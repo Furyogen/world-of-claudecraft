@@ -17,6 +17,7 @@ import {
   worldXBoundsAt,
   ZONES,
 } from './data';
+import { dockLocalPoint, dockSectionAtLocal, dockSurfaceLine, dockSurfaceYAt } from './dock_layout';
 import { isAuthoredMapPresentation } from './map_presentation';
 import { placementRampFloorAt } from './placement_ramps';
 import { fbm2, hash2, noise2 } from './rng';
@@ -1966,6 +1967,24 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
   return t * t * (3 - 2 * t);
 }
 
+// Pure pass mask used by border ridges. Exported for the performance invariant
+// test: a zero mask makes the skipped crest-noise contribution exactly +0.
+export function ridgePassWeight(distanceFromPass: number): number {
+  return smoothstep(PASS_HALF_WIDTH, PASS_SHOULDER, Math.abs(distanceFromPass));
+}
+
+// North-rim profile for the multi-row world. The rim can wander at most 23yd
+// south of its nominal onset, so every point at or below this bound is provably
+// outside it. Returning before the two fbm2 calls preserves the exact +0 result.
+export function northRimWeight(x: number, z: number): number {
+  if (z <= WORLD_MAX_Z - 53) return 0;
+  const wobble = (fbm2(x * 0.008, 60.1, 9207, 2) - 0.5) * 46;
+  return (
+    smoothstep(WORLD_MAX_Z - 30 + wobble, WORLD_MAX_Z + wobble, z) *
+    (0.32 + 0.68 * fbm2(x * 0.013, 60.2, 9209, 2))
+  );
+}
+
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
@@ -2202,8 +2221,22 @@ export function sowfieldFlattenWeight(x: number, z: number): number {
   return 1 - smoothstep(0, 1, d / f.falloff);
 }
 
+// The renderer seats each dock section relative to its shore anchor, then uses
+// the plank top as a raised walkable surface. Return the matching absolute
+// surface height, or -Infinity outside every deck footprint.
+function dockSurfaceHeight(x: number, z: number, seed: number): number {
+  let surface = -Infinity;
+  for (const dock of getActiveWorldContent().props.docks) {
+    const local = dockLocalPoint(dock, x, z);
+    if (dockSectionAtLocal(local.x, local.z) < 0) continue;
+    const line = dockSurfaceLine(dock, (sampleX, sampleZ) => terrainHeight(sampleX, sampleZ, seed));
+    surface = Math.max(surface, dockSurfaceYAt(line, local.z));
+  }
+  return surface;
+}
+
 // Ground height including instanced dungeon floors (flat, far off-world), the
-// walkable Vale Cup grandstand lift, and the custom-map sculpt edits.
+// walkable Vale Cup grandstand lift, raised docks, and custom-map sculpt edits.
 export function groundHeight(x: number, z: number, seed: number): number {
   if (x > DUNGEON_X_THRESHOLD) return DUNGEON_FLOOR_Y;
   // The Vale Cup grandstands are walkable: the ground steps up in seated tiers so
@@ -2251,7 +2284,7 @@ export function groundHeight(x: number, z: number, seed: number): number {
     const floor = terrainHeight(v.x, v.z, seed) + v.sizeY + lx * uy + lz * wy;
     if (floor > h) h = floor;
   }
-  return h;
+  return Math.max(h, dockSurfaceHeight(x, z, seed));
 }
 
 /** The cave floor sheet at a point, or null when no authored cave crosses it. */
@@ -2382,9 +2415,10 @@ export function terrainHeight(x: number, z: number, seed: number): number {
     if (dPerp < sigma * 3) {
       const along = edge.kind === 'h' ? x : z;
       let profile = Math.exp(-(dPerp * dPerp) / (2 * sigma * sigma));
-      const pass = edge.sealed
-        ? 1
-        : smoothstep(PASS_HALF_WIDTH, PASS_SHOULDER, Math.abs(along - edge.passAt));
+      const pass = edge.sealed ? 1 : ridgePassWeight(along - edge.passAt);
+      // Inside a road pass, the final wall term is exactly +0. Skip the crest
+      // noise and shaping work while keeping the heightfield bit-identical.
+      if (pass === 0) continue;
       // jagged crest so the wall reads as mountains, not a berm
       // Thornpeak's edges carry real peaks: the mountain realm's borders
       // are taller and craggier than the rest of the grid's low ranges
@@ -2520,10 +2554,7 @@ export function terrainHeight(x: number, z: number, seed: number): number {
   // horizontal wall: its onset line meanders +-23yd in z with low-frequency
   // noise along x, and its height swells and drops to near-nothing over long
   // runs (broken massifs and passes, not a uniform berm).
-  const rimNWob = (fbm2(x * 0.008, 60.1, 9207, 2) - 0.5) * 46;
-  let rimN =
-    smoothstep(WORLD_MAX_Z - 30 + rimNWob, WORLD_MAX_Z + rimNWob, z) *
-    (0.32 + 0.68 * fbm2(x * 0.013, 60.2, 9209, 2));
+  let rimN = northRimWeight(x, z);
   // the southern realms end in open coast, not a rim range: the vale, the
   // Farshore, the fen, the headlands, the jungle, and the lawns all meet
   // the sea at their outer edges, and swim fatigue does the containment
@@ -2720,17 +2751,11 @@ export function terrainDownhill(
 // players).
 const WALL_STANDOFF_SAMPLES = 8;
 
-// Push a body of `radius` out of terrain steeper than `maxSlope` so the
-// character model does not sink into a cliff face. Movement collision samples
-// only the center point (the climb gate blocks the center from CLIMBING a wall,
-// but nothing keeps the body's WIDTH clear of one), so standing at or strafing
-// along the foot of a near-vertical wall buries the model's near side. This
-// samples the heightfield on a ring at the body radius; any direction rising
-// faster than a climbable slope is a wall within reach, and the center is nudged
-// directly away from it, toward the lower walkable side. Pure and deterministic;
-// returns the input unchanged on open or merely-sloped ground (no ring sample
-// exceeds a climbable rise there), so it is a near-no-op away from the walls.
-export function terrainWallStandoff(
+// A single ring-sample-and-nudge pass, capped at one body radius of push (see
+// `terrainWallStandoff` below for why it must be iterated rather than trusted
+// to converge in one call, and why the caller must accept a push that only
+// REDUCES steepness rather than requiring it clear `maxSlope` outright).
+export function terrainWallStandoffPass(
   x: number,
   z: number,
   seed: number,
@@ -2759,6 +2784,48 @@ export function terrainWallStandoff(
   const mag = Math.hypot(pushX, pushZ);
   const scale = Math.min(mag, radius) / mag; // total nudge never exceeds one body radius
   return { x: x + pushX * scale, z: z + pushZ * scale };
+}
+
+// The most passes `terrainWallStandoff` will take to converge. Mirrors the
+// 3-iteration prop/OBB push-out loop in `colliders.ts`'s `resolveAgainst`.
+const WALL_STANDOFF_ITERATIONS = 3;
+
+// Push a body of `radius` out of terrain steeper than `maxSlope` so the
+// character model does not sink into a cliff face. Movement collision samples
+// only the center point (the climb gate blocks the center from CLIMBING a wall,
+// but nothing keeps the body's WIDTH clear of one), so standing at or strafing
+// along the foot of a near-vertical wall buries the model's near side. This
+// samples the heightfield on a ring at the body radius; any direction rising
+// faster than a climbable slope is a wall within reach, and the center is nudged
+// directly away from it, toward the lower walkable side. Pure and deterministic;
+// returns the input unchanged on open or merely-sloped ground (no ring sample
+// exceeds a climbable rise there), so it is a near-no-op away from the walls.
+//
+// A single pass can leave the pushed point still reading as a wall in a
+// CONCAVE pocket (a ridge/rim corner or a coastline notch wrapping more than
+// half the sample ring): one pass's push, capped at one body radius, is not
+// always enough to clear it. The caller (`stepPlayerMotion`) only ever
+// committed the result when it stopped reading as steep, so an unconverged
+// single pass silently no-ops right where standoff is needed most, leaving
+// the player permanently wedged. Iterating a few passes lets each subsequent
+// ring sample, now centered on the partially-pushed point, see less of the
+// wall, converging out of the pocket instead of stalling on it.
+export function terrainWallStandoff(
+  x: number,
+  z: number,
+  seed: number,
+  radius: number,
+  maxSlope: number,
+): { x: number; z: number } {
+  let cx = x;
+  let cz = z;
+  for (let iter = 0; iter < WALL_STANDOFF_ITERATIONS; iter++) {
+    const next = terrainWallStandoffPass(cx, cz, seed, radius, maxSlope);
+    if (next.x === cx && next.z === cz) break;
+    cx = next.x;
+    cz = next.z;
+  }
+  return { x: cx, z: cz };
 }
 
 // ---------------------------------------------------------------------------

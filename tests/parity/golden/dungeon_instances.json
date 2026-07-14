@@ -10,8 +10,8 @@
     "updateDoorTriggers exit portal -> leaveDungeon (~14620)",
     "updateInstances empty-reset -> freeInstance despawn + partyKey null (~14841/14816)"
   ],
-  "draws": 49,
-  "drawDigest": "68b9c85e",
+  "draws": 45,
+  "drawDigest": "e713383f",
   "frames": [
     {
       "tick": 0,
@@ -878,8 +878,8 @@
       "state": "42fa8d57",
       "events": "21d3f773",
       "rng": {
-        "draws": 47,
-        "digest": "5fe69d27"
+        "draws": 43,
+        "digest": "9a57da27"
       },
       "label": "left",
       "players": [
@@ -1736,8 +1736,8 @@
       "state": "2dad58d2",
       "events": "4797480b",
       "rng": {
-        "draws": 47,
-        "digest": "5fe69d27"
+        "draws": 43,
+        "digest": "9a57da27"
       }
     },
     {
@@ -1747,8 +1747,8 @@
       "state": "50b400a1",
       "events": "741638a5",
       "rng": {
-        "draws": 47,
-        "digest": "5fe69d27"
+        "draws": 43,
+        "digest": "9a57da27"
       }
     },
     {
@@ -1758,8 +1758,8 @@
       "state": "d78f1bd1",
       "events": "741638a5",
       "rng": {
-        "draws": 47,
-        "digest": "5fe69d27"
+        "draws": 43,
+        "digest": "9a57da27"
       }
     },
     {
@@ -1769,8 +1769,8 @@
       "state": "fb87fae8",
       "events": "ffe210c0",
       "rng": {
-        "draws": 49,
-        "digest": "68b9c85e"
+        "draws": 45,
+        "digest": "e713383f"
       }
     },
     {
@@ -1780,8 +1780,8 @@
       "state": "e1ae9068",
       "events": "741638a5",
       "rng": {
-        "draws": 49,
-        "digest": "68b9c85e"
+        "draws": 45,
+        "digest": "e713383f"
       },
       "label": "reset",
       "players": [
@@ -2042,8 +2042,8 @@
       "state": "e1ae9068",
       "events": "741638a5",
       "rng": {
-        "draws": 49,
-        "digest": "68b9c85e"
+        "draws": 45,
+        "digest": "e713383f"
       },
       "label": "final",
       "players": [

@@ -14,6 +14,255 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.wocStore.title': 'Магазин WOC',
+  'hudChrome.wocStore.close': 'Закрыть магазин WOC',
+  'hudChrome.wocStore.tabsLabel': 'Разделы магазина WOC',
+  'hudChrome.wocStore.storeTab': 'Магазин',
+  'hudChrome.wocStore.rewardsTab': 'Ежедневные награды',
+  'hudChrome.wocStore.loading': 'Загрузка магазина WOC…',
+  'hudChrome.wocStore.error': 'Магазин WOC сейчас недоступен. Повторите попытку позже.',
+  'hudChrome.wocStore.balance': 'Баланс Claudium',
+  'hudChrome.wocStore.buyClaudium': 'Купить Claudium',
+  'hudChrome.wocStore.owned': 'Получено',
+  'hudChrome.wocStore.needMoreTitle': 'Требуется больше Claudium',
+  'hudChrome.wocStore.needMoreBody': 'Для покупки {item} не хватает {shortfall} Claudium.',
+  'hudChrome.wocStore.cancel': 'Отмена',
+  'hudChrome.wocStore.confirmTitle': 'Подтвердить покупку облика',
+  'hudChrome.wocStore.confirmBody': 'Купить {item} за {cost} Claudium?',
+  'hudChrome.wocStore.confirmPurchase': 'Купить',
+  'hudChrome.wocStore.priceChanged':
+    'Цена изменилась до завершения покупки. Проверьте обновлённую цену и подтвердите покупку ещё раз.',
+  'hudChrome.wocStore.armoryEyebrow': 'Сезон 1',
+  'hudChrome.wocStore.armoryTitle': 'Арсенал',
+  'hudChrome.wocStore.armoryBody':
+    'Ограниченные облики оружия из Арсенала 1-го сезона. Общие для всей учётной записи, чисто косметические и видимые всем вокруг.',
+  'hudChrome.wocStore.collectionLine': 'Коллекция «{collection}»',
+  'hudChrome.wocStore.collections.guildmark': 'Клеймо гильдии',
+  'hudChrome.wocStore.collections.emberwrought': 'Закалённое углями',
+  'hudChrome.wocStore.collections.hoarfrost': 'Иней',
+  'hudChrome.wocStore.collections.fallen_star': 'Падшая звезда',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.name': 'Боевой меч с клеймом гильдии',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.look':
+    'Клинок из воронёной стали, бронзовая гарда «рыбий хвост», рукоять из кожи, окрашенной в бирюзовый цвет, и небольшое клеймо гильдии.',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.lore':
+    'Если обычный кованый клинок безымянен, то на этом стоит подпись. Оружейник получает право выбить своё клеймо на рикассо лишь после того, как Merchant с World Market поручится за его сталь, а за клеймо Smith Haldren поручились. Воронение защищает от сырости Vale, баланс выверен до волоска. За клеймо платят не меньше, чем за сам меч, и оно того стоит.',
+  'hudChrome.wocStore.skins.brasscap_axe.name': 'Топорик с латунным навершием',
+  'hudChrome.wocStore.skins.brasscap_axe.look':
+    'Полированное стальное лезвие, латунное навершие и лангеты на лакированной рукояти из ясеня, аккуратная обмотка и клеймо мастера.',
+  'hudChrome.wocStore.skins.brasscap_axe.lore':
+    'Топор с клеймом — хвастовство, которое можно держать в руке. Латунное навершие и лангеты наполовину служат бронёй, наполовину подписью: не дают древку расколоться и ловят свет таверны, чтобы все знали — перед ними работа Armorer Hode, а не обноски ополченца. «Если рубит — я продаю», — говорит кузнец из Highwatch. Этот рубит.',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.name': 'Закалённая шестопёрная булава',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.look':
+    'Шесть перьев из закалённой воронёной стали, латунные муфта и навершие, рукоять из кожи винно-красного цвета.',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.lore':
+    'Шесть перьев из воронёной закалённой стали, каждое заточено вскрывать шлем; латунный колпачок и обмотка из винно-красной кожи. Оружейники королевства не делают уродливого оружия, даже если его работа жестока. Эту булаву заказали через World Market, а не сняли со стойки. Где-то хранится книга с именем гордого покупателя и суммой, которую он заплатил Hode.',
+  'hudChrome.wocStore.skins.guildmark_dirk.name': 'Дирк с клеймом гильдии',
+  'hudChrome.wocStore.skins.guildmark_dirk.look':
+    'Тонкий дирк из закалённой стали, бронзовые гарда и гайка навершия, тёмно-зелёная шнуровая обмотка и выбитая эмблема.',
+  'hudChrome.wocStore.skins.guildmark_dirk.lore':
+    'То, что носит уважаемый человек, когда меч остаётся дома: тонкий закалённый клинок с тем же клеймом, что удостоверяет полноразмерный меч, — словно перстень-печать с остриём на поясе. Неприметный для всех, кроме тех, кто умеет читать свидетельство оружейника. Quartermaster Bree держит в Highwatch целый ящик таких для офицеров, заслуживших уважение стены.',
+  'hudChrome.wocStore.skins.brasscrown_staff.name': 'Трость с латунной короной',
+  'hudChrome.wocStore.skins.brasscrown_staff.look':
+    'Посох из твёрдой древесины с точёным латунным навершием-короной, латунным наконечником и полосой крашеной кожи.',
+  'hudChrome.wocStore.skins.brasscrown_staff.lore':
+    'Посох выточен из выдержанной твёрдой древесины и увенчан латунью, которую кузнецы Eastbrook отливают сотнями, но доводят до совершенства по одной. Он для путешественника, желающего, чтобы к нему серьёзно отнеслись и у ворот Fenbridge, и на стене Highwatch. Трость, которой никогда по-настоящему не приходилось помогать при ходьбе; крашеная полоса подходит к плащу, цену которого нетрудно угадать.',
+  'hudChrome.wocStore.skins.lacquered_wand.name': 'Лакированный жезл',
+  'hudChrome.wocStore.skins.lacquered_wand.look':
+    'Тонкий жезл под тёмно-красным лаком, два полированных латунных кольца и небольшой округлый латунный наконечник.',
+  'hudChrome.wocStore.skins.lacquered_wand.lore':
+    'Семь терпеливо нанесённых слоёв тёмно-красного лака и два кольца полированной латуни — такой жезл деревенский маг покупает на World Market, когда начинает брать настоящие деньги и хочет выглядеть соответственно. Он проводит Light не лучше берёзовой ветки. Зато великолепно сияет на прилавке Merchant, а половина малой магии всегда заключалась в том, чтобы в неё поверили.',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.name': 'Лук гильдии Fletcher',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.look':
+    'Рекурсивный лук из лакированного ореха, латунные законцовки плеч, вощёная льняная тетива и клеймо гильдии на рукояти.',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.lore':
+    'Ближайшее подобие гильдии в королевстве — клеймо Fletcher на рукояти, обещание качества внутри, как печать винодела на бочке. Лакированный орех, латунь на концах плеч, вощёная льняная тетива, которая не истреплется под дождём Mirefen. Каждый стык обосновывает цену. Стоит натянуть лук за Widow Thicket, и спор решается в его пользу.',
+  'hudChrome.wocStore.skins.cinderbrand_sword.name': 'Синдербренд',
+  'hudChrome.wocStore.skins.cinderbrand_sword.look':
+    'Тёмный клинок из кованой стали, дол с пылающими оранжевыми рунами и трещинами от жара, тлеющий камень в гарде.',
+  'hudChrome.wocStore.skins.cinderbrand_sword.lore':
+    'Первый клинок, закалённый не в воде, а в Blessed Embers из Stormcrag — углях, которые, по словам кузнецов Highwatch, «горят синим и чистым пламенем, потому что гора помнит древнюю клятву». Огонь, заключённый в доле, тлеет оранжевым и не гаснет; самой холодной ночью на стене руны согревают голую ладонь. Cinderbrand не нужно зажигать. Он просто отказывается гаснуть.',
+  'hudChrome.wocStore.skins.emberbite_axe.name': 'Эмбербайт',
+  'hudChrome.wocStore.skins.emberbite_axe.look':
+    'Топор из чернёного железа с оранжевым жаром в трещинах лезвия, камень с затаившимся углём и струйки жара.',
+  'hudChrome.wocStore.skins.emberbite_axe.lore':
+    'Armorer Hode вложил живой уголёк горного пламени в сердце лезвия, и кромка не успевает остыть между ударами. При взмахе трещины дышат оранжевым, словно удар пробуждает нечто, оставленное первым горном спать в железе. Говорят, элементаль Stormcrag отдал ради него свой уголёк; в ветреную погоду в Highwatch говорят многое.',
+  'hudChrome.wocStore.skins.smoulderfall_mace.name': 'Смолдерфолл',
+  'hudChrome.wocStore.skins.smoulderfall_mace.look':
+    'Перья из тёмного железа с оранжевым свечением во внутренних трещинах и камень с расплавленным ядром в навершии.',
+  'hudChrome.wocStore.skins.smoulderfall_mace.lore':
+    'Булава с собственным очагом: в её навершии сияет камень с расплавленным ядром, отколотый от печати Sanctum, «выкованной горным огнём». Перья тёплые на ощупь и ещё горячее там, куда опускаются. Сержант Highwatch клянётся, что синяк от удара слабо светится до утра. Горное пламя наконец служит не для запечатывания, а для разрушения.',
+  'hudChrome.wocStore.skins.ashspark_dagger.name': 'Заточка Ashspark',
+  'hudChrome.wocStore.skins.ashspark_dagger.look':
+    'Короткий чернёный клинок с пылающими оранжевыми прожилками, крошечный тлеющий камень в навершии, пепел и искры.',
+  'hudChrome.wocStore.skins.ashspark_dagger.lore':
+    'Клинок из подворотни с горным огнём, тайком заключённым в камне навершия, — тихая шутка оружейника: даже карманник может носить уголёк первого горна. Чернёный, с оранжевыми прожилками, всегда чуть горячее, чем следует, даже в ножнах. В темноте под Highwatch его сияние освещает руку ровно настолько, чтобы найти брешь в защите противника.',
+  'hudChrome.wocStore.skins.forgeheart_staff.name': 'Посох Forgeheart',
+  'hudChrome.wocStore.skins.forgeheart_staff.look':
+    'Окованный железом посох с сияющим угольным ядром в клетке на вершине, огненные руны вдоль древка и поднимающееся марево.',
+  'hudChrome.wocStore.skins.forgeheart_staff.lore':
+    'Живой уголёк горного пламени, заключённый в железную клетку на вершине. Loremaster Caddis называет его доказательством, что огонь первого горна можно подчинить службе, а не только печати. Марево поднимается тонкой бесконечной лентой; магу с таким посохом не нужны ни кузня, ни сторожевой костёр. Шепчут, уголёк взят из дыхания самого Voskar the Emberwing и с тех пор не остыл.',
+  'hudChrome.wocStore.skins.emberwrought_wand.name': 'Жезл Emberwrought',
+  'hudChrome.wocStore.skins.emberwrought_wand.look':
+    'Жезл из чернёного металла с пылающим углём в железных когтях, тончайшими трещинами от жара и тёплым внутренним светом.',
+  'hudChrome.wocStore.skins.emberwrought_wand.lore':
+    'Жезл, давший имя целой категории. Когда оружейник Highwatch впервые зажал уголёк горного огня в железных когтях и заставил его повиноваться смертной руке, даже Priests of the Light перестали называть это ересью и стали называть полезным. Тёплый, терпеливый и тихо опасный: уголёк на его конце непрерывно горит с тех пор, когда владелец ещё не сделал первого вдоха.',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.name': 'Синдерлатч',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.look':
+    'Арбалет из чернёной стали, оранжевый жар из трещин в дуге и тлеющий уголёк в ложе.',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.lore':
+    'Самое странное из оружия, выкованного на углях: горный огонь, залитый в механизм. Оранжевый свет сочится из трещин дуги, а тлеющий уголёк в ложе не даёт тетиве задубеть ни от холода Thornpeak, ни от сырости Mirefen. Болты сходят с желоба уже тёплыми и прилетают ещё горячее. Ответ охотника стене, где враг тоже не чувствует холода.',
+  'hudChrome.wocStore.skins.ice_fang_sword.name': 'Ice Fang',
+  'hudChrome.wocStore.skins.ice_fang_sword.look':
+    'Изогнутый клинок из бледного ледникового льда, зубчатые кристаллы изморози на обухе, сияющее голубое замёрзшее ядро в доле и гарда-сосулька.',
+  'hudChrome.wocStore.skins.ice_fang_sword.lore':
+    'Главный образец ледяной категории и первое, к чему тянется каждый коллекционер. Ice Fang не выковали, а вырезали из клыка ледника Thornpeak над Highwatch; его голубое ядро горит холодом, словно свет на Glimmermere. Он покрывает инеем сам воздух, который разрезает. Стражи стены клянутся, что солдат нёс его в ночь, когда высокие снега сдержали Wyrmcult, и «купил стене целую зиму».',
+  'hudChrome.wocStore.skins.glaciersplit_axe.name': 'Глейшерсплит',
+  'hudChrome.wocStore.skins.glaciersplit_axe.look':
+    'Навершие из полупрозрачного синего ледникового льда, голубое свечение в треснувшей сердцевине, щетина морозных кристаллов и холодный пар за рукоятью.',
+  'hudChrome.wocStore.skins.glaciersplit_axe.lore':
+    'Вытесан из синего сердца ледника Thornpeak, где два века льда спрессовывали холод, пока тот не начал светиться сам. Даже в покое топор тянет за собой пар, а удар звучит как трещина, раскрывающаяся под Stalker Ridge. Highwatch отдаёт своих павших льдам наверху; это оружие должно сдержать оттепель и всё, что она способна разбудить.',
+  'hudChrome.wocStore.skins.rimecrusher_mace.name': 'Раймкрашер',
+  'hudChrome.wocStore.skins.rimecrusher_mace.look':
+    'Гроздь острых ледяных кристаллов вокруг сияющего голубого ядра и иней, ползущий вниз по посеребрённой рукояти.',
+  'hudChrome.wocStore.skins.rimecrusher_mace.lore':
+    'Не вырезан, а выращен: лёд Thornpeak направляли вокруг холодного голубого ядра, пока он не затвердел, как лучшая сталь Hode. Иней ползёт по серебряной рукояти к ладони, но так и не достигает её. Там, где булава ударяет, вода замерзает; где лежит — земля белеет. Могильный холод вершин, сделанный достаточно малым, чтобы замахнуться им на тех, кто взбирается на стену.',
+  'hudChrome.wocStore.skins.frostbite_dagger.name': 'Ледяная игла',
+  'hudChrome.wocStore.skins.frostbite_dagger.look':
+    'Зловеще тонкий кинжал из прозрачного синего льда, сияющая голубая жила по центру, игольчатые кристаллы мороза и покрытая инеем рукоять.',
+  'hudChrome.wocStore.skins.frostbite_dagger.lore':
+    'Тонок, как задержанный вздох, и вдвое холоднее: осколок ледника Thornpeak заточен до единственной сияющей жилы так остро, что рана замерзает прежде, чем кровь вспоминает, как течь. Имя взято у могильного холода, который мёртвые несут с вершин. Точить его не нужно; лёд не тупится, сухо замечает Loremaster Caddis, он лишь ждёт.',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.name': 'Морозный дозор',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.look':
+    'Серебряный посох с парящим и медленно вращающимся осколком сияющего голубого льда, расходящимися кристаллами и холодным паром.',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.lore':
+    'Посох дозора, который никогда не спит на стене Highwatch. Его навершие — осколок голубого озёрного льда, свободно висящий над серебром и медленно вращающийся сам собой; стража клянётся, что он всегда повёрнут к холоду, собирающемуся под вершинами. Нести Vigil — значит за одну ночь отстоять двести лет караула и пообещать не отводить глаз.',
+  'hudChrome.wocStore.skins.everwinter_wand.name': 'Осколок Вечной Зимы',
+  'hudChrome.wocStore.skins.everwinter_wand.look':
+    'Один шип сияющего голубого ледникового льда, иней, распускающийся из серебряной муфты, и лёгкая холодная дымка.',
+  'hudChrome.wocStore.skins.everwinter_wand.lore':
+    'Шип сияющего ледникового льда, отколотый, как говорят, от глубокого озера под Sanctum, где у горного холода есть зубы. Иней непрерывно расцветает на серебряной муфте и не тает ни в огне, ни летом. Маги держат его близко ради холода, который он придаёт их чарам, и далеко — в ночи, когда он будто клонится к склепу Nythraxis и прислушивается.',
+  'hudChrome.wocStore.skins.winterbite.name': 'Уинтербайт',
+  'hudChrome.wocStore.skins.winterbite.look':
+    'Лук из посеребрённой стали и синего льда, сияющее голубое замёрзшее ядро в рукояти, наложенная стрела из цельного льда и холодный пар.',
+  'hudChrome.wocStore.skins.winterbite.lore':
+    'Лук из посеребрённой стали и льда Thornpeak; холодное голубое ядро в рукояти примораживает стрелу к тетиве. При каждом натяжении возникает новый древок из цельного ледникового льда, поэтому на стене лучник носит не колчан, а лишь холод. С таким луком Highwatch выдержал осаду Stalker Ridge: один стрелок и запас стрел на целую зиму, которые словно всегда уже были на месте.',
+  'hudChrome.wocStore.skins.solheim_sword.name': 'Solheim, Последний свет зари',
+  'hudChrome.wocStore.skins.solheim_sword.look':
+    'Двуручный меч из падшей звезды, расплавленно-золотое ядро раскалывает клинок, космически-чёрная сталь окантована звёздным светом, золотые осколки кружат у гарды, следом тянется лента сияния.',
+  'hudChrome.wocStore.skins.solheim_sword.lore':
+    'Когда звезда упала с западного неба и «взорвалась, как горн» за Widow Thicket, Brother Aldric извлёк её тлеющее сердце из кратера Mirefen и умолял кузнецов королевства обработать «вещь не из этого мира». Они создали один двуручный меч — Solheim. Его расплавленно-золотое ядро рассекает космически-чёрный клинок, как рассвет — ночное небо, а осколки звёздного металла вращаются у гарды по путям, которых не прокладывала рука. Другого не будет.',
+  'hudChrome.wocStore.skins.skyrender_axe.name': 'Skyrender, Рана небосвода',
+  'hudChrome.wocStore.skins.skyrender_axe.look':
+    'Навершие словно обрывок ночного неба, расплавленно-золотые трещины и гравировка созвездий, парящие осколки звёздного света и сияние вдоль лезвия.',
+  'hudChrome.wocStore.skins.skyrender_axe.lore':
+    'Выкован из края кратера, где падшая звезда вырвала из Mirefen отражение самого неба и оставила рану, которая до сих пор дымится. Навершие похоже на клочок ночи: расплавленно-золотые трещины, созвездия, которых не назовёт ни один учёный Highwatch, и сияние, стекающее с кромки при каждом взмахе. Brother Aldric благословил его, но не коснулся. Поднять его — значит держать дыру, оставленную небесами.',
+  'hudChrome.wocStore.skins.starfall_mace.name': 'Starfall, Суд небес',
+  'hudChrome.wocStore.skins.starfall_mace.look':
+    'Пленённое расплавленно-золотое звёздное ядро в кольце вращающихся обломков, космически-чёрные перья со звёздными прожилками и сияние из швов.',
+  'hudChrome.wocStore.skins.starfall_mace.lore':
+    'Звёздное ядро поймано за миг до смерти, окружено упавшими вместе с ним обломками и застыло в дюйме от небытия. По космически-чёрным перьям течёт пленённый звёздный свет, а когда булаву поднимают, из швов льётся сияние. Древние Priests of the Light называли падшую звезду судом — приговором свыше, который не должен остановить ни один щит, — и назвали эту в честь той, что обрушилась на Mirefen.',
+  'hudChrome.wocStore.skins.astravyr_dagger.name': 'Astravyr, Клык падшей звезды',
+  'hudChrome.wocStore.skins.astravyr_dagger.look':
+    'Осколок падшей звезды с расплавленно-золотой кромкой на космически-чёрном металле, яркая звёздная искра у навершия и тонкий след сияния.',
+  'hudChrome.wocStore.skins.astravyr_dagger.lore':
+    'Самая малая частица звезды, которую Aldric вынес из кратера, и, по некоторым меркам, самая опасная. Осколок потустороннего сердца: расплавленно-золотая кромка на космически-чёрном металле и одинокая звёздная искра, кружащая у навершия, словно луна, потерявшая свой мир. Почти ничего не весит и рассекает почти всё. Достаточно мал, чтобы спрятать, и достаточно ярок, чтобы найти в темноте по его собственному свету.',
+  'hudChrome.wocStore.skins.cosmarch_staff.name': 'Cosmarch, Шпиль бесконечной пустоты',
+  'hudChrome.wocStore.skins.cosmarch_staff.look':
+    'Золотые звёздные осколки вращаются вокруг расплавленного ядра, космически-чёрное древко покрыто созвездиями, ленты сияния вьются вверх.',
+  'hudChrome.wocStore.skins.cosmarch_staff.lore':
+    'Древко из звёздного металла увенчано расплавленно-золотым ядром и кольцом золотых осколков в медленной бесконечной орбите — маленьким космосом с созвездиями, которых нет ни в одном небе над Thornpeak. Сияние обвивает его, словно дым, забывший подниматься. Носившие посох чувствовали, как в нём вращается пустота, подобно озеру Ysolei, что «пьёт лунный свет»: терпеливо, холодно и глядя в ответ.',
+  'hudChrome.wocStore.skins.emberwish_wand.name': 'Emberwish, Искра угасающего солнца',
+  'hudChrome.wocStore.skins.emberwish_wand.look':
+    'Пленённая расплавленно-золотая искра умирающей звезды в венце вращающихся огней и космически-чёрное древко со светящимися созвездиями.',
+  'hudChrome.wocStore.skins.emberwish_wand.lore':
+    'Не сама падшая звезда, а последняя искра умирающей: расплавленно-золотой уголёк уже погасшего солнца, окружённый искрами его последнего света. На космически-чёрном древке вырезаны созвездия, видевшие его смерть. Земледельцы Mirefen говорят, что в истинных сумерках жезл исполняет одно желание владельца. Они же говорят: каждая державшая его душа просила больше времени, и Drowned Moon не дал его никому.',
+  'hudChrome.wocStore.skins.encore_bow.name': 'Encore, Вторая падшая звезда',
+  'hudChrome.wocStore.skins.encore_bow.look':
+    'Нелепо огромная звёздная пушка: космически-чёрный ствол с золотыми созвездиями, раструб с расплавленно-золотым снарядом-кометой, латунные детали и деревянный приклад.',
+  'hudChrome.wocStore.skins.encore_bow.lore':
+    'Кузнецы создали из падшей звезды шесть реликвий, но у них осталась целая бочка звёздного металла, а у подмастерьев уже появились идеи. С наковальни сошло то ли первое ружьё королевства, то ли его наименьшая осадная машина: плечевая пушка, которая не столько стреляет, сколько вызывает вторую звезду — прицельно. Brother Aldric отказался благословлять её: всё настолько громкое уже замечено небесами. Охотники в восторге. Никто перед дулом — нет.',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.name': 'Meteorlatch, Последний суд небес',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.look':
+    'Метеоритный звёздный металл, расплавленно-золотое ядро вдоль ложа, космически-чёрные плечи с созвездиями и наложенный болт из чистого звёздного огня.',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.lore':
+    'Выкован из сырого метеоритного металла, пока кратер Mirefen ещё светился. Обломки, «слишком горячие для рук», стали космически-чёрными плечами с созвездиями, а вдоль ложа заключили расплавленно-золотое ядро. Арбалет не заряжают болтом — он создаёт его сам: стрелу звёздного пламени, выпущенную как приговор и падающую как его исполнение. Когда Highwatch боялся, что даже бессмертная корона Nythraxis — не худшее под горами, именно это оружие хотели видеть на стене. Цельтесь точно.',
+  'hudChrome.wocStore.seasonOne': 'Сезон 1',
+  'hudChrome.wocStore.rarity.uncommon': 'Необычный',
+  'hudChrome.wocStore.rarity.rare': 'Редкий',
+  'hudChrome.wocStore.rarity.epic': 'Эпический',
+  'hudChrome.wocStore.rarity.legendary': 'Легендарный',
+  'hudChrome.wocStore.wtype.sword': 'Меч',
+  'hudChrome.wocStore.wtype.axe': 'Топор',
+  'hudChrome.wocStore.wtype.mace': 'Булава',
+  'hudChrome.wocStore.wtype.dagger': 'Кинжал',
+  'hudChrome.wocStore.wtype.staff': 'Посох',
+  'hudChrome.wocStore.wtype.wand': 'Жезл',
+  'hudChrome.wocStore.wtype.bow': 'Лук',
+  'hudChrome.wocStore.wtype.crossbow': 'Арбалет',
+  'hudChrome.wocStore.badge.flagship': 'Флагман',
+  'hudChrome.wocStore.badge.hero': 'Герой',
+  'hudChrome.wocStore.inspectAria': 'Осмотреть {item}',
+  'hudChrome.wocStore.viewModeLabel': 'Режим предпросмотра',
+  'hudChrome.wocStore.tryOn': 'Примерить',
+  'hudChrome.wocStore.weaponOnly': 'Только оружие',
+  'hudChrome.wocStore.sceneLabel': 'Освещение сцены',
+  'hudChrome.wocStore.scene.day': 'День',
+  'hudChrome.wocStore.scene.dusk': 'Сумерки',
+  'hudChrome.wocStore.scene.night': 'Ночь',
+  'hudChrome.wocStore.lore': 'История',
+  'hudChrome.wocStore.buySkin': 'Купить облик',
+  'hudChrome.wocStore.unavailable': 'Недоступно',
+  'hudChrome.wocStore.applied': 'Применён',
+  'hudChrome.wocStore.apply': 'Применить облик',
+  'hudChrome.wocStore.detach': 'Снять облик',
+  'hudChrome.wocStore.equipHint': 'Чтобы применить этот облик, возьмите в руки {type}.',
+  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.open': 'Открыть Claudium',
+  'hudChrome.claudium.close': 'Закрыть Claudium',
+  'hudChrome.claudium.loading': 'Загрузка Claudium…',
+  'hudChrome.claudium.balanceLabel': 'Баланс',
+  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.unavailable':
+    'Магазин Claudium сейчас недоступен. Ваш баланс и покупки не затронуты; повторите попытку позже.',
+  'hudChrome.claudium.disclosure':
+    'Claudium — односторонняя игровая валюта: её можно купить за деньги и потратить на косметические предметы. Её нельзя вернуть, передать или обналичить.',
+  'hudChrome.claudium.buyTitle': 'Купить Claudium',
+  'hudChrome.claudium.railLabel': 'Способ оплаты',
+  'hudChrome.claudium.railNativeUnavailable': 'SOL/WOC недоступны',
+  'hudChrome.claudium.railSol': 'SOL',
+  'hudChrome.claudium.railStripe': 'Карта',
+  'hudChrome.claudium.railWoc': 'WOC',
+  'hudChrome.claudium.railWocDiscount': 'Скидка 20%',
+  'hudChrome.claudium.solBalance': 'SOL: {amount}',
+  'hudChrome.claudium.wocBalance': 'WOC: {amount}',
+  'hudChrome.claudium.railWocUnavailable': 'Цена WOC сейчас недоступна.',
+  'hudChrome.claudium.amountLabel': 'Количество',
+  'hudChrome.claudium.showAmounts': 'Показать все варианты Claudium',
+  'hudChrome.claudium.hideAmounts': 'Скрыть дополнительные варианты Claudium',
+  'hudChrome.claudium.skuRow': '{claudium} Claudium за {usd}',
+  'hudChrome.claudium.buyUnavailable': 'Покупки сейчас недоступны.',
+  'hudChrome.claudium.storeTitle': 'Магазин косметики',
+  'hudChrome.claudium.storeEmpty': 'Сейчас косметические предметы недоступны.',
+  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.spendButton': 'Обменять',
+  'hudChrome.claudium.kindCosmetic': 'Косметика',
+  'hudChrome.claudium.kindItem': 'Предмет',
+  'hudChrome.claudium.kindSkin': 'Облик',
+  'hudChrome.claudium.buyButton': 'Купить',
+  'hudChrome.claudium.checkoutTitle': 'Завершить покупку',
+  'hudChrome.claudium.checkoutClose': 'Закрыть оплату',
+  'hudChrome.claudium.checkoutLoading': 'Загрузка оплаты…',
+  'hudChrome.claudium.checkoutPending':
+    'Транзакция выполняется. Подтвердите её в кошельке и не закрывайте эту панель.',
+  'hudChrome.claudium.checkoutPendingButton': 'Обработка',
+  'hudChrome.claudium.checkoutFailed': 'Не удалось загрузить оплату. Повторите попытку.',
+  'hudChrome.claudium.checkoutUnavailable': 'Эта покупка Claudium сейчас недоступна.',
+  'hudChrome.claudium.checkoutWalletRequired':
+    'Подключите кошелёк Solana перед покупкой Claudium за криптовалюту.',
+  'hudChrome.claudium.checkoutWalletUnsupported':
+    'Этот кошелёк не может подписывать и отправлять транзакции Solana.',
+  'hudChrome.claudium.checkoutNotSettled':
+    'Транзакция отправлена, но Claudium ещё не зачислен. Повторите попытку позже.',
   'hudChrome.itemHeroicTag': '[ГЕРОИЧЕСКИЙ]',
   'hudChrome.readyCheck.notInPartyError':
     'Чтобы начать проверку готовности, вы должны состоять в группе.',
@@ -209,6 +458,25 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': 'Включить мастера добычи',
   'hudChrome.masterLoot.looterLabel': 'Мастер добычи',
   'hudChrome.masterLoot.leaderOption': 'Лидер группы',
+  'hudChrome.playerMenu.info': 'Об игроке',
+  'hudChrome.playerMenu.block': 'Заблокировать',
+  'hudChrome.playerMenu.unblock': 'Разблокировать',
+  'hudChrome.playerMenu.openFor': 'Открыть меню игрока {name}',
+  'hudChrome.playerMenu.profileUnavailable': 'Профиль игрока {name} не найден.',
+  'hudChrome.playerMenu.aiTag': '[AI]',
+  'hudChrome.playerMenu.aiTagTitle': 'Аккаунт под управлением ИИ',
+  'hudChrome.playerMenu.watchTwitch': 'Смотреть на Twitch',
+  'hudChrome.playerMenu.watchX': 'Открыть в X',
+  'hudChrome.playerMenu.watchKick': 'Смотреть на Kick',
+  'hudChrome.playerMenu.watchYouTube': 'Смотреть на YouTube',
+  'hudChrome.social.ignoredTab': 'Игнорируемые',
+  'hudChrome.social.ignoredEmpty': 'Вы никого не игнорируете.',
+  'hudChrome.social.blockedEmpty': 'Вы никого не заблокировали.',
+  'hudChrome.social.blockSearchPlaceholder': 'Имя персонажа',
+  'hudChrome.social.blockAction': 'Заблокировать',
+  'hudChrome.social.nowBlocking': '{name} заблокирован.',
+  'hudChrome.social.blockedTab': 'Заблокированные',
+  'hudChrome.social.stopBlockingTitle': 'Разблокировать {name}',
   'hudChrome.party.promoteLeader': 'Назначить лидером',
   'hudChrome.party.inviteUsage': 'Кого пригласить? Использование: /invite <имя>.',
   'hudChrome.masterLoot.thresholdLabel': 'Порог качества',
@@ -289,16 +557,30 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'Сенсорный',
   'hudChrome.options.interfaceModeNote':
     'В режиме «Авто» управление для компьютера или сенсорное выбирается по вашему устройству. Выберите «Компьютер», чтобы включить клавиатуру и мышь (удобно на планшете с клавиатурой), или «Сенсорный» для экранного управления.',
+  'hudChrome.warfare.honorAmount': '{amount} очк. чести',
+  'hudChrome.warfare.dualPrice': '{money} + {honor}',
+  'hudChrome.warfare.balance': 'Честь: {amount}',
+  'hudChrome.warfare.honorFloat': '+{amount} чести',
+  'hudChrome.warfare.honorGain': 'Вы получаете {amount} очк. чести ({reason}).',
+  'hudChrome.warfare.notEnoughHonor': 'Недостаточно чести.',
+  'hudChrome.warfare.reasons.arenaWin': 'Победа на арене',
+  'hudChrome.warfare.reasons.fiestaKill': 'Устранение на Фиесте',
+  'hudChrome.warfare.reasons.fiestaComplete': 'Завершение Фиесты',
+  'hudChrome.warfare.reasons.fiestaWin': 'Победа на Фиесте',
   'hudChrome.statInfo.fromYour': 'От вашей характеристики ({value} {stat}):',
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
   'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',
   'hudChrome.statInfo.names.hasteRating': 'Рейтинг ускорения',
+  'hudChrome.statInfo.names.warfare': 'Боевая мощь',
+  'hudChrome.statInfo.warfareValue': '+{increase}% к урону / -{reduction}% получаемого',
   'hudChrome.statInfo.desc.critRating':
     'Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.',
   'hudChrome.statInfo.desc.hasteRating':
     'Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.',
   'hudChrome.statInfo.desc.spellPower':
     'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
+  'hudChrome.statInfo.desc.warfare':
+    'Увеличивает урон по игрокам на {increase}% и снижает получаемый от игроков урон на {reduction}%.',
   'hudChrome.statInfo.sources.header': 'Складывается из:',
   'hudChrome.statInfo.sources.base': 'База: {value}',
   'hudChrome.statInfo.sources.attributes': 'От характеристик: {value}',
@@ -430,6 +712,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': 'Колесо эмоций',
   'hudChrome.keybinds.targetFriendly': 'Ближайший союзник',
   'hudChrome.keybinds.targetFriendlyNext': 'Следующий союзник',
+  'hudChrome.petFeed.disabledFullHp': 'Питомец полностью здоров',
+  'hudChrome.petFeed.disabledNoFood': 'В ваших сумках нет еды, которая могла бы вылечить питомца',
   'hudChrome.options.clickMoveLeft': 'Левая кнопка',
   'hudChrome.options.clickMoveRight': 'Правая кнопка',
   'hudChrome.options.browserEffects': 'Эффекты браузера',
@@ -2028,6 +2312,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lay_on_hands.name': 'Последний обряд',
   'entities.abilities.lay_on_hands.description':
     'Мощный поток исцеления: восстанавливает {damage} здоровья. Время восстановления 10 мин.',
+  'entities.abilities.holy_taunt.name': 'Священное подстрекательство',
+  'entities.abilities.holy_taunt.description':
+    'Провоцирует цель: ваша угроза повышается до уровня самого ненавистного ей врага, и она вынуждена атаковать вас 3 сек.',
   'entities.abilities.flash_of_light.name': 'Заживление Светом',
   'entities.abilities.flash_of_light.description':
     'Быстрая и действенная вспышка Света, исцеляющая дружественную цель на {damage}.',
@@ -2116,6 +2403,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Насыщает ваше оружие яростью камня: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин.',
   'entities.abilities.healing_wave.name': 'Целебные воды',
   'entities.abilities.healing_wave.description': 'Исцеляет дружественную цель на {damage}.',
+  'entities.abilities.chain_heal.name': 'Цепное исцеление',
+  'entities.abilities.chain_heal.description':
+    'Исцеляет дружественную цель на большую величину, затем перескакивает на 2 ближайших союзников, исцеляя на 50% меньше с каждым прыжком. (Специализация Исцеление)',
   'entities.abilities.earth_shock.name': 'Земной толчок',
   'entities.abilities.earth_shock.description':
     'Мгновенно поражает цель ударной силой, нанося {damage} ед. урона от сил природы.',
@@ -2298,6 +2588,72 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Оживление питомца',
   'entities.abilities.revive_pet.description':
     'Оживляет вашего павшего питомца и возвращает его к вам.',
+  'entities.abilities.holy_shock.name': 'Шок небес',
+  'entities.abilities.holy_shock.description':
+    'Поражает дружественную цель энергией Света и исцеляет ее на {damage}. (знаковое умение Света)',
+  'entities.abilities.holy_shield.name': 'Священный щит',
+  'entities.abilities.holy_shield.description':
+    'Защищает вас силой Света на 10 сек., повышает броню на 90 и поражает атакующих в ближнем бою на 12 ед. урона от Света. (знаковое умение Защиты)',
+  'entities.abilities.bestial_wrath.name': 'Звериный гнев',
+  'entities.abilities.bestial_wrath.description':
+    'Повергает вас в звериную ярость, повышая силу атаки на 55 на 15 сек. (знаковое умение Повелителя зверей)',
+  'entities.abilities.trueshot_aura.name': 'Аура меткого выстрела',
+  'entities.abilities.trueshot_aura.description':
+    'Воодушевляет ближайших союзников, повышая силу атаки на 35 на 5 мин. (знаковое умение Стрельбы)',
+  'entities.abilities.wyvern_sting.name': 'Укус виверны',
+  'entities.abilities.wyvern_sting.description':
+    'Поражает врага издалека и выводит его из строя на срок до 4 сек. Любой урон прерывает эффект. (знаковое умение Выживания)',
+  'entities.abilities.arcane_power.name': 'Мощь тайной магии',
+  'entities.abilities.arcane_power.description':
+    'Повышает урон от заклинаний на 20% и скорость заклинаний на 10% на 10 сек. (знаковое умение Тайной магии)',
+  'entities.abilities.combustion.name': 'Возгорание',
+  'entities.abilities.combustion.description':
+    'Повышает шанс критического эффекта заклинаний на 50% на 15 сек. (знаковое умение Огня)',
+  'entities.abilities.icy_veins.name': 'Ледяные жилы',
+  'entities.abilities.icy_veins.description':
+    'Повышает скорость заклинаний на 30% и предотвращает прерывание и задержку произнесения на 10 сек. (знаковое умение Льда)',
+  'entities.abilities.cold_blood.name': 'Хладнокровие',
+  'entities.abilities.cold_blood.description':
+    'Сосредоточивает убийственное намерение, чтобы следующая атака стала критической. (знаковое умение Ликвидации)',
+  'entities.abilities.blade_flurry.name': 'Шквал клинков',
+  'entities.abilities.blade_flurry.description':
+    'Обрушивает шквал клинков, повышая скорость атаки на 20% на 12 сек. (знаковое умение Боя)',
+  'entities.abilities.hemorrhage.name': 'Кровоизлияние',
+  'entities.abilities.hemorrhage.description':
+    'Бьет врага, нанося урон оружием плюс {damage}, и вызывает кровотечение на 12 сек. Дает 1 прием. (знаковое умение Скрытности)',
+  'entities.abilities.power_infusion.name': 'Придание сил',
+  'entities.abilities.power_infusion.description':
+    'Наполняет дружественную цель силой, повышая ее силу заклинаний на 28 на 15 сек. (знаковое умение Послушания)',
+  'entities.abilities.holy_nova.name': 'Кольцо света',
+  'entities.abilities.holy_nova.description':
+    'Вызывает взрыв Света, исцеляя ближайших союзников на {damage} и раня ближайших врагов. (знаковое умение Света)',
+  'entities.abilities.shadowform.name': 'Облик Тьмы',
+  'entities.abilities.shadowform.description':
+    'Вы принимаете Облик Тьмы, усиливая темную магию до обратного перехода. Примените снова, чтобы вернуться в обычный облик. (знаковое умение Тьмы)',
+  'entities.abilities.elemental_mastery.name': 'Покорение стихий',
+  'entities.abilities.elemental_mastery.description':
+    'Призывает покорение стихий, делая следующее заклинание мгновенным. (знаковое умение Стихий)',
+  'entities.abilities.siphon_life.name': 'Вытягивание жизни',
+  'entities.abilities.siphon_life.description':
+    'Вытягивает жизнь из врага, нанося {damage} ед. урона от темной магии за 30 сек. и исцеляя вас на величину нанесенного урона. (знаковое умение Колдовства)',
+  'entities.abilities.conflagrate.name': 'Поджигание',
+  'entities.abilities.conflagrate.description':
+    'Поглощает ваше Жертвенное пламя на враге, поджигая его и нанося {damage} ед. урона от огня. (знаковое умение Разрушения)',
+  'entities.abilities.moonkin_form.name': 'Облик лунного совуха',
+  'entities.abilities.moonkin_form.description':
+    'Вы принимаете Облик лунного совуха, усиливая заклинания до обратного перехода. Примените снова, чтобы вернуться в обычный облик. (знаковое умение Баланса)',
+  'entities.abilities.feral_charge.name': 'Звериная атака',
+  'entities.abilities.feral_charge.description':
+    'Вы бросаетесь к врагу и обездвиживаете его на 1 сек. Дистанция 8-25 м. (знаковое умение Силы зверя)',
+  'entities.abilities.swiftmend.name': 'Быстрое восстановление',
+  'entities.abilities.swiftmend.description':
+    'Поглощает эффект периодического исцеления на дружественной цели и исцеляет ее на {damage}. (знаковое умение Исцеления)',
+  'entities.abilities.crusader_strike.name': 'Удар воина Света',
+  'entities.abilities.crusader_strike.description':
+    'Бьет цель, нанося урон оружием плюс {damage} ед. урона от Света. (талант паладина)',
+  'entities.abilities.metamorphosis.name': 'Метаморфоза',
+  'entities.abilities.metamorphosis.description':
+    'Принимает демоническую силу, повышая броню и силу атаки на 20 сек. (талант чернокнижника)',
   'entities.items.worn_sword.name': 'Щербатый короткий меч',
   'entities.items.gnarled_staff.name': 'Посох мореного дуба',
   'entities.items.rusty_dagger.name': 'Ржавый кинжал',
@@ -3608,9 +3964,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.shroud_of_the_gravewyrm.name': 'Саван могильного змея',
   'entities.items.sanctum_prowlers_grips.name': 'Перчатки святилищного охотника',
   'entities.items.scepter_of_the_deathless_court.name': 'Скипетр бессмертного двора',
-  'entities.items.deathless_warguard_legmail.name': 'Ножные латы бессмертного стража',
-  'entities.items.soulrend_diadem.name': 'Диадема разрыва души',
-  'entities.items.scourgehide_carapace.name': 'Панцирь бичевой шкуры',
   'entities.items.cryptplate_helm.name': 'Гробничный латный шлем',
   'entities.items.shadowpulse_slippers.name': 'Туфли теневого пульса',
   'entities.items.bonechill_cord.name': 'Пояс костяного холода',
@@ -3624,7 +3977,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.gravescale_girdle.name': 'Пояс могильной чешуи',
   'entities.items.wyrmchoir_handwraps.name': 'Обмотки змеиного хора',
   'entities.items.deathless_greatblade.name': 'Бессмертный великий клинок',
-  'entities.items.soulforged_warplate.name': 'Душекованый боевой доспех',
   'entities.items.stormcallers_focus.name': 'Средоточие буревестника',
   'entities.items.zense_meridian.name': 'Меридиан Зенсе',
   'entities.items.seal_of_the_nine_oaths.name': 'Печать девяти клятв',
@@ -3984,6 +4336,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/с',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} сек.',
+  'hudChrome.meters.autoShowHint':
+    'Строки появляются автоматически, как только ваша группа наносит урон или лечит, и этот раздел закрывается через несколько секунд после окончания боя.',
   'hudChrome.mobile.actionPageToggle': 'Переключить страницу действий',
   'hudChrome.mobile.actionRing': 'Боевые действия',
   'hudChrome.mobile.haptics': 'Вибрация',
@@ -3992,7 +4346,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.hotbarPageAria': 'Показать следующий набор навыков',
   'hudChrome.mobile.jump': 'Прыжок',
   'hudChrome.mobile.leaderboard': 'Рейтинг',
-  'hudChrome.mobile.dailyRewards': 'Награды',
+  'hudChrome.mobile.dailyRewards': 'Магазин',
   'hudChrome.mobile.deeds': 'Деяния',
   'hudChrome.mobile.nameplates': 'Имена',
   'hudChrome.mobile.targetCycle': 'Сменить цель',
@@ -4078,6 +4432,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': 'Получите награду',
   'hud.tutorial.returnBody':
     'Задание выполнено. Вернитесь к маршалу Редбруку и нажмите {interactKey}, чтобы сдать его.',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Олдрен, бессмертный страж',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Малрик, бессмертный иерофант',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Восс, бессмертный клинок',
   'entities.mobs.nythraxis_skeleton_warrior.name': 'Восставший королевский страж',
   'entities.mobs.nythraxis_scourge_of_thornpeak.name': 'Нитраксис, Бич Торнпика',
   'itemUi.quality.legendary': 'Легендарное',
@@ -4209,7 +4566,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'Свернуть трекер заданий',
   'hudChrome.questTracker.expandHint': 'Развернуть трекер заданий',
   'hudChrome.bags.cannotDestroy': 'Этот предмет нельзя уничтожить.',
-  'hudChrome.bags.rightClickDestroy': 'Правый клик, чтобы уничтожить',
+  'hudChrome.bags.rightClickDestroy': 'Shift+правый клик, чтобы уничтожить',
   'hudChrome.bags.filterGroupAria': 'Фильтровать сумки по категории',
   'hudChrome.bags.filterAll': 'Все',
   'hudChrome.bags.filterWeapon': 'Оружие',
@@ -4710,6 +5067,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.family.dragonkin.name': 'Дракониды',
   'guide.family.elemental.desc':
     'Живая буря и камень, привязанные к диким местам, где стихии особенно сильны.',
+  'guide.family.reptile.name': 'Рептилии',
+  'guide.family.reptile.desc':
+    'Хладнокровные охотники со своим особым шипением и хваткой, непохожие на теплокровных зверей.',
   'guide.worldPage.heading': 'Мир',
   'guide.worldPage.intro':
     'World of ClaudeCraft - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.',
@@ -5985,6 +6345,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Привяжите Discord, чтобы получать очки за игру и активность в сообществе и подниматься по рангам статуса.',
   'hudChrome.discord.link.error': 'Не удалось привязать Discord. Пожалуйста, попробуйте снова.',
   'hudChrome.discord.link.success': 'Discord привязан.',
+  'hudChrome.discord.link.joinServer': 'Просто присоединиться к серверу Discord',
   'hudChrome.discord.linkedAs': 'Привязан как {name}',
   'hudChrome.discord.linkedTitle': 'Discord: {name}',
   'hudChrome.discord.viewProfile': 'Открыть публичный профиль этого персонажа',
@@ -6051,6 +6412,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': 'Разработчик',
   'hudChrome.discord.roleTag.mods': 'Модератор',
+  'hudChrome.discord.roleTag.seniormods': 'Старший модератор',
+  'hudChrome.discord.roleTag.juniormods': 'Младший модератор',
+  'hudChrome.discord.roleTag.contentcreator': 'Контент-мейкер',
   'hudChrome.discord.voice.channel': 'В {channel}',
   'hudChrome.discord.swag.title': 'Мерч',
   'hudChrome.discord.swag.free': 'Бесплатно',
@@ -6095,6 +6459,15 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Доступна версия {version} World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.',
   'hudChrome.nativeUpdate.notNow': 'Не сейчас',
   'hudChrome.nativeUpdate.update': 'Обновить',
+  'hudChrome.cameraPrompt.title': 'Выберите камеру',
+  'hudChrome.cameraPrompt.intro': 'Выберите, как камера следует за персонажем.',
+  'hudChrome.cameraPrompt.mouseDesc':
+    'Двигайте мышью, чтобы поворачивать камеру, не удерживая кнопку.',
+  'hudChrome.cameraPrompt.classicTitle': 'Классическая камера',
+  'hudChrome.cameraPrompt.classicDesc':
+    'Удерживайте правую кнопку мыши и двигайте мышью, чтобы поворачивать камеру.',
+  'hudChrome.cameraPrompt.changeLater': 'Это можно изменить позже в меню Esc, раздел «Клавиши».',
+  'hudChrome.cameraPrompt.confirm': 'Подтвердить',
   'desktop.update.downloading': 'Загрузка обновления {version}...',
   'desktop.update.ready':
     'Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.',
@@ -7191,6 +7564,50 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.bursar_aldous_crane.title': 'Золочёный сундук',
   'entities.npcs.bursar_aldous_crane.greeting':
     'Любой ящик, ларец и безделушка в Золочёном сундуке в полной сохранности.',
+  'entities.items.furyforged_warhelm.name': 'Боевой шлем яростной ковки',
+  'entities.items.furyforged_warspaulders.name': 'Боевые наплечники яростной ковки',
+  'entities.items.furyforged_warplate.name': 'Боевой панцирь яростной ковки',
+  'entities.items.furyforged_girdle.name': 'Пояс яростной ковки',
+  'entities.items.furyforged_legguards.name': 'Набедренники яростной ковки',
+  'entities.items.furyforged_gauntlets.name': 'Рукавицы яростной ковки',
+  'entities.items.furyforged_sabatons.name': 'Сабатоны яростной ковки',
+  'entities.items.stormbound_crown.name': 'Корона, скованная бурей',
+  'entities.items.stormbound_spaulders.name': 'Наплечники, скованные бурей',
+  'entities.items.stormbound_hauberk.name': 'Хауберк, скованный бурей',
+  'entities.items.stormbound_waistguard.name': 'Набедренник, скованный бурей',
+  'entities.items.stormbound_legmail.name': 'Кольчужные поножи, скованные бурей',
+  'entities.items.stormbound_handguards.name': 'Наручи, скованные бурей',
+  'entities.items.stormbound_greaves.name': 'Наголенники, скованные бурей',
+  'entities.items.ashstalker_cowl.name': 'Капюшон пеплохода',
+  'entities.items.ashstalker_shoulderguards.name': 'Наплечники пеплохода',
+  'entities.items.ashstalker_harness.name': 'Портупея пеплохода',
+  'entities.items.ashstalker_waistband.name': 'Кушак пеплохода',
+  'entities.items.ashstalker_legguards.name': 'Набедренники пеплохода',
+  'entities.items.ashstalker_grips.name': 'Перчатки пеплохода',
+  'entities.items.ashstalker_treads.name': 'Башмаки пеплохода',
+  'entities.items.cinderweave_cowl.name': 'Капюшон жароткача',
+  'entities.items.cinderweave_mantle.name': 'Оплечье жароткача',
+  'entities.items.cinderweave_raiment.name': 'Облачение жароткача',
+  'entities.items.cinderweave_cord.name': 'Шнурованный пояс жароткача',
+  'entities.items.cinderweave_legwraps.name': 'Обмотки жароткача',
+  'entities.items.cinderweave_handwraps.name': 'Повязки жароткача',
+  'entities.items.cinderweave_slippers.name': 'Туфли жароткача',
+  'entities.items.final_oath_medallion.name': 'Медальон последней клятвы',
+  'entities.items.razorwind_torque.name': 'Шейная гривна режущего ветра',
+  'entities.items.cinder_sigil_pendant.name': 'Подвеска с печатью углей',
+  'entities.items.iron_vow_band.name': 'Кольцо железной клятвы',
+  'entities.items.unbroken_circle.name': 'Несокрушимый круг',
+  'entities.items.fleetblood_band.name': 'Кольцо стремительной крови',
+  'entities.items.last_step_signet.name': 'Печатка последнего шага',
+  'entities.items.ashen_focus_ring.name': 'Кольцо пепельного средоточия',
+  'entities.items.spellbreakers_seal.name': 'Печать разрушителя чар',
+  'entities.items.final_argument_greatblade.name': 'Великий клинок последнего довода',
+  'entities.items.first_blood_razor.name': 'Бритва первой крови',
+  'entities.items.emberglass_warstaff.name': 'Боевой посох из огненного стекла',
+  'entities.npcs.fury.name': 'Фьюри',
+  'entities.npcs.fury.title': 'Интендант чести',
+  'entities.npcs.fury.greeting':
+    'Пески поля боя помнят каждую победу. Распорядись своей честью достойно.',
   'guide.economy.bankBody':
     'В каждом узловом городе есть отделение Золочёного сундука, банкирского дома этих земель. Поговорите с казначеем, и он откроет ваше хранилище: личный запас места помимо сумок, который остаётся за персонажем навсегда. Всё, что вы оставили, будет спокойно ждать вас в любом отделении.',
   'guide.economy.bankHow':
@@ -7349,6 +7766,28 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Совет: сохраните несколько наборов талантов, чтобы менять билды, не тратя очки заново.',
   'loading.tips.pvp':
     'Совет: вызовите другого игрока на дружескую дуэль или встаньте в очередь на арену Пепельного Колизея, чтобы испытать свой билд.',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': 'Челюстолом',
+  'entities.abilities.pummel.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.kick.name': 'Пинок',
+  'entities.abilities.kick.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.counterspell.name': 'Разрыв чар',
+  'entities.abilities.counterspell.description':
+    'Контрит заклинание цели и запрещает заклинания этой школы в течение 6 сек.',
+  'entities.abilities.counter_shot.name': 'Глушащий выстрел',
+  'entities.abilities.counter_shot.description':
+    'Быстрый выстрел прерывает заклинание цели и блокирует эту школу на 4 сек.',
+  'entities.abilities.rebuke.name': 'Укор',
+  'entities.abilities.rebuke.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.skull_bash.name': 'Удар головой',
+  'entities.abilities.skull_bash.description':
+    'Рывковый удар головой прерывает заклинание цели и блокирует эту школу на 4 сек.',
+  'entities.abilities.spell_lock.name': 'Затычка',
+  'entities.abilities.spell_lock.description':
+    'Заставляет цель умолкнуть при чтении заклинания и запрещает заклинания этой школы на 5 сек.',
   'guide.bestiary.flavor.sethrael_palecoil':
     'Костисто-бледный змей, что скользит вдоль глубокого уступа Глиммермира, безмолвный страж вод, которые он объявил своими. Пловцы, делящие с ним озеро, редко всплывают снова.',
   'guide.combat.metersBody':
@@ -7404,4 +7843,29 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.social.slashBody':
     'Несколько повседневных команд стоит запомнить: /w Имя отправляет шёпот, а /r отвечает на последний полученный, /invite приглашает кого-то в вашу группу, /follow пристраивает вас следом за другом, /roll бросает кости на виду у группы, /who показывает, кто в сети, а /afk отмечает вас отошедшим. Введите /help в игре, чтобы увидеть полный список.',
   'guide.social.slashHeading': 'Удобные команды с косой чертой',
+  // Unstuck recovery (M16 non-Latin fills).
+  'hudChrome.unstuck.menuButton': 'Выбраться',
+  'hudChrome.unstuck.help':
+    'Спасение: /unstuck запускает неподвижный отсчёт, после которого вы окажетесь в ближайшем доступном безопасном месте.',
+  'hudChrome.unstuck.started':
+    'Перемещение из ловушки через {seconds} сек. Движение, бой, получение урона или другое действие отменят его.',
+  'hudChrome.unstuck.countdown': 'Выбраться: {seconds}',
+  'hudChrome.unstuck.completed': 'Вы перемещены в ближайшее доступное безопасное место.',
+  'hudChrome.unstuck.cancelledMoved': 'Перемещение отменено, потому что вы сдвинулись с места.',
+  'hudChrome.unstuck.cancelledDamaged': 'Перемещение отменено, потому что вы получили урон.',
+  'hudChrome.unstuck.cancelledCombat': 'Перемещение отменено, потому что вы вступили в бой.',
+  'hudChrome.unstuck.cancelledBusy': 'Перемещение отменено, потому что вы начали другое действие.',
+  'hudChrome.unstuck.cancelledState': 'Перемещение отменено из-за изменения вашего состояния.',
+  'hudChrome.unstuck.cancelledDisconnected': 'Перемещение отменено из-за отключения.',
+  'hudChrome.unstuck.noSafePosition':
+    'Поблизости нет доступного безопасного места. Вы остались на месте.',
+  'hudChrome.unstuck.alreadyActive': 'Отсчёт перемещения уже идёт.',
+  'hudChrome.unstuck.alreadySafe': 'Вы уже находитесь в безопасном доступном месте.',
+  'hudChrome.unstuck.cooldown': 'Перемещение будет доступно через {seconds} сек.',
+  'hudChrome.unstuck.dead': 'Нельзя выбраться, пока вы мертвы или находитесь в облике духа.',
+  'hudChrome.unstuck.combat': 'Нельзя выбраться во время боя.',
+  'hudChrome.unstuck.controlled': 'Нельзя выбраться, пока ваше движение ограничено.',
+  'hudChrome.unstuck.standStill': 'Остановитесь на твёрдой земле, прежде чем выбираться.',
+  'hudChrome.unstuck.busy': 'Завершите текущее действие, прежде чем выбираться.',
+  'hudChrome.unstuck.unavailable': 'В текущем состоянии выбраться нельзя.',
 };

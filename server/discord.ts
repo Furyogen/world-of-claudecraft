@@ -68,6 +68,7 @@ import {
   parseTokenResponse,
   pkceChallengeFromVerifier,
 } from './discord_oauth';
+import { deleteUnusedFederatedProvision } from './federated_auth_db';
 import { ctxAccountId } from './http/context';
 import type { ErrorCode } from './http/error_codes';
 import { logger } from './http/logger';
@@ -100,7 +101,7 @@ const STATE_TTL_MINUTES = 10;
 // (the player may also type a password / 2FA code on the link path), a bit longer
 // than the OAuth state TTL since a human decision sits in the middle.
 const PENDING_LOGIN_TTL_MINUTES = 15;
-const DEFAULT_INVITE = 'https://discord.gg/GjhnUsBtw';
+const DEFAULT_INVITE = 'https://discord.com/invite/worldofclaudecraft';
 const NATIVE_DISCORD_REDIRECT = 'worldofclaudecraft://discord-auth';
 const NATIVE_REDIRECT_STATE_PREFIX = `${NATIVE_DISCORD_REDIRECT}?challenge=`;
 
@@ -508,7 +509,9 @@ export async function handleDiscordLoginNew(
       });
       if (!linked) {
         // Lost the race: another account grabbed this Discord id between our check
-        // and the insert. Fall back to logging into the real owner.
+        // and the insert. Delete only the still-unreachable loser, including its
+        // seeded test characters, then fall back to logging into the real owner.
+        await deleteUnusedFederatedProvision(pool, account.id);
         const ownerId = await accountForDiscord(pool, user.id);
         if (ownerId === null)
           return json(res, 409, { error: 'already_linked', code: 'discord.already_linked' });

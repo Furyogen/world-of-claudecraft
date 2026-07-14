@@ -41,7 +41,7 @@ interface PalmPart {
 
 // Bake a preloaded palm GLB into instanceable parts. The shipped models are
 // meshopt-quantized, so attributes are converted to float32 before the node
-// transform is folded into the geometry — writing world-space values back into
+// transform is folded into the geometry; writing world-space values back into
 // normalized int16 attributes would clip (same recipe as foliage.ts).
 function bakePalmParts(scene: THREE.Group): PalmPart[] {
   scene.updateMatrixWorld(true);

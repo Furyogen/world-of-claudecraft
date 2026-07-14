@@ -167,6 +167,29 @@ export const zh_TW: EnTranslations = {
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
       "spiritHealerAlive": "靈魂醫者只看護逝者。你仍是生者。"
     },
+    "unstuck": {
+      "menuButton": "脫困",
+      "help": "脫困：/unstuck 會啟動原地倒數，之後將你移動到附近可到達的安全位置。",
+      "started": "將在 {seconds} 秒後脫困。移動、戰鬥、受到傷害或開始其他動作都會取消。",
+      "countdown": "脫困：{seconds}",
+      "completed": "已移動到最近且可到達的安全位置。",
+      "cancelledMoved": "你進行了移動，脫困已取消。",
+      "cancelledDamaged": "你受到了傷害，脫困已取消。",
+      "cancelledCombat": "你進入了戰鬥，脫困已取消。",
+      "cancelledBusy": "你開始了其他動作，脫困已取消。",
+      "cancelledState": "你的狀態發生變化，脫困已取消。",
+      "cancelledDisconnected": "由於連線中斷，脫困已取消。",
+      "noSafePosition": "附近沒有可到達的安全位置。你沒有被移動。",
+      "alreadyActive": "脫困倒數已在進行。",
+      "alreadySafe": "你已經位於安全且可到達的位置。",
+      "cooldown": "脫困將在 {seconds} 秒後可用。",
+      "dead": "死亡或靈魂狀態下無法使用脫困。",
+      "combat": "戰鬥中無法使用脫困。",
+      "controlled": "移動受限時無法使用脫困。",
+      "standStill": "請在堅實地面上站穩後再使用脫困。",
+      "busy": "請先完成目前動作再使用脫困。",
+      "unavailable": "目前狀態下無法使用脫困。"
+    },
     "emotes": {
       "wave": "揮手",
       "laugh": "大笑",
@@ -244,6 +267,263 @@ export const zh_TW: EnTranslations = {
         "banned": "您已被禁止參加每日獎勵。原因：{reason}"
       }
     },
+    "wocStore": {
+      "title": "WOC 商店",
+      "close": "關閉 WOC 商店",
+      "tabsLabel": "WOC 商店分區",
+      "storeTab": "商店",
+      "rewardsTab": "每日獎勵",
+      "loading": "正在載入 WOC 商店…",
+      "error": "WOC 商店目前無法使用，請稍後再試。",
+      "balance": "Claudium 餘額",
+      "buyClaudium": "購買 Claudium",
+      "owned": "已擁有",
+      "needMoreTitle": "需要更多 Claudium",
+      "needMoreBody": "還需要 {shortfall} Claudium 才能購買 {item}。",
+      "cancel": "取消",
+      "confirmTitle": "確認購買外觀",
+      "confirmBody": "要用 {cost} Claudium 購買 {item} 嗎？",
+      "confirmPurchase": "購買",
+      "priceChanged": "購買完成前價格已變更。請查看刷新後的價格並再次確認。",
+      "armoryEyebrow": "第一賽季",
+      "armoryTitle": "兵器庫",
+      "armoryBody": "第一賽季兵器庫限定武器外觀。全帳號通用，純裝飾性，周圍所有玩家都能看到。",
+      "collectionLine": "{collection}系列",
+      "collections": {
+        "guildmark": "公會印記",
+        "emberwrought": "餘燼鍛造",
+        "hoarfrost": "白霜",
+        "fallen_star": "隕星"
+      },
+      "skins": {
+        "guildmark_arming_sword": {
+          "name": "公會印記武裝劍",
+          "look": "發藍鋼劍刃、青銅魚尾形十字護手、青綠色染皮握柄，以及一枚小巧的公會鋼印。",
+          "lore": "一般成品劍無名無姓，這一把卻有署名。只有當 World Market 的 Merchant 願為其鋼材作保，鎧甲匠才有權在劍根刻下自己的印記；Smith Haldren 的印記正有這份擔保。劍身經發藍處理，足以抵禦 the Vale 的濕氣，平衡精準至毫釐。你付的錢有一半買的是鋼印，但它物有所值。"
+        },
+        "brasscap_axe": {
+          "name": "黃銅帽手斧",
+          "look": "拋光鋼斧刃，漆製白蠟木柄上裝有黃銅頂帽與護木鐵，纏帶整潔，並刻有匠人鋼印。",
+          "lore": "帶有鋼印的斧頭是握在手中的炫耀。黃銅頂帽和護木鐵一半是護甲，一半是簽名：既防斧柄劈裂，也映著酒館燈火，讓人人都知道你買的是 Armorer Hode 的作品，不是民兵傳下來的舊貨。「能砍，我就賣。」Highwatch 的鐵匠如此說。這一把確實能砍。"
+        },
+        "tempered_flanged_mace": {
+          "name": "淬火凸緣錘",
+          "look": "六稜淬火藍鋼鎚頭、黃銅頸環與柄首，以及酒紅色皮革握柄。",
+          "lore": "六道發藍淬火鋼棱，每一道都磨得足以劈開頭盔，再配黃銅端飾與酒紅皮革。即使用途再殘酷，王國的鎧甲匠也不肯造醜陋的武器。這一把經 World Market 專門委製，並非貨架上的現成貨；某處帳簿裡還寫著那位自豪買家的名字，以及他付給 Hode 的價錢。"
+        },
+        "guildmark_dirk": {
+          "name": "公會印記短劍",
+          "look": "纖細的淬火鋼短劍、青銅護手與柄尾螺帽、深綠色繩纏握柄，以及壓印徽記。",
+          "lore": "這是有身份者把長劍留在家中時佩戴的武器：纖細、淬火，蓋著與整柄長劍同樣的認證鋼印，掛在腰間，如同一枚帶刃的印戒。除非懂得鎧甲匠的憑證，否則只會覺得它低調。 Quartermaster Bree 在 Highwatch 留著整整一抽屜，專供贏得城牆敬意的軍官。"
+        },
+        "brasscrown_staff": {
+          "name": "黃銅冠手杖",
+          "look": "硬木杖頂裝有車製黃銅冠飾，配黃銅杖腳與染色皮帶。",
+          "lore": "杖身取自風乾硬木，頂上是 Eastbrook 鐵匠成百鑄造卻件件精修的黃銅冠飾。它屬於那種無論走到 Fenbridge 城門或 Highwatch 城牆，都希望被認真對待的旅人。這根手杖從未真正需要支撐步伐；染色皮帶與那件一眼便知價值不菲的外套恰好相配。"
+        },
+        "lacquered_wand": {
+          "name": "漆木短杖",
+          "look": "纖細的深紅漆杖，飾有兩道拋光黃銅環和小巧圓潤的黃銅杖頭。",
+          "lore": "深紅漆面耐心塗了七層，再以兩道拋光黃銅束起。這正是鄉野法師開始收取真金白銀後，會從 World Market 買來裝點門面的法杖。它引導 Light 的能力並不比白樺枝更強，卻能在 Merchant 的櫃檯上耀眼奪目；小法術向來有一半靠別人相信。"
+        },
+        "fletcher_s_guild_bow": {
+          "name": "製弓師公會弓",
+          "look": "漆製胡桃木反曲弓、黃銅弓梢、上蠟亞麻弦，弓把上刻有公會鋼印。",
+          "lore": "弓把上的製弓師鋼印，是王國最接近公會憑證的東西；它承諾著弓身內在的品質，就像釀酒師為木桶封印。漆製胡桃木、黃銅弓梢，還有經上蠟、不會在 Mirefen 雨中磨損的亞麻弦，每一處接合都在為價格辯護。越過 Widow Thicket 後拉一次弓，這場辯論有了答案。"
+        },
+        "cinderbrand_sword": {
+          "name": "燼痕",
+          "look": "深色鍛鋼劍刃，血槽中嵌著橘紅發光符文與熱裂紋，護手內有一枚陰燃寶石。",
+          "lore": "這是第一把不用水淬火，而以從 Stormcrag 耙出的 Blessed Embers 淬煉的劍。 Highwatch 的鐵匠發誓，那些煤火「燃得湛藍而純淨，因為山仍記得古老的誓言」。火焰被封進血槽後只餘橙紅暗燃，卻永不熄滅；即便在城牆最寒冷的夜晚，符文也能溫暖裸手。 Cinderbrand 從不需要點燃，它只是拒絕熄滅。"
+        },
+        "emberbite_axe": {
+          "name": "餘燼之噬",
+          "look": "燻黑鐵斧，斧刃間透出橘紅裂光，嵌有一顆封存炭火的寶石，周圍熱氣繚繞。",
+          "lore": "Armorer Hode 把一塊山火活炭鍛造進斧刃核心，使刃口在兩次揮砍之間也從未真正冷卻。下劈時裂縫吐出橙光，彷彿撞擊喚醒了初次鍛造時沉睡在鐵裡的東西。有人說一隻 Stormcrag 元素為此交出了餘燼；Highwatch 起風時，人們總是會說出許多故事。"
+        },
+        "smoulderfall_mace": {
+          "name": "悶燃墜擊",
+          "look": "黑鐵鎚稜的內側裂縫泛著橙紅光芒，鎚頭中嵌有熔核寶石。",
+          "lore": "這柄戰鎚自備爐火：從那道「以山火鑄成」的 Sanctum 封印上鑿下一塊熔核石，嵌在鎚頭中發光。鎚稜觸手溫熱，落下時更燙；一名 Highwatch 中士發誓，被它擊中的瘀傷會微微發亮直到清晨。山中之火終於不再用於封印，而用於破壞。"
+        },
+        "ashspark_dagger": {
+          "name": "灰火匕",
+          "look": "短小的燻黑刀刃遍布橙紅發光紋路，柄首嵌著微小的陰燃寶石，灰燼與火星相隨。",
+          "lore": "一把將山火偷藏進柄首寶石的巷戰短刀，也是鎧甲匠無聲的玩笑：就連扒手也能帶著初次鍛造的一點餘燼。刀身燻黑、橙紋密布，在鞘中總比應有的溫度更暖。在 Highwatch 下方的黑暗中拔出它，微光恰好能照亮你的手，也足以找到對手守勢中的縫隙。"
+        },
+        "forgeheart_staff": {
+          "name": "爐心法杖",
+          "look": "鐵箍法杖頂端囚著發光餘燼核心，火焰符文沿著杖身攀升，熱浪在上方搖曳。",
+          "lore": "一塊山火活炭被囚在杖冠的鐵籠中。 Loremaster Caddis 稱它證明了初次鍛造之火不僅能用於封印，也能被束縛來服務。熱浪化為纖細而無盡的絲帶升起；攜帶它的法師永遠不缺少鍛爐或守夜火。傳言這塊餘燼取自 Voskar the Emberwing 的吐息，自此從未冷卻。"
+        },
+        "emberwrought_wand": {
+          "name": "餘燼鍛造魔杖",
+          "look": "燻黑金屬魔杖，鐵爪扣住發光炭火，細微熱裂紋間透出溫暖內光。",
+          "lore": "正是這根魔杖為整個品級命名。 Highwatch 的鎧甲匠第一次以鐵爪扣住山火餘炭，並讓它聽命於凡人之手時，就連 Light 的祭司也不再稱其為異端，轉而說它很實用。溫暖、耐心，又悄悄危險：杖尖的餘燼從主人出生前便持續燃燒，從未中斷。"
+        },
+        "cinderlatch_crossbow": {
+          "name": "燼鎖",
+          "look": "燻黑鋼弩，弩臂裂縫滲出橘紅光芒，弩身封著一塊陰燃煤炭。",
+          "lore": "這是餘燼鍛造中最奇怪的一件：把山火灌進一台機械。橙光從弩臂裂縫滲出，弩身內的陰燃煤炭令弓弦在 Thornpeak 的嚴寒或 Mirefen 的濕氣中都不會僵硬。弩矢離槽時已有溫度，命中時更為灼熱。對於城牆外那些同樣不畏嚴寒的敵人，這是獵人的回答。"
+        },
+        "ice_fang_sword": {
+          "name": "冰牙",
+          "look": "蒼白冰河彎刃，刃背生鋸齒狀霜晶，血槽內有發光的青藍冰核，護手如冰柱。",
+          "lore": "這是冰封品級的旗艦，也是每位收藏家最先伸手的一件。 Ice Fang 並非鍛造，而是從覆蓋 Highwatch 上方 Thornpeak 的冰川尖牙中雕成；青藍核心寒冷燃燒，如 Glimmermere 水面的冷光。它劈過之處連空氣都會結霜。城牆守衛發誓，大雪擋住 Wyrmcult 的那一夜，一名士兵帶著它，「為城牆買下了一個冬天」。"
+        },
+        "glaciersplit_axe": {
+          "name": "裂冰",
+          "look": "半透明藍色冰川斧頭，裂開的內部泛著青藍光，霜晶密布，斧柄拖曳寒霧。",
+          "lore": "它鑿自 Thornpeak 冰川的藍色核心，兩個世紀的重壓把寒意壓到自行發光。即使靜止也拖著白霧，落下時的巨響如同 Stalker Ridge 下方裂開一道冰隙。 Highwatch 將陣亡者交給那裡的冰雪；因此這件武器生來便要阻擋融雪，以及融雪可能喚醒的一切。"
+        },
+        "rimecrusher_mace": {
+          "name": "霜碎",
+          "look": "鋸齒狀冰晶簇擁著發光的青藍核心，白霜沿著鍍銀錘柄向下蔓延。",
+          "lore": "它不是雕刻出來，而是生長而成：匠人誘導 Thornpeak 寒冰包裹青藍冷核，直到堅硬得不遜於 Hode 最好的鋼。白霜沿著鍍銀錘柄爬向手掌，卻始終差一點觸及。它擊中之處水會凍結，停放之處地面會變成泛白。山峰的墓穴寒意，被縮小到足以揮向那些攀爬城牆之物。"
+        },
+        "frostbite_dagger": {
+          "name": "霜針",
+          "look": "透明藍冰製成的極細匕首，中央貫穿青藍發光脈絡，針狀霜晶與白霜覆蓋刀柄。",
+          "lore": "薄如屏息，卻比呼吸冷上兩倍：一片 Thornpeak 冰川碎屑被磨成單一發光脈絡，鋒利到傷口會在血液想起流動前先被凍結。它的名字借自死者從群峰帶下的墓穴寒意。它從不需要磨刃；Loremaster Caddis 冷冷地說，冰不會變鈍，它只會等待。"
+        },
+        "hoarfrost_vigil_staff": {
+          "name": "白霜守望",
+          "look": "鍍銀法杖頂端漂浮著緩慢旋轉的青藍冰片，放射霜晶與寒霧。",
+          "lore": "這是 Highwatch 城牆上永不沉睡的守望之杖。杖冠是一片青藍湖冰，脫離銀托懸浮，並自行緩緩轉動；守衛發誓，它總是指向群峰下正在聚集的寒意。攜帶這份守望，便是在一夜間站完兩百年的崗，並承諾絕不移開目光。"
+        },
+        "everwinter_wand": {
+          "name": "永冬碎片",
+          "look": "一根發光的青藍冰川尖刺，白霜從銀環綻開，周圍浮著淡淡寒霧。",
+          "lore": "一根發光的冰川尖刺，據說折自 Sanctum 下方的深潭，那裡的山寒長著利齒。白霜不斷從銀環綻放，無論烈火或盛夏都無法使它融化。法師將它貼身攜帶，借寒意輔助施法；但在它似乎傾向 Nythraxis 墓室並靜靜聆聽的夜晚，又會把它放得遠遠的。"
+        },
+        "winterbite": {
+          "name": "寒冬之噬",
+          "look": "鍍銀鋼與藍冰製成的弓，弓把內有青藍冰核，弦上搭著實冰箭矢，寒霧繚繞。",
+          "lore": "這把弓由鍍銀鋼與 Thornpeak 寒冰製成，弓把內的青藍冷核將箭凍結在弦上。每次拉弓都會重新凝成一支冰川實冰箭；城牆上的弓手不帶箭袋，只攜寒意。 Highwatch 曾靠一把這樣的弓守住遭圍攻的 Stalker Ridge：據說只有一名弓手，以及一整個冬天取之不盡的箭。"
+        },
+        "solheim_sword": {
+          "name": "Solheim，黎明最後之光",
+          "look": "以隕星鍛造成的巨劍，熔金核心貫裂劍刃，宇宙黑鋼邊緣閃著星光，金色碎片環繞護手，極光如帶。",
+          "lore": "那顆星從西方天空墜落，在 Widow Thicket 之外「如鍛爐般爆裂」時，Brother Aldric 從 Mirefen 隕坑取出仍在陰燃的星核，懇求王國鐵匠加工「並不屬於這個世界的東西」。他們將其鍛造成唯一一柄巨劍：Solheim。熔金核心如黎明撕開夜空般劈開宇宙黑刃，星金碎片沿著無人設定的軌道繞護手運行。世上只鍛造成這一把，也絕對不會有第二把。"
+        },
+        "skyrender_axe": {
+          "name": "裂天者，蒼穹之傷",
+          "look": "斧頭像一塊撕裂的夜空，遍布熔金裂縫與星座刻紋，星光碎片懸浮，刃後拖著極光。",
+          "lore": "它鍛造自隕坑邊緣，那裡墜星從 Mirefen 水面撕走了天空的倒影，留下至今仍冒蒸汽的傷口。斧頭像一片被扯下的夜：熔金裂縫、Highwatch 學者也叫不出名字的星座，以及每次揮舞都從刃緣流出的極光。 Brother Aldric 為它賜福，卻拒絕碰觸。舉起它，就像握住蒼穹留下的缺口。"
+        },
+        "starfall_mace": {
+          "name": "星隕，諸天裁決",
+          "look": "被囚的熔金星核由軌道碎片環繞，宇宙黑錘棱中流淌星光，極光從接縫處溢出。",
+          "lore": "一顆星核在死亡前一瞬被捕獲，隨它墜落的殘片環繞四周，永遠停在湮滅前最後一寸。宇宙黑錘棱中流淌著被困的星光，舉起時極光便從接縫處溢出。古老的 Light 祭司稱流星為裁決，是從天而降、任何盾牌都無意阻擋的判決；此錘便以墜落 Mirefen 的那顆星命名。"
+        },
+        "astravyr_dagger": {
+          "name": "Astravyr，隕星之牙",
+          "look": "一片隕星碎屑，宇宙黑金屬上燃著熔金刃光，明亮星塵繞柄首運行，拖出細薄極光。",
+          "lore": "這是 Aldric 從隕坑帶回的星體中最小的一片，也有人認為它最危險。異界星核的一縷碎片，熔金刃緣貼著宇宙黑金屬，一顆孤獨星塵如失去世界的月亮般繞柄首運行。它幾乎沒有重量，卻幾乎能切開一切。小到足以藏匿，也亮到能憑自身光芒在黑暗中尋回。"
+        },
+        "cosmarch_staff": {
+          "name": "Cosmarch，無盡虛空尖塔",
+          "look": "金色星片環繞熔金核心運行，宇宙黑杖身刻滿星座，極光絲帶向上盤繞。",
+          "lore": "星金杖身頂著熔金核心，金色碎片沿著緩慢而無盡的軌道環行，宛如一座微型宇宙；其星座不屬於 Thornpeak 上空的任何天幕。極光如忘記升起的煙，沿著杖身向上纏繞。曾持有它的人說能感覺到虛空在杖中轉動，就像 Ysolei 的湖水「飲下月光」：耐心、寒冷，並回望著你。"
+        },
+        "emberwish_wand": {
+          "name": "餘燼之願，垂死太陽之火種",
+          "look": "被囚的熔金垂死星火由火星環繞，宇宙黑杖身刻發光星座。",
+          "lore": "這並非隕星本身，而是一顆垂死恆星最後的微光：一輪早已熄滅的太陽留下的熔金餘燼，周圍盤旋著它最後的火花。宇宙黑杖身刻有見證其死亡的星座。 Mirefen 佃農說，真黃昏時持有它便可許下一個願望；他們也說，每個持有過它的靈魂都只願獲得更多時間，而 Drowned Moon 從未答應任何人。"
+        },
+        "encore_bow": {
+          "name": "Encore，第二顆墜星",
+          "look": "誇張巨大的星砲：宇宙黑砲管刻著金色發光星座，喇叭形砲口內裝有熔金彗星彈，搭配黃銅構件與木質肩托。",
+          "lore": "加工隕星的鐵匠造出六件遺物後，還剩下整整一砲管星金；到了那時，學徒們也有了自己的主意。鐵砧上誕生的東西，要嘛是王國第一支火槍，要嘛是最小的攻城器：一門肩扛星炮，與其說它發射彈丸，不如說它瞄準後請求第二顆星落下。 Brother Aldric 拒絕賜福，理由是如此響亮的東西早已被天堂注意。獵人深愛它，射線前方的一切從未如此。"
+        },
+        "meteorlatch_crossbow": {
+          "name": "星隕鎖扣，天空最後的裁決",
+          "look": "隕星金屬弩身，熔金核心貫穿弩托，宇宙黑弩臂刻滿星座，弦上搭著純星火之矢。",
+          "lore": "它在 Mirefen 隕坑仍發著光時，以「燙得無法觸碰」的原始隕星金屬鍛造成；碎片被敲成刻滿星座的宇宙黑弩臂，熔金核心沿弩托封存。它不搭弩矢，而是召來一束星火：發射如宣判，落地如判決的終結。當 Highwatch 擔心 Nythraxis 的不死王冠或許還不是群峰下最可怕的東西時，他們希望城牆上擺著的正是這件武器。務必瞄準。"
+        }
+      },
+      "seasonOne": "第一賽季",
+      "rarity": {
+        "uncommon": "優秀",
+        "rare": "精良",
+        "epic": "史詩",
+        "legendary": "傳說"
+      },
+      "wtype": {
+        "sword": "劍",
+        "axe": "斧",
+        "mace": "錘",
+        "dagger": "匕首",
+        "staff": "法杖",
+        "wand": "魔杖",
+        "bow": "弓",
+        "crossbow": "弩"
+      },
+      "badge": {
+        "flagship": "旗艦",
+        "hero": "英雄"
+      },
+      "inspectAria": "檢視{item}",
+      "viewModeLabel": "預覽模式",
+      "tryOn": "試穿",
+      "weaponOnly": "僅武器",
+      "sceneLabel": "場景光照",
+      "scene": {
+        "day": "白天",
+        "dusk": "黃昏",
+        "night": "夜晚"
+      },
+      "lore": "背景故事",
+      "buySkin": "購買外觀",
+      "unavailable": "暫不可用",
+      "applied": "已裝備",
+      "apply": "裝備外觀",
+      "detach": "卸下外觀",
+      "equipHint": "裝備{type}後才能使用此外觀。"
+    },
+    "claudium": {
+      "title": "Claudium",
+      "open": "開啟 Claudium",
+      "close": "關閉 Claudium",
+      "loading": "正在載入 Claudium…",
+      "balanceLabel": "餘額",
+      "balanceUnit": "{amount} Claudium",
+      "solBalance": "SOL：{amount}",
+      "wocBalance": "WOC：{amount}",
+      "unavailable": "Claudium 商店目前無法使用。您的餘額與購買不受影響，請稍後再試。",
+      "disclosure": "Claudium 是單向軟貨幣：可用金錢購買並用於兌換外觀物品，不能贖回、轉讓或兌現。",
+      "buyTitle": "購買 Claudium",
+      "railLabel": "付款方式",
+      "railStripe": "信用卡",
+      "railSol": "SOL",
+      "railWoc": "WOC",
+      "railWocDiscount": "優惠 20%",
+      "railWocUnavailable": "WOC 定價目前無法使用。",
+      "railNativeUnavailable": "SOL/WOC 無法使用",
+      "amountLabel": "數量",
+      "showAmounts": "顯示所有 Claudium 數量",
+      "hideAmounts": "隱藏其他 Claudium 數量",
+      "skuRow": "{usd} 可購買 {claudium} Claudium",
+      "buyButton": "購買",
+      "buyUnavailable": "目前無法購買。",
+      "storeTitle": "外觀商店",
+      "storeEmpty": "目前沒有可用的外觀物品。",
+      "storeCost": "{amount} Claudium",
+      "spendButton": "兌換",
+      "kindCosmetic": "外觀物品",
+      "kindSkin": "外觀",
+      "kindItem": "物品",
+      "checkoutTitle": "完成購買",
+      "checkoutClose": "關閉結帳",
+      "checkoutLoading": "正在載入結帳頁面…",
+      "checkoutPending": "交易處理中。請在錢包中確認，並保持此面板開啟。",
+      "checkoutPendingButton": "處理中",
+      "checkoutFailed": "無法載入結帳頁面，請再試一次。",
+      "checkoutUnavailable": "該 Claudium 購買項目目前無法使用。",
+      "checkoutWalletRequired": "使用加密貨幣購買 Claudium 前，請先連接 Solana 錢包。",
+      "checkoutWalletUnsupported": "此錢包無法簽署及傳送 Solana 交易。",
+      "checkoutNotSettled": "交易已傳送，但 Claudium 尚未入帳，請稍後再試。"
+    },
     "theme": {
       "preset": "介面主題",
       "customColors": "自訂顏色",
@@ -317,7 +597,7 @@ export const zh_TW: EnTranslations = {
     "mobile": {
       "jump": "跳躍",
       "leaderboard": "排行榜",
-      "dailyRewards": "獎勵",
+      "dailyRewards": "商店",
       "deeds": "功績",
       "nameplates": "名條",
       "haptics": "觸覺回饋",
@@ -359,6 +639,15 @@ export const zh_TW: EnTranslations = {
       "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以取得最新修正與改進。",
       "notNow": "暫不",
       "update": "更新"
+    },
+    "cameraPrompt": {
+      "title": "選擇你的鏡頭",
+      "intro": "選擇鏡頭跟隨角色的方式。",
+      "mouseDesc": "無需按住滑鼠按鍵，移動滑鼠即可轉動鏡頭。",
+      "classicTitle": "經典鏡頭",
+      "classicDesc": "按住滑鼠右鍵並移動滑鼠來轉動鏡頭。",
+      "changeLater": "稍後可在 Esc 選單的「按鍵綁定」中變更。",
+      "confirm": "確認"
     },
     "castBar": {
       "playerAria": "你的施法條",
@@ -405,7 +694,12 @@ export const zh_TW: EnTranslations = {
       "perSecond": "{value}/秒",
       "perSecondRow": "{total}（{rate}）",
       "minutesSeconds": "{m}分{s}秒",
-      "seconds": "{s}秒"
+      "seconds": "{s}秒",
+      "autoShowHint": "一旦你的小隊造成傷害或治療，行數就會自動出現，此區段會在戰鬥結束幾秒後關閉。"
+    },
+    "petFeed": {
+      "disabledFullHp": "寵物生命值已滿",
+      "disabledNoFood": "你的背包中沒有可以治療寵物的食物"
     },
     "keybinds": {
       "emoteWheel": "表情輪盤",
@@ -686,13 +980,29 @@ export const zh_TW: EnTranslations = {
       "highContrast": "高對比度",
       "highContrastAria": "切換高對比度背景：關閉動態預告片，使開始畫面文字保持清晰"
     },
+    "warfare": {
+      "honorAmount": "{amount} 點榮譽",
+      "dualPrice": "{money} + {honor}",
+      "balance": "榮譽：{amount}",
+      "honorFloat": "+{amount} 榮譽",
+      "honorGain": "你獲得了 {amount} 點榮譽（{reason}）。",
+      "notEnoughHonor": "榮譽不足。",
+      "reasons": {
+        "arenaWin": "競技場勝利",
+        "fiestaKill": "嘉年華擊倒",
+        "fiestaComplete": "完成嘉年華",
+        "fiestaWin": "嘉年華勝利"
+      }
+    },
     "statInfo": {
       "fromYour": "來自你的 {value} 點{stat}：",
       "names": {
         "spellPower": "法術強度",
         "critRating": "暴擊等級",
-        "hasteRating": "急速等級"
+        "hasteRating": "急速等級",
+        "warfare": "戰爭"
       },
+      "warfareValue": "造成傷害 +{increase}% / 承受傷害 -{reduction}%",
       "desc": {
         "str": "提升你的攻擊強度，使你的武器攻擊更具威力。",
         "agi": "磨練你的反應與準度，提升多項戰鬥屬性。",
@@ -706,7 +1016,8 @@ export const zh_TW: EnTranslations = {
         "critChance": "你的攻擊造成暴擊並施加雙倍傷害的機率。",
         "dodge": "你完全閃躲受到的近戰攻擊、不受任何傷害的機率。",
         "critRating": "來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。",
-        "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。"
+        "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。",
+        "warfare": "對玩家造成的傷害提高 {increase}%，受到玩家造成的傷害降低 {reduction}%。"
       },
       "effects": {
         "attackPower": "+{value} 攻擊強度",
@@ -959,6 +1270,19 @@ export const zh_TW: EnTranslations = {
       "promoteLeader": "提升為隊長",
       "inviteUsage": "邀請誰？用法：/invite <名稱>。"
     },
+    "playerMenu": {
+      "info": "玩家資訊",
+      "block": "封鎖",
+      "unblock": "取消封鎖",
+      "openFor": "開啟 {name} 的玩家選單",
+      "profileUnavailable": "找不到 {name} 的資料。",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI 操作的帳號",
+      "watchTwitch": "在 Twitch 觀看",
+      "watchX": "在 X 檢視",
+      "watchKick": "在 Kick 觀看",
+      "watchYouTube": "在 YouTube 觀看"
+    },
     "lootSettings": {
       "title": "拾取設定",
       "close": "關閉拾取設定",
@@ -976,7 +1300,7 @@ export const zh_TW: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "此物品無法銷毀。",
-      "rightClickDestroy": "右鍵單擊以銷毀",
+      "rightClickDestroy": "Shift+右鍵單擊以銷毀",
       "filterGroupAria": "依類別篩選背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -1179,7 +1503,8 @@ export const zh_TW: EnTranslations = {
         "connecting": "正在開啟 Discord...",
         "benefits": "連結你的 Discord，從遊玩與社群活動中賺取點數，並攀升階級。",
         "error": "無法連結 Discord。請再試一次。",
-        "success": "Discord 已連結。"
+        "success": "Discord 已連結。",
+        "joinServer": "直接加入 Discord 伺服器"
       },
       "choice": {
         "title": "使用 Discord 繼續",
@@ -1227,8 +1552,13 @@ export const zh_TW: EnTranslations = {
         "admin": "管理員",
         "coredevs": "核心開發者",
         "devs": "開發者",
+        "seniormods": "資深管理員",
         "mods": "管理員",
-        "artists": "美術"
+        "juniormods": "初級管理員",
+        "artists": "美術",
+        "contentcreator": "內容創作者",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "已驗證成員",
       "notMember": "尚未加入伺服器",
@@ -1481,7 +1811,15 @@ export const zh_TW: EnTranslations = {
     },
     "social": {
       "lastSeen": "最後上線: {when}",
-      "lastSeenNever": "從未"
+      "lastSeenNever": "從未",
+      "ignoredTab": "已忽略",
+      "blockedTab": "封鎖",
+      "ignoredEmpty": "你沒有忽略任何人。",
+      "blockedEmpty": "你沒有封鎖任何人。",
+      "blockSearchPlaceholder": "玩家名稱",
+      "blockAction": "封鎖",
+      "nowBlocking": "已封鎖 {name}。",
+      "stopBlockingTitle": "取消對 {name} 的封鎖"
     },
     "gathering": {
       "title": "採集",
@@ -2269,6 +2607,10 @@ export const zh_TW: EnTranslations = {
       "dragonkin": {
         "name": "龍類",
         "desc": "來自遠古深淵、覆鱗如蛇的生物。稀少、高傲，且遠比外表看來更為強大。"
+      },
+      "reptile": {
+        "name": "爬行類",
+        "desc": "冷血的獵手，帶著獨有的嘶聲與撕咬，與溫血的野獸截然不同。"
       },
       "murloc": {
         "name": "蛙鰭族",
@@ -6176,6 +6518,10 @@ export const zh_TW: EnTranslations = {
         "name": "臨終聖禮",
         "description": "巨大的治療湧流：恢復 {damage} 點生命值。10 分鐘冷卻時間。"
       },
+      "holy_taunt": {
+        "name": "神聖挑釁",
+        "description": "嘲諷目標：你的威脅值提高到其最仇恨敵人的水平，並強迫其攻擊你 3 秒。"
+      },
       "flash_of_light": {
         "name": "光癒術",
         "description": "快速而高效的聖光迸發，為一個友方目標恢復 {damage} 點生命值。"
@@ -6500,6 +6846,98 @@ export const zh_TW: EnTranslations = {
         "name": "沸血狂怒",
         "description": "進入沸血狂怒，產生 20 點怒氣。（戰士天賦）"
       },
+      "crusader_strike": {
+        "name": "十字軍聖擊",
+        "description": "打擊目標，造成武器傷害外加 {damage} 點神聖傷害。（聖騎士天賦）"
+      },
+      "chain_heal": {
+        "name": "治療鏈",
+        "description": "大量治療一個友方目標，然後跳躍至多2個附近的盟友，每次跳躍的治療量降低50%。（恢復專精招牌）"
+      },
+      "metamorphosis": {
+        "name": "惡魔變形",
+        "description": "化為惡魔之力，使護甲和攻擊強度提高 20 秒。（術士天賦）"
+      },
+      "holy_shock": {
+        "name": "神聖震擊",
+        "description": "以神聖能量震擊一名友方目標，為其恢復{damage}點生命值。（神聖專精招牌）"
+      },
+      "holy_shield": {
+        "name": "神聖之盾",
+        "description": "以神聖之力保護你10秒，護甲提高90，並對近戰攻擊者造成12點神聖傷害。（防護專精招牌）"
+      },
+      "bestial_wrath": {
+        "name": "狂野怒火",
+        "description": "使你進入野獸怒火狀態，攻擊強度提高55點，持續15秒。（野獸控制專精招牌）"
+      },
+      "trueshot_aura": {
+        "name": "強擊光環",
+        "description": "鼓舞附近盟友，使攻擊強度提高35點，持續5分鐘。（射擊專精招牌）"
+      },
+      "wyvern_sting": {
+        "name": "翼龍釘刺",
+        "description": "從遠處釘刺敵人，使其癱瘓最多4秒。受到任何傷害都會打破效果。（生存專精招牌）"
+      },
+      "arcane_power": {
+        "name": "祕法強化",
+        "description": "法術傷害提高20%，法術加速提高10%，持續10秒。（祕法專精招牌）"
+      },
+      "combustion": {
+        "name": "燃燒",
+        "description": "法術致命一擊機率提高50%，持續15秒。（火焰專精招牌）"
+      },
+      "icy_veins": {
+        "name": "冰冷血脈",
+        "description": "法術加速提高30%，並防止施法被打斷或受到延遲，持續10秒。（冰霜專精招牌）"
+      },
+      "cold_blood": {
+        "name": "冷血",
+        "description": "集中你的殺意，使下一次攻擊造成致命一擊。（刺殺專精招牌）"
+      },
+      "blade_flurry": {
+        "name": "劍刃亂舞",
+        "description": "釋放劍刃亂舞，攻擊速度提高20%，持續12秒。（戰鬥專精招牌）"
+      },
+      "hemorrhage": {
+        "name": "出血",
+        "description": "攻擊敵人，造成武器傷害加{damage}點傷害，並在12秒內造成流血傷害。獎勵1個連擊點。（敏銳專精招牌）"
+      },
+      "power_infusion": {
+        "name": "能量灌注",
+        "description": "向一名友方目標灌注能量，使其法術強度提高28點，持續15秒。（戒律專精招牌）"
+      },
+      "holy_nova": {
+        "name": "神聖新星",
+        "description": "引發神聖之光爆炸，為附近盟友恢復{damage}點生命值並傷害附近敵人。（神聖專精招牌）"
+      },
+      "shadowform": {
+        "name": "暗影形態",
+        "description": "進入暗影形態，強化暗影魔法直到你切換回來。再次施放可返回普通形態。（暗影專精招牌）"
+      },
+      "elemental_mastery": {
+        "name": "元素精通",
+        "description": "呼喚元素精通，使你的下一個法術變為瞬發。（元素專精招牌）"
+      },
+      "siphon_life": {
+        "name": "生命虹吸",
+        "description": "虹吸敵人的生命，在30秒內造成{damage}點暗影傷害，並按造成的傷害治療你。（痛苦專精招牌）"
+      },
+      "conflagrate": {
+        "name": "燃盡",
+        "description": "吞噬敵人身上的獻祭，將其點燃並造成{damage}點火焰傷害。（毀滅專精招牌）"
+      },
+      "moonkin_form": {
+        "name": "梟獸形態",
+        "description": "進入梟獸形態，強化施法直到你切換回來。再次施放可返回普通形態。（平衡專精招牌）"
+      },
+      "feral_charge": {
+        "name": "野性衝鋒",
+        "description": "衝向敵人並使其定身1秒。8-25碼距離。（野性專精招牌）"
+      },
+      "swiftmend": {
+        "name": "迅癒",
+        "description": "吞噬友方目標身上的持續治療效果，為其恢復{damage}點生命值。（恢復專精招牌）"
+      },
       "summon_imp": {
         "name": "召喚燼裔",
         "description": "召喚一隻聽從術士命令的燼裔。燼裔會從遠處向你的敵人投擲灰燼箭。召喚新的惡魔會驅散你目前的惡魔。你同時只能擁有一隻惡魔。"
@@ -6527,6 +6965,34 @@ export const zh_TW: EnTranslations = {
       "summon_doomguard": {
         "name": "召喚怨魂裔",
         "description": "將一隻怨魂裔束縛於你的意志之下，這是一種精英惡魔，會從遠處降下沉重的暗影傷害。漫長的冷卻時間限制了牠的毀滅性力量。召喚新的惡魔會驅散你目前的惡魔。你同時只能擁有一隻惡魔。"
+      },
+      "pummel": {
+        "name": "碎顎擊",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "kick": {
+        "name": "飛踢",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "counterspell": {
+        "name": "破法",
+        "description": "反制目標的施法，並在6秒內封鎖該法術學派。"
+      },
+      "counter_shot": {
+        "name": "靜默射擊",
+        "description": "一記快射，打斷目標的施法，並在4秒內封鎖該學派。"
+      },
+      "rebuke": {
+        "name": "譴喝",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "skull_bash": {
+        "name": "頭槌",
+        "description": "猛然頭槌，打斷目標的施法，並在4秒內封鎖該學派。"
+      },
+      "spell_lock": {
+        "name": "封口令",
+        "description": "在施法中沉默目標，並在5秒內封鎖該法術學派。"
       },
       "bear_charge": {
         "name": "巨熊衝鋒",
@@ -7231,6 +7697,126 @@ export const zh_TW: EnTranslations = {
       "sunpetal_herb": {
         "name": "陽瓣草"
       },
+      "furyforged_warhelm": {
+        "name": "怒鑄戰盔"
+      },
+      "furyforged_warspaulders": {
+        "name": "怒鑄戰肩"
+      },
+      "furyforged_warplate": {
+        "name": "怒鑄戰甲"
+      },
+      "furyforged_girdle": {
+        "name": "怒鑄腰帶"
+      },
+      "furyforged_legguards": {
+        "name": "怒鑄護腿"
+      },
+      "furyforged_gauntlets": {
+        "name": "怒鑄護手"
+      },
+      "furyforged_sabatons": {
+        "name": "怒鑄戰靴"
+      },
+      "stormbound_crown": {
+        "name": "縛雷王冠"
+      },
+      "stormbound_spaulders": {
+        "name": "縛雷肩甲"
+      },
+      "stormbound_hauberk": {
+        "name": "縛雷鎖甲"
+      },
+      "stormbound_waistguard": {
+        "name": "縛雷護腰"
+      },
+      "stormbound_legmail": {
+        "name": "縛雷腿甲"
+      },
+      "stormbound_handguards": {
+        "name": "縛雷護手"
+      },
+      "stormbound_greaves": {
+        "name": "縛雷脛甲"
+      },
+      "ashstalker_cowl": {
+        "name": "獵燼兜帽"
+      },
+      "ashstalker_shoulderguards": {
+        "name": "獵燼護肩"
+      },
+      "ashstalker_harness": {
+        "name": "獵燼胸甲"
+      },
+      "ashstalker_waistband": {
+        "name": "獵燼腰帶"
+      },
+      "ashstalker_legguards": {
+        "name": "獵燼護腿"
+      },
+      "ashstalker_grips": {
+        "name": "獵燼護手"
+      },
+      "ashstalker_treads": {
+        "name": "獵燼軟靴"
+      },
+      "cinderweave_cowl": {
+        "name": "織燼兜帽"
+      },
+      "cinderweave_mantle": {
+        "name": "織燼披肩"
+      },
+      "cinderweave_raiment": {
+        "name": "織燼法衣"
+      },
+      "cinderweave_cord": {
+        "name": "織燼腰繩"
+      },
+      "cinderweave_legwraps": {
+        "name": "織燼裹腿"
+      },
+      "cinderweave_handwraps": {
+        "name": "織燼裹手"
+      },
+      "cinderweave_slippers": {
+        "name": "織燼便鞋"
+      },
+      "final_oath_medallion": {
+        "name": "最終誓約勳章"
+      },
+      "razorwind_torque": {
+        "name": "剃風頸環"
+      },
+      "cinder_sigil_pendant": {
+        "name": "燼印墜飾"
+      },
+      "iron_vow_band": {
+        "name": "鐵誓指環"
+      },
+      "unbroken_circle": {
+        "name": "不破之環"
+      },
+      "fleetblood_band": {
+        "name": "疾血指環"
+      },
+      "last_step_signet": {
+        "name": "末步徽戒"
+      },
+      "ashen_focus_ring": {
+        "name": "灰燼專注戒指"
+      },
+      "spellbreakers_seal": {
+        "name": "破法者之印"
+      },
+      "final_argument_greatblade": {
+        "name": "最終論斷巨刃"
+      },
+      "first_blood_razor": {
+        "name": "初血剃刀"
+      },
+      "emberglass_warstaff": {
+        "name": "燼晶戰杖"
+      },
       "rift_essence": {
         "name": "裂隙精華"
       },
@@ -7759,15 +8345,6 @@ export const zh_TW: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "不死王庭權杖"
       },
-      "deathless_warguard_legmail": {
-        "name": "不死戰衛腿甲"
-      },
-      "soulrend_diadem": {
-        "name": "裂魂冠冕"
-      },
-      "scourgehide_carapace": {
-        "name": "災禍之皮甲殼"
-      },
       "cryptplate_helm": {
         "name": "墓板頭盔"
       },
@@ -7806,9 +8383,6 @@ export const zh_TW: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "不死巨刃"
-      },
-      "soulforged_warplate": {
-        "name": "鑄魂戰甲"
       },
       "stormcallers_focus": {
         "name": "喚雷之核"
@@ -8123,6 +8697,15 @@ export const zh_TW: EnTranslations = {
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "尼思拉克西斯，荊峰之災"
+      },
+      "nythraxis_heroic_warrior_add": {
+        "name": "奧德倫，亡魂戰衛"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "馬爾里克，亡魂大祭司"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "沃斯，亡魂之刃"
       },
       "reliquary_ledger_wraith": {
         "name": "名冊幽靈"
@@ -8640,6 +9223,11 @@ export const zh_TW: EnTranslations = {
         "name": "軍需官維克斯",
         "title": "英雄軍需官",
         "greeting": "英雄深淵的憑證能換來高崖望最上等的戒指和吊墜。把你的徽記拿給我看。"
+      },
+      "fury": {
+        "name": "怒焰",
+        "title": "榮譽軍需官",
+        "greeting": "戰場黃沙銘記每一場勝利。願你妥善運用這份榮譽。"
       },
       "loremaster_caddis": {
         "name": "凱迪斯博學者",

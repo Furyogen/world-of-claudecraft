@@ -304,7 +304,10 @@ describe('terrain wall standoff', () => {
     sim.tick();
     const moved = Math.hypot(sim.player.pos.x - cell.x, sim.player.pos.z - cell.z);
     expect(moved).toBeGreaterThan(0.1); // the standoff engaged in the live Sim
-    expect(moved).toBeLessThanOrEqual(R + 1e-6); // and never more than a body radius
+    // terrainWallStandoff iterates up to 3 passes, each capped at one body
+    // radius, so a single grounded tick can move up to 3x the body radius
+    // (1.5yd here), not just one body radius; bound it at the real max.
+    expect(moved).toBeLessThanOrEqual(3 * R + 1e-6);
     // and it did not shove the player onto a wall to slide back off
     expect(terrainSteepnessAt(sim.player.pos.x, sim.player.pos.z, SEED)).toBeLessThanOrEqual(
       SLOPE + 1e-6,

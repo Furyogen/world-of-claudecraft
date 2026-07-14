@@ -17,6 +17,7 @@ const W6_TAGS: Readonly<Record<string, string>> = {
   attack: 'IWorldCombat',
   stopattack: 'IWorldCombat',
   release: 'IWorldCombat',
+  unstuck: 'IWorldCombat',
   target: 'IWorldTargeting',
   tab: 'IWorldTargeting',
   targetNearestFriendly: 'IWorldTargeting',

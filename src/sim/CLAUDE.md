@@ -98,6 +98,7 @@ Each module owns the FUNCTIONS for one system; the backing STATE stays on `Sim` 
 | `social/vale_cup.ts` + `social/vale_cup_bots.ts` | Vale Cup boarball: brackets, the one match slot, the `vcup*` seam arms (pure ball math in the `vale_cup_ball.ts`/`vale_cup_layout.ts` leaves); its tick phase draws ZERO shared rng |
 | `social/yumi.ts` | Protect Yumi 3v3/5v5 maze mode (layout leaf `yumi_maze_layout.ts`) |
 | `social/ready_check.ts` | `/ready`: the `readyChecks` primitive + the `updateReadyChecks` phase |
+| `unstuck.ts` | `/unstuck` recovery countdown, same-area safe-point search, cancellation, and cooldown |
 | `social/trade.ts` + `social/chat.ts` | player trade; the `chat()` router, emotes, whispers, channel membership (readout formatters in `social/chat_readouts.ts`). `Sim` keeps only a thin `chat()` delegate for the `IWorld` facade; new slash commands land in `social/chat.ts`, never on `Sim` |
 | `targeting.ts` | player target selection + raid markers |
 | `market.ts` | the World Market (`Market` class) |
@@ -115,7 +116,8 @@ a row here or a Key files entry (`sim.ts`, `sim_context.ts`, `entity_roster.ts`)
 these before inlining pure logic in a system module: `spell_scaling.ts` (spell/attack
 power coefficients), `stun_dr.ts` (CC diminishing-return categories), `item_level.ts`/
 `item_budget.ts`/`item_level_req.ts` (drop power math), `equipment_rules.ts` (equip
-legality), `cooldown_persist.ts` (cooldown save/load), `tab_target.ts`/`assist.ts`/
+legality), `cooldown_persist.ts` (cooldown save/load), `unstuck_cooldown.ts` (the hidden
+recovery timer across competitive resets), `tab_target.ts`/`assist.ts`/
 `dead_target.ts` (target cycling, /assist, dead-target selectability), `flee_speed.ts`,
 `lockpick.ts` (the minigame core behind `delves/lockpick_controller.ts`), `map_doc.ts`
 (the custom-map document/validator), `geometry2d.ts`, `market_query.ts`,

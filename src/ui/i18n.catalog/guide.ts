@@ -776,6 +776,10 @@ export const guideStrings = {
       name: 'Dragonkin',
       desc: 'Scaled, serpentine things of the old depths. Rare, proud, and far stronger than they look.',
     },
+    reptile: {
+      name: 'Reptiles',
+      desc: 'Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts.',
+    },
     murloc: {
       name: 'Croakfins',
       desc: 'Croaking fish-folk of lake shore and tide pool, quick to swarm anything that wades too close.',

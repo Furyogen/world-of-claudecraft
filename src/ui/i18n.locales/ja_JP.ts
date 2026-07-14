@@ -14,6 +14,255 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.wocStore.title': 'WOCストア',
+  'hudChrome.wocStore.close': 'WOCストアを閉じる',
+  'hudChrome.wocStore.tabsLabel': 'WOCストアのセクション',
+  'hudChrome.wocStore.storeTab': 'ストア',
+  'hudChrome.wocStore.rewardsTab': 'デイリー報酬',
+  'hudChrome.wocStore.loading': 'WOCストアを読み込み中…',
+  'hudChrome.wocStore.error': 'WOCストアは現在利用できません。しばらくしてからお試しください。',
+  'hudChrome.wocStore.balance': 'Claudium残高',
+  'hudChrome.wocStore.buyClaudium': 'Claudiumを購入',
+  'hudChrome.wocStore.owned': '所有済み',
+  'hudChrome.wocStore.needMoreTitle': 'Claudiumが不足しています',
+  'hudChrome.wocStore.needMoreBody': '{item}の購入にはあと{shortfall} Claudium必要です。',
+  'hudChrome.wocStore.cancel': 'キャンセル',
+  'hudChrome.wocStore.confirmTitle': '外見の購入を確認',
+  'hudChrome.wocStore.confirmBody': '{item}を{cost} Claudiumで購入しますか？',
+  'hudChrome.wocStore.confirmPurchase': '購入',
+  'hudChrome.wocStore.priceChanged':
+    '購入が完了する前に価格が変更されました。更新後の価格を確認し、もう一度確定してください。',
+  'hudChrome.wocStore.armoryEyebrow': 'シーズン1',
+  'hudChrome.wocStore.armoryTitle': '武器庫',
+  'hudChrome.wocStore.armoryBody':
+    'シーズン1武器庫の限定武器スキン。アカウント共有の純粋な装飾で、周囲のプレイヤー全員に表示されます。',
+  'hudChrome.wocStore.collectionLine': '{collection}コレクション',
+  'hudChrome.wocStore.collections.guildmark': 'ギルドマーク',
+  'hudChrome.wocStore.collections.emberwrought': '残り火鍛造',
+  'hudChrome.wocStore.collections.hoarfrost': '白霜',
+  'hudChrome.wocStore.collections.fallen_star': '墜星',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.name': 'ギルドマーク・アーミングソード',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.look':
+    '青焼き鋼の刀身、青銅の魚尾型クロスガード、青緑に染めた革巻きの柄、小さく刻印されたギルドの紋章。',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.lore':
+    '名もなき鍛造刀とは違い、この剣には署名がある。刀匠がリカッソに自らの印を打つ権利を得るのは、World MarketのMerchantがその鋼を保証してからだ。そしてSmith Haldrenの印には、その保証がある。Valeの湿気に耐える青焼き仕上げ、髪一本ほどの狂いもない均衡。剣と同じほど刻印にも金を払うが、それだけの価値はある。',
+  'hudChrome.wocStore.skins.brasscap_axe.name': 'ブラスキャップ・ハチェット',
+  'hudChrome.wocStore.skins.brasscap_axe.look':
+    '磨き鋼の刃、漆塗りのトネリコ柄を守る真鍮の頭金とランゲット、整った柄巻き、職人の刻印。',
+  'hudChrome.wocStore.skins.brasscap_axe.lore':
+    '刻印入りの斧は、手に取れる自慢そのものだ。真鍮の頭金とランゲットは半ば防具、半ば署名。柄が割れるのを防ぎ、酒場の灯を受けて輝くから、民兵のお下がりではなくArmorer Hodeの仕事を買ったのだと誰にでも分かる。「斬れるなら売る」とHighwatchの鍛冶師は言う。この斧は、斬れる。',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.name': '焼入れフランジドメイス',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.look':
+    '六枚のフランジを備えた焼入れ青鋼の頭部、真鍮の口金と柄頭、葡萄酒色の革巻き。',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.lore':
+    '青く焼き入れた鋼の六枚刃は、どれも兜を割り開くために研がれ、真鍮をかぶせて葡萄酒色の革で巻かれている。仕事が残酷でも、この王国の刀匠は醜い武器を作らない。棚から取った品ではなく、World Marketを通じて注文された一本。どこかの帳簿には、誇らしげな買い手の名と、Hodeに支払った額が記されている。',
+  'hudChrome.wocStore.skins.guildmark_dirk.name': 'ギルドマーク・ダーク',
+  'hudChrome.wocStore.skins.guildmark_dirk.look':
+    '細身の焼入れ鋼のダーク、青銅の鍔と柄頭ナット、深緑の組紐巻き、刻印された紋章。',
+  'hudChrome.wocStore.skins.guildmark_dirk.lore':
+    '剣を家に置く日に一人前の男が帯びるもの。細身で鍛えられ、長剣と同じ品質を証す印を打ち、刃のある印章のように腰に下げる。刀匠の証を読める者以外には慎ましく映る。Quartermaster Breeは、城壁の敬意を勝ち取った士官のため、Highwatchの引き出し一段をこれで満たしている。',
+  'hudChrome.wocStore.skins.brasscrown_staff.name': 'ブラスクラウン・ウォーキングスタッフ',
+  'hudChrome.wocStore.skins.brasscrown_staff.look':
+    '堅木の杖に旋盤仕上げの真鍮製冠形石突、真鍮の先金、染め革の帯。',
+  'hudChrome.wocStore.skins.brasscrown_staff.lore':
+    '乾燥させた堅木を削り出し、Eastbrookの鍛冶師たちが百個単位で鋳ながら、一つずつ完璧に仕上げる真鍮の冠を載せた杖。Fenbridgeの門でもHighwatchの城壁でも、一目置かれたい旅人にふさわしい。歩く必要など本当は一度もなかったような杖で、染め革の帯は値段を想像できる上着とよく似合う。',
+  'hudChrome.wocStore.skins.lacquered_wand.name': '漆塗りのロッド',
+  'hudChrome.wocStore.skins.lacquered_wand.look':
+    '深紅の漆を施した細身のワンド、二本の磨き真鍮帯、小さく丸い真鍮の先端。',
+  'hudChrome.wocStore.skins.lacquered_wand.lore':
+    '根気よく七層重ねた深紅の漆に、磨いた真鍮を二筋。野辺の魔術師が本物の金貨を取るようになり、見栄えも整えたくなった頃にWorld Marketで買う類のワンドだ。Lightを導く力は白樺の枝と変わらない。それでもMerchantのカウンター越しには見事に輝く。ささやかな魔法の半分は、昔から信じてもらうことなのだから。',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.name': 'Fletcherギルドの弓',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.look':
+    '漆塗りのウォールナット製リカーブボウ、真鍮のリム先、蝋引き亜麻弦、ライザーのギルド刻印。',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.lore':
+    'この王国でギルドに最も近いものは、ライザーにあるFletcherの刻印だ。酒造家が樽に封をするように、中身を保証する約束である。漆塗りのウォールナット、リム先の真鍮、Mirefenの雨でもほつれない蝋引き亜麻弦。すべての継ぎ目がその値段を主張する。Widow Thicketを越えて一度引けば、その主張が正しいと分かる。',
+  'hudChrome.wocStore.skins.cinderbrand_sword.name': 'シンダーブランド',
+  'hudChrome.wocStore.skins.cinderbrand_sword.look':
+    '黒い鍛鋼の刀身、樋を満たす燃える橙色のルーンと熱亀裂、鍔で燻る宝石。',
+  'hudChrome.wocStore.skins.cinderbrand_sword.lore':
+    '水ではなくStormcragから掻き集めたBlessed Embersで初めて焼き入れされた刀身。Highwatchの鍛冶師は、その炭が「山が古き誓いを覚えているから、青く清らかに燃える」と誓う。樋に封じた火は橙色に燻り、決して消えない。城壁の最も寒い夜でも、ルーンは素手に温かい。Cinderbrandに火を点ける必要はない。ただ、消えることを拒むのだ。',
+  'hudChrome.wocStore.skins.emberbite_axe.name': 'エンバーバイト',
+  'hudChrome.wocStore.skins.emberbite_axe.look':
+    '黒鉄の斧、刃から透けて燃える橙色の亀裂、熾火を宿す宝石、立ちのぼる熱気。',
+  'hudChrome.wocStore.skins.emberbite_axe.lore':
+    'Armorer Hodeは山火の生きた炭を刃の芯に埋め込み、一撃と次の一撃の間にも刃が冷えきらぬようにした。振り下ろすたび亀裂が橙色に息づき、最初の鍛造が鉄の中に眠らせた何かを打撃が起こすようだ。Stormcragの精霊がこの残り火を手放したのだという。風の強いHighwatchでは、ほかにも実に多くの話が語られる。',
+  'hudChrome.wocStore.skins.smoulderfall_mace.name': 'スモルダーフォール',
+  'hudChrome.wocStore.skins.smoulderfall_mace.look':
+    '内側の亀裂が燃える橙色に輝く黒鉄のフランジ、頭部に据えた溶融核の宝石。',
+  'hudChrome.wocStore.skins.smoulderfall_mace.lore':
+    '自ら炉を携えるメイス。「山火で鍛えられた」Sanctumの封印から欠き取った溶融核の石が、頭部で輝く。フランジは触れて温かく、命中した場所ではさらに熱い。Highwatchの軍曹は、これで殴られた痣は朝までかすかに光ると断言する。かつて封じるための山の火が、ついに壊すためのものとなった。',
+  'hudChrome.wocStore.skins.ashspark_dagger.name': 'Ashsparkシヴ',
+  'hudChrome.wocStore.skins.ashspark_dagger.look':
+    '燃える橙色の筋が走る短い黒刃、柄頭で燻る小さな宝石、舞う灰と火花。',
+  'hudChrome.wocStore.skins.ashspark_dagger.lore':
+    '柄頭石に山火を忍ばせた裏路地の刃。最初の鍛造の残り火くらいは追い剥ぎでも携えられる、という刀匠の静かな冗談だ。黒く、橙色の筋が走り、鞘の中でも常に少し熱すぎる。Highwatchの下の闇で抜けば、その光が男の構えの隙を見つけるのに十分なだけ手元を照らす。',
+  'hudChrome.wocStore.skins.forgeheart_staff.name': 'Forgeheartステイヴ',
+  'hudChrome.wocStore.skins.forgeheart_staff.look':
+    '鉄の石突を備え、檻に収めた輝く残り火を冠する杖。軸を昇る火のルーンと熱の揺らめき。',
+  'hudChrome.wocStore.skins.forgeheart_staff.lore':
+    '冠の鉄檻に閉じ込めた、山火の生きた炭。Loremaster Caddisは、最初の鍛造の火が封印だけでなく奉仕のためにも縛れる証だという。熱の揺らめきが細く果てない帯となって立ちのぼり、これを持つ魔術師は鍛冶炉にも番火にも困らない。残り火はVoskar the Emberwing自身の吐息から抜き取られ、それ以来冷めていないと囁かれる。',
+  'hudChrome.wocStore.skins.emberwrought_wand.name': 'Emberwroughtワンド',
+  'hudChrome.wocStore.skins.emberwrought_wand.look':
+    '鉄の爪に輝く熾火を挟んだ黒金属のワンド、髪筋ほどの熱亀裂、内側からの温かな光。',
+  'hudChrome.wocStore.skins.emberwrought_wand.lore':
+    'この等級に名を与えたワンド。Highwatchの刀匠が初めて山火の炭を鉄の爪に据え、人の手に応えさせたとき、LightのPriestたちさえ異端と呼ぶのをやめ、役に立つと呼び始めた。温かく、辛抱強く、静かに危険。その先端の残り火は、持ち主が生まれる前から途切れず燃え続けている。',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.name': 'シンダーラッチ',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.look':
+    '黒鋼のクロスボウ、弓部の亀裂から滲む燃える橙色の光、台木で燻る炭。',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.lore':
+    '残り火鍛造の中でも最も奇妙なもの。山火を機械へ流し込んだ。弓部の亀裂から橙色が滲み、台木で燻る炭がThornpeakの寒さでもMirefenの湿気でも弦を硬くさせない。ボルトは溝を出るときすでに温かく、着弾時にはさらに熱い。敵もまた寒さを感じない城壁に対する、狩人の答えである。',
+  'hudChrome.wocStore.skins.ice_fang_sword.name': 'Ice Fang',
+  'hudChrome.wocStore.skins.ice_fang_sword.look':
+    '淡い氷河氷の湾曲刀、峰に並ぶ鋸歯状の霧氷結晶、樋で輝く青緑の凍結核、氷柱の鍔。',
+  'hudChrome.wocStore.skins.ice_fang_sword.lore':
+    '凍結等級の象徴であり、収集家がまず手を伸ばす逸品。Ice Fangは鍛えられたのではなく、Highwatchの上にそびえるThornpeakの氷河の牙から削り出された。青緑の核はGlimmermereの反射光のように冷たく燃え、斬った空気そのものを霧氷で覆う。大雪がWyrmcultを退けた夜、兵士がこれを携え「城壁に一冬を買った」と衛兵たちは誓う。',
+  'hudChrome.wocStore.skins.glaciersplit_axe.name': 'グレイシャースプリット',
+  'hudChrome.wocStore.skins.glaciersplit_axe.look':
+    '半透明の青い氷河氷の斧頭、青緑に輝くひび割れた内部、逆立つ霜の結晶、冷気を引く柄。',
+  'hudChrome.wocStore.skins.glaciersplit_axe.lore':
+    '二世紀の氷が冷気を自ら輝くまで圧し固めた、Thornpeak氷河の青い心臓部から切り出された。静止していても霧を引き、命中する音はStalker Ridgeの下で裂け目が開くようだ。Highwatchは死者をあの氷へ委ねる。ゆえにこれは、雪解けと、雪解けが目覚めさせるものを寄せつけないための武器である。',
+  'hudChrome.wocStore.skins.rimecrusher_mace.name': 'ライムクラッシャー',
+  'hudChrome.wocStore.skins.rimecrusher_mace.look':
+    '輝く青緑の核を囲む鋭い氷晶の房、銀色の柄を這い下りる白霜。',
+  'hudChrome.wocStore.skins.rimecrusher_mace.lore':
+    '削ったのではなく育てたもの。Thornpeakの氷を冷たい青緑の核の周りに導き、Hode自慢の鋼ほど硬く結晶させた。白霜は銀色の柄を手元へ這うが、決して届ききらない。打てば水が凍り、置けば地が白む。峰の墓場の冷気を、城壁を登るものへ振るえるほど小さくした武器だ。',
+  'hudChrome.wocStore.skins.frostbite_dagger.name': 'ライムニードル',
+  'hudChrome.wocStore.skins.frostbite_dagger.look':
+    '透明な青氷の凶悪なまでに細い短剣、中央を走る輝く青緑の脈、針状の霜結晶、白霜の柄。',
+  'hudChrome.wocStore.skins.frostbite_dagger.lore':
+    '息を止めた瞬間ほど薄く、その倍も冷たい。Thornpeak氷河の欠片を一本の輝く脈まで研ぎ澄まし、血が流れることを思い出す前に傷口を凍らせるほど鋭い。その名は死者が峰から運び下ろす墓の冷気にちなむ。研ぐ必要はない。氷は鈍らない、ただ待つだけだとLoremaster Caddisは素っ気なく記している。',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.name': 'ホアフロスト・ヴィジル',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.look':
+    '銀色の杖の上に浮かび、ゆっくり回る輝く青緑の氷片。放射状の結晶と冷たい霧。',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.lore':
+    'Highwatchの城壁で眠らぬ見張りの杖。冠には青緑の山湖氷の欠片が銀から離れて浮かび、ひとりでにゆっくり回る。衛兵によれば、常に峰の下へ集う寒気を指すという。Vigilを携えることは、一夜で二百年の見張りに立ち、決して目を逸らさぬと誓うことだ。',
+  'hudChrome.wocStore.skins.everwinter_wand.name': 'エヴァーウィンターの欠片',
+  'hudChrome.wocStore.skins.everwinter_wand.look':
+    '輝く青緑の氷河氷の一本角、銀の口金から咲く白霜、かすかな冷たい霧。',
+  'hudChrome.wocStore.skins.everwinter_wand.lore':
+    '山の寒さが牙を持つSanctumの下の深い山湖から折り取られたという、輝く氷河氷の角。銀の口金から白霜が絶えず咲き、火にも夏にも溶けない。魔術師は術に貸す冷気ゆえ近くに置き、Nythraxisの地下墓所へ傾いて耳を澄ますような夜には、遠ざけておく。',
+  'hudChrome.wocStore.skins.winterbite.name': 'ウィンターバイト',
+  'hudChrome.wocStore.skins.winterbite.look':
+    '銀鋼と青氷の弓、ライザーで輝く青緑の凍結核、つがえられた固い氷の矢、冷たい霧。',
+  'hudChrome.wocStore.skins.winterbite.lore':
+    '銀鋼とThornpeakの氷で作られた弓。ライザーの冷たい青緑の核が矢を弦へ凍りつかせる。引くたびに氷河氷の矢が再び形づくられるため、城壁の射手が携えるのは矢筒ではなく寒気だけ。Highwatchは同じ弓でStalker Ridgeの包囲を耐え抜いたという。射手は一人、そして初めからそこにあった一冬分の矢。',
+  'hudChrome.wocStore.skins.solheim_sword.name': 'Solheim、暁の最後の光',
+  'hudChrome.wocStore.skins.solheim_sword.look':
+    '墜星から鍛えた大剣、刀身を裂く溶融金の核、星明かりの刃を持つ宇宙黒の鋼、鍔を巡る金の破片、極光の帯。',
+  'hudChrome.wocStore.skins.solheim_sword.lore':
+    '星が西の空から落ち、Widow Thicketの彼方で「炉のように爆ぜた」とき、Brother AldricはMirefenのクレーターからまだ燻る心臓を引き出し、王国の鍛冶師に「この世のものではない物」を鍛えてくれと懇願した。生まれた大剣はただ一振り、Solheim。溶融金の核が夜空を割る暁のように宇宙黒の刀身を裂き、星鉄の破片は誰の手も定めぬ軌道で鍔を巡る。二振り目が作られることはない。',
+  'hudChrome.wocStore.skins.skyrender_axe.name': 'Skyrender、天空の傷',
+  'hudChrome.wocStore.skins.skyrender_axe.look':
+    '引き裂かれた夜空のような斧頭、溶融金の亀裂と星座の刻印、浮かぶ星光の破片、刃を引く極光。',
+  'hudChrome.wocStore.skins.skyrender_axe.lore':
+    '墜星がMirefenから空そのものの映り込みを引き裂き、今も蒸気を上げる傷を残したクレーターの縁から打ち出された。斧頭は破れた夜の一片に見える。溶融金の亀裂、Highwatchの学者にも名づけられぬ星座、振るたび刃から流血のようにこぼれる極光。Brother Aldricは祝福したが、触れようとはしなかった。掲げる者は、天が残した穴を手にする。',
+  'hudChrome.wocStore.skins.starfall_mace.name': 'Starfall、天の裁き',
+  'hudChrome.wocStore.skins.starfall_mace.look':
+    '周回する破片に囲まれた溶融金の星核、星明かりの脈が走る宇宙黒のフランジ、継ぎ目から溢れる極光。',
+  'hudChrome.wocStore.skins.starfall_mace.lore':
+    '死の直前に捉えられた星核。ともに落ちた残骸に囲まれ、消滅まであと一寸のところで凍りついている。宇宙黒のフランジには閉じ込めた星明かりが走り、掲げれば継ぎ目から極光が溢れる。古いLightのPriestたちは流星を裁き、いかなる盾も止めるべきでない天上からの宣告と呼び、Mirefenへ下った一星にちなんでこれを名づけた。',
+  'hudChrome.wocStore.skins.astravyr_dagger.name': 'Astravyr、墜星の牙',
+  'hudChrome.wocStore.skins.astravyr_dagger.look':
+    '墜星の薄片、宇宙黒の金属に輝く溶融金の刃、柄頭を巡る明るい星粒、細い極光の尾。',
+  'hudChrome.wocStore.skins.astravyr_dagger.lore':
+    'Aldricがクレーターから運び出した星の最小の欠片であり、見方によっては最も危険なもの。異世界の心臓の薄片ひとつ、宇宙黒の金属に沿う溶融金の刃、世界を失った月のように柄頭を巡る孤独な星粒。重さはほとんどなく、ほとんど何でも切り分ける。隠せるほど小さく、自らの光で闇の中から見つけられるほど明るい。',
+  'hudChrome.wocStore.skins.cosmarch_staff.name': 'Cosmarch、果てなき虚空の尖塔',
+  'hudChrome.wocStore.skins.cosmarch_staff.look':
+    '溶融金の核を巡る金色の星片、星座を刻んだ宇宙黒の軸、上へ巻きつく極光の帯。',
+  'hudChrome.wocStore.skins.cosmarch_staff.lore':
+    '星鉄の軸に溶融金の核を冠し、金の破片がゆっくり果てなく巡る小宇宙。そこに刻まれた星座はThornpeakのどの空にも一致しない。立ち昇ることを忘れた煙のように、極光が全長へ巻きつく。これを担った者は、Ysoleiの湖が「月明かりを飲む」ように、虚空が杖の中で回るのを感じたという。辛抱強く、冷たく、こちらを見返しながら。',
+  'hudChrome.wocStore.skins.emberwish_wand.name': 'Emberwish、死にゆく太陽の火種',
+  'hudChrome.wocStore.skins.emberwish_wand.look':
+    '周回する火花に包まれた、捕らわれの溶融金の死に星。輝く星座を刻んだ宇宙黒の軸。',
+  'hudChrome.wocStore.skins.emberwish_wand.lore':
+    '墜星そのものではなく、死にゆく星の最後の一粒。すでに消えた太陽の溶融金の残り火を、最後の光だった火花が包む。宇宙黒の軸には、その死を見届けた星座が刻まれている。Mirefenの小作人は、真の黄昏にこれを持つ者の願いを一つ叶えるという。同時に、手にした魂は誰もが「もっと時間を」と願い、Drowned Moonは誰にも与えなかったとも語る。',
+  'hudChrome.wocStore.skins.encore_bow.name': 'Encore、二つ目の墜星',
+  'hudChrome.wocStore.skins.encore_bow.look':
+    '滑稽なほど巨大な星砲。輝く金の星座を刻んだ宇宙黒の砲身、溶融金の彗星弾を収めた朝顔形の砲口、真鍮金具、木製の銃床。',
+  'hudChrome.wocStore.skins.encore_bow.lore':
+    '墜星を加工した鍛冶師は六つの遺物を作ってなお、樽一本分の星鉄を余らせた。その頃には徒弟たちにも意見があった。金床から生まれたのは王国初の銃か、最小の攻城兵器か。射撃というより、狙いをつけた二つ目の星を呼び寄せる肩撃ち砲だ。これほど轟くものはすでに天に気づかれているとしてBrother Aldricは祝福を断った。狩人たちは愛用する。射線の先にいるものは、決してそうではない。',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.name': 'Meteorlatch、空の最後の裁き',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.look':
+    '隕鉄、台木に沿う溶融金の核、星座を刻んだ宇宙黒の弓部、つがえられた純粋な星火のボルト。',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.lore':
+    'Mirefenのクレーターがまだ輝いていた頃、生の隕鉄から鍛えられた。「熱すぎて持てない」残骸を叩き、星座を刻んだ宇宙黒の弓部とし、台木に沿って溶融金の核を封じた。ボルトをつがえるのではなく召喚する。宣告のように放たれ、その終わりのように着弾する星火の矢だ。Nythraxisの不死の王冠すら峰の下で最悪のものではないとHighwatchが恐れたとき、城壁に望んだ武器がこれだった。狙いを違えるな。',
+  'hudChrome.wocStore.seasonOne': 'シーズン1',
+  'hudChrome.wocStore.rarity.uncommon': 'アンコモン',
+  'hudChrome.wocStore.rarity.rare': 'レア',
+  'hudChrome.wocStore.rarity.epic': 'エピック',
+  'hudChrome.wocStore.rarity.legendary': 'レジェンダリー',
+  'hudChrome.wocStore.wtype.sword': '剣',
+  'hudChrome.wocStore.wtype.axe': '斧',
+  'hudChrome.wocStore.wtype.mace': 'メイス',
+  'hudChrome.wocStore.wtype.dagger': '短剣',
+  'hudChrome.wocStore.wtype.staff': '杖',
+  'hudChrome.wocStore.wtype.wand': 'ワンド',
+  'hudChrome.wocStore.wtype.bow': '弓',
+  'hudChrome.wocStore.wtype.crossbow': 'クロスボウ',
+  'hudChrome.wocStore.badge.flagship': 'フラッグシップ',
+  'hudChrome.wocStore.badge.hero': 'ヒーロー',
+  'hudChrome.wocStore.inspectAria': '{item}を詳しく見る',
+  'hudChrome.wocStore.viewModeLabel': 'プレビューモード',
+  'hudChrome.wocStore.tryOn': '試着する',
+  'hudChrome.wocStore.weaponOnly': '武器のみ',
+  'hudChrome.wocStore.sceneLabel': 'シーンライティング',
+  'hudChrome.wocStore.scene.day': '昼',
+  'hudChrome.wocStore.scene.dusk': '夕暮れ',
+  'hudChrome.wocStore.scene.night': '夜',
+  'hudChrome.wocStore.lore': '伝承',
+  'hudChrome.wocStore.buySkin': 'スキンを購入',
+  'hudChrome.wocStore.unavailable': '利用不可',
+  'hudChrome.wocStore.applied': '適用中',
+  'hudChrome.wocStore.apply': 'スキンを適用',
+  'hudChrome.wocStore.detach': 'スキンを解除',
+  'hudChrome.wocStore.equipHint': 'このスキンを適用するには{type}を装備してください。',
+  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.open': 'Claudiumを開く',
+  'hudChrome.claudium.close': 'Claudiumを閉じる',
+  'hudChrome.claudium.loading': 'Claudiumを読み込み中…',
+  'hudChrome.claudium.balanceLabel': '残高',
+  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.unavailable':
+    'Claudiumストアは現在利用できません。残高と購入内容に影響はありません。しばらくしてからお試しください。',
+  'hudChrome.claudium.disclosure':
+    'Claudiumは一方向のゲーム内通貨です。現金で購入して外見アイテムに使用でき、換金、譲渡、払い戻しはできません。',
+  'hudChrome.claudium.buyTitle': 'Claudiumを購入',
+  'hudChrome.claudium.railLabel': '支払い方法',
+  'hudChrome.claudium.railNativeUnavailable': 'SOL/WOCは利用不可',
+  'hudChrome.claudium.railSol': 'SOL',
+  'hudChrome.claudium.railStripe': 'カード',
+  'hudChrome.claudium.railWoc': 'WOC',
+  'hudChrome.claudium.railWocDiscount': '20%オフ',
+  'hudChrome.claudium.solBalance': 'SOL：{amount}',
+  'hudChrome.claudium.wocBalance': 'WOC：{amount}',
+  'hudChrome.claudium.railWocUnavailable': 'WOC価格は現在利用できません。',
+  'hudChrome.claudium.amountLabel': '数量',
+  'hudChrome.claudium.showAmounts': 'すべてのClaudium数量を表示',
+  'hudChrome.claudium.hideAmounts': '追加のClaudium数量を隠す',
+  'hudChrome.claudium.skuRow': '{usd}で{claudium} Claudium',
+  'hudChrome.claudium.buyUnavailable': '現在購入できません。',
+  'hudChrome.claudium.storeTitle': '外見アイテムストア',
+  'hudChrome.claudium.storeEmpty': '現在利用できる外見アイテムはありません。',
+  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.spendButton': '交換',
+  'hudChrome.claudium.kindCosmetic': '外見アイテム',
+  'hudChrome.claudium.kindItem': 'アイテム',
+  'hudChrome.claudium.kindSkin': 'スキン',
+  'hudChrome.claudium.buyButton': '購入',
+  'hudChrome.claudium.checkoutTitle': '購入を完了',
+  'hudChrome.claudium.checkoutClose': '決済を閉じる',
+  'hudChrome.claudium.checkoutLoading': '決済を読み込み中…',
+  'hudChrome.claudium.checkoutPending':
+    '取引を処理中です。ウォレットで確認し、このパネルを開いたままにしてください。',
+  'hudChrome.claudium.checkoutPendingButton': '処理中',
+  'hudChrome.claudium.checkoutFailed': '決済を読み込めませんでした。もう一度お試しください。',
+  'hudChrome.claudium.checkoutUnavailable': 'そのClaudium購入は現在利用できません。',
+  'hudChrome.claudium.checkoutWalletRequired':
+    '暗号資産でClaudiumを購入する前にSolanaウォレットを接続してください。',
+  'hudChrome.claudium.checkoutWalletUnsupported':
+    'このウォレットではSolana取引の署名と送信ができません。',
+  'hudChrome.claudium.checkoutNotSettled':
+    '取引は送信されましたが、Claudiumはまだ反映されていません。しばらくしてからお試しください。',
   'hudChrome.itemHeroicTag': '[ヒロイック]',
   'hudChrome.readyCheck.notInPartyError':
     '準備確認を開始するにはパーティーに参加している必要があります。',
@@ -212,6 +461,25 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': 'マスタールートを有効化',
   'hudChrome.masterLoot.looterLabel': '分配担当',
   'hudChrome.masterLoot.leaderOption': 'パーティリーダー',
+  'hudChrome.playerMenu.info': 'プレイヤー情報',
+  'hudChrome.playerMenu.block': 'ブロック',
+  'hudChrome.playerMenu.unblock': 'ブロック解除',
+  'hudChrome.playerMenu.openFor': '{name} のプレイヤーメニューを開く',
+  'hudChrome.playerMenu.profileUnavailable': '{name} のプロフィールが見つかりません。',
+  'hudChrome.playerMenu.aiTag': '[AI]',
+  'hudChrome.playerMenu.aiTagTitle': 'AI操作アカウント',
+  'hudChrome.playerMenu.watchTwitch': 'Twitch で視聴',
+  'hudChrome.playerMenu.watchX': 'X で見る',
+  'hudChrome.playerMenu.watchKick': 'Kick で視聴',
+  'hudChrome.playerMenu.watchYouTube': 'YouTube で視聴',
+  'hudChrome.social.ignoredTab': '無視中',
+  'hudChrome.social.ignoredEmpty': '誰も無視していません。',
+  'hudChrome.social.blockedEmpty': '誰もブロックしていません。',
+  'hudChrome.social.blockSearchPlaceholder': 'プレイヤー名',
+  'hudChrome.social.blockAction': 'ブロック',
+  'hudChrome.social.nowBlocking': '{name} をブロックしました。',
+  'hudChrome.social.blockedTab': 'ブロック',
+  'hudChrome.social.stopBlockingTitle': '{name} のブロックを解除',
   'hudChrome.party.promoteLeader': 'パーティリーダーに指定',
   'hudChrome.party.inviteUsage': '誰を招待しますか？使用法：/invite <名前>。',
   'hudChrome.masterLoot.thresholdLabel': '品質しきい値',
@@ -290,16 +558,30 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'タッチ',
   'hudChrome.options.interfaceModeNote':
     '自動では、デバイスに応じてデスクトップ操作かタッチ操作を選びます。デスクトップを選ぶとキーボードとマウスに固定され（キーボード付きタブレットなどに便利）、タッチを選ぶと画面上の操作になります。',
+  'hudChrome.warfare.honorAmount': '名誉 {amount}',
+  'hudChrome.warfare.dualPrice': '{money} + {honor}',
+  'hudChrome.warfare.balance': '名誉: {amount}',
+  'hudChrome.warfare.honorFloat': '名誉 +{amount}',
+  'hudChrome.warfare.honorGain': '名誉を {amount} 獲得しました（{reason}）。',
+  'hudChrome.warfare.notEnoughHonor': '名誉が足りません。',
+  'hudChrome.warfare.reasons.arenaWin': 'アリーナ勝利',
+  'hudChrome.warfare.reasons.fiestaKill': 'フィエスタ撃破',
+  'hudChrome.warfare.reasons.fiestaComplete': 'フィエスタ完遂',
+  'hudChrome.warfare.reasons.fiestaWin': 'フィエスタ勝利',
   'hudChrome.statInfo.fromYour': 'あなたの{stat}{value}による効果:',
   'hudChrome.statInfo.names.spellPower': '呪文威力',
   'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',
   'hudChrome.statInfo.names.hasteRating': 'ヘイストレーティング',
+  'hudChrome.statInfo.names.warfare': 'ウォーフェア',
+  'hudChrome.statInfo.warfareValue': '与ダメージ +{increase}% / 被ダメージ -{reduction}%',
   'hudChrome.statInfo.desc.critRating':
     '装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。',
   'hudChrome.statInfo.desc.hasteRating':
     '装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。',
   'hudChrome.statInfo.desc.spellPower':
     '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
+  'hudChrome.statInfo.desc.warfare':
+    'プレイヤーに与えるダメージが {increase}% 増加し、プレイヤーから受けるダメージが {reduction}% 減少します。',
   'hudChrome.statInfo.sources.header': '内訳:',
   'hudChrome.statInfo.sources.base': '基本: {value}',
   'hudChrome.statInfo.sources.attributes': '能力値から: {value}',
@@ -419,6 +701,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': 'エモートホイール',
   'hudChrome.keybinds.targetFriendly': '最も近い味方をターゲット',
   'hudChrome.keybinds.targetFriendlyNext': '味方ターゲットを順に切り替え',
+  'hudChrome.petFeed.disabledFullHp': 'ペットは満タンの体力です',
+  'hudChrome.petFeed.disabledNoFood': 'バッグの中にペットを回復できる食べ物がありません',
   'hudChrome.options.clickMoveLeft': '左クリック',
   'hudChrome.options.clickMoveRight': '右クリック',
   'hudChrome.options.browserEffects': 'ブラウザエフェクト',
@@ -2009,6 +2293,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lay_on_hands.name': '最後の秘跡',
   'entities.abilities.lay_on_hands.description':
     '大きな癒やしの波で体力を{damage}回復します。クールダウン10分。',
+  'entities.abilities.holy_taunt.name': '聖なる挑発',
+  'entities.abilities.holy_taunt.description':
+    '対象を挑発します。あなたの脅威が対象の最も憎む敵と同じ値まで上がり、3秒間あなたを攻撃させます。',
   'entities.abilities.flash_of_light.name': '光の癒し',
   'entities.abilities.flash_of_light.description':
     '素早く効率的な光の迸りで味方対象の体力を {damage} 回復します。',
@@ -2094,6 +2381,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '石の怒りを武器に込めます。5分間、各スイングが{damage}の追加ダメージを与えます。',
   'entities.abilities.healing_wave.name': '癒しの水流',
   'entities.abilities.healing_wave.description': '味方対象の体力を {damage} 回復します。',
+  'entities.abilities.chain_heal.name': 'チェインヒール',
+  'entities.abilities.chain_heal.description':
+    '味方1体を大きく回復し、近くの味方最大2体に連鎖します。連鎖するごとに回復量が50%減少します。（回復スペシャライゼーション）',
   'entities.abilities.earth_shock.name': '大地の衝撃',
   'entities.abilities.earth_shock.description':
     '衝撃の力で対象を即座に打ち、{damage} の自然ダメージを与えます。',
@@ -2272,6 +2562,72 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ステルス状態からの先制攻撃で、武器ダメージに加えて{damage}のダメージを与え、9秒かけて出血ダメージを与える。コンボポイントを1獲得する。ウルフフォーム時のみ使用可能。',
   'entities.abilities.revive_pet.name': 'ペット蘇生',
   'entities.abilities.revive_pet.description': '死んだペットを蘇生させ、自分のそばに呼び戻す。',
+  'entities.abilities.holy_shock.name': 'ホーリーショック',
+  'entities.abilities.holy_shock.description':
+    '聖なる力で味方を衝撃し、体力を{damage}回復します。（ホーリー特性のシグネチャ）',
+  'entities.abilities.holy_shield.name': 'ホーリーシールド',
+  'entities.abilities.holy_shield.description':
+    '10秒間、聖なる力で自分を守り、防御力を90上げ、近接攻撃者に12の聖属性ダメージを与えます。（プロテクション特性のシグネチャ）',
+  'entities.abilities.bestial_wrath.name': '野獣の怒り',
+  'entities.abilities.bestial_wrath.description':
+    '野獣の怒りに入り、15秒間攻撃力が55上がります。（ビーストマスタリー特性のシグネチャ）',
+  'entities.abilities.trueshot_aura.name': 'トゥルーショットオーラ',
+  'entities.abilities.trueshot_aura.description':
+    '近くの味方を鼓舞し、5分間攻撃力を35上げます。（マークスマンシップ特性のシグネチャ）',
+  'entities.abilities.wyvern_sting.name': 'ワイバーンスティング',
+  'entities.abilities.wyvern_sting.description':
+    '遠距離から敵を刺し、最大4秒間行動不能にします。ダメージを受けると効果は解除されます。（サバイバル特性のシグネチャ）',
+  'entities.abilities.arcane_power.name': 'アーケインパワー',
+  'entities.abilities.arcane_power.description':
+    '10秒間、呪文ダメージが20%、呪文ヘイストが10%上がります。（アーケイン特性のシグネチャ）',
+  'entities.abilities.combustion.name': 'コンバッション',
+  'entities.abilities.combustion.description':
+    '15秒間、呪文クリティカル率が50%上がります。（ファイア特性のシグネチャ）',
+  'entities.abilities.icy_veins.name': 'アイシーヴェインズ',
+  'entities.abilities.icy_veins.description':
+    '10秒間、呪文ヘイストが30%上がり、詠唱の中断と遅延を防ぎます。（フロスト特性のシグネチャ）',
+  'entities.abilities.cold_blood.name': 'コールドブラッド',
+  'entities.abilities.cold_blood.description':
+    '殺意を集中し、次の攻撃をクリティカルにします。（アサシネーション特性のシグネチャ）',
+  'entities.abilities.blade_flurry.name': 'ブレードフラリー',
+  'entities.abilities.blade_flurry.description':
+    '刃の連撃を放ち、12秒間攻撃速度を20%上げます。（コンバット特性のシグネチャ）',
+  'entities.abilities.hemorrhage.name': 'ヘモリッジ',
+  'entities.abilities.hemorrhage.description':
+    '敵を攻撃して武器ダメージに加え{damage}を与え、12秒間出血ダメージを与えます。コンボポイントを1得ます。（サブテリティ特性のシグネチャ）',
+  'entities.abilities.power_infusion.name': 'パワーインフュージョン',
+  'entities.abilities.power_infusion.description':
+    '味方に力を注ぎ、15秒間呪文力を28上げます。（ディシプリン特性のシグネチャ）',
+  'entities.abilities.holy_nova.name': 'ホーリーノヴァ',
+  'entities.abilities.holy_nova.description':
+    '聖なる光を爆発させ、近くの味方を{damage}回復し、近くの敵にダメージを与えます。（ホーリー特性のシグネチャ）',
+  'entities.abilities.shadowform.name': 'シャドウフォーム',
+  'entities.abilities.shadowform.description':
+    'シャドウフォームになり、戻るまで影の魔法を強化します。再び唱えると通常形態に戻ります。（シャドウ特性のシグネチャ）',
+  'entities.abilities.elemental_mastery.name': 'エレメンタルマスタリー',
+  'entities.abilities.elemental_mastery.description':
+    '元素の熟達を呼び、次の呪文を即時発動にします。（エレメンタル特性のシグネチャ）',
+  'entities.abilities.siphon_life.name': 'サイフォンライフ',
+  'entities.abilities.siphon_life.description':
+    '敵の生命を吸い取り、30秒間で{damage}のシャドウダメージを与え、与えたダメージ分あなたを回復します。（アフリクション特性のシグネチャ）',
+  'entities.abilities.conflagrate.name': 'コンフラグレート',
+  'entities.abilities.conflagrate.description':
+    '敵にかかったイモレートを消費して燃え上がらせ、{damage}のファイアダメージを与えます。（デストラクション特性のシグネチャ）',
+  'entities.abilities.moonkin_form.name': 'ムーンキンフォーム',
+  'entities.abilities.moonkin_form.description':
+    'ムーンキンフォームになり、戻るまで呪文詠唱を強化します。再び唱えると通常形態に戻ります。（バランス特性のシグネチャ）',
+  'entities.abilities.feral_charge.name': 'フェラルチャージ',
+  'entities.abilities.feral_charge.description':
+    '敵に突撃し、1秒間足止めします。射程8-25ヤード。（フェラル特性のシグネチャ）',
+  'entities.abilities.swiftmend.name': 'スウィフトメンド',
+  'entities.abilities.swiftmend.description':
+    '味方にかかった継続回復効果を消費し、体力を{damage}回復します。（レストレーション特性のシグネチャ）',
+  'entities.abilities.crusader_strike.name': 'クルセイダー ストライク',
+  'entities.abilities.crusader_strike.description':
+    '対象を攻撃し、武器ダメージに加えて {damage} の聖なるダメージを与えます。（パラディンのタレント）',
+  'entities.abilities.metamorphosis.name': '悪魔変身',
+  'entities.abilities.metamorphosis.description':
+    '悪魔の力をまとい、20 秒間防御力と攻撃力を高めます。（ウォーロックのタレント）',
   'entities.items.worn_sword.name': '錆穴だらけのショートソード',
   'entities.items.gnarled_staff.name': '沼樫の杖',
   'entities.items.rusty_dagger.name': '錆びたダガー',
@@ -3582,9 +3938,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.shroud_of_the_gravewyrm.name': 'グレイヴワームの帳',
   'entities.items.sanctum_prowlers_grips.name': 'サンクタムプラウラーのグリップ',
   'entities.items.scepter_of_the_deathless_court.name': '不死の宮廷の笏',
-  'entities.items.deathless_warguard_legmail.name': '不死の戦衛レッグメイル',
-  'entities.items.soulrend_diadem.name': 'ソウルレンドの宝冠',
-  'entities.items.scourgehide_carapace.name': 'スカージハイドの甲殻',
   'entities.items.cryptplate_helm.name': 'クリプトプレートヘルム',
   'entities.items.shadowpulse_slippers.name': 'シャドウパルスのスリッパ',
   'entities.items.bonechill_cord.name': 'ボーンチルの帯',
@@ -3598,7 +3951,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.gravescale_girdle.name': 'グレイヴスケイルの帯',
   'entities.items.wyrmchoir_handwraps.name': 'ワームクワイアの手巻き',
   'entities.items.deathless_greatblade.name': '不死の大剣',
-  'entities.items.soulforged_warplate.name': '魂鍛の戦甲',
   'entities.items.stormcallers_focus.name': 'ストームコーラーの焦点',
   'entities.items.zense_meridian.name': 'ゼンセの子午線',
   'entities.items.seal_of_the_nine_oaths.name': '九誓の印章',
@@ -3759,6 +4111,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_log.name': 'エルダーウッドの丸太',
   'entities.items.goldleaf_herb.name': 'ゴールドリーフ草',
   'entities.items.sunpetal_herb.name': 'サンペタル草',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': '死なずの戦衛オルドレン',
+  'entities.mobs.nythraxis_heroic_priest_add.name': '死なずの司祭長マルリック',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': '死なずの刃ヴォス',
   'entities.mobs.nythraxis_skeleton_warrior.name': '蘇った王家の衛兵',
   'entities.mobs.nythraxis_scourge_of_thornpeak.name': 'ナイスラクシス、ソーンピークの災厄',
   'hud.core.chatChannels.add': 'チャットチャンネルを追加',
@@ -3943,6 +4298,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/秒',
   'hudChrome.meters.perSecondRow': '{total}（{rate}）',
   'hudChrome.meters.seconds': '{s}秒',
+  'hudChrome.meters.autoShowHint':
+    'パーティがダメージまたは回復を与えると行が自動的に表示され、戦闘終了の数秒後にこのセグメントは閉じます。',
   'hudChrome.mobile.actionPageToggle': '行動ページ切替',
   'hudChrome.mobile.actionRing': '戦闘アクション',
   'hudChrome.mobile.haptics': '振動',
@@ -3951,7 +4308,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.hotbarPageAria': '次のスキルセットを表示',
   'hudChrome.mobile.jump': 'ジャンプ',
   'hudChrome.mobile.leaderboard': 'ランキング',
-  'hudChrome.mobile.dailyRewards': '報酬',
+  'hudChrome.mobile.dailyRewards': 'ストア',
   'hudChrome.mobile.deeds': '功績',
   'hudChrome.mobile.nameplates': 'ネームプレート',
   'hudChrome.mobile.targetCycle': 'ターゲット切替',
@@ -4164,7 +4521,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'クエストトラッカーを折りたたむ',
   'hudChrome.questTracker.expandHint': 'クエストトラッカーを展開する',
   'hudChrome.bags.cannotDestroy': 'このアイテムは破壊できません。',
-  'hudChrome.bags.rightClickDestroy': '右クリックで破壊',
+  'hudChrome.bags.rightClickDestroy': 'Shift+右クリックで破壊',
   'hudChrome.bags.filterGroupAria': 'バッグをカテゴリーで絞り込む',
   'hudChrome.bags.filterAll': 'すべて',
   'hudChrome.bags.filterWeapon': '武器',
@@ -4653,6 +5010,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '古き深淵に棲む、鱗に覆われた蛇のような存在。希少で誇り高く、見た目よりもはるかに強大です。',
   'guide.family.dragonkin.name': 'ドラゴンキン',
   'guide.family.elemental.desc': '嵐や岩が命を得た存在。元素の力が強く渦巻く荒野に縛られています。',
+  'guide.family.reptile.name': '爬虫類',
+  'guide.family.reptile.desc':
+    '独特の威嚇音と鋭い一撃を持つ、冷血のハンターたち。温血の獣たちとは一線を画します。',
   'guide.worldPage.heading': '世界',
   'guide.worldPage.intro':
     'World of ClaudeCraftは、自らの足で歩いて渡る一続きの大地です。南から北へと3つのゾーンが連なっています。ファストトラベルはなく、その旅路こそが冒険の一部です。',
@@ -5878,6 +6238,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'Discordを連携すると、プレイやコミュニティ活動からポイントを獲得し、ステータスランクを上げられます。',
   'hudChrome.discord.link.error': 'Discordを連携できませんでした。もう一度お試しください。',
   'hudChrome.discord.link.success': 'Discordを連携しました。',
+  'hudChrome.discord.link.joinServer': 'アカウント連携なしでサーバーに参加',
   'hudChrome.discord.linkedAs': '{name}として連携済み',
   'hudChrome.discord.linkedTitle': 'Discord：{name}',
   'hudChrome.discord.viewProfile': 'このキャラクターの公開プロフィールを開く',
@@ -5943,6 +6304,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': '開発者',
   'hudChrome.discord.roleTag.mods': 'モデレーター',
+  'hudChrome.discord.roleTag.seniormods': 'シニアモデレーター',
+  'hudChrome.discord.roleTag.juniormods': 'ジュニアモデレーター',
+  'hudChrome.discord.roleTag.contentcreator': 'コンテンツクリエイター',
   'hudChrome.discord.voice.channel': '{channel}に参加中',
   'hudChrome.discord.swag.title': 'グッズ',
   'hudChrome.discord.swag.free': '無料',
@@ -5989,6 +6353,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'World of ClaudeCraft のバージョン {version} が利用可能です。今すぐアップデートして最新の修正と改善を入手しましょう。',
   'hudChrome.nativeUpdate.notNow': '後で',
   'hudChrome.nativeUpdate.update': '更新',
+  'hudChrome.cameraPrompt.title': 'カメラを選択',
+  'hudChrome.cameraPrompt.intro': 'カメラがキャラクターを追う方法を選びましょう。',
+  'hudChrome.cameraPrompt.mouseDesc': 'ボタンを押さずにマウスを動かして視点を回します。',
+  'hudChrome.cameraPrompt.classicTitle': 'クラシックカメラ',
+  'hudChrome.cameraPrompt.classicDesc': '右クリックを押しながらマウスを動かして視点を回します。',
+  'hudChrome.cameraPrompt.changeLater': 'この設定は後で Esc の「キー割り当て」から変更できます。',
+  'hudChrome.cameraPrompt.confirm': '決定',
   'desktop.update.downloading': 'アップデート {version} をダウンロード中...',
   'desktop.update.ready':
     'アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。',
@@ -7062,6 +7433,49 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.bursar_aldous_crane.title': '金張りの金庫',
   'entities.npcs.bursar_aldous_crane.greeting':
     'どんな木箱も、金櫃も、装身具も、金張りの金庫にお預けいただければ安全です。',
+  'entities.items.furyforged_warhelm.name': '憤怒鋳りの戦兜',
+  'entities.items.furyforged_warspaulders.name': '憤怒鋳りの戦肩当て',
+  'entities.items.furyforged_warplate.name': '憤怒鋳りの戦鎧',
+  'entities.items.furyforged_girdle.name': '憤怒鋳りの腰帯',
+  'entities.items.furyforged_legguards.name': '憤怒鋳りの脚当て',
+  'entities.items.furyforged_gauntlets.name': '憤怒鋳りの篭手',
+  'entities.items.furyforged_sabatons.name': '憤怒鋳りの戦靴',
+  'entities.items.stormbound_crown.name': '嵐縛りの王冠',
+  'entities.items.stormbound_spaulders.name': '嵐縛りの肩当て',
+  'entities.items.stormbound_hauberk.name': '嵐縛りの鎖帷子',
+  'entities.items.stormbound_waistguard.name': '嵐縛りの腰守り',
+  'entities.items.stormbound_legmail.name': '嵐縛りの脚鎖',
+  'entities.items.stormbound_handguards.name': '嵐縛りの手甲',
+  'entities.items.stormbound_greaves.name': '嵐縛りの脛当て',
+  'entities.items.ashstalker_cowl.name': '灰追いの頭巾',
+  'entities.items.ashstalker_shoulderguards.name': '灰追いの肩守り',
+  'entities.items.ashstalker_harness.name': '灰追いの胴具',
+  'entities.items.ashstalker_waistband.name': '灰追いの腰帯',
+  'entities.items.ashstalker_legguards.name': '灰追いの脚当て',
+  'entities.items.ashstalker_grips.name': '灰追いの手甲',
+  'entities.items.ashstalker_treads.name': '灰追いの足袋',
+  'entities.items.cinderweave_cowl.name': '熾火織りの頭巾',
+  'entities.items.cinderweave_mantle.name': '熾火織りの肩衣',
+  'entities.items.cinderweave_raiment.name': '熾火織りの法衣',
+  'entities.items.cinderweave_cord.name': '熾火織りの腰紐',
+  'entities.items.cinderweave_legwraps.name': '熾火織りの脚巻き',
+  'entities.items.cinderweave_handwraps.name': '熾火織りの手巻き',
+  'entities.items.cinderweave_slippers.name': '熾火織りの上履き',
+  'entities.items.final_oath_medallion.name': '最後の誓いのメダリオン',
+  'entities.items.razorwind_torque.name': '刃風の首輪',
+  'entities.items.cinder_sigil_pendant.name': '熾火印のペンダント',
+  'entities.items.iron_vow_band.name': '鉄の誓いの指輪',
+  'entities.items.unbroken_circle.name': '不壊の円環',
+  'entities.items.fleetblood_band.name': '疾血の指輪',
+  'entities.items.last_step_signet.name': '最後の一歩の印章',
+  'entities.items.ashen_focus_ring.name': '灰燼の集中指輪',
+  'entities.items.spellbreakers_seal.name': '呪文砕きの印章',
+  'entities.items.final_argument_greatblade.name': '最後の論駁の大剣',
+  'entities.items.first_blood_razor.name': '初血の剃刀',
+  'entities.items.emberglass_warstaff.name': '熾火硝子の戦杖',
+  'entities.npcs.fury.name': 'フューリー',
+  'entities.npcs.fury.title': '名誉補給官',
+  'entities.npcs.fury.greeting': '戦場の砂は、すべての勝利を記憶している。名誉は賢く使うことだ。',
   'guide.economy.bankBody':
     '各拠点の町には、この地の銀行商会である金張りの金庫の支店があります。そこの出納官に話しかけると自分の金庫が開きます。バッグとは別の私的な収納で、キャラクターが生涯持ち続けるものです。預けた品は、次にどの支店を訪れてもそのまま安全に待っています。',
   'guide.economy.bankHow':
@@ -7219,6 +7633,25 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。',
   'loading.tips.pvp':
     'ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': '顎砕き',
+  'entities.abilities.pummel.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.kick.name': 'ブーツ',
+  'entities.abilities.kick.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.counterspell.name': 'スペルブレイク',
+  'entities.abilities.counterspell.description':
+    '対象の呪文を打ち消し、6秒間その系統の呪文を封じる。',
+  'entities.abilities.counter_shot.name': '沈黙の一射',
+  'entities.abilities.counter_shot.description':
+    '素早い一射で対象の詠唱を中断し、4秒間その系統を封じる。',
+  'entities.abilities.rebuke.name': '叱咤',
+  'entities.abilities.rebuke.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.skull_bash.name': '頭突き',
+  'entities.abilities.skull_bash.description':
+    '突進する頭突きで対象の詠唱を中断し、4秒間その系統を封じる。',
+  'entities.abilities.spell_lock.name': '猿轡',
+  'entities.abilities.spell_lock.description':
+    '詠唱中の対象を沈黙させ、5秒間その系統の呪文を封じる。',
   'guide.bestiary.flavor.sethrael_palecoil':
     '骨のように蒼白い蛇で、グリマーミアの深い棚を音もなく滑り、自らのものとした水域を守る無言の番人。この湖を分かち合った泳ぎ手が、水面に戻ることはまずない。',
   'guide.combat.metersBody':
@@ -7274,4 +7707,29 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.social.slashBody':
     '日々使う便利なコマンドをいくつか覚えておくとよいでしょう。/w 名前 でウィスパーを送り、/r で最後に受け取ったウィスパーに返信します。/invite で誰かをパーティに誘い、/follow で仲間の後ろについて歩き、/roll でグループの全員に見えるサイコロを振り、/who でオンラインの相手を確認し、/afk で離席中を示します。全一覧はゲーム内で /help と打てば見られます。',
   'guide.social.slashHeading': '便利なスラッシュコマンド',
+  // Unstuck recovery (M16 non-Latin fills).
+  'hudChrome.unstuck.menuButton': 'スタック解除',
+  'hudChrome.unstuck.help':
+    '復帰：/unstuck はその場でカウントダウンを開始し、近くの到達可能な安全地点へ移動します。',
+  'hudChrome.unstuck.started':
+    '{seconds}秒後にスタックを解除します。移動、戦闘、被ダメージ、別の行動を始めるとキャンセルされます。',
+  'hudChrome.unstuck.countdown': 'スタック解除：{seconds}',
+  'hudChrome.unstuck.completed': '到達可能な最寄りの安全な場所へ移動しました。',
+  'hudChrome.unstuck.cancelledMoved': '移動したため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.cancelledDamaged': 'ダメージを受けたため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.cancelledCombat': '戦闘に入ったため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.cancelledBusy': '別の行動を始めたため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.cancelledState': '状態が変化したため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.cancelledDisconnected': '接続が切れたため、スタック解除をキャンセルしました。',
+  'hudChrome.unstuck.noSafePosition':
+    '近くに到達可能な安全な場所がありません。移動は行われませんでした。',
+  'hudChrome.unstuck.alreadyActive': 'スタック解除のカウントダウンはすでに進行中です。',
+  'hudChrome.unstuck.alreadySafe': 'すでに安全で到達可能な場所にいます。',
+  'hudChrome.unstuck.cooldown': 'スタック解除はあと{seconds}秒で使用できます。',
+  'hudChrome.unstuck.dead': '死亡中または霊体中はスタック解除を使用できません。',
+  'hudChrome.unstuck.combat': '戦闘中はスタック解除を使用できません。',
+  'hudChrome.unstuck.controlled': '移動を妨げられている間はスタック解除を使用できません。',
+  'hudChrome.unstuck.standStill': '安定した地面で静止してからスタック解除を使用してください。',
+  'hudChrome.unstuck.busy': '現在の行動を終えてからスタック解除を使用してください。',
+  'hudChrome.unstuck.unavailable': '現在の状態ではスタック解除を使用できません。',
 };

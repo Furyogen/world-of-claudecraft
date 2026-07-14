@@ -341,11 +341,13 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
   // Ease the body off any terrain wall it now overlaps. The slope gates above
   // block the CENTER from climbing a wall, but nothing keeps the body's WIDTH
   // clear of one, so standing at (or strafing along) a wall foot buries the near
-  // side of the model. Only on settled ground (a fall/ledge is resolved above),
-  // and never onto ground steeper than the climb limit (a rare terrace corner:
-  // a tick's clip beats being shoved onto a wall). Lives in the kernel so the
-  // server Sim and the client self-predictor apply it identically; no-op on open
-  // ground and on flat instanced floors.
+  // side of the model. Only on settled ground (a fall/ledge is resolved above).
+  // The acceptance gate below (see its own comment) can commit a push onto ground
+  // still steeper than the climb limit when that push strictly improves on the
+  // player's current steepness; that is deliberate, so a concave wall pocket
+  // converges over several ticks instead of leaving the player wedged forever.
+  // Lives in the kernel so the server Sim and the client self-predictor apply it
+  // identically; no-op on open ground and on flat instanced floors.
   if (p.onGround && !isSwimming(p, deps.seed)) {
     const s = terrainWallStandoff(p.pos.x, p.pos.z, deps.seed, BODY_RADIUS, MAX_CLIMB_SLOPE);
     if (s.x !== p.pos.x || s.z !== p.pos.z) {
@@ -381,7 +383,27 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
           standZ = slide.z;
         }
       }
-      if (terrainSteepnessAt(standX, standZ, deps.seed) <= MAX_CLIMB_SLOPE) {
+      // Commit the nudge once it clears the climb limit outright, OR once it
+      // is no steeper than the current spot (<=, not <). A single tick's
+      // push is not always enough to escape a concave wall pocket (a notch
+      // where two faces meet, e.g. a coastline cliff cove or a ridge/rim
+      // corner); requiring full clearance in one shot silently discards
+      // every partial improvement, so the position never changes and the
+      // player is frozen there forever (this tick's push is recomputed from
+      // the SAME unmoved spot next tick too). Accepting any non-worsening
+      // push instead lets each of the sim's 20 ticks/sec inch the player
+      // further from the wall, guaranteeing eventual escape instead of a
+      // permanent wedge. The compare is deliberately <=, not <:
+      // terrainSteepnessAt rounds to 1-yard cells and a single pass moves at
+      // most one body radius (0.5yd), so a push often lands back in the same
+      // steepness cell it started in, reading exactly equal. Tightening to <
+      // would make that equal-cell case stop committing, which is precisely
+      // the wedge case this gate exists to fix.
+      const standSteep = terrainSteepnessAt(standX, standZ, deps.seed);
+      if (
+        standSteep <= MAX_CLIMB_SLOPE ||
+        standSteep <= terrainSteepnessAt(p.pos.x, p.pos.z, deps.seed)
+      ) {
         p.pos.x = standX;
         p.pos.z = standZ;
         p.pos.y = groundHeightNear(standX, standZ, deps.seed, p.pos.y);

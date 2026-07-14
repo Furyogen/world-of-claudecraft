@@ -27,6 +27,7 @@ services:
       args:
         # Build-time public client config inlined into the bundle (see .env.example).
         VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
+        VITE_WALLET_DISABLED: ${VITE_WALLET_DISABLED:-}
     container_name: eastbrook-game
     restart: unless-stopped
     depends_on:
@@ -35,6 +36,9 @@ services:
     environment:
       DATABASE_URL: postgres://eastbrook:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env. See .env.example.}@postgres:5432/eastbrook
       PORT: "8787"
+      # Community test realms can opt in to a ready-made level-20 roster for
+      # every newly created account. The production-safe default is disabled.
+      PROVISION_TEST_ACCOUNTS: ${PROVISION_TEST_ACCOUNTS:-0}
       # Target the game server 302-redirects /wiki to when hit directly (not via the
       # reverse proxy). Public origin in prod; localhost fallback for local dev.
       WIKI_URL: ${WIKI_URL:-http://localhost:8080/wiki/index.php/Main_Page}
@@ -64,6 +68,8 @@ services:
       # heartbeat log line (tickHz, per-phase p95/max) plus over-budget stutter
       # traces. Off by default so production logs stay quiet.
       PERF_TICK_LOG: ${PERF_TICK_LOG:-}
+      # Runtime: opt-in public-test Rift population. Empty leaves normal policy on.
+      COMMUNITY_TEST_RIFTS: ${COMMUNITY_TEST_RIFTS:-}
       # Runtime: bearer token that gates GET /metrics (server/http/health.ts).
       # Empty (unset) leaves the endpoint feature-off (404); a non-empty value
       # turns it on behind Authorization: Bearer <token>. Set on the host .env by
@@ -92,6 +98,10 @@ services:
       WOC_DAILY_REWARD_SERVICE_URL: ${WOC_DAILY_REWARD_SERVICE_URL:-}
       WOC_DAILY_REWARD_SERVICE_SECRET: ${WOC_DAILY_REWARD_SERVICE_SECRET:-}
       WOC_DAILY_REWARD_CONFIG_TTL_MS: ${WOC_DAILY_REWARD_CONFIG_TTL_MS:-}
+      WOC_ECONOMY_SERVICE_URL: ${WOC_ECONOMY_SERVICE_URL:-}
+      WOC_ECONOMY_INTERNAL_SECRET: ${WOC_ECONOMY_INTERNAL_SECRET:-}
+      SOLANA_RPC_URL: ${SOLANA_RPC_URL:-}
+      WOC_MINT: ${WOC_MINT:-}
       META_CAPI_PIXEL_ID: ${META_CAPI_PIXEL_ID:-}
       META_CAPI_ACCESS_TOKEN: ${META_CAPI_ACCESS_TOKEN:-}
       META_CAPI_TEST_EVENT_CODE: ${META_CAPI_TEST_EVENT_CODE:-}
@@ -110,6 +120,10 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
       EMAIL_API_URL: ${EMAIL_API_URL:-}
       EMAIL_API_KEY: ${EMAIL_API_KEY:-}
+      # Optional Steam account link and Book of Deeds achievement mirror.
+      STEAM_ENABLED: ${STEAM_ENABLED:-}
+      STEAM_APP_ID: ${STEAM_APP_ID:-}
+      STEAM_WEB_API_KEY: ${STEAM_WEB_API_KEY:-}
       # Optional deployable SFX packs live outside the image. Export from SFX
       # Studio, run its installer against the host overlay root, and this server
       # reads only the stable runtime manifest plus immutable audio blobs here.
@@ -120,6 +134,8 @@ services:
     volumes:
       - ${EASTBROOK_MEDIA_DIR:-./media-cache}:/app/dist/media
       - ${EASTBROOK_SFX_DIR:-./sfx-runtime}:/app/sfx-runtime:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   discord-bot:
     image: eastbrook-game:${EASTBROOK_IMAGE_TAG:-local}

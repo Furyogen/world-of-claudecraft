@@ -8,8 +8,8 @@
     "casting lifecycle (C4a)",
     "effect dispatch + spell damage (C4b/C1)"
   ],
-  "draws": 748,
-  "drawDigest": "bf3b67a8",
+  "draws": 746,
+  "drawDigest": "f0658bea",
   "frames": [
     {
       "tick": 0,
@@ -192,22 +192,22 @@
       "tick": 120,
       "time": 6,
       "nextId": 663,
-      "state": "d2ce7561",
-      "events": "b87a8fa3",
+      "state": "10e3e551",
+      "events": "074e1da0",
       "rng": {
-        "draws": 656,
-        "digest": "e899d3b3"
+        "draws": 657,
+        "digest": "ddd2ebed"
       }
     },
     {
       "tick": 128,
       "time": 6.4,
       "nextId": 663,
-      "state": "f8f92d4d",
+      "state": "ed5c3a29",
       "events": "741638a5",
       "rng": {
-        "draws": 748,
-        "digest": "bf3b67a8"
+        "draws": 746,
+        "digest": "f0658bea"
       },
       "label": "final",
       "players": [
@@ -228,7 +228,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 89,
-            "damageTaken": 8
+            "damageTaken": 9
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -308,7 +308,7 @@
           "facing": 0.106651,
           "fallStartY": 1.5,
           "fiveSecondRule": 2.05,
-          "hp": 49992,
+          "hp": 49991,
           "id": 661,
           "inCombat": true,
           "kind": "player",

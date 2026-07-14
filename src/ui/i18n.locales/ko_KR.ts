@@ -14,6 +14,255 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.wocStore.title': 'WOC 상점',
+  'hudChrome.wocStore.close': 'WOC 상점 닫기',
+  'hudChrome.wocStore.tabsLabel': 'WOC 상점 구역',
+  'hudChrome.wocStore.storeTab': '상점',
+  'hudChrome.wocStore.rewardsTab': '일일 보상',
+  'hudChrome.wocStore.loading': 'WOC 상점 불러오는 중…',
+  'hudChrome.wocStore.error': '현재 WOC 상점을 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+  'hudChrome.wocStore.balance': 'Claudium 잔액',
+  'hudChrome.wocStore.buyClaudium': 'Claudium 구매',
+  'hudChrome.wocStore.owned': '보유 중',
+  'hudChrome.wocStore.needMoreTitle': 'Claudium이 더 필요합니다',
+  'hudChrome.wocStore.needMoreBody': '{item} 구매에 Claudium {shortfall}개가 더 필요합니다.',
+  'hudChrome.wocStore.cancel': '취소',
+  'hudChrome.wocStore.confirmTitle': '꾸미기 상품 구매 확인',
+  'hudChrome.wocStore.confirmBody': '{item}을(를) {cost} Claudium으로 구매할까요?',
+  'hudChrome.wocStore.confirmPurchase': '구매',
+  'hudChrome.wocStore.priceChanged':
+    '구매가 완료되기 전에 가격이 변경되었습니다. 갱신된 가격을 확인한 후 다시 승인해 주세요.',
+  'hudChrome.wocStore.armoryEyebrow': '시즌 1',
+  'hudChrome.wocStore.armoryTitle': '무기고',
+  'hudChrome.wocStore.armoryBody':
+    '시즌 1 무기고의 한정 무기 스킨입니다. 계정 전체에 적용되는 순수 장식이며 주변 모든 플레이어에게 보입니다.',
+  'hudChrome.wocStore.collectionLine': '{collection} 컬렉션',
+  'hudChrome.wocStore.collections.guildmark': '길드마크',
+  'hudChrome.wocStore.collections.emberwrought': '엠버로트',
+  'hudChrome.wocStore.collections.hoarfrost': '백상',
+  'hudChrome.wocStore.collections.fallen_star': '추락한 별',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.name': '길드마크 무장검',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.look':
+    '푸르게 처리한 강철 칼날, 청동 물고기 꼬리형 십자 가드, 청록색으로 염색한 가죽 손잡이, 작게 찍힌 길드 문장.',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.lore':
+    '단조된 칼날이 이름 없는 물건이라면, 이 검에는 서명이 있습니다. 갑옷 장인은 월드 마켓의 상인이 자신의 강철을 보증해 준 뒤에야 검신 뿌리에 표식을 새길 자격을 얻으며, 대장장이 할드렌의 표식은 정식 보증을 받았습니다. 베일의 습기를 견디도록 푸르게 처리했고, 머리카락 한 올만큼 정밀하게 균형을 맞췄습니다. 검값만큼이나 표식에 값을 치르지만, 그만한 가치가 있습니다.',
+  'hudChrome.wocStore.skins.brasscap_axe.name': '브라스캡 손도끼',
+  'hudChrome.wocStore.skins.brasscap_axe.look':
+    '광택 낸 강철 날, 옻칠한 물푸레나무 자루의 황동 덮개와 랑게트, 단정한 감개, 제작자의 표식.',
+  'hudChrome.wocStore.skins.brasscap_axe.lore':
+    '표식이 찍힌 도끼는 손에 쥘 수 있는 자랑거리입니다. 황동 덮개와 랑게트는 절반은 갑옷이고 절반은 서명입니다. 자루가 쪼개지는 것을 막고 선술집 불빛을 받아 반짝여, 모두에게 이것이 민병대에서 물려받은 물건이 아니라 갑옷 장인 호드의 작품임을 알립니다. 하이워치 대장장이는 “베기만 한다면 팔지”라고 말합니다. 이 도끼는 벱니다.',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.name': '담금질 플랜지 철퇴',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.look':
+    '여섯 갈래의 담금질한 청강철 머리, 황동 칼라와 폼멜, 와인색 가죽 손잡이.',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.lore':
+    '푸르게 담금질한 강철 플랜지 여섯 개를 투구를 가를 수 있도록 하나하나 갈아내고, 황동으로 마감한 뒤 와인색 가죽을 감았습니다. 이 왕국의 갑옷 장인들은 일이 잔혹할 때조차 흉한 무기를 만들지 않습니다. 이 철퇴는 진열대에서 집어 든 것이 아니라 월드 마켓을 통해 주문 제작되었습니다. 어딘가의 장부에는 자랑스러운 구매자의 이름과 그가 호드에게 치른 금액이 적혀 있을 것입니다.',
+  'hudChrome.wocStore.skins.guildmark_dirk.name': '길드마크 더크',
+  'hudChrome.wocStore.skins.guildmark_dirk.look':
+    '가느다란 담금질 강철 더크, 청동 가드와 폼멜 너트, 짙은 녹색 끈 손잡이, 찍힌 문장.',
+  'hudChrome.wocStore.skins.guildmark_dirk.lore':
+    '검을 집에 두고 나온 명사가 차는 무기입니다. 가늘고 단단하며, 온전한 칼날과 같은 품질을 보증하는 표식이 찍혀 있습니다. 날이 선 인장처럼 허리띠에 차며, 갑옷 장인의 증표를 알아보는 사람에게만 그 의미가 드러납니다. 병참장교 브리는 성벽의 존경을 얻은 장교들을 위해 하이워치의 서랍 하나를 이 더크로 가득 채워 둡니다.',
+  'hudChrome.wocStore.skins.brasscrown_staff.name': '브라스크라운 여행 지팡이',
+  'hudChrome.wocStore.skins.brasscrown_staff.look':
+    '깎아 만든 황동 왕관 장식이 얹힌 견목 지팡이, 황동 페룰, 염색한 가죽 띠.',
+  'hudChrome.wocStore.skins.brasscrown_staff.lore':
+    '잘 말린 견목을 깎아 만들고, 이스트브룩 대장장이들이 수백 개씩 주조하면서도 하나하나 완벽하게 다듬은 황동 장식을 왕관처럼 얹었습니다. 펜브리지의 관문과 하이워치의 성벽 어디서든 진지하게 대우받고 싶은 여행자에게 어울립니다. 실제로는 걸을 필요가 전혀 없었던 듯한 여행 지팡이이며, 염색한 띠와 어울리는 외투의 가격도 짐작할 만합니다.',
+  'hudChrome.wocStore.skins.lacquered_wand.name': '옻칠 마법봉',
+  'hudChrome.wocStore.skins.lacquered_wand.look':
+    '가느다란 진홍색 옻칠 마법봉, 광택 낸 황동 띠 두 개, 작고 둥근 황동 끝.',
+  'hudChrome.wocStore.skins.lacquered_wand.lore':
+    '인내심을 들여 진홍색 옻칠을 일곱 겹 올리고 광택 낸 황동 띠 두 개를 둘렀습니다. 진짜 주화를 받기 시작한 떠돌이 마법사가 월드 마켓에서 사서 그럴듯하게 보이고 싶을 때 고르는 마법봉입니다. 빛을 다루는 능력은 자작나무 막대보다 나을 것이 없습니다. 하지만 상인의 계산대 너머에서 눈부시게 빛나며, 하찮은 마법의 절반은 언제나 믿음을 사는 일이었습니다.',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.name': '화살장인 길드 활',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.look':
+    '옻칠한 호두나무 리커브 활, 황동 활대 끝, 밀랍 먹인 아마실 시위, 손잡이에 찍힌 길드 표식.',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.lore':
+    '이 왕국에서 길드에 가장 가까운 것은 활 손잡이에 찍힌 화살장인의 표식입니다. 포도주 장인이 술통을 봉인하듯, 그 안에 무엇이 들었는지 보증하는 약속입니다. 옻칠한 호두나무, 활대 끝의 황동, 미어펜의 비에도 해지지 않는 밀랍 먹인 아마실 시위. 모든 이음새가 그 가격을 정당화합니다. 위도우 시켓을 지나 단 한 번 당겨 보면 그 주장이 옳았음을 알게 됩니다.',
+  'hudChrome.wocStore.skins.cinderbrand_sword.name': '신더브랜드',
+  'hudChrome.wocStore.skins.cinderbrand_sword.look':
+    '어두운 단조 강철 칼날, 불씨 주황빛 룬으로 채운 홈, 열기로 갈라진 균열, 가드에서 타오르는 보석.',
+  'hudChrome.wocStore.skins.cinderbrand_sword.lore':
+    '물 대신 스톰크래그에서 긁어 모은 축복받은 불씨에 담금질한 최초의 칼날입니다. 하이워치 대장장이들은 그 숯이 “산이 옛 맹세를 기억하기 때문에 푸르고 맑게 탄다”고 맹세합니다. 칼날의 홈에 가둔 불은 불씨 같은 주황빛으로 타오르며 꺼지지 않습니다. 성벽의 가장 추운 밤에도 룬은 맨손에 따뜻합니다. 신더브랜드는 불을 붙일 필요가 없습니다. 그저 꺼지기를 거부할 뿐입니다.',
+  'hudChrome.wocStore.skins.emberbite_axe.name': '엠버바이트',
+  'hudChrome.wocStore.skins.emberbite_axe.look':
+    '날의 균열 사이로 불씨 주황빛이 새어 나오는 검게 그을린 쇠도끼, 잔불 같은 보석, 아른거리는 열기.',
+  'hudChrome.wocStore.skins.emberbite_axe.lore':
+    '갑옷 장인 호드는 살아 있는 산불의 숯을 도끼날 중심에 박아 넣어, 타격 사이에도 날이 완전히 식지 않게 했습니다. 휘두를 때 균열이 주황빛으로 숨 쉬며, 마치 첫 단조가 쇠 속에 잠재운 무언가를 타격이 깨우는 듯합니다. 스톰크래그 정령이 이 불씨를 내주었다고 합니다. 하이워치에 바람이 거세지면 별별 이야기가 다 나옵니다.',
+  'hudChrome.wocStore.skins.smoulderfall_mace.name': '스몰더폴',
+  'hudChrome.wocStore.skins.smoulderfall_mace.look':
+    '안쪽 균열을 따라 불씨 주황빛으로 타오르는 어두운 철제 플랜지, 머리에 박힌 용융 핵 보석.',
+  'hudChrome.wocStore.skins.smoulderfall_mace.lore':
+    '자신만의 화로를 품은 철퇴입니다. “산불로 빚었다”는 생텀 봉인에서 떼어 낸 용융 핵 돌을 머리에 박아 빛나게 했습니다. 플랜지는 손에 닿을 때 따뜻하고, 적중한 곳에서는 더욱 뜨겁습니다. 한 하이워치 부사관은 이 철퇴에 맞은 멍이 아침까지 희미하게 빛난다고 맹세합니다. 마침내 산의 불이 봉인이 아니라 파괴를 위해 쓰이게 되었습니다.',
+  'hudChrome.wocStore.skins.ashspark_dagger.name': '애시스파크 칼',
+  'hudChrome.wocStore.skins.ashspark_dagger.look':
+    '불씨 주황빛 맥이 흐르는 짧고 검게 그을린 칼날, 폼멜의 작은 잔불 보석, 재와 불꽃.',
+  'hudChrome.wocStore.skins.ashspark_dagger.lore':
+    '산의 불을 폼멜 돌에 몰래 숨긴 뒷골목 칼날로, 소매치기조차 최초 단조의 불씨를 지닐 수 있다는 갑옷 장인의 은밀한 농담입니다. 검게 그을리고 주황빛 맥이 흐르며, 칼집 속에서도 늘 조금 지나치게 따뜻합니다. 하이워치 아래 어둠 속에서 뽑으면, 그 빛이 손을 겨우 밝혀 상대의 방어 틈을 찾게 해 줍니다.',
+  'hudChrome.wocStore.skins.forgeheart_staff.name': '포지하트 장봉',
+  'hudChrome.wocStore.skins.forgeheart_staff.look':
+    '철로 덧댄 지팡이, 우리에 갇힌 빛나는 불씨 핵, 자루를 타고 오르는 불씨 룬, 피어오르는 아지랑이.',
+  'hudChrome.wocStore.skins.forgeheart_staff.lore':
+    '살아 있는 산불의 숯을 꼭대기의 철창에 가두었습니다. 기록학자 캐디스는 이것이 최초 단조의 불이 봉인뿐 아니라 복종하도록 묶일 수 있다는 증거라 말합니다. 얇고 끝없는 열 아지랑이가 피어오르므로, 이것을 든 마법사는 대장간의 불이나 야간 경계의 모닥불이 아쉬울 일이 없습니다. 사람들은 이 불씨가 보스카르 엠버윙의 숨결에서 뽑혔으며 그 뒤로 한 번도 식지 않았다고 속삭입니다.',
+  'hudChrome.wocStore.skins.emberwrought_wand.name': '엠버로트 마법봉',
+  'hudChrome.wocStore.skins.emberwrought_wand.look':
+    '쇠 발톱이 빛나는 불씨를 움켜쥔 검게 그을린 금속 마법봉, 실금 같은 열 균열, 따뜻한 내부 광채.',
+  'hudChrome.wocStore.skins.emberwrought_wand.lore':
+    '이 등급에 이름을 붙인 마법봉입니다. 하이워치 갑옷 장인이 처음으로 산불의 숯을 쇠 발톱에 끼워 인간의 손에 응답하게 만들었을 때, 빛의 사제들조차 이를 이단이라 부르기를 멈추고 쓸모 있다고 부르기 시작했습니다. 따뜻하고 끈기 있으며 조용히 위험합니다. 끝의 불씨는 주인이 태어나기 전부터 한 번도 끊이지 않고 타올랐습니다.',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.name': '신더래치',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.look':
+    '검게 그을린 강철 석궁, 활대 균열에서 새어 나오는 불씨 주황빛, 대목 속에서 타오르는 숯.',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.lore':
+    '불씨로 단조한 무기 중 가장 기묘한 작품으로, 산의 불을 기계에 부었습니다. 활대의 균열에서 주황빛이 새어 나오며, 대목 속에서 타오르는 숯은 손피크의 추위나 미어펜의 습기에도 시위가 뻣뻣해지지 않게 합니다. 화살은 이미 따뜻한 채 홈을 떠나 더 뜨거운 상태로 꽂힙니다. 추위를 느끼지 않는 적이 서 있는 성벽에 대한 사냥꾼의 해답입니다.',
+  'hudChrome.wocStore.skins.ice_fang_sword.name': '얼음 송곳니',
+  'hudChrome.wocStore.skins.ice_fang_sword.look':
+    '옅은 빙하 얼음의 곡선 칼날, 칼등을 따라 돋은 들쭉날쭉한 서리 결정, 홈 속에서 청록빛을 내는 얼어붙은 핵, 고드름 십자 가드.',
+  'hudChrome.wocStore.skins.ice_fang_sword.lore':
+    '얼어붙은 등급의 대표작이자 모든 수집가가 가장 먼저 손을 뻗는 작품입니다. 얼음 송곳니는 단조하지 않고, 하이워치 위 손피크를 덮은 빙하의 송곳니를 깎아 만들었습니다. 청록색 핵은 글리머미어에 반사된 빛처럼 차갑게 타오릅니다. 베어 가르는 공기마저 서리로 덮습니다. 성벽 수비대는 폭설이 웜컬트를 막아 세운 밤에 한 병사가 이것을 들고 “성벽에 겨울 하나를 사 주었다”고 맹세합니다.',
+  'hudChrome.wocStore.skins.glaciersplit_axe.name': '글레이셔스플릿',
+  'hudChrome.wocStore.skins.glaciersplit_axe.look':
+    '반투명한 푸른 빙하 얼음 도끼머리, 청록빛으로 빛나는 내부 균열, 솟아난 서리 결정, 한기를 흘리는 자루.',
+  'hudChrome.wocStore.skins.glaciersplit_axe.lore':
+    '두 세기 동안 쌓인 얼음이 스스로 빛날 때까지 추위를 짓눌러 온 손피크 빙하의 푸른 심장에서 잘라 냈습니다. 가만히 있어도 냉기를 흘리며, 내리찍는 소리는 스토커 리지 아래에서 크레바스가 벌어지는 듯합니다. 하이워치는 전사자를 그 위의 얼음에 맡깁니다. 그러니 이 무기는 해빙과, 해빙이 깨울 모든 것을 막아 내기 위한 것입니다.',
+  'hudChrome.wocStore.skins.rimecrusher_mace.name': '라임크러셔',
+  'hudChrome.wocStore.skins.rimecrusher_mace.look':
+    '빛나는 청록색 핵 주위로 뻗은 들쭉날쭉한 얼음 결정 무리, 은빛 자루를 타고 내려오는 백상.',
+  'hudChrome.wocStore.skins.rimecrusher_mace.lore':
+    '깎아 낸 것이 아니라 길러 낸 무기입니다. 손피크의 얼음을 차가운 청록색 핵 주위로 유도해 호드가 만든 최고의 강철만큼 단단하게 굳혔습니다. 백상이 은빛 자루를 따라 손 쪽으로 기어 내려오지만 끝내 닿지는 않습니다. 내려친 곳에서는 물이 얼고, 내려놓은 곳에서는 땅이 하얗게 변합니다. 봉우리를 내려오는 망자의 차가움을 성벽을 기어오르는 것들에게 휘두를 수 있을 만큼 작게 만들었습니다.',
+  'hudChrome.wocStore.skins.frostbite_dagger.name': '서리 바늘',
+  'hudChrome.wocStore.skins.frostbite_dagger.look':
+    '맑고 푸른 얼음으로 만든 사악하리만치 가느다란 단검, 중앙을 흐르는 청록빛 맥, 바늘 같은 서리 결정, 백상으로 덮인 손잡이.',
+  'hudChrome.wocStore.skins.frostbite_dagger.lore':
+    '참은 숨결처럼 가늘고 그보다 두 배는 차갑습니다. 손피크 빙하의 파편을 하나의 빛나는 맥이 되도록 갈아, 피가 흐를 생각을 떠올리기도 전에 상처가 얼어붙을 만큼 날카롭게 만들었습니다. 그 이름은 망자들이 봉우리에서 가져오는 무덤의 한기에서 빌렸습니다. 날을 갈 필요는 없습니다. 기록학자 캐디스가 무심하게 지적하듯, 얼음은 무뎌지지 않고 그저 기다릴 뿐입니다.',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.name': '백상의 감시',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.look':
+    '천천히 회전하며 떠 있는 청록빛 얼음 파편을 왕관처럼 얹은 은빛 지팡이, 퍼져 나가는 결정과 차가운 안개.',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.lore':
+    '하이워치 성벽에서 결코 잠들지 않는 경계병의 지팡이입니다. 꼭대기의 청록색 산정호수 얼음 파편은 은에서 떨어져 천천히 저절로 회전합니다. 수비대는 그것이 언제나 봉우리 아래에 모이는 추위를 향한다고 맹세합니다. 이 감시를 든다는 것은 단 하룻밤에 이백 년의 경계를 서고, 시선을 돌리지 않겠다고 약속하는 일입니다.',
+  'hudChrome.wocStore.skins.everwinter_wand.name': '영원한 겨울의 파편',
+  'hudChrome.wocStore.skins.everwinter_wand.look':
+    '청록빛으로 빛나는 단 하나의 빙하 얼음 가시, 은 칼라에서 피어나는 백상, 희미한 냉기 안개.',
+  'hudChrome.wocStore.skins.everwinter_wand.lore':
+    '산의 추위가 이빨을 드러내는 생텀 아래 깊은 산정호수에서 부러뜨렸다고 전해지는 빛나는 빙하 얼음 가시입니다. 은 칼라에서 백상이 끝없이 피어나며, 불에도 여름에도 녹지 않습니다. 마법사들은 자신의 술법에 한기를 더하려고 가까이 두지만, 니스락시스의 지하 묘지를 향해 기울며 귀 기울이는 듯한 밤에는 멀리 둡니다.',
+  'hudChrome.wocStore.skins.winterbite.name': '윈터바이트',
+  'hudChrome.wocStore.skins.winterbite.look':
+    '은빛 강철과 푸른 얼음으로 만든 활, 손잡이에서 빛나는 청록색 얼어붙은 핵, 시위에 걸린 단단한 얼음 화살, 차가운 안개.',
+  'hudChrome.wocStore.skins.winterbite.lore':
+    '은빛 강철과 손피크 얼음으로 만든 활로, 손잡이의 차가운 청록색 핵이 화살을 시위에 얼려 붙입니다. 당길 때마다 다시 만들어지는 단단한 빙하 얼음 화살을 메기 때문에, 성벽의 궁수는 화살통 대신 추위만 지닙니다. 하이워치는 이와 같은 활 하나로 포위전 내내 스토커 리지를 지켰습니다. 궁수 한 명과 이미 언제나 그곳에 있던 한겨울 분량의 화살만으로 해냈다고 합니다.',
+  'hudChrome.wocStore.skins.solheim_sword.name': '솔하임, 새벽의 마지막 빛',
+  'hudChrome.wocStore.skins.solheim_sword.look':
+    '추락한 별로 벼린 대검, 칼날을 가르는 용융 금빛 핵, 별빛으로 날을 세운 우주처럼 검은 강철, 가드를 도는 황금 파편, 오로라의 띠.',
+  'hudChrome.wocStore.skins.solheim_sword.lore':
+    '별이 서쪽 하늘에서 떨어져 위도우 시켓 너머에서 “대장간처럼 폭발했을” 때, 알드릭 수사는 미어펜 분화구에서 아직 타오르는 심장을 꺼내 왕국의 대장장이들에게 “이 세계에 속하지 않은 것”을 벼려 달라고 간청했습니다. 그들은 그것으로 단 한 자루의 대검, 솔하임을 만들었습니다. 용융 금빛 핵은 새벽이 밤하늘을 가르듯 우주처럼 검은 칼날을 쪼개고, 별 금속 파편은 누구의 손도 정하지 않은 궤도로 가드를 돕니다. 오직 하나만 만들어졌습니다. 두 번째는 없을 것입니다.',
+  'hudChrome.wocStore.skins.skyrender_axe.name': '스카이렌더, 창공의 상처',
+  'hudChrome.wocStore.skins.skyrender_axe.look':
+    '찢어진 밤하늘 같은 도끼머리, 용융 금빛 균열과 별자리 각인, 떠 있는 별빛 파편, 날을 따라 흐르는 오로라 광채.',
+  'hudChrome.wocStore.skins.skyrender_axe.lore':
+    '추락한 별이 미어펜에서 하늘의 모습마저 찢어내고 아직도 김이 오르는 상처를 남긴 분화구 가장자리에서 두드려 만들었습니다. 도끼머리는 찢어진 밤 조각처럼 보입니다. 용융 금빛 균열, 하이워치의 어떤 학자도 이름 붙이지 못한 별자리, 휘두를 때마다 날에서 흘러나오는 오로라가 있습니다. 알드릭 수사는 축복을 내렸지만 손대려 하지는 않았습니다. 이것을 들어 올리는 것은 하늘이 남긴 구멍을 손에 쥐는 일입니다.',
+  'hudChrome.wocStore.skins.starfall_mace.name': '스타폴, 하늘의 심판',
+  'hudChrome.wocStore.skins.starfall_mace.look':
+    '궤도를 도는 파편에 둘러싸인 포획된 용융 금빛 별의 핵, 별빛 맥이 흐르는 우주처럼 검은 플랜지, 틈에서 쏟아지는 오로라.',
+  'hudChrome.wocStore.skins.starfall_mace.lore':
+    '죽기 직전의 별의 핵을 붙잡고, 함께 추락한 잔해를 둘러 소멸에서 불과 한 치 떨어진 곳에 얼려 두었습니다. 우주처럼 검은 플랜지에는 갇힌 별빛이 흐르고, 들어 올리면 틈새에서 오로라가 쏟아집니다. 옛 빛의 사제들은 추락하는 별을 심판이라 불렀습니다. 어떤 방패도 막아서는 안 되는 위에서 내려진 판결이라 여겼으며, 미어펜에 떨어진 별을 따라 이 무기의 이름을 지었습니다.',
+  'hudChrome.wocStore.skins.astravyr_dagger.name': '아스트라비르, 추락한 별의 송곳니',
+  'hudChrome.wocStore.skins.astravyr_dagger.look':
+    '추락한 별의 조각, 우주처럼 검은 금속 위의 용융 금빛 날, 폼멜을 도는 밝은 별 티끌, 가느다란 오로라 궤적.',
+  'hudChrome.wocStore.skins.astravyr_dagger.lore':
+    '알드릭이 분화구에서 가져온 별의 가장 작은 조각이지만, 어떤 셈법으로는 가장 위험한 조각입니다. 이 세계에 속하지 않은 심장의 한 파편으로, 우주처럼 검은 금속 위에 용융 금빛 날이 서 있고, 세계를 잃은 달처럼 별 티끌 하나가 폼멜 주위를 돕니다. 무게는 거의 없지만 거의 무엇이든 가릅니다. 숨길 만큼 작고, 스스로 내는 빛으로 어둠 속에서 찾아낼 만큼 밝습니다.',
+  'hudChrome.wocStore.skins.cosmarch_staff.name': '코스마치, 끝없는 공허의 첨탑',
+  'hudChrome.wocStore.skins.cosmarch_staff.look':
+    '용융 금빛 핵 주위를 도는 황금 별 파편 무리, 별자리가 새겨진 우주처럼 검은 자루, 위로 감겨 오르는 오로라 띠.',
+  'hudChrome.wocStore.skins.cosmarch_staff.lore':
+    '별 금속 자루 위에 용융 금빛 핵을 얹고, 황금 파편의 고리가 느리고 끝없는 궤도로 그 주위를 행진합니다. 손피크의 어떤 하늘과도 맞지 않는 별자리가 새겨진 작은 우주입니다. 오로라는 위로 오르는 법을 잊은 연기처럼 길이를 따라 감깁니다. 이것을 지녔던 이들은 이솔레이의 호수가 “달빛을 마시는” 방식처럼, 끈기 있고 차가우며 이쪽을 바라보는 공허의 회전을 느낄 수 있었다고 주장했습니다.',
+  'hudChrome.wocStore.skins.emberwish_wand.name': '엠버위시, 죽어 가는 태양의 티끌',
+  'hudChrome.wocStore.skins.emberwish_wand.look':
+    '궤도를 도는 불꽃에 싸인 포획된 용융 금빛 죽은 별의 티끌, 빛나는 별자리가 새겨진 우주처럼 검은 자루.',
+  'hudChrome.wocStore.skins.emberwish_wand.lore':
+    '추락한 별 자체가 아니라 죽어 가는 별의 마지막 티끌입니다. 이미 꺼진 태양의 용융 금빛 불씨 하나를 마지막 빛이었던 불꽃이 감쌉니다. 우주처럼 검은 자루에는 그 죽음을 지켜본 별자리들이 새겨져 있습니다. 미어펜의 소작농들은 진정한 황혼에 이것을 든 자에게 소원 하나를 들어준다고 말합니다. 또한 이것을 든 모든 영혼은 더 많은 시간을 빌었지만, 드라운드 문은 그 누구의 소원도 들어주지 않았다고 말합니다.',
+  'hudChrome.wocStore.skins.encore_bow.name': '앙코르, 두 번째 추락한 별',
+  'hudChrome.wocStore.skins.encore_bow.look':
+    '우스꽝스러울 만큼 거대한 별 대포, 빛나는 황금 별자리가 새겨진 우주처럼 검은 포신, 용융 금빛 혜성탄이 장전된 나팔 모양 포구, 황동 부품, 나무 견착대.',
+  'hudChrome.wocStore.skins.encore_bow.lore':
+    '추락한 별을 다룬 대장장이들은 그것으로 유물 여섯 개를 만들고도 포신 하나 분량의 별 금속이 남았습니다. 그때쯤 도제들에게도 의견이 생겼습니다. 모루에서 나온 것은 왕국 최초의 총이거나 가장 작은 공성 병기입니다. 이 견착 대포는 탄환을 쏜다기보다 두 번째 별이 목표를 향해 떨어져 달라고 요청합니다. 알드릭 수사는 이토록 시끄러운 물건은 이미 하늘의 눈에 띄었을 것이라며 축복을 거절했습니다. 사냥꾼들은 열광합니다. 사선 끝에 선 것은 무엇도 그러지 못했습니다.',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.name': '미티어래치, 하늘의 마지막 심판',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.look':
+    '운석의 별 금속, 대목을 따라 흐르는 용융 금빛 핵, 별자리가 새겨진 우주처럼 검은 활대, 시위에 걸린 순수한 별불 화살.',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.lore':
+    '미어펜 분화구가 아직 빛날 때 “손댈 수 없을 만큼 뜨거웠던” 잔해인 순수한 운석 별 금속을 벼려 만들었습니다. 망치로 두드려 별자리가 새겨진 우주처럼 검은 활대를 만들고, 대목을 따라 용융 금빛 핵을 가두었습니다. 화살을 메는 대신 별불의 화살을 불러냅니다. 판결처럼 날아가 이야기 하나의 끝처럼 꽂힙니다. 하이워치가 니스락시스의 죽지 않는 왕관조차 봉우리 아래 최악의 것이 아닐 수 있다고 두려워했을 때, 성벽 위에 두고 싶어 했던 무기입니다. 조준을 신중히 하십시오.',
+  'hudChrome.wocStore.seasonOne': '시즌 1',
+  'hudChrome.wocStore.rarity.uncommon': '고급',
+  'hudChrome.wocStore.rarity.rare': '희귀',
+  'hudChrome.wocStore.rarity.epic': '영웅',
+  'hudChrome.wocStore.rarity.legendary': '전설',
+  'hudChrome.wocStore.wtype.sword': '검',
+  'hudChrome.wocStore.wtype.axe': '도끼',
+  'hudChrome.wocStore.wtype.mace': '둔기',
+  'hudChrome.wocStore.wtype.dagger': '단검',
+  'hudChrome.wocStore.wtype.staff': '지팡이',
+  'hudChrome.wocStore.wtype.wand': '마법봉',
+  'hudChrome.wocStore.wtype.bow': '활',
+  'hudChrome.wocStore.wtype.crossbow': '석궁',
+  'hudChrome.wocStore.badge.flagship': '플래그십',
+  'hudChrome.wocStore.badge.hero': '영웅',
+  'hudChrome.wocStore.inspectAria': '{item} 살펴보기',
+  'hudChrome.wocStore.viewModeLabel': '미리보기 모드',
+  'hudChrome.wocStore.tryOn': '착용해 보기',
+  'hudChrome.wocStore.weaponOnly': '무기만 보기',
+  'hudChrome.wocStore.sceneLabel': '장면 조명',
+  'hudChrome.wocStore.scene.day': '낮',
+  'hudChrome.wocStore.scene.dusk': '황혼',
+  'hudChrome.wocStore.scene.night': '밤',
+  'hudChrome.wocStore.lore': '전승',
+  'hudChrome.wocStore.buySkin': '스킨 구매',
+  'hudChrome.wocStore.unavailable': '이용 불가',
+  'hudChrome.wocStore.applied': '적용됨',
+  'hudChrome.wocStore.apply': '스킨 적용',
+  'hudChrome.wocStore.detach': '스킨 해제',
+  'hudChrome.wocStore.equipHint': '이 스킨을 적용하려면 {type}을(를) 장착하세요.',
+  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.open': 'Claudium 열기',
+  'hudChrome.claudium.close': 'Claudium 닫기',
+  'hudChrome.claudium.loading': 'Claudium 불러오는 중…',
+  'hudChrome.claudium.balanceLabel': '잔액',
+  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.unavailable':
+    '현재 Claudium 상점을 이용할 수 없습니다. 잔액과 구매 내역에는 영향이 없으니 잠시 후 다시 확인해 주세요.',
+  'hudChrome.claudium.disclosure':
+    'Claudium은 단방향 게임 화폐입니다. 현금으로 구매해 꾸미기 상품에 사용할 수 있으며 환전, 양도 또는 현금화할 수 없습니다.',
+  'hudChrome.claudium.buyTitle': 'Claudium 구매',
+  'hudChrome.claudium.railLabel': '결제 수단',
+  'hudChrome.claudium.railNativeUnavailable': 'SOL/WOC 사용 불가',
+  'hudChrome.claudium.railSol': 'SOL',
+  'hudChrome.claudium.railStripe': '카드',
+  'hudChrome.claudium.railWoc': 'WOC',
+  'hudChrome.claudium.railWocDiscount': '20% 할인',
+  'hudChrome.claudium.solBalance': 'SOL: {amount}',
+  'hudChrome.claudium.wocBalance': 'WOC: {amount}',
+  'hudChrome.claudium.railWocUnavailable': '현재 WOC 가격을 이용할 수 없습니다.',
+  'hudChrome.claudium.amountLabel': '수량',
+  'hudChrome.claudium.showAmounts': '모든 Claudium 수량 표시',
+  'hudChrome.claudium.hideAmounts': '추가 Claudium 수량 숨기기',
+  'hudChrome.claudium.skuRow': '{usd}에 {claudium} Claudium',
+  'hudChrome.claudium.buyUnavailable': '현재 구매할 수 없습니다.',
+  'hudChrome.claudium.storeTitle': '꾸미기 상점',
+  'hudChrome.claudium.storeEmpty': '현재 이용 가능한 꾸미기 상품이 없습니다.',
+  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.spendButton': '교환',
+  'hudChrome.claudium.kindCosmetic': '꾸미기 상품',
+  'hudChrome.claudium.kindItem': '아이템',
+  'hudChrome.claudium.kindSkin': '스킨',
+  'hudChrome.claudium.buyButton': '구매',
+  'hudChrome.claudium.checkoutTitle': '구매 완료',
+  'hudChrome.claudium.checkoutClose': '결제 닫기',
+  'hudChrome.claudium.checkoutLoading': '결제 불러오는 중…',
+  'hudChrome.claudium.checkoutPending':
+    '거래가 진행 중입니다. 지갑에서 확인하고 이 패널을 열어 두세요.',
+  'hudChrome.claudium.checkoutPendingButton': '처리 중',
+  'hudChrome.claudium.checkoutFailed': '결제를 불러오지 못했습니다. 다시 시도해 주세요.',
+  'hudChrome.claudium.checkoutUnavailable': '해당 Claudium 구매는 현재 이용할 수 없습니다.',
+  'hudChrome.claudium.checkoutWalletRequired':
+    '암호화폐로 Claudium을 구매하기 전에 Solana 지갑을 연결하세요.',
+  'hudChrome.claudium.checkoutWalletUnsupported':
+    '이 지갑은 Solana 거래에 서명하거나 전송할 수 없습니다.',
+  'hudChrome.claudium.checkoutNotSettled':
+    '거래는 전송됐지만 Claudium이 아직 지급되지 않았습니다. 잠시 후 다시 시도해 주세요.',
   'hudChrome.itemHeroicTag': '[영웅]',
   'hudChrome.readyCheck.notInPartyError': '준비 확인을 시작하려면 파티에 속해 있어야 합니다.',
   'hudChrome.readyCheck.inProgressError': '준비 확인이 이미 진행 중입니다.',
@@ -203,6 +452,25 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': '분배 담당 사용',
   'hudChrome.masterLoot.looterLabel': '분배 담당자',
   'hudChrome.masterLoot.leaderOption': '파티장',
+  'hudChrome.playerMenu.info': '플레이어 정보',
+  'hudChrome.playerMenu.block': '차단',
+  'hudChrome.playerMenu.unblock': '차단 해제',
+  'hudChrome.playerMenu.openFor': '{name} 님의 플레이어 메뉴 열기',
+  'hudChrome.playerMenu.profileUnavailable': '{name} 님의 프로필을 찾을 수 없습니다.',
+  'hudChrome.playerMenu.aiTag': '[AI]',
+  'hudChrome.playerMenu.aiTagTitle': 'AI 운영 계정',
+  'hudChrome.playerMenu.watchTwitch': 'Twitch에서 시청',
+  'hudChrome.playerMenu.watchX': 'X에서 보기',
+  'hudChrome.playerMenu.watchKick': 'Kick에서 시청',
+  'hudChrome.playerMenu.watchYouTube': 'YouTube에서 시청',
+  'hudChrome.social.ignoredTab': '무시됨',
+  'hudChrome.social.ignoredEmpty': '아무도 무시하고 있지 않습니다.',
+  'hudChrome.social.blockedEmpty': '아무도 차단하지 않았습니다.',
+  'hudChrome.social.blockSearchPlaceholder': '플레이어 이름',
+  'hudChrome.social.blockAction': '차단',
+  'hudChrome.social.nowBlocking': '{name} 님을 차단했습니다.',
+  'hudChrome.social.blockedTab': '차단',
+  'hudChrome.social.stopBlockingTitle': '{name} 님 차단 해제',
   'hudChrome.party.promoteLeader': '파티장으로 지정',
   'hudChrome.party.inviteUsage': '누구를 초대하시겠습니까? 사용법: /invite <이름>.',
   'hudChrome.masterLoot.thresholdLabel': '품질 기준',
@@ -282,16 +550,30 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '터치',
   'hudChrome.options.interfaceModeNote':
     '자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.',
+  'hudChrome.warfare.honorAmount': '명예 {amount}',
+  'hudChrome.warfare.dualPrice': '{money} + {honor}',
+  'hudChrome.warfare.balance': '명예: {amount}',
+  'hudChrome.warfare.honorFloat': '명예 +{amount}',
+  'hudChrome.warfare.honorGain': '명예를 {amount} 획득했습니다({reason}).',
+  'hudChrome.warfare.notEnoughHonor': '명예가 부족합니다.',
+  'hudChrome.warfare.reasons.arenaWin': '투기장 승리',
+  'hudChrome.warfare.reasons.fiestaKill': '피에스타 처치',
+  'hudChrome.warfare.reasons.fiestaComplete': '피에스타 완료',
+  'hudChrome.warfare.reasons.fiestaWin': '피에스타 승리',
   'hudChrome.statInfo.fromYour': '당신의 {value} {stat}에서:',
   'hudChrome.statInfo.names.spellPower': '주문력',
   'hudChrome.statInfo.names.critRating': '치명타 등급',
   'hudChrome.statInfo.names.hasteRating': '가속 등급',
+  'hudChrome.statInfo.names.warfare': '워페어',
+  'hudChrome.statInfo.warfareValue': '주는 피해 +{increase}% / 받는 피해 -{reduction}%',
   'hudChrome.statInfo.desc.critRating':
     '장비와 세트 보너스에서 얻는 치명타 등급으로 치명타 확률이 증가합니다. 약 10등급당 1% 치명타.',
   'hudChrome.statInfo.desc.hasteRating':
     '장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속.',
   'hudChrome.statInfo.desc.spellPower':
     '주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.',
+  'hudChrome.statInfo.desc.warfare':
+    '플레이어에게 주는 피해가 {increase}% 증가하고 플레이어에게 받는 피해가 {reduction}% 감소합니다.',
   'hudChrome.statInfo.sources.header': '구성:',
   'hudChrome.statInfo.sources.base': '기본: {value}',
   'hudChrome.statInfo.sources.attributes': '능력치에서: {value}',
@@ -414,6 +696,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': '감정 표현 휠',
   'hudChrome.keybinds.targetFriendly': '가장 가까운 아군 대상 지정',
   'hudChrome.keybinds.targetFriendlyNext': '아군 대상 순환',
+  'hudChrome.petFeed.disabledFullHp': '펫의 체력이 가득 찼습니다',
+  'hudChrome.petFeed.disabledNoFood': '가방에 펫을 치유할 음식이 없습니다',
   'hudChrome.options.clickMoveLeft': '왼쪽 클릭',
   'hudChrome.options.clickMoveRight': '오른쪽 클릭',
   'hudChrome.options.browserEffects': '브라우저 효과',
@@ -1986,6 +2270,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lay_on_hands.name': '마지막 의식',
   'entities.abilities.lay_on_hands.description':
     '막대한 치유의 힘으로 생명력을 {damage}만큼 회복시킵니다. 재사용 대기시간 10분.',
+  'entities.abilities.holy_taunt.name': '신성한 부추김',
+  'entities.abilities.holy_taunt.description':
+    '대상을 도발합니다. 자신의 위협 수준이 대상이 가장 증오하는 적과 같아지며, 3초 동안 자신을 공격하게 만듭니다.',
   'entities.abilities.flash_of_light.name': '빛의 치유',
   'entities.abilities.flash_of_light.description':
     '빠르고 효율적인 빛줄기로 아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
@@ -2072,6 +2359,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 피해를 입힙니다.',
   'entities.abilities.healing_wave.name': '치유의 물결',
   'entities.abilities.healing_wave.description': '아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
+  'entities.abilities.chain_heal.name': '연쇄 치유',
+  'entities.abilities.chain_heal.description':
+    '아군 대상을 대량으로 치유한 후, 근처 아군 최대 2명에게 도약합니다. 도약할 때마다 치유량이 50% 감소합니다. (복원 전문화)',
   'entities.abilities.earth_shock.name': '대지의 충격',
   'entities.abilities.earth_shock.description':
     '대상을 즉시 강타해 {damage}의 자연 피해를 입힙니다.',
@@ -2252,6 +2542,72 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '은신 상태에서 적을 할퀴어 무기 피해에 더해 {damage}의 피해를 입히고 9초에 걸쳐 출혈 피해를 줍니다. 연계 점수 1을 부여합니다. 늑대 변신 상태에서만 사용 가능.',
   'entities.abilities.revive_pet.name': '소환수 소생',
   'entities.abilities.revive_pet.description': '죽은 소환수를 되살려 당신의 곁으로 되돌립니다.',
+  'entities.abilities.holy_shock.name': '신성 충격',
+  'entities.abilities.holy_shock.description':
+    '신성한 기운으로 아군 대상을 충격시켜 생명력을 {damage}만큼 회복시킵니다. (신성 전문화 상징)',
+  'entities.abilities.holy_shield.name': '신성한 방패',
+  'entities.abilities.holy_shield.description':
+    '10초 동안 신성한 힘으로 자신을 보호하여 방어도를 90만큼 올리고 근접 공격자에게 12의 신성 피해를 줍니다. (보호 전문화 상징)',
+  'entities.abilities.bestial_wrath.name': '야수의 격노',
+  'entities.abilities.bestial_wrath.description':
+    '야수의 분노에 휩싸여 15초 동안 전투력이 55만큼 증가합니다. (야수 전문화 상징)',
+  'entities.abilities.trueshot_aura.name': '정조준 오라',
+  'entities.abilities.trueshot_aura.description':
+    '주위 아군을 고무하여 5분 동안 전투력을 35만큼 증가시킵니다. (사격 전문화 상징)',
+  'entities.abilities.wyvern_sting.name': '비룡 쐐기',
+  'entities.abilities.wyvern_sting.description':
+    '원거리에서 적을 쏘아 최대 4초 동안 행동 불가로 만듭니다. 피해를 받으면 효과가 해제됩니다. (생존 전문화 상징)',
+  'entities.abilities.arcane_power.name': '신비의 마법 강화',
+  'entities.abilities.arcane_power.description':
+    '10초 동안 주문 공격력이 20%, 주문 가속이 10% 증가합니다. (비전 전문화 상징)',
+  'entities.abilities.combustion.name': '발화',
+  'entities.abilities.combustion.description':
+    '15초 동안 주문 치명타율이 50% 증가합니다. (화염 전문화 상징)',
+  'entities.abilities.icy_veins.name': '얼음 핏줄',
+  'entities.abilities.icy_veins.description':
+    '10초 동안 주문 가속이 30% 증가하고 시전 방해와 밀림을 막습니다. (냉기 전문화 상징)',
+  'entities.abilities.cold_blood.name': '냉혈',
+  'entities.abilities.cold_blood.description':
+    '살의를 집중하여 다음 공격이 치명타로 적중하게 합니다. (암살 전문화 상징)',
+  'entities.abilities.blade_flurry.name': '폭풍의 칼날',
+  'entities.abilities.blade_flurry.description':
+    '칼날의 폭풍을 일으켜 12초 동안 공격 속도를 20% 증가시킵니다. (전투 전문화 상징)',
+  'entities.abilities.hemorrhage.name': '과다출혈',
+  'entities.abilities.hemorrhage.description':
+    '적을 공격하여 무기 피해에 더해 {damage}의 피해를 주고 12초 동안 출혈 피해를 줍니다. 연계 점수 1점을 얻습니다. (잠행 전문화 상징)',
+  'entities.abilities.power_infusion.name': '마력 주입',
+  'entities.abilities.power_infusion.description':
+    '아군 대상에게 힘을 주입하여 15초 동안 주문력을 28만큼 증가시킵니다. (수양 전문화 상징)',
+  'entities.abilities.holy_nova.name': '신성한 폭발',
+  'entities.abilities.holy_nova.description':
+    '신성한 빛을 폭발시켜 주위 아군을 {damage}만큼 치유하고 주위 적에게 피해를 줍니다. (신성 전문화 상징)',
+  'entities.abilities.shadowform.name': '어둠의 형상',
+  'entities.abilities.shadowform.description':
+    '어둠의 형상을 취해 돌아올 때까지 암흑 마법을 강화합니다. 다시 시전하면 일반 형상으로 돌아옵니다. (암흑 전문화 상징)',
+  'entities.abilities.elemental_mastery.name': '정기의 깨달음',
+  'entities.abilities.elemental_mastery.description':
+    '정기의 깨달음을 불러 다음 주문을 즉시 시전하게 합니다. (정기 전문화 상징)',
+  'entities.abilities.siphon_life.name': '생명력 착취',
+  'entities.abilities.siphon_life.description':
+    '적의 생명력을 착취하여 30초에 걸쳐 {damage}의 암흑 피해를 주고 준 피해만큼 자신을 치유합니다. (고통 전문화 상징)',
+  'entities.abilities.conflagrate.name': '점화',
+  'entities.abilities.conflagrate.description':
+    '적에게 걸린 제물 효과를 소모해 불태우고 {damage}의 화염 피해를 줍니다. (파괴 전문화 상징)',
+  'entities.abilities.moonkin_form.name': '달빛야수 변신',
+  'entities.abilities.moonkin_form.description':
+    '달빛야수 형상을 취해 돌아올 때까지 주문 시전을 강화합니다. 다시 시전하면 일반 형상으로 돌아옵니다. (조화 전문화 상징)',
+  'entities.abilities.feral_charge.name': '야성의 돌진',
+  'entities.abilities.feral_charge.description':
+    '적에게 돌진하고 1초 동안 묶습니다. 8-25미터 거리. (야성 전문화 상징)',
+  'entities.abilities.swiftmend.name': '신속한 치유',
+  'entities.abilities.swiftmend.description':
+    '아군 대상의 지속 치유 효과를 소모하여 생명력을 {damage}만큼 회복시킵니다. (복원 전문화 상징)',
+  'entities.abilities.crusader_strike.name': '성전사의 일격',
+  'entities.abilities.crusader_strike.description':
+    '대상을 공격해 무기 피해에 추가로 {damage}의 신성 피해를 줍니다. (성기사 특성)',
+  'entities.abilities.metamorphosis.name': '악마 변신',
+  'entities.abilities.metamorphosis.description':
+    '악마의 힘을 받아 20초 동안 방어도와 전투력을 높입니다. (흑마법사 특성)',
   'entities.items.worn_sword.name': '흠집 난 쇼트소드',
   'entities.items.gnarled_staff.name': '늪참나무 지팡이',
   'entities.items.rusty_dagger.name': '녹슨 단검',
@@ -3566,9 +3922,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.shroud_of_the_gravewyrm.name': '무덤용의 장막',
   'entities.items.sanctum_prowlers_grips.name': '성소 잠행자의 장갑',
   'entities.items.scepter_of_the_deathless_court.name': '불사 궁정의 홀',
-  'entities.items.deathless_warguard_legmail.name': '불사 전쟁수호 다리갑옷',
-  'entities.items.soulrend_diadem.name': '영혼분열 왕관',
-  'entities.items.scourgehide_carapace.name': '재앙가죽 갑각',
   'entities.items.cryptplate_helm.name': '묘지판금 투구',
   'entities.items.shadowpulse_slippers.name': '어둠파동 슬리퍼',
   'entities.items.bonechill_cord.name': '뼈서리 허리끈',
@@ -3582,7 +3935,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.gravescale_girdle.name': '무덤비늘 허리띠',
   'entities.items.wyrmchoir_handwraps.name': '용노래 손싸개',
   'entities.items.deathless_greatblade.name': '불사 대검',
-  'entities.items.soulforged_warplate.name': '혼주조 전투갑옷',
   'entities.items.stormcallers_focus.name': '폭풍소환사의 매개체',
   'entities.items.zense_meridian.name': '젠세의 자오선',
   'entities.items.seal_of_the_nine_oaths.name': '아홉 맹세의 인장',
@@ -3929,6 +4281,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/초',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}초',
+  'hudChrome.meters.autoShowHint':
+    '파티가 피해를 주거나 치유를 하면 행이 자동으로 나타나며, 전투가 끝난 후 몇 초 뒤에 이 구역이 닫힙니다.',
   'hudChrome.mobile.actionPageToggle': '행동 페이지 전환',
   'hudChrome.mobile.actionRing': '전투 행동',
   'hudChrome.mobile.haptics': '진동',
@@ -3937,7 +4291,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.hotbarPageAria': '다음 스킬 세트 표시',
   'hudChrome.mobile.jump': '점프',
   'hudChrome.mobile.leaderboard': '순위',
-  'hudChrome.mobile.dailyRewards': '보상',
+  'hudChrome.mobile.dailyRewards': '상점',
   'hudChrome.mobile.deeds': '업적',
   'hudChrome.mobile.nameplates': '이름표',
   'hudChrome.mobile.targetCycle': '대상 전환',
@@ -4027,6 +4381,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': '보상 받기',
   'hud.tutorial.returnBody':
     '임무를 마쳤습니다. 레드브룩 원수에게 돌아가 {interactKey} 키를 눌러 완료하세요.',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': '죽지 않는 전쟁수호병 알드렌',
+  'entities.mobs.nythraxis_heroic_priest_add.name': '죽지 않는 대사제 말릭',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': '죽지 않는 칼날 보스',
   'entities.mobs.nythraxis_skeleton_warrior.name': '되살아난 왕실 근위병',
   'entities.mobs.nythraxis_scourge_of_thornpeak.name': '나이트락시스, 손피크의 재앙',
   'itemUi.quality.legendary': '전설',
@@ -4154,7 +4511,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': '퀘스트 추적기 접기',
   'hudChrome.questTracker.expandHint': '퀘스트 추적기 펼치기',
   'hudChrome.bags.cannotDestroy': '이 아이템은 파괴할 수 없습니다.',
-  'hudChrome.bags.rightClickDestroy': '마우스 오른쪽 버튼으로 파괴',
+  'hudChrome.bags.rightClickDestroy': 'Shift + 마우스 오른쪽 버튼으로 파괴',
   'hudChrome.bags.filterGroupAria': '가방을 분류별로 필터링',
   'hudChrome.bags.filterAll': '전체',
   'hudChrome.bags.filterWeapon': '무기',
@@ -4649,6 +5006,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.family.dragonkin.name': '용족',
   'guide.family.elemental.desc':
     '원소가 강하게 흐르는 야생의 장소에 매여 있는, 살아 있는 폭풍과 돌.',
+  'guide.family.reptile.name': '파충류',
+  'guide.family.reptile.desc':
+    '쉭쉭거리는 소리와 날카로운 물어뜯기를 지닌 냉혈 사냥꾼들로, 온혈 야수들과는 뚜렷이 다릅니다.',
   'guide.worldPage.heading': '세계',
   'guide.worldPage.intro':
     'World of ClaudeCraft는 두 발로 가로지르는 하나로 이어진 대지이며, 남에서 북으로 펼쳐진 세 개의 지역으로 이루어져 있습니다. 빠른 이동이 없으니, 여정 자체가 모험의 일부입니다.',
@@ -5875,6 +6235,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '플레이와 커뮤니티 활동으로 포인트를 얻고 상태 등급을 올리려면 Discord를 연결하세요.',
   'hudChrome.discord.link.error': 'Discord를 연결할 수 없습니다. 다시 시도해 주세요.',
   'hudChrome.discord.link.success': 'Discord가 연결되었습니다.',
+  'hudChrome.discord.link.joinServer': '연동 없이 서버 참여하기',
   'hudChrome.discord.linkedAs': '{name}(으)로 연결됨',
   'hudChrome.discord.linkedTitle': 'Discord: {name}',
   'hudChrome.discord.viewProfile': '이 캐릭터의 공개 프로필 열기',
@@ -5939,6 +6300,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': '개발자',
   'hudChrome.discord.roleTag.mods': '운영자',
+  'hudChrome.discord.roleTag.seniormods': '선임 운영자',
+  'hudChrome.discord.roleTag.juniormods': '수습 운영자',
+  'hudChrome.discord.roleTag.contentcreator': '콘텐츠 크리에이터',
   'hudChrome.discord.voice.channel': '{channel}에서',
   'hudChrome.discord.swag.title': '굿즈',
   'hudChrome.discord.swag.free': '무료',
@@ -5986,6 +6350,14 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     'World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.',
   'hudChrome.nativeUpdate.notNow': '나중에',
   'hudChrome.nativeUpdate.update': '업데이트',
+  'hudChrome.cameraPrompt.title': '카메라 선택',
+  'hudChrome.cameraPrompt.intro': '카메라가 캐릭터를 따라가는 방식을 선택하세요.',
+  'hudChrome.cameraPrompt.mouseDesc': '버튼을 누르지 않고 마우스를 움직여 시점을 돌립니다.',
+  'hudChrome.cameraPrompt.classicTitle': '클래식 카메라',
+  'hudChrome.cameraPrompt.classicDesc': '우클릭을 누른 채 마우스를 움직여 시점을 돌립니다.',
+  'hudChrome.cameraPrompt.changeLater':
+    '이 설정은 나중에 Esc 메뉴의 키 설정에서 변경할 수 있습니다.',
+  'hudChrome.cameraPrompt.confirm': '확인',
   'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
   'desktop.update.ready':
     '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
@@ -7047,6 +7419,49 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.bursar_aldous_crane.title': '도금 금고',
   'entities.npcs.bursar_aldous_crane.greeting':
     '어떤 상자든, 금궤든, 장신구든 도금 금고에 맡기시면 안전합니다.',
+  'entities.items.furyforged_warhelm.name': '분노벼림 전투투구',
+  'entities.items.furyforged_warspaulders.name': '분노벼림 전투어깨갑옷',
+  'entities.items.furyforged_warplate.name': '분노벼림 전투흉갑',
+  'entities.items.furyforged_girdle.name': '분노벼림 요대',
+  'entities.items.furyforged_legguards.name': '분노벼림 다리보호대',
+  'entities.items.furyforged_gauntlets.name': '분노벼림 건틀릿',
+  'entities.items.furyforged_sabatons.name': '분노벼림 전투장화',
+  'entities.items.stormbound_crown.name': '폭풍결속 왕관',
+  'entities.items.stormbound_spaulders.name': '폭풍결속 어깨갑옷',
+  'entities.items.stormbound_hauberk.name': '폭풍결속 사슬갑옷',
+  'entities.items.stormbound_waistguard.name': '폭풍결속 허리보호대',
+  'entities.items.stormbound_legmail.name': '폭풍결속 다리사슬갑옷',
+  'entities.items.stormbound_handguards.name': '폭풍결속 손보호대',
+  'entities.items.stormbound_greaves.name': '폭풍결속 경갑',
+  'entities.items.ashstalker_cowl.name': '잿빛추적자 두건',
+  'entities.items.ashstalker_shoulderguards.name': '잿빛추적자 어깨보호대',
+  'entities.items.ashstalker_harness.name': '잿빛추적자 멜빵갑옷',
+  'entities.items.ashstalker_waistband.name': '잿빛추적자 허리띠',
+  'entities.items.ashstalker_legguards.name': '잿빛추적자 다리보호대',
+  'entities.items.ashstalker_grips.name': '잿빛추적자 장갑',
+  'entities.items.ashstalker_treads.name': '잿빛추적자 발덮개',
+  'entities.items.cinderweave_cowl.name': '불씨매듭 두건',
+  'entities.items.cinderweave_mantle.name': '불씨매듭 어깨망토',
+  'entities.items.cinderweave_raiment.name': '불씨매듭 예복',
+  'entities.items.cinderweave_cord.name': '불씨매듭 장식끈',
+  'entities.items.cinderweave_legwraps.name': '불씨매듭 다리싸개',
+  'entities.items.cinderweave_handwraps.name': '불씨매듭 손싸개',
+  'entities.items.cinderweave_slippers.name': '불씨매듭 덧신',
+  'entities.items.final_oath_medallion.name': '최후의 맹세 메달',
+  'entities.items.razorwind_torque.name': '칼바람 목가리개',
+  'entities.items.cinder_sigil_pendant.name': '불씨 인장 목걸이',
+  'entities.items.iron_vow_band.name': '강철 맹세의 반지',
+  'entities.items.unbroken_circle.name': '깨지지 않는 고리',
+  'entities.items.fleetblood_band.name': '쾌혈의 반지',
+  'entities.items.last_step_signet.name': '마지막 걸음의 인장',
+  'entities.items.ashen_focus_ring.name': '잿빛 집중의 반지',
+  'entities.items.spellbreakers_seal.name': '주문파괴자의 인장',
+  'entities.items.final_argument_greatblade.name': '최후 논박의 대검',
+  'entities.items.first_blood_razor.name': '첫 피의 면도날',
+  'entities.items.emberglass_warstaff.name': '불씨유리 전투지팡이',
+  'entities.npcs.fury.name': '퓨리',
+  'entities.npcs.fury.title': '명예 병참장교',
+  'entities.npcs.fury.greeting': '전장의 모래는 모든 승리를 기억한다. 명예를 현명하게 사용하라.',
   'guide.economy.bankBody':
     '모든 거점 마을에는 이 땅의 은행 상회인 도금 금고의 지점이 있습니다. 그곳의 출납관에게 말을 걸면 자신의 금고가 열립니다. 가방과는 별개인 개인 보관 공간으로, 캐릭터가 평생 유지합니다. 맡겨 둔 물건은 다음에 어느 지점을 찾아가도 안전하게 기다리고 있습니다.',
   'guide.economy.bankHow':
@@ -7203,6 +7618,28 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '팁: 특성 로드아웃을 여러 개 저장해 두면 포인트를 다시 쓰지 않고도 빌드를 바꿀 수 있습니다.',
   'loading.tips.pvp':
     '팁: 다른 플레이어에게 친선 결투를 신청하거나 잿빛 콜로세움 투기장에 참가해 빌드를 시험해보세요.',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': '턱 강타',
+  'entities.abilities.pummel.description':
+    '대상의 주문 시전을 중단시키고 4초 동안 해당 계열의 주문을 봉쇄합니다.',
+  'entities.abilities.kick.name': '발차기',
+  'entities.abilities.kick.description':
+    '대상의 주문 시전을 중단시키고 4초 동안 해당 계열의 주문을 봉쇄합니다.',
+  'entities.abilities.counterspell.name': '주문 분쇄',
+  'entities.abilities.counterspell.description':
+    '대상의 주문을 무효화하고 6초 동안 해당 계열의 주문을 봉쇄합니다.',
+  'entities.abilities.counter_shot.name': '침묵의 사격',
+  'entities.abilities.counter_shot.description':
+    '빠른 사격으로 대상의 시전을 중단시키고 4초 동안 해당 계열을 봉쇄합니다.',
+  'entities.abilities.rebuke.name': '질책',
+  'entities.abilities.rebuke.description':
+    '대상의 주문 시전을 중단시키고 4초 동안 해당 계열의 주문을 봉쇄합니다.',
+  'entities.abilities.skull_bash.name': '박치기',
+  'entities.abilities.skull_bash.description':
+    '돌진 박치기로 대상의 시전을 중단시키고 4초 동안 해당 계열을 봉쇄합니다.',
+  'entities.abilities.spell_lock.name': '재갈 물리기',
+  'entities.abilities.spell_lock.description':
+    '시전 중인 대상을 침묵시키고 5초 동안 해당 계열의 주문을 봉쇄합니다.',
   'guide.bestiary.flavor.sethrael_palecoil':
     '글리머미어의 깊은 벼랑을 미끄러지듯 헤엄치는 뼈처럼 창백한 뱀으로, 자신이 차지한 물의 말없는 파수꾼입니다. 이 못을 함께 쓰는 헤엄치는 이들은 좀처럼 수면 위로 올라오지 못합니다.',
   'guide.combat.metersBody':
@@ -7258,4 +7695,29 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.social.slashBody':
     '몇 가지 자주 쓰는 명령어는 외워 둘 만합니다. /w 이름은 귓속말을 보내고, /r은 마지막으로 받은 귓속말에 답하며, /invite는 상대를 파티로 초대하고, /follow는 친구 뒤를 따라 걷게 하며, /roll은 파티가 함께 볼 주사위를 굴리고, /who는 접속 중인 사람을 보여주며, /afk는 자리 비움으로 표시합니다. 전체 목록은 게임에서 /help를 입력해 확인하세요.',
   'guide.social.slashHeading': '유용한 슬래시 명령어',
+  // Unstuck recovery (M16 non-Latin fills).
+  'hudChrome.unstuck.menuButton': '갇힘 탈출',
+  'hudChrome.unstuck.help':
+    '탈출: /unstuck은 제자리에서 카운트다운을 시작한 뒤 주변의 도달 가능한 안전한 위치로 이동합니다.',
+  'hudChrome.unstuck.started':
+    '{seconds}초 후 탈출합니다. 이동, 전투, 피해를 받거나 다른 행동을 시작하면 취소됩니다.',
+  'hudChrome.unstuck.countdown': '갇힘 탈출: {seconds}',
+  'hudChrome.unstuck.completed': '도달할 수 있는 가장 가까운 안전한 위치로 이동했습니다.',
+  'hudChrome.unstuck.cancelledMoved': '이동해서 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.cancelledDamaged': '피해를 받아 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.cancelledCombat': '전투에 진입해 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.cancelledBusy': '다른 행동을 시작해 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.cancelledState': '상태가 바뀌어 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.cancelledDisconnected': '연결이 끊겨서 갇힘 탈출이 취소되었습니다.',
+  'hudChrome.unstuck.noSafePosition':
+    '주변에 도달할 수 있는 안전한 위치가 없습니다. 이동하지 않았습니다.',
+  'hudChrome.unstuck.alreadyActive': '갇힘 탈출 카운트다운이 이미 진행 중입니다.',
+  'hudChrome.unstuck.alreadySafe': '이미 안전하고 접근 가능한 위치에 있습니다.',
+  'hudChrome.unstuck.cooldown': '{seconds}초 후 갇힘 탈출을 다시 사용할 수 있습니다.',
+  'hudChrome.unstuck.dead': '죽었거나 영혼 상태일 때는 갇힘 탈출을 사용할 수 없습니다.',
+  'hudChrome.unstuck.combat': '전투 중에는 갇힘 탈출을 사용할 수 없습니다.',
+  'hudChrome.unstuck.controlled': '이동이 제한된 동안에는 갇힘 탈출을 사용할 수 없습니다.',
+  'hudChrome.unstuck.standStill': '단단한 지면에 멈춰 선 뒤 갇힘 탈출을 사용하세요.',
+  'hudChrome.unstuck.busy': '현재 행동을 끝낸 뒤 갇힘 탈출을 사용하세요.',
+  'hudChrome.unstuck.unavailable': '현재 상태에서는 갇힘 탈출을 사용할 수 없습니다.',
 };

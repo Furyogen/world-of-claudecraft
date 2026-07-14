@@ -110,6 +110,65 @@ export function riftInstanceAtPos(ctx: SimContext, pos: Vec3): RiftInstance | nu
   return null;
 }
 
+function riftHazardTierAt(
+  hazards: import('../types').DelveHazardZone[],
+  localX: number,
+  localZ: number,
+): 'shallow' | 'deep' | null {
+  let tier: 'shallow' | 'deep' | null = null;
+  for (const hazard of hazards) {
+    const rx = hazard.rx ?? hazard.r;
+    const rz = hazard.rz ?? hazard.r;
+    const nx = (localX - hazard.x) / rx;
+    const nz = (localZ - hazard.z) / rz;
+    if (nx * nx + nz * nz > 1) continue;
+    if (hazard.tier === 'deep') return 'deep';
+    tier = tier ?? 'shallow';
+  }
+  return tier;
+}
+
+/** Whether a route sample avoids the live floor's closed runtime gate. */
+export function riftRecoveryRoutePointClear(ctx: SimContext, p: Entity, pos: Vec3): boolean {
+  if (!isRiftPos(pos.x)) return true;
+  const inst = riftInstanceAtPos(ctx, pos);
+  if (!inst?.memberIds.has(p.id)) return false;
+  const floor = floorForInstance(inst);
+  if (!floor.gate || inst.gateOpen) return true;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const localX = pos.x - origin.x;
+  const localZ = pos.z - origin.z;
+  return !(
+    Math.abs(localX - floor.gate.x) <= floor.gate.hw + PLAYER_BODY_R &&
+    Math.abs(localZ - floor.gate.z) <= floor.gate.hd + PLAYER_BODY_R
+  );
+}
+
+/** Whether a recovery destination avoids every live traversal hazard on its floor. */
+export function riftRecoveryPointSafe(ctx: SimContext, p: Entity, pos: Vec3): boolean {
+  if (!isRiftPos(pos.x)) return true;
+  const inst = riftInstanceAtPos(ctx, pos);
+  if (!inst?.memberIds.has(p.id)) return false;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  const localX = pos.x - origin.x;
+  const localZ = pos.z - origin.z;
+  if (riftHazardTierAt(floor.hazards, localX, localZ) !== null) return false;
+  if (inIceZone(floor.iceZone, localX, localZ)) return false;
+  for (let i = 0; i < floor.rollers.length; i++) {
+    if (!inst.rollerIds[i] || !ctx.entities.has(inst.rollerIds[i])) continue;
+    const roller = floor.rollers[i];
+    if (
+      Math.abs(localX - roller.x) <= roller.r + PLAYER_BODY_R &&
+      localZ >= roller.z0 - PLAYER_BODY_R &&
+      localZ <= roller.z1 + PLAYER_BODY_R
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function emitRiftState(ctx: SimContext, pid: number, inst: RiftInstance, active: boolean): void {
   const floor = floorForInstance(inst);
   const event =
@@ -435,7 +494,10 @@ export function enterRift(
       }
     }
     inst.returnPos = ret;
-    inst.tier = portal?.riftTier ?? null;
+    // Dev portals keep a cosmetic rank on the gate, but only a persisted natural
+    // event is reward-ranked. This keeps the reward guard authoritative for the
+    // real /dev portal path instead of paying Marks for a visual-only badge.
+    inst.tier = eventId === null ? null : (portal?.riftTier ?? null);
     inst.portalId = portal?.id ?? null;
     inst.rewarded = false;
     markRiftEventActive(ctx, eventId);
@@ -1146,20 +1208,7 @@ function tickRiftHazards(
     if (!p || p.dead || p.jumping) continue;
     const lx = p.pos.x - origin.x;
     const lz = p.pos.z - origin.z;
-    let tier: 'shallow' | 'deep' | null = null;
-    for (const h of hazards) {
-      const rx = h.rx ?? h.r;
-      const rz = h.rz ?? h.r;
-      const nx = (lx - h.x) / rx;
-      const nz = (lz - h.z) / rz;
-      if (nx * nx + nz * nz <= 1) {
-        if (h.tier === 'deep') {
-          tier = 'deep';
-          break;
-        }
-        tier = tier ?? 'shallow';
-      }
-    }
+    const tier = riftHazardTierAt(hazards, lx, lz);
     if (!tier) continue;
     const dmg = Math.max(1, Math.round(p.maxHp * 0.06 * (tier === 'deep' ? 2 : 1)));
     ctx.dealDamage(null, p, dmg, false, 'fire', 'Molten Rift', 'hit', true);

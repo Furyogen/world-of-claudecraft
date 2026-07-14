@@ -14,6 +14,251 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.wocStore.title': 'WOC 商店',
+  'hudChrome.wocStore.close': '关闭 WOC 商店',
+  'hudChrome.wocStore.tabsLabel': 'WOC 商店分区',
+  'hudChrome.wocStore.storeTab': '商店',
+  'hudChrome.wocStore.rewardsTab': '每日奖励',
+  'hudChrome.wocStore.loading': '正在加载 WOC 商店…',
+  'hudChrome.wocStore.error': 'WOC 商店暂时不可用，请稍后再试。',
+  'hudChrome.wocStore.balance': 'Claudium 余额',
+  'hudChrome.wocStore.buyClaudium': '购买 Claudium',
+  'hudChrome.wocStore.owned': '已拥有',
+  'hudChrome.wocStore.needMoreTitle': '需要更多 Claudium',
+  'hudChrome.wocStore.needMoreBody': '还需要 {shortfall} Claudium 才能购买 {item}。',
+  'hudChrome.wocStore.cancel': '取消',
+  'hudChrome.wocStore.confirmTitle': '确认购买外观',
+  'hudChrome.wocStore.confirmBody': '要用 {cost} Claudium 购买 {item} 吗？',
+  'hudChrome.wocStore.confirmPurchase': '购买',
+  'hudChrome.wocStore.armoryEyebrow': '第一赛季',
+  'hudChrome.wocStore.armoryTitle': '兵器库',
+  'hudChrome.wocStore.armoryBody':
+    '第一赛季兵器库限定武器外观。全账号通用，纯装饰性，周围所有玩家都能看到。',
+  'hudChrome.wocStore.collectionLine': '{collection}系列',
+  'hudChrome.wocStore.seasonOne': '第一赛季',
+  'hudChrome.wocStore.rarity.uncommon': '优秀',
+  'hudChrome.wocStore.rarity.rare': '精良',
+  'hudChrome.wocStore.rarity.epic': '史诗',
+  'hudChrome.wocStore.rarity.legendary': '传说',
+  'hudChrome.wocStore.wtype.sword': '剑',
+  'hudChrome.wocStore.wtype.axe': '斧',
+  'hudChrome.wocStore.wtype.mace': '锤',
+  'hudChrome.wocStore.wtype.dagger': '匕首',
+  'hudChrome.wocStore.wtype.staff': '法杖',
+  'hudChrome.wocStore.wtype.wand': '魔杖',
+  'hudChrome.wocStore.wtype.bow': '弓',
+  'hudChrome.wocStore.wtype.crossbow': '弩',
+  'hudChrome.wocStore.badge.flagship': '旗舰',
+  'hudChrome.wocStore.badge.hero': '英雄',
+  'hudChrome.wocStore.inspectAria': '查看{item}',
+  'hudChrome.wocStore.viewModeLabel': '预览模式',
+  'hudChrome.wocStore.tryOn': '试穿',
+  'hudChrome.wocStore.weaponOnly': '仅武器',
+  'hudChrome.wocStore.sceneLabel': '场景光照',
+  'hudChrome.wocStore.scene.day': '白天',
+  'hudChrome.wocStore.scene.dusk': '黄昏',
+  'hudChrome.wocStore.scene.night': '夜晚',
+  'hudChrome.wocStore.lore': '背景故事',
+  'hudChrome.wocStore.buySkin': '购买外观',
+  'hudChrome.wocStore.unavailable': '暂不可用',
+  'hudChrome.wocStore.applied': '已装备',
+  'hudChrome.wocStore.apply': '装备外观',
+  'hudChrome.wocStore.detach': '卸下外观',
+  'hudChrome.wocStore.equipHint': '装备{type}后才能使用此外观。',
+  'hudChrome.wocStore.priceChanged': '购买完成前价格已发生变化。请查看刷新后的价格并再次确认。',
+  'hudChrome.wocStore.collections.guildmark': '公会印记',
+  'hudChrome.wocStore.collections.emberwrought': '余烬锻造',
+  'hudChrome.wocStore.collections.hoarfrost': '白霜',
+  'hudChrome.wocStore.collections.fallen_star': '陨星',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.name': '公会印记武装剑',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.look':
+    '发蓝钢剑刃、青铜鱼尾形十字护手、青绿色染皮握柄，以及一枚小巧的公会钢印。',
+  'hudChrome.wocStore.skins.guildmark_arming_sword.lore':
+    '一般成品剑无名无姓，这一把却有署名。只有当 World Market 的 Merchant 愿为其钢材作保，铠甲匠才有权在剑根刻下自己的印记；Smith Haldren 的印记正有这份担保。剑身经发蓝处理，足以抵御 the Vale 的湿气，平衡精准至毫厘。你付的钱有一半买的是钢印，但它物有所值。',
+  'hudChrome.wocStore.skins.brasscap_axe.name': '黄铜帽手斧',
+  'hudChrome.wocStore.skins.brasscap_axe.look':
+    '抛光钢斧刃，漆制白蜡木柄上装有黄铜顶帽与护木铁，缠带整洁，并刻有匠人钢印。',
+  'hudChrome.wocStore.skins.brasscap_axe.lore':
+    '带钢印的斧头是握在手里的炫耀。黄铜顶帽和护木铁一半是护甲，一半是签名：既防斧柄劈裂，也映着酒馆灯火，让人人都知道你买的是 Armorer Hode 的作品，不是民兵传下来的旧货。“能砍，我就卖。”Highwatch 的铁匠如此说。这一把确实能砍。',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.name': '淬火凸缘锤',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.look':
+    '六棱淬火蓝钢锤头、黄铜颈环与柄首，以及酒红色皮革握柄。',
+  'hudChrome.wocStore.skins.tempered_flanged_mace.lore':
+    '六道发蓝淬火钢棱，每一道都磨得足以劈开头盔，再配黄铜端饰与酒红皮革。哪怕用途再残酷，王国的铠甲匠也不肯造丑陋的武器。这一把经 World Market 专门委制，并非货架上的现成货；某处账簿里还写着那位自豪买家的名字，以及他付给 Hode 的价钱。',
+  'hudChrome.wocStore.skins.guildmark_dirk.name': '公会印记短剑',
+  'hudChrome.wocStore.skins.guildmark_dirk.look':
+    '纤细的淬火钢短剑、青铜护手与柄尾螺帽、深绿色绳缠握柄，以及压印徽记。',
+  'hudChrome.wocStore.skins.guildmark_dirk.lore':
+    '这是有身份者把长剑留在家中时佩戴的武器：纤细、淬火，盖着与整柄长剑同样的认证钢印，挂在腰间，如同一枚带刃的印戒。除非懂得铠甲匠的凭证，否则只会觉得它低调。Quartermaster Bree 在 Highwatch 留着整整一抽屉，专供赢得城墙敬意的军官。',
+  'hudChrome.wocStore.skins.brasscrown_staff.name': '黄铜冠手杖',
+  'hudChrome.wocStore.skins.brasscrown_staff.look':
+    '硬木杖顶装有车制黄铜冠饰，配黄铜杖脚与染色皮带。',
+  'hudChrome.wocStore.skins.brasscrown_staff.lore':
+    '杖身取自风干硬木，顶上是 Eastbrook 铁匠成百铸造却件件精修的黄铜冠饰。它属于那种无论走到 Fenbridge 城门还是 Highwatch 城墙，都希望被认真对待的旅人。这根手杖从未真正需要支撑步伐；染色皮带与那件一眼便知价值不菲的外套恰好相配。',
+  'hudChrome.wocStore.skins.lacquered_wand.name': '漆木短杖',
+  'hudChrome.wocStore.skins.lacquered_wand.look':
+    '纤细的深红漆杖，饰有两道抛光黄铜环和小巧圆润的黄铜杖头。',
+  'hudChrome.wocStore.skins.lacquered_wand.lore':
+    '深红漆面耐心涂了七层，再以两道抛光黄铜束起。这正是乡野法师开始收取真金白银后，会从 World Market 买来装点门面的法杖。它引导 Light 的能力并不比白桦枝更强，却能在 Merchant 的柜台上耀眼夺目；小法术向来有一半靠别人相信。',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.name': '制弓师公会弓',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.look':
+    '漆制胡桃木反曲弓、黄铜弓梢、上蜡亚麻弦，弓把上刻有公会钢印。',
+  'hudChrome.wocStore.skins.fletcher_s_guild_bow.lore':
+    '弓把上的制弓师钢印，是王国最接近公会凭证的东西；它承诺着弓身内在的品质，就像酿酒师为木桶封印。漆制胡桃木、黄铜弓梢，还有经上蜡、不会在 Mirefen 雨中磨损的亚麻弦，每一处接合都在为价格辩护。越过 Widow Thicket 后拉一次弓，这场辩论便有了答案。',
+  'hudChrome.wocStore.skins.cinderbrand_sword.name': '烬痕',
+  'hudChrome.wocStore.skins.cinderbrand_sword.look':
+    '深色锻钢剑刃，血槽中嵌着橙红发光符文与热裂纹，护手内有一枚阴燃宝石。',
+  'hudChrome.wocStore.skins.cinderbrand_sword.lore':
+    '这是第一把不用水淬火，而以从 Stormcrag 耙出的 Blessed Embers 淬炼的剑。Highwatch 的铁匠发誓，那些煤火“燃得湛蓝而纯净，因为山仍记得古老的誓言”。火焰被封进血槽后只余橙红暗燃，却永不熄灭；即便在城墙最寒冷的夜晚，符文也能温暖裸手。Cinderbrand 从不需要点燃，它只是拒绝熄灭。',
+  'hudChrome.wocStore.skins.emberbite_axe.name': '余烬之噬',
+  'hudChrome.wocStore.skins.emberbite_axe.look':
+    '熏黑铁斧，斧刃间透出橙红裂光，嵌有一枚封存炭火的宝石，周围热气缭绕。',
+  'hudChrome.wocStore.skins.emberbite_axe.lore':
+    'Armorer Hode 把一块山火活炭锻进斧刃核心，使刃口在两次挥砍之间也从未真正冷却。下劈时裂纹吐出橙光，仿佛撞击唤醒了初次锻造时沉睡在铁里的东西。有人说一只 Stormcrag 元素为此交出了余烬；Highwatch 起风时，人们总会说出许多故事。',
+  'hudChrome.wocStore.skins.smoulderfall_mace.name': '闷燃坠击',
+  'hudChrome.wocStore.skins.smoulderfall_mace.look':
+    '黑铁锤棱的内侧裂缝泛着橙红光芒，锤头中嵌有熔核宝石。',
+  'hudChrome.wocStore.skins.smoulderfall_mace.lore':
+    '这柄战锤自带炉火：从那道“以山火铸成”的 Sanctum 封印上凿下一块熔核石，嵌在锤头中发光。锤棱触手温热，落下时更烫；一名 Highwatch 中士发誓，被它击中的瘀伤会微微发亮直到清晨。山中之火终于不再用于封印，而用于破坏。',
+  'hudChrome.wocStore.skins.ashspark_dagger.name': '灰火匕',
+  'hudChrome.wocStore.skins.ashspark_dagger.look':
+    '短小的熏黑刀刃遍布橙红发光纹路，柄首嵌着微小的阴燃宝石，灰烬与火星相随。',
+  'hudChrome.wocStore.skins.ashspark_dagger.lore':
+    '一把将山火偷藏进柄首宝石的巷战短刀，也是铠甲匠无声的玩笑：就连扒手也能带着初次锻造的一点余烬。刀身熏黑、橙纹密布，在鞘中总比应有的温度更暖。于 Highwatch 下方的黑暗中拔出它，微光恰好能照亮你的手，也足以找到对手守势中的缝隙。',
+  'hudChrome.wocStore.skins.forgeheart_staff.name': '炉心法杖',
+  'hudChrome.wocStore.skins.forgeheart_staff.look':
+    '铁箍法杖顶端囚着发光余烬核心，火焰符文沿杖身攀升，热浪在上方摇曳。',
+  'hudChrome.wocStore.skins.forgeheart_staff.lore':
+    '一块山火活炭被囚在杖冠的铁笼中。Loremaster Caddis 称它证明了初次锻造之火不仅能用于封印，也能被束缚来服务。热浪化作纤细而无尽的丝带升起；携带它的法师永远不缺锻炉或守夜火。传言这块余烬取自 Voskar the Emberwing 的吐息，自此从未冷却。',
+  'hudChrome.wocStore.skins.emberwrought_wand.name': '余烬锻造魔杖',
+  'hudChrome.wocStore.skins.emberwrought_wand.look':
+    '熏黑金属魔杖，铁爪扣住发光炭火，细微热裂纹间透出温暖内光。',
+  'hudChrome.wocStore.skins.emberwrought_wand.lore':
+    '正是这根魔杖为整个品级命名。Highwatch 的铠甲匠第一次以铁爪扣住山火余炭，并让它听命于凡人之手时，就连 Light 的祭司也不再称其为异端，转而说它很实用。温暖、耐心，又悄然危险：杖尖的余烬从主人出生前便持续燃烧，从未中断。',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.name': '烬锁',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.look':
+    '熏黑钢弩，弩臂裂缝渗出橙红光芒，弩身中封着一块阴燃煤炭。',
+  'hudChrome.wocStore.skins.cinderlatch_crossbow.lore':
+    '这是余烬锻造中最奇异的一件：把山火灌进一台机械。橙光从弩臂裂缝渗出，弩身内的阴燃煤炭令弓弦在 Thornpeak 的严寒或 Mirefen 的湿气中都不会僵硬。弩矢离槽时已有温度，命中时更为灼热。对于城墙外那些同样不畏严寒的敌人，这是猎人的回答。',
+  'hudChrome.wocStore.skins.ice_fang_sword.name': '冰牙',
+  'hudChrome.wocStore.skins.ice_fang_sword.look':
+    '苍白冰川弯刃，刃背生着锯齿状霜晶，血槽内有发光的青蓝冰核，护手如冰柱。',
+  'hudChrome.wocStore.skins.ice_fang_sword.lore':
+    '这是冰封品级的旗舰，也是每位收藏家最先伸手的一件。Ice Fang 并非锻造，而是从覆盖 Highwatch 上方 Thornpeak 的冰川尖牙中雕成；青蓝核心寒冷燃烧，如 Glimmermere 水面的冷光。它劈过之处连空气都会结霜。城墙守卫发誓，大雪挡住 Wyrmcult 的那一夜，一名士兵带着它，“为城墙买下了一个冬天”。',
+  'hudChrome.wocStore.skins.glaciersplit_axe.name': '裂冰',
+  'hudChrome.wocStore.skins.glaciersplit_axe.look':
+    '半透明蓝色冰川斧头，裂开的内部泛着青蓝光，霜晶密布，斧柄拖曳寒雾。',
+  'hudChrome.wocStore.skins.glaciersplit_axe.lore':
+    '它凿自 Thornpeak 冰川的蓝色核心，两个世纪的重压把寒意压到自行发光。即使静止也拖着白雾，落下时的巨响如同 Stalker Ridge 下方裂开一道冰隙。Highwatch 将阵亡者交给那里的冰雪；因此这件武器生来便要阻挡融雪，以及融雪可能唤醒的一切。',
+  'hudChrome.wocStore.skins.rimecrusher_mace.name': '霜碎',
+  'hudChrome.wocStore.skins.rimecrusher_mace.look':
+    '锯齿状冰晶簇拥着发光的青蓝核心，白霜沿镀银锤柄向下蔓延。',
+  'hudChrome.wocStore.skins.rimecrusher_mace.lore':
+    '它不是雕刻出来，而是生长而成：匠人诱导 Thornpeak 寒冰包裹青蓝冷核，直到坚硬得不逊于 Hode 最好的钢。白霜沿镀银锤柄爬向手掌，却始终差一点触及。它击中之处水会冻结，停放之处地面会泛白。山峰的墓穴寒意，被缩小到足以挥向那些攀爬城墙之物。',
+  'hudChrome.wocStore.skins.frostbite_dagger.name': '霜针',
+  'hudChrome.wocStore.skins.frostbite_dagger.look':
+    '透明蓝冰制成的极细匕首，中央贯穿青蓝发光脉络，针状霜晶与白霜覆盖刀柄。',
+  'hudChrome.wocStore.skins.frostbite_dagger.lore':
+    '薄如屏息，却比呼吸冷上两倍：一片 Thornpeak 冰川碎屑被磨成单一发光脉络，锋利到伤口会在血液想起流动前先被冻结。它的名字借自死者从群峰带下的墓穴寒意。它从不需要磨刃；Loremaster Caddis 冷冷地说，冰不会变钝，它只会等待。',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.name': '白霜守望',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.look':
+    '镀银法杖顶端漂浮着缓慢旋转的青蓝冰片，放射霜晶与寒雾。',
+  'hudChrome.wocStore.skins.hoarfrost_vigil_staff.lore':
+    '这是 Highwatch 城墙上永不沉睡的守望之杖。杖冠是一片青蓝湖冰，脱离银托悬浮，并自行缓缓转动；守卫发誓，它总是指向群峰下正在聚集的寒意。携带这份守望，便是在一夜间站完两百年的岗，并承诺绝不移开目光。',
+  'hudChrome.wocStore.skins.everwinter_wand.name': '永冬碎片',
+  'hudChrome.wocStore.skins.everwinter_wand.look':
+    '一根发光的青蓝冰川尖刺，白霜从银环绽开，周围浮着淡淡寒雾。',
+  'hudChrome.wocStore.skins.everwinter_wand.lore':
+    '一根发光的冰川尖刺，据说折自 Sanctum 下方的深潭，那里的山寒长着利齿。白霜不断从银环绽放，无论烈火还是盛夏都不能使它融化。法师将它贴身携带，借寒意辅助施法；但在它似乎倾向 Nythraxis 墓室并静静聆听的夜晚，又会把它放得远远的。',
+  'hudChrome.wocStore.skins.winterbite.name': '寒冬之噬',
+  'hudChrome.wocStore.skins.winterbite.look':
+    '镀银钢与蓝冰制成的弓，弓把内有青蓝冰核，弦上搭着实冰箭矢，寒雾缭绕。',
+  'hudChrome.wocStore.skins.winterbite.lore':
+    '这把弓由镀银钢与 Thornpeak 寒冰制成，弓把内的青蓝冷核将箭冻结在弦上。每次拉弓都会重新凝成一支冰川实冰箭；城墙上的弓手不带箭袋，只携寒意。Highwatch 曾靠一把这样的弓守住遭围攻的 Stalker Ridge：据说只有一名弓手，以及一整个冬天取之不尽的箭。',
+  'hudChrome.wocStore.skins.solheim_sword.name': 'Solheim，黎明最后之光',
+  'hudChrome.wocStore.skins.solheim_sword.look':
+    '以陨星锻成的巨剑，熔金核心贯裂剑刃，宇宙黑钢边缘闪着星光，金色碎片环绕护手，极光如带。',
+  'hudChrome.wocStore.skins.solheim_sword.lore':
+    '那颗星从西方天空坠落，在 Widow Thicket 之外“如锻炉般爆裂”时，Brother Aldric 从 Mirefen 陨坑取出仍在阴燃的星核，恳求王国铁匠加工“并不属于这个世界的东西”。他们将其锻成唯一一柄巨剑：Solheim。熔金核心如黎明撕开夜空般劈开宇宙黑刃，星金碎片沿无人设定的轨道绕护手运行。世上只锻成这一把，也绝不会有第二把。',
+  'hudChrome.wocStore.skins.skyrender_axe.name': '裂天者，苍穹之伤',
+  'hudChrome.wocStore.skins.skyrender_axe.look':
+    '斧头像一块撕裂的夜空，遍布熔金裂缝与星座刻纹，星光碎片悬浮，刃后拖着极光。',
+  'hudChrome.wocStore.skins.skyrender_axe.lore':
+    '它锻自陨坑边缘，那里坠星从 Mirefen 水面撕走了天空的倒影，留下至今仍冒蒸汽的伤口。斧头像一片被扯下的夜：熔金裂缝、Highwatch 学者也叫不出名字的星座，以及每次挥动都从刃缘流出的极光。Brother Aldric 为它赐福，却拒绝碰触。举起它，就像握住苍穹留下的缺口。',
+  'hudChrome.wocStore.skins.starfall_mace.name': '星陨，诸天裁决',
+  'hudChrome.wocStore.skins.starfall_mace.look':
+    '被囚的熔金星核由轨道碎片环绕，宇宙黑锤棱中流淌星光，极光从接缝溢出。',
+  'hudChrome.wocStore.skins.starfall_mace.lore':
+    '一颗星核在死亡前一瞬被捕获，随它坠落的残片环绕四周，永远停在湮灭前最后一寸。宇宙黑锤棱中流淌着被困的星光，举起时极光便从接缝溢出。古老的 Light 祭司称流星为裁决，是从天而降、任何盾牌都无意阻挡的判决；此锤便以坠落 Mirefen 的那颗星命名。',
+  'hudChrome.wocStore.skins.astravyr_dagger.name': 'Astravyr，陨星之牙',
+  'hudChrome.wocStore.skins.astravyr_dagger.look':
+    '一片陨星碎屑，宇宙黑金属上燃着熔金刃光，明亮星尘绕柄首运行，并拖出细薄极光。',
+  'hudChrome.wocStore.skins.astravyr_dagger.lore':
+    '这是 Aldric 从陨坑带回的星体中最小的一片，也有人认为它最危险。异界星核的一缕碎片，熔金刃缘贴着宇宙黑金属，一颗孤独星尘如失去世界的月亮般绕柄首运行。它几乎没有重量，却几乎能切开一切。小到足以藏匿，也亮到能凭自身光芒在黑暗中寻回。',
+  'hudChrome.wocStore.skins.cosmarch_staff.name': 'Cosmarch，无尽虚空尖塔',
+  'hudChrome.wocStore.skins.cosmarch_staff.look':
+    '金色星片环绕熔金核心运行，宇宙黑杖身刻满星座，极光丝带向上盘绕。',
+  'hudChrome.wocStore.skins.cosmarch_staff.lore':
+    '星金杖身顶着熔金核心，金色碎片沿缓慢而无尽的轨道环行，宛如一座微型宇宙；其星座不属于 Thornpeak 上空的任何天幕。极光如忘记升起的烟，沿杖身向上缠绕。曾持有它的人说能感到虚空在杖中转动，就像 Ysolei 的湖水“饮下月光”：耐心、寒冷，并回望着你。',
+  'hudChrome.wocStore.skins.emberwish_wand.name': '余烬之愿，垂死太阳之火种',
+  'hudChrome.wocStore.skins.emberwish_wand.look':
+    '被囚的熔金垂死星火由火星环绕，宇宙黑杖身刻着发光星座。',
+  'hudChrome.wocStore.skins.emberwish_wand.lore':
+    '这并非陨星本身，而是一颗垂死恒星最后的微光：一轮早已熄灭的太阳留下的熔金余烬，周围盘旋着它最后的火花。宇宙黑杖身刻有见证其死亡的星座。Mirefen 佃农说，真黄昏时持有它便可许下一个愿望；他们也说，每个持有过它的灵魂都只愿获得更多时间，而 Drowned Moon 从未答应任何人。',
+  'hudChrome.wocStore.skins.encore_bow.name': 'Encore，第二颗坠星',
+  'hudChrome.wocStore.skins.encore_bow.look':
+    '夸张巨大的星炮：宇宙黑炮管刻着金色发光星座，喇叭形炮口内装有熔金彗星弹，配黄铜构件与木质肩托。',
+  'hudChrome.wocStore.skins.encore_bow.lore':
+    '加工陨星的铁匠造出六件遗物后，还剩下整整一炮管星金；到了那时，学徒们也有了自己的主意。铁砧上诞生的东西，要么是王国第一支火枪，要么是最小的攻城器：一门肩扛星炮，与其说它发射弹丸，不如说它瞄准后请求第二颗星落下。Brother Aldric 拒绝赐福，理由是如此响亮的东西早已被天堂注意。猎人深爱它，射线前方的一切则从未如此。',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.name': '星陨锁扣，苍穹最后的裁决',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.look':
+    '陨星金属弩身，熔金核心贯穿弩托，宇宙黑弩臂刻满星座，弦上搭着纯粹星火之矢。',
+  'hudChrome.wocStore.skins.meteorlatch_crossbow.lore':
+    '它在 Mirefen 陨坑仍发着光时，以“烫得无法触碰”的原始陨星金属锻成；碎片被敲成刻满星座的宇宙黑弩臂，熔金核心沿弩托封存。它不搭弩矢，而是召来一束星火：发射如宣判，落地如判决的终结。当 Highwatch 担心 Nythraxis 的不死王冠或许还不是群峰下最可怕的东西时，他们希望城墙上摆着的正是这件武器。务必瞄准。',
+  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.open': '打开 Claudium',
+  'hudChrome.claudium.close': '关闭 Claudium',
+  'hudChrome.claudium.loading': '正在加载 Claudium…',
+  'hudChrome.claudium.balanceLabel': '余额',
+  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.unavailable':
+    'Claudium 商店暂时不可用。您的余额和购买不会受到影响，请稍后再试。',
+  'hudChrome.claudium.disclosure':
+    'Claudium 是单向软货币：可用真钱购买并用于兑换外观物品，不能赎回、转让或兑现。',
+  'hudChrome.claudium.buyTitle': '购买 Claudium',
+  'hudChrome.claudium.railLabel': '付款方式',
+  'hudChrome.claudium.railNativeUnavailable': 'SOL/WOC 不可用',
+  'hudChrome.claudium.railSol': 'SOL',
+  'hudChrome.claudium.railStripe': '银行卡',
+  'hudChrome.claudium.railWoc': 'WOC',
+  'hudChrome.claudium.railWocDiscount': '优惠 20%',
+  'hudChrome.claudium.solBalance': 'SOL：{amount}',
+  'hudChrome.claudium.wocBalance': 'WOC：{amount}',
+  'hudChrome.claudium.railWocUnavailable': 'WOC 定价暂时不可用。',
+  'hudChrome.claudium.amountLabel': '数量',
+  'hudChrome.claudium.showAmounts': '显示所有 Claudium 数量',
+  'hudChrome.claudium.hideAmounts': '隐藏其他 Claudium 数量',
+  'hudChrome.claudium.skuRow': '{usd} 可购买 {claudium} Claudium',
+  'hudChrome.claudium.buyUnavailable': '暂时无法购买。',
+  'hudChrome.claudium.storeTitle': '外观商店',
+  'hudChrome.claudium.storeEmpty': '目前没有可用的外观物品。',
+  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.spendButton': '兑换',
+  'hudChrome.claudium.kindCosmetic': '外观物品',
+  'hudChrome.claudium.kindItem': '物品',
+  'hudChrome.claudium.kindSkin': '外观',
+  'hudChrome.claudium.buyButton': '购买',
+  'hudChrome.claudium.checkoutTitle': '完成购买',
+  'hudChrome.claudium.checkoutClose': '关闭结账',
+  'hudChrome.claudium.checkoutLoading': '正在加载结账页面…',
+  'hudChrome.claudium.checkoutPending': '交易正在进行。请在钱包中确认，并保持此面板打开。',
+  'hudChrome.claudium.checkoutPendingButton': '处理中',
+  'hudChrome.claudium.checkoutFailed': '无法加载结账页面，请重试。',
+  'hudChrome.claudium.checkoutUnavailable': '该 Claudium 购买项目暂时不可用。',
+  'hudChrome.claudium.checkoutWalletRequired':
+    '使用加密货币购买 Claudium 前，请先连接 Solana 钱包。',
+  'hudChrome.claudium.checkoutWalletUnsupported': '此钱包无法签署和发送 Solana 交易。',
+  'hudChrome.claudium.checkoutNotSettled': '交易已发送，但 Claudium 尚未到账，请稍后重试。',
   'hudChrome.itemHeroicTag': '[英雄]',
   'hudChrome.readyCheck.notInPartyError': '你必须加入队伍才能发起就绪确认。',
   'hudChrome.readyCheck.inProgressError': '就绪确认已在进行中。',
@@ -195,6 +440,25 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': '启用队长分配',
   'hudChrome.masterLoot.looterLabel': '分配者',
   'hudChrome.masterLoot.leaderOption': '队长',
+  'hudChrome.playerMenu.info': '玩家信息',
+  'hudChrome.playerMenu.block': '屏蔽',
+  'hudChrome.playerMenu.unblock': '取消屏蔽',
+  'hudChrome.playerMenu.openFor': '打开 {name} 的玩家菜单',
+  'hudChrome.playerMenu.profileUnavailable': '未找到 {name} 的资料。',
+  'hudChrome.playerMenu.aiTag': '[AI]',
+  'hudChrome.playerMenu.aiTagTitle': 'AI 操作的账号',
+  'hudChrome.playerMenu.watchTwitch': '在 Twitch 观看',
+  'hudChrome.playerMenu.watchX': '在 X 查看',
+  'hudChrome.playerMenu.watchKick': '在 Kick 观看',
+  'hudChrome.playerMenu.watchYouTube': '在 YouTube 观看',
+  'hudChrome.social.ignoredTab': '已忽略',
+  'hudChrome.social.ignoredEmpty': '你没有忽略任何人。',
+  'hudChrome.social.blockedEmpty': '你没有屏蔽任何人。',
+  'hudChrome.social.blockSearchPlaceholder': '玩家名称',
+  'hudChrome.social.blockAction': '屏蔽',
+  'hudChrome.social.nowBlocking': '已屏蔽 {name}。',
+  'hudChrome.social.blockedTab': '屏蔽',
+  'hudChrome.social.stopBlockingTitle': '取消对 {name} 的屏蔽',
   'hudChrome.party.promoteLeader': '提升为队长',
   'hudChrome.party.inviteUsage': '邀请谁？用法：/invite <名称>。',
   'hudChrome.masterLoot.thresholdLabel': '品质门槛',
@@ -272,16 +536,30 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '触控',
   'hudChrome.options.interfaceModeNote':
     '自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。',
+  'hudChrome.warfare.honorAmount': '{amount} 点荣誉',
+  'hudChrome.warfare.dualPrice': '{money} + {honor}',
+  'hudChrome.warfare.balance': '荣誉：{amount}',
+  'hudChrome.warfare.honorFloat': '+{amount} 荣誉',
+  'hudChrome.warfare.honorGain': '你获得了 {amount} 点荣誉（{reason}）。',
+  'hudChrome.warfare.notEnoughHonor': '荣誉不足。',
+  'hudChrome.warfare.reasons.arenaWin': '竞技场胜利',
+  'hudChrome.warfare.reasons.fiestaKill': '嘉年华击倒',
+  'hudChrome.warfare.reasons.fiestaComplete': '完成嘉年华',
+  'hudChrome.warfare.reasons.fiestaWin': '嘉年华胜利',
   'hudChrome.statInfo.fromYour': '来自你的 {value} 点{stat}：',
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
   'hudChrome.statInfo.names.hasteRating': '急速等级',
+  'hudChrome.statInfo.names.warfare': '战争',
+  'hudChrome.statInfo.warfareValue': '造成伤害 +{increase}% / 承受伤害 -{reduction}%',
   'hudChrome.statInfo.desc.critRating':
     '来自装备和套装奖励的暴击等级，提升你的暴击几率。约每10点等级提供1%暴击。',
   'hudChrome.statInfo.desc.hasteRating':
     '来自装备和套装奖励的急速等级，加快你的攻击和施法速度。约每10点等级提供1%急速。',
   'hudChrome.statInfo.desc.spellPower':
     '提高你法术造成的伤害和治疗的强度。每点智力都会提供少量法术强度，此外还有来自装备和增益的加成。',
+  'hudChrome.statInfo.desc.warfare':
+    '对玩家造成的伤害提高 {increase}%，受到玩家造成的伤害降低 {reduction}%。',
   'hudChrome.statInfo.sources.header': '构成：',
   'hudChrome.statInfo.sources.base': '基础：{value}',
   'hudChrome.statInfo.sources.attributes': '来自属性：{value}',
@@ -395,6 +673,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': '表情轮盘',
   'hudChrome.keybinds.targetFriendly': '选中最近友方',
   'hudChrome.keybinds.targetFriendlyNext': '切换友方目标',
+  'hudChrome.petFeed.disabledFullHp': '宠物生命值已满',
+  'hudChrome.petFeed.disabledNoFood': '你的背包中没有可以治疗宠物的食物',
   'hudChrome.options.clickMoveLeft': '左键',
   'hudChrome.options.clickMoveRight': '右键',
   'hudChrome.options.browserEffects': '浏览器特效',
@@ -1916,6 +2196,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lay_on_hands.name': '临终圣礼',
   'entities.abilities.lay_on_hands.description':
     '巨大的治疗涌流：恢复 {damage} 点生命值。10 分钟冷却时间。',
+  'entities.abilities.holy_taunt.name': '神圣挑衅',
+  'entities.abilities.holy_taunt.description':
+    '嘲讽目标：你的威胁值提高到其最仇恨敌人的水平，并强迫其攻击你 3 秒。',
   'entities.abilities.flash_of_light.name': '圣光愈合',
   'entities.abilities.flash_of_light.description':
     '一道快速而高效的圣光爆发，为一个友方目标恢复 {damage} 点生命值。',
@@ -1993,6 +2276,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '以大地之怒灌注你的武器：每次挥击额外造成 {damage} 点伤害，持续 5 分钟。',
   'entities.abilities.healing_wave.name': '治愈之水',
   'entities.abilities.healing_wave.description': '为一个友方目标恢复 {damage} 点生命值。',
+  'entities.abilities.chain_heal.name': '治疗链',
+  'entities.abilities.chain_heal.description':
+    '大量治疗一个友方目标，然后跳跃至多2个附近的盟友，每次跳跃的治疗量降低50%。（恢复专精招牌）',
   'entities.abilities.earth_shock.name': '大地震击',
   'entities.abilities.earth_shock.description':
     '立即以震荡之力冲击目标，造成 {damage} 点自然伤害。',
@@ -2159,6 +2445,71 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '一记潜行起手技，以武器伤害外加{damage}撕抓敌人，并造成持续9秒的流血伤害。获得1点连击点数。仅限狼形态使用。',
   'entities.abilities.revive_pet.name': '复活宠物',
   'entities.abilities.revive_pet.description': '复活你死去的宠物，并将其召回身边。',
+  'entities.abilities.holy_shock.name': '神圣震击',
+  'entities.abilities.holy_shock.description':
+    '以神圣能量震击一个友方目标，为其恢复{damage}点生命值。（神圣专精招牌）',
+  'entities.abilities.holy_shield.name': '神圣之盾',
+  'entities.abilities.holy_shield.description':
+    '以神圣之力保护你10秒，护甲提高90，并对近战攻击者造成12点神圣伤害。（防护专精招牌）',
+  'entities.abilities.bestial_wrath.name': '狂野怒火',
+  'entities.abilities.bestial_wrath.description':
+    '使你进入野兽怒火状态，攻击强度提高55点，持续15秒。（野兽控制专精招牌）',
+  'entities.abilities.trueshot_aura.name': '强击光环',
+  'entities.abilities.trueshot_aura.description':
+    '鼓舞附近盟友，使攻击强度提高35点，持续5分钟。（射击专精招牌）',
+  'entities.abilities.wyvern_sting.name': '翼龙钉刺',
+  'entities.abilities.wyvern_sting.description':
+    '从远处钉刺敌人，使其瘫痪最多4秒。受到任何伤害都会打破效果。（生存专精招牌）',
+  'entities.abilities.arcane_power.name': '奥术强化',
+  'entities.abilities.arcane_power.description':
+    '法术伤害提高20%，法术急速提高10%，持续10秒。（奥术专精招牌）',
+  'entities.abilities.combustion.name': '燃烧',
+  'entities.abilities.combustion.description': '法术暴击几率提高50%，持续15秒。（火焰专精招牌）',
+  'entities.abilities.icy_veins.name': '冰冷血脉',
+  'entities.abilities.icy_veins.description':
+    '法术急速提高30%，并防止施法被打断或受到退条，持续10秒。（冰霜专精招牌）',
+  'entities.abilities.cold_blood.name': '冷血',
+  'entities.abilities.cold_blood.description':
+    '集中你的杀意，使下一次攻击造成暴击。（刺杀专精招牌）',
+  'entities.abilities.blade_flurry.name': '剑刃乱舞',
+  'entities.abilities.blade_flurry.description':
+    '释放剑刃乱舞，攻击速度提高20%，持续12秒。（战斗专精招牌）',
+  'entities.abilities.hemorrhage.name': '出血',
+  'entities.abilities.hemorrhage.description':
+    '攻击敌人，造成武器伤害加{damage}点伤害，并在12秒内造成流血伤害。奖励1个连击点。（敏锐专精招牌）',
+  'entities.abilities.power_infusion.name': '能量灌注',
+  'entities.abilities.power_infusion.description':
+    '向一个友方目标灌注能量，使其法术强度提高28点，持续15秒。（戒律专精招牌）',
+  'entities.abilities.holy_nova.name': '神圣新星',
+  'entities.abilities.holy_nova.description':
+    '引发神圣之光爆炸，为附近盟友恢复{damage}点生命值并伤害附近敌人。（神圣专精招牌）',
+  'entities.abilities.shadowform.name': '暗影形态',
+  'entities.abilities.shadowform.description':
+    '进入暗影形态，强化暗影魔法直到你切换回来。再次施放可返回普通形态。（暗影专精招牌）',
+  'entities.abilities.elemental_mastery.name': '元素掌握',
+  'entities.abilities.elemental_mastery.description':
+    '呼唤元素掌握，使你的下一个法术变为瞬发。（元素专精招牌）',
+  'entities.abilities.siphon_life.name': '生命虹吸',
+  'entities.abilities.siphon_life.description':
+    '虹吸敌人的生命，在30秒内造成{damage}点暗影伤害，并按造成的伤害治疗你。（痛苦专精招牌）',
+  'entities.abilities.conflagrate.name': '燃尽',
+  'entities.abilities.conflagrate.description':
+    '吞噬敌人身上的献祭，将其点燃并造成{damage}点火焰伤害。（毁灭专精招牌）',
+  'entities.abilities.moonkin_form.name': '枭兽形态',
+  'entities.abilities.moonkin_form.description':
+    '进入枭兽形态，强化施法直到你切换回来。再次施放可返回普通形态。（平衡专精招牌）',
+  'entities.abilities.feral_charge.name': '野性冲锋',
+  'entities.abilities.feral_charge.description':
+    '冲向敌人并使其定身1秒。8-25码距离。（野性专精招牌）',
+  'entities.abilities.swiftmend.name': '迅捷治愈',
+  'entities.abilities.swiftmend.description':
+    '吞噬友方目标身上的持续治疗效果，为其恢复{damage}点生命值。（恢复专精招牌）',
+  'entities.abilities.crusader_strike.name': '十字军打击',
+  'entities.abilities.crusader_strike.description':
+    '打击目标，造成武器伤害外加 {damage} 点神圣伤害。（圣骑士天赋）',
+  'entities.abilities.metamorphosis.name': '恶魔变形',
+  'entities.abilities.metamorphosis.description':
+    '化为恶魔之力，使护甲和攻击强度提高 20 秒。（术士天赋）',
   'entities.items.worn_sword.name': '斑驳短剑',
   'entities.items.gnarled_staff.name': '沼橡法杖',
   'entities.items.rusty_dagger.name': '生锈匕首',
@@ -3430,9 +3781,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.shroud_of_the_gravewyrm.name': '墓龙裹布',
   'entities.items.sanctum_prowlers_grips.name': '圣殿潜行者的手套',
   'entities.items.scepter_of_the_deathless_court.name': '不死王庭权杖',
-  'entities.items.deathless_warguard_legmail.name': '不死战卫腿甲',
-  'entities.items.soulrend_diadem.name': '裂魂冠冕',
-  'entities.items.scourgehide_carapace.name': '灾祸之皮甲壳',
   'entities.items.cryptplate_helm.name': '墓板头盔',
   'entities.items.shadowpulse_slippers.name': '暗影脉冲便鞋',
   'entities.items.bonechill_cord.name': '骨寒腰绳',
@@ -3446,7 +3794,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.gravescale_girdle.name': '墓鳞腰带',
   'entities.items.wyrmchoir_handwraps.name': '龙唱裹手',
   'entities.items.deathless_greatblade.name': '不死巨刃',
-  'entities.items.soulforged_warplate.name': '铸魂战甲',
   'entities.items.stormcallers_focus.name': '唤雷之核',
   'entities.items.zense_meridian.name': '泽恩斯子午坠',
   'entities.items.seal_of_the_nine_oaths.name': '九誓之印',
@@ -3785,6 +4132,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/秒',
   'hudChrome.meters.perSecondRow': '{total}（{rate}）',
   'hudChrome.meters.seconds': '{s}秒',
+  'hudChrome.meters.autoShowHint':
+    '一旦你的小队造成伤害或治疗，行数就会自动出现，此区段会在战斗结束几秒后关闭。',
   'hudChrome.mobile.actionPageToggle': '切换动作页',
   'hudChrome.mobile.actionRing': '战斗动作',
   'hudChrome.mobile.haptics': '震动反馈',
@@ -3793,7 +4142,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.hotbarPageAria': '显示下一组技能',
   'hudChrome.mobile.jump': '跳跃',
   'hudChrome.mobile.leaderboard': '排行榜',
-  'hudChrome.mobile.dailyRewards': '奖励',
+  'hudChrome.mobile.dailyRewards': '商店',
   'hudChrome.mobile.deeds': '功绩',
   'hudChrome.mobile.nameplates': '姓名板',
   'hudChrome.mobile.targetCycle': '切换目标',
@@ -3869,6 +4218,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.slayProgress': '已击杀森林狼：{current} / {needed}',
   'hud.tutorial.returnTitle': '领取奖励',
   'hud.tutorial.returnBody': '任务已完成。返回雷德布鲁克元帅处并按 {interactKey} 交付任务。',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': '奥德伦，亡魂战卫',
+  'entities.mobs.nythraxis_heroic_priest_add.name': '马尔里克，亡魂大祭司',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': '沃斯，亡魂之刃',
   'entities.mobs.nythraxis_skeleton_warrior.name': '复苏王室卫兵',
   'entities.mobs.nythraxis_scourge_of_thornpeak.name': '尼思拉克西斯，荆峰之灾',
   'itemUi.quality.legendary': '传说',
@@ -3989,7 +4341,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': '收起任务追踪器',
   'hudChrome.questTracker.expandHint': '展开任务追踪器',
   'hudChrome.bags.cannotDestroy': '该物品无法销毁。',
-  'hudChrome.bags.rightClickDestroy': '右键单击以销毁',
+  'hudChrome.bags.rightClickDestroy': 'Shift+右键单击以销毁',
   'hudChrome.bags.filterGroupAria': '按类别筛选背包',
   'hudChrome.bags.filterAll': '全部',
   'hudChrome.bags.filterWeapon': '武器',
@@ -4444,6 +4796,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '源自远古深渊、披着鳞甲、形似巨蛇的造物。它们罕见、骄傲，远比看上去更强大。',
   'guide.family.dragonkin.name': '龙类',
   'guide.family.elemental.desc': '由风暴与岩石化成的活物，被束缚于元素之力旺盛的荒野之地。',
+  'guide.family.reptile.name': '爬行类',
+  'guide.family.reptile.desc': '冷血的猎手，带着独有的嘶声与撕咬，与温血的野兽截然不同。',
   'guide.worldPage.heading': '世界',
   'guide.worldPage.intro':
     'World of ClaudeCraft 是一片连绵不绝、需你徒步穿越的大陆，三大区域由南向北依次铺展。这里没有快速旅行，因此旅途本身便是冒险的一部分。',
@@ -5606,6 +5960,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '关联你的 Discord，通过游玩和社区活动赚取积分，并攀登段位阶梯。',
   'hudChrome.discord.link.error': '无法关联 Discord，请重试。',
   'hudChrome.discord.link.success': 'Discord 已关联。',
+  'hudChrome.discord.link.joinServer': '直接加入 Discord 服务器',
   'hudChrome.discord.linkedAs': '已关联为 {name}',
   'hudChrome.discord.linkedTitle': 'Discord：{name}',
   'hudChrome.discord.viewProfile': '打开该角色的公开资料',
@@ -5670,6 +6025,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': '开发者',
   'hudChrome.discord.roleTag.mods': '管理员',
+  'hudChrome.discord.roleTag.seniormods': '高级管理员',
+  'hudChrome.discord.roleTag.juniormods': '初级管理员',
+  'hudChrome.discord.roleTag.contentcreator': '内容创作者',
   'hudChrome.discord.voice.channel': '在{channel}',
   'hudChrome.discord.swag.title': '周边',
   'hudChrome.discord.swag.free': '免费',
@@ -5714,6 +6072,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     'World of ClaudeCraft {version} 版本已可用。立即更新以获取最新修复和改进。',
   'hudChrome.nativeUpdate.notNow': '暂不',
   'hudChrome.nativeUpdate.update': '更新',
+  'hudChrome.cameraPrompt.title': '选择你的镜头',
+  'hudChrome.cameraPrompt.intro': '选择镜头跟随角色的方式。',
+  'hudChrome.cameraPrompt.mouseDesc': '无需按住鼠标按键，移动鼠标即可转动镜头。',
+  'hudChrome.cameraPrompt.classicTitle': '经典镜头',
+  'hudChrome.cameraPrompt.classicDesc': '按住鼠标右键并移动鼠标来转动镜头。',
+  'hudChrome.cameraPrompt.changeLater': '稍后可在 Esc 菜单的“按键绑定”中更改。',
+  'hudChrome.cameraPrompt.confirm': '确认',
   'desktop.update.downloading': '正在下载更新 {version}...',
   'desktop.update.ready': '更新 {version} 已就绪。退出游戏时将自动安装，也可立即重启。',
   'desktop.update.restart': '立即重启',
@@ -6712,6 +7077,49 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.bursar_aldous_crane.title': '镀金保险箱',
   'entities.npcs.bursar_aldous_crane.greeting':
     '每一只木箱、每一个钱柜、每一件饰物，交给镀金保险箱都万无一失。',
+  'entities.items.furyforged_warhelm.name': '怒铸战盔',
+  'entities.items.furyforged_warspaulders.name': '怒铸战肩',
+  'entities.items.furyforged_warplate.name': '怒铸战甲',
+  'entities.items.furyforged_girdle.name': '怒铸腰带',
+  'entities.items.furyforged_legguards.name': '怒铸护腿',
+  'entities.items.furyforged_gauntlets.name': '怒铸护手',
+  'entities.items.furyforged_sabatons.name': '怒铸战靴',
+  'entities.items.stormbound_crown.name': '缚雷王冠',
+  'entities.items.stormbound_spaulders.name': '缚雷肩甲',
+  'entities.items.stormbound_hauberk.name': '缚雷锁甲',
+  'entities.items.stormbound_waistguard.name': '缚雷护腰',
+  'entities.items.stormbound_legmail.name': '缚雷腿甲',
+  'entities.items.stormbound_handguards.name': '缚雷护手',
+  'entities.items.stormbound_greaves.name': '缚雷胫甲',
+  'entities.items.ashstalker_cowl.name': '猎烬兜帽',
+  'entities.items.ashstalker_shoulderguards.name': '猎烬护肩',
+  'entities.items.ashstalker_harness.name': '猎烬胸甲',
+  'entities.items.ashstalker_waistband.name': '猎烬腰带',
+  'entities.items.ashstalker_legguards.name': '猎烬护腿',
+  'entities.items.ashstalker_grips.name': '猎烬护手',
+  'entities.items.ashstalker_treads.name': '猎烬软靴',
+  'entities.items.cinderweave_cowl.name': '织烬兜帽',
+  'entities.items.cinderweave_mantle.name': '织烬披肩',
+  'entities.items.cinderweave_raiment.name': '织烬法衣',
+  'entities.items.cinderweave_cord.name': '织烬腰绳',
+  'entities.items.cinderweave_legwraps.name': '织烬裹腿',
+  'entities.items.cinderweave_handwraps.name': '织烬裹手',
+  'entities.items.cinderweave_slippers.name': '织烬便鞋',
+  'entities.items.final_oath_medallion.name': '最终誓约勋章',
+  'entities.items.razorwind_torque.name': '剃风颈环',
+  'entities.items.cinder_sigil_pendant.name': '烬印坠饰',
+  'entities.items.iron_vow_band.name': '铁誓指环',
+  'entities.items.unbroken_circle.name': '不破之环',
+  'entities.items.fleetblood_band.name': '疾血指环',
+  'entities.items.last_step_signet.name': '末步徽戒',
+  'entities.items.ashen_focus_ring.name': '灰烬专注戒指',
+  'entities.items.spellbreakers_seal.name': '破法者之印',
+  'entities.items.final_argument_greatblade.name': '最终论断巨刃',
+  'entities.items.first_blood_razor.name': '初血剃刀',
+  'entities.items.emberglass_warstaff.name': '烬晶战杖',
+  'entities.npcs.fury.name': '怒焰',
+  'entities.npcs.fury.title': '荣誉军需官',
+  'entities.npcs.fury.greeting': '战场黄沙铭记每一场胜利。愿你妥善运用这份荣誉。',
   'guide.economy.bankBody':
     '每座主城都设有镀金保险箱的分号，它是这片大陆的银行商号。与那里的司库交谈即可打开你的保险库：一处背包之外的私人储物空间，伴随角色终身。无论你下次造访哪家分号，寄存的物品都会安然等候。',
   'guide.economy.bankHow':
@@ -6863,6 +7271,21 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.tips.professions': '提示：采集与制造类生活技能可以与你的战斗职业同时培养。',
   'loading.tips.loadouts': '提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。',
   'loading.tips.pvp': '提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': '碎颚击',
+  'entities.abilities.pummel.description': '打断目标的施法，并在4秒内封锁该法术学派。',
+  'entities.abilities.kick.name': '飞踢',
+  'entities.abilities.kick.description': '打断目标的施法，并在4秒内封锁该法术学派。',
+  'entities.abilities.counterspell.name': '破法',
+  'entities.abilities.counterspell.description': '反制目标的施法，并在6秒内封锁该法术学派。',
+  'entities.abilities.counter_shot.name': '静默射击',
+  'entities.abilities.counter_shot.description': '一记快射，打断目标的施法，并在4秒内封锁该学派。',
+  'entities.abilities.rebuke.name': '谴喝',
+  'entities.abilities.rebuke.description': '打断目标的施法，并在4秒内封锁该法术学派。',
+  'entities.abilities.skull_bash.name': '头槌',
+  'entities.abilities.skull_bash.description': '猛然头槌，打断目标的施法，并在4秒内封锁该学派。',
+  'entities.abilities.spell_lock.name': '封口令',
+  'entities.abilities.spell_lock.description': '在施法中沉默目标，并在5秒内封锁该法术学派。',
   'guide.bestiary.flavor.sethrael_palecoil':
     '一条骨色苍白的巨蛇，游弋于微光湖的深处暗礁，是它所占据水域的沉默守卫。与它共享此湖的泅水者，鲜有能再浮出水面的。',
   'guide.combat.metersBody':
@@ -6918,4 +7341,27 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.social.slashBody':
     '有几条日常命令值得记住：/w 名字 发送密语，/r 回复你最近收到的一条，/invite 邀请某人加入你的小队，/follow 跟随一位好友的脚步，/roll 为全队掷骰，/who 显示谁在线，/afk 将你标记为离开。在游戏中输入 /help 可查看完整列表。',
   'guide.social.slashHeading': '实用的斜杠命令',
+  // Unstuck recovery (M16 non-Latin fills).
+  'hudChrome.unstuck.menuButton': '脱困',
+  'hudChrome.unstuck.help': '脱困：/unstuck 会启动原地倒计时，随后将你移动到附近可到达的安全位置。',
+  'hudChrome.unstuck.started':
+    '将在 {seconds} 秒后脱困。移动、战斗、受到伤害或开始其他动作都会取消。',
+  'hudChrome.unstuck.countdown': '脱困：{seconds}',
+  'hudChrome.unstuck.completed': '已移动到最近且可到达的安全位置。',
+  'hudChrome.unstuck.cancelledMoved': '你进行了移动，脱困已取消。',
+  'hudChrome.unstuck.cancelledDamaged': '你受到了伤害，脱困已取消。',
+  'hudChrome.unstuck.cancelledCombat': '你进入了战斗，脱困已取消。',
+  'hudChrome.unstuck.cancelledBusy': '你开始了其他动作，脱困已取消。',
+  'hudChrome.unstuck.cancelledState': '你的状态发生变化，脱困已取消。',
+  'hudChrome.unstuck.cancelledDisconnected': '由于连接断开，脱困已取消。',
+  'hudChrome.unstuck.noSafePosition': '附近没有可到达的安全位置。你没有被移动。',
+  'hudChrome.unstuck.alreadyActive': '脱困倒计时已在进行。',
+  'hudChrome.unstuck.alreadySafe': '你已经处于安全且可到达的位置。',
+  'hudChrome.unstuck.cooldown': '脱困将在 {seconds} 秒后可用。',
+  'hudChrome.unstuck.dead': '死亡或灵魂状态下无法使用脱困。',
+  'hudChrome.unstuck.combat': '战斗中无法使用脱困。',
+  'hudChrome.unstuck.controlled': '移动受限时无法使用脱困。',
+  'hudChrome.unstuck.standStill': '请在坚实地面上站稳后再使用脱困。',
+  'hudChrome.unstuck.busy': '请先完成当前动作再使用脱困。',
+  'hudChrome.unstuck.unavailable': '当前状态下无法使用脱困。',
 };

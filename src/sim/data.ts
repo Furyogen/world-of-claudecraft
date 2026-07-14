@@ -268,6 +268,7 @@ import { DELVE_ITEMS } from './content/delves/items';
 import { HEROIC_ITEMS } from './content/heroic_loot';
 import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
+import { FURY_NPC, WARFARE_ITEMS } from './content/pvp_honor';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -310,6 +311,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   DELVE_ITEMS,
   HEROIC_VENDOR_ITEMS,
   HEROIC_ITEMS,
+  WARFARE_ITEMS,
   RIFT_ITEMS,
   REALM_ITEMS,
   DRAKELANDS_ITEMS,
@@ -369,6 +371,7 @@ export const NPCS: Record<string, NpcDef> = {
   // Scorching Wastes expedition roster (dynamic: true ? the custom desert map
   // spawns live copies from its own content.npcs; the base world never places
   // them). Registered here so quest giver/turn-in ids resolve globally.
+  [FURY_NPC.id]: FURY_NPC,
   brother_halven: BROTHER_HALVEN,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
   ...REALM_NPCS,
@@ -933,7 +936,9 @@ export const RIFT_BAND_X_MIN = RIFT_X_MIN - 40;
 // only RIFT_REGION_HALF_X wide either side; 1000u of headroom keeps it clear of the
 // relocated Protect Yumi maze band (YUMI_BAND_X_MIN) that now sits past it.
 export const RIFT_BAND_X_MAX = RIFT_X_MIN + 1000;
-export const RIFT_SLOT_COUNT = 8; // concurrent rifts the world can host
+export const RIFT_SLOT_COUNT = 8; // normal concurrent-rift capacity
+export const COMMUNITY_RIFT_SLOT_COUNT = 24; // opt-in public-test capacity
+const RIFT_LAYOUT_SLOT_COUNT = COMMUNITY_RIFT_SLOT_COUNT;
 export const RIFT_MAX_FLOORS = 6; // matches rift_gen MAX_FLOORS
 const RIFT_Z0 = -1250;
 // Each FLOOR gets its own z-stacked origin within a slot, so descending builds a
@@ -962,7 +967,10 @@ export function isRiftPos(x: number): boolean {
 // uses it to place the generated interior at the same origin the sim spawned it.
 export function riftOriginAt(z: number): { x: number; z: number } {
   const off = z - RIFT_Z0;
-  const slot = Math.max(0, Math.min(RIFT_SLOT_COUNT - 1, Math.floor(off / RIFT_SLOT_SPACING)));
+  const slot = Math.max(
+    0,
+    Math.min(RIFT_LAYOUT_SLOT_COUNT - 1, Math.floor(off / RIFT_SLOT_SPACING)),
+  );
   const withinSlot = off - slot * RIFT_SLOT_SPACING;
   const floor = Math.max(
     0,

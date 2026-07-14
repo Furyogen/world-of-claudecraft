@@ -237,9 +237,12 @@ A scheduler opens ranked portals automatically. Tuning is `RIFT_TIER_INFO` plus 
 - **Determinism.** Each spawn rolls zone, rank, position and rift seed from a
   DEDICATED `Rng` derived from `(worldSeed, spawnOrdinal)`, never the shared
   stream, so adding the scheduler shifts no existing draw order.
-- **Zone -> rank pool** (`riftTierForZone`): Eastbrook Vale rolls only C, Mirefen
-  Marsh B/A, Thornpeak Heights A/S. The rank sets the generated dungeon's
-  `baseLevel` (C=20 up to S=28, so B+ runs above the level cap) and the reward.
+- **Zone to rank pool** (`riftTierForZone`): eligible regions are The Amberfall,
+  The Drakelands, The Evergarden, The Farshore, The Frostveil Reach, The
+  Galecrest, The Nightbloom, The Palmreach, The Veiled Hollow, The Willowfen,
+  and The Wraithwood. Each region owns its C/B/A/S weights. The rank sets the
+  generated dungeon's `baseLevel` (C=20 up to S=28, so B+ runs above the level
+  cap) and the reward.
 - **Lifecycle:** a portal ANNOUNCES world-visibly on open, stays until its rift's
   final boss dies (SEALED) or `RIFT_PORTAL_LIFETIME` (1 h) passes uncleared
   (COLLAPSED), each with its own world announcement.
@@ -247,6 +250,15 @@ A scheduler opens ranked portals automatically. Tuning is `RIFT_TIER_INFO` plus 
   onto the boss corpse as personal loot, daily-gated per rank via the same
   `meta.heroicDaily` set the heroic dungeons use (key `rift_<tier>`). Dev-portal
   runs (tier null) seal nothing and pay nothing.
+- **Public test profile.** `COMMUNITY_TEST_RIFTS=1` is a validated, default-off
+  server flag. After persisted state loads, the server preserves open events, fills
+  to eight distinct active eligible regions, and saves the result before accepting
+  players. A transitional population can exceed eight portals when restored events
+  overlap in one region; those valid events drain normally.
+  A missing portal is replaced after 60 seconds, community portals last six hours,
+  and the instance pool grows from eight to 24 concurrent groups. Persistence load
+  or initial save failure aborts boot in this mode so an unknown saved state is
+  never overwritten. Normal scheduling and capacity remain unchanged when off.
 
 ## Client sync + render
 

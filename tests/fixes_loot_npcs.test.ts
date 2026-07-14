@@ -63,7 +63,7 @@ describe('quest npc roles', () => {
     const aldric = [...sim.entities.values()].find((e) => e.templateId === 'brother_aldric')!;
     teleportTo(sim, aldric.pos.x + 2, aldric.pos.z);
     // talkToNpc accepts one available quest per interaction and aldric
-    // offers several — keep talking until the muster order is taken
+    // offers several; keep talking until the muster order is taken
     for (let i = 0; i < 10 && sim.questState('q_fenbridge_muster') !== 'active'; i++)
       sim.talkToNpc(aldric.id);
     expect(sim.questState('q_fenbridge_muster')).toBe('active');
@@ -468,8 +468,8 @@ describe('warrior charge', () => {
     )!;
     // A level-20 warrior one-shots a ~28hp wolf, and the swing that lands the
     // instant the charge arrives would clear autoAttack (target died). Whether
-    // that kill connects rides the shared RNG stream — which shifts as world
-    // content grows — so beef the wolf up to survive the engaging swing and
+    // that kill connects rides the shared RNG stream, which shifts as world
+    // content grows, so beef the wolf up to survive the engaging swing and
     // keep this test about charge -> melee -> auto-attack, not the kill roll.
     wolf.maxHp = 10000;
     wolf.hp = 10000;
@@ -484,7 +484,7 @@ describe('warrior charge', () => {
     const before = dist2d(p.pos, wolf.pos);
     sim.castAbility('charge');
     expect(wolf.auras.some((a) => a.kind === 'stun')).toBe(true);
-    // still roughly where we started — the run happens over the next ticks
+    // still roughly where we started; the run happens over the next ticks
     expect(dist2d(p.pos, wolf.pos)).toBeGreaterThan(before - 2);
     expect(p.chargeTargetId).toBe(wolf.id);
   });
@@ -531,7 +531,7 @@ describe('mob tap rights', () => {
   it('a fully absorbed (zero-damage) hit does not claim the mob', () => {
     const sim = makeSim('mage');
     const m = wolf(sim);
-    // a shield that soaks the whole hit — the mob takes no real damage
+    // a shield that soaks the whole hit; the mob takes no real damage
     m.auras.push({
       id: 'test_absorb',
       name: 'Test Shield',
@@ -573,7 +573,7 @@ describe('pet heel warp', () => {
     (sim as any).ctx.updatePet(pet);
     expect(dist2d(pet.pos, p.pos)).toBeLessThan(1);
 
-    // a same-tick radius query at the warp destination must see the pet — it
+    // a same-tick radius query at the warp destination must see the pet; it
     // would miss it if the grid still held the pet in its stale far-away cell
     const found: number[] = [];
     (sim as any).grid.forEachInRadius(p.pos.x, p.pos.z, 5, (e: Entity) => found.push(e.id));
@@ -595,7 +595,7 @@ describe('aoe damage vs armor', () => {
     )!;
     wolf.maxHp = 100000;
     wolf.hp = 100000;
-    // huge armor pins armorReduction at its 0.75 cap — a mitigated arcane hit
+    // huge armor pins armorReduction at its 0.75 cap; a mitigated arcane hit
     // would land at <=8, well under the unmitigated 26-31 band.
     wolf.stats.armor = 10_000_000;
     teleportTo(sim, wolf.pos.x, wolf.pos.z + 1);
@@ -663,7 +663,7 @@ describe('pet heel warp', () => {
     (sim as any).ctx.updatePet(pet);
     expect(dist2d(pet.pos, p.pos)).toBeLessThan(1);
 
-    // a same-tick radius query at the warp destination must see the pet — it
+    // a same-tick radius query at the warp destination must see the pet; it
     // would miss it if the grid still held the pet in its stale far-away cell
     const found: number[] = [];
     (sim as any).grid.forEachInRadius(p.pos.x, p.pos.z, 5, (e: Entity) => found.push(e.id));
@@ -689,7 +689,7 @@ describe('mob tap rights', () => {
   it('a fully absorbed (zero-damage) hit does not claim the mob', () => {
     const sim = makeSim('mage');
     const m = wolf(sim);
-    // a shield that soaks the whole hit — the mob takes no real damage
+    // a shield that soaks the whole hit; the mob takes no real damage
     m.auras.push({
       id: 'test_absorb',
       name: 'Test Shield',
@@ -828,21 +828,31 @@ describe('spell visuals', () => {
     expect(events.some((e) => e.type === 'castStart' && e.ability === 'fireball')).toBe(true);
   });
 
-  it('a LOW prop (campfire) no longer blocks spell line of sight, buildings still do', () => {
+  it('a LOW fence no longer blocks spell line of sight, tall walls still do (#1668)', () => {
     const sim = makeSim('mage');
     const seed = sim.cfg.seed;
-    // Straddle a world campfire: its collider sits on the ray (it still blocks
-    // MOVEMENT below), but its visual top (1.45) is under the eye line (1.6),
-    // so the cast sees straight over it.
-    const [cx, cz] = PROPS.campfires[0];
-    expect(isBlocked(seed, cx, cz, 0.5)).toBe(true); // movement still collides
-    expect(lineOfSightClear(seed, { x: cx - 3, z: cz }, { x: cx + 3, z: cz })).toBe(true);
-    // A building straddled through its center still blocks (top far above eyes).
-    const b = PROPS.buildings[0];
-    const span = b.w + b.d;
-    expect(lineOfSightClear(seed, { x: b.x - span, z: b.z }, { x: b.x + span, z: b.z })).toBe(
-      false,
-    );
+    const fence = PROPS.fences[0];
+    const mx = (fence.x1 + fence.x2) / 2;
+    const mz = (fence.z1 + fence.z2) / 2;
+    const dx = fence.x2 - fence.x1;
+    const dz = fence.z2 - fence.z1;
+    const len = Math.hypot(dx, dz);
+    const nx = -dz / len;
+    const nz = dx / len;
+    const a = { x: mx + nx * 3, z: mz + nz * 3 };
+    const b = { x: mx - nx * 3, z: mz - nz * 3 };
+    expect(isBlocked(seed, mx, mz, 0.5)).toBe(true);
+    expect(lineOfSightClear(seed, a, b)).toBe(true);
+
+    const building = PROPS.buildings[0];
+    const span = building.w + building.d;
+    expect(
+      lineOfSightClear(
+        seed,
+        { x: building.x - span, z: building.z },
+        { x: building.x + span, z: building.z },
+      ),
+    ).toBe(false);
   });
 
   it('ranged auto shot does not fire through dungeon walls', () => {
@@ -964,7 +974,7 @@ describe('trade and duel invites validate availability at accept time', () => {
     sim.tradeRequest(b, a);
     sim.tradeRequest(c, a);
 
-    // Bert accepts first — Anna and Bert are now trading together.
+    // Bert accepts first; Anna and Bert are now trading together.
     sim.tradeAccept(b);
     const annaSession = sim.tradeFor(a);
     const bertSession = sim.tradeFor(b);

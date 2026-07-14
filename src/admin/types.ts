@@ -1,3 +1,4 @@
+import type { StreamerLinks } from './account_flair';
 import type { AccountStatus } from './account_status';
 
 // Shapes returned by the /admin/api endpoints (mirrors server/admin_db.ts
@@ -202,6 +203,8 @@ export interface AccountRow {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
   characterCount: number;
@@ -272,6 +275,9 @@ export interface AccountDetail {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
+  streamerLinks: StreamerLinks;
   online: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
@@ -352,6 +358,56 @@ export interface BugReportRow {
   meta: unknown;
   status: string;
   created_at: string;
+}
+
+export interface UnstuckArea {
+  kind: string;
+  id: string;
+  instanceId: string | null;
+  slot: number | null;
+}
+
+export interface UnstuckPosition {
+  x: number;
+  y: number;
+  z: number;
+  localX: number;
+  localY: number;
+  localZ: number;
+}
+
+export type UnstuckOutcome = 'completed' | 'cancelled' | 'failed';
+
+export interface UnstuckReportRow {
+  id: number;
+  characterId: number | null;
+  characterName: string | null;
+  area: UnstuckArea;
+  origin: UnstuckPosition;
+  destination: UnstuckPosition | null;
+  outcome: UnstuckOutcome;
+  reason: string;
+  invokedAt: string;
+  resolvedAt: string | null;
+}
+
+export interface UnstuckHotspot {
+  area: UnstuckArea;
+  bucket: { x: number; y: number; z: number };
+  count: number;
+  completed: number;
+  cancelled: number;
+  failed: number;
+  lastUsedAt: string;
+}
+
+export interface UnstuckReportsData {
+  reports: UnstuckReportRow[];
+  hotspots: UnstuckHotspot[];
+  days: number;
+  limit: number;
+  hasMore: boolean;
+  nextBeforeId: number | null;
 }
 
 export interface ReportDetail {
@@ -535,8 +591,13 @@ export interface PerfPhaseStats {
 }
 
 export interface PerfCaptureResult {
+  captureId: string;
   capturedAt: number; // epoch ms the window closed
   durationMs: number;
+  loopCallbacks: number;
+  simTicks: number;
+  catchUpCallbacks: number;
+  maxTicksPerCallback: number;
   online: number;
   simEntities: number;
   profile: {
@@ -547,6 +608,7 @@ export interface PerfCaptureResult {
 }
 
 export interface PerfCaptureStatus {
+  captureId: string | null;
   capturing: boolean;
   endsAt: number | null; // epoch ms the in-flight capture closes
   last: PerfCaptureResult | null;

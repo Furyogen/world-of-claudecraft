@@ -53,6 +53,7 @@ import {
   accountMailTarget,
   findAccount,
   isAdminAccount,
+  loadAccountFlair,
   pool,
   revokeTokensExcept,
   saveToken,
@@ -88,17 +89,30 @@ import {
   moderationReportsForAccount,
   muteAccountChat,
   recordPasswordReset,
+  setAccountAiFlag,
+  setAccountStreamerFlair,
   setDailyRewardsBan,
   setDailyRewardsIpBan,
 } from './moderation_db';
 import { providerUsageSnapshot } from './provider_usage';
 import { rateLimited } from './ratelimit';
+import { REALM } from './realm';
 import {
   adminRolesForAccount,
   listStaff,
   roleChangeHistory,
   setAccountAdminRoles,
 } from './staff_db';
+import {
+  type UnstuckHotspotRow as DbUnstuckHotspotRow,
+  type UnstuckReportPage as DbUnstuckReportPage,
+  type UnstuckReportRow as DbUnstuckReportRow,
+  listUnstuckHotspots as listUnstuckHotspotsDb,
+  listUnstuckReports as listUnstuckReportsDb,
+  UNSTUCK_HOTSPOT_MAX_LIMIT,
+  UNSTUCK_REPORT_MAX_DAYS,
+  UNSTUCK_REPORT_MAX_LIMIT,
+} from './unstuck_db';
 import { PgUserAssetsDb } from './user_assets_db';
 
 // Admin API: everything under /admin/api/*. Auth is a bearer token whose
@@ -113,8 +127,133 @@ const MAX_PAGE_LIMIT = 200;
 const DEFAULT_PAGE_LIMIT = 25;
 const ACTIVITY_WINDOW_DAYS = 30;
 const ANTIBOT_CONFIG_NOTE_MAX = 500;
+const UNSTUCK_DEFAULT_DAYS = 30;
+const UNSTUCK_DEFAULT_LIMIT = 50;
 
 const IP_BLOCK_KICK_MESSAGE = 'Connection to the server was lost.';
+
+// Account-flair validation messages. Named constants so the two dispatch twins (the
+// legacy handleAdminApi arm and the RouteDef handler) can never drift, and so the
+// dashboard has a stable string to map onto its own i18n key. `invalid streamer
+// link` is raised by moderation_db.setAccountStreamerFlair and surfaces through the
+// same err.message path every other admin write uses.
+const AI_FLAG_REQUIRED = 'ai must be a boolean';
+const STREAMER_FLAG_REQUIRED = 'streamer must be a boolean';
+const STREAMER_LINKS_REQUIRED = 'a links object is required';
+const ACCOUNT_FLAIR_FAILED = 'failed to update account flair';
+
+function boundedPositiveParam(raw: string | null, fallback: number, max: number): number {
+  const value = Number(raw ?? fallback);
+  return Number.isFinite(value) ? Math.min(max, Math.max(1, Math.floor(value))) : fallback;
+}
+
+function unstuckQuery(params: URLSearchParams): {
+  days: number;
+  limit: number;
+  beforeId?: number;
+} {
+  const days = boundedPositiveParam(
+    params.get('days'),
+    UNSTUCK_DEFAULT_DAYS,
+    UNSTUCK_REPORT_MAX_DAYS,
+  );
+  const limit = boundedPositiveParam(
+    params.get('limit'),
+    UNSTUCK_DEFAULT_LIMIT,
+    UNSTUCK_REPORT_MAX_LIMIT,
+  );
+  const rawBeforeId = Number(params.get('beforeId'));
+  return {
+    days,
+    limit,
+    ...(Number.isSafeInteger(rawBeforeId) && rawBeforeId > 0 ? { beforeId: rawBeforeId } : {}),
+  };
+}
+
+function adminUnstuckReport(row: DbUnstuckReportRow): unknown {
+  const destination =
+    row.destinationRawX === null ||
+    row.destinationRawY === null ||
+    row.destinationRawZ === null ||
+    row.destinationLocalX === null ||
+    row.destinationLocalZ === null
+      ? null
+      : {
+          x: row.destinationRawX,
+          y: row.destinationRawY,
+          z: row.destinationRawZ,
+          localX: row.destinationLocalX,
+          localY: row.destinationLocalY,
+          localZ: row.destinationLocalZ,
+        };
+  return {
+    id: row.id,
+    characterId: row.characterId,
+    characterName: row.characterName,
+    area: {
+      kind: row.areaKind,
+      id: row.areaId,
+      instanceId: row.instanceId,
+      slot: row.instanceSlot,
+    },
+    origin: {
+      x: row.originRawX,
+      y: row.originRawY,
+      z: row.originRawZ,
+      localX: row.originLocalX,
+      localY: row.originLocalY,
+      localZ: row.originLocalZ,
+    },
+    destination,
+    outcome: row.outcome,
+    reason: row.reason,
+    invokedAt: row.invokedAt,
+    resolvedAt: row.resolvedAt,
+  };
+}
+
+function adminUnstuckHotspot(row: DbUnstuckHotspotRow): unknown {
+  return {
+    area: { kind: row.areaKind, id: row.areaId, instanceId: null, slot: null },
+    bucket: { x: row.bucketLocalX, y: row.bucketLocalY, z: row.bucketLocalZ },
+    count: row.reportCount,
+    completed: row.completedCount,
+    cancelled: row.cancelledCount,
+    failed: row.failedCount,
+    lastUsedAt: row.lastResolvedAt,
+  };
+}
+
+function adminUnstuckPayload(
+  page: DbUnstuckReportPage,
+  hotspots: DbUnstuckHotspotRow[],
+  query: { days: number; limit: number },
+): unknown {
+  return {
+    reports: page.rows.map(adminUnstuckReport),
+    hotspots: hotspots.map(adminUnstuckHotspot),
+    days: query.days,
+    limit: query.limit,
+    hasMore: page.hasMore,
+    nextBeforeId: page.nextBeforeId,
+  };
+}
+
+/**
+ * Decode the request's `links` bag, three-valued:
+ *  - an object: the bag REPLACES the stored links (an explicit `{}` clears them);
+ *  - `undefined` (key absent): LEAVE the stored links alone. The dashboard's three
+ *    streamer actions (mark / unmark / save links) all send the full bag, but a caller
+ *    that sends only the flag must never wipe an account's links by omission, and
+ *    unmarking a streamer deliberately keeps them (wireStreamerLinks is what stops
+ *    them shipping, so stored-but-not-shipped is the correct state);
+ *  - `null`: malformed (an array or a scalar), which the handler turns into a 400.
+ */
+function streamerLinksBody(value: unknown): Record<string, unknown> | null | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== 'object' || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
 
 // Map editor moderation reads/writes go straight to the db layer (like the
 // other *_db imports here); the player-facing rules stay in maps.ts. LAZY
@@ -638,6 +777,52 @@ export async function handleAdminApi(
       }
     }
 
+    // Account flair: the AI-operated mark and an official streamer's links. Both
+    // are cosmetic and non-punitive, so (unlike suspend/ban/chat-mute) there is
+    // deliberately NO isAdminAccount guard: marking a staff account as a streamer
+    // is a legitimate edit (a developer who streams), and no reason is required.
+    // The write is still audited, and the live push lands the change on a connected
+    // player with no reconnect (the identity diff re-broadcasts it).
+    const aiFlagMatch = /^\/admin\/api\/accounts\/(\d+)\/ai$/.exec(path);
+    if (req.method === 'POST' && aiFlagMatch) {
+      const targetAccountId = Number(aiFlagMatch[1]);
+      const body = await readBody(req);
+      if (typeof body.ai !== 'boolean') return fail(res, 400, AI_FLAG_REQUIRED);
+      try {
+        await setAccountAiFlag({
+          accountId: targetAccountId,
+          adminAccountId: accountId,
+          ai: body.ai,
+          reason: body.reason,
+        });
+        game.applyAccountFlairLive(targetAccountId, await loadAccountFlair(targetAccountId));
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+      }
+    }
+    const streamerFlairMatch = /^\/admin\/api\/accounts\/(\d+)\/streamer$/.exec(path);
+    if (req.method === 'POST' && streamerFlairMatch) {
+      const targetAccountId = Number(streamerFlairMatch[1]);
+      const body = await readBody(req);
+      if (typeof body.streamer !== 'boolean') return fail(res, 400, STREAMER_FLAG_REQUIRED);
+      const links = streamerLinksBody(body.links);
+      if (links === null) return fail(res, 400, STREAMER_LINKS_REQUIRED);
+      try {
+        await setAccountStreamerFlair({
+          accountId: targetAccountId,
+          adminAccountId: accountId,
+          streamer: body.streamer,
+          links,
+          reason: body.reason,
+        });
+        game.applyAccountFlairLive(targetAccountId, await loadAccountFlair(targetAccountId));
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+      }
+    }
+
     // Chat filter: word list + escalation config management. Every edit reloads
     // the live filter and pushes the new soft list to connected clients.
     if (req.method === 'POST' && path === '/admin/api/chat-filter/words') {
@@ -870,6 +1055,20 @@ export async function handleAdminApi(
       const { rows, total } = await listBugReports(limit, (page - 1) * limit);
       return ok(res, { rows, total, page, limit });
     }
+    if (path === '/admin/api/unstuck-reports') {
+      const query = unstuckQuery(url.searchParams);
+      const [page, hotspots] = await Promise.all([
+        listUnstuckReportsDb(pool, { realm: REALM, ...query }),
+        query.beforeId === undefined
+          ? listUnstuckHotspotsDb(pool, {
+              realm: REALM,
+              days: query.days,
+              limit: UNSTUCK_HOTSPOT_MAX_LIMIT,
+            })
+          : Promise.resolve<DbUnstuckHotspotRow[]>([]),
+      ]);
+      return ok(res, adminUnstuckPayload(page, hotspots, query));
+    }
     const bugScreenshotMatch = /^\/admin\/api\/bug-reports\/(\d+)\/screenshot$/.exec(path);
     if (bugScreenshotMatch) {
       // The list query omits the (potentially large) screenshot; fetch it per report.
@@ -1017,6 +1216,9 @@ export type AdminRuntime = Pick<
   | 'muteAccountChat'
   | 'liftChatMuteLive'
   | 'resetChatStrikesLive'
+  // Push an operator's account-flair edit onto the account's live session, so the
+  // AI mark / streamer links change without a reconnect.
+  | 'applyAccountFlairLive'
   | 'reloadChatFilter'
   | 'reloadBlockedIps'
   | 'disconnectByIp'
@@ -1074,6 +1276,10 @@ function makeRealAdminDb() {
     sessionsByDay,
     listBugReports,
     getBugReportScreenshot,
+    listUnstuckReports: (options: Parameters<typeof listUnstuckReportsDb>[1]) =>
+      listUnstuckReportsDb(pool, options),
+    listUnstuckHotspots: (options: Parameters<typeof listUnstuckHotspotsDb>[1]) =>
+      listUnstuckHotspotsDb(pool, options),
     listFilterWords,
     addFilterWord,
     removeFilterWord,
@@ -1114,6 +1320,11 @@ function makeRealAdminDb() {
     recordPasswordReset,
     setDailyRewardsBan,
     setDailyRewardsIpBan,
+    // Account flair: the two audited writes plus the read-back the live push sends
+    // (the DB row, never the request body, is the source of truth for what ships).
+    setAccountAiFlag,
+    setAccountStreamerFlair,
+    loadAccountFlair,
     emailSecurityIncident,
     providerUsageSnapshot,
     rateLimited,
@@ -1780,6 +1991,60 @@ async function resetPasswordHandler(ctx: Ctx): Promise<void> {
   }
 }
 
+/**
+ * POST /admin/api/accounts/:id/ai: mark the account as AI-operated (or clear it).
+ * Cosmetic and non-punitive: no reason is required and, unlike suspend/ban/chat-mute,
+ * there is NO isAdminAccount guard (a staff account can legitimately carry flair).
+ * The audited write lands first, then the freshly-read flair is pushed to any live
+ * session so a connected player sees it without reconnecting.
+ */
+async function accountAiFlagHandler(ctx: Ctx): Promise<void> {
+  const rt = useAdminRuntime();
+  const targetAccountId = adminTargetId(ctx);
+  const body = await readBody(ctx.req);
+  if (typeof body.ai !== 'boolean') return fail(ctx.res, 400, AI_FLAG_REQUIRED);
+  try {
+    await adminDb().setAccountAiFlag({
+      accountId: targetAccountId,
+      adminAccountId: ctxAccountId(ctx),
+      ai: body.ai,
+      reason: body.reason,
+    });
+    rt.applyAccountFlairLive(targetAccountId, await adminDb().loadAccountFlair(targetAccountId));
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(ctx.res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+  }
+}
+
+/**
+ * POST /admin/api/accounts/:id/streamer: set the streamer flag + platform links.
+ * Every link is validated by normalizeStreamerLink inside the db write (https only,
+ * that platform's own hosts, no credentials): a hostile value throws before any row
+ * changes, so a rejected link never reaches the database, let alone a client.
+ */
+async function accountStreamerFlairHandler(ctx: Ctx): Promise<void> {
+  const rt = useAdminRuntime();
+  const targetAccountId = adminTargetId(ctx);
+  const body = await readBody(ctx.req);
+  if (typeof body.streamer !== 'boolean') return fail(ctx.res, 400, STREAMER_FLAG_REQUIRED);
+  const links = streamerLinksBody(body.links);
+  if (links === null) return fail(ctx.res, 400, STREAMER_LINKS_REQUIRED);
+  try {
+    await adminDb().setAccountStreamerFlair({
+      accountId: targetAccountId,
+      adminAccountId: ctxAccountId(ctx),
+      streamer: body.streamer,
+      links,
+      reason: body.reason,
+    });
+    rt.applyAccountFlairLive(targetAccountId, await adminDb().loadAccountFlair(targetAccountId));
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(ctx.res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+  }
+}
+
 /** GET /admin/api/chat-filter: word lists + escalation config + moderated accounts. */
 async function chatFilterGetHandler(ctx: Ctx): Promise<void> {
   const [soft, hard, config, accounts] = await Promise.all([
@@ -1825,6 +2090,22 @@ async function bugReportsHandler(ctx: Ctx): Promise<void> {
   const { page, limit } = parsePageParams(ctx.url.searchParams);
   const { rows, total } = await adminDb().listBugReports(limit, (page - 1) * limit);
   ok(ctx.res, { rows, total, page, limit });
+}
+
+/** GET /admin/api/unstuck-reports: bounded reports plus content-local hotspots. */
+async function unstuckReportsHandler(ctx: Ctx): Promise<void> {
+  const query = unstuckQuery(ctx.url.searchParams);
+  const [page, hotspots] = await Promise.all([
+    adminDb().listUnstuckReports({ realm: REALM, ...query }),
+    query.beforeId === undefined
+      ? adminDb().listUnstuckHotspots({
+          realm: REALM,
+          days: query.days,
+          limit: UNSTUCK_HOTSPOT_MAX_LIMIT,
+        })
+      : Promise.resolve<DbUnstuckHotspotRow[]>([]),
+  ]);
+  ok(ctx.res, adminUnstuckPayload(page, hotspots, query));
 }
 
 /** GET /admin/api/bug-reports/:id/screenshot: one report's screenshot on demand. */
@@ -2037,6 +2318,24 @@ export const routes: RouteDef[] = [
     middleware: [requireAdmin, requireAdminTarget('account')],
     meta: adminTargetMeta('account'),
     handler: resetPasswordHandler,
+  },
+
+  // Account flair: the AI-operated mark and an official streamer's platform links.
+  {
+    method: 'POST',
+    path: '/admin/api/accounts/:id/ai',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: accountAiFlagHandler,
+  },
+  {
+    method: 'POST',
+    path: '/admin/api/accounts/:id/streamer',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: accountStreamerFlairHandler,
   },
 
   // Staff-role management (release v0.22.0 fine-grained permissions).
@@ -2274,6 +2573,14 @@ export const routes: RouteDef[] = [
     middleware: [requireAdmin],
     meta: ADMIN_META,
     handler: bugReportsHandler,
+  },
+  {
+    method: 'GET',
+    path: '/admin/api/unstuck-reports',
+    surface: 'admin',
+    middleware: [requireAdmin],
+    meta: ADMIN_META,
+    handler: unstuckReportsHandler,
   },
   {
     method: 'GET',

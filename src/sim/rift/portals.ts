@@ -32,6 +32,9 @@ export const RIFT_PORTAL_INTERVAL_MAX = 4 * 60 * 60;
 export const RIFT_PORTAL_INTERVAL = (RIFT_PORTAL_INTERVAL_MIN + RIFT_PORTAL_INTERVAL_MAX) / 2;
 export const RIFT_PORTAL_LIFETIME = 60 * 60;
 export const RIFT_PORTAL_MAX_OPEN = 3;
+export const COMMUNITY_RIFT_PORTAL_TARGET = 8;
+export const COMMUNITY_RIFT_PORTAL_LIFETIME = 6 * 60 * 60;
+export const COMMUNITY_RIFT_PORTAL_REFILL_DELAY = 60;
 const RIFT_EVENT_HISTORY_LIMIT = 64;
 
 /** Rank tuning. `raceMarks` is paid only to the first group and is deliberately
@@ -77,6 +80,11 @@ export interface NaturalRiftPortal {
   openedAt: number;
   expiresAt: number;
   position: { x: number; z: number };
+}
+
+interface RiftPortalSpawnOptions {
+  readonly excludedZoneIds?: ReadonlySet<string>;
+  readonly lifetime?: number;
 }
 
 function announce(ctx: SimContext, text: string, color: string): void {
@@ -156,9 +164,16 @@ export function restoreNaturalRiftPortal(ctx: SimContext, event: RiftEvent): num
 
 /** Spawn one deterministic event. False means no eligible/valid position was
  * available; the scheduler leaves the ordinal pending and retries later. */
-export function spawnNaturalRiftPortal(ctx: SimContext, ordinal: number): boolean {
+export function spawnNaturalRiftPortal(
+  ctx: SimContext,
+  ordinal: number,
+  options?: RiftPortalSpawnOptions,
+): boolean {
   const eligible = ZONES.filter(
-    (zone) => zone.riftPortalEligible && zone.riftTierWeights !== undefined,
+    (zone) =>
+      zone.riftPortalEligible &&
+      zone.riftTierWeights !== undefined &&
+      !options?.excludedZoneIds?.has(zone.id),
   );
   if (eligible.length === 0) return false;
 
@@ -214,7 +229,7 @@ export function spawnNaturalRiftPortal(ctx: SimContext, ordinal: number): boolea
     seed,
     baseLevel: info.baseLevel,
     openedAt: ctx.time,
-    expiresAt: ctx.time + RIFT_PORTAL_LIFETIME,
+    expiresAt: ctx.time + (options?.lifetime ?? RIFT_PORTAL_LIFETIME),
     position,
   };
   ctx.naturalRiftPortals.push(portal);
@@ -256,8 +271,16 @@ export function closeNaturalRiftPortal(
 ): void {
   const index = ctx.naturalRiftPortals.findIndex((portal) => portal.id === portalId);
   if (index < 0) return;
+  const coveredCommunityZonesBefore = ctx.cfg.communityRifts ? activeRiftZoneIds(ctx).size : 0;
   const portal = ctx.naturalRiftPortals[index];
   ctx.naturalRiftPortals.splice(index, 1);
+  if (
+    ctx.cfg.communityRifts &&
+    coveredCommunityZonesBefore >= COMMUNITY_RIFT_PORTAL_TARGET &&
+    activeRiftZoneIds(ctx).size < COMMUNITY_RIFT_PORTAL_TARGET
+  ) {
+    ctx.riftPortalNextAt = ctx.time + COMMUNITY_RIFT_PORTAL_REFILL_DELAY;
+  }
   if (ctx.entities.has(portal.id)) ctx.dropEntity(portal.id);
 
   const event = eventForPortal(ctx, portal);
@@ -277,10 +300,58 @@ export function closeNaturalRiftPortal(
   }
 }
 
+function activeRiftZoneIds(ctx: SimContext): Set<string> {
+  return new Set(ctx.naturalRiftPortals.map((portal) => portal.zoneId));
+}
+
+function spawnCommunityRiftPortal(ctx: SimContext): boolean {
+  const activeZoneIds = activeRiftZoneIds(ctx);
+  const ordinal = ctx.riftPortalSpawnCount;
+  if (
+    !spawnNaturalRiftPortal(ctx, ordinal, {
+      excludedZoneIds: activeZoneIds,
+      lifetime: COMMUNITY_RIFT_PORTAL_LIFETIME,
+    })
+  ) {
+    return false;
+  }
+  ctx.riftPortalSpawnCount += 1;
+  return true;
+}
+
+/** Reconcile the public-test population immediately after persisted state loads.
+ * Existing open portals are preserved and every new portal selects a region not
+ * already active. Placement failure leaves the ordinal pending for the scheduler. */
+export function populateCommunityRiftPortals(ctx: SimContext): number {
+  let spawned = 0;
+  while (activeRiftZoneIds(ctx).size < COMMUNITY_RIFT_PORTAL_TARGET) {
+    if (!spawnCommunityRiftPortal(ctx)) break;
+    spawned += 1;
+  }
+  ctx.riftPortalNextAt = ctx.time + COMMUNITY_RIFT_PORTAL_REFILL_DELAY;
+  return spawned;
+}
+
+function updateCommunityRiftPortals(ctx: SimContext): void {
+  for (let i = ctx.naturalRiftPortals.length - 1; i >= 0; i--) {
+    const portal = ctx.naturalRiftPortals[i];
+    if (ctx.time >= portal.expiresAt) closeNaturalRiftPortal(ctx, portal.id, 'collapsed');
+  }
+
+  if (activeRiftZoneIds(ctx).size >= COMMUNITY_RIFT_PORTAL_TARGET) return;
+  if (ctx.time < ctx.riftPortalNextAt) return;
+  spawnCommunityRiftPortal(ctx);
+  ctx.riftPortalNextAt = ctx.time + COMMUNITY_RIFT_PORTAL_REFILL_DELAY;
+}
+
 /** Once-per-second scheduler. A full world cap postpones the due event instead of
  * consuming it, and every successful spawn samples the next 2-4 hour deadline. */
 export function updateRiftPortals(ctx: SimContext): void {
   if (ctx.tickCount % 20 !== 10) return;
+  if (ctx.cfg.communityRifts) {
+    updateCommunityRiftPortals(ctx);
+    return;
+  }
 
   for (let i = ctx.naturalRiftPortals.length - 1; i >= 0; i--) {
     const portal = ctx.naturalRiftPortals[i];

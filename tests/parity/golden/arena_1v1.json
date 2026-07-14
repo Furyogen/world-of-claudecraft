@@ -8,8 +8,8 @@
     "multi-player PlayerMeta sampling",
     "classes:warrior,mage"
   ],
-  "draws": 884,
-  "drawDigest": "12ad85d5",
+  "draws": 892,
+  "drawDigest": "da84810a",
   "frames": [
     {
       "tick": 0,
@@ -65,30 +65,30 @@
       "state": "49e3dc1b",
       "events": "689997dc",
       "rng": {
-        "draws": 473,
-        "digest": "035028d2"
+        "draws": 472,
+        "digest": "5244e608"
       }
     },
     {
       "tick": 125,
       "time": 6.25,
       "nextId": 663,
-      "state": "9f923770",
-      "events": "061ed5c2",
+      "state": "164cb366",
+      "events": "1d550b39",
       "rng": {
-        "draws": 709,
-        "digest": "d8b9e5a2"
+        "draws": 715,
+        "digest": "6778a20b"
       }
     },
     {
       "tick": 142,
       "time": 7.1,
       "nextId": 663,
-      "state": "8805a1dc",
+      "state": "8ba2896a",
       "events": "741638a5",
       "rng": {
-        "draws": 884,
-        "digest": "12ad85d5"
+        "draws": 892,
+        "digest": "da84810a"
       },
       "label": "final",
       "players": [
@@ -141,12 +141,21 @@
           "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 25,
+          "honorArenaDaily": {
+            "fiestaCompletionsByOpponent": {},
+            "totalWins": 1,
+            "winsByOpponent": {
+              "1v1:[\"name:bet\"]": 1
+            }
+          },
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 25,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "renown": 15,

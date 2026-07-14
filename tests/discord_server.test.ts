@@ -241,7 +241,7 @@ describe('GET /api/discord (status)', () => {
     expect(data.linked).toBe(false);
     expect(data.points).toBe(0);
     expect(data.statusTier).toBe(0);
-    expect(data.inviteUrl).toContain('discord.gg');
+    expect(data.inviteUrl).toBe('https://discord.com/invite/worldofclaudecraft');
   });
 
   it('reports linked status, points and derived tier', async () => {
@@ -1060,6 +1060,9 @@ describe('POST /api/auth/discord/login/new', () => {
       status: 409,
       data: { error: 'already_linked', code: 'discord.already_linked' },
     });
+    expect(
+      dbMock.query.mock.calls.some((call) => String(call[0]).includes('DELETE FROM accounts')),
+    ).toBe(true);
   });
 
   it('provisions a password-less account, links it, and returns a session', async () => {

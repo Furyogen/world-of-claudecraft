@@ -111,6 +111,24 @@ describe('ensureSchema wires every schema module at boot', () => {
     expect(applied).toContain('password_set');
   });
 
+  it('applies the unstuck reporting schema after the core identity tables', async () => {
+    await ensureSchema();
+    const coreIndex = h.calls.findIndex((sql) =>
+      sql.includes('CREATE TABLE IF NOT EXISTS accounts'),
+    );
+    const unstuckIndex = h.calls.findIndex((sql) =>
+      sql.includes('CREATE TABLE IF NOT EXISTS unstuck_reports'),
+    );
+    expect(coreIndex).toBeGreaterThanOrEqual(0);
+    expect(unstuckIndex).toBeGreaterThan(coreIndex);
+    const ddl = h.calls[unstuckIndex];
+    expect(ddl).toContain('CREATE INDEX IF NOT EXISTS unstuck_reports_realm_id');
+    expect(ddl).toContain('attempt_id UUID NOT NULL UNIQUE');
+    expect(ddl).toContain('CREATE INDEX IF NOT EXISTS unstuck_reports_created');
+    expect(ddl).toContain('ON DELETE SET NULL');
+    expect(ddl).not.toMatch(/\b(?:DROP|TRUNCATE|ALTER COLUMN)\b/i);
+  });
+
   it('applies the bank-system tables (character_leases, bank_ledger) idempotently', async () => {
     // Bank system tables: the per-character load lease and the append-only
     // bank op ledger both live inline in the core SCHEMA string. Pin them by name so

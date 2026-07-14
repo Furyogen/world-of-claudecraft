@@ -288,6 +288,7 @@ describe('druid spell pack — casting applies effects', () => {
     const normalFollower = normal.addPlayer('druid', 'Follower');
     placeOnGround(normal, normalLeader, 0, 90);
     placeOnGround(normal, normalFollower, 0, 40);
+    normal.setPlayerLevel(20, normalFollower);
     normal.chat('/follow Leader', normalFollower);
     normal.tick();
 

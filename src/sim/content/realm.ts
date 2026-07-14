@@ -942,7 +942,7 @@ export const REALM_ITEMS: Record<string, ItemDef> = {
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'uncommon',
-    weapon: { min: 13, max: 21, speed: 1.7 },
+    weapon: { min: 13, max: 21, speed: 1.7, dagger: true },
     stats: { agi: 6, sta: 2 },
     sellValue: 950,
     requiredClass: ['rogue', 'hunter'],

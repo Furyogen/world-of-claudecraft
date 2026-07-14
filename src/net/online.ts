@@ -2,6 +2,12 @@
 
 import { apiUrl, DESKTOP_API_ORIGIN, NATIVE_API_ORIGIN } from '../client_origin';
 import { normalizeOrigin, runtimeWebSocketUrl } from '../runtime';
+import {
+  hasStreamerLink,
+  normalizeStreamerLinks,
+  type PlayerFlair,
+  type StreamerLinks,
+} from '../sim/account_flair';
 import { bagCapacity } from '../sim/bags';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
@@ -17,6 +23,8 @@ import {
   talentPointsAtLevel,
 } from '../sim/content/talents';
 import { resolveSportKit } from '../sim/content/vale_cup';
+import { resolveActiveWeaponSkin, withWeaponSkinApplied } from '../sim/content/weapon_skin_rules';
+import { WEAPON_SKINS } from '../sim/content/weapon_skins';
 import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
 import { freshDeedStats } from '../sim/deeds';
@@ -27,7 +35,7 @@ import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import { getArchetypeTitle, getHobbyCraft } from '../sim/professions/archetype';
 import type { MaterialRarity } from '../sim/professions/gathering';
 import { emptyCraftSkills } from '../sim/professions/wheel';
-import { computeQuestState, type ResolvedAbility } from '../sim/sim';
+import type { ResolvedAbility } from '../sim/sim';
 import {
   type DeedStats,
   type DungeonDifficulty,
@@ -49,11 +57,13 @@ import {
   type SportRole,
   type VcBracket,
   type VcNationId,
+  type WeaponSkinType,
 } from '../sim/types';
 import {
   type AccountCosmetics,
   type ArenaInfo,
   type BankInfo,
+  type CharacterProfile,
   type CharacterSearchResult,
   type ClientCommand,
   type CraftResultView,
@@ -89,6 +99,7 @@ import {
   type SocialInfo,
   type TradeInfo,
 } from '../world_api';
+import { optimisticQuestState } from './quest_state_optimistic';
 import { isTransientReconnectRejection } from './reconnect_policy';
 
 // ---------------------------------------------------------------------------
@@ -118,11 +129,22 @@ function stringList(value: unknown): string[] {
     : [];
 }
 
+function stringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string' && entry.length > 0) out[key] = entry;
+  }
+  return out;
+}
+
 function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
   const src = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   return {
     completedQuestIds: stringList(src.completedQuestIds),
     mechChromaIds: stringList(src.mechChromaIds),
+    weaponSkinIds: stringList(src.weaponSkinIds),
+    weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
   };
 }
 
@@ -904,6 +926,8 @@ function blankEntity(id: number): Entity {
     level: 1,
     mendTimer: 0,
     wardTimer: 0,
+    channelTimer: 0,
+    channelRamp: 0,
     rallyTimer: 0,
     warcryTimer: 0,
     petPath: [],
@@ -929,7 +953,16 @@ function blankEntity(id: number): Entity {
     overheadEmoteId: null,
     overheadEmoteUntil: 0,
     overheadEmoteSeq: 0,
-    stats: { str: 0, agi: 0, sta: 0, int: 0, spi: 0, armor: 0 },
+    stats: {
+      str: 0,
+      agi: 0,
+      sta: 0,
+      int: 0,
+      spi: 0,
+      armor: 0,
+      pvpOffense: 0,
+      pvpDefense: 0,
+    },
     weapon: { min: 1, max: 2, speed: 2 },
     attackPower: 0,
     rangedPower: 0,
@@ -942,6 +975,9 @@ function blankEntity(id: number): Entity {
     critChance: 0.05,
     critRating: 0,
     hasteRating: 0,
+    critDmgSpellBonus: 0,
+    critDmgPhysBonus: 0,
+    critDmgHealBonus: 0,
     dodgeChance: 0.05,
     moveSpeed: 7,
     hostile: false,
@@ -1028,11 +1064,14 @@ function blankEntity(id: number): Entity {
     dead: false,
     ghost: false,
     corpsePos: null,
+    corpseInstanceId: null,
     scale: 1,
     color: 0xffffff,
     skinCatalog: 'class',
     skin: 0,
     mainhandItemId: null,
+    weaponSkinLoadout: {},
+    weaponSkinId: null,
     equippedItems: {},
     equippedInstances: {},
     guild: '',
@@ -1064,7 +1103,12 @@ export class ClientWorld implements IWorld {
   copper = 0;
   // --- IWorldCosmetics: account cosmetics (completed-quest + mech-chroma ids),
   // mirrored from snapshot self. ---
-  accountCosmetics: AccountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
+  accountCosmetics: AccountCosmetics = {
+    completedQuestIds: [],
+    mechChromaIds: [],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
+  };
   // --- IWorldProgressionXp: XP + post-cap progression scalars + unlocked
   // milestones, mirrored from snapshot self. ---
   xp = 0;
@@ -1096,6 +1140,8 @@ export class ClientWorld implements IWorld {
   // arenaInfo.match.fiesta and its dynamics flow over the events queue. ---
   duelInfo: DuelInfo | null = null;
   arenaInfo: ArenaInfo | null = null;
+  honor = 0;
+  lifetimeHonor = 0;
   // --- IWorldValeCup: Vale Cup queue/match state, mirrored from the snapshot
   // self (`s.vcup`, delta-omitted: a missing key keeps the prior mirror, an
   // explicit null clears it, same as `s.arena`). ---
@@ -1109,6 +1155,12 @@ export class ClientWorld implements IWorld {
   // --- IWorldSocialGraph: persistent friends/blocks/guild, set ONLY by the
   // `social`/`socialpos` frames (there is no `s.social` snapshot field). ---
   socialInfo: SocialInfo | null = null;
+  // Operator-set account flair (cosmetic), keyed by LOWERCASED character name and
+  // read back by `accountFlair`. Fed from BOTH wire sources: the entity identity
+  // record (players inside the ~120yd interest scope) and the `flair` on a chat
+  // event (senders far outside it, where no entity exists). See rememberFlair for
+  // the write rule. NON-IWorld mirror: the seam exposes only `accountFlair`.
+  private playerFlair = new Map<string, PlayerFlair>();
   // --- IWorldMarket: World Market view, mirrored from the snapshot self
   // (`s.market`, delta-omitted). ---
   marketInfo: MarketInfo | null = null;
@@ -1594,6 +1646,8 @@ export class ClientWorld implements IWorld {
         this.applyLockpickEvent(ev as SimEvent);
         this.applyCraftResultEvent(ev as SimEvent);
         this.applyRiftStateEvent(ev as SimEvent);
+        this.applyChatFlairEvent(ev as SimEvent);
+        this.applyUnstuckEvent(ev as SimEvent);
         this.eventQueue.push(ev as SimEvent);
       }
       return;
@@ -1602,6 +1656,7 @@ export class ClientWorld implements IWorld {
       this.socialInfo = {
         friends: msg.friends ?? [],
         blocks: msg.blocks ?? [],
+        ignores: msg.ignores ?? [],
         guild: msg.guild ?? null,
       };
       this.socialDirty = true;
@@ -1717,6 +1772,7 @@ export class ClientWorld implements IWorld {
         e.level = w.lv;
         e.skin = w.sk ?? 0;
         e.mainhandItemId = w.mh ?? null; // equipped mainhand → held weapon model (render-only)
+        e.weaponSkinId = w.wsk ?? null; // active weapon-skin cosmetic (render-only)
         e.equippedItems = w.eq ?? {}; // full worn set (render-only), for the inspect window
         e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';
         e.holderTier = w.ht ?? 0; // $WOC holder-tier flair (cosmetic, server-set)
@@ -1729,6 +1785,18 @@ export class ClientWorld implements IWorld {
         e.devTier = w.dvt ?? 0; // developer-badge tier (cosmetic, server-set)
         e.devMergedPrs = typeof w.dvc === 'number' ? w.dvc : undefined; // merged-PR count
         e.githubLogin = typeof w.dgl === 'string' ? w.dgl : undefined; // GitHub login
+        // Account flair (cosmetic, operator-set): the AI-operated mark and, for a
+        // flagged streamer, their platform links. NEVER trust the wire: the links are
+        // re-sanitized here (they end up in a window.open), and stay sparse/undefined
+        // when there is nothing to show, like the discord/dev fields above.
+        e.aiAccount = w.ai === 1;
+        const streamerLinks = normalizeStreamerLinks(w.slk);
+        e.streamerLinks = hasStreamerLink(streamerLinks) ? streamerLinks : undefined;
+        // Feed the by-name flair cache. Players only: flair is an ACCOUNT property, so
+        // a mob or NPC sharing a player's name must never poison it. An identity record
+        // is authoritative and complete (the server re-sends one whenever flair
+        // changes), so this both sets and CLEARS.
+        if (e.kind === 'player') this.rememberFlair(e.name, e.aiAccount, streamerLinks);
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
         e.dungeonId = w.dgn ?? null;
@@ -1959,7 +2027,12 @@ export class ClientWorld implements IWorld {
       e.autoAttack = !!s.auto;
       e.swingTimer = s.swing ?? e.swingTimer;
       e.queuedOnSwing = s.queued ?? null;
-      e.stats = s.stats ?? e.stats;
+      // A rolling deploy can pair this client with an older server whose stats
+      // object predates WARFARE. Preserve numeric PvP fields instead of letting
+      // an old six-field object turn the character-sheet percentages into NaN.
+      if (s.stats !== undefined) {
+        e.stats = { pvpOffense: 0, pvpDefense: 0, ...s.stats };
+      }
       e.attackPower = s.ap ?? 0;
       e.rangedPower = s.rp ?? 0;
       e.spellPower = s.sp ?? 0;
@@ -2046,7 +2119,7 @@ export class ClientWorld implements IWorld {
         : abilitiesKnownAt(
             this.cfg.playerClass,
             e.level,
-            computeTalentModifiers(this.cfg.playerClass, talents),
+            computeTalentModifiers(this.cfg.playerClass, talents, e.level),
           );
       // --- IWorldParty: party roster + raid markers, delta-omitted self-decode
       // (keep the prior value when absent; `marks: null` clears on disband). ---
@@ -2059,6 +2132,8 @@ export class ClientWorld implements IWorld {
       if (s.trade !== undefined) this.tradeInfo = s.trade;
       if (s.duel !== undefined) this.duelInfo = s.duel;
       if (s.arena !== undefined) this.arenaInfo = s.arena;
+      if (s.honor !== undefined) this.honor = s.honor ?? 0;
+      if (s.lhonor !== undefined) this.lifetimeHonor = s.lhonor ?? 0;
       if (s.vcup !== undefined) this.cupInfo = s.vcup;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
@@ -2149,15 +2224,13 @@ export class ClientWorld implements IWorld {
   // -----------------------------------------------------------------------
 
   questState(questId: string): QuestState {
-    const state = computeQuestState(questId, this.questLog, this.questsDone, this.player.level);
-    const pending = this.pendingQuestCommands?.get(questId);
-    if (
-      (pending === 'accept' && state === 'available') ||
-      (pending === 'turnin' && state === 'ready')
-    ) {
-      return 'active';
-    }
-    return state;
+    return optimisticQuestState(
+      questId,
+      this.questLog,
+      this.questsDone,
+      this.pendingQuestCommands,
+      this.player.level,
+    );
   }
 
   consumeInventoryChanged(): boolean {
@@ -2215,6 +2288,9 @@ export class ClientWorld implements IWorld {
   }
   stopAutoAttack(): void {
     this.cmd({ cmd: 'stopattack' });
+  }
+  unstuck(): void {
+    this.cmd({ cmd: 'unstuck' });
   }
   releaseSpirit(): void {
     this.cmd({ cmd: 'release' });
@@ -2398,6 +2474,30 @@ export class ClientWorld implements IWorld {
     }
     this.cmd({ cmd: 'unequip_mech_chroma', chroma: chromaId });
   }
+  changeWeaponSkin(skinId: string | null, weaponType?: WeaponSkinType): void {
+    // Optimistic local nudge mirroring the server's resolution, so the held
+    // weapon swaps without a round trip; the identity wire reconciles.
+    const p = this.entities.get(this.playerId);
+    const def = skinId ? WEAPON_SKINS[skinId] : null;
+    if (skinId !== null && !def) return;
+    const type = def ? def.weaponType : weaponType;
+    if (p && type) {
+      const next = { ...p.weaponSkinLoadout };
+      if (def) {
+        const applied = withWeaponSkinApplied(next, def.id);
+        if (!applied) return;
+        p.weaponSkinLoadout = applied;
+      } else delete next[type];
+      if (!def) p.weaponSkinLoadout = next;
+      const appliedLoadout = p.weaponSkinLoadout;
+      p.weaponSkinId = resolveActiveWeaponSkin(p.templateId, p.mainhandItemId, appliedLoadout);
+      const loadout: Record<string, string> = {};
+      for (const [t, id] of Object.entries(appliedLoadout)) if (id) loadout[t] = id;
+      this.accountCosmetics = { ...this.accountCosmetics, weaponSkinLoadout: loadout };
+      this.cosmeticsChanged = true;
+    }
+    this.cmd({ cmd: 'change_weapon_skin', skin: skinId, wtype: type ?? null });
+  }
   chat(text: string): void {
     this.cmd({ cmd: 'chat', text });
   }
@@ -2574,6 +2674,12 @@ export class ClientWorld implements IWorld {
   blockRemove(name: string): void {
     this.cmd({ cmd: 'block_remove', name });
   }
+  ignoreAdd(name: string): void {
+    this.cmd({ cmd: 'ignore_add', name });
+  }
+  ignoreRemove(name: string): void {
+    this.cmd({ cmd: 'ignore_remove', name });
+  }
   guildCreate(name: string): void {
     this.cmd({ cmd: 'guild_create', name });
   }
@@ -2622,6 +2728,81 @@ export class ClientWorld implements IWorld {
     } catch {
       return [];
     }
+  }
+  // Reads the EXISTING public character sheet, the same one behind the
+  // unauthenticated /c/:name page, so a chat-name lookup exposes nothing that
+  // was not already crawlable. The richer in-view inspect card (wallet balance,
+  // Discord/GitHub flair, gear) stays on the proximity-gated entity wire.
+  async characterProfile(name: string): Promise<CharacterProfile | null> {
+    const wanted = name.trim();
+    if (!wanted) return null;
+    try {
+      // No Authorization header: this route is a public read (meta.publicRead) and
+      // ignores one, so sending the bearer would leak it for nothing.
+      const res = await fetch(
+        apiUrl(`/api/public/characters/${encodeURIComponent(wanted)}/sheet`, this.base),
+      );
+      if (!res.ok) return null;
+      const sheet = await res.json();
+      if (typeof sheet?.name !== 'string') return null;
+      return {
+        name: sheet.name,
+        cls: sheet.class,
+        classLabel: sheet.classLabel ?? sheet.class,
+        spec: sheet.spec ?? '',
+        level: sheet.level ?? 1,
+        guild: sheet.guild ?? null,
+        zone: sheet.zone ?? '',
+        skin: sheet.skin ?? 0,
+        realm: sheet.realm ?? '',
+      };
+    } catch {
+      return null;
+    }
+  }
+  // Operator-set account flair, by name. A pure LOCAL read (no round-trip): the flair
+  // already rode in on the entity identity record or on the sender's chat event, so
+  // this resolves for a player you can see AND for one you have only heard in chat.
+  accountFlair(name: string): PlayerFlair | null {
+    const key = name.trim().toLowerCase();
+    // lazy init: tests build bare instances via Object.create, skipping field initializers
+    if (!key || this.playerFlair === undefined) return null;
+    return this.playerFlair.get(key) ?? null;
+  }
+  // The ONE writer for the flair cache. An account with nothing to show is DELETED
+  // rather than stored as an empty record, so "never had flair" and "had it turned
+  // off since we last saw them" both resolve to null instead of a stale hit.
+  private rememberFlair(name: string, ai: boolean, links: StreamerLinks): void {
+    const key = name?.trim().toLowerCase();
+    if (!key) return;
+    if (this.playerFlair === undefined) this.playerFlair = new Map();
+    if (!ai && !hasStreamerLink(links)) {
+      this.playerFlair.delete(key);
+      return;
+    }
+    this.playerFlair.set(key, { ai, links });
+  }
+  // Cache the flair of a chat SENDER. This is the whole reason flair rides the chat
+  // event: general/world/lfg/guild chat reaches you from players far outside your
+  // ~120yd interest scope, where there is no entity record to read it off.
+  //
+  // ADD-ONLY, deliberately: an undecorated chat line does NOT clear a cached entry.
+  // The server omits `flair` entirely for an unflagged sender (keeping an ordinary
+  // chat line, the hottest path on the wire, byte-for-byte unchanged), so absence
+  // means "nothing to say", not "this player has no flair".
+  //
+  // The cost of that choice is bounded and worth naming: revoke a player's flair
+  // while a client has only ever HEARD them in chat, and that client's player menu
+  // can still offer their old stream links until the entry is refreshed. It cannot
+  // produce a phantom [AI] tag, because the chat tag renders from the per-event
+  // `ev.flair`, never from this cache. The entry self-heals the moment the player
+  // comes into interest scope (the identity record is authoritative and both sets
+  // and clears) or the client reloads. The alternative, stamping an explicit empty
+  // flair onto every chat line of every player forever, costs more than it buys.
+  private applyChatFlairEvent(ev: SimEvent): void {
+    if (ev.type !== 'chat' || !ev.flair) return;
+    // never trust the wire: re-sanitize the links, same as the identity decode
+    this.rememberFlair(ev.from, ev.flair.ai === true, normalizeStreamerLinks(ev.flair.links));
   }
   // --- IWorldMarket: World Market browse/list/buy/cancel/collect command sends
   // (snake_case wire strings). marketInfo is a snapshot read (mirror field above). ---
@@ -2810,6 +2991,24 @@ export class ClientWorld implements IWorld {
       quality: ev.quality as MaterialRarity | undefined,
       reason: ev.reason,
     };
+  }
+
+  // A successful recovery is intentionally shorter than the normal large-delta
+  // snapshot snap threshold. Mirror its authoritative event immediately so an
+  // eight-yard correction never spends a frame interpolating back into the wall.
+  private applyUnstuckEvent(ev: SimEvent): void {
+    if (ev.type !== 'unstuck' || ev.phase !== 'completed') return;
+    const p = this.entities.get(ev.pid ?? this.playerId);
+    if (!p) return;
+    p.pos = {
+      x: ev.destination.x,
+      y: ev.destination.y,
+      z: ev.destination.z,
+    };
+    p.prevPos = { ...p.pos };
+    p.vx = 0;
+    p.vy = 0;
+    p.vz = 0;
   }
   delveRiteChoose(intensity: RiteIntensity): void {
     this.cmd({ cmd: 'delve_rite_choose', intensity });
@@ -3069,7 +3268,7 @@ export class ClientWorld implements IWorld {
       this.known = abilitiesKnownAt(
         this.cfg.playerClass,
         this.player.level,
-        computeTalentModifiers(this.cfg.playerClass, this.talents),
+        computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
       );
     }
   }
@@ -3090,7 +3289,7 @@ export class ClientWorld implements IWorld {
         this.known = abilitiesKnownAt(
           this.cfg.playerClass,
           this.player.level,
-          computeTalentModifiers(this.cfg.playerClass, this.talents),
+          computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
         );
       }
     } else if (this.activeLoadout > index) this.activeLoadout -= 1;

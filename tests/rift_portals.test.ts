@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
+import { RIFT_ESSENCE_ITEM_ID, RIFT_GEM_IDS } from '../src/sim/content/rift/items';
 import { ZONES } from '../src/sim/data';
 import {
   RIFT_MIN_LEVEL,
@@ -8,8 +9,9 @@ import {
   riftTierForZone,
   updateRiftPortals,
 } from '../src/sim/rift/portals';
+import type { RiftInstance } from '../src/sim/rift/types';
 import { Sim } from '../src/sim/sim';
-import { DT, type SimEvent } from '../src/sim/types';
+import { DT, type Entity, type SimEvent } from '../src/sim/types';
 
 const SEED = 777;
 
@@ -41,6 +43,31 @@ function spawnDuePortal(sim: Sim): SimEvent[] {
   sim.tickCount += (10 - (sim.tickCount % 20) + 20) % 20;
   updateRiftPortals(sim.ctx);
   return sim.drainEvents();
+}
+
+function clearRiftToBossKill(sim: Sim, inst: RiftInstance): Entity {
+  for (let guard = 0; guard < 12 && inst.floorIndex < inst.floorCount - 1; guard++) {
+    for (const id of inst.mobIds) {
+      const mob = sim.entities.get(id);
+      if (mob && mob.id !== inst.bossId) {
+        mob.hp = 0;
+        mob.dead = true;
+      }
+    }
+    inst.litPylons = new Set(inst.pylonIds);
+    inst.puzzleSolved = true;
+    tickSeconds(sim, 1.2);
+    if (inst.descentId === null) break;
+    const descent = sim.entities.get(inst.descentId)!;
+    sim.player.pos = { ...descent.pos };
+    sim.player.prevPos = { ...descent.pos };
+    sim.tick();
+  }
+  expect(inst.floorIndex).toBe(inst.floorCount - 1);
+  const boss = sim.entities.get(inst.bossId!)!;
+  boss.hp = 0;
+  boss.dead = true;
+  return boss;
 }
 
 describe('rift ranks: zone mapping and tuning', () => {
@@ -176,28 +203,7 @@ describe('rift portals: sealing pays Heroic Marks by rank', () => {
     sim.player.prevPos = { ...portal.pos };
     sim.tick();
     const inst = sim.riftInstances.find((i) => i.partyKey !== null)!;
-    // Fast-forward: force every floor clear + descend down to the boss floor.
-    for (let guard = 0; guard < 12 && inst.floorIndex < inst.floorCount - 1; guard++) {
-      for (const id of inst.mobIds) {
-        const m = sim.entities.get(id);
-        if (m && m.id !== inst.bossId) {
-          m.hp = 0;
-          m.dead = true;
-        }
-      }
-      inst.litPylons = new Set(inst.pylonIds);
-      inst.puzzleSolved = true;
-      tickSeconds(sim, 1.2);
-      if (inst.descentId === null) break;
-      const desc = sim.entities.get(inst.descentId)!;
-      sim.player.pos = { ...desc.pos };
-      sim.player.prevPos = { ...desc.pos };
-      sim.tick();
-    }
-    expect(inst.floorIndex).toBe(inst.floorCount - 1);
-    const boss = sim.entities.get(inst.bossId!)!;
-    boss.hp = 0;
-    boss.dead = true;
+    const boss = clearRiftToBossKill(sim, inst);
     return { inst, boss, portalInfo: p };
   }
 
@@ -244,5 +250,34 @@ describe('rift portals: sealing pays Heroic Marks by rank', () => {
     sim.enterRift(4242, 15, sim.player.id);
     const inst2 = sim.riftInstances.find((i) => i.partyKey !== null && i.seed === 4242)!;
     expect(inst2.tier).toBeNull();
+  });
+
+  it('/dev portal keeps its cosmetic rank but pays no Heroic Marks on clear', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(RIFT_MIN_LEVEL);
+    sim.utcDay = '2026-07-07';
+    sim.chat('/dev portal 5 20 S', sim.player.id);
+    const portal = [...sim.entities.values()].find(
+      (entity) => entity.templateId === 'rift_portal' && entity.riftSeed === 5,
+    )!;
+    expect(portal.riftTier).toBe('S');
+
+    sim.player.pos = { ...portal.pos };
+    sim.player.prevPos = { ...portal.pos };
+    sim.tick();
+    const inst = sim.riftInstances.find((candidate) => candidate.partyKey !== null)!;
+    expect(inst.tier).toBeNull();
+
+    const boss = clearRiftToBossKill(sim, inst);
+    tickSeconds(sim, 1.2);
+    expect(inst.rewarded).toBe(true);
+    const rewardItems = boss.loot?.items ?? [];
+    expect(rewardItems.filter((item) => item.itemId === HEROIC_MARK_ITEM_ID)).toEqual([]);
+    expect(rewardItems.some((item) => item.itemId === RIFT_ESSENCE_ITEM_ID)).toBe(false);
+    expect(
+      rewardItems.some((item) => (RIFT_GEM_IDS as readonly string[]).includes(item.itemId)),
+    ).toBe(false);
+    expect(rewardItems.some((item) => item.instance?.rift !== undefined)).toBe(false);
+    expect(sim.players.get(sim.player.id)?.heroicDaily.marked.size).toBe(0);
   });
 });

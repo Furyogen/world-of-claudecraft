@@ -52,6 +52,11 @@ export interface RiftWorldSavedEvent {
   };
 }
 
+export interface LoadRiftWorldStateOptions {
+  /** Reject malformed state instead of tolerating it as an empty/partial save. */
+  strict?: boolean;
+}
+
 function finite(value: unknown, fallback = 0): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
@@ -95,14 +100,25 @@ export function serializeRiftWorldState(ctx: SimContext, nowMs: number): RiftWor
 function validSavedEvent(input: unknown): input is RiftWorldSavedEvent {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return false;
   const event = input as Partial<RiftWorldSavedEvent>;
-  if (!event.eventId || !/^rift-[a-z0-9-]{3,80}$/i.test(event.eventId)) return false;
+  if (typeof event.eventId !== 'string' || !/^rift-[a-z0-9-]{3,80}$/i.test(event.eventId)) {
+    return false;
+  }
   if (!Number.isInteger(event.ordinal) || finite(event.ordinal, -1) < 0) return false;
   if (!event.tier || !TIERS.has(event.tier)) return false;
   if (!['open', 'active', 'cleared', 'collapsed'].includes(event.status ?? '')) return false;
   if (!['heuristic', 'pending', 'ready', 'fallback'].includes(event.upgradeStatus ?? '')) {
     return false;
   }
-  if (!event.zoneId || !event.zoneName || !event.riftName) return false;
+  if (
+    typeof event.zoneId !== 'string' ||
+    typeof event.zoneName !== 'string' ||
+    typeof event.riftName !== 'string' ||
+    !event.zoneId ||
+    !event.zoneName ||
+    !event.riftName
+  ) {
+    return false;
+  }
   if (!event.position || !Number.isFinite(event.position.x) || !Number.isFinite(event.position.z)) {
     return false;
   }
@@ -113,11 +129,64 @@ function validSavedEvent(input: unknown): input is RiftWorldSavedEvent {
   return Number.isFinite(event.seed) && Number.isFinite(event.baseLevel);
 }
 
+function validStrictSavedState(save: Partial<RiftWorldStateV1>): save is RiftWorldStateV1 {
+  if (
+    save.version !== 1 ||
+    !Number.isFinite(save.savedAtMs) ||
+    !Number.isInteger(save.spawnCount) ||
+    finite(save.spawnCount, -1) < 0 ||
+    !Number.isFinite(save.nextPortalAtMs) ||
+    !Array.isArray(save.events) ||
+    save.events.length > MAX_SAVED_EVENTS
+  ) {
+    return false;
+  }
+
+  const seen = new Set<string>();
+  for (const event of save.events) {
+    if (
+      !validSavedEvent(event) ||
+      seen.has(event.eventId) ||
+      !Number.isFinite(event.openedAtMs) ||
+      !Number.isFinite(event.expiresAtMs) ||
+      typeof event.contentId !== 'string' ||
+      typeof event.contentHash !== 'string'
+    ) {
+      return false;
+    }
+    seen.add(event.eventId);
+  }
+  return true;
+}
+
 /** Load defensively from JSONB. Returns the number of reconstructed open portals. */
-export function loadRiftWorldState(ctx: SimContext, input: unknown, nowMs: number): number {
-  if (!input || typeof input !== 'object' || Array.isArray(input)) return 0;
+export function loadRiftWorldState(
+  ctx: SimContext,
+  input: unknown,
+  nowMs: number,
+  options: LoadRiftWorldStateOptions = {},
+): number {
+  if (input === null) return 0;
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (options.strict) throw new Error('unsupported or malformed shared Rift state');
+    return 0;
+  }
   const save = input as Partial<RiftWorldStateV1>;
-  if (save.version !== 1 || !Array.isArray(save.events)) return 0;
+  if (
+    options.strict
+      ? !validStrictSavedState(save)
+      : save.version !== 1 || !Array.isArray(save.events)
+  ) {
+    if (options.strict) throw new Error('unsupported or malformed shared Rift state');
+    return 0;
+  }
+  // The strict predicate above narrows only its ternary arm. Repeat the cheap
+  // shape guard so TypeScript and the tolerant path share one concrete array.
+  if (!Array.isArray(save.events)) {
+    if (options.strict) throw new Error('unsupported or malformed shared Rift state');
+    return 0;
+  }
+  const savedEvents = save.events;
 
   for (const portal of [...ctx.naturalRiftPortals]) {
     if (ctx.entities.has(portal.id)) ctx.dropEntity(portal.id);
@@ -125,7 +194,7 @@ export function loadRiftWorldState(ctx: SimContext, input: unknown, nowMs: numbe
   ctx.naturalRiftPortals.splice(0);
   ctx.riftEvents.splice(0);
   const seen = new Set<string>();
-  for (const raw of save.events.slice(-MAX_SAVED_EVENTS)) {
+  for (const raw of savedEvents.slice(-MAX_SAVED_EVENTS)) {
     if (!validSavedEvent(raw) || seen.has(raw.eventId)) continue;
     seen.add(raw.eventId);
     const expectedFloorCount = generateRiftPlan(

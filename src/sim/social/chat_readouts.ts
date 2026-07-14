@@ -46,6 +46,7 @@ import {
   MELEE_RANGE,
   xpForLevel,
 } from '../types';
+import { UNSTUCK_COOLDOWN_ID } from '../unstuck_cooldown';
 import { groundHeight } from '../world';
 
 const NEARBY_RANGE = 40; // /nearby scan radius — wider than say, tighter than yell
@@ -293,6 +294,8 @@ export function formReadout(e: Entity): string {
       a.kind === 'form_bear' ||
       a.kind === 'form_cat' ||
       a.kind === 'form_travel' ||
+      a.kind === 'form_moonkin' ||
+      a.kind === 'form_shadow' ||
       a.kind === 'defensive_stance' ||
       a.kind === 'stealth',
   );
@@ -407,10 +410,11 @@ function auraLabel(a: Aura): string {
 // remainder showing as "(1s)", matching how /buffs renders aura timers.
 //
 export function cooldownsReadout(e: Entity): string {
-  if (e.cooldowns.size === 0) return 'No abilities are on cooldown.';
   const parts = [...e.cooldowns]
+    .filter(([id]) => id !== UNSTUCK_COOLDOWN_ID)
     .sort((a, b) => a[1] - b[1])
     .map(([id, remaining]) => `${ABILITIES[id]?.name ?? id} (${Math.ceil(remaining)}s)`);
+  if (parts.length === 0) return 'No abilities are on cooldown.';
   return `Abilities on cooldown (${parts.length}): ${parts.join(', ')}.`;
 }
 // Self-only readout of the active quest log: one entry per tracked quest with
