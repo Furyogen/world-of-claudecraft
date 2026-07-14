@@ -1545,13 +1545,13 @@ export const pl_PL: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Główny deweloper",
         "devs": "Dev",
-        "seniormods": "Senior Mod",
+        "seniormods": "Starszy moderator",
         "mods": "Mod",
-        "juniormods": "Junior Mod",
+        "juniormods": "Młodszy moderator",
         "artists": "Grafik",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "Twórca treści",
+        "legend": "LEGENDA",
+        "shill": "PROMOTOR"
       },
       "guildMember": "Zweryfikowany członek",
       "notMember": "Jeszcze nie na serwerze",

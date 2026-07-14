@@ -5868,6 +5868,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.seniormods': '高级管理员',
   'hudChrome.discord.roleTag.juniormods': '初级管理员',
   'hudChrome.discord.roleTag.contentcreator': '内容创作者',
+  'hudChrome.discord.roleTag.legend': '传奇',
+  'hudChrome.discord.roleTag.shill': '推广者',
   'hudChrome.discord.voice.channel': '在{channel}',
   'hudChrome.discord.swag.title': '周边',
   'hudChrome.discord.swag.free': '免费',

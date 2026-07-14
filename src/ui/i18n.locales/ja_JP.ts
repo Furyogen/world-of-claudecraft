@@ -6141,6 +6141,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.seniormods': 'シニアモデレーター',
   'hudChrome.discord.roleTag.juniormods': 'ジュニアモデレーター',
   'hudChrome.discord.roleTag.contentcreator': 'コンテンツクリエイター',
+  'hudChrome.discord.roleTag.legend': 'レジェンド',
+  'hudChrome.discord.roleTag.shill': '宣伝役',
   'hudChrome.discord.voice.channel': '{channel}に参加中',
   'hudChrome.discord.swag.title': 'グッズ',
   'hudChrome.discord.swag.free': '無料',

@@ -1545,13 +1545,13 @@ export const da_DK: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
-        "seniormods": "Senior Mod",
+        "seniormods": "Senior-moderator",
         "mods": "Moderator",
-        "juniormods": "Junior Mod",
+        "juniormods": "Junior-moderator",
         "artists": "Kunstner",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "Indholdsskaber",
+        "legend": "LEGENDE",
+        "shill": "PROMOTER"
       },
       "guildMember": "Verificeret medlem",
       "notMember": "Ikke på serveren endnu",

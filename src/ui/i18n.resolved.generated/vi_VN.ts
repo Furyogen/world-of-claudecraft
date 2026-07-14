@@ -1545,13 +1545,13 @@ export const vi_VN: EnTranslations = {
         "admin": "Quản Trị Viên",
         "coredevs": "Nhà Phát Triển Chính",
         "devs": "Lập Trình Viên",
-        "seniormods": "Senior Mod",
+        "seniormods": "Điều Hành Viên Cấp Cao",
         "mods": "Điều Hành Viên",
-        "juniormods": "Junior Mod",
+        "juniormods": "Điều Hành Viên Cấp Dưới",
         "artists": "Họa Sĩ",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "Nhà Sáng Tạo Nội Dung",
+        "legend": "HUYỀN THOẠI",
+        "shill": "NGƯỜI QUẢNG BÁ"
       },
       "guildMember": "Thành viên đã xác minh",
       "notMember": "Chưa tham gia máy chủ",

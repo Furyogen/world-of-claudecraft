@@ -6251,6 +6251,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.seniormods': 'Старший модератор',
   'hudChrome.discord.roleTag.juniormods': 'Младший модератор',
   'hudChrome.discord.roleTag.contentcreator': 'Контент-мейкер',
+  'hudChrome.discord.roleTag.legend': 'ЛЕГЕНДА',
+  'hudChrome.discord.roleTag.shill': 'ПРОМОУТЕР',
   'hudChrome.discord.voice.channel': 'В {channel}',
   'hudChrome.discord.swag.title': 'Мерч',
   'hudChrome.discord.swag.free': 'Бесплатно',

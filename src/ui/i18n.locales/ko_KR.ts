@@ -6139,6 +6139,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.seniormods': '선임 운영자',
   'hudChrome.discord.roleTag.juniormods': '수습 운영자',
   'hudChrome.discord.roleTag.contentcreator': '콘텐츠 크리에이터',
+  'hudChrome.discord.roleTag.legend': '전설',
+  'hudChrome.discord.roleTag.shill': '홍보대사',
   'hudChrome.discord.voice.channel': '{channel}에서',
   'hudChrome.discord.swag.title': '굿즈',
   'hudChrome.discord.swag.free': '무료',

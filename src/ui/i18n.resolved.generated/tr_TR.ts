@@ -1545,13 +1545,13 @@ export const tr_TR: EnTranslations = {
         "admin": "Yönetici",
         "coredevs": "Çekirdek Geliştirici",
         "devs": "Geliştirici",
-        "seniormods": "Senior Mod",
+        "seniormods": "Kıdemli Moderatör",
         "mods": "Moderatör",
-        "juniormods": "Junior Mod",
+        "juniormods": "Genç Moderatör",
         "artists": "Sanatçı",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "İçerik Üreticisi",
+        "legend": "EFSANE",
+        "shill": "TANITIMCI"
       },
       "guildMember": "Onaylı üye",
       "notMember": "Henüz sunucuda değil",

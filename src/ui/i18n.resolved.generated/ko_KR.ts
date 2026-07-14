@@ -1550,8 +1550,8 @@ export const ko_KR: EnTranslations = {
         "juniormods": "수습 운영자",
         "artists": "아티스트",
         "contentcreator": "콘텐츠 크리에이터",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "legend": "전설",
+        "shill": "홍보대사"
       },
       "guildMember": "인증된 멤버",
       "notMember": "아직 서버에 없음",

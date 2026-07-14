@@ -1545,13 +1545,13 @@ export const cs_CZ: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Hlavní dev",
         "devs": "Dev",
-        "seniormods": "Senior Mod",
+        "seniormods": "Starší moderátor",
         "mods": "Mod",
-        "juniormods": "Junior Mod",
+        "juniormods": "Mladší moderátor",
         "artists": "Umělec",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "Tvůrce obsahu",
+        "legend": "LEGENDA",
+        "shill": "PROPAGÁTOR"
       },
       "guildMember": "Ověřený člen",
       "notMember": "Zatím nejsi na serveru",

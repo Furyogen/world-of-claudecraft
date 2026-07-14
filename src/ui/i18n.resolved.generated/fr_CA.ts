@@ -1545,13 +1545,13 @@ export const fr_CA: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Développeur principal",
         "devs": "Dév",
-        "seniormods": "Senior Mod",
+        "seniormods": "Modérateur senior",
         "mods": "Modo",
-        "juniormods": "Junior Mod",
+        "juniormods": "Modérateur junior",
         "artists": "Artiste",
-        "contentcreator": "Content Creator",
-        "legend": "LEGEND",
-        "shill": "SHILL"
+        "contentcreator": "Créateur de contenu",
+        "legend": "LÉGENDE",
+        "shill": "PROMOTEUR"
       },
       "guildMember": "Membre vérifié",
       "notMember": "Pas encore sur le serveur",
