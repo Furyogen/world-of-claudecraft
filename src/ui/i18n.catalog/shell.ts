@@ -42,6 +42,8 @@ export const shellStrings = {
       reconnecting: 'Connection lost. Reconnecting...',
       connectionRejected: 'The server closed the connection.',
       realmFull: 'This world is full right now. Please try again in a few minutes.',
+      tooManyConnections:
+        'Too many connections to this world are coming from your network. Please close extra game windows or try again in a few minutes.',
       tips: {
         classes:
           'Tip: each of the 9 classes plays differently. Try a few before committing to one.',

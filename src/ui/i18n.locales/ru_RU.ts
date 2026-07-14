@@ -1189,6 +1189,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'loading.connectionRejected': 'Сервер закрыл соединение.',
   'loading.realmFull':
     'Этот мир сейчас переполнен. Пожалуйста, попробуйте снова через несколько минут.',
+  'loading.tooManyConnections':
+    'Из вашей сети открыто слишком много подключений к этому миру. Пожалуйста, закройте лишние игровые окна или попробуйте снова через несколько минут.',
   'errors.nothingInteract': 'Нет объекта для взаимодействия.',
   'errors.noEnemyNearby': 'Рядом нет врагов.',
   'errors.characterNameRequired': 'Введите имя персонажа.',

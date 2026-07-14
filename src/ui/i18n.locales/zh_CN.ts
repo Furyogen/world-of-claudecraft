@@ -1119,6 +1119,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.reconnecting': '连接已断开。正在重新连接...',
   'loading.connectionRejected': '服务器关闭了连接。',
   'loading.realmFull': '当前服务器已满，请稍后几分钟再试。',
+  'loading.tooManyConnections':
+    '您的网络向该服务器发起的连接过多。请关闭多余的游戏窗口，或稍后几分钟再试。',
   'errors.nothingInteract': '附近没有可互动目标。',
   'errors.noEnemyNearby': '附近没有敌人。',
   'errors.characterNameRequired': '请输入角色名称。',

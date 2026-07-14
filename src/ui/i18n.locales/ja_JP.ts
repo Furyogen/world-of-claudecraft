@@ -1173,6 +1173,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'loading.reconnecting': 'サーバーとの接続が切断されました。再接続しています...',
   'loading.connectionRejected': 'サーバーが接続を閉じました。',
   'loading.realmFull': 'このワールドは現在満員です。数分後にもう一度お試しください。',
+  'loading.tooManyConnections':
+    'お使いのネットワークからこのワールドへの接続が多すぎます。余分なゲームウィンドウを閉じるか、数分後にもう一度お試しください。',
   'errors.nothingInteract': '操作できるものがありません。',
   'errors.noEnemyNearby': '近くに敵がいません。',
   'errors.characterNameRequired': 'キャラクター名を入力してください。',

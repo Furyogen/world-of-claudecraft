@@ -1120,6 +1120,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.reconnecting': '連線已中斷。正在重新連線...',
   'loading.connectionRejected': '伺服器已關閉連線。',
   'loading.realmFull': '這個世界目前已滿，請於幾分鐘後再試。',
+  'loading.tooManyConnections':
+    '您的網路對這個世界建立的連線過多。請關閉多餘的遊戲視窗，或於幾分鐘後再試。',
   'errors.nothingInteract': '附近沒有可互動目標。',
   'errors.noEnemyNearby': '附近沒有敵人。',
   'errors.characterNameRequired': '請輸入角色名稱。',
