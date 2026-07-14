@@ -307,10 +307,11 @@ describe('tick perf capture lifecycle', () => {
       'sim.mob.update|elemental',
       'sim.mob.update|dragonkin',
       'sim.mob.update|demon',
+      'sim.mob.update|reptile',
       'sim.mob.update|other',
     ];
     expect(base).toHaveLength(27);
-    expect(buckets).toHaveLength(12);
+    expect(buckets).toHaveLength(13);
     // Base names are byte-identical and first; the buckets are appended after and
     // nothing else, so every registered name still reaches the TickProfiler ctor.
     expect(SIM_LAP_PHASES.slice(0, 27)).toEqual(base);
@@ -320,7 +321,7 @@ describe('tick perf capture lifecycle', () => {
     for (const name of buckets) {
       expect(registered.has(name), `${name} is not registered in SIM_LAP_PHASES`).toBe(true);
     }
-    // The exported bucket list is exactly the 11 MobFamily values plus 'other'.
+    // The exported bucket list is exactly the MobFamily union values plus 'other'.
     expect(MOB_UPDATE_BUCKETS).toEqual([
       'beast',
       'humanoid',
@@ -333,6 +334,7 @@ describe('tick perf capture lifecycle', () => {
       'elemental',
       'dragonkin',
       'demon',
+      'reptile',
       'other',
     ]);
     // Exhaustiveness against the live content set (the runtime cousin of the
