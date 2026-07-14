@@ -193,9 +193,10 @@ export function resolveHarvest(
 // never off-tick. Denies (no side effect) if the requesting player is dead
 // (matching the vendor family's dead gate, items.ts buyItem/useItem), the
 // node id is unknown, the player is too far away, their own timer for the
-// node has not elapsed, or their bags are full (matching the pickupObject
-// capacity pre-check, interaction.ts); a denial never touches another
-// player's state and never consumes that player's respawn timer.
+// node has not elapsed, or their bags cannot fit the material plus any
+// quest-gated bonus item (matching the pickupObject capacity pre-check,
+// interaction.ts); a denial never touches another player's state and never
+// consumes that player's respawn timer.
 export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
@@ -218,11 +219,19 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     return;
   }
   const entry = NODE_HARVEST_TABLE[node.type];
-  if (!ctx.canAddItem(entry.itemId, 1, meta.entityId)) {
+  // Joint capacity gate (#1888): the harvest wants the material AND, while the
+  // paired quest is active and short of its objective, that quest's dedicated
+  // item. Deny the whole attempt up front when either cannot fit, before the
+  // timer-consuming resolveHarvest call, so a full-bags attempt never eats the
+  // node's per-player respawn timer: the player clears a slot and re-harvests.
+  const questItemId = neededNodeQuestItem(ctx, meta, node);
+  if (
+    !ctx.canAddItem(entry.itemId, 1, meta.entityId) ||
+    (questItemId !== undefined && !ctx.canAddItem(questItemId, 1, meta.entityId))
+  ) {
     ctx.error(meta.entityId, 'Your bags are full.');
     return;
   }
-  const questItemId = neededNodeQuestItem(ctx, meta, node);
   const result = resolveHarvest(meta, node, ctx.time, ctx.rng);
   if (!result.granted) {
     // Unreachable in practice (the readiness check above already gates this),
@@ -232,11 +241,16 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     return;
   }
   ctx.addItem(result.itemId!, 1, meta.entityId);
-  // Resolved against the timer/bags gates above, before the timer-consuming
-  // resolveHarvest call, so a full-bags quest item never eats the node's
-  // per-player respawn timer on its own.
-  if (questItemId && ctx.canAddItem(questItemId, 1, meta.entityId)) {
-    ctx.addItem(questItemId, 1, meta.entityId);
+  if (questItemId) {
+    // Two independent pre-checks cannot prove BOTH items fit when exactly one
+    // bag slot is free and neither merges into an existing stack: the material
+    // add above can consume that last slot. Grant when the quest item still
+    // fits; when it does not, the skip is loud (#1888), never silent.
+    if (ctx.canAddItem(questItemId, 1, meta.entityId)) {
+      ctx.addItem(questItemId, 1, meta.entityId);
+    } else {
+      ctx.error(meta.entityId, 'Your bags are full.');
+    }
   }
   // Zone gather mark: one entry per zone and node type ever harvested.
   ctx.markVisited(meta, `gather:${node.zoneId}:${node.type}`);

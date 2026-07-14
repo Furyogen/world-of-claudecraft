@@ -23,6 +23,7 @@ import { canEquipItem, resolveEquipSlot } from './equipment_rules';
 import { formatMoney } from './format_money';
 import { meetsLevelRequirement, requiredLevelFor } from './item_level_req';
 import { battlefieldExperienceTrickle } from './professions/battlefield_xp';
+import { isGatherToolUse } from './professions/tools';
 import type { ItemUseResult, PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import {
@@ -294,6 +295,18 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
     equipItem(ctx, itemId, meta.entityId);
   } else if (def.kind === 'bag') {
     equipBagCmd(ctx, itemId, undefined, meta.entityId);
+  } else if (isGatherToolUse(def.use)) {
+    // Gathering tools are deliberately inert (#1888): no tool is required to
+    // work a node today (see the guide's gathering copy), but the item's
+    // truthy `use` field makes the tooltip advertise "Click to use", so a use
+    // must point the player at the real interaction instead of silently
+    // falling off the end of this chain.
+    ctx.emit({
+      type: 'log',
+      text: 'Walk up to a resource node and interact with it to harvest.',
+      color: '#999',
+      pid: meta.entityId,
+    });
   }
 }
 

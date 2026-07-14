@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bagCapacity } from '../src/sim/bags';
-import { GATHER_NODES } from '../src/sim/data';
+import { GATHER_NODES, NPCS } from '../src/sim/data';
 import {
   MATERIAL_RARITY_MAX_PROFICIENCY,
   NODE_HARVEST_TABLE,
@@ -315,6 +315,152 @@ describe('gather node harvest (#1121)', () => {
     p.dead = true;
     sim.harvestNode(NODE_ID, pid); // denied: dead, the first guard in the chain
     expect(draws).toBe(0);
+  });
+});
+
+describe('bag-full quest-item feedback (#1888)', () => {
+  const ORE_NODE_ID = GATHER_NODES.find((n) => n.type === 'ore')!.id;
+
+  // Walks the player to Foreman Odell, accepts q_prof_intro, then stands them
+  // on the ore node, so a harvest wants BOTH the material and chunk_of_ore.
+  function acceptProfIntroOnNode(sim: Sim, pid: number) {
+    const giver = NPCS.foreman_odell;
+    const p = mustEntity(sim, pid);
+    p.pos.x = giver.pos.x;
+    p.pos.z = giver.pos.z;
+    p.pos.y = terrainHeight(giver.pos.x, giver.pos.z, sim.cfg.seed);
+    p.prevPos = { ...p.pos };
+    sim.acceptQuest('q_prof_intro', pid);
+    sim.tick();
+    if (sim.questState('q_prof_intro', pid) !== 'active') throw new Error('quest not active');
+    teleportOntoNode(sim, pid, ORE_NODE_ID);
+  }
+
+  it('denies the whole harvest with a bags-full error when the quest item cannot fit, preserving the timer', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'QuestFull');
+    acceptProfIntroOnNode(sim, pid);
+    const meta = mustMeta(sim, pid);
+
+    // Every slot holds non-stacking instanced junk EXCEPT one plain
+    // bone_fragments stack with room: the harvested material can merge into
+    // that stack, but chunk_of_ore has no free slot and no stack of its own.
+    const capacity = bagCapacity(meta.bags);
+    meta.inventory.length = 0;
+    for (let i = 0; i < capacity - 1; i++) {
+      meta.inventory.push({ itemId: 'bone_fragments', count: 1, instance: { boundTo: pid } });
+    }
+    meta.inventory.push({ itemId: 'bone_fragments', count: 1 });
+    expect(sim.canAddItem('bone_fragments', 1, pid)).toBe(true);
+    expect(sim.canAddItem('chunk_of_ore', 1, pid)).toBe(false);
+
+    const materialBefore = sim.countItem('bone_fragments', pid);
+    sim.drainEvents();
+    sim.harvestNode(ORE_NODE_ID, pid);
+    // Drain BEFORE tick: tick() itself flushes and returns the event queue.
+    const events = sim.drainEvents();
+    sim.tick();
+
+    // Nothing granted, the denial is loud, and the per-player respawn timer
+    // is untouched so clearing a slot lets the player re-harvest immediately.
+    expect(sim.countItem('bone_fragments', pid)).toBe(materialBefore);
+    expect(sim.countItem('chunk_of_ore', pid)).toBe(0);
+    expect(sim.nodeHarvestableByMeFor(ORE_NODE_ID, pid)).toBe(true);
+    expect(events.some((e) => e.type === 'error' && e.text === 'Your bags are full.')).toBe(true);
+    expect(events.some((e) => e.type === 'gatherResult')).toBe(false);
+  });
+
+  it('the one-free-slot race still grants the material but errors loudly on the skipped quest item', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'OneSlot');
+    acceptProfIntroOnNode(sim, pid);
+    const meta = mustMeta(sim, pid);
+
+    // Exactly ONE free slot and no mergeable stack of either item: both
+    // pre-checks pass individually, but the material's add consumes the slot,
+    // so the quest-item add finds full bags. This edge must never be silent.
+    const capacity = bagCapacity(meta.bags);
+    meta.inventory.length = 0;
+    for (let i = 0; i < capacity - 1; i++) {
+      meta.inventory.push({ itemId: 'wolf_fang', count: 1, instance: { boundTo: pid } });
+    }
+    expect(sim.canAddItem('bone_fragments', 1, pid)).toBe(true);
+    expect(sim.canAddItem('chunk_of_ore', 1, pid)).toBe(true);
+
+    sim.drainEvents();
+    sim.harvestNode(ORE_NODE_ID, pid);
+    // Drain BEFORE tick: tick() itself flushes and returns the event queue.
+    const events = sim.drainEvents();
+    sim.tick();
+
+    expect(sim.countItem('bone_fragments', pid)).toBe(1);
+    expect(sim.countItem('chunk_of_ore', pid)).toBe(0);
+    // The material grant consumed the timer (the harvest itself succeeded).
+    expect(sim.nodeHarvestableByMeFor(ORE_NODE_ID, pid)).toBe(false);
+    expect(events.some((e) => e.type === 'error' && e.text === 'Your bags are full.')).toBe(true);
+  });
+
+  it('a quest-item-full denial spends no rng draw (no draw-order skew from the new gate)', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'NoDraw');
+    acceptProfIntroOnNode(sim, pid);
+    const meta = mustMeta(sim, pid);
+    const capacity = bagCapacity(meta.bags);
+    meta.inventory.length = 0;
+    for (let i = 0; i < capacity - 1; i++) {
+      meta.inventory.push({ itemId: 'bone_fragments', count: 1, instance: { boundTo: pid } });
+    }
+    meta.inventory.push({ itemId: 'bone_fragments', count: 1 });
+
+    let draws = 0;
+    (sim as unknown as { rng: { setObserver(fn: () => void): void } }).rng.setObserver(() => {
+      draws++;
+    });
+    sim.harvestNode(ORE_NODE_ID, pid);
+    expect(draws).toBe(0);
+  });
+});
+
+describe('gather tool use feedback (#1888)', () => {
+  it('using a mining pick from the bag emits the gather hint instead of silently doing nothing', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'PickUser');
+    const meta = mustMeta(sim, pid);
+    meta.inventory.push({ itemId: 'copper_mining_pick', count: 1 });
+
+    sim.drainEvents();
+    sim.useItem('copper_mining_pick', pid);
+    const events = sim.drainEvents();
+    expect(
+      events.some(
+        (e) =>
+          e.type === 'log' &&
+          e.text === 'Walk up to a resource node and interact with it to harvest.',
+      ),
+    ).toBe(true);
+    // The pick is a permanent tool: giving feedback never consumes it.
+    expect(sim.countItem('copper_mining_pick', pid)).toBe(1);
+  });
+
+  it('every gathering tool kind (pick, axe, sickle) gives the same feedback', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'ToolUser');
+    const meta = mustMeta(sim, pid);
+    for (const toolId of ['handaxe', 'gathering_sickle']) {
+      meta.inventory.push({ itemId: toolId, count: 1 });
+      sim.drainEvents();
+      sim.useItem(toolId, pid);
+      expect(
+        sim
+          .drainEvents()
+          .some(
+            (e) =>
+              e.type === 'log' &&
+              e.text === 'Walk up to a resource node and interact with it to harvest.',
+          ),
+        toolId,
+      ).toBe(true);
+    }
   });
 });
 
