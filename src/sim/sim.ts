@@ -261,6 +261,7 @@ import {
   harvestNode as harvestNodeImpl,
   isNodeHarvestableBy,
   normalizeGatheringProficiency,
+  pendingNodeCooldowns,
 } from './professions/gathering';
 import { type SalvageResult, salvageItem as salvageItemImpl } from './professions/salvage';
 import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
@@ -6052,6 +6053,14 @@ export class Sim {
 
   nodeHarvestableByMe(nodeId: string): boolean {
     return this.nodeHarvestableByMeFor(nodeId, this.primaryId);
+  }
+
+  // The `gnodes` self-wire read (#1888): this player's still-cooling node
+  // timers, filtered to the live entries so the online mirror is a pure
+  // membership check. See pendingNodeCooldowns (professions/gathering.ts).
+  nodeHarvestPendingFor(pid: number): Record<string, number> {
+    const meta = this.players.get(pid);
+    return meta ? pendingNodeCooldowns(meta, this.time) : {};
   }
 
   // IWorld read surface (IWorldProfessions, #1127): the full recipe list

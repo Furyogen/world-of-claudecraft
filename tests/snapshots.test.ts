@@ -490,7 +490,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap).not.toBeNull();
     // a fresh session has an empty lastSent, so EVERY maybe() delta key rides the
-    // first snapshot (even the null-valued ones like party/trade/bank); all 42 of them
+    // first snapshot (even the null-valued ones like party/trade/bank); all 43 of them
     for (const key of ALL_DELTA_KEYS) {
       expect(snap.self, `self.${key} missing from first snapshot`).toHaveProperty(key);
     }
@@ -2448,9 +2448,9 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 42 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 43 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 41st unregistered delta key reddens this gate.
+// 44th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
   'atitle',
@@ -2470,6 +2470,7 @@ const ALL_DELTA_KEYS = [
   'dstats',
   'duel',
   'equip',
+  'gnodes',
   'gprof',
   'honor',
   'inv',
@@ -2627,6 +2628,10 @@ function dirtyEveryDeltaField(): {
   meta.delveClears = { 'collapsed_reliquary:heroic': 1 };
   meta.companionUpgrades = { companion_tessa: 2 };
   meta.gatheringProficiency = { mining: 6, logging: 0, herbalism: 0 };
+  // gnodes: one real node on a still-cooling per-player timer (values are
+  // sim-time seconds; the encoder filters to readyAt > sim.time, so a past
+  // stamp would be dropped and the key would ride the wire as {}).
+  meta.nodeHarvestReadyAt.ore_eastbrook_1 = sim.time + 999;
   meta.delveDaily = { date: '2099-01-01', firstClearXp: new Set(['x']), markClears: 4 };
   meta.talents = { spec: 'arms', ranks: {}, choices: {} };
   // Book of Deeds: two earned deeds with DISTINCT utcDay stamps (an empty map
@@ -2801,6 +2806,34 @@ describe('full self-state snapshot delta fixture', () => {
       { name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] },
     ]);
     expect(client.activeLoadout).toBe(0);
+    // gnodes -> the nodeHarvestableByMe METHOD surface (like tal, no
+    // TERSE_TO_IWORLD row): the cooling node reads not-harvestable for this
+    // viewer, an untouched node stays ready, and an unknown node id is false
+    // in BOTH worlds (Sim.nodeHarvestableByMeFor parity).
+    expect(client.nodeHarvestableByMe('ore_eastbrook_1')).toBe(false);
+    expect(client.nodeHarvestableByMe('ore_eastbrook_2')).toBe(true);
+    expect(client.nodeHarvestableByMe('no_such_node')).toBe(false);
+  });
+
+  it('gnodes flips back to ready once the per-player timer expires (server-side filtering)', () => {
+    const { server, fc, leader } = dirtyEveryDeltaField();
+    const sim = server.sim;
+    broadcast(server);
+    const client = bareClient(leader.pid);
+    (client as any).applySnapshot(lastSnap(fc.sent));
+    expect(client.nodeHarvestableByMe('ore_eastbrook_1')).toBe(false);
+
+    // Advance the deterministic clock past the stamp: the per-tick encoder
+    // filters expired entries out, the serialized form changes, and the delta
+    // guard re-sends the shrunken map. A client that only checks membership
+    // (never mirroring the clock) flips back to ready.
+    sim.time += 1000;
+    fc.sent.length = 0;
+    broadcast(server);
+    const snap2 = lastSnap(fc.sent);
+    expect(snap2.self).toHaveProperty('gnodes');
+    (client as any).applySnapshot(snap2);
+    expect(client.nodeHarvestableByMe('ore_eastbrook_1')).toBe(true);
   });
 
   it('omits all delta keys on a no-op re-broadcast and preserves the prior mirror', () => {
@@ -2844,9 +2877,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 42 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(42);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(42);
+  it('ALL_DELTA_KEYS contains exactly 43 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(43);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(43);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2858,7 +2891,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(42);
+    expect(scraped.size).toBe(43);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

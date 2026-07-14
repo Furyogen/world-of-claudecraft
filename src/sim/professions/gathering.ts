@@ -151,6 +151,21 @@ export function isNodeHarvestableBy(meta: PlayerMeta, nodeId: string, now: numbe
   return readyAt === undefined || now >= readyAt;
 }
 
+// One player's still-cooling node timers, filtered to readyAt strictly in the
+// future (#1888). This is the `gnodes` self-wire read (server/game.ts
+// selfWireJson): shipping only live entries makes the online client's
+// nodeHarvestableByMe a pure membership check with no clock mirroring, and
+// the per-tick re-read means an expiry changes the serialized form so the
+// delta guard re-sends exactly on harvest and on expiry. Pure and clock-free
+// (the caller passes `now`), like the rest of this module's leaves.
+export function pendingNodeCooldowns(meta: PlayerMeta, now: number): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [nodeId, readyAt] of Object.entries(meta.nodeHarvestReadyAt)) {
+    if (readyAt > now) out[nodeId] = readyAt;
+  }
+  return out;
+}
+
 export interface HarvestResolution {
   granted: boolean;
   itemId?: string;

@@ -33,7 +33,7 @@ import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import { getArchetypeTitle, getHobbyCraft } from '../sim/professions/archetype';
-import type { MaterialRarity } from '../sim/professions/gathering';
+import { gatherNodeById, type MaterialRarity } from '../sim/professions/gathering';
 import { emptyCraftSkills } from '../sim/professions/wheel';
 import { computeQuestState, type ResolvedAbility } from '../sim/sim';
 import {
@@ -1207,15 +1207,18 @@ export class ClientWorld implements IWorld {
   professionsState: PlayerProfessionsView = { skills: [] };
   // #1143: persistent town focus allocation, mirrored from the self-wire `tfocus`.
   townFocus: Record<string, number> = {};
-  // Stub for #1121: per-node respawn state is server-authoritative and not yet
-  // wired onto the snapshot (see src/sim/professions/CLAUDE.md), so the client
-  // cannot know another player's, or even its own, real per-node timer yet.
-  // Always reports harvestable; the server re-validates and denies via a
-  // normal error event on an actual attempt, same as every other authoritative
-  // action (see src/net/CLAUDE.md "Never predict an outcome"). Wiring the real
-  // per-player timer is future work once the snapshot carries it.
-  nodeHarvestableByMe(_nodeId: string): boolean {
-    return true;
+  // This viewer's still-cooling node timers, mirrored from the `gnodes`
+  // self-wire delta (#1888). The server ships only entries with a future
+  // readyAt and re-sends on every harvest/expiry edge, so membership alone
+  // answers readiness with no client-side clock mirroring. The server still
+  // re-validates every actual attempt and denies via a normal error event,
+  // same as every other authoritative action (src/net/CLAUDE.md "Never
+  // predict an outcome"); this mirror only paints the minimap/HUD state.
+  nodeHarvestPending: Record<string, number> = {};
+  nodeHarvestableByMe(nodeId: string): boolean {
+    // Unknown node ids are not harvestable, matching Sim.nodeHarvestableByMeFor.
+    if (!gatherNodeById(nodeId)) return false;
+    return this.nodeHarvestPending?.[nodeId] === undefined;
   }
   // Static content read (#1127, extended #1132): the full recipe list (common
   // tier plus combo recipes) ships with the client bundle like every other
@@ -2153,6 +2156,7 @@ export class ClientWorld implements IWorld {
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
       if (s.tfocus !== undefined) this.townFocus = s.tfocus ?? {};
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
+      if (s.gnodes !== undefined) this.nodeHarvestPending = s.gnodes ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {

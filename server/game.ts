@@ -4853,6 +4853,14 @@ export class GameServer {
     // shape used by the `/dev gather` chat cheat and existing consumers. Wire
     // key `gprof`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
     maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
+    // Per-viewer gather-node cooldowns (#1888): only the anchor player's
+    // still-cooling timers (nodeId -> readyAt sim-seconds), filtered server
+    // side so the client's nodeHarvestableByMe is a pure membership check.
+    // The per-tick re-read means the serialized form changes exactly on a
+    // harvest (entry appears) and on expiry (entry drops), so the delta guard
+    // re-sends at both edges and a fresh/reconnecting session gets the full
+    // map on its first snapshot (lastSent starts empty).
+    maybe('gnodes', this.sim.nodeHarvestPendingFor(anchorSession.pid));
     // Book of Deeds: the Renown total and the selected title id, cheap
     // scalars diffed per tick (grants land from sim sites that never mark
     // this session dirty, and the title echo must not wait on the heavy gate).
