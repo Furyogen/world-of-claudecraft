@@ -162,14 +162,18 @@ describe('buildManifest', () => {
     expect(manifest).toContain('cast_lightning_bolt');
   });
 
-  it('keeps the release catalog and all 26 UI cues in one 138-key inventory', () => {
+  it('keeps the release catalog and all 26 UI cues in one 155-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
-    expect(keys.size).toBe(138);
+    expect(keys.size).toBe(155);
     expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(26);
     for (const key of [
       'cast_lightning_bolt',
       'mob_mudfin_attack',
       'mob_burrower_attack',
+      'mob_reptile_attack',
+      'mob_beast_hurt',
+      'mob_dragonkin_hurt',
+      'mob_reptile_hurt',
       'quest_ready',
       'lockpick_success',
     ]) {
@@ -177,7 +181,16 @@ describe('buildManifest', () => {
     }
     expect(keys.has('mob_murloc_attack')).toBe(false);
     expect(keys.has('mob_kobold_attack')).toBe(false);
-    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(138);
+    // Every mob family (13, including reptile) now generates 4 actions
+    // (aggro/attack/death/hurt), not just 3, pin the count so a future
+    // family addition can't silently drop hurt coverage again. reptile is
+    // also the first family with a 5th, idle, action; idle stays optional
+    // per family (mob() only emits it when called with an idle prompt), so
+    // this is +1, not +13. Subfamily keys (mob_beast_wolf_*, etc.) never
+    // appear in the static catalog, they are purely filesystem-discovered.
+    const mobFamilyKeys = [...keys].filter((key) => key.startsWith('mob_'));
+    expect(mobFamilyKeys).toHaveLength(53); // 13 families x 4 actions, + 1 reptile idle
+    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(155);
   });
 });
 
@@ -308,12 +321,13 @@ describe('mob subfamily scanning', () => {
     expect(errors).toEqual([]);
   });
 
-  it('MOB_ACTIONS covers the four expected vocalization types', () => {
+  it('MOB_ACTIONS covers the five expected vocalization types', () => {
     expect(MOB_ACTIONS.has('aggro')).toBe(true);
     expect(MOB_ACTIONS.has('attack')).toBe(true);
     expect(MOB_ACTIONS.has('death')).toBe(true);
     expect(MOB_ACTIONS.has('hurt')).toBe(true);
-    expect(MOB_ACTIONS.size).toBe(4);
+    expect(MOB_ACTIONS.has('idle')).toBe(true);
+    expect(MOB_ACTIONS.size).toBe(5);
   });
 
   it('exports one constrained grammar for runtime mob extension keys', () => {

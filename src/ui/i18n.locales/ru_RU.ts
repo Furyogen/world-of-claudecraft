@@ -712,6 +712,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': 'Колесо эмоций',
   'hudChrome.keybinds.targetFriendly': 'Ближайший союзник',
   'hudChrome.keybinds.targetFriendlyNext': 'Следующий союзник',
+  'hudChrome.petFeed.disabledFullHp': 'Питомец полностью здоров',
+  'hudChrome.petFeed.disabledNoFood': 'В ваших сумках нет еды, которая могла бы вылечить питомца',
   'hudChrome.options.clickMoveLeft': 'Левая кнопка',
   'hudChrome.options.clickMoveRight': 'Правая кнопка',
   'hudChrome.options.browserEffects': 'Эффекты браузера',
@@ -4033,6 +4035,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/с',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} сек.',
+  'hudChrome.meters.autoShowHint':
+    'Строки появляются автоматически, как только ваша группа наносит урон или лечит, и этот раздел закрывается через несколько секунд после окончания боя.',
   'hudChrome.mobile.actionPageToggle': 'Переключить страницу действий',
   'hudChrome.mobile.actionRing': 'Боевые действия',
   'hudChrome.mobile.haptics': 'Вибрация',
@@ -4760,6 +4764,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.family.dragonkin.name': 'Дракониды',
   'guide.family.elemental.desc':
     'Живая буря и камень, привязанные к диким местам, где стихии особенно сильны.',
+  'guide.family.reptile.name': 'Рептилии',
+  'guide.family.reptile.desc':
+    'Хладнокровные охотники со своим особым шипением и хваткой, непохожие на теплокровных зверей.',
   'guide.worldPage.heading': 'Мир',
   'guide.worldPage.intro':
     'World of ClaudeCraft - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.',
@@ -6003,6 +6010,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': 'Разработчик',
   'hudChrome.discord.roleTag.mods': 'Модератор',
+  'hudChrome.discord.roleTag.seniormods': 'Старший модератор',
+  'hudChrome.discord.roleTag.juniormods': 'Младший модератор',
+  'hudChrome.discord.roleTag.contentcreator': 'Контент-мейкер',
   'hudChrome.discord.voice.channel': 'В {channel}',
   'hudChrome.discord.swag.title': 'Мерч',
   'hudChrome.discord.swag.free': 'Бесплатно',

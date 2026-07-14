@@ -671,7 +671,12 @@ export const pl_PL: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Koło emotek",
@@ -1521,8 +1526,13 @@ export const pl_PL: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Główny deweloper",
         "devs": "Dev",
+        "seniormods": "Senior Mod",
         "mods": "Mod",
-        "artists": "Grafik"
+        "juniormods": "Junior Mod",
+        "artists": "Grafik",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Zweryfikowany członek",
       "notMember": "Jeszcze nie na serwerze",
@@ -2561,6 +2571,10 @@ export const pl_PL: EnTranslations = {
       "dragonkin": {
         "name": "Smoczy ród",
         "desc": "Łuskowate, wężowate istoty ze starych głębin. Rzadkie, dumne i znacznie silniejsze, niż na to wyglądają."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

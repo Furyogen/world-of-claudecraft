@@ -671,7 +671,12 @@ export const da_DK: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Følelseshjul",
@@ -1521,8 +1526,13 @@ export const da_DK: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
+        "seniormods": "Senior Mod",
         "mods": "Moderator",
-        "artists": "Kunstner"
+        "juniormods": "Junior Mod",
+        "artists": "Kunstner",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Verificeret medlem",
       "notMember": "Ikke på serveren endnu",
@@ -2561,6 +2571,10 @@ export const da_DK: EnTranslations = {
       "dragonkin": {
         "name": "Drageæt",
         "desc": "Skældækkede, slangeagtige væsner fra de gamle dyb. Sjældne, stolte og langt stærkere, end de ser ud."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

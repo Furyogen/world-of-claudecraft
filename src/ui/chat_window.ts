@@ -22,6 +22,8 @@ export interface ChatBoxLimits {
   margin: number;
 }
 
+export type ChatBoxReservedAbove = number | ((width: number) => number);
+
 // Defaults roughly track the stock chat box (~370px wide, 184px pane) while
 // allowing a generous grow range. maxWidth/maxHeight are further capped by the
 // viewport in clampChatBox so they never need to know the screen size here.
@@ -39,14 +41,21 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v));
 }
 
+function reservedAboveHeight(reservedAbove: ChatBoxReservedAbove, width: number): number {
+  const raw = typeof reservedAbove === 'function' ? reservedAbove(width) : reservedAbove;
+  return Number.isFinite(raw) ? Math.max(0, raw) : 0;
+}
+
 // Clamp a desired geometry to the viewport and size limits. `chromeH` is the
-// measured height of the tab strip above the frame, included so the *whole* box
-// (strip + frame) stays on-screen.
+// measured height of the tab strip above the frame. `reservedAbove` accounts
+// for optional UI attached above the wrap (for example, the Store promo), so
+// the full visible stack remains inside the viewport.
 export function clampChatBox(
   geo: ChatBoxGeometry,
   viewport: { w: number; h: number },
   chromeH: number,
   limits: ChatBoxLimits = CHAT_BOX_LIMITS,
+  reservedAbove: ChatBoxReservedAbove = 0,
 ): ChatBoxGeometry {
   const { margin } = limits;
   const width = clamp(
@@ -54,17 +63,19 @@ export function clampChatBox(
     limits.minWidth,
     Math.min(limits.maxWidth, viewport.w - margin * 2),
   );
+  const aboveH = reservedAboveHeight(reservedAbove, width);
   const height = clamp(
     geo.height,
     limits.minHeight,
-    Math.min(limits.maxHeight, viewport.h - margin * 2 - Math.max(0, chromeH)),
+    Math.min(limits.maxHeight, viewport.h - margin * 2 - Math.max(0, chromeH) - aboveH),
   );
   const totalH = height + Math.max(0, chromeH);
   const maxLeft = Math.max(margin, viewport.w - width - margin);
   const maxTop = Math.max(margin, viewport.h - totalH - margin);
+  const minTop = margin + aboveH;
   return {
     left: clamp(geo.left, margin, maxLeft),
-    top: clamp(geo.top, margin, maxTop),
+    top: clamp(geo.top, minTop, maxTop),
     width,
     height,
   };
@@ -98,8 +109,9 @@ export function placeChatBox(
   chromeH: number,
   scale: number,
   limits: ChatBoxLimits = CHAT_BOX_LIMITS,
+  reservedAbove: ChatBoxReservedAbove = 0,
 ): ChatBoxPlacement {
-  const clamped = clampChatBox(geo, viewport, chromeH, limits);
+  const clamped = clampChatBox(geo, viewport, chromeH, limits, reservedAbove);
   const z = safeScale(scale);
   return {
     geo: clamped,

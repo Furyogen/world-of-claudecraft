@@ -671,7 +671,12 @@ export const pt_BR: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}min {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Roda de emotes",
@@ -1521,8 +1526,13 @@ export const pt_BR: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Dev Principal",
         "devs": "Dev",
+        "seniormods": "Senior Mod",
         "mods": "Mod",
-        "artists": "Artista"
+        "juniormods": "Junior Mod",
+        "artists": "Artista",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Membro verificado",
       "notMember": "Ainda não está no servidor",
@@ -2561,6 +2571,10 @@ export const pt_BR: EnTranslations = {
       "dragonkin": {
         "name": "Dracônicos",
         "desc": "Criaturas escamosas e serpentinas das antigas profundezas. Raras, orgulhosas e muito mais fortes do que aparentam."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

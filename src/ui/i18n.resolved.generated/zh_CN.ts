@@ -671,7 +671,12 @@ export const zh_CN: EnTranslations = {
       "perSecond": "{value}/秒",
       "perSecondRow": "{total}（{rate}）",
       "minutesSeconds": "{m}分{s}秒",
-      "seconds": "{s}秒"
+      "seconds": "{s}秒",
+      "autoShowHint": "一旦你的小队造成伤害或治疗，行数就会自动出现，此区段会在战斗结束几秒后关闭。"
+    },
+    "petFeed": {
+      "disabledFullHp": "宠物生命值已满",
+      "disabledNoFood": "你的背包中没有可以治疗宠物的食物"
     },
     "keybinds": {
       "emoteWheel": "表情轮盘",
@@ -1521,8 +1526,13 @@ export const zh_CN: EnTranslations = {
         "admin": "管理员",
         "coredevs": "核心开发者",
         "devs": "开发者",
+        "seniormods": "高级管理员",
         "mods": "管理员",
-        "artists": "画师"
+        "juniormods": "初级管理员",
+        "artists": "画师",
+        "contentcreator": "内容创作者",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "已验证成员",
       "notMember": "尚未加入服务器",
@@ -2561,6 +2571,10 @@ export const zh_CN: EnTranslations = {
       "dragonkin": {
         "name": "龙类",
         "desc": "源自远古深渊、披着鳞甲、形似巨蛇的造物。它们罕见、骄傲，远比看上去更强大。"
+      },
+      "reptile": {
+        "name": "爬行类",
+        "desc": "冷血的猎手，带着独有的嘶声与撕咬，与温血的野兽截然不同。"
       }
     },
     "worldPage": {

@@ -671,7 +671,12 @@ export const ja_JP: EnTranslations = {
       "perSecond": "{value}/秒",
       "perSecondRow": "{total}（{rate}）",
       "minutesSeconds": "{m}分{s}秒",
-      "seconds": "{s}秒"
+      "seconds": "{s}秒",
+      "autoShowHint": "パーティがダメージまたは回復を与えると行が自動的に表示され、戦闘終了の数秒後にこのセグメントは閉じます。"
+    },
+    "petFeed": {
+      "disabledFullHp": "ペットは満タンの体力です",
+      "disabledNoFood": "バッグの中にペットを回復できる食べ物がありません"
     },
     "keybinds": {
       "emoteWheel": "エモートホイール",
@@ -1521,8 +1526,13 @@ export const ja_JP: EnTranslations = {
         "admin": "管理者",
         "coredevs": "コア開発者",
         "devs": "開発者",
+        "seniormods": "シニアモデレーター",
         "mods": "モデレーター",
-        "artists": "アーティスト"
+        "juniormods": "ジュニアモデレーター",
+        "artists": "アーティスト",
+        "contentcreator": "コンテンツクリエイター",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "認証済みメンバー",
       "notMember": "まだサーバーに参加していません",
@@ -2561,6 +2571,10 @@ export const ja_JP: EnTranslations = {
       "dragonkin": {
         "name": "ドラゴンキン",
         "desc": "古き深淵に棲む、鱗に覆われた蛇のような存在。希少で誇り高く、見た目よりもはるかに強大です。"
+      },
+      "reptile": {
+        "name": "爬虫類",
+        "desc": "独特の威嚇音と鋭い一撃を持つ、冷血のハンターたち。温血の獣たちとは一線を画します。"
       }
     },
     "worldPage": {

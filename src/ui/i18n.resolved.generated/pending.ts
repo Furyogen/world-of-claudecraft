@@ -10,6 +10,8 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -18,9 +20,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "es_ES": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -29,9 +41,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "fr_FR": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -40,9 +62,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "fr_CA": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -51,10 +83,20 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "en_CA": [],
   "it_IT": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -63,9 +105,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "de_DE": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -74,13 +126,35 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
+  "zh_CN": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "zh_TW": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "ko_KR": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "ja_JP": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
   "pt_BR": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -89,10 +163,23 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
-  "ru_RU": [],
+  "ru_RU": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
   "cs_CZ": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -101,9 +188,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "nl_NL": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -112,9 +209,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "pl_PL": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -123,9 +230,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "id_ID": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -134,9 +251,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "tr_TR": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -145,9 +272,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "sv_SE": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -156,9 +293,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "vi_VN": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -167,9 +314,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ],
   "da_DK": [
+    "guide.family.reptile.desc",
+    "guide.family.reptile.name",
     "hudChrome.bags.rightClickDestroy",
     "hudChrome.cameraPrompt.changeLater",
     "hudChrome.cameraPrompt.classicDesc",
@@ -178,6 +335,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
+    "hudChrome.meters.autoShowHint",
+    "hudChrome.petFeed.disabledFullHp",
+    "hudChrome.petFeed.disabledNoFood"
   ]
 };

@@ -37,6 +37,7 @@ import {
   type CrowdControlDrState,
   DT,
   type Entity,
+  emptyMoveInput,
 } from '../types';
 
 // Deep-copy the CC diminishing-return map so a snapshot never shares mutable
@@ -891,6 +892,10 @@ export function readyArenaFighter(ctx: SimContext, e: Entity, opts: { clearPrep:
   e.resource = e.resourceType === 'mana' ? e.maxResource : e.resourceType === 'energy' ? 100 : 0;
   e.targetId = null;
   e.autoAttack = false;
+  // Drop any held movement intent so a fighter placed/respawned into the arena does
+  // not drift from a stale forward/back flag with no key held (issue 1651); bots
+  // already reset theirs on spawn.
+  if (meta) Object.assign(meta.moveInput, emptyMoveInput());
   e.queuedOnSwing = null;
   delete e.queuedOnSwingFree;
   e.queuedCastAbility = null;

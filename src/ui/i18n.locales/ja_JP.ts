@@ -701,6 +701,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': 'エモートホイール',
   'hudChrome.keybinds.targetFriendly': '最も近い味方をターゲット',
   'hudChrome.keybinds.targetFriendlyNext': '味方ターゲットを順に切り替え',
+  'hudChrome.petFeed.disabledFullHp': 'ペットは満タンの体力です',
+  'hudChrome.petFeed.disabledNoFood': 'バッグの中にペットを回復できる食べ物がありません',
   'hudChrome.options.clickMoveLeft': '左クリック',
   'hudChrome.options.clickMoveRight': '右クリック',
   'hudChrome.options.browserEffects': 'ブラウザエフェクト',
@@ -3996,6 +3998,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/秒',
   'hudChrome.meters.perSecondRow': '{total}（{rate}）',
   'hudChrome.meters.seconds': '{s}秒',
+  'hudChrome.meters.autoShowHint':
+    'パーティがダメージまたは回復を与えると行が自動的に表示され、戦闘終了の数秒後にこのセグメントは閉じます。',
   'hudChrome.mobile.actionPageToggle': '行動ページ切替',
   'hudChrome.mobile.actionRing': '戦闘アクション',
   'hudChrome.mobile.haptics': '振動',
@@ -4704,6 +4708,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '古き深淵に棲む、鱗に覆われた蛇のような存在。希少で誇り高く、見た目よりもはるかに強大です。',
   'guide.family.dragonkin.name': 'ドラゴンキン',
   'guide.family.elemental.desc': '嵐や岩が命を得た存在。元素の力が強く渦巻く荒野に縛られています。',
+  'guide.family.reptile.name': '爬虫類',
+  'guide.family.reptile.desc':
+    '独特の威嚇音と鋭い一撃を持つ、冷血のハンターたち。温血の獣たちとは一線を画します。',
   'guide.worldPage.heading': '世界',
   'guide.worldPage.intro':
     'World of ClaudeCraftは、自らの足で歩いて渡る一続きの大地です。南から北へと3つのゾーンが連なっています。ファストトラベルはなく、その旅路こそが冒険の一部です。',
@@ -5896,6 +5903,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': '開発者',
   'hudChrome.discord.roleTag.mods': 'モデレーター',
+  'hudChrome.discord.roleTag.seniormods': 'シニアモデレーター',
+  'hudChrome.discord.roleTag.juniormods': 'ジュニアモデレーター',
+  'hudChrome.discord.roleTag.contentcreator': 'コンテンツクリエイター',
   'hudChrome.discord.voice.channel': '{channel}に参加中',
   'hudChrome.discord.swag.title': 'グッズ',
   'hudChrome.discord.swag.free': '無料',

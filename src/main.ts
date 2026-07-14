@@ -216,8 +216,10 @@ import {
 } from './ui/player_card_share';
 import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
+import { wireSkinPicker } from './ui/skin_picker';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
+import { shouldShowStorePromo } from './ui/store_promo_card';
 import { type PresetId, type ThemeKnob, ThemeStore } from './ui/theme';
 import {
   classifyAuthCode,
@@ -1986,7 +1988,18 @@ async function startGame(
         };
       },
     };
-    if (!NATIVE_APP) hud.attachClaudium(claudiumHooks);
+    if (!NATIVE_APP) {
+      hud.attachClaudium(claudiumHooks);
+      if (
+        shouldShowStorePromo({
+          nativeApp: NATIVE_APP,
+          desktopApp: DESKTOP_APP,
+          mobileTouch: document.body.classList.contains('mobile-touch'),
+        })
+      ) {
+        hud.attachStorePromoCard();
+      }
+    }
   }
   function interactKey(): void {
     const p = world.player;
@@ -3183,6 +3196,7 @@ function renderSkinPicker(
   }
   if (picker) picker.style.display = '';
   row.style.setProperty('--class-color', `#${CLASSES[cls].color.toString(16).padStart(6, '0')}`);
+  const swatches: HTMLElement[] = [];
   for (let i = 0; i < count; i++) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -3200,21 +3214,19 @@ function renderSkinPicker(
     } else {
       b.textContent = String(i + 1);
     }
-    b.addEventListener('click', () => {
-      row.querySelectorAll('.skin-swatch').forEach((x) => {
-        x.classList.remove('sel');
-      });
-      b.classList.add('sel');
-      onPick(i);
-    });
-    // Live-preview the chroma on the right avatar while hovering; revert on leave.
-    b.addEventListener('mouseenter', () => characterPreview?.setSkin(i));
-    b.addEventListener('mouseleave', () => {
-      const sel = row.querySelector('.skin-swatch.sel') as HTMLElement | null;
-      characterPreview?.setSkin(sel ? Number(sel.dataset.skin ?? 0) || 0 : current);
-    });
+    swatches.push(b);
     row.appendChild(b);
   }
+  // Live-preview the chroma on the avatar while hovering, commit on click, and
+  // revert to the committed selection when the pointer leaves the whole row.
+  // The revert is row-level, not per swatch, so hovering the swatch next to the
+  // selected one previews instead of being clobbered (issue 1464); see
+  // wireSkinPicker.
+  wireSkinPicker(row, swatches, current, {
+    onPreview: (i) => characterPreview?.setSkin(i),
+    onRevert: (i) => characterPreview?.setSkin(i),
+    onPick,
+  });
 }
 
 /** Give each class button a small portrait preview of that class (run once
@@ -4886,7 +4898,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   if (jsonLd) {
     const sameAs = [
       'https://github.com/levy-street/world-of-claudecraft',
-      'https://discord.gg/GjhnUsBtw',
+      'https://discord.com/invite/worldofclaudecraft',
       'https://www.youtube.com/@WoClaudeCraft',
       'https://x.com/WoClaudecraft',
       'https://www.instagram.com/worldofclaudecraft/',
@@ -5914,7 +5926,7 @@ const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? ''
 // Community links for the mobile More tray. The invite mirrors the hardcoded
 // invite on the shells' community links and is the fallback when the server-fed
 // discordInviteUrl() is not known yet (logged out, offline).
-const DISCORD_INVITE_URL = 'https://discord.gg/GjhnUsBtw';
+const DISCORD_INVITE_URL = 'https://discord.com/invite/worldofclaudecraft';
 const DONATE_URL = 'https://ko-fi.com/worldofclaudecraft';
 const DISCORD_ONBOARD_KEY = 'woc_discord_onboard';
 let discordPopup: Window | null = null;

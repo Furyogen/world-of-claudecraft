@@ -671,7 +671,12 @@ export const zh_TW: EnTranslations = {
       "perSecond": "{value}/秒",
       "perSecondRow": "{total}（{rate}）",
       "minutesSeconds": "{m}分{s}秒",
-      "seconds": "{s}秒"
+      "seconds": "{s}秒",
+      "autoShowHint": "一旦你的小隊造成傷害或治療，行數就會自動出現，此區段會在戰鬥結束幾秒後關閉。"
+    },
+    "petFeed": {
+      "disabledFullHp": "寵物生命值已滿",
+      "disabledNoFood": "你的背包中沒有可以治療寵物的食物"
     },
     "keybinds": {
       "emoteWheel": "表情輪盤",
@@ -1521,8 +1526,13 @@ export const zh_TW: EnTranslations = {
         "admin": "管理員",
         "coredevs": "核心開發者",
         "devs": "開發者",
+        "seniormods": "資深管理員",
         "mods": "管理員",
-        "artists": "美術"
+        "juniormods": "初級管理員",
+        "artists": "美術",
+        "contentcreator": "內容創作者",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "已驗證成員",
       "notMember": "尚未加入伺服器",
@@ -2561,6 +2571,10 @@ export const zh_TW: EnTranslations = {
       "dragonkin": {
         "name": "龍類",
         "desc": "來自遠古深淵、覆鱗如蛇的生物。稀少、高傲，且遠比外表看來更為強大。"
+      },
+      "reptile": {
+        "name": "爬行類",
+        "desc": "冷血的獵手，帶著獨有的嘶聲與撕咬，與溫血的野獸截然不同。"
       }
     },
     "worldPage": {

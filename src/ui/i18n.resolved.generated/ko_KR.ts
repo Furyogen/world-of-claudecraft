@@ -671,7 +671,12 @@ export const ko_KR: EnTranslations = {
       "perSecond": "{value}/초",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}분 {s}초",
-      "seconds": "{s}초"
+      "seconds": "{s}초",
+      "autoShowHint": "파티가 피해를 주거나 치유를 하면 행이 자동으로 나타나며, 전투가 끝난 후 몇 초 뒤에 이 구역이 닫힙니다."
+    },
+    "petFeed": {
+      "disabledFullHp": "펫의 체력이 가득 찼습니다",
+      "disabledNoFood": "가방에 펫을 치유할 음식이 없습니다"
     },
     "keybinds": {
       "emoteWheel": "감정 표현 휠",
@@ -1521,8 +1526,13 @@ export const ko_KR: EnTranslations = {
         "admin": "관리자",
         "coredevs": "핵심 개발자",
         "devs": "개발자",
+        "seniormods": "선임 운영자",
         "mods": "운영자",
-        "artists": "아티스트"
+        "juniormods": "수습 운영자",
+        "artists": "아티스트",
+        "contentcreator": "콘텐츠 크리에이터",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "인증된 멤버",
       "notMember": "아직 서버에 없음",
@@ -2561,6 +2571,10 @@ export const ko_KR: EnTranslations = {
       "dragonkin": {
         "name": "용족",
         "desc": "비늘로 뒤덮인 뱀 같은 옛 심연의 존재들. 보기 드물고 오만하며, 겉보기보다 훨씬 강합니다."
+      },
+      "reptile": {
+        "name": "파충류",
+        "desc": "쉭쉭거리는 소리와 날카로운 물어뜯기를 지닌 냉혈 사냥꾼들로, 온혈 야수들과는 뚜렷이 다릅니다."
       }
     },
     "worldPage": {

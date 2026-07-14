@@ -671,7 +671,12 @@ export const id_ID: EnTranslations = {
       "perSecond": "{value}/d",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}d",
-      "seconds": "{s}d"
+      "seconds": "{s}d",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Roda Emote",
@@ -1521,8 +1526,13 @@ export const id_ID: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Dev Inti",
         "devs": "Pengembang",
+        "seniormods": "Senior Mod",
         "mods": "Moderator",
-        "artists": "Seniman"
+        "juniormods": "Junior Mod",
+        "artists": "Seniman",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Anggota terverifikasi",
       "notMember": "Belum berada di server",
@@ -2561,6 +2571,10 @@ export const id_ID: EnTranslations = {
       "dragonkin": {
         "name": "Bangsa Naga",
         "desc": "Makhluk bersisik dan berlekuk ular dari kedalaman purba. Langka, angkuh, dan jauh lebih kuat dari penampakannya."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

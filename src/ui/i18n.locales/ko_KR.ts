@@ -696,6 +696,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.emoteWheel': '감정 표현 휠',
   'hudChrome.keybinds.targetFriendly': '가장 가까운 아군 대상 지정',
   'hudChrome.keybinds.targetFriendlyNext': '아군 대상 순환',
+  'hudChrome.petFeed.disabledFullHp': '펫의 체력이 가득 찼습니다',
+  'hudChrome.petFeed.disabledNoFood': '가방에 펫을 치유할 음식이 없습니다',
   'hudChrome.options.clickMoveLeft': '왼쪽 클릭',
   'hudChrome.options.clickMoveRight': '오른쪽 클릭',
   'hudChrome.options.browserEffects': '브라우저 효과',
@@ -3978,6 +3980,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/초',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}초',
+  'hudChrome.meters.autoShowHint':
+    '파티가 피해를 주거나 치유를 하면 행이 자동으로 나타나며, 전투가 끝난 후 몇 초 뒤에 이 구역이 닫힙니다.',
   'hudChrome.mobile.actionPageToggle': '행동 페이지 전환',
   'hudChrome.mobile.actionRing': '전투 행동',
   'hudChrome.mobile.haptics': '진동',
@@ -4699,6 +4703,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.family.dragonkin.name': '용족',
   'guide.family.elemental.desc':
     '원소가 강하게 흐르는 야생의 장소에 매여 있는, 살아 있는 폭풍과 돌.',
+  'guide.family.reptile.name': '파충류',
+  'guide.family.reptile.desc':
+    '쉭쉭거리는 소리와 날카로운 물어뜯기를 지닌 냉혈 사냥꾼들로, 온혈 야수들과는 뚜렷이 다릅니다.',
   'guide.worldPage.heading': '세계',
   'guide.worldPage.intro':
     'World of ClaudeCraft는 두 발로 가로지르는 하나로 이어진 대지이며, 남에서 북으로 펼쳐진 세 개의 지역으로 이루어져 있습니다. 빠른 이동이 없으니, 여정 자체가 모험의 일부입니다.',
@@ -5891,6 +5898,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.levyst': 'Levy St',
   'hudChrome.discord.roleTag.devs': '개발자',
   'hudChrome.discord.roleTag.mods': '운영자',
+  'hudChrome.discord.roleTag.seniormods': '선임 운영자',
+  'hudChrome.discord.roleTag.juniormods': '수습 운영자',
+  'hudChrome.discord.roleTag.contentcreator': '콘텐츠 크리에이터',
   'hudChrome.discord.voice.channel': '{channel}에서',
   'hudChrome.discord.swag.title': '굿즈',
   'hudChrome.discord.swag.free': '무료',

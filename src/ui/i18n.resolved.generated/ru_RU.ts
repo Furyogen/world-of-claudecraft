@@ -671,7 +671,12 @@ export const ru_RU: EnTranslations = {
       "perSecond": "{value}/с",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} мин {s} сек.",
-      "seconds": "{s} сек."
+      "seconds": "{s} сек.",
+      "autoShowHint": "Строки появляются автоматически, как только ваша группа наносит урон или лечит, и этот раздел закрывается через несколько секунд после окончания боя."
+    },
+    "petFeed": {
+      "disabledFullHp": "Питомец полностью здоров",
+      "disabledNoFood": "В ваших сумках нет еды, которая могла бы вылечить питомца"
     },
     "keybinds": {
       "emoteWheel": "Колесо эмоций",
@@ -1521,8 +1526,13 @@ export const ru_RU: EnTranslations = {
         "admin": "Администратор",
         "coredevs": "Ведущий разработчик",
         "devs": "Разработчик",
+        "seniormods": "Старший модератор",
         "mods": "Модератор",
-        "artists": "Художник"
+        "juniormods": "Младший модератор",
+        "artists": "Художник",
+        "contentcreator": "Контент-мейкер",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Подтвержденный участник",
       "notMember": "Еще не на сервере",
@@ -2561,6 +2571,10 @@ export const ru_RU: EnTranslations = {
       "dragonkin": {
         "name": "Дракониды",
         "desc": "Чешуйчатые, змееподобные твари древних глубин. Редкие, гордые и куда сильнее, чем кажутся."
+      },
+      "reptile": {
+        "name": "Рептилии",
+        "desc": "Хладнокровные охотники со своим особым шипением и хваткой, непохожие на теплокровных зверей."
       }
     },
     "worldPage": {

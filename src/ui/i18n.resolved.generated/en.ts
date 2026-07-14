@@ -671,7 +671,12 @@ export const en: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Emote Wheel",
@@ -1521,8 +1526,13 @@ export const en: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Core Dev",
         "devs": "Dev",
+        "seniormods": "Senior Mod",
         "mods": "Mod",
-        "artists": "Artist"
+        "juniormods": "Junior Mod",
+        "artists": "Artist",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Verified member",
       "notMember": "Not in the server yet",
@@ -2561,6 +2571,10 @@ export const en: EnTranslations = {
       "dragonkin": {
         "name": "Dragonkin",
         "desc": "Scaled, serpentine things of the old depths. Rare, proud, and far stronger than they look."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {
@@ -9098,7 +9112,7 @@ export const en: EnTranslations = {
       },
       "q_nythraxis_bound_guardian": {
         "title": "The Bound Guardian",
-        "text": "Voss wrote that the survivors sealed the King's Signet behind an ancient guardian, so no one could reach the tomb of Nythraxis by accident or ambition. Take the Crypt Keystone to the ritual circle on the flat ground east of the abandoned crypt and south-east of the western grave. Use it there, break the guardian, and bring back the signet.",
+        "text": "Voss wrote that the survivors sealed the King's Signet behind an ancient guardian, so no one could reach the tomb of Nythraxis by accident or ambition. Take the Crypt Keystone to the ritual circle on the flat ground north-west of the abandoned crypt and north-east of High Priest Malric's grave. Use it there, break the guardian, and bring back the signet.",
         "completion": "The three relics tell the same story: Aldren fought to defend his king, Malric broke the boundary of death, and Voss tried to stop what followed. The seal is weakening, and this signet is the key to Nythraxis's tomb. You are now attuned to enter The Crypt of Nythraxis. Return to the abandoned crypt, unlock the royal door, and face Nythraxis before the old king's rage spills beyond Thornpeak.",
         "objectives": {
           "0": {

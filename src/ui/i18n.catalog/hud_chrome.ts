@@ -554,6 +554,18 @@ export const hudChromeStrings = {
     perSecondRow: '{total} ({rate})',
     minutesSeconds: '{m}m {s}s',
     seconds: '{s}s',
+    // Shown alongside the empty state so a first-time viewer understands the
+    // panel is not broken: rows populate once party combat starts, and the
+    // segment closes itself a few seconds after the fight ends.
+    autoShowHint:
+      'Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends.',
+  },
+  // Pet action bar disabled-state tooltips: the feed/heal-pet button stays
+  // visible (never hidden) while it cannot currently be used, so a hunter
+  // sees WHY instead of a button that looks broken.
+  petFeed: {
+    disabledFullHp: 'Pet is at full health',
+    disabledNoFood: 'No food in your bags will heal your pet',
   },
   // Key Bindings panel action labels that the in-file BIND_ACTION_LABEL_KEYS map
   // (hud.ts) routes through t(). Kept here (not the constrained `hud` catalog
@@ -1680,8 +1692,13 @@ export const hudChromeStrings = {
       admin: 'Admin',
       coredevs: 'Core Dev',
       devs: 'Dev',
+      seniormods: 'Senior Mod',
       mods: 'Mod',
+      juniormods: 'Junior Mod',
       artists: 'Artist',
+      contentcreator: 'Content Creator',
+      legend: 'LEGEND',
+      shill: 'SHILL',
     },
     guildMember: 'Verified member',
     notMember: 'Not in the server yet',

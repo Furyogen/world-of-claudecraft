@@ -671,7 +671,12 @@ export const tr_TR: EnTranslations = {
       "perSecond": "{value}/sn",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}dk {s}sn",
-      "seconds": "{s}sn"
+      "seconds": "{s}sn",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "İfade Çarkı",
@@ -1521,8 +1526,13 @@ export const tr_TR: EnTranslations = {
         "admin": "Yönetici",
         "coredevs": "Çekirdek Geliştirici",
         "devs": "Geliştirici",
+        "seniormods": "Senior Mod",
         "mods": "Moderatör",
-        "artists": "Sanatçı"
+        "juniormods": "Junior Mod",
+        "artists": "Sanatçı",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Onaylı üye",
       "notMember": "Henüz sunucuda değil",
@@ -2561,6 +2571,10 @@ export const tr_TR: EnTranslations = {
       "dragonkin": {
         "name": "Ejder Soyu",
         "desc": "Eski derinliklerin pullu, yılansı yaratıkları. Nadir, mağrur ve göründüklerinden çok daha güçlü."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

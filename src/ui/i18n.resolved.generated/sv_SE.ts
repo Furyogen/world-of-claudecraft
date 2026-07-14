@@ -671,7 +671,12 @@ export const sv_SE: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} m {s} s",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Gesthjul",
@@ -1521,8 +1526,13 @@ export const sv_SE: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Kärnutvecklare",
         "devs": "Utvecklare",
+        "seniormods": "Senior Mod",
         "mods": "Moderator",
-        "artists": "Konstnär"
+        "juniormods": "Junior Mod",
+        "artists": "Konstnär",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Verifierad medlem",
       "notMember": "Inte med på servern ännu",
@@ -2561,6 +2571,10 @@ export const sv_SE: EnTranslations = {
       "dragonkin": {
         "name": "Drakätt",
         "desc": "Fjälliga, ormlika ting från de gamla djupen. Sällsynta, stolta och långt starkare än de ser ut."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

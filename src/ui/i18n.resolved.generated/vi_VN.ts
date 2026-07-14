@@ -671,7 +671,12 @@ export const vi_VN: EnTranslations = {
       "perSecond": "{value}/g",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}p {s}g",
-      "seconds": "{s}g"
+      "seconds": "{s}g",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Vòng Biểu Cảm",
@@ -1521,8 +1526,13 @@ export const vi_VN: EnTranslations = {
         "admin": "Quản Trị Viên",
         "coredevs": "Nhà Phát Triển Chính",
         "devs": "Lập Trình Viên",
+        "seniormods": "Senior Mod",
         "mods": "Điều Hành Viên",
-        "artists": "Họa Sĩ"
+        "juniormods": "Junior Mod",
+        "artists": "Họa Sĩ",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Thành viên đã xác minh",
       "notMember": "Chưa tham gia máy chủ",
@@ -2561,6 +2571,10 @@ export const vi_VN: EnTranslations = {
       "dragonkin": {
         "name": "Long Tộc",
         "desc": "Những sinh vật có vảy, thân rắn từ vực sâu cổ xưa. Hiếm gặp, kiêu hãnh, và mạnh hơn vẻ ngoài của chúng rất nhiều."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

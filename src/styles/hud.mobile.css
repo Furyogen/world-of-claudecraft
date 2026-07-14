@@ -1936,7 +1936,11 @@
     width: min(220px, calc(50vw - 144px));
     min-width: 142px;
     max-height: min(170px, calc(var(--app-vh) / var(--ui-scale, 1) - 128px));
-    overflow: hidden;
+    /* Scroll vertically instead of clipping: the empty-state discoverability
+       hint can wrap to several lines in this narrow column, and a clipped hint
+       with no scroll affordance would silently hide it. */
+    overflow-y: auto;
+    overflow-x: hidden;
     z-index: 25;
   }
   /* Left-handed mirror: swap the move joystick (and the utility cluster and
@@ -4445,6 +4449,34 @@
      rise at data-fx-level=low): our layer would otherwise re-apply fct-crit-mobile,
      so re-point the low tier at the non-crit mobile rise here too. */
   :root[data-fx-level="low"] body.mobile-touch .fct.crit {
+    animation-name: fct-rise-mobile;
+  }
+  @keyframes fct-xp-pop-mobile {
+    0% {
+      opacity: 1;
+      translate: -50% -50%;
+      scale: 1;
+    }
+    15% {
+      scale: 1.2;
+    }
+    100% {
+      opacity: 0;
+      translate: -50% calc(-50% - 56px);
+      scale: 1;
+    }
+  }
+  /* Same treatment as .fct.crit above: the mobile .fct-xp/.fct-rested-xp selectors
+     are more specific than the desktop hud.css ones (body.mobile-touch adds a
+     selector), so they must be re-declared here or the desktop pop/size is lost
+     on touch. */
+  body.mobile-touch .fct-xp,
+  body.mobile-touch .fct-rested-xp {
+    font-size: calc(17px * var(--fct-scale, 1));
+    animation-name: fct-xp-pop-mobile;
+  }
+  :root[data-fx-level="low"] body.mobile-touch .fct-xp,
+  :root[data-fx-level="low"] body.mobile-touch .fct-rested-xp {
     animation-name: fct-rise-mobile;
   }
 }

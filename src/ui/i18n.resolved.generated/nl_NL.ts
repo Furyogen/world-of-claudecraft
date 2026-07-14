@@ -671,7 +671,12 @@ export const nl_NL: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Emotewiel",
@@ -1521,8 +1526,13 @@ export const nl_NL: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Kernontwikkelaar",
         "devs": "Dev",
+        "seniormods": "Senior Mod",
         "mods": "Mod",
-        "artists": "Artiest"
+        "juniormods": "Junior Mod",
+        "artists": "Artiest",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Geverifieerd lid",
       "notMember": "Nog niet in de server",
@@ -2561,6 +2571,10 @@ export const nl_NL: EnTranslations = {
       "dragonkin": {
         "name": "Drakenvolk",
         "desc": "Geschubde, slangachtige wezens uit de oude diepten. Zeldzaam, trots en veel sterker dan ze eruitzien."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {

@@ -31,6 +31,18 @@ describe('clampChatBox', () => {
     expect(out.top).toBe(CHAT_BOX_LIMITS.margin);
   });
 
+  it('keeps optional UI attached above chat inside the top margin', () => {
+    const reservedAbove = (width: number) => width * 0.59 + 10;
+    const out = clampChatBox(
+      { left: 100, top: -999, width: 370, height: 184 },
+      VP,
+      CHROME,
+      CHAT_BOX_LIMITS,
+      reservedAbove,
+    );
+    expect(out.top - reservedAbove(out.width)).toBeCloseTo(CHAT_BOX_LIMITS.margin, 9);
+  });
+
   it('enforces min width/height', () => {
     const out = clampChatBox({ left: 100, top: 100, width: 10, height: 10 }, VP, CHROME);
     expect(out.width).toBe(CHAT_BOX_LIMITS.minWidth);
@@ -48,6 +60,18 @@ describe('clampChatBox', () => {
     const out = clampChatBox({ left: 8, top: 8, width: 760, height: 600 }, small, CHROME);
     expect(out.width).toBe(small.w - CHAT_BOX_LIMITS.margin * 2);
     expect(out.height).toBe(small.h - CHAT_BOX_LIMITS.margin * 2 - CHROME);
+  });
+
+  it('subtracts reserved-above space when capping pane height', () => {
+    const reservedAbove = 120;
+    const out = clampChatBox(
+      { left: 8, top: 200, width: 370, height: 9999 },
+      VP,
+      CHROME,
+      CHAT_BOX_LIMITS,
+      reservedAbove,
+    );
+    expect(out.height).toBe(VP.h - CHAT_BOX_LIMITS.margin * 2 - CHROME - reservedAbove);
   });
 });
 
@@ -86,6 +110,22 @@ describe('placeChatBox (UI Scale compensation)', () => {
     expect(p.geo.top).toBe(VP.h - (184 + CHROME) - CHAT_BOX_LIMITS.margin);
     expect(p.css.left).toBeCloseTo(p.geo.left / scale, 9);
     expect(p.css.top).toBeCloseTo(p.geo.top / scale, 9);
+  });
+
+  it('reserves attached-above space using the clamped visual width', () => {
+    const scale = 1.25;
+    const reservedAbove = (width: number) => width * 0.59 + 10 * scale;
+    const p = placeChatBox(
+      { left: 100, top: -500, width: 9999, height: 184 },
+      VP,
+      CHROME,
+      scale,
+      CHAT_BOX_LIMITS,
+      reservedAbove,
+    );
+    expect(p.geo.width).toBe(CHAT_BOX_LIMITS.maxWidth);
+    expect(p.geo.top - reservedAbove(p.geo.width)).toBeCloseTo(CHAT_BOX_LIMITS.margin, 9);
+    expect(p.css.top * scale).toBeCloseTo(p.geo.top, 9);
   });
 
   it('treats a non-positive / non-finite scale as 1 (never blanks the box)', () => {

@@ -671,7 +671,12 @@ export const cs_CZ: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} min {s} s",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+    },
+    "petFeed": {
+      "disabledFullHp": "Pet is at full health",
+      "disabledNoFood": "No food in your bags will heal your pet"
     },
     "keybinds": {
       "emoteWheel": "Kruh emotů",
@@ -1521,8 +1526,13 @@ export const cs_CZ: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Hlavní dev",
         "devs": "Dev",
+        "seniormods": "Senior Mod",
         "mods": "Mod",
-        "artists": "Umělec"
+        "juniormods": "Junior Mod",
+        "artists": "Umělec",
+        "contentcreator": "Content Creator",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "Ověřený člen",
       "notMember": "Zatím nejsi na serveru",
@@ -2561,6 +2571,10 @@ export const cs_CZ: EnTranslations = {
       "dragonkin": {
         "name": "Dračí plémě",
         "desc": "Šupinaté, hadovité věci ze starých hlubin. Vzácné, hrdé a mnohem silnější, než vypadají."
+      },
+      "reptile": {
+        "name": "Reptiles",
+        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
       }
     },
     "worldPage": {
