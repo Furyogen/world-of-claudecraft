@@ -2947,8 +2947,12 @@ export async function deedsBoardRanked(
 ): Promise<{ ranked: RankedDeedsAccount[]; totalRanked: number; unknownDeedIds: string[] }> {
   // Both reads run in ONE raised-timeout transaction: the roll-up is a full-table
   // hash aggregate and the unknown-id side read a DISTINCT scan, so a large
-  // character_deeds table can legitimately exceed the default statement timeout,
-  // and sharing one transaction also gives the two reads a single snapshot.
+  // character_deeds table can legitimately exceed the default statement timeout.
+  // The shared transaction raises the allowance once and reuses one client; it
+  // does NOT give the two reads a single snapshot (READ COMMITTED, see the
+  // runWithStatementTimeout header), so a commit landing between them can skew
+  // the pair by one refresh cycle. Acceptable here: the board is a TTL-cached
+  // cosmetic aggregate and the next refresh converges.
   return runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, async (query) => {
     const res = await query(
       `WITH renown(deed_id, renown) AS (

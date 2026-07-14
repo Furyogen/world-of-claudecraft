@@ -73,8 +73,12 @@ export const DEED_RARITY_MIN_LEVEL = 5;
 export async function deedRarityCounts(): Promise<DeedRarityAggregate> {
   // Two full-table aggregate scans over character_deeds / characters, so run both
   // in ONE raised-timeout transaction: a large table can legitimately exceed the
-  // default statement timeout, and one snapshot keeps the numerator and
-  // denominator mutually consistent.
+  // default statement timeout. The shared transaction raises the allowance once
+  // and reuses one client; it does NOT give the two scans a single snapshot
+  // (READ COMMITTED, see the runWithStatementTimeout header), so an earn
+  // committing between them can skew a percentage by one refresh cycle. The
+  // shared eligibility predicate below is what keeps the pair mutually
+  // consistent; the read is TTL-cached and cosmetic, so one-cycle skew is fine.
   //
   // Numerator and denominator share ONE eligibility predicate on TWO axes so
   // they stay mutually consistent: (1) the level floor plus state IS NOT NULL,
