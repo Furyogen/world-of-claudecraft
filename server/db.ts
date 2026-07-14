@@ -433,6 +433,14 @@ CREATE TABLE IF NOT EXISTS character_leases (
   expires_at TIMESTAMPTZ NOT NULL
 );
 CREATE INDEX IF NOT EXISTS character_leases_holder ON character_leases(holder);
+-- Stamped from the authenticated account at every acquire (the ownership gate
+-- getCharacter(accountId, characterId) precedes the acquire, so this is always the
+-- character's true owner). It lets the owner reclaim a lease stranded by a dead or
+-- wedged process before its TTL expires. NULL rows predate this column and can never
+-- be stolen by the account-match arm (plain SQL equality makes a NULL account_id fail
+-- every predicate arm except expiry: fail closed). No default, no index, no backfill;
+-- the auth_tokens.scope ALTER above is the ADD COLUMN IF NOT EXISTS precedent.
+ALTER TABLE character_leases ADD COLUMN IF NOT EXISTS account_id INT;
 CREATE TABLE IF NOT EXISTS admin_online_samples (
   id BIGSERIAL PRIMARY KEY,
   realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
@@ -2583,22 +2591,43 @@ export async function renameCharacter(
   return res.rows[0] ?? null;
 }
 
+// Persist a character row. Returns true when the write landed. When a leaseNonce is
+// given the UPDATE is fenced to the current lease holder+nonce in the SAME statement:
+// a displaced session (its lease reclaimed by a same-account takeover, which rotated
+// the nonce) matches no lease row, the UPDATE touches nothing, and this returns false
+// so the caller can refuse to overwrite the live session's state. The fence rides the
+// write statement itself and never a separate pre-check, because a check-then-write
+// pair would race the takeover that steals the lease between the two. The no-nonce path
+// (tests, resumes, meta-less sessions) writes unconditionally and returns true, exactly
+// as before.
 export async function saveCharacterState(
   characterId: number,
   level: number,
   state: CharacterState,
-): Promise<void> {
+  leaseNonce?: string,
+): Promise<boolean> {
   const cleanState = sanitizeRemovedZone1Content(state).state;
   // A character save should wait out a slow database rather than lose state, so
   // run it on the raised heavy allowance; still bounded so a leave / shutdown
   // flush cannot hang past the container stop grace.
-  await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
-    query('UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1', [
-      characterId,
-      level,
-      JSON.stringify(cleanState),
-    ]),
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    leaseNonce === undefined
+      ? query('UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1', [
+          characterId,
+          level,
+          JSON.stringify(cleanState),
+        ])
+      : query(
+          `UPDATE characters SET level = $2, state = $3, updated_at = now()
+            WHERE id = $1
+              AND EXISTS (
+                SELECT 1 FROM character_leases
+                 WHERE character_id = $1 AND holder = $4 AND nonce = $5
+              )`,
+          [characterId, level, JSON.stringify(cleanState), PROCESS_LEASE_HOLDER, leaseNonce],
+        ),
   );
+  return leaseNonce === undefined ? true : (res.rowCount ?? 0) > 0;
 }
 
 // Persist a character row AND this realm's World Market + Ravenpost mail blobs
@@ -2615,7 +2644,8 @@ export async function saveCharacterAndMarketState(
   state: CharacterState,
   market: MarketSave,
   mail: MailSave,
-): Promise<void> {
+  leaseNonce?: string,
+): Promise<boolean> {
   // Gate the escrow flush on the boot backfill just like saveMarketState:
   // this writes the realm-market row, so it must not run before ensureSchema
   // has confirmed the marker and opened the gate. Checked before any pool work.
@@ -2629,10 +2659,31 @@ export async function saveCharacterAndMarketState(
     // raise this transaction to the heavy allowance; still bounded so shutdown
     // cannot hang past the container stop grace. SET LOCAL reverts at COMMIT.
     await client.query(`SET LOCAL statement_timeout = ${DB_HEAVY_STATEMENT_TIMEOUT_MS}`);
-    await client.query(
-      'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
-      [characterId, level, JSON.stringify(cleanState)],
-    );
+    // Fence the bag half on the current lease holder+nonce when one is given (same
+    // in-statement fence as saveCharacterState). If a same-account takeover rotated
+    // the nonce out from under this displaced session, the character UPDATE matches
+    // no row: ROLL BACK before touching the market/mail rows and report false. The
+    // escrow halves must never land without the bag half, and a displaced session
+    // must not overwrite the realm's shared Market/Ravenpost escrow either.
+    const charRes =
+      leaseNonce === undefined
+        ? await client.query(
+            'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
+            [characterId, level, JSON.stringify(cleanState)],
+          )
+        : await client.query(
+            `UPDATE characters SET level = $2, state = $3, updated_at = now()
+              WHERE id = $1
+                AND EXISTS (
+                  SELECT 1 FROM character_leases
+                   WHERE character_id = $1 AND holder = $4 AND nonce = $5
+                )`,
+            [characterId, level, JSON.stringify(cleanState), PROCESS_LEASE_HOLDER, leaseNonce],
+          );
+    if (leaseNonce !== undefined && (charRes.rowCount ?? 0) === 0) {
+      await client.query('ROLLBACK');
+      return false;
+    }
     await client.query(
       `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
        ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
@@ -2647,6 +2698,7 @@ export async function saveCharacterAndMarketState(
       [mailStateKey(REALM), JSON.stringify(mail)],
     );
     await client.query('COMMIT');
+    return true;
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
@@ -3300,31 +3352,42 @@ export const LEASE_TTL_SECONDS = 90;
 export const PROCESS_LEASE_HOLDER = `${REALM}#${randomUUID()}`;
 
 // Claim (or renew) the lease for one character. Returns true when this process
-// now holds it, false when a live lease belongs to another holder (fail closed:
-// the caller must refuse the join). The ON CONFLICT UPDATE fires only when the
-// existing lease has expired (crash reclaim) OR is already ours (a linkdead
-// resume on the same process re-extends its own lease instead of refusing
-// itself). A live foreign lease matches neither arm, so rowCount stays 0. Every
-// acquire stamps a fresh nonce (the caller passes a per-join value): a later
-// releaseCharacterLease matches on that nonce, so an older join's stale release
-// cannot delete the row this acquire re-stamped.
+// now holds it, false when a live lease belongs to a foreign holder AND a foreign
+// account (fail closed: the caller must refuse the join). The ON CONFLICT UPDATE
+// fires when the existing lease has expired (crash reclaim) OR is already ours (a
+// linkdead resume on the same process re-extends its own lease instead of refusing
+// itself) OR belongs to the same account (the owner reclaiming a lease stranded by
+// a dead or wedged process before its TTL expires). A live lease that is none of
+// those matches no arm, so rowCount stays 0. Every acquire stamps a fresh nonce
+// (the caller passes a per-join value): a later releaseCharacterLease matches on
+// that nonce, so an older join's stale release cannot delete the row this acquire
+// re-stamped, and a same-account reclaim rotates the nonce out from under any
+// displaced session, whose fenced writes then fail. accountId is the authenticated
+// owner (getCharacter gated the caller before this runs).
 export async function acquireCharacterLease(
   characterId: number,
+  accountId: number,
   nonce: string,
   holder = PROCESS_LEASE_HOLDER,
 ): Promise<boolean> {
   const res = await pool.query(
-    `INSERT INTO character_leases (character_id, realm, holder, nonce, acquired_at, heartbeat_at, expires_at)
-     VALUES ($1, $2, $3, $4, now(), now(), now() + make_interval(secs => $5))
+    // The nonce rotation needs no extra code: this ONE atomic statement already
+    // re-stamps nonce = EXCLUDED.nonce, which IS the fence rotation. The account arm
+    // uses PLAIN EQUALITY (never IS NOT DISTINCT FROM): SQL NULL semantics make a
+    // NULL account_id row (a lease that predates this column) fail the account arm
+    // and every arm except expiry, which is exactly the locked fail-closed behavior.
+    `INSERT INTO character_leases (character_id, realm, holder, nonce, account_id, acquired_at, heartbeat_at, expires_at)
+     VALUES ($1, $2, $3, $4, $5, now(), now(), now() + make_interval(secs => $6))
      ON CONFLICT (character_id) DO UPDATE
        SET realm = EXCLUDED.realm,
            holder = EXCLUDED.holder,
            nonce = EXCLUDED.nonce,
+           account_id = EXCLUDED.account_id,
            acquired_at = now(),
            heartbeat_at = now(),
            expires_at = EXCLUDED.expires_at
-       WHERE character_leases.expires_at < now() OR character_leases.holder = EXCLUDED.holder`,
-    [characterId, REALM, holder, nonce, LEASE_TTL_SECONDS],
+       WHERE character_leases.expires_at < now() OR character_leases.holder = EXCLUDED.holder OR character_leases.account_id = EXCLUDED.account_id`,
+    [characterId, REALM, holder, nonce, accountId, LEASE_TTL_SECONDS],
   );
   return (res.rowCount ?? 0) > 0;
 }

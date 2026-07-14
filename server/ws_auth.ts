@@ -95,9 +95,15 @@ export interface WsAuthDeps {
   maxWsPerIpHard: number;
   // Per-character DB load lease (server/db.ts character_leases), injected like
   // every other DB dependency here so the handshake stays unit-testable without a
-  // live database. acquire fences the row with a per-join nonce; release matches
-  // that nonce so a stale release cannot delete a re-acquired lease.
-  acquireCharacterLease: (characterId: number, nonce: string) => Promise<boolean>;
+  // live database. acquire stamps the authenticated account on the row and fences
+  // it with a per-join nonce; release matches that nonce so a stale release cannot
+  // delete a re-acquired lease. Passing accountId lets the owner reclaim a lease
+  // stranded by a dead process before its TTL expires (same-account takeover).
+  acquireCharacterLease: (
+    characterId: number,
+    accountId: number,
+    nonce: string,
+  ) => Promise<boolean>;
   releaseCharacterLease: (characterId: number, nonce?: string) => Promise<void>;
   // Recomputes the account's bank bonus slots from live facts (email/Discord/wallet/
   // referrals) so a fresh join stamps the current entitlement into the character state.
@@ -259,7 +265,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
         // await means a DB error fails the handshake exactly like a getCharacter failure.
         const bankBonus = await bankBonusForAccount(accountId);
         leaseNonce = randomUUID();
-        const leased = await acquireCharacterLease(character.id, leaseNonce);
+        const leased = await acquireCharacterLease(character.id, accountId, leaseNonce);
         if (!leased) {
           rejectHandshake(ws, WS_AUTH_ERROR.alreadyInWorld);
           return;

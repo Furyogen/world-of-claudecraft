@@ -162,6 +162,11 @@ describe('ensureSchema wires every schema module at boot', () => {
     const applied = h.calls.join('\n');
     expect(applied).toContain('CREATE TABLE IF NOT EXISTS character_leases');
     expect(applied).toContain('CREATE INDEX IF NOT EXISTS character_leases_holder');
+    // The same-account takeover column is added at boot on existing databases (the
+    // owner reclaiming a lease stranded by a dead process); additive and idempotent.
+    expect(applied).toContain(
+      'ALTER TABLE character_leases ADD COLUMN IF NOT EXISTS account_id INT',
+    );
     expect(applied).toContain('CREATE TABLE IF NOT EXISTS bank_ledger');
     expect(applied).toContain('CREATE INDEX IF NOT EXISTS bank_ledger_character');
     expect(applied).toContain('CREATE INDEX IF NOT EXISTS bank_ledger_created');

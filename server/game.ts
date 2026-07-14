@@ -2845,22 +2845,54 @@ export class GameServer {
         // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
         // is temporarily 20, but serializeCharacter reports the real level — so the
         // character-list/leaderboard `level` column never reflects the temp state.
+        let saved: boolean;
         if (opts.withMarket) {
           // Atomic on the leave path so a logout bag-flush can never tear away
           // from the global Market escrow (see saveCharacterAndMarketState). Run
           // through the market queue and capture the market snapshot at write
           // time so this commit can't clobber a newer one.
-          await this.enqueueMarketWrite(() =>
+          saved = await this.enqueueMarketWrite(() =>
             saveCharacterAndMarketState(
               session.characterId,
               state.level,
               state,
               this.sim.serializeMarket(),
               this.sim.serializeMail(),
+              session.leaseNonce,
             ),
           );
         } else {
-          await saveCharacterState(session.characterId, state.level, state);
+          saved = await saveCharacterState(
+            session.characterId,
+            state.level,
+            state,
+            session.leaseNonce,
+          );
+        }
+        // A same-account takeover can reclaim this character's lease and rotate the
+        // nonce out from under a displaced session; the lease-fenced save then matches
+        // no row and reports false, meaning nothing persisted. Skip every post-save
+        // step: never stamp lastSave (the write did not land) and never drain
+        // pendingDeedRecords into the durable index (a deed must never publish ahead
+        // of the blob that proves it). The ids stay queued and simply never drain for
+        // this doomed session; the live holder records its own unlocks from its own
+        // saves. Only an explicit false is a fence-out: the no-nonce legacy path
+        // returns true, so a strict comparison never mistakes an ordinary save for one.
+        if (saved === false) {
+          console.warn(
+            `character ${session.characterId} (${session.name}) save fenced out by a same-account takeover; skipping deed publish and lastSave`,
+          );
+          // The lease is gone: this session is a displaced zombie whose writes
+          // can never land again. Give the player the same explicit signal an
+          // in-process takeover sends instead of letting them keep playing an
+          // unsaved session. Deliberately not awaited: kickSession -> leave ->
+          // the leave save queues behind this closure on the per-character save
+          // queue, so awaiting here would deadlock. leave() is idempotent
+          // (session.left), so that leave save fencing out again cannot re-kick.
+          if (!session.left) {
+            void this.kickSession(session, 'character taken over', 'character taken over');
+          }
+          return;
         }
         session.lastSave = Date.now();
         // The blob is durable: publish every unlock it contains. A rejected
