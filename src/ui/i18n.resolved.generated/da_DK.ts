@@ -4483,6 +4483,7 @@ export const da_DK: EnTranslations = {
     "connectionLost": "Forbindelsen til serveren gik tabt.",
     "reconnecting": "Forbindelse mistet. Genopretter forbindelse...",
     "connectionRejected": "Serveren lukkede forbindelsen.",
+    "realmFull": "This world is full right now. Please try again in a few minutes.",
     "tips": {
       "classes": "Tip: Hver af de 9 klasser spilles forskelligt. Prøv nogle stykker, før du vælger én.",
       "talents": "Tip: Du kan nulstille dine talenter, når du er ude af kamp, så et tidligt valg er aldrig en fælde.",

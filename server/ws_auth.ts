@@ -37,6 +37,12 @@ const WS_AUTH_ERROR = {
   // (src/ui/api_error_i18n.ts, errors.api.alreadyInWorld), so reusing it verbatim
   // needs no new i18n key.
   alreadyInWorld: 'character already in world',
+  // The realm is at its configured player cap and this is a FRESH join (a resume of
+  // an in-world or linkdead session is exempt, staff bypass it). This EXACT lowercase
+  // literal is part of the wire contract the client matcher reads verbatim, so
+  // changing it is a wire change that must land in the client matcher in the same
+  // commit.
+  realmFull: 'realm is full',
   forceRename: 'This character must be renamed before entering the world.',
   authTimedOut: 'authentication timed out',
 } as const;
@@ -93,6 +99,12 @@ export interface WsAuthDeps {
   bufferHandshakeMessages: (ws: EventEmitter, maxFrames?: number) => () => void;
   requestMetadata: (req: http.IncomingMessage) => { ip: string; userAgent: string };
   maxWsPerIpHard: number;
+  // The realm player admission cap: a FRESH WS join is refused (with the realmFull
+  // wire literal) once game.clients.size plus the in-flight fresh admissions reaches
+  // this value. A resume of an in-world or linkdead session is exempt (it reuses an
+  // existing world slot) and staff bypass it, mirroring the per-IP exemption in
+  // server/ip_block.ts isConnectionRefused. 0 or negative disables the cap.
+  maxPlayersPerRealm: number;
   // Per-character DB load lease (server/db.ts character_leases), injected like
   // every other DB dependency here so the handshake stays unit-testable without a
   // live database. acquire stamps the authenticated account on the row and fences
@@ -136,6 +148,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     bufferHandshakeMessages,
     requestMetadata,
     maxWsPerIpHard: MAX_WS_PER_IP_HARD,
+    maxPlayersPerRealm: MAX_PLAYERS_PER_REALM,
     acquireCharacterLease,
     releaseCharacterLease,
     bankBonusForAccount,
@@ -148,6 +161,36 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
   // the rest. The id is added before the lease section and removed in a finally,
   // so the check-acquire-join sequence is atomic per character within the process.
   const pendingLeaseJoins = new Set<number>();
+
+  // Fresh joins that have passed the realm-cap check but not yet completed
+  // game.join. A plain game.clients.size read at check time can admit past the cap
+  // when several fresh handshakes race across the awaits between the check and the
+  // game.join insertion, so the cap check compares game.clients.size PLUS this
+  // counter. It is incremented once a fresh join clears the cap check and
+  // decremented in a finally once game.join has completed or the fresh arm has
+  // failed, so the count is conserved on every exit path (a successful join leaves
+  // the slot counted by game.clients.size instead).
+  let inFlightFreshAdmissions = 0;
+
+  // Under a join storm one console line per realm-cap refusal would flood the log,
+  // so refusals are aggregated: emit at most one summary line per window carrying
+  // the count of refusals since the last line. Date.now is used because this is
+  // server-side wall-clock aggregation, not sim logic (the Rng/Date.now ban is
+  // sim-only). The first refusal after an idle window logs immediately.
+  const REALM_FULL_LOG_WINDOW_MS = 30_000;
+  let realmFullRefusalsSinceLog = 0;
+  let realmFullLastLogAtMs = 0;
+  function recordRealmFullRefusal(): void {
+    realmFullRefusalsSinceLog++;
+    const nowMs = Date.now();
+    if (nowMs - realmFullLastLogAtMs >= REALM_FULL_LOG_WINDOW_MS) {
+      console.log(
+        `ws auth: realm full, refused ${realmFullRefusalsSinceLog} fresh join(s) at cap ${MAX_PLAYERS_PER_REALM}`,
+      );
+      realmFullRefusalsSinceLog = 0;
+      realmFullLastLogAtMs = nowMs;
+    }
+  }
 
   async function authenticateWebSocket(
     ws: WebSocket,
@@ -248,38 +291,70 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
           joinMeta,
         );
       } else {
-        // Fresh load: claim the lease immediately before creating the session, and
-        // only after every cheap refusal above (auth, moderation, ownership,
-        // force-rename, the per-IP hard limit), so no refusable handshake pays for
-        // the DB write and no session is ever created without a lease. Acquiring on
-        // a raw client-supplied id before the getCharacter ownership check would let
-        // any authenticated user lock arbitrary characters (a login DoS). The
-        // per-join nonce fences the row so a later stale release cannot delete it. A
-        // live foreign lease fails closed with the exact 'character already in world'
-        // string planJoin already uses.
-        //
-        // Recompute the bank bonus slots from live account facts and stamp them into
-        // the character state at load (server authority). Fresh-join arm ONLY: a resume
-        // above keeps its stamped value (no mid-session recompute, locked policy).
-        // Computed BEFORE the lease acquire so the lease-held window stays tight; a bare
-        // await means a DB error fails the handshake exactly like a getCharacter failure.
-        const bankBonus = await bankBonusForAccount(accountId);
-        leaseNonce = randomUUID();
-        const leased = await acquireCharacterLease(character.id, accountId, leaseNonce);
-        if (!leased) {
-          rejectHandshake(ws, WS_AUTH_ERROR.alreadyInWorld);
+        // Realm admission cap: refuse this FRESH join once the realm is at its
+        // configured player cap. This is the fresh arm only: the resume arm above is
+        // exempt because it reuses an existing world slot, never adds one. Staff
+        // bypass the cap, mirroring the per-IP exemption in isConnectionRefused. A
+        // cap of 0 or negative disables it. The count basis is game.clients.size
+        // (which includes linkdead sessions, since they still hold world slots)
+        // PLUS the in-flight fresh admissions, so a burst of concurrent fresh
+        // handshakes racing across the awaits below cannot admit past the cap. The
+        // check-then-increment pair has no await between it, so it is atomic in the
+        // single-threaded loop. Checked here, before the bank-bonus DB read and the
+        // lease acquire, so a refused join never holds a lease and pays for no
+        // fresh-arm DB work (the shared handshake reads above, cosmetics and
+        // moderation among them, are already spent by this point; they stay bounded
+        // by the per-IP hard limit and the auth timeout).
+        if (
+          MAX_PLAYERS_PER_REALM > 0 &&
+          !isAdmin &&
+          game.clients.size + inFlightFreshAdmissions >= MAX_PLAYERS_PER_REALM
+        ) {
+          recordRealmFullRefusal();
+          rejectHandshake(ws, WS_AUTH_ERROR.realmFull);
           return;
         }
-        result = game.join(
-          ws,
-          accountId,
-          character.id,
-          character.name,
-          character.class,
-          character.state,
-          character.is_gm,
-          { ...joinMeta, leaseNonce, bankBonus },
-        );
+        inFlightFreshAdmissions++;
+        try {
+          // Fresh load: claim the lease immediately before creating the session, and
+          // only after every cheap refusal above (auth, moderation, ownership,
+          // force-rename, the per-IP hard limit, the realm cap), so no refusable
+          // handshake pays for the DB write and no session is ever created without a
+          // lease. Acquiring on a raw client-supplied id before the getCharacter
+          // ownership check would let any authenticated user lock arbitrary
+          // characters (a login DoS). The per-join nonce fences the row so a later
+          // stale release cannot delete it. A live foreign lease fails closed with
+          // the exact 'character already in world' string planJoin already uses.
+          //
+          // Recompute the bank bonus slots from live account facts and stamp them into
+          // the character state at load (server authority). Fresh-join arm ONLY: a resume
+          // above keeps its stamped value (no mid-session recompute, locked policy).
+          // Computed BEFORE the lease acquire so the lease-held window stays tight; a bare
+          // await means a DB error fails the handshake exactly like a getCharacter failure.
+          const bankBonus = await bankBonusForAccount(accountId);
+          leaseNonce = randomUUID();
+          const leased = await acquireCharacterLease(character.id, accountId, leaseNonce);
+          if (!leased) {
+            rejectHandshake(ws, WS_AUTH_ERROR.alreadyInWorld);
+            return;
+          }
+          result = game.join(
+            ws,
+            accountId,
+            character.id,
+            character.name,
+            character.class,
+            character.state,
+            character.is_gm,
+            { ...joinMeta, leaseNonce, bankBonus },
+          );
+        } finally {
+          // Decrement on every fresh-arm exit path (join completed, lease refused,
+          // or a thrown DB error): a successful join is now counted by
+          // game.clients.size, and a failed one consumed no slot, so the count is
+          // conserved for a concurrent handshake either way.
+          inFlightFreshAdmissions--;
+        }
       }
       if ('error' in result) {
         // join refused after we took the lease. Release it, AWAITED and nonce-fenced

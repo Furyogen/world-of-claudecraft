@@ -4483,6 +4483,7 @@ export const de_DE: EnTranslations = {
     "connectionLost": "Die Verbindung zum Server wurde unterbrochen.",
     "reconnecting": "Verbindung verloren. Verbindung wird wieder hergestellt...",
     "connectionRejected": "Der Server hat die Verbindung geschlossen.",
+    "realmFull": "This world is full right now. Please try again in a few minutes.",
     "tips": {
       "classes": "Tipp: Jede der 9 Klassen spielt sich anders. Probiere einige aus, bevor du dich für eine entscheidest.",
       "talents": "Tipp: Du kannst deine Talente jederzeit außerhalb des Kampfes zurücksetzen, eine frühe Wahl ist also nie eine Falle.",

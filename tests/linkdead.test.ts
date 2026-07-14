@@ -496,6 +496,16 @@ describe('reconnect policy (client-side conflict tolerance)', () => {
     expect(isTransientTimeoutRejection('not authenticated', 3, 0)).toBe(false);
     expect(isTransientTimeoutRejection(undefined, 3, 0)).toBe(false);
   });
+
+  it('treats the realm-full rejection as FATAL under both predicates (a fresh join is not retried)', () => {
+    // The realm admission cap refusal (server/ws_auth.ts WS_AUTH_ERROR.realmFull,
+    // the exact literal 'realm is full') matches NEITHER transient predicate, so a
+    // reconnect gives up rather than hammering a realm that is at capacity. Pinned
+    // mid-retry (attempts 3) with fresh rejection counters (0) so the false result
+    // comes from the string not matching, not from a spent bound.
+    expect(isTransientReconnectRejection('realm is full', 3, 0)).toBe(false);
+    expect(isTransientTimeoutRejection('realm is full', 3, 0)).toBe(false);
+  });
 });
 
 describe('deliberate logout skips linkdead grace', () => {

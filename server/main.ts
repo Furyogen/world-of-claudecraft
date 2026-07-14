@@ -301,6 +301,15 @@ export function resetActiveConfigForTests(): void {
   activeConfigCache = null;
 }
 
+// The realm player cap advertised on /api/status, canonicalized for the wire: a
+// configured 0 or negative (the cap disabled) is normalized to 0 so the field is
+// always a non-negative count. Both /api/status arms (the legacy handleApi twin
+// below and the migrated statusHandler via the injected leaderboard runtime) read
+// it here, so the players_cap field stays byte-identical across the two arms.
+function canonicalPlayersCap(): number {
+  return Math.max(0, activeConfig().maxPlayersPerRealm);
+}
+
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
 const SFX_PACK_DIR = process.env.SFX_PACK_DIR?.trim()
   ? path.resolve(process.env.SFX_PACK_DIR.trim())
@@ -1633,6 +1642,10 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         ok: true,
         realm: REALM,
         players_online: liveGame().clients.size,
+        // The configured realm player cap so the client realm list can display
+        // honestly; 0 means the cap is disabled. Dual-arm edit: the migrated
+        // statusHandler (server/leaderboard.ts) carries the same players_cap field.
+        players_cap: canonicalPlayersCap(),
         names: [...liveGame().clients.values()].map((s) => s.name),
         steam: { enabled: false },
       });
@@ -2176,6 +2189,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
 // `routes` array registry.ts already spread in can serve.
 configureLeaderboardRuntime({
   playersOnline: () => liveGame().clients.size,
+  playersCap: canonicalPlayersCap,
   perfProfile: () => liveGame().perfProfile(),
   getLeaderboard,
   getGuildLeaderboard,
@@ -2704,6 +2718,7 @@ export async function startServer(): Promise<http.Server> {
     bufferHandshakeMessages,
     requestMetadata,
     maxWsPerIpHard: config.maxWsPerIpHard,
+    maxPlayersPerRealm: config.maxPlayersPerRealm,
     acquireCharacterLease,
     releaseCharacterLease,
     bankBonusForAccount: async (id) => computeBankBonus(await bankBonusFactsForAccount(id)),

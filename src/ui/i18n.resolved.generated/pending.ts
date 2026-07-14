@@ -28,7 +28,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "es_ES": [
     "guide.family.reptile.desc",
@@ -49,7 +50,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "fr_FR": [
     "guide.family.reptile.desc",
@@ -70,7 +72,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "fr_CA": [
     "guide.family.reptile.desc",
@@ -91,7 +94,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "en_CA": [],
   "it_IT": [
@@ -113,7 +117,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "de_DE": [
     "guide.family.reptile.desc",
@@ -134,7 +139,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "zh_CN": [
     "hudChrome.discord.roleTag.legend",
@@ -171,7 +177,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.legend",
@@ -196,7 +203,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "nl_NL": [
     "guide.family.reptile.desc",
@@ -217,7 +225,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "pl_PL": [
     "guide.family.reptile.desc",
@@ -238,7 +247,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "id_ID": [
     "guide.family.reptile.desc",
@@ -259,7 +269,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "tr_TR": [
     "guide.family.reptile.desc",
@@ -280,7 +291,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "sv_SE": [
     "guide.family.reptile.desc",
@@ -301,7 +313,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "vi_VN": [
     "guide.family.reptile.desc",
@@ -322,7 +335,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ],
   "da_DK": [
     "guide.family.reptile.desc",
@@ -343,6 +357,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
-    "hudChrome.petFeed.disabledNoFood"
+    "hudChrome.petFeed.disabledNoFood",
+    "loading.realmFull"
   ]
 };

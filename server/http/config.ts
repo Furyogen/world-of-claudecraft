@@ -88,6 +88,13 @@ export interface Config {
   readonly allowDevCommands: boolean;
   readonly turnstileSecret: string;
   readonly maxWsPerIpHard: number;
+  // The realm player admission cap: the WS handshake (server/ws_auth.ts) refuses a
+  // fresh join once the realm holds this many sessions, and /api/status advertises
+  // it so the client realm list can display honestly. Set-but-empty yields the
+  // default (numberOr returns the fallback for an empty value); an explicit 0 or a
+  // negative value DISABLES the cap, a rule enforced at the admission site (a
+  // cap > 0 test there), never in numberOr, which passes an explicit '0' through.
+  readonly maxPlayersPerRealm: number;
   readonly githubRepo: string;
   readonly githubToken: string;
   readonly chatLogRetentionDays: number;
@@ -125,6 +132,7 @@ const ALLOW_DEV_COMMANDS_ON = '1';
 const DEFAULT_PORT = 8787;
 const DEFAULT_TURNSTILE_SECRET = '';
 const DEFAULT_MAX_WS_PER_IP_HARD = 20;
+const DEFAULT_MAX_PLAYERS_PER_REALM = 5000;
 const DEFAULT_GITHUB_REPO = 'levy-street/world-of-claudecraft';
 const DEFAULT_GITHUB_TOKEN = '';
 const DEFAULT_CHAT_LOG_RETENTION_DAYS = 90;
@@ -261,6 +269,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     allowDevCommands: env.ALLOW_DEV_COMMANDS === ALLOW_DEV_COMMANDS_ON,
     turnstileSecret: env.TURNSTILE_SECRET ?? DEFAULT_TURNSTILE_SECRET,
     maxWsPerIpHard: numberOr(env.MAX_WS_PER_IP_HARD, DEFAULT_MAX_WS_PER_IP_HARD),
+    maxPlayersPerRealm: numberOr(env.MAX_PLAYERS_PER_REALM, DEFAULT_MAX_PLAYERS_PER_REALM),
     githubRepo: env.GITHUB_REPO ?? DEFAULT_GITHUB_REPO,
     githubToken: env.GITHUB_TOKEN ?? DEFAULT_GITHUB_TOKEN,
     chatLogRetentionDays: numberOr(env.CHAT_LOG_RETENTION_DAYS, DEFAULT_CHAT_LOG_RETENTION_DAYS),

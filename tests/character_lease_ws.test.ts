@@ -76,6 +76,8 @@ function makeDeps(opts: { joinResult?: any; hasSession?: boolean; acquireResult?
     bufferHandshakeMessages: () => () => {},
     requestMetadata: () => ({ ip: '1.2.3.4', userAgent: 'test' }),
     maxWsPerIpHard: 100,
+    // Realm admission cap disabled: this file exercises the lease arm, not the cap.
+    maxPlayersPerRealm: 0,
     acquireCharacterLease: acquireSpy,
     releaseCharacterLease: releaseSpy,
     bankBonusForAccount: bankBonusSpy,
