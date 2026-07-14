@@ -11,9 +11,10 @@
 //      under both dispatch modes, proving readyz flips to 503 after markDraining and
 //      livez flips to 503 on a stalled loop.
 //
-// The staleness window is driven by the AGE the source reports (a fixed offset from
-// Date.now()), never by fake timers, and every boundary case asserts against the
-// hardcoded 30 s rather than against LIVEZ_STALE_MS itself.
+// Most cases drive the staleness window by the AGE the source reports (a fixed offset
+// from Date.now()), so no fake timers are needed; the one exact-boundary case fakes the
+// clock to land precisely on 30 s. Every boundary case asserts against the hardcoded
+// 30 s rather than against LIVEZ_STALE_MS itself.
 //
 // Layers (a) and (b) are the required coverage; layer (c) reuses the security-headers
 // integration pattern (a dummy DATABASE_URL set BEFORE importing server/main, a
