@@ -446,6 +446,27 @@ describe('createWsAuth: realm admission cap', () => {
     expect(ws3.send).not.toHaveBeenCalledWith(errorFrame('realm is full'));
     logSpy.mockRestore();
   });
+
+  it('i. a successful fresh join releases its in-flight admission (no capacity leak)', async () => {
+    const { game, deps, req } = setup();
+    deps.maxPlayersPerRealm = 5;
+    // One free slot (4 of 5), and the fake clients.size never grows, so ONLY a
+    // leaked in-flight admission could push the second join over the cap: a
+    // decrement moved off the success path (out of the unconditional release)
+    // refuses join 2 as realm-full while every failure-arm case stays green.
+    game.clients = { size: 4 };
+    deps.getCharacter = vi.fn(async (_accountId: number, id: number) => baseChar({ id }));
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const { authenticateWebSocket } = createWsAuth(deps);
+    const ws1 = new FakeWs();
+    await authenticateWebSocket(asWs(ws1), authRaw({ character: 31 }), req);
+    expect(ws1.send).not.toHaveBeenCalledWith(errorFrame('realm is full'));
+    const ws2 = new FakeWs();
+    await authenticateWebSocket(asWs(ws2), authRaw({ character: 32 }), req);
+    expect(ws2.send).not.toHaveBeenCalledWith(errorFrame('realm is full'));
+    expect(game.join).toHaveBeenCalledTimes(2);
+    logSpy.mockRestore();
+  });
 });
 
 describe('createWsAuth: authenticateWebSocket accept path', () => {
