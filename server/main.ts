@@ -177,7 +177,13 @@ import {
 } from './http/dispatch';
 import { type GameStateSource, registerGameStateMetrics } from './http/game_metrics';
 import { setGameMetricsCounters } from './http/game_signals';
-import { handleLivez, handleMetricsGate, handleReadyz, markDraining } from './http/health';
+import {
+  handleLivez,
+  handleMetricsGate,
+  handleReadyz,
+  markDraining,
+  registerLivenessSource,
+} from './http/health';
 import { type Logger, logger } from './http/logger';
 import { createHttpMetrics } from './http/metrics';
 import { teeMetricSink } from './http/middleware/metric_sink';
@@ -2737,8 +2743,15 @@ export async function startServer(): Promise<http.Server> {
     simEntities: () => game.sim.entities.size,
     simTickHz: () => game.simTickHz(),
     tickPhaseMillis: () => game.tickPhaseMillis(),
+    lastTickAt: () => game.lastTickAt(),
+    loopStartedAt: () => game.loopStartedAt(),
   };
   setGameMetricsCounters(registerGameStateMetrics(httpMetrics.registry, gameStateSource));
+  // Hand the same live source to /livez, so a wedged loop answers 503 from outside
+  // the process. Registered HERE rather than read from the route arm: the /livez arm
+  // must never touch liveGame() (a health probe constructing a GameServer is the bug
+  // tests/server/game_boot_order.test.ts pins against).
+  registerLivenessSource(gameStateSource);
 
   // The app-aggregate /metrics collectors (Phase 3 business, Phase 4 client-perf):
   // each registers bounded gauges on the SAME exporter registry and runs ONE cached

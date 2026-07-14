@@ -1137,6 +1137,17 @@ export class GameServer {
   // that actually sags. Rides the snapshot head (throttled) + perfProfile().
   private readonly tickRateMeter = new TickRateMeter();
   private tickHz: number | null = null;
+  // Wall clock (epoch millis) of the last COMPLETED tick pass, null until the
+  // first one lands. Written at the very END of the guarded body, so a pass that
+  // throws leaves it untouched: once one pass has completed, a loop that then wedges
+  // reads as stale. A loop that throws on its FIRST pass never stamps this at all, so
+  // liveness falls back to loopStartedAtMs to still catch a boot-time wedge.
+  private lastTickCompletedAt: number | null = null;
+  // Wall clock (epoch millis) when start() last installed the loop, null before it.
+  // The liveness backstop for the never-completed-a-pass case: without it, a loop that
+  // throws every tick from the first one leaves lastTickCompletedAt null forever and
+  // /livez would read that as warmup (200) for the life of the process.
+  private loopStartedAtMs: number | null = null;
   // sim.time (seconds) of the last head that carried tickHz; throttles the
   // scalar to TICK_HZ_HEAD_INTERVAL_S so it does not ride every 20 Hz head.
   private lastTickHzHeadTime: number | null = null;
@@ -1667,6 +1678,10 @@ export class GameServer {
   start(): void {
     let last = process.hrtime.bigint();
     let acc = 0;
+    // Stamp the loop-start clock before the first fire: it is the liveness backstop for
+    // a loop that never completes a pass (every tick throws), so /livez still goes stale
+    // instead of reading a boot-time wedge as warmup forever.
+    this.loopStartedAtMs = Date.now();
     this.interval = setInterval(() => {
       // The whole tick body runs guarded: an unguarded throw here (sim tick, a
       // broadcast, an autosave kick-off) would unwind the callback and skip the
@@ -1746,6 +1761,10 @@ export class GameServer {
               ? tickMs
               : this.tickMsAvg + TICK_EMA_ALPHA * (tickMs - this.tickMsAvg);
           this.flushPeriodicSaves(dt);
+          // LAST statement of the guarded body, deliberately: this timestamp is the
+          // liveness signal /livez reads, so only a pass that ran to completion may
+          // refresh it (a body that throws every tick must go stale, not look alive).
+          this.lastTickCompletedAt = Date.now();
         },
         (err) => console.error('[tick] guarded tick body threw, skipping this tick:', err),
       );
@@ -3094,6 +3113,20 @@ export class GameServer {
   // null while the rate meter is still warming up (its first second of uptime).
   simTickHz(): number | null {
     return this.tickHz == null ? null : round2(this.tickHz);
+  }
+
+  // Wall clock (epoch millis) of the last COMPLETED tick pass for the /livez
+  // staleness read (server/http/health.ts), or null while the loop is still
+  // warming up (before its first pass completes).
+  lastTickAt(): number | null {
+    return this.lastTickCompletedAt;
+  }
+
+  // Wall clock (epoch millis) when start() last installed the loop, or null before it.
+  // The /livez staleness read (server/http/health.ts) falls back to this when no pass
+  // has completed yet, so a loop that starts but never completes one still goes stale.
+  loopStartedAt(): number | null {
+    return this.loopStartedAtMs;
   }
 
   // Per-phase loop timing (p95 + max, in MILLISECONDS) for the /metrics exporter,
