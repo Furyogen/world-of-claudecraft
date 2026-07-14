@@ -3473,12 +3473,14 @@
     box-shadow: 0 0 8px #ffd10066;
   }
   .tal-spec .ts-name {
+    display: block;
     font-size: 12px;
     color: #fff;
     font-family: var(--title-font);
     margin-top: 2px;
   }
   .tal-spec .ts-role {
+    display: block;
     font-size: 10px;
     color: var(--gold);
     text-transform: uppercase;
