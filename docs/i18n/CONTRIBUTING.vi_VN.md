@@ -14,7 +14,7 @@ lỗi, dựng nên cả một hầm ngục mới: tất cả đều có giá tr�
 
 Hướng dẫn này sẽ giúp bạn cài đặt và thực hiện đóng góp đầu tiên một cách suôn sẻ.
 Bạn không cần phải là chuyên gia. Nếu có điều gì chưa rõ, hãy hỏi trên
-[Discord](https://discord.gg/GjhnUsBtw) và sẽ có người sẵn lòng giúp đỡ.
+[Discord](https://discord.gg/wYCQAfppF7) và sẽ có người sẵn lòng giúp đỡ.
 
 Khi tham gia, bạn đồng ý tuân theo [Quy tắc Ứng xử](../../CODE_OF_CONDUCT.md) của
 chúng tôi.
@@ -180,7 +180,7 @@ Bạn không cần viết bất kỳ mã trò chơi nào để làm điều đó
 3. Chạy `npx tsc --noEmit` để xác nhận không thiếu gì, rồi mở một PR.
 
 Để đề xuất một locale hoàn toàn mới, hoặc để thảo luận về giọng điệu và thuật ngữ,
-hãy bắt đầu một chủ đề trên [Discord](https://discord.gg/GjhnUsBtw) và chúng tôi sẽ
+hãy bắt đầu một chủ đề trên [Discord](https://discord.gg/wYCQAfppF7) và chúng tôi sẽ
 giúp bạn kết nối nó. Người bản xứ và người nói lưu loát đặc biệt được chào đón. Những
 bản dịch tốt khiến trò chơi cảm thấy như nhà đối với người chơi ở khắp mọi nơi.
 
@@ -198,7 +198,7 @@ Xin hãy sử dụng [các mẫu issue](https://github.com/levy-street/world-of-
 ## Nhận trợ giúp
 
 Bị mắc kẹt, hay chỉ muốn chào hỏi? Hãy tham gia
-[Discord cộng đồng](https://discord.gg/GjhnUsBtw). Không có câu hỏi nào là quá nhỏ,
+[Discord cộng đồng](https://discord.gg/wYCQAfppF7). Không có câu hỏi nào là quá nhỏ,
 và những người đóng góp mới luôn được chào đón.
 
 ## Giấy phép
