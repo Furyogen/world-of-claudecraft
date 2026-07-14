@@ -1,0 +1,331 @@
+import { spawnSync } from 'node:child_process';
+import { chmodSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterAll, describe, expect, it } from 'vitest';
+
+const watchdog = readFileSync('deploy/game_watchdog.sh', 'utf8');
+const userData = readFileSync('deploy/user-data.sh', 'utf8');
+const deployDoc = readFileSync('DEPLOY.md', 'utf8');
+
+describe('game watchdog deploy contract', () => {
+  // Docker's `restart: unless-stopped` only fires when the container process EXITS,
+  // so a wedged-but-alive game container is never restarted without this script.
+  // An unset variable or a silently failing pipe in a watchdog is worse than no
+  // watchdog: it would take a no-op path and report success.
+  it('runs under strict shell settings', () => {
+    expect(watchdog).toContain('set -euo pipefail');
+  });
+
+  // Detection reads docker's OWN health status (fed by the compose healthcheck
+  // probing /livez). If this inspect is lost, the watchdog is blind.
+  it('reads the container health status from docker inspect', () => {
+    expect(watchdog).toContain('docker inspect');
+    expect(watchdog).toContain('{{.State.Health.Status}}');
+  });
+
+  // It must act on `unhealthy` and on nothing else. Acting on `starting` would
+  // restart every boot inside start_period; there is no other state to act on.
+  it('restarts only on the unhealthy state', () => {
+    expect(watchdog).toContain('unhealthy)');
+    expect(watchdog).toContain('docker restart "$CONTAINER"');
+  });
+
+  // A drain deliberately keeps /livez at 200, so a draining container never reports
+  // unhealthy and the watchdog never sees it. Losing this contract from the header
+  // is how someone later "fixes" the detection into probing the port and starts
+  // killing containers mid-shutdown, discarding the character saves the drain flushes.
+  it('states the never-restart-a-draining-container contract', () => {
+    expect(watchdog).toContain('IT MUST NEVER RESTART A DRAINING CONTAINER');
+  });
+
+  // Dry-run is how an operator confirms the watchdog sees the container without
+  // touching production; it is also the only safe way to exercise it on a live box.
+  it('has a dry-run arm that changes nothing', () => {
+    expect(watchdog).toContain('--dry-run');
+    expect(watchdog).toContain('WATCHDOG_DRY_RUN');
+    expect(watchdog).toContain('DRY RUN: container ');
+    expect(watchdog).toContain(' is unhealthy, would run: docker restart ');
+  });
+
+  // A restart outlasts the one-minute cron interval, so fires overlap by design.
+  // Without the non-blocking lock, one wedge would be restarted twice.
+  it('serializes overlapping cron fires with a non-blocking lock', () => {
+    expect(watchdog).toContain('flock -n 9');
+    expect(watchdog).toContain('WATCHDOG_LOCK_FILE');
+  });
+
+  // Backoff. The healthcheck cannot report unhealthy again for start_period plus
+  // retries times interval after a restart, so without the cooldown state file the
+  // watchdog would restart a genuinely crashing container blind, in a hot loop.
+  it('refuses a fresh restart inside the cooldown window, stamped in a state file', () => {
+    expect(watchdog).toContain('WATCHDOG_COOLDOWN');
+    expect(watchdog).toContain('WATCHDOG_STATE_FILE');
+    expect(watchdog).toContain('/var/lib/eastbrook/watchdog-last-restart');
+    expect(watchdog).toContain('but the last watchdog restart was ');
+    expect(watchdog).toContain('s), skipping');
+  });
+});
+
+describe('game watchdog install', () => {
+  // First boot must land the script AND the cron entry: an uninstalled watchdog is
+  // an unmonitored realm, and a wedge then waits for a human to notice.
+  it('installs the watchdog and its cron entry at first boot', () => {
+    expect(userData).toContain(
+      'install -m 755 "$APP_DIR/deploy/game_watchdog.sh" /usr/local/bin/eastbrook-watchdog',
+    );
+    expect(userData).toContain('/etc/cron.d/eastbrook-watchdog');
+    expect(userData).toContain('* * * * * root /usr/local/bin/eastbrook-watchdog');
+  });
+
+  // user-data.sh runs at EC2 first boot only, so the already-provisioned production
+  // box never gets the watchdog unless a human installs it. Without this documented
+  // step the script ships and is never actually running anywhere.
+  it('documents the by-hand install for an already-provisioned host', () => {
+    expect(deployDoc).toContain(
+      'sudo install -m 755 deploy/game_watchdog.sh /usr/local/bin/eastbrook-watchdog',
+    );
+    // 'first boot' alone appears in unrelated prose (secrets, chat-filter seeding), so
+    // it pins nothing. This phrase is the by-hand-install instruction itself: drop the
+    // documented manual step and an already-provisioned host ships with no watchdog.
+    expect(deployDoc).toContain('has to be given it by hand');
+  });
+});
+
+describe('update runbook guards', () => {
+  // The private bot detector lives in a second checkout the image bundles at build
+  // time. A missing clone silently falls back to the no-op stub and a drifted clone
+  // compiles anyway, so the build reports nothing either way: the runbook IS the
+  // guard, and only these two steps catch a detector out of step with the game tree.
+  it('pulls the private bot-detector clone before the build', () => {
+    expect(deployDoc).toContain('sudo git -C private/bot_detector pull');
+  });
+
+  // npx tsc needs devDependencies, which a production checkout does not have. A
+  // documented gate that cannot run on a fresh host is not a gate.
+  it('runs the type-check drift gate, with devDependencies actually installed', () => {
+    expect(deployDoc).toContain('npx tsc --noEmit');
+    expect(deployDoc).toContain('npm ci');
+    // The two substrings above are satisfiable by two unrelated lines. The gate only
+    // works if `npm ci` (to get devDependencies) and `npx tsc --noEmit` run TOGETHER
+    // inside node:22-alpine, because a deploy host has neither Node nor devDependencies.
+    // Pin the whole invocation as one contiguous block so a split can never pass. It
+    // must drop the host .env (rm -f /app/.env) so production secrets never enter the
+    // throwaway container, and pass --ignore-scripts so dependency install hooks cannot
+    // run as root with network access: losing either turns the type-check into a
+    // secret-exfiltration surface on every deploy.
+    expect(deployDoc).toContain(
+      [
+        'sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \\',
+        "  sh -c 'cp -a /src/. /app && rm -f /app/.env && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'",
+      ].join('\n'),
+    );
+  });
+
+  // The stop step must let the shutdown chain drain; the explicit fallback window is
+  // for an older checkout whose compose file carries no stop_grace_period.
+  it('stops the game before rebuilding, with an explicit drain fallback', () => {
+    expect(deployDoc).toContain('sudo docker compose stop game');
+    expect(deployDoc).toContain('sudo docker compose stop -t 60 game');
+  });
+
+  // Post-deploy verification: an unverified deploy is one that gets rolled back later
+  // by whoever is on call. The health status catches a container whose world loop is
+  // not completing passes; the log read catches a server erroring on startup.
+  it('verifies container health and clean startup logs after the deploy', () => {
+    expect(deployDoc).toContain("sudo docker inspect -f '{{.State.Health.Status}}' eastbrook-game");
+    expect(deployDoc).toContain('sudo docker compose logs game --since 10m');
+  });
+});
+
+// -----------------------------------------------------------------------------
+// EXECUTION HARNESS: run deploy/game_watchdog.sh for real against a fake `docker`
+// (and a fake `flock`) on PATH, and assert whether it ACTUALLY issued a restart.
+// The string-grep tests above pin the literals; these pin the behavior, so a
+// mutation that keeps every literal intact but changes what the script does (a
+// `starting) ;;` restart arm, a deleted not-running guard, an inverted cooldown
+// comparison, a disabled dry-run arm) is caught here instead of shipping green.
+// -----------------------------------------------------------------------------
+
+const WATCHDOG_SCRIPT = 'deploy/game_watchdog.sh';
+const CONTAINER = 'eastbrook-game';
+const harnessDirs: string[] = [];
+
+interface Harness {
+  dir: string;
+  stateFile: string;
+  lockFile: string;
+  restartLog: string;
+}
+
+// A temp PATH dir holding two shims. `docker` prints a scripted `<running> <health>`
+// pair for `inspect` and records every `restart` invocation to a file; `flock` (which
+// may be entirely ABSENT on macOS) is overridden so the lock decision is deterministic
+// and cross-platform, controllable via SHIM_FLOCK_EXIT. Prepending this dir to PATH
+// makes both shims win over any real binary, and keeps the script off real docker.
+function makeHarness(): Harness {
+  const dir = mkdtempSync(join(tmpdir(), 'woc-watchdog-'));
+  harnessDirs.push(dir);
+  const dockerShim = `#!/usr/bin/env bash
+if [ "$1" = "inspect" ]; then
+  if [ "\${SHIM_INSPECT_EXIT:-0}" != "0" ]; then exit "\${SHIM_INSPECT_EXIT}"; fi
+  printf '%s\\n' "$SHIM_INSPECT"
+  exit 0
+fi
+if [ "$1" = "restart" ]; then
+  printf '%s\\n' "$2" >> "$SHIM_RESTART_LOG"
+  exit "\${SHIM_RESTART_EXIT:-0}"
+fi
+exit 0
+`;
+  writeFileSync(join(dir, 'docker'), dockerShim);
+  chmodSync(join(dir, 'docker'), 0o755);
+  const flockShim = `#!/usr/bin/env bash
+exit "\${SHIM_FLOCK_EXIT:-0}"
+`;
+  writeFileSync(join(dir, 'flock'), flockShim);
+  chmodSync(join(dir, 'flock'), 0o755);
+  return {
+    dir,
+    stateFile: join(dir, 'state'),
+    lockFile: join(dir, 'lock'),
+    restartLog: join(dir, 'restart.log'),
+  };
+}
+
+interface RunResult {
+  status: number | null;
+  output: string;
+  restarted: boolean;
+}
+
+function runWatchdog(
+  h: Harness,
+  opts: { inspect: string; args?: string[]; env?: Record<string, string> },
+): RunResult {
+  const res = spawnSync('bash', [WATCHDOG_SCRIPT, ...(opts.args ?? [])], {
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      PATH: `${h.dir}:${process.env.PATH ?? ''}`,
+      WATCHDOG_CONTAINER: CONTAINER,
+      WATCHDOG_STATE_FILE: h.stateFile,
+      WATCHDOG_LOCK_FILE: h.lockFile,
+      SHIM_INSPECT: opts.inspect,
+      SHIM_RESTART_LOG: h.restartLog,
+      ...opts.env,
+    },
+  });
+  const restarted =
+    existsSync(h.restartLog) && readFileSync(h.restartLog, 'utf8').includes(CONTAINER);
+  return { status: res.status, output: `${res.stdout}${res.stderr}`, restarted };
+}
+
+/** Epoch seconds, to stamp the cooldown state file relative to the script's `date -u +%s`. */
+function nowSeconds(): number {
+  return Math.floor(Date.now() / 1000);
+}
+
+afterAll(() => {
+  for (const dir of harnessDirs) rmSync(dir, { recursive: true, force: true });
+});
+
+describe('game watchdog behavior (executed against a fake docker)', () => {
+  // The harness must be able to observe a REAL restart, or every negative case below
+  // passes vacuously. An unhealthy, running container is the one case the watchdog
+  // exists for: if this stops restarting, a wedged world never recovers on its own.
+  it('restarts an unhealthy, running container', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(true);
+  });
+
+  // Restarting a healthy container would bounce a working server once a minute.
+  it('does NOT restart a healthy container', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true healthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+  });
+
+  // `starting` is the start_period window. Acting on it turns every cold boot into a
+  // restart loop that never lets the server finish coming up (mutation: a starting arm).
+  it('does NOT restart a container that is still starting (inside start_period)', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true starting' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+  });
+
+  // running=false is the real state after `docker compose stop`, and health can still
+  // read `unhealthy`. Restarting it fights the operator/deploy that stopped it and can
+  // kill a container mid-drain, discarding the saves the drain exists to flush.
+  it('does NOT restart a container that is not running, even while health is unhealthy', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'false unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+  });
+
+  // An image predating the healthcheck reports no health (`none`). Treating that as a
+  // reason to restart bounces a container the watchdog has no basis to assess.
+  it('does NOT restart a container reporting no health status (none)', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true none' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+  });
+
+  // --dry-run is the only safe way to exercise the watchdog on a live box. If it ever
+  // performs a real restart, an operator merely checking the watchdog reboots production.
+  it('logs the intended restart but does NOT restart under --dry-run', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true unhealthy', args: ['--dry-run'] });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+    expect(res.output).toContain('DRY RUN: container eastbrook-game is unhealthy');
+    expect(res.output).toContain('would run: docker restart eastbrook-game');
+  });
+
+  // A restart stamp newer than the cooldown must suppress a fresh restart: after a
+  // restart the healthcheck cannot report unhealthy again for start_period + retries,
+  // so acting inside the window is a blind hot restart loop (mutation: inverted -lt).
+  it('does NOT restart while a cooldown stamp is inside the window', () => {
+    const h = makeHarness();
+    writeFileSync(h.stateFile, `${nowSeconds()}\n`);
+    const res = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+    expect(res.output).toContain('cooldown');
+  });
+
+  // A stamp older than the cooldown must allow the next restart, or a container that
+  // failed to recover on its first restart is never retried (mutation: inverted -lt).
+  it('DOES restart once the cooldown stamp is older than the window', () => {
+    const h = makeHarness();
+    writeFileSync(h.stateFile, `${nowSeconds() - 700}\n`);
+    const res = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(true);
+  });
+
+  // Overlapping cron fires must serialize: a restart outlasts the one-minute interval,
+  // so a second fire that ignored the lock would restart the same wedge twice. The
+  // flock shim reports the lock already held (exit 1), the signal a real flock gives a
+  // second concurrent run.
+  it('does NOT restart when the serialization lock is already held', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true unhealthy', env: { SHIM_FLOCK_EXIT: '1' } });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+    expect(res.output).toContain('skipping');
+  });
+
+  // A syntax error anywhere in the script would ship green through every string-grep
+  // pin above; parsing it (and the executed cases) is what actually catches one.
+  it('parses without a syntax error', () => {
+    const res = spawnSync('bash', ['-n', WATCHDOG_SCRIPT], { encoding: 'utf8' });
+    expect(res.status).toBe(0);
+  });
+});

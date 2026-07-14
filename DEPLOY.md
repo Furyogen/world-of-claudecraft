@@ -73,12 +73,80 @@ WebSockets are proxied with no extra config, and the client auto-selects
 
 ## Updating the game
 
+Run these in order. If you bundle the private bot detector, its pull and the
+type-check gate are not optional. The detector is an optional component in a second
+checkout (`private/bot_detector`), and the build never complains about it: a missing
+clone silently falls back to the no-op stub, and a clone that has drifted out of step
+with the game tree compiles into the image and only fails when the server calls it.
+The type check is what catches that mismatch, and it has to run before the image is
+built, not after it ships.
+
 ```bash
 ssh ubuntu@<elastic-ip>
 cd /opt/eastbrook
+
+# 1. The game code.
 sudo git pull
+
+# 2. The private bot detector, if you bundle it. The image bundles whatever sits in
+#    private/bot_detector at build time (see the bot detector note below), so this
+#    clone has to move with the game tree. Pull it in the same breath as the game
+#    repo, every time. Skip this step entirely if you run the open-source stub.
+sudo git -C private/bot_detector pull
+#    First time on this host, clone it instead: it is not part of the public checkout.
+#    sudo git clone <private-bot-detector-repo> private/bot_detector
+
+# 3. The type-check drift gate: this is what catches a detector that no longer
+#    matches the interface the server calls. A deploy host runs Docker but often no
+#    Node, and a production checkout has no devDependencies, so run it in the same
+#    Node the image builds with. The checkout goes in read-only and is copied inside
+#    the container, so no root-owned node_modules is left behind on the host. Two
+#    hardening flags: `rm -f /app/.env` keeps the host .env (every production secret)
+#    out of the throwaway container, and `--ignore-scripts` stops dependency install
+#    hooks from running as root with network access. The type check needs neither.
+sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \
+  sh -c 'cp -a /src/. /app && rm -f /app/.env && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
+#    Red means STOP, do not deploy: the image would build fine and fail at runtime.
+#    (On a host that does have Node 22 on PATH, `npm ci --ignore-scripts && npx tsc
+#    --noEmit` in the checkout is the same gate.)
+
+# 4. Optional: warn the players. POST /internal/restart-countdown (loopback only,
+#    gated by the RESTART_COUNTDOWN_SECRET env var) broadcasts an in-game countdown;
+#    with the secret unset the endpoint answers 404 and there is nothing to warn
+#    with. The countdown runs 10 minutes; wait for it to elapse before step 5.
+curl -fsS -X POST -H "x-woc-deploy-secret: <RESTART_COUNTDOWN_SECRET>" \
+  http://127.0.0.1:8787/internal/restart-countdown
+
+# 5. Stop the game and let it drain. The container's stop grace period covers the
+#    whole shutdown chain (character saves included), and /livez deliberately stays
+#    200 while draining, so neither Docker's healthcheck nor the watchdog can read a
+#    graceful drain as a wedge.
+sudo docker compose stop game
+#    On an older checkout whose compose file has no stop_grace_period, pass the
+#    window explicitly: sudo docker compose stop -t 60 game
+
+# 6. Rebuild and start. (`sudo docker compose build game` before step 4 shortens the
+#    outage: the image is then ready the moment the countdown ends.)
 sudo docker compose up -d --build
 ```
+
+Then verify, before you walk away:
+
+```bash
+# the realm answers
+curl -fsS http://127.0.0.1:8787/api/status
+
+# Docker calls the game container healthy, not `starting` and not `unhealthy`
+sudo docker compose ps
+sudo docker inspect -f '{{.State.Health.Status}}' eastbrook-game
+
+# the startup logs are free of errors, and the bot detector line names the
+# implementation you actually expect (`stub (no-op)` or `private`)
+sudo docker compose logs game --since 10m
+```
+
+A container that never leaves `starting`, or that flips to `unhealthy`, is telling
+you the world loop is not completing passes: roll back rather than leaving it up.
 
 Players online during the restart are disconnected for a few seconds and
 can log straight back in; the server saves all characters on shutdown.
@@ -217,6 +285,45 @@ For off-box safety, sync the directory to S3 occasionally:
   (anything else gets an opaque 401). Configure the token on **both** the server
   and the Prometheus scrape job in the same change or scraping goes dark.
   `/livez` and `/readyz` stay open for load-balancer checks.
+- **Game watchdog (wedge recovery)**: `deploy/game_watchdog.sh`, installed as
+  `/usr/local/bin/eastbrook-watchdog` and fired every minute from
+  `/etc/cron.d/eastbrook-watchdog`. Docker's `restart: unless-stopped` only acts when
+  the container process EXITS, so a wedged-but-alive container (world loop stalled,
+  port still held) sits there until a human ssh-es in. The compose healthcheck probes
+  `GET /livez`, which answers **503 once the world loop has not completed a pass in
+  over 30 seconds** (it stays open and unauthenticated, as above); Docker turns that
+  into a container health status; the watchdog reads that status and restarts the
+  container **only** on `unhealthy`. Never on `starting`, never on `healthy`, and
+  never when the container is stopped or its image predates the healthcheck. It never
+  touches a **draining** container, and cannot: a drain deliberately holds `/livez` at
+  200 so a graceful shutdown is never misread as a wedge, so a draining container
+  never reports unhealthy. A five-minute cooldown (stamped in
+  `/var/lib/eastbrook/watchdog-last-restart`) sits above the roughly two-minute floor
+  before the healthcheck can re-evaluate a restart, so the watchdog never fires blind; a
+  container that keeps re-wedging is restarted about once every five minutes (Docker's
+  own `restart: unless-stopped` cannot help, since a wedge never exits the process), and
+  an `flock` serializes overlapping cron fires. End to end, a wedge takes roughly 90
+  seconds to flip `unhealthy`, then up to the stop grace period to shut down, then a
+  boot: budget about three minutes from stall to recovered when planning on-call. Dry-run
+  it any time, it changes nothing:
+  `sudo /usr/local/bin/eastbrook-watchdog --dry-run --verbose`. Actions land in
+  `/var/log/eastbrook-watchdog.log`; it is silent when there is nothing to do.
+  **Installing it on a host that is already running**: `deploy/user-data.sh` runs at
+  EC2 **first boot only** and never runs again, so any host provisioned before the
+  watchdog existed (or provisioned some other way) has to be given it by hand:
+
+  ```bash
+  cd /opt/eastbrook && sudo git pull
+  sudo install -m 755 deploy/game_watchdog.sh /usr/local/bin/eastbrook-watchdog
+  sudo install -d -m 755 /var/lib/eastbrook
+  echo '* * * * * root /usr/local/bin/eastbrook-watchdog >> /var/log/eastbrook-watchdog.log 2>&1' \
+    | sudo tee /etc/cron.d/eastbrook-watchdog
+  sudo /usr/local/bin/eastbrook-watchdog --dry-run --verbose  # confirm it sees the container
+  ```
+
+  The watchdog only has something to read once the game container runs an image
+  whose compose file carries the healthcheck, so install it alongside that deploy,
+  not before it.
 - **API dispatch (rollback)**: every REST surface (`/api`, `/admin/api`, `/oauth`,
   `/internal`) runs through the in-house request pipeline by default. To roll back to
   the old handler ladder, set `API_DISPATCH=legacy` in the server runtime env and
@@ -232,7 +339,24 @@ For off-box safety, sync the directory to S3 occasionally:
   logs forever); the same line now resolves to the 90-day default and pruning
   turns ON. Audit deployed env files for empty placeholder lines: delete the
   line to take the default, or set an explicit value (`CHAT_LOG_RETENTION_DAYS=0`
-  is still keep-forever).
+  is still keep-forever). Two more rows follow the same "empty means the DEFAULT"
+  contract:
+  - `NODE_OPTIONS=` (empty) means node's own defaults, which node sizes from TOTAL
+    system memory rather than the container's `mem_limit`, so on a host larger than the
+    limit node can grow past it and be OOM-killed mid-tick. Set a heap cap under the
+    limit on any host with the memory to back it, for example
+    `--max-old-space-size=4096` under the 5g `mem_limit` in `docker-compose.yml`: size
+    the two together and a runaway heap kills node inside the container, which Docker
+    restarts, rather than sending the kernel OOM-killer hunting for a victim on the
+    host. Raising the heap cap above the container limit trades one failure for a worse
+    one. Set this explicitly in the production `.env` (it is empty by default so a small
+    dev host is not handed a heap cap it cannot back).
+  - `MAX_PLAYERS_PER_REALM=` (empty) means the built-in default of 5000. A positive
+    value is the number of sessions a realm admits before it refuses fresh WebSocket
+    joins (`/api/status` advertises the value, so the realm list can show Full
+    honestly); an explicit `0` disables the cap entirely. The default is a guard rail,
+    not a capacity estimate: what a realm can actually carry depends on the host, so
+    measure yours and set the number you measured.
 - Logs: `sudo docker compose -f /opt/eastbrook/docker-compose.yml logs -f game`.
 - If the instance ever feels tight, stop, change instance type,
   start. Everything lives in Docker plus one EBS volume, so nothing
