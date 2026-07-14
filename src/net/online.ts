@@ -98,7 +98,7 @@ import {
   type TradeInfo,
 } from '../world_api';
 import { computeBackoffDelay } from './backoff';
-import { isTransientReconnectRejection } from './reconnect_policy';
+import { isTransientReconnectRejection, isTransientTimeoutRejection } from './reconnect_policy';
 
 // ---------------------------------------------------------------------------
 // REST
@@ -1288,6 +1288,10 @@ export class ClientWorld implements IWorld {
   // consecutive 'character already in world' rejections during a reconnect;
   // see src/net/reconnect_policy.ts for why these are tolerated (bounded)
   private conflictRejections = 0;
+  // consecutive 'authentication timed out' rejections during a reconnect (a
+  // server event-loop stall under saturation); tolerated on its own bound,
+  // see src/net/reconnect_policy.ts
+  private timeoutRejections = 0;
   private reconnectTimer: number | undefined;
   // set by close() and by a server 'error' frame: the session is over for
   // good, so a subsequent socket close must not schedule a reconnect
@@ -1589,6 +1593,7 @@ export class ClientWorld implements IWorld {
         // any stale mirrored entities fall out via the snapshot prune
         this.reconnectAttempts = 0;
         this.conflictRejections = 0;
+        this.timeoutRejections = 0;
         this.inputSeq = 0;
         this.lastInputSig = '';
         this.lastInputSentAt = 0;
@@ -1642,6 +1647,14 @@ export class ClientWorld implements IWorld {
         isTransientReconnectRejection(msg.error, this.reconnectAttempts, this.conflictRejections)
       ) {
         this.conflictRejections++;
+        return; // the server closes this socket; onclose schedules the retry
+      }
+      // Mid-reconnect, 'authentication timed out' is the other transient
+      // window: a server event-loop stall under saturation kept the handshake
+      // from processing the first auth frame in time. Keep backing off; the
+      // next retry lands after the stall clears. Bounded on its own counter.
+      if (isTransientTimeoutRejection(msg.error, this.reconnectAttempts, this.timeoutRejections)) {
+        this.timeoutRejections++;
         return; // the server closes this socket; onclose schedules the retry
       }
       // any other server rejection (kick, moderation, takeover, failed auth)
