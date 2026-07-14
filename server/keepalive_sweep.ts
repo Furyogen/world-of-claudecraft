@@ -6,6 +6,13 @@
 // is the stall threshold expressed in whole intervals. Below 1.0x every normal timer
 // jitter would read as a stall; at 1.5x a sweep half an interval late means queued
 // pongs were never processed, so the termination evidence is void.
+//
+// Deliberate consequence: while the loop is CHRONICALLY late (every sweep past the
+// threshold), reaping is paused entirely, so genuinely dead sockets accumulate and
+// their characters answer 'character already in world' until one on-time sweep
+// runs. That is the intended trade: a saturated process must not mass-terminate
+// every live session on evidence the stall itself manufactured; the dead sockets
+// drain one clean interval after the loop recovers.
 export const KEEPALIVE_STALL_FACTOR = 1.5;
 
 // True when the gap since the previous sweep exceeds the stall threshold, meaning

@@ -923,8 +923,10 @@ export async function ensureSchema(): Promise<void> {
   // import would invalidate every one of those mocks.
   const { Client } = await import('pg');
   const client = new Client({ connectionString: DATABASE_URL });
-  await client.connect();
   try {
+    // Inside the try so the finally's end() always runs, even on a connect
+    // failure (end() on a never-connected client is a harmless no-op).
+    await client.connect();
     await client.query('BEGIN');
     // Boot DDL serializes on the advisory lock across every realm process, so it
     // can legitimately wait far longer than any per-request budget. The dedicated
