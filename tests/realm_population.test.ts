@@ -54,6 +54,26 @@ describe('realmPopulation', () => {
     });
   });
 
+  it('bands normally below a positive cap: the cap only adds the Full refusal point', () => {
+    // cap 100: counts below it band exactly as the cap-disabled table does, so a
+    // configured cap never shifts the High/Medium/Low edges.
+    expect(realmPopulation(true, 85, 100)).toEqual({
+      labelKey: 'realm.high',
+      tipKey: 'realm.popTipHigh',
+      cls: 'high',
+    });
+    expect(realmPopulation(true, 50, 100)).toEqual({
+      labelKey: 'realm.medium',
+      tipKey: 'realm.popTipMedium',
+      cls: 'med',
+    });
+    expect(realmPopulation(true, 10, 100)).toEqual({
+      labelKey: 'realm.low',
+      tipKey: 'realm.popTipLow',
+      cls: 'low',
+    });
+  });
+
   it('bands the count when the cap is disabled: high >= 80, medium >= 15, else low', () => {
     const band = (players: number) => realmPopulation(true, players, 0);
     // High band opens at exactly 80 (79 is still Medium).

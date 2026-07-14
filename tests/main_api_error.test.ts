@@ -153,6 +153,11 @@ describe('userFacingApiError prose fallback (un-migrated routes, until Phase 25)
       t('loading.connectionLost'),
     );
     expect(userFacingApiError('rejected by server')).toBe(t('loading.connectionRejected'));
+    // The realm-at-capacity refusal: the server emit and the FATAL reconnect
+    // classification are pinned elsewhere; this pins the localization hop between
+    // them, so a drifted matcher literal or target key cannot silently regress the
+    // refusal overlay to raw English.
+    expect(userFacingApiError('realm is full')).toBe(t('loading.realmFull'));
   });
 
   it('re-localizes a moderation kick through tServer', () => {
