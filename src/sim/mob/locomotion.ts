@@ -260,8 +260,10 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         // never-detectable players. One caveat: the grid buckets by end-of-tick
         // position with a 1 yd pad (spatial.ts), so a mid-tick displacement past the
         // pad (a knockback) defers that player's detection to the next tick's
-        // rebucket; the former 25 yd query had the same miss class above a 6 yd
-        // displacement.
+        // rebucket. The former 25 yd query had the same one-tick-deferral miss
+        // class, but its 5 yd slack meant only displacements past ~6 yd could
+        // fall outside it; this query defers any inward displacement past the
+        // pad. Ruled acceptable: one 50 ms deferral, uniform across hosts.
         ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
           counters.aggroScanPlayerVisits++;
           if (e.dead) return;
