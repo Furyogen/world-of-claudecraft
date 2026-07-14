@@ -9,7 +9,7 @@
 // visibilitychange and force-checks the real socket state on resume; this
 // file pins that behavior directly (world_api_parity.test.ts's StubWebSocket
 // is OPEN-only and never exercises reconnect).
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import type { PlayerClass } from '../src/sim/types';
 
@@ -64,43 +64,81 @@ function makeFakeDocument() {
 
 type FakeDocument = ReturnType<typeof makeFakeDocument>;
 
-function withDomStubs<T>(fn: (doc: FakeDocument) => T): T {
+// One captured, not-yet-fired timer plus the delay it was scheduled with, so a
+// test can assert a new short spread timer replaced a cleared long backoff one.
+type CapturedTimer = { id: number; fn: () => void; delay: number };
+
+interface TimerHarness {
+  // Live timers: scheduled but neither cleared nor fired yet.
+  readonly timers: CapturedTimer[];
+  // Fire a captured timer the way the event loop would: remove it first (a
+  // one-shot timer is gone once it fires), then run its callback (which may
+  // itself schedule a fresh timer).
+  fire(id: number): void;
+}
+
+function withDomStubs<T>(fn: (doc: FakeDocument, harness: TimerHarness) => T): T {
   const g = globalThis as Record<string, unknown>;
   const prevWebSocket = g.WebSocket;
   const prevWindow = g.window;
   const prevDocument = g.document;
-  const timers: Array<{ id: number; fn: () => void }> = [];
+  const prevClearTimeout = g.clearTimeout as (id?: unknown) => void;
+  const timers: CapturedTimer[] = [];
   let nextId = 1;
   const doc = makeFakeDocument();
+  const clearById = (id: number): boolean => {
+    const idx = timers.findIndex((t) => t.id === id);
+    if (idx === -1) return false;
+    timers.splice(idx, 1);
+    return true;
+  };
   g.WebSocket = StubWebSocket as unknown;
   g.document = doc as unknown;
   g.window = {
     setInterval: () => 0,
     clearInterval: () => undefined,
-    // Reconnect scheduling under test: capture without auto-firing, so a
-    // test can assert whether a NEW timer replaced a cleared one.
-    setTimeout: (fn: () => void) => {
+    // Reconnect scheduling under test: capture without auto-firing, recording the
+    // delay, so a test can assert whether a NEW timer replaced a cleared one and
+    // inspect the scheduled spread.
+    setTimeout: (cb: () => void, delay = 0) => {
       const id = nextId++;
-      timers.push({ id, fn });
+      timers.push({ id, fn: cb, delay });
       return id;
     },
     clearTimeout: (id: number) => {
+      clearById(id);
+    },
+  };
+  // online.ts clears its reconnect timer via the bare global clearTimeout (in a
+  // browser the same object as window.clearTimeout, but not under Node), so route
+  // the global at the captured array too; forward any unrelated id to the real
+  // clearTimeout so no foreign timer leaks.
+  g.clearTimeout = (id: number) => {
+    if (!clearById(id)) prevClearTimeout(id);
+  };
+  const harness: TimerHarness = {
+    timers,
+    fire(id: number) {
       const idx = timers.findIndex((t) => t.id === id);
-      if (idx !== -1) timers.splice(idx, 1);
+      if (idx === -1) throw new Error(`no live timer with id ${id}`);
+      const [timer] = timers.splice(idx, 1);
+      timer.fn();
     },
   };
   try {
-    return fn(doc);
+    return fn(doc, harness);
   } finally {
     g.WebSocket = prevWebSocket;
     g.window = prevWindow;
     g.document = prevDocument;
+    g.clearTimeout = prevClearTimeout;
   }
 }
 
 describe('ClientWorld visibilitychange reconnect (mobile background/foreground)', () => {
   afterEach(() => {
     StubWebSocket.instances = [];
+    vi.restoreAllMocks();
   });
 
   it('registers exactly one visibilitychange listener at construction and removes it on close()', () => {
@@ -141,22 +179,111 @@ describe('ClientWorld visibilitychange reconnect (mobile background/foreground)'
     });
   });
 
-  it('foregrounding while a backoff timer is still pending retries immediately instead of waiting out the delay', () => {
-    withDomStubs((doc) => {
+  it('foregrounding while a backoff timer is still pending replaces it with a short spread retry, not the full backoff wait', () => {
+    withDomStubs((doc, harness) => {
+      // Pin the rng so both scheduled delays are exact values, not just bands:
+      // regressions that collapse the spread to a constant, shrink its range, or
+      // swap computeBackoffDelay's arguments all change these literals.
+      vi.spyOn(Math, 'random').mockReturnValue(0.75);
       const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
       const first = StubWebSocket.instances[0];
 
       // A real close: readyState moves off OPEN and onclose fires, scheduling
-      // the backoff reconnectTimer via the stubbed window.setTimeout above
-      // (captured, not auto-fired).
+      // the long exponential backoff reconnectTimer via the stubbed
+      // window.setTimeout above (captured, not auto-fired).
       first.readyState = StubWebSocket.CLOSED;
       first.onclose?.();
       expect(StubWebSocket.instances.length).toBe(1); // still waiting on backoff
+      expect(harness.timers.length).toBe(1);
+      const backoff = harness.timers[0];
+      // Attempt 1 through the real socketClosed wiring: base 1000 * (0.5 + 0.75)
+      // = 1250. Feeding the wrong constants or swapping the base/max arguments
+      // of computeBackoffDelay lands on a different value.
+      expect(backoff.delay).toBe(1_250);
 
       doc.setVisible(true);
-      // Foregrounding must not wait for the captured backoff timer to fire;
-      // it opens a new socket right away.
+      // Foregrounding does not wait out the long backoff: it clears that pending
+      // timer and schedules a NEW one in its place (a short 0 to 1000 ms random
+      // spread), rather than opening a socket on the same beat as every other
+      // foregrounded tab.
+      expect(harness.timers.some((t) => t.id === backoff.id)).toBe(false); // old cleared
+      expect(harness.timers.length).toBe(1); // exactly one live timer, the replacement
+      const spread = harness.timers[0];
+      expect(spread.id).not.toBe(backoff.id);
+      // 0.75 * the 1000 ms spread window exactly; the band bounds follow from
+      // this linear map for any rng in [0, 1).
+      expect(spread.delay).toBe(750);
+      expect(spread.delay).toBeGreaterThanOrEqual(0);
+      expect(spread.delay).toBeLessThanOrEqual(1_000);
+      expect(StubWebSocket.instances.length).toBe(1); // still deferred, not opened yet
+
+      // firing the spread timer by hand performs the deferred retry
+      harness.fire(spread.id);
       expect(StubWebSocket.instances.length).toBe(2);
+      world.close();
+    });
+  });
+
+  it('never stacks timers across repeated foreground events while the short retry is pending', () => {
+    withDomStubs((doc, harness) => {
+      // One rng draw per schedule, in order: the backoff (0.5), then one spread
+      // draw per foreground event. Distinct values prove each event re-rolls a
+      // fresh spread timer rather than keeping the first one alive.
+      vi.spyOn(Math, 'random')
+        .mockReturnValueOnce(0.5)
+        .mockReturnValueOnce(0.999999)
+        .mockReturnValueOnce(0)
+        .mockReturnValue(0.42);
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // long backoff scheduled
+      expect(harness.timers.length).toBe(1);
+
+      // Several visibilitychange events in a row (a phone unlock storm): each
+      // clears the pending spread timer and schedules a fresh one in the same
+      // slot, so there is never a second live timer and never a double open.
+      doc.setVisible(true);
+      doc.setVisible(true);
+      doc.setVisible(true);
+      expect(harness.timers.length).toBe(1);
+      const only = harness.timers[0];
+      // The survivor is the LAST draw's timer (0.42 * 1000), proving the earlier
+      // spread timers (999.999..., 0) were each cleared on replacement.
+      expect(only.delay).toBe(420);
+      expect(only.delay).toBeLessThanOrEqual(1_000);
+
+      harness.fire(only.id);
+      expect(StubWebSocket.instances.length).toBe(2); // exactly one new socket
+      expect(harness.timers.length).toBe(0);
+      world.close();
+    });
+  });
+
+  it('does not re-schedule or re-open when foregrounded again while the fresh socket is still connecting', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // long backoff scheduled
+      doc.setVisible(true); // replaced with the short spread timer
+      const spread = harness.timers[0];
+
+      // Fire the spread retry by hand: its callback clears reconnectTimer, then
+      // opens the second socket. That socket is still CONNECTING (no hello yet).
+      harness.fire(spread.id);
+      expect(StubWebSocket.instances.length).toBe(2);
+      const second = StubWebSocket.instances[1];
+      second.readyState = StubWebSocket.CONNECTING;
+      expect(harness.timers.length).toBe(0); // the retry timer is spent, none pending
+
+      // Foregrounding again now must be a no-op: reconnectTimer is undefined (the
+      // callback cleared its own stale handle) and the socket is not OPEN, so the
+      // zombie branch sees connected === false and neither schedules a timer nor
+      // opens a third socket.
+      doc.setVisible(true);
+      expect(StubWebSocket.instances.length).toBe(2);
+      expect(harness.timers.length).toBe(0);
       world.close();
     });
   });

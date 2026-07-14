@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 
 const openPlaySession = vi.fn(async () => 1);
@@ -27,8 +28,11 @@ import { type ClientSession, GameServer } from '../server/game';
 import { LINKDEAD_GRACE_MS, planJoin } from '../server/linkdead';
 import {
   isTransientReconnectRejection,
+  isTransientTimeoutRejection,
   MAX_CONFLICT_REJECTIONS,
+  MAX_TIMEOUT_REJECTIONS,
   RECONNECT_CONFLICT_ERROR,
+  RECONNECT_TIMEOUT_ERROR,
 } from '../src/net/reconnect_policy';
 
 function fakeWs() {
@@ -433,6 +437,59 @@ describe('reconnect policy (client-side conflict tolerance)', () => {
       maxPerAccount: 1,
     });
     expect(plan).toEqual({ action: 'reject', error: RECONNECT_CONFLICT_ERROR });
+  });
+
+  it('tolerates the auth-timeout rejection only while a reconnect is in flight', () => {
+    expect(isTransientTimeoutRejection('authentication timed out', 1, 0)).toBe(true);
+    // a fresh character-select join (not reconnecting) must stay fatal
+    expect(isTransientTimeoutRejection('authentication timed out', 0, 0)).toBe(false);
+  });
+
+  it('gives up after its own bounded run of timeout rejections, and pins both bounds', () => {
+    expect(
+      isTransientTimeoutRejection('authentication timed out', 5, MAX_TIMEOUT_REJECTIONS - 1),
+    ).toBe(true);
+    expect(isTransientTimeoutRejection('authentication timed out', 5, MAX_TIMEOUT_REJECTIONS)).toBe(
+      false,
+    );
+    // the two transient windows carry different, literally-pinned bounds, so a
+    // silent change to either reds here
+    expect(MAX_TIMEOUT_REJECTIONS).toBe(20);
+    expect(MAX_CONFLICT_REJECTIONS).toBe(8);
+  });
+
+  it('keeps the timeout and conflict predicates independent by string and by counter', () => {
+    // cross-string: neither predicate fires on the other's wire string
+    expect(isTransientTimeoutRejection(RECONNECT_CONFLICT_ERROR, 3, 0)).toBe(false);
+    expect(isTransientReconnectRejection(RECONNECT_TIMEOUT_ERROR, 3, 0)).toBe(false);
+    // cross-counter: each predicate bounds on its OWN counter. At a rejection count
+    // of 8 (the conflict bound) the timeout predicate is still transient (its bound
+    // is 20), while the conflict predicate has already given up. A shared counter
+    // or a swapped bound would flip one of these.
+    expect(isTransientTimeoutRejection(RECONNECT_TIMEOUT_ERROR, 3, MAX_CONFLICT_REJECTIONS)).toBe(
+      true,
+    );
+    expect(
+      isTransientReconnectRejection(RECONNECT_CONFLICT_ERROR, 3, MAX_CONFLICT_REJECTIONS),
+    ).toBe(false);
+  });
+
+  it('pins the auth-timeout wire string byte-identical to the server literal', () => {
+    // Must equal the server's WS_AUTH_ERROR.authTimedOut value (server/ws_auth.ts,
+    // sent by the first-frame auth timer in onConnection).
+    expect(RECONNECT_TIMEOUT_ERROR).toBe('authentication timed out');
+    // That table is a private const, not exported, so the server side is pinned
+    // by source text: renaming or rewording the table entry there reds this test
+    // until the client constant moves in the same change (the conflict literal
+    // gets the equivalent guard through the planJoin call above).
+    const wsAuthSource = readFileSync(new URL('../server/ws_auth.ts', import.meta.url), 'utf8');
+    expect(wsAuthSource).toContain("authTimedOut: 'authentication timed out',");
+  });
+
+  it('never tolerates any other server rejection under the timeout predicate', () => {
+    expect(isTransientTimeoutRejection('character taken over', 3, 0)).toBe(false);
+    expect(isTransientTimeoutRejection('not authenticated', 3, 0)).toBe(false);
+    expect(isTransientTimeoutRejection(undefined, 3, 0)).toBe(false);
   });
 });
 
