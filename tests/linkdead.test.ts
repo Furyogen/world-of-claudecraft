@@ -506,6 +506,18 @@ describe('reconnect policy (client-side conflict tolerance)', () => {
     expect(isTransientReconnectRejection('realm is full', 3, 0)).toBe(false);
     expect(isTransientTimeoutRejection('realm is full', 3, 0)).toBe(false);
   });
+
+  it('treats the too-many-connections refusal as FATAL under both predicates (the refusal is not retried)', () => {
+    // The per-IP hard-limit refusal (server/ws_auth.ts WS_AUTH_ERROR.tooManyConnections,
+    // the exact literal 'too many connections from your network') matches NEITHER transient
+    // predicate, so a reconnect surfaces it to the player instead of silently hammering the
+    // same network cap. Pinned mid-retry (attempts 3) with fresh rejection counters (0) so
+    // the false result comes from the string not matching, not from a spent bound.
+    expect(isTransientReconnectRejection('too many connections from your network', 3, 0)).toBe(
+      false,
+    );
+    expect(isTransientTimeoutRejection('too many connections from your network', 3, 0)).toBe(false);
+  });
 });
 
 describe('deliberate logout skips linkdead grace', () => {

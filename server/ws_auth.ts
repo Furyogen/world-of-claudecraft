@@ -3,13 +3,13 @@
 // main.ts and behind an injected deps bag so it can be unit tested without a
 // database or a live HTTP server.
 //
-// The handshake's wire vocabulary (the rejection strings, the per-IP close code
-// and reason, the leave reasons, the timeout, the upgrade path) lives in named
-// tables at the top of this module rather than as literals scattered through the
-// control flow. The rejection strings ride the {t:'error'} frame to the client's
-// disconnect path (src/net/online.ts) and are matched there by userFacingApiError
-// (src/main.ts), so any value here is part of the wire contract: changing one is a
-// wire change that must land in the client matcher in the same commit.
+// The handshake's wire vocabulary (the rejection strings, the leave reasons, the
+// timeout, the upgrade path) lives in named tables at the top of this module rather
+// than as literals scattered through the control flow. The rejection strings ride the
+// {t:'error'} frame to the client's disconnect path (src/net/online.ts) and are matched
+// there by userFacingApiError (src/main.ts), so any value here is part of the wire
+// contract: changing one is a wire change that must land in the client matcher in the
+// same commit.
 
 import { randomUUID } from 'node:crypto';
 import type { EventEmitter } from 'node:events';
@@ -43,15 +43,14 @@ const WS_AUTH_ERROR = {
   // changing it is a wire change that must land in the client matcher in the same
   // commit.
   realmFull: 'realm is full',
+  // The per-IP hard connection limit refused a fresh handshake (an egregious bot farm
+  // opening many sockets from one network); staff are exempt. This EXACT lowercase
+  // literal is part of the wire contract the client matcher reads verbatim, so
+  // changing it is a wire change that must land in the client matcher in the same
+  // commit.
+  tooManyConnections: 'too many connections from your network',
   forceRename: 'This character must be renamed before entering the world.',
   authTimedOut: 'authentication timed out',
-} as const;
-
-// The per-IP hard-limit refusal is a raw WS close (code + reason), never a
-// {t:'error'} frame; the client surfaces it through the socket onclose path.
-const TOO_MANY_CONNECTIONS_CLOSE = {
-  code: 1008,
-  reason: 'Too many connections from your network',
 } as const;
 
 // The first auth frame must arrive within this window or the socket is closed.
@@ -249,7 +248,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
         hardLimit: MAX_WS_PER_IP_HARD,
       })
     ) {
-      ws.close(TOO_MANY_CONNECTIONS_CLOSE.code, TOO_MANY_CONNECTIONS_CLOSE.reason);
+      rejectHandshake(ws, WS_AUTH_ERROR.tooManyConnections);
       return;
     }
     const accountCosmetics = await loadAccountCosmetics(accountId);

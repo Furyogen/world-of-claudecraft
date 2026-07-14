@@ -193,7 +193,7 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     );
   });
 
-  it('8. closes 1008 on the IP gate, wiring the gate inputs, and sends NO error frame', async () => {
+  it('8. sends the tooManyConnections error frame on the IP gate, wiring the gate inputs', async () => {
     const { ws, game, deps, req } = setup();
     deps.isConnectionRefused = vi.fn(() => true);
     const { authenticateWebSocket } = createWsAuth(deps);
@@ -211,10 +211,9 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     });
     expect(game.isIpBlocked).toHaveBeenCalledWith('1.2.3.4');
     expect(game.countIpSessions).toHaveBeenCalledWith('1.2.3.4');
-    // This asymmetry is load-bearing: the hard per-IP limit closes with a code
-    // and reason but never writes a {t:'error'} frame first.
-    expect(ws.close).toHaveBeenCalledWith(1008, 'Too many connections from your network');
-    expect(ws.send).not.toHaveBeenCalled();
+    // The refusal now rides the same localizable {t:'error'} frame every other
+    // reject path uses, so the client surfaces it instead of silently reconnecting.
+    expectSendThenClose(ws, errorFrame('too many connections from your network'));
   });
 
   it('8b. refuses via the REAL gate predicate when live IP sessions reach the hard limit', async () => {
@@ -225,7 +224,19 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     game.countIpSessions = vi.fn((_ip: string) => 20); // exactly at maxWsPerIpHard (20)
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw(), req);
-    expect(ws.close).toHaveBeenCalledWith(1008, 'Too many connections from your network');
+    expectSendThenClose(ws, errorFrame('too many connections from your network'));
+    expect(game.join).not.toHaveBeenCalled();
+  });
+
+  it('8b2. refuses via the REAL gate predicate when the IP is blocked', async () => {
+    const { ws, game, deps, req } = setup();
+    // The blocked arm of the real predicate, with the session count at zero, so the
+    // refusal can only come from the block flag itself.
+    deps.isConnectionRefused = realIsConnectionRefused;
+    game.isIpBlocked = vi.fn((_ip: string) => true);
+    const { authenticateWebSocket } = createWsAuth(deps);
+    await authenticateWebSocket(asWs(ws), authRaw(), req);
+    expectSendThenClose(ws, errorFrame('too many connections from your network'));
     expect(game.join).not.toHaveBeenCalled();
   });
 
@@ -236,9 +247,9 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     game.countIpSessions = vi.fn((_ip: string) => 999); // far past the limit
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw(), req);
-    // isAdmin short-circuits the gate, so the join proceeds and no 1008 fires.
+    // isAdmin short-circuits the gate, so the join proceeds and no refusal frame is sent.
     expect(game.join).toHaveBeenCalledTimes(1);
-    expect(ws.close).not.toHaveBeenCalledWith(1008, 'Too many connections from your network');
+    expect(ws.send).not.toHaveBeenCalledWith(errorFrame('too many connections from your network'));
   });
 
   it('9. forwards a game.join error frame', async () => {

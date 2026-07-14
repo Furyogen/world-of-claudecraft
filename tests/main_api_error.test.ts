@@ -158,6 +158,11 @@ describe('userFacingApiError prose fallback (un-migrated routes, until Phase 25)
     // them, so a drifted matcher literal or target key cannot silently regress the
     // refusal overlay to raw English.
     expect(userFacingApiError('realm is full')).toBe(t('loading.realmFull'));
+    // The per-IP connection-cap refusal takes the same localization hop, so its
+    // matcher literal and target key are pinned the same way.
+    expect(userFacingApiError('too many connections from your network')).toBe(
+      t('loading.tooManyConnections'),
+    );
   });
 
   it('re-localizes a moderation kick through tServer', () => {

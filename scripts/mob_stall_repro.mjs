@@ -498,7 +498,13 @@ class Bot {
           return;
         }
         if (msg.t === 'error') {
-          fail(new Error(`${this.name} auth failed: ${msg.error ?? 'unknown websocket error'}`));
+          const hint =
+            msg.error === 'too many connections from your network'
+              ? ' Increase MAX_WS_PER_IP_HARD, restart the server, and close extra local sessions.'
+              : '';
+          fail(
+            new Error(`${this.name} auth failed: ${msg.error ?? 'unknown websocket error'}${hint}`),
+          );
           ws.close();
           return;
         }
@@ -515,11 +521,7 @@ class Bot {
         this.closed = true;
         this.connected = false;
         if (!settled) {
-          const hint =
-            code === 1008
-              ? ' Increase MAX_WS_PER_IP_HARD, restart the server, and close extra local sessions.'
-              : '';
-          fail(new Error(`${this.name} closed before hello: code=${code}.${hint}`));
+          fail(new Error(`${this.name} closed before hello: code=${code}.`));
         }
       });
     });
