@@ -175,6 +175,6 @@ export async function clientPerfMetricRows(
   // allowance (driven by the client-perf metrics collector on an interval). The
   // integration test's own pool path (runClientPerfMetricRows) is left untouched.
   return runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
-    runClientPerfMetricRows({ query: (text, params) => query(text, params) }, options),
+    runClientPerfMetricRows({ query }, options),
   );
 }
