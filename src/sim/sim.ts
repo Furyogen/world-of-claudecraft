@@ -397,6 +397,7 @@ import {
   angleTo,
   armorReduction,
   type CrowdControlDrCategory,
+  type CrowdControlDrState,
   cloneInvSlot,
   cloneItemInstancePayload,
   DELVE_COMPANION_HEAL_INTERVAL,
@@ -670,6 +671,17 @@ export interface ArenaQueueUnit {
 // slot; `returns` remembers where each was standing so the match can put them
 // back when it ends. Ratings are snapshotted at the start purely for the
 // result message — the authoritative values live on each PlayerMeta.
+// Per-fighter recovery pools snapshotted at match formation (before the arena
+// clean-slate reset) so returnFromArena can restore them instead of full-healing.
+// This is what stops an arena bout being abused as a free, instant full restore
+// of HP, resource, and cooldowns (issue #1600).
+export interface ArenaReturnPools {
+  hp: number;
+  resource: number;
+  cooldowns: Map<string, number>;
+  ccDr: Map<CrowdControlDrCategory, CrowdControlDrState>;
+}
+
 export interface ArenaMatch {
   id: number;
   format: ArenaFormat;
@@ -679,6 +691,10 @@ export interface ArenaMatch {
   state: 'countdown' | 'active' | 'over';
   timer: number; // countdown remaining, then elapsed once active, then return countdown
   returns: Map<number, { x: number; z: number; facing: number }>;
+  // Pre-match HP/resource/cooldown/CC DR pools keyed by pid, restored on return
+  // so no arena format can be farmed as a free full-restore (issue #1600).
+  // Optional only for compatibility with synthetic/legacy ArenaMatch fixtures.
+  preMatchPools?: Map<number, ArenaReturnPools>;
   ratingA: number; // team avg at start
   ratingB: number;
   defeated: Set<number>;
@@ -3729,6 +3745,8 @@ export class Sim {
     // time since its previous mark to the named phase. Undefined offline/headless, so
     // this is a no-op there; it draws no rng and mutates nothing either way, keeping
     // the tick deterministic. The server injects it for its on-demand tick profiler.
+    // The mob loop additionally passes the mob it just updated as a sub-phase tag so
+    // the host can split mob.update per zone; every other call omits it.
     const lap = this.cfg.perfLap;
     // Zero the mob-AI scan visit counters for this tick before any tick work runs, so
     // the getter reads this tick's totals once tick() returns (observability only,
@@ -3791,7 +3809,10 @@ export class Sim {
     for (const e of this.entities.values()) {
       if (e.kind === 'mob') {
         this.updateMob(e);
-        lap?.('mob.update', e.templateId);
+        // Tag the mob.update lap with the mob so the host can attribute this slice
+        // of the phase cost to its zone/group. The sim reads nothing
+        // from it and allocates nothing, so this stays behavior- and parity-inert.
+        lap?.('mob.update', e);
         updateAuras(this.ctx, e);
         lap?.('mob.auras');
       } else if (e.kind === 'npc') {

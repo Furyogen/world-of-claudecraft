@@ -11,27 +11,69 @@
 export const pending: Record<string, readonly string[]> = {
   "es": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "es_ES": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "fr_FR": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "fr_CA": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "en_CA": [],
   "it_IT": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "de_DE": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "zh_CN": [],
@@ -40,39 +82,102 @@ export const pending: Record<string, readonly string[]> = {
   "ja_JP": [],
   "pt_BR": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "ru_RU": [],
   "cs_CZ": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "nl_NL": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "pl_PL": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "id_ID": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "tr_TR": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "sv_SE": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "vi_VN": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
   "da_DK": [
     "hudChrome.bags.rightClickDestroy",
+    "hudChrome.cameraPrompt.changeLater",
+    "hudChrome.cameraPrompt.classicDesc",
+    "hudChrome.cameraPrompt.classicTitle",
+    "hudChrome.cameraPrompt.confirm",
+    "hudChrome.cameraPrompt.intro",
+    "hudChrome.cameraPrompt.mouseDesc",
+    "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ]
 };
