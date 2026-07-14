@@ -298,4 +298,111 @@ describe('ClientWorld visibilitychange reconnect (mobile background/foreground)'
       world.close();
     });
   });
+
+  it('clears the backoff timer handle when it fires, so a foreground during CONNECTING stays a no-op', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // long backoff scheduled
+      expect(harness.timers.length).toBe(1);
+
+      // Fire the BACKOFF timer itself (not a spread replacement): its callback
+      // must clear its own reconnectTimer handle before opening the new socket.
+      harness.fire(harness.timers[0].id);
+      expect(StubWebSocket.instances.length).toBe(2);
+      StubWebSocket.instances[1].readyState = StubWebSocket.CONNECTING;
+      expect(harness.timers.length).toBe(0);
+
+      // A stale handle here would send this foreground event down the
+      // pending-timer branch and schedule a spread retry toward a THIRD socket;
+      // the self-clear keeps it a no-op instead.
+      doc.setVisible(true);
+      expect(harness.timers.length).toBe(0);
+      expect(StubWebSocket.instances.length).toBe(2);
+      world.close();
+    });
+  });
+
+  it('close() clears a pending spread retry so nothing opens a socket after the session ends', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // long backoff scheduled
+      doc.setVisible(true); // replaced with the short spread timer, still pending
+      expect(harness.timers.length).toBe(1);
+
+      // Ending the session while the spread retry is pending must clear it; a
+      // leaked live timer would call openSocket after the session is over.
+      world.close();
+      expect(harness.timers.length).toBe(0);
+      expect(StubWebSocket.instances.length).toBe(1);
+    });
+  });
+});
+
+// The error-frame tolerance wiring: the pure predicates in reconnect_policy.ts
+// are unit-tested in linkdead.test.ts, but ClientWorld consuming them is real
+// behavior of its own. These drive onMessage with wire frames mid-reconnect and
+// pin the tolerate / count-on-own-counter / reset-on-hello loop end to end.
+describe('ClientWorld reconnect error-frame tolerance (auth timeout)', () => {
+  afterEach(() => {
+    StubWebSocket.instances = [];
+    vi.restoreAllMocks();
+  });
+
+  // Reach the private wiring the way snapshots.test.ts reaches applySnapshot:
+  // the members under test are private on purpose (nothing outside ClientWorld
+  // consumes them), so the probe goes through an any-cast.
+  type WorldProbe = {
+    onMessage(raw: string): void;
+    timeoutRejections: number;
+    conflictRejections: number;
+    sessionEnded: boolean;
+  };
+
+  it('tolerates the auth-timeout rejection mid-reconnect on its own counter and resets it on hello', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const w = world as unknown as WorldProbe;
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // reconnectAttempts is now 1: mid-reconnect
+      expect(harness.timers.length).toBe(1);
+
+      w.onMessage(JSON.stringify({ t: 'error', error: 'authentication timed out' }));
+      // Tolerated: the session survives, counted on the timeout counter and
+      // NEVER on the conflict counter (a swapped counter flips both pins).
+      expect(w.sessionEnded).toBe(false);
+      expect(w.timeoutRejections).toBe(1);
+      expect(w.conflictRejections).toBe(0);
+
+      // The post-reconnect hello restores the full tolerance budget for the
+      // next drop; without this reset the counter climbs across a session's
+      // lifetime and wrongly ends it after 20 cumulative auth timeouts.
+      w.onMessage(JSON.stringify({ t: 'hello', pid: 1, seed: 42 }));
+      expect(w.timeoutRejections).toBe(0);
+      world.close();
+    });
+  });
+
+  it('still ends the session for good on any other rejection mid-reconnect', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const w = world as unknown as WorldProbe;
+      const reasons: string[] = [];
+      world.onDisconnect = (reason) => {
+        reasons.push(reason);
+      };
+      const first = StubWebSocket.instances[0];
+      first.readyState = StubWebSocket.CLOSED;
+      first.onclose?.(); // mid-reconnect, backoff pending
+
+      w.onMessage(JSON.stringify({ t: 'error', error: 'not authenticated' }));
+      expect(w.sessionEnded).toBe(true);
+      expect(reasons).toEqual(['not authenticated']); // verbatim server text
+      expect(harness.timers.length).toBe(0); // the pending retry died with the session
+    });
+  });
 });

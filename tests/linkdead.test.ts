@@ -484,6 +484,11 @@ describe('reconnect policy (client-side conflict tolerance)', () => {
     // gets the equivalent guard through the planJoin call above).
     const wsAuthSource = readFileSync(new URL('../server/ws_auth.ts', import.meta.url), 'utf8');
     expect(wsAuthSource).toContain("authTimedOut: 'authentication timed out',");
+    // The conflict literal has a SECOND live server copy in this same table
+    // (the lease-acquire reject), which the planJoin call above cannot see:
+    // pin it in the same source scan so rewording only that copy cannot
+    // silently turn tolerated reconnect conflicts fatal.
+    expect(wsAuthSource).toContain("alreadyInWorld: 'character already in world',");
   });
 
   it('never tolerates any other server rejection under the timeout predicate', () => {
