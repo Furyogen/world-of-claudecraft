@@ -46,6 +46,11 @@ const conformanceCache = new Set();
 // a few tens of milliseconds shorter, enough to flip a clip across the one-second
 // peak/LUFS branch boundary and demand the wrong loudness target, so a clip the gate
 // accepts would fail export. Keep validation bound to the bundled binaries.
+if (!ffmpegStaticPath || !ffprobeStatic?.path) {
+  // ffmpeg-static exports null on an unsupported platform; fail here with a
+  // clear message instead of handing inspectSfxConformance a null binary path.
+  throw new Error('sfx export: bundled ffmpeg-static/ffprobe-static unavailable on this platform');
+}
 export const CONFORMANCE_FFMPEG_PATH = ffmpegStaticPath;
 export const CONFORMANCE_FFPROBE_PATH = ffprobeStatic.path;
 
