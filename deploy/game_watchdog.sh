@@ -59,6 +59,13 @@ export PATH="${PATH:-}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/
 CONTAINER="${WATCHDOG_CONTAINER:-eastbrook-game}"
 COMPOSE_DIR="${WATCHDOG_COMPOSE_DIR:-/opt/eastbrook}"
 COOLDOWN="${WATCHDOG_COOLDOWN:-300}"
+# Same sanitization as the state-file stamp below: a non-numeric operator
+# override would make the cooldown comparison error out and fall through to a
+# restart with NO cooldown protection, the exact failure the knob exists to
+# prevent. Fall back to the default instead.
+case "$COOLDOWN" in
+  '' | *[!0-9]*) COOLDOWN=300 ;;
+esac
 STATE_FILE="${WATCHDOG_STATE_FILE:-/var/lib/eastbrook/watchdog-last-restart}"
 # Root-owned dir, not world-writable /var/lock: a lockfile opened for write follows
 # symlinks, so a world-writable location lets a local user symlink-truncate a root file

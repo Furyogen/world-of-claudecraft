@@ -363,6 +363,23 @@ describe('game watchdog behavior (executed against a fake docker)', () => {
     expect(res.restarted).toBe(true);
   });
 
+  // A non-numeric WATCHDOG_COOLDOWN override must fall back to the default, not
+  // disable the cooldown: unsanitized, the numeric comparison errors, the condition
+  // evaluates false, and the script falls through to a restart with NO cooldown
+  // protection, the exact hot loop the knob exists to prevent (mutation: drop the
+  // COOLDOWN sanitization case).
+  it('does NOT restart inside the window when WATCHDOG_COOLDOWN is non-numeric', () => {
+    const h = makeHarness();
+    writeFileSync(h.stateFile, `${nowSeconds()}\n`);
+    const res = runWatchdog(h, {
+      inspect: 'true unhealthy',
+      env: { WATCHDOG_COOLDOWN: 'five-minutes' },
+    });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+    expect(res.output).toContain('cooldown');
+  });
+
   // Overlapping cron fires must serialize: a restart outlasts the one-minute interval,
   // so a second fire that ignored the lock would restart the same wedge twice. The
   // flock shim reports the lock already held (exit 1), the signal a real flock gives a
