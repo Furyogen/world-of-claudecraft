@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Pool } from 'pg';
+import { Pool, type QueryResult } from 'pg';
 import {
   type AccountFlair,
   EMPTY_ACCOUNT_FLAIR,
@@ -63,11 +63,105 @@ export const DATABASE_URL =
   })();
 
 // Max Postgres clients this realm process keeps in its pool (count). Shared
-// across the HTTP request path and the game loop; deliberately no idle/connection
-// timeout override, so those keep pg's own defaults.
+// across the HTTP request path and the game loop. The pool is timeout-bounded on
+// every axis below so a slow or unreachable database degrades into fast, isolated
+// query failures instead of a process-wide stall.
 export const DB_POOL_MAX_CLIENTS = 10;
 
-export const pool = new Pool({ connectionString: DATABASE_URL, max: DB_POOL_MAX_CLIENTS });
+// Pool checkout / connect wait: how long pool.connect() (and every pool.query,
+// which checks a client out first) may block waiting for a free client or a new
+// TCP connect before it rejects. A slow database must fail a request fast rather
+// than queue the whole handshake path behind an exhausted pool forever.
+export const DB_POOL_CONNECT_TIMEOUT_MS = 5000;
+
+// Server-side default statement timeout per session, applied as a connection
+// startup parameter so every query on every pooled client is bounded by the
+// database itself. The known heavy aggregates raise it per-transaction via
+// runWithStatementTimeout; any ordinary request query that runs past this is a
+// runaway and the database cancels it.
+export const DB_STATEMENT_TIMEOUT_MS = 15_000;
+
+// The raised per-transaction allowance for the known heavy reads (the cached
+// leaderboard / board / metrics aggregates and the final character save), applied
+// via runWithStatementTimeout. Bounded so even an exempted scan that goes runaway
+// still dies rather than pinning a pooled client indefinitely.
+export const DB_HEAVY_STATEMENT_TIMEOUT_MS = 60_000;
+
+// Client-side backstop timeout per connection. query_timeout is enforced in the
+// driver, NOT the database, so a SET LOCAL cannot lift it: it MUST sit strictly
+// above the heaviest server-side allowance or it would kill the very queries
+// runWithStatementTimeout raises DB_HEAVY_STATEMENT_TIMEOUT_MS for. The server-side
+// statement_timeout is the real working limit; this only catches a black-holed
+// server that accepted a query and then never answers (so no server-side timer
+// ever fires), one layer outside the heavy allowance.
+export const DB_QUERY_TIMEOUT_MS = DB_HEAVY_STATEMENT_TIMEOUT_MS + 5000;
+
+export const pool = new Pool({
+  connectionString: DATABASE_URL,
+  max: DB_POOL_MAX_CLIENTS,
+  connectionTimeoutMillis: DB_POOL_CONNECT_TIMEOUT_MS,
+  statement_timeout: DB_STATEMENT_TIMEOUT_MS,
+  query_timeout: DB_QUERY_TIMEOUT_MS,
+});
+
+// An idle pooled client can emit 'error' with no query in flight (a backend
+// termination, a dropped TCP connection). Unhandled, pg re-emits it on the Pool
+// where it becomes an uncaught exception that crashes the realm process. Swallow
+// it to a logged, counted event; pg discards the broken client and the next
+// checkout transparently opens a fresh one. Dev-channel English is fine here (a
+// log, never player text). The real pg Pool is an EventEmitter; a few db-layer
+// unit tests replace it with a minimal fake that omits .on, so guard the
+// registration by capability rather than force every such fake to grow the event
+// surface (the real registration is exercised in tests/server/tunables.test.ts).
+let poolClientErrorCount = 0;
+if (typeof pool.on === 'function') {
+  pool.on('error', (err) => {
+    poolClientErrorCount++;
+    console.error('pg pool: idle client error (client discarded)', err);
+  });
+}
+
+/** Count of idle pooled-client 'error' events seen since boot (tests + future metrics). */
+export function getPoolClientErrorCount(): number {
+  return poolClientErrorCount;
+}
+
+/**
+ * Run `fn` inside ONE transaction on a dedicated pooled client whose
+ * statement_timeout is raised to `timeoutMs` for the duration (SET LOCAL, so it
+ * reverts at COMMIT/ROLLBACK and never leaks to the next checkout). For the known
+ * heavy reads whose legitimate runtime can exceed the default DB_STATEMENT_TIMEOUT_MS.
+ * The wrapped `query` handed to `fn` runs on the same client inside the same
+ * transaction, so every statement it issues is covered by the raised timeout and a
+ * multi-statement read gets one consistent snapshot.
+ *
+ * SET LOCAL cannot take a bind parameter, so `timeoutMs` is interpolated into the
+ * statement text as an integer; validating it as a non-negative safe integer here
+ * is therefore the injection guard, since no other value can reach the SQL text.
+ */
+export async function runWithStatementTimeout<T>(
+  timeoutMs: number,
+  fn: (query: (text: string, values?: unknown[]) => Promise<QueryResult>) => Promise<T>,
+): Promise<T> {
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 0) {
+    throw new Error(
+      `runWithStatementTimeout: timeoutMs must be a non-negative safe integer, got ${timeoutMs}`,
+    );
+  }
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query(`SET LOCAL statement_timeout = ${timeoutMs}`);
+    const result = await fn((text, values) => client.query(text, values));
+    await client.query('COMMIT');
+    return result;
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
 
 const REALM_SQL_DEFAULT = REALM.replace(/'/g, "''");
 const LIFETIME_XP_EXPR = "((state->>'lifetimeXp')::bigint)";
@@ -809,9 +903,27 @@ export async function ensureSchema(): Promise<void> {
   // otherwise deadlock when run concurrently, so serialize schema setup behind
   // a transaction-scoped advisory lock (auto-released on COMMIT). The lock key
   // is an arbitrary constant shared by every process.
-  const client = await pool.connect();
+  //
+  // Boot runs on a DEDICATED client, never the pool: the pool carries a
+  // driver-side query_timeout, a per-query timer that SET LOCAL cannot lift,
+  // and the advisory-lock wait plus the one-shot market backfill may
+  // legitimately outlast any per-request budget. This client is constructed
+  // with the connection string alone, so no statement_timeout or query_timeout
+  // config applies to boot at all. pg's Client is resolved at call time rather
+  // than imported at module scope because many test suites module-mock 'pg'
+  // with a Pool-only factory and never boot the schema; a top-level named
+  // import would invalidate every one of those mocks.
+  const { Client } = await import('pg');
+  const client = new Client({ connectionString: DATABASE_URL });
+  await client.connect();
   try {
     await client.query('BEGIN');
+    // Boot DDL serializes on the advisory lock across every realm process, so it
+    // can legitimately wait far longer than any per-request budget. The dedicated
+    // client above escapes the pool's timeouts; this SET LOCAL additionally
+    // overrides any database- or role-level statement_timeout an operator may
+    // have set server-side (SET LOCAL reverts at COMMIT).
+    await client.query('SET LOCAL statement_timeout = 0');
     await client.query('SELECT pg_advisory_xact_lock($1)', [0x57_4f_43_01]); // "WOC\x01"
     await client.query(SCHEMA);
     await client.query(SOCIAL_SCHEMA);
@@ -891,7 +1003,8 @@ export async function ensureSchema(): Promise<void> {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
   } finally {
-    client.release();
+    // Dedicated client, not a pool checkout: close the connection outright.
+    await client.end().catch(() => {});
   }
 }
 
@@ -2476,9 +2589,15 @@ export async function saveCharacterState(
   state: CharacterState,
 ): Promise<void> {
   const cleanState = sanitizeRemovedZone1Content(state).state;
-  await pool.query(
-    'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
-    [characterId, level, JSON.stringify(cleanState)],
+  // A character save should wait out a slow database rather than lose state, so
+  // run it on the raised heavy allowance; still bounded so a leave / shutdown
+  // flush cannot hang past the container stop grace.
+  await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    query('UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1', [
+      characterId,
+      level,
+      JSON.stringify(cleanState),
+    ]),
   );
 }
 
@@ -2505,6 +2624,11 @@ export async function saveCharacterAndMarketState(
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    // Same rationale as saveCharacterState: a logout / shutdown escrow flush should
+    // wait out a slow database rather than lose the character + market blobs, so
+    // raise this transaction to the heavy allowance; still bounded so shutdown
+    // cannot hang past the container stop grace. SET LOCAL reverts at COMMIT.
+    await client.query(`SET LOCAL statement_timeout = ${DB_HEAVY_STATEMENT_TIMEOUT_MS}`);
     await client.query(
       'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
       [characterId, level, JSON.stringify(cleanState)],
@@ -2568,8 +2692,9 @@ export async function topArenaRatings(
     fmt === '2v2'
       ? "COALESCE((state->>'arena2v2Losses')::int, 0)"
       : "COALESCE((state->>'arena1v1Losses')::int, (state->>'arenaLosses')::int, 0)";
-  const res = await pool.query(
-    `SELECT name, class, level,
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    query(
+      `SELECT name, class, level,
             ${ratingExpr} AS rating,
             ${winsExpr} AS wins,
             ${lossesExpr} AS losses
@@ -2581,7 +2706,8 @@ export async function topArenaRatings(
                      WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
       ORDER BY rating DESC, wins DESC, name ASC
       LIMIT $2`,
-    [REALM, Math.max(1, Math.min(100, limit))],
+      [REALM, Math.max(1, Math.min(100, limit))],
+    ),
   );
   return res.rows.map((r) => ({
     name: r.name,
@@ -2622,9 +2748,10 @@ export async function topLifetimeXp(
   // Capped at LEADERBOARD_MAX (1000): the in-game board pages through this whole
   // cached window, so a realm with hundreds of max-level players is fully ranked.
   const cap = Math.max(1, Math.min(LEADERBOARD_MAX, limit));
-  const res = opts.global
-    ? await pool.query(
-        `SELECT name, class, level, realm,
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    opts.global
+      ? query(
+          `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
                 COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
                 state->>'activeTitle' AS active_title
@@ -2635,10 +2762,10 @@ export async function topLifetimeXp(
                          WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
           ORDER BY lifetime_xp DESC, level DESC, name ASC
           LIMIT $1`,
-        [cap],
-      )
-    : await pool.query(
-        `SELECT name, class, level, realm,
+          [cap],
+        )
+      : query(
+          `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
                 COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
                 state->>'activeTitle' AS active_title
@@ -2649,8 +2776,9 @@ export async function topLifetimeXp(
                          WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
           ORDER BY lifetime_xp DESC, level DESC, name ASC
           LIMIT $2`,
-        [REALM, cap],
-      );
+          [REALM, cap],
+        ),
+  );
   return res.rows.map((r) => ({
     name: r.name,
     class: r.class,
@@ -2702,23 +2830,25 @@ export async function topGuilds(
                          WHERE a.id = c.account_id AND ${ELIGIBLE_ACCOUNT_SQL})`;
   const groupOrder = `GROUP BY g.id, g.name, g.realm
           ORDER BY total_lifetime_xp DESC, member_count DESC, g.name ASC`;
-  const res = opts.global
-    ? await pool.query(
-        `SELECT ${selectAgg}
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    opts.global
+      ? query(
+          `SELECT ${selectAgg}
            ${fromJoin}
           WHERE c.state IS NOT NULL
           ${groupOrder}
           LIMIT $1`,
-        [cap],
-      )
-    : await pool.query(
-        `SELECT ${selectAgg}
+          [cap],
+        )
+      : query(
+          `SELECT ${selectAgg}
            ${fromJoin}
           WHERE g.realm = $1 AND c.state IS NOT NULL
           ${groupOrder}
           LIMIT $2`,
-        [REALM, cap],
-      );
+          [REALM, cap],
+        ),
+  );
   return res.rows.map((r) => ({
     name: r.name,
     realm: r.realm,
@@ -2757,8 +2887,13 @@ export async function deedsBoardRanked(
   renowns: readonly number[],
   floor: number,
 ): Promise<{ ranked: RankedDeedsAccount[]; totalRanked: number; unknownDeedIds: string[] }> {
-  const res = await pool.query(
-    `WITH renown(deed_id, renown) AS (
+  // Both reads run in ONE raised-timeout transaction: the roll-up is a full-table
+  // hash aggregate and the unknown-id side read a DISTINCT scan, so a large
+  // character_deeds table can legitimately exceed the default statement timeout,
+  // and sharing one transaction also gives the two reads a single snapshot.
+  return runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, async (query) => {
+    const res = await query(
+      `WITH renown(deed_id, renown) AS (
        SELECT * FROM unnest($1::text[], $2::int[]) AS u(deed_id, renown) WHERE u.renown > 0
      ),
      per_deed AS (
@@ -2802,29 +2937,30 @@ export async function deedsBoardRanked(
        FROM account_agg aa
        JOIN display d ON d.account_id = aa.account_id
       ORDER BY aa.renown DESC, aa.completion_time ASC, aa.account_id ASC`,
-    [deedIds, renowns, floor],
-  );
-  const ranked: RankedDeedsAccount[] = res.rows.map((r) => ({
-    accountId: Number(r.account_id),
-    renown: Number(r.renown),
-    deedCount: Number(r.deed_count),
-    // TIMESTAMPTZ back to epoch ms (Date via pg; string tolerated for driver
-    // config drift), matching computeDeedsBoard's earnedMs.
-    completionTime: new Date(r.completion_time).getTime(),
-    displayCharacterId: Number(r.display_character_id),
-  }));
-  // Deed ids present in character_deeds but absent from the content table
-  // entirely (removed or renamed content), for the same warn computeDeedsBoard
-  // emitted. A cheap side read kept off the aggregation's hot path: scored rows
-  // already excluded these via the renown join, so this never shrinks a score,
-  // only surfaces the ids. A zero-renown KNOWN deed is not flagged (its id is in
-  // $1), matching computeDeedsBoard's def-present test.
-  const unknown = await pool.query(
-    `SELECT DISTINCT deed_id FROM character_deeds WHERE deed_id <> ALL($1::text[])`,
-    [deedIds],
-  );
-  const unknownDeedIds = unknown.rows.map((r) => String(r.deed_id)).sort();
-  return { ranked, totalRanked: ranked.length, unknownDeedIds };
+      [deedIds, renowns, floor],
+    );
+    const ranked: RankedDeedsAccount[] = res.rows.map((r) => ({
+      accountId: Number(r.account_id),
+      renown: Number(r.renown),
+      deedCount: Number(r.deed_count),
+      // TIMESTAMPTZ back to epoch ms (Date via pg; string tolerated for driver
+      // config drift), matching computeDeedsBoard's earnedMs.
+      completionTime: new Date(r.completion_time).getTime(),
+      displayCharacterId: Number(r.display_character_id),
+    }));
+    // Deed ids present in character_deeds but absent from the content table
+    // entirely (removed or renamed content), for the same warn computeDeedsBoard
+    // emitted. A cheap side read kept off the aggregation's hot path: scored rows
+    // already excluded these via the renown join, so this never shrinks a score,
+    // only surfaces the ids. A zero-renown KNOWN deed is not flagged (its id is in
+    // $1), matching computeDeedsBoard's def-present test.
+    const unknown = await query(
+      `SELECT DISTINCT deed_id FROM character_deeds WHERE deed_id <> ALL($1::text[])`,
+      [deedIds],
+    );
+    const unknownDeedIds = unknown.rows.map((r) => String(r.deed_id)).sort();
+    return { ranked, totalRanked: ranked.length, unknownDeedIds };
+  });
 }
 
 /** The display-character fill for ranked accounts: name, realm, class, level,

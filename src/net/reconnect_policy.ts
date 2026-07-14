@@ -18,15 +18,17 @@
 // backoff cadence.
 //
 // A second transient failure mode is the auth-timeout rejection. The server
-// rejects a handshake whose first auth frame is not processed within its auth
-// window; that window is missed during server event-loop stalls under CPU
-// saturation and reconnect races, not during database brownouts (the server
-// clears the timer before any database work, so a slow query cannot trip it).
+// sends it when a handshake cannot complete: the first auth frame missed the
+// auth window (a server event-loop stall under CPU saturation, or a reconnect
+// race), or a database failure interrupted the handshake mid-flight (the
+// server converts that rejection into this same literal, so clients keep
+// backing off until the database recovers instead of being dumped to login).
 // A reconnecting client treats it exactly like a conflict: keep backing off
-// rather than end the session, since the next retry lands once the stall has
-// passed. It carries its own counter, bounded at MAX_TIMEOUT_REJECTIONS (20)
-// rather than the conflict bound of 8 because a saturation stall episode
-// outlasts the server keepalive window that clears a conflict.
+// rather than end the session, since the next retry lands once the stall or
+// database episode has passed. It carries its own counter, bounded at
+// MAX_TIMEOUT_REJECTIONS (20) rather than the conflict bound of 8 because a
+// saturation or database episode outlasts the server keepalive window that
+// clears a conflict.
 
 // Wire contract: the exact rejection string server/linkdead.ts planJoin sends.
 export const RECONNECT_CONFLICT_ERROR = 'character already in world';

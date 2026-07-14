@@ -1291,7 +1291,8 @@ export class ClientWorld implements IWorld {
   // see src/net/reconnect_policy.ts for why these are tolerated (bounded)
   private conflictRejections = 0;
   // consecutive 'authentication timed out' rejections during a reconnect (a
-  // server event-loop stall under saturation); tolerated on its own bound,
+  // server event-loop stall under saturation, or a database failure that
+  // interrupted the handshake server-side); tolerated on its own bound,
   // see src/net/reconnect_policy.ts
   private timeoutRejections = 0;
   private reconnectTimer: number | undefined;
@@ -1652,9 +1653,10 @@ export class ClientWorld implements IWorld {
         return; // the server closes this socket; onclose schedules the retry
       }
       // Mid-reconnect, 'authentication timed out' is the other transient
-      // window: a server event-loop stall under saturation kept the handshake
-      // from processing the first auth frame in time. Keep backing off; the
-      // next retry lands after the stall clears. Bounded on its own counter.
+      // window: a server event-loop stall kept the handshake from processing
+      // the first auth frame in time, or a database failure interrupted the
+      // handshake server-side. Keep backing off; the next retry lands after
+      // the stall clears or the database recovers. Bounded on its own counter.
       if (isTransientTimeoutRejection(msg.error, this.reconnectAttempts, this.timeoutRejections)) {
         this.timeoutRejections++;
         return; // the server closes this socket; onclose schedules the retry

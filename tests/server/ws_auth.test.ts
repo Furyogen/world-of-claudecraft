@@ -502,6 +502,53 @@ describe('createWsAuth: onConnection', () => {
     expect(ws.send).not.toHaveBeenCalledWith(errorFrame('authentication timed out'));
   });
 
+  it('converts a rejected handshake into the retryable authTimedOut frame while the socket is open, then flushes', async () => {
+    const { ws, deps, req } = setup();
+    // A DB dependency rejects, so authenticateWebSocket rejects (it is designed to
+    // reject, never swallow: the character_lease_ws pin requires that). The caller
+    // must convert the escaped rejection into the client's classified retry path
+    // instead of leaving an unhandled rejection that hangs the client.
+    deps.accountForToken = vi.fn(async () => {
+      throw new Error('db down');
+    });
+    // Model an OPEN socket so the caller sends the classified error frame.
+    (ws as unknown as { readyState: number; OPEN: number }).readyState = 1;
+    (ws as unknown as { OPEN: number }).OPEN = 1;
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { onConnection } = createWsAuth(deps);
+    await onConnection(asWs(ws), req);
+
+    ws.emit('message', authRaw());
+    await flushMicrotasks();
+
+    // The client receives the EXISTING retryable rejection literal, not a hang.
+    expectSendThenClose(ws, errorFrame('authentication timed out'));
+    // The escaped rejection is logged server-side, never silently swallowed.
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
+  });
+
+  it('logs but sends no frame when the socket already closed during a rejected handshake', async () => {
+    const { ws, deps, req } = setup();
+    deps.accountForToken = vi.fn(async () => {
+      throw new Error('db down');
+    });
+    // Socket already closed (readyState CLOSED, not OPEN): the caller must not
+    // double-send onto a socket a reject path already tore down.
+    (ws as unknown as { readyState: number; OPEN: number }).readyState = 3;
+    (ws as unknown as { OPEN: number }).OPEN = 1;
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { onConnection } = createWsAuth(deps);
+    await onConnection(asWs(ws), req);
+
+    ws.emit('message', authRaw());
+    await flushMicrotasks();
+
+    expect(ws.send).not.toHaveBeenCalled();
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
+  });
+
   it('tears down quietly on a pre-auth socket error without throwing', async () => {
     const { ws, deps, req } = setup();
     const { onConnection } = createWsAuth(deps);

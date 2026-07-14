@@ -8,7 +8,7 @@
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { DESKTOP_LOGIN_TTL_MS } from '../../server/desktop_login';
 import {
   ASSET_UPLOAD_POLICY,
@@ -308,6 +308,59 @@ describe('byte caps + page sizes hold their literal values', () => {
   });
 });
 
+describe('db pool timeouts hold their literal values and the query_timeout layering', () => {
+  it('pins each literal and the strict layering the SET LOCAL exemption depends on', async () => {
+    const {
+      DB_POOL_CONNECT_TIMEOUT_MS,
+      DB_STATEMENT_TIMEOUT_MS,
+      DB_HEAVY_STATEMENT_TIMEOUT_MS,
+      DB_QUERY_TIMEOUT_MS,
+      getPoolClientErrorCount,
+      pool,
+    } = await import('../../server/db');
+    // (b) values: each named timeout holds its literal.
+    expect(DB_POOL_CONNECT_TIMEOUT_MS).toBe(5_000);
+    expect(DB_STATEMENT_TIMEOUT_MS).toBe(15_000);
+    expect(DB_HEAVY_STATEMENT_TIMEOUT_MS).toBe(60_000);
+    expect(DB_QUERY_TIMEOUT_MS).toBe(65_000);
+    // (a) derivation: the client-side backstop is defined as heavy + 5s, pinned as a
+    // relation so the two cannot silently drift together (the constant-self-comparison
+    // trap). query_timeout is per-connection and cannot be lifted by SET LOCAL, so it
+    // MUST sit strictly above the heaviest server-side allowance or it would kill the
+    // very queries runWithStatementTimeout raises the heavy allowance for.
+    expect(DB_QUERY_TIMEOUT_MS).toBe(DB_HEAVY_STATEMENT_TIMEOUT_MS + 5_000);
+    expect(DB_QUERY_TIMEOUT_MS).toBeGreaterThan(DB_HEAVY_STATEMENT_TIMEOUT_MS);
+    // The ladder: heavy > default > connect wait, so an exempted read gets real
+    // headroom, an ordinary query is bounded tighter, and a checkout fails fastest.
+    expect(DB_HEAVY_STATEMENT_TIMEOUT_MS).toBeGreaterThan(DB_STATEMENT_TIMEOUT_MS);
+    expect(DB_STATEMENT_TIMEOUT_MS).toBeGreaterThan(DB_POOL_CONNECT_TIMEOUT_MS);
+    // The idle-client error handler is actually REGISTERED on the real pool (this
+    // suite does not mock pg), not just present in source: emitting the pool's
+    // 'error' event runs it, so the counter the getter exposes advances by one. An
+    // unregistered handler would instead let node throw on an unhandled 'error'.
+    const before = getPoolClientErrorCount();
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    pool.emit('error', new Error('idle client boom'));
+    errSpy.mockRestore();
+    expect(getPoolClientErrorCount()).toBe(before + 1);
+  });
+
+  it('runWithStatementTimeout rejects a non-integer or negative timeout before touching the pool', async () => {
+    // SET LOCAL cannot bind a parameter, so the timeout is interpolated into the
+    // statement text as an integer; the safe-integer validation is therefore the
+    // injection guard. It must throw BEFORE any client is checked out (so a bad
+    // value can never reach the SQL, and fn never runs).
+    const { runWithStatementTimeout } = await import('../../server/db');
+    const fn = vi.fn();
+    await expect(runWithStatementTimeout(-1, fn)).rejects.toThrow(/non-negative safe integer/);
+    await expect(runWithStatementTimeout(1.5, fn)).rejects.toThrow(/non-negative safe integer/);
+    await expect(runWithStatementTimeout(Number.NaN, fn)).rejects.toThrow(
+      /non-negative safe integer/,
+    );
+    expect(fn).not.toHaveBeenCalled();
+  });
+});
+
 // Source-scan guard: each consolidated literal must live in exactly ONE place (its
 // owning module) and every call site must reference the named constant, never a
 // re-inlined magic number. Scoped to the SPECIFIC literals consolidated here
@@ -364,6 +417,36 @@ describe('no consolidated tunable literal is duplicated at a call site', () => {
   it('the pg pool max references DB_POOL_MAX_CLIENTS', () => {
     expect(dbSrc).toContain('max: DB_POOL_MAX_CLIENTS');
     expect(dbSrc).not.toContain('max: 10 }');
+  });
+
+  it('the pg pool timeouts wire the named constants at construction, never a re-inlined literal', () => {
+    // Pool construction reads each timeout from its named constant.
+    expect(dbSrc).toContain('connectionTimeoutMillis: DB_POOL_CONNECT_TIMEOUT_MS');
+    expect(dbSrc).toContain('statement_timeout: DB_STATEMENT_TIMEOUT_MS');
+    expect(dbSrc).toContain('query_timeout: DB_QUERY_TIMEOUT_MS');
+    // No re-inlined magic number at the construction call site (the owner defs above
+    // are `= 5000` / `= 15_000` / `= DB_HEAVY_STATEMENT_TIMEOUT_MS + 5000`, never the
+    // `key: literal` spellings banned here).
+    expect(dbSrc).not.toContain('connectionTimeoutMillis: 5000');
+    expect(dbSrc).not.toContain('statement_timeout: 15000');
+    expect(dbSrc).not.toContain('query_timeout: 65000');
+  });
+
+  it('an idle pooled-client error is handled, never left to crash the process', () => {
+    expect(dbSrc).toContain("pool.on('error'");
+  });
+
+  it('the heavy-statement exemption interpolates the named constant and validates the integer', () => {
+    // runWithStatementTimeout is the single SET LOCAL site; it interpolates the raw
+    // integer (SET LOCAL cannot bind a parameter) after a safe-integer guard, which
+    // is the injection guard. The named heavy constant is what the exempt call sites
+    // pass, never a re-inlined 60000.
+    expect(dbSrc).toMatch(/SET LOCAL statement_timeout = \$\{timeoutMs\}/);
+    expect(dbSrc).toContain('Number.isSafeInteger(timeoutMs)');
+    expect(dbSrc).toMatch(/SET LOCAL statement_timeout = \$\{DB_HEAVY_STATEMENT_TIMEOUT_MS\}/);
+    // Boot DDL disables the timeout entirely for its advisory-lock-serialized wait.
+    expect(dbSrc).toContain('SET LOCAL statement_timeout = 0');
+    expect(dbSrc).not.toContain('SET LOCAL statement_timeout = 60000');
   });
 
   it('the rateLimited default budget binds AUTH_MAX_PER_MINUTE, not a re-inlined 20', () => {

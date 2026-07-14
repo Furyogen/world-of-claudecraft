@@ -348,7 +348,22 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       // attached the permanent message handler. Without this the frames are
       // silently dropped (see ws_buffer.ts).
       const flush = bufferHandshakeMessages(ws);
-      void authenticateWebSocket(ws, String(data), req).finally(flush);
+      void authenticateWebSocket(ws, String(data), req)
+        .catch((err) => {
+          // A database rejection under a slow or unreachable Postgres (a pool
+          // checkout wait, a statement/query timeout, a dropped connection) escapes
+          // authenticateWebSocket, which is designed to REJECT rather than swallow
+          // (tests/character_lease_ws.test.ts pins that). Caught HERE at the caller,
+          // not inside authenticateWebSocket, an otherwise-unhandled rejection would
+          // leave the client with no frame and no close, hanging it until its own
+          // timeout. Convert it into the SAME classified, retryable rejection the
+          // client already backs off on (authTimedOut), reusing the shared
+          // send-then-close helper, but only while the socket is still open (a
+          // reject path that already closed the socket must not double-send).
+          console.error('ws auth: handshake rejected, closing socket', err);
+          if (ws.readyState === ws.OPEN) rejectHandshake(ws, WS_AUTH_ERROR.authTimedOut);
+        })
+        .finally(flush);
     });
   }
 

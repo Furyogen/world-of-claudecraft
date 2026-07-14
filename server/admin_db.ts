@@ -1,5 +1,5 @@
 import { normalizeAccountFlair, type StreamerLinks } from '../src/sim/account_flair';
-import { pool } from './db';
+import { DB_HEAVY_STATEMENT_TIMEOUT_MS, pool, runWithStatementTimeout } from './db';
 import { REALM } from './realm';
 
 // Read-side queries for the admin dashboard. All inputs are parameterized;
@@ -23,8 +23,13 @@ export interface OverviewCounts {
 }
 
 export async function overviewCounts(): Promise<OverviewCounts> {
-  const res = await pool.query(
-    `
+  // A big multi-subquery aggregate over accounts / characters / play_sessions,
+  // driven on an interval by the business-metrics PeriodicCollector: run it on the
+  // raised allowance so a growing play_sessions table cannot trip the default
+  // statement timeout.
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    query(
+      `
     SELECT
       (SELECT count(*) FROM accounts)::int                                               AS accounts,
       (SELECT count(*) FROM characters)::int                                             AS characters,
@@ -54,7 +59,8 @@ export async function overviewCounts(): Promise<OverviewCounts> {
       (SELECT count(*) FROM site_presence_sessions
         WHERE last_seen_at > now() - interval '2 minutes')::int AS site_users_now
   `,
-    [REALM],
+      [REALM],
+    ),
   );
   const r = res.rows[0];
   return {
