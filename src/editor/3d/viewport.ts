@@ -43,12 +43,6 @@ import { Sim } from '../../sim/sim';
 import type { CaveDef, PlacedAsset, TerrainHole } from '../../sim/types';
 import { type BlockerDef, type ColliderVolume, DT, type MapWeather } from '../../sim/types';
 import { terrainHeight } from '../../sim/world';
-import {
-  findRuntimeCampIndex,
-  moveRuntimeMapEntity,
-  moveRuntimeMobsById,
-  setRuntimeNpcFacing,
-} from '../entity_edit_core';
 import { t } from '../../ui/i18n';
 import {
   type AssetPlacement,
@@ -57,6 +51,12 @@ import {
   mapBounds,
   placementsToRenderAssets,
 } from '../custom_map';
+import {
+  findRuntimeCampIndex,
+  moveRuntimeMapEntity,
+  moveRuntimeMobsById,
+  setRuntimeNpcFacing,
+} from '../entity_edit_core';
 import { PLACEMENT_SCALE_MAX, PLACEMENT_SCALE_MIN, wrapAngle } from '../placement_transform_core';
 import { EditorCamera } from './editor_camera';
 import { EditorPerfOverlay, type PerfOverlayConfig } from './perf_overlay';
@@ -526,6 +526,9 @@ export class Editor3DViewport {
   private mobSelGroup: THREE.Group | null = null;
   private mobSelIds: number[] = [];
   private readonly mobSelMeshes = new Map<number, THREE.Mesh>();
+  private npcSelGroup: THREE.Group | null = null;
+  private npcSelKeys: string[] = [];
+  private readonly npcSelMeshes = new Map<string, THREE.Mesh>();
   private readonly mobSelMat = new THREE.MeshBasicMaterial({
     color: 0x39e6ff,
     transparent: true,
@@ -627,11 +630,7 @@ export class Editor3DViewport {
   }
 
   /** Update an authored NPC/camp in the live editor Sim without reloading WebGL. */
-  moveMapEntity(
-    key: string,
-    from: { x: number; z: number },
-    to: { x: number; z: number },
-  ): number {
+  moveMapEntity(key: string, from: { x: number; z: number }, to: { x: number; z: number }): number {
     if (!this.sim) return 0;
     return moveRuntimeMapEntity(
       this.sim.entities.values(),
@@ -706,10 +705,7 @@ export class Editor3DViewport {
           candidate.kind === 'mob' &&
           candidate.ownerId === null &&
           candidate.templateId === camp.mobId &&
-          Math.hypot(
-            candidate.spawnPos.x - camp.center.x,
-            candidate.spawnPos.z - camp.center.z,
-          ) <=
+          Math.hypot(candidate.spawnPos.x - camp.center.x, candidate.spawnPos.z - camp.center.z) <=
             camp.radius + 1,
       )
       .sort((a, b) => {
@@ -732,12 +728,8 @@ export class Editor3DViewport {
   /** Move only the explicitly selected live mobs; authored camps are owned by App. */
   moveRuntimeMobs(ids: ReadonlySet<number>, dx: number, dz: number): number {
     if (!this.sim || (dx === 0 && dz === 0)) return 0;
-    return moveRuntimeMobsById(
-      this.sim.entities.values(),
-      ids,
-      dx,
-      dz,
-      (x, z) => terrainHeight(x, z, this.seed),
+    return moveRuntimeMobsById(this.sim.entities.values(), ids, dx, dz, (x, z) =>
+      terrainHeight(x, z, this.seed),
     );
   }
 
@@ -966,6 +958,51 @@ export class Editor3DViewport {
     }
   }
 
+  /** Mark every Ctrl-selected authored NPC with the same cyan entity ring. */
+  setSelectedRuntimeNpcs(keys: ReadonlySet<string>): void {
+    this.npcSelKeys = [...keys];
+    if (this.npcSelGroup) {
+      this.renderer?.scene.remove(this.npcSelGroup);
+      for (const child of this.npcSelGroup.children) {
+        (child as THREE.Mesh).geometry.dispose();
+      }
+    }
+    this.npcSelGroup = null;
+    this.npcSelMeshes.clear();
+    if (!this.renderer || this.npcSelKeys.length === 0) return;
+    const group = new THREE.Group();
+    group.name = 'editor-npc-selection';
+    for (const key of this.npcSelKeys) {
+      const geometry = new THREE.RingGeometry(1.05, 1.35, 40);
+      geometry.rotateX(-Math.PI / 2);
+      const mesh = new THREE.Mesh(geometry, this.mobSelMat);
+      mesh.renderOrder = 3;
+      group.add(mesh);
+      this.npcSelMeshes.set(key, mesh);
+    }
+    this.npcSelGroup = group;
+    this.renderer.scene.add(group);
+    this.syncNpcSelectionRings();
+  }
+
+  private syncNpcSelectionRings(): void {
+    if (!this.sim) return;
+    const positions = new Map<string, { x: number; z: number }>();
+    for (const entity of this.sim.entities.values()) {
+      if (entity.kind === 'npc') positions.set(`npc:${entity.templateId}`, entity.pos);
+    }
+    for (const [key, mesh] of this.npcSelMeshes) {
+      const position = positions.get(key);
+      mesh.visible = position !== undefined;
+      if (!position) continue;
+      mesh.position.set(
+        position.x,
+        terrainHeight(position.x, position.z, this.seed) + 0.14,
+        position.z,
+      );
+    }
+  }
+
   /**
    * Blender-style frame/focus: put the orbit pivot on the point of interest
    * and dolly to fit, so orbiting now revolves around it. `extent` is the
@@ -984,6 +1021,11 @@ export class Editor3DViewport {
     const base = targetY ?? terrainHeight(x, z, this.seed);
     this.cam.target.set(x, base + Math.min(4, extent * 0.4), z);
     this.cam.dist = Math.min(500, Math.max(3, extent * 1.8));
+  }
+
+  /** Ground-plane focus used by proximity-based editor actions. */
+  cameraFocus(): { x: number; z: number } {
+    return { x: this.cam.target.x, z: this.cam.target.z };
   }
 
   /** True when the viewport owns this key right now, so the app must not treat
@@ -2570,6 +2612,7 @@ export class Editor3DViewport {
       this.zonePreviewMesh,
       this.multiSelGroup,
       this.mobSelGroup,
+      this.npcSelGroup,
       this.rockChainGroup,
       this.hitboxGroup,
       this.gizmo?.group ?? null,
@@ -2798,6 +2841,8 @@ export class Editor3DViewport {
     this.multiSelGroup = null;
     this.mobSelGroup = null;
     this.mobSelMeshes.clear();
+    this.npcSelGroup = null;
+    this.npcSelMeshes.clear();
     this.hitboxGroup = null;
     this.hitboxEditState = null;
     this.gizmo?.dispose();
@@ -2833,6 +2878,7 @@ export class Editor3DViewport {
     this.renderer.editorCam = this.cam.pose();
     this.syncGizmo();
     this.syncMobSelectionRings();
+    this.syncNpcSelectionRings();
     // Preview mode re-hides overlays each frame: refreshAuthoredOverlays and
     // friends rebuild their groups visible, so a one-shot hide would leak.
     if (this.previewMode) this.applyPreviewHide();

@@ -11,13 +11,19 @@
 import { loadGroundTextureBytes } from '../render/assets/ground_textures';
 import { loadSkyboxBytes, storeSkybox } from '../render/assets/skyboxes';
 import type { CustomMap } from './custom_map';
-import { isLocalAssetId } from './local_assets';
+import { bundleDependencyRefs, prepareMapForEngine } from './export_contract';
 import { loadStoredLocalAssets, storeLocalAssetBytes } from './local_assets_db';
-import { serializeMap } from './persist';
 
 export interface BundleFile {
   path: string;
   bytes: Uint8Array;
+}
+
+export class BundleDependencyError extends Error {
+  constructor(readonly missing: number) {
+    super(`Map bundle is missing ${missing} browser-owned dependencies`);
+    this.name = 'BundleDependencyError';
+  }
 }
 
 const enc = new TextEncoder();
@@ -98,11 +104,13 @@ export function zipStore(files: readonly BundleFile[]): Uint8Array {
  *  return null (foreign zips are out of scope). */
 export function zipRead(bytes: Uint8Array): BundleFile[] | null {
   const files: BundleFile[] = [];
+  const paths = new Set<string>();
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   let pos = 0;
   const dec = new TextDecoder();
   while (pos + 30 <= bytes.length && view.getUint32(pos, true) === 0x04034b50) {
     const method = view.getUint16(pos + 8, true);
+    const expectedCrc = view.getUint32(pos + 14, true);
     const size = view.getUint32(pos + 18, true);
     const nameLen = view.getUint16(pos + 26, true);
     const extraLen = view.getUint16(pos + 28, true);
@@ -110,10 +118,12 @@ export function zipRead(bytes: Uint8Array): BundleFile[] | null {
     const nameStart = pos + 30;
     const dataStart = nameStart + nameLen + extraLen;
     if (dataStart + size > bytes.length) return null;
-    files.push({
-      path: dec.decode(bytes.subarray(nameStart, nameStart + nameLen)),
-      bytes: bytes.slice(dataStart, dataStart + size),
-    });
+    const path = dec.decode(bytes.subarray(nameStart, nameStart + nameLen));
+    if (paths.has(path)) return null;
+    paths.add(path);
+    const payload = bytes.slice(dataStart, dataStart + size);
+    if (crc32(payload) !== expectedCrc) return null;
+    files.push({ path, bytes: payload });
     pos = dataStart + size;
   }
   return files.length > 0 ? files : null;
@@ -123,41 +133,48 @@ export function zipRead(bytes: Uint8Array): BundleFile[] | null {
 
 /** Collect the map JSON plus every dependency stored in this browser. */
 export async function buildMapBundle(map: CustomMap): Promise<BundleFile[]> {
-  const files: BundleFile[] = [{ path: 'map.json', bytes: enc.encode(serializeMap(map)) }];
-  // Imported local models referenced by 'local/<sha>' placements.
-  const usedShas = new Set<string>();
-  for (const p of map.placements) {
-    if (isLocalAssetId(p.assetId)) usedShas.add(p.assetId.slice('local/'.length));
-  }
-  if (usedShas.size > 0) {
+  const prepared = prepareMapForEngine(map);
+  const canonical = prepared.map;
+  const files: BundleFile[] = [{ path: 'map.json', bytes: enc.encode(prepared.json) }];
+  const refs = bundleDependencyRefs(canonical);
+  let missing = 0;
+  if (refs.models.length > 0) {
+    const wanted = new Set(refs.models);
+    const found = new Set<string>();
     for (const stored of await loadStoredLocalAssets()) {
-      if (!usedShas.has(stored.sha256)) continue;
+      if (!wanted.has(stored.sha256)) continue;
       files.push({ path: `models/${stored.sha256}.glb`, bytes: new Uint8Array(stored.bytes) });
+      found.add(stored.sha256);
     }
+    missing += refs.models.filter((sha) => !found.has(sha)).length;
   }
   // Ground textures behind custom paint swatches.
-  for (const sw of map.biomePaint?.custom ?? []) {
-    if (!sw.textureSha) continue;
-    const stored = await loadGroundTextureBytes(sw.textureSha);
+  for (const sha of refs.textures) {
+    const stored = await loadGroundTextureBytes(sha);
     if (stored) {
       files.push({ path: `textures/${stored.sha256}`, bytes: new Uint8Array(stored.bytes) });
-    }
+    } else missing++;
   }
   // The uploaded skybox, when the map uses one.
-  if (map.skybox?.startsWith('custom:')) {
-    const stored = await loadSkyboxBytes(map.skybox.slice('custom:'.length));
+  for (const sha of refs.skyboxes) {
+    const stored = await loadSkyboxBytes(sha);
     if (stored) {
       files.push({ path: `skybox/${stored.sha256}`, bytes: new Uint8Array(stored.bytes) });
-    }
+    } else missing++;
   }
+  if (missing > 0) throw new BundleDependencyError(missing);
   return files;
 }
 
 /** Restore a bundle's dependencies into this browser's stores (import side). */
 export async function restoreBundleDeps(files: readonly BundleFile[]): Promise<void> {
+  const expectedModels = new Set<string>();
+  const expectedTextures = new Set<string>();
+  const expectedSkyboxes = new Set<string>();
   for (const f of files) {
     if (f.path.startsWith('models/')) {
       const sha = f.path.slice('models/'.length).replace(/\.glb$/i, '');
+      expectedModels.add(sha);
       await storeLocalAssetBytes({
         sha256: sha,
         name: sha.slice(0, 8),
@@ -167,6 +184,7 @@ export async function restoreBundleDeps(files: readonly BundleFile[]): Promise<v
       });
     } else if (f.path.startsWith('textures/')) {
       const sha = f.path.slice('textures/'.length);
+      expectedTextures.add(sha);
       const { storeGroundTexture } = await import('../render/assets/ground_textures');
       await storeGroundTexture({
         sha256: sha,
@@ -176,6 +194,7 @@ export async function restoreBundleDeps(files: readonly BundleFile[]): Promise<v
       });
     } else if (f.path.startsWith('skybox/')) {
       const sha = f.path.slice('skybox/'.length);
+      expectedSkyboxes.add(sha);
       await storeSkybox({
         sha256: sha,
         name: sha.slice(0, 8),
@@ -184,4 +203,14 @@ export async function restoreBundleDeps(files: readonly BundleFile[]): Promise<v
       });
     }
   }
+
+  // IndexedDB helpers intentionally never throw, so explicitly read every
+  // payload back. Otherwise a browser with blocked/quota-exhausted storage
+  // would report a successful import and then render holes after reload.
+  let missing = 0;
+  const restoredModels = new Set((await loadStoredLocalAssets()).map((entry) => entry.sha256));
+  for (const sha of expectedModels) if (!restoredModels.has(sha)) missing++;
+  for (const sha of expectedTextures) if (!(await loadGroundTextureBytes(sha))) missing++;
+  for (const sha of expectedSkyboxes) if (!(await loadSkyboxBytes(sha))) missing++;
+  if (missing > 0) throw new BundleDependencyError(missing);
 }

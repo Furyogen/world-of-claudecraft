@@ -3353,6 +3353,8 @@ export interface WorldContent {
   // Procedural terrain decorations (trees/rocks) are enabled by default. The
   // map editor's blank-flat template opts out so makers start from bare ground.
   decorationsMode?: 'empty';
+  // Stable keys of procedural decorations replaced by editable placements.
+  decorationExclusions?: string[];
   // Render/sim presentation defaults are enabled by default. 'blank' keeps only
   // the neutral terrain base and sky birds for new flat authoring worlds.
   presentationMode?: MapPresentationMode;

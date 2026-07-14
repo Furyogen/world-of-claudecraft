@@ -12,6 +12,7 @@ import { hash2 } from '../sim/rng';
 import { terrainHeight, waterLevel } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
+import { normalizeGeometryAttributesForMerge } from './geometry_merge';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
 
 // Static world props: buildings, tents, campfires, mines, ruins, docks,
@@ -1802,6 +1803,7 @@ function mergeStaticMeshes(group: THREE.Group, keep: Set<THREE.Object3D>): THREE
     // clone/de-index: extracted geometries are shared across placements, so
     // the bake must never mutate them in place
     const geo = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+    normalizeGeometryAttributesForMerge(geo);
     bucket.geoms.push(geo.applyMatrix4(mesh.matrixWorld));
     merged.push(mesh);
   });

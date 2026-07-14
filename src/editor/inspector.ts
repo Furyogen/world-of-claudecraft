@@ -253,6 +253,8 @@ export interface InspectorDeps {
       rocks: boolean;
     }>,
   ): void;
+  hasAmbientFoliage(): boolean;
+  makeAmbientFoliageEditable(): void;
   /** Custom foliage-brush asset (scatter a chosen asset instead of the built-in
    *  groups), or null for the built-in behaviour. */
   getFoliageCustom(): { assetId: string; label: string } | null;
@@ -2383,10 +2385,14 @@ export class Inspector {
     const area = d.getSpawnArea();
     if (area) {
       s.appendChild(
-        el('p', 'ed-chosen', t('editor.spawn.area', {
-          width: num1(area.maxX - area.minX),
-          height: num1(area.maxZ - area.minZ),
-        })),
+        el(
+          'p',
+          'ed-chosen',
+          t('editor.spawn.area', {
+            width: num1(area.maxX - area.minX),
+            height: num1(area.maxZ - area.minZ),
+          }),
+        ),
       );
     }
     if (spawn) {
@@ -2425,21 +2431,12 @@ export class Inspector {
           max: 359,
           step: 1,
           value: Math.round(
-            (((selected.facing % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) *
-              (180 / Math.PI),
+            (((selected.facing % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) * (180 / Math.PI),
           ),
           onInput: (degrees) =>
-            this.deps.updateMovableEntityFacing(
-              selected.key,
-              (degrees * Math.PI) / 180,
-              false,
-            ),
+            this.deps.updateMovableEntityFacing(selected.key, (degrees * Math.PI) / 180, false),
           onChange: (degrees) =>
-            this.deps.updateMovableEntityFacing(
-              selected.key,
-              (degrees * Math.PI) / 180,
-              true,
-            ),
+            this.deps.updateMovableEntityFacing(selected.key, (degrees * Math.PI) / 180, true),
           format: (degrees) =>
             `${formatNumber(Math.round(degrees), {
               useGrouping: false,
@@ -2477,6 +2474,20 @@ export class Inspector {
     const f = d.getFoliage();
     const s = section(t('editor.foliageTool.title'));
     s.appendChild(hint(t('editor.foliageTool.hint')));
+
+    s.appendChild(el('h4', 'ed-sub-title', t('editor.foliageTool.ambientTitle')));
+    if (d.hasAmbientFoliage()) {
+      s.appendChild(hint(t('editor.foliageTool.ambientHint')));
+      s.appendChild(
+        button(
+          t('editor.foliageTool.makeAmbientEditable'),
+          () => d.makeAmbientFoliageEditable(),
+          'small',
+        ),
+      );
+    } else {
+      s.appendChild(hint(t('editor.foliageTool.ambientEditableHint')));
+    }
 
     // ---- custom brush asset (scatter a chosen asset instead of the groups) ---
     s.appendChild(el('h4', 'ed-sub-title', t('editor.foliageTool.customTitle')));

@@ -2961,6 +2961,18 @@ export interface Decoration {
   biome: BiomeId;
 }
 
+/** Stable persisted identity for one deterministic ambient decoration anchor. */
+export function decorationKey(decoration: Pick<Decoration, 'kind' | 'x' | 'z'>): string {
+  return `${decoration.kind}:${decoration.x.toFixed(3)}:${decoration.z.toFixed(3)}`;
+}
+
+function withoutEditorExcludedDecorations(decorations: Decoration[]): Decoration[] {
+  const excluded = getActiveWorldContent().decorationExclusions;
+  if (!excluded || excluded.length === 0) return decorations;
+  const keys = new Set(excluded);
+  return decorations.filter((decoration) => !keys.has(decorationKey(decoration)));
+}
+
 const DECORATION_EXCLUSION_RADIUS = 1.2;
 const DECORATION_EXCLUSIONS = [{ x: 2.456450840458274, z: 211.33819991815835 }];
 
@@ -3215,7 +3227,7 @@ export function generateDecorationsInBounds(
   const zEnd = end(bounds.maxZ, DECORATION_Z_START, zCount);
   const out: Decoration[] = [];
   appendDecorationRange(out, seed, xFirst, xEnd, zFirst, zEnd, bounds);
-  return out;
+  return withoutEditorExcludedDecorations(out);
 }
 
 export function generateDecorations(seed: number): Decoration[] {
@@ -3229,5 +3241,5 @@ export function generateDecorations(seed: number): Decoration[] {
     0,
     decorationAnchorCount(DECORATION_Z_START, DECORATION_Z_END),
   );
-  return out;
+  return withoutEditorExcludedDecorations(out);
 }

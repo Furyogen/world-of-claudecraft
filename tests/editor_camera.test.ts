@@ -15,4 +15,30 @@ describe('editor camera drag direction', () => {
     look.look(20, 0);
     expect(look.pose().target.x).toBeGreaterThan(0);
   });
+
+  it('caps fly speed when the camera is zoomed far out', () => {
+    const camera = new EditorCamera();
+    camera.dist = 600;
+    camera.fly(1, 0, 0, 1);
+
+    expect(camera.target.length()).toBeLessThanOrEqual(112.001);
+  });
+
+  it('normalizes diagonal flight to the same speed as straight flight', () => {
+    const straight = new EditorCamera();
+    straight.fly(1, 0, 0, 1);
+
+    const diagonal = new EditorCamera();
+    diagonal.fly(1, 1, 1, 1);
+
+    expect(diagonal.target.length()).toBeCloseTo(straight.target.length(), 6);
+  });
+
+  it('limits one extreme wheel event to a controlled zoom step', () => {
+    const camera = new EditorCamera();
+    camera.dist = 70;
+    camera.zoom(10_000);
+
+    expect(camera.dist).toBeLessThan(90);
+  });
 });
