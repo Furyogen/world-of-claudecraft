@@ -216,6 +216,27 @@ describe('liveness wiring: isLive() tracks the live GameServer loop', () => {
     }
   });
 
+  it('stays live on a HEALTHY loop running past the window (loop start alone is stale)', () => {
+    const server = new GameServer();
+    registerLivenessSource(sourceOver(server));
+    server.start();
+    try {
+      // The steady production state: the loop keeps completing passes for 31 s, so the
+      // loop-start stamp alone is now PAST the staleness window while the completed-pass
+      // stamp keeps refreshing. The completed pass must be what liveness reads: if the
+      // read ever preferred the loop start (or dropped the completed pass), every
+      // healthy server with over 30 s of uptime would answer 503 and the watchdog would
+      // restart a working realm once per cooldown, forever.
+      vi.advanceTimersByTime(31_000);
+      expect(server.loopStartedAt()).toBe(TICK_BASE_MS);
+      expect(Date.now() - TICK_BASE_MS).toBeGreaterThan(30_000);
+      expect(server.lastTickAt()).toBe(TICK_BASE_MS + 31_000);
+      expect(isLive()).toBe(true);
+    } finally {
+      server.stop();
+    }
+  });
+
   it('reads a loop that never completes its first pass as dead once past the window', () => {
     const server = new GameServer();
     registerLivenessSource(sourceOver(server));
@@ -291,6 +312,29 @@ describe('lastTickAt: the loop-liveness source (server/game.ts)', () => {
       // stopped being guarded), a loop that throws every tick would look permanently alive.
       (server as unknown as { sim: { tick: () => unknown } }).sim.tick = () => {
         throw new Error('boom');
+      };
+      vi.advanceTimersByTime(50);
+      expect(errorSpy).toHaveBeenCalled();
+      expect(server.lastTickAt()).toBe(afterFirstPass);
+    } finally {
+      server.stop();
+    }
+  });
+
+  it('does NOT advance when a LATE step of the pass throws (the stamp is the last statement)', () => {
+    const server = new GameServer();
+    server.start();
+    try {
+      vi.advanceTimersByTime(50);
+      const afterFirstPass = server.lastTickAt();
+      expect(afterFirstPass).toBe(TICK_BASE_MS + 50);
+
+      // flushPeriodicSaves is the final step before the stamp. A throw THERE must also
+      // leave the stamp untouched: if the stamp ever moved earlier in the body (say,
+      // right after sim.tick), a pass that died mid-save would still read as a completed
+      // pass and a save-path wedge would look permanently alive.
+      (server as unknown as { flushPeriodicSaves: () => void }).flushPeriodicSaves = () => {
+        throw new Error('save wedge');
       };
       vi.advanceTimersByTime(50);
       expect(errorSpy).toHaveBeenCalled();

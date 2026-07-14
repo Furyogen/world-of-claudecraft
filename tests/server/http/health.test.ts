@@ -164,6 +164,17 @@ describe('health liveness state', () => {
     expect(isLive()).toBe(false);
   });
 
+  it('reads a FRESH last pass as live even though the loop START is long past the window', () => {
+    // The steady production state: loopStartedAt() is stamped once at boot and never
+    // refreshed, so on any server with more than 30 s of uptime it is ALWAYS stale;
+    // only lastTickAt() keeps moving. The completed pass must take precedence over the
+    // loop start, or every healthy long-lived server would read dead and the watchdog
+    // would restart a working realm once per cooldown, forever. This is the one case
+    // that distinguishes the two operands of the staleness read.
+    registerLoopAged(0, 60_000);
+    expect(isLive()).toBe(true);
+  });
+
   it('resetHealthForTests() unregisters the source, so a stale loop cannot leak', () => {
     registerLoopAged(60_000);
     expect(isLive()).toBe(false);
