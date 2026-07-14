@@ -90,10 +90,12 @@ export interface Config {
   readonly maxWsPerIpHard: number;
   // The realm player admission cap: the WS handshake (server/ws_auth.ts) refuses a
   // fresh join once the realm holds this many sessions, and /api/status advertises
-  // it so the client realm list can display honestly. Set-but-empty yields the
-  // default (numberOr returns the fallback for an empty value); an explicit 0 or a
-  // negative value DISABLES the cap, a rule enforced at the admission site (a
-  // cap > 0 test there), never in numberOr, which passes an explicit '0' through.
+  // it so the client realm list can display honestly. The raw value is trimmed
+  // before the read, so set-but-empty AND whitespace-only both yield the default
+  // (Number('   ') is 0, which an untrimmed read would take as an explicit 0 and
+  // silently DISABLE the cap); an explicit 0 or a negative value disables it, a
+  // rule enforced at the admission site (a cap > 0 test there), never in numberOr,
+  // which passes an explicit '0' through.
   readonly maxPlayersPerRealm: number;
   readonly githubRepo: string;
   readonly githubToken: string;
@@ -269,7 +271,11 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     allowDevCommands: env.ALLOW_DEV_COMMANDS === ALLOW_DEV_COMMANDS_ON,
     turnstileSecret: env.TURNSTILE_SECRET ?? DEFAULT_TURNSTILE_SECRET,
     maxWsPerIpHard: numberOr(env.MAX_WS_PER_IP_HARD, DEFAULT_MAX_WS_PER_IP_HARD),
-    maxPlayersPerRealm: numberOr(env.MAX_PLAYERS_PER_REALM, DEFAULT_MAX_PLAYERS_PER_REALM),
+    // Trimmed so a whitespace-only value reads as unset -> the default, never as
+    // the explicit 0 that disables the cap (see the Config field comment). Scoped
+    // to this key: for retention-style keys a stray whitespace 0 is the SAFE side,
+    // so their untrimmed reads stay as they are.
+    maxPlayersPerRealm: numberOr(env.MAX_PLAYERS_PER_REALM?.trim(), DEFAULT_MAX_PLAYERS_PER_REALM),
     githubRepo: env.GITHUB_REPO ?? DEFAULT_GITHUB_REPO,
     githubToken: env.GITHUB_TOKEN ?? DEFAULT_GITHUB_TOKEN,
     chatLogRetentionDays: numberOr(env.CHAT_LOG_RETENTION_DAYS, DEFAULT_CHAT_LOG_RETENTION_DAYS),
