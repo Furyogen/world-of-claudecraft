@@ -8,7 +8,7 @@
 
 首先，感谢你的到来。World of ClaudeCraft 由一群热爱经典 MMO 的人共同打造，每一份贡献，无论大小，都让它变得更好。修正一个错别字、翻译游戏、报告一个 bug、搭建一座全新的副本：这些都很重要，我们欢迎你的加入。
 
-本指南会帮你完成环境搭建，让你的第一次贡献顺顺利利。你不需要是专家。如果有任何不清楚的地方，欢迎到 [Discord](https://discord.gg/wYCQAfppF7) 上提问，会有人乐意帮你。
+本指南会帮你完成环境搭建，让你的第一次贡献顺顺利利。你不需要是专家。如果有任何不清楚的地方，欢迎到 [Discord](https://discord.com/invite/worldofclaudecraft) 上提问，会有人乐意帮你。
 
 参与即表示你同意遵守我们的[行为准则](../../CODE_OF_CONDUCT.md)。
 
@@ -117,7 +117,7 @@ World of ClaudeCraft 支持多种语言，并且随着游戏的发展，我们�
 2. 改进现有的翻译，或者补全任何读起来别扭的地方。
 3. 运行 `npx tsc --noEmit` 确认没有遗漏，然后提交 PR。
 
-要提议一门全新的语言，或者讨论语气和术语，请到 [Discord](https://discord.gg/wYCQAfppF7) 上开个话题，我们会帮你把它接进来。尤其欢迎母语者和流利使用者。好的翻译能让各地玩家都觉得游戏像家一样亲切。
+要提议一门全新的语言，或者讨论语气和术语，请到 [Discord](https://discord.com/invite/worldofclaudecraft) 上开个话题，我们会帮你把它接进来。尤其欢迎母语者和流利使用者。好的翻译能让各地玩家都觉得游戏像家一样亲切。
 
 ## 报告 bug 与请求功能
 
@@ -128,7 +128,7 @@ World of ClaudeCraft 支持多种语言，并且随着游戏的发展，我们�
 
 ## 获取帮助
 
-卡住了，或者只是想打个招呼？欢迎加入[社区 Discord](https://discord.gg/wYCQAfppF7)。没有什么问题是太小的，我们始终欢迎新的贡献者。
+卡住了，或者只是想打个招呼？欢迎加入[社区 Discord](https://discord.com/invite/worldofclaudecraft)。没有什么问题是太小的，我们始终欢迎新的贡献者。
 
 ## 许可证
 
