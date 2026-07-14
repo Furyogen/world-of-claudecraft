@@ -82,9 +82,11 @@ export const DB_POOL_CONNECT_TIMEOUT_MS = 5000;
 export const DB_STATEMENT_TIMEOUT_MS = 15_000;
 
 // The raised per-transaction allowance for the known heavy reads (the cached
-// leaderboard / board / metrics aggregates and the final character save), applied
-// via runWithStatementTimeout. Bounded so even an exempted scan that goes runaway
-// still dies rather than pinning a pooled client indefinitely.
+// leaderboard / board / metrics aggregates and the final character save, plus the
+// on-demand admin reads: the sessions-by-day chart, the client perf summary, the
+// account-detail playtime aggregate, and the chat-log prune), applied via
+// runWithStatementTimeout. Bounded so even an exempted scan that goes runaway still
+// dies rather than pinning a pooled client indefinitely.
 export const DB_HEAVY_STATEMENT_TIMEOUT_MS = 60_000;
 
 // Client-side backstop timeout per connection. query_timeout is enforced in the
@@ -132,8 +134,10 @@ export function getPoolClientErrorCount(): number {
  * reverts at COMMIT/ROLLBACK and never leaks to the next checkout). For the known
  * heavy reads whose legitimate runtime can exceed the default DB_STATEMENT_TIMEOUT_MS.
  * The wrapped `query` handed to `fn` runs on the same client inside the same
- * transaction, so every statement it issues is covered by the raised timeout and a
- * multi-statement read gets one consistent snapshot.
+ * transaction, so every statement it issues is covered by the raised timeout. The
+ * transaction runs at the default READ COMMITTED isolation, where each statement
+ * takes its own snapshot: this raises the allowance for every statement but does
+ * NOT give a multi-statement read one consistent snapshot.
  *
  * SET LOCAL cannot take a bind parameter, so `timeoutMs` is interpolated into the
  * statement text as an integer; validating it as a non-negative safe integer here
@@ -3463,9 +3467,10 @@ export async function insertChatLogs(rows: ChatLogRow[]): Promise<void> {
 // Keeps the table bounded; CHAT_LOG_RETENTION_DAYS=0 disables pruning.
 export async function pruneChatLogs(retentionDays: number): Promise<number> {
   if (!Number.isFinite(retentionDays) || retentionDays <= 0) return 0;
-  const res = await pool.query(
-    `DELETE FROM chat_logs WHERE created_at < now() - ($1 || ' days')::interval`,
-    [String(Math.floor(retentionDays))],
+  const res = await runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS, (query) =>
+    query(`DELETE FROM chat_logs WHERE created_at < now() - ($1 || ' days')::interval`, [
+      String(Math.floor(retentionDays)),
+    ]),
   );
   return res.rowCount ?? 0;
 }

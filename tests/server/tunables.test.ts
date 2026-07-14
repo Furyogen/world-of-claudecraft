@@ -522,7 +522,8 @@ describe('no consolidated tunable literal is duplicated at a call site', () => {
     expect(bodyOf(dbSrc, 'export async function saveCharacterAndMarketState')).toContain(
       'SET LOCAL statement_timeout = ${DB_HEAVY_STATEMENT_TIMEOUT_MS}',
     );
-    expect(bodyOf(read('server/admin_db.ts'), 'export async function overviewCounts')).toContain(
+    const adminSrc = read('server/admin_db.ts');
+    expect(bodyOf(adminSrc, 'export async function overviewCounts')).toContain(
       'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
     );
     expect(bodyOf(read('server/deeds_db.ts'), 'export async function deedRarityCounts')).toContain(
@@ -534,6 +535,60 @@ describe('no consolidated tunable literal is duplicated at a call site', () => {
         'export async function clientPerfMetricRows',
       ),
     ).toContain('runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS');
+    // The on-demand admin reads carry the wrapper in the body that owns their
+    // heaviest scan: sessionsByDay and accountDetail wrap directly; clientPerfSummary
+    // threads the bound query into its private perf helpers from ONE wrapper call, so
+    // the wrapper lives in its own body. pruneChatLogs (db.ts) wraps its delete.
+    for (const decl of [
+      'export async function sessionsByDay',
+      'export async function clientPerfSummary',
+      'export async function accountDetail',
+    ]) {
+      expect(bodyOf(adminSrc, decl)).toContain(
+        'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+      );
+    }
+    // clientPerfSummary inherits the allowance ONLY if it hands the bound query to
+    // both perf helpers; pin the threading so a helper cannot silently drop back to a
+    // pool.query outside the raised transaction without reddening this.
+    const perfSummaryBody = bodyOf(adminSrc, 'export async function clientPerfSummary');
+    expect(perfSummaryBody).toContain('perfAggregate(query,');
+    expect(perfSummaryBody).toContain('perfBuckets(query,');
+    // accountDetail wraps ONLY the account row whose correlated play_sessions sum
+    // grows without bound; its four LIMIT-capped companion reads stay on the default.
+    // Slice from the wrapper to the next pool.query and require the playtime
+    // aggregate inside it, so moving the wrapper onto one of the capped reads (and
+    // silently dropping the unbounded scan back to the default) reddens this.
+    const accountDetailBody = bodyOf(adminSrc, 'export async function accountDetail');
+    const wrapStart = accountDetailBody.indexOf(
+      'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+    );
+    expect(wrapStart).toBeGreaterThan(-1);
+    const nextPoolQuery = accountDetailBody.indexOf('pool.query', wrapStart);
+    const wrappedRead =
+      nextPoolQuery === -1
+        ? accountDetailBody.slice(wrapStart)
+        : accountDetailBody.slice(wrapStart, nextPoolQuery);
+    expect(wrappedRead).toContain('playtime_seconds');
+    expect(wrappedRead).toContain('FROM accounts WHERE id = $1');
+    expect(bodyOf(dbSrc, 'export async function pruneChatLogs')).toContain(
+      'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+    );
+  });
+
+  it('the player character-select read stays on the default statement timeout', () => {
+    // db.ts listCharacters is the login-path character-select read: it deliberately
+    // stays on the 15s default so it fails fast during a database brownout rather than
+    // pinning a client for up to the heavy allowance. It must NEVER gain the wrapper.
+    const bodyOf = (source: string, decl: string): string => {
+      const start = source.indexOf(decl);
+      expect(start, `${decl} not found`).toBeGreaterThan(-1);
+      const next = source.indexOf('\nexport ', start + decl.length);
+      return next === -1 ? source.slice(start) : source.slice(start, next);
+    };
+    expect(bodyOf(dbSrc, 'export async function listCharacters')).not.toContain(
+      'runWithStatementTimeout',
+    );
   });
 
   it('the heavy-statement exemption interpolates the named constant and validates the integer', () => {
