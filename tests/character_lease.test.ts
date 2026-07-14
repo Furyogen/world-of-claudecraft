@@ -161,14 +161,21 @@ describe('shutdown wiring (source pin)', () => {
     // (the join reconcile is the only heal). Match the awaited CALL forms so a
     // prose mention in a comment never shifts an index.
     const src = readFileSync(new URL('../server/main.ts', import.meta.url), 'utf8');
+    const saveAll = src.indexOf("await game.saveAll('shutdown')");
     const endSessions = src.indexOf('await game.endAllPlaySessions(');
     const sweep = src.indexOf('await releaseAllCharacterLeases(');
     const ledgerDrain = src.indexOf('await bankLedgerIdle()');
     const deedsDrain = src.indexOf('await deedRecordsIdle()');
     const poolEnd = src.indexOf('await pool.end()');
-    expect(endSessions).toBeGreaterThan(-1);
+    // The shutdown save runs FIRST, while this process still holds every lease:
+    // the saves are lease-fenced (a holder + nonce EXISTS inside the UPDATE), so
+    // a reorder below the sweep would fence out EVERY shutdown save (rowCount 0,
+    // nothing persisted) and silently drop all in-flight state on each restart.
+    expect(saveAll).toBeGreaterThan(-1);
+    expect(endSessions).toBeGreaterThan(saveAll);
     expect(ledgerDrain).toBeGreaterThan(endSessions);
     expect(deedsDrain).toBeGreaterThan(endSessions);
+    expect(sweep).toBeGreaterThan(saveAll);
     expect(sweep).toBeGreaterThan(ledgerDrain);
     expect(sweep).toBeGreaterThan(deedsDrain);
     expect(poolEnd).toBeGreaterThan(sweep);

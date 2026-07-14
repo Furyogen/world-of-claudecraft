@@ -359,6 +359,65 @@ describe('db pool timeouts hold their literal values and the query_timeout layer
     );
     expect(fn).not.toHaveBeenCalled();
   });
+
+  it('runWithStatementTimeout opens the transaction before the raise and unwinds on error', async () => {
+    // BEGIN must precede SET LOCAL (outside a transaction SET LOCAL is a silent
+    // no-op, leaving the heavy read on the 15s default), fn's statements must run
+    // on the SAME checked-out client, and both exits must return the client to
+    // the pool: a leaked client on the heavy path eats one of the 10 slots
+    // forever. Recorded on a stubbed checkout, no database touched.
+    const { runWithStatementTimeout, pool } = await import('../../server/db');
+    const calls: string[] = [];
+    let released = 0;
+    const client = {
+      query: (text: string) => {
+        calls.push(text);
+        return Promise.resolve({ rows: [], rowCount: 0 });
+      },
+      release: () => {
+        released++;
+      },
+    };
+    const connectSpy = vi.spyOn(pool, 'connect').mockResolvedValue(client as never);
+    try {
+      const out = await runWithStatementTimeout(1234, async (query) => {
+        await query('SELECT 1');
+        return 'ok';
+      });
+      expect(out).toBe('ok');
+      expect(calls).toEqual(['BEGIN', 'SET LOCAL statement_timeout = 1234', 'SELECT 1', 'COMMIT']);
+      expect(released).toBe(1);
+
+      // fn rejects: ROLLBACK (never COMMIT), the original error rethrows, and the
+      // client is STILL released.
+      calls.length = 0;
+      await expect(
+        runWithStatementTimeout(1234, async () => {
+          throw new Error('boom');
+        }),
+      ).rejects.toThrow('boom');
+      expect(calls).toEqual(['BEGIN', 'SET LOCAL statement_timeout = 1234', 'ROLLBACK']);
+      expect(released).toBe(2);
+
+      // A ROLLBACK that itself fails (dead connection) must neither mask the
+      // original error nor skip the release.
+      calls.length = 0;
+      client.query = (text: string) => {
+        calls.push(text);
+        return text === 'ROLLBACK'
+          ? Promise.reject(new Error('conn gone'))
+          : Promise.resolve({ rows: [], rowCount: 0 });
+      };
+      await expect(
+        runWithStatementTimeout(1234, async () => {
+          throw new Error('original');
+        }),
+      ).rejects.toThrow('original');
+      expect(released).toBe(3);
+    } finally {
+      connectSpy.mockRestore();
+    }
+  });
 });
 
 // Source-scan guard: each consolidated literal must live in exactly ONE place (its
@@ -434,6 +493,47 @@ describe('no consolidated tunable literal is duplicated at a call site', () => {
 
   it('an idle pooled-client error is handled, never left to crash the process', () => {
     expect(dbSrc).toContain("pool.on('error'");
+  });
+
+  it('every heavy-aggregate call site runs through the raised allowance, per function body', () => {
+    // Dropping runWithStatementTimeout at ONE call site silently reverts that
+    // read to the 15s session default while its own suite stays green (the
+    // suites answer BEGIN/SET LOCAL and forward the real query through the same
+    // spy), so pin each function BODY to the wrapper. Slices run to the next
+    // export so a neighbor's wrapper cannot satisfy a body that lost its own.
+    const bodyOf = (source: string, decl: string): string => {
+      const start = source.indexOf(decl);
+      expect(start, `${decl} not found`).toBeGreaterThan(-1);
+      const next = source.indexOf('\nexport ', start + decl.length);
+      return next === -1 ? source.slice(start) : source.slice(start, next);
+    };
+    for (const decl of [
+      'export async function topArenaRatings',
+      'export async function topLifetimeXp',
+      'export async function topGuilds',
+      'export async function deedsBoardRanked',
+      'export async function saveCharacterState',
+    ]) {
+      expect(bodyOf(dbSrc, decl)).toContain(
+        'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+      );
+    }
+    // saveCharacterAndMarketState owns its escrow transaction and inlines the raise.
+    expect(bodyOf(dbSrc, 'export async function saveCharacterAndMarketState')).toContain(
+      'SET LOCAL statement_timeout = ${DB_HEAVY_STATEMENT_TIMEOUT_MS}',
+    );
+    expect(bodyOf(read('server/admin_db.ts'), 'export async function overviewCounts')).toContain(
+      'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+    );
+    expect(bodyOf(read('server/deeds_db.ts'), 'export async function deedRarityCounts')).toContain(
+      'runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS',
+    );
+    expect(
+      bodyOf(
+        read('server/client_perf_metrics_db.ts'),
+        'export async function clientPerfMetricRows',
+      ),
+    ).toContain('runWithStatementTimeout(DB_HEAVY_STATEMENT_TIMEOUT_MS');
   });
 
   it('the heavy-statement exemption interpolates the named constant and validates the integer', () => {
