@@ -30,6 +30,7 @@ import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
+import { tryHarvestNearestNode } from './game/gather_interact';
 import { Input } from './game/input';
 import { InputActivityMeter, installInputActivityTracking } from './game/input_activity';
 import {
@@ -2054,6 +2055,10 @@ async function startGame(
       else hud.openQuestDialog(bestNpc);
       return;
     }
+    // Gather nodes are static content, never entities, so the scan above can
+    // not see them; lowest priority so a corpse/object/NPC on top of a vein
+    // keeps its existing interaction (src/game/gather_interact.ts, #1888).
+    if (tryHarvestNearestNode(world)) return;
     hud.showError(t('errors.nothingInteract'));
   }
 
