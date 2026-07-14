@@ -421,6 +421,27 @@ describe('bag-full quest-item feedback (#1888)', () => {
   });
 });
 
+describe('pendingNodeCooldowns boundary (#1888)', () => {
+  it('agrees with isNodeHarvestableBy at the exact readyAt instant: due means ready and absent from gnodes', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'Boundary');
+    const meta = mustMeta(sim, pid);
+
+    // Exactly due (readyAt === now): harvestable again, so it must NOT ship as
+    // cooling, or the online minimap would paint a harvestable vein on
+    // cooldown forever at the boundary.
+    meta.nodeHarvestReadyAt[NODE_ID] = sim.time;
+    expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(true);
+    expect(sim.nodeHarvestPendingFor(pid)).toEqual({});
+
+    // One tick short of due: still cooling, so it ships with its stamp.
+    const readyAt = sim.time + 0.05;
+    meta.nodeHarvestReadyAt[NODE_ID] = readyAt;
+    expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(false);
+    expect(sim.nodeHarvestPendingFor(pid)).toEqual({ [NODE_ID]: readyAt });
+  });
+});
+
 describe('gather tool use feedback (#1888)', () => {
   it('using a mining pick from the bag emits the gather hint instead of silently doing nothing', () => {
     const sim = makeWorld();
