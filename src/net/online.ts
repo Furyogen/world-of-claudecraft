@@ -97,6 +97,7 @@ import {
   type SocialInfo,
   type TradeInfo,
 } from '../world_api';
+import { computeBackoffDelay } from './backoff';
 import { isTransientReconnectRejection } from './reconnect_policy';
 
 // ---------------------------------------------------------------------------
@@ -901,8 +902,11 @@ const DESPAWN_GRACE_MS = 600;
 // Auto-reconnect backoff for an unexpectedly dropped game socket. The server
 // holds the character in-world (linkdead) for five minutes; the retry window
 // is deliberately longer, since past the grace a successful auth simply
-// performs a fresh join from the last save. 1s, 2s, 4s, 8s, then 15s apart:
-// 40 attempts spans roughly nine minutes before giving up for good.
+// performs a fresh join from the last save. Roughly 1s, 2s, 4s, 8s, then 15s
+// apart, with each delay spread over a 0.5x to 1.5x jitter band
+// (computeBackoffDelay) so many clients dropped by one server blip do not retry
+// in lockstep. Expected total is unchanged (about nine minutes), but the actual
+// span across 40 attempts ranges from roughly 4.5 to 14 minutes before giving up.
 const RECONNECT_BASE_DELAY_MS = 1_000;
 const RECONNECT_MAX_DELAY_MS = 15_000;
 const RECONNECT_MAX_ATTEMPTS = 40;
@@ -1348,9 +1352,17 @@ export class ClientWorld implements IWorld {
     if (this.sessionEnded) return;
     if (this.ws.readyState === WebSocket.OPEN) return;
     if (this.reconnectTimer !== undefined) {
+      // Retry soon, but with a short random spread (0 to 1000 ms) rather than
+      // instantly, so a fleet of tabs foregrounded together (a phone unlock, a
+      // laptop wake) does not stampede the reconnect endpoint on the same beat.
+      // Reusing reconnectTimer means endSession still clears it and a second
+      // visibilitychange while it is pending takes the clearTimeout branch
+      // below: never two live timers, never a double openSocket.
       clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = undefined;
-      this.openSocket();
+      this.reconnectTimer = window.setTimeout(() => {
+        this.reconnectTimer = undefined;
+        this.openSocket();
+      }, Math.random() * 1000);
       return;
     }
     // No reconnect scheduled yet but the socket is not open: onclose was
@@ -1392,11 +1404,19 @@ export class ClientWorld implements IWorld {
     }
     this.reconnectAttempts++;
     this.onConnectionLost?.();
-    const delayMs = Math.min(
+    const delayMs = computeBackoffDelay(
+      this.reconnectAttempts,
+      RECONNECT_BASE_DELAY_MS,
       RECONNECT_MAX_DELAY_MS,
-      RECONNECT_BASE_DELAY_MS * 2 ** (this.reconnectAttempts - 1),
+      Math.random,
     );
-    this.reconnectTimer = window.setTimeout(() => this.openSocket(), delayMs);
+    // Clear our own handle when the timer fires: a stale handle left in
+    // reconnectTimer would make a later visibility event (while the socket is
+    // still CONNECTING) take the pending-timer branch and open a second socket.
+    this.reconnectTimer = window.setTimeout(() => {
+      this.reconnectTimer = undefined;
+      this.openSocket();
+    }, delayMs);
   }
 
   private endSession(): void {
