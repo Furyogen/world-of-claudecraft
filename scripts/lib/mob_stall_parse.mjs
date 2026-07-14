@@ -13,7 +13,7 @@ export function boundedInt(raw, fallback, min, max) {
   return Math.max(min, Math.min(max, Math.trunc(n)));
 }
 
-export function num(re, line) {
+function num(re, line) {
   const m = re.exec(line);
   return m ? Number(m[1]) : null;
 }

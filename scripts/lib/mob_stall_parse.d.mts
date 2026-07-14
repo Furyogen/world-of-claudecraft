@@ -35,7 +35,6 @@ export declare function boundedInt(
   min: number,
   max: number,
 ): number;
-export declare function num(re: RegExp, line: string): number | null;
 export declare function timingPair(name: string, line: string): TimingPair | null;
 export declare function parseHeartbeat(line: string): HeartbeatSample;
 export declare function parseSimline(line: string): Record<string, SimlineBucket>;
