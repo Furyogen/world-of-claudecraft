@@ -73,6 +73,7 @@ const CALLBACK_KEYS = [
   'partyOf',
   'removeFromParty',
   'dropPartyMarkers',
+  'formDungeonFinderGroup',
   // Q1 quest-credit trio + the countItem it consumes.
   'onMobKilledForQuests',
   'onInventoryChangedForQuests',
@@ -197,6 +198,7 @@ const CALLBACK_KEYS = [
   'setPlayerLevel',
   'notice',
   'spawnDevBot',
+  'seedDungeonFinderDev',
   // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
   'startFishing',
   'unlockMechChromaFromItem',
@@ -349,6 +351,7 @@ function makeFakeHost() {
     partyOf: vi.fn(() => null),
     removeFromParty: vi.fn(),
     dropPartyMarkers: vi.fn(),
+    formDungeonFinderGroup: vi.fn(() => null),
     onMobKilledForQuests: vi.fn(),
     onInventoryChangedForQuests: vi.fn(),
     checkQuestReady: vi.fn(),
@@ -470,6 +473,7 @@ function makeFakeHost() {
     setPlayerLevel: vi.fn(),
     notice: vi.fn(),
     spawnDevBot: vi.fn(),
+    seedDungeonFinderDev: vi.fn(() => ({ spawned: 0, note: 'ok' as const })),
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),
