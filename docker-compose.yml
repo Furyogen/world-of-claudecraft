@@ -36,6 +36,11 @@ services:
     environment:
       DATABASE_URL: postgres://eastbrook:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env. See .env.example.}@postgres:5432/eastbrook
       PORT: "8787"
+      # Runtime: the realm player admission cap. A fresh WebSocket join is refused
+      # once the realm holds this many sessions (server/ws_auth.ts); /api/status
+      # advertises the value so the client realm list can show Full honestly. Empty
+      # (unset) yields the built-in default of 5000; an explicit 0 disables the cap.
+      MAX_PLAYERS_PER_REALM: ${MAX_PLAYERS_PER_REALM:-}
       # Target the game server 302-redirects /wiki to when hit directly (not via the
       # reverse proxy). Public origin in prod; localhost fallback for local dev.
       WIKI_URL: ${WIKI_URL:-http://localhost:8080/wiki/index.php/Main_Page}
