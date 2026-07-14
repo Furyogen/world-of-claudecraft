@@ -127,6 +127,7 @@ import { forEachGuarded, runGuarded } from './guarded_iter';
 import { gameMetricsCounters } from './http/game_signals';
 import { IpBlockList } from './ip_block';
 import { loadActiveBlockedIps } from './ip_block_db';
+import { keepaliveSweepDelayed } from './keepalive_sweep';
 import { LINKDEAD_GRACE_MS, planJoin } from './linkdead';
 import { type LiveSharedIp, sharedIpsFromLiveSessions } from './live_shared_ips';
 import { trackReachedLevel5 } from './meta_capi';
@@ -1066,6 +1067,9 @@ export class GameServer {
   private interval: NodeJS.Timeout | null = null;
   private holderTierInterval: NodeJS.Timeout | null = null;
   private keepaliveInterval: NodeJS.Timeout | null = null;
+  // Wall-clock ms at which the keepalive sweep last ran, so a sweep can tell whether
+  // it fired on time. A late sweep proves the process stalled, not that clients died.
+  private lastKeepaliveSweepAt = Date.now();
   private holderTierRefreshing = false; // overlap guard for the refresh cycle
   private playtimeInterval: NodeJS.Timeout | null = null;
   private lastPlaytimeGrantAt = new Map<number, number>(); // accountId -> sim time of last grant
@@ -1718,6 +1722,7 @@ export class GameServer {
     this.dailyRewardActivityInterval = setInterval(() => {
       void this.recordDailyRewardActivity();
     }, DAILY_REWARD_ACTIVITY_MS);
+    this.lastKeepaliveSweepAt = Date.now();
     this.keepaliveInterval = setInterval(() => {
       this.pingLiveSessions();
     }, WS_KEEPALIVE_PING_MS);
@@ -1797,9 +1802,15 @@ export class GameServer {
   // client's reconnect backoff resumes within a ping interval or two (the
   // client tolerates that rejection mid-reconnect, src/net/reconnect_policy.ts).
   pingLiveSessions(): void {
+    const now = Date.now();
+    // A sweep that fired far later than its interval proves the process stalled, so
+    // pong silence is not evidence of a dead client: queued pong frames went
+    // unprocessed during the stall. On such a sweep terminate nobody; re-arm every
+    // live session (ping again) so the next on-time sweep can judge honestly.
+    const delayed = keepaliveSweepDelayed(now, this.lastKeepaliveSweepAt, WS_KEEPALIVE_PING_MS);
     for (const session of this.clients.values()) {
       if (session.linkdead || session.ws.readyState !== 1) continue;
-      if (session.awaitingPong) {
+      if (session.awaitingPong && !delayed) {
         const ws = session.ws;
         try {
           ws.terminate();
@@ -1816,6 +1827,7 @@ export class GameServer {
         /* socket torn down mid-iteration */
       }
     }
+    this.lastKeepaliveSweepAt = now;
   }
 
   stop(): void {
