@@ -7648,6 +7648,15 @@ export const en_XA: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "[Šçéþţéŕ óƒ ţĥé Ðéáţĥļéšš Çóúŕţ]"
       },
+      "deathless_warguard_legmail": {
+        "name": "[Ðéáţĥļéšš Ŵáŕĝúáŕð Ļéĝɱáíļ]"
+      },
+      "soulrend_diadem": {
+        "name": "[Šóúļŕéñð Ðíáðéɱ]"
+      },
+      "scourgehide_carapace": {
+        "name": "[Šçóúŕĝéĥíðé Çáŕáþáçé]"
+      },
       "cryptplate_helm": {
         "name": "[Çŕýþţþļáţé Ĥéļɱ]"
       },
@@ -7686,6 +7695,9 @@ export const en_XA: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "[Ðéáţĥļéšš Ĝŕéáţƀļáðé]"
+      },
+      "soulforged_warplate": {
+        "name": "[Šóúļƒóŕĝéð Ŵáŕþļáţé]"
       },
       "stormcallers_focus": {
         "name": "[Šţóŕɱçáļļéŕ'š Ƒóçúš]"

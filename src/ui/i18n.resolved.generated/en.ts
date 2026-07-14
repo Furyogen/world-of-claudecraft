@@ -7648,6 +7648,15 @@ export const en: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Scepter of the Deathless Court"
       },
+      "deathless_warguard_legmail": {
+        "name": "Deathless Warguard Legmail"
+      },
+      "soulrend_diadem": {
+        "name": "Soulrend Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Scourgehide Carapace"
+      },
       "cryptplate_helm": {
         "name": "Cryptplate Helm"
       },
@@ -7686,6 +7695,9 @@ export const en: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Deathless Greatblade"
+      },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
       },
       "stormcallers_focus": {
         "name": "Stormcaller's Focus"
