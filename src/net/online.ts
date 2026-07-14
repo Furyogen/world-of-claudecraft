@@ -903,10 +903,12 @@ const DESPAWN_GRACE_MS = 600;
 // holds the character in-world (linkdead) for five minutes; the retry window
 // is deliberately longer, since past the grace a successful auth simply
 // performs a fresh join from the last save. Roughly 1s, 2s, 4s, 8s, then 15s
-// apart, with each delay spread over a 0.5x to 1.5x jitter band
-// (computeBackoffDelay) so many clients dropped by one server blip do not retry
-// in lockstep. Expected total is unchanged (about nine minutes), but the actual
-// span across 40 attempts ranges from roughly 4.5 to 14 minutes before giving up.
+// apart, with each delay spread over a 0.5x to 1.5x jitter band and clamped at
+// the 15s cap (computeBackoffDelay) so many clients dropped by one server blip
+// do not retry in lockstep. The clamp trims the band's upper half once the
+// schedule reaches the cap, so across 40 attempts the total runs from roughly
+// 4.6 minutes (every draw at the floor) to 9.4 minutes (every draw at the
+// ceiling), with an expected total near 8 minutes, before giving up for good.
 const RECONNECT_BASE_DELAY_MS = 1_000;
 const RECONNECT_MAX_DELAY_MS = 15_000;
 const RECONNECT_MAX_ATTEMPTS = 40;

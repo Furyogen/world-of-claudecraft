@@ -46,9 +46,11 @@ export function isTransientReconnectRejection(
 }
 
 // Wire contract: this literal must stay byte-identical to the server's auth
-// rejection table entry (server/ws_auth.ts, WS_AUTH_ERROR.authTimedOut) and to
-// the untranslated protocol-diagnostics passthrough that keeps it English on
-// the client (src/ui/api_error_i18n.ts).
+// rejection table entry (server/ws_auth.ts, WS_AUTH_ERROR.authTimedOut).
+// src/ui/api_error_i18n.ts deliberately has no match arm for it: its NOTE lists
+// the string as an untranslated protocol diagnostic, so when it does surface
+// (an initial connect, or past the bound below) the player sees the raw
+// English wire text by design.
 export const RECONNECT_TIMEOUT_ERROR = 'authentication timed out';
 
 export const MAX_TIMEOUT_REJECTIONS = 20;
