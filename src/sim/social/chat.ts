@@ -572,6 +572,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     );
     return null;
   }
+  if (/^\/(?:dungeons|dungeon|instances)\s+reset\s*$/i.test(raw)) {
+    ctx.resetDungeonInstances(r.meta.entityId);
+    return null;
+  }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
     ctx.error(
@@ -579,6 +583,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       ctx.dungeonDifficulty(r.meta.entityId) === 'heroic'
         ? 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.'
         : 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+    );
+    ctx.error(
+      r.meta.entityId,
+      'Use /dungeon reset to abandon your empty instances after changing difficulty.',
     );
     return null;
   }

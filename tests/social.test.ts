@@ -1228,6 +1228,43 @@ describe('the new dungeons', () => {
 });
 
 describe('dungeon difficulty slash command', () => {
+  it('routes /dungeon reset to the owned-instance reset', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+    sim.enterDungeon('hollow_crypt', p);
+    sim.leaveDungeon(p);
+    sim.setDungeonDifficulty('heroic', p);
+
+    sim.drainEvents();
+    sim.chat('/dungeon reset', p);
+
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === p &&
+          event.text === 'All instances have been reset.',
+      ),
+    ).toBe(true);
+  });
+
+  it('routes the /dungeons and /instances reset aliases', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Aliases');
+    for (const cmd of ['/dungeons reset', '/instances reset']) {
+      sim.drainEvents();
+      sim.chat(cmd, p);
+      expect(
+        (sim.drainEvents() as any[]).some(
+          (event) =>
+            event.type === 'error' &&
+            event.pid === p &&
+            event.text === 'You have no instances to reset.',
+        ),
+      ).toBe(true);
+    }
+  });
+
   it('lets a leader switch normal and heroic without using dev commands', () => {
     const sim = makeWorld();
     const leader = sim.addPlayer('warrior', 'Lead');

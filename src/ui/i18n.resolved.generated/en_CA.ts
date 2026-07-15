@@ -1283,7 +1283,20 @@ export const en_CA: EnTranslations = {
     },
     "dungeonDifficulty": {
       "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setNormal": "Set Dungeon Difficulty: Normal",
+      "resetAll": "Reset All Instances",
+      "resetDone": "All instances have been reset.",
+      "resetNone": "You have no instances to reset.",
+      "resetOccupied": "You cannot reset instances while someone is still inside.",
+      "resetSameDifficulty": "Change dungeon difficulty before resetting these instances. Empty instances reset on their own after 5 minutes.",
+      "resetLoot": "You cannot reset instances while loot remains inside.",
+      "resetConfirmTitle": "Reset All Instances?",
+      "resetConfirmBody": "This abandons empty instances from your previously selected difficulty. Unclaimed loot will prevent the reset.",
+      "resetConfirm": "Reset Instances",
+      "resetCooldown": "Instances can only be reset once every 5 minutes.",
+      "resetUsage": "Use /dungeon reset to abandon your empty instances after changing difficulty.",
+      "entryMismatchNormal": "This instance is set to Normal difficulty. Use Reset All Instances to start a fresh Heroic run.",
+      "entryMismatchHeroic": "This instance is set to Heroic difficulty. Use Reset All Instances to start a fresh Normal run."
     },
     "bags": {
       "cannotDestroy": "This item cannot be destroyed.",

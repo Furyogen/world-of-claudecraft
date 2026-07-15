@@ -499,6 +499,26 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.menuItem': '전리품 설정',
   'hudChrome.dungeonDifficulty.setHeroic': '던전 난이도 설정: 영웅',
   'hudChrome.dungeonDifficulty.setNormal': '던전 난이도 설정: 일반',
+  'hudChrome.dungeonDifficulty.resetAll': '모든 인스턴스 초기화',
+  'hudChrome.dungeonDifficulty.resetDone': '모든 인스턴스가 초기화되었습니다.',
+  'hudChrome.dungeonDifficulty.resetNone': '초기화할 인스턴스가 없습니다.',
+  'hudChrome.dungeonDifficulty.resetOccupied':
+    '아직 안에 플레이어가 있으면 인스턴스를 초기화할 수 없습니다.',
+  'hudChrome.dungeonDifficulty.resetSameDifficulty':
+    '인스턴스를 초기화하기 전에 던전 난이도를 변경하세요. 비어 있는 인스턴스는 5분 후 자동으로 초기화됩니다.',
+  'hudChrome.dungeonDifficulty.resetUsage':
+    '난이도를 변경한 후 /dungeon reset 으로 빈 인스턴스를 포기할 수 있습니다.',
+  'hudChrome.dungeonDifficulty.resetLoot':
+    '안에 전리품이 남아 있으면 인스턴스를 초기화할 수 없습니다.',
+  'hudChrome.dungeonDifficulty.resetConfirmTitle': '모든 인스턴스를 초기화할까요?',
+  'hudChrome.dungeonDifficulty.resetConfirmBody':
+    '이전에 선택한 난이도의 빈 인스턴스를 포기합니다. 획득하지 않은 전리품이 있으면 초기화할 수 없습니다.',
+  'hudChrome.dungeonDifficulty.resetConfirm': '인스턴스 초기화',
+  'hudChrome.dungeonDifficulty.resetCooldown': '인스턴스는 5분마다 한 번만 초기화할 수 있습니다.',
+  'hudChrome.dungeonDifficulty.entryMismatchNormal':
+    '이 인스턴스는 일반 난이도로 설정되어 있습니다. 영웅 난이도로 새로 시작하려면 모든 인스턴스 초기화를 사용하세요.',
+  'hudChrome.dungeonDifficulty.entryMismatchHeroic':
+    '이 인스턴스는 영웅 난이도로 설정되어 있습니다. 일반 난이도로 새로 시작하려면 모든 인스턴스 초기화를 사용하세요.',
   'hudChrome.lootSettings.method': '전리품 방식',
   'hudChrome.lootSettings.rollThreshold': '주사위 기준',
   'hudChrome.lootSettings.groupLoot': '파티 분배',

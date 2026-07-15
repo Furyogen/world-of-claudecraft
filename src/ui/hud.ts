@@ -14318,6 +14318,9 @@ export class Hud {
             : 'hudChrome.dungeonDifficulty.setHeroic',
         ),
       )}</div>`;
+      html += `<div class="ctx-item" data-act="reset-dungeons">${esc(
+        t('hudChrome.dungeonDifficulty.resetAll'),
+      )}</div>`;
     }
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
@@ -14338,6 +14341,14 @@ export class Hud {
       else if (act === 'dungeon-difficulty') {
         this.sim.setDungeonDifficulty(
           this.sim.dungeonDifficulty() === 'heroic' ? 'normal' : 'heroic',
+        );
+      } else if (act === 'reset-dungeons') {
+        this.confirmDialog(
+          t('hudChrome.dungeonDifficulty.resetConfirmTitle'),
+          t('hudChrome.dungeonDifficulty.resetConfirmBody'),
+          t('hudChrome.dungeonDifficulty.resetConfirm'),
+          t('hud.chat.context.cancel'),
+          () => this.sim.chat('/dungeon reset'),
         );
       }
     });

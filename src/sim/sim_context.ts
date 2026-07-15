@@ -106,6 +106,9 @@ export interface SimContextPrimitives {
   // reads/finds/iterates it and mutates slot fields in place; the array identity
   // stays Sim-owned (like delayedEvents/groundAoEs), so this is a live read-only view.
   readonly instances: InstanceSlot[];
+  // Session-only manual-reset cooldowns keyed by durable character identity and
+  // dungeon id. Unlike party instance keys, these survive relogs and party reforming.
+  readonly dungeonResetLocks: Map<string, { availableAt: number; claimId: number }>;
   // live arena bouts keyed by every participant pid (A2); release-spirit early-bails
   // when the dead player is mid-bout.
   readonly arenaMatches: Map<number, ArenaMatch>;
@@ -248,6 +251,8 @@ export interface SimContextCallbacks {
   instanceClaimIdAt(pos: Vec3): number | null;
   enterDungeon(dungeonId: string, pid?: number): void;
   leaveDungeon(pid?: number): void;
+  resetDungeonInstances(pid?: number): void;
+  inheritDungeonResetLocks(pid: number): void;
   dungeonDifficulty(pid?: number): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void;
@@ -828,6 +833,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get instances() {
       return host.instances;
     },
+    get dungeonResetLocks() {
+      return host.dungeonResetLocks;
+    },
     get arenaMatches() {
       return host.arenaMatches;
     },
@@ -957,6 +965,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     instanceClaimIdAt: host.instanceClaimIdAt,
     enterDungeon: host.enterDungeon,
     leaveDungeon: host.leaveDungeon,
+    resetDungeonInstances: host.resetDungeonInstances,
+    inheritDungeonResetLocks: host.inheritDungeonResetLocks,
     dungeonDifficulty: host.dungeonDifficulty,
     setDungeonDifficulty: host.setDungeonDifficulty,
     awardHeroicMarks: host.awardHeroicMarks,

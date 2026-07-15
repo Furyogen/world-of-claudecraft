@@ -1283,7 +1283,20 @@ export const zh_CN: EnTranslations = {
     },
     "dungeonDifficulty": {
       "setHeroic": "设置地下城难度：英雄",
-      "setNormal": "设置地下城难度：普通"
+      "setNormal": "设置地下城难度：普通",
+      "resetAll": "重置所有副本",
+      "resetDone": "所有副本已重置。",
+      "resetNone": "你没有可重置的副本。",
+      "resetOccupied": "仍有人在副本内时无法重置副本。",
+      "resetSameDifficulty": "切换地下城难度后才能重置这些副本。空置副本会在5分钟后自动重置。",
+      "resetLoot": "副本内仍有战利品时无法重置。",
+      "resetConfirmTitle": "重置所有副本？",
+      "resetConfirmBody": "此操作会放弃先前所选难度下的空置副本。若有未拾取的战利品，则无法重置。",
+      "resetConfirm": "重置副本",
+      "resetCooldown": "每5分钟只能重置一次副本。",
+      "resetUsage": "切换难度后，使用 /dungeon reset 放弃你的空置副本。",
+      "entryMismatchNormal": "此副本的难度为普通。使用“重置所有副本”以开始全新的英雄难度副本。",
+      "entryMismatchHeroic": "此副本的难度为英雄。使用“重置所有副本”以开始全新的普通难度副本。"
     },
     "bags": {
       "cannotDestroy": "该物品无法销毁。",

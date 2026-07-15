@@ -485,6 +485,24 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.menuItem': '拾取設定',
   'hudChrome.dungeonDifficulty.setHeroic': '設定地城難度：英雄',
   'hudChrome.dungeonDifficulty.setNormal': '設定地城難度：普通',
+  'hudChrome.dungeonDifficulty.resetAll': '重置所有地城副本',
+  'hudChrome.dungeonDifficulty.resetDone': '所有地城副本已重置。',
+  'hudChrome.dungeonDifficulty.resetNone': '你沒有可重置的地城副本。',
+  'hudChrome.dungeonDifficulty.resetOccupied': '仍有人在地城副本內時無法重置。',
+  'hudChrome.dungeonDifficulty.resetSameDifficulty':
+    '切換地城難度後才能重置這些副本。空置的地城副本會在5分鐘後自動重置。',
+  'hudChrome.dungeonDifficulty.resetUsage':
+    '切換難度後，使用 /dungeon reset 放棄你的空置地城副本。',
+  'hudChrome.dungeonDifficulty.resetLoot': '地城副本內仍有戰利品時無法重置。',
+  'hudChrome.dungeonDifficulty.resetConfirmTitle': '重置所有地城副本？',
+  'hudChrome.dungeonDifficulty.resetConfirmBody':
+    '此操作會放棄先前所選難度下的空置副本。若有未拾取的戰利品，則無法重置。',
+  'hudChrome.dungeonDifficulty.resetConfirm': '重置副本',
+  'hudChrome.dungeonDifficulty.resetCooldown': '每5分鐘只能重置一次副本。',
+  'hudChrome.dungeonDifficulty.entryMismatchNormal':
+    '此地城副本的難度為普通。使用「重置所有地城副本」以開始全新的英雄難度副本。',
+  'hudChrome.dungeonDifficulty.entryMismatchHeroic':
+    '此地城副本的難度為英雄。使用「重置所有地城副本」以開始全新的普通難度副本。',
   'hudChrome.lootSettings.method': '拾取方式',
   'hudChrome.lootSettings.rollThreshold': '擲骰門檻',
   'hudChrome.lootSettings.groupLoot': '小隊拾取',

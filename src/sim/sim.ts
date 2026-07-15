@@ -328,6 +328,7 @@ import {
   awardHeroicMarks as awardHeroicMarksImpl,
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
+  inheritDungeonResetLocks as inheritDungeonResetLocksImpl,
   instanceClaimIdAt as instanceClaimIdAtImpl,
   instanceInfoAt as instanceInfoAtImpl,
   instanceKeyFor as instanceKeyForImpl,
@@ -335,6 +336,7 @@ import {
   instanceSlotAt as instanceSlotAtImpl,
   leaveCrypt as leaveCryptImpl,
   leaveDungeon as leaveDungeonImpl,
+  resetDungeonInstances as resetDungeonInstancesImpl,
   updateDoorTriggers as updateDoorTriggersImpl,
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
@@ -787,6 +789,10 @@ export interface InstanceSlot {
   objectIds: number[];
   exitId: number | null;
   emptyFor: number;
+  // Sim-time until this live claim may be manually replaced again. Claim-owned
+  // authority prevents party roster or leadership churn from rotating away the
+  // reset cooldown; cleared whenever the slot returns to the free pool.
+  resetAvailableAt: number;
   // Sim-time (seconds) this slot was claimed, cleared with the claim. Session
   // state (instances never persist); the Sanctum speed deed reads it.
   claimedAt?: number;
@@ -1379,6 +1385,7 @@ export class Sim {
   private channelSubs = new Map<number, Set<JoinableChannel>>();
   // dungeon instances
   instances: InstanceSlot[] = [];
+  dungeonResetLocks = new Map<string, { availableAt: number; claimId: number }>();
   // delve instances (separate slot pool from dungeons)
   delveRuns: DelveRun[] = [];
   private delvePetStash = new Map<number, PetState>();
@@ -1604,6 +1611,7 @@ export class Sim {
             objectIds: [],
             exitId: null,
             emptyFor: 0,
+            resetAvailableAt: 0,
             clearedBy: new Set(),
           });
         }
@@ -1631,6 +1639,7 @@ export class Sim {
           objectIds: [],
           exitId: null,
           emptyFor: 0,
+          resetAvailableAt: 0,
           clearedBy: new Set(),
         });
       }
@@ -3080,6 +3089,9 @@ export class Sim {
       get instances() {
         return sim.instances;
       },
+      get dungeonResetLocks() {
+        return sim.dungeonResetLocks;
+      },
       get arenaMatches() {
         return sim.arenaMatches;
       },
@@ -3360,6 +3372,8 @@ export class Sim {
       instanceClaimIdAt: sim.instanceClaimIdAt.bind(sim),
       enterDungeon: sim.enterDungeon.bind(sim),
       leaveDungeon: sim.leaveDungeon.bind(sim),
+      resetDungeonInstances: sim.resetDungeonInstances.bind(sim),
+      inheritDungeonResetLocks: sim.inheritDungeonResetLocks.bind(sim),
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
       setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
       awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
@@ -7535,6 +7549,14 @@ export class Sim {
 
   leaveDungeon(pid?: number): void {
     leaveDungeonImpl(this.ctx, pid);
+  }
+
+  resetDungeonInstances(pid?: number): void {
+    resetDungeonInstancesImpl(this.ctx, pid);
+  }
+
+  inheritDungeonResetLocks(pid: number): void {
+    inheritDungeonResetLocksImpl(this.ctx, pid);
   }
 
   dungeonDifficulty(pid?: number): DungeonDifficulty {

@@ -485,6 +485,23 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.menuItem': '拾取设置',
   'hudChrome.dungeonDifficulty.setHeroic': '设置地下城难度：英雄',
   'hudChrome.dungeonDifficulty.setNormal': '设置地下城难度：普通',
+  'hudChrome.dungeonDifficulty.resetAll': '重置所有副本',
+  'hudChrome.dungeonDifficulty.resetDone': '所有副本已重置。',
+  'hudChrome.dungeonDifficulty.resetNone': '你没有可重置的副本。',
+  'hudChrome.dungeonDifficulty.resetOccupied': '仍有人在副本内时无法重置副本。',
+  'hudChrome.dungeonDifficulty.resetSameDifficulty':
+    '切换地下城难度后才能重置这些副本。空置副本会在5分钟后自动重置。',
+  'hudChrome.dungeonDifficulty.resetUsage': '切换难度后，使用 /dungeon reset 放弃你的空置副本。',
+  'hudChrome.dungeonDifficulty.resetLoot': '副本内仍有战利品时无法重置。',
+  'hudChrome.dungeonDifficulty.resetConfirmTitle': '重置所有副本？',
+  'hudChrome.dungeonDifficulty.resetConfirmBody':
+    '此操作会放弃先前所选难度下的空置副本。若有未拾取的战利品，则无法重置。',
+  'hudChrome.dungeonDifficulty.resetConfirm': '重置副本',
+  'hudChrome.dungeonDifficulty.resetCooldown': '每5分钟只能重置一次副本。',
+  'hudChrome.dungeonDifficulty.entryMismatchNormal':
+    '此副本的难度为普通。使用“重置所有副本”以开始全新的英雄难度副本。',
+  'hudChrome.dungeonDifficulty.entryMismatchHeroic':
+    '此副本的难度为英雄。使用“重置所有副本”以开始全新的普通难度副本。',
   'hudChrome.lootSettings.method': '拾取方式',
   'hudChrome.lootSettings.rollThreshold': '掷骰门槛',
   'hudChrome.lootSettings.groupLoot': '小队拾取',
