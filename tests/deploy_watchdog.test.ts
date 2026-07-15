@@ -163,10 +163,12 @@ describe('update runbook guards', () => {
     // production secret, and a nested clone's .env or .git config can carry tokens),
     // and pass --ignore-scripts so dependency install hooks cannot run as root with
     // network access: losing either turns the type-check into a secret-exfiltration
-    // surface on every deploy.
+    // surface on every deploy. The --memory/--memory-swap bound keeps the gate,
+    // which runs on the live box before the game stops, from creating the host
+    // memory pressure the game service's mem_limit exists to prevent.
     expect(deployDoc).toContain(
       [
-        'sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \\',
+        'sudo docker run --rm --memory 2g --memory-swap 2g -v /opt/eastbrook:/src:ro -w /app node:22-alpine \\',
         "  sh -c 'cp -a /src/. /app && find /app \\( -name .git -o -name .env \\) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'",
       ].join('\n'),
     );
@@ -218,11 +220,13 @@ function makeHarness(): Harness {
   harnessDirs.push(dir);
   const dockerShim = `#!/usr/bin/env bash
 if [ "$1" = "inspect" ]; then
+  if [ "\${SHIM_INSPECT_HANG:-0}" = "1" ]; then exec sleep 5; fi
   if [ "\${SHIM_INSPECT_EXIT:-0}" != "0" ]; then exit "\${SHIM_INSPECT_EXIT}"; fi
   printf '%s\\n' "$SHIM_INSPECT"
   exit 0
 fi
 if [ "$1" = "restart" ]; then
+  if [ "\${SHIM_RESTART_HANG:-0}" = "1" ]; then exec sleep 5; fi
   # Record the cooldown stamp AS SEEN AT RESTART TIME next to the container name: the
   # script must write the stamp BEFORE restarting (a hanging restart still holds the
   # cooldown), and this is the only observable that pins that ordering.
@@ -432,6 +436,49 @@ describe('game watchdog behavior (executed against a fake docker)', () => {
     const h = makeHarness();
     writeFileSync(h.stateFile, 'not-a-number\n');
     const res = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(true);
+  });
+
+  // A hung docker daemon must not park a run on the flock forever (every later cron
+  // fire would exit with the skip line and the wedge would never recover). The
+  // inspect is abandoned on its bound and logged LOUDLY: that line is the only
+  // breadcrumb distinguishing a hung daemon from a plainly absent container.
+  it('abandons a hung docker inspect on the bound and exits cleanly', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, {
+      inspect: 'true unhealthy',
+      env: { SHIM_INSPECT_HANG: '1', WATCHDOG_INSPECT_TIMEOUT: '1' },
+    });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(false);
+    expect(res.output).toContain('docker inspect eastbrook-game timed out after 1s');
+  });
+
+  // Same bound on the restart arm: abandon a hung restart loudly (exit 1), and the
+  // cooldown stamp written BEFORE the restart must survive, so the next fire does
+  // not immediately pile a second restart onto a struggling daemon.
+  it('abandons a hung docker restart on the bound, keeping the cooldown stamp', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, {
+      inspect: 'true unhealthy',
+      env: { SHIM_RESTART_HANG: '1', WATCHDOG_RESTART_TIMEOUT: '1' },
+    });
+    expect(res.status).toBe(1);
+    expect(res.output).toContain('docker restart eastbrook-game timed out after 1s');
+    expect(readFileSync(h.stateFile, 'utf8').trim()).toMatch(/^\d+$/);
+  });
+
+  // A non-numeric timeout override must sanitize to the default, not reach `timeout`
+  // as a bogus duration: unsanitized, `timeout fast docker inspect` exits 125, the
+  // error branch reads that as container-absent, and the watchdog goes permanently
+  // blind while reporting nothing (mutation: drop the timeout sanitization cases).
+  it('still restarts when the timeout knobs are non-numeric (sanitized to defaults)', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, {
+      inspect: 'true unhealthy',
+      env: { WATCHDOG_INSPECT_TIMEOUT: 'fast', WATCHDOG_RESTART_TIMEOUT: 'soon' },
+    });
     expect(res.status).toBe(0);
     expect(res.restarted).toBe(true);
   });

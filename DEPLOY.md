@@ -107,16 +107,22 @@ sudo git -C private/bot_detector pull
 #    host .env holds every production secret, and a nested clone's .env or .git
 #    config can carry tokens; the type check needs none of them), and
 #    --ignore-scripts stops dependency install hooks from running as root with
-#    network access.
-sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \
+#    network access. The memory bound matters because this runs on the live box
+#    BEFORE the game stops: an unbounded npm ci plus tsc can spike past what the
+#    host has spare and create the exact memory pressure the game service's
+#    mem_limit exists to prevent. 2g is ample for this tree's npm ci and tsc; the
+#    swap bound matches so the gate cannot push the host into swap either.
+sudo docker run --rm --memory 2g --memory-swap 2g -v /opt/eastbrook:/src:ro -w /app node:22-alpine \
   sh -c 'cp -a /src/. /app && find /app \( -name .git -o -name .env \) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
 #    Red means STOP, do not deploy: the image would build fine and fail at runtime.
 #    (On a host that does have Node 22 on PATH, `npm ci --ignore-scripts && npx tsc
 #    --noEmit` in the checkout is the same gate.)
 
-# 4. Optional: warn the players. POST /internal/restart-countdown (loopback only,
-#    gated by the RESTART_COUNTDOWN_SECRET env var) broadcasts an in-game countdown;
-#    with the secret unset the endpoint answers 404 and there is nothing to warn
+# 4. Optional: warn the players. POST /internal/restart-countdown broadcasts an
+#    in-game countdown. The secret header is the ONLY gate: nothing restricts the
+#    endpoint to loopback (the edge hides /livez /readyz /metrics but not
+#    /internal/*), so treat RESTART_COUNTDOWN_SECRET as a real production secret.
+#    With the secret unset the endpoint answers 404 and there is nothing to warn
 #    with. The countdown runs 10 minutes; wait for it to elapse before step 5.
 curl -fsS -X POST -H "x-woc-deploy-secret: <RESTART_COUNTDOWN_SECRET>" \
   http://127.0.0.1:8787/internal/restart-countdown

@@ -41,13 +41,15 @@
 #   /usr/local/bin/eastbrook-watchdog --dry-run
 #
 # ENV KNOBS
-#   WATCHDOG_CONTAINER    container to watch        (default: eastbrook-game)
-#   WATCHDOG_COMPOSE_DIR  compose project directory (default: /opt/eastbrook)
-#   WATCHDOG_COOLDOWN     seconds between restarts  (default: 300)
-#   WATCHDOG_STATE_FILE   last-restart stamp        (default: /var/lib/eastbrook/watchdog-last-restart)
-#   WATCHDOG_LOCK_FILE    serialization lock        (default: /var/lib/eastbrook/watchdog.lock)
-#   WATCHDOG_DRY_RUN=1    same as --dry-run
-#   WATCHDOG_VERBOSE=1    also log the quiet no-op paths (healthy, not running)
+#   WATCHDOG_CONTAINER        container to watch        (default: eastbrook-game)
+#   WATCHDOG_COMPOSE_DIR      compose project directory (default: /opt/eastbrook)
+#   WATCHDOG_COOLDOWN         seconds between restarts  (default: 300)
+#   WATCHDOG_STATE_FILE       last-restart stamp        (default: /var/lib/eastbrook/watchdog-last-restart)
+#   WATCHDOG_LOCK_FILE        serialization lock        (default: /var/lib/eastbrook/watchdog.lock)
+#   WATCHDOG_INSPECT_TIMEOUT  seconds before a hung docker inspect is abandoned (default: 55)
+#   WATCHDOG_RESTART_TIMEOUT  seconds before a hung docker restart is abandoned (default: 150)
+#   WATCHDOG_DRY_RUN=1        same as --dry-run
+#   WATCHDOG_VERBOSE=1        also log the quiet no-op paths (healthy, not running)
 
 set -euo pipefail
 
@@ -73,6 +75,32 @@ STATE_FILE="${WATCHDOG_STATE_FILE:-/var/lib/eastbrook/watchdog-last-restart}"
 LOCK_FILE="${WATCHDOG_LOCK_FILE:-/var/lib/eastbrook/watchdog.lock}"
 DRY_RUN="${WATCHDOG_DRY_RUN:-0}"
 VERBOSE="${WATCHDOG_VERBOSE:-0}"
+
+# A hung docker daemon must not park a run on the flock forever: every later cron
+# fire would then exit with the skip line and the wedge would never recover, so
+# every docker call below runs under a bound. The inspect bound fits inside the
+# one-minute cron interval. The restart bound must EXCEED the container's stop
+# grace period (75s in compose): a wedged process ignores SIGTERM and eats the
+# full grace before SIGKILL, so a WORKING recovery routinely takes longer than a
+# minute, and a tighter bound would misreport the exact restart this script
+# exists to issue. 150s bounds only a truly hung daemon. Same sanitization as
+# the cooldown: a non-numeric override must not turn into a timeout error.
+INSPECT_TIMEOUT="${WATCHDOG_INSPECT_TIMEOUT:-55}"
+case "$INSPECT_TIMEOUT" in
+  '' | *[!0-9]*) INSPECT_TIMEOUT=55 ;;
+esac
+RESTART_TIMEOUT="${WATCHDOG_RESTART_TIMEOUT:-150}"
+case "$RESTART_TIMEOUT" in
+  '' | *[!0-9]*) RESTART_TIMEOUT=150 ;;
+esac
+if command -v timeout >/dev/null 2>&1; then
+  bounded() { timeout "$@"; }
+else
+  # coreutils timeout ships on every provisioned host (deploy/user-data.sh boxes
+  # are Ubuntu). Where it is genuinely absent (a macOS dry run), degrade to the
+  # old unbounded behavior rather than refusing to act.
+  bounded() { shift; "$@"; }
+fi
 
 for arg in "$@"; do
   case "$arg" in
@@ -121,12 +149,19 @@ fi
 # Docker's health status decides, and nothing else. An image built before the
 # healthcheck existed has no .State.Health at all, so print an explicit "none"
 # rather than letting the template emit "<no value>".
-if ! state="$(docker inspect \
+state="$(bounded "$INSPECT_TIMEOUT" docker inspect \
   -f '{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
-  "$CONTAINER" 2>/dev/null)"; then
-  quiet_log "container ${CONTAINER} does not exist (compose project ${COMPOSE_DIR}), nothing to do"
+  "$CONTAINER" 2>/dev/null)" || {
+  rc=$?
+  if [ "$rc" -eq 124 ]; then
+    # Loud, not quiet: a hung docker daemon is an active incident, and this line is
+    # the only breadcrumb distinguishing it from a plainly absent container.
+    log "docker inspect ${CONTAINER} timed out after ${INSPECT_TIMEOUT}s, is the docker daemon hung?"
+  else
+    quiet_log "container ${CONTAINER} does not exist (compose project ${COMPOSE_DIR}), nothing to do"
+  fi
   exit 0
-fi
+}
 running="${state%% *}"
 health="${state##* }"
 
@@ -190,9 +225,14 @@ log "container ${CONTAINER} is unhealthy, restarting it: docker restart ${CONTAI
 mkdir -p "$(dirname "$STATE_FILE")"
 # Stamp the cooldown BEFORE the restart: a restart that hangs must still hold it.
 printf '%s\n' "$now" > "$STATE_FILE"
-if docker restart "$CONTAINER" >/dev/null; then
+if bounded "$RESTART_TIMEOUT" docker restart "$CONTAINER" >/dev/null; then
   log "container ${CONTAINER} restarted"
 else
-  log "docker restart ${CONTAINER} FAILED, leaving the container to docker's restart policy"
+  rc=$?
+  if [ "$rc" -eq 124 ]; then
+    log "docker restart ${CONTAINER} timed out after ${RESTART_TIMEOUT}s, leaving the container to docker's restart policy"
+  else
+    log "docker restart ${CONTAINER} FAILED, leaving the container to docker's restart policy"
+  fi
   exit 1
 fi
