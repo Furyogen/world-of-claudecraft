@@ -95,6 +95,12 @@ describe('game watchdog deploy contract', () => {
   it('pins the default docker call bounds: inspect inside the cron minute, restart past the stop grace', () => {
     expect(watchdog).toContain('INSPECT_TIMEOUT="${WATCHDOG_INSPECT_TIMEOUT:-55}"');
     expect(watchdog).toContain('RESTART_TIMEOUT="${WATCHDOG_RESTART_TIMEOUT:-150}"');
+    // GNU timeout reads 0 as unbounded, so an operator 0 must map to the default.
+    expect(watchdog).toContain('if [ "$INSPECT_TIMEOUT" -eq 0 ]; then INSPECT_TIMEOUT=55; fi');
+    expect(watchdog).toContain('if [ "$RESTART_TIMEOUT" -eq 0 ]; then RESTART_TIMEOUT=150; fi');
+    // The KILL escalation is what bounds a TERM-immune docker CLI (uninterruptible
+    // sleep); without it the wrapper waits forever and the bound is fiction.
+    expect(watchdog).toContain('bounded() { timeout -k 5 "$@"; }');
   });
 });
 

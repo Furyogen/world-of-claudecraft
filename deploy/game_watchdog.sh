@@ -93,8 +93,16 @@ RESTART_TIMEOUT="${WATCHDOG_RESTART_TIMEOUT:-150}"
 case "$RESTART_TIMEOUT" in
   '' | *[!0-9]*) RESTART_TIMEOUT=150 ;;
 esac
+# GNU timeout treats a bound of 0 as NO bound at all, so an operator 0 (or 00)
+# would silently restore the exact unbounded hang these knobs exist to prevent.
+if [ "$INSPECT_TIMEOUT" -eq 0 ]; then INSPECT_TIMEOUT=55; fi
+if [ "$RESTART_TIMEOUT" -eq 0 ]; then RESTART_TIMEOUT=150; fi
 if command -v timeout >/dev/null 2>&1; then
-  bounded() { timeout "$@"; }
+  # -k 5: TERM at the bound, KILL 5 seconds later. Without the escalation a
+  # docker CLI stuck in uninterruptible sleep would shrug off the TERM and the
+  # wrapper would wait forever, re-creating the park-on-the-flock hang the
+  # bound exists to close.
+  bounded() { timeout -k 5 "$@"; }
 else
   # coreutils timeout ships on every provisioned host (deploy/user-data.sh boxes
   # are Ubuntu). Where it is genuinely absent (a macOS dry run), degrade to the
@@ -157,6 +165,12 @@ state="$(bounded "$INSPECT_TIMEOUT" docker inspect \
     # Loud, not quiet: a hung docker daemon is an active incident, and this line is
     # the only breadcrumb distinguishing it from a plainly absent container.
     log "docker inspect ${CONTAINER} timed out after ${INSPECT_TIMEOUT}s, is the docker daemon hung?"
+  elif [ "$rc" -ge 125 ]; then
+    # 125/126/127 are wrapper or exec failures (and 137 is the -k KILL
+    # escalation), not "container absent": stay loud, because the quiet arm
+    # would hide a permanently broken watchdog behind a silent per-minute no-op
+    # while 2>/dev/null has already discarded the wrapper's own diagnostic.
+    log "docker inspect ${CONTAINER} failed with exit ${rc} (timeout wrapper or exec failure)"
   else
     quiet_log "container ${CONTAINER} does not exist (compose project ${COMPOSE_DIR}), nothing to do"
   fi

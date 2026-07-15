@@ -115,6 +115,9 @@ sudo git -C private/bot_detector pull
 sudo docker run --rm --memory 2g --memory-swap 2g -v /opt/eastbrook:/src:ro -w /app node:22-alpine \
   sh -c 'cp -a /src/. /app && find /app \( -name .git -o -name .env \) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
 #    Red means STOP, do not deploy: the image would build fine and fail at runtime.
+#    One exception: exit code 137 means the container hit the 2g memory bound (a
+#    gate-environment failure, not a type error); raise the bound or run the gate
+#    off-box, do not skip it.
 #    (On a host that does have Node 22 on PATH, `npm ci --ignore-scripts && npx tsc
 #    --noEmit` in the checkout runs the same type check, but WITHOUT the container's
 #    memory bound; on the live box prefer the containerized form above.)
