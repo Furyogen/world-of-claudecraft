@@ -13,6 +13,7 @@ import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
+import { normalizeGeometryAttributesForMerge } from '../geometry_merge';
 import { addRimGlow, GFX } from '../gfx';
 import {
   type AttachDef,
@@ -957,6 +958,7 @@ function bakeStaticPose(
     if (uv) out.setAttribute('uv', uv.clone());
     if (srcGeo.index) out.setIndex(srcGeo.index.clone());
     out.computeVertexNormals();
+    normalizeGeometryAttributesForMerge(out);
     geos.push(out);
     // GLTFLoader emits one Mesh per primitive — materials are never arrays here
     mats.push(Array.isArray(mesh.material) ? mesh.material[0] : mesh.material);

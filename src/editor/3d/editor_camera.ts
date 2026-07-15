@@ -7,6 +7,10 @@
 
 import * as THREE from 'three';
 
+const MAX_FLY_DISTANCE_SCALE = 80;
+const MIN_FLY_DISTANCE_SCALE = 8;
+const MAX_WHEEL_DELTA = 160;
+
 function clamp(v: number, lo: number, hi: number): number {
   return v < lo ? lo : v > hi ? hi : v;
 }
@@ -64,7 +68,8 @@ export class EditorCamera {
   }
 
   zoom(deltaY: number): void {
-    this.dist = clamp(this.dist * Math.exp(deltaY * 0.0015), this.minDist, this.maxDist);
+    const controlledDelta = clamp(deltaY, -MAX_WHEEL_DELTA, MAX_WHEEL_DELTA);
+    this.dist = clamp(this.dist * Math.exp(controlledDelta * 0.0015), this.minDist, this.maxDist);
   }
 
   /**
@@ -123,7 +128,8 @@ export class EditorCamera {
    * horizontally, Q/E move straight down/up.
    */
   fly(forward: number, right: number, up: number, dt: number): void {
-    const speed = this.dist * dt * 1.4 * this.moveSpeed;
+    const speed =
+      clamp(this.dist, MIN_FLY_DISTANCE_SCALE, MAX_FLY_DISTANCE_SCALE) * dt * 1.4 * this.moveSpeed;
     const cp = Math.cos(this.pitch);
     const sp = Math.sin(this.pitch);
     const fx = Math.sin(this.yaw) * cp;
@@ -132,8 +138,14 @@ export class EditorCamera {
     // Screen-right of the camera basis (D strafes right, A strafes left).
     const rx = -Math.cos(this.yaw);
     const rz = Math.sin(this.yaw);
-    this.target.x += (forward * fx + right * rx) * speed;
-    this.target.y += (forward * fy + up) * speed;
-    this.target.z += (forward * fz + right * rz) * speed;
+    const mx = forward * fx + right * rx;
+    const my = forward * fy + up;
+    const mz = forward * fz + right * rz;
+    const movementLength = Math.hypot(mx, my, mz);
+    if (movementLength === 0) return;
+    const normalizedSpeed = speed / movementLength;
+    this.target.x += mx * normalizedSpeed;
+    this.target.y += my * normalizedSpeed;
+    this.target.z += mz * normalizedSpeed;
   }
 }

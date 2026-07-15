@@ -16,6 +16,10 @@ export const TARGET_HEIGHT = 2.2;
 // and sim/map_doc.ts COLLIDE_FACTORS are tuned against these same heights so
 // the blocking circle keeps tracking the visual silhouette.
 export function targetHeightFor(path: string): number {
+  // The loader normalizes by the largest source dimension. This model is already
+  // authored at 14 x 11 x 7.2 yards, so preserving its 14-yard width keeps the
+  // full sidecar dimensions intact at placement scale 1.
+  if (/goldcrest_bank_reference/i.test(path)) return 14;
   // Palms live in the biome set but are trees: match them wherever they sit.
   if (/beach_palm/i.test(path)) return 4;
   if (/desert_cactus_tall/i.test(path)) return 4.5;

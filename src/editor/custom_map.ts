@@ -32,7 +32,11 @@ import { assetById } from './asset_catalog.generated';
 import { isLocalAssetId, localAssetUrl } from './local_assets';
 import type { ZoneContent } from './model';
 import { userAssetPath } from './user_assets';
-import { withoutMajorWorldProps, worldMajorPropPlacements } from './world_prop_placements';
+import {
+  withoutEditableWorldProps,
+  withoutMajorWorldProps,
+  worldMajorPropPlacements,
+} from './world_prop_placements';
 
 export const CUSTOM_MAP_VERSION = MAP_DOC_VERSION;
 
@@ -48,10 +52,38 @@ export type CustomMap = Omit<MapDoc, 'content'> & { content: ZoneContent };
 // derived terrain matches what the editor previews (mirrors DEFAULT_PLAYTEST_SEED).
 const DEFAULT_SEED = 20061;
 const FLAT_STAMPS = [
-  { x: -WORLD_MAX_X / 2, z: 60, radius: 200, delta: 0, falloff: 'flat', mode: 'level' },
-  { x: WORLD_MAX_X / 2, z: 60, radius: 200, delta: 0, falloff: 'flat', mode: 'level' },
-  { x: -WORLD_MAX_X / 2, z: 260, radius: 200, delta: 0, falloff: 'flat', mode: 'level' },
-  { x: WORLD_MAX_X / 2, z: 260, radius: 200, delta: 0, falloff: 'flat', mode: 'level' },
+  {
+    x: -WORLD_MAX_X / 2,
+    z: 60,
+    radius: 200,
+    delta: 0,
+    falloff: 'flat',
+    mode: 'level',
+  },
+  {
+    x: WORLD_MAX_X / 2,
+    z: 60,
+    radius: 200,
+    delta: 0,
+    falloff: 'flat',
+    mode: 'level',
+  },
+  {
+    x: -WORLD_MAX_X / 2,
+    z: 260,
+    radius: 200,
+    delta: 0,
+    falloff: 'flat',
+    mode: 'level',
+  },
+  {
+    x: WORLD_MAX_X / 2,
+    z: 260,
+    radius: 200,
+    delta: 0,
+    falloff: 'flat',
+    mode: 'level',
+  },
 ] satisfies CustomMap['terrainEdits'];
 
 function deepClone<T>(v: T): T {
@@ -82,7 +114,7 @@ export function newCustomMap(name: string, id: string, now: number): CustomMap {
     },
     terrainEdits: [],
     placements: worldMajorPropPlacements(BUILTIN_WORLD.props),
-    propsMode: 'editable-major',
+    propsMode: 'editable-all',
   };
 }
 
@@ -273,7 +305,12 @@ export function newFlatCustomMap(
     // A blank map starts with every automatic-texturing rule OFF: makers paint
     // and sculpt on a clean slate, so nothing repaints their cliffs or shores
     // until they opt in from the Biome tab's Auto textures section.
-    terrainStyle: { slopeRock: false, snowCaps: false, rimMountains: false, shoreSand: false },
+    terrainStyle: {
+      slopeRock: false,
+      snowCaps: false,
+      rimMountains: false,
+      shoreSand: false,
+    },
   };
   if (size) {
     map.worldHalfX = halfW;
@@ -294,7 +331,12 @@ export function customMapFromContent(
     meta: CustomMapMeta;
     waterLevel?: number;
     playerStart?: { x: number; z: number };
-    playerSpawnArea?: { minX: number; minZ: number; maxX: number; maxZ: number };
+    playerSpawnArea?: {
+      minX: number;
+      minZ: number;
+      maxX: number;
+      maxZ: number;
+    };
   },
 ): CustomMap {
   const map: CustomMap = {
@@ -335,9 +377,11 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
     props:
       map.propsMode === 'empty'
         ? emptyZoneProps()
-        : map.propsMode === 'editable-major'
-          ? withoutMajorWorldProps(deepClone(BUILTIN_WORLD.props))
-          : deepClone(BUILTIN_WORLD.props),
+        : map.propsMode === 'editable-all'
+          ? withoutEditableWorldProps(deepClone(BUILTIN_WORLD.props))
+          : map.propsMode === 'editable-major'
+            ? withoutMajorWorldProps(deepClone(BUILTIN_WORLD.props))
+            : deepClone(BUILTIN_WORLD.props),
     playerStart: { x: start.x, z: start.z },
     terrainEdits: deepClone(map.terrainEdits),
     placements: placementsToPlayAssets(map.placements, map.assetCollisionMesh),
@@ -374,6 +418,9 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
   if (map.waterLevel !== undefined) world.waterLevel = map.waterLevel;
   if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
   if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
+  if (map.decorationExclusions && map.decorationExclusions.length > 0) {
+    world.decorationExclusions = [...map.decorationExclusions];
+  }
   if (map.presentationMode !== undefined) world.presentationMode = map.presentationMode;
   if (map.skybox !== undefined) world.skybox = map.skybox;
   if (map.terrainStyle) world.terrainStyle = { ...map.terrainStyle };
@@ -439,7 +486,13 @@ export function placementsToRenderAssets(
                   userAssetPath(p.assetId) ??
                   assetById(p.assetId)?.path);
     if (!path) return null;
-    const placed: PlacedAsset = { path, x: p.x, z: p.z, rotY: p.rotY, scale: p.scale };
+    const placed: PlacedAsset = {
+      path,
+      x: p.x,
+      z: p.z,
+      rotY: p.rotY,
+      scale: p.scale,
+    };
     if (p.worldPropKind !== undefined) placed.worldPropKind = p.worldPropKind;
     if (p.worldPropWidth !== undefined) placed.worldPropWidth = p.worldPropWidth;
     if (p.worldPropDepth !== undefined) placed.worldPropDepth = p.worldPropDepth;
@@ -505,7 +558,8 @@ export function placementsToPlayAssets(
   placements: readonly AssetPlacement[],
   meshCollision?: Readonly<Record<string, readonly AssetCollisionBox[]>>,
 ): PlacedAsset[] {
-  return placementsToRenderAssets(placements, { keepLocalIds: true, meshCollision }).filter(
-    (a): a is PlacedAsset => a !== null,
-  );
+  return placementsToRenderAssets(placements, {
+    keepLocalIds: true,
+    meshCollision,
+  }).filter((a): a is PlacedAsset => a !== null);
 }

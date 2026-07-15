@@ -3558,6 +3558,11 @@ export const en: EnTranslations = {
     "foliageTool": {
       "title": "Foliage Brush",
       "hint": "Drag across the ground to scatter the enabled foliage inside the brush; each stroke is one undo step. Use Erase to remove pieces.",
+      "ambientTitle": "Existing map foliage",
+      "ambientHint": "Built-in trees are procedural and cannot be selected. Focus the camera on an area, then convert the nearest batch.",
+      "makeAmbientEditable": "Make 500 nearby trees editable",
+      "ambientEditableHint": "Ambient foliage is off. Every foliage piece painted with this brush can be selected, moved, rotated, scaled, or erased.",
+      "ambientConverted": "Made the {count} nearest trees editable.",
       "density": "Density",
       "minScale": "Min size",
       "maxScale": "Max size",
@@ -3690,7 +3695,7 @@ export const en: EnTranslations = {
       "delete": "Delete",
       "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
       "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
-      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+C copies, and Ctrl+V pastes. Ctrl+D duplicates it in place."
     },
     "transform": {
       "moveHint": "Drag a gizmo arrow to move along that axis, or the yellow square to move freely. Arrow keys nudge.",
@@ -3816,6 +3821,8 @@ export const en: EnTranslations = {
       "importMissingDeps": "{count} model/texture/skybox file(s) are missing, so parts of the map are blank. Re-import the .wocmap.zip bundle to include them.",
       "exported": "Downloaded \"{name}\".",
       "bundleExported": "Exported \"{name}\" with its models, textures, and skybox. Import the .wocmap.zip (not a loose .json) on the other computer.",
+      "exportBlockedMissingDeps": "Export blocked: {count} referenced model, texture, or skybox file(s) are missing from this browser. Restore them before exporting so the engine receives a complete map.",
+      "exportBlockedInvalid": "Export blocked because the map did not pass the engine compatibility check. Save a copy and review the latest edits before trying again.",
       "newMap": "New map started from the built-in world.",
       "newFlatMap": "Blank map started.",
       "forked": "Forked to \"{name}\". You are editing your own copy now.",
@@ -3833,6 +3840,11 @@ export const en: EnTranslations = {
       "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
       "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
+      "entityCapReached": "The map entity limit was reached. Some copied NPCs or mobs were not pasted.",
+      "selectionCopied": "Copied {count} selected item(s).",
+      "selectionPasted": "Pasted {count} item(s).",
+      "selectionNothingToCopy": "Select an asset, NPC, or mob before copying.",
+      "selectionNothingToPaste": "Copy an asset, NPC, or mob before pasting.",
       "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
       "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
     },
@@ -4031,8 +4043,8 @@ export const en: EnTranslations = {
         "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
         "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
         "save": "Ctrl+S saves the map.",
-        "duplicate": "Ctrl+D duplicates the selected asset; Shift+D duplicates the whole selection and lets the copies follow the cursor until you click.",
-        "multiSelect": "Shift+click adds or removes assets from the selection (Blender style).",
+        "duplicate": "Ctrl+C copies selected assets, NPCs, or mobs; Ctrl+V pastes the group. Ctrl+D duplicates assets in place, and Shift+D duplicates them into a grab.",
+        "multiSelect": "Shift+click adds or removes assets. In the NPC and Mob tool, Ctrl+click selects multiple entities.",
         "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
         "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
         "delete": "Delete removes the selected asset or camp.",

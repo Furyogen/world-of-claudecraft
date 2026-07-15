@@ -96,6 +96,7 @@ import {
   MAX_ASSET_VIEW_DISTANCE,
   MAX_AXIS_SCALE,
   MAX_BLOCKERS,
+  MAX_CAMPS,
   MAX_COLLIDE_RADIUS,
   MAX_COLLIDER_SIZE,
   MAX_COLLIDER_SIZE_Y,
@@ -105,6 +106,7 @@ import {
   MAX_LOCATIONS,
   MAX_MARKERS,
   MAX_MUSIC_AREAS,
+  MAX_NPCS,
   MAX_PLACEMENT_HITBOXES,
   MAX_PLACEMENT_NAME_LENGTH,
   MAX_PLACEMENT_Y_OFFSET,
@@ -137,11 +139,18 @@ import {
   emptyZoneProps,
   type HeightStamp,
   type MapWeather,
+  type NpcDef,
   type TerrainHole,
   type TerrainStyle,
   type WorldContent,
 } from '../sim/types';
-import { invalidateTerrainEditIndex, terrainHeight, WATER_LEVEL, waterLevel } from '../sim/world';
+import {
+  generateDecorationsInBounds,
+  invalidateTerrainEditIndex,
+  terrainHeight,
+  WATER_LEVEL,
+  waterLevel,
+} from '../sim/world';
 import { tEntity } from '../ui/entity_i18n';
 import { formatNumber, t } from '../ui/i18n';
 import { Editor3DViewport, type GizmoHitboxChange } from './3d/viewport';
@@ -150,7 +159,7 @@ import { ASSET_CATALOG, assetById } from './asset_catalog.generated';
 import { finestPaintCell, resampleBiomePaint } from './biome_paint_core';
 import { nearestBlockerIndex } from './blocker_core';
 import { brushAlphaById, importBrushAlpha, sampleBrushAlpha } from './brush_alphas';
-import { buildMapBundle, zipStore } from './bundle';
+import { BundleDependencyError, buildMapBundle, zipStore } from './bundle';
 import { draw } from './canvas';
 import { generateCaveRigNodes } from './cave_gen_core';
 import {
@@ -159,18 +168,26 @@ import {
   type CustomMap,
   customMapToWorldContent,
   effectiveCollideRadius,
+  mapBounds,
   newCustomMap,
   newFlatCustomMap,
 } from './custom_map';
 import { button, checkbox, el, slider } from './dom';
-import { clampToCap } from './edit_caps_core';
+import { capRoom, clampToCap } from './edit_caps_core';
 import {
   isMovableEntity,
   pickMovableEntity,
   splitCampIntoIndividuals,
   toggledMobSelection,
 } from './entity_edit_core';
+import { bundleDependencyRefs, ExportCompatibilityError } from './export_contract';
 import { downloadMap, pickMapOrBundle } from './file_io';
+import {
+  AMBIENT_TREE_EDIT_BATCH,
+  ambientDecorationKey,
+  ambientDecorationsToPlacements,
+  closestAmbientTrees,
+} from './foliage_edit_core';
 import { bakeImportedModelCollision, bakeTrueModelCollision } from './import_collision';
 import {
   BIOME_OPTIONS,
@@ -223,6 +240,16 @@ import {
 import { DEFAULT_POINT_SOUND } from './point_sounds';
 import { type Bounds, makeRng, scatterHills, scatterPlacements } from './procgen';
 import { EditGeneration, shouldAutosave } from './save_lifecycle_core';
+import {
+  type CopiedNpc,
+  copyCampSelection,
+  copyNpcSelection,
+  copyPlacementSelection,
+  pasteCampSelection,
+  pasteNpcSelection,
+  pastePlacementSelection,
+  toggledKeySelection,
+} from './selection_clipboard';
 import { editorErrorKey } from './server_errors_core';
 import { createShippedMap } from './shipped_maps';
 import { appendSpan, removeSpan } from './span_core';
@@ -247,7 +274,11 @@ import {
   userAssetPath,
 } from './user_assets';
 import { Camera, pickHandle, type ScreenPoint, type Vec2, type Viewport } from './view';
-import { promoteMajorWorldProps, withoutMajorWorldProps } from './world_prop_placements';
+import {
+  promoteMajorWorldProps,
+  withoutEditableWorldProps,
+  withoutMajorWorldProps,
+} from './world_prop_placements';
 
 const KINDS: EntityKind[] = ['hub', 'graveyard', 'lake', 'poi', 'camp', 'npc', 'object'];
 
@@ -355,6 +386,11 @@ interface Clipboard {
   placements: AssetPlacement[]; // relative to center
   edits: HeightStamp[]; // relative to center
 }
+
+type SelectionClipboard =
+  | { kind: 'placements'; items: AssetPlacement[] }
+  | { kind: 'mobs'; items: CampDef[] }
+  | { kind: 'npcs'; items: CopiedNpc[] };
 
 interface PlaytestRestore {
   map: CustomMap;
@@ -541,6 +577,9 @@ export class EditorApp {
   // its whole authored camp, is the unit of selection and movement.
   private selectedMobIds = new Set<number>();
   private selectedMobCamps = new Map<number, CampDef>();
+  // NPC authoring keys use the same Ctrl-click group semantics as runtime mobs.
+  private selectedNpcKeys = new Set<string>();
+  private npcDragBase: Map<string, { npc: NpcDef; point: Vec2 }> | null = null;
   private mobDragStart: {
     pointer: Vec2;
     camps: Map<number, { camp: CampDef; point: Vec2 }>;
@@ -671,8 +710,12 @@ export class EditorApp {
   // Zone tool drag box (named locations) + spawn-tool marker placement mode.
   private zoneStart: Vec2 | null = null;
   private spawnAreaStart: Vec2 | null = null;
-  private spawnAreaPreview: { minX: number; minZ: number; maxX: number; maxZ: number } | null =
-    null;
+  private spawnAreaPreview: {
+    minX: number;
+    minZ: number;
+    maxX: number;
+    maxZ: number;
+  } | null = null;
   private zoneBox: RegionBox | null = null;
   private markerPlaceMode = false;
   private markerKind: 'npc' | 'object' = 'npc';
@@ -698,6 +741,7 @@ export class EditorApp {
   private regionStart: Vec2 | null = null;
   private selectingRegion = false;
   private clipboard: Clipboard | null = null;
+  private selectionClipboard: SelectionClipboard | null = null;
 
   // 2D pointer state
   private panning = false;
@@ -1080,9 +1124,11 @@ export class EditorApp {
       props:
         map.propsMode === 'empty'
           ? emptyZoneProps()
-          : map.propsMode === 'editable-major'
-            ? withoutMajorWorldProps(BUILTIN_WORLD.props)
-            : BUILTIN_WORLD.props,
+          : map.propsMode === 'editable-all'
+            ? withoutEditableWorldProps(BUILTIN_WORLD.props)
+            : map.propsMode === 'editable-major'
+              ? withoutMajorWorldProps(BUILTIN_WORLD.props)
+              : BUILTIN_WORLD.props,
       playerStart: map.playerStart ? { ...map.playerStart } : { ...PLAYER_START },
       terrainEdits: map.terrainEdits,
       placements: [],
@@ -1100,6 +1146,9 @@ export class EditorApp {
     if (fluids.length > 0) world.fluids = fluids;
     if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
     if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
+    if (map.decorationExclusions && map.decorationExclusions.length > 0) {
+      world.decorationExclusions = map.decorationExclusions;
+    }
     if (map.presentationMode !== undefined) world.presentationMode = map.presentationMode;
     if (map.skybox !== undefined) world.skybox = map.skybox;
     if (map.terrainStyle) world.terrainStyle = map.terrainStyle;
@@ -1306,6 +1355,7 @@ export class EditorApp {
     if (tool !== 'select' && tool !== 'entity') this.selectedKey = null;
     if (tool !== 'entity') {
       this.clearMobSelection();
+      this.clearNpcSelection();
       this.npcFacingDragBase = null;
     }
     if (tool !== 'camp') this.selectedCamp = null;
@@ -1428,6 +1478,7 @@ export class EditorApp {
         if (runtimeMob) {
           const camp = this.individualCampForRuntimeMob(runtimeMob.id);
           if (camp) {
+            this.clearNpcSelection();
             this.selectedMobIds = toggledMobSelection(
               this.selectedMobIds,
               runtimeMob.id,
@@ -1464,10 +1515,43 @@ export class EditorApp {
         }
         this.clearMobSelection();
         const hit = pickMovableEntity(this.entities, w);
-        this.selectedKey = hit?.key ?? null;
-        if (hit) {
-          this.markerDragStart = { key: hit.key, x: hit.point.x, z: hit.point.z };
+        if (hit?.kind === 'npc') {
+          this.selectedNpcKeys = toggledKeySelection(
+            this.selectedNpcKeys,
+            hit.key,
+            ev?.ctrlKey === true,
+          );
+          this.selectedKey = this.selectedNpcKeys.has(hit.key)
+            ? hit.key
+            : ([...this.selectedNpcKeys].pop() ?? null);
+          this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+        } else {
+          this.clearNpcSelection();
+          this.selectedKey = hit?.key ?? null;
+        }
+        if (hit && this.selectedKey === hit.key) {
+          this.markerDragStart = {
+            key: hit.key,
+            x: hit.point.x,
+            z: hit.point.z,
+          };
+          if (hit.kind === 'npc') {
+            this.npcDragBase = new Map(
+              [...this.selectedNpcKeys]
+                .map((key) => {
+                  const npc = this.map.content.npcs[key.slice('npc:'.length)];
+                  return npc ? ([key, { npc, point: { ...npc.pos } }] as const) : null;
+                })
+                .filter(
+                  (entry): entry is readonly [string, { npc: NpcDef; point: Vec2 }] =>
+                    entry !== null,
+                ),
+            );
+          }
           this.grab = { x: w.x - hit.point.x, z: w.z - hit.point.z };
+        } else {
+          this.markerDragStart = null;
+          this.npcDragBase = null;
         }
         this.inspector.refresh();
         this.canvasDirty = true;
@@ -1477,7 +1561,12 @@ export class EditorApp {
         if (this.markerPlaceMode) this.addMarker(w);
         else {
           this.spawnAreaStart = { ...w };
-          this.spawnAreaPreview = { minX: w.x, minZ: w.z, maxX: w.x, maxZ: w.z };
+          this.spawnAreaPreview = {
+            minX: w.x,
+            minZ: w.z,
+            maxX: w.x,
+            maxZ: w.z,
+          };
         }
         break;
       case 'zone':
@@ -1569,6 +1658,26 @@ export class EditorApp {
             camp.center.z = point.z + dz;
           }
           this.entities = buildEntities(this.content);
+          this.canvasDirty = true;
+          break;
+        }
+        if (this.npcDragBase && this.markerDragStart) {
+          const activeStart = this.markerDragStart;
+          const activeTo = { x: w.x - this.grab.x, z: w.z - this.grab.z };
+          const dx = activeTo.x - activeStart.x;
+          const dz = activeTo.z - activeStart.z;
+          for (const [key, entry] of this.npcDragBase) {
+            const from = { ...entry.npc.pos };
+            const to = { x: entry.point.x + dx, z: entry.point.z + dz };
+            entry.npc.pos.x = to.x;
+            entry.npc.pos.z = to.z;
+            const entity = this.entities.find((candidate) => candidate.key === key);
+            if (entity) {
+              entity.point.x = to.x;
+              entity.point.z = to.z;
+            }
+            this.viewport3d?.moveMapEntity(key, from, to);
+          }
           this.canvasDirty = true;
           break;
         }
@@ -1692,6 +1801,41 @@ export class EditorApp {
           });
           this.map.meta.updatedAt = now();
           this.markDirty();
+          this.inspector.refresh();
+          break;
+        }
+        const npcDrag = this.npcDragBase;
+        this.npcDragBase = null;
+        if (npcDrag) {
+          const previous = new Map([...npcDrag].map(([key, entry]) => [key, entry.point]));
+          const next = new Map([...npcDrag].map(([key, entry]) => [key, { ...entry.npc.pos }]));
+          const changed = [...previous].some(([key, point]) => {
+            const target = next.get(key);
+            return target && (target.x !== point.x || target.z !== point.z);
+          });
+          this.markerDragStart = null;
+          if (changed) {
+            const apply = (points: ReadonlyMap<string, Vec2>): void => {
+              for (const [key, point] of points) {
+                const npc = this.map.content.npcs[key.slice('npc:'.length)];
+                if (!npc) continue;
+                const from = { ...npc.pos };
+                npc.pos.x = point.x;
+                npc.pos.z = point.z;
+                const entity = this.entities.find((candidate) => candidate.key === key);
+                if (entity) Object.assign(entity.point, point);
+                this.viewport3d?.moveMapEntity(key, from, point);
+              }
+              this.canvasDirty = true;
+            };
+            this.pushUndo({
+              label: 'move-npcs',
+              undo: () => apply(previous),
+              redo: () => apply(next),
+            });
+            this.map.meta.updatedAt = now();
+            this.markDirty();
+          }
           this.inspector.refresh();
           break;
         }
@@ -4220,6 +4364,7 @@ export class EditorApp {
   }
 
   private setSelectedPlacement(index: number | null): void {
+    if (index !== null) this.clearNpcSelection();
     // Switching objects (or clearing) leaves hitbox-edit mode.
     if (this.hitboxEdit && this.hitboxEdit.index !== index) this.exitHitboxEdit();
     if (this.selectedPlacement !== index) {
@@ -4254,6 +4399,7 @@ export class EditorApp {
       return;
     }
     this.selectedKey = null;
+    this.clearNpcSelection();
     this.selectedCamp = null;
     this.setSelectedPlacement(indices[0]);
     this.selectedSet = new Set(indices);
@@ -4278,6 +4424,7 @@ export class EditorApp {
       this.selectedSet = keep;
     }
     this.selectedKey = null;
+    this.clearNpcSelection();
     this.syncMultiSelectionView();
     this.inspector.refresh();
     this.canvasDirty = true;
@@ -4336,6 +4483,78 @@ export class EditorApp {
   }
 
   // ---- foliage brush ------------------------------------------------------------
+
+  private hasAmbientFoliage(): boolean {
+    return this.map.decorationsMode !== 'empty' && this.map.presentationMode !== 'blank';
+  }
+
+  private refreshAmbientFoliage(selected: number | null): void {
+    this.rebuildActiveWorld();
+    this.setSelectedPlacement(selected);
+    this.canvasDirty = true;
+    this.inspector.refresh();
+    if (!this.viewport3d) return;
+    this.show3dLoading();
+    void this.viewport3d.reload(this.map).then(() => {
+      this.hide3dLoading();
+      this.syncFootprintOverlay();
+      this.viewport3d?.setSelectedPlacement(this.selectedPlacement);
+    });
+  }
+
+  private makeAmbientFoliageEditable(): void {
+    if (!this.hasAmbientFoliage()) return;
+    const room = capRoom(this.map.placements.length, MAX_PLACEMENTS);
+    if (room === 0) {
+      this.toasts.error(t('editor.status.placementCapReached', { max: MAX_PLACEMENTS }));
+      return;
+    }
+    const bounds = mapBounds(this.map);
+    const decorations = generateDecorationsInBounds(this.map.meta.seed, {
+      minX: -bounds.halfW,
+      maxX: bounds.halfW,
+      minZ: bounds.zMin,
+      maxZ: bounds.zMax,
+    });
+    const focus = this.viewport3d?.cameraFocus() ?? {
+      x: 0,
+      z: (bounds.zMin + bounds.zMax) / 2,
+    };
+    const selected = closestAmbientTrees(
+      decorations,
+      focus,
+      Math.min(AMBIENT_TREE_EDIT_BATCH, room),
+    );
+    const placements = ambientDecorationsToPlacements(selected);
+    if (placements.length === 0) {
+      this.toasts.success(t('editor.foliageTool.ambientConverted', { count: 0 }));
+      return;
+    }
+    const previousExclusions = [...(this.map.decorationExclusions ?? [])];
+    const nextExclusions = [
+      ...previousExclusions,
+      ...selected.map(ambientDecorationKey).filter((key) => !previousExclusions.includes(key)),
+    ];
+    const start = appendSpan(this.map.placements, placements);
+    this.map.decorationExclusions = nextExclusions;
+    this.map.meta.updatedAt = now();
+    this.refreshAmbientFoliage(placements.length > 0 ? start : null);
+    this.pushUndo({
+      label: 'make-ambient-foliage-editable',
+      undo: () => {
+        removeSpan(this.map.placements, start, placements);
+        this.map.decorationExclusions =
+          previousExclusions.length > 0 ? [...previousExclusions] : undefined;
+        this.refreshAmbientFoliage(null);
+      },
+      redo: () => {
+        this.map.placements.splice(start, 0, ...placements);
+        this.map.decorationExclusions = [...nextExclusions];
+        this.refreshAmbientFoliage(placements.length > 0 ? start : null);
+      },
+    });
+    this.toasts.success(t('editor.foliageTool.ambientConverted', { count: placements.length }));
+  }
 
   /** The enabled foliage asset ids (catalog 'foliage' category by family),
    *  plus the reserved animated-grass patch id when Grass is on. */
@@ -5534,6 +5753,98 @@ export class EditorApp {
     this.updateSelectedPlacement({}, true);
   }
 
+  private copySelection(): void {
+    if (this.selectedPlacement !== null) {
+      const indices =
+        this.selectedSet.size > 0 ? this.selectedSet : new Set([this.selectedPlacement]);
+      const items = copyPlacementSelection(this.map.placements, indices);
+      if (items.length > 0) this.selectionClipboard = { kind: 'placements', items };
+    } else if (this.selectedMobCamps.size > 0) {
+      const items = copyCampSelection(new Set(this.selectedMobCamps.values()));
+      if (items.length > 0) this.selectionClipboard = { kind: 'mobs', items };
+    } else if (this.selectedNpcKeys.size > 0) {
+      const items = copyNpcSelection(this.map.content.npcs, this.selectedNpcKeys);
+      if (items.length > 0) this.selectionClipboard = { kind: 'npcs', items };
+    } else {
+      this.toasts.info(t('editor.status.selectionNothingToCopy'));
+      return;
+    }
+    const count = this.selectionClipboard?.items.length ?? 0;
+    this.toasts.success(t('editor.status.selectionCopied', { count }));
+  }
+
+  private pasteSelection(): void {
+    const clipboard = this.selectionClipboard;
+    if (!clipboard) {
+      this.toasts.info(t('editor.status.selectionNothingToPaste'));
+      return;
+    }
+    if (clipboard.kind === 'placements') {
+      const start = this.map.placements.length;
+      this.appendPlacements(pastePlacementSelection(clipboard.items, 2, 2), 'paste-placements');
+      const added = this.map.placements.length - start;
+      if (added <= 0) return;
+      const indices = Array.from({ length: added }, (_, index) => start + index);
+      this.setSelectedPlacement(indices[indices.length - 1]);
+      this.selectedSet = new Set(indices);
+      this.syncMultiSelectionView();
+      this.inspector.refresh();
+      this.toasts.success(t('editor.status.selectionPasted', { count: added }));
+      return;
+    }
+    if (clipboard.kind === 'mobs') {
+      const room = capRoom(this.camps().length, MAX_CAMPS);
+      const accepted = pasteCampSelection(clipboard.items.slice(0, room), 2, 2);
+      if (accepted.length < clipboard.items.length) {
+        this.toasts.error(t('editor.status.entityCapReached'));
+      }
+      if (accepted.length === 0) return;
+      const start = appendSpan(this.camps(), accepted);
+      this.clearMobSelection();
+      this.map.meta.updatedAt = now();
+      this.refreshEntityWorld();
+      this.pushUndo({
+        label: 'paste-mobs',
+        undo: () => {
+          removeSpan(this.camps(), start, accepted);
+          this.refreshEntityWorld();
+        },
+        redo: () => {
+          this.camps().push(...accepted);
+          this.refreshEntityWorld();
+        },
+      });
+      this.inspector.refresh();
+      this.toasts.success(t('editor.status.selectionPasted', { count: accepted.length }));
+      return;
+    }
+
+    const npcs = this.map.content.npcs as Record<string, NpcDef>;
+    const room = capRoom(Object.keys(npcs).length, MAX_NPCS);
+    const accepted = pasteNpcSelection(npcs, clipboard.items.slice(0, room), 2, 2);
+    if (accepted.length < clipboard.items.length) {
+      this.toasts.error(t('editor.status.entityCapReached'));
+    }
+    if (accepted.length === 0) return;
+    const insert = (): void => {
+      for (const { key, npc } of accepted) npcs[key] = npc;
+      this.selectedNpcKeys = new Set(accepted.map(({ key }) => `npc:${key}`));
+      this.selectedKey = `npc:${accepted[accepted.length - 1].key}`;
+      this.refreshEntityWorld();
+    };
+    const remove = (): void => {
+      for (const { key } of accepted) delete npcs[key];
+      this.selectedKey = null;
+      this.clearNpcSelection();
+      this.refreshEntityWorld();
+    };
+    insert();
+    this.map.meta.updatedAt = now();
+    this.pushUndo({ label: 'paste-npcs', undo: remove, redo: insert });
+    this.inspector.refresh();
+    this.toasts.success(t('editor.status.selectionPasted', { count: accepted.length }));
+  }
+
   private duplicateSelectedPlacement(): void {
     // Duplicates the whole multi-selection (box select / Shift+click), offset
     // together so the copies keep their relative layout.
@@ -5730,6 +6041,28 @@ export class EditorApp {
     this.selectedMobCamps.clear();
     this.mobDragStart = null;
     this.viewport3d?.setSelectedRuntimeMobs(this.selectedMobIds);
+  }
+
+  private clearNpcSelection(): void {
+    this.selectedNpcKeys.clear();
+    this.npcDragBase = null;
+    this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+  }
+
+  /** Rebuild authored NPC/mob entities after a structural paste or undo. */
+  private refreshEntityWorld(): void {
+    this.entities = buildEntities(this.content);
+    this.base = snapshot(this.entities);
+    this.rebuildActiveWorld();
+    this.canvasDirty = true;
+    this.markDirty();
+    if (!this.viewport3d) return;
+    this.show3dLoading();
+    void this.viewport3d.reload(this.map).then(() => {
+      this.hide3dLoading();
+      this.syncFootprintOverlay();
+      this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+    });
   }
 
   /** Live-facing slider for selected NPCs, committed as one undo entry. */
@@ -6576,10 +6909,29 @@ export class EditorApp {
       a.remove();
       URL.revokeObjectURL(url);
       this.toasts.success(t('editor.status.bundleExported', { name: this.map.meta.name }));
-    } catch {
-      // Bundle build failed (blocked storage?): at least export the JSON.
-      downloadMap(this.map);
-      this.toasts.success(t('editor.status.exported', { name: this.map.meta.name }));
+    } catch (error) {
+      if (error instanceof BundleDependencyError) {
+        this.toasts.error(t('editor.status.exportBlockedMissingDeps', { count: error.missing }));
+        return;
+      }
+      if (error instanceof ExportCompatibilityError) {
+        this.toasts.error(t('editor.status.exportBlockedInvalid'));
+        return;
+      }
+      const refs = bundleDependencyRefs(this.map);
+      const dependencyCount = refs.models.length + refs.textures.length + refs.skyboxes.length;
+      if (dependencyCount > 0) {
+        this.toasts.error(t('editor.status.exportBlockedMissingDeps', { count: dependencyCount }));
+        return;
+      }
+      // Folder/zip assembly failed for a dependency-free map. The canonical
+      // JSON still passes the same engine preflight through downloadMap().
+      try {
+        downloadMap(this.map);
+        this.toasts.success(t('editor.status.exported', { name: this.map.meta.name }));
+      } catch {
+        this.toasts.error(t('editor.status.exportBlockedInvalid'));
+      }
     }
   }
 
@@ -6997,6 +7349,7 @@ export class EditorApp {
     this.dirty = false;
     this.selectedKey = null;
     this.clearMobSelection();
+    this.clearNpcSelection();
     this.npcFacingDragBase = null;
     this.hoverKey = null;
     this.selectedPlacement = null;
@@ -7009,6 +7362,7 @@ export class EditorApp {
     this.selectedCamp = null;
     this.regionBox = null;
     this.clipboard = null;
+    this.selectionClipboard = null;
     this.blockerStart = null;
     this.blockerPreview = null;
     this.drawingBlocker2d = false;
@@ -7072,6 +7426,16 @@ export class EditorApp {
       void this.save();
       return;
     }
+    if (mod && ev.key.toLowerCase() === 'c') {
+      ev.preventDefault();
+      this.copySelection();
+      return;
+    }
+    if (mod && ev.key.toLowerCase() === 'v') {
+      ev.preventDefault();
+      this.pasteSelection();
+      return;
+    }
     if (mod && ev.key.toLowerCase() === 'd') {
       if (this.selectedPlacement !== null) {
         ev.preventDefault();
@@ -7105,6 +7469,7 @@ export class EditorApp {
       ) {
         this.setSelectedPlacement(null);
         this.selectedKey = null;
+        this.clearNpcSelection();
         this.selectedCamp = null;
         if (this.selectedLight !== null) this.setSelectedLight(null);
         if (this.selectedMusicArea !== null) this.setSelectedMusicArea(null);
@@ -7634,6 +7999,8 @@ export class EditorApp {
       setFoliage: (change) => {
         Object.assign(this.foliage, change);
       },
+      hasAmbientFoliage: () => this.hasAmbientFoliage(),
+      makeAmbientFoliageEditable: () => this.makeAmbientFoliageEditable(),
       getFoliageCustom: () => (this.foliageCustom ? { ...this.foliageCustom } : null),
       pickFoliageCustom: () => {
         // Reuse the currently-selected asset in the browser (same id the Place
@@ -8081,25 +8448,25 @@ export class EditorApp {
       }
       if (this.tool === 'region') {
         this.selectingRegion = true;
-        this.editStart(w);
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.tool === 'blocker') {
         this.drawingBlocker2d = true;
-        this.editStart(w);
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.isDragTool()) {
         this.painting2d = true;
         this.paint2dDragPx = 0;
-        this.editStart(w);
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.tool === 'place' || this.tool === 'camp' || this.tool === 'spawn') {
-        this.editStart(w);
+        this.editStart(w, ev);
         this.canvasDirty = true;
         return;
       }

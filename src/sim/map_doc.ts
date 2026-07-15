@@ -54,6 +54,7 @@ export const MAP_DOC_VERSION = 2;
 // so a hostile document cannot stall the editor's chunk rebuilds.
 export const MAX_TERRAIN_EDITS = 10_000;
 export const MAX_PLACEMENTS = 4000;
+export const MAX_DECORATION_EXCLUSIONS = MAX_PLACEMENTS;
 export const MAX_CAMPS = 600;
 export const MAX_NPCS = 200;
 export const MAX_OBJECTS = 400;
@@ -378,11 +379,13 @@ export interface MapDoc {
   // exported with the map bundle). Absent = the procedural HDRI sky.
   skybox?: string;
   // v2: built-in static prop set by default; 'empty' gives blank authoring maps
-  // no props, while 'editable-major' replaces buildings/fences with ordinary
-  // exported placements and keeps the remaining built-in scenery.
-  propsMode?: 'empty' | 'editable-major';
+  // no props. 'editable-major' is the legacy buildings/fences-only format;
+  // 'editable-all' replaces every renderer-owned prop with exported placements.
+  propsMode?: 'empty' | 'editable-major' | 'editable-all';
   // v2: procedural terrain decorations by default; 'empty' removes trees/rocks.
   decorationsMode?: 'empty';
+  // Stable procedural-decoration keys replaced by editable placements.
+  decorationExclusions?: string[];
   // v2: render-only world dressing by default; 'blank' is the flat-map slate.
   presentationMode?: MapPresentationMode;
   // v2 optional: named locations - axis-aligned rects the HUD shows as the
@@ -547,7 +550,12 @@ function sanitizeCave(v: unknown): CaveDef | null {
     .slice(0, MAX_CAVE_NODES)
     .map(sanitizeCaveNode)
     .filter((n): n is CaveNode => n !== null)
-    .map((n) => ({ ...n, x: coord(n.x), z: coord(n.z), y: clamp(n.y, -500, 500) }));
+    .map((n) => ({
+      ...n,
+      x: coord(n.x),
+      z: coord(n.z),
+      y: clamp(n.y, -500, 500),
+    }));
   if (nodes.length === 0) return null;
   const cave: CaveDef = { id, nodes };
   if (finiteNum(c.radius)) cave.radius = clamp(c.radius, CAVE_MIN_RADIUS, CAVE_MAX_RADIUS);
@@ -722,7 +730,13 @@ function sanitizePlacement(v: unknown): MapPlacement | null {
   if (finiteNum(p.rockTexTile)) out.rockTexTile = clamp(p.rockTexTile, 1, 64);
   // Merged-ridge node chain: capped, every field clamped finite.
   if (Array.isArray(p.rockNodes)) {
-    const nodes: { dx: number; dz: number; dy: number; r: number; h: number }[] = [];
+    const nodes: {
+      dx: number;
+      dz: number;
+      dy: number;
+      r: number;
+      h: number;
+    }[] = [];
     for (const raw of p.rockNodes.slice(0, MAX_ROCK_NODES)) {
       if (!raw || typeof raw !== 'object') continue;
       const n = raw as Record<string, unknown>;
@@ -1227,10 +1241,21 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
       maxZ: coord(Math.max(psa.minZ, psa.maxZ)),
     };
   }
-  if (o.propsMode === 'empty' || o.propsMode === 'editable-major') {
+  if (
+    o.propsMode === 'empty' ||
+    o.propsMode === 'editable-major' ||
+    o.propsMode === 'editable-all'
+  ) {
     doc.propsMode = o.propsMode;
   }
   if (o.decorationsMode === 'empty') doc.decorationsMode = 'empty';
+  const decorationExclusions = arr(o.decorationExclusions)
+    .filter((value): value is string => typeof value === 'string')
+    .filter((value) => /^(tree|tree2|rock):-?\d+\.\d{3}:-?\d+\.\d{3}$/.test(value))
+    .slice(0, MAX_DECORATION_EXCLUSIONS);
+  if (decorationExclusions.length > 0) {
+    doc.decorationExclusions = [...new Set(decorationExclusions)];
+  }
   if (
     o.presentationMode === 'blank' ||
     o.presentationMode === 'dungeon' ||
@@ -1279,7 +1304,12 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
       if (!finiteNum(m.x) || !finiteNum(m.z)) return null;
       const name = m.name.trim().slice(0, MAX_LOCATION_NAME);
       if (!name) return null;
-      return { name, kind: m.kind === 'object' ? 'object' : 'npc', x: m.x, z: m.z };
+      return {
+        name,
+        kind: m.kind === 'object' ? 'object' : 'npc',
+        x: m.x,
+        z: m.z,
+      };
     })
     .filter((m): m is MapMarker => m !== null);
   if (markers.length > 0) doc.markers = markers;
@@ -1368,7 +1398,13 @@ function sanitizeMusic(v: unknown): MapMusic | undefined {
         const minZ = Math.min(a.minZ, a.maxZ);
         const maxZ = Math.max(a.minZ, a.maxZ);
         if (maxX - minX < 1 || maxZ - minZ < 1) return null;
-        return { minX, minZ, maxX, maxZ, track: a.track.slice(0, MAX_TRACK_ID_LENGTH) };
+        return {
+          minX,
+          minZ,
+          maxX,
+          maxZ,
+          track: a.track.slice(0, MAX_TRACK_ID_LENGTH),
+        };
       })
       .filter((a): a is NonNullable<MapMusic['areas']>[number] => a !== null);
     if (areas.length > 0) out.areas = areas;
@@ -1397,20 +1433,34 @@ function sanitizeWeather(v: unknown): MapWeather | undefined {
   if (Array.isArray(w.schedule)) {
     const steps = w.schedule
       .slice(0, MAX_WEATHER_SCHEDULE)
-      .map((raw): { mode: 'clear' | 'rain' | 'snow' | 'sparkle'; minutes: number } | null => {
-        if (!raw || typeof raw !== 'object') return null;
-        const s = raw as Record<string, unknown>;
-        if (typeof s.mode !== 'string' || !WEATHER_MODES.has(s.mode) || s.mode === 'auto') {
-          return null;
-        }
-        return {
-          mode: s.mode as 'clear' | 'rain' | 'snow' | 'sparkle',
-          minutes: finiteNum(s.minutes) ? clamp(s.minutes, 0.1, 120) : 5,
-        };
-      })
-      .filter((s): s is { mode: 'clear' | 'rain' | 'snow' | 'sparkle'; minutes: number } => {
-        return s !== null;
-      });
+      .map(
+        (
+          raw,
+        ): {
+          mode: 'clear' | 'rain' | 'snow' | 'sparkle';
+          minutes: number;
+        } | null => {
+          if (!raw || typeof raw !== 'object') return null;
+          const s = raw as Record<string, unknown>;
+          if (typeof s.mode !== 'string' || !WEATHER_MODES.has(s.mode) || s.mode === 'auto') {
+            return null;
+          }
+          return {
+            mode: s.mode as 'clear' | 'rain' | 'snow' | 'sparkle',
+            minutes: finiteNum(s.minutes) ? clamp(s.minutes, 0.1, 120) : 5,
+          };
+        },
+      )
+      .filter(
+        (
+          s,
+        ): s is {
+          mode: 'clear' | 'rain' | 'snow' | 'sparkle';
+          minutes: number;
+        } => {
+          return s !== null;
+        },
+      );
     if (steps.length > 0) out.schedule = steps;
   }
   return Object.keys(out).length > 0 ? out : undefined;

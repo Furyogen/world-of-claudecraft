@@ -3,10 +3,12 @@
 
 import { restoreBundleDeps, zipRead } from './bundle';
 import type { CustomMap } from './custom_map';
-import { parseMap, serializeMap } from './persist';
+import { missingBundleEntries, prepareMapForEngine } from './export_contract';
+import { parseMap } from './persist';
 
 export function downloadMap(map: CustomMap): void {
-  const blob = new Blob([serializeMap(map)], { type: 'application/json' });
+  const prepared = prepareMapForEngine(map);
+  const blob = new Blob([prepared.json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -50,22 +52,22 @@ export type MapPickOutcome =
   | { status: 'invalid' }
   | { status: 'cancelled' };
 
-/** Read a chosen file into a CustomMap: a .wocmap.zip bundle restores its
- *  dependencies (best effort) before parsing the contained map.json; anything
- *  else is parsed as plain map JSON. Returns null when the bytes are not a map. */
+/** Read a chosen file into a CustomMap: a .wocmap.zip bundle verifies and
+ *  restores every dependency before accepting map.json; anything else is
+ *  parsed as plain map JSON. Returns null when the bytes are not a whole map. */
 async function readMapFile(file: File): Promise<CustomMap | null> {
   if (/\.zip$/i.test(file.name)) {
     const files = zipRead(new Uint8Array(await file.arrayBuffer()));
     const mapEntry = files?.find((f) => f.path === 'map.json');
     if (!files || !mapEntry) return null;
-    // Dependency restore is best effort: a failed texture/model write must not
-    // stop the map itself from loading (placements just fall back to holes).
+    const map = parseMap(new TextDecoder().decode(mapEntry.bytes));
+    if (!map || missingBundleEntries(map, files) > 0) return null;
     try {
       await restoreBundleDeps(files);
     } catch {
-      // ignore: deps stay unresolved, the map still opens
+      return null;
     }
-    return parseMap(new TextDecoder().decode(mapEntry.bytes));
+    return map;
   }
   return parseMap(await file.text());
 }

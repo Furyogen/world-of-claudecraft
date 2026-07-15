@@ -2,10 +2,11 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { customMapToWorldContent, newCustomMap, newFlatCustomMap } from '../src/editor/custom_map';
 import {
   promoteMajorWorldProps,
+  withoutEditableWorldProps,
   worldMajorPropPlacements,
 } from '../src/editor/world_prop_placements';
 import { pathCrossesFence } from '../src/sim/colliders';
-import { setActiveWorldContent } from '../src/sim/data';
+import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
 import { MAX_PLACEMENTS, sanitizeMapDoc } from '../src/sim/map_doc';
 import { isResting } from '../src/sim/progression/xp';
 import type { Entity, ZonePropsDef } from '../src/sim/types';
@@ -23,6 +24,8 @@ const EMPTY: ZonePropsDef = {
   ruinRings: [],
   fences: [],
   graveyards: [],
+  delveMarkers: [],
+  greatTrees: [],
 };
 
 describe('editable overworld scenery', () => {
@@ -47,16 +50,58 @@ describe('editable overworld scenery', () => {
     expect(placements.filter((p) => p.worldPropKind === 'fence')).toHaveLength(3);
   });
 
-  it('new world maps export editable major scenery without duplicate static copies', () => {
+  it('turns every built-in scenery family into selectable placements', () => {
+    const props: ZonePropsDef = {
+      ...EMPTY,
+      wells: [{ x: 1, z: 2, r: 1.4 }],
+      stalls: [{ x: 3, z: 4, rot: 0.2, r: 2 }],
+      mines: [{ x: 5, z: 6, rot: 0.3 }],
+      docks: [{ x: 7, z: 8, rot: 0.4, hutLocal: { x: 2, z: 1, hw: 2, hd: 1.5 } }],
+      tents: [{ x: 9, z: 10, rot: 0.5, scale: 1.2 }],
+      crates: [[11, 12]],
+      campfires: [[13, 14]],
+      mudHuts: [[15, 16]],
+      ruinRings: [{ x: 17, z: 18, ringR: 4, columns: 3 }],
+      graveyards: [{ x: 19, z: 20 }],
+      delveMarkers: [{ x: 21, z: 22, delveId: 'drowned_litany' }],
+      greatTrees: [{ x: 23, z: 24, r: 4 }],
+    };
+
+    const placements = worldMajorPropPlacements(props);
+    const assets = new Set(placements.map((placement) => placement.assetId));
+
+    for (const assetId of [
+      'props/well',
+      'props/market_stand_1',
+      'props/timber_pillar',
+      'props/dock_platform',
+      'props/tent_open',
+      'props/crate_wooden',
+      'props/bonfire',
+      'props/mushroom_red',
+      'props/column_broken',
+      'props/gravestone_round',
+      'dungeon/delve_entrance_2',
+      'foliage/twisted_1',
+    ]) {
+      expect(assets.has(assetId), assetId).toBe(true);
+    }
+    expect(placements.find((placement) => placement.assetId === 'props/bonfire')?.fire).toBe(true);
+    expect(withoutEditableWorldProps(props)).toEqual(EMPTY);
+  });
+
+  it('new world maps export all scenery as placements without static duplicates', () => {
     const map = newCustomMap('Editable World', 'world', 100);
     const world = customMapToWorldContent(map);
 
-    expect(map.propsMode).toBe('editable-major');
+    expect(map.propsMode).toBe('editable-all');
     expect(map.placements.some((p) => p.assetId.startsWith('props/house_'))).toBe(true);
     expect(map.placements.some((p) => p.assetId === 'props/fence')).toBe(true);
     expect(world.props.buildings).toEqual([]);
     expect(world.props.fences).toEqual([]);
-    expect(world.props.wells.length).toBeGreaterThan(0);
+    expect(world.props).toEqual(EMPTY);
+    expect(map.placements.some((p) => p.assetId === 'props/bonfire')).toBe(true);
+    expect(map.placements.some((p) => p.assetId === 'dungeon/delve_entrance_2')).toBe(true);
   });
 
   it('promotes a recognized legacy world once without touching unrelated or full maps', () => {
@@ -69,6 +114,18 @@ describe('editable overworld scenery', () => {
     expect(count).toBeGreaterThan(0);
     expect(promoteMajorWorldProps(legacy)).toBe(false);
     expect(legacy.placements).toHaveLength(count);
+
+    const partial = newCustomMap('Partial', 'partial', 100);
+    partial.placements = worldMajorPropPlacements({
+      ...EMPTY,
+      buildings: BUILTIN_WORLD.props.buildings,
+      fences: BUILTIN_WORLD.props.fences,
+    });
+    partial.propsMode = 'editable-major';
+    const oldCount = partial.placements.length;
+    expect(promoteMajorWorldProps(partial)).toBe(true);
+    expect(partial.propsMode).toBe('editable-all');
+    expect(partial.placements.length).toBeGreaterThan(oldCount);
 
     const blank = newFlatCustomMap('Blank', 'blank', 100);
     delete blank.propsMode;
@@ -96,7 +153,7 @@ describe('editable overworld scenery', () => {
     const clean = sanitizeMapDoc(JSON.stringify(map));
     const fence = clean?.placements.find((p) => p.worldPropKind === 'fence');
 
-    expect(clean?.propsMode).toBe('editable-major');
+    expect(clean?.propsMode).toBe('editable-all');
     expect(fence?.assetId).toBe('props/fence');
     expect(fence?.collisionMode).toBe('baked');
     expect(fence?.worldPropWidth).toBeGreaterThan(0);
@@ -123,7 +180,10 @@ describe('editable overworld scenery', () => {
       pathCrossesFence(fence.x - nx * 2, fence.z - nz * 2, fence.x + nx * 2, fence.z + nz * 2),
     ).toBe(true);
 
-    const player = { inCombat: false, pos: { x: inn.x, y: 0, z: inn.z } } as Entity;
+    const player = {
+      inCombat: false,
+      pos: { x: inn.x, y: 0, z: inn.z },
+    } as Entity;
     expect(isResting(player)).toBe(true);
     player.pos.x = oldInn.x;
     player.pos.z = oldInn.z;
