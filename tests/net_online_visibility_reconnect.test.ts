@@ -260,7 +260,7 @@ describe('ClientWorld visibilitychange reconnect (mobile background/foreground)'
     });
   });
 
-  it('a zombie-socket manual close followed by the late real onclose leaves exactly one live timer', () => {
+  it('a zombie-socket manual close followed by the late real onclose is one drop: one timer, one attempt', () => {
     withDomStubs((doc, harness) => {
       vi.spyOn(Math, 'random').mockReturnValue(0.75);
       const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
@@ -276,18 +276,51 @@ describe('ClientWorld visibilitychange reconnect (mobile background/foreground)'
       expect(harness.timers.length).toBe(1);
       const manual = harness.timers[0];
 
-      // The browser finally delivers the zombie socket's real close event. This
-      // second socketClosed entry must REPLACE the pending timer, never stack a
-      // second one next to it: two live timers would each run openSocket, and
-      // the "never two live timers" contract would be a lie on exactly this path.
+      // The browser finally delivers the zombie socket's real close event. That
+      // is a duplicate signal of the SAME physical drop, so the second entry
+      // must be a no-op: the pending timer survives untouched (never two live
+      // timers, never a double openSocket) and the attempt is not double-counted
+      // (each zombie drop would otherwise burn two of the bounded attempts).
       first.onclose?.();
-      expect(harness.timers.some((t) => t.id === manual.id)).toBe(false); // old cleared
       expect(harness.timers.length).toBe(1);
+      expect(harness.timers[0].id).toBe(manual.id);
+      expect((world as unknown as { reconnectAttempts: number }).reconnectAttempts).toBe(1);
 
       // Firing the survivor opens exactly one replacement socket.
-      harness.fire(harness.timers[0].id);
+      harness.fire(manual.id);
       expect(StubWebSocket.instances.length).toBe(2);
       expect(harness.timers.length).toBe(0);
+      world.close();
+    });
+  });
+
+  it('a late duplicate close at the attempt cap does not end the session while the final retry is pending', () => {
+    withDomStubs((doc, harness) => {
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      let disconnected = '';
+      world.onDisconnect = (reason) => {
+        disconnected = reason;
+      };
+      // Sit one below RECONNECT_MAX_ATTEMPTS (40 in src/net/online.ts): the
+      // manual zombie close below burns the FINAL attempt and schedules the
+      // last legitimate retry.
+      (world as unknown as { reconnectAttempts: number }).reconnectAttempts = 39;
+      (world as unknown as { connected: boolean }).connected = true;
+      first.readyState = StubWebSocket.CLOSED;
+      doc.setVisible(true);
+      expect(harness.timers.length).toBe(1);
+
+      // The zombie socket's real onclose lands late. Counted as a fresh drop it
+      // would hit the attempts >= MAX branch: endSession() clears the pending
+      // final retry and onDisconnect dumps the player, all on ONE physical drop.
+      first.onclose?.();
+      expect(disconnected).toBe('');
+      expect(harness.timers.length).toBe(1);
+
+      // The final retry actually happens.
+      harness.fire(harness.timers[0].id);
+      expect(StubWebSocket.instances.length).toBe(2);
       world.close();
     });
   });

@@ -1415,6 +1415,16 @@ export class ClientWorld implements IWorld {
   private socketClosed(): void {
     this.connected = false;
     if (this.sessionEnded) return;
+    // A pending reconnect timer means this close is a duplicate signal of the
+    // SAME physical drop: on the zombie-socket path the visibility handler
+    // drives socketClosed manually and the socket's late real onclose lands
+    // right behind it. One drop counts once: keep the already-scheduled retry
+    // and return, rather than burning a second attempt, re-firing
+    // onConnectionLost, or, at the attempt cap, ending the session while a
+    // legitimate final retry is still pending. (A pending timer can never
+    // belong to a different drop: no socket is open while one is pending, and
+    // the timer clears its own handle before opening the next socket.)
+    if (this.reconnectTimer !== undefined) return;
     if (this.reconnectAttempts >= RECONNECT_MAX_ATTEMPTS) {
       this.endSession();
       this.onDisconnect?.('Connection to the server was lost.');
@@ -1428,14 +1438,9 @@ export class ClientWorld implements IWorld {
       RECONNECT_MAX_DELAY_MS,
       Math.random,
     );
-    // Clear any pending timer FIRST: on the zombie-socket path the visibility
-    // handler drives socketClosed manually, and the socket's real onclose can
-    // land right behind it, so a second entry here would otherwise strand the
-    // first timer live (two timers, a double openSocket). Then clear our own
-    // handle when the timer fires: a stale handle left in reconnectTimer would
-    // make a later visibility event (while the socket is still CONNECTING) take
-    // the pending-timer branch and open a second socket.
-    if (this.reconnectTimer !== undefined) clearTimeout(this.reconnectTimer);
+    // Clear our own handle when the timer fires: a stale handle left in
+    // reconnectTimer would make a later visibility event (while the socket is
+    // still CONNECTING) take the pending-timer branch and open a second socket.
     this.reconnectTimer = window.setTimeout(() => {
       this.reconnectTimer = undefined;
       this.openSocket();
