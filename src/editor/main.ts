@@ -12,7 +12,7 @@ import { EditorApp } from './app';
 // The editor's 3D viewport holds a full game WebGLRenderer (its GL context is
 // tracked via trackWebGLContext). Playtest launches via full-page navigation and
 // the game returns the same way, so without wiring context release on teardown
-// the editor's WebGL context was never force-lost — every Playtest round-trip
+// the editor's WebGL context was never force-lost ? every Playtest round-trip
 // leaked one, exhausting the ~16-context GPU pool until the browser was
 // restarted. Release on real teardown (bfcache-frozen editors are preserved so a
 // Back restore keeps the live, unsaved document intact).

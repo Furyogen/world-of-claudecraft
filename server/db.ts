@@ -1,19 +1,52 @@
+import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
+import {
+  type AccountFlair,
+  EMPTY_ACCOUNT_FLAIR,
+  normalizeAccountFlair,
+} from '../src/sim/account_flair';
 import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { sanitizeRemovedZone1Content } from '../src/sim/removed_zone1_content';
 import type { CharacterState, MailSave, MarketSave } from '../src/sim/sim';
 import type { ArenaFormat, PlayerClass } from '../src/sim/types';
+import { APPLE_AUTH_SCHEMA } from './apple_auth_db';
+import { validCharName } from './auth';
+import type { BankBonusFacts } from './bank_entitlements';
 import { seedChatFilterDefaults } from './chat_filter_db';
 import type { ChatLogRow } from './chat_log';
+import {
+  buildCommunityTestCharacters,
+  communityTestAccountsEnabled,
+  GENERATED_NAME_ATTEMPTS,
+  generatedTestCharacterName,
+  prepareCommunityTestCharacters,
+} from './community_test_accounts';
+import type { RankedDeedsAccount } from './deeds_board';
 import { DISCORD_SCHEMA } from './discord_db';
 import { GITHUB_SCHEMA } from './github_db';
 import { isUniqueViolation } from './http_util';
 import { MAPS_SCHEMA } from './maps_db';
+import {
+  LEGACY_MARKET_KEY,
+  MARKET_BACKFILL_MARKER_KEY,
+  MARKET_KEY_PREFIX,
+  marketStateKey,
+  runMarketBackfill,
+} from './market_backfill';
 import { OAUTH_SCHEMA } from './oauth_db';
+import { RATELIMIT_PRUNE_SQL, RATELIMIT_SCHEMA } from './ratelimit_db';
 import { REALM } from './realm';
 import { chooseArchiveName } from './reclaim_name';
 import { SOCIAL_SCHEMA } from './social_db';
+import { UNSTUCK_SCHEMA } from './unstuck_db';
 import { USER_ASSETS_SCHEMA } from './user_assets_db';
+
+// The realm-market key helpers and the backfill marker key live in
+// server/market_backfill.ts (a *_db-style module with no db.ts dependency, so
+// db.ts can import it without a cycle). Only marketStateKey was ever part of
+// db.ts's public surface; re-export just that one so its pre-existing
+// consumers (the market tests) keep importing it from ./db unchanged.
+export { marketStateKey } from './market_backfill';
 
 try {
   process.loadEnvFile?.();
@@ -38,10 +71,24 @@ export const DATABASE_URL =
     );
   })();
 
-export const pool = new Pool({ connectionString: DATABASE_URL, max: 10 });
+// Max Postgres clients this realm process keeps in its pool (count). Shared
+// across the HTTP request path and the game loop; deliberately no idle/connection
+// timeout override, so those keep pg's own defaults.
+export const DB_POOL_MAX_CLIENTS = 10;
+
+export const pool = new Pool({ connectionString: DATABASE_URL, max: DB_POOL_MAX_CLIENTS });
 
 const REALM_SQL_DEFAULT = REALM.replace(/'/g, "''");
 const LIFETIME_XP_EXPR = "((state->>'lifetimeXp')::bigint)";
+
+// The one eligibility predicate every public board query embeds VERBATIM (via
+// a JOIN or EXISTS over `accounts a`): banned and currently-suspended accounts
+// are delisted from every player-derived board, and an expired suspension
+// relists on its own. Exported so the board queries here, the daily-rewards
+// board reads (daily_rewards_db.ts), and the moderation guard test all bind to
+// the same fragment. Static text, never interpolated with user input.
+export const ELIGIBLE_ACCOUNT_SQL =
+  'a.banned_at IS NULL AND (a.suspended_until IS NULL OR a.suspended_until <= now())';
 
 export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS accounts (
@@ -125,6 +172,46 @@ ALTER TABLE accounts ADD COLUMN IF NOT EXISTS created_user_agent TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_ip TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_user_agent TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS cosmetics JSONB NOT NULL DEFAULT '{}'::jsonb;
+-- Paid weapon ownership and loadouts live outside accounts.cosmetics. Older game
+-- binaries replace that JSON document wholesale, so keeping paid state there would
+-- let a rolling deploy or rollback erase entitlements. The one-time backfill reads
+-- the legacy keys for accounts that received them before this table existed; once a
+-- row exists here it is authoritative and old binaries cannot mutate it.
+CREATE TABLE IF NOT EXISTS account_weapon_cosmetics (
+  account_id INT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+  skin_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  loadout JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT account_weapon_cosmetics_skin_ids_array
+    CHECK (jsonb_typeof(skin_ids) = 'array'),
+  CONSTRAINT account_weapon_cosmetics_loadout_object
+    CHECK (jsonb_typeof(loadout) = 'object')
+);
+INSERT INTO account_weapon_cosmetics AS awc (account_id, skin_ids, loadout)
+SELECT
+  id,
+  CASE WHEN jsonb_typeof(cosmetics -> 'weaponSkinIds') = 'array'
+    THEN cosmetics -> 'weaponSkinIds' ELSE '[]'::jsonb END,
+  CASE WHEN jsonb_typeof(cosmetics -> 'weaponSkinLoadout') = 'object'
+    THEN cosmetics -> 'weaponSkinLoadout' ELSE '{}'::jsonb END
+FROM accounts
+WHERE cosmetics ? 'weaponSkinIds' OR cosmetics ? 'weaponSkinLoadout'
+-- This is deliberately insert-only. Re-merging the legacy document on every
+-- startup would let a rolled-back binary resurrect a stale, previously-cleared
+-- loadout. Once the dedicated row exists it is the sole authority.
+ON CONFLICT (account_id) DO NOTHING;
+-- Operator-set account flair (cosmetic, no gameplay effect): the "AI-operated
+-- account" mark that prefixes the character name with [AI], and an official
+-- streamer's platform links. Both are written ONLY from the admin dashboard
+-- (moderation.act) and audited in account_moderation_actions. streamer_links is
+-- a JSONB bag keyed by platform; it is UNTRUSTED at read time and always run back
+-- through normalizeAccountFlair (src/sim/account_flair.ts), which is also the one
+-- gate the write path uses, so a link that somehow reached the column cannot
+-- reach a client. is_streamer is kept separate from the links so an operator can
+-- switch the flair off without losing the URLs they typed.
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_ai BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_streamer BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS streamer_links JSONB NOT NULL DEFAULT '{}'::jsonb;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS email TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS deactivated_at TIMESTAMPTZ;
 -- Whether the account has a password the OWNER set (and therefore can log in with
@@ -143,6 +230,11 @@ ALTER TABLE accounts ADD COLUMN IF NOT EXISTS locale TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS marketing_opt_in BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS unsubscribe_token TEXT;
+-- Deed broadcast opt-out. When FALSE the server skips the guild/friend
+-- broadcast of this account's marquee deed unlocks (the earner's own client
+-- toast is local and unaffected). Defaults TRUE so broadcasts are on unless
+-- the player opts out; the flag never gates the unlock itself.
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS deed_broadcasts BOOLEAN NOT NULL DEFAULT TRUE;
 -- Index + collision guard for the public unsubscribe lookup. Partial (the column
 -- is NULL until an account first opts in) and UNIQUE so two accounts can never
 -- share a token. The token is a low-sensitivity capability (its only power is to
@@ -163,6 +255,20 @@ CREATE TABLE IF NOT EXISTS email_change_requests (
 );
 CREATE INDEX IF NOT EXISTS email_change_requests_token ON email_change_requests(token_hash);
 CREATE INDEX IF NOT EXISTS email_change_requests_account ON email_change_requests(account_id);
+-- Pending self-service password resets. Same posture as email_change_requests:
+-- only the SHA-256 of the token is stored (a DB leak cannot be replayed into a
+-- takeover), each row is single-use (consumed_at) and time-boxed (expires_at).
+-- No payload column; account_id is the reset target.
+CREATE TABLE IF NOT EXISTS password_reset_requests (
+  id SERIAL PRIMARY KEY,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  expires_at TIMESTAMPTZ NOT NULL,
+  consumed_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS password_reset_requests_token ON password_reset_requests(token_hash);
+CREATE INDEX IF NOT EXISTS password_reset_requests_account ON password_reset_requests(account_id);
 -- Audit trail for every outbound email attempt (success or failure). Doubles as
 -- the source for any future per-account send rate limiting.
 CREATE TABLE IF NOT EXISTS email_log (
@@ -218,6 +324,30 @@ ALTER TABLE play_sessions ADD COLUMN IF NOT EXISTS user_agent TEXT;
 CREATE INDEX IF NOT EXISTS play_sessions_account ON play_sessions(account_id);
 CREATE INDEX IF NOT EXISTS play_sessions_started ON play_sessions(started_at);
 CREATE INDEX IF NOT EXISTS play_sessions_ip_started ON play_sessions(ip_address, started_at DESC);
+-- Per-character load lease: at most one process may have a character loaded
+-- in-world at a time, the guard against a cross-process double-load dupe. The
+-- row IS the lease; holder names one process boot; crash recovery is
+-- expiry-based (heartbeats ride the autosave loop, and an expired lease is
+-- reclaimable by the next process that loads the character). No realm DEFAULT
+-- here on purpose: the realm ... DEFAULT '<realm>' pattern the older tables use
+-- is last-boot-wins across realm processes sharing one database, so this table
+-- demands an explicit realm value on every insert. realm is informational for
+-- ops only; the lease key is character_id alone (character ids are globally
+-- unique, characters.id SERIAL in the one shared DB). nonce is a per-join fence:
+-- every acquire stamps a fresh one, and a release matches on it, so a late
+-- fire-and-forget release (a grace-expiry sweep's, a takeover's) whose nonce a
+-- newer acquire has already overwritten becomes a no-op instead of eating the
+-- live session's re-acquired row.
+CREATE TABLE IF NOT EXISTS character_leases (
+  character_id INT PRIMARY KEY REFERENCES characters(id) ON DELETE CASCADE,
+  realm TEXT NOT NULL,
+  holder TEXT NOT NULL,
+  nonce TEXT NOT NULL,
+  acquired_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  heartbeat_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  expires_at TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX IF NOT EXISTS character_leases_holder ON character_leases(holder);
 CREATE TABLE IF NOT EXISTS admin_online_samples (
   id BIGSERIAL PRIMARY KEY,
   realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
@@ -303,6 +433,9 @@ CREATE TABLE IF NOT EXISTS account_moderation_actions (
   expires_at TIMESTAMPTZ
 );
 CREATE INDEX IF NOT EXISTS account_moderation_actions_account ON account_moderation_actions(account_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS account_moderation_actions_created ON account_moderation_actions(created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS account_moderation_actions_admin_created ON account_moderation_actions(admin_account_id, created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS account_moderation_actions_admin_action_created ON account_moderation_actions(admin_account_id, action, created_at DESC, id DESC);
 CREATE TABLE IF NOT EXISTS blocked_ips (
   id SERIAL PRIMARY KEY,
   ip TEXT NOT NULL UNIQUE,
@@ -320,6 +453,8 @@ CREATE TABLE IF NOT EXISTS blocked_ip_actions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS blocked_ip_actions_ip ON blocked_ip_actions(ip, created_at DESC);
+CREATE INDEX IF NOT EXISTS blocked_ip_actions_created ON blocked_ip_actions(created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS blocked_ip_actions_admin_created ON blocked_ip_actions(admin_account_id, created_at DESC, id DESC);
 -- Audit trail for staff role changes (dashboard staff page; the grant script
 -- writes here too, with admin_account_id NULL).
 CREATE TABLE IF NOT EXISTS admin_role_changes (
@@ -460,6 +595,19 @@ CREATE TABLE IF NOT EXISTS wallet_link_challenges (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS wallet_link_challenges_account ON wallet_link_challenges(account_id);
+-- Steam account links (the deeds achievement mirror). Copies the wallet_links
+-- shape: one Steam account per WoCC account (account_id is the PK) and one
+-- WoCC account per Steam id (steam_id is UNIQUE). A row is a cosmetic-mirror
+-- pointer only, proven by a server-verified session ticket at link time
+-- (server/steam/): it is NEVER an identity or session source, and login stays
+-- email + Discord only. Accessors live in server/steam/steam_db.ts. Purely
+-- additive leaf: a pre-Steam rollback binary never references it, and the
+-- CASCADE keeps account deletion consistent even under old code.
+CREATE TABLE IF NOT EXISTS steam_links (
+  account_id INT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+  steam_id TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 CREATE TABLE IF NOT EXISTS daily_reward_days (
   day TEXT NOT NULL,
   realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
@@ -481,6 +629,31 @@ CREATE TABLE IF NOT EXISTS daily_reward_scores (
 );
 CREATE INDEX IF NOT EXISTS daily_reward_scores_rank
   ON daily_reward_scores(day, realm, points DESC, updated_at ASC);
+CREATE TABLE IF NOT EXISTS daily_reward_bans (
+  account_id INT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+  reason TEXT NOT NULL,
+  admin_account_id INT REFERENCES accounts(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS daily_reward_ip_bans (
+  ip_address TEXT PRIMARY KEY,
+  reason TEXT NOT NULL,
+  admin_account_id INT REFERENCES accounts(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE OR REPLACE VIEW daily_reward_excluded_accounts AS
+SELECT account_id, reason FROM daily_reward_bans
+UNION
+SELECT a.id AS account_id, ib.reason
+  FROM accounts a
+  JOIN daily_reward_ip_bans ib
+    ON ib.ip_address = a.last_login_ip
+    OR EXISTS (
+      SELECT 1 FROM play_sessions ps
+       WHERE ps.account_id = a.id AND ps.ip_address = ib.ip_address
+    );
 CREATE TABLE IF NOT EXISTS daily_reward_events (
   id BIGSERIAL PRIMARY KEY,
   day TEXT NOT NULL,
@@ -568,7 +741,7 @@ ALTER TABLE player_cards ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT '
 CREATE INDEX IF NOT EXISTS player_cards_account ON player_cards(account_id);
 -- Referral capture: when a new account registers via someone's card link
 -- (?ref=<slug>) we record who referred whom, once per referee. Reward payout is
--- intentionally out of scope here — this just captures the relationship so it
+-- intentionally out of scope here: this just captures the relationship so it
 -- can be synced to rewards later.
 CREATE TABLE IF NOT EXISTS referrals (
   referee_account_id INT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
@@ -577,6 +750,66 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS referrals_referrer ON referrals(referrer_account_id);
+-- Append-only audit ledger, one row per SUCCESSFUL bank op, written fire-and-forget
+-- off the game loop; rows are never updated or deleted by the server. The container
+-- discriminator is guild-bank readiness: v1 writes only 'personal' with a NULL
+-- container_id, while the future guild bank writes 'guild' plus the guild id into
+-- this SAME table. realm carries no DEFAULT deliberately: the interpolated-default
+-- pattern is last-boot-wins across realm processes, so every insert passes realm
+-- explicitly.
+CREATE TABLE IF NOT EXISTS bank_ledger (
+  id BIGSERIAL PRIMARY KEY,
+  realm TEXT NOT NULL,
+  character_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  op TEXT NOT NULL,
+  item_id TEXT,
+  count INT,
+  instance JSONB,
+  copper_delta BIGINT NOT NULL DEFAULT 0,
+  purchased_slots_after INT NOT NULL,
+  container TEXT NOT NULL DEFAULT 'personal',
+  container_id BIGINT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS bank_ledger_character ON bank_ledger(character_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS bank_ledger_created ON bank_ledger(created_at);
+-- Earned-deed records: one row per (character, deed), written fire-and-forget
+-- off the game loop by server/deeds_records.ts, an OBSERVER of the sim's
+-- deedUnlocked events. The characters.state blob stays the gameplay source of
+-- truth; this table only indexes it for rarity aggregates, account roll-ups,
+-- and sheet reads, and no server path grants or revokes a deed. realm carries
+-- no DEFAULT deliberately: the interpolated-default pattern is last-boot-wins
+-- across realm processes, so every insert passes realm explicitly. account_id
+-- is a snapshot of the owner at unlock time (a future character-transfer
+-- feature must update or re-derive it). earned_at is the server clock (the
+-- sim's utcDay stamp lives in the state blob and is not duplicated here).
+-- UNIQUE (character_id, deed_id) is the idempotence backbone: retro re-emits
+-- and crash-replays collapse into no-ops.
+CREATE TABLE IF NOT EXISTS character_deeds (
+  id BIGSERIAL PRIMARY KEY,
+  realm TEXT NOT NULL,
+  character_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  deed_id TEXT NOT NULL,
+  earned_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (character_id, deed_id)
+);
+-- character_deeds_deed (a lone index on deed_id) was retired: no query seeks
+-- by deed_id. insertCharacterDeed's ON CONFLICT rides the UNIQUE (character_id,
+-- deed_id) index, deedRarityCounts groups by deed_id but cannot seek on it,
+-- and the board and account reads use their own indexes below, so the index
+-- was pure write amplification. The statement below removes it idempotently to
+-- converge databases that booted the earlier schema; a no-op where it never
+-- existed.
+DROP INDEX IF EXISTS character_deeds_deed;
+-- Per-account roll-up reads: earnedDeedIdsForAccount (server/deeds_db.ts,
+-- the Steam reconcile-on-link push) filters on account_id through this
+-- index. The Renown board's deedsBoardRanked read stays a full-table hash
+-- aggregation (cached in main.ts) and does not use it.
+CREATE INDEX IF NOT EXISTS character_deeds_account ON character_deeds(account_id);
+CREATE INDEX IF NOT EXISTS character_deeds_character_earned
+  ON character_deeds(character_id, earned_at DESC);
 `;
 
 export async function ensureSchema(): Promise<void> {
@@ -590,6 +823,9 @@ export async function ensureSchema(): Promise<void> {
     await client.query('BEGIN');
     await client.query('SELECT pg_advisory_xact_lock($1)', [0x57_4f_43_01]); // "WOC\x01"
     await client.query(SCHEMA);
+    // Local-recovery reports reference accounts/characters, so their additive
+    // schema runs after the core tables under the same boot advisory lock.
+    await client.query(UNSTUCK_SCHEMA);
     await client.query(SOCIAL_SCHEMA);
     await client.query(OAUTH_SCHEMA);
     // Discord integration tables (links, oauth states, pending logins, reward
@@ -597,10 +833,32 @@ export async function ensureSchema(): Promise<void> {
     // unconditionally (idempotent) so the tables exist before the feature is
     // enabled, like the other schema modules.
     await client.query(DISCORD_SCHEMA);
+    await client.query(APPLE_AUTH_SCHEMA);
     // GitHub link tables (links + oauth states) for the developer badge.
     // FK-references accounts(id), so it runs after SCHEMA. Applied unconditionally
     // (idempotent), like the Discord tables.
     await client.query(GITHUB_SCHEMA);
+    // Tier-2 global rate-limit backstop table (pg-backed fixed-window counters,
+    // one row per (policy, key)) for the multi-realm deployment. Applied
+    // unconditionally (idempotent), like the Discord/GitHub tables. See
+    // server/ratelimit_db.ts.
+    await client.query(RATELIMIT_SCHEMA);
+    // Fail-fast at boot if rate_limits did not materialize: the tier-2 limiter
+    // depends on it, and a defined-but-unwired schema shipped once before
+    // (DISCORD_SCHEMA, PR #1044). to_regclass sees the uncommitted DDL on this
+    // same client inside the transaction. Scoped to this one table on purpose
+    // (the other schemas stay test-guarded).
+    const rateLimitsReg = await client.query("SELECT to_regclass('public.rate_limits') AS reg");
+    if (!rateLimitsReg.rows[0]?.reg) {
+      throw new Error(
+        'rate_limits table missing after DDL: RATELIMIT_SCHEMA (server/ratelimit_db.ts) was not applied',
+      );
+    }
+    // Reclaim expired tier-2 windows at boot (rows older than two windows are
+    // dead by construction; see RATELIMIT_PRUNE_SQL). A concurrent serving realm
+    // is unaffected: only expired windows match, and a racing UPSERT on a pruned
+    // key simply re-inserts a fresh row.
+    await client.query(RATELIMIT_PRUNE_SQL);
     // Map editor tables: saved/forked custom maps and uploaded GLB assets.
     // Both FK-reference accounts(id), so they run after SCHEMA. Applied
     // unconditionally (idempotent), like the other schema modules.
@@ -609,7 +867,38 @@ export async function ensureSchema(): Promise<void> {
     // Seed the chat-filter word lists + config on first boot only (idempotent).
     // Runs under the same advisory lock so concurrent realm boots don't race.
     await seedChatFilterDefaults(client);
+    // Partitioned World Market backfill. Runs inside this same
+    // advisory-lock transaction (so a concurrent realm boot cannot race it) and
+    // AFTER the schema modules exist. It splits any surviving pre-scoping
+    // 'market' blob per seller realm, RETAINS the legacy row as a rollback
+    // artifact, and records a marker row so every later boot is a no-op. See
+    // server/market_backfill.ts.
+    const marketBackfillDryRun = process.env.MARKET_BACKFILL_DRY_RUN === '1';
+    const backfill = await runMarketBackfill({
+      client,
+      realm: REALM,
+      dryRun: marketBackfillDryRun,
+      log: (line) => console.log(line),
+    });
+    if (marketBackfillDryRun) {
+      // Deliberate halt: the runner logged the per-realm plan and wrote nothing
+      // (no partitions, no marker). Stop the boot so an operator can inspect the
+      // plan before applying. The ROLLBACK in the catch is harmless: the DDL is
+      // idempotent and the dry run wrote nothing.
+      throw new Error(
+        'MARKET_BACKFILL_DRY_RUN halted boot after computing the market backfill plan: no changes were written and the boot was stopped deliberately, unset MARKET_BACKFILL_DRY_RUN to apply',
+      );
+    }
+    if (backfill.ran) {
+      console.log(
+        `[market-backfill] applied for realm ${REALM} (legacyRowFound=${backfill.legacyRowFound})`,
+      );
+    }
     await client.query('COMMIT');
+    // Open the market write gate only AFTER a successful COMMIT, so no market
+    // write can land before the marker is durable. Opens on the no-op path too
+    // (backfill.ran === false, i.e. the marker already existed).
+    openMarketWriteGate();
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
@@ -635,6 +924,11 @@ export interface AccountModerationStatus {
   locked: boolean;
   banned: boolean;
   suspendedUntil: string | null;
+  // True only for a self-deactivated account (locked, not banned, no active
+  // suspension). Lets a caller distinguish the deactivation lock from a
+  // suspension so it can surface the correct message/code (e.g. the API pipeline
+  // requireAccount maps it to account.deactivated, not moderation.suspended).
+  deactivated?: boolean;
   reason: string;
   message: string;
   // Chat mute is independent of `locked`: a muted account can still log in and
@@ -657,6 +951,11 @@ export interface RequestMetadata {
 export interface AccountCosmetics {
   completedQuestIds: string[];
   mechChromaIds: string[];
+  // Season 1 Armory weapon skins: owned skin ids (granted on Claudium spend,
+  // reconciled from the economy service) and the applied-skin-per-weapon-type
+  // loadout. Account-wide by design; characters never carry either.
+  weaponSkinIds: string[];
+  weaponSkinLoadout: Record<string, string>;
 }
 
 function uniqueStrings(value: unknown): string[] {
@@ -671,59 +970,205 @@ function uniqueStrings(value: unknown): string[] {
   return out;
 }
 
+function stringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string' && entry.length > 0) out[key] = entry;
+  }
+  return out;
+}
+
 export function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
   const src = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   return {
     completedQuestIds: uniqueStrings(src.completedQuestIds),
     mechChromaIds: uniqueStrings(src.mechChromaIds),
+    weaponSkinIds: uniqueStrings(src.weaponSkinIds),
+    weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
+  };
+}
+
+interface AccountCosmeticsRow {
+  cosmetics?: unknown;
+  weapon_skin_ids?: unknown;
+  weapon_skin_loadout?: unknown;
+}
+
+function normalizeAccountCosmeticsRow(row: AccountCosmeticsRow | undefined): AccountCosmetics {
+  const base = normalizeAccountCosmetics(row?.cosmetics);
+  return {
+    ...base,
+    weaponSkinIds:
+      row?.weapon_skin_ids === null || row?.weapon_skin_ids === undefined
+        ? base.weaponSkinIds
+        : uniqueStrings(row.weapon_skin_ids),
+    weaponSkinLoadout:
+      row?.weapon_skin_loadout === null || row?.weapon_skin_loadout === undefined
+        ? base.weaponSkinLoadout
+        : stringRecord(row.weapon_skin_loadout),
   };
 }
 
 export async function loadAccountCosmetics(accountId: number): Promise<AccountCosmetics> {
-  const res = await pool.query('SELECT cosmetics FROM accounts WHERE id = $1', [accountId]);
-  return normalizeAccountCosmetics(res.rows[0]?.cosmetics);
+  const res = await pool.query(
+    `SELECT a.cosmetics,
+            awc.skin_ids AS weapon_skin_ids,
+            awc.loadout AS weapon_skin_loadout
+       FROM accounts a
+       LEFT JOIN account_weapon_cosmetics awc ON awc.account_id = a.id
+      WHERE a.id = $1`,
+    [accountId],
+  );
+  return normalizeAccountCosmeticsRow(res.rows[0]);
 }
 
-async function saveAccountCosmetics(
+/**
+ * The account's operator-set flair (AI mark + streamer links). The stored JSONB is
+ * treated as untrusted: the row always goes back through normalizeAccountFlair, so
+ * a link that is not a plain https URL on the platform's own host is dropped here
+ * rather than shipped to a client. An unknown account reads as no flair.
+ */
+export async function loadAccountFlair(accountId: number): Promise<AccountFlair> {
+  const res = await pool.query(
+    'SELECT is_ai, is_streamer, streamer_links FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  const row = res.rows[0];
+  if (!row) return EMPTY_ACCOUNT_FLAIR;
+  return normalizeAccountFlair({
+    ai: row.is_ai,
+    streamer: row.is_streamer,
+    links: row.streamer_links,
+  });
+}
+
+async function addAccountCosmeticId(
   accountId: number,
-  cosmetics: AccountCosmetics,
+  key: 'completedQuestIds' | 'mechChromaIds',
+  value: string,
 ): Promise<AccountCosmetics> {
   const res = await pool.query(
-    'UPDATE accounts SET cosmetics = $2 WHERE id = $1 RETURNING cosmetics',
-    [accountId, cosmetics],
+    `WITH updated AS (
+       UPDATE accounts
+          SET cosmetics = jsonb_set(
+            COALESCE(cosmetics, '{}'::jsonb), ARRAY[$2::text],
+            (SELECT COALESCE(jsonb_agg(to_jsonb(v) ORDER BY v), '[]'::jsonb)
+               FROM (
+                 SELECT DISTINCT v FROM (
+                   SELECT jsonb_array_elements_text(
+                     CASE WHEN jsonb_typeof(cosmetics -> $2) = 'array'
+                       THEN cosmetics -> $2 ELSE '[]'::jsonb END) AS v
+                   UNION ALL SELECT $3::text
+                 ) merged
+               ) uniq))
+        WHERE id = $1
+        RETURNING id, cosmetics
+     )
+     SELECT updated.cosmetics,
+            awc.skin_ids AS weapon_skin_ids,
+            awc.loadout AS weapon_skin_loadout
+       FROM updated
+       LEFT JOIN account_weapon_cosmetics awc ON awc.account_id = updated.id`,
+    [accountId, key, value],
   );
-  return normalizeAccountCosmetics(res.rows[0]?.cosmetics ?? cosmetics);
+  return normalizeAccountCosmeticsRow(res.rows[0]);
 }
 
 export async function markAccountQuestComplete(
   accountId: number,
   questId: string,
 ): Promise<AccountCosmetics> {
-  const cosmetics = await loadAccountCosmetics(accountId);
-  const completedQuestIds = cosmetics.completedQuestIds.includes(questId)
-    ? cosmetics.completedQuestIds
-    : [...cosmetics.completedQuestIds, questId];
-  return saveAccountCosmetics(accountId, { ...cosmetics, completedQuestIds });
+  return addAccountCosmeticId(accountId, 'completedQuestIds', questId);
 }
 
 export async function grantAccountMechChroma(
   accountId: number,
   chromaId: string,
 ): Promise<AccountCosmetics> {
-  const cosmetics = await loadAccountCosmetics(accountId);
-  const mechChromaIds = cosmetics.mechChromaIds.includes(chromaId)
-    ? cosmetics.mechChromaIds
-    : [...cosmetics.mechChromaIds, chromaId];
-  return saveAccountCosmetics(accountId, { ...cosmetics, mechChromaIds });
+  return addAccountCosmeticId(accountId, 'mechChromaIds', chromaId);
 }
 
 export async function revokeAccountMechChroma(
   accountId: number,
   chromaId: string,
 ): Promise<AccountCosmetics> {
-  const cosmetics = await loadAccountCosmetics(accountId);
-  const mechChromaIds = cosmetics.mechChromaIds.filter((id) => id !== chromaId);
-  return saveAccountCosmetics(accountId, { ...cosmetics, mechChromaIds });
+  const res = await pool.query(
+    `WITH updated AS (
+       UPDATE accounts
+          SET cosmetics = jsonb_set(
+            COALESCE(cosmetics, '{}'::jsonb), '{mechChromaIds}',
+            (SELECT COALESCE(jsonb_agg(to_jsonb(v) ORDER BY ord), '[]'::jsonb)
+               FROM jsonb_array_elements_text(
+                 CASE WHEN jsonb_typeof(cosmetics -> 'mechChromaIds') = 'array'
+                   THEN cosmetics -> 'mechChromaIds' ELSE '[]'::jsonb END)
+                 WITH ORDINALITY AS entries(v, ord)
+              WHERE v <> $2))
+        WHERE id = $1
+        RETURNING id, cosmetics
+     )
+     SELECT updated.cosmetics,
+            awc.skin_ids AS weapon_skin_ids,
+            awc.loadout AS weapon_skin_loadout
+       FROM updated
+       LEFT JOIN account_weapon_cosmetics awc ON awc.account_id = updated.id`,
+    [accountId, chromaId],
+  );
+  return normalizeAccountCosmeticsRow(res.rows[0]);
+}
+
+/** Additive union in the rollback-safe paid-entitlement row. */
+export async function grantAccountWeaponSkins(
+  accountId: number,
+  skinIds: string[],
+): Promise<AccountCosmetics> {
+  const res = await pool.query(
+    `WITH upserted AS (
+       INSERT INTO account_weapon_cosmetics AS awc (account_id, skin_ids)
+       VALUES ($1, to_jsonb($2::text[]))
+       ON CONFLICT (account_id) DO UPDATE SET
+         skin_ids = (
+           SELECT COALESCE(jsonb_agg(to_jsonb(v) ORDER BY v), '[]'::jsonb)
+             FROM (
+               SELECT DISTINCT value AS v
+                 FROM jsonb_array_elements_text(awc.skin_ids || EXCLUDED.skin_ids)
+             ) merged),
+         updated_at = now()
+       RETURNING account_id, skin_ids, loadout
+     )
+     SELECT a.cosmetics,
+            upserted.skin_ids AS weapon_skin_ids,
+            upserted.loadout AS weapon_skin_loadout
+       FROM upserted
+       JOIN accounts a ON a.id = upserted.account_id`,
+    [accountId, skinIds.filter((id) => id)],
+  );
+  return normalizeAccountCosmeticsRow(res.rows[0]);
+}
+
+/** Replace the applied-skin-per-weapon-type loadout in the paid-state row. */
+export async function setAccountWeaponSkinLoadout(
+  accountId: number,
+  loadout: Record<string, string>,
+): Promise<AccountCosmetics> {
+  const cleanLoadout = stringRecord(loadout);
+  const res = await pool.query(
+    `WITH upserted AS (
+       INSERT INTO account_weapon_cosmetics AS awc (account_id, loadout)
+       VALUES ($1, $2::jsonb)
+       ON CONFLICT (account_id) DO UPDATE SET
+         loadout = EXCLUDED.loadout,
+         updated_at = now()
+       RETURNING account_id, skin_ids, loadout
+     )
+     SELECT a.cosmetics,
+            upserted.skin_ids AS weapon_skin_ids,
+            upserted.loadout AS weapon_skin_loadout
+       FROM upserted
+       JOIN accounts a ON a.id = upserted.account_id`,
+    [accountId, JSON.stringify(cleanLoadout)],
+  );
+  return normalizeAccountCosmeticsRow(res.rows[0]);
 }
 
 function cleanMetadataText(value: string | null | undefined, max: number): string | null {
@@ -740,19 +1185,67 @@ export async function createAccount(
   // (register / portal) signup so nothing changes for them.
   opts: { passwordSet?: boolean } = {},
 ): Promise<AccountRow> {
-  const res = await pool.query(
-    `INSERT INTO accounts (username, password_hash, created_ip, created_user_agent, password_set)
+  const values = [
+    username,
+    passwordHash,
+    cleanMetadataText(meta.ip, 128),
+    cleanMetadataText(meta.userAgent, 512),
+    opts.passwordSet ?? true,
+  ];
+  const insertAccount = `INSERT INTO accounts (username, password_hash, created_ip, created_user_agent, password_set)
      VALUES ($1, $2, $3, $4, $5)
-     RETURNING id, username, password_hash`,
-    [
-      username,
-      passwordHash,
-      cleanMetadataText(meta.ip, 128),
-      cleanMetadataText(meta.userAgent, 512),
-      opts.passwordSet ?? true,
-    ],
-  );
-  return res.rows[0];
+     RETURNING id, username, password_hash`;
+  if (!communityTestAccountsEnabled()) {
+    const res = await pool.query(insertAccount, values);
+    return res.rows[0];
+  }
+
+  // Sim construction and canonical equipment serialization are CPU work, so
+  // warm the immutable templates before opening a database transaction.
+  prepareCommunityTestCharacters();
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const res = await client.query(insertAccount, values);
+    const account = res.rows[0] as AccountRow | undefined;
+    if (!account) throw new Error('account insert returned no row');
+
+    for (const character of buildCommunityTestCharacters(account.id)) {
+      let inserted = false;
+      for (let attempt = 0; attempt < GENERATED_NAME_ATTEMPTS; attempt++) {
+        const name = generatedTestCharacterName(account.id, character.cls, attempt);
+        if (!validCharName(name)) continue;
+        const characterResult = await client.query(
+          `INSERT INTO characters (account_id, name, class, realm, level, state)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT DO NOTHING
+           RETURNING id`,
+          [
+            account.id,
+            name,
+            character.cls,
+            REALM,
+            character.state.level,
+            JSON.stringify(character.state),
+          ],
+        );
+        if ((characterResult.rowCount ?? 0) > 0) {
+          inserted = true;
+          break;
+        }
+      }
+      if (!inserted) {
+        throw new Error(`failed to reserve a community test name for ${character.cls}`);
+      }
+    }
+    await client.query('COMMIT');
+    return account;
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function findAccount(username: string): Promise<AccountRow | null> {
@@ -843,7 +1336,7 @@ export interface AccountInfoRow {
   marketing_opt_in: boolean;
 }
 
-// Full account record by id — used by the self-service account portal
+// Full account record by id, used by the self-service account portal
 // (whoami, password change, email, deactivate). Distinct from findAccount,
 // which keys on username for the login path.
 export async function accountById(accountId: number): Promise<AccountInfoRow | null> {
@@ -934,8 +1427,8 @@ export async function createCompanionToken(
   await saveToken(token, accountId, ttlHours, 'read', label);
 }
 
-// Live (unexpired) read tokens for an account. Never returns the full secret —
-// only an 8-char prefix for display — so a leaked portal response can't be
+// Live (unexpired) read tokens for an account. Never returns the full secret,
+// only an 8-char prefix for display, so a leaked portal response can't be
 // replayed as a bearer token.
 export async function listCompanionTokens(accountId: number): Promise<CompanionTokenRow[]> {
   const res = await pool.query(
@@ -1098,6 +1591,68 @@ export async function consumeEmailChangeRequest(
     ]);
     await client.query('COMMIT');
     return { accountId: row.account_id, newEmail: row.new_email };
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export async function createPasswordResetRequest(
+  accountId: number,
+  tokenHash: string,
+  ttlHours: number,
+): Promise<void> {
+  // Invalidate any still-pending reset for this account first: only the most
+  // recent link stays live, and this keeps the table from accumulating dead rows.
+  await pool.query(
+    'DELETE FROM password_reset_requests WHERE account_id = $1 AND consumed_at IS NULL',
+    [accountId],
+  );
+  await pool.query(
+    `INSERT INTO password_reset_requests (account_id, token_hash, expires_at)
+     VALUES ($1, $2, now() + ($3 || ' hours')::interval)`,
+    [accountId, tokenHash, String(ttlHours)],
+  );
+}
+
+// Atomically consume a pending password-reset token, set the new password, and
+// revoke every session, all in one transaction. The claiming UPDATE ... WHERE
+// consumed_at IS NULL AND expires_at > now() is the race + replay guard: a
+// replayed or expired link matches zero rows and returns null, and two concurrent
+// clicks can never both win. Deleting all auth_tokens signs out every device,
+// which is the right posture for a reset (the account may be recovering from a
+// compromise), unlike the change-password path that keeps the current device.
+export async function consumePasswordResetRequest(
+  tokenHash: string,
+  newPasswordHash: string,
+): Promise<{ accountId: number } | null> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const claim = await client.query(
+      `UPDATE password_reset_requests
+       SET consumed_at = now()
+       WHERE token_hash = $1 AND consumed_at IS NULL AND expires_at > now()
+       RETURNING account_id`,
+      [tokenHash],
+    );
+    const row = claim.rows[0];
+    if (!row) {
+      await client.query('ROLLBACK');
+      return null;
+    }
+    // Mirror updatePasswordHash: setting a password always marks the account
+    // usable (this is also how a Discord-provisioned account that added an email
+    // could gain a password).
+    await client.query(
+      'UPDATE accounts SET password_hash = $2, password_set = TRUE WHERE id = $1',
+      [row.account_id, newPasswordHash],
+    );
+    await client.query('DELETE FROM auth_tokens WHERE account_id = $1', [row.account_id]);
+    await client.query('COMMIT');
+    return { accountId: row.account_id };
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
@@ -1345,7 +1900,7 @@ export async function linkWalletToAccount(accountId: number, pubkey: string): Pr
   } catch (err) {
     // TOCTOU: another account claimed this pubkey between the check above and
     // here. The pubkey column is UNIQUE (not the ON CONFLICT target), so that
-    // races to a 23505 — treat it as "already owned" (→ 409), not a 500.
+    // races to a 23505: treat it as "already owned" (409), not a 500.
     if (isUniqueViolation(err)) return false;
     throw err;
   }
@@ -1422,7 +1977,7 @@ export async function getPlayerCardBySlug(slug: string): Promise<PlayerCardRow |
 }
 
 // Metadata-only read for the OG-unfurl HTML page, which doesn't need the (up to
-// ~4 MB) PNG bytes — keeps getPlayerCardBySlug's heavy SELECT for the image route.
+// ~4 MB) PNG bytes, keeps getPlayerCardBySlug's heavy SELECT for the image route.
 export async function getPlayerCardMetaBySlug(
   slug: string,
 ): Promise<{ title: string; description: string; locale: string; updatedAt: number } | null> {
@@ -1445,7 +2000,7 @@ export async function getPlayerCardMetaBySlug(
   };
 }
 
-// The account that owns a card slug — i.e. the referrer credited when someone
+// The account that owns a card slug, i.e. the referrer credited when someone
 // signs up through their link.
 export async function accountForSlug(slug: string): Promise<number | null> {
   const res = await pool.query('SELECT account_id FROM player_cards WHERE slug = $1', [slug]);
@@ -1475,6 +2030,43 @@ export async function referralCountForAccount(accountId: number): Promise<number
   return res.rows[0]?.n ?? 0;
 }
 
+// The account facts that drive the bank bonus-slot registry (server/bank_entitlements.ts),
+// read in ONE round trip because this runs at every fresh join. Cross-table reads are
+// fine from here (discord_links DDL lives in server/discord_db.ts, wallet_links + referrals
+// above): the query is the natural home for the join. A missing account returns all-false/0
+// (the FROM accounts row is absent, so res.rows[0] is undefined and the fallback applies).
+//   - emailVerified: the RESOLVED criterion, email_verified_at IS NOT NULL, never email-present.
+//   - discordLinked / walletLinked: a link ROW is the whole proof. NEVER a balance, holder tier,
+//     or any chain state (the $WOC PRDs pin cosmetic-only; a wallet's contents are out of scope).
+//   - qualifiedReferrals: referrals this account referred whose referee owns ANY character at
+//     level >= 10 (the denormalized characters.level; deliberately realm-agnostic, referrals are
+//     account-global; the characters_account index covers the probe). Counted RAW; the cap is
+//     registry data applied in computeBankBonus.
+export async function bankBonusFactsForAccount(accountId: number): Promise<BankBonusFacts> {
+  const res = await pool.query(
+    `SELECT
+       (a.email_verified_at IS NOT NULL) AS email_verified,
+       EXISTS(SELECT 1 FROM discord_links dl WHERE dl.account_id = $1) AS discord_linked,
+       EXISTS(SELECT 1 FROM wallet_links wl WHERE wl.account_id = $1) AS wallet_linked,
+       (SELECT count(*)::int FROM referrals r
+          WHERE r.referrer_account_id = $1
+            AND EXISTS(
+              SELECT 1 FROM characters c
+              WHERE c.account_id = r.referee_account_id AND c.level >= 10
+            )) AS qualified_referrals
+     FROM accounts a
+     WHERE a.id = $1`,
+    [accountId],
+  );
+  const row = res.rows[0];
+  return {
+    emailVerified: !!row?.email_verified,
+    discordLinked: !!row?.discord_linked,
+    walletLinked: !!row?.wallet_linked,
+    qualifiedReferrals: row?.qualified_referrals ?? 0,
+  };
+}
+
 // This account's published-card slug, if any (one slug per card; an account can
 // have several characters, so return the most recently updated card's slug for
 // referral display).
@@ -1487,22 +2079,31 @@ export async function primarySlugForAccount(accountId: number): Promise<string |
 }
 
 // Where a character ranks among all characters on its realm by lifetime XP (the
-// canonical progression metric — encodes level plus post-cap overflow), for the
+// canonical progression metric, encodes level plus post-cap overflow), for the
 // player card's "Top N%" flex. Ownership + realm are enforced via the caller's
 // account; returns null when the character isn't the caller's. rank is 1-based
-// (1 = highest lifetime XP on the realm); total is the realm population.
+// (1 = highest lifetime XP on the realm); total is the ELIGIBLE realm
+// population (both counts embed the same ELIGIBLE_ACCOUNT_SQL delisting as the
+// boards, so a banned/suspended account absent from every board is not counted
+// ahead or in the total here either).
 export async function lifetimeXpStanding(
   accountId: number,
   characterId: number,
 ): Promise<{ rank: number; total: number } | null> {
   // One round-trip: the `own` subquery yields this character's lifetime XP and
-  // gates ownership/realm. The count-ahead predicate uses the same expression
-  // as characters_lifetime_xp so PostgreSQL can use that expression index.
+  // gates ownership/realm (ungated by eligibility: the owner may view their own
+  // rank regardless). The count-ahead predicate uses the same expression as
+  // characters_lifetime_xp so PostgreSQL can use that expression index.
   const res = await pool.query(
     `SELECT
        (SELECT count(*) FROM characters
-         WHERE realm = $1 AND ${LIFETIME_XP_EXPR} > own.xp)::int AS ahead,
-       (SELECT count(*) FROM characters WHERE realm = $1)::int AS total
+         WHERE realm = $1 AND ${LIFETIME_XP_EXPR} > own.xp
+           AND EXISTS (SELECT 1 FROM accounts a
+                        WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL}))::int AS ahead,
+       (SELECT count(*) FROM characters
+         WHERE realm = $1
+           AND EXISTS (SELECT 1 FROM accounts a
+                        WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL}))::int AS total
      FROM (SELECT COALESCE(${LIFETIME_XP_EXPR}, 0) AS xp
              FROM characters WHERE id = $2 AND account_id = $3 AND realm = $1) own`,
     [REALM, characterId, accountId],
@@ -1512,22 +2113,41 @@ export async function lifetimeXpStanding(
 }
 
 // Realm-scoped lifetime-XP rank for a character addressed by id, WITHOUT an
-// ownership check — for the public character sheet / profile page, where rank is
-// shown for any player. Same expression-index predicate as lifetimeXpStanding.
-// Returns null when no such character exists on this realm.
+// ownership check, for the public character sheet / profile page, where rank is
+// shown for any player. Same expression-index predicate as lifetimeXpStanding,
+// and the same eligibility gate on both counts: total is the ELIGIBLE realm
+// population (same ELIGIBLE_ACCOUNT_SQL delisting as the boards), and a delisted
+// higher-XP account is not counted ahead. UNLIKE lifetimeXpStanding, the `own`
+// subquery is ALSO eligibility-gated here: this feeds UNAUTHENTICATED public
+// surfaces (GET /c/:name, GET /api/public/characters/:name/sheet), so a banned
+// or suspended account must not publicly show a rank at all. The bearer-only
+// self-view (lifetimeXpStanding) keeps its own subquery ungated so an owner
+// still sees their own rank. Returns null when no such character exists on this
+// realm OR when the viewed account is delisted (the callers render name/level
+// with no rank line on null, so this is not a 404).
 export async function lifetimeXpRankForCharacter(
   characterId: number,
 ): Promise<{ rank: number; total: number } | null> {
   const res = await pool.query(
     `SELECT
        (SELECT count(*) FROM characters
-         WHERE realm = $1 AND ${LIFETIME_XP_EXPR} > own.xp)::int AS ahead,
-       (SELECT count(*) FROM characters WHERE realm = $1)::int AS total
-     FROM (SELECT COALESCE(${LIFETIME_XP_EXPR}, 0) AS xp
+         WHERE realm = $1 AND ${LIFETIME_XP_EXPR} > own.xp
+           AND EXISTS (SELECT 1 FROM accounts a
+                        WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL}))::int AS ahead,
+       (SELECT count(*) FROM characters
+         WHERE realm = $1
+           AND EXISTS (SELECT 1 FROM accounts a
+                        WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL}))::int AS total
+     FROM (SELECT COALESCE(${LIFETIME_XP_EXPR}, 0) AS xp,
+                  EXISTS (SELECT 1 FROM accounts a
+                           WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL}) AS eligible
              FROM characters WHERE id = $2 AND realm = $1) own`,
     [REALM, characterId],
   );
   if ((res.rowCount ?? 0) === 0) return null;
+  // The subject's own account is banned or suspended: a public surface shows no
+  // rank for a delisted account (its bearer-authenticated self-view still does).
+  if (!res.rows[0]?.eligible) return null;
   return { rank: (res.rows[0]?.ahead ?? 0) + 1, total: res.rows[0]?.total ?? 0 };
 }
 
@@ -1588,6 +2208,7 @@ export async function moderationStatusForAccount(
       locked: true,
       banned: false,
       suspendedUntil: null,
+      deactivated: true,
       reason: '',
       message: 'This account has been deactivated.',
       chatMutedUntil,
@@ -1696,7 +2317,7 @@ export async function listCharacterNamesForSitemap(limit = 50000): Promise<strin
   return res.rows.map((r) => r.name as string);
 }
 
-// Realm-scoped character read by id WITHOUT an ownership check — for the public
+// Realm-scoped character read by id WITHOUT an ownership check, for the public
 // character sheet / profile page, which serve any character on the realm. Returns
 // the same shape as getCharacter so the sheet normalizer treats both alike.
 export async function getCharacterById(characterId: number): Promise<CharacterRow | null> {
@@ -1796,7 +2417,7 @@ export async function createCharacterCapped(
 // Reclaim a character name abandoned by a deactivated ("invalid") account.
 // Character names are unique per (realm, lower(name)), and deactivation is a
 // soft delete (accounts.deactivated_at) that leaves the account's characters in
-// place — so an abandoned name stays reserved forever, blocking the original
+// place, so an abandoned name stays reserved forever, blocking the original
 // player from recreating it on a new account. Classic MMOs free the names of
 // deactivated/deleted accounts; this releases such a name by archiving the
 // orphaned character (a suffixed placeholder name + force_rename) so its row
@@ -1856,7 +2477,7 @@ export async function deleteCharacter(accountId: number, characterId: number): P
   return (res.rowCount ?? 0) > 0;
 }
 
-// How many characters this account has on each realm — deliberately NOT
+// How many characters this account has on each realm, deliberately NOT
 // realm-scoped, so the realm-list screen can show "N characters" per realm
 // like classic MMOs. Keyed by realm name.
 export async function characterCountsByRealm(accountId: number): Promise<Record<string, number>> {
@@ -1936,6 +2557,10 @@ export async function saveCharacterAndMarketState(
   market: MarketSave,
   mail: MailSave,
 ): Promise<void> {
+  // Gate the escrow flush on the boot backfill just like saveMarketState:
+  // this writes the realm-market row, so it must not run before ensureSchema
+  // has confirmed the marker and opened the gate. Checked before any pool work.
+  assertMarketWriteGateOpen();
   const cleanState = sanitizeRemovedZone1Content(state).state;
   const client = await pool.connect();
   try {
@@ -2012,6 +2637,8 @@ export async function topArenaRatings(
       WHERE realm = $1
         AND state IS NOT NULL
         AND ${winsExpr} + ${lossesExpr} > 0
+        AND EXISTS (SELECT 1 FROM accounts a
+                     WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
       ORDER BY rating DESC, wins DESC, name ASC
       LIMIT $2`,
     [REALM, Math.max(1, Math.min(100, limit))],
@@ -2030,7 +2657,7 @@ export async function topArenaRatings(
 // Lifetime-XP leaderboard (Max-Level XP Overflow). Ranks characters by the
 // `lifetimeXp` stored in their state JSONB. Realm-scoped (FR-4.3) and backed by
 // the `characters_lifetime_xp` index. Read through the server-side cache in
-// main.ts — never run per request under load.
+// main.ts, never run per request under load.
 // ---------------------------------------------------------------------------
 
 export interface LifetimeXpLeaderRow {
@@ -2040,6 +2667,9 @@ export interface LifetimeXpLeaderRow {
   realm: string;
   lifetimeXp: number;
   prestigeRank: number;
+  // The selected Book of Deeds title (a deed id the client localizes; never
+  // English), null when untitled. The charactersForDeedsBoard read shape.
+  activeTitle: string | null;
 }
 
 // `global: true` ranks across every realm (for the home-page board); otherwise
@@ -2056,10 +2686,13 @@ export async function topLifetimeXp(
     ? await pool.query(
         `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
-                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank
+                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
+                state->>'activeTitle' AS active_title
            FROM characters
           WHERE state IS NOT NULL
             AND COALESCE((state->>'lifetimeXp')::bigint, 0) > 0
+            AND EXISTS (SELECT 1 FROM accounts a
+                         WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
           ORDER BY lifetime_xp DESC, level DESC, name ASC
           LIMIT $1`,
         [cap],
@@ -2067,10 +2700,13 @@ export async function topLifetimeXp(
     : await pool.query(
         `SELECT name, class, level, realm,
                 COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
-                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank
+                COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank,
+                state->>'activeTitle' AS active_title
            FROM characters
           WHERE realm = $1 AND state IS NOT NULL
             AND COALESCE((state->>'lifetimeXp')::bigint, 0) > 0
+            AND EXISTS (SELECT 1 FROM accounts a
+                         WHERE a.id = characters.account_id AND ${ELIGIBLE_ACCOUNT_SQL})
           ORDER BY lifetime_xp DESC, level DESC, name ASC
           LIMIT $2`,
         [REALM, cap],
@@ -2082,6 +2718,9 @@ export async function topLifetimeXp(
     realm: r.realm,
     lifetimeXp: Number(r.lifetime_xp),
     prestigeRank: Number(r.prestige_rank),
+    // Normalized like charactersForDeedsBoard: a non-empty string or null.
+    activeTitle:
+      typeof r.active_title === 'string' && r.active_title !== '' ? r.active_title : null,
   }));
 }
 
@@ -2112,9 +2751,15 @@ export async function topGuilds(
                 COUNT(gm.character_id)                                AS member_count,
                 COALESCE(SUM(COALESCE((c.state->>'lifetimeXp')::bigint, 0)), 0) AS total_lifetime_xp,
                 COALESCE(MAX(COALESCE((c.state->>'level')::int, 0)), 0)         AS top_level`;
+  // The eligibility predicate applies to the MEMBER characters inside the SUM:
+  // a banned or suspended member's XP stops inflating the guild score (and its
+  // seat leaves member_count) without delisting the whole guild. A guild whose
+  // every member is ineligible drops off the board like any empty guild.
   const fromJoin = `FROM guilds g
            JOIN guild_members gm ON gm.guild_id = g.id
-           JOIN characters c ON c.id = gm.character_id`;
+           JOIN characters c ON c.id = gm.character_id
+            AND EXISTS (SELECT 1 FROM accounts a
+                         WHERE a.id = c.account_id AND ${ELIGIBLE_ACCOUNT_SQL})`;
   const groupOrder = `GROUP BY g.id, g.name, g.realm
           ORDER BY total_lifetime_xp DESC, member_count DESC, g.name ASC`;
   const res = opts.global
@@ -2140,6 +2785,140 @@ export async function topGuilds(
     memberCount: Number(r.member_count),
     totalLifetimeXp: Number(r.total_lifetime_xp),
     topLevel: Number(r.top_level),
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Renown board read (the account-level deeds leaderboard). Renown values are
+// content-owned (server/deeds_board.ts doctrine: never stored in SQL, so a
+// rebalance needs no migration), so the caller passes the whole content table
+// as two parallel arrays plus the score floor and the roll-up runs IN Postgres.
+// The read is cache-fronted in main.ts, never run per request under load.
+// ---------------------------------------------------------------------------
+
+// The account-level Renown ranking, aggregated IN Postgres and cross-realm (the
+// board is account-level and accounts span realms, so it has exactly one global
+// scope). Renown values come in as `renowns` parallel to `deedIds` (the content
+// table, never SQL), and `floor` is the entry cutoff. The query pushes the
+// counted-set roll-up, the floor, the display-character pick, and the final
+// ordering into the database, so only the ranked accounts cross the wire, never
+// the whole character_deeds table (the roll-up is a full-table hash aggregate by
+// design; deliberately no LIMIT, so it can never become a cap that drops a
+// legitimate account). The output maps 1:1 onto computeDeedsBoard(...).ranked
+// (server/deeds_board.ts is the executable spec this mirrors): per account the
+// COUNTED SET is the distinct renown-bearing deed ids, so a deed earned by two
+// characters counts once; zero-renown deeds score and count nothing; the floor
+// is inclusive; completionTime is max over the counted set of each deed's
+// EARLIEST earn; the display character is the account's highest per-character
+// Renown character, ties to the lowest id; ordering is renown desc, completion
+// asc, accountId asc.
+export async function deedsBoardRanked(
+  deedIds: readonly string[],
+  renowns: readonly number[],
+  floor: number,
+): Promise<{ ranked: RankedDeedsAccount[]; totalRanked: number; unknownDeedIds: string[] }> {
+  const res = await pool.query(
+    `WITH renown(deed_id, renown) AS (
+       SELECT * FROM unnest($1::text[], $2::int[]) AS u(deed_id, renown) WHERE u.renown > 0
+     ),
+     per_deed AS (
+       SELECT cd.account_id, cd.deed_id, min(cd.earned_at) AS first_earned
+         FROM character_deeds cd
+         JOIN characters c ON c.id = cd.character_id
+         JOIN accounts a ON a.id = cd.account_id
+         JOIN renown r ON r.deed_id = cd.deed_id
+        WHERE ${ELIGIBLE_ACCOUNT_SQL}
+        GROUP BY cd.account_id, cd.deed_id
+     ),
+     account_agg AS (
+       SELECT pd.account_id,
+              sum(r.renown)::int AS renown,
+              count(*)::int AS deed_count,
+              max(pd.first_earned) AS completion_time
+         FROM per_deed pd
+         JOIN renown r ON r.deed_id = pd.deed_id
+        GROUP BY pd.account_id
+       HAVING sum(r.renown) >= $3
+     ),
+     per_char AS (
+       SELECT cd.account_id, cd.character_id, sum(r.renown)::int AS char_renown
+         FROM character_deeds cd
+         JOIN characters c ON c.id = cd.character_id
+         JOIN accounts a ON a.id = cd.account_id
+         JOIN renown r ON r.deed_id = cd.deed_id
+        WHERE ${ELIGIBLE_ACCOUNT_SQL}
+        GROUP BY cd.account_id, cd.character_id
+     ),
+     display AS (
+       SELECT DISTINCT ON (account_id) account_id, character_id
+         FROM per_char
+        ORDER BY account_id, char_renown DESC, character_id ASC
+     )
+     SELECT aa.account_id,
+            aa.renown,
+            aa.deed_count,
+            aa.completion_time,
+            d.character_id AS display_character_id
+       FROM account_agg aa
+       JOIN display d ON d.account_id = aa.account_id
+      ORDER BY aa.renown DESC, aa.completion_time ASC, aa.account_id ASC`,
+    [deedIds, renowns, floor],
+  );
+  const ranked: RankedDeedsAccount[] = res.rows.map((r) => ({
+    accountId: Number(r.account_id),
+    renown: Number(r.renown),
+    deedCount: Number(r.deed_count),
+    // TIMESTAMPTZ back to epoch ms (Date via pg; string tolerated for driver
+    // config drift), matching computeDeedsBoard's earnedMs.
+    completionTime: new Date(r.completion_time).getTime(),
+    displayCharacterId: Number(r.display_character_id),
+  }));
+  // Deed ids present in character_deeds but absent from the content table
+  // entirely (removed or renamed content), for the same warn computeDeedsBoard
+  // emitted. A cheap side read kept off the aggregation's hot path: scored rows
+  // already excluded these via the renown join, so this never shrinks a score,
+  // only surfaces the ids. A zero-renown KNOWN deed is not flagged (its id is in
+  // $1), matching computeDeedsBoard's def-present test.
+  const unknown = await pool.query(
+    `SELECT DISTINCT deed_id FROM character_deeds WHERE deed_id <> ALL($1::text[])`,
+    [deedIds],
+  );
+  const unknownDeedIds = unknown.rows.map((r) => String(r.deed_id)).sort();
+  return { ranked, totalRanked: ranked.length, unknownDeedIds };
+}
+
+/** The display-character fill for ranked accounts: name, realm, class, level,
+ *  and the selected title (a deed id the client localizes; never English). */
+export interface DeedsBoardCharacterRow {
+  id: number;
+  name: string;
+  class: PlayerClass;
+  level: number;
+  realm: string;
+  activeTitle: string | null;
+}
+
+// One IN query for the board's display characters. Names/realms are read live
+// at each cache refresh (never persisted in the board), so a rename shows
+// within one board TTL.
+export async function charactersForDeedsBoard(
+  characterIds: readonly number[],
+): Promise<DeedsBoardCharacterRow[]> {
+  if (characterIds.length === 0) return [];
+  const res = await pool.query(
+    `SELECT id, name, class, level, realm, state->>'activeTitle' AS active_title
+       FROM characters
+      WHERE id = ANY($1::int[])`,
+    [characterIds],
+  );
+  return res.rows.map((r) => ({
+    id: Number(r.id),
+    name: r.name,
+    class: r.class,
+    level: Number(r.level),
+    realm: r.realm,
+    activeTitle:
+      typeof r.active_title === 'string' && r.active_title !== '' ? r.active_title : null,
   }));
 }
 
@@ -2278,6 +3057,20 @@ export async function loadWorldState<T>(key: string): Promise<T | null> {
 }
 
 export async function saveWorldState(key: string, data: unknown): Promise<void> {
+  // The pre-scoping bare 'market' row is RETAINED as the rollback artifact for
+  // the partitioned market backfill (server/market_backfill.ts) and is never
+  // written again: reject any attempt to persist it, gate open or not.
+  if (key === LEGACY_MARKET_KEY) {
+    throw new Error(
+      'legacy market key is read-only: the pre-scoping "market" row is retained as a rollback artifact (see server/market_backfill.ts)',
+    );
+  }
+  // A realm-market write must not race ahead of the boot backfill: block every
+  // `market:<realm>` write until ensureSchema has confirmed the marker row and
+  // opened the gate (openMarketWriteGate).
+  if (key.startsWith(MARKET_KEY_PREFIX)) {
+    assertMarketWriteGateOpen();
+  }
   await pool.query(
     `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
      ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
@@ -2285,53 +3078,64 @@ export async function saveWorldState(key: string, data: unknown): Promise<void> 
   );
 }
 
+// Boot-ordering write gate for the World Market. Before ensureSchema's
+// partitioned backfill (server/market_backfill.ts) has run and recorded its
+// marker row, a realm process must not persist its market: the 30 s autosave
+// could otherwise overwrite a realm partition the backfill has not produced
+// yet. ensureSchema opens the gate only AFTER its advisory-lock transaction
+// COMMITs (also when the marker pre-existed and the backfill was a no-op).
+let marketWriteGateOpen = false;
+
+export function openMarketWriteGate(): void {
+  marketWriteGateOpen = true;
+}
+
+// Test-only: re-close the gate so a fresh test starts from the boot default.
+// (vi.resetModules also yields a fresh CLOSED gate; this is the in-file reset.)
+export function closeMarketWriteGateForTests(): void {
+  marketWriteGateOpen = false;
+}
+
+function assertMarketWriteGateOpen(): void {
+  if (!marketWriteGateOpen) {
+    throw new Error(
+      'market write blocked: ensureSchema must confirm the backfill marker first before any market:<realm> write (see server/market_backfill.ts)',
+    );
+  }
+}
+
 // The World Market is realm-scoped like characters, friends, guilds and
 // presence: each realm process keeps its own listings under `market:<realm>`.
 // Before this scoping the market lived in a single bare 'market' row shared by
 // every realm pointed at the same DATABASE_URL, so two realms silently
 // overwrote each other's listings and proceeds (and stomped nextListingId).
-const LEGACY_MARKET_KEY = 'market';
-
-export function marketStateKey(realm: string): string {
-  return `market:${realm}`;
-}
-
+//
+// Migration is NOT lazy here: ensureSchema runs a partitioned backfill
+// (server/market_backfill.ts) inside its advisory-lock transaction, splitting
+// the legacy blob per seller realm, RETAINING the legacy row as a rollback
+// artifact, and recording completion in the MARKET_BACKFILL_MARKER_KEY marker
+// row. Every market write is gated on that marker (openMarketWriteGate) so a
+// racing autosave can never overtake the backfill. loadMarketState is a pure
+// READ: it serves the realm row, and only a pre-backfill database (no marker)
+// still falls back to the retained legacy row, never writing or deleting it.
 export async function loadMarketState(): Promise<MarketSave | null> {
-  const key = marketStateKey(REALM);
-  const own = await loadWorldState<MarketSave>(key);
+  const own = await loadWorldState<MarketSave>(marketStateKey(REALM));
   if (own !== null) return own;
-  // One-time GLOBAL migration: the first realm to boot after this scoping
-  // lands adopts the pre-scoping shared row into its own key, then deletes
-  // the legacy row so no later-added realm can re-adopt (and thereby
-  // duplicate) the same listings. The claiming SELECT ... FOR UPDATE plus
-  // the delete run in one transaction, so only one realm ever wins the row
-  // even if several boot at once.
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-    const res = await client.query('SELECT data FROM world_state WHERE key = $1 FOR UPDATE', [
-      LEGACY_MARKET_KEY,
-    ]);
-    const legacy = (res.rows[0]?.data as MarketSave) ?? null;
-    if (legacy !== null) {
-      await client.query(
-        `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
-         ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
-        [key, JSON.stringify(legacy)],
-      );
-      await client.query('DELETE FROM world_state WHERE key = $1', [LEGACY_MARKET_KEY]);
-    }
-    await client.query('COMMIT');
-    return legacy;
-  } catch (err) {
-    await client.query('ROLLBACK').catch(() => {});
-    throw err;
-  } finally {
-    client.release();
-  }
+  // No realm row. If the ensureSchema backfill has recorded its marker, a
+  // backfilled database never serves the stale legacy blob (this realm simply
+  // has no market yet, which is correct). Only a database that predates the
+  // backfill (no marker) falls back to a plain back-compat READ of the retained
+  // legacy row; the backfill owns adoption, so this path never writes or deletes.
+  // On a normal boot this fallback is unreachable (ensureSchema always confirms
+  // the marker before game.loadMarket runs); it is a defensive net for an
+  // out-of-band caller hitting a pre-backfill database.
+  const marker = await loadWorldState<unknown>(MARKET_BACKFILL_MARKER_KEY);
+  if (marker !== null) return null;
+  return loadWorldState<MarketSave>(LEGACY_MARKET_KEY);
 }
 
 export async function saveMarketState(save: MarketSave): Promise<void> {
+  assertMarketWriteGateOpen();
   await saveWorldState(marketStateKey(REALM), save);
 }
 
@@ -2347,6 +3151,20 @@ export async function loadMailState(): Promise<MailSave | null> {
 
 export async function saveMailState(save: MailSave): Promise<void> {
   await saveWorldState(mailStateKey(REALM), save);
+}
+
+// Shared Rift event history/scheduler, realm-scoped. Runtime group instances are
+// intentionally absent from this blob (see sim/rift/persistence.ts).
+export function riftStateKey(realm: string): string {
+  return `rifts:${realm}`;
+}
+
+export async function loadRiftState(): Promise<unknown | null> {
+  return loadWorldState<unknown>(riftStateKey(REALM));
+}
+
+export async function saveRiftState(save: unknown): Promise<void> {
+  await saveWorldState(riftStateKey(REALM), save);
 }
 
 // ---------------------------------------------------------------------------
@@ -2399,6 +3217,102 @@ export async function closeOrphanSessions(): Promise<number> {
 }
 
 // ---------------------------------------------------------------------------
+// Character load leases: the cross-process double-load dupe guard. At most one
+// process may hold a character in-world at a time. A row in character_leases IS
+// the lease; it self-releases via expiry after a crash, so no client checkout
+// or advisory lock is pinned for the session's whole length (that would starve
+// the pool this shares with HTTP). heartbeats ride the 30s autosave loop.
+// ---------------------------------------------------------------------------
+
+// Lease lifetime with no heartbeat before an expired lease is reclaimable. Set
+// to three missed 30s autosave heartbeats so a brief GC pause or an autosave
+// that runs long never lets a peer steal a live character; only a genuine crash
+// (or a clean shutdown that deletes the lease) frees it early.
+export const LEASE_TTL_SECONDS = 90;
+
+// One value per process boot: realm name plus a per-boot UUID. Realm alone must
+// NOT identify the holder, because two processes accidentally started on the
+// SAME realm name is exactly the double-load accident this table guards; if they
+// shared a holder the second would treat the first's lease as its own and load
+// the character anyway. The UUID keeps every boot distinct.
+export const PROCESS_LEASE_HOLDER = `${REALM}#${randomUUID()}`;
+
+// Claim (or renew) the lease for one character. Returns true when this process
+// now holds it, false when a live lease belongs to another holder (fail closed:
+// the caller must refuse the join). The ON CONFLICT UPDATE fires only when the
+// existing lease has expired (crash reclaim) OR is already ours (a linkdead
+// resume on the same process re-extends its own lease instead of refusing
+// itself). A live foreign lease matches neither arm, so rowCount stays 0. Every
+// acquire stamps a fresh nonce (the caller passes a per-join value): a later
+// releaseCharacterLease matches on that nonce, so an older join's stale release
+// cannot delete the row this acquire re-stamped.
+export async function acquireCharacterLease(
+  characterId: number,
+  nonce: string,
+  holder = PROCESS_LEASE_HOLDER,
+): Promise<boolean> {
+  const res = await pool.query(
+    `INSERT INTO character_leases (character_id, realm, holder, nonce, acquired_at, heartbeat_at, expires_at)
+     VALUES ($1, $2, $3, $4, now(), now(), now() + make_interval(secs => $5))
+     ON CONFLICT (character_id) DO UPDATE
+       SET realm = EXCLUDED.realm,
+           holder = EXCLUDED.holder,
+           nonce = EXCLUDED.nonce,
+           acquired_at = now(),
+           heartbeat_at = now(),
+           expires_at = EXCLUDED.expires_at
+       WHERE character_leases.expires_at < now() OR character_leases.holder = EXCLUDED.holder`,
+    [characterId, REALM, holder, nonce, LEASE_TTL_SECONDS],
+  );
+  return (res.rowCount ?? 0) > 0;
+}
+
+// Drop the lease for one character on a clean leave. Guarded on holder so this
+// never deletes a lease that another process has already reclaimed (e.g. after
+// our own lease expired and a peer took over). When a nonce is given it is also
+// matched, the fence that makes a stale release a no-op: if a newer acquire has
+// re-stamped the row with a different nonce (a reconnect that raced this leave),
+// the DELETE finds nothing and the live session keeps its lease. The no-nonce
+// arm is for callers that created a session without one (direct game.join in
+// tests); it deletes on holder alone as before.
+export async function releaseCharacterLease(
+  characterId: number,
+  nonce?: string,
+  holder = PROCESS_LEASE_HOLDER,
+): Promise<void> {
+  if (nonce === undefined) {
+    await pool.query('DELETE FROM character_leases WHERE character_id = $1 AND holder = $2', [
+      characterId,
+      holder,
+    ]);
+    return;
+  }
+  await pool.query(
+    'DELETE FROM character_leases WHERE character_id = $1 AND holder = $2 AND nonce = $3',
+    [characterId, holder, nonce],
+  );
+}
+
+// Extend every lease this process holds in one statement, called from the
+// autosave loop. A lease already reclaimed by another holder is not matched, so
+// this can never steal one back.
+export async function heartbeatCharacterLeases(holder = PROCESS_LEASE_HOLDER): Promise<void> {
+  await pool.query(
+    `UPDATE character_leases
+        SET heartbeat_at = now(),
+            expires_at = now() + make_interval(secs => $2)
+      WHERE holder = $1`,
+    [holder, LEASE_TTL_SECONDS],
+  );
+}
+
+// Shutdown sweep: drop every lease this process holds so a clean restart never
+// waits out the TTL before its characters can reload.
+export async function releaseAllCharacterLeases(holder = PROCESS_LEASE_HOLDER): Promise<void> {
+  await pool.query('DELETE FROM character_leases WHERE holder = $1', [holder]);
+}
+
+// ---------------------------------------------------------------------------
 // Chat logs: one row per sent say/party message, written in batches by the
 // ChatLogger in game.ts. Name is denormalized so logs survive character
 // deletion (the FK goes NULL but the row keeps its meaning for moderation).
@@ -2427,4 +3341,49 @@ export async function pruneChatLogs(retentionDays: number): Promise<number> {
     [String(Math.floor(retentionDays))],
   );
   return res.rowCount ?? 0;
+}
+
+// ---------------------------------------------------------------------------
+// Bank ledger: one append-only row per SUCCESSFUL bank op, written fire-and-forget
+// off the game loop by server/bank_ledger.ts. See the bank_ledger DDL block in
+// SCHEMA above; realm is passed explicitly (the table carries no DEFAULT), and
+// container is always 'personal' with a NULL container_id until the guild bank
+// lands. `instance` is the item's per-instance payload (or null for a plain
+// fungible stack / a buy_slots row), serialized the same way as characters.state.
+// ---------------------------------------------------------------------------
+
+export interface BankLedgerRow {
+  realm: string;
+  characterId: number;
+  accountId: number;
+  op: 'deposit' | 'withdraw' | 'buy_slots';
+  itemId: string | null;
+  count: number | null;
+  instance: unknown;
+  copperDelta: number;
+  purchasedSlotsAfter: number;
+  container: 'personal';
+  containerId: null;
+}
+
+export async function insertBankLedgerRow(row: BankLedgerRow): Promise<void> {
+  await pool.query(
+    `INSERT INTO bank_ledger
+       (realm, character_id, account_id, op, item_id, count, instance,
+        copper_delta, purchased_slots_after, container, container_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+    [
+      row.realm,
+      row.characterId,
+      row.accountId,
+      row.op,
+      row.itemId,
+      row.count,
+      row.instance == null ? null : JSON.stringify(row.instance),
+      row.copperDelta,
+      row.purchasedSlotsAfter,
+      row.container,
+      row.containerId,
+    ],
+  );
 }

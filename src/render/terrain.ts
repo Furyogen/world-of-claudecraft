@@ -1,13 +1,28 @@
 import * as THREE from 'three';
 import { MAX_HOLE_PATCHES, MAX_TERRAIN_HOLES } from '../sim/caves';
-import { getActiveWorldContent, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z, ZONES } from '../sim/data';
-import type { BiomeId, BiomePaint, CustomPaintSwatch } from '../sim/types';
+import {
+  COLUMN_ZONES,
+  columnBlendAt,
+  getActiveWorldContent,
+  STRIP_MAX_X,
+  STRIP_MIN_X,
+  STRIP_ZONES,
+  WORLD_MAX_X,
+  WORLD_MAX_Z,
+  WORLD_MIN_Z,
+  ZONES,
+} from '../sim/data';
+import { isAuthoredMapPresentation, usesPlainTerrainMaterial } from '../sim/map_presentation';
+import { fbm2 } from '../sim/rng';
+import type { BiomeId, BiomePaint, CustomPaintSwatch, ZoneDef } from '../sim/types';
 import {
   BIOME_BY_ID,
   biomeAt,
+  inGardenMaze,
   paintedCellIdAt,
   roadDistance,
   terrainHeight,
+  WATER_LEVEL,
   waterLevel,
   zoneBiomeAt,
 } from '../sim/world';
@@ -15,6 +30,7 @@ import { groundImageFor } from './assets/ground_textures';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { GFX } from './gfx';
+import { idleSlot } from './idle_queue';
 import { impactCraterTerrainBlend } from './impact_terrain';
 import { chunkIntersectsRegion, normalTexelBounds } from './terrain_region_core';
 import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textures';
@@ -25,7 +41,14 @@ import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textu
 //   works (the old single-plane-per-zone terrain was always fully submitted).
 // - LOD by distance from the nearest hub at build time: settlements (where
 //   the camera lingers) get dense vertices, the wilderness gets coarse ones.
-// - 0.3u skirts hang from every chunk edge to hide LOD cracks.
+//   Chunks carrying the impassable mountain walls (inter-zone ridges, world
+//   rim) are promoted to the densest band regardless: the terraced walls hold
+//   the heightfield's highest frequencies and the far band smears them into
+//   ragged shards.
+// - Skirts hang from every chunk edge to hide LOD cracks: a 0.3u base drop
+//   plus the vertex slope times the coarsest band spacing, since a T-junction
+//   hole grows with both the neighbor's chord span and the local gradient
+//   (terraced cliffs open multi-yard holes that a flat drop cannot cover).
 // - High tier: MeshStandardMaterial + splat shading (grass/dirt/rock/sand
 //   weights precomputed per vertex from slope/height/roadDistance into a vec4
 //   attribute) over the biome vertex-color tint, plus a world-space macro
@@ -35,10 +58,10 @@ import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textu
 const CHUNK_SIZE = 60;
 const SKIRT_DROP = 0.3;
 const SLOPE_EPS = 1.5; // matches the legacy color pass so tints don't shift
-// Steep sculpted cliffs can drop tens of units between adjacent grid rows; a
-// skirt must cover the worst local relief or backface-culled seams read as
-// transparent holes. Scaled per-vertex in buildChunkGeometry.
 const SKIRT_RELIEF_FACTOR = 1.25;
+// An 'idle'-paced zone build waits for a browser idle slot between batches;
+// this timeout forces one batch through anyway under sustained frame load.
+const IDLE_BUILD_TIMEOUT_MS = 200;
 
 // ---------------------------------------------------------------------------
 // Real PBR splat layers (ambientCG 1K, shipped under public/textures/terrain).
@@ -104,8 +127,8 @@ const ROUGH_SNOW = 0.72;
 const LOD_BANDS = {
   high: [
     { maxHubDist: 95, spacing: 1.2 },
-    { maxHubDist: 185, spacing: 2.0 },
-    { maxHubDist: Infinity, spacing: 3.5 },
+    { maxHubDist: 185, spacing: 1.6 },
+    { maxHubDist: Infinity, spacing: 2.6 },
   ],
   low: [
     { maxHubDist: 95, spacing: 3.0 },
@@ -114,9 +137,20 @@ const LOD_BANDS = {
   ],
 } as const;
 
-// terrain normal map resolution (~0.56u per texel over 360x1080)
-const NORMAL_TEX_W = 640;
-const NORMAL_TEX_H = 1920;
+// Mountain-wall chunks are promoted to the densest LOD band. Half-widths
+// mirror sim/world.ts: the ridge contribution lives within RIDGE_SIGMA*3
+// (30yd) of each inter-zone ridge line, and the rim rise starts 30yd inside
+// the world edge (plus crest-noise margin).
+const WALL_LOD_RIDGE_HALF = 30;
+const WALL_LOD_RIM_MARGIN = 40;
+
+// Macro relief only needs to carry broad slopes: vertex normals and the four
+// tiled material normals own close detail. The atlas spans the whole expanded
+// world but is baked sparsely by zone, so keep it compact enough that entering
+// a new region never turns tens of thousands of terrainHeight samples into a
+// second boot. At the current bounds this is roughly 3yd/texel.
+const NORMAL_TEX_W = 320;
+const NORMAL_TEX_H = 960;
 const NORMAL_TEX_STRENGTH = 1.35;
 
 // Ground colors per biome; boundaries blend across the same window as the
@@ -148,33 +182,118 @@ const BIOME_PALETTE: Record<
     sand: 0xb0a486,
   },
   // Paint-only biomes (editor brush): flat palettes, no zone-band blend.
+  // Coastal green-blue, brighter sand than the desert's.
   beach: {
-    grass: 0x9aa55e,
-    grassDark: 0x7a8a4e,
-    grassYellow: 0xb5b06a,
-    dirt: 0xb59a6b,
-    sand: 0xe2d3a4,
+    grass: 0x9ab86a,
+    grassDark: 0x7d9a5a,
+    grassYellow: 0xb8c278,
+    dirt: 0xc2a575,
+    sand: 0xf0e4bc,
   },
+  // Warmer and browner than the beach, less green. Pushed further orange
+  // than a first pass to separate it clearly from the beach at a glance.
   desert: {
-    grass: 0xb0a060,
-    grassDark: 0x8f8350,
-    grassYellow: 0xc4b070,
-    dirt: 0xa87f4f,
-    sand: 0xd8b581,
+    grass: 0xcbaa5e,
+    grassDark: 0xa88d48,
+    grassYellow: 0xe0c070,
+    dirt: 0xc08f4a,
+    sand: 0xecc890,
   },
+  // Dark, red-tinted ash rather than the cave's neutral grey. Pushed darker
+  // still so it reads as scorched ground, not just "dirty".
   volcano: {
-    grass: 0x5a4a42,
-    grassDark: 0x40332e,
-    grassYellow: 0x6e5a4a,
-    dirt: 0x4a3a32,
-    sand: 0x6a5548,
+    grass: 0x3c2c28,
+    grassDark: 0x281c18,
+    grassYellow: 0x503830,
+    dirt: 0x2c2018,
+    sand: 0x4c342c,
   },
+  // Neutral blue-grey stone, distinct from volcano's warm ash. Pushed cooler
+  // and darker so it reads as underground rock, not daylight dirt.
   cave: {
-    grass: 0x6a6a62,
-    grassDark: 0x50504a,
-    grassYellow: 0x7a7a6e,
-    dirt: 0x5a5248,
-    sand: 0x8a8274,
+    grass: 0x585e66,
+    grassDark: 0x3e444c,
+    grassYellow: 0x6a7078,
+    dirt: 0x484e56,
+    sand: 0x767c86,
+  },
+  // dusk: violet-cast glade greens with dusty rose soil
+  dusk: {
+    grass: 0x6d7566,
+    grassDark: 0x4c4e58,
+    grassYellow: 0x8c8078,
+    dirt: 0x6e5a68,
+    sand: 0xa593a2,
+  },
+  ember: {
+    grass: 0xc9a86a,
+    grassDark: 0xa8854f,
+    grassYellow: 0xd8bc80,
+    dirt: 0x9a6a44,
+    sand: 0xe0c088,
+  },
+  frost: {
+    grass: 0xeef4fa,
+    grassDark: 0xd8e4f0,
+    grassYellow: 0xcfdce8,
+    dirt: 0x9fb0c0,
+    sand: 0xdfe8f2,
+  },
+  amber: {
+    grass: 0xc9a44e,
+    grassDark: 0xa88438,
+    grassYellow: 0xe0c060,
+    dirt: 0x8a6a42,
+    sand: 0xd8bc84,
+  },
+  fen: {
+    grass: 0x7cab68,
+    grassDark: 0x5c8a52,
+    grassYellow: 0xa2c47a,
+    dirt: 0x6e6448,
+    sand: 0xb8bc8e,
+  },
+  // night: the Nightbloom dreams in violet. The splat textures are
+  // green-authored, so these run hot and saturated or the meadow reads
+  // green anyway (the amber realm's fire-orange needed the same push)
+  night: {
+    grass: 0xc06cf2,
+    grassDark: 0x8f4ecc,
+    grassYellow: 0xe08cf8,
+    dirt: 0x8a5cb8,
+    sand: 0xd8a8f0,
+  },
+  // haunt: dead mossy floor, cold wet earth, everything a shade too dark
+  haunt: {
+    grass: 0x46543e,
+    grassDark: 0x2e382c,
+    grassYellow: 0x5a6644,
+    dirt: 0x453c34,
+    sand: 0x6b6754,
+  },
+  // jungle: saturated tropical green over bright coral sand
+  jungle: {
+    grass: 0x3f9448,
+    grassDark: 0x2c7038,
+    grassYellow: 0x74b04e,
+    dirt: 0x8a6e4a,
+    sand: 0xf2e2b4,
+  },
+  // garden: mown lawn over warm gravel, tidy even where it has run wild
+  garden: {
+    grass: 0x58a04e,
+    grassDark: 0x3f7e3c,
+    grassYellow: 0x86b85c,
+    dirt: 0x8a7a5a,
+    sand: 0xd8cca8,
+  },
+  // gale: wind-dried sage downs over grey shingle
+  gale: {
+    grass: 0x6a9a62,
+    grassDark: 0x4c7a4e,
+    grassYellow: 0x9ab070,
+    dirt: 0x7a6e58,
+    sand: 0xd8d0b8,
   },
 };
 
@@ -187,6 +306,16 @@ const ROCK_SLOPE_START: Record<BiomeId, number> = {
   desert: 0.55,
   volcano: 0.35,
   cave: 0.4,
+  dusk: 0.52,
+  ember: 0.5,
+  frost: 0.5,
+  amber: 0.52,
+  fen: 0.6,
+  night: 0.55,
+  haunt: 0.58,
+  jungle: 0.6,
+  garden: 0.6,
+  gale: 0.5, // the cliffs crag early
 };
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
@@ -209,13 +338,23 @@ const dirtC = new THREE.Color(),
   sandC = new THREE.Color();
 const dirtDarkC = new THREE.Color(0x73592f);
 const rockC = new THREE.Color(0x7a7a72);
+const wetRockC = new THREE.Color(0x3f4442); // dark wet-rock shoreline (peaks/volcano/cave)
 const impactAshC = new THREE.Color(0x18110d);
 const impactScorchC = new THREE.Color(0x2a160c);
 const hazyPeakC = new THREE.Color(0xa8bdd4); // world-rim mountains, atmospheric
+const emberForestC = new THREE.Color(0x729a4e); // the Drakelands' green gatewood
+const emberScorchC = new THREE.Color(0x6a4a40); // volcanic ground near the Drakemaw
+const emberBasaltC = new THREE.Color(0x4e3c34); // the cones' dark volcanic rock
+const cobbleC = new THREE.Color(0x8f8c86); // the Amberfall's laid stone
+const cobbleDarkC = new THREE.Color(0x6e6b66); // ...its mortar-shadow cells
+const duskCliffC = new THREE.Color(0x544d58); // dark weathered sea-cliff stone
+const hedgeC = new THREE.Color(0x2e5c30); // the Great Maze's clipped hedge walls
+const duskStrataC = new THREE.Color(0x8d7d76); // pale strata bands in the face
 const snowCapC = new THREE.Color(0xedf3fa);
 const lowSunC = new THREE.Color(0xe7d9a5);
 const lowShadeC = new THREE.Color(0x60745b);
 const blankGroundC = new THREE.Color(0x6f805d);
+const interiorGroundC = new THREE.Color(0x171b14);
 const paintMixC = new THREE.Color();
 const zonePalettes = ZONES.map((zn) => {
   const p = BIOME_PALETTE[zn.biome];
@@ -227,30 +366,24 @@ const zonePalettes = ZONES.map((zn) => {
     sand: new THREE.Color(p.sand),
   };
 });
-
-// Per-biome palettes for painted cells (a flat lookup, no z-blend).
-const biomePalettes: Record<BiomeId, (typeof zonePalettes)[number]> = {
-  vale: makeBiomePalette('vale'),
-  marsh: makeBiomePalette('marsh'),
-  peaks: makeBiomePalette('peaks'),
-  beach: makeBiomePalette('beach'),
-  desert: makeBiomePalette('desert'),
-  volcano: makeBiomePalette('volcano'),
-  cave: makeBiomePalette('cave'),
-};
-function makeBiomePalette(b: BiomeId): (typeof zonePalettes)[number] {
-  const p = BIOME_PALETTE[b];
-  return {
-    grass: new THREE.Color(p.grass),
-    grassDark: new THREE.Color(p.grassDark),
-    grassYellow: new THREE.Color(p.grassYellow),
-    dirt: new THREE.Color(p.dirt),
-    sand: new THREE.Color(p.sand),
-  };
-}
+const biomePalettes = Object.fromEntries(
+  Object.keys(BIOME_PALETTE).map((id) => {
+    const p = BIOME_PALETTE[id as BiomeId];
+    return [
+      id,
+      {
+        grass: new THREE.Color(p.grass),
+        grassDark: new THREE.Color(p.grassDark),
+        grassYellow: new THREE.Color(p.grassYellow),
+        dirt: new THREE.Color(p.dirt),
+        sand: new THREE.Color(p.sand),
+      },
+    ];
+  }),
+) as Record<BiomeId, (typeof zonePalettes)[number]>;
 
 function isBlankSlateWorld(): boolean {
-  return getActiveWorldContent().presentationMode === 'blank';
+  return isAuthoredMapPresentation(getActiveWorldContent().presentationMode);
 }
 
 // The world rect the terrain mesh covers, derived from the ACTIVE content
@@ -978,44 +1111,53 @@ function paintSuppressAt(x: number, z: number): number {
 // Palette at a point. A painted cell (biome differs from its zone band) uses that
 // biome's flat palette; otherwise the smooth zone-band blend. With no paint layer
 // `biome === zoneBiomeAt(z)` always, so this is the original z-blend exactly.
-function paletteAt(x: number, z: number, biome: BiomeId): void {
-  if (biome !== zoneBiomeAt(z)) {
-    const p = biomePalettes[biome];
-    grassC.copy(p.grass);
-    grassDarkC.copy(p.grassDark);
-    grassYellowC.copy(p.grassYellow);
-    dirtC.copy(p.dirt);
-    sandC.copy(p.sand);
-    return;
-  }
-  grassC.copy(zonePalettes[0].grass);
-  grassDarkC.copy(zonePalettes[0].grassDark);
-  grassYellowC.copy(zonePalettes[0].grassYellow);
-  dirtC.copy(zonePalettes[0].dirt);
-  sandC.copy(zonePalettes[0].sand);
-  for (let i = 0; i + 1 < ZONES.length; i++) {
-    const b = ZONES[i].zMax;
+
+function paletteAt(x: number, z: number): void {
+  const stripPalette = (zn: (typeof ZONES)[number]) =>
+    zonePalettes[ZONES.indexOf(zn)] ?? zonePalettes[0];
+  grassC.copy(stripPalette(STRIP_ZONES[0]).grass);
+  grassDarkC.copy(stripPalette(STRIP_ZONES[0]).grassDark);
+  grassYellowC.copy(stripPalette(STRIP_ZONES[0]).grassYellow);
+  dirtC.copy(stripPalette(STRIP_ZONES[0]).dirt);
+  sandC.copy(stripPalette(STRIP_ZONES[0]).sand);
+  for (let i = 0; i + 1 < STRIP_ZONES.length; i++) {
+    const b = STRIP_ZONES[i].zMax;
     const t = clamp01((z - (b - 30)) / 65);
     const tt = t * t * (3 - 2 * t);
     if (tt <= 0) break;
-    grassC.lerp(zonePalettes[i + 1].grass, tt);
-    grassDarkC.lerp(zonePalettes[i + 1].grassDark, tt);
-    grassYellowC.lerp(zonePalettes[i + 1].grassYellow, tt);
-    dirtC.lerp(zonePalettes[i + 1].dirt, tt);
-    sandC.lerp(zonePalettes[i + 1].sand, tt);
+    const next = stripPalette(STRIP_ZONES[i + 1]);
+    grassC.lerp(next.grass, tt);
+    grassDarkC.lerp(next.grassDark, tt);
+    grassYellowC.lerp(next.grassYellow, tt);
+    dirtC.lerp(next.dirt, tt);
+    sandC.lerp(next.sand, tt);
+  }
+  for (const col of COLUMN_ZONES) {
+    const t = columnBlendAt(col, x, z);
+    if (t <= 0) continue;
+    const p = stripPalette(col);
+    grassC.lerp(p.grass, t);
+    grassDarkC.lerp(p.grassDark, t);
+    grassYellowC.lerp(p.grassYellow, t);
+    dirtC.lerp(p.dirt, t);
+    sandC.lerp(p.sand, t);
   }
 }
 
 // How "marsh" a given z is — mirrors the palette/heightfield blend windows so
 // the mud texture fades in exactly where the marsh palette does.
-function marshWeightAt(z: number): number {
-  let w = ZONES[0].biome === 'marsh' ? 1 : 0;
-  for (let i = 0; i + 1 < ZONES.length; i++) {
-    const b = ZONES[i].zMax;
+function marshWeightAt(x: number, z: number): number {
+  let w = STRIP_ZONES[0].biome === 'marsh' ? 1 : 0;
+  for (let i = 0; i + 1 < STRIP_ZONES.length; i++) {
+    const b = STRIP_ZONES[i].zMax;
     const t = clamp01((z - (b - 30)) / 65);
     const tt = t * t * (3 - 2 * t);
     if (tt <= 0) break;
-    w += ((ZONES[i + 1].biome === 'marsh' ? 1 : 0) - w) * tt;
+    w += ((STRIP_ZONES[i + 1].biome === 'marsh' ? 1 : 0) - w) * tt;
+  }
+  for (const col of COLUMN_ZONES) {
+    const t = columnBlendAt(col, x, z);
+    if (t > 0) w += ((col.biome === 'marsh' ? 1 : 0) - w) * t;
   }
   return w;
 }
@@ -1062,13 +1204,12 @@ function sampleVertex(
     -(nhz / (2 * ne)) * invLen,
   ];
 
-  // Smooth paint: the bilinear sample feathers painted color and splat
-  // textures across a cell (soft brush edges) instead of hard block cuts.
-  // Paint never touches the geometry (see sim/world.ts shapeAt).
   const paint = paintSmoothAt(x, z);
   const blank = isBlankSlateWorld();
   if (blank && paint.weight <= 0) {
-    cTmp.copy(blankGroundC);
+    cTmp.copy(
+      getActiveWorldContent().presentationMode === 'blank' ? blankGroundC : interiorGroundC,
+    );
     return {
       height: h,
       slope,
@@ -1079,7 +1220,7 @@ function sampleVertex(
     };
   }
 
-  const zoneBiome = zoneBiomeAt(z);
+  const zoneBiome = zoneBiomeAt(x, z);
   let paintedBiome: BiomeId | null = null;
   let customPaint: number | null = null;
   if (paint.id !== null) {
@@ -1087,8 +1228,6 @@ function sampleVertex(
       paintedBiome = BIOME_BY_ID[paint.id];
     } else {
       const sw = customSwatchFor(paint.id);
-      // A biome-variant swatch behaves like its base biome on the vertex
-      // path (auto-feature suppression + the Lambert tier's legacy bake).
       if (sw && sw.baseBiome !== undefined && sw.baseBiome < BIOME_BY_ID.length) {
         paintedBiome = BIOME_BY_ID[sw.baseBiome];
       } else {
@@ -1097,29 +1236,15 @@ function sampleVertex(
     }
   }
   const pw = paintedBiome !== null || customPaint !== null ? paint.weight : 0;
-  // Paint weight for COLOR/SPLAT application: zero on the splat tier (the
-  // fragment field owns the painted look).
   const pwVert = paintInFrag ? 0 : pw;
-  // Auto-feature suppression weight. Splat tier: a WIDER kernel than the
-  // paint itself, so snow caps / slope rock / shore sand / road dirt are
-  // fully cleared under the whole fragment feather (and slightly beyond) —
-  // otherwise a stroke on high or shore ground wears a bright halo of the
-  // resurfacing auto feature. Lambert tier: the paint weight, the legacy
-  // exact vertex crossfade.
   const sup = paintInFrag ? paintSuppressAt(x, z) : pw;
-  // Discrete biome for the threshold-style rules below (rock slope, marsh mud):
-  // the painted biome once it dominates the blend.
   const biome = pw > 0.5 && paintedBiome ? paintedBiome : zoneBiome;
-  // Auto-texturing rules: per-map toggles (absent = all on, the shipped look),
-  // and painted ground always suppresses them (what you paint is what you
-  // get), so cliffs and snow caps stop eating brush strokes.
   const style = getActiveWorldContent().terrainStyle;
   const slopeRockOn = style?.slopeRock !== false;
-  const snowCapsOn = style?.snowCaps !== false;
-  const rimOn = style?.rimMountains !== false;
   const shoreSandOn = style?.shoreSand !== false;
   const autoW = 1 - sup;
-  paletteAt(x, z, zoneBiome);
+
+  paletteAt(x, z);
   if (paintedBiome !== null && pwVert > 0) {
     const p = biomePalettes[paintedBiome];
     grassC.lerp(p.grass, pwVert);
@@ -1136,9 +1261,6 @@ function sampleVertex(
     sandC.lerp(p.sand, pwVert);
   }
   const w: [number, number, number, number] = [1, 0, 0, 0];
-  // Painted ground re-bases the splat mix toward its biome's dominant texture
-  // layer, scaled by the smooth paint weight so the texture feathers in.
-  // (Lambert tier only; the splat tier re-bases per fragment.)
   if (paintedBiome !== null && pwVert > 0) {
     if (paintedBiome === 'marsh' || paintedBiome === 'cave') {
       lerpSplat(w, 1, PAINT_REBASE_DIRT * pwVert);
@@ -1148,66 +1270,154 @@ function sampleVertex(
       lerpSplat(w, 3, PAINT_REBASE_SAND * pwVert);
     }
   }
-  // Blank maps carry no built-in crater, so no scorch/ash tint over the ground
-  // (the height bowl is likewise gated in world.ts terrainHeight).
   const impact = blank ? { ash: 0, scorch: 0, dirt: 0, rock: 0 } : impactCraterTerrainBlend(x, z);
 
-  // base grass with patchy variation
-  const v = (Math.sin(x * 0.21) * Math.cos(z * 0.17) + 1) / 2;
+  // base grass with patchy variation: a coarse fbm layer for dry/lush
+  // patches plus a fine one for grain, replacing the old pure-sine tint
+  // (sine repeats on a visible grid at a distance; noise reads as natural
+  // ground cover instead).
+  const v = fbm2(x * 0.045, z * 0.045, seed + 53, 3);
   cTmp.copy(grassC).lerp(grassDarkC, v);
-  const v2 = (Math.sin(x * 0.043 + 5) * Math.cos(z * 0.05 + 2) + 1) / 2;
+  const v2 = fbm2(x * 0.16, z * 0.16, seed + 59, 2);
   cTmp.lerp(grassYellowC, v2 * 0.35);
+  if (biome === 'ember') {
+    // the gatewood is green in the south near Wyrmwatch and dries into sand
+    // northward; the volcanic belt then darkens toward scorched basalt
+    const forest = 1 - clamp01((z - 1925) / 145);
+    if (forest > 0) cTmp.lerp(emberForestC, forest * 0.85);
+    const sandT = clamp01((z - 1925) / 145);
+    lerpSplat(w, 3, sandT * 0.75);
+    // the Wyrmroad: a sheltered green corridor along x 404 through the
+    // volcanic belt toward the south crossing, the realm's second gradient
+    const passT = 1 - clamp01((Math.abs(x - 404) - 26) / 26);
+    const valley = passT * clamp01((z - 2310) / 80);
+    const scorch = clamp01((z - 2260) / 100) * (1 - valley);
+    if (scorch > 0) {
+      cTmp.lerp(emberScorchC, scorch * 0.55);
+      lerpSplat(w, 2, scorch * 0.5);
+    }
+    if (valley > 0) {
+      cTmp.lerp(emberForestC, valley * 0.8);
+      lerpSplat(w, 0, valley * 0.6);
+    }
+  }
   // the marsh reads muddier: patches of wet dirt across the lowland
   if (biome === 'marsh') lerpSplat(w, 1, 0.3 * v2 * clamp01((4 - h) / 6));
-  // shoreline sand — color and splat weight share one feathered falloff so
-  // the beach blends out instead of cutting a razor-hard grass/sand line.
-  // waterLevel() (not the const) so the beach tracks a custom map's water.
-  // Optional per map (shoreSand toggle) and suppressed by paint (autoW), so a
-  // painted texture stays put when the ground dips toward the water instead of
-  // snapping to sand.
+  // shoreline blend, biome-specific: marsh has no sandy beach (wet mud
+  // instead), rocky/ashen biomes get a darker wet-rock tint, everywhere else
+  // keeps the classic sandy bank. Color and splat weight share one feathered
+  // falloff so the shore blends out instead of cutting a razor-hard edge.
   const wl = waterLevel();
-  const shore = clamp01((wl + 1.6 - h) / 1.6);
+  const shore = clamp01((wl + 1.6 - h) / 1.6) * autoW;
   if (shoreSandOn) {
-    const shoreW = shore * autoW;
-    cTmp.lerp(sandC, shoreW);
-    lerpSplat(w, 3, shoreW);
+    if (biome === 'marsh') {
+      cTmp.lerp(dirtDarkC, shore);
+      lerpSplat(w, 1, shore);
+    } else if (biome === 'peaks' || biome === 'volcano' || biome === 'cave') {
+      cTmp.lerp(wetRockC, shore);
+      lerpSplat(w, 2, shore);
+    } else {
+      cTmp.lerp(sandC, shore);
+      lerpSplat(w, 3, shore);
+    }
   }
   // packed dirt at each hub settlement (same feather as the splat weight —
-  // a constant lerp stamped a clean-edged brown disc on the grass). Skipped
-  // outright on blank authoring maps (the spawn must not force a brown patch)
-  // and attenuated by the paint weight everywhere: painted ground always wins.
-  if (!blank) {
-    for (const zn of ZONES) {
-      const dHub = Math.hypot(x - zn.hub.x, z - zn.hub.z);
-      if (dHub < 14) {
-        const hubT = clamp01((14 - dHub) / 3) * (1 - sup);
+  // a constant lerp stamped a clean-edged brown disc on the grass)
+  for (const zn of ZONES) {
+    const dHub = Math.hypot(x - zn.hub.x, z - zn.hub.z);
+    if (dHub < 14) {
+      const hubT = clamp01((14 - dHub) / 3);
+      if (zn.biome === 'amber') {
+        // Lanternmere's plaza is paved like its roads
+        const cell =
+          (Math.sin(Math.floor(x * 1.6) * 12.9898 + Math.floor(z * 1.6) * 78.233) + 1) / 2;
+        cTmp.lerp(cobbleC, 0.85 * hubT);
+        cTmp.lerp(cobbleDarkC, cell * 0.45 * hubT);
+        lerpSplat(w, 2, 0.75 * hubT);
+      } else {
         cTmp.lerp(dirtDarkC, 0.7 * hubT);
         lerpSplat(w, 1, 0.75 * hubT);
-        break;
       }
+      break;
     }
   }
   const rd = roadDistance(x, z);
-  const roadW = 1 - sup; // painted ground overrides the road dirt too
+  // the Amberfall paves its ways: cobblestone, cell-jittered so the vertex
+  // grid reads as laid stones rather than one grey ribbon (rock splat)
+  const cobbles = biome === 'amber';
   if (rd < 2.0) {
-    cTmp.lerp(dirtC, 0.85 * roadW);
-    lerpSplat(w, 1, 0.85 * roadW);
+    if (cobbles) {
+      const cell = (Math.sin(Math.floor(x * 1.6) * 12.9898 + Math.floor(z * 1.6) * 78.233) + 1) / 2;
+      cTmp.lerp(cobbleC, 0.9);
+      cTmp.lerp(cobbleDarkC, cell * 0.5);
+      lerpSplat(w, 2, 0.85);
+    } else {
+      cTmp.lerp(dirtC, 0.85);
+      lerpSplat(w, 1, 0.85);
+    }
   } else if (rd < 3.4) {
-    const t = 0.85 * (1 - (rd - 2.0) / 1.4) * roadW;
-    cTmp.lerp(dirtC, t);
-    lerpSplat(w, 1, t);
+    const t = 0.85 * (1 - (rd - 2.0) / 1.4);
+    cTmp.lerp(cobbles ? cobbleC : dirtC, t);
+    lerpSplat(w, cobbles ? 2 : 1, t);
   }
+  // Break up the rock/snow blend so cliffs read as striated stone and snow
+  // reads as patchy drifts instead of a single flat tone / a clean cutoff.
+  const rockStreak = fbm2(x * 0.09, z * 0.09, seed + 41, 3);
+  const snowPatch = fbm2(x * 0.06, z * 0.06, seed + 47, 3);
   const rockStart = ROCK_SLOPE_START[biome];
   if (slopeRockOn && slope > rockStart && autoW > 0) {
     const t = Math.min(1, (slope - rockStart) * 2) * autoW;
     cTmp.lerp(rockC, t);
+    cTmp.lerp(dirtDarkC, t * (rockStreak - 0.5) * 0.35);
     lerpSplat(w, 2, t);
+    // the Great Maze's walls are hedges, not cliffs: inside the maze the
+    // steep faces take clipped evergreen instead of rock
+    if (biome === 'garden' && inGardenMaze(x, z)) {
+      cTmp.lerp(hedgeC, t);
+      lerpSplat(w, 0, t * 0.7); // lean back toward the grass splat
+    }
+    // dusk sea cliffs read as dark weathered stone with pale strata bands, so
+    // the coast walls look like rugged wave-cut rock instead of smooth clay
+    if (biome === 'dusk') {
+      const nearSea = clamp01((16 - h) / 12);
+      const band = (Math.sin(h * 1.7 + x * 0.06 + z * 0.045) + 1) / 2;
+      cTmp.lerp(duskCliffC, t * nearSea * (0.45 + band * 0.35));
+      cTmp.lerp(duskStrataC, t * nearSea * (1 - band) * 0.3);
+    }
   }
-  // high ground (ridges, peaks) goes rocky then snowy
+  // high ground (ridges, peaks) goes rocky then snowy (the Drakelands' high
+  // rock reads as dark basalt instead, and its peaks never take snow). The snow
+  // ramp is wide (26u, over four terrace bands) with a strong patch-noise term:
+  // the terraced heightfield steps 6u at a time, and a ramp comparable to the
+  // step paints alternate treads fully white / fully bare, which reads as a
+  // repetitive checkerboard from a distance. The grid world terraces too, so it
+  // keeps the release's wide ramp; only the snow LINE (h - 34) stays tuned to
+  // the grid's own peak heights.
   let snow = 0;
-  if (snowCapsOn && h > 22 && autoW > 0) {
-    cTmp.lerp(rockC, clamp01((h - 22) / 10) * 0.7 * autoW);
-    snow = clamp01((h - 34) / 14) * 0.85 * autoW;
+  if (biome === 'ember') {
+    const t2 = Math.max(
+      slope > rockStart ? Math.min(1, (slope - rockStart) * 2) : 0,
+      clamp01((h - 18) / 8) * 0.75,
+    );
+    if (t2 > 0) cTmp.lerp(emberBasaltC, t2 * 0.85);
+  }
+  if (biome === 'frost') {
+    // the Reach is snowbound from the shore up, not just on its crowns; the
+    // Snowline and the Goldmelt (the sideways crossings) both sit at z 1890
+    // on opposite borders, so the green valley floors fade under the snow
+    // toward the interior instead of flipping white at the borders
+    const passT = 1 - clamp01((Math.abs(z - 1890) - 26) / 26);
+    const green = passT * clamp01((Math.abs(x) - 95) / 85);
+    const snowline = 1 - green;
+    if (green > 0) cTmp.lerp(emberForestC, green * 0.8);
+    const blanket = clamp01((h - (WATER_LEVEL + 1.2)) / 3) * snowline;
+    cTmp.lerp(snowCapC, 0.8 * blanket);
+    snow = Math.max(snow, 0.85 * blanket);
+  }
+  if (h > 22) {
+    const rockT = clamp01((h - 22) / 10) * (0.6 + rockStreak * 0.25);
+    cTmp.lerp(biome === 'ember' ? emberBasaltC : rockC, rockT);
+    snow = biome === 'ember' ? 0 : clamp01((h - 34 + (snowPatch - 0.5) * 14) / 26) * 0.85;
     cTmp.lerp(snowCapC, snow);
     lerpSplat(w, 2, clamp01((h - 22) / 10) * 0.8 * autoW);
   }
@@ -1217,32 +1427,28 @@ function sampleVertex(
     lerpSplat(w, 1, impact.dirt);
     lerpSplat(w, 2, impact.rock);
   }
-  // Blank slate: unpainted stays the uniform pale ground; painted color fades
-  // in from it by the smooth paint weight.
-  if (blank) {
-    paintMixC.copy(cTmp);
-    cTmp.copy(blankGroundC).lerp(paintMixC, pwVert);
+  // the rim wall reads as distant sunlit peaks, not a black cliff. The haze
+  // kicks in well before the wall itself (edge starts negative deep inland)
+  // so from a zone's centre the rim reads as atmospheric haze rather than a
+  // crisp silhouette, reinforcing the reduced BIOME_FOG draw distance.
+  const edge = Math.max(
+    Math.abs(x) - (WORLD_MAX_X - 70),
+    WORLD_MIN_Z + 70 - z,
+    z - (WORLD_MAX_Z - 70),
+  );
+  const rim = clamp01(edge / 64);
+  if (rim > 0) {
+    cTmp.lerp(hazyPeakC, rim * 0.95);
+    // same wide, noise-broken ramp as the interior snow above: a pure
+    // height threshold snowed every terrace tread above the line uniformly,
+    // turning the rim's 2D terrace lattice into a white/grey checkerboard
+    const rimSnow = clamp01((h - 21 + (snowPatch - 0.5) * 12) / 26) * rim * 0.8;
+    cTmp.lerp(snowCapC, rimSnow);
+    snow = Math.max(snow, rimSnow);
+    lerpSplat(w, 2, rim * 0.85);
   }
-  // the rim wall reads as distant sunlit peaks, not a black cliff. Optional
-  // per map, and painted ground wins here too (the perimeter used to force
-  // rock over any stroke near the world edge).
-  if (rimOn) {
-    const rb = renderBounds();
-    const edge = Math.max(Math.abs(x) - (rb.maxX - 32), rb.minZ + 32 - z, z - (rb.maxZ - 32));
-    const rim = clamp01(edge / 26) * autoW;
-    if (rim > 0) {
-      cTmp.lerp(hazyPeakC, rim * 0.9);
-      const rimSnow = clamp01((h - 26) / 16) * rim * 0.8;
-      cTmp.lerp(snowCapC, rimSnow);
-      snow = Math.max(snow, rimSnow);
-      lerpSplat(w, 2, rim * 0.85);
-    }
-  }
-  // mud rides the dirt layer wherever the marsh palette is active; painted
-  // ground blends the band weight toward its own (painted marsh goes fully
-  // wet, any other painted biome fades band mud out) by the paint weight.
-  const bandMud = marshWeightAt(z);
-  const mud = pw > 0 ? bandMud + ((paintedBiome === 'marsh' ? 1 : 0) - bandMud) * pw : bandMud;
+  // mud rides the dirt layer wherever the marsh palette is active
+  const mud = marshWeightAt(x, z);
   if (GFX.lowPlus && !GFX.terrainSplat) {
     const ridge = clamp01((slope - 0.22) * 1.6);
     const lowland = clamp01((wl + 7 - h) / 12);
@@ -1274,6 +1480,7 @@ function buildChunkGeometry(
   spacing: number,
   seed: number,
   withSplat: boolean,
+  skirtSpan: number,
 ): THREE.BufferGeometry {
   // Sizes differ on the map's last row/column: chunks clamp to renderBounds
   // instead of overshooting up to a chunk beyond the map edge.
@@ -1319,7 +1526,11 @@ function buildChunkGeometry(
         ? Math.max(SKIRT_DROP, s.slope * Math.max(stepX, stepZ) * SKIRT_RELIEF_FACTOR)
         : 0;
       positions[vi * 3] = x;
-      positions[vi * 3 + 1] = s.height - skirtDrop;
+      // Slope-aware drop: a T-junction hole under a coarse neighbor's chord is
+      // bounded by the local gradient times that neighbor's vertex spacing, so
+      // a flat cliff-side skirt must deepen with the slope or the hole shows
+      // sky (skirtSpan is the coarsest spacing any neighbor can have).
+      positions[vi * 3 + 1] = s.height - (isSkirt ? SKIRT_DROP + s.slope * skirtSpan : 0);
       positions[vi * 3 + 2] = z;
       normals[vi * 3] = s.normal[0];
       normals[vi * 3 + 1] = s.normal[1];
@@ -1354,12 +1565,29 @@ function buildChunkGeometry(
       const b = a + 1;
       const c = a + gw;
       const d = c + 1;
-      indices[k++] = a;
-      indices[k++] = c;
-      indices[k++] = b;
-      indices[k++] = b;
-      indices[k++] = c;
-      indices[k++] = d;
+      // Split each quad along the diagonal whose endpoints are closest in
+      // height, so the fold line follows a ridge/terrace edge instead of
+      // cutting across it (a fixed diagonal saws terraced cliffs into
+      // alternating shards). Both windings keep the +y face up.
+      const ha = positions[a * 3 + 1];
+      const hb = positions[b * 3 + 1];
+      const hc = positions[c * 3 + 1];
+      const hd = positions[d * 3 + 1];
+      if (Math.abs(hb - hc) <= Math.abs(ha - hd)) {
+        indices[k++] = a;
+        indices[k++] = c;
+        indices[k++] = b;
+        indices[k++] = b;
+        indices[k++] = c;
+        indices[k++] = d;
+      } else {
+        indices[k++] = a;
+        indices[k++] = c;
+        indices[k++] = d;
+        indices[k++] = a;
+        indices[k++] = d;
+        indices[k++] = b;
+      }
     }
   }
 
@@ -1439,14 +1667,29 @@ function bakeNormalRegion(
   }
 }
 
-function terrainNormalTexture(seed: number): THREE.DataTexture {
+function terrainNormalTexture(): THREE.DataTexture {
   const data = new Uint8Array(NORMAL_TEX_W * NORMAL_TEX_H * 4);
-  bakeNormalRegion(data, seed, 0, NORMAL_TEX_W - 1, 0, NORMAL_TEX_H - 1);
+  // Zone texels are baked on demand. Unloaded areas remain a flat normal and
+  // have no geometry, so they cannot be sampled on screen.
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = 128;
+    data[i + 1] = 128;
+    data[i + 2] = 255;
+    data[i + 3] = 255;
+  }
   const tex = new THREE.DataTexture(data, NORMAL_TEX_W, NORMAL_TEX_H, THREE.RGBAFormat);
   tex.colorSpace = THREE.NoColorSpace;
   tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
   tex.magFilter = THREE.LinearFilter;
-  tex.minFilter = THREE.LinearFilter;
+  // Mipmapped minification (DataTexture defaults it off): the bake packs the
+  // terraces' near-vertical risers next to flat treads at 0.56u/texel, and
+  // sampling that unfiltered from a distant camera aliases the lighting into
+  // shimmering checker patterns. Mips average the relief away smoothly with
+  // distance instead. WebGL2 handles the NPOT mip chain; the editor's
+  // rebakeNormalRegion re-upload regenerates it automatically.
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.generateMipmaps = true;
+  tex.anisotropy = NORMAL_ANISOTROPY;
   tex.needsUpdate = true;
   return tex;
 }
@@ -1941,8 +2184,27 @@ function buildBlankMaterial(brush: BrushUniforms): THREE.MeshLambertMaterial {
 // Entry point
 // ---------------------------------------------------------------------------
 
+export interface EnsureZoneOptions {
+  /** Build the cells nearest this point first (e.g. the entry position).
+   *  Falls back to buildTerrain's priorityPoint when omitted. */
+  priority?: { x: number; z: number };
+  /** 'fast' (default): the caller is gating on the result (boot, a teleport
+   *  behind the loading screen), so yield only between small batches.
+   *  'idle': a background prepare; every batch waits for a browser idle slot
+   *  (requestIdleCallback with a forced-progress timeout) so the build never
+   *  steals time an interactive frame needs. */
+  pace?: 'fast' | 'idle';
+}
+
 export interface TerrainView {
   group: THREE.Group;
+  /** Materialize one overworld zone. Repeated calls share the cached task. */
+  ensureZone(
+    zone: ZoneDef,
+    onProgress?: (done: number, total: number) => void,
+    opts?: EnsureZoneOptions,
+  ): Promise<void>;
+  isZoneLoaded(zoneId: string): boolean;
   /** hides chunks that sit entirely past the fog far plane */
   update(camX: number, camZ: number, fogFar: number): void;
   /**
@@ -1968,13 +2230,17 @@ export interface TerrainView {
   setBrush(x: number, z: number, radius: number, color?: THREE.ColorRepresentation): void;
   /** Editor-only: hide the brush ring. */
   clearBrush(): void;
+  /**
+   * Stops any in-flight ensureZone build from adding further chunks. Call
+   * before discarding this view (see renderer rebuildTerrain), or the
+   * abandoned zone builds keep running on a setTimeout chain.
+   */
+  cancelStreaming(): void;
 }
 
-export function buildTerrain(seed: number): TerrainView {
-  // Blank authoring maps use the FULL textured splat material too, so biome
-  // paint lays down real ground textures (the flat blank material made paint
-  // read as untextured vertex tint). Only the true low tier falls back.
+export function buildTerrain(seed: number, priorityPoint?: { x: number; z: number }): TerrainView {
   const lowGfx = !GFX.terrainSplat || !hasTerrainSplatAssets();
+  const plainMaterial = usesPlainTerrainMaterial(getActiveWorldContent().presentationMode);
   refreshCustomGroundTextures();
   // Hole cutouts ride shared uniforms: seed them from the active world before
   // the material build so a loaded map's holes show from the first frame.
@@ -1982,13 +2248,13 @@ export function buildTerrain(seed: number): TerrainView {
   // Full paint-field bake AFTER the custom-texture refresh (the bake reads the
   // textured-swatch slot order) and BEFORE the material build (the uniforms
   // are module-shared, so the swap lands in every past and future material).
-  if (!lowGfx) refreshPaintField();
+  if (!lowGfx && !plainMaterial) refreshPaintField();
   const brush = makeBrushUniforms();
-  const normalTex = lowGfx ? null : terrainNormalTexture(seed);
-  const mat = normalTex
-    ? buildSplatMaterial(normalTex, brush)
-    : isBlankSlateWorld()
-      ? buildBlankMaterial(brush)
+  const normalTex = lowGfx || plainMaterial ? null : terrainNormalTexture();
+  const mat = plainMaterial
+    ? buildBlankMaterial(brush)
+    : normalTex
+      ? buildSplatMaterial(normalTex, brush)
       : buildLambertMaterial(brush);
   const bands = lowGfx ? LOD_BANDS.low : LOD_BANDS.high;
   const group = new THREE.Group();
@@ -2010,9 +2276,32 @@ export function buildTerrain(seed: number): TerrainView {
     spacing: number;
   }[] = [];
 
+  // True when the chunk cell overlaps a mountain-wall band: an inter-zone
+  // ridge line (ZONES[i].zMax) or the world rim. Those chunks always take the
+  // densest band; the walls sit far from every hub, so hub-distance LOD alone
+  // hands the steepest, most looked-at cliffs the coarsest grid.
+  const wallChunkAt = (x0: number, z0: number, size: number): boolean => {
+    if (x0 < rb.minX + WALL_LOD_RIM_MARGIN || x0 + size > rb.maxX - WALL_LOD_RIM_MARGIN) {
+      return true;
+    }
+    if (z0 < rb.minZ + WALL_LOD_RIM_MARGIN || z0 + size > rb.maxZ - WALL_LOD_RIM_MARGIN) {
+      return true;
+    }
+    for (let i = 0; i + 1 < ZONES.length; i++) {
+      const ridgeZ = ZONES[i].zMax;
+      if (z0 - WALL_LOD_RIDGE_HALF < ridgeZ && z0 + size + WALL_LOD_RIDGE_HALF > ridgeZ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const bandIndexAt = (cx: number, cz: number): number => {
-    const centerX = rb.minX + cx * CHUNK_SIZE + CHUNK_SIZE / 2;
-    const centerZ = rb.minZ + cz * CHUNK_SIZE + CHUNK_SIZE / 2;
+    const x0 = rb.minX + cx * CHUNK_SIZE;
+    const z0 = rb.minZ + cz * CHUNK_SIZE;
+    if (wallChunkAt(x0, z0, CHUNK_SIZE)) return 0;
+    const centerX = x0 + CHUNK_SIZE / 2;
+    const centerZ = z0 + CHUNK_SIZE / 2;
     let hubDist = Infinity;
     for (const zn of ZONES) {
       hubDist = Math.min(hubDist, Math.hypot(centerX - zn.hub.x, centerZ - zn.hub.z));
@@ -2021,17 +2310,28 @@ export function buildTerrain(seed: number): TerrainView {
     return idx === -1 ? bands.length - 1 : idx;
   };
 
+  // the coarsest spacing any neighbor chunk can have; sizes the slope-aware
+  // skirt drop so a fine chunk's skirt always reaches past the coarsest
+  // neighbor's chord (and vice versa)
+  const skirtSpan = bands[bands.length - 1].spacing;
+
   const addChunk = (x0: number, z0: number, size: number, spacing: number): void => {
-    // Clamp to the render bounds: the grid loop rounds the chunk count UP, so
-    // without this the last row/column would render up to a whole chunk of
-    // out-of-bounds ground (on blank maps, a junk strip past the map edge).
-    const sizeX = Math.min(size, rb.minX + rb.width - x0);
-    const sizeZ = Math.min(size, rb.minZ + rb.depth - z0);
+    const sizeX = Math.min(size, rb.maxX - x0);
+    const sizeZ = Math.min(size, rb.maxZ - z0);
     if (sizeX <= 0 || sizeZ <= 0) return;
-    const geo = buildChunkGeometry(x0, z0, sizeX, sizeZ, spacing, seed, !lowGfx);
+    const geo = buildChunkGeometry(x0, z0, sizeX, sizeZ, spacing, seed, !lowGfx, skirtSpan);
     const mesh = new THREE.Mesh(geo, mat);
     mesh.receiveShadow = true;
     group.add(mesh);
+    // A chunk's transform never changes after this point (its shape lives in
+    // the geometry, not the mesh matrix), so it can freeze immediately rather
+    // than waiting for the caller's group-wide freezeStaticMatrices pass.
+    // That pass only runs once, right after the synchronous near ring returns,
+    // so every chunk streamed in afterward (the majority, on the far bands)
+    // would otherwise keep matrixAutoUpdate = true and recompose every frame
+    // for the rest of the session.
+    mesh.updateMatrixWorld(true);
+    mesh.matrixAutoUpdate = false;
     chunks.push({
       mesh,
       x: x0 + sizeX / 2,
@@ -2049,42 +2349,205 @@ export function buildTerrain(seed: number): TerrainView {
   // count hurts and culling granularity matters least
   const farBand = bands.length - 1;
   const built = new Set<number>();
-  for (let cz = 0; cz < chunksZ; cz++) {
-    for (let cx = 0; cx < chunksX; cx++) {
-      if (built.has(cz * chunksX + cx)) continue;
-      const superOk =
-        cx % 2 === 0 &&
-        cz % 2 === 0 &&
-        cx + 1 < chunksX &&
-        cz + 1 < chunksZ &&
-        bandIndexAt(cx, cz) === farBand &&
-        bandIndexAt(cx + 1, cz) === farBand &&
-        bandIndexAt(cx, cz + 1) === farBand &&
-        bandIndexAt(cx + 1, cz + 1) === farBand;
-      if (superOk) {
-        for (const [dx, dz] of [
-          [0, 0],
-          [1, 0],
-          [0, 1],
-          [1, 1],
-        ]) {
-          built.add((cz + dz) * chunksX + (cx + dx));
-        }
-        addChunk(
-          rb.minX + cx * CHUNK_SIZE,
-          rb.minZ + cz * CHUNK_SIZE,
-          CHUNK_SIZE * 2,
-          bands[farBand].spacing,
-        );
-      } else {
-        built.add(cz * chunksX + cx);
-        const band = bands[bandIndexAt(cx, cz)];
-        addChunk(rb.minX + cx * CHUNK_SIZE, rb.minZ + cz * CHUNK_SIZE, CHUNK_SIZE, band.spacing);
+  const loadedZones = new Set<string>();
+  const pendingZones = new Map<string, Promise<void>>();
+  // Set by cancelStreaming(): every in-flight ensureZone loop bails at its next
+  // yield point without marking its zone loaded, so a discarded view (see
+  // renderer rebuildTerrain) stops adding chunks instead of building on a
+  // setTimeout chain for the rest of the session.
+  let cancelled = false;
+  const cellOwnerId = (cx: number, cz: number): string | null => {
+    const x = rb.minX + (cx + 0.5) * CHUNK_SIZE;
+    const z = rb.minZ + (cz + 0.5) * CHUNK_SIZE;
+    // zoneAt deliberately clamps gaps/out-of-bounds positions to the nearest
+    // playable zone. Terrain ownership must not: otherwise asking for one
+    // column can accidentally materialize chunks in an empty neighbouring
+    // column merely because that zone is the fallback for the same z band.
+    return (
+      ZONES.find(
+        (candidate) =>
+          z >= candidate.zMin &&
+          z < candidate.zMax &&
+          x >= (candidate.xMin ?? STRIP_MIN_X) &&
+          x < (candidate.xMax ?? STRIP_MAX_X),
+      )?.id ?? null
+    );
+  };
+  const zoneCells = (zone: ZoneDef): [number, number][] => {
+    const out: [number, number][] = [];
+    for (let cz = 0; cz < chunksZ; cz++) {
+      for (let cx = 0; cx < chunksX; cx++) {
+        if (cellOwnerId(cx, cz) === zone.id) out.push([cx, cz]);
       }
     }
-  }
+    return out;
+  };
+  const yieldBuild = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
+  // Background ('idle') builds advance one batch per idle slot instead: the
+  // timeout still forces progress under sustained load, so a later gating
+  // caller awaiting the same shared task is never starved indefinitely.
+  const yieldIdle = (): Promise<void> => idleSlot(IDLE_BUILD_TIMEOUT_MS);
+  const normalBoundsFor = (zone: ZoneDef) =>
+    normalTexelBounds(
+      zone.xMin ?? STRIP_MIN_X,
+      zone.zMin,
+      zone.xMax ?? STRIP_MAX_X,
+      zone.zMax,
+      rb.minX,
+      rb.minZ,
+      rb.width,
+      rb.depth,
+      NORMAL_TEX_W,
+      NORMAL_TEX_H,
+      1,
+    );
+  const ensureZone = (
+    zone: ZoneDef,
+    onProgress?: (done: number, total: number) => void,
+    opts?: EnsureZoneOptions,
+  ): Promise<void> => {
+    if (loadedZones.has(zone.id)) {
+      onProgress?.(1, 1);
+      return Promise.resolve();
+    }
+    const pending = pendingZones.get(zone.id);
+    if (pending) return pending;
+    const idlePace = opts?.pace === 'idle';
+    const yieldSlice = idlePace ? yieldIdle : yieldBuild;
+    // An idle build works one cell per idle slot (a gating build races in
+    // batches of four): measured on the walked-crossing harness, dense-band
+    // 60 yd chunks cost ~75 ms of main-thread geometry each, so idle pace
+    // additionally quarters them below (4 x 30 yd sub-chunks of ~20 ms).
+    const cellsPerSlice = idlePace ? 1 : 4;
+    const task = (async () => {
+      const cells = zoneCells(zone);
+      // A player can enter a zone anywhere, not just at its hub (a returning
+      // character's logout spot, a walked boundary crossing), so row-major
+      // order alone can leave them standing on not-yet-built terrain. Pull the
+      // cells around the actual entry point (this call's priority, falling
+      // back to the view's construction point) to the front, sorted by
+      // distance, so the chunk directly underfoot builds first. Only that
+      // bounded neighbourhood is reordered: the rest keeps row-major order so
+      // the far-band 2x2 super-chunk merge still forms.
+      const entryPoint = opts?.priority ?? priorityPoint;
+      if (entryPoint) {
+        const cellDist = ([cx, cz]: [number, number]): number =>
+          Math.hypot(
+            rb.minX + (cx + 0.5) * CHUNK_SIZE - entryPoint.x,
+            rb.minZ + (cz + 0.5) * CHUNK_SIZE - entryPoint.z,
+          );
+        const nearby = cells.filter((cell) => cellDist(cell) <= CHUNK_SIZE * 3);
+        if (nearby.length > 0) {
+          nearby.sort((a, b) => cellDist(a) - cellDist(b));
+          const nearbySet = new Set(nearby);
+          const rest = cells.filter((cell) => !nearbySet.has(cell));
+          cells.length = 0;
+          cells.push(...nearby, ...rest);
+        }
+      }
+      const normalBounds = normalTex ? normalBoundsFor(zone) : null;
+      const rowsPerSlice = 12;
+      const normalSlices = normalBounds
+        ? Math.ceil((normalBounds.j1 - normalBounds.j0 + 1) / rowsPerSlice)
+        : 0;
+      const total = Math.max(1, normalSlices + cells.length);
+      let done = 0;
+      if (normalTex && normalBounds) {
+        for (let j = normalBounds.j0; j <= normalBounds.j1; j += rowsPerSlice) {
+          if (cancelled) return;
+          bakeNormalRegion(
+            normalTex.image.data as Uint8Array,
+            seed,
+            normalBounds.i0,
+            normalBounds.i1,
+            j,
+            Math.min(normalBounds.j1, j + rowsPerSlice - 1),
+          );
+          onProgress?.(++done, total);
+          await yieldSlice();
+        }
+        normalTex.needsUpdate = true;
+      }
+      for (const [cx, cz] of cells) {
+        if (cancelled) return;
+        const cell = cz * chunksX + cx;
+        // Idle pace splits a dense-band (near or mid LOD) cell into four
+        // half-size sub-chunks, one per idle slot: a full dense 60 yd chunk
+        // costs ~75 ms of geometry on the main thread (the walked-crossing
+        // hitch), a 30 yd quarter ~20 ms. Skirts make the extra seams
+        // invisible, exactly like the far-band super-chunk merge in reverse;
+        // only the handful of dense cells per zone pay the extra draw calls.
+        const bandIdx = bandIndexAt(cx, cz);
+        if (idlePace && bandIdx < farBand && !built.has(cell)) {
+          built.add(cell);
+          const half = CHUNK_SIZE / 2;
+          const x0 = rb.minX + cx * CHUNK_SIZE;
+          const z0 = rb.minZ + cz * CHUNK_SIZE;
+          for (const [qx, qz] of [
+            [0, 0],
+            [1, 0],
+            [0, 1],
+            [1, 1],
+          ] as const) {
+            if (cancelled) return;
+            addChunk(x0 + qx * half, z0 + qz * half, half, bands[bandIdx].spacing);
+            await yieldSlice();
+          }
+          onProgress?.(++done, total);
+          continue;
+        }
+        if (!built.has(cell)) {
+          const superCells = [
+            [cx, cz],
+            [cx + 1, cz],
+            [cx, cz + 1],
+            [cx + 1, cz + 1],
+          ] as const;
+          const superOk =
+            cx % 2 === 0 &&
+            cz % 2 === 0 &&
+            cx + 1 < chunksX &&
+            cz + 1 < chunksZ &&
+            superCells.every(
+              ([sx, sz]) =>
+                cellOwnerId(sx, sz) === zone.id &&
+                !built.has(sz * chunksX + sx) &&
+                bandIndexAt(sx, sz) === farBand,
+            );
+          if (superOk) {
+            for (const [sx, sz] of superCells) built.add(sz * chunksX + sx);
+            addChunk(
+              rb.minX + cx * CHUNK_SIZE,
+              rb.minZ + cz * CHUNK_SIZE,
+              CHUNK_SIZE * 2,
+              bands[farBand].spacing,
+            );
+          } else {
+            built.add(cell);
+            addChunk(
+              rb.minX + cx * CHUNK_SIZE,
+              rb.minZ + cz * CHUNK_SIZE,
+              CHUNK_SIZE,
+              bands[bandIndexAt(cx, cz)].spacing,
+            );
+          }
+        }
+        onProgress?.(++done, total);
+        if (done % cellsPerSlice === 0) await yieldSlice();
+      }
+      loadedZones.add(zone.id);
+      onProgress?.(total, total);
+    })().finally(() => pendingZones.delete(zone.id));
+    pendingZones.set(zone.id, task);
+    return task;
+  };
   return {
     group,
+    ensureZone,
+    isZoneLoaded: (zoneId: string) => loadedZones.has(zoneId),
+    cancelStreaming(): void {
+      cancelled = true;
+    },
     update(camX: number, camZ: number, fogFar: number): void {
       // fully-fogged chunks are pure overdraw; drop them before the frustum
       for (const chunk of chunks) {
@@ -2113,6 +2576,7 @@ export function buildTerrain(seed: number): TerrainView {
           chunk.spacing,
           seed,
           !lowGfx,
+          skirtSpan,
         );
         chunk.mesh.geometry.dispose();
         chunk.mesh.geometry = geo; // bounding box/sphere already computed by the build

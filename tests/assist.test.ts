@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { type AssistCandidate, resolveAssist } from '../src/sim/assist';
+import { describe, it, expect } from 'vitest';
+import { resolveAssist, type AssistCandidate } from '../src/sim/assist';
 
 // resolveAssist is the pure core behind the "/assist <name>" chat command: given the
 // roster of online players (each with the entity they are currently targeting) it works
@@ -13,10 +13,7 @@ describe('resolveAssist', () => {
   // caster=1 (Aki), leader=2 (Bret) is beating mob 99. /assist Bret -> target 99.
   it('targets whatever mob the named player is targeting', () => {
     const r = resolveAssist(
-      roster(
-        { entityId: 1, name: 'Aki', targetId: null },
-        { entityId: 2, name: 'Bret', targetId: 99 },
-      ),
+      roster({ entityId: 1, name: 'Aki', targetId: null }, { entityId: 2, name: 'Bret', targetId: 99 }),
       1,
       'Bret',
     );
@@ -25,10 +22,7 @@ describe('resolveAssist', () => {
 
   it('matches the player name case-insensitively when unambiguous', () => {
     const r = resolveAssist(
-      roster(
-        { entityId: 1, name: 'Aki', targetId: null },
-        { entityId: 2, name: 'Bret', targetId: 99 },
-      ),
+      roster({ entityId: 1, name: 'Aki', targetId: null }, { entityId: 2, name: 'Bret', targetId: 99 }),
       1,
       'bret',
     );
@@ -58,10 +52,7 @@ describe('resolveAssist', () => {
       1,
       'bret',
     );
-    expect(r).toEqual({
-      kind: 'error',
-      message: "Several players match 'bret'. Use exact capitalization.",
-    });
+    expect(r).toEqual({ kind: 'error', message: "Several players match 'bret'. Use exact capitalization." });
   });
 
   it('errors when no player by that name is online', () => {
@@ -76,10 +67,7 @@ describe('resolveAssist', () => {
 
   it('reports when the named player has no target', () => {
     const r = resolveAssist(
-      roster(
-        { entityId: 1, name: 'Aki', targetId: null },
-        { entityId: 2, name: 'Bret', targetId: null },
-      ),
+      roster({ entityId: 1, name: 'Aki', targetId: null }, { entityId: 2, name: 'Bret', targetId: null }),
       1,
       'Bret',
     );
@@ -108,10 +96,7 @@ describe('resolveAssist', () => {
         1,
         '   ',
       );
-      expect(r).toEqual({
-        kind: 'error',
-        message: 'Assist whom? Target a player or use /assist <name>.',
-      });
+      expect(r).toEqual({ kind: 'error', message: 'Assist whom? Target a player or use /assist <name>.' });
     });
 
     it('refuses to assist yourself when you target yourself', () => {
@@ -121,10 +106,7 @@ describe('resolveAssist', () => {
   });
 
   it('is a pure function: same inputs give the same result', () => {
-    const rows = roster(
-      { entityId: 1, name: 'Aki', targetId: null },
-      { entityId: 2, name: 'Bret', targetId: 99 },
-    );
+    const rows = roster({ entityId: 1, name: 'Aki', targetId: null }, { entityId: 2, name: 'Bret', targetId: 99 });
     expect(resolveAssist(rows, 1, 'Bret')).toEqual(resolveAssist(rows, 1, 'Bret'));
   });
 });

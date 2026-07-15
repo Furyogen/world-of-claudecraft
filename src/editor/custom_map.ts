@@ -32,6 +32,7 @@ import { assetById } from './asset_catalog.generated';
 import { isLocalAssetId, localAssetUrl } from './local_assets';
 import type { ZoneContent } from './model';
 import { userAssetPath } from './user_assets';
+import { withoutMajorWorldProps, worldMajorPropPlacements } from './world_prop_placements';
 
 export const CUSTOM_MAP_VERSION = MAP_DOC_VERSION;
 
@@ -80,7 +81,8 @@ export function newCustomMap(name: string, id: string, now: number): CustomMap {
       roads: deepClone(BUILTIN_WORLD.roads as CustomMap['content']['roads']),
     },
     terrainEdits: [],
-    placements: [],
+    placements: worldMajorPropPlacements(BUILTIN_WORLD.props),
+    propsMode: 'editable-major',
   };
 }
 
@@ -292,6 +294,7 @@ export function customMapFromContent(
     meta: CustomMapMeta;
     waterLevel?: number;
     playerStart?: { x: number; z: number };
+    playerSpawnArea?: { minX: number; minZ: number; maxX: number; maxZ: number };
   },
 ): CustomMap {
   const map: CustomMap = {
@@ -313,6 +316,7 @@ export function customMapFromContent(
     map.waterLevel = layers.waterLevel;
   }
   if (layers.playerStart) map.playerStart = { ...layers.playerStart };
+  if (layers.playerSpawnArea) map.playerSpawnArea = { ...layers.playerSpawnArea };
   return map;
 }
 
@@ -328,12 +332,18 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
     npcs: deepClone(map.content.npcs as WorldContent['npcs']),
     groundObjects: deepClone(map.content.objects as WorldContent['groundObjects']),
     roads: deepClone((map.content.roads ?? BUILTIN_WORLD.roads) as WorldContent['roads']),
-    props: map.propsMode === 'empty' ? emptyZoneProps() : deepClone(BUILTIN_WORLD.props),
+    props:
+      map.propsMode === 'empty'
+        ? emptyZoneProps()
+        : map.propsMode === 'editable-major'
+          ? withoutMajorWorldProps(deepClone(BUILTIN_WORLD.props))
+          : deepClone(BUILTIN_WORLD.props),
     playerStart: { x: start.x, z: start.z },
     terrainEdits: deepClone(map.terrainEdits),
     placements: placementsToPlayAssets(map.placements, map.assetCollisionMesh),
     biomePaint: map.biomePaint ? deepClone(map.biomePaint) : undefined,
   };
+  if (map.playerSpawnArea) world.playerSpawnArea = { ...map.playerSpawnArea };
   if (map.blockers && map.blockers.length > 0) world.blockers = deepClone(map.blockers);
   // Imported-model collision bakes ride into the play world so the sim's
   // placement colliders resolve 'local/<sha>' / 'user/<sha>' paths.
@@ -364,7 +374,7 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
   if (map.waterLevel !== undefined) world.waterLevel = map.waterLevel;
   if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
   if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
-  if (map.presentationMode === 'blank') world.presentationMode = 'blank';
+  if (map.presentationMode !== undefined) world.presentationMode = map.presentationMode;
   if (map.skybox !== undefined) world.skybox = map.skybox;
   if (map.terrainStyle) world.terrainStyle = { ...map.terrainStyle };
   if (map.timeScale !== undefined) world.timeScale = map.timeScale;
@@ -430,6 +440,9 @@ export function placementsToRenderAssets(
                   assetById(p.assetId)?.path);
     if (!path) return null;
     const placed: PlacedAsset = { path, x: p.x, z: p.z, rotY: p.rotY, scale: p.scale };
+    if (p.worldPropKind !== undefined) placed.worldPropKind = p.worldPropKind;
+    if (p.worldPropWidth !== undefined) placed.worldPropWidth = p.worldPropWidth;
+    if (p.worldPropDepth !== undefined) placed.worldPropDepth = p.worldPropDepth;
     if (p.hue !== undefined) placed.hue = p.hue;
     if (p.lum !== undefined) placed.lum = p.lum;
     if (p.clump !== undefined) placed.clump = p.clump;

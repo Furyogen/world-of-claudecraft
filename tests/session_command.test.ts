@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import type { SimEvent } from '../src/sim/types';
+import { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -29,7 +29,7 @@ describe('/session command', () => {
     );
   });
 
-  it("reflects this session's counters with singular/plural and thousands separators", () => {
+  it('reflects this session\'s counters with singular/plural and thousands separators', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.tick();

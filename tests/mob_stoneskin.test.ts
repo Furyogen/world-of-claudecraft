@@ -91,6 +91,18 @@ describe('Stoneskin boss mechanic', () => {
     expect(mob.stoneskinTimer).toBe(MOBS.marrowlord_varkas.stoneskin!.every);
   });
 
+  it('mechanicHealMult scales the barrier at the fire site (heroic-instance plumbing)', () => {
+    // Heroic spawns carry mechanicHealMult (instances/difficulty.ts). Stoneskin
+    // draws no rng, so the scaled absorb pins exactly: 2x the template amount.
+    const sim = makeSim();
+    const mob = engagedWard(sim);
+    mob.mechanicHealMult = 2;
+    mob.stoneskinTimer = 0.001;
+    (sim as any).updateMob(mob);
+
+    expect(wardAura(mob)?.value).toBe(MOBS.marrowlord_varkas.stoneskin!.amount * 2);
+  });
+
   it('a normal mob without a stoneskin template never gains the barrier', () => {
     const sim = makeSim();
     const wolf = createMob(900202, MOBS.forest_wolf, 5, { ...sim.player.pos });

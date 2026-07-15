@@ -177,6 +177,28 @@ describe('delve companions', () => {
     expect(sim.entities.has(companion.id)).toBe(false);
   });
 
+  it('rank 3 revive clears a movement intent held at death (issue 1651)', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(20);
+    const meta = (sim as any).players.get(sim.playerId);
+    meta.companionUpgrades.companion_tessa = 3;
+    teleport(sim, 0, 0);
+    sim.enterDelve('collapsed_reliquary', 'normal');
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    const companion = sim.entities.get(run.companion!.entityId)!;
+    const p = sim.player;
+    // Hold forward, then die: handleDeath does not zero moveInput, so the flag
+    // survives the dead interval and would re-activate the tick after the revive.
+    meta.moveInput.forward = true;
+    p.dead = true;
+    p.hp = 0;
+    updateDelveCompanion((sim as any).ctx, companion);
+    expect(p.dead).toBe(false);
+    expect(run.companionReviveUsed).toBe(true);
+    // The revived owner must not auto-walk from the stale intent.
+    expect(meta.moveInput.forward).toBe(false);
+  });
+
   it('below rank 3 a dead owner still despawns the companion (no revive)', () => {
     const sim = makeSim();
     sim.setPlayerLevel(20);
@@ -222,6 +244,84 @@ describe('delve companions', () => {
     p.hp = 0;
     updateDelveCompanion((sim as any).ctx, companion2);
     expect(p.dead).toBe(true); // no second revive in the same run
+  });
+
+  it('companion respawns after an in-delve player death and release', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    teleport(sim, 0, 0);
+    sim.enterDelve('collapsed_reliquary', 'normal');
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    expect(run.companion).toBeDefined();
+    const oldId = run.companion!.entityId;
+
+    // Kill the owner and advance a couple of ticks so the mob-AI pass runs the
+    // owner-dead arm of updateDelveCompanion, which drops the companion entity
+    // before the player's spirit is released (mirrors the live sequence).
+    sim.player.dead = true;
+    sim.player.hp = 0;
+    sim.tick();
+    sim.tick();
+    expect(sim.entities.has(oldId)).toBe(false);
+
+    sim.releaseSpirit();
+
+    expect(run.companion).toBeDefined();
+    expect(run.companion!.entityId).not.toBe(oldId);
+    expect(sim.entities.has(run.companion!.entityId)).toBe(true);
+    expect(sim.companionState).not.toBeNull();
+  });
+
+  it('companion respawns after death in the Drowned Litany (Edda Reedhand)', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(14);
+    teleport(sim, 0, 0);
+    sim.enterDelve('drowned_litany', 'normal');
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    expect(run.companion?.companionId).toBe('companion_edda');
+    const oldId = run.companion!.entityId;
+
+    sim.player.dead = true;
+    sim.player.hp = 0;
+    sim.tick();
+    sim.tick();
+    expect(sim.entities.has(oldId)).toBe(false);
+
+    sim.releaseSpirit();
+
+    expect(run.companion?.companionId).toBe('companion_edda');
+    expect(run.companion!.entityId).not.toBe(oldId);
+    expect(sim.entities.has(run.companion!.entityId)).toBe(true);
+  });
+
+  it('respawning the companion after death does not recharge the rank 3 revive boon', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(20);
+    const meta = (sim as any).players.get(sim.playerId);
+    meta.companionUpgrades.companion_tessa = 3;
+    teleport(sim, 0, 0);
+    sim.enterDelve('collapsed_reliquary', 'normal');
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    const companion = sim.entities.get(run.companion!.entityId)!;
+
+    // Spend the once-per-run revive first.
+    sim.player.dead = true;
+    sim.player.hp = 0;
+    updateDelveCompanion((sim as any).ctx, companion);
+    expect(sim.player.dead).toBe(false);
+    expect(run.companionReviveUsed).toBe(true);
+
+    // A real death now (revive already spent) drops the companion; release
+    // should respawn her but must not reset the spent flag.
+    sim.player.dead = true;
+    sim.player.hp = 0;
+    sim.tick();
+    sim.tick();
+    sim.releaseSpirit();
+
+    expect(run.companionReviveUsed).toBe(true);
+    expect(run.companion).toBeDefined();
+    expect(sim.entities.has(run.companion!.entityId)).toBe(true);
   });
 
   it('companion upgrade rank 2 costs 3 marks (Marks only, no copper)', () => {

@@ -55,6 +55,7 @@ export interface DrawState {
   region: { minX: number; minZ: number; maxX: number; maxZ: number } | null;
   brush: BrushCursor | null;
   spawn: Vec2 | null;
+  spawnArea: { minX: number; minZ: number; maxX: number; maxZ: number } | null;
 }
 
 export function draw(
@@ -104,8 +105,27 @@ export function draw(
     ctx.fillRect(a.sx, a.sy, b.sx - a.sx, b.sy - a.sy);
     ctx.restore();
   }
+  if (state.spawnArea) drawSpawnArea(ctx, cam, vp, state.spawnArea);
   if (state.spawn) drawSpawn(ctx, cam, vp, state.spawn);
   if (state.brush) drawBrush(ctx, cam, vp, state.brush);
+  ctx.restore();
+}
+
+function drawSpawnArea(
+  ctx: CanvasRenderingContext2D,
+  cam: Camera,
+  vp: Viewport,
+  area: { minX: number; minZ: number; maxX: number; maxZ: number },
+): void {
+  const a = cam.worldToScreen({ x: area.minX, z: area.minZ }, vp);
+  const b = cam.worldToScreen({ x: area.maxX, z: area.maxZ }, vp);
+  ctx.save();
+  ctx.setLineDash([8, 5]);
+  ctx.strokeStyle = '#3fd0ff';
+  ctx.fillStyle = 'rgba(63,208,255,0.14)';
+  ctx.lineWidth = 2;
+  ctx.fillRect(a.sx, a.sy, b.sx - a.sx, b.sy - a.sy);
+  ctx.strokeRect(a.sx, a.sy, b.sx - a.sx, b.sy - a.sy);
   ctx.restore();
 }
 

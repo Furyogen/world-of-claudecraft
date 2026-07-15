@@ -28,13 +28,18 @@ const EFFECT_CLASS: Record<AbilityEffect['type'], AutoAttackClass> = {
   finisherDamage: 'damage',
   dot: 'damage',
   aoeDamage: 'damage',
+  chainDamage: 'damage',
+  aoeHeal: 'other',
+  chainHeal: 'other',
   groundAoE: 'damage',
   aoeRoot: 'damage',
+  consumeAura: 'other',
   drainTick: 'damage',
   judgement: 'damage',
   incapacitate: 'breakCC',
   polymorph: 'breakCC',
   heal: 'other',
+  feralCharge: 'other',
   hot: 'other',
   absorb: 'other',
   imbue: 'other',
@@ -45,18 +50,31 @@ const EFFECT_CLASS: Record<AbilityEffect['type'], AutoAttackClass> = {
   stun: 'other',
   aoeAttackSpeed: 'other',
   aoeAttackPower: 'other',
+  aoeAllyAttackPower: 'other',
+  aoeAllyHaste: 'other',
   selfBuff: 'other',
+  petBuff: 'other',
+  applyDebuff: 'other',
   finisherHaste: 'other',
   finisherStun: 'other',
   gainResource: 'other',
   selfDamagePctMax: 'other',
   charge: 'other',
   sunder: 'other',
+  faerieFire: 'other',
   taunt: 'other',
   tamePet: 'other',
   dismissPet: 'other',
   summonPet: 'other',
   summonDemon: 'other',
+  // Vale Cup sport moves (docs/prd/vale-cup.md): no-damage, harvest-truce
+  // utility. None of them should engage auto-attack on use (the paired stun on
+  // Shoulder is non-breaking CC, and nothing on the pitch deals damage).
+  ballKick: 'other',
+  ballPass: 'other',
+  ballShoot: 'other',
+  sportDash: 'other',
+  sportShove: 'other',
 };
 
 /**
@@ -71,7 +89,7 @@ export function abilityStartsAutoAttack(effects: AbilityEffect[]): boolean {
   for (const e of effects) {
     const cls = EFFECT_CLASS[e.type];
     if (cls === 'breakCC') return false;
-    if (cls === 'damage') damaging = true;
+    if (cls === 'damage' || (e.type === 'consumeAura' && e.deal !== undefined)) damaging = true;
   }
   return damaging;
 }

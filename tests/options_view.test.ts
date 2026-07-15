@@ -177,8 +177,40 @@ describe('options_view: graphics dispatch matrix (cluster 3)', () => {
     expect(keys).toContain('actionButtonScale');
     expect(keys).toContain('joystickDeadzone');
     expect(keys).toContain('touchInvertLook');
+    expect(keys).toContain('mobileCameraJoystick');
+    expect(keys).toContain('leftHandedTouch');
     // touchLookSpeed sits right after cameraSpeed
     expect(keys[keys.indexOf('cameraSpeed') + 1]).toBe('touchLookSpeed');
+    // mobileCameraJoystick and leftHandedTouch are the last two touch-only rows,
+    // right after touchInvertLook, in that order.
+    const touchInvertIdx = keys.indexOf('touchInvertLook');
+    expect(keys[touchInvertIdx + 1]).toBe('mobileCameraJoystick');
+    expect(keys[touchInvertIdx + 2]).toBe('leftHandedTouch');
+  });
+
+  it('hides mobileCameraJoystick and leftHandedTouch on a desktop interface', () => {
+    const controls = buildGraphicsControls(makeSource({ graphicsPreset: 4 }), {
+      touch: false,
+      nativeShell: false,
+    });
+    const keys = keysOf(controls);
+    expect(keys).not.toContain('mobileCameraJoystick');
+    expect(keys).not.toContain('leftHandedTouch');
+  });
+
+  it('gives mobileCameraJoystick and leftHandedTouch their correct i18n keys', () => {
+    const controls = buildGraphicsControls(makeSource({ graphicsPreset: 4 }), {
+      touch: true,
+      nativeShell: false,
+    });
+    expect(find(controls, 'mobileCameraJoystick')).toMatchObject({
+      control: 'boolToggle',
+      labelKey: 'hudChrome.options.mobileCameraJoystick',
+    });
+    expect(find(controls, 'leftHandedTouch')).toMatchObject({
+      control: 'boolToggle',
+      labelKey: 'hudChrome.options.mobileLeftHanded',
+    });
   });
 });
 
@@ -256,13 +288,23 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
     ]);
     expect(find(controls, 'reduceMotion')).toMatchObject({ control: 'boolToggle' });
   });
+
+  it('marks only uiScale as commit-on-release; the other comfort sliders stay live (#1558)', () => {
+    const controls = buildInterfaceControls(makeSource());
+    // uiScale rescales the whole UI (window included), so it must apply on release.
+    expect(find(controls, 'uiScale')).toMatchObject({ control: 'slider', commitOnChange: true });
+    // Sibling sliders keep their live preview (no commitOnChange flag).
+    expect(find(controls, 'playerFrameScale')).not.toHaveProperty('commitOnChange');
+    expect(find(controls, 'tooltipScale')).not.toHaveProperty('commitOnChange');
+    expect(find(controls, 'fctScale')).not.toHaveProperty('commitOnChange');
+  });
 });
 
 // ---------------------------------------------------------------------------
 // Main menu routing (cluster 5)
 // ---------------------------------------------------------------------------
 describe('options_view: main menu routing', () => {
-  it('routes each row to its sub-view, with logout + close, omitting bug report offline', () => {
+  it('routes each row to its sub-view, with unstuck before logout + close, omitting bug report offline', () => {
     const offline = buildOptionsMenu({ bugReportAvailable: false });
     expect(offline.map((e) => e.labelKey)).toEqual([
       'hud.options.keyBindings',
@@ -271,9 +313,11 @@ describe('options_view: main menu routing', () => {
       'hud.options.interface',
       'hud.options.audio',
       'hudChrome.perf.title',
+      'hudChrome.unstuck.menuButton',
       'hud.options.logout',
       'hud.options.returnToGame',
     ]);
+    expect(offline.at(-3)?.action).toEqual({ kind: 'unstuck' });
     expect(offline.at(-2)?.action).toEqual({ kind: 'logout' });
     expect(offline.at(-1)?.action).toEqual({ kind: 'close' });
     // exactly one interface entry (no duplicates), routing to the interface view
@@ -286,6 +330,12 @@ describe('options_view: main menu routing', () => {
     const online = buildOptionsMenu({ bugReportAvailable: true });
     const bug = online.find((e) => e.labelKey === 'hudChrome.bugReport.menuButton');
     expect(bug?.action).toEqual({ kind: 'goto', view: 'bugreport' });
+    expect(online.slice(-4)).toEqual([
+      { labelKey: 'hudChrome.bugReport.menuButton', action: { kind: 'goto', view: 'bugreport' } },
+      { labelKey: 'hudChrome.unstuck.menuButton', action: { kind: 'unstuck' } },
+      { labelKey: 'hud.options.logout', action: { kind: 'logout' } },
+      { labelKey: 'hud.options.returnToGame', action: { kind: 'close' } },
+    ]);
   });
 });
 

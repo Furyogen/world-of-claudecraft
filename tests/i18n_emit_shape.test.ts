@@ -37,7 +37,7 @@ import {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// The authoritative ordered locale set both build scripts emit (LOCALES). en + 20.
+// The authoritative ordered locale set both build scripts emit (LOCALES). en + 21.
 const ALL_LOCALES = [
   'en',
   'es',
@@ -53,6 +53,7 @@ const ALL_LOCALES = [
   'ja_JP',
   'pt_BR',
   'ru_RU',
+  'cs_CZ',
   'nl_NL',
   'pl_PL',
   'id_ID',
@@ -73,7 +74,7 @@ function assertEmitSurface(
   loaders: Record<string, () => Promise<unknown>>,
   supported: readonly string[],
 ) {
-  // Barrel translations map: exactly the 14 locales, in emit order, en_XA EXCLUDED.
+  // Barrel translations map: exactly the 21 locales, in emit order, en_XA EXCLUDED.
   expect(Object.keys(translations), `${label}: translations key set`).toEqual(ALL_LOCALES);
   expect('en_XA' in translations, `${label}: en_XA must NOT be in translations`).toBe(false);
   expect(translations.en, `${label}: en present`).toBeTypeOf('object');

@@ -14,6 +14,7 @@
 // and formats values through formatNumber; this core stays locale-free so the
 // same row/severity logic is unit-testable without a renderer or a locale loaded.
 
+import { TICK_RATE } from '../sim/types';
 import type { TranslationKey } from './i18n';
 
 // ---------------------------------------------------------------------------
@@ -28,7 +29,9 @@ export type PerfMetricKey =
   | 'ping'
   | 'jitter'
   | 'snapshot'
+  | 'serverTick'
   | 'connection'
+  | 'predLead'
   | 'drawCalls'
   | 'triangles'
   | 'geometries'
@@ -56,7 +59,11 @@ export interface MetricsSample {
   connected: boolean;
   pingMs: number | null;
   jitterMs: number | null;
+  /** Latency hidden by the self-motion extrapolation; null when inactive. */
+  predLeadMs: number | null;
   snapshotHz: number | null;
+  /** Server-measured achieved sim tick rate (Hz); null offline or unreported. */
+  serverTickHz: number | null;
   connectionType: string | null;
   // renderer
   drawCalls: number | null;
@@ -86,7 +93,7 @@ export type PerfValue =
   | { kind: 'int'; v: number }
   | { kind: 'compact'; v: number }
   | { kind: 'percent'; v: number } // 0..1
-  | { kind: 'hz'; v: number }
+  | { kind: 'hz'; v: number; digits?: number }
   | { kind: 'memPair'; usedMb: number; limitMb: number | null }
   | { kind: 'text'; text: string };
 
@@ -121,11 +128,11 @@ export interface PerfOverlayViewConfig {
 // Frame-time meter (pure rolling statistics)
 // ---------------------------------------------------------------------------
 
-const DEFAULT_RING = 300; // ~5s at 60fps — enough for stable 1%/0.1% lows
+const DEFAULT_RING = 300; // ~5s at 60fps, enough for stable 1%/0.1% lows
 const DEFAULT_REPAINT_MS = 250; // ~4 Hz text repaint, matching the legacy readout
 const DEFAULT_GRAPH_POINTS = 90;
 const HITCH_MS = 50; // a frame slower than this counts as a hitch
-const EMA_ALPHA = 0.1; // FPS smoothing — readable, not flickery
+const EMA_ALPHA = 0.1; // FPS smoothing, readable, not flickery
 
 export class FrameMeter {
   private ema: number;
@@ -294,12 +301,37 @@ export const METRIC_REGISTRY: readonly MetricDef[] = [
     severity: (s) => (s.online && s.jitterMs != null ? lowerBetter(s.jitterMs, 8, 20) : NONE),
   },
   {
+    key: 'predLead',
+    labelKey: 'hudChrome.perf.labels.predLead',
+    group: 'network',
+    defaultOn: false,
+    read: (s) =>
+      s.online && s.predLeadMs != null ? { kind: 'ms', v: s.predLeadMs, digits: 0 } : null,
+    severity: () => NONE,
+  },
+  {
     key: 'snapshot',
     labelKey: 'hudChrome.perf.labels.snapshot',
     group: 'network',
     defaultOn: false,
     read: (s) => (s.online && s.snapshotHz != null ? { kind: 'hz', v: s.snapshotHz } : null),
     severity: () => NONE,
+  },
+  {
+    // One decimal: the interesting signal is a sag from 20.0, which integer
+    // rounding would hide until the loop is already badly degraded.
+    key: 'serverTick',
+    labelKey: 'hudChrome.perf.labels.serverTick',
+    group: 'network',
+    defaultOn: false,
+    read: (s) =>
+      s.online && s.serverTickHz != null ? { kind: 'hz', v: s.serverTickHz, digits: 1 } : null,
+    // Sag thresholds derive from the nominal rate (never a hardcoded 20):
+    // within half a tick of nominal is healthy, a >25% sag is the bad tier.
+    severity: (s) =>
+      s.online && s.serverTickHz != null
+        ? higherBetter(s.serverTickHz, TICK_RATE - 0.5, TICK_RATE * 0.75)
+        : NONE,
   },
   {
     key: 'connection',

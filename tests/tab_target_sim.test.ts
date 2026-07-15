@@ -2,19 +2,15 @@
 // the nearest blip regardless of where the player is looking. Reproduces the
 // bug where Tab selected an off-screen mob behind the player over a visible one.
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 
 const SEED = 31337;
 
 function spawnMob(sim: Sim, id: number, dx: number, dz: number) {
   const p = sim.entities.get(sim.playerId)!;
-  const mob = createMob(id, MOBS.ridge_stalker, 13, {
-    x: p.pos.x + dx,
-    y: p.pos.y,
-    z: p.pos.z + dz,
-  });
+  const mob = createMob(id, MOBS.ridge_stalker, 13, { x: p.pos.x + dx, y: p.pos.y, z: p.pos.z + dz });
   sim.entities.set(mob.id, mob);
   (sim as any).rebucket(mob);
   return mob;

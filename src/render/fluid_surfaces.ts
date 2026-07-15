@@ -1,5 +1,5 @@
 // Fluid pool surfaces (lava/acid/spectral/water): the visible ellipse surface
-// for every 'fluid/<kind>' volume, plus per-pool ambience — an attached point
+// for every 'fluid/<kind>' volume, plus per-pool ambience ? an attached point
 // light (ranked into the shared fireLights budget), bubble/smoke particles
 // through the pooled Vfx cloud, and a cheap haze disc. Geometry and placement
 // derive from the SAME FluidVolume records the sim damage tick reads

@@ -1,10 +1,10 @@
 // Cave/tunnel geometry: the ONE analytic model shared by the sim (ground
 // sheets, wall confinement, camera clamp) and the renderer (the standalone
 // tube mesh). Everything derives from the CaveDef node chains; no RNG, no
-// DOM/Three imports, pure math — the same contract as terrainHeight/
+// DOM/Three imports, pure math ? the same contract as terrainHeight/
 // HeightStamp.
 //
-// Geometry model (v2 — terrain-independent)
+// Geometry model (v2 ? terrain-independent)
 // -----------------------------------------
 // A cave is a capsule chain in XZ: consecutive nodes form segments, each point
 // inside a node's radius (interpolated along the segment, scaled by the
@@ -45,7 +45,7 @@ export function caveClearance(radius: number, heightMult = 1): number {
 // so the bumped floor still meets the arch cleanly. A pure function of
 // (cave, x, z, lat): the sim's ground sheet and the render mesh both call it,
 // so what you walk on is exactly what you see. The ceiling arch derives from
-// the UNBUMPED floor line — bumps make the floor roll, not the roof.
+// the UNBUMPED floor line ? bumps make the floor roll, not the roof.
 // ---------------------------------------------------------------------------
 
 // Peak bump amplitude (yards) at floorVariance 1 on the centerline.
@@ -208,7 +208,7 @@ export function caveSampleAt(caves: readonly CaveDef[], x: number, z: number): C
 
 /**
  * The cave ground sheet at (x, z): the walkable tube floor when a bore runs
- * under/through this point, else null. Purely chain-derived — terrain plays
+ * under/through this point, else null. Purely chain-derived ? terrain plays
  * no part. Not meaningfully walkable at the very edge of the horseshoe; a
  * sliver is kept so the slope gate (not a hard pop) rejects the wall.
  */
@@ -280,7 +280,7 @@ const CAM_OPEN_EPS = 0.2;
 /**
  * Camera clamp inside BURIED tubes: the farthest distance along the segment
  * eye -> desired camera that stays inside the bore (below the horseshoe
- * ceiling, above the floor, within the footprint). Marches in short steps —
+ * ceiling, above the floor, within the footprint). Marches in short steps ?
  * the segment is at most a few dozen yards. Returns Infinity when the eye is
  * not inside a tube, the span is open/above ground (mouths, exposed shells),
  * or the march reaches such a span: from there the normal terrain/collider

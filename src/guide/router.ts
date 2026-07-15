@@ -32,7 +32,10 @@ export class GuideRouter {
   }
 
   private handlePopState = (): void => {
-    this.onNavigate(window.location.pathname);
+    // Keep the fragment: pathname alone drops the #anchor, so a Back/Forward to a
+    // deep-linked section would scroll to the top instead of the target. matchRoute
+    // strips the hash for routing; focusMain reads it for the scroll/focus.
+    this.onNavigate(window.location.pathname + window.location.hash);
   };
 
   private handleClick = (ev: MouseEvent): void => {

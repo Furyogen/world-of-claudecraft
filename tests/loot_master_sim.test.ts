@@ -92,6 +92,36 @@ describe('master loot', () => {
     expect(sim.activeLootRolls(b).map((p) => p.rollId)).toContain(rollId);
   });
 
+  it('falls back to need/greed for remaining candidates when the master looter logs out', () => {
+    const sim = makeSim();
+    const { a, b, mob } = partyOnCorpse(sim, PREMIUM);
+    const c = sim.addPlayer('rogue', 'Cara');
+    sim.partyInvite(c, a);
+    sim.partyAccept(c);
+    teleportTo(sim, 21, 21, c);
+    sim.setPartyLootMaster(true, 0, 'uncommon', a);
+    sim.lootCorpse(mob.id, a);
+    const rollId = sim.events.find((e) => e.type === 'masterLoot')?.rollId;
+    if (rollId === undefined) throw new Error('expected master loot prompt');
+
+    sim.events.length = 0;
+    sim.removePlayer(a);
+
+    expect(sim.activeLootRolls(b).map((p) => p.rollId)).toContain(rollId);
+    expect(sim.activeLootRolls(c).map((p) => p.rollId)).toContain(rollId);
+    const entries = sim.lootRollGroupStatus(b)[0]?.entries ?? [];
+    expect(entries.map((entry) => entry.pid).sort((x, y) => x - y)).toEqual(
+      [b, c].sort((x, y) => x - y),
+    );
+
+    sim.submitLootRoll(rollId, 'pass', b);
+    sim.submitLootRoll(rollId, 'pass', c);
+    expect(mob.loot?.items.find((slot) => slot.itemId === PREMIUM)).toMatchObject({
+      count: 1,
+      openToAll: true,
+    });
+  });
+
   it('rejects assignment from anyone other than the master looter', () => {
     const sim = makeSim();
     const { a, b, mob } = partyOnCorpse(sim, PREMIUM);
@@ -200,7 +230,7 @@ describe('master loot', () => {
         if (e.type === 'lootRoll' && e.rollId === rollId) convertedEarly = true;
     }
     expect(convertedEarly).toBe(false);
-  });
+  }, 120000); // ticks a five-minute window on a 13-zone world under suite load
 
   it('converts an uncurated drop to a need/greed roll for all candidates at the 5-min timeout', () => {
     const sim = makeSim();
@@ -221,7 +251,8 @@ describe('master loot', () => {
         if (e.type === 'lootRoll' && e.rollId === rollId && e.pid !== undefined) rolls.push(e.pid);
     }
     expect(rolls.sort((x, y) => x - y)).toEqual([a, b].sort((x, y) => x - y));
-  });
+    // 6020 ticks of a 9-zone world: give it headroom under full-suite load
+  }, 120000); // ticks a five-minute window on a 13-zone world under suite load
 
   it('only the leader can change the loot method', () => {
     const sim = makeSim();

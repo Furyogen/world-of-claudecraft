@@ -8,8 +8,8 @@ import type { BiomePaint } from '../sim/types';
 
 // The sanitizer drops grids over 4,200,000 cells (sim/map_doc.ts); stay under
 // it so a resample can never trip that gate. localStorage saves survive the
-// bigger grids because the store run-length-encodes the ids (persist.ts) —
-// paint is extremely run-heavy — while exports/bundles zip them. The budget
+// bigger grids because the store run-length-encodes the ids (persist.ts) ?
+// paint is extremely run-heavy ? while exports/bundles zip them. The budget
 // buys a 1000x1000yd map 0.5yd cells (2001^2 ~= 4.0M; the GPU paint field at
 // 4 RGBA8 layers is ~64MB there, and 2001 stays under PAINT_TEX_MAX 4096).
 export const MAX_PAINT_CELLS = 4_100_000;

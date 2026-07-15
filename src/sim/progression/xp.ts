@@ -4,7 +4,7 @@
 // (`updateRested` / `isResting`), MOVED verbatim out of sim.ts behind SimContext
 // (move + import, not a rewrite). The XP curve formulas (xpForLevel / canPrestige)
 // stay pure in ../types and are imported here.
-import { PROPS } from '../data';
+import { getActiveWorldContent } from '../data';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { canPrestige, DT, type Entity, MAX_LEVEL, xpForLevel } from '../types';
@@ -20,8 +20,28 @@ const RESTED_INN_PADDING = 2; // yards of slack around the inn footprint that st
 // out of combat — the classic "resting" state that accrues rested XP.
 export function isResting(p: Entity): boolean {
   if (p.inCombat) return false;
-  for (const b of PROPS.buildings) {
-    if (b.kind !== 'inn') continue;
+  const content = getActiveWorldContent();
+  const inns = [
+    ...content.props.buildings
+      .filter((building) => building.kind === 'inn')
+      .map((building) => ({
+        x: building.x,
+        z: building.z,
+        rot: building.rot,
+        w: building.w,
+        d: building.d,
+      })),
+    ...(content.placements ?? [])
+      .filter((placed) => placed.worldPropKind === 'inn' && placed.worldPropWidth)
+      .map((placed) => ({
+        x: placed.x,
+        z: placed.z,
+        rot: placed.rotY,
+        w: (placed.worldPropWidth ?? 0) * placed.scale * (placed.scaleX ?? 1),
+        d: (placed.worldPropDepth ?? 0) * placed.scale * (placed.scaleZ ?? 1),
+      })),
+  ];
+  for (const b of inns) {
     // Point-in-rotated-rect: bring the player into the inn's local frame.
     const dx = p.pos.x - b.x;
     const dz = p.pos.z - b.z;
@@ -68,6 +88,8 @@ export function prestige(ctx: SimContext, pid?: number): boolean {
   if (!canPrestige(r.e.level, r.meta.lifetimeXp, r.meta.prestigeRank)) return false;
   r.meta.xp = 0;
   r.meta.prestigeRank += 1;
+  // The prestige rank is a persisted deed trigger input, so re-check.
+  ctx.markDeedsDirty(r.meta.entityId);
   ctx.emit({
     type: 'log',
     pid: r.e.id,

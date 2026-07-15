@@ -1,13 +1,8 @@
 import * as THREE from 'three';
-import {
-  DUNGEON_X_THRESHOLD,
-  getActiveWorldContent,
-  WORLD_MAX_X,
-  WORLD_MAX_Z,
-  WORLD_MIN_Z,
-} from '../sim/data';
+import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import type { BiomeId } from '../sim/types';
-import { terrainHeight, waterLevel, zoneBiomeAt } from '../sim/world';
+import { isInSowfieldShell } from '../sim/vale_cup_layout';
+import { terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
 import { GFX } from './gfx';
 
 // ---------------------------------------------------------------------------
@@ -34,6 +29,16 @@ const MOTE_TINT: Record<BiomeId, number> = {
   desert: 0xecd9a0,
   volcano: 0xe8a070,
   cave: 0xa8c4b8,
+  dusk: 0xf2b8e0,
+  ember: 0xffa868,
+  frost: 0xcfe8ff,
+  amber: 0xffd98a, // drifting golden leaves
+  fen: 0xeaffd0, // drifting pollen and midge-glow
+  night: 0xf2dcff, // dream sparkles: pale rose-white drift
+  haunt: 0xc2d4b4, // drifting grave-pale spores
+  jungle: 0xfff2b0, // sun-caught pollen and midges
+  garden: 0xffccd8, // drifting rose petals
+  gale: 0xeef6ff, // wind-torn sea spray
 };
 
 const RADIUS = 26; // motes live within this ring of the player
@@ -72,9 +77,6 @@ function moteSprite(): THREE.Texture {
 export function buildMotes(seed: number): MotesView {
   const group = new THREE.Group();
   group.name = 'motes';
-  if (getActiveWorldContent().presentationMode === 'blank') {
-    return { group, update(): void {} };
-  }
 
   // count scales with tier — cheap THREE.Points, so high/ultra can afford a
   // dense shimmer while low stays sparse
@@ -102,8 +104,9 @@ export function buildMotes(seed: number): MotesView {
     const x = px + Math.cos(ang) * r;
     const z = pz + Math.sin(ang) * r;
     if (Math.abs(x) > WORLD_MAX_X - 8 || z < WORLD_MIN_Z + 8 || z > WORLD_MAX_Z - 8) return false;
+    if (isInSowfieldShell(x, z)) return false; // no pollen drifting over the mown pitch
     const h = terrainHeight(x, z, seed);
-    if (h < waterLevel() + 0.5) return false; // no motes hovering over open water
+    if (h < WATER_LEVEL + 0.5) return false; // no motes hovering over open water
     homeX[i] = x;
     homeZ[i] = z;
     baseY[i] = h;
@@ -112,7 +115,7 @@ export function buildMotes(seed: number): MotesView {
     positions[i * 3] = x;
     positions[i * 3 + 1] = h + bobAmp[i];
     positions[i * 3 + 2] = z;
-    tmpColor.setHex(MOTE_TINT[zoneBiomeAt(z)]);
+    tmpColor.setHex(MOTE_TINT[zoneBiomeAt(x, z)]);
     colors[i * 3] = tmpColor.r;
     colors[i * 3 + 1] = tmpColor.g;
     colors[i * 3 + 2] = tmpColor.b;

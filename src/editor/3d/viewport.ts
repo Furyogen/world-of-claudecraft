@@ -43,6 +43,12 @@ import { Sim } from '../../sim/sim';
 import type { CaveDef, PlacedAsset, TerrainHole } from '../../sim/types';
 import { type BlockerDef, type ColliderVolume, DT, type MapWeather } from '../../sim/types';
 import { terrainHeight } from '../../sim/world';
+import {
+  findRuntimeCampIndex,
+  moveRuntimeMapEntity,
+  moveRuntimeMobsById,
+  setRuntimeNpcFacing,
+} from '../entity_edit_core';
 import { t } from '../../ui/i18n';
 import {
   type AssetPlacement,
@@ -516,6 +522,18 @@ export class Editor3DViewport {
     depthWrite: false,
     side: THREE.DoubleSide,
   });
+  // Live Sim mob selection: one bright ground ring per selected runtime id.
+  private mobSelGroup: THREE.Group | null = null;
+  private mobSelIds: number[] = [];
+  private readonly mobSelMeshes = new Map<number, THREE.Mesh>();
+  private readonly mobSelMat = new THREE.MeshBasicMaterial({
+    color: 0x39e6ff,
+    transparent: true,
+    opacity: 1,
+    depthTest: false,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
 
   constructor(
     private readonly parent: HTMLElement,
@@ -593,7 +611,9 @@ export class Editor3DViewport {
       const zones = this.map.content.zones;
       const zSpan = (zones[zones.length - 1]?.zMax ?? 0) - (zones[0]?.zMin ?? 0);
       const extent = Math.max(this.map.worldHalfX * 2, zSpan);
-      this.cam.dist = Math.min(500, Math.max(20, extent * 0.6));
+      const framingScale =
+        this.map.presentationMode && this.map.presentationMode !== 'blank' ? 0.32 : 0.6;
+      this.cam.dist = Math.min(500, Math.max(20, extent * framingScale));
     }
     this.attachEvents();
     if (this.visible) {
@@ -604,6 +624,121 @@ export class Editor3DViewport {
 
   get ready(): boolean {
     return this.renderer !== null;
+  }
+
+  /** Update an authored NPC/camp in the live editor Sim without reloading WebGL. */
+  moveMapEntity(
+    key: string,
+    from: { x: number; z: number },
+    to: { x: number; z: number },
+  ): number {
+    if (!this.sim) return 0;
+    return moveRuntimeMapEntity(
+      this.sim.entities.values(),
+      key,
+      this.map.content.camps,
+      from,
+      to,
+      (x, z) => terrainHeight(x, z, this.seed),
+    );
+  }
+
+  /** Update an authored NPC's facing in the live editor Sim. */
+  setMapNpcFacing(key: string, facing: number): number {
+    if (!this.sim) return 0;
+    return setRuntimeNpcFacing(this.sim.entities.values(), key, facing);
+  }
+
+  /** Pick the rendered wild mob under the cursor, rather than its camp handle. */
+  pickRuntimeMob(clientX: number, clientY: number): { id: number; mobId: string } | null {
+    if (!this.renderer || !this.sim) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    const id = this.renderer.pick(clientX - rect.left, clientY - rect.top);
+    const direct = id === null ? null : this.sim.entities.get(id);
+    if (direct?.kind === 'mob' && direct.ownerId === null) {
+      return { id: direct.id, mobId: direct.templateId };
+    }
+
+    // Models and click proxies can be tiny at editor zoom levels. Fall back to
+    // the closest projected mob body, which also makes clicking its nameplate
+    // select the mob users can see instead of the camp center underneath it.
+    let nearest: { id: number; mobId: string } | null = null;
+    let nearestPx = 48;
+    for (const candidate of this.sim.entities.values()) {
+      if (candidate.kind !== 'mob' || candidate.ownerId !== null) continue;
+      const projected = new THREE.Vector3(
+        candidate.pos.x,
+        candidate.pos.y + 1.2,
+        candidate.pos.z,
+      ).project(this.renderer.camera);
+      if (projected.z < -1 || projected.z > 1) continue;
+      const sx = rect.left + ((projected.x + 1) / 2) * rect.width;
+      const sy = rect.top + ((1 - projected.y) / 2) * rect.height;
+      const distance = Math.hypot(clientX - sx, clientY - sy);
+      if (distance < nearestPx) {
+        nearestPx = distance;
+        nearest = { id: candidate.id, mobId: candidate.templateId };
+      }
+    }
+    return nearest;
+  }
+
+  /** Resolve a live mob back to its authored camp and the camp's live members. */
+  runtimeMobCamp(entityId: number): {
+    campIndex: number;
+    members: { id: number; x: number; z: number }[];
+  } | null {
+    if (!this.sim) return null;
+    const mob = this.sim.entities.get(entityId);
+    if (!mob || mob.kind !== 'mob' || mob.ownerId !== null) return null;
+    const campIndex = findRuntimeCampIndex(this.map.content.camps, mob);
+    const camp = this.map.content.camps[campIndex];
+    if (!camp) return null;
+    if (camp.count === 1) {
+      return {
+        campIndex,
+        members: [{ id: mob.id, x: mob.pos.x, z: mob.pos.z }],
+      };
+    }
+    const members = [...this.sim.entities.values()]
+      .filter(
+        (candidate) =>
+          candidate.kind === 'mob' &&
+          candidate.ownerId === null &&
+          candidate.templateId === camp.mobId &&
+          Math.hypot(
+            candidate.spawnPos.x - camp.center.x,
+            candidate.spawnPos.z - camp.center.z,
+          ) <=
+            camp.radius + 1,
+      )
+      .sort((a, b) => {
+        const ad = Math.hypot(a.spawnPos.x - camp.center.x, a.spawnPos.z - camp.center.z);
+        const bd = Math.hypot(b.spawnPos.x - camp.center.x, b.spawnPos.z - camp.center.z);
+        return ad - bd || a.id - b.id;
+      })
+      .slice(0, camp.count)
+      .map((candidate) => ({
+        id: candidate.id,
+        x: candidate.pos.x,
+        z: candidate.pos.z,
+      }));
+    if (!members.some((member) => member.id === entityId)) {
+      members[members.length - 1] = { id: mob.id, x: mob.pos.x, z: mob.pos.z };
+    }
+    return { campIndex, members };
+  }
+
+  /** Move only the explicitly selected live mobs; authored camps are owned by App. */
+  moveRuntimeMobs(ids: ReadonlySet<number>, dx: number, dz: number): number {
+    if (!this.sim || (dx === 0 && dz === 0)) return 0;
+    return moveRuntimeMobsById(
+      this.sim.entities.values(),
+      ids,
+      dx,
+      dz,
+      (x, z) => terrainHeight(x, z, this.seed),
+    );
   }
 
   // Terrain point under a cursor position (client coords). Analytic ray-march
@@ -788,6 +923,47 @@ export class Editor3DViewport {
     }
     this.multiSelGroup = group;
     this.renderer.scene.add(group);
+  }
+
+  /** Mark each selected live mob with a cyan ground ring. */
+  setSelectedRuntimeMobs(ids: ReadonlySet<number>): void {
+    this.mobSelIds = [...ids];
+    if (this.mobSelGroup) {
+      this.renderer?.scene.remove(this.mobSelGroup);
+      for (const child of this.mobSelGroup.children) {
+        (child as THREE.Mesh).geometry.dispose();
+      }
+    }
+    this.mobSelGroup = null;
+    this.mobSelMeshes.clear();
+    if (!this.renderer || this.mobSelIds.length === 0) return;
+    const group = new THREE.Group();
+    group.name = 'editor-mob-selection';
+    for (const id of this.mobSelIds) {
+      const geometry = new THREE.RingGeometry(1.05, 1.35, 40);
+      geometry.rotateX(-Math.PI / 2);
+      const mesh = new THREE.Mesh(geometry, this.mobSelMat);
+      mesh.renderOrder = 3;
+      group.add(mesh);
+      this.mobSelMeshes.set(id, mesh);
+    }
+    this.mobSelGroup = group;
+    this.renderer.scene.add(group);
+    this.syncMobSelectionRings();
+  }
+
+  private syncMobSelectionRings(): void {
+    if (!this.sim) return;
+    for (const [id, mesh] of this.mobSelMeshes) {
+      const mob = this.sim.entities.get(id);
+      mesh.visible = mob?.kind === 'mob';
+      if (!mob || mob.kind !== 'mob') continue;
+      mesh.position.set(
+        mob.pos.x,
+        terrainHeight(mob.pos.x, mob.pos.z, this.seed) + 0.14,
+        mob.pos.z,
+      );
+    }
   }
 
   /**
@@ -1700,7 +1876,7 @@ export class Editor3DViewport {
 
   /** The camera's view-plane basis in world space (unit right/up): the Grab
    *  sculpt maps cursor drags onto this plane so the pulled ground follows
-   *  the drag direction in 3D — sideways slides the grabbed bump across the
+   *  the drag direction in 3D ? sideways slides the grabbed bump across the
    *  map, up/down on screen pulls it out of / into the ground. */
   viewPlaneAxes(): {
     right: { x: number; y: number; z: number };
@@ -2008,7 +2184,7 @@ export class Editor3DViewport {
     // A plane's Y handle rides its floor offset (sizeY); every other kind (assets
     // + box/sphere/wall) rides the shared vertical offset, so the gizmo tracks the
     // lifted object instead of staying pinned to the ground. Cave rig nodes are
-    // plane-kind pads whose Y IS the vertical offset — track the node.
+    // plane-kind pads whose Y IS the vertical offset ? track the node.
     const caveNode = (p.assetId ?? '').startsWith('cave/');
     const y = kind === 'plane' && !caveNode ? ground + (p.sizeY ?? 0) : ground + (p.y ?? 0);
     return this.gizmoOriginV.set(p.x, y + 0.05, p.z);
@@ -2186,7 +2362,7 @@ export class Editor3DViewport {
         const dy = hit.y - d.startHit.y;
         // Cave rig nodes ride the plane-kind pick pad for XZ grabbing, but
         // their Y arrow must move the NODE itself (placement.y drives the
-        // cave floor height there) — never the pad's sizeY.
+        // cave floor height there) ? never the pad's sizeY.
         const caveNode = (d.start.assetId ?? '').startsWith('cave/');
         change =
           d.kind === 'plane' && !caveNode
@@ -2298,7 +2474,7 @@ export class Editor3DViewport {
     }
     // Cave/rock rig markers: a small pick pad so the Move/Scale gizmos can
     // grab EVERY node (entrance, exit, and the blue waypoints), not just the
-    // mouths — moving or scaling one live-regenerates its bore/ridge.
+    // mouths ? moving or scaling one live-regenerates its bore/ridge.
     if (
       p.assetId === 'cave/entrance' ||
       p.assetId === 'cave/exit' ||
@@ -2349,7 +2525,7 @@ export class Editor3DViewport {
 
   /**
    * Preview mode (topbar toggle): the map as it looks in-game. Hides every
-   * editor-only overlay — collider boxes, blockers, music areas, location
+   * editor-only overlay ? collider boxes, blockers, music areas, location
    * rects, markers, spawn ring, cave guides, light bulbs, selection rings,
    * the gizmo. Point lights keep SHINING (they exist in-game); only their
    * bulb badges hide. Enforced per frame in loop() because refresh* rebuilds
@@ -2393,6 +2569,7 @@ export class Editor3DViewport {
       this.holeGuidesGroup,
       this.zonePreviewMesh,
       this.multiSelGroup,
+      this.mobSelGroup,
       this.rockChainGroup,
       this.hitboxGroup,
       this.gizmo?.group ?? null,
@@ -2619,6 +2796,8 @@ export class Editor3DViewport {
     this.collidersGroup = null;
     this.colliderMeshes.clear();
     this.multiSelGroup = null;
+    this.mobSelGroup = null;
+    this.mobSelMeshes.clear();
     this.hitboxGroup = null;
     this.hitboxEditState = null;
     this.gizmo?.dispose();
@@ -2653,6 +2832,7 @@ export class Editor3DViewport {
     }
     this.renderer.editorCam = this.cam.pose();
     this.syncGizmo();
+    this.syncMobSelectionRings();
     // Preview mode re-hides overlays each frame: refreshAuthoredOverlays and
     // friends rebuild their groups visible, so a one-shot hide would leak.
     if (this.previewMode) this.applyPreviewHide();

@@ -1,4 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
+import {
+  mobCombatProfile,
+  mobEffectiveMeleeRange,
+  tryMobMeleeSwingInRange,
+} from '../src/sim/mob/combat_profile';
 import {
   combatProfileForMob,
   DEFAULT_MOB_COMBAT_PROFILE,
@@ -7,19 +14,24 @@ import {
   NYTHRAXIS_BOSS_COMBAT_PROFILE,
   scaledDefaultMobMeleeRange,
 } from '../src/sim/mob_combat';
+import { Sim } from '../src/sim/sim';
 import { MELEE_RANGE } from '../src/sim/types';
 
 describe('mob combat profiles', () => {
-  it('keeps ordinary mobs on the legacy scale-based melee range profile', () => {
+  it('gives ordinary mobs a pursuing scale-based melee profile (hit-and-run)', () => {
     const profile = combatProfileForMob('forest_wolf', 1.5);
 
     expect(profile).toEqual({
       ...DEFAULT_MOB_COMBAT_PROFILE,
       meleeRange: scaledDefaultMobMeleeRange(1.5),
+      desiredRange: scaledDefaultMobMeleeRange(1.5) * 0.8,
     });
     expect(profile.meleeRange).toBe(MELEE_RANGE + 1.5);
     expect(profile.canLeash).toBe(true);
-    expect(profile.swingWhilePursuing).toBe(false);
+    expect(profile.swingWhilePursuing).toBe(true);
+    expect(profile.immediateSwingOnEnterRange).toBe(true);
+    expect(DEFAULT_MOB_COMBAT_PROFILE.swingWhilePursuing).toBe(true);
+    expect(DEFAULT_MOB_COMBAT_PROFILE.immediateSwingOnEnterRange).toBe(true);
   });
 
   it('gives Nythraxis a non-leashing pursuing melee profile', () => {
@@ -72,5 +84,35 @@ describe('mob combat profiles', () => {
     expect(effectiveMobMeleeRange(NYTHRAXIS_BOSS_COMBAT_PROFILE, true)).toBe(
       NYTHRAXIS_BOSS_COMBAT_PROFILE.meleeRange,
     );
+  });
+
+  it('exposes default-profile reach through the mob combat module', () => {
+    const sim = new Sim({ seed: 7788, playerClass: 'warrior' });
+    const player = sim.entities.get(sim.playerId);
+    if (!player) throw new Error('expected default player');
+    player.pos = { x: 0, y: 0, z: 0 };
+    player.prevPos = { x: -1, y: 0, z: 0 };
+    player.maxHp = 100000;
+    player.hp = 100000;
+
+    const still = createMob(9000, MOBS.forest_wolf, 5, { x: 6.5, y: 0, z: 0 });
+    still.scale = 1;
+    still.weapon = { min: 50, max: 50, speed: 2 };
+    still.swingTimer = 0;
+    still.prevPos = { ...still.pos };
+
+    const pursuing = createMob(9001, MOBS.forest_wolf, 5, { x: 5.5, y: 0, z: 0 });
+    pursuing.scale = 1;
+    pursuing.weapon = { min: 50, max: 50, speed: 2 };
+    pursuing.swingTimer = 0;
+    pursuing.prevPos = { x: 7.5, y: 0, z: 0 };
+
+    expect(mobCombatProfile(still)).toEqual(DEFAULT_MOB_COMBAT_PROFILE);
+    expect(mobEffectiveMeleeRange(still)).toBe(MELEE_RANGE);
+    expect(tryMobMeleeSwingInRange(sim.ctx, still, player)).toBe(false);
+
+    expect(mobEffectiveMeleeRange(pursuing)).toBe(MELEE_RANGE + 1);
+    expect(tryMobMeleeSwingInRange(sim.ctx, pursuing, player)).toBe(true);
+    expect(player.hp).toBeLessThan(100000);
   });
 });

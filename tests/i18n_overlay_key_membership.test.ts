@@ -22,6 +22,7 @@
 import { describe, expect, it } from 'vitest';
 import type { TranslationKey } from '../src/ui/i18n.catalog';
 import { en } from '../src/ui/i18n.catalog';
+import { cs_CZ } from '../src/ui/i18n.locales/cs_CZ';
 import { de_DE } from '../src/ui/i18n.locales/de_DE';
 import { en_CA } from '../src/ui/i18n.locales/en_CA';
 import { es } from '../src/ui/i18n.locales/es';
@@ -79,6 +80,7 @@ const overlays: Record<string, Partial<Record<TranslationKey, string>>> = {
   ja_JP,
   pt_BR,
   ru_RU,
+  cs_CZ,
 };
 
 describe('flat overlay keys are members of Leaves(en)', () => {

@@ -182,6 +182,7 @@ export class Meters {
   private rowsEl: HTMLElement;
   private titleEl: HTMLElement;
   private subEl: HTMLElement;
+  private hintEl: HTMLElement;
 
   constructor(private world: IWorld) {
     this.data = new MeterData(performance.now());
@@ -189,6 +190,7 @@ export class Meters {
     this.rowsEl = this.root.querySelector('.mt-rows') as HTMLElement;
     this.titleEl = this.root.querySelector('.mt-view') as HTMLElement;
     this.subEl = this.root.querySelector('.mt-sub') as HTMLElement;
+    this.hintEl = this.root.querySelector('.mt-hint') as HTMLElement;
     for (const tab of ['dmg', 'heal', 'threat'] as Tab[]) {
       const tabButton = this.root.querySelector(`.mt-tab[data-tab="${tab}"]`) as HTMLElement;
       tabButton.textContent = t(TAB_SHORT_LABEL_KEY[tab]);
@@ -288,9 +290,19 @@ export class Meters {
 
     if (!enc || enc.tallies.size === 0) {
       this.subEl.textContent = t('hud.meters.noCombat');
+      // The auto-show hint only makes sense on the live "current" segment of the
+      // damage/healing tabs: on the Threat tab, or on a finished History / All
+      // (session) segment, the copy ("rows appear once your party deals damage",
+      // "this segment closes after combat ends") is wrong. Its own element (its
+      // own single t() key), never concatenated into subEl.
+      const showHint = this.viewIdx === 0 && this.tab !== 'threat';
+      this.hintEl.textContent = showHint ? t('hudChrome.meters.autoShowHint') : '';
+      this.hintEl.style.display = showHint ? 'block' : 'none';
       this.rowsEl.innerHTML = '';
       return;
     }
+    this.hintEl.textContent = '';
+    this.hintEl.style.display = 'none';
 
     const isThreat = this.tab === 'threat';
     const mob = isThreat && enc.mainMobId !== null ? this.world.entities.get(enc.mainMobId) : null;

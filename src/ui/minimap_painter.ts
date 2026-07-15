@@ -24,7 +24,8 @@
 // radii, rect size, outline width, the NPC glyph font + offsets, the arrow geometry) is a
 // named constant.
 
-import { WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_X } from '../sim/data';
+import { WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_X, yumiMazeOriginAt } from '../sim/data';
+import { yumiMazeLayout } from '../sim/yumi_maze_layout';
 import type { IWorld } from '../world_api';
 import { createMinimapMarkers, type MinimapMarker } from './minimap_markers';
 import type { PainterHostWriters } from './painter_host';
@@ -81,6 +82,15 @@ const CORPSE_SKULL_EYE_R = 1.1;
 
 const FULL_CIRCLE = Math.PI * 2;
 
+// Protect Yumi maze background: the fixed competitive layout rasterized ONCE
+// to an offscreen canvas (the delve-map bg-cache technique) and sub-rect
+// blitted under the ordinary overworld marker set. Walls draw in the resolved
+// --color-minimap-outline token at a fixed alpha; the margin pads the shell so
+// the blit window never samples outside the cache.
+const MAZE_BG_PX_PER_YARD = 3;
+const MAZE_BG_MARGIN_YD = 24;
+const MAZE_BG_WALL_ALPHA = 0.75;
+
 // Draw the corpse skull centered at (x, y): `fill` paints the bone, `socket` the
 // dark eye/nose hollows so the shape reads even over light terrain.
 function drawCorpseSkull(
@@ -129,6 +139,18 @@ const MINIMAP_COLOR_TOKENS = {
 export type MinimapColors = Record<keyof typeof MINIMAP_COLOR_TOKENS, string>;
 
 /**
+ * The current zone's cached high-res map background (the 480px per-zone canvas
+ * the world map already renders), plus the world rect it covers. Blitting this
+ * sharp over the coarse whole-world fallback gives the minimap ~10x the source
+ * resolution around the player instead of upscaling ~12 pixels of the 140px
+ * world image. Null when the zone's bg has not been prewarmed yet.
+ */
+export type MinimapZoneBg = {
+  canvas: HTMLCanvasElement;
+  region: { minX: number; maxX: number; minZ: number; maxZ: number };
+};
+
+/**
  * Owns painting the overworld minimap onto the #minimap canvas. One instance is built
  * by Hud with the write-elision facet (for the '#zone-label' text), the class-color
  * resolver (for party discs/arrows), and the zone-name localizer.
@@ -142,11 +164,15 @@ export class MinimapPainter {
   // style recalc (the minimap redraws after other HUD style writes in the same frame). If
   // a runtime theme / contrast toggle is ever added, invalidate this cache from that signal.
   private colors: MinimapColors | null = null;
+  // The Protect Yumi maze wall cache (built on first in-maze redraw; the fixed
+  // competitive layout never changes, so one raster serves the session).
+  private mazeBg: HTMLCanvasElement | null = null;
 
   constructor(
     private readonly writers: PainterHostWriters,
     private readonly classColor: (cls: string) => string,
     private readonly localizeZone: (zoneId: string) => string,
+    private readonly localizeRift: (name: string, rank: string | null) => string,
   ) {}
 
   /** Resolve the minimap color tokens in one getComputedStyle pass (a 2D
@@ -178,12 +204,18 @@ export class MinimapPainter {
     zoneLabelEl: HTMLElement,
     bg: HTMLCanvasElement,
     zoom: number,
+    zoneBg: MinimapZoneBg | null = null,
   ): void {
     const S = MINIMAP_SIZE;
     const pxPerYard = MINIMAP_BASE_SCALE * zoom;
     const model = this.markers.build(world, S, pxPerYard);
     // The one DOM write this Canvas painter routes through the write-elision facet.
-    this.writers.setText(zoneLabelEl, this.localizeZone(model.zoneId));
+    // In a rift, show the generated floor name + rank instead of the overworld zone.
+    if (model.rift) {
+      this.writers.setText(zoneLabelEl, this.localizeRift(model.rift.name, model.rift.rank));
+    } else {
+      this.writers.setText(zoneLabelEl, this.localizeZone(model.zoneId));
+    }
     const colors = this.resolveColors();
     const p = world.player;
 
@@ -192,17 +224,100 @@ export class MinimapPainter {
     ctx.beginPath();
     ctx.arc(S / 2, S / 2, S / 2 - CLIP_INSET, 0, FULL_CIRCLE);
     ctx.clip();
-    ctx.imageSmoothingEnabled = false;
+    // Smooth sampling: the coarse fallback reads as a soft wash (not hard
+    // blocks), and the sharp zone overlay upscales cleanly.
+    ctx.imageSmoothingEnabled = true;
 
-    // Blit the matching sub-rect of the cached terrain background (Hud-owned, +X-left).
+    // Coarse fallback: the sub-rect of the whole-world background under the
+    // player (Hud-owned, +X-left). Covers the border case where the player's
+    // view spills into a neighbouring zone the overlay does not.
     const bgPxPerYard = bg.width / (WORLD_MAX_X - WORLD_MIN_X);
     const sw = S / (pxPerYard / bgPxPerYard);
     const sx = (WORLD_MAX_X - p.pos.x) * bgPxPerYard - sw / 2;
     const sy = (WORLD_MAX_Z - p.pos.z) * bgPxPerYard - sw / 2;
     ctx.drawImage(bg, sx, sy, sw, sw, 0, 0, S, S);
 
+    // Sharp overlay: the current zone's own high-res background, placed by its
+    // world rect so the player sits at centre. +X is map-left, +Z is map-down.
+    if (zoneBg) {
+      const r = zoneBg.region;
+      const half = S / 2;
+      const destX = half - (r.maxX - p.pos.x) * pxPerYard;
+      const destY = half - (r.maxZ - p.pos.z) * pxPerYard;
+      const destW = (r.maxX - r.minX) * pxPerYard;
+      const destH = (r.maxZ - r.minZ) * pxPerYard;
+      ctx.drawImage(zoneBg.canvas, destX, destY, destW, destH);
+    }
+
     this.drawMarkers(ctx, model.markers, colors);
     ctx.restore();
+  }
+
+  /**
+   * Protect Yumi maze render: the ordinary overworld marker set (party discs,
+   * the cats as mob dots; enemy players are deliberately NOT modeled) over a
+   * cached raster of the fixed maze walls. `label` is the localized strip
+   * title Hud passes (the maze band has no zone).
+   */
+  paintYumiMaze(
+    ctx: CanvasRenderingContext2D,
+    world: IWorld,
+    zoneLabelEl: HTMLElement,
+    zoom: number,
+    label: string,
+  ): void {
+    const S = MINIMAP_SIZE;
+    const pxPerYard = MINIMAP_BASE_SCALE * zoom;
+    const model = this.markers.build(world, S, pxPerYard);
+    this.writers.setText(zoneLabelEl, label);
+    const colors = this.resolveColors();
+    const p = world.player;
+    const o = yumiMazeOriginAt(p.pos.z);
+    const bg = this.ensureMazeBg(colors);
+    const layout = yumiMazeLayout();
+    const pad = layout.halfExtent + MAZE_BG_MARGIN_YD;
+
+    ctx.clearRect(0, 0, S, S);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(S / 2, S / 2, S / 2 - CLIP_INSET, 0, FULL_CIRCLE);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = false;
+    // Sub-rect blit centered on the player's maze-local position (+X map-left,
+    // matching the marker projection).
+    const sw = S / (pxPerYard / MAZE_BG_PX_PER_YARD);
+    const sx = (pad - (p.pos.x - o.x)) * MAZE_BG_PX_PER_YARD - sw / 2;
+    const sy = (p.pos.z - o.z + pad) * MAZE_BG_PX_PER_YARD - sw / 2;
+    ctx.drawImage(bg, sx, sy, sw, sw, 0, 0, S, S);
+    this.drawMarkers(ctx, model.markers, colors);
+    ctx.restore();
+  }
+
+  // Rasterize the fixed maze layout once: every wall stub + shell slab as a
+  // rect in the outline token (mirrored on x like the live projection).
+  private ensureMazeBg(colors: MinimapColors): HTMLCanvasElement {
+    if (this.mazeBg) return this.mazeBg;
+    const layout = yumiMazeLayout();
+    const pad = layout.halfExtent + MAZE_BG_MARGIN_YD;
+    const s = MAZE_BG_PX_PER_YARD;
+    const side = Math.ceil(pad * 2 * s);
+    const canvas = document.createElement('canvas');
+    canvas.width = side;
+    canvas.height = side;
+    const bctx = canvas.getContext('2d');
+    if (!bctx) return canvas;
+    bctx.globalAlpha = MAZE_BG_WALL_ALPHA;
+    bctx.fillStyle = colors.outline;
+    for (const wall of [...layout.shell, ...layout.walls]) {
+      bctx.fillRect(
+        (pad - wall.x - wall.hw) * s,
+        (wall.z - wall.hd + pad) * s,
+        wall.hw * 2 * s,
+        wall.hd * 2 * s,
+      );
+    }
+    this.mazeBg = canvas;
+    return canvas;
   }
 
   private drawMarkers(

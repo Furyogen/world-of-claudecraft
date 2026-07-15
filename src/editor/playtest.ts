@@ -30,7 +30,7 @@ export interface PlaytestOptions {
   playerName: string;
 }
 
-// A fine paint grid's plain ids array is several MB of JSON — past the
+// A fine paint grid's plain ids array is several MB of JSON ? past the
 // sessionStorage quota ("storage blocked" on Playtest). Ship it run-length
 // encoded (shared codec in sim/map_doc); the game-side reader expands it
 // before the world boots. Small grids stay plain.

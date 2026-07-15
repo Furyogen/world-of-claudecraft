@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { generateCaveRigNodes } from '../src/editor/cave_gen_core';
 
 // The Caves tool's rig generator: a terrain-BLIND spline through the authored
-// control points. What you model is what you get — the mouths land exactly on
+// control points. What you model is what you get ? the mouths land exactly on
 // their rig points at exactly their authored size, and translating the whole
 // rig translates the generated cave rigidly (the whole-cave Move contract).
 

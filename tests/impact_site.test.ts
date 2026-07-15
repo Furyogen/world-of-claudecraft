@@ -23,7 +23,7 @@ describe('Mirefen impact site', () => {
     expect(MIREFEN_IMPACT_SITE.x).toBeGreaterThanOrEqual(148);
     expect(MIREFEN_IMPACT_SITE.x).toBeLessThan(152);
     expect(MIREFEN_IMPACT_SITE.z).toBe(295);
-    expect(zoneAt(MIREFEN_IMPACT_SITE.z).id).toBe('mirefen_marsh');
+    expect(zoneAt(MIREFEN_IMPACT_SITE.x, MIREFEN_IMPACT_SITE.z).id).toBe('mirefen_marsh');
 
     const impactY = terrainHeight(MIREFEN_IMPACT_SITE.x, MIREFEN_IMPACT_SITE.z, SEED);
     const wallY = terrainHeight(MIREFEN_IMPACT_SITE.x + 4, MIREFEN_IMPACT_SITE.z, SEED);

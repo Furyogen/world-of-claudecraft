@@ -18,8 +18,8 @@ import {
   createDesktopLoginCode,
   type DesktopLoginRouteDeps,
   desktopLoginCodeCountForTest,
-  handleDesktopLoginCreate,
   handleDesktopLoginExchange,
+  issueDesktopLoginCode,
   resetDesktopLoginCodesForTest,
 } from '../server/desktop_login';
 import {
@@ -45,7 +45,19 @@ import {
 import { passesTurnstile } from '../server/turnstile';
 import { isWebClientRequest } from '../server/web_login_guard';
 import { buildWebSocketAuthMessage, buildWebSocketUrl } from '../src/net/online';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
+import type { WorldContent } from '../src/sim/types';
+
+// The one Sim-backed test here only round-trips a serialized character; no
+// assertion reads ambient world content, so strip camps/npcs/ground objects
+// to keep construction cheap (the dot_final_tick subsystem-world pattern).
+const GM_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 function fakeReq(headers: Record<string, string>, remoteAddress: string) {
   const req: any = new EventEmitter();
@@ -194,11 +206,14 @@ describe('rate-limit client IP selection', () => {
     // 21 attempts from one forwarded client trip the limiter...
     let aliceLimited = false;
     for (let i = 0; i < 21; i++) {
-      aliceLimited = rateLimited(fakeReq({ 'x-forwarded-for': '203.0.113.200' }, '172.18.0.1'));
+      aliceLimited = !rateLimited(fakeReq({ 'x-forwarded-for': '203.0.113.200' }, '172.18.0.1'))
+        .allowed;
     }
     expect(aliceLimited).toBe(true);
     // ...while another player behind the same proxy is unaffected
-    expect(rateLimited(fakeReq({ 'x-forwarded-for': '198.51.100.201' }, '172.18.0.1'))).toBe(false);
+    expect(
+      rateLimited(fakeReq({ 'x-forwarded-for': '198.51.100.201' }, '172.18.0.1')).allowed,
+    ).toBe(true);
   });
 
   it('rate-limits card uploads by account across client IPs', () => {
@@ -208,27 +223,27 @@ describe('rate-limit client IP selection', () => {
         cardUploadRateLimited(
           fakeReq({ 'x-forwarded-for': `203.0.113.${i + 1}` }, '172.18.0.1'),
           accountId,
-        ),
-      ).toBe(false);
+        ).allowed,
+      ).toBe(true);
     }
     expect(
       cardUploadRateLimited(
         fakeReq({ 'x-forwarded-for': '203.0.113.250' }, '172.18.0.1'),
         accountId,
-      ),
-    ).toBe(true);
+      ).allowed,
+    ).toBe(false);
   });
 
   it('rate-limits card uploads by client IP across accounts', () => {
     const ip = '203.0.113.220';
     for (let i = 0; i < CARD_UPLOAD_MAX_PER_MINUTE; i++) {
       expect(
-        cardUploadRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 1000 + i),
-      ).toBe(false);
+        cardUploadRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 1000 + i).allowed,
+      ).toBe(true);
     }
-    expect(cardUploadRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 2000)).toBe(
-      true,
-    );
+    expect(
+      cardUploadRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 2000).allowed,
+    ).toBe(false);
   });
 
   it('rate-limits wallet link/challenge attempts by account across client IPs', () => {
@@ -238,48 +253,49 @@ describe('rate-limit client IP selection', () => {
         walletLinkRateLimited(
           fakeReq({ 'x-forwarded-for': `203.0.114.${i + 1}` }, '172.18.0.1'),
           accountId,
-        ),
-      ).toBe(false);
+        ).allowed,
+      ).toBe(true);
     }
     expect(
       walletLinkRateLimited(
         fakeReq({ 'x-forwarded-for': '203.0.114.250' }, '172.18.0.1'),
         accountId,
-      ),
-    ).toBe(true);
+      ).allowed,
+    ).toBe(false);
   });
 
   it('rate-limits wallet link/challenge attempts by client IP across accounts', () => {
     const ip = '203.0.114.220';
     for (let i = 0; i < WALLET_LINK_MAX_PER_MINUTE; i++) {
       expect(
-        walletLinkRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 1000 + i),
-      ).toBe(false);
+        walletLinkRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 1000 + i).allowed,
+      ).toBe(true);
     }
-    expect(walletLinkRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 2000)).toBe(
-      true,
-    );
+    expect(
+      walletLinkRateLimited(fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1'), 2000).allowed,
+    ).toBe(false);
   });
 
   it('rate-limits the $WOC balance proxy per IP on its OWN bucket (decoupled from login/register)', () => {
     const ip = '203.0.115.10';
     const req = () => fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1');
     for (let i = 0; i < WOC_BALANCE_MAX_PER_MINUTE; i++) {
-      expect(wocBalanceRateLimited(req())).toBe(false);
+      expect(wocBalanceRateLimited(req()).allowed).toBe(true);
     }
-    expect(wocBalanceRateLimited(req())).toBe(true); // 21st balance read from this IP is limited
+    // 21st balance read from this IP is limited
+    expect(wocBalanceRateLimited(req()).allowed).toBe(false);
     // Crucially, exhausting the balance bucket must NOT spill into the shared
-    // register/login limiter — the player can still log in from the same IP.
-    expect(rateLimited(req())).toBe(false);
+    // register/login limiter, the player can still log in from the same IP.
+    expect(rateLimited(req()).allowed).toBe(true);
   });
 
   it('keeps the balance proxy unaffected by an exhausted login/register budget', () => {
     const ip = '203.0.115.20';
     const req = () => fakeReq({ 'x-forwarded-for': ip }, '172.18.0.1');
     for (let i = 0; i < 21; i++) rateLimited(req()); // burn the shared login/register bucket
-    expect(rateLimited(req())).toBe(true);
+    expect(rateLimited(req()).allowed).toBe(false);
     // The balance proxy has its own bucket, so a card/bag open still succeeds.
-    expect(wocBalanceRateLimited(req())).toBe(false);
+    expect(wocBalanceRateLimited(req()).allowed).toBe(true);
   });
 
   it('keeps limiting a persistent attacker after the memory backstop evicts', () => {
@@ -290,7 +306,7 @@ describe('rate-limit client IP selection', () => {
     const attacker = '203.0.113.250';
     let limited = false;
     for (let i = 0; i < 25; i++) {
-      limited = rateLimited(fakeReq({ 'x-forwarded-for': attacker }, '172.18.0.1'));
+      limited = !rateLimited(fakeReq({ 'x-forwarded-for': attacker }, '172.18.0.1')).allowed;
     }
     expect(limited).toBe(true);
 
@@ -302,7 +318,7 @@ describe('rate-limit client IP selection', () => {
     }
 
     // The attacker's counter must survive eviction and stay limited.
-    expect(rateLimited(fakeReq({ 'x-forwarded-for': attacker }, '172.18.0.1'))).toBe(true);
+    expect(rateLimited(fakeReq({ 'x-forwarded-for': attacker }, '172.18.0.1')).allowed).toBe(false);
   });
 
   it('keeps a burst-then-idle limited IP limited after a flood of newer IPs', () => {
@@ -315,7 +331,7 @@ describe('rate-limit client IP selection', () => {
     const victim = '203.0.113.240';
     let limited = false;
     for (let i = 0; i < 21; i++) {
-      limited = rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'));
+      limited = !rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1')).allowed;
     }
     expect(limited).toBe(true);
 
@@ -326,8 +342,8 @@ describe('rate-limit client IP selection', () => {
       rateLimited(fakeReq({ 'x-forwarded-for': `100.64.${a}.${b}` }, '172.18.0.1'));
     }
 
-    // The idle victim must stay limited — its counter must survive eviction.
-    expect(rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'))).toBe(true);
+    // The idle victim must stay limited, its counter must survive eviction.
+    expect(rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1')).allowed).toBe(false);
   });
 
   it('does not let a lenient-route flood evict an IP limited by a stricter route', () => {
@@ -341,7 +357,8 @@ describe('rate-limit client IP selection', () => {
     const victim = '203.0.113.230';
     let adminLimited = false;
     for (let i = 0; i < 11; i++) {
-      adminLimited = rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit);
+      adminLimited = !rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit)
+        .allowed;
     }
     expect(adminLimited).toBe(true);
 
@@ -353,9 +370,9 @@ describe('rate-limit client IP selection', () => {
     }
 
     // The admin-limited victim must still be limited under the admin policy.
-    expect(rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit)).toBe(
-      true,
-    );
+    expect(
+      rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit).allowed,
+    ).toBe(false);
   });
 
   it('keeps the IP map bounded under a flood of distinct in-window clients', () => {
@@ -382,34 +399,34 @@ describe('per-account failed-login throttle (#93)', () => {
 
   it('throttles an account after repeated failed logins, regardless of source IP', () => {
     const user = 'victim_account';
-    expect(authThrottled(user)).toBe(false);
+    expect(authThrottled(user).allowed).toBe(true);
     // a credential-stuffing botnet hammers one account from many IPs
     for (let i = 0; i < 10; i++) {
-      expect(authThrottled(user)).toBe(false); // still allowed to try
+      expect(authThrottled(user).allowed).toBe(true); // still allowed to try
       recordAuthFailure(user);
     }
-    expect(authThrottled(user)).toBe(true); // now locked out for the window
+    expect(authThrottled(user).allowed).toBe(false); // now locked out for the window
   });
 
   it('is case/whitespace-insensitive so the same account cannot be split into buckets', () => {
     for (let i = 0; i < 10; i++) recordAuthFailure('  CaseUser ');
-    expect(authThrottled('caseuser')).toBe(true);
-    expect(authThrottled('CASEUSER')).toBe(true);
+    expect(authThrottled('caseuser').allowed).toBe(false);
+    expect(authThrottled('CASEUSER').allowed).toBe(false);
   });
 
   it('clears failures after a successful login so honest typos are forgiven', () => {
     const user = 'butterfingers';
     for (let i = 0; i < 9; i++) recordAuthFailure(user);
-    expect(authThrottled(user)).toBe(false); // one under the ceiling
+    expect(authThrottled(user).allowed).toBe(true); // one under the ceiling
     clearAuthFailures(user); // correct password on the next try
     for (let i = 0; i < 9; i++) recordAuthFailure(user);
-    expect(authThrottled(user)).toBe(false); // counter started fresh
+    expect(authThrottled(user).allowed).toBe(true); // counter started fresh
   });
 
   it('keeps separate accounts independent', () => {
     for (let i = 0; i < 10; i++) recordAuthFailure('account_a');
-    expect(authThrottled('account_a')).toBe(true);
-    expect(authThrottled('account_b')).toBe(false);
+    expect(authThrottled('account_a').allowed).toBe(false);
+    expect(authThrottled('account_b').allowed).toBe(true);
   });
 
   it('keeps an account locked out after the memory backstop evicts', () => {
@@ -420,13 +437,13 @@ describe('per-account failed-login throttle (#93)', () => {
     // per-account throttle exactly when it is needed most.
     const victim = 'lockme_account';
     for (let i = 0; i < 10; i++) recordAuthFailure(victim);
-    expect(authThrottled(victim)).toBe(true);
+    expect(authThrottled(victim).allowed).toBe(false);
 
     // Churn past MAX_TRACKED_IPS (10_000) distinct accounts to trip the backstop.
     for (let i = 0; i < 10_050; i++) recordAuthFailure(`throwaway_${i}`);
 
     // The victim's lockout must survive eviction.
-    expect(authThrottled(victim)).toBe(true);
+    expect(authThrottled(victim).allowed).toBe(false);
   });
 
   it('keeps a throttled-then-idle victim throttled after a flood of newer accounts', () => {
@@ -439,13 +456,13 @@ describe('per-account failed-login throttle (#93)', () => {
     // bypass the backstop must prevent. The eviction must skip throttled accounts.
     const victim = 'idle_victim';
     for (let i = 0; i < 10; i++) recordAuthFailure(victim);
-    expect(authThrottled(victim)).toBe(true);
+    expect(authThrottled(victim).allowed).toBe(false);
 
     // Flood past MAX_TRACKED_IPS (10_000) with newer accounts; victim untouched.
     for (let i = 0; i < 10_050; i++) recordAuthFailure(`floodacct_${i}`);
 
-    // The idle victim must stay throttled — its counter must survive eviction.
-    expect(authThrottled(victim)).toBe(true);
+    // The idle victim must stay throttled: its counter must survive eviction.
+    expect(authThrottled(victim).allowed).toBe(false);
   });
 
   it('keeps the failure map bounded under a flood of distinct in-window accounts', () => {
@@ -534,12 +551,17 @@ describe('gm privilege boundaries', () => {
   });
 
   it('does not restore gm privilege from client-controlled saved character state', () => {
-    const source = new Sim({ seed: 42, playerClass: 'warrior' });
+    const source = new Sim({ seed: 42, playerClass: 'warrior', world: GM_TEST_WORLD });
     const state = source.serializeCharacter(source.playerId) as any;
     state.gm = true;
     state.is_gm = true;
 
-    const target = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const target = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: GM_TEST_WORLD,
+    });
     const pid = target.addPlayer('warrior', 'Tester', { state });
 
     expect(target.entities.get(pid)?.gm).not.toBe(true);
@@ -712,13 +734,11 @@ describe('desktop login handoff codes: expiry and code shape', () => {
 function desktopRouteDeps(overrides: Partial<DesktopLoginRouteDeps> = {}) {
   const sent: Array<{ status: number; body: any }> = [];
   const deps: DesktopLoginRouteDeps = {
-    bearerToken: () => null,
     readBody: async () => ({}),
     json: (_res, status, body) => {
       sent.push({ status, body });
     },
     requestMetadata: () => ({ ip: '203.0.113.55', userAgent: 'test-agent' }),
-    accountForToken: async () => null,
     accountById: async () => null,
     moderationStatusForAccount: async () => ({ locked: false, message: '' }),
     touchLogin: async () => {},
@@ -728,48 +748,42 @@ function desktopRouteDeps(overrides: Partial<DesktopLoginRouteDeps> = {}) {
   return { deps, sent };
 }
 
+// The create leg's bearer resolution moved OUT of the handler (the Phase 18b
+// scope fix: both serving paths authenticate with the full-session resolver
+// BEFORE the core; the missing/stale/read-scope token rejections are pinned at
+// the arm/guard level in tests/server/desktop_login.test.ts and the parity
+// pins). These tests cover the post-auth core, issueDesktopLoginCode.
 describe('desktop login route handlers', () => {
   beforeEach(() => {
     resetDesktopLoginCodesForTest();
   });
 
-  it('create rejects a missing bearer token with 401 before any account lookup', async () => {
-    const accountForToken = vi.fn(async () => null);
-    const { deps, sent } = desktopRouteDeps({ accountForToken });
-    await handleDesktopLoginCreate(fakeReq({}, '203.0.113.55'), {} as any, deps);
+  it('create answers 401 when the authenticated account row has vanished', async () => {
+    const { deps, sent } = desktopRouteDeps();
+    await issueDesktopLoginCode(fakeReq({}, '203.0.113.55'), {} as any, deps, 7);
     expect(sent).toEqual([{ status: 401, body: { error: 'not authenticated' } }]);
-    expect(accountForToken).not.toHaveBeenCalled();
-  });
-
-  it('create rejects an unknown or stale token with 401', async () => {
-    const { deps, sent } = desktopRouteDeps({ bearerToken: () => 'tok' });
-    await handleDesktopLoginCreate(fakeReq({}, '203.0.113.55'), {} as any, deps);
-    expect(sent).toEqual([{ status: 401, body: { error: 'not authenticated' } }]);
+    expect(desktopLoginCodeCountForTest()).toBe(0);
   });
 
   it('create refuses a moderation-locked account with 403 and the moderation message', async () => {
     const { deps, sent } = desktopRouteDeps({
-      bearerToken: () => 'tok',
-      accountForToken: async () => 7,
       accountById: async () => ({ id: 7, username: 'tito' }),
       moderationStatusForAccount: async () => ({
         locked: true,
         message: 'This account has been banned.',
       }),
     });
-    await handleDesktopLoginCreate(fakeReq({}, '203.0.113.55'), {} as any, deps);
+    await issueDesktopLoginCode(fakeReq({}, '203.0.113.55'), {} as any, deps, 7);
     expect(sent).toEqual([{ status: 403, body: { error: 'This account has been banned.' } }]);
     expect(desktopLoginCodeCountForTest()).toBe(0);
   });
 
   it('create mints a code the same IP can exchange', async () => {
     const { deps, sent } = desktopRouteDeps({
-      bearerToken: () => 'tok',
-      accountForToken: async () => 7,
       accountById: async () => ({ id: 7, username: 'tito' }),
     });
     const req = fakeReq({}, '203.0.113.55');
-    await handleDesktopLoginCreate(req, {} as any, deps);
+    await issueDesktopLoginCode(req, {} as any, deps, 7);
     expect(sent[0].status).toBe(200);
     expect(sent[0].body.code).toMatch(/^[A-Za-z0-9_-]{20,80}$/);
     expect(sent[0].body.expiresInMs).toBe(5 * 60 * 1000);

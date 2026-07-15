@@ -12,6 +12,9 @@ vi.mock('../server/db', () => ({
   accountForToken: vi.fn(),
   isAdminAccount: vi.fn(),
   accountMailTarget: vi.fn(async () => null),
+  accountById: vi.fn(),
+  updatePasswordHash: vi.fn(),
+  revokeTokensExcept: vi.fn(),
 }));
 vi.mock('../server/admin_db', async () => {
   const actual = await vi.importActual<typeof import('../server/admin_db')>('../server/admin_db');
@@ -35,6 +38,9 @@ vi.mock('../server/admin_db', async () => {
 vi.mock('../server/auth', () => ({
   verifyPassword: vi.fn(async () => false),
   newToken: vi.fn(() => 'b'.repeat(64)),
+  hashPassword: vi.fn(async () => 'salt:hashed'),
+  MIN_PASSWORD_LENGTH: 6,
+  MAX_PASSWORD_LENGTH: 128,
 }));
 vi.mock('../server/moderation_db', () => ({
   forceCharacterRename: vi.fn(),
@@ -44,6 +50,7 @@ vi.mock('../server/moderation_db', () => ({
   liftAccountChatMute: vi.fn(),
   moderateAccount: vi.fn(),
   muteAccountChat: vi.fn(),
+  recordPasswordReset: vi.fn(),
 }));
 vi.mock('../server/chat_filter_db', () => ({
   addFilterWord: vi.fn(),
@@ -91,7 +98,7 @@ import {
   overviewCounts,
   type PerfRawRow,
 } from '../server/admin_db';
-import { verifyPassword } from '../server/auth';
+import { hashPassword, verifyPassword } from '../server/auth';
 import type { CalibrationHistogram, SuspiciousPlayer } from '../server/bot_detector/contract';
 import {
   addFilterWord,
@@ -102,7 +109,16 @@ import {
   resetChatStrikes,
   updateFilterConfig,
 } from '../server/chat_filter_db';
-import { accountForToken, accountMailTarget, findAccount, isAdminAccount } from '../server/db';
+import {
+  accountById,
+  accountForToken,
+  accountMailTarget,
+  findAccount,
+  isAdminAccount,
+  pool,
+  revokeTokensExcept,
+  updatePasswordHash,
+} from '../server/db';
 import { addBlockedIp, removeBlockedIp } from '../server/ip_block_db';
 import type { LiveSharedIp } from '../server/live_shared_ips';
 import {
@@ -113,6 +129,7 @@ import {
   moderationQueue,
   moderationReportsForAccount,
   muteAccountChat,
+  recordPasswordReset,
 } from '../server/moderation_db';
 import {
   adminRolesForAccount,
@@ -472,6 +489,123 @@ describe('admin api auth', () => {
     expect(res.statusCode).toBe(200);
   });
 
+  it('serves unstuck reports through the production admin dispatcher', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    vi.mocked(pool.query)
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: '9',
+            realm: 'main',
+            account_id: 4,
+            character_id: 5,
+            character_name: 'Aleph',
+            area_kind: 'dungeon',
+            area_id: 'hollow_crypt',
+            instance_id: null,
+            instance_slot: 2,
+            origin_raw_x: 100,
+            origin_raw_y: 3,
+            origin_raw_z: 200,
+            origin_local_x: 4,
+            origin_local_y: 3,
+            origin_local_z: 8,
+            destination_raw_x: null,
+            destination_raw_y: null,
+            destination_raw_z: null,
+            destination_local_x: null,
+            destination_local_y: null,
+            destination_local_z: null,
+            outcome: 'cancelled',
+            reason: 'moved',
+            invoked_at: '2026-07-14T00:00:00.000Z',
+            resolved_at: '2026-07-14T00:00:03.000Z',
+            created_at: '2026-07-14T00:00:03.000Z',
+          },
+        ],
+      } as never)
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            area_kind: 'dungeon',
+            area_id: 'hollow_crypt',
+            bucket_local_x: 0,
+            bucket_local_y: 0,
+            bucket_local_z: 5,
+            report_count: 3,
+            completed_count: 1,
+            cancelled_count: 2,
+            failed_count: 0,
+            first_invoked_at: '2026-07-13T00:00:00.000Z',
+            last_resolved_at: '2026-07-14T00:00:03.000Z',
+          },
+        ],
+      } as never);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({
+        token: VALID_TOKEN,
+        url: '/admin/api/unstuck-reports?days=14&limit=25',
+      }),
+      res,
+      fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data).toMatchObject({
+      days: 14,
+      limit: 25,
+      reports: [
+        {
+          id: 9,
+          characterName: 'Aleph',
+          origin: { x: 100, y: 3, z: 200, localX: 4, localY: 3, localZ: 8 },
+          destination: null,
+          outcome: 'cancelled',
+          reason: 'moved',
+        },
+      ],
+      hotspots: [
+        {
+          bucket: { x: 0, y: 0, z: 5 },
+          count: 3,
+          completed: 1,
+          cancelled: 2,
+          failed: 0,
+        },
+      ],
+    });
+  });
+
+  it('skips the unstuck hotspot aggregate on legacy cursor pages', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    vi.mocked(pool.query).mockResolvedValueOnce({ rows: [], rowCount: 0 } as never);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({
+        token: VALID_TOKEN,
+        url: '/admin/api/unstuck-reports?days=14&limit=25&beforeId=9',
+      }),
+      res,
+      fakeGame,
+    );
+
+    expect(pool.query).toHaveBeenCalledTimes(1);
+    expect(String(vi.mocked(pool.query).mock.calls[0][0])).toContain('FROM unstuck_reports r');
+    expect(String(vi.mocked(pool.query).mock.calls[0][0])).not.toContain('WITH bucketed AS');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data).toMatchObject({
+      reports: [],
+      hotspots: [],
+      hasMore: false,
+      nextBeforeId: null,
+    });
+  });
+
   it('serves shared IPs with their current block state', async () => {
     vi.mocked(accountForToken).mockResolvedValue(7);
     vi.mocked(isAdminAccount).mockResolvedValue(true);
@@ -701,6 +835,9 @@ describe('admin api auth', () => {
       chatMutedUntil: null,
       chatMuteReason: '',
       chatStrikes: 0,
+      isAi: false,
+      isStreamer: false,
+      streamerLinks: {},
       lastLoginIp: null,
       playtimeSeconds: 0,
       characters: [],
@@ -736,6 +873,9 @@ describe('admin api auth', () => {
       chatMutedUntil: null,
       chatMuteReason: '',
       chatStrikes: 0,
+      isAi: false,
+      isStreamer: false,
+      streamerLinks: {},
       lastLoginIp: null,
       playtimeSeconds: 0,
       characters: [],
@@ -1156,6 +1296,9 @@ describe('admin api chat filter', () => {
       chatMutedUntil: null,
       chatMuteReason: '',
       chatStrikes: 0,
+      isAi: false,
+      isStreamer: false,
+      streamerLinks: {},
       lastLoginIp: null,
       playtimeSeconds: 0,
       characters: [],
@@ -1309,6 +1452,141 @@ describe('blocked-ips admin route', () => {
     );
     expect(res.statusCode).toBe(400);
     expect(removeBlockedIp).not.toHaveBeenCalled();
+  });
+});
+
+describe('admin api password reset', () => {
+  const actAs = (roles: string[], accountId = 7) => {
+    vi.mocked(accountForToken).mockResolvedValue(accountId);
+    vi.mocked(adminRolesForAccount).mockResolvedValue({ username: 'operator', roles });
+  };
+  const targetExists = () =>
+    vi
+      .mocked(accountById)
+      .mockResolvedValue({ id: 9 } as NonNullable<Awaited<ReturnType<typeof accountById>>>);
+  const post = (body: unknown, id = 9) =>
+    fakeReq({
+      method: 'POST',
+      token: VALID_TOKEN,
+      url: `/admin/api/accounts/${id}/reset-password`,
+      body,
+    });
+
+  it('audits, rehashes, revokes every token, and disconnects live sessions', async () => {
+    actAs(['admin']);
+    vi.mocked(isAdminAccount).mockResolvedValue(false); // target is not staff
+    targetExists();
+    const res = fakeRes();
+
+    await handleAdminApi(
+      post({ password: 'newpass123', reason: 'account recovery' }),
+      res,
+      fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(recordPasswordReset).toHaveBeenCalledWith({
+      accountId: 9,
+      adminAccountId: 7,
+      reason: 'account recovery',
+    });
+    expect(hashPassword).toHaveBeenCalledWith('newpass123');
+    expect(updatePasswordHash).toHaveBeenCalledWith(9, 'salt:hashed');
+    expect(revokeTokensExcept).toHaveBeenCalledWith(9, null);
+    expect(fakeGame.disconnectAccount).toHaveBeenCalledWith(
+      9,
+      'Connection to the server was lost.',
+    );
+    // The audit row lands before the credential write (no unaudited action).
+    expect(vi.mocked(recordPasswordReset).mock.invocationCallOrder[0]).toBeLessThan(
+      vi.mocked(updatePasswordHash).mock.invocationCallOrder[0],
+    );
+  });
+
+  it('rejects out-of-bounds passwords without touching the account', async () => {
+    actAs(['admin']);
+    vi.mocked(isAdminAccount).mockResolvedValue(false);
+    targetExists();
+
+    const tooShort = fakeRes();
+    await handleAdminApi(post({ password: 'abc', reason: 'r' }), tooShort, fakeGame);
+    expect(tooShort.statusCode).toBe(400);
+    expect(tooShort.body.error).toBe('password must be at least 6 chars');
+
+    const tooLong = fakeRes();
+    await handleAdminApi(post({ password: 'x'.repeat(129), reason: 'r' }), tooLong, fakeGame);
+    expect(tooLong.statusCode).toBe(400);
+    expect(tooLong.body.error).toBe('password must be at most 128 chars');
+
+    const missing = fakeRes();
+    await handleAdminApi(post({ reason: 'r' }), missing, fakeGame);
+    expect(missing.statusCode).toBe(400);
+
+    expect(recordPasswordReset).not.toHaveBeenCalled();
+    expect(updatePasswordHash).not.toHaveBeenCalled();
+    expect(revokeTokensExcept).not.toHaveBeenCalled();
+  });
+
+  it('returns 404 for an unknown account without touching anything', async () => {
+    actAs(['admin']);
+    vi.mocked(isAdminAccount).mockResolvedValue(false);
+    vi.mocked(accountById).mockResolvedValue(null);
+    const res = fakeRes();
+
+    await handleAdminApi(post({ password: 'newpass123', reason: 'r' }, 12345), res, fakeGame);
+
+    expect(res.statusCode).toBe(404);
+    expect(recordPasswordReset).not.toHaveBeenCalled();
+    expect(updatePasswordHash).not.toHaveBeenCalled();
+    expect(revokeTokensExcept).not.toHaveBeenCalled();
+  });
+
+  it('refuses a staff target unless the actor is a superadmin', async () => {
+    actAs(['admin']);
+    vi.mocked(isAdminAccount).mockResolvedValue(true); // target is staff
+    targetExists();
+    const denied = fakeRes();
+
+    await handleAdminApi(post({ password: 'newpass123', reason: 'r' }), denied, fakeGame);
+
+    expect(denied.statusCode).toBe(400);
+    expect(denied.body.error).toBe('only a superadmin can reset a staff password');
+    expect(updatePasswordHash).not.toHaveBeenCalled();
+    expect(revokeTokensExcept).not.toHaveBeenCalled();
+
+    actAs(['superadmin']);
+    const allowed = fakeRes();
+    await handleAdminApi(post({ password: 'newpass123', reason: 'r' }), allowed, fakeGame);
+    expect(allowed.statusCode).toBe(200);
+    expect(updatePasswordHash).toHaveBeenCalledWith(9, 'salt:hashed');
+  });
+
+  it('refuses the route entirely without the accounts.password permission', async () => {
+    actAs(['moderator']);
+    const res = fakeRes();
+
+    await handleAdminApi(post({ password: 'newpass123', reason: 'r' }), res, fakeGame);
+
+    expect(res.statusCode).toBe(403);
+    expect(res.body.error).toBe('you do not have permission to do this');
+    expect(updatePasswordHash).not.toHaveBeenCalled();
+  });
+
+  it('requires a moderation reason, surfacing the audit failure as 400', async () => {
+    actAs(['admin']);
+    vi.mocked(isAdminAccount).mockResolvedValue(false);
+    targetExists();
+    vi.mocked(recordPasswordReset).mockRejectedValueOnce(
+      new Error('moderation reason is required'),
+    );
+    const res = fakeRes();
+
+    await handleAdminApi(post({ password: 'newpass123' }), res, fakeGame);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe('moderation reason is required');
+    expect(updatePasswordHash).not.toHaveBeenCalled();
+    expect(revokeTokensExcept).not.toHaveBeenCalled();
   });
 });
 

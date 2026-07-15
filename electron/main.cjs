@@ -25,6 +25,8 @@ const {
   ALLOWED_PERMISSIONS,
 } = require('./shell_guards.cjs');
 const { resolveDesktopConfig } = require('./desktop_config.cjs');
+const { createSteamShell } = require('./steam.cjs');
+const { PRODUCTION_API_ORIGIN } = require('./update_guard.cjs');
 const {
   MAX_FORWARDED_ERRORS,
   MAX_MIRRORED_CONSOLE_LINES,
@@ -65,8 +67,9 @@ function readPackagedMetadata() {
     return null;
   }
 }
+const packagedMetadata = readPackagedMetadata();
 const desktopConfig = resolveDesktopConfig({
-  packagedMetadata: readPackagedMetadata(),
+  packagedMetadata,
   env: process.env,
   isPackaged: app.isPackaged,
 });
@@ -77,7 +80,7 @@ const desktopConfig = resolveDesktopConfig({
 // what the Vite client bundle was baked with; loginOrigin is main-process-only);
 // the VITE_DESKTOP_* env pair is honored on unpackaged checkouts only,
 // mirroring the WOC_DISTRIBUTION hatch closure.
-const apiOrigin = deriveOrigin(desktopConfig.apiOrigin) || 'https://worldofclaudecraft.com';
+const apiOrigin = deriveOrigin(desktopConfig.apiOrigin) || PRODUCTION_API_ORIGIN;
 const desktopLoginOrigin = desktopConfig.loginOrigin.replace(/\/+$/, '');
 
 // Crashpad must start before any window exists so native crashes in EVERY
@@ -361,6 +364,42 @@ function handleDeepLink(url) {
 // or foreign-origin sender is rejected with null.
 const trustedSender = (event) => isTrustedSender(event.senderFrame, appOrigins);
 
+// Steam link tickets (electron/steam.cjs). Inert on website builds: the shell
+// only lazy-requires steamworks.js when the distribution stamp says 'steam'
+// (or the unpackaged WOC_STEAM_DEV=1 dev loop), and getLinkTicket() answers
+// null on every failure path instead of throwing across IPC.
+const steamShell = createSteamShell({
+  distribution: desktopConfig.distribution,
+  packagedMetadata,
+  env: process.env,
+  isPackaged: app.isPackaged,
+  log,
+});
+
+ipcMain.handle('desktop-steam-link-ticket', async (event) => {
+  if (!trustedSender(event)) return null;
+  return await steamShell.getLinkTicket();
+});
+
+// The renderer signals that a link attempt has settled (POST /api/steam/link
+// resolved or rejected) so the shell can CancelAuthTicket the live handle
+// promptly (Valve's contract), rather than waiting for the next mint or process
+// exit. Idempotent; inert on website builds (no live handle ever exists).
+ipcMain.handle('desktop-steam-link-settled', (event) => {
+  if (!trustedSender(event)) return null;
+  steamShell.cancelLinkTicket();
+  return null;
+});
+
+// Whether this shell can mint link tickets at all (steam distribution or the
+// unpackaged dev loop): the renderer hides the Link button when false instead
+// of offering a click whose ticket can never exist (website builds). Computed
+// without loading steamworks.js.
+ipcMain.handle('desktop-steam-capability', (event) => {
+  if (!trustedSender(event)) return false;
+  return steamShell.enabled;
+});
+
 ipcMain.handle('desktop-login-open-browser', (event) => {
   if (!trustedSender(event)) return null;
   openDesktopLogin();
@@ -464,6 +503,7 @@ app.whenReady().then(() => {
     packaged: app.isPackaged,
     distribution: desktopConfig.distribution,
     updaterEnabled: desktopConfig.updaterEnabled,
+    updateChannel: desktopConfig.updateChannel,
     crashUpload: desktopConfig.crashSubmitUrl !== '',
     crashDumpDir: app.getPath('crashDumps'),
     logFile: logFilePath,
@@ -501,6 +541,11 @@ app.whenReady().then(() => {
         getWindow: () => mainWindow,
         isTrusted: trustedSender,
         isPackaged: app.isPackaged,
+        // The normalized origin this install talks to and the update channel
+        // derived from it (electron/update_guard.cjs): the updater reads only
+        // its own track's feed and refuses cross-origin artifacts.
+        apiOrigin,
+        updateChannel: desktopConfig.updateChannel,
       });
     } catch (err) {
       log.error('[updater] init failed', err);

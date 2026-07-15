@@ -27,7 +27,7 @@ export function serializeMap(map: CustomMap): string {
 // ---- biome-paint ids RLE (localStorage layer ONLY) --------------------------
 //
 // A fine paint grid holds up to ~4.2M cells; as a plain JSON array that is
-// many MB — past the localStorage quota. The grids are extremely run-heavy
+// many MB ? past the localStorage quota. The grids are extremely run-heavy
 // (mostly 255 with painted runs), so the STORE swaps `ids` for a run-length
 // string (shared codec in sim/map_doc, also used by the playtest handoff).
 // This never leaks into the document format: file export, bundles and the

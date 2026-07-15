@@ -10,10 +10,43 @@
 export interface WebGLContextHolder {
   forceContextLoss(): void;
   dispose(): void;
+  getContext?(): WebGLRenderingContext | WebGL2RenderingContext;
 }
 
 const holders = new Set<WebGLContextHolder>();
-const teardownFns = new Set<() => void>();
+const normalizedInfoLogContexts = new WeakSet<object>();
+
+/**
+ * Three r165 calls `.trim()` directly on WebGL info logs, although the WebGL
+ * contract allows browsers to return null. Chrome 150 does that on some Linux
+ * shader/link paths, which used to throw during the first render and leave the
+ * loading screen up forever. Three r179+ coalesces these values to an empty
+ * string; mirror that narrow upstream fix while this project remains pinned to
+ * r165 for shader-chunk compatibility.
+ */
+function normalizeNullableInfoLogs(context: WebGLRenderingContext | WebGL2RenderingContext): void {
+  if (normalizedInfoLogContexts.has(context)) return;
+  const getProgramInfoLog = context.getProgramInfoLog.bind(context);
+  const getShaderInfoLog = context.getShaderInfoLog.bind(context);
+  try {
+    Object.defineProperties(context, {
+      getProgramInfoLog: {
+        configurable: true,
+        value: (program: WebGLProgram) => getProgramInfoLog(program) ?? '',
+        writable: true,
+      },
+      getShaderInfoLog: {
+        configurable: true,
+        value: (shader: WebGLShader) => getShaderInfoLog(shader) ?? '',
+        writable: true,
+      },
+    });
+    normalizedInfoLogContexts.add(context);
+  } catch {
+    // Some embedded WebViews may expose non-configurable host methods. Leaving
+    // them untouched is safer than making renderer construction itself fail.
+  }
+}
 
 /**
  * Track a renderer so its GL context is released on page teardown. Returns an
@@ -21,33 +54,17 @@ const teardownFns = new Set<() => void>();
  * touched twice.
  */
 export function trackWebGLContext(holder: WebGLContextHolder): () => void {
+  try {
+    const context = holder.getContext?.();
+    if (context) normalizeNullableInfoLogs(context);
+  } catch {
+    // Context release tracking must remain available even if an unusual host
+    // rejects context introspection.
+  }
   holders.add(holder);
   return () => {
     holders.delete(holder);
   };
-}
-
-/**
- * Register a callback to run on page teardown alongside WebGL context release —
- * e.g. closing AudioContexts, which are not GPU contexts but leak the same way
- * across the editor↔playtest navigation ping-pong. Returns an unregister
- * function. Callbacks must be idempotent and swallow their own errors.
- */
-export function registerPageTeardown(fn: () => void): () => void {
-  teardownFns.add(fn);
-  return () => {
-    teardownFns.delete(fn);
-  };
-}
-
-function runPageTeardowns(): void {
-  for (const fn of teardownFns) {
-    try {
-      fn();
-    } catch {
-      /* best-effort teardown */
-    }
-  }
 }
 
 /**
@@ -76,25 +93,15 @@ export function releaseTrackedWebGLContexts(): void {
  * navigation, and tab close, and unlike `unload` it does not disqualify the page
  * from the bfcache. Call once at startup.
  *
- * Release only on a real teardown (`persisted === false`) — this is what frees
- * the GPU context whose leak the ~16-per-process cap otherwise punishes (the
- * editor's viewport renderer never wired this, so every Playtest launch leaked
- * its context until the browser was restarted). Registered page-teardown
- * callbacks (e.g. closing AudioContexts) run in the same breath.
- *
- * When the page is frozen into the bfcache (`persisted === true`) everything must
- * survive: `dispose()` is terminal and nothing rebuilds them, so a bfcache
- * restore (`pageshow` with `persisted`) has to come back to live canvases, not
- * dead ones. bfcache retention is bounded (the browser evicts under memory
- * pressure), so it is not the unbounded leak.
+ * Release only on a real teardown (`persisted === false`). When the page is
+ * frozen into the bfcache (`persisted === true`) the contexts must survive:
+ * `dispose()` is terminal and nothing rebuilds them, so a bfcache restore
+ * (`pageshow` with `persisted`) has to come back to live canvases, not dead ones.
  */
 export function installWebGLContextRelease(
   target: Pick<EventTarget, 'addEventListener'> = window,
 ): void {
   target.addEventListener('pagehide', (e) => {
-    if (!(e as PageTransitionEvent).persisted) {
-      runPageTeardowns();
-      releaseTrackedWebGLContexts();
-    }
+    if (!(e as PageTransitionEvent).persisted) releaseTrackedWebGLContexts();
   });
 }

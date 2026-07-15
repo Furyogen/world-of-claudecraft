@@ -1,22 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
+import { Aura } from '../src/sim/types';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
-import type { Aura } from '../src/sim/types';
 
 const SEED = 5150;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
 
 function spellVulnAura(value: number, remaining = 10): Aura {
   return {
-    id: 'spellvuln_test',
-    name: 'Static Charge',
-    kind: 'spellvuln',
-    remaining,
-    duration: 10,
-    value,
-    sourceId: -1,
-    school: 'nature',
+    id: 'spellvuln_test', name: 'Static Charge', kind: 'spellvuln',
+    remaining, duration: 10, value, sourceId: -1, school: 'nature',
   };
 }
 
@@ -63,8 +57,7 @@ describe('Spell Vulnerability (spellvuln) debuff', () => {
   it('a landed stormcrag_elemental swing can inflict Static Charge', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000;
-    p.hp = 100000; // survive every swing so we observe the debuff
+    p.maxHp = 100000; p.hp = 100000; // survive every swing so we observe the debuff
     const tmpl = MOBS.stormcrag_elemental;
     const saved = tmpl.spellVuln!.chance;
     tmpl.spellVuln!.chance = 1; // force the proc; misses/dodges still possible
@@ -87,8 +80,7 @@ describe('Spell Vulnerability (spellvuln) debuff', () => {
   it('a friendly pet swing (hostile=false) never inflicts Static Charge', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000;
-    p.hp = 100000;
+    p.maxHp = 100000; p.hp = 100000;
     const tmpl = MOBS.stormcrag_elemental;
     const saved = tmpl.spellVuln!.chance;
     tmpl.spellVuln!.chance = 1;
@@ -105,8 +97,7 @@ describe('Spell Vulnerability (spellvuln) debuff', () => {
   it('a mob without spellVuln applies no debuff', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000;
-    p.hp = 100000;
+    p.maxHp = 100000; p.hp = 100000;
     const mob = createMob(900603, MOBS.forest_wolf, 5, { x: 0, y: 0, z: 0 });
     for (let i = 0; i < 40; i++) (sim as any).mobSwing(mob, p);
     expect(p.auras.some((a) => a.kind === 'spellvuln')).toBe(false);

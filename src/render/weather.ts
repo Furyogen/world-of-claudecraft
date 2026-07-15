@@ -72,9 +72,6 @@ const STYLES: Record<Precip, PrecipStyle> = {
     blending: THREE.NormalBlending,
     twinkle: 0,
   },
-  // golden sparkles: slow-sinking motes of light, additive so they read as
-  // glow (and cross the bloom threshold on composer tiers), with a gentle
-  // global twinkle.
   sparkle: {
     color: 0xffd876,
     size: 0.38,
@@ -261,8 +258,6 @@ export class Weather {
    *              (indoors / underwater / suppressed)
    */
   update(cam: THREE.Vector3, dt: number, biome: BiomeId | null): void {
-    // The map override wins; otherwise peaks -> snow, marsh -> rain, clear else.
-    // Indoors/underwater (biome null) always clears, override or not.
     let want: Precip | null;
     let strength = 1;
     if (!this.enabled || biome === null) {
@@ -272,7 +267,7 @@ export class Weather {
       strength = Math.max(0, Math.min(1, this.override.intensity));
       if (strength <= 0.01) want = null;
     } else {
-      want = biome === 'peaks' ? 'snow' : biome === 'marsh' ? 'rain' : null;
+      want = biome === 'peaks' || biome === 'frost' ? 'snow' : biome === 'marsh' ? 'rain' : null;
     }
 
     // While the visible type still differs from what we want, drive opacity to

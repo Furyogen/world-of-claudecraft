@@ -4,9 +4,9 @@
 // This is the mob-side reactive twin of packFrenzy — a refreshable buff_haste
 // self-aura on the struck mob, not a player debuff.
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 const makeSim = () => new Sim({ seed: 42, playerClass: 'warrior', autoEquip: true });
@@ -14,11 +14,7 @@ const makeSim = () => new Sim({ seed: 42, playerClass: 'warrior', autoEquip: tru
 // Spawn a hostile Old Greyjaw next to the player and register it with the world.
 function spawnGreyjaw(sim: Sim): Entity {
   const p = sim.entities.get(sim.playerId)!;
-  const mob = createMob((sim as any).nextId++, MOBS.old_greyjaw, 4, {
-    x: p.pos.x + 2,
-    z: p.pos.z,
-    y: p.pos.y,
-  });
+  const mob = createMob((sim as any).nextId++, MOBS.old_greyjaw, 4, { x: p.pos.x + 2, z: p.pos.z, y: p.pos.y });
   sim.entities.set(mob.id, mob);
   return mob;
 }
@@ -35,12 +31,7 @@ function strike(sim: Sim, mob: Entity, proc: boolean) {
 
 describe('frenzyOnHit (Blood Frenzy)', () => {
   it('old_greyjaw carries the frenzyOnHit trait', () => {
-    expect(MOBS.old_greyjaw.frenzyOnHit).toEqual({
-      chance: 0.25,
-      hasteMult: 1.3,
-      duration: 8,
-      name: 'Blood Frenzy',
-    });
+    expect(MOBS.old_greyjaw.frenzyOnHit).toEqual({ chance: 0.25, hasteMult: 1.3, duration: 8, name: 'Blood Frenzy' });
   });
 
   it('a wounded carrier flies into a blood frenzy', () => {
@@ -93,11 +84,7 @@ describe('frenzyOnHit (Blood Frenzy)', () => {
   it('a mob without the trait never frenzies (and draws no rng)', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    const wolf = createMob((sim as any).nextId++, MOBS.forest_wolf, 2, {
-      x: p.pos.x + 2,
-      z: p.pos.z,
-      y: p.pos.y,
-    });
+    const wolf = createMob((sim as any).nextId++, MOBS.forest_wolf, 2, { x: p.pos.x + 2, z: p.pos.z, y: p.pos.y });
     sim.entities.set(wolf.id, wolf);
 
     strike(sim, wolf, true); // even with a guaranteed proc, no trait → no aura

@@ -9,12 +9,14 @@ import { button, el } from './dom';
 import * as net from './net';
 import { EditorApiError, type MapSummaryWire } from './net';
 import { editorErrorKey } from './server_errors_core';
+import { SHIPPED_MAPS, type ShippedMapId } from './shipped_maps';
 
-type Tab = 'local' | 'mine' | 'public';
+type Tab = 'shipped' | 'local' | 'mine' | 'public';
 
 export interface MapDrawerDeps {
   listLocal(): CustomMapMeta[];
   hasDraft(): boolean;
+  onOpenShipped(id: ShippedMapId): void;
   onOpenLocal(id: string): void;
   onOpenDraft(): void;
   onDeleteLocal(id: string): Promise<void>;
@@ -65,7 +67,13 @@ export class MapDrawer {
     panel.setAttribute('aria-label', t('editor.openDrawer.title'));
     const head = el('div', 'ed-drawer-head');
     head.appendChild(el('h2', 'ed-modal-title', t('editor.openDrawer.title')));
-    head.appendChild(button(t('editor.openDrawer.close'), () => this.close(), 'ed-drawer-close'));
+    head.appendChild(
+      button(
+        t('editor.openDrawer.close'),
+        () => this.close(),
+        'ed-drawer-close',
+      ),
+    );
     panel.appendChild(head);
     this.tabsEl = el('div', 'ed-drawer-tabs');
     this.tabsEl.setAttribute('role', 'tablist');
@@ -89,7 +97,8 @@ export class MapDrawer {
 
   private render(): void {
     this.renderTabs();
-    if (this.tab === 'local') this.renderLocal();
+    if (this.tab === 'shipped') this.renderShipped();
+    else if (this.tab === 'local') this.renderLocal();
     else if (this.tab === 'mine') void this.renderMine();
     else void this.renderPublic();
   }
@@ -97,6 +106,7 @@ export class MapDrawer {
   private renderTabs(): void {
     this.tabsEl.innerHTML = '';
     const tabs: { id: Tab; label: string }[] = [
+      { id: 'shipped', label: t('editor.openDrawer.tabShipped') },
       { id: 'local', label: t('editor.openDrawer.tabLocal') },
       { id: 'mine', label: t('editor.openDrawer.tabMine') },
       { id: 'public', label: t('editor.openDrawer.tabPublic') },
@@ -117,15 +127,42 @@ export class MapDrawer {
     }
   }
 
+  private renderShipped(): void {
+    const { rows } = this.table([
+      t('editor.openDrawer.colName'),
+      t('editor.openDrawer.colType'),
+    ]);
+    for (const map of SHIPPED_MAPS) {
+      const row = el('div', 'ed-map-row');
+      row.appendChild(el('span', 'ed-map-cell', map.name));
+      row.appendChild(el('span', 'ed-map-cell ed-map-muted', map.group));
+      const actions = el('span', 'ed-map-cell ed-map-actions');
+      actions.appendChild(
+        button(t('editor.openDrawer.openCopy'), () => {
+          this.deps.onOpenShipped(map.id);
+          this.close();
+        }),
+      );
+      row.appendChild(actions);
+      rows.appendChild(row);
+    }
+  }
+
   private note(text: string): void {
     this.body.innerHTML = '';
     this.body.appendChild(el('p', 'ed-drawer-note', text));
   }
 
-  private table(headers: string[], hasStatus = false): { table: HTMLElement; rows: HTMLElement } {
+  private table(
+    headers: string[],
+    hasStatus = false,
+  ): { table: HTMLElement; rows: HTMLElement } {
     this.body.innerHTML = '';
     const table = el('div', 'ed-map-table');
-    const head = el('div', `ed-map-row ed-map-head${hasStatus ? ' has-status' : ''}`);
+    const head = el(
+      'div',
+      `ed-map-row ed-map-head${hasStatus ? ' has-status' : ''}`,
+    );
     for (const h of headers) head.appendChild(el('span', 'ed-map-cell', h));
     head.appendChild(el('span', 'ed-map-cell ed-map-actions', ''));
     table.appendChild(head);
@@ -170,7 +207,10 @@ export class MapDrawer {
           'span',
           'ed-map-cell ed-map-muted',
           m.updatedAt
-            ? formatDateTime(m.updatedAt, { dateStyle: 'medium', timeStyle: 'short' })
+            ? formatDateTime(m.updatedAt, {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })
             : '',
         ),
       );
@@ -247,15 +287,21 @@ export class MapDrawer {
       ),
     );
     const actions = el('span', 'ed-map-cell ed-map-actions');
-    actions.appendChild(button(t('editor.openDrawer.open'), () => void this.openServer(m.id)));
+    actions.appendChild(
+      button(t('editor.openDrawer.open'), () => void this.openServer(m.id)),
+    );
     const pubLabel =
-      m.status === 'public' ? t('editor.openDrawer.unpublish') : t('editor.openDrawer.publish');
+      m.status === 'public'
+        ? t('editor.openDrawer.unpublish')
+        : t('editor.openDrawer.publish');
     actions.appendChild(
       button(pubLabel, async () => {
         try {
           await net.setMapPublished(m.id, m.status !== 'public');
           this.deps.toastSuccess(
-            m.status !== 'public' ? t('editor.status.published') : t('editor.status.unpublished'),
+            m.status !== 'public'
+              ? t('editor.status.published')
+              : t('editor.status.unpublished'),
           );
           void this.renderMine();
         } catch (err) {
@@ -311,15 +357,21 @@ export class MapDrawer {
     for (const m of page.rows) {
       const row = el('div', 'ed-map-row');
       row.appendChild(el('span', 'ed-map-cell', m.name));
-      row.appendChild(el('span', 'ed-map-cell ed-map-muted', when(m.updatedAt)));
+      row.appendChild(
+        el('span', 'ed-map-cell ed-map-muted', when(m.updatedAt)),
+      );
       const actions = el('span', 'ed-map-cell ed-map-actions');
-      actions.appendChild(button(t('editor.openDrawer.open'), () => void this.openServer(m.id)));
+      actions.appendChild(
+        button(t('editor.openDrawer.open'), () => void this.openServer(m.id)),
+      );
       if (net.signedIn()) {
         actions.appendChild(
           button(t('editor.openDrawer.fork'), async () => {
             try {
               const forked = await net.forkMap(m.id);
-              this.deps.toastSuccess(t('editor.status.forked', { name: forked.name }));
+              this.deps.toastSuccess(
+                t('editor.status.forked', { name: forked.name }),
+              );
               this.deps.onOpenServer(forked, true);
               this.close();
             } catch (err) {
@@ -331,7 +383,10 @@ export class MapDrawer {
       row.appendChild(actions);
       rows.appendChild(row);
     }
-    const totalPages = Math.max(1, Math.ceil(page.total / Math.max(1, page.limit)));
+    const totalPages = Math.max(
+      1,
+      Math.ceil(page.total / Math.max(1, page.limit)),
+    );
     if (totalPages > 1) {
       const pager = el('div', 'ed-drawer-pager');
       const prev = button(t('editor.openDrawer.prev'), () => {
@@ -346,13 +401,19 @@ export class MapDrawer {
       next.disabled = this.publicPage >= totalPages;
       pager.append(
         prev,
-        el('span', 'ed-map-muted', t('editor.openDrawer.page', { page: this.publicPage })),
+        el(
+          'span',
+          'ed-map-muted',
+          t('editor.openDrawer.page', { page: this.publicPage }),
+        ),
         next,
       );
       table.appendChild(pager);
     }
     if (!net.signedIn()) {
-      table.appendChild(el('p', 'ed-drawer-note', t('editor.openDrawer.signInHint')));
+      table.appendChild(
+        el('p', 'ed-drawer-note', t('editor.openDrawer.signInHint')),
+      );
     }
   }
 
@@ -368,15 +429,21 @@ export class MapDrawer {
 
   private serverError(err: unknown): void {
     const key =
-      err instanceof EditorApiError ? editorErrorKey(err.code, err.status) : editorErrorKey(null);
+      err instanceof EditorApiError
+        ? editorErrorKey(err.code, err.status)
+        : editorErrorKey(null);
     this.body.innerHTML = '';
-    this.body.appendChild(el('p', 'ed-drawer-note ed-error', t('editor.openDrawer.loadFailed')));
+    this.body.appendChild(
+      el('p', 'ed-drawer-note ed-error', t('editor.openDrawer.loadFailed')),
+    );
     this.body.appendChild(el('p', 'ed-drawer-note', t(key)));
   }
 
   private toastServerError(err: unknown): void {
     const key =
-      err instanceof EditorApiError ? editorErrorKey(err.code, err.status) : editorErrorKey(null);
+      err instanceof EditorApiError
+        ? editorErrorKey(err.code, err.status)
+        : editorErrorKey(null);
     this.deps.toastError(t(key));
   }
 }

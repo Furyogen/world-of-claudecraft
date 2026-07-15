@@ -19,10 +19,22 @@ import {
   validateAllocation,
   validateTalentTree,
 } from '../src/sim/content/talents';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import { ALL_CLASSES, dist2d, MAX_LEVEL } from '../src/sim/types';
+import { ALL_CLASSES, dist2d, MAX_LEVEL, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { talentChoiceIconRef, talentNodeIconRef } from '../src/ui/talent_icons';
+
+// Talent, loadout, and persistence assertions only ever read the player (and a
+// reloaded player), never ambient world content, so strip camps/npcs/ground
+// objects (the dot_final_tick subsystem-world pattern). The one exception, the
+// Vengeance threat test, needs a real camp mob and keeps the full world.
+const TALENT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 const alloc = (over: Partial<TalentAllocation> = {}): TalentAllocation => ({
   ...emptyAllocation(),
@@ -30,7 +42,7 @@ const alloc = (over: Partial<TalentAllocation> = {}): TalentAllocation => ({
 });
 
 function warriorAtCap(seed = 7): Sim {
-  const sim = new Sim({ seed, playerClass: 'warrior' });
+  const sim = new Sim({ seed, playerClass: 'warrior', world: TALENT_TEST_WORLD });
   sim.setPlayerLevel(MAX_LEVEL);
   return sim;
 }
@@ -288,7 +300,7 @@ describe('precomputed modifiers', () => {
     expect(mods.spec).toBe('arms');
     expect(mods.role).toBe('dps');
     expect(mods.grants.some((g) => g.ability === 'mortal_strike')).toBe(true);
-    expect(mods.global.meleeDmgPct).toBeCloseTo(0.1); // Sharpened Blades mastery
+    expect(mods.global.meleeDmgPct).toBeCloseTo(0.15); // Sharpened Blades mastery
   });
 
   it('makes every chosen spec signature available at the first talent level', () => {
@@ -325,14 +337,14 @@ describe('precomputed modifiers', () => {
         alloc({ spec: 'discipline', ranks: { disc_twin_disciplines: 1 } }),
       ),
     ).find((k) => k.def.id === 'power_word_shield')!;
-    expect(effOf(shield).amount).toBe(56); // 48 * (1 + 8% mastery + 8% talent)
+    expect(effOf(shield).amount).toBe(67); // 48 * 1.30 mastery * 1.08 talent
 
     const fort = abilitiesKnownAt(
       'priest',
       20,
       computeTalentModifiers('priest', alloc({ ranks: { pri_imp_fortitude: 2 } })),
     ).find((k) => k.def.id === 'power_word_fortitude')!;
-    expect(effOf(fort).value).toBe(17); // 12 stamina * 1.40
+    expect(effOf(fort).value).toBe(7); // 5% stamina * 1.40 (percent-points survive the round)
 
     const demonSkin = abilitiesKnownAt(
       'warlock',
@@ -349,7 +361,8 @@ describe('precomputed modifiers', () => {
         alloc({ spec: 'retribution', ranks: { ret_seal_command: 2 } }),
       ),
     ).find((k) => k.def.id === 'seal_of_righteousness')!;
-    expect(effOf(seal)).toMatchObject({ bonus: 16, judgeMin: 44, judgeMax: 64 }); // mastery + 2 talent ranks
+    expect(effOf(seal)).toMatchObject({ bonus: 18, judgeMin: 48, judgeMax: 70 });
+    // 2 talent ranks plus 20% retribution spell mastery.
   });
 });
 
@@ -405,7 +418,7 @@ describe('Sim integration — passive talents', () => {
   });
 
   it('rejects an over-budget allocation server-side', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'warrior' });
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     sim.setPlayerLevel(10); // exactly 1 point
     expect(sim.talentPoints().total).toBe(1);
     expect(sim.applyTalents(alloc({ ranks: { war_cruelty: 3 } }))).toBe(false);
@@ -427,7 +440,12 @@ describe('Sim integration — passive talents', () => {
     const state = sim.serializeCharacter(sim.playerId)!;
     expect(state.talents).toBeTruthy();
 
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Reloaded', { state });
     const meta = sim2.meta(pid)!;
     expect(meta.talents.spec).toBe('arms');
@@ -465,7 +483,7 @@ describe('Sim integration — active talents & ability modifiers', () => {
   });
 
   it('gates specialization choice to the first talent level', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'warrior' });
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     sim.setPlayerLevel(5);
     expect(sim.setSpec('arms')).toBe(false);
     expect(sim.known.some((k) => k.def.id === 'mortal_strike')).toBe(false);
@@ -482,8 +500,8 @@ describe('Sim integration — active talents & ability modifiers', () => {
     const buffed = effOf(
       abilitiesKnownAt('warrior', 20, mods).find((k) => k.def.id === 'overpower'),
     ).bonus;
-    // Arms mastery (+10% melee) + Improved Overpower r2 (+50%) => x1.60
-    expect(buffed).toBe(Math.round(baseBonus * 1.6));
+    // Arms mastery (+15% melee) + Improved Overpower r2 (+50%) => x1.65
+    expect(buffed).toBe(Math.round(baseBonus * 1.65));
     expect(buffed).toBeGreaterThan(baseBonus);
     // shared content data must NOT be mutated by the modifier pass
     const baseAgain = effOf(
@@ -555,15 +573,15 @@ describe('Sim integration — active talents & ability modifiers', () => {
         ),
       ).find((k) => k.def.id === 'cleave'),
     ).min;
-    expect(sweeping).toBe(Math.round(baseMin * 1.4)); // arms mastery .10 + sweeping .30
-    expect(impale).toBe(Math.round(baseMin * 1.1)); // arms mastery only; impale is crit
+    expect(sweeping).toBe(Math.round(baseMin * 1.45)); // arms mastery .15 + sweeping .30
+    expect(impale).toBe(Math.round(baseMin * 1.15)); // arms mastery only; impale is crit
   });
 
-  it('tank-role Vengeance Mastery multiplies generated threat (+30%)', () => {
+  it('tank-role Vengeance Mastery multiplies generated threat (+50%)', () => {
     const sunderThreat = (vengeance: boolean): number => {
       const sim = new Sim({ seed: 3, playerClass: 'warrior' });
       sim.setPlayerLevel(20);
-      if (vengeance) expect(sim.setSpec('prot')).toBe(true); // grants Vengeance (+30% threat)
+      if (vengeance) expect(sim.setSpec('prot')).toBe(true); // grants Vengeance (+50% threat)
       const mob = nearestMob(sim);
       sim.player.pos.x = mob.pos.x;
       sim.player.pos.z = mob.pos.z - 3;
@@ -579,8 +597,8 @@ describe('Sim integration — active talents & ability modifiers', () => {
     expect(base).toBeGreaterThan(0);
     // ~+30% (a tiny constant "seed" threat on combat entry isn't multiplied, so
     // assert the band rather than the exact ratio): clearly boosted, not doubled.
-    expect(venge / base).toBeGreaterThan(1.25);
-    expect(venge / base).toBeLessThan(1.31);
+    expect(venge / base).toBeGreaterThan(1.4);
+    expect(venge / base).toBeLessThan(1.55);
   });
 });
 
@@ -655,7 +673,7 @@ describe('Sim integration — loadouts & build strings', () => {
     expect(target.talents.ranks.prot_toughness).toBe(3);
 
     // the SAME build is rejected for a character without the points (server-side)
-    const lowbie = new Sim({ seed: 5, playerClass: 'warrior' });
+    const lowbie = new Sim({ seed: 5, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     lowbie.setPlayerLevel(10); // only 1 point
     expect(lowbie.applyTalents(imported.ok ? imported.alloc : alloc())).toBe(false);
   });
@@ -849,7 +867,12 @@ describe('persisted talents are revalidated on load (FR security)', () => {
     // Tamper: a level-5 character (0 talent points) carrying a max-level build.
     state.level = 5;
 
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Tampered', { state });
     const meta = sim2.meta(pid)!;
     // 0 points available at level 5 -> nothing survives.
@@ -893,7 +916,12 @@ describe('persisted talents are revalidated on load (FR security)', () => {
     const sim = warriorAtCap();
     sim.applyTalents(alloc({ spec: 'arms', ranks: { war_cruelty: 2, arms_imp_overpower: 2 } }));
     const state = sim.serializeCharacter(sim.playerId)!;
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Honest', { state });
     const meta = sim2.meta(pid)!;
     expect(meta.talents.ranks.war_cruelty).toBe(2);

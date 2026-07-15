@@ -1,12 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { arenaOrigin, isArenaPos } from '../src/sim/data';
+import { arenaOrigin, BUILTIN_WORLD, isArenaPos } from '../src/sim/data';
 import { DUNGEON_WALL_X } from '../src/sim/dungeon_layout';
 import { eloDelta, Sim } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
+import type { PlayerClass, WorldContent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
+// Arena assertions exercise players and the private arena band. Spawning every
+// ambient realm mob makes each countdown tick scan unrelated overworld AI.
+const ARENA_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeWorld() {
-  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, world: ARENA_TEST_WORLD });
 }
 
 function teleport(sim: Sim, pid: number, x: number, z: number) {

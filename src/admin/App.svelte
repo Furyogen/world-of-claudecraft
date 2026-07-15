@@ -22,7 +22,9 @@
   import Accounts from './pages/Accounts.svelte';
   import Characters from './pages/Characters.svelte';
   import Usage from './pages/Usage.svelte';
+  import TickPerf from './pages/TickPerf.svelte';
   import Moderation from './pages/Moderation.svelte';
+  import ModerationHistoryPage from './pages/ModerationHistoryPage.svelte';
   import SuspiciousPlayers from './pages/SuspiciousPlayers.svelte';
   import DetectionCalibration from './pages/DetectionCalibration.svelte';
   import AntibotConfig from './pages/AntibotConfig.svelte';
@@ -30,6 +32,7 @@
   import ChatFilter from './pages/ChatFilter.svelte';
   import BlockedIps from './pages/BlockedIps.svelte';
   import BugReports from './pages/BugReports.svelte';
+  import UnstuckReports from './pages/UnstuckReports.svelte';
   import IpAssociations from './pages/IpAssociations.svelte';
   import Staff from './pages/Staff.svelte';
 
@@ -44,7 +47,9 @@
     accounts: Accounts,
     characters: Characters,
     usage: Usage,
+    'tick-perf': TickPerf,
     moderation: Moderation,
+    'moderation-history': ModerationHistoryPage,
     'suspicious-players': SuspiciousPlayers,
     'detection-calibration': DetectionCalibration,
     'antibot-config': AntibotConfig,
@@ -52,6 +57,7 @@
     'chat-filter': ChatFilter,
     'blocked-ips': BlockedIps,
     'bug-reports': BugReports,
+    'unstuck-reports': UnstuckReports,
     staff: Staff,
   } satisfies Record<AdminPage, Component>;
   // Permission route guard (presentation only; the server re-checks every

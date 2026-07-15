@@ -4,6 +4,7 @@
 import { drownedLitanyChestItemsForTier } from '../content/delves/drowned_litany_loot';
 import { LOCKPICK_TIER_REWARD } from '../content/delves/lockpick_tiers';
 import { DELVES } from '../data';
+import * as deedsMod from '../deeds';
 import { DELVE_MODULE_LAYOUTS } from '../delve_layout';
 import type { LootTier } from '../lockpick';
 import { Rng } from '../rng';
@@ -239,7 +240,16 @@ function openDrownedReliquary(
   grantRiteBonus(ctx, run, tier);
   openDelveSurfaceExit(ctx, run);
   for (const pid of members) {
-    ctx.emit({ type: 'delveChestLoot', chestId: st.reliquaryId, items: partyLoot[pid], pid });
+    ctx.emit({
+      type: 'delveChestLoot',
+      chestId: st.reliquaryId,
+      delveId: run.delveId,
+      tierId: run.tierId,
+      lootTier: tier,
+      bountiful: isCoffer,
+      items: partyLoot[pid],
+      pid,
+    });
   }
   emitPartyLog(ctx, run, 'The Drowned Reliquary opens.', '#8cf');
 }
@@ -332,6 +342,8 @@ export function interactDrownedLitanyRite(
         riteCeiling(st.intensity),
       );
       openDrownedReliquary(ctx, run, tier, pid);
+      // Finale completed on the last correct touch (not the out-of-tries path).
+      deedsMod.onRiteFinaleForDeeds(ctx, pid, st.mistakes);
     }
     return true;
   }

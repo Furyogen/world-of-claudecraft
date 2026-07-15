@@ -55,6 +55,7 @@ export const progression: GuidePage = {
           { href: hrefFor('how-to-play'), key: 'guide.nav.howToPlay' },
           { href: hrefFor('reference/combat'), key: 'guide.nav.combat' },
           { href: hrefFor('world'), key: 'guide.nav.world' },
+          { href: hrefFor('deeds'), key: 'guide.nav.deeds' },
         ])}
       </article>`;
   },

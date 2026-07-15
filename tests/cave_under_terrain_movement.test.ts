@@ -94,7 +94,7 @@ describe('player movement on the cave sheet under steep terrain', () => {
 describe('cave side walls are solid', () => {
   // A flush tube on LEVELED flat ground (floor == surface): the worst case for
   // wall collision, because stepping out of the footprint lands on terrain at
-  // exactly the floor height — no climb gate can save you. The horseshoe wall
+  // exactly the floor height ? no climb gate can save you. The horseshoe wall
   // itself must block: headroom shrinks to 0 at the lateral edge.
   const FLAT_Y = 10;
 
@@ -178,7 +178,7 @@ describe('cave side walls are solid', () => {
 
 describe('cave mouth lips are stepped, not jumped', () => {
   // A tube whose mouth sits under a Hole-tool cutout with a small height
-  // mismatch between the tube floor and the terrain outside — the common
+  // mismatch between the tube floor and the terrain outside ? the common
   // hand-authored case. Walking must simply step the lip in both directions.
   const FLAT_Y = 10;
 

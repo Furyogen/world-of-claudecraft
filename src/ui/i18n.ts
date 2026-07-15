@@ -4,7 +4,7 @@
 //              !import.meta.env.PROD branch in tableFor, so a prod build tree-shakes it),
 //   - `pending` feeds the release-gate hard-fail in t(),
 //   - `LOCALE_LOADERS` + `SUPPORTED_LANGUAGES` drive lazy per-locale loading.
-// The 13 non-en dense slices are NO LONGER static-imported for use - each loads lazily via
+// The 21 non-en dense slices are NO LONGER static-imported for use - each loads lazily via
 // LOCALE_LOADERS[lang]()'s dynamic import() as its own content-hashed chunk, so a
 // default-English visitor downloads zero non-en locale bytes. These are imported from the
 // SPECIFIC generated modules (en / en_XA / pending / loaders), never the index.ts barrel,
@@ -30,10 +30,11 @@ import { pending } from './i18n.resolved.generated/pending';
 // re-export (export-from, NO local binding): the app runtime references none of these names
 // through './i18n' - every read-path below (t, translationValue, hasTranslation, tOptional)
 // reads the lazy `resident` table instead - so Rollup drops the unused re-export and
-// tree-shakes the 13 non-en slices (and the barrel that assembles them) out of the app
+// tree-shakes the 21 non-en slices (and the barrel that assembles them) out of the app
 // chunk. THAT drop is the payload win of the lazy locale flip. `en` stays in the chunk via the eager
 // local import above (the universal English default), not via this line.
 export {
+  cs_CZ,
   da_DK,
   de_DE,
   en,
@@ -64,9 +65,9 @@ export {
 export const gameStrings = en.game;
 export type { DeepPartial, InterpolationValue, InterpolationValues, Leaves, TranslationKey };
 
-// The 21-locale set + its type derive from the generated SUPPORTED_LANGUAGES (the loaders
+// The 22-locale set + its type derive from the generated SUPPORTED_LANGUAGES (the loaders
 // surface), NOT `keyof typeof translations`: after the lazy flip the full `translations`
-// map is no longer eagerly imported. The two are pinned equal (same 21 codes, same order)
+// map is no longer eagerly imported. The two are pinned equal (same 22 codes, same order)
 // by tests/i18n_emit_shape.test.ts.
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 export const supportedLanguages = [...SUPPORTED_LANGUAGES] as SupportedLanguage[];
@@ -90,6 +91,17 @@ let currentLanguage: SupportedLanguage = 'en';
 // the shipped bundle entirely.
 const DEV_PSEUDO_LOCALE = 'en_XA';
 let pseudoActive = false;
+
+/** Whether the dev-only en_XA pseudo-locale is active (accent-push + brackets on
+ *  English, {placeholders} preserved). The `!import.meta.env.PROD` guard mirrors
+ *  tableFor, so a release build statically resolves this to `false` and any
+ *  consumer's pseudo branch tree-shakes away. Player text that resolves its
+ *  English OUTSIDE the catalog table (deed names/descs/titles come from the sim
+ *  content table, so tableFor never pseudo-folds them) consults this to fold at
+ *  render time (src/ui/deed_i18n.ts). */
+export function isPseudoActive(): boolean {
+  return !import.meta.env.PROD && pseudoActive;
+}
 
 export function isSupportedLanguage(value: string): value is SupportedLanguage {
   return SUPPORTED_SET.has(value);
@@ -423,6 +435,18 @@ export function formatNumber(
   lang: SupportedLanguage = currentLanguage,
 ): string {
   return numberFormatFor(languageTag(lang), options).format(value);
+}
+
+// A localized "N seconds" duration phrase (the API rate-limit error renders a
+// server-supplied retry delay this way; the server sends the raw seconds and never
+// localizes). Uses Intl's unit style so each locale's plural rules apply, including
+// the Slavic 3-form split; shares the cached NumberFormat pool with formatNumber.
+export function formatDuration(seconds: number, lang: SupportedLanguage = currentLanguage): string {
+  return numberFormatFor(languageTag(lang), {
+    style: 'unit',
+    unit: 'second',
+    unitDisplay: 'long',
+  }).format(seconds);
 }
 
 export function formatDateTime(

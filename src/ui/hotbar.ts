@@ -81,6 +81,19 @@ export function placeItemOnSlot(
   return next;
 }
 
+// Given a completed touch drag (mobile long-press pick-up + drag-to-slot), decide
+// whether it resolves to a swap. `targetIndex` is null when the pointer released
+// outside any slot (cancel); releasing back on the source slot is also a no-op
+// cancel, not a swap-with-itself. Pure so hud.ts's pointer-event finish handler
+// stays a thin call site instead of inlining this branch.
+export function resolveMobileHotbarDrop(
+  sourceIndex: number,
+  targetIndex: number | null,
+): number | null {
+  if (targetIndex === null || targetIndex === sourceIndex) return null;
+  return targetIndex;
+}
+
 export function swapHotbarSlots(
   actions: readonly HotbarAction[],
   sourceIndex: number,
@@ -151,6 +164,26 @@ export function shouldSeedFormBar(
   if (alreadySeeded) return false;
   if (parsedForm.every((action) => action === null)) return true;
   return hotbarActionsEqual(parsedForm, parsedNormal);
+}
+
+// Rebuild the bar for a switched talent loadout. A `SavedLoadout.bar` only ever
+// records ability ids (the caller's currentBar mapping strips item shortcuts
+// before saving), so replacing the WHOLE bar from it wipes any potion/food/drink
+// slot the loadout never captured. A loadout slot with a resolvable ability id
+// fully replaces whatever was there; every other slot keeps its existing item
+// shortcut (if any) instead of being cleared.
+export function applyLoadoutBar(
+  current: readonly HotbarAction[],
+  bar: readonly (string | null)[],
+  slots: number,
+  abilityExists: (id: string) => boolean,
+): HotbarAction[] {
+  return Array.from({ length: slots }, (_, i) => {
+    const v = bar[i];
+    if (typeof v === 'string' && abilityExists(v)) return { type: 'ability' as const, id: v };
+    const existing = current[i];
+    return existing?.type === 'item' ? existing : null;
+  });
 }
 
 export function syncHotbarActions(

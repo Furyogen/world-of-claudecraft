@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import type { SimEvent } from '../src/sim/types';
+import { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -29,9 +29,7 @@ describe('/manaregen command', () => {
     const e = sim.entities.get(a)!;
     e.fiveSecondRule = 2.4; // 5 - 2.4 = 2.6 -> ceil 3
     sim.chat('/5sr', a);
-    expect(errorText(sim.tick())).toBe(
-      'Mana regen is paused — resumes in 3s (you spent mana recently).',
-    );
+    expect(errorText(sim.tick())).toBe('Mana regen is paused — resumes in 3s (you spent mana recently).');
   });
 
   it('tells non-mana classes the mechanic does not apply', () => {

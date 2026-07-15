@@ -74,7 +74,7 @@ export const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
     roleType: 'hybrid',
     armorKey: 'classDetails.armor.leatherCloth',
     weaponsKey: 'classDetails.weapons.staves',
-  },
+  }
 };
 
 // Three curated "signature" abilities per class, shown on the select screen.
@@ -89,5 +89,5 @@ export const SIGNATURE_ABILITIES: Record<PlayerClass, string[]> = {
   shaman: ['lightning_bolt', 'rockbiter_weapon', 'ghost_wolf'],
   mage: ['fireball', 'frostbolt', 'polymorph'],
   warlock: ['shadow_bolt', 'corruption', 'life_tap'],
-  druid: ['wrath', 'bear_form', 'rejuvenation'],
+  druid: ['wrath', 'bear_form', 'rejuvenation']
 };

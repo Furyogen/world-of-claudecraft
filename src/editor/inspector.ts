@@ -379,7 +379,11 @@ export interface InspectorDeps {
   updateCamp(change: { mobId?: string; count?: number; radius?: number }): void;
   deleteCamp(): void;
 
+  getSelectedMovableEntity(): { key: string; name: string; facing: number | null } | null;
+  updateMovableEntityFacing(key: string, facing: number, commit: boolean): void;
+
   getSpawn(): { x: number; z: number } | null;
+  getSpawnArea(): { minX: number; minZ: number; maxX: number; maxZ: number } | null;
   clearSpawn(): void;
 
   copyRegion(): void;
@@ -700,6 +704,9 @@ export class Inspector {
         break;
       case 'camp':
         this.campPanel();
+        break;
+      case 'entity':
+        this.entityPanel();
         break;
       case 'spawn':
         this.spawnPanel();
@@ -2373,6 +2380,15 @@ export class Inspector {
     const s = section(t('editor.spawn.title'));
     s.appendChild(hint(t('editor.spawn.hint')));
     const spawn = d.getSpawn();
+    const area = d.getSpawnArea();
+    if (area) {
+      s.appendChild(
+        el('p', 'ed-chosen', t('editor.spawn.area', {
+          width: num1(area.maxX - area.minX),
+          height: num1(area.maxZ - area.minZ),
+        })),
+      );
+    }
     if (spawn) {
       s.appendChild(
         el('p', 'ed-chosen', t('editor.spawn.position', { x: num1(spawn.x), z: num1(spawn.z) })),
@@ -2389,6 +2405,48 @@ export class Inspector {
       );
     } else {
       s.appendChild(el('p', 'ed-muted', t('editor.spawn.unset')));
+    }
+    this.root.appendChild(s);
+  }
+
+  private entityPanel(): void {
+    const s = section(t('editor.entityTool.title'));
+    s.appendChild(hint(t('editor.entityTool.hint')));
+    const selected = this.deps.getSelectedMovableEntity();
+    s.appendChild(
+      selected
+        ? el('p', 'ed-chosen', t('editor.entityTool.selected', { name: selected.name }))
+        : el('p', 'ed-muted', t('editor.entityTool.none')),
+    );
+    if (selected?.facing !== null && selected?.facing !== undefined) {
+      s.appendChild(
+        slider(t('editor.entityTool.facing'), {
+          min: 0,
+          max: 359,
+          step: 1,
+          value: Math.round(
+            (((selected.facing % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) *
+              (180 / Math.PI),
+          ),
+          onInput: (degrees) =>
+            this.deps.updateMovableEntityFacing(
+              selected.key,
+              (degrees * Math.PI) / 180,
+              false,
+            ),
+          onChange: (degrees) =>
+            this.deps.updateMovableEntityFacing(
+              selected.key,
+              (degrees * Math.PI) / 180,
+              true,
+            ),
+          format: (degrees) =>
+            `${formatNumber(Math.round(degrees), {
+              useGrouping: false,
+              maximumFractionDigits: 0,
+            })}°`,
+        }).root,
+      );
     }
     this.root.appendChild(s);
   }

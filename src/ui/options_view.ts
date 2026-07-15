@@ -40,6 +40,11 @@ export interface SliderControl {
   /** Current value at build time; the painter re-reads the live value on input. */
   value: number;
   fmt: SliderFmt;
+  /** Commit the setting on release ('change') instead of live on every 'input'
+   *  tick. Set for uiScale, whose live rescale moves the slider under the cursor
+   *  mid-drag (issue 1558); dragging updates only the readout, not the setting.
+   *  Other sliders keep their intended live preview (volume, fov, frame scale). */
+  commitOnChange?: boolean;
 }
 
 export interface ToggleControl {
@@ -205,6 +210,7 @@ export type OptionsPanelId =
 
 export type OptionsMenuAction =
   | { kind: 'goto'; view: OptionsPanelId }
+  | { kind: 'unstuck' }
   | { kind: 'logout' }
   | { kind: 'close' };
 
@@ -229,6 +235,7 @@ export function buildOptionsMenu(opts: { bugReportAvailable: boolean }): Options
       labelKey: 'hudChrome.bugReport.menuButton',
       action: { kind: 'goto', view: 'bugreport' },
     });
+  entries.push({ labelKey: 'hudChrome.unstuck.menuButton', action: { kind: 'unstuck' } });
   entries.push({ labelKey: 'hud.options.logout', action: { kind: 'logout' } });
   entries.push({ labelKey: 'hud.options.returnToGame', action: { kind: 'close' } });
   return entries;
@@ -305,6 +312,12 @@ export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv)
   if (env.touch) out.push(slider(s, 'actionButtonScale', 'hud.options.buttonSize'));
   if (env.touch) out.push(slider(s, 'joystickDeadzone', 'hud.options.joystickDeadzone'));
   if (env.touch) out.push(boolToggle(s, 'touchInvertLook', 'hud.options.invertLook'));
+  // Camera joystick is hidden/off by default (swipe-look is primary); left-handed
+  // layout already has a Key Bindings row (leftHandedTouch), but is surfaced here
+  // too since it is squarely a touch/graphics-panel concern for touch players.
+  if (env.touch)
+    out.push(boolToggle(s, 'mobileCameraJoystick', 'hudChrome.options.mobileCameraJoystick'));
+  if (env.touch) out.push(boolToggle(s, 'leftHandedTouch', 'hudChrome.options.mobileLeftHanded'));
   return out;
 }
 
@@ -351,7 +364,10 @@ export function buildControllerControls(s: OptionsSettingsSource): OptionsContro
 
 export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl[] {
   return [
-    slider(s, 'uiScale', 'hudChrome.options.uiScale'),
+    // uiScale commits on release: applying it live rescales the whole UI (the
+    // options window included), which shoves the slider under the cursor and makes
+    // the value hard to land (issue 1558).
+    { ...slider(s, 'uiScale', 'hudChrome.options.uiScale'), commitOnChange: true },
     slider(s, 'playerFrameScale', 'hudChrome.options.playerFrameScale'),
     slider(s, 'targetFrameScale', 'hudChrome.options.targetFrameScale'),
     slider(s, 'hudOpacity', 'hud.options.hudOpacity'),

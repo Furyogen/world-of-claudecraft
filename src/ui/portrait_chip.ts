@@ -8,6 +8,7 @@
 
 import {
   onPortraitsReady,
+  type PortraitFraming,
   playerPortraitDataUrl,
   portraitsReady,
 } from '../render/characters/portrait';
@@ -26,6 +27,10 @@ export interface PortraitChipOpts {
   variant?: PortraitVariant;
   /** Show the small class-crest badge in the corner (default true). */
   badge?: boolean;
+  /** Which slice of the model to show (default 'headshot'). Pass 'body' for a
+   *  normal 3/4 figure framing where the chip is shown large, e.g. the
+   *  Inspect window, so it does not read as an over-zoomed helmet crop. */
+  framing?: PortraitFraming;
 }
 
 /** Class crest data URL — the placeholder before the 3D portrait is ready and
@@ -37,8 +42,8 @@ function crestUrl(cls: PlayerClass): string {
 /** Build a portrait-chip HTML string. Call {@link hydratePortraits} on the
  *  container afterwards (or rely on the global ready hook to upgrade it). */
 export function portraitChipHtml(opts: PortraitChipOpts): string {
-  const { cls, skin = 0, name, variant = 'sm', badge = true } = opts;
-  const portrait = playerPortraitDataUrl(cls, skin);
+  const { cls, skin = 0, name, variant = 'sm', badge = true, framing = 'headshot' } = opts;
+  const portrait = playerPortraitDataUrl(cls, skin, framing);
   const src = portrait ?? crestUrl(cls);
   const pending = portrait ? '' : ' data-portrait-pending="1"';
   const fallbackCls = portrait ? '' : ' is-fallback';
@@ -47,7 +52,7 @@ export function portraitChipHtml(opts: PortraitChipOpts): string {
     ? `<img class="portrait-badge" src="${crestUrl(cls)}" alt="" aria-hidden="true" draggable="false">`
     : '';
   return (
-    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}"${pending}>` +
+    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}" data-framing="${framing}"${pending}>` +
     `<span class="portrait-ring"><img class="portrait-img" src="${src}" alt="${alt}" draggable="false"></span>` +
     badgeHtml +
     `</span>`
@@ -62,7 +67,8 @@ export function hydratePortraits(root: ParentNode = document): void {
     const cls = chip.dataset.cls as PlayerClass | undefined;
     if (!cls) return;
     const skin = Number(chip.dataset.skin ?? 0) || 0;
-    const url = playerPortraitDataUrl(cls, skin);
+    const framing = (chip.dataset.framing as PortraitFraming | undefined) ?? 'headshot';
+    const url = playerPortraitDataUrl(cls, skin, framing);
     if (!url) return;
     const img = chip.querySelector<HTMLImageElement>('.portrait-img');
     if (img) img.src = url;

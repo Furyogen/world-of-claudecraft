@@ -1,8 +1,20 @@
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
+import { describe, expect, it, vi } from 'vitest';
 import { ClientWorld } from '../src/net/online';
+import { applyMaterials } from '../src/render/characters/assets';
+import type { VisualDef } from '../src/render/characters/manifest';
 import { Sim } from '../src/sim/sim';
 import type { IWorld } from '../src/world_api';
+
+vi.mock('../src/render/assets/loader', () => ({
+  loadGltf: vi.fn(() => new Promise(() => undefined)),
+  loadTexture: vi.fn(() => new Promise(() => undefined)),
+}));
+
+vi.mock('../src/render/assets/preload', () => ({
+  registerPreload: vi.fn(),
+}));
 
 const characterAssetsSource = readFileSync(
   new URL('../src/render/characters/assets.ts', import.meta.url),
@@ -71,6 +83,38 @@ describe('appearance skin selection', () => {
     expect(characterAssetsSource).not.toContain('Standard tier only — low tier aliases');
     expect(characterAssetsSource).not.toContain(
       'if (GFX.standardMaterials) {\n  // Boot sweep skips lazyPreload keys',
+    );
+  });
+
+  it('restores the embedded default texture after previewing an alternate skin', () => {
+    const defaultTexture = new THREE.Texture();
+    const alternateTexture = new THREE.Texture();
+    const sourceMaterial = new THREE.MeshStandardMaterial({ map: defaultTexture });
+    const mesh = new THREE.Mesh(new THREE.BufferGeometry(), sourceMaterial);
+    mesh.userData.bodyMesh = true;
+
+    applyMaterials(mesh, {} as VisualDef, 0xffffff, alternateTexture);
+    expect((mesh.material as THREE.MeshStandardMaterial).map).toBe(alternateTexture);
+
+    applyMaterials(mesh, {} as VisualDef, 0xffffff, null);
+    expect((mesh.material as THREE.MeshStandardMaterial).map).toBe(defaultTexture);
+  });
+
+  it('restores every embedded default texture on a multi-material mesh', () => {
+    const defaultTextures = [new THREE.Texture(), new THREE.Texture()];
+    const alternateTexture = new THREE.Texture();
+    const sourceMaterials = defaultTextures.map((map) => new THREE.MeshStandardMaterial({ map }));
+    const mesh = new THREE.Mesh(new THREE.BufferGeometry(), sourceMaterials);
+    mesh.userData.bodyMesh = true;
+
+    applyMaterials(mesh, {} as VisualDef, 0xffffff, alternateTexture);
+    expect((mesh.material as THREE.MeshStandardMaterial[]).map((material) => material.map)).toEqual(
+      [alternateTexture, alternateTexture],
+    );
+
+    applyMaterials(mesh, {} as VisualDef, 0xffffff, null);
+    expect((mesh.material as THREE.MeshStandardMaterial[]).map((material) => material.map)).toEqual(
+      defaultTextures,
     );
   });
 });

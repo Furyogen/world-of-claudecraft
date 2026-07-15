@@ -26,7 +26,7 @@ import { type GuideRoute, hrefFor } from './routes';
 const ORIGIN = 'https://worldofclaudecraft.com';
 const LOGO = `${ORIGIN}/woc_logo_square.webp`;
 const GITHUB_URL = 'https://github.com/levy-street/world-of-claudecraft';
-const DISCORD_URL = 'https://discord.gg/GjhnUsBtw';
+const DISCORD_URL = 'https://discord.com/invite/worldofclaudecraft';
 
 // The newcomer FAQ on /guide/faq, kept in lockstep with pages/faq.ts so the FAQPage
 // JSON-LD answers the same questions the visible page does. cap rows splice the level

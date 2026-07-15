@@ -4,6 +4,7 @@ import {
   createNativeAttestationChallenge,
   nativeAttestationRequired,
   verifyNativeAttestation,
+  verifyNativeAttestationChallenge,
 } from '../server/native_attestation';
 
 const originalEnv = { ...process.env };
@@ -61,5 +62,25 @@ describe('native attestation', () => {
         token: 'token',
       }),
     ).resolves.toBe(false);
+  });
+
+  it('returns only the consumed server nonce for the expected action', async () => {
+    process.env.NATIVE_ATTESTATION_REQUIRED = '0';
+    const request = req({ origin: 'capacitor://localhost' });
+    const challenge = createNativeAttestationChallenge(request, 'apple');
+    const proof = { platform: 'ios', challengeId: challenge.challengeId, token: 'dev-token' };
+    await expect(verifyNativeAttestationChallenge(request, proof, 'discord')).resolves.toBeNull();
+    const appleChallenge = createNativeAttestationChallenge(request, 'apple');
+    const appleProof = {
+      platform: 'ios',
+      challengeId: appleChallenge.challengeId,
+      token: 'dev-token',
+    };
+    await expect(verifyNativeAttestationChallenge(request, appleProof, 'apple')).resolves.toEqual({
+      nonce: appleChallenge.nonce,
+    });
+    await expect(
+      verifyNativeAttestationChallenge(request, appleProof, 'apple'),
+    ).resolves.toBeNull();
   });
 });

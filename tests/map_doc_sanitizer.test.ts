@@ -570,6 +570,6 @@ describe('point sounds', () => {
     }));
     const doc = sanitizeMapDoc({ ...rawDoc(), pointSounds: many });
     expect(doc?.pointSounds?.length).toBe(MAX_POINT_SOUNDS);
-    expect(sanitizeMapDoc(rawDoc()).pointSounds).toBeUndefined();
+    expect(sanitizeMapDoc(rawDoc())?.pointSounds).toBeUndefined();
   });
 });

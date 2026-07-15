@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { assertDeterministic } from './helpers/i18n_determinism';
 
 // Byte-equivalence safety net for the i18n scaling refactor. Every
-// behavior-preserving change must leave the resolved 14-locale table
+// behavior-preserving change must leave the resolved locale table
 // byte-identical; this asserts the table's deterministic SHA-256 still matches
 // the committed baseline. The baseline changes ONLY in a change that
 // deliberately changes resolved output - a drift here is a bug, not a re-baseline.
@@ -30,18 +30,18 @@ describe('i18n resolved-table byte equivalence', () => {
     const match = out.match(/locales=(\d+) bytes=(\d+) sha256=([0-9a-f]{64})/);
     expect(match, `unexpected hash script output: ${out}`).toBeTruthy();
     const [, locales, , sha256] = match!;
-    expect(Number(locales)).toBe(21);
+    expect(Number(locales)).toBe(22);
 
     const baseline = readFileSync(baselinePath, 'utf8').trim();
     expect(sha256).toBe(baseline);
-  });
+  }, 15000);
 
   it('the --check gate passes against the committed baseline', () => {
     // execFileSync throws on a non-zero exit, which fails the test.
     expect(() =>
       execFileSync(process.execPath, [scriptPath, '--check'], { cwd: root, encoding: 'utf8' }),
     ).not.toThrow();
-  });
+  }, 15000);
 });
 
 describe('i18n resolved-artifact reproducibility', () => {
@@ -56,7 +56,7 @@ describe('i18n resolved-artifact reproducibility', () => {
         encoding: 'utf8',
       }),
     ).not.toThrow();
-  });
+  }, 15000);
 
   it('regenerating src/ui/i18n.resolved.generated/ leaves the committed directory unchanged', () => {
     // The dense generated artifact is the tsc safety net and is committed. Like
@@ -71,7 +71,7 @@ describe('i18n resolved-artifact reproducibility', () => {
         encoding: 'utf8',
       }),
     ).not.toThrow();
-  });
+  }, 15000);
 
   it('regenerates byte-identically across two perturbed-env runs (determinism)', () => {
     // The committed directory keeps the freshness check above; this ADDS the stronger

@@ -45,7 +45,7 @@
 //   I18N_OUT_DIR=... node scripts/i18n_scan.mjs   emit both into a custom directory
 
 import { createHash } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import * as esbuild from 'esbuild';
 import { COPIED_ALLOW_IDS, V07_SLASH } from './i18n_blocked_seed.mjs';
@@ -65,6 +65,18 @@ const OUT_DIR = process.env.I18N_OUT_DIR
 const OUT_PATH = path.join(OUT_DIR, 'i18n.status.json');
 const SUMMARY_PATH = path.join(OUT_DIR, 'i18n.status.summary.json');
 
+// Write-then-rename so no concurrent reader ever observes a half-written
+// artifact: the test suite regenerates these files into the real tree while
+// parallel workers run `git status` porcelain assertions, and a direct
+// multi-megabyte writeFileSync leaves a mid-write window where a tracked,
+// otherwise byte-identical file reads as modified. Same-directory rename is
+// atomic on POSIX.
+function atomicWriteFileSync(filePath, contents) {
+  const tmpPath = `${filePath}.tmp`;
+  writeFileSync(tmpPath, contents);
+  renameSync(tmpPath, filePath);
+}
+
 // The authoritative ordered locale set (mirrors scripts/i18n_build.mjs). `en` is
 // the nested base; the rest are flat dotted-key overlays. The registry tracks the
 // 13 NON-`en` locales per key (`en` is the authoritative source, never "pending").
@@ -83,6 +95,7 @@ const LOCALES = [
   'ja_JP',
   'pt_BR',
   'ru_RU',
+  'cs_CZ',
   'nl_NL',
   'pl_PL',
   'id_ID',
@@ -108,7 +121,7 @@ const SCOPE_RANK = { main: 0, sim: 1, server: 2, admin: 3 };
 // A human-meaningful reason per cognate (blocked rows require one). Keyed by the
 // stable part of the id so the seed stays short; falls back to a generic cognate
 // note for the long tail of accepted borrowings.
-function cognateReason(scope, locale, key) {
+function cognateReason(_scope, _locale, key) {
   if (key === 'who.statusCombat')
     return "'combat' is a real word in this locale and is identical to English.";
   if (key === 'who.statusOnline')
@@ -122,6 +135,8 @@ function cognateReason(scope, locale, key) {
     return "'Status' is the accepted term in this locale and is identical to English (matches detail.status).";
   if (key === 'chatFilter.escalationTitle')
     return "'Escalation' is a borrowed term already used across this locale's admin strings.";
+  if (key === 'accounts.badgeStreamer' || key === 'detail.streamerLabel')
+    return "'Streamer' is the borrowed term this locale actually uses for the role; the native calque is not what an operator would say.";
   return 'Accepted cognate or borrowed term that is legitimately identical to English.';
 }
 
@@ -242,11 +257,11 @@ async function main() {
       const blockedForKey = blockedRows.get(`${scope}:${key}`);
       const locales = {};
       for (const lang of NON_EN) {
-        const reason = blockedForKey && blockedForKey.get(lang);
+        const reason = blockedForKey?.get(lang);
         if (reason !== undefined) {
           locales[lang] = { state: 'blocked', reason };
         } else {
-          const v = dict[lang] && dict[lang][key];
+          const v = dict[lang]?.[key];
           locales[lang] = isPresent(v)
             ? { state: 'translated', srcHash: enHash, by: 'human' }
             : { state: 'pending' };
@@ -293,7 +308,7 @@ async function main() {
       const blockedForKey = blockedRows.get(`${scope}:${key}`);
       const locales = {};
       for (const lang of NON_EN) {
-        const reason = blockedForKey && blockedForKey.get(lang);
+        const reason = blockedForKey?.get(lang);
         if (reason !== undefined) {
           locales[lang] = { state: 'blocked', reason };
         } else {
@@ -375,9 +390,9 @@ async function main() {
     };
   }
 
-  const text = JSON.stringify(registry, null, 2) + '\n';
+  const text = `${JSON.stringify(registry, null, 2)}\n`;
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(OUT_PATH, text);
+  atomicWriteFileSync(OUT_PATH, text);
 
   // A small COMMITTED audit summary alongside the (gitignored) full registry: the
   // headline counts, a per-locale state rollup, and a hash over the whole key
@@ -409,8 +424,8 @@ async function main() {
     counts: registry.counts,
     perLocale,
   };
-  const summaryText = JSON.stringify(summary, null, 2) + '\n';
-  writeFileSync(SUMMARY_PATH, summaryText);
+  const summaryText = `${JSON.stringify(summary, null, 2)}\n`;
+  atomicWriteFileSync(SUMMARY_PATH, summaryText);
 
   console.log(
     `generated ${path.relative(root, OUT_PATH)} ` +

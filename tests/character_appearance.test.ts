@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { SKIN_COUNTS } from '../src/sim/content/skins';
 import { ALL_CLASSES } from '../src/sim/types';
-import {
-  activeCharacterAppearancePreview,
-  characterAppearanceOptions,
-} from '../src/ui/character_appearance';
+import { SKIN_COUNTS } from '../src/sim/content/skins';
+import { activeCharacterAppearancePreview, characterAppearanceOptions } from '../src/ui/character_appearance';
 
 describe('character appearance picker', () => {
   it('numbers unlocked mech cosmetics after the class appearances', () => {

@@ -14,12 +14,12 @@
     "multi-class healers: priest/paladin/druid/shaman"
   ],
   "draws": 10,
-  "drawDigest": "fce7a45d",
+  "drawDigest": "3b7dbd5a",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 400,
+      "nextId": 661,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -33,17 +33,18 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 409,
-      "state": "61c0b768",
-      "events": "36482172",
+      "nextId": 670,
+      "state": "57175e56",
+      "events": "d87c69c0",
       "rng": {
         "draws": 6,
-        "digest": "e9e34462"
+        "digest": "668af0f6"
       },
       "label": "heals",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -52,18 +53,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -79,10 +94,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -91,18 +108,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -118,10 +149,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -130,18 +163,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "druid",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 402,
+          "entityId": 663,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -157,10 +204,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -169,18 +218,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "shaman",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 403,
+          "entityId": 664,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -196,10 +259,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -208,18 +273,31 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 665,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -231,7 +309,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -246,7 +325,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99,
           "hp": 51,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -295,7 +374,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99,
           "hp": 95,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -345,7 +424,7 @@
               "name": "Weakening Hex",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 0.3
             }
           ],
@@ -357,7 +436,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 402,
+          "id": 663,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -407,7 +486,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99,
           "hp": 68,
-          "id": 403,
+          "id": 664,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -457,7 +536,7 @@
               "name": "Necrotic",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 3700
             }
           ],
@@ -469,7 +548,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 10000,
-          "id": 404,
+          "id": 665,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -517,7 +596,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 405,
+          "id": 666,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -525,7 +604,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 404,
+          "ownerId": 665,
           "petMode": "defensive",
           "pos": {
             "x": 80,
@@ -559,7 +638,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 406,
+          "id": 667,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -586,19 +665,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               87.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
@@ -619,7 +698,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 407,
+          "id": 668,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -646,19 +725,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               87.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
@@ -679,7 +758,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 408,
+          "id": 669,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -706,19 +785,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               87.5
             ],
             [
-              405,
+              666,
               10
             ]
           ],
@@ -733,17 +812,18 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 409,
-      "state": "46fbdd1d",
-      "events": "730d9ac4",
+      "nextId": 670,
+      "state": "5ed810ab",
+      "events": "d608ef56",
       "rng": {
         "draws": 6,
-        "digest": "e9e34462"
+        "digest": "668af0f6"
       },
       "label": "crit-vuln-damage",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -752,18 +832,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -779,10 +873,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -791,18 +887,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -818,10 +928,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -830,20 +942,37 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "druid",
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 105
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "crits": 1,
+              "damageDealt": 105
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 402,
+          "entityId": 663,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -859,10 +988,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -871,18 +1002,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "shaman",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 403,
+          "entityId": 664,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -898,10 +1043,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -910,18 +1057,31 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 665,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -933,7 +1093,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -948,7 +1109,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99,
           "hp": 51,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -997,7 +1158,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99,
           "hp": 95,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1047,7 +1208,7 @@
               "name": "Weakening Hex",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 0.3
             }
           ],
@@ -1058,7 +1219,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 402,
+          "id": 663,
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1109,7 +1270,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99,
           "hp": 68,
-          "id": 403,
+          "id": 664,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1159,7 +1320,7 @@
               "name": "Necrotic",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 3700
             }
           ],
@@ -1171,7 +1332,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 10000,
-          "id": 404,
+          "id": 665,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1219,7 +1380,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 405,
+          "id": 666,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1227,7 +1388,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 404,
+          "ownerId": 665,
           "petMode": "defensive",
           "pos": {
             "x": 80,
@@ -1251,7 +1412,7 @@
           }
         },
         {
-          "aggroTargetId": 402,
+          "aggroTargetId": 663,
           "aiState": "chase",
           "auras": [
             {
@@ -1261,7 +1422,7 @@
               "name": "Find Weakness",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 402,
+              "sourceId": 663,
               "value": 0.5
             }
           ],
@@ -1273,7 +1434,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49895,
-          "id": 406,
+          "id": 667,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1302,23 +1463,23 @@
           "stats": {
             "armor": 40
           },
-          "tappedById": 402,
+          "tappedById": 663,
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               193.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
@@ -1339,7 +1500,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 407,
+          "id": 668,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -1366,19 +1527,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               87.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
@@ -1399,7 +1560,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 408,
+          "id": 669,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -1426,19 +1587,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
+              663,
               87.5
             ],
             [
-              405,
+              666,
               10
             ]
           ],
@@ -1453,28 +1614,29 @@
     {
       "tick": 5,
       "time": 0.25,
-      "nextId": 409,
-      "state": "b7744a59",
-      "events": "fb83a59d",
+      "nextId": 670,
+      "state": "f4222385",
+      "events": "cdb301e5",
       "rng": {
         "draws": 10,
-        "digest": "fce7a45d"
+        "digest": "3b7dbd5a"
       }
     },
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 409,
-      "state": "6351b12b",
-      "events": "fb83a59d",
+      "nextId": 670,
+      "state": "e8a0be81",
+      "events": "cdb301e5",
       "rng": {
         "draws": 10,
-        "digest": "fce7a45d"
+        "digest": "3b7dbd5a"
       },
       "label": "final",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1483,18 +1645,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -1510,10 +1686,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1522,18 +1700,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -1549,10 +1741,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1561,20 +1755,37 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "druid",
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 105
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "crits": 1,
+              "damageDealt": 105
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 402,
+          "entityId": 663,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -1590,10 +1801,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1602,18 +1815,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "shaman",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 403,
+          "entityId": 664,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -1629,10 +1856,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1641,18 +1870,31 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 665,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -1664,7 +1906,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -1679,7 +1922,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99.4,
           "hp": 51,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1728,7 +1971,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99.4,
           "hp": 95,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1778,7 +2021,7 @@
               "name": "Weakening Hex",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 0.3
             }
           ],
@@ -1790,7 +2033,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99.4,
           "hp": 62,
-          "id": 402,
+          "id": 663,
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1841,7 +2084,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99.4,
           "hp": 68,
-          "id": 403,
+          "id": 664,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1891,7 +2134,7 @@
               "name": "Necrotic",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 406,
+              "sourceId": 667,
               "value": 3700
             },
             {
@@ -1901,7 +2144,7 @@
               "name": "Rejuvenation",
               "remaining": 2.6,
               "school": "physical",
-              "sourceId": 402,
+              "sourceId": 663,
               "tickInterval": 0.1,
               "tickTimer": 0.1,
               "value": 300
@@ -1915,7 +2158,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99.4,
           "hp": 3200,
-          "id": 404,
+          "id": 665,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1960,11 +2203,11 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "facing": 1.394614,
+          "facing": 2.622921,
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 405,
+          "id": 666,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1972,7 +2215,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 404,
+          "ownerId": 665,
           "petMode": "defensive",
           "petPathCooldown": 0.2,
           "pos": {
@@ -1997,7 +2240,7 @@
           }
         },
         {
-          "aggroTargetId": 402,
+          "aggroTargetId": 663,
           "aiState": "chase",
           "auras": [
             {
@@ -2007,7 +2250,7 @@
               "name": "Find Weakness",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 402,
+              "sourceId": 663,
               "value": 0.5
             }
           ],
@@ -2021,7 +2264,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49895,
-          "id": 406,
+          "id": 667,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2050,23 +2293,23 @@
           "stats": {
             "armor": 40
           },
-          "tappedById": 402,
+          "tappedById": 663,
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
-              268.5
+              663,
+              313.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
@@ -2083,12 +2326,12 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "facing": 1.114821,
+          "facing": -1.021374,
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 407,
+          "id": 668,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -2099,9 +2342,9 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": -88.994428,
+            "x": -90.955165,
             "y": -5.25,
-            "z": 90.493179
+            "z": 90.584858
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -2115,26 +2358,26 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
-              162.5
+              663,
+              207.5
             ],
             [
-              404,
+              665,
               10
             ]
           ],
           "wanderTarget": {
-            "x": -82.543054,
+            "x": -93.024553,
             "y": -8.5,
-            "z": 93.657233
+            "z": 91.851966
           },
           "wanderTimer": 29.65,
           "weapon": {
@@ -2150,12 +2393,12 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "facing": 1.248608,
+          "facing": -1.319485,
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 408,
+          "id": 669,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -2166,9 +2409,9 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 92.171262,
-            "y": -3.236049,
-            "z": -89.202696
+            "x": 87.743192,
+            "y": -3.24435,
+            "z": -89.42059
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -2182,26 +2425,26 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              661,
               115.666667
             ],
             [
-              401,
+              662,
               200
             ],
             [
-              402,
-              162.5
+              663,
+              207.5
             ],
             [
-              405,
+              666,
               10
             ]
           ],
           "wanderTarget": {
-            "x": 94.87499,
+            "x": 82.084411,
             "y": -3.24435,
-            "z": -88.372633
+            "z": -87.96776
           },
           "wanderTimer": 29.65,
           "weapon": {

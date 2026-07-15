@@ -19,10 +19,7 @@ function fakeStyle(): any {
   const store: Record<string, string> = {};
   return new Proxy(store, {
     get(target, prop: string) {
-      if (prop === 'setProperty')
-        return (n: string, v: string) => {
-          target[n] = v;
-        };
+      if (prop === 'setProperty') return (n: string, v: string) => { target[n] = v; };
       return target[prop] ?? '';
     },
     set(target, prop: string, value: string) {
@@ -54,9 +51,7 @@ function fakeEl(tag: string, clientWidth: number): any {
     appendChild() {},
     remove() {},
     addEventListener() {},
-    getBoundingClientRect() {
-      return { left: 0, top: 0, width: clientWidth, height: 40 };
-    },
+    getBoundingClientRect() { return { left: 0, top: 0, width: clientWidth, height: 40 }; },
     getContext() {
       // A no-op 2D context: every method is a stub, every prop a sink.
       return new Proxy({}, { get: () => () => {} });
@@ -67,12 +62,7 @@ function fakeEl(tag: string, clientWidth: number): any {
 const WIDE = 320;
 
 function makeOverlay() {
-  (globalThis as any).window = {
-    innerWidth: 1280,
-    innerHeight: 720,
-    devicePixelRatio: 2,
-    addEventListener() {},
-  };
+  (globalThis as any).window = { innerWidth: 1280, innerHeight: 720, devicePixelRatio: 2, addEventListener() {} };
   (globalThis as any).document = { createElement: (tag: string) => fakeEl(tag, WIDE) };
   const host = fakeEl('div', WIDE);
   const overlay = new PerfOverlay(host);

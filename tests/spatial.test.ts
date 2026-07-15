@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { SpatialGrid } from '../src/sim/spatial';
-import { dist2d, type Entity } from '../src/sim/types';
+import { Entity, dist2d } from '../src/sim/types';
 
 function bruteForceInRadius(sim: Sim, x: number, z: number, radius: number): Set<number> {
   const out = new Set<number>();
@@ -65,12 +65,7 @@ describe('spatial grid', () => {
       meta.moveInput.forward = true;
       sim.tick();
       for (const e of sim.entities.values()) {
-        if (
-          e.kind === 'mob' &&
-          !e.dead &&
-          (e.aiState === 'chase' || e.aiState === 'attack') &&
-          e.aggroTargetId === p.id
-        ) {
+        if (e.kind === 'mob' && !e.dead && (e.aiState === 'chase' || e.aiState === 'attack') && e.aggroTargetId === p.id) {
           aggroed = true;
         }
       }

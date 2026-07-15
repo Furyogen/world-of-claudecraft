@@ -24,6 +24,7 @@ export type EditorTool =
   | 'blocker'
   | 'collider'
   | 'camp'
+  | 'entity'
   | 'spawn'
   | 'zone'
   | 'light'
@@ -60,6 +61,7 @@ export interface ToolDef {
     | 'editor.tool.blocker'
     | 'editor.tool.collider'
     | 'editor.tool.camp'
+    | 'editor.tool.entity'
     | 'editor.tool.spawn'
     | 'editor.tool.region'
     | 'editor.tool.erase';
@@ -141,6 +143,11 @@ export const TOOL_DEFS: readonly ToolDef[] = [
     tool: 'camp',
     labelKey: 'editor.tool.camp',
     icon: 'M12 4L3 20h18zM12 4l4 16M12 4L8 20',
+  },
+  {
+    tool: 'entity',
+    labelKey: 'editor.tool.entity',
+    icon: 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20v-3a5 5 0 0 1 10 0v3M17 7v10M14 14l3 3 3-3',
   },
   {
     tool: 'spawn',

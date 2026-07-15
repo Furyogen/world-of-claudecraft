@@ -35,6 +35,7 @@ import type {
   HeightStamp,
   MapMusic,
   MapPointSound,
+  MapPresentationMode,
   MapWeather,
   NpcDef,
   TerrainHole,
@@ -56,7 +57,10 @@ export const MAX_PLACEMENTS = 4000;
 export const MAX_CAMPS = 600;
 export const MAX_NPCS = 200;
 export const MAX_OBJECTS = 400;
-export const MAX_ZONES = 12;
+// The built-in grid world ships 14 zones (the original strip plus the east/west
+// realm columns), so the editor's zone cap sits above that with headroom for a
+// few custom zones. (It was 12 in the 3-zone-strip era.)
+export const MAX_ZONES = 24;
 export const MAX_ROADS = 64;
 export const MAX_ROAD_POINTS = 256;
 export const MAX_NAME_LENGTH = 60;
@@ -168,6 +172,12 @@ export interface MapPlacement {
   rotY: number; // radians
   scale: number;
   collide: boolean;
+  // Semantic carried by converted shipped-world scenery. It keeps gameplay
+  // behavior (jumpable fences and inn resting areas) attached while the
+  // ordinary placement transform fields remain the visual/source of truth.
+  worldPropKind?: 'fence' | 'inn';
+  worldPropWidth?: number;
+  worldPropDepth?: number;
   // Optional collision-radius override in yards (clamped to
   // [MIN_COLLIDE_RADIUS, MAX_COLLIDE_RADIUS]); absent = derive from scale via
   // collideRadiusFor. Only meaningful while collide is true, but stored either
@@ -361,17 +371,20 @@ export interface MapDoc {
   worldHalfX?: number;
   // v2: where playtest drops the player; absent = the built-in start.
   playerStart?: { x: number; z: number };
+  // Optional rectangle that spreads new players across deterministic slots.
+  playerSpawnArea?: { minX: number; minZ: number; maxX: number; maxZ: number };
   // v2 optional: the map's sky. 'builtin:<id>' names a bundled equirect image
   // (render/assets/skyboxes.ts); 'custom:<sha256>' an uploaded one (IndexedDB,
   // exported with the map bundle). Absent = the procedural HDRI sky.
   skybox?: string;
   // v2: built-in static prop set by default; 'empty' gives blank authoring maps
-  // no houses/fences/market props unless the maker places assets explicitly.
-  propsMode?: 'empty';
+  // no props, while 'editable-major' replaces buildings/fences with ordinary
+  // exported placements and keeps the remaining built-in scenery.
+  propsMode?: 'empty' | 'editable-major';
   // v2: procedural terrain decorations by default; 'empty' removes trees/rocks.
   decorationsMode?: 'empty';
   // v2: render-only world dressing by default; 'blank' is the flat-map slate.
-  presentationMode?: 'blank';
+  presentationMode?: MapPresentationMode;
   // v2 optional: named locations - axis-aligned rects the HUD shows as the
   // player's current location name in playtest.
   locations?: MapLocation[];
@@ -642,6 +655,11 @@ function sanitizePlacement(v: unknown): MapPlacement | null {
     out.collideRadius = clamp(p.collideRadius, MIN_COLLIDE_RADIUS, MAX_COLLIDE_RADIUS);
   }
   if (p.collideShape === 'square') out.collideShape = 'square';
+  if (p.worldPropKind === 'fence' || p.worldPropKind === 'inn') {
+    out.worldPropKind = p.worldPropKind;
+    if (finiteNum(p.worldPropWidth)) out.worldPropWidth = clamp(p.worldPropWidth, 0.05, 100);
+    if (finiteNum(p.worldPropDepth)) out.worldPropDepth = clamp(p.worldPropDepth, 0.05, 100);
+  }
   if (
     p.collisionMode === 'baked' ||
     p.collisionMode === 'basic' ||
@@ -822,7 +840,7 @@ export const MAX_BIOME_PAINT_CELLS = 4_200_000;
 
 // ---- biome-paint ids RLE (TRANSPORT layers only) ----------------------------
 //
-// A fine grid's plain ids array is several MB of JSON — past browser storage
+// A fine grid's plain ids array is several MB of JSON ? past browser storage
 // quotas. Transport seams (the editor's localStorage store, the playtest
 // sessionStorage handoff) swap `ids` for this run-length string and expand it
 // back before anything else sees the document; the document FORMAT itself
@@ -950,6 +968,7 @@ function sanitizeNpc(v: unknown): NpcDef | null {
   };
   if (Array.isArray(n.vendorItems)) npc.vendorItems = strArray(n.vendorItems);
   if (n.market === true) npc.market = true;
+  if (n.banker === true) npc.banker = true;
   if (n.dynamic === true) npc.dynamic = true;
   return npc;
 }
@@ -1192,9 +1211,37 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
   if (ps && typeof ps === 'object' && finiteNum(ps.x) && finiteNum(ps.z)) {
     doc.playerStart = { x: ps.x, z: ps.z };
   }
-  if (o.propsMode === 'empty') doc.propsMode = 'empty';
+  const psa = o.playerSpawnArea as Record<string, unknown> | undefined;
+  if (
+    psa &&
+    typeof psa === 'object' &&
+    finiteNum(psa.minX) &&
+    finiteNum(psa.minZ) &&
+    finiteNum(psa.maxX) &&
+    finiteNum(psa.maxZ)
+  ) {
+    doc.playerSpawnArea = {
+      minX: coord(Math.min(psa.minX, psa.maxX)),
+      minZ: coord(Math.min(psa.minZ, psa.maxZ)),
+      maxX: coord(Math.max(psa.minX, psa.maxX)),
+      maxZ: coord(Math.max(psa.minZ, psa.maxZ)),
+    };
+  }
+  if (o.propsMode === 'empty' || o.propsMode === 'editable-major') {
+    doc.propsMode = o.propsMode;
+  }
   if (o.decorationsMode === 'empty') doc.decorationsMode = 'empty';
-  if (o.presentationMode === 'blank') doc.presentationMode = 'blank';
+  if (
+    o.presentationMode === 'blank' ||
+    o.presentationMode === 'dungeon' ||
+    o.presentationMode === 'temple' ||
+    o.presentationMode === 'nythraxis' ||
+    o.presentationMode === 'delve' ||
+    o.presentationMode === 'sowfield' ||
+    o.presentationMode === 'yumiMaze'
+  ) {
+    doc.presentationMode = o.presentationMode;
+  }
   // Skybox token: 'builtin:<id>' or 'custom:<sha256>' (bounded; resolution
   // and fallback live render-side).
   if (

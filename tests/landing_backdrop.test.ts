@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { type BackdropSignals, shouldUseStaticBackdrop } from '../src/game/landing_backdrop';
+import { shouldUseStaticBackdrop, BackdropSignals } from '../src/game/landing_backdrop';
 
-const NONE: BackdropSignals = {
-  phone: false,
-  saveData: false,
-  reducedMotion: false,
-  highContrast: false,
-};
+const NONE: BackdropSignals = { phone: false, saveData: false, reducedMotion: false, highContrast: false };
 
 describe('shouldUseStaticBackdrop', () => {
   it('plays the trailer (not static) for a desktop user with no preferences', () => {
@@ -30,13 +25,6 @@ describe('shouldUseStaticBackdrop', () => {
   });
 
   it('stays static when several reasons stack', () => {
-    expect(
-      shouldUseStaticBackdrop({
-        phone: true,
-        saveData: true,
-        reducedMotion: false,
-        highContrast: true,
-      }),
-    ).toBe(true);
+    expect(shouldUseStaticBackdrop({ phone: true, saveData: true, reducedMotion: false, highContrast: true })).toBe(true);
   });
 });

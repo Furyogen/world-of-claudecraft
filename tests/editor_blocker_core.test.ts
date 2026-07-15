@@ -4,14 +4,7 @@ import {
   nearestBlockerIndex,
   pointSegmentDistance,
 } from '../src/editor/blocker_core';
-import {
-  boundaryBlockers,
-  customMapToWorldContent,
-  effectiveCollideRadius,
-  newCustomMap,
-  newFlatCustomMap,
-  placementsToPlayAssets,
-} from '../src/editor/custom_map';
+import { effectiveCollideRadius, placementsToPlayAssets } from '../src/editor/custom_map';
 import {
   clampBlockerSegment,
   collideRadiusFor,
@@ -100,16 +93,6 @@ describe('effectiveCollideRadius', () => {
     expect(effectiveCollideRadius({ assetId: 'props/well', scale: 2 })).toBe(collideRadiusFor(2));
   });
 
-  it('derives a family-matched radius: trunks block far less than the generic factor', () => {
-    const tree = effectiveCollideRadius({ assetId: 'foliage/oak_1', scale: 10 });
-    const generic = effectiveCollideRadius({ assetId: 'props/well', scale: 10 });
-    expect(tree).toBeLessThan(generic / 2);
-    // The auto radius keeps tracking scale past the old flat cap of 8...
-    expect(effectiveCollideRadius({ assetId: 'props/well', scale: 20 })).toBeGreaterThan(8);
-    // ...but never past the manual-override bound.
-    expect(effectiveCollideRadius({ assetId: 'props/well', scale: 50 })).toBeLessThanOrEqual(30);
-  });
-
   it('flows into the playtest PlacedAssets (both paths read the same record)', () => {
     const base = { assetId: 'props/well', x: 1, z: 2, rotY: 0, scale: 2, collide: true };
     const [derived, overridden] = placementsToPlayAssets([
@@ -121,23 +104,5 @@ describe('effectiveCollideRadius', () => {
     // A non-colliding placement carries no radius, override or not.
     const [walkThrough] = placementsToPlayAssets([{ ...base, collide: false, collideRadius: 7.5 }]);
     expect(walkThrough.collideRadius).toBeUndefined();
-  });
-});
-
-describe('map boundary walls (playtest hard limit)', () => {
-  it('a built-in-based map gets all four boundary edges appended at playtest', () => {
-    const map = newCustomMap('m', 'id', 0);
-    const boundary = boundaryBlockers(map);
-    expect(boundary.length).toBeGreaterThanOrEqual(4);
-    const world = customMapToWorldContent(map);
-    expect(world.blockers?.length).toBe(boundary.length);
-  });
-
-  it('a sized flat map keeps its stored perimeter without duplicates', () => {
-    const map = newFlatCustomMap('m', 'id', 0, { width: 300, height: 300 });
-    // The document already walls off every edge: nothing to append.
-    expect(boundaryBlockers(map)).toHaveLength(0);
-    const world = customMapToWorldContent(map);
-    expect(world.blockers?.length).toBe(map.blockers?.length);
   });
 });

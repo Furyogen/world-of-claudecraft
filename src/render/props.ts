@@ -2,6 +2,12 @@ import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
+import {
+  DOCK_SECTION_LOCAL_Z,
+  DOCK_SECTION_SURFACE_Y,
+  dockSurfaceLine,
+  dockSurfaceYAt,
+} from '../sim/dock_layout';
 import { hash2 } from '../sim/rng';
 import { terrainHeight, waterLevel } from '../sim/world';
 import { loadGltf } from './assets/loader';
@@ -668,14 +674,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   const group = new THREE.Group();
   const flames: THREE.Mesh[] = [];
   const fireLights: THREE.PointLight[] = [];
-  if (getActiveWorldContent().presentationMode === 'blank') {
-    return {
-      group,
-      flames,
-      fireLights,
-      update(): void {},
-    };
-  }
 
   const ground = (x: number, z: number) => terrainHeight(x, z, seed);
 
@@ -841,7 +839,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       scale: [3.1 / stand.size.x, 2.6 / stand.size.y, 2.5 / stand.size.z],
       rot: (keyRand(key, 1) - 0.5) * 0.1,
     });
-    if (!lowProps && (i === 1 || i === 4)) {
+    if (!lowProps && s.smithy) {
       // Smith Haldren (z1) / Armorer Hode (z3): forge-front dressing
       addParts(g, 'anvil', { x: 1.35, z: 1.15, rot: 0.9, scale: 1.35 });
       addParts(g, 'weaponStand', { x: -1.45, z: 0.6, rot: 0.5 + Math.PI, scale: 1.25 });
@@ -1191,25 +1189,39 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     const y = ground(d.x, d.z);
     const g = new THREE.Group();
     const key = d.x * 3.3 + d.z * 1.7;
-    for (let i = 0; i < 3; i++) {
-      // step each pier section down toward the water so the far legs stay
-      // grounded on a dropping shore (flat shores keep a level deck)
-      const lz = -1.05 - i * 2.13;
-      const wx = d.x + lz * Math.sin(d.rot);
-      const wz = d.z + lz * Math.cos(d.rot);
-      addParts(g, 'dockPlatform', {
-        z: lz,
-        y: Math.min(0, ground(wx, wz) - y + 0.15),
-        rot: (keyRand(key, i) - 0.5) * 0.04,
-        scale: [0.78, 0.52, 0.85],
+    const surfaceLine = dockSurfaceLine(d, ground);
+    const pitch = -Math.atan(surfaceLine.slope);
+    const zScale = 0.85 / Math.cos(pitch);
+    for (let i = 0; i < DOCK_SECTION_LOCAL_Z.length; i++) {
+      const lz = DOCK_SECTION_LOCAL_Z[i];
+      const section = new THREE.Group();
+      section.position.set(0, dockSurfaceYAt(surfaceLine, lz) - y, lz);
+      section.rotation.x = pitch;
+      g.add(section);
+      // Pivot around the plank surface, not the post feet. Every section then
+      // lies on the same analytic plane exposed by groundHeight. Compensating
+      // z scale preserves the authored footprint after the pitch projection.
+      addParts(section, 'dockPlatform', {
+        y: -DOCK_SECTION_SURFACE_Y,
+        scale: [0.78, 0.52, zScale],
       });
     }
-    const hut = propAsset('house3');
-    addParts(g, 'house3', {
-      x: d.hutLocal.x,
-      z: d.hutLocal.z,
-      scale: [(d.hutLocal.hw * 2) / hut.size.x, 2.6 / hut.size.y, (d.hutLocal.hd * 2) / hut.size.z],
-    });
+    // hw/hd 0 means this dock carries no stone hut (e.g. the Farshore Landing).
+    // Skip it entirely: a zero-scale mesh has a degenerate (non-invertible)
+    // transform, which reads as NaN normals and flickers as a black square.
+    const hasHut = d.hutLocal.hw > 0 && d.hutLocal.hd > 0;
+    if (hasHut) {
+      const hut = propAsset('house3');
+      addParts(g, 'house3', {
+        x: d.hutLocal.x,
+        z: d.hutLocal.z,
+        scale: [
+          (d.hutLocal.hw * 2) / hut.size.x,
+          2.6 / hut.size.y,
+          (d.hutLocal.hd * 2) / hut.size.z,
+        ],
+      });
+    }
     if (!lowProps) {
       addParts(g, 'barrel', {
         x: 0.55,
@@ -1244,14 +1256,16 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     g.rotation.y = d.rot;
     group.add(shadowed(g));
     // stone hut OBB — same offset/extents/rotation as the collider
-    const hc = Math.cos(d.rot),
-      hs = Math.sin(d.rot);
-    const hx = d.x + d.hutLocal.x * hc + d.hutLocal.z * hs;
-    const hz = d.z - d.hutLocal.x * hs + d.hutLocal.z * hc;
-    registerHideable(
-      g,
-      obbFootprint(hx, hz, d.hutLocal.hw, d.hutLocal.hd, d.rot, ground(hx, hz) + 2.9),
-    );
+    if (hasHut) {
+      const hc = Math.cos(d.rot),
+        hs = Math.sin(d.rot);
+      const hx = d.x + d.hutLocal.x * hc + d.hutLocal.z * hs;
+      const hz = d.z - d.hutLocal.x * hs + d.hutLocal.z * hc;
+      registerHideable(
+        g,
+        obbFootprint(hx, hz, d.hutLocal.hw, d.hutLocal.hd, d.rot, ground(hx, hz) + 2.9),
+      );
+    }
   }
 
   // ---- delve entrance: Meshy portal-door + animated void + carved name lintel -

@@ -2,8 +2,10 @@
 // SimContext. The trade SESSION + INVITE state stay Sim-owned fields (live ctx
 // views: `trades`, `tradeInvites`), like E1's delayedEvents; the leave-path
 // cleanup + the joint invite-expiry sweep reach them through the same seam. The
-// inventory hub (addItem/removeItem/countItem) stays on Sim and is consumed via
-// ctx. This is a MOVE: the statements, branches, and iteration order are
+// inventory hub (addItem/removeFungibleItem/countFungibleItem) stays on Sim and
+// is consumed via ctx. Per-instance payloads are intentionally ineligible: the
+// wire offer identifies only an item id, so it cannot safely identify or preserve
+// a particular signed/rolled/bound copy. This is a MOVE: the statements, branches, and iteration order are
 // byte-identical to the pre-move methods (the immutability waiver applies, so the
 // in-place mutation of the shared TradeSession / PlayerMeta.copper is preserved).
 //
@@ -11,8 +13,9 @@
 // + leave-path + tick() call sites resolve unchanged; this module draws no rng.
 
 import type { TradeInfo } from '../../world_api';
-import { bagCapacity, fitsAll, removeStacked } from '../bags';
+import { bagCapacity, fitsAll } from '../bags';
 import { ITEMS } from '../data';
+import { removePreferFungible } from '../items';
 import type { PlayerMeta, TradeSession } from '../sim';
 import type { SimContext } from '../sim_context';
 import { dist2d, type InvSlot } from '../types';
@@ -101,12 +104,12 @@ export function tradeSetOffer(
     if (!slot || typeof slot.itemId !== 'string' || !Number.isFinite(slot.count)) continue;
     const count = Math.max(1, Math.floor(slot.count));
     const def = ITEMS[slot.itemId];
-    if (!def || def.kind === 'quest') continue; // quest items are soulbound-ish
+    if (!def || def.kind === 'quest' || def.soulbound) continue; // quest + soulbound items never trade
     merged.set(slot.itemId, (merged.get(slot.itemId) ?? 0) + count);
   }
   const cleaned: InvSlot[] = [];
   for (const [itemId, count] of merged) {
-    if (ctx.countItem(itemId, r.meta.entityId) < count) continue;
+    if (ctx.countFungibleItem(itemId, r.meta.entityId) < count) continue;
     cleaned.push({ itemId, count });
   }
   const offer = {
@@ -150,7 +153,7 @@ export function tradeConfirm(ctx: SimContext, pid?: number): void {
   // leaves their bags (simulated on a scratch copy; nothing moved yet)
   const fitsAfterSwap = (meta: PlayerMeta, gives: InvSlot[], receives: InvSlot[]): boolean => {
     const scratch = meta.inventory.map((s) => ({ ...s }));
-    for (const s of gives) removeStacked(scratch, s.itemId, s.count);
+    for (const s of gives) removeFungibleStacked(scratch, s.itemId, s.count);
     return fitsAll(scratch, bagCapacity(meta.bags), receives);
   };
   if (
@@ -166,16 +169,29 @@ export function tradeConfirm(ctx: SimContext, pid?: number): void {
   metaA.copper = metaA.copper - session.offerA.copper + session.offerB.copper;
   metaB.copper = metaB.copper - session.offerB.copper + session.offerA.copper;
   for (const s of session.offerA.items) {
-    ctx.removeItem(s.itemId, s.count, session.a);
+    removePreferFungible(ctx, s.itemId, s.count, session.a);
     ctx.addItem(s.itemId, s.count, session.b);
   }
   for (const s of session.offerB.items) {
-    ctx.removeItem(s.itemId, s.count, session.b);
+    removePreferFungible(ctx, s.itemId, s.count, session.b);
     ctx.addItem(s.itemId, s.count, session.a);
   }
   for (const tPid of [session.a, session.b]) {
     ctx.emit({ type: 'log', text: 'Trade complete.', color: '#8df', pid: tPid });
     ctx.emit({ type: 'tradeDone', pid: tPid });
+  }
+  // The goods have moved; count the completed trade for both sides, but only when
+  // something actually changed hands. A zero-item, zero-copper double-confirm still
+  // completes (and emits tradeDone), but it is not a trade for deed purposes:
+  // soc_first_trade must not unlock on an empty handshake.
+  const nonEmpty =
+    session.offerA.items.length > 0 ||
+    session.offerB.items.length > 0 ||
+    session.offerA.copper > 0 ||
+    session.offerB.copper > 0;
+  if (nonEmpty) {
+    ctx.bumpDeedStat(metaA, 'tradesCompleted', 1);
+    ctx.bumpDeedStat(metaB, 'tradesCompleted', 1);
   }
   closeTrade(ctx, session);
 }
@@ -197,9 +213,23 @@ function offerCovered(ctx: SimContext, items: InvSlot[], pid: number): boolean {
   const totals = new Map<string, number>();
   for (const s of items) totals.set(s.itemId, (totals.get(s.itemId) ?? 0) + s.count);
   for (const [itemId, count] of totals) {
-    if (ctx.countItem(itemId, pid) < count) return false;
+    if (ctx.countFungibleItem(itemId, pid) < count) return false;
   }
   return true;
+}
+
+// Capacity simulation counterpart to Sim.removeFungibleItem. The generic
+// removeStacked helper deliberately includes instance slots, which would make a
+// trade appear to free space by consuming a copy the real swap must not touch.
+function removeFungibleStacked(inventory: InvSlot[], itemId: string, count: number): void {
+  for (let i = inventory.length - 1; i >= 0 && count > 0; i--) {
+    const slot = inventory[i];
+    if (slot.itemId !== itemId || slot.instance) continue;
+    const take = Math.min(slot.count, count);
+    slot.count -= take;
+    count -= take;
+    if (slot.count <= 0) inventory.splice(i, 1);
+  }
 }
 
 function closeTrade(ctx: SimContext, session: TradeSession): void {

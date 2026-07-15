@@ -82,6 +82,38 @@ describe('combat meters', () => {
     expect(m.allTime.tallies.get(1)!.dmg).toBe(17);
   });
 
+  it('measures DPS against a training dummy and retains the segment after combat ends', () => {
+    const w = fakeWorld();
+    // a training dummy never holds aggro on a party member (aggroTargetId stays null),
+    // so it never keeps the encounter artificially open.
+    (w.entities as Map<number, any>).set(70, {
+      id: 70,
+      kind: 'mob',
+      name: 'Training Dummy',
+      maxHp: 999999,
+      dead: false,
+      aggroTargetId: null,
+    });
+    const party = new Set([1]);
+    const m = new MeterData(0);
+    // 1000 damage across a 10s window of attacking -> 100 DPS.
+    m.onEvent(dmg(1, 70, 400), w, party, 1000);
+    m.onEvent(dmg(1, 70, 600), w, party, 11_000);
+    m.update(w, party, 11_000);
+    expect(m.current!.tallies.get(1)!.dmg).toBe(1000);
+    expect(m.current!.label).toBe('Training Dummy');
+    // No other mob is engaged (the dummy itself never aggros), so once the inactivity
+    // window (ENCOUNTER_END_SECONDS = 5s) elapses the segment closes, landing in history
+    // with its measured duration so the meter retains the finished fight's DPS.
+    (w.entities.get(50) as any).aggroTargetId = null;
+    (w.entities.get(51) as any).aggroTargetId = null;
+    m.update(w, party, 11_000 + 5000 + 1);
+    expect(m.current).toBeNull();
+    expect(m.history.length).toBe(1);
+    expect(m.history[0].tallies.get(1)!.dmg).toBe(1000);
+    expect(m.history[0].duration).toBe(10); // 1000 dmg / 10s = 100 DPS, retained
+  });
+
   it('damage taken by a party member keeps the encounter alive but adds no damage row', () => {
     const w = fakeWorld();
     const party = new Set([1, 2]);

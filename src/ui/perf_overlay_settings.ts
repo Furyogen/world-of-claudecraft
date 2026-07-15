@@ -49,10 +49,12 @@ export interface PerfSettingsHost {
   click(): void;
   /** Title "X": return to the game. */
   onClose(): void;
-  /** Footer "Back": return to the main options list. */
+  /** Title-bar and footer "Back": return to the main options list. */
   onBack(): void;
   /** svgIcon('close') markup for the title button (trusted, not user text). */
   closeIconHtml: string;
+  /** svgIcon('prev') markup for the title back button (trusted, not user text). */
+  backIconHtml: string;
 }
 
 const PERCENT = (v: number): string =>
@@ -115,6 +117,18 @@ export class PerfOverlaySettingsPanel {
 
   private buildTitle(): HTMLElement {
     const title = div('panel-title');
+    // Top-left back to the Game Menu root, matching the panelTitle() sub-views.
+    // Wired locally (NOT via the options window's [data-back] sweep): this panel
+    // rerender()s itself on control changes, which would drop a centrally-wired
+    // listener; carrying the data-back attribute too would double-wire the first
+    // render, so it is deliberately absent here.
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'x-btn back-btn';
+    back.setAttribute('aria-label', t('hud.options.back'));
+    back.setAttribute('title', t('hud.options.back'));
+    back.innerHTML = this.host.backIconHtml; // trusted svg markup
+    back.addEventListener('click', () => this.host.onBack());
     const label = document.createElement('span');
     label.textContent = t('hudChrome.perf.title');
     const close = document.createElement('button');
@@ -123,7 +137,7 @@ export class PerfOverlaySettingsPanel {
     close.setAttribute('aria-label', t('hud.options.returnToGame'));
     close.innerHTML = this.host.closeIconHtml; // trusted svg markup
     close.addEventListener('click', () => this.host.onClose());
-    title.append(label, close);
+    title.append(back, label, close);
     return title;
   }
 
@@ -351,10 +365,7 @@ export class PerfOverlaySettingsPanel {
     back.type = 'button';
     back.className = 'btn';
     back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => {
-      this.host.click();
-      this.host.onBack();
-    });
+    back.addEventListener('click', () => this.host.onBack());
     footer.append(reset, back);
     return footer;
   }

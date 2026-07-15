@@ -154,10 +154,41 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} 發起了準備確認。你準備好了嗎？",
+      "ready": "準備就緒",
+      "notReady": "未準備",
+      "result": "準備確認：{ready} 人就緒，{notReady} 人未準備，{noResponse} 人未回應。",
+      "notInPartyError": "你必須加入隊伍才能發起就緒確認。",
+      "inProgressError": "就緒確認已在進行中。"
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
       "spiritHealerAlive": "靈魂醫者只看護逝者。你仍是生者。"
+    },
+    "unstuck": {
+      "menuButton": "脫困",
+      "help": "脫困：/unstuck 會啟動原地倒數，之後將你移動到附近可到達的安全位置。",
+      "started": "將在 {seconds} 秒後脫困。移動、戰鬥、受到傷害或開始其他動作都會取消。",
+      "countdown": "脫困：{seconds}",
+      "completed": "已移動到最近且可到達的安全位置。",
+      "cancelledMoved": "你進行了移動，脫困已取消。",
+      "cancelledDamaged": "你受到了傷害，脫困已取消。",
+      "cancelledCombat": "你進入了戰鬥，脫困已取消。",
+      "cancelledBusy": "你開始了其他動作，脫困已取消。",
+      "cancelledState": "你的狀態發生變化，脫困已取消。",
+      "cancelledDisconnected": "由於連線中斷，脫困已取消。",
+      "noSafePosition": "附近沒有可到達的安全位置。你沒有被移動。",
+      "alreadyActive": "脫困倒數已在進行。",
+      "alreadySafe": "你已經位於安全且可到達的位置。",
+      "cooldown": "脫困將在 {seconds} 秒後可用。",
+      "dead": "死亡或靈魂狀態下無法使用脫困。",
+      "combat": "戰鬥中無法使用脫困。",
+      "controlled": "移動受限時無法使用脫困。",
+      "standStill": "請在堅實地面上站穩後再使用脫困。",
+      "busy": "請先完成目前動作再使用脫困。",
+      "unavailable": "目前狀態下無法使用脫困。"
     },
     "emotes": {
       "wave": "揮手",
@@ -232,8 +263,266 @@ export const zh_TW: EnTranslations = {
         "eligible": "獎勵已解鎖。",
         "no_wallet": "請連接持有至少 $20 USD WOC 的錢包。",
         "under_minimum": "錢包低於 $20 USD 的 WOC 最低要求。",
-        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。"
+        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。",
+        "banned": "您已被禁止參加每日獎勵。原因：{reason}"
       }
+    },
+    "wocStore": {
+      "title": "WOC 商店",
+      "close": "關閉 WOC 商店",
+      "tabsLabel": "WOC 商店分區",
+      "storeTab": "商店",
+      "rewardsTab": "每日獎勵",
+      "loading": "正在載入 WOC 商店…",
+      "error": "WOC 商店目前無法使用，請稍後再試。",
+      "balance": "Claudium 餘額",
+      "buyClaudium": "購買 Claudium",
+      "owned": "已擁有",
+      "needMoreTitle": "需要更多 Claudium",
+      "needMoreBody": "還需要 {shortfall} Claudium 才能購買 {item}。",
+      "cancel": "取消",
+      "confirmTitle": "確認購買外觀",
+      "confirmBody": "要用 {cost} Claudium 購買 {item} 嗎？",
+      "confirmPurchase": "購買",
+      "priceChanged": "購買完成前價格已變更。請查看刷新後的價格並再次確認。",
+      "armoryEyebrow": "第一賽季",
+      "armoryTitle": "兵器庫",
+      "armoryBody": "第一賽季兵器庫限定武器外觀。全帳號通用，純裝飾性，周圍所有玩家都能看到。",
+      "collectionLine": "{collection}系列",
+      "collections": {
+        "guildmark": "公會印記",
+        "emberwrought": "餘燼鍛造",
+        "hoarfrost": "白霜",
+        "fallen_star": "隕星"
+      },
+      "skins": {
+        "guildmark_arming_sword": {
+          "name": "公會印記武裝劍",
+          "look": "發藍鋼劍刃、青銅魚尾形十字護手、青綠色染皮握柄，以及一枚小巧的公會鋼印。",
+          "lore": "一般成品劍無名無姓，這一把卻有署名。只有當 World Market 的 Merchant 願為其鋼材作保，鎧甲匠才有權在劍根刻下自己的印記；Smith Haldren 的印記正有這份擔保。劍身經發藍處理，足以抵禦 the Vale 的濕氣，平衡精準至毫釐。你付的錢有一半買的是鋼印，但它物有所值。"
+        },
+        "brasscap_axe": {
+          "name": "黃銅帽手斧",
+          "look": "拋光鋼斧刃，漆製白蠟木柄上裝有黃銅頂帽與護木鐵，纏帶整潔，並刻有匠人鋼印。",
+          "lore": "帶有鋼印的斧頭是握在手中的炫耀。黃銅頂帽和護木鐵一半是護甲，一半是簽名：既防斧柄劈裂，也映著酒館燈火，讓人人都知道你買的是 Armorer Hode 的作品，不是民兵傳下來的舊貨。「能砍，我就賣。」Highwatch 的鐵匠如此說。這一把確實能砍。"
+        },
+        "tempered_flanged_mace": {
+          "name": "淬火凸緣錘",
+          "look": "六稜淬火藍鋼鎚頭、黃銅頸環與柄首，以及酒紅色皮革握柄。",
+          "lore": "六道發藍淬火鋼棱，每一道都磨得足以劈開頭盔，再配黃銅端飾與酒紅皮革。即使用途再殘酷，王國的鎧甲匠也不肯造醜陋的武器。這一把經 World Market 專門委製，並非貨架上的現成貨；某處帳簿裡還寫著那位自豪買家的名字，以及他付給 Hode 的價錢。"
+        },
+        "guildmark_dirk": {
+          "name": "公會印記短劍",
+          "look": "纖細的淬火鋼短劍、青銅護手與柄尾螺帽、深綠色繩纏握柄，以及壓印徽記。",
+          "lore": "這是有身份者把長劍留在家中時佩戴的武器：纖細、淬火，蓋著與整柄長劍同樣的認證鋼印，掛在腰間，如同一枚帶刃的印戒。除非懂得鎧甲匠的憑證，否則只會覺得它低調。 Quartermaster Bree 在 Highwatch 留著整整一抽屜，專供贏得城牆敬意的軍官。"
+        },
+        "brasscrown_staff": {
+          "name": "黃銅冠手杖",
+          "look": "硬木杖頂裝有車製黃銅冠飾，配黃銅杖腳與染色皮帶。",
+          "lore": "杖身取自風乾硬木，頂上是 Eastbrook 鐵匠成百鑄造卻件件精修的黃銅冠飾。它屬於那種無論走到 Fenbridge 城門或 Highwatch 城牆，都希望被認真對待的旅人。這根手杖從未真正需要支撐步伐；染色皮帶與那件一眼便知價值不菲的外套恰好相配。"
+        },
+        "lacquered_wand": {
+          "name": "漆木短杖",
+          "look": "纖細的深紅漆杖，飾有兩道拋光黃銅環和小巧圓潤的黃銅杖頭。",
+          "lore": "深紅漆面耐心塗了七層，再以兩道拋光黃銅束起。這正是鄉野法師開始收取真金白銀後，會從 World Market 買來裝點門面的法杖。它引導 Light 的能力並不比白樺枝更強，卻能在 Merchant 的櫃檯上耀眼奪目；小法術向來有一半靠別人相信。"
+        },
+        "fletcher_s_guild_bow": {
+          "name": "製弓師公會弓",
+          "look": "漆製胡桃木反曲弓、黃銅弓梢、上蠟亞麻弦，弓把上刻有公會鋼印。",
+          "lore": "弓把上的製弓師鋼印，是王國最接近公會憑證的東西；它承諾著弓身內在的品質，就像釀酒師為木桶封印。漆製胡桃木、黃銅弓梢，還有經上蠟、不會在 Mirefen 雨中磨損的亞麻弦，每一處接合都在為價格辯護。越過 Widow Thicket 後拉一次弓，這場辯論有了答案。"
+        },
+        "cinderbrand_sword": {
+          "name": "燼痕",
+          "look": "深色鍛鋼劍刃，血槽中嵌著橘紅發光符文與熱裂紋，護手內有一枚陰燃寶石。",
+          "lore": "這是第一把不用水淬火，而以從 Stormcrag 耙出的 Blessed Embers 淬煉的劍。 Highwatch 的鐵匠發誓，那些煤火「燃得湛藍而純淨，因為山仍記得古老的誓言」。火焰被封進血槽後只餘橙紅暗燃，卻永不熄滅；即便在城牆最寒冷的夜晚，符文也能溫暖裸手。 Cinderbrand 從不需要點燃，它只是拒絕熄滅。"
+        },
+        "emberbite_axe": {
+          "name": "餘燼之噬",
+          "look": "燻黑鐵斧，斧刃間透出橘紅裂光，嵌有一顆封存炭火的寶石，周圍熱氣繚繞。",
+          "lore": "Armorer Hode 把一塊山火活炭鍛造進斧刃核心，使刃口在兩次揮砍之間也從未真正冷卻。下劈時裂縫吐出橙光，彷彿撞擊喚醒了初次鍛造時沉睡在鐵裡的東西。有人說一隻 Stormcrag 元素為此交出了餘燼；Highwatch 起風時，人們總是會說出許多故事。"
+        },
+        "smoulderfall_mace": {
+          "name": "悶燃墜擊",
+          "look": "黑鐵鎚稜的內側裂縫泛著橙紅光芒，鎚頭中嵌有熔核寶石。",
+          "lore": "這柄戰鎚自備爐火：從那道「以山火鑄成」的 Sanctum 封印上鑿下一塊熔核石，嵌在鎚頭中發光。鎚稜觸手溫熱，落下時更燙；一名 Highwatch 中士發誓，被它擊中的瘀傷會微微發亮直到清晨。山中之火終於不再用於封印，而用於破壞。"
+        },
+        "ashspark_dagger": {
+          "name": "灰火匕",
+          "look": "短小的燻黑刀刃遍布橙紅發光紋路，柄首嵌著微小的陰燃寶石，灰燼與火星相隨。",
+          "lore": "一把將山火偷藏進柄首寶石的巷戰短刀，也是鎧甲匠無聲的玩笑：就連扒手也能帶著初次鍛造的一點餘燼。刀身燻黑、橙紋密布，在鞘中總比應有的溫度更暖。在 Highwatch 下方的黑暗中拔出它，微光恰好能照亮你的手，也足以找到對手守勢中的縫隙。"
+        },
+        "forgeheart_staff": {
+          "name": "爐心法杖",
+          "look": "鐵箍法杖頂端囚著發光餘燼核心，火焰符文沿著杖身攀升，熱浪在上方搖曳。",
+          "lore": "一塊山火活炭被囚在杖冠的鐵籠中。 Loremaster Caddis 稱它證明了初次鍛造之火不僅能用於封印，也能被束縛來服務。熱浪化為纖細而無盡的絲帶升起；攜帶它的法師永遠不缺少鍛爐或守夜火。傳言這塊餘燼取自 Voskar the Emberwing 的吐息，自此從未冷卻。"
+        },
+        "emberwrought_wand": {
+          "name": "餘燼鍛造魔杖",
+          "look": "燻黑金屬魔杖，鐵爪扣住發光炭火，細微熱裂紋間透出溫暖內光。",
+          "lore": "正是這根魔杖為整個品級命名。 Highwatch 的鎧甲匠第一次以鐵爪扣住山火餘炭，並讓它聽命於凡人之手時，就連 Light 的祭司也不再稱其為異端，轉而說它很實用。溫暖、耐心，又悄悄危險：杖尖的餘燼從主人出生前便持續燃燒，從未中斷。"
+        },
+        "cinderlatch_crossbow": {
+          "name": "燼鎖",
+          "look": "燻黑鋼弩，弩臂裂縫滲出橘紅光芒，弩身封著一塊陰燃煤炭。",
+          "lore": "這是餘燼鍛造中最奇怪的一件：把山火灌進一台機械。橙光從弩臂裂縫滲出，弩身內的陰燃煤炭令弓弦在 Thornpeak 的嚴寒或 Mirefen 的濕氣中都不會僵硬。弩矢離槽時已有溫度，命中時更為灼熱。對於城牆外那些同樣不畏嚴寒的敵人，這是獵人的回答。"
+        },
+        "ice_fang_sword": {
+          "name": "冰牙",
+          "look": "蒼白冰河彎刃，刃背生鋸齒狀霜晶，血槽內有發光的青藍冰核，護手如冰柱。",
+          "lore": "這是冰封品級的旗艦，也是每位收藏家最先伸手的一件。 Ice Fang 並非鍛造，而是從覆蓋 Highwatch 上方 Thornpeak 的冰川尖牙中雕成；青藍核心寒冷燃燒，如 Glimmermere 水面的冷光。它劈過之處連空氣都會結霜。城牆守衛發誓，大雪擋住 Wyrmcult 的那一夜，一名士兵帶著它，「為城牆買下了一個冬天」。"
+        },
+        "glaciersplit_axe": {
+          "name": "裂冰",
+          "look": "半透明藍色冰川斧頭，裂開的內部泛著青藍光，霜晶密布，斧柄拖曳寒霧。",
+          "lore": "它鑿自 Thornpeak 冰川的藍色核心，兩個世紀的重壓把寒意壓到自行發光。即使靜止也拖著白霧，落下時的巨響如同 Stalker Ridge 下方裂開一道冰隙。 Highwatch 將陣亡者交給那裡的冰雪；因此這件武器生來便要阻擋融雪，以及融雪可能喚醒的一切。"
+        },
+        "rimecrusher_mace": {
+          "name": "霜碎",
+          "look": "鋸齒狀冰晶簇擁著發光的青藍核心，白霜沿著鍍銀錘柄向下蔓延。",
+          "lore": "它不是雕刻出來，而是生長而成：匠人誘導 Thornpeak 寒冰包裹青藍冷核，直到堅硬得不遜於 Hode 最好的鋼。白霜沿著鍍銀錘柄爬向手掌，卻始終差一點觸及。它擊中之處水會凍結，停放之處地面會變成泛白。山峰的墓穴寒意，被縮小到足以揮向那些攀爬城牆之物。"
+        },
+        "frostbite_dagger": {
+          "name": "霜針",
+          "look": "透明藍冰製成的極細匕首，中央貫穿青藍發光脈絡，針狀霜晶與白霜覆蓋刀柄。",
+          "lore": "薄如屏息，卻比呼吸冷上兩倍：一片 Thornpeak 冰川碎屑被磨成單一發光脈絡，鋒利到傷口會在血液想起流動前先被凍結。它的名字借自死者從群峰帶下的墓穴寒意。它從不需要磨刃；Loremaster Caddis 冷冷地說，冰不會變鈍，它只會等待。"
+        },
+        "hoarfrost_vigil_staff": {
+          "name": "白霜守望",
+          "look": "鍍銀法杖頂端漂浮著緩慢旋轉的青藍冰片，放射霜晶與寒霧。",
+          "lore": "這是 Highwatch 城牆上永不沉睡的守望之杖。杖冠是一片青藍湖冰，脫離銀托懸浮，並自行緩緩轉動；守衛發誓，它總是指向群峰下正在聚集的寒意。攜帶這份守望，便是在一夜間站完兩百年的崗，並承諾絕不移開目光。"
+        },
+        "everwinter_wand": {
+          "name": "永冬碎片",
+          "look": "一根發光的青藍冰川尖刺，白霜從銀環綻開，周圍浮著淡淡寒霧。",
+          "lore": "一根發光的冰川尖刺，據說折自 Sanctum 下方的深潭，那裡的山寒長著利齒。白霜不斷從銀環綻放，無論烈火或盛夏都無法使它融化。法師將它貼身攜帶，借寒意輔助施法；但在它似乎傾向 Nythraxis 墓室並靜靜聆聽的夜晚，又會把它放得遠遠的。"
+        },
+        "winterbite": {
+          "name": "寒冬之噬",
+          "look": "鍍銀鋼與藍冰製成的弓，弓把內有青藍冰核，弦上搭著實冰箭矢，寒霧繚繞。",
+          "lore": "這把弓由鍍銀鋼與 Thornpeak 寒冰製成，弓把內的青藍冷核將箭凍結在弦上。每次拉弓都會重新凝成一支冰川實冰箭；城牆上的弓手不帶箭袋，只攜寒意。 Highwatch 曾靠一把這樣的弓守住遭圍攻的 Stalker Ridge：據說只有一名弓手，以及一整個冬天取之不盡的箭。"
+        },
+        "solheim_sword": {
+          "name": "Solheim，黎明最後之光",
+          "look": "以隕星鍛造成的巨劍，熔金核心貫裂劍刃，宇宙黑鋼邊緣閃著星光，金色碎片環繞護手，極光如帶。",
+          "lore": "那顆星從西方天空墜落，在 Widow Thicket 之外「如鍛爐般爆裂」時，Brother Aldric 從 Mirefen 隕坑取出仍在陰燃的星核，懇求王國鐵匠加工「並不屬於這個世界的東西」。他們將其鍛造成唯一一柄巨劍：Solheim。熔金核心如黎明撕開夜空般劈開宇宙黑刃，星金碎片沿著無人設定的軌道繞護手運行。世上只鍛造成這一把，也絕對不會有第二把。"
+        },
+        "skyrender_axe": {
+          "name": "裂天者，蒼穹之傷",
+          "look": "斧頭像一塊撕裂的夜空，遍布熔金裂縫與星座刻紋，星光碎片懸浮，刃後拖著極光。",
+          "lore": "它鍛造自隕坑邊緣，那裡墜星從 Mirefen 水面撕走了天空的倒影，留下至今仍冒蒸汽的傷口。斧頭像一片被扯下的夜：熔金裂縫、Highwatch 學者也叫不出名字的星座，以及每次揮舞都從刃緣流出的極光。 Brother Aldric 為它賜福，卻拒絕碰觸。舉起它，就像握住蒼穹留下的缺口。"
+        },
+        "starfall_mace": {
+          "name": "星隕，諸天裁決",
+          "look": "被囚的熔金星核由軌道碎片環繞，宇宙黑錘棱中流淌星光，極光從接縫處溢出。",
+          "lore": "一顆星核在死亡前一瞬被捕獲，隨它墜落的殘片環繞四周，永遠停在湮滅前最後一寸。宇宙黑錘棱中流淌著被困的星光，舉起時極光便從接縫處溢出。古老的 Light 祭司稱流星為裁決，是從天而降、任何盾牌都無意阻擋的判決；此錘便以墜落 Mirefen 的那顆星命名。"
+        },
+        "astravyr_dagger": {
+          "name": "Astravyr，隕星之牙",
+          "look": "一片隕星碎屑，宇宙黑金屬上燃著熔金刃光，明亮星塵繞柄首運行，拖出細薄極光。",
+          "lore": "這是 Aldric 從隕坑帶回的星體中最小的一片，也有人認為它最危險。異界星核的一縷碎片，熔金刃緣貼著宇宙黑金屬，一顆孤獨星塵如失去世界的月亮般繞柄首運行。它幾乎沒有重量，卻幾乎能切開一切。小到足以藏匿，也亮到能憑自身光芒在黑暗中尋回。"
+        },
+        "cosmarch_staff": {
+          "name": "Cosmarch，無盡虛空尖塔",
+          "look": "金色星片環繞熔金核心運行，宇宙黑杖身刻滿星座，極光絲帶向上盤繞。",
+          "lore": "星金杖身頂著熔金核心，金色碎片沿著緩慢而無盡的軌道環行，宛如一座微型宇宙；其星座不屬於 Thornpeak 上空的任何天幕。極光如忘記升起的煙，沿著杖身向上纏繞。曾持有它的人說能感覺到虛空在杖中轉動，就像 Ysolei 的湖水「飲下月光」：耐心、寒冷，並回望著你。"
+        },
+        "emberwish_wand": {
+          "name": "餘燼之願，垂死太陽之火種",
+          "look": "被囚的熔金垂死星火由火星環繞，宇宙黑杖身刻發光星座。",
+          "lore": "這並非隕星本身，而是一顆垂死恆星最後的微光：一輪早已熄滅的太陽留下的熔金餘燼，周圍盤旋著它最後的火花。宇宙黑杖身刻有見證其死亡的星座。 Mirefen 佃農說，真黃昏時持有它便可許下一個願望；他們也說，每個持有過它的靈魂都只願獲得更多時間，而 Drowned Moon 從未答應任何人。"
+        },
+        "encore_bow": {
+          "name": "Encore，第二顆墜星",
+          "look": "誇張巨大的星砲：宇宙黑砲管刻著金色發光星座，喇叭形砲口內裝有熔金彗星彈，搭配黃銅構件與木質肩托。",
+          "lore": "加工隕星的鐵匠造出六件遺物後，還剩下整整一砲管星金；到了那時，學徒們也有了自己的主意。鐵砧上誕生的東西，要嘛是王國第一支火槍，要嘛是最小的攻城器：一門肩扛星炮，與其說它發射彈丸，不如說它瞄準後請求第二顆星落下。 Brother Aldric 拒絕賜福，理由是如此響亮的東西早已被天堂注意。獵人深愛它，射線前方的一切從未如此。"
+        },
+        "meteorlatch_crossbow": {
+          "name": "星隕鎖扣，天空最後的裁決",
+          "look": "隕星金屬弩身，熔金核心貫穿弩托，宇宙黑弩臂刻滿星座，弦上搭著純星火之矢。",
+          "lore": "它在 Mirefen 隕坑仍發著光時，以「燙得無法觸碰」的原始隕星金屬鍛造成；碎片被敲成刻滿星座的宇宙黑弩臂，熔金核心沿弩托封存。它不搭弩矢，而是召來一束星火：發射如宣判，落地如判決的終結。當 Highwatch 擔心 Nythraxis 的不死王冠或許還不是群峰下最可怕的東西時，他們希望城牆上擺著的正是這件武器。務必瞄準。"
+        }
+      },
+      "seasonOne": "第一賽季",
+      "rarity": {
+        "uncommon": "優秀",
+        "rare": "精良",
+        "epic": "史詩",
+        "legendary": "傳說"
+      },
+      "wtype": {
+        "sword": "劍",
+        "axe": "斧",
+        "mace": "錘",
+        "dagger": "匕首",
+        "staff": "法杖",
+        "wand": "魔杖",
+        "bow": "弓",
+        "crossbow": "弩"
+      },
+      "badge": {
+        "flagship": "旗艦",
+        "hero": "英雄"
+      },
+      "inspectAria": "檢視{item}",
+      "viewModeLabel": "預覽模式",
+      "tryOn": "試穿",
+      "weaponOnly": "僅武器",
+      "sceneLabel": "場景光照",
+      "scene": {
+        "day": "白天",
+        "dusk": "黃昏",
+        "night": "夜晚"
+      },
+      "lore": "背景故事",
+      "buySkin": "購買外觀",
+      "unavailable": "暫不可用",
+      "applied": "已裝備",
+      "apply": "裝備外觀",
+      "detach": "卸下外觀",
+      "equipHint": "裝備{type}後才能使用此外觀。"
+    },
+    "claudium": {
+      "title": "Claudium",
+      "open": "開啟 Claudium",
+      "close": "關閉 Claudium",
+      "loading": "正在載入 Claudium…",
+      "balanceLabel": "餘額",
+      "balanceUnit": "{amount} Claudium",
+      "solBalance": "SOL：{amount}",
+      "wocBalance": "WOC：{amount}",
+      "unavailable": "Claudium 商店目前無法使用。您的餘額與購買不受影響，請稍後再試。",
+      "disclosure": "Claudium 是單向軟貨幣：可用金錢購買並用於兌換外觀物品，不能贖回、轉讓或兌現。",
+      "buyTitle": "購買 Claudium",
+      "railLabel": "付款方式",
+      "railStripe": "信用卡",
+      "railSol": "SOL",
+      "railWoc": "WOC",
+      "railWocDiscount": "優惠 20%",
+      "railWocUnavailable": "WOC 定價目前無法使用。",
+      "railNativeUnavailable": "SOL/WOC 無法使用",
+      "amountLabel": "數量",
+      "showAmounts": "顯示所有 Claudium 數量",
+      "hideAmounts": "隱藏其他 Claudium 數量",
+      "skuRow": "{usd} 可購買 {claudium} Claudium",
+      "buyButton": "購買",
+      "buyUnavailable": "目前無法購買。",
+      "storeTitle": "外觀商店",
+      "storeEmpty": "目前沒有可用的外觀物品。",
+      "storeCost": "{amount} Claudium",
+      "spendButton": "兌換",
+      "kindCosmetic": "外觀物品",
+      "kindSkin": "外觀",
+      "kindItem": "物品",
+      "checkoutTitle": "完成購買",
+      "checkoutClose": "關閉結帳",
+      "checkoutLoading": "正在載入結帳頁面…",
+      "checkoutPending": "交易處理中。請在錢包中確認，並保持此面板開啟。",
+      "checkoutPendingButton": "處理中",
+      "checkoutFailed": "無法載入結帳頁面，請再試一次。",
+      "checkoutUnavailable": "該 Claudium 購買項目目前無法使用。",
+      "checkoutWalletRequired": "使用加密貨幣購買 Claudium 前，請先連接 Solana 錢包。",
+      "checkoutWalletUnsupported": "此錢包無法簽署及傳送 Solana 交易。",
+      "checkoutNotSettled": "交易已傳送，但 Claudium 尚未入帳，請稍後再試。"
     },
     "theme": {
       "preset": "介面主題",
@@ -291,6 +580,7 @@ export const zh_TW: EnTranslations = {
       "targetLabel": "你的目標",
       "targetAnnounce": "目標：{name}",
       "partyLabel": "你的隊伍",
+      "partyChip": "隊伍",
       "partyGroup": "小隊 {n}",
       "durationUnitSeconds": "秒",
       "durationUnitMinutes": "分",
@@ -305,19 +595,36 @@ export const zh_TW: EnTranslations = {
       "chat": "跳至聊天"
     },
     "mobile": {
-      "autorun": "自動奔跑",
       "jump": "跳躍",
       "leaderboard": "排行榜",
+      "dailyRewards": "商店",
+      "deeds": "功績",
       "nameplates": "名條",
       "haptics": "觸覺回饋",
       "hapticsOff": "觸覺回饋已關閉",
-      "toggleHaptics": "切換觸覺回饋"
+      "toggleHaptics": "切換觸覺回饋",
+      "hotbarPage": "技能",
+      "hotbarPageAria": "顯示下一組技能",
+      "actionRing": "戰鬥動作",
+      "actionPageToggle": "切換動作頁",
+      "actionPageIndicator": "第{page}頁",
+      "targetCycle": "切換目標",
+      "targetCycleShort": "目標",
+      "spellbookPageLabel": "頁{page}",
+      "hideKeyboard": "隱藏鍵盤",
+      "chatPlaceholder": "說點什麼..."
     },
     "tutorial": {
       "moveBodyTouch": "使用搖桿移動，拖曳螢幕環顧四周。先走幾步開始吧。",
       "talkBodyTouch": "靠近雷德布魯克元帥並點按「使用」按鈕與他交談，然後接受他的任務。",
       "returnBodyTouch": "任務已完成。返回雷德布魯克元帥處並點按「使用」按鈕繳交任務。",
-      "doneBodyTouch": "你已掌握基礎，{name}。東溪谷任你探索。點按「更多」再選「任務日誌」即可隨時查看任務。祝你狩獵順利。"
+      "doneBodyTouch": "你已掌握基礎，{name}。東溪谷任你探索。點按「更多」再選「任務日誌」即可隨時查看任務。祝你狩獵順利。",
+      "slayTargetHint": "第一次戰鬥嗎？按下 {targetKey} 或點擊狼來選定牠，然後使用快捷欄技能攻擊牠。",
+      "slayTargetHintTouch": "第一次戰鬥嗎？點擊狼來選定牠，然後點擊快捷欄技能攻擊牠。",
+      "nextTipsTitle": "接下來去哪",
+      "nextTipQuestLog": "開啟任務日誌（{key}）尋找附近的下一個任務。",
+      "nextTipMap": "查看世界地圖（{key}）了解任務所在位置。",
+      "nextTipSocial": "開啟社交面板（{key}）尋找隊伍應對更強的戰鬥。"
     },
     "widgets": {
       "clockTitle": "本地時間 - 點擊切換 12／24 小時制",
@@ -332,6 +639,15 @@ export const zh_TW: EnTranslations = {
       "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以取得最新修正與改進。",
       "notNow": "暫不",
       "update": "更新"
+    },
+    "cameraPrompt": {
+      "title": "選擇你的鏡頭",
+      "intro": "選擇鏡頭跟隨角色的方式。",
+      "mouseDesc": "無需按住滑鼠按鍵，移動滑鼠即可轉動鏡頭。",
+      "classicTitle": "經典鏡頭",
+      "classicDesc": "按住滑鼠右鍵並移動滑鼠來轉動鏡頭。",
+      "changeLater": "稍後可在 Esc 選單的「按鍵綁定」中變更。",
+      "confirm": "確認"
     },
     "castBar": {
       "playerAria": "你的施法條",
@@ -360,7 +676,9 @@ export const zh_TW: EnTranslations = {
       "hoursMinutes": "{h}小時{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "<1分",
-      "lockedToast": "你已鎖定到{raid}。{time}後解鎖。"
+      "lockedToast": "你已鎖定到{raid}。{time}後解鎖。",
+      "heroicName": "英雄難度:{name}",
+      "heroicLocked": "你已被鎖定至英雄難度的{name}。"
     },
     "compass": {
       "N": "北",
@@ -376,17 +694,166 @@ export const zh_TW: EnTranslations = {
       "perSecond": "{value}/秒",
       "perSecondRow": "{total}（{rate}）",
       "minutesSeconds": "{m}分{s}秒",
-      "seconds": "{s}秒"
+      "seconds": "{s}秒",
+      "autoShowHint": "一旦你的小隊造成傷害或治療，行數就會自動出現，此區段會在戰鬥結束幾秒後關閉。"
+    },
+    "petFeed": {
+      "disabledFullHp": "寵物生命值已滿",
+      "disabledNoFood": "你的背包中沒有可以治療寵物的食物"
     },
     "keybinds": {
       "emoteWheel": "表情輪盤",
       "targetFriendly": "選取最近友方",
       "targetFriendlyNext": "切換友方目標",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "溪谷盃",
+      "categoryPet": "寵物",
+      "petAttack": "寵物：攻擊",
+      "petStop": "寵物：停止",
+      "petTaunt": "寵物：嘲諷",
+      "petDefensive": "寵物：防禦",
+      "petAggressive": "寵物：攻擊性"
+    },
+    "vcup": {
+      "title": "溪谷盃",
+      "shootPower": "力道",
+      "close": "關閉溪谷盃視窗",
+      "offlineNote": "賽程簿已闔上。溪谷盃目前無法使用。",
+      "recordLine": "你的戰績：{wins} 勝，{losses} 敗，{draws} 平。",
+      "bracketsAria": "比賽賽級",
+      "bracketLabel": "{n}對{n}",
+      "waitingCount": "{count} 人等待中",
+      "nationsHeading": "旗幟國度",
+      "nation": {
+        "vale": "東溪谷",
+        "mirefen": "泥沼",
+        "thornpeak": "荊峰",
+        "coliseum": "灰燼競技場",
+        "choir": "蒼白唱詩班",
+        "ogre": "食人魔氏族",
+        "moon": "蒼白之月",
+        "copperdig": "銅礦坑"
+      },
+      "awayNote": "若雙方舉同一面旗幟，客隊將使用反轉配色。",
+      "rolesHeading": "運動位置",
+      "role": {
+        "allrounder": {
+          "name": "全能型",
+          "desc": "樣樣都會：踢球、長傳，還有一記正當的肩撞。"
+        },
+        "striker": {
+          "name": "前鋒",
+          "desc": "為大腳開球和靈巧側身而生。"
+        },
+        "sweeper": {
+          "name": "清道夫",
+          "desc": "把持球者撞開，再把球大腳解圍。"
+        },
+        "keeper": {
+          "name": "守門員",
+          "desc": "用抓球、撲救和長踢守住球門區。"
+        }
+      },
+      "queue": "加入佇列",
+      "leaveQueue": "離開佇列",
+      "queueNote": "隨時隨地排隊；哨聲會召喚你前往母豬場。",
+      "queuedStatus": "已排入 {bracket}：第 {position} 位，共 {count} 人。",
+      "blockNation": "請先選擇一個旗幟國度。",
+      "blockPartySize": "這個賽級需要更小的隊伍。",
+      "blockNotLeader": "只有隊長才能為隊伍排隊。",
+      "inMatchNote": "你的隊伍正在場上。繼續比賽！",
+      "deserterNote": "場地管理員記著呢。{seconds} 秒後才能再次排隊。",
+      "liveHeading": "母豬場現況",
+      "liveAria": "溪谷盃：{nationA} {scoreA}，{nationB} {scoreB}",
+      "walkUp": "走到母豬場，從看台上觀賽。",
+      "noLive": "球場很安靜。目前沒有比賽。",
+      "boardHeading": "優勝者榜",
+      "boardEmpty": "尚無優勝紀錄。銅奶桶還在等待。",
+      "boardWins": "{count} 勝",
+      "enterAsGuild": "以 {guild} 的旗號參賽",
+      "guildRecordLine": "你的公會戰績：{wins} 勝，{losses} 敗。",
+      "guildBoardHeading": "公會旗幟榜",
+      "guildBoardEmpty": "還沒有公會上場。揚起你的旗幟吧！",
+      "guildBoardWl": "{wins} 勝，{losses} 敗",
+      "practice": "與機器人練習賽",
+      "practiceNote": "立即在母豬場開始一場完整的機器人比賽。",
+      "practicingNow": "正在練習（{count}）：",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "溪谷盃佇列：{bracket}，第 {position} 位，共 {count} 人",
+      "indicatorLive": "溪谷盃",
+      "indicatorOpen": "開啟溪谷盃視窗",
+      "phaseCountdown": "{seconds} 秒後開球",
+      "phaseGoal": "進球！",
+      "phaseGolden": "黃金進球",
+      "phaseOver": "全場結束",
+      "bannerFound": "溪谷盃開賽：{nationA} 對戰 {nationB}！",
+      "bannerCountdown": "{seconds} 秒後開球...",
+      "bannerKickoff": "開球！",
+      "bannerGoal": "進球！{nation} 破門！",
+      "bannerSave": "{name} 撲救成功！",
+      "bannerGolden": "黃金進球：下一球定勝負！",
+      "bannerEnd": "全場結束：{nationA} {scoreA}，{nationB} {scoreB}",
+      "bannerWin": "母豬場的勝利！",
+      "bannerDraw": "母豬場的比賽以平手收場。",
+      "bannerLoss": "在母豬場落敗。",
+      "logQueued": "你加入了 {bracket} 溪谷盃佇列（第 {position} 位）。",
+      "logUnqueued": "你離開了溪谷盃佇列。",
+      "logFound": "你的溪谷盃比賽已就緒：{nationA} 對戰 {nationB}。",
+      "logRoster": "你方：{allies}。對方：{enemies}。",
+      "logGoal": "{name} 為 {nation} 破門！{nationA} {scoreA}，{nationB} {scoreB}。",
+      "logSave": "{name} 完成撲救！",
+      "logWin": "你贏下了母豬場的這一戰。",
+      "logDraw": "母豬場的這一戰以平手告終。",
+      "logLoss": "你輸掉了母豬場的這一戰。",
+      "gossipOpen": "賽程簿",
+      "gossipOpenAria": "開啟溪谷盃視窗",
+      "mobileLabel": "盃賽",
+      "briefing": {
+        "subtitle": "賽前簡報",
+        "vs": "對",
+        "rulesHeading": "玩法",
+        "rule1": "把球踢或傳進對方球門即可得分。",
+        "rule2": "先進 5 球者勝，或全場結束時進球最多者勝。",
+        "rule3": "全場打平則進入金球賽：下一個進球者獲勝。",
+        "rule4": "鏟球只會把人撞倒，沒有人會受傷，豐收休戰為證。",
+        "rule5": "任何人都可以走上前，在看台上為你加油。",
+        "kitHeading": "你的技能",
+        "kitNote": "比賽期間，這些動作將取代你的職業技能。",
+        "rosterHeading": "出場名單",
+        "you": "你",
+        "bot": "電腦",
+        "ready": "我準備好了",
+        "readyDone": "已準備",
+        "readyAria": "準備開球",
+        "waiting": "正在等待對方準備……",
+        "whistle": "開球哨將在 {seconds} 秒後吹響。",
+        "readyCount": "已準備 {ready}/{total}"
+      },
+      "bet": {
+        "title": "本場投注",
+        "aria": "溪谷盃比賽投注",
+        "closesIn": "{seconds} 秒後停止投注",
+        "closed": "投注已截止",
+        "prize": "獎池 {amount}",
+        "splitAria": "兩隊投注池佔比",
+        "expand": "查看並下注",
+        "collapse": "收起投注",
+        "oddsLabel": "賠率",
+        "back": "押注 {team}",
+        "form": "{wins}勝-{losses}負",
+        "mine": "你的投注：{amount} 押 {team}",
+        "none": "你還沒有在本場比賽下注。",
+        "record": "投注戰績：{wins}勝-{losses}負，{sign}{net}",
+        "wonBanner": "你贏了這注！",
+        "wonLog": "你的溪谷盃投注贏了：返還 {amount}。",
+        "lostLog": "你的溪谷盃投注輸了：{amount}。",
+        "refundLog": "投注作廢，已退還你的 {amount} 本金。"
+      }
     },
     "options": {
       "clickMoveLeft": "左鍵",
       "clickMoveRight": "右鍵",
+      "version": "v{version}（{build}）",
       "browserEffects": "瀏覽器特效",
       "browserEffectsAuto": "自動",
       "browserEffectsFull": "完整",
@@ -418,7 +885,9 @@ export const zh_TW: EnTranslations = {
       "itemLevelLine": "物品等級 {level}",
       "itemScoreLine": "評分 {score}",
       "showSecondaryActionBar": "顯示副動作列",
-      "showDailyRewardsChest": "顯示每日獎勵寶箱"
+      "showDailyRewardsChest": "顯示每日獎勵寶箱",
+      "mobileCameraJoystick": "攝影機搖桿",
+      "mobileLeftHanded": "左手配置"
     },
     "controller": {
       "title": "手把",
@@ -469,7 +938,9 @@ export const zh_TW: EnTranslations = {
         "fps01Low": "0.1% 最低",
         "ping": "延遲",
         "jitter": "抖動",
+        "predLead": "預測提前量",
         "snapshot": "快照速率",
+        "serverTick": "伺服器刻率",
         "connection": "連線",
         "drawCalls": "繪製呼叫",
         "triangles": "三角形",
@@ -509,11 +980,29 @@ export const zh_TW: EnTranslations = {
       "highContrast": "高對比度",
       "highContrastAria": "切換高對比度背景：關閉動態預告片，使開始畫面文字保持清晰"
     },
+    "warfare": {
+      "honorAmount": "{amount} 點榮譽",
+      "dualPrice": "{money} + {honor}",
+      "balance": "榮譽：{amount}",
+      "honorFloat": "+{amount} 榮譽",
+      "honorGain": "你獲得了 {amount} 點榮譽（{reason}）。",
+      "notEnoughHonor": "榮譽不足。",
+      "reasons": {
+        "arenaWin": "競技場勝利",
+        "fiestaKill": "嘉年華擊倒",
+        "fiestaComplete": "完成嘉年華",
+        "fiestaWin": "嘉年華勝利"
+      }
+    },
     "statInfo": {
       "fromYour": "來自你的 {value} 點{stat}：",
       "names": {
-        "spellPower": "法術強度"
+        "spellPower": "法術強度",
+        "critRating": "暴擊等級",
+        "hasteRating": "急速等級",
+        "warfare": "戰爭"
       },
+      "warfareValue": "造成傷害 +{increase}% / 承受傷害 -{reduction}%",
       "desc": {
         "str": "提升你的攻擊強度，使你的武器攻擊更具威力。",
         "agi": "磨練你的反應與準度，提升多項戰鬥屬性。",
@@ -525,7 +1014,10 @@ export const zh_TW: EnTranslations = {
         "spellPower": "提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。",
         "dps": "你的預估武器每秒傷害，由武器的傷害與速度結合你的攻擊強度計算而來。",
         "critChance": "你的攻擊造成暴擊並施加雙倍傷害的機率。",
-        "dodge": "你完全閃躲受到的近戰攻擊、不受任何傷害的機率。"
+        "dodge": "你完全閃躲受到的近戰攻擊、不受任何傷害的機率。",
+        "critRating": "來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。",
+        "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。",
+        "warfare": "對玩家造成的傷害提高 {increase}%，受到玩家造成的傷害降低 {reduction}%。"
       },
       "effects": {
         "attackPower": "+{value} 攻擊強度",
@@ -562,9 +1054,20 @@ export const zh_TW: EnTranslations = {
     "tips": {
       "joinChannels": "提示：輸入 /join world 或 /join lfg 可與全世界的玩家聊天。"
     },
+    "itemHeroicTag": "[英雄]",
+    "itemSoulbound": "靈魂綁定",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "命中時機率（{chance}%）：{effect}",
+      "onSpellDamage": "造成傷害的法術機率（{chance}%）：{effect}",
+      "onHeal": "治療時機率（{chance}%）：{effect}",
+      "chainArc": "以{school}{name}（{damage}）轟擊目標，並跳躍至{jumps}個附近敵人，造成遞減傷害",
+      "attackSlow": "並使目標攻擊速度降低{pct}%，持續{duration}秒",
+      "dot": "引發{name}，一種{school}持續傷害效果，在{duration}秒內造成{total}點傷害",
+      "hot": "綻放{name}，一種持續治療效果，在{duration}秒內恢復{total}點生命"
     },
     "questShare": {
       "notShareable": "該任務無法分享。",
@@ -736,9 +1239,49 @@ export const zh_TW: EnTranslations = {
       "summaryMaster": "拾取設定：隊長分配，分配者{name}，品質門檻{threshold}。",
       "summaryGroup": "拾取設定：小隊拾取。"
     },
+    "corpseHarvest": {
+      "title": "採集",
+      "harvestButton": "採集",
+      "harvestButtonTooltip": "採集：從這具屍體取得製作材料（獸皮、尖牙、絲線等類似部位），與戰利品分開。任何人都可以採集，但每具屍體只能被一名玩家採集。",
+      "concentrateHint": "選擇的部位越少，每個部位的品質越高。",
+      "alreadyHarvested": "這具屍體已經被採集過了。",
+      "componentAria": "採集{component}",
+      "components": {
+        "hide": "獸皮",
+        "fang": "尖牙",
+        "silk": "絲線",
+        "venomSac": "毒囊",
+        "gills": "魚鰓",
+        "claw": "爪",
+        "horn": "角",
+        "tusk": "獠牙"
+      }
+    },
+    "townFocus": {
+      "title": "城鎮專注",
+      "hint": "專注點會在每種材料的基礎產出上疊加加成。未專注的材料保持基礎產出不變。",
+      "budgetLabel": "剩餘點數：{remaining} / {budget}",
+      "saveButton": "儲存專注",
+      "notInTownHint": "你必須在城鎮中才能設定專注。",
+      "increaseAria": "增加對{component}的專注",
+      "decreaseAria": "減少對{component}的專注"
+    },
     "party": {
       "promoteLeader": "提升為隊長",
       "inviteUsage": "邀請誰？用法：/invite <名稱>。"
+    },
+    "playerMenu": {
+      "info": "玩家資訊",
+      "block": "封鎖",
+      "unblock": "取消封鎖",
+      "openFor": "開啟 {name} 的玩家選單",
+      "profileUnavailable": "找不到 {name} 的資料。",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI 操作的帳號",
+      "watchTwitch": "在 Twitch 觀看",
+      "watchX": "在 X 檢視",
+      "watchKick": "在 Kick 觀看",
+      "watchYouTube": "在 YouTube 觀看"
     },
     "lootSettings": {
       "title": "拾取設定",
@@ -751,7 +1294,13 @@ export const zh_TW: EnTranslations = {
       "leaderOption": "分配者：隊長（你）",
       "masterOption": "分配者：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "設定地城難度：英雄",
+      "setNormal": "設定地城難度：普通"
+    },
     "bags": {
+      "cannotDestroy": "此物品無法銷毀。",
+      "rightClickDestroy": "Shift+右鍵單擊以銷毀",
       "filterGroupAria": "依類別篩選背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -815,10 +1364,19 @@ export const zh_TW: EnTranslations = {
         "allStats": "所有屬性降低 {value}"
       },
       "allStatsPctReduce": "所有屬性降低 {pct}%",
+      "increasePct": {
+        "ap": "攻擊強度提高 {pct}%",
+        "armor": "護甲提高 {pct}%",
+        "int": "智力提高 {pct}%",
+        "sta": "耐力提高 {pct}%",
+        "allStats": "所有屬性提高 {pct}%"
+      },
       "dodge": "閃躲機率提高 {pct}%",
       "dodgeReduce": "閃避機率降低 {pct}%",
       "armorFlat": "護甲降低 {value}",
       "armorFlatStacks": "護甲降低 {value}（{stacks} 層）",
+      "armorPct": "護甲降低 {pct}%",
+      "armorPctStacks": "護甲降低 {pct}%（{stacks} 層）",
       "mortalWound": "受到的治療降低 {pct}%",
       "vulnerability": "受到的傷害提高 {pct}%",
       "physVuln": "受到的物理傷害提高 {pct}%",
@@ -857,8 +1415,29 @@ export const zh_TW: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}在荊峰高地崛起！"
     },
+    "auth": {
+      "appleLoginCta": "透過 Apple 繼續",
+      "appleError": "無法透過 Apple 登入。請再試一次。",
+      "appleChoiceIntro": "建立新帳戶，或將 Apple 連結到現有帳戶。",
+      "appleChoiceExpired": "Apple 登入已過期。請再次使用 Apple 登入。",
+      "forgotPrompt": "忘記密碼？",
+      "forgotTitle": "重設密碼",
+      "forgotHint": "輸入您的使用者名稱，我們會將重設連結寄送到登記的電子郵件。",
+      "forgotUsername": "使用者名稱",
+      "forgotSubmit": "傳送重設連結",
+      "forgotSent": "如果該使用者名稱對應的帳戶已登記電子郵件，我們已寄出重設連結。請查看您的收件匣。",
+      "forgotBack": "返回登入",
+      "resetTitle": "設定新密碼",
+      "resetNewPassword": "新密碼",
+      "resetConfirm": "確認新密碼",
+      "resetSubmit": "更新密碼",
+      "resetDone": "您的密碼已更新。現在可以登入了。",
+      "resetMismatch": "兩次輸入的密碼不一致。",
+      "resetErrInvalid": "此重設連結無效或已過期。請重新申請一個。"
+    },
     "loot": {
-      "chestTitle": "寶箱"
+      "chestTitle": "寶箱",
+      "takeAllTooltip": "全部拾取：收取此戰利品視窗中的所有金幣和物品。"
     },
     "spellbook": {
       "addToBarAria": "將 {name} 加入動作列",
@@ -886,7 +1465,10 @@ export const zh_TW: EnTranslations = {
       "label": "重置框體位置"
     },
     "itemTooltip": {
-      "requiresLevel": "需要等級 {level}"
+      "requiresLevel": "需要等級 {level}",
+      "riftTier": "{tier}級裂隙物品",
+      "riftUpgrade": "裂隙強化 {level}/{max}",
+      "riftSockets": "裂隙寶石 {used}/{total}"
     },
     "discord": {
       "title": "Discord",
@@ -921,7 +1503,8 @@ export const zh_TW: EnTranslations = {
         "connecting": "正在開啟 Discord...",
         "benefits": "連結你的 Discord，從遊玩與社群活動中賺取點數，並攀升階級。",
         "error": "無法連結 Discord。請再試一次。",
-        "success": "Discord 已連結。"
+        "success": "Discord 已連結。",
+        "joinServer": "直接加入 Discord 伺服器"
       },
       "choice": {
         "title": "使用 Discord 繼續",
@@ -967,9 +1550,15 @@ export const zh_TW: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理員",
+        "coredevs": "核心開發者",
         "devs": "開發者",
+        "seniormods": "資深管理員",
         "mods": "管理員",
-        "artists": "美術"
+        "juniormods": "初級管理員",
+        "artists": "美術",
+        "contentcreator": "內容創作者",
+        "legend": "LEGEND",
+        "shill": "SHILL"
       },
       "guildMember": "已驗證成員",
       "notMember": "尚未加入伺服器",
@@ -1060,6 +1649,14 @@ export const zh_TW: EnTranslations = {
       "linkedAs": "已連結為 {login}",
       "unlink": "取消連結 GitHub"
     },
+    "steam": {
+      "title": "Steam",
+      "link": "連結 Steam",
+      "unlink": "取消連結 Steam",
+      "linked": "已連結 Steam 帳號 {id}",
+      "benefits": "在桌面應用程式中連結你的 Steam 帳號，將你獲得的功績同步為 Steam 成就。",
+      "noTicket": "Steam 未提供連結憑證。請先啟動 Steam，然後重試。"
+    },
     "mailbox": {
       "title": "郵箱",
       "subtitle": "渡鴉郵驛",
@@ -1085,6 +1682,8 @@ export const zh_TW: EnTranslations = {
       "parcelsLabel": "包裹",
       "parcelsHint": "點擊背包中的物品即可附上。",
       "removeParcelAria": "從信件中移除 {item}",
+      "parcelQtyDecreaseAria": "少寄一個{item}",
+      "parcelQtyIncreaseAria": "多寄一個{item}",
       "sendButton": "寄出信件",
       "postageNote": "郵資：{amount}。渡鴉飛行約 {seconds} 秒。",
       "arrivedBanner": "渡鴉已降落：來自 {name} 的郵件。",
@@ -1107,6 +1706,50 @@ export const zh_TW: EnTranslations = {
         "letterGone": "那封信已不在你的郵箱裡。",
         "takeParcelsFirst": "請先取出包裹再丟棄信件。"
       }
+    },
+    "bank": {
+      "title": "銀行",
+      "subtitle": "鍍金保險箱",
+      "close": "關閉銀行",
+      "capacity": "{used}/{total}",
+      "capacityAria": "銀行格已用：{used}/{total}",
+      "empty": "你的銀行是空的。",
+      "tooFar": "你必須站在銀行家旁才能查看銀行。",
+      "buySlots": "購買 {count} 個格子",
+      "buySlotsMaxed": "已完全擴展",
+      "buyConfirm": "花費 {price} 購買 {count} 個額外的銀行格子嗎？",
+      "buyConfirmAccept": "購買",
+      "withdrawHint": "點擊取出",
+      "withdrawPartialHint": "Shift+點擊取出部分數量",
+      "depositHint": "點擊存入",
+      "depositPartialHint": "Shift+點擊存入部分數量",
+      "cannotDeposit": "無法存入銀行",
+      "depositQuantityTitle": "存入 {item}",
+      "depositQuantityInput": "要存入的數量",
+      "depositQuantityConfirm": "存入",
+      "withdrawQuantityTitle": "取出 {item}",
+      "withdrawQuantityInput": "要取出的數量",
+      "withdrawQuantityConfirm": "取出",
+      "filterGroupAria": "依類別篩選銀行",
+      "sortAria": "排序銀行物品",
+      "searchAria": "依名稱搜尋銀行物品",
+      "depositAll": "存入所有材料",
+      "depositAllDone": "已存入材料：{count}。",
+      "depositAllFull": "已存入材料：{count}。銀行已滿。",
+      "depositAllNone": "銀行已滿：未存入任何物品。",
+      "bonusTitle": "獎勵格子",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "已驗證電子郵件",
+      "bonusSourceDiscord": "已連結 Discord",
+      "bonusSourceWallet": "已連結錢包",
+      "bonusSourceReferral": "已推薦的好友",
+      "bonusAdvertEmail": "驗證電子郵件可獲得 2 個格子。",
+      "bonusAdvertDiscord": "連結 Discord 可獲得 2 個格子。",
+      "bonusAdvertWallet": "連結錢包可獲得 2 個格子。",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "邀請好友：當好友升到 10 級，你們各獲得 2 個格子，最多 5 位好友。",
+      "bonusSectionAria": "獎勵銀行格子及獲取方式"
     },
     "calendar": {
       "title": "活動日曆",
@@ -1168,13 +1811,216 @@ export const zh_TW: EnTranslations = {
     },
     "social": {
       "lastSeen": "最後上線: {when}",
-      "lastSeenNever": "從未"
+      "lastSeenNever": "從未",
+      "ignoredTab": "已忽略",
+      "blockedTab": "封鎖",
+      "ignoredEmpty": "你沒有忽略任何人。",
+      "blockedEmpty": "你沒有封鎖任何人。",
+      "blockSearchPlaceholder": "玩家名稱",
+      "blockAction": "封鎖",
+      "nowBlocking": "已封鎖 {name}。",
+      "stopBlockingTitle": "取消對 {name} 的封鎖"
     },
     "gathering": {
       "title": "採集",
       "mining": "採礦",
       "logging": "伐木",
       "herbalism": "藥草學"
+    },
+    "archetypeTitle": {
+      "label": "稱號",
+      "none": "無",
+      "hobbyLabel": "愛好",
+      "armorcrafting": "鍛甲師",
+      "weaponcrafting": "武器匠",
+      "jewelcrafting": "珠寶匠",
+      "alchemy": "煉金師",
+      "engineering": "工程師",
+      "cooking": "廚師",
+      "inscription": "銘文師",
+      "enchanting": "附魔師",
+      "tailoring": "裁縫",
+      "leatherworking": "製皮師"
+    },
+    "crafting": {
+      "title": "製作",
+      "close": "關閉製作",
+      "craft": "製作",
+      "reagentsNeeded": "需要:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "尚無已知配方。",
+      "resultAria": "製作{name}",
+      "craftedToast": "已製作:{name}",
+      "insufficientMaterials": "你沒有足夠的材料。",
+      "unknownRecipe": "該配方不存在。",
+      "comboRequirementUnmet": "你尚未達到該配方所需組合的兩項製造技能等級。",
+      "notAtHub": "必須達到所需等級並位於製作站，才能製作該物品。",
+      "throttled": "你製作得太快了，請稍等片刻後再試。",
+      "recipeNotLearned": "你還沒有學會這個配方。"
+    },
+    "deeds": {
+      "title": "功績之書",
+      "close": "關閉功績之書",
+      "searchPlaceholder": "搜尋功績",
+      "searchAria": "依名稱搜尋功績",
+      "renownLabel": "名望",
+      "countLabel": "{earned}/{total} 項功績",
+      "completionAria": "已獲得功績：{earned}/{total}",
+      "recentLabel": "最近：",
+      "nearestLabel": "即將達成：",
+      "filterGroupAria": "篩選功績",
+      "filterAll": "全部",
+      "filterEarned": "已獲得",
+      "filterUnearned": "未獲得",
+      "filterNearly": "即將完成",
+      "categoriesAria": "功績類別",
+      "catProgression": "成長",
+      "catCombat": "戰鬥",
+      "catDungeon": "地城",
+      "catDelve": "秘探",
+      "catChronicle": "編年史",
+      "catCollection": "收藏",
+      "catPvp": "PvP與競技",
+      "catSocial": "社交",
+      "catExploration": "探索",
+      "catFeat": "壯舉",
+      "categoryCountAria": "{category}：已獲得 {earned}/{visible} 項功績",
+      "emptyCategory": "沒有符合條件的功績。",
+      "progressText": "{current}/{target}",
+      "progressAria": "進度：{current}/{target}",
+      "renownChip": "{renown} 名望",
+      "earnedDate": "獲得於 {date}",
+      "featRibbon": "壯舉",
+      "hiddenBadge": "隱藏",
+      "titleChip": "頭銜獎勵",
+      "watch": "追蹤",
+      "unwatch": "取消追蹤",
+      "watchFull": "追蹤清單已滿（最多 {cap} 項）",
+      "watchAria": "在介面追蹤器中追蹤{name}",
+      "unwatchAria": "停止追蹤{name}",
+      "titlesSection": "頭銜",
+      "titlesAria": "選擇要展示的頭銜",
+      "titlesNone": "無頭銜",
+      "titlesEmpty": "獲得帶頭銜的功績後即可解鎖此欄。",
+      "unlockedBanner": "達成功績：{name}",
+      "unlockedTitleHint": "獲得新頭銜：{title}。可在功績之書中選用。",
+      "retroSummary": "你的編年史已更新：補錄 {count} 項功績。",
+      "broadcastLine": "{name} 達成了功績：{deed}",
+      "rarityLine": "{percent} 的冒險者已達成",
+      "trackerLabel": "功績",
+      "collapseHint": "摺疊功績追蹤器",
+      "expandHint": "展開功績追蹤器",
+      "openBookHint": "打開功績之書",
+      "charTitleLabel": "頭銜",
+      "charTitleNone": "未選擇頭銜",
+      "charOpenBook": "功績之書",
+      "lbTab": "名望",
+      "lbDeedsCol": "功績",
+      "lbTitleCol": "頭銜",
+      "lbSelf": "你的排名：第 {rank} 名，位居前 {percent}%",
+      "lbEmpty": "尚無上榜的編年史家。",
+      "broadcastsLabel": "與公會和好友分享功績達成",
+      "titledName": "{name}【{title}】"
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "部分欄位無效。請檢查表單後再試一次。"
+    },
+    "json": {
+      "malformed": "無法讀取該請求。請再試一次。"
+    },
+    "body": {
+      "too_large": "該請求過大。請減少資料後再試一次。",
+      "unsupported_media_type": "不支援的請求格式。"
+    },
+    "db": {
+      "conflict": "該變更與另一次更新發生衝突。請再試一次。"
+    },
+    "rate_limit": {
+      "exceeded": "請求過於頻繁。請在 {seconds} 後再試一次。"
+    },
+    "internal": {
+      "error": "我們這邊發生了問題。請再試一次。"
+    },
+    "auth": {
+      "token_missing": "你需要登入後才能執行此操作。",
+      "token_invalid": "你的工作階段已過期。請重新登入。",
+      "forbidden": "你沒有執行此操作的權限。",
+      "invalid_credentials": "使用者名稱或密碼無效。",
+      "required": "尚未驗證。",
+      "web_login_only": "只能從遊戲客戶端登入。",
+      "too_many_attempts": "嘗試次數過多。請等待一分鐘後再試。",
+      "too_many_failed_attempts": "嘗試失敗次數過多。請稍候幾分鐘後再試。",
+      "current_password_incorrect": "目前密碼不正確。",
+      "password_incorrect": "密碼不正確。",
+      "verification_failed": "驗證失敗，請重試。"
+    },
+    "account": {
+      "username_invalid": "使用者名稱必須為 3-24 個字元，並使用字母、數字或底線。",
+      "username_not_allowed": "此使用者名稱不可使用。",
+      "username_taken": "此使用者名稱已被使用。",
+      "username_mismatch": "該使用者名稱與您的帳號不符。",
+      "password_too_short": "密碼至少需要 6 個字元。",
+      "password_too_long": "新密碼最多只能包含 128 個字元。",
+      "characters_online": "請先登出所有角色再進行停用。",
+      "deactivated": "此帳號已停用。請聯絡管理員以還原。",
+      "not_found": "找不到帳號。"
+    },
+    "character": {
+      "name_invalid": "角色名稱無效。請使用 2-16 個字母。",
+      "name_not_allowed": "此角色名稱不可使用。",
+      "invalid_class": "職業無效。",
+      "limit_reached": "已達角色數量上限。",
+      "name_taken": "此名稱已被使用。",
+      "not_found": "找不到角色。",
+      "online": "角色目前在線上。",
+      "rename_not_permitted": "不允許為此角色更名。",
+      "delete_confirm": "輸入角色名稱以確認刪除。",
+      "already_in_world": "角色已在世界中。",
+      "taken_over": "你的角色已被另一個工作階段接管。",
+      "rename_required": "此角色必須先更名才能進入世界。"
+    },
+    "moderation": {
+      "suspended_until": "此帳號停權至 {date}。",
+      "suspended": "此帳號已被停權。",
+      "banned": "此帳號已被封鎖。",
+      "force_rename": "管理員要求你的其中一個角色必須改名。"
+    },
+    "email": {
+      "invalid": "請輸入有效的電子郵件地址。",
+      "unchanged": "這已經是你目前的電子郵件地址了。"
+    },
+    "two_factor": {
+      "code_invalid": "這組代碼無效，請再試一次。",
+      "setup_required": "請先開始雙重驗證設定。",
+      "already_enabled": "雙重驗證已啟用。",
+      "not_enabled": "雙重驗證未啟用。"
+    },
+    "origin": {
+      "cross_site": "出於安全原因，請求已被封鎖。"
+    },
+    "discord": {
+      "not_configured": "Discord 整合目前無法使用。",
+      "expired": "該 Discord 登入已過期，請重新使用 Discord 登入。",
+      "already_linked": "該 Discord 帳號已連結到另一個帳號。",
+      "password_required": "取消連結 Discord 帳號前請先設定密碼。",
+      "unknown_swag": "該獎勵無法使用。",
+      "link_required": "請先連結你的 Discord 帳號。",
+      "swag_claimed": "你已經領取過此獎勵。",
+      "swag_tier": "達到更高階級才能領取此項目。",
+      "swag_points": "點數不足。"
+    },
+    "deeds": {
+      "invalid_input": "輸入無效。"
+    },
+    "steam": {
+      "disabled": "Steam 連結目前無法使用。",
+      "invalid_ticket": "Steam 無法驗證此連結請求。請在桌面應用程式中重試。",
+      "banned": "該 Steam 帳號無法連結。",
+      "already_linked": "你的帳號已連結一個 Steam 帳號。",
+      "account_taken": "該 Steam 帳號已連結到另一個帳號。",
+      "upstream": "Steam 未回應。請稍後重試。"
     }
   },
   "guide": {
@@ -1192,6 +2038,7 @@ export const zh_TW: EnTranslations = {
       "bestiary": "生物圖鑑",
       "models": "3D模型",
       "gear": "裝備與物品",
+      "professions": "專業",
       "economy": "經濟與交易",
       "social": "社交與組隊",
       "stats": "角色與屬性",
@@ -1202,9 +2049,12 @@ export const zh_TW: EnTranslations = {
       "delves": "秘探",
       "reference": "參考資料",
       "controls": "操作按鍵",
+      "settings": "設定與效能",
       "combat": "戰鬥",
       "talents": "天賦",
       "arena": "競技場與PvP",
+      "valeCup": "溪谷盃",
+      "deeds": "功績之書",
       "glossary": "詞彙表",
       "wishIKnew": "我希望早點知道的事",
       "faq": "常見問題",
@@ -1214,6 +2064,7 @@ export const zh_TW: EnTranslations = {
       "primary": "指南章節",
       "topics": "主題",
       "onThisPage": "本頁內容",
+      "sidebarLabel": "指南主題",
       "backToGame": "返回遊戲"
     },
     "groups": {
@@ -1239,7 +2090,8 @@ export const zh_TW: EnTranslations = {
       "github": "GitHub上的原始碼",
       "discord": "加入Discord",
       "communityWiki": "社群Wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "遊玩與社群連結"
     },
     "language": {
       "label": "語言",
@@ -1255,7 +2107,9 @@ export const zh_TW: EnTranslations = {
       "typeCreature": "生物",
       "typeDungeon": "地城",
       "typeDelve": "秘探",
-      "typeTerm": "詞彙"
+      "typeTerm": "詞彙",
+      "typeAbility": "技能",
+      "typeDeed": "功績"
     },
     "home": {
       "eyebrow": "經典風格的瀏覽器MMO",
@@ -1287,7 +2141,17 @@ export const zh_TW: EnTranslations = {
         "marshName": "泥沼澤地",
         "marshBlurb": "沉沒的沼澤與潮水侵蝕的廢墟，是泥鰭與更危險生物的巢穴。",
         "peaksName": "棘峰高地",
-        "peaksBlurb": "風蝕的山脊一路攀向這片國度最寒冷的危境。"
+        "peaksBlurb": "風蝕的山脊一路攀向這片國度最寒冷的危境。",
+        "duskName": "帷幕幽谷",
+        "duskBlurb": "群山之下封存的國度，如果關於入口的低語屬實。",
+        "emberName": "龍裔荒原",
+        "emberBlurb": "越過蒼白堤道，綠意讓位於灰燼，古老的存在統治著荒漠。",
+        "frostName": "霜幕之境",
+        "frostBlurb": "一處任何地圖都未曾標出的雪封高地，只在舞動的極光中若隱若現。",
+        "amberName": "琥珀秋境",
+        "amberBlurb": "西邊峭壁之後，是一場永不落幕的秋天，金色湖面上燈火點點。",
+        "fenName": "柳澤沼地",
+        "fenBlurb": "越過秋色之冠，是一片垂柳與靜水的明亮沼澤，還有一座護城河環繞的小鎮。"
       },
       "group": {
         "heading": "在艱難之處組隊同行",
@@ -1305,7 +2169,7 @@ export const zh_TW: EnTranslations = {
         "q1": "這款遊戲免費嗎？",
         "a1": "是的。整款遊戲可免費遊玩至等級上限，並且在GitHub上開放原始碼。",
         "q2": "我需要加密貨幣錢包嗎？",
-        "a2": "不需要。沒有它遊戲也能完整遊玩。選用的社群代幣僅能解鎖外觀裝飾，絕不影響戰力。",
+        "a2": "不需要。沒有它遊戲也能完整遊玩。選用的社群代幣僅增添外觀裝飾，以及每日獎勵獎池的一份分紅，絕不影響戰力。",
         "q3": "我可以離線遊玩嗎？",
         "a3": "可以。瀏覽器中提供即時的單人模式，另外還有共享的線上世界。",
         "q4": "達到最高等級需要多久？",
@@ -1325,7 +2189,7 @@ export const zh_TW: EnTranslations = {
       "step1Title": "建立角色",
       "step1Body": "選擇一個職業與外觀，為你的英雄取個名字，然後進入世界。之後還可以建立更多角色。",
       "step2Title": "找到你的第一個任務",
-      "step2Body": "紅溪元帥正在起始城鎮等著你。與他對話並接下「狼臨城門」任務。",
+      "step2Body": "執法官紅溪正在起始城鎮等著你，手上有「狼臨城下」任務，而附近的工頭歐戴爾也有活兒要交。與他們任一位交談即可接下你的第一個任務。",
       "step3Title": "移動與環顧四周",
       "step3Body": "以 W、A、S、D 移動。按住滑鼠右鍵拖曳即可環顧四周。大致就是這些。",
       "step4Title": "開始戰鬥",
@@ -1342,16 +2206,16 @@ export const zh_TW: EnTranslations = {
       "questsTitle": "任務",
       "questsBody": "向頭上有標記的人接取任務，完成目標後回報，即可換取經驗值、金幣與裝備。畫面上的任務追蹤器會讓你隨時掌握目標。",
       "deathTitle": "死亡並非終點",
-      "deathBody": "若你倒下，可釋放靈魂並在最近的墓地復活，生命值回滿，再自行回到你原先所在之處。不會損失任何經驗值。",
+      "deathBody": "若你倒下，你的軀體會留在倒下之處，而你會化為鬼魂在最近的墓地甦醒。讓你的靈魂跑回軀體旁，即可當場復活、毫無懲罰；或者接受墓地的靈魂醫者，以一段短暫的虛弱為代價立即復生。全新的英雄可完全免除這份虛弱，而你所擁有或掙得的一切也絕不會失去。",
       "groupingTitle": "同心協力",
       "groupingBody": "邀請其他人組成隊伍，即可共享任務進度並挑戰地城。世界大部分內容皆可單人完成，因此組隊是一種選擇，而非負擔。",
       "onlineTitle": "線上或離線",
       "onlineBody": "與所有人一同遊玩共享的線上世界，或在瀏覽器中開啟即時的離線世界來熟悉操作。",
-      "reassure": "天賦於10級解鎖，且可隨時重置，因此你早期的選擇絕非永久。儘管放手嘗試吧。",
+      "reassure": "天賦於10級解鎖，且只要脫離戰鬥便可隨時重置，因此你早期的選擇絕非永久。儘管放手嘗試吧。",
       "controlsLink": "查看完整操作按鍵說明"
     },
     "controls": {
-      "intro": "電腦版的預設按鍵。每項配置皆可在遊戲選項中變更。",
+      "intro": "電腦版的預設按鍵。除了永遠用來開啟遊戲選單的 Esc 之外，每項配置皆可在遊戲選項中變更，而一項配置也可以是像 Shift+Z 這樣的組合鍵。",
       "keyHeader": "按鍵",
       "actionHeader": "動作",
       "groupMovement": "移動",
@@ -1361,14 +2225,91 @@ export const zh_TW: EnTranslations = {
       "talents": "天賦",
       "arena": "競技場",
       "leaderboard": "排行榜",
+      "deeds": "功績之書",
+      "crafting": "製作",
+      "valeCup": "溪谷盃",
+      "calendar": "活動日曆",
+      "discord": "Discord",
       "abilities": "使用動作列技能（數字鍵列；第二條動作列位於數字鍵盤上）",
       "targetFriendly": "鎖定最近的友方",
       "cycleFriendly": "切換友方目標",
       "gameMenu": "開啟遊戲選單與設定",
+      "bothMouse": "滑鼠左右鍵",
+      "runForward": "向前奔跑",
+      "arrowKeys": "方向鍵",
+      "groupPet": "寵物指令",
+      "petBar": "寵物列：攻擊、停止、嘲諷、防禦、攻擊性（獵人或術士的寵物在場時）",
+      "attackMoveNote": "還有一項預設關閉的功能：在選項中啟用「攻擊移動」後，會保留一個按鍵（選項開啟期間為 A），按下它，你便會朝游標走去，並對游標下的敵人，或沿途遇到的第一個敵人展開攻擊。",
       "mobileHeading": "行動裝置上",
-      "mobileBody": "在手機與平板上會自動顯示觸控操作：左側為移動搖桿，在右側任意處拖曳即可環顧，並有螢幕上的按鈕供你使用技能與選單。",
+      "mobileBody": "在手機與平板上會自動顯示觸控操作：左側為移動搖桿，在其他任意處拖曳即可環顧，用兩指捏合來縮放鏡頭，並有螢幕上的按鈕供你使用技能與選單。左上角的一個小箭頭可以顯示或隱藏選單按鈕，而那裡的「更多」按鈕則收納了你其餘的視窗。",
       "controllerHeading": "使用手把時",
-      "controllerBody": "手把同樣可用，且預設即開啟手把支援。左搖桿負責移動，右搖桿控制鏡頭，正面按鍵與肩鍵則涵蓋你的技能、跳躍與互動。開啟任何視窗都會喚出畫面上的指標，供你操作選單。你可以在選項中的手把設定裡重新配置按鍵，並調整搖桿盲區、鏡頭速度、震動以及反轉視角。"
+      "controllerBody": "手把同樣可用，且預設即開啟手把支援。左搖桿負責移動，右搖桿控制鏡頭，正面按鍵與肩鍵則涵蓋你的技能、跳躍與互動。開啟像是背包這樣的視窗會喚出畫面上的指標，而遊戲選單則可用十字鍵與正面按鍵直接操作。你可以在選項中的手把設定裡重新配置按鍵，並調整搖桿盲區、鏡頭速度、震動以及反轉視角。"
+    },
+    "settingsPage": {
+      "heading": "設定與效能",
+      "intro": "讓遊戲畫面美到極致，或跑得飛快。三套現成配置，加上每個圖形選項的真正作用。",
+      "wherePath": "本頁介紹的一切都在遊戲裡：按下 Esc 開啟選項。選單會開在釘選要項的「總覽」頁，類別則排列在一旁的軌道上：以下的設定位於「顯示」群組中的「圖形」、「介面」與「無障礙」之下，而「效能監視器」則在「系統」之下。更快的方式，是在頂端的搜尋框輸入名稱，直接跳到它。",
+      "fairnessTitle": "天生公平",
+      "fairnessBody": "這裡沒有任何選項會用畫面換取優勢。調低設定只會捨去外觀上的修飾，絕不會犧牲作戰所需的資訊：你的減益效果、施法條、隊伍血量與傷害數字，從「低」到「超高」完全相同。用入門機器遊玩絕不吃虧。",
+      "loadoutsHeading": "三套現成配置",
+      "loadoutsIntro": "先從聽起來最像你機器的配置開始，再一次調整一個選項，直到感覺對了為止。",
+      "recommended": "推薦",
+      "whyLabel": "為什麼有效：",
+      "tagReload": "需重新載入",
+      "fpsTitle": "效能優先",
+      "fpsTagline": "適合較舊的筆電、內顯，以及使用電池遊玩的時候。",
+      "fpsWhy": "圖形品質是總開關，渲染品質則是效果最強的滑桿：調到 70% 時，世界只需繪製約一半的像素，介面卻依然完全清晰。",
+      "balancedTitle": "平衡",
+      "balancedTagline": "大多數機器的甜蜜點，也是我們的預設建議。",
+      "balancedWhy": "「中」就有真實陰影與完整材質，「高」再加上環境光遮蔽與光暈。只要低於「超高」，內建安全網就會在激烈戰鬥中吸收突然的效能下滑，因此「平衡」不必費心照顧也能保持順暢。",
+      "visualsTitle": "極致畫質",
+      "visualsTagline": "給高階桌機的截圖模式。",
+      "visualsWhy": "「超高」會以你螢幕支援的最高解析度繪製，並呈現最豐富的光照。它同時會關閉安全網，而且僅限桌機：手機與 App 版最高到「高」為止。",
+      "value50to70": "50% 到 70%",
+      "value90to100": "90% 到 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "電競電腦用「高」，筆電用「中」",
+      "valueOnOptional": "開啟（可選）",
+      "howHeading": "選項的運作方式",
+      "factDetectTitle": "遊戲會先自我調校",
+      "factDetectBody": "首次啟動時，遊戲會偵測你的裝置並挑選合適的檔位：入門手機用「低」，高效能桌機用「超高」。而你親自做的選擇永遠優先。",
+      "factReloadTitle": "兩種類型的選項",
+      "factReloadBody": "圖形品質與進階選項需要重新載入後才會生效，必要時面板會出現「立即重新載入」按鈕。其他所有選項則是一改就生效。",
+      "factGovernorTitle": "內建安全網",
+      "factGovernorBody": "在「超高」以下的所有檔位，當大型戰鬥造成瞬間負載時，遊戲會悄悄暫時減少草叢、特效與光照，狀況過去後再恢復原狀。選擇「超高」則代表你寧可保留每一分細節。",
+      "factSearchTitle": "搜尋最快找到",
+      "factSearchBody": "不確定某個選項在哪裡？在選單頂端的搜尋框中輸入即可。它也聽得懂常見的說法，因此輸入 fps 就能找到 FPS 讀數，而選擇一項結果會直接跳到該設定並將其標亮。",
+      "advancedHeading": "「進階」預設：自由調配",
+      "advancedBody": "「進階」以「高」這一檔為起點，並解鎖四個額外選項，讓你把效能花在真正看得出差別的地方：地形細節、植被密度、特效與光照，以及陰影品質。它們和圖形品質一樣，需要重新載入後才會生效。",
+      "advancedMixes": "兩種人氣搭配：把陰影品質維持在「高」、特效與光照調成「低」，畫面清爽俐落、沒有光暈，跑起來也輕鬆；或者反過來，保留光暈，讓陰影柔和一些。",
+      "tableHeading": "每個圖形選項，逐一解說",
+      "colSetting": "選項",
+      "colDoes": "作用",
+      "colImpact": "FPS 影響",
+      "impactNone": "無",
+      "impactLight": "輕微",
+      "impactModerate": "中等",
+      "impactHeavy": "顯著",
+      "rowGraphicsQuality": "總開關。每調一檔，解析度、陰影、材質、植被與光照特效都會一起改變。這是影響最大的單一選項。",
+      "rowRenderQuality": "以較低的內部解析度繪製 3D 世界再放大，介面維持清晰。在較弱的機器與高解析度螢幕上，是立即見效、威力最強的滑桿。",
+      "rowFieldOfView": "決定畫面能容納多少世界：從拉近的 55 度到開闊的 100 度。屬於舒適度選擇；視野越廣，繪製量會略微增加。",
+      "rowBrightness": "調整場景曝光的明暗，純屬個人喜好。",
+      "rowWeather": "環境雨雪效果。純屬氣氛營造，關閉後在暴風雨中還能省下一點效能。",
+      "rowBrowserEffects": "決定介面本身可以多華麗：玻璃模糊、光暈、選單動畫。「自動」會配合你的瀏覽器；無論怎麼選，3D 世界都不受影響。",
+      "rowTerrainDetail": "豐富細膩的混合地面材質，或是較簡單、跑得較快的地形外觀。",
+      "rowFoliageDensity": "角色周圍草叢生長的範圍與密度。",
+      "rowEffectsQuality": "光暈、環境光遮蔽，以及有多少火把和法術會投射真實光源。是進階選項中省效能最多的一項。",
+      "rowShadowQuality": "陰影的銳利程度。「低」仍保留陰影，只是邊緣較柔和。",
+      "rowFrostedPanels": "視窗背後的霧面玻璃模糊。很漂亮，但也正是較弱的瀏覽器最有感的那種效果；關閉它，就是經典的俐落外觀。",
+      "rowReduceMotion": "移除介面動畫，讓視窗立即出現。首先是無障礙選項，順帶帶來少許效能提升。",
+      "rowPerfOverlay": "在畫面上即時顯示 FPS、影格時間等數據。調整本頁設定時先開著，調完再關掉。",
+      "tableFoot": "想找繪製距離滑桿或 FPS 上限嗎？其實不必找：可視距離已內建在各品質檔位中，影格節奏則交由你的顯示器決定。",
+      "mobileTitle": "在手機與平板上",
+      "mobileBody": "行動裝置上，遊戲會替你打理更多：自動挑選檔位、將解析度稍微壓低以節省電力並抑制發熱，最高的幾個檔位則僅限桌機。上面的配置依然適用，只是手機最高到「高」為止。",
+      "touchBody": "在觸控螢幕上，選項還會多出一組專屬的舒適度設定：搖桿的大小與靈敏度、螢幕按鈕的大小與不透明度、左撇子的鏡像佈局、可選的鏡頭搖桿，以及反轉觸控視角，讓螢幕來配合你的雙手，而不是反過來。",
+      "audioTitle": "聲音與語言",
+      "audioBody": "選項視窗管的不只是畫面。「音訊」分頁提供音效、音樂與語音各自獨立的音量控制，「介面」區則有一個語言選擇器，能當場重新在地化整個介面，無需重新載入。",
+      "autolootBody": "不想逐一點擊每具屍體嗎？有一個介面選項（預設關閉），能在你走過自己擊殺的敵人時，自動拾取牠們身上的戰利品。"
     },
     "combat": {
       "intro": "戰鬥遵循熟悉的經典MMO規則。你完全不需要研究這些就能玩得很好，這只是讓你了解戰鬥運作的大致樣貌。",
@@ -1379,12 +2320,15 @@ export const zh_TW: EnTranslations = {
       "resourcesTitle": "每種職業都有自己的節奏",
       "resourcesBody": "戰士在激戰中累積怒氣，盜賊消耗會穩定回復的能量，施法者則管理一池法力。掌握你的資源，等於掌握了玩好職業的一半。",
       "growTitle": "你每升一級都會更強",
-      "growBody": "每一級都會讓你更強韌並解鎖新技能，一路直到 {cap} 級的上限。進行任務是升級最快的途徑；地城與探索則讓過程更完整。",
+      "growBody": "每一級都會讓你更強韌並解鎖新技能，一路直到 {cap} 級的上限。進行任務是升級最快的途徑；狩獵、地城與秘探則讓過程更完整。",
       "effectsTitle": "增益、減益與控場",
-      "effectsBody": "許多技能會施加一個會持續存在的效果。有益的（增益）能提升你的屬性、為你護盾，或一點一滴地治療你；有害的（減益）則以持續傷害消耗你的生命，或使你衰弱。留意動作列附近的小圖示，便能看出你身上有哪些效果以及還剩多久。",
-      "ccBody": "控場是一種特殊的減益，會限制目標所能做的事：暈眩、定身與緩速、阻斷施法的沉默、繳械、恐懼，還有能讓敵人短暫無害的變形。其中有些，例如定身、恐懼與變形，若太快重複施加便會失去效用，因此無法永無止盡地連鎖控制。",
+      "effectsBody": "許多技能會施加一個會持續存在的效果。有益的（增益）能提升你的屬性、為你護盾，或一點一滴地治療你；有害的（減益）則以持續傷害消耗你的生命，或使你衰弱。留意畫面頂端角落、小地圖旁的小圖示，便能看出你身上有哪些效果以及還會持續多久。",
+      "ccBody": "控場是一種特殊的減益，會限制目標所能做的事：昏迷、定身與緩速、阻斷施法的沉默、繳械、恐懼，還有能讓敵人短暫變得無害的變形。對上其他玩家時，控制會隨著重複而磨損：同一類控場重複施加得太快便會減弱、繼而完全失效，而一記從潛行中開場的昏迷會與其後的昏迷分開計算，因此沒有人能被永無止盡地連鎖控制。這個世界的生物則沒有這種記性：控場對牠們永遠不會因重複而減弱，不過許多最強大的敵人，包括具名的菁英與其中最強的首領，則完全無法被控制。",
+      "metersBody": "想知道一場戰鬥打得如何？按下 Z 即可開啟隊伍統計面板，它會逐場戰鬥為你的隊伍統計傷害、治療與威脅值。",
+      "queueTitle": "你的下一招早已上膛",
+      "queueBody": "你不必把按鍵時機掐準到每一格。在當前技能仍在施放時按下你的下一個技能，它便會排入佇列，在施法完成的那一瞬間立刻發動，讓熟練的操作流暢無間。有些近戰打擊也以同樣的方式運作，隨著你的下一次武器揮擊一併出手。",
       "deathTitle": "當你倒下時",
-      "deathBody": "若你的生命值歸零，你便倒下了。釋放你的靈魂，在最近的墓地以全滿生命值復活，再自行跑回原處，所以死亡只會花掉你一點時間，而非你的進度。戰鬥之間，坐下進食飲水，好讓你以全盛狀態迎接下一場。"
+      "deathBody": "若你的生命值歸零，你便當場倒下，你的軀體會留在原地。釋放你的靈魂，你會化為鬼魂在最近的墓地甦醒：比活人腳程更快、敵人也無法觸及，卻無法戰鬥、拾取，也無法與任何人交談，唯獨盤旋在墓石之上的靈魂醫者例外。接下來由你選擇。讓你的鬼魂跑回軀體旁，你便會當場復活，回復部分生命與法力，毫無任何懲罰。或者接受靈魂醫者的當場復生，代價則是「復活虛弱」：一種對你全身上下的暫時削弱，你的資歷愈深，它持續得愈久，而全新的角色則可完全免除。若你在地城中倒下，你的靈魂會在外頭的墓地等候；讓你的鬼魂走回門前，你便會在入口處復活。秘探則是例外：在那裡倒下，你只會被重新扶起於秘探的入口處，不過第二次倒下便會結束這趟探索。無論哪條路，你都不會損失經驗、裝備或錢幣。戰鬥之間，坐下進食飲水，好讓你以全盛狀態迎接下一場。"
     },
     "glossary": {
       "intro": "本指南與聊天中所用術語的快速參考。",
@@ -1427,18 +2371,44 @@ export const zh_TW: EnTranslations = {
       "delveTerm": "秘探",
       "delveDef": "供一到兩名玩家進行、可重複挑戰的短程副本探索，自看守人的看板啟程，並有一名同伴隨侍在側。",
       "augmentTerm": "強化",
-      "augmentDef": "在2v2的嘉年華競技場對戰中挑選的暫時性強化，只在該場對戰中重塑你的技能組。"
+      "augmentDef": "在2v2的嘉年華競技場對戰中挑選的暫時性強化，只在該場對戰中重塑你的技能組。",
+      "deedTerm": "功績",
+      "deedDef": "記錄在功績之書中的成就。贏得功績能獲得名望，其中一些還會授予外觀頭銜或銘牌邊框。",
+      "renownTerm": "名望",
+      "renownDef": "你的功績累加而成的生涯總分。它只增不減，而王國會在功績之書中保有它的排名。",
+      "heroicTerm": "英雄",
+      "heroicDef": "地城或團隊副本的更高難度版本，為裝備精良的終局隊伍而調校。英雄首領會掉落升級版戰利品，最終首領還會給予英雄徽記。",
+      "lockoutTerm": "鎖定",
+      "lockoutDef": "對最豐厚可重複獎勵的每日上限。每座英雄地城每天只給予一次通關獎勵，團隊副本的普通與英雄模式分開計算，而拾取世界首領也會開始你的鎖定。已通關的五人副本仍對其原隊伍開放；而遭鎖定的團隊副本大門，要到重置後才會再度開啟。",
+      "restedTerm": "充分休息",
+      "restedDef": "你的角色在旅店中、脫離戰鬥狀態下休息時所積存的額外經驗值。你接下來的擊殺會賺取額外經驗，直到這池經驗耗盡為止。",
+      "petBarTerm": "寵物指令列",
+      "petBarDef": "獵人或術士寵物會增添的指令列：攻擊、停止、挑釁、防禦與主動，預設綁定為 Ctrl 加 1 到 5。",
+      "metersTerm": "傷害統計面板",
+      "metersDef": "當前戰鬥的隊伍計分視窗：造成的傷害、完成的治療，以及誰握有最高威脅值，皆逐場戰鬥記錄。以其快捷鍵（預設為 Z）開啟。",
+      "targetMarkerTerm": "目標標記",
+      "targetMarkerDef": "任何隊伍或團隊成員都能標記在目標頭上的符號，讓所有人集火，或避開，同一個目標。共有八種符號，每種符號對應一個目標。",
+      "loadoutTerm": "配置",
+      "loadoutDef": "一套已儲存的天賦分配。保留數套，即可在不同構築之間切換，無需一點一點重新投入天賦點。",
+      "readyCheckTerm": "準備確認",
+      "readyCheckDef": "隊長輸入 /ready 對隊伍或團隊發起表決：每個人確認「準備就緒」或「未準備」，而全隊都能看到統計結果。",
+      "soulboundTerm": "靈魂綁定",
+      "soulboundDef": "從你取得的那一刻起便與你的角色綁定的物品。它無法交易、郵寄、賣給商人，也無法在市場上架。",
+      "spiritHealerTerm": "靈魂醫者",
+      "spiritHealerDef": "盤旋於每座墓地之上的看護者，能以一段短暫的虛弱為代價，讓你的鬼魂當場復生。",
+      "worldBossTerm": "世界首領",
+      "worldBossDef": "一種以穩定節奏在開放世界中崛起的團隊副本強度首領，由聞訊聚集而來的所有人共同迎戰，而非一支固定的隊伍。"
     },
     "faqPage": {
       "intro": "新手最常問的問題。",
       "q1": "真的免費嗎？",
       "a1": "是的。整款遊戲可免費遊玩至等級上限，原始碼也在GitHub上公開。",
       "q2": "我需要加密貨幣錢包或任何代幣嗎？",
-      "a2": "不需要。沒有它遊戲也能完整遊玩。選用的社群代幣僅能解鎖外觀裝飾，絕不影響戰力或進度。",
+      "a2": "不需要。沒有它遊戲也能完整遊玩。選用的社群代幣僅增添外觀裝飾，以及每日獎勵獎池的一份分紅，絕不影響戰力或進度。",
       "q3": "我可以在手機上玩嗎？",
       "a3": "可以。遊戲可在行動瀏覽器中以觸控操作運行，另外也提供電腦版啟動器。",
       "q4": "我可以離線或單人遊玩嗎？",
-      "a4": "可以。遊戲提供即時的單人離線模式，而線上世界除了地城與團隊副本外，皆可完全單人完成。",
+      "a4": "可以。遊戲提供即時的單人離線模式，而線上世界除了地城、團隊副本與世界首領之外，皆可完全單人完成。",
       "q5": "總共有幾種職業？",
       "a5": "九種，涵蓋經典的坦克、治療與輸出角色定位，每一種都有自己的資源系統（怒氣、法力或能量）以及專屬的招牌技能。",
       "q6": "等級上限是多少？",
@@ -1450,7 +2420,7 @@ export const zh_TW: EnTranslations = {
       "q9": "有PvP嗎？",
       "a9": "有的。你可以和任何人決鬥取樂，或踏進灰燼鬥獸場與其他玩家對戰。PvP採自願參加制，所以你永遠不會被強迫加入。",
       "q10": "達到滿級後有什麼可做？",
-      "a10": "等級上限是 {cap} 級。從那裡開始，你可以挑戰五人地城和十人團隊副本、追求更好的裝備，並在競技場中考驗自己。",
+      "a10": "等級上限是 {cap} 級。從那裡開始，你可以挑戰五人地城與十人團隊副本，再以英雄模式重新征服它們以取得升級版戰利品，在世界首領崛起時與他一戰，在競技場中考驗自己，帶著一名同伴深入秘探，並在功績之書中追逐功績，以攀登王國排名。",
       "q11": "我該如何找隊伍？",
       "a11": "邀請你遇到的任何人組隊、在聊天中招募，或在地城前湊隊。世界上大部分內容都能單人完成，所以組隊是一種選擇，而非必要。"
     },
@@ -1477,7 +2447,7 @@ export const zh_TW: EnTranslations = {
       "abilitiesNote": "這只是配套的一隅。隨著升級你會學到更多，而天賦會重塑這一切的玩法。",
       "masteryLabel": "精通",
       "fullKitHeading": "完整技能",
-      "fullKitNote": "此職業能學習的每一項技能，依照解鎖順序排列。天賦決定哪些技能撐起你的配置。",
+      "fullKitNote": "此職業隨等級成長所學會的技能，依照解鎖順序排列。天賦會再賦予少數幾項技能，並決定哪些技能撐起你的構築。",
       "petsHeading": "惡魔",
       "petsNote": "術士召喚惡魔並肩作戰，每隻各擅長不同的任務。"
     },
@@ -1583,7 +2553,7 @@ export const zh_TW: EnTranslations = {
     },
     "bestiary": {
       "heading": "生物圖鑑",
-      "intro": "世界中的生物，依族群分類。這些是你在野外會遇到的敵人。最致命之物則潛伏在地城門後，未列於此。",
+      "intro": "世界中的生物，依族群分類。這些是你在野外會遇到的日常敵人。菁英敵人與牠們的首領不會出現在這些頁面上，而最致命之物則潛伏在地城門後。",
       "rare": "稀有",
       "levels": "等級 {min} 到 {max}",
       "levelsSame": "等級 {min}",
@@ -1592,6 +2562,7 @@ export const zh_TW: EnTranslations = {
         "old_greyjaw": "一頭傷痕累累的老狼，沒有任何陷阱困得住牠，被指控害死了三條獵犬，還咬斷一名馬廄小弟的手臂。牠獨自獵食於深林之中，戰鬥拖得愈久就愈兇殘。",
         "grubjaw": "一頭貪婪到連其他巨魔都不願在牠身旁挖掘的沼澤巨魔，據說曾把一名商人最後兩頭馱騾連同挽具一併吞下肚。",
         "shardlord_kazzix": "一具長出了肩膀的風暴元素，行走在風暴岩之上的遠處峭壁間，身上的心核碎片值得人冒著雷電去搶。",
+        "sethrael_palecoil": "一條骨白如枯的巨蛇，滑行於微光湖深處的水底陡崖，是牠所據有這片水域的沉默守望者。與牠共享此湖的泅泳者，鮮少能再浮上水面。",
         "mirejaw_frenzy": "一隻沼澤泥鰭，會在戰鬥中把自己鞭策成一陣亂揮亂打的狂亂，是一群喧鬧又護地的同類中嗓門最大的那個。",
         "gravecaller_cultist": "死亡邪教的長袍僕從，他們的作為玷污了從谷地到群峰的座座墳塚。凡他們聚集之處，亡者便不得安息。"
       }
@@ -1636,6 +2607,22 @@ export const zh_TW: EnTranslations = {
       "dragonkin": {
         "name": "龍類",
         "desc": "來自遠古深淵、覆鱗如蛇的生物。稀少、高傲，且遠比外表看來更為強大。"
+      },
+      "reptile": {
+        "name": "爬行類",
+        "desc": "冷血的獵手，帶著獨有的嘶聲與撕咬，與溫血的野獸截然不同。"
+      },
+      "murloc": {
+        "name": "蛙鰭族",
+        "desc": "棲息於湖岸與潮池、呱呱作響的魚族，任何涉水太近之物都會迅速引來牠們成群圍攻。"
+      },
+      "kobold": {
+        "name": "林間小妖",
+        "desc": "竄行於林間空地與樹籬間的拾荒者與小妖，在成群聚集之前，與其說是威脅，不如說是麻煩。"
+      },
+      "demon": {
+        "name": "惡魔",
+        "desc": "來自裂隙彼端的入侵者，渾身是烈焰與怨毒。凡有一隻現身之處，裂口必不在遠處。"
       }
     },
     "worldPage": {
@@ -1649,38 +2636,80 @@ export const zh_TW: EnTranslations = {
       "valeBlurb": "翠綠的起始山谷，新英雄在東溪鎮周圍與群狼和盜匪交手、磨練本領之處。",
       "marshBlurb": "一片被霧氣與廢墟淹沒的國度。泥鰭成群湧入淺灘，更古老之物在水下蠢動，沼橋鎮的人們從橋上警戒注視著。",
       "peaksBlurb": "被狂風刮蝕的山脊與古老的礦坑，向上攀升至王國中最寒冷、最高處的險境，由高守哨站鎮守。",
+      "duskBlurb": "古輝鎮巨樹之下一座永恆暮色的山谷，水晶廢墟閃著微光，空氣中迴盪著古老魔法的低鳴。",
+      "emberBlurb": "風暴照亮的灰燼與血玻璃荒原，幼龍盤旋於火山口上空，巨魔的營火在沙丘間燃燒，門戶之鎮望龍哨在旁警戒注視。",
+      "frostBlurb": "極光之下一片雪與黑松的靜謐之地，寒冷本身彷彿甦醒了，而冰幔鎮的爐火長燃不熄。",
+      "amberBlurb": "一場金紅葉片永不飄落的永恆之秋，環繞著燈火通明的燈湖鎮。",
+      "fenBlurb": "一片睡蓮與緩水交織、明亮而嗡鳴的濕地，從橋湖鎮沿著古老的木棧道穿越其間。",
+      "nightBlurb": "一片星光午夜的國度，花朵照亮路徑，月棲鎮在夢境般的天空下靜靜守夜。",
+      "hauntBlurb": "巨大樹冠之下的一片鬧鬼森林，絞湖鎮的燈籠是路上唯一可信的光。",
+      "galeBlurb": "海崖與呼嘯的丘陵，這裡的風從不停歇，老燈塔從不熄滅，燭港則緊閉門戶。",
+      "jungleBlurb": "棕櫚、白沙與喧鬧群鳥交織的熱帶叢林，海濱小鎮漂流港在沙灘上燃著一堆火。",
+      "gardenBlurb": "一座樹籬迷宮般的園林國度，至今仍被無人見過的園丁修剪著，經由籬苑鎮及其噴泉庭院進入。",
       "valeGreeting": "把你的劍帶在身邊。谷地已不復昔日。",
       "valeGreeter": "雷德布魯克元帥，東溪鎮",
       "marshGreeting": "守在城門這頭。越過那片蘆葦，沼澤便會替我們動手殺人。",
       "marshGreeter": "守衛芬威克，沼橋鎮",
       "peaksGreeting": "這座城牆已守了兩百年。它不會在我當值時破，但它正在呻吟。",
       "peaksGreeter": "瑟莎莉隊長，高守哨站",
-      "valePlaceNotes": "東溪是你的第一個主據點。狼奔地與野豬草原是溫和的狩獵場；鏡湖是適合垂釣的靜謐水域；玄網林與銅礦坑藏著蜘蛛與貪礦的掘地者；盜匪營地與傾頹禮拜堂另有更粗野的活計；聖物丘向下通往崩塌聖物庫，這個王國的第一座探窟；而亮林空地則是北方一片靜謐、陽光灑落的林地。",
-      "marshPlaceNotes": "沼橋鎮鎮守著唯一一條乾燥的道路。潛獵蘆葦叢與深沼淺灘擠滿了沼澤野獸與泥鰭；寡婦密林被蛛網織得密不透風；溺亡禮拜堂與巨魔土塚藏著更古老的危險；喚墓者營地是邪教的據點，而沉沒堡壘則是沼澤的副本核心。",
-      "peaksPlaceNotes": "高守哨站鎮守著城牆。潛行者山脊與深岩地洞屬於山脊巨貓與掘地怪；食人魔山麓與卓格瑪戰營屬於受僱的暴徒；風暴岩劈啪作響地竄動著元素，微光湖則在其下發著光；龍裔邪教帳篷與亡魂之野環繞著邪教佔據的高地，墓龍聖所就矗立於其頂峰。",
+      "duskGreeting": "你的同族鮮少踏足這片樹蔭。輕聲慢行，歡迎你的到來。",
+      "duskGreeter": "守護者塞爾文，古輝鎮",
+      "emberGreeting": "荒原吹來熱風，巨龍盤旋在龍喉之上，沙丘裡燃著巨魔的營火。走出去之前，先喝上一口吧。",
+      "emberGreeter": "守門衛士，望龍哨",
+      "frostGreeting": "牆外的白雪吞沒了一切聲響。若天上的光開始舞動，就壓低你的聲音，別讓你的火熄了。",
+      "frostGreeter": "爐火守護者，冰幔鎮",
+      "amberGreeting": "這裡每片葉子都燃著金紅，卻沒有一片飄落。燈籠已為你點亮；上路時當心融金隘口。",
+      "amberGreeter": "燈匠，燈湖鎮",
+      "fenGreeting": "沼澤裡蜻蜓與蜜蜂嗡嗡作響。跨過橋來，歇歇腳，走過水池時記得留在棧道上。",
+      "fenGreeter": "守橋人，橋湖鎮",
+      "nightGreeting": "過了夜門，連空氣本身都在做夢。跟著花光走，也當心那懸在天上的沉睡世界。",
+      "nightGreeter": "守夜衛士，月棲鎮",
+      "hauntGreeting": "旅人，緊跟著燈籠走。若林子在路外喊你的名字，千萬別回應。",
+      "hauntGreeter": "點燈人，絞湖鎮",
+      "galeGreeting": "這裡的風從未停過一次，老燈塔也從未熄過一次。進了旅店，記得隨手關上門。",
+      "galeGreeter": "燈塔看守人，燭港",
+      "jungleGreeting": "溫暖的沙、喧鬧的鳥，還有一片吞沒地平線的叢林。我們在海灘上燃著一堆火；盡量活著回到火邊來。",
+      "jungleGreeter": "港務長，漂流港",
+      "gardenGreeting": "樹籬仍有人在修剪，儘管一百年來沒人見過任何園丁。當心迷宮：它也在當心你。",
+      "gardenGreeter": "守門人，籬苑鎮",
+      "valePlaceNotes": "東溪鎮是你的第一個主據點。狼徑與野豬草地是溫和的狩獵場；鏡湖是適合垂釣的水域，儘管淺灘處群聚著泥鰭魚；玄網林與銅礦坑藏著蜘蛛與貪礦的掘地者；強盜營地與倒塌禮拜堂另有更粗野的活計；聖物庫山丘向下通往崩塌的聖物庫，這個王國的第一座秘探；明木林地是北方一片靜謐、陽光灑落的林地；而母豬場則是東溪有圍牆的野豬球場，溪谷盃就在豐收休戰之下於此開賽。",
+      "marshPlaceNotes": "芬橋鎮守著唯一一條乾燥的道路。潛伏者蘆葦地與深沼淺灘擠滿了沼澤野獸與泥鰭；寡婦灌木叢被蛛網織得密不透風；溺沒禮拜堂與巨魔墳丘藏著更古老的危險，而沼澤自己的秘探「溺亡連禱」就在墳丘以北開啟；喚墓者營地是邪教挖壕據守之處，沉沒堡壘則是沼澤的副本核心。",
+      "peaksPlaceNotes": "高守哨站鎮守著城牆。潛行者山脊與深岩地洞屬於山脊巨貓與掘地怪；食人魔山麓與卓格瑪戰營屬於受僱的暴徒；風暴岩劈啪作響地竄動著元素，其下則是發著光的微光湖，這座山中小湖的岸邊守著那道通往溺亡神殿的蒼白之光大門；龍裔邪教帳篷與亡魂之野環繞著邪教佔據的高地，墓龍聖所就矗立於其頂峰。",
+      "duskPlaceNotes": "古輝鎮聚居在巨樹之下。暮落洞穴與其瞭望台是入口，也是初見山谷的地方；古木林地與星落盆地守著寧靜的南方；沉沒王庭在東面藏著草木蔓生的廢墟；輝光深處與水晶淺灘則在北方閃著微光。",
+      "emberPlaceNotes": "望龍哨鎮守著大門。門林是荒原之前最後一片綠意；燼沙丘飄蕩著灰燼與更糟的東西；巨魔集會是沙丘巨魔升起營火之處；血玻璃原野閃爍著鋒利的碎片；龍喉火山口則是幼龍盤旋其上、冒著煙的王冠。",
+      "frostPlaceNotes": "冰幔鎮守著最後一座溫暖的爐火。雪線隘口標記著雪堆接管一切之處；冰川湖是冰層之下漆黑靜止的水；極光台階在舞動的光芒下向上攀升；顫慄沼澤是一片從未真正沉睡的冰封泥沼；呼嘯台地則夜夜印證著自己的名字。",
+      "amberPlaceNotes": "燈湖鎮在豐收之心閃著光。融金隘口是那條琥珀滑膩的入山通道；鎏金果園與豐收谷藏著最甜美的收成，也藏著最大膽的竊賊；大湖映照著燃燒般的葉片；燼楓坡站得最高、紅得最豔；斜碑則記得比秋天更古老的事物。",
+      "fenPlaceNotes": "橋湖鎮橫跨在緩流的水面上。琥珀沼石階自豐收之鄉一路而下；睡蓮澤與澤光池閃爍著鬼火與蜻蜓；垂柳灣的枝條垂進湖中；沉眠淺灘則是這片土地最溫柔的一隅。",
+      "nightPlaceNotes": "月棲鎮守著長夜。夜門是通往午夜之國的入口；月井盛著你能佇立其旁的星光；暮光花田在黑暗中綻放；守望石陣一動不動地注視著；不眠古塚則是這裡唯一從不做夢的地方。",
+      "hauntPlaceNotes": "絞湖鎮蜷縮在自己的燈籠之中。鴉門是這片森林陰森的正門；寡婦棘叢被蛛網織得密不透風；吊影林地與哀石禮拜堂守著森林最古老的悲慟；獵手林隙則屬於那仍在其中狩獵的東西。",
+      "galePlaceNotes": "燭港迎著風而立。風道是進來的懸崖之路；嘯風丘陵在狂風下光禿起伏，寸樹不生；老燈塔燃燒了多久，沒有人說得清；斷崖筆直墜入水中；沉船灘讓這片海岸不敢說謊；鏡湖則是整個國度裡唯一靜止的事物。",
+      "junglePlaceNotes": "漂流港在海灘上燃著火堆。纏木隘口是河流與綠牆相會之處；棕櫚長灘沿著浪花鋪展，潔白而溫暖；翠綠叢林與垂藤林吞沒了內陸；藍寶石潟湖清澈幽深地發著光；沉沒神像則自水下注視著一切。",
+      "gardenPlaceNotes": "籬苑鎮候在花園之門前。雕像步道有它沉默的同伴相隨；野薔薇叢早已蔓生出花圃之外；花瓣池終年飄著粉色花瓣；大迷宮會為每位訪客重新安排它的規矩；噴泉庭院則仍在花園中心流淌著清澈的泉水。",
       "gladeTitle": "寧靜一隅：碧木林地",
-      "gladeBody": "Vale 裡的故事並不全都關於亡者。北方有一片陽光灑落的林地，名為 Brightwood Glade，保有自己較溫和的節奏：盡是安靜的小徑，以及枝葉下斑駁的光影。它是你所追循之路旁的一段柔和對照，當道路給你餘裕漫遊時，很值得前去一看。"
+      "gladeBody": "Vale 裡的故事並不全都關於亡者。北方有一片陽光灑落的林地，名為 Brightwood Glade，保有自己較溫和的節奏：盡是安靜的小徑，以及枝葉下斑駁的光影。它是你所追循之路旁的一段柔和對照，當道路給你餘裕漫遊時，很值得前去一看。",
+      "worldBossTitle": "當山峰甦醒：世界首領",
+      "worldBossBody": "在荊峰的高處，風暴岩上空的風暴有時會凝聚成形。桑扎爾，覺醒之峰會以穩定的節奏在那裡崛起，這是一頭在開放世界中由所有應召而來者共同迎戰、具團隊副本強度的元素生物，而且與他對峙的挑戰者愈多，他就愈發強大。每個參戰的人都能為他的戰利品贏得屬於自己的一次擲骰，按團隊副本鎖定的規矩結算；他的屍身也會停留得夠久，讓陣亡者來得及跑回來領取應得之物。多召集些人手吧，比你以為需要的還要多。"
     },
     "questsPage": {
       "heading": "任務",
       "intro": "任務是世界的核心，也是升級最快的途徑。以下說明它們的運作方式。",
       "acceptTitle": "尋找與接取",
-      "acceptBody": "頭頂有標記的人有工作要交給你。與他們交談即可接取任務。你的第一個任務是「狼臨城下」，由東溪鎮的執法官紅溪發布。",
+      "acceptBody": "頭頂有標記的人有工作要交給你。與他們交談即可接取任務。在東溪鎮，執法官紅溪正等著你接下「狼臨城下」，這是你最先能接的任務之一。",
       "objectivesTitle": "目標",
       "objectivesBody": "擊殺特定敵人、收集物品，或與世界中的某物互動。畫面上的任務追蹤器會隨著你的進展計算進度。若你改變心意，可以從任務記錄中放棄一項任務，日後再從發布者那裡重新接取。",
       "turninTitle": "繳交任務",
       "turninBody": "將完成的任務帶到它的繳交標記處（地圖會指示位置），即可換得經驗值、金幣，以及通常會有一件配合你職業挑選的裝備。那通常就是把任務交給你的人，不過有些任務會讓你轉而前往另一個人那裡。",
       "partyTitle": "組隊接任務",
-      "partyBody": "附近的隊伍成員會共享擊殺與目標進度，所以一起接任務只會更快，絕不會更慢。你也可以與隊伍分享任務：用 /share 指令將它以可點擊的連結貼到聊天中，任何符合條件的附近成員都能一鍵接取同一項任務。",
+      "partyBody": "附近的隊伍成員會共享擊殺與目標進度，所以一起接任務只會更快，絕不會更慢。你也可以與隊伍分享任務：用 /share 指令將它以可點擊的連結貼到聊天中，任何符合條件的成員都能一鍵接取同一項任務。",
       "storyTitle": "一條主線貫穿其中",
       "storyBody": "從你在東溪鎮的第一批跑腿差事開始，亡者出了問題。一個邪教正在運作，線索向北穿過每個區域。循線追查，便能查出幕後主使是誰。",
       "soloNote": "主線劇情一路到每個篇章的結局都可以單人完成，而那結局是一座五人地城。",
       "typesTitle": "你會見到的任務種類",
       "typesBody": "大多數任務都屬於幾種熟悉的形式之一。畫面上的追蹤器會明確指出每一個任務的要求，讓你絕不會無所適從。",
       "typeSlayTitle": "擊殺",
-      "typeSlayBody": "削減一群野獸，或藉由擊敗指定數量的某種標記敵人來瓦解一個邪教的掌控。遊戲中的第一個任務，清除東溪大道上的群狼，便是這類任務。",
+      "typeSlayBody": "削減一群野獸，或藉由擊敗指定數量的某種標記敵人來瓦解一個邪教的掌控。你最初的任務之一，清除東溪大道上的群狼，便是這類任務。",
       "typeGatherTitle": "收集",
-      "typeGatherBody": "從世界中或從敵人的掉落物收集物品：草藥、礦石、遺失的書信、一個邪教陰森的施法材料。有些物件只會從特定的敵人身上掉落，所以狩獵與收集相輔相成。",
+      "typeGatherBody": "從世界中或從敵人的掉落物收集物品：草藥、礦石、一個邪教陰森的施法材料。有些物件只會從特定的敵人身上掉落，所以狩獵與收穫相輔相成。",
       "typeInteractTitle": "互動",
       "typeInteractBody": "使用、淨化或閱讀世界中固定的某物：一座被玷污的墳墓、一句刻在岸邊岩石上的警語、一道封印的地穴之門。走到標記前並對它採取行動。",
       "typeMusterTitle": "召集防禦",
@@ -1716,21 +2745,27 @@ export const zh_TW: EnTranslations = {
       "intro": "當開放世界不夠盡興時，召集一支隊伍踏入副本：一份專為你的隊伍打造的地城私人副本。",
       "party": "地城為五人小隊設計。最終的團隊副本則供十人挑戰。",
       "soloLead": "每座地城都以一個可單人完成的前導任務開場，讓你隨時都清楚自己為何而戰。",
-      "levelAround": "約 {n} 級",
       "levelExact": "{n} 級",
       "levelBand": "等級 {min} 至 {max}",
       "partySize": "{n} 名玩家",
+      "levelAround": "約 {n} 級",
       "raidSize": "十名玩家，{n} 級",
       "hollowName": "空墓地穴",
-      "hollowBody": "一座被盜墓洗劫的禮拜堂地穴，新死的亡者拒絕安息。新隊伍的第一個真正考驗。",
       "bastionName": "沉沒堡壘",
-      "bastionBody": "一座沉入沼澤、被遺忘的要塞，由溺亡的守軍與不斷上漲的潮水本身所據守。",
       "templeName": "沉沒神殿",
-      "templeBody": "沼澤大道旁一座沉沒的神龕，是為好奇且準備充分者預備的支線之路。",
       "sanctumName": "墓龍聖所",
+      "hollowBody": "一座被盜墓洗劫的禮拜堂地穴，新死的亡者拒絕安息。新隊伍的第一個真正考驗。",
+      "bastionBody": "一座沉入沼澤、被遺忘的要塞，由溺亡的守軍與不斷上漲的潮水本身所據守。",
+      "templeBody": "沼澤大道旁一座沉沒的神龕，是為好奇且準備充分者預備的支線之路。",
       "sanctumBody": "棘峰的黑暗核心，邪教漫長的圖謀在此達到恐怖的頂點。",
       "raidName": "最終團隊副本",
-      "raidBody": "在一道封印的皇家大門之後，等待著一場十人試煉：一場多階段的戰鬥，以及一股不死的力量，需要整個團隊齊心將其終結。先掙得入內的資格，再帶上九位夥伴。",
+      "raidBody": "在一道封印的皇家大門之後，等待著一場十人試煉：一場多階段的戰鬥，以及一股整個團隊必須齊心遏止的不死力量。先掙得入內的資格，再帶上九位夥伴。",
+      "heroicTitle": "英雄模式",
+      "heroicBody": "每座五人地城，以及團隊副本本身，都有一個等在等級上限之後的英雄版本。同樣的殿堂，為裝備精良的終局隊伍重新打造：一切都打得更痛，沒有什麼能靠雙腿甩開，首領更是對昏迷與緩速完全免疫。先超越普通版本吧；英雄難度假定你早已做到。",
+      "heroicHowBody": "在你的隊伍認領副本之前先選好難度：輸入 /dungeon heroic，或切換隊伍選單上的「地城難度」開關。這個選擇由全隊共享，並在踏入大門時鎖定，因此一趟征程始終保持它被認領時的樣子。",
+      "heroicRewardsTitle": "英雄徽記與升級版戰利品",
+      "heroicRewardsBody": "英雄首領掉落你所熟悉的戰利品，經過升級並在提示框上標註「英雄」，而每趟征程的最終首領還會追加別處找不到的史詩裝備。那最後一擊也會為每位參與者留下英雄徽記：一種在高望的軍需官維克斯處花用的貨幣，他存貨中的戒指與項鍊是全王國唯一的珠寶。",
+      "heroicLockoutBody": "普通地城可以整天連刷。英雄難度則講求耐心：每座地城每天只獎勵一次英雄通關，團隊副本也為每種難度各保有一個每日鎖定。已通關的征程對它自己的隊伍永遠敞開，所以沒有人會被擋在自己掙得的戰利品之外。",
       "templeLoreTitle": "溺亡神殿，再深入一些",
       "templeLoreBody": "這座神殿有著自己的傳說，比你在別處追查的邪教更為古老。在微光湖的岸邊（那是一座飲下月光、又交還溺亡者的山中湖泊），一名孤獨的看守者守著一道蒼白光芒之門。在水面之下，一道冰冷的石階向下通往那裡。沉沒在此的人並非死於意外：他們是蒼白唱詩班，在禮拜中沉入水底，自此再未停止吟唱。古老的守衛在被湖水吞沒之前，在岩石上刻下了唯一一句警語，一段向他們稱之為溺月之物獻上的禱詞，其下另有一隻更沉穩的手添上了兩個字：它只是沉睡。",
       "cryptLeadTitle": "一道亡者本應永遠緊閉的門",
@@ -1758,11 +2793,11 @@ export const zh_TW: EnTranslations = {
       "tiersHeading": "難度",
       "tiersBody": "一座秘探提供不只一種難度。較高的難度會讓敵人更強，並擲入一項旅程詞綴，相應地也給予更豐厚的報酬。它同時要求你先累積幾個等級，才會放你進入。",
       "affixesHeading": "旅程詞綴",
-      "affixesBody": "較高難度的旅程會擲出一項詞綴，改變這趟探索的進行方式，從不安的亡者到污濁的空氣，再到搖搖欲墜的屋頂結構。它們同時提高了危險與獎勵。一座以墓穴為主題的秘探可能擲出以下任何一種：",
+      "affixesBody": "較高難度的旅程會擲出一項詞綴，改變這趟探索的進行方式，從不安的亡者到污濁的空氣，再到搖搖欲墜的屋頂結構。它們同時提高了危險與獎勵。每座秘探都會從契合自身主題的詞綴中抽取；就整個王國而言，詞綴池如下：",
       "marksHeading": "秘探印記",
       "marksBody": "通關秘探可賺取秘探印記，這是一種與你的錢幣分開存放的貨幣。在看守人處花用它們，以強化你的同伴，並取得在其他任何地方都找不到的裝備。",
       "whereHeading": "何處能找到",
-      "whereBody": "第一座秘探「崩塌的聖物庫」位於東溪谷地起始山谷中的聖物庫山丘。哈爾文修士在那裡看管著看板，待你準備就緒，他便會送你下去。"
+      "whereBody": "第一座秘探「崩塌的聖物庫」在起始山谷東溪谷的聖物庫山丘開啟。哈爾文修士在那裡看管著看板，待你準備就緒，他便會送你下去。他的巡迴並不止於此：越過泥沼濕地北緣的巨魔墳丘，這位看守人又為已站穩腳跟的秘探者開啟了「溺亡連禱」。"
     },
     "talentsPage": {
       "heading": "天賦與專精",
@@ -1770,12 +2805,13 @@ export const zh_TW: EnTranslations = {
       "whatHeading": "天賦的作用",
       "whatBody": "隨著升級，你會獲得天賦點數，可用於小幅且永久地強化你的技能與屬性。它們塑造職業的手感，使其偏向更高的傷害、更堅固的防禦或更強的治療。",
       "howHeading": "運作方式",
-      "howBody": "天賦在10級開放，隨著你向等級上限攀升，會持續獲得點數。你在職業的天賦面板中分配點數，而且可以儲存多套配置以在不同構築間切換。",
+      "howBody": "天賦在 10 級開放，隨著你向等級上限攀升，會持續獲得點數。你在職業的天賦面板中分配點數，較深的階層會隨著你的投入與升級而開放，而且你可以儲存多套配置以在不同構築間切換。",
       "shareNote": "一套完成的天賦配置可以複製成一段可分享的短代碼，交給朋友，對方只要把它直接貼進自己的天賦面板即可載入。",
+      "choiceNote": "每棵天賦樹上都有少數幾點是十字路口，而非單純的購買：該節點提供兩到三個選項，而你只能認定其中之一。你的下一次重置會重新開啟這個選擇，就像樹上的其他一切一樣。",
       "resetTitle": "沒有什麼是永久的",
-      "resetNote": "只要脫離戰鬥，你隨時都能重置天賦，所以早期的選擇絕不會是陷阱。儘管嘗試，看看自己喜歡什麼，並自由地改變主意。",
+      "resetNote": "只要脫離戰鬥且不在競技場對戰中，你隨時都能重置天賦，所以早期的選擇絕不會是陷阱。儘管嘗試，看看自己喜歡什麼，並自由地改變主意。",
       "specsHeading": "各職業的專精",
-      "specsBody": "每個職業都有數種專精，各有自己的角色定位和標誌性的著重方向。以下是它們全部的輪廓。打開某個職業即可查看其完整技能。"
+      "specsBody": "每個職業都有數種專精，各有自己的角色定位和標誌性的著重方向。在天賦面板中選擇其一，會賦予一項標誌性技能與一份專屬的持久精通。以下是它們全部的輪廓。打開某個職業即可查看其完整技能。"
     },
     "arenaPage": {
       "heading": "競技場與PvP",
@@ -1783,22 +2819,88 @@ export const zh_TW: EnTranslations = {
       "duelsHeading": "決鬥",
       "duelsBody": "向你遇到的任何玩家發起一場友誼決鬥。賭上的只有顏面，所以這是學習對戰組合或解決友好爭論最簡單的方式。",
       "coliseumHeading": "灰燼鬥獸場",
-      "coliseumBody": "Coliseum 是這個王國的競技場，你會在排名對戰中面對其他玩家，進行一對一或二對二的較量。每個級別都各自保有自己的排名，因此一場勝利能讓你在那道天梯上往上爬，讓整個王國都看得見。",
+      "coliseumBody": "灰燼競技場是這個王國的競技場，你會在排名對戰中面對其他玩家，進行一對一或二對二的較量。每個級別都各自保有自己的排名，因此一場勝利能讓你在那道天梯上往上爬，讓整個王國都看得見。開啟競技場視窗即可報名參加某個級別，可以獨自一人，也可以與你的搭檔一同上場。",
       "fiestaHeading": "二對二嘉年華",
-      "fiestaBody": "嘉年華是一種快節奏的二對二模式，以短回合進行。每回合之間你都會抽選強化，這些快速的增益能即時重塑你的配套，讓每場對戰都不盡相同。",
+      "fiestaBody": "嘉年華是一種快節奏的二對二混戰，以一場連續不斷的對戰進行，每位鬥士都被拉到同一起跑線上。隨著戰鬥推進，你會抽選強化，這些快速的增益能即時重塑你的配套，讓每場對戰都不盡相同。",
       "augmentsNote": "強化與增益只在該場對戰中有效。它們著重於即興、好玩的搭配，而非長久的力量，所以沒有人能花錢買到勝利。",
       "wavesTitle": "強化如波浪般湧來",
-      "wavesBody": "嘉年華的每一回合都會發給你一份新的選項，而隨著對戰進行，選項也愈來愈大膽。你會一波接一波地堆疊配套，每次從幾個選項中挑一個，並保留到這場對戰結束。",
+      "wavesBody": "一場嘉年華對戰會隨著進行不斷發給你新的選項，而戰鬥拖得愈久，選項也愈來愈大膽。你會一波接一波地堆疊構築，每次從幾個選項中挑一個，並保留到這場對戰結束。",
       "waveSilverTitle": "白銀",
       "waveSilverBody": "開場那波：乾淨俐落的單一屬性增益，磨利你職業的基本功。",
       "waveGoldTitle": "黃金",
       "waveGoldBody": "中段那波：雙刃般的搭配組合，你的配套在此開始成形，奏出旋律。",
       "wavePrismaticTitle": "彩虹",
       "wavePrismaticBody": "最後那波：足以定義整套配套、能融化整個畫面的爆發，刻意設計得荒謬到讓人拍案叫絕。",
+      "yumiHeading": "守護Yumi",
+      "yumiBody": "Protect Yumi是一種在迷宮中進行的團隊目標模式：每隊守護自己的貓咪使魔，同時獵殺對方的。兩隻貓咪會不時閃現到迷宮的新角落，戰鬥在防守、追獵與尋回之間不斷搖擺。可選擇3對3或5對5排隊；陣亡只會讓你短暫離場。",
       "powerupsTitle": "鬥技場中的能量道具",
       "powerupsBody": "戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。",
       "ladderHeading": "在天梯上攀升",
       "ladderBody": "排名對戰會長期記錄你的名次。查看排行榜便能看到自己的位置，以及誰穩坐王國之巔。"
+    },
+    "valeCupPage": {
+      "heading": "溪谷盃",
+      "intro": "母豬場上的野豬球：選一面旗幟、選一個位置，把塞滿稻草的野豬皮球踢過守門員，去爭奪銅奶桶。不流血，無戰利品，只有看台的歡呼。",
+      "loreHeading": "野豬球與豐收休戰",
+      "loreOldSow": "早在亡者甦醒之前，東溪的農工們就在收割後的麥茬地上玩野豬球：兩群人，一張塞滿稻草的野豬皮，和拖到綠地兩端的兩扇貨車門。第一顆球「老母豬」，如今鍍銅掛在酒館壁爐上方。",
+      "loreTruce": "當灰燼競技場開始批准戰爭競技時，紅溪元帥以更溫和的方式回應：在老綠地上立下長期的豐收休戰。貨車門變成了球門，綠地有了圍牆、看台和一個名字：母豬場。而獎品始終是優勝者們共飲的那只癟了的奶桶：銅奶桶。",
+      "howHeading": "怎麼玩",
+      "howQueue": "透過溪谷盃視窗隨處排隊，或到母豬場大門找場地管理員布拉姆。選擇從一對一到五對五的賽級、一面旗幟國度和一個運動位置；可以單排，也可以帶上隊伍。",
+      "howMatch": "開球時你的職業技能會被換成運動技能，賽後原樣恢復。踢球以地面準星瞄準，球會在擋板上反彈，帶球就是推著球跑。在全場結束前比對方進更多球；平手進入黃金進球。",
+      "howTruce": "母豬場上無人流血：鏟搶只會讓人翻滾，什麼都不會造成傷害，寵物也會場外休息。",
+      "spectateBody": "球場同一時間只進行一場比賽，任何人都可以走到看台觀賽。",
+      "bettingHeading": "欄杆邊的小賭一把",
+      "bettingBody": "比賽成形期間，母豬場的觀眾可以押注其中一方：賭注匯成獎池，終場哨響時，勝方按各自押注的比例瓜分敗方的獎池。平局，或是無人押中的冷門，會退還每一枚錢幣。上場比賽的球員不得押注自己的比賽，而欄杆邊會記下你勝、負與淨賺錢幣的生涯紀錄。",
+      "practiceHeading": "練習賽與閒置的球場",
+      "practiceBody": "溪谷盃視窗也提供練習：一座球場的私人複本，由機器人補滿雙方，任何內容都不計入你的戰績。正式比賽還差一兩個人？稍候片刻，機器人便會補齊隊伍，而任何有機器人上場的比賽都是友誼賽，絕不計入排名。而當母豬場閒置時，機器人會上演一場表演賽，你可以從看台上觀賞、也可以下注；一旦真正的玩家準備就緒，表演賽便會讓出球場，所有賭注全數退還。",
+      "nationsHeading": "八個旗幟國度",
+      "nationsBody": "每支隊伍都在一面旗幟下比賽。隊長選擇國度；若雙方舉同一面旗，客隊使用反轉配色。",
+      "nationVale": "綠與金，揚著麥捆旗：主場球隊，骨子裡都是農工。",
+      "nationMirefen": "青與灰，蒼鷺旗下：耐心、腿長、從不著急。",
+      "nationThornpeak": "冰藍與白，山峰旗下：步伐穩健、性子倔強。",
+      "nationColiseum": "紅與黑，交叉雙劍：他們踢起球來仍像在打仗。",
+      "nationChoir": "淡藍與銀，鈴鐺旗下：詭異、精準、非常安靜。",
+      "nationOgre": "橙與棕，鐵拳當先：肩膀開路，並引以為傲。",
+      "nationMoon": "紫與銀，彎月旗下：夜行的球員，腳步輕盈。",
+      "nationCopperdig": "銅與褐，別著鎬頭：跑不停歇的礦工。",
+      "rolesHeading": "運動位置",
+      "rolesBody": "你的位置決定你帶上球場的技能。人人都會踢球；其餘看性情。在一人制與二人制的級別中，每個人都使用全能配套，因此位置的選擇要從三人制起才真正發揮作用。",
+      "rewardsHeading": "休戰規矩",
+      "rewardsBody": "休戰規矩意味著沒有經驗也沒有戰利品：一場分出勝負的比賽會計入你的戰績和優勝者榜，而一場勝利也會計入當日的獎勵任務。中途棄賽會讓你的位置空缺，而場地管理員可記著呢。"
+    },
+    "deedsPage": {
+      "intro": "功績之書記錄著你在這個世界所做的一切，從走出新手山谷的第一步，到王國所能提供的最艱難的戰鬥。一邊遊玩一邊贏得功績，佩戴它們授予的頭銜，看著你的名望不斷攀升。",
+      "howHeading": "功績如何運作",
+      "howBody": "功績以單一角色為單位逐一贏得並留存，因此你所扮演的每一位英雄都會各自累積自己的功績之書；只有王國的排行榜才會匯總你所扮演的所有角色的名望，且每個功績只計一次。每個功績都在遊戲內的功績之書中清楚寫明它的要求，讓你始終知道該追求什麼；你也可以追蹤心儀的功績，讓它們在遊玩時常在眼前。少數功績會保持隱密，只有在你贏得它們之後才會揭曉。功績之書也對自己誠實：凡是你過往的記錄能夠證明的，它都會當場記上功勞，因此老練的玩家絕不會翻開一頁空白；只有計數類的功績才會從零開始累計。",
+      "renownHeading": "名望",
+      "renownBody": "名望是功績之書背後的分數。你贏得的每個功績都價值固定的點數，而你的總分只增不減，因此清閒的一週絕不會讓你失去已有的成績。少數功績取決於運氣而非技巧，而壯舉則自成一份榮譽，因此這兩者都不提供任何名望。",
+      "rewardsHeading": "頭銜與邊框",
+      "rewardsBody": "這些獎勵純粹是為了炫耀，而這正是它們的意義所在。有些功績會授予你可佩戴的頭銜，或是為你的名字增添裝飾的邊框，絕不會給出任何讓你的英雄變強的東西。在功績之書中選擇你想要的頭銜，它便會隨你出現在銘牌上、聊天中與排行榜上，供所有人觀看。",
+      "chroniclesHeading": "編年史",
+      "chroniclesBody": "每個區域都保有自己的編年史，這是一組由當地記錄者收集的功績，他們自願承擔起記錄每一位過路旅人的責任。東溪谷的Saul是其中的第一位。一部編年史分為若干章節，你可以按任意順序來完成它們。",
+      "featsHeading": "壯舉",
+      "featsBody": "壯舉自成一類：它們是傳承與世界首創的記錄，是那些與逝去紀元相關、或只會發生一次的功績。它們不帶來任何名望，也不計入完成度，將作為對往昔功業的紀念被永久保存。",
+      "catalogHeading": "功績全錄",
+      "catalogBody": "這裡列出了功績之書所能容納的每一個功績，按類別整理。隱密的功績被特意略去，等待你自己去發現。在遊戲內打開功績之書，即可查看每個功績的具體要求。",
+      "standingsNote": "各王國會持續統計所有帳號累積的名望。想知道誰位居何處，請在遊戲內打開排行榜並轉到其名望分頁；排名在那裡，而不在維基上。",
+      "catHeading": "{label}（{count}）",
+      "colName": "功績",
+      "colRenown": "名望",
+      "colReward": "獎勵",
+      "featTag": "壯舉",
+      "rewardBorder": "邊框",
+      "cat": {
+        "progression": "成長",
+        "combat": "戰鬥",
+        "dungeon": "地城",
+        "delve": "秘探",
+        "chronicle": "編年史",
+        "collection": "收藏",
+        "pvp": "PvP與競技",
+        "social": "社交",
+        "exploration": "探索",
+        "feat": "壯舉"
+      }
     },
     "wishPage": {
       "heading": "我希望早點知道的事",
@@ -1806,9 +2908,9 @@ export const zh_TW: EnTranslations = {
       "i1Title": "你不會選錯職業",
       "i1Body": "每個職業都能撐住場面並達到等級上限。選擇你喜歡的奇幻設定，而不是別人口中所謂最好的那個。",
       "i2Title": "死亡幾乎不會讓你付出代價",
-      "i2Body": "當你倒下時，會釋放靈魂並在最近的墓地復活，再自行返回原處。不會損失任何經驗，所以放心去冒險、去學習。",
+      "i2Body": "當你倒下時，你會化為鬼魂在最近的墓地甦醒。跑回你的軀體旁即可免費復活，或者接受靈魂醫者的當場復生，以一段短暫的虛弱換取這份便利。經驗、裝備與錢幣都絕不會失去，所以放心去冒險、去學習。",
       "i3Title": "天賦不是陷阱",
-      "i3Body": "天賦在10級解鎖，並且隨時都能重置，所以你早期的選擇絕不是永久的。",
+      "i3Body": "天賦在10級解鎖，而且只要脫離戰鬥，想何時重置都可以，所以你早期的選擇絕不是永久的。",
       "i4Title": "跟著任務的軌跡走",
       "i4Body": "任務是最快的升級方式，並會帶你走遍整個世界。當你不確定該往哪走，就去找下一個標記。",
       "i5Title": "讓你的裝備保持更新",
@@ -1834,6 +2936,10 @@ export const zh_TW: EnTranslations = {
       "lead": "近距離端詳這個世界的英雄、怪物與惡魔。選擇一個模型，再拖曳即可轉動它。",
       "intro": "這裡的每一個身影，都與你在遊戲中遇見的模型一模一樣，在你的瀏覽器中即時呈現。挑一個來載入吧。",
       "groupClasses": "職業",
+      "groupForms": "德魯伊形態",
+      "formBear": "巨熊形態",
+      "formCat": "狼形態",
+      "formTravel": "迅捷形態",
       "groupCreatures": "生物",
       "groupPets": "術士惡魔",
       "pickerLabel": "選擇要檢視的模型",
@@ -1843,15 +2949,19 @@ export const zh_TW: EnTranslations = {
     "gear": {
       "intro": "裝備是你角色身上穿戴的物件與隨身攜帶的物品。更好的裝備是變強最穩當的途徑，而其中大部分只要遊玩就能取得。",
       "slotsTitle": "你能裝備什麼",
-      "slotsBody": "你有一個武器欄位與七個護甲欄位。每種職業只能使用特定的武器，並穿戴不超過自身重量等級的護甲，無論是布甲、皮甲或鎖甲，因此適合你的升級品，正是為你的職業打造的那些。在這個範圍內，用你所能找到最好的物件填滿每一個欄位。",
+      "slotsBody": "你有一個武器欄位、七個護甲欄位，以及三個珠寶欄位：一個頸部與兩個手指。每種職業只能使用特定的武器，並穿戴不超過自身重量等級的護甲，無論是布甲、皮甲或鎖甲，因此適合你的升級品，正是為你的職業打造的那些。珠寶則完全不分重量：任何職業都能佩戴自己掙得的一切。在這個範圍內，用你所能找到最好的物件填滿每一個欄位。",
       "slotMainhand": "武器",
       "slotHelmet": "頭部",
+      "slotNeck": "頸部",
       "slotShoulder": "肩部",
       "slotChest": "胸部",
       "slotWaist": "腰部",
       "slotLegs": "腿部",
       "slotGloves": "手部",
       "slotFeet": "腳部",
+      "slotFinger": "手指",
+      "bagsTitle": "袋子與攜物空間",
+      "bagsBody": "你拾取的一切都收在同一個共用背包裡，而你可以透過裝備袋子來擴充它。你的背包視窗設有四個袋子欄位：點擊背包中的袋子，即可將它掛入空閒的欄位，而你所裝備的每個袋子都會增添各自的空間。簡易的袋子是廉價的商人貨品，較寬敞的則從野獸身上掉落，最上乘的則出自地城首領，因此你的攜物空間會隨著裝備一同成長。",
       "qualityTitle": "品質一覽",
       "qualityBody": "每件物品都有一個品質，其名稱也會以對應的顏色標示，讓你一眼就能看出它的價值。從最常見到最珍貴：",
       "qualityPoor": "粗劣",
@@ -1863,11 +2973,13 @@ export const zh_TW: EnTranslations = {
       "qualityNote": "品質愈高通常代表屬性愈好，但品質只是一種提示，並非定則。一件與你職業和等級相配的裝備，可能勝過一件更花俏的。",
       "upgradeTitle": "保持裝備更新",
       "upgradeBody": "用一件全新的升級品換下舊裝備，對你的助益遠勝於穿著早已過時的裝備打得再完美。當有更好的東西掉落，或任務提供升級時，就收下吧。別把你的好物品留到以後。",
-      "itemLevelBody": "若你想快速比較兩件裝備，可在選項中開啟「顯示物品等級」。屆時每件武器與護甲都會顯示一個物品等級，這是依其來源粗略衡量其強度的單一數值，讓你一眼就能看出哪件升級更有分量，即使是不同部位之間也行。",
+      "itemLevelBody": "若你想快速比較兩件裝備，可在選項中開啟「顯示物品等級」。在世界中贏得的裝備，來自敵人與任務者，便會顯示一個物品等級，這是依其來源粗略衡量其強度的單一數值，讓你一眼就能看出哪件升級更有分量，即使是不同部位之間也行。沒有這類來源的物品，例如普通的商人基礎貨品與新手裝備，則不會顯示物品等級，因此缺少數值是正常現象，而非瑕疵。",
       "sourcesTitle": "裝備從何而來",
-      "sourcesBody": "你早期的升級大多來自任務獎勵，因此完成任務比刷怪更划算。敵人被你擊敗時會掉落裝備，城鎮裡的商人販售扎實的基本款，玩家市場則讓你能向其他冒險者購買。",
+      "sourcesBody": "你早期的升級大多來自任務獎勵，因此完成任務比刷怪更划算。敵人被你擊敗時會掉落裝備，城鎮裡的商人販售扎實的基本款，工匠會把採集來的材料製成可穿戴的裝備，玩家市場則讓你能向其他冒險者購買。而在攀上頂峰之後，兩種印記貨幣能買到別處找不到的裝備：秘探印記在秘探看守人處花用，英雄徽記則在英雄軍需官處花用。",
+      "soulboundTitle": "靈魂綁定：屬於你，也僅屬於你",
+      "soulboundBody": "許多珍貴的裝備是靈魂綁定的，從你取得的那一刻起便與你的角色綁定。靈魂綁定的物品無法交易、無法郵寄、無法賣給商人，也無法在市場上架；它如今是你故事的一部分，沒有其他人能替你佩戴它。",
       "setsTitle": "套裝與套裝效果",
-      "setsBody": "最稀有的護甲以成套的系列出現，數件裝備經過設計，使其外觀與戰鬥表現渾然一體。同時穿上足夠多的同系列裝備，套裝便會啟動，在每件裝備本身的屬性之上額外賦予加成，而你穿得越多，效果就越強。這些裝備掉落自接近等級上限的最艱難團隊內容，因此追求一整套裝是經典的終局目標。",
+      "setsBody": "有些護甲以成套的家族出現，數件裝備經過剪裁，使其外觀與戰鬥表現渾然一體。同時穿上足夠多的同家族裝備，套裝便會甦醒，在每件裝備本身的屬性之上額外賦予加成，而你穿得愈多，效果就愈強。少數這樣的家族會在你升級途中作為珍貴的掉落現身；其中最頂尖的則來自接近等級上限的最艱難團隊內容，因此追求一整套裝是經典的終局目標。",
       "consumablesTitle": "消耗品",
       "consumablesIntro": "有些物品用一次就能帶來即時的好處。它們是便宜的保險，所以隨身備上幾個吧。",
       "consumablesPotions": "藥水在你使用的那一刻就能回復生命或法力，即使在戰鬥中也行，這讓它們在一次拉怪出錯時成了關鍵的救命之物。它們共用一段短暫的冷卻時間，所以請挑準一個好時機使用。",
@@ -1884,22 +2996,66 @@ export const zh_TW: EnTranslations = {
       "cosmeticsCache": "其中少數來自一個神秘的外觀寶箱，那是一份封存的獎賞，開啟時會隨機擲出三種品質等級之一，並授予相符的外觀。它純粹是為了好看：裡頭沒有任何東西能讓你變強，只會讓你更賞心悅目。",
       "cosmeticsApply": "在你的角色畫面上的外觀欄位設定當前的造型，並在所有已解鎖的項目間自由切換。"
     },
+    "professions": {
+      "intro": "除了戰鬥與任務之外，這個世界還會獎勵你耕耘土地與鍛造：採集原材料，透過十種製作行業將其打造成裝備與物品，並在這些行業所代表的十種命途之一中確立自己的身分。",
+      "gatherTitle": "採集：採礦、伐木與草藥學",
+      "gatherIntro": "三種採集行業讓你從世界中直接取得原材料：採礦從礦脈中開採礦石與石料，伐木從林地中砍伐木材，草藥學採集野生生長的草藥與植物。三者分別計算進度，從事其中一項不會拖慢你在另一項上的進展。初次接觸這一切嗎？東溪鎮的工頭歐戴爾有一項簡短的差事，「人人皆可從事的行業」，會帶你走過你的第一次採集。",
+      "gatherWhatTitle": "資源節點",
+      "gatherWhatBody": "礦脈、林地與藥草叢作為可見、無主的地物分布在溪谷與濕地各處。走近並與之互動即可採集其中的資源。採集過一個節點後，它需要一段時間才能恢復供你本人再次採集，但這從不會阻擋其他玩家：其他人可以在此期間採集同一個節點。",
+      "gatherProficiencyTitle": "熟練度",
+      "gatherProficiencyBody": "每次成功採集都會提升你在該採集行業的熟練度，而你的角色資訊面板會分別記錄每一門行業。多加練習永遠不會損及你的進展，只會不斷為它增添。",
+      "gatherToolsTitle": "行業工具",
+      "gatherToolsBody": "商人出售各採集行業的基礎工具，更好的工具則可以製作出來。目前採集節點並不需要任何工具：工具是為日後更豐富的節點所鋪的基礎，屆時更高階的鎬、斧與鐮刀將是採集它們的門路。",
+      "harvestTitle": "從狩獵本身採收",
+      "harvestBody": "採集並不止於節點。有些被擊倒的野獸可以採收出部件：獸皮、獠牙、絲線，以及更稀奇的東西，直接從屍體上取得，與它的普通戰利品並存。每次擊殺只容一位採收者：誰先動手，就全歸誰所有。每一次也都由你選擇：把屍體能給的一切盡數剝下，或專注於單一部件，換取更精細的品級。任何角色都能採收，無需入行也無需訓練，而一件特別精良的部件甚至會冠上採收者的名字。",
+      "focusTitle": "城鎮專注",
+      "focusBody": "每座主據點城鎮都為到訪的採收者備有一面城鎮專注面板：站在鎮上，從小地圖旁打開它，把一小筆專注點數投向你在意的部件類型。此後每具屍體上的專注部件都會精細一個品級、也略微豐厚一些；你的分配會跟著角色走遍天涯，而且日後任何一次回到鎮上，都能免費重新調整。",
+      "craftTitle": "十大製作行業",
+      "craftIntro": "十種製作行業將採集到的材料轉化為成品裝備與物品：製甲、製械與珠寶加工將原材料塑形為可穿戴裝備；煉金術與工程學依靠反覆試驗；烹飪、銘文與附魔各自作用於其他行業的產出；裁縫與製皮則依照精確的圖樣進行。它們共同構成一個輪環，每種行業都與兩個鄰居相鄰，並與另一種行業相對。",
+      "craftRingTitle": "專精之輪",
+      "craftRingBody": "十種行業排列在一個固定的輪環上，行業在輪環上的位置很重要：相鄰的行業彼此之間的共通之處比處於對面的行業更多。專注於一種行業應當讓人感覺像是加入了一個相關行業組成的家族，而不是選擇了一項孤立的技能。",
+      "craftRecipesTitle": "配方與材料",
+      "craftRecipesBody": "每個配方都需要你採集或購買的特定材料。最簡單的配方只需要普通材料，從一開始就能製作，因此你一拿起一門行業就能立刻上手。配方清單仍在持續補齊：少數行業還在等待它們的第一批配方，而隨著這些行業成長，會有更多配方登場。",
+      "craftHowTitle": "製作視窗",
+      "craftHowBody": "開啟製作視窗（預設按鍵 T），即可看到你已學會的每一個配方、各自所需的材料，以及你手邊現有的材料；材料齊備時，一鍵即可完成製作。常見的配方可以在世界任何地方製作。少數進階的工具配方則要求你站在高守哨站的製作站前。",
+      "craftMasteryTitle": "技能與精通",
+      "craftMasteryBody": "成功製作會提升你在該行業的技能，而技能從不會把行業的配方鎖起來：只要你會某個配方並持有其材料，就能嘗試製作。技能為你換來的其實是品質，熟練的手藝能做出更精良的作品。唯一的例外是組合配方，它們要求你先在兩門相關行業中都證明過自己，才會開放。",
+      "craftComboTitle": "組合配方",
+      "craftComboBody": "除了單一行業自身的配方列表之外，這個輪環還支援需要同時調用兩個相鄰行業的組合配方，用以獎勵那些在輪環上投入了相鄰行業的角色，而非只專精孤立一項的人。製作者必須自己同時掌握這兩門行業；夥伴的技能無法替代其中任一半。",
+      "archetypeTitle": "十大命途",
+      "archetypeIntro": "十種行業各自也代表一種命途，一種超越單純從事該行業本身的更廣闊身分。你的當前命途一次只能有一個，而非一份清單：你只承載一個命途，但如果願意，之後可以更改。",
+      "archetypeChooseTitle": "選擇你的命途",
+      "archetypeChooseBody": "宣告一種命途將會是一個劇情時刻：一個正式接納你進入該身分的任務。那條路仍在修築之中，所以眼下每個角色都帶著這個尚未做出的選擇行走世間，而在此期間，每種行業都能推進到稀有品質層級。",
+      "archetypeSwitchTitle": "回心轉意",
+      "archetypeSwitchBody": "宣告也不會是一紙終身判決。目前的計畫是：在拿起新行業之前，先向你的舊行業完成一次可重複的贖罪，而每轉換一次，贖罪就會加重一分，因此這個選擇始終有其分量，而非毫無代價。它和宣告本身一樣，仍在路上。",
+      "archetypeIdentityTitle": "你的命途意味著什麼",
+      "archetypeIdentityBody": "你當前的命途，是關於你的角色在這個世界中是誰的一種宣告，會體現在他人與世界如何稱呼你之中。它所附帶的具體獎勵與認可仍在完善之中；請隨著系統的完善持續關注。"
+    },
     "economy": {
       "intro": "錢幣是整個世界的潤滑劑：它能購買你的裝備、補給與旅行用品，並在玩家之間易手。這一切只要遊玩就能自然取得，所以不妨把這一頁當成一張地圖，看看你的錢從何處來、又往何處去。",
       "coinTitle": "金幣、銀幣與銅幣",
       "coinBody": "錢幣分為三種。一百枚銅幣換一枚銀幣，一百枚銀幣換一枚金幣，因此你的錢袋會從最小的硬幣開始累積。你可透過任務獎勵、拾取被擊敗的敵人，以及變賣不再需要的物品來賺取金錢。",
       "vendorsTitle": "商人與他們的存貨",
       "vendorsBody": "城鎮與哨站裡到處是商人，各有各的生意。補給商備有食物與飲品，武器匠與盔甲匠出售裝備，軍需官則準備實用的旅行用品。走到他們面前，便能看到他們在賣什麼。",
-      "marksTitle": "第二種貨幣：秘探印記",
-      "marksBody": "錢幣並非你唯一能積攢的東西。秘探會給予秘探印記，這是一種獨立的貨幣，只能在秘探看守人處花用，用於同伴升級以及在別處找不到的裝備。它們絕不會與你的錢幣混在一起。",
+      "marksTitle": "印記與徽記：錢幣之外的貨幣",
+      "marksBody": "錢幣並非你唯一能積攢的東西。秘探會給予秘探印記，只能在秘探看守人處花用，用於同伴升級以及在別處找不到的裝備。英雄地城的征程則會在最終首領身上留下英雄徽記，在高望的英雄軍需官處花用，換取王國任何其他角落都不出售的珠寶。兩者都絕不會與你的錢幣混在一起。",
+      "bankTitle": "銀行",
+      "bankBody": "每座主城都設有鍍金保險箱的分號，它是這片大陸的銀行商號。與那裡的司庫交談即可打開你的保險庫：一處背包之外的私人儲物空間，伴隨角色終身。無論你下次造訪哪家分號，寄存的物品都會安然等候。",
+      "bankHow": "保險庫打開後，點擊背包中的物品即可存入，點擊保險庫中的物品即可取回。保險庫只存放物品，不存放錢幣，任務物品也會留在你身上。旅途中背包裝滿時，還有一個按鈕可將全部製造材料一鍵存入。",
+      "bankSlots": "新開的保險庫空間不大，但會隨你一同成長。司庫出售更多格位，價格逐級走高；線上遊玩還能獲得額外空間，例如驗證信箱、連結帳號，以及引薦好友加入遊戲。",
       "buyingTitle": "買與賣",
-      "buyingBody": "站在商人附近即可開啟他的視窗。只要你負擔得起，便能買下他所販售的任何商品，也能將背包裡大部分的東西換成錢幣。若你不小心賣錯了東西，商人會為你保留近期的售出物，讓你能買回來。",
+      "buyingBody": "與商人交談並選擇瀏覽他的貨品，他的商店便會開啟，內含三個分頁：選購、出售與買回。選購分頁陳列他所有的存貨，只要你負擔得起便能買下。出售分頁列出你背包中他願意收購的物品，而出售一件帶有自身擲選品質的物品時，會先請你確認，好讓珍貴的一件絕不會因失誤而流失。若你割捨了某樣讓你後悔的東西，買回分頁會保留你近期的售出物，讓你能以當初賣得的錢幣把它們買回來。",
       "junkTitle": "清理雜物",
-      "junkBody": "你用不上的掉落物仍能賣給任何商人，因此每當你經過城鎮時就清空背包，別讓它們塞滿。真正一文不值的零碎雜物也可以直接丟棄以騰出空間。",
+      "junkBody": "你用不上的掉落物仍能賣給任何商人，因此每當你經過城鎮時就清空背包，別讓它們塞滿。商人的出售分頁甚至備有一個一鍵按鈕，能一次賣出所有粗劣品質的雜物。真正一文不值的零碎雜物也可以直接丟棄以騰出空間。",
       "tradeTitle": "與其他玩家交易",
       "tradeBody": "你可以與站在你身旁的任何人面對面交易。雙方都把物品與錢幣放進一個共享的視窗，唯有兩人都確認後交換才會成立，因此誰都不會吃虧。這是把掉落物交給朋友或敲定一筆買賣最簡單的方法。",
+      "mailTitle": "渡鴉郵驛",
+      "mailBody": "每座主據點城鎮都立著一根雕刻的渡鴉石柱：那是渡鴉郵驛的信箱，這個王國的信件服務。站在石柱旁，即可寫信給任何一位指名的角色，無論是在線的朋友還是久未上線的故人，並支付一小筆郵資，在信中附上錢幣或貨物。渡鴉需要飛上一小段時間；當牠降落時，一個信封指示會告訴收件人有東西在等著。",
+      "mailHow": "收信的方式正好相反：站在任何石柱旁閱讀你的信件，把它們所載之物收進你的錢袋與背包。信件不會永遠等候，所以要在渡鴉對你死心之前領取。有兩樣東西郵驛一概拒收：靈魂綁定的物品與任務物品，它們要麼隨你同行，要麼哪兒也去不了。另外，繳交一個漂亮的任務之後，記得留意石柱；有些任務給予者會寫信。",
+      "dailyTitle": "每日獎勵",
+      "dailyBody": "畫面上的寶箱按鈕能開啟每日獎勵視窗。每天都會安排幾項任務：完成任務、在灰燼競技場中作戰、贏得一場溪谷盃比賽，並提供一次免費轉動獎輪的機會，這一切都能換取當日排名的點數；而當日累積最多的玩家，會為持有選用社群代幣者共享一份獎池。這一切都不會在遊戲中賦予任何戰力。視窗本身會載明當日規則與參賽資格，顯示排行榜，並保留你的歷史紀錄。",
       "marketTitle": "世界市場",
-      "marketBody": "商人經營著世界市場，那是一個由玩家驅動的交易所，讓你能與或許從未謀面的人買賣。與商人對話即可開啟它。商人也會在那裡長期掛售自己的一批貨品，因此即使沒有其他玩家上架，也總有東西可買。",
+      "marketBody": "商人經營著世界市場，那是一個由玩家驅動的交易所，讓你能與或許從未謀面的人買賣。與東溪鎮的商人交談，或找高守哨站上的拍賣師沃斯，即可開啟它：兩位管理者服務於同一個共享市場。商人也會在那裡長期掛售自己的一批貨品，因此即使沒有其他玩家上架，也總有東西可買。",
       "marketBrowse": "瀏覽：捲動列表或按名稱搜尋，找出待售的商品。每筆刊登都會顯示貨物、賣家，以及整堆的開價。",
       "marketPost": "刊登：從背包中選一堆物品，設定你的價格，然後刊登出去。在有人買下之前，貨物會由商人代為保管。未售出的刊登過一陣子會退回給你，若你改變心意，也可以提早取回其中一筆。",
       "marketCollect": "收取：當你的貨物售出後，所得款項會在商人處等著你。回去領取錢幣，連同任何未售出而退回的物品。每筆完成的交易，商人都會抽取一小筆費用。",
@@ -1924,7 +3080,7 @@ export const zh_TW: EnTranslations = {
       "chanLfg": "尋找隊伍。",
       "chanLfgBody": "一個選擇性加入、涵蓋全伺服器的頻道，用來尋找人一同挑戰地城。開啟它的分頁即可加入。",
       "chanGuild": "公會與幹部。",
-      "chanGuildBody": "供你公會使用的頻道。公會聊天能傳達給每一位成員；幹部頻道則僅供幹部使用。",
+      "chanGuildBody": "供你公會使用的頻道。公會聊天能傳達給每一位成員；幹部頻道則供幹部與公會會長使用。",
       "partyHeading": "組成隊伍",
       "partyBody": "對另一名玩家的名字按右鍵並選擇邀請。一支隊伍最多容納五名玩家，你們其中一人為隊長。",
       "partyCredit": "彼此靠近的隊伍成員會共享擊殺與任務進度，所以一起接任務只會更快，絕不會更慢。組成隊伍也是你以團隊身分踏入地城的方式。",
@@ -1934,7 +3090,7 @@ export const zh_TW: EnTranslations = {
       "lootCoinTitle": "錢幣。",
       "lootCoinBody": "一次擊殺所得的金錢，可以歸給拾取它的人，也可以在隊伍間平均分配。",
       "lootCommonTitle": "物品。",
-      "lootCommonBody": "普通的掉落物可以歸給拾取者，較好的掉落物則會擺出來擲骰，好讓每個人都有公平的機會。",
+      "lootCommonBody": "普通的掉落物可以在隊伍中輪流分配，或歸給拾取者，較好的掉落物則會擺出來擲骰，好讓每個人都有公平的機會。",
       "lootRollTitle": "需求、貪婪或放棄。",
       "lootRollBody": "當一件物品進行擲骰時，每位符合資格的成員若想要它便選擇需求，若只想當備品則選擇貪婪，或選擇放棄退出。骰點最高者勝出。",
       "lootMasterTitle": "物品分配者。",
@@ -1945,8 +3101,19 @@ export const zh_TW: EnTranslations = {
       "guildHeading": "公會",
       "guildBody": "公會是你在登入之間都歸屬其中的一個長久玩家團體。建立一個，或接受邀請以加入，而你一次只能身處一個公會。成員各持一個階級：一位會長、幹部，以及成員。",
       "guildChatBody": "歸屬於一個公會，能讓你擁有一個私人的公會聊天頻道，並在一份共享的名冊上顯示你的公會夥伴，所以線上總有熟悉的面孔。",
+      "communityHeading": "呼叫整個社群",
+      "communityBody": "以驚嘆號開頭起一行聊天，就能發出社群呼叫：!lfg 用來尋找隊伍，!wts 與 !wtb 用來交易，!recruit 為你的公會招募，!event 用來公告團隊副本或聚會，!help 則用來求助。你一輸入驚嘆號，呼叫選單便會彈出。每則呼叫都會在世界中廣播，並同步轉發到社群 Discord，因此連尚未登入的玩家也能收到。社群呼叫是線上遊玩的一部分。",
+      "slashHeading": "實用的斜線指令",
+      "slashBody": "有幾個日常指令值得記住：/w 名稱 可發送密語，/r 則回覆你最近收到的一則，/invite 邀請某人加入你的隊伍，/follow 跟隨在朋友身後，/roll 為隊伍擲骰讓大家看見，/who 顯示誰在線上，而 /afk 則標示你暫時離開。在遊戲中輸入 /help 可查看完整清單。",
+      "emotesBody": "你的角色也能不用言語表達：輸入諸如 /wave、/dance、/cheer 或 /bow 之類的表情指令，先選定一位朋友即可將它指向對方，或者按住 X 開啟表情輪盤，快速做出一個頭頂表情。",
+      "calendarHeading": "活動行事曆",
+      "calendarBody": "按下 I 即可開啟活動行事曆。它標示出王國中值得預作規劃的日子，從每週的團隊副本召集到嘉年華之夜，而這裡也是公會安排行程之處：公會會長與幹部可以在上頭預定活動，而每位成員都會在同一頁面上看到它們。",
+      "readyHeading": "準備確認",
+      "readyBody": "在一場大戰開打之前，隊長可以輸入 /ready 對全體發起表決：其他每個人都會收到「準備就緒」或「未準備」的提示，而當所有人都答覆完畢，或30秒耗盡後，全隊會看到一份匯總人數的總結。沒有人會被點名；重點在於人數，而非揪出誰沒準備好。",
+      "markersHeading": "目標標記",
+      "markersBody": "在隊伍中，對一個敵對生物按右鍵，即可為它冠上八種團隊符號之一。任何成員都能標記，每個符號一次只存在於一個目標身上，而對同一目標重複施加同一符號便會將其清除。擊殺順序、控場分工，或一句簡單的「先打這個」，化作符號都比化作句子傳得更快。",
       "etiquetteHeading": "組隊禮儀",
-      "etiquetteBody": "組隊是一種選擇，而非負擔。加入時打聲招呼，只在你真正會用上的裝備上選擇需求，離隊前先讓隊伍知道。一點點禮貌就能帶來很大不同，而大多數玩家也樂於有人作伴。"
+      "etiquetteBody": "組隊是一種選擇，而非負擔。加入時打聲招呼，只在你真正會用上的裝備上選擇需求，離隊前先讓隊伍知道。一點點禮貌就能帶來很大不同，而大多數玩家也樂於有人作伴。管理員負責維持秩序，而不願讓他人好好享受遊戲的玩家，可能會被關進牢房，直到管理員將他放出來為止。"
     },
     "stats": {
       "intro": "你的角色由少數幾項屬性所描述。你完全不必把它們背下來也能玩得很好，但大致了解每一項的作用，能幫你看懂自己的角色面板並挑選正確的升級品。",
@@ -1961,17 +3128,19 @@ export const zh_TW: EnTranslations = {
       "intTitle": "智力",
       "intBody": "智力能擴大施法者的法力池，提升他們的法術強度好讓法術打得更重，並提高他們法術造成暴擊的機率。它對那些以法力施法的職業很重要；對怒氣或能量職業而言則作用甚微。",
       "spiTitle": "精神",
-      "spiBody": "精神主宰著施法者的法力在脫離戰鬥後回復得有多快。一如智力，它服務於那些以法力施法的職業，對其他職業而言意義不大。",
+      "spiBody": "精神主宰著施法者每當停下施法時，法力回復得有多快，而那多半是戰鬥之間的時候。一如智力，它服務於那些以法力施法的職業，對其他職業而言意義不大。",
       "armorTitle": "護甲",
       "armorBody": "護甲能減少你受到的物理傷害。它大多來自你身上的穿戴，而重甲職業攜帶的護甲遠多得多。對上一個與你等級相近的敵人，護甲愈多便意味著它的每一擊落下時都更輕。",
       "apTitle": "攻擊強度",
-      "apBody": "攻擊強度衡量你的武器揮擊得有多狠。你的主要屬性會灌注它，而更強的武器與裝備能進一步提升它，這正是為什麼一件升級品可能帶來傷害上實實在在的躍進。",
+      "apBody": "攻擊強度衡量你的武器揮擊得有多狠。你的主要屬性會灌注它，帶有那些屬性的裝備能進一步提升它，而更強的武器則直接提高你的傷害，這正是為什麼一件升級品可能帶來傷害上實實在在的躍進。",
       "spTitle": "法術強度",
       "spBody": "法術強度是施法者對應於攻擊強度的屬性：它會提高你的法術所造成的傷害。智力會增進它，施法者的裝備與增益還會在其上額外疊加，因此施法者關注法術強度，就如同近戰鬥士關注攻擊強度一般。",
       "critTitle": "暴擊",
-      "critBody": "你的暴擊機率是攻擊打出額外傷害的頻率。每個人都從一個微小的基礎機率起步，而敏捷（外加一些天賦與裝備）則在其上累加。",
+      "critBody": "你的暴擊機率是攻擊打出額外傷害的頻率。每個人都從一個微小的基礎機率起步，而敏捷（外加一些天賦與裝備）則在其上累加。你的角色面板會同時顯示這個機率本身，以及你的裝備為它貢獻的暴擊等級。",
       "dodgeTitle": "閃躲",
       "dodgeBody": "閃躲是你完全避開一次來襲近戰攻擊的機率。你從一個微小的基礎機率起步，而敏捷會提升它，因此身手敏捷的職業能閃過更多攻擊。",
+      "hasteTitle": "急速",
+      "hasteBody": "急速是一項能讓你所做的一切都變快的屬性：近戰揮擊、遠程射擊與施法會一同提速。它來自裝備，最主要是護甲的套裝加成，少數技能也會給予短暫的急速爆發。你的角色面板將它顯示為急速等級。",
       "dpsTitle": "每秒傷害",
       "dpsBody": "你的角色面板還會顯示一個每秒傷害的估計值：大致是你的武器、它的揮擊速度與你的攻擊強度隨時間累加後的結果。這是一眼比較兩把武器的快捷方式。",
       "sheetHeading": "看懂你的角色面板",
@@ -1982,16 +3151,16 @@ export const zh_TW: EnTranslations = {
     "progression": {
       "intro": "每一場戰鬥、每一個任務、每一步北行，都會讓你的英雄更為強大。以下說明升級如何運作，以及當你登上巔峰之後，是什麼讓你持續成長。",
       "xpTitle": "你如何獲得經驗值",
-      "xpBody": "你透過完成任務與擊敗敵人來賺取經驗值。任務給予的經驗值遠遠最多，因此跟隨任務的軌跡是攀升最快的方式。沿途殺敵則補足其餘部分。",
+      "xpBody": "你透過完成任務、擊敗敵人與通關秘探來賺取經驗值。任務給予的經驗值遠遠最多，因此跟隨任務的軌跡是攀升最快的方式。沿途的殺敵與秘探則補足其餘部分。",
       "capBody": "每一級都會讓你更強韌並帶來新技能，一路直到 {cap} 級的上限。",
       "journeyTitle": "北行之路",
       "journeyBody": "這個世界是一片相連的大地，三座區域由南而北排列，每一座都高上一個等級。你從翠綠的山谷起步，奮力穿越沼澤，最終在寒冷的高峰落腳。跟著任務的軌跡走，這片土地便會帶你從一座區域前往下一座。",
       "bandLabel": "等級 {min} 至 {max}",
       "restedTitle": "充分休息經驗",
-      "restedBody": "在旅店這類安全之處、脫離戰鬥狀態下休息，當你坐在那裡時，你的角色便會累積充分休息經驗。下一次你出門戰鬥，那一池經驗會額外加成你的擊殺，直到耗盡為止。在旅店裡稍作停留絕非浪費時間，它能加速你接下來的一段升級。",
+      "restedBody": "走進旅店並保持脫離戰鬥，你的角色便會在等待時累積充分休息經驗。每座城鎮都有一間旅店。下一次你出門戰鬥，那一池經驗會額外加成你的擊殺，直到耗盡為止。在旅店裡稍作停留絕非浪費時間，它能加速你接下來的一段升級。",
       "capTitle": "抵達 {cap} 級",
-      "capJourneyBody": "{cap} 級是上限，是升級的終點，卻不是成長的盡頭。從那裡開始，你會挑戰地城與團隊副本、追逐更好的裝備，並在競技場中試煉自己。",
-      "prestigeBody": "經驗值在抵達上限之後仍會持續計算。它會灌注一個純外觀的虛擬等級，讓你的經驗條繼續攀升，還有一個你能為了榮譽而掙得的長期聲望階級。跨越重大的生涯經驗里程碑，還會解鎖顯示在你角色資訊面板上的外觀頭銜與名條邊框。這一切純屬選擇性質，絕不賦予力量，只是你所走過旅途的一個印記。",
+      "capJourneyBody": "{cap} 級是上限，是升級的終點，卻不是成長的盡頭。從那裡開始，你會以普通與英雄難度挑戰地城與團隊副本、在世界首領崛起時與他一戰、追逐更好的裝備，並在競技場中試煉自己。",
+      "prestigeBody": "經驗值在抵達上限之後仍會持續計算。它會灌注一個純外觀的虛擬等級，讓你的經驗條繼續攀升，還有一個抵達上限後可從角色資訊面板領取的長期聲望階級。跨越重大的生涯經驗里程碑，還會在你的功績之書中獲得功績，附帶顯示在角色資訊面板上的外觀頭銜與名條邊框。這一切純屬選擇性質，絕不賦予力量，只是你所走過旅途的一個印記。",
       "noRush": "不必急。這個世界就在那裡，讓你以自己的步調盡情享受，所以儘管漫遊、接下吸引你目光的任務，讓你的英雄一路成長吧。"
     },
     "placeholder": {
@@ -2189,6 +3358,7 @@ export const zh_TW: EnTranslations = {
       "blocker": "空氣牆",
       "collider": "Collider",
       "camp": "營地",
+      "entity": "Move NPCs and Mobs",
       "spawn": "出生點",
       "zone": "Zone",
       "light": "Point Light",
@@ -2425,10 +3595,18 @@ export const zh_TW: EnTranslations = {
       "selected": "營地：{mob}",
       "none": "未選取營地。"
     },
+    "entityTool": {
+      "title": "NPCs and Mobs",
+      "hint": "Click a mob or NPC to select it, then drag to move it. Hold Ctrl while clicking to select multiple mobs, then drag any selected mob to move the whole ringed group. Selected NPCs can also be rotated with the Facing control. Use Camp to create or configure mob groups.",
+      "selected": "Selected: {name}",
+      "none": "Click a mob or NPC in the map view to select it.",
+      "facing": "Facing"
+    },
     "spawn": {
       "title": "出生點",
       "hint": "點擊地面設定試玩時玩家的出生位置。",
       "position": "出生點：{x}，{z}",
+      "area": "Spawn area: {width} x {height} yd",
       "unset": "使用內建的起始位置。",
       "clear": "清除出生點"
     },
@@ -2597,15 +3775,18 @@ export const zh_TW: EnTranslations = {
     "openDrawer": {
       "title": "開啟地圖",
       "close": "關閉",
+      "tabShipped": "Shipped Maps",
       "tabLocal": "此瀏覽器",
       "tabMine": "我的伺服器地圖",
       "tabPublic": "公開地圖",
       "colName": "名稱",
+      "colType": "Type",
       "colUpdated": "更新時間",
       "colStatus": "狀態",
       "statusPublic": "公開",
       "statusPrivate": "私人",
       "open": "開啟",
+      "openCopy": "Open Copy",
       "fork": "分支",
       "publish": "發布",
       "unpublish": "取消發布",
@@ -2629,6 +3810,7 @@ export const zh_TW: EnTranslations = {
       "savedLocalOnly": "已將「{name}」儲存到此瀏覽器。登入後可線上儲存。",
       "saveFailedLocal": "本機儲存失敗（儲存空間遭封鎖）。",
       "opened": "已開啟「{name}」。",
+      "shippedMapOpened": "Opened an editable copy of \"{name}\".",
       "imported": "已匯入「{name}」。",
       "importFailed": "匯入已取消，或該檔案不是有效的地圖。",
       "importMissingDeps": "{count} model/texture/skybox file(s) are missing, so parts of the map are blank. Re-import the .wocmap.zip bundle to include them.",
@@ -3000,6 +4182,8 @@ export const zh_TW: EnTranslations = {
     "title": "下載電腦版啟動器",
     "desc": "獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。",
     "macCta": "下載 macOS 版",
+    "linuxCta": "下載 Linux 版",
+    "linuxHint": "AppImage 格式：賦予可執行權限後直接執行，無需安裝。",
     "windowsPending": "Windows 版本即將推出。"
   },
   "comingSoon": {
@@ -3299,6 +4483,35 @@ export const zh_TW: EnTranslations = {
     "chat": "開啟對話框"
   },
   "sim": {
+    "rift": {
+      "allUnstable": "所有裂隙目前都不穩定。請稍後再試。",
+      "enterFloor": "你穿過裂隙，進入了{name}。",
+      "descendFloor": "你深入{name}的更深處。",
+      "stepBack": "你退回裂隙，返回原地。",
+      "pylonLit": "一座符文尖塔亮起（{lit}/{total}）。",
+      "wayDownOpens": "通往下層的裂口被撕開了。",
+      "exitOpens": "裂隙震顫。一條歸途在倒下的敵人身後撕裂開來。",
+      "portalOpens": "一道{tier}級裂隙在{zone}撕裂而開！",
+      "portalSealed": "{zone}的{tier}級裂隙已被封印。",
+      "portalCollapses": "{zone}的{tier}級裂隙坍塌了。",
+      "levelGate": "只有等級達到{level}級或以上的冒險者才能進入這道裂隙。",
+      "iceGoalLit": "霜之印記熊熊燃起。去路隨之震動。",
+      "socketsShut": "凹槽隆隆合攏。去路隨之震動。",
+      "seqProgress": "符文依次回應（{step}/{total}）。",
+      "seqReset": "符文盡數熄滅。從頭再來。",
+      "gateOpen": "閘門轟隆隆地開啟了。",
+      "orbSealed": "寶珠被下方的儀式封印著。",
+      "orbWakes": "五芒星陣的火焰熄滅了。祭壇上有什麼甦醒了。",
+      "orbOpensGate": "血色寶珠驟然爆發。神殿之門轟然開啟。",
+      "alreadyCleared": "此裂隙已由 {names} 清除。",
+      "raceLost": "此裂隙已由 {names} 清除。你的挑戰結束了。",
+      "raceWorldWin": "{names} 以 {seconds} 秒贏得了 {tier} 級裂隙競速！",
+      "raceWinBanner": "裂隙競速勝利 — {seconds} 秒",
+      "raceLostBanner": "裂隙已被清除",
+      "forgeUpgraded": "{name} 的裂隙強化已完成。",
+      "forgeEnchanted": "{name} 的裂隙附魔已完成。",
+      "forgeSocketed": "已為 {name} 鑲嵌裂隙寶石。"
+    },
     "delve": {
       "cannotEnterNow": "你現在無法進入秘探。",
       "leaveDungeonFirst": "請先離開地下城。",
@@ -3447,6 +4660,10 @@ export const zh_TW: EnTranslations = {
       "hard": "頂級戰利品"
     },
     "closeAria": "關閉"
+  },
+  "heroicShop": {
+    "balance": "英雄徽記: {count}",
+    "buyAria": "用{marks}枚英雄徽記購買{item}"
   },
   "delveUi": {
     "board": {
@@ -3642,6 +4859,45 @@ export const zh_TW: EnTranslations = {
     },
     "chest": {
       "flavor": "亡者已交出他們所能割捨之物。"
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "加入Protect Yumi！",
+    "queue": {
+      "join": "你加入了Protect Yumi佇列。守好你的使魔……",
+      "leave": "你離開了Protect Yumi佇列。",
+      "teamLeave": "你的隊伍離開了Protect Yumi佇列。"
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3最多允許三人隊伍。",
+      "partyTooBig5": "Protect Yumi 5v5最多允許五人隊伍。"
+    },
+    "log": {
+      "start": "Protect Yumi！保衛你的使魔，獵殺敵方的使魔。"
+    },
+    "hud": {
+      "title": "守護YUMI",
+      "getReady": "做好準備……",
+      "teleportIn": "Yumi將在{s}秒後傳送",
+      "suddenDeath": "驟死戰",
+      "yourYumi": "我方Yumi",
+      "enemyYumi": "敵方Yumi",
+      "aria": "我方Yumi生命值{mine}/{max}，敵方Yumi生命值{theirs}。",
+      "collapse": "摺疊Protect Yumi血條",
+      "expand": "展開Protect Yumi血條"
+    },
+    "respawn": {
+      "title": "倒下了！"
+    },
+    "banner": {
+      "sudden": "驟死戰！Yumi不再傳送！",
+      "teleport": "Yumi傳送了！"
+    },
+    "end": {
+      "win": "勝利！Yumi安全了！",
+      "loss": "戰敗！你的Yumi倒下了。"
     }
   },
   "fiesta": {
@@ -3840,7 +5096,18 @@ export const zh_TW: EnTranslations = {
     "rendererFailed": "無法啟動渲染器：請嘗試重新整理。{error}",
     "enterTimeout": "無法進入世界。連線已逾時。遊戲伺服器是否正在執行？",
     "connectionLost": "與伺服器的連線已中斷。",
-    "connectionRejected": "伺服器已關閉連線。"
+    "reconnecting": "連線已中斷。正在重新連線...",
+    "connectionRejected": "伺服器已關閉連線。",
+    "tips": {
+      "classes": "提示：9 個職業玩法各不相同，投入之前不妨都試一試。",
+      "talents": "提示：只要不在戰鬥中，隨時都能重置天賦，因此早期的選擇不會成為陷阱。",
+      "dungeons": "提示：裝備超出普通難度要求後，試試地下城的英雄難度，享受更艱難也更有成就感的戰鬥。",
+      "market": "提示：世界市場可以讓你與全服玩家進行買賣交易。",
+      "guilds": "提示：加入公會可獲得專屬聊天頻道與公會成員名單。",
+      "professions": "提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。",
+      "loadouts": "提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。",
+      "pvp": "提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。"
+    }
   },
   "errors": {
     "nothingInteract": "附近沒有可互動目標。",
@@ -3872,9 +5139,12 @@ export const zh_TW: EnTranslations = {
       "webLoginOnly": "只能從遊戲客戶端登入。",
       "accountSuspended": "此帳號停權至 {date}。",
       "alreadyInWorld": "角色已在世界中。",
+      "accountSessionLimit": "此帳號已有太多角色在世界中。",
       "takenOver": "你的角色已被另一個工作階段接管。",
       "renameBeforeEntering": "此角色必須先更名才能進入世界。",
-      "renameNotPermitted": "不允許為此角色更名。"
+      "renameNotPermitted": "不允許為此角色更名。",
+      "unsupportedMediaType": "不支援的請求格式。",
+      "crossSiteOrigin": "出於安全原因，請求已被封鎖。"
     }
   },
   "desktop": {
@@ -4047,6 +5317,8 @@ export const zh_TW: EnTranslations = {
       "secondsRemaining": "剩餘 {seconds} 秒",
       "enteringZone": "進入 {zone}。",
       "welcomeZone": "歡迎來到 {zone}！",
+      "riftLabel": "{name}",
+      "riftLabelRanked": "{name} ({rank})",
       "levelBanner": "{level} 級！",
       "levelLog": "你已達到 {level} 級！",
       "xpGain": "你獲得 {amount} 點經驗值。",
@@ -4086,6 +5358,7 @@ export const zh_TW: EnTranslations = {
       "mobileSocial": "社交",
       "mobileArena": "競技場",
       "mobileMenu": "選單",
+      "mobileSettings": "設定",
       "mobileUse": "使用",
       "mobileMeters": "統計",
       "mobileMap": "地圖",
@@ -4634,6 +5907,7 @@ export const zh_TW: EnTranslations = {
       "offGlobalCooldown": "不觸發公共冷卻",
       "friendlyTarget": "友方目標",
       "enemyTarget": "敵方目標",
+      "selfOnly": "僅對自己",
       "damageRange": "{min} 到 {max}",
       "finisherDamage": "{base} 加每個連擊點 {perCombo}"
     },
@@ -4736,12 +6010,14 @@ export const zh_TW: EnTranslations = {
     "slots": {
       "mainhand": "主手",
       "helmet": "頭部",
+      "neck": "頸部",
       "shoulder": "肩部",
       "chest": "胸部",
       "waist": "腰部",
       "legs": "腿部",
       "gloves": "手部",
-      "feet": "腳部"
+      "feet": "腳部",
+      "ring": "手指"
     },
     "quality": {
       "poor": "粗糙",
@@ -4940,30 +6216,71 @@ export const zh_TW: EnTranslations = {
       "needAria": "需求 {item}",
       "greedAria": "貪婪 {item}",
       "passAria": "放棄 {item}",
-      "everyonePassed": "所有人都放棄了 {item}。"
+      "everyonePassed": "所有人都放棄了 {item}。",
+      "rolled": "{answered}/{total} 已擲骰"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "踢球",
+        "description": "沿地面把球踢向瞄準點。"
+      },
+      "sport_shoot": {
+        "name": "射門",
+        "description": "按住蓄力，鬆手射門。力量過大球會飛高。"
+      },
+      "sport_pass": {
+        "name": "傳球",
+        "description": "把球穩穩地傳給你選定的隊友，提前送到他的跑動路線上。"
+      },
+      "sport_boot": {
+        "name": "大腳開球",
+        "description": "朝瞄準點來一記高遠長傳。觀眾最愛這一腳。"
+      },
+      "sport_hoof": {
+        "name": "大腳解圍",
+        "description": "把球又低又狠地轟向前場。"
+      },
+      "sport_punt": {
+        "name": "守門員長踢",
+        "description": "守門員的一記開球，又高又遠。"
+      },
+      "sport_feint": {
+        "name": "假動作",
+        "description": "朝瞄準點快速側身突進。"
+      },
+      "sport_dive": {
+        "name": "魚躍撲救",
+        "description": "朝瞄準點飛身撲出。橫傳球會被你牢牢抱住。"
+      },
+      "sport_shoulder": {
+        "name": "肩撞",
+        "description": "一記符合豐收休戰規矩的肩撞，把對手撞得摔離球。"
+      },
+      "sport_second_wind": {
+        "name": "重振旗鼓",
+        "description": "找回狀態：移動速度提高50%，持續4秒。"
+      },
       "flamestrike": {
         "name": "烈焰風暴",
         "description": "在目標區域召喚一次烈焰爆發，對爆炸範圍內的敵人造成 {damage} 點火焰傷害。"
       },
       "rain_of_fire": {
         "name": "烈火之雨",
-        "description": "在目標區域降下烈火之雨，灼燒敵人，造成 {damage} 點火焰傷害。"
+        "description": "在目標區域降下烈火之雨，持續 4 秒，每秒灼燒敵人造成 {damage} 點火焰傷害。"
       },
       "volley": {
         "name": "亂射",
-        "description": "向目標區域射出箭雨，對其中的敵人造成 {damage} 點傷害。"
+        "description": "向目標區域射出箭雨，持續 3 秒，每 0.5 秒對其中的敵人造成 {damage} 點傷害。"
       },
       "hurricane": {
         "name": "颶風",
-        "description": "在目標區域召喚颶風，重擊敵人，造成 {damage} 點自然傷害。"
+        "description": "在目標區域召喚颶風，持續 6 秒，每秒重擊敵人造成 {damage} 點自然傷害。"
       },
       "earthquake": {
         "name": "地震",
-        "description": "撼動目標區域，重擊敵人，造成 {damage} 點自然傷害。"
+        "description": "撼動目標區域，持續 6 秒，每 1.5 秒重擊敵人造成 {damage} 點自然傷害。"
       },
       "heroic_strike": {
         "name": "劫掠打擊",
@@ -4971,15 +6288,15 @@ export const zh_TW: EnTranslations = {
       },
       "battle_shout": {
         "name": "鐵嗓怒吼",
-        "description": "使你的攻擊強度提高 20，持續 2 分鐘。"
+        "description": "使你的攻擊強度提高 {buff}，持續 2 分鐘。"
       },
       "commanding_shout": {
         "name": "激勵吶喊",
-        "description": "使你的耐力提高 6，持續 2 分鐘。"
+        "description": "使你的耐力提高 {buff}，持續 2 分鐘。"
       },
       "demoralizing_shout": {
         "name": "厲嚎",
-        "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 30，持續 30 秒。"
+        "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 {buff}，持續 30 秒。"
       },
       "charge": {
         "name": "猛衝",
@@ -4987,7 +6304,7 @@ export const zh_TW: EnTranslations = {
       },
       "rend": {
         "name": "深切裂傷",
-        "description": "撕裂目標，使其在 9 秒內流血並受到 {damage} 點傷害。"
+        "description": "撕裂目標，使其在 {duration} 秒內流血並受到 {damage} 點傷害。"
       },
       "thunder_clap": {
         "name": "撼地一擊",
@@ -4995,7 +6312,7 @@ export const zh_TW: EnTranslations = {
       },
       "hamstring": {
         "name": "跛行斬",
-        "description": "重創敵人，造成 5 點傷害，並使其移動速度降低 50%，持續 15 秒。"
+        "description": "重創敵人，造成 {damage} 點傷害，並使其移動速度降低 50%，持續 15 秒。"
       },
       "bloodrage": {
         "name": "血之代價",
@@ -5003,7 +6320,7 @@ export const zh_TW: EnTranslations = {
       },
       "overpower": {
         "name": "血手",
-        "description": "立即攻擊，造成武器傷害 +5。只能在目標閃躲後使用。無法被閃躲。"
+        "description": "立即攻擊，造成武器傷害加 {damage}。只能在目標閃躲後使用。無法被閃躲。"
       },
       "execute": {
         "name": "提早入土",
@@ -5023,7 +6340,7 @@ export const zh_TW: EnTranslations = {
       },
       "sunder_armor": {
         "name": "削甲",
-        "description": "撕裂目標的護甲，每次使其降低 {damage}。最多疊加 5 次。產生大量威脅值。"
+        "description": "撕裂目標的護甲，每次使其降低 {damage}%。最多疊加 5 次。產生大量威脅值。"
       },
       "taunt": {
         "name": "挑釁",
@@ -5035,11 +6352,11 @@ export const zh_TW: EnTranslations = {
       },
       "frost_armor": {
         "name": "白霜披風",
-        "description": "以寒霜包裹自身，使護甲提高 30，持續 30 分鐘。"
+        "description": "以寒霜包裹自身，使護甲提高 {buff}，持續 30 分鐘。"
       },
       "arcane_intellect": {
         "name": "乙太洞察",
-        "description": "使智力提高 2，持續 30 分鐘。"
+        "description": "使智力提高 {buff}，持續 30 分鐘。"
       },
       "frostbolt": {
         "name": "凜霜矛",
@@ -5063,7 +6380,7 @@ export const zh_TW: EnTranslations = {
       },
       "polymorph": {
         "name": "蠱惑術",
-        "description": "將敵人變成蟾蜍，最多持續 15 秒。蟾蜍會四處遊蕩並快速恢復。任何傷害都會打破效果。僅限野獸和人型生物。"
+        "description": "將敵人變成蟾蜍，最多持續 {duration} 秒。蟾蜍會四處遊蕩並快速恢復。任何傷害都會打破效果。僅限野獸和人型生物。"
       },
       "frost_nova": {
         "name": "縛冰術",
@@ -5083,7 +6400,7 @@ export const zh_TW: EnTranslations = {
       },
       "ice_barrier": {
         "name": "冰霜帷幕",
-        "description": "以冰霜護盾保護你，吸收 130 點傷害，持續 60 秒。"
+        "description": "以冰霜護盾保護你，吸收 {damage} 點傷害，持續 60 秒。"
       },
       "sinister_strike": {
         "name": "邪惡揮斬",
@@ -5091,7 +6408,7 @@ export const zh_TW: EnTranslations = {
       },
       "eviscerate": {
         "name": "入土長眠",
-        "description": "終結技，根據連擊點數造成傷害。"
+        "description": "終結技，造成 {damage}。"
       },
       "backstab": {
         "name": "怯懦突刺",
@@ -5099,7 +6416,7 @@ export const zh_TW: EnTranslations = {
       },
       "gouge": {
         "name": "戳眼一擊",
-        "description": "攻擊目標，使其癱瘓 4 秒。任何傷害都會打破效果。獎勵 1 個連擊點。"
+        "description": "攻擊目標，造成 {damage} 點傷害，使其癱瘓 4 秒。任何傷害都會打破效果。獎勵 1 個連擊點。"
       },
       "evasion": {
         "name": "鬼影步",
@@ -5131,11 +6448,11 @@ export const zh_TW: EnTranslations = {
       },
       "garrote": {
         "name": "勒喉鋼絲",
-        "description": "勒住敵人的咽喉，立即造成傷害，並使其在 18 秒內流血損失 {damage} 點生命。必須處於潛行狀態。獎勵 1 個連擊點。"
+        "description": "勒住敵人的咽喉，立即造成 {damage} 點傷害，並使其在 18 秒內流血損失 {overTime}。必須處於潛行狀態。獎勵 1 個連擊點。"
       },
       "cheap_shot": {
         "name": "掏腹重擊",
-        "description": "攻擊目標，使其昏迷 4 秒。必須處於潛行狀態。獎勵 2 個連擊點。"
+        "description": "攻擊目標，造成 {damage} 點傷害，使其昏迷 4 秒。必須處於潛行狀態。獎勵 2 個連擊點。"
       },
       "sap": {
         "name": "悶棍",
@@ -5143,11 +6460,11 @@ export const zh_TW: EnTranslations = {
       },
       "crippling_poison": {
         "name": "沉鉛之毒",
-        "description": "以沉鉛之毒攻擊目標，造成 {damage} 點自然傷害，並使其移動速度降低 50%，持續 12 秒。"
+        "description": "用沉鉛之毒攻擊目標，造成 {damage} 點自然傷害，並使其移動速度降低 50%，持續 12 秒。"
       },
       "expose_armor": {
         "name": "裂甲",
-        "description": "終結技，使目標破綻盡露，降低其護甲。消耗越多連擊點，撕裂得越深。"
+        "description": "終結技，使目標破綻盡露，使其護甲降低 {damage}，持續 30 秒。"
       },
       "rupture": {
         "name": "血竭",
@@ -5171,7 +6488,7 @@ export const zh_TW: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "誓約烙印",
-        "description": "使你充滿神聖能量，持續 30 秒，使每次近戰揮擊造成 4 點額外神聖傷害。可用裁決釋放。"
+        "description": "使你充滿神聖能量，持續 30 秒，使每次近戰揮擊造成 {damage} 點額外神聖傷害。可用裁決釋放。"
       },
       "holy_light": {
         "name": "療癒聖光",
@@ -5179,7 +6496,7 @@ export const zh_TW: EnTranslations = {
       },
       "devotion_aura": {
         "name": "堅定光環",
-        "description": "使你的護甲提高 40，持續 30 分鐘。"
+        "description": "使你的護甲提高 {buff}，持續 30 分鐘。"
       },
       "judgement": {
         "name": "裁決",
@@ -5187,19 +6504,23 @@ export const zh_TW: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "鋼鐵誓約",
-        "description": "為一個友方目標施加祝福，使攻擊強度提高 15，持續 5 分鐘。"
+        "description": "為一個友方目標施加祝福，使攻擊強度提高 {buff}，持續 5 分鐘。"
       },
       "divine_protection": {
         "name": "信仰守護",
-        "description": "一道守護結界吸收 50 點傷害，持續 10 秒。"
+        "description": "一道神聖護盾吸收 {damage} 點傷害，持續 10 秒。"
       },
       "hammer_of_justice": {
         "name": "裂碎法槌",
-        "description": "使目標昏迷 3 秒。"
+        "description": "使目標昏迷 {duration} 秒。"
       },
       "lay_on_hands": {
         "name": "臨終聖禮",
-        "description": "巨大的治療湧流：恢復 250 點生命值。10 分鐘冷卻時間。"
+        "description": "巨大的治療湧流：恢復 {damage} 點生命值。10 分鐘冷卻時間。"
+      },
+      "holy_taunt": {
+        "name": "神聖挑釁",
+        "description": "嘲諷目標：你的威脅值提高到其最仇恨敵人的水平，並強迫其攻擊你 3 秒。"
       },
       "flash_of_light": {
         "name": "光癒術",
@@ -5211,7 +6532,7 @@ export const zh_TW: EnTranslations = {
       },
       "consecration": {
         "name": "聖化之地",
-        "description": "奉獻你腳下的土地，灼燒附近敵人，造成 {damage} 點神聖傷害。"
+        "description": "奉獻你腳下的土地，持續 10 秒，每 2 秒灼燒附近敵人造成 {damage} 點神聖傷害。"
       },
       "righteous_fury": {
         "name": "燃燒誓言",
@@ -5231,11 +6552,11 @@ export const zh_TW: EnTranslations = {
       },
       "raptor_strike": {
         "name": "剖膛打擊",
-        "description": "一次強力近戰攻擊，使傷害提高 5。在你的下一次揮擊時觸發。"
+        "description": "一次強力近戰攻擊，使傷害提高 {damage}。在你的下一次揮擊時觸發。"
       },
       "aspect_of_the_hawk": {
         "name": "獵鷂之姿",
-        "description": "化為獵鷂之姿，使攻擊強度提高 20，持續 30 分鐘。"
+        "description": "化為獵鷂之姿，使攻擊強度提高 {buff}，持續 30 分鐘。"
       },
       "serpent_sting": {
         "name": "毒液倒刺",
@@ -5247,15 +6568,15 @@ export const zh_TW: EnTranslations = {
       },
       "concussive_shot": {
         "name": "震顫射擊",
-        "description": "使目標暈眩遲緩，移動速度降低 50%，持續 4 秒。"
+        "description": "使目標暈眩遲緩，造成 {damage} 點傷害，並使移動速度降低 50%，持續 4 秒。"
       },
       "mongoose_bite": {
         "name": "反噬獠牙",
-        "description": "在目標閃躲後反擊，造成武器傷害加 12。無法被閃躲。"
+        "description": "在目標閃躲後反擊，造成武器傷害加 {damage}。無法被閃躲。"
       },
       "wing_clip": {
         "name": "桎梏斬",
-        "description": "造成傷口，使敵人移動速度降低 40%，持續 10 秒。"
+        "description": "造成傷口，造成 {damage} 點傷害，並使敵人移動速度降低 40%，持續 10 秒。"
       },
       "aspect_of_the_monkey": {
         "name": "靈貂之姿",
@@ -5283,7 +6604,7 @@ export const zh_TW: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "堅毅連禱",
-        "description": "使目標的耐力提高 3，持續 30 分鐘。"
+        "description": "使目標的耐力提高 {buff}，持續 30 分鐘。"
       },
       "shadow_word_pain": {
         "name": "腐朽輓歌",
@@ -5291,7 +6612,7 @@ export const zh_TW: EnTranslations = {
       },
       "power_word_shield": {
         "name": "守護聖詠",
-        "description": "保護目標，吸收 48 點傷害，持續 30 秒。"
+        "description": "保護目標，吸收 {damage} 點傷害，持續 30 秒。"
       },
       "renew": {
         "name": "綿延恩典",
@@ -5319,7 +6640,7 @@ export const zh_TW: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "縛石武器",
-        "description": "以大地之怒灌注你的武器：每次揮擊額外造成 5 點傷害，持續 5 分鐘。"
+        "description": "以大地之怒灌注你的武器：每次揮擊額外造成 {damage} 點傷害，持續 5 分鐘。"
       },
       "healing_wave": {
         "name": "療癒之水",
@@ -5331,15 +6652,15 @@ export const zh_TW: EnTranslations = {
       },
       "lightning_shield": {
         "name": "雷霆守護",
-        "description": "以爆裂閃電環繞自身：近戰攻擊者會受到 13 點自然傷害。"
+        "description": "以爆裂閃電環繞自身：近戰攻擊者會受到 {buff} 點自然傷害，最多 3 次充能，且每 5 秒最多觸發一次。"
       },
       "flame_shock": {
         "name": "燼焰震擊",
-        "description": "用火焰灼燒目標，造成 25 點傷害，並在 12 秒內額外造成 {damage}。"
+        "description": "用火焰灼燒目標，造成 {damage} 點傷害，並在 12 秒內額外造成 {overTime}。"
       },
       "flametongue_weapon": {
         "name": "焰烙武器",
-        "description": "用元素之火灌注你的武器：每次揮擊額外造成 8 點火焰傷害，持續 5 分鐘。"
+        "description": "用元素之火灌注你的武器：每次揮擊額外造成 {damage} 點火焰傷害，持續 5 分鐘。"
       },
       "frost_shock": {
         "name": "凜霜震擊",
@@ -5347,7 +6668,7 @@ export const zh_TW: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "凜霜束縛武器",
-        "description": "為你的武器附上刺骨寒霜：每次揮擊額外造成 8 點傷害，持續 5 分鐘。"
+        "description": "為你的武器附上刺骨寒霜：每次揮擊額外造成 {damage} 點傷害，持續 5 分鐘。"
       },
       "ghost_wolf": {
         "name": "幽影狼",
@@ -5363,11 +6684,11 @@ export const zh_TW: EnTranslations = {
       },
       "demon_skin": {
         "name": "邪魔之皮",
-        "description": "惡魔皮膚使你的護甲提高 30，持續 30 分鐘。"
+        "description": "惡魔皮膚使你的護甲提高 {buff}，持續 30 分鐘。"
       },
       "immolate": {
         "name": "燃燒契約",
-        "description": "灼燒敵人，造成 11 點火焰傷害，並在 15 秒內額外造成 {damage}。"
+        "description": "灼燒敵人，造成 {damage} 點火焰傷害，並在 15 秒內額外造成 {overTime}。"
       },
       "corruption": {
         "name": "黑腐術",
@@ -5375,7 +6696,7 @@ export const zh_TW: EnTranslations = {
       },
       "life_tap": {
         "name": "苛刻交易",
-        "description": "將 30 點生命值轉化為 30 點法力值。"
+        "description": "將 {damage} 點生命值轉化為 {damage} 點法力值。"
       },
       "curse_of_agony": {
         "name": "苦楚邪咒",
@@ -5407,7 +6728,7 @@ export const zh_TW: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "野性守護",
-        "description": "為一個友方目標施加野性守護，使護甲提高 25，持續 30 分鐘。"
+        "description": "為一個友方目標施加野性守護，使護甲提高 {buff}，持續 30 分鐘。"
       },
       "moonfire": {
         "name": "月光風暴",
@@ -5419,7 +6740,7 @@ export const zh_TW: EnTranslations = {
       },
       "thorns": {
         "name": "荊棘守衛",
-        "description": "目標身上長出荊棘：近戰攻擊者受到 3 點自然傷害。"
+        "description": "目標身上長出荊棘：近戰攻擊者受到 {buff} 點自然傷害。"
       },
       "entangling_roots": {
         "name": "攫纏根鬚",
@@ -5427,7 +6748,7 @@ export const zh_TW: EnTranslations = {
       },
       "bear_form": {
         "name": "巨熊形態",
-        "description": "變形為熊：護甲 +65%，攻擊強度 +15，你的攻擊會產生怒氣並額外產生 30% 威脅值。再次施放可返回施法者形態。"
+        "description": "變形為熊：護甲 +90%，攻擊強度大幅提高，你的攻擊會產生怒氣並額外產生 30% 威脅值。再次施放可返回施法者形態。"
       },
       "maul": {
         "name": "碎骨擊",
@@ -5447,7 +6768,7 @@ export const zh_TW: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "血噬",
-        "description": "終結技，根據連擊點數造成傷害。僅限狼形態。"
+        "description": "終結技，造成 {damage}。僅限狼形態。"
       },
       "swipe": {
         "name": "橫掃利爪",
@@ -5479,7 +6800,7 @@ export const zh_TW: EnTranslations = {
       },
       "faerie_fire": {
         "name": "巫光",
-        "description": "使目標的護甲降低 35，持續 40 秒。"
+        "description": "使目標的護甲降低 {damage}%，持續 40 秒。無法與削甲疊加。"
       },
       "hibernate": {
         "name": "沉眠",
@@ -5503,7 +6824,7 @@ export const zh_TW: EnTranslations = {
       },
       "rip": {
         "name": "割裂",
-        "description": "終結技，在 12 秒內造成流血傷害。消耗連擊點。僅限狼形態。"
+        "description": "終結技，在 12 秒內造成 {damage} 點流血傷害。消耗連擊點。僅限狼形態。"
       },
       "mortal_strike": {
         "name": "致殘打擊",
@@ -5511,11 +6832,11 @@ export const zh_TW: EnTranslations = {
       },
       "bloodthirst": {
         "name": "放血",
-        "description": "在鮮血狂怒中立即攻擊，造成 {damage} 點傷害。（狂怒專精標誌技能）"
+        "description": "在鮮血狂怒中立即攻擊，造成 60% 武器傷害加 {damage}。（狂怒專精標誌技能）"
       },
       "shield_slam": {
         "name": "碎盾擊",
-        "description": "用盾牌猛擊目標，造成 {damage} 點傷害並產生巨量威脅。（防護專精標誌技能）"
+        "description": "用盾牌猛擊目標，造成 50% 武器傷害加 {damage} 並產生巨量威脅。（防護專精標誌技能）"
       },
       "whirlwind": {
         "name": "利刃迴旋",
@@ -5524,6 +6845,98 @@ export const zh_TW: EnTranslations = {
       "berserker_rage": {
         "name": "沸血狂怒",
         "description": "進入沸血狂怒，產生 20 點怒氣。（戰士天賦）"
+      },
+      "crusader_strike": {
+        "name": "十字軍聖擊",
+        "description": "打擊目標，造成武器傷害外加 {damage} 點神聖傷害。（聖騎士天賦）"
+      },
+      "chain_heal": {
+        "name": "治療鏈",
+        "description": "大量治療一個友方目標，然後跳躍至多2個附近的盟友，每次跳躍的治療量降低50%。（恢復專精招牌）"
+      },
+      "metamorphosis": {
+        "name": "惡魔變形",
+        "description": "化為惡魔之力，使護甲和攻擊強度提高 20 秒。（術士天賦）"
+      },
+      "holy_shock": {
+        "name": "神聖震擊",
+        "description": "以神聖能量震擊一名友方目標，為其恢復{damage}點生命值。（神聖專精招牌）"
+      },
+      "holy_shield": {
+        "name": "神聖之盾",
+        "description": "以神聖之力保護你10秒，護甲提高90，並對近戰攻擊者造成12點神聖傷害。（防護專精招牌）"
+      },
+      "bestial_wrath": {
+        "name": "狂野怒火",
+        "description": "使你進入野獸怒火狀態，攻擊強度提高55點，持續15秒。（野獸控制專精招牌）"
+      },
+      "trueshot_aura": {
+        "name": "強擊光環",
+        "description": "鼓舞附近盟友，使攻擊強度提高35點，持續5分鐘。（射擊專精招牌）"
+      },
+      "wyvern_sting": {
+        "name": "翼龍釘刺",
+        "description": "從遠處釘刺敵人，使其癱瘓最多4秒。受到任何傷害都會打破效果。（生存專精招牌）"
+      },
+      "arcane_power": {
+        "name": "祕法強化",
+        "description": "法術傷害提高20%，法術加速提高10%，持續10秒。（祕法專精招牌）"
+      },
+      "combustion": {
+        "name": "燃燒",
+        "description": "法術致命一擊機率提高50%，持續15秒。（火焰專精招牌）"
+      },
+      "icy_veins": {
+        "name": "冰冷血脈",
+        "description": "法術加速提高30%，並防止施法被打斷或受到延遲，持續10秒。（冰霜專精招牌）"
+      },
+      "cold_blood": {
+        "name": "冷血",
+        "description": "集中你的殺意，使下一次攻擊造成致命一擊。（刺殺專精招牌）"
+      },
+      "blade_flurry": {
+        "name": "劍刃亂舞",
+        "description": "釋放劍刃亂舞，攻擊速度提高20%，持續12秒。（戰鬥專精招牌）"
+      },
+      "hemorrhage": {
+        "name": "出血",
+        "description": "攻擊敵人，造成武器傷害加{damage}點傷害，並在12秒內造成流血傷害。獎勵1個連擊點。（敏銳專精招牌）"
+      },
+      "power_infusion": {
+        "name": "能量灌注",
+        "description": "向一名友方目標灌注能量，使其法術強度提高28點，持續15秒。（戒律專精招牌）"
+      },
+      "holy_nova": {
+        "name": "神聖新星",
+        "description": "引發神聖之光爆炸，為附近盟友恢復{damage}點生命值並傷害附近敵人。（神聖專精招牌）"
+      },
+      "shadowform": {
+        "name": "暗影形態",
+        "description": "進入暗影形態，強化暗影魔法直到你切換回來。再次施放可返回普通形態。（暗影專精招牌）"
+      },
+      "elemental_mastery": {
+        "name": "元素精通",
+        "description": "呼喚元素精通，使你的下一個法術變為瞬發。（元素專精招牌）"
+      },
+      "siphon_life": {
+        "name": "生命虹吸",
+        "description": "虹吸敵人的生命，在30秒內造成{damage}點暗影傷害，並按造成的傷害治療你。（痛苦專精招牌）"
+      },
+      "conflagrate": {
+        "name": "燃盡",
+        "description": "吞噬敵人身上的獻祭，將其點燃並造成{damage}點火焰傷害。（毀滅專精招牌）"
+      },
+      "moonkin_form": {
+        "name": "梟獸形態",
+        "description": "進入梟獸形態，強化施法直到你切換回來。再次施放可返回普通形態。（平衡專精招牌）"
+      },
+      "feral_charge": {
+        "name": "野性衝鋒",
+        "description": "衝向敵人並使其定身1秒。8-25碼距離。（野性專精招牌）"
+      },
+      "swiftmend": {
+        "name": "迅癒",
+        "description": "吞噬友方目標身上的持續治療效果，為其恢復{damage}點生命值。（恢復專精招牌）"
       },
       "summon_imp": {
         "name": "召喚燼裔",
@@ -5552,6 +6965,34 @@ export const zh_TW: EnTranslations = {
       "summon_doomguard": {
         "name": "召喚怨魂裔",
         "description": "將一隻怨魂裔束縛於你的意志之下，這是一種精英惡魔，會從遠處降下沉重的暗影傷害。漫長的冷卻時間限制了牠的毀滅性力量。召喚新的惡魔會驅散你目前的惡魔。你同時只能擁有一隻惡魔。"
+      },
+      "pummel": {
+        "name": "碎顎擊",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "kick": {
+        "name": "飛踢",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "counterspell": {
+        "name": "破法",
+        "description": "反制目標的施法，並在6秒內封鎖該法術學派。"
+      },
+      "counter_shot": {
+        "name": "靜默射擊",
+        "description": "一記快射，打斷目標的施法，並在4秒內封鎖該學派。"
+      },
+      "rebuke": {
+        "name": "譴喝",
+        "description": "打斷目標的施法，並在4秒內封鎖該法術學派。"
+      },
+      "skull_bash": {
+        "name": "頭槌",
+        "description": "猛然頭槌，打斷目標的施法，並在4秒內封鎖該學派。"
+      },
+      "spell_lock": {
+        "name": "封口令",
+        "description": "在施法中沉默目標，並在5秒內封鎖該法術學派。"
       },
       "bear_charge": {
         "name": "巨熊衝鋒",
@@ -5710,6 +7151,9 @@ export const zh_TW: EnTranslations = {
       "greyjaw_fang": {
         "name": "老灰顎的尖牙"
       },
+      "chunk_of_ore": {
+        "name": "礦石塊"
+      },
       "weathered_ledger_page": {
         "name": "風化帳頁"
       },
@@ -5739,6 +7183,15 @@ export const zh_TW: EnTranslations = {
       },
       "linen_scrap": {
         "name": "亞麻碎布"
+      },
+      "arcane_dust": {
+        "name": "奧術之塵"
+      },
+      "arcane_essence": {
+        "name": "奧術精華"
+      },
+      "arcane_shard": {
+        "name": "奧術碎片"
       },
       "fen_muster_order": {
         "name": "芬橋集結令"
@@ -6166,131 +7619,224 @@ export const zh_TW: EnTranslations = {
       "sunpetal_sickle": {
         "name": "陽瓣鐮刀"
       },
-      "ashen_psalter": {
-        "name": "灰燼詩篇"
+      "duskwisp_essence": {
+        "name": "暮光靈精華"
       },
-      "brimming_waterskin": {
-        "name": "滿溢水囊"
+      "spore_heart": {
+        "name": "孢子之心"
       },
-      "cactus_pressed_water": {
-        "name": "仙人掌榨水"
+      "gleaming_antler": {
+        "name": "輝光鹿角"
       },
-      "caravan_guard_mail": {
-        "name": "商隊衛士鎖甲"
+      "wisp_mote": {
+        "name": "光塵"
       },
-      "caravan_manifest": {
-        "name": "水漬貨單"
+      "starfall_shard": {
+        "name": "星落碎片"
       },
-      "cinder_soaked_veil": {
-        "name": "浸燼面紗"
+      "elder_bark": {
+        "name": "長者樹皮"
       },
-      "crown_brazier": {
-        "name": "王冠火盆"
+      "hollow_sealstone": {
+        "name": "幽谷封印石"
       },
-      "crown_guard_seal": {
-        "name": "王冠衛隊之印"
+      "monument_overlook": {
+        "name": "風蝕石碑"
       },
-      "duneblade_token": {
-        "name": "沙丘之刃令牌"
+      "monument_court": {
+        "name": "沉沒石碑"
       },
-      "duneforged_warblade": {
-        "name": "沙丘鍛造戰刃"
+      "monument_north": {
+        "name": "遺忘石碑"
       },
-      "dunewatch_sash": {
-        "name": "沙丘守望腰帶"
+      "guardian_core": {
+        "name": "守衛核心"
       },
-      "duskmane_pelt": {
-        "name": "暮鬃獸皮"
+      "wardens_seal": {
+        "name": "守望者之印"
       },
-      "emberbound_leggings": {
-        "name": "縛燼護腿"
+      "gleamstag_charm": {
+        "name": "輝鹿護符"
       },
-      "emberglass_scepter": {
-        "name": "燼玻權杖"
+      "veilsteel_blade": {
+        "name": "帷鋼之刃"
       },
-      "emberveil_writ": {
-        "name": "燼紗教令"
+      "duskfang_dirk": {
+        "name": "暮牙短劍"
       },
-      "glasscarab_shell": {
-        "name": "玻璃甲蟲殼"
+      "gleamwood_stave": {
+        "name": "輝木長杖"
       },
-      "glasscut_dirk": {
-        "name": "玻璃裂谷匕首"
+      "wardens_oathband": {
+        "name": "守望者誓言護手"
       },
-      "heart_of_the_first_ember": {
-        "name": "初燼之心"
+      "wardplate_cuirass": {
+        "name": "守衛板甲胸鎧"
       },
-      "heartspring_offering": {
-        "name": "心泉供碗"
+      "nightweave_tunic": {
+        "name": "夜織皮甲"
       },
-      "kareshs_last_skin": {
-        "name": "卡雷什的最後水囊"
+      "veilcloth_robe": {
+        "name": "帷紗長袍"
       },
-      "lastwell_datewine": {
-        "name": "最後之井椰棗酒"
+      "thorium_ore": {
+        "name": "瑟銀礦石"
       },
-      "living_cinder": {
-        "name": "活燼"
+      "arcanite_bar": {
+        "name": "秘銀錠"
       },
-      "moltenheart_girdle": {
-        "name": "熔心束帶"
+      "ashwood_log": {
+        "name": "灰木原木"
       },
-      "moltenheart_slagcore": {
-        "name": "熔心渣核"
+      "elderwood_log": {
+        "name": "古老接骨木原木"
       },
-      "mural_rubbing": {
-        "name": "壁畫拓片"
+      "goldleaf_herb": {
+        "name": "金葉草"
       },
-      "parched_kings_goblet": {
-        "name": "焦渴之王的酒杯"
+      "sunpetal_herb": {
+        "name": "陽瓣草"
       },
-      "prowler_fang": {
-        "name": "潛行獸獠牙"
+      "furyforged_warhelm": {
+        "name": "怒鑄戰盔"
       },
-      "sentinel_core_stone": {
-        "name": "哨衛核心石"
+      "furyforged_warspaulders": {
+        "name": "怒鑄戰肩"
       },
-      "springheart_blessing": {
-        "name": "心泉祝福"
+      "furyforged_warplate": {
+        "name": "怒鑄戰甲"
       },
-      "stolen_waterskin": {
-        "name": "失竊水囊"
+      "furyforged_girdle": {
+        "name": "怒鑄腰帶"
       },
-      "sunbaked_flatbread": {
-        "name": "日烤薄餅"
+      "furyforged_legguards": {
+        "name": "怒鑄護腿"
       },
-      "sunbleached_bone": {
-        "name": "日曬白骨"
+      "furyforged_gauntlets": {
+        "name": "怒鑄護手"
       },
-      "sunbleached_staff": {
-        "name": "日曬法杖"
+      "furyforged_sabatons": {
+        "name": "怒鑄戰靴"
       },
-      "sunglass_shard": {
-        "name": "陽玻碎片"
+      "stormbound_crown": {
+        "name": "縛雷王冠"
       },
-      "sunspeakers_ash_crown": {
-        "name": "太陽代言人的灰燼之冠"
+      "stormbound_spaulders": {
+        "name": "縛雷肩甲"
       },
-      "vestment_of_the_sunken_crown": {
-        "name": "沉沒王冠法衣"
+      "stormbound_hauberk": {
+        "name": "縛雷鎖甲"
       },
-      "vigil_obelisk_dawn": {
-        "name": "晨火印記"
+      "stormbound_waistguard": {
+        "name": "縛雷護腰"
       },
-      "vigil_obelisk_dusk": {
-        "name": "暮火印記"
+      "stormbound_legmail": {
+        "name": "縛雷腿甲"
       },
-      "vigil_obelisk_noon": {
-        "name": "午火印記"
+      "stormbound_handguards": {
+        "name": "縛雷護手"
       },
-      "wastes_relic_cache": {
-        "name": "太陽王庭遺物箱"
+      "stormbound_greaves": {
+        "name": "縛雷脛甲"
       },
-      "wastewalker_jerkin": {
-        "name": "荒原行者皮甲"
+      "ashstalker_cowl": {
+        "name": "獵燼兜帽"
       },
-      "wastewalker_treads": {
-        "name": "荒原行者之靴"
+      "ashstalker_shoulderguards": {
+        "name": "獵燼護肩"
+      },
+      "ashstalker_harness": {
+        "name": "獵燼胸甲"
+      },
+      "ashstalker_waistband": {
+        "name": "獵燼腰帶"
+      },
+      "ashstalker_legguards": {
+        "name": "獵燼護腿"
+      },
+      "ashstalker_grips": {
+        "name": "獵燼護手"
+      },
+      "ashstalker_treads": {
+        "name": "獵燼軟靴"
+      },
+      "cinderweave_cowl": {
+        "name": "織燼兜帽"
+      },
+      "cinderweave_mantle": {
+        "name": "織燼披肩"
+      },
+      "cinderweave_raiment": {
+        "name": "織燼法衣"
+      },
+      "cinderweave_cord": {
+        "name": "織燼腰繩"
+      },
+      "cinderweave_legwraps": {
+        "name": "織燼裹腿"
+      },
+      "cinderweave_handwraps": {
+        "name": "織燼裹手"
+      },
+      "cinderweave_slippers": {
+        "name": "織燼便鞋"
+      },
+      "final_oath_medallion": {
+        "name": "最終誓約勳章"
+      },
+      "razorwind_torque": {
+        "name": "剃風頸環"
+      },
+      "cinder_sigil_pendant": {
+        "name": "燼印墜飾"
+      },
+      "iron_vow_band": {
+        "name": "鐵誓指環"
+      },
+      "unbroken_circle": {
+        "name": "不破之環"
+      },
+      "fleetblood_band": {
+        "name": "疾血指環"
+      },
+      "last_step_signet": {
+        "name": "末步徽戒"
+      },
+      "ashen_focus_ring": {
+        "name": "灰燼專注戒指"
+      },
+      "spellbreakers_seal": {
+        "name": "破法者之印"
+      },
+      "final_argument_greatblade": {
+        "name": "最終論斷巨刃"
+      },
+      "first_blood_razor": {
+        "name": "初血剃刀"
+      },
+      "emberglass_warstaff": {
+        "name": "燼晶戰杖"
+      },
+      "rift_essence": {
+        "name": "裂隙精華"
+      },
+      "rift_gem_crimson": {
+        "name": "緋紅裂隙寶石"
+      },
+      "rift_gem_azure": {
+        "name": "蔚藍裂隙寶石"
+      },
+      "rift_gem_verdant": {
+        "name": "翠綠裂隙寶石"
+      },
+      "riftbound_band_of_might": {
+        "name": "力量裂隙之戒"
+      },
+      "riftbound_band_of_insight": {
+        "name": "洞察裂隙之戒"
+      },
+      "riftbound_band_of_guile": {
+        "name": "詭詐裂隙之戒"
       },
       "bristleback_maul": {
         "name": "加洛格拉斯戰錘"
@@ -6757,6 +8303,120 @@ export const zh_TW: EnTranslations = {
       "event_skin_token": {
         "name": "神秘外觀寶箱"
       },
+      "heroic_mark": {
+        "name": "英雄徽記"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "莫爾森的墓鑄鎖甲"
+      },
+      "shadowpulse_handwraps": {
+        "name": "暗影脈衝裹手"
+      },
+      "bonechill_striders": {
+        "name": "骨寒行者之靴"
+      },
+      "mistcallers_fang": {
+        "name": "喚霧者之牙"
+      },
+      "tidebound_spaulders": {
+        "name": "縛潮護肩"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "沉沒王庭腰帶"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "月潮巨杖"
+      },
+      "tidewoven_trousers": {
+        "name": "織潮長褲"
+      },
+      "choirmothers_casque": {
+        "name": "唱詩聖母的頭盔"
+      },
+      "gravewyrm_cleaver": {
+        "name": "墓龍劈斬刀"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "墓龍裹布"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "聖殿潛行者的手套"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "不死王庭權杖"
+      },
+      "cryptplate_helm": {
+        "name": "墓板頭盔"
+      },
+      "shadowpulse_slippers": {
+        "name": "暗影脈衝便鞋"
+      },
+      "bonechill_cord": {
+        "name": "骨寒腰繩"
+      },
+      "mistforged_pauldrons": {
+        "name": "霧鑄肩鎧"
+      },
+      "tideguard_faceguard": {
+        "name": "守潮面甲"
+      },
+      "sunken_court_mantle": {
+        "name": "沉沒王庭披肩"
+      },
+      "lunar_choir_leggings": {
+        "name": "月唱護腿"
+      },
+      "choir_blessed_spaulders": {
+        "name": "唱詩祝福肩鎧"
+      },
+      "tideworn_warboots": {
+        "name": "潮蝕戰靴"
+      },
+      "gravewyrm_claws": {
+        "name": "墓龍護爪"
+      },
+      "gravescale_girdle": {
+        "name": "墓鱗腰帶"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "龍唱裹手"
+      },
+      "deathless_greatblade": {
+        "name": "不死巨刃"
+      },
+      "stormcallers_focus": {
+        "name": "喚雷之核"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "九誓之印"
+      },
+      "nielas_coldlight_band": {
+        "name": "妮拉的冷光指環"
+      },
+      "sutils_gambit": {
+        "name": "蘇蒂爾的賭局"
+      },
+      "oath_of_the_round_table": {
+        "name": "圓桌誓約"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "茲茲的不朽印戒"
+      },
+      "architects_cornerstone": {
+        "name": "建築師的奠基石"
+      },
+      "swiftfang_talisman": {
+        "name": "迅牙護符"
+      },
+      "yumis_keepsake_locket": {
+        "name": "由美的紀念小盒"
+      },
+      "zense_meridian": {
+        "name": "澤恩斯子午墜"
+      },
+      "medallion_of_endless_profit": {
+        "name": "無盡利潤勳章"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
@@ -6864,6 +8524,9 @@ export const zh_TW: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "由美"
+      },
       "forest_wolf": {
         "name": "森林狼"
       },
@@ -6923,6 +8586,9 @@ export const zh_TW: EnTranslations = {
       },
       "deacon_voss": {
         "name": "執事沃斯"
+      },
+      "training_dummy": {
+        "name": "訓練假人"
       },
       "ridge_stalker": {
         "name": "山脊潛獵者"
@@ -7032,6 +8698,15 @@ export const zh_TW: EnTranslations = {
       "nythraxis_scourge_of_thornpeak": {
         "name": "尼思拉克西斯，荊峰之災"
       },
+      "nythraxis_heroic_warrior_add": {
+        "name": "奧德倫，亡魂戰衛"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "馬爾里克，亡魂大祭司"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "沃斯，亡魂之刃"
+      },
       "reliquary_ledger_wraith": {
         "name": "名冊幽靈"
       },
@@ -7086,53 +8761,263 @@ export const zh_TW: EnTranslations = {
       "tolling_bell": {
         "name": "鳴鐘"
       },
+      "vale_cup_ball": {
+        "name": "野豬皮球"
+      },
       "thunzharr_waking_peak": {
         "name": "桑扎爾，覺醒之峰"
       },
       "thunzharr_stormling": {
         "name": "被驚醒的風暴元素"
       },
-      "duskmane_prowler": {
-        "name": "暮鬃潛行獸"
+      "rift_spawnling": {
+        "name": "裂隙孽生體"
       },
-      "glasscarab": {
-        "name": "玻璃甲蟲"
+      "rift_bonewalker": {
+        "name": "復生骨行者"
       },
-      "duneblade_marauder": {
-        "name": "沙丘之刃掠奪者"
+      "rift_frost_revenant": {
+        "name": "霜縛亡魂"
       },
-      "karesh_the_parched": {
-        "name": "焦渴者卡雷什"
+      "rift_rime_elemental": {
+        "name": "白霜元素"
       },
-      "vigil_sentinel": {
-        "name": "守夜哨衛"
+      "rift_ember_fiend": {
+        "name": "餘燼惡鬼"
       },
-      "sunbaked_revenant": {
-        "name": "日炙亡魂"
+      "rift_magma_brute": {
+        "name": "熔岩蠻獸"
       },
-      "ashen_courtier": {
-        "name": "灰燼朝臣"
+      "rift_venom_weaver": {
+        "name": "毒液織網者"
       },
-      "sunspeaker_atharis": {
-        "name": "太陽代言人亞薩里斯"
+      "rift_thornback": {
+        "name": "荊棘潛襲者"
       },
-      "emberveil_zealot": {
-        "name": "燼紗狂熱者"
+      "rift_boneclad": {
+        "name": "骨甲戰士"
       },
-      "emberveil_pyromancer": {
-        "name": "燼紗炎術師"
+      "rift_marrow_troll": {
+        "name": "骨髓巨魔"
       },
-      "cinder_elemental": {
-        "name": "燼火元素"
+      "rift_void_acolyte": {
+        "name": "虛空侍僧"
       },
-      "moltenheart_colossus": {
-        "name": "熔心巨像"
+      "rift_dread_stalker": {
+        "name": "恐懼潛獵者"
       },
-      "cinder_wisp": {
-        "name": "燼火精魂"
+      "rift_storm_caller": {
+        "name": "喚風者"
       },
-      "ember_of_korzul": {
-        "name": "初燼"
+      "rift_stormscale": {
+        "name": "風暴鱗龍"
+      },
+      "rift_tide_thrall": {
+        "name": "潮汐奴僕"
+      },
+      "rift_deep_lurker": {
+        "name": "深淵潛伏者"
+      },
+      "rift_stone_ogre": {
+        "name": "石食人魔"
+      },
+      "rift_boss_frost": {
+        "name": "白霜守望者"
+      },
+      "rift_boss_ember": {
+        "name": "餘燼熔爐暴君"
+      },
+      "rift_boss_venom": {
+        "name": "育母維斯卡"
+      },
+      "rift_boss_necro": {
+        "name": "骨領主薩瑞斯"
+      },
+      "rift_boss_brute": {
+        "name": "督軍格拉斯克"
+      },
+      "rift_boss_arcane": {
+        "name": "執政官尼克薩里斯"
+      },
+      "rift_boss_storm": {
+        "name": "風暴威洛克"
+      },
+      "rift_boss_tide": {
+        "name": "深淵之喉"
+      },
+      "glimmerwisp": {
+        "name": "微光靈"
+      },
+      "duskwisp": {
+        "name": "暮光靈"
+      },
+      "hollow_spirit": {
+        "name": "幽谷之靈"
+      },
+      "veiled_stag": {
+        "name": "帷紗雄鹿"
+      },
+      "gleamstag": {
+        "name": "輝光雄鹿"
+      },
+      "sporeling_gatherer": {
+        "name": "孢子人採集者"
+      },
+      "corrupted_sporeling": {
+        "name": "墮落的孢子人"
+      },
+      "treant_elder": {
+        "name": "樹人長者"
+      },
+      "ancient_guardian": {
+        "name": "上古守衛"
+      },
+      "waking_warden": {
+        "name": "甦醒的守望者"
+      },
+      "old_marrowshell": {
+        "name": "老甲髓"
+      },
+      "aurelhorn": {
+        "name": "金角，鹿群之首"
+      },
+      "snowdrift_wolf": {
+        "name": "雪堆狼"
+      },
+      "ice_wisp": {
+        "name": "寒冰微光"
+      },
+      "rime_elemental": {
+        "name": "霜凝元素"
+      },
+      "fen_sprite": {
+        "name": "沼澤小妖"
+      },
+      "frostmane_yeti": {
+        "name": "霜鬃雪人"
+      },
+      "emberwing_drake": {
+        "name": "燼翼幼龍"
+      },
+      "ashbone_raider": {
+        "name": "灰骨掠奪者"
+      },
+      "ashbone_warcaller": {
+        "name": "灰骨戰吼者"
+      },
+      "dune_troll": {
+        "name": "沙丘巨魔"
+      },
+      "gilded_stag": {
+        "name": "鎏金雄鹿"
+      },
+      "gloam_fox": {
+        "name": "暮光狐"
+      },
+      "orchard_treant": {
+        "name": "果園樹人"
+      },
+      "harvest_sprite": {
+        "name": "豐收小妖"
+      },
+      "mere_lurker": {
+        "name": "湖澤潛伏者"
+      },
+      "bogtoad": {
+        "name": "沼蟾"
+      },
+      "drowsy_croaker": {
+        "name": "瞌睡蛙王"
+      },
+      "lily_wisp": {
+        "name": "睡蓮微光"
+      },
+      "willow_sprite": {
+        "name": "柳樹小妖"
+      },
+      "moonfleece_grazer": {
+        "name": "月絨獸"
+      },
+      "gloam_strider": {
+        "name": "幽暝疾行者"
+      },
+      "nightkin_stargazer": {
+        "name": "夜裔觀星者"
+      },
+      "barrow_king": {
+        "name": "古塚之王"
+      },
+      "widowsilk_spinner": {
+        "name": "寡婦絲紡蛛"
+      },
+      "wood_wraith": {
+        "name": "林中怨靈"
+      },
+      "gravenbark_shambler": {
+        "name": "墓皮樹怪"
+      },
+      "pale_huntsman": {
+        "name": "蒼白獵手"
+      },
+      "tide_scuttler": {
+        "name": "潮汐蟹"
+      },
+      "thicket_boar": {
+        "name": "灌叢野豬"
+      },
+      "canopy_weaver": {
+        "name": "樹冠織網蛛"
+      },
+      "idol_guardian": {
+        "name": "神像守衛"
+      },
+      "topiary_stag": {
+        "name": "綠雕雄鹿"
+      },
+      "topiary_wolf": {
+        "name": "綠雕之狼"
+      },
+      "hedge_gnome": {
+        "name": "樹籬地精"
+      },
+      "the_topiary_bull": {
+        "name": "綠雕公牛"
+      },
+      "moor_ram": {
+        "name": "荒原羊"
+      },
+      "gale_wisp": {
+        "name": "疾風精"
+      },
+      "shoal_scuttler": {
+        "name": "淺灘蟹"
+      },
+      "the_wreck_warden": {
+        "name": "沉船守衛"
+      },
+      "riftspawn": {
+        "name": "裂隙孽生"
+      },
+      "breach_wretch": {
+        "name": "裂口惡徒"
+      },
+      "void_stalker": {
+        "name": "虛空潛獵者"
+      },
+      "sundered_horror": {
+        "name": "碎裂之恐怖"
+      },
+      "rift_hellguard": {
+        "name": "地獄衛士"
+      },
+      "rift_pact_acolyte": {
+        "name": "契約侍僧"
+      },
+      "rift_boss_ritualist": {
+        "name": "契約縛身者維爾科爾法師"
+      },
+      "rift_boss_pitlord": {
+        "name": "深淵之主阿茲戈拉斯"
       },
       "ironvein_foreman": {
         "name": "鐵脈工頭"
@@ -7334,6 +9219,16 @@ export const zh_TW: EnTranslations = {
         "title": "護甲大師",
         "greeting": "爐火正旺，砂輪正轉。能砍的東西，我都賣。"
       },
+      "heroic_quartermaster": {
+        "name": "軍需官維克斯",
+        "title": "英雄軍需官",
+        "greeting": "英雄深淵的憑證能換來高崖望最上等的戒指和吊墜。把你的徽記拿給我看。"
+      },
+      "fury": {
+        "name": "怒焰",
+        "title": "榮譽軍需官",
+        "greeting": "戰場黃沙銘記每一場勝利。願你妥善運用這份榮譽。"
+      },
       "loremaster_caddis": {
         "name": "凱迪斯博學者",
         "title": "博學者",
@@ -7343,6 +9238,21 @@ export const zh_TW: EnTranslations = {
         "name": "拍賣師沃斯",
         "title": "世界市場守護者",
         "greeting": "世界市場在此亦可使用，{className}。從王國各地的冒險者手中購買，或出售你自己的貨物。"
+      },
+      "bursar_fernando": {
+        "name": "司庫費爾南多",
+        "title": "鍍金保險箱",
+        "greeting": "歡迎來到鍍金保險箱。你的財物在我們的鎖後安然無恙。"
+      },
+      "bursar_petra_vell": {
+        "name": "司庫佩特拉·維爾",
+        "title": "鍍金保險箱",
+        "greeting": "鍍金保險箱帳目清晰，金庫更是一塵不染。想讓我們為你存放些什麼？"
+      },
+      "bursar_aldous_crane": {
+        "name": "司庫奧爾多斯·克萊恩",
+        "title": "鍍金保險箱",
+        "greeting": "每一只木箱、每一個錢櫃、每一件飾物，交給鍍金保險箱都萬無一失。"
       },
       "brother_aldric_raid": {
         "name": "奧德里克修士",
@@ -7364,65 +9274,80 @@ export const zh_TW: EnTranslations = {
         "title": "亡者的守護者",
         "greeting": "安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。"
       },
-      "caravan_master_saffa": {
-        "name": "商隊長莎法",
-        "title": "最後之井守護者",
-        "greeting": "朋友，在這裡，水是唯一的錢幣。高望派我們來，是要把它花在刀口上——而這片荒原，一心想讓我們破產。"
+      "groundskeeper_bram": {
+        "name": "場地管理員布拉姆",
+        "title": "母豬場看守",
+        "greeting": "休戰約定在母豬場依然有效，{className}：只許用腳和肩膀。想為銅奶桶一戰嗎？"
       },
-      "scout_maren_wastes": {
-        "name": "瑪倫斥候",
-        "title": "元帥的斥候",
-        "greeting": "我在泥沼追過爛泥，在荊峰踏過積雪。沙子更難纏——你走過的每一步，沙都記得。"
+      "chronicler_saul": {
+        "name": "編年史者紹爾",
+        "title": "東溪谷編年史",
+        "greeting": "值得做的事蹟，就值得寫下兩遍，{playerName}：一遍記進帳冊，一遍留給爐邊。"
       },
-      "loremaster_caddis_wastes": {
-        "name": "凱迪斯博學者",
-        "title": "沉沒王冠學者",
-        "greeting": "札爾凱斯在一夜之間傾覆，{playerName}——整個王國話說到一半，就被熔成了玻璃。我等了一輩子，就想聽聽那句話的下文。"
+      "chronicler_osric_fenn": {
+        "name": "編年史者奧斯里克·芬恩",
+        "title": "泥沼濕地編年史",
+        "greeting": "當心書頁受潮，{playerName}。沼澤吞掉的書可比讀者讀掉的多。"
       },
-      "brother_aldric_wastes": {
-        "name": "奧德里克修士",
-        "title": "山谷牧師",
-        "greeting": "墓龍的熱氣連這裡都滲得到，{playerName}——隔著靴底我都能感覺到。不管邪教在那片玻璃裡挖什麼，都絕不能讓他們帶回家。"
+      "chronicler_edda_hartwell": {
+        "name": "編年史者贊西",
+        "title": "荊峰高地編年史",
+        "greeting": "高山什麼都不會忘記，{playerName}，我也一樣。讓我看看你都做過什麼吧。"
       },
-      "old_haruk": {
-        "name": "老哈魯克",
-        "title": "心泉守望者",
-        "greeting": "早在這道泉需要人看守之前，我家就世世代代照料著它。九位國王飲過它的水。第十位，想把它「整個」喝乾。"
+      "keeper_saelwyn": {
+        "name": "守護者塞爾文",
+        "title": "幽谷守護者",
+        "greeting": "你的同族鮮少踏足這片樹蔭，{className}。輕聲慢行，歡迎你的到來。"
       },
-      "provisioner_ashka": {
-        "name": "補給官艾什卡",
-        "title": "商隊補給官",
-        "greeting": "薄餅、椰棗酒，還有沒泡過屍體的清水。全荒原最上等的貨。"
+      "loremother_bryn": {
+        "name": "傳識之母布琳",
+        "title": "聖祠之聲",
+        "greeting": "這山谷裡的每一盞光都銘記著什麼，{playerName}。幫我聽聽它們的低語。"
       },
-      "forgemaster_derin": {
-        "name": "鍛造大師德林",
-        "title": "商隊鐵匠",
-        "greeting": "爐子裡是沙，淬火桶裡是沙，牙縫裡也是沙。憋著這股怨氣，打出來的刀反而更利。"
+      "provisioner_fenna": {
+        "name": "補給員芬娜",
+        "title": "古輝鎮補給員",
+        "greeting": "麵包還熱著，泉水依然甘甜。幽谷有所饋贈，我也一樣。"
       },
-      "auctioneer_zeph": {
-        "name": "拍賣師澤夫",
-        "title": "世界市場守護者",
-        "greeting": "朋友，世界市場連最後之井都到得了。金幣不管在哪片沙漠，秤起來都一樣重。"
+      "wardsmith_orun": {
+        "name": "結界鐵匠歐倫",
+        "title": "古爐看守",
+        "greeting": "這些熔爐幾百年前就冷了，{className}，但它們鍛出的兵刃至今鋒利。"
       },
-      "wellwatch_hana": {
-        "name": "井衛哈娜",
-        "title": "商隊護衛",
-        "greeting": "帶著水進來，帶著水出去。這中間的一切，都歸我管。"
+      "archivist_tullo": {
+        "name": "檔案員圖洛",
+        "title": "讀石者",
+        "greeting": "外面那些石碑已經許久不曾對人開口。也許它們正等著新的耳朵。"
       },
-      "wellwatch_toma": {
-        "name": "井衛托馬",
-        "title": "商隊護衛",
-        "greeting": "今天值班很平靜。不過在這裡，「平靜」只代表沙子嚼得比較慢。"
+      "warden_coalfast": {
+        "name": "守望者 煤堅",
+        "title": "堡壘指揮官",
+        "greeting": "裂隙可不管鷗港有多小，{className}。我們守住這片海岸，否則便再無海岸可守。與我們並肩而戰，我絕不會忘記。"
       },
-      "drover_pell": {
-        "name": "趕騾人佩爾",
-        "title": "趕騾人",
-        "greeting": "騾子先喝水，這是商隊的規矩。你要是想跟騾子講道理，請便。"
+      "riftwatch_ollun": {
+        "name": "裂隙守望 歐倫",
+        "title": "裂隙學者",
+        "greeting": "若你聽得出那聲響，每道裂隙開啟之前都會歌唱。此刻我聽見島上有三道正在騷動，其中一道就在近旁。"
       },
-      "dowser_emrys": {
-        "name": "尋水師艾姆里斯",
-        "title": "尋水人",
-        "greeting": "我的探水杖只在瀑布那裡彎成兩折，方圓四十哩再無別處。這片土地與墳場之間，只隔著一道泉水。"
+      "quartermaster_edda": {
+        "name": "軍需官 艾妲",
+        "title": "堡壘軍械師",
+        "greeting": "鋼與鹽，{className}，這便是我僅剩能發放的一切了。收下它，讓那些裂隙後悔開在我搆得著的地方。"
+      },
+      "mender_saul": {
+        "name": "療者 索爾",
+        "title": "戰地外科醫",
+        "greeting": "這一個月裡我接的斷骨，比十年來替漁人跌傷接的還要多。裂隙奪走的東西，鮮少留下什麼。若你能辦到，就完好無缺地回到我身邊吧。"
+      },
+      "bellkeeper_tam": {
+        "name": "守鐘人 塔姆",
+        "title": "守望鐘司",
+        "greeting": "這口鐘是裂隙唯一給我們的警訊，{className}。一響是田野有變，兩響是崖壁告急，三響時它已近得再怎麼奔逃也無濟於事。留心聽著它，它或許便能保你周全。"
+      },
+      "fisher_nell": {
+        "name": "受驚的 奈兒",
+        "title": "鷗港漁人",
+        "greeting": "它就開在曬網的地方。就在那裡，就在我這輩子每天清晨站立的地方。我再也不下海岸了。如今哪兒我都幾乎不再去了。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",
@@ -7431,6 +9356,16 @@ export const zh_TW: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "人人都有一技之長",
+        "text": "伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。",
+        "completion": "看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，靠這些都能正經謀生。",
+        "objectives": {
+          "0": {
+            "label": "礦石塊"
+          }
+        }
+      },
       "q_wolves": {
         "title": "門前群狼",
         "text": "森林狼已敢撲咬北路旅人，{playerName}。擊敗8隻森林狼，讓東溪能鬆一口氣。",
@@ -8213,236 +10148,169 @@ export const zh_TW: EnTranslations = {
           }
         }
       },
-      "q_sw_arrival": {
-        "title": "最後之井",
-        "text": "歡迎來到地圖的盡頭，{playerName}。高望把這趟遠行稱作「南方遠征」；在我看來，不過是四十條人命和一道泉水。所以其他事都往後排——先顧水。到營地北邊的心泉水潭打滿四袋水回來，讓我知道通往瀑布的那條線走得安穩。",
-        "completion": "水又冰又清，你身上也沒插著箭——這是最後之井這一季聽過最好的消息。",
+      "q_archetype_acceptance": {
+        "title": "屬於你自己的技藝",
+        "text": "東溪的每一位工匠最終都會選定一門屬於自己的技藝。用一件事證明自己吧，{playerName}，宣告你的道路。",
+        "completion": "你的道路已經選定；願你走得穩當。",
         "objectives": {
           "0": {
-            "label": "滿溢水囊"
+            "label": "擊敗森林之狼"
           }
         }
       },
-      "q_sw_prowlers": {
-        "title": "暮色之牙",
-        "text": "暮鬃獸已經聽熟了我們水車的聲響，{playerName}。每到黃昏牠們就逼近一步，昨晚更有一頭連著挽具把一匹騾子拖走了。去營地南邊的骨風平原削減獸群，帶八張獸皮回來，證明這一課牠們記住了。",
-        "completion": "八張獸皮，圍欄邊就少了八道影子。騾子總算能睡了——比我睡得還多。",
+      "q_prof_make_amends": {
+        "title": "彌補",
+        "text": "若要放下一門技藝、轉投另一門，工匠必須先為放棄的道路做出彌補，{playerName}。",
+        "completion": "彌補已經完成；一條新的道路已向你敞開。",
         "objectives": {
           "0": {
-            "label": "擊敗暮鬃潛行獸"
+            "label": "擊敗森林之狼"
+          }
+        }
+      },
+      "q_veil_thinned": {
+        "title": "稀薄的帷幕",
+        "text": "洞穴竟為你敞開了。那麼封印比我擔心的還要脆弱，{playerName}。帷幕撕裂之處，光靈會變得陰冷黑暗。給我帶來八份暮光靈的精華，我便能讀出這道傷口有多深。",
+        "completion": "每一份都是冰冷的。幽谷也許只剩一個季節，裂縫就會變成裂谷。你我有得忙了。",
+        "objectives": {
+          "0": {
+            "label": "暮光靈精華"
+          }
+        }
+      },
+      "q_gleaming_antlers": {
+        "title": "輝光鹿角",
+        "text": "帷紗雄鹿在吃草的地方灑下微光，牠們蛻下的鹿角能把光留住許多年。從星落盆地的鹿群那裡取來五支，我的燈籠整個冬天都不用點油。不必傷害雄鹿，但牠們也不會輕易相讓。",
+        "completion": "看牠們把光留得多好！沒有火焰，沒有煙，只有光。幽谷自有饋贈。",
+        "objectives": {
+          "0": {
+            "label": "輝光鹿角"
+          }
+        }
+      },
+      "q_wisp_lights": {
+        "title": "淺灘之光",
+        "text": "微光靈身上帶著幽谷封印之時落下的古老星光。六粒光塵，聖祠的燈便能燃上一年。只取那些將熄的，幽谷的饋贈足夠，無需貪求。",
+        "completion": "柔和得像最初的星辰。放在祭壇邊吧，聖祠會完成剩下的事。",
+        "objectives": {
+          "0": {
+            "label": "光塵"
+          }
+        }
+      },
+      "q_calming_the_deep": {
+        "title": "安撫幽深",
+        "text": "輝光深處的孢子人本是溫和的族群，直到裂縫觸到了他們的蘑菇環。被侵蝕奪走的，再也不會歸還。讓墮落者安息吧，{playerName}：深處北面，十個。",
+        "completion": "你做了我不忍做的事。南邊的採集者還在歌唱；因為你，他們能一直唱下去。",
+        "objectives": {
+          "0": {
+            "label": "墮落的孢子人：已安息"
+          }
+        }
+      },
+      "q_spore_hearts": {
+        "title": "蘑菇環之心",
+        "text": "孢子人墮入黑暗後，心臟仍靠借來的陰影跳動。四顆這樣的心，在聖祠淨化後，能讓我們弄清侵蝕如何蔓延。這活計殘酷，{playerName}，卻是修補之工。",
+        "completion": "好了。淨化了，也安靜了。每一顆都指向同一處：陰影來自沉沒王庭。去告訴塞爾文。",
+        "objectives": {
+          "0": {
+            "label": "孢子之心"
+          }
+        }
+      },
+      "q_monument_tour": {
+        "title": "石碑的記憶",
+        "text": "封印之前的石碑還立著三座：一座在暮落瞭望台，一座在沉沒王庭，還有一座失落在無人行走的東北角。替我讀一讀它們，{playerName}。我的膝蓋兩百年前就爬不動台階了。",
+        "completion": "瞭望台、王庭、被遺忘的角落……封印之歌的三段歌詞，自吟唱之日起第一次重聚。你讓一個老讀者非常快樂。",
+        "objectives": {
+          "0": {
+            "label": "已讀瞭望台石碑"
           },
           "1": {
-            "label": "暮鬃獸皮"
-          }
-        }
-      },
-      "q_sw_carrion_glass": {
-        "title": "食腐的玻璃",
-        "text": "趕騾人管牠們叫玻璃甲蟲——獵犬那麼大的甲蟲，殼是熔成的玻璃，正從東邊的焦地裡成群湧出。德林賭咒說，用那種殼開出來的刃口比任何磨刀石都利。敲碎八隻甲蟲，帶六枚完整的殼回來；當心殼上的亮光，那表示牠們正在硬化。",
-        "completion": "你看這刃口的光！德林這輩子都欠我一次磨刀，而東邊的路，也欠你一趟安靜的通行。",
-        "objectives": {
-          "0": {
-            "label": "擊敗玻璃甲蟲"
-          },
-          "1": {
-            "label": "玻璃甲蟲殼"
-          }
-        }
-      },
-      "q_sw_lost_caravan": {
-        "title": "沙丘留下的東西",
-        "text": "有三輛貨車始終沒抵達井邊，{playerName}——糧食、工具，領頭那輛還是我妹夫在趕。風暴把它們吹散在西南邊的沙丘裡。找到殘骸，仔細搜一搜。我需要貨單，才知道我們損失了什麼……我也需要知道，有沒有人活著走了出去。",
-        "completion": "靴印是「離開」殘骸的——然後就只剩掠奪者的足跡了。他們把車夫活捉了。那要嘛是慈悲，要嘛是算計，而在這裡，我很清楚該賭哪一個。",
-        "objectives": {
-          "0": {
-            "label": "搜查損毀的貨車"
-          }
-        }
-      },
-      "q_sw_marauders": {
-        "title": "水稅",
-        "text": "沙丘之刃管這叫「收稅」：見面就收，要水或要血。他們在沙丘西南的窪地紮了營，圍著搶來的火堆，喝著搶來的水囊。去擊潰他們，{playerName}。放倒十名掠奪者，再帶五個水囊回來——那些皮囊裡裝的，是我們族人的性命。",
-        "completion": "你帶回的每一個水囊，都代表這口井邊有人能多活一天。沙丘之刃會記住向我們收稅的代價。",
-        "objectives": {
-          "0": {
-            "label": "擊敗沙丘之刃掠奪者"
-          },
-          "1": {
-            "label": "失竊水囊"
-          }
-        }
-      },
-      "q_sw_karesh": {
-        "title": "焦渴之王",
-        "text": "他們的頭目自稱「焦渴者卡雷什」——他喝乾了自己的蓄水池，還在殘渣裡撒鹽，免得對手跟著沾光。一個對自家水井都下得了這種手的人，對我們的井只會更狠。他在西邊山脊下的卡雷什窪地稱王。終結他的統治，{playerName}，再把他囤著的最後一個水囊帶回來。",
-        "completion": "原來這就是焦渴之王的最後一囊水。莎法會把它倒回井裡——一滴不留，這是原則。",
-        "objectives": {
-          "0": {
-            "label": "擊敗焦渴者卡雷什"
-          },
-          "1": {
-            "label": "卡雷什的最後水囊"
-          }
-        }
-      },
-      "q_sw_survey": {
-        "title": "中斷的句子",
-        "text": "既然井邊暫時用不著你——就陪我走一趟歷史吧，{playerName}。太陽王庭留下了壁畫：一幅在水道脊下方，一幅在平頂山山腳，一幅在綠洲廢墟的雙塔旁。三幅都拓下來。札爾凱斯死在句子的中途，而我打算把剩下的半句讀完。",
-        "completion": "就是這裡——句子接上了：「當王冠燙得再也戴不住，諸王便登上平頂山，把火焰『歸還』。」那是一場棄絕之禮，藉方尖碑行之——先晨、後午、再暮。順序很重要，{playerName}。儀式向來講究順序。",
-        "objectives": {
-          "0": {
-            "label": "拓下壁畫"
-          }
-        }
-      },
-      "q_sw_vigil_dawn": {
-        "title": "守夜臺：黎明",
-        "text": "營地西邊那座平頂山，正是守夜臺本身——諸王行棄絕之禮的路。黎明方尖碑立在第一層臺地上，是日光最先照到的地方。沿著之字坡爬上去，把手放在碑上。黎明最先甦醒；壁畫對這一點相當堅持。",
-        "completion": "你也感覺到它的嗡鳴了？妙極了。兩個紀元過去，這場儀式竟還蓄著力。黎明已燃——正午在上頭等著。",
-        "objectives": {
-          "0": {
-            "label": "自方尖碑取得晨火印記"
-          }
-        }
-      },
-      "q_sw_vigil_noon": {
-        "title": "守夜臺：正午",
-        "text": "正午加冕於峰頂——第二座方尖碑立在平頂山的最高處，在那裡，太陽獨佔整片天空。攀登本身就是重點，{playerName}：當年諸王是頂著王冠一步一步走上去的。去喚醒正午方尖碑。",
-        "completion": "先是黎明，再是正午。儀式只剩最後一個時辰——而守夜臺，已經開始注意到我們了。",
-        "objectives": {
-          "0": {
-            "label": "自方尖碑取得午火印記"
-          }
-        }
-      },
-      "q_sw_vigil_dusk": {
-        "title": "守夜臺：黃昏",
-        "text": "黃昏總是最後赴約——它的方尖碑立在西側的山嘴上，俯瞰峽谷。但你得明白這場儀式的本質，{playerName}：棄絕，必須有人「見證」。王庭以活生生的山石立了一尊哨衛作見證者；黃昏一旦點燃，它便會甦醒，審視你究竟是棄絕，還是純粹奪取。去說服它。徹底地說服。",
-        "completion": "哨衛判定你配得上——或者判定你殺不死，對一塊石頭來說，這兩者是同一個結論。守夜之禮已成，札爾凱斯的每一扇門，如今都成了值得一問的問題。",
-        "objectives": {
-          "0": {
-            "label": "喚醒黃昏方尖碑"
-          },
-          "1": {
-            "label": "擊敗守夜哨衛"
-          }
-        }
-      },
-      "q_sw_revenants": {
-        "title": "亡者的崗哨",
-        "text": "札爾凱斯的士兵從沒得知戰爭已敗——更沒得知它敗得有多「快」。他們在瀑布北邊的外城廢墟裡巡邏，盔甲熔進了骨頭，攔住旅人索問早已無人記得的口令。送十二個去安息吧，{playerName}，並收集他們的衛隊印記；有了印記，我們才能通行到城市更深處。",
-        "completion": "每一枚印記都還帶著餘溫——忠誠到最後一刻，甚至更久。維繫他們崗哨的東西還在更裡面，而現在，我們的官階比它大了。",
-        "objectives": {
-          "0": {
-            "label": "擊敗日炙亡魂"
-          },
-          "1": {
-            "label": "王冠衛隊之印"
-          }
-        }
-      },
-      "q_sw_courtiers": {
-        "title": "灰燼王庭",
-        "text": "再往深處走，王庭本身仍在開議——內侍與誦經士守著一位死去國王的禮制，對著一座熔渣王座誦讀詩篇。他們的詩篇集裡記著聖所的禮拜儀文，而儀文裡藏著點燃王冠火盆的儀式。去打散這場朝會，{playerName}，帶一本書頁完整的詩篇集回來。",
-        "completion": "噢，這可是精妙的手筆——整套火盆儀式，以一位已故領唱人的筆跡記譜。他們對著一座空王座整整唱了兩百年。我幾乎要憐憫他們了。幾乎。",
-        "objectives": {
-          "0": {
-            "label": "擊敗灰燼朝臣"
-          },
-          "1": {
-            "label": "灰燼詩篇"
-          }
-        }
-      },
-      "q_sw_braziers": {
-        "title": "王冠燃起",
-        "text": "詩篇集點名了塔樓之間的三座王冠火盆——三座齊燃，內聖所便會自行開啟，一如歷代加冕之時。我把儀文用粉筆抄在你的護手上了，{playerName}，盡量別流汗。先說清楚：點亮的王冠，就是看得見的王冠。第三簇火焰燃起的那一刻，城裡的一切都會知道。",
-        "completion": "我們在井邊看著塔樓一座接一座亮起——莎法哭了，而我承認，這回我沒對任何人說教。聖所已敞開。而裡面有什麼，正在應和著歌唱。",
-        "objectives": {
-          "0": {
-            "label": "點燃王冠火盆"
-          }
-        }
-      },
-      "q_sw_sunspeaker": {
-        "title": "第十次加冕",
-        "text": "聖所裡的那個聲音，是太陽代言人亞薩里斯——札爾凱斯九位國王皆由他加冕。詩篇稱他為王庭活著的記憶，而他花了兩個紀元籌備第十次加冕：為火焰本身加冕。他就站在雙塔之間的太陽王座前。廢黜他，{playerName}，趕在他完成一場全沙漠都會後悔的儀式之前。",
-        "completion": "九頂王冠，他親手戴上九道眉間；而第十頂，得燒掉整個世界才戴得下。史書將記載：是你宣布札爾凱斯的王庭休會。我會親自確保史書一字不差地這麼寫。",
-        "objectives": {
-          "0": {
-            "label": "廢黜太陽代言人亞薩里斯"
-          }
-        }
-      },
-      "q_sw_emberveil": {
-        "title": "燼紗教",
-        "text": "你也看到東側山緣那些蒙紗的營地了，{playerName}。他們是龍教——一支分裂出來的教派，名為燼紗教，趁高望緊盯聖所大門時翻過了山口。母教高歌喚醒墓龍，這一支卻在挖掘，要「武裝」牠。他們的狂熱者和炎術師正把整片玻璃地翻過來找什麼東西。趕在他們找到之前，削減他們的人手。",
-        "completion": "那片玻璃地裡少了十六把鏟子。但挖掘聲日夜不歇——他們已經不是在找了，{playerName}。他們是在往外挖。",
-        "objectives": {
-          "0": {
-            "label": "擊敗燼紗狂熱者"
-          },
-          "1": {
-            "label": "擊敗燼紗炎術師"
-          }
-        }
-      },
-      "q_sw_writs": {
-        "title": "面紗下的教令",
-        "text": "他們的頭目身上帶著教令——以母教密文寫成的命令。我在高望破譯過那套密文，在這裡我也能再破一次。給我帶五份燼紗教令回來，{playerName}，我們就能一字不差地讀出他們被派來取什麼。",
-        "completion": "果然不出我所懼。「尋回『初燼』——太陽諸王自吾主之火竊走並鎖縛的那塊碎片。將它送往聖所之門；封印無法抵禦它自身的火焰。」他們打算用墓龍自己被竊的火，把墓龍的門燒開，{playerName}。",
-        "objectives": {
-          "0": {
-            "label": "燼紗教令"
-          }
-        }
-      },
-      "q_sw_glasscut": {
-        "title": "天空燃燒之地",
-        "text": "玻璃裂谷正是初燼墜落之處——就在它毀滅札爾凱斯的那一夜。那裡的地面至今灼熱，燼火元素在其上遊走，像一簇簇始終沒有落地的火星。初燼正在甦醒，{playerName}；邪教越挖越近，它的火星就越發張狂。驅散八隻元素，帶五枚活燼回來。我必須掂量掂量，我們面對的是怎樣一團火。",
-        "completion": "泡在受祝福的鹽裡，它們竟還在扭動……這是龍焰，如今再無可疑。初燼不是遺物，{playerName}。它是「殘軀」——科祖爾脾性中活生生的一塊，而且它還記得自己曾被當作王冠佩戴。",
-        "objectives": {
-          "0": {
-            "label": "擊敗燼火元素"
-          },
-          "1": {
-            "label": "活燼"
-          }
-        }
-      },
-      "q_sw_offering": {
-        "title": "泉水記得",
-        "text": "牧師要去直面那團火，你也要同去。那就先聽一句守井人的智慧吧，{playerName}：心泉自墓龍囚牢的正下方湧起，而從一件東西底下流過的水，最了解那件東西。帶著我的供碗到瀑布頂端的水潭，倒下清水，然後傾聽。這道泉曾經淹熄過這團火一次。出發去求火燒身之前，先讓泉水祝福你。",
-        "completion": "你也聽見了——深處的水，在世界底下流動。把那個聲音當鎧甲穿上吧，{playerName}。火焰喧囂，但泉水先於它存在，也將在它之後長流。",
-        "objectives": {
-          "0": {
-            "label": "在心泉獻上供品"
-          }
-        }
-      },
-      "q_sw_first_ember": {
-        "title": "初燼",
-        "text": "它出土了，{playerName}。邪教的坑洞在黎明時分塌開，玻璃裂谷從內裡亮了起來——初燼就站在它兩個紀元前砸出的坑中，披著火焰如同君王的冠服，燼紗教徒一排排向它下跪。一旦它抵達聖所之門，高望流過的每一滴血都將化為灰燼。你身上帶著泉水的祝福與守夜臺的見證。下到玻璃裡去，替札爾凱斯把那句話說完：火焰，「歸還」。",
-        "completion": "它熄滅的那一刻，瀑布的水又急又亮——那是泉水，把宿敵收回了水底。你做到了九位國王做不到的事，{playerName}：你把火還了回去。坐吧，喝口水。今晚的水最甜。",
-        "objectives": {
-          "0": {
-            "label": "熄滅初燼"
-          }
-        }
-      },
-      "q_sw_afterglow": {
-        "title": "活人的水",
-        "text": "哈魯克說，泉水如今唱的調子低了一度，像一筆還清的債。燼紗教非灰即逃，王庭已然休會，我的帳本上終於是水多過憂。最後一件事，{playerName}——在營地裡走一圈，讓瑪倫、凱迪斯和奧德里克修士好好向你道個謝。這是他們掙來的機會，也是你掙來的。",
-        "completion": "那麼一切都結束了，最後之井也終於只是……一口井。若我這個老商隊頭子說了算，它會是一條活路上眾多水井中的第一口。灼熱荒原會記住你的名字，{playerName}——水記得一切。",
-        "objectives": {
-          "0": {
-            "label": "與瑪倫斥候交談"
-          },
-          "1": {
-            "label": "與凱迪斯博學者交談"
+            "label": "已讀王庭石碑"
           },
           "2": {
-            "label": "與奧德里克修士交談"
+            "label": "已讀遺忘石碑"
+          }
+        }
+      },
+      "q_grove_menace": {
+        "title": "林間之患",
+        "text": "入夜後暮光靈開始在我的攤位間遊蕩，{playerName}，牠們的寒氣碰什麼壞什麼。替我清一清：十隻，哪裡帷幕破了就去哪裡。",
+        "completion": "夜市又能開張了。你有一位終身顧客，至少也有個折扣。",
+        "objectives": {
+          "0": {
+            "label": "已驅散暮光靈"
+          }
+        }
+      },
+      "q_shards_of_starfall": {
+        "title": "星落碎片",
+        "text": "暮光靈飄過水晶原野時，古老星光的碎屑會像芒刺般附在牠們身上。六枚碎片，{playerName}，我就能把封印的年代精確到吟唱的那個季節。",
+        "completion": "看這些紋理！秋天。幽谷是在秋天被封印的。兩百年的爭論，被六塊小石頭了結。",
+        "objectives": {
+          "0": {
+            "label": "星落碎片"
+          }
+        }
+      },
+      "q_treant_accord": {
+        "title": "樹人之約",
+        "text": "樹蔭長者們的根被侵蝕啃噬，外層樹皮紛紛剝落。四段樹皮，我就能為整片林地熬製藥膏。你去撬樹皮時它們不會道謝，{playerName}，但它們會因此多站立一個世紀。",
+        "completion": "四段都厚實完好。藥膏要熬一個星期，藥效要過一百年才算完。樹木衡量善意的方式不一樣。",
+        "objectives": {
+          "0": {
+            "label": "長者樹皮"
+          }
+        }
+      },
+      "q_spore_tide": {
+        "title": "抵禦孢子之潮",
+        "text": "藥膏守住了林地，但每到黃昏，侵蝕就把深處逼得更緊。還要讓十二個墮落者安息，採集者們才能奪回北面的蘑菇環，{playerName}。",
+        "completion": "今夜北面的蘑菇環又在歌唱了。輕輕地，但在歌唱。",
+        "objectives": {
+          "0": {
+            "label": "墮落的孢子人：已安息"
+          }
+        }
+      },
+      "q_sunken_court": {
+        "title": "沉沒王庭",
+        "text": "布琳讀得沒錯：裂縫貫穿東邊的古老王庭，而它的守衛醒得不對了。它們本是為守護封印而造；如今卻會碾碎任何靠近的人。清除廢墟中的八座。",
+        "completion": "八座守衛，歸於沉寂。我還記得它們被立起來的時候，{playerName}。別這麼驚訝；幽谷讓它的守護者活得很久。",
+        "objectives": {
+          "0": {
+            "label": "上古守衛：已沉寂"
+          }
+        }
+      },
+      "q_wardens_echoes": {
+        "title": "守望者的迴響",
+        "text": "主人雖已沉默，王庭的守衛仍在重複它最後的命令，像一道不肯消散的迴聲。封印一日不歸位，它們就會不斷甦醒，{playerName}。再平息十座，石匠們才能抵達封印石。",
+        "completion": "迴聲一次比一次微弱。很快王庭就只剩下風和常春藤，廢墟本該如此。",
+        "objectives": {
+          "0": {
+            "label": "上古守衛：已沉寂"
+          }
+        }
+      },
+      "q_waking_warden": {
+        "title": "甦醒的守望者",
+        "text": "王庭安靜了，它的主人卻沒有。持守封印的守望者在扭曲中甦醒，它不倒下，封印就無法修復。這一戰不會輕鬆；能找到一個朋友就帶上一個，{playerName}。能找到兩個就帶上兩個。",
+        "completion": "它鐘鳴般的嗓音沉寂了。我在這裡都感覺到了，像有重擔從整座山谷卸下。",
+        "objectives": {
+          "0": {
+            "label": "已擊敗甦醒的守望者"
+          }
+        }
+      },
+      "q_seal_restored": {
+        "title": "封印重鑄",
+        "text": "帶上守望者之印，去王庭中心的封印石那裡，把它放回被擊落的位置。那時幽谷便能開始癒合，而你，{playerName}，將完成你的同族從未做到的事。",
+        "completion": "我在這裡感覺到它合攏了，溫柔如暮色。幽谷會記得它的朋友，{playerName}。無論你走多遠，大樹下總會為你留一盞燈。",
+        "objectives": {
+          "0": {
+            "label": "封印已放回封印石"
           }
         }
       },
@@ -8544,6 +10412,12 @@ export const zh_TW: EnTranslations = {
           },
           "9": {
             "label": "明木林地"
+          },
+          "10": {
+            "label": "母豬場"
+          },
+          "11": {
+            "label": "遠岸沙洲堤道"
           }
         }
       },
@@ -8610,6 +10484,285 @@ export const zh_TW: EnTranslations = {
           },
           "9": {
             "label": "墓龍聖所"
+          }
+        }
+      },
+      "veiled_hollow": {
+        "name": "帷幕幽谷",
+        "welcome": "空氣中迴盪著古老魔法的低鳴。到古輝鎮的巨樹下尋找守護者塞爾文吧。",
+        "pois": {
+          "0": {
+            "label": "古輝鎮"
+          },
+          "1": {
+            "label": "暮落洞穴"
+          },
+          "2": {
+            "label": "暮落瞭望台"
+          },
+          "3": {
+            "label": "古木林地"
+          },
+          "4": {
+            "label": "星落盆地"
+          },
+          "5": {
+            "label": "沉沒王庭"
+          },
+          "6": {
+            "label": "水晶淺灘"
+          },
+          "7": {
+            "label": "輝光深處"
+          }
+        }
+      },
+      "drakelands": {
+        "name": "龍裔荒原",
+        "welcome": "灼熱的風從前方的荒漠滾滾而來。巨龍在龍喉火山上空盤旋，巨魔的篝火在沙丘間燃燒。",
+        "pois": {
+          "0": {
+            "label": "望龍哨"
+          },
+          "1": {
+            "label": "門林"
+          },
+          "2": {
+            "label": "燼沙丘"
+          },
+          "3": {
+            "label": "巨魔集會"
+          },
+          "4": {
+            "label": "血玻璃原野"
+          },
+          "5": {
+            "label": "龍喉火山口"
+          }
+        }
+      },
+      "frostveil": {
+        "name": "霜幕之境",
+        "welcome": "白雪吞沒了一切聲響。在舞動的極光之下，寒冷本身彷彿甦醒了。",
+        "pois": {
+          "0": {
+            "label": "冰幔鎮"
+          },
+          "1": {
+            "label": "雪線隘口"
+          },
+          "2": {
+            "label": "冰川湖"
+          },
+          "3": {
+            "label": "極光台階"
+          },
+          "4": {
+            "label": "顫慄沼澤"
+          },
+          "5": {
+            "label": "呼嘯台地"
+          }
+        }
+      },
+      "amberfall": {
+        "name": "琥珀秋境",
+        "welcome": "這裡每一片葉子都燃燒著金紅，卻從不飄落。燈湖鎮的燈籠已為你點亮。",
+        "pois": {
+          "0": {
+            "label": "燈湖鎮"
+          },
+          "1": {
+            "label": "融金隘口"
+          },
+          "2": {
+            "label": "鎏金果園"
+          },
+          "3": {
+            "label": "豐收谷"
+          },
+          "4": {
+            "label": "大湖"
+          },
+          "5": {
+            "label": "燼楓坡"
+          },
+          "6": {
+            "label": "斜碑"
+          }
+        }
+      },
+      "willowfen": {
+        "name": "柳澤沼地",
+        "welcome": "沼澤裡蜻蜓與蜜蜂嗡嗡作響。跨過橋進入橋湖鎮，歇歇腳吧。",
+        "pois": {
+          "0": {
+            "label": "橋湖鎮"
+          },
+          "1": {
+            "label": "琥珀沼石階"
+          },
+          "2": {
+            "label": "睡蓮澤"
+          },
+          "3": {
+            "label": "澤光池"
+          },
+          "4": {
+            "label": "垂柳灣"
+          },
+          "5": {
+            "label": "沉眠淺灘"
+          }
+        }
+      },
+      "nightbloom": {
+        "name": "夜綻花野",
+        "welcome": "越過夜門，連空氣都在做夢。沿著花光走向月棲鎮，別忘了看看懸在天上沉睡的世界。",
+        "pois": {
+          "0": {
+            "label": "月棲鎮"
+          },
+          "1": {
+            "label": "夜門"
+          },
+          "2": {
+            "label": "月井"
+          },
+          "3": {
+            "label": "暮光花田"
+          },
+          "4": {
+            "label": "守望石陣"
+          },
+          "5": {
+            "label": "不眠古塚"
+          }
+        }
+      },
+      "wraithwood": {
+        "name": "怨靈林",
+        "welcome": "樹冠像棺蓋一樣在路上合攏。跟緊絞湖鎮的燈火，若林中有聲音喊你的名字，千萬別回應。",
+        "pois": {
+          "0": {
+            "label": "絞湖鎮"
+          },
+          "1": {
+            "label": "鴉門"
+          },
+          "2": {
+            "label": "寡婦棘叢"
+          },
+          "3": {
+            "label": "吊影林地"
+          },
+          "4": {
+            "label": "哀石禮拜堂"
+          },
+          "5": {
+            "label": "獵手林隙"
+          }
+        }
+      },
+      "palmreach": {
+        "name": "棕櫚灣",
+        "welcome": "溫暖的沙灘，喧鬧的鳥鳴，還有吞沒地平線的叢林。漂流港在海灘上為你留著一堆篝火。",
+        "pois": {
+          "0": {
+            "label": "漂流港"
+          },
+          "1": {
+            "label": "纏木隘口"
+          },
+          "2": {
+            "label": "棕櫚長灘"
+          },
+          "3": {
+            "label": "翠綠叢林"
+          },
+          "4": {
+            "label": "垂藤林"
+          },
+          "5": {
+            "label": "藍寶石潟湖"
+          },
+          "6": {
+            "label": "沉沒神像"
+          }
+        }
+      },
+      "evergarden": {
+        "name": "常青園",
+        "welcome": "樹籬仍有人在修剪，可百年來無人見過園丁。當心迷宮：它也在留意你。",
+        "pois": {
+          "0": {
+            "label": "籬苑鎮"
+          },
+          "1": {
+            "label": "花園之門"
+          },
+          "2": {
+            "label": "雕像步道"
+          },
+          "3": {
+            "label": "野薔薇叢"
+          },
+          "4": {
+            "label": "花瓣池"
+          },
+          "5": {
+            "label": "大迷宮"
+          },
+          "6": {
+            "label": "噴泉庭院"
+          }
+        }
+      },
+      "galecrest": {
+        "name": "疾風崖",
+        "welcome": "這裡的風從未停過，老燈塔的火也從未熄過。燭港只求你隨手關上旅店的門。",
+        "pois": {
+          "0": {
+            "label": "燭港"
+          },
+          "1": {
+            "label": "風道"
+          },
+          "2": {
+            "label": "嘯風丘陵"
+          },
+          "3": {
+            "label": "老燈塔"
+          },
+          "4": {
+            "label": "斷崖"
+          },
+          "5": {
+            "label": "沉船灘"
+          },
+          "6": {
+            "label": "鏡湖"
+          }
+        }
+      },
+      "farshore_isle": {
+        "name": "遠岸",
+        "welcome": "越過那道沙洲，鷗港的鐘聲會先於城鎮尋著你。裂隙無預警地撕裂而開，這座據點便死守著自己的海岸，抵擋一切從中傾湧而出之物。他們已等候像你這樣的人許久了。",
+        "pois": {
+          "0": {
+            "label": "鷗港"
+          },
+          "1": {
+            "label": "登岸碼頭"
+          },
+          "2": {
+            "label": "守望草原"
+          },
+          "3": {
+            "label": "碎裂斷崖"
+          },
+          "4": {
+            "label": "裂隙原野"
           }
         }
       }
@@ -8688,12 +10841,14 @@ export const zh_TW: EnTranslations = {
       "crownforged": {
         "name": "骨鑄戰裝",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "力量提高 15 點，耐力提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "力量提高 15 點，耐力提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一擊會使目標產生「骨刺」，每 2 秒流血 8 點傷害，持續 12 秒。最多疊加 3 層。"
       },
       "deathlord": {
         "name": "塚陵領主戰鬥護甲",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "力量提高 15 點，耐力提高 15 點。"
+        "bonus3": "力量提高 15 點，耐力提高 15 點。",
+        "bonus4": "你的武器致命一擊有 50% 的機率觸發「墓塚之力」，使攻擊強度提高 60 點，持續 10 秒。"
       },
       "greyjaw_stalker": {
         "name": "灰顎追獵者裝備",
@@ -8702,22 +10857,26 @@ export const zh_TW: EnTranslations = {
       "necromancers": {
         "name": "哀織法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 10 點，耐力提高 10 點。"
+        "bonus3": "智力提高 10 點，耐力提高 10 點。",
+        "bonus4": "你的法術有 10% 的機率觸發「清晰施法」，使你的下一個法術免費施放。"
       },
       "nighttalon": {
         "name": "厲牙皮甲",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%，攻擊速度和施法速度提高 15%。"
+        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一擊會撕開「撕裂傷口」，使目標每 2 秒流血 6 點傷害，持續 12 秒。最多疊加 3 層。"
       },
       "soulflame": {
         "name": "怨焰法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的法術有 10% 的機率觸發「灼魂之焰」，使法術強度提高 40 點，持續 10 秒。"
       },
       "stormcallers": {
         "name": "喚風法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的法術有 10% 的機率觸發「灼魂之焰」，使法術強度提高 40 點，持續 10 秒。"
       },
       "vale_arcanist": {
         "name": "谷地秘法師法衣",
@@ -8726,7 +10885,8 @@ export const zh_TW: EnTranslations = {
       "wyrmshadow": {
         "name": "夜牙法衣",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%。"
+        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%。",
+        "bonus4": "你的武器致命一擊有 50% 的機率觸發「獠牙疾襲」，使攻擊速度提高 25%，持續 8 秒。"
       }
     }
   },

@@ -334,7 +334,7 @@ describe('terrain texture set registry', () => {
 // ---------------------------------------------------------------------------
 // Cave tube rendering: the mesh derives from the cave's own nodes and NOTHING
 // else. Terrain towering over the tube must not squish, taper, or collapse a
-// single ring — the entrance stays the full authored arch everywhere.
+// single ring ? the entrance stays the full authored arch everywhere.
 // ---------------------------------------------------------------------------
 
 const MOUTH_SEED = 20061;
@@ -367,7 +367,7 @@ describe('cave tube mesh (never squished by terrain)', () => {
     const rows = pos.count / RING_COLS;
     expect(Number.isInteger(rows)).toBe(true);
     // Apex (u = 0) of each interior ring: arch vertex 7 (ARC_SEGS / 2). The
-    // full clearance stands on EVERY ring — clearance(4) = 3.4yd.
+    // full clearance stands on EVERY ring ? clearance(4) = 3.4yd.
     for (let r = 0; r < rows; r++) {
       const apexY = pos.getY(r * RING_COLS + 7);
       const floorY = pos.getY(r * RING_COLS + (14 + 1)); // first floor column

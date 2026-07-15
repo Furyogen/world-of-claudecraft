@@ -1,4 +1,10 @@
-import type { ArmorType, ItemDef, PlayerClass } from './types';
+import {
+  ALL_CLASSES,
+  type ArmorType,
+  type EquipSlot,
+  type ItemDef,
+  type PlayerClass,
+} from './types';
 
 type WeaponArchetype = 'warrior' | 'caster' | 'rogue';
 
@@ -20,8 +26,6 @@ const CASTER_WEAPON_CLASSES = new Set<PlayerClass>([
   'druid',
 ]);
 const ROGUE_WEAPON_CLASSES = new Set<PlayerClass>(['rogue', 'hunter']);
-const OLD_WARRIOR_WEAPON_ARCHETYPE = new Set<PlayerClass>(['warrior', 'paladin', 'shaman']);
-const OLD_CASTER_WEAPON_ARCHETYPE = new Set<PlayerClass>(['mage', 'priest', 'warlock', 'druid']);
 
 const ARMOR_RANK: Record<ArmorType, number> = {
   cloth: 0,
@@ -29,13 +33,30 @@ const ARMOR_RANK: Record<ArmorType, number> = {
   mail: 2,
 };
 
-function subsetOf(classes: readonly PlayerClass[], allowed: ReadonlySet<PlayerClass>): boolean {
-  return classes.length > 0 && classes.every((cls) => allowed.has(cls));
+// True when `classes` names exactly the members of `allowed` (order-independent).
+function sameClassSet(classes: readonly PlayerClass[], allowed: ReadonlySet<PlayerClass>): boolean {
+  return classes.length === allowed.size && classes.every((cls) => allowed.has(cls));
 }
 
 export function armorTypeForItem(item: ItemDef): ArmorType | null {
   if (item.kind !== 'armor') return null;
-  return item.armorType;
+  // Jewelry (neck/ring) is kind 'armor' with no armor class.
+  return item.armorType ?? null;
+}
+
+// Resolve the concrete equipment key an item equips into. Rings declare the
+// slot KIND 'ring' and land in whichever ring slot is empty (ring1 first);
+// with both full the swap replaces ring1, the classic behavior. Every other
+// item names its equipment slot directly. Returns null for slotless items.
+export function resolveEquipSlot(
+  item: ItemDef,
+  equipment: Partial<Record<EquipSlot, string>>,
+): EquipSlot | null {
+  if (!item.slot) return null;
+  if (item.slot !== 'ring') return item.slot;
+  if (!equipment.ring1) return 'ring1';
+  if (!equipment.ring2) return 'ring2';
+  return 'ring1';
 }
 
 export function maxArmorTypeForClass(cls: PlayerClass): ArmorType {
@@ -44,12 +65,29 @@ export function maxArmorTypeForClass(cls: PlayerClass): ArmorType {
   return 'cloth';
 }
 
+// A weapon's `requiredClass` lists exactly the classes that can equip it, i.e. the
+// full weapon-proficiency group (weapons are proficiency-based, not class-locked).
+// Recover the archetype by matching that list against each group. A weapon with a
+// narrower, bespoke class lock (not one of the three groups) has no archetype and
+// falls through to the literal `requiredClass` check in canEquipItem, and shows its
+// class line on the tooltip.
 export function weaponArchetypeForItem(item: ItemDef): WeaponArchetype | null {
   if (item.kind !== 'weapon' || !item.requiredClass) return null;
-  if (subsetOf(item.requiredClass, OLD_WARRIOR_WEAPON_ARCHETYPE)) return 'warrior';
-  if (subsetOf(item.requiredClass, OLD_CASTER_WEAPON_ARCHETYPE)) return 'caster';
-  if (subsetOf(item.requiredClass, ROGUE_WEAPON_CLASSES)) return 'rogue';
+  if (sameClassSet(item.requiredClass, WARRIOR_WEAPON_CLASSES)) return 'warrior';
+  if (sameClassSet(item.requiredClass, CASTER_WEAPON_CLASSES)) return 'caster';
+  if (sameClassSet(item.requiredClass, ROGUE_WEAPON_CLASSES)) return 'rogue';
   return null;
+}
+
+// The full set of classes `canEquipItem` actually admits for a given armor weight,
+// i.e. every class whose max armor rank is at least `armorType`'s rank. Used to tell
+// a genuinely enforced armor class list (one that names exactly this set, e.g. mail
+// naming only warrior/paladin/shaman) apart from `requiredClass` values that are
+// narrower loot-targeting metadata `canEquipItem` never reads (armor short-circuits
+// on weight before it would reach `requiredClass`).
+export function classesThatCanEquipArmorType(armorType: ArmorType): PlayerClass[] {
+  const rank = ARMOR_RANK[armorType];
+  return ALL_CLASSES.filter((cls) => ARMOR_RANK[maxArmorTypeForClass(cls)] >= rank);
 }
 
 export function canEquipItem(cls: PlayerClass, item: ItemDef): boolean {

@@ -9,6 +9,12 @@ vi.mock('../server/db', () => ({
 
 import { accountForToken, getCharacter, insertClientPerfReport } from '../server/db';
 import { handlePerfReport, perfReportInternalsForTest } from '../server/perf_report';
+import { resetRateLimitClock, setRateLimitClock } from '../server/ratelimit';
+
+// PERF_REPORT_MAX_PER_MINUTE / PERF_REPORT_WINDOW_MS are un-exported constants in
+// server/perf_report; mirror them here (30 posts per 60s window per IP).
+const PERF_REPORT_MAX_PER_MINUTE = 30;
+const PERF_REPORT_WINDOW_MS = 60_000;
 
 const VALID_TOKEN = 'b'.repeat(64);
 
@@ -145,6 +151,50 @@ describe('perf report ingestion', () => {
     expect(first.statusCode).toBe(200);
     expect(second.statusCode).toBe(200);
     expect(insertClientPerfReport).toHaveBeenCalledTimes(1);
+  });
+
+  it('rate-limits per IP through the shared injected clock (200 by design, no insert over cap)', async () => {
+    // The perf-report limiter now reads time via ratelimit.rateLimitNow (the shared
+    // setRateLimitClock seam), so a pinned clock drives its window with no real timers.
+    // Distinct sessionIds keep the separate min-insert throttle from gating, so an
+    // insert is observed exactly while the per-IP rate limiter allows the post.
+    const remoteAddress = '203.0.113.99'; // a fresh per-IP bucket, unused elsewhere
+    setRateLimitClock(() => 5_000_000);
+    try {
+      for (let i = 0; i < PERF_REPORT_MAX_PER_MINUTE; i++) {
+        const res = fakeRes();
+        await handlePerfReport(
+          fakeReq({ sessionId: `cap-${i}`, rawSummary: {} }, { remoteAddress }),
+          res,
+        );
+        expect(res.statusCode).toBe(200);
+      }
+      // The cap is drained: every allowed post stored a row.
+      expect(insertClientPerfReport).toHaveBeenCalledTimes(PERF_REPORT_MAX_PER_MINUTE);
+
+      // The (cap + 1)th post in the same window is rate-limited: still 200 by design,
+      // but it returns before the insert, so the stored count does not move.
+      const overCap = fakeRes();
+      await handlePerfReport(
+        fakeReq({ sessionId: 'cap-over', rawSummary: {} }, { remoteAddress }),
+        overCap,
+      );
+      expect(overCap.statusCode).toBe(200);
+      expect(insertClientPerfReport).toHaveBeenCalledTimes(PERF_REPORT_MAX_PER_MINUTE);
+
+      // Roll the clock a full window forward: the t=5_000_000 entries age out, the
+      // window is fresh, and a new post stores again.
+      setRateLimitClock(() => 5_000_000 + PERF_REPORT_WINDOW_MS);
+      const rolled = fakeRes();
+      await handlePerfReport(
+        fakeReq({ sessionId: 'cap-rolled', rawSummary: {} }, { remoteAddress }),
+        rolled,
+      );
+      expect(rolled.statusCode).toBe(200);
+      expect(insertClientPerfReport).toHaveBeenCalledTimes(PERF_REPORT_MAX_PER_MINUTE + 1);
+    } finally {
+      resetRateLimitClock();
+    }
   });
 
   it('strips development trace data from public reports', async () => {

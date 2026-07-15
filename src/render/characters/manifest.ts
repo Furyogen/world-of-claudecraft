@@ -3,6 +3,7 @@
 // Pure data + dispatch — no three.js imports, no loading.
 
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
+import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { MOBS } from '../../sim/data';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
@@ -157,6 +158,17 @@ const animal = (attack: string[]): ClipMap => ({
   death: 'Death',
 });
 
+// Custom baked wolf rig (wolf_basic/greyjaw, Dog_Animation donor skeleton): the
+// animal() core plus the donor's Sit/Fall clips so player wolf forms sit and
+// jump properly, and a Walk swim base (a paddling gait at the gentle clip
+// pitch beats the steep no-clip procedural prone on a quadruped).
+const WOLF_BAKED: ClipMap = {
+  ...animal(['Attack']),
+  sitIdle: 'Sit',
+  swim: 'Walk',
+  jump: 'Fall',
+};
+
 // Custom wild boar rig (wild_boar.glb)
 const WILD_BOAR: ClipMap = {
   idle: 'Idle1',
@@ -197,12 +209,31 @@ const FLOATING: ClipMap = {
   death: 'Death',
 };
 
+// 2023 enemy rig variant with a bite attack and no run clip (yeti)
+const ENEMY_BITE: ClipMap = {
+  idle: 'Idle',
+  walk: 'Walk',
+  run: 'Walk',
+  attack: ['Bite_Front'],
+  hit: ['HitRecieve'],
+  death: 'Death',
+};
+
 const SPIDER: ClipMap = {
   idle: 'Spider_Idle',
   walk: 'Spider_Walk',
   run: 'Spider_Walk',
   attack: ['Spider_Attack'],
   death: 'Spider_Death', // no hit-react in asset
+};
+
+// Velociraptor rig (velociraptor.glb): like the spider, no hit-react clips
+const RAPTOR: ClipMap = {
+  idle: 'Velociraptor_Idle',
+  walk: 'Velociraptor_Walk',
+  run: 'Velociraptor_Run',
+  attack: ['Velociraptor_Attack'],
+  death: 'Velociraptor_Death',
 };
 
 // Chicken-cow rig (chicken_cow.glb, procedurally authored — see
@@ -265,6 +296,21 @@ export function itemWeaponModelUrl(itemId: string | null | undefined): string | 
  *  an un-preloaded url). */
 export function itemWeaponModelUrls(): string[] {
   return [...new Set(Object.values(ITEM_WEAPON_VARIANTS).map((key) => `${WEAPONS}/${key}.glb`))];
+}
+
+/** GLB url for a Season 1 Armory weapon-skin cosmetic, or null for no/unknown
+ *  skin. The skin model replaces the equipped item's held model (same bone, its
+ *  own KAYKIT_WEAPON_ACCESSORY grip family + WEAPON_GRIP_OVERRIDES fine-tune). */
+export function weaponSkinModelUrl(skinId: string | null | undefined): string | null {
+  if (!skinId) return null;
+  const def = WEAPON_SKINS[skinId];
+  return def ? `${WEAPONS}/${def.model}.glb` : null;
+}
+
+/** Distinct weapon-skin GLB urls, preloaded like item weapon models: any nearby
+ *  player can have a skin applied, and the attach path is synchronous. */
+export function weaponSkinModelUrls(): string[] {
+  return [...new Set(Object.values(WEAPON_SKINS).map((def) => `${WEAPONS}/${def.model}.glb`))];
 }
 
 const LOW_URL_ALIAS: Record<string, string> = {
@@ -351,6 +397,11 @@ export const SKINS: Record<string, (string | null)[]> = {
   // Combat Mech chromas — every index is a real full-model texture (no null
   // default; the embedded base texture is not one of the rewards).
   player_mech: MECH_CHROMAS.map(mechChromaUrl),
+  // Bursar Fernando (the Eastbrook banker easter egg): the rogue palette with
+  // the skin swatch repainted light brown and the hair/brow swatch black, in
+  // the real Fernando's likeness. Index 0 is the real texture (mech precedent):
+  // NPCs always resolve skin 0, so the embedded default is deliberately unused.
+  npc_fernando: [`${SKINS_DIR}/rogue/fernando.png`],
 };
 
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
@@ -412,6 +463,10 @@ export const VISUALS: Record<string, VisualDef> = {
     url: `${PLAYERS}/ranger.glb`,
     height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
+    // Bow-draw clips for the Season 1 bow skins (scripts/build_bow_anims.mjs):
+    // with a bow displayed the shot plays a draw instead of the crossbow
+    // shoulder-aim (visual.ts weaponSkinAttackClips).
+    animUrls: [`${PLAYERS}/bow_anims.glb`],
     // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
     // a separate chest attachment
     attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
@@ -511,10 +566,13 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 0x5a4030,
     tintStrength: 0.55,
   },
+  // Druid Wolf Form AND shaman Shadewolf (ghost_wolf renders this visual with
+  // the ghost material on top). Same custom baked wolf as the world wolves;
+  // the tawny tint keeps the druid form readable against grey pack wolves.
   form_cat: {
-    url: `${CREATURES}/wolf.glb`,
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 0xd08b45,
     tintStrength: 0.35,
   },
@@ -528,11 +586,24 @@ export const VISUALS: Record<string, VisualDef> = {
 
   // -- mob families --------------------------------------------------------
   mob_wolf: {
-    url: `${CREATURES}/wolf.glb`,
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton
+    // (same pipeline as greyjaw), clips renamed to the animal() names at bake
+    // time. Baked basecolor texture; keeps a light entity tint so this doubles
+    // as the beast-family fallback and each beast keeps its own colour.
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 'entity',
     tintStrength: 0.35,
+  },
+  greyjaw: {
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton;
+    // clips renamed to the animal() names at bake time. Baked texture, no tint.
+    // Old Greyjaw's model: 2.2 at scale 1 (his template scale 1.25 makes the
+    // rare ~2.75 in-world vs the 1.6 pack wolf).
+    url: `${CREATURES}/greyjaw.glb`,
+    height: 2.2,
+    clips: WOLF_BAKED,
   },
   mob_boar: {
     url: `${CREATURES}/wild_boar.glb`,
@@ -559,6 +630,25 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // Yumi, the Protect Yumi objective cat familiar (Meshy rig, scale baked by
+  // scripts/_bake_meshy_scale.mjs, meshopt + 1024 webp). The GLB ships ONE
+  // clip, the block: mapped as the HIT reaction so she blocks when struck
+  // (playHit rides every landed damage event). No idle/walk clips on
+  // purpose: the objective never moves on its own, and baseAction falls back
+  // to the authored rest pose when a slot's clip is absent. Painted texture,
+  // so no entity tint.
+  mob_yumi_cat: {
+    url: `${CREATURES}/yumi_cat.glb`,
+    height: HUMANOID_H * 1.2, // the objective reads over player heads
+    clips: {
+      idle: 'None',
+      walk: 'None',
+      run: 'None',
+      attack: [],
+      death: 'None',
+      hit: ['Armature|Block5|baselayer'],
+    },
+  },
   mob_stag: {
     url: `${CREATURES}/stag.glb`,
     height: 1.9,
@@ -583,6 +673,14 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: BIPED14,
     tint: 0x5a4030,
     tintStrength: 0.5,
+  },
+  // the same rig worn honestly: an ice-white yeti for the Frostveil
+  mob_yeti: {
+    url: `${CREATURES}/yetialt.glb`,
+    height: 2.5,
+    clips: BIPED14,
+    tint: 'entity',
+    tintStrength: 0.55,
   },
   mob_spider: {
     url: `${CREATURES}/spider.glb`,
@@ -680,6 +778,82 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: FLOATING,
     tint: 'entity',
     tintStrength: 0.25,
+  },
+  // the Nightbloom's realm-only rigs, all first appearances: the moonfleece
+  // herds (alpaca), the gloam striders (velociraptor), and the hovering
+  // masked nightkin (tribal, a flying rig: they drift rather than walk)
+  mob_alpaca: {
+    url: `${CREATURES}/alpaca.glb`,
+    height: 1.7,
+    clips: animal(['Attack_Headbutt', 'Attack_Kick']),
+    tint: 'entity',
+    tintStrength: 0.3,
+  },
+  mob_raptor: {
+    url: `${CREATURES}/velociraptor.glb`,
+    height: 1.6,
+    clips: RAPTOR,
+    tint: 'entity',
+    tintStrength: 0.35,
+  },
+  mob_nightkin: {
+    url: `${CREATURES}/tribal.glb`,
+    height: 1.9,
+    hover: 0.3,
+    clips: FLOATING,
+    tint: 'entity',
+    tintStrength: 0.3,
+  },
+  // the Veiled Hollow's spirits and wisps: the ghost rig, entity-tinted so
+  // the rose glimmerwisps, violet duskwisps, and teal hollow spirits read as
+  // one ethereal family unlike anything in the outer three zones
+  mob_ghost: {
+    url: `${CREATURES}/ghost.glb`,
+    height: 1.6,
+    hover: 0.4,
+    clips: FLOATING,
+    tint: 'entity',
+    tintStrength: 0.55,
+  },
+  // spore-borne mushroom folk: the glub blob drifting just above the glade
+  mob_glub: {
+    url: `${CREATURES}/glubevolved.glb`,
+    height: 1.4,
+    hover: 0.15,
+    clips: FLOATING,
+    tint: 'entity',
+    tintStrength: 0.45,
+  },
+  // the Hollow's wandering bosses: two more rigs no other zone uses
+  mob_crab: {
+    url: `${CREATURES}/crabenemy.glb`,
+    height: 1.7,
+    clips: ENEMY_BITE,
+    tint: 'entity',
+    tintStrength: 0.35,
+  },
+  mob_bull: {
+    url: `${CREATURES}/bull.glb`,
+    height: 2.1,
+    // the bull rig has no plain Idle clip; grazing IS its idle
+    clips: {
+      idle: 'Eating',
+      walk: 'Walk',
+      run: 'Gallop',
+      attack: ['Attack_Headbutt', 'Attack_Kick'],
+      hit: ['Idle_HitReact_Left', 'Idle_HitReact_Right'],
+      death: 'Death',
+    },
+    tint: 'entity',
+    tintStrength: 0.3,
+  },
+  // mossy treant: the shaggy yeti under a bark-green entity wash
+  mob_treant: {
+    url: `${CREATURES}/yeti.glb`,
+    height: 2.6,
+    clips: ENEMY_BITE,
+    tint: 'entity',
+    tintStrength: 0.72, // the white pelt needs a heavy wash to read as moss
   },
   mob_demonalt: {
     url: `${CREATURES}/demonalt.glb`,
@@ -783,6 +957,16 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
     tint: 'entity',
     tintStrength: 0.25,
+  },
+  // The Infernal Citadel's Magus Vel'Kor: the same necromancer rig, but drenched in
+  // its entity colour (the shared skel_necromancer tints at 0.25 and stays
+  // bone-white, which reads as a snowdrift under the citadel's blood-red grade).
+  rift_ritualist: {
+    url: `${ENEMIES}/necromancer.glb`,
+    height: 2.5,
+    clips: skeletonClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.8,
   },
   skel_golem: {
     url: `${ENEMIES}/skeleton_golem.glb`,
@@ -888,6 +1072,15 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // Bursar Fernando: the villager body with the likeness atlas (SKINS above)
+  // carrying black shoulder-length hair and light brown skin. No entity tint:
+  // the gold NpcDef color would wash the repaint back toward the villager look.
+  npc_fernando: {
+    url: `${PLAYERS}/rogue.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    show: [],
+  },
   // Brother Halven, the Reliquary Keeper: a devout male guardian tending the crypt
   // door. Uses the KayKit paladin, one of the newer full-pack adventurer models
   // (unused elsewhere), for a sturdier, holier silhouette than the old hooded
@@ -907,6 +1100,23 @@ export const VISUALS: Record<string, VisualDef> = {
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
+  },
+  // The three zone Chroniclers (Saul, Osric Fenn, Zenzie): one shared
+  // scholarly-mage silhouette (hat, staff, open ledger in the off hand,
+  // the warlock spellbook grip) with the per-NPC entity tint carrying each
+  // identity. When the bespoke chronicler .glb files arrive, split this into
+  // one def per chronicler with its own url.
+  npc_chronicler: {
+    url: `${PLAYERS}/mage.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['2H_Melee_Attack_Chop']),
+    show: ['Mage_Hat'],
+    attach: [
+      { url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
+    ],
+    tint: 'entity',
+    tintStrength: 0.55,
   },
   // Reedbound Acolyte (The Drowned Litany trash mob): Stone Cantor model from
   // the Raid 02 asset batch. The earlier Meshy mesh (reedbound_acolyte.glb) was
@@ -950,6 +1160,9 @@ export const VISUALS: Record<string, VisualDef> = {
 // ---------------------------------------------------------------------------
 
 const MOB_KEYS: Record<string, string> = {
+  // Protect Yumi objective cat: the dedicated Meshy familiar
+  // (docs/prd/protect-yumi-assets.md item 1, delivered).
+  yumi_cat: 'mob_yumi_cat',
   emberkin: 'mob_demon',
   gloomshade: 'mob_demon',
   duskborn: 'mob_demon',
@@ -959,6 +1172,9 @@ const MOB_KEYS: Record<string, string> = {
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',
+  // Old Greyjaw: the named rare wolf gets his own custom model (the pack
+  // wolves keep the light mob_wolf)
+  old_greyjaw: 'greyjaw',
   // The Drowned Litany (Mirefen Marsh): give marsh enemies the right silhouette
   // instead of the family fallback (beast -> wolf, undead -> skeleton minion).
   mirefen_widowling: 'mob_spider',
@@ -1009,6 +1225,55 @@ const MOB_KEYS: Record<string, string> = {
   vision_aldren_warrior: 'player_warrior',
   vision_malric_mage: 'player_mage',
   vision_deathstalker_voss: 'player_rogue',
+  // the Veiled Hollow: stags use the real stag rig instead of the beast-family
+  // wolf; the court guardians borrow the golem rig as stone constructs; the
+  // spirits, mushroom folk, and treants get realm-only rigs (ghost, glub,
+  // yeti) that appear nowhere in the outer three zones
+  veiled_stag: 'mob_stag',
+  gleamstag: 'mob_stag',
+  gilded_stag: 'mob_stag',
+  gloam_fox: 'mob_fox',
+  orchard_treant: 'mob_treant',
+  lily_wisp: 'mob_ghost',
+  ancient_guardian: 'skel_golem',
+  waking_warden: 'skel_golem',
+  glimmerwisp: 'mob_ghost',
+  duskwisp: 'mob_ghost',
+  hollow_spirit: 'mob_ghost',
+  ice_wisp: 'mob_ghost',
+  frostmane_yeti: 'mob_yeti',
+  sporeling_gatherer: 'mob_glub',
+  corrupted_sporeling: 'mob_glub',
+  treant_elder: 'mob_treant',
+  old_marrowshell: 'mob_crab',
+  aurelhorn: 'mob_bull',
+  // the Nightbloom: silver herds, night-running raptors, hovering star folk;
+  // the Barrow King borrows the armored skeleton the other revenants wear
+  moonfleece_grazer: 'mob_alpaca',
+  gloam_strider: 'mob_raptor',
+  nightkin_stargazer: 'mob_nightkin',
+  barrow_king: 'skel_warrior',
+  // the Wraithwood: drifting wraiths on the ghost rig, walking haunted
+  // trees on the treant's, and the hooded Huntsman on the crypt rogue's
+  // (the widowsilk spinners take the spider family default)
+  wood_wraith: 'mob_ghost',
+  gravenbark_shambler: 'mob_treant',
+  pale_huntsman: 'skel_rogue',
+  // the Palmreach: coral crabs, jungle boars, and the carved-stone guardian
+  // (the canopy weavers take the spider family default)
+  tide_scuttler: 'mob_crab',
+  thicket_boar: 'mob_boar',
+  idol_guardian: 'skel_golem',
+  topiary_stag: 'mob_stag',
+  the_topiary_bull: 'mob_bull',
+  moor_ram: 'mob_alpaca',
+  shoal_scuttler: 'mob_crab',
+  the_wreck_warden: 'skel_golem',
+  // The Infernal Citadel: the pact cult reads as robed casters, not the `undead`
+  // family's default skeleton minion. Its demons keep the family fallback
+  // (mob_demonalt), re-tinted deep red by the templates.
+  rift_pact_acolyte: 'mob_dark_caster',
+  rift_boss_ritualist: 'rift_ritualist',
 };
 
 const FAMILY_KEYS: Record<string, string> = {
@@ -1023,9 +1288,16 @@ const FAMILY_KEYS: Record<string, string> = {
   elemental: 'mob_elemental',
   dragonkin: 'mob_dragonkin',
   demon: 'mob_demonalt',
+  // deepfen_spearjaw already has an explicit MOB_KEYS override to mob_spearjaw
+  // (visualKeyFor checks MOB_KEYS first), so this default stays unreachable
+  // for it even after its family retag. It only matters for a future reptile
+  // mob with no override of its own; reuse the same model so that fallback
+  // is sane too.
+  reptile: 'mob_spearjaw',
 };
 
 const NPC_KEYS: Record<string, string> = {
+  bursar_fernando: 'npc_fernando',
   marshal_redbrook: 'npc_knight',
   warden_fenwick: 'npc_knight',
   captain_thessaly: 'npc_knight',
@@ -1043,9 +1315,18 @@ const NPC_KEYS: Record<string, string> = {
   quartermaster_bree: 'npc_villager',
   brother_halven: 'npc_reliquary_keeper',
   brother_halven_marsh: 'npc_reliquary_keeper',
+  chronicler_saul: 'npc_chronicler',
+  chronicler_osric_fenn: 'npc_chronicler',
+  chronicler_edda_hartwell: 'npc_chronicler',
   // The graveyard angel: a robed figure, rendered translucent (ethereal) with a
   // holy shimmer by the renderer (see the spirit_healer branches there).
   spirit_healer: 'npc_villager_robed',
+  // Eldergleam, the Veiled Hollow
+  keeper_saelwyn: 'npc_mage',
+  loremother_bryn: 'npc_villager_robed',
+  provisioner_fenna: 'npc_villager',
+  wardsmith_orun: 'npc_smith',
+  archivist_tullo: 'npc_villager_robed',
 };
 
 export function visualKeyFor(e: Entity): string {
@@ -1088,6 +1369,9 @@ export function manifestUrls(): string[] {
   // Equipped-weapon models a player may swap to at runtime (any nearby player's
   // gear), so they are resolved-and-ready when setWeapon attaches them.
   for (const url of itemWeaponModelUrls()) urls.add(url);
+  // Season 1 Armory weapon-skin models: also attachable on any nearby player at
+  // any moment (account-wide cosmetics), so they preload with the same sweep.
+  for (const url of weaponSkinModelUrls()) urls.add(url);
   return [...urls];
 }
 

@@ -18,9 +18,9 @@ export class EditorCamera {
   pitch = 0.62; // elevation, radians; negative looks up from below the pivot
   dist = 70;
 
-  /** Drag-pan direction preference (Invert pan setting). Default (false) is
-   *  Blender-style grab: the world follows the cursor. */
-  panInverted = false;
+  /** Drag direction preference. The default makes the view follow the pointer;
+   *  disabling it restores the legacy opposite-direction navigation. */
+  panInverted = true;
 
   /** Per-user speed multipliers (Camera tab sliders), 1 = the shipped feel.
    *  moveSpeed scales WASD/QE fly, lookSpeed scales orbit + mouse-look,

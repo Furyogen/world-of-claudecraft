@@ -3,18 +3,17 @@
 // these have no presence in the sim/IWorld, so they cost nothing on the wire and
 // "work online for free". A small pool follows the player like the grass ring
 // (foliage.ts): when one drifts past the cull radius it relocates ahead of the
-// camera onto valid ground. Procedural primitive geometry — no GLB assets.
+// camera onto valid ground. Each species is a small Tripo-generated GLB (see
+// public/models/creatures/CLAUDE.md); a merged-primitive body is kept as a
+// fallback for the brief window before the GLB preload resolves.
 
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import {
-  DUNGEON_X_THRESHOLD,
-  getActiveWorldContent,
-  WORLD_MAX_X,
-  WORLD_MAX_Z,
-  WORLD_MIN_Z,
-} from '../sim/data';
-import { terrainHeight, terrainSteepnessAt, waterLevel } from '../sim/world';
+import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
+import { isInSowfieldShell } from '../sim/vale_cup_layout';
+import { terrainHeight, terrainSteepnessAt, waterLevelAt } from '../sim/world';
+import { loadGltf } from './assets/loader';
+import { registerPreload } from './assets/preload';
 import { GFX } from './gfx';
 
 export interface CritterField {
@@ -111,8 +110,31 @@ const TINT: Record<Species, number> = {
   bird: 0x6b8fb5,
 };
 
+const SPECIES_ASSET_URL: Record<Species, string> = {
+  rabbit: '/models/creatures/rabbit_critter.glb',
+  squirrel: '/models/creatures/squirrel_critter.glb',
+  bird: '/models/creatures/songbird_critter.glb',
+};
+
+const loadedSpeciesGltf = new Map<Species, THREE.Group>();
+
+if (typeof window !== 'undefined') {
+  for (const [species, url] of Object.entries(SPECIES_ASSET_URL) as [Species, string][]) {
+    registerPreload(
+      loadGltf(url).then((gltf) => {
+        loadedSpeciesGltf.set(species, gltf.scene);
+      }),
+    );
+  }
+}
+
+/** Test-only window into the preload asset set (mirrors props.ts). */
+export const critterPreloadInternalsForTest = {
+  speciesAssetUrl: SPECIES_ASSET_URL,
+};
+
 interface Critter {
-  mesh: THREE.Mesh;
+  obj: THREE.Object3D;
   species: Species;
   x: number;
   z: number;
@@ -127,9 +149,6 @@ interface Critter {
 export function buildCritters(seed: number): CritterField {
   const group = new THREE.Group();
   group.name = 'critters';
-  if (getActiveWorldContent().presentationMode === 'blank') {
-    return { group, update(): void {} };
-  }
   const rng = mulberry32(seed ^ 0x6c12a7);
   const count = GFX.standardMaterials ? 16 : 7;
 
@@ -155,15 +174,32 @@ export function buildCritters(seed: number): CritterField {
     return r < 0.45 ? 'rabbit' : r < 0.75 ? 'squirrel' : 'bird';
   };
 
+  const buildInstance = (species: Species): THREE.Object3D => {
+    const loaded = loadedSpeciesGltf.get(species);
+    if (loaded) {
+      // Unlike delve_props/mailbox, this is not Box3-normalized: it assumes each
+      // species GLB is authored at world scale with feet at the origin (baseY
+      // below is tuned for that). A re-export at a different scale or origin
+      // will silently sink or oversize the critter.
+      const inst = loaded.clone(true);
+      inst.traverse((child) => {
+        if (child instanceof THREE.Mesh) child.castShadow = GFX.standardMaterials;
+      });
+      return inst;
+    }
+    const mesh = new THREE.Mesh(geos[species], mats[species]);
+    mesh.castShadow = GFX.standardMaterials;
+    return mesh;
+  };
+
   const critters: Critter[] = [];
   for (let i = 0; i < count; i++) {
     const species = pickSpecies();
-    const mesh = new THREE.Mesh(geos[species], mats[species]);
-    mesh.castShadow = GFX.standardMaterials;
-    mesh.visible = false;
-    group.add(mesh);
+    const obj = buildInstance(species);
+    obj.visible = false;
+    group.add(obj);
     critters.push({
-      mesh,
+      obj,
       species,
       x: 0,
       z: 0,
@@ -180,8 +216,9 @@ export function buildCritters(seed: number): CritterField {
     if (Math.abs(x) > WORLD_MAX_X - EDGE) return false;
     if (z < WORLD_MIN_Z + EDGE || z > WORLD_MAX_Z - EDGE) return false;
     if (x > DUNGEON_X_THRESHOLD - 24) return false;
+    if (isInSowfieldShell(x, z)) return false; // no wildlife on the football pitch
     if (terrainSteepnessAt(x, z, seed) > MAX_WALK_SLOPE) return false;
-    return terrainHeight(x, z, seed) > waterLevel() + 0.8;
+    return terrainHeight(x, z, seed) > waterLevelAt(x, z) + 0.8;
   };
 
   const relocate = (c: Critter, px: number, pz: number): void => {
@@ -202,7 +239,7 @@ export function buildCritters(seed: number): CritterField {
     // no valid spot this frame — hide and retry next tick
     c.x = px;
     c.z = pz;
-    c.mesh.visible = false;
+    c.obj.visible = false;
   };
 
   return {
@@ -223,7 +260,7 @@ export function buildCritters(seed: number): CritterField {
       for (let i = 0; i < critters.length; i++) {
         const c = critters[i];
         if (i >= active) {
-          if (c.mesh.visible) c.mesh.visible = false;
+          if (c.obj.visible) c.obj.visible = false;
           continue;
         }
         const dx = c.x - px,
@@ -274,9 +311,9 @@ export function buildCritters(seed: number): CritterField {
             : c.speed > 0
               ? Math.abs(Math.sin(c.hopPhase)) * 0.16
               : 0;
-        c.mesh.position.set(c.x, groundY + c.baseY + motion, c.z);
-        c.mesh.rotation.y = -c.heading + Math.PI / 2;
-        c.mesh.visible = true;
+        c.obj.position.set(c.x, groundY + c.baseY + motion, c.z);
+        c.obj.rotation.y = -c.heading + Math.PI / 2;
+        c.obj.visible = true;
       }
     },
   };

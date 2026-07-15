@@ -9,10 +9,7 @@ async function animationRange(path: string, name: string): Promise<{ start: numb
     .registerExtensions(ALL_EXTENSIONS)
     .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
   const doc = await io.read(path);
-  const anim = doc
-    .getRoot()
-    .listAnimations()
-    .find((a) => a.getName() === name);
+  const anim = doc.getRoot().listAnimations().find((a) => a.getName() === name);
   if (!anim) throw new Error(`${name} animation not found`);
   let start = Infinity;
   let end = 0;

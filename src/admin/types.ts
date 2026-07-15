@@ -1,3 +1,4 @@
+import type { StreamerLinks } from './account_flair';
 import type { AccountStatus } from './account_status';
 
 // Shapes returned by the /admin/api endpoints (mirrors server/admin_db.ts
@@ -106,6 +107,13 @@ export interface SuspiciousEvidence {
   weight: number;
   detail: string;
   expiresAt: number;
+  // Recurrence history, present only on kinds where re-triggering carries
+  // information: distinct episodes this session, first and latest (epoch ms),
+  // and the opening timestamps of the most recent episodes (bounded ring).
+  occurrences?: number;
+  firstAt?: number;
+  lastAt?: number;
+  episodesAt?: number[];
 }
 
 export interface SuspiciousPlayer {
@@ -115,6 +123,8 @@ export interface SuspiciousPlayer {
     name: string;
     ip: string;
   };
+  // CONFIRMED = an automated moderator report went out for this session.
+  state: 'SUSPICIOUS' | 'CONFIRMED';
   snapshot: {
     capturedAt: number;
   } | null;
@@ -193,6 +203,8 @@ export interface AccountRow {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
   characterCount: number;
@@ -263,6 +275,9 @@ export interface AccountDetail {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
+  streamerLinks: StreamerLinks;
   online: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
@@ -270,6 +285,8 @@ export interface AccountDetail {
   chatMutedUntil: string | null;
   chatMuteReason: string;
   chatStrikes: number;
+  dailyRewardsBan?: { reason: string; createdAt: string } | null;
+  dailyRewardsIpBans?: { ip: string; reason: string; createdAt: string }[];
   lastLoginIp: string | null;
   playtimeSeconds: number;
   characters: {
@@ -304,6 +321,13 @@ export interface ModerationHistoryEntry {
   adminUsername: string | null;
 }
 
+export interface ModerationActionHistoryRow extends ModerationHistoryEntry {
+  source: 'account' | 'ip';
+  accountId: number | null;
+  username: string | null;
+  ip: string | null;
+}
+
 export interface ModerationQueueRow {
   accountId: number;
   username: string;
@@ -334,6 +358,56 @@ export interface BugReportRow {
   meta: unknown;
   status: string;
   created_at: string;
+}
+
+export interface UnstuckArea {
+  kind: string;
+  id: string;
+  instanceId: string | null;
+  slot: number | null;
+}
+
+export interface UnstuckPosition {
+  x: number;
+  y: number;
+  z: number;
+  localX: number;
+  localY: number;
+  localZ: number;
+}
+
+export type UnstuckOutcome = 'completed' | 'cancelled' | 'failed';
+
+export interface UnstuckReportRow {
+  id: number;
+  characterId: number | null;
+  characterName: string | null;
+  area: UnstuckArea;
+  origin: UnstuckPosition;
+  destination: UnstuckPosition | null;
+  outcome: UnstuckOutcome;
+  reason: string;
+  invokedAt: string;
+  resolvedAt: string | null;
+}
+
+export interface UnstuckHotspot {
+  area: UnstuckArea;
+  bucket: { x: number; y: number; z: number };
+  count: number;
+  completed: number;
+  cancelled: number;
+  failed: number;
+  lastUsedAt: string;
+}
+
+export interface UnstuckReportsData {
+  reports: UnstuckReportRow[];
+  hotspots: UnstuckHotspot[];
+  days: number;
+  limit: number;
+  hasMore: boolean;
+  nextBeforeId: number | null;
 }
 
 export interface ReportDetail {
@@ -504,4 +578,38 @@ export interface RoleChangeRow {
 
 export interface StaffHistoryData {
   rows: RoleChangeRow[];
+}
+
+// Server tick-loop profiling (GET /admin/api/perf/tick, POST .../capture). Mirrors
+// server/game.ts PerfCaptureResult/PerfCaptureStatus and the TickProfiler shape.
+export interface PerfPhaseStats {
+  mean: number;
+  p50: number;
+  p95: number;
+  p99: number;
+  max: number;
+}
+
+export interface PerfCaptureResult {
+  captureId: string;
+  capturedAt: number; // epoch ms the window closed
+  durationMs: number;
+  loopCallbacks: number;
+  simTicks: number;
+  catchUpCallbacks: number;
+  maxTicksPerCallback: number;
+  online: number;
+  simEntities: number;
+  profile: {
+    samples: number;
+    windowTicks: number;
+    phases: Record<string, PerfPhaseStats>;
+  };
+}
+
+export interface PerfCaptureStatus {
+  captureId: string | null;
+  capturing: boolean;
+  endsAt: number | null; // epoch ms the in-flight capture closes
+  last: PerfCaptureResult | null;
 }

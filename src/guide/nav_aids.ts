@@ -73,9 +73,21 @@ export function mountToc(main: HTMLElement): (() => void) | void {
   toc.setAttribute('aria-label', t('guide.toc.heading'));
   toc.innerHTML = `<span class="guide-toc-h">${esc(t('guide.toc.heading'))}</span><ul>${items}</ul>`;
 
+  // Placement: inline after the h1 on narrow viewports (the current reading order), or
+  // a sticky end-side rail on wide ones, where the scrollspy highlight stays visible
+  // while reading. Re-placed live if the viewport crosses the rail breakpoint.
   const h1 = article.querySelector(':scope > h1');
-  if (h1) h1.insertAdjacentElement('afterend', toc);
-  else article.prepend(toc);
+  const rail = typeof matchMedia === 'function' ? matchMedia('(min-width: 1240px)') : null;
+  const place = () => {
+    const asRail = !!rail?.matches;
+    toc.classList.toggle('guide-toc-rail', asRail);
+    main.classList.toggle('guide-has-toc-rail', asRail);
+    if (asRail) main.prepend(toc);
+    else if (h1) h1.insertAdjacentElement('afterend', toc);
+    else article.prepend(toc);
+  };
+  place();
+  rail?.addEventListener('change', place);
 
   const links = new Map(
     Array.from(toc.querySelectorAll<HTMLAnchorElement>('[data-toc]')).map((a) => [
@@ -84,10 +96,18 @@ export function mountToc(main: HTMLElement): (() => void) | void {
     ]),
   );
   const setActive = (id: string) => {
-    links.forEach((a) => a.classList.remove('is-active'));
+    links.forEach((a) => {
+      a.classList.remove('is-active');
+    });
     links.get(id)?.classList.add('is-active');
   };
-  if (typeof IntersectionObserver === 'undefined') return;
+  // The toc node is discarded with the article on navigation, but the rail-grid class
+  // lives on the persistent <main>, so cleanup must strip it.
+  const unplace = () => {
+    rail?.removeEventListener('change', place);
+    main.classList.remove('guide-has-toc-rail');
+  };
+  if (typeof IntersectionObserver === 'undefined') return unplace;
   const observer = new IntersectionObserver(
     (entries) => {
       const visible = entries.filter((e) => e.isIntersecting);
@@ -95,6 +115,11 @@ export function mountToc(main: HTMLElement): (() => void) | void {
     },
     { rootMargin: '-15% 0px -75% 0px' },
   );
-  heads.forEach((h) => observer.observe(h));
-  return () => observer.disconnect();
+  heads.forEach((h) => {
+    observer.observe(h);
+  });
+  return () => {
+    observer.disconnect();
+    unplace();
+  };
 }

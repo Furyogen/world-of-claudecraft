@@ -22,7 +22,7 @@ const GEN_MAX_RADIUS = 20;
 const WOBBLE_LATERAL = 1.6;
 const WOBBLE_RADIUS = 0.45;
 // The wobble fades to ZERO across this many yards at each end (scaled by the
-// bore radius, see mouthFadeYards): the mouths are the one non-negotiable —
+// bore radius, see mouthFadeYards): the mouths are the one non-negotiable ?
 // they stay exactly where and exactly as big as authored.
 const MOUTH_FADE_MIN_YARDS = 3;
 const MOUTH_FADE_MAX_YARDS = 10;
@@ -64,7 +64,7 @@ function catmullRom(p0: number, p1: number, p2: number, p3: number, t: number): 
  * (entrance first, exit last, any number of waypoints between).
  * - The path is a Catmull-Rom spline through the control points in FULL 3D
  *   (x, y, z): the floor runs exactly through every authored height. No
- *   terrain reads, no clamping, no grade relaxation — what you model is what
+ *   terrain reads, no clamping, no grade relaxation ? what you model is what
  *   you get.
  * - Per-point girth multipliers interpolate along the path; the mouths keep
  *   their authored girth EXACTLY.

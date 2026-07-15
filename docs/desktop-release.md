@@ -14,13 +14,15 @@ Sign-in is email and Discord only, identical to the web flow: email/password log
 inside the app, and "Continue with Discord" opens the player's default browser on the
 `/desktop-login` page, which hands a one-time code back to the app over the
 `worldofclaudecraft://desktop-login` deep link. There is no Steam sign-in on any
-channel (Steam is distribution only).
+channel; on the Steam channel the shell's one Steam surface is the account-link
+ticket behind the Book of Deeds achievement mirror (`electron/steam.cjs`).
 
 The build stamps `wocDesktop` into the packaged `package.json` (electron-builder
 `extraMetadata`, wired in `scripts/electron-build.mjs` +
 `scripts/electron-builder-config.mjs`): the `distribution` channel, the `apiOrigin`
-the Vite bundle was baked with, the main-process-only `loginOrigin`, and the optional
-`crashSubmitUrl`. The shell resolves the stamp at runtime in
+the Vite bundle was baked with, the main-process-only `loginOrigin`, the optional
+`crashSubmitUrl`, and (steam channel only) the `steamAppId` fed by the
+`WOC_STEAM_APP_ID` build env. The shell resolves the stamp at runtime in
 `electron/desktop_config.cjs`, and a PACKAGED build ignores the `WOC_*` and
 `VITE_DESKTOP_*` runtime env vars entirely (the stamp is final), so a local env var
 cannot steer an installed app to another API, login page, updater state, or crash
@@ -28,12 +30,37 @@ endpoint. The updater runs only for a PACKAGED WEBSITE build; there is deliberat
 no way to force it on in a Steam build. To try either channel unpacked, set
 `WOC_DISTRIBUTION=website|steam` on `npm run electron:dev`.
 
+Update tracks (prod/dev split): the publish channel is derived from the baked
+`apiOrigin` by one rule shared between build and runtime
+(`electron/update_guard.cjs`). A build baked with the production origin publishes
+and reads the `latest` channel (`latest-mac.yml`, `latest.yml`,
+`latest-linux*.yml`); a build baked with ANY other origin (dev, staging, a
+localhost smoke pack) publishes and reads the `dev` channel (`dev-mac.yml` and
+friends), which production installs never request. Three layers keep the tracks
+apart: the build throws if the production channel is requested for a
+non-production origin (`scripts/electron-builder-config.mjs`); every emitted feed
+file is stamped with the `wocApiOrigin` its artifact was baked with; and the
+running app refuses to download an update whose stamp differs from its own baked
+origin (loud `[updater] REFUSED` entry in `main.log`), so even a feed file
+renamed onto the wrong track cannot flip an install to another backend.
+`WOC_UPDATE_CHANNEL=dev` on a production-origin build is the one supported
+cross: it emits a production-origin artifact's feed files on the dev track to
+exercise the publish pipeline end to end (no install ever downloads such an
+artifact: dev-origin installs refuse its production origin stamp, which is the
+fail-safe direction). Never rename `dev*.yml` files to `latest*.yml` on the
+update host. Dev installs made BEFORE the track split read the `latest`
+channel like everything else did, so they will auto-update onto production
+builds; give dev testers a fresh post-split dev build rather than expecting
+their old installs to stay on dev.
+
 `npm run electron:pack` / `electron:pack:steam` are the fast local variants
 (`--dir`, host arch only, no installers). Release builds use the full arch matrix in
 `package.json` `build`: macOS universal (dmg + zip), Windows x64 + arm64 (nsis + zip),
 Linux x64 + arm64 (AppImage + deb). To smoke-test a packaged build against a local
 server: `VITE_DESKTOP_API_ORIGIN=http://localhost:8787 npm run electron:pack` (a
-BUILD-time value: baked into the bundle and stamped into the app).
+BUILD-time value: baked into the bundle and stamped into the app; such a build
+lands on the `dev` update channel automatically and cannot produce production
+feed files).
 
 Build each OS on its own runner (mac artifacts on macOS, Windows artifacts on Windows,
 Linux artifacts on Linux). Cross-building is not part of this runbook.
@@ -49,6 +76,7 @@ Linux artifacts on Linux). Cross-building is not part of this runbook.
 | Azure service principal with "Trusted Signing Certificate Profile Signer" role | CI auth for signing | CI secrets `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET` |
 | Update host: a static HTTPS host / bucket serving `https://updates.worldofclaudecraft.com/desktop/` | website auto-update feed + installer downloads | e.g. Cloudflare R2 bucket behind that hostname (any static host works; the app only GETs) |
 | Steam partner account + app ID + three depot IDs | Steam distribution | partner.steamgames.com |
+| Steamworks publisher Web API key (+ `STEAM_ENABLED=1`, `STEAM_APP_ID`) | the Book of Deeds achievement mirror + account link (`server/steam/`) | game-server runtime env `STEAM_WEB_API_KEY` (see `DEPLOY.md`) |
 | Optional: a crash-minidump endpoint (e.g. a Sentry project's minidump URL) | crash uploads | build env `WOC_CRASH_SUBMIT_URL` (https only) |
 
 Never commit any of these values; they are env vars in CI or the local shell.
@@ -73,6 +101,9 @@ carries for desktop:
 - The desktop-origin Turnstile admission (`server/turnstile.ts`): the widget cannot
   run at `app://`, so desktop-Origin requests are admitted without it; a documented,
   accepted softening of the bot gate for the desktop origins only.
+- The Steam account-link routes and the Book of Deeds achievement mirror
+  (`server/steam/`), env-gated OFF until `STEAM_ENABLED=1` is set (`DEPLOY.md`,
+  operational notes).
 
 Verify after deploying (should print the origin back):
 
@@ -131,16 +162,116 @@ Reputation persists across releases signed with the same identity, so it fades.
 ## Linux
 
 No artifact signing (electron-builder 26 has none built in; per-file signatures are
-not customary). Publish SHA256 checksums next to the artifacts:
-`shasum -a 256 release/*.AppImage release/*.deb > SHA256SUMS`. AppImage is the
-auto-updatable target; deb users update manually or via a future repo.
+not customary). Publish SHA256 checksums next to the artifacts (the CI publish
+does this as `SHA256SUMS-linux`; manually:
+`shasum -a 256 release/*.AppImage release/*.deb > SHA256SUMS-linux`). AppImage is the
+auto-updatable target; deb users update manually or via a future repo. The
+website download page offers the AppImage (not the deb): it runs on immutable
+Fedora atomic desktops (Bazzite, Steam Deck) with no system install, just
+`chmod +x` and launch, which the deb cannot do there.
+
+## Publishing from CI (Linux + macOS)
+
+The `.github/workflows/desktop-publish.yml` workflow publishes two of the three
+platforms automatically:
+
+- Linux: AppImage + deb (x64 + arm64), `SHA256SUMS-linux`, and both per-arch
+  feed files. No signing.
+- macOS: the signed + notarized universal dmg + zip + blockmap,
+  `SHA256SUMS-mac`, and `latest-mac.yml`. The job verifies the signature
+  (`codesign --verify --deep --strict`, `spctl -a -t exec`) before uploading
+  and refuses to run at all without the Apple secrets, so an ad-hoc build can
+  never publish.
+
+Windows stays on the manual steps below until Azure Artifact Signing is
+provisioned in CI. The platform jobs are independent: a mac signing failure
+never blocks the Linux publish and vice versa.
+
+Triggers:
+
+- Pushing a release tag `v<version>` (the tagged commit must be on `main`, the tag
+  must match `package.json` `version`, and `DESKTOP_VERSION` must match too; the
+  workflow hard-fails on any mismatch so a half-bumped release cannot publish).
+- Manual `workflow_dispatch` (Actions tab, "Desktop publish", pick a branch).
+  By default this is a DRY RUN: it builds, signs, verifies, and checksums
+  exactly like a release, then attaches the artifacts to the workflow run
+  (7-day retention) for inspection instead of uploading, so the whole pipeline
+  can be rehearsed without touching the live host. Tick "publish" to really
+  upload (the backfill path). The same version lockstep guard runs; only the
+  tag and main-ancestry checks are skipped.
+
+Within each job, versioned artifacts upload first and the feed files
+(`latest-linux.yml` + `latest-linux-arm64.yml`, `latest-mac.yml`) last, so
+installed apps are never offered an update whose file is not yet downloadable.
+Versioned artifacts upload with immutable cache headers; checksum and feed
+files are near-uncached, matching the existing host convention.
+
+One-time provisioning (maintainer):
+
+1. Cloudflare R2: create a bucket (any name, e.g. `woc-desktop-updates`) and
+   connect the custom domain `updates.worldofclaudecraft.com` to it (R2 bucket
+   settings, Custom Domains; the zone must be on the same Cloudflare account).
+   Objects are uploaded under the `desktop/` prefix, matching the
+   `/desktop/` path the feed URL and download page already use.
+2. R2 API token: create an "Object Read and Write" API token scoped to that one
+   bucket (Cloudflare dashboard, R2, Manage API Tokens). Note the Access Key ID,
+   Secret Access Key, and your Cloudflare account id.
+3. GitHub repo secrets (Settings, Secrets and variables, Actions), R2 set:
+   `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`.
+4. GitHub repo secrets, Apple set (all five required or the mac job refuses to
+   run; sourced from the same credentials the manual mac build uses):
+   - `CSC_LINK`: the Developer ID Application `.p12` as base64
+     (`base64 -i <cert>.p12 | pbcopy`).
+   - `CSC_KEY_PASSWORD`: the `.p12` password.
+   - `APPLE_API_KEY_P8`: the raw text content of the App Store Connect API key
+     `.p8` file (the workflow writes it to disk and points `APPLE_API_KEY` at
+     it; note the manual flow passes a file path here instead).
+   - `APPLE_API_KEY_ID`, `APPLE_API_ISSUER`: as in the manual flow.
+5. Public read: the custom domain makes the bucket publicly readable through
+   that hostname only, which is exactly what the updater and download page need;
+   do not additionally enable the `r2.dev` public URL.
+
+Verify after the first publish:
+
+```bash
+curl -sI https://updates.worldofclaudecraft.com/desktop/latest-linux.yml | head -1
+curl -sI https://updates.worldofclaudecraft.com/desktop/latest-mac.yml | head -1
+curl -s https://updates.worldofclaudecraft.com/desktop/SHA256SUMS-linux
+```
+
+Users verify a download against the published checksums with
+`sha256sum -c SHA256SUMS-linux --ignore-missing` (or `shasum -a 256 -c
+SHA256SUMS-mac --ignore-missing` on macOS) from their download directory.
 
 ## Publishing a website update
 
-1. Bump `version` in `package.json` (the feed is version-ordered; see rollback).
-2. Build on each OS runner with signing env present: `npm run electron:build`.
+1. Bump `version` in `package.json` (the feed is version-ordered; see rollback),
+   and match `DESKTOP_VERSION` in `src/game/desktop_download.ts` so the download
+   page links point at the new build (the static hrefs in `index.html` are the
+   no-JS fallback; keep them on the same version). The page offers macOS (dmg)
+   and Linux (AppImage); Windows stays "pending" until its installer is uploaded.
+2. Build on each OS runner with signing env present: `npm run electron:build`,
+   with `VITE_DESKTOP_API_ORIGIN` unset or set to the production origin. macOS
+   and Linux are built and published by CI on the release tag (see "Publishing
+   from CI"); CI leaves the origin unset, so it always bakes production. Only
+   Windows still needs a manual runner. A
+   production release MUST emit `latest*.yml` feed files (`latest.yml` on
+   Windows, `latest-mac.yml`, `latest-linux*.yml`); if the build produced
+   `dev*.yml` instead, it was baked with a non-production origin: rebuild, do
+   not rename (renamed files still carry the `wocApiOrigin` stamp and every
+   production install will refuse them). The CI jobs pin the exact `latest*`
+   filenames they upload, so a dev-channel misbake fails their artifact check
+   instead of publishing.
+   One-time cleanup with the first track-split release: audit the production
+   update host and delete any `latest*.yml` (and its artifacts) that this
+   release did not produce. Feed files published before the split carry no
+   `wocApiOrigin` stamp and the runtime guard accepts unstamped files for back
+   compat, so a leftover pre-split dev-baked `latest*.yml` is the one artifact
+   the guard cannot refuse; from this release on, every feed file on the host
+   is stamped and the acceptance window can later be tightened to stamped-only.
 3. Upload from `release/` to the update host directory (keep filenames exactly):
-   - macOS: `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
+   - macOS: handled by CI; the manual list, should CI ever be bypassed:
+     `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
      `...-mac-universal.zip` + `.zip.blockmap` (updater), `latest-mac.yml`.
    - Windows: with x64+arm64 and no `nsis` block, electron-builder's
      `buildUniversalInstaller` default (true) emits ONE combined NSIS installer
@@ -149,7 +280,9 @@ auto-updatable target; deb users update manually or via a future repo.
      verify the emitted installer filename and the `path` in `latest.yml` on the
      first Windows build. To ship separate per-arch installers instead, set
      `build.nsis.buildUniversalInstaller: false`.
-   - Linux: `...-linux-x86_64.AppImage` (x64) / `...-linux-arm64.AppImage`
+   - Linux: handled by CI (see "Publishing from CI" above); the manual list,
+     should CI ever be bypassed: `...-linux-x86_64.AppImage` (x64) /
+     `...-linux-arm64.AppImage`
      (electron-builder names the x64 AppImage `x86_64`; blockmap data is
      embedded), the debs `...-linux-amd64.deb` (x64) / `...-linux-arm64.deb` for
      the download page, plus BOTH per-arch feed files `latest-linux.yml` (x64)
@@ -176,7 +309,11 @@ and skips, by design.
 ## Steam
 
 Build: `npm run electron:build:steam` on each OS runner (signing env still applies on
-mac; Steam mac builds must ALSO be Developer ID signed + notarized). Output layouts
+mac; Steam mac builds must ALSO be Developer ID signed + notarized). Set
+`WOC_STEAM_APP_ID` in the build env so the stamp carries the real app id: the build
+refuses to run without a numeric id, because a packaged depot without the stamp
+would init Steam with the Spacewar fallback id (480) and link tickets would verify
+against the wrong app. Output layouts
 in `release-steam/`:
 
 - `mac-universal/World of ClaudeCraft.app` (one universal .app)
@@ -202,15 +339,19 @@ Rules that keep this working:
   as-is and preserves the notarized signature).
 - Do NOT apply the Valve DRM wrapper on any platform (it rewrites the exe like a
   packer, is unavailable for mac, and Valve itself calls it weak).
-- No Steamworks SDK is linked, which Valve explicitly supports; consequences:
-  no achievements/cloud/rich presence, and the Steam OVERLAY does not hook the game.
-  Accepted for v1. If overlay/achievements are ever wanted, that is a steamworks.js
-  (or successor) project with its own CI gate; do not bolt it on casually.
+- The Steamworks SDK loads on this channel only to mint the account-link
+  ticket: `electron/steam.cjs` lazily requires `steamworks.js`, which rides the
+  steam depot alone, asar-unpacked (`scripts/electron-builder-config.mjs`);
+  website builds never load it. Achievements reach Steam through the SERVER'S
+  Book of Deeds mirror (`server/steam/`), not the client SDK; cloud and rich
+  presence stay unused, and the Steam OVERLAY is not hooked (nothing calls an
+  overlay enable). Gate: `tests/electron_steam.test.ts`.
 - Updates ship as new SteamPipe builds promoted to the default branch; the in-app
   updater is off in this channel (runtime stamp) AND the build has no publish feed
   (no app-update.yml), so there is nothing to disable manually. Steam policy is that
   updates flow through Steam; keep it that way.
-- `steam_appid.txt` is not needed (SDK never initialized) and must not ship.
+- `steam_appid.txt` is not needed (`electron/steam.cjs` passes the app id
+  straight to `init`) and must not ship.
 
 ## Error logging, crash dumps, privacy
 
@@ -240,7 +381,8 @@ Rules that keep this working:
 
 1. Fresh install, launch: window appears, no Gatekeeper/SmartScreen block (signed
    builds), log file created, startup banner shows the right `version`,
-   `distribution`, and `updaterEnabled`.
+   `distribution`, `updaterEnabled`, and `updateChannel` (`latest` on a
+   production build, `dev` on anything else).
 2. GPU: log shows `[gpu] feature status` with hardware WebGL2 (no
    `software only`, no SwiftShader/llvmpipe renderer, no softwareRendering warning).
 3. Login both paths: email/password in-app, and Discord via the external browser +
@@ -250,8 +392,9 @@ Rules that keep this working:
    world (backgroundThrottling stays off).
 5. Website channel only: with a higher-version build on the feed, the update toast
    appears, "Restart now" applies it, and a player who quits instead gets it on next
-   launch. Steam channel: confirm the log says the updater is disabled and no
-   update network traffic occurs.
+   launch; after the restart the log's startup banner still shows the production
+   `apiOrigin` channel (`updateChannel: latest`). Steam channel: confirm the log
+   says the updater is disabled and no update network traffic occurs.
 6. Crash surfaces: `kill -SEGV <renderer pid>` THREE times within a minute (a
    task-manager "end task" is classified as a benign `killed` exit and does not
    trigger recovery). The first two SEGVs each produce a log entry and a bounded

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CLASSES } from '../src/sim/content/classes';
 import {
+  applyLoadoutBar,
   buildDefaultFormBar,
   classHasFormBars,
   clearHotbarSlot,
@@ -8,6 +9,7 @@ import {
   parseHotbarActions,
   placeAbilityOnSlot,
   placeItemOnSlot,
+  resolveMobileHotbarDrop,
   shouldSeedFormBar,
   syncHotbarActions,
 } from '../src/ui/hotbar';
@@ -374,5 +376,59 @@ describe('hotbar slot sync', () => {
       null,
       { type: 'ability', id: 'blink' },
     ]);
+  });
+});
+
+describe('applying a saved talent loadout bar', () => {
+  // A SavedLoadout.bar is ability ids only (saveTalentLoadout's currentBar mapping
+  // in hud.ts drops item shortcuts before persisting), so switching to a saved
+  // loadout must not silently clear a potion/food/drink slot the loadout never
+  // captured in the first place. Regression for #1889.
+  it('keeps an existing item shortcut in a slot the loadout leaves blank', () => {
+    const current = [
+      { type: 'item' as const, id: 'baked_bread' },
+      { type: 'ability' as const, id: 'frost_armor' },
+      { type: 'item' as const, id: 'spring_water' },
+      null,
+    ];
+
+    expect(applyLoadoutBar(current, ['fireball', null, null, null], 4, abilityExists)).toEqual([
+      { type: 'ability', id: 'fireball' },
+      null,
+      { type: 'item', id: 'spring_water' },
+      null,
+    ]);
+  });
+
+  it('lets a loadout ability slot replace whatever was there before', () => {
+    const current = [
+      { type: 'item' as const, id: 'baked_bread' },
+      { type: 'ability' as const, id: 'frost_armor' },
+    ];
+
+    expect(applyLoadoutBar(current, ['polymorph', 'fireball'], 2, abilityExists)).toEqual([
+      { type: 'ability', id: 'polymorph' },
+      { type: 'ability', id: 'fireball' },
+    ]);
+  });
+
+  it('drops an unknown/stale ability id from the loadout without reviving an item there', () => {
+    const current = [{ type: 'ability' as const, id: 'fireball' }];
+
+    expect(applyLoadoutBar(current, ['no_such_ability'], 1, abilityExists)).toEqual([null]);
+  });
+});
+
+describe('mobile touch drag drop resolution', () => {
+  it('resolves the target slot when it differs from the source', () => {
+    expect(resolveMobileHotbarDrop(2, 5)).toBe(5);
+  });
+
+  it('cancels when the pointer released outside any slot', () => {
+    expect(resolveMobileHotbarDrop(2, null)).toBeNull();
+  });
+
+  it('cancels when the pointer released back on the source slot', () => {
+    expect(resolveMobileHotbarDrop(2, 2)).toBeNull();
   });
 });

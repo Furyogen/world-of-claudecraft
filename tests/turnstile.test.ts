@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { providerUsageSnapshot, resetProviderUsageForTests } from '../server/provider_usage';
 import { verifyTurnstile } from '../server/turnstile';
+import { providerUsageSnapshot, resetProviderUsageForTests } from '../server/provider_usage';
 
 // Minimal fetch stub: resolves to a Response-like object with the given body.
 function fakeFetch(payload: unknown, ok = true): typeof fetch {
@@ -30,15 +30,14 @@ describe('verifyTurnstile', () => {
   });
 
   it('tracks provider verification attempts and failures', async () => {
-    await expect(
-      verifyTurnstile('bad-token', 'secret', '1.2.3.4', fakeFetch({ success: false })),
-    ).resolves.toBe(false);
+    await expect(verifyTurnstile('bad-token', 'secret', '1.2.3.4', fakeFetch({ success: false }))).resolves.toBe(false);
     const snapshot = providerUsageSnapshot();
     const verify = snapshot.metrics.find((row) => row.key === 'turnstile.verify');
     const failure = snapshot.metrics.find((row) => row.key === 'turnstile.verify.failure');
     expect(verify?.counts.m1).toBe(1);
     expect(failure?.counts.m1).toBe(1);
   });
+
 
   it('sends the secret, token and remote IP to the siteverify endpoint', async () => {
     const fetchImpl = fakeFetch({ success: true });

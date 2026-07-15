@@ -1,7 +1,7 @@
 // Cave tube meshes: the visible walls/ceiling/floor of every cave
 // (sim/caves.ts CaveDef chains) plus an outer rock shell. Geometry derives
 // from the SAME analytic model the sim walks on (floor + horseshoe ceiling),
-// so what you see is what you collide with — and from NOTHING else: the tube
+// so what you see is what you collide with ? and from NOTHING else: the tube
 // is fully terrain-independent. It is never clamped under the ground, never
 // collapsed by low terrain, and its open mouths are always exactly the
 // authored node size. Where a tube pokes out of a hillside you simply see its
@@ -231,7 +231,7 @@ export function buildCaveGeometry(
         (3 * (p.radius + clear) - Math.sqrt((3 * p.radius + clear) * (p.radius + 3 * clear)))) /
       2;
     // Interior horseshoe ceiling: u sweeps wall to wall (-1 .. 1). ALWAYS the
-    // full authored arch — nothing outside the cave's own data touches it.
+    // full authored arch ? nothing outside the cave's own data touches it.
     for (let a = 0; a <= ARC_SEGS; a++) {
       const u = -1 + (2 * a) / ARC_SEGS;
       const q = u * p.radius * 0.995;

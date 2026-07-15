@@ -3,8 +3,8 @@
 // frenzy. Forest Wolves (a pack mob) carry the trait; killing one should hasten
 // the survivors next to it, but not distant ones, other families, or pets.
 import { describe, expect, it } from 'vitest';
-import { MOBS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
+import { MOBS } from '../src/sim/data';
 import type { Entity } from '../src/sim/types';
 
 const makeSim = () => new Sim({ seed: 42, playerClass: 'warrior', autoEquip: true });
@@ -19,16 +19,7 @@ function wolves(sim: Sim): Entity[] {
 function kill(sim: Sim, victim: Entity) {
   victim.aiState = 'idle';
   victim.auras = [];
-  (sim as any).dealDamage(
-    sim.player,
-    victim,
-    victim.hp + 1000,
-    false,
-    'physical',
-    null,
-    'hit',
-    true,
-  );
+  (sim as any).dealDamage(sim.player, victim, victim.hp + 1000, false, 'physical', null, 'hit', true);
 }
 
 function frenzy(e: Entity) {

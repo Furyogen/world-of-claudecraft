@@ -164,6 +164,12 @@ import {
 } from './custom_map';
 import { button, checkbox, el, slider } from './dom';
 import { clampToCap } from './edit_caps_core';
+import {
+  isMovableEntity,
+  pickMovableEntity,
+  splitCampIntoIndividuals,
+  toggledMobSelection,
+} from './entity_edit_core';
 import { downloadMap, pickMapOrBundle } from './file_io';
 import { bakeImportedModelCollision, bakeTrueModelCollision } from './import_collision';
 import {
@@ -218,6 +224,7 @@ import { DEFAULT_POINT_SOUND } from './point_sounds';
 import { type Bounds, makeRng, scatterHills, scatterPlacements } from './procgen';
 import { EditGeneration, shouldAutosave } from './save_lifecycle_core';
 import { editorErrorKey } from './server_errors_core';
+import { createShippedMap } from './shipped_maps';
 import { appendSpan, removeSpan } from './span_core';
 import {
   erasePlacementIndex,
@@ -240,6 +247,7 @@ import {
   userAssetPath,
 } from './user_assets';
 import { Camera, pickHandle, type ScreenPoint, type Vec2, type Viewport } from './view';
+import { promoteMajorWorldProps, withoutMajorWorldProps } from './world_prop_placements';
 
 const KINDS: EntityKind[] = ['hub', 'graveyard', 'lake', 'poi', 'camp', 'npc', 'object'];
 
@@ -408,7 +416,7 @@ export class EditorApp {
   private brushRadius = 18;
   // Sculpt strength SLIDER value (1..50). The height math consumes it divided
   // by BRUSH_STRENGTH_SCALE, so every step is a fifth of the legacy 1..30
-  // scale's — fine control at the low end without losing the old ceiling
+  // scale's ? fine control at the low end without losing the old ceiling
   // (50/5 = 10; the default 30/5 = 6 matches the legacy default of 6).
   private brushStrength = 30;
   private paintBiome = 1;
@@ -468,7 +476,7 @@ export class EditorApp {
   // Free-Fly is ON by default (WASD/QE fly + mouse-look is the default editor
   // feel); a stored '0' keeps a maker who turned it off, off.
   private freeFlyOn = readPrefDefaultOn(FREE_FLY_PREF_KEY);
-  private invertPanOn = readPref(INVERT_PAN_PREF_KEY);
+  private invertPanOn = readPrefDefaultOn(INVERT_PAN_PREF_KEY);
   // The playtest player stand-in model; removed by default (game-editor feel).
   private showPlayerOn = readPref(SHOW_PLAYER_PREF_KEY);
   // Map-limit wall overlays; OFF by default (uncluttered viewport), shown when a
@@ -529,6 +537,16 @@ export class EditorApp {
   private selectedSet = new Set<number>();
   private selectedCamp: number | null = null;
   private selectedKey: string | null = null; // 2D marker
+  // Entity-tool mob selection uses live Sim ids so a rendered mob, rather than
+  // its whole authored camp, is the unit of selection and movement.
+  private selectedMobIds = new Set<number>();
+  private selectedMobCamps = new Map<number, CampDef>();
+  private mobDragStart: {
+    pointer: Vec2;
+    camps: Map<number, { camp: CampDef; point: Vec2 }>;
+    dx: number;
+    dz: number;
+  } | null = null;
   // Selected map point light (Light tool click or Select-tool bulb click).
   private selectedLight: number | null = null;
   // Selected map point sound (Sound tool click or Select-tool badge click).
@@ -547,8 +565,12 @@ export class EditorApp {
   // Rotate/Scale drag reference (captured on the first drag sample): the
   // placement's pre-drag transform plus the cursor's angle/distance around the
   // pivot, so the whole drag applies deltas against one stable baseline.
-  private transformDragRef: { angle: number; dist: number; rotY: number; scale: number } | null =
-    null;
+  private transformDragRef: {
+    angle: number;
+    dist: number;
+    rotY: number;
+    scale: number;
+  } | null = null;
   // Pre-gesture snapshots of the OTHER multi-selection members during a group
   // transform (move/rotate/scale; the active one is covered by
   // placementDragBase). Full snapshots: every live sample re-derives each
@@ -560,7 +582,7 @@ export class EditorApp {
   // instead of flattening.
   private sculptLower = false;
   // Sculpt Grab mode (snake hook): press grabs the ground under the brush,
-  // and the drag pulls that spot ALONG the drag direction — in 3D the cursor
+  // and the drag pulls that spot ALONG the drag direction ? in 3D the cursor
   // motion maps onto the camera's view plane (sideways slides the grabbed
   // bump across the map, up/down on screen pulls it out of / into the
   // ground); in 2D top-down only the height pull applies (one live stamp per
@@ -648,6 +670,9 @@ export class EditorApp {
   private autoTexOwnedGrid: BiomePaint | null = null;
   // Zone tool drag box (named locations) + spawn-tool marker placement mode.
   private zoneStart: Vec2 | null = null;
+  private spawnAreaStart: Vec2 | null = null;
+  private spawnAreaPreview: { minX: number; minZ: number; maxX: number; maxZ: number } | null =
+    null;
   private zoneBox: RegionBox | null = null;
   private markerPlaceMode = false;
   private markerKind: 'npc' | 'object' = 'npc';
@@ -679,6 +704,7 @@ export class EditorApp {
   private dragKey: string | null = null;
   private markerDragStart: { key: string; x: number; z: number } | null = null;
   private grab: Vec2 = { x: 0, z: 0 };
+  private npcFacingDragBase: { key: string; facing: number } | null = null;
   private lastPointer: ScreenPoint = { sx: 0, sy: 0 };
   private painting2d = false;
   /** Pixels dragged since the 2D paint press; gates jitter, see pointermove. */
@@ -732,6 +758,7 @@ export class EditorApp {
       this.content = opened.content;
       this.waterBase = opened.waterLevel ?? WATER_LEVEL;
     }
+    promoteMajorWorldProps(this.map as CustomMap);
     this.entities = buildEntities(this.content);
     this.base = snapshot(this.entities);
     this.rebuildActiveWorld();
@@ -774,7 +801,10 @@ export class EditorApp {
     try {
       const raw = localStorage.getItem(LIGHTING_PREF_KEY);
       if (raw) {
-        const saved = JSON.parse(raw) as { preset?: string; profile?: EditorLightingProfile };
+        const saved = JSON.parse(raw) as {
+          preset?: string;
+          profile?: EditorLightingProfile;
+        };
         if (saved.profile && typeof saved.profile.sunIntensity === 'number') {
           this.lighting = saved.profile;
           this.lightingPreset = typeof saved.preset === 'string' ? saved.preset : 'custom';
@@ -822,6 +852,18 @@ export class EditorApp {
     this.drawer = new MapDrawer(this.root, {
       listLocal: () => this.io.store.list(),
       hasDraft: () => this.io.draftLoad() !== null,
+      onOpenShipped: async (mapId) => {
+        if (!(await this.confirmDiscard())) return;
+        const map = await createShippedMap(mapId, mintId(), now());
+        this.loadMap(map);
+        // Dense kit maps turn the global footprint overlay into one solid
+        // screen-sized wash. Open them clean; the toggle remains available.
+        this.footprintsOn = false;
+        writePref(FOOTPRINTS_PREF_KEY, false);
+        this.syncFootprintOverlay();
+        this.inspector.refresh();
+        this.toasts.info(t('editor.status.shippedMapOpened', { name: map.meta.name }));
+      },
       onOpenLocal: async (id) => {
         if (!(await this.confirmDiscard())) return;
         const loaded = this.io.store.load(id);
@@ -877,9 +919,11 @@ export class EditorApp {
     this.toolbar.setActive(this.tool);
 
     // Sky/birds preferences (applied through the viewport once it boots).
-    const savedBirds = readJsonPref<{ enabled: boolean; count: number; formation: boolean }>(
-      BIRDS_PREF_KEY,
-    );
+    const savedBirds = readJsonPref<{
+      enabled: boolean;
+      count: number;
+      formation: boolean;
+    }>(BIRDS_PREF_KEY);
     if (savedBirds && typeof savedBirds.enabled === 'boolean') {
       this.birds = {
         enabled: savedBirds.enabled,
@@ -888,9 +932,11 @@ export class EditorApp {
       };
     }
     // Camera-speed multipliers (persisted): clamp to the slider range on load.
-    const savedSpeeds = readJsonPref<{ move: number; look: number; pan: number }>(
-      CAMERA_SPEEDS_PREF_KEY,
-    );
+    const savedSpeeds = readJsonPref<{
+      move: number;
+      look: number;
+      pan: number;
+    }>(CAMERA_SPEEDS_PREF_KEY);
     if (savedSpeeds) {
       const clampSpeed = (v: unknown): number =>
         Number.isFinite(v) ? Math.min(4, Math.max(0.1, v as number)) : 1;
@@ -935,7 +981,10 @@ export class EditorApp {
       resumeId = null;
     }
 
-    const candidates: { map: CustomMap; source: 'store' | 'draft' | 'recovery' }[] = [];
+    const candidates: {
+      map: CustomMap;
+      source: 'store' | 'draft' | 'recovery';
+    }[] = [];
     if (resumeId) {
       const stored = this.io.store.load(resumeId);
       const draft = this.io.draftLoadById(resumeId);
@@ -1028,12 +1077,18 @@ export class EditorApp {
       npcs: map.content.npcs as WorldContent['npcs'],
       groundObjects: map.content.objects as WorldContent['groundObjects'],
       roads: (map.content.roads ?? BUILTIN_WORLD.roads) as WorldContent['roads'],
-      props: map.propsMode === 'empty' ? emptyZoneProps() : BUILTIN_WORLD.props,
+      props:
+        map.propsMode === 'empty'
+          ? emptyZoneProps()
+          : map.propsMode === 'editable-major'
+            ? withoutMajorWorldProps(BUILTIN_WORLD.props)
+            : BUILTIN_WORLD.props,
       playerStart: map.playerStart ? { ...map.playerStart } : { ...PLAYER_START },
       terrainEdits: map.terrainEdits,
       placements: [],
       biomePaint: map.biomePaint,
     };
+    if (map.playerSpawnArea) world.playerSpawnArea = { ...map.playerSpawnArea };
     if (map.blockers) world.blockers = map.blockers;
     if (map.caves) world.caves = map.caves;
     if (map.holes) world.holes = map.holes;
@@ -1045,7 +1100,7 @@ export class EditorApp {
     if (fluids.length > 0) world.fluids = fluids;
     if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
     if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
-    if (map.presentationMode === 'blank') world.presentationMode = 'blank';
+    if (map.presentationMode !== undefined) world.presentationMode = map.presentationMode;
     if (map.skybox !== undefined) world.skybox = map.skybox;
     if (map.terrainStyle) world.terrainStyle = map.terrainStyle;
     if (map.timeScale !== undefined) world.timeScale = map.timeScale;
@@ -1248,7 +1303,11 @@ export class EditorApp {
     // The placement selection survives switching among Select/Move/Rotate/Scale
     // (Blender flow: pick, then G/R/S); any other tool drops it.
     if (!isSelectionTool(tool)) this.setSelectedPlacement(null);
-    if (tool !== 'select') this.selectedKey = null;
+    if (tool !== 'select' && tool !== 'entity') this.selectedKey = null;
+    if (tool !== 'entity') {
+      this.clearMobSelection();
+      this.npcFacingDragBase = null;
+    }
     if (tool !== 'camp') this.selectedCamp = null;
     if (tool !== 'select' && tool !== 'light' && this.selectedLight !== null) {
       this.selectedLight = null;
@@ -1263,6 +1322,8 @@ export class EditorApp {
       this.viewport3d?.setSelectedSound(null);
     }
     if (tool !== 'blocker') this.clearBlockerDraft();
+    if (tool === 'spawn') this.viewport3d?.setZonePreview(this.map.playerSpawnArea ?? null);
+    else if (this.tool !== 'zone' && this.tool !== 'music') this.viewport3d?.setZonePreview(null);
     this.viewport3d?.clearBrush();
     this.syncFootprintOverlay();
     this.inspector.refresh();
@@ -1281,7 +1342,7 @@ export class EditorApp {
     this.viewport3d?.showFootprints((this.footprintsOn || forced) && !this.previewOn);
   }
 
-  /** Preview mode (topbar): the map as it looks in-game — every editor-only
+  /** Preview mode (topbar): the map as it looks in-game ? every editor-only
    *  overlay hidden. Purely a view state; nothing in the document changes. */
   private setPreviewMode(on: boolean): void {
     if (this.previewOn === on) return;
@@ -1305,6 +1366,8 @@ export class EditorApp {
       this.tool === 'flatten' ||
       this.tool === 'paint' ||
       this.tool === 'foliage' ||
+      this.tool === 'entity' ||
+      this.tool === 'spawn' ||
       this.tool === 'zone' ||
       this.tool === 'music' ||
       this.tool === 'erase'
@@ -1360,9 +1423,62 @@ export class EditorApp {
       case 'camp':
         this.campClick(w);
         break;
+      case 'entity': {
+        const runtimeMob = ev ? this.viewport3d?.pickRuntimeMob(ev.clientX, ev.clientY) : null;
+        if (runtimeMob) {
+          const camp = this.individualCampForRuntimeMob(runtimeMob.id);
+          if (camp) {
+            this.selectedMobIds = toggledMobSelection(
+              this.selectedMobIds,
+              runtimeMob.id,
+              ev?.ctrlKey === true,
+            );
+            if (this.selectedMobIds.has(runtimeMob.id)) {
+              this.selectedMobCamps.set(runtimeMob.id, camp);
+            } else {
+              this.selectedMobCamps.delete(runtimeMob.id);
+            }
+            for (const id of [...this.selectedMobCamps.keys()]) {
+              if (!this.selectedMobIds.has(id)) this.selectedMobCamps.delete(id);
+            }
+            this.viewport3d?.setSelectedRuntimeMobs(this.selectedMobIds);
+            this.selectedKey = null;
+            this.markerDragStart = null;
+            this.mobDragStart = this.selectedMobIds.has(runtimeMob.id)
+              ? {
+                  pointer: { ...w },
+                  camps: new Map(
+                    [...this.selectedMobCamps].map(([id, selectedCamp]) => [
+                      id,
+                      { camp: selectedCamp, point: { ...selectedCamp.center } },
+                    ]),
+                  ),
+                  dx: 0,
+                  dz: 0,
+                }
+              : null;
+            this.inspector.refresh();
+            this.canvasDirty = true;
+            break;
+          }
+        }
+        this.clearMobSelection();
+        const hit = pickMovableEntity(this.entities, w);
+        this.selectedKey = hit?.key ?? null;
+        if (hit) {
+          this.markerDragStart = { key: hit.key, x: hit.point.x, z: hit.point.z };
+          this.grab = { x: w.x - hit.point.x, z: w.z - hit.point.z };
+        }
+        this.inspector.refresh();
+        this.canvasDirty = true;
+        break;
+      }
       case 'spawn':
         if (this.markerPlaceMode) this.addMarker(w);
-        else this.setSpawn(w);
+        else {
+          this.spawnAreaStart = { ...w };
+          this.spawnAreaPreview = { minX: w.x, minZ: w.z, maxX: w.x, maxZ: w.z };
+        }
         break;
       case 'zone':
       case 'music':
@@ -1440,6 +1556,45 @@ export class EditorApp {
           this.canvasDirty = true;
         }
         break;
+      case 'entity': {
+        if (this.mobDragStart) {
+          const drag = this.mobDragStart;
+          const dx = w.x - drag.pointer.x;
+          const dz = w.z - drag.pointer.z;
+          this.viewport3d?.moveRuntimeMobs(this.selectedMobIds, dx - drag.dx, dz - drag.dz);
+          drag.dx = dx;
+          drag.dz = dz;
+          for (const { camp, point } of drag.camps.values()) {
+            camp.center.x = point.x + dx;
+            camp.center.z = point.z + dz;
+          }
+          this.entities = buildEntities(this.content);
+          this.canvasDirty = true;
+          break;
+        }
+        if (!this.selectedKey) break;
+        const entity = this.entities.find((candidate) => candidate.key === this.selectedKey);
+        if (!entity || !isMovableEntity(entity)) break;
+        const from = { x: entity.point.x, z: entity.point.z };
+        const to = { x: w.x - this.grab.x, z: w.z - this.grab.z };
+        entity.point.x = to.x;
+        entity.point.z = to.z;
+        this.viewport3d?.moveMapEntity(entity.key, from, to);
+        this.canvasDirty = true;
+        break;
+      }
+      case 'spawn':
+        if (this.spawnAreaStart && !this.markerPlaceMode) {
+          this.spawnAreaPreview = {
+            minX: Math.min(this.spawnAreaStart.x, w.x),
+            minZ: Math.min(this.spawnAreaStart.z, w.z),
+            maxX: Math.max(this.spawnAreaStart.x, w.x),
+            maxZ: Math.max(this.spawnAreaStart.z, w.z),
+          };
+          this.viewport3d?.setZonePreview(this.spawnAreaPreview);
+          this.canvasDirty = true;
+        }
+        break;
       case 'zone':
       case 'music':
         if (this.zoneStart) {
@@ -1503,6 +1658,62 @@ export class EditorApp {
         break;
       case 'paint':
         this.paintCommit();
+        break;
+      case 'entity': {
+        const mobDrag = this.mobDragStart;
+        this.mobDragStart = null;
+        if (mobDrag && (mobDrag.dx !== 0 || mobDrag.dz !== 0)) {
+          const moves = new Map(
+            [...mobDrag.camps].map(([id, entry]) => [
+              id,
+              {
+                camp: entry.camp,
+                prev: entry.point,
+                next: { x: entry.camp.center.x, z: entry.camp.center.z },
+              },
+            ]),
+          );
+          const apply = (side: 'prev' | 'next'): void => {
+            for (const [id, move] of moves) {
+              const target = move[side];
+              const dx = target.x - move.camp.center.x;
+              const dz = target.z - move.camp.center.z;
+              this.viewport3d?.moveRuntimeMobs(new Set([id]), dx, dz);
+              move.camp.center.x = target.x;
+              move.camp.center.z = target.z;
+            }
+            this.entities = buildEntities(this.content);
+            this.canvasDirty = true;
+          };
+          this.pushUndo({
+            label: 'move-mobs',
+            undo: () => apply('prev'),
+            redo: () => apply('next'),
+          });
+          this.map.meta.updatedAt = now();
+          this.markDirty();
+          this.inspector.refresh();
+          break;
+        }
+        const start = this.markerDragStart;
+        const entity = start
+          ? this.entities.find((candidate) => candidate.key === start.key)
+          : null;
+        this.markerDragStart = null;
+        if (start && entity && (entity.point.x !== start.x || entity.point.z !== start.z)) {
+          this.pushMarkerUndo(
+            start.key,
+            { x: start.x, z: start.z },
+            { x: entity.point.x, z: entity.point.z },
+          );
+          this.map.meta.updatedAt = now();
+          this.markDirty();
+        }
+        this.inspector.refresh();
+        break;
+      }
+      case 'spawn':
+        if (!this.markerPlaceMode) this.finishSpawnArea();
         break;
       case 'region': {
         // A click (no real drag) with a clipboard pastes at the click point.
@@ -1785,7 +1996,13 @@ export class EditorApp {
     const h0 = anchorGround;
     const h1 = terrainHeight(pts[pts.length - 1].x, pts[pts.length - 1].z, seed);
     const size = this.rockParams.size;
-    const nodes: { dx: number; dz: number; dy: number; r: number; h: number }[] = [];
+    const nodes: {
+      dx: number;
+      dz: number;
+      dy: number;
+      r: number;
+      h: number;
+    }[] = [];
     let arc = 0;
     for (let i = 0; i < pts.length; i++) {
       if (i > 0) arc += lens[i - 1];
@@ -1803,7 +2020,13 @@ export class EditorApp {
       // ground-seated where the terrain runs higher. The node's Y gizmo adds
       // an authored lift/sink on top (floating arches, buried spans).
       const seatY = Math.max(ground, deckY - r * h * 0.4) + (p.y ?? 0);
-      nodes.push({ dx: p.x - anchor.x, dz: p.z - anchor.z, dy: seatY - anchorGround, r, h });
+      nodes.push({
+        dx: p.x - anchor.x,
+        dz: p.z - anchor.z,
+        dy: seatY - anchorGround,
+        r,
+        h,
+      });
     }
     return nodes;
   }
@@ -1996,7 +2219,12 @@ export class EditorApp {
   private caveRigs(): { id: string; points: AssetPlacement[] }[] {
     const byId = new Map<
       string,
-      { id: string; entrance: AssetPlacement[]; mid: AssetPlacement[]; exit: AssetPlacement[] }
+      {
+        id: string;
+        entrance: AssetPlacement[];
+        mid: AssetPlacement[];
+        exit: AssetPlacement[];
+      }
     >();
     for (const p of this.map.placements) {
       if (
@@ -2136,7 +2364,7 @@ export class EditorApp {
   /** EVERY hole mutation (punch, resize, delete, undo/redo) funnels here:
    *  the shader cutout uniforms re-upload and the grass/dressing over the
    *  cutout re-scatter. Terrain heights are untouched (holes only remove the
-   *  sheet), so no chunk re-mesh is needed — just the region's decor. */
+   *  sheet), so no chunk re-mesh is needed ? just the region's decor. */
   private holesMutated(region: RegionBox | null): void {
     refreshTerrainHoles();
     invalidateStaticColliders();
@@ -2160,11 +2388,16 @@ export class EditorApp {
 
   private holeRegion(hole: TerrainHole): RegionBox {
     const b = holeBounds(hole);
-    return { minX: b.minX - 2, minZ: b.minZ - 2, maxX: b.maxX + 2, maxZ: b.maxZ + 2 };
+    return {
+      minX: b.minX - 2,
+      minZ: b.minZ - 2,
+      maxX: b.maxX + 2,
+      maxZ: b.maxZ + 2,
+    };
   }
 
   /** Hole mode: one click punches a sphere cutout through the terrain sheet
-   *  (brush radius wide) — a real opening you can drop or walk through when a
+   *  (brush radius wide) ? a real opening you can drop or walk through when a
    *  cave tube runs underneath. */
   private placeTerrainHole(w: Vec2): void {
     const holes = this.holesRef();
@@ -2206,7 +2439,10 @@ export class EditorApp {
     if (change.radius !== undefined) {
       hole.radius = Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, change.radius));
     }
-    const region = this.holeRegion({ ...hole, radius: Math.max(hole.radius, base.radius) });
+    const region = this.holeRegion({
+      ...hole,
+      radius: Math.max(hole.radius, base.radius),
+    });
     // Live: uniforms only (cheap). Commit: full region refresh + undo.
     refreshTerrainHoles();
     this.canvasDirty = true;
@@ -2251,7 +2487,7 @@ export class EditorApp {
   }
 
   /** Patch mode: one click drops a patch sphere (brush radius wide) that
-   *  RESTORES the ground inside any hole cutouts it overlaps — fills in the
+   *  RESTORES the ground inside any hole cutouts it overlaps ? fills in the
    *  unwanted blank parts around the cuts. */
   private placeHolePatch(w: Vec2): void {
     const patches = this.holePatchesRef();
@@ -2295,7 +2531,10 @@ export class EditorApp {
     if (change.radius !== undefined) {
       patch.radius = Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, change.radius));
     }
-    const region = this.holeRegion({ ...patch, radius: Math.max(patch.radius, base.radius) });
+    const region = this.holeRegion({
+      ...patch,
+      radius: Math.max(patch.radius, base.radius),
+    });
     refreshTerrainHoles();
     this.canvasDirty = true;
     if (!commit) return;
@@ -2588,7 +2827,12 @@ export class EditorApp {
 
   private caveRegion(cave: CaveDef): RegionBox {
     const b = caveBounds(cave);
-    return { minX: b.minX - 4, minZ: b.minZ - 4, maxX: b.maxX + 4, maxZ: b.maxZ + 4 };
+    return {
+      minX: b.minX - 4,
+      minZ: b.minZ - 4,
+      maxX: b.maxX + 4,
+      maxZ: b.maxZ + 4,
+    };
   }
 
   // ---- Grab sculpt (snake hook) ---------------------------------------------------
@@ -2620,13 +2864,18 @@ export class EditorApp {
       startZ: w.z,
       wpp,
       axes: this.viewMode === '3d' ? (this.viewport3d?.viewPlaneAxes() ?? null) : null,
-      region: { minX: w.x - pad, minZ: w.z - pad, maxX: w.x + pad, maxZ: w.z + pad },
+      region: {
+        minX: w.x - pad,
+        minZ: w.z - pad,
+        maxX: w.x + pad,
+        maxZ: w.z + pad,
+      },
     };
   }
 
   /** Drag: the cursor motion (camera-scaled) IS the pull. In 3D it maps onto
    *  the camera's view plane, so the grabbed ground follows the drag in all
-   *  three axes — sideways slides the bump, up on screen lifts it, down
+   *  three axes ? sideways slides the bump, up on screen lifts it, down
    *  shoves it in. In 2D top-down only the height pull applies. */
   private grabStep(ev: PointerEvent): void {
     const g = this.grabSession;
@@ -2874,7 +3123,13 @@ export class EditorApp {
           // id so a later reshape can undo the auto paint.
           if (cur === desired) continue;
           const base = ownPrev !== undefined ? ownPrev : cur;
-          changes.push({ idx, prev: cur, next: desired, ownPrev, ownNext: base });
+          changes.push({
+            idx,
+            prev: cur,
+            next: desired,
+            ownPrev,
+            ownNext: base,
+          });
           bp.ids[idx] = desired;
           owned.set(idx, base);
         } else if (ownPrev !== undefined) {
@@ -2884,7 +3139,13 @@ export class EditorApp {
             owned.delete(idx);
             continue;
           }
-          changes.push({ idx, prev: cur, next: ownPrev, ownPrev, ownNext: undefined });
+          changes.push({
+            idx,
+            prev: cur,
+            next: ownPrev,
+            ownPrev,
+            ownNext: undefined,
+          });
           bp.ids[idx] = ownPrev;
           owned.delete(idx);
         }
@@ -3429,13 +3690,22 @@ export class EditorApp {
         if (bp.ids[idx] === this.paintBiome) continue;
         const change = this.paintChanges.get(idx);
         if (change) change.next = this.paintBiome;
-        else this.paintChanges.set(idx, { prev: bp.ids[idx], next: this.paintBiome });
+        else
+          this.paintChanges.set(idx, {
+            prev: bp.ids[idx],
+            next: this.paintBiome,
+          });
         bp.ids[idx] = this.paintBiome;
         touched = true;
       }
     }
     if (touched) {
-      const region = { minX: w.x - r, minZ: w.z - r, maxX: w.x + r, maxZ: w.z + r };
+      const region = {
+        minX: w.x - r,
+        minZ: w.z - r,
+        maxX: w.x + r,
+        maxZ: w.z + r,
+      };
       this.strokeRegion = unionRegion(this.strokeRegion, region);
       this.viewport3d?.rebuildTerrainRegion(region);
       this.canvasDirty = true;
@@ -3645,7 +3915,7 @@ export class EditorApp {
     const hue = sw.hueShift ?? 0;
     const light = Math.round((sw.light ?? 0) * 100);
     const parts = [
-      hue !== 0 ? `${hue > 0 ? '+' : ''}${hue}°` : '',
+      hue !== 0 ? `${hue > 0 ? '+' : ''}${hue}?` : '',
       light !== 0 ? `${light > 0 ? '+' : ''}${light}` : '',
     ];
     const label = `${base} ${parts.filter(Boolean).join(' ')}`.trim();
@@ -4190,7 +4460,10 @@ export class EditorApp {
     if (!p || p.detached) return;
     p.detached = true;
     p.groundY = terrainHeight(p.x, p.z, this.map.meta.seed);
-    this.viewport3d?.placementUpdated(index, { detached: true, groundY: p.groundY });
+    this.viewport3d?.placementUpdated(index, {
+      detached: true,
+      groundY: p.groundY,
+    });
   }
 
   // ---- hitbox editing (baked-collision boxes as first-class objects) ------------
@@ -4351,7 +4624,9 @@ export class EditorApp {
       }
     }
     p.hitboxes = boxes;
-    this.viewport3d?.placementUpdated(he.index, { hitboxes: boxes.map((b) => ({ ...b })) });
+    this.viewport3d?.placementUpdated(he.index, {
+      hitboxes: boxes.map((b) => ({ ...b })),
+    });
     this.syncHitboxEditView();
     this.canvasDirty = true;
   }
@@ -4465,7 +4740,9 @@ export class EditorApp {
     this.hitboxPresets[p.assetId] = p.hitboxes.map((b) => ({ ...b }));
     writeJsonPref(HITBOX_PRESETS_PREF_KEY, this.hitboxPresets);
     this.toasts.info(
-      t('editor.selection.hitboxPresetSaved', { name: this.placementLabel(p.assetId) }),
+      t('editor.selection.hitboxPresetSaved', {
+        name: this.placementLabel(p.assetId),
+      }),
     );
     this.inspector.refresh();
   }
@@ -4567,7 +4844,12 @@ export class EditorApp {
       formatNumber(v, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     const ok = await confirmDialog(this.root, {
       title: t('editor.selection.scaleAllConfirmTitle', { name }),
-      body: t('editor.selection.scaleAllConfirmBody', { name, count, min: fmt(lo), max: fmt(hi) }),
+      body: t('editor.selection.scaleAllConfirmBody', {
+        name,
+        count,
+        min: fmt(lo),
+        max: fmt(hi),
+      }),
       confirmLabel: t('editor.selection.scaleAllConfirm'),
     });
     if (!ok) return;
@@ -4712,7 +4994,7 @@ export class EditorApp {
     const isRigMarker = isCaveMarker || p.assetId === ROCK_POINT_ASSET_ID;
     // Cave markers are ANCHORED (frozen ground): their elevation is absolute
     // so the tube ignores whatever the terrain does. Heal markers from older
-    // sessions on first touch by freezing the CURRENT surface under them —
+    // sessions on first touch by freezing the CURRENT surface under them ?
     // their y offset keeps meaning the same height it did before the freeze.
     if (isCaveMarker && !p.detached) {
       p.detached = true;
@@ -5193,7 +5475,9 @@ export class EditorApp {
       }
       return;
     }
-    this.updateSelectedPlacement({ x: w.x, z: w.z }, false, { detachOnMove: true });
+    this.updateSelectedPlacement({ x: w.x, z: w.z }, false, {
+      detachOnMove: true,
+    });
   }
 
   /** Release: ONE commit diffed against the pre-drag base (single Ctrl+Z). */
@@ -5224,7 +5508,9 @@ export class EditorApp {
     const yaw =
       this.viewMode === '3d' ? (this.viewport3d?.cameraYaw() ?? NORTH_UP_YAW) : NORTH_UP_YAW;
     const d = nudgeDelta(key, yaw, big ? NUDGE_STEP_BIG_YD : NUDGE_STEP_YD);
-    this.updateSelectedPlacement({ x: p.x + d.dx, z: p.z + d.dz }, false, { detachOnMove: true });
+    this.updateSelectedPlacement({ x: p.x + d.dx, z: p.z + d.dz }, false, {
+      detachOnMove: true,
+    });
     this.scheduleTransformCommit();
   }
 
@@ -5439,40 +5725,193 @@ export class EditorApp {
     this.markDirty();
   }
 
+  private clearMobSelection(): void {
+    this.selectedMobIds.clear();
+    this.selectedMobCamps.clear();
+    this.mobDragStart = null;
+    this.viewport3d?.setSelectedRuntimeMobs(this.selectedMobIds);
+  }
+
+  /** Live-facing slider for selected NPCs, committed as one undo entry. */
+  private updateNpcFacing(key: string, facing: number, commit: boolean): void {
+    if (!key.startsWith('npc:') || !Number.isFinite(facing)) return;
+    const npcId = key.slice('npc:'.length);
+    const npc = this.map.content.npcs[npcId];
+    if (!npc) return;
+    if (!this.npcFacingDragBase || this.npcFacingDragBase.key !== key) {
+      this.npcFacingDragBase = { key, facing: npc.facing };
+    }
+    npc.facing = facing;
+    this.viewport3d?.setMapNpcFacing(key, facing);
+    this.canvasDirty = true;
+    if (!commit) return;
+
+    const previous = this.npcFacingDragBase.facing;
+    this.npcFacingDragBase = null;
+    if (previous === facing) return;
+    const apply = (value: number): void => {
+      npc.facing = value;
+      this.viewport3d?.setMapNpcFacing(key, value);
+      this.canvasDirty = true;
+    };
+    this.pushUndo({
+      label: 'rotate-npc',
+      undo: () => apply(previous),
+      redo: () => apply(facing),
+    });
+    this.map.meta.updatedAt = now();
+  }
+
+  /**
+   * Turn the picked mob's group camp into compatible one-mob camps. This is
+   * what makes an individual selection survive JSON export and a later import.
+   */
+  private individualCampForRuntimeMob(entityId: number): CampDef | null {
+    const runtime = this.viewport3d?.runtimeMobCamp(entityId);
+    if (!runtime) return null;
+    const camps = this.camps();
+    const original = camps[runtime.campIndex];
+    if (!original) return null;
+    if (original.count === 1) return original;
+
+    const individuals = splitCampIntoIndividuals(
+      original,
+      runtime.members.map((member) => ({ x: member.x, z: member.z })),
+    );
+    if (individuals.length === 0) return null;
+    const campByMobId = new Map(
+      runtime.members
+        .slice(0, individuals.length)
+        .map((member, index) => [member.id, individuals[index]]),
+    );
+    const selected = campByMobId.get(entityId);
+    if (!selected) return null;
+
+    const insertionIndex = runtime.campIndex;
+    camps.splice(insertionIndex, 1, ...individuals);
+    this.selectedCamp = null;
+    this.afterCampsChanged();
+    const clearAndRefresh = (): void => {
+      this.clearMobSelection();
+      this.afterCampsChanged();
+      this.inspector.refresh();
+    };
+    this.pushUndo({
+      label: 'split-mob-camp',
+      undo: () => {
+        const first = this.camps().indexOf(individuals[0]);
+        if (first >= 0) this.camps().splice(first, individuals.length, original);
+        clearAndRefresh();
+      },
+      redo: () => {
+        const index = this.camps().indexOf(original);
+        this.camps().splice(
+          index >= 0 ? index : insertionIndex,
+          index >= 0 ? 1 : 0,
+          ...individuals,
+        );
+        clearAndRefresh();
+      },
+    });
+    return selected;
+  }
+
   // ---- spawn -----------------------------------------------------------------------
 
-  private setSpawn(w: Vec2): void {
-    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
-    const next = { x: Math.round(w.x * 10) / 10, z: Math.round(w.z * 10) / 10 };
-    const apply = (v: { x: number; z: number } | null): void => {
-      if (v) this.map.playerStart = { ...v };
-      else delete this.map.playerStart;
-      this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
-      this.viewport3d?.setSpawnMarker(v);
+  private finishSpawnArea(): void {
+    const start = this.spawnAreaStart;
+    const area = this.spawnAreaPreview;
+    this.spawnAreaStart = null;
+    if (!start || !area) return;
+    const width = area.maxX - area.minX;
+    const height = area.maxZ - area.minZ;
+    if (width < 2 || height < 2) {
+      this.spawnAreaPreview = null;
+      this.viewport3d?.setZonePreview(null);
+      this.setSpawn(start);
+      return;
+    }
+    const prev = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const next = {
+      minX: Math.round(area.minX * 10) / 10,
+      minZ: Math.round(area.minZ * 10) / 10,
+      maxX: Math.round(area.maxX * 10) / 10,
+      maxZ: Math.round(area.maxZ * 10) / 10,
+    };
+    const apply = (value: typeof next | null): void => {
+      if (value) this.map.playerSpawnArea = { ...value };
+      else delete this.map.playerSpawnArea;
+      if (value) this.activeWorld.playerSpawnArea = { ...value };
+      else delete this.activeWorld.playerSpawnArea;
+      this.spawnAreaPreview = value ? { ...value } : null;
+      this.viewport3d?.setZonePreview(value);
       this.canvasDirty = true;
     };
     apply(next);
     this.map.meta.updatedAt = now();
     this.pushUndo({
-      label: 'set-spawn',
+      label: 'set-spawn-area',
       undo: () => apply(prev),
       redo: () => apply(next),
+    });
+    this.markDirty();
+    this.inspector.refresh();
+  }
+
+  private setSpawn(w: Vec2): void {
+    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
+    const prevArea = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const next = { x: Math.round(w.x * 10) / 10, z: Math.round(w.z * 10) / 10 };
+    const apply = (
+      v: { x: number; z: number } | null,
+      area: CustomMap['playerSpawnArea'] | null,
+    ): void => {
+      if (v) this.map.playerStart = { ...v };
+      else delete this.map.playerStart;
+      if (area) this.map.playerSpawnArea = { ...area };
+      else delete this.map.playerSpawnArea;
+      this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
+      if (area) this.activeWorld.playerSpawnArea = { ...area };
+      else delete this.activeWorld.playerSpawnArea;
+      this.viewport3d?.setSpawnMarker(v);
+      this.viewport3d?.setZonePreview(area ?? null);
+      this.canvasDirty = true;
+    };
+    apply(next, null);
+    this.map.meta.updatedAt = now();
+    this.pushUndo({
+      label: 'set-spawn',
+      undo: () => apply(prev, prevArea),
+      redo: () => apply(next, null),
     });
     this.inspector.refresh();
   }
 
   private clearSpawn(): void {
-    if (!this.map.playerStart) return;
-    const prev = { ...this.map.playerStart };
-    const apply = (v: { x: number; z: number } | null): void => {
+    if (!this.map.playerStart && !this.map.playerSpawnArea) return;
+    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
+    const prevArea = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const apply = (
+      v: { x: number; z: number } | null,
+      area: CustomMap['playerSpawnArea'] | null,
+    ): void => {
       if (v) this.map.playerStart = { ...v };
       else delete this.map.playerStart;
+      if (area) this.map.playerSpawnArea = { ...area };
+      else delete this.map.playerSpawnArea;
       this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
+      if (area) this.activeWorld.playerSpawnArea = { ...area };
+      else delete this.activeWorld.playerSpawnArea;
       this.viewport3d?.setSpawnMarker(v);
+      this.viewport3d?.setZonePreview(area ?? null);
       this.canvasDirty = true;
     };
-    apply(null);
-    this.pushUndo({ label: 'clear-spawn', undo: () => apply(prev), redo: () => apply(null) });
+    apply(null, null);
+    this.pushUndo({
+      label: 'clear-spawn',
+      undo: () => apply(prev, prevArea),
+      redo: () => apply(null, null),
+    });
   }
 
   // ---- water ------------------------------------------------------------------------
@@ -5562,7 +6001,10 @@ export class EditorApp {
       .map((e) => ({ ...e, x: e.x - cx, z: e.z - cz }));
     this.clipboard = { placements, edits };
     this.toasts.success(
-      t('editor.region.copied', { assets: placements.length, edits: edits.length }),
+      t('editor.region.copied', {
+        assets: placements.length,
+        edits: edits.length,
+      }),
     );
   }
 
@@ -5589,7 +6031,11 @@ export class EditorApp {
       x: p.x + world.x,
       z: p.z + world.z,
     }));
-    const edits = eClamp.accepted.map((e) => ({ ...e, x: e.x + world.x, z: e.z + world.z }));
+    const edits = eClamp.accepted.map((e) => ({
+      ...e,
+      x: e.x + world.x,
+      z: e.z + world.z,
+    }));
     if (placements.length === 0 && edits.length === 0) return;
     let region: RegionBox | null = null;
     for (const e of edits) region = unionRegion(region, stampRegion(e));
@@ -5687,7 +6133,10 @@ export class EditorApp {
     }
     this.appendPlacements(placed, 'procgen-scatter');
     this.toasts.success(
-      t('editor.procgen.scattered', { count: placed.length, category: category ?? '' }),
+      t('editor.procgen.scattered', {
+        count: placed.length,
+        category: category ?? '',
+      }),
     );
   }
 
@@ -5810,7 +6259,10 @@ export class EditorApp {
     try {
       const link = await this.io.saveServer(this.map);
       this.finishSave(
-        t('editor.status.savedServer', { name: this.map.meta.name, version: link.version }),
+        t('editor.status.savedServer', {
+          name: this.map.meta.name,
+          version: link.version,
+        }),
         link.version,
         generation,
         auto,
@@ -5890,7 +6342,10 @@ export class EditorApp {
       const link = await this.io.saveServerAsCopy(this.map);
       this.io.saveLocal(this.map);
       this.finishSave(
-        t('editor.status.savedServer', { name: this.map.meta.name, version: link.version }),
+        t('editor.status.savedServer', {
+          name: this.map.meta.name,
+          version: link.version,
+        }),
         link.version,
         generation,
       );
@@ -5954,7 +6409,10 @@ export class EditorApp {
     parsed.meta.name = full.name;
     this.loadMap(parsed);
     if (mine) {
-      this.io.setLink(parsed.meta.id, { serverId: full.id, version: full.version });
+      this.io.setLink(parsed.meta.id, {
+        serverId: full.id,
+        version: full.version,
+      });
       this.topbar.setForkEnabled(true);
       this.topbar.setSaveState(t('editor.topbar.savedServer', { version: full.version }));
     } else {
@@ -6079,7 +6537,9 @@ export class EditorApp {
       if (picker) {
         try {
           const root = await picker.call(window, { mode: 'readwrite' });
-          const dir = await root.getDirectoryHandle(`${safe} map bundle`, { create: true });
+          const dir = await root.getDirectoryHandle(`${safe} map bundle`, {
+            create: true,
+          });
           const writeFile = async (name: string, data: Uint8Array): Promise<void> => {
             const fh = await dir.getFileHandle(name, { create: true });
             const w = await fh.createWritable();
@@ -6287,7 +6747,12 @@ export class EditorApp {
         const name = file.name.replace(/\.glb$/i, '');
         const { asset, existing } = await uploadAsset(bytes, name);
         registerUserAssets([
-          { id: asset.id, sha256: asset.sha256, name: asset.name, byteSize: asset.byteSize },
+          {
+            id: asset.id,
+            sha256: asset.sha256,
+            name: asset.name,
+            byteSize: asset.byteSize,
+          },
         ]);
         const assetId = userAssetIdFor(asset.sha256);
         // One-time collision bake from the just-uploaded bytes (the server
@@ -6424,7 +6889,9 @@ export class EditorApp {
           sha = `s${Date.now().toString(36)}${Math.floor(Math.random() * 1e9).toString(36)}`;
         }
         const url = URL.createObjectURL(
-          new Blob([bytes], { type: isGlb ? 'model/gltf-binary' : 'model/gltf+json' }),
+          new Blob([bytes], {
+            type: isGlb ? 'model/gltf-binary' : 'model/gltf+json',
+          }),
         );
         const name = file.name.replace(/\.(glb|gltf)$/i, '');
         const assetId = registerLocalAsset({
@@ -6521,6 +6988,7 @@ export class EditorApp {
 
   // Replace the whole working document and rebuild the editor over its content.
   private loadMap(map: CustomMap): void {
+    promoteMajorWorldProps(map as CustomMap);
     this.map = map;
     this.content = map.content;
     this.entities = buildEntities(map.content);
@@ -6528,6 +6996,8 @@ export class EditorApp {
     this.undo.clear();
     this.dirty = false;
     this.selectedKey = null;
+    this.clearMobSelection();
+    this.npcFacingDragBase = null;
     this.hoverKey = null;
     this.selectedPlacement = null;
     this.placementDragBase = null;
@@ -6966,7 +7436,10 @@ export class EditorApp {
       },
       deleteMapSound: (index) => this.deleteMapSound(index),
       getMarkers: () => this.map.markers ?? [],
-      getMarkerMode: () => ({ placing: this.markerPlaceMode, kind: this.markerKind }),
+      getMarkerMode: () => ({
+        placing: this.markerPlaceMode,
+        kind: this.markerKind,
+      }),
       setMarkerMode: (change) => {
         if (change.placing !== undefined) this.markerPlaceMode = change.placing;
         if (change.kind !== undefined) this.markerKind = change.kind;
@@ -7018,7 +7491,10 @@ export class EditorApp {
       previewWaterLevel: (v) => this.previewWater(v),
       commitWaterLevel: (v) => this.commitWater(v),
       resetWaterLevel: () => this.commitWater(WATER_LEVEL),
-      getWaterTint: () => ({ hue: this.map.waterHue ?? null, lum: this.map.waterLum ?? null }),
+      getWaterTint: () => ({
+        hue: this.map.waterHue ?? null,
+        lum: this.map.waterLum ?? null,
+      }),
       previewWaterTint: (hue, lum) => this.previewWaterTint(hue, lum),
       commitWaterTint: (hue, lum) => this.commitWaterTint(hue, lum),
       resetWaterTint: () => this.commitWaterTint(null, null),
@@ -7126,7 +7602,27 @@ export class EditorApp {
       },
       updateCamp: (change) => this.updateSelectedCamp(change),
       deleteCamp: () => this.deleteSelectedCamp(),
+      getSelectedMovableEntity: () => {
+        if (this.selectedMobIds.size > 0) {
+          const count = this.selectedMobIds.size;
+          return {
+            key: `mobs:${[...this.selectedMobIds].join(',')}`,
+            name: count === 1 ? '1 mob' : `${count} mobs`,
+            facing: null,
+          };
+        }
+        const entity = this.entities.find((candidate) => candidate.key === this.selectedKey);
+        if (!entity || !isMovableEntity(entity)) return null;
+        const npcId = entity.key.startsWith('npc:') ? entity.key.slice('npc:'.length) : null;
+        return {
+          key: entity.key,
+          name: entity.label,
+          facing: npcId ? (this.map.content.npcs[npcId]?.facing ?? null) : null,
+        };
+      },
+      updateMovableEntityFacing: (key, facing, commit) => this.updateNpcFacing(key, facing, commit),
       getSpawn: () => this.map.playerStart ?? null,
+      getSpawnArea: () => this.map.playerSpawnArea ?? null,
       clearSpawn: () => this.clearSpawn(),
       copyRegion: () => this.copyRegion(),
       pasteBeside: () => this.pasteBeside(),
@@ -7356,7 +7852,10 @@ export class EditorApp {
         this.musicChanged();
       },
       deleteMusicArea: (index) => this.deleteMusicArea(index),
-      getLighting: () => ({ preset: this.lightingPreset, profile: this.effectiveLighting() }),
+      getLighting: () => ({
+        preset: this.lightingPreset,
+        profile: this.effectiveLighting(),
+      }),
       setLightingPreset: (key) => this.setLightingPreset(key),
       updateLighting: (change) => this.updateLighting(change),
       getBirds: () => ({ ...this.birds }),
@@ -7388,7 +7887,10 @@ export class EditorApp {
         const he = this.hitboxEdit;
         if (!he) return null;
         const p = this.map.placements[he.index];
-        return { count: p?.hitboxes?.length ?? 0, selectedCount: he.selected.size };
+        return {
+          count: p?.hitboxes?.length ?? 0,
+          selectedCount: he.selected.size,
+        };
       },
       enterHitboxEdit: () => this.enterHitboxEdit(),
       exitHitboxEdit: () => this.exitHitboxEdit(),
@@ -7398,7 +7900,10 @@ export class EditorApp {
       saveHitboxPreset: () => this.saveHitboxPreset(),
       clearHitboxPreset: () => this.clearHitboxPreset(),
       copyCollisionToSameAsset: () => void this.copyCollisionToSameAsset(),
-      getCloneScaleRange: () => ({ min: this.cloneScaleMin, max: this.cloneScaleMax }),
+      getCloneScaleRange: () => ({
+        min: this.cloneScaleMin,
+        max: this.cloneScaleMax,
+      }),
       setCloneScaleRange: (change) => {
         if (change.min !== undefined) {
           this.cloneScaleMin = Math.min(
@@ -7451,7 +7956,11 @@ export class EditorApp {
           visible: this.visible.has(kind),
         })),
         // Blocker walls are a document layer, not a marker entity kind.
-        { kind: 'blocker', label: t('editor.layers.blocker'), visible: this.blockersVisible2d },
+        {
+          kind: 'blocker',
+          label: t('editor.layers.blocker'),
+          visible: this.blockersVisible2d,
+        },
       ],
       toggleLayer: (kind, on) => {
         if (kind === 'blocker') this.blockersVisible2d = on;
@@ -7476,8 +7985,10 @@ export class EditorApp {
     const apply = (v: Vec2): void => {
       const e = this.entities.find((x) => x.key === key);
       if (!e) return;
+      const from = { x: e.point.x, z: e.point.z };
       e.point.x = v.x;
       e.point.z = v.z;
+      if (isMovableEntity(e)) this.viewport3d?.moveMapEntity(e.key, from, v);
       this.markerMovedWhile2d = true;
       this.canvasDirty = true;
     };
@@ -7498,7 +8009,12 @@ export class EditorApp {
 
   private pickEntity(s: ScreenPoint): EditorEntity | null {
     const list = this.visibleEntities();
-    const handles = list.map((e) => ({ id: e.key, x: e.point.x, z: e.point.z, radius: e.radius }));
+    const handles = list.map((e) => ({
+      id: e.key,
+      x: e.point.x,
+      z: e.point.z,
+      radius: e.radius,
+    }));
     const hit = pickHandle(handles, s, this.cam, this.vp());
     return hit ? (list.find((e) => e.key === hit.id) ?? null) : null;
   }
@@ -7530,6 +8046,7 @@ export class EditorApp {
         blockerPreview: this.blockerPreview,
         region: this.tool === 'region' ? this.regionBox : null,
         spawn: this.map.playerStart ?? null,
+        spawnArea: this.spawnAreaPreview ?? this.map.playerSpawnArea ?? null,
         brush:
           this.isDragTool() && this.cursorWorld
             ? {
@@ -7708,8 +8225,14 @@ export class EditorApp {
   private frameAll(): void {
     const pts = this.entities.map((e) => e.point);
     if (pts.length === 0) return;
-    const min = { x: Math.min(...pts.map((p) => p.x)), z: Math.min(...pts.map((p) => p.z)) };
-    const max = { x: Math.max(...pts.map((p) => p.x)), z: Math.max(...pts.map((p) => p.z)) };
+    const min = {
+      x: Math.min(...pts.map((p) => p.x)),
+      z: Math.min(...pts.map((p) => p.z)),
+    };
+    const max = {
+      x: Math.max(...pts.map((p) => p.x)),
+      z: Math.max(...pts.map((p) => p.z)),
+    };
     this.cam.frame(min, max, this.vp());
     this.canvasDirty = true;
   }

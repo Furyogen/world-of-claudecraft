@@ -39,6 +39,7 @@ import {
   MOBS,
   resolveDelveShopOffers,
 } from '../data';
+import * as deedsMod from '../deeds';
 import {
   DELVE_MODULE_LAYOUTS,
   type DelveModuleId,
@@ -61,6 +62,7 @@ import {
   DT,
   dist2d,
   type Entity,
+  emptyMoveInput,
   INSTANCE_EMPTY_TIMEOUT,
   type RiteIntensity,
   type Vec3,
@@ -394,6 +396,9 @@ export function enterDelve(ctx: SimContext, delveId: string, tierId: string, pid
   p.targetId = null;
   p.autoAttack = false;
   run.emptyFor = 0;
+  // Whole-run roster watermark, taken after the teleport so the count includes
+  // this player; it only ever grows for the life of the run.
+  run.deedMaxParty = Math.max(run.deedMaxParty ?? 0, ctx.partyMembersForKey(key).length);
   if (key.startsWith('solo:') && delve.autoCompanionId && !run.companion) {
     ctx.spawnDelveCompanion(run, r.meta.entityId, delve.autoCompanionId);
   }
@@ -447,6 +452,7 @@ export function claimDelveRun(
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
@@ -563,6 +569,7 @@ export function freeDelveRun(ctx: SimContext, run: DelveRun): void {
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
@@ -632,13 +639,14 @@ export function ejectToDelveDoor(
   // The Keeper's Toll survives a delve eject too (see resurrection.ts); all else clears.
   p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
-  recalcPlayerStats(p, r.meta.cls, r.meta.equipment, r.meta.talentMods);
+  recalcPlayerStats(p, r.meta.cls, r.meta.equipment, r.meta.talentMods, r.meta.equipmentInstance);
   p.hp = p.maxHp;
   p.resource = p.resourceType === 'mana' ? p.maxResource : p.resourceType === 'energy' ? 100 : 0;
   p.targetId = null;
   p.combatTimer = 99;
   p.inCombat = false;
   p.autoAttack = false;
+  Object.assign(r.meta.moveInput, emptyMoveInput());
 }
 
 export function failDelveRun(ctx: SimContext, run: DelveRun): void {
@@ -662,6 +670,10 @@ export function onDelveBossDefeated(ctx: SimContext, run: DelveRun): void {
   const layout = DELVE_MODULE_LAYOUTS[moduleId];
   const zBase = delveModuleZOffset(run);
   const dais = layout?.dais ?? { x: 0, z: 52 };
+  const members = run.partyKey ? ctx.partyMembersForKey(run.partyKey) : [];
+  for (const pid of members) {
+    ctx.emit({ type: 'delveObjectiveComplete', delveId: run.delveId, tierId: run.tierId, pid });
+  }
   // Drop any stale module_exit (same z as dais / north passage) before placing rewards.
   for (const id of [...run.objectIds]) {
     if (run.objectState[id]?.kind !== 'module_exit') continue;
@@ -685,7 +697,7 @@ export function onDelveBossDefeated(ctx: SimContext, run: DelveRun): void {
   run.rewardChestId = chest.id;
   run.objectState[chest.id].attemptAvailable = true;
   if (!run.partyKey) return;
-  for (const pid of ctx.partyMembersForKey(run.partyKey)) {
+  for (const pid of members) {
     ctx.emit({
       type: 'log',
       text: 'The boss falls. A warded reliquary chest rises on the dais. Pick its lock to claim your spoils.',
@@ -755,6 +767,9 @@ export function grantDelveClearTo(
   );
   meta.copper += copper;
   unlockNextDelveLore(ctx, meta, pid);
+  // Clear predicates re-check; a heroic run whose watermark never saw a second
+  // player is the solo task.
+  deedsMod.onDelveClearForDeeds(ctx, meta, run);
   ctx.maybeCompanionBark(run, pid, 'completion');
   restorePetFromDelveStash(ctx, pid);
   ctx.emit({ type: 'delveComplete', delveId: run.delveId, tierId: run.tierId, pid });
@@ -1120,6 +1135,34 @@ function standingOnLitanyDryGround(moduleId: string, localX: number, localZ: num
   return false;
 }
 
+/** The active static Blackwater tier at a world point, or null on dry ground. */
+export function delveBlackwaterTierAt(
+  run: DelveRun,
+  pos: Pick<Vec3, 'x' | 'z'>,
+): 'shallow' | 'deep' | null {
+  const moduleId = run.modules[run.moduleIndex];
+  const zones = DELVE_MODULES[moduleId]?.hazards;
+  if (!moduleId || !zones || zones.length === 0) return null;
+  const ox = run.origin.x;
+  const oz = run.origin.z + delveModuleZOffset(run);
+  const localX = pos.x - ox;
+  const localZ = pos.z - oz;
+  if (standingOnLitanyDryGround(moduleId, localX, localZ)) return null;
+
+  let worstTier: 'shallow' | 'deep' | null = null;
+  for (const zone of zones) {
+    const dx = localX - zone.x;
+    const dz = localZ - zone.z;
+    const rx = zone.rx ?? zone.r;
+    const rz = zone.rz ?? zone.r;
+    if ((dx * dx) / (rx * rx) + (dz * dz) / (rz * rz) > 1) continue;
+    const tier = zone.tier ?? 'deep';
+    if (tier === 'deep') return 'deep';
+    worstTier = 'shallow';
+  }
+  return worstTier;
+}
+
 export function tickDelveBlackwater(ctx: SimContext, run: DelveRun): void {
   const mod = DELVE_MODULES[run.modules[run.moduleIndex]];
   const zones = mod?.hazards;
@@ -1136,35 +1179,12 @@ export function tickDelveBlackwater(ctx: SimContext, run: DelveRun): void {
       ? DELVE_BLACKWATER_PCT_HEROIC
       : DELVE_BLACKWATER_PCT_NORMAL;
   if (highWater) basePct *= 1.35;
-  const ox = run.origin.x;
-  const oz = run.origin.z + delveModuleZOffset(run);
   for (const pid of ctx.partyMembersForKey(run.partyKey)) {
     const p = ctx.entities.get(pid);
     if (!p || p.dead) continue;
     // Airborne players dodge water damage.
     if (p.jumping) continue;
-    // Standing on an island or the dais is dry ground, regardless of which
-    // hazard zone's radius it geometrically falls inside.
-    if (standingOnLitanyDryGround(run.modules[run.moduleIndex], p.pos.x - ox, p.pos.z - oz)) {
-      continue;
-    }
-    // Find the worst-tier zone the player is standing in.
-    let worstTier: 'shallow' | 'deep' | null = null;
-    for (const z of zones) {
-      const dx = p.pos.x - (ox + z.x);
-      const dz = p.pos.z - (oz + z.z);
-      // An authored ellipse (rx/rz, e.g. the apse moat) checks per-axis; a plain
-      // zone (rx/rz unset) falls back to the circular r/r check.
-      const rx = z.rx ?? z.r;
-      const rz = z.rz ?? z.r;
-      if ((dx * dx) / (rx * rx) + (dz * dz) / (rz * rz) > 1) continue;
-      const zt = z.tier ?? 'deep';
-      if (zt === 'deep') {
-        worstTier = 'deep';
-        break; // deep is worst; no need to check further
-      }
-      if (worstTier === null) worstTier = 'shallow';
-    }
+    const worstTier = delveBlackwaterTierAt(run, p.pos);
     if (worstTier === null) continue;
     const tierMult = worstTier === 'deep' ? 2.0 : 0.35;
     const dmg = Math.max(1, Math.round(p.maxHp * basePct * tierMult));
@@ -1248,6 +1268,7 @@ export function startDelveRaiseDeadChannel(
     text: `${boss.name} begins Raise Dead.`,
     color: '#f96',
     entityId: boss.id,
+    telegraph: true,
   });
   return true;
 }
@@ -1513,6 +1534,8 @@ export function companionUpgrade(ctx: SimContext, companionId: string, pid?: num
   r.meta.delveMarks -= cost.marks;
   r.meta.copper -= cost.copper;
   r.meta.companionUpgrades[companionId] = next;
+  // Companion-rank predicates read this map; re-evaluate on the next pass.
+  ctx.markDeedsDirty(r.meta.entityId);
   ctx.emit({
     type: 'log',
     text: `${def.name} reaches rank ${next}.`,

@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { isBlocked } from '../src/sim/colliders';
-import { CAMPS } from '../src/sim/data';
+import { BUILTIN_WORLD, CAMPS } from '../src/sim/data';
 import { PLAYER_MAX_CLIMB_SLOPE } from '../src/sim/pathfind';
 import { Sim } from '../src/sim/sim';
+import type { WorldContent } from '../src/sim/types';
 import { terrainDownhill, terrainHeight, terrainSteepness, WATER_LEVEL } from '../src/sim/world';
 
 // Movement gates for unwalkable slopes (the report: players climbing the
@@ -21,8 +22,26 @@ import { terrainDownhill, terrainHeight, terrainSteepness, WATER_LEVEL } from '.
 const SEED = 42;
 const CLIMB_LIMIT = 1.5;
 
+// These gates are about TERRAIN (the seed-procedural rim walls and slopes), not
+// entity content, and the walkers below tick a minute of world time each. Keep
+// every terrain-relevant field (zones, roads, terrainEdits, biomePaint,
+// waterLevel) identical to BUILTIN_WORLD and strip only the constructor-spawned
+// ambient mobs/NPCs/objects; the approach scan below still proves the steep
+// band and crest exist (it throws if they do not).
+const CLIMB_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeSim(): Sim {
-  const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
+  const sim = new Sim({
+    seed: SEED,
+    playerClass: 'warrior',
+    autoEquip: true,
+    world: CLIMB_TEST_WORLD,
+  });
   sim.setPlayerLevel(60); // rim mobs must not decide these tests
   return sim;
 }

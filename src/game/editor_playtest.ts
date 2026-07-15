@@ -73,7 +73,7 @@ export function takeEditorPlaytestRequest(): EditorPlaytestRequest | null {
     const obj = JSON.parse(raw) as Record<string, unknown>;
     if (!obj || typeof obj !== 'object') return null;
     // The editor ships large biome-paint grids run-length encoded (several MB
-    // as a plain array — past the sessionStorage quota). Expand before the
+    // as a plain array ? past the sessionStorage quota). Expand before the
     // shape check; a malformed blob just drops the paint layer.
     const content = obj.content as Record<string, unknown> | null;
     const bp =

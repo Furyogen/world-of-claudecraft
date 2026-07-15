@@ -63,10 +63,10 @@ describe('cave tube geometry (sim/caves.ts)', () => {
     expect((edge?.ceiling ?? 0) - (edge?.floor ?? 0)).toBeLessThan(1);
   });
 
-  it('the tube exists at ANY height — nothing about terrain touches it', () => {
+  it('the tube exists at ANY height ? nothing about terrain touches it', () => {
     // Same chain, floors from deep underground to high in the air: the sample
     // is identical modulo the floor offset. There is no surface parameter to
-    // squish it with — the entrance is always as big as authored.
+    // squish it with ? the entrance is always as big as authored.
     for (const floorY of [-200, -5, 0, 50, 400]) {
       const s = caveSampleAt([tube(0, 40, floorY)], 0, 40);
       expect(s?.floor).toBe(floorY);
@@ -91,7 +91,7 @@ describe('cave tube geometry (sim/caves.ts)', () => {
       Number.POSITIVE_INFINITY,
     );
     // Tube standing ABOVE the ground (surface below its ceiling): the shell
-    // is open air — the chase cam is never confined.
+    // is open air ? the chase cam is never confined.
     const low = (): number => -35;
     expect(caveCameraMaxDist([cave], low, 0, -28, 40, 0, -10, 40, 0.3)).toBe(
       Number.POSITIVE_INFINITY,
@@ -166,7 +166,7 @@ describe('terrain holes + ground sheets (sim/world.ts)', () => {
       [80, 700],
     ];
     const before = spots.map(([x, z]) => terrainHeight(x, z, SEED));
-    // A tube RIGHT at the surface — the old system would have carved a trench.
+    // A tube RIGHT at the surface ? the old system would have carved a trench.
     const surface = terrainHeight(0, 40, SEED);
     setActiveWorldContent(world({ caves: [tube(0, 40, surface - 1)] }));
     spots.forEach(([x, z], i) => {
@@ -248,22 +248,22 @@ describe('terrain holes + ground sheets (sim/world.ts)', () => {
 describe('cave pass-under collision (sim/colliders.ts)', () => {
   it('a mover deep in a tube passes under surface props; surface movers still collide', () => {
     setActiveWorldContent(world({}));
-    // The village house at (10,12) — a solid OBB collider on the surface.
+    // The village house at (10,12) ? a solid OBB collider on the surface.
     const ground = groundHeight(10, 12, SEED);
     // Surface mover (no y / y at ground): pushed out of the footprint.
     const legacy = resolvePosition(SEED, 10, 12, 0.5);
     expect(Math.abs(legacy.x - 10) + Math.abs(legacy.z - 12)).toBeGreaterThan(0.5);
-    const atGround = resolvePosition(SEED, 10, 12, 0.5, false, undefined, ground);
+    const atGround = resolvePosition(SEED, 10, 12, 0.5, false, undefined, 0, ground);
     expect(Math.abs(atGround.x - 10) + Math.abs(atGround.z - 12)).toBeGreaterThan(0.5);
     // Mover 12yd below the house's ground (inside a cave tube): passes clean.
-    const under = resolvePosition(SEED, 10, 12, 0.5, false, undefined, ground - 12);
+    const under = resolvePosition(SEED, 10, 12, 0.5, false, undefined, 0, ground - 12);
     expect(under.x).toBe(10);
     expect(under.z).toBe(12);
   });
 
   it('blocker walls stay height-agnostic: they block at any depth', () => {
     setActiveWorldContent(world({ blockers: [{ x1: -5, z1: 40, x2: 5, z2: 40 }] }));
-    const deep = resolvePosition(SEED, 0, 40, 0.5, false, undefined, -200);
+    const deep = resolvePosition(SEED, 0, 40, 0.5, false, undefined, 0, -200);
     expect(Math.abs(deep.x - 0) + Math.abs(deep.z - 40)).toBeGreaterThan(0.1);
   });
 });

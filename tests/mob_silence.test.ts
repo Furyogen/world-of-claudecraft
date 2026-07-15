@@ -3,9 +3,9 @@
 // it blocks spell (non-physical) abilities and breaks an in-progress spell, but
 // leaves physical abilities, movement and auto-attack untouched.
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
@@ -15,11 +15,7 @@ function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
 // Spawn a Gravecaller Summoner adjacent to the player, engaged and ready to swing.
 function spawnSummoner(sim: Sim, target: Entity): Entity {
   const template = MOBS['gravecaller_summoner'];
-  const mob = createMob((sim as any).nextId++, template, 12, {
-    x: target.pos.x,
-    y: target.pos.y,
-    z: target.pos.z,
-  });
+  const mob = createMob((sim as any).nextId++, template, 12, { x: target.pos.x, y: target.pos.y, z: target.pos.z });
   mob.hostile = true;
   (sim as any).addEntity(mob);
   return mob;
@@ -33,13 +29,7 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
   const rng = (sim as any).rng;
   const realNext = rng.next.bind(rng);
   let firstRoll = true;
-  rng.next = () => {
-    if (firstRoll) {
-      firstRoll = false;
-      return 0.999;
-    }
-    return realNext();
-  };
+  rng.next = () => { if (firstRoll) { firstRoll = false; return 0.999; } return realNext(); };
   try {
     (sim as any).mobSwing(mob, target);
   } finally {
@@ -50,18 +40,14 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
 describe('mob silence ("Silencing Shriek")', () => {
   it('seeds the silence mechanic on the Gravecaller Summoner', () => {
     expect(MOBS['gravecaller_summoner'].silence).toEqual({
-      chance: 0.3,
-      duration: 4,
-      name: 'Silencing Shriek',
-      school: 'shadow',
+      chance: 0.3, duration: 4, name: 'Silencing Shriek', school: 'shadow',
     });
   });
 
   it('applies a silence aura on a landed hit when it rolls', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 100000;
-    p.hp = 100000;
+    p.maxHp = 100000; p.hp = 100000;
     const mob = spawnSummoner(sim, p);
     MOBS['gravecaller_summoner'].silence!.chance = 1; // deterministic for the test
     swing(sim, mob, p);
@@ -76,22 +62,13 @@ describe('mob silence ("Silencing Shriek")', () => {
     const sim = makeSim('mage');
     const p = sim.player;
     p.auras.push({
-      id: 'silence_gravecaller_summoner',
-      name: 'Silencing Shriek',
-      kind: 'silence',
-      remaining: 4,
-      duration: 4,
-      value: 0,
-      sourceId: 999,
-      school: 'shadow',
+      id: 'silence_gravecaller_summoner', name: 'Silencing Shriek', kind: 'silence',
+      remaining: 4, duration: 4, value: 0, sourceId: 999, school: 'shadow',
     });
     // Fireball is a spell (school: fire) — must be rejected with "You are silenced!".
     const errs: string[] = [];
     const orig = (sim as any).error.bind(sim);
-    (sim as any).error = (pid: number, msg: string) => {
-      errs.push(msg);
-      orig(pid, msg);
-    };
+    (sim as any).error = (pid: number, msg: string) => { errs.push(msg); orig(pid, msg); };
     sim.castAbility('fireball', p.id);
     expect(errs).toContain('You are silenced!');
   });
@@ -104,14 +81,8 @@ describe('mob silence ("Silencing Shriek")', () => {
     p.castRemaining = 2;
     p.channeling = false;
     p.auras.push({
-      id: 'silence_x',
-      name: 'Silencing Shriek',
-      kind: 'silence',
-      remaining: 4,
-      duration: 4,
-      value: 0,
-      sourceId: 999,
-      school: 'shadow',
+      id: 'silence_x', name: 'Silencing Shriek', kind: 'silence',
+      remaining: 4, duration: 4, value: 0, sourceId: 999, school: 'shadow',
     });
     sim.tick();
     expect(p.castingAbility).toBeNull();
@@ -122,21 +93,12 @@ describe('mob silence ("Silencing Shriek")', () => {
     const p = sim.player;
     p.resource = 100;
     p.auras.push({
-      id: 'silence_x',
-      name: 'Silencing Shriek',
-      kind: 'silence',
-      remaining: 4,
-      duration: 4,
-      value: 0,
-      sourceId: 999,
-      school: 'shadow',
+      id: 'silence_x', name: 'Silencing Shriek', kind: 'silence',
+      remaining: 4, duration: 4, value: 0, sourceId: 999, school: 'shadow',
     });
     const errs: string[] = [];
     const orig = (sim as any).error.bind(sim);
-    (sim as any).error = (pid: number, msg: string) => {
-      errs.push(msg);
-      orig(pid, msg);
-    };
+    (sim as any).error = (pid: number, msg: string) => { errs.push(msg); orig(pid, msg); };
     // Heroic Strike is physical — silence must NOT be the reason it's blocked.
     sim.castAbility('heroic_strike', p.id);
     expect(errs).not.toContain('You are silenced!');
@@ -145,8 +107,7 @@ describe('mob silence ("Silencing Shriek")', () => {
   it('a friendly pet swing never silences its target', () => {
     const sim = makeSim('mage');
     const p = sim.player;
-    p.maxHp = 100000;
-    p.hp = 100000;
+    p.maxHp = 100000; p.hp = 100000;
     const pet = spawnSummoner(sim, p);
     pet.hostile = false; // a tamed/friendly summoner shape
     pet.ownerId = p.id;

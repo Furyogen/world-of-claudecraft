@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { QUESTS, ZONES } from '../src/sim/data';
 import { computeTutorialStep, isFreshCharacter, type TutorialSnapshot } from '../src/ui/tutorial';
 import type { IWorld } from '../src/world_api';
+import { QUESTS, ZONES } from '../src/sim/data';
 
 // The overlay's rendering is DOM-bound, but the step progression is a pure
 // function over observed IWorld state — that's what we pin here.
@@ -40,21 +40,11 @@ describe('computeTutorialStep', () => {
 
   it('keeps guiding to slay even while standing on the giver mid-hunt', () => {
     // nearGiver must not pull the player back to "talk" once the quest is live.
-    expect(computeTutorialStep({ ...base, moved: true, nearGiver: true, questActive: true })).toBe(
-      'slay',
-    );
+    expect(computeTutorialStep({ ...base, moved: true, nearGiver: true, questActive: true })).toBe('slay');
   });
 
   it('treats a turned-in quest as done regardless of position', () => {
-    expect(
-      computeTutorialStep({
-        moved: true,
-        nearGiver: true,
-        questActive: true,
-        questReady: true,
-        questDone: true,
-      }),
-    ).toBe('done');
+    expect(computeTutorialStep({ moved: true, nearGiver: true, questActive: true, questReady: true, questDone: true })).toBe('done');
   });
 });
 
@@ -62,16 +52,13 @@ describe('computeTutorialStep', () => {
 // guards against is the highest-value missing coverage (see review #729).
 describe('isFreshCharacter', () => {
   // Minimal IWorld stub — only the fields the gate reads.
-  const world = (
-    over: Partial<IWorld> & { playerLevel?: number; playerId?: number; playerEntId?: number },
-  ): IWorld =>
-    ({
-      playerId: over.playerId ?? 7,
-      player: { id: over.playerEntId ?? 7, level: over.playerLevel ?? 1 } as any,
-      questsDone: new Set<string>(),
-      questLog: new Map(),
-      ...over,
-    }) as unknown as IWorld;
+  const world = (over: Partial<IWorld> & { playerLevel?: number; playerId?: number; playerEntId?: number }): IWorld => ({
+    playerId: over.playerId ?? 7,
+    player: { id: over.playerEntId ?? 7, level: over.playerLevel ?? 1 } as any,
+    questsDone: new Set<string>(),
+    questLog: new Map(),
+    ...over,
+  } as unknown as IWorld);
 
   it('is true for a genuine fresh character (ids match, level 1, no quests)', () => {
     expect(isFreshCharacter(world({ playerId: 7, playerEntId: 7 }))).toBe(true);
@@ -91,9 +78,7 @@ describe('isFreshCharacter', () => {
 
   it('is false once the player has any quest history', () => {
     expect(isFreshCharacter(world({ questsDone: new Set(['q_wolves']) }))).toBe(false);
-    expect(
-      isFreshCharacter(world({ questLog: new Map([['q_wolves', { counts: [0] } as any]]) })),
-    ).toBe(false);
+    expect(isFreshCharacter(world({ questLog: new Map([['q_wolves', { counts: [0] } as any]]) }))).toBe(false);
   });
 });
 
