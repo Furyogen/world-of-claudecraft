@@ -175,19 +175,38 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
   // so refusals are aggregated: emit at most one summary line per window carrying
   // the count of refusals since the last line. Date.now is used because this is
   // server-side wall-clock aggregation, not sim logic (the Rng/Date.now ban is
-  // sim-only). The first refusal after an idle window logs immediately.
+  // sim-only). The first refusal after an idle window logs immediately. Refusals
+  // inside the window arm a trailing flush at the window edge: without it a
+  // burst's tail would accumulate silently until the NEXT refusal after the
+  // window, which may be hours later, so incident-time counts would read shifted.
+  // The timer is unref'd so a pending flush never holds the process open.
   const REALM_FULL_LOG_WINDOW_MS = 30_000;
   let realmFullRefusalsSinceLog = 0;
   let realmFullLastLogAtMs = 0;
+  let realmFullFlushTimer: NodeJS.Timeout | null = null;
+  function logRealmFullRefusals(nowMs: number): void {
+    console.log(
+      `ws auth: realm full, refused ${realmFullRefusalsSinceLog} fresh join(s) at cap ${MAX_PLAYERS_PER_REALM}`,
+    );
+    realmFullRefusalsSinceLog = 0;
+    realmFullLastLogAtMs = nowMs;
+  }
   function recordRealmFullRefusal(): void {
     realmFullRefusalsSinceLog++;
     const nowMs = Date.now();
     if (nowMs - realmFullLastLogAtMs >= REALM_FULL_LOG_WINDOW_MS) {
-      console.log(
-        `ws auth: realm full, refused ${realmFullRefusalsSinceLog} fresh join(s) at cap ${MAX_PLAYERS_PER_REALM}`,
+      logRealmFullRefusals(nowMs);
+    } else if (realmFullFlushTimer === null) {
+      realmFullFlushTimer = setTimeout(
+        () => {
+          realmFullFlushTimer = null;
+          // The count can be 0 here: a refusal landing exactly at the window edge
+          // flushes inline above while this timer is still pending. Nothing to log.
+          if (realmFullRefusalsSinceLog > 0) logRealmFullRefusals(Date.now());
+        },
+        REALM_FULL_LOG_WINDOW_MS - (nowMs - realmFullLastLogAtMs),
       );
-      realmFullRefusalsSinceLog = 0;
-      realmFullLastLogAtMs = nowMs;
+      realmFullFlushTimer.unref();
     }
   }
 
@@ -275,10 +294,14 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       let leaseNonce: string | undefined;
       let result: ReturnType<GameServer['join']>;
       if (game.hasSessionForCharacter(character.id)) {
-        // A live or linkdead session in THIS process already owns the lease row;
-        // let planJoin adjudicate (a linkdead session resumes and keeps the row's
-        // nonce; a live duplicate is rejected) and never re-stamp the row with a
-        // fresh acquire that a doomed handshake could leave mismatched.
+        // A live or linkdead session in THIS process holds this character, and
+        // USUALLY still owns the lease row (not always: a cross-process
+        // same-account takeover may have rotated the nonce already, leaving the
+        // row owned by the other process until the fence-out kick lands, within
+        // one autosave). Either way, let planJoin adjudicate (a linkdead session
+        // resumes and keeps its nonce; a live duplicate is rejected) and never
+        // re-stamp the row with a fresh acquire that a doomed handshake could
+        // leave mismatched.
         result = game.join(
           ws,
           accountId,

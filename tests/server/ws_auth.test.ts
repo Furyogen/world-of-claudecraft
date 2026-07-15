@@ -410,6 +410,51 @@ describe('createWsAuth: realm admission cap', () => {
     logSpy.mockRestore();
   });
 
+  it('g2. flushes a burst tail at the window edge instead of waiting for the next refusal', async () => {
+    // Refusals inside the window aggregate silently; if the burst then STOPS, the
+    // tail must still be logged at the window edge. Without the trailing flush the
+    // count sits invisible until the next refusal after the window, which may be
+    // hours later, so incident-time counts read shifted into the wrong burst.
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const { game, deps, req } = setup();
+      deps.maxPlayersPerRealm = 5;
+      game.clients = { size: 5 };
+      deps.getCharacter = vi.fn(async (_accountId: number, id: number) => baseChar({ id }));
+      let nowMs = 100_000;
+      const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const { authenticateWebSocket } = createWsAuth(deps);
+      const refusalLines = () =>
+        logSpy.mock.calls.map((c) => String(c[0])).filter((line) => line.includes('realm full'));
+      const refuse = (character: number) =>
+        authenticateWebSocket(asWs(new FakeWs()), authRaw({ character }), req);
+      // First refusal after idle logs immediately; the two inside the window stay
+      // silent and arm exactly one trailing flush.
+      await refuse(21);
+      nowMs += 1_000;
+      await refuse(22);
+      nowMs += 1_000;
+      await refuse(23);
+      expect(refusalLines()).toEqual(['ws auth: realm full, refused 1 fresh join(s) at cap 5']);
+      // The burst stops. At the window edge the tail flushes on its own.
+      nowMs = 130_000;
+      await vi.advanceTimersByTimeAsync(30_000);
+      expect(refusalLines()).toEqual([
+        'ws auth: realm full, refused 1 fresh join(s) at cap 5',
+        'ws auth: realm full, refused 2 fresh join(s) at cap 5',
+      ]);
+      // The flush cleared the aggregate and disarmed itself: nothing further fires.
+      nowMs = 200_000;
+      await vi.advanceTimersByTimeAsync(60_000);
+      expect(refusalLines()).toHaveLength(2);
+      nowSpy.mockRestore();
+      logSpy.mockRestore();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('h. a failed fresh join releases its in-flight admission (no capacity leak)', async () => {
     const { game, deps, req } = setup();
     deps.maxPlayersPerRealm = 5;
