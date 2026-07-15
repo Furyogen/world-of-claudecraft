@@ -85,6 +85,17 @@ describe('game watchdog deploy contract', () => {
       "'{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}'",
     );
   });
+
+  // The default bounds are load-bearing and invisible to the exec harness (its
+  // hang tests override both knobs to 1s): the restart bound must EXCEED the 75s
+  // compose stop_grace_period (a wedged process ignores SIGTERM and eats the full
+  // grace, so a WORKING recovery routinely outlasts a minute, and a tighter bound
+  // would misreport the exact restart this script exists to issue), and the
+  // inspect bound must fit inside the one-minute cron interval.
+  it('pins the default docker call bounds: inspect inside the cron minute, restart past the stop grace', () => {
+    expect(watchdog).toContain('INSPECT_TIMEOUT="${WATCHDOG_INSPECT_TIMEOUT:-55}"');
+    expect(watchdog).toContain('RESTART_TIMEOUT="${WATCHDOG_RESTART_TIMEOUT:-150}"');
+  });
 });
 
 describe('game watchdog install', () => {
