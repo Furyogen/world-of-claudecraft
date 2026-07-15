@@ -190,6 +190,13 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     );
     realmFullRefusalsSinceLog = 0;
     realmFullLastLogAtMs = nowMs;
+    // Every flush disarms a pending trailing timer: an inline window-edge flush
+    // that left the old timer live would let it fire early into the NEW window
+    // and flush a fresh burst's first refusals ahead of their own edge.
+    if (realmFullFlushTimer !== null) {
+      clearTimeout(realmFullFlushTimer);
+      realmFullFlushTimer = null;
+    }
   }
   function recordRealmFullRefusal(): void {
     realmFullRefusalsSinceLog++;
@@ -200,8 +207,9 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       realmFullFlushTimer = setTimeout(
         () => {
           realmFullFlushTimer = null;
-          // The count can be 0 here: a refusal landing exactly at the window edge
-          // flushes inline above while this timer is still pending. Nothing to log.
+          // Defensive: every flush path disarms this timer, so a 0 count should
+          // be unreachable; guard anyway so a future ordering bug logs nothing
+          // rather than a zero-refusal line.
           if (realmFullRefusalsSinceLog > 0) logRealmFullRefusals(Date.now());
         },
         REALM_FULL_LOG_WINDOW_MS - (nowMs - realmFullLastLogAtMs),

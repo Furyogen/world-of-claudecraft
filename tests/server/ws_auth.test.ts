@@ -455,6 +455,56 @@ describe('createWsAuth: realm admission cap', () => {
     }
   });
 
+  it('g3. an inline window-edge flush disarms the pending trailing timer (no early flush of the next window)', async () => {
+    // The race this pins: a refusal at the window edge flushes inline while an
+    // older trailing timer is still pending. If that timer survived, it would
+    // fire moments into the NEW window and flush a fresh burst's first refusals
+    // early, splitting one burst into two misdated lines.
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const { game, deps, req } = setup();
+      deps.maxPlayersPerRealm = 5;
+      game.clients = { size: 5 };
+      deps.getCharacter = vi.fn(async (_accountId: number, id: number) => baseChar({ id }));
+      let nowMs = 100_000;
+      const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const { authenticateWebSocket } = createWsAuth(deps);
+      const refusalLines = () =>
+        logSpy.mock.calls.map((c) => String(c[0])).filter((line) => line.includes('realm full'));
+      const refuse = (character: number) =>
+        authenticateWebSocket(asWs(new FakeWs()), authRaw({ character }), req);
+      await refuse(31); // logs immediately (line 1)
+      nowMs = 101_000;
+      await refuse(32); // silent, arms the trailing timer (due at the 130_000 edge)
+      await vi.advanceTimersByTimeAsync(28_000); // sit just short of that edge
+      nowMs = 130_000;
+      await refuse(33); // window edge: inline flush (line 2, count 2) must DISARM the timer
+      nowMs = 130_500;
+      await refuse(34); // first refusal of the NEW window: silent, arms a fresh timer
+      nowMs = 131_000;
+      // Cross the old timer's due time: a surviving stale timer would flush the
+      // new window's single refusal here, 29 seconds early.
+      await vi.advanceTimersByTimeAsync(1_000);
+      expect(refusalLines()).toEqual([
+        'ws auth: realm full, refused 1 fresh join(s) at cap 5',
+        'ws auth: realm full, refused 2 fresh join(s) at cap 5',
+      ]);
+      // The fresh timer still flushes the new window's tail at its OWN edge.
+      nowMs = 160_500;
+      await vi.advanceTimersByTimeAsync(29_500);
+      expect(refusalLines()).toEqual([
+        'ws auth: realm full, refused 1 fresh join(s) at cap 5',
+        'ws auth: realm full, refused 2 fresh join(s) at cap 5',
+        'ws auth: realm full, refused 1 fresh join(s) at cap 5',
+      ]);
+      nowSpy.mockRestore();
+      logSpy.mockRestore();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('h. a failed fresh join releases its in-flight admission (no capacity leak)', async () => {
     const { game, deps, req } = setup();
     deps.maxPlayersPerRealm = 5;
@@ -709,8 +759,10 @@ describe('createWsAuth: bank bonus stamp', () => {
 
   it('never recomputes the bank bonus on the resume arm (no mid-session recompute)', async () => {
     const { ws, game, deps, req } = setup();
-    // A live/linkdead session already owns the lease row: the handshake takes the resume
-    // arm, which must not recompute or stamp a fresh bonus (locked policy).
+    // A live/linkdead session in this process holds the character (it usually still
+    // owns the lease row too, unless a cross-process takeover already rotated the
+    // nonce): the handshake takes the resume arm, which must not recompute or stamp
+    // a fresh bonus (locked policy).
     game.hasSessionForCharacter = vi.fn(() => true);
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw(), req);
