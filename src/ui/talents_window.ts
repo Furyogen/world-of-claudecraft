@@ -139,10 +139,7 @@ const TAL_COLOR = {
 const SPEC_ICON_DIR = '/ui/specs';
 
 function specIconUrl(cls: PlayerClass, specId: string): string | null {
-  if (
-    (cls === 'warrior' || cls === 'warrior_classic') &&
-    (specId === 'arms' || specId === 'fury' || specId === 'prot')
-  ) {
+  if (cls === 'warrior' && (specId === 'arms' || specId === 'fury' || specId === 'prot')) {
     return `${SPEC_ICON_DIR}/${cls}/${specId}.webp`;
   }
   return null;
@@ -369,7 +366,7 @@ export class TalentsWindow {
         exEl.setAttribute('aria-label', signatureName(id));
         this.deps.attachTooltip(exEl, () => this.deps.abilityTooltip(id) ?? esc(signatureName(id)));
       }
-      // Every panel gets a primary action button. For ALL TEN classes a spec
+      // Every panel gets a primary action button. For all nine classes a spec
       // that is NOT the committed one reads Select specialization and COMMITS
       // it via deps.commitSpec (IWorld.setSpec, sim re-validated) before
       // staging + jumping to the Choices tab, so the spec choice actually

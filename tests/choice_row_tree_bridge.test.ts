@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { CHOICE_ROW_LEVELS, CHOICE_ROWS } from '../src/sim/content/choice_rows';
-import { WARRIOR_CLASSIC_CHOICE_ROWS } from '../src/sim/content/choice_rows_classic';
 import {
   computeModifiersWithRows,
   emptyRowPicks,
@@ -14,15 +13,17 @@ import { WARRIOR_ROWS } from '../src/sim/content/warrior_rows';
 import { Sim } from '../src/sim/sim';
 import { ALL_CLASSES, MAX_LEVEL, type PlayerClass } from '../src/sim/types';
 import { buildTalentRowsView } from '../src/ui/talent_rows_view';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 // The old-model -> row-tree bridge (choice_row_tree_bridge.ts): every class the
 // warrior overhaul left without an authored RowTree gets its fully-authored
 // CHOICE_ROWS content converted 1:1, so the talents window's Choices tab (which
-// renders only when rowTreeFor(cls) returns a tree) works for all ten classes.
+// renders only when rowTreeFor(cls) returns a tree) works for all nine classes.
 
 describe('choice-row tree bridge', () => {
   it('gives every class a row tree post-bridge', () => {
-    for (const cls of ALL_CLASSES) {
+    expect(ALL_CLASSES).toEqual(EXPECTED_PLAYER_CLASSES);
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       expect(rowTreeFor(cls), `no row tree for ${cls}`).not.toBeNull();
       expect(TALENTS[cls], `no talents entry for ${cls}`).toBeDefined();
     }
@@ -43,15 +44,8 @@ describe('choice-row tree bridge', () => {
     ]);
   });
 
-  it('bridges warrior_classic from its own classic rows', () => {
-    const tree = rowTreeFor('warrior_classic');
-    expect(tree?.[0]?.options.map((o) => o.id)).toEqual(
-      WARRIOR_CLASSIC_CHOICE_ROWS.rows[0].options.map((o) => o.id),
-    );
-  });
-
   it('conversion preserves id, name, description, and the effect reference per option', () => {
-    for (const cls of ALL_CLASSES) {
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       if (cls === 'warrior') continue; // authored, not bridged
       const source = CHOICE_ROWS[cls];
       const tree = rowTreeFor(cls);
@@ -74,8 +68,8 @@ describe('choice-row tree bridge', () => {
     }
   });
 
-  it('renders a full, pickable Choices view for all ten classes (no pending pills)', () => {
-    for (const cls of ALL_CLASSES) {
+  it('renders a full, pickable Choices view for all nine classes (no pending pills)', () => {
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       if (cls === 'warrior') continue; // the authored tree carries its own live-marker suite
       const vm = buildTalentRowsView(rowTreeFor(cls), emptyRowPicks(), MAX_LEVEL);
       expect(vm.rows.length, `${cls}: row count`).toBe(ROW_COUNT);
@@ -90,7 +84,7 @@ describe('choice-row tree bridge', () => {
   });
 
   it('accepts a row pick through the Sim for every class', () => {
-    for (const cls of ALL_CLASSES) {
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       const sim = new Sim({ seed: 3, playerClass: cls, autoEquip: true });
       sim.setPlayerLevel(MAX_LEVEL);
       const first = rowTreeFor(cls)?.[0]?.options[0];

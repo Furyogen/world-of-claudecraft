@@ -186,3 +186,30 @@ export function syncHotbarActions(
   }
   return { actions: next, changed };
 }
+
+// One-shot v0.23 to v0.24 stable-Warrior reconciliation. The caller owns the
+// class/form/version gate and passes the explicit v0.24 castable additions. This
+// leaf only preserves still-known abilities and item shortcuts in their exact
+// slots, clears retired abilities, then fills empty slots in addition order.
+export function reconcileStableWarriorHotbar(
+  actions: readonly HotbarAction[],
+  knownAbilityIds: readonly string[],
+  additionIds: readonly string[],
+): { actions: HotbarAction[]; changed: boolean } {
+  const known = new Set(knownAbilityIds);
+  const next = actions.map((action) =>
+    action?.type === 'ability' && !known.has(action.id) ? null : action,
+  );
+  let changed = next.some((action, index) => action !== actions[index]);
+
+  for (const id of additionIds) {
+    if (!known.has(id)) continue;
+    if (next.some((action) => action?.type === 'ability' && action.id === id)) continue;
+    const empty = next.indexOf(null);
+    if (empty === -1) break;
+    next[empty] = { type: 'ability', id };
+    changed = true;
+  }
+
+  return { actions: next, changed };
+}

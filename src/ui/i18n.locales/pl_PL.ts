@@ -2,69 +2,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Cios łupieżcy',
-  'entities.abilities.cw_heroic_strike.description':
-    'Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu.',
-  'entities.abilities.cw_battle_shout.name': 'Żelazny ryk',
-  'entities.abilities.cw_battle_shout.description': 'Zwiększa twoją moc ataku o {buff} na 2 min.',
-  'entities.abilities.cw_commanding_shout.name': 'Krzepiący okrzyk',
-  'entities.abilities.cw_commanding_shout.description':
-    'Zwiększa twoją kondycję o {buff} na 2 min.',
-  'entities.abilities.cw_charge.name': 'Natarcie',
-  'entities.abilities.cw_charge.description':
-    'Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów.',
-  'entities.abilities.cw_rend.name': 'Głęboka rana',
-  'entities.abilities.cw_rend.description':
-    'Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek.',
-  'entities.abilities.cw_thunder_clap.name': 'Trzęsący cios',
-  'entities.abilities.cw_thunder_clap.description':
-    'Razi pobliskich wrogów za {damage} obrażeń i spowalnia ich ataki o 10% na 10 sek.',
-  'entities.abilities.cw_hamstring.name': 'Kulawiące cięcie',
-  'entities.abilities.cw_hamstring.description':
-    'Okalecza wroga, zadając {damage} obrażeń i spowalniając jego ruch o 50% na 15 sek.',
-  'entities.abilities.cw_bloodrage.name': 'Krwawa danina',
-  'entities.abilities.cw_bloodrage.description': 'Generuje 10 wściekłości kosztem zdrowia.',
-  'entities.abilities.cw_overpower.name': 'Krwawa ręka',
-  'entities.abilities.cw_overpower.description':
-    'Natychmiastowy atak za obrażenia broni plus {damage}. Użyteczne tylko po uniku celu. Nie można uniknąć.',
-  'entities.abilities.cw_execute.name': 'Przedwczesny grób',
-  'entities.abilities.cw_execute.description':
-    'Próba dobicia rannego przeciwnika, zadająca {damage} obrażeń. Użyteczne tylko na wrogach poniżej 20% zdrowia.',
-  'entities.abilities.cw_slam.name': 'Brutalny zamach',
-  'entities.abilities.cw_slam.description':
-    'Wali przeciwnika, zadając obrażenia broni plus {damage}.',
-  'entities.abilities.cw_cleave.name': 'Kosiący łuk',
-  'entities.abilities.cw_cleave.description':
-    'Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń.',
-  'entities.abilities.cw_defensive_stance.name': 'Czujna postawa',
-  'entities.abilities.cw_defensive_stance.description':
-    'Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Złowieszcze wycie',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek.',
-  'entities.abilities.cw_sunder_armor.name': 'Rozdarcie pancerza',
-  'entities.abilities.cw_sunder_armor.description':
-    'Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia.',
-  'entities.abilities.cw_taunt.name': 'Podjudzenie',
-  'entities.abilities.cw_taunt.description':
-    'Prowokuje cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel jest zmuszony atakować cię przez 3 sek.',
-  'entities.abilities.cw_bloodthirst.name': 'Upust krwi',
-  'entities.abilities.cw_bloodthirst.description':
-    'Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)',
-  'entities.abilities.cw_mortal_strike.name': 'Okaleczające uderzenie',
-  'entities.abilities.cw_mortal_strike.description':
-    'Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)',
-  'entities.abilities.cw_shield_slam.name': 'Trzask tarczy',
-  'entities.abilities.cw_shield_slam.description':
-    'Uderza cel tarczą, zadając 50% obrażeń broni plus {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)',
-  'entities.abilities.cw_whirlwind.name': 'Wir ostrzy',
-  'entities.abilities.cw_whirlwind.description':
-    'Wirujesz w śmiercionośnym łuku, uderzając wszystkich pobliskich wrogów za {damage}. (Talent Furii)',
-  'entities.abilities.cw_berserker_rage.name': 'Kipiąca furia',
-  'entities.abilities.cw_berserker_rage.description':
-    'Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)',
-  'classDetails.roles.warriorClassic': 'Tank / DPS wręcz',
-  'classes.warriorClassic': 'Wojownik',
   'entities.abilities.sport_boot.description':
     'Długie, wysokie wykopnięcie w stronę punktu celowania. Trybuny to uwielbiają.',
   'entities.abilities.sport_boot.name': 'Potężny Wykop',
@@ -6929,8 +6866,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Hasła nie są zgodne.',
   'hudChrome.auth.resetErrInvalid':
     'Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy.',
-  'classDetails.lore.warriorClassic':
-    'Wojownik dokładnie taki, jakim grało się przed przebudową walki: pierwotny zestaw umiejętności i dawne tempo wściekłości, zachowane obok nowego wojownika, byś mógł wypróbować obie wersje i dać nam znać, którą gra się lepiej.',
   'entities.abilities.battle_stance.name': 'Postawa bojowa',
   'entities.abilities.battle_stance.description':
     'Agresywna postawa bojowa: generujesz o 10% więcej wściekłości. Domyślna postawa specjalizacji Broń i Ochrona.',
@@ -7030,16 +6965,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.items.eastbrook_greatsword.name': 'Wielki miecz ze Wschodniego Strumienia',
   'entities.items.highwatch_greatsword.name': 'Wielki miecz z Wysokiej Strażnicy',
   'entities.items.highwatch_wallshield.name': 'Pawęż z Wysokiej Strażnicy',
-  'guide.abilityHook.cw_battle_shout':
-    'Mobilizujący okrzyk, który zwiększa siłę ataku całej drużyny.',
-  'guide.abilityHook.cw_charge':
-    'Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Wzmacnia wytrzymałość, by każdy dłużej wytrzymał w walce.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Kolejkuje cięższy zamach, który zużywa wściekłość przy następnym ciosie.',
-  'guide.abilityHook.cw_rend': 'Otwiera krwawienie, które z czasem wyczerpuje cel.',
-  'guide.abilityHook.cw_thunder_clap': 'Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.',
   'guide.abilityHook.hamstring': 'Tnie nogi celu, spowalniając go, by nie mógł cię dogonić.',
   'guide.abilityHook.revenge':
     'Zamaszysty kontratak, który trafia wszystko przed tobą, a tuż po odbiciu ciosu kosztuje mniej.',
@@ -7097,4 +7022,28 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.tab': 'Wybory',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Cel celu',
   'itemUi.slots.twoHand': 'Dwuręczna',
+  'entities.abilities.cleansing_verdict.name': 'Oczyszczający wyrok',
+  'entities.abilities.cleansing_verdict.description':
+    'Usuwa szkodliwy efekt magiczny z sojuszniczego celu i przywraca mu {damage} zdrowia Świętą mocą.',
+  'entities.abilities.lingering_dread.name': 'Długotrwały lęk',
+  'entities.abilities.lingering_dread.description':
+    'Wydaje okrzyk bojowy, który wywołuje strach u wrogów w promieniu 10 m na 4 sek. Strach trwa, dopóki każdy cel nie otrzyma obrażeń równych 20% jego maksymalnego zdrowia. (Talent wojownika)',
+  'entities.abilities.smoke_screen.name': 'Zasłona dymna',
+  'entities.abilities.smoke_screen.description':
+    'Znikasz w chmurze dymu, na pewien czas zwiększając swoją szansę na unik.',
+  'entities.abilities.spell_reflect.name': 'Odbicie zaklęcia',
+  'entities.abilities.spell_reflect.description':
+    'Unosisz tarczę i odbijasz następne wrogie zaklęcie w osobę, która je rzuciła.',
+  'entities.abilities.spellsteal.name': 'Kradzież zaklęcia',
+  'entities.abilities.spellsteal.description':
+    'Kradnie korzystny efekt magiczny przeciwnikowi i przenosi go na ciebie.',
+  'entities.abilities.startle_shot.name': 'Płoszący strzał',
+  'entities.abilities.startle_shot.description':
+    'Dziki strzał, który dezorientuje cel na {duration} sek. Jakiekolwiek obrażenia przerywają efekt.',
+  'entities.abilities.typhoon.name': 'Tajfun',
+  'entities.abilities.typhoon.description':
+    'Podmuch wiatru odrzuca wszystkich pobliskich wrogów i oszałamia ich, spowalniając ich ruch.',
+  'entities.abilities.voidfeast.name': 'Uczta Pustki',
+  'entities.abilities.voidfeast.description':
+    'Pożera efekt magiczny (korzystny z przeciwnika lub szkodliwy z sojusznika) i leczy cię o 6% maksymalnego zdrowia.',
 };

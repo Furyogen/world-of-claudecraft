@@ -478,9 +478,9 @@ describe('PR3 signature mechanics', () => {
   });
 
   it('Mortal Wound keeps its 0.5 multiplier under Arms talent damage scaling', () => {
-    // Sharpened Blades (arms mastery) is meleeDmgPct 0.10: rounding the
-    // multiplier-shaped debuff value (round(0.5 * 1.1) = 1) would suppress
-    // ALL healing, so mortal_wound must be exempt like buff_haste.
+    // Talent and augment damage scaling (any meleeDmgPct source) must not
+    // round the multiplier-shaped debuff value (round(0.5 * 1.1) = 1 would
+    // suppress ALL healing), so mortal_wound stays exempt like buff_haste.
     const { sim, p } = makeSim('warrior');
     expect(sim.setSpec('arms')).toBe(true);
     const ms = sim.resolvedAbility('mortal_strike', p.id);

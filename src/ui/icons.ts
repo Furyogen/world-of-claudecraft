@@ -2625,53 +2625,8 @@ const BASE_ABILITY_RECIPES: Record<string, IconRecipe> = {
   swiftmend: r('nature', 'leafGreen', ['droplet'], ['glow']),
 };
 
-// Classic Warrior (the pre-overhaul PTR side-by-side class): every cw_ ability is a
-// verbatim clone of a base warrior ability (classes_warrior_classic.ts), so each icon
-// reuses the base recipe with the lead primitive drawn slightly smaller. The art stays
-// recognizably the same at a glance, but the recipe is distinct, satisfying the
-// no-two-abilities-share-an-icon guard (tests/ability_icons.test.ts).
-const CLASSIC_WARRIOR_BASE_IDS = [
-  'heroic_strike',
-  'battle_shout',
-  'commanding_shout',
-  'charge',
-  'rend',
-  'thunder_clap',
-  'hamstring',
-  'bloodrage',
-  'overpower',
-  'execute',
-  'slam',
-  'cleave',
-  'defensive_stance',
-  'demoralizing_shout',
-  'sunder_armor',
-  'taunt',
-  'bloodthirst',
-  'mortal_strike',
-  'shield_slam',
-  'whirlwind',
-  'berserker_rage',
-] as const;
-const CLASSIC_WARRIOR_ICON_SCALE = 0.9;
-
-function classicWarriorRecipes(): Record<string, IconRecipe> {
-  const out: Record<string, IconRecipe> = {};
-  for (const baseId of CLASSIC_WARRIOR_BASE_IDS) {
-    const base = BASE_ABILITY_RECIPES[baseId];
-    out[`cw_${baseId}`] = {
-      ...base,
-      prims: base.prims.map((placement, i) =>
-        i === 0 ? { ...placement, s: (placement.s ?? 1) * CLASSIC_WARRIOR_ICON_SCALE } : placement,
-      ),
-    };
-  }
-  return out;
-}
-
 const ABILITY_RECIPES: Record<string, IconRecipe> = {
   ...BASE_ABILITY_RECIPES,
-  ...classicWarriorRecipes(),
 };
 
 const ITEM_RECIPES: Record<string, IconRecipe> = {
@@ -2935,9 +2890,6 @@ const AURA_RECIPES: Record<string, IconRecipe> = {
 const CREST_RECIPES: Record<string, IconRecipe> = {
   // player classes (motif + class-flavoured background)
   class_warrior: r('fury', 'steel', ['sword'], ['glow']),
-  // Classic Warrior (PTR side-by-side class): the warrior crest with the sword
-  // drawn slightly smaller, matching the cw_ ability-icon treatment.
-  class_warrior_classic: r('fury', 'steel', [{ p: 'sword', s: 0.9 }], ['glow']),
   class_paladin: r('holy', 'holyGold', ['mace'], ['glow']),
   class_hunter: r('nature', 'leafGreen', ['arrow'], ['glow']),
   class_rogue: r(

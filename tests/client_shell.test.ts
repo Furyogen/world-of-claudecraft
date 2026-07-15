@@ -1945,6 +1945,13 @@ describe('client HTML shell', () => {
     expect(hudTs).toContain('shouldSeedFormBar(parsed, normalActions, false)');
   });
 
+  it('delegates the one-shot v0.24 stable-Warrior normal-bar migration to its pure coordinator', () => {
+    expect(hudTs).toContain('runStableWarriorHotbarMigration({');
+    expect(hudTs).toContain('form: this.playerHotbarForm(),');
+    expect(hudTs).toContain("hotbarKey: this.slotMapKey('normal'),");
+    expect(hudTs).toContain('additionIds: WARRIOR_V024_HOTBAR_ADDITION_IDS.filter');
+  });
+
   it('only auto-places abilities that belong on the active form bar', () => {
     expect(hudTs).toContain(
       'if (this.shouldAutoPlaceOnForm(id, this.activeHotbarForm)) autoPlaceAbilityIds.add(id);',

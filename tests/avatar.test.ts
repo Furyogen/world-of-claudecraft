@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { avatarPng, isPlayerClass, isValidSkin, MAX_SKIN, PLAYER_CLASSES } from '../server/avatar';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
 describe('avatar validation', () => {
   it('accepts the nine classes and rejects others', () => {
+    expect(PLAYER_CLASSES).toEqual(EXPECTED_PLAYER_CLASSES);
     for (const c of PLAYER_CLASSES) expect(isPlayerClass(c)).toBe(true);
     expect(isPlayerClass('deathknight')).toBe(false);
     expect(isPlayerClass('')).toBe(false);

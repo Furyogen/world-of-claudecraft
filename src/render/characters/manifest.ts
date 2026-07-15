@@ -394,10 +394,6 @@ export const SKINS: Record<string, (string | null)[]> = {
   // NPCs always resolve skin 0, so the embedded default is deliberately unused.
   npc_fernando: [`${SKINS_DIR}/rogue/fernando.png`],
 };
-// The classic warrior (the pre-overhaul side-by-side test class) shares the
-// warrior model and skin set outright.
-SKINS.player_warrior_classic = SKINS.player_warrior;
-
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
 // skin index has one. Only the Combat Mech epics glow; null entries mean no glow.
 export const SKIN_EMISSIVE: Record<string, (string | null)[]> = {
@@ -1093,8 +1089,6 @@ export const VISUALS: Record<string, VisualDef> = {
     },
   },
 };
-VISUALS.player_warrior_classic = VISUALS.player_warrior;
-
 // ---------------------------------------------------------------------------
 // Dispatch: entity -> visual key (mirrors the old buildRigFor selection:
 // e.kind + e.templateId + MOBS[id].family)

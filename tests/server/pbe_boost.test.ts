@@ -51,10 +51,6 @@ function lcg(seed: number): (maxExclusive: number) => number {
 }
 
 const HEROIC_VENDOR_IDS = new Set(HEROIC_VENDOR_STOCK.map((o) => o.itemId));
-// The classic warrior shares the warrior's authored gear locks (see
-// equipment_rules.ts gearCls); the test mirrors resolve the same way.
-const gearClsOf = (cls: PlayerClass): PlayerClass => (cls === 'warrior_classic' ? 'warrior' : cls);
-
 const ARMOR_SLOTS: EquipSlot[] = [
   'mainhand',
   'helmet',
@@ -111,8 +107,7 @@ describe('nonHeroicBisKit', () => {
         expect(itemId in HEROIC_ITEMS, `${cls} ${slot} ${itemId} bespoke heroic`).toBe(false);
         expect(HEROIC_VENDOR_IDS.has(itemId), `${cls} ${slot} ${itemId} vendor`).toBe(false);
         expect(canEquipItem(cls, item), `${cls} ${slot} ${itemId} canEquip`).toBe(true);
-        if (item.requiredClass)
-          expect(item.requiredClass, `${cls} ${slot}`).toContain(gearClsOf(cls));
+        if (item.requiredClass) expect(item.requiredClass, `${cls} ${slot}`).toContain(cls);
         expect(meetsLevelRequirement(BOOST_LEVEL, item), `${cls} ${slot} level`).toBe(true);
       }
     }
@@ -146,7 +141,7 @@ describe('nonHeroicBisKit', () => {
           !(i.id in HEROIC_ITEMS) &&
           !HEROIC_VENDOR_IDS.has(i.id) &&
           canEquipItem(cls, i) &&
-          (!i.requiredClass || i.requiredClass.includes(gearClsOf(cls))) &&
+          (!i.requiredClass || i.requiredClass.includes(cls)) &&
           meetsLevelRequirement(BOOST_LEVEL, i),
       );
       const best = Math.max(...candidates.map((i) => classItemScore(cls, i)));
@@ -179,7 +174,7 @@ describe('nonHeroicBisKit', () => {
     // pairs the staff with the epic raid shield, cloth casters (and the balance
     // druid) hold the Wraithfire Orb, and the rogue still dual-wields a second
     // real weapon.
-    for (const cls of ['warrior', 'warrior_classic', 'paladin'] as const) {
+    for (const cls of ['warrior', 'paladin'] as const) {
       expect(nonHeroicBisKit(cls).mainhand, cls).toBe('bonewrought_greatsword');
       expect(nonHeroicBisKit(cls).offhand, cls).toBeUndefined();
     }
@@ -247,21 +242,14 @@ describe('bags, gold, and alternate role kits', () => {
 
   it('exactly the multi-kit classes define alternate roles, and spawn roles are stable', () => {
     const hybrids = BOOST_CLASSES.filter((c) => CLASS_ROLES[c].length > 1);
-    expect([...hybrids].sort()).toEqual([
-      'druid',
-      'paladin',
-      'shaman',
-      'warrior',
-      'warrior_classic',
-    ]);
+    expect([...hybrids].sort()).toEqual(['druid', 'paladin', 'shaman', 'warrior']);
     for (const cls of BOOST_CLASSES) {
       expect(CLASS_ROLES[cls].length, cls).toBeGreaterThanOrEqual(1);
       expect(CLASS_ROLES[cls].length, cls).toBeLessThanOrEqual(3);
     }
-    // The spawn-equipped identity (roles[0]) never changes silently: charselect
-    // and the side-by-side warrior comparison both lean on these.
+    // The spawn-equipped identity (roles[0]) never changes silently: character
+    // selection and the prebuilt kits both lean on these.
     expect(CLASS_ROLES.warrior[0].id).toBe('arms');
-    expect(CLASS_ROLES.warrior_classic[0].id).toBe('arms');
     expect(CLASS_ROLES.paladin[0].id).toBe('retribution');
     expect(CLASS_ROLES.priest[0].id).toBe('holy');
     expect(CLASS_ROLES.shaman[0].id).toBe('elemental');
@@ -390,35 +378,6 @@ describe('tank, dual-wield, and shadow kits', () => {
     expect(carried, 'bagged second greatsword').toContain('bonewrought_greatsword');
     expect(carried, 'bagged spare one-hander').toContain('emberfang_warblade');
     expect(carried, 'bagged legendary').toContain('kingsbane_last_oath');
-  });
-
-  it("the classic warrior fury kit pairs two one-handers (no Titan's Grip)", () => {
-    // Equal weapon footing (2026-07-11): the classic warrior always
-    // dual-wields ONE-handers, so its pair anchors on the best 1H instead of
-    // the greatsword the Bloodrush warrior can offhand through Titan's Grip.
-    const kit = bisKitForRole('warrior_classic', roleOf('warrior_classic', 'fury'));
-    expect(kit.mainhand).toBe('kingsbane_last_oath');
-    expect(kit.offhand).toBe('drownedmoon_maul');
-    for (const slot of ['mainhand', 'offhand'] as const) {
-      const item = ITEMS[kit[slot] as string];
-      expect(item.kind === 'weapon' && weaponHand(item), `${slot} is 1H`).toBe('onehand');
-    }
-    // Classic dual wield is unconditional, so the pair is spawn-equippable.
-    expect(
-      canEquipItemInSlot('warrior_classic', ITEMS[kit.offhand as string], 'offhand', null),
-    ).toBe(true);
-  });
-
-  it('the classic warrior prot kit tanks with a one-hander and the raid shield', () => {
-    const kit = bisKitForRole('warrior_classic', roleOf('warrior_classic', 'prot'));
-    expect(kit.mainhand).toBe('kingsbane_last_oath');
-    expect(kit.offhand).toBe('bonewrought_bulwark');
-    expect(ITEMS[kit.offhand as string].kind).toBe('shield');
-    const state = buildBoostedCharacterState('warrior_classic', 'Pbetestcw', 0);
-    const carried = new Set(state.inventory.map((s) => s.itemId));
-    expect(carried.has('bonewrought_bulwark'), 'classic carries the shield').toBe(true);
-    expect(carried.has('kingsbane_last_oath'), 'classic carries the 1H').toBe(true);
-    expect(carried.has('drownedmoon_maul'), 'classic carries the DW offhand').toBe(true);
   });
 
   it('the holy kit IS the shadow kit: the cloth pool stays undifferentiated (tripwire)', () => {

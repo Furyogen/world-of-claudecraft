@@ -14,72 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const fr_FR: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Frappe du pillard',
-  'entities.abilities.cw_heroic_strike.description':
-    "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe.",
-  'entities.abilities.cw_battle_shout.name': 'Beuglement de fer',
-  'entities.abilities.cw_battle_shout.description':
-    "Augmente votre puissance d'attaque de {buff} pendant 2 min.",
-  'entities.abilities.cw_commanding_shout.name': 'Cri fortifiant',
-  'entities.abilities.cw_commanding_shout.description':
-    'Augmente votre Endurance de {buff} pendant 2 min.',
-  'entities.abilities.cw_charge.name': 'Ruée',
-  'entities.abilities.cw_charge.description':
-    "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m.",
-  'entities.abilities.cw_rend.name': 'Entaille profonde',
-  'entities.abilities.cw_rend.description':
-    'Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s.',
-  'entities.abilities.cw_thunder_clap.name': 'Coup sismique',
-  'entities.abilities.cw_thunder_clap.description':
-    'Frappe les ennemis proches pour {damage} points de dégâts et ralentit leurs attaques de 10% pendant 10 s.',
-  'entities.abilities.cw_hamstring.name': 'Entaille estropiante',
-  'entities.abilities.cw_hamstring.description':
-    "Mutile l'ennemi pour {damage} points de dégâts et réduit sa vitesse de déplacement de 50% pendant 15 s.",
-  'entities.abilities.cw_bloodrage.name': 'Tribut de sang',
-  'entities.abilities.cw_bloodrage.description': 'Génère 10 rage au prix de vos points de vie.',
-  'entities.abilities.cw_overpower.name': 'Redhand',
-  'entities.abilities.cw_overpower.description':
-    "Attaque instantanée infligeant les dégâts de l'arme plus {damage}. Utilisable seulement après une esquive de la cible. Ne peut pas être esquivée.",
-  'entities.abilities.cw_execute.name': 'Tombe précoce',
-  'entities.abilities.cw_execute.description':
-    "Tente d'achever un ennemi blessé et inflige {damage} points de dégâts. Utilisable seulement sur les ennemis sous 20% de points de vie.",
-  'entities.abilities.cw_slam.name': 'Coup brutal',
-  'entities.abilities.cw_slam.description':
-    "Frappe l'adversaire pour les dégâts de l'arme plus {damage}.",
-  'entities.abilities.cw_cleave.name': 'Arc faucheur',
-  'entities.abilities.cw_cleave.description':
-    'Une frappe circulaire qui touche tous les ennemis devant vous pour {damage} points de dégâts.',
-  'entities.abilities.cw_defensive_stance.name': 'Posture de garde',
-  'entities.abilities.cw_defensive_stance.description':
-    'Posture de combat défensive: vous générez 30% de menace en plus, mais infligez et subissez 10% de dégâts en moins. Relancez pour quitter la posture.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Direhowl',
-  'entities.abilities.cw_demoralizing_shout.description':
-    "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s.",
-  'entities.abilities.cw_sunder_armor.name': "Cisaillement d'armure",
-  'entities.abilities.cw_sunder_armor.description':
-    "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
-  'entities.abilities.cw_taunt.name': 'Aiguillon',
-  'entities.abilities.cw_taunt.description':
-    'Provoque la cible: votre menace rejoint celle de son ennemi le plus haï et elle est forcée de vous attaquer pendant 3 s.',
-  'entities.abilities.cw_bloodthirst.name': 'Saignée',
-  'entities.abilities.cw_bloodthirst.description':
-    "Attaque instantanément dans une frénésie sanguinaire pour 60% des dégâts de l'arme plus {damage}. (signature Fureur)",
-  'entities.abilities.cw_mortal_strike.name': 'Frappe mutilante',
-  'entities.abilities.cw_mortal_strike.description':
-    "Frappe vicieuse infligeant les dégâts de l'arme plus {damage}. (signature Armes)",
-  'entities.abilities.cw_shield_slam.name': 'Shieldcrack',
-  'entities.abilities.cw_shield_slam.description':
-    "Heurte la cible avec votre bouclier pour 50% des dégâts de l'arme plus {damage} et génère une menace énorme. (signature Protection)",
-  'entities.abilities.cw_whirlwind.name': 'Tournoiement de lames',
-  'entities.abilities.cw_whirlwind.description':
-    'Tournoie dans un arc mortel et frappe tous les ennemis proches pour {damage}. (talent Fureur)',
-  'entities.abilities.cw_berserker_rage.name': 'Fureur bouillonnante',
-  'entities.abilities.cw_berserker_rage.description':
-    'Entre dans une fureur bouillonnante et génère 20 points de rage. (talent de guerrier)',
-  'classDetails.roles.warriorClassic': 'Tank / DPS mêlée',
-  'classes.warriorClassic': 'Guerrier',
-  'classDetails.lore.warriorClassic':
-    "Le guerrier exactement tel qu'il se jouait avant la refonte du combat : le kit de techniques d'origine et le rythme de la rage, conservés aux côtés du nouveau guerrier pour que vous puissiez essayer les deux et nous dire lequel vous convient le mieux.",
   'entities.abilities.battle_stance.name': 'Posture de combat',
   'entities.abilities.battle_stance.description':
     'Posture de combat agressive: vous générez 10% de rage en plus. La posture par défaut pour Armes et Protection.',
@@ -5670,17 +5604,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Frappe tout autour de vous et ralentit les attaques des ennemis.',
   'guide.abilityHook.wrath':
     'Un trait de nature lancé sur une cible à distance, votre frappe de prédilection.',
-  'guide.abilityHook.cw_battle_shout':
-    "Un cri de ralliement qui augmente la puissance d'attaque du groupe.",
-  'guide.abilityHook.cw_charge':
-    'Fonce sur un ennemi lointain pour ouvrir le combat avec un bref étourdissement.',
-  'guide.abilityHook.cw_commanding_shout':
-    "Renforce l'endurance pour que chacun tienne plus longtemps au combat.",
-  'guide.abilityHook.cw_heroic_strike':
-    'Prépare un coup plus lourd qui dépense de la rage sur votre prochaine attaque.',
-  'guide.abilityHook.cw_rend': 'Ouvre un saignement qui use la cible dans la durée.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Frappe tout autour de vous et ralentit les attaques des ennemis.',
   'guide.abilityHook.hamstring':
     "Taillade les jambes de la cible pour la ralentir, afin qu'elle ne puisse pas vous rattraper.",
   'guide.abilityHook.revenge':
@@ -7242,4 +7165,28 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Créez un nouveau compte, ou liez Apple à un compte que vous possédez déjà.',
   'hudChrome.auth.appleError': 'Impossible de se connecter avec Apple. Veuillez réessayer.',
   'hudChrome.auth.appleLoginCta': 'Continuer avec Apple',
+  'entities.abilities.cleansing_verdict.name': 'Verdict purificateur',
+  'entities.abilities.cleansing_verdict.description':
+    'Purifie un effet magique néfaste sur une cible alliée et lui rend {damage} points de vie grâce au Sacré.',
+  'entities.abilities.lingering_dread.name': 'Terreur persistante',
+  'entities.abilities.lingering_dread.description':
+    "Pousse un cri de guerre qui effraie les ennemis à moins de 10 m pendant 4 s. La peur persiste jusqu'à ce que chaque cible subisse des dégâts équivalant à 20 % de ses points de vie maximum. (Talent de guerrier)",
+  'entities.abilities.smoke_screen.name': 'Écran de fumée',
+  'entities.abilities.smoke_screen.description':
+    "Disparaissez dans un nuage de fumée, ce qui augmente vos chances d'esquiver pendant un moment.",
+  'entities.abilities.spell_reflect.name': 'Renvoi de sort',
+  'entities.abilities.spell_reflect.description':
+    'Levez votre bouclier et renvoyez le prochain sort hostile à son lanceur.',
+  'entities.abilities.spellsteal.name': 'Vol de sort',
+  'entities.abilities.spellsteal.description':
+    'Vole un effet magique bénéfique à un ennemi et vous le transfère.',
+  'entities.abilities.startle_shot.name': 'Tir saisissant',
+  'entities.abilities.startle_shot.description':
+    "Un tir imprévisible qui désoriente la cible pendant {duration} s. Tout dégât met fin à l'effet.",
+  'entities.abilities.typhoon.name': 'Typhon',
+  'entities.abilities.typhoon.description':
+    'Une rafale de vent repousse tous les ennemis proches et les hébète, ce qui ralentit leurs déplacements.',
+  'entities.abilities.voidfeast.name': 'Festin du Vide',
+  'entities.abilities.voidfeast.description':
+    'Dévore un effet magique (un effet bénéfique sur un ennemi ou néfaste sur un allié) et vous rend 6 % de vos points de vie maximum.',
 };

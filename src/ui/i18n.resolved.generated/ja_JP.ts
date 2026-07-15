@@ -2033,12 +2033,6 @@ export const ja_JP: EnTranslations = {
       "charge": "離れた敵に突進し、短いスタンで戦闘の口火を切ります。",
       "rend": "出血を与え、時間をかけて標的を削っていきます。",
       "thunder_clap": "周囲のすべてに当たり、相手の攻撃を遅くします。",
-      "cw_heroic_strike": "次の一撃にレイジを乗せ、より重い攻撃を予約します。",
-      "cw_battle_shout": "パーティの攻撃力を高める鼓舞の雄叫びです。",
-      "cw_commanding_shout": "持久力を底上げし、長い戦いでも全員が粘り強く戦えるようにします。",
-      "cw_charge": "離れた敵に突進し、短いスタンで戦闘の口火を切ります。",
-      "cw_rend": "出血を与え、時間をかけて標的を削っていきます。",
-      "cw_thunder_clap": "周囲のすべてに当たり、相手の攻撃を遅くします。",
       "hamstring": "対象の脚を斬りつけて減速させ、追いつかれないようにします。",
       "seal_of_righteousness": "一振りごとにホーリーダメージを付与し、ヴァーディクトで消費します。",
       "holy_light": "味方や自分の体力を満タンに戻す、安定した大きめのヒールです。",
@@ -3346,7 +3340,6 @@ export const ja_JP: EnTranslations = {
   },
   "classes": {
     "warrior": "戦士",
-    "warriorClassic": "戦士",
     "paladin": "パラディン",
     "hunter": "ハンター",
     "rogue": "ローグ",
@@ -4114,7 +4107,6 @@ export const ja_JP: EnTranslations = {
     },
     "roles": {
       "warrior": "タンク / 近接DPS",
-      "warriorClassic": "タンク / 近接DPS",
       "paladin": "ヒーラー / タンク / 近接DPS",
       "hunter": "遠隔DPS",
       "rogue": "近接DPS",
@@ -4139,7 +4131,6 @@ export const ja_JP: EnTranslations = {
     },
     "lore": {
       "warrior": "ウォリアーは戦いで鍛えられた近接戦士で、ダメージを与えたり受けたりして怒りを蓄えます。重い一撃を耐え、強力な武器で敵を砕きます。",
-      "warriorClassic": "戦闘リワーク前の戦士をそのまま残しました。元のアビリティ構成とレイジの感覚を新戦士と並べて試し、どちらが良いか教えてください。",
       "paladin": "パラディンは祝福で味方を支え、癒しの光で傷を癒やし、重装備で弱き者を守る聖騎士です。",
       "hunter": "ハンターはテイムした獣を従えて戦う遠距離戦の専門家で、エイムショットやラピッドファイアで敵を撃ち抜き、スティングやコンカッシブショットで足を止め、状況に応じて相を切り替えます。",
       "rogue": "ローグはエネルギーとコンボポイントを使い、影から奇襲と決め技を放つ隠密の暗殺者です。",
@@ -5167,90 +5158,6 @@ export const ja_JP: EnTranslations = {
       "heroic_strike": {
         "name": "略奪者の一撃",
         "description": "強力な攻撃で近接ダメージが {damage} 増加します。次のスイングで発動します。"
-      },
-      "cw_heroic_strike": {
-        "name": "略奪者の一撃",
-        "description": "強力な攻撃で近接ダメージが {damage} 増加します。次のスイングで発動します。"
-      },
-      "cw_battle_shout": {
-        "name": "鉄の咆哮",
-        "description": "2分間、攻撃力が{buff}増加します。"
-      },
-      "cw_commanding_shout": {
-        "name": "鼓舞の号令",
-        "description": "2分間、スタミナが{buff}増加します。"
-      },
-      "cw_charge": {
-        "name": "突撃",
-        "description": "敵に突撃し、怒りを9生成して1秒間スタンさせます。射程8-25yd。"
-      },
-      "cw_rend": {
-        "name": "深き裂傷",
-        "description": "対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。"
-      },
-      "cw_thunder_clap": {
-        "name": "震撼の一撃",
-        "description": "周囲の敵に {damage} のダメージを与え、10秒間、攻撃速度を10%低下させます。"
-      },
-      "cw_hamstring": {
-        "name": "足萎えの斬撃",
-        "description": "敵を痛めつけて{damage}ダメージを与え、15秒間、移動速度を50%低下させます。"
-      },
-      "cw_bloodrage": {
-        "name": "血の代償",
-        "description": "体力を代償に怒りを10生成します。"
-      },
-      "cw_overpower": {
-        "name": "血染めの手",
-        "description": "武器ダメージに{damage}を加えた即時攻撃です。対象が回避した後にのみ使用できます。回避されません。"
-      },
-      "cw_execute": {
-        "name": "早すぎる墓",
-        "description": "傷ついた敵をとどめようとして {damage} のダメージを与えます。体力が20%未満の敵にのみ使用できます。"
-      },
-      "cw_slam": {
-        "name": "力任せの一振り",
-        "description": "相手を叩きつけ、武器ダメージに {damage} を加えたダメージを与えます。"
-      },
-      "cw_cleave": {
-        "name": "刈り取りの弧",
-        "description": "大きく薙ぎ払い、前方のすべての敵に {damage} のダメージを与えます。"
-      },
-      "cw_defensive_stance": {
-        "name": "ガーデッドスタンス",
-        "description": "防御用の戦闘スタンスです。脅威生成が30%増加しますが、与えるダメージと受けるダメージが10%低下します。再度使用するとスタンスを解除します。"
-      },
-      "cw_demoralizing_shout": {
-        "name": "戦慄の遠吠え",
-        "description": "恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を{buff}低下させます。"
-      },
-      "cw_sunder_armor": {
-        "name": "装甲切断",
-        "description": "対象のアーマーを破壊し、1回ごとに{damage}%低下させます。最大5回まで重なります。大量の脅威を生成します。"
-      },
-      "cw_taunt": {
-        "name": "挑発",
-        "description": "対象を挑発します。あなたの脅威が対象の最も憎む敵と同じ値まで上がり、3秒間あなたを攻撃させます。"
-      },
-      "cw_bloodthirst": {
-        "name": "瀉血",
-        "description": "血の狂乱に身を任せて即座に攻撃し、武器ダメージの60%に{damage}を加えたダメージを与えます。（狂怒シグネチャー）"
-      },
-      "cw_mortal_strike": {
-        "name": "重傷の一撃",
-        "description": "凶悪な一撃で武器ダメージに加えて {damage} のダメージを与えます。（武器シグネチャー）"
-      },
-      "cw_shield_slam": {
-        "name": "盾砕き",
-        "description": "盾で対象を叩きつけ、武器ダメージの50%に{damage}を加えたダメージと大量の脅威を与えます。（防御シグネチャー）"
-      },
-      "cw_whirlwind": {
-        "name": "刃の旋風",
-        "description": "致命的な弧を描いて回転し、近くのすべての敵に {damage} のダメージを与えます。（狂怒タレント）"
-      },
-      "cw_berserker_rage": {
-        "name": "滾る怒り",
-        "description": "滾る怒りに身を任せ、怒りを20生成します。（戦士タレント）"
       },
       "revenge": {
         "name": "意趣返し",

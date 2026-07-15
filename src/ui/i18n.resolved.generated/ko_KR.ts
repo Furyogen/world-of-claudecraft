@@ -2033,12 +2033,6 @@ export const ko_KR: EnTranslations = {
       "charge": "멀리 있는 적에게 돌진해 잠시 기절시키며 전투를 시작합니다.",
       "rend": "시간이 지나며 대상을 약화시키는 출혈을 입힙니다.",
       "thunder_clap": "주위의 모든 적을 타격하고 그들의 공격 속도를 늦춥니다.",
-      "cw_heroic_strike": "다음 타격에 분노를 소모해 더 강하게 휘두르도록 예약합니다.",
-      "cw_battle_shout": "파티 전체의 공격력을 높여 주는 사기를 북돋우는 외침입니다.",
-      "cw_commanding_shout": "체력을 높여 모두가 전투에서 더 오래 버틸 수 있게 합니다.",
-      "cw_charge": "멀리 있는 적에게 돌진해 잠시 기절시키며 전투를 시작합니다.",
-      "cw_rend": "시간이 지나며 대상을 약화시키는 출혈을 입힙니다.",
-      "cw_thunder_clap": "주위의 모든 적을 타격하고 그들의 공격 속도를 늦춥니다.",
       "hamstring": "대상의 다리를 베어 이동 속도를 늦춰 당신을 쫓아오지 못하게 합니다.",
       "seal_of_righteousness": "공격에 신성 피해를 부여하고, 선고로 그 기운을 소모합니다.",
       "holy_light": "아군이나 자신의 체력을 채워 주는 안정적이고 큰 치유입니다.",
@@ -3346,7 +3340,6 @@ export const ko_KR: EnTranslations = {
   },
   "classes": {
     "warrior": "전사",
-    "warriorClassic": "전사",
     "paladin": "성기사",
     "hunter": "사냥꾼",
     "rogue": "도적",
@@ -4114,7 +4107,6 @@ export const ko_KR: EnTranslations = {
     },
     "roles": {
       "warrior": "탱커 / 근접 DPS",
-      "warriorClassic": "탱커 / 근접 DPS",
       "paladin": "치유 / 탱커 / 근접 DPS",
       "hunter": "원거리 DPS",
       "rogue": "근접 DPS",
@@ -4139,7 +4131,6 @@ export const ko_KR: EnTranslations = {
     },
     "lore": {
       "warrior": "전사는 피해를 주거나 받을 때 분노를 쌓는 단련된 근접 전투원입니다. 강한 공격을 버티거나 강력한 무기로 적을 압도합니다.",
-      "warriorClassic": "전투 개편 이전의 전사를 그대로 남겨 두었습니다. 원래의 기술 구성과 분노 흐름을 새 전사와 나란히 플레이해 보고 어느 쪽이 더 좋은지 알려 주세요.",
       "paladin": "성기사는 축복으로 아군을 돕고 치유의 빛으로 상처를 치유하며 중갑으로 약자를 보호하는 성전사입니다.",
       "hunter": "사냥꾼은 길들인 야수와 함께 싸우는 원거리 전문가로, 일격 사격과 속사를 퍼부어 적을 공략하고 맹독과 충격 사격으로 적의 발을 묶으며 상황에 맞춰 화신을 전환합니다.",
       "rogue": "도적은 기력과 연계 점수를 사용해 그림자 속에서 기습과 마무리 일격을 가하는 암살자입니다.",
@@ -5167,90 +5158,6 @@ export const ko_KR: EnTranslations = {
       "heroic_strike": {
         "name": "약탈자의 일격",
         "description": "강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
-      },
-      "cw_heroic_strike": {
-        "name": "약탈자의 일격",
-        "description": "강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
-      },
-      "cw_battle_shout": {
-        "name": "강철의 외침",
-        "description": "2분 동안 전투력이 {buff}만큼 증가합니다."
-      },
-      "cw_commanding_shout": {
-        "name": "북돋는 외침",
-        "description": "2분 동안 체력이 {buff}만큼 증가합니다."
-      },
-      "cw_charge": {
-        "name": "쇄도",
-        "description": "적에게 돌진하여 분노 9를 생성하고 1초 동안 기절시킵니다. 사거리 8-25yd."
-      },
-      "cw_rend": {
-        "name": "깊은 상처",
-        "description": "대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
-      },
-      "cw_thunder_clap": {
-        "name": "진동의 일격",
-        "description": "주위 적에게 {damage}의 피해를 입히고 10초 동안 공격 속도를 10%만큼 늦춥니다."
-      },
-      "cw_hamstring": {
-        "name": "절뚝이는 베기",
-        "description": "적에게 {damage}의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다."
-      },
-      "cw_bloodrage": {
-        "name": "피의 대가",
-        "description": "생명력을 희생하여 분노 10을 생성합니다."
-      },
-      "cw_overpower": {
-        "name": "붉은 손",
-        "description": "무기 피해에 {damage}를 더한 피해를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다."
-      },
-      "cw_execute": {
-        "name": "이른 무덤",
-        "description": "상처 입은 적을 끝내려 시도해 {damage}의 피해를 입힙니다. 생명력이 20% 미만인 적에게만 사용할 수 있습니다."
-      },
-      "cw_slam": {
-        "name": "우악스러운 휘두르기",
-        "description": "상대에게 무기 피해에 {damage}를 더한 피해를 입힙니다."
-      },
-      "cw_cleave": {
-        "name": "수확의 호",
-        "description": "전방의 모든 적을 휩쓸어 {damage}의 피해를 입힙니다."
-      },
-      "cw_defensive_stance": {
-        "name": "방어 태세",
-        "description": "방어 전투 태세입니다. 위협 수준을 30% 더 생성하지만, 주고받는 피해가 10% 감소합니다. 다시 시전하면 태세를 해제합니다."
-      },
-      "cw_demoralizing_shout": {
-        "name": "흉포한 울부짖음",
-        "description": "무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 {buff}만큼 감소시킵니다."
-      },
-      "cw_sunder_armor": {
-        "name": "방어구 절단",
-        "description": "대상의 방어구를 가르고 적용마다 {damage}%만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다."
-      },
-      "cw_taunt": {
-        "name": "부추김",
-        "description": "대상을 도발합니다. 자신의 위협 수준이 대상이 가장 증오하는 적과 같아지며, 3초 동안 자신을 공격하게 만듭니다."
-      },
-      "cw_bloodthirst": {
-        "name": "사혈",
-        "description": "피의 광란으로 즉시 공격하여 무기 피해의 60%에 {damage}를 더한 피해를 줍니다. (분노 특화 대표 기술)"
-      },
-      "cw_mortal_strike": {
-        "name": "불구의 일격",
-        "description": "잔혹한 일격으로 무기 피해에 {damage}의 피해를 더합니다. (무기 특화 대표 기술)"
-      },
-      "cw_shield_slam": {
-        "name": "방패 강타",
-        "description": "방패로 대상을 강타해 무기 피해의 50%에 {damage}를 더한 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)"
-      },
-      "cw_whirlwind": {
-        "name": "칼날 회오리",
-        "description": "치명적인 호를 그리며 돌아 주변 모든 적에게 {damage}의 피해를 줍니다. (분노 특성)"
-      },
-      "cw_berserker_rage": {
-        "name": "들끓는 격노",
-        "description": "들끓는 격노에 들어가 분노 20을 생성합니다. (전사 특성)"
       },
       "revenge": {
         "name": "복수",

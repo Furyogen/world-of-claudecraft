@@ -2,69 +2,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Yağmacı Darbesi',
-  'entities.abilities.cw_heroic_strike.description':
-    'Yakın dövüş hasarını {damage} artıran güçlü bir saldırı. Bir sonraki vuruşunda etkinleşir.',
-  'entities.abilities.cw_battle_shout.name': 'Demir Nara',
-  'entities.abilities.cw_battle_shout.description':
-    'Saldırı gücünü 2 dakika boyunca {buff} artırır.',
-  'entities.abilities.cw_commanding_shout.name': 'Güçlendiren Nara',
-  'entities.abilities.cw_commanding_shout.description':
-    'Dayanıklılığını 2 dakika boyunca {buff} artırır.',
-  'entities.abilities.cw_charge.name': 'Atılım',
-  'entities.abilities.cw_charge.description':
-    'Bir düşmana hücum ederek 9 öfke üretir ve onu 1 saniye sersemletir. 8-25 yarda menzil.',
-  'entities.abilities.cw_rend.name': 'Derin Yarık',
-  'entities.abilities.cw_rend.description':
-    'Hedefi yaralar, {duration} saniye boyunca {damage} kanama hasarı vermesine yol açar.',
-  'entities.abilities.cw_thunder_clap.name': 'Sarsan Darbe',
-  'entities.abilities.cw_thunder_clap.description':
-    'Yakındaki düşmanları {damage} hasar için patlatır ve saldırılarını 10 saniye boyunca %10 yavaşlatır.',
-  'entities.abilities.cw_hamstring.name': 'Topallatan Kesik',
-  'entities.abilities.cw_hamstring.description':
-    'Düşmanı {damage} hasarla sakatlayarak hareketini 15 saniye boyunca %50 yavaşlatır.',
-  'entities.abilities.cw_bloodrage.name': 'Kan Bedeli',
-  'entities.abilities.cw_bloodrage.description': 'Can pahasına 10 öfke üretir.',
-  'entities.abilities.cw_overpower.name': 'Kızıl El',
-  'entities.abilities.cw_overpower.description':
-    'Silah hasarı artı {damage} veren anında saldırı. Yalnızca hedef sıyırma yaptıktan sonra kullanılabilir. Sıyrılamaz.',
-  'entities.abilities.cw_execute.name': 'Erken Mezar',
-  'entities.abilities.cw_execute.description':
-    "Yaralı bir düşmanı bitirmeye çalışır ve {damage} hasar verir. Yalnızca canı %20'nin altındaki düşmanlarda kullanılabilir.",
-  'entities.abilities.cw_slam.name': 'Kaba Savuruş',
-  'entities.abilities.cw_slam.description': 'Rakibe silah hasarı artı {damage} için çarpar.',
-  'entities.abilities.cw_cleave.name': 'Biçen Yay',
-  'entities.abilities.cw_cleave.description':
-    'Önündeki tüm düşmanlara {damage} hasar veren süpüren bir darbe.',
-  'entities.abilities.cw_defensive_stance.name': 'Korumali Durus',
-  'entities.abilities.cw_defensive_stance.description':
-    'Savunma amaçlı bir dövüş duruşu: %30 daha fazla tehdit üretirsin ama %10 daha az hasar verir ve alırsın. Duruştan çıkmak için tekrar kullan.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Vahim Uluma',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Korkunç bir nara atarak yakındaki tüm düşmanların saldırı gücünü 30 saniye boyunca {buff} azaltır.',
-  'entities.abilities.cw_sunder_armor.name': 'Zırh Kesme',
-  'entities.abilities.cw_sunder_armor.description':
-    'Hedefin zırhını parçalar, her uygulamada %{damage} azaltır. 5 kez istiflenir. Yüksek miktarda tehdit üretir.',
-  'entities.abilities.cw_taunt.name': 'Tahrik',
-  'entities.abilities.cw_taunt.description':
-    'Hedefi kışkırtır: tehdidin onun en nefret ettiği düşmana eşit hale gelir ve 3 saniye boyunca sana saldırmaya zorlanır.',
-  'entities.abilities.cw_bloodthirst.name': 'Kan Akıtma',
-  'entities.abilities.cw_bloodthirst.description':
-    'Bir kan çılgınlığıyla anında %60 silah hasarı artı {damage} veren bir saldırı yap. (Hiddet imzası)',
-  'entities.abilities.cw_mortal_strike.name': 'Sakatlayan Darbe',
-  'entities.abilities.cw_mortal_strike.description':
-    'Silah hasarı artı {damage} veren acımasız bir darbe. (Silahşor imzası)',
-  'entities.abilities.cw_shield_slam.name': 'Kalkan Kırma',
-  'entities.abilities.cw_shield_slam.description':
-    'Hedefe kalkanınla %50 silah hasarı artı {damage} hasar verir ve devasa tehdit üretirsin. (Koruma imzası)',
-  'entities.abilities.cw_whirlwind.name': 'Bıçaklı Girdap',
-  'entities.abilities.cw_whirlwind.description':
-    'Ölümcül bir yayda dönerek yakındaki tüm düşmanları {damage} için vurursun. (Cinnet yeteneği)',
-  'entities.abilities.cw_berserker_rage.name': 'Kaynayan Gazap',
-  'entities.abilities.cw_berserker_rage.description':
-    'Kaynayan bir gazaba kapılarak 20 öfke üretir. (Savaşçı yeteneği)',
-  'classDetails.roles.warriorClassic': 'Tank / Yakın DPS',
-  'classes.warriorClassic': 'Savaşçı',
   'entities.abilities.sport_boot.description':
     'Nişan noktasına doğru uzun, havadan bir vuruş. Seyirci buna bayılır.',
   'entities.abilities.sport_boot.name': 'Aşırtma',
@@ -1377,8 +1314,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Karabüyücüler şeytanlar çağırır, lanetler ve süregelen hasar büyüleri uygular ve dayanmak için düşmanlardan can emer.',
   'classDetails.lore.warrior':
     'Savaşçılar, hasar verdikçe ya da aldıkça Öfke biriktiren çelik gibi yakın dövüş savaşçılarıdır. Ağır darbeleri soğurur ya da düşmanları güçlü silahlarla ezerler.',
-  'classDetails.lore.warriorClassic':
-    'Savaşçının dövüş yenilemesinden önceki haliyle birebir aynısı: özgün yetenek seti ve öfke temposu, yeni savaşçının yanında korundu; böylece ikisini de deneyip hangisinin daha iyi hissettirdiğini bize söyleyebilirsin.',
   'classDetails.resources.energy': 'Enerji',
   'classDetails.resources.mana': 'Mana',
   'classDetails.resources.rage': 'Öfke',
@@ -3619,15 +3554,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Mana yenileyen içecekler çağırır, böylece akınlar arasında dolum yapabilirsin.',
   'guide.abilityHook.corruption':
     'Bir hedefi gölgeyle çürütür ve sen başka işler yaparken hasar verir.',
-  'guide.abilityHook.cw_battle_shout': 'Grubun saldırı gücünü yükselten coşturucu bir nara.',
-  'guide.abilityHook.cw_charge':
-    'Uzaktaki bir düşmana atılarak kısa bir sersemletmeyle dövüşü başlatır.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Dayanıklılığı artırır, böylece dövüşte herkesin daha çok direnci olur.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Bir sonraki vuruşunda öfke harcayan daha ağır bir savruş sıraya koyar.',
-  'guide.abilityHook.cw_rend': 'Hedefi zamanla yıpratan bir kanama açar.',
-  'guide.abilityHook.cw_thunder_clap': 'Çevrendeki her şeye vurur ve saldırılarını yavaşlatır.',
   'guide.abilityHook.demon_skin': 'Derini sertleştirip zırh ekleyen kalıcı bir öz güçlendirmesi.',
   'guide.abilityHook.devotion_aura':
     'Zırhı yükselten kalıcı bir öz güçlendirmesi, böylece darbeler daha hafif gelir.',
@@ -7058,4 +6984,28 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.defaultLoadout': 'Varsayılan Dizilim',
   'hudChrome.talentRows.tab': 'Seçimler',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Hedefin Hedefi',
+  'entities.abilities.cleansing_verdict.name': 'Arındırıcı Hüküm',
+  'entities.abilities.cleansing_verdict.description':
+    'Dost bir hedeften zararlı bir büyü etkisini kaldırır ve Kutsal güçle {damage} can yeniler.',
+  'entities.abilities.lingering_dread.name': 'Süren Dehşet',
+  'entities.abilities.lingering_dread.description':
+    "10 m içindeki düşmanları 4 sn. boyunca korkutan bir savaş narası atar. Korku, her hedef maksimum canının %20'sine eşit hasar alana kadar sürer. (Savaşçı yeteneği)",
+  'entities.abilities.smoke_screen.name': 'Duman Perdesi',
+  'entities.abilities.smoke_screen.description':
+    'Bir duman bulutunun içinde kaybolarak bir süreliğine kaçınma şansını artırır.',
+  'entities.abilities.spell_reflect.name': 'Büyü Yansıtma',
+  'entities.abilities.spell_reflect.description':
+    'Kalkanını kaldırarak bir sonraki düşmanca büyüyü onu yapan kişiye geri yansıtır.',
+  'entities.abilities.spellsteal.name': 'Büyü Çalma',
+  'entities.abilities.spellsteal.description':
+    'Bir düşmandan faydalı bir büyü etkisini çalıp sana aktarır.',
+  'entities.abilities.startle_shot.name': 'İrkilten Atış',
+  'entities.abilities.startle_shot.description':
+    'Hedefin yönünü {duration} sn. boyunca şaşırtan vahşi bir atış. Alınan herhangi bir hasar etkiyi bozar.',
+  'entities.abilities.typhoon.name': 'Tayfun',
+  'entities.abilities.typhoon.description':
+    'Bir rüzgâr patlaması yakındaki tüm düşmanları geri savurup sersemletir ve hareketlerini yavaşlatır.',
+  'entities.abilities.voidfeast.name': 'Hiçlik Ziyafeti',
+  'entities.abilities.voidfeast.description':
+    "Bir büyü etkisini (düşmandaki faydalı veya müttefikteki zararlı bir etkiyi) yutup seni maksimum canının %6'sı kadar iyileştirir.",
 };

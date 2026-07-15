@@ -90,8 +90,6 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
     'Los brujos invocan demonios, lanzan maldiciones y magia de daño continuo, y sorben la vida de sus enemigos para aguantar.',
   'classDetails.lore.druid':
     'Los druidas canalizan la naturaleza, curan heridas, enredan enemigos y cambian a formas animales para defender o dañar.',
-  'classDetails.lore.warriorClassic':
-    'El guerrero exactamente como se jugaba antes de la renovación del combate: el conjunto de habilidades y el ritmo de ira originales, conservado junto al guerrero nuevo para que pruebes ambos y nos digas cuál te parece mejor.',
   'mobilePreflight.baseLandscape': 'Gira el dispositivo a horizontal antes de entrar en el mundo.',
   'mobilePreflight.basePerformance':
     'El rendimiento móvil puede degradarse. Cierra pestañas extra y baja la calidad de renderizado si el juego va lento.',
@@ -358,8 +356,7 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
     'Golpea con daño de arma más {damage} y te sana un 20% de tu salud máxima. Solo usable en los 20 s posteriores a matar a un enemigo.',
   // v0.24.0 release i18n fill: new item names.
   'entities.items.eastbrook_buckler.name': 'Broquel de Eastbrook',
-  // v0.24.0 release i18n fill: guide ability hooks (cw_ rows reuse the es base
-  // translations of the identical English non-cw hooks).
+  // v0.24.0 release i18n fill: guide ability hooks.
   'guide.abilityHook.hamstring':
     'Raja las piernas del objetivo para ralentizarlo y que no pueda darte alcance.',
   'guide.abilityHook.revenge':
@@ -379,4 +376,28 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.comingSoon': 'Próximamente',
   'hudChrome.talentRows.defaultLoadout': 'Configuración por defecto',
   'hudChrome.talentRows.tab': 'Elecciones',
+  'entities.abilities.cleansing_verdict.name': 'Sentencia purificadora',
+  'entities.abilities.cleansing_verdict.description':
+    'Disipa un efecto mágico perjudicial de un objetivo aliado y lo sana {damage} p. con magia Sagrada.',
+  'entities.abilities.lingering_dread.name': 'Terror persistente',
+  'entities.abilities.lingering_dread.description':
+    'Profiere un grito de batalla que aterroriza a los enemigos en un radio de 10 m durante 4 s. El miedo persiste hasta que cada objetivo recibe como daño un 20% de su salud máxima. (Talento de guerrero)',
+  'entities.abilities.smoke_screen.name': 'Velo de humo',
+  'entities.abilities.smoke_screen.description':
+    'Te esfumas en una nube de humo, aumentando temporalmente tu probabilidad de esquivar.',
+  'entities.abilities.spell_reflect.name': 'Reflejar hechizo',
+  'entities.abilities.spell_reflect.description':
+    'Levantas el escudo para devolver al lanzador el siguiente hechizo hostil.',
+  'entities.abilities.spellsteal.name': 'Robo de hechizo',
+  'entities.abilities.spellsteal.description':
+    'Sustrae un efecto mágico beneficioso de un enemigo y te lo aplica.',
+  'entities.abilities.startle_shot.name': 'Disparo alarmante',
+  'entities.abilities.startle_shot.description':
+    'Un disparo errático que desorienta al objetivo durante {duration} s. El efecto se rompe al recibir cualquier daño.',
+  'entities.abilities.typhoon.name': 'Vendaval',
+  'entities.abilities.typhoon.description':
+    'Una ráfaga de viento hace retroceder a todos los enemigos cercanos y los ofusca, reduciendo su velocidad de movimiento.',
+  'entities.abilities.voidfeast.name': 'Banquete del Vacío',
+  'entities.abilities.voidfeast.description':
+    'Consume un efecto mágico (uno beneficioso de un enemigo o uno perjudicial de un aliado) y te restaura un 6% de tu salud máxima.',
 };

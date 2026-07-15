@@ -2033,12 +2033,6 @@ export const id_ID: EnTranslations = {
       "charge": "Menerjang musuh yang jauh untuk membuka pertarungan dengan pingsan singkat.",
       "rend": "Membuka pendarahan yang menggerus sasaran seiring waktu.",
       "thunder_clap": "Menghantam segala sesuatu di sekitarmu dan melambatkan serangan mereka.",
-      "cw_heroic_strike": "Mengantrekan ayunan lebih berat yang menghabiskan amarah pada pukulanmu berikutnya.",
-      "cw_battle_shout": "Pekik penggugah semangat yang menaikkan daya serang seluruh kelompok.",
-      "cw_commanding_shout": "Memperkuat stamina agar semua orang lebih tahan lama dalam pertarungan.",
-      "cw_charge": "Menerjang musuh yang jauh untuk membuka pertarungan dengan pingsan singkat.",
-      "cw_rend": "Membuka pendarahan yang menggerus sasaran seiring waktu.",
-      "cw_thunder_clap": "Menghantam segala sesuatu di sekitarmu dan melambatkan serangan mereka.",
       "hamstring": "Menyabet kaki sasaran untuk melambatkannya sehingga ia tak bisa mengejarmu.",
       "seal_of_righteousness": "Mengisi ayunanmu dengan kerusakan Suci, lalu habiskan dengan Vonis.",
       "holy_light": "Penyembuhan mantap berukuran besar untuk memenuhi nyawa sekutu atau dirimu sendiri.",
@@ -3346,7 +3340,6 @@ export const id_ID: EnTranslations = {
   },
   "classes": {
     "warrior": "Prajurit",
-    "warriorClassic": "Prajurit",
     "paladin": "Paladin",
     "hunter": "Pemburu",
     "rogue": "Penyamun",
@@ -4114,7 +4107,6 @@ export const id_ID: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS Jarak Dekat",
-      "warriorClassic": "Tank / DPS Jarak Dekat",
       "paladin": "Penyembuh / Tank / DPS Jarak Dekat",
       "hunter": "DPS Jarak Jauh",
       "rogue": "DPS Jarak Dekat",
@@ -4139,7 +4131,6 @@ export const id_ID: EnTranslations = {
     },
     "lore": {
       "warrior": "Prajurit adalah petarung jarak dekat yang tangguh, yang membangun Amarah saat memberi atau menerima kerusakan. Mereka menyerap pukulan keras atau meremukkan lawan dengan senjata ampuh.",
-      "warriorClassic": "Prajurit persis seperti sebelum perombakan sistem tempur: paket kemampuan asli dan ritme amarah aslinya, dipertahankan berdampingan dengan Prajurit baru agar kamu bisa mencoba keduanya dan memberi tahu kami mana yang terasa lebih baik.",
       "paladin": "Paladin adalah ksatria suci yang mendukung sekutu dengan berkah, menyembuhkan luka dengan Cahaya Pemulih, dan melindungi yang lemah dengan zirah berat.",
       "hunter": "Pemburu adalah spesialis jarak jauh yang bertarung berdampingan dengan binatang buas jinak, menghujani musuh dengan tembakan terarah dan beruntun, memperlambat mereka dengan sengat dan tembakan pengguncang, serta berganti Aspek sesuai keadaan pertempuran.",
       "rogue": "Penyamun adalah pembunuh siluman yang menghabiskan Energi dan Poin Kombo untuk tikaman belakang dan jurus penutup dari balik bayangan.",
@@ -5168,90 +5159,6 @@ export const id_ID: EnTranslations = {
         "name": "Serangan Perampas",
         "description": "Serangan kuat yang meningkatkan kerusakan jarak dekat sebesar {damage}. Aktif pada ayunan berikutnya."
       },
-      "cw_heroic_strike": {
-        "name": "Serangan Perampas",
-        "description": "Serangan kuat yang meningkatkan kerusakan jarak dekat sebesar {damage}. Aktif pada ayunan berikutnya."
-      },
-      "cw_battle_shout": {
-        "name": "Raungan Besi",
-        "description": "Meningkatkan daya serangmu sebesar {buff} selama 2 menit."
-      },
-      "cw_commanding_shout": {
-        "name": "Seruan Penguat",
-        "description": "Meningkatkan Staminamu sebesar {buff} selama 2 menit."
-      },
-      "cw_charge": {
-        "name": "Serbuan",
-        "description": "Menerjang musuh, menghasilkan 9 amarah dan menyetrumnya selama 1 detik. Jangkauan 8-25 yard."
-      },
-      "cw_rend": {
-        "name": "Sayatan Dalam",
-        "description": "Melukai target, membuatnya berdarah sebesar {damage} kerusakan selama {duration} detik."
-      },
-      "cw_thunder_clap": {
-        "name": "Pukulan Gempa",
-        "description": "Menghantam musuh di sekitar sebesar {damage} kerusakan dan memperlambat serangan mereka sebesar 10% selama 10 detik."
-      },
-      "cw_hamstring": {
-        "name": "Sayatan Pincang",
-        "description": "Melukai musuh sebesar {damage} kerusakan, memperlambat gerakannya sebesar 50% selama 15 detik."
-      },
-      "cw_bloodrage": {
-        "name": "Tumbal Darah",
-        "description": "Menghasilkan 10 amarah dengan mengorbankan nyawa."
-      },
-      "cw_overpower": {
-        "name": "Redhand",
-        "description": "Serangan seketika sebesar kerusakan senjata ditambah {damage}. Hanya dapat digunakan setelah target mengelak. Tidak dapat dielakkan."
-      },
-      "cw_execute": {
-        "name": "Ajal Dini",
-        "description": "Berupaya menghabisi musuh yang terluka, menimbulkan {damage} kerusakan. Hanya dapat digunakan pada musuh di bawah 20% kesehatan."
-      },
-      "cw_slam": {
-        "name": "Ayunan Brutal",
-        "description": "Menghantam lawan sebesar kerusakan senjata ditambah {damage}."
-      },
-      "cw_cleave": {
-        "name": "Busur Penuai",
-        "description": "Sabetan menyapu yang menghantam semua musuh di hadapanmu untuk {damage} kerusakan."
-      },
-      "cw_defensive_stance": {
-        "name": "Kuda-kuda Waspada",
-        "description": "Kuda-kuda tempur bertahan: kamu menghasilkan 30% lebih banyak ancaman tetapi memberi dan menerima 10% lebih sedikit kerusakan. Rapal lagi untuk meninggalkan kuda-kuda ini."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Direhowl",
-        "description": "Melepaskan pekikan menyeramkan, mengurangi kekuatan serang semua musuh di sekitar sebesar {buff} selama 30 detik."
-      },
-      "cw_sunder_armor": {
-        "name": "Robek Zirah",
-        "description": "Merobek zirah target, menguranginya sebesar {damage}% per penerapan. Menumpuk hingga 5 kali. Menghasilkan ancaman dalam jumlah besar."
-      },
-      "cw_taunt": {
-        "name": "Hasutan",
-        "description": "Memprovokasi target: ancamanmu naik menyamai musuhnya yang paling dibenci dan ia terpaksa menyerangmu selama 3 detik."
-      },
-      "cw_bloodthirst": {
-        "name": "Pertumpahan Darah",
-        "description": "Seketika menyerang dalam amukan darah untuk 60% kerusakan senjata ditambah {damage}. (Penanda Fury)"
-      },
-      "cw_mortal_strike": {
-        "name": "Serangan Pelukai",
-        "description": "Serangan ganas yang menimbulkan kerusakan senjata ditambah {damage}. (Ciri khas Arms)"
-      },
-      "cw_shield_slam": {
-        "name": "Shieldcrack",
-        "description": "Menghantam target dengan perisaimu sebesar 50% kerusakan senjata ditambah {damage} dan ancaman besar. (Ciri khas Perlindungan)"
-      },
-      "cw_whirlwind": {
-        "name": "Pusaran Berpisau",
-        "description": "Berputar dalam busur mematikan, menyerang semua musuh di sekitar sebesar {damage}. (Talenta Murka)"
-      },
-      "cw_berserker_rage": {
-        "name": "Amukan Mendidih",
-        "description": "Memasuki amukan mendidih, menghasilkan 20 amarah. (Talenta Prajurit)"
-      },
       "revenge": {
         "name": "Balas Dendam",
         "description": "Menyerang dalam busur lebar, memberikan kerusakan Fisik kepada semua musuh di hadapanmu. Di atas 5 target kerusakannya berkurang. Saat kamu mengelak atau menangkis, Balas Dendam berikutnya mungkin tidak membutuhkan amarah."
@@ -6077,8 +5984,8 @@ export const id_ID: EnTranslations = {
         "description": "Teriakan yang memperlambat musuh dalam jarak 15 m sebesar 50% selama 8 dtk. (Talenta petarung)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Kengerian Membekas",
+        "description": "Melepaskan pekik perang yang menakuti musuh dalam jarak 10 m selama 4 dtk. Ketakutan bertahan hingga setiap sasaran menerima kerusakan sebesar 20% kesehatan maksimumnya. (Talenta Prajurit)"
       },
       "stormthrow": {
         "name": "Lemparan Badai",
@@ -6277,32 +6184,32 @@ export const id_ID: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a di dekat sekutu cada segundo. (talenta druid)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Vonis Pemurnian",
+        "description": "Menghapus efek sihir berbahaya dari sasaran kawan dan memulihkan {damage} kesehatannya dengan kekuatan Suci."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Jamuan Kehampaan",
+        "description": "Melahap efek sihir (efek bermanfaat dari musuh atau efek berbahaya dari sekutu) dan memulihkan 6% kesehatan maksimum Anda."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Pencurian Mantra",
+        "description": "Mencuri efek sihir bermanfaat dari musuh dan memindahkannya kepada Anda."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Tembakan Kejut",
+        "description": "Tembakan liar yang membuat sasaran kehilangan orientasi selama {duration} dtk. Kerusakan apa pun akan menghentikan efeknya."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Pantulan Mantra",
+        "description": "Mengangkat perisai Anda dan memantulkan mantra musuh berikutnya kembali kepada perapalnya."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Tirai Asap",
+        "description": "Menghilang ke dalam kepulan asap, meningkatkan peluang menghindar untuk sementara waktu."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Topan",
+        "description": "Hembusan angin mendorong semua musuh di sekitar dan membuat mereka linglung, sehingga memperlambat gerakan mereka."
       },
       "bear_charge": {
         "name": "Terjangan Bruin",

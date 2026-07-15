@@ -14,70 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Удар разорителя',
-  'entities.abilities.cw_heroic_strike.description':
-    'Мощная атака, увеличивающая урон в ближнем бою на {damage}. Срабатывает при следующем взмахе оружием.',
-  'entities.abilities.cw_battle_shout.name': 'Железный рёв',
-  'entities.abilities.cw_battle_shout.description': 'Повышает вашу силу атаки на {buff} на 2 мин.',
-  'entities.abilities.cw_commanding_shout.name': 'Ободряющий клич',
-  'entities.abilities.cw_commanding_shout.description':
-    'Повышает вашу выносливость на {buff} на 2 мин.',
-  'entities.abilities.cw_charge.name': 'Натиск',
-  'entities.abilities.cw_charge.description':
-    'Вы бросаетесь к врагу, накапливаете 9 ярости и оглушаете его на 1 сек. Дальность 8-25 м.',
-  'entities.abilities.cw_rend.name': 'Глубокий разрез',
-  'entities.abilities.cw_rend.description':
-    'Ранит цель, вызывая кровотечение на {damage} ед. урона за {duration} сек.',
-  'entities.abilities.cw_thunder_clap.name': 'Сотрясающий удар',
-  'entities.abilities.cw_thunder_clap.description':
-    'Поражает ближайших врагов на {damage} ед. урона и замедляет их атаки на 10% на 10 сек.',
-  'entities.abilities.cw_hamstring.name': 'Калечащий надрез',
-  'entities.abilities.cw_hamstring.description':
-    'Калечит врага, нанося {damage} ед. урона и снижая его скорость передвижения на 50% на 15 сек.',
-  'entities.abilities.cw_bloodrage.name': 'Кровавая дань',
-  'entities.abilities.cw_bloodrage.description': 'Дает 10 ед. ярости ценой здоровья.',
-  'entities.abilities.cw_overpower.name': 'Кровавая рука',
-  'entities.abilities.cw_overpower.description':
-    'Мгновенная атака, наносящая урон оружием плюс {damage}. Можно использовать только после уклонения цели. От нее нельзя уклониться.',
-  'entities.abilities.cw_execute.name': 'Ранняя могила',
-  'entities.abilities.cw_execute.description':
-    'Попытка добить раненого врага, нанося {damage} ед. урона. Можно использовать только против врагов с менее чем 20% здоровья.',
-  'entities.abilities.cw_slam.name': 'Грубый замах',
-  'entities.abilities.cw_slam.description': 'Бьет противника, нанося урон оружием плюс {damage}.',
-  'entities.abilities.cw_cleave.name': 'Жатвенная дуга',
-  'entities.abilities.cw_cleave.description':
-    'Широкий удар, поражающий всех врагов перед вами на {damage} ед. урона.',
-  'entities.abilities.cw_defensive_stance.name': 'Стойка стража',
-  'entities.abilities.cw_defensive_stance.description':
-    'Оборонительная боевая стойка: вы создаете на 30% больше угрозы, но наносите и получаете на 10% меньше урона. Примените снова, чтобы выйти из стойки.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Зловещий вой',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Издает устрашающий крик, снижая силу атаки всех противников поблизости на {buff} на 30 сек.',
-  'entities.abilities.cw_sunder_armor.name': 'Срез брони',
-  'entities.abilities.cw_sunder_armor.description':
-    'Раскалывает броню цели, снижая ее на {damage}% за применение. Суммируется до 5 раз. Создает большое количество угрозы.',
-  'entities.abilities.cw_taunt.name': 'Подстрекательство',
-  'entities.abilities.cw_taunt.description':
-    'Провоцирует цель: ваша угроза повышается до уровня самого ненавистного ей врага, и она вынуждена атаковать вас 3 сек.',
-  'entities.abilities.cw_bloodthirst.name': 'Кровопускание',
-  'entities.abilities.cw_bloodthirst.description':
-    'Мгновенно атакует в кровавом исступлении, нанося 60% урона оружием плюс {damage}. (ключевая способность ветки «Неистовство»)',
-  'entities.abilities.cw_mortal_strike.name': 'Калечащий удар',
-  'entities.abilities.cw_mortal_strike.description':
-    'Жестокий удар, наносящий урон оружием плюс {damage}. (ключевая способность ветки «Оружие»)',
-  'entities.abilities.cw_shield_slam.name': 'Раскол щита',
-  'entities.abilities.cw_shield_slam.description':
-    'Бьет цель щитом, нанося 50% урона оружием плюс {damage} и создавая огромную угрозу. (ключевая способность ветки «Защита»)',
-  'entities.abilities.cw_whirlwind.name': 'Клинковый вихрь',
-  'entities.abilities.cw_whirlwind.description':
-    'Кружится смертельной дугой, поражая всех ближайших врагов на {damage}. (талант ветки «Неистовство»)',
-  'entities.abilities.cw_berserker_rage.name': 'Бурлящая ярость',
-  'entities.abilities.cw_berserker_rage.description':
-    'Вы впадаете в бурлящую ярость и получаете 20 ярости. (талант воина)',
-  'classDetails.lore.warriorClassic':
-    'Воин ровно таким, каким он был до переработки боя: прежний набор способностей и темп ярости. Играйте на обоих и расскажите, какой вам больше по душе.',
-  'classDetails.roles.warriorClassic': 'Танк / ближний DPS',
-  'classes.warriorClassic': 'Воин',
   'hudChrome.auth.appleLoginCta': 'Продолжить с Apple',
   'hudChrome.auth.appleError': 'Не удалось войти через Apple. Попробуйте ещё раз.',
   'hudChrome.auth.appleChoiceIntro':
@@ -4742,14 +4678,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.thorns':
     'Защищает союзника так, что атакующие в ближнем бою ранят себя при ударе.',
   'guide.abilityHook.thunder_clap': 'Бьет по всем вокруг вас и замедляет их атаки.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Готовит более тяжелый замах, который потратит ярость на следующем ударе.',
-  'guide.abilityHook.cw_battle_shout': 'Боевой клич, повышающий силу атаки всей группы.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Повышает выносливость, так что у всех становится больше запаса прочности в бою.',
-  'guide.abilityHook.cw_charge': 'Рывок к далекому врагу, открывающий бой коротким оглушением.',
-  'guide.abilityHook.cw_rend': 'Открывает кровотечение, которое изматывает цель со временем.',
-  'guide.abilityHook.cw_thunder_clap': 'Бьет по всем вокруг вас и замедляет их атаки.',
   'guide.abilityHook.wrath':
     'Удар силами природы, запущенный в цель с дистанции, ваш основной способ бить.',
   'guide.arenaPage.augmentsNote':
@@ -7104,9 +7032,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rallying_cry.description':
     'Издает сплачивающий клич, даруя вам и членам группы в пределах 40 м 20% дополнительного максимального здоровья в течение 10 сек.',
   'entities.abilities.spell_reflect.name': 'Отражение заклинаний',
-  'entities.abilities.spell_reflect.description': 'Поднимает щит, отражая следующее вражеское заклинание обратно в чародея.',
+  'entities.abilities.spell_reflect.description':
+    'Поднимает щит, отражая следующее вражеское заклинание обратно в чародея.',
   'entities.abilities.smoke_screen.name': 'Дымовая завеса',
-  'entities.abilities.smoke_screen.description': 'Скрывает вас в облаке дыма, повышая шанс уклонения на время.',
+  'entities.abilities.smoke_screen.description':
+    'Скрывает вас в облаке дыма, повышая шанс уклонения на время.',
   'entities.abilities.typhoon.name': 'Тайфун',
-  'entities.abilities.typhoon.description': 'Порыв ветра отбрасывает всех врагов поблизости и оглушает их, замедляя передвижение.',
+  'entities.abilities.typhoon.description':
+    'Порыв ветра отбрасывает всех врагов поблизости и оглушает их, замедляя передвижение.',
 };

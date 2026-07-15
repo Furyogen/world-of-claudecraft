@@ -173,6 +173,20 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     expectSendThenClose(ws, errorFrame('no such character'));
   });
 
+  it('6b. rejects a character row whose class left the roster (stale warrior_classic)', async () => {
+    // A PTR/PBE database can still hold rows for the removed class; the
+    // handshake must fail closed instead of loading a ghost class into the sim.
+    const { ws, game, deps, req } = setup();
+    // The row type narrows class to the live roster, but the database column
+    // is an unvalidated string; model exactly what a stale row would return.
+    const staleClass = 'warrior_classic' as unknown as CharacterRow['class'];
+    deps.getCharacter = vi.fn(async () => baseChar({ class: staleClass }));
+    const { authenticateWebSocket } = createWsAuth(deps);
+    await authenticateWebSocket(asWs(ws), authRaw(), req);
+    expectSendThenClose(ws, errorFrame('no such character'));
+    expect(game.join).not.toHaveBeenCalled();
+  });
+
   it('7. rejects a force_rename character with the rename notice', async () => {
     const { ws, deps, req } = setup();
     deps.getCharacter = vi.fn(async () => baseChar({ force_rename: true }));

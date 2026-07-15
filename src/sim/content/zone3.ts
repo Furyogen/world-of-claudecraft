@@ -2998,8 +2998,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // The warrior weapon group MINUS rogue: rogues never equip two-handers
     // (equipment_rules, 2026-07-11), and requiredClass must honestly list who
     // can equip (the equipment_proficiency guard). The list no longer matches
-    // WARRIOR_WEAPON_CLASSES, so it resolves by literal membership; the
-    // classic warrior still equips via the gearCls alias.
+    // WARRIOR_WEAPON_CLASSES, so it resolves by literal membership.
     requiredClass: ['warrior', 'hunter', 'shaman', 'paladin'],
   },
   direfang_greatblade: {

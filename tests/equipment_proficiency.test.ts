@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CLASSES, ITEMS } from '../src/sim/data';
-import { canEquipItem } from '../src/sim/equipment_rules';
+import { canEquipItem, canEquipItemInSlot, maxArmorTypeForClass } from '../src/sim/equipment_rules';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 
@@ -85,6 +85,17 @@ describe('armor proficiencies', () => {
     expect(equip('shaman', 'eastbrook_buckler').equipment.offhand).toBe('eastbrook_buckler');
     expect(equip('mage', 'eastbrook_buckler').equipment.offhand).toBeUndefined();
   });
+
+  it('keeps the redesigned Warrior mail, weapon, and shield proficiencies', () => {
+    expect(maxArmorTypeForClass('warrior')).toBe('mail');
+    expect(canEquipItem('warrior', ITEMS.crownforged_dreadhelm)).toBe(true);
+    expect(canEquipItem('warrior', ITEMS.kingsbane_last_oath)).toBe(true);
+    expect(canEquipItem('warrior', ITEMS.bonewrought_greatsword)).toBe(true);
+    expect(canEquipItem('warrior', ITEMS.highwatch_wallshield)).toBe(true);
+    expect(canEquipItem('warrior', ITEMS.bonewrought_bulwark)).toBe(true);
+    expect(canEquipItemInSlot('warrior', ITEMS.bonewrought_bulwark, 'offhand', null)).toBe(true);
+    expect(canEquipItem('warrior', ITEMS.wraithfire_orb)).toBe(false);
+  });
 });
 
 describe('weapon requiredClass is representative of who can equip', () => {
@@ -95,13 +106,7 @@ describe('weapon requiredClass is representative of who can equip', () => {
   it('lists exactly the classes canEquipItem allows, for every weapon with a class list', () => {
     for (const item of Object.values(ITEMS)) {
       if (item.kind !== 'weapon' || !item.requiredClass) continue;
-      // warrior_classic is exempt: it equips via the deliberate gearCls alias to
-      // 'warrior' (equipment_rules.ts), because the class is a warrior variant and
-      // every authored requiredClass list predates it. Tooltips listing the warrior
-      // group are correct for it, so the alias never appears in requiredClass.
-      const equippable = ALL_CLASSES.filter(
-        (c) => c !== 'warrior_classic' && canEquipItem(c, item),
-      ).sort();
+      const equippable = ALL_CLASSES.filter((c) => canEquipItem(c, item)).sort();
       const listed = [...item.requiredClass].sort();
       expect(listed, `${item.id}: requiredClass must match its equippable classes`).toEqual(
         equippable,

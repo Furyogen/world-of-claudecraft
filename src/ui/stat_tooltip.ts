@@ -190,13 +190,7 @@ export function isManaClass(cls: PlayerClass): boolean {
 /** Melee attack power gained per point of Strength (entity.ts apFromStats):
  *  2 for warrior/paladin/shaman/druid, 1 for everyone else. */
 export function strApPerPoint(cls: PlayerClass): number {
-  return cls === 'warrior' ||
-    cls === 'warrior_classic' ||
-    cls === 'paladin' ||
-    cls === 'shaman' ||
-    cls === 'druid'
-    ? 2
-    : 1;
+  return cls === 'warrior' || cls === 'paladin' || cls === 'shaman' || cls === 'druid' ? 2 : 1;
 }
 
 /** Melee attack power gained per point of Agility: 1 for rogue/hunter, else 0. */

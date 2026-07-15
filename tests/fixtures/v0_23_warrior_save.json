@@ -1,0 +1,222 @@
+{
+  "provenance": {
+    "version": "0.23.0",
+    "tag": "v0.23.0",
+    "commit": "8a3deb7886f189caa2217d4c5087552069c3c5b8",
+    "simSeed": 230024,
+    "playerClass": "warrior",
+    "characterName": "Vanguard",
+    "generator": "real Sim.serializeCharacter at the pinned commit"
+  },
+  "stateSha256": "2c9194443f3235f6248adac172e8f174f95c2e10f5af3708deb07fa4f7e79159",
+  "state": {
+    "level": 20,
+    "xp": 4321,
+    "lifetimeXp": 987654,
+    "prestigeRank": 4,
+    "unlockedMilestones": ["level_10", "level_20"],
+    "restedXp": 2468,
+    "professions": {
+      "mining": 37,
+      "logging": 22,
+      "herbalism": 11
+    },
+    "gatheringProficiency": {
+      "mining": 37,
+      "logging": 22,
+      "herbalism": 11
+    },
+    "copper": 123456,
+    "hp": 795,
+    "resource": 73,
+    "pos": {
+      "x": 111,
+      "z": 222
+    },
+    "facing": 1.25,
+    "dead": false,
+    "ghost": false,
+    "corpsePos": null,
+    "resSickness": null,
+    "equipment": {
+      "mainhand": "redbrook_blade",
+      "chest": "recruit_tunic",
+      "feet": "hobnail_boots"
+    },
+    "inventory": [
+      {
+        "itemId": "baked_bread",
+        "count": 7
+      },
+      {
+        "itemId": "wolf_fang",
+        "count": 13
+      },
+      {
+        "itemId": "event_skin_token",
+        "count": 1
+      }
+    ],
+    "bags": ["linen_pouch", "travelers_knapsack", null, null],
+    "bank": {
+      "inventory": [
+        {
+          "itemId": "linen_scrap",
+          "count": 19
+        },
+        {
+          "itemId": "spring_water",
+          "count": 4
+        }
+      ],
+      "purchasedSlots": 6,
+      "bonusSlots": 2
+    },
+    "vendorBuyback": [
+      {
+        "itemId": "wolf_fang",
+        "count": 2
+      }
+    ],
+    "questLog": [
+      {
+        "questId": "q_wolves",
+        "counts": [3],
+        "state": "active"
+      },
+      {
+        "questId": "q_boars",
+        "counts": [8],
+        "state": "ready"
+      }
+    ],
+    "questsDone": ["q_spiders", "q_murlocs"],
+    "arenaRating": 1675,
+    "arenaWins": 12,
+    "arenaLosses": 5,
+    "arena1v1Rating": 1675,
+    "arena1v1Wins": 12,
+    "arena1v1Losses": 5,
+    "arena2v2Rating": 1810,
+    "arena2v2Wins": 9,
+    "arena2v2Losses": 3,
+    "vcupWins": 6,
+    "vcupLosses": 2,
+    "vcupDraws": 1,
+    "vcupGuildWins": 4,
+    "vcupGuildLosses": 1,
+    "vcupBetWins": 7,
+    "vcupBetLosses": 3,
+    "vcupBetNet": 850,
+    "talents": {
+      "spec": "arms",
+      "ranks": {
+        "war_toughness": 3,
+        "war_cruelty": 2,
+        "arms_imp_overpower": 2,
+        "arms_deep_wounds": 3
+      },
+      "choices": {
+        "arms_choice": "ac_impale"
+      }
+    },
+    "loadouts": [
+      {
+        "name": "Questing",
+        "alloc": {
+          "spec": "arms",
+          "ranks": {
+            "war_toughness": 3,
+            "arms_imp_overpower": 2
+          },
+          "choices": {}
+        },
+        "bar": [
+          "heroic_strike",
+          "battle_shout",
+          "commanding_shout",
+          null,
+          "charge",
+          "mortal_strike",
+          "hamstring",
+          null
+        ]
+      },
+      {
+        "name": "Tank",
+        "alloc": {
+          "spec": "prot",
+          "ranks": {
+            "prot_toughness": 3,
+            "prot_anticipation": 3
+          },
+          "choices": {
+            "prot_choice": "pc_shield_spec"
+          }
+        },
+        "bar": ["defensive_stance", "shield_slam", "taunt", "sunder_armor", null]
+      }
+    ],
+    "activeLoadout": 0,
+    "raidLockouts": {
+      "drowned_reliquary": 4102444800000,
+      "worldboss:thornmaw": 4102444800000
+    },
+    "pet": null,
+    "cooldowns": {
+      "abilities": {
+        "bloodrage": 23.5,
+        "obsolete_v023_spell": 8
+      },
+      "potion": 41
+    },
+    "skin": 2,
+    "skinCatalog": "class",
+    "pendingSkinRank": "rare",
+    "pendingSkinCatalog": "class",
+    "pendingSkinItemId": "event_skin_token",
+    "craftSkills": {
+      "armorcrafting": 41,
+      "weaponcrafting": 0,
+      "jewelcrafting": 0,
+      "alchemy": 0,
+      "engineering": 0,
+      "cooking": 18,
+      "inscription": 0,
+      "enchanting": 0,
+      "tailoring": 0,
+      "leatherworking": 0
+    },
+    "knownRecipes": ["recipe_eastbrook_arming_sword", "recipe_tough_jerky"],
+    "archetype": {
+      "activeArchetype": "armorcrafting",
+      "pairedMajor": "weaponcrafting",
+      "switchCount": 2,
+      "amendsProgress": 4
+    },
+    "delveMarks": 17,
+    "delveClears": {
+      "drowned_litany": 3,
+      "ashvault": 1
+    },
+    "companionUpgrades": {
+      "armor": 2,
+      "damage": 1
+    },
+    "delveLoreUnlocked": ["drowned_litany_1", "ashvault_1"],
+    "delveDaily": {
+      "date": "2026-07-08",
+      "firstClearXp": ["drowned_litany"],
+      "markClears": 2
+    },
+    "heroicDaily": {
+      "date": "2026-07-08",
+      "marked": ["drowned_reliquary"]
+    },
+    "mailWelcomed": true,
+    "townFocus": {
+      "armorcrafting": 3,
+      "weaponcrafting": 2
+    }
+  }
+}

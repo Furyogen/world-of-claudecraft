@@ -20,7 +20,6 @@ import {
   type InterpolationValues,
   type SupportedLanguage,
   supportedLanguages,
-  t,
   tOptional,
 } from './i18n';
 
@@ -129,7 +128,6 @@ export interface EntityTranslationFallback extends EntityTranslationManifestEntr
 
 const CLASS_NAME_KEYS: Record<PlayerClass, string> = {
   warrior: 'classes.warrior',
-  warrior_classic: 'classes.warriorClassic',
   paladin: 'classes.paladin',
   hunter: 'classes.hunter',
   rogue: 'classes.rogue',
@@ -142,7 +140,6 @@ const CLASS_NAME_KEYS: Record<PlayerClass, string> = {
 
 const CLASS_DESCRIPTION_KEYS: Record<PlayerClass, string> = {
   warrior: 'classDetails.lore.warrior',
-  warrior_classic: 'classDetails.lore.warriorClassic',
   paladin: 'classDetails.lore.paladin',
   hunter: 'classDetails.lore.hunter',
   rogue: 'classDetails.lore.rogue',
@@ -354,8 +351,10 @@ function interpolateSource(source: string, values?: InterpolationValues): string
 }
 
 function classDescriptionSource(id: PlayerClass): string {
-  // The catalog uses camelCase keys; the one multi-word class id maps by hand.
-  return en.classDetails.lore[id === 'warrior_classic' ? 'warriorClassic' : id];
+  // A stale save can surface a class id that is no longer on the roster
+  // (e.g. the removed warrior_classic); fall back to the raw id so the
+  // character list still renders instead of throwing.
+  return en.classDetails.lore[id] ?? id;
 }
 
 function canonicalEntityText(request: EntityTranslationRequest): string {
@@ -435,9 +434,13 @@ function canonicalEntityText(request: EntityTranslationRequest): string {
 export function entityTranslationKey(request: EntityTranslationRequest): string {
   switch (request.kind) {
     case 'class':
+      // Unknown (removed) class ids resolve to a key that exists in no
+      // catalog, so tEntity flows into its canonical-text fallback rather
+      // than handing tOptional an undefined key.
       return request.field === 'name'
-        ? CLASS_NAME_KEYS[request.id]
-        : CLASS_DESCRIPTION_KEYS[request.id];
+        ? (CLASS_NAME_KEYS[request.id] ?? `classes.${entityPathSegment(request.id)}`)
+        : (CLASS_DESCRIPTION_KEYS[request.id] ??
+            `classDetails.lore.${entityPathSegment(request.id)}`);
     case 'ability':
       return `entities.abilities.${entityPathSegment(request.id)}.${request.field}`;
     case 'item':

@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -58,19 +58,20 @@ describe('i18n resolved-artifact reproducibility', () => {
     ).not.toThrow();
   });
 
-  it('regenerating src/ui/i18n.resolved.generated/ leaves the committed directory unchanged', () => {
+  it('regenerating src/ui/i18n.resolved.generated/ leaves the generated directory unchanged', () => {
     // The dense generated artifact is the tsc safety net and is committed. Like
     // the media manifest, it must regenerate byte-identically: a drift here means
     // the generator is non-deterministic or the committed directory is stale. The
     // generator replaces the directory atomically, so a removed locale would also
     // surface as a deletion in the diff.
+    const generatedDir = path.join(root, generatedPath);
+    const snapshot = () =>
+      readdirSync(generatedDir)
+        .sort()
+        .map((name) => [name, readFileSync(path.join(generatedDir, name), 'utf8')]);
+    const before = snapshot();
     execFileSync(process.execPath, [buildScript], { cwd: root, encoding: 'utf8' });
-    expect(() =>
-      execFileSync('git', ['diff', '--exit-code', '--', generatedPath], {
-        cwd: root,
-        encoding: 'utf8',
-      }),
-    ).not.toThrow();
+    expect(snapshot()).toEqual(before);
   });
 
   it('regenerates byte-identically across two perturbed-env runs (determinism)', () => {

@@ -2033,12 +2033,6 @@ export const zh_CN: EnTranslations = {
       "charge": "冲向远处的敌人，以一次短暂的昏迷开场。",
       "rend": "造成一道流血，让目标随时间逐渐被消耗。",
       "thunder_clap": "打击你周围的一切，并减缓它们的攻击速度。",
-      "cw_heroic_strike": "预备一次更重的挥击，在下次攻击时消耗怒气。",
-      "cw_battle_shout": "一声号召呐喊，提升全队的攻击强度。",
-      "cw_commanding_shout": "提升耐力，让所有人在战斗中更耐打。",
-      "cw_charge": "冲向远处的敌人，以一次短暂的昏迷开场。",
-      "cw_rend": "造成一道流血，让目标随时间逐渐被消耗。",
-      "cw_thunder_clap": "打击你周围的一切，并减缓它们的攻击速度。",
       "hamstring": "划伤目标的双腿使其减速，让它无法追上你。",
       "seal_of_righteousness": "为你的挥击附加神圣伤害，再用裁决将其释放出去。",
       "holy_light": "稳健而可观的治疗，用于把盟友或自己奶满。",
@@ -3346,7 +3340,6 @@ export const zh_CN: EnTranslations = {
   },
   "classes": {
     "warrior": "战士",
-    "warriorClassic": "战士",
     "paladin": "圣骑士",
     "hunter": "猎人",
     "rogue": "潜行者",
@@ -4114,7 +4107,6 @@ export const zh_CN: EnTranslations = {
     },
     "roles": {
       "warrior": "坦克 / 近战 DPS",
-      "warriorClassic": "坦克 / 近战 DPS",
       "paladin": "治疗 / 坦克 / 近战 DPS",
       "hunter": "远程 DPS",
       "rogue": "近战 DPS",
@@ -4139,7 +4131,6 @@ export const zh_CN: EnTranslations = {
     },
     "lore": {
       "warrior": "战士是久经沙场的近战斗士，会在造成或承受伤害时积累怒气。他们能承受重击，也能用强力武器碾碎敌人。",
-      "warriorClassic": "战斗重做之前的战士玩法原样保留：原版技能组与怒气节奏，与新战士并存，试试两个版本，告诉我们哪个手感更好。",
       "paladin": "圣骑士是神圣的十字军，以祝福支援盟友，用愈疗之光治愈伤口，并身披重甲保护弱者。",
       "hunter": "猎人是远程专家，与驯服的野兽并肩作战，用瞄准与急速射击向敌人倾泻箭矢，以钉刺和震荡射击减速对手，并随机应变地切换守护形态。",
       "rogue": "潜行者是隐秘刺客，消耗能量和连击点，从阴影中发动背刺与终结技。",
@@ -5167,90 +5158,6 @@ export const zh_CN: EnTranslations = {
       "heroic_strike": {
         "name": "劫掠打击",
         "description": "一次强力攻击，使近战伤害提高 {damage}。在你的下一次挥击时触发。"
-      },
-      "cw_heroic_strike": {
-        "name": "劫掠打击",
-        "description": "一次强力攻击，使近战伤害提高 {damage}。在你的下一次挥击时触发。"
-      },
-      "cw_battle_shout": {
-        "name": "铁血怒吼",
-        "description": "使你的攻击强度提高 {buff}，持续 2 分钟。"
-      },
-      "cw_commanding_shout": {
-        "name": "鼓舞呐喊",
-        "description": "使你的耐力提高 {buff}，持续 2 分钟。"
-      },
-      "cw_charge": {
-        "name": "突进",
-        "description": "向一名敌人冲锋，产生 9 点怒气并使其昏迷 1 秒。8-25 码距离。"
-      },
-      "cw_rend": {
-        "name": "深创",
-        "description": "撕裂目标，使其流血，在 {duration} 秒内受到 {damage} 点伤害。"
-      },
-      "cw_thunder_clap": {
-        "name": "震地一击",
-        "description": "轰击附近敌人，造成 {damage} 点伤害，并使其攻击速度降低 10%，持续 10 秒。"
-      },
-      "cw_hamstring": {
-        "name": "致跛斩",
-        "description": "重创敌人，造成 {damage} 点伤害，并使其移动速度降低 50%，持续 15 秒。"
-      },
-      "cw_bloodrage": {
-        "name": "血之代价",
-        "description": "以生命值为代价产生 10 点怒气。"
-      },
-      "cw_overpower": {
-        "name": "血手",
-        "description": "立即攻击，造成武器伤害加 {damage}。只能在目标躲闪后使用。无法被躲闪。"
-      },
-      "cw_execute": {
-        "name": "早赴黄泉",
-        "description": "尝试终结受伤的敌人，造成 {damage} 点伤害。只能对生命值低于 20% 的敌人使用。"
-      },
-      "cw_slam": {
-        "name": "蛮力挥击",
-        "description": "猛击对手，造成武器伤害加 {damage}。"
-      },
-      "cw_cleave": {
-        "name": "收割弧斩",
-        "description": "横扫一击，对你前方所有敌人造成 {damage} 点伤害。"
-      },
-      "cw_defensive_stance": {
-        "name": "戒备姿态",
-        "description": "防御战斗姿态：你产生的威胁值提高 30%，但造成和受到的伤害降低 10%。再次施放可离开该姿态。"
-      },
-      "cw_demoralizing_shout": {
-        "name": "恐怖嚎叫",
-        "description": "发出可怕的怒吼，使附近所有敌人的攻击强度降低 {buff}，持续 30 秒。"
-      },
-      "cw_sunder_armor": {
-        "name": "削甲",
-        "description": "撕裂目标的护甲，每次使其降低 {damage}%。最多叠加 5 次。产生大量威胁值。"
-      },
-      "cw_taunt": {
-        "name": "挑衅",
-        "description": "嘲讽目标：你的威胁值提高到其最仇恨敌人的水平，并强迫其攻击你 3 秒。"
-      },
-      "cw_bloodthirst": {
-        "name": "放血",
-        "description": "在鲜血狂怒中立即攻击，造成 60% 武器伤害加 {damage}。（狂怒专精标志技能）"
-      },
-      "cw_mortal_strike": {
-        "name": "致残打击",
-        "description": "凶狠打击，造成武器伤害外加 {damage} 点伤害。（武器专精标志技能）"
-      },
-      "cw_shield_slam": {
-        "name": "碎盾击",
-        "description": "用盾牌猛击目标，造成 50% 武器伤害加 {damage} 并产生巨量威胁。（防护专精标志技能）"
-      },
-      "cw_whirlwind": {
-        "name": "利刃回旋",
-        "description": "以致命弧线旋转，打击附近所有敌人，造成 {damage} 点伤害。（狂怒天赋）"
-      },
-      "cw_berserker_rage": {
-        "name": "沸腾之怒",
-        "description": "进入沸腾之怒，产生 20 点怒气。（战士天赋）"
       },
       "revenge": {
         "name": "复仇",

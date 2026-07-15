@@ -31,7 +31,7 @@ import {
 } from '../src/sim/equipment_rules';
 import { meetsLevelRequirement } from '../src/sim/item_level_req';
 import { type CharacterState, Sim } from '../src/sim/sim';
-import type { EquipSlot, ItemDef, PlayerClass } from '../src/sim/types';
+import { ALL_CLASSES, type EquipSlot, type ItemDef, type PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
 import { createCharacterCapped, saveCharacterState } from './db';
 import { logger } from './http/logger';
@@ -50,18 +50,7 @@ const BOOST_SEED = 20061;
 // the generator space is ~10k combos).
 const NAME_ATTEMPTS = 8;
 
-export const BOOST_CLASSES: readonly PlayerClass[] = [
-  'warrior',
-  'warrior_classic',
-  'paladin',
-  'hunter',
-  'rogue',
-  'priest',
-  'shaman',
-  'mage',
-  'warlock',
-  'druid',
-];
+export const BOOST_CLASSES: readonly PlayerClass[] = ALL_CLASSES;
 
 export function pbeBoostEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
   return env.PBE_BOOST_ACCOUNTS === '1';
@@ -203,10 +192,7 @@ export interface BoostRole {
 // kit; priest shadow/discipline wear the holy kit because the caster cloth
 // pool is undifferentiated, a tripwire in the boost test re-checks that;
 // shaman restoration wears the elemental kit; druid restoration wears the
-// balance kit and feral covers both cat and bear). The classic warrior got
-// equal weapon footing 2026-07-11 (always dual-wields one-handers, equips
-// shields, no Titan's Grip), so it mirrors the warrior's fury/prot kits with
-// a one-hand pair instead of the Titan's Grip layout.
+// balance kit and feral covers both cat and bear).
 export const CLASS_ROLES: Record<PlayerClass, readonly BoostRole[]> = {
   warrior: [
     { id: 'arms', weights: { str: 1, sta: 0.8, agi: 0.4 }, melee: true },
@@ -221,17 +207,6 @@ export const CLASS_ROLES: Record<PlayerClass, readonly BoostRole[]> = {
       // warrior-legal non-heroic one-hander below the legendary.
       extras: ['bonewrought_greatsword', 'emberfang_warblade'],
     },
-    {
-      id: 'prot',
-      weights: { sta: 1, str: 0.6, agi: 0.3 },
-      melee: true,
-      tank: true,
-      hands: 'shield',
-    },
-  ],
-  warrior_classic: [
-    { id: 'arms', weights: { str: 1, sta: 0.8, agi: 0.4 }, melee: true },
-    { id: 'fury', weights: { str: 1, sta: 0.8, agi: 0.4 }, melee: true, hands: 'dualWield' },
     {
       id: 'prot',
       weights: { sta: 1, str: 0.6, agi: 0.3 },
@@ -325,9 +300,7 @@ function eligibleForBoost(cls: PlayerClass, item: ItemDef): boolean {
   if (!canEquipItem(cls, item)) return false;
   // canEquipItem checks requiredClass for weapons only; class-locked armor
   // (the tier sets) declares intent through requiredClass too, so honor it
-  // (the classic warrior counts as a warrior for authored gear locks).
-  const gearCls = cls === 'warrior_classic' ? 'warrior' : cls;
-  if (item.requiredClass && !item.requiredClass.includes(gearCls)) return false;
+  if (item.requiredClass && !item.requiredClass.includes(cls)) return false;
   return meetsLevelRequirement(BOOST_LEVEL, item);
 }
 
@@ -421,10 +394,8 @@ function fillHands(
   }
   if (role.hands === 'dualWield') {
     // Both hands get the best distinct spec-legal weapons. Under Titan's
-    // Grip (the Bloodrush warrior) canEquipItemInSlot admits two-handers in
-    // either hand; without it (the classic warrior) the PAIR must be two
-    // one-handers, so a two-handed mainhand candidate cannot anchor it (the
-    // equip path would displace the offhand).
+    // Grip canEquipItemInSlot admits two-handers in either hand. Without it,
+    // the pair must use one-handers so the mainhand cannot displace the offhand.
     const titanGrip = canDualWieldTwoHand(cls, role.id);
     const main = weapons.find(
       (w) => (titanGrip || !w.twoHand) && canEquipItemInSlot(cls, ITEMS[w.id], 'mainhand', role.id),

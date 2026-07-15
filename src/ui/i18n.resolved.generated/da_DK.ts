@@ -2033,12 +2033,6 @@ export const da_DK: EnTranslations = {
       "charge": "Stormer mod en fjern fjende for at åbne kampen med en kort lammelse.",
       "rend": "Åbner en blødning der nedslider målet over tid.",
       "thunder_clap": "Rammer alt omkring dig og sløver deres angreb.",
-      "cw_heroic_strike": "Sætter et tungere sving i kø der bruger raseri på dit næste slag.",
-      "cw_battle_shout": "Et samlende råb der hæver angrebsstyrken for gruppen.",
-      "cw_commanding_shout": "Styrker udholdenheden så alle har mere modstandskraft i en kamp.",
-      "cw_charge": "Stormer mod en fjern fjende for at åbne kampen med en kort lammelse.",
-      "cw_rend": "Åbner en blødning der nedslider målet over tid.",
-      "cw_thunder_clap": "Rammer alt omkring dig og sløver deres angreb.",
       "hamstring": "Flænser målets ben for at sløve det så det ikke kan indhente dig.",
       "seal_of_righteousness": "Gennemtrænger dine sving med Hellig skade, brug den så med Dom.",
       "holy_light": "En stabil, anselig helbredelse til at fylde en allieret eller dig selv op.",
@@ -3346,7 +3340,6 @@ export const da_DK: EnTranslations = {
   },
   "classes": {
     "warrior": "Kriger",
-    "warriorClassic": "Kriger",
     "paladin": "Paladin",
     "hunter": "Jæger",
     "rogue": "Slyngel",
@@ -4114,7 +4107,6 @@ export const da_DK: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Nærkamps-DPS",
-      "warriorClassic": "Tank / Nærkamps-DPS",
       "paladin": "Healer / Tank / Nærkamps-DPS",
       "hunter": "Afstands-DPS",
       "rogue": "Nærkamps-DPS",
@@ -4139,7 +4131,6 @@ export const da_DK: EnTranslations = {
     },
     "lore": {
       "warrior": "Krigere er kamphærdede nærkæmpere, der opbygger Raseri, når de uddeler eller tager skade. De opsuger hårde slag eller knuser fjender med kraftfulde våben.",
-      "warriorClassic": "Krigeren præcis som den spillede før kampomlægningen: det oprindelige evnesæt og raseritempo, bevaret side om side med den nye kriger, så du kan prøve begge og fortælle os, hvilken der føles bedst.",
       "paladin": "Paladiner er hellige korsfarere, der støtter allierede med velsignelser, helbreder sår med Lægende Lys og beskytter de svage i tung rustning.",
       "hunter": "Jægere er afstandsspecialister, der kæmper side om side med et tæmmet bæst, overøser fjender med sigtede og hurtige skud, sinker dem med stik og rystende beskydning og skifter aspekter, så de passer til øjeblikket.",
       "rogue": "Slyngler er snigende snigmordere, der bruger Energi og Combo-point på dolkestød og afsluttende manøvrer fra skyggerne.",
@@ -5168,90 +5159,6 @@ export const da_DK: EnTranslations = {
         "name": "Plyndrerslag",
         "description": "Et stærkt angreb, der øger nærkampsskaden med {damage}. Aktiveres ved dit næste hug."
       },
-      "cw_heroic_strike": {
-        "name": "Plyndrerslag",
-        "description": "Et stærkt angreb, der øger nærkampsskaden med {damage}. Aktiveres ved dit næste hug."
-      },
-      "cw_battle_shout": {
-        "name": "Jernbrøl",
-        "description": "Øger din angrebskraft med {buff} i 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Styrkende Råb",
-        "description": "Øger din Udholdenhed med {buff} i 2 min."
-      },
-      "cw_charge": {
-        "name": "Fremstorm",
-        "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde."
-      },
-      "cw_rend": {
-        "name": "Dyb Flænge",
-        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek."
-      },
-      "cw_thunder_clap": {
-        "name": "Rystende Slag",
-        "description": "Sprænger nærliggende fjender for {damage} skade og sløver deres angreb med 10 % i 10 sek."
-      },
-      "cw_hamstring": {
-        "name": "Lammende Snit",
-        "description": "Lemlæster fjenden for {damage} skade og sænker dens bevægelse med 50% i 15 sek."
-      },
-      "cw_bloodrage": {
-        "name": "Blodtold",
-        "description": "Genererer 10 raseri på bekostning af helbred."
-      },
-      "cw_overpower": {
-        "name": "Rødhånd",
-        "description": "Øjeblikkeligt angreb for våbenskade plus {damage}. Kan kun bruges efter målet undviger. Kan ikke undviges."
-      },
-      "cw_execute": {
-        "name": "Tidlig Grav",
-        "description": "Forsøg på at gøre det af med en såret fjende, hvilket volder {damage} skade. Kan kun bruges på fjender under 20% helbred."
-      },
-      "cw_slam": {
-        "name": "Brutalt Sving",
-        "description": "Drøner modstanderen for våbenskade plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Mejende Bue",
-        "description": "Et fejende slag, der rammer alle fjender foran dig for {damage} skade."
-      },
-      "cw_defensive_stance": {
-        "name": "Værgende Stilling",
-        "description": "En defensiv kampstilling: du skaber 30% mere trussel, men volder og modtager 10% mindre skade. Aktivér igen for at forlade stillingen."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Rædselshyl",
-        "description": "Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek."
-      },
-      "cw_sunder_armor": {
-        "name": "Rustningsskær",
-        "description": "Flænger målets rustning og sænker den med {damage}% pr. anvendelse. Stakker op til 5 gange. Skaber en stor mængde trussel."
-      },
-      "cw_taunt": {
-        "name": "Ægge",
-        "description": "Håner målet: din trussel stiger til at matche dets mest forhadte fjende, og det tvinges til at angribe dig i 3 sek."
-      },
-      "cw_bloodthirst": {
-        "name": "Åreladning",
-        "description": "Angrib øjeblikkeligt i et blodraseri for 60% våbenskade plus {damage}. (Furie-signatur)"
-      },
-      "cw_mortal_strike": {
-        "name": "Lemlæstende Slag",
-        "description": "Et ondskabsfuldt slag, der volder våbenskade plus {damage}. (Arms-signatur)"
-      },
-      "cw_shield_slam": {
-        "name": "Skjoldknæk",
-        "description": "Slå målet med dit skjold for 50% våbenskade plus {damage} og enorm trussel. (Beskyttelses-kendetegn)"
-      },
-      "cw_whirlwind": {
-        "name": "Klingehvirvel",
-        "description": "Snur i en dødelig bue og ram alle nærliggende fjender for {damage}. (Raseri-talent)"
-      },
-      "cw_berserker_rage": {
-        "name": "Sydende Raseri",
-        "description": "Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)"
-      },
       "revenge": {
         "name": "Hævn",
         "description": "Angrib i en bred bue og vold fysisk skade på alle fjender foran dig. Over 5 mål reduceres skaden. Når du undviger eller parerer, koster din næste Hævn muligvis intet raseri."
@@ -6077,8 +5984,8 @@ export const da_DK: EnTranslations = {
         "description": "Et råb, der sænker fjender inden for 15 m med 50% i 8 sek. (Kriger-talent)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Dvælende rædsel",
+        "description": "Udstøder et kampråb, der skræmmer fjender inden for 10 m i 4 sek. Frygten varer, indtil hvert mål har taget skade svarende til 20 % af sit maksimale helbred. (Kriger-talent)"
       },
       "stormthrow": {
         "name": "Stormkast",
@@ -6277,32 +6184,32 @@ export const da_DK: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a nærliggende allierede cada segundo. (druidentalent)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Rensende dom",
+        "description": "Fjerner en skadelig magisk effekt fra et venligt mål og genopretter {damage} helbred med Hellig kraft."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Tomhedsfestmåltid",
+        "description": "Fortærer en magisk effekt (en gavnlig fra en fjende eller en skadelig fra en allieret) og helbreder dig for 6 % af dit maksimale helbred."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Besværgelsestyveri",
+        "description": "Stjæler en gavnlig magisk effekt fra en fjende og overfører den til dig."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Skræmmeskud",
+        "description": "Et vildt skud, der desorienterer målet i {duration} sek. Enhver skade bryder effekten."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Besværgelsesrefleksion",
+        "description": "Løft dit skjold, og reflekter den næste fjendtlige besværgelse tilbage mod dens kaster."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Røgslør",
+        "description": "Forsvind i en sky af røg, og øg din chance for at undvige i en periode."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Tyfon",
+        "description": "Et vindstød slår alle fjender i nærheden tilbage og fortumler dem, så deres bevægelse sænkes."
       },
       "bear_charge": {
         "name": "Bruin-storm",

@@ -2033,12 +2033,6 @@ export const fr_CA: EnTranslations = {
       "charge": "Fonce sur un ennemi lointain pour ouvrir le combat avec un bref étourdissement.",
       "rend": "Ouvre un saignement qui use la cible dans la durée.",
       "thunder_clap": "Frappe tout autour de vous et ralentit les attaques des ennemis.",
-      "cw_heroic_strike": "Prépare un coup plus lourd qui dépense de la rage lors de votre prochaine attaque.",
-      "cw_battle_shout": "Un cri de ralliement qui augmente la puissance d'attaque du groupe.",
-      "cw_commanding_shout": "Renforce l'endurance pour que tout le monde tienne plus longtemps en combat.",
-      "cw_charge": "Fonce sur un ennemi éloigné pour ouvrir le combat avec un bref étourdissement.",
-      "cw_rend": "Ouvre une plaie qui use la cible au fil du temps.",
-      "cw_thunder_clap": "Frappe tout ce qui vous entoure et ralentit les attaques ennemies.",
       "hamstring": "Taillade les jambes de la cible pour la ralentir afin qu'elle ne puisse pas vous rattraper.",
       "seal_of_righteousness": "Imprègne vos coups de dégâts sacrés, à dépenser ensuite avec Verdict.",
       "holy_light": "Un soin régulier et conséquent pour remettre d'aplomb un allié ou vous-même.",
@@ -3346,7 +3340,6 @@ export const fr_CA: EnTranslations = {
   },
   "classes": {
     "warrior": "Guerrier",
-    "warriorClassic": "Guerrier",
     "paladin": "Paladin",
     "hunter": "Chasseur",
     "rogue": "Voleur",
@@ -4114,7 +4107,6 @@ export const fr_CA: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS mêlée",
-      "warriorClassic": "Tank / DPS mêlée",
       "paladin": "Soigneur / Tank / DPS mêlée",
       "hunter": "DPS à distance",
       "rogue": "DPS mêlée",
@@ -4139,7 +4131,6 @@ export const fr_CA: EnTranslations = {
     },
     "lore": {
       "warrior": "Les guerriers sont des combattants endurcis qui gagnent de la rage en infligeant ou subissant des dégâts. Ils encaissent ou écrasent leurs ennemis.",
-      "warriorClassic": "Le guerrier exactement tel qu'il se jouait avant la refonte du combat : la panoplie de techniques et le rythme de rage d'origine, conservés aux côtés du nouveau guerrier pour que vous puissiez essayer les deux et nous dire lequel vous plaît le plus.",
       "paladin": "Les paladins sont de saints croisés qui épaulent leurs alliés par des bénédictions, soignent les blessures avec la Lumière guérisseuse et protègent les faibles sous une armure lourde.",
       "hunter": "Les chasseurs sont des spécialistes à distance qui combattent aux côtés d'une bête apprivoisée, criblant leurs ennemis de tirs précis et rapides, les ralentissant de morsures et de traits de choc, et changeant d'aspect selon le moment.",
       "rogue": "Les voleurs sont des assassins furtifs qui dépensent énergie et points de combo pour frapper depuis les ombres.",
@@ -5168,90 +5159,6 @@ export const fr_CA: EnTranslations = {
         "name": "Frappe du pillard",
         "description": "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe."
       },
-      "cw_heroic_strike": {
-        "name": "Frappe du pillard",
-        "description": "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe."
-      },
-      "cw_battle_shout": {
-        "name": "Beuglement de fer",
-        "description": "Augmente votre puissance d'attaque de {buff} pendant 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Cri fortifiant",
-        "description": "Augmente votre Endurance de {buff} pendant 2 min."
-      },
-      "cw_charge": {
-        "name": "Ruée",
-        "description": "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m."
-      },
-      "cw_rend": {
-        "name": "Entaille profonde",
-        "description": "Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s."
-      },
-      "cw_thunder_clap": {
-        "name": "Coup sismique",
-        "description": "Frappe les ennemis proches pour {damage} points de dégâts et ralentit leurs attaques de 10% pendant 10 s."
-      },
-      "cw_hamstring": {
-        "name": "Entaille estropiante",
-        "description": "Mutile l'ennemi pour {damage} points de dégâts et réduit sa vitesse de déplacement de 50% pendant 15 s."
-      },
-      "cw_bloodrage": {
-        "name": "Tribut de sang",
-        "description": "Génère 10 rage au prix de vos points de vie."
-      },
-      "cw_overpower": {
-        "name": "Redhand",
-        "description": "Attaque instantanée infligeant les dégâts de l'arme plus {damage}. Utilisable seulement après une esquive de la cible. Ne peut pas être esquivée."
-      },
-      "cw_execute": {
-        "name": "Tombe précoce",
-        "description": "Tente d'achever un ennemi blessé et inflige {damage} points de dégâts. Utilisable seulement sur les ennemis sous 20% de points de vie."
-      },
-      "cw_slam": {
-        "name": "Coup brutal",
-        "description": "Frappe l'adversaire pour les dégâts de l'arme plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Arc faucheur",
-        "description": "Une frappe circulaire qui touche tous les ennemis devant vous pour {damage} points de dégâts."
-      },
-      "cw_defensive_stance": {
-        "name": "Posture de garde",
-        "description": "Posture de combat défensive: vous générez 30% de menace en plus, mais infligez et subissez 10% de dégâts en moins. Relancez pour quitter la posture."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Direhowl",
-        "description": "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s."
-      },
-      "cw_sunder_armor": {
-        "name": "Cisaillement d'armure",
-        "description": "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace."
-      },
-      "cw_taunt": {
-        "name": "Aiguillon",
-        "description": "Provoque la cible: votre menace rejoint celle de son ennemi le plus haï et elle est forcée de vous attaquer pendant 3 s."
-      },
-      "cw_bloodthirst": {
-        "name": "Saignée",
-        "description": "Attaque instantanément dans une frénésie sanguinaire pour 60% des dégâts de l'arme plus {damage}. (signature Fureur)"
-      },
-      "cw_mortal_strike": {
-        "name": "Frappe mutilante",
-        "description": "Frappe vicieuse infligeant les dégâts de l'arme plus {damage}. (signature Armes)"
-      },
-      "cw_shield_slam": {
-        "name": "Shieldcrack",
-        "description": "Heurte la cible avec votre bouclier pour 50% des dégâts de l'arme plus {damage} et génère une menace énorme. (signature Protection)"
-      },
-      "cw_whirlwind": {
-        "name": "Tournoiement de lames",
-        "description": "Tournoie dans un arc mortel et frappe tous les ennemis proches pour {damage}. (talent Fureur)"
-      },
-      "cw_berserker_rage": {
-        "name": "Fureur bouillonnante",
-        "description": "Entre dans une fureur bouillonnante et génère 20 points de rage. (talent de guerrier)"
-      },
       "revenge": {
         "name": "Vengeance",
         "description": "Attaque en arc large, infligeant des dégâts physiques à tous les ennemis devant vous. Au-delà de 5 cibles, les dégâts sont réduits. Quand vous esquivez ou parez, votre prochaine Vengeance peut ne coûter aucune rage."
@@ -6077,8 +5984,8 @@ export const fr_CA: EnTranslations = {
         "description": "Un cri qui ralentit de 50 % les ennemis à moins de 15 m pendant 8 s. (Talent de guerrier)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Effroi persistant",
+        "description": "Pousse un cri de guerre qui effraie les ennemis à moins de 10 mètres pendant 4 s. La peur persiste jusqu'à ce que chaque cible subisse des dégâts équivalant à 20 % de sa santé maximale. (Talent de guerrier)"
       },
       "stormthrow": {
         "name": "Lancer-tempête",
@@ -6277,32 +6184,32 @@ export const fr_CA: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a proches alliés cada segundo. (talent de druide)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Jugement de purification",
+        "description": "Dissipe un effet magique néfaste sur une cible alliée et lui rend {damage} points de vie grâce à la magie sacrée."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Banquet du Vide",
+        "description": "Dévore un effet magique (bénéfique sur un ennemi ou néfaste sur un allié) et vous rend 6 % de votre santé maximale."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Vol de magie",
+        "description": "Dérobe un effet magique bénéfique à un ennemi et vous le confère."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Tir déstabilisant",
+        "description": "Un tir imprévisible désoriente la cible pendant {duration} s. Le moindre dégât met fin à l'effet."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Réflexion de sort",
+        "description": "Vous levez votre bouclier et renvoyez à son lanceur le prochain sort hostile."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Rideau de fumée",
+        "description": "Vous disparaissez dans un nuage de fumée, ce qui augmente temporairement vos chances d'esquive."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Bourrasque",
+        "description": "Une bourrasque repousse tous les ennemis à proximité et les hébète, ralentissant leurs déplacements."
       },
       "bear_charge": {
         "name": "Ruée de Bruin",

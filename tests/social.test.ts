@@ -91,6 +91,7 @@ function nearestMob(
 
 describe('nine classes', () => {
   it('every class spawns with a working kit and stats', () => {
+    expect(ALL_CLASSES).toHaveLength(9);
     for (const cls of ALL_CLASSES) {
       const sim = new Sim({ seed: 42, playerClass: cls });
       const p = sim.player;
@@ -113,8 +114,8 @@ describe('nine classes', () => {
       if (cls !== 'mage') expect(abilitiesKnownAt(cls, 10).length).toBeLessThan(kit.length);
       // every class's core kit keeps scaling: something reaches rank 3+ by 20
       expect(kit.some((k) => k.rank >= 3)).toBe(true);
-      // resource type sane (warrior_classic keeps the pre-overhaul rage model)
-      if (cls === 'warrior' || cls === 'warrior_classic') expect(p.resourceType).toBe('rage');
+      // resource type sane
+      if (cls === 'warrior') expect(p.resourceType).toBe('rage');
       else if (cls === 'rogue') expect(p.resourceType).toBe('energy');
       else expect(p.resourceType).toBe('mana');
     }

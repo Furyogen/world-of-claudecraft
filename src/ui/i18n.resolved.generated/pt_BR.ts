@@ -2033,12 +2033,6 @@ export const pt_BR: EnTranslations = {
       "charge": "Avança contra um inimigo distante para abrir a luta com um breve atordoamento.",
       "rend": "Abre um sangramento que desgasta o alvo ao longo do tempo.",
       "thunder_clap": "Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.",
-      "cw_heroic_strike": "Prepara um golpe mais pesado que gasta fúria no seu próximo ataque.",
-      "cw_battle_shout": "Um grito de incentivo que aumenta o poder de ataque do grupo.",
-      "cw_commanding_shout": "Reforça o vigor para que todos tenham mais resistência numa luta.",
-      "cw_charge": "Avança contra um inimigo distante para abrir a luta com um breve atordoamento.",
-      "cw_rend": "Abre um sangramento que desgasta o alvo ao longo do tempo.",
-      "cw_thunder_clap": "Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.",
       "hamstring": "Corta as pernas do alvo para reduzir sua velocidade e impedir que ele alcance você.",
       "seal_of_righteousness": "Imbui seus golpes com dano Sagrado; depois gaste-o com Verdict.",
       "holy_light": "Uma cura firme e considerável para recuperar um aliado ou você mesmo.",
@@ -3346,7 +3340,6 @@ export const pt_BR: EnTranslations = {
   },
   "classes": {
     "warrior": "Guerreiro",
-    "warriorClassic": "Guerreiro",
     "paladin": "Paladino",
     "hunter": "Caçador",
     "rogue": "Ladino",
@@ -4114,7 +4107,6 @@ export const pt_BR: EnTranslations = {
     },
     "roles": {
       "warrior": "Tanque / DPS corpo a corpo",
-      "warriorClassic": "Tanque / DPS corpo a corpo",
       "paladin": "Curador / Tanque / DPS corpo a corpo",
       "hunter": "DPS à distância",
       "rogue": "DPS corpo a corpo",
@@ -4139,7 +4131,6 @@ export const pt_BR: EnTranslations = {
     },
     "lore": {
       "warrior": "Guerreiros são combatentes de linha de frente que acumulam raiva ao causar ou receber dano. Eles absorvem golpes pesados ou esmagam inimigos.",
-      "warriorClassic": "O guerreiro exatamente como se jogava antes da reformulação de combate: o conjunto original de habilidades e o ritmo de raiva, mantido ao lado do novo guerreiro para você experimentar os dois e nos dizer qual parece melhor.",
       "paladin": "Paladinos são cruzados sagrados que apoiam aliados com bênçãos, curam feridas com a Luz Restauradora e protegem os fracos com armaduras robustas.",
       "hunter": "Caçadores são especialistas em combate à distância que lutam ao lado de uma fera domada, crivando inimigos com tiros certeiros e disparos rápidos, reduzindo-os com picadas e fogo concussivo, e alternando aspectos conforme o momento exige.",
       "rogue": "Ladinos são assassinos furtivos que gastam energia e pontos de combo para atacar das sombras.",
@@ -5168,90 +5159,6 @@ export const pt_BR: EnTranslations = {
         "name": "Golpe do Saqueador",
         "description": "Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe."
       },
-      "cw_heroic_strike": {
-        "name": "Golpe do Saqueador",
-        "description": "Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe."
-      },
-      "cw_battle_shout": {
-        "name": "Brado de Ferro",
-        "description": "Aumenta seu poder de ataque em {buff} por 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Brado Encorajador",
-        "description": "Aumenta seu Vigor em {buff} por 2 min."
-      },
-      "cw_charge": {
-        "name": "Arremetida",
-        "description": "Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m."
-      },
-      "cw_rend": {
-        "name": "Corte Profundo",
-        "description": "Fere o alvo, fazendo-o sangrar por {damage} de dano ao longo de {duration} s."
-      },
-      "cw_thunder_clap": {
-        "name": "Golpe Sísmico",
-        "description": "Atinge inimigos próximos com {damage} de dano e reduz seus ataques em 10% por 10 s."
-      },
-      "cw_hamstring": {
-        "name": "Corte Manquejante",
-        "description": "Mutila o inimigo, causando {damage} de dano e reduzindo sua velocidade de movimento em 50% por 15 s."
-      },
-      "cw_bloodrage": {
-        "name": "Tributo de Sangue",
-        "description": "Gera 10 de raiva ao custo de vida."
-      },
-      "cw_overpower": {
-        "name": "Mão Vermelha",
-        "description": "Ataque instantâneo com dano de arma mais {damage}. Só pode ser usado depois que o alvo esquiva. Não pode ser esquivado."
-      },
-      "cw_execute": {
-        "name": "Cova Prematura",
-        "description": "Tenta finalizar um inimigo ferido, causando {damage} de dano. Só pode ser usado em inimigos com menos de 20% de vida."
-      },
-      "cw_slam": {
-        "name": "Golpe Brutal",
-        "description": "Atinge o oponente com dano de arma mais {damage}."
-      },
-      "cw_cleave": {
-        "name": "Arco Ceifante",
-        "description": "Um golpe amplo que atinge todos os inimigos à sua frente com {damage} de dano."
-      },
-      "cw_defensive_stance": {
-        "name": "Postura de Guarda",
-        "description": "Postura de combate defensiva: você gera 30% mais ameaça, mas causa e recebe 10% menos dano. Lance de novo para sair da postura."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Uivo Sinistro",
-        "description": "Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s."
-      },
-      "cw_sunder_armor": {
-        "name": "Retalhar Armadura",
-        "description": "Retalha a armadura do alvo, reduzindo-a em {damage}% por aplicação. Acumula até 5 vezes. Gera uma grande quantidade de ameaça."
-      },
-      "cw_taunt": {
-        "name": "Provocar",
-        "description": "Provoca o alvo: sua ameaça sobe para igualar a do inimigo mais odiado por ele, que é forçado a atacar você por 3 s."
-      },
-      "cw_bloodthirst": {
-        "name": "Sangria",
-        "description": "Ataca instantaneamente em frenesi sangrento, causando 60% do dano de arma mais {damage}. (assinatura de Fúria)"
-      },
-      "cw_mortal_strike": {
-        "name": "Golpe Mutilador",
-        "description": "Um golpe cruel que causa dano da arma mais {damage}. (assinatura de Armas)"
-      },
-      "cw_shield_slam": {
-        "name": "Estrondo de Escudo",
-        "description": "Golpeia o alvo com seu escudo, causando 50% do dano de arma mais {damage} e muita ameaça. (assinatura de Proteção)"
-      },
-      "cw_whirlwind": {
-        "name": "Redemoinho de Lâminas",
-        "description": "Gira em um arco mortal, atingindo todos os inimigos próximos por {damage}. (talento de Fúria)"
-      },
-      "cw_berserker_rage": {
-        "name": "Fúria Fervente",
-        "description": "Entra em uma fúria fervente, gerando 20 de raiva. (talento de guerreiro)"
-      },
       "revenge": {
         "name": "Vingança",
         "description": "Ataca em um arco amplo, causando dano Físico a todos os inimigos à sua frente. Acima de 5 alvos, o dano é reduzido. Quando você esquiva ou apara, sua próxima Vingança pode não custar raiva."
@@ -6077,8 +5984,8 @@ export const pt_BR: EnTranslations = {
         "description": "Um grito que reduz em 50% a velocidade dos inimigos em um raio de 15 m por 8 s. (Talento de guerreiro)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Pavor Persistente",
+        "description": "Solta um grito de batalha que causa medo nos inimigos em um raio de 10 m por 4 s. O medo persiste até cada alvo sofrer dano equivalente a 20% da própria vida máxima. (Talento de guerreiro)"
       },
       "stormthrow": {
         "name": "Arremesso da Tempestade",
@@ -6277,32 +6184,32 @@ export const pt_BR: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a próximos aliados cada segundo. (talento de druida)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Veredito Purificador",
+        "description": "Remove um efeito mágico prejudicial de um alvo aliado e restaura {damage} de vida com poder Sagrado."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Banquete do Vazio",
+        "description": "Devora um efeito mágico (um benéfico de um inimigo ou um prejudicial de um aliado) e cura você em 6% da sua vida máxima."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Roubar Feitiço",
+        "description": "Rouba um efeito mágico benéfico de um inimigo e o transfere para você."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Tiro de Sobressalto",
+        "description": "Um disparo imprevisível que desorienta o alvo por {duration} s. Qualquer dano interrompe o efeito."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Reflexão de Feitiço",
+        "description": "Ergue seu escudo e reflete o próximo feitiço hostil de volta ao conjurador."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Cortina de Fumaça",
+        "description": "Desaparece em uma nuvem de fumaça, aumentando por algum tempo sua chance de esquiva."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Tufão",
+        "description": "Uma rajada de vento repele todos os inimigos próximos e os tonteia, reduzindo a velocidade de movimento deles."
       },
       "bear_charge": {
         "name": "Investida de Bruin",

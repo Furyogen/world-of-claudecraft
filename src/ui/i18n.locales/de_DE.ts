@@ -14,70 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Reaver-Hieb',
-  'entities.abilities.cw_heroic_strike.description':
-    'Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst.',
-  'entities.abilities.cw_battle_shout.name': 'Eisernes Gebrüll',
-  'entities.abilities.cw_battle_shout.description':
-    'Erhöht eure Angriffskraft 2 Min. lang um {buff}.',
-  'entities.abilities.cw_commanding_shout.name': 'Stärkender Ruf',
-  'entities.abilities.cw_commanding_shout.description':
-    'Erhöht eure Ausdauer 2 Min. lang um {buff}.',
-  'entities.abilities.cw_charge.name': 'Vorpreschen',
-  'entities.abilities.cw_charge.description':
-    'Stürmt auf einen Gegner zu, erzeugt 9 Wut und betäubt ihn 1 Sek. lang. Reichweite 8-25 m.',
-  'entities.abilities.cw_rend.name': 'Tiefe Wunde',
-  'entities.abilities.cw_rend.description':
-    'Verwundet das Ziel und lässt es über {duration} Sek. für {damage} Schaden bluten.',
-  'entities.abilities.cw_thunder_clap.name': 'Bebender Schlag',
-  'entities.abilities.cw_thunder_clap.description':
-    'Trifft nahe Gegner für {damage} Schaden und verlangsamt ihre Angriffe 10 Sek. lang um 10%.',
-  'entities.abilities.cw_hamstring.name': 'Lähmender Schnitt',
-  'entities.abilities.cw_hamstring.description':
-    'Verkrüppelt den Gegner für {damage} Schaden und verringert sein Bewegungstempo 15 Sek. lang um 50%.',
-  'entities.abilities.cw_bloodrage.name': 'Blutzoll',
-  'entities.abilities.cw_bloodrage.description': 'Erzeugt 10 Wut auf Kosten von Gesundheit.',
-  'entities.abilities.cw_overpower.name': 'Redhand',
-  'entities.abilities.cw_overpower.description':
-    'Sofortiger Angriff mit Waffenschaden plus {damage}. Nur einsetzbar, nachdem das Ziel ausgewichen ist. Kann nicht ausgewichen werden.',
-  'entities.abilities.cw_execute.name': 'Frühes Grab',
-  'entities.abilities.cw_execute.description':
-    'Versucht, einen verwundeten Gegner zu erledigen, und verursacht {damage} Schaden. Nur bei Gegnern unter 20% Gesundheit einsetzbar.',
-  'entities.abilities.cw_slam.name': 'Roher Schwung',
-  'entities.abilities.cw_slam.description':
-    'Zerschmettert den Gegner für Waffenschaden plus {damage}.',
-  'entities.abilities.cw_cleave.name': 'Sichelschwung',
-  'entities.abilities.cw_cleave.description':
-    'Ein weiter Hieb, der alle Gegner vor euch für {damage} Schaden trifft.',
-  'entities.abilities.cw_defensive_stance.name': 'Wehrhafte Haltung',
-  'entities.abilities.cw_defensive_stance.description':
-    'Defensive Kampfhaltung: Ihr erzeugt 30% mehr Bedrohung, verursacht und erleidet aber 10% weniger Schaden. Erneut wirken, um die Haltung zu verlassen.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Direhowl',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Stößt einen furchterregenden Ruf aus und verringert die Angriffskraft aller nahen Gegner 30 Sek. lang um {buff}.',
-  'entities.abilities.cw_sunder_armor.name': 'Rüstungsspalter',
-  'entities.abilities.cw_sunder_armor.description':
-    'Spaltet die Rüstung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung.',
-  'entities.abilities.cw_taunt.name': 'Anstacheln',
-  'entities.abilities.cw_taunt.description':
-    'Verspottet das Ziel: Eure Bedrohung steigt auf die seines meistgehassten Gegners und es wird 3 Sek. lang gezwungen, euch anzugreifen.',
-  'entities.abilities.cw_bloodthirst.name': 'Aderlass',
-  'entities.abilities.cw_bloodthirst.description':
-    'Greift sofort in blutiger Raserei an und verursacht 60% Waffenschaden plus {damage}. (Furor-Signatur)',
-  'entities.abilities.cw_mortal_strike.name': 'Verstümmelnder Hieb',
-  'entities.abilities.cw_mortal_strike.description':
-    'Ein bösartiger Schlag, der Waffenschaden plus {damage} verursacht. (Waffen-Signatur)',
-  'entities.abilities.cw_shield_slam.name': 'Shieldcrack',
-  'entities.abilities.cw_shield_slam.description':
-    'Schlägt das Ziel mit eurem Schild für 50% Waffenschaden plus {damage} und erzeugt enorme Bedrohung. (Schutz-Signatur)',
-  'entities.abilities.cw_whirlwind.name': 'Klingenwirbel',
-  'entities.abilities.cw_whirlwind.description':
-    'Dreht euch in einem tödlichen Bogen und trefft alle nahen Gegner für {damage}. (Furor-Talent)',
-  'entities.abilities.cw_berserker_rage.name': 'Brodelnde Raserei',
-  'entities.abilities.cw_berserker_rage.description':
-    'Ihr verfallt in brodelnde Raserei und erzeugt 20 Wut. (Krieger-Talent)',
-  'classDetails.roles.warriorClassic': 'Tank / Nahkampf-DPS',
-  'classes.warriorClassic': 'Krieger',
   'entities.abilities.sport_boot.description':
     'Ein hoher, weiter Schlag Richtung Zielpunkt. Die Menge liebt es.',
   'entities.abilities.sport_boot.name': 'Weitschlag',
@@ -2020,8 +1956,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'classDetails.weapons.macesAxes': 'Streitkolben, Äxte',
   'classDetails.lore.warrior':
     'Krieger sind kampferprobte Nahkämpfer, die Wut aufbauen, wenn sie Schaden verursachen oder erleiden. Sie halten schwere Treffer aus oder zerschmettern Gegner.',
-  'classDetails.lore.warriorClassic':
-    'Der Krieger genau so, wie er sich vor der Kampfüberarbeitung gespielt hat: das ursprüngliche Fähigkeitenrepertoire und das alte Wut-Tempo, erhalten neben dem neuen Krieger, damit du beide ausprobieren und uns sagen kannst, welcher sich besser anfühlt.',
   'classDetails.lore.paladin':
     'Paladine sind heilige Kreuzritter, die mit Segen unterstützen, Wunden mit Mending Light heilen und Schwache in schwerer Rüstung schützen.',
   'classDetails.lore.hunter':
@@ -5568,16 +5502,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Zaubert Getränke herbei, die Mana wiederherstellen, damit du zwischen den Pulls auffüllen kannst.',
   'guide.abilityHook.corruption':
     'Lässt ein Ziel mit Schatten verrotten, der tickt, während du anderes erledigst.',
-  'guide.abilityHook.cw_battle_shout':
-    'Ein aufrüttelnder Ruf, der die Angriffskraft der Gruppe erhöht.',
-  'guide.abilityHook.cw_charge':
-    'Stürmt auf einen entfernten Gegner zu und eröffnet den Kampf mit einer kurzen Betäubung.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Stärkt die Ausdauer, damit alle in einem Kampf länger durchhalten.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Reiht einen schwereren Schwung ein, der bei deinem nächsten Treffer Wut verbraucht.',
-  'guide.abilityHook.cw_rend': 'Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.',
-  'guide.abilityHook.cw_thunder_clap': 'Trifft alles um dich herum und verlangsamt deren Angriffe.',
   'guide.abilityHook.demon_skin':
     'Eine anhaltende Selbststärkung, die deine Haut abhärtet und Rüstung verleiht.',
   'guide.abilityHook.devotion_aura':
@@ -7212,4 +7136,28 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.appleChoiceExpired':
     'Diese Apple-Anmeldung ist abgelaufen. Bitte melde dich erneut mit Apple an.',
   'hudChrome.auth.appleError': 'Anmeldung mit Apple fehlgeschlagen. Bitte versuche es erneut.',
+  'entities.abilities.cleansing_verdict.name': 'Läuterndes Urteil',
+  'entities.abilities.cleansing_verdict.description':
+    'Entfernt einen schädlichen Magieeffekt von einem verbündeten Ziel und heilt es mit heiliger Magie um {damage}.',
+  'entities.abilities.lingering_dread.name': 'Anhaltender Schrecken',
+  'entities.abilities.lingering_dread.description':
+    'Stößt einen Schlachtruf aus, der Gegner im Umkreis von 10 Metern 4 Sek. lang in Furcht versetzt. Die Furcht hält an, bis jedes Ziel Schaden in Höhe von 20 % seiner maximalen Gesundheit erlitten hat. (Krieger-Talent)',
+  'entities.abilities.smoke_screen.name': 'Rauchwand',
+  'entities.abilities.smoke_screen.description':
+    'Du verschwindest in einer Rauchwolke und erhöhst für kurze Zeit deine Ausweichchance.',
+  'entities.abilities.spell_reflect.name': 'Zauberreflexion',
+  'entities.abilities.spell_reflect.description':
+    'Du hebst deinen Schild und wirfst den nächsten feindlichen Zauber auf seinen Wirker zurück.',
+  'entities.abilities.spellsteal.name': 'Zauberdiebstahl',
+  'entities.abilities.spellsteal.description':
+    'Stiehlt einem Gegner einen nützlichen Magieeffekt und überträgt ihn auf dich.',
+  'entities.abilities.startle_shot.name': 'Schreckschuss',
+  'entities.abilities.startle_shot.description':
+    'Ein wilder Schuss, der das Ziel {duration} Sek. lang desorientiert. Jeglicher Schaden beendet den Effekt.',
+  'entities.abilities.typhoon.name': 'Taifun',
+  'entities.abilities.typhoon.description':
+    'Ein Windstoß schleudert alle Gegner in der Nähe zurück und macht sie benommen, wodurch ihr Bewegungstempo sinkt.',
+  'entities.abilities.voidfeast.name': 'Leerenmahl',
+  'entities.abilities.voidfeast.description':
+    'Verschlingt einen Magieeffekt (einen nützlichen von einem Gegner oder einen schädlichen von einem Verbündeten) und heilt dich um 6 % deiner maximalen Gesundheit.',
 };

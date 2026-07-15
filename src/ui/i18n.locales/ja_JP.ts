@@ -14,70 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': '略奪者の一撃',
-  'entities.abilities.cw_heroic_strike.description':
-    '強力な攻撃で近接ダメージが {damage} 増加します。次のスイングで発動します。',
-  'entities.abilities.cw_battle_shout.name': '鉄の咆哮',
-  'entities.abilities.cw_battle_shout.description': '2分間、攻撃力が{buff}増加します。',
-  'entities.abilities.cw_commanding_shout.name': '鼓舞の号令',
-  'entities.abilities.cw_commanding_shout.description': '2分間、スタミナが{buff}増加します。',
-  'entities.abilities.cw_charge.name': '突撃',
-  'entities.abilities.cw_charge.description':
-    '敵に突撃し、怒りを9生成して1秒間スタンさせます。射程8-25yd。',
-  'entities.abilities.cw_rend.name': '深き裂傷',
-  'entities.abilities.cw_rend.description':
-    '対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。',
-  'entities.abilities.cw_thunder_clap.name': '震撼の一撃',
-  'entities.abilities.cw_thunder_clap.description':
-    '周囲の敵に {damage} のダメージを与え、10秒間、攻撃速度を10%低下させます。',
-  'entities.abilities.cw_hamstring.name': '足萎えの斬撃',
-  'entities.abilities.cw_hamstring.description':
-    '敵を痛めつけて{damage}ダメージを与え、15秒間、移動速度を50%低下させます。',
-  'entities.abilities.cw_bloodrage.name': '血の代償',
-  'entities.abilities.cw_bloodrage.description': '体力を代償に怒りを10生成します。',
-  'entities.abilities.cw_overpower.name': '血染めの手',
-  'entities.abilities.cw_overpower.description':
-    '武器ダメージに{damage}を加えた即時攻撃です。対象が回避した後にのみ使用できます。回避されません。',
-  'entities.abilities.cw_execute.name': '早すぎる墓',
-  'entities.abilities.cw_execute.description':
-    '傷ついた敵をとどめようとして {damage} のダメージを与えます。体力が20%未満の敵にのみ使用できます。',
-  'entities.abilities.cw_slam.name': '力任せの一振り',
-  'entities.abilities.cw_slam.description':
-    '相手を叩きつけ、武器ダメージに {damage} を加えたダメージを与えます。',
-  'entities.abilities.cw_cleave.name': '刈り取りの弧',
-  'entities.abilities.cw_cleave.description':
-    '大きく薙ぎ払い、前方のすべての敵に {damage} のダメージを与えます。',
-  'entities.abilities.cw_defensive_stance.name': 'ガーデッドスタンス',
-  'entities.abilities.cw_defensive_stance.description':
-    '防御用の戦闘スタンスです。脅威生成が30%増加しますが、与えるダメージと受けるダメージが10%低下します。再度使用するとスタンスを解除します。',
-  'entities.abilities.cw_demoralizing_shout.name': '戦慄の遠吠え',
-  'entities.abilities.cw_demoralizing_shout.description':
-    '恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を{buff}低下させます。',
-  'entities.abilities.cw_sunder_armor.name': '装甲切断',
-  'entities.abilities.cw_sunder_armor.description':
-    '対象のアーマーを破壊し、1回ごとに{damage}%低下させます。最大5回まで重なります。大量の脅威を生成します。',
-  'entities.abilities.cw_taunt.name': '挑発',
-  'entities.abilities.cw_taunt.description':
-    '対象を挑発します。あなたの脅威が対象の最も憎む敵と同じ値まで上がり、3秒間あなたを攻撃させます。',
-  'entities.abilities.cw_bloodthirst.name': '瀉血',
-  'entities.abilities.cw_bloodthirst.description':
-    '血の狂乱に身を任せて即座に攻撃し、武器ダメージの60%に{damage}を加えたダメージを与えます。（狂怒シグネチャー）',
-  'entities.abilities.cw_mortal_strike.name': '重傷の一撃',
-  'entities.abilities.cw_mortal_strike.description':
-    '凶悪な一撃で武器ダメージに加えて {damage} のダメージを与えます。（武器シグネチャー）',
-  'entities.abilities.cw_shield_slam.name': '盾砕き',
-  'entities.abilities.cw_shield_slam.description':
-    '盾で対象を叩きつけ、武器ダメージの50%に{damage}を加えたダメージと大量の脅威を与えます。（防御シグネチャー）',
-  'entities.abilities.cw_whirlwind.name': '刃の旋風',
-  'entities.abilities.cw_whirlwind.description':
-    '致命的な弧を描いて回転し、近くのすべての敵に {damage} のダメージを与えます。（狂怒タレント）',
-  'entities.abilities.cw_berserker_rage.name': '滾る怒り',
-  'entities.abilities.cw_berserker_rage.description':
-    '滾る怒りに身を任せ、怒りを20生成します。（戦士タレント）',
-  'classDetails.lore.warriorClassic':
-    '戦闘リワーク前の戦士をそのまま残しました。元のアビリティ構成とレイジの感覚を新戦士と並べて試し、どちらが良いか教えてください。',
-  'classDetails.roles.warriorClassic': 'タンク / 近接DPS',
-  'classes.warriorClassic': '戦士',
   'hudChrome.auth.appleLoginCta': 'Appleで続ける',
   'hudChrome.auth.appleError': 'Appleでサインインできませんでした。もう一度お試しください。',
   'hudChrome.auth.appleChoiceIntro':
@@ -4656,13 +4592,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.summon_imp': '遠距離から敵にファイアボルトを放つエンバーキンを呼び出します。',
   'guide.abilityHook.thorns': '味方を守り、近接で攻撃してきた相手に反射ダメージを与えます。',
   'guide.abilityHook.thunder_clap': '周囲のすべてに当たり、相手の攻撃を遅くします。',
-  'guide.abilityHook.cw_heroic_strike': '次の一撃にレイジを乗せ、より重い攻撃を予約します。',
-  'guide.abilityHook.cw_battle_shout': 'パーティの攻撃力を高める鼓舞の雄叫びです。',
-  'guide.abilityHook.cw_commanding_shout':
-    '持久力を底上げし、長い戦いでも全員が粘り強く戦えるようにします。',
-  'guide.abilityHook.cw_charge': '離れた敵に突進し、短いスタンで戦闘の口火を切ります。',
-  'guide.abilityHook.cw_rend': '出血を与え、時間をかけて標的を削っていきます。',
-  'guide.abilityHook.cw_thunder_clap': '周囲のすべてに当たり、相手の攻撃を遅くします。',
   'guide.abilityHook.wrath': '遠距離から標的に放つネイチャーのボルト。主力の火力です。',
   'guide.arenaPage.augmentsNote':
     'オーグメントやパワーアップはそのマッチの間だけ続きます。持続的な強さではなく、その場で組む遊び心のあるビルドが目的なので、課金で勝ちを買えるわけではありません。',
@@ -6976,5 +6905,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.smoke_screen.name': 'スモークスクリーン',
   'entities.abilities.smoke_screen.description': '煙幕に紛れ、一定時間、回避率を上昇させる。',
   'entities.abilities.typhoon.name': 'タイフーン',
-  'entities.abilities.typhoon.description': '突風で周囲の敵をすべて吹き飛ばし、よろめかせて移動速度を下げる。',
+  'entities.abilities.typhoon.description':
+    '突風で周囲の敵をすべて吹き飛ばし、よろめかせて移動速度を下げる。',
 };

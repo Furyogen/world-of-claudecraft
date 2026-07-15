@@ -5,7 +5,13 @@
 // equipment_rules, not per-item data: any future two-hander is covered.
 import { describe, expect, it } from 'vitest';
 import { ITEMS } from '../src/sim/data';
-import { canEquipItem, canEquipItemInSlot, weaponHand } from '../src/sim/equipment_rules';
+import {
+  canDualWield,
+  canDualWieldTwoHand,
+  canEquipItem,
+  canEquipItemInSlot,
+  weaponHand,
+} from '../src/sim/equipment_rules';
 import { ALL_CLASSES } from '../src/sim/types';
 
 describe('two-handed weapon proficiency', () => {
@@ -26,10 +32,24 @@ describe('two-handed weapon proficiency', () => {
   });
 
   it('the two-hand classes keep their greatswords', () => {
-    for (const cls of ['warrior', 'warrior_classic', 'paladin', 'shaman'] as const) {
+    for (const cls of ['warrior', 'paladin', 'shaman'] as const) {
       expect(canEquipItem(cls, ITEMS.bonewrought_greatsword), cls).toBe(true);
     }
     expect(canEquipItem('hunter', ITEMS.direfang_greatblade)).toBe(true);
+  });
+
+  it("keeps dual wield and Titan's Grip exclusive to a Fury Warrior", () => {
+    expect(canDualWield('warrior', null)).toBe(false);
+    expect(canDualWield('warrior', 'arms')).toBe(false);
+    expect(canDualWield('warrior', 'prot')).toBe(false);
+    expect(canDualWield('warrior', 'fury')).toBe(true);
+    expect(canDualWieldTwoHand('warrior', 'fury')).toBe(true);
+    expect(canEquipItemInSlot('warrior', ITEMS.bonewrought_greatsword, 'offhand', 'fury')).toBe(
+      true,
+    );
+    expect(canEquipItemInSlot('warrior', ITEMS.bonewrought_greatsword, 'offhand', 'arms')).toBe(
+      false,
+    );
   });
 
   it('no other class loses a weapon it could equip before the rule', () => {
@@ -42,9 +62,7 @@ describe('two-handed weapon proficiency', () => {
         // Only classes in the item's group/list may equip; the rule itself
         // must never be the reason a non-rogue is denied. Deny reasons for
         // non-rogues must come from requiredClass alone.
-        const allowedByList =
-          !item.requiredClass ||
-          item.requiredClass.includes(cls === 'warrior_classic' ? 'warrior' : cls);
+        const allowedByList = !item.requiredClass || item.requiredClass.includes(cls);
         expect(canEquipItem(cls, item), `${cls} ${item.id}`).toBe(allowedByList);
       }
     }

@@ -14,68 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pt_BR: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Golpe do Saqueador',
-  'entities.abilities.cw_heroic_strike.description':
-    'Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe.',
-  'entities.abilities.cw_battle_shout.name': 'Brado de Ferro',
-  'entities.abilities.cw_battle_shout.description':
-    'Aumenta seu poder de ataque em {buff} por 2 min.',
-  'entities.abilities.cw_commanding_shout.name': 'Brado Encorajador',
-  'entities.abilities.cw_commanding_shout.description': 'Aumenta seu Vigor em {buff} por 2 min.',
-  'entities.abilities.cw_charge.name': 'Arremetida',
-  'entities.abilities.cw_charge.description':
-    'Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m.',
-  'entities.abilities.cw_rend.name': 'Corte Profundo',
-  'entities.abilities.cw_rend.description':
-    'Fere o alvo, fazendo-o sangrar por {damage} de dano ao longo de {duration} s.',
-  'entities.abilities.cw_thunder_clap.name': 'Golpe Sísmico',
-  'entities.abilities.cw_thunder_clap.description':
-    'Atinge inimigos próximos com {damage} de dano e reduz seus ataques em 10% por 10 s.',
-  'entities.abilities.cw_hamstring.name': 'Corte Manquejante',
-  'entities.abilities.cw_hamstring.description':
-    'Mutila o inimigo, causando {damage} de dano e reduzindo sua velocidade de movimento em 50% por 15 s.',
-  'entities.abilities.cw_bloodrage.name': 'Tributo de Sangue',
-  'entities.abilities.cw_bloodrage.description': 'Gera 10 de raiva ao custo de vida.',
-  'entities.abilities.cw_overpower.name': 'Mão Vermelha',
-  'entities.abilities.cw_overpower.description':
-    'Ataque instantâneo com dano de arma mais {damage}. Só pode ser usado depois que o alvo esquiva. Não pode ser esquivado.',
-  'entities.abilities.cw_execute.name': 'Cova Prematura',
-  'entities.abilities.cw_execute.description':
-    'Tenta finalizar um inimigo ferido, causando {damage} de dano. Só pode ser usado em inimigos com menos de 20% de vida.',
-  'entities.abilities.cw_slam.name': 'Golpe Brutal',
-  'entities.abilities.cw_slam.description': 'Atinge o oponente com dano de arma mais {damage}.',
-  'entities.abilities.cw_cleave.name': 'Arco Ceifante',
-  'entities.abilities.cw_cleave.description':
-    'Um golpe amplo que atinge todos os inimigos à sua frente com {damage} de dano.',
-  'entities.abilities.cw_defensive_stance.name': 'Postura de Guarda',
-  'entities.abilities.cw_defensive_stance.description':
-    'Postura de combate defensiva: você gera 30% mais ameaça, mas causa e recebe 10% menos dano. Lance de novo para sair da postura.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Uivo Sinistro',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s.',
-  'entities.abilities.cw_sunder_armor.name': 'Retalhar Armadura',
-  'entities.abilities.cw_sunder_armor.description':
-    'Retalha a armadura do alvo, reduzindo-a em {damage}% por aplicação. Acumula até 5 vezes. Gera uma grande quantidade de ameaça.',
-  'entities.abilities.cw_taunt.name': 'Provocar',
-  'entities.abilities.cw_taunt.description':
-    'Provoca o alvo: sua ameaça sobe para igualar a do inimigo mais odiado por ele, que é forçado a atacar você por 3 s.',
-  'entities.abilities.cw_bloodthirst.name': 'Sangria',
-  'entities.abilities.cw_bloodthirst.description':
-    'Ataca instantaneamente em frenesi sangrento, causando 60% do dano de arma mais {damage}. (assinatura de Fúria)',
-  'entities.abilities.cw_mortal_strike.name': 'Golpe Mutilador',
-  'entities.abilities.cw_mortal_strike.description':
-    'Um golpe cruel que causa dano da arma mais {damage}. (assinatura de Armas)',
-  'entities.abilities.cw_shield_slam.name': 'Estrondo de Escudo',
-  'entities.abilities.cw_shield_slam.description':
-    'Golpeia o alvo com seu escudo, causando 50% do dano de arma mais {damage} e muita ameaça. (assinatura de Proteção)',
-  'entities.abilities.cw_whirlwind.name': 'Redemoinho de Lâminas',
-  'entities.abilities.cw_whirlwind.description':
-    'Gira em um arco mortal, atingindo todos os inimigos próximos por {damage}. (talento de Fúria)',
-  'entities.abilities.cw_berserker_rage.name': 'Fúria Fervente',
-  'entities.abilities.cw_berserker_rage.description':
-    'Entra em uma fúria fervente, gerando 20 de raiva. (talento de guerreiro)',
-  'classDetails.roles.warriorClassic': 'Tanque / DPS corpo a corpo',
-  'classes.warriorClassic': 'Guerreiro',
   'entities.abilities.sport_boot.description':
     'Um chutão alto e longo em direção ao ponto de mira. A torcida adora.',
   'entities.abilities.sport_boot.name': 'Chutão',
@@ -6986,8 +6924,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hud.errors.needShield': 'Você precisa ter um escudo equipado.',
   'hud.errors.nothingToConsume': 'Nada para consumir.',
   'itemUi.slots.twoHand': 'Duas mãos',
-  'classDetails.lore.warriorClassic':
-    'O guerreiro exatamente como se jogava antes da reformulação de combate: o conjunto original de habilidades e o ritmo de raiva, mantido ao lado do novo guerreiro para você experimentar os dois e nos dizer qual parece melhor.',
   'entities.abilities.battle_stance.name': 'Postura de Batalha',
   'entities.abilities.battle_stance.description':
     'Postura de combate agressiva: você gera 10% mais raiva. A postura padrão de Armas e Proteção.',
@@ -7090,17 +7026,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.eastbrook_greatsword.name': 'Montante de Eastbrook',
   'entities.items.highwatch_greatsword.name': 'Montante de Highwatch',
   'entities.items.highwatch_wallshield.name': 'Escudo-Muralha de Highwatch',
-  'guide.abilityHook.cw_battle_shout':
-    'Um grito de incentivo que aumenta o poder de ataque do grupo.',
-  'guide.abilityHook.cw_charge':
-    'Avança contra um inimigo distante para abrir a luta com um breve atordoamento.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Reforça o vigor para que todos tenham mais resistência numa luta.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Prepara um golpe mais pesado que gasta fúria no seu próximo ataque.',
-  'guide.abilityHook.cw_rend': 'Abre um sangramento que desgasta o alvo ao longo do tempo.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.',
   'guide.abilityHook.hamstring':
     'Corta as pernas do alvo para reduzir sua velocidade e impedir que ele alcance você.',
   'guide.abilityHook.revenge':
@@ -7148,4 +7073,28 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.defaultLoadout': 'Conjunto Padrão',
   'hudChrome.talentRows.tab': 'Escolhas',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Alvo do alvo',
+  'entities.abilities.cleansing_verdict.name': 'Veredito Purificador',
+  'entities.abilities.cleansing_verdict.description':
+    'Remove um efeito mágico prejudicial de um alvo aliado e restaura {damage} de vida com poder Sagrado.',
+  'entities.abilities.lingering_dread.name': 'Pavor Persistente',
+  'entities.abilities.lingering_dread.description':
+    'Solta um grito de batalha que causa medo nos inimigos em um raio de 10 m por 4 s. O medo persiste até cada alvo sofrer dano equivalente a 20% da própria vida máxima. (Talento de guerreiro)',
+  'entities.abilities.smoke_screen.name': 'Cortina de Fumaça',
+  'entities.abilities.smoke_screen.description':
+    'Desaparece em uma nuvem de fumaça, aumentando por algum tempo sua chance de esquiva.',
+  'entities.abilities.spell_reflect.name': 'Reflexão de Feitiço',
+  'entities.abilities.spell_reflect.description':
+    'Ergue seu escudo e reflete o próximo feitiço hostil de volta ao conjurador.',
+  'entities.abilities.spellsteal.name': 'Roubar Feitiço',
+  'entities.abilities.spellsteal.description':
+    'Rouba um efeito mágico benéfico de um inimigo e o transfere para você.',
+  'entities.abilities.startle_shot.name': 'Tiro de Sobressalto',
+  'entities.abilities.startle_shot.description':
+    'Um disparo imprevisível que desorienta o alvo por {duration} s. Qualquer dano interrompe o efeito.',
+  'entities.abilities.typhoon.name': 'Tufão',
+  'entities.abilities.typhoon.description':
+    'Uma rajada de vento repele todos os inimigos próximos e os tonteia, reduzindo a velocidade de movimento deles.',
+  'entities.abilities.voidfeast.name': 'Banquete do Vazio',
+  'entities.abilities.voidfeast.description':
+    'Devora um efeito mágico (um benéfico de um inimigo ou um prejudicial de um aliado) e cura você em 6% da sua vida máxima.',
 };

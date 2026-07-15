@@ -58,7 +58,7 @@ describe('talents_window: no magic values', () => {
     expect(rowsTab).toContain('deps.pickRow(rowIndex, wasPicked ? null : optId);');
   });
 
-  // The spec-commit fix: ALL TEN classes (the overhauled 'warrior' included,
+  // The spec-commit fix: all nine classes (the overhauled 'warrior' included,
   // operator decision 2026-07-11) commit an uncommitted spec through
   // deps.commitSpec (IWorld.setSpec via Hud) from the Select specialization
   // button; the committed spec keeps the navigation-only View talents button.

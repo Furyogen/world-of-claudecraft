@@ -2033,12 +2033,6 @@ export const en: EnTranslations = {
       "charge": "Rushes a distant enemy to open the fight with a brief stun.",
       "rend": "Opens a bleed that wears the target down over time.",
       "thunder_clap": "Hits everything around you and slows their attacks.",
-      "cw_heroic_strike": "Queues a heavier swing that spends rage on your next hit.",
-      "cw_battle_shout": "A rallying cry that raises attack power for the party.",
-      "cw_commanding_shout": "Bolsters stamina so everyone has more staying power in a fight.",
-      "cw_charge": "Rushes a distant enemy to open the fight with a brief stun.",
-      "cw_rend": "Opens a bleed that wears the target down over time.",
-      "cw_thunder_clap": "Hits everything around you and slows their attacks.",
       "hamstring": "Slashes the target's legs to slow it so it cannot run you down.",
       "seal_of_righteousness": "Imbues your swings with Holy damage, then spend it with Verdict.",
       "holy_light": "A steady, sizable heal for topping off an ally or yourself.",
@@ -3346,7 +3340,6 @@ export const en: EnTranslations = {
   },
   "classes": {
     "warrior": "Warrior",
-    "warriorClassic": "Classic Warrior",
     "paladin": "Paladin",
     "hunter": "Hunter",
     "rogue": "Rogue",
@@ -4114,7 +4107,6 @@ export const en: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Melee DPS",
-      "warriorClassic": "Tank / Melee DPS",
       "paladin": "Healer / Tank / Melee DPS",
       "hunter": "Ranged DPS",
       "rogue": "Melee DPS",
@@ -4139,7 +4131,6 @@ export const en: EnTranslations = {
     },
     "lore": {
       "warrior": "Warriors are battle-hardened melee fighters who build Rage as they deal or take damage. They absorb heavy hits or crush foes with powerful weapons.",
-      "warriorClassic": "The warrior exactly as it played before the combat rework: the original ability kit and rage pacing, kept alongside the new warrior so you can try both and tell us which one feels better.",
       "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Mending Light, and protect the weak in heavy armor.",
       "hunter": "Hunters are ranged specialists who fight beside a tamed beast, peppering enemies with aimed and rapid shots, slowing them with stings and concussive fire, and shifting aspects to suit the moment.",
       "rogue": "Rogues are stealthy assassins who spend Energy and Combo Points on backstabs and finishing moves from the shadows.",
@@ -5167,90 +5158,6 @@ export const en: EnTranslations = {
       "heroic_strike": {
         "name": "Reaver Strike",
         "description": "A strong attack that increases melee damage by {damage}. Activates on your next swing."
-      },
-      "cw_heroic_strike": {
-        "name": "Reaver Strike",
-        "description": "A strong attack that increases melee damage by {damage}. Activates on your next swing."
-      },
-      "cw_battle_shout": {
-        "name": "Iron Bellow",
-        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Bolstering Cry",
-        "description": "Increases your Stamina by {buff} for 2 min."
-      },
-      "cw_charge": {
-        "name": "Onrush",
-        "description": "Charges an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range."
-      },
-      "cw_rend": {
-        "name": "Deep Gash",
-        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
-      },
-      "cw_thunder_clap": {
-        "name": "Quaking Blow",
-        "description": "Blasts nearby enemies for {damage} damage and slows their attacks by 10% for 10 sec."
-      },
-      "cw_hamstring": {
-        "name": "Hobbling Cut",
-        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
-      },
-      "cw_bloodrage": {
-        "name": "Blood Toll",
-        "description": "Generates 10 rage at the cost of health."
-      },
-      "cw_overpower": {
-        "name": "Redhand",
-        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
-      },
-      "cw_execute": {
-        "name": "Early Grave",
-        "description": "Attempt to finish off a wounded foe, causing {damage} damage. Only usable on enemies below 20% health."
-      },
-      "cw_slam": {
-        "name": "Brute Swing",
-        "description": "Slams the opponent for weapon damage plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Reaping Arc",
-        "description": "A sweeping strike that hits all enemies in front of you for {damage} damage."
-      },
-      "cw_defensive_stance": {
-        "name": "Guarded Stance",
-        "description": "A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast again to leave the stance."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Direhowl",
-        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
-      },
-      "cw_sunder_armor": {
-        "name": "Armor Shear",
-        "description": "Sunders the target's armor, reducing it by {damage}% per application. Stacks up to 5 times. Generates a high amount of threat."
-      },
-      "cw_taunt": {
-        "name": "Goad",
-        "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
-      },
-      "cw_bloodthirst": {
-        "name": "Bloodletting",
-        "description": "Instantly attack in a blood frenzy for 60% weapon damage plus {damage}. (Fury signature)"
-      },
-      "cw_mortal_strike": {
-        "name": "Maiming Strike",
-        "description": "A vicious strike dealing weapon damage plus {damage}. (Arms signature)"
-      },
-      "cw_shield_slam": {
-        "name": "Shieldcrack",
-        "description": "Slam the target with your shield for 50% weapon damage plus {damage} and massive threat. (Protection signature)"
-      },
-      "cw_whirlwind": {
-        "name": "Bladed Gyre",
-        "description": "Spin in a deadly arc, striking all nearby enemies for {damage}. (Fury talent)"
-      },
-      "cw_berserker_rage": {
-        "name": "Seething Fury",
-        "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
       },
       "revenge": {
         "name": "Revenge",

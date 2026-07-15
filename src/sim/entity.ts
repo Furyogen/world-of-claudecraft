@@ -494,11 +494,7 @@ export function recalcPlayerStats(
   // Melee AP by class (classic-era-ish): warriors/paladins/shamans/druids 2/str,
   // rogues str+agi, hunters str+agi, pure casters str.
   const apFromStats =
-    cls === 'warrior' ||
-    cls === 'warrior_classic' ||
-    cls === 'paladin' ||
-    cls === 'shaman' ||
-    cls === 'druid'
+    cls === 'warrior' || cls === 'paladin' || cls === 'shaman' || cls === 'druid'
       ? s.str * 2
       : cls === 'rogue' || cls === 'hunter'
         ? s.str + s.agi

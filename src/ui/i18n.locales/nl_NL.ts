@@ -2,70 +2,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Plunderaarsslag',
-  'entities.abilities.cw_heroic_strike.description':
-    'Een sterke aanval die de slagschade met {damage} verhoogt. Activeert bij je volgende slag.',
-  'entities.abilities.cw_battle_shout.name': 'IJzeren Gebrul',
-  'entities.abilities.cw_battle_shout.description':
-    'Verhoogt je aanvalskracht met {buff} gedurende 2 min.',
-  'entities.abilities.cw_commanding_shout.name': 'Versterkende Kreet',
-  'entities.abilities.cw_commanding_shout.description':
-    'Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min.',
-  'entities.abilities.cw_charge.name': 'Bestorming',
-  'entities.abilities.cw_charge.description':
-    'Stormt op een vijand af, genereert 9 woede en verdooft hem gedurende 1 sec. Bereik 8-25 m.',
-  'entities.abilities.cw_rend.name': 'Diepe Snee',
-  'entities.abilities.cw_rend.description':
-    'Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec.',
-  'entities.abilities.cw_thunder_clap.name': 'Schuddende Klap',
-  'entities.abilities.cw_thunder_clap.description':
-    'Treft nabije vijanden voor {damage} schade en vertraagt hun aanvallen met 10% gedurende 10 sec.',
-  'entities.abilities.cw_hamstring.name': 'Kreupelsnede',
-  'entities.abilities.cw_hamstring.description':
-    'Verminkt de vijand voor {damage} schade en vertraagt zijn beweging met 50% gedurende 15 sec.',
-  'entities.abilities.cw_bloodrage.name': 'Bloedtol',
-  'entities.abilities.cw_bloodrage.description': 'Genereert 10 woede ten koste van levenskracht.',
-  'entities.abilities.cw_overpower.name': 'Roodhand',
-  'entities.abilities.cw_overpower.description':
-    'Ogenblikkelijke aanval voor wapenschade plus {damage}. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken.',
-  'entities.abilities.cw_execute.name': 'Vroeg Graf',
-  'entities.abilities.cw_execute.description':
-    'Poging om een gewonde vijand af te maken voor {damage} schade. Alleen bruikbaar op vijanden met minder dan 20% levenskracht.',
-  'entities.abilities.cw_slam.name': 'Botte Zwaai',
-  'entities.abilities.cw_slam.description':
-    'Dreunt op de tegenstander in voor wapenschade plus {damage}.',
-  'entities.abilities.cw_cleave.name': 'Maaiboog',
-  'entities.abilities.cw_cleave.description':
-    'Een vegende slag die alle vijanden voor je raakt voor {damage} schade.',
-  'entities.abilities.cw_defensive_stance.name': 'Bewaakte Houding',
-  'entities.abilities.cw_defensive_stance.description':
-    'Een verdedigende gevechtshouding: je genereert 30% meer dreiging, maar brengt 10% minder schade toe en incasseert 10% minder. Activeer opnieuw om de houding te verlaten.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Grimmig Gehuil',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec.',
-  'entities.abilities.cw_sunder_armor.name': 'Pantserscheur',
-  'entities.abilities.cw_sunder_armor.description':
-    'Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging.',
-  'entities.abilities.cw_taunt.name': 'Provoceren',
-  'entities.abilities.cw_taunt.description':
-    'Provoceert het doelwit: je dreiging stijgt tot het niveau van zijn meest gehate vijand en het wordt 3 sec lang gedwongen jou aan te vallen.',
-  'entities.abilities.cw_bloodthirst.name': 'Aderlating',
-  'entities.abilities.cw_bloodthirst.description':
-    'Val onmiddellijk aan in een bloedrazernij voor 60% wapenschade plus {damage}. (Razernij-kenmerk)',
-  'entities.abilities.cw_mortal_strike.name': 'Verminkende Slag',
-  'entities.abilities.cw_mortal_strike.description':
-    'Een venijnige slag die wapenschade plus {damage} toebrengt. (Wapens-handtekening)',
-  'entities.abilities.cw_shield_slam.name': 'Schildbreuk',
-  'entities.abilities.cw_shield_slam.description':
-    'Sla het doelwit met je schild voor 50% wapenschade plus {damage} en enorme dreiging. (Protectie-kenmerk)',
-  'entities.abilities.cw_whirlwind.name': 'Snijdende Wenteling',
-  'entities.abilities.cw_whirlwind.description':
-    'Draai in een dodelijke boog en tref alle nabije vijanden voor {damage}. (Razernij-talent)',
-  'entities.abilities.cw_berserker_rage.name': 'Kolkende Woede',
-  'entities.abilities.cw_berserker_rage.description':
-    'Ga in een kolkende woede en genereer 20 woede. (Krijger-talent)',
-  'classDetails.roles.warriorClassic': 'Tank / Melee-DPS',
-  'classes.warriorClassic': 'Krijger',
   'entities.abilities.sport_boot.description':
     'Een lange, hoge uithaal richting het richtpunt. Het publiek smult ervan.',
   'entities.abilities.sport_boot.name': 'Grote Uithaal',
@@ -6976,8 +6912,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'De wachtwoorden komen niet overeen.',
   'hudChrome.auth.resetErrInvalid':
     'Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan.',
-  'classDetails.lore.warriorClassic':
-    'De krijger precies zoals hij speelde voor de gevechtsherziening: de oorspronkelijke vaardighedenset en het originele woedetempo, behouden naast de nieuwe krijger zodat je beide kunt uitproberen en ons kunt vertellen welke beter aanvoelt.',
   'entities.abilities.battle_stance.name': 'Strijdhouding',
   'entities.abilities.battle_stance.description':
     'Een agressieve gevechtshouding: je genereert 10% meer woede. De standaardhouding voor Wapens en Protectie.',
@@ -7077,16 +7011,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.eastbrook_greatsword.name': 'Oostbeek-Grootzwaard',
   'entities.items.highwatch_greatsword.name': 'Hoogwacht-Grootzwaard',
   'entities.items.highwatch_wallshield.name': 'Hoogwacht-Muurschild',
-  'guide.abilityHook.cw_battle_shout':
-    'Een strijdkreet die de aanvalskracht van de groep verhoogt.',
-  'guide.abilityHook.cw_charge':
-    'Stormt op een verre vijand af om het gevecht te openen met een korte verdoving.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Versterkt uithoudingsvermogen zodat iedereen meer staande blijft in een gevecht.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Zet een zwaardere uithaal in de wachtrij die rage besteedt bij je volgende klap.',
-  'guide.abilityHook.cw_rend': 'Opent een bloeding die het doelwit na verloop van tijd uitput.',
-  'guide.abilityHook.cw_thunder_clap': 'Raakt alles om je heen en vertraagt hun aanvallen.',
   'guide.abilityHook.hamstring':
     'Snijdt in de benen van het doelwit om het te vertragen, zodat het je niet kan inhalen.',
   'guide.abilityHook.revenge':
@@ -7146,4 +7070,28 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.tab': 'Keuzes',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Doelwit van het doelwit',
   'itemUi.slots.twoHand': 'Tweehandig',
+  'entities.abilities.cleansing_verdict.name': 'Zuiverend oordeel',
+  'entities.abilities.cleansing_verdict.description':
+    'Verwijdert een schadelijk magisch effect van een bevriend doelwit en herstelt {damage} gezondheid met Heilige kracht.',
+  'entities.abilities.lingering_dread.name': 'Aanhoudende angst',
+  'entities.abilities.lingering_dread.description':
+    'Slaakt een strijdkreet die vijanden binnen 10 meter 4 sec. angst aanjaagt. De angst houdt aan tot elk doelwit schade gelijk aan 20% van zijn maximale gezondheid heeft opgelopen. (Krijgerstalent)',
+  'entities.abilities.smoke_screen.name': 'Rookgordijn',
+  'entities.abilities.smoke_screen.description':
+    'Verdwijn in een rookwolk en vergroot tijdelijk je kans om te ontwijken.',
+  'entities.abilities.spell_reflect.name': 'Spreukweerkaatsing',
+  'entities.abilities.spell_reflect.description':
+    'Heft je schild en kaatst de volgende vijandige spreuk terug naar de bezweerder.',
+  'entities.abilities.spellsteal.name': 'Spreukroof',
+  'entities.abilities.spellsteal.description':
+    'Steelt een gunstig magisch effect van een vijand en draagt het over op jou.',
+  'entities.abilities.startle_shot.name': 'Schrikschot',
+  'entities.abilities.startle_shot.description':
+    'Een wild schot dat het doelwit {duration} sec. desoriënteert. Elke vorm van schade beëindigt het effect.',
+  'entities.abilities.typhoon.name': 'Tyfoon',
+  'entities.abilities.typhoon.description':
+    'Een windstoot slaat alle nabije vijanden terug en versuft ze, waardoor ze langzamer bewegen.',
+  'entities.abilities.voidfeast.name': 'Leegtefeest',
+  'entities.abilities.voidfeast.description':
+    'Verslindt een magisch effect (een gunstig effect van een vijand of een schadelijk effect van een bondgenoot) en geneest je voor 6% van je maximale gezondheid.',
 };

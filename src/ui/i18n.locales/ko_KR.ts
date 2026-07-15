@@ -14,68 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': '약탈자의 일격',
-  'entities.abilities.cw_heroic_strike.description':
-    '강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
-  'entities.abilities.cw_battle_shout.name': '강철의 외침',
-  'entities.abilities.cw_battle_shout.description': '2분 동안 전투력이 {buff}만큼 증가합니다.',
-  'entities.abilities.cw_commanding_shout.name': '북돋는 외침',
-  'entities.abilities.cw_commanding_shout.description': '2분 동안 체력이 {buff}만큼 증가합니다.',
-  'entities.abilities.cw_charge.name': '쇄도',
-  'entities.abilities.cw_charge.description':
-    '적에게 돌진하여 분노 9를 생성하고 1초 동안 기절시킵니다. 사거리 8-25yd.',
-  'entities.abilities.cw_rend.name': '깊은 상처',
-  'entities.abilities.cw_rend.description':
-    '대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다.',
-  'entities.abilities.cw_thunder_clap.name': '진동의 일격',
-  'entities.abilities.cw_thunder_clap.description':
-    '주위 적에게 {damage}의 피해를 입히고 10초 동안 공격 속도를 10%만큼 늦춥니다.',
-  'entities.abilities.cw_hamstring.name': '절뚝이는 베기',
-  'entities.abilities.cw_hamstring.description':
-    '적에게 {damage}의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다.',
-  'entities.abilities.cw_bloodrage.name': '피의 대가',
-  'entities.abilities.cw_bloodrage.description': '생명력을 희생하여 분노 10을 생성합니다.',
-  'entities.abilities.cw_overpower.name': '붉은 손',
-  'entities.abilities.cw_overpower.description':
-    '무기 피해에 {damage}를 더한 피해를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다.',
-  'entities.abilities.cw_execute.name': '이른 무덤',
-  'entities.abilities.cw_execute.description':
-    '상처 입은 적을 끝내려 시도해 {damage}의 피해를 입힙니다. 생명력이 20% 미만인 적에게만 사용할 수 있습니다.',
-  'entities.abilities.cw_slam.name': '우악스러운 휘두르기',
-  'entities.abilities.cw_slam.description': '상대에게 무기 피해에 {damage}를 더한 피해를 입힙니다.',
-  'entities.abilities.cw_cleave.name': '수확의 호',
-  'entities.abilities.cw_cleave.description': '전방의 모든 적을 휩쓸어 {damage}의 피해를 입힙니다.',
-  'entities.abilities.cw_defensive_stance.name': '방어 태세',
-  'entities.abilities.cw_defensive_stance.description':
-    '방어 전투 태세입니다. 위협 수준을 30% 더 생성하지만, 주고받는 피해가 10% 감소합니다. 다시 시전하면 태세를 해제합니다.',
-  'entities.abilities.cw_demoralizing_shout.name': '흉포한 울부짖음',
-  'entities.abilities.cw_demoralizing_shout.description':
-    '무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 {buff}만큼 감소시킵니다.',
-  'entities.abilities.cw_sunder_armor.name': '방어구 절단',
-  'entities.abilities.cw_sunder_armor.description':
-    '대상의 방어구를 가르고 적용마다 {damage}%만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다.',
-  'entities.abilities.cw_taunt.name': '부추김',
-  'entities.abilities.cw_taunt.description':
-    '대상을 도발합니다. 자신의 위협 수준이 대상이 가장 증오하는 적과 같아지며, 3초 동안 자신을 공격하게 만듭니다.',
-  'entities.abilities.cw_bloodthirst.name': '사혈',
-  'entities.abilities.cw_bloodthirst.description':
-    '피의 광란으로 즉시 공격하여 무기 피해의 60%에 {damage}를 더한 피해를 줍니다. (분노 특화 대표 기술)',
-  'entities.abilities.cw_mortal_strike.name': '불구의 일격',
-  'entities.abilities.cw_mortal_strike.description':
-    '잔혹한 일격으로 무기 피해에 {damage}의 피해를 더합니다. (무기 특화 대표 기술)',
-  'entities.abilities.cw_shield_slam.name': '방패 강타',
-  'entities.abilities.cw_shield_slam.description':
-    '방패로 대상을 강타해 무기 피해의 50%에 {damage}를 더한 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)',
-  'entities.abilities.cw_whirlwind.name': '칼날 회오리',
-  'entities.abilities.cw_whirlwind.description':
-    '치명적인 호를 그리며 돌아 주변 모든 적에게 {damage}의 피해를 줍니다. (분노 특성)',
-  'entities.abilities.cw_berserker_rage.name': '들끓는 격노',
-  'entities.abilities.cw_berserker_rage.description':
-    '들끓는 격노에 들어가 분노 20을 생성합니다. (전사 특성)',
-  'classDetails.lore.warriorClassic':
-    '전투 개편 이전의 전사를 그대로 남겨 두었습니다. 원래의 기술 구성과 분노 흐름을 새 전사와 나란히 플레이해 보고 어느 쪽이 더 좋은지 알려 주세요.',
-  'classDetails.roles.warriorClassic': '탱커 / 근접 DPS',
-  'classes.warriorClassic': '전사',
   'hudChrome.auth.appleLoginCta': 'Apple로 계속하기',
   'hudChrome.auth.appleError': 'Apple로 로그인할 수 없습니다. 다시 시도해 주세요.',
   'hudChrome.auth.appleChoiceIntro': '새 계정을 만들거나 Apple을 기존 계정에 연결하세요.',
@@ -4654,14 +4592,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.summon_imp': '원거리에서 적에게 화염 화살을 날리는 불씨족을 불러냅니다.',
   'guide.abilityHook.thorns': '아군을 보호해, 근접 공격자가 칠 때마다 스스로 피해를 입게 합니다.',
   'guide.abilityHook.thunder_clap': '주위의 모든 적을 타격하고 그들의 공격 속도를 늦춥니다.',
-  'guide.abilityHook.cw_heroic_strike':
-    '다음 타격에 분노를 소모해 더 강하게 휘두르도록 예약합니다.',
-  'guide.abilityHook.cw_battle_shout': '파티 전체의 공격력을 높여 주는 사기를 북돋우는 외침입니다.',
-  'guide.abilityHook.cw_commanding_shout':
-    '체력을 높여 모두가 전투에서 더 오래 버틸 수 있게 합니다.',
-  'guide.abilityHook.cw_charge': '멀리 있는 적에게 돌진해 잠시 기절시키며 전투를 시작합니다.',
-  'guide.abilityHook.cw_rend': '시간이 지나며 대상을 약화시키는 출혈을 입힙니다.',
-  'guide.abilityHook.cw_thunder_clap': '주위의 모든 적을 타격하고 그들의 공격 속도를 늦춥니다.',
   'guide.abilityHook.wrath': '원거리에서 대상에게 던지는 자연 화살로, 주력 공격기입니다.',
   'guide.arenaPage.augmentsNote':
     '증강과 강화 효과는 해당 경기 동안에만 유지됩니다. 지속적인 힘이 아니라 그 자리에서 재미있게 빌드를 짜는 것이 목적이므로, 돈으로 승리를 사는 일은 없습니다.',
@@ -6962,9 +6892,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rallying_cry.description':
     '재집결의 함성을 내질러 자신과 40yd 이내의 파티원에게 10초 동안 최대 생명력을 20% 추가로 부여합니다.',
   'entities.abilities.spell_reflect.name': '주문 반사',
-  'entities.abilities.spell_reflect.description': '방패를 들어 다음에 받는 적대적 주문을 시전자에게 되돌립니다.',
+  'entities.abilities.spell_reflect.description':
+    '방패를 들어 다음에 받는 적대적 주문을 시전자에게 되돌립니다.',
   'entities.abilities.smoke_screen.name': '연막',
-  'entities.abilities.smoke_screen.description': '연기 속으로 몸을 숨겨 일정 시간 동안 회피율을 높입니다.',
+  'entities.abilities.smoke_screen.description':
+    '연기 속으로 몸을 숨겨 일정 시간 동안 회피율을 높입니다.',
   'entities.abilities.typhoon.name': '태풍',
-  'entities.abilities.typhoon.description': '돌풍이 주변의 모든 적을 밀쳐내고 무력화시켜 이동 속도를 늦춥니다.',
+  'entities.abilities.typhoon.description':
+    '돌풍이 주변의 모든 적을 밀쳐내고 무력화시켜 이동 속도를 늦춥니다.',
 };

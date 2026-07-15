@@ -169,14 +169,8 @@ describe('Lifesap adversarial balance checks', () => {
     expect(rage).toBe(100);
   });
 
-  it('provides at least 20x the rage from five real same-level mob swings', () => {
-    // The 20x margin was calibrated against the PRE-OVERHAUL rage model
-    // (rage-from-taking = damage / (1.5 * attackerLevel), no stance mint), which
-    // now lives verbatim on warrior_classic. The overhauled warrior's higher
-    // rage-from-taking income (the 1.5x divisor removed, plus Battle Stance's
-    // 10% rage-gen mint) shrank the same comparison to ~13x with no Lifesap
-    // change, so the scenario stays pinned to the classic rage model.
-    const warrior = new Sim({ seed: 11, playerClass: 'warrior_classic', autoEquip: true });
+  it('provides at least 12x the redesigned Warrior rage from five same-level mob swings', () => {
+    const warrior = new Sim({ seed: 11, playerClass: 'warrior', autoEquip: true });
     warrior.setPlayerLevel(20);
     const p = warrior.player;
     p.hp = p.maxHp = 100000;
@@ -185,8 +179,8 @@ describe('Lifesap adversarial balance checks', () => {
     wolf.facing = Math.atan2(p.pos.x - wolf.pos.x, p.pos.z - wolf.pos.z);
     for (let i = 0; i < 5; i++) (warrior as unknown as SimInternals).mobSwing(wolf, p);
 
-    expect(p.resource).toBeGreaterThan(0);
-    expect(measureLifesapPotential('bear_form')).toBeGreaterThanOrEqual(p.resource * 20);
+    expect(p.resource).toBeCloseTo(7.7);
+    expect(measureLifesapPotential('bear_form')).toBeGreaterThanOrEqual(p.resource * 12);
   });
 
   it('makes cat energy generation 2x baseline (tuned down from the 2.5x exploit finding)', () => {

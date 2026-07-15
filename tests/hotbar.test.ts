@@ -8,6 +8,7 @@ import {
   parseHotbarActions,
   placeAbilityOnSlot,
   placeItemOnSlot,
+  reconcileStableWarriorHotbar,
   resolveMobileHotbarDrop,
   shouldSeedFormBar,
   syncHotbarActions,
@@ -375,6 +376,73 @@ describe('hotbar slot sync', () => {
       null,
       { type: 'ability', id: 'blink' },
     ]);
+  });
+});
+
+describe('stable Warrior v0.24 hotbar reconciliation', () => {
+  it('preserves exact valid slots and items, drops unknown abilities, and fills first-empty slots', () => {
+    const original = [
+      { type: 'ability' as const, id: 'heroic_strike' },
+      { type: 'item' as const, id: 'baked_bread' },
+      { type: 'ability' as const, id: 'retired_v023_spell' },
+      null,
+      { type: 'ability' as const, id: 'battle_shout' },
+      null,
+      null,
+    ];
+
+    const result = reconcileStableWarriorHotbar(
+      original,
+      ['heroic_strike', 'battle_shout', 'revenge', 'raging_gale', 'pummel'],
+      ['revenge', 'raging_gale', 'pummel'],
+    );
+
+    expect(result.actions).toEqual([
+      { type: 'ability', id: 'heroic_strike' },
+      { type: 'item', id: 'baked_bread' },
+      { type: 'ability', id: 'revenge' },
+      { type: 'ability', id: 'raging_gale' },
+      { type: 'ability', id: 'battle_shout' },
+      { type: 'ability', id: 'pummel' },
+      null,
+    ]);
+    expect(result.changed).toBe(true);
+    expect(original[2]).toEqual({ type: 'ability', id: 'retired_v023_spell' });
+  });
+
+  it('never overwrites a full custom bar to make room for additions', () => {
+    const full = ['heroic_strike', 'battle_shout', 'charge', 'hamstring'].map((id) => ({
+      type: 'ability' as const,
+      id,
+    }));
+
+    expect(
+      reconcileStableWarriorHotbar(
+        full,
+        ['heroic_strike', 'battle_shout', 'charge', 'hamstring', 'revenge'],
+        ['revenge'],
+      ),
+    ).toEqual({ actions: full, changed: false });
+  });
+
+  it('is idempotent after the caller writes its one-shot migration marker', () => {
+    const first = reconcileStableWarriorHotbar(
+      [{ type: 'ability' as const, id: 'heroic_strike' }, null, null],
+      ['heroic_strike', 'revenge'],
+      ['revenge'],
+    );
+    const second = reconcileStableWarriorHotbar(
+      first.actions,
+      ['heroic_strike', 'revenge'],
+      ['revenge'],
+    );
+
+    expect(first.actions).toEqual([
+      { type: 'ability', id: 'heroic_strike' },
+      { type: 'ability', id: 'revenge' },
+      null,
+    ]);
+    expect(second).toEqual({ actions: first.actions, changed: false });
   });
 });
 

@@ -1,5 +1,4 @@
 import type { AbilityDef, AbilityEffect, AuraKind, PlayerClass, Stats, WeaponInfo } from '../types';
-import { WARRIOR_CLASSIC_ABILITIES, WARRIOR_CLASSIC_CLASS } from './classes_warrior_classic';
 import type { TalentModifiers } from './talents';
 import { SPORT_ABILITIES } from './vale_cup';
 
@@ -178,7 +177,6 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     ],
     color: 0xfff569,
   },
-  warrior_classic: WARRIOR_CLASSIC_CLASS,
   paladin: {
     id: 'paladin',
     name: 'Paladin',
@@ -5733,7 +5731,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // resolves sport ids; no class lists them, so abilitiesKnownAt never grants
   // them outside a match (resolveSportKit is the only entry).
   ...SPORT_ABILITIES,
-  ...WARRIOR_CLASSIC_ABILITIES,
 };
 
 // A class ability resolved to a concrete rank, with talent modifiers already

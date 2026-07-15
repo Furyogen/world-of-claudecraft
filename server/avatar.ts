@@ -8,26 +8,16 @@
 // override this fallback (the route prefers the static file when present).
 
 import { deflateSync } from 'node:zlib';
-import type { PlayerClass } from '../src/sim/types';
+import { ALL_CLASSES, isPlayerClass, type PlayerClass } from '../src/sim/types';
 
-export const PLAYER_CLASSES: readonly PlayerClass[] = [
-  'warrior',
-  'paladin',
-  'hunter',
-  'rogue',
-  'priest',
-  'shaman',
-  'mage',
-  'warlock',
-  'druid',
-];
+export const PLAYER_CLASSES: readonly PlayerClass[] = ALL_CLASSES;
+export { isPlayerClass };
 
 export const MAX_SKIN = 7;
 
 // Card-design class colors (shared palette in WORLD-OF-CLAUDECRAFT.md §6).
 const CLASS_COLOR: Record<PlayerClass, [number, number, number]> = {
   warrior: [0xc7, 0x9c, 0x6e],
-  warrior_classic: [0xc7, 0x9c, 0x6e],
   paladin: [0xf5, 0x8c, 0xba],
   hunter: [0xab, 0xd4, 0x73],
   rogue: [0xff, 0xf5, 0x69],
@@ -37,10 +27,6 @@ const CLASS_COLOR: Record<PlayerClass, [number, number, number]> = {
   warlock: [0x94, 0x82, 0xc9],
   druid: [0xff, 0x7d, 0x0a],
 };
-
-export function isPlayerClass(s: string): s is PlayerClass {
-  return (PLAYER_CLASSES as readonly string[]).includes(s);
-}
 
 export function isValidSkin(n: number): boolean {
   return Number.isInteger(n) && n >= 0 && n <= MAX_SKIN;

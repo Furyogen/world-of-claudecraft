@@ -14,6 +14,10 @@ import * as bagsMod from './bags';
 import { addStacked, BAG_SOCKETS, bagCapacity, canAddItem, migrationBagsFor } from './bags';
 import * as bankMod from './bank';
 import { type BankState, clampBonusSlots, sanitizeBankState } from './bank';
+import {
+  CURRENT_CHARACTER_CONTENT_REVISION,
+  normalizeCharacterContentRevision,
+} from './character_content_revision';
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
 import { auraReplacementConflicts } from './combat/aura_stacking';
@@ -481,6 +485,7 @@ const FLEEING_FAMILIES: ReadonlySet<MobFamily> = new Set([
 // FALL_SAFE_DISTANCE moved there too; re-exported for social/chat_readouts.ts (the
 // /falling readout shares the landing-damage threshold with the fall-damage model).
 export { FALL_SAFE_DISTANCE } from './player_motion';
+export { CURRENT_CHARACTER_CONTENT_REVISION };
 
 // Host-agnostic raid-lockout fallback: when no host injects a reset boundary (offline
 // browser, headless RL env, tests), a kill locks for a flat 24h day. The authoritative
@@ -1025,6 +1030,9 @@ export interface AwayStatus {
 // are optional so characters saved before the Ashen Coliseum existed load
 // cleanly (addPlayer falls back to the unranked defaults).
 export interface CharacterState {
+  // Version of class-owned persisted content (talents, saved build bars, and
+  // cooldown ids). Optional so production saves from before v0.24 remain valid.
+  contentRevision?: number;
   level: number;
   xp: number;
   // Post-cap progression. All optional so characters saved before the Max-Level
@@ -1698,7 +1706,9 @@ export class Sim {
       bankBonus?: { bonusSlots: number; sources: BankBonusSource[] };
     },
   ): number {
-    const savedState = opts?.state ? sanitizeRemovedZone1Content(opts.state).state : undefined;
+    const savedState = opts?.state
+      ? normalizeCharacterContentRevision(cls, sanitizeRemovedZone1Content(opts.state).state)
+      : undefined;
     // Characters saved inside a dungeon instance rejoin at its entrance —
     // their old instance is gone (or belongs to someone else) by now.
     let savedPos = savedState?.pos ?? null;
@@ -2145,6 +2155,7 @@ export class Sim {
     // delvePetStash fallback; known/sportRole are session-derived, not saved.
     const cupReturn = valeCupMod.vcupReturnFor(this.ctx, pid);
     const state: CharacterState = {
+      contentRevision: CURRENT_CHARACTER_CONTENT_REVISION,
       level: restore ? restore.level : e.level,
       xp: restore ? restore.xp : meta.xp,
       lifetimeXp: meta.lifetimeXp,

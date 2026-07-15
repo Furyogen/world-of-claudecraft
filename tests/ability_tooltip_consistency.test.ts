@@ -64,12 +64,6 @@ const NUMBER_ALLOWLIST: Record<string, number[]> = {
   // dedicated branch in casting_lifecycle.ts. The HUD replaces 240 with the
   // resolved HoT total after Improved Patch Up is applied.
   revive_pet: [240, 35],
-  // Classic Warrior clones (classes_warrior_classic.ts): same dispatch-code
-  // constants as their base ids above (charge rage/stun, the defensive-stance
-  // threat multiplier, the taunt compel window).
-  cw_charge: [9, 1],
-  cw_defensive_stance: [30],
-  cw_taunt: [3],
 };
 
 // Every resolved rank of every class ability (deduped by rank).

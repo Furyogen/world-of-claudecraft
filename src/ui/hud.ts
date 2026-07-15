@@ -25,6 +25,7 @@ import {
 } from '../render/characters/portrait';
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
+import { WARRIOR_V024_HOTBAR_ADDITION_IDS } from '../sim/character_content_revision';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
 import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
@@ -252,7 +253,6 @@ import {
 import {
   formatMoney as formatLocalizedMoney,
   formatNumber,
-  getLanguage,
   moneyParts,
   type SupportedLanguage,
   type TranslationKey,
@@ -402,6 +402,7 @@ import {
   wocBalance,
   wocBalanceVerified,
 } from './wallet_balance';
+import { runStableWarriorHotbarMigration } from './warrior_hotbar_migration';
 import { type WeaponProcEffectDesc, weaponProcLines } from './weapon_proc_view';
 import { makeWindowFocus } from './window_focus';
 import { installWindowResize, markResizableWindow } from './window_resize';
@@ -793,9 +794,7 @@ function castKeyForAbility(ability: string): string | null {
  *  (other players), flesh (creatures). */
 function materialImpactKey(tgt: Entity): string {
   if (tgt.kind === 'player')
-    return tgt.templateId === 'warrior' ||
-      tgt.templateId === 'warrior_classic' ||
-      tgt.templateId === 'paladin'
+    return tgt.templateId === 'warrior' || tgt.templateId === 'paladin'
       ? 'impact_metal'
       : 'impact_leather';
   if (tgt.kind === 'mob')
@@ -4989,6 +4988,33 @@ export class Hud {
     this.loadedSlotMapFromStorage = stored;
     this.hotbarActions = parsed;
     this.knownAbilityIdsAtLastSlotSync = null;
+    this.migrateStableWarriorHotbar(stored);
+  }
+
+  private migrateStableWarriorHotbar(hasStoredBar: boolean): void {
+    const knownAbilityIds = this.sim.known.map((known) => known.def.id);
+    const known = new Set(knownAbilityIds);
+    const migrated = runStableWarriorHotbarMigration({
+      storage: typeof localStorage === 'undefined' ? null : localStorage,
+      playerClass: this.sim.cfg.playerClass,
+      // Resolve the live form instead of trusting the constructor's initial
+      // `normal`: an online reconnect can first render while a sport kit is live.
+      form: this.playerHotbarForm(),
+      hasStoredBar,
+      hotbarKey: this.slotMapKey('normal'),
+      actions: this.hotbarActions,
+      knownAbilityIds,
+      // Mirror the sim-side reconcile defense (character_content_revision.ts):
+      // a passive or stance ability must never land on the normal bar even if
+      // one is ever added to the addition list.
+      additionIds: WARRIOR_V024_HOTBAR_ADDITION_IDS.filter(
+        (id) =>
+          known.has(id) &&
+          !ABILITIES[id]?.passive &&
+          ABILITIES[id]?.exclusiveGroup !== WARRIOR_STANCE_GROUP,
+      ),
+    });
+    this.hotbarActions = migrated.actions;
   }
 
   private saveSlotMap(): void {
@@ -6238,8 +6264,7 @@ export class Hud {
   // changes (sig elision, like the pet bar).
   private renderStanceBar(): void {
     const bar = $('#stancebar') as HTMLElement;
-    const isWarrior =
-      this.sim.cfg.playerClass === 'warrior' || this.sim.cfg.playerClass === 'warrior_classic';
+    const isWarrior = this.sim.cfg.playerClass === 'warrior';
     const knownStances = isWarrior
       ? this.sim.known.filter((k) => k.def.exclusiveGroup === WARRIOR_STANCE_GROUP)
       : [];

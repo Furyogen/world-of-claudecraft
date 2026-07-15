@@ -27,12 +27,6 @@ export const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
     armorKey: 'classDetails.armor.chainLeatherCloth',
     weaponsKey: 'classDetails.weapons.swordsMacesAxes',
   },
-  warrior_classic: {
-    roleKey: 'classDetails.roles.warriorClassic',
-    roleType: 'hybrid',
-    armorKey: 'classDetails.armor.chainLeatherCloth',
-    weaponsKey: 'classDetails.weapons.swordsMacesAxes',
-  },
   paladin: {
     roleKey: 'classDetails.roles.paladin',
     roleType: 'hybrid',
@@ -88,7 +82,6 @@ export const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
 // tests/charselect_class_details.test.ts so this never drifts from the sim.
 export const SIGNATURE_ABILITIES: Record<PlayerClass, string[]> = {
   warrior: ['charge', 'heroic_strike', 'execute'],
-  warrior_classic: ['cw_charge', 'cw_heroic_strike', 'cw_execute'],
   paladin: ['holy_light', 'judgement', 'seal_of_righteousness'],
   hunter: ['serpent_sting', 'aimed_shot', 'arcane_shot'],
   rogue: ['sinister_strike', 'eviscerate', 'evasion'],

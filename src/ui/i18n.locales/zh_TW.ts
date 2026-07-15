@@ -14,67 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': '劫掠打擊',
-  'entities.abilities.cw_heroic_strike.description':
-    '一次強力攻擊，使近戰傷害提高 {damage}。在你的下一次揮擊時觸發。',
-  'entities.abilities.cw_battle_shout.name': '鐵嗓怒吼',
-  'entities.abilities.cw_battle_shout.description': '使你的攻擊強度提高 {buff}，持續 2 分鐘。',
-  'entities.abilities.cw_commanding_shout.name': '激勵吶喊',
-  'entities.abilities.cw_commanding_shout.description': '使你的耐力提高 {buff}，持續 2 分鐘。',
-  'entities.abilities.cw_charge.name': '猛衝',
-  'entities.abilities.cw_charge.description':
-    '向一名敵人衝鋒，產生 9 點怒氣並使其昏迷 1 秒。8-25 碼距離。',
-  'entities.abilities.cw_rend.name': '深切裂傷',
-  'entities.abilities.cw_rend.description':
-    '撕裂目標，使其在 {duration} 秒內流血並受到 {damage} 點傷害。',
-  'entities.abilities.cw_thunder_clap.name': '撼地一擊',
-  'entities.abilities.cw_thunder_clap.description':
-    '轟擊附近敵人，造成 {damage} 點傷害，並使其攻擊速度降低 10%，持續 10 秒。',
-  'entities.abilities.cw_hamstring.name': '跛行斬',
-  'entities.abilities.cw_hamstring.description':
-    '重創敵人，造成 {damage} 點傷害，並使其移動速度降低 50%，持續 15 秒。',
-  'entities.abilities.cw_bloodrage.name': '血之代價',
-  'entities.abilities.cw_bloodrage.description': '以生命值為代價產生 10 點怒氣。',
-  'entities.abilities.cw_overpower.name': '血手',
-  'entities.abilities.cw_overpower.description':
-    '立即攻擊，造成武器傷害加 {damage}。只能在目標閃躲後使用。無法被閃躲。',
-  'entities.abilities.cw_execute.name': '提早入土',
-  'entities.abilities.cw_execute.description':
-    '嘗試終結受傷的敵人，造成 {damage} 點傷害。只能對生命值低於 20% 的敵人使用。',
-  'entities.abilities.cw_slam.name': '蠻力揮擊',
-  'entities.abilities.cw_slam.description': '猛擊對手，造成武器傷害加 {damage}。',
-  'entities.abilities.cw_cleave.name': '收割弧斬',
-  'entities.abilities.cw_cleave.description': '橫掃一擊，對你前方所有敵人造成 {damage} 點傷害。',
-  'entities.abilities.cw_defensive_stance.name': '戒備姿態',
-  'entities.abilities.cw_defensive_stance.description':
-    '防禦戰鬥姿態：你產生的威脅值提高 30%，但造成和受到的傷害降低 10%。再次施放可離開該姿態。',
-  'entities.abilities.cw_demoralizing_shout.name': '厲嚎',
-  'entities.abilities.cw_demoralizing_shout.description':
-    '發出可怕的怒吼，使附近所有敵人的攻擊強度降低 {buff}，持續 30 秒。',
-  'entities.abilities.cw_sunder_armor.name': '削甲',
-  'entities.abilities.cw_sunder_armor.description':
-    '撕裂目標的護甲，每次使其降低 {damage}%。最多疊加 5 次。產生大量威脅值。',
-  'entities.abilities.cw_taunt.name': '挑釁',
-  'entities.abilities.cw_taunt.description':
-    '嘲諷目標：你的威脅值提高到其最仇恨敵人的水平，並強迫其攻擊你 3 秒。',
-  'entities.abilities.cw_bloodthirst.name': '放血',
-  'entities.abilities.cw_bloodthirst.description':
-    '在鮮血狂怒中立即攻擊，造成 60% 武器傷害加 {damage}。（狂怒專精標誌技能）',
-  'entities.abilities.cw_mortal_strike.name': '致殘打擊',
-  'entities.abilities.cw_mortal_strike.description':
-    '凶狠打擊，造成武器傷害外加 {damage} 點傷害。（武器專精標誌技能）',
-  'entities.abilities.cw_shield_slam.name': '碎盾擊',
-  'entities.abilities.cw_shield_slam.description':
-    '用盾牌猛擊目標，造成 50% 武器傷害加 {damage} 並產生巨量威脅。（防護專精標誌技能）',
-  'entities.abilities.cw_whirlwind.name': '利刃迴旋',
-  'entities.abilities.cw_whirlwind.description':
-    '以致命弧線旋轉，打擊附近所有敵人，造成 {damage} 點傷害。（狂怒天賦）',
-  'entities.abilities.cw_berserker_rage.name': '沸血狂怒',
-  'entities.abilities.cw_berserker_rage.description': '進入沸血狂怒，產生 20 點怒氣。（戰士天賦）',
-  'classDetails.lore.warriorClassic':
-    '戰鬥重做之前的戰士玩法原樣保留：原版技能組與怒氣節奏，與新戰士並存，試試兩個版本，告訴我們哪個手感更好。',
-  'classDetails.roles.warriorClassic': '坦克 / 近戰 DPS',
-  'classes.warriorClassic': '戰士',
   'hudChrome.auth.appleLoginCta': '透過 Apple 繼續',
   'hudChrome.auth.appleError': '無法透過 Apple 登入。請再試一次。',
   'hudChrome.auth.appleChoiceIntro': '建立新帳戶，或將 Apple 連結到現有帳戶。',
@@ -4423,12 +4362,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.summon_imp': '召喚一隻燼裔，從遠處朝敵人投擲火焰箭。',
   'guide.abilityHook.thorns': '守護友方，讓近戰攻擊者每次出手都會傷到自己。',
   'guide.abilityHook.thunder_clap': '打擊你周遭的一切並降低它們的攻擊速度。',
-  'guide.abilityHook.cw_heroic_strike': '預備一記更沉重的揮擊，在你的下一擊消耗怒氣。',
-  'guide.abilityHook.cw_battle_shout': '鼓舞士氣的怒吼，提升隊伍的攻擊強度。',
-  'guide.abilityHook.cw_commanding_shout': '提升耐力，讓所有人在戰鬥中更有續航力。',
-  'guide.abilityHook.cw_charge': '衝向遠處的敵人，以短暫昏迷揭開戰鬥序幕。',
-  'guide.abilityHook.cw_rend': '施加流血，隨時間慢慢磨耗目標。',
-  'guide.abilityHook.cw_thunder_clap': '打擊你周遭的一切並降低它們的攻擊速度。',
   'guide.abilityHook.wrath': '從遠處朝目標擲出一道自然箭矢，是你慣用的核彈。',
   'guide.arenaPage.augmentsNote':
     '強化與增益只在該場對戰中有效。它們著重於即興、好玩的搭配，而非長久的力量，所以沒有人能花錢買到勝利。',
@@ -6619,5 +6552,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.smoke_screen.name': '煙幕',
   'entities.abilities.smoke_screen.description': '遁入煙霧之中，在一段時間內提高你的閃躲幾率。',
   'entities.abilities.typhoon.name': '颱風',
-  'entities.abilities.typhoon.description': '一陣狂風將附近所有敵人擊退並使其昏亂，降低其移動速度。',
+  'entities.abilities.typhoon.description':
+    '一陣狂風將附近所有敵人擊退並使其昏亂，降低其移動速度。',
 };

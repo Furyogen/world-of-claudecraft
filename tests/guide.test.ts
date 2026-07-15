@@ -23,6 +23,7 @@ import {
 } from '../src/guide/routes';
 import { MOBS } from '../src/sim/data';
 import { setLanguage, t } from '../src/ui/i18n';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const publicPath = (url: string): string => resolve(repoRoot, 'public', url.replace(/^\//, ''));
@@ -170,9 +171,8 @@ describe('guide.html shell', () => {
 });
 
 describe('Guide generated class content', () => {
-  it('covers all ten classes with grounded data', () => {
-    // 10 = the 9 originals plus warrior_classic (the pre-overhaul PTR clone).
-    expect(GUIDE_CLASSES).toHaveLength(10);
+  it('covers exactly the nine playable classes with grounded data', () => {
+    expect(GUIDE_CLASSES.map((entry) => entry.id)).toEqual(EXPECTED_PLAYER_CLASSES);
     for (const c of GUIDE_CLASSES) {
       expect(c.color).toMatch(/^#[0-9a-f]{6}$/);
       expect(['rage', 'mana', 'energy']).toContain(c.resource);
@@ -184,8 +184,7 @@ describe('Guide generated class content', () => {
         expect(['tank', 'healer', 'dps']).toContain(s.role);
         expect(s.signature.length).toBeGreaterThan(0);
       }
-      // every class nav name resolves (via the guide's helper, which owns the
-      // class-id -> catalog-key mapping: warrior_classic -> classes.warriorClassic)
+      // Every class navigation name resolves through the Guide helper.
       expect(className(c.id).length).toBeGreaterThan(0);
       // the class page uses the canonical character-creation description, not a guide-only blurb
       expect(classLore(c.id).length).toBeGreaterThan(0);
@@ -230,17 +229,13 @@ describe('Guide generated class content', () => {
     }
   });
 
-  it('matches the sim (regenerating leaves the committed file unchanged)', () => {
+  it('matches the sim (regenerating leaves the generated file unchanged)', () => {
+    const generatedPath = new URL('../src/guide/content.generated.ts', import.meta.url);
+    const before = readFileSync(generatedPath, 'utf8');
     execFileSync('node', ['scripts/wiki/build_content.mjs'], {
       cwd: new URL('..', import.meta.url),
     });
-    // No diff means the committed content is derived from the current sim data.
-    expect(() =>
-      execFileSync('git', ['diff', '--exit-code', '--', 'src/guide/content.generated.ts'], {
-        cwd: new URL('..', import.meta.url),
-        encoding: 'utf8',
-      }),
-    ).not.toThrow();
+    expect(readFileSync(generatedPath, 'utf8')).toBe(before);
   });
 });
 

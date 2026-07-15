@@ -31,7 +31,6 @@ import {
   WARLOCK_TALENTS,
 } from './talents_classic';
 import { WARRIOR_TALENTS } from './talents_warrior';
-import { WARRIOR_CLASSIC_TALENTS } from './talents_warrior_classic';
 
 export type Role = 'tank' | 'healer' | 'dps';
 
@@ -242,7 +241,6 @@ export interface TalentModifiers {
 
 export const TALENTS: Partial<Record<PlayerClass, ClassTalents>> = {
   warrior: WARRIOR_TALENTS,
-  warrior_classic: WARRIOR_CLASSIC_TALENTS,
   paladin: PALADIN_TALENTS,
   hunter: HUNTER_TALENTS,
   rogue: ROGUE_TALENTS,

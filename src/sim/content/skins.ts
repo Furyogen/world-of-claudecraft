@@ -120,7 +120,6 @@ export function rankAllowsMechChroma(granted: SkinRank, skin: number): boolean {
 // tests/skin_event.test.ts asserts this stays in lockstep with SKINS.
 export const SKIN_COUNTS: Record<PlayerClass, number> = {
   warrior: 4,
-  warrior_classic: 4,
   paladin: 2,
   hunter: 4,
   rogue: 4,

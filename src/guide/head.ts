@@ -47,10 +47,8 @@ const FAQ_QA: { q: TranslationKey; a: TranslationKey; cap?: boolean }[] = [
   { q: 'guide.faqPage.q11', a: 'guide.faqPage.a11' },
 ];
 
-// Class name + lore, resolved through entity_i18n like the class pages (it owns the
-// class-id -> catalog-key mapping; a raw `classes.${id}` key breaks for
-// warrior_classic, whose catalog key is classes.warriorClassic). Kept off class_view.ts
-// so the head module does not pull in the icon-canvas machinery it carries.
+// Class name + lore, resolved through entity_i18n like the class pages. Kept off
+// class_view.ts so the head module does not pull in its icon-canvas machinery.
 const className = (id: string): string => classDisplayName(id as PlayerClass);
 const classLore = (id: string): string =>
   tEntity({ kind: 'class', id: id as PlayerClass, field: 'description' });

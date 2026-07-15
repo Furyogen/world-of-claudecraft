@@ -15,6 +15,7 @@ import { randomUUID } from 'node:crypto';
 import type { EventEmitter } from 'node:events';
 import type * as http from 'node:http';
 import type { WebSocket, WebSocketServer } from 'ws';
+import { isPlayerClass } from '../src/sim/types';
 import type { BankBonusSource } from '../src/world_api';
 import type {
   AccountChatMuteStatus,
@@ -176,6 +177,10 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     }
     const character = await getCharacter(accountId, characterId);
     if (!character) {
+      rejectHandshake(ws, WS_AUTH_ERROR.noSuchCharacter);
+      return;
+    }
+    if (!isPlayerClass(character.class)) {
       rejectHandshake(ws, WS_AUTH_ERROR.noSuchCharacter);
       return;
     }

@@ -2,66 +2,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Plundrarhugg',
-  'entities.abilities.cw_heroic_strike.description':
-    'Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg.',
-  'entities.abilities.cw_battle_shout.name': 'Järnvrål',
-  'entities.abilities.cw_battle_shout.description': 'Ökar din attackkraft med {buff} i 2 min.',
-  'entities.abilities.cw_commanding_shout.name': 'Stärkande rop',
-  'entities.abilities.cw_commanding_shout.description': 'Ökar din uthållighet med {buff} i 2 min.',
-  'entities.abilities.cw_charge.name': 'Anstormning',
-  'entities.abilities.cw_charge.description':
-    'Stormar en fiende, genererar 9 raseri och bedövar den i 1 sek. 8-25 m räckvidd.',
-  'entities.abilities.cw_rend.name': 'Djup skåra',
-  'entities.abilities.cw_rend.description':
-    'Sårar målet och får det att blöda för {damage} skada över {duration} sek.',
-  'entities.abilities.cw_thunder_clap.name': 'Skälvande slag',
-  'entities.abilities.cw_thunder_clap.description':
-    'Spränger närliggande fiender för {damage} skada och saktar ner deras attacker med 10 % i 10 sek.',
-  'entities.abilities.cw_hamstring.name': 'Haltande hugg',
-  'entities.abilities.cw_hamstring.description':
-    'Stympar fienden för {damage} skada och saktar dess förflyttning med 50 % i 15 sek.',
-  'entities.abilities.cw_bloodrage.name': 'Blodstull',
-  'entities.abilities.cw_bloodrage.description': 'Genererar 10 raseri på bekostnad av hälsa.',
-  'entities.abilities.cw_overpower.name': 'Rödhand',
-  'entities.abilities.cw_overpower.description':
-    'Omedelbart anfall för vapenskada plus {damage}. Endast användbart efter att målet väjt undan. Kan inte väjas undan.',
-  'entities.abilities.cw_execute.name': 'Tidig grav',
-  'entities.abilities.cw_execute.description':
-    'Försöker göra slut på en sårad fiende och vållar {damage} skada. Endast användbar på fiender under 20 % hälsa.',
-  'entities.abilities.cw_slam.name': 'Brutalt sving',
-  'entities.abilities.cw_slam.description':
-    'Smäller till motståndaren för vapenskada plus {damage}.',
-  'entities.abilities.cw_cleave.name': 'Skördebåge',
-  'entities.abilities.cw_cleave.description':
-    'Ett svepande hugg som träffar alla fiender framför dig för {damage} skada.',
-  'entities.abilities.cw_defensive_stance.name': 'Gardställning',
-  'entities.abilities.cw_defensive_stance.description':
-    'En defensiv stridsställning: du genererar 30 % mer hot men vållar och tar 10 % mindre skada. Kasta igen för att lämna ställningen.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Fasans tjut',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Utstöter ett skräckinjagande rop som sänker anfallskraften hos alla närliggande fiender med {buff} i 30 sek.',
-  'entities.abilities.cw_sunder_armor.name': 'Rustningsklipp',
-  'entities.abilities.cw_sunder_armor.description':
-    'Klyver målets rustning och sänker den med {damage}% per applicering. Stackas upp till 5 gånger. Vållar en stor mängd hot.',
-  'entities.abilities.cw_taunt.name': 'Egga',
-  'entities.abilities.cw_taunt.description':
-    'Hånar målet: ditt hot stiger till nivå med dess mest hatade fiende och det tvingas anfalla dig i 3 sek.',
-  'entities.abilities.cw_bloodthirst.name': 'Åderlåtning',
-  'entities.abilities.cw_bloodthirst.description':
-    'Attackera omedelbart i ett blodsraseri för 60 % vapenskada plus {damage}. (Raserisignatur)',
-  'entities.abilities.cw_mortal_strike.name': 'Stympande hugg',
-  'entities.abilities.cw_mortal_strike.description':
-    'Ett illvilligt hugg som vållar vapenskada plus {damage}. (Vapensignatur)',
-  'entities.abilities.cw_shield_slam.name': 'Sköldkross',
-  'entities.abilities.cw_shield_slam.description':
-    'Slå målet med din sköld för 50 % vapenskada plus {damage} och enormt hot. (Skyddssignatur)',
-  'entities.abilities.cw_whirlwind.name': 'Klingvirvel',
-  'entities.abilities.cw_whirlwind.description':
-    'Snurra i en dödlig båge och hugg alla närliggande fiender för {damage}. (Raserital)',
-  'entities.abilities.cw_berserker_rage.name': 'Sjudande raseri',
-  'entities.abilities.cw_berserker_rage.description':
-    'Gå in i ett sjudande raseri och generera 20 raseri. (Krigartalang)',
   'entities.abilities.battle_stance.name': 'Stridsställning',
   'entities.abilities.battle_stance.description':
     'En aggressiv stridsställning: du genererar 10 % mer raseri. Standardställningen för Vapen och Beskydd.',
@@ -157,10 +97,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.victory_rush.name': 'Segerrus',
   'entities.abilities.victory_rush.description':
     'Slå för vapenskada plus {damage} och läk 20 % av din maximala hälsa. Kan endast användas inom 20 sek efter att du dödat en fiende.',
-  'classDetails.roles.warriorClassic': 'Tank / Närstrids-DPS',
-  'classes.warriorClassic': 'Krigare',
-  'classDetails.lore.warriorClassic':
-    'Krigaren precis som den spelades före stridsomarbetningen: den ursprungliga uppsättningen förmågor och det gamla raseritempot, bevarad vid sidan av den nya krigaren så att du kan prova båda och berätta för oss vilken som känns bäst.',
   'entities.abilities.sport_boot.description':
     'En lång, hög spark mot siktpunkten. Publiken älskar den.',
   'entities.abilities.sport_boot.name': 'Storspark',
@@ -3713,15 +3649,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Frammanar drycker som återställer mana, så du kan fylla på mellan anstormningarna.',
   'guide.abilityHook.corruption':
     'Förmultnar ett mål med skugga som tickar medan du gör andra saker.',
-  'guide.abilityHook.cw_battle_shout': 'Ett samlande rop som höjer attackstyrkan för gruppen.',
-  'guide.abilityHook.cw_charge':
-    'Stormar mot en avlägsen fiende för att öppna striden med en kort bedövning.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Stärker uthålligheten så alla har mer stryktålighet i en strid.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Köar ett tyngre svingslag som förbrukar raseri på ditt nästa slag.',
-  'guide.abilityHook.cw_rend': 'Öppnar en blödning som sliter ner målet över tid.',
-  'guide.abilityHook.cw_thunder_clap': 'Slår allt runt omkring dig och saktar ner deras attacker.',
   'guide.abilityHook.demon_skin':
     'En varaktig självförstärkning som härdar din hud och ger rustning.',
   'guide.abilityHook.devotion_aura':
@@ -7056,4 +6983,28 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Skapa ett nytt konto, eller koppla Apple till ett du redan har.',
   'hudChrome.auth.appleChoiceExpired': 'Apple-inloggningen har gått ut. Logga in med Apple igen.',
   'hudChrome.auth.appleError': 'Det gick inte att logga in med Apple. Försök igen.',
+  'entities.abilities.cleansing_verdict.name': 'Renande dom',
+  'entities.abilities.cleansing_verdict.description':
+    'Rensar bort en skadlig magisk effekt från ett vänligt mål och återställer {damage} hälsa med Helig kraft.',
+  'entities.abilities.lingering_dread.name': 'Kvardröjande skräck',
+  'entities.abilities.lingering_dread.description':
+    'Utstöter ett stridsrop som skrämmer fiender inom 10 m i 4 sek. Rädslan består tills varje mål har tagit skada motsvarande 20 % av sin maximala hälsa. (Krigartalang)',
+  'entities.abilities.smoke_screen.name': 'Rökridå',
+  'entities.abilities.smoke_screen.description':
+    'Försvinn in i ett rökmoln och öka din chans att undvika attacker under en tid.',
+  'entities.abilities.spell_reflect.name': 'Besvärjelsereflektion',
+  'entities.abilities.spell_reflect.description':
+    'Höj din sköld och reflektera nästa fientliga besvärjelse tillbaka mot dess kastare.',
+  'entities.abilities.spellsteal.name': 'Besvärjelsestöld',
+  'entities.abilities.spellsteal.description':
+    'Stjäl en gynnsam magisk effekt från en fiende och överför den till dig.',
+  'entities.abilities.startle_shot.name': 'Skrämselskott',
+  'entities.abilities.startle_shot.description':
+    'Ett vilt skott som desorienterar målet i {duration} sek. All skada bryter effekten.',
+  'entities.abilities.typhoon.name': 'Tyfon',
+  'entities.abilities.typhoon.description':
+    'En vindstöt slår tillbaka alla fiender i närheten och omtöcknar dem, vilket sänker deras rörelsehastighet.',
+  'entities.abilities.voidfeast.name': 'Tomhetsfest',
+  'entities.abilities.voidfeast.description':
+    'Slukar en magisk effekt (en gynnsam från en fiende eller en skadlig från en allierad) och läker dig med 6 % av din maximala hälsa.',
 };

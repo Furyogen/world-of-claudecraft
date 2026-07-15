@@ -2033,12 +2033,6 @@ export const cs_CZ: EnTranslations = {
       "charge": "Vyrazí k vzdálenému nepříteli a otevře boj krátkým omráčením.",
       "rend": "Otevře krvácení, které cíl postupně opotřebuje.",
       "thunder_clap": "Zasáhne vše kolem tebe a zpomalí jejich útoky.",
-      "cw_heroic_strike": "Zařadí těžší švih, který utratí vztek při příštím zásahu.",
-      "cw_battle_shout": "Povzbuzující pokřik, který zvedne sílu útoku party.",
-      "cw_commanding_shout": "Posílí výdrž, aby všichni v boji vydrželi déle.",
-      "cw_charge": "Vyrazí k vzdálenému nepříteli a otevře boj krátkým omráčením.",
-      "cw_rend": "Otevře krvácení, které cíl postupně opotřebuje.",
-      "cw_thunder_clap": "Zasáhne vše kolem tebe a zpomalí jejich útoky.",
       "hamstring": "Sekne cíl do nohou a zpomalí ho, aby tě nemohl doběhnout.",
       "seal_of_righteousness": "Naplní tvé švihy svatým poškozením, které potom utratíš Verdiktem.",
       "holy_light": "Stabilní, výrazné léčení pro doléčení spojence nebo sebe.",
@@ -3346,7 +3340,6 @@ export const cs_CZ: EnTranslations = {
   },
   "classes": {
     "warrior": "Válečník",
-    "warriorClassic": "Válečník",
     "paladin": "Paladin",
     "hunter": "Lovec",
     "rogue": "Tulák",
@@ -4114,7 +4107,6 @@ export const cs_CZ: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS na blízko",
-      "warriorClassic": "Tank / DPS na blízko",
       "paladin": "Léčitel / tank / DPS na blízko",
       "hunter": "DPS na dálku",
       "rogue": "DPS na blízko",
@@ -4139,7 +4131,6 @@ export const cs_CZ: EnTranslations = {
     },
     "lore": {
       "warrior": "Válečníci jsou bojem zocelení bojovníci na blízko, kteří získávají vztek při udělování nebo přijímání poškození. Pohlcují těžké zásahy nebo drtí nepřátele mocnými zbraněmi.",
-      "warriorClassic": "Válečník přesně tak, jak se hrál před přepracováním boje: původní sada schopností i tempo vzteku, zachované vedle nového válečníka, aby sis mohl(a) vyzkoušet oba a říct nám, který ti sedí víc.",
       "paladin": "Paladinové jsou svatí křižáci, kteří podporují spojence požehnáními, léčí zranění Hojivým světlem a chrání slabé v těžké zbroji.",
       "hunter": "Lovci jsou specialisté na boj z dálky, kteří bojují po boku ochočené šelmy, zasypávají nepřátele mířenými a rychlými střelami, zpomalují je bodnutím a omračující palbou a mění aspekty podle situace.",
       "rogue": "Tuláci jsou nenápadní zabijáci, kteří utrácejí energii a combo body za bodnutí do zad a dokončovací útoky ze stínů.",
@@ -5168,90 +5159,6 @@ export const cs_CZ: EnTranslations = {
         "name": "Nájezdnický úder",
         "description": "Silný útok, který zvýší poškození na blízko o {damage}. Aktivuje se při tvém dalším úderu."
       },
-      "cw_heroic_strike": {
-        "name": "Nájezdnický úder",
-        "description": "Silný útok, který zvýší poškození na blízko o {damage}. Aktivuje se při tvém dalším úderu."
-      },
-      "cw_battle_shout": {
-        "name": "Železný řev",
-        "description": "Zvýší tvoji sílu útoku o {buff} na 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Povzbuzující pokřik",
-        "description": "Zvýší tvoji výdrž o {buff} na 2 min."
-      },
-      "cw_charge": {
-        "name": "Nápor",
-        "description": "Vyrazí k nepříteli, vygeneruje 9 vzteku a omráčí ho na 1 s. Dosah 8-25 yardů."
-      },
-      "cw_rend": {
-        "name": "Hluboká rána",
-        "description": "Zraní cíl a způsobí mu krvácení za {damage} poškození během {duration} s."
-      },
-      "cw_thunder_clap": {
-        "name": "Chvějící úder",
-        "description": "Zasáhne blízké nepřátele za {damage} poškození a zpomalí jejich útoky o 10 % na 10 s."
-      },
-      "cw_hamstring": {
-        "name": "Mrzačící řez",
-        "description": "Zmrzačí nepřítele za {damage} poškození a zpomalí jeho pohyb o 50 % na 15 s."
-      },
-      "cw_bloodrage": {
-        "name": "Krvavá daň",
-        "description": "Vygeneruje 10 vzteku za cenu zdraví."
-      },
-      "cw_overpower": {
-        "name": "Rudá ruka",
-        "description": "Okamžitý útok za poškození zbraně plus {damage}. Použitelné jen poté, co cíl uhne. Nelze mu uhnout."
-      },
-      "cw_execute": {
-        "name": "Předčasný hrob",
-        "description": "Pokusí se dorazit zraněného nepřítele a způsobí {damage} poškození. Použitelné jen na nepřátele pod 20 % zdraví."
-      },
-      "cw_slam": {
-        "name": "Hrubý švih",
-        "description": "Praští protivníka za poškození zbraně plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Žací oblouk",
-        "description": "Rozmáchlý úder, který zasáhne všechny nepřátele před tebou za {damage} poškození."
-      },
-      "cw_defensive_stance": {
-        "name": "Krytý postoj",
-        "description": "Obranný bojový postoj: vytváříš o 30 % více hrozby, ale způsobuješ i utrpíš o 10 % méně poškození. Sesláním znovu postoj opustíš."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Děsivé vytí",
-        "description": "Vypustíš děsivý řev, který sníží sílu útoku všech blízkých nepřátel o {buff} na 30 s."
-      },
-      "cw_sunder_armor": {
-        "name": "Seřezání zbroje",
-        "description": "Rozpoltí zbroj cíle a sníží ji o {damage} za každou aplikaci. Stakuje se až 5 krát. Vytváří velké množství hrozby."
-      },
-      "cw_taunt": {
-        "name": "Provokace",
-        "description": "Vyprovokuje cíl: tvoje hrozba se zvýší na úroveň jeho nejnenáviděnějšího nepřítele a cíl je donucen tě 3 s útočit."
-      },
-      "cw_bloodthirst": {
-        "name": "Pouštění žilou",
-        "description": "Okamžitě zaútočíš v krvavém šílenství za 60 % poškození zbraně plus {damage}. (Hlavní schopnost Fury)"
-      },
-      "cw_mortal_strike": {
-        "name": "Mrzačící úder",
-        "description": "Zákeřný úder, který způsobí poškození zbraně plus {damage}. (Hlavní schopnost Arms)"
-      },
-      "cw_shield_slam": {
-        "name": "Proražení štítem",
-        "description": "Udeří cíl štítem za 50 % poškození zbraně plus {damage} a masivní hrozbu. (Hlavní schopnost Protection)"
-      },
-      "cw_whirlwind": {
-        "name": "Čepelový vír",
-        "description": "Roztočíš se v smrtícím oblouku a zasáhneš všechny blízké nepřátele za {damage}. (Talent Fury)"
-      },
-      "cw_berserker_rage": {
-        "name": "Vroucí zuřivost",
-        "description": "Vstoupíš do vroucí zuřivosti a získáš 20 vzteku. (Talent válečníka)"
-      },
       "revenge": {
         "name": "Odveta",
         "description": "Zaútočíš širokým obloukem a způsobíš fyzické poškození všem nepřátelům před tebou. Při více než 5 cílech je poškození sníženo. Když se vyhneš útoku nebo ho odrazíš, tvá příští Odveta nemusí stát žádný vztek."
@@ -6077,8 +5984,8 @@ export const cs_CZ: EnTranslations = {
         "description": "Výkřik, který na 8 sek. zpomalí nepřátele do 15 m o 50 %. (Válečnický talent)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Přetrvávající děs",
+        "description": "Vydá bojový pokřik, který na 4 s vyděsí nepřátele do 10 m. Strach přetrvá, dokud každý cíl neutrpí poškození ve výši 20 % svého maximálního zdraví. (Talent válečníka)"
       },
       "stormthrow": {
         "name": "Bouřný hod",
@@ -6277,32 +6184,32 @@ export const cs_CZ: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a blízké spojence cada segundo. (druidský talent)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Očistný rozsudek",
+        "description": "Odstraní škodlivý magický efekt ze spojeneckého cíle a obnoví mu {damage} zdraví pomocí Svaté magie."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Hostina prázdnoty",
+        "description": "Pohltí magický efekt (prospěšný z nepřítele nebo škodlivý ze spojence) a vyléčí tě o 6 % maximálního zdraví."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Krádež kouzla",
+        "description": "Ukradne nepříteli prospěšný magický efekt a přenese ho na tebe."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Lekavý výstřel",
+        "description": "Divoký výstřel, který cíl na {duration} s dezorientuje. Jakékoli poškození efekt přeruší."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Odraz kouzla",
+        "description": "Zvedneš štít a odrazíš další nepřátelské kouzlo zpět na jeho sesilatele."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Kouřová clona",
+        "description": "Zmizíš v oblaku kouře a na krátkou dobu zvýšíš svou šanci na úhyb."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Tajfun",
+        "description": "Poryv větru odhodí všechny nepřátele v okolí a ochromí je, čímž zpomalí jejich pohyb."
       },
       "bear_charge": {
         "name": "Medvědí výpad",

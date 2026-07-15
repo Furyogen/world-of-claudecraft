@@ -283,18 +283,15 @@ describe('i18n status summary: committed audit rollup cross-checks the full regi
         encoding: 'utf8',
       }),
     ).not.toThrow();
+    const summaryPath = path.join(root, summaryRel);
+    const before = fs.readFileSync(summaryPath, 'utf8');
     // Regenerates both artifacts; only the committed summary is diffed (status.json is
-    // gitignored, so a `git diff` on it would silently pass regardless).
+    // gitignored. Compare bytes directly so the check is valid in a dirty worktree.
     execFileSync(process.execPath, [path.join(root, 'scripts/i18n_scan.mjs')], {
       cwd: root,
       encoding: 'utf8',
     });
-    expect(() =>
-      execFileSync('git', ['diff', '--exit-code', '--', summaryRel], {
-        cwd: root,
-        encoding: 'utf8',
-      }),
-    ).not.toThrow();
+    expect(fs.readFileSync(summaryPath, 'utf8')).toBe(before);
     // Spawns the scanner subprocess too (cold Node + esbuild); same slow-CI reason as
     // the determinism test above, so it gets the same generous budget.
   }, 30_000);

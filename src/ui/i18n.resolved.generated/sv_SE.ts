@@ -2033,12 +2033,6 @@ export const sv_SE: EnTranslations = {
       "charge": "Stormar mot en avlägsen fiende för att öppna striden med en kort bedövning.",
       "rend": "Öppnar en blödning som sliter ner målet över tid.",
       "thunder_clap": "Slår allt runt omkring dig och saktar ner deras attacker.",
-      "cw_heroic_strike": "Köar ett tyngre svingslag som förbrukar raseri på ditt nästa slag.",
-      "cw_battle_shout": "Ett samlande rop som höjer attackstyrkan för gruppen.",
-      "cw_commanding_shout": "Stärker uthålligheten så alla har mer stryktålighet i en strid.",
-      "cw_charge": "Stormar mot en avlägsen fiende för att öppna striden med en kort bedövning.",
-      "cw_rend": "Öppnar en blödning som sliter ner målet över tid.",
-      "cw_thunder_clap": "Slår allt runt omkring dig och saktar ner deras attacker.",
       "hamstring": "Skär upp målets ben för att sakta ner det så att det inte kan jaga ikapp dig.",
       "seal_of_righteousness": "Besjälar dina sving med helig skada, förbruka den sedan med Verdict.",
       "holy_light": "En stadig, rejäl läkning för att toppa upp en allierad eller dig själv.",
@@ -3346,7 +3340,6 @@ export const sv_SE: EnTranslations = {
   },
   "classes": {
     "warrior": "Krigare",
-    "warriorClassic": "Krigare",
     "paladin": "Paladin",
     "hunter": "Jägare",
     "rogue": "Skurk",
@@ -4114,7 +4107,6 @@ export const sv_SE: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Närstrids-DPS",
-      "warriorClassic": "Tank / Närstrids-DPS",
       "paladin": "Helare / Tank / Närstrids-DPS",
       "hunter": "Distans-DPS",
       "rogue": "Närstrids-DPS",
@@ -4139,7 +4131,6 @@ export const sv_SE: EnTranslations = {
     },
     "lore": {
       "warrior": "Krigare är stridshärdade närstridskämpar som bygger upp Raseri när de utdelar eller tar skada. De absorberar tunga slag eller krossar fiender med kraftfulla vapen.",
-      "warriorClassic": "Krigaren precis som den spelades före stridsomarbetningen: den ursprungliga uppsättningen förmågor och det gamla raseritempot, bevarad vid sidan av den nya krigaren så att du kan prova båda och berätta för oss vilken som känns bäst.",
       "paladin": "Paladiner är heliga korsriddare som stödjer allierade med välsignelser, läker sår med Lagande ljus och skyddar de svaga i tung rustning.",
       "hunter": "Jägare är distansspecialister som slåss vid sidan av ett tämjt vilddjur, pepprar fiender med riktade skott och snabbeld, saktar ner dem med stick och krossande eld, och skiftar skepnader efter stundens behov.",
       "rogue": "Skurkar är smygande lönnmördare som spenderar Energi och Kombopoäng på ryggdolkar och dödsstötar från skuggorna.",
@@ -5168,90 +5159,6 @@ export const sv_SE: EnTranslations = {
         "name": "Plundrarhugg",
         "description": "Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg."
       },
-      "cw_heroic_strike": {
-        "name": "Plundrarhugg",
-        "description": "Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg."
-      },
-      "cw_battle_shout": {
-        "name": "Järnvrål",
-        "description": "Ökar din attackkraft med {buff} i 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Stärkande rop",
-        "description": "Ökar din uthållighet med {buff} i 2 min."
-      },
-      "cw_charge": {
-        "name": "Anstormning",
-        "description": "Stormar en fiende, genererar 9 raseri och bedövar den i 1 sek. 8-25 m räckvidd."
-      },
-      "cw_rend": {
-        "name": "Djup skåra",
-        "description": "Sårar målet och får det att blöda för {damage} skada över {duration} sek."
-      },
-      "cw_thunder_clap": {
-        "name": "Skälvande slag",
-        "description": "Spränger närliggande fiender för {damage} skada och saktar ner deras attacker med 10 % i 10 sek."
-      },
-      "cw_hamstring": {
-        "name": "Haltande hugg",
-        "description": "Stympar fienden för {damage} skada och saktar dess förflyttning med 50 % i 15 sek."
-      },
-      "cw_bloodrage": {
-        "name": "Blodstull",
-        "description": "Genererar 10 raseri på bekostnad av hälsa."
-      },
-      "cw_overpower": {
-        "name": "Rödhand",
-        "description": "Omedelbart anfall för vapenskada plus {damage}. Endast användbart efter att målet väjt undan. Kan inte väjas undan."
-      },
-      "cw_execute": {
-        "name": "Tidig grav",
-        "description": "Försöker göra slut på en sårad fiende och vållar {damage} skada. Endast användbar på fiender under 20 % hälsa."
-      },
-      "cw_slam": {
-        "name": "Brutalt sving",
-        "description": "Smäller till motståndaren för vapenskada plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Skördebåge",
-        "description": "Ett svepande hugg som träffar alla fiender framför dig för {damage} skada."
-      },
-      "cw_defensive_stance": {
-        "name": "Gardställning",
-        "description": "En defensiv stridsställning: du genererar 30 % mer hot men vållar och tar 10 % mindre skada. Kasta igen för att lämna ställningen."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Fasans tjut",
-        "description": "Utstöter ett skräckinjagande rop som sänker anfallskraften hos alla närliggande fiender med {buff} i 30 sek."
-      },
-      "cw_sunder_armor": {
-        "name": "Rustningsklipp",
-        "description": "Klyver målets rustning och sänker den med {damage}% per applicering. Stackas upp till 5 gånger. Vållar en stor mängd hot."
-      },
-      "cw_taunt": {
-        "name": "Egga",
-        "description": "Hånar målet: ditt hot stiger till nivå med dess mest hatade fiende och det tvingas anfalla dig i 3 sek."
-      },
-      "cw_bloodthirst": {
-        "name": "Åderlåtning",
-        "description": "Attackera omedelbart i ett blodsraseri för 60 % vapenskada plus {damage}. (Raserisignatur)"
-      },
-      "cw_mortal_strike": {
-        "name": "Stympande hugg",
-        "description": "Ett illvilligt hugg som vållar vapenskada plus {damage}. (Vapensignatur)"
-      },
-      "cw_shield_slam": {
-        "name": "Sköldkross",
-        "description": "Slå målet med din sköld för 50 % vapenskada plus {damage} och enormt hot. (Skyddssignatur)"
-      },
-      "cw_whirlwind": {
-        "name": "Klingvirvel",
-        "description": "Snurra i en dödlig båge och hugg alla närliggande fiender för {damage}. (Raserital)"
-      },
-      "cw_berserker_rage": {
-        "name": "Sjudande raseri",
-        "description": "Gå in i ett sjudande raseri och generera 20 raseri. (Krigartalang)"
-      },
       "revenge": {
         "name": "Hämnd",
         "description": "Anfall i en vid båge och vålla fysisk skada mot alla fiender framför dig. Över 5 mål minskas skadan. När du väjer undan eller parerar kan din nästa Hämnd kosta inget raseri."
@@ -6077,8 +5984,8 @@ export const sv_SE: EnTranslations = {
         "description": "Ett stridsrop som saktar ned fiender inom 15 m med 50% i 8 sek. (Krigartalang)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Kvardröjande skräck",
+        "description": "Utstöter ett stridsrop som skrämmer fiender inom 10 m i 4 sek. Rädslan består tills varje mål har tagit skada motsvarande 20 % av sin maximala hälsa. (Krigartalang)"
       },
       "stormthrow": {
         "name": "Stormkast",
@@ -6277,32 +6184,32 @@ export const sv_SE: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a närliggande allierade cada segundo. (druidtalang)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Renande dom",
+        "description": "Rensar bort en skadlig magisk effekt från ett vänligt mål och återställer {damage} hälsa med Helig kraft."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Tomhetsfest",
+        "description": "Slukar en magisk effekt (en gynnsam från en fiende eller en skadlig från en allierad) och läker dig med 6 % av din maximala hälsa."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Besvärjelsestöld",
+        "description": "Stjäl en gynnsam magisk effekt från en fiende och överför den till dig."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Skrämselskott",
+        "description": "Ett vilt skott som desorienterar målet i {duration} sek. All skada bryter effekten."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Besvärjelsereflektion",
+        "description": "Höj din sköld och reflektera nästa fientliga besvärjelse tillbaka mot dess kastare."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Rökridå",
+        "description": "Försvinn in i ett rökmoln och öka din chans att undvika attacker under en tid."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Tyfon",
+        "description": "En vindstöt slår tillbaka alla fiender i närheten och omtöcknar dem, vilket sänker deras rörelsehastighet."
       },
       "bear_charge": {
         "name": "Bruinrusning",

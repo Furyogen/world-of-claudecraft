@@ -293,11 +293,10 @@ describe('talent tooltip accuracy for specs, masteries, and choice rows', () => 
   const specs = specEntries();
 
   it('covers every class, every spec, and every choice row option', () => {
-    // 10 classes: the 9 originals plus warrior_classic (the pre-overhaul PTR
-    // clone), each with 3 specs and 6 choice rows of 3 options.
-    expect(new Set(effects.map((e) => e.cls)).size).toBe(10);
-    expect(specs).toHaveLength(30);
-    expect(effects.length).toBe(30 + 10 * 6 * 3);
+    // Nine classes, each with 3 specs and 6 choice rows of 3 options.
+    expect(new Set(effects.map((e) => e.cls)).size).toBe(9);
+    expect(specs).toHaveLength(27);
+    expect(effects).toHaveLength(27 + 9 * 6 * 3);
   });
 
   it('every spec tooltip names its signature ability', () => {
@@ -449,8 +448,23 @@ describe('talent tooltip accuracy for specs, masteries, and choice rows', () => 
     });
   });
 
-  it('falls back atomically when generated locale prose cannot express the complete effect', () => {
-    const option = (cls: 'warrior' | 'hunter' | 'rogue', id: string) => {
+  it('renders every shipped choice effect without copying authored English prose', () => {
+    setLanguage('es');
+    const copied: string[] = [];
+    for (const [cls, tree] of Object.entries(CHOICE_ROWS)) {
+      for (const row of tree.rows) {
+        for (const choice of row.options) {
+          const rendered = tTalent({ kind: 'talentChoice', choice, field: 'description' });
+          if (rendered === choice.description) copied.push(`${cls}:${choice.id}`);
+        }
+      }
+    }
+    expect(copied).toEqual([]);
+    setLanguage('en');
+  });
+
+  it('keeps conditional-DoT identity and damage-pushback immunity in localized output', () => {
+    const option = (cls: 'hunter' | 'priest', id: string) => {
       const found = CHOICE_ROWS[cls].rows
         .flatMap((row) => row.options)
         .find((choice) => choice.id === id);
@@ -459,16 +473,21 @@ describe('talent tooltip accuracy for specs, masteries, and choice rows', () => 
     };
 
     setLanguage('es');
-    for (const choice of [
-      option('warrior', 'war_r8_crippling_strikes'),
-      option('hunter', 'hun_r5_improved_serpent_sting'),
-      option('rogue', 'rog_r5_opportunist'),
-    ]) {
-      expect(tTalent({ kind: 'talentChoice', choice, field: 'description' })).toBe(
-        choice.description,
-      );
-    }
+    const pushback = tTalent({
+      kind: 'talentChoice',
+      choice: option('hunter', 'hun_r20_improved_volley'),
+      field: 'description',
+    });
+    expect(pushback).toContain(tEntity({ kind: 'ability', id: 'volley', field: 'name' }));
+    expect(pushback).toMatch(/0\s*s/);
 
+    const dotted = tTalent({
+      kind: 'talentChoice',
+      choice: option('priest', 'pri_r5_twisted_faith'),
+      field: 'description',
+    });
+    expect(dotted).toContain(tEntity({ kind: 'ability', id: 'mind_blast', field: 'name' }));
+    expect(dotted).toContain(tEntity({ kind: 'ability', id: 'shadow_word_pain', field: 'name' }));
     setLanguage('en');
   });
 

@@ -14,68 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const es: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Golpe del Saqueador',
-  'entities.abilities.cw_heroic_strike.description':
-    'Un ataque poderoso que aumenta el daño cuerpo a cuerpo en {damage}. Se activa en tu siguiente golpe.',
-  'entities.abilities.cw_battle_shout.name': 'Bramido de Hierro',
-  'entities.abilities.cw_battle_shout.description':
-    'Aumenta tu poder de ataque en {buff} durante 2 min.',
-  'entities.abilities.cw_commanding_shout.name': 'Grito Alentador',
-  'entities.abilities.cw_commanding_shout.description':
-    'Aumenta tu Aguante en {buff} durante 2 min.',
-  'entities.abilities.cw_charge.name': 'Arremetida',
-  'entities.abilities.cw_charge.description':
-    'Carga contra un enemigo, genera 9 de ira y lo aturde durante 1 s. Alcance de 8-25 m.',
-  'entities.abilities.cw_rend.name': 'Tajo Profundo',
-  'entities.abilities.cw_rend.description':
-    'Hiere al objetivo y le hace sangrar por {damage} de daño durante {duration} s.',
-  'entities.abilities.cw_thunder_clap.name': 'Golpe Sísmico',
-  'entities.abilities.cw_thunder_clap.description':
-    'Golpea a los enemigos cercanos por {damage} de daño y ralentiza sus ataques un 10% durante 10 s.',
-  'entities.abilities.cw_hamstring.name': 'Corte Paralizante',
-  'entities.abilities.cw_hamstring.description':
-    'Mutila al enemigo por {damage} de daño y reduce su velocidad de movimiento un 50% durante 15 s.',
-  'entities.abilities.cw_bloodrage.name': 'Tributo de Sangre',
-  'entities.abilities.cw_bloodrage.description': 'Genera 10 de ira a costa de salud.',
-  'entities.abilities.cw_overpower.name': 'Mano Roja',
-  'entities.abilities.cw_overpower.description':
-    'Ataque instantáneo que inflige daño de arma más {damage}. Solo se puede usar después de que el objetivo esquive. No puede esquivarse.',
-  'entities.abilities.cw_execute.name': 'Tumba Temprana',
-  'entities.abilities.cw_execute.description':
-    'Intenta rematar a un enemigo herido e inflige {damage} de daño. Solo usable contra enemigos con menos del 20% de salud.',
-  'entities.abilities.cw_slam.name': 'Mandoble Brutal',
-  'entities.abilities.cw_slam.description':
-    'Golpea al oponente e inflige daño de arma más {damage}.',
-  'entities.abilities.cw_cleave.name': 'Arco Segador',
-  'entities.abilities.cw_cleave.description':
-    'Un golpe amplio que alcanza a todos los enemigos frente a ti por {damage} de daño.',
-  'entities.abilities.cw_defensive_stance.name': 'Actitud en Guardia',
-  'entities.abilities.cw_defensive_stance.description':
-    'Actitud de combate defensiva: generas un 30% más de amenaza, pero infliges y recibes un 10% menos de daño. Lánzala de nuevo para salir de la actitud.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Aullido Pavoroso',
-  'entities.abilities.cw_demoralizing_shout.description':
-    'Lanza un grito aterrador que reduce el poder de ataque de todos los enemigos cercanos en {buff} durante 30 s.',
-  'entities.abilities.cw_sunder_armor.name': 'Cizalla de Armadura',
-  'entities.abilities.cw_sunder_armor.description':
-    'Cizalla la armadura del objetivo y la reduce un {damage}% por aplicación. Se acumula hasta 5 veces. Genera una gran cantidad de amenaza.',
-  'entities.abilities.cw_taunt.name': 'Provocar',
-  'entities.abilities.cw_taunt.description':
-    'Provoca al objetivo: tu amenaza sube hasta igualar la de su enemigo más odiado y queda obligado a atacarte durante 3 s.',
-  'entities.abilities.cw_bloodthirst.name': 'Sangría',
-  'entities.abilities.cw_bloodthirst.description':
-    'Atacas al instante en un frenesí sangriento por un 60% de daño de arma más {damage}. (habilidad distintiva de Furia)',
-  'entities.abilities.cw_mortal_strike.name': 'Golpe Mutilador',
-  'entities.abilities.cw_mortal_strike.description':
-    'Ataque brutal que inflige daño de arma más {damage}. (habilidad distintiva de Armas)',
-  'entities.abilities.cw_shield_slam.name': 'Quiebra de Escudo',
-  'entities.abilities.cw_shield_slam.description':
-    'Golpeas al objetivo con tu escudo por un 50% de daño de arma más {damage} y generas una amenaza enorme. (habilidad distintiva de Protección)',
-  'entities.abilities.cw_whirlwind.name': 'Remolino de Cuchillas',
-  'entities.abilities.cw_whirlwind.description':
-    'Giras en un arco letal y golpeas a todos los enemigos cercanos por {damage}. (talento de Furia)',
-  'entities.abilities.cw_berserker_rage.name': 'Furia Hirviente',
-  'entities.abilities.cw_berserker_rage.description':
-    'Entras en un frenesí hirviente y generas 20 de furia. (talento de guerrero)',
   'entities.abilities.battle_stance.name': 'Actitud de Batalla',
   'entities.abilities.battle_stance.description':
     'Actitud de combate agresiva: generas un 10% más de ira. La actitud predeterminada de Armas y Protección.',
@@ -171,8 +109,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.victory_rush.name': 'Ímpetu de Victoria',
   'entities.abilities.victory_rush.description':
     'Golpea con daño de arma más {damage} y te sana un 20% de tu salud máxima. Solo usable durante los 20 s posteriores a matar a un enemigo.',
-  'classDetails.roles.warriorClassic': 'Tanque / DPS cuerpo a cuerpo',
-  'classes.warriorClassic': 'Guerrero',
   'entities.abilities.sport_boot.description':
     'Un patadón largo y elevado hacia el punto de mira. El público lo adora.',
   'entities.abilities.sport_boot.name': 'Patadón',
@@ -2127,8 +2063,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Los brujos invocan demonios, lanzan maldiciones y daño prolongado, y drenan vida para resistir.',
   'classDetails.lore.druid':
     'Los druidas canalizan la naturaleza, curan heridas, enredan enemigos y cambian de forma animal para defender o atacar.',
-  'classDetails.lore.warriorClassic':
-    'El guerrero exactamente como se jugaba antes de la renovación del combate: el conjunto de habilidades y el ritmo de ira originales, conservados junto al nuevo guerrero para que pruebes los dos y nos digas cuál se siente mejor.',
   'classDetails.aria':
     'Detalles de clase para {className}: rol {role}. Atributos iniciales: Fuerza {str}, Agilidad {agi}, Aguante {sta}, Intelecto {int}, Espíritu {spi}.',
   'classDetails.statBarAria': '{stat}: {value} de 25',
@@ -5540,17 +5474,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Crea bebidas que restauran maná, para que puedas reponerte entre combates.',
   'guide.abilityHook.corruption':
     'Pudre al objetivo con sombra que va dañando mientras haces otras cosas.',
-  'guide.abilityHook.cw_battle_shout':
-    'Un grito de aliento que aumenta el poder de ataque del grupo.',
-  'guide.abilityHook.cw_charge':
-    'Embiste a un enemigo lejano para abrir el combate con un breve aturdimiento.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Refuerza el aguante para que todos resistan más en combate.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Prepara un golpe más fuerte que gasta ira en tu próximo ataque.',
-  'guide.abilityHook.cw_rend': 'Abre una hemorragia que va desgastando al objetivo con el tiempo.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Golpea a los enemigos a tu alrededor y ralentiza sus ataques.',
   'guide.abilityHook.demon_skin':
     'Una mejora propia y duradera que endurece tu piel y añade armadura.',
   'guide.abilityHook.devotion_aura':
@@ -7193,4 +7116,28 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.appleChoiceIntro': 'Crea una cuenta nueva o vincula Apple a una que ya tengas.',
   'hudChrome.auth.appleError': 'No se pudo iniciar sesión con Apple. Inténtalo de nuevo.',
   'hudChrome.auth.appleLoginCta': 'Continuar con Apple',
+  'entities.abilities.cleansing_verdict.name': 'Veredicto purificador',
+  'entities.abilities.cleansing_verdict.description':
+    'Purga un efecto mágico dañino de un objetivo amistoso y le restaura {damage} p. de salud con poder Sagrado.',
+  'entities.abilities.lingering_dread.name': 'Pavor persistente',
+  'entities.abilities.lingering_dread.description':
+    'Lanza un grito de batalla que infunde miedo a los enemigos en un radio de 10 m durante 4 s. El miedo persiste hasta que cada objetivo recibe un 20% de su salud máxima como daño. (Talento de guerrero)',
+  'entities.abilities.smoke_screen.name': 'Cortina de humo',
+  'entities.abilities.smoke_screen.description':
+    'Desaparece en una nube de humo, lo que aumenta durante un tiempo tu probabilidad de esquivar.',
+  'entities.abilities.spell_reflect.name': 'Reflejo de hechizos',
+  'entities.abilities.spell_reflect.description':
+    'Alza tu escudo y refleja el siguiente hechizo hostil hacia quien lo lanzó.',
+  'entities.abilities.spellsteal.name': 'Robar hechizo',
+  'entities.abilities.spellsteal.description':
+    'Roba un efecto mágico beneficioso de un enemigo y te lo transfiere.',
+  'entities.abilities.startle_shot.name': 'Disparo de sobresalto',
+  'entities.abilities.startle_shot.description':
+    'Un disparo impredecible que desorienta al objetivo durante {duration} s. Cualquier daño interrumpe el efecto.',
+  'entities.abilities.typhoon.name': 'Tifón',
+  'entities.abilities.typhoon.description':
+    'Una ráfaga de viento repele a todos los enemigos cercanos y los atonta, lo que reduce su velocidad de movimiento.',
+  'entities.abilities.voidfeast.name': 'Festín del Vacío',
+  'entities.abilities.voidfeast.description':
+    'Devora un efecto mágico (uno beneficioso de un enemigo o uno dañino de un aliado) y te sana un 6% de tu salud máxima.',
 };

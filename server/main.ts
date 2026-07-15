@@ -13,8 +13,7 @@ import {
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
 import { Sim } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
-import { virtualLevel } from '../src/sim/types';
+import { isPlayerClass, type PlayerClass, virtualLevel } from '../src/sim/types';
 import type { GuildLeaderboardEntry, LeaderboardEntry } from '../src/world_api';
 import {
   configureAccountRuntime,
@@ -1019,18 +1018,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
             error: 'character name is not allowed',
             code: 'character.name_not_allowed',
           });
-        const validClasses = [
-          'warrior',
-          'paladin',
-          'hunter',
-          'rogue',
-          'priest',
-          'shaman',
-          'mage',
-          'warlock',
-          'druid',
-        ];
-        if (!validClasses.includes(body.class))
+        if (!isPlayerClass(body.class))
           return json(res, 400, { error: 'invalid class', code: 'character.invalid_class' });
         const skin = Math.max(
           0,

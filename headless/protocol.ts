@@ -1,5 +1,5 @@
 import { NUM_ACTIONS } from '../src/sim/obs';
-import { ALL_CLASSES, PlayerClass } from '../src/sim/types';
+import { isPlayerClass, type PlayerClass } from '../src/sim/types';
 
 export const MAX_INPUT_LINE_LENGTH = 1024 * 1024;
 
@@ -10,5 +10,5 @@ export function validateAction(value: unknown): number | null {
 }
 
 export function validatePlayerClass(value: unknown): PlayerClass | null {
-  return (ALL_CLASSES as string[]).includes(value as string) ? (value as PlayerClass) : null;
+  return isPlayerClass(value) ? value : null;
 }

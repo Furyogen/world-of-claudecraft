@@ -20,10 +20,7 @@ export function roleKey(role: GuideRole): TranslationKey {
   return 'guide.role.damage';
 }
 
-// Class name + lore resolve through entity_i18n (the same source the HUD uses),
-// which owns the class-id -> catalog-key mapping. A raw `classes.${id}` template
-// key breaks for warrior_classic, whose catalog key is the camelCase
-// classes.warriorClassic.
+// Class name + lore resolve through entity_i18n, the same source the HUD uses.
 export const className = (id: string): string => classDisplayName(id as PlayerClass);
 export const classLore = (id: string): string =>
   tEntity({ kind: 'class', id: id as PlayerClass, field: 'description' });

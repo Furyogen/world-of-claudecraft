@@ -14,72 +14,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const it_IT: Partial<Record<TranslationKey, string>> = {
-  'entities.abilities.cw_heroic_strike.name': 'Colpo del Predone',
-  'entities.abilities.cw_heroic_strike.description':
-    'Un attacco potente che aumenta i danni in mischia di {damage}. Si attiva al tuo prossimo colpo.',
-  'entities.abilities.cw_battle_shout.name': 'Urlo di Ferro',
-  'entities.abilities.cw_battle_shout.description':
-    "Aumenta la tua potenza d'attacco di {buff} per 2 min.",
-  'entities.abilities.cw_commanding_shout.name': 'Grido Rincuorante',
-  'entities.abilities.cw_commanding_shout.description':
-    'Aumenta la tua Tempra di {buff} per 2 min.',
-  'entities.abilities.cw_charge.name': 'Irruzione',
-  'entities.abilities.cw_charge.description':
-    'Carica un nemico, genera 9 rabbia e lo stordisce per 1 s. Portata 8-25 m.',
-  'entities.abilities.cw_rend.name': 'Squarcio Profondo',
-  'entities.abilities.cw_rend.description':
-    'Ferisce il bersaglio e lo fa sanguinare per {damage} danni in {duration} sec.',
-  'entities.abilities.cw_thunder_clap.name': 'Colpo Sismico',
-  'entities.abilities.cw_thunder_clap.description':
-    'Colpisce i nemici vicini per {damage} danni e rallenta i loro attacchi del 10% per 10 s.',
-  'entities.abilities.cw_hamstring.name': 'Taglio Azzoppante',
-  'entities.abilities.cw_hamstring.description':
-    'Menoma il nemico per {damage} danni, riducendo la sua velocità di movimento del 50% per 15 sec.',
-  'entities.abilities.cw_bloodrage.name': 'Tributo di Sangue',
-  'entities.abilities.cw_bloodrage.description': 'Genera 10 rabbia al costo di salute.',
-  'entities.abilities.cw_overpower.name': 'Mano Rossa',
-  'entities.abilities.cw_overpower.description':
-    "Attacco istantaneo per danni dell'arma più {damage}. Utilizzabile solo dopo che il bersaglio schiva. Non può essere schivato.",
-  'entities.abilities.cw_execute.name': 'Tomba Prematura',
-  'entities.abilities.cw_execute.description':
-    'Tenta di finire un nemico ferito, infliggendo {damage} danni. Utilizzabile solo sui nemici sotto il 20% di salute.',
-  'entities.abilities.cw_slam.name': 'Colpo Brutale',
-  'entities.abilities.cw_slam.description':
-    "Schianta l'avversario per danni dell'arma più {damage}.",
-  'entities.abilities.cw_cleave.name': 'Arco Mietitore',
-  'entities.abilities.cw_cleave.description':
-    'Un colpo ampio che raggiunge tutti i nemici davanti a te per {damage} danni.',
-  'entities.abilities.cw_defensive_stance.name': 'Posizione Guardinga',
-  'entities.abilities.cw_defensive_stance.description':
-    'Posizione di combattimento difensiva: generi il 30% di minaccia in più, ma infliggi e subisci il 10% di danni in meno. Lanciala di nuovo per uscire dalla posizione.',
-  'entities.abilities.cw_demoralizing_shout.name': 'Ululato Sinistro',
-  'entities.abilities.cw_demoralizing_shout.description':
-    "Emette un urlo terrificante, riducendo la potenza d'attacco di tutti i nemici vicini di {buff} per 30 sec.",
-  'entities.abilities.cw_sunder_armor.name': 'Trancia Armatura',
-  'entities.abilities.cw_sunder_armor.description':
-    "Lacera l'armatura del bersaglio, riducendola del {damage}% per applicazione. Si accumula fino a 5 volte. Genera una grande quantità di minaccia.",
-  'entities.abilities.cw_taunt.name': 'Aizzare',
-  'entities.abilities.cw_taunt.description':
-    'Provoca il bersaglio: la tua minaccia sale fino a eguagliare quella del suo nemico più odiato e lo costringe ad attaccarti per 3 s.',
-  'entities.abilities.cw_bloodthirst.name': 'Salasso',
-  'entities.abilities.cw_bloodthirst.description':
-    "Attacca istantaneamente in una frenesia sanguigna per il 60% dei danni dell'arma più {damage}. (firma Furia)",
-  'entities.abilities.cw_mortal_strike.name': 'Colpo Mutilante',
-  'entities.abilities.cw_mortal_strike.description':
-    "Un colpo feroce che infligge danni dell'arma più {damage}. (firma Armi)",
-  'entities.abilities.cw_shield_slam.name': 'Frantumascudo',
-  'entities.abilities.cw_shield_slam.description':
-    "Colpisce il bersaglio con lo scudo per il 50% dei danni dell'arma più {damage} e genera una minaccia enorme. (firma Protezione)",
-  'entities.abilities.cw_whirlwind.name': 'Vortice di Lame',
-  'entities.abilities.cw_whirlwind.description':
-    'Ruoti in un arco letale, colpendo tutti i nemici vicini per {damage}. (talento Furia)',
-  'entities.abilities.cw_berserker_rage.name': 'Furia Ribollente',
-  'entities.abilities.cw_berserker_rage.description':
-    'Entri in una furia ribollente, generando 20 punti rabbia. (talento del guerriero)',
-  'classDetails.roles.warriorClassic': 'Tank / DPS da mischia',
-  'classes.warriorClassic': 'Guerriero',
-  'classDetails.lore.warriorClassic':
-    'Il guerriero esattamente come si giocava prima della revisione del combattimento: il kit di abilità originale e il ritmo della rabbia, mantenuti accanto al nuovo guerriero, così puoi provare entrambi e dirci quale ti sembra migliore.',
   'entities.abilities.sport_boot.description':
     'Un calcione alto e lungo verso il punto mirato. La folla lo adora.',
   'entities.abilities.sport_boot.name': 'Calcione',
@@ -5450,17 +5384,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Evoca bevande che ripristinano il mana, così puoi rifornirti tra un pull e l'altro.",
   'guide.abilityHook.corruption':
     "Marcisce il bersaglio con l'ombra, che continua a pulsare mentre fai altro.",
-  'guide.abilityHook.cw_battle_shout':
-    "Un grido di incitamento che aumenta la potenza d'attacco del gruppo.",
-  'guide.abilityHook.cw_charge':
-    'Si scaglia su un nemico distante per aprire lo scontro con un breve stordimento.',
-  'guide.abilityHook.cw_commanding_shout':
-    'Rafforza la vigoria, così tutti hanno più resistenza in combattimento.',
-  'guide.abilityHook.cw_heroic_strike':
-    'Mette in coda un fendente più pesante che spende ira al tuo prossimo colpo.',
-  'guide.abilityHook.cw_rend': "Apre un'emorragia che logora il bersaglio nel tempo.",
-  'guide.abilityHook.cw_thunder_clap':
-    'Colpisce tutto ciò che ti circonda e rallenta i loro attacchi.',
   'guide.abilityHook.demon_skin':
     'Un potenziamento personale duraturo che irrobustisce la pelle e aggiunge corazza.',
   'guide.abilityHook.devotion_aura':
@@ -7179,4 +7102,28 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talentRows.comingSoon': 'In arrivo',
   'hudChrome.talentRows.defaultLoadout': 'Assetto predefinito',
   'hudChrome.talentRows.tab': 'Scelte',
+  'entities.abilities.cleansing_verdict.name': 'Verdetto Purificatore',
+  'entities.abilities.cleansing_verdict.description':
+    'Rimuove un effetto magico dannoso da un bersaglio alleato e gli ripristina {damage} salute con potere Sacro.',
+  'entities.abilities.lingering_dread.name': 'Terrore Persistente',
+  'entities.abilities.lingering_dread.description':
+    'Lancia un grido di battaglia che impaurisce i nemici entro 10 m per 4 s. La paura persiste finché ogni bersaglio non subisce danni pari al 20% della sua salute massima. (Talento del guerriero)',
+  'entities.abilities.smoke_screen.name': 'Cortina Fumogena',
+  'entities.abilities.smoke_screen.description':
+    'Svanisci in una nube di fumo, aumentando per un certo tempo la tua probabilità di schivata.',
+  'entities.abilities.spell_reflect.name': 'Riflesso Magico',
+  'entities.abilities.spell_reflect.description':
+    'Alza lo scudo e riflette il prossimo incantesimo ostile contro chi lo ha lanciato.',
+  'entities.abilities.spellsteal.name': 'Ruba Incantesimo',
+  'entities.abilities.spellsteal.description':
+    'Ruba un effetto magico benefico da un nemico e lo trasferisce su di te.',
+  'entities.abilities.startle_shot.name': 'Tiro Sconcertante',
+  'entities.abilities.startle_shot.description':
+    "Un colpo imprevedibile che disorienta il bersaglio per {duration} s. Qualsiasi danno interrompe l'effetto.",
+  'entities.abilities.typhoon.name': 'Tifone',
+  'entities.abilities.typhoon.description':
+    'Una raffica di vento respinge tutti i nemici vicini e li frastorna, rallentandone il movimento.',
+  'entities.abilities.voidfeast.name': 'Banchetto del Vuoto',
+  'entities.abilities.voidfeast.description':
+    'Divora un effetto magico (uno benefico da un nemico o uno dannoso da un alleato) e ti cura del 6% della tua salute massima.',
 };

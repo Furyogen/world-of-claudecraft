@@ -2033,12 +2033,6 @@ export const de_DE: EnTranslations = {
       "charge": "Stürmt auf einen entfernten Gegner zu und eröffnet den Kampf mit einer kurzen Betäubung.",
       "rend": "Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.",
       "thunder_clap": "Trifft alles um dich herum und verlangsamt deren Angriffe.",
-      "cw_heroic_strike": "Reiht einen schwereren Schwung ein, der bei deinem nächsten Treffer Wut verbraucht.",
-      "cw_battle_shout": "Ein aufrüttelnder Ruf, der die Angriffskraft der Gruppe erhöht.",
-      "cw_commanding_shout": "Stärkt die Ausdauer, damit alle in einem Kampf länger durchhalten.",
-      "cw_charge": "Stürmt auf einen entfernten Gegner zu und eröffnet den Kampf mit einer kurzen Betäubung.",
-      "cw_rend": "Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.",
-      "cw_thunder_clap": "Trifft alles um dich herum und verlangsamt deren Angriffe.",
       "hamstring": "Zerschneidet die Beine des Ziels und verlangsamt es, damit es dich nicht einholen kann.",
       "seal_of_righteousness": "Verzaubert deine Schwünge mit heiligem Schaden, den du dann mit Verdict verbrauchst.",
       "holy_light": "Eine stetige, ansehnliche Heilung, um einen Verbündeten oder dich selbst aufzufüllen.",
@@ -3346,7 +3340,6 @@ export const de_DE: EnTranslations = {
   },
   "classes": {
     "warrior": "Krieger",
-    "warriorClassic": "Krieger",
     "paladin": "Paladin",
     "hunter": "Jäger",
     "rogue": "Schurke",
@@ -4114,7 +4107,6 @@ export const de_DE: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Nahkampf-DPS",
-      "warriorClassic": "Tank / Nahkampf-DPS",
       "paladin": "Heiler / Tank / Nahkampf-DPS",
       "hunter": "Fernkampf-DPS",
       "rogue": "Nahkampf-DPS",
@@ -4139,7 +4131,6 @@ export const de_DE: EnTranslations = {
     },
     "lore": {
       "warrior": "Krieger sind kampferprobte Nahkämpfer, die Wut aufbauen, wenn sie Schaden verursachen oder erleiden. Sie halten schwere Treffer aus oder zerschmettern Gegner.",
-      "warriorClassic": "Der Krieger genau so, wie er sich vor der Kampfüberarbeitung gespielt hat: das ursprüngliche Fähigkeitenrepertoire und das alte Wut-Tempo, erhalten neben dem neuen Krieger, damit du beide ausprobieren und uns sagen kannst, welcher sich besser anfühlt.",
       "paladin": "Paladine sind heilige Kreuzritter, die mit Segen unterstützen, Wunden mit Mending Light heilen und Schwache in schwerer Rüstung schützen.",
       "hunter": "Jäger sind Fernkampfspezialisten, die an der Seite eines gezähmten Tieres kämpfen, Gegner mit gezielten und schnellen Schüssen überschütten, sie mit Stichen und erschütterndem Beschuss verlangsamen und je nach Augenblick zwischen ihren Aspekten wechseln.",
       "rogue": "Schurken sind verstohlene Assassinen, die Energie und Kombopunkte für Angriffe aus den Schatten ausgeben.",
@@ -5168,90 +5159,6 @@ export const de_DE: EnTranslations = {
         "name": "Reaver-Hieb",
         "description": "Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst."
       },
-      "cw_heroic_strike": {
-        "name": "Reaver-Hieb",
-        "description": "Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst."
-      },
-      "cw_battle_shout": {
-        "name": "Eisernes Gebrüll",
-        "description": "Erhöht eure Angriffskraft 2 Min. lang um {buff}."
-      },
-      "cw_commanding_shout": {
-        "name": "Stärkender Ruf",
-        "description": "Erhöht eure Ausdauer 2 Min. lang um {buff}."
-      },
-      "cw_charge": {
-        "name": "Vorpreschen",
-        "description": "Stürmt auf einen Gegner zu, erzeugt 9 Wut und betäubt ihn 1 Sek. lang. Reichweite 8-25 m."
-      },
-      "cw_rend": {
-        "name": "Tiefe Wunde",
-        "description": "Verwundet das Ziel und lässt es über {duration} Sek. für {damage} Schaden bluten."
-      },
-      "cw_thunder_clap": {
-        "name": "Bebender Schlag",
-        "description": "Trifft nahe Gegner für {damage} Schaden und verlangsamt ihre Angriffe 10 Sek. lang um 10%."
-      },
-      "cw_hamstring": {
-        "name": "Lähmender Schnitt",
-        "description": "Verkrüppelt den Gegner für {damage} Schaden und verringert sein Bewegungstempo 15 Sek. lang um 50%."
-      },
-      "cw_bloodrage": {
-        "name": "Blutzoll",
-        "description": "Erzeugt 10 Wut auf Kosten von Gesundheit."
-      },
-      "cw_overpower": {
-        "name": "Redhand",
-        "description": "Sofortiger Angriff mit Waffenschaden plus {damage}. Nur einsetzbar, nachdem das Ziel ausgewichen ist. Kann nicht ausgewichen werden."
-      },
-      "cw_execute": {
-        "name": "Frühes Grab",
-        "description": "Versucht, einen verwundeten Gegner zu erledigen, und verursacht {damage} Schaden. Nur bei Gegnern unter 20% Gesundheit einsetzbar."
-      },
-      "cw_slam": {
-        "name": "Roher Schwung",
-        "description": "Zerschmettert den Gegner für Waffenschaden plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Sichelschwung",
-        "description": "Ein weiter Hieb, der alle Gegner vor euch für {damage} Schaden trifft."
-      },
-      "cw_defensive_stance": {
-        "name": "Wehrhafte Haltung",
-        "description": "Defensive Kampfhaltung: Ihr erzeugt 30% mehr Bedrohung, verursacht und erleidet aber 10% weniger Schaden. Erneut wirken, um die Haltung zu verlassen."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Direhowl",
-        "description": "Stößt einen furchterregenden Ruf aus und verringert die Angriffskraft aller nahen Gegner 30 Sek. lang um {buff}."
-      },
-      "cw_sunder_armor": {
-        "name": "Rüstungsspalter",
-        "description": "Spaltet die Rüstung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung."
-      },
-      "cw_taunt": {
-        "name": "Anstacheln",
-        "description": "Verspottet das Ziel: Eure Bedrohung steigt auf die seines meistgehassten Gegners und es wird 3 Sek. lang gezwungen, euch anzugreifen."
-      },
-      "cw_bloodthirst": {
-        "name": "Aderlass",
-        "description": "Greift sofort in blutiger Raserei an und verursacht 60% Waffenschaden plus {damage}. (Furor-Signatur)"
-      },
-      "cw_mortal_strike": {
-        "name": "Verstümmelnder Hieb",
-        "description": "Ein bösartiger Schlag, der Waffenschaden plus {damage} verursacht. (Waffen-Signatur)"
-      },
-      "cw_shield_slam": {
-        "name": "Shieldcrack",
-        "description": "Schlägt das Ziel mit eurem Schild für 50% Waffenschaden plus {damage} und erzeugt enorme Bedrohung. (Schutz-Signatur)"
-      },
-      "cw_whirlwind": {
-        "name": "Klingenwirbel",
-        "description": "Dreht euch in einem tödlichen Bogen und trefft alle nahen Gegner für {damage}. (Furor-Talent)"
-      },
-      "cw_berserker_rage": {
-        "name": "Brodelnde Raserei",
-        "description": "Ihr verfallt in brodelnde Raserei und erzeugt 20 Wut. (Krieger-Talent)"
-      },
       "revenge": {
         "name": "Rache",
         "description": "Greift in einem weiten Bogen an und verursacht physischen Schaden an allen Gegnern vor Euch. Bei mehr als 5 Zielen ist der Schaden verringert. Wenn Ihr ausweicht oder pariert, kann Eure nächste Rache keine Wut kosten."
@@ -6077,8 +5984,8 @@ export const de_DE: EnTranslations = {
         "description": "Ein Ruf, der Gegner im Umkreis von 15 m 8 Sek. lang um 50 % verlangsamt. (Kriegertalent)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Anhaltender Schrecken",
+        "description": "Stößt einen Schlachtruf aus, der Gegner im Umkreis von 10 Metern 4 Sek. lang in Furcht versetzt. Die Furcht hält an, bis jedes Ziel Schaden in Höhe von 20 % seiner maximalen Gesundheit erlitten hat. (Krieger-Talent)"
       },
       "stormthrow": {
         "name": "Sturmwurf",
@@ -6277,32 +6184,32 @@ export const de_DE: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a nahe Verbündete cada segundo. (Druiden-Talent)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Läuterndes Urteil",
+        "description": "Entfernt einen schädlichen Magieeffekt von einem verbündeten Ziel und heilt es mit heiliger Magie um {damage}."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Leerenmahl",
+        "description": "Verschlingt einen Magieeffekt (einen nützlichen von einem Gegner oder einen schädlichen von einem Verbündeten) und heilt dich um 6 % deiner maximalen Gesundheit."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Zauberdiebstahl",
+        "description": "Stiehlt einem Gegner einen nützlichen Magieeffekt und überträgt ihn auf dich."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Schreckschuss",
+        "description": "Ein wilder Schuss, der das Ziel {duration} Sek. lang desorientiert. Jeglicher Schaden beendet den Effekt."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Zauberreflexion",
+        "description": "Du hebst deinen Schild und wirfst den nächsten feindlichen Zauber auf seinen Wirker zurück."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Rauchwand",
+        "description": "Du verschwindest in einer Rauchwolke und erhöhst für kurze Zeit deine Ausweichchance."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Taifun",
+        "description": "Ein Windstoß schleudert alle Gegner in der Nähe zurück und macht sie benommen, wodurch ihr Bewegungstempo sinkt."
       },
       "bear_charge": {
         "name": "Bruin-Ansturm",

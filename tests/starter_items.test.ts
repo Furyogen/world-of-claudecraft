@@ -1,20 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { CLASSES } from '../src/sim/content/classes';
 import { Sim } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
+import { ALL_CLASSES, type PlayerClass } from '../src/sim/types';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 // Fresh characters set out provisioned: 5 bread for every class, plus 5 water
 // for the mana classes. Saved characters load their own bags and are never
 // re-granted the rations.
 
-const ALL_CLASSES = Object.keys(CLASSES) as PlayerClass[];
+const PLAYABLE_CLASSES = [...EXPECTED_PLAYER_CLASSES] as PlayerClass[];
 
 function count(sim: Sim, itemId: string): number {
   return sim.inventory.filter((s) => s.itemId === itemId).reduce((total, s) => total + s.count, 0);
 }
 
 describe('starter rations', () => {
-  for (const cls of ALL_CLASSES) {
+  it('uses the exact nine-class release roster', () => {
+    expect(ALL_CLASSES).toEqual(EXPECTED_PLAYER_CLASSES);
+    expect(Object.keys(CLASSES).sort()).toEqual([...EXPECTED_PLAYER_CLASSES].sort());
+  });
+
+  for (const cls of PLAYABLE_CLASSES) {
     const wantsWater = CLASSES[cls].resourceType === 'mana';
     it(`a fresh ${cls} starts with 5 bread${wantsWater ? ' and 5 water' : ' and no water'}`, () => {
       const sim = new Sim({ seed: 42, playerClass: cls });
@@ -24,9 +30,8 @@ describe('starter rations', () => {
   }
 
   it('rage and energy classes are exactly the waterless ones', () => {
-    const waterless = ALL_CLASSES.filter((c) => CLASSES[c].resourceType !== 'mana').sort();
-    // warrior_classic keeps the pre-overhaul rage model, so it is waterless too.
-    expect(waterless).toEqual(['rogue', 'warrior', 'warrior_classic']);
+    const waterless = PLAYABLE_CLASSES.filter((c) => CLASSES[c].resourceType !== 'mana').sort();
+    expect(waterless).toEqual(['rogue', 'warrior']);
   });
 
   it('a saved character keeps its bags as-is (no re-grant on load)', () => {

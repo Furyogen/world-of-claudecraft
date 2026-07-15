@@ -53,8 +53,6 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
     'Les démonistes invoquent des démons, jettent des malédictions et des dégâts prolongés, puis drainent la vie de leurs ennemis pour tenir bon.',
   'classDetails.lore.druid':
     'Les druides canalisent la nature, guérissent, entravent les ennemis et prennent des formes animales pour défendre ou attaquer.',
-  'classDetails.lore.warriorClassic':
-    "Le guerrier exactement tel qu'il se jouait avant la refonte du combat : la panoplie de techniques et le rythme de rage d'origine, conservés aux côtés du nouveau guerrier pour que vous puissiez essayer les deux et nous dire lequel vous plaît le plus.",
   'classDetails.aria':
     'Détails de classe pour {className}: rôle {role}. Caractéristiques de départ: Force {str}, Agilité {agi}, Endurance {sta}, Intelligence {int}, Esprit {spi}.',
   'mobilePreflight.rotateTitle': 'Passez en mode paysage',
@@ -204,15 +202,6 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'entities.items.eastbrook_buckler.name': "Targe d'Eastbrook",
   'entities.mobs.reliquary_gravecall_acolyte.name': "Acolyte de l'appel des tombes",
   'entities.npcs.brother_halven.greeting': "Le reliquaire en bas s'est encore déplacé.",
-  'guide.abilityHook.cw_charge':
-    'Fonce sur un ennemi éloigné pour ouvrir le combat avec un bref étourdissement.',
-  'guide.abilityHook.cw_commanding_shout':
-    "Renforce l'endurance pour que tout le monde tienne plus longtemps en combat.",
-  'guide.abilityHook.cw_heroic_strike':
-    'Prépare un coup plus lourd qui dépense de la rage lors de votre prochaine attaque.',
-  'guide.abilityHook.cw_rend': 'Ouvre une plaie qui use la cible au fil du temps.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Frappe tout ce qui vous entoure et ralentit les attaques ennemies.',
   'guide.abilityHook.hamstring':
     "Taillade les jambes de la cible pour la ralentir afin qu'elle ne puisse pas vous rattraper.",
   'guide.abilityHook.revenge':
@@ -346,4 +335,28 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
     "Accélère vos coups d'arme et vos incantations de sorts. Ne réduit pas le délai de récupération global.",
   'hudChrome.statInfo.desc.parry':
     'Vos chances de parer entièrement une attaque de mêlée de front, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré.',
+  'entities.abilities.cleansing_verdict.name': 'Jugement de purification',
+  'entities.abilities.cleansing_verdict.description':
+    'Dissipe un effet magique néfaste sur une cible alliée et lui rend {damage} points de vie grâce à la magie sacrée.',
+  'entities.abilities.lingering_dread.name': 'Effroi persistant',
+  'entities.abilities.lingering_dread.description':
+    "Pousse un cri de guerre qui effraie les ennemis à moins de 10 mètres pendant 4 s. La peur persiste jusqu'à ce que chaque cible subisse des dégâts équivalant à 20 % de sa santé maximale. (Talent de guerrier)",
+  'entities.abilities.smoke_screen.name': 'Rideau de fumée',
+  'entities.abilities.smoke_screen.description':
+    "Vous disparaissez dans un nuage de fumée, ce qui augmente temporairement vos chances d'esquive.",
+  'entities.abilities.spell_reflect.name': 'Réflexion de sort',
+  'entities.abilities.spell_reflect.description':
+    'Vous levez votre bouclier et renvoyez à son lanceur le prochain sort hostile.',
+  'entities.abilities.spellsteal.name': 'Vol de magie',
+  'entities.abilities.spellsteal.description':
+    'Dérobe un effet magique bénéfique à un ennemi et vous le confère.',
+  'entities.abilities.startle_shot.name': 'Tir déstabilisant',
+  'entities.abilities.startle_shot.description':
+    "Un tir imprévisible désoriente la cible pendant {duration} s. Le moindre dégât met fin à l'effet.",
+  'entities.abilities.typhoon.name': 'Bourrasque',
+  'entities.abilities.typhoon.description':
+    'Une bourrasque repousse tous les ennemis à proximité et les hébète, ralentissant leurs déplacements.',
+  'entities.abilities.voidfeast.name': 'Banquet du Vide',
+  'entities.abilities.voidfeast.description':
+    'Dévore un effet magique (bénéfique sur un ennemi ou néfaste sur un allié) et vous rend 6 % de votre santé maximale.',
 };

@@ -2,7 +2,7 @@
 //
 // Spec-commit behavior of the talents window (the fix for the reworked window
 // whose spec choice only ever STAGED and never committed):
-//   - For ALL TEN classes (the overhauled 'warrior' included since the
+//   - For all nine classes (the overhauled 'warrior' included since the
 //     2026-07-11 operator decision superseded the staged-edit-plus-Save rule;
 //     see docs/prd/warrior-talents.md), an UNCOMMITTED spec panel's button reads
 //     the selectSpec label and clicking it COMMITS through deps.commitSpec (Hud
@@ -26,9 +26,10 @@ import { talentsFor } from '../src/sim/content/talents';
 import { ALL_CLASSES, type PlayerClass } from '../src/sim/types';
 import { t } from '../src/ui/i18n';
 import { TalentsWindow, type TalentsWindowDeps } from '../src/ui/talents_window';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 // Every class commits through the same button, the overhauled warrior included.
-const COMMIT_CLASSES = ALL_CLASSES;
+const COMMIT_CLASSES = EXPECTED_PLAYER_CLASSES;
 
 interface Harness {
   win: TalentsWindow;
@@ -86,11 +87,11 @@ beforeEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('spec commit: all ten classes', () => {
-  it('covers every class, the overhauled warrior and warrior_classic included', () => {
-    expect(COMMIT_CLASSES).toHaveLength(10);
+describe('spec commit: all nine classes', () => {
+  it('covers the exact playable roster, including the overhauled warrior', () => {
+    expect(ALL_CLASSES).toEqual(COMMIT_CLASSES);
+    expect(COMMIT_CLASSES).toHaveLength(9);
     expect(COMMIT_CLASSES).toContain('warrior');
-    expect(COMMIT_CLASSES).toContain('warrior_classic');
     for (const cls of COMMIT_CLASSES) {
       expect(talentsFor(cls), `${cls} must have authored specs`).not.toBeNull();
     }

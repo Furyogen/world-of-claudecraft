@@ -2033,12 +2033,6 @@ export const pl_PL: EnTranslations = {
       "charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
       "rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
       "thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
-      "cw_heroic_strike": "Kolejkuje cięższy zamach, który zużywa wściekłość przy następnym ciosie.",
-      "cw_battle_shout": "Mobilizujący okrzyk, który zwiększa siłę ataku całej drużyny.",
-      "cw_commanding_shout": "Wzmacnia wytrzymałość, by każdy dłużej wytrzymał w walce.",
-      "cw_charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
-      "cw_rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
-      "cw_thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
       "hamstring": "Tnie nogi celu, spowalniając go, by nie mógł cię dogonić.",
       "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Verdictem.",
       "holy_light": "Stabilne, pokaźne leczenie do uzupełnienia zdrowia sojusznika lub własnego.",
@@ -3346,7 +3340,6 @@ export const pl_PL: EnTranslations = {
   },
   "classes": {
     "warrior": "Wojownik",
-    "warriorClassic": "Wojownik",
     "paladin": "Paladyn",
     "hunter": "Łowca",
     "rogue": "Łotrzyk",
@@ -4114,7 +4107,6 @@ export const pl_PL: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS wręcz",
-      "warriorClassic": "Tank / DPS wręcz",
       "paladin": "Uzdrowiciel / Tank / DPS wręcz",
       "hunter": "Dystansowy DPS",
       "rogue": "DPS wręcz",
@@ -4139,7 +4131,6 @@ export const pl_PL: EnTranslations = {
     },
     "lore": {
       "warrior": "Wojownicy to zaprawieni w boju wojownicy walki wręcz, którzy gromadzą Furię, zadając lub otrzymując obrażenia. Pochłaniają potężne ciosy lub miażdżą wrogów potężnym orężem.",
-      "warriorClassic": "Wojownik dokładnie taki, jakim grało się przed przebudową walki: pierwotny zestaw umiejętności i dawne tempo wściekłości, zachowane obok nowego wojownika, byś mógł wypróbować obie wersje i dać nam znać, którą gra się lepiej.",
       "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Kojącym Światłem i chronią słabych, odziani w ciężki pancerz.",
       "hunter": "Łowcy to specjaliści walki dystansowej, którzy walczą u boku oswojonej bestii, zasypując wrogów celnymi i szybkimi strzałami, spowalniając ich żądłami oraz ogłuszającym ostrzałem i zmieniając aspekty stosownie do chwili.",
       "rogue": "Łotrzykowie to skradający się zabójcy, którzy wydają Energię i Punkty Kombosów na ciosy w plecy i wykończenia z cienia.",
@@ -5168,90 +5159,6 @@ export const pl_PL: EnTranslations = {
         "name": "Cios łupieżcy",
         "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
       },
-      "cw_heroic_strike": {
-        "name": "Cios łupieżcy",
-        "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
-      },
-      "cw_battle_shout": {
-        "name": "Żelazny ryk",
-        "description": "Zwiększa twoją moc ataku o {buff} na 2 min."
-      },
-      "cw_commanding_shout": {
-        "name": "Krzepiący okrzyk",
-        "description": "Zwiększa twoją kondycję o {buff} na 2 min."
-      },
-      "cw_charge": {
-        "name": "Natarcie",
-        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów."
-      },
-      "cw_rend": {
-        "name": "Głęboka rana",
-        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek."
-      },
-      "cw_thunder_clap": {
-        "name": "Trzęsący cios",
-        "description": "Razi pobliskich wrogów za {damage} obrażeń i spowalnia ich ataki o 10% na 10 sek."
-      },
-      "cw_hamstring": {
-        "name": "Kulawiące cięcie",
-        "description": "Okalecza wroga, zadając {damage} obrażeń i spowalniając jego ruch o 50% na 15 sek."
-      },
-      "cw_bloodrage": {
-        "name": "Krwawa danina",
-        "description": "Generuje 10 wściekłości kosztem zdrowia."
-      },
-      "cw_overpower": {
-        "name": "Krwawa ręka",
-        "description": "Natychmiastowy atak za obrażenia broni plus {damage}. Użyteczne tylko po uniku celu. Nie można uniknąć."
-      },
-      "cw_execute": {
-        "name": "Przedwczesny grób",
-        "description": "Próba dobicia rannego przeciwnika, zadająca {damage} obrażeń. Użyteczne tylko na wrogach poniżej 20% zdrowia."
-      },
-      "cw_slam": {
-        "name": "Brutalny zamach",
-        "description": "Wali przeciwnika, zadając obrażenia broni plus {damage}."
-      },
-      "cw_cleave": {
-        "name": "Kosiący łuk",
-        "description": "Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń."
-      },
-      "cw_defensive_stance": {
-        "name": "Czujna postawa",
-        "description": "Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę."
-      },
-      "cw_demoralizing_shout": {
-        "name": "Złowieszcze wycie",
-        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek."
-      },
-      "cw_sunder_armor": {
-        "name": "Rozdarcie pancerza",
-        "description": "Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia."
-      },
-      "cw_taunt": {
-        "name": "Podjudzenie",
-        "description": "Prowokuje cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel jest zmuszony atakować cię przez 3 sek."
-      },
-      "cw_bloodthirst": {
-        "name": "Upust krwi",
-        "description": "Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)"
-      },
-      "cw_mortal_strike": {
-        "name": "Okaleczające uderzenie",
-        "description": "Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)"
-      },
-      "cw_shield_slam": {
-        "name": "Trzask tarczy",
-        "description": "Uderza cel tarczą, zadając 50% obrażeń broni plus {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
-      },
-      "cw_whirlwind": {
-        "name": "Wir ostrzy",
-        "description": "Wirujesz w śmiercionośnym łuku, uderzając wszystkich pobliskich wrogów za {damage}. (Talent Furii)"
-      },
-      "cw_berserker_rage": {
-        "name": "Kipiąca furia",
-        "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
-      },
       "revenge": {
         "name": "Odwet",
         "description": "Atakujesz szerokim łukiem, zadając obrażenia fizyczne wszystkim wrogom przed tobą. Powyżej 5 celów obrażenia są zmniejszone. Gdy unikniesz ciosu lub go sparujesz, twój następny Odwet może nie kosztować wściekłości."
@@ -6077,8 +5984,8 @@ export const pl_PL: EnTranslations = {
         "description": "Okrzyk, który spowalnia wrogów w promieniu 15 m o 50% na 8 sek. (Talent wojownika)"
       },
       "lingering_dread": {
-        "name": "Lingering Dread",
-        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
+        "name": "Długotrwały lęk",
+        "description": "Wydaje okrzyk bojowy, który wywołuje strach u wrogów w promieniu 10 m na 4 sek. Strach trwa, dopóki każdy cel nie otrzyma obrażeń równych 20% jego maksymalnego zdrowia. (Talent wojownika)"
       },
       "stormthrow": {
         "name": "Burzowy rzut",
@@ -6277,32 +6184,32 @@ export const pl_PL: EnTranslations = {
         "description": "Canaliza energía restauradora y sana a pobliskich sojuszników cada segundo. (talent druida)"
       },
       "cleansing_verdict": {
-        "name": "Cleansing Verdict",
-        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+        "name": "Oczyszczający wyrok",
+        "description": "Usuwa szkodliwy efekt magiczny z sojuszniczego celu i przywraca mu {damage} zdrowia Świętą mocą."
       },
       "voidfeast": {
-        "name": "Voidfeast",
-        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+        "name": "Uczta Pustki",
+        "description": "Pożera efekt magiczny (korzystny z przeciwnika lub szkodliwy z sojusznika) i leczy cię o 6% maksymalnego zdrowia."
       },
       "spellsteal": {
-        "name": "Spellsteal",
-        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+        "name": "Kradzież zaklęcia",
+        "description": "Kradnie korzystny efekt magiczny przeciwnikowi i przenosi go na ciebie."
       },
       "startle_shot": {
-        "name": "Startle Shot",
-        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+        "name": "Płoszący strzał",
+        "description": "Dziki strzał, który dezorientuje cel na {duration} sek. Jakiekolwiek obrażenia przerywają efekt."
       },
       "spell_reflect": {
-        "name": "Spell Reflect",
-        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+        "name": "Odbicie zaklęcia",
+        "description": "Unosisz tarczę i odbijasz następne wrogie zaklęcie w osobę, która je rzuciła."
       },
       "smoke_screen": {
-        "name": "Smoke Screen",
-        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+        "name": "Zasłona dymna",
+        "description": "Znikasz w chmurze dymu, na pewien czas zwiększając swoją szansę na unik."
       },
       "typhoon": {
-        "name": "Typhoon",
-        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
+        "name": "Tajfun",
+        "description": "Podmuch wiatru odrzuca wszystkich pobliskich wrogów i oszałamia ich, spowalniając ich ruch."
       },
       "bear_charge": {
         "name": "Szarża Bruina",

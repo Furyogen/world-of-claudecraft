@@ -6,7 +6,7 @@
 // (the window renders rows only when rowTreeFor(cls) returns a tree). The full
 // per-class row content still lives, authored and translated, in the OLD model
 // (CHOICE_ROWS, choice_rows.ts). This module converts each ClassChoiceRows into
-// a RowTree so all ten classes render (and pick from) the new Choices tab.
+// a RowTree so all nine classes render (and pick from) the new Choices tab.
 //
 // Pure, lossless where it matters: rows map in level order (5/8/11/14/17/20),
 // options 1:1 keeping id, name, description, and the effect OBJECT REFERENCE

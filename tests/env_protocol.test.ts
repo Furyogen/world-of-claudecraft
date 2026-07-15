@@ -4,6 +4,7 @@ import { CLASSES } from '../src/sim/data';
 import { ACTIONS, encodeObs, NUM_ACTIONS, obsSize } from '../src/sim/obs';
 import { Sim } from '../src/sim/sim';
 import { ALL_CLASSES } from '../src/sim/types';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 describe('headless environment protocol validation', () => {
   it('accepts only integer action ids from the declared action space', () => {
@@ -17,13 +18,10 @@ describe('headless environment protocol validation', () => {
   });
 
   it('accepts every declared player class and rejects anything else', () => {
-    // all 10 classes (the 9 originals plus the classic-warrior PTR clone) are
-    // valid env inputs, not just warrior/mage
-    for (const cls of ALL_CLASSES) {
+    expect(ALL_CLASSES).toEqual(EXPECTED_PLAYER_CLASSES);
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       expect(validatePlayerClass(cls)).toBe(cls);
     }
-    expect(ALL_CLASSES.length).toBe(10);
-    expect(validatePlayerClass('warrior_classic')).toBe('warrior_classic');
     expect(validatePlayerClass('warlock')).toBe('warlock');
     expect(validatePlayerClass('necromancer')).toBeNull();
     expect(validatePlayerClass('')).toBeNull();
@@ -36,12 +34,12 @@ describe('headless environment protocol validation', () => {
 
   it('builds an identical-shape, full-size, finite observation for every class', () => {
     // Loop ALL_CLASSES (not a hardcoded subset) so all 9 obs vectors are guarded
-    // and a 10th class would self-extend the check. The obs space is content-scaled
+    // and an added class would self-extend the check. The obs space is content-scaled
     // and class-agnostic (ability slots pad to the largest kit), so every class
     // yields the same-length vector as the advertised obsSize(): switching
     // player_class never silently changes a trained config's obs shape.
     const sizes = new Set<number>();
-    for (const cls of ALL_CLASSES) {
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       const obs = encodeObs(new Sim({ seed: 7, playerClass: cls, autoEquip: true }));
       expect(obs.every((v) => Number.isFinite(v))).toBe(true);
       // every value stays inside the Python Gym observation_space Box(-2, 2)
@@ -60,9 +58,9 @@ describe('headless environment protocol validation', () => {
     // class kit, so no class's learnable abilities fall outside ACTIONS: a trained
     // policy's action head stays valid across all 9 classes.
     const abilitySlots = ACTIONS.filter((a) => a.startsWith('ability_')).length;
-    const maxKit = Math.max(...ALL_CLASSES.map((cls) => CLASSES[cls].abilities.length));
+    const maxKit = Math.max(...EXPECTED_PLAYER_CLASSES.map((cls) => CLASSES[cls].abilities.length));
     expect(abilitySlots).toBe(maxKit);
-    for (const cls of ALL_CLASSES) {
+    for (const cls of EXPECTED_PLAYER_CLASSES) {
       expect(CLASSES[cls].abilities.length).toBeLessThanOrEqual(abilitySlots);
     }
     // 13 fixed actions (10 move/target + interact/stop/eat_drink) plus the ability slots

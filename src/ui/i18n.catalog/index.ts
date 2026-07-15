@@ -400,7 +400,6 @@ export const en = {
   },
   classes: {
     warrior: 'Warrior',
-    warriorClassic: 'Classic Warrior',
     paladin: 'Paladin',
     hunter: 'Hunter',
     rogue: 'Rogue',

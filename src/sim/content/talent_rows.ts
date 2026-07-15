@@ -180,9 +180,9 @@ export function computeModifiersWithRows(
 // at import so a malformed tree fails loudly at boot rather than in play.
 // ---------------------------------------------------------------------------
 
-// Bridged trees first (every class's old-model rows converted 1:1, including
-// warrior_classic), then the authored trees override their bridged stand-ins
-// (the warrior keeps its hand-authored overhaul rows).
+// Bridged trees first (every class's old-model rows converted 1:1), then the
+// authored trees override their bridged stand-ins (the warrior keeps its
+// hand-authored overhaul rows).
 export const ROW_TREES: Partial<Record<PlayerClass, RowTree>> = {
   ...bridgedRowTrees(),
   warrior: WARRIOR_ROWS,

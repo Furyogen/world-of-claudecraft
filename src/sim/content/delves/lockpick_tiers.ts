@@ -59,7 +59,6 @@ export const LOCKPICK_TIER_REWARD: Record<LootTier, { bonusMarks: number; copper
 // data.ts -> content/delves import cycle): WAR plate, ROG leather/mail, MAG cloth.
 const LOOT_ARCHETYPE: Record<PlayerClass, 'WAR' | 'ROG' | 'MAG'> = {
   warrior: 'WAR',
-  warrior_classic: 'WAR',
   paladin: 'WAR',
   shaman: 'WAR',
   rogue: 'ROG',

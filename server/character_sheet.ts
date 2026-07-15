@@ -24,8 +24,7 @@ import {
 import { zoneAt } from '../src/sim/data';
 import { characterDerivedStats } from '../src/sim/entity';
 import type { CharacterState } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
-import { virtualLevel, xpToReachLevel } from '../src/sim/types';
+import { isPlayerClass, type PlayerClass, virtualLevel, xpToReachLevel } from '../src/sim/types';
 import type { CharacterRow } from './db';
 
 export type SheetVisibility = 'owner' | 'public';
@@ -99,7 +98,6 @@ export interface CharacterSheet {
 
 const CLASS_LABELS: Record<PlayerClass, string> = {
   warrior: 'Warrior',
-  warrior_classic: 'Classic Warrior',
   paladin: 'Paladin',
   hunter: 'Hunter',
   rogue: 'Rogue',
@@ -169,7 +167,8 @@ function arenaBrackets(state: CharacterState): Record<string, SheetArenaBracket>
 
 export function characterSheet(input: CharacterSheetInput): CharacterSheet {
   const { row, visibility, realm, origin, guild, rank } = input;
-  const cls = row.class as PlayerClass;
+  if (!isPlayerClass(row.class)) throw new Error('character row has invalid class');
+  const cls = row.class;
   const state: CharacterState = row.state ?? ({} as CharacterState);
   const level = row.level ?? state.level ?? 1;
   const skin = Math.max(0, Math.min(7, Math.floor(state.skin ?? 0)));

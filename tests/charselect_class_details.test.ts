@@ -1,16 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { CLASS_DETAILS, SIGNATURE_ABILITIES } from '../src/ui/class_details_data';
-import { CLASSES, ABILITIES } from '../src/sim/content/classes';
+import { describe, expect, it } from 'vitest';
+import { ABILITIES, CLASSES } from '../src/sim/content/classes';
 import type { PlayerClass } from '../src/sim/types';
+import { CLASS_DETAILS, SIGNATURE_ABILITIES } from '../src/ui/class_details_data';
+import { EXPECTED_PLAYER_CLASSES } from './helpers/player_classes';
 
 // Guards the hand-maintained character-select showcase data against drift from
 // the sim's source of truth. If a class's ability kit or roster changes, these
 // assertions force the showcase metadata to be updated in the same change.
 
-const classIds = Object.keys(CLASSES) as PlayerClass[];
+const classIds = [...EXPECTED_PLAYER_CLASSES] as PlayerClass[];
 
 describe('character-select class details parity', () => {
   it('covers every playable class exactly once', () => {
+    expect(Object.keys(CLASSES)).toHaveLength(EXPECTED_PLAYER_CLASSES.length);
     for (const cls of classIds) {
       expect(CLASS_DETAILS[cls], `missing CLASS_DETAILS for ${cls}`).toBeTruthy();
       expect(SIGNATURE_ABILITIES[cls], `missing SIGNATURE_ABILITIES for ${cls}`).toBeTruthy();

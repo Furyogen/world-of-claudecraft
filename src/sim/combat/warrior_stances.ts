@@ -99,17 +99,10 @@ export function warriorStanceReconcile(
 // (or a spec change that invalidates the worn stance) it strips the stale stance
 // and applies the spec default. Draws no rng. Runs once per player-tick.
 export function ensureWarriorStance(ctx: SimContext, p: Entity, meta: PlayerMeta): void {
-  if (meta.cls !== 'warrior' && meta.cls !== 'warrior_classic') return;
+  if (meta.cls !== 'warrior') return;
   const worn = p.auras.filter((a) => isWarriorStanceKind(a.kind)).map((a) => a.kind);
   const spec = ctx.playerMods(meta).spec;
-  // The classic warrior keeps the pre-overhaul stance model verbatim: every
-  // spec reconciles into the (cloned) Defensive Stance, nothing else exists.
-  const plan =
-    meta.cls === 'warrior_classic'
-      ? worn.includes('defensive_stance')
-        ? { removeKinds: [], applyId: null }
-        : { removeKinds: [...worn], applyId: 'cw_defensive_stance' }
-      : warriorStanceReconcile(spec, worn);
+  const plan = warriorStanceReconcile(spec, worn);
   if (plan.applyId === null) return;
   // Drop any invalid stance auras (announce the loss like the exclusive-group path).
   for (let i = p.auras.length - 1; i >= 0; i--) {

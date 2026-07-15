@@ -43,7 +43,7 @@
 
 import type * as http from 'node:http';
 import type { CharacterState } from '../src/sim/sim';
-import type { PlayerClass } from '../src/sim/types';
+import { isPlayerClass, type PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
 import { characterSheet, type SheetRank } from './character_sheet';
 import {
@@ -120,19 +120,6 @@ const DELETE_CONFIRM = {
 const CHARACTER_RESOURCE = 'character';
 /** Per-account character cap (mirrors the legacy createCharacterCapped default). */
 const CHARACTER_LIMIT = 10;
-/** The nine playable classes accepted by create (mirrors the legacy inline list). */
-const VALID_CLASSES: readonly string[] = [
-  'warrior',
-  'warrior_classic',
-  'paladin',
-  'hunter',
-  'rogue',
-  'priest',
-  'shaman',
-  'mage',
-  'warlock',
-  'druid',
-];
 /** Highest selectable skin index (mirrors the legacy Math.min(7, ...) clamp). */
 const MAX_SKIN = 7;
 const BEARER_PATTERN = /^Bearer ([a-f0-9]{64})$/;
@@ -363,11 +350,11 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
     json(ctx.res, 400, CHAR_NAME_NOT_ALLOWED);
     return;
   }
-  if (typeof body.class !== 'string' || !VALID_CLASSES.includes(body.class)) {
+  if (!isPlayerClass(body.class)) {
     json(ctx.res, 400, INVALID_CLASS);
     return;
   }
-  const cls = body.class as PlayerClass;
+  const cls = body.class;
   const skin = Math.max(
     0,
     Math.min(MAX_SKIN, Math.floor(typeof body.skin === 'number' ? body.skin : 0)),

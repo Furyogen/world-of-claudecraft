@@ -48,10 +48,8 @@ import { vendorStackSize } from './vendor_stack';
 const VENDOR_BUYBACK_LIMIT = 12;
 
 function shouldAutoRouteToOffhand(meta: PlayerMeta, spec: string | null | undefined): boolean {
-  // Delegate to the ONE dual-wield rule: a hand-written copy of it here
-  // silently missed the classic warrior joining canDualWield (2026-07-11 PBE
-  // bug: the second one-hander kept replacing the mainhand, so 1H+1H was
-  // unreachable by right-click).
+  // Delegate to the one dual-wield rule so right-click auto-equipping stays
+  // aligned with equipment eligibility.
   return canDualWield(meta.cls, spec);
 }
 
