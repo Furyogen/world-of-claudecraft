@@ -116,7 +116,8 @@ sudo docker run --rm --memory 2g --memory-swap 2g -v /opt/eastbrook:/src:ro -w /
   sh -c 'cp -a /src/. /app && find /app \( -name .git -o -name .env \) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
 #    Red means STOP, do not deploy: the image would build fine and fail at runtime.
 #    (On a host that does have Node 22 on PATH, `npm ci --ignore-scripts && npx tsc
-#    --noEmit` in the checkout is the same gate.)
+#    --noEmit` in the checkout runs the same type check, but WITHOUT the container's
+#    memory bound; on the live box prefer the containerized form above.)
 
 # 4. Optional: warn the players. POST /internal/restart-countdown broadcasts an
 #    in-game countdown. The secret header is the ONLY gate: nothing restricts the

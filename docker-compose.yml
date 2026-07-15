@@ -84,7 +84,8 @@ services:
       # turns it on behind Authorization: Bearer <token>. Set on the host .env by
       # the monitoring deploy so Prometheus can scrape the RED + process metrics.
       METRICS_TOKEN: ${METRICS_TOKEN:-}
-      # Runtime: protects the loopback-only deploy countdown endpoint.
+      # Runtime: the ONLY gate on the deploy countdown endpoint (nothing
+      # restricts /internal/* to loopback), so treat it as a real secret.
       RESTART_COUNTDOWN_SECRET: ${RESTART_COUNTDOWN_SECRET:-}
       # Runtime: Discord OAuth + the secret-gated game <-> Discord bot channel.
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-}
