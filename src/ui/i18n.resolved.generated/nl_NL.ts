@@ -857,6 +857,7 @@ export const nl_NL: EnTranslations = {
       "aurasOnPlayerFrame": "Buffs op het spelerframe",
       "highContrastBackground": "Hoog-contrastachtergrond",
       "startAttackOnAbility": "Auto-aanval bij gebruik van vaardigheid",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Buit oprapen in het voorbijgaan",
       "groundReticle": "Grondrichtkruis",
       "showItemLevel": "Itemniveau tonen",
@@ -1284,7 +1285,10 @@ export const nl_NL: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Dit voorwerp kan niet worden vernietigd.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -1806,7 +1810,8 @@ export const nl_NL: EnTranslations = {
       "title": "Verzamelen",
       "mining": "Mijnbouw",
       "logging": "Houtkap",
-      "herbalism": "Kruidenkunde"
+      "herbalism": "Kruidenkunde",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -5359,6 +5364,7 @@ export const nl_NL: EnTranslations = {
     "actionBar": {
       "attackName": "Aanvallen",
       "attackTooltip": "Schakel auto-aanval op je doelwit in of uit. Rechtsklikken op een vijand valt ook aan.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Lege sleuf",
       "slotAria": "Actiesleuf {slot}: {ability}",
       "emptySlotAria": "Actiesleuf {slot}: leeg",

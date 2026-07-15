@@ -857,6 +857,7 @@ export const en_XA: EnTranslations = {
       "aurasOnPlayerFrame": "[Ɓúƒƒš óñ ţĥé Þļáýéŕ Ƒŕáɱé]",
       "highContrastBackground": "[Ĥíĝĥ-Çóñţŕášţ Ɓáçķĝŕóúñð]",
       "startAttackOnAbility": "[Áúţó-Áţţáçķ óñ Áƀíļíţý Úšé]",
+      "showAttackButton": "[Šĥóŵ Áţţáçķ Ɓúţţóñ]",
       "walkByAutoloot": "[Ŵáļķ-ƀý Áúţóļóóţ]",
       "groundReticle": "[Ĝŕóúñð-Ţáŕĝéţíñĝ Ŕéţíçļé]",
       "showItemLevel": "[Šĥóŵ Íţéɱ Ļéʋéļ]",
@@ -1284,7 +1285,10 @@ export const en_XA: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "[Ţĥíš íţéɱ çáññóţ ƀé ðéšţŕóýéð.]",
-      "rightClickDestroy": "[Šĥíƒţ+ŕíĝĥţ-çļíçķ ţó ðéšţŕóý]",
+      "rightClickDestroy": "[Ŕíĝĥţ-çļíçķ ţó ðéšţŕóý]",
+      "dragEquipHint": "[Ðŕáĝ óñţó ýóúŕ çĥáŕáçţéŕ ţó éɋúíþ]",
+      "dragDestroyHint": "[Ðŕáĝ óúţ íñţó ţĥé ŵóŕļð ţó ðéšţŕóý]",
+      "reorderNeedsRecent": "[Çļéáŕ ţĥé ƒíļţéŕ áñð šóŕţ ƀý Ŕéçéñţ ţó ŕéáŕŕáñĝé ýóúŕ ƀáĝš]",
       "filterGroupAria": "[Ƒíļţéŕ ƀáĝš ƀý çáţéĝóŕý]",
       "filterAll": "[Áļļ]",
       "filterWeapon": "[Ŵéáþóñš]",
@@ -1806,7 +1810,8 @@ export const en_XA: EnTranslations = {
       "title": "[Ĝáţĥéŕíñĝ]",
       "mining": "[Ɱíñíñĝ]",
       "logging": "[Ļóĝĝíñĝ]",
-      "herbalism": "[Ĥéŕƀáļíšɱ]"
+      "herbalism": "[Ĥéŕƀáļíšɱ]",
+      "notReady": "[Ţĥíš ŕéšóúŕçé ñóðé ĥáš ñóţ ŕéšþáŵñéð ƒóŕ ýóú ýéţ.]"
     },
     "archetypeTitle": {
       "label": "[Ţíţļé]",
@@ -5359,6 +5364,7 @@ export const en_XA: EnTranslations = {
     "actionBar": {
       "attackName": "[Áţţáçķ]",
       "attackTooltip": "[Ţóĝĝļé áúţó-áţţáçķ óñ ýóúŕ ţáŕĝéţ. Ŕíĝĥţ-çļíçķíñĝ áñ éñéɱý áļšó áţţáçķš.]",
+      "attackRemoveHint": "[Ŕíĝĥţ-çļíçķ ţó ŕéɱóʋé íţ ƒŕóɱ ţĥé ƀáŕ áñð ƒŕéé ţĥé šļóţ.]",
       "emptySlot": "[Éɱþţý šļóţ]",
       "slotAria": "[Áçţíóñ šļóţ {slot}: {ability}]",
       "emptySlotAria": "[Áçţíóñ šļóţ {slot}: éɱþţý]",

@@ -857,6 +857,7 @@ export const ja_JP: EnTranslations = {
       "aurasOnPlayerFrame": "バフをプレイヤーフレームに表示",
       "highContrastBackground": "高コントラスト背景",
       "startAttackOnAbility": "アビリティ使用時に自動攻撃",
+      "showAttackButton": "攻撃ボタンを表示",
       "walkByAutoloot": "通りがかり自動ルート",
       "groundReticle": "地面ターゲットのレティクル",
       "showItemLevel": "アイテムレベルを表示",
@@ -1284,7 +1285,10 @@ export const ja_JP: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "このアイテムは破壊できません。",
-      "rightClickDestroy": "Shift+右クリックで破壊",
+      "rightClickDestroy": "右クリックで破壊",
+      "dragEquipHint": "キャラクターにドラッグして装備",
+      "dragDestroyHint": "世界へドラッグして破壊",
+      "reorderNeedsRecent": "絞り込みを解除し並び順を「最近」にすると持ち物を並べ替えられます",
       "filterGroupAria": "バッグをカテゴリーで絞り込む",
       "filterAll": "すべて",
       "filterWeapon": "武器",
@@ -1806,7 +1810,8 @@ export const ja_JP: EnTranslations = {
       "title": "採集",
       "mining": "採掘",
       "logging": "伐採",
-      "herbalism": "薬草学"
+      "herbalism": "薬草学",
+      "notReady": "この資源ノードはまだあなたのために再生していません。"
     },
     "archetypeTitle": {
       "label": "称号",
@@ -5359,6 +5364,7 @@ export const ja_JP: EnTranslations = {
     "actionBar": {
       "attackName": "攻撃",
       "attackTooltip": "対象への自動攻撃を切り替えます。敵を右クリックしても攻撃します。",
+      "attackRemoveHint": "右クリックでバーから外し、スロットを空けます。",
       "emptySlot": "空きスロット",
       "slotAria": "アクションスロット {slot}: {ability}",
       "emptySlotAria": "アクションスロット {slot}: 空き",

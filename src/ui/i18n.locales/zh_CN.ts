@@ -5,9 +5,8 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
@@ -531,6 +530,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': '能量',
   'hudChrome.options.interfaceMode': '界面模式',
   'hudChrome.options.groundReticle': '地面瞄准指示圈',
+  'hudChrome.options.showAttackButton': '显示攻击按钮',
   'hudChrome.options.interfaceModeAuto': '自动',
   'hudChrome.options.interfaceModeDesktop': '桌面',
   'hudChrome.options.interfaceModeTouch': '触控',
@@ -1729,6 +1729,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hud.arena.levelClass': '{level} 级 {className}',
   'abilityUi.actionBar.attackName': '攻击',
   'abilityUi.actionBar.attackTooltip': '对目标开启或关闭自动攻击。右键点击敌人也会发起攻击。',
+  'abilityUi.actionBar.attackRemoveHint': '右键点击可将其从动作栏移除并空出栏位。',
   'abilityUi.actionBar.emptySlot': '空栏位',
   'abilityUi.actionBar.slotAria': '动作栏位 {slot}：{ability}',
   'abilityUi.actionBar.emptySlotAria': '动作栏位 {slot}：空',
@@ -4060,7 +4061,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': '收起任务追踪器',
   'hudChrome.questTracker.expandHint': '展开任务追踪器',
   'hudChrome.bags.cannotDestroy': '该物品无法销毁。',
-  'hudChrome.bags.rightClickDestroy': 'Shift+右键单击以销毁',
+  'hudChrome.bags.rightClickDestroy': '右键单击以销毁',
+  'hudChrome.bags.dragEquipHint': '拖到角色身上以装备',
+  'hudChrome.bags.dragDestroyHint': '拖出到世界中以销毁',
+  'hudChrome.bags.reorderNeedsRecent': '清除筛选并按“最近”排序即可整理背包',
   'hudChrome.bags.filterGroupAria': '按类别筛选背包',
   'hudChrome.bags.filterAll': '全部',
   'hudChrome.bags.filterWeapon': '武器',
@@ -6389,6 +6393,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '采矿',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '草药学',
+  'hudChrome.gathering.notReady': '这个资源节点尚未为你重新生成。',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': '无',
   'hudChrome.archetypeTitle.hobbyLabel': '爱好',

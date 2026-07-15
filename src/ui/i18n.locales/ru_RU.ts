@@ -5,9 +5,8 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
@@ -552,6 +551,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': 'Энергия',
   'hudChrome.options.interfaceMode': 'Режим интерфейса',
   'hudChrome.options.groundReticle': 'Прицел наземного наведения',
+  'hudChrome.options.showAttackButton': 'Показывать кнопку атаки',
   'hudChrome.options.interfaceModeAuto': 'Авто',
   'hudChrome.options.interfaceModeDesktop': 'Компьютер',
   'hudChrome.options.interfaceModeTouch': 'Сенсорный',
@@ -1833,6 +1833,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.attackName': 'Атака',
   'abilityUi.actionBar.attackTooltip':
     'Включает или выключает автоатаку по вашей цели. Щелчок правой кнопкой по врагу также начинает атаку.',
+  'abilityUi.actionBar.attackRemoveHint':
+    'Щёлкните правой кнопкой, чтобы убрать её с панели и освободить ячейку.',
   'abilityUi.actionBar.emptySlot': 'Пустая ячейка',
   'abilityUi.actionBar.slotAria': 'Ячейка действия {slot}: {ability}',
   'abilityUi.actionBar.emptySlotAria': 'Ячейка действия {slot}: пусто',
@@ -4278,7 +4280,11 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'Свернуть трекер заданий',
   'hudChrome.questTracker.expandHint': 'Развернуть трекер заданий',
   'hudChrome.bags.cannotDestroy': 'Этот предмет нельзя уничтожить.',
-  'hudChrome.bags.rightClickDestroy': 'Shift+правый клик, чтобы уничтожить',
+  'hudChrome.bags.rightClickDestroy': 'Правый клик, чтобы уничтожить',
+  'hudChrome.bags.dragEquipHint': 'Перетащите на персонажа, чтобы надеть',
+  'hudChrome.bags.dragDestroyHint': 'Перетащите в мир, чтобы уничтожить',
+  'hudChrome.bags.reorderNeedsRecent':
+    'Сбросьте фильтр и выберите сортировку «Недавние», чтобы менять порядок в сумках',
   'hudChrome.bags.filterGroupAria': 'Фильтровать сумки по категории',
   'hudChrome.bags.filterAll': 'Все',
   'hudChrome.bags.filterWeapon': 'Оружие',
@@ -6842,6 +6848,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': 'Горное дело',
   'hudChrome.gathering.logging': 'Лесозаготовка',
   'hudChrome.gathering.herbalism': 'Травничество',
+  'hudChrome.gathering.notReady': 'Этот ресурсный узел еще не восстановился для вас.',
   'hudChrome.archetypeTitle.label': 'Титул',
   'hudChrome.archetypeTitle.none': 'Нет',
   'hudChrome.archetypeTitle.hobbyLabel': 'Хобби',

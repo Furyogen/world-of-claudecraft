@@ -857,6 +857,7 @@ export const tr_TR: EnTranslations = {
       "aurasOnPlayerFrame": "Oyuncu Çerçevesinde Güçlendirmeler",
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
       "startAttackOnAbility": "Yetenek Kullanımında Otomatik Saldırı",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Yanından Geçerken Otomatik Yağma",
       "groundReticle": "Yer hedefleme halkası",
       "showItemLevel": "Eşya Seviyesini Göster",
@@ -1284,7 +1285,10 @@ export const tr_TR: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Bu eşya yok edilemez.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1806,7 +1810,8 @@ export const tr_TR: EnTranslations = {
       "title": "Toplama",
       "mining": "Madencilik",
       "logging": "Ağaç kesme",
-      "herbalism": "Bitkicilik"
+      "herbalism": "Bitkicilik",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Unvan",
@@ -5359,6 +5364,7 @@ export const tr_TR: EnTranslations = {
     "actionBar": {
       "attackName": "Saldırı",
       "attackTooltip": "Hedefine otomatik saldırıyı aç/kapat. Bir düşmana sağ tıklamak da saldırır.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Boş yuva",
       "slotAria": "Eylem yuvası {slot}: {ability}",
       "emptySlotAria": "Eylem yuvası {slot}: boş",

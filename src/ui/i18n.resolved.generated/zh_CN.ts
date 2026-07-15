@@ -857,6 +857,7 @@ export const zh_CN: EnTranslations = {
       "aurasOnPlayerFrame": "增益显示在玩家框",
       "highContrastBackground": "高对比度背景",
       "startAttackOnAbility": "使用技能时自动攻击",
+      "showAttackButton": "显示攻击按钮",
       "walkByAutoloot": "路过自动拾取",
       "groundReticle": "地面瞄准指示圈",
       "showItemLevel": "显示物品等级",
@@ -1284,7 +1285,10 @@ export const zh_CN: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "该物品无法销毁。",
-      "rightClickDestroy": "Shift+右键单击以销毁",
+      "rightClickDestroy": "右键单击以销毁",
+      "dragEquipHint": "拖到角色身上以装备",
+      "dragDestroyHint": "拖出到世界中以销毁",
+      "reorderNeedsRecent": "清除筛选并按“最近”排序即可整理背包",
       "filterGroupAria": "按类别筛选背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -1806,7 +1810,8 @@ export const zh_CN: EnTranslations = {
       "title": "采集",
       "mining": "采矿",
       "logging": "伐木",
-      "herbalism": "草药学"
+      "herbalism": "草药学",
+      "notReady": "这个资源节点尚未为你重新生成。"
     },
     "archetypeTitle": {
       "label": "称号",
@@ -5359,6 +5364,7 @@ export const zh_CN: EnTranslations = {
     "actionBar": {
       "attackName": "攻击",
       "attackTooltip": "对目标开启或关闭自动攻击。右键点击敌人也会发起攻击。",
+      "attackRemoveHint": "右键点击可将其从动作栏移除并空出栏位。",
       "emptySlot": "空栏位",
       "slotAria": "动作栏位 {slot}：{ability}",
       "emptySlotAria": "动作栏位 {slot}：空",

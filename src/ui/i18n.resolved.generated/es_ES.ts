@@ -857,6 +857,7 @@ export const es_ES: EnTranslations = {
       "aurasOnPlayerFrame": "Beneficios en el marco del jugador",
       "highContrastBackground": "Fondo de alto contraste",
       "startAttackOnAbility": "Ataque automático al usar habilidad",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Saqueo automático al pasar",
       "groundReticle": "Retícula de objetivo terrestre",
       "showItemLevel": "Mostrar nivel de objeto",
@@ -1284,7 +1285,10 @@ export const es_ES: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Este elemento no se puede destruir.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtrar bolsas por categoría",
       "filterAll": "Todos",
       "filterWeapon": "Armas",
@@ -1806,7 +1810,8 @@ export const es_ES: EnTranslations = {
       "title": "Recolección",
       "mining": "Minería",
       "logging": "Tala",
-      "herbalism": "Herboristería"
+      "herbalism": "Herboristería",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Título",
@@ -5359,6 +5364,7 @@ export const es_ES: EnTranslations = {
     "actionBar": {
       "attackName": "Atacar",
       "attackTooltip": "Activa o desactiva el autoataque sobre tu objetivo. Hacer clic derecho en un enemigo también ataca.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Ranura vacía",
       "slotAria": "Ranura de acción {slot}: {ability}",
       "emptySlotAria": "Ranura de acción {slot}: vacía",

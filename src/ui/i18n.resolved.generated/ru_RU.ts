@@ -857,6 +857,7 @@ export const ru_RU: EnTranslations = {
       "aurasOnPlayerFrame": "Баффы у рамки игрока",
       "highContrastBackground": "Фон высокой контрастности",
       "startAttackOnAbility": "Автоатака при использовании способности",
+      "showAttackButton": "Показывать кнопку атаки",
       "walkByAutoloot": "Автосбор добычи при проходе",
       "groundReticle": "Прицел наземного наведения",
       "showItemLevel": "Показывать уровень предмета",
@@ -1284,7 +1285,10 @@ export const ru_RU: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Этот предмет нельзя уничтожить.",
-      "rightClickDestroy": "Shift+правый клик, чтобы уничтожить",
+      "rightClickDestroy": "Правый клик, чтобы уничтожить",
+      "dragEquipHint": "Перетащите на персонажа, чтобы надеть",
+      "dragDestroyHint": "Перетащите в мир, чтобы уничтожить",
+      "reorderNeedsRecent": "Сбросьте фильтр и выберите сортировку «Недавние», чтобы менять порядок в сумках",
       "filterGroupAria": "Фильтровать сумки по категории",
       "filterAll": "Все",
       "filterWeapon": "Оружие",
@@ -1806,7 +1810,8 @@ export const ru_RU: EnTranslations = {
       "title": "Собирательство",
       "mining": "Горное дело",
       "logging": "Лесозаготовка",
-      "herbalism": "Травничество"
+      "herbalism": "Травничество",
+      "notReady": "Этот ресурсный узел еще не восстановился для вас."
     },
     "archetypeTitle": {
       "label": "Титул",
@@ -5359,6 +5364,7 @@ export const ru_RU: EnTranslations = {
     "actionBar": {
       "attackName": "Атака",
       "attackTooltip": "Включает или выключает автоатаку по вашей цели. Щелчок правой кнопкой по врагу также начинает атаку.",
+      "attackRemoveHint": "Щёлкните правой кнопкой, чтобы убрать её с панели и освободить ячейку.",
       "emptySlot": "Пустая ячейка",
       "slotAria": "Ячейка действия {slot}: {ability}",
       "emptySlotAria": "Ячейка действия {slot}: пусто",

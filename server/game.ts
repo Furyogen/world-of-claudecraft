@@ -501,6 +501,7 @@ const JAILED_BLOCKED_COMMANDS = new Set<string>([
 ]);
 const HEAVY_SELF_CMDS = new Set<string>([
   'equip',
+  'inv_move', // rewrites the inventory array order: the self snapshot must resend it
   'unequip_item',
   'equip_bag',
   'unequip_bag',
@@ -3855,7 +3856,25 @@ export class GameServer {
         }
         break;
       case 'equip':
-        if (typeof msg.item === 'string') sim.equipItem(msg.item, pid);
+        if (typeof msg.item === 'string') {
+          // The optional aimed slot (the paperdoll drop target) is accepted only
+          // when it names a real equipment key; anything else falls back to the
+          // sim's own resolver rather than trusting the client. The sim then
+          // re-validates the slot against the item itself.
+          const aimed =
+            typeof msg.slot === 'string' && (EQUIP_SLOTS as readonly string[]).includes(msg.slot)
+              ? (msg.slot as EquipSlot)
+              : undefined;
+          if (aimed) sim.equipItemToSlot(msg.item, aimed, pid);
+          else sim.equipItem(msg.item, pid);
+        }
+        break;
+      case 'inv_move':
+        // Manual bag order (a drag between bag cells). Both indices are re-validated
+        // inside the sim against the live bag, so a bogus pair is simply refused.
+        if (typeof msg.from === 'number' && typeof msg.to === 'number') {
+          sim.moveInventoryItem(msg.from, msg.to, pid);
+        }
         break;
       case 'unequip_item':
         if (typeof msg.slot === 'string' && (EQUIP_SLOTS as readonly string[]).includes(msg.slot)) {
@@ -5032,6 +5051,21 @@ export class GameServer {
     // draws the corpse marker and gates the resurrect-at-corpse button on it.
     maybe('corpse', p.corpsePos);
     maybe('cds', Object.fromEntries([...p.cooldowns.entries()].map(([k, v]) => [k, round2(v)])));
+    // Per-player gather-node respawn cooldowns (#1866), same shape/semantics as
+    // `cds` above: remaining seconds AS OF THIS TICK, ticking down tick over
+    // tick (so `maybe` re-ships it while any node is still cooling down and
+    // drops a node's key the tick it clears), matching
+    // PlayerMeta.nodeHarvestReadyAt's own "absent means ready" contract (see
+    // src/sim/professions/gathering.ts isNodeHarvestableBy). Only entries with
+    // remaining time survive the filter, an already-elapsed timer reads as ready.
+    maybe(
+      'ncd',
+      Object.fromEntries(
+        Object.entries(meta.nodeHarvestReadyAt)
+          .filter(([, until]) => until > this.sim.time)
+          .map(([k, until]) => [k, round2(until - this.sim.time)]),
+      ),
+    );
     maybe('stats', p.stats);
     maybe('weapon', p.weapon);
     maybe('party', this.partyWire(anchorSession.pid));

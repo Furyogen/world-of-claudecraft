@@ -857,6 +857,7 @@ export const cs_CZ: EnTranslations = {
       "aurasOnPlayerFrame": "Buffy na rámu hráče",
       "highContrastBackground": "Vysoce kontrastní pozadí",
       "startAttackOnAbility": "Automatický útok při použití schopnosti",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Automatická kořist při průchodu",
       "groundReticle": "Zaměřovací kruh na zemi",
       "showItemLevel": "Zobrazit úroveň předmětu",
@@ -1284,7 +1285,10 @@ export const cs_CZ: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Tento předmět nelze zničit.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",
       "filterWeapon": "Zbraně",
@@ -1806,7 +1810,8 @@ export const cs_CZ: EnTranslations = {
       "title": "Sběr",
       "mining": "Těžba",
       "logging": "Dřevorubectví",
-      "herbalism": "Bylinkářství"
+      "herbalism": "Bylinkářství",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titul",
@@ -5359,6 +5364,7 @@ export const cs_CZ: EnTranslations = {
     "actionBar": {
       "attackName": "Útok",
       "attackTooltip": "Přepne automatický útok na cíl. Kliknutí pravým tlačítkem na nepřítele také zaútočí.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Prázdný slot",
       "slotAria": "Akční slot {slot}: {ability}",
       "emptySlotAria": "Akční slot {slot}: prázdný",

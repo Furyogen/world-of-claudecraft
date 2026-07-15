@@ -857,6 +857,7 @@ export const vi_VN: EnTranslations = {
       "aurasOnPlayerFrame": "Hiệu Ứng Có Lợi Trên Khung Người Chơi",
       "highContrastBackground": "Nền Tương Phản Cao",
       "startAttackOnAbility": "Tự Đánh Khi Dùng Kỹ Năng",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Tự Nhặt Đồ Khi Đi Ngang",
       "groundReticle": "Vòng ngắm mục tiêu mặt đất",
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
@@ -1284,7 +1285,10 @@ export const vi_VN: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Không thể phá hủy vật phẩm này.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Lọc túi đồ theo danh mục",
       "filterAll": "Tất cả",
       "filterWeapon": "Vũ khí",
@@ -1806,7 +1810,8 @@ export const vi_VN: EnTranslations = {
       "title": "Thu thập",
       "mining": "Khai mỏ",
       "logging": "Đốn gỗ",
-      "herbalism": "Thảo dược học"
+      "herbalism": "Thảo dược học",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Danh hiệu",
@@ -5359,6 +5364,7 @@ export const vi_VN: EnTranslations = {
     "actionBar": {
       "attackName": "Tấn Công",
       "attackTooltip": "Bật/tắt tự động tấn công mục tiêu. Nhấp chuột phải vào kẻ địch cũng sẽ tấn công.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Ô trống",
       "slotAria": "Ô hành động {slot}: {ability}",
       "emptySlotAria": "Ô hành động {slot}: trống",

@@ -30,6 +30,7 @@ import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
+import { handleGatherNodeInteract } from './game/gather_node_interact';
 import { Input } from './game/input';
 import { InputActivityMeter, installInputActivityTracking } from './game/input_activity';
 import {
@@ -126,7 +127,7 @@ import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { isStunned } from './sim/combat/cc';
 import { ABILITIES, CLASSES } from './sim/content/classes';
-import { ITEMS, isDelvePos, setActiveWorldContent } from './sim/data';
+import { GATHER_NODES, ITEMS, isDelvePos, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 import { Sim } from './sim/sim';
@@ -163,6 +164,7 @@ import {
   dismissCameraPrompt,
   maybeShowFirstRunCameraPrompt,
 } from './ui/camera_prompt';
+import { deleteCharButtonHtml } from './ui/char_delete_button';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { chatInputSize } from './ui/chat_input_autosize';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
@@ -1536,6 +1538,13 @@ async function startGame(
       settings.set('startAttackOnAbilityUse', !!value);
       return;
     }
+    if (key === 'showAttackButton') {
+      // Slot-0 mode switch, read LIVE by the HUD (attackSlotIsAttack): ON keeps the
+      // classic Attack toggle; OFF turns the first slot into a normal assignable one
+      // (its key then casts the assigned action). Persistence is the only page work.
+      settings.set('showAttackButton', !!value);
+      return;
+    }
     if (key === 'groundReticle') {
       const v = settings.set('groundReticle', !!value);
       if (!v) hud.cancelGroundAim();
@@ -2032,6 +2041,18 @@ async function startGame(
     // emit its precise "move closer to the chest/passage" hint.
     let bestDelve: number | null = null,
       bestDelveD = INTERACT_RANGE + 1;
+    // Gather nodes (#1866) are static content (src/sim/data GATHER_NODES), not
+    // entities, so they get their own nearest-in-range scan alongside the
+    // entity loop below rather than living inside it.
+    let bestNode: (typeof GATHER_NODES)[number] | null = null,
+      bestNodeD = INTERACT_RANGE;
+    for (const node of GATHER_NODES) {
+      const d = dist2d(p.pos, { x: node.pos.x, y: p.pos.y, z: node.pos.z });
+      if (d < bestNodeD) {
+        bestNode = node;
+        bestNodeD = d;
+      }
+    }
     for (const e of world.entities.values()) {
       const d = dist2d(p.pos, e.pos);
       if (e.kind === 'mob' && e.lootable && d < bestCorpseD) {
@@ -2047,7 +2068,11 @@ async function startGame(
         bestObj = e.id;
         bestObjD = d;
       }
-      if (e.kind === 'npc' && d < bestNpcD) {
+      // The graveyard angel is hidden from (and not interactable by) the living,
+      // same filter renderer.pick() applies to the click path: skip it here too
+      // unless the local player is a released spirit, so it cannot starve a
+      // node sharing its graveyard's interact range for keyboard/gamepad/mobile.
+      if (e.kind === 'npc' && d < bestNpcD && (e.templateId !== 'spirit_healer' || p.ghost)) {
         bestNpc = e.id;
         bestNpcD = d;
       }
@@ -2081,6 +2106,18 @@ async function startGame(
       const npc = world.entities.get(bestNpc);
       if (npc?.kind === 'npc' && npc.templateId === 'brother_halven') hud.openDelveBoard(bestNpc);
       else hud.openQuestDialog(bestNpc);
+      return;
+    }
+    if (bestNode !== null) {
+      handleGatherNodeInteract(
+        world,
+        hud,
+        p.pos,
+        bestNode.id,
+        bestNode.pos,
+        t('questUi.errors.tooFar'),
+        t('hudChrome.gathering.notReady'),
+      );
       return;
     }
     hud.showError(t('errors.nothingInteract'));
@@ -2152,7 +2189,31 @@ async function startGame(
         return;
       }
     }
-    const id = renderer.pick(x, y);
+    // Gather nodes (#1866) are static content, not entities, so they get their
+    // own raycast rather than living in `renderer.pick()`. Ordered: a direct
+    // entity hit always wins (it must not be overridden by a nearby node), then
+    // a direct node hit (it must not be stolen by the sloppy assist below when
+    // a mob/player camps the node), then the sloppy character assist, then the
+    // ground-click/click-to-move fallback. A click that lands on a node
+    // harvests it; it does not also walk you there or deselect your target.
+    let id = renderer.pickDirect(x, y);
+    if (id === null) {
+      const nodeId = renderer.pickGatherNode(x, y);
+      const node = nodeId !== null ? GATHER_NODES.find((n) => n.id === nodeId) : undefined;
+      if (node) {
+        handleGatherNodeInteract(
+          world,
+          hud,
+          world.player.pos,
+          node.id,
+          node.pos,
+          t('questUi.errors.tooFar'),
+          t('hudChrome.gathering.notReady'),
+        );
+        return;
+      }
+      id = renderer.pickSloppy(x, y);
+    }
     // OSRS-style click feedback (its own toggle): a brief ground marker, gold for a
     // neutral click and red on a hostile. Both reference games only mark a real action,
     // so the marker stamps where a click actually does something: the click-to-move
@@ -4365,10 +4426,10 @@ async function refreshCharacters(): Promise<void> {
         </div>
         ${
           c.forceRename
-            ? `<input class="rename-input" placeholder="${escapeHtml(t('character.newNamePlaceholder'))}" maxlength="16" /><span class="char-actions"><button class="btn btn-danger delete-char-btn" ${c.online ? 'disabled' : ''}>${escapeHtml(t('character.delete'))}</button><button class="btn rename-btn">${escapeHtml(t('character.rename'))}</button></span>`
+            ? `<input class="rename-input" placeholder="${escapeHtml(t('character.newNamePlaceholder'))}" maxlength="16" /><span class="char-actions"><button class="btn rename-btn">${escapeHtml(t('character.rename'))}</button>${deleteCharButtonHtml(c.online)}</span>`
             : c.online
-              ? `<span class="char-actions"><button class="btn btn-danger delete-char-btn" disabled title="${escapeHtml(t('character.inWorldHint'))}">${escapeHtml(t('character.delete'))}</button><button class="btn take-over-btn" title="${escapeHtml(t('character.takeOverConfirm'))}" aria-label="${escapeHtml(t('character.takeOverConfirm'))}">${escapeHtml(t('character.takeOver'))}</button></span>`
-              : `<span class="char-actions"><button class="btn btn-danger delete-char-btn">${escapeHtml(t('character.delete'))}</button><button class="btn enter-world-btn">${escapeHtml(t('auth.enterWorld'))}</button></span>`
+              ? `<span class="char-actions"><button class="btn take-over-btn" title="${escapeHtml(t('character.takeOverConfirm'))}" aria-label="${escapeHtml(t('character.takeOverConfirm'))}">${escapeHtml(t('character.takeOver'))}</button>${deleteCharButtonHtml(true)}</span>`
+              : `<span class="char-actions"><button class="btn enter-world-btn">${escapeHtml(t('auth.enterWorld'))}</button>${deleteCharButtonHtml(false)}</span>`
         }`;
 
       row.querySelector('.delete-char-btn')?.addEventListener('click', (e) => {

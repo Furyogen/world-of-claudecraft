@@ -5,9 +5,8 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
@@ -553,6 +552,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': 'エネルギー',
   'hudChrome.options.interfaceMode': '操作モード',
   'hudChrome.options.groundReticle': '地面ターゲットのレティクル',
+  'hudChrome.options.showAttackButton': '攻撃ボタンを表示',
   'hudChrome.options.interfaceModeAuto': '自動',
   'hudChrome.options.interfaceModeDesktop': 'デスクトップ',
   'hudChrome.options.interfaceModeTouch': 'タッチ',
@@ -1811,6 +1811,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.attackName': '攻撃',
   'abilityUi.actionBar.attackTooltip':
     '対象への自動攻撃を切り替えます。敵を右クリックしても攻撃します。',
+  'abilityUi.actionBar.attackRemoveHint': '右クリックでバーから外し、スロットを空けます。',
   'abilityUi.actionBar.emptySlot': '空きスロット',
   'abilityUi.actionBar.slotAria': 'アクションスロット {slot}: {ability}',
   'abilityUi.actionBar.emptySlotAria': 'アクションスロット {slot}: 空き',
@@ -4233,7 +4234,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'クエストトラッカーを折りたたむ',
   'hudChrome.questTracker.expandHint': 'クエストトラッカーを展開する',
   'hudChrome.bags.cannotDestroy': 'このアイテムは破壊できません。',
-  'hudChrome.bags.rightClickDestroy': 'Shift+右クリックで破壊',
+  'hudChrome.bags.rightClickDestroy': '右クリックで破壊',
+  'hudChrome.bags.dragEquipHint': 'キャラクターにドラッグして装備',
+  'hudChrome.bags.dragDestroyHint': '世界へドラッグして破壊',
+  'hudChrome.bags.reorderNeedsRecent':
+    '絞り込みを解除し並び順を「最近」にすると持ち物を並べ替えられます',
   'hudChrome.bags.filterGroupAria': 'バッグをカテゴリーで絞り込む',
   'hudChrome.bags.filterAll': 'すべて',
   'hudChrome.bags.filterWeapon': '武器',
@@ -6727,6 +6732,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '採掘',
   'hudChrome.gathering.logging': '伐採',
   'hudChrome.gathering.herbalism': '薬草学',
+  'hudChrome.gathering.notReady': 'この資源ノードはまだあなたのために再生していません。',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': 'なし',
   'hudChrome.archetypeTitle.hobbyLabel': '趣味',

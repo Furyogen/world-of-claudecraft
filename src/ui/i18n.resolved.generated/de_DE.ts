@@ -857,6 +857,7 @@ export const de_DE: EnTranslations = {
       "aurasOnPlayerFrame": "Stärkungszauber am Spielerfenster",
       "highContrastBackground": "Hintergrund mit hohem Kontrast",
       "startAttackOnAbility": "Auto-Angriff bei Fähigkeitseinsatz",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Plündern im Vorbeigehen",
       "groundReticle": "Bodenziel-Fadenkreuz",
       "showItemLevel": "Gegenstandsstufe anzeigen",
@@ -1284,7 +1285,10 @@ export const de_DE: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Dieser Gegenstand kann nicht zerstört werden.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",
       "filterWeapon": "Waffen",
@@ -1806,7 +1810,8 @@ export const de_DE: EnTranslations = {
       "title": "Sammeln",
       "mining": "Bergbau",
       "logging": "Holzfällen",
-      "herbalism": "Kräuterkunde"
+      "herbalism": "Kräuterkunde",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -5359,6 +5364,7 @@ export const de_DE: EnTranslations = {
     "actionBar": {
       "attackName": "Angreifen",
       "attackTooltip": "Schaltet den automatischen Angriff auf Euer Ziel um. Ein Rechtsklick auf einen Gegner greift ebenfalls an.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Leerer Platz",
       "slotAria": "Aktionsplatz {slot}: {ability}",
       "emptySlotAria": "Aktionsplatz {slot}: leer",

@@ -857,6 +857,7 @@ export const it_IT: EnTranslations = {
       "aurasOnPlayerFrame": "Buff sul riquadro del giocatore",
       "highContrastBackground": "Sfondo a contrasto elevato",
       "startAttackOnAbility": "Attacco automatico all'uso dell'abilita",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Raccolta automatica al passaggio",
       "groundReticle": "Reticolo di puntamento a terra",
       "showItemLevel": "Mostra livello oggetto",
@@ -1284,7 +1285,10 @@ export const it_IT: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Questo oggetto non può essere distrutto.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtra le borse per categoria",
       "filterAll": "Tutti",
       "filterWeapon": "Armi",
@@ -1806,7 +1810,8 @@ export const it_IT: EnTranslations = {
       "title": "Raccolta",
       "mining": "Estrazione mineraria",
       "logging": "Taglio del legname",
-      "herbalism": "Erbalismo"
+      "herbalism": "Erbalismo",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titolo",
@@ -5359,6 +5364,7 @@ export const it_IT: EnTranslations = {
     "actionBar": {
       "attackName": "Attacca",
       "attackTooltip": "Attiva o disattiva l'autoattacco sul bersaglio. Anche il clic destro su un nemico attacca.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Slot vuoto",
       "slotAria": "Slot azione {slot}: {ability}",
       "emptySlotAria": "Slot azione {slot}: vuoto",

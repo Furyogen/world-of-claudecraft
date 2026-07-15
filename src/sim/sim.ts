@@ -5972,6 +5972,18 @@ export class Sim {
     items.equipItem(this.ctx, itemId, pid);
   }
 
+  // Manual bag order: the player dragged the stack at `from` onto the cell at `to`.
+  moveInventoryItem(from: number, to: number, pid?: number): void {
+    items.moveInventoryItem(this.ctx, from, to, pid);
+  }
+
+  // Equip into the exact slot the player aimed at (the paperdoll drop target),
+  // rather than letting the resolver pick. items.equipItem re-validates the slot
+  // against the item, so this is a request, never a bypass.
+  equipItemToSlot(itemId: string, slot: EquipSlot, pid?: number): void {
+    items.equipItem(this.ctx, itemId, pid, slot);
+  }
+
   unequipItem(slot: EquipSlot, pid?: number): boolean {
     return items.unequipItem(this.ctx, slot, pid);
   }

@@ -857,6 +857,7 @@ export const fr_CA: EnTranslations = {
       "aurasOnPlayerFrame": "Améliorations sur le cadre du joueur",
       "highContrastBackground": "Arrière-plan à contraste élevé",
       "startAttackOnAbility": "Attaque auto à l'utilisation d'une compétence",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Ramassage auto au passage",
       "groundReticle": "Réticule de ciblage au sol",
       "showItemLevel": "Afficher le niveau d'objet",
@@ -1284,7 +1285,10 @@ export const fr_CA: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Cet objet ne peut pas être détruit.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtrer les sacs par catégorie",
       "filterAll": "Tous",
       "filterWeapon": "Armes",
@@ -1806,7 +1810,8 @@ export const fr_CA: EnTranslations = {
       "title": "Récolte",
       "mining": "Minage",
       "logging": "Bûcheronnage",
-      "herbalism": "Herboristerie"
+      "herbalism": "Herboristerie",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titre",
@@ -5359,6 +5364,7 @@ export const fr_CA: EnTranslations = {
     "actionBar": {
       "attackName": "Attaquer",
       "attackTooltip": "Active ou désactive l'attaque automatique sur votre cible. Un clic droit sur un ennemi attaque aussi.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Emplacement vide",
       "slotAria": "Emplacement d'action {slot}: {ability}",
       "emptySlotAria": "Emplacement d'action {slot}: vide",

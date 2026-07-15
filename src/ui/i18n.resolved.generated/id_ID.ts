@@ -857,6 +857,7 @@ export const id_ID: EnTranslations = {
       "aurasOnPlayerFrame": "Buff pada Bingkai Pemain",
       "highContrastBackground": "Latar Kontras Tinggi",
       "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Jarah Otomatis Sambil Lewat",
       "groundReticle": "Retikel bidik darat",
       "showItemLevel": "Tampilkan Level Item",
@@ -1284,7 +1285,10 @@ export const id_ID: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Item ini tidak dapat dihancurkan.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1806,7 +1810,8 @@ export const id_ID: EnTranslations = {
       "title": "Pengumpulan",
       "mining": "Penambangan",
       "logging": "Penebangan",
-      "herbalism": "Herbalisme"
+      "herbalism": "Herbalisme",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Gelar",
@@ -5359,6 +5364,7 @@ export const id_ID: EnTranslations = {
     "actionBar": {
       "attackName": "Serang",
       "attackTooltip": "Alihkan serangan otomatis pada targetmu. Klik kanan pada musuh juga menyerang.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Slot kosong",
       "slotAria": "Slot aksi {slot}: {ability}",
       "emptySlotAria": "Slot aksi {slot}: kosong",

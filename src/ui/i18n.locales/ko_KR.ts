@@ -5,9 +5,8 @@
 // translate that key. The build (scripts/i18n_build.mjs) unflattens this map and
 // overlays it onto nested `en` to produce the dense resolved table; any key here
 // must be a real `en` leaf path: keys are typed `Partial<Record<TranslationKey,
-// string>>` so tsc rejects a structurally-wrong key, plus
-// tests/i18n_overlay_key_membership.test.ts catches a typo'd entity id the
-// template-literal key type cannot. Overlays are SPARSE: an
+// string>>` against the build-generated flat key union, so tsc rejects any key
+// that is not an exact `en` leaf path, typo'd entity ids included. Overlays are SPARSE: an
 // untranslated key is omitted and the build fills it from English, then the
 // registry (src/ui/i18n.status.json) marks it `pending`.
 
@@ -545,6 +544,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.theme.knob.energy': '에너지',
   'hudChrome.options.interfaceMode': '인터페이스 모드',
   'hudChrome.options.groundReticle': '지면 조준 표시기',
+  'hudChrome.options.showAttackButton': '공격 버튼 표시',
   'hudChrome.options.interfaceModeAuto': '자동',
   'hudChrome.options.interfaceModeDesktop': '데스크톱',
   'hudChrome.options.interfaceModeTouch': '터치',
@@ -1793,6 +1793,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.attackName': '공격',
   'abilityUi.actionBar.attackTooltip':
     '대상에게 자동 공격을 켜거나 끕니다. 적을 우클릭해도 공격합니다.',
+  'abilityUi.actionBar.attackRemoveHint': '우클릭하면 바에서 제거하고 칸을 비웁니다.',
   'abilityUi.actionBar.emptySlot': '빈 칸',
   'abilityUi.actionBar.slotAria': '행동 칸 {slot}: {ability}',
   'abilityUi.actionBar.emptySlotAria': '행동 칸 {slot}: 비어 있음',
@@ -4222,7 +4223,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': '퀘스트 추적기 접기',
   'hudChrome.questTracker.expandHint': '퀘스트 추적기 펼치기',
   'hudChrome.bags.cannotDestroy': '이 아이템은 파괴할 수 없습니다.',
-  'hudChrome.bags.rightClickDestroy': 'Shift + 마우스 오른쪽 버튼으로 파괴',
+  'hudChrome.bags.rightClickDestroy': '마우스 오른쪽 버튼으로 파괴',
+  'hudChrome.bags.dragEquipHint': '캐릭터로 끌어다 놓아 장착',
+  'hudChrome.bags.dragDestroyHint': '세계로 끌어내어 파괴',
+  'hudChrome.bags.reorderNeedsRecent': '가방을 정리하려면 필터를 해제하고 최근 순으로 정렬하세요',
   'hudChrome.bags.filterGroupAria': '가방을 분류별로 필터링',
   'hudChrome.bags.filterAll': '전체',
   'hudChrome.bags.filterWeapon': '무기',
@@ -6707,6 +6711,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '채광',
   'hudChrome.gathering.logging': '벌목',
   'hudChrome.gathering.herbalism': '약초학',
+  'hudChrome.gathering.notReady': '이 자원 채집지는 아직 당신을 위해 재생성되지 않았습니다.',
   'hudChrome.archetypeTitle.label': '칭호',
   'hudChrome.archetypeTitle.none': '없음',
   'hudChrome.archetypeTitle.hobbyLabel': '취미',

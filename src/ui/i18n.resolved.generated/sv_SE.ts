@@ -857,6 +857,7 @@ export const sv_SE: EnTranslations = {
       "aurasOnPlayerFrame": "Förstärkningar på spelarramen",
       "highContrastBackground": "Bakgrund med hög kontrast",
       "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Automatisk plundring i förbifarten",
       "groundReticle": "Markriktmedel",
       "showItemLevel": "Visa föremålsnivå",
@@ -1284,7 +1285,10 @@ export const sv_SE: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Det här föremålet kan inte förstöras.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtrera väskor efter kategori",
       "filterAll": "Alla",
       "filterWeapon": "Vapen",
@@ -1806,7 +1810,8 @@ export const sv_SE: EnTranslations = {
       "title": "Insamling",
       "mining": "Gruvdrift",
       "logging": "Skogsavverkning",
-      "herbalism": "Örtkunskap"
+      "herbalism": "Örtkunskap",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -5359,6 +5364,7 @@ export const sv_SE: EnTranslations = {
     "actionBar": {
       "attackName": "Anfall",
       "attackTooltip": "Växla automatiskt anfall mot ditt mål. Att högerklicka på en fiende anfaller också.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Tom plats",
       "slotAria": "Handlingsplats {slot}: {ability}",
       "emptySlotAria": "Handlingsplats {slot}: tom",

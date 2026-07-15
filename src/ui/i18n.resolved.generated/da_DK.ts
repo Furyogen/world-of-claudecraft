@@ -857,6 +857,7 @@ export const da_DK: EnTranslations = {
       "aurasOnPlayerFrame": "Buffs på spillerrammen",
       "highContrastBackground": "Baggrund med høj kontrast",
       "startAttackOnAbility": "Autoangreb ved brug af evne",
+      "showAttackButton": "Show Attack Button",
       "walkByAutoloot": "Auto-plyndring i forbifarten",
       "groundReticle": "Jordsigte-retikel",
       "showItemLevel": "Vis genstandsniveau",
@@ -1284,7 +1285,10 @@ export const da_DK: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Denne genstand kan ikke ødelægges.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Right-click to destroy",
+      "dragEquipHint": "Drag onto your character to equip",
+      "dragDestroyHint": "Drag out into the world to destroy",
+      "reorderNeedsRecent": "Clear the filter and sort by Recent to rearrange your bags",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1806,7 +1810,8 @@ export const da_DK: EnTranslations = {
       "title": "Indsamling",
       "mining": "Minedrift",
       "logging": "Skovhugst",
-      "herbalism": "Urtekundskab"
+      "herbalism": "Urtekundskab",
+      "notReady": "This resource node has not respawned for you yet."
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -5359,6 +5364,7 @@ export const da_DK: EnTranslations = {
     "actionBar": {
       "attackName": "Angrib",
       "attackTooltip": "Slå automatisk angreb til/fra på dit mål. Højreklik på en fjende angriber også.",
+      "attackRemoveHint": "Right-click to remove it from the bar and free the slot.",
       "emptySlot": "Tom plads",
       "slotAria": "Handlingsplads {slot}: {ability}",
       "emptySlotAria": "Handlingsplads {slot}: tom",
