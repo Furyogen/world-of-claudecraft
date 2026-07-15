@@ -179,7 +179,9 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
   // inside the window arm a trailing flush at the window edge: without it a
   // burst's tail would accumulate silently until the NEXT refusal after the
   // window, which may be hours later, so incident-time counts would read shifted.
-  // The timer is unref'd so a pending flush never holds the process open.
+  // The timer is unref'd so a pending flush never holds the process open
+  // (accepted loss: a tail count still pending at process exit is dropped
+  // with it; the joins it counted never happened, so nothing is owed).
   const REALM_FULL_LOG_WINDOW_MS = 30_000;
   let realmFullRefusalsSinceLog = 0;
   let realmFullLastLogAtMs = 0;

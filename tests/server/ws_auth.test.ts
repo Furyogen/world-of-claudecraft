@@ -416,14 +416,14 @@ describe('createWsAuth: realm admission cap', () => {
     // count sits invisible until the next refusal after the window, which may be
     // hours later, so incident-time counts read shifted into the wrong burst.
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    let nowMs = 100_000;
+    const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     try {
       const { game, deps, req } = setup();
       deps.maxPlayersPerRealm = 5;
       game.clients = { size: 5 };
       deps.getCharacter = vi.fn(async (_accountId: number, id: number) => baseChar({ id }));
-      let nowMs = 100_000;
-      const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const { authenticateWebSocket } = createWsAuth(deps);
       const refusalLines = () =>
         logSpy.mock.calls.map((c) => String(c[0])).filter((line) => line.includes('realm full'));
@@ -448,9 +448,11 @@ describe('createWsAuth: realm admission cap', () => {
       nowMs = 200_000;
       await vi.advanceTimersByTimeAsync(60_000);
       expect(refusalLines()).toHaveLength(2);
+    } finally {
+      // Restore in the finally: a failing assertion above must not leak a frozen
+      // Date.now or a silenced console.log into every later test in this file.
       nowSpy.mockRestore();
       logSpy.mockRestore();
-    } finally {
       vi.useRealTimers();
     }
   });
@@ -461,14 +463,14 @@ describe('createWsAuth: realm admission cap', () => {
     // fire moments into the NEW window and flush a fresh burst's first refusals
     // early, splitting one burst into two misdated lines.
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    let nowMs = 100_000;
+    const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     try {
       const { game, deps, req } = setup();
       deps.maxPlayersPerRealm = 5;
       game.clients = { size: 5 };
       deps.getCharacter = vi.fn(async (_accountId: number, id: number) => baseChar({ id }));
-      let nowMs = 100_000;
-      const nowSpy = vi.spyOn(Date, 'now').mockImplementation(() => nowMs);
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const { authenticateWebSocket } = createWsAuth(deps);
       const refusalLines = () =>
         logSpy.mock.calls.map((c) => String(c[0])).filter((line) => line.includes('realm full'));
@@ -498,9 +500,11 @@ describe('createWsAuth: realm admission cap', () => {
         'ws auth: realm full, refused 2 fresh join(s) at cap 5',
         'ws auth: realm full, refused 1 fresh join(s) at cap 5',
       ]);
+    } finally {
+      // Restore in the finally: a failing assertion above must not leak a frozen
+      // Date.now or a silenced console.log into every later test in this file.
       nowSpy.mockRestore();
       logSpy.mockRestore();
-    } finally {
       vi.useRealTimers();
     }
   });
