@@ -45,10 +45,15 @@ describe('PTR deployment boundary', () => {
     const sourceGuard = ptrBootstrap.match(
       /if \[ -n "\$\(git status --porcelain --untracked-files=all\)" \]; then\n(?: {2}.*\n)+? {2}exit 1\nfi/,
     );
+    const composeDefinition =
+      'COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.ptr.yml -p "$COMPOSE_PROJECT")';
+    const buildInvocation = `"\${COMPOSE[@]}" up -d --build`;
 
     expect(sourceGuard, 'missing fail-closed worktree guard').not.toBeNull();
+    expect(ptrBootstrap).toContain(composeDefinition);
+    expect(ptrBootstrap).toContain(buildInvocation);
     expect(ptrBootstrap.indexOf(sourceGuard?.[0] ?? '')).toBeLessThan(
-      ptrBootstrap.indexOf('docker compose up -d --build'),
+      ptrBootstrap.indexOf(buildInvocation),
     );
   });
 

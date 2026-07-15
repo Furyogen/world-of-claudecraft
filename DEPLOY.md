@@ -54,12 +54,42 @@ the canonical `levy-street/world-of-claudecraft` repository at `release/v0.24.0-
 `/opt/eastbrook-ptr`. Do not run it on a production host, attach a production volume, restore a
 production backup into it, or promote its database to production.
 
-The PTR bootstrap writes `ALLOW_DEV_COMMANDS=1` to its host-only `.env` so testers can use the
-PTR vendor and level-jump commands. `docker-compose.yml` passes that variable through with an
-empty default, so generic and production deployments remain disabled unless their host
-explicitly opts in. A PTR source update uses a fast-forward-only pull, verifies that the deployed
-commit is the exact fetched canonical commit, and refuses a source worktree with nonignored
-changes. The deployment aborts if any of those checks fail.
+The PTR bootstrap requires a dedicated HTTPS hostname with a DNS label equal to `ptr`, beginning
+with `ptr-`, or ending with `-ptr`. It creates a random
+host identity, a root-owned marker, the `eastbrook-ptr` Compose project, the `eastbrook_ptr`
+database, and distinct game, PostgreSQL, Wiki, and media volumes. It writes
+`ALLOW_DEV_COMMANDS=1`, `PBE_BOOST_ACCOUNTS=1`, `DEPLOY_ENV=ptr`, `REALM_NAME=PTR`, and
+`PTR_RESET_ALLOWED=1` only to the host's mode-600 `.env`. The server refuses to enable PBE
+boosting unless the deployment type, realm, PTR-only database URL and HTTPS origin, and
+high-entropy identity all agree; every seed transaction also verifies the live database name and
+identity comment before creating the account and exact nine-character roster atomically.
+
+A PTR source update uses a fast-forward-only pull, verifies that the deployed commit is the exact
+fetched canonical commit, and refuses a source worktree with nonignored changes. An existing
+environment without the PTR identity and root-owned marker is refused rather than relabeled.
+
+To inspect a reset plan, run this as root from `/opt/eastbrook-ptr`:
+
+```bash
+node scripts/reset_ptr.mjs --commit "$(git rev-parse HEAD)"
+```
+
+Dry-run is the default and executes no reset commands. After reviewing the argv-only plan and
+obtaining release approval, execute the exact approved commit with the environment id from the
+root-owned marker:
+
+```bash
+sudo node scripts/reset_ptr.mjs \
+  --execute \
+  --commit "$(git rev-parse HEAD)" \
+  --confirm "$(sudo sed -n 's/^PTR_ENVIRONMENT_ID=//p' /etc/world-of-claudecraft/ptr-environment)"
+```
+
+The reset validates the application path, canonical branch and commit, clean source tree,
+Compose labels, PostgreSQL mount, database identity, database inventory, marker ownership, and
+PTR origin before any write. It creates and verifies a custom-format database dump, removes only
+the verified PTR PostgreSQL container and volume, recreates that database, and leaves the Wiki
+and media volumes untouched. It never invokes `docker compose down -v`.
 
 ## 3. Point DNS at it
 

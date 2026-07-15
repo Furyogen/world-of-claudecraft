@@ -1,0 +1,46 @@
+services:
+  postgres:
+    container_name: eastbrook-ptr-postgres
+    environment:
+      POSTGRES_DB: eastbrook_ptr
+    ports: !override
+      - '127.0.0.1:5434:5432'
+    volumes: !override
+      - eastbrook_ptr_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U eastbrook -d eastbrook_ptr']
+
+  game:
+    container_name: eastbrook-ptr-game
+    environment:
+      DATABASE_URL: postgres://eastbrook:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.}@postgres:5432/eastbrook_ptr
+      DEPLOY_ENV: ${DEPLOY_ENV:?Set DEPLOY_ENV=ptr in the PTR .env.}
+      REALM_NAME: ${REALM_NAME:?Set REALM_NAME=PTR in the PTR .env.}
+      PBE_BOOST_ACCOUNTS: ${PBE_BOOST_ACCOUNTS:?Enable PBE boosting in the PTR .env.}
+      PTR_RESET_ALLOWED: ${PTR_RESET_ALLOWED:?Explicitly authorize PTR resets in the PTR .env.}
+      PTR_ENVIRONMENT_ID: ${PTR_ENVIRONMENT_ID:?Set the host-specific PTR identity.}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set the dedicated PTR origin.}
+    ports: !override
+      - '127.0.0.1:8877:8787'
+    volumes: !override
+      - ${EASTBROOK_PTR_MEDIA_DIR:-./media-cache-ptr}:/app/dist/media
+
+  discord-bot:
+    container_name: eastbrook-ptr-discord-bot
+
+  mediawiki-db:
+    container_name: eastbrook-ptr-wiki-db
+    volumes: !override
+      - eastbrook_ptr_wikidb:/var/lib/mysql
+
+  mediawiki:
+    container_name: eastbrook-ptr-wiki
+    ports: !override
+      - '127.0.0.1:8081:80'
+    volumes: !override
+      - eastbrook_ptr_wiki_images:/var/www/html/images
+
+volumes:
+  eastbrook_ptr_pgdata:
+  eastbrook_ptr_wikidb:
+  eastbrook_ptr_wiki_images:
