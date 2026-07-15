@@ -1428,9 +1428,14 @@ export class ClientWorld implements IWorld {
       RECONNECT_MAX_DELAY_MS,
       Math.random,
     );
-    // Clear our own handle when the timer fires: a stale handle left in
-    // reconnectTimer would make a later visibility event (while the socket is
-    // still CONNECTING) take the pending-timer branch and open a second socket.
+    // Clear any pending timer FIRST: on the zombie-socket path the visibility
+    // handler drives socketClosed manually, and the socket's real onclose can
+    // land right behind it, so a second entry here would otherwise strand the
+    // first timer live (two timers, a double openSocket). Then clear our own
+    // handle when the timer fires: a stale handle left in reconnectTimer would
+    // make a later visibility event (while the socket is still CONNECTING) take
+    // the pending-timer branch and open a second socket.
+    if (this.reconnectTimer !== undefined) clearTimeout(this.reconnectTimer);
     this.reconnectTimer = window.setTimeout(() => {
       this.reconnectTimer = undefined;
       this.openSocket();

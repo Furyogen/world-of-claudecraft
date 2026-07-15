@@ -260,6 +260,38 @@ describe('ClientWorld visibilitychange reconnect (mobile background/foreground)'
     });
   });
 
+  it('a zombie-socket manual close followed by the late real onclose leaves exactly one live timer', () => {
+    withDomStubs((doc, harness) => {
+      vi.spyOn(Math, 'random').mockReturnValue(0.75);
+      const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
+      const first = StubWebSocket.instances[0];
+      // Zombie socket: the transport died while backgrounded, no close event was
+      // delivered, ClientWorld still believes it is connected.
+      (world as unknown as { connected: boolean }).connected = true;
+      first.readyState = StubWebSocket.CLOSED;
+
+      // Foregrounding drives socketClosed() manually (the zombie branch), which
+      // schedules the first backoff timer.
+      doc.setVisible(true);
+      expect(harness.timers.length).toBe(1);
+      const manual = harness.timers[0];
+
+      // The browser finally delivers the zombie socket's real close event. This
+      // second socketClosed entry must REPLACE the pending timer, never stack a
+      // second one next to it: two live timers would each run openSocket, and
+      // the "never two live timers" contract would be a lie on exactly this path.
+      first.onclose?.();
+      expect(harness.timers.some((t) => t.id === manual.id)).toBe(false); // old cleared
+      expect(harness.timers.length).toBe(1);
+
+      // Firing the survivor opens exactly one replacement socket.
+      harness.fire(harness.timers[0].id);
+      expect(StubWebSocket.instances.length).toBe(2);
+      expect(harness.timers.length).toBe(0);
+      world.close();
+    });
+  });
+
   it('does not re-schedule or re-open when foregrounded again while the fresh socket is still connecting', () => {
     withDomStubs((doc, harness) => {
       const world = new ClientWorld('t', 1, PROBE_CLASS, 'http://localhost');
