@@ -4,12 +4,12 @@
 // document to the editor's live editing model and projects it onto the engine's
 // WorldContent for play-test. Pure: no DOM, Vitest-importable.
 
+import { autoCollideRadius } from '../sim/asset_collision';
 import { colliderVolumesFromPlacements } from '../sim/collider_volumes';
 import { BUILTIN_WORLD, PLAYER_START, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import { fluidVolumesFromPlacements } from '../sim/fluid_volumes';
 import {
   type AssetCollisionBox,
-  collideRadiusFor,
   effectiveCollisionMode,
   GRASS_PATCH_ASSET_ID,
   GRASS_PATCH_PATH,
@@ -427,6 +427,7 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
   if (map.timeScale !== undefined) world.timeScale = map.timeScale;
   if (map.assetViewDistance !== undefined) world.assetViewDistance = map.assetViewDistance;
   if (map.weather) world.weather = deepClone(map.weather);
+  if (map.lighting) world.lighting = { ...map.lighting };
   if (map.music) world.music = deepClone(map.music);
   if (map.locations && map.locations.length > 0) world.locations = deepClone(map.locations);
   if (map.lights && map.lights.length > 0) world.lights = deepClone(map.lights);
@@ -438,12 +439,17 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
 }
 
 // The collision radius a colliding placement actually gets: the per-placement
-// override when authored, else the scale- and family-derived default. The ONE
-// resolution used by both the render footprint and the playtest colliders.
+// override when authored, else the derived default — in 'basic' mode a
+// baked-footprint fit that hugs the actual mesh, otherwise the scale- and
+// family-derived factor. The ONE resolution used by both the render footprint
+// and the playtest colliders.
 export function effectiveCollideRadius(
-  p: Pick<MapPlacement, 'assetId' | 'scale' | 'collideRadius'>,
+  p: Pick<
+    MapPlacement,
+    'assetId' | 'scale' | 'collideRadius' | 'collide' | 'collisionMode' | 'collideShape'
+  >,
 ): number {
-  return p.collideRadius ?? collideRadiusFor(p.scale, p.assetId);
+  return p.collideRadius ?? autoCollideRadius(p.assetId, p.scale, effectiveCollisionMode(p));
 }
 
 // Resolve editor placements (catalogue id, or an uploaded 'user/<sha256>' id)

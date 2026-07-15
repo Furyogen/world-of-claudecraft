@@ -14,11 +14,11 @@ import {
   paintDefaultSets,
   TERRAIN_TEXTURE_SETS,
 } from '../render/terrain_texture_sets';
+import { autoCollideRadius } from '../sim/asset_collision';
 import { COLLIDER_DEFAULT_SIZE, type ColliderVolumeKind } from '../sim/collider_volumes';
 import { FLUID_PRESETS, type FluidKind } from '../sim/fluid_volumes';
 import {
   type CollisionMode,
-  collideRadiusFor,
   MAX_COLLIDE_RADIUS,
   MAX_WATER_LEVEL,
   MIN_COLLIDE_RADIUS,
@@ -457,6 +457,20 @@ export interface InspectorDeps {
    *  hitbox edits) onto every other placement of the same asset on the map,
    *  after an in-app confirm. */
   copyCollisionToSameAsset(): void;
+
+  // ---- Collision Master (single-asset authored-collision scene) -----------
+  /** Active session (or null): the panel replaces the normal tool panels. */
+  getCollisionMaster(): { assetId: string; label: string; canSave: boolean } | null;
+  /** Starter box sets: the raw voxel bake, one fitted box, or one plain box. */
+  collisionMasterStarter(kind: 'bake' | 'fitted' | 'single'): void;
+  getCollisionMasterPoly(): boolean;
+  setCollisionMasterPoly(on: boolean): void;
+  /** Lock In: persist as the asset's repo default and return to the map. */
+  collisionMasterCommit(): void;
+  collisionMasterCancel(): void;
+  /** Open Collision Master for the SELECTED placement's asset (catalogue
+   *  assets only; the app toasts otherwise). */
+  openCollisionMasterForSelection(): void;
   /** "Scale all copies" range: roll a random scale in [min, max] onto every
    *  placement of the selected asset (after an in-app confirm). */
   getCloneScaleRange(): { min: number; max: number };
@@ -632,6 +646,16 @@ export class Inspector {
     this.root.dataset.tool = tool;
 
     const is3d = d.getViewMode() === '3d';
+    // Collision Master session: a focused panel set (the CM controls + the
+    // normal Selection panel, whose collision block does the actual editing).
+    const cm = d.getCollisionMaster();
+    if (cm) {
+      this.collisionMasterPanel(cm);
+      if (tool === 'move' || tool === 'rotate' || tool === 'scale') this.transformPanel(tool);
+      this.selectPanel();
+      this.navHint();
+      return;
+    }
     if (is3d) this.panelTabs();
     if (is3d && this.panelTab === 'lighting') {
       this.lightingPanel();
@@ -3049,6 +3073,58 @@ export class Inspector {
   /** Collision block for ordinary model placements: the type dropdown plus
    *  the picked mode's controls (baked hitbox editing / basic radius / true
    *  mesh status). */
+  /** The Collision Master session panel: session controls + starters + the
+   *  poly-snap brush toggle. The actual box/radius editing happens through the
+   *  normal Selection panel's collision block below it. */
+  private collisionMasterPanel(cm: { assetId: string; label: string; canSave: boolean }): void {
+    const d = this.deps;
+    const s = section(t('editor.collisionMaster.title'));
+    s.appendChild(el('p', 'ed-hint', t('editor.collisionMaster.assetLabel', { name: cm.label })));
+    s.appendChild(hint(t('editor.collisionMaster.hint')));
+    s.appendChild(
+      button(
+        t('editor.collisionMaster.fromBake'),
+        () => d.collisionMasterStarter('bake'),
+        'small',
+        t('editor.collisionMaster.fromBakeTitle'),
+      ),
+    );
+    s.appendChild(
+      button(
+        t('editor.collisionMaster.fittedBox'),
+        () => d.collisionMasterStarter('fitted'),
+        'small',
+        t('editor.collisionMaster.fittedBoxTitle'),
+      ),
+    );
+    s.appendChild(
+      button(
+        t('editor.collisionMaster.singleBox'),
+        () => d.collisionMasterStarter('single'),
+        'small',
+        t('editor.collisionMaster.singleBoxTitle'),
+      ),
+    );
+    s.appendChild(
+      checkbox(t('editor.collisionMaster.polySnap'), d.getCollisionMasterPoly(), (on) => {
+        d.setCollisionMasterPoly(on);
+        this.refresh();
+      }).root,
+    );
+    s.appendChild(hint(t('editor.collisionMaster.polySnapHint')));
+    if (!cm.canSave) s.appendChild(hint(t('editor.collisionMaster.devOnly')));
+    s.appendChild(
+      button(
+        t('editor.collisionMaster.lockIn'),
+        () => d.collisionMasterCommit(),
+        'primary',
+        t('editor.collisionMaster.lockInTitle'),
+      ),
+    );
+    s.appendChild(button(t('editor.collisionMaster.cancel'), () => d.collisionMasterCancel()));
+    this.root.appendChild(s);
+  }
+
   private collisionControls(s: HTMLElement, sel: PlacementSelection): void {
     const d = this.deps;
     s.appendChild(el('h4', 'ed-sub-title', t('editor.selection.collisionTitle')));
@@ -3074,7 +3150,7 @@ export class Inspector {
           min: MIN_COLLIDE_RADIUS,
           max: MAX_COLLIDE_RADIUS,
           step: 0.1,
-          value: sel.collideRadius ?? collideRadiusFor(sel.scale, sel.assetId),
+          value: sel.collideRadius ?? autoCollideRadius(sel.assetId, sel.scale, 'basic'),
           onInput: (v) => d.updateSelection({ collideRadius: v }, false),
           onChange: (v) => d.updateSelection({ collideRadius: v }, true),
           format: num1,
@@ -3201,6 +3277,18 @@ export class Inspector {
         ),
       );
       s.appendChild(hint(t('editor.selection.collisionCopyAllHint', { name: sel.assetLabel })));
+    }
+    // Jump into Collision Master for this asset: author its DEFAULT collision
+    // (saved to the project) in the dedicated single-asset scene.
+    if (!d.getCollisionMaster()) {
+      s.appendChild(
+        button(
+          t('editor.collisionMaster.openFromSelection'),
+          () => d.openCollisionMasterForSelection(),
+          'small',
+          t('editor.collisionMaster.openFromSelectionTitle'),
+        ),
+      );
     }
   }
 

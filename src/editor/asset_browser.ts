@@ -49,6 +49,9 @@ export interface AssetBrowserDeps {
   onPick(assetId: string, label: string): void;
   confirm(title: string, body: string): Promise<boolean>;
   toastError(message: string): void;
+  /** Open the Collision Master (per-asset collision authoring scene) for a
+   *  CATALOGUE asset. Absent = the cells show no Collision Master button. */
+  onCollisionMaster?(assetId: string, label: string): void;
 }
 
 interface Entry {
@@ -417,6 +420,22 @@ export class AssetBrowser {
       this.deps.onPick(entry.id, entry.label);
     });
     wrap.appendChild(b);
+    // Catalogue assets get the Collision Master shortcut (per-asset authored
+    // collision). Uploaded/imported models keep their per-map import bake, so
+    // the corner slot stays free for their delete button instead.
+    if (!entry.local && entry.uploadId === undefined && this.deps.onCollisionMaster) {
+      const cmBtn = document.createElement('button');
+      cmBtn.type = 'button';
+      cmBtn.className = 'ed-asset-del ed-asset-cm';
+      cmBtn.textContent = '⛉';
+      cmBtn.title = t('editor.assets.collisionMaster');
+      cmBtn.setAttribute('aria-label', t('editor.assets.collisionMaster'));
+      cmBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        this.deps.onCollisionMaster?.(entry.id, entry.label);
+      });
+      wrap.appendChild(cmBtn);
+    }
     if (entry.local) {
       const del = document.createElement('button');
       del.type = 'button';

@@ -36,6 +36,39 @@ export function finestPaintCell(width: number, depth: number): number {
  * custom swatch list; null when the grid is already at/below the target or
  * the result would exceed the sanitizer's hard cap.
  */
+/**
+ * Grow a paint grid to cover a larger world rect at the SAME cell size: the
+ * new origin snaps down from the old one in whole cells, so every existing
+ * cell copies to an integer offset (painted footprint preserved bit-for-bit,
+ * new cells unpainted). A map created small and later authored bigger keeps
+ * painting seamlessly instead of clamping at the old grid's edge. Returns a
+ * NEW grid sharing the custom swatch list; null when the grid already covers
+ * the rect or growth would exceed the sanitizer's hard cap.
+ */
+export function growBiomePaint(
+  bp: BiomePaint,
+  bounds: { minX: number; maxX: number; minZ: number; maxZ: number },
+): BiomePaint | null {
+  const cell = bp.cell;
+  const padW = Math.max(0, Math.ceil((bp.originX - bounds.minX) / cell));
+  const padS = Math.max(0, Math.ceil((bp.originZ - bounds.minZ) / cell));
+  const originX = bp.originX - padW * cell;
+  const originZ = bp.originZ - padS * cell;
+  const cols = Math.max(bp.cols + padW, Math.ceil((bounds.maxX - originX) / cell) + 1);
+  const rows = Math.max(bp.rows + padS, Math.ceil((bounds.maxZ - originZ) / cell) + 1);
+  if (cols === bp.cols && rows === bp.rows && padW === 0 && padS === 0) return null;
+  if (cols * rows > MAX_BIOME_PAINT_CELLS) return null; // keep the old grid
+  const ids = new Array<number>(cols * rows).fill(255);
+  for (let r = 0; r < bp.rows; r++) {
+    const dst = (r + padS) * cols + padW;
+    const src = r * bp.cols;
+    for (let c = 0; c < bp.cols; c++) ids[dst + c] = bp.ids[src + c];
+  }
+  const out: BiomePaint = { cell, cols, rows, originX, originZ, ids };
+  if (bp.custom) out.custom = bp.custom;
+  return out;
+}
+
 export function resampleBiomePaint(bp: BiomePaint, targetCell: number): BiomePaint | null {
   if (targetCell <= 0 || bp.cell <= targetCell) return null;
   const width = bp.cols * bp.cell;

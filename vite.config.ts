@@ -10,6 +10,10 @@ import { loadBrowserslistFloors } from './scripts/browserslist_targets.mjs';
 // Untyped zero-dep build helper (same convention as the other scripts/*.mjs tools).
 // vite.config.ts is outside tsconfig `include`, so this import is never type-checked.
 import { templateModulepreload } from './scripts/i18n_modulepreload.mjs';
+import {
+  emitCollisionOverridesModule,
+  validateOverride,
+} from './scripts/lib/collision_overrides_emit.mjs';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 
@@ -293,6 +297,85 @@ function musicEditorSavePlugin() {
   };
 }
 
+// Dev-only save endpoint for the editor's Collision Master tool: receives one
+// asset's authored collision override (or null to clear it), merges it into
+// data/asset_collision_overrides.json, and regenerates
+// src/sim/asset_collision_overrides.generated.ts so the editor, playtest and
+// tests pick the new default up immediately via HMR. configureServer only
+// runs under the dev server, so this never ships.
+function collisionMasterSavePlugin() {
+  return {
+    name: 'woc-collision-master-save',
+    configureServer(server: {
+      middlewares: {
+        use: (
+          route: string,
+          fn: (
+            req: { method?: string; on: (ev: string, cb: (chunk?: unknown) => void) => void },
+            res: { statusCode: number; end: (body?: string) => void },
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use('/__collision_master/save', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end('POST only');
+          return;
+        }
+        let body = '';
+        req.on('data', (chunk) => {
+          body += String(chunk);
+          if (body.length > 1_000_000) {
+            res.statusCode = 413;
+            res.end('too large');
+          }
+        });
+        req.on('end', () => {
+          try {
+            const payload = JSON.parse(body) as { assetId?: unknown; override?: unknown };
+            const assetId = payload.assetId;
+            if (typeof assetId !== 'string') {
+              res.statusCode = 400;
+              res.end('missing assetId');
+              return;
+            }
+            const jsonPath = path.resolve(root, 'data/asset_collision_overrides.json');
+            const overrides = JSON.parse(readFileSync(jsonPath, 'utf8')) as Record<string, unknown>;
+            if (payload.override === null || payload.override === undefined) {
+              delete overrides[assetId];
+            } else {
+              const err = validateOverride(assetId, payload.override);
+              if (err) {
+                res.statusCode = 400;
+                res.end(err);
+                return;
+              }
+              overrides[assetId] = payload.override;
+            }
+            const { source, errors } = emitCollisionOverridesModule(overrides);
+            if (errors.length > 0) {
+              res.statusCode = 400;
+              res.end(errors.join('; '));
+              return;
+            }
+            writeFileSync(jsonPath, `${JSON.stringify(overrides, null, 2)}\n`);
+            writeFileSync(
+              path.resolve(root, 'src/sim/asset_collision_overrides.generated.ts'),
+              source,
+            );
+            res.statusCode = 200;
+            res.end('ok');
+          } catch (err) {
+            res.statusCode = 400;
+            res.end(String(err));
+          }
+        });
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: '/',
   // The Svelte plugin only transforms the standalone admin entry. The testing
@@ -303,6 +386,7 @@ export default defineConfig({
     staticPageAliasPlugin(),
     i18nModulepreloadPlugin(),
     musicEditorSavePlugin(),
+    collisionMasterSavePlugin(),
   ],
   resolve: { alias: { '#bot-detector': botDetectorImpl } },
   define: {
