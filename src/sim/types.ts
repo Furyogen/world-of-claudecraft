@@ -3224,6 +3224,21 @@ export interface MapPointSound {
   radius: number;
 }
 
+// Per-map authored scene lighting (render-only): the editor's Lighting tab
+// saved into the document, applied over the biome/day-night rig in playtest
+// and the editor alike. Absent = the shipped biome/day-night lighting.
+// Structurally identical to the render layer's EditorLightingProfile (the sim
+// stays render-free, so the shape is declared here too).
+export interface MapLighting {
+  sunIntensity: number;
+  sunColor: number; // 0xRRGGBB
+  hemiIntensity: number;
+  skyColor: number; // 0xRRGGBB
+  envScale: number;
+  sunAzimuthDeg: number;
+  sunElevationDeg: number;
+}
+
 // Map-authored ambient weather (render-only, presentation-only). Absent = the
 // shipped biome rule (snow in the peaks, rain in the marsh).
 export interface MapWeather {
@@ -3330,6 +3345,8 @@ export interface WorldContent {
   assetViewDistance?: number;
   // Ambient weather override (render-only; absent = the biome rule).
   weather?: MapWeather;
+  // Authored scene lighting (render-only; absent = biome/day-night rig).
+  lighting?: MapLighting;
   // Authored soundtrack (client presentation; absent = the biome rule).
   music?: MapMusic;
   // The map's sky: 'builtin:<id>' (bundled equirect) or 'custom:<sha256>'

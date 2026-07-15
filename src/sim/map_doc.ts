@@ -33,6 +33,7 @@ import type {
   CustomPaintSwatch,
   GroundObjectDef,
   HeightStamp,
+  MapLighting,
   MapMusic,
   MapPointSound,
   MapPresentationMode,
@@ -411,6 +412,10 @@ export interface MapDoc {
   // v2 optional: ambient weather (fixed mode or a timed schedule, plus the
   // cloud deck). Render-only; absent = the biome rule.
   weather?: MapWeather;
+  // v3 optional: authored scene lighting (the editor's Lighting tab saved
+  // into the map: sun/ambient intensity+color, environment scale, sun
+  // azimuth/elevation). Render-only; absent = the biome/day-night rig.
+  lighting?: MapLighting;
   // v2 optional: authored soundtrack (map-wide track + per-area rects).
   music?: MapMusic;
 }
@@ -1342,6 +1347,8 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
   }
   const weather = sanitizeWeather(o.weather);
   if (weather) doc.weather = weather;
+  const lighting = sanitizeLighting(o.lighting);
+  if (lighting) doc.lighting = lighting;
   const music = sanitizeMusic(o.music);
   if (music) doc.music = music;
   const pointSounds = arr(o.pointSounds)
@@ -1414,6 +1421,34 @@ function sanitizeMusic(v: unknown): MapMusic | undefined {
 
 const WEATHER_MODES = new Set(['auto', 'clear', 'rain', 'snow', 'sparkle']);
 export const MAX_WEATHER_SCHEDULE = 12;
+
+/** Authored scene lighting: every field required + clamped to the editor's
+ *  slider ranges, colors masked to 24-bit. Anything unsalvageable drops the
+ *  whole block (the map falls back to the shipped biome/day-night rig). */
+function sanitizeLighting(v: unknown): MapLighting | undefined {
+  if (!v || typeof v !== 'object') return undefined;
+  const l = v as Record<string, unknown>;
+  if (
+    !finiteNum(l.sunIntensity) ||
+    !finiteNum(l.sunColor) ||
+    !finiteNum(l.hemiIntensity) ||
+    !finiteNum(l.skyColor) ||
+    !finiteNum(l.envScale) ||
+    !finiteNum(l.sunAzimuthDeg) ||
+    !finiteNum(l.sunElevationDeg)
+  ) {
+    return undefined;
+  }
+  return {
+    sunIntensity: clamp(l.sunIntensity, 0, 6),
+    sunColor: Math.round(clamp(l.sunColor, 0, 0xffffff)),
+    hemiIntensity: clamp(l.hemiIntensity, 0, 2),
+    skyColor: Math.round(clamp(l.skyColor, 0, 0xffffff)),
+    envScale: clamp(l.envScale, 0, 2),
+    sunAzimuthDeg: clamp(l.sunAzimuthDeg, 0, 360),
+    sunElevationDeg: clamp(l.sunElevationDeg, 5, 85),
+  };
+}
 
 function sanitizeWeather(v: unknown): MapWeather | undefined {
   if (!v || typeof v !== 'object') return undefined;

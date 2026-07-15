@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   distanceSqToZone,
+  effectiveStreamingZones,
   fogFarForPreparedZones,
   MAX_OUTDOOR_FOG_FAR,
   MIN_OUTDOOR_FOG_FAR,
@@ -9,7 +10,7 @@ import {
   zoneEntryPoint,
   zonesWithinStreamingHorizon,
 } from '../src/render/zone_streaming';
-import { ZONES, zoneAt } from '../src/sim/data';
+import { BUILTIN_WORLD, setActiveWorldContent, ZONES, zoneAt } from '../src/sim/data';
 
 describe('renderer zone-streaming horizon', () => {
   it('keeps a zero-radius query scoped to the containing zone', () => {
@@ -108,5 +109,50 @@ describe('renderer zone-residency fog', () => {
       MAX_OUTDOOR_FOG_FAR,
     );
     expect(fogFarForPreparedZones(ZONES, all, 0, 0, 80)).toBe(80);
+  });
+});
+
+describe('effectiveStreamingZones', () => {
+  it('is the ZONES table itself for the built-in world', () => {
+    setActiveWorldContent(null);
+    expect(effectiveStreamingZones()).toBe(ZONES);
+  });
+
+  it('expands rects to cover a larger custom world, so margin cameras queue zones', () => {
+    const world = {
+      ...BUILTIN_WORLD,
+      worldHalfX: 400,
+      zones: [
+        {
+          id: 'blank_world',
+          name: '',
+          zMin: -400,
+          zMax: 400,
+          levelRange: [1, 1] as [number, number],
+          biome: 'vale' as const,
+          hub: { x: 0, z: 0, radius: 8, name: '' },
+          graveyard: { x: 0, z: 0 },
+          lakes: [],
+          pois: [],
+          welcome: '',
+        },
+      ],
+    };
+    setActiveWorldContent(world);
+    try {
+      const zones = effectiveStreamingZones();
+      expect(zones.map((zone) => zone.id)).toEqual(ZONES.map((zone) => zone.id));
+      // A camera far out in the west margin now sits INSIDE some expanded
+      // rect (distance 0), so the streaming queue fills instead of staying
+      // empty and never building the margin.
+      const margin = { x: -380, z: -380 };
+      expect(zones.some((zone) => distanceSqToZone(zone, margin.x, margin.z) === 0)).toBe(true);
+      // ...and the zone the queue prepares is the one the sim clamp (zoneAt)
+      // resolves for that position, so ownership and preparation agree.
+      const containing = zones.filter((zone) => distanceSqToZone(zone, margin.x, margin.z) === 0);
+      expect(containing.map((zone) => zone.id)).toContain(zoneAt(margin.x, margin.z).id);
+    } finally {
+      setActiveWorldContent(null);
+    }
   });
 });

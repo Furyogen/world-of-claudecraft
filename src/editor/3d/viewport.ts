@@ -40,8 +40,14 @@ import {
   MIN_COLLIDER_SIZE_Y,
 } from '../../sim/map_doc';
 import { Sim } from '../../sim/sim';
-import type { CaveDef, PlacedAsset, TerrainHole } from '../../sim/types';
-import { type BlockerDef, type ColliderVolume, DT, type MapWeather } from '../../sim/types';
+import type {
+  BlockerDef,
+  CaveDef,
+  ColliderVolume,
+  MapWeather,
+  PlacedAsset,
+  TerrainHole,
+} from '../../sim/types';
 import { terrainHeight } from '../../sim/world';
 import { t } from '../../ui/i18n';
 import {
@@ -59,6 +65,7 @@ import {
 } from '../entity_edit_core';
 import { PLACEMENT_SCALE_MAX, PLACEMENT_SCALE_MIN, wrapAngle } from '../placement_transform_core';
 import { EditorCamera } from './editor_camera';
+import { HitboxHandles, type HitboxSubMode } from './hitbox_handles';
 import { EditorPerfOverlay, type PerfOverlayConfig } from './perf_overlay';
 import {
   type GizmoAxis,
@@ -121,6 +128,13 @@ export interface Editor3DHooks {
   // Hitbox edit mode: live gizmo deltas over the SELECTED hitboxes (world
   // space, from gesture start); the shared onGizmoEnd commits the gesture.
   onHitboxGizmoChange(change: GizmoHitboxChange): void;
+  // Collision Master sub-element handles (vertex/edge/face): live reshaped
+  // box per drag sample + the end-of-gesture commit (ONE undo entry).
+  onHitboxHandleEdit(boxIndex: number, box: MapHitbox): void;
+  onHitboxHandleCommit(): void;
+  // Ctrl+drag marquee while hitbox editing: the lassoed COLLISION BOX indices
+  // (empty = clear the box selection).
+  onHitboxBoxSelect(indices: number[]): void;
 }
 
 /** A live hitbox edit produced by a gizmo handle drag: world-space deltas
@@ -388,7 +402,12 @@ export class Editor3DViewport {
     | 'placepending'
     | 'moveplacement'
     | 'gizmo'
+    | 'hitboxhandle'
     | 'marquee' = 'none';
+  // Collision Master sub-element editing (vertex/edge/face handles).
+  private hitboxHandles: HitboxHandles | null = null;
+  private hitboxSubMode: HitboxSubMode | null = null;
+  private handleBoxIndex = -1;
   // A left press landed on a pickable placement (Select mode). The gesture stays
   // 'placepending' until the pointer passes TAP_SLOP_PX: past it, it promotes to a
   // move-drag; a release before it is a tap (select / overlap-cycle).
@@ -612,7 +631,12 @@ export class Editor3DViewport {
     this.cam.target.set(hub.x, terrainHeight(hub.x, hub.z, this.seed), hub.z);
     if (this.map.worldHalfX !== undefined) {
       const zones = this.map.content.zones;
-      const zSpan = (zones[zones.length - 1]?.zMax ?? 0) - (zones[0]?.zMin ?? 0);
+      // Min/max over all zones: the list is not stacked south-to-north once
+      // column zones exist (same trap as terrain.ts renderBounds).
+      const zSpan =
+        zones.length > 0
+          ? Math.max(...zones.map((zn) => zn.zMax)) - Math.min(...zones.map((zn) => zn.zMin))
+          : 0;
       const extent = Math.max(this.map.worldHalfX * 2, zSpan);
       const framingScale =
         this.map.presentationMode && this.map.presentationMode !== 'blank' ? 0.32 : 0.6;
@@ -1203,6 +1227,24 @@ export class Editor3DViewport {
 
   showFootprints(on: boolean): void {
     this.renderer?.placedAssets.showFootprints(on);
+  }
+
+  /**
+   * World-space hit point on a placed asset's actual mesh under the cursor,
+   * or null when the ray misses every model. Collision Master's poly-snap
+   * brush samples the real surface through this.
+   */
+  modelHitAt(clientX: number, clientY: number): { x: number; y: number; z: number } | null {
+    if (!this.renderer) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    this.pickNdc.set(
+      ((clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1,
+      -((clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1,
+    );
+    this.picker.setFromCamera(this.pickNdc, this.renderer.camera);
+    const hits = this.picker.intersectObjects(this.renderer.placedAssets.group.children, true);
+    const hit = hits.find((h) => h.point);
+    return hit ? { x: hit.point.x, y: hit.point.y, z: hit.point.z } : null;
   }
 
   /**
@@ -2073,6 +2115,44 @@ export class Editor3DViewport {
   ): void {
     this.hitboxEditState = state;
     this.rebuildHitboxOverlay();
+    this.refreshHitboxHandles();
+  }
+
+  /** Collision Master sub-element mode: vertex/edge/face handles on the
+   *  selected hitbox; null = object mode (the plain transform gizmo). */
+  setHitboxSubMode(mode: HitboxSubMode | null): void {
+    this.hitboxSubMode = mode;
+    this.refreshHitboxHandles();
+  }
+
+  /** Rebuild the sub-element handle set from the current edit state. The
+   *  handles assume the Collision Master scene frame (placement at the
+   *  origin, scale 1, yaw 0) — the only context sub modes are enabled in. */
+  private refreshHitboxHandles(): void {
+    const st = this.hitboxEditState;
+    const mode = this.hitboxSubMode;
+    if (!st || !mode || !this.renderer) {
+      this.hitboxHandles?.setTarget(null, 0, null);
+      this.handleBoxIndex = -1;
+      return;
+    }
+    if (!this.hitboxHandles) this.hitboxHandles = new HitboxHandles();
+    if (this.hitboxHandles.group.parent !== this.renderer.scene) {
+      this.renderer.scene.add(this.hitboxHandles.group);
+    }
+    const p = this.map.placements[st.index];
+    if (!p) {
+      this.hitboxHandles.setTarget(null, 0, null);
+      this.handleBoxIndex = -1;
+      return;
+    }
+    // The edited box: the last selected, or the only box when nothing is.
+    const boxIndex =
+      st.selected.length > 0 ? st.selected[st.selected.length - 1] : st.boxes.length === 1 ? 0 : -1;
+    const box = boxIndex >= 0 ? st.boxes[boxIndex] : null;
+    const ground = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
+    this.hitboxHandles.setTarget(box ? { ...box } : null, ground + (p.y ?? 0), mode);
+    this.handleBoxIndex = boxIndex;
   }
 
   private rebuildHitboxOverlay(): void {
@@ -2293,6 +2373,45 @@ export class Editor3DViewport {
       const sx = rect.left + ((v.x + 1) / 2) * rect.width;
       const sy = rect.top + ((1 - v.y) / 2) * rect.height;
       if (sx >= minX && sx <= maxX && sy >= minY && sy <= maxY) out.push(i);
+    }
+    return out;
+  }
+
+  /** Hitbox indices whose projected CENTER falls inside the marquee (hitbox
+   *  edit mode: Ctrl+drag selects collision boxes instead of placements). */
+  private hitboxesInMarquee(): number[] {
+    const m = this.marquee;
+    const st = this.hitboxEditState;
+    if (!m || !st || !this.renderer) return [];
+    const p = this.map.placements[st.index];
+    if (!p) return [];
+    const minX = Math.min(m.x0, m.x1);
+    const maxX = Math.max(m.x0, m.x1);
+    const minY = Math.min(m.y0, m.y1);
+    const maxY = Math.max(m.y0, m.y1);
+    if (maxX - minX < 3 && maxY - minY < 3) return [];
+    const rect = this.canvas.getBoundingClientRect();
+    const cam = this.renderer.camera;
+    const ground = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
+    const baseY = ground + (p.y ?? 0);
+    const s = p.scale > 0 ? p.scale : 1;
+    const sx0 = s * (p.scaleX ?? 1);
+    const sy0 = s * (p.scaleY ?? 1);
+    const sz0 = s * (p.scaleZ ?? 1);
+    const cr = Math.cos(p.rotY);
+    const sr = Math.sin(p.rotY);
+    const v = new THREE.Vector3();
+    const out: number[] = [];
+    for (let i = 0; i < st.boxes.length; i++) {
+      const b = st.boxes[i];
+      const lx = b.x * sx0;
+      const lz = b.z * sz0;
+      // Same frame as the hitbox overlay group: yaw p.rotY about the anchor.
+      v.set(p.x + lx * cr + lz * sr, baseY + b.y * sy0, p.z - lx * sr + lz * cr).project(cam);
+      if (v.z > 1 || v.z < -1) continue;
+      const px = rect.left + ((v.x + 1) / 2) * rect.width;
+      const py = rect.top + ((1 - v.y) / 2) * rect.height;
+      if (px >= minX && px <= maxX && py >= minY && py <= maxY) out.push(i);
     }
     return out;
   }
@@ -2888,7 +3007,11 @@ export class Editor3DViewport {
       this.applyWireframe();
       this.wireframeWasOn = this.wireframe;
     }
-    this.renderer.sync(1, DT, null);
+    // Real elapsed frame time, like the game loop (main.ts renderer.sync):
+    // passing the fixed sim DT per rAF frame ran every visual clock (water,
+    // weather, foliage sway, day/night) at 50ms per frame — 3x speed at
+    // 60 FPS, 6x on a 120 Hz display.
+    this.renderer.sync(1, dt, null);
     this.updatePerfOverlay(dt);
     // The player is an LOD anchor, not editable content. sync() force-shows
     // the self view every frame (visible = true), so hiding it means keeping
@@ -2995,6 +3118,21 @@ export class Editor3DViewport {
       this.canvas.setPointerCapture(ev.pointerId);
       return;
     }
+    // Collision Master sub-element handles claim their drags like the gizmo:
+    // a left press on a vertex/edge/face handle reshapes the box directly.
+    if (ev.button === 0 && this.hitboxHandles?.active && this.renderer) {
+      const rect = this.canvas.getBoundingClientRect();
+      this.pickNdc.set(
+        ((ev.clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1,
+        -((ev.clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1,
+      );
+      this.picker.setFromCamera(this.pickNdc, this.renderer.camera);
+      if (this.hitboxHandles.beginDrag(this.picker)) {
+        this.dragMode = 'hitboxhandle';
+        this.canvas.setPointerCapture(ev.pointerId);
+        return;
+      }
+    }
     // The gizmo owns its handles outright: a left-press on one starts an
     // axis-constrained transform drag before the tool routing.
     if (ev.button === 0 && this.gizmo?.group.visible) {
@@ -3061,6 +3199,19 @@ export class Editor3DViewport {
       if (this.dragDist <= TAP_SLOP_PX) return;
       const w = this.surfaceAt(ev.clientX, ev.clientY);
       if (w) this.hooks.onEditMove(w, ev);
+    } else if (this.dragMode === 'hitboxhandle') {
+      if (this.hitboxHandles && this.renderer) {
+        const rect = this.canvas.getBoundingClientRect();
+        this.pickNdc.set(
+          ((ev.clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1,
+          -((ev.clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1,
+        );
+        this.picker.setFromCamera(this.pickNdc, this.renderer.camera);
+        const box = this.hitboxHandles.moveDrag(this.picker);
+        if (box && this.handleBoxIndex >= 0) {
+          this.hooks.onHitboxHandleEdit(this.handleBoxIndex, box);
+        }
+      }
     } else if (this.dragMode === 'gizmo') {
       this.updateGizmoDrag(ev.clientX, ev.clientY);
     } else if (this.dragMode === 'marquee') {
@@ -3121,14 +3272,27 @@ export class Editor3DViewport {
       // (Ctrl/Shift+click toggle alike), not an empty marquee clearing the
       // selection.
       const tap = this.dragDist <= TAP_SLOP_PX;
-      const indices = tap ? null : this.placementsInMarquee();
+      // Hitbox-edit mode (Collision Master): the marquee lassos COLLISION
+      // BOXES, not placements — Blender's box select over sub-objects.
+      const overHitboxes = this.hitboxEditState !== null;
+      const indices = tap
+        ? null
+        : overHitboxes
+          ? this.hitboxesInMarquee()
+          : this.placementsInMarquee();
       this.marquee = null;
       this.updateMarqueeEl();
       if (indices === null) {
         this.hooks.onTap(ev.clientX, ev.clientY, this.surfaceAt(ev.clientX, ev.clientY), true);
+      } else if (overHitboxes) {
+        this.hooks.onHitboxBoxSelect(indices);
       } else {
         this.hooks.onBoxSelect(indices);
       }
+    } else if (this.dragMode === 'hitboxhandle') {
+      this.hitboxHandles?.endDrag();
+      this.hooks.onHitboxHandleCommit();
+      this.refreshHitboxHandles();
     } else if (this.dragMode === 'gizmo') {
       this.gizmoDrag = null;
       this.hooks.onGizmoEnd();

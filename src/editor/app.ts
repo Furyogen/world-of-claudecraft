@@ -66,6 +66,13 @@ function caveWobbleSeed(id: string): number {
 
 import { rockSeed } from '../render/rock_gen';
 import { builtinShaFor, terrainTextureSet } from '../render/terrain_texture_sets';
+import {
+  type AssetCollisionOverride,
+  analyzeBakedFootprint,
+  autoCollideRadius,
+  boxesForAssetId,
+  collisionOverrideFor,
+} from '../sim/asset_collision';
 import { ASSET_COLLISION } from '../sim/asset_collision.generated';
 import {
   COLLIDER_ASSET_IDS,
@@ -156,12 +163,14 @@ import { formatNumber, t } from '../ui/i18n';
 import { Editor3DViewport, type GizmoHitboxChange } from './3d/viewport';
 import { AssetBrowser } from './asset_browser';
 import { ASSET_CATALOG, assetById } from './asset_catalog.generated';
-import { finestPaintCell, resampleBiomePaint } from './biome_paint_core';
+import { finestPaintCell, growBiomePaint, resampleBiomePaint } from './biome_paint_core';
 import { nearestBlockerIndex } from './blocker_core';
 import { brushAlphaById, importBrushAlpha, sampleBrushAlpha } from './brush_alphas';
 import { BundleDependencyError, buildMapBundle, zipStore } from './bundle';
 import { draw } from './canvas';
 import { generateCaveRigNodes } from './cave_gen_core';
+import { applyDefaultCollision } from './collision_defaults';
+import { CollisionMasterBar } from './collision_master_bar';
 import {
   type AssetPlacement,
   CUSTOM_MAP_VERSION,
@@ -890,6 +899,21 @@ export class EditorApp {
       },
       confirm: (title, body) => confirmDialog(this.root, { title, body, danger: true }),
       toastError: (m) => this.toasts.error(m),
+      onCollisionMaster: (assetId, label) => this.enterCollisionMaster(assetId, label),
+    });
+
+    this.cmBar = new CollisionMasterBar(stageWrap, {
+      getMode: () => this.cmSubMode,
+      setMode: (m) => this.setCmSubMode(m),
+      addPrimitive: (kind) => this.addCmPrimitive(kind),
+      duplicateSelection: () => this.duplicateCmSelection(),
+      deleteSelection: () => this.deleteSelectedHitboxes(),
+      getPolySnap: () => this.cmPolySnap,
+      setPolySnap: (on) => {
+        this.cmPolySnap = on;
+        this.cmPolyPoints = null;
+        this.inspector.refresh();
+      },
     });
 
     this.toasts = new Toasts(this.root);
@@ -1255,6 +1279,9 @@ export class EditorApp {
         onGizmoChange: (change) =>
           this.updateSelectedPlacement(change, false, { detachOnMove: true }),
         onHitboxGizmoChange: (change) => this.applyHitboxGizmo(change),
+        onHitboxHandleEdit: (boxIndex, box) => this.applyHitboxHandleEdit(boxIndex, box),
+        onHitboxHandleCommit: () => this.commitHitboxes(),
+        onHitboxBoxSelect: (indices) => this.selectHitboxes(indices),
         onGizmoEnd: () => {
           if (this.hitboxDragBase) this.commitHitboxes();
           else this.updateSelectedPlacement({}, true);
@@ -1405,10 +1432,14 @@ export class EditorApp {
   /** Tools that claim the left pointer in the 3D viewport. The transform trio
    *  goes through the placement-drag path instead, so empty ground still orbits. */
   private toolWantsPointer(): boolean {
+    // Collision Master's poly-snap brush claims the pointer on ANY tool: the
+    // drag samples the model surface instead of orbiting or box-selecting.
+    if (this.cmPolyActive()) return true;
     return this.tool !== 'select' && this.tool !== 'water' && !isTransformTool(this.tool);
   }
 
   private isDragTool(): boolean {
+    if (this.cmPolyActive()) return true;
     return (
       this.tool === 'raise' ||
       this.tool === 'lower' ||
@@ -1428,6 +1459,10 @@ export class EditorApp {
 
   private editStart(w: Vec2, ev?: PointerEvent): void {
     this.pointerEditActive = true;
+    if (this.cmPolyActive() && ev) {
+      this.cmPolyBegin(ev);
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
@@ -1603,6 +1638,10 @@ export class EditorApp {
   }
 
   private editMove(w: Vec2, ev?: PointerEvent): void {
+    if (this.cmPolyActive() && this.cmPolyPoints && ev) {
+      this.cmPolyMove(ev);
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
@@ -1735,6 +1774,10 @@ export class EditorApp {
 
   private editEnd(): void {
     this.pointerEditActive = false;
+    if (this.cmPolyPoints) {
+      this.cmPolyEnd();
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
@@ -3773,6 +3816,37 @@ export class EditorApp {
     });
   }
 
+  /** A map authored bigger after its first paint stroke (resized world, or a
+   *  save from before a zone was appended) keeps its original grid, which
+   *  clamps at its edge: painting past it silently does nothing and the
+   *  terrain out there renders unpainted. Grow the grid to today's bounds at
+   *  stroke start, preserving every painted cell in place. The GPU paint
+   *  field is sized/rected to the grid, so growth needs a full refresh NOW
+   *  (a region rebake would address the old texture). */
+  private growBiomeGridForPainting(): void {
+    const old = this.map.biomePaint;
+    if (!old) return;
+    const grown = growBiomePaint(old, this.worldBounds());
+    if (!grown) return;
+    this.map.biomePaint = grown;
+    this.activeWorld.biomePaint = grown;
+    this.map.meta.updatedAt = now();
+    this.refreshTerrain(null);
+    this.pushUndo({
+      label: 'paint-grow',
+      undo: () => {
+        this.map.biomePaint = old;
+        this.activeWorld.biomePaint = old;
+        this.refreshTerrain(null);
+      },
+      redo: () => {
+        this.map.biomePaint = grown;
+        this.activeWorld.biomePaint = grown;
+        this.refreshTerrain(null);
+      },
+    });
+  }
+
   /** Sculpt strength in HEIGHT units: the 1..50 slider over a 5x finer scale
    *  than the legacy 1..30 one (slider 5 == legacy 1), for gentle grading. */
   private effectiveBrushStrength(): number {
@@ -3781,6 +3855,7 @@ export class EditorApp {
 
   private paintBegin(w: Vec2): void {
     this.refineBiomeGridForPainting();
+    this.growBiomeGridForPainting();
     this.paintChanges = new Map();
     this.paintCreatedGrid = false;
     this.strokeRegion = null;
@@ -4292,6 +4367,10 @@ export class EditorApp {
     const preset = this.hitboxPresets[this.placeAssetId];
     if (this.placeCollide && preset && preset.length > 0) {
       placement.hitboxes = preset.map((b) => ({ ...b }));
+    } else {
+      // No preset: stamp the simple-collision default (fitted box or radius
+      // circle for solid props; walkable/pass-through assets keep their bake).
+      applyDefaultCollision(placement);
     }
     this.appendPlacements([placement], 'place-asset');
     // A fresh placement lands selected under the Move gizmo (Blender flow);
@@ -4730,8 +4809,10 @@ export class EditorApp {
   /** The starting editable box set: the asset's baked boxes (catalogue or
    *  imported), else one crate-sized box derived from the collide radius. */
   private materializeHitboxes(p: AssetPlacement): MapHitbox[] {
-    const baked = ASSET_COLLISION[p.assetId] ?? this.map.assetCollision?.[p.assetId];
-    if (baked && baked.length > 0) return baked.map((b) => ({ ...b }));
+    const baked = boxesForAssetId(p.assetId) ?? this.map.assetCollision?.[p.assetId];
+    if (baked && baked.length > 0) {
+      return baked.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }));
+    }
     const r = Math.max(0.3, collideRadiusFor(1, p.assetId));
     return [{ x: 0, y: r, z: 0, hx: r, hy: r, hz: r }];
   }
@@ -4973,6 +5054,375 @@ export class EditorApp {
     delete this.hitboxPresets[p.assetId];
     writeJsonPref(HITBOX_PRESETS_PREF_KEY, this.hitboxPresets);
     this.toasts.info(t('editor.selection.hitboxPresetCleared'));
+    this.inspector.refresh();
+  }
+
+  // ---- Collision Master (per-asset authored collision -> repo default) ----------
+
+  /** Active Collision Master session: a dedicated single-asset authoring scene
+   *  entered from the asset browser. The working map is saved to the local
+   *  store on entry and restored on exit. Lock In posts the authored collision
+   *  to the dev server (/__collision_master/save), which writes
+   *  data/asset_collision_overrides.json + the generated module - making it
+   *  the asset's DEFAULT collision everywhere from then on. */
+  private collisionMaster: { assetId: string; label: string; returnMapId: string } | null = null;
+  /** The floating modeling toolbar over the 3D stage (CM sessions only). */
+  private cmBar: CollisionMasterBar | null = null;
+  /** Poly-snap brush: drag across the model surface to lay a collision plane
+   *  hugging the sampled geometry (built as a thin yawed box). */
+  private cmPolySnap = false;
+  private cmPolyPoints: { x: number; y: number; z: number }[] | null = null;
+
+  private collisionMasterVm(): { assetId: string; label: string; canSave: boolean } | null {
+    const cm = this.collisionMaster;
+    return cm ? { assetId: cm.assetId, label: cm.label, canSave: import.meta.env.DEV } : null;
+  }
+
+  private enterCollisionMaster(assetId: string, label: string): void {
+    if (this.collisionMaster) return;
+    if (!assetById(assetId)) {
+      // Only catalogue assets can persist a repo default; imported models keep
+      // their per-map import bake.
+      this.toasts.error(t('editor.collisionMaster.catalogOnly'));
+      return;
+    }
+    // Auto-save the working map so Cancel/Lock In can restore it exactly.
+    if (!this.io.saveLocal(this.map)) {
+      this.toasts.error(t('editor.collisionMaster.saveFailed'));
+      return;
+    }
+    const returnMapId = this.map.meta.id;
+    const cm = newFlatCustomMap(
+      t('editor.collisionMaster.mapName', { name: label }),
+      mintId(),
+      now(),
+      { width: 60, height: 60 },
+    );
+    const placement: AssetPlacement = { assetId, x: 0, z: 0, rotY: 0, scale: 1, collide: true };
+    // Seed the scene with the asset's CURRENT default so editing starts from
+    // the truth: authored override > box set (authored or baked) > heuristics.
+    const authored = collisionOverrideFor(assetId);
+    if (authored?.mode === 'none') {
+      placement.collisionMode = 'none';
+    } else if (authored?.mode === 'basic') {
+      placement.collisionMode = 'basic';
+      if (authored.shape === 'square') placement.collideShape = 'square';
+      if (authored.radius !== undefined) placement.collideRadius = authored.radius;
+    } else {
+      const boxes = boxesForAssetId(assetId);
+      if (boxes && boxes.length > 0) {
+        placement.collisionMode = 'baked';
+        placement.hitboxes = boxes.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }));
+      } else {
+        applyDefaultCollision(placement);
+      }
+    }
+    cm.placements.push(placement);
+    this.collisionMaster = { assetId, label, returnMapId };
+    this.cmPolySnap = false;
+    this.cmSubMode = 'object';
+    this.loadMap(cm);
+    this.setTool('select');
+    this.setSelectedPlacement(0);
+    if (effectiveCollisionMode(placement) === 'baked') this.enterHitboxEdit();
+    this.cmBar?.setVisible(true);
+    // Frame the asset up close once the 3D reload lands (loadMap's frameAll
+    // framed the whole map, and the reload would stomp an immediate focus).
+    this.pendingFocus = {
+      x: placement.x,
+      z: placement.z,
+      extent: Math.max(2.5, placement.scale * 2.5),
+      y: terrainHeight(placement.x, placement.z, this.map.meta.seed),
+    };
+    this.inspector.refresh();
+  }
+
+  /** Camera focus applied after the next 3D viewport reload completes. */
+  private pendingFocus: { x: number; z: number; extent: number; y: number } | null = null;
+
+  private exitCollisionMaster(): void {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const cmMapId = this.map.meta.id;
+    this.collisionMaster = null;
+    this.cmPolySnap = false;
+    this.cmPolyPoints = null;
+    this.cmSubMode = 'object';
+    this.cmBar?.setVisible(false);
+    this.viewport3d?.setHitboxSubMode(null);
+    this.exitHitboxEdit();
+    this.pendingFocus = null; // an unconsumed enter-focus must not retarget the restored map
+    // The scratch scene must never resurface as a resumable draft.
+    this.io.draftClear(cmMapId);
+    const back = this.io.store.load(cm.returnMapId);
+    if (back) this.loadMap(back);
+    else this.loadMap(newCustomMap(t('editor.untitledMap'), mintId(), now()));
+  }
+
+  /** Lock In: persist the scene's collision as the asset's repo default. */
+  private async commitCollisionMaster(): Promise<void> {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    const mode = effectiveCollisionMode(p);
+    let override: AssetCollisionOverride;
+    if (mode === 'none') {
+      override = { mode: 'none' };
+    } else if (mode === 'basic') {
+      override = { mode: 'basic' };
+      if (p.collideShape === 'square') override.shape = 'square';
+      // Scene scale is 1, so the effective radius IS the model-space radius.
+      override.radius = p.collideRadius ?? autoCollideRadius(p.assetId, 1, 'basic');
+    } else if (mode === 'baked') {
+      const boxes =
+        this.resolvedHitboxesFor(p) ?? boxesForAssetId(p.assetId)?.map((b) => ({ ...b })) ?? null;
+      if (!boxes || boxes.length === 0) {
+        this.toasts.error(t('editor.collisionMaster.noBoxes'));
+        return;
+      }
+      override = { mode: 'baked', boxes };
+    } else {
+      // 'mesh' is a per-map fine bake, not a repo default.
+      this.toasts.error(t('editor.collisionMaster.meshUnsupported'));
+      return;
+    }
+    try {
+      const res = await fetch('/__collision_master/save', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ assetId: cm.assetId, override }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+    } catch (err) {
+      this.toasts.error(t('editor.collisionMaster.saveEndpointFailed', { error: String(err) }));
+      return;
+    }
+    this.toasts.info(t('editor.collisionMaster.locked', { name: cm.label }));
+    // The generated-module write triggers a dev full reload moments after
+    // this; exiting first restores (and re-saves nothing), so the reload
+    // boots straight back into the working map.
+    this.exitCollisionMaster();
+  }
+
+  /** Starter box sets for the Collision Master scene. */
+  private collisionMasterStarter(kind: 'bake' | 'fitted' | 'single'): void {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    this.setSelectedPlacement(0);
+    let boxes: MapHitbox[];
+    if (kind === 'bake') {
+      const baked = ASSET_COLLISION[cm.assetId];
+      boxes =
+        baked && baked.length > 0
+          ? baked.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }))
+          : this.materializeHitboxes(p);
+    } else if (kind === 'fitted') {
+      const a = analyzeBakedFootprint(cm.assetId);
+      boxes = a && a.boxCount > 0 ? [{ ...a.union }] : this.materializeHitboxes(p);
+    } else {
+      const r = Math.max(0.3, collideRadiusFor(1, cm.assetId));
+      boxes = [{ x: 0, y: r, z: 0, hx: r, hy: r, hz: r }];
+    }
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    this.setHitboxes(0, boxes, 'collision-master-starter');
+    if (!this.hitboxEdit) this.enterHitboxEdit();
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  // ---- Collision Master v2: sub-element modes, primitives, duplicate ------------
+
+  /** Blender-style sub-element select mode for the Collision Master scene:
+   *  object = whole-box gizmo, vertex/edge/face = direct handle editing. */
+  private cmSubMode: 'object' | 'vertex' | 'edge' | 'face' = 'object';
+
+  private setCmSubMode(mode: 'object' | 'vertex' | 'edge' | 'face'): void {
+    this.cmSubMode = mode;
+    if (this.collisionMaster && !this.hitboxEdit) this.enterHitboxEdit();
+    this.viewport3d?.setHitboxSubMode(mode === 'object' ? null : mode);
+    this.cmBar?.refresh();
+    this.inspector.refresh();
+  }
+
+  /** One live sub-element handle sample: replace ONE box, uncommitted (the
+   *  drag end commits via commitHitboxes — the gizmo's exact contract). */
+  private applyHitboxHandleEdit(boxIndex: number, box: MapHitbox): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes || !p.hitboxes[boxIndex]) return;
+    if (!this.hitboxDragBase) this.hitboxDragBase = p.hitboxes.map((b) => ({ ...b }));
+    const boxes = p.hitboxes.map((b) => ({ ...b }));
+    const clean: MapHitbox = { ...box };
+    if (!clean.ry) delete clean.ry;
+    boxes[boxIndex] = clean;
+    p.hitboxes = boxes;
+    this.viewport3d?.placementUpdated(he.index, { hitboxes: boxes.map((b) => ({ ...b })) });
+    this.syncHitboxEditView();
+    this.canvasDirty = true;
+  }
+
+  /** Primitive starters: append sim-ready box sets approximating the shape.
+   *  Cylinders/spheres are two crossed boxes (a tight octagon footprint),
+   *  ramps are step stacks the sim's step-over walks like stairs. */
+  private addCmPrimitive(kind: 'box' | 'plane' | 'cylinder' | 'sphere' | 'wedge'): void {
+    if (!this.collisionMaster) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    this.setSelectedPlacement(0);
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    if (!this.hitboxEdit) this.enterHitboxEdit();
+    // Size relative to the asset so primitives land usable, not microscopic.
+    const a = analyzeBakedFootprint(this.collisionMaster.assetId);
+    const r = Math.min(3, Math.max(0.5, a ? Math.max(a.union.hx, a.union.hz) * 0.8 : 1));
+    const h = Math.min(4, Math.max(0.5, a ? a.union.hy * 2 * 0.9 : 1.5));
+    const fresh: MapHitbox[] = [];
+    if (kind === 'box') {
+      fresh.push({ x: 0, y: h / 2, z: 0, hx: r, hy: h / 2, hz: r });
+    } else if (kind === 'plane') {
+      fresh.push({ x: 0, y: h / 2, z: 0, hx: r * 1.2, hy: h / 2, hz: 0.05 });
+    } else if (kind === 'cylinder' || kind === 'sphere') {
+      const hy = kind === 'sphere' ? r * 0.92 : h / 2;
+      const y = kind === 'sphere' ? r : h / 2;
+      const side = r * 0.92;
+      fresh.push({ x: 0, y, z: 0, hx: side, hy, hz: side });
+      fresh.push({ x: 0, y, z: 0, hx: side, hy, hz: side, ry: Math.PI / 4 });
+    } else {
+      // wedge/ramp: four rising steps along +X, walkable via step-over.
+      const steps = 4;
+      const len = Math.max(2, r * 2);
+      for (let i = 0; i < steps; i++) {
+        const hy = (h * (i + 1)) / (steps * 2);
+        fresh.push({
+          x: -len / 2 + (len / steps) * (i + 0.5),
+          y: hy,
+          z: 0,
+          hx: len / (steps * 2),
+          hy,
+          hz: r,
+        });
+      }
+    }
+    const existing = p.hitboxes ? p.hitboxes.map((b) => ({ ...b })) : [];
+    if (existing.length + fresh.length > MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    this.setHitboxes(0, [...existing, ...fresh], 'collision-master-primitive');
+    const he = this.hitboxEdit;
+    if (he) {
+      he.selected = new Set(fresh.map((_, i) => existing.length + i));
+      this.syncHitboxEditView();
+    }
+    this.inspector.refresh();
+  }
+
+  /** Marquee selection over collision boxes (Ctrl+drag in hitbox edit). */
+  private selectHitboxes(indices: number[]): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    const max = p?.hitboxes?.length ?? 0;
+    he.selected = new Set(indices.filter((i) => i >= 0 && i < max));
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  /** Duplicate the selected hitboxes, offset a step so the copies are visible. */
+  private duplicateCmSelection(): void {
+    const he = this.hitboxEdit;
+    if (!he || he.selected.size === 0) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes) return;
+    const copies = [...he.selected]
+      .filter((i) => p.hitboxes?.[i])
+      .map((i) => {
+        const src = p.hitboxes?.[i] as MapHitbox;
+        return { ...src, x: src.x + Math.max(0.3, src.hx) };
+      });
+    const boxes = [...p.hitboxes.map((b) => ({ ...b })), ...copies];
+    if (boxes.length > MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    this.setHitboxes(he.index, boxes, 'duplicate-hitbox');
+    he.selected = new Set(copies.map((_, i) => boxes.length - copies.length + i));
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  // ---- poly-snap brush: sample the real model surface, emit a hugging box ----
+
+  private cmPolyActive(): boolean {
+    return this.collisionMaster !== null && this.cmPolySnap;
+  }
+
+  private cmPolyBegin(ev: PointerEvent): void {
+    const hit = this.viewport3d?.modelHitAt(ev.clientX, ev.clientY);
+    this.cmPolyPoints = hit ? [hit] : [];
+  }
+
+  private cmPolyMove(ev: PointerEvent): void {
+    if (!this.cmPolyPoints) return;
+    const hit = this.viewport3d?.modelHitAt(ev.clientX, ev.clientY);
+    if (hit) this.cmPolyPoints.push(hit);
+  }
+
+  private cmPolyEnd(): void {
+    const pts = this.cmPolyPoints;
+    this.cmPolyPoints = null;
+    if (!pts || pts.length < 2) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    // Model space: the scene placement sits at the origin, scale 1, yaw 0.
+    const seat = terrainHeight(p.x, p.z, this.map.meta.seed);
+    const a = pts[0];
+    const b = pts[pts.length - 1];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const len = Math.hypot(dx, dz);
+    if (len < 0.05) return;
+    // Yaw so the box's local X axis runs along the drag (rotY convention:
+    // rotY(x, z, ry) rotates model space into world space).
+    const ry = Math.atan2(dz, dx) * -1;
+    const midX = (a.x + b.x) / 2;
+    const midZ = (a.z + b.z) / 2;
+    const ux = dx / len;
+    const uz = dz / len;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    let maxPerp = 0.05;
+    for (const q of pts) {
+      minY = Math.min(minY, q.y);
+      maxY = Math.max(maxY, q.y);
+      // Spread perpendicular to the drag direction (thin wall by default,
+      // thicker when the drag wanders across the surface).
+      const perp = Math.abs((q.x - midX) * -uz + (q.z - midZ) * ux);
+      maxPerp = Math.max(maxPerp, perp);
+    }
+    const box: MapHitbox = {
+      x: midX - p.x,
+      y: (minY + maxY) / 2 - seat,
+      z: midZ - p.z,
+      hx: Math.max(0.05, len / 2),
+      hy: Math.max(0.1, (maxY - minY) / 2 + 0.05),
+      hz: Math.min(2, maxPerp + 0.05),
+      ry,
+    };
+    const existing = p.hitboxes ?? [];
+    if (existing.length >= MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    this.setHitboxes(0, [...existing.map((bx) => ({ ...bx })), box], 'collision-master-poly');
+    if (!this.hitboxEdit) this.hitboxEdit = { index: 0, selected: new Set() };
+    this.hitboxEdit.selected = new Set([(p.hitboxes ?? []).length - 1]);
+    this.syncFootprintOverlay();
+    this.syncHitboxEditView();
     this.inspector.refresh();
   }
 
@@ -7367,6 +7817,12 @@ export class EditorApp {
     this.blockerPreview = null;
     this.drawingBlocker2d = false;
     this.waterBase = map.waterLevel ?? WATER_LEVEL;
+    // The map's authored lighting is the source of truth: adopt it (or clear
+    // back to the shipped rig) so the Lighting tab, the viewport, and the next
+    // playtest all agree with the document. skipDoc: this IS the doc's value.
+    this.applyLighting(map.lighting ? 'custom' : 'day', map.lighting ? { ...map.lighting } : null, {
+      skipDoc: true,
+    });
     this.rebuildActiveWorld();
     this.applySkybox();
     this.topbar.setMapName(map.meta.name);
@@ -7384,6 +7840,11 @@ export class EditorApp {
       void this.viewport3d.reload(map).then(() => {
         this.hide3dLoading();
         this.syncFootprintOverlay();
+        if (this.pendingFocus) {
+          const f = this.pendingFocus;
+          this.pendingFocus = null;
+          this.viewport3d?.focusClose(f.x, f.z, f.extent, f.y);
+        }
       });
     }
     // Make this map's saved extra assets (imported 'local/<sha>' models kept in
@@ -7482,8 +7943,11 @@ export class EditorApp {
     }
     if (ev.key === 'Delete') {
       if (this.hitboxEdit && this.hitboxEdit.selected.size > 0) this.deleteSelectedHitboxes();
-      else if (this.selectedPlacement !== null) this.removeSelectedPlacements();
-      else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
+      // Collision Master: the scene's one placement is the workbench, never a
+      // delete target — Delete/X only ever remove collision boxes there.
+      else if (this.selectedPlacement !== null && !this.collisionMaster) {
+        this.removeSelectedPlacements();
+      } else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
       else if (this.selectedMusicArea !== null) this.deleteMusicArea(this.selectedMusicArea);
       else if (this.selectedCamp !== null) this.deleteSelectedCamp();
       return;
@@ -7539,8 +8003,10 @@ export class EditorApp {
     // X deletes the selection (Blender-style), same as the Delete key. The
     // region tool deliberately lost this shortcut: it is click-only now.
     if (ev.key.toLowerCase() === 'x' && !ev.altKey) {
-      if (this.selectedPlacement !== null) this.removeSelectedPlacements();
-      else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
+      if (this.hitboxEdit && this.hitboxEdit.selected.size > 0) this.deleteSelectedHitboxes();
+      else if (this.selectedPlacement !== null && !this.collisionMaster) {
+        this.removeSelectedPlacements();
+      } else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
       else if (this.selectedMusicArea !== null) this.deleteMusicArea(this.selectedMusicArea);
       else if (this.selectedCamp !== null) this.deleteSelectedCamp();
       return;
@@ -7656,10 +8122,28 @@ export class EditorApp {
     input.click();
   }
 
-  private applyLighting(preset: string, profile: EditorLightingProfile | null): void {
+  private applyLighting(
+    preset: string,
+    profile: EditorLightingProfile | null,
+    opts?: { skipDoc?: boolean },
+  ): void {
     this.lightingPreset = preset;
     this.lighting = profile;
     this.viewport3d?.setLighting(profile);
+    // Lighting is PART OF THE MAP: it saves into the document (sanitized,
+    // projected onto WorldContent) so playtest and the shipped map render the
+    // authored rig, not just this editor session. skipDoc = a load path
+    // applying the map's own value (no dirty, no rewrite).
+    if (!opts?.skipDoc) {
+      if (profile) this.map.lighting = { ...profile };
+      else delete this.map.lighting;
+      this.map.meta.updatedAt = now();
+      this.markDirty();
+      // The projected world must carry it too, or the next playtest launch
+      // (which reuses the active world) would boot without the change.
+      if (profile) this.activeWorld.lighting = { ...profile };
+      else delete this.activeWorld.lighting;
+    }
     try {
       localStorage.setItem(LIGHTING_PREF_KEY, JSON.stringify({ preset, profile }));
     } catch {
@@ -8267,6 +8751,22 @@ export class EditorApp {
       saveHitboxPreset: () => this.saveHitboxPreset(),
       clearHitboxPreset: () => this.clearHitboxPreset(),
       copyCollisionToSameAsset: () => void this.copyCollisionToSameAsset(),
+      // ---- Collision Master ---------------------------------------------------
+      getCollisionMaster: () => this.collisionMasterVm(),
+      collisionMasterStarter: (kind) => this.collisionMasterStarter(kind),
+      getCollisionMasterPoly: () => this.cmPolySnap,
+      setCollisionMasterPoly: (on) => {
+        this.cmPolySnap = on;
+        this.cmPolyPoints = null;
+      },
+      collisionMasterCommit: () => void this.commitCollisionMaster(),
+      collisionMasterCancel: () => this.exitCollisionMaster(),
+      openCollisionMasterForSelection: () => {
+        const index = this.selectedPlacement;
+        const p = index === null ? undefined : this.map.placements[index];
+        if (!p) return;
+        this.enterCollisionMaster(p.assetId, this.placementLabel(p.assetId));
+      },
       getCloneScaleRange: () => ({
         min: this.cloneScaleMin,
         max: this.cloneScaleMax,

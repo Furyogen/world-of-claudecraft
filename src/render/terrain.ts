@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MAX_HOLE_PATCHES, MAX_TERRAIN_HOLES } from '../sim/caves';
 import {
+  BUILTIN_WORLD,
   COLUMN_ZONES,
   columnBlendAt,
   getActiveWorldContent,
@@ -11,6 +12,7 @@ import {
   WORLD_MAX_Z,
   WORLD_MIN_Z,
   ZONES,
+  zoneAt,
 } from '../sim/data';
 import { isAuthoredMapPresentation, usesPlainTerrainMaterial } from '../sim/map_presentation';
 import { fbm2 } from '../sim/rng';
@@ -404,8 +406,14 @@ function renderBounds(): RenderBounds {
   if (!renderBoundsCache || renderBoundsCache.content !== content) {
     const halfX = content.worldHalfX ?? WORLD_MAX_X;
     const zones = content.zones;
-    const minZ = zones.length > 0 ? zones[0].zMin : WORLD_MIN_Z;
-    const maxZ = zones.length > 0 ? zones[zones.length - 1].zMax : WORLD_MAX_Z;
+    // Min/max over ALL zones, never first/last: the zone list is NOT stacked
+    // south-to-north once column zones exist (the built-in list ends with
+    // Farshore, an east column at z -180..180). Reading zones[last].zMax
+    // capped the whole terrain grid at the southernmost band: every northern
+    // zone owned ZERO buildable cells, "loaded" instantly with no chunks, and
+    // the world past the first band rendered as bare water.
+    const minZ = zones.length > 0 ? Math.min(...zones.map((zn) => zn.zMin)) : WORLD_MIN_Z;
+    const maxZ = zones.length > 0 ? Math.max(...zones.map((zn) => zn.zMax)) : WORLD_MAX_Z;
     renderBoundsCache = {
       content,
       b: { minX: -halfX, maxX: halfX, minZ, maxZ, width: halfX * 2, depth: maxZ - minZ },
@@ -465,6 +473,16 @@ const TILE0 = 1 / DEFAULT_TEXTURE_TILE_YD;
 const customTileUniform = { value: new THREE.Vector4(TILE0, TILE0, TILE0, TILE0) };
 const customTileUniformB = { value: new THREE.Vector4(TILE0, TILE0, TILE0, TILE0) };
 let atlasRefreshGen = 0;
+
+/** Drop the atlas so the next ensureAtlas() builds a fresh CanvasTexture.
+ *  Called per terrain build: a texture uploaded under a dead GL context
+ *  renders stale (same rationale as refreshPaintField's fresh allocation). */
+function resetCustomGroundTextureAtlas(): void {
+  atlasTexture?.dispose();
+  atlasTexture = null;
+  atlasCanvas = null;
+  customAtlasUniform.value = null;
+}
 
 function ensureAtlas(): { canvas: HTMLCanvasElement; texture: THREE.CanvasTexture } {
   if (!atlasCanvas || !atlasTexture) {
@@ -2240,7 +2258,15 @@ export interface TerrainView {
 
 export function buildTerrain(seed: number, priorityPoint?: { x: number; z: number }): TerrainView {
   const lowGfx = !GFX.terrainSplat || !hasTerrainSplatAssets();
-  const plainMaterial = usesPlainTerrainMaterial(getActiveWorldContent().presentationMode);
+  const activeContent = getActiveWorldContent();
+  const customWorld = activeContent !== BUILTIN_WORLD;
+  const activeZones = activeContent.zones ?? [];
+  const plainMaterial = usesPlainTerrainMaterial(activeContent.presentationMode);
+  // The custom-texture atlas gets the same fresh-per-build treatment as the
+  // paint field below: a CanvasTexture uploaded under a lost/replaced GL
+  // context renders stale forever, which blanked imported ground textures
+  // after an editor map reload (viewport.reload() force-loses the context).
+  resetCustomGroundTextureAtlas();
   refreshCustomGroundTextures();
   // Hole cutouts ride shared uniforms: seed them from the active world before
   // the material build so a loaded map's holes show from the first frame.
@@ -2306,6 +2332,14 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
     for (const zn of ZONES) {
       hubDist = Math.min(hubDist, Math.hypot(centerX - zn.hub.x, centerZ - zn.hub.z));
     }
+    // Custom worlds: their own hubs (a blank map's spawn) anchor the fine
+    // bands too, so a map larger than the built-in footprint is not all
+    // far-LOD out in its margins.
+    if (customWorld) {
+      for (const zn of activeZones) {
+        hubDist = Math.min(hubDist, Math.hypot(centerX - zn.hub.x, centerZ - zn.hub.z));
+      }
+    }
     const idx = bands.findIndex((b) => hubDist <= b.maxHubDist);
     return idx === -1 ? bands.length - 1 : idx;
   };
@@ -2363,15 +2397,26 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
     // playable zone. Terrain ownership must not: otherwise asking for one
     // column can accidentally materialize chunks in an empty neighbouring
     // column merely because that zone is the fallback for the same z band.
-    return (
+    const builtin =
       ZONES.find(
         (candidate) =>
           z >= candidate.zMin &&
           z < candidate.zMax &&
           x >= (candidate.xMin ?? STRIP_MIN_X) &&
           x < (candidate.xMax ?? STRIP_MAX_X),
-      )?.id ?? null
-    );
+      )?.id ?? null;
+    if (builtin !== null) return builtin;
+    // A custom world can be wider/taller than the built-in footprint (blank
+    // maps size up to MAX_WORLD_COORD). Those margin cells clamp to the same
+    // zone the sim resolves (zoneAt), so they build with that zone's prepare
+    // instead of silently never building — the "terrain/textures only exist
+    // near spawn" bug on big custom maps. The z gate keeps deliberate gaps
+    // between a custom world's own zone bands unbuilt, exactly like built-in
+    // column gaps.
+    if (customWorld && activeZones.some((zn) => z >= zn.zMin && z < zn.zMax)) {
+      return zoneAt(x, z).id;
+    }
+    return null;
   };
   const zoneCells = (zone: ZoneDef): [number, number][] => {
     const out: [number, number][] = [];

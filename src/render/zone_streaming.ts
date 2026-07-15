@@ -6,8 +6,15 @@
 // fog ahead of any zone the streaming has not finished yet (a teleport, a
 // sprint that outruns the build), so an unloaded region is never visible.
 
-import { STRIP_MAX_X, STRIP_MIN_X } from '../sim/data';
-import type { ZoneDef } from '../sim/types';
+import {
+  BUILTIN_WORLD,
+  getActiveWorldContent,
+  STRIP_MAX_X,
+  STRIP_MIN_X,
+  WORLD_MAX_X,
+  ZONES,
+} from '../sim/data';
+import type { WorldContent, ZoneDef } from '../sim/types';
 
 // The outdoor visibility envelope: no biome fog preset may exceed this, and
 // terrain/prop/foliage culling all key off the live fog far, so this is the
@@ -22,6 +29,43 @@ interface Candidate {
   distanceSq: number;
   alignment: number;
   order: number;
+}
+
+// ---------------------------------------------------------------------------
+// A custom world can be WIDER or TALLER than the built-in 14-zone footprint
+// (blank maps size up to MAX_WORLD_COORD). Terrain cell ownership clamps such
+// margin cells to the nearest built-in zone (zoneAt), so the streaming policy
+// must see matching rectangles: strip-spanning zones widen to the custom
+// world's x extent, and the south/northmost bands extend to its z extent.
+// Otherwise the camera out in the margin is "far from every zone rect", the
+// prepare queue stays empty, and the margin never builds — the classic
+// "chunks only load near spawn" failure on big custom maps. Built-in world:
+// returns ZONES itself, byte-identical behavior.
+// ---------------------------------------------------------------------------
+let effectiveZonesCache: { content: WorldContent; zones: ZoneDef[] } | null = null;
+
+export function effectiveStreamingZones(): readonly ZoneDef[] {
+  const content = getActiveWorldContent();
+  if (content === BUILTIN_WORLD) return ZONES;
+  if (effectiveZonesCache?.content === content) return effectiveZonesCache.zones;
+  const halfX = content.worldHalfX ?? WORLD_MAX_X;
+  const czones = content.zones ?? [];
+  const cMinZ = czones.length > 0 ? Math.min(...czones.map((z) => z.zMin)) : Infinity;
+  const cMaxZ = czones.length > 0 ? Math.max(...czones.map((z) => z.zMax)) : -Infinity;
+  const southZMin = Math.min(...ZONES.map((z) => z.zMin));
+  const northZMax = Math.max(...ZONES.map((z) => z.zMax));
+  const zones = ZONES.map((zone) => {
+    const copy: ZoneDef = { ...zone };
+    // Strip-default zones (no explicit x range) own the x margins too.
+    if (zone.xMin === undefined) copy.xMin = Math.min(STRIP_MIN_X, -halfX);
+    if (zone.xMax === undefined) copy.xMax = Math.max(STRIP_MAX_X, halfX);
+    // The end bands own anything the custom world extends past them.
+    if (zone.zMin === southZMin && cMinZ < zone.zMin) copy.zMin = cMinZ;
+    if (zone.zMax === northZMax && cMaxZ > zone.zMax) copy.zMax = cMaxZ;
+    return copy;
+  });
+  effectiveZonesCache = { content, zones };
+  return zones;
 }
 
 /** Squared XZ distance from a point to a zone's exact rectangle. */

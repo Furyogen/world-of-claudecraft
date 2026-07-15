@@ -573,3 +573,39 @@ describe('point sounds', () => {
     expect(sanitizeMapDoc(rawDoc())?.pointSounds).toBeUndefined();
   });
 });
+
+describe('lighting sanitizer', () => {
+  it('round-trips a valid authored lighting block, clamped to slider ranges', () => {
+    const doc = sanitizeMapDoc(rawDoc({}));
+    expect(doc?.lighting).toBeUndefined();
+    const lit = sanitizeMapDoc({
+      ...rawDoc({}),
+      lighting: {
+        sunIntensity: 9, // clamps to 6
+        sunColor: 0xffaa33,
+        hemiIntensity: 0.8,
+        skyColor: 0x99bbff,
+        envScale: 1.4,
+        sunAzimuthDeg: 400, // clamps to 360
+        sunElevationDeg: 2, // clamps to 5
+      },
+    });
+    expect(lit?.lighting).toEqual({
+      sunIntensity: 6,
+      sunColor: 0xffaa33,
+      hemiIntensity: 0.8,
+      skyColor: 0x99bbff,
+      envScale: 1.4,
+      sunAzimuthDeg: 360,
+      sunElevationDeg: 5,
+    });
+  });
+
+  it('drops the block when any field is missing or non-finite', () => {
+    const bad = sanitizeMapDoc({
+      ...rawDoc({}),
+      lighting: { sunIntensity: 1, sunColor: Number.POSITIVE_INFINITY },
+    });
+    expect(bad?.lighting).toBeUndefined();
+  });
+});

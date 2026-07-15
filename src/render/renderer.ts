@@ -186,6 +186,7 @@ import { buildWorldAmbientSources, crowdAmbienceAt, footstepSurfaceAt } from './
 import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
 import { YumiTeamMarkers } from './yumi_team_markers';
 import {
+  effectiveStreamingZones,
   fogFarForPreparedZones,
   MAX_OUTDOOR_FOG_FAR,
   ZONE_STREAM_RECHECK_DISTANCE,
@@ -1008,6 +1009,8 @@ export class Renderer {
     envIntensity: number;
   } | null = null;
   private editorSunAnchor: THREE.Vector3 | null = null;
+  /** Active authored lighting (editor tab / map doc); null = shipped rig. */
+  private lightingOverride: EditorLightingProfile | null = null;
   private clouds: THREE.Sprite[] = [];
   private waterView: WaterView;
   private terrainView: TerrainView;
@@ -1393,6 +1396,11 @@ export class Renderer {
       skyColor: hemi.color.getHex(),
       envIntensity: this.envOutdoorIntensity,
     };
+    // A map with authored lighting (the editor's Lighting tab, saved into the
+    // document and projected onto WorldContent) applies it from boot: playtest
+    // and the editor render the same authored rig.
+    const mapLighting = getActiveWorldContent().lighting;
+    if (mapLighting) this.setEditorLighting(mapLighting);
 
     // visible sun disc + bloom halo
     // The sun and moon are billboard sprites: always camera-facing, so they read
@@ -1896,7 +1904,15 @@ export class Renderer {
   }
 
   zoneIdAt(x: number, z: number): string | null {
-    return x > DUNGEON_X_THRESHOLD ? null : zoneAt(x, z).id;
+    // The east instance band (dungeons/arenas) is not zone terrain — but a
+    // custom world sized past the threshold legitimately owns that x range,
+    // so the guard only applies where the active world does not reach.
+    if (x > DUNGEON_X_THRESHOLD) {
+      const content = getActiveWorldContent();
+      const halfX = content.worldHalfX;
+      if (halfX === undefined || Math.abs(x) > halfX) return null;
+    }
+    return zoneAt(x, z).id;
   }
 
   isZonePreparedAt(x: number, z: number): boolean {
@@ -1976,11 +1992,24 @@ export class Renderer {
       this.ensureEnvironmentBiome(zone.biome);
       const skyDone = performance.now();
       onProgress?.(5, 100);
-      await this.terrainView.ensureZone(
+      const terrainForPrepare = this.terrainView;
+      await terrainForPrepare.ensureZone(
         zone,
         (done, total) => onProgress?.(5 + Math.round((done / Math.max(1, total)) * 83), 100),
         { priority: { x, z }, pace: opts?.pace },
       );
+      // A full terrain rebuild (editor map load, water change, undo, ...) both
+      // CANCELS in-flight zone builds — which resolve WITHOUT loading the
+      // zone — and can swap this.terrainView under the await above. Marking
+      // the zone prepared anyway stranded it invisible for the whole session:
+      // the streaming queue skips "prepared" zones and the fog opens over the
+      // void, so the terrain never appeared until a page reload. Bail
+      // UNPREPARED instead; the next streaming pass re-runs this prepare
+      // against the live view.
+      if (this.terrainView !== terrainForPrepare || !this.terrainView.isZoneLoaded(zone.id)) {
+        onProgress?.(100, 100);
+        return;
+      }
       // The group itself was frozen while still empty in the constructor.
       // Freeze the children added by this zone as well; subsequent zones are
       // handled by their own prepare pass.
@@ -2125,8 +2154,10 @@ export class Renderer {
     this.visibleZoneCheckFar = horizon;
     const forwardX = this.cameraLookAt.x - cameraX;
     const forwardZ = this.cameraLookAt.z - cameraZ;
+    // effectiveStreamingZones: rects expanded to a larger custom world's
+    // margins, so the queue still fills when the camera flies out there.
     this.visibleZonePrepareQueue = zonesWithinStreamingHorizon(
-      ZONES,
+      effectiveStreamingZones(),
       cameraX,
       cameraZ,
       horizon,
@@ -2161,10 +2192,13 @@ export class Renderer {
       // just to compile programs.
       .then(() => {
         if (!this.preparedZones.has(zone.id)) {
-          // The entry point resolved to some other zone: this queue entry was
-          // consumed without making its zone resident (the starvation class
-          // the entry-point inset above exists to prevent).
+          // The entry point resolved to some other zone, or the prepare bailed
+          // because a terrain rebuild cancelled/swapped the view mid-build:
+          // this queue entry was consumed without making its zone resident.
+          // Invalidate the movement gate so the next frame recomputes the
+          // queue and retries even with a stationary camera.
           console.warn(`Visible-zone prepare resolved without residency: ${zone.id}`);
+          this.visibleZoneCheckX = Number.NaN;
         }
         return this.prewarmZoneAt(entryX, entryZ, { background: true });
       })
@@ -4863,6 +4897,13 @@ export class Renderer {
     this.moonDir.set(md[0], md[1], md[2]);
     this.sunUp = aboveHorizon(sd[1]) * amp;
     this.moonUp = aboveHorizon(md[1]) * Math.max(amp, 0.6);
+    // Authored lighting pins the sun where the maker aimed it: the world clock
+    // must not swing the key light (or its disc) away from the authored angle.
+    if (this.editorSunAnchor) {
+      this.sunDir.copy(this.editorSunAnchor).normalize();
+      this.sunUp = aboveHorizon(this.sunDir.y) * amp;
+      this.moonUp = 0;
+    }
     // stars follow the global cycle (not per-realm), fading in past dusk
     this.starAmt = nightStarAmount(gday);
     if (isDelvePos(px) && !inPractice) {
@@ -5112,7 +5153,7 @@ export class Renderer {
       const requestedFar = preset.far * (this.lowGfx ? 1 : g.farScale);
       this.lastRequestedFogFar = requestedFar;
       const targetFar = fogFarForPreparedZones(
-        ZONES,
+        effectiveStreamingZones(),
         this.preparedZones,
         this.camera.position.x,
         this.camera.position.z,
@@ -5134,6 +5175,17 @@ export class Renderer {
       // bounce, a no-op elsewhere by day since the presets match the ctor hues):
       // the sun and sky hues cool toward moonlight at night, and the sun + sky
       // intensity scales down with the grade (the IBL follows in updateEnvBiome).
+      // Authored lighting (editor tab / map doc): ease toward the authored
+      // values instead of the biome + day/night targets, which would silently
+      // pull any override back to the shipped rig within seconds.
+      const authored = this.lightingOverride;
+      if (authored) {
+        this.sun.color.lerp(this.dnColorScratch.setHex(authored.sunColor), k);
+        this.hemi.color.lerp(this.dnColorScratch.setHex(authored.skyColor), k);
+        this.sun.intensity += (authored.sunIntensity - this.sun.intensity) * k;
+        this.hemi.intensity += (authored.hemiIntensity - this.hemi.intensity) * k;
+        return;
+      }
       const light = Renderer.BIOME_LIGHT[biome];
       // the sun light warms toward gold, gently by day and strongly as it nears
       // the horizon (a golden hour), then cools toward moonlight deep at night.
@@ -6708,6 +6760,9 @@ export class Renderer {
   setEditorLighting(profile: EditorLightingProfile | null): void {
     const b = this.baseLighting;
     if (!b) return;
+    // Remembered for updateAmbience: the per-frame day/night easing otherwise
+    // pulls the rig back to the biome targets within seconds of any change.
+    this.lightingOverride = profile;
     this.sun.intensity = profile ? profile.sunIntensity : b.sunIntensity;
     this.sun.color.setHex(profile ? profile.sunColor : b.sunColor);
     this.hemi.intensity = profile ? profile.hemiIntensity : b.hemiIntensity;
