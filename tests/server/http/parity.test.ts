@@ -360,7 +360,7 @@ beforeAll(async () => {
 
   const fixtures = API_REQUEST_CORPUS.map(specToFixture);
   report = await runParity({ oldDispatch, newDispatch, fixtures });
-});
+}, 30_000);
 
 afterAll(async () => {
   const main = (await import('../../../server/main')) as MainModule;

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Pool } from 'pg';
+import { Pool, type PoolClient } from 'pg';
 import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { sanitizeRemovedZone1Content } from '../src/sim/removed_zone1_content';
 import type { CharacterState, MailSave, MarketSave } from '../src/sim/sim';
@@ -868,7 +868,8 @@ function cleanMetadataText(value: string | null | undefined, max: number): strin
   return text ? text.slice(0, max) : null;
 }
 
-export async function createAccount(
+export async function createAccountWithClient(
+  client: Pick<PoolClient, 'query'>,
   username: string,
   passwordHash: string,
   meta: RequestMetadata = {},
@@ -877,7 +878,7 @@ export async function createAccount(
   // (register / portal) signup so nothing changes for them.
   opts: { passwordSet?: boolean } = {},
 ): Promise<AccountRow> {
-  const res = await pool.query(
+  const res = await client.query(
     `INSERT INTO accounts (username, password_hash, created_ip, created_user_agent, password_set)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING id, username, password_hash`,
@@ -890,6 +891,15 @@ export async function createAccount(
     ],
   );
   return res.rows[0];
+}
+
+export async function createAccount(
+  username: string,
+  passwordHash: string,
+  meta: RequestMetadata = {},
+  opts: { passwordSet?: boolean } = {},
+): Promise<AccountRow> {
+  return createAccountWithClient(pool, username, passwordHash, meta, opts);
 }
 
 export async function findAccount(username: string): Promise<AccountRow | null> {

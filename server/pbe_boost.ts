@@ -33,15 +33,9 @@ import { meetsLevelRequirement } from '../src/sim/item_level_req';
 import { type CharacterState, Sim } from '../src/sim/sim';
 import { ALL_CLASSES, type EquipSlot, type ItemDef, type PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
-import { createCharacterCapped, saveCharacterState } from './db';
-import { logger } from './http/logger';
-import { isUniqueViolation } from './http_util';
+import { validatePbeEnvironment } from './pbe_environment';
 
 export const BOOST_LEVEL = 20;
-// Mirrors the per-realm character cap in server/characters.ts (10) and its
-// MAX_SKIN (7): one boosted character per class fits under the cap with a
-// slot to spare for a hand-made character.
-const CHARACTER_LIMIT = 10;
 const BOOST_MAX_SKIN = 7;
 // Same fixed world seed the normal creation path uses (initialCharacterState
 // in server/main.ts): the builder Sim is a throwaway, never ticked.
@@ -53,7 +47,7 @@ const NAME_ATTEMPTS = 8;
 export const BOOST_CLASSES: readonly PlayerClass[] = ALL_CLASSES;
 
 export function pbeBoostEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  return env.PBE_BOOST_ACCOUNTS === '1';
+  return validatePbeEnvironment(env).enabled;
 }
 
 // ---------------------------------------------------------------------------
@@ -132,7 +126,7 @@ const NAME_ENDS = [
   'zar',
 ];
 
-type RandFn = (maxExclusive: number) => number;
+export type RandFn = (maxExclusive: number) => number;
 
 export function randomBoostName(rand: RandFn = randomInt): string {
   for (;;) {
@@ -533,8 +527,8 @@ export function buildBoostedCharacterState(
   if (meta) meta.copper += BOOST_COPPER;
   const state = sim.serializeCharacter(pid);
   if (!state) throw new Error('failed to serialize boosted character');
-  // Fail loud (caught and logged per class upstream) rather than persist a
-  // half-equipped roster if a content change ever breaks an equip silently.
+  // Fail before the one persistence call rather than seed any roster when a
+  // content change breaks an equipment invariant.
   for (const slot of KIT_SLOTS) {
     const want = kit[slot];
     if (want && state.equipment[slot] !== want) {
@@ -554,69 +548,51 @@ export function buildBoostedCharacterState(
 }
 
 // ---------------------------------------------------------------------------
-// Orchestration: one character per class on the fresh account. Injected deps
-// keep the db seam testable; the defaults hit the real characters table.
+// Orchestration: build the complete roster before the first write. The shared
+// registration coordinator then owns the account-plus-roster transaction, so
+// callers can never observe a partially seeded PTR account.
 
-export type BoostCreateResult = { id: number } | 'name_taken' | null;
-
-export interface BoostDeps {
-  /** Insert the character row (null = account at the slot cap: stop). */
-  createCharacter(
-    accountId: number,
-    name: string,
-    cls: PlayerClass,
-    state: CharacterState,
-  ): Promise<BoostCreateResult>;
-  /** Persist the level column + state blob (charselect reads the column). */
-  saveState(characterId: number, level: number, state: CharacterState): Promise<void>;
-  rand?: RandFn;
+export interface BoostRosterRow {
+  readonly name: string;
+  readonly cls: PlayerClass;
+  readonly state: CharacterState;
 }
 
-const defaultDeps: BoostDeps = {
-  createCharacter: async (accountId, name, cls, state) => {
-    try {
-      const row = await createCharacterCapped(accountId, name, cls, CHARACTER_LIMIT, state);
-      return row ? { id: row.id } : null;
-    } catch (err) {
-      if (isUniqueViolation(err)) return 'name_taken';
-      throw err;
-    }
-  },
-  saveState: (characterId, level, state) => saveCharacterState(characterId, level, state),
-};
-
 /**
- * Create the boosted roster for a freshly registered account: one level-20,
- * BiS-geared character per class under a random name. Per-class failures are
- * logged and skipped so one bad apple never blocks the rest; returns how many
- * characters were created.
+ * Build the complete boosted roster before account creation begins: one
+ * level-20, BiS-geared character per class under a random unique name. The
+ * registration coordinator hands this immutable write set to one transaction
+ * that creates both the account and all nine characters.
  */
-export async function boostAccountCharacters(
-  accountId: number,
-  deps: BoostDeps = defaultDeps,
-): Promise<number> {
-  const rand = deps.rand ?? randomInt;
+export async function buildBoostRoster(
+  rand: RandFn = randomInt,
+): Promise<readonly BoostRosterRow[]> {
   const triedNames = new Set<string>();
-  let created = 0;
+  const roster: BoostRosterRow[] = [];
   for (const cls of BOOST_CLASSES) {
     // Yield between world builds so the 20 Hz world loop keeps breathing.
     await new Promise((resolve) => setImmediate(resolve));
-    try {
-      for (let attempt = 0; attempt < NAME_ATTEMPTS; attempt++) {
-        const name = randomBoostName(rand);
-        if (triedNames.has(name)) continue;
-        triedNames.add(name);
-        const state = buildBoostedCharacterState(cls, name, rand(BOOST_MAX_SKIN + 1));
-        const result = await deps.createCharacter(accountId, name, cls, state);
-        if (result === 'name_taken') continue;
-        if (result === null) return created;
-        await deps.saveState(result.id, BOOST_LEVEL, state);
-        created++;
-        break;
-      }
-    } catch (err) {
-      logger.error({ err, cls, accountId }, 'pbe boost character creation failed');
+    let name: string | null = null;
+    for (let attempt = 0; attempt < NAME_ATTEMPTS; attempt++) {
+      const candidate = randomBoostName(rand);
+      if (triedNames.has(candidate)) continue;
+      triedNames.add(candidate);
+      name = candidate;
+      break;
     }
+    if (name === null) throw new Error(`PBE roster name generation exhausted for ${cls}`);
+    roster.push({
+      name,
+      cls,
+      state: buildBoostedCharacterState(cls, name, rand(BOOST_MAX_SKIN + 1)),
+    });
   }
-  return created;
+
+  if (
+    roster.length !== BOOST_CLASSES.length ||
+    roster.some((row, index) => row.cls !== BOOST_CLASSES[index])
+  ) {
+    throw new Error('PBE roster must contain the exact ordered class set');
+  }
+  return roster;
 }

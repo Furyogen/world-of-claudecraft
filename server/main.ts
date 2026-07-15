@@ -189,6 +189,7 @@ import {
 import { createNativeAttestationChallenge } from './native_attestation';
 import { handleOAuth, seedOAuthClients } from './oauth';
 import { pruneExpiredOAuthGrants } from './oauth_db';
+import { createRegistrationAccount } from './pbe_registration';
 import { handlePerfReport } from './perf_report';
 import {
   captureReferral,
@@ -859,7 +860,12 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         return json(res, 409, { error: 'username already taken', code: 'account.username_taken' });
       let account: Awaited<ReturnType<typeof createAccount>>;
       try {
-        account = await createAccount(body.username, await hashPassword(body.password), meta);
+        account = await createRegistrationAccount(
+          body.username,
+          await hashPassword(body.password),
+          meta,
+          createAccount,
+        );
       } catch (err: any) {
         // a concurrent registration can win the insert after our findAccount
         // check; the username UNIQUE index is the real guard. Surface it as a
@@ -871,6 +877,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
           });
         throw err;
       }
+      // Keep the retained legacy dispatcher in lockstep with the RouteDef arm:
+      // PTR account + roster creation already committed atomically above.
       const token = newToken();
       await saveToken(token, account.id);
       // Store the mandatory signup email and send the welcome mail. Validated above,

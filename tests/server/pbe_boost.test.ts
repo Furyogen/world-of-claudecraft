@@ -16,13 +16,11 @@ import {
   BOOST_CLASSES,
   BOOST_COPPER,
   BOOST_LEVEL,
-  type BoostCreateResult,
-  type BoostDeps,
   type BoostRole,
   bestBoostBag,
   bisKitForRole,
-  boostAccountCharacters,
   buildBoostedCharacterState,
+  buildBoostRoster,
   CLASS_ROLES,
   classItemScore,
   NYTHRAXIS_ATTUNEMENT_QUESTS,
@@ -63,8 +61,17 @@ const ARMOR_SLOTS: EquipSlot[] = [
 ];
 
 describe('pbeBoostEnabled (env gate)', () => {
-  it('is on only for the literal "1"', () => {
-    expect(pbeBoostEnabled({ PBE_BOOST_ACCOUNTS: '1' } as NodeJS.ProcessEnv)).toBe(true);
+  it('requires the literal flag plus a complete PTR identity', () => {
+    expect(
+      pbeBoostEnabled({
+        PBE_BOOST_ACCOUNTS: '1',
+        DEPLOY_ENV: 'ptr',
+        REALM_NAME: 'PTR',
+        PTR_ENVIRONMENT_ID: '8f1d7e2c4b6a9031d5e7f9a2c4b60813',
+        DATABASE_URL: 'postgres://eastbrook:secret@postgres:5432/eastbrook_ptr',
+        PUBLIC_ORIGIN: 'https://ptr.worldofclaudecraft.example',
+      } as NodeJS.ProcessEnv),
+    ).toBe(true);
     expect(pbeBoostEnabled({ PBE_BOOST_ACCOUNTS: '0' } as NodeJS.ProcessEnv)).toBe(false);
     expect(pbeBoostEnabled({ PBE_BOOST_ACCOUNTS: '' } as NodeJS.ProcessEnv)).toBe(false);
     expect(pbeBoostEnabled({} as NodeJS.ProcessEnv)).toBe(false);
@@ -465,81 +472,15 @@ describe('Nythraxis attunement', () => {
   });
 });
 
-describe('boostAccountCharacters', () => {
-  function fakes() {
-    const created: { name: string; cls: PlayerClass; state: CharacterState }[] = [];
-    const saved: { id: number; level: number }[] = [];
-    let nextId = 100;
-    const deps: BoostDeps = {
-      createCharacter: async (
-        _accountId: number,
-        name: string,
-        cls: PlayerClass,
-        state: CharacterState,
-      ): Promise<BoostCreateResult> => {
-        created.push({ name, cls, state });
-        return { id: nextId++ };
-      },
-      saveState: async (id: number, level: number) => {
-        saved.push({ id, level });
-      },
-      rand: lcg(23),
-    };
-    return { created, saved, deps };
-  }
-
-  it('creates one level-20 character per class with distinct valid names', async () => {
-    const { created, saved, deps } = fakes();
-    const count = await boostAccountCharacters(42, deps);
-    expect(count).toBe(BOOST_CLASSES.length);
-    expect(created.map((c) => c.cls).sort()).toEqual([...BOOST_CLASSES].sort());
-    const names = new Set(created.map((c) => c.name));
+describe('buildBoostRoster', () => {
+  it('returns one complete roster with valid level-20 states', async () => {
+    const roster = await buildBoostRoster(lcg(23));
+    expect(roster.map((row) => row.cls)).toEqual(BOOST_CLASSES);
+    const names = new Set(roster.map((row) => row.name));
     expect(names.size).toBe(BOOST_CLASSES.length);
-    for (const c of created) {
-      expect(normalizeCharName(c.name)).toBe(c.name);
-      expect(c.state.level).toBe(BOOST_LEVEL);
+    for (const row of roster) {
+      expect(normalizeCharName(row.name)).toBe(row.name);
+      expect(row.state.level).toBe(BOOST_LEVEL);
     }
-    expect(saved).toHaveLength(BOOST_CLASSES.length);
-    for (const s of saved) expect(s.level).toBe(BOOST_LEVEL);
-  });
-
-  it('retries with a different name when the first is taken', async () => {
-    const { created, deps } = fakes();
-    const tried: string[] = [];
-    const inner = deps.createCharacter;
-    let rejectedOnce = false;
-    deps.createCharacter = async (accountId, name, cls, state) => {
-      tried.push(name);
-      if (!rejectedOnce) {
-        rejectedOnce = true;
-        return 'name_taken';
-      }
-      return inner(accountId, name, cls, state);
-    };
-    const count = await boostAccountCharacters(42, deps);
-    expect(count).toBe(BOOST_CLASSES.length);
-    expect(tried.length).toBe(BOOST_CLASSES.length + 1);
-    expect(tried[0]).not.toBe(tried[1]);
-    expect(created).toHaveLength(BOOST_CLASSES.length);
-  });
-
-  it('a failure on one class never blocks the rest', async () => {
-    const { created, deps } = fakes();
-    const inner = deps.createCharacter;
-    deps.createCharacter = async (accountId, name, cls, state) => {
-      if (cls === 'priest') throw new Error('boom');
-      return inner(accountId, name, cls, state);
-    };
-    const count = await boostAccountCharacters(42, deps);
-    expect(count).toBe(BOOST_CLASSES.length - 1);
-    expect(created.some((c) => c.cls === 'priest')).toBe(false);
-    expect(created).toHaveLength(BOOST_CLASSES.length - 1);
-  });
-
-  it('stops burning names after the retry budget (account at cap)', async () => {
-    const { deps } = fakes();
-    deps.createCharacter = async () => 'name_taken';
-    const count = await boostAccountCharacters(42, deps);
-    expect(count).toBe(0);
   });
 });

@@ -65,6 +65,8 @@
 //       PUBLIC_ORIGIN that is not a bare origin, and a non-empty REALMS with no
 //       usable Name=origin entry.
 
+import { validatePbeEnvironment } from '../pbe_environment';
+
 // The two accepted API dispatch modes, single-sourced so the boot wiring
 // (server/main.ts) and the dispatcher (server/http/dispatch.ts) share ONE type
 // rather than re-typing the literal union at each call site.
@@ -253,6 +255,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
   validateBooleanFlag(env, ORIGIN_CHECK_ENFORCE_ENV);
   validatePublicOrigin(env);
   validateRealms(env);
+  validatePbeEnvironment(env);
 
   return Object.freeze({
     dispatch: parseDispatch(env.API_DISPATCH),
