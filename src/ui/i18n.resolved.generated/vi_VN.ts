@@ -3709,6 +3709,7 @@ export const vi_VN: EnTranslations = {
     "title": "Tải Trình Khởi Chạy Trên Máy Tính",
     "desc": "Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.",
     "macCta": "Tải xuống cho macOS",
+    "windowsCta": "Download for Windows",
     "linuxCta": "Tải xuống cho Linux",
     "linuxHint": "AppImage: làm cho nó có thể thực thi được rồi chạy nó. Không cần cài đặt.",
     "windowsPending": "Bản dựng Windows đang chờ."

@@ -3709,6 +3709,7 @@ export const nl_NL: EnTranslations = {
     "title": "Desktop-launcher downloaden",
     "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
     "macCta": "Download voor macOS",
+    "windowsCta": "Download for Windows",
     "linuxCta": "Downloaden voor Linux",
     "linuxHint": "AppImage: maak het uitvoerbaar en voer het vervolgens uit. Geen installatie nodig.",
     "windowsPending": "Windows-build volgt later."

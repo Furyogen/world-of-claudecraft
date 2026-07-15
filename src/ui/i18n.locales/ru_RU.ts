@@ -909,6 +909,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Скачать для Linux',
   'download.linuxHint':
     'Формат AppImage: сделайте файл исполняемым и запустите его, установка не требуется.',
+  'download.windowsCta': 'Скачать для Windows',
   'download.windowsPending': 'Сборка для Windows готовится.',
   'download.desc':
     'Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.',

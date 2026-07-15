@@ -3709,6 +3709,7 @@ export const en: EnTranslations = {
     "title": "Download Desktop Launcher",
     "desc": "Get the standalone launcher for optimized performance and full-screen play.",
     "macCta": "Download for macOS",
+    "windowsCta": "Download for Windows",
     "linuxCta": "Download for Linux",
     "linuxHint": "AppImage: make it executable, then run it. No install needed.",
     "windowsPending": "Windows build pending."

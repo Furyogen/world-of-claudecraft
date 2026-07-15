@@ -3709,6 +3709,7 @@ export const id_ID: EnTranslations = {
     "title": "Unduh Peluncur Desktop",
     "desc": "Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.",
     "macCta": "Unduh untuk macOS",
+    "windowsCta": "Download for Windows",
     "linuxCta": "Unduh untuk Linux",
     "linuxHint": "AppImage: membuatnya dapat dieksekusi, lalu jalankan. Tidak perlu instalasi.",
     "windowsPending": "Build Windows tertunda."

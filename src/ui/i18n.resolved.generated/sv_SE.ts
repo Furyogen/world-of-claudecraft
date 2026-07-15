@@ -3709,6 +3709,7 @@ export const sv_SE: EnTranslations = {
     "title": "Ladda ner skrivbordsstartaren",
     "desc": "Hämta den fristående startaren för optimerad prestanda och spel i helskärm.",
     "macCta": "Ladda ner för macOS",
+    "windowsCta": "Download for Windows",
     "linuxCta": "Ladda ner för Linux",
     "linuxHint": "AppImage: gör den körbar och kör den sedan. Ingen installation behövs.",
     "windowsPending": "Windows-bygge väntar."
