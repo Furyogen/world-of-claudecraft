@@ -42,6 +42,17 @@ const PROP_URLS: Record<string, string> = {
   abyss_magma_crystal_cluster: 'models/props/abyss_magma_crystal_cluster.glb',
 };
 
+/** Every decor key the Infernal Abyss dressing understands: the GLB props
+ *  plus the procedural lava footprints. The world editor's dungeon mode
+ *  offers exactly this list, so an authored key can never miss its visual. */
+export const INFERNAL_DECOR_KEYS: readonly string[] = [
+  ...Object.keys(PROP_URLS),
+  'lava_pool',
+  'lava_fissure',
+  'lava_chasm',
+  'lava_moat',
+].sort();
+
 const sources = new Map<string, THREE.Object3D>();
 let assetsPromise: Promise<void> | null = null;
 let lavaMat: THREE.ShaderMaterial | null = null;

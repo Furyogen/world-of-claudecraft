@@ -21,6 +21,7 @@ export interface TopbarDeps {
   onImportModel(): void;
   onSettings(): void;
   onPlaytest(): void;
+  onDungeonMode(): void;
   onViewMode(mode: '3d' | '2d'): void;
   onUndo(): void;
   onRedo(): void;
@@ -245,6 +246,16 @@ export class Topbar {
       viewWrap.appendChild(b);
     }
     this.root.appendChild(viewWrap);
+
+    // Dungeon-layout mode: edits an authored interior instead of the map.
+    this.root.appendChild(
+      button(
+        t('editor.topbar.dungeon'),
+        deps.onDungeonMode,
+        'ed-dungeon',
+        t('editor.topbar.dungeonTitle'),
+      ),
+    );
 
     const play = button(
       t('editor.topbar.playtest'),

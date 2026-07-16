@@ -293,6 +293,79 @@ function musicEditorSavePlugin() {
   };
 }
 
+// Dev-only save endpoint for the editor's dungeon mode (/editor, Dungeon
+// button): receives a formatted DungeonLayout literal and splices it over the
+// matching exported const in src/sim/dungeon_layout.ts, so the sim, renderer,
+// colliders, minimap, and tests all pick the edit up via HMR. Same lifecycle
+// as musicEditorSavePlugin: configureServer never runs in a build.
+function dungeonEditorSavePlugin() {
+  const ALLOWED_CONSTS = new Set(['INFERNAL_ABYSS_LAYOUT']);
+  // The writer emits only plain data: identifiers, numbers, single-quoted
+  // slugs, and Math.PI fractions. Anything else (comments, semicolons,
+  // backticks, imports) is rejected so the endpoint cannot inject code.
+  const LITERAL_RE = /^\{[\w\s{}[\](),:.'+*/-]*\}$/;
+  return {
+    name: 'woc-dungeon-editor-save',
+    configureServer(server: {
+      middlewares: {
+        use: (
+          route: string,
+          fn: (
+            req: { method?: string; on: (ev: string, cb: (chunk?: unknown) => void) => void },
+            res: { statusCode: number; end: (body?: string) => void },
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use('/__dungeon_editor/save', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end('POST only');
+          return;
+        }
+        let body = '';
+        req.on('data', (chunk) => {
+          body += String(chunk);
+          if (body.length > 4_000_000) {
+            res.statusCode = 413;
+            res.end('too large');
+          }
+        });
+        req.on('end', () => {
+          void (async () => {
+            try {
+              const payload = JSON.parse(body) as { constName?: unknown; literal?: unknown };
+              const constName = payload.constName;
+              const literal = payload.literal;
+              if (
+                typeof constName !== 'string' ||
+                !ALLOWED_CONSTS.has(constName) ||
+                typeof literal !== 'string' ||
+                !LITERAL_RE.test(literal)
+              ) {
+                res.statusCode = 400;
+                res.end('invalid payload');
+                return;
+              }
+              const { replaceLayoutConst } = await import(
+                './src/editor/dungeon/dungeon_layout_writer_core'
+              );
+              const file = path.resolve(root, 'src/sim/dungeon_layout.ts');
+              const source = readFileSync(file, 'utf8');
+              writeFileSync(file, replaceLayoutConst(source, constName, literal));
+              res.statusCode = 200;
+              res.end('ok');
+            } catch (err) {
+              res.statusCode = 400;
+              res.end(String(err));
+            }
+          })();
+        });
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: '/',
   // The Svelte plugin only transforms the standalone admin entry. The testing
@@ -303,6 +376,7 @@ export default defineConfig({
     staticPageAliasPlugin(),
     i18nModulepreloadPlugin(),
     musicEditorSavePlugin(),
+    dungeonEditorSavePlugin(),
   ],
   resolve: { alias: { '#bot-detector': botDetectorImpl } },
   define: {

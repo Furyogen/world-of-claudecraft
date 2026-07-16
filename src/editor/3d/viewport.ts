@@ -1802,6 +1802,18 @@ export class Editor3DViewport {
     this.hiddenColliders = false;
   }
 
+  /** Narrow surface for the dungeon-layout mode (src/editor/dungeon/): the
+   *  live renderer + camera + canvas while the engine runs, else null. The
+   *  mode owns its own picking, overlays, and pointer capture on top of it. */
+  dungeonStagePort(): {
+    renderer: Renderer;
+    cam: EditorCamera;
+    canvas: HTMLCanvasElement;
+  } | null {
+    if (!this.renderer || this.disposed) return null;
+    return { renderer: this.renderer, cam: this.cam, canvas: this.canvas };
+  }
+
   dispose(): void {
     this.disposed = true;
     this.generation++;

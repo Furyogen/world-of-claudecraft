@@ -3404,6 +3404,8 @@ export const ko_KR: EnTranslations = {
     "playtestBackTitle": "Return to the map editor (your map was saved when the playtest launched)",
     "topbar": {
       "label": "편집기 동작",
+      "dungeon": "Dungeon",
+      "dungeonTitle": "Edit an authored dungeon interior layout",
       "mapNameLabel": "맵 이름",
       "dirty": "저장하지 않은 변경 사항",
       "dirtyDot": "이 맵에 저장하지 않은 변경 사항이 있습니다",
@@ -4146,6 +4148,52 @@ export const ko_KR: EnTranslations = {
       "stage": "맵 뷰포트",
       "toasts": "편집기 알림",
       "dialog": "편집기 대화 상자"
+    },
+    "dungeon": {
+      "title": "Dungeon layout",
+      "exit": "Back to map",
+      "hint": "Click selects (again cycles overlaps). Drag moves. Arrows nudge, Delete removes, Ctrl+Z undoes. Shift-drag pans, middle-drag orbits.",
+      "none": "Nothing selected. Click an outline on the floor plan.",
+      "addRoom": "Add room",
+      "addDoor": "Add door",
+      "addBarrier": "Add barrier",
+      "addOpening": "Add opening",
+      "addDecor": "Add decor",
+      "delete": "Delete",
+      "validate": "Validate",
+      "save": "Save to source",
+      "saved": "Layout written to src/sim/dungeon_layout.ts (dev server)",
+      "saveFailed": "Dev save endpoint unavailable; downloaded the layout instead",
+      "unsaved": "Unsaved layout changes",
+      "noIssues": "No issues found",
+      "kind": {
+        "room": "Room",
+        "door": "Door",
+        "barrier": "Barrier",
+        "opening": "Visual opening",
+        "decor": "Decor",
+        "dais": "Boss dais"
+      },
+      "field": {
+        "id": "Id",
+        "key": "Model",
+        "style": "Style",
+        "x0": "West edge (x0)",
+        "x1": "East edge (x1)",
+        "z0": "Near edge (z0)",
+        "z1": "Far edge (z1)",
+        "x": "X",
+        "z": "Z",
+        "y": "Height offset",
+        "yaw": "Yaw (radians)",
+        "hw": "Half width",
+        "hd": "Half depth",
+        "r": "Collision radius",
+        "scale": "Scale",
+        "scaleX": "Scale X",
+        "scaleZ": "Scale Z",
+        "innerScale": "Inner scale"
+      }
     }
   },
   "skinEvent": {

@@ -623,6 +623,18 @@ export class DungeonInteriors {
   private waterMat: THREE.ShaderMaterial | null = null;
   private arenaHideables: ArenaHideable[] = [];
   private infernalPortcullises: Array<InfernalPortcullis & { worldX: number; worldZ: number }> = [];
+  // Keyed build records so an interior can be torn down and rebuilt live (the
+  // world editor's dungeon mode). Only builds that pass opts.key are tracked.
+  private builtByKey = new Map<
+    string,
+    {
+      group: THREE.Group;
+      flames: THREE.Mesh[];
+      fireLights: THREE.PointLight[];
+      portcullises: Array<InfernalPortcullis & { worldX: number; worldZ: number }>;
+      arenaHideables: ArenaHideable[];
+    }
+  >();
 
   constructor(
     private scene: THREE.Scene,
@@ -692,10 +704,18 @@ export class DungeonInteriors {
         tier?: 'shallow' | 'deep';
       }>;
       moduleId?: DelveModuleId;
+      /** Track this build so disposeInterior(key) can tear it down live. */
+      key?: string;
     },
   ): Promise<void> {
     await ensureDungeonAssets();
     if (interior === 'infernal_abyss') await ensureInfernalAbyssAssets();
+    // Length snapshots AFTER the awaits: everything below is synchronous, so
+    // the slices taken at the end are exactly this build's additions.
+    const flamesStart = this.flames.length;
+    const lightsStart = this.fireLights.length;
+    const portcullisesStart = this.infernalPortcullises.length;
+    const hideablesStart = this.arenaHideables.length;
     // Delve modules pass an explicit per-module layout so render geometry matches
     // the SAME layout sim/colliders.ts derives collision from (what you see is
     // what you collide with). Without it, every module fell back to CRYPT_LAYOUT
@@ -768,6 +788,56 @@ export class DungeonInteriors {
     }
     group.position.set(ox, 0, oz);
     this.scene.add(group);
+    if (opts?.key) {
+      this.builtByKey.set(opts.key, {
+        group,
+        flames: this.flames.slice(flamesStart),
+        fireLights: this.fireLights.slice(lightsStart),
+        portcullises: this.infernalPortcullises.slice(portcullisesStart),
+        arenaHideables: this.arenaHideables.slice(hideablesStart),
+      });
+    }
+  }
+
+  /** Tear down a keyed interior build (world-editor live rebuild). Shared kit
+   *  geometries/materials (userData.sharedRendererResource) are left alone;
+   *  everything bespoke to the build is disposed. */
+  disposeInterior(key: string): void {
+    const record = this.builtByKey.get(key);
+    if (!record) return;
+    this.builtByKey.delete(key);
+    this.scene.remove(record.group);
+    const flames = new Set<THREE.Mesh>(record.flames);
+    if (flames.size) {
+      for (let i = this.flames.length - 1; i >= 0; i--) {
+        if (flames.has(this.flames[i])) this.flames.splice(i, 1);
+      }
+    }
+    const lights = new Set<THREE.PointLight>(record.fireLights);
+    if (lights.size) {
+      for (let i = this.fireLights.length - 1; i >= 0; i--) {
+        if (lights.has(this.fireLights[i])) this.fireLights.splice(i, 1);
+      }
+    }
+    const portcullises = new Set(record.portcullises);
+    if (portcullises.size) {
+      this.infernalPortcullises = this.infernalPortcullises.filter((p) => !portcullises.has(p));
+    }
+    const hideables = new Set(record.arenaHideables);
+    if (hideables.size) {
+      this.arenaHideables = this.arenaHideables.filter((h) => !hideables.has(h));
+    }
+    // Geometries and materials are deliberately NOT disposed: the kit modules,
+    // the infernal prop sources (clone(true) shares buffers with the loader
+    // cache), the lava shader, and the glow decals are all module or instance
+    // level caches reused by the next build. Only per-build GPU state goes:
+    // instance matrices and light shadow maps.
+    record.group.traverse((obj) => {
+      const instanced = obj as THREE.InstancedMesh;
+      if (instanced.isInstancedMesh) instanced.dispose();
+      const light = obj as unknown as THREE.PointLight;
+      if (light.isLight) light.dispose();
+    });
   }
 
   update(

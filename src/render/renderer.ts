@@ -33,6 +33,7 @@ import {
   ZONES,
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
+import type { DungeonLayout } from '../sim/dungeon_layout';
 import { DEFAULT_ASSET_VIEW_DISTANCE } from '../sim/map_doc';
 import type { BiomeId, MapWeather } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
@@ -3940,6 +3941,11 @@ export class Renderer {
   // ---------------------------------------------------------------------
 
   private builtInteriors = new Set<string>();
+  // World-editor dungeon mode: a live layout override per interior key. While
+  // set, every (re)build of that interior renders the override instead of the
+  // module constant; setting it tears down the built copies so the lazy pass
+  // rebuilds them from the override on the next frame.
+  private dungeonLayoutOverrides = new Map<string, DungeonLayout>();
   // Protect Yumi maze interiors, one per match slot, built lazily like the
   // arena copies; their update() anchors the team beacons each frame.
   private yumiMazeViews = new Map<number, YumiMazeView>();
@@ -3959,11 +3965,29 @@ export class Renderer {
     | 'underwater'
     | 'practice' = 'outdoor';
 
-  private buildInterior(interior: string, ox: number, oz: number): void {
+  private buildInterior(interior: string, ox: number, oz: number, key?: string): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
-    void this.dungeons.buildInterior(interior, ox, oz).catch((err) => {
+    const layout = this.dungeonLayoutOverrides.get(interior);
+    void this.dungeons.buildInterior(interior, ox, oz, { layout, key }).catch((err) => {
       console.error('Failed to build dungeon interior:', err);
     });
+  }
+
+  /** World-editor dungeon mode: override (or clear) the layout an interior
+   *  renders with, tearing down every built copy so the lazy per-frame pass
+   *  rebuilds it from the new layout. No-op outside the editor. */
+  setDungeonLayoutOverride(interior: string, layout: DungeonLayout | null): void {
+    if (layout) this.dungeonLayoutOverrides.set(interior, layout);
+    else this.dungeonLayoutOverrides.delete(interior);
+    if (!this.dungeons) return;
+    for (const key of [...this.builtInteriors]) {
+      const id = key.slice(0, key.lastIndexOf(':'));
+      const keyInterior =
+        id === 'arena' ? 'arena' : DUNGEON_LIST.find((d) => d.id === id)?.interior;
+      if (keyInterior !== interior) continue;
+      this.dungeons.disposeInterior(key);
+      this.builtInteriors.delete(key);
+    }
   }
 
   // Outdoor fog presets per biome (high tier eases between them as the
@@ -4125,7 +4149,7 @@ export class Renderer {
         const o = arenaOrigin(i);
         if (Math.abs(px - o.x) < 200 && Math.abs(pz - o.z) < 120) {
           this.builtInteriors.add(key);
-          this.buildInterior('arena', o.x, o.z);
+          this.buildInterior('arena', o.x, o.z, key);
         }
       }
     } else if (inside) {
@@ -4138,7 +4162,7 @@ export class Renderer {
           const o = instanceOrigin(dungeon.index, i);
           if (Math.abs(px - o.x) < 200 && Math.abs(this.sim.player.pos.z - o.z) < 250) {
             this.builtInteriors.add(key);
-            this.buildInterior(dungeon.interior, o.x, o.z);
+            this.buildInterior(dungeon.interior, o.x, o.z, key);
           }
         }
       }

@@ -97,6 +97,8 @@ import {
   newFlatCustomMap,
 } from './custom_map';
 import { button, checkbox, el, slider } from './dom';
+import { AUTHORED_DUNGEONS } from './dungeon/authored_dungeons';
+import { DungeonEditorMode } from './dungeon/dungeon_mode';
 import { clampToCap } from './edit_caps_core';
 import { downloadMap, pickMapOrBundle } from './file_io';
 import {
@@ -571,6 +573,7 @@ export class EditorApp {
       onImportModel: () => this.importModel(),
       onSettings: () => this.openGameSettings(),
       onPlaytest: () => this.playtest(),
+      onDungeonMode: () => this.enterDungeonMode(),
       onViewMode: (mode) => this.setViewMode(mode),
       onUndo: () => this.doUndo(),
       onRedo: () => this.doRedo(),
@@ -901,6 +904,37 @@ export class EditorApp {
       this.viewMode = '2d';
       this.applyViewMode();
     }
+  }
+
+  // ---- dungeon-layout mode ---------------------------------------------------
+  // A parallel stage over the same 3D viewport: it edits an authored
+  // DungeonLayout (src/editor/dungeon/) instead of the map document. The map
+  // document is untouched while it runs; entering just needs the 3D engine up.
+  private dungeonMode: DungeonEditorMode | null = null;
+
+  private enterDungeonMode(): void {
+    if (this.dungeonMode?.isActive()) return;
+    if (this.viewMode !== '3d') this.setViewMode('3d');
+    const viewport = this.viewport3d;
+    if (!viewport) return;
+    this.setTool('select');
+    this.dungeonMode ??= new DungeonEditorMode({
+      viewport,
+      panelHost: document.body,
+      onExit: () => undefined,
+    });
+    // The engine may still be booting (assets await); retry on the next frames
+    // until the stage port exists, bounded so a dead boot cannot loop forever.
+    let attempts = 0;
+    const tryEnter = (): void => {
+      if (this.dungeonMode?.isActive()) return;
+      if (viewport.dungeonStagePort()) {
+        this.dungeonMode?.enter(AUTHORED_DUNGEONS[0]);
+        return;
+      }
+      if (++attempts < 600) requestAnimationFrame(tryEnter);
+    };
+    tryEnter();
   }
 
   private setViewMode(mode: '3d' | '2d'): void {
