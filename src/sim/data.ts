@@ -168,6 +168,17 @@ import {
 } from './content/recipes';
 import { RIFT_ITEMS } from './content/rift/items';
 import { RIFT_MOBS } from './content/rift/mobs';
+// Scorching Wastes: a CUSTOM-MAP zone (never part of the built-in world).
+// Only its id registries merge here — mobs/npcs/quests/items resolve globally
+// so the custom map's camps and quest chain work — while camps/objects/zone
+// ride the map document itself (the base world must not place any of it).
+import {
+  SCORCHING_ITEMS,
+  SCORCHING_MOBS,
+  SCORCHING_NPCS,
+  SCORCHING_QUEST_ORDER,
+  SCORCHING_QUESTS,
+} from './content/scorching_wastes';
 import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,
@@ -324,6 +335,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   EVERGARDEN_ITEMS,
   GALECREST_ITEMS,
   FARSHORE_ITEMS,
+  SCORCHING_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';
@@ -351,6 +363,9 @@ export const MOBS: Record<string, MobTemplate> = {
   ...EVERGARDEN_MOBS,
   ...GALECREST_MOBS,
   ...FARSHORE_MOBS,
+  // Scorching Wastes mobs: camp-spawned only by the custom desert map's own
+  // content.camps (the base world has no camps referencing them).
+  ...SCORCHING_MOBS,
   // The Vale Cup boarball: an inert, non-hostile ball entity (never camp-spawned;
   // the match driver in social/vale_cup.ts spawns and despawns it).
   [VALE_CUP_BALL_TEMPLATE_ID]: VALE_CUP_BALL_MOB,
@@ -368,9 +383,10 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE2_NPCS,
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
-  // Scorching Wastes expedition roster (dynamic: true ? the custom desert map
+  // Scorching Wastes expedition roster (dynamic: true — the custom desert map
   // spawns live copies from its own content.npcs; the base world never places
   // them). Registered here so quest giver/turn-in ids resolve globally.
+  ...SCORCHING_NPCS,
   [FURY_NPC.id]: FURY_NPC,
   brother_halven: BROTHER_HALVEN,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
@@ -411,6 +427,7 @@ export const QUESTS: Record<string, QuestDef> = {
   ...EVERGARDEN_QUESTS,
   ...GALECREST_QUESTS,
   ...FARSHORE_QUESTS,
+  ...SCORCHING_QUESTS,
 };
 
 export const QUEST_ORDER: string[] = [
@@ -429,6 +446,7 @@ export const QUEST_ORDER: string[] = [
   ...EVERGARDEN_QUEST_ORDER,
   ...GALECREST_QUEST_ORDER,
   ...FARSHORE_QUEST_ORDER,
+  ...SCORCHING_QUEST_ORDER,
 ];
 
 // The Book of Deeds catalog (content/deeds.ts) is deliberately NOT re-exported

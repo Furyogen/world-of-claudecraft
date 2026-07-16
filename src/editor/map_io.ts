@@ -48,6 +48,12 @@ export class MapIO {
     this.store = new MapStore(storage);
   }
 
+  /** Hydrate the map store (IndexedDB + one-time localStorage migration).
+   *  Await once at boot before the first list/load; see MapStore.ready(). */
+  ready(): Promise<void> {
+    return this.store.ready();
+  }
+
   // ---- local <-> server linkage --------------------------------------------
 
   private readStoredLinks(): Record<string, ServerLink> {
@@ -166,6 +172,9 @@ export class MapIO {
   }
 
   draftSave(map: CustomMap): boolean {
+    if (this.store.idbActive) {
+      return this.store.draftPut(map.meta.id, serializeMapCompact(map), map.meta.updatedAt);
+    }
     if (!this.storage) return false;
     this.migrateLegacyDraft();
     try {
@@ -181,6 +190,10 @@ export class MapIO {
 
   /** The most recently autosaved draft across every map, or null. */
   draftLoad(): CustomMap | null {
+    if (this.store.idbActive) {
+      const raw = this.store.draftNewest();
+      return raw ? parseMap(raw) : null;
+    }
     if (!this.storage) return null;
     this.migrateLegacyDraft();
     try {
@@ -201,6 +214,10 @@ export class MapIO {
 
   /** A specific map's autosave draft, used when returning from playtest. */
   draftLoadById(mapId: string): CustomMap | null {
+    if (this.store.idbActive) {
+      const raw = this.store.draftGet(mapId);
+      return raw ? parseMap(raw) : null;
+    }
     if (!this.storage) return null;
     this.migrateLegacyDraft();
     try {
@@ -218,6 +235,10 @@ export class MapIO {
 
   /** Clear ONLY this map's draft slot; other maps keep their autosaves. */
   draftClear(mapId: string): void {
+    if (this.store.idbActive) {
+      this.store.draftDelete(mapId);
+      return;
+    }
     if (!this.storage) return;
     this.migrateLegacyDraft();
     try {

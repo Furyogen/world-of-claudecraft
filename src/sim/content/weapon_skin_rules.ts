@@ -114,6 +114,11 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   // Polearms (no skins target these)
   tidereaver_gaff: 'polearm',
   fen_reaver_glaive: 'polearm',
+  // Scorching Wastes (custom-map endgame zone loot)
+  duneforged_warblade: 'sword',
+  glasscut_dirk: 'dagger',
+  sunbleached_staff: 'staff',
+  emberglass_scepter: 'wand',
 };
 
 /**
