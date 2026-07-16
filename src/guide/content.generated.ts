@@ -3381,6 +3381,20 @@ export const GUIDE_DEEDS: GuideDeed[] = [
     "renown": 5,
     "feat": false,
     "crest": "/ui/deeds/chr_marsh_first_cast.webp"
+  },
+  {
+    "id": "dgn_infernal_abyss",
+    "name": "Lord of Nothing",
+    "category": "dungeon",
+    "renown": 10,
+    "feat": false
+  },
+  {
+    "id": "dgn_infernal_abyss_heroic",
+    "name": "Heroic: The Molten Abyss",
+    "category": "dungeon",
+    "renown": 10,
+    "feat": false
   }
 ];
 
