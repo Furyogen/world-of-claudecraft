@@ -3510,7 +3510,7 @@ export class Renderer {
       const built = buildDoorBody(entering, e.dungeonId, this.lowGfx);
       body = built.body;
       portal = built.portal;
-      height = 4.6;
+      height = built.height ?? 4.6;
       objectMesh = body!;
     } else if (e.kind === 'object' && e.templateId === 'mailbox') {
       // Ravenpost pillar: bespoke procedural prop (no sparkle; the unread-mail
@@ -3953,6 +3953,7 @@ export class Renderer {
     | 'dungeon'
     | 'temple'
     | 'nythraxis'
+    | 'infernalAbyss'
     | 'delve'
     | 'yumiMaze'
     | 'underwater'
@@ -4150,6 +4151,7 @@ export class Renderer {
       inside && !inDelve && !inYumiMaze && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
+    const inInfernalAbyss = interior === 'infernal_abyss';
     const desired = inPractice
       ? 'practice'
       : inDelve
@@ -4160,11 +4162,13 @@ export class Renderer {
             ? 'temple'
             : inNythraxis
               ? 'nythraxis'
-              : inside
-                ? 'dungeon'
-                : camY < waterLevelAt(px, pz) - 0.05
-                  ? 'underwater'
-                  : 'outdoor';
+              : inInfernalAbyss
+                ? 'infernalAbyss'
+                : inside
+                  ? 'dungeon'
+                  : camY < waterLevelAt(px, pz) - 0.05
+                    ? 'underwater'
+                    : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -4182,6 +4186,10 @@ export class Renderer {
         fog.color.setHex(0x020106);
         fog.near = 20;
         fog.far = 80;
+      } else if (desired === 'infernalAbyss') {
+        fog.color.setHex(0x170402);
+        fog.near = 20;
+        fog.far = 115;
       } else if (desired === 'delve') {
         // the collapsed reliquary breathes a warm ember murk, dried-blood
         // charcoal, tighter than the overworld crypt's cold near-black, so the
@@ -4222,6 +4230,7 @@ export class Renderer {
           desired === 'dungeon' ||
           desired === 'temple' ||
           desired === 'nythraxis' ||
+          desired === 'infernalAbyss' ||
           desired === 'delve';
         this.sun.intensity = mazeNight
           ? YUMI_MAZE_SUN_INTENSITY
@@ -5170,6 +5179,9 @@ export class Renderer {
       this.cameraLookAt.x,
       this.cameraLookAt.y,
       this.cameraLookAt.z,
+      selfPos.x,
+      selfPos.z,
+      dt,
     );
     worldStart = markWorldPhase('props', worldStart);
     this.foliage.update(
