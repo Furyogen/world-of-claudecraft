@@ -14,13 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "f9f2bda8",
-=======
-      "nextId": 409,
-      "state": "20380ff5",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "0d8c6007",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -57,11 +52,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -96,11 +87,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -145,15 +132,9 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 417,
-      "state": "b064720f",
-      "events": "3cb0b41b",
-=======
-      "nextId": 419,
-      "state": "3240d560",
-      "events": "5f48187d",
->>>>>>> origin/release/v0.27.0
+      "nextId": 420,
+      "state": "906a2d9c",
+      "events": "090368ca",
       "rng": {
         "draws": 1,
         "digest": "8d59a9d6"
@@ -189,11 +170,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -229,11 +206,7 @@
           "fallStartY": 2.077747,
           "fiveSecondRule": 99,
           "hp": 93,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -277,15 +250,9 @@
     {
       "tick": 2,
       "time": 0.1,
-<<<<<<< HEAD
-      "nextId": 417,
-      "state": "88b31312",
-      "events": "2327257a",
-=======
-      "nextId": 419,
-      "state": "7df77ea3",
-      "events": "e33b1222",
->>>>>>> origin/release/v0.27.0
+      "nextId": 420,
+      "state": "c8887b69",
+      "events": "5f649f0a",
       "rng": {
         "draws": 1,
         "digest": "8d59a9d6"
@@ -331,11 +298,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -372,11 +335,7 @@
           "fallStartY": 2.353205,
           "fiveSecondRule": 99.1,
           "hp": 185,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -421,13 +380,8 @@
     {
       "tick": 2,
       "time": 0.1,
-<<<<<<< HEAD
-      "nextId": 417,
-      "state": "88b31312",
-=======
-      "nextId": 419,
-      "state": "7df77ea3",
->>>>>>> origin/release/v0.27.0
+      "nextId": 420,
+      "state": "c8887b69",
       "events": "741638a5",
       "rng": {
         "draws": 1,
@@ -474,11 +428,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -515,11 +465,7 @@
           "fallStartY": 2.353205,
           "fiveSecondRule": 99.1,
           "hp": 185,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",

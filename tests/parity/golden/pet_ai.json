@@ -16,13 +16,8 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "89d441fb",
-=======
-      "nextId": 409,
-      "state": "cf0725c0",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "92939a2c",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -60,11 +55,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -103,11 +94,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -152,15 +139,9 @@
     {
       "tick": 20,
       "time": 1,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "15cd4893",
-      "events": "fe8351a0",
-=======
-      "nextId": 413,
-      "state": "2590f176",
-      "events": "96578c04",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "53a0e7db",
+      "events": "f798b3bf",
       "rng": {
         "draws": 14,
         "digest": "547eb3f4"
@@ -169,13 +150,8 @@
     {
       "tick": 40,
       "time": 2,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "4cee8715",
-=======
-      "nextId": 413,
-      "state": "ae883a6c",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "c6384669",
       "events": "741638a5",
       "rng": {
         "draws": 14,
@@ -185,15 +161,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "fc84e4ac",
-      "events": "9fbfd8f3",
-=======
-      "nextId": 413,
-      "state": "7f808735",
-      "events": "0ab1964a",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "f526d15c",
+      "events": "d841731d",
       "rng": {
         "draws": 109,
         "digest": "3782f1c0"
@@ -202,13 +172,8 @@
     {
       "tick": 80,
       "time": 4,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "6df46525",
-=======
-      "nextId": 413,
-      "state": "49d6653b",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "27474fe9",
       "events": "741638a5",
       "rng": {
         "draws": 187,
@@ -218,15 +183,9 @@
     {
       "tick": 100,
       "time": 5,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "4f733854",
-      "events": "6e5e1e4b",
-=======
-      "nextId": 413,
-      "state": "54eeaf02",
-      "events": "c510a374",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "ad26452c",
+      "events": "197709f3",
       "rng": {
         "draws": 306,
         "digest": "c196a33e"
@@ -235,13 +194,8 @@
     {
       "tick": 120,
       "time": 6,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "671dacd9",
-=======
-      "nextId": 413,
-      "state": "69a925cf",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "095ab375",
       "events": "741638a5",
       "rng": {
         "draws": 426,
@@ -251,13 +205,8 @@
     {
       "tick": 120,
       "time": 6,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "8040d9ad",
-=======
-      "nextId": 413,
-      "state": "598bb140",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "76461cae",
       "events": "741638a5",
       "rng": {
         "draws": 426,
@@ -316,11 +265,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -362,11 +307,7 @@
           "fallStartY": 1.075713,
           "fiveSecondRule": 105,
           "hp": 50000,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "inCombat": true,
           "kind": "player",
           "level": 12,
@@ -400,11 +341,7 @@
             "sta": 41,
             "str": 25
           },
-<<<<<<< HEAD
-          "targetId": 410,
-=======
-          "targetId": 412,
->>>>>>> origin/release/v0.27.0
+          "targetId": 413,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -423,11 +360,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 108,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -436,11 +369,7 @@
           "moveSpeed": 5.2,
           "onGround": true,
           "overpowerUntil": -1,
-<<<<<<< HEAD
-          "ownerId": 406,
-=======
-          "ownerId": 408,
->>>>>>> origin/release/v0.27.0
+          "ownerId": 409,
           "petMode": "passive",
           "pos": {
             "x": 4,
@@ -465,11 +394,7 @@
           }
         },
         {
-<<<<<<< HEAD
-          "aggroTargetId": 407,
-=======
-          "aggroTargetId": 409,
->>>>>>> origin/release/v0.27.0
+          "aggroTargetId": 410,
           "aiState": "attack",
           "combatTimer": 1.1,
           "comboUntil": -1,
@@ -481,11 +406,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49949,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -515,19 +436,11 @@
             "armor": 70
           },
           "swingTimer": 0.9,
-<<<<<<< HEAD
-          "tappedById": 406,
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "threat": [
             [
-              407,
-=======
-          "tappedById": 408,
-          "templateId": "forest_wolf",
-          "threat": [
-            [
-              409,
->>>>>>> origin/release/v0.27.0
+              410,
               52
             ]
           ],
@@ -554,11 +467,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 370,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -567,11 +476,7 @@
           "moveSpeed": 5,
           "onGround": true,
           "overpowerUntil": -1,
-<<<<<<< HEAD
-          "ownerId": 406,
-=======
-          "ownerId": 408,
->>>>>>> origin/release/v0.27.0
+          "ownerId": 409,
           "petAutoTaunt": true,
           "petMode": "passive",
           "petTauntTimer": 4.4,
@@ -597,11 +502,7 @@
           }
         },
         {
-<<<<<<< HEAD
-          "aggroTargetId": 409,
-=======
-          "aggroTargetId": 411,
->>>>>>> origin/release/v0.27.0
+          "aggroTargetId": 412,
           "aiState": "attack",
           "combatTimer": 1.6,
           "comboUntil": -1,
@@ -614,11 +515,7 @@
           "forcedTargetTimer": -0.05,
           "hostile": true,
           "hp": 49944,
-<<<<<<< HEAD
-          "id": 410,
-=======
-          "id": 412,
->>>>>>> origin/release/v0.27.0
+          "id": 413,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -648,29 +545,16 @@
             "armor": 70
           },
           "swingTimer": 0.4,
-<<<<<<< HEAD
-          "tappedById": 406,
-          "targetId": 406,
+          "tappedById": 409,
+          "targetId": 409,
           "templateId": "forest_wolf",
           "threat": [
-            [
-              406,
-              20
-            ],
             [
               409,
-=======
-          "tappedById": 408,
-          "targetId": 408,
-          "templateId": "forest_wolf",
-          "threat": [
-            [
-              408,
               20
             ],
             [
-              411,
->>>>>>> origin/release/v0.27.0
+              412,
               56
             ]
           ],
@@ -685,13 +569,8 @@
     {
       "tick": 140,
       "time": 7,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "cacbf573",
-=======
-      "nextId": 413,
-      "state": "7725061a",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "ce1716ed",
       "events": "741638a5",
       "rng": {
         "draws": 517,
@@ -701,13 +580,8 @@
     {
       "tick": 160,
       "time": 8,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "7cd71836",
-=======
-      "nextId": 413,
-      "state": "7f24d719",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "0c56348a",
       "events": "741638a5",
       "rng": {
         "draws": 638,
@@ -717,13 +591,8 @@
     {
       "tick": 180,
       "time": 9,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "62ccf324",
-=======
-      "nextId": 413,
-      "state": "9b60c3f5",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "2f83a974",
       "events": "741638a5",
       "rng": {
         "draws": 771,
@@ -733,13 +602,8 @@
     {
       "tick": 180,
       "time": 9,
-<<<<<<< HEAD
-      "nextId": 411,
-      "state": "62ccf324",
-=======
-      "nextId": 413,
-      "state": "9b60c3f5",
->>>>>>> origin/release/v0.27.0
+      "nextId": 414,
+      "state": "2f83a974",
       "events": "741638a5",
       "rng": {
         "draws": 771,
@@ -798,11 +662,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -844,11 +704,7 @@
           "fallStartY": 1.075713,
           "fiveSecondRule": 108,
           "hp": 50000,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 12,
           "lootFfaTimer": "Infinity",
@@ -881,11 +737,7 @@
             "sta": 41,
             "str": 25
           },
-<<<<<<< HEAD
-          "targetId": 410,
-=======
-          "targetId": 412,
->>>>>>> origin/release/v0.27.0
+          "targetId": 413,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -904,11 +756,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 111,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "mob",
           "level": 12,
           "lootFfaTimer": "Infinity",
@@ -916,11 +764,7 @@
           "moveSpeed": 5.2,
           "onGround": true,
           "overpowerUntil": -1,
-<<<<<<< HEAD
-          "ownerId": 406,
-=======
-          "ownerId": 408,
->>>>>>> origin/release/v0.27.0
+          "ownerId": 409,
           "petMode": "passive",
           "pos": {
             "x": 23.856687,
@@ -955,11 +799,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49949,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "inCombat": true,
           "kind": "mob",
           "level": 8,
@@ -984,11 +824,7 @@
             "armor": 70
           },
           "swingTimer": 0.9,
-<<<<<<< HEAD
-          "tappedById": 406,
-=======
-          "tappedById": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "wanderTarget": {
             "x": 13.601517,
@@ -1013,11 +849,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 378,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "kind": "mob",
           "level": 12,
           "lootFfaTimer": "Infinity",
@@ -1025,11 +857,7 @@
           "moveSpeed": 5,
           "onGround": true,
           "overpowerUntil": -1,
-<<<<<<< HEAD
-          "ownerId": 406,
-=======
-          "ownerId": 408,
->>>>>>> origin/release/v0.27.0
+          "ownerId": 409,
           "petAutoTaunt": true,
           "petMode": "passive",
           "petPath": [
@@ -1071,11 +899,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49944,
-<<<<<<< HEAD
-          "id": 410,
-=======
-          "id": 412,
->>>>>>> origin/release/v0.27.0
+          "id": 413,
           "inCombat": true,
           "kind": "mob",
           "level": 8,
@@ -1100,13 +924,8 @@
             "armor": 70
           },
           "swingTimer": 0.4,
-<<<<<<< HEAD
-          "tappedById": 406,
-          "targetId": 406,
-=======
-          "tappedById": 408,
-          "targetId": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
+          "targetId": 409,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 18,

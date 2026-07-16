@@ -15,11 +15,7 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 406,
-=======
-      "nextId": 408,
->>>>>>> origin/release/v0.27.0
+      "nextId": 409,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -33,15 +29,9 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 410,
-      "state": "223d1aa7",
-      "events": "38e3afbb",
-=======
-      "nextId": 412,
-      "state": "cec04ff7",
-      "events": "8bd686b9",
->>>>>>> origin/release/v0.27.0
+      "nextId": 413,
+      "state": "a11cbf9f",
+      "events": "cbe27097",
       "rng": {
         "draws": 1,
         "digest": "b4f92bc7"
@@ -82,11 +72,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -147,11 +133,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -211,11 +193,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 408,
-=======
-          "entityId": 410,
->>>>>>> origin/release/v0.27.0
+          "entityId": 411,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -250,11 +228,7 @@
           "fallStartY": 1.49341,
           "fiveSecondRule": 99,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -303,11 +277,7 @@
           "fallStartY": 1.335617,
           "fiveSecondRule": 99,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -357,11 +327,7 @@
           "fallStartY": 1.133292,
           "fiveSecondRule": 99,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -414,11 +380,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "kind": "mob",
           "level": 2,
           "loot": {
@@ -427,26 +389,16 @@
                 "count": 1,
                 "itemId": "gnarled_staff",
                 "personalFor": [
-<<<<<<< HEAD
-                  407
-=======
-                  409
->>>>>>> origin/release/v0.27.0
+                  410
                 ]
               }
             ]
           },
           "lootFfaTimer": "Infinity",
           "lootRecipientIds": [
-<<<<<<< HEAD
-            406,
-            407,
-            408
-=======
-            408,
             409,
-            410
->>>>>>> origin/release/v0.27.0
+            410,
+            411
           ],
           "lootable": true,
           "maxHp": 54,
@@ -468,11 +420,7 @@
           "stats": {
             "armor": 10
           },
-<<<<<<< HEAD
-          "tappedById": 406,
-=======
-          "tappedById": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 6,
@@ -485,15 +433,9 @@
     {
       "tick": 1,
       "time": 0.05,
-<<<<<<< HEAD
-      "nextId": 410,
-      "state": "9eeed16d",
-      "events": "309ccc8f",
-=======
-      "nextId": 412,
-      "state": "6ceff060",
-      "events": "67e1588b",
->>>>>>> origin/release/v0.27.0
+      "nextId": 413,
+      "state": "9fec144c",
+      "events": "acc6493a",
       "rng": {
         "draws": 3,
         "digest": "0f82d0c2"
@@ -541,11 +483,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -617,11 +555,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -688,11 +622,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 408,
-=======
-          "entityId": 410,
->>>>>>> origin/release/v0.27.0
+          "entityId": 411,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -728,11 +658,7 @@
           "fallStartY": 1.49341,
           "fiveSecondRule": 99.05,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -781,11 +707,7 @@
           "fallStartY": 1.335617,
           "fiveSecondRule": 99.05,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -835,11 +757,7 @@
           "fallStartY": 1.133292,
           "fiveSecondRule": 99.05,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -892,11 +810,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "kind": "mob",
           "level": 2,
           "loot": {
@@ -905,11 +819,7 @@
                 "count": 1,
                 "itemId": "gnarled_staff",
                 "personalFor": [
-<<<<<<< HEAD
-                  407
-=======
-                  409
->>>>>>> origin/release/v0.27.0
+                  410
                 ]
               },
               {
@@ -921,15 +831,9 @@
           },
           "lootFfaTimer": "Infinity",
           "lootRecipientIds": [
-<<<<<<< HEAD
-            406,
-            407,
-            408
-=======
-            408,
             409,
-            410
->>>>>>> origin/release/v0.27.0
+            410,
+            411
           ],
           "lootable": true,
           "maxHp": 54,
@@ -952,11 +856,7 @@
           "stats": {
             "armor": 10
           },
-<<<<<<< HEAD
-          "tappedById": 406,
-=======
-          "tappedById": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 6,
@@ -969,15 +869,9 @@
     {
       "tick": 1,
       "time": 0.05,
-<<<<<<< HEAD
-      "nextId": 410,
-      "state": "d069415a",
-      "events": "7197e4f2",
-=======
-      "nextId": 412,
-      "state": "feea5999",
-      "events": "8ce764fa",
->>>>>>> origin/release/v0.27.0
+      "nextId": 413,
+      "state": "ebb52d1d",
+      "events": "c5ed7f56",
       "rng": {
         "draws": 3,
         "digest": "0f82d0c2"
@@ -1025,11 +919,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1102,11 +992,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1181,11 +1067,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 408,
-=======
-          "entityId": 410,
->>>>>>> origin/release/v0.27.0
+          "entityId": 411,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1221,11 +1103,7 @@
           "fallStartY": 1.49341,
           "fiveSecondRule": 99.05,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1274,11 +1152,7 @@
           "fallStartY": 1.335617,
           "fiveSecondRule": 99.05,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1328,11 +1202,7 @@
           "fallStartY": 1.133292,
           "fiveSecondRule": 99.05,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1385,24 +1255,14 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "kind": "mob",
           "level": 2,
           "lootFfaTimer": "Infinity",
           "lootRecipientIds": [
-<<<<<<< HEAD
-            406,
-            407,
-            408
-=======
-            408,
             409,
-            410
->>>>>>> origin/release/v0.27.0
+            410,
+            411
           ],
           "maxHp": 54,
           "moveSpeed": 8,
@@ -1424,11 +1284,7 @@
           "stats": {
             "armor": 10
           },
-<<<<<<< HEAD
-          "tappedById": 406,
-=======
-          "tappedById": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 6,
@@ -1441,13 +1297,8 @@
     {
       "tick": 3,
       "time": 0.15,
-<<<<<<< HEAD
-      "nextId": 410,
-      "state": "2d732075",
-=======
-      "nextId": 412,
-      "state": "254d4057",
->>>>>>> origin/release/v0.27.0
+      "nextId": 413,
+      "state": "c5a188d6",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -1496,11 +1347,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1573,11 +1420,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1652,11 +1495,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 408,
-=======
-          "entityId": 410,
->>>>>>> origin/release/v0.27.0
+          "entityId": 411,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1692,11 +1531,7 @@
           "fallStartY": 1.49341,
           "fiveSecondRule": 99.15,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1746,11 +1581,7 @@
           "fallStartY": 1.335617,
           "fiveSecondRule": 99.15,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1800,11 +1631,7 @@
           "fallStartY": 1.133292,
           "fiveSecondRule": 99.15,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1845,11 +1672,7 @@
           }
         },
         {
-<<<<<<< HEAD
-          "aggroTargetId": 406,
-=======
-          "aggroTargetId": 408,
->>>>>>> origin/release/v0.27.0
+          "aggroTargetId": 409,
           "aiState": "chase",
           "combatTimer": 99.05,
           "comboUntil": -1,
@@ -1861,11 +1684,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 409,
-=======
-          "id": 411,
->>>>>>> origin/release/v0.27.0
+          "id": 412,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1898,11 +1717,7 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-<<<<<<< HEAD
-              406,
-=======
-              408,
->>>>>>> origin/release/v0.27.0
+              409,
               1
             ]
           ],

@@ -14,11 +14,7 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 406,
-=======
-      "nextId": 408,
->>>>>>> origin/release/v0.27.0
+      "nextId": 409,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -32,15 +28,9 @@
     {
       "tick": 20,
       "time": 1,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "d1b9f487",
-      "events": "9162f3b4",
-=======
-      "nextId": 410,
-      "state": "46f56708",
-      "events": "671a7082",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "5b6bd14c",
+      "events": "719e15f0",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -49,15 +39,9 @@
     {
       "tick": 40,
       "time": 2,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "ed30bddf",
-      "events": "37320122",
-=======
-      "nextId": 410,
-      "state": "054ebf6c",
-      "events": "ae5fecde",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "e171ee6c",
+      "events": "0590394f",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -66,15 +50,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "a1c7cc4b",
-      "events": "2a321574",
-=======
-      "nextId": 410,
-      "state": "78d48f94",
-      "events": "da66a0cc",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "b4b548b4",
+      "events": "4213e525",
       "rng": {
         "draws": 71,
         "digest": "6619b0ad"
@@ -83,15 +61,9 @@
     {
       "tick": 61,
       "time": 3.05,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "0097c411",
-      "events": "4f176879",
-=======
-      "nextId": 410,
-      "state": "eb756756",
-      "events": "22d88bb9",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "e1776ed6",
+      "events": "33f23425",
       "rng": {
         "draws": 78,
         "digest": "d52f266d"
@@ -130,11 +102,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -189,11 +157,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -232,11 +196,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 102.05,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -284,11 +244,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 102.05,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -332,15 +288,9 @@
     {
       "tick": 61,
       "time": 3.05,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "e04c5b6d",
-      "events": "01f33224",
-=======
-      "nextId": 410,
-      "state": "14f9a0fb",
-      "events": "a8bd51a8",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "0035b607",
+      "events": "2b9236e3",
       "rng": {
         "draws": 78,
         "digest": "d52f266d"
@@ -382,11 +332,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -443,11 +389,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -486,11 +428,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 102.05,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -538,11 +476,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 102.05,
           "hp": 1,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -586,15 +520,9 @@
     {
       "tick": 80,
       "time": 4,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "61ffa951",
-      "events": "741638a5",
-=======
-      "nextId": 410,
-      "state": "e0850666",
-      "events": "30ae529b",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "3982d1e6",
+      "events": "1ba0277e",
       "rng": {
         "draws": 150,
         "digest": "b4023222"
@@ -603,13 +531,8 @@
     {
       "tick": 100,
       "time": 5,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "e327e915",
-=======
-      "nextId": 410,
-      "state": "716c033e",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "7275528e",
       "events": "741638a5",
       "rng": {
         "draws": 262,
@@ -619,13 +542,8 @@
     {
       "tick": 101,
       "time": 5.05,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "923e1fb7",
-=======
-      "nextId": 410,
-      "state": "4c816908",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "6a0db984",
       "events": "741638a5",
       "rng": {
         "draws": 263,
@@ -674,11 +592,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -742,11 +656,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -786,11 +696,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 104.05,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -838,11 +744,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 104.05,
           "hp": 7,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",

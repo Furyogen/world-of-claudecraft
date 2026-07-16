@@ -16,13 +16,8 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "3aab6491",
-=======
-      "nextId": 409,
-      "state": "6bd4c62d",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "dac3634b",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -59,11 +54,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -98,11 +89,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -145,15 +132,9 @@
     {
       "tick": 20,
       "time": 1,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "7f587797",
-      "events": "a3b147e3",
-=======
-      "nextId": 409,
-      "state": "da75b1ab",
-      "events": "977a17cf",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "f48d6561",
+      "events": "988cc0c1",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -162,13 +143,8 @@
     {
       "tick": 40,
       "time": 2,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "6f2fe66f",
-=======
-      "nextId": 409,
-      "state": "dc359b6b",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "8f3b4305",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -178,13 +154,8 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "25bc8ad1",
-=======
-      "nextId": 409,
-      "state": "c3decc9d",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "f16fc62f",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -194,13 +165,8 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "25bc8ad1",
-=======
-      "nextId": 409,
-      "state": "c3decc9d",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "f16fc62f",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -246,11 +212,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -287,11 +249,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -334,15 +292,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "c2e48048",
-      "events": "d0ad6a2a",
-=======
-      "nextId": 409,
-      "state": "d02ae080",
-      "events": "7fd0fd5c",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "55845d96",
+      "events": "bdbc4bbf",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -389,11 +341,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -432,11 +380,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -479,15 +423,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "f73a9aad",
-      "events": "7b26d3a7",
-=======
-      "nextId": 409,
-      "state": "bdfe51ed",
-      "events": "9e92923f",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "3a458e4b",
+      "events": "74595827",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -535,11 +473,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -578,11 +512,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 128,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 2,
           "lootFfaTimer": "Infinity",
@@ -625,15 +555,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "1385334b",
-      "events": "94a32313",
-=======
-      "nextId": 409,
-      "state": "f6b05a65",
-      "events": "2896a35f",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "5b6d7b39",
+      "events": "2029a8f5",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -681,11 +605,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -724,11 +644,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -771,15 +687,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "aa4abe98",
-      "events": "8e86a191",
-=======
-      "nextId": 409,
-      "state": "43216972",
-      "events": "41ed0fe7",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "2f3e094e",
+      "events": "88fb684a",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -827,11 +737,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -870,11 +776,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -917,13 +819,8 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "aa4abe98",
-=======
-      "nextId": 409,
-      "state": "43216972",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "2f3e094e",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -972,11 +869,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1015,11 +908,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -1062,13 +951,8 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "aa4abe98",
-=======
-      "nextId": 409,
-      "state": "43216972",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "2f3e094e",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -1117,11 +1001,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1160,11 +1040,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",

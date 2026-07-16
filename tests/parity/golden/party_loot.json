@@ -13,11 +13,7 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 406,
-=======
-      "nextId": 408,
->>>>>>> origin/release/v0.27.0
+      "nextId": 409,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -31,15 +27,9 @@
     {
       "tick": 3,
       "time": 0.15,
-<<<<<<< HEAD
-      "nextId": 409,
-      "state": "dd83d9f7",
-      "events": "26bf8c56",
-=======
-      "nextId": 411,
-      "state": "8901545f",
-      "events": "ff0b9497",
->>>>>>> origin/release/v0.27.0
+      "nextId": 412,
+      "state": "df70306f",
+      "events": "28bb7c8b",
       "rng": {
         "draws": 2,
         "digest": "c05535b8"
@@ -83,11 +73,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -151,11 +137,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 407,
-=======
-          "entityId": 409,
->>>>>>> origin/release/v0.27.0
+          "entityId": 410,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -195,11 +177,7 @@
           "fallStartY": 0.860353,
           "fiveSecondRule": 99.15,
           "hp": 90,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -248,11 +226,7 @@
           "fallStartY": 0.639595,
           "fiveSecondRule": 99.15,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -304,11 +278,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 54,
-<<<<<<< HEAD
-          "id": 408,
-=======
-          "id": 410,
->>>>>>> origin/release/v0.27.0
+          "id": 411,
           "kind": "mob",
           "level": 2,
           "lootFfaTimer": "Infinity",
@@ -333,11 +303,7 @@
           "stats": {
             "armor": 10
           },
-<<<<<<< HEAD
-          "tappedById": 406,
-=======
-          "tappedById": 408,
->>>>>>> origin/release/v0.27.0
+          "tappedById": 409,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 6,

@@ -14,13 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-<<<<<<< HEAD
-      "nextId": 407,
-      "state": "f9f2bda8",
-=======
-      "nextId": 409,
-      "state": "20380ff5",
->>>>>>> origin/release/v0.27.0
+      "nextId": 410,
+      "state": "0d8c6007",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -57,11 +52,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -96,11 +87,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -145,15 +132,9 @@
     {
       "tick": 20,
       "time": 1,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "71254f02",
-      "events": "2907fd7c",
-=======
-      "nextId": 410,
-      "state": "b051edc2",
-      "events": "c1a0a368",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "05b9e174",
+      "events": "5454e170",
       "rng": {
         "draws": 9,
         "digest": "8ecad8de"
@@ -162,15 +143,9 @@
     {
       "tick": 40,
       "time": 2,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "e43ff19a",
-      "events": "f57d95dd",
-=======
-      "nextId": 410,
-      "state": "3d0710ec",
-      "events": "c835dfbb",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "fbee887a",
+      "events": "5b3425b4",
       "rng": {
         "draws": 15,
         "digest": "843b3bf7"
@@ -179,15 +154,9 @@
     {
       "tick": 60,
       "time": 3,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "51b9aa3a",
-      "events": "c549cc19",
-=======
-      "nextId": 410,
-      "state": "c62c9e97",
-      "events": "f84ddf9f",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "2478e5a7",
+      "events": "c5bf7b3e",
       "rng": {
         "draws": 90,
         "digest": "0f3d4b16"
@@ -196,13 +165,8 @@
     {
       "tick": 72,
       "time": 3.6,
-<<<<<<< HEAD
-      "nextId": 408,
-      "state": "4c9b3eba",
-=======
-      "nextId": 410,
-      "state": "48e6a803",
->>>>>>> origin/release/v0.27.0
+      "nextId": 411,
+      "state": "937b9485",
       "events": "741638a5",
       "rng": {
         "draws": 143,
@@ -261,11 +225,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-<<<<<<< HEAD
-          "entityId": 406,
-=======
-          "entityId": 408,
->>>>>>> origin/release/v0.27.0
+          "entityId": 409,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -305,11 +265,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
           "hp": 49991,
-<<<<<<< HEAD
-          "id": 406,
-=======
-          "id": 408,
->>>>>>> origin/release/v0.27.0
+          "id": 409,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -343,11 +299,7 @@
             "str": 26
           },
           "swingTimer": 0.05,
-<<<<<<< HEAD
-          "targetId": 407,
-=======
-          "targetId": 409,
->>>>>>> origin/release/v0.27.0
+          "targetId": 410,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -357,11 +309,7 @@
           }
         },
         {
-<<<<<<< HEAD
-          "aggroTargetId": 406,
-=======
-          "aggroTargetId": 408,
->>>>>>> origin/release/v0.27.0
+          "aggroTargetId": 409,
           "aiState": "attack",
           "combatTimer": 1.2,
           "comboUntil": -1,
@@ -373,11 +321,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 8921,
-<<<<<<< HEAD
-          "id": 407,
-=======
-          "id": 409,
->>>>>>> origin/release/v0.27.0
+          "id": 410,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -407,21 +351,12 @@
             "armor": 40
           },
           "swingTimer": 0.45,
-<<<<<<< HEAD
-          "tappedById": 406,
-          "targetId": 406,
+          "tappedById": 409,
+          "targetId": 409,
           "templateId": "forest_wolf",
           "threat": [
             [
-              406,
-=======
-          "tappedById": 408,
-          "targetId": 408,
-          "templateId": "forest_wolf",
-          "threat": [
-            [
-              408,
->>>>>>> origin/release/v0.27.0
+              409,
               80
             ]
           ],
