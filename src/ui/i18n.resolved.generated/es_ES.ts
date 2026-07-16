@@ -7373,6 +7373,15 @@ export const es_ES: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Cetro de la Corte Imperecedera"
       },
+      "deathless_warguard_legmail": {
+        "name": "Malla de piernas del Guardián Imperecedero"
+      },
+      "soulrend_diadem": {
+        "name": "Diadema Desgarralmas"
+      },
+      "scourgehide_carapace": {
+        "name": "Caparazón de piel de Azote"
+      },
       "cryptplate_helm": {
         "name": "Yelmo Placacripta"
       },
@@ -7412,6 +7421,9 @@ export const es_ES: EnTranslations = {
       "deathless_greatblade": {
         "name": "Mandoble Imperecedero"
       },
+      "soulforged_warplate": {
+        "name": "Coraza de guerra forjada en almas"
+      },
       "stormcallers_focus": {
         "name": "Foco del Invocador de Tormentas"
       },
@@ -7448,61 +7460,31 @@ export const es_ES: EnTranslations = {
       "deathless_heartwood": {
         "name": "Duramen de la Corona Inmortal"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Duramen de la Corona Inmortal"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, último juramento de Thornpeak"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, último juramento de Thornpeak"
       },
       "crownforged_dreadhelm": {
         "name": "Yelmo aterrador Bonewrought"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Yelmo aterrador Bonewrought"
-      },
       "crownforged_warspaulders": {
-        "name": "Hombreras de guerra Bonewrought"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Hombreras de guerra Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Corona Direfang"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Corona Direfang"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Guardahombros Direfang"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Guardahombros Direfang"
       },
       "soulflame_cowl": {
         "name": "Caperuza Wraithfire"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Caperuza Wraithfire"
-      },
       "soulflame_mantle": {
-        "name": "Manto Wraithfire"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Manto Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Corona de Galecall"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Corona de Galecall"
-      },
       "stormcallers_spaulders": {
-        "name": "Bufas de Galecall"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Bufas de Galecall"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const es_ES: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Guardia real alzado"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Guardián Imperecedero"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, Hierofante Imperecedero"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Cuchillo Imperecedero"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Azote de Thornpeak"

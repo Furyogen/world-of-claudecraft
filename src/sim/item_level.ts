@@ -19,12 +19,7 @@
 //     str/sta, a mage cloth piece stays int/spi). itemScore() is the realized
 //     power (stats + armor + weapon dps) for at-a-glance comparison.
 
-import {
-  HEROIC_BOSS_LOOT,
-  HEROIC_LOOT_SOURCE_LEVEL,
-  NYTHRAXIS_RAID_BOSS_ID,
-  NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL,
-} from './content/heroic_loot';
+import { HEROIC_BOSS_LOOT, HEROIC_LOOT_SOURCE_LEVEL } from './content/heroic_loot';
 import { HEROIC_VENDOR_STOCK } from './content/heroic_vendor';
 import { DUNGEONS, ITEMS, MOBS, QUESTS } from './data';
 // The pure budget primitives live in the leaf module ./item_budget (no ./data
@@ -155,16 +150,12 @@ function buildSourceIndex(): Map<string, ItemSource> {
   // level 26 (20 + the epic bump) and get budget-enforced like any drop.
   for (const offer of HEROIC_VENDOR_STOCK) bump(offer.itemId, HEROIC_VENDOR_SOURCE_LEVEL, false);
   // Heroic boss drops: level-20 content one tier up (the heroic bump), so the
-  // five-man epics read item level 31 (25 + the epic bump). The 10-player raid
-  // (Heroic Nythraxis) is one tier ABOVE the five-mans, so its table registers
-  // at NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL (27) and its epics land at item level 33.
-  for (const [bossId, entries] of Object.entries(HEROIC_BOSS_LOOT)) {
-    const src =
-      bossId === NYTHRAXIS_RAID_BOSS_ID
-        ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL
-        : HEROIC_LOOT_SOURCE_LEVEL;
+  // epic pieces read item level 31 (25 + the epic bump). Flat across the five
+  // bosses BY DESIGN (raid=false even for Nythraxis): the heroic set is one
+  // shared tier, per the drop-table spec.
+  for (const entries of Object.values(HEROIC_BOSS_LOOT)) {
     for (const entry of entries) {
-      if (entry.itemId) bump(entry.itemId, src, false);
+      if (entry.itemId) bump(entry.itemId, HEROIC_LOOT_SOURCE_LEVEL, false);
     }
   }
   // Heroic upgraded drop variants (content/heroic_variants.ts): the "Heroic X"

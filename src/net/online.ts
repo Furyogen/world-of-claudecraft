@@ -864,8 +864,6 @@ function blankEntity(id: number): Entity {
     level: 1,
     mendTimer: 0,
     wardTimer: 0,
-    channelTimer: 0,
-    channelRamp: 0,
     rallyTimer: 0,
     warcryTimer: 0,
     petPath: [],

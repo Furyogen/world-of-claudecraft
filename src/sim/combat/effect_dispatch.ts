@@ -19,7 +19,6 @@ import { isDebuffAura } from '../aura_classify';
 import { ABILITIES, isDelvePos } from '../data';
 import { recalcPlayerStats } from '../entity';
 import type { GroundAoE } from '../entity_roster';
-import { SCRIPTED_INTERRUPTIBLE_CHANNELS } from '../mob/healer_channel';
 import { PLAYER_BODY_RADIUS, PLAYER_MAX_CLIMB_SLOPE, PLAYER_SWIM_DEPTH } from '../pathfind';
 import { scheduleProjectile } from '../projectile_travel';
 import type { PlayerMeta, ResolvedAbility } from '../sim';
@@ -877,19 +876,13 @@ export function runEffects(
         const interruptedDef =
           ctx.resolvedAbility(target.castingAbility, target.id)?.def ??
           ABILITIES[target.castingAbility];
-        // A scripted mob channel (Malric's Mending) resolves to no ability def but
-        // is still meant to be interruptible: a matching school-lockout breaks it in
-        // updateBossMechanics. Everything else that resolves to nothing stays immune.
-        const scriptedChannel = interruptedDef
-          ? undefined
-          : SCRIPTED_INTERRUPTIBLE_CHANNELS[target.castingAbility];
         if (
-          (!interruptedDef && !scriptedChannel) ||
-          interruptedDef?.school === 'physical' ||
-          interruptedDef?.uninterruptible
+          !interruptedDef ||
+          interruptedDef.school === 'physical' ||
+          interruptedDef.uninterruptible
         )
           break;
-        const school = interruptedDef?.school ?? scriptedChannel!.school;
+        const school = interruptedDef.school;
         const remaining = ctx.diminishedCrowdControlDuration(p, target, 'lockout', eff.lockout);
         ctx.cancelCast(target);
         // Pummel (owner design): stopping a cast PAYS rage instead of costing

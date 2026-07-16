@@ -57,25 +57,6 @@ describe('mob support shield (wardAllies)', () => {
     expect(ward(ally)).toBeUndefined();
   });
 
-  it('does not tick the ward cast while the caster is stunned', () => {
-    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
-    const mogger = spawn(sim, 9015, MOBS.mogger);
-    const ally = spawn(sim, 9016, MOBS.mogger_lackey);
-    mogger.auras.push({
-      id: 'test_stun',
-      name: 'Test Stun',
-      kind: 'stun',
-      remaining: 20,
-      duration: 20,
-      value: 0,
-      sourceId: 0,
-      school: 'physical',
-    });
-    for (let i = 0; i < 20 * 12 + 1; i++) inner(sim).updateBossMechanics(mogger);
-    expect(mogger.wardTimer).toBe(MOBS.mogger.wardAllies!.every);
-    expect(ward(ally)).toBeUndefined();
-  });
-
   it('shields every ally in range plus the caster (AoE, healthy too)', () => {
     const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
     const mogger = spawn(sim, 9021, MOBS.mogger);

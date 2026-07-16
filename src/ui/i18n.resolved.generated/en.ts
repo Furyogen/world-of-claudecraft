@@ -7373,6 +7373,15 @@ export const en: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Scepter of the Deathless Court"
       },
+      "deathless_warguard_legmail": {
+        "name": "Deathless Warguard Legmail"
+      },
+      "soulrend_diadem": {
+        "name": "Soulrend Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Scourgehide Carapace"
+      },
       "cryptplate_helm": {
         "name": "Cryptplate Helm"
       },
@@ -7412,6 +7421,9 @@ export const en: EnTranslations = {
       "deathless_greatblade": {
         "name": "Deathless Greatblade"
       },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
+      },
       "stormcallers_focus": {
         "name": "Stormcaller's Focus"
       },
@@ -7448,61 +7460,31 @@ export const en: EnTranslations = {
       "deathless_heartwood": {
         "name": "Heartwood of the Deathless Crown"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Heartwood of the Deathless Crown"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, Last Oath of Thornpeak"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, Last Oath of Thornpeak"
       },
       "crownforged_dreadhelm": {
         "name": "Bonewrought Dreadhelm"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dreadhelm"
-      },
       "crownforged_warspaulders": {
-        "name": "Bonewrought Warspaulders"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Bonewrought Warspaulders"
       },
       "nighttalon_crown": {
         "name": "Direfang Crown"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Direfang Crown"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Direfang Shoulderguards"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Direfang Shoulderguards"
       },
       "soulflame_cowl": {
         "name": "Wraithfire Cowl"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Wraithfire Cowl"
-      },
       "soulflame_mantle": {
-        "name": "Wraithfire Mantle"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Wraithfire Mantle"
       },
       "stormcallers_crown": {
         "name": "Galecall Crown"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Galecall Crown"
-      },
       "stormcallers_spaulders": {
-        "name": "Galecall Spaulders"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Galecall Spaulders"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const en: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Risen Royal Guard"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Spirit of Aldren"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Spirit of Malric"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Spirit of Voss"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Scourge of Thornpeak"

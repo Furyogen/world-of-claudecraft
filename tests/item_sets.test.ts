@@ -30,14 +30,6 @@ function statsFor(cls: PlayerClass, level: number, equipment: Record<string, str
 const dist2d = (a: { x: number; z: number }, b: { x: number; z: number }) =>
   Math.hypot(a.x - b.x, a.z - b.z);
 
-describe('heroic set item identity', () => {
-  it('shares the normal set id and carries the heroic flag', () => {
-    expect(ITEMS.crownforged_dreadhelm_heroic.set).toBe(ITEMS.crownforged_dreadhelm.set);
-    expect(ITEMS.crownforged_dreadhelm_heroic.set).toBe('crownforged');
-    expect(ITEMS.crownforged_dreadhelm_heroic.heroic).toBe(true);
-  });
-});
-
 describe('aggregateSetBonuses (pure resolver)', () => {
   it('grants nothing below the 2-piece threshold', () => {
     const eff = aggregateSetBonuses(counts({ [SET_DEATHLORD]: 1 }));
@@ -139,20 +131,19 @@ describe('aggregateSetBonuses (pure resolver)', () => {
 });
 
 describe('item set tooltip model', () => {
-  it('counts each set as its distinct equip slots (base + all heroic versions are one piece)', () => {
-    const counts = itemSetMemberCounts();
-    // The t2 sets are 5 slots (soulflame cloth is 4). The normal piece, its
-    // auto-generated heroic variant, and any bespoke heroic raid piece for the
-    // same slot all collapse to one member, so the "X/N" denominator reflects the
-    // real number of collectible pieces (not the parallel heroic-variant ids).
-    expect(counts.crownforged).toBe(4);
-    expect(counts.nighttalon).toBe(4);
-    expect(counts.soulflame).toBe(4);
-    expect(counts.stormcallers).toBe(4);
-    // Leveling haste kits: 3 pieces each.
-    expect(counts.vale_arcanist).toBe(3);
-    expect(counts.boundstone_vanguard).toBe(3);
-    expect(counts.greyjaw_stalker).toBe(3);
+  it('counts base and Heroic alternatives as one logical member of every item set', () => {
+    const logicalMembers = new Map<string, Set<string>>();
+    for (const item of Object.values(ITEMS)) {
+      if (!item.set) continue;
+      const members = logicalMembers.get(item.set) ?? new Set<string>();
+      members.add(item.heroicOf ?? item.id);
+      logicalMembers.set(item.set, members);
+    }
+    const expectedCounts = Object.fromEntries(
+      [...logicalMembers].map(([setId, members]) => [setId, members.size]),
+    );
+
+    expect(itemSetMemberCounts()).toEqual(expectedCounts);
   });
 
   it('keeps four-piece families at four and the Boundstone family at three', () => {
@@ -229,19 +220,6 @@ describe('recalcPlayerStats applies equipped set bonuses (real raid/dungeon gear
     // Rogue AP = str + agi + bonusAp; the only set bonus at 2pc is +40 AP.
     expect(two.attackPower - (two.stats.str + two.stats.agi)).toBe(40);
     expect(two.attackPower).toBeGreaterThan(base.attackPower);
-  });
-
-  it('normal and heroic Nythraxis armor pieces mix for set thresholds', () => {
-    const base = statsFor('mage', 20, {});
-    const mixed = statsFor('mage', 20, {
-      helmet: 'soulflame_cowl_heroic', // heroic helmet mixed with normal pieces
-      shoulder: 'soulflame_mantle',
-      gloves: 'soulflame_gloves',
-      waist: 'soulflame_cord',
-    });
-    expect(mixed.knockbackResistance).toBe(1);
-    expect(mixed.stats.int).toBe(base.stats.int + 13 + 9 + 8 + 8 + 15);
-    expect(mixed.stats.spi).toBe(base.stats.spi + 5 + 15);
   });
 
   it("Necromancer's (t1 caster): knockback resistance at 2pc, int/sta added at 3pc", () => {

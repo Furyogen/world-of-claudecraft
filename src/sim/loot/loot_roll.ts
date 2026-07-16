@@ -23,7 +23,7 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
-import { HEROIC_BOSS_LOOT, NYTHRAXIS_RAID_BOSS_ID } from '../content/heroic_loot';
+import { HEROIC_BOSS_LOOT } from '../content/heroic_loot';
 import { heroicVariantId } from '../content/heroic_variants';
 import { ITEMS, MOBS, QUESTS } from '../data';
 import { formatMoney } from '../format_money';
@@ -167,20 +167,11 @@ export function rollLoot(
     if (!variant) return id;
     return (itemLevel(variant) ?? 0) > (itemLevel(ITEMS[id]) ?? 0) ? variant.id : id;
   };
-  // On a HEROIC Nythraxis (10-player raid) kill, the boss's normal-tier drop
-  // groups are suppressed so every drop is an item-level-33 [HEROIC] raid epic
-  // (rolled from HEROIC_BOSS_LOOT below); copper still drops. The five-man
-  // heroics deliberately keep their normal groups (they drop normal + heroic),
-  // so this gate is scoped to the raid boss. Suppression draws NO rng and only
-  // fires on a heroic claim, so the normal loot trace and parity goldens are
-  // byte-identical.
-  const suppressBaseGroups = heroicClaim && mob.templateId === NYTHRAXIS_RAID_BOSS_ID;
   for (const entry of template.loot) {
     // Exclusive groups: a single rng draw is partitioned by the group
     // entries' chances, so at most one matching entry drops.
     // Exactly one rng.next() per group keeps replays deterministic.
     if (entry.rollGroup) {
-      if (suppressBaseGroups) continue;
       if (rolledGroups.has(entry.rollGroup)) continue;
       rolledGroups.add(entry.rollGroup);
       const group = template.loot.filter((l) => l.rollGroup === entry.rollGroup);

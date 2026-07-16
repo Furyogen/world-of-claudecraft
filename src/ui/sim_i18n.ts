@@ -199,7 +199,6 @@ const baseEnTable = {
   'error.notInChannelJoin': 'You are not in the {channel} channel. Type /join {channel} first.',
   'log.bossUnleashes': '{name} unleashes {mechanic}!',
   'log.mobChannels': '{name} channels {mechanic}.',
-  'log.channelInterrupted': '{mechanic} is interrupted!',
   'aura.tamed': 'Tamed',
   'aura.causticSpores': 'Caustic Spores',
   'aura.elixirBear': 'Might of the Bear',
@@ -4487,34 +4486,6 @@ const PET_DICT: Record<SupportedLanguage, Record<PetSimMessageKey, string>> = {
   ...PET_NEW,
 };
 
-// Channeled-mechanic interruption was added after the large locale tables were
-// assembled. Keep its compact, complete release set together so every supported
-// client localizes the open `{mechanic}` capture instead of falling back to English.
-const CHANNEL_INTERRUPTED: Record<SupportedLanguage, string> = {
-  en: '{mechanic} is interrupted!',
-  es: '¡Se interrumpe {mechanic}!',
-  es_ES: '¡Se interrumpe {mechanic}!',
-  fr_FR: 'Interruption de {mechanic} !',
-  fr_CA: 'Interruption de {mechanic} !',
-  en_CA: '{mechanic} is interrupted!',
-  it_IT: 'Interruzione di {mechanic}!',
-  de_DE: '{mechanic} wird unterbrochen!',
-  zh_CN: '{mechanic}被打断了！',
-  zh_TW: '{mechanic}被中斷了！',
-  ko_KR: '{mechanic} 시전이 방해받았습니다!',
-  ja_JP: '{mechanic}が中断された！',
-  pt_BR: 'Interrupção de {mechanic}!',
-  ru_RU: 'Применение «{mechanic}» прервано!',
-  cs_CZ: 'Sesílání schopnosti {mechanic} bylo přerušeno!',
-  nl_NL: '{mechanic} is onderbroken!',
-  pl_PL: 'Przerwano {mechanic}!',
-  id_ID: '{mechanic} terinterupsi!',
-  tr_TR: '{mechanic} kesintiye uğradı!',
-  sv_SE: '{mechanic} avbröts!',
-  vi_VN: '{mechanic} đã bị gián đoạn!',
-  da_DK: '{mechanic} blev afbrudt!',
-};
-
 export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Object.fromEntries(
   supportedLanguages.map((lang) => [
     lang,
@@ -4522,7 +4493,6 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Ob
       ...baseEnTable,
       ...BASE_DICT[lang],
       ...PET_DICT[lang],
-      'log.channelInterrupted': CHANNEL_INTERRUPTED[lang],
     },
   ]),
 ) as Record<SupportedLanguage, Record<SimMessageKey, string>>;
@@ -6445,11 +6415,6 @@ const RULES: Rule[] = [
   {
     re: /^(.+) channels (.+)\.$/,
     build: (m) => tSim('log.mobChannels', { name: locMob(m[1]), mechanic: locBossMechanic(m[2]) }),
-  },
-  // "{mechanic} is interrupted!" (a channeled mob heal broken by a stun/silence).
-  {
-    re: /^(.+) is interrupted!$/,
-    build: (m) => tSim('log.channelInterrupted', { mechanic: locBossMechanic(m[1]) }),
   },
   {
     re: /^(.+) unleashes (.+)!$/,

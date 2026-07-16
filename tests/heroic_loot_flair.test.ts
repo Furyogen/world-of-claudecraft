@@ -97,10 +97,10 @@ describe('heroic loot flair: weapon dps tracks item level', () => {
     const w = ITEMS[id].weapon!;
     return (w.min + w.max) / 2 / w.speed;
   };
-  // The five-man heroic set weapons sit one tier below the Heroic Nythraxis
-  // (10-player raid) bespoke weapons, which register at item level 33.
-  const HEROIC_SET_WEAPONS = ['gravewyrm_cleaver', 'mistcallers_fang', 'lunar_tide_greatstaff'];
-  const HEROIC_RAID_WEAPONS = [
+  const HEROIC_SET_WEAPONS = [
+    'gravewyrm_cleaver',
+    'mistcallers_fang',
+    'lunar_tide_greatstaff',
     'scepter_of_the_deathless_court',
     'deathless_greatblade',
     'stormcallers_focus',
@@ -110,14 +110,6 @@ describe('heroic loot flair: weapon dps tracks item level', () => {
     const target = weaponDpsBudget(31);
     for (const id of HEROIC_SET_WEAPONS) {
       expect(itemLevel(ITEMS[id]), id).toBe(31);
-      expect(Math.abs(dps(id) - target), `${id} dps ${dps(id)}`).toBeLessThan(0.3);
-    }
-  });
-
-  it('every heroic Nythraxis raid weapon (item level 33) sits on the dps curve', () => {
-    const target = weaponDpsBudget(33);
-    for (const id of HEROIC_RAID_WEAPONS) {
-      expect(itemLevel(ITEMS[id]), id).toBe(33);
       expect(Math.abs(dps(id) - target), `${id} dps ${dps(id)}`).toBeLessThan(0.3);
     }
   });

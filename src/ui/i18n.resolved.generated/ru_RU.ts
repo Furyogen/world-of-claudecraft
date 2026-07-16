@@ -7373,6 +7373,15 @@ export const ru_RU: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Скипетр бессмертного двора"
       },
+      "deathless_warguard_legmail": {
+        "name": "Ножные латы бессмертного стража"
+      },
+      "soulrend_diadem": {
+        "name": "Диадема разрыва души"
+      },
+      "scourgehide_carapace": {
+        "name": "Панцирь бичевой шкуры"
+      },
       "cryptplate_helm": {
         "name": "Гробничный латный шлем"
       },
@@ -7412,6 +7421,9 @@ export const ru_RU: EnTranslations = {
       "deathless_greatblade": {
         "name": "Бессмертный великий клинок"
       },
+      "soulforged_warplate": {
+        "name": "Душекованый боевой доспех"
+      },
       "stormcallers_focus": {
         "name": "Средоточие буревестника"
       },
@@ -7448,61 +7460,31 @@ export const ru_RU: EnTranslations = {
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Сердцевина бессмертной короны"
-      },
       "kingsbane_last_oath": {
-        "name": "Погибель Трона, последняя клятва Торнпика"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Погибель Трона, последняя клятва Торнпика"
       },
       "crownforged_dreadhelm": {
         "name": "Костокованый шлем ужаса"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Костокованый шлем ужаса"
-      },
       "crownforged_warspaulders": {
-        "name": "Костокованые боевые наплечники"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Костокованые боевые наплечники"
       },
       "nighttalon_crown": {
         "name": "Корона Лютого Клыка"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Корона Лютого Клыка"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Наплечные стражи Лютого Клыка"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Наплечные стражи Лютого Клыка"
       },
       "soulflame_cowl": {
         "name": "Клобук Призрачного пламени"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Клобук Призрачного пламени"
-      },
       "soulflame_mantle": {
-        "name": "Оплечье Призрачного пламени"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Оплечье Призрачного пламени"
       },
       "stormcallers_crown": {
         "name": "Корона Зова Бури"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Корона Зова Бури"
-      },
       "stormcallers_spaulders": {
-        "name": "Наплечники Зова Бури"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Наплечники Зова Бури"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const ru_RU: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Восставший королевский страж"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Олдрен, бессмертный страж"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Малрик, бессмертный иерофант"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Восс, бессмертный клинок"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Нитраксис, Бич Торнпика"

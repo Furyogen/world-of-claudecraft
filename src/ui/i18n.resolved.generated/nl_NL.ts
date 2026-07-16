@@ -7373,6 +7373,15 @@ export const nl_NL: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Scepter van het Doodloze Hof"
       },
+      "deathless_warguard_legmail": {
+        "name": "Doodloze Krijgswacht-Beenmalie"
+      },
+      "soulrend_diadem": {
+        "name": "Zielscheur-Diadeem"
+      },
+      "scourgehide_carapace": {
+        "name": "Geselhuid-Pantser"
+      },
       "cryptplate_helm": {
         "name": "Kryptplaat-Helm"
       },
@@ -7412,6 +7421,9 @@ export const nl_NL: EnTranslations = {
       "deathless_greatblade": {
         "name": "Doodloos Grootzwaard"
       },
+      "soulforged_warplate": {
+        "name": "Zielgesmede Krijgsplaat"
+      },
       "stormcallers_focus": {
         "name": "Stormroepers Focus"
       },
@@ -7448,61 +7460,31 @@ export const nl_NL: EnTranslations = {
       "deathless_heartwood": {
         "name": "Kernhout van de Dodeloze Kroon"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Kernhout van de Dodeloze Kroon"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, Laatste Eed van Doorntop"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, Laatste Eed van Doorntop"
       },
       "crownforged_dreadhelm": {
         "name": "Bonewrought-Schrikhelm"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought-Schrikhelm"
-      },
       "crownforged_warspaulders": {
-        "name": "Bonewrought-Strijdschouderstukken"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Bonewrought-Strijdschouderstukken"
       },
       "nighttalon_crown": {
         "name": "Direfang-Kroon"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Direfang-Kroon"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Direfang-Schouderstukken"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Direfang-Schouderstukken"
       },
       "soulflame_cowl": {
         "name": "Wraithfire-Kap"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Wraithfire-Kap"
-      },
       "soulflame_mantle": {
-        "name": "Wraithfire-Mantel"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Wraithfire-Mantel"
       },
       "stormcallers_crown": {
         "name": "Galecall-Kroon"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Galecall-Kroon"
-      },
       "stormcallers_spaulders": {
-        "name": "Galecall-Schouderstukken"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Galecall-Schouderstukken"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const nl_NL: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Verrezen Koninklijke Garde"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Doodloze Krijgswacht"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, Doodloze Hiërofant"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Doodloos Mes"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Gesel van Doorntop"

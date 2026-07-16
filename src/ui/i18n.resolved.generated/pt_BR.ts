@@ -7373,6 +7373,15 @@ export const pt_BR: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Cetro da Corte Imortal"
       },
+      "deathless_warguard_legmail": {
+        "name": "Malha de Pernas Imortal da Guarda de Guerra"
+      },
+      "soulrend_diadem": {
+        "name": "Diadema Dilacera-Almas"
+      },
+      "scourgehide_carapace": {
+        "name": "Carapaça de Couro do Flagelo"
+      },
       "cryptplate_helm": {
         "name": "Elmo de Placas da Cripta"
       },
@@ -7412,6 +7421,9 @@ export const pt_BR: EnTranslations = {
       "deathless_greatblade": {
         "name": "Grande Lâmina Imortal"
       },
+      "soulforged_warplate": {
+        "name": "Placa de Guerra Forjada na Alma"
+      },
       "stormcallers_focus": {
         "name": "Foco do Invocador da Tempestade"
       },
@@ -7448,61 +7460,31 @@ export const pt_BR: EnTranslations = {
       "deathless_heartwood": {
         "name": "Cerne da Coroa Imortal"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Cerne da Coroa Imortal"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, Último Juramento de Thornpeak"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, Último Juramento de Thornpeak"
       },
       "crownforged_dreadhelm": {
         "name": "Elmo Aterrador Bonewrought"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Elmo Aterrador Bonewrought"
-      },
       "crownforged_warspaulders": {
-        "name": "Espaldares de Guerra Bonewrought"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Espaldares de Guerra Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Coroa Direfang"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Coroa Direfang"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Guarda-ombros Direfang"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Guarda-ombros Direfang"
       },
       "soulflame_cowl": {
         "name": "Capuz Wraithfire"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Capuz Wraithfire"
-      },
       "soulflame_mantle": {
-        "name": "Manto Wraithfire"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Manto Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Coroa Galecall"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Coroa Galecall"
-      },
       "stormcallers_spaulders": {
-        "name": "Espaldares Galecall"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Espaldares Galecall"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const pt_BR: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Guarda real reerguido"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Guarda de Guerra Imortal"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, Hierofante Imortal"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Lâmina Imortal"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Flagelo de Thornpeak"

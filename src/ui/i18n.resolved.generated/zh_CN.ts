@@ -7373,6 +7373,15 @@ export const zh_CN: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "不死王庭权杖"
       },
+      "deathless_warguard_legmail": {
+        "name": "不死战卫腿甲"
+      },
+      "soulrend_diadem": {
+        "name": "裂魂冠冕"
+      },
+      "scourgehide_carapace": {
+        "name": "灾祸之皮甲壳"
+      },
       "cryptplate_helm": {
         "name": "墓板头盔"
       },
@@ -7412,6 +7421,9 @@ export const zh_CN: EnTranslations = {
       "deathless_greatblade": {
         "name": "不死巨刃"
       },
+      "soulforged_warplate": {
+        "name": "铸魂战甲"
+      },
       "stormcallers_focus": {
         "name": "唤雷之核"
       },
@@ -7448,61 +7460,31 @@ export const zh_CN: EnTranslations = {
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
-      "deathless_heartwood_heroic": {
-        "name": "不朽王冠之心木"
-      },
       "kingsbane_last_oath": {
-        "name": "弑座者，荆峰的最后誓言"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "弑座者，荆峰的最后誓言"
       },
       "crownforged_dreadhelm": {
         "name": "骨铸恐惧头盔"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "骨铸恐惧头盔"
-      },
       "crownforged_warspaulders": {
-        "name": "骨铸战肩甲"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "骨铸战肩甲"
       },
       "nighttalon_crown": {
         "name": "恐牙之冠"
       },
-      "nighttalon_crown_heroic": {
-        "name": "恐牙之冠"
-      },
       "nighttalon_shoulderguards": {
-        "name": "恐牙护肩"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "恐牙护肩"
       },
       "soulflame_cowl": {
         "name": "魂焰兜帽"
       },
-      "soulflame_cowl_heroic": {
-        "name": "魂焰兜帽"
-      },
       "soulflame_mantle": {
-        "name": "魂焰披肩"
-      },
-      "soulflame_mantle_heroic": {
         "name": "魂焰披肩"
       },
       "stormcallers_crown": {
         "name": "唤风之冠"
       },
-      "stormcallers_crown_heroic": {
-        "name": "唤风之冠"
-      },
       "stormcallers_spaulders": {
-        "name": "唤风肩甲"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "唤风肩甲"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const zh_CN: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "复苏王室卫兵"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "奥德伦，亡魂战卫"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "马尔里克，亡魂大祭司"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "沃斯，亡魂之刃"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "尼思拉克西斯，荆峰之灾"

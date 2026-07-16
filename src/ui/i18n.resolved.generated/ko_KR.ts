@@ -7373,6 +7373,15 @@ export const ko_KR: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "불사 궁정의 홀"
       },
+      "deathless_warguard_legmail": {
+        "name": "불사 전쟁수호 다리갑옷"
+      },
+      "soulrend_diadem": {
+        "name": "영혼분열 왕관"
+      },
+      "scourgehide_carapace": {
+        "name": "재앙가죽 갑각"
+      },
       "cryptplate_helm": {
         "name": "묘지판금 투구"
       },
@@ -7412,6 +7421,9 @@ export const ko_KR: EnTranslations = {
       "deathless_greatblade": {
         "name": "불사 대검"
       },
+      "soulforged_warplate": {
+        "name": "혼주조 전투갑옷"
+      },
       "stormcallers_focus": {
         "name": "폭풍소환사의 매개체"
       },
@@ -7448,61 +7460,31 @@ export const ko_KR: EnTranslations = {
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },
-      "deathless_heartwood_heroic": {
-        "name": "죽지 않는 왕관의 심재"
-      },
       "kingsbane_last_oath": {
-        "name": "왕좌살해자, 손피크의 마지막 맹세"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "왕좌살해자, 손피크의 마지막 맹세"
       },
       "crownforged_dreadhelm": {
         "name": "뼈벼림 공포투구"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "뼈벼림 공포투구"
-      },
       "crownforged_warspaulders": {
-        "name": "뼈벼림 전쟁 어깨갑옷"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "뼈벼림 전쟁 어깨갑옷"
       },
       "nighttalon_crown": {
         "name": "흉포송곳니 왕관"
       },
-      "nighttalon_crown_heroic": {
-        "name": "흉포송곳니 왕관"
-      },
       "nighttalon_shoulderguards": {
-        "name": "흉포송곳니 어깨수호대"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "흉포송곳니 어깨수호대"
       },
       "soulflame_cowl": {
         "name": "망령불꽃 두건"
       },
-      "soulflame_cowl_heroic": {
-        "name": "망령불꽃 두건"
-      },
       "soulflame_mantle": {
-        "name": "망령불꽃 어깨덮개"
-      },
-      "soulflame_mantle_heroic": {
         "name": "망령불꽃 어깨덮개"
       },
       "stormcallers_crown": {
         "name": "강풍부름 관"
       },
-      "stormcallers_crown_heroic": {
-        "name": "강풍부름 관"
-      },
       "stormcallers_spaulders": {
-        "name": "강풍부름 어깨갑옷"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "강풍부름 어깨갑옷"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const ko_KR: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "되살아난 왕실 근위병"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "죽지 않는 전쟁수호병 알드렌"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "죽지 않는 대사제 말릭"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "죽지 않는 칼날 보스"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "나이트락시스, 손피크의 재앙"

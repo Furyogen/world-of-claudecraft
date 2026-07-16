@@ -7373,6 +7373,15 @@ export const tr_TR: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Ölümsüz Saray Asası"
       },
+      "deathless_warguard_legmail": {
+        "name": "Ölümsüz Savaşmuhafızı Bacak Zırhı"
+      },
+      "soulrend_diadem": {
+        "name": "Ruhyırtan Tacı"
+      },
+      "scourgehide_carapace": {
+        "name": "Afetpostu Kabuğu"
+      },
       "cryptplate_helm": {
         "name": "Mezarzırh Miğferi"
       },
@@ -7412,6 +7421,9 @@ export const tr_TR: EnTranslations = {
       "deathless_greatblade": {
         "name": "Ölümsüz Pala"
       },
+      "soulforged_warplate": {
+        "name": "Ruhdövümü Savaş Zırhı"
+      },
       "stormcallers_focus": {
         "name": "Fırtınaçağıranın Odağı"
       },
@@ -7448,61 +7460,31 @@ export const tr_TR: EnTranslations = {
       "deathless_heartwood": {
         "name": "Ölümsüz Taç'ın Öz Odunu"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Ölümsüz Taç'ın Öz Odunu"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, Dikenzirve'nin Son Yemini"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, Dikenzirve'nin Son Yemini"
       },
       "crownforged_dreadhelm": {
         "name": "Bonewrought Dehşet Miğferi"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dehşet Miğferi"
-      },
       "crownforged_warspaulders": {
-        "name": "Bonewrought Savaş Omuzlukları"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Bonewrought Savaş Omuzlukları"
       },
       "nighttalon_crown": {
         "name": "Direfang Tacı"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Direfang Tacı"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Direfang Omuzlukları"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Direfang Omuzlukları"
       },
       "soulflame_cowl": {
         "name": "Wraithfire Başlığı"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Wraithfire Başlığı"
-      },
       "soulflame_mantle": {
-        "name": "Wraithfire Pelerini"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Wraithfire Pelerini"
       },
       "stormcallers_crown": {
         "name": "Galecall Tacı"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Galecall Tacı"
-      },
       "stormcallers_spaulders": {
-        "name": "Galecall Omuzlukları"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Galecall Omuzlukları"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const tr_TR: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Dirilen Kraliyet Muhafızı"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Ölümsüz Savaşmuhafızı"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, Ölümsüz Başrahip"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Ölümsüz Bıçak"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Dikenzirve Belası"

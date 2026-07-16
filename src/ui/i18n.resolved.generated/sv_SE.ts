@@ -7373,6 +7373,15 @@ export const sv_SE: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Odödliga hovets spira"
       },
+      "deathless_warguard_legmail": {
+        "name": "Odödlig krigsvakts benbrynja"
+      },
+      "soulrend_diadem": {
+        "name": "Själsrivardiadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Gisselhudspansar"
+      },
       "cryptplate_helm": {
         "name": "Kryptplåtshjälm"
       },
@@ -7412,6 +7421,9 @@ export const sv_SE: EnTranslations = {
       "deathless_greatblade": {
         "name": "Odödlig storklinga"
       },
+      "soulforged_warplate": {
+        "name": "Själssmidd krigsplåt"
+      },
       "stormcallers_focus": {
         "name": "Stormkallarens fokus"
       },
@@ -7448,61 +7460,31 @@ export const sv_SE: EnTranslations = {
       "deathless_heartwood": {
         "name": "Kärnved från den odödliga kronan"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Kärnved från den odödliga kronan"
-      },
       "kingsbane_last_oath": {
-        "name": "Tronbane, Törntoppens sista ed"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Tronbane, Törntoppens sista ed"
       },
       "crownforged_dreadhelm": {
         "name": "Bonewrought skräckhjälm"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought skräckhjälm"
-      },
       "crownforged_warspaulders": {
-        "name": "Bonewrought krigsskuldror"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Bonewrought krigsskuldror"
       },
       "nighttalon_crown": {
         "name": "Direfang-krona"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Direfang-krona"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Direfang-axelskydd"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Direfang-axelskydd"
       },
       "soulflame_cowl": {
         "name": "Wraithfire-huva"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Wraithfire-huva"
-      },
       "soulflame_mantle": {
-        "name": "Wraithfire-mantel"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Wraithfire-mantel"
       },
       "stormcallers_crown": {
         "name": "Galecall-krona"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Galecall-krona"
-      },
       "stormcallers_spaulders": {
-        "name": "Galecall-axelskydd"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Galecall-axelskydd"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const sv_SE: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Uppstånden kunglig vakt"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, den odödlige krigsvakten"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, den odödlige hierofanten"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, den odödliga kniven"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Törntoppens gissel"

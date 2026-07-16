@@ -4338,8 +4338,7 @@ export class Hud {
   private itemTooltip(item: ItemDef, compare = true): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
-    // Quality/kind line, e.g. "Epic Armor". Heroic items (dungeon upgraded variants
-    // via heroicOf, bespoke heroic-tier raid gear via heroic) append a gold
+    // Quality/kind line, e.g. "Epic Armor". Heroic upgraded variants append a gold
     // "[HEROIC]" tag here (never in the name) so the drop reads "Epic Armor [HEROIC]".
     let qualityKindHtml = esc(
       t('itemUi.tooltip.qualityKind', {
@@ -4347,7 +4346,7 @@ export class Hud {
         kind: itemKindLabel(item.kind),
       }),
     );
-    if (item.heroicOf || item.heroic) {
+    if (item.heroicOf) {
       qualityKindHtml += ` <span style="color:#e5cc80">${esc(t('hudChrome.itemHeroicTag'))}</span>`;
     }
     html += `<div class="tt-sub">${qualityKindHtml}</div>`;

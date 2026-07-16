@@ -102,7 +102,6 @@ describe('nonHeroicBisKit', () => {
       for (const [slot, itemId] of Object.entries(kit) as [EquipSlot, string][]) {
         const item = ITEMS[itemId];
         expect(item, `${cls} ${slot} ${itemId}`).toBeDefined();
-        expect(item.heroic ?? false, `${cls} ${slot} ${itemId} heroic`).toBe(false);
         expect(item.heroicOf, `${cls} ${slot} ${itemId} heroicOf`).toBeUndefined();
         expect(itemId in HEROIC_ITEMS, `${cls} ${slot} ${itemId} bespoke heroic`).toBe(false);
         expect(HEROIC_VENDOR_IDS.has(itemId), `${cls} ${slot} ${itemId} vendor`).toBe(false);
@@ -117,7 +116,6 @@ describe('nonHeroicBisKit', () => {
     const anyJewelry = Object.values(ITEMS).some(
       (i) =>
         (i.slot === 'neck' || i.slot === 'ring') &&
-        !i.heroic &&
         !i.heroicOf &&
         !(i.id in HEROIC_ITEMS) &&
         !HEROIC_VENDOR_IDS.has(i.id),
@@ -136,8 +134,7 @@ describe('nonHeroicBisKit', () => {
         (i) =>
           i.slot === 'chest' &&
           i.kind === 'armor' &&
-          !i.heroic &&
-          !i.heroicOf &&
+            !i.heroicOf &&
           !(i.id in HEROIC_ITEMS) &&
           !HEROIC_VENDOR_IDS.has(i.id) &&
           canEquipItem(cls, i) &&
@@ -219,7 +216,6 @@ describe('bags, gold, and alternate role kits', () => {
     const bags = Object.values(ITEMS).filter(
       (i) =>
         i.kind === 'bag' &&
-        !i.heroic &&
         !i.heroicOf &&
         !(i.id in HEROIC_ITEMS) &&
         !HEROIC_VENDOR_IDS.has(i.id),
@@ -357,7 +353,6 @@ describe('tank, dual-wield, and shadow kits', () => {
     expect(fury.extras).toEqual(['bonewrought_greatsword', 'emberfang_warblade']);
     for (const id of fury.extras ?? []) {
       const item = ITEMS[id];
-      expect(item.heroic ?? false, `${id} heroic`).toBe(false);
       expect(item.heroicOf, `${id} heroicOf`).toBeUndefined();
       expect(id in HEROIC_ITEMS, `${id} bespoke heroic`).toBe(false);
       expect(canEquipItem('warrior', item), `${id} canEquip`).toBe(true);

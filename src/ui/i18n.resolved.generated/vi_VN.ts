@@ -7373,6 +7373,15 @@ export const vi_VN: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Vương Trượng Triều Đình Bất Tử"
       },
+      "deathless_warguard_legmail": {
+        "name": "Giáp Chân Lưới Vệ Chiến Bất Tử"
+      },
+      "soulrend_diadem": {
+        "name": "Vương Miện Xé Hồn"
+      },
+      "scourgehide_carapace": {
+        "name": "Giáp Mai Da Tai Ương"
+      },
       "cryptplate_helm": {
         "name": "Mũ Giáp Tấm Hầm Mộ"
       },
@@ -7412,6 +7421,9 @@ export const vi_VN: EnTranslations = {
       "deathless_greatblade": {
         "name": "Đại Kiếm Bất Tử"
       },
+      "soulforged_warplate": {
+        "name": "Chiến Giáp Rèn Hồn"
+      },
       "stormcallers_focus": {
         "name": "Pháp Khí của Kẻ Gọi Bão"
       },
@@ -7448,61 +7460,31 @@ export const vi_VN: EnTranslations = {
       "deathless_heartwood": {
         "name": "Lõi Gỗ Của Vương Miện Bất Tử"
       },
-      "deathless_heartwood_heroic": {
-        "name": "Lõi Gỗ Của Vương Miện Bất Tử"
-      },
       "kingsbane_last_oath": {
-        "name": "Thronebane, Lời Thề Cuối Cùng Của Đỉnh Gai"
-      },
-      "kingsbane_last_oath_heroic": {
         "name": "Thronebane, Lời Thề Cuối Cùng Của Đỉnh Gai"
       },
       "crownforged_dreadhelm": {
         "name": "Mũ Kinh Hoàng Bonewrought"
       },
-      "crownforged_dreadhelm_heroic": {
-        "name": "Mũ Kinh Hoàng Bonewrought"
-      },
       "crownforged_warspaulders": {
-        "name": "Giáp Vai Chiến Bonewrought"
-      },
-      "crownforged_warspaulders_heroic": {
         "name": "Giáp Vai Chiến Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Vương Miện Direfang"
       },
-      "nighttalon_crown_heroic": {
-        "name": "Vương Miện Direfang"
-      },
       "nighttalon_shoulderguards": {
-        "name": "Giáp Vai Direfang"
-      },
-      "nighttalon_shoulderguards_heroic": {
         "name": "Giáp Vai Direfang"
       },
       "soulflame_cowl": {
         "name": "Mũ Trùm Wraithfire"
       },
-      "soulflame_cowl_heroic": {
-        "name": "Mũ Trùm Wraithfire"
-      },
       "soulflame_mantle": {
-        "name": "Áo Choàng Wraithfire"
-      },
-      "soulflame_mantle_heroic": {
         "name": "Áo Choàng Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Vương Miện Galecall"
       },
-      "stormcallers_crown_heroic": {
-        "name": "Vương Miện Galecall"
-      },
       "stormcallers_spaulders": {
-        "name": "Giáp Vai Galecall"
-      },
-      "stormcallers_spaulders_heroic": {
         "name": "Giáp Vai Galecall"
       },
       "bonewrought_greatsword": {
@@ -7764,15 +7746,6 @@ export const vi_VN: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Cấm Vệ Hồi Sinh"
-      },
-      "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Vệ Chiến Bất Tử"
-      },
-      "nythraxis_heroic_priest_add": {
-        "name": "Malric, Đại Tư Tế Bất Tử"
-      },
-      "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Lưỡi Dao Bất Tử"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Tai Họa Đỉnh Gai"

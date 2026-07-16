@@ -659,22 +659,7 @@ describe('dungeons: heroic boss drops', () => {
   });
 
   it('the heroic Nythraxis raid boss drops from its own heroic table', () => {
-    const heroicTable = HEROIC_BOSS_LOOT.nythraxis_scourge_of_thornpeak;
-    const table = heroicTable.map((e) => e.itemId);
-    const groups = new Map<string, typeof heroicTable>();
-    for (const entry of heroicTable) {
-      const group = entry.rollGroup!;
-      groups.set(group, [...(groups.get(group) ?? []), entry]);
-    }
-    expect(groups.size).toBe(5);
-    // Four armor groups of two heroic set pieces (helm + shoulder) plus one
-    // weapon/legendary group of five: eight set pieces + three weapons + two
-    // legendaries = 13.
-    expect(new Set(table).size).toBe(13);
-    for (const entries of groups.values()) {
-      expect(entries.length).toBeGreaterThanOrEqual(2);
-      expect(entries.reduce((sum, entry) => sum + entry.chance, 0)).toBeCloseTo(1, 10);
-    }
+    const table = HEROIC_BOSS_LOOT.nythraxis_scourge_of_thornpeak.map((e) => e.itemId);
     const dropped = new Set<string>();
     for (let seed = 1; seed <= 8; seed++) {
       const sim = makeSim(seed);
@@ -699,20 +684,8 @@ describe('dungeons: heroic boss drops', () => {
         null,
         'hit',
       );
-      const items = (boss.loot?.items ?? []) as any[];
-      const epics = items.filter((s) => table.includes(s.itemId));
-      expect(epics.length, `seed ${seed}`).toBe(5); // one per heroic roll group
-      // The normal-tier groups are suppressed on a heroic raid claim: every
-      // dropped item is a [HEROIC] raid epic, no normal Nythraxis gear.
-      const normalTierIds = new Set(
-        (MOBS[NYTHRAXIS_BOSS_ID].loot ?? [])
-          .filter((e: any) => e.rollGroup && e.itemId)
-          .map((e: any) => e.itemId),
-      );
-      expect(
-        items.some((s) => normalTierIds.has(s.itemId)),
-        `seed ${seed} no normal gear`,
-      ).toBe(false);
+      const epics = ((boss.loot?.items ?? []) as any[]).filter((s) => table.includes(s.itemId));
+      expect(epics.length, `seed ${seed}`).toBe(2); // one per roll group
       for (const s of epics) dropped.add(s.itemId);
     }
     expect(dropped.size).toBeGreaterThan(2);

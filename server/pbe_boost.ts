@@ -294,7 +294,7 @@ function eligibleForBoost(cls: PlayerClass, item: ItemDef): boolean {
   ) {
     return false;
   }
-  if (item.heroic || item.heroicOf) return false;
+  if (item.heroicOf) return false;
   if (item.id in HEROIC_ITEMS) return false;
   if (HEROIC_VENDOR_IDS.has(item.id)) return false;
   if (!canEquipItem(cls, item)) return false;
@@ -442,7 +442,7 @@ export function bestBoostBag(): string {
   let best: ItemDef | null = null;
   for (const item of Object.values(ITEMS)) {
     if (item.kind !== 'bag') continue;
-    if (item.heroic || item.heroicOf || item.id in HEROIC_ITEMS) continue;
+    if (item.heroicOf || item.id in HEROIC_ITEMS) continue;
     if (HEROIC_VENDOR_IDS.has(item.id)) continue;
     if (!best || (item.bagSlots ?? 0) > (best.bagSlots ?? 0)) best = item;
   }
