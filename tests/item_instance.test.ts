@@ -159,4 +159,49 @@ describe('item-instance payload (#1165)', () => {
       sim.meta(seller)?.inventory.some((s) => s.itemId === 'apprentice_staff' && s.instance),
     ).toBe(true);
   });
+
+  it('trade cannot flatten an instanced copy into a fungible item', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    const buyer = sim.addPlayer('mage', 'Buyer');
+    sim.addItemInstance('apprentice_staff', { signer: 'Aldric', boundTo: seller }, seller);
+
+    sim.tradeRequest(buyer, seller);
+    sim.tradeAccept(buyer);
+    sim.tradeSetOffer([{ itemId: 'apprentice_staff', count: 1 }], 0, seller);
+    sim.tradeConfirm(seller);
+    sim.tradeConfirm(buyer);
+
+    expect(sim.countItem('apprentice_staff', buyer)).toBe(0);
+    expect(
+      sim
+        .meta(seller)
+        ?.inventory.some(
+          (slot) => slot.itemId === 'apprentice_staff' && slot.instance?.signer === 'Aldric',
+        ),
+    ).toBe(true);
+  });
+
+  it('trade moves a plain copy without touching a same-id instanced copy', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    const buyer = sim.addPlayer('mage', 'Buyer');
+    sim.addItem('apprentice_staff', 1, seller);
+    sim.addItemInstance('apprentice_staff', { signer: 'Aldric', boundTo: seller }, seller);
+
+    sim.tradeRequest(buyer, seller);
+    sim.tradeAccept(buyer);
+    sim.tradeSetOffer([{ itemId: 'apprentice_staff', count: 1 }], 0, seller);
+    sim.tradeConfirm(seller);
+    sim.tradeConfirm(buyer);
+
+    expect(sim.countItem('apprentice_staff', buyer)).toBe(1);
+    expect(
+      sim
+        .meta(seller)
+        ?.inventory.some(
+          (slot) => slot.itemId === 'apprentice_staff' && slot.instance?.signer === 'Aldric',
+        ),
+    ).toBe(true);
+  });
 });

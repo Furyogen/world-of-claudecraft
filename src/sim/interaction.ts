@@ -52,7 +52,14 @@ import {
   rollCorpseMaterialRarity,
 } from './professions/gathering';
 import type { SimContext } from './sim_context';
-import { dist2d, type Entity, INTERACT_RANGE, type InvSlot, OBJECT_RESPAWN } from './types';
+import {
+  cloneItemInstancePayload,
+  dist2d,
+  type Entity,
+  INTERACT_RANGE,
+  type InvSlot,
+  OBJECT_RESPAWN,
+} from './types';
 import { markWorldBossLooted } from './world_boss';
 
 // Shared corpse loot-rights snapshot for both the manual `lootCorpse` and the passive
@@ -122,7 +129,11 @@ export function lootCorpse(
     if (!lootSlotVisibleTo(s, meta.entityId)) continue;
     if (s.openToAll) {
       while (s.count > 0 && ctx.canAddItem(s.itemId, 1, meta.entityId)) {
-        ctx.addItem(s.itemId, 1, meta.entityId);
+        if (s.instance) {
+          ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
+        } else {
+          ctx.addItem(s.itemId, 1, meta.entityId);
+        }
         s.count--;
       }
       if (s.count > 0) bagsFull = true;
@@ -133,14 +144,26 @@ export function lootCorpse(
         bagsFull = true;
         continue;
       }
-      ctx.addItem(s.itemId, 1, meta.entityId);
+      if (s.instance) {
+        ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
+      } else {
+        ctx.addItem(s.itemId, 1, meta.entityId);
+      }
       s.personalFor = s.personalFor.filter((id) => id !== meta.entityId);
       tookPersonal = true;
       continue;
     }
     if (!rights.shared) continue;
-    while (s.count > 0 && awardSharedLootItem(ctx, s.itemId, mob, meta)) {
-      s.count--;
+    while (s.count > 0) {
+      if (s.instance) {
+        if (!ctx.canAddItem(s.itemId, 1, meta.entityId)) break;
+        ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
+        s.count--;
+      } else if (awardSharedLootItem(ctx, s.itemId, mob, meta)) {
+        s.count--;
+      } else {
+        break;
+      }
     }
     if (s.count > 0) bagsFull = true;
   }
@@ -221,7 +244,7 @@ export function harvestCorpse(
     return;
   }
   const mob = ctx.entities.get(mobId);
-  if (!mob || mob.kind !== 'mob' || !mob.dead) return;
+  if (mob?.kind !== 'mob' || !mob.dead) return;
   const componentTags = MOBS[mob.templateId]?.componentTags;
   if (!isHarvestableCorpse(componentTags)) {
     ctx.error(meta.entityId, 'That corpse has nothing to harvest.');
@@ -399,6 +422,23 @@ export function interact(ctx: SimContext, pid?: number): void {
           ctx.leaveDungeon(p.id);
           return;
         }
+        if (target.templateId === 'rift_portal' && target.riftSeed !== undefined) {
+          ctx.enterRift(target.riftSeed, target.riftBaseLevel ?? p.level, p.id, undefined, target);
+          return;
+        }
+        if (target.templateId === 'rift_exit') {
+          ctx.leaveRift(p.id);
+          return;
+        }
+        if (target.templateId === 'rift_locked_chest') {
+          // Offer the ante selector; the pick itself runs via lockpick_engage.
+          ctx.emit({ type: 'lockpickOffer', objectId: target.id, bountiful: false, pid: p.id });
+          return;
+        }
+        if (target.templateId === 'rift_treasure') {
+          ctx.riftOpenTreasure(target.id, p.id);
+          return;
+        }
         if (target.templateId === 'mailbox') {
           ctx.emit({ type: 'mailbox', pid: p.id });
           return;
@@ -454,6 +494,22 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (obj.templateId === 'dungeon_exit') {
       ctx.leaveDungeon(p.id);
+      return;
+    }
+    if (obj.templateId === 'rift_portal' && obj.riftSeed !== undefined) {
+      ctx.enterRift(obj.riftSeed, obj.riftBaseLevel ?? p.level, p.id, undefined, obj);
+      return;
+    }
+    if (obj.templateId === 'rift_exit') {
+      ctx.leaveRift(p.id);
+      return;
+    }
+    if (obj.templateId === 'rift_locked_chest') {
+      ctx.emit({ type: 'lockpickOffer', objectId: obj.id, bountiful: false, pid: p.id });
+      return;
+    }
+    if (obj.templateId === 'rift_treasure') {
+      ctx.riftOpenTreasure(obj.id, p.id);
       return;
     }
     if (obj.templateId === 'mailbox') {

@@ -726,15 +726,48 @@ class Sfx {
     // swelling while a match is live (the renderer passes 0 / ~0.4 / 1).
     this.ambient('amb_crowd', crowd > 0 ? 0.08 + 0.18 * Math.min(1, crowd) : 0);
     this.ambient('amb_wind_vale', !inDungeon && (biome === 'vale' || biome === 'beach') ? 0.12 : 0);
-    this.ambient('amb_birds', !inDungeon && biome === 'vale' ? 0.1 : 0);
     this.ambient(
-      'amb_wind_marsh',
-      !inDungeon && (biome === 'marsh' || biome === 'cave') ? 0.13 : 0,
+      'amb_birds',
+      !inDungeon &&
+        (biome === 'vale' || biome === 'jungle' || biome === 'garden' || biome === 'gale')
+        ? 0.12
+        : 0,
     );
-    this.ambient(
-      'amb_wind_peaks',
-      !inDungeon && (biome === 'peaks' || biome === 'desert' || biome === 'volcano') ? 0.18 : 0,
-    );
+    // The dusk realm shares the marsh's low still-air bed, kept quieter: a
+    // sheltered valley, no open-ridge wind. ...and the ember wastes a faint
+    // dry-air version of the same bed. Cave (paint-only) borrows the marsh bed.
+    const marshBed =
+      biome === 'marsh' || biome === 'cave'
+        ? 0.13
+        : biome === 'dusk'
+          ? 0.07
+          : biome === 'ember'
+            ? 0.05
+            : biome === 'amber'
+              ? 0.09
+              : biome === 'fen'
+                ? 0.11
+                : biome === 'night'
+                  ? 0.06 // hushed still night air
+                  : biome === 'haunt'
+                    ? 0.14 // the wood breathes: thick still air
+                    : biome === 'jungle'
+                      ? 0.1 // humid insect drone
+                      : biome === 'garden'
+                        ? 0.07 // bees in the beds
+                        : 0;
+    this.ambient('amb_wind_marsh', !inDungeon ? marshBed : 0);
+    // the Frostveil shares the peaks' ridge wind, a touch stronger in the mist;
+    // desert/volcano (paint-only) borrow the peaks ridge bed too.
+    const peaksBed =
+      biome === 'peaks' || biome === 'desert' || biome === 'volcano'
+        ? 0.18
+        : biome === 'frost'
+          ? 0.2
+          : biome === 'gale'
+            ? 0.24
+            : 0;
+    this.ambient('amb_wind_peaks', !inDungeon ? peaksBed : 0);
     this.ambient('amb_rain', precip === 'rain' ? 0.11 : 0); // sharp clip, kept very low
     this.ambient('amb_snow', precip === 'snow' ? 0.13 : 0);
     this.ambient('amb_water', nearWater ? 0.18 : 0);

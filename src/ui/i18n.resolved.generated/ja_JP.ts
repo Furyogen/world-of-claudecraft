@@ -315,6 +315,29 @@ export const ja_JP: EnTranslations = {
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
       "spiritHealerAlive": "霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。"
     },
+    "unstuck": {
+      "menuButton": "スタック解除",
+      "help": "復帰：/unstuck はその場でカウントダウンを開始し、近くの到達可能な安全地点へ移動します。",
+      "started": "{seconds}秒後にスタックを解除します。移動、戦闘、被ダメージ、別の行動を始めるとキャンセルされます。",
+      "countdown": "スタック解除：{seconds}",
+      "completed": "到達可能な最寄りの安全な場所へ移動しました。",
+      "cancelledMoved": "移動したため、スタック解除をキャンセルしました。",
+      "cancelledDamaged": "ダメージを受けたため、スタック解除をキャンセルしました。",
+      "cancelledCombat": "戦闘に入ったため、スタック解除をキャンセルしました。",
+      "cancelledBusy": "別の行動を始めたため、スタック解除をキャンセルしました。",
+      "cancelledState": "状態が変化したため、スタック解除をキャンセルしました。",
+      "cancelledDisconnected": "接続が切れたため、スタック解除をキャンセルしました。",
+      "noSafePosition": "近くに到達可能な安全な場所がありません。移動は行われませんでした。",
+      "alreadyActive": "スタック解除のカウントダウンはすでに進行中です。",
+      "alreadySafe": "すでに安全で到達可能な場所にいます。",
+      "cooldown": "スタック解除はあと{seconds}秒で使用できます。",
+      "dead": "死亡中または霊体中はスタック解除を使用できません。",
+      "combat": "戦闘中はスタック解除を使用できません。",
+      "controlled": "移動を妨げられている間はスタック解除を使用できません。",
+      "standStill": "安定した地面で静止してからスタック解除を使用してください。",
+      "busy": "現在の行動を終えてからスタック解除を使用してください。",
+      "unavailable": "現在の状態ではスタック解除を使用できません。"
+    },
     "emotes": {
       "wave": "手を振る",
       "laugh": "大笑い",
@@ -1649,7 +1672,10 @@ export const ja_JP: EnTranslations = {
       "label": "フレーム位置をリセット"
     },
     "itemTooltip": {
-      "requiresLevel": "必要レベル {level}"
+      "requiresLevel": "必要レベル {level}",
+      "riftTier": "{tier}ランク・リフト装備",
+      "riftUpgrade": "リフト強化 {level}/{max}",
+      "riftSockets": "リフト宝石 {used}/{total}"
     },
     "discord": {
       "title": "Discord",
@@ -2424,7 +2450,17 @@ export const ja_JP: EnTranslations = {
         "marshName": "マイアフェン湿地",
         "marshBlurb": "沈んだ沼地と波に削られた遺跡。マッドフィンや、それ以上に厄介なものが棲む。",
         "peaksName": "ソーンピーク高地",
-        "peaksBlurb": "風に削られた尾根が、この世界で最も冷たい危険へと続いていく。"
+        "peaksBlurb": "風に削られた尾根が、この世界で最も冷たい危険へと続いていく。",
+        "duskName": "ヴェールの幽谷",
+        "duskBlurb": "山々の下に封じられた領域。入り口の噂がまことなら、だが。",
+        "emberName": "ドレイクランド",
+        "emberBlurb": "ペイル・コーズウェイを越えると緑は燃え殻に変わり、荒野には古きものが君臨する。",
+        "frostName": "フロストヴェイルの果て",
+        "frostBlurb": "どの地図にも載らない雪の高地。揺らめくオーロラの中にだけ垣間見える。",
+        "amberName": "アンバーフォール",
+        "amberBlurb": "西の断崖の向こうには終わらない秋があり、金色の湖にランタンが灯る。",
+        "fenName": "ウィローフェン",
+        "fenBlurb": "秋の冠を越えた先には、柳と静かな水の明るい湿原と、堀に守られた町がある。"
       },
       "group": {
         "heading": "難所は仲間と挑もう",
@@ -2884,6 +2920,18 @@ export const ja_JP: EnTranslations = {
       "reptile": {
         "name": "爬虫類",
         "desc": "独特の威嚇音と鋭い一撃を持つ、冷血のハンターたち。温血の獣たちとは一線を画します。"
+      },
+      "murloc": {
+        "name": "クロークフィン",
+        "desc": "湖岸や潮だまりに棲む、しわがれ声の魚人たち。近づきすぎた者には、すぐさま群れをなして襲いかかります。"
+      },
+      "kobold": {
+        "name": "いたずら小妖",
+        "desc": "林間や生け垣をちょろちょろと駆け回る、漁り屋の小妖たち。数が揃うまでは、脅威というより厄介者です。"
+      },
+      "demon": {
+        "name": "デーモン",
+        "desc": "裂け目の彼方から来た侵略者たち。その身は炎と悪意のかたまりです。一体がいるところ、次元の裂け目は決して遠くありません。"
       }
     },
     "worldPage": {
@@ -2897,15 +2945,55 @@ export const ja_JP: EnTranslations = {
       "valeBlurb": "緑あふれる始まりの谷。新たな英雄たちが、イーストブルックの町の周りでオオカミや盗賊を相手に腕を磨く場所です。",
       "marshBlurb": "霧と廃墟に沈んだ国。浅瀬にはマッドフィンが群れ、水の底ではより古き何かがうごめいています。橋の町フェンブリッジから見張られています。",
       "peaksBlurb": "風に削られた尾根と古い鉱山跡。この地で最も寒く、最も高所にある危険へと続いており、前哨地ハイウォッチが守っています。",
+      "duskBlurb": "エルダーグリームの大樹の下に広がる、永遠の黄昏に沈む谷。水晶の遺跡が輝き、大気は古の魔力に満ちて震えています。",
+      "emberBlurb": "嵐の光に照らされた灰と血硝子の荒れ地。カルデラの上空をドレイクが旋回し、砂丘のあいだにはトロルの篝火が燃えています。門の町ワームウォッチから見張られています。",
+      "frostBlurb": "オーロラの下、雪と暗い松の森が静まり返る地。寒さそのものが目覚めているかのようで、アイスマントルは絶やさず火を焚き続けています。",
+      "amberBlurb": "金と紅の葉が決して散らない、永遠の秋の国。ランタンの灯る町ランタンミアの周りに広がっています。",
+      "fenBlurb": "睡蓮とゆるやかな水をたたえた、明るく羽音に満ちた湿地。橋の町ブリッジミアから、古い板張りの道で渡っていきます。",
+      "nightBlurb": "星降る真夜中のレルム。花々が小道を照らし、ムーンレストは夢見る空の下で静かな見張りを続けています。",
+      "hauntBlurb": "巨大な樹冠に覆われた呪われた森。街道でまともな光といえば、ギャロウミアのランタンだけです。",
+      "galeBlurb": "風のやむことのない海崖と咆哮の丘陵。古き烽火台の火は決して消えず、ウィックハーバーは扉を固く閉ざしています。",
+      "jungleBlurb": "ヤシと白砂、騒がしい鳥たちの南国の密林。浜の町ドリフトヘイヴンが、渚に火を灯し続けています。",
+      "gardenBlurb": "誰も姿を見たことのない庭師によって、今も刈り込まれ続けている生け垣迷路の庭園のレルム。ヘッジウィックとその噴水の中庭を抜けて入ります。",
       "valeGreeting": "刃を手放すな。渓谷はかつての姿ではない。",
       "valeGreeter": "レッドブルック元帥、イーストブルック",
       "marshGreeting": "門で止まれ。あの葦の向こうでは、沼が我々の代わりに殺しをやってくれる。",
       "marshGreeter": "番人フェンウィック、フェンブリッジ",
       "peaksGreeting": "この壁は二百年立ち続けてきた。私が守る限り崩れはしないが、軋んでいる。",
       "peaksGreeter": "隊長テサリー、ハイウォッチ",
+      "duskGreeting": "そなたの同族でこの枝の下に立った者は少ない。静かに歩み、歓迎を受けるがよい。",
+      "duskGreeter": "守り手セルウィン、エルダーグリーム",
+      "emberGreeting": "荒れ地から吹く熱風、ドレイクモウの上を舞う竜、砂丘に燃えるトロルの篝火。外へ出る前に、一杯やっていけ。",
+      "emberGreeter": "門衛、ワームウォッチ",
+      "frostGreeting": "壁の外では、雪があらゆる音を飲み込む。空の光が踊り始めたら、声を潜め、火を絶やすな。",
+      "frostGreeter": "炉の守り手、アイスマントル",
+      "amberGreeting": "ここの葉はどれも金と紅に燃えているのに、一枚として散ることがない。ランタンはお前さんのために灯してある。登り道ではゴールドメルトに気をつけな。",
+      "amberGreeter": "ランタン職人、ランタンミア",
+      "fenGreeting": "この湿原はトンボと蜂の羽音でいっぱいだ。橋を渡って、しばし足を休めていくといい。池のそばでは板の道を外れるなよ。",
+      "fenGreeter": "橋守、ブリッジミア",
+      "nightGreeting": "ナイトゲートの先では、大気そのものが夢を見ている。花明かりをたどり、空に浮かぶ眠れる世界に心せよ。",
+      "nightGreeter": "不寝番の守り手、ムーンレスト",
+      "hauntGreeting": "ランタンのそばを離れるな、旅人よ。それから、道の外から森がお前の名を呼んでも、決して答えるな。",
+      "hauntGreeter": "点灯夫、ギャロウミア",
+      "galeGreeting": "ここでは風は一度たりともやんだことがなく、古き烽火台の火は一度たりとも消えたことがない。宿の扉はしっかり閉めてくれ。",
+      "galeGreeter": "烽火の番人、ウィックハーバー",
+      "jungleGreeting": "温かい砂、騒がしい鳥、そして地平線を飲み込むジャングル。浜辺には火を灯してある。必ずそこへ帰ってくるんだよ。",
+      "jungleGreeter": "港の女主人、ドリフトヘイヴン",
+      "gardenGreeting": "百年ものあいだ庭師の姿を見た者はいないのに、誰かが今も生け垣を刈り込んでいる。迷路には気をつけろ。向こうもこちらに気を配っているのだからな。",
+      "gardenGreeter": "門番、ヘッジウィック",
       "valePlaceNotes": "イーストブルックは最初の本拠地です。狼の道と猪の草地は穏やかな狩り場、鏡の湖は良い釣り場ですが、浅瀬にはマッドフィンが群れています。セイブルウェブと銅鉱山には蜘蛛と鉱石に貪欲な掘り手が隠れ、盗賊の野営地と倒れた礼拝堂にはより手荒い仕事があります。聖遺物庫の丘はレルム初のデルヴ、崩れた聖遺物庫へと落ち込み、ブライトウッドの林間は北にある静かな陽だまりの木立です。そしてソウフィールドはイーストブルックの壁に囲まれたボアボール場で、収穫休戦のもとヴェイルカップが行われます。",
       "marshPlaceNotes": "フェンブリッジは唯一の乾いた道を守っています。徘徊者の葦原とディープフェンの浅瀬は沼地の獣とマッドフィンでひしめき、寡婦蜘蛛の茂みは蜘蛛の糸が厚く張られています。沈んだ礼拝堂とトロルの塚にはより古き危険が潜み、塚のすぐ北には沼地自身のデルヴ、溺れし連祷が口を開けています。グレイブコーラーの野営地にはカルトが立てこもり、沈んだ砦は沼地のインスタンス化された中心地です。",
       "peaksPlaceNotes": "ハイウォッチは壁を守っています。ストーカー尾根とディープロックの巣穴は尾根猫と穴掘りのもの、オーガの丘陵とドログマーの戦営は雇われの荒くれ者のもの。ストームクラグはエレメンタルで弾け、その下にはグリマーミアが輝きます。その岸辺には、溺れし神殿へと下る蒼白い光の門があります。ワームカルトのテントとレヴェナントの野原がカルトの高所を囲み、その頂には墓ワームの聖所があります。",
+      "duskPlaceNotes": "エルダーグリームは大樹の下に集う。ダスクフォール洞窟とその見晴らし台が入り口であり、谷を初めて望む場所でもある。長老樹の森と星降りの盆地は静かな南を守り、沈んだ宮廷は東で草に覆われた遺跡を抱え、輝きの深みと水晶の浅瀬は北で淡く光る。",
+      "emberPlaceNotes": "ワームウォッチは門を守っています。ゲートウッドは荒れ地を前にした最後の緑地。燃えがらの砂丘には灰と、それより悪いものが吹き溜まります。トロルの集会場は砂丘のトロルたちが篝火を囲む場所、血硝子の野は剃刀のような破片できらめき、ドレイクモウ・カルデラはドレイクたちが旋回する、煙を上げる王冠です。",
+      "frostPlaceNotes": "アイスマントルは最後の温かな炉を守っています。雪線から先は吹き溜まりの領分。氷河の山湖は氷の下に黒く静まる水をたたえ、オーロラの階段は踊る光の下を登っていきます。シヴァーフェンは決して寝静まらない凍てついた泥沼で、咆哮の段丘は毎晩その名にふさわしい声を上げます。",
+      "amberPlaceNotes": "ランタンミアは実りの中心で輝いています。ゴールドメルトは琥珀に濡れた入り口の峠。金箔の果樹園と収穫の窪地には、いちばん甘い実りと、いちばん大胆な盗人たちがいます。グレートミアは燃える葉を映し、シンダーメイプルの丘は最も高く最も紅く立ち、傾いたモノリスは秋よりも古い何かを覚えています。",
+      "fenPlaceNotes": "ブリッジミアはゆるやかな水をまたいで座しています。アンバーフェンの階段は実りの国から下ってくる道。睡蓮の湿原と沼光の池はウィスプとトンボできらめき、ウィローウィープは湖面へと枝を垂らします。まどろみの平地は、この地でいちばん穏やかな場所です。",
+      "nightPlaceNotes": "ムーンレストは見張りを続けています。ナイトゲートは真夜中の国への入り口。月の泉にはそばに立てるほど近くに星明かりが湛えられ、宵闇の野は暗がりの中で花開きます。不動の見張りは微動だにせず見つめ続け、眠らずの塚はこの地でただ一つ、決して夢を見ない場所です。",
+      "hauntPlaceNotes": "ギャロウミアはランタンの内側に身を寄せ合っています。鴉の門は森の陰気な玄関口。寡婦蜘蛛の茂みは蜘蛛の糸が厚く張られています。首吊りの林間と嘆き石の礼拝堂は森の最も古い悲しみを抱え、狩人の空き地は、今もそこで狩りを続ける何者かのものです。",
+      "galePlaceNotes": "ウィックハーバーは風に身を傾けています。風の道は崖沿いの入り口の道。咆哮の丘陵は強風の下、木一本なくうねっています。古き烽火台は誰も知らぬ昔から燃え続け、断ち崖は水面まで垂直に落ち込み、難破船の野はこの海岸の油断ならなさを物語ります。そして鏡の山湖は、このレルムでただ一つ静止しているものです。",
+      "junglePlaceNotes": "ドリフトヘイヴンは浜辺の火を守っています。タングルマウスは川が緑の壁とぶつかる場所。パームストランドは白く温かな砂浜となって波打ち際に続きます。エメラルドの密林とヴァインフォールは内陸を飲み込み、サファイアの礁湖は澄んで深く輝き、沈んだ偶像は水の底からこちらを見つめています。",
+      "gardenPlaceNotes": "ヘッジウィックは庭園の門で待っています。彫像の小径には物言わぬ立ち姿が並び、野薔薇の原はとうの昔に花壇を飛び出しました。花びらの池は一年中桃色に漂い、大迷路は客が来るたびに作法を並べ替え、噴水の中庭は庭園の中心で今も澄んだ水を流し続けています。",
       "gladeTitle": "静かな一角：ブライトウッド・グレード",
       "gladeBody": "Valeの物語がすべて死者について語るわけではありません。北にはBrightwood Gladeと呼ばれる陽だまりの木立があり、静かな小道と枝々の下に揺れる木漏れ日とともに、穏やかな独自の調子を保っています。あなたが追う足跡への柔らかな対照であり、道に寄り道の余裕があるなら見る価値があります。",
       "worldBossTitle": "峰が目覚めるとき：ワールドボス",
@@ -3443,6 +3531,8 @@ export const ja_JP: EnTranslations = {
       "view3dTitle": "レンダリングされたワールドで編集",
       "view2d": "2D",
       "view2dTitle": "俯瞰の記号マップで編集",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "元に戻す：{count}",
       "undoCountTitle": "{count} 手戻せます（Ctrl+Z で元に戻す、Ctrl+Y でやり直し）",
       "autosave": "自動保存",
@@ -3478,6 +3568,87 @@ export const ja_JP: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "エディターツール",
       "keyHint": "{name}（{key}）",
@@ -3489,6 +3660,9 @@ export const ja_JP: EnTranslations = {
       "lower": "沈降",
       "smooth": "なめらか",
       "flatten": "平坦化",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "バイオーム塗り",
       "water": "水面",
       "place": "アセット配置",
@@ -3496,10 +3670,12 @@ export const ja_JP: EnTranslations = {
       "blocker": "ブロッカー壁",
       "collider": "Collider",
       "camp": "キャンプ",
+      "entity": "Move NPCs and Mobs",
       "spawn": "スポーン地点",
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "範囲",
       "erase": "消去"
     },
@@ -3540,13 +3716,17 @@ export const ja_JP: EnTranslations = {
       "cave": "洞窟",
       "erase": "塗りを消す",
       "hint": "塗ったマスはゾーンのバイオームを上書きし、地形の形状と色を変えます。",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "バイオーム塗りをすべて消去",
@@ -3575,7 +3755,8 @@ export const ja_JP: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -3589,6 +3770,19 @@ export const ja_JP: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -3615,6 +3809,8 @@ export const ja_JP: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -3634,6 +3830,10 @@ export const ja_JP: EnTranslations = {
       "level": "水面の高さ",
       "hint": "マップ全体の水面の高さを設定します（{min} から {max} ヤード）。",
       "reset": "既定の高さに戻す",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -3670,6 +3870,11 @@ export const ja_JP: EnTranslations = {
     "foliageTool": {
       "title": "Foliage Brush",
       "hint": "Drag across the ground to scatter the enabled foliage inside the brush; each stroke is one undo step. Use Erase to remove pieces.",
+      "ambientTitle": "Existing map foliage",
+      "ambientHint": "Built-in trees are procedural and cannot be selected. Focus the camera on an area, then convert the nearest batch.",
+      "makeAmbientEditable": "Make 500 nearby trees editable",
+      "ambientEditableHint": "Ambient foliage is off. Every foliage piece painted with this brush can be selected, moved, rotated, scaled, or erased.",
+      "ambientConverted": "Made the {count} nearest trees editable.",
       "density": "Density",
       "minScale": "Min size",
       "maxScale": "Max size",
@@ -3707,10 +3912,18 @@ export const ja_JP: EnTranslations = {
       "selected": "キャンプ：{mob}",
       "none": "キャンプが選択されていません。"
     },
+    "entityTool": {
+      "title": "NPCs and Mobs",
+      "hint": "Click a mob or NPC to select it, then drag to move it. Hold Ctrl while clicking to select multiple mobs, then drag any selected mob to move the whole ringed group. Selected NPCs can also be rotated with the Facing control. Use Camp to create or configure mob groups.",
+      "selected": "Selected: {name}",
+      "none": "Click a mob or NPC in the map view to select it.",
+      "facing": "Facing"
+    },
     "spawn": {
       "title": "スポーン地点",
       "hint": "地面をクリックして、プレイテストでプレイヤーが降り立つ場所を設定します。",
       "position": "スポーン：{x}、{z}",
+      "area": "Spawn area: {width} x {height} yd",
       "unset": "内蔵の開始位置を使用します。",
       "clear": "スポーン地点をクリア"
     },
@@ -3747,7 +3960,49 @@ export const ja_JP: EnTranslations = {
       "radiusAuto": "自動",
       "radiusAutoTitle": "衝突半径をアセットのスケールに追従するようリセット",
       "radiusHint": "「自動」はアセットのスケールから衝突半径を導きます。スライダーをドラッグすると上書きできます。",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "当たり判定の範囲を表示",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "複製",
       "delete": "削除",
       "deleteHint": "削除は選択を取り除きます。Ctrl+Z で元に戻せます。",
@@ -3805,6 +4060,7 @@ export const ja_JP: EnTranslations = {
       "deleteAsset": "アップロード済みアセットを削除",
       "deleteAssetConfirm": "アップロード済みアセット「{name}」を削除しますか？使用中のマップからモデルが消えます。",
       "pick": "{name}を配置",
+      "collisionMaster": "Collision Master: author this asset’s default collision",
       "categoryTab": "{category}（{count}）",
       "resizeHandle": "Drag to resize the asset browser",
       "category": {
@@ -3819,6 +4075,53 @@ export const ja_JP: EnTranslations = {
         "tools": "ツール",
         "weapons": "武器"
       }
+    },
+    "collisionMaster": {
+      "title": "Collision Master",
+      "mapName": "Collision Master: {name}",
+      "assetLabel": "Authoring default collision for {name}.",
+      "hint": "Build this asset’s collision with the Selection panel below: pick the collision type, edit boxes with the gizmo (move / rotate / scale), add or delete boxes. Lock In saves it to the project as the asset’s default everywhere.",
+      "fromBake": "From bake",
+      "fromBakeTitle": "Start from the asset’s auto-baked voxel boxes",
+      "fittedBox": "Fitted box",
+      "fittedBoxTitle": "Start from one box fitted around the whole asset",
+      "singleBox": "Single box",
+      "singleBoxTitle": "Start from one plain box at the asset’s base",
+      "polySnap": "Poly snap brush",
+      "polySnapHint": "Drag across the model’s surface to lay a collision plane that hugs the geometry: the drag start/end set its length and yaw, the sampled heights its vertical band. Great for walls, roofs, and ramps.",
+      "devOnly": "Lock In writes to the project files, so it needs the local dev server (npm run dev).",
+      "lockIn": "Lock In",
+      "lockInTitle": "Save as this asset’s default collision (writes to the project) and return to your map",
+      "cancel": "Back to map",
+      "catalogOnly": "Collision Master works on catalogue assets. Imported models keep their import bake.",
+      "saveFailed": "Could not save your map before opening Collision Master.",
+      "stashOnly": "Browser storage is blocked, so the map is held in memory: you will return to it from Collision Master, but export it if you want a durable copy.",
+      "noBoxes": "No collision boxes to lock in. Add at least one box, or pick Basic/None.",
+      "meshUnsupported": "True Mesh is a per-map bake and cannot be a project default. Pick Baked, Basic, or None.",
+      "saveEndpointFailed": "Saving the default failed: {error}",
+      "locked": "Locked in: {name} now uses this collision everywhere.",
+      "barLabel": "Collision modeling tools",
+      "modeObject": "Object",
+      "modeObjectTitle": "Object mode: move / rotate / scale whole boxes with the gizmo",
+      "modeVertex": "Vertex",
+      "modeVertexTitle": "Vertex mode: drag a corner to reshape the selected box",
+      "modeEdge": "Edge",
+      "modeEdgeTitle": "Edge mode: drag an edge to move its two faces together",
+      "modeFace": "Face",
+      "modeFaceTitle": "Face mode: drag a face along its normal",
+      "primBox": "Box",
+      "primPlane": "Plane",
+      "primCylinder": "Cylinder",
+      "primSphere": "Sphere",
+      "primWedge": "Ramp",
+      "primTitle": "Add a {name} primitive to the collision set",
+      "polySnapShort": "Poly Snap",
+      "duplicate": "Dup",
+      "duplicateTitle": "Duplicate the selected boxes",
+      "delete": "Del",
+      "deleteTitle": "Delete the selected boxes",
+      "openFromSelection": "Collision Master",
+      "openFromSelectionTitle": "Author this asset’s DEFAULT collision in the Collision Master scene (saves to the project; your map auto-saves and you return here)"
     },
     "importModel": {
       "notModel": "Pick a .glb or .gltf file.",
@@ -3837,15 +4140,18 @@ export const ja_JP: EnTranslations = {
     "openDrawer": {
       "title": "マップを開く",
       "close": "閉じる",
+      "tabShipped": "Shipped Maps",
       "tabLocal": "このブラウザー",
       "tabMine": "自分のサーバーマップ",
       "tabPublic": "公開マップ",
       "colName": "名前",
+      "colType": "Type",
       "colUpdated": "更新日時",
       "colStatus": "状態",
       "statusPublic": "公開",
       "statusPrivate": "非公開",
       "open": "開く",
+      "openCopy": "Open Copy",
       "fork": "フォーク",
       "publish": "公開する",
       "unpublish": "公開を停止",
@@ -3868,12 +4174,16 @@ export const ja_JP: EnTranslations = {
       "savedServer": "「{name}」をサーバーに保存しました（v{version}）。",
       "savedLocalOnly": "「{name}」をこのブラウザーに保存しました。ログインするとオンライン保存できます。",
       "saveFailedLocal": "ローカル保存に失敗しました（ストレージがブロックされています）。",
+      "openFailedLocal": "That save could not be read (corrupt or truncated). Its file may still import via More > Import if you exported a copy.",
       "opened": "「{name}」を開きました。",
+      "shippedMapOpened": "Opened an editable copy of \"{name}\".",
       "imported": "「{name}」をインポートしました。",
       "importFailed": "インポートがキャンセルされたか、ファイルが有効なマップではありません。",
       "importMissingDeps": "{count} model/texture/skybox file(s) are missing, so parts of the map are blank. Re-import the .wocmap.zip bundle to include them.",
       "exported": "「{name}」をダウンロードしました。",
       "bundleExported": "Exported \"{name}\" with its models, textures, and skybox. Import the .wocmap.zip (not a loose .json) on the other computer.",
+      "exportBlockedMissingDeps": "Export blocked: {count} referenced model, texture, or skybox file(s) are missing from this browser. Restore them before exporting so the engine receives a complete map.",
+      "exportBlockedInvalid": "Export blocked because the map did not pass the engine compatibility check. Save a copy and review the latest edits before trying again.",
       "newMap": "内蔵ワールドから新しいマップを開始しました。",
       "newFlatMap": "Blank map started.",
       "forked": "「{name}」としてフォークしました。今は自分のコピーを編集しています。",
@@ -3888,7 +4198,14 @@ export const ja_JP: EnTranslations = {
       "draftRestored": "自動保存の下書きを復元しました。",
       "autosaveFailed": "自動保存に失敗しました（ブラウザのストレージが満杯かブロックされています）。バックアップとしてマップをエクスポートしてください。",
       "terrainCapReached": "地形編集の上限に達しました（{max}）。超過分のスカルプトは追加されませんでした。",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "配置数の上限に達しました（{max}）。超過分のアセットは追加されませんでした。",
+      "entityCapReached": "The map entity limit was reached. Some copied NPCs or mobs were not pasted.",
+      "selectionCopied": "Copied {count} selected item(s).",
+      "selectionPasted": "Pasted {count} item(s).",
+      "selectionNothingToCopy": "Select an asset, NPC, or mob before copying.",
+      "selectionNothingToPaste": "Copy an asset, NPC, or mob before pasting.",
       "blockerCapReached": "ブロッカー壁の上限（{max}）に達しました。新しい壁は追加されませんでした。",
       "autosaveOff": "自動保存をオフにしました：{reason} 手動で保存してから、再度オンにしてください。"
     },
@@ -4088,7 +4405,7 @@ export const ja_JP: EnTranslations = {
         "undo": "Ctrl+Z で元に戻す、Ctrl+Y または Ctrl+Shift+Z でやり直します。",
         "save": "Ctrl+S でマップを保存します。",
         "duplicate": "Ctrl+D で選択中のアセットを複製します。",
-        "multiSelect": "Shift+click adds or removes assets from the selection (Blender style).",
+        "multiSelect": "Shift+click adds or removes assets. In the NPC and Mob tool, Ctrl+click selects multiple entities.",
         "nudge": "矢印キーで選択中のアセットを 0.5 ヤード動かします。Shift を押しながらで 2 ヤードです。",
         "wheel": "Shift+スクロールで選択中のアセットを回転、Alt+スクロールで拡大縮小します。",
         "delete": "Delete で選択中のアセットまたはキャンプを削除します。",
@@ -4586,6 +4903,35 @@ export const ja_JP: EnTranslations = {
     "chat": "チャットを開く"
   },
   "sim": {
+    "rift": {
+      "allUnstable": "すべての裂け目が今は不安定だ。しばらくしてからもう一度試そう。",
+      "enterFloor": "裂け目をくぐり、{name}へ足を踏み入れた。",
+      "descendFloor": "{name}のさらに深くへ降りていく。",
+      "stepBack": "裂け目を通って元の場所へ戻った。",
+      "pylonLit": "ルーンの尖塔が光を放った（{lit}/{total}）。",
+      "wayDownOpens": "下層への道が裂け開いた。",
+      "exitOpens": "裂け目が震える。倒れた敵の後ろに帰り道が裂け開いた。",
+      "portalOpens": "{zone}に{tier}ランクの裂け目が裂け開いた！",
+      "portalSealed": "{zone}の{tier}ランクの裂け目が封印された。",
+      "portalCollapses": "{zone}の{tier}ランクの裂け目が崩れ落ちた。",
+      "levelGate": "この裂け目に入れるのはレベル{level}以上の冒険者だけだ。",
+      "iceGoalLit": "霜の紋章が燃え上がる。道が動き出す。",
+      "socketsShut": "台座が音を立てて閉じる。道が動き出す。",
+      "seqProgress": "ルーンが順に応える（{step}/{total}）。",
+      "seqReset": "ルーンがすべて暗くなる。最初からやり直せ。",
+      "gateOpen": "門が音を立てて開いた。",
+      "orbSealed": "宝珠は下層の儀式によって封じられている。",
+      "orbWakes": "五芒星の炎が消えた。祭壇で何かが目覚める。",
+      "orbOpensGate": "血の宝珠が輝く。神殿の門が音を立てて開いた。",
+      "alreadyCleared": "このリフトはすでに {names} が攻略しました。",
+      "raceLost": "このリフトはすでに {names} が攻略しました。挑戦は終了します。",
+      "raceWorldWin": "{names} が {seconds}秒で{tier}ランク・リフトレースに勝利！",
+      "raceWinBanner": "リフトレース勝利 — {seconds}秒",
+      "raceLostBanner": "リフト攻略済み",
+      "forgeUpgraded": "{name} のリフト強化が完了しました。",
+      "forgeEnchanted": "{name} のリフト付与が完了しました。",
+      "forgeSocketed": "{name} にリフトの宝石をはめ込みました。"
+    },
     "delve": {
       "cannotEnterNow": "今はデルヴに入れない。",
       "leaveDungeonFirst": "まずダンジョンから出よ。",
@@ -5393,6 +5739,8 @@ export const ja_JP: EnTranslations = {
       "secondsRemaining": "残り {seconds} 秒",
       "enteringZone": "{zone}に入りました。",
       "welcomeZone": "{zone}へようこそ！",
+      "riftLabel": "{name}",
+      "riftLabelRanked": "{name} ({rank})",
       "levelBanner": "レベル {level}！",
       "levelLog": "レベル {level}になりました！",
       "xpGain": "{amount}の経験値を獲得しました。",
@@ -7708,6 +8056,66 @@ export const ja_JP: EnTranslations = {
       "sunpetal_sickle": {
         "name": "陽花弁の鎌"
       },
+      "duskwisp_essence": {
+        "name": "ダスクウィスプの精髄"
+      },
+      "spore_heart": {
+        "name": "胞子の心臓"
+      },
+      "gleaming_antler": {
+        "name": "輝く鹿角"
+      },
+      "wisp_mote": {
+        "name": "星明かりの粒"
+      },
+      "starfall_shard": {
+        "name": "星降りの欠片"
+      },
+      "elder_bark": {
+        "name": "長老の樹皮"
+      },
+      "hollow_sealstone": {
+        "name": "幽谷の封印石"
+      },
+      "monument_overlook": {
+        "name": "風化した石碑"
+      },
+      "monument_court": {
+        "name": "沈んだ石碑"
+      },
+      "monument_north": {
+        "name": "忘れられた石碑"
+      },
+      "guardian_core": {
+        "name": "守護者の核"
+      },
+      "wardens_seal": {
+        "name": "監視者の印章"
+      },
+      "gleamstag_charm": {
+        "name": "グリームスタッグの護符"
+      },
+      "veilsteel_blade": {
+        "name": "ヴェール鋼の剣"
+      },
+      "duskfang_dirk": {
+        "name": "黄昏の牙の短剣"
+      },
+      "gleamwood_stave": {
+        "name": "輝き木の杖"
+      },
+      "wardens_oathband": {
+        "name": "監視者の誓いの篭手"
+      },
+      "wardplate_cuirass": {
+        "name": "守りの板金胸甲"
+      },
+      "nightweave_tunic": {
+        "name": "夜織りのチュニック"
+      },
+      "veilcloth_robe": {
+        "name": "ヴェール布のローブ"
+      },
       "thorium_ore": {
         "name": "トリウム鉱石"
       },
@@ -7896,6 +8304,27 @@ export const ja_JP: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "熾火硝子の戦杖"
+      },
+      "rift_essence": {
+        "name": "リフトエッセンス"
+      },
+      "rift_gem_crimson": {
+        "name": "深紅のリフト宝石"
+      },
+      "rift_gem_azure": {
+        "name": "紺碧のリフト宝石"
+      },
+      "rift_gem_verdant": {
+        "name": "翠緑のリフト宝石"
+      },
+      "riftbound_band_of_might": {
+        "name": "剛力のリフトバウンドリング"
+      },
+      "riftbound_band_of_insight": {
+        "name": "叡智のリフトバウンドリング"
+      },
+      "riftbound_band_of_guile": {
+        "name": "機略のリフトバウンドリング"
       },
       "bristleback_maul": {
         "name": "ギャロウグラスの大槌"
@@ -8868,6 +9297,255 @@ export const ja_JP: EnTranslations = {
       "azazel_infernal_lord": {
         "name": "獄炎の王アザゼル"
       },
+      "rift_spawnling": {
+        "name": "リフトの落とし子"
+      },
+      "rift_bonewalker": {
+        "name": "蘇りし骨歩き"
+      },
+      "rift_frost_revenant": {
+        "name": "氷縛の亡霊"
+      },
+      "rift_rime_elemental": {
+        "name": "樹氷のエレメンタル"
+      },
+      "rift_ember_fiend": {
+        "name": "燃え殻の魔物"
+      },
+      "rift_magma_brute": {
+        "name": "マグマの猛獣"
+      },
+      "rift_venom_weaver": {
+        "name": "毒織り"
+      },
+      "rift_thornback": {
+        "name": "茨背の追跡者"
+      },
+      "rift_boneclad": {
+        "name": "骨鎧の戦士"
+      },
+      "rift_marrow_troll": {
+        "name": "髄のトロル"
+      },
+      "rift_void_acolyte": {
+        "name": "虚空傷の侍祭"
+      },
+      "rift_dread_stalker": {
+        "name": "恐怖の追跡者"
+      },
+      "rift_storm_caller": {
+        "name": "嵐呼び"
+      },
+      "rift_stormscale": {
+        "name": "嵐鱗のドレイク"
+      },
+      "rift_tide_thrall": {
+        "name": "潮の下僕"
+      },
+      "rift_deep_lurker": {
+        "name": "深淵の潜伏者"
+      },
+      "rift_stone_ogre": {
+        "name": "石のオーガ"
+      },
+      "rift_boss_frost": {
+        "name": "樹氷の守護者"
+      },
+      "rift_boss_ember": {
+        "name": "燃え殻鍛冶の暴君"
+      },
+      "rift_boss_venom": {
+        "name": "母胎ヴィスカ"
+      },
+      "rift_boss_necro": {
+        "name": "骨王ザレス"
+      },
+      "rift_boss_brute": {
+        "name": "軍将グラスク"
+      },
+      "rift_boss_arcane": {
+        "name": "アルコン・ニクサリス"
+      },
+      "rift_boss_storm": {
+        "name": "嵐のヴァロク"
+      },
+      "rift_boss_tide": {
+        "name": "深淵の顎"
+      },
+      "glimmerwisp": {
+        "name": "グリマーウィスプ"
+      },
+      "duskwisp": {
+        "name": "ダスクウィスプ"
+      },
+      "hollow_spirit": {
+        "name": "幽谷の精霊"
+      },
+      "veiled_stag": {
+        "name": "ヴェールの牡鹿"
+      },
+      "gleamstag": {
+        "name": "グリームスタッグ"
+      },
+      "sporeling_gatherer": {
+        "name": "スポアリングの採集者"
+      },
+      "corrupted_sporeling": {
+        "name": "堕落したスポアリング"
+      },
+      "treant_elder": {
+        "name": "トレントの長老"
+      },
+      "ancient_guardian": {
+        "name": "古代の守護者"
+      },
+      "waking_warden": {
+        "name": "目覚めし監視者"
+      },
+      "old_marrowshell": {
+        "name": "オールド・マロウシェル"
+      },
+      "aurelhorn": {
+        "name": "アウレルホーン、群れの長"
+      },
+      "snowdrift_wolf": {
+        "name": "スノードリフトウルフ"
+      },
+      "ice_wisp": {
+        "name": "アイスウィスプ"
+      },
+      "rime_elemental": {
+        "name": "霧氷の精霊"
+      },
+      "fen_sprite": {
+        "name": "フェンスプライト"
+      },
+      "frostmane_yeti": {
+        "name": "フロストメイン・イエティ"
+      },
+      "emberwing_drake": {
+        "name": "エンバーウィング・ドレイク"
+      },
+      "ashbone_raider": {
+        "name": "アッシュボーンの略奪者"
+      },
+      "ashbone_warcaller": {
+        "name": "アッシュボーンの戦呼び"
+      },
+      "dune_troll": {
+        "name": "デューントロール"
+      },
+      "gilded_stag": {
+        "name": "黄金の牡鹿"
+      },
+      "gloam_fox": {
+        "name": "グロームフォックス"
+      },
+      "orchard_treant": {
+        "name": "果樹園のトレント"
+      },
+      "harvest_sprite": {
+        "name": "ハーベストスプライト"
+      },
+      "mere_lurker": {
+        "name": "湖の潜み手"
+      },
+      "bogtoad": {
+        "name": "ボグトード"
+      },
+      "drowsy_croaker": {
+        "name": "まどろみのクローカー"
+      },
+      "lily_wisp": {
+        "name": "リリーウィスプ"
+      },
+      "willow_sprite": {
+        "name": "ウィロースプライト"
+      },
+      "moonfleece_grazer": {
+        "name": "ムーンフリース"
+      },
+      "gloam_strider": {
+        "name": "グロームストライダー"
+      },
+      "nightkin_stargazer": {
+        "name": "ナイトキンの星読み"
+      },
+      "barrow_king": {
+        "name": "塚の王"
+      },
+      "widowsilk_spinner": {
+        "name": "ウィドウシルク・スピナー"
+      },
+      "wood_wraith": {
+        "name": "ウッドレイス"
+      },
+      "gravenbark_shambler": {
+        "name": "グレイヴンバーク"
+      },
+      "pale_huntsman": {
+        "name": "蒼白の狩人"
+      },
+      "tide_scuttler": {
+        "name": "タイドスカトラー"
+      },
+      "thicket_boar": {
+        "name": "茂みの猪"
+      },
+      "canopy_weaver": {
+        "name": "キャノピーウィーバー"
+      },
+      "idol_guardian": {
+        "name": "神像の守護者"
+      },
+      "topiary_stag": {
+        "name": "トピアリーの雄鹿"
+      },
+      "topiary_wolf": {
+        "name": "トピアリーの狼"
+      },
+      "hedge_gnome": {
+        "name": "生け垣ノーム"
+      },
+      "the_topiary_bull": {
+        "name": "トピアリーの雄牛"
+      },
+      "moor_ram": {
+        "name": "ムーアラム"
+      },
+      "gale_wisp": {
+        "name": "ゲイルウィスプ"
+      },
+      "shoal_scuttler": {
+        "name": "ショールスカトラー"
+      },
+      "the_wreck_warden": {
+        "name": "レックウォーデン"
+      },
+      "riftspawn": {
+        "name": "裂け目の落とし子"
+      },
+      "breach_wretch": {
+        "name": "破れの成れの果て"
+      },
+      "void_stalker": {
+        "name": "虚無の忍び寄り"
+      },
+      "sundered_horror": {
+        "name": "引き裂かれし恐怖"
+      },
+      "rift_hellguard": {
+        "name": "ヘルガード"
+      },
+      "rift_pact_acolyte": {
+        "name": "契約の侍祭"
+      },
+      "rift_boss_ritualist": {
+        "name": "契約に縛られし魔導士ヴェルコル"
+      },
+      "rift_boss_pitlord": {
+        "name": "奈落の王アズゴラス"
+      },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"
       },
@@ -9142,6 +9820,61 @@ export const ja_JP: EnTranslations = {
         "name": "年代記官ゼンジー",
         "title": "ソーンピーク高地の年代記",
         "greeting": "山は何ひとつ忘れない、{playerName}よ。私もだ。あなたの成したことを見せてもらおう。"
+      },
+      "keeper_saelwyn": {
+        "name": "守り手セルウィン",
+        "title": "幽谷の守り手",
+        "greeting": "そなたの同族でこの枝の下に立った者は少ない、{className}よ。静かに歩み、歓迎を受けるがよい。"
+      },
+      "loremother_bryn": {
+        "name": "ロアマザー・ブリン",
+        "title": "聖堂の声",
+        "greeting": "この谷の光はどれも何かを覚えている、{playerName}。共に耳を澄ませておくれ。"
+      },
+      "provisioner_fenna": {
+        "name": "補給係フェンナ",
+        "title": "エルダーグリームの補給係",
+        "greeting": "パンはまだ温かく、水はまだ甘い。幽谷は与えてくれる。わたしもね。"
+      },
+      "wardsmith_orun": {
+        "name": "ワードスミス・オルン",
+        "title": "古き炉の番人",
+        "greeting": "この炉が冷えたのは何世紀も前だ、{className}。だが打たれた刃は今も切れる。"
+      },
+      "archivist_tullo": {
+        "name": "アーキビスト・トゥッロ",
+        "title": "石を読む者",
+        "greeting": "外の石碑はもう長いこと誰にも語りかけていない。新しい耳を待っていたのかもしれん。"
+      },
+      "warden_coalfast": {
+        "name": "守将コールファスト",
+        "title": "要塞司令官",
+        "greeting": "裂け目は、カモメ港が小さいことなど気にもかけぬ、{className}。この岸を守り抜くか、さもなくば守るべき岸そのものが失われるかだ。我らと共に立て、そうすれば私はその恩を忘れはせぬ。"
+      },
+      "riftwatch_ollun": {
+        "name": "裂け目監視のオルン",
+        "title": "破れの学者",
+        "greeting": "裂け目はどれも、開く前に歌うのだ――耳を傾ける術さえあればな。いま島では三つが蠢いているのが聞こえる。そのうち一つは、すぐ近くだ。"
+      },
+      "quartermaster_edda": {
+        "name": "補給将校エッダ",
+        "title": "要塞武具方",
+        "greeting": "鋼と塩、それが手渡せる残り物のすべてさ、{className}。持って行きな。私の手が届くところで開いたことを、裂け目に後悔させてやれ。"
+      },
+      "mender_saul": {
+        "name": "癒し手サウル",
+        "title": "従軍外科医",
+        "greeting": "漁の転落を手当てした十年よりも、この一月のほうが多くの骨を接いだ。裂け目は、奪ったものをろくに残しはせぬ。できることなら、五体満足で戻ってきてくれ。"
+      },
+      "bellkeeper_tam": {
+        "name": "鐘守タム",
+        "title": "警鐘守り",
+        "greeting": "裂け目が我らに寄越す唯一の報せ、それがこの鐘だ、{className}。一打ちなら畑、二打ちなら崖、三打ちともなれば、もう逃げても間に合わぬほど近いということ。耳を離すな。さすれば鐘が、お前を五体満足のままにしてくれよう。"
+      },
+      "fisher_nell": {
+        "name": "怯えるネル",
+        "title": "カモメ港の漁師",
+        "greeting": "網を干す、まさにあの場所で開いたんだ。あそこだよ、私が生まれてからずっと毎朝立っていた場所さ。もう岸へは下りない。もう、どこへもろくに行かなくなっちまった。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",
@@ -9998,6 +10731,152 @@ export const ja_JP: EnTranslations = {
           }
         }
       },
+      "q_veil_thinned": {
+        "title": "薄れゆく帳",
+        "text": "洞窟がそなたに開いたか。ならば封印は思ったより弱っている、{playerName}。帳が裂ける場所で、ウィスプは冷たく暗く変わる。ダスクウィスプの精髄を八つ持ってきておくれ。傷の深さを読み取ろう。",
+        "completion": "どれも冷え切っている。裂け目が亀裂になるまで、幽谷に残された時はひと季節ほどだろう。そなたとわたしの仕事が始まる。",
+        "objectives": {
+          "0": {
+            "label": "ダスクウィスプの精髄"
+          }
+        }
+      },
+      "q_gleaming_antlers": {
+        "title": "輝く鹿角",
+        "text": "ヴェールの牡鹿は草を食む場所に光を落とし、抜け落ちた角は何年もその光を保つ。星降りの盆地の群れから五本。それでわたしのランタンは油なしで冬を越せる。牡鹿を傷つける必要はないが、簡単には譲ってくれないよ。",
+        "completion": "見ておくれ、光をこんなに抱えて！炎も煙もなく、ただ光だけ。幽谷は与えてくれる。",
+        "objectives": {
+          "0": {
+            "label": "輝く鹿角"
+          }
+        }
+      },
+      "q_wisp_lights": {
+        "title": "浅瀬の灯",
+        "text": "グリマーウィスプは、幽谷が封じられた時に降った古い星明かりの粒を運んでいる。六粒あれば聖堂の灯は一年もつ。消えかけたものからだけ取りなさい。幽谷は貪らずとも足りるだけ与えてくれる。",
+        "completion": "最初の星々のように柔らかい。祭壇のそばに置いておくれ。あとは聖堂がやってくれる。",
+        "objectives": {
+          "0": {
+            "label": "星明かりの粒"
+          }
+        }
+      },
+      "q_calming_the_deep": {
+        "title": "深みを鎮めて",
+        "text": "輝きの深みのスポアリングは、裂け目が輪に触れるまでは穏やかな民だった。穢れが奪ったものは還らない。堕ちた者たちに安らぎを、{playerName}。深みの北で、十体。",
+        "completion": "わたしにはできなかったことをしてくれた。南の輪では採集者たちがまだ歌っている。そなたのおかげで、歌い続けられる。",
+        "objectives": {
+          "0": {
+            "label": "堕落したスポアリングを鎮めた"
+          }
+        }
+      },
+      "q_spore_hearts": {
+        "title": "輪の心臓",
+        "text": "闇に堕ちたスポアリングの心臓は、借り物の影で脈打ち続ける。その心臓を四つ、聖堂で清めれば、穢れの広がり方が分かるはずだ。むごい仕事だが、{playerName}、これは癒やしの仕事でもある。",
+        "completion": "これで清められ、静かになった。どの心臓にも同じ印がある。影は沈んだ宮廷から流れている。セルウィンに伝えておくれ。",
+        "objectives": {
+          "0": {
+            "label": "胞子の心臓"
+          }
+        }
+      },
+      "q_monument_tour": {
+        "title": "石が覚えていること",
+        "text": "封印より前の石碑が三つ残っている。ひとつはダスクフォールの見晴らし台、ひとつは沈んだ宮廷、もうひとつは誰も歩かぬ北東の果てだ。読んできておくれ、{playerName}。わたしの膝は二世紀前に階段を諦めた。",
+        "completion": "見晴らし台、宮廷、忘れられた片隅……封印の歌の三つの節が、歌われた日以来はじめて揃った。老いた読み手を心から喜ばせてくれたね。",
+        "objectives": {
+          "0": {
+            "label": "見晴らし台の石碑を読んだ"
+          },
+          "1": {
+            "label": "宮廷の石碑を読んだ"
+          },
+          "2": {
+            "label": "忘れられた石碑を読んだ"
+          }
+        }
+      },
+      "q_grove_menace": {
+        "title": "木立の脅威",
+        "text": "日が落ちるとダスクウィスプが屋台の間に漂い込んでくるんだ、{playerName}。あの冷気は触れたものを片端から駄目にする。間引いておくれ。帳の裂けた場所で、十体。",
+        "completion": "これで夜市を開けられる。生涯のお得意さんができたよ。少なくとも割引はしよう。",
+        "objectives": {
+          "0": {
+            "label": "ダスクウィスプを散らした"
+          }
+        }
+      },
+      "q_shards_of_starfall": {
+        "title": "星降りの欠片",
+        "text": "ダスクウィスプが水晶の野を渡ると、古い星明かりの欠片が棘のように張り付く。欠片が六つあれば、{playerName}、封印が歌われた季節まで特定できる。",
+        "completion": "この縞模様を見よ！秋だ。幽谷は秋に封じられたのだ。二百年の論争が、六つの小石で決着した。",
+        "objectives": {
+          "0": {
+            "label": "星降りの欠片"
+          }
+        }
+      },
+      "q_treant_accord": {
+        "title": "トレントとの約定",
+        "text": "木立の長老たちは、根を穢れに齧られて外皮を落としている。樹皮が四片あれば、木立全体の軟膏を煎じられる。剥がす間は感謝されないだろうが、{playerName}、そのぶん彼らは百年長く立っていられる。",
+        "completion": "四片とも厚く、健やかだ。軟膏は煎じるのに一週間、効き終わるのに百年かかる。木々は優しさの尺度が違うのだよ。",
+        "objectives": {
+          "0": {
+            "label": "長老の樹皮"
+          }
+        }
+      },
+      "q_spore_tide": {
+        "title": "胞子の潮に抗して",
+        "text": "軟膏は木立を守っているが、穢れは夕暮れごとに深みへ強く押し寄せる。採集者たちが北の輪を取り戻すには、あと十二の堕ちた者に安らぎを、{playerName}。",
+        "completion": "今夜、北の輪がまた歌っている。小さく、けれど確かに。",
+        "objectives": {
+          "0": {
+            "label": "堕落したスポアリングを鎮めた"
+          }
+        }
+      },
+      "q_sunken_court": {
+        "title": "沈んだ宮廷",
+        "text": "ブリンの読みは正しかった。裂け目は東の古い宮廷を貫き、その守護者たちは狂って目覚めた。封印を守るために造られたものが、今は近づく者を砕こうとする。廃墟から八体を除いておくれ。",
+        "completion": "八体の守護者が、静まった。あれらが建てられた時をわたしは覚えているよ、{playerName}。驚くことはない。幽谷は守り手を長く生かすのだ。",
+        "objectives": {
+          "0": {
+            "label": "古代の守護者を静めた"
+          }
+        }
+      },
+      "q_wardens_echoes": {
+        "title": "監視者の残響",
+        "text": "主が黙しても、宮廷の守護者たちは最後の命令を、消えない残響のように繰り返している。封印が戻るまで、彼らは目覚め続ける、{playerName}。石工たちが封印石に届くよう、さらに十体を静めておくれ。",
+        "completion": "残響は繰り返すたびに薄れていく。じきに宮廷には風と蔦だけが残る。廃墟とはそうあるべきものだ。",
+        "objectives": {
+          "0": {
+            "label": "古代の守護者を静めた"
+          }
+        }
+      },
+      "q_waking_warden": {
+        "title": "目覚めし監視者",
+        "text": "宮廷は静かになったが、その主は違う。封印を守る監視者が歪んで目覚めた。あれが立っている限り、封印は繕えない。容易には倒れぬぞ。友を一人見つけられるなら連れて行け、{playerName}。二人見つかるなら二人だ。",
+        "completion": "あの鐘のような声が沈黙した。ここからでも感じたよ。谷全体から重石が取り除かれたようだった。",
+        "objectives": {
+          "0": {
+            "label": "目覚めし監視者を打ち倒した"
+          }
+        }
+      },
+      "q_seal_restored": {
+        "title": "封印の修復",
+        "text": "監視者の印章を宮廷の中心の封印石へ運び、打ち落とされた場所へ戻しておくれ。そうすれば幽谷は癒え始める。そしてそなたは、{playerName}、そなたの同族の誰も成しえなかったことを成すのだ。",
+        "completion": "ここから閉じるのを感じたよ。黄昏のように穏やかに。幽谷は友を忘れない、{playerName}。どれほど遠くへ旅しても、大樹の下にはいつでもそなたの灯りがある。",
+        "objectives": {
+          "0": {
+            "label": "封印を封印石に戻した"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺れし聖歌隊",
         "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",
@@ -10099,6 +10978,9 @@ export const ja_JP: EnTranslations = {
           },
           "10": {
             "label": "ソウフィールド"
+          },
+          "11": {
+            "label": "遠つ岸の砂州道"
           }
         }
       },
@@ -10165,6 +11047,285 @@ export const ja_JP: EnTranslations = {
           },
           "9": {
             "label": "墓ワームの聖所"
+          }
+        }
+      },
+      "veiled_hollow": {
+        "name": "ヴェールの幽谷",
+        "welcome": "大気は古の魔力に満ちて震えている。エルダーグリームの大樹の下で、守り手セルウィンを訪ねよ。",
+        "pois": {
+          "0": {
+            "label": "エルダーグリーム"
+          },
+          "1": {
+            "label": "ダスクフォール洞窟"
+          },
+          "2": {
+            "label": "ダスクフォールの見晴らし台"
+          },
+          "3": {
+            "label": "長老樹の森"
+          },
+          "4": {
+            "label": "星降りの盆地"
+          },
+          "5": {
+            "label": "沈んだ宮廷"
+          },
+          "6": {
+            "label": "水晶の浅瀬"
+          },
+          "7": {
+            "label": "輝きの深み"
+          }
+        }
+      },
+      "drakelands": {
+        "name": "ドレイクランド",
+        "welcome": "熱風が荒野から吹きつける。ドラゴンはドレイクモウの上空を旋回し、砂丘にはトロールの焚き火が燃えている。",
+        "pois": {
+          "0": {
+            "label": "ワームウォッチ"
+          },
+          "1": {
+            "label": "ゲートウッドの森"
+          },
+          "2": {
+            "label": "シンダー砂丘"
+          },
+          "3": {
+            "label": "トロールムート"
+          },
+          "4": {
+            "label": "ブラッドグラスの平原"
+          },
+          "5": {
+            "label": "ドレイクモウ火口"
+          }
+        }
+      },
+      "frostveil": {
+        "name": "フロストヴェイルの果て",
+        "welcome": "雪がすべての音を呑み込む。揺らめくオーロラの下で、寒さそのものが目覚めているかのようだ。",
+        "pois": {
+          "0": {
+            "label": "アイスマントル"
+          },
+          "1": {
+            "label": "スノーライン峠"
+          },
+          "2": {
+            "label": "氷河の湖"
+          },
+          "3": {
+            "label": "オーロラの階段"
+          },
+          "4": {
+            "label": "シヴァーフェン湿地"
+          },
+          "5": {
+            "label": "咆哮のテラス"
+          }
+        }
+      },
+      "amberfall": {
+        "name": "アンバーフォール",
+        "welcome": "ここではどの葉も金と紅に燃え、決して散らない。ランタンミアの灯りが君を迎えている。",
+        "pois": {
+          "0": {
+            "label": "ランタンミア"
+          },
+          "1": {
+            "label": "ゴールドメルト峠"
+          },
+          "2": {
+            "label": "黄金の果樹園"
+          },
+          "3": {
+            "label": "ハーベスト谷"
+          },
+          "4": {
+            "label": "大いなる湖"
+          },
+          "5": {
+            "label": "シンダーメイプルの丘"
+          },
+          "6": {
+            "label": "傾いた石碑"
+          }
+        }
+      },
+      "willowfen": {
+        "name": "ウィローフェン",
+        "welcome": "湿原にはトンボと蜂の羽音が満ちている。橋を渡ってブリッジミアに入り、しばし足を休めるといい。",
+        "pois": {
+          "0": {
+            "label": "ブリッジミア"
+          },
+          "1": {
+            "label": "アンバーフェンの石段"
+          },
+          "2": {
+            "label": "リリームーア"
+          },
+          "3": {
+            "label": "ボグシャインの池"
+          },
+          "4": {
+            "label": "ウィローウィープ"
+          },
+          "5": {
+            "label": "まどろみの浅瀬"
+          }
+        }
+      },
+      "nightbloom": {
+        "name": "ナイトブルーム",
+        "welcome": "夜門の先では、大気までもが夢を見ている。花明かりをたどってムーンレストへ。空に浮かぶ眠れる世界もお見逃しなく。",
+        "pois": {
+          "0": {
+            "label": "ムーンレスト"
+          },
+          "1": {
+            "label": "夜の門"
+          },
+          "2": {
+            "label": "月の井戸"
+          },
+          "3": {
+            "label": "宵闇の花野"
+          },
+          "4": {
+            "label": "見張りの石環"
+          },
+          "5": {
+            "label": "不眠の塚"
+          }
+        }
+      },
+      "wraithwood": {
+        "name": "レイスウッド",
+        "welcome": "梢が棺の蓋のように道の上で閉じていく。ガロウミアの灯りから離れるな。森が名前を呼んでも、決して答えるな。",
+        "pois": {
+          "0": {
+            "label": "ガロウミア"
+          },
+          "1": {
+            "label": "鴉の門"
+          },
+          "2": {
+            "label": "寡婦の茨"
+          },
+          "3": {
+            "label": "吊るしの林間地"
+          },
+          "4": {
+            "label": "哀石の礼拝堂"
+          },
+          "5": {
+            "label": "狩人の広場"
+          }
+        }
+      },
+      "palmreach": {
+        "name": "パームリーチ",
+        "welcome": "暖かい砂浜、騒がしい鳥の声、そして地平線を呑み込むジャングル。ドリフトヘイヴンは浜辺に火を焚いて待っている。",
+        "pois": {
+          "0": {
+            "label": "ドリフトヘイヴン"
+          },
+          "1": {
+            "label": "絡み口"
+          },
+          "2": {
+            "label": "パームストランド"
+          },
+          "3": {
+            "label": "エメラルドの密林"
+          },
+          "4": {
+            "label": "蔓垂の森"
+          },
+          "5": {
+            "label": "サファイアの潟"
+          },
+          "6": {
+            "label": "沈んだ神像"
+          }
+        }
+      },
+      "evergarden": {
+        "name": "エバーガーデン",
+        "welcome": "生け垣は今も刈り込まれているのに、庭師の姿は百年も見られていない。迷路には気をつけろ。迷路もお前を見ている。",
+        "pois": {
+          "0": {
+            "label": "ヘッジウィック"
+          },
+          "1": {
+            "label": "ガーデンゲート"
+          },
+          "2": {
+            "label": "彫像の並木道"
+          },
+          "3": {
+            "label": "野バラの茂み"
+          },
+          "4": {
+            "label": "花びらの池"
+          },
+          "5": {
+            "label": "大迷路"
+          },
+          "6": {
+            "label": "噴水の中庭"
+          }
+        }
+      },
+      "galecrest": {
+        "name": "ゲイルクレスト",
+        "welcome": "ここでは風が一度も止んだことがなく、オールドビーコンの火も一度も消えたことがない。ウィックハーバーの願いはただひとつ、宿の扉をきちんと閉めてくれることだ。",
+        "pois": {
+          "0": {
+            "label": "ウィックハーバー"
+          },
+          "1": {
+            "label": "ウィンドウェイ"
+          },
+          "2": {
+            "label": "ハウリングダウンズ"
+          },
+          "3": {
+            "label": "オールドビーコン"
+          },
+          "4": {
+            "label": "ザ・シアー"
+          },
+          "5": {
+            "label": "レックフィールズ"
+          },
+          "6": {
+            "label": "ミラーターン"
+          }
+        }
+      },
+      "farshore_isle": {
+        "name": "遠つ岸",
+        "welcome": "砂州を渡れば、町に着くより先にカモメ港の鐘があなたを見つけるだろう。裂け目は前触れもなく口を開き、この砦は流れ出るものすべてから己の岸を守り続けている。あなたのような者を、ここでは長らく待ちわびていたのだ。",
+        "pois": {
+          "0": {
+            "label": "カモメ港"
+          },
+          "1": {
+            "label": "船着き場"
+          },
+          "2": {
+            "label": "見張りの草原"
+          },
+          "3": {
+            "label": "引き裂かれた断崖"
+          },
+          "4": {
+            "label": "裂け目野"
           }
         }
       }

@@ -1,3 +1,4 @@
+import { bakedBoxesForPath } from './asset_collision';
 import {
   arenaOriginAt,
   DUNGEON_X_THRESHOLD,
@@ -10,7 +11,10 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isRiftPos,
   isYumiMazePos,
+  RIFT_REGION_HALF_X,
+  RIFT_REGION_HALF_Z,
   yumiMazeOriginAt,
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
@@ -24,9 +28,17 @@ import {
   SANCTUM_LAYOUT,
   TEMPLE_LAYOUT,
 } from './dungeon_layout';
+import { invalidatePlacementRamps } from './placement_ramps';
 import type { WorldContent } from './types';
 import { valeCupColliders } from './vale_cup_layout';
-import { generateDecorations, groundHeight } from './world';
+import {
+  crossesGardenHedge,
+  crossesSealedBorder,
+  type Decoration,
+  generateDecorationsInBounds,
+  groundHeight,
+  reachPalmSpots,
+} from './world';
 import { yumiMazeColliders } from './yumi_maze_layout';
 
 // Static world collision. Prop placement comes from the per-zone content
@@ -42,11 +54,20 @@ export interface CircleCollider {
   /** Absolute world-space top used by camera occlusion; movement ignores it. */
   cameraTopY?: number;
   /**
+   * Absolute world-space BASE (the ground the obstacle stands on). A mover
+   * whose head is below it passes underneath ? cave tubes run under surface
+   * props without hitting their 2D footprints. Absent = height-agnostic
+   * (blocker walls, interior wall sets): blocks at every depth.
+   */
+  baseY?: number;
+  /**
    * When true the chase cam ray passes straight through this collider (no
    * pull-in). Movement still collides. Used for props that the renderer hides
    * when they cross the eye-to-camera segment instead of zooming in.
    */
   camGhost?: boolean;
+  /** See {@link ObbCollider.hiY}: top of the blocking band (step-over gate). */
+  hiY?: number;
 }
 
 export interface ObbCollider {
@@ -58,6 +79,8 @@ export interface ObbCollider {
   rot: number; // yaw, three.js rotation.y convention
   /** Absolute world-space top used by camera occlusion; movement ignores it. */
   cameraTopY?: number;
+  /** See {@link CircleCollider.baseY}. */
+  baseY?: number;
   /** See {@link CircleCollider.camGhost}. */
   camGhost?: boolean;
   /**
@@ -66,6 +89,13 @@ export interface ObbCollider {
    * the OBBs built from `PROPS.fences`.
    */
   isFence?: boolean;
+  /**
+   * Absolute world-space TOP of the blocking band (baked per-asset boxes): a
+   * mover whose feet are near or above it steps/jumps clear - a low wagon bed
+   * never walls the player while its full-height side rails still do. Absent =
+   * blocks to the sky (every legacy collider).
+   */
+  hiY?: number;
 }
 
 export type Collider = CircleCollider | ObbCollider;
@@ -103,6 +133,7 @@ function staticWorldColliders(seed: number): Collider[] {
       hd: b.d / 2,
       rot: b.rot,
       cameraTopY: topY(seed, b.x, b.z, height),
+      baseY: topY(seed, b.x, b.z, 0),
       camGhost: true,
     });
   }
@@ -113,6 +144,29 @@ function staticWorldColliders(seed: number): Collider[] {
       z: w.z,
       r: w.r,
       cameraTopY: topY(seed, w.x, w.z, 3.7),
+      baseY: topY(seed, w.x, w.z, 0),
+      camGhost: true,
+    });
+  for (const t of PROPS.greatTrees ?? [])
+    out.push({
+      type: 'circle',
+      x: t.x,
+      z: t.z,
+      r: t.r,
+      cameraTopY: topY(seed, t.x, t.z, 7),
+      camGhost: true,
+    });
+  // The Palmreach strand: a slim trunk collider at the base of every beach
+  // palm, from the same deterministic list the renderer instances the models
+  // from (world.ts). camGhost so the chase cam passes through instead of
+  // slamming in when a palm crosses the eye line.
+  for (const p of reachPalmSpots(seed))
+    out.push({
+      type: 'circle',
+      x: p.x,
+      z: p.z,
+      r: p.r,
+      cameraTopY: topY(seed, p.x, p.z, 7),
       camGhost: true,
     });
   for (const s of PROPS.stalls)
@@ -122,6 +176,7 @@ function staticWorldColliders(seed: number): Collider[] {
       z: s.z,
       r: s.r,
       cameraTopY: topY(seed, s.x, s.z, 3.1),
+      baseY: topY(seed, s.x, s.z, 0),
       camGhost: true,
     });
 
@@ -130,11 +185,20 @@ function staticWorldColliders(seed: number): Collider[] {
     const mound = rotY(0, -3.4, m.rot);
     const x = m.x + mound.x,
       z = m.z + mound.z;
-    out.push({ type: 'circle', x, z, r: 5, cameraTopY: topY(seed, x, z, 5.2), camGhost: true });
+    out.push({
+      type: 'circle',
+      x,
+      z,
+      r: 5,
+      cameraTopY: topY(seed, x, z, 5.2),
+      baseY: topY(seed, x, z, 0),
+      camGhost: true,
+    });
   }
 
-  // Dock decks are raised walkable ground in world.ts; only the hut blocks.
+  // Dock decks are raised walkable ground in world.ts; only a non-empty hut blocks.
   for (const d of PROPS.docks) {
+    if (d.hutLocal.hw <= 0 || d.hutLocal.hd <= 0) continue;
     const hut = rotY(d.hutLocal.x, d.hutLocal.z, d.rot);
     const x = d.x + hut.x,
       z = d.z + hut.z;
@@ -146,6 +210,7 @@ function staticWorldColliders(seed: number): Collider[] {
       hd: d.hutLocal.hd,
       rot: d.rot,
       cameraTopY: topY(seed, x, z, 2.9),
+      baseY: topY(seed, x, z, 0),
       camGhost: true,
     });
   }
@@ -157,20 +222,53 @@ function staticWorldColliders(seed: number): Collider[] {
       z: t.z,
       r: 1.5 * t.scale,
       cameraTopY: topY(seed, t.x, t.z, 3.4 * t.scale),
+      baseY: topY(seed, t.x, t.z, 0),
       camGhost: true,
     });
   for (const [x, z] of PROPS.crates)
-    out.push({ type: 'circle', x, z, r: 0.65, cameraTopY: topY(seed, x, z, 1.35), camGhost: true });
+    out.push({
+      type: 'circle',
+      x,
+      z,
+      r: 0.65,
+      cameraTopY: topY(seed, x, z, 1.35),
+      baseY: topY(seed, x, z, 0),
+      camGhost: true,
+    });
   for (const [x, z] of PROPS.campfires)
-    out.push({ type: 'circle', x, z, r: 0.85, cameraTopY: topY(seed, x, z, 1.45), camGhost: true });
+    out.push({
+      type: 'circle',
+      x,
+      z,
+      r: 0.85,
+      cameraTopY: topY(seed, x, z, 1.45),
+      baseY: topY(seed, x, z, 0),
+      camGhost: true,
+    });
   for (const [x, z] of PROPS.mudHuts)
-    out.push({ type: 'circle', x, z, r: 1.1, cameraTopY: topY(seed, x, z, 12.5), camGhost: true });
+    out.push({
+      type: 'circle',
+      x,
+      z,
+      r: 1.1,
+      cameraTopY: topY(seed, x, z, 12.5),
+      baseY: topY(seed, x, z, 0),
+      camGhost: true,
+    });
   for (const ruin of PROPS.ruinRings) {
     for (let i = 0; i < ruin.columns; i++) {
       const ang = (i / ruin.columns) * Math.PI * 2;
       const x = ruin.x + Math.sin(ang) * ruin.ringR,
         z = ruin.z + Math.cos(ang) * ruin.ringR;
-      out.push({ type: 'circle', x, z, r: 0.6, cameraTopY: topY(seed, x, z, 4.3), camGhost: true });
+      out.push({
+        type: 'circle',
+        x,
+        z,
+        r: 0.6,
+        cameraTopY: topY(seed, x, z, 4.3),
+        baseY: topY(seed, x, z, 0),
+        camGhost: true,
+      });
     }
   }
   for (const f of PROPS.fences) {
@@ -188,42 +286,80 @@ function staticWorldColliders(seed: number): Collider[] {
       hd: FENCE_HALF_DEPTH,
       rot: Math.atan2(-dz, dx),
       cameraTopY: topY(seed, x, z, FENCE_RAIL_HEIGHT),
+      baseY: topY(seed, x, z, 0),
       camGhost: true,
       isFence: true,
     });
   }
 
-  // trees & large rocks from the deterministic decoration field
-  for (const d of generateDecorations(seed)) {
-    if (d.kind === 'rock') {
-      if (d.scale >= 0.8)
-        out.push({
-          type: 'circle',
-          x: d.x,
-          z: d.z,
-          r: 0.7 * d.scale,
-          cameraTopY: topY(seed, d.x, d.z, 1.25 * d.scale),
-        });
-    } else {
-      // tree trunks only — canopies don't block
-      out.push({
-        type: 'circle',
-        x: d.x,
-        z: d.z,
-        r: 0.55 * d.scale,
-        cameraTopY: topY(seed, d.x, d.z, 7.5 * d.scale),
-        camGhost: true,
-      });
-    }
-  }
-
   // Editor-placed assets with a collide footprint (custom maps only; the
   // built-in world has no placements). The ONE placement record drives both the
   // renderer and this collider, so what you see is what you collide with.
-  // Default footprint is a circle; the authored 'square' shape becomes a
-  // yaw-following OBB whose half-extents equal the radius.
+  // Assets with a BAKED collision entry block with their real silhouette: one
+  // yaw OBB per baked box, each with a Y band (archways stay walkable, low
+  // slabs step over). Otherwise the legacy footprint applies: a circle, or the
+  // authored 'square' shape as a yaw-following OBB.
   for (const p of content.placements ?? []) {
     if (!p.collideRadius || p.collideRadius <= 0) continue;
+    // Detached placements anchor at their frozen ground (they can sit INSIDE
+    // a cave); grounded ones stand on the surface. Either way the base gates
+    // the pass-under check, so tubes run beneath surface decor but a rock
+    // placed down in the cave still blocks.
+    const base = p.detached ? (p.groundY ?? 0) : topY(seed, p.x, p.z, 0);
+    if (p.worldPropKind === 'fence' && p.worldPropWidth) {
+      const width = p.worldPropWidth * p.scale * (p.scaleX ?? 1);
+      const depth = (p.worldPropDepth ?? 0.1) * p.scale * (p.scaleZ ?? 1);
+      out.push({
+        type: 'obb',
+        x: p.x,
+        z: p.z,
+        hw: width / 2 + FENCE_END_PAD,
+        hd: Math.max(FENCE_HALF_DEPTH, depth / 2),
+        rot: p.rotY,
+        cameraTopY: base + (p.y ?? 0) + FENCE_RAIL_HEIGHT,
+        baseY: base + (p.y ?? 0),
+        camGhost: true,
+        isFence: true,
+      });
+      continue;
+    }
+    // A hand-authored radius/shape override keeps the maker's footprint; only
+    // the derived default upgrades to the baked boxes.
+    // Resolved per-placement hitboxes (hand-edited boxes / the fine mesh bake)
+    // beat everything; otherwise the derived default upgrades to baked boxes.
+    const baked =
+      p.hitboxes && p.hitboxes.length > 0
+        ? p.hitboxes
+        : p.collideCustom
+          ? null
+          : bakedBoxesForPath(p.path, content.assetCollision);
+    if (baked) {
+      const lift = p.y ?? 0;
+      const s = p.scale > 0 ? p.scale : 1;
+      const sx = s * (p.scaleX ?? 1);
+      const sy = s * (p.scaleY ?? 1);
+      const sz = s * (p.scaleZ ?? 1);
+      for (const b of baked) {
+        const off = rotY(b.x * sx, b.z * sz, p.rotY);
+        const loY = base + lift + (b.y - b.hy) * sy;
+        const hiY = base + lift + (b.y + b.hy) * sy;
+        // Hand-edited hitboxes may carry a per-box yaw on top of the placement's.
+        const bry = (b as { ry?: number }).ry ?? 0;
+        out.push({
+          type: 'obb',
+          x: p.x + off.x,
+          z: p.z + off.z,
+          hw: Math.max(0.05, b.hx * sx),
+          hd: Math.max(0.05, b.hz * sz),
+          rot: p.rotY + bry,
+          cameraTopY: hiY,
+          baseY: loY,
+          hiY,
+          camGhost: true,
+        });
+      }
+      continue;
+    }
     if (p.collideShape === 'square') {
       out.push({
         type: 'obb',
@@ -232,7 +368,8 @@ function staticWorldColliders(seed: number): Collider[] {
         hw: p.collideRadius,
         hd: p.collideRadius,
         rot: p.rotY,
-        cameraTopY: topY(seed, p.x, p.z, Math.max(2.5, p.collideRadius * 2)),
+        cameraTopY: base + Math.max(2.5, p.collideRadius * 2),
+        baseY: base,
         camGhost: true,
       });
       continue;
@@ -242,7 +379,8 @@ function staticWorldColliders(seed: number): Collider[] {
       x: p.x,
       z: p.z,
       r: p.collideRadius,
-      cameraTopY: topY(seed, p.x, p.z, Math.max(2.5, p.collideRadius * 2)),
+      cameraTopY: base + Math.max(2.5, p.collideRadius * 2),
+      baseY: base,
       camGhost: true,
     });
   }
@@ -286,6 +424,7 @@ function staticWorldColliders(seed: number): Collider[] {
         hd: v.sizeZ / 2,
         rot: v.rotY,
         cameraTopY: topY(seed, v.x, v.z, Math.max(1, v.sizeY)),
+        baseY: topY(seed, v.x, v.z, 0),
         camGhost: true,
       });
     } else if (v.kind === 'sphere') {
@@ -295,10 +434,12 @@ function staticWorldColliders(seed: number): Collider[] {
         z: v.z,
         r: v.sizeX / 2,
         cameraTopY: topY(seed, v.x, v.z, Math.max(1, v.sizeX)),
+        baseY: topY(seed, v.x, v.z, 0),
         camGhost: true,
       });
     }
   }
+
   // The Sowfield boards, goal posts, net pockets, stand fronts, and plinth
   // (Vale Cup). ONE layout module (vale_cup_layout.ts) drives this movement
   // set, the ball's analytic wall reflection, the terrain flatten, and the
@@ -355,6 +496,12 @@ const FENCE_RAIL_HEIGHT = 0.95;
 
 interface ColliderGrid {
   cells: Map<string, Collider[]>;
+  // The authored prop grid above is cheap and eager. The multi-realm
+  // decoration field is generated one queried cell at a time, then combined
+  // with that authored list. This keeps collision identical without making a
+  // cold Sim enumerate the whole continent before its first spawn.
+  decorationCells: Map<string, Collider[]>;
+  combinedCells: Map<string, Collider[]>;
 }
 
 // Grids are cached per (active world content, seed). The WeakMap keeps the
@@ -366,6 +513,8 @@ const gridCaches = new WeakMap<WorldContent, Map<number, ColliderGrid>>();
  * call after mutating its placements/props in place). */
 export function invalidateStaticColliders(): void {
   gridCaches.delete(getActiveWorldContent());
+  // Stairs-deck ramps derive from the same placements: bust them together.
+  invalidatePlacementRamps(getActiveWorldContent());
 }
 
 function colliderBounds(c: Collider): { minX: number; maxX: number; minZ: number; maxZ: number } {
@@ -385,7 +534,7 @@ function gridFor(seed: number): ColliderGrid {
   }
   let grid = perContent.get(seed);
   if (grid) return grid;
-  grid = { cells: new Map() };
+  grid = { cells: new Map(), decorationCells: new Map(), combinedCells: new Map() };
   for (const c of staticWorldColliders(seed)) {
     const b = colliderBounds(c);
     const x0 = Math.floor((b.minX - MAX_BODY_RADIUS) / GRID_CELL);
@@ -403,6 +552,74 @@ function gridFor(seed: number): ColliderGrid {
   }
   perContent.set(seed, grid);
   return grid;
+}
+
+// Decoration scale is `0.7 + hash * 0.9` (world.ts), and rocks have the
+// largest collision multiplier at 0.7. This conservative bound selects every
+// candidate whose circle could be assigned to a queried grid cell.
+const MAX_DECORATION_COLLIDER_RADIUS = 1.6 * 0.7;
+
+function decorationCollider(seed: number, d: Decoration): Collider | null {
+  if (d.kind === 'rock') {
+    if (d.scale < 0.8) return null;
+    return {
+      type: 'circle',
+      x: d.x,
+      z: d.z,
+      r: 0.7 * d.scale,
+      cameraTopY: topY(seed, d.x, d.z, 1.25 * d.scale),
+    };
+  }
+  // tree trunks only; canopies don't block
+  return {
+    type: 'circle',
+    x: d.x,
+    z: d.z,
+    r: 0.55 * d.scale,
+    cameraTopY: topY(seed, d.x, d.z, 7.5 * d.scale),
+    camGhost: true,
+  };
+}
+
+function collidersInCell(grid: ColliderGrid, seed: number, gx: number, gz: number): Collider[] {
+  const key = `${gx},${gz}`;
+  const cached = grid.combinedCells.get(key);
+  if (cached) return cached;
+
+  let decorations = grid.decorationCells.get(key);
+  if (!decorations) {
+    decorations = [];
+    const minX = gx * GRID_CELL;
+    const maxX = (gx + 1) * GRID_CELL;
+    const minZ = gz * GRID_CELL;
+    const maxZ = (gz + 1) * GRID_CELL;
+    const pad = MAX_BODY_RADIUS + MAX_DECORATION_COLLIDER_RADIUS;
+    for (const decoration of generateDecorationsInBounds(seed, {
+      minX: minX - pad,
+      maxX: maxX + pad,
+      minZ: minZ - pad,
+      maxZ: maxZ + pad,
+    })) {
+      const collider = decorationCollider(seed, decoration);
+      if (!collider) continue;
+      const bounds = colliderBounds(collider);
+      const x0 = Math.floor((bounds.minX - MAX_BODY_RADIUS) / GRID_CELL);
+      const x1 = Math.floor((bounds.maxX + MAX_BODY_RADIUS) / GRID_CELL);
+      const z0 = Math.floor((bounds.minZ - MAX_BODY_RADIUS) / GRID_CELL);
+      const z1 = Math.floor((bounds.maxZ + MAX_BODY_RADIUS) / GRID_CELL);
+      if (gx >= x0 && gx <= x1 && gz >= z0 && gz <= z1) decorations.push(collider);
+    }
+    grid.decorationCells.set(key, decorations);
+  }
+
+  const authored = grid.cells.get(key);
+  const combined = authored?.length
+    ? decorations.length
+      ? [...authored, ...decorations]
+      : authored
+    : decorations;
+  grid.combinedCells.set(key, combined);
+  return combined;
 }
 
 // Push (x,z) out of one collider. Returns the corrected point, or null if clear.
@@ -432,12 +649,37 @@ function pushOut(c: Collider, x: number, z: number, r: number): { x: number; z: 
   return { x: c.x + world.x, z: c.z + world.z };
 }
 
+// Pass-under gate: a mover this tall (head height) fits beneath a collider
+// whose base is at least the margin above the head ? cave tubes run under
+// surface props/trees/fences without hitting their 2D footprints. Colliders
+// with no baseY (blocker walls, interior wall sets) block at every depth.
+const MOVER_HEAD_Y = 2.0;
+const UNDER_PASS_MARGIN = 0.4;
+
+function passesUnder(c: Collider, moverY: number | undefined): boolean {
+  return (
+    moverY !== undefined &&
+    c.baseY !== undefined &&
+    moverY + MOVER_HEAD_Y < c.baseY - UNDER_PASS_MARGIN
+  );
+}
+
+// Step-over gate for banded colliders (baked per-asset boxes): a box whose
+// top sits at or below roughly knee height never blocks - matching the bake's
+// own snag filter - and a jumping mover vaults boxes its arc clears.
+const STEP_OVER_Y = 0.65;
+
+function stepsOver(c: Collider, moverY: number | undefined): boolean {
+  return moverY !== undefined && c.hiY !== undefined && moverY + STEP_OVER_Y >= c.hiY;
+}
+
 function resolveAgainst(
   list: Collider[],
   x: number,
   z: number,
   r: number,
   ignoreFences = false,
+  moverY?: number,
 ): { x: number; z: number } {
   let px = x,
     pz = z;
@@ -445,6 +687,8 @@ function resolveAgainst(
     let moved = false;
     for (const c of list) {
       if (ignoreFences && c.type === 'obb' && c.isFence) continue;
+      if (passesUnder(c, moverY)) continue;
+      if (stepsOver(c, moverY)) continue;
       const res = pushOut(c, px, pz, r);
       if (res) {
         px = res.x;
@@ -455,6 +699,57 @@ function resolveAgainst(
     if (!moved) break;
   }
   return { x: px, z: pz };
+}
+
+// ---------------------------------------------------------------------------
+// Procedural Rift regions. A rift floor's collision comes from its GENERATED
+// DungeonLayout, so it cannot be a static INTERIOR_COLLIDERS entry. rift/runs.ts
+// publishes the active floor's instance-local collider set here on spawn/descent
+// and clears it on free; every region-aware collision function below reads it, so
+// movement, mob pathing, line-of-sight and camera occlusion all respect the
+// generated geometry uniformly. Keyed by a per-Sim COLLISION TOKEN (allocated
+// once per world via allocRiftCollisionToken, NOT the world seed: two Sims in
+// one process can share a seed) plus the instance origin, so concurrent rifts
+// and multiple Sims stay isolated. Token 0 means "no rift regions".
+interface RiftRegion {
+  ox: number;
+  oz: number;
+  colliders: Collider[];
+}
+const RIFT_REGIONS = new Map<number, RiftRegion[]>();
+let NEXT_RIFT_TOKEN = 1;
+
+export function allocRiftCollisionToken(): number {
+  return NEXT_RIFT_TOKEN++;
+}
+
+export function setRiftRegion(token: number, ox: number, oz: number, colliders: Collider[]): void {
+  let list = RIFT_REGIONS.get(token);
+  if (!list) {
+    list = [];
+    RIFT_REGIONS.set(token, list);
+  }
+  const i = list.findIndex((r) => r.ox === ox && r.oz === oz);
+  if (i >= 0) list[i] = { ox, oz, colliders };
+  else list.push({ ox, oz, colliders });
+}
+
+export function clearRiftRegion(token: number, ox: number, oz: number): void {
+  const list = RIFT_REGIONS.get(token);
+  if (!list) return;
+  const i = list.findIndex((r) => r.ox === ox && r.oz === oz);
+  if (i >= 0) list.splice(i, 1);
+}
+
+function riftRegionAt(token: number, x: number, z: number): RiftRegion | null {
+  const list = RIFT_REGIONS.get(token);
+  if (!list) return null;
+  for (const r of list) {
+    if (Math.abs(x - r.ox) <= RIFT_REGION_HALF_X && Math.abs(z - r.oz) <= RIFT_REGION_HALF_Z) {
+      return r;
+    }
+  }
+  return null;
 }
 
 function instanceLocal(x: number, z: number): { ox: number; oz: number; interior: string } {
@@ -475,7 +770,9 @@ function instanceLocal(x: number, z: number): { ox: number; oz: number; interior
 }
 
 // Resolve a movement destination against all static geometry. Movers slide
-// along obstacles. `r` is the body radius.
+// along obstacles. `r` is the body radius. `moverY` (when known) lets a mover
+// deep below a collider's base pass underneath it ? cave movement; omitted =
+// the legacy height-agnostic resolve.
 export function resolvePosition(
   seed: number,
   x: number,
@@ -483,6 +780,8 @@ export function resolvePosition(
   r = 0.5,
   ignoreFences = false,
   delveModules?: readonly string[],
+  riftToken = 0,
+  moverY?: number,
 ): { x: number; z: number } {
   if (isYumiMazePos(x)) {
     const o = yumiMazeOriginAt(z);
@@ -502,6 +801,12 @@ export function resolvePosition(
     const local = resolveAgainst(ARENA_COLLIDERS, x - o.x, z - o.z, r, ignoreFences);
     return { x: local.x + o.x, z: local.z + o.z };
   }
+  if (isRiftPos(x)) {
+    const region = riftRegionAt(riftToken, x, z);
+    if (!region) return { x, z };
+    const local = resolveAgainst(region.colliders, x - region.ox, z - region.oz, r, ignoreFences);
+    return { x: local.x + region.ox, z: local.z + region.oz };
+  }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);
     const colliders = INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS;
@@ -509,18 +814,29 @@ export function resolvePosition(
     return { x: local.x + ox, z: local.z + oz };
   }
   const grid = gridFor(seed);
-  const key = `${Math.floor(x / GRID_CELL)},${Math.floor(z / GRID_CELL)}`;
-  const list = grid.cells.get(key);
-  if (!list) return { x, z };
-  return resolveAgainst(list, x, z, r, ignoreFences);
+  const list = collidersInCell(grid, seed, Math.floor(x / GRID_CELL), Math.floor(z / GRID_CELL));
+  if (list.length === 0) return { x, z };
+  return resolveAgainst(list, x, z, r, ignoreFences, moverY);
 }
 
-function crossesFence(fromX: number, fromZ: number, toX: number, toZ: number, r: number): boolean {
-  for (const f of getActiveWorldContent().props.fences) {
+// crossesFence needs the seed for its lazy ground sample; resolveMovement
+// stashes it here (single-threaded sim, no reentrancy).
+let activeSeed = 0;
+
+function crossesFence(
+  fromX: number,
+  fromZ: number,
+  toX: number,
+  toZ: number,
+  r: number,
+  moverY?: number,
+): boolean {
+  const content = getActiveWorldContent();
+  const crossesSegment = (f: { x1: number; z1: number; x2: number; z2: number }): boolean => {
     const dx = f.x2 - f.x1,
       dz = f.z2 - f.z1;
     const len = Math.hypot(dx, dz);
-    if (len < 1e-6) continue;
+    if (len < 1e-6) return false;
     const ux = dx / len,
       uz = dz / len;
     const nx = -uz,
@@ -531,15 +847,35 @@ function crossesFence(fromX: number, fromZ: number, toX: number, toZ: number, r:
       toRelZ = toZ - f.z1;
     const fromSide = fromRelX * nx + fromRelZ * nz;
     const toSide = toRelX * nx + toRelZ * nz;
-    if (fromSide === 0 && toSide === 0) continue;
-    if (fromSide * toSide > 0) continue;
+    if (fromSide === 0 && toSide === 0) return false;
+    if (fromSide * toSide > 0) return false;
     const denom = fromSide - toSide;
     const t = Math.abs(denom) < 1e-6 ? 0 : fromSide / denom;
-    if (t < 0 || t > 1) continue;
+    if (t < 0 || t > 1) return false;
     const hitX = fromX + (toX - fromX) * t;
     const hitZ = fromZ + (toZ - fromZ) * t;
     const along = (hitX - f.x1) * ux + (hitZ - f.z1) * uz;
-    if (along >= -FENCE_END_PAD - r && along <= len + FENCE_END_PAD + r) return true;
+    if (along >= -FENCE_END_PAD - r && along <= len + FENCE_END_PAD + r) {
+      // A mover deep under the fence's ground (cave tube) passes beneath the
+      // rail. Sampled only on an actual crossing, so the common case stays
+      // height-free.
+      if (moverY !== undefined) {
+        const base = groundHeight(hitX, hitZ, activeSeed);
+        if (moverY + MOVER_HEAD_Y < base - UNDER_PASS_MARGIN) return false;
+      }
+      return true;
+    }
+    return false;
+  };
+  for (const f of content.props.fences) if (crossesSegment(f)) return true;
+  for (const p of content.placements ?? []) {
+    if (p.worldPropKind !== 'fence' || !p.worldPropWidth) continue;
+    const half = (p.worldPropWidth * p.scale * (p.scaleX ?? 1)) / 2;
+    const dx = Math.cos(p.rotY) * half;
+    const dz = -Math.sin(p.rotY) * half;
+    if (crossesSegment({ x1: p.x - dx, z1: p.z - dz, x2: p.x + dx, z2: p.z + dz })) {
+      return true;
+    }
   }
   return false;
 }
@@ -553,20 +889,50 @@ export function resolveMovement(
   r = 0.5,
   ignoreFences = false,
   delveModules?: readonly string[],
+  riftToken = 0,
+  moverY?: number,
 ): { x: number; z: number } {
   const dx = toX - fromX;
   const dz = toZ - fromZ;
   const d = Math.hypot(dx, dz);
-  if (d < 1e-6) return resolvePosition(seed, toX, toZ, r, ignoreFences, delveModules);
+  activeSeed = seed;
+  if (d < 1e-6)
+    return resolvePosition(seed, toX, toZ, r, ignoreFences, delveModules, riftToken, moverY);
   const steps = Math.max(1, Math.ceil(d / 0.2));
   let x = fromX,
     z = fromZ;
   for (let i = 1; i <= steps; i++) {
     const t = i / steps;
-    const nextX = fromX + dx * t;
-    const nextZ = fromZ + dz * t;
-    if (!ignoreFences && crossesFence(x, z, nextX, nextZ, r)) break;
-    const resolved = resolvePosition(seed, nextX, nextZ, r, ignoreFences, delveModules);
+    let nextX = fromX + dx * t;
+    // A sealed zone border is a hard wall regardless of terrain slope (the
+    // climb gate projects rise along the movement direction, so a shallow
+    // diagonal would otherwise sneak over the crest). Clamp z at the crest
+    // and keep the x component, so pushing into the wall slides along it.
+    let nextZ = crossesSealedBorder(x, z, fromZ + dz * t) ? z : fromZ + dz * t;
+    // The Great Maze's hedges are hard walls for the same reason, tested as
+    // a segment crossing (an endpoint-only test teleports a stalled mover
+    // across once its target passes the wall). The faces are axis-aligned,
+    // so slide by dropping whichever axis component pushes into the hedge.
+    if (crossesGardenHedge(x, z, nextX, nextZ)) {
+      if (!crossesGardenHedge(x, z, x, nextZ)) nextX = x;
+      else if (!crossesGardenHedge(x, z, nextX, z)) nextZ = z;
+      else break; // cornered against the hedge
+    }
+    if (!ignoreFences && crossesFence(x, z, nextX, nextZ, r, moverY)) break;
+    const resolved = resolvePosition(
+      seed,
+      nextX,
+      nextZ,
+      r,
+      ignoreFences,
+      delveModules,
+      riftToken,
+      moverY,
+    );
+    // ...and a static-collider slide (a tree hugging the crest) must not
+    // shove the resolved position across it either
+    if (crossesSealedBorder(x, z, resolved.z)) break;
+    if (crossesGardenHedge(x, z, resolved.x, resolved.z)) break;
     x = resolved.x;
     z = resolved.z;
     if (Math.hypot(x - nextX, z - nextZ) > r * 0.25) {
@@ -587,8 +953,10 @@ export function isBlocked(
   r = 0.5,
   ignoreFences = false,
   delveModules?: readonly string[],
+  riftToken = 0,
+  moverY?: number,
 ): boolean {
-  const res = resolvePosition(seed, x, z, r, ignoreFences, delveModules);
+  const res = resolvePosition(seed, x, z, r, ignoreFences, delveModules, riftToken, moverY);
   return Math.abs(res.x - x) > 1e-4 || Math.abs(res.z - z) > 1e-4;
 }
 
@@ -713,7 +1081,11 @@ function sweepColliders(
         ? rayCircleEntry(ax, az, bx, bz, c.x, c.z, c.r + pad)
         : rayObbEntry(c, ax, az, bx, bz, pad);
     if (!(t > 1e-4) || t >= best) continue;
-    if (!infinite && c.cameraTopY !== undefined && ay + (by - ay) * t > c.cameraTopY) continue;
+    const hitY = ay + (by - ay) * t;
+    if (!infinite && c.cameraTopY !== undefined && hitY > c.cameraTopY) continue;
+    // Below the obstacle's ground (camera inside a cave tube under it): the
+    // segment passes beneath, mirroring the movement pass-under gate.
+    if (!infinite && c.baseY !== undefined && hitY < c.baseY - UNDER_PASS_MARGIN) continue;
     best = t;
   }
   return best;
@@ -732,6 +1104,7 @@ export function cameraOcclusion(
   bz: number,
   pad = 0.35,
   delveModules?: readonly string[],
+  riftToken = 0,
 ): number {
   if (isYumiMazePos(ax)) {
     const o = yumiMazeOriginAt(az);
@@ -778,6 +1151,21 @@ export function cameraOcclusion(
       true,
     );
   }
+  if (isRiftPos(ax)) {
+    const region = riftRegionAt(riftToken, ax, az);
+    if (!region) return 1;
+    return sweepColliders(
+      region.colliders,
+      ax - region.ox,
+      ay,
+      az - region.oz,
+      bx - region.ox,
+      by,
+      bz - region.oz,
+      pad,
+      true,
+    );
+  }
   if (ax > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(ax, az);
     const colliders = INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS;
@@ -791,8 +1179,9 @@ export function cameraOcclusion(
   let best = 1;
   for (let gx = gx0; gx <= gx1; gx++) {
     for (let gz = gz0; gz <= gz1; gz++) {
-      const list = grid.cells.get(`${gx},${gz}`);
-      if (list) best = Math.min(best, sweepColliders(list, ax, ay, az, bx, by, bz, pad, false));
+      const list = collidersInCell(grid, seed, gx, gz);
+      if (list.length > 0)
+        best = Math.min(best, sweepColliders(list, ax, ay, az, bx, by, bz, pad, false));
     }
   }
   return best;
@@ -811,7 +1200,14 @@ export const SIGHT_HEIGHT = 1.6;
 // sight line at that sample)? Mirrors resolvePosition's zone routing so
 // interiors, delves and the arena keep their wall sets, but tests pure overlap
 // (no push-out) and applies the low-obstacle skip only where tops are known.
-function sightBlockedAt(seed: number, x: number, z: number, r: number, sightY: number): boolean {
+function sightBlockedAt(
+  seed: number,
+  x: number,
+  z: number,
+  r: number,
+  sightY: number,
+  riftToken = 0,
+): boolean {
   const overlapsAny = (list: Collider[], lx: number, lz: number, skipLow: boolean): boolean => {
     for (const c of list) {
       if (skipLow && c.cameraTopY !== undefined && c.cameraTopY <= sightY) continue;
@@ -838,13 +1234,17 @@ function sightBlockedAt(seed: number, x: number, z: number, r: number, sightY: n
     const o = arenaOriginAt(z);
     return overlapsAny(ARENA_COLLIDERS, x - o.x, z - o.z, false);
   }
+  if (isRiftPos(x)) {
+    const region = riftRegionAt(riftToken, x, z);
+    return region ? overlapsAny(region.colliders, x - region.ox, z - region.oz, false) : false;
+  }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);
     return overlapsAny(INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS, x - ox, z - oz, false);
   }
   const grid = gridFor(seed);
-  const list = grid.cells.get(`${Math.floor(x / GRID_CELL)},${Math.floor(z / GRID_CELL)}`);
-  return list ? overlapsAny(list, x, z, true) : false;
+  const list = collidersInCell(grid, seed, Math.floor(x / GRID_CELL), Math.floor(z / GRID_CELL));
+  return list.length > 0 ? overlapsAny(list, x, z, true) : false;
 }
 
 export function lineOfSightClear(
@@ -853,6 +1253,7 @@ export function lineOfSightClear(
   to: { x: number; z: number },
   r = 0.05,
   delveModules?: readonly string[],
+  riftToken = 0,
 ): boolean {
   const dx = to.x - from.x;
   const dz = to.z - from.z;
@@ -885,7 +1286,7 @@ export function lineOfSightClear(
     const t = i / steps;
     const x = from.x + dx * t;
     const z = from.z + dz * t;
-    if (sightBlockedAt(seed, x, z, r, eyeFrom + (eyeTo - eyeFrom) * t)) return false;
+    if (sightBlockedAt(seed, x, z, r, eyeFrom + (eyeTo - eyeFrom) * t, riftToken)) return false;
   }
   return true;
 }

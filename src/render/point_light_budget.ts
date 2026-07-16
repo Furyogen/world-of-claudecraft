@@ -64,7 +64,15 @@ export function applyPointLightBudget(
     const dz = entry.worldPos.z - pz;
     entry.d2 = dx * dx + dz * dz;
   }
-  if (ranked.length > visibleCount) ranked.sort((a, b) => a.d2 - b.d2);
+  // Authored map lamps should not go dark just because several ambient fire
+  // sources sit slightly closer. Rank steady lights as if they were 2x nearer,
+  // while preserving pure distance ordering within each class.
+  if (ranked.length > visibleCount) {
+    ranked.sort(
+      (a, b) =>
+        a.d2 * (a.light.userData.steady ? 0.25 : 1) - b.d2 * (b.light.userData.steady ? 0.25 : 1),
+    );
+  }
   for (let index = 0; index < ranked.length; index++) {
     const entry = ranked[index];
     const counted = index < visibleCount;

@@ -70,3 +70,61 @@ describe('custom paint swatches', () => {
     expect(doc?.biomePaint?.ids).toEqual([255, 1]);
   });
 });
+
+describe('swatch hue/light adjust', () => {
+  it('round-trips hueShift/light/baseBiome and clamps out-of-range values', () => {
+    const id = CUSTOM_PAINT_ID_MIN;
+    const doc = sanitizeMapDoc(
+      docWith({
+        cell: 8,
+        cols: 1,
+        rows: 1,
+        originX: 0,
+        originZ: 0,
+        ids: [id],
+        custom: [{ id, color: 0x336699, hueShift: 400, light: -3, baseBiome: 2 }],
+      }),
+    );
+    expect(doc?.biomePaint?.custom).toEqual([
+      { id, color: 0x336699, hueShift: 180, light: -1, baseBiome: 2 },
+    ]);
+  });
+
+  it('drops zero adjust values and invalid baseBiome ids', () => {
+    const id = CUSTOM_PAINT_ID_MIN;
+    const doc = sanitizeMapDoc(
+      docWith({
+        cell: 8,
+        cols: 1,
+        rows: 1,
+        originX: 0,
+        originZ: 0,
+        ids: [id],
+        custom: [{ id, color: 0x336699, hueShift: 0, light: 0, baseBiome: 99 }],
+      }),
+    );
+    expect(doc?.biomePaint?.custom).toEqual([{ id, color: 0x336699 }]);
+  });
+
+  it('round-trips the saved flag and drops non-true values', () => {
+    const id = CUSTOM_PAINT_ID_MIN;
+    const doc = sanitizeMapDoc(
+      docWith({
+        cell: 8,
+        cols: 2,
+        rows: 1,
+        originX: 0,
+        originZ: 0,
+        ids: [id, id + 1],
+        custom: [
+          { id, color: 0x336699, hueShift: 90, baseBiome: 2, saved: true },
+          { id: id + 1, color: 0x336699, saved: 'yes' },
+        ],
+      }),
+    );
+    expect(doc?.biomePaint?.custom).toEqual([
+      { id, color: 0x336699, hueShift: 90, baseBiome: 2, saved: true },
+      { id: id + 1, color: 0x336699 },
+    ]);
+  });
+});

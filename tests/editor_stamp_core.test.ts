@@ -50,6 +50,14 @@ describe('smooth stamp', () => {
     expect(strong.delta).toBeLessThan(weak.delta);
   });
 
+  it('applies the 5x gentleness scale to the blend (SCULPT_POWER_SCALE)', () => {
+    // Spike: center 10, four neighbors 0 => avg 2, an 8-unit gap. At max strength
+    // the pre-scale blend factor saturates at 0.65 (delta would be 10 - 8*0.65 =
+    // 4.8); scaled by 1/5 it is 0.13, so the delta stays at 10 - 8*0.13 = 8.96.
+    const sample = (x: number, z: number): number => (x === 0 && z === 0 ? 10 : 0);
+    expect(smoothStamp(0, 0, 8, 50, sample).delta).toBeCloseTo(8.96, 2);
+  });
+
   it('same input gives the same stamp (deterministic)', () => {
     const sample = (x: number, z: number): number => Math.sin(x) + Math.cos(z);
     expect(smoothStamp(3, 4, 12, 9, sample)).toEqual(smoothStamp(3, 4, 12, 9, sample));
@@ -64,6 +72,14 @@ describe('flatten stamp', () => {
 
   it('uses the flat falloff for a hard plateau edge', () => {
     expect(flattenStamp(0, 0, 10, 3, true).falloff).toBe('flat');
+  });
+
+  it('eases only partway toward the target when strength < 1 (5x-gentler brush)', () => {
+    // Current surface at 0, target 10, strength 1/5 => the stamp targets a fifth
+    // of the way (delta 2) instead of snapping straight to 10.
+    expect(flattenStamp(0, 0, 10, 10, false, 0, 1 / 5).delta).toBeCloseTo(2, 10);
+    // The default (no currentHeight/strength) still snaps fully to the target.
+    expect(flattenStamp(0, 0, 10, 10, false).delta).toBe(10);
   });
 });
 

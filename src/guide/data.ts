@@ -35,7 +35,60 @@ export interface ZoneTeaser {
 }
 
 export const ZONE_TEASERS: ZoneTeaser[] = [
-  { id: 'vale', nameKey: 'guide.home.world.valeName', blurbKey: 'guide.home.world.valeBlurb', min: 1, max: 7 },
-  { id: 'marsh', nameKey: 'guide.home.world.marshName', blurbKey: 'guide.home.world.marshBlurb', min: 6, max: 13 },
-  { id: 'peaks', nameKey: 'guide.home.world.peaksName', blurbKey: 'guide.home.world.peaksBlurb', min: 13, max: 20 },
+  {
+    id: 'vale',
+    nameKey: 'guide.home.world.valeName',
+    blurbKey: 'guide.home.world.valeBlurb',
+    min: 1,
+    max: 7,
+  },
+  {
+    id: 'marsh',
+    nameKey: 'guide.home.world.marshName',
+    blurbKey: 'guide.home.world.marshBlurb',
+    min: 6,
+    max: 13,
+  },
+  {
+    id: 'peaks',
+    nameKey: 'guide.home.world.peaksName',
+    blurbKey: 'guide.home.world.peaksBlurb',
+    min: 13,
+    max: 20,
+  },
+  {
+    id: 'dusk',
+    nameKey: 'guide.home.world.duskName',
+    blurbKey: 'guide.home.world.duskBlurb',
+    min: 15,
+    max: 20,
+  },
+  {
+    id: 'ember',
+    nameKey: 'guide.home.world.emberName',
+    blurbKey: 'guide.home.world.emberBlurb',
+    min: 16,
+    max: 20,
+  },
+  {
+    id: 'frost',
+    nameKey: 'guide.home.world.frostName',
+    blurbKey: 'guide.home.world.frostBlurb',
+    min: 17,
+    max: 20,
+  },
+  {
+    id: 'amber',
+    nameKey: 'guide.home.world.amberName',
+    blurbKey: 'guide.home.world.amberBlurb',
+    min: 18,
+    max: 20,
+  },
+  {
+    id: 'fen',
+    nameKey: 'guide.home.world.fenName',
+    blurbKey: 'guide.home.world.fenBlurb',
+    min: 19,
+    max: 20,
+  },
 ];

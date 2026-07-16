@@ -76,6 +76,7 @@ export function addEntityToRoster(ctx: SimContext, e: Entity): void {
   ctx.grid.insert(e);
   if (e.kind === 'player') ctx.playerGrid.insert(e);
   if (e.templateId === 'dungeon_door' && ctx.dungeonDoorIds) ctx.dungeonDoorIds.push(e.id);
+  if (e.templateId === 'rift_portal' && ctx.riftPortalIds) ctx.riftPortalIds.push(e.id);
 }
 
 export function dropEntityFromRoster(ctx: SimContext, id: number): void {
@@ -94,6 +95,18 @@ export function dropEntityFromRoster(ctx: SimContext, id: number): void {
   }
   ctx.grid.remove(e);
   if (e.kind === 'player') ctx.playerGrid.remove(e);
+  // Mirror addEntityToRoster's trigger registries: natural rift portals expire
+  // and reopen for the world's whole lifetime, so an unspliced id would leak
+  // (and cost the walk-in scan) forever. Doors are never dropped today, but the
+  // registries must stay symmetric either way.
+  if (e.templateId === 'rift_portal' && ctx.riftPortalIds) {
+    const at = ctx.riftPortalIds.indexOf(id);
+    if (at >= 0) ctx.riftPortalIds.splice(at, 1);
+  }
+  if (e.templateId === 'dungeon_door' && ctx.dungeonDoorIds) {
+    const at = ctx.dungeonDoorIds.indexOf(id);
+    if (at >= 0) ctx.dungeonDoorIds.splice(at, 1);
+  }
   ctx.entities.delete(id);
 }
 
@@ -234,7 +247,7 @@ export function releaseSpiritInDelve(ctx: SimContext, pid: number): void {
 // guard does not see it as a literal emit.
 export function graveyardReadout(p: Entity): string {
   const dungeon = dungeonAt(p.pos.x);
-  const zone = zoneAt(dungeon ? dungeon.doorPos.z : p.pos.z);
+  const zone = zoneAt(dungeon ? dungeon.doorPos.x : p.pos.x, dungeon ? dungeon.doorPos.z : p.pos.z);
   const gy = zone.graveyard;
   return `If you fall here, your spirit returns to the ${zone.name} graveyard at (${Math.floor(gy.x)}, ${Math.floor(gy.z)}).`;
 }

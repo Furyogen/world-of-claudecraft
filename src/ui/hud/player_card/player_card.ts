@@ -179,8 +179,8 @@ function fillTextClamped(
     return;
   }
   let s = text;
-  while (s.length > 1 && ctx.measureText(s + '…').width > maxW) s = s.slice(0, -1);
-  ctx.fillText(s + '…', x, y);
+  while (s.length > 1 && ctx.measureText(`${s}…`).width > maxW) s = s.slice(0, -1);
+  ctx.fillText(`${s}…`, x, y);
 }
 
 const TITLE_FONT = 'Cinzel, Georgia, serif';

@@ -149,7 +149,7 @@ export type {
   DungeonFinderProposalView,
   DungeonFinderQueueView,
 } from './world_api/dungeon_finder';
-export type { RaidLockout } from './world_api/dungeons';
+export type { RaidLockout, RiftFloorView } from './world_api/dungeons';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
@@ -386,12 +386,18 @@ export const COMMAND_NAMES = [
   'df_apply',
   'df_apply_cancel',
   'df_app_respond',
+  'salvage_item',
+  'rift_upgrade_item',
+  'rift_enchant_item',
+  'rift_socket_gem',
   'deed_set_title',
   // personal chat ignores: the chat-only sibling of block_add/block_remove.
   // (An admin "mute" is a moderation action, not a wire command.)
   'ignore_add',
   'ignore_remove',
   'stow_weapon',
+  // Local geometry recovery. Appended because wire tokens are never reordered.
+  'unstuck',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -470,6 +476,7 @@ export const COMMAND_FACETS = {
   attack: 'IWorldCombat',
   stopattack: 'IWorldCombat',
   release: 'IWorldCombat',
+  unstuck: 'IWorldCombat',
   // Ghost resurrection: run the spirit to its corpse, or accept the Spirit Healer's
   // resurrection (with Resurrection Sickness). Wire strings are snake_case by design.
   resurrect_corpse: 'IWorldCombat',
@@ -481,6 +488,13 @@ export const COMMAND_FACETS = {
   tabFriendly: 'IWorldTargeting',
   // IWorldLoot: need-greed roll submit.
   lootRoll: 'IWorldLoot',
+  // IWorldInventory: non-fungible Rift gear progression. These mutate the
+  // authoritative inventory copy; every cost and payload is validated again
+  // in the sim before the item instance is changed.
+  salvage_item: 'IWorldInventory',
+  rift_upgrade_item: 'IWorldInventory',
+  rift_enchant_item: 'IWorldInventory',
+  rift_socket_gem: 'IWorldInventory',
   // IWorldTelemetry: fire-and-forget metrics sink.
   telemetry: 'IWorldTelemetry',
   // IWorldProgressionXp: opt-in cosmetic prestige (leaderboard is a REST GET, no

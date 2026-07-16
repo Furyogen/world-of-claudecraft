@@ -311,7 +311,7 @@ function buildDetail(
     size: activity.size,
     composition: activity.composition ? { ...activity.composition } : null,
     autoQueue: activity.autoQueue,
-    entrance: { x: door.x, z: door.z, zoneId: zoneAt(door.z).id },
+    entrance: { x: door.x, z: door.z, zoneId: zoneAt(door.x, door.z).id },
     lockout: activity.lockout,
     lockedMinutes: lockoutMinutesFor(activity, lockouts),
     attunementQuestId: activity.attunementQuestId ?? null,

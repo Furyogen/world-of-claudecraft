@@ -97,10 +97,16 @@ export function dealDamage(
   const attackAnimation = attackAnimationStarted ? { attackAnimationStarted: true as const } : {};
   // [dev] A god-mode player (/dev god) hits for 100x so a solo tester can chew
   // through raid bosses to inspect drops without one-shotting them past their phase
-  // transitions. Gated on devCommands so it can NEVER apply in production (where gm
+  // transitions. Gated on devCommands so it can never apply in production (where gm
   // marks real, non-fighting game masters). Draws no rng.
   if (source?.devGod && source.kind === 'player' && ctx.devCommands)
     amount = Math.round(amount * 100);
+  // Dev "smite" mode: a flagged player's hit one-shots any mob (overrides the
+  // rolled amount before mitigation, so armor/absorb can't save the target). Only
+  // the player's own damage, only vs mobs; never touches players/NPCs/PvP.
+  if (source?.oneShot && source.kind === 'player' && target.kind === 'mob' && ctx.devCommands) {
+    amount = target.maxHp * 1000 + 1_000_000;
+  }
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)
   if (

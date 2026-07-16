@@ -65,9 +65,6 @@ import { KNOWN_DEVIATIONS } from './known_deviations';
 // every contract request replayed here returns before touching it.
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase9_parity';
 
-// routeHttpRequest is synchronous fire-and-forget (void apiEntry(req, res)), so a
-// dispatch must poll res.writableEnded before the captured triple is readable.
-const MAX_POLL_TICKS = 5000;
 // The /api/perf dev gate reads process.env.ALLOW_DEV_COMMANDS per request.
 const DEV_COMMANDS_ENV = 'ALLOW_DEV_COMMANDS';
 // Content-Length header sentinel: far above the player-card byte cap, so the
@@ -291,17 +288,12 @@ function isolate(): void {
 type MainModule = typeof import('../../../server/main');
 
 // A Dispatch that BAKES IN the /api dispatch mode: it flips the flag (legacy vs
-// new) via the test-only setter, drives the real routeHttpRequest, then polls
-// res.writableEnded (routeHttpRequest is synchronous fire-and-forget).
+// new) via the test-only setter and drives the real routeHttpRequest. The shared
+// captureResponse helper waits on FakeRes's end signal.
 function makeModedDispatch(main: MainModule, mode: 'legacy' | 'new'): Dispatch {
-  return async (req, res) => {
+  return (req, res) => {
     main.setApiDispatchModeForTests(mode);
     main.routeHttpRequest(req, res);
-    let ticks = 0;
-    while (!(res as unknown as { writableEnded: boolean }).writableEnded) {
-      if (ticks++ > MAX_POLL_TICKS) throw new Error('response never ended');
-      await new Promise((r) => setImmediate(r));
-    }
   };
 }
 

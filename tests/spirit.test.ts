@@ -5,6 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 import {
+  BUILTIN_WORLD,
   DELVES,
   DUNGEON_X_THRESHOLD,
   OVERWORLD_GRAVEYARDS,
@@ -19,14 +20,26 @@ import {
   RESURRECTION_SICKNESS_ID,
   SPIRIT_HEALER_RANGE,
 } from '../src/sim/spirit';
-import { dist2d, type Entity } from '../src/sim/types';
+import { dist2d, type Entity, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
 type AnyEntity = Entity & Record<string, any>;
 type AnySim = Sim & Record<string, any>;
 
+// Spirit Healers are system-owned (spawnOverworldSpiritHealers places one per
+// OVERWORLD_GRAVEYARDS entry from the static template in the ctor pass), and
+// zones/graveyards, DELVES and dungeons are static data, so ambient camps,
+// world npcs and quest objects can all be stripped (subsystem-world pattern,
+// see tests/dot_final_tick.test.ts).
+const SPIRIT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 const makeSim = (cls: 'warrior' | 'rogue' | 'mage' = 'warrior', seed = 42): AnySim =>
-  new Sim({ seed, playerClass: cls, autoEquip: true }) as AnySim;
+  new Sim({ seed, playerClass: cls, autoEquip: true, world: SPIRIT_TEST_WORLD }) as AnySim;
 
 // A Spirit Healer NPC within reach of a position (2D).
 function healerInRange(
@@ -259,7 +272,12 @@ describe("spirit: The Keeper's Toll persistence", () => {
     expect(state.resSickness).toBe(remaining);
 
     // relog: a fresh Sim loads the saved character
-    const sim2 = new Sim({ seed: 99, playerClass: 'warrior', noPlayer: true }) as AnySim;
+    const sim2 = new Sim({
+      seed: 99,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: SPIRIT_TEST_WORLD,
+    }) as AnySim;
     const pid2 = sim2.addPlayer('warrior', 'Toller', { state });
     const e2 = sim2.entities.get(pid2) as AnyEntity;
     const toll2 = e2.auras.find((a: any) => a.id === RESURRECTION_SICKNESS_ID);

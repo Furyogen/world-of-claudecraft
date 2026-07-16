@@ -20,7 +20,11 @@
 import {
   dungeonAt,
   isDelvePos,
+  isRiftPos,
   OVERWORLD_GRAVEYARDS,
+  RIFT_REGION_HALF_X,
+  RIFT_REGION_HALF_Z,
+  riftInstanceOrigin,
   SPIRIT_HEALER,
   SPIRIT_HEALER_NPC_ID,
 } from './data';
@@ -79,9 +83,25 @@ export function nearestOverworldGraveyard(x: number, z: number): { x: number; z:
 // ghost runs its spirit back to the door and re-enters to resurrect at the entrance, so
 // no Spirit Healer stands inside an instance. Outdoors it is the nearest overworld
 // graveyard to where the body fell.
-function ghostGraveyard(p: Entity): { x: number; z: number } {
+function ghostGraveyard(ctx: SimContext, p: Entity): { x: number; z: number } {
   const dungeon = dungeonAt(p.pos.x);
   if (dungeon) return nearestOverworldGraveyard(dungeon.doorPos.x, dungeon.doorPos.z);
+  // A rift death returns the spirit to the overworld graveyard nearest where the
+  // player STEPPED THROUGH the portal (the instance's returnPos), not the far-off
+  // rift band (which would resolve to whatever zone happens to be nearest in raw
+  // world space). Scanned off ctx.riftInstances to avoid a rift/runs import cycle.
+  if (isRiftPos(p.pos.x)) {
+    for (const inst of ctx.riftInstances) {
+      if (inst.partyKey === null) continue;
+      const o = riftInstanceOrigin(inst.slot, inst.floorIndex);
+      if (
+        Math.abs(p.pos.x - o.x) <= RIFT_REGION_HALF_X &&
+        Math.abs(p.pos.z - o.z) <= RIFT_REGION_HALF_Z
+      ) {
+        return nearestOverworldGraveyard(inst.returnPos.x, inst.returnPos.z);
+      }
+    }
+  }
   return nearestOverworldGraveyard(p.pos.x, p.pos.z);
 }
 
@@ -104,7 +124,7 @@ export function releasePlayerSpirit(ctx: SimContext, pid?: number): void {
   p.corpsePos = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
   p.corpseInstanceId = ctx.instanceClaimIdAt(p.pos);
   p.ghost = true; // p.dead stays true
-  const gy = ghostGraveyard(p);
+  const gy = ghostGraveyard(ctx, p);
   p.pos = ctx.groundPos(gy.x, gy.z);
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);

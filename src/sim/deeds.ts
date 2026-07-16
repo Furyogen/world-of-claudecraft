@@ -955,7 +955,7 @@ function sweepProximityMarks(ctx: SimContext): void {
   for (const meta of ctx.players.values()) {
     const e = ctx.entities.get(meta.entityId);
     if (!e || e.dead) continue;
-    const zone = zoneAt(e.pos.z);
+    const zone = zoneAt(e.pos.x, e.pos.z);
     for (const poi of zone.pois ?? []) {
       // The mark keys on the stable poi id, never the display label (a label copy
       // edit must not strand exploration progress). Custom-map pois may omit the

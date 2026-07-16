@@ -81,6 +81,23 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: 'The ritual circle lies cold and dormant.',
     enough: 'The circle has nothing more to give you.',
   },
+  // the Veiled Hollow
+  hollow_sealstone: {
+    deny: 'The sealstone waits, its socket empty. You have nothing that fits it.',
+    enough: 'The seal is set. The sealstone asks nothing more of you.',
+  },
+  monument_overlook: {
+    deny: 'The verse is worn shallow. Without a reason to read, it stays silent.',
+    enough: 'You have already read what the Overlook monument remembers.',
+  },
+  monument_court: {
+    deny: 'Ivy blankets the verse. Without a reason to read, it stays silent.',
+    enough: 'You have already read what the Court monument remembers.',
+  },
+  monument_north: {
+    deny: 'The forgotten verse waits for a reader with a reason.',
+    enough: 'You have already read what the forgotten monument remembers.',
+  },
 };
 
 export function groundPickupDeny(itemId: string, itemName: string): string {

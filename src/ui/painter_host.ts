@@ -39,7 +39,7 @@
 // / `el.style.*`) on elements handed to them, but never reach for a browser global,
 // so the host itself imports cleanly under Vitest.
 
-import type { ItemDef } from '../sim/types';
+import type { ItemDef, ItemInstancePayload } from '../sim/types';
 
 /**
  * Facet 1: the presentation dep-bag. Exactly the icon / money / tooltip helpers a
@@ -53,7 +53,7 @@ export interface PainterHostPresentation {
   /** Localized coin markup (gold/silver/copper) for a copper amount. */
   moneyHtml(copper: number): string;
   /** Full item tooltip markup (name, stats, compare). */
-  itemTooltip(item: ItemDef): string;
+  itemTooltip(item: ItemDef, instance?: ItemInstancePayload): string;
   /** Attach a lazily-built tooltip to an element. */
   attachTooltip(el: HTMLElement, html: () => string): void;
 }

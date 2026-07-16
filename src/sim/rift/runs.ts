@@ -1,0 +1,1446 @@
+// Procedural Rift instance lifecycle. A parallel sibling to instances/dungeons.ts
+// (which is left untouched): the rift pool lives in its own coordinate band, each
+// slot holds one GENERATED floor at a time, and descending regenerates the room
+// in place. Everything a rift needs is derived from its descriptor (seed +
+// baseLevel + floorIndex) via the pure generator in rift_gen.ts, so the client
+// regenerates identical geometry and only the descriptor travels over the wire.
+//
+// Behaviour lives here; state (ctx.riftInstances, ctx.riftPortalIds) stays on Sim
+// as live SimContext views. Sim keeps thin enterRift/leaveRift delegates for the
+// dev command + interaction click path; the per-tick drivers (updateRiftTriggers,
+// updateRiftInstances) are called from tick().
+
+import { clearRiftRegion, resolveMovement, setRiftRegion } from '../colliders';
+import { delveChestItemsForTier } from '../content/delves/lockpick_tiers';
+import { HEROIC_MARK_ITEM_ID } from '../content/dungeon_difficulty';
+import {
+  DUNGEON_FLOOR_Y,
+  isRiftPos,
+  MOBS,
+  RIFT_REGION_HALF_X,
+  RIFT_REGION_HALF_Z,
+  riftInstanceOrigin,
+} from '../data';
+import { layoutColliders } from '../dungeon_layout';
+import { createGroundObject, createMob } from '../entity';
+import type { LootTier } from '../lockpick';
+import type { SimContext } from '../sim_context';
+import { DT, dist2d, type Entity, type Vec3 } from '../types';
+import { closeNaturalRiftPortal, RIFT_MIN_LEVEL, RIFT_TIER_INFO } from './portals';
+import { addRiftProgressionLoot } from './progression';
+import { claimRiftFirstClear, markRiftEventActive } from './race';
+import { generateRiftFloor, riftLiftAt } from './rift_gen';
+import { riftLockpickAbort, tickRiftLockpick } from './rift_lockpick';
+import type { RiftInstance, RiftRoller } from './types';
+
+const PORTAL_TRIGGER_RADIUS = 2.2; // walk this close to a rift portal to use it
+const PYLON_TRIGGER_RADIUS = 3.0; // walk this close to light a rune pylon
+const SWITCH_TRIGGER_RADIUS = 2.6; // step this close to a gate switch to throw it
+const BEACON_TRIGGER_RADIUS = 2.0; // walk this close to the way-out beacon to leave
+const SEQ_TRIGGER_RADIUS = 2.6; // walk this close to step a sequence rune
+// Reach the Blood Orb from outside its altar's collider (altar r 1.8 + body 0.6).
+const ORB_TRIGGER_RADIUS = 3.2;
+const ORB_NOTICE_COOLDOWN = 6; // seconds between "the orb is sealed" nudges
+const BOULDER_PUSH_RADIUS = 2.0; // shove a boulder when this close and moving into it
+const PAD_RADIUS = 2.2; // a boulder counts as socketed within this of its pad
+const ICE_SLIDE_SPEED = 13; // yd/s glide across the ice (~1.85x run: frictionless momentum)
+const ICE_SLIDE_START = 0.04; // min input displacement in a tick to push off into a slide
+const PLAYER_BODY_R = 0.6;
+const ROLLER_HIT_COOLDOWN = 0.6; // seconds between rolling-boulder hits on one player
+const ROLLER_KB_SIDE = 3.2; // sideways shove (to the aisle) when a boulder bowls you over
+const ROLLER_KB_FWD = 1.4; // forward nudge along the boulder's travel
+
+/** Play a themed impact VFX at a WORLD spot for every interactive rift moment (the
+ * ice-slide launch, a boulder shove, a rune flare, a lava burn, a roller wallop). It
+ * reuses the already-wired `spellfxAt` world event, so it interest-scopes to everyone
+ * in the instance and renders on all three hosts with no new event/wire surface. It
+ * is render-only (draws no rng, touches no sim state), so it is determinism-safe. */
+function riftFx(
+  ctx: SimContext,
+  x: number,
+  z: number,
+  school: string,
+  fx: 'burst' | 'nova' = 'burst',
+): void {
+  ctx.emit({ type: 'spellfxAt', x, z, school, fx });
+}
+
+/** Whether an instance-local point sits on this floor's ice sheet. */
+function inIceZone(
+  ice: { x: number; z: number; hw: number; hd: number } | null,
+  lx: number,
+  lz: number,
+): boolean {
+  return ice !== null && Math.abs(lx - ice.x) <= ice.hw && Math.abs(lz - ice.z) <= ice.hd;
+}
+const RIFT_EMPTY_TIMEOUT = 60; // seconds with nobody inside before the slot frees
+
+// Deterministic per-channel colour jitter (server-side; the result rides the
+// entity snapshot to the client, so it need not be client-reproducible).
+function jitterColor(ctx: SimContext, hex: number, amt: number): number {
+  const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v)));
+  const f = () => 1 + ctx.rng.range(-amt, amt);
+  const r = (hex >> 16) & 0xff;
+  const g = (hex >> 8) & 0xff;
+  const b = hex & 0xff;
+  return (clamp(r * f()) << 16) | (clamp(g * f()) << 8) | clamp(b * f());
+}
+
+function riftKeyFor(ctx: SimContext, pid: number): string {
+  const party = ctx.partyOf(pid);
+  return party ? `party:${party.id}` : `solo:${pid}`;
+}
+
+function floorForInstance(inst: RiftInstance, floorIndex = inst.floorIndex) {
+  return generateRiftFloor(inst.seed, inst.baseLevel, floorIndex, inst.upgrade);
+}
+
+/** The rift instance whose region contains `pos`, or null. */
+export function riftInstanceAtPos(ctx: SimContext, pos: Vec3): RiftInstance | null {
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey === null) continue;
+    const o = riftInstanceOrigin(inst.slot, inst.floorIndex);
+    if (
+      Math.abs(pos.x - o.x) <= RIFT_REGION_HALF_X &&
+      Math.abs(pos.z - o.z) <= RIFT_REGION_HALF_Z
+    ) {
+      return inst;
+    }
+  }
+  return null;
+}
+
+function riftHazardTierAt(
+  hazards: import('../types').DelveHazardZone[],
+  localX: number,
+  localZ: number,
+): 'shallow' | 'deep' | null {
+  let tier: 'shallow' | 'deep' | null = null;
+  for (const hazard of hazards) {
+    const rx = hazard.rx ?? hazard.r;
+    const rz = hazard.rz ?? hazard.r;
+    const nx = (localX - hazard.x) / rx;
+    const nz = (localZ - hazard.z) / rz;
+    if (nx * nx + nz * nz > 1) continue;
+    if (hazard.tier === 'deep') return 'deep';
+    tier = tier ?? 'shallow';
+  }
+  return tier;
+}
+
+/** Whether a route sample avoids the live floor's closed runtime gate. */
+export function riftRecoveryRoutePointClear(ctx: SimContext, p: Entity, pos: Vec3): boolean {
+  if (!isRiftPos(pos.x)) return true;
+  const inst = riftInstanceAtPos(ctx, pos);
+  if (!inst?.memberIds.has(p.id)) return false;
+  const floor = floorForInstance(inst);
+  if (!floor.gate || inst.gateOpen) return true;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const localX = pos.x - origin.x;
+  const localZ = pos.z - origin.z;
+  return !(
+    Math.abs(localX - floor.gate.x) <= floor.gate.hw + PLAYER_BODY_R &&
+    Math.abs(localZ - floor.gate.z) <= floor.gate.hd + PLAYER_BODY_R
+  );
+}
+
+/** Whether a recovery destination avoids every live traversal hazard on its floor. */
+export function riftRecoveryPointSafe(ctx: SimContext, p: Entity, pos: Vec3): boolean {
+  if (!isRiftPos(pos.x)) return true;
+  const inst = riftInstanceAtPos(ctx, pos);
+  if (!inst?.memberIds.has(p.id)) return false;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  const localX = pos.x - origin.x;
+  const localZ = pos.z - origin.z;
+  if (riftHazardTierAt(floor.hazards, localX, localZ) !== null) return false;
+  if (inIceZone(floor.iceZone, localX, localZ)) return false;
+  for (let i = 0; i < floor.rollers.length; i++) {
+    if (!inst.rollerIds[i] || !ctx.entities.has(inst.rollerIds[i])) continue;
+    const roller = floor.rollers[i];
+    if (
+      Math.abs(localX - roller.x) <= roller.r + PLAYER_BODY_R &&
+      localZ >= roller.z0 - PLAYER_BODY_R &&
+      localZ <= roller.z1 + PLAYER_BODY_R
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function emitRiftState(ctx: SimContext, pid: number, inst: RiftInstance, active: boolean): void {
+  const floor = floorForInstance(inst);
+  const event =
+    inst.eventId === null
+      ? null
+      : (ctx.riftEvents.find((candidate) => candidate.eventId === inst.eventId) ?? null);
+  const contentId = event?.contentId ?? `procedural-v1:${inst.seed}:${inst.baseLevel}`;
+  ctx.emit({
+    type: 'riftState',
+    pid,
+    active,
+    eventId: inst.eventId,
+    instanceId: inst.instanceId,
+    seed: inst.seed >>> 0,
+    baseLevel: inst.baseLevel,
+    floorIndex: inst.floorIndex,
+    floorCount: inst.floorCount,
+    origin: riftInstanceOrigin(inst.slot, inst.floorIndex),
+    contentId,
+    contentHash: event?.contentHash ?? contentId,
+    upgrade: inst.upgrade,
+    name: floor.name,
+    themeName: floor.themeName,
+    tier: inst.tier,
+  });
+}
+
+// ---- Floor spawn / teardown -------------------------------------------------
+
+function spawnRiftFloor(ctx: SimContext, inst: RiftInstance): void {
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+
+  // Publish the generated collision so movement/pathing/LoS/camera respect it.
+  setRiftRegion(ctx.riftCollisionToken, origin.x, origin.z, layoutColliders(floor.layout));
+
+  inst.mobIds = [];
+  inst.objectIds = [];
+  inst.pylonIds = [];
+  inst.litPylons = new Set();
+  inst.bossId = null;
+  inst.bossDiedAtTick = null;
+  inst.exitId = null;
+  inst.descentId = null;
+  inst.descentOpen = false;
+  inst.descentAt = null;
+  inst.pylonTotal = floor.puzzle.kind === 'rune_pylons' ? floor.puzzle.pylonCount : 0;
+  inst.puzzleSolved = floor.puzzle.kind === 'none';
+  inst.boulderIds = [];
+  inst.boulderPads = [];
+  inst.seqRuneIds = [];
+  inst.seqStep = 0;
+  inst.beaconId = null;
+  inst.rollerIds = [];
+  inst.cacheId = null;
+  inst.lockpick = null;
+  inst.gateId = null;
+  inst.switchId = null;
+  inst.gateOpen = floor.gate === null;
+  inst.minibossId = null;
+  inst.orbId = null;
+  inst.orbActive = false;
+
+  for (const spawn of floor.spawns) {
+    const template = MOBS[spawn.templateId];
+    if (!template) continue;
+    const mob = createMob(
+      ctx.nextId++,
+      template,
+      spawn.level,
+      ctx.groundPos(origin.x + spawn.x, origin.z + spawn.z),
+    );
+    if (spawn.name) mob.name = spawn.name;
+    // Per-run re-grade: a fresh tint (and a little scale variance) so the same
+    // template reads as a different creature across rifts. Model + mechanics are
+    // unchanged (both read from the static template by id).
+    mob.color = jitterColor(ctx, spawn.color ?? mob.color, 0.14);
+    mob.scale = (spawn.scale ?? mob.scale) * ctx.rng.range(0.92, 1.12);
+    mob.facing = Math.PI;
+    mob.prevFacing = mob.facing;
+    ctx.addEntity(mob);
+    inst.mobIds.push(mob.id);
+    if (spawn.boss) inst.bossId = mob.id;
+    if (spawn.miniboss) inst.minibossId = mob.id;
+  }
+
+  const spawnObj = (templateId: string, name: string, x: number, z: number): number => {
+    const o = createGroundObject(ctx.nextId++, '', name, ctx.groundPos(origin.x + x, origin.z + z));
+    o.templateId = templateId;
+    o.objectItemId = null;
+    o.lootable = false;
+    ctx.addEntity(o);
+    inst.objectIds.push(o.id);
+    return o.id;
+  };
+
+  for (const obj of floor.objects) {
+    switch (obj.kind) {
+      case 'descent':
+        // Spawned only once the floor is cleared (see updateRiftInstances).
+        inst.descentAt = { x: obj.x, z: obj.z };
+        break;
+      case 'rune_pylon':
+        inst.pylonIds.push(spawnObj('rift_pylon', obj.name, obj.x, obj.z));
+        break;
+      case 'ice_goal':
+        spawnObj('rift_ice_goal', obj.name, obj.x, obj.z);
+        break;
+      case 'seq_rune':
+        inst.seqRuneIds.push(spawnObj('rift_seq_rune', obj.name, obj.x, obj.z));
+        break;
+      case 'boulder':
+        inst.boulderIds.push(spawnObj('rift_boulder', obj.name, obj.x, obj.z));
+        break;
+      case 'boulder_pad':
+        inst.boulderPads.push({ x: obj.x, z: obj.z });
+        spawnObj('rift_boulder_pad', obj.name, obj.x, obj.z);
+        break;
+      case 'treasure': {
+        // Hidden reward chest behind an illusion wall. Lootable so the interact
+        // F-scan finds it; opening it (interaction.ts) rolls loot, not a lockpick.
+        const tid = spawnObj('rift_treasure', obj.name, obj.x, obj.z);
+        const t = ctx.entities.get(tid);
+        if (t) t.lootable = true;
+        break;
+      }
+      case 'gate':
+        inst.gateId = spawnObj('rift_gate', obj.name, obj.x, obj.z);
+        break;
+      case 'switch':
+        inst.switchId = spawnObj('rift_switch', obj.name, obj.x, obj.z);
+        break;
+      case 'infernal_orb':
+        // Dormant until this floor's miniboss dies (updateRiftInstances arms it).
+        inst.orbId = spawnObj('rift_infernal_orb', obj.name, obj.x, obj.z);
+        break;
+      // 'chest'/'exit' are placed on boss death (openExit).
+    }
+  }
+  // Sequence runes must be stepped south-to-north; keep the id list in that order.
+  if (inst.seqRuneIds.length > 1) {
+    inst.seqRuneIds.sort(
+      (a, b) => (ctx.entities.get(a)?.pos.z ?? 0) - (ctx.entities.get(b)?.pos.z ?? 0),
+    );
+  }
+
+  // The always-available "way out": a beacon at the floor entry. Walking onto it
+  // (or clicking it) returns you to the overworld, so a run is never a trap.
+  inst.beaconId = spawnObj('rift_beacon', 'Rift Beacon', floor.entry.x, floor.entry.z - 3);
+
+  // Rolling-boulder hazards: one entity per lane, staggered along it by `phase`.
+  for (const roller of floor.rollers) {
+    const z = roller.z0 + (roller.z1 - roller.z0) * roller.phase;
+    inst.rollerIds.push(spawnObj('rift_roller', 'Rolling Boulder', roller.x, z));
+  }
+
+  inst.emptyFor = 0;
+}
+
+function dropObjects(ctx: SimContext, ids: number[]): void {
+  for (const id of ids) {
+    if (ctx.entities.has(id)) ctx.dropEntity(id);
+  }
+}
+
+function freeRiftFloorEntities(ctx: SimContext, inst: RiftInstance): void {
+  for (const id of inst.mobIds) {
+    if (!ctx.entities.has(id)) continue;
+    for (const meta of ctx.players.values()) {
+      const e = ctx.entities.get(meta.entityId);
+      if (e?.targetId === id) e.targetId = null;
+    }
+    ctx.dropEntity(id);
+  }
+  dropObjects(ctx, inst.objectIds);
+  if (inst.descentId !== null) dropObjects(ctx, [inst.descentId]);
+  if (inst.exitId !== null) dropObjects(ctx, [inst.exitId]);
+  if (inst.cacheId !== null) dropObjects(ctx, [inst.cacheId]);
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  clearRiftRegion(ctx.riftCollisionToken, origin.x, origin.z);
+  inst.mobIds = [];
+  inst.objectIds = [];
+  inst.pylonIds = [];
+  inst.litPylons = new Set();
+  inst.descentId = null;
+  inst.exitId = null;
+  inst.bossId = null;
+  inst.bossDiedAtTick = null;
+  inst.boulderIds = [];
+  inst.boulderPads = [];
+  inst.seqRuneIds = [];
+  inst.seqStep = 0;
+  inst.beaconId = null;
+  inst.rollerIds = [];
+  inst.cacheId = null;
+  inst.lockpick = null;
+  inst.gateId = null;
+  inst.switchId = null;
+  inst.gateOpen = true;
+  inst.puzzleSolved = false;
+  inst.minibossId = null;
+  inst.orbId = null;
+  inst.orbActive = false;
+}
+
+function freeRiftInstance(ctx: SimContext, inst: RiftInstance): void {
+  const eventId = inst.eventId;
+  freeRiftFloorEntities(ctx, inst);
+  inst.instanceId = 0;
+  inst.eventId = null;
+  inst.partyKey = null;
+  inst.memberIds = new Set();
+  inst.startedAt = 0;
+  inst.finishedAt = null;
+  inst.outcome = 'abandoned';
+  inst.upgrade = null;
+  inst.floorIndex = 0;
+  inst.descentOpen = false;
+  inst.descentAt = null;
+  inst.emptyFor = 0;
+  inst.tier = null;
+  inst.portalId = null;
+  inst.rewarded = false;
+  if (eventId !== null) {
+    const event = ctx.riftEvents.find((candidate) => candidate.eventId === eventId);
+    const anotherRun = ctx.riftInstances.some(
+      (candidate) => candidate.partyKey !== null && candidate.eventId === eventId,
+    );
+    if (event?.status === 'active' && event.portalId === null && !anotherRun) {
+      event.status = 'collapsed';
+    }
+  }
+}
+
+// ---- Enter / descend / leave ------------------------------------------------
+
+export function enterRift(
+  ctx: SimContext,
+  seed: number,
+  baseLevel: number,
+  pid?: number,
+  returnPos?: { x: number; z: number },
+  portal?: Entity,
+): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  if (r.e.dead && !r.e.ghost) return;
+  // Every rift is endgame content: level 20+ in every zone (the Eastbrook
+  // portal exists for low levels to see, but turns them away with this line).
+  // Gated on the PORTAL path (walk-in + interaction click, which always pass
+  // the portal entity); the direct programmatic call stays open for tests.
+  // Throttled so standing inside the trigger radius does not spam per tick.
+  if (portal && r.e.level < RIFT_MIN_LEVEL) {
+    if (ctx.time >= (r.e.riftDeniedAt ?? -Infinity) + 4) {
+      r.e.riftDeniedAt = ctx.time;
+      ctx.error(
+        r.meta.entityId,
+        `Only adventurers of level ${RIFT_MIN_LEVEL} or higher may enter this rift.`,
+      );
+    }
+    return;
+  }
+  const key = riftKeyFor(ctx, r.meta.entityId);
+  const eventId = portal?.riftEventId ?? null;
+  if (eventId !== null) {
+    const event = ctx.riftEvents.find((candidate) => candidate.eventId === eventId);
+    if (!event || event.status === 'cleared' || event.status === 'collapsed') {
+      const winner = event?.firstClear?.memberNames.join(', ') || 'another party';
+      ctx.error(r.meta.entityId, `This rift has already been cleared by ${winner}.`);
+      return;
+    }
+    if (event.upgradeStatus === 'pending') event.upgradeStatus = 'fallback';
+    event.contentLocked = true;
+  }
+
+  // Members of one group share an instance. Every other group entering the same
+  // event receives another slot with identical generated content.
+  let inst =
+    ctx.riftInstances.find(
+      (candidate) =>
+        candidate.partyKey !== null &&
+        candidate.outcome === 'active' &&
+        (candidate.memberIds.has(r.meta.entityId) || candidate.partyKey === key) &&
+        (eventId !== null
+          ? candidate.eventId === eventId
+          : candidate.eventId === null && candidate.seed === seed >>> 0),
+    ) ?? null;
+  if (!inst) {
+    const free = ctx.riftInstances.find((i) => i.partyKey === null);
+    if (!free) {
+      ctx.error(r.meta.entityId, 'All rifts are unstable right now. Try again soon.');
+      return;
+    }
+    inst = free;
+    inst.instanceId = ctx.nextRiftInstanceId++;
+    inst.eventId = eventId;
+    inst.partyKey = key;
+    inst.memberIds = new Set();
+    inst.startedAt = ctx.time;
+    inst.finishedAt = null;
+    inst.outcome = 'active';
+    inst.upgrade =
+      eventId === null
+        ? null
+        : (ctx.riftEvents.find((candidate) => candidate.eventId === eventId)?.upgrade ?? null);
+    inst.seed = seed >>> 0;
+    inst.baseLevel = Math.max(1, Math.min(60, Math.round(baseLevel)));
+    inst.floorIndex = 0;
+    inst.floorCount = floorForInstance(inst, 0).floorCount;
+    // Return spot: never inside the portal's walk-in radius, or leaving the
+    // rift would drop the player onto the portal and bounce them straight back
+    // in. Push the entry position away from the portal to a safe distance.
+    let ret = returnPos ?? { x: r.e.pos.x, z: r.e.pos.z };
+    if (portal) {
+      const dx = ret.x - portal.pos.x;
+      const dz = ret.z - portal.pos.z;
+      const d = Math.hypot(dx, dz);
+      const SAFE = PORTAL_TRIGGER_RADIUS + 2.5;
+      if (d < SAFE) {
+        const ux = d > 1e-3 ? dx / d : 0;
+        const uz = d > 1e-3 ? dz / d : 1;
+        ret = { x: portal.pos.x + ux * SAFE, z: portal.pos.z + uz * SAFE };
+      }
+    }
+    inst.returnPos = ret;
+    // Dev portals keep a cosmetic rank on the gate, but only a persisted natural
+    // event is reward-ranked. This keeps the reward guard authoritative for the
+    // real /dev portal path instead of paying Marks for a visual-only badge.
+    inst.tier = eventId === null ? null : (portal?.riftTier ?? null);
+    inst.portalId = portal?.id ?? null;
+    inst.rewarded = false;
+    markRiftEventActive(ctx, eventId);
+    spawnRiftFloor(ctx, inst);
+  }
+
+  inst.memberIds.add(r.meta.entityId);
+
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  const p = r.e;
+  p.pos = ctx.groundPos(origin.x + floor.entry.x, origin.z + floor.entry.z);
+  p.prevPos = { ...p.pos };
+  ctx.rebucket(p);
+  p.facing = 0;
+  p.targetId = null;
+  p.autoAttack = false;
+  inst.emptyFor = 0;
+  emitRiftState(ctx, r.meta.entityId, inst, true);
+  ctx.emit({
+    type: 'log',
+    text: `You step through the rift into ${floor.name}.`,
+    color: '#b9f',
+    pid: r.meta.entityId,
+  });
+  if (inst.upgrade) {
+    const detail = floor.isBoss
+      ? inst.upgrade.boss.concept
+      : inst.upgrade.floors[inst.floorIndex]?.environmentalDetails[0];
+    ctx.emit({
+      type: 'log',
+      text: [inst.upgrade.synopsis, detail].filter(Boolean).join(' '),
+      color: '#d9c7ff',
+      pid: r.meta.entityId,
+    });
+  }
+}
+
+export function descendRift(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const inst = riftInstanceAtPos(ctx, r.e.pos);
+  if (!inst?.descentOpen) return;
+  if (inst.floorIndex >= inst.floorCount - 1) return;
+
+  // Collect everyone currently standing in this floor's region before we tear it
+  // down, so the whole party descends together.
+  const descenders = instancePlayerIds(ctx, inst);
+
+  freeRiftFloorEntities(ctx, inst);
+  inst.floorIndex += 1;
+  spawnRiftFloor(ctx, inst);
+
+  // The next floor has its own z-stacked origin: teleport descenders THERE.
+  const newOrigin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  for (const id of descenders) {
+    const e = ctx.entities.get(id);
+    if (!e) continue;
+    e.pos = ctx.groundPos(newOrigin.x + floor.entry.x, newOrigin.z + floor.entry.z);
+    e.prevPos = { ...e.pos };
+    ctx.rebucket(e);
+    e.facing = 0;
+    e.targetId = null;
+    e.autoAttack = false;
+    emitRiftState(ctx, id, inst, true);
+    ctx.emit({
+      type: 'log',
+      text: `You descend deeper into ${floor.name}.`,
+      color: '#b9f',
+      pid: id,
+    });
+    if (inst.upgrade) {
+      const directive = inst.upgrade.floors[inst.floorIndex];
+      const narrative = floor.isBoss
+        ? inst.upgrade.boss.concept
+        : directive?.environmentalDetails[0];
+      if (narrative) ctx.emit({ type: 'log', text: narrative, color: '#d9c7ff', pid: id });
+    }
+  }
+}
+
+export function leaveRift(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r || r.e.dead) return;
+  // Only meaningful from inside a rift (reached via a rift_exit object); if the
+  // player is not in one, do nothing rather than yanking them to the world origin.
+  const inst = riftInstanceAtPos(ctx, r.e.pos);
+  if (!inst) return;
+  // Tear down any lock attempt in progress so a half-picked cache doesn't linger.
+  if (inst.lockpick) riftLockpickAbort(ctx, inst, r.meta.entityId);
+  forceExitRiftPlayer(ctx, inst, r.meta.entityId, false);
+  ctx.emit({
+    type: 'log',
+    text: 'You step back through the rift.',
+    color: '#b9f',
+    pid: r.meta.entityId,
+  });
+}
+
+/** Return one participant to the overworld. `forced` also handles dead/ghost
+ * entities and is used when another group wins the shared event. */
+function forceExitRiftPlayer(
+  ctx: SimContext,
+  inst: RiftInstance,
+  pid: number,
+  forced: boolean,
+): void {
+  const p = ctx.entities.get(pid);
+  if (!p) return;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const isInside =
+    Math.abs(p.pos.x - origin.x) <= RIFT_REGION_HALF_X &&
+    Math.abs(p.pos.z - origin.z) <= RIFT_REGION_HALF_Z;
+  if (!isInside && forced) return;
+  const dest = inst.returnPos;
+  // Walk-in grace so the overworld portal cannot re-swallow the player the
+  // tick they land next to it (clicking it deliberately still re-enters).
+  p.riftReentryGraceUntil = ctx.time + 3;
+  p.pos = ctx.groundPos(dest.x, dest.z);
+  p.prevPos = { ...p.pos };
+  ctx.rebucket(p);
+  p.targetId = null;
+  p.autoAttack = false;
+  p.riftSliding = false; // never carry a stale slide pose out to the overworld
+  p.riftSlideDirX = 0;
+  p.riftSlideDirZ = 0;
+  emitRiftState(ctx, pid, inst, false);
+}
+
+// ---- Per-tick drivers -------------------------------------------------------
+
+export function updateRiftTriggers(ctx: SimContext, p: Entity): void {
+  if (p.kind !== 'player') return;
+
+  if (isRiftPos(p.pos.x)) {
+    const inst = riftInstanceAtPos(ctx, p.pos);
+    if (!inst) return;
+    const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+    const floor = floorForInstance(inst);
+
+    // Way out: the entry beacon returns you to the overworld any time, so a run
+    // is never a dead end (too hard / stuck / lost).
+    if (inst.beaconId !== null) {
+      const beacon = ctx.entities.get(inst.beaconId);
+      if (beacon && dist2d(p.pos, beacon.pos) < BEACON_TRIGGER_RADIUS) {
+        leaveRift(ctx, p.id);
+        return;
+      }
+    }
+    // Exit portal -> leave.
+    if (inst.exitId !== null) {
+      const exit = ctx.entities.get(inst.exitId);
+      if (exit && dist2d(p.pos, exit.pos) < PORTAL_TRIGGER_RADIUS) {
+        leaveRift(ctx, p.id);
+        return;
+      }
+    }
+    // Open descent -> go deeper.
+    if (inst.descentOpen && inst.descentId !== null) {
+      const desc = ctx.entities.get(inst.descentId);
+      if (desc && dist2d(p.pos, desc.pos) < PORTAL_TRIGGER_RADIUS) {
+        descendRift(ctx, p.id);
+        return;
+      }
+    }
+
+    // Ice slide (FFX / Pokemon): step onto the frictionless sheet and you GLIDE in
+    // your heading, input locked, one fixed step per tick (NOT a teleport, so it
+    // interpolates smoothly and reads as sliding), until a wall stops you or you
+    // reach solid ground at the sheet's edge. `runDespawnDecay` snapshotted prevPos
+    // = this tick's pre-move pos, so `pos - prevPos` is the drive this tick, and the
+    // glide advances from prevPos each tick (discarding further steering input).
+    if (floor.iceZone) {
+      const onIce = inIceZone(floor.iceZone, p.pos.x - origin.x, p.pos.z - origin.z);
+      const sliding = (p.riftSlideDirX ?? 0) !== 0 || (p.riftSlideDirZ ?? 0) !== 0;
+      if (sliding) {
+        const dirx = p.riftSlideDirX ?? 0;
+        const dirz = p.riftSlideDirZ ?? 0;
+        const step = ICE_SLIDE_SPEED * DT;
+        const dest = resolveMovement(
+          ctx.cfg.seed,
+          p.prevPos.x,
+          p.prevPos.z,
+          p.prevPos.x + dirx * step,
+          p.prevPos.z + dirz * step,
+          PLAYER_BODY_R,
+          false,
+          undefined,
+          ctx.riftCollisionToken,
+        );
+        const advanced = Math.hypot(dest.x - p.prevPos.x, dest.z - p.prevPos.z);
+        const nextOnIce = inIceZone(floor.iceZone, dest.x - origin.x, dest.z - origin.z);
+        p.pos = ctx.groundPos(dest.x, dest.z);
+        p.facing = Math.atan2(dirx, dirz); // face the glide
+        ctx.rebucket(p);
+        if (advanced < step * 0.5 || !nextOnIce) {
+          // Slammed into a wall/rock, or skated off the ice onto solid ground: stop.
+          p.riftSlideDirX = 0;
+          p.riftSlideDirZ = 0;
+          p.riftSliding = false;
+          riftFx(ctx, p.pos.x, p.pos.z, 'frost'); // spray as you skid to a halt
+        }
+      } else if (onIce) {
+        // Push off: capture the heading the moment the player drives on the ice.
+        const dx = p.pos.x - p.prevPos.x;
+        const dz = p.pos.z - p.prevPos.z;
+        const moved = Math.hypot(dx, dz);
+        if (moved > ICE_SLIDE_START) {
+          p.riftSlideDirX = dx / moved;
+          p.riftSlideDirZ = dz / moved;
+          p.riftSliding = true;
+          riftFx(ctx, p.pos.x, p.pos.z, 'frost'); // frost spray kicks up as you launch
+        }
+      }
+    } else if ((p.riftSlideDirX ?? 0) !== 0 || (p.riftSlideDirZ ?? 0) !== 0 || p.riftSliding) {
+      p.riftSliding = false;
+      p.riftSlideDirX = 0; // no ice on this floor: never leave a stale slide latched
+      p.riftSlideDirZ = 0;
+    }
+    // Ice-slide goal: sliding onto the Frost Sigil solves the floor.
+    if (floor.puzzle.kind === 'ice_slide' && !inst.puzzleSolved) {
+      const goal = floor.objects.find((o) => o.kind === 'ice_goal');
+      // Radius 4 so a straight north slide that skids to a halt just past the far
+      // edge still lands on the sigil (the glide can overshoot by up to one step).
+      if (goal && dist2d(p.pos, ctx.groundPos(origin.x + goal.x, origin.z + goal.z)) < 4) {
+        inst.puzzleSolved = true;
+        riftFx(ctx, origin.x + goal.x, origin.z + goal.z, 'frost', 'nova'); // the sigil blazes
+        for (const pid of instancePlayerIds(ctx, inst)) {
+          ctx.emit({
+            type: 'log',
+            text: 'The frost sigil blazes. The way stirs.',
+            color: '#adf',
+            pid,
+          });
+        }
+      }
+    }
+
+    // Strength boulders: shove an adjacent boulder one heading-step onto its socket.
+    for (const id of inst.boulderIds) {
+      const b = ctx.entities.get(id);
+      if (!b || dist2d(p.pos, b.pos) >= BOULDER_PUSH_RADIUS) continue;
+      const mvx = p.pos.x - p.prevPos.x;
+      const mvz = p.pos.z - p.prevPos.z;
+      const dirx = b.pos.x - p.pos.x;
+      const dirz = b.pos.z - p.pos.z;
+      // Only push when actually walking INTO the boulder.
+      if (mvx * dirx + mvz * dirz <= 0.0001) continue;
+      const dd = Math.hypot(dirx, dirz) || 1;
+      const dest = resolveMovement(
+        ctx.cfg.seed,
+        b.pos.x,
+        b.pos.z,
+        b.pos.x + (dirx / dd) * 1.4,
+        b.pos.z + (dirz / dd) * 1.4,
+        1.0,
+        false,
+        undefined,
+        ctx.riftCollisionToken,
+      );
+      if (Math.hypot(dest.x - b.pos.x, dest.z - b.pos.z) > 0.05) {
+        b.pos = ctx.groundPos(dest.x, dest.z);
+        b.prevPos = { ...b.pos };
+        ctx.rebucket(b);
+        // Grinding dust as the boulder scrapes forward (throttled: it can move every
+        // tick while you lean on it, so cap the puffs to ~4/sec, deterministically).
+        if (ctx.tickCount % 5 === 0) riftFx(ctx, b.pos.x, b.pos.z, 'physical');
+      }
+    }
+
+    // Sequence: step the runes south-to-north; a wrong (skipped-ahead) step resets.
+    if (floor.puzzle.kind === 'sequence' && !inst.puzzleSolved) {
+      for (let i = 0; i < inst.seqRuneIds.length; i++) {
+        const rune = ctx.entities.get(inst.seqRuneIds[i]);
+        if (!rune || dist2d(p.pos, rune.pos) >= SEQ_TRIGGER_RADIUS) continue;
+        if (i === inst.seqStep) {
+          rune.templateId = 'rift_seq_rune_lit';
+          inst.seqStep++;
+          // A correct rune flares arcane; the last one blazes into a bright payoff.
+          const solved = inst.seqStep >= inst.seqRuneIds.length;
+          if (solved) inst.puzzleSolved = true;
+          riftFx(ctx, rune.pos.x, rune.pos.z, solved ? 'holy' : 'arcane', 'nova');
+          for (const pid of instancePlayerIds(ctx, inst)) {
+            ctx.emit({
+              type: 'log',
+              text: `The runes answer in turn (${inst.seqStep}/${inst.seqRuneIds.length}).`,
+              color: '#adf',
+              pid,
+            });
+          }
+        } else if (i > inst.seqStep) {
+          inst.seqStep = 0;
+          for (const rid of inst.seqRuneIds) {
+            const rr = ctx.entities.get(rid);
+            if (rr) rr.templateId = 'rift_seq_rune';
+          }
+          riftFx(ctx, rune.pos.x, rune.pos.z, 'shadow'); // the runes snuff out
+          for (const pid of instancePlayerIds(ctx, inst)) {
+            ctx.emit({ type: 'log', text: 'The runes go dark. Begin again.', color: '#a9c', pid });
+          }
+        }
+        break;
+      }
+    }
+
+    // Walk-on rune pylons.
+    for (const id of inst.pylonIds) {
+      if (inst.litPylons.has(id)) continue;
+      const pylon = ctx.entities.get(id);
+      if (pylon && dist2d(p.pos, pylon.pos) < PYLON_TRIGGER_RADIUS) {
+        inst.litPylons.add(id);
+        pylon.templateId = 'rift_pylon_lit';
+        // The pylon flares as it lights; the last one blazes the brighter payoff.
+        const all = inst.litPylons.size >= inst.pylonTotal;
+        riftFx(ctx, pylon.pos.x, pylon.pos.z, all ? 'holy' : 'arcane', 'nova');
+        ctx.emit({
+          type: 'log',
+          text: `A rune pylon flares to life (${inst.litPylons.size}/${inst.pylonTotal}).`,
+          color: '#adf',
+          pid: p.id,
+        });
+      }
+    }
+    // Blood Orb (authored citadel): dormant while its miniboss lives; once armed,
+    // touching it grinds the temple portcullis open for good. The orb IS the gate's
+    // switch on an `openOnOrb` floor, so no pressure plate is ever placed.
+    if (inst.orbId !== null) {
+      const orb = ctx.entities.get(inst.orbId);
+      if (orb && dist2d(p.pos, orb.pos) < ORB_TRIGGER_RADIUS) {
+        if (!inst.orbActive) {
+          if (ctx.time >= (p.riftOrbNoticeAt ?? -Infinity) + ORB_NOTICE_COOLDOWN) {
+            p.riftOrbNoticeAt = ctx.time;
+            ctx.emit({
+              type: 'log',
+              text: 'The orb is sealed by the ritual below.',
+              color: '#a9c',
+              pid: p.id,
+            });
+          }
+        } else if (floor.gate && !inst.gateOpen) {
+          inst.gateOpen = true;
+          const gate = inst.gateId !== null ? ctx.entities.get(inst.gateId) : null;
+          if (gate) gate.templateId = 'rift_gate_open';
+          riftFx(ctx, orb.pos.x, orb.pos.z, 'fire', 'nova');
+          if (gate) riftFx(ctx, gate.pos.x, gate.pos.z, 'holy', 'nova');
+          for (const pid of instancePlayerIds(ctx, inst)) {
+            ctx.emit({
+              type: 'log',
+              text: 'The Blood Orb flares. The gates of the temple grind open.',
+              color: '#f97',
+              pid,
+            });
+          }
+        }
+      }
+    }
+    // Switch-gate: stepping the plate raises the linked portcullis for good.
+    if (floor.gate && !inst.gateOpen) {
+      const sw = inst.switchId !== null ? ctx.entities.get(inst.switchId) : null;
+      if (sw && dist2d(p.pos, sw.pos) < SWITCH_TRIGGER_RADIUS) {
+        inst.gateOpen = true;
+        sw.templateId = 'rift_switch_on';
+        const gate = inst.gateId !== null ? ctx.entities.get(inst.gateId) : null;
+        if (gate) gate.templateId = 'rift_gate_open';
+        riftFx(ctx, sw.pos.x, sw.pos.z, 'arcane', 'nova');
+        if (gate) riftFx(ctx, gate.pos.x, gate.pos.z, 'holy', 'nova');
+        for (const pid of instancePlayerIds(ctx, inst)) {
+          ctx.emit({ type: 'log', text: 'The gate grinds open.', color: '#adf', pid });
+        }
+      }
+    }
+    // A closed gate is a runtime clamp (never a static collider): shove the player
+    // back to the SOUTH face of the portcullis so they cannot pass until it opens.
+    if (floor.gate && !inst.gateOpen) {
+      const g = floor.gate;
+      const lx = p.pos.x - origin.x;
+      const lz = p.pos.z - origin.z;
+      if (Math.abs(lx - g.x) < g.hw && lz > g.z - g.hd - PLAYER_BODY_R) {
+        p.pos = ctx.groundPos(p.pos.x, origin.z + g.z - g.hd - PLAYER_BODY_R - 0.05);
+        p.prevPos = { ...p.pos };
+        ctx.rebucket(p);
+      }
+    }
+    // Verticality: stand the player on the raised tier (procedural platform or
+    // authored per-room lift). This is a post-movement Y lift;
+    // updatePlayerMovement stripped the prior tick's lift first, so the kernel
+    // integrated jumps/gravity against the true flat floor. Zero on flat floors.
+    p.pos.y += riftLiftAt(floor, p.pos.x - origin.x, p.pos.z - origin.z);
+    return;
+  }
+
+  // Overworld: walk into a rift portal to enter (unless inside the short
+  // post-exit grace, so leaving a rift never bounces the player back in).
+  if (ctx.time < (p.riftReentryGraceUntil ?? -Infinity)) return;
+  if (ctx.riftPortalIds === null) {
+    ctx.riftPortalIds = [];
+    for (const e of ctx.entities.values()) {
+      if (e.templateId === 'rift_portal') ctx.riftPortalIds.push(e.id);
+    }
+  }
+  for (const portalId of ctx.riftPortalIds) {
+    const portal = ctx.entities.get(portalId);
+    if (
+      portal &&
+      portal.riftSeed !== undefined &&
+      dist2d(p.pos, portal.pos) < PORTAL_TRIGGER_RADIUS
+    ) {
+      enterRift(ctx, portal.riftSeed, portal.riftBaseLevel ?? p.level, p.id, undefined, portal);
+      return;
+    }
+  }
+}
+
+function trashCleared(ctx: SimContext, inst: RiftInstance): boolean {
+  for (const id of inst.mobIds) {
+    if (id === inst.bossId) continue;
+    const m = ctx.entities.get(id);
+    if (m && !m.dead) return false;
+  }
+  return true;
+}
+
+function openDescent(ctx: SimContext, inst: RiftInstance): void {
+  if (inst.descentOpen || !inst.descentAt) return;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const desc = createGroundObject(
+    ctx.nextId++,
+    '',
+    'Rift Descent',
+    ctx.groundPos(origin.x + inst.descentAt.x, origin.z + inst.descentAt.z),
+  );
+  desc.templateId = 'rift_descent';
+  desc.objectItemId = null;
+  desc.lootable = true;
+  ctx.addEntity(desc);
+  inst.descentId = desc.id;
+  inst.descentOpen = true;
+  for (const pid of instancePlayerIds(ctx, inst)) {
+    ctx.emit({ type: 'log', text: 'The way down tears open.', color: '#b9f', pid });
+  }
+}
+
+/** Open an off-path hidden treasure chest on interact: roll real item loot (scaled
+ * by the run's rank), grant it to the picker, and pop the shared loot overlay. No
+ * lockpick minigame - just the reward for exploring behind an illusion wall. */
+export function riftOpenTreasure(ctx: SimContext, objectId: number, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const chest = ctx.entities.get(objectId);
+  if (chest?.templateId !== 'rift_treasure') return; // already opened / gone
+  if (dist2d(r.e.pos, chest.pos) > 3.5) {
+    ctx.error(r.meta.entityId, 'Move closer to the chest.');
+    return;
+  }
+  const inst = riftInstanceAtPos(ctx, r.e.pos);
+  const tier: LootTier =
+    inst?.tier === 'S' ? 'premium' : inst?.tier === 'A' || inst?.tier === 'B' ? 'medium' : 'low';
+  const cls = ctx.players.get(r.meta.entityId)?.cls ?? 'warrior';
+  const items = delveChestItemsForTier(tier, cls, ctx.rng, false);
+  for (const it of items) ctx.addItem(it.itemId, it.count, r.meta.entityId);
+  chest.templateId = 'rift_treasure_open';
+  chest.name = 'Opened Cache';
+  chest.lootable = false;
+  ctx.emit({
+    type: 'delveChestLoot',
+    chestId: objectId,
+    delveId: 'rift',
+    tierId: inst?.tier ?? 'rift',
+    lootTier: tier,
+    bountiful: false,
+    items,
+    pid: r.meta.entityId,
+  });
+}
+
+function openExit(ctx: SimContext, inst: RiftInstance): void {
+  if (inst.exitId !== null) return;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  const chest = floor.objects.find((o) => o.kind === 'chest');
+  const pos = chest ?? { x: 0, z: floor.layout.dais.z + 6 };
+  const exit = createGroundObject(
+    ctx.nextId++,
+    '',
+    'Rift Egress',
+    ctx.groundPos(origin.x + pos.x, origin.z + pos.z),
+  );
+  exit.templateId = 'rift_exit';
+  exit.objectItemId = null;
+  exit.lootable = true;
+  // The way home renders as the ranked-portal gate; carry the run's tier so its
+  // colour matches the rift you cleared (dev-portal runs are tier-null, and the
+  // gate builder defaults those to A-rank).
+  exit.riftTier = inst.tier ?? undefined;
+  ctx.addEntity(exit);
+  inst.exitId = exit.id;
+  // Beside the way home, the giga-boss leaves a SEALED reward cache: pick its lock
+  // (the shared Tumbler's Path minigame) for bonus spoils. Lootable so the interact
+  // scan targets it; the pick, not a grab, opens it (see interaction.ts + rift_lockpick).
+  const cache = createGroundObject(
+    ctx.nextId++,
+    '',
+    'Sealed Rift Cache',
+    ctx.groundPos(origin.x + pos.x - 4, origin.z + pos.z),
+  );
+  cache.templateId = 'rift_locked_chest';
+  cache.objectItemId = null;
+  cache.lootable = true;
+  ctx.addEntity(cache);
+  inst.cacheId = cache.id;
+  for (const pid of instancePlayerIds(ctx, inst)) {
+    ctx.emit({
+      type: 'log',
+      text: 'The rift shudders. A way home tears open behind the fallen.',
+      color: '#fd7',
+      pid,
+    });
+  }
+}
+
+/** Put normal rank marks plus the one-off race bonus on the winner's boss corpse
+ * as personal loot. Normal marks retain the existing daily-per-rank gate; race
+ * marks are event-specific and therefore always paid to a legitimate winner. */
+function rewardRiftWinner(
+  ctx: SimContext,
+  inst: RiftInstance,
+  boss: Entity | null,
+  participants: readonly number[],
+  raceWinner: boolean,
+): Map<number, number> {
+  const awardedByPlayer = new Map<number, number>();
+  if (inst.tier === null || !boss) return awardedByPlayer;
+  const info = RIFT_TIER_INFO[inst.tier];
+  const loot = boss.loot ?? { copper: 0, items: [] };
+  const dailyKey = `rift_${inst.tier}`;
+  for (const pid of participants) {
+    const meta = ctx.players.get(pid);
+    if (!meta) continue;
+    let marks = raceWinner ? info.raceMarks : 0;
+    const today = ctx.utcDay;
+    if (today && meta.heroicDaily.date !== today) {
+      meta.heroicDaily = { date: today, marked: new Set() };
+    }
+    if (!meta.heroicDaily.marked.has(dailyKey)) {
+      meta.heroicDaily.marked.add(dailyKey);
+      marks += info.marks;
+    }
+    for (let i = 0; i < marks; i++) {
+      loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [pid] });
+    }
+    awardedByPlayer.set(pid, marks);
+  }
+  if (awardedByPlayer.size > 0) {
+    boss.loot = loot;
+    boss.lootable = true;
+  }
+  return awardedByPlayer;
+}
+
+function terminateLosingInstance(ctx: SimContext, inst: RiftInstance): void {
+  const event =
+    inst.eventId === null
+      ? null
+      : (ctx.riftEvents.find((candidate) => candidate.eventId === inst.eventId) ?? null);
+  const winnerNames = event?.firstClear?.memberNames ?? [];
+  const clearTime = event?.firstClear?.duration ?? 0;
+  const tier = event?.tier ?? inst.tier;
+  inst.outcome = 'lost';
+  inst.finishedAt = ctx.time;
+  if (inst.lockpick) riftLockpickAbort(ctx, inst);
+  for (const pid of instancePlayerIds(ctx, inst)) {
+    if (event && tier) {
+      ctx.emit({
+        type: 'riftRaceResult',
+        pid,
+        eventId: event.eventId,
+        outcome: 'lost',
+        tier,
+        winnerNames,
+        clearTime,
+        rewardMarks: 0,
+      });
+    }
+    ctx.emit({
+      type: 'log',
+      text: `The rift has already been cleared by ${winnerNames.join(', ') || 'another party'}. Your run ends.`,
+      color: '#f99',
+      pid,
+    });
+    forceExitRiftPlayer(ctx, inst, pid, true);
+  }
+  freeRiftInstance(ctx, inst);
+}
+
+/** Resolve the authoritative first-clear claim. The winning instance remains open
+ * for loot and egress; every competing group is notified, ejected, and torn down. */
+function completeRiftClear(ctx: SimContext, inst: RiftInstance, boss: Entity | null): boolean {
+  if (inst.rewarded) return inst.outcome === 'won';
+  const present = instancePlayerIds(ctx, inst);
+  const participants = present.length > 0 ? present : [...inst.memberIds];
+  const claim = claimRiftFirstClear(ctx, inst, participants);
+  if (!claim.won) {
+    terminateLosingInstance(ctx, inst);
+    return false;
+  }
+
+  inst.rewarded = true;
+  inst.outcome = 'won';
+  inst.finishedAt = ctx.time;
+  const raceWinner = claim.event !== null;
+  const rewards = rewardRiftWinner(ctx, inst, boss, participants, raceWinner);
+
+  // A cleared rift seals its way in: the entry portal despawns, so a finished
+  // run can never be walked into and re-farmed. Ranked natural portals seal
+  // through the race claim below (closeNaturalRiftPortal); this arm covers
+  // portals outside the race (dev portals), whose entity would otherwise stay
+  // open forever.
+  if (!claim.event && inst.portalId !== null) {
+    if (ctx.entities.has(inst.portalId)) ctx.dropEntity(inst.portalId);
+    inst.portalId = null;
+  }
+
+  if (claim.event) {
+    if (boss) {
+      addRiftProgressionLoot(
+        ctx,
+        boss,
+        claim.event.eventId,
+        claim.event.tier,
+        participants,
+        inst.upgrade?.rewards.lootMultiplier,
+        inst.upgrade?.rewards.craftingMaterialBias,
+      );
+    }
+    const portalId = claim.event.portalId ?? inst.portalId;
+    if (portalId !== null) closeNaturalRiftPortal(ctx, portalId, 'sealed');
+    const firstClear = claim.event.firstClear;
+    const winnerNames = firstClear?.memberNames ?? [];
+    const clearTime = firstClear?.duration ?? Math.max(0, ctx.time - inst.startedAt);
+    for (const pid of participants) {
+      ctx.emit({
+        type: 'riftRaceResult',
+        pid,
+        eventId: claim.event.eventId,
+        outcome: 'won',
+        tier: claim.event.tier,
+        winnerNames,
+        clearTime,
+        rewardMarks: rewards.get(pid) ?? 0,
+      });
+    }
+    ctx.emit({
+      type: 'riftRaceWorld',
+      eventId: claim.event.eventId,
+      tier: claim.event.tier,
+      winnerNames,
+      clearTime,
+    });
+    ctx.emit({
+      type: 'log',
+      text: `${winnerNames.join(', ') || 'A party'} won the ${claim.event.tier}-rank Rift race in ${clearTime.toFixed(1)}s!`,
+      color: '#ffd76a',
+    });
+
+    const competitors = ctx.riftInstances.filter(
+      (candidate) =>
+        candidate !== inst &&
+        candidate.partyKey !== null &&
+        candidate.eventId === claim.event?.eventId,
+    );
+    for (const competitor of competitors) terminateLosingInstance(ctx, competitor);
+  }
+  return true;
+}
+
+function instancePlayerIds(ctx: SimContext, inst: RiftInstance): number[] {
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const out: number[] = [];
+  const candidates =
+    inst.memberIds.size > 0
+      ? inst.memberIds
+      : new Set([...ctx.players.values()].map((m) => m.entityId));
+  for (const pid of candidates) {
+    const e = ctx.entities.get(pid);
+    if (
+      e &&
+      Math.abs(e.pos.x - origin.x) <= RIFT_REGION_HALF_X &&
+      Math.abs(e.pos.z - origin.z) <= RIFT_REGION_HALF_Z
+    ) {
+      out.push(pid);
+    }
+  }
+  return out;
+}
+
+// Unblockable environmental damage to players standing in a hazard zone (lava),
+// skipped while airborne so a running jump clears the band. Modelled on the delve
+// blackwater tick; scales with max HP so it bites at any level. 1 Hz.
+function tickRiftHazards(
+  ctx: SimContext,
+  inst: RiftInstance,
+  origin: { x: number; z: number },
+  hazards: import('../types').DelveHazardZone[],
+): void {
+  for (const pid of instancePlayerIds(ctx, inst)) {
+    const p = ctx.entities.get(pid);
+    if (!p || p.dead || p.jumping) continue;
+    const lx = p.pos.x - origin.x;
+    const lz = p.pos.z - origin.z;
+    const tier = riftHazardTierAt(hazards, lx, lz);
+    if (!tier) continue;
+    const dmg = Math.max(1, Math.round(p.maxHp * 0.06 * (tier === 'deep' ? 2 : 1)));
+    ctx.dealDamage(null, p, dmg, false, 'fire', 'Molten Rift', 'hit', true);
+    riftFx(ctx, p.pos.x, p.pos.z, 'fire'); // flames lick up as the lava sears you (1 Hz)
+  }
+}
+
+// Roll one lane's boulder forward a tick and bowl over anyone it overtakes.
+function tickRiftRollers(
+  ctx: SimContext,
+  inst: RiftInstance,
+  origin: { x: number; z: number },
+  rollers: RiftRoller[],
+): void {
+  for (let i = 0; i < inst.rollerIds.length && i < rollers.length; i++) {
+    const e = ctx.entities.get(inst.rollerIds[i]);
+    if (!e) continue;
+    const lane = rollers[i];
+    // Constant-speed roll down the lane; wrap back to the start (carry overshoot).
+    let lz = e.pos.z - origin.z + lane.speed * DT;
+    if (lz > lane.z1) lz = lane.z0 + (lz - lane.z1);
+    e.prevPos = { ...e.pos };
+    e.pos = ctx.groundPos(origin.x + lane.x, origin.z + lz);
+    e.facing = 0;
+    ctx.rebucket(e);
+    // Anyone (not airborne) it overtakes is shoved aisle-ward + a nudge forward
+    // and chipped; the cooldown makes one pass cost one hit, not one per tick.
+    for (const pid of instancePlayerIds(ctx, inst)) {
+      const p = ctx.entities.get(pid);
+      if (!p || p.dead || p.jumping) continue;
+      if (dist2d(p.pos, e.pos) >= lane.r + PLAYER_BODY_R) continue;
+      if (ctx.time < (p.riftRollerUntil ?? 0)) continue;
+      p.riftRollerUntil = ctx.time + ROLLER_HIT_COOLDOWN;
+      const side = p.pos.x - e.pos.x >= 0 ? 1 : -1;
+      const dest = resolveMovement(
+        ctx.cfg.seed,
+        p.pos.x,
+        p.pos.z,
+        p.pos.x + side * ROLLER_KB_SIDE,
+        p.pos.z + ROLLER_KB_FWD,
+        PLAYER_BODY_R,
+        false,
+        undefined,
+        ctx.riftCollisionToken,
+      );
+      p.pos = ctx.groundPos(dest.x, dest.z);
+      p.prevPos = { ...p.pos };
+      ctx.rebucket(p);
+      ctx.dealDamage(
+        null,
+        p,
+        Math.max(1, Math.round(p.maxHp * 0.07)),
+        false,
+        'physical',
+        'Rolling Boulder',
+        'hit',
+        true,
+      );
+      riftFx(ctx, p.pos.x, p.pos.z, 'physical', 'nova'); // a heavy dusty wallop as it bowls you
+    }
+  }
+}
+
+/** Advance every active rift's rolling boulders each tick (20 Hz, unlike the 1 Hz
+ * updateRiftInstances so the motion is smooth). Regenerating the floor is memoised,
+ * so this stays cheap even with many live rifts. */
+export function advanceRiftRollers(ctx: SimContext): void {
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey === null || inst.rollerIds.length === 0) continue;
+    const floor = floorForInstance(inst);
+    if (floor.rollers.length === 0) continue;
+    tickRiftRollers(ctx, inst, riftInstanceOrigin(inst.slot, inst.floorIndex), floor.rollers);
+  }
+}
+
+/** The raised-tier Y lift for a player at their current position (0 outside a rift
+ * or on a single-level floor). updatePlayerMovement strips this before the movement
+ * kernel runs, so jumps/gravity integrate against the flat floor; updateRiftTriggers
+ * re-applies it after. Both read the same pure height field, so they cancel. */
+export function riftPlayerLift(ctx: SimContext, p: Entity): number {
+  if (!isRiftPos(p.pos.x)) return 0;
+  const inst = riftInstanceAtPos(ctx, p.pos);
+  if (!inst) return 0;
+  const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+  const floor = floorForInstance(inst);
+  return riftLiftAt(floor, p.pos.x - origin.x, p.pos.z - origin.z);
+}
+
+/** Stand every rift MOB and OBJECT on the raised sanctum tier each tick (an absolute
+ * Y set from the flat floor; mobs/objects never jump, so no arc to preserve). Only
+ * floors with a platform do any work. Players are lifted in updateRiftTriggers. */
+export function liftRiftEntities(ctx: SimContext): void {
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey === null) continue;
+    const floor = floorForInstance(inst);
+    if (!floor.platform && !floor.layout.rooms?.some((r) => (r.lift ?? 0) !== 0)) continue;
+    const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+    const lift = (id: number): void => {
+      const e = ctx.entities.get(id);
+      if (e) e.pos.y = DUNGEON_FLOOR_Y + riftLiftAt(floor, e.pos.x - origin.x, e.pos.z - origin.z);
+    };
+    for (const id of inst.mobIds) lift(id);
+    for (const id of inst.objectIds) lift(id);
+    if (inst.descentId !== null) lift(inst.descentId);
+    if (inst.exitId !== null) lift(inst.exitId);
+    if (inst.cacheId !== null) lift(inst.cacheId);
+  }
+}
+
+/** Per-tick step-clock for any active rift-cache lockpick attempt (mirrors the
+ * delve controller's per-tick tickLockpickTimeout). Cheap: only instances with a
+ * live session do any work. */
+export function tickRiftLockpicks(ctx: SimContext): void {
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey !== null && inst.lockpick) tickRiftLockpick(ctx, inst);
+  }
+}
+
+export function updateRiftInstances(ctx: SimContext): void {
+  // Pre-pass at TICK resolution: stamp the moment each floor boss is first seen
+  // dead. The sweep below runs once a second, so without the stamp two groups
+  // whose bosses fall inside the same window would be ranked by slot order and
+  // the earlier kill could lose the shared race.
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey === null || inst.bossDiedAtTick !== null || inst.bossId === null) continue;
+    if (ctx.entities.get(inst.bossId)?.dead) inst.bossDiedAtTick = ctx.tickCount;
+  }
+  if (ctx.tickCount % 20 !== 0) return; // once a second
+  for (const inst of ctx.riftInstances) {
+    if (inst.partyKey === null) continue;
+    const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+
+    // Gate progression.
+    const floor = floorForInstance(inst);
+
+    // Environmental hazards (lava/blackwater): unblockable damage to any player
+    // standing in a zone, skipped while airborne (jump across). 1 Hz, like delves.
+    if (floor.hazards.length) tickRiftHazards(ctx, inst, origin, floor.hazards);
+
+    // Strength boulders: a boulder counts once it rests on a socket pad; the floor
+    // solves when every boulder is placed.
+    if (floor.puzzle.kind === 'boulder_push' && !inst.puzzleSolved && inst.boulderPads.length) {
+      let allOn = true;
+      for (const id of inst.boulderIds) {
+        const b = ctx.entities.get(id);
+        const onPad =
+          !!b &&
+          inst.boulderPads.some(
+            (pad) => dist2d(b.pos, ctx.groundPos(origin.x + pad.x, origin.z + pad.z)) < PAD_RADIUS,
+          );
+        if (b) b.templateId = onPad ? 'rift_boulder_placed' : 'rift_boulder';
+        if (!onPad) allOn = false;
+      }
+      if (allOn) {
+        inst.puzzleSolved = true;
+        // Each seated socket flares as the mechanism locks home.
+        for (const pad of inst.boulderPads) {
+          riftFx(ctx, origin.x + pad.x, origin.z + pad.z, 'holy', 'nova');
+        }
+        for (const pid of instancePlayerIds(ctx, inst)) {
+          ctx.emit({
+            type: 'log',
+            text: 'The sockets grind shut. The way stirs.',
+            color: '#adf',
+            pid,
+          });
+        }
+      }
+    }
+
+    // Authored citadel: the miniboss's death arms the Blood Orb (which in turn is
+    // the temple gate's only switch). Checked here, not on the kill path, so a
+    // miniboss that despawns with its floor arms nothing.
+    if (inst.minibossId !== null && !inst.orbActive) {
+      const mini = ctx.entities.get(inst.minibossId);
+      if (!mini || mini.dead) {
+        inst.orbActive = true;
+        const orb = inst.orbId !== null ? ctx.entities.get(inst.orbId) : null;
+        if (orb) {
+          orb.templateId = 'rift_infernal_orb_active';
+          riftFx(ctx, orb.pos.x, orb.pos.z, 'fire', 'nova');
+        }
+        for (const pid of instancePlayerIds(ctx, inst)) {
+          ctx.emit({
+            type: 'log',
+            text: "The pentagram's flame gutters out. Something wakes on the altar.",
+            color: '#f97',
+            pid,
+          });
+        }
+      }
+    }
+
+    if (floor.isBoss) {
+      // Clears are claimed AFTER this loop, in boss-death order (see below).
+    } else if (!inst.descentOpen) {
+      const puzzleDone =
+        floor.puzzle.kind === 'rune_pylons'
+          ? inst.litPylons.size >= inst.pylonTotal
+          : inst.puzzleSolved;
+      if (trashCleared(ctx, inst) && puzzleDone) openDescent(ctx, inst);
+    }
+
+    // Empty-slot cleanup.
+    const occupied = instancePlayerIds(ctx, inst).length > 0;
+    if (occupied) {
+      inst.emptyFor = 0;
+    } else {
+      inst.emptyFor += 1;
+      if (inst.emptyFor >= RIFT_EMPTY_TIMEOUT) freeRiftInstance(ctx, inst);
+    }
+  }
+
+  // Boss clears claim in DEATH order, not slot order: every candidate whose
+  // boss has a recorded kill tick ranks by that tick (slot only breaks exact
+  // ties), so the group that actually finished first wins the shared race.
+  // A boss floor whose boss never spawned has no recorded death and can never
+  // claim (fails closed instead of handing out a free clear).
+  const cleared = ctx.riftInstances
+    .filter(
+      (inst) =>
+        inst.partyKey !== null &&
+        inst.exitId === null &&
+        inst.bossDiedAtTick !== null &&
+        floorForInstance(inst).isBoss,
+    )
+    .sort((a, b) => (a.bossDiedAtTick as number) - (b.bossDiedAtTick as number) || a.slot - b.slot);
+  for (const inst of cleared) {
+    // An earlier claim this sweep may have torn this competitor down already.
+    if (inst.partyKey === null) continue;
+    const boss = inst.bossId !== null ? ctx.entities.get(inst.bossId) : null;
+    if (!completeRiftClear(ctx, inst, boss ?? null)) continue;
+    openExit(ctx, inst);
+  }
+}

@@ -11,7 +11,7 @@
 // The S3 guard in tests/localization_fixes.test.ts parses src/sim/sim.ts, enumerates
 // every player-facing emit site, and fails if any is no longer recognized by a client
 // matcher — so a new unhandled sim string cannot ship silently.
-import { ABILITIES, DELVES, ITEMS, MOBS } from '../sim/data';
+import { ABILITIES, DELVES, ITEMS, MOBS, ZONES } from '../sim/data';
 import { DELVE_MODULE_NAMES } from '../sim/sim';
 import { tEntity } from './entity_i18n';
 import {
@@ -151,6 +151,22 @@ const baseEnTable = {
   'mechanic.hellbreakerStomp': 'Hellbreaker Stomp',
   'mechanic.gazeOfTheAbyss': 'Gaze of the Abyss',
   'mechanic.forgekeepersWrath': "Forgekeeper's Wrath",
+  // The Veiled Hollow pickup surfaces (sealstone puzzle + the three memory
+  // monuments): dems added these to GROUND_PICKUP_LINES; their EXACT matcher
+  // entries land here so the client re-localizes the sim-emitted lines.
+  'groundPickup.hollowSealstoneDeny':
+    'The sealstone waits, its socket empty. You have nothing that fits it.',
+  'groundPickup.hollowSealstoneEnough': 'The seal is set. The sealstone asks nothing more of you.',
+  'groundPickup.monumentOverlookDeny':
+    'The verse is worn shallow. Without a reason to read, it stays silent.',
+  'groundPickup.monumentOverlookEnough':
+    'You have already read what the Overlook monument remembers.',
+  'groundPickup.monumentCourtDeny':
+    'Ivy blankets the verse. Without a reason to read, it stays silent.',
+  'groundPickup.monumentCourtEnough': 'You have already read what the Court monument remembers.',
+  'groundPickup.monumentNorthDeny': 'The forgotten verse waits for a reader with a reason.',
+  'groundPickup.monumentNorthEnough':
+    'You have already read what the forgotten monument remembers.',
   'error.vcupDeserter': 'The Groundskeeper remembers. Come back later.',
   'error.vcupPartyTooBig': 'That bracket needs a smaller party.',
   'error.vcupNoNation': 'Pick a banner nation first.',
@@ -333,6 +349,11 @@ const baseEnTable = {
   'dfinder.proposalReady': 'A dungeon group is ready. Confirm your slot now.',
   'dfinder.groupChanged': 'Your group changed and left the Dungeon Finder queue.',
   'dfinder.listingFull': 'Your group listing is now full.',
+  'log.seaFatigue': 'The open sea saps your strength. Swim back to shore!',
+  'log.veilEnter': 'A veil of dusk parts before you, and the Hollow opens ahead.',
+  'log.veilLeave': 'The veil closes behind you, and the mountain air bites again.',
+  'log.ferryEnter': 'The ferry bell rings once, and the Farshore rises out of the spray.',
+  'log.ferryLeave': 'The bell answers from the vale, and the mainland takes you back.',
 } as const;
 
 const petEnTable = {
@@ -389,6 +410,11 @@ export type SimMessageKey = keyof typeof enTable;
 // back to English here until the release localization pass fills them.
 const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>> = {
   en: {
+    'log.seaFatigue': 'The open sea saps your strength. Swim back to shore!',
+    'log.veilEnter': 'A veil of dusk parts before you, and the Hollow opens ahead.',
+    'log.veilLeave': 'The veil closes behind you, and the mountain air bites again.',
+    'log.ferryEnter': 'The ferry bell rings once, and the Farshore rises out of the spray.',
+    'log.ferryLeave': 'The bell answers from the vale, and the mainland takes you back.',
     'error.lineOfSight': 'Line of sight.',
     'error.bagsFull': 'Your bags are full.',
     'error.bagSocketsFull': 'All your bag slots are full.',
@@ -650,6 +676,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Campana doblante',
     'mechanic.howlingGale': 'Vendaval aullante',
     'aura.drownedCanticle': 'Cántico ahogado',
+    'log.seaFatigue': 'El mar abierto agota tus fuerzas. ¡Nada de vuelta a la orilla!',
+    'log.veilEnter': 'Un velo de crepúsculo se abre ante ti, y la Hondonada se despliega adelante.',
+    'log.veilLeave': 'El velo se cierra a tu espalda, y el aire de la montaña vuelve a morder.',
+    'log.ferryEnter': 'La campana del ferry suena una vez, y la Costa Lejana surge de la espuma.',
+    'log.ferryLeave': 'La campana responde desde el valle, y tierra firme te recibe de vuelta.',
     'log.learnedAbility': 'Has aprendido una nueva habilidad: {name}.',
     'log.abilityRankUp': 'Tu {name} ha mejorado a Rango {rank}.',
     'log.stopFollowing': 'Dejas de seguir.',
@@ -938,6 +969,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Campana doblante',
     'mechanic.howlingGale': 'Vendaval aullante',
     'aura.drownedCanticle': 'Cántico ahogado',
+    'log.seaFatigue': 'El mar abierto agota tus fuerzas. ¡Nada de vuelta a la orilla!',
+    'log.veilEnter': 'Un velo de crepúsculo se abre ante ti, y la Hondonada se despliega adelante.',
+    'log.veilLeave': 'El velo se cierra a tu espalda, y el aire de la montaña vuelve a morder.',
+    'log.ferryEnter': 'La campana del ferry suena una vez, y la Costa Lejana surge de la espuma.',
+    'log.ferryLeave': 'La campana responde desde el valle, y tierra firme te recibe de vuelta.',
     'log.learnedAbility': 'Has aprendido una nueva habilidad: {name}.',
     'log.abilityRankUp': 'Tu {name} ha mejorado a Rango {rank}.',
     'log.stopFollowing': 'Dejas de seguir.',
@@ -1227,6 +1263,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Cloche du glas',
     'mechanic.howlingGale': 'Bourrasque hurlante',
     'aura.drownedCanticle': 'Cantique noyé',
+    'log.seaFatigue': 'La haute mer épuise vos forces. Regagnez le rivage à la nage !',
+    'log.veilEnter': "Un voile de crépuscule s'écarte, et la Combe s'ouvre devant vous.",
+    'log.veilLeave': "Le voile se referme derrière vous, et l'air des montagnes mord de nouveau.",
+    'log.ferryEnter': 'La cloche du bac sonne une fois, et le Rivage Lointain surgit des embruns.',
+    'log.ferryLeave': 'La cloche repond depuis le val, et la terre ferme vous reprend.',
     'log.learnedAbility': 'Vous avez appris une nouvelle technique : {name}.',
     'log.abilityRankUp': 'Votre {name} est passé au rang {rank}.',
     'log.stopFollowing': 'Vous ne suivez plus.',
@@ -1517,6 +1558,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Cloche du glas',
     'mechanic.howlingGale': 'Bourrasque hurlante',
     'aura.drownedCanticle': 'Cantique noyé',
+    'log.seaFatigue': 'La haute mer épuise vos forces. Regagnez le rivage à la nage !',
+    'log.veilEnter': "Un voile de crépuscule s'écarte, et la Combe s'ouvre devant vous.",
+    'log.veilLeave': "Le voile se referme derrière vous, et l'air des montagnes mord de nouveau.",
+    'log.ferryEnter': 'La cloche du bac sonne une fois, et le Rivage Lointain surgit des embruns.',
+    'log.ferryLeave': 'La cloche repond depuis le val, et la terre ferme vous reprend.',
     'log.learnedAbility': 'Vous avez appris une nouvelle technique : {name}.',
     'log.abilityRankUp': 'Votre {name} est passé au rang {rank}.',
     'log.stopFollowing': 'Vous ne suivez plus.',
@@ -1715,6 +1761,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': "Embrasement d'âme",
   },
   en_CA: {
+    'log.seaFatigue': 'The open sea saps your strength. Swim back to shore!',
+    'log.veilEnter': 'A veil of dusk parts before you, and the Hollow opens ahead.',
+    'log.veilLeave': 'The veil closes behind you, and the mountain air bites again.',
+    'log.ferryEnter': 'The ferry bell rings once, and the Farshore rises out of the spray.',
+    'log.ferryLeave': 'The bell answers from the vale, and the mainland takes you back.',
     'log.learnedAbility': 'You have learned a new ability: {name}.',
     'log.abilityRankUp': 'Your {name} has improved to Rank {rank}.',
     'log.stopFollowing': 'You stop following.',
@@ -1975,6 +2026,12 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Campana Rintoccante',
     'mechanic.howlingGale': 'Raffica Ululante',
     'aura.drownedCanticle': 'Cantico Annegato',
+    'log.seaFatigue': 'Il mare aperto ti prosciuga le forze. Torna a riva a nuoto!',
+    'log.veilEnter': 'Un velo di crepuscolo si apre davanti a te, e la Conca si rivela più avanti.',
+    'log.veilLeave': "Il velo si richiude alle tue spalle, e l'aria di montagna torna a pungere.",
+    'log.ferryEnter':
+      'La campana del traghetto suona una volta, e la Riva Lontana emerge dagli spruzzi.',
+    'log.ferryLeave': 'La campana risponde dalla valle, e la terraferma ti riaccoglie.',
     'log.learnedAbility': 'Hai imparato una nuova abilità: {name}.',
     'log.abilityRankUp': 'La tua {name} è migliorata al Grado {rank}.',
     'log.stopFollowing': 'Smetti di seguire.',
@@ -2262,6 +2319,12 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Läutende Glocke',
     'mechanic.howlingGale': 'Heulender Sturm',
     'aura.drownedCanticle': 'Ertrunkener Choral',
+    'log.seaFatigue': 'Die offene See zehrt an deinen Kräften. Schwimm zurück ans Ufer!',
+    'log.veilEnter':
+      'Ein Schleier aus Dämmerung teilt sich vor dir, und die Senke öffnet sich dahinter.',
+    'log.veilLeave': 'Der Schleier schließt sich hinter dir, und die Bergluft beißt wieder.',
+    'log.ferryEnter': 'Die Faehrglocke schlaegt einmal, und das Fernufer steigt aus der Gischt.',
+    'log.ferryLeave': 'Die Glocke antwortet aus dem Tal, und das Festland nimmt dich zurueck.',
     'log.learnedAbility': 'Ihr habt eine neue Fähigkeit erlernt: {name}.',
     'log.abilityRankUp': 'Euer {name} wurde auf Rang {rank} verbessert.',
     'log.stopFollowing': 'Ihr folgt nicht mehr.',
@@ -2567,6 +2630,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': '鸣响之钟',
     'mechanic.howlingGale': '呼啸狂风',
     'aura.drownedCanticle': '溺亡圣咏',
+    'log.seaFatigue': '汪洋正在耗尽你的体力。快游回岸边！',
+    'log.veilEnter': '暮色的帷幕在你面前分开，幽谷在前方展开。',
+    'log.veilLeave': '帷幕在你身后合拢，山间的寒风再次刺骨。',
+    'log.ferryEnter': '渡船的钟声响起一声，远岸从浪花中浮现。',
+    'log.ferryLeave': '钟声自谷中回应，大陆将你迎回。',
     'log.learnedAbility': '你学会了新技能：{name}。',
     'log.abilityRankUp': '你的{name}已提升至等级 {rank}。',
     'log.stopFollowing': '你停止了跟随。',
@@ -2859,6 +2927,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': '鳴響喪鐘',
     'mechanic.howlingGale': '呼嘯狂風',
     'aura.drownedCanticle': '溺亡聖詠',
+    'log.seaFatigue': '汪洋正在耗盡你的體力。快游回岸邊！',
+    'log.veilEnter': '暮色的帷幕在你面前分開，幽谷在前方展開。',
+    'log.veilLeave': '帷幕在你身後合攏，山間的寒風再次刺骨。',
+    'log.ferryEnter': '渡船的鐘聲響起一聲，遠岸從浪花中浮現。',
+    'log.ferryLeave': '鐘聲自谷中回應，大陸將你迎回。',
     'log.learnedAbility': '你學會了新技能：{name}。',
     'log.abilityRankUp': '你的「{name}」已提升至第 {rank} 級。',
     'log.stopFollowing': '你停止了跟隨。',
@@ -3156,6 +3229,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': '울리는 종',
     'mechanic.howlingGale': '울부짖는 강풍',
     'aura.drownedCanticle': '익사한 성가',
+    'log.seaFatigue': '먼바다가 그대의 기력을 앗아 간다. 어서 해안으로 헤엄쳐 돌아가라!',
+    'log.veilEnter': '황혼의 장막이 눈앞에서 갈라지고, 골짜기가 앞에 펼쳐진다.',
+    'log.veilLeave': '장막이 등 뒤에서 닫히고, 산바람이 다시 살을 엔다.',
+    'log.ferryEnter': '나룻배의 종이 한 번 울리고, 먼기슭이 물보라 속에서 떠오른다.',
+    'log.ferryLeave': '골짜기에서 종소리가 화답하고, 뭍이 너를 다시 맞이한다.',
     'log.learnedAbility': '새로운 기술을 배웠습니다: {name}.',
     'log.abilityRankUp': '{name}이(가) {rank}단계로 향상되었습니다.',
     'log.stopFollowing': '따라가기를 멈췄습니다.',
@@ -3462,6 +3540,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': '鳴り響く鐘',
     'mechanic.howlingGale': '咆哮の烈風',
     'aura.drownedCanticle': '溺れし聖歌',
+    'log.seaFatigue': '外海が体力を奪っていく。岸へ泳ぎ戻れ！',
+    'log.veilEnter': '黄昏の帳が目の前で開き、幽谷が行く手に広がる。',
+    'log.veilLeave': '帳が背後で閉じ、山の空気が再び肌を刺す。',
+    'log.ferryEnter': '渡し船の鐘が一度鳴り、遠つ岸がしぶきの中から現れる。',
+    'log.ferryLeave': '谷から鐘が応え、本土がお前を迎え戻す。',
     'log.learnedAbility': '新しいアビリティ「{name}」を習得しました。',
     'log.abilityRankUp': '「{name}」がランク{rank}に上昇しました。',
     'log.stopFollowing': '追従を解除しました。',
@@ -3746,6 +3829,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Dobre do Sino',
     'mechanic.howlingGale': 'Vendaval Uivante',
     'aura.drownedCanticle': 'Cântico Afogado',
+    'log.seaFatigue': 'O mar aberto suga suas forças. Nade de volta à praia!',
+    'log.veilEnter': 'Um véu de crepúsculo se abre à sua frente, e o Vale Oculto surge adiante.',
+    'log.veilLeave': 'O véu se fecha às suas costas, e o ar da montanha volta a morder.',
+    'log.ferryEnter': 'O sino da balsa toca uma vez, e a Costa Distante ergue-se da espuma.',
+    'log.ferryLeave': 'O sino responde do vale, e o continente o recebe de volta.',
     'log.learnedAbility': 'Você aprendeu uma nova habilidade: {name}.',
     'log.abilityRankUp': 'Sua habilidade {name} melhorou para o Grau {rank}.',
     'log.stopFollowing': 'Você parou de seguir.',
@@ -4059,6 +4147,11 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.tollingBell': 'Погребальный колокол',
     'mechanic.howlingGale': 'Воющий шквал',
     'aura.drownedCanticle': 'Песнь утопленников',
+    'log.seaFatigue': 'Открытое море вытягивает из вас силы. Плывите обратно к берегу!',
+    'log.veilEnter': 'Сумеречная завеса расступается перед вами, и впереди открывается Лощина.',
+    'log.veilLeave': 'Завеса смыкается за спиной, и горный воздух снова обжигает холодом.',
+    'log.ferryEnter': 'Колокол парома звонит один раз, и Дальний берег встаёт из брызг.',
+    'log.ferryLeave': 'Колокол отвечает из долины, и большая земля принимает вас обратно.',
     'log.learnedAbility': 'Вы изучили новое умение: {name}.',
     'log.abilityRankUp': 'Умение «{name}» повышено до ранга {rank}.',
     'log.stopFollowing': 'Вы перестаёте следовать.',
@@ -4814,6 +4907,12 @@ function locMob(name: string): string {
 function locAbility(name: string): string {
   const id = abilityNameToId.get(name);
   return id ? tEntity({ kind: 'ability', id, field: 'name' }) : name;
+}
+const zoneNameToId = new Map<string, string>();
+for (const z of ZONES) zoneNameToId.set(z.name, z.id);
+function locZone(name: string): string {
+  const id = zoneNameToId.get(name);
+  return id ? tEntity({ kind: 'zone', id, field: 'name' }) : name;
 }
 function locDelve(name: string): string {
   const id = delveNameToId.get(name);
@@ -6371,6 +6470,90 @@ const RULES: Rule[] = [
   // sim.lockpick.* keys (src/ui/i18n.catalog/index.ts). The module-enter banner is two
   // rules anchored on the fixed objective lines ("X: Clear the room." / "X: Defeat the
   // boss."), each localizing the captured module name, so there is no bare catch-all.
+  // Procedural Rift sim text (src/sim/rift/runs.ts), re-localized through the
+  // sim.rift.* keys. The captured floor name is a generated English name and is
+  // spliced verbatim, like player/build names.
+  {
+    re: /^All rifts are unstable right now\. Try again soon\.$/,
+    build: () => t('sim.rift.allUnstable'),
+  },
+  {
+    re: /^You step through the rift into (.+)\.$/,
+    build: (m) => t('sim.rift.enterFloor', { name: m[1] }),
+  },
+  {
+    re: /^You descend deeper into (.+)\.$/,
+    build: (m) => t('sim.rift.descendFloor', { name: m[1] }),
+  },
+  { re: /^You step back through the rift\.$/, build: () => t('sim.rift.stepBack') },
+  {
+    re: /^A rune pylon flares to life \(([^/)]+)\/([^)]+)\)\.$/,
+    build: (m) => t('sim.rift.pylonLit', { lit: m[1], total: m[2] }),
+  },
+  { re: /^The way down tears open\.$/, build: () => t('sim.rift.wayDownOpens') },
+  { re: /^The frost sigil blazes\. The way stirs\.$/, build: () => t('sim.rift.iceGoalLit') },
+  { re: /^The sockets grind shut\. The way stirs\.$/, build: () => t('sim.rift.socketsShut') },
+  {
+    re: /^The runes answer in turn \(([^/)]+)\/([^)]+)\)\.$/,
+    build: (m) => t('sim.rift.seqProgress', { step: m[1], total: m[2] }),
+  },
+  { re: /^The runes go dark\. Begin again\.$/, build: () => t('sim.rift.seqReset') },
+  { re: /^The gate grinds open\.$/, build: () => t('sim.rift.gateOpen') },
+  { re: /^The orb is sealed by the ritual below\.$/, build: () => t('sim.rift.orbSealed') },
+  {
+    re: /^The pentagram's flame gutters out\. Something wakes on the altar\.$/,
+    build: () => t('sim.rift.orbWakes'),
+  },
+  {
+    re: /^The Blood Orb flares\. The gates of the temple grind open\.$/,
+    build: () => t('sim.rift.orbOpensGate'),
+  },
+  {
+    re: /^A ([CBAS])-rank rift tears open in (.+)!$/,
+    build: (m) => t('sim.rift.portalOpens', { tier: m[1], zone: locZone(m[2]) }),
+  },
+  {
+    re: /^The ([CBAS])-rank rift in (.+) has been sealed\.$/,
+    build: (m) => t('sim.rift.portalSealed', { tier: m[1], zone: locZone(m[2]) }),
+  },
+  {
+    re: /^The ([CBAS])-rank rift in (.+) collapses\.$/,
+    build: (m) => t('sim.rift.portalCollapses', { tier: m[1], zone: locZone(m[2]) }),
+  },
+  {
+    re: /^Only adventurers of level (\d+) or higher may enter this rift\.$/,
+    build: (m) => t('sim.rift.levelGate', { level: m[1] }),
+  },
+  {
+    re: /^The rift shudders\. A way home tears open behind the fallen\.$/,
+    build: () => t('sim.rift.exitOpens'),
+  },
+  {
+    re: /^This rift has already been cleared by (.+)\.$/,
+    build: (m) => t('sim.rift.alreadyCleared', { names: m[1] }),
+  },
+  {
+    re: /^The rift has already been cleared by (.+)\. Your run ends\.$/,
+    build: (m) => t('sim.rift.raceLost', { names: m[1] }),
+  },
+  {
+    // The localization drift guard substitutes every template interpolation with
+    // "Aki", so tier/time cannot be narrowed here to C/B/A/S and digits.
+    re: /^(.+) won the (.+)-rank Rift race in (.+)s!$/,
+    build: (m) => t('sim.rift.raceWorldWin', { names: m[1], tier: m[2], seconds: m[3] }),
+  },
+  {
+    re: /^Rift upgrade completed for (.+)\.$/,
+    build: (m) => t('sim.rift.forgeUpgraded', { name: m[1] }),
+  },
+  {
+    re: /^Rift enchant completed for (.+)\.$/,
+    build: (m) => t('sim.rift.forgeEnchanted', { name: m[1] }),
+  },
+  {
+    re: /^Rift gem socketed for (.+)\.$/,
+    build: (m) => t('sim.rift.forgeSocketed', { name: m[1] }),
+  },
   { re: /^You cannot enter a delve right now\.$/, build: () => t('sim.delve.cannotEnterNow') },
   { re: /^Leave the dungeon first\.$/, build: () => t('sim.delve.leaveDungeonFirst') },
   { re: /^Leave the arena first\.$/, build: () => t('sim.delve.leaveArenaFirst') },

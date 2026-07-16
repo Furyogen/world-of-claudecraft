@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { buildCritters, causewayPopScale } from '../src/render/critters';
+import { DUNGEON_X_THRESHOLD } from '../src/sim/data';
 
 // The Eastbrook Vale / Mirefen Marsh boundary runs along the causeway at z=180.
 // Ambient critters thin out across this band (see critters.ts), so the active
 // pool tapers to a sparse floor centred on the crossing.
 const CAUSEWAY_Z = 180;
-const DUNGEON_X = 700; // x beyond DUNGEON_X_THRESHOLD (600) = indoors
+const DUNGEON_X = DUNGEON_X_THRESHOLD + 100; // past the threshold = indoors
 
 describe('critter causeway population taper', () => {
   it('is full in the open vale/marsh and sparse on the causeway', () => {

@@ -3,9 +3,9 @@
 // it suppresses weapon swings (auto-attack, melee and ranged) for a duration but
 // leaves movement, spells and instant abilities untouched.
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim(playerClass: 'warrior' | 'mage' = 'warrior') {
@@ -15,7 +15,11 @@ function makeSim(playerClass: 'warrior' | 'mage' = 'warrior') {
 // Spawn a Thornpeak Crusher adjacent to the player, engaged and ready to swing.
 function spawnCrusher(sim: Sim, target: Entity): Entity {
   const template = MOBS['ogre_crusher'];
-  const mob = createMob((sim as any).nextId++, template, 17, { x: target.pos.x, y: target.pos.y, z: target.pos.z });
+  const mob = createMob((sim as any).nextId++, template, 17, {
+    x: target.pos.x,
+    y: target.pos.y,
+    z: target.pos.z,
+  });
   mob.hostile = true;
   (sim as any).addEntity(mob);
   return mob;
@@ -29,17 +33,23 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
 describe('mob disarm ("Disarming Smash")', () => {
   it('seeds the disarm mechanic on the Thornpeak Crusher', () => {
     expect(MOBS['ogre_crusher'].disarm).toEqual({
-      chance: 0.25, duration: 6, name: 'Disarming Smash', school: 'physical',
+      chance: 0.25,
+      duration: 6,
+      name: 'Disarming Smash',
+      school: 'physical',
     });
   });
 
   it('applies a disarm aura on a landed hit when it rolls', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = spawnCrusher(sim, p);
     MOBS['ogre_crusher'].disarm!.chance = 1; // deterministic for the test
-    swing(sim, mob, p);
+    // the swing itself can miss on the hit table (rng-stream dependent):
+    // keep swinging until one lands (chance 1 disarms on any landed hit)
+    for (let i = 0; i < 12 && !p.auras.some((a) => a.kind === 'disarm'); i++) swing(sim, mob, p);
     MOBS['ogre_crusher'].disarm!.chance = 0.25;
     const aura = p.auras.find((a) => a.kind === 'disarm');
     expect(aura).toBeTruthy();
@@ -52,8 +62,14 @@ describe('mob disarm ("Disarming Smash")', () => {
     const p = sim.player;
     const meta = (sim as any).players.get(p.id);
     // A defenseless dummy directly in front of the player, inside melee range.
-    const dummy = createMob((sim as any).nextId++, MOBS['ogre_crusher'], 1, { x: p.pos.x + 1, y: p.pos.y, z: p.pos.z });
-    dummy.hostile = true; dummy.maxHp = 100000; dummy.hp = 100000;
+    const dummy = createMob((sim as any).nextId++, MOBS['ogre_crusher'], 1, {
+      x: p.pos.x + 1,
+      y: p.pos.y,
+      z: p.pos.z,
+    });
+    dummy.hostile = true;
+    dummy.maxHp = 100000;
+    dummy.hp = 100000;
     (sim as any).addEntity(dummy);
     p.targetId = dummy.id;
     p.autoAttack = true;
@@ -61,25 +77,35 @@ describe('mob disarm ("Disarming Smash")', () => {
 
     // Disarmed: a ready swing must NOT land.
     p.auras.push({
-      id: 'disarm_x', name: 'Disarming Smash', kind: 'disarm',
-      remaining: 6, duration: 6, value: 0, sourceId: 999, school: 'physical',
+      id: 'disarm_x',
+      name: 'Disarming Smash',
+      kind: 'disarm',
+      remaining: 6,
+      duration: 6,
+      value: 0,
+      sourceId: 999,
+      school: 'physical',
     });
     p.swingTimer = 0;
     const before = dummy.hp;
     (sim as any).updatePlayerAutoAttack(p, meta);
     expect(dummy.hp).toBe(before); // no swing while disarmed
 
-    // Weapon recovered: the same ready swing now lands.
+    // Weapon recovered: the same ready swing now lands (retry past hit-table
+    // misses, which are rng-stream dependent).
     p.auras = p.auras.filter((a) => a.kind !== 'disarm');
-    p.swingTimer = 0;
-    (sim as any).updatePlayerAutoAttack(p, meta);
+    for (let i = 0; i < 12 && dummy.hp >= before; i++) {
+      p.swingTimer = 0;
+      (sim as any).updatePlayerAutoAttack(p, meta);
+    }
     expect(dummy.hp).toBeLessThan(before);
   });
 
   it('a friendly pet swing never disarms its target', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const pet = spawnCrusher(sim, p);
     pet.hostile = false; // a friendly shape sharing the mobSwing path
     pet.ownerId = p.id;

@@ -31,8 +31,10 @@ function mockEmptyAssetLoads(): void {
   }));
 }
 
-// No requestIdleCallback in the plain-Node test env, so idle_queue's default
-// scheduler falls back to setTimeout(0); fake timers drain it deterministically.
+// Zone-lazy terrain: buildTerrain() itself builds nothing; each overworld zone
+// materializes through ensureZone (driven by the renderer's prepareZoneAt and
+// the visible-zone streaming queue). ensureZone yields between build batches
+// on setTimeout(0); fake timers drain it deterministically.
 describe('progressive terrain build', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -41,94 +43,223 @@ describe('progressive terrain build', () => {
     vi.useRealTimers();
   });
 
-  it('builds only the near ring synchronously, then streams the rest in', async () => {
+  it('builds nothing until a zone is ensured, then only that zone streams in', async () => {
     vi.resetModules();
     mockEmptyAssetLoads();
     const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
 
     const terrain = buildTerrain(20061);
-    const nearCount = terrain.group.children.length;
-    expect(nearCount).toBeGreaterThan(0);
+    expect(terrain.group.children).toHaveLength(0);
 
+    const zone = zoneAt(0, 0);
+    expect(terrain.isZoneLoaded(zone.id)).toBe(false);
+    const task = terrain.ensureZone(zone);
     await vi.runAllTimersAsync();
-    await terrain.streamingDone;
+    await task;
 
-    const fullCount = terrain.group.children.length;
-    expect(fullCount).toBeGreaterThan(nearCount);
+    expect(terrain.group.children.length).toBeGreaterThan(0);
+    expect(terrain.isZoneLoaded(zone.id)).toBe(true);
   });
 
-  it('cancelStreaming stops far chunks from ever being added', async () => {
+  it('cancelStreaming stops an in-flight zone build from ever completing', async () => {
     vi.resetModules();
     mockEmptyAssetLoads();
     const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
 
     const terrain = buildTerrain(20061);
-    const nearCount = terrain.group.children.length;
+    const zone = zoneAt(0, 0);
+    const task = terrain.ensureZone(zone);
+    // Let at most one yield slice through, then cancel: the loop must bail at
+    // its next yield point without marking the zone loaded.
+    await vi.advanceTimersByTimeAsync(0);
+    const midCount = terrain.group.children.length;
     terrain.cancelStreaming();
 
     await vi.runAllTimersAsync();
-    await terrain.streamingDone;
+    await task;
 
-    expect(terrain.group.children.length).toBe(nearCount);
+    expect(terrain.group.children.length).toBe(midCount);
+    expect(terrain.isZoneLoaded(zone.id)).toBe(false);
   });
 
   it('streamed-in chunks are visible to update()/rebuildRegion() via the same live chunk list', async () => {
     vi.resetModules();
     mockEmptyAssetLoads();
     const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
 
     const terrain = buildTerrain(20061);
+    const task = terrain.ensureZone(zoneAt(0, 0));
     await vi.runAllTimersAsync();
-    await terrain.streamingDone;
+    await task;
 
-    // update() must not throw once far chunks (added after the initial return)
-    // are folded into fog culling.
+    // update() must not throw once zone chunks (added after the initial
+    // return) are folded into fog culling.
     expect(() => terrain.update(0, 0, 1000)).not.toThrow();
   });
 
-  it('freezes matrixAutoUpdate on every streamed-in chunk, not just the near ring', async () => {
+  it('freezes matrixAutoUpdate on every streamed-in chunk', async () => {
     vi.resetModules();
     mockEmptyAssetLoads();
     const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
 
     const terrain = buildTerrain(20061);
+    const task = terrain.ensureZone(zoneAt(0, 0));
     await vi.runAllTimersAsync();
-    await terrain.streamingDone;
+    await task;
 
     for (const child of terrain.group.children) {
       expect(child.matrixAutoUpdate).toBe(false);
     }
   });
 
-  it('streams the chunk nearest a given priority point before farther ones', async () => {
+  it('an idle-paced background build completes and matches the fast build', async () => {
     vi.resetModules();
     mockEmptyAssetLoads();
     const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
 
-    // Anchor near one corner of the map so the ordering effect is unambiguous.
-    const terrain = buildTerrain(20061, { x: -170, z: 20 });
-    const nearCount = terrain.group.children.length;
+    const zone = zoneAt(0, 0);
+    const fast = buildTerrain(20061);
+    const fastTask = fast.ensureZone(zone);
+    await vi.runAllTimersAsync();
+    await fastTask;
 
-    // Advance one idle-queue batch only: the first few streamed chunks should
-    // already include ones far closer to the priority point than a plain
-    // row-major walk would produce this early.
+    // No requestIdleCallback in plain Node, so idleSlot falls back to
+    // setTimeout(0); fake timers drain it the same way. The pin is that the
+    // idle-paced arm reaches full coverage (zone marked loaded) without
+    // stalling or dropping work; it emits MORE meshes than the fast arm
+    // because dense-band cells split into four half-size sub-chunks (the
+    // per-idle-slot hitch bound), never fewer.
+    const idle = buildTerrain(20061);
+    const idleTask = idle.ensureZone(zone, undefined, { pace: 'idle' });
+    await vi.runAllTimersAsync();
+    await idleTask;
+
+    expect(idle.group.children.length).toBeGreaterThanOrEqual(fast.group.children.length);
+    expect(idle.isZoneLoaded(zone.id)).toBe(true);
+    fast.cancelStreaming();
+    idle.cancelStreaming();
+  });
+
+  it('builds the chunks nearest a per-call priority point before farther ones', async () => {
+    vi.resetModules();
+    mockEmptyAssetLoads();
+    const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
+
+    // Anchor away from the zone's row-major origin so the ordering effect is
+    // unambiguous: the first built chunks must hug the entry point. The point
+    // rides the ensureZone call (a walked crossing's entry), NOT the view's
+    // construction point, which deliberately stays unset here.
+    const zone = zoneAt(0, 0);
+    const point = { x: 0, z: (zone.zMin + zone.zMax) / 2 };
+    const terrain = buildTerrain(20061);
+    const task = terrain.ensureZone(zone, undefined, { priority: point });
+
+    // Advance a couple of yield slices only, mid-build.
     await vi.advanceTimersByTimeAsync(0);
-    const afterFirstBatch = terrain.group.children.length;
-    expect(afterFirstBatch).toBeGreaterThan(nearCount);
-
-    const distToPriority = (mesh: THREE.Object3D): number => {
-      const box = new THREE.Box3().setFromObject(mesh);
-      const center = box.getCenter(new THREE.Vector3());
-      return Math.hypot(center.x - -170, center.z - 20);
-    };
-    const firstStreamed = terrain.group.children.slice(nearCount, afterFirstBatch);
-    const closest = Math.min(...firstStreamed.map(distToPriority));
+    await vi.advanceTimersByTimeAsync(0);
+    const early = [...terrain.group.children];
+    expect(early.length).toBeGreaterThan(0);
 
     await vi.runAllTimersAsync();
-    await terrain.streamingDone;
-    const allStreamed = terrain.group.children.slice(nearCount);
-    const overallClosest = Math.min(...allStreamed.map(distToPriority));
+    await task;
+    const all = [...terrain.group.children];
+    expect(all.length).toBeGreaterThan(early.length);
 
-    expect(closest).toBeCloseTo(overallClosest, 5);
+    const distToPoint = (mesh: THREE.Object3D): number => {
+      const box = new THREE.Box3().setFromObject(mesh);
+      const center = box.getCenter(new THREE.Vector3());
+      return Math.hypot(center.x - point.x, center.z - point.z);
+    };
+    const earlyClosest = Math.min(...early.map(distToPoint));
+    const overallClosest = Math.min(...all.map(distToPoint));
+    expect(earlyClosest).toBeCloseTo(overallClosest, 5);
+  });
+
+  it('northern zones build although the zone list ends with a southern column', async () => {
+    vi.resetModules();
+    mockEmptyAssetLoads();
+    const { buildTerrain } = await import('../src/render/terrain');
+    const { zoneAt } = await import('../src/sim/data');
+
+    // The built-in ZONES list ends with Farshore Isle, an east COLUMN zone at
+    // z -180..180. renderBounds once read zones[last].zMax as the world's
+    // north edge, capping the whole terrain grid at the southernmost band:
+    // every northern zone owned zero cells, "loaded" instantly with no
+    // chunks, and everything past the first band rendered as bare water.
+    const terrain = buildTerrain(20061);
+    const zone = zoneAt(0, 300); // the second band, north of Farshore's zMax
+    expect(zone.zMax).toBeGreaterThan(200);
+    const task = terrain.ensureZone(zone);
+    await vi.runAllTimersAsync();
+    await task;
+
+    expect(terrain.isZoneLoaded(zone.id)).toBe(true);
+    const covered = terrain.group.children.some((child) => {
+      const box = new THREE.Box3().setFromObject(child);
+      return box.min.z <= 300 && box.max.z >= 300 && box.min.x <= 0 && box.max.x >= 0;
+    });
+    expect(covered).toBe(true);
+    terrain.cancelStreaming();
+  });
+
+  it('a custom world larger than the built-in footprint builds its margins', async () => {
+    vi.resetModules();
+    mockEmptyAssetLoads();
+    const { buildTerrain } = await import('../src/render/terrain');
+    const { BUILTIN_WORLD, setActiveWorldContent, zoneAt } = await import('../src/sim/data');
+
+    // A blank 800x800 map: wider than the strip (±180) and reaching south of
+    // every built-in zone band.
+    const world = {
+      ...BUILTIN_WORLD,
+      worldHalfX: 400,
+      zones: [
+        {
+          id: 'blank_world',
+          name: '',
+          zMin: -400,
+          zMax: 400,
+          levelRange: [1, 1] as [number, number],
+          biome: 'vale' as const,
+          hub: { x: 0, z: 0, radius: 8, name: '' },
+          graveyard: { x: 0, z: 0 },
+          lakes: [],
+          pois: [],
+          welcome: '',
+        },
+      ],
+    };
+    setActiveWorldContent(world);
+    try {
+      const terrain = buildTerrain(20061);
+      // This margin position sits outside every built-in zone rect. The sim
+      // clamps it to a built-in zone (zoneAt); ensuring THAT zone must now
+      // also build the margin cells it owns.
+      const margin = { x: 380, z: -380 };
+      const owner = zoneAt(margin.x, margin.z);
+      const task = terrain.ensureZone(owner);
+      await vi.runAllTimersAsync();
+      await task;
+
+      const covered = terrain.group.children.some((child) => {
+        const box = new THREE.Box3().setFromObject(child);
+        return (
+          box.min.x <= margin.x &&
+          box.max.x >= margin.x &&
+          box.min.z <= margin.z &&
+          box.max.z >= margin.z
+        );
+      });
+      expect(covered).toBe(true);
+      terrain.cancelStreaming();
+    } finally {
+      setActiveWorldContent(null);
+    }
   });
 });

@@ -3,7 +3,7 @@
 // The imperative half of the pure-core + painter split: the pure geometry lives
 // in map_window_view.ts (buildOverworldMapModel, unit-tested there); this module
 // turns that flat draw model into actual canvas draws. It owns the 2D context, the
-// cached whole-world decorations, and the localized text + color resolution. The
+// cached current-zone decorations, and the localized text + color resolution. The
 // delve branch of the map is owned by delve_map_painter.ts; Hud picks the
 // branch with mapWindowMode and only routes the overworld branch here, so the two
 // painters never duplicate each other's marker drawing.
@@ -19,7 +19,7 @@
 // line width, label offset, triangle geometry) is a named constant.
 
 import type { ZoneDef } from '../sim/data';
-import { type Decoration, generateDecorations } from '../sim/world';
+import { type Decoration, generateDecorationsInBounds } from '../sim/world';
 import type { IWorld } from '../world_api';
 import { dungeonDisplayName, zoneDisplayName, zonePoiLabel } from './entity_i18n';
 import { formatNumber } from './i18n';
@@ -70,6 +70,7 @@ const QUEST_BADGE_TEXT_LIFT = 4; // px above the arc center to optically center 
 // The `--color-map-*` design tokens the painter resolves once per redraw. These
 // mirror the colors the inline overworld-map render used verbatim.
 const MAP_COLOR_TOKENS = {
+  ocean: '--color-map-ocean',
   label: '--color-map-label',
   outline: '--color-map-outline',
   portalDot: '--color-map-portal-dot',
@@ -101,12 +102,18 @@ const MAP_COLOR_TOKENS = {
 
 type MapColors = Record<keyof typeof MAP_COLOR_TOKENS, string>;
 
-/** Inputs for one overworld redraw. The cached terrain bg + the committed zone are
- *  Hud-owned (Hud keys the bg cache by zone); the painter owns the decorations. */
+/** The current zone's cached map background plus the world rect it covers. */
+export interface MapZoneBg {
+  canvas: HTMLCanvasElement;
+  region: { minX: number; maxX: number; minZ: number; maxZ: number };
+}
+
+/** Inputs for one overworld redraw. The cached terrain bg + the committed zone
+ *  are Hud-owned (Hud keys the bg cache by zone); the painter owns the
+ *  decorations. Only the committed zone background can reach the painter. */
 export interface MapPaintOptions {
   zone: ZoneDef;
-  /** The cached terrain background canvas for the committed zone. */
-  bg: HTMLCanvasElement;
+  zoneBg: MapZoneBg;
   /** The square map-canvas side in px. */
   canvasSize: number;
   zoom: number;
@@ -127,13 +134,10 @@ export interface MapPaintResult {
 
 /**
  * Owns painting the overworld map onto the map-window canvas. One instance is
- * built by Hud; it caches the whole-world decorations once (generated from the
- * seed) and reuses them across redraws.
+ * built by Hud; it caches decorations per zone and reuses them across redraws.
  */
 export class MapWindowPainter {
-  // Cached trees/rocks for the whole world, generated once from the world seed
-  // (matches the inline site's lazy this.mapDecorations cache).
-  private decorations: Decoration[] | null = null;
+  private decorationsByZone = new Map<string, Decoration[]>();
 
   /** Read the map color tokens in one getComputedStyle pass (a 2D
    *  context can only read a CSS var this way; never per-marker). */
@@ -153,18 +157,22 @@ export class MapWindowPainter {
     world: IWorld,
     opts: MapPaintOptions,
   ): MapPaintResult {
-    if (!this.decorations) this.decorations = generateDecorations(world.cfg.seed);
+    let decorations = this.decorationsByZone.get(opts.zone.id);
+    if (!decorations) {
+      decorations = generateDecorationsInBounds(world.cfg.seed, opts.zoneBg.region);
+      this.decorationsByZone.set(opts.zone.id, decorations);
+    }
     const model = buildOverworldMapModel({
       world,
       zone: opts.zone,
       zoom: opts.zoom,
       center: opts.center,
       canvasSize: opts.canvasSize,
-      decorations: this.decorations,
+      decorations,
       ping: opts.ping ?? null,
     });
     const colors = this.resolveColors();
-    this.draw(ctx, model, opts.bg, opts.canvasSize, colors);
+    this.draw(ctx, model, opts.zoneBg, opts.canvasSize, colors);
     return {
       view: model.view,
       cursor: model.cursor,
@@ -176,23 +184,26 @@ export class MapWindowPainter {
   private draw(
     ctx: CanvasRenderingContext2D,
     model: OverworldMapModel,
-    bg: HTMLCanvasElement,
+    zoneBg: MapZoneBg,
     S: number,
     colors: MapColors,
   ): void {
-    // Blit the matching sub-rect of the cached terrain (note: +X is map-left).
+    // Open ocean under everything, then composite only the current zone's cached
+    // terrain at its world position (+X is map-left, +Z map-down).
+    const r = model.region;
+    const spanX = r.maxX - r.minX;
+    const spanZ = r.maxZ - r.minZ;
     ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(
-      bg,
-      model.blit.sxFrac * bg.width,
-      model.blit.syFrac * bg.height,
-      model.blit.swFrac * bg.width,
-      model.blit.shFrac * bg.height,
-      0,
-      0,
-      S,
-      S,
-    );
+    ctx.fillStyle = colors.ocean;
+    ctx.fillRect(0, 0, S, S);
+    {
+      const b = zoneBg.region;
+      const destX = ((r.maxX - b.maxX) / spanX) * S;
+      const destY = ((r.maxZ - b.maxZ) / spanZ) * S;
+      const destW = ((b.maxX - b.minX) / spanX) * S;
+      const destH = ((b.maxZ - b.minZ) / spanZ) * S;
+      ctx.drawImage(zoneBg.canvas, destX, destY, destW, destH);
+    }
 
     if (model.detail) this.drawDetail(ctx, model.detail, colors);
 

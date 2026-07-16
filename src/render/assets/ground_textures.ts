@@ -4,6 +4,14 @@
 // splat material (editor AND playtest, same origin) resolves a swatch's
 // textureSha back to a tiling texture. Never-throws: a blocked IDB or missing
 // entry resolves null and the swatch falls back to its flat color.
+//
+// Built-in library swatches carry the pseudo hash `builtin:<Key>` instead of
+// a sha256 (see terrain_texture_sets.ts): those resolve straight from the app
+// bundle (public/textures/terrain/), never from IndexedDB, so the default
+// texture set is available on every machine a map opens on.
+
+import { builtinKeyOf, terrainTexturePath } from '../terrain_texture_sets';
+import { assetUrl } from './media';
 
 const DB_NAME = 'woc_editor_ground_textures';
 const STORE = 'textures';
@@ -52,6 +60,25 @@ export async function storeGroundTexture(entry: StoredGroundTexture): Promise<vo
 }
 
 export async function loadGroundTextureBytes(sha256: string): Promise<StoredGroundTexture | null> {
+  // Builtin sets ship with the app: serve their Color map from the bundle so
+  // export flows (map bundles) can embed the image like any imported texture.
+  const builtinKey = builtinKeyOf(sha256);
+  if (builtinKey) {
+    const path = terrainTexturePath(builtinKey, 'color');
+    if (!path) return null;
+    try {
+      const resp = await fetch(assetUrl(path));
+      if (!resp.ok) return null;
+      return {
+        sha256,
+        name: `${builtinKey}_Color.jpg`,
+        mime: 'image/jpeg',
+        bytes: await resp.arrayBuffer(),
+      };
+    } catch {
+      return null;
+    }
+  }
   const db = await openDb();
   if (!db) return null;
   const out = await new Promise<StoredGroundTexture | null>((resolve) => {
@@ -79,8 +106,14 @@ const imageCache = new Map<string, Promise<ImageBitmap | null>>();
 const urlCache = new Map<string, string>();
 
 /** Object URL for a stored texture once it has been resolved (sync; the paint
- *  palette uses it for swatch thumbnails). */
+ *  palette uses it for swatch thumbnails). Builtin shas resolve immediately to
+ *  their bundled asset URL. */
 export function groundTextureUrl(sha256: string): string | null {
+  const builtinKey = builtinKeyOf(sha256);
+  if (builtinKey) {
+    const path = terrainTexturePath(builtinKey, 'color');
+    return path ? assetUrl(path) : null;
+  }
   return urlCache.get(sha256) ?? null;
 }
 
@@ -93,7 +126,7 @@ export function groundImageFor(sha256: string): Promise<ImageBitmap | null> {
       if (!stored) return null;
       try {
         const blob = new Blob([stored.bytes], { type: stored.mime });
-        urlCache.set(sha256, URL.createObjectURL(blob));
+        if (!builtinKeyOf(sha256)) urlCache.set(sha256, URL.createObjectURL(blob));
         return await createImageBitmap(blob);
       } catch {
         return null;

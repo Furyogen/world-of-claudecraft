@@ -315,6 +315,29 @@ export const ru_RU: EnTranslations = {
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
       "spiritHealerAlive": "Целитель душ оберегает мёртвых. Вы всё ещё среди живых."
     },
+    "unstuck": {
+      "menuButton": "Выбраться",
+      "help": "Спасение: /unstuck запускает неподвижный отсчёт, после которого вы окажетесь в ближайшем доступном безопасном месте.",
+      "started": "Перемещение из ловушки через {seconds} сек. Движение, бой, получение урона или другое действие отменят его.",
+      "countdown": "Выбраться: {seconds}",
+      "completed": "Вы перемещены в ближайшее доступное безопасное место.",
+      "cancelledMoved": "Перемещение отменено, потому что вы сдвинулись с места.",
+      "cancelledDamaged": "Перемещение отменено, потому что вы получили урон.",
+      "cancelledCombat": "Перемещение отменено, потому что вы вступили в бой.",
+      "cancelledBusy": "Перемещение отменено, потому что вы начали другое действие.",
+      "cancelledState": "Перемещение отменено из-за изменения вашего состояния.",
+      "cancelledDisconnected": "Перемещение отменено из-за отключения.",
+      "noSafePosition": "Поблизости нет доступного безопасного места. Вы остались на месте.",
+      "alreadyActive": "Отсчёт перемещения уже идёт.",
+      "alreadySafe": "Вы уже находитесь в безопасном доступном месте.",
+      "cooldown": "Перемещение будет доступно через {seconds} сек.",
+      "dead": "Нельзя выбраться, пока вы мертвы или находитесь в облике духа.",
+      "combat": "Нельзя выбраться во время боя.",
+      "controlled": "Нельзя выбраться, пока ваше движение ограничено.",
+      "standStill": "Остановитесь на твёрдой земле, прежде чем выбираться.",
+      "busy": "Завершите текущее действие, прежде чем выбираться.",
+      "unavailable": "В текущем состоянии выбраться нельзя."
+    },
     "emotes": {
       "wave": "Помахать",
       "laugh": "Смех",
@@ -1649,7 +1672,10 @@ export const ru_RU: EnTranslations = {
       "label": "Сбросить положение рамок"
     },
     "itemTooltip": {
-      "requiresLevel": "Требуется уровень {level}"
+      "requiresLevel": "Требуется уровень {level}",
+      "riftTier": "Предмет разлома ранга {tier}",
+      "riftUpgrade": "Улучшение разлома {level}/{max}",
+      "riftSockets": "Самоцветы разлома {used}/{total}"
     },
     "discord": {
       "title": "Discord",
@@ -2424,7 +2450,17 @@ export const ru_RU: EnTranslations = {
         "marshName": "Топь Мирфен",
         "marshBlurb": "Затопленные болота и изъеденные приливами руины, дом мадфинов и тварей пострашнее.",
         "peaksName": "Тернопиковые высоты",
-        "peaksBlurb": "Выскобленные ветром хребты, что уходят ввысь к самым холодным опасностям королевства."
+        "peaksBlurb": "Выскобленные ветром хребты, что уходят ввысь к самым холодным опасностям королевства.",
+        "duskName": "Сокрытая лощина",
+        "duskBlurb": "Мир, запечатанный под горами, если шёпот о пути внутрь не лжёт.",
+        "emberName": "Земли Драконов",
+        "emberBlurb": "За Бледной дамбой зелень уступает пеплу, и пустошами правит нечто древнее.",
+        "frostName": "Морозный Предел",
+        "frostBlurb": "Заснеженная высь, которой нет ни на одной карте. Её видно лишь в танцующем сиянии.",
+        "amberName": "Янтарная Падь",
+        "amberBlurb": "За западными утёсами длится вечная осень, и на золотом озере горят фонари.",
+        "fenName": "Ивовая Топь",
+        "fenBlurb": "За осенней короной лежит светлая топь ив и тихой воды, и городок за рвом."
       },
       "group": {
         "heading": "Объединяйтесь для сложных испытаний",
@@ -2884,6 +2920,18 @@ export const ru_RU: EnTranslations = {
       "reptile": {
         "name": "Рептилии",
         "desc": "Хладнокровные охотники со своим особым шипением и хваткой, непохожие на теплокровных зверей."
+      },
+      "murloc": {
+        "name": "Квакопёры",
+        "desc": "Квакающий рыбий народец озёрных берегов и приливных луж, что мигом накидывается стаей на всякого, кто зайдёт в воду слишком близко."
+      },
+      "kobold": {
+        "name": "Проныры",
+        "desc": "Суетливые мусорщики и духи полян и живых изгородей, скорее докука, чем угроза, пока их не наберётся много."
+      },
+      "demon": {
+        "name": "Демоны",
+        "desc": "Захватчики из-за разломов, сплошь огонь и злоба. Где стоит один из них, там и прорыв недалеко."
       }
     },
     "worldPage": {
@@ -2897,15 +2945,55 @@ export const ru_RU: EnTranslations = {
       "valeBlurb": "Зеленая стартовая долина, где новые герои набираются опыта на волках и разбойниках вокруг города Восточный Брод.",
       "marshBlurb": "Утонувший край тумана и руин. Мадфины кишат на мелководье, а под водой шевелится нечто древнее, за которым наблюдают из города-моста Топкомостье.",
       "peaksBlurb": "Истерзанные ветрами хребты и старые рудники, поднимающиеся к самым холодным и высоким опасностям королевства, что удерживает застава Высокий Дозор.",
+      "duskBlurb": "Долина вечных сумерек под великим древом Элдерглима, где светятся хрустальные руины, а воздух гудит от древней магии.",
+      "emberBlurb": "Озарённые грозами пустоши пепла и кровостекла, где дрейки кружат над кальдерой, а в дюнах горят костры троллей; за всем этим следит привратный город Змеиный дозор.",
+      "frostBlurb": "Тишина снега и тёмных сосен под танцующим сиянием, где сам холод кажется живым, а Ледяная Мантия не даёт погаснуть своим очагам.",
+      "amberBlurb": "Вечная осень золотых и багряных листьев, что никогда не опадают, собравшаяся вокруг освещённого фонарями городка Лантанмир.",
+      "fenBlurb": "Светлая, гудящая жизнью топь кувшинок и тихой воды, которую пересекают старые мостки от города-моста Бриджмир.",
+      "nightBlurb": "Край звёздной полуночи, где тропы освещают цветы, а Лунный Приют несёт тихий дозор под грезящим небом.",
+      "hauntBlurb": "Населённый призраками лес под исполинскими кронами, где фонари Гэллоумира, единственный честный свет на дороге.",
+      "galeBlurb": "Морские утёсы и воющие холмы, где ветер не знает покоя, Старый Маяк никогда не гаснет, а Викхарбор крепко запирает свои двери.",
+      "jungleBlurb": "Тропическое сплетение пальм, белого песка и громких птиц, где пляжный городок Дрифтхейвен держит костёр на берегу.",
+      "gardenBlurb": "Садовый край живых лабиринтов, который до сих пор подстригает садовник, которого никто не видел; путь внутрь лежит мимо Хеджвика и его фонтанных дворов.",
       "valeGreeting": "Держите клинок наготове. Долина уже не та, что прежде.",
       "valeGreeter": "Маршал Редбрук, Истврук",
       "marshGreeting": "Стой у ворот. За теми камышами топь убивает за нас.",
       "marshGreeter": "Страж Фенвик, Топкомостье",
       "peaksGreeting": "Две сотни лет держится эта стена. На моём посту она не падёт, но стонет.",
       "peaksGreeter": "Капитан Тессали, Хайвотч",
+      "duskGreeting": "Немногие из вашего рода стояли под этими ветвями. Ступайте мягко, и добро пожаловать.",
+      "duskGreeter": "Хранительница Сэльвин, Элдерглим",
+      "emberGreeting": "Горячий ветер с пустошей, драконы над Дрейкмо и костры троллей в дюнах. Выпей воды, прежде чем выходить туда.",
+      "emberGreeter": "Страж ворот, Змеиный дозор",
+      "frostGreeting": "За стеной снег глотает каждый звук. Если огни в небе пустятся в пляс, говори тише и не давай своему костру погаснуть.",
+      "frostGreeter": "Хранитель очага, Ледяная Мантия",
+      "amberGreeting": "Каждый лист здесь горит золотом и багрянцем, но ни один не падает. Фонари зажжены для тебя; будь осторожен на Золотой Проталине по пути наверх.",
+      "amberGreeter": "Фонарных дел мастер, Лантанмир",
+      "fenGreeting": "Над топью гудят стрекозы и пчёлы. Перейди мост, дай ногам отдых и не сходи с мостков за бочагами.",
+      "fenGreeter": "Смотритель моста, Бриджмир",
+      "nightGreeting": "За Ночными Вратами грезит сам воздух. Иди по цветочному свету и не пропусти спящий мир, что висит в небе.",
+      "nightGreeter": "Страж дозора, Лунный Приют",
+      "hauntGreeting": "Держись фонарей, путник. И если лес позовёт тебя по имени откуда-то с обочины, не отвечай.",
+      "hauntGreeter": "Фонарщик, Гэллоумир",
+      "galeGreeting": "Ветер здесь не стихал ни разу, и Старый Маяк ни разу не гас. Закрой за собой дверь таверны.",
+      "galeGreeter": "Смотритель маяка, Викхарбор",
+      "jungleGreeting": "Тёплый песок, громкие птицы и джунгли, пожирающие горизонт. Мы держим костёр на берегу; постарайся к нему вернуться.",
+      "jungleGreeter": "Хозяйка гавани, Дрифтхейвен",
+      "gardenGreeting": "Кто-то до сих пор подстригает живые изгороди, хотя садовника не видели уже сто лет. Берегись лабиринта: он тоже следит за тобой.",
+      "gardenGreeter": "Привратник, Хеджвик",
       "valePlaceNotes": "Истврук, ваша первая опорная база. Волчья тропа и Кабаний луг, это спокойные охотничьи угодья; Зеркальное озеро, это добрая вода для рыбалки, хотя его отмели кишат грязепёрами; Сейблвеб и Медный карьер прячут пауков и жадных до руды землекопов; Лагерь бандитов и Павшая часовня хранят работу погрубее; Холм Реликвария ведёт вниз, в Обрушившийся Реликварий, первую вылазку мира; Поляна Брайтвуда, это тихая солнечная роща на севере; а Свиное поле, это обнесённая стенами кабанбольная площадка Истврука, где под жатвенным перемирием разыгрывается Кубок Долины.",
       "marshPlaceNotes": "Топкомостье стережёт единственную сухую дорогу. Хищные камыши и Глубокотопкие мели кишат болотными тварями и мадфинами, Вдовья чаща густо оплетена паутиной, Утонувшая часовня и Курганы троллей хранят опасности постарше, причём чуть севернее курганов открывается Утонувшая Литания, собственная вылазка топи, Стан Зовущих Могилу, это окопавшийся культ, а Затонувший бастион, это сердце топи в инстансе.",
       "peaksPlaceNotes": "Хайвотч держит стену. Хребет Преследователя и Глубокоскальные норы принадлежат горным котам и землекопам; Огрские предгорья и Военный лагерь Дрогмара, наёмным громилам; Бурехребет трещит от элементалей, а под ним сияет Глиммермир, горное озеро, чей берег хранит врата бледного света, ведущие вниз, в Утонувший храм; Шатры Культа Вирма и Поля ревенантов кольцом окружают высоты культа, а на самом их пике, Святилище Могильного Вирма.",
+      "duskPlaceNotes": "Элдерглим собрался под великим древом. Сумеречная пещера и её смотровая площадка служат входом и первым видом на долину; Древняя роща и Котловина Звездопада хранят тихий юг; Затонувший двор скрывает заросшие руины на востоке; а Мерцающая глубь и Хрустальные отмели светятся на севере.",
+      "emberPlaceNotes": "Змеиный дозор держит ворота. Привратный лес, это последняя зелень перед пустошью; по Пепельным дюнам несёт пепел и кое-что похуже; в Тролльмуте дюнные тролли собираются у своих костров; Кровостеклянные поля блестят острыми, как бритва, осколками; а Кальдера Дрейкмо, это дымящаяся корона, над которой кружат дрейки.",
+      "frostPlaceNotes": "Ледяная Мантия хранит последний тёплый очаг. Снеговая Тропа отмечает, где начинаются сугробы; Ледниковое озеро, это чёрная, недвижная вода подо льдом; Ступени Сияния поднимаются под танцующими огнями; Дрожащая топь, это промёрзшая трясина, что никогда не спит до конца; а Воющие террасы каждую ночь оправдывают своё имя.",
+      "amberPlaceNotes": "Лантанмир светится в самом сердце жатвы. Золотая Проталина, это скользкий от янтаря перевал на входе; Золочёный сад и Жатвенная лощина хранят самые сладкие плоды и самых дерзких воров; Великое озеро отражает горящую листву; Клёновый взгорок стоит выше и краснее всех; а Кренящийся монолит помнит нечто старше самой осени.",
+      "fenPlaceNotes": "Бриджмир сидит верхом на тихой воде. Янтарные Ступени спускаются из края жатвы; Кувшинковые мхи и Светлые бочаги блестят огоньками и стрекозами; Плакучая заводь опускает свои ветви в озеро; а Дремотные отмели, это самое ласковое место во всём этом краю.",
+      "nightPlaceNotes": "Лунный Приют несёт дозор. Ночные Врата, это путь в полуночный край; Лунный Колодец хранит звёздный свет, рядом с которым можно постоять; Сумеречное Поле цветёт в темноте; Стоячий Дозор наблюдает, не шевелясь; а Курган Неспящего, единственное место здесь, которому не снятся сны.",
+      "hauntPlaceNotes": "Гэллоумир жмётся к своим фонарям. Вороньи Врата, это мрачная парадная дверь леса; Вдовья Чаща густо оплетена паутиной; Висельная Поляна и Часовня Скорбного Камня хранят самые старые скорби этого леса; а Поляна Ловчего принадлежит тому, что до сих пор там охотится.",
+      "galePlaceNotes": "Викхарбор стоит, накренившись против ветра. Ветровой Проход, это дорога по утёсам на входе; Воющие Холмы катятся под бурей без единого дерева; Старый Маяк горит столько, сколько кто-либо может припомнить; Отвесный Срез обрывается прямо к воде; Поля Кораблекрушений держат побережье в строгости; а Зеркальное Озеро, единственная неподвижная вещь во всём этом краю.",
+      "junglePlaceNotes": "Дрифтхейвен держит костёр на берегу. Заросшее Устье, это место, где река встречает зелёную стену; Пальмовая Коса тянется белой тёплой полосой вдоль прибоя; Изумрудная Чаща и Лианопад поглощают всё, что дальше от берега; Сапфировая Лагуна светится, прозрачная и глубокая; а Затонувший Идол наблюдает из-под воды.",
+      "gardenPlaceNotes": "Хеджвик ждёт у Садовых Врат. Аллея Статуй хранит своё безмолвное общество; Дикие Розы давно переросли свои клумбы; Лепестковый Пруд круглый год розовеет от лепестков; Великий Лабиринт меняет свои манеры под каждого гостя; а Фонтанный Двор всё так же бежит чистой водой в самом сердце сада.",
       "gladeTitle": "Тихий уголок: Поляна Брайтвуда",
       "gladeBody": "Не всякая история в Vale рассказывает о мёртвых. На севере солнечная роща под названием Brightwood Glade живёт в собственном, более мягком ритме: сплошь тихие тропы и пятнистый свет под ветвями. Это спокойный контрапункт следу, по которому вы идёте, и его стоит увидеть, когда дорога даст время побродить.",
       "worldBossTitle": "Когда пик пробуждается: мировой босс",
@@ -3443,6 +3531,8 @@ export const ru_RU: EnTranslations = {
       "view3dTitle": "Редактировать в отрисованном мире",
       "view2d": "2D",
       "view2dTitle": "Редактировать на схематичной карте сверху",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "Отмена: {count}",
       "undoCountTitle": "Можно отменить {count} шагов (Ctrl+Z отмена, Ctrl+Y повтор)",
       "autosave": "Автосохранение",
@@ -3478,6 +3568,87 @@ export const ru_RU: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "Инструменты редактора",
       "keyHint": "{name} ({key})",
@@ -3489,6 +3660,9 @@ export const ru_RU: EnTranslations = {
       "lower": "Опустить",
       "smooth": "Сгладить",
       "flatten": "Выровнять",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "Красить биом",
       "water": "Вода",
       "place": "Разместить модель",
@@ -3496,10 +3670,12 @@ export const ru_RU: EnTranslations = {
       "blocker": "Невидимая стена",
       "collider": "Collider",
       "camp": "Лагерь",
+      "entity": "Move NPCs and Mobs",
       "spawn": "Точка появления",
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "Область",
       "erase": "Стереть"
     },
@@ -3540,13 +3716,17 @@ export const ru_RU: EnTranslations = {
       "cave": "Пещера",
       "erase": "Стереть покраску",
       "hint": "Закрашенные клетки заменяют биом зоны, меняя форму и цвет рельефа.",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "Очистить всю покраску биомов",
@@ -3575,7 +3755,8 @@ export const ru_RU: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -3589,6 +3770,19 @@ export const ru_RU: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -3615,6 +3809,8 @@ export const ru_RU: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -3634,6 +3830,10 @@ export const ru_RU: EnTranslations = {
       "level": "Уровень воды",
       "hint": "Задает высоту поверхности воды для всей карты, от {min} до {max} ярдов.",
       "reset": "Сбросить к встроенному уровню",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -3670,6 +3870,11 @@ export const ru_RU: EnTranslations = {
     "foliageTool": {
       "title": "Foliage Brush",
       "hint": "Drag across the ground to scatter the enabled foliage inside the brush; each stroke is one undo step. Use Erase to remove pieces.",
+      "ambientTitle": "Existing map foliage",
+      "ambientHint": "Built-in trees are procedural and cannot be selected. Focus the camera on an area, then convert the nearest batch.",
+      "makeAmbientEditable": "Make 500 nearby trees editable",
+      "ambientEditableHint": "Ambient foliage is off. Every foliage piece painted with this brush can be selected, moved, rotated, scaled, or erased.",
+      "ambientConverted": "Made the {count} nearest trees editable.",
       "density": "Density",
       "minScale": "Min size",
       "maxScale": "Max size",
@@ -3707,10 +3912,18 @@ export const ru_RU: EnTranslations = {
       "selected": "Лагерь: {mob}",
       "none": "Лагерь не выбран."
     },
+    "entityTool": {
+      "title": "NPCs and Mobs",
+      "hint": "Click a mob or NPC to select it, then drag to move it. Hold Ctrl while clicking to select multiple mobs, then drag any selected mob to move the whole ringed group. Selected NPCs can also be rotated with the Facing control. Use Camp to create or configure mob groups.",
+      "selected": "Selected: {name}",
+      "none": "Click a mob or NPC in the map view to select it.",
+      "facing": "Facing"
+    },
     "spawn": {
       "title": "Точка появления",
       "hint": "Кликните по земле, чтобы задать место, где игрок появится в тесте.",
       "position": "Появление: {x}, {z}",
+      "area": "Spawn area: {width} x {height} yd",
       "unset": "Используется встроенная стартовая позиция.",
       "clear": "Убрать точку появления"
     },
@@ -3747,7 +3960,49 @@ export const ru_RU: EnTranslations = {
       "radiusAuto": "Авто",
       "radiusAutoTitle": "Сбросить радиус столкновения, чтобы он следовал масштабу модели",
       "radiusHint": "\"Авто\" выводит радиус столкновения из масштаба модели; перетащите ползунок, чтобы задать свой.",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "Показать зоны столкновений",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "Дублировать",
       "delete": "Удалить",
       "deleteHint": "Удаление убирает выделенное; Ctrl+Z вернет его.",
@@ -3805,6 +4060,7 @@ export const ru_RU: EnTranslations = {
       "deleteAsset": "Удалить загруженную модель",
       "deleteAssetConfirm": "Удалить загруженную модель «{name}»? Карты, где она используется, потеряют ее.",
       "pick": "Разместить {name}",
+      "collisionMaster": "Collision Master: author this asset’s default collision",
       "categoryTab": "{category} ({count})",
       "resizeHandle": "Drag to resize the asset browser",
       "category": {
@@ -3819,6 +4075,53 @@ export const ru_RU: EnTranslations = {
         "tools": "Инструменты",
         "weapons": "Оружие"
       }
+    },
+    "collisionMaster": {
+      "title": "Collision Master",
+      "mapName": "Collision Master: {name}",
+      "assetLabel": "Authoring default collision for {name}.",
+      "hint": "Build this asset’s collision with the Selection panel below: pick the collision type, edit boxes with the gizmo (move / rotate / scale), add or delete boxes. Lock In saves it to the project as the asset’s default everywhere.",
+      "fromBake": "From bake",
+      "fromBakeTitle": "Start from the asset’s auto-baked voxel boxes",
+      "fittedBox": "Fitted box",
+      "fittedBoxTitle": "Start from one box fitted around the whole asset",
+      "singleBox": "Single box",
+      "singleBoxTitle": "Start from one plain box at the asset’s base",
+      "polySnap": "Poly snap brush",
+      "polySnapHint": "Drag across the model’s surface to lay a collision plane that hugs the geometry: the drag start/end set its length and yaw, the sampled heights its vertical band. Great for walls, roofs, and ramps.",
+      "devOnly": "Lock In writes to the project files, so it needs the local dev server (npm run dev).",
+      "lockIn": "Lock In",
+      "lockInTitle": "Save as this asset’s default collision (writes to the project) and return to your map",
+      "cancel": "Back to map",
+      "catalogOnly": "Collision Master works on catalogue assets. Imported models keep their import bake.",
+      "saveFailed": "Could not save your map before opening Collision Master.",
+      "stashOnly": "Browser storage is blocked, so the map is held in memory: you will return to it from Collision Master, but export it if you want a durable copy.",
+      "noBoxes": "No collision boxes to lock in. Add at least one box, or pick Basic/None.",
+      "meshUnsupported": "True Mesh is a per-map bake and cannot be a project default. Pick Baked, Basic, or None.",
+      "saveEndpointFailed": "Saving the default failed: {error}",
+      "locked": "Locked in: {name} now uses this collision everywhere.",
+      "barLabel": "Collision modeling tools",
+      "modeObject": "Object",
+      "modeObjectTitle": "Object mode: move / rotate / scale whole boxes with the gizmo",
+      "modeVertex": "Vertex",
+      "modeVertexTitle": "Vertex mode: drag a corner to reshape the selected box",
+      "modeEdge": "Edge",
+      "modeEdgeTitle": "Edge mode: drag an edge to move its two faces together",
+      "modeFace": "Face",
+      "modeFaceTitle": "Face mode: drag a face along its normal",
+      "primBox": "Box",
+      "primPlane": "Plane",
+      "primCylinder": "Cylinder",
+      "primSphere": "Sphere",
+      "primWedge": "Ramp",
+      "primTitle": "Add a {name} primitive to the collision set",
+      "polySnapShort": "Poly Snap",
+      "duplicate": "Dup",
+      "duplicateTitle": "Duplicate the selected boxes",
+      "delete": "Del",
+      "deleteTitle": "Delete the selected boxes",
+      "openFromSelection": "Collision Master",
+      "openFromSelectionTitle": "Author this asset’s DEFAULT collision in the Collision Master scene (saves to the project; your map auto-saves and you return here)"
     },
     "importModel": {
       "notModel": "Pick a .glb or .gltf file.",
@@ -3837,15 +4140,18 @@ export const ru_RU: EnTranslations = {
     "openDrawer": {
       "title": "Открыть карту",
       "close": "Закрыть",
+      "tabShipped": "Shipped Maps",
       "tabLocal": "Этот браузер",
       "tabMine": "Мои карты на сервере",
       "tabPublic": "Публичные карты",
       "colName": "Название",
+      "colType": "Type",
       "colUpdated": "Обновлено",
       "colStatus": "Статус",
       "statusPublic": "Публичная",
       "statusPrivate": "Личная",
       "open": "Открыть",
+      "openCopy": "Open Copy",
       "fork": "Форк",
       "publish": "Опубликовать",
       "unpublish": "Снять с публикации",
@@ -3868,12 +4174,16 @@ export const ru_RU: EnTranslations = {
       "savedServer": "Карта «{name}» сохранена на сервере (v{version}).",
       "savedLocalOnly": "Карта «{name}» сохранена в этом браузере. Войдите, чтобы сохранять онлайн.",
       "saveFailedLocal": "Локальное сохранение не удалось (хранилище заблокировано).",
+      "openFailedLocal": "That save could not be read (corrupt or truncated). Its file may still import via More > Import if you exported a copy.",
       "opened": "Открыта карта «{name}».",
+      "shippedMapOpened": "Opened an editable copy of \"{name}\".",
       "imported": "Импортирована карта «{name}».",
       "importFailed": "Импорт отменен, или файл не является корректной картой.",
       "importMissingDeps": "{count} model/texture/skybox file(s) are missing, so parts of the map are blank. Re-import the .wocmap.zip bundle to include them.",
       "exported": "Скачана карта «{name}».",
       "bundleExported": "Exported \"{name}\" with its models, textures, and skybox. Import the .wocmap.zip (not a loose .json) on the other computer.",
+      "exportBlockedMissingDeps": "Export blocked: {count} referenced model, texture, or skybox file(s) are missing from this browser. Restore them before exporting so the engine receives a complete map.",
+      "exportBlockedInvalid": "Export blocked because the map did not pass the engine compatibility check. Save a copy and review the latest edits before trying again.",
       "newMap": "Новая карта начата на основе встроенного мира.",
       "newFlatMap": "Blank map started.",
       "forked": "Сделан форк «{name}». Теперь вы редактируете собственную копию.",
@@ -3888,7 +4198,14 @@ export const ru_RU: EnTranslations = {
       "draftRestored": "Автосохраненный черновик восстановлен.",
       "autosaveFailed": "Автосохранение не удалось (хранилище браузера заполнено или заблокировано). Экспортируйте карту, чтобы сохранить резервную копию.",
       "terrainCapReached": "Достигнут лимит правок рельефа ({max}). Лишние штампы не были добавлены.",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "Достигнут лимит размещений ({max}). Лишние объекты не были добавлены.",
+      "entityCapReached": "The map entity limit was reached. Some copied NPCs or mobs were not pasted.",
+      "selectionCopied": "Copied {count} selected item(s).",
+      "selectionPasted": "Pasted {count} item(s).",
+      "selectionNothingToCopy": "Select an asset, NPC, or mob before copying.",
+      "selectionNothingToPaste": "Copy an asset, NPC, or mob before pasting.",
       "blockerCapReached": "Достигнут предел невидимых стен ({max}). Новая стена не добавлена.",
       "autosaveOff": "Автосохранение отключено: {reason} Сохраните вручную, затем включите снова."
     },
@@ -4088,7 +4405,7 @@ export const ru_RU: EnTranslations = {
         "undo": "Ctrl+Z отменяет последнее действие; Ctrl+Y или Ctrl+Shift+Z повторяет его.",
         "save": "Ctrl+S сохраняет карту.",
         "duplicate": "Ctrl+D дублирует выбранный объект.",
-        "multiSelect": "Shift+click adds or removes assets from the selection (Blender style).",
+        "multiSelect": "Shift+click adds or removes assets. In the NPC and Mob tool, Ctrl+click selects multiple entities.",
         "nudge": "Стрелки сдвигают выбранный объект на 0,5 ярда; с зажатым Shift на 2 ярда.",
         "wheel": "Shift+прокрутка поворачивает выбранный объект; Alt+прокрутка меняет его размер.",
         "delete": "Delete удаляет выбранный объект или лагерь.",
@@ -4586,6 +4903,35 @@ export const ru_RU: EnTranslations = {
     "chat": "Открыть чат"
   },
   "sim": {
+    "rift": {
+      "allUnstable": "Все разломы сейчас нестабильны. Попробуйте позже.",
+      "enterFloor": "Вы проходите сквозь разлом и попадаете в {name}.",
+      "descendFloor": "Вы спускаетесь глубже в {name}.",
+      "stepBack": "Вы возвращаетесь назад сквозь разлом.",
+      "pylonLit": "Рунный пилон вспыхивает ({lit}/{total}).",
+      "wayDownOpens": "Путь вниз разверзается.",
+      "exitOpens": "Разлом содрогается. Позади павших разверзается путь домой.",
+      "portalOpens": "В {zone} разверзся разлом ранга {tier}!",
+      "portalSealed": "Разлом ранга {tier} в {zone} запечатан.",
+      "portalCollapses": "Разлом ранга {tier} в {zone} обрушился.",
+      "levelGate": "Войти в этот разлом могут лишь искатели приключений уровня {level} и выше.",
+      "iceGoalLit": "Морозная печать вспыхивает. Путь пробуждается.",
+      "socketsShut": "Гнёзда с грохотом смыкаются. Путь пробуждается.",
+      "seqProgress": "Руны отвечают по очереди ({step}/{total}).",
+      "seqReset": "Руны гаснут. Начните заново.",
+      "gateOpen": "Врата с грохотом отворяются.",
+      "orbSealed": "Сфера запечатана ритуалом внизу.",
+      "orbWakes": "Пламя пентаграммы гаснет. Нечто пробуждается на алтаре.",
+      "orbOpensGate": "Кровавая сфера вспыхивает. Врата храма с грохотом отворяются.",
+      "alreadyCleared": "Этот разлом уже закрыла группа {names}.",
+      "raceLost": "Этот разлом уже закрыла группа {names}. Ваш поход завершён.",
+      "raceWorldWin": "{names} победили в гонке разлома ранга {tier} за {seconds} с!",
+      "raceWinBanner": "Победа в гонке разлома — {seconds} с",
+      "raceLostBanner": "Разлом уже закрыт",
+      "forgeUpgraded": "Улучшение разлома завершено для {name}.",
+      "forgeEnchanted": "Зачарование разлома завершено для {name}.",
+      "forgeSocketed": "Самоцвет разлома вставлен в {name}."
+    },
     "delve": {
       "cannotEnterNow": "Сейчас вы не можете войти в вылазку.",
       "leaveDungeonFirst": "Сначала покиньте подземелье.",
@@ -5393,6 +5739,8 @@ export const ru_RU: EnTranslations = {
       "secondsRemaining": "Осталось {seconds} сек.",
       "enteringZone": "Вход в {zone}.",
       "welcomeZone": "Добро пожаловать в {zone}!",
+      "riftLabel": "{name}",
+      "riftLabelRanked": "{name} ({rank})",
       "levelBanner": "Уровень {level}!",
       "levelLog": "Вы достигли уровня {level}!",
       "xpGain": "Вы получаете {amount} опыта.",
@@ -7708,6 +8056,66 @@ export const ru_RU: EnTranslations = {
       "sunpetal_sickle": {
         "name": "Солнцелепестковый серп"
       },
+      "duskwisp_essence": {
+        "name": "Сущность сумеречного огонька"
+      },
+      "spore_heart": {
+        "name": "Споровое сердце"
+      },
+      "gleaming_antler": {
+        "name": "Сияющий рог"
+      },
+      "wisp_mote": {
+        "name": "Звёздная пылинка"
+      },
+      "starfall_shard": {
+        "name": "Осколок звездопада"
+      },
+      "elder_bark": {
+        "name": "Кора старейшины"
+      },
+      "hollow_sealstone": {
+        "name": "Печатный камень Лощины"
+      },
+      "monument_overlook": {
+        "name": "Выветренный монумент"
+      },
+      "monument_court": {
+        "name": "Затонувший монумент"
+      },
+      "monument_north": {
+        "name": "Забытый монумент"
+      },
+      "guardian_core": {
+        "name": "Ядро стража"
+      },
+      "wardens_seal": {
+        "name": "Печать Смотрителя"
+      },
+      "gleamstag_charm": {
+        "name": "Оберег Сияющего оленя"
+      },
+      "veilsteel_blade": {
+        "name": "Клинок скрытой стали"
+      },
+      "duskfang_dirk": {
+        "name": "Кинжал сумеречного клыка"
+      },
+      "gleamwood_stave": {
+        "name": "Посох сияющего дерева"
+      },
+      "wardens_oathband": {
+        "name": "Наручи клятвы Смотрителя"
+      },
+      "wardplate_cuirass": {
+        "name": "Кираса стражевых пластин"
+      },
+      "nightweave_tunic": {
+        "name": "Куртка ночного плетения"
+      },
+      "veilcloth_robe": {
+        "name": "Одеяние скрытой ткани"
+      },
       "thorium_ore": {
         "name": "Ториевая руда"
       },
@@ -7896,6 +8304,27 @@ export const ru_RU: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "Боевой посох из огненного стекла"
+      },
+      "rift_essence": {
+        "name": "Эссенция разлома"
+      },
+      "rift_gem_crimson": {
+        "name": "Багровый самоцвет разлома"
+      },
+      "rift_gem_azure": {
+        "name": "Лазурный самоцвет разлома"
+      },
+      "rift_gem_verdant": {
+        "name": "Зелёный самоцвет разлома"
+      },
+      "riftbound_band_of_might": {
+        "name": "Кольцо разлома могущества"
+      },
+      "riftbound_band_of_insight": {
+        "name": "Кольцо разлома прозрения"
+      },
+      "riftbound_band_of_guile": {
+        "name": "Кольцо разлома хитрости"
       },
       "bristleback_maul": {
         "name": "Молот Гэллоугласа"
@@ -8868,6 +9297,255 @@ export const ru_RU: EnTranslations = {
       "azazel_infernal_lord": {
         "name": "Азазель, владыка Преисподней"
       },
+      "rift_spawnling": {
+        "name": "Отпрыск Разлома"
+      },
+      "rift_bonewalker": {
+        "name": "Восставший Костоход"
+      },
+      "rift_frost_revenant": {
+        "name": "Скованный Морозом Возвращенец"
+      },
+      "rift_rime_elemental": {
+        "name": "Изморозевый Элементаль"
+      },
+      "rift_ember_fiend": {
+        "name": "Тлеющий Изверг"
+      },
+      "rift_magma_brute": {
+        "name": "Магмовый Громила"
+      },
+      "rift_venom_weaver": {
+        "name": "Ядовитый Ткач"
+      },
+      "rift_thornback": {
+        "name": "Терноспинный Охотник"
+      },
+      "rift_boneclad": {
+        "name": "Костяной Воин"
+      },
+      "rift_marrow_troll": {
+        "name": "Костномозговой Тролль"
+      },
+      "rift_void_acolyte": {
+        "name": "Аколит Пустотного Шрама"
+      },
+      "rift_dread_stalker": {
+        "name": "Жуткий Преследователь"
+      },
+      "rift_storm_caller": {
+        "name": "Призыватель Бури"
+      },
+      "rift_stormscale": {
+        "name": "Грозочешуйчатый Дрейк"
+      },
+      "rift_tide_thrall": {
+        "name": "Приливный Раб"
+      },
+      "rift_deep_lurker": {
+        "name": "Глубинный Обитатель"
+      },
+      "rift_stone_ogre": {
+        "name": "Каменный Огр"
+      },
+      "rift_boss_frost": {
+        "name": "Инеевый Страж"
+      },
+      "rift_boss_ember": {
+        "name": "Тиран Пепельной Кузни"
+      },
+      "rift_boss_venom": {
+        "name": "Прародительница Висска"
+      },
+      "rift_boss_necro": {
+        "name": "Костяной Владыка Ксаррет"
+      },
+      "rift_boss_brute": {
+        "name": "Полководец Граск"
+      },
+      "rift_boss_arcane": {
+        "name": "Архонт Никсарис"
+      },
+      "rift_boss_storm": {
+        "name": "Буревой Вхарок"
+      },
+      "rift_boss_tide": {
+        "name": "Бездонная Пасть"
+      },
+      "glimmerwisp": {
+        "name": "Мерцающий огонёк"
+      },
+      "duskwisp": {
+        "name": "Сумеречный огонёк"
+      },
+      "hollow_spirit": {
+        "name": "Дух лощины"
+      },
+      "veiled_stag": {
+        "name": "Скрытый олень"
+      },
+      "gleamstag": {
+        "name": "Сияющий олень"
+      },
+      "sporeling_gatherer": {
+        "name": "Спорёныш-собиратель"
+      },
+      "corrupted_sporeling": {
+        "name": "Осквернённый спорёныш"
+      },
+      "treant_elder": {
+        "name": "Древень-старейшина"
+      },
+      "ancient_guardian": {
+        "name": "Древний страж"
+      },
+      "waking_warden": {
+        "name": "Пробудившийся Смотритель"
+      },
+      "old_marrowshell": {
+        "name": "Старый Костнопанцирь"
+      },
+      "aurelhorn": {
+        "name": "Аурелхорн, Первый в стаде"
+      },
+      "snowdrift_wolf": {
+        "name": "Сугробный волк"
+      },
+      "ice_wisp": {
+        "name": "Ледяной огонёк"
+      },
+      "rime_elemental": {
+        "name": "Инеевый элементаль"
+      },
+      "fen_sprite": {
+        "name": "Топяной дух"
+      },
+      "frostmane_yeti": {
+        "name": "Морозогривый йети"
+      },
+      "emberwing_drake": {
+        "name": "Углекрылый дрейк"
+      },
+      "ashbone_raider": {
+        "name": "Пеплокостный налётчик"
+      },
+      "ashbone_warcaller": {
+        "name": "Пеплокостный горлопан"
+      },
+      "dune_troll": {
+        "name": "Дюнный тролль"
+      },
+      "gilded_stag": {
+        "name": "Золочёный олень"
+      },
+      "gloam_fox": {
+        "name": "Сумеречный лис"
+      },
+      "orchard_treant": {
+        "name": "Садовый древень"
+      },
+      "harvest_sprite": {
+        "name": "Жатвенный дух"
+      },
+      "mere_lurker": {
+        "name": "Озёрный скрытень"
+      },
+      "bogtoad": {
+        "name": "Топяная жаба"
+      },
+      "drowsy_croaker": {
+        "name": "Дремотный Квакун"
+      },
+      "lily_wisp": {
+        "name": "Кувшинковый огонёк"
+      },
+      "willow_sprite": {
+        "name": "Ивовый дух"
+      },
+      "moonfleece_grazer": {
+        "name": "Лунорунный зверь"
+      },
+      "gloam_strider": {
+        "name": "Сумеречный бегун"
+      },
+      "nightkin_stargazer": {
+        "name": "Ночерождённый звездочёт"
+      },
+      "barrow_king": {
+        "name": "Курганный Король"
+      },
+      "widowsilk_spinner": {
+        "name": "Вдовий шелкопряд"
+      },
+      "wood_wraith": {
+        "name": "Лесной призрак"
+      },
+      "gravenbark_shambler": {
+        "name": "Гробокорый шатун"
+      },
+      "pale_huntsman": {
+        "name": "Бледный Ловчий"
+      },
+      "tide_scuttler": {
+        "name": "Приливный краб"
+      },
+      "thicket_boar": {
+        "name": "Чащобный вепрь"
+      },
+      "canopy_weaver": {
+        "name": "Кроновый ткач"
+      },
+      "idol_guardian": {
+        "name": "Страж идола"
+      },
+      "topiary_stag": {
+        "name": "Фигурный олень"
+      },
+      "topiary_wolf": {
+        "name": "Фигурный волк"
+      },
+      "hedge_gnome": {
+        "name": "Гном живой изгороди"
+      },
+      "the_topiary_bull": {
+        "name": "Фигурный бык"
+      },
+      "moor_ram": {
+        "name": "Вересковый баран"
+      },
+      "gale_wisp": {
+        "name": "Штормовой дух"
+      },
+      "shoal_scuttler": {
+        "name": "Отмельный краб"
+      },
+      "the_wreck_warden": {
+        "name": "Страж Кораблекрушений"
+      },
+      "riftspawn": {
+        "name": "Порождение разлома"
+      },
+      "breach_wretch": {
+        "name": "Отродье прорыва"
+      },
+      "void_stalker": {
+        "name": "Охотник Пустоты"
+      },
+      "sundered_horror": {
+        "name": "Расколотый Ужас"
+      },
+      "rift_hellguard": {
+        "name": "Адский страж"
+      },
+      "rift_pact_acolyte": {
+        "name": "Послушник договора"
+      },
+      "rift_boss_ritualist": {
+        "name": "Магус Вель'Кор Связанный Договором"
+      },
+      "rift_boss_pitlord": {
+        "name": "Азгорат, Владыка Бездны"
+      },
       "ironvein_foreman": {
         "name": "Прораб Железной жилы"
       },
@@ -9142,6 +9820,61 @@ export const ru_RU: EnTranslations = {
         "name": "Летописец Зензи",
         "title": "Летопись Терновых высот",
         "greeting": "Гора ничего не забывает, {playerName}, и я тоже. Посмотрим, какие деяния за тобой числятся."
+      },
+      "keeper_saelwyn": {
+        "name": "Хранительница Сэльвин",
+        "title": "Хранительница Лощины",
+        "greeting": "Немногие из вашего рода стояли под этими ветвями, {className}. Ступайте мягко, и добро пожаловать."
+      },
+      "loremother_bryn": {
+        "name": "Мать преданий Брин",
+        "title": "Голос святилища",
+        "greeting": "Каждый огонёк в этой долине что-то помнит, {playerName}. Помоги мне вслушаться."
+      },
+      "provisioner_fenna": {
+        "name": "Снабженец Фенна",
+        "title": "Снабженец Элдерглима",
+        "greeting": "Хлеб ещё тёплый, вода всё так же сладка. Лощина даёт, и я даю."
+      },
+      "wardsmith_orun": {
+        "name": "Кузнец-оберегов Орун",
+        "title": "Хранитель старых горнов",
+        "greeting": "Эти горны остыли столетия назад, {className}, но их работа до сих пор держит остроту."
+      },
+      "archivist_tullo": {
+        "name": "Архивариус Тулло",
+        "title": "Чтец камней",
+        "greeting": "Тамошние монументы давно никому не говорили ни слова. Быть может, они ждали свежие уши."
+      },
+      "warden_coalfast": {
+        "name": "Смотритель Хладоуголь",
+        "title": "Комендант редута",
+        "greeting": "Прорывам нет дела до того, что Чаячья Гавань мала, {className}. Мы удержим этот берег — или удерживать будет уже нечего. Встань с нами, и я этого не забуду."
+      },
+      "riftwatch_ollun": {
+        "name": "Стражеразлома Оллун",
+        "title": "Учёный по прорывам",
+        "greeting": "Каждый прорыв поёт, прежде чем раскрыться, — если есть слух для этого. Прямо сейчас я слышу, как трое из них ворочаются на острове, и один совсем близко."
+      },
+      "quartermaster_edda": {
+        "name": "Интендант Эдда",
+        "title": "Оружейница редута",
+        "greeting": "Сталь да соль, {className}, — вот и всё, что мне осталось раздавать. Бери и заставь прорывы пожалеть, что они раскрылись там, куда я смогла дотянуться."
+      },
+      "mender_saul": {
+        "name": "Врачеватель Саул",
+        "title": "Полевой хирург",
+        "greeting": "За один этот месяц я вправил больше костей, чем за десять лет лечения рыбацких увечий. Прорывы мало что оставляют от того, что забирают. Возвращайся ко мне целым, если сумеешь."
+      },
+      "bellkeeper_tam": {
+        "name": "Звонарь Там",
+        "title": "Смотритель сигнального колокола",
+        "greeting": "Колокол — единственное предупреждение, что даёт нам прорыв, {className}. Один удар — за поля, два — за утёсы, три — когда он уже так близко, что бежать без толку. Держи ухо востро, и он, глядишь, сбережёт тебя целым."
+      },
+      "fisher_nell": {
+        "name": "Испуганная Нелл",
+        "title": "Рыбачка Чаячьей Гавани",
+        "greeting": "Он раскрылся прямо там, где сушат сети. Прямо там, где я стояла каждое утро всей своей жизни. Я больше не спускаюсь к берегу. Я вообще почти никуда больше не хожу."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",
@@ -9998,6 +10731,152 @@ export const ru_RU: EnTranslations = {
           }
         }
       },
+      "q_veil_thinned": {
+        "title": "Истончившаяся завеса",
+        "text": "Значит, пещера открылась тебе. Тогда печать слабее, чем я боялась, {playerName}. Там, где рвётся завеса, огоньки становятся тёмными и холодными. Принеси мне восемь сущностей сумеречных огоньков, и я прочту, как глубока рана.",
+        "completion": "Холодные, все до единой. У Лощины, пожалуй, есть одно время года, прежде чем разрыв станет разломом. Нам с тобой предстоит работа.",
+        "objectives": {
+          "0": {
+            "label": "Сущность сумеречного огонька"
+          }
+        }
+      },
+      "q_gleaming_antlers": {
+        "title": "Сияющие рога",
+        "text": "Скрытые олени роняют свет там, где пасутся, а сброшенные рога хранят его годами. Пять рогов от стад у Котловины Звездопада, и мои фонари прогорят всю зиму без масла. Оленей можно не трогать, но задаром они рога не отдадут.",
+        "completion": "Только посмотри, как они держат свет! Ни пламени, ни дыма, лишь сияние. Лощина даёт.",
+        "objectives": {
+          "0": {
+            "label": "Сияющий рог"
+          }
+        }
+      },
+      "q_wisp_lights": {
+        "title": "Огни отмелей",
+        "text": "Мерцающие огоньки несут пылинки старого звёздного света, упавшего сюда при запечатывании Лощины. Шесть пылинок, и лампады святилища прогорят год. Бери лишь у тех, что угасают: Лощина даёт довольно и без жадности.",
+        "completion": "Мягкие, как первые звёзды. Положи их у алтаря; святилище довершит остальное.",
+        "objectives": {
+          "0": {
+            "label": "Звёздная пылинка"
+          }
+        }
+      },
+      "q_calming_the_deep": {
+        "title": "Утишить чащу",
+        "text": "Спорёныши Мерцающей глуби были кротким народом, пока разрыв не коснулся их колец. Что порча забрала, того не вернёт. Даруй осквернённым покой, {playerName}: десятерым, на севере глуби.",
+        "completion": "Ты сделал то, чего я не могла вынести. Собиратели в южных кольцах всё ещё поют; благодаря тебе они будут петь и дальше.",
+        "objectives": {
+          "0": {
+            "label": "Осквернённый спорёныш упокоен"
+          }
+        }
+      },
+      "q_spore_hearts": {
+        "title": "Сердца кольца",
+        "text": "Когда спорёныш падает во тьму, его сердце продолжает биться заёмной тенью. Четыре таких сердца, очищенных в святилище, покажут нам, как расползается порча. Мрачная работа, {playerName}, но это работа исцеления.",
+        "completion": "Вот так. Очищены и тихи. На каждом одна и та же метка: тень течёт из Затонувшего двора. Скажи Сэльвин.",
+        "objectives": {
+          "0": {
+            "label": "Споровое сердце"
+          }
+        }
+      },
+      "q_monument_tour": {
+        "title": "Что помнят камни",
+        "text": "Со времён до запечатывания стоят три монумента: один на Сумеречной смотровой площадке, один в Затонувшем дворе, а один потерян на северо-востоке, где никто не ходит. Прочти их за меня, {playerName}. Мои колени сдались лестницам два столетия назад.",
+        "completion": "Смотровая площадка, двор и забытый угол... все три строфы песни запечатывания вместе, впервые с тех пор, как её спели. Ты осчастливил старого чтеца.",
+        "objectives": {
+          "0": {
+            "label": "Прочитан монумент на смотровой площадке"
+          },
+          "1": {
+            "label": "Прочитан монумент во дворе"
+          },
+          "2": {
+            "label": "Прочитан забытый монумент"
+          }
+        }
+      },
+      "q_grove_menace": {
+        "title": "Напасть на поляне",
+        "text": "После заката сумеречные огоньки повадились плыть между моими прилавками, {playerName}, а их стужа портит всё, чего коснётся. Проредите их для меня: десяток, где бы ни рвалась завеса.",
+        "completion": "Ночной рынок снова может открыться. Считай, у тебя пожизненный покупатель. Ну или хотя бы скидка.",
+        "objectives": {
+          "0": {
+            "label": "Сумеречный огонёк развеян"
+          }
+        }
+      },
+      "q_shards_of_starfall": {
+        "title": "Осколки звездопада",
+        "text": "Когда сумеречные огоньки проплывают над хрустальными полями, к ним, как репьи, липнут осколки старого звёздного света. Шесть осколков, {playerName}, и я датирую запечатывание до самого времени года, когда его спели.",
+        "completion": "Взгляни на прожилки! Осень. Лощину запечатали осенью. Двести лет споров решили шесть камешков.",
+        "objectives": {
+          "0": {
+            "label": "Осколок звездопада"
+          }
+        }
+      },
+      "q_treant_accord": {
+        "title": "Уговор с древнями",
+        "text": "Старейшины Рощи сбрасывают внешнюю кору, пока порча грызёт их корни. Четыре пласта, и я сварю бальзам на всю Рощу. Пока будешь отдирать кору, спасибо не скажут, {playerName}, зато простоят на столетие дольше.",
+        "completion": "Все четыре толстые и крепкие. Бальзам варится неделю, а действует сто лет. Деревья меряют доброту иначе.",
+        "objectives": {
+          "0": {
+            "label": "Кора старейшины"
+          }
+        }
+      },
+      "q_spore_tide": {
+        "title": "Против споровой волны",
+        "text": "Бальзам держит Рощу, но порча с каждыми сумерками сильнее давит на глубь. Ещё двенадцать осквернённых должны обрести покой, прежде чем собиратели вернут свои северные кольца, {playerName}.",
+        "completion": "Северные кольца этой ночью снова поют. Тихо, но поют.",
+        "objectives": {
+          "0": {
+            "label": "Осквернённый спорёныш упокоен"
+          }
+        }
+      },
+      "q_sunken_court": {
+        "title": "Затонувший двор",
+        "text": "Брин прочла сердца верно: разрыв идёт через старый двор на востоке, и его стражи пробудились неправильно. Их строили защищать печать; теперь они сокрушат всякого, кто приблизится. Убери восьмерых из руин.",
+        "completion": "Восемь стражей утихли. Я помню, как их поднимали, {playerName}. Не удивляйся: Лощина долго хранит своих хранителей.",
+        "objectives": {
+          "0": {
+            "label": "Древний страж утихомирен"
+          }
+        }
+      },
+      "q_wardens_echoes": {
+        "title": "Отголоски Смотрителя",
+        "text": "Хозяин умолк, но стражи двора повторяют его последний приказ, как эхо, что не желает стихать. Пока печать не вернётся на место, они будут просыпаться снова и снова, {playerName}. Утихомирь ещё десятерых, чтобы каменщики добрались до печатного камня.",
+        "completion": "Эхо с каждым разом всё слабее. Скоро во дворе останутся лишь ветер и плющ, как и положено руинам.",
+        "objectives": {
+          "0": {
+            "label": "Древний страж утихомирен"
+          }
+        }
+      },
+      "q_waking_warden": {
+        "title": "Пробудившийся Смотритель",
+        "text": "Двор затих, но его хозяин нет. Смотритель, держащий печать, пробудился искажённым, и пока он стоит, печать не срастить. Легко он не падёт; возьми друга, если найдёшь одного, {playerName}. Возьми двоих, если найдёшь двоих.",
+        "completion": "Колокол его голоса умолк. Я почувствовала это отсюда, будто с целой долины сняли тяжесть.",
+        "objectives": {
+          "0": {
+            "label": "Пробудившийся Смотритель повержен"
+          }
+        }
+      },
+      "q_seal_restored": {
+        "title": "Печать восстановлена",
+        "text": "Отнеси печать Смотрителя к печатному камню в сердце двора и вложи её туда, откуда её выбили. Тогда Лощина начнёт исцеляться, а ты, {playerName}, совершишь то, чего никто из вашего рода не совершал.",
+        "completion": "Я почувствовала, как она сомкнулась, мягко, как сумерки. Лощина помнит своих друзей, {playerName}. Как бы далеко ты ни странствовал, под великим древом для тебя всегда будет гореть огонёк.",
+        "objectives": {
+          "0": {
+            "label": "Печать возвращена в печатный камень"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Утонувший хор",
         "text": "Бродяги действуют не одни. Среди них ходят Утонувшие служители — культ, что затонул вместе с храмом, всё ещё в истлевших облачениях, всё ещё поющий молитву с прибрежных скал. Заставь умолкнуть восьмерых из них и принеси мне шесть подношений, что они несут. Хочу знать, что они задумали поднести своей богине.",
@@ -10099,6 +10978,9 @@ export const ru_RU: EnTranslations = {
           },
           "10": {
             "label": "Свиное поле"
+          },
+          "11": {
+            "label": "Коса Дальнего Берега"
           }
         }
       },
@@ -10165,6 +11047,285 @@ export const ru_RU: EnTranslations = {
           },
           "9": {
             "label": "Святилище Могильного Вирма"
+          }
+        }
+      },
+      "veiled_hollow": {
+        "name": "Сокрытая лощина",
+        "welcome": "Воздух гудит от древней магии. Найдите хранительницу Сэльвин под великим древом Элдерглима.",
+        "pois": {
+          "0": {
+            "label": "Элдерглим"
+          },
+          "1": {
+            "label": "Сумеречная пещера"
+          },
+          "2": {
+            "label": "Сумеречная смотровая площадка"
+          },
+          "3": {
+            "label": "Древняя роща"
+          },
+          "4": {
+            "label": "Котловина Звездопада"
+          },
+          "5": {
+            "label": "Затонувший двор"
+          },
+          "6": {
+            "label": "Хрустальные отмели"
+          },
+          "7": {
+            "label": "Мерцающая глубь"
+          }
+        }
+      },
+      "drakelands": {
+        "name": "Земли Драконов",
+        "welcome": "Горячий ветер несётся с пустошей. Драконы кружат над Дрейкмо, а в дюнах горят костры троллей.",
+        "pois": {
+          "0": {
+            "label": "Змеиный дозор"
+          },
+          "1": {
+            "label": "Привратный лес"
+          },
+          "2": {
+            "label": "Пепельные дюны"
+          },
+          "3": {
+            "label": "Тролльмут"
+          },
+          "4": {
+            "label": "Кровостеклянные поля"
+          },
+          "5": {
+            "label": "Кальдера Дрейкмо"
+          }
+        }
+      },
+      "frostveil": {
+        "name": "Морозный Предел",
+        "welcome": "Снег глотает каждый звук. Под танцующим сиянием сам холод кажется живым.",
+        "pois": {
+          "0": {
+            "label": "Ледяная Мантия"
+          },
+          "1": {
+            "label": "Снеговая Тропа"
+          },
+          "2": {
+            "label": "Ледниковое озеро"
+          },
+          "3": {
+            "label": "Ступени Сияния"
+          },
+          "4": {
+            "label": "Дрожащая топь"
+          },
+          "5": {
+            "label": "Воющие террасы"
+          }
+        }
+      },
+      "amberfall": {
+        "name": "Янтарная Падь",
+        "welcome": "Каждый лист здесь горит золотом и багрянцем, но ни один не падает. Фонари Лантанмира зажжены для тебя.",
+        "pois": {
+          "0": {
+            "label": "Лантанмир"
+          },
+          "1": {
+            "label": "Золотая Проталина"
+          },
+          "2": {
+            "label": "Золочёный сад"
+          },
+          "3": {
+            "label": "Жатвенная лощина"
+          },
+          "4": {
+            "label": "Великое озеро"
+          },
+          "5": {
+            "label": "Клёновый взгорок"
+          },
+          "6": {
+            "label": "Кренящийся монолит"
+          }
+        }
+      },
+      "willowfen": {
+        "name": "Ивовая Топь",
+        "welcome": "Над топью гудят стрекозы и пчёлы. Перейди мост в Бриджмир и дай ногам отдых.",
+        "pois": {
+          "0": {
+            "label": "Бриджмир"
+          },
+          "1": {
+            "label": "Янтарные Ступени"
+          },
+          "2": {
+            "label": "Кувшинковые мхи"
+          },
+          "3": {
+            "label": "Светлые бочаги"
+          },
+          "4": {
+            "label": "Плакучая заводь"
+          },
+          "5": {
+            "label": "Дремотные отмели"
+          }
+        }
+      },
+      "nightbloom": {
+        "name": "Ночецветье",
+        "welcome": "За Ночными Вратами грезит сам воздух. Иди по цветочному свету к Лунному Приюту и не пропусти спящий мир, что висит в небе.",
+        "pois": {
+          "0": {
+            "label": "Лунный Приют"
+          },
+          "1": {
+            "label": "Ночные Врата"
+          },
+          "2": {
+            "label": "Лунный Колодец"
+          },
+          "3": {
+            "label": "Сумеречное Поле"
+          },
+          "4": {
+            "label": "Стоячий Дозор"
+          },
+          "5": {
+            "label": "Курган Неспящего"
+          }
+        }
+      },
+      "wraithwood": {
+        "name": "Призрачная Чаща",
+        "welcome": "Кроны смыкаются над дорогой, как крышка гроба. Держись фонарей Гэллоумира, и если лес позовёт тебя по имени, не отвечай.",
+        "pois": {
+          "0": {
+            "label": "Гэллоумир"
+          },
+          "1": {
+            "label": "Вороньи Врата"
+          },
+          "2": {
+            "label": "Вдовья Чаща"
+          },
+          "3": {
+            "label": "Висельная Поляна"
+          },
+          "4": {
+            "label": "Часовня Скорбного Камня"
+          },
+          "5": {
+            "label": "Поляна Ловчего"
+          }
+        }
+      },
+      "palmreach": {
+        "name": "Пальмовый Берег",
+        "welcome": "Тёплый песок, громкие птицы и джунгли, пожирающие горизонт. Дрифтхейвен держит для тебя костёр на берегу.",
+        "pois": {
+          "0": {
+            "label": "Дрифтхейвен"
+          },
+          "1": {
+            "label": "Заросшее Устье"
+          },
+          "2": {
+            "label": "Пальмовая Коса"
+          },
+          "3": {
+            "label": "Изумрудная Чаща"
+          },
+          "4": {
+            "label": "Лианопад"
+          },
+          "5": {
+            "label": "Сапфировая Лагуна"
+          },
+          "6": {
+            "label": "Затонувший Идол"
+          }
+        }
+      },
+      "evergarden": {
+        "name": "Вечный Сад",
+        "welcome": "Кто-то до сих пор подстригает живые изгороди, хотя садовника не видели уже сто лет. Берегись лабиринта: он тоже следит за тобой.",
+        "pois": {
+          "0": {
+            "label": "Хеджвик"
+          },
+          "1": {
+            "label": "Садовые Врата"
+          },
+          "2": {
+            "label": "Аллея Статуй"
+          },
+          "3": {
+            "label": "Дикие Розы"
+          },
+          "4": {
+            "label": "Лепестковый Пруд"
+          },
+          "5": {
+            "label": "Великий Лабиринт"
+          },
+          "6": {
+            "label": "Фонтанный Двор"
+          }
+        }
+      },
+      "galecrest": {
+        "name": "Гейлкрест",
+        "welcome": "Ветер здесь не стихал ни разу, и Старый Маяк ни разу не гас. Викхарбор просит лишь об одном: закрывайте за собой дверь таверны.",
+        "pois": {
+          "0": {
+            "label": "Викхарбор"
+          },
+          "1": {
+            "label": "Ветровой Проход"
+          },
+          "2": {
+            "label": "Воющие Холмы"
+          },
+          "3": {
+            "label": "Старый Маяк"
+          },
+          "4": {
+            "label": "Отвесный Срез"
+          },
+          "5": {
+            "label": "Поля Кораблекрушений"
+          },
+          "6": {
+            "label": "Зеркальное Озеро"
+          }
+        }
+      },
+      "farshore_isle": {
+        "name": "Дальний Берег",
+        "welcome": "Пройди по песчаной косе, и колокол Чаячьей Гавани отыщет тебя раньше, чем сам город. Прорыв разверзается без предупреждения, и редут держит свой берег против всего, что через него хлещет. Они уже давно ждут кого-то вроде тебя.",
+        "pois": {
+          "0": {
+            "label": "Чаячья Гавань"
+          },
+          "1": {
+            "label": "Пристань"
+          },
+          "2": {
+            "label": "Дозорный Луг"
+          },
+          "3": {
+            "label": "Расколотые Утёсы"
+          },
+          "4": {
+            "label": "Поля Разломов"
           }
         }
       }

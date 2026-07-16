@@ -58,6 +58,7 @@
     "ops:cpu-monitor": "node scripts/prod_cpu_monitor.mjs",
     "feel:smoke": "node scripts/feel_smoke.mjs",
     "asset:budget": "node scripts/asset_budget.mjs",
+    "assets:mapbg": "node scripts/build_map_backgrounds.mjs",
     "assets:items": "node scripts/convert_item_icons_webp.mjs",
     "assets:skills": "node scripts/convert_skill_icons_webp.mjs",
     "assets:deeds": "node scripts/convert_deed_icons_webp.mjs",

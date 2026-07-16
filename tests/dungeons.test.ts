@@ -6,7 +6,14 @@
 import { describe, expect, it } from 'vitest';
 import { HEROIC_DUNGEON_TUNING, HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { HEROIC_BOSS_LOOT } from '../src/sim/content/heroic_loot';
-import { DUNGEON_X_THRESHOLD, DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
+import {
+  BUILTIN_WORLD,
+  DUNGEON_X_THRESHOLD,
+  DUNGEONS,
+  ITEMS,
+  instanceOrigin,
+  MOBS,
+} from '../src/sim/data';
 import { spawnNythraxisAdds } from '../src/sim/encounters/nythraxis';
 import {
   enterDungeon,
@@ -24,13 +31,30 @@ import {
   type MobTemplate,
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
+  type WorldContent,
 } from '../src/sim/types';
 
 type AnySim = Sim & Record<string, any>;
 type AnyEntity = Entity & Record<string, any>;
 
+// Dungeon doors, instance slots, and instance mobs all spawn from DUNGEON_LIST
+// (data), not from WorldContent, and no assertion here reads ambient overworld
+// content, so strip camps/npcs/ground objects to keep each Sim and tick cheap
+// (the dot_final_tick subsystem-world pattern).
+const DUNGEON_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeSim(seed = 99): AnySim {
-  return new Sim({ seed, playerClass: 'warrior', noPlayer: true }) as AnySim;
+  return new Sim({
+    seed,
+    playerClass: 'warrior',
+    noPlayer: true,
+    world: DUNGEON_TEST_WORLD,
+  }) as AnySim;
 }
 
 function teleport(sim: AnySim, e: AnyEntity, x: number, z: number): void {
@@ -1295,6 +1319,7 @@ describe('dungeons: heroic daily lockouts', () => {
       noPlayer: true,
       lockoutNowMs: () => now,
       raidResetMs: () => now + 24 * 3600 * 1000,
+      world: DUNGEON_TEST_WORLD,
     }) as AnySim;
     sim.utcDay = '2026-07-12';
     const pid = sim.addPlayer('warrior', 'Raider');

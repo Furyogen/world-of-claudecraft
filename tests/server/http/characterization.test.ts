@@ -30,9 +30,6 @@ import { goldenContentTypeMismatch } from './content_type_consistency';
 // serves an empty (deterministic) payload.
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase3';
 
-// routeHttpRequest is synchronous fire-and-forget (void handleApi(...)), so the
-// dispatcher must poll res.writableEnded before the captured triple is readable.
-const MAX_POLL_TICKS = 5000;
 // Where this surface's goldens live: tests/server/fixtures/main/.
 const FIXTURE_DIR = `${__dirname}/../fixtures/main`;
 
@@ -53,13 +50,8 @@ function clearDiscordConfigEnv(): void {
 
 async function loadDispatch(): Promise<Dispatch> {
   const main = await import('../../../server/main');
-  return async (req, res) => {
+  return (req, res) => {
     main.routeHttpRequest(req, res);
-    let ticks = 0;
-    while (!(res as unknown as { writableEnded: boolean }).writableEnded) {
-      if (ticks++ > MAX_POLL_TICKS) throw new Error('response never ended');
-      await new Promise((r) => setImmediate(r));
-    }
   };
 }
 

@@ -104,6 +104,7 @@
     /* overworld world-map window (resolved by map_window_painter.ts via
        getComputedStyle: a 2D canvas context cannot read a CSS var directly).
        Exact pre-existing values from the inline updateMapWindow/drawMapDetail. */
+    --color-map-ocean: #142c54;
     --color-map-label: #ffe9a0;
     --color-map-outline: #000;
     --color-map-portal-dot: #c084ff;

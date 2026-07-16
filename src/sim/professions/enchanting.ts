@@ -4,9 +4,10 @@
 // abstract). An enchanted piece is a fresh, non-stacking instanced copy
 // (types.ts ItemInstancePayload.rolled.stats), so it survives equip/unequip
 // (src/sim/items.ts) and stays a distinct good, separate from a plain copy of
-// the same item id. sellItem/discardItem/trade's drop arm now prefer a
-// fungible copy over this one (items.ts removePreferFungible), but market
-// listing, mail, and trade do not yet carry the instance payload end to end
+// the same item id. sellItem/discardItem prefer a fungible copy over this one
+// (items.ts removePreferFungible); trade refuses instanced copies outright
+// (offers are gated on countFungibleItem, social/trade.ts). Market listing,
+// mail, and trade do not yet carry the instance payload end to end
 // (#1165-style gap): a fully "tradeable good" is a known follow-up, not yet
 // true here.
 //

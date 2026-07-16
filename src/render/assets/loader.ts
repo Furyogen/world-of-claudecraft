@@ -107,31 +107,100 @@ export function releaseGltf(url: string): void {
   gltfCache.delete(assetUrl(url));
 }
 
+// One shared decode worker (created lazily): fetch + RGBE parse of an 8MB 2k
+// HDRI is over a second of pure CPU, a measured full-frame stall every time
+// zone streaming brought in a new biome's sky. Requests are matched by id;
+// the pixel buffer transfers back zero-copy.
+let hdrWorker: Worker | null = null;
+let hdrWorkerSeq = 0;
+const hdrWorkerPending = new Map<
+  number,
+  (r: import('./hdr_decode_worker').HdrDecodeResponse) => void
+>();
+function hdrDecodeInWorker(url: string): Promise<import('./hdr_decode_worker').HdrDecodeResponse> {
+  if (!hdrWorker) {
+    try {
+      hdrWorker = new Worker(new URL('./hdr_decode_worker.ts', import.meta.url), {
+        type: 'module',
+      });
+    } catch {
+      return Promise.resolve({ id: 0, ok: false, error: 'worker unavailable' });
+    }
+    hdrWorker.onmessage = (e: MessageEvent<import('./hdr_decode_worker').HdrDecodeResponse>) => {
+      const pending = hdrWorkerPending.get(e.data.id);
+      if (pending) {
+        hdrWorkerPending.delete(e.data.id);
+        pending(e.data);
+      }
+    };
+    // A worker-level failure (script load, uncaught throw) must never strand
+    // the callers: fail every pending decode so loadHdr's fallback path runs.
+    hdrWorker.onerror = () => {
+      for (const [id, resolve] of hdrWorkerPending) {
+        hdrWorkerPending.delete(id);
+        resolve({ id, ok: false, error: 'hdr decode worker error' });
+      }
+    };
+  }
+  const id = ++hdrWorkerSeq;
+  return new Promise((resolve) => {
+    hdrWorkerPending.set(id, resolve);
+    hdrWorker?.postMessage({ id, url } satisfies import('./hdr_decode_worker').HdrDecodeRequest);
+  });
+}
+
+// The exact texture configuration RGBELoader.load applies for the HalfFloat/
+// Float types it produces (three/examples RGBELoader onLoadCallback), plus the
+// equirect mapping loadHdr always set. Keep in lockstep with the fallback path
+// below, which still routes through RGBELoader.load itself.
+function finishHdrTexture(tex: THREE.DataTexture): THREE.DataTexture {
+  tex.colorSpace = THREE.LinearSRGBColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.flipY = true;
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.needsUpdate = true;
+  return tex;
+}
+
 /** Equirectangular Radiance .hdr for IBL / sky sampling (HalfFloat). */
 export function loadHdr(url: string): Promise<THREE.DataTexture> {
   const resolved = assetUrl(url);
   let p = hdrCache.get(resolved);
   if (!p) {
     const startedAt = assetLoadStarted();
-    p = scheduleLoad(
-      hdrQueue,
-      () =>
-        new Promise<THREE.DataTexture>((resolve, reject) => {
-          new RGBELoader().load(
-            resolved,
-            (tex) => {
-              tex.mapping = THREE.EquirectangularReflectionMapping;
-              recordAssetLoad('hdr', resolved, startedAt);
-              resolve(tex);
-            },
-            undefined,
-            () => {
-              recordAssetLoad('hdr', resolved, startedAt, true);
-              reject(new Error(`hdr load failed: ${url}`));
-            },
-          );
-        }),
-    );
+    p = scheduleLoad(hdrQueue, async () => {
+      // Decode off-thread when the host has workers (the game client);
+      // plain-Node tests and exotic hosts fall back to the loader path.
+      if (typeof Worker !== 'undefined') {
+        const decoded = await hdrDecodeInWorker(resolved);
+        if (decoded.ok && decoded.data && decoded.width && decoded.height) {
+          const pixels = decoded.data as unknown as Uint16Array<ArrayBuffer>;
+          const tex = new THREE.DataTexture(pixels, decoded.width, decoded.height);
+          tex.type = decoded.type as THREE.TextureDataType;
+          finishHdrTexture(tex);
+          recordAssetLoad('hdr', resolved, startedAt);
+          return tex;
+        }
+        // fall through to the main-thread loader on a worker failure
+      }
+      return new Promise<THREE.DataTexture>((resolve, reject) => {
+        new RGBELoader().load(
+          resolved,
+          (tex) => {
+            tex.mapping = THREE.EquirectangularReflectionMapping;
+            recordAssetLoad('hdr', resolved, startedAt);
+            resolve(tex);
+          },
+          undefined,
+          () => {
+            recordAssetLoad('hdr', resolved, startedAt, true);
+            reject(new Error(`hdr load failed: ${url}`));
+          },
+        );
+      });
+    });
     hdrCache.set(resolved, p);
   }
   return p;

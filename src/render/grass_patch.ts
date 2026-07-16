@@ -88,7 +88,7 @@ function grayTuftTexture(blades: number): THREE.CanvasTexture {
     grad.addColorStop(0, `rgba(${root},${root},${root},0.9)`);
     grad.addColorStop(1, `rgba(${tip},${tip},${tip},0.9)`);
     ctx.strokeStyle = grad;
-    ctx.lineWidth = 1.5 + Math.random();
+    ctx.lineWidth = 1.0 + Math.random() * 0.8; // finer blades read as grass, not straps
     ctx.beginPath();
     ctx.moveTo(x, 64);
     ctx.quadraticCurveTo(x + sway * 0.4, 64 - h * 0.6, x + sway, 64 - h);
@@ -106,14 +106,16 @@ function parts(): { geo: THREE.BufferGeometry; mat: THREE.Material } {
   if (!sharedGeo || !sharedMat) {
     // The grass ring's lush tuft card: two crossed quads seated on y = 0.
     const lush = !GFX.leanFoliage;
-    const quad = new THREE.PlaneGeometry(lush ? 1.45 : 1.1, lush ? 0.9 : 0.7);
-    quad.translate(0, lush ? 0.42 : 0.35, 0);
+    // Knee-high meadow tufts: the old 1.45x0.9 cards at full tuft scale stood
+    // chest-high next to the ~2yd player and read as shrubs, not grass.
+    const quad = new THREE.PlaneGeometry(lush ? 1.15 : 0.9, lush ? 0.62 : 0.5);
+    quad.translate(0, lush ? 0.29 : 0.24, 0);
     const quad2 = quad.clone().rotateY(Math.PI / 2);
     sharedGeo = mergeGeometries([quad, quad2]);
     sharedMat = configureMaskedDoubleSidedVegetationMaterial(
       lush
         ? new THREE.MeshStandardMaterial({
-            map: grayTuftTexture(30),
+            map: grayTuftTexture(44),
             alphaTest: 0.3,
             roughness: 0.9,
           })
@@ -167,7 +169,7 @@ export function buildGrassPatchModel(
   for (let i = 0; i < count; i++) {
     const ang = rnd() * Math.PI * 2;
     const rad = Math.sqrt(rnd()) * radius;
-    const tuftScale = 0.55 + rnd() * 1.1; // the grass ring's lush size range
+    const tuftScale = 0.5 + rnd() * 0.6; // knee-high spread; placement scale multiplies
     q.setFromAxisAngle(up, rnd() * Math.PI * 2);
     m.compose(
       v.set(Math.sin(ang) * rad, 0, Math.cos(ang) * rad),

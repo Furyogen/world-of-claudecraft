@@ -34,6 +34,7 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   moonscale_saber: 'sword',
   deathless_greatblade: 'sword',
   final_argument_greatblade: 'sword',
+  veilsteel_blade: 'sword',
   // Daggers
   rusty_dagger: 'dagger',
   keen_dirk: 'dagger',
@@ -60,6 +61,7 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   drowned_choir_fang: 'dagger',
   mistcallers_fang: 'dagger',
   first_blood_razor: 'dagger',
+  duskfang_dirk: 'dagger',
   // Maces
   training_mace: 'mace',
   bristleback_maul: 'mace',
@@ -100,6 +102,7 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   craghorn_staff: 'staff',
   lunar_tide_greatstaff: 'staff',
   emberglass_warstaff: 'staff',
+  gleamwood_stave: 'staff',
   // Wands
   drowned_tide_scepter: 'wand',
   palecoil_rod: 'wand',
@@ -118,6 +121,11 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   // Polearms (no skins target these)
   tidereaver_gaff: 'polearm',
   fen_reaver_glaive: 'polearm',
+  // Scorching Wastes (custom-map endgame zone loot)
+  duneforged_warblade: 'sword',
+  glasscut_dirk: 'dagger',
+  sunbleached_staff: 'staff',
+  emberglass_scepter: 'wand',
 };
 
 /**

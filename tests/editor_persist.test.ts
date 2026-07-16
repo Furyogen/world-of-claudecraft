@@ -42,6 +42,17 @@ describe('CustomMap build + projection', () => {
     expect(w.terrainEdits).toHaveLength(1);
   });
 
+  it('round-trips ambient decoration exclusions into playtest content', () => {
+    const map = newCustomMap('M', 'id', 0);
+    map.decorationExclusions = ['tree:10.000:20.000', 'tree2:-3.250:4.500'];
+    const restored = parseMap(serializeMap(map));
+    if (!restored) throw new Error('map failed to restore');
+    expect(restored.decorationExclusions).toEqual(map.decorationExclusions);
+    expect(customMapToWorldContent(restored).decorationExclusions).toEqual(
+      map.decorationExclusions,
+    );
+  });
+
   it('newFlatCustomMap starts from empty content, empty props, and flat terrain', () => {
     const map = newFlatCustomMap('Flat', 'flat-id', 1000);
     const w = customMapToWorldContent(map);

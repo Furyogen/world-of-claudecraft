@@ -665,6 +665,45 @@ export interface ItemInstancePayload {
   rolled?: { quality?: string; stats?: Record<string, number> };
   /** Player id (Entity id) this specific copy is bound to. */
   boundTo?: number;
+  /** Long-term Rift gear progression. `rolled.stats` is the authoritative
+   * aggregate bonus consumed by recalcPlayerStats; this record explains how it
+   * was earned and lets forge operations rebuild it deterministically. */
+  rift?: {
+    sourceEventId: string;
+    tier: RiftTier;
+    power: number;
+    upgradeLevel: number;
+    maxUpgradeLevel: number;
+    baseStats: Record<string, number>;
+    enchant?: { stat: string; value: number };
+    gemSlots: number;
+    gems: string[];
+  };
+}
+
+// A shallow `{ ...instance }` aliases the mutable `charges`/`rolled.stats`/`rift`
+// maps between a live payload and a serialized/loaded copy: decrementing a charge
+// on one would silently mutate the other. Deep-clones at every save/load boundary
+// instead. Shared by cloneInvSlot below and the equipped-instance map (an
+// enchanted piece's payload, src/sim/professions/enchanting.ts, or a Rift gear
+// piece's, src/sim/rift/progression.ts), so all copy through the exact same rules.
+export function cloneItemInstancePayload(src: ItemInstancePayload): ItemInstancePayload {
+  const instance: ItemInstancePayload = { ...src };
+  if (src.charges) instance.charges = { ...src.charges };
+  if (src.rolled)
+    instance.rolled = {
+      ...src.rolled,
+      ...(src.rolled.stats && { stats: { ...src.rolled.stats } }),
+    };
+  if (src.rift) {
+    instance.rift = {
+      ...src.rift,
+      baseStats: { ...src.rift.baseStats },
+      ...(src.rift.enchant && { enchant: { ...src.rift.enchant } }),
+      gems: [...src.rift.gems],
+    };
+  }
+  return instance;
 }
 
 export interface InvSlot {
@@ -680,25 +719,9 @@ export interface InvSlot {
   slot?: number;
 }
 
-// A shallow `{ ...instance }` aliases the mutable `charges`/`rolled.stats` maps
-// between a live payload and a serialized/loaded copy: decrementing a charge on
-// one would silently mutate the other. Deep-clones at every save/load boundary
-// instead. Shared by cloneInvSlot below and the equipped-instance map (an
-// enchanted piece's payload, src/sim/professions/enchanting.ts), so both copy
-// through the exact same rules.
-export function cloneItemInstancePayload(src: ItemInstancePayload): ItemInstancePayload {
-  const instance: ItemInstancePayload = { ...src };
-  if (src.charges) instance.charges = { ...src.charges };
-  if (src.rolled)
-    instance.rolled = {
-      ...src.rolled,
-      ...(src.rolled.stats && { stats: { ...src.rolled.stats } }),
-    };
-  return instance;
-}
-
 // A shallow `{ ...slot }` aliases `instance` between the live slot and a
-// serialized/loaded copy; see cloneItemInstancePayload above for why that is
+// serialized/loaded copy; see cloneItemInstancePayload above (shared with the
+// equipped-instance map, src/sim/professions/enchanting.ts) for why that is
 // unsafe and what this clones instead.
 export function cloneInvSlot<T extends InvSlot>(slot: T): T {
   if (!slot.instance) return { ...slot };
@@ -800,6 +823,8 @@ export type MobFamily =
   | 'elemental'
   | 'dragonkin'
   | 'demon'
+  | 'kobold'
+  | 'murloc'
   | 'reptile';
 export type PetMode = 'passive' | 'defensive' | 'aggressive';
 export type PetRole = 'melee_tank' | 'ranged_dps';
@@ -1735,12 +1760,50 @@ export interface DungeonDef {
   leaveText: string;
 }
 
-export type BiomeId = 'vale' | 'marsh' | 'peaks' | 'beach' | 'desert' | 'volcano' | 'cave';
+export type BiomeId =
+  | 'vale'
+  | 'marsh'
+  | 'peaks'
+  | 'beach'
+  | 'desert'
+  | 'volcano'
+  | 'cave'
+  | 'dusk'
+  | 'ember'
+  | 'frost'
+  | 'amber'
+  | 'fen'
+  | 'night'
+  | 'haunt'
+  | 'jungle'
+  | 'garden'
+  | 'gale';
 
 export interface ZoneDef {
   id: string;
   name: string;
+  /** Natural Rift portals may only select zones explicitly opted in. */
+  riftPortalEligible?: boolean;
+  /** Relative C/B/A/S weights for portals in this zone. Missing/zero ranks are
+   * never selected. Kept on content data so adding/reordering zones cannot
+   * silently change endgame difficulty. */
+  riftTierWeights?: Partial<Record<RiftTier, number>>;
   zMin: number;
+  /**
+   * Optional east-west extent (a world GRID column). Omitted = the original
+   * full-width strip [-WORLD_SIZE/2, WORLD_SIZE/2]. Zones are rectangles;
+   * zoneAt(x, z) picks by rect, so side-by-side columns can share a z band
+   * and meet at a real walkable border, exactly like the north passes.
+   */
+  xMin?: number;
+  xMax?: number;
+  /**
+   * Road passes through a COLUMN border (a shared vertical edge with the
+   * neighbor east or west), the sideways twin of southPassX: the z where
+   * the border ridge opens. Only read when such an edge exists.
+   */
+  eastPassZ?: number;
+  westPassZ?: number;
   zMax: number;
   levelRange: [number, number];
   biome: BiomeId;
@@ -1754,6 +1817,35 @@ export interface ZoneDef {
   pois: { x: number; z: number; label: string; id?: string }[];
   welcome: string; // chat-log hint shown on first entry
   welcomeQuestId?: string; // only show the hint while this quest is available
+  // The zone's southern border ridge has NO road pass and is raised past the
+  // climbable slope: the zone is reachable only by portal (see world.ts).
+  sealedSouthBorder?: boolean;
+  // Where the road pass through the zone's SOUTHERN border ridge sits (x).
+  // Defaults to 0 (the original zones' central road); the Drakelands set it
+  // to the Pale Causeway's head so the Wyrmgate opens where the road arrives.
+  southPassX?: number;
+}
+
+// One end of a paired overworld portal. Walking within the pair's trigger
+// radius of this side teleports the player to the OTHER side's landing;
+// `landing` is where a traveler coming out of this side arrives, placed
+// outside this side's own trigger radius so arrivals never bounce back.
+export interface PortalSide {
+  x: number;
+  z: number;
+  landing: { x: number; z: number; facing: number };
+}
+
+// A two-way positional portal between overworld locations (the Veiled Hollow
+// cave). Purely data: src/sim/portals.ts checks these in the tick, in every
+// host, with no entities and no rng.
+export interface PortalDef {
+  id: string;
+  a: PortalSide;
+  b: PortalSide;
+  radius: number;
+  enterText: string; // flavor line for a -> b
+  leaveText: string; // flavor line for b -> a
 }
 
 export interface BuildingDef {
@@ -1788,6 +1880,9 @@ export interface ZonePropsDef {
   // delveId resolves to the delve's localized name at render time (the carved
   // entrance sign), so the marker carries no hardcoded English label.
   delveMarkers?: { x: number; z: number; delveId: string }[];
+  // Hand-placed giant trees (the Eldergleam centerpiece): solid trunk
+  // colliders here, rendered by render/realm_flora.ts from the same record.
+  greatTrees?: { x: number; z: number; r: number }[];
 }
 
 export function emptyZoneProps(): ZonePropsDef {
@@ -1902,6 +1997,7 @@ export interface Entity {
   // Lets a jump clear fences for the whole arc, independent of slope.
   jumping: boolean;
   fallStartY: number;
+  fatigueTicks: number; // ticks spent past the open-sea fatigue line (sim/fatigue.ts)
   hp: number;
   maxHp: number;
   resource: number;
@@ -2069,6 +2165,9 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  /** Dev "smite" mode: this player's damage one-shots any mob it hits. Toggled by
+   *  the dev command /dev smite (gated by ALLOW_DEV_COMMANDS); never set otherwise. */
+  oneShot?: boolean;
   // [dev] /dev god cheat state, kept OFF the production gm flag so it never touches a
   // real game master (who could otherwise deal 100x or have their invuln toggled).
   devGod?: boolean;
@@ -2104,6 +2203,39 @@ export interface Entity {
   // object (ground interactable)
   objectItemId: string | null;
   dungeonId: string | null; // set on dungeon door/exit portals
+  // Procedural Rift portal: set on an overworld 'rift_portal' object so walking
+  // into it opens a freshly generated rift from this descriptor (see rift/runs.ts).
+  riftSeed?: number;
+  riftBaseLevel?: number;
+  // Stable identity of the shared natural Rift event. Two groups entering the
+  // same portal receive separate instances tied to this one race record.
+  // Absent on legacy/dev portals that are not global events.
+  riftEventId?: string;
+  // Rank of a world-spawned rift portal (rift/portals.ts); drives the rank badge
+  // both hosts render above the portal and the Heroic Mark payout on sealing.
+  // Absent on dev-spawned portals.
+  riftTier?: RiftTier;
+  // Sim time of the last "level too low" rift denial shown to this player, so
+  // standing inside the portal trigger radius does not spam the toast per tick.
+  riftDeniedAt?: number;
+  // Sim time of the last "the orb is sealed" nudge shown to this player at a
+  // dormant Blood Orb (authored citadel), throttled the same way.
+  riftOrbNoticeAt?: number;
+  // Walk-in portal grace after leaving a rift: until this sim time the player
+  // does not auto-enter portals, so being returned near the entry portal can
+  // never bounce them straight back in (clicking the portal still works).
+  riftReentryGraceUntil?: number;
+  // Locked glide heading while ice-sliding on a rift frost sheet (unit vector);
+  // both 0/undefined means not sliding. The slide advances a fixed step along this
+  // each tick, ignoring steering input, until a wall or the sheet edge stops it.
+  riftSlideDirX?: number;
+  riftSlideDirZ?: number;
+  // True while the ice slide is carrying the player: the renderer holds a frozen
+  // braced pose (no run cycle) so they read as gliding, not sprinting. Wired (`sld`).
+  riftSliding?: boolean;
+  // Cooldown gate (sim time) between rolling-boulder knockbacks, so a single pass
+  // shoves + chips once rather than every tick of overlap.
+  riftRollerUntil?: number;
   // misc
   dead: boolean;
   // Ghost/spirit state for the WoW-style death -> corpse-run -> resurrect loop.
@@ -2270,6 +2402,80 @@ export interface ReadyCheck {
   responses: Map<number, 'ready' | 'notready' | 'pending'>; // pid -> answer
 }
 
+// Structured, player-safe recovery telemetry. The sim captures both raw world
+// coordinates and content-local coordinates at invocation time so operators can
+// group repeated problem spots across separate instance slots. Stable codes only:
+// player-facing prose is assembled by the client i18n catalog.
+export type UnstuckAreaKind = 'overworld' | 'dungeon' | 'delve' | 'rift';
+
+export interface UnstuckArea {
+  kind: UnstuckAreaKind;
+  id: string;
+  instanceId?: string;
+  slot?: number;
+}
+
+export interface UnstuckPosition extends Vec3 {
+  localX: number;
+  localZ: number;
+}
+
+export type UnstuckBlockedReason =
+  | 'already_active'
+  | 'already_safe'
+  | 'cooldown'
+  | 'dead'
+  | 'ghost'
+  | 'jailed'
+  | 'combat'
+  | 'controlled'
+  | 'falling'
+  | 'moving'
+  | 'busy'
+  | 'spectating'
+  | 'competitive'
+  | 'trading'
+  | 'invalid_area';
+
+export type UnstuckCancelReason =
+  | 'moved'
+  | 'damaged'
+  | 'combat'
+  | 'busy'
+  | 'state_changed'
+  | 'disconnected';
+
+export type UnstuckEvent =
+  | { type: 'unstuck'; phase: 'started'; seconds: number }
+  | { type: 'unstuck'; phase: 'countdown'; seconds: number }
+  | { type: 'unstuck'; phase: 'blocked'; reason: UnstuckBlockedReason; seconds?: number }
+  | {
+      type: 'unstuck';
+      phase: 'cancelled';
+      reason: UnstuckCancelReason;
+      area: UnstuckArea;
+      origin: UnstuckPosition;
+      duration: number;
+    }
+  | {
+      type: 'unstuck';
+      phase: 'failed';
+      reason: 'no_safe_position';
+      area: UnstuckArea;
+      origin: UnstuckPosition;
+      duration: number;
+    }
+  | {
+      type: 'unstuck';
+      phase: 'completed';
+      reason: 'nearest_safe_position';
+      area: UnstuckArea;
+      origin: UnstuckPosition;
+      destination: UnstuckPosition;
+      duration: number;
+      distance: number;
+    };
+
 // `pid` (when present) marks a personal event that should only be delivered to
 // that player entity's owner; events without pid are world-visible.
 export type SimEvent = { pid?: number } & (
@@ -2330,6 +2536,7 @@ export type SimEvent = { pid?: number } & (
   | { type: 'comboPoint'; points: number }
   | { type: 'playerDeath' }
   | { type: 'respawn' }
+  | UnstuckEvent
   // itemId names the single item for buy/sell/buyback; it is omitted for the
   // bulk "sell all junk" sweep, which the client treats as a plain refresh signal.
   | { type: 'vendor'; action: 'buy' | 'sell' | 'buyback'; itemId?: string }
@@ -2666,6 +2873,63 @@ export type SimEvent = { pid?: number } & (
         | 'throttled'
         | 'not_at_hub';
     }
+  // Procedural Rift state, pushed to the entering player so the client can
+  // regenerate the current floor's geometry + visual style from the descriptor
+  // (the same pure generator the server ran). `active:false` clears it on leave.
+  // Text-free structured fields (like skinEvent/craftResult): the client renders
+  // its own localized floor label from name/themeName.
+  | {
+      type: 'riftState';
+      pid: number;
+      active: boolean;
+      eventId: string | null;
+      instanceId: number;
+      seed: number;
+      baseLevel: number;
+      floorIndex: number;
+      floorCount: number;
+      origin: { x: number; z: number };
+      contentId: string;
+      contentHash: string;
+      upgrade: import('./rift/types').RiftUpgradeManifest | null;
+      name: string;
+      themeName: string;
+      tier: RiftTier | null;
+    }
+  | {
+      type: 'riftRaceResult';
+      pid: number;
+      eventId: string;
+      outcome: 'won' | 'lost';
+      tier: RiftTier;
+      winnerNames: string[];
+      clearTime: number;
+      rewardMarks: number;
+    }
+  | {
+      type: 'riftRaceWorld';
+      eventId: string;
+      tier: RiftTier;
+      winnerNames: string[];
+      clearTime: number;
+    }
+  | {
+      type: 'riftForgeResult';
+      pid: number;
+      ok: boolean;
+      action: 'upgrade' | 'enchant' | 'socket';
+      itemId: string;
+      reason?:
+        | 'not_found'
+        | 'not_rift_gear'
+        | 'max_upgrade'
+        | 'insufficient_essence'
+        | 'invalid_stat'
+        | 'invalid_gem'
+        | 'sockets_full';
+      upgradeLevel?: number;
+      essenceSpent?: number;
+    }
   // Gather-node harvest outcome (#1729): a successful resource harvest emits
   // this so the client can play a gathering audio cue for the acting player.
   // Personal (carries pid), delivered only to the harvester. Emitted only on a
@@ -2720,11 +2984,29 @@ export interface PlacedAsset {
   z: number;
   rotY: number; // radians
   scale: number;
+  worldPropKind?: 'fence' | 'inn';
+  worldPropWidth?: number;
+  worldPropDepth?: number;
   // Circle collider radius in yards (already scaled), or absent/0 for walk-through.
   collideRadius?: number;
   // Footprint shape: absent = circle, 'square' = rotY-following OBB with
   // half-extents = collideRadius (see sim/colliders.ts).
   collideShape?: 'square';
+  // The maker hand-authored the radius/shape: keep the legacy footprint even
+  // when a baked per-asset collision entry exists for the model.
+  collideCustom?: boolean;
+  // Resolved hitboxes overriding the baked/generated set: hand-edited boxes
+  // (baked mode) or the fine "true collision" bake (mesh mode). Normalized
+  // model space; `ry` = per-box yaw on top of the placement's rotY.
+  hitboxes?: readonly {
+    x: number;
+    y: number;
+    z: number;
+    hx: number;
+    hy: number;
+    hz: number;
+    ry?: number;
+  }[];
   // Optional extra transform axes (the editor gizmo): visual-only tilts and
   // per-axis scale multipliers on top of the uniform scale. Absent = 0 / 1.
   rotX?: number;
@@ -2745,6 +3027,25 @@ export interface PlacedAsset {
   // Grass blade lightness [0, 1] and tufts per patch [1, 60]; absent = defaults.
   lum?: number;
   clump?: number;
+  // Generated rock (path 'procedural://rock') shape parameters: deterministic
+  // seed + generator sliders (noise amount, feature detail, sharpness, texture
+  // index). Absent on ordinary placements.
+  rockSeed?: number;
+  rockNoise?: number;
+  rockDetail?: number;
+  rockSharp?: number;
+  rockTex?: number;
+  // v3 rock params: vertical stretch, ground embed, ridged jaggedness, and a
+  // built-in terrain texture set key (render/terrain_texture_sets.ts) with
+  // its tile size in yards per repeat.
+  rockHeight?: number;
+  rockDepth?: number;
+  rockJag?: number;
+  rockTexId?: string;
+  rockTexTile?: number;
+  // Merged rock ridge (path 'procedural://rock-ridge'): the chain's nodes as
+  // anchor-relative offsets (girth radius in yards, height multiplier).
+  rockNodes?: { dx: number; dz: number; dy: number; r: number; h: number }[];
   // Material overrides (shader tweaks): albedo tint multiply, transparency,
   // emissive glow color + strength. Absent = the model's own materials.
   tint?: number;
@@ -2787,6 +3088,113 @@ export interface ColliderVolume {
   sizeZ: number; // box depth / plane depth
 }
 
+// One control point of a cave/tunnel centerline (editor Caves tool).
+// `y` is the ABSOLUTE floor height of the tunnel at this node; `radius` is the
+// half-width of the bore in yards. Consecutive nodes form a capsule-chain
+// corridor; src/sim/caves.ts owns all geometry math derived from these.
+export interface CaveNode {
+  x: number;
+  y: number;
+  z: number;
+  radius: number;
+}
+
+// A cave/tunnel (editor-authored, custom maps only). Pure data shared by sim
+// (ground sheets, wall confinement, camera clamp) and render (the standalone
+// tube mesh), exactly like HeightStamp: both sides sample the same analytic
+// functions in src/sim/caves.ts so what you walk on is what you see.
+//
+// The tube is TERRAIN-INDEPENDENT: its size and shape come only from the
+// authored nodes (never clamped, carved, or collapsed by the surrounding
+// ground). Openings into the terrain are authored separately as TerrainHole
+// cutouts the maker lines the cave up with.
+export interface CaveDef {
+  id: string;
+  nodes: CaveNode[];
+  // The base bore radius this cave was AUTHORED with (yards). Regenerating
+  // the bore (moving a rig node) reuses it, so a cave never silently changes
+  // girth because the Tunnel brush slider moved since. Absent (v1 docs) =
+  // the editor falls back to the live brush radius.
+  radius?: number;
+  // Bore multipliers (editor Cave panel sliders): width scales every node
+  // radius, height scales the interior clearance. Absent = 1 (v1 documents).
+  width?: number;
+  height?: number;
+  // Organic wobble [0,1] applied when the bore is (re)generated from its rig
+  // points: lateral path noise + radius variation. Absent = 0 (straight bore).
+  variance?: number;
+  // Floor bumps [0,1]: deterministic noise rolled into the WALKABLE floor
+  // (sim sheet + render mesh share sim/caves.ts caveFloorBumpAt), fading to
+  // zero at the walls. Absent = 0 (flat floor).
+  floorVariance?: number;
+  // Cosmetic spike density [0,1] for the interior mesh (render-only; the sim
+  // never collides with them). Absent = 0 (bare bore, v1 documents).
+  stalactites?: number;
+  stalagmites?: number;
+  // Spike size multiplier [0.3, 3] for the formations above. Absent = 1.
+  spikeSize?: number;
+  // Mouth toggles: whether each end of the tube is an OPEN entrance ring
+  // (walk-in mouth at exactly the authored node size) or a sealed rock cap.
+  // Absent = true (open) at both ends.
+  startOpen?: boolean;
+  endOpen?: boolean;
+  // Interior base-texture set key (render/terrain_texture_sets.ts): the detail
+  // map tiled over walls/floor. Absent = the default granite (Rock051). The
+  // Paint tool's vertex tinting layers on top either way, so a re-textured
+  // cave stays fully paintable.
+  tex?: string;
+  // Texture tile size in yards per repeat. Absent = 28 for a picked texture
+  // set, the legacy 5 for the stock granite.
+  texTile?: number;
+}
+
+// A spherical cutout through the terrain sheet (editor Hole tool): the ground
+// surface simply does not exist where it passes inside the sphere. Render
+// discards the surface there (a clean round rim on any slope) and movement
+// treats the missing sheet as either a drop into a cave below or a hard wall
+// (nothing to stand on). `y` anchors the sphere at the surface height captured
+// when the hole was punched, so re-sculpting nearby ground never smears it.
+export interface TerrainHole {
+  x: number;
+  y: number;
+  z: number;
+  radius: number;
+}
+
+// LEGACY (retired Patch tool): a disc where the old terrain-carving cave
+// layer was suppressed. Still parsed so old documents round-trip, but the
+// runtime ignores it ? the rebuilt cave system never carves terrain.
+export interface CavePatch {
+  x: number;
+  z: number;
+  radius: number;
+}
+
+// A fluid pool volume (lava/acid/spectral/water), resolved from a
+// 'fluid/<kind>' placement by sim/fluid_volumes.ts. An ellipse footprint
+// (half-axes, rotated by rotY) whose surface sits at terrainHeight(center) +
+// offsetY. Independent of the map-wide water level: the sim only reads it for
+// the submerged damage tick; the renderer draws the surface + effects.
+export type FluidKind = 'lava' | 'acid' | 'spectral' | 'water';
+export type FluidSchool = 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
+export interface FluidVolume {
+  kind: FluidKind;
+  x: number;
+  z: number;
+  rotY: number;
+  halfX: number;
+  halfZ: number;
+  offsetY: number;
+  hue: number; // degrees
+  lum: number; // 0..1
+  dps: number; // damage per second while submerged (0 = harmless)
+  school: FluidSchool;
+  fx: number; // FLUID_FX_* bits (fluid_volumes.ts)
+  glow: number; // emissive strength 0..1
+  lightColor: number;
+  lightIntensity: number;
+}
+
 // A coarse 2D biome paint grid (editor). Each cell holds a biome id (0=vale,
 // 1=marsh, 2=peaks) or 255 for unpainted. Where painted, it overrides both the
 // terrain SHAPE (sim, in shapeAt) and the ground COLOR (render). Absent for the
@@ -2814,6 +3222,17 @@ export interface CustomPaintSwatch {
   textureSha?: string;
   // Yards per texture repeat (default 8).
   tileSize?: number;
+  // Hue rotation in degrees (-180..180) and lightness shift (-1..1) applied
+  // on top of the swatch's base look; 0/absent paints exactly the base.
+  hueShift?: number;
+  light?: number;
+  // Built-in biome id (index into world.ts BIOME_BY_ID) this swatch is a
+  // hue/light variant of: painting re-bases like that biome instead of the
+  // flat-color path, so the variant keeps the stock biome's ground look.
+  baseBiome?: number;
+  // A user-saved tint copy: the biome sliders' auto-variant reuse skips it,
+  // so tweaking a built-in biome's sliders never mutates a saved swatch.
+  saved?: boolean;
 }
 
 // Map-authored music (game-client presentation only). Track ids are the
@@ -2824,6 +3243,39 @@ export interface MapMusic {
   zoneTrack?: string;
   // Rect areas with their own track; the smallest containing rect wins.
   areas?: { minX: number; minZ: number; maxX: number; maxZ: number; track: string }[];
+}
+
+// Map-authored positional "point sound": a looping sound-effect emitter placed
+// at a spot, audible within `radius` yards (spherical falloff) at up to `volume`
+// gain. Client-audio presentation only; `sound` is an SFX clip id (game/sfx
+// SFX_CLIPS) and an unknown/undecoded id is ignored at play time so documents
+// stay forward-compatible.
+export interface MapPointSound {
+  x: number;
+  z: number;
+  // Height above the terrain seat (yards) of the emitter.
+  y: number;
+  // SFX clip id to loop (see SFX_CLIPS in src/game/sfx.ts).
+  sound: string;
+  // Peak gain 0..1 at the emitter, before distance falloff.
+  volume: number;
+  // Falloff radius in yards: full at the centre, silent at/beyond this distance.
+  radius: number;
+}
+
+// Per-map authored scene lighting (render-only): the editor's Lighting tab
+// saved into the document, applied over the biome/day-night rig in playtest
+// and the editor alike. Absent = the shipped biome/day-night lighting.
+// Structurally identical to the render layer's EditorLightingProfile (the sim
+// stays render-free, so the shape is declared here too).
+export interface MapLighting {
+  sunIntensity: number;
+  sunColor: number; // 0xRRGGBB
+  hemiIntensity: number;
+  skyColor: number; // 0xRRGGBB
+  envScale: number;
+  sunAzimuthDeg: number;
+  sunElevationDeg: number;
 }
 
 // Map-authored ambient weather (render-only, presentation-only). Absent = the
@@ -2862,6 +3314,15 @@ export interface TerrainStyle {
 // registry (both, because terrain reaches the data by module global and the Sim
 // reaches it by config). CAMPS order is a determinism contract: append, never
 // reorder, since the Sim draws the shared Rng in array order.
+export type MapPresentationMode =
+  | 'blank'
+  | 'dungeon'
+  | 'temple'
+  | 'nythraxis'
+  | 'delve'
+  | 'sowfield'
+  | 'yumiMaze';
+
 export interface WorldContent {
   zones: ZoneDef[];
   camps: CampDef[];
@@ -2870,6 +3331,8 @@ export interface WorldContent {
   roads: { x: number; z: number }[][];
   props: ZonePropsDef;
   playerStart: { x: number; z: number };
+  /** Optional author-authored area used to spread new players across distinct positions. */
+  playerSpawnArea?: { minX: number; minZ: number; maxX: number; maxZ: number };
   // Heightfield edits applied inside terrainHeight(). Absent/empty for the
   // built-in world, so its heightfield stays byte-identical.
   terrainEdits?: HeightStamp[];
@@ -2882,8 +3345,34 @@ export interface WorldContent {
   // Editor-authored collision volumes (box/sphere block movement, plane raises
   // the floor); never rendered in playtest. Absent for the built-in world.
   colliderVolumes?: ColliderVolume[];
+  // Per-imported-asset baked collision boxes (normalized model space, keyed by
+  // the placement path / 'local|user/<sha>' id). Catalogue assets resolve into
+  // the generated table instead; see sim/asset_collision.ts.
+  assetCollision?: Record<
+    string,
+    readonly { x: number; y: number; z: number; hx: number; hy: number; hz: number }[]
+  >;
   // 2D biome paint overriding terrain shape (sim) and color (render).
   biomePaint?: BiomePaint;
+  // Caves/tunnels (editor Caves tool): standalone tube volumes, independent
+  // of the heightfield. Absent for the built-in world.
+  caves?: CaveDef[];
+  // Legacy patch discs (the retired Patch tool). Parsed for old documents but
+  // ignored at runtime: terrain is no longer carved, so there is nothing to
+  // patch. Absent = none.
+  cavePatches?: CavePatch[];
+  // Spherical cutouts through the terrain sheet (editor Hole tool). Absent
+  // for the built-in world, so its ground stays byte-identical.
+  holes?: TerrainHole[];
+  // Patch spheres restoring the ground inside hole cutouts (editor Patch hole
+  // mode): a patch beats every hole it overlaps. Absent = none.
+  holePatches?: TerrainHole[];
+  // Fluid pool volumes (lava/acid/...), projected from 'fluid/<kind>'
+  // placements. Sim reads the damage tick; render draws surfaces + effects.
+  fluids?: FluidVolume[];
+  // Map-wide water tint (hue degrees / lightness 0..1); absent = shipped blues.
+  waterHue?: number;
+  waterLum?: number;
   // Auto-texturing rule toggles (render-only; absent = all rules on).
   terrainStyle?: TerrainStyle;
   // Ambience animation speed (render-only): scales cosmetic world motion
@@ -2895,6 +3384,8 @@ export interface WorldContent {
   assetViewDistance?: number;
   // Ambient weather override (render-only; absent = the biome rule).
   weather?: MapWeather;
+  // Authored scene lighting (render-only; absent = biome/day-night rig).
+  lighting?: MapLighting;
   // Authored soundtrack (client presentation; absent = the biome rule).
   music?: MapMusic;
   // The map's sky: 'builtin:<id>' (bundled equirect) or 'custom:<sha256>'
@@ -2905,6 +3396,9 @@ export interface WorldContent {
   locations?: { name: string; minX: number; minZ: number; maxX: number; maxZ: number }[];
   // Editor-authored point lights (render-only; y is height above terrain).
   lights?: { x: number; z: number; y: number; color: number; intensity: number; range: number }[];
+  // Editor-authored positional point sounds (client audio only): each loops its
+  // SFX clip, attenuated to silence at `radius` yards. y is height above terrain.
+  pointSounds?: MapPointSound[];
   // Water surface height for this map; absent = the built-in WATER_LEVEL (-4.5).
   // Read through waterLevel() in src/sim/world.ts, never directly.
   waterLevel?: number;
@@ -2915,9 +3409,11 @@ export interface WorldContent {
   // Procedural terrain decorations (trees/rocks) are enabled by default. The
   // map editor's blank-flat template opts out so makers start from bare ground.
   decorationsMode?: 'empty';
+  // Stable keys of procedural decorations replaced by editable placements.
+  decorationExclusions?: string[];
   // Render/sim presentation defaults are enabled by default. 'blank' keeps only
   // the neutral terrain base and sky birds for new flat authoring worlds.
-  presentationMode?: 'blank';
+  presentationMode?: MapPresentationMode;
 }
 
 export interface SimConfig {
@@ -2934,6 +3430,13 @@ export interface SimConfig {
   // Offline worlds and parity traces keep the default (first rise after one
   // interval), so this never fires inside a short deterministic scenario.
   worldBossAtBoot?: boolean;
+  // Live worlds (server + offline client): enable the natural ranked rift portal
+  // scheduler (rift/portals.ts). Default OFF so deterministic tests, parity
+  // traces, and the RL env keep a portal-free world unless they opt in.
+  riftPortals?: boolean;
+  // Public test realms may opt into a denser natural-portal policy and a larger
+  // instance pool. Default OFF so all existing hosts retain their current policy.
+  communityRifts?: boolean;
   // Host-computed next raid-reset instant for a given lockout "now" (epoch ms). The
   // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
   // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.
@@ -3008,6 +3511,19 @@ export const XP_TABLE = [
   400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400, 16000,
   17700, 19400, 21300, 23200,
 ];
+// Procedural Rift rank ladder (C lowest, S highest); tuning per rank lives in
+// rift/portals.ts (RIFT_TIER_INFO). Declared here so Entity can carry it.
+export type RiftTier = 'C' | 'B' | 'A' | 'S';
+
+// Rank badge colours, shared by the sim tuning table and the renderer's
+// floating rank badge (single source so the two can never drift).
+export const RIFT_TIER_COLORS: Record<RiftTier, number> = {
+  C: 0x3fbf5f,
+  B: 0x3f7fff,
+  A: 0xb04fff,
+  S: 0xffb020,
+};
+
 export const MAX_LEVEL = 20;
 
 // Shared sim constants relocated here (C1) so both sim.ts and the extracted damage

@@ -8,14 +8,14 @@
     "meleeSwing weaponStrike (sinister_strike via castAbility ~3736)",
     "combo points"
   ],
-  "draws": 143,
-  "drawDigest": "9dafb67b",
+  "draws": 231,
+  "drawDigest": "2135d3df",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 410,
-      "state": "0d8c6007",
+      "nextId": 663,
+      "state": "fd25a419",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -52,7 +52,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 409,
+          "entityId": 662,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -87,7 +87,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 409,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -132,45 +132,45 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 411,
-      "state": "05b9e174",
-      "events": "5454e170",
+      "nextId": 664,
+      "state": "0e2964c5",
+      "events": "234ad2ed",
       "rng": {
         "draws": 9,
-        "digest": "8ecad8de"
+        "digest": "93a054f8"
       }
     },
     {
       "tick": 40,
       "time": 2,
-      "nextId": 411,
-      "state": "fbee887a",
-      "events": "5b3425b4",
+      "nextId": 664,
+      "state": "fb0f5548",
+      "events": "c7c7a266",
       "rng": {
         "draws": 15,
-        "digest": "843b3bf7"
+        "digest": "de13b0db"
       }
     },
     {
       "tick": 60,
       "time": 3,
-      "nextId": 411,
-      "state": "2478e5a7",
-      "events": "c5bf7b3e",
+      "nextId": 664,
+      "state": "01e45735",
+      "events": "6a178a05",
       "rng": {
-        "draws": 90,
-        "digest": "0f3d4b16"
+        "draws": 146,
+        "digest": "7dfa4ce1"
       }
     },
     {
       "tick": 72,
       "time": 3.6,
-      "nextId": 411,
-      "state": "937b9485",
+      "nextId": 664,
+      "state": "42dd2e75",
       "events": "741638a5",
       "rng": {
-        "draws": 143,
-        "digest": "9dafb67b"
+        "draws": 231,
+        "digest": "2135d3df"
       },
       "label": "final",
       "players": [
@@ -191,7 +191,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 79,
-            "damageTaken": 9
+            "damageTaken": 14
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -225,7 +225,7 @@
           ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 409,
+          "entityId": 662,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -264,8 +264,8 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
-          "hp": 49991,
-          "id": 409,
+          "hp": 49986,
+          "id": 662,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -299,7 +299,7 @@
             "str": 26
           },
           "swingTimer": 0.05,
-          "targetId": 410,
+          "targetId": 663,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -309,7 +309,7 @@
           }
         },
         {
-          "aggroTargetId": 409,
+          "aggroTargetId": 662,
           "aiState": "attack",
           "combatTimer": 1.2,
           "comboUntil": -1,
@@ -321,7 +321,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 8921,
-          "id": 410,
+          "id": 663,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -351,12 +351,12 @@
             "armor": 40
           },
           "swingTimer": 0.45,
-          "tappedById": 409,
-          "targetId": 409,
+          "tappedById": 662,
+          "targetId": 662,
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              662,
               80
             ]
           ],

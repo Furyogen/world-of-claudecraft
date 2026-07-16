@@ -39,6 +39,7 @@ import {
   type Entity,
   emptyMoveInput,
 } from '../types';
+import { clearCooldownsPreservingUnstuck } from '../unstuck_cooldown';
 
 // Deep-copy the CC diminishing-return map so a snapshot never shares mutable
 // state objects with the live entity (values are re-derived each restore).
@@ -882,7 +883,7 @@ export function readyArenaFighter(ctx: SimContext, e: Entity, opts: { clearPrep:
     // intentionally strips ALL auras (including The Keeper's Toll) so a PvE penalty
     // never carries into a normalized match.
     e.auras = [];
-    e.cooldowns.clear();
+    clearCooldownsPreservingUnstuck(e.cooldowns);
     e.ccDr.clear();
   }
   const meta = ctx.players.get(e.id);

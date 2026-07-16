@@ -1,16 +1,29 @@
 import { describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
-import { zoneAt } from '../src/sim/data';
+import { BUILTIN_WORLD, MOBS, zoneAt } from '../src/sim/data';
 import { grantDeed } from '../src/sim/deeds';
+import { createMob } from '../src/sim/entity';
 import { emitMobYell } from '../src/sim/mob/yells';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import * as chatMod from '../src/sim/social/chat';
-import type { SimEvent } from '../src/sim/types';
+import type { SimEvent, WorldContent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
+// Chat/emote/presence tests only ever talk between hand-added players (the
+// /played and /playtime timelines tick a minute-plus of world time), so none
+// of the hundreds of ambient overworld mobs/NPCs/objects matter. Keep every
+// terrain- and zone-relevant field identical to BUILTIN_WORLD while stripping
+// only the constructor-spawned entity content.
+const CHAT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeWorld() {
-  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, world: CHAT_TEST_WORLD });
 }
 
 function teleport(sim: Sim, pid: number, x: number, z: number) {
@@ -245,6 +258,7 @@ describe('chat channels', () => {
     expect(help.length).toBeGreaterThan(0);
     const text = help.map((e) => e.text).join('\n');
     expect(text).toContain('/w <name> <message>');
+    expect(text).toContain('/unstuck');
     expect(text).toContain('/who');
   });
 
@@ -353,7 +367,7 @@ describe('chat channels', () => {
     const a = sim.addPlayer('warrior', 'Aleph');
     teleport(sim, a, 12, -340);
     sim.tick();
-    const zone = zoneAt(-340);
+    const zone = zoneAt(0, -340);
     const [lo, hi] = zone.levelRange;
     sim.chat('/where', a);
     const events = sim.tick();
@@ -382,14 +396,14 @@ describe('chat channels', () => {
     );
     // once past a minute the line switches to "Xm Ys" form
     expect(played?.text).toMatch(/^Time played this session: 1m \d+s\.$/);
-  });
+  }, 90_000);
 
   it('/where accepts the /loc and /zone aliases', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     teleport(sim, a, 0, -40);
     sim.tick();
-    const expected = `You are in ${zoneAt(-40).name}`;
+    const expected = `You are in ${zoneAt(0, -40).name}`;
     for (const cmd of ['/loc', '/zone']) {
       sim.chat(cmd, a);
       const events = sim.tick();
@@ -1137,8 +1151,8 @@ describe('chat module (direct, no Sim)', () => {
     const line = chatMod.inspectReadout(target, e);
     expect(line).toContain('Bet: Level 7');
     expect(line).toContain('50%');
-    // 8 lines: the 7 original groups plus the ignore/block line
-    expect(chatMod.helpLines().length).toBe(8);
+    // 9 lines: the original groups plus ignore/block and localized recovery help.
+    expect(chatMod.helpLines().length).toBe(9);
     expect(chatMod.helpLines().join('\n')).toContain('/ignore <name>');
   });
 
@@ -1366,7 +1380,9 @@ describe('chat speaker titles (Book of Deeds)', () => {
     const a = titledSpeaker(sim);
     teleport(sim, a, 0, -40);
     sim.tick();
-    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    // CHAT_TEST_WORLD strips the ambient camps, so hand-spawn the yelling mob.
+    const mob = createMob(sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: -40 });
+    sim.entities.set(mob.id, mob);
     emitMobYell(sim.ctx, mob, 'Graaah!', 1e9);
     const msgs = chatEvents(sim.tick()).filter((m) => m.from === mob.name);
     expect(msgs.length).toBeGreaterThan(0);

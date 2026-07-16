@@ -2452,6 +2452,24 @@
     color: #fff;
     border-color: #c9a86a;
   }
+  /* day/night dial: a small satellite disc on the top-right rim of the minimap
+     (mirrors the #raid-lockout button placement), showing the 12h world cycle.
+     Purely informational, so it ignores pointer input. */
+  #minimap-daynight {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: #14141d;
+    box-shadow:
+      0 1px 3px #000a,
+      inset 0 0 6px #0007;
+    pointer-events: none;
+  }
   #minimap-coords {
     margin-top: 4px;
     display: inline-block;

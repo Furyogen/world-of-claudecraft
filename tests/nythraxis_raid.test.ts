@@ -3,11 +3,23 @@ import { nextRaidResetMs } from '../server/raid_reset';
 import { visualKeyFor } from '../src/render/characters/manifest';
 import { dungeonDaisHasRaisedPlatform } from '../src/render/dungeon';
 import { isBlocked } from '../src/sim/colliders';
-import { DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
+import { BUILTIN_WORLD, DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
 import { NYTHRAXIS_LAYOUT } from '../src/sim/dungeon_layout';
 import { Sim } from '../src/sim/sim';
-import { type Aura, dist2d, type Entity } from '../src/sim/types';
+import { type Aura, dist2d, type Entity, type WorldContent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
+
+// The raid assertions run inside the Nythraxis instance band (x > 3000): the
+// boss, adds, Aldric, and wardstones are all spawned by the encounter/dungeon
+// code from the global registries, never from the overworld placements. So
+// spawning every ambient realm mob only makes each tick scan unrelated
+// overworld AI (the fiesta/arena subsystem-world precedent).
+const NYTHRAXIS_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 type TickEvent = ReturnType<Sim['tick']>[number];
 type TimedEvent = { at: number; event: TickEvent };
@@ -33,7 +45,14 @@ function isDamageEvent(event: TickEvent): event is DamageEvent {
 }
 
 function makeWorld(lockoutNowMs?: () => number, raidResetMs?: (nowMs: number) => number) {
-  return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, lockoutNowMs, raidResetMs });
+  return new Sim({
+    seed: 42,
+    playerClass: 'warrior',
+    noPlayer: true,
+    lockoutNowMs,
+    raidResetMs,
+    world: NYTHRAXIS_TEST_WORLD,
+  });
 }
 
 function teleport(sim: Sim, pid: number, x: number, z: number) {

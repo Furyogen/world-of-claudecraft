@@ -15,6 +15,7 @@ import { isCameraDrivenFacingActive } from './game/camera_driven_facing';
 import { cameraFollowShouldSettle, updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 import { shouldRecoverOnComposerBlur } from './game/chat_keyboard_dismiss';
 import {
+  clickMoveBrokenByTeleport,
   clickMoveShouldWalk,
   clickMoveStep,
   distance2d,
@@ -27,6 +28,7 @@ import { getClientSeed } from './game/client_seed';
 import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
+import { installDevTeleports } from './game/dev_shortcuts';
 import {
   mountPlaytestReturnButton,
   resolveLocalPlaytestAssets,
@@ -80,6 +82,7 @@ import {
 import { resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { currentUtcDay } from './game/utc_day';
 import { voice } from './game/voice';
+import { zoneWarmupMode } from './game/zone_transition';
 import {
   CHAR_SORT_MODES,
   type CharSortMode,
@@ -132,15 +135,26 @@ import { preloadMechAssets } from './render/characters/assets';
 import { skinCount } from './render/characters/manifest';
 import { playerPortraitDataUrl } from './render/characters/portrait';
 import { installWebGLContextRelease } from './render/context_release';
+import { setDayNightPhaseOverride } from './render/day_night_clock';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
-import type { SelfMotionFrame } from './render/self_motion';
-import { navigatorSaveData } from './render/sky';
+import {
+  hasAuthoritativeSelfPositionDiscontinuity,
+  type SelfMotionFrame,
+} from './render/self_motion';
+import { ensureSkyAssetsAt, navigatorSaveData } from './render/sky';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { isStunned } from './sim/combat/cc';
 import { ABILITIES, CLASSES } from './sim/content/classes';
-import { GATHER_NODES, ITEMS, isDelvePos, setActiveWorldContent } from './sim/data';
+import {
+  GATHER_NODES,
+  ITEMS,
+  isDelvePos,
+  isRiftPos,
+  setActiveWorldContent,
+  ZONES,
+} from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 import { Sim } from './sim/sim';
@@ -762,12 +776,14 @@ let loadingTipTimer: number | null = null;
 
 function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
+  const wasVisible = el.classList.contains('visible');
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;
   }
   el.classList.remove('fade');
   el.classList.add('visible');
+  if (!wasVisible) $('#ls-fill').style.width = '0%';
   setLoadingStatus(statusText);
   startLoadingTips();
 }
@@ -776,9 +792,21 @@ function setLoadingStatus(text: string): void {
   $('#ls-status').textContent = text;
 }
 
-function setLoadingProgress(done: number, total: number): void {
-  $('#ls-fill').style.width = total > 0 ? `${Math.round((done / total) * 100)}%` : '0%';
+function setLoadingProgressRange(
+  done: number,
+  total: number,
+  rangeStart: number,
+  rangeEnd: number,
+): void {
+  const fraction = total > 0 ? Math.max(0, Math.min(1, done / total)) : 0;
+  const percent = rangeStart + (rangeEnd - rangeStart) * fraction;
+  $('#ls-fill').style.width = `${Math.round(percent)}%`;
   setLoadingStatus(t('loading.worldProgress', { done, total }));
+}
+
+function setLoadingPercent(percent: number, statusText: string): void {
+  $('#ls-fill').style.width = `${Math.max(0, Math.min(100, Math.round(percent)))}%`;
+  setLoadingStatus(statusText);
 }
 
 // Rotating "did you know" copy under the progress bar, purely cosmetic (no
@@ -917,7 +945,7 @@ async function startGame(
     // Soft fallback: English is statically resident; boot in English (the picker can retry).
   }
   try {
-    await assetsReady((done, total) => setLoadingProgress(done, total));
+    await assetsReady((done, total) => setLoadingProgressRange(done, total, 0, 35));
   } catch (err) {
     fatalOverlay(t('loading.assetsFailed', { error: technicalErrorMessage(err) }));
     return;
@@ -989,6 +1017,9 @@ async function startGame(
   const autoLoot = new AutoLoot();
   const perf = createPerfMonitor(null);
   try {
+    setLoadingPercent(37, t('loading.enteringWorld'));
+    await ensureSkyAssetsAt(world.player.pos.x, world.player.pos.z);
+    setLoadingPercent(40, t('loading.enteringWorld'));
     renderer = new Renderer(world, canvas, nameplates);
     renderer.setAudioSink(sfx);
     renderer.showDevBadges = settings.get('showDevBadges');
@@ -1004,6 +1035,10 @@ async function startGame(
       devCommandsEnabled: import.meta.env.DEV,
     });
     perf.setHud(hud);
+    // Every zone the renderer makes resident (boot, teleport warmup, or the
+    // background streaming lane) also prewarms its world-map background, so
+    // opening the map right after a crossing never pays the terrain render.
+    renderer.onZonePrepared = (zoneId) => hud.queueMapBgPrewarm(zoneId);
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
   } catch (err) {
     // e.g. WebGL context creation failure: surface it instead of leaving the
@@ -1150,6 +1185,57 @@ async function startGame(
       autosizeChatInput();
     }
   });
+  // Dev-only chat command to scrub the world day/night cycle for testing:
+  //   /daynight night|dawn|day|dusk|<0..1>|auto   (also /dev daynight, /dev time)
+  // Render-only: it just overrides the shared clock phase (day_night_clock), so
+  // the sky lighting and the minimap dial both jump to the chosen time of day.
+  // Returns true when it handled the input (so it is not also sent to chat).
+  const DAY_NIGHT_PRESETS: Record<string, number> = {
+    midnight: 0,
+    night: 0,
+    dawn: 0.25,
+    sunrise: 0.25,
+    morning: 0.375,
+    day: 0.5,
+    noon: 0.5,
+    midday: 0.5,
+    afternoon: 0.625,
+    dusk: 0.75,
+    sunset: 0.75,
+    evening: 0.8,
+  };
+  const tryDayNightDevCommand = (raw: string): boolean => {
+    const m = raw.trim().match(/^\/(?:dev\s+time|dev\s+daynight|daynight)\b\s*(.*)$/i);
+    if (!m) return false;
+    // Dev builds only: a per-client phase override is brighter-night-for-me,
+    // exactly the actionable-visibility class the graphics-fairness rule bans.
+    // Harmless while DAY_ONLY pins day, but gate it before that ever flips.
+    if (!import.meta.env.DEV) return false;
+    const arg = m[1].trim().toLowerCase();
+    if (!arg) {
+      hud.log('[dev] usage: /daynight night|dawn|day|dusk|<0..1>|auto', '#ffcf6a');
+      return true;
+    }
+    if (['auto', 'off', 'real', 'resume', 'clear'].includes(arg)) {
+      setDayNightPhaseOverride(null);
+      hud.log('[dev] day/night resumed (real UTC clock)', '#8fd0ff');
+      hud.refreshDayNightDial();
+      return true;
+    }
+    let phase: number | null = arg in DAY_NIGHT_PRESETS ? DAY_NIGHT_PRESETS[arg] : null;
+    if (phase === null) {
+      const n = Number.parseFloat(arg);
+      if (Number.isFinite(n)) phase = ((n % 1) + 1) % 1;
+    }
+    if (phase === null) {
+      hud.log(`[dev] unknown time "${arg}" - try night|dawn|day|dusk|<0..1>|auto`, '#ffcf6a');
+      return true;
+    }
+    setDayNightPhaseOverride(phase);
+    hud.log(`[dev] time of day set to ${arg} (phase ${phase.toFixed(2)})`, '#8fd0ff');
+    hud.refreshDayNightDial();
+    return true;
+  };
   chatInput.addEventListener('keydown', (e) => {
     e.stopPropagation();
     // While the "!" command dropdown is open it owns Arrows/Enter/Tab/Escape.
@@ -1164,6 +1250,12 @@ async function startGame(
       // the active channel tab supplies the send prefix, so plain text goes to
       // that channel without the player retyping "/world" etc.
       const raw = chatInput.value;
+      // dev-only day/night scrub command, intercepted before the chat send path
+      if (import.meta.env.DEV && tryDayNightDevCommand(raw)) {
+        chatInput.value = '';
+        closeChat();
+        return;
+      }
       // "/share" links the selected quest into party chat; skip the normal send path.
       if (import.meta.env.DEV && isDevGuiCommand(raw)) {
         hud.toggleDevCommandWindow();
@@ -1907,7 +1999,7 @@ async function startGame(
           build: `${__APP_VERSION__} (${__APP_BUILD_ID__})`,
           userAgent: navigator.userAgent,
           viewport: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio },
-          zone: zoneBiomeAt(world.player.pos.z),
+          zone: zoneBiomeAt(world.player.pos.x, world.player.pos.z),
           level: world.player.level,
           // Entity has no `cls`; the player's class is its templateId (see Entity).
           className: world.player.templateId,
@@ -2501,6 +2593,77 @@ async function startGame(
   // perf overlay's Jitter row.
   let onlineJitterMs = 0;
   let gameInputReady = false;
+  let zoneWarmup: Promise<void> | null = null;
+
+  let lastWarmCheckX = Number.NaN;
+  let lastWarmCheckZ = Number.NaN;
+  const maybeWarmCurrentZone = (): void => {
+    const player = world.player;
+    const displacement = Number.isFinite(lastWarmCheckX)
+      ? Math.hypot(player.pos.x - lastWarmCheckX, player.pos.z - lastWarmCheckZ)
+      : 0;
+    lastWarmCheckX = player.pos.x;
+    lastWarmCheckZ = player.pos.z;
+    if (zoneWarmup || renderer.isZoneReadyAt(player.pos.x, player.pos.z)) return;
+    const zoneX = player.pos.x;
+    const zoneZ = player.pos.z;
+    if (zoneWarmupMode(displacement) === 'background') {
+      // A walked crossing: the visible-zone streaming lane normally has the
+      // destination resident long before the boundary, so landing here means
+      // the build is still catching up (or a prepare failed). Finish it in the
+      // background: no loading screen, no input freeze. Sim collision is
+      // procedural math, so gameplay on not-yet-rendered ground stays correct;
+      // the chunks under the player stream in first (prepareZoneAt priority),
+      // and the fog residency clamp keeps the unbuilt remainder hidden.
+      zoneWarmup = renderer
+        .prepareZoneAt(zoneX, zoneZ)
+        .then(() => renderer.prewarmZoneAt(zoneX, zoneZ, { background: true }))
+        .catch((err) => {
+          console.warn('Background zone warmup failed', err);
+          // Back off before the frame loop may retry, so a persistent failure
+          // (e.g. an asset fetch while offline) does not re-kick every frame.
+          return new Promise<void>((resolve) => window.setTimeout(resolve, 5000));
+        })
+        .finally(() => {
+          zoneWarmup = null;
+        });
+      return;
+    }
+    // A teleport-sized jump (rift exit, dungeon door, hearthstone) can land
+    // anywhere: keep the classic blocking loading screen instead of dropping
+    // the player into a not-yet-built void.
+    const resumeInput = gameInputReady;
+    gameInputReady = false;
+    showLoadingScreen(t('loading.world'));
+    zoneWarmup = nextPaint()
+      .then(() =>
+        renderer.prepareZoneAt(zoneX, zoneZ, (done, total) =>
+          setLoadingProgressRange(done, total, 0, 94),
+        ),
+      )
+      .then(async () => {
+        setLoadingPercent(96, t('loading.enteringWorld'));
+        try {
+          await renderer.prewarmZoneAt(zoneX, zoneZ);
+        } catch (err) {
+          console.warn('Zone shader prewarm failed', err);
+        }
+      })
+      .then(() => setLoadingPercent(100, t('loading.enteringWorld')))
+      .then(nextPaint)
+      .then(() => {
+        hideLoadingScreen();
+        gameInputReady = resumeInput;
+        last = performance.now();
+        acc = 0;
+      })
+      .catch((err) => {
+        fatalOverlay(t('loading.rendererFailed', { error: technicalErrorMessage(err) }));
+      })
+      .finally(() => {
+        zoneWarmup = null;
+      });
+  };
 
   // Camera follow state: keyboard turning advances facing in 20Hz sim steps,
   // so the camera tracks the player's render-interpolated facing per frame
@@ -2566,6 +2729,7 @@ async function startGame(
     );
   }
 
+  let lastResolveMovePos: { x: number; z: number } | null = null;
   function resolveMove(
     mouselook: boolean,
     playerPos: { x: number; z: number },
@@ -2575,6 +2739,13 @@ async function startGame(
     attackMoveTick();
     const mi = input.readMoveInput();
     let facing: number | null = mouselook ? input.camYaw : null;
+    // A teleport (door, portal, spirit release) invalidates any pending
+    // click-to-move: the destination is across the transition, and chasing it
+    // walks the player straight back into the trigger.
+    if (input.clickMoveTarget && clickMoveBrokenByTeleport(lastResolveMovePos, playerPos)) {
+      input.clearClickMove();
+    }
+    lastResolveMovePos = { x: playerPos.x, z: playerPos.z };
     if (input.clickMoveTarget) {
       const action = resolveClickMoveAction(mi, {
         mouselook,
@@ -2751,6 +2922,7 @@ async function startGame(
 
   function frame(now: number): void {
     requestAnimationFrame(frame);
+    maybeWarmCurrentZone();
     let frameDt = (now - last) / 1000;
     last = now;
     if (frameDt > 0.25) frameDt = 0.25;
@@ -2943,6 +3115,10 @@ async function startGame(
     }
     net.pendingFacingDelta = 0; // superseded by the interpolated follow below
     const drainedEvents = net.drainEvents();
+    const selfAuthoritativeDiscontinuity = hasAuthoritativeSelfPositionDiscontinuity(
+      drainedEvents,
+      net.playerId,
+    );
     perf.time('events', () =>
       perf.trace('hud.handleEvents', () => hud.handleEvents(drainedEvents), {
         mode: 'online',
@@ -2978,7 +3154,12 @@ async function startGame(
             net.spectating === null &&
             !movementFrozen() &&
             !playerImmobilized() &&
-            !isDelvePos(pe.pos.x),
+            !isDelvePos(pe.pos.x) &&
+            // Rifts (like delves) are server-authoritative instanced content, and
+            // their raised sanctum tiers lift the player's Y server-side. The local
+            // kernel predicts a flat floor, so keep prediction off here and render
+            // the authoritative interpolated Y (no vertical jitter on the stairs).
+            !isRiftPos(pe.pos.x),
           moveInput: resolved.mi,
           displayFacing: netFacing ?? interpServerFacing,
           echoMs: onlineInputEchoMs,
@@ -3011,6 +3192,7 @@ async function startGame(
             net.spectating === null ? onlineRenderFacing : null,
             adaptiveSelfAlphaLead(onlineInputEchoMs, onlineJitterMs, net.snapInterval),
             selfMotion,
+            selfAuthoritativeDiscontinuity,
           ),
         {
           mode: 'online',
@@ -3029,8 +3211,9 @@ async function startGame(
   }
   const controller = {
     move(moveInput: unknown, facing?: unknown) {
-      if (arguments.length > 1) input.setControllerMoveInput(moveInput, facing);
-      else input.setControllerMoveInput(moveInput);
+      // setControllerMoveInput ignores an undefined facing, so the 1- and
+      // 2-argument caller shapes collapse into one call.
+      input.setControllerMoveInput(moveInput, facing);
     },
     face(facing: unknown) {
       input.setControllerFacing(facing);
@@ -3142,10 +3325,23 @@ async function startGame(
   input.setSuspendMovement(true);
   await nextPaint();
   try {
+    await renderer.prepareZoneAt(world.player.pos.x, world.player.pos.z, (done, total) =>
+      setLoadingProgressRange(done, total, 40, 88),
+    );
+  } catch (err) {
+    fatalOverlay(t('loading.rendererFailed', { error: technicalErrorMessage(err) }));
+    return;
+  }
+  setLoadingPercent(90, t('loading.enteringWorld'));
+  try {
     await renderer.prewarmInitialScene();
   } catch (err) {
+    // Shader prewarm is an optimization; a failed program warmup can safely
+    // fall back to Three's normal first-use compilation once the zone itself
+    // has been materialized successfully.
     console.warn('Renderer prewarm failed', err);
   }
+  setLoadingPercent(100, t('loading.enteringWorld'));
   await nextPaint();
   last = performance.now();
   requestAnimationFrame(frame);
@@ -3194,6 +3390,21 @@ async function startGame(
             hud.submitLockpickAction(action as import('./sim/lockpick').PickAction),
           flushLockpickEvents: () => hud.flushLockpickEvents(),
         };
+        // Console realm teleports (go.vale() ... go.fen()): offline dev only,
+        // never online (server-authoritative movement) and never production.
+        if (import.meta.env.DEV && offlineSim && !online) {
+          installDevTeleports(
+            ZONES.map((zn) => ({ id: zn.id, town: zn.hub.name, x: zn.hub.x, z: zn.hub.z })),
+            (x, z) => {
+              const me = offlineSim.entities.get(offlineSim.playerId);
+              if (!me) return;
+              me.pos.x = x;
+              me.pos.z = z;
+              me.prevPos = { ...me.pos };
+              me.hp = me.maxHp;
+            },
+          );
+        }
       }, LOADING_FADE_MS);
     }),
   );
@@ -3233,6 +3444,9 @@ async function startOffline(
     playerClass,
     playerName: name,
     devCommands: import.meta.env.DEV,
+    // The offline world runs the ranked rift portal scheduler like the live
+    // server (custom editor play-test maps keep it off: their zones differ).
+    riftPortals: world === undefined,
     valeCupShowcase: true, // idle Sowfield auto-runs a bot exhibition to watch/bet on
     world,
   });
@@ -8738,8 +8952,6 @@ const editorPlaytest = takeEditorPlaytestRequest();
 if (editorPlaytest) {
   startSitePresence('home');
   mountPlaytestReturnButton();
-  // Imported-model placements arrive as 'local/<sha>' ids: resolve them to
-  // fresh object URLs from IndexedDB before the world (and renderer) boots.
   void resolveLocalPlaytestAssets(editorPlaytest.content).then(() =>
     startOffline(
       editorPlaytest.playerClass,

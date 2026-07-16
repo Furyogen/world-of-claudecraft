@@ -138,6 +138,15 @@ describe('weapon type classification', () => {
     }
   });
 
+  it('every dagger-classified weapon carries the dagger gameplay flag', () => {
+    const missingFlag = weaponIds.filter((id) => {
+      if (weaponTypeForItem(id) !== 'dagger') return false;
+      const def = ITEMS[id];
+      return def.kind !== 'weapon' || !def.weapon.dagger;
+    });
+    expect(missingFlag).toEqual([]);
+  });
+
   it('heroic variants resolve through their base row', () => {
     expect(weaponTypeForItem('heroic_moggers_shiv')).toBe('dagger');
     expect(weaponTypeForItem('heroic_brutoks_maul')).toBe('mace');

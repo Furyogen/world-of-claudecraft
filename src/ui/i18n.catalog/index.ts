@@ -565,6 +565,38 @@ export const en = {
   // Locale overlays are English-filled + marked pending by the i18n build until a
   // translation pass. ENGLISH ONLY here; never add per-locale blocks to this section.
   sim: {
+    // Procedural Rift sim-emitted player text (src/sim/rift/runs.ts). Same model
+    // as sim.delve below: the sim emits English, sim_i18n.ts re-localizes. The
+    // {name} value is the generated floor name (spliced verbatim, like build names).
+    rift: {
+      allUnstable: 'All rifts are unstable right now. Try again soon.',
+      enterFloor: 'You step through the rift into {name}.',
+      descendFloor: 'You descend deeper into {name}.',
+      stepBack: 'You step back through the rift.',
+      pylonLit: 'A rune pylon flares to life ({lit}/{total}).',
+      wayDownOpens: 'The way down tears open.',
+      exitOpens: 'The rift shudders. A way home tears open behind the fallen.',
+      portalOpens: 'A {tier}-rank rift tears open in {zone}!',
+      portalSealed: 'The {tier}-rank rift in {zone} has been sealed.',
+      portalCollapses: 'The {tier}-rank rift in {zone} collapses.',
+      levelGate: 'Only adventurers of level {level} or higher may enter this rift.',
+      iceGoalLit: 'The frost sigil blazes. The way stirs.',
+      socketsShut: 'The sockets grind shut. The way stirs.',
+      seqProgress: 'The runes answer in turn ({step}/{total}).',
+      seqReset: 'The runes go dark. Begin again.',
+      gateOpen: 'The gate grinds open.',
+      orbSealed: 'The orb is sealed by the ritual below.',
+      orbWakes: "The pentagram's flame gutters out. Something wakes on the altar.",
+      orbOpensGate: 'The Blood Orb flares. The gates of the temple grind open.',
+      alreadyCleared: 'This rift has already been cleared by {names}.',
+      raceLost: 'The rift has already been cleared by {names}. Your run ends.',
+      raceWorldWin: '{names} won the {tier}-rank Rift race in {seconds}s!',
+      raceWinBanner: 'Rift Race Won - {seconds}s',
+      raceLostBanner: 'Rift Already Cleared',
+      forgeUpgraded: 'Rift upgrade completed for {name}.',
+      forgeEnchanted: 'Rift enchant completed for {name}.',
+      forgeSocketed: 'Rift gem socketed for {name}.',
+    },
     delve: {
       cannotEnterNow: 'You cannot enter a delve right now.',
       leaveDungeonFirst: 'Leave the dungeon first.',

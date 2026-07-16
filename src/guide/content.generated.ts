@@ -1306,7 +1306,8 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Fallen Chapel",
       "Reliquary Hill",
       "Brightwood Glade",
-      "The Sowfield"
+      "The Sowfield",
+      "The Farshore Causeway"
     ],
     "welcome": "Find Marshal Redbrook in town - he has work for you.",
     "families": [
@@ -1374,6 +1375,248 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "undead",
       "elemental",
       "dragonkin"
+    ]
+  },
+  {
+    "id": "veiled_hollow",
+    "name": "The Veiled Hollow",
+    "min": 15,
+    "max": 20,
+    "biome": "dusk",
+    "hub": "Eldergleam",
+    "pois": [
+      "Eldergleam",
+      "Duskfall Cave",
+      "Duskfall Overlook",
+      "Elder Grove",
+      "Starfall Basin",
+      "The Sunken Court",
+      "Crystalline Shallows",
+      "The Gleaming Deep"
+    ],
+    "welcome": "The air hums with old magic. Seek Keeper Saelwyn beneath the great tree of Eldergleam.",
+    "families": [
+      "beast",
+      "kobold",
+      "elemental"
+    ]
+  },
+  {
+    "id": "drakelands",
+    "name": "The Drakelands",
+    "min": 16,
+    "max": 20,
+    "biome": "ember",
+    "hub": "Wyrmwatch",
+    "pois": [
+      "Wyrmwatch",
+      "The Gatewood",
+      "Cinder Dunes",
+      "Trollmoot",
+      "Bloodglass Fields",
+      "Drakemaw Caldera"
+    ],
+    "welcome": "Hot wind rolls off the wastes ahead. Dragons wheel over the Drakemaw, and troll fires burn in the dunes.",
+    "families": [
+      "troll",
+      "undead"
+    ]
+  },
+  {
+    "id": "frostveil",
+    "name": "The Frostveil Reach",
+    "min": 17,
+    "max": 20,
+    "biome": "frost",
+    "hub": "Icemantle",
+    "pois": [
+      "Icemantle",
+      "The Snowline",
+      "Glacier Tarn",
+      "The Aurora Steps",
+      "The Shiverfen",
+      "The Howling Terraces"
+    ],
+    "welcome": "Snow swallows every sound. Under the dancing lights, the cold itself feels awake.",
+    "families": [
+      "beast",
+      "kobold",
+      "elemental"
+    ]
+  },
+  {
+    "id": "amberfall",
+    "name": "The Amberfall",
+    "min": 18,
+    "max": 20,
+    "biome": "amber",
+    "hub": "Lanternmere",
+    "pois": [
+      "Lanternmere",
+      "The Goldmelt",
+      "The Gilded Orchard",
+      "Harvest Hollow",
+      "The Great Mere",
+      "Cindermaple Rise",
+      "The Leaning Monolith"
+    ],
+    "welcome": "Every leaf here burns gold and red, yet none ever fall. The lanterns of Lanternmere are lit for you.",
+    "families": [
+      "beast",
+      "murloc",
+      "kobold"
+    ]
+  },
+  {
+    "id": "willowfen",
+    "name": "The Willowfen",
+    "min": 19,
+    "max": 20,
+    "biome": "fen",
+    "hub": "Bridgemere",
+    "pois": [
+      "Bridgemere",
+      "The Amberfen Steps",
+      "The Lilymoors",
+      "Bogshine Pools",
+      "Willowweep",
+      "The Drowsy Flats"
+    ],
+    "welcome": "The fen hums with dragonflies and bees. Cross the bridge into Bridgemere and rest your feet awhile.",
+    "families": [
+      "murloc",
+      "kobold",
+      "elemental"
+    ]
+  },
+  {
+    "id": "nightbloom",
+    "name": "The Nightbloom",
+    "min": 20,
+    "max": 20,
+    "biome": "night",
+    "hub": "Moonrest",
+    "pois": [
+      "Moonrest",
+      "The Nightgate",
+      "The Moonwell",
+      "Gloamfield",
+      "The Standing Vigil",
+      "The Sleepless Barrow"
+    ],
+    "welcome": "Past the Nightgate the air itself dreams. Follow the flower-light to Moonrest, and mind the sleeping world that hangs in the sky.",
+    "families": [
+      "beast",
+      "elemental"
+    ]
+  },
+  {
+    "id": "wraithwood",
+    "name": "The Wraithwood",
+    "min": 20,
+    "max": 20,
+    "biome": "haunt",
+    "hub": "Gallowmere",
+    "pois": [
+      "Gallowmere",
+      "The Crowgate",
+      "Widow's Thicket",
+      "The Hanging Glade",
+      "The Mournstone Chapel",
+      "The Huntsman's Clearing"
+    ],
+    "welcome": "The canopy closes over the road like a lid. Keep to the lanterns of Gallowmere, and do not answer if the wood calls your name.",
+    "families": [
+      "spider",
+      "ogre",
+      "elemental"
+    ]
+  },
+  {
+    "id": "palmreach",
+    "name": "The Palmreach",
+    "min": 20,
+    "max": 20,
+    "biome": "jungle",
+    "hub": "Drifthaven",
+    "pois": [
+      "Drifthaven",
+      "The Tanglemouth",
+      "The Palmstrand",
+      "The Emerald Tangle",
+      "The Vinefall",
+      "The Sapphire Lagoon",
+      "The Sunken Idol"
+    ],
+    "welcome": "Warm sand, loud birds, and a jungle that eats the horizon. Drifthaven keeps a fire lit on the beach for you.",
+    "families": [
+      "beast",
+      "spider"
+    ]
+  },
+  {
+    "id": "evergarden",
+    "name": "The Evergarden",
+    "min": 20,
+    "max": 20,
+    "biome": "garden",
+    "hub": "Hedgewick",
+    "pois": [
+      "Hedgewick",
+      "The Garden Gate",
+      "The Statuary Walk",
+      "The Rose Wilds",
+      "The Petal Pond",
+      "The Great Maze",
+      "The Fountain Court"
+    ],
+    "welcome": "Someone is still trimming the hedges, though no gardener has been seen for a hundred years. Mind the maze: it minds you back.",
+    "families": [
+      "beast",
+      "kobold"
+    ]
+  },
+  {
+    "id": "galecrest",
+    "name": "The Galecrest",
+    "min": 20,
+    "max": 20,
+    "biome": "gale",
+    "hub": "Wickharbor",
+    "pois": [
+      "Wickharbor",
+      "The Windway",
+      "The Howling Downs",
+      "The Old Beacon",
+      "The Shear",
+      "The Wreckfields",
+      "The Mirror Tarn"
+    ],
+    "welcome": "The wind has never once stopped here, and the Old Beacon has never once gone out. Wickharbor asks only that you close the inn door behind you.",
+    "families": [
+      "beast",
+      "elemental"
+    ]
+  },
+  {
+    "id": "farshore_isle",
+    "name": "The Farshore",
+    "min": 3,
+    "max": 7,
+    "biome": "vale",
+    "hub": "Gullhaven",
+    "pois": [
+      "Gullhaven",
+      "The Landing",
+      "The Watch Meadow",
+      "The Sundered Cliffs",
+      "The Riftfields"
+    ],
+    "welcome": "Cross the sandbar and Gullhaven's bell will find you before the town does. The breaks tear open without warning, and the redoubt holds its shore against whatever pours through. They have been waiting a long while for someone like you.",
+    "families": [
+      "beast",
+      "kobold",
+      "demon"
     ]
   }
 ];
@@ -1534,6 +1777,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/greyjaw.webp"
       },
       {
+        "name": "Void Stalker",
+        "min": 5,
+        "max": 6,
+        "rare": false,
+        "templateId": "void_stalker",
+        "model": "mob_wolf",
+        "tint": "#2f2a44",
+        "still": "/guide-stills/mob_wolf__2f2a44.webp"
+      },
+      {
         "name": "Mire Prowler",
         "min": 7,
         "max": 8,
@@ -1562,6 +1815,126 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_wolf",
         "tint": "#8c8270",
         "still": "/guide-stills/mob_wolf__8c8270.webp"
+      },
+      {
+        "name": "Veiled Stag",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "veiled_stag",
+        "model": "mob_stag",
+        "tint": "#b9a3cf",
+        "still": "/guide-stills/mob_stag__b9a3cf.webp"
+      },
+      {
+        "name": "Snowdrift Wolf",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "snowdrift_wolf",
+        "model": "mob_wolf",
+        "tint": "#eef4f8",
+        "still": "/guide-stills/mob_wolf__eef4f8.webp"
+      },
+      {
+        "name": "Gilded Stag",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "gilded_stag",
+        "model": "mob_stag",
+        "tint": "#d8a848",
+        "still": "/guide-stills/mob_stag__d8a848.webp"
+      },
+      {
+        "name": "Gloam Fox",
+        "min": 18,
+        "max": 18,
+        "rare": false,
+        "templateId": "gloam_fox",
+        "model": "mob_fox",
+        "tint": "#d87838",
+        "still": "/guide-stills/mob_fox__d87838.webp"
+      },
+      {
+        "name": "Gloam Strider",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "gloam_strider",
+        "model": "mob_raptor",
+        "tint": "#4c4a72",
+        "still": "/guide-stills/mob_raptor__4c4a72.webp"
+      },
+      {
+        "name": "Moonfleece Grazer",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "moonfleece_grazer",
+        "model": "mob_alpaca",
+        "tint": "#e6e9f4",
+        "still": "/guide-stills/mob_alpaca__e6e9f4.webp"
+      },
+      {
+        "name": "Moor Ram",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "moor_ram",
+        "model": "mob_alpaca",
+        "tint": "#d8d0c0",
+        "still": "/guide-stills/mob_alpaca__d8d0c0.webp"
+      },
+      {
+        "name": "Shoal Scuttler",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "shoal_scuttler",
+        "model": "mob_crab",
+        "tint": "#8898a8",
+        "still": "/guide-stills/mob_crab__8898a8.webp"
+      },
+      {
+        "name": "Thicket Boar",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "thicket_boar",
+        "model": "mob_boar",
+        "tint": "#6a4e38",
+        "still": "/guide-stills/mob_boar__6a4e38.webp"
+      },
+      {
+        "name": "Tide Scuttler",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "tide_scuttler",
+        "model": "mob_crab",
+        "tint": "#e86848",
+        "still": "/guide-stills/mob_crab__e86848.webp"
+      },
+      {
+        "name": "Topiary Stag",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "topiary_stag",
+        "model": "mob_stag",
+        "tint": "#3f7e3c",
+        "still": "/guide-stills/mob_stag__3f7e3c.webp"
+      },
+      {
+        "name": "Topiary Wolf",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "topiary_wolf",
+        "model": "mob_wolf",
+        "tint": "#4a8a4e",
+        "still": "/guide-stills/mob_wolf__4a8a4e.webp"
       }
     ]
   },
@@ -1587,6 +1960,26 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_spider",
         "tint": "#283747",
         "still": "/guide-stills/mob_spider__283747.webp"
+      },
+      {
+        "name": "Canopy Weaver",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "canopy_weaver",
+        "model": "mob_spider",
+        "tint": "#4e8a3c",
+        "still": "/guide-stills/mob_spider__4e8a3c.webp"
+      },
+      {
+        "name": "Widowsilk Spinner",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "widowsilk_spinner",
+        "model": "mob_spider",
+        "tint": "#3a3440",
+        "still": "/guide-stills/mob_spider__3a3440.webp"
       }
     ]
   },
@@ -1626,6 +2019,31 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
     ]
   },
   {
+    "family": "murloc",
+    "creatures": [
+      {
+        "name": "Bogtoad",
+        "min": 19,
+        "max": 20,
+        "rare": false,
+        "templateId": "bogtoad",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      },
+      {
+        "name": "Mere Lurker",
+        "min": 19,
+        "max": 20,
+        "rare": false,
+        "templateId": "mere_lurker",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      }
+    ]
+  },
+  {
     "family": "burrower",
     "creatures": [
       {
@@ -1647,6 +2065,81 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_kobold",
         "tint": "#9c7a3c",
         "still": "/guide-stills/mob_kobold__9c7a3c.webp"
+      }
+    ]
+  },
+  {
+    "family": "kobold",
+    "creatures": [
+      {
+        "name": "Breach Wretch",
+        "min": 3,
+        "max": 5,
+        "rare": false,
+        "templateId": "breach_wretch",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      },
+      {
+        "name": "Sporeling Gatherer",
+        "min": 15,
+        "max": 15,
+        "rare": false,
+        "templateId": "sporeling_gatherer",
+        "model": "mob_glub",
+        "tint": "#d8b98a",
+        "still": "/guide-stills/mob_glub__d8b98a.webp"
+      },
+      {
+        "name": "Corrupted Sporeling",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "corrupted_sporeling",
+        "model": "mob_glub",
+        "tint": "#5e4a72",
+        "still": "/guide-stills/mob_glub__5e4a72.webp"
+      },
+      {
+        "name": "Fen Sprite",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "fen_sprite",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      },
+      {
+        "name": "Harvest Sprite",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "harvest_sprite",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      },
+      {
+        "name": "Willow Sprite",
+        "min": 19,
+        "max": 20,
+        "rare": false,
+        "templateId": "willow_sprite",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+      },
+      {
+        "name": "Hedge Gnome",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "hedge_gnome",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
       }
     ]
   },
@@ -1737,6 +2230,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_troll",
         "tint": "#145a32",
         "still": "/guide-stills/mob_troll__145a32.webp"
+      },
+      {
+        "name": "Dune Troll",
+        "min": 17,
+        "max": 19,
+        "rare": false,
+        "templateId": "dune_troll",
+        "model": "mob_troll",
+        "tint": "#b07040",
+        "still": "/guide-stills/mob_troll__b07040.webp"
       }
     ]
   },
@@ -1752,6 +2255,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_ogre",
         "tint": "#9e7b53",
         "still": "/guide-stills/mob_ogre__9e7b53.webp"
+      },
+      {
+        "name": "Gravenbark Shambler",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "gravenbark_shambler",
+        "model": "mob_treant",
+        "tint": "#4e4a3a",
+        "still": "/guide-stills/mob_treant__4e4a3a.webp"
       }
     ]
   },
@@ -1789,6 +2302,26 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/skel_minion__6c8f8a.webp"
       },
       {
+        "name": "Ashbone Raider",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "ashbone_raider",
+        "model": "skel_minion",
+        "tint": "#e8dcc8",
+        "still": "/guide-stills/skel_minion__e8dcc8.webp"
+      },
+      {
+        "name": "Ashbone Warcaller",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "ashbone_warcaller",
+        "model": "skel_minion",
+        "tint": "#d8c8a8",
+        "still": "/guide-stills/skel_minion__d8c8a8.webp"
+      },
+      {
         "name": "Boneclad Revenant",
         "min": 18,
         "max": 19,
@@ -1804,6 +2337,46 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
     "family": "elemental",
     "creatures": [
       {
+        "name": "Duskwisp",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "duskwisp",
+        "model": "mob_ghost",
+        "tint": "#7a5f9e",
+        "still": "/guide-stills/mob_ghost__7a5f9e.webp"
+      },
+      {
+        "name": "Glimmerwisp",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "glimmerwisp",
+        "model": "mob_ghost",
+        "tint": "#ffc4ec",
+        "still": "/guide-stills/mob_ghost__ffc4ec.webp"
+      },
+      {
+        "name": "Hollow Spirit",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "hollow_spirit",
+        "model": "mob_ghost",
+        "tint": "#8fe8d8",
+        "still": "/guide-stills/mob_ghost__8fe8d8.webp"
+      },
+      {
+        "name": "Ice Wisp",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "ice_wisp",
+        "model": "mob_ghost",
+        "tint": "#bfe4ff",
+        "still": "/guide-stills/mob_ghost__bfe4ff.webp"
+      },
+      {
         "name": "Stormcrag Elemental",
         "min": 17,
         "max": 18,
@@ -1814,6 +2387,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_elemental__5dade2.webp"
       },
       {
+        "name": "Rime Elemental",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "rime_elemental",
+        "model": "mob_elemental",
+        "tint": "#9fd0f0",
+        "still": "/guide-stills/mob_elemental__9fd0f0.webp"
+      },
+      {
         "name": "Shardlord Kazzix",
         "min": 18,
         "max": 18,
@@ -1822,6 +2405,46 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_elemental",
         "tint": "#aed6f1",
         "still": "/guide-stills/mob_elemental__aed6f1.webp"
+      },
+      {
+        "name": "Lily Wisp",
+        "min": 19,
+        "max": 19,
+        "rare": false,
+        "templateId": "lily_wisp",
+        "model": "mob_ghost",
+        "tint": "#d0f2c8",
+        "still": "/guide-stills/mob_ghost__d0f2c8.webp"
+      },
+      {
+        "name": "Gale Wisp",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "gale_wisp",
+        "model": "mob_elemental",
+        "tint": "#bfe0e8",
+        "still": "/guide-stills/mob_elemental__bfe0e8.webp"
+      },
+      {
+        "name": "Nightkin Stargazer",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "nightkin_stargazer",
+        "model": "mob_nightkin",
+        "tint": "#8fa8e0",
+        "still": "/guide-stills/mob_nightkin__8fa8e0.webp"
+      },
+      {
+        "name": "Wood Wraith",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "wood_wraith",
+        "model": "mob_ghost",
+        "tint": "#9ab4a0",
+        "still": "/guide-stills/mob_ghost__9ab4a0.webp"
       }
     ]
   },
@@ -1837,6 +2460,21 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_dragonkin",
         "tint": "#bcd2e6",
         "still": "/guide-stills/mob_dragonkin__bcd2e6.webp"
+      }
+    ]
+  },
+  {
+    "family": "demon",
+    "creatures": [
+      {
+        "name": "Riftspawn",
+        "min": 3,
+        "max": 4,
+        "rare": false,
+        "templateId": "riftspawn",
+        "model": "mob_demonalt",
+        "tint": "#7a3fb0",
+        "still": "/guide-stills/mob_demonalt__7a3fb0.webp"
       }
     ]
   }
@@ -3657,5 +4295,62 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.4,
     "hover": 0.25,
     "tintStrength": 0.2
+  },
+  "mob_ghost": {
+    "url": "models/creatures/ghost.glb",
+    "idle": "Flying_Idle",
+    "height": 1.6,
+    "hover": 0.4,
+    "tintStrength": 0.55
+  },
+  "mob_stag": {
+    "url": "models/creatures/stag.glb",
+    "idle": "Idle",
+    "height": 1.9,
+    "tintStrength": 0.35
+  },
+  "mob_glub": {
+    "url": "models/creatures/glubevolved.glb",
+    "idle": "Flying_Idle",
+    "height": 1.4,
+    "hover": 0.15,
+    "tintStrength": 0.45
+  },
+  "mob_fox": {
+    "url": "models/creatures/fox.glb",
+    "idle": "Idle",
+    "height": 1,
+    "tintStrength": 0.35
+  },
+  "mob_alpaca": {
+    "url": "models/creatures/alpaca.glb",
+    "idle": "Idle",
+    "height": 1.7,
+    "tintStrength": 0.3
+  },
+  "mob_raptor": {
+    "url": "models/creatures/velociraptor.glb",
+    "idle": "Velociraptor_Idle",
+    "height": 1.6,
+    "tintStrength": 0.35
+  },
+  "mob_nightkin": {
+    "url": "models/creatures/tribal.glb",
+    "idle": "Flying_Idle",
+    "height": 1.9,
+    "hover": 0.3,
+    "tintStrength": 0.3
+  },
+  "mob_treant": {
+    "url": "models/creatures/yeti.glb",
+    "idle": "Idle",
+    "height": 2.6,
+    "tintStrength": 0.72
+  },
+  "mob_crab": {
+    "url": "models/creatures/crabenemy.glb",
+    "idle": "Idle",
+    "height": 1.7,
+    "tintStrength": 0.35
   }
 };

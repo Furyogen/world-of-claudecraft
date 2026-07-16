@@ -214,6 +214,9 @@ const UI_PURE_CORES = [
 // terrain_region_core (editor partial-rebuild chunk/texel selection math) and
 // water_core (the shore-depth sample shared by build + editor setLevel) follow
 // the same contract for the map editor's realtime terrain/water edits.
+// day_night_core is the clock-to-grade math of the world day/night cycle
+// (Date.now stays in the renderer that calls it), so a Vitest can drive any
+// moment of the cycle.
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
   'src/render/delve_interactable_visibility_core.ts',
@@ -221,6 +224,10 @@ const RENDER_PURE_CORES = [
   'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
+  'src/render/day_night_core.ts',
+  'src/render/authored_walls_core.ts',
+  'src/render/foliage_lod.ts',
+  'src/render/prewarm_pass.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // Bare-named pure cores: registered cores (from UI_PURE_CORES + RENDER_PURE_CORES)
@@ -232,6 +239,8 @@ const RENDER_PURE_CORES = [
 // updating this list) fails the cross-check instead of silently escaping the
 // reverse-completeness guard.
 const BARE_NAMED = [
+  'src/render/foliage_lod.ts',
+  'src/render/prewarm_pass.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',

@@ -257,8 +257,8 @@ describe('corpse harvest: single-use, first-come (#1141)', () => {
 // exact setup() shape (two players, seeded before the harvest's rolls) to land on
 // each side of the rarity floor.
 describe('signed materials (#1145)', () => {
-  it('a rare-or-better harvest stamps the item with the harvester name (seed 5)', () => {
-    const { sim, internals, a, mob } = setup(5);
+  it('a rare-or-better harvest stamps the item with the harvester name (seed 7)', () => {
+    const { sim, internals, a, mob } = setup(7);
     sim.harvestCorpse(mob.id, ['hide'], a);
     const meta = internals.players.get(a)!;
     const slot = meta.inventory.find((s) => s.itemId === 'boar_hide');
@@ -269,8 +269,8 @@ describe('signed materials (#1145)', () => {
     expect(sim.countItem('boar_hide', a)).toBe(1);
   });
 
-  it('a below-rare harvest grants a plain, unsigned fungible stack at its tier quantity (seed 2)', () => {
-    const { sim, internals, a, mob } = setup(2);
+  it('a below-rare harvest grants a plain, unsigned fungible stack at its tier quantity (seed 4)', () => {
+    const { sim, internals, a, mob } = setup(4);
     sim.harvestCorpse(mob.id, ['hide'], a);
     const meta = internals.players.get(a)!;
     const slot = meta.inventory.find((s) => s.itemId === 'boar_hide');

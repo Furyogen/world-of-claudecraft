@@ -62,6 +62,9 @@ export const editorStrings = {
     view3dTitle: 'Edit in the rendered world',
     view2d: '2D',
     view2dTitle: 'Edit on the symbolic overhead map',
+    preview: 'Preview',
+    previewTitle:
+      'See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)',
     undoCount: 'Undo: {count}',
     undoCountTitle: '{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)',
     autosave: 'Autosave',
@@ -101,6 +104,96 @@ export const editorStrings = {
     close: 'Close',
   },
 
+  fluid: {
+    title: 'Fluid Pool',
+    hint: 'Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.',
+    selHint:
+      'The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.',
+    kind: {
+      lava: 'Lava',
+      acid: 'Acid',
+      spectral: 'Spectral Fluid',
+      water: 'Still Water',
+    },
+    hue: 'Hue',
+    light: 'Lightness',
+    dps: 'Damage per second',
+    surfaceOffset: 'Surface height',
+    fxBubbles: 'Bubbles',
+    fxSmoke: 'Smoke',
+    fxHaze: 'Haze',
+    fxLight: 'Glow light',
+    resetPreset: 'Reset to preset',
+  },
+
+  tunnel: {
+    needExit:
+      'Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.',
+    generate: 'Generate cave ({count} ready)',
+    tooShort: 'The rig points are too close together - spread them at least a few yards apart.',
+    modeDig: 'Dig cave',
+    modeHole: 'Cut hole',
+    modePatch: 'Patch hole',
+    holeHint:
+      'Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.',
+    holeList: 'Holes',
+    holeLabel: 'Hole {n}',
+    holeRadius: 'Radius',
+    holeDelete: 'Delete hole',
+    patchHint:
+      'Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.',
+    patchList: 'Patches',
+    patchLabel: 'Patch {n}',
+    patchDelete: 'Delete patch',
+    listTitle: 'Caves',
+    caveLabel: 'Cave {n} ({nodes} points)',
+    width: 'Width',
+    height: 'Interior height',
+    variance: 'Variance',
+    floorVariance: 'Floor bumps',
+    stalactites: 'Stalactites',
+    stalagmites: 'Stalagmites',
+    spikeSize: 'Formation size',
+    startOpen: 'Entrance open',
+    endOpen: 'Exit open',
+    selectCave: 'Select whole cave',
+    noRig: 'This cave has no rig nodes to grab - lay a new cave instead.',
+    reverse: 'Swap entrance/exit',
+    delete: 'Delete cave',
+    texture: 'Interior texture',
+    texDefault: 'Granite (default)',
+    guideHint:
+      'Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.',
+    hint: 'Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole.',
+  },
+
+  rock: {
+    title: 'Rock Generator',
+    hint: 'Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.',
+    chainMode: 'Bridge / ridge mode',
+    chainHint:
+      'Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.',
+    chainCount: '{count} points laid',
+    generateChain: 'Generate rock ridge',
+    clearChain: 'Clear points',
+    chainTooShort: 'Lay at least two points first.',
+    size: 'Size',
+    noise: 'Noise amount',
+    detail: 'Feature detail',
+    sharp: 'Sharpness',
+    height: 'Height',
+    depth: 'Embed depth',
+    jag: 'Jaggedness',
+    texture: 'Texture',
+    baseTex: 'Base texture',
+    texStone: 'Stone',
+    texSandstone: 'Sandstone',
+    texBare: 'Bare (tintable)',
+    reroll: 'Re-roll shape',
+    selTitle: 'Generated Rock',
+    walkable: 'Walkable top',
+  },
+
   tool: {
     listLabel: 'Editor tools',
     keyHint: '{name} ({key})',
@@ -112,6 +205,9 @@ export const editorStrings = {
     lower: 'Lower',
     smooth: 'Smooth',
     flatten: 'Flatten / Smooth',
+    tunnel: 'Caves',
+    rock: 'Rock Gen',
+    fluid: 'Fluid Pool',
     paint: 'Paint Biome',
     water: 'Water',
     place: 'Place Asset',
@@ -119,10 +215,12 @@ export const editorStrings = {
     blocker: 'Blocker Wall',
     collider: 'Collider',
     camp: 'Camp',
-    spawn: 'Spawn Point',
+    entity: 'Move NPCs and Mobs',
+    spawn: 'Player Spawn',
     zone: 'Zone',
     light: 'Point Light',
     music: 'Music',
+    sound: 'Point Sound',
     region: 'Region',
     erase: 'Erase',
   },
@@ -169,15 +267,21 @@ export const editorStrings = {
     cave: 'Cave',
     erase: 'Erase paint',
     hint: 'Paint changes the ground texture and color only; it never reshapes the terrain.',
-    addSwatch: 'Add',
-    swatchColor: 'New swatch color',
-    swatchNamePlaceholder: 'Swatch name (optional)',
+    hue: 'Hue',
+    light: 'Light/Dark',
+    saveSwatch: 'Save tint as swatch',
+    saveSwatchTitle:
+      'Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on',
+    swatchSaved: 'Saved swatch "{name}".',
     customHint:
       'Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.',
     customFull: 'Swatch limit reached ({max}).',
     importTexture: 'Import texture swatch',
     importTextureTitle:
       'Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)',
+    builtinGroup: 'Texture library',
+    builtinTitle:
+      'Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)',
     tileSize: 'Texture tile size (yd)',
     importTextureFailed: 'Could not read that image.',
     clear: 'Clear all biome paint',
@@ -211,6 +315,7 @@ export const editorStrings = {
     namePrompt: 'Location name',
     none: 'No named locations yet.',
     deleteTitle: 'Remove this location',
+    hideBoxes: 'Hide area boxes',
   },
 
   lightTool: {
@@ -225,6 +330,20 @@ export const editorStrings = {
     capReached: 'Light limit reached ({max}).',
     lightN: 'Light {num}',
     selectTitle: 'Select this light in the world (bulb badge enlarges; Delete removes it)',
+  },
+
+  soundTool: {
+    title: 'Point Sounds',
+    hint: 'Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.',
+    none: 'No point sounds yet.',
+    clip: 'Sound effect',
+    volume: 'Max volume',
+    radius: 'Radius (yd)',
+    height: 'Height (yd)',
+    deleteTitle: 'Remove this sound',
+    capReached: 'Point sound limit reached ({max}).',
+    soundN: 'Sound {num}',
+    selectTitle: 'Select this sound in the world (badge enlarges; Delete removes it)',
   },
 
   markerTool: {
@@ -254,6 +373,9 @@ export const editorStrings = {
   sculpt: {
     hint: 'Drag to raise the ground; tick the box to carve downward instead.',
     lower: 'Lower instead of raise',
+    grab: 'Grab / pull (snake hook)',
+    grabHint:
+      'Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.',
     shiftHint: 'Hold Shift while dragging to do the opposite (raise becomes lower, and back).',
     autoTex: 'Auto texture by angle',
     autoTexHint:
@@ -276,6 +398,10 @@ export const editorStrings = {
     level: 'Water level',
     hint: "Sets each declared lake's water surface height, from {min} to {max} yards.",
     reset: 'Reset to the built-in level',
+    tintTitle: 'Water tint',
+    hue: 'Hue',
+    light: 'Lightness',
+    tintReset: 'Reset tint',
     waterfallTitle: 'Waterfalls',
     placeWaterfall: 'Place waterfall',
     placeWaterfallTitle: 'Arm the Place tool with an animated waterfall (click a cliff to drop it)',
@@ -318,6 +444,13 @@ export const editorStrings = {
   foliageTool: {
     title: 'Foliage Brush',
     hint: 'Drag across the ground to scatter the enabled foliage inside the brush; each stroke is one undo step. Use Erase to remove pieces.',
+    ambientTitle: 'Existing map foliage',
+    ambientHint:
+      'Built-in trees are procedural and cannot be selected. Focus the camera on an area, then convert the nearest batch.',
+    makeAmbientEditable: 'Make 500 nearby trees editable',
+    ambientEditableHint:
+      'Ambient foliage is off. Every foliage piece painted with this brush can be selected, moved, rotated, scaled, or erased.',
+    ambientConverted: 'Made the {count} nearest trees editable.',
     density: 'Density',
     minScale: 'Min size',
     maxScale: 'Max size',
@@ -359,12 +492,21 @@ export const editorStrings = {
     none: 'No camp selected.',
   },
 
+  entityTool: {
+    title: 'NPCs and Mobs',
+    hint: 'Click a mob or NPC to select it, then drag to move it. Hold Ctrl while clicking to select multiple mobs, then drag any selected mob to move the whole ringed group. Selected NPCs can also be rotated with the Facing control. Use Camp to create or configure mob groups.',
+    selected: 'Selected: {name}',
+    none: 'Click a mob or NPC in the map view to select it.',
+    facing: 'Facing',
+  },
+
   spawn: {
-    title: 'Spawn Point',
-    hint: 'Click the ground to set where playtest drops the player.',
+    title: 'Player Spawn',
+    hint: 'Drag a large box to spread new players across it. Click without dragging to keep a single spawn point.',
     position: 'Spawn: {x}, {z}',
+    area: 'Spawn area: {width} x {height} yd',
     unset: 'Using the built-in start position.',
-    clear: 'Clear spawn point',
+    clear: 'Clear player spawn',
   },
 
   region: {
@@ -404,13 +546,65 @@ export const editorStrings = {
     radiusAutoTitle: 'Reset the collision radius to follow the asset scale',
     radiusHint:
       'Auto derives the collision radius from the asset scale; drag the slider to override it.',
+    collisionBaked:
+      'Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.',
+    collisionCustom:
+      'Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.',
     footprints: 'Show collision footprints',
+    collisionTitle: 'Collision',
+    collisionType: 'Collision type',
+    collisionTypeBaked: 'Baked hitboxes',
+    collisionTypeBasic: 'Basic (radius)',
+    collisionTypeMesh: 'True collision (heavy)',
+    collisionTypeNone: 'No collision',
+    collisionEdited: 'Custom hitboxes ({count} boxes). The sim blocks with exactly these.',
+    hitboxEdit: 'Edit hitboxes',
+    hitboxDone: 'Done editing',
+    hitboxAdd: 'Add hitbox',
+    hitboxDelete: 'Delete selected',
+    hitboxReset: 'Reset to baked',
+    hitboxSelected: '{count} hitboxes selected',
+    hitboxHint:
+      'Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.',
+    hitboxCap: 'Hitbox limit reached ({max} per asset).',
+    hitboxSavePreset: 'Save as preset',
+    hitboxClearPreset: 'Clear saved preset',
+    hitboxPresetSaved: 'Hitbox preset saved for {name}. New placements copy these boxes.',
+    hitboxPresetCleared: 'Hitbox preset cleared.',
+    hitboxPresetHint:
+      'Presets live on this device: every future placement of this asset spawns with the saved hitboxes.',
+    meshBaking: 'Baking true collision from the model mesh...',
+    meshBakeDone: 'True collision ready ({count} boxes).',
+    meshBakeFailed: 'Could not bake true collision for this asset.',
+    meshReady: 'True collision active: a dense box set hugging the real model mesh.',
+    meshHint:
+      'True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.',
+    collisionCopyAll: 'Copy collision to all {name} ({count})',
+    collisionCopyAllHint:
+      'Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.',
+    collisionCopyConfirmTitle: 'Copy collision to all {name}?',
+    collisionCopyConfirmBody:
+      'All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.',
+    collisionCopyConfirm: 'Copy to all',
+    collisionCopied: 'Copied collision to {count} {name}.',
+    scaleAllTitle: 'Scale all copies',
+    scaleMin: 'Scale min',
+    scaleMax: 'Scale max',
+    scaleAllButton: 'Scale all {name} ({count})',
+    scaleAllHint:
+      'Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).',
+    scaleAllConfirmTitle: 'Scale all {name}?',
+    scaleAllConfirmBody:
+      'Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.',
+    scaleAllConfirm: 'Scale all',
+    scaleAllDone: 'Scaled {count} {name}.',
     duplicate: 'Duplicate',
     delete: 'Delete',
     deleteHint: 'Delete removes the selection; Ctrl+Z restores it.',
     moveHint:
       'Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).',
-    wheelHint: 'Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it.',
+    wheelHint:
+      'Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+C copies, and Ctrl+V pastes. Ctrl+D duplicates it in place.',
   },
 
   transform: {
@@ -473,6 +667,7 @@ export const editorStrings = {
     deleteAsset: 'Delete uploaded asset',
     deleteAssetConfirm: 'Delete the uploaded asset "{name}"? Maps that use it lose the model.',
     pick: 'Place {name}',
+    collisionMaster: 'Collision Master: author this asset’s default collision',
     categoryTab: '{category} ({count})',
     resizeHandle: 'Drag to resize the asset browser',
     category: {
@@ -487,6 +682,57 @@ export const editorStrings = {
       tools: 'Tools',
       weapons: 'Weapons',
     },
+  },
+
+  collisionMaster: {
+    title: 'Collision Master',
+    mapName: 'Collision Master: {name}',
+    assetLabel: 'Authoring default collision for {name}.',
+    hint: 'Build this asset’s collision with the Selection panel below: pick the collision type, edit boxes with the gizmo (move / rotate / scale), add or delete boxes. Lock In saves it to the project as the asset’s default everywhere.',
+    fromBake: 'From bake',
+    fromBakeTitle: 'Start from the asset’s auto-baked voxel boxes',
+    fittedBox: 'Fitted box',
+    fittedBoxTitle: 'Start from one box fitted around the whole asset',
+    singleBox: 'Single box',
+    singleBoxTitle: 'Start from one plain box at the asset’s base',
+    polySnap: 'Poly snap brush',
+    polySnapHint:
+      'Drag across the model’s surface to lay a collision plane that hugs the geometry: the drag start/end set its length and yaw, the sampled heights its vertical band. Great for walls, roofs, and ramps.',
+    devOnly: 'Lock In writes to the project files, so it needs the local dev server (npm run dev).',
+    lockIn: 'Lock In',
+    lockInTitle: 'Save as this asset’s default collision (writes to the project) and return to your map',
+    cancel: 'Back to map',
+    catalogOnly: 'Collision Master works on catalogue assets. Imported models keep their import bake.',
+    saveFailed: 'Could not save your map before opening Collision Master.',
+    stashOnly:
+      'Browser storage is blocked, so the map is held in memory: you will return to it from Collision Master, but export it if you want a durable copy.',
+    noBoxes: 'No collision boxes to lock in. Add at least one box, or pick Basic/None.',
+    meshUnsupported: 'True Mesh is a per-map bake and cannot be a project default. Pick Baked, Basic, or None.',
+    saveEndpointFailed: 'Saving the default failed: {error}',
+    locked: 'Locked in: {name} now uses this collision everywhere.',
+    barLabel: 'Collision modeling tools',
+    modeObject: 'Object',
+    modeObjectTitle: 'Object mode: move / rotate / scale whole boxes with the gizmo',
+    modeVertex: 'Vertex',
+    modeVertexTitle: 'Vertex mode: drag a corner to reshape the selected box',
+    modeEdge: 'Edge',
+    modeEdgeTitle: 'Edge mode: drag an edge to move its two faces together',
+    modeFace: 'Face',
+    modeFaceTitle: 'Face mode: drag a face along its normal',
+    primBox: 'Box',
+    primPlane: 'Plane',
+    primCylinder: 'Cylinder',
+    primSphere: 'Sphere',
+    primWedge: 'Ramp',
+    primTitle: 'Add a {name} primitive to the collision set',
+    polySnapShort: 'Poly Snap',
+    duplicate: 'Dup',
+    duplicateTitle: 'Duplicate the selected boxes',
+    delete: 'Del',
+    deleteTitle: 'Delete the selected boxes',
+    openFromSelection: 'Collision Master',
+    openFromSelectionTitle:
+      'Author this asset’s DEFAULT collision in the Collision Master scene (saves to the project; your map auto-saves and you return here)',
   },
 
   importModel: {
@@ -508,15 +754,18 @@ export const editorStrings = {
   openDrawer: {
     title: 'Open Map',
     close: 'Close',
+    tabShipped: 'Shipped Maps',
     tabLocal: 'This Browser',
     tabMine: 'My Server Maps',
     tabPublic: 'Public Maps',
     colName: 'Name',
+    colType: 'Type',
     colUpdated: 'Updated',
     colStatus: 'Status',
     statusPublic: 'Public',
     statusPrivate: 'Private',
     open: 'Open',
+    openCopy: 'Open Copy',
     fork: 'Fork',
     publish: 'Publish',
     unpublish: 'Unpublish',
@@ -540,7 +789,10 @@ export const editorStrings = {
     savedServer: 'Saved "{name}" to the server (v{version}).',
     savedLocalOnly: 'Saved "{name}" to this browser. Sign in to save online.',
     saveFailedLocal: 'Local save failed (storage blocked).',
+    openFailedLocal:
+      'That save could not be read (corrupt or truncated). Its file may still import via More > Import if you exported a copy.',
     opened: 'Opened "{name}".',
+    shippedMapOpened: 'Opened an editable copy of "{name}".',
     imported: 'Imported "{name}".',
     importFailed: 'That file is not a valid map. If you exported a bundle, import the .wocmap.zip.',
     importMissingDeps:
@@ -548,6 +800,10 @@ export const editorStrings = {
     exported: 'Downloaded "{name}".',
     bundleExported:
       'Exported "{name}" with its models, textures, and skybox. Import the .wocmap.zip (not a loose .json) on the other computer.',
+    exportBlockedMissingDeps:
+      'Export blocked: {count} referenced model, texture, or skybox file(s) are missing from this browser. Restore them before exporting so the engine receives a complete map.',
+    exportBlockedInvalid:
+      'Export blocked because the map did not pass the engine compatibility check. Save a copy and review the latest edits before trying again.',
     newMap: 'New map started from the built-in world.',
     newFlatMap: 'Blank map started.',
     forked: 'Forked to "{name}". You are editing your own copy now.',
@@ -563,7 +819,14 @@ export const editorStrings = {
     autosaveFailed:
       'Autosave failed (browser storage is full or blocked). Export the map to keep a backup.',
     terrainCapReached: 'Terrain edit limit reached ({max}). Extra sculpt stamps were not added.',
+    caveCapReached: 'Cave limit reached ({max}). Delete or undo a cave first.',
+    holeCapReached: 'Hole limit reached ({max}). Delete or undo a hole first.',
     placementCapReached: 'Placement limit reached ({max}). Extra assets were not added.',
+    entityCapReached: 'The map entity limit was reached. Some copied NPCs or mobs were not pasted.',
+    selectionCopied: 'Copied {count} selected item(s).',
+    selectionPasted: 'Pasted {count} item(s).',
+    selectionNothingToCopy: 'Select an asset, NPC, or mob before copying.',
+    selectionNothingToPaste: 'Copy an asset, NPC, or mob before pasting.',
     blockerCapReached: 'Blocker wall limit reached ({max}). The new wall was not added.',
     autosaveOff: 'Autosave turned off: {reason} Save manually, then turn it back on.',
   },
@@ -781,13 +1044,14 @@ export const editorStrings = {
     },
     key: {
       tools:
-        'Most tools have a single-letter shortcut, shown on their buttons in the tool rail. X deletes the selected assets; Region and Erase are click-only.',
+        'Select, Move, Rotate and Scale use the number keys 1-4, shown on their buttons in the tool rail. X deletes the selected assets; every other tool is click-only.',
       brush: '[ and ] resize the brush; Shift+[ and Shift+] change its strength.',
       undo: 'Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.',
       save: 'Ctrl+S saves the map.',
       duplicate:
-        'Ctrl+D duplicates the selected asset; Shift+D duplicates the whole selection and lets the copies follow the cursor until you click.',
-      multiSelect: 'Shift+click adds or removes assets from the selection (Blender style).',
+        'Ctrl+C copies selected assets, NPCs, or mobs; Ctrl+V pastes the group. Ctrl+D duplicates assets in place, and Shift+D duplicates them into a grab.',
+      multiSelect:
+        'Shift+click adds or removes assets. In the NPC and Mob tool, Ctrl+click selects multiple entities.',
       nudge: 'Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.',
       wheel: 'Shift+scroll rotates the selected asset; Alt+scroll scales it.',
       delete: 'Delete removes the selected asset or camp.',

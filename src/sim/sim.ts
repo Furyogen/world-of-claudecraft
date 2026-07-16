@@ -14,7 +14,13 @@ import * as bagsMod from './bags';
 import { addStacked, BAG_SOCKETS, bagCapacity, canAddItem, migrationBagsFor } from './bags';
 import * as bankMod from './bank';
 import { type BankState, clampBonusSlots, sanitizeBankState } from './bank';
-import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
+import { campSpawnOffset } from './camp_scatter';
+import {
+  allocRiftCollisionToken,
+  lineOfSightClear,
+  resolveMovement,
+  resolvePosition,
+} from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
 import { auraReplacementConflicts } from './combat/aura_stacking';
 import {
@@ -103,6 +109,7 @@ import {
   abilitiesKnownAt,
   arenaOrigin,
   CLASSES,
+  COMMUNITY_RIFT_SLOT_COUNT,
   DEEPFEN_SHALLOWS_LAKE,
   DELVE_COMPANIONS,
   DELVE_LIST,
@@ -120,8 +127,11 @@ import {
   isArenaPos,
   isDelvePos,
   MOBS,
+  migrateLegacyInstancePos,
   NPCS,
   QUESTS,
+  RIFT_SLOT_COUNT,
+  riftInstanceOrigin,
   SPIRIT_HEALER_NPC_ID,
   zoneAt,
 } from './data';
@@ -150,6 +160,7 @@ import {
   createNpc,
   createPlayer,
   type PlayerEquipment,
+  type PlayerEquipmentInstances,
   recalcPlayerStats,
 } from './entity';
 import {
@@ -297,6 +308,7 @@ import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
 import * as tradeMod from './social/trade';
+import { spawnPointInArea } from './spawn_area';
 import {
   applyResurrectionSickness,
   RESURRECTION_SICKNESS_ID,
@@ -305,7 +317,9 @@ import {
   resurrectAtSpiritHealer,
   revivePlayerAt,
   spawnOverworldSpiritHealers,
+  spawnSpiritHealerAt,
 } from './spirit';
+import * as unstuckMod from './unstuck';
 import {
   rollWorldBossLoot as rollWorldBossLootImpl,
   scaleWorldBossHp,
@@ -320,6 +334,7 @@ export type { MailSave } from './mail/post_office';
 // stays valid now that the type lives in market.ts.
 export type { MarketSave } from './market';
 
+import { updateSwimFatigue } from './fatigue';
 import {
   applyHeroicMobTuning,
   mobLevelForDungeonDifficulty,
@@ -342,12 +357,45 @@ import {
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
 import { buyHeroicVendorItem as buyHeroicVendorItemImpl } from './instances/heroic_vendor';
+import { updatePortalTriggers } from './portals';
 import * as questCommands from './quests/quest_commands';
 import {
   checkQuestReady,
   onInventoryChangedForQuests,
   onMobKilledForQuests,
 } from './quests/quest_credit';
+import {
+  type NaturalRiftPortal,
+  RIFT_PORTAL_FIRST_AT,
+  updateRiftPortals as updateRiftPortalsImpl,
+} from './rift/portals';
+import {
+  enchantRiftItem as enchantRiftItemImpl,
+  type RiftForgeResult,
+  sanitizeRiftGearInstance,
+  socketRiftGem as socketRiftGemImpl,
+  upgradeRiftItem as upgradeRiftItemImpl,
+} from './rift/progression';
+import { generateRiftFloor } from './rift/rift_gen';
+import {
+  riftLockpickAbort as riftLockpickAbortImpl,
+  riftLockpickAction as riftLockpickActionImpl,
+  riftLockpickEngage as riftLockpickEngageImpl,
+  riftLockpickViewFor as riftLockpickViewForImpl,
+} from './rift/rift_lockpick';
+import {
+  advanceRiftRollers as advanceRiftRollersImpl,
+  enterRift as enterRiftImpl,
+  leaveRift as leaveRiftImpl,
+  liftRiftEntities as liftRiftEntitiesImpl,
+  riftInstanceAtPos,
+  riftOpenTreasure as riftOpenTreasureImpl,
+  riftPlayerLift as riftPlayerLiftImpl,
+  tickRiftLockpicks as tickRiftLockpicksImpl,
+  updateRiftInstances as updateRiftInstancesImpl,
+  updateRiftTriggers as updateRiftTriggersImpl,
+} from './rift/runs';
+import type { RiftEvent, RiftInstance } from './rift/types';
 
 // computeQuestState (the pure quest-state fn) moved to quests/quest_commands.ts (W4);
 // re-export it here so ClientWorld's `import { computeQuestState } from '../sim/sim'`
@@ -366,6 +414,8 @@ import * as yumiMod from './social/yumi';
 export { eloDelta } from './social/arena';
 
 import { FINDER_ACTIVITIES, type FinderListingTag } from './content/dungeon_finder';
+import { damagingFluidAt } from './fluid_volumes';
+import { isAuthoredMapPresentation } from './map_presentation';
 import {
   partyFrameAbsorb,
   partyFrameAggroTargets,
@@ -423,6 +473,7 @@ import {
   type DungeonDifficulty,
   dist2d,
   type Entity,
+  EQUIP_SLOTS,
   type EquipSlot,
   type ErrorReason,
   emptyMoveInput,
@@ -475,8 +526,14 @@ import {
 } from './types';
 import * as weaponStowMod from './weapon_stow';
 import {
+  caveMouthStepOk,
+  caveSheetAt,
+  caveWallBlocksStep,
   groundHeight,
+  groundHeightNear,
   nearSteepWalls,
+  onCaveSheet,
+  terrainHeight,
   terrainSteepnessAt,
   waterLevel,
   waterLevelAt,
@@ -902,9 +959,10 @@ export interface PlayerMeta {
   copper: number;
   equipment: PlayerEquipment;
   // Per-slot ItemInstancePayload for whichever equipped piece carries one (an
-  // enchanted item's rolled.stats, see src/sim/professions/enchanting.ts).
-  // Sparse: a slot with a plain (unenchanted) piece has no entry.
-  equipmentInstance: Partial<Record<EquipSlot, ItemInstancePayload>>;
+  // enchanted item's rolled.stats, see src/sim/professions/enchanting.ts, or a
+  // rift-forged upgrade's payload, see src/sim/rift/progression.ts). Sparse: a
+  // slot with a plain piece has no entry.
+  equipmentInstance: PlayerEquipmentInstances;
   xp: number;
   // Post-cap progression (Max-Level XP Overflow). `lifetimeXp` is the monotonic
   // 64-bit-safe total of all XP ever earned — it keeps growing at the cap and is
@@ -969,6 +1027,9 @@ export interface PlayerMeta {
   // aggressive pet auto-pull (see PET_OWNER_IDLE_TICKS) so an idle owner's pet
   // cannot farm the area alone.
   lastActiveTick: number;
+  // Runtime-only local recovery attempt. The owning system lives in unstuck.ts;
+  // only its anti-relog cooldown is persisted through Entity.cooldowns.
+  pendingUnstuck: unstuckMod.PendingUnstuck | null;
   // Ashen Coliseum standings. Legacy arenaRating/Wins/Losses are the 1v1
   // bracket; 2v2 is fully independent and persisted alongside them.
   arenaRating: number;
@@ -1140,9 +1201,11 @@ export interface CharacterState {
   facing: number;
   equipment: PlayerEquipment;
   // Per-slot ItemInstancePayload for whichever equipped piece carries one (an
-  // enchanted item's rolled.stats, see src/sim/professions/enchanting.ts).
-  // Optional so pre-Enchanting saves load cleanly (defaults to no enchants).
+  // enchanted item's rolled.stats or a rift-forged upgrade's payload).
+  // Optional so pre-Enchanting saves load cleanly (defaults to no instances).
   equipmentInstance?: Partial<Record<EquipSlot, ItemInstancePayload>>;
+  /** Legacy plural key written by this branch's earlier rift-gear saves. */
+  equipmentInstances?: Partial<Record<EquipSlot, ItemInstancePayload>>;
   inventory: InvSlot[];
   // Equipped bag sockets. Optional so pre-bag saves load cleanly (defaults to
   // 4 empty sockets; an over-capacity legacy inventory is tolerated).
@@ -1345,6 +1408,7 @@ export class Sim {
   private engagedPids = new Set<number>();
   primaryId = -1; // the local/RL player in single-player contexts
   nextId = 1;
+  private nextSpawnAreaSlot = 0;
   events: SimEvent[] = [];
   // Owned by E1 (entity_roster drains it); stays on Sim because N1/M3 schedule into
   // it. Exposed as a live view via SimContext.
@@ -1393,6 +1457,19 @@ export class Sim {
   // dungeon instances
   instances: InstanceSlot[] = [];
   dungeonResetLocks = new Map<string, { availableAt: number; claimId: number }>();
+  // procedural rift instances (separate slot pool + coordinate band from dungeons)
+  riftInstances: RiftInstance[] = [];
+  // Shared natural-world events. Group instances point here by eventId and race
+  // for one authoritative first-clear claim.
+  riftEvents: RiftEvent[] = [];
+  nextRiftInstanceId = 1;
+  // rift-portal registry (built lazily by updateRiftTriggers, appended on rift_portal spawn)
+  private riftPortalIds: number[] | null = null;
+  // Open world-spawned ranked rift portals + the spawn ordinal (rift/portals.ts
+  // scheduler; both live SimContext views).
+  naturalRiftPortals: NaturalRiftPortal[] = [];
+  riftPortalSpawnCount = 0;
+  riftPortalNextAt = RIFT_PORTAL_FIRST_AT;
   // delve instances (separate slot pool from dungeons)
   delveRuns: DelveRun[] = [];
   private delvePetStash = new Map<number, PetState>();
@@ -1443,6 +1520,11 @@ export class Sim {
   private worldBossNextAt: number[] = WORLD_BOSSES.map((b) => b.intervalSeconds);
   private worldBossEntityIds: (number | null)[] = WORLD_BOSSES.map(() => null);
 
+  // Per-world key for the rift collision registry in colliders.ts. Allocated per
+  // Sim INSTANCE (not per seed): two same-seed Sims in one process must never
+  // read or overwrite each other's active rift regions.
+  readonly riftCollisionToken = allocRiftCollisionToken();
+
   constructor(cfg: SimConfig) {
     this.devCommands = cfg.devCommands ?? false;
     this.cfg = {
@@ -1453,6 +1535,8 @@ export class Sim {
       playerName: cfg.playerName ?? 'Adventurer',
       devCommands: this.devCommands,
       worldBossAtBoot: cfg.worldBossAtBoot ?? false,
+      riftPortals: cfg.riftPortals ?? false,
+      communityRifts: cfg.communityRifts ?? false,
       lockoutNowMs: cfg.lockoutNowMs ?? (() => Math.floor(this.time * 1000)),
       raidResetMs: cfg.raidResetMs ?? ((nowMs: number) => nowMs + DEFAULT_RAID_LOCKOUT_MS),
       valeCupShowcase: cfg.valeCupShowcase ?? false,
@@ -1533,6 +1617,13 @@ export class Sim {
     // Mobs from camps
     for (const camp of worldContent.camps) {
       const template = MOBS[camp.mobId];
+      // A custom map may reference a mob id this build does not register (an
+      // older/newer content set): skip the camp instead of crashing the boot.
+      // The editor still shows the camp marker, so nothing is silently lost.
+      if (!template) {
+        console.warn(`camp mob id not in MOBS registry, skipping camp: ${camp.mobId}`);
+        continue;
+      }
       // Aquatic/flagged swimmers may wade in the shallows; everyone else
       // still spawns on dry land even though combat movement can enter water.
       const minHeight = this.mobCanSpawnInWater(template) ? waterLevel() - 0.5 : waterLevel() + 0.4;
@@ -1553,17 +1644,20 @@ export class Sim {
           this.addEntity(mob);
           continue;
         }
-        const ang = this.rng.range(0, Math.PI * 2);
-        const r = Math.sqrt(this.rng.next()) * camp.radius;
+        // Spread the camp's mobs with even nearest-neighbor spacing (a sunflower
+        // spiral) instead of independent uniform sampling, which let mobs stack.
+        // The two draws below feed campSpawnOffset as jitter and are consumed in the
+        // SAME order/count as the old angle/radius rolls, so the global rng stream
+        // position is unchanged: only spawn positions move (see camp_scatter.ts).
+        const jitterAngle = this.rng.range(0, Math.PI * 2);
+        const jitterFrac = this.rng.next();
+        const off = campSpawnOffset(i, camp.count, camp.radius, jitterAngle, jitterFrac);
         // Keep camp mobs out of every dungeon door's clear ring so approaching or
         // zoning out of a dungeon never lands the player in a pack's aggro radius.
         // Pure geometry on the already-rolled point: it draws no rng, so the spawn
         // loop's own draw order is untouched (mob positions do shift, which moves
         // their later idle-wander draws, but that is downstream in the drive phase).
-        const cleared = projectOutsideDungeonDoors(
-          camp.center.x + Math.sin(ang) * r,
-          camp.center.z + Math.cos(ang) * r,
-        );
+        const cleared = projectOutsideDungeonDoors(camp.center.x + off.x, camp.center.z + off.z);
         // findSafePos's inward spiral can walk a shore-side ring-edge point back
         // toward land, i.e. back INTO the ring; re-project the safe point so the
         // "never inside a door ring" guarantee holds for every seed, not just the
@@ -1595,7 +1689,9 @@ export class Sim {
 
     // Ravenpost mailboxes: one interactable raven pillar per town (draws no
     // rng; findSafePos is deterministic, so the camp draws above are unmoved).
-    for (const boxDef of MAILBOXES) {
+    // Blank-slate maps carry none of the shipped town fixtures.
+    const blankSlate = isAuthoredMapPresentation(this.cfg.world?.presentationMode);
+    for (const boxDef of blankSlate ? [] : MAILBOXES) {
       const safe = this.findSafePos(boxDef.x, boxDef.z, waterLevel() + 0.6);
       const box = createGroundObject(this.nextId++, '', 'Mailbox', this.groundPos(safe.x, safe.z));
       box.templateId = 'mailbox';
@@ -1606,7 +1702,6 @@ export class Sim {
     }
 
     // Dungeon entrances + their private instance slots
-    const blankSlate = this.cfg.world?.presentationMode === 'blank';
     for (const dungeon of DUNGEON_LIST) {
       if (dungeon.overworldDoor === false) {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
@@ -1657,8 +1752,15 @@ export class Sim {
 
     // Spirit Healers (the angels): one hovering at every overworld graveyard.
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
-    // createNpc draws no rng, so world-gen determinism is preserved.
-    spawnOverworldSpiritHealers(this.ctx);
+    // createNpc draws no rng, so world-gen determinism is preserved. A blank
+    // map has no graveyards, so it gets a single Pale Keeper at its starting
+    // spawn point (where released spirits also return, see spirit.ts).
+    if (!blankSlate) {
+      spawnOverworldSpiritHealers(this.ctx);
+    } else if (this.cfg.world) {
+      const ps = this.cfg.world.playerStart;
+      spawnSpiritHealerAt(this.ctx, ps.x, ps.z);
+    }
 
     // Groundskeeper Bram at the Sowfield gate (Vale Cup). Placed through the
     // SAME findSafePos path as the generic NPC loop above, but under a RESERVED
@@ -1717,6 +1819,58 @@ export class Sim {
           lockpick: null,
         });
       }
+    }
+
+    // Procedural rift instance pool (empty until a portal is entered). Public
+    // test realms opt into a larger pool without changing the normal host cap.
+    const riftSlotCount = this.cfg.communityRifts ? COMMUNITY_RIFT_SLOT_COUNT : RIFT_SLOT_COUNT;
+    for (let i = 0; i < riftSlotCount; i++) {
+      this.riftInstances.push({
+        slot: i,
+        instanceId: 0,
+        eventId: null,
+        partyKey: null,
+        memberIds: new Set(),
+        startedAt: 0,
+        finishedAt: null,
+        outcome: 'abandoned',
+        upgrade: null,
+        seed: 0,
+        baseLevel: 1,
+        floorIndex: 0,
+        floorCount: 0,
+        mobIds: [],
+        objectIds: [],
+        bossId: null,
+        bossDiedAtTick: null,
+        exitId: null,
+        descentAt: null,
+        descentId: null,
+        descentOpen: false,
+        pylonIds: [],
+        litPylons: new Set(),
+        pylonTotal: 0,
+        puzzleSolved: false,
+        boulderIds: [],
+        boulderPads: [],
+        seqRuneIds: [],
+        seqStep: 0,
+        beaconId: null,
+        rollerIds: [],
+        cacheId: null,
+        lockpick: null,
+        gateId: null,
+        switchId: null,
+        gateOpen: true,
+        minibossId: null,
+        orbId: null,
+        orbActive: false,
+        returnPos: { x: 0, z: 0 },
+        emptyFor: 0,
+        tier: null,
+        portalId: null,
+        rewarded: false,
+      });
     }
 
     if (!cfg.noPlayer) {
@@ -1779,6 +1933,8 @@ export class Sim {
   // a spawn actually fires (which never happens inside the short parity scenarios),
   // so existing determinism traces are unaffected.
   private updateWorldBosses(): void {
+    // Blank-slate maps have no built-in world content, bosses included.
+    if (isAuthoredMapPresentation(this.cfg.world?.presentationMode)) return;
     for (let i = 0; i < WORLD_BOSSES.length; i++) {
       const def = WORLD_BOSSES[i];
       const liveId = this.worldBossEntityIds[i];
@@ -1866,6 +2022,10 @@ export class Sim {
     // fallback would otherwise swallow a delve position and eject the player to a
     // dungeon door instead of the board door (FR-1.6). The bands are disjoint, so
     // `else if` keeps dungeon handling intact.
+    if (savedPos) {
+      // saves from before the instance plane moved east (see data.ts)
+      savedPos = migrateLegacyInstancePos(savedPos) ?? savedPos;
+    }
     if (savedPos && isDelvePos(savedPos.x)) {
       const delve = delveAt(savedPos.x) ?? DELVE_LIST[0];
       savedPos = { x: delve.doorPos.x, z: delve.doorPos.z - 4 };
@@ -1873,10 +2033,15 @@ export class Sim {
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };
     }
-    const playerStart = (this.cfg.world ?? getActiveWorldContent()).playerStart;
+    const world = this.cfg.world ?? getActiveWorldContent();
+    const playerStart = world.playerStart;
+    const freshStart =
+      !savedPos && world.playerSpawnArea
+        ? spawnPointInArea(world.playerSpawnArea, this.nextSpawnAreaSlot++)
+        : playerStart;
     const startPos = savedPos
       ? this.groundPos(savedPos.x, savedPos.z)
-      : this.groundPos(playerStart.x, playerStart.z);
+      : this.groundPos(freshStart.x, freshStart.z);
     const savedArena1v1: ArenaStanding = {
       rating: savedState?.arena1v1Rating ?? savedState?.arenaRating ?? arenaMod.ARENA_BASE_RATING,
       wins: savedState?.arena1v1Wins ?? savedState?.arenaWins ?? 0,
@@ -1932,6 +2097,7 @@ export class Sim {
       joinedAt: this.time,
       totalPlayedSeconds: Math.max(0, savedState?.totalPlayedSeconds ?? 0),
       lastActiveTick: this.tickCount,
+      pendingUnstuck: null,
       arenaRating: savedArena1v1.rating,
       arenaWins: savedArena1v1.wins,
       arenaLosses: savedArena1v1.losses,
@@ -2016,13 +2182,27 @@ export class Sim {
         for (const id of s.unlockedMilestones) meta.unlockedMilestones.add(id);
       meta.copper = s.copper;
       meta.equipment = { ...s.equipment };
-      meta.equipmentInstance = Object.fromEntries(
-        Object.entries(s.equipmentInstance ?? {}).map(([slot, inst]) => [
-          slot,
-          cloneItemInstancePayload(inst),
-        ]),
-      );
+      meta.equipmentInstance = {};
+      for (const [slot, instance] of Object.entries(
+        s.equipmentInstance ?? s.equipmentInstances ?? {},
+      )) {
+        if (!(EQUIP_SLOTS as readonly string[]).includes(slot) || !instance) continue;
+        const itemId = meta.equipment[slot as EquipSlot];
+        if (!itemId) continue;
+        // A rift payload is validated against the worn item (anti-tamper); any
+        // other instance (an enchant) deep-clones through the shared rules.
+        const clean = instance.rift
+          ? sanitizeRiftGearInstance(itemId, instance, player.id)
+          : cloneItemInstancePayload(instance);
+        if (clean) meta.equipmentInstance[slot as EquipSlot] = clean;
+      }
       meta.inventory = s.inventory.map(cloneInvSlot);
+      for (const slot of meta.inventory) {
+        if (!slot.instance?.rift) continue;
+        const clean = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
+        if (clean) slot.instance = clean;
+        else delete slot.instance;
+      }
       if (s.bags === undefined) {
         // PRE-BAG save: the character earned this space under the infinite
         // inventory, so grant + equip bags that cover it (lowest quality tier
@@ -2246,6 +2426,11 @@ export class Sim {
   removePlayer(pid: number): void {
     const meta = this.players.get(pid);
     if (!meta) return;
+    // Offline/headless removals have no GameServer lifecycle hook. End an
+    // accepted recovery explicitly so every accepted attempt has one terminal
+    // event; the online server calls the same delegate earlier so it can attach
+    // durable account/character identity before removing the session.
+    this.cancelUnstuckForDisconnect(pid);
     // If the leaver owns a live lockpick session, abandon it (preserves
     // attemptAvailable so a remaining party member can still pick the chest).
     // Must run before party removal / dropEntity, since delveRunForPlayer
@@ -2786,6 +2971,9 @@ export class Sim {
   get equipment(): PlayerEquipment {
     return this.primary.equipment;
   }
+  get equipmentInstances(): PlayerEquipmentInstances {
+    return this.primary.equipmentInstance;
+  }
   get copper(): number {
     return this.primary.copper;
   }
@@ -2999,7 +3187,7 @@ export class Sim {
     const seed = this.cfg.seed;
     const ok = (px: number, pz: number): boolean => {
       if (groundHeight(px, pz, seed) < minHeight) return false;
-      const res = resolvePosition(seed, px, pz, 0.6);
+      const res = resolvePosition(seed, px, pz, 0.6, false, undefined, this.riftCollisionToken);
       return Math.abs(res.x - px) < 1e-4 && Math.abs(res.z - pz) < 1e-4;
     };
     if (ok(x, z)) return { x, z };
@@ -3043,6 +3231,9 @@ export class Sim {
     const host: SimContextHost = {
       get rng() {
         return sim.rng;
+      },
+      get riftCollisionToken() {
+        return sim.riftCollisionToken;
       },
       get time() {
         return sim.time;
@@ -3103,6 +3294,39 @@ export class Sim {
       },
       get dungeonResetLocks() {
         return sim.dungeonResetLocks;
+      },
+      get riftInstances() {
+        return sim.riftInstances;
+      },
+      get riftEvents() {
+        return sim.riftEvents;
+      },
+      get nextRiftInstanceId() {
+        return sim.nextRiftInstanceId;
+      },
+      set nextRiftInstanceId(v) {
+        sim.nextRiftInstanceId = v;
+      },
+      get naturalRiftPortals() {
+        return sim.naturalRiftPortals;
+      },
+      get riftPortalSpawnCount() {
+        return sim.riftPortalSpawnCount;
+      },
+      set riftPortalSpawnCount(v: number) {
+        sim.riftPortalSpawnCount = v;
+      },
+      get riftPortalNextAt() {
+        return sim.riftPortalNextAt;
+      },
+      set riftPortalNextAt(v: number) {
+        sim.riftPortalNextAt = v;
+      },
+      get riftPortalIds() {
+        return sim.riftPortalIds;
+      },
+      set riftPortalIds(v) {
+        sim.riftPortalIds = v;
       },
       get arenaMatches() {
         return sim.arenaMatches;
@@ -3386,6 +3610,9 @@ export class Sim {
       leaveDungeon: sim.leaveDungeon.bind(sim),
       resetDungeonInstances: sim.resetDungeonInstances.bind(sim),
       inheritDungeonResetLocks: sim.inheritDungeonResetLocks.bind(sim),
+      enterRift: sim.enterRift.bind(sim),
+      leaveRift: sim.leaveRift.bind(sim),
+      riftOpenTreasure: sim.riftOpenTreasure.bind(sim),
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
       setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
       awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
@@ -3433,6 +3660,7 @@ export class Sim {
       swingIntervalMult: sim.swingIntervalMult.bind(sim),
       mobCanSwim: sim.mobCanSwim.bind(sim),
       resolveMovePoint: sim.resolveMovePoint.bind(sim),
+      resolvePlayerMove: sim.resolveMove.bind(sim),
       // P1a pet AI lives in src/sim/pet/pet_ai.ts; locomotion.updateMob reaches it
       // through this seam binding (late-bound arrow so sim.ctx resolves at call time).
       updatePet: (pet) => petAi.updatePet(sim.ctx, pet),
@@ -3839,6 +4067,9 @@ export class Sim {
         this.updatePlayerMovement(p, meta);
         lap?.('p.move');
         this.updateDoorTriggers(p);
+        this.updateRiftTriggers(p);
+        updatePortalTriggers(this.ctx, p);
+        updateSwimFatigue(this.ctx, p);
         lap?.('p.doors');
         this.updateCasting(p, meta);
         lap?.('p.casting');
@@ -3864,8 +4095,10 @@ export class Sim {
         // death model), or resurrect at its corpse / an overworld Spirit Healer.
         this.updatePlayerMovement(p, meta);
         this.updateDoorTriggers(p);
+        this.updateRiftTriggers(p);
         lap?.('p.move');
       }
+      this.updateFluidDamage(p);
       updateTimers(p);
       updateComboExpiry(this.ctx, p);
       updateAuras(this.ctx, p);
@@ -3931,7 +4164,16 @@ export class Sim {
     lap?.('trades');
     this.updateLootRolls();
     lap?.('lootRolls');
+    // Recovery resolves after this tick's movement/combat and before instance
+    // lift/trigger passes. It draws no rng and its swept candidate search cannot
+    // change phase ordering for players without an active attempt.
+    unstuckMod.updateUnstuck(this.ctx);
     this.updateInstances();
+    this.updateRiftInstances();
+    advanceRiftRollersImpl(this.ctx); // 20 Hz: smooth rolling-boulder motion
+    liftRiftEntitiesImpl(this.ctx); // stand rift mobs/objects on the raised tier
+    tickRiftLockpicksImpl(this.ctx); // per-tick rift-cache lockpick step clock
+    if (this.cfg.riftPortals) updateRiftPortalsImpl(this.ctx);
     lap?.('instances');
     this.updateDelveRuns();
     lap?.('delves');
@@ -4151,7 +4393,15 @@ export class Sim {
   }
 
   private findChargePath(p: Entity, target: Entity): Vec3[] {
-    return findPlayerPath(this.cfg.seed, p.pos, target.pos, 64).map((w) => ({
+    return findPlayerPath(
+      this.cfg.seed,
+      p.pos,
+      target.pos,
+      64,
+      false,
+      false,
+      this.riftCollisionToken,
+    ).map((w) => ({
       x: w.x,
       y: 0,
       z: w.z,
@@ -4189,16 +4439,19 @@ export class Sim {
     const h1 = groundHeight(nx, nz, this.cfg.seed);
     if (h1 < waterLevelAt(nx, nz) - SWIM_DEPTH) return done(false);
     if (
-      h1 > h0 &&
-      ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
-        terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+      (h1 > h0 &&
+        ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
+          (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+            terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)) &&
+        !caveMouthStepOk(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+      caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
     ) {
       return done(false);
     }
     const resolved = this.resolveMove(p.pos.x, p.pos.z, nx, nz, BODY_RADIUS, p);
     p.pos.x = resolved.x;
     p.pos.z = resolved.z;
-    p.pos.y = groundHeight(resolved.x, resolved.z, this.cfg.seed);
+    p.pos.y = groundHeightNear(resolved.x, resolved.z, this.cfg.seed, p.pos.y);
     p.vy = 0;
     p.onGround = true;
     p.fallStartY = p.pos.y;
@@ -4257,17 +4510,20 @@ export class Sim {
     const h1 = groundHeight(nx, nz, this.cfg.seed);
     if (h1 < waterLevelAt(nx, nz) - SWIM_DEPTH) return true; // don't trail into deep water
     if (
-      h1 > h0 &&
-      step > 1e-5 &&
-      ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
-        terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+      (h1 > h0 &&
+        step > 1e-5 &&
+        ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
+          (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+            terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)) &&
+        !caveMouthStepOk(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+      caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
     ) {
       return true; // wall/cliff
     }
     const resolved = this.resolveMove(p.pos.x, p.pos.z, nx, nz, BODY_RADIUS, p);
     p.pos.x = resolved.x;
     p.pos.z = resolved.z;
-    p.pos.y = groundHeight(resolved.x, resolved.z, this.cfg.seed);
+    p.pos.y = groundHeightNear(resolved.x, resolved.z, this.cfg.seed, p.pos.y);
     p.vy = 0;
     p.onGround = true;
     p.fallStartY = p.pos.y;
@@ -4275,6 +4531,12 @@ export class Sim {
   }
 
   private updatePlayerMovement(p: Entity, meta: PlayerMeta): void {
+    // Verticality: strip last tick's rift raised-tier lift so the movement kernel
+    // (and the charge/follow/fear paths) integrate jumps + gravity against the true
+    // flat rift floor; updateRiftTriggers re-applies it after the step. Zero outside
+    // a rift or on a single-level floor, so non-rift movement is byte-identical.
+    const preLift = riftPlayerLiftImpl(this.ctx, p);
+    if (preLift !== 0) p.pos.y -= preLift;
     // Any locomotion key counts as a deliberate action for the anti-AFK pet gate.
     const mv = meta.moveInput;
     if (
@@ -4298,6 +4560,28 @@ export class Sim {
     // aware moveSpeedMult, delve-aware resolveMove, cancelCast/standUp/dealDamage)
     // so behavior and the rng draw order are unchanged.
     stepPlayerMotion(this.playerMotionDeps, p, meta.moveInput);
+  }
+
+  // Environmental fluid damage: standing/swimming in a damaging fluid pool
+  // (lava, acid, ... ? editor 'fluid/<kind>' placements) ticks its DPS once
+  // per second, DoT-style (no rage, indirect). Fluid pools are fully
+  // independent of the map-wide water level. Cheap on fluid-free maps.
+  private updateFluidDamage(p: Entity): void {
+    const fluids = getActiveWorldContent().fluids;
+    if (!fluids || fluids.length === 0 || p.dead) return;
+    // One shared cadence for everyone: tick on whole seconds of sim time.
+    if (this.tickCount % 20 !== 0) return;
+    const v = damagingFluidAt(
+      fluids,
+      p.pos.x,
+      p.pos.z,
+      p.pos.y,
+      (f) => terrainHeight(f.x, f.z, this.cfg.seed) + f.offsetY,
+    );
+    if (!v) return;
+    const dmg = Math.max(1, Math.round(v.dps));
+    const name = v.kind === 'lava' ? 'Lava' : v.kind === 'acid' ? 'Acid' : 'Noxious Fluid';
+    this.dealDamage(null, p, dmg, false, v.school, name, 'hit', true, undefined, false);
   }
 
   private standUp(p: Entity): void {
@@ -4392,7 +4676,14 @@ export class Sim {
       this.delveRunForMob(target.id) ??
       this.delveRunForPlayer(source.id) ??
       this.delveRunForPlayer(target.id);
-    return lineOfSightClear(this.cfg.seed, source.pos, target.pos, 0.05, run?.modules);
+    return lineOfSightClear(
+      this.cfg.seed,
+      source.pos,
+      target.pos,
+      0.05,
+      run?.modules,
+      this.riftCollisionToken,
+    );
   }
 
   private lineOfSightBlocked(source: Entity, target: Entity, ability: AbilityDef): boolean {
@@ -4596,11 +4887,13 @@ export class Sim {
       const h1 = groundHeight(nx, nz, this.cfg.seed);
       if (h1 < waterLevelAt(nx, nz) - SWIM_DEPTH) break; // would land in deep water
       if (
-        h1 > h0 &&
-        ((h1 - h0) / adv > MAX_CLIMB_SLOPE ||
-          terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+        (h1 > h0 &&
+          ((h1 - h0) / adv > MAX_CLIMB_SLOPE ||
+            (!onCaveSheet(nx, nz, this.cfg.seed, target.pos.y) &&
+              terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE))) ||
+        caveWallBlocksStep(this.cfg.seed, cx, cz, target.pos.y, nx, nz)
       ) {
-        break; // would slam into a cliff
+        break; // would slam into a cliff (or the cave's rock wall)
       }
       // resolveMove sweeps cx,cz -> nx,nz against static colliders (walls,
       // pillars, delve module bounds/doors) in small sub-steps, so a thin wall
@@ -4616,7 +4909,7 @@ export class Sim {
     if (moved <= 0) return 0;
     target.pos.x = cx;
     target.pos.z = cz;
-    target.pos.y = groundHeight(cx, cz, this.cfg.seed);
+    target.pos.y = groundHeightNear(cx, cz, this.cfg.seed, target.pos.y);
     target.vy = 0;
     target.onGround = true;
     target.fallStartY = target.pos.y;
@@ -5343,6 +5636,18 @@ export class Sim {
           h0 = ride(e.pos.x, e.pos.z, groundHeight(e.pos.x, e.pos.z, this.cfg.seed));
         if (ride(nx, nz, groundHeight(nx, nz, this.cfg.seed)) > h0) continue;
       }
+      // Cave sheets: inside a bore footprint a mover may not step between the
+      // cave floor and the surface roof mid-bore (the bore wall); only mouths,
+      // where the sheets meet, allow the transfer. Cheap: both samples are
+      // null on cave-free maps and outside footprints.
+      if (
+        (caveSheetAt(nx, nz) || caveSheetAt(e.pos.x, e.pos.z)) &&
+        Math.abs(groundHeightNear(nx, nz, this.cfg.seed, e.pos.y) - e.pos.y) > 1.6
+      ) {
+        continue;
+      }
+      // The horseshoe side wall is rock for mobs and pets too.
+      if (caveWallBlocksStep(this.cfg.seed, e.pos.x, e.pos.z, e.pos.y, nx, nz)) continue;
       const r = this.resolveMovePoint(nx, nz, BODY_RADIUS, e);
       const progress = d - Math.hypot(r.x - dest.x, r.z - dest.z);
       if (progress > bestProgress) {
@@ -6084,7 +6389,7 @@ export class Sim {
     // The catch depends on which zone's water you're fishing — each has its own
     // weighted table (src/sim/content/items.ts). Fall back to the Vale table for
     // any spot without its own (e.g. fishable water inside a dungeon zone).
-    const table = FISHING_TABLES[zoneAt(p.pos.z).id] ?? FISHING_TABLES.eastbrook_vale;
+    const table = FISHING_TABLES[zoneAt(p.pos.x, p.pos.z).id] ?? FISHING_TABLES.eastbrook_vale;
     const total = table.reduce((sum, e) => sum + e.weight, 0);
     let roll = this.rng.next() * total;
     let caught: string | null = null;
@@ -6116,7 +6421,7 @@ export class Sim {
     this.addItem(caught, 1, meta.entityId);
     // Book of Deeds: a real fish (never weeds or boots) from this zone's
     // waters feeds the per-zone first-cast mark.
-    deedsMod.onFishCaughtForDeeds(this.ctx, meta, zoneAt(p.pos.z).id, caught);
+    deedsMod.onFishCaughtForDeeds(this.ctx, meta, zoneAt(p.pos.x, p.pos.z).id, caught);
   }
 
   useItem(itemId: string, pid?: number): ItemUseResult | undefined {
@@ -6229,6 +6534,18 @@ export class Sim {
     return this.players.get(this.primaryId)?.lastSalvageResult ?? null;
   }
 
+  upgradeRiftItem(itemId: string, pid?: number): RiftForgeResult {
+    return upgradeRiftItemImpl(this.ctx, itemId, pid);
+  }
+
+  enchantRiftItem(itemId: string, stat: string, pid?: number): RiftForgeResult {
+    return enchantRiftItemImpl(this.ctx, itemId, stat, pid);
+  }
+
+  socketRiftGem(itemId: string, gemId: string, pid?: number): RiftForgeResult {
+    return socketRiftGemImpl(this.ctx, itemId, gemId, pid);
+  }
+
   // Enchanting profession commands: same thin-delegate/stash-result/not-yet-
   // wired-onto-IWorld shape as salvageItem/lastSalvageResult above.
   disenchantItem(itemId: string, pid?: number): void {
@@ -6322,7 +6639,7 @@ export class Sim {
     const r = this.resolve(pid);
     if (!r) return;
     const { meta, e: p } = r;
-    const zone = zoneAt(p.pos.z);
+    const zone = zoneAt(p.pos.x, p.pos.z);
     const inTown = professionsFocus.isInTownZone(p.pos, zone);
     const result = professionsFocus.setTownFocus(meta.townFocus, allocation, inTown);
     if (!result.ok) {
@@ -6492,6 +6809,19 @@ export class Sim {
 
   chat(text: string, pid?: number): SentChat | null {
     return chatMod.chat(this.ctx, text, pid);
+  }
+
+  // Local recovery lives in unstuck.ts. Both the slash command and the direct
+  // Settings wire action enter through the same authoritative system.
+  unstuck(pid?: number): boolean {
+    return unstuckMod.requestUnstuck(this.ctx, pid);
+  }
+
+  cancelUnstuckForDisconnect(
+    pid: number,
+    emitEvent = true,
+  ): unstuckMod.CancelledUnstuckEvent | null {
+    return unstuckMod.cancelPendingUnstuckForDisconnect(this.ctx, pid, emitEvent);
   }
 
   // PUBLIC (IWorld + server) overhead-emote entry; body moved to social/chat.ts (G2).
@@ -7571,6 +7901,33 @@ export class Sim {
     inheritDungeonResetLocksImpl(this.ctx, pid);
   }
 
+  // Procedural rift delegates (dev command + interaction click + tick drivers).
+  enterRift(
+    seed: number,
+    baseLevel: number,
+    pid?: number,
+    returnPos?: { x: number; z: number },
+    portal?: Entity,
+  ): void {
+    enterRiftImpl(this.ctx, seed, baseLevel, pid, returnPos, portal);
+  }
+
+  leaveRift(pid?: number): void {
+    leaveRiftImpl(this.ctx, pid);
+  }
+
+  riftOpenTreasure(objectId: number, pid?: number): void {
+    riftOpenTreasureImpl(this.ctx, objectId, pid);
+  }
+
+  private updateRiftTriggers(p: Entity): void {
+    updateRiftTriggersImpl(this.ctx, p);
+  }
+
+  private updateRiftInstances(): void {
+    updateRiftInstancesImpl(this.ctx);
+  }
+
   dungeonDifficulty(pid?: number): DungeonDifficulty {
     const r = this.resolve(pid);
     if (!r) return 'normal';
@@ -7795,7 +8152,18 @@ export class Sim {
     ignoreFences = false,
   ): { x: number; z: number } {
     const run = isDelvePos(nx) || isDelvePos(e.pos.x) ? this.delveRunForEntity(e) : undefined;
-    const res = resolveMovement(this.cfg.seed, fromX, fromZ, nx, nz, r, ignoreFences, run?.modules);
+    const res = resolveMovement(
+      this.cfg.seed,
+      fromX,
+      fromZ,
+      nx,
+      nz,
+      r,
+      ignoreFences,
+      run?.modules,
+      this.riftCollisionToken,
+      e.pos.y,
+    );
     if (!run) return res;
     const clamped = this.clampDelveModuleBounds(run, res.x, res.z, r);
     return this.clampDelveDoors(run, clamped.x, clamped.z, r);
@@ -7804,7 +8172,16 @@ export class Sim {
   // Point resolution for mob wander / blocked checks, with the same delve layering.
   private resolveMovePoint(nx: number, nz: number, r: number, e: Entity): { x: number; z: number } {
     const run = isDelvePos(nx) || isDelvePos(e.pos.x) ? this.delveRunForEntity(e) : undefined;
-    const res = resolvePosition(this.cfg.seed, nx, nz, r, false, run?.modules);
+    const res = resolvePosition(
+      this.cfg.seed,
+      nx,
+      nz,
+      r,
+      false,
+      run?.modules,
+      this.riftCollisionToken,
+      e.pos.y,
+    );
     if (!run) return res;
     const clamped = this.clampDelveModuleBounds(run, res.x, res.z, r);
     return this.clampDelveDoors(run, clamped.x, clamped.z, r);
@@ -8079,17 +8456,40 @@ export class Sim {
   // never serialized, only visibleCells() inside the fog window is emitted.
   // -------------------------------------------------------------------------
 
+  /** The rift instance the acting player is standing in, or null. Lockpick ops
+   * route to the rift-cache driver when in a rift, else the delve controller (a
+   * player is never in both), so the shared engine/HUD/commands serve both. */
+  private riftInstForPid(pid?: number) {
+    const r = this.ctx.resolve(pid);
+    return r ? riftInstanceAtPos(this.ctx, r.e.pos) : null;
+  }
+
   /** Start a lockpicking attempt: commit an ante (1/2/3 lives = loot tier). */
   lockpickEngage(objectId: number, ante: Ante, pid?: number): void {
+    const inst = this.riftInstForPid(pid);
+    if (inst) {
+      riftLockpickEngageImpl(this.ctx, inst, objectId, ante, pid);
+      return;
+    }
     lockpickMod.lockpickEngage(this.ctx, objectId, ante, pid);
   }
 
   /** Submit one pick action on the player's active attempt (server-authoritative). */
   lockpickAction(action: PickAction, pid?: number, sessionId?: string): void {
+    const inst = this.riftInstForPid(pid);
+    if (inst) {
+      riftLockpickActionImpl(this.ctx, inst, action, pid, sessionId);
+      return;
+    }
     lockpickMod.lockpickAction(this.ctx, action, pid, sessionId);
   }
 
   lockpickAbort(pid?: number, sessionId?: string): void {
+    const inst = this.riftInstForPid(pid);
+    if (inst) {
+      riftLockpickAbortImpl(this.ctx, inst, pid, sessionId);
+      return;
+    }
     lockpickMod.lockpickAbort(this.ctx, pid, sessionId);
   }
 
@@ -8105,6 +8505,8 @@ export class Sim {
 
   /** Read-only projection of the active lockpick attempt for IWorld (offline). */
   lockpickViewFor(pid?: number): LockpickView | null {
+    const inst = this.riftInstForPid(pid);
+    if (inst) return riftLockpickViewForImpl(this.ctx, inst, pid);
     return lockpickMod.lockpickViewFor(this.ctx, pid);
   }
 
@@ -8158,6 +8560,49 @@ export class Sim {
 
   delveDailyWire(pid: number): { date: string; firstClearXp: string[]; markClears: number } {
     return runsMod.delveDailyWire(this.ctx, pid);
+  }
+
+  // The primary player's active procedural Rift floor (offline IWorld read). The
+  // renderer regenerates geometry/style from this descriptor; null outside a rift.
+  get riftFloor(): import('../world_api/dungeons').RiftFloorView | null {
+    // The renderer reads this per frame (camera clamp, per-entity ground
+    // reference): cache the derived view per tick instead of reallocating it
+    // and re-searching riftEvents on every read.
+    if (this.riftFloorViewTick === this.tickCount) return this.riftFloorView;
+    this.riftFloorViewTick = this.tickCount;
+    this.riftFloorView = this.buildRiftFloorView();
+    return this.riftFloorView;
+  }
+
+  private riftFloorViewTick = -1;
+  private riftFloorView: import('../world_api/dungeons').RiftFloorView | null = null;
+
+  private buildRiftFloorView(): import('../world_api/dungeons').RiftFloorView | null {
+    const p = this.entities.get(this.primaryId);
+    if (!p) return null;
+    const inst = riftInstanceAtPos(this.ctx, p.pos);
+    if (!inst || inst.partyKey === null) return null;
+    const floor = generateRiftFloor(inst.seed, inst.baseLevel, inst.floorIndex, inst.upgrade);
+    const event =
+      inst.eventId === null
+        ? null
+        : (this.riftEvents.find((candidate) => candidate.eventId === inst.eventId) ?? null);
+    const contentId = event?.contentId ?? `procedural-v1:${inst.seed}:${inst.baseLevel}`;
+    return {
+      eventId: inst.eventId,
+      instanceId: inst.instanceId,
+      seed: inst.seed,
+      baseLevel: inst.baseLevel,
+      floorIndex: inst.floorIndex,
+      floorCount: inst.floorCount,
+      origin: riftInstanceOrigin(inst.slot, inst.floorIndex),
+      contentId,
+      contentHash: event?.contentHash ?? contentId,
+      upgrade: inst.upgrade,
+      name: floor.name,
+      themeName: floor.themeName,
+      tier: inst.tier,
+    };
   }
 
   get delveRun(): DelveRunInfo | null {

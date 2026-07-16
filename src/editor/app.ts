@@ -23,7 +23,57 @@ import {
   EDITOR_LIGHTING_PRESETS,
   type EditorLightingProfile,
 } from '../render/editor_lighting';
-import { refreshCustomGroundTextures } from '../render/terrain';
+import {
+  DEFAULT_TEXTURE_TILE_YD,
+  rebakePaintFieldSwatches,
+  refreshCustomGroundTextures,
+  refreshTerrainHoles,
+} from '../render/terrain';
+import {
+  CAVE_MAX_MULT,
+  CAVE_MAX_RADIUS,
+  CAVE_MIN_MULT,
+  CAVE_MIN_RADIUS,
+  CAVE_SPIKE_SIZE_MAX,
+  CAVE_SPIKE_SIZE_MIN,
+  caveBounds,
+  HOLE_MAX_RADIUS,
+  HOLE_MIN_RADIUS,
+  holeBounds,
+  MAX_CAVES,
+  MAX_HOLE_PATCHES,
+  MAX_TERRAIN_HOLES,
+} from '../sim/caves';
+
+// Reserved marker assetIds for the cave rig flow. Ordinary placements
+// (gizmo-movable, undoable, saved); placement.name carries the shared cave id.
+const CAVE_ENTRANCE_ASSET_ID = 'cave/entrance';
+const CAVE_EXIT_ASSET_ID = 'cave/exit';
+// Blue rig waypoint between the entrance and the exit (Caves tool clicks
+// after the first). The rig's LAST point acts as the exit.
+const CAVE_POINT_ASSET_ID = 'cave/point';
+// Control-point cap per rig (the generated node chain has its own sim cap).
+const MAX_CAVE_RIG_POINTS = 24;
+// Organic wobble a fresh cave generates with (Cave card slider re-bores).
+const DEFAULT_CAVE_VARIANCE = 0.35;
+
+/** Deterministic per-cave wobble seed from its id (stable across regens). */
+function caveWobbleSeed(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 100000;
+  return h;
+}
+
+import { rockSeed } from '../render/rock_gen';
+import { builtinShaFor, terrainTextureSet } from '../render/terrain_texture_sets';
+import {
+  type AssetCollisionOverride,
+  analyzeBakedFootprint,
+  autoCollideRadius,
+  boxesForAssetId,
+  collisionOverrideFor,
+} from '../sim/asset_collision';
+import { ASSET_COLLISION } from '../sim/asset_collision.generated';
 import {
   COLLIDER_ASSET_IDS,
   type ColliderVolumeKind,
@@ -33,14 +83,27 @@ import {
 import { invalidateStaticColliders } from '../sim/colliders';
 import { BUILTIN_WORLD, MOBS, PLAYER_START, setActiveWorldContent } from '../sim/data';
 import {
+  FLUID_ASSET_IDS,
+  FLUID_DEFAULT_OFFSET_Y,
+  FLUID_DEFAULT_SIZE,
+  type FluidKind,
+  fluidKindFor,
+  fluidVolumesFromPlacements,
+} from '../sim/fluid_volumes';
+import {
+  type CollisionMode,
   CUSTOM_PAINT_ID_MAX,
   CUSTOM_PAINT_ID_MIN,
   clampBlockerSegment,
+  collideRadiusFor,
   DEFAULT_ASSET_VIEW_DISTANCE,
+  effectiveCollisionMode,
   GRASS_PATCH_ASSET_ID,
+  MAX_ASSET_COLLISION_MESH_BOXES,
   MAX_ASSET_VIEW_DISTANCE,
   MAX_AXIS_SCALE,
   MAX_BLOCKERS,
+  MAX_CAMPS,
   MAX_COLLIDE_RADIUS,
   MAX_COLLIDER_SIZE,
   MAX_COLLIDER_SIZE_Y,
@@ -50,57 +113,93 @@ import {
   MAX_LOCATIONS,
   MAX_MARKERS,
   MAX_MUSIC_AREAS,
+  MAX_NPCS,
+  MAX_PLACEMENT_HITBOXES,
   MAX_PLACEMENT_NAME_LENGTH,
   MAX_PLACEMENT_Y_OFFSET,
   MAX_PLACEMENTS,
+  MAX_POINT_SOUNDS,
+  MAX_ROCK_NODES,
   MAX_SWATCH_LABEL_LENGTH,
   MAX_TERRAIN_EDITS,
   MAX_TIME_SCALE,
   MAX_WEATHER_SCHEDULE,
+  type MapHitbox,
   MIN_ASSET_VIEW_DISTANCE,
   MIN_AXIS_SCALE,
   MIN_COLLIDE_RADIUS,
   MIN_COLLIDER_SIZE,
   MIN_COLLIDER_SIZE_Y,
   MIN_TIME_SCALE,
+  ROCK_ASSET_ID,
+  ROCK_POINT_ASSET_ID,
+  ROCK_RIDGE_ASSET_ID,
   WATERFALL_ASSET_ID,
 } from '../sim/map_doc';
 import {
   type BiomePaint,
   type BlockerDef,
   type CampDef,
+  type CaveDef,
+  type CaveNode,
   type CustomPaintSwatch,
   emptyZoneProps,
   type HeightStamp,
   type MapWeather,
+  type NpcDef,
+  type TerrainHole,
   type TerrainStyle,
   type WorldContent,
 } from '../sim/types';
-import { invalidateTerrainEditIndex, terrainHeight, WATER_LEVEL, waterLevel } from '../sim/world';
+import {
+  generateDecorationsInBounds,
+  invalidateTerrainEditIndex,
+  terrainHeight,
+  WATER_LEVEL,
+  waterLevel,
+} from '../sim/world';
 import { tEntity } from '../ui/entity_i18n';
 import { formatNumber, t } from '../ui/i18n';
-import { Editor3DViewport } from './3d/viewport';
+import { Editor3DViewport, type GizmoHitboxChange } from './3d/viewport';
 import { AssetBrowser } from './asset_browser';
 import { ASSET_CATALOG, assetById } from './asset_catalog.generated';
-import { finestPaintCell, resampleBiomePaint } from './biome_paint_core';
+import { finestPaintCell, growBiomePaint, resampleBiomePaint } from './biome_paint_core';
 import { nearestBlockerIndex } from './blocker_core';
 import { brushAlphaById, importBrushAlpha, sampleBrushAlpha } from './brush_alphas';
-import { buildMapBundle, zipStore } from './bundle';
+import { BundleDependencyError, buildMapBundle, zipStore } from './bundle';
 import { draw } from './canvas';
+import { generateCaveRigNodes } from './cave_gen_core';
+import { applyDefaultCollision } from './collision_defaults';
+import { CollisionMasterBar } from './collision_master_bar';
 import {
   type AssetPlacement,
   CUSTOM_MAP_VERSION,
   type CustomMap,
   customMapToWorldContent,
   effectiveCollideRadius,
+  mapBounds,
   newCustomMap,
   newFlatCustomMap,
 } from './custom_map';
 import { button, checkbox, el, slider } from './dom';
 import { AUTHORED_DUNGEONS } from './dungeon/authored_dungeons';
 import { DungeonEditorMode } from './dungeon/dungeon_mode';
-import { clampToCap } from './edit_caps_core';
+import { capRoom, clampToCap } from './edit_caps_core';
+import {
+  isMovableEntity,
+  pickMovableEntity,
+  splitCampIntoIndividuals,
+  toggledMobSelection,
+} from './entity_edit_core';
+import { bundleDependencyRefs, ExportCompatibilityError } from './export_contract';
 import { downloadMap, pickMapOrBundle } from './file_io';
+import {
+  AMBIENT_TREE_EDIT_BATCH,
+  ambientDecorationKey,
+  ambientDecorationsToPlacements,
+  closestAmbientTrees,
+} from './foliage_edit_core';
+import { bakeImportedModelCollision, bakeTrueModelCollision } from './import_collision';
 import {
   BIOME_OPTIONS,
   Inspector,
@@ -129,6 +228,7 @@ import { newMapSizeDialog } from './new_map_dialog';
 import { parseMap } from './persist';
 import {
   CommitCoalescer,
+  groupMemberPoint,
   NORTH_UP_YAW,
   NUDGE_STEP_BIG_YD,
   NUDGE_STEP_YD,
@@ -140,14 +240,34 @@ import {
   scaleStep,
   wrapAngle,
 } from './placement_transform_core';
-import { DEFAULT_PLAYTEST_SEED, launchPlaytest, PLAYTEST_RESUME_KEY } from './playtest';
-import { type Bounds, scatterHills, scatterPlacements } from './procgen';
+import {
+  clearPlaytestRecoveryDraft,
+  DEFAULT_PLAYTEST_SEED,
+  launchPlaytest,
+  loadPlaytestRecoveryDraft,
+  PLAYTEST_RESUME_KEY,
+  savePlaytestRecoveryDraft,
+} from './playtest';
+import { DEFAULT_POINT_SOUND } from './point_sounds';
+import { type Bounds, makeRng, scatterHills, scatterPlacements } from './procgen';
 import { EditGeneration, shouldAutosave } from './save_lifecycle_core';
+import {
+  type CopiedNpc,
+  copyCampSelection,
+  copyNpcSelection,
+  copyPlacementSelection,
+  pasteCampSelection,
+  pasteNpcSelection,
+  pastePlacementSelection,
+  toggledKeySelection,
+} from './selection_clipboard';
 import { editorErrorKey } from './server_errors_core';
+import { createShippedMap } from './shipped_maps';
 import { appendSpan, removeSpan } from './span_core';
 import {
   erasePlacementIndex,
   flattenStamp,
+  SCULPT_POWER_SCALE,
   smoothStamp,
   stampRegion,
   unionRegion,
@@ -157,8 +277,19 @@ import { type EditorTool, TOOL_BY_KEY, Toolbar } from './toolbar';
 import { Topbar } from './topbar';
 import { EditorTutorial } from './tutorial';
 import { UndoStack } from './undo_core';
-import { isUserAssetId, registerUserAssets, userAssetIdFor, userAssetLabel } from './user_assets';
+import {
+  isUserAssetId,
+  registerUserAssets,
+  userAssetIdFor,
+  userAssetLabel,
+  userAssetPath,
+} from './user_assets';
 import { Camera, pickHandle, type ScreenPoint, type Vec2, type Viewport } from './view';
+import {
+  promoteMajorWorldProps,
+  withoutEditableWorldProps,
+  withoutMajorWorldProps,
+} from './world_prop_placements';
 
 const KINDS: EntityKind[] = ['hub', 'graveyard', 'lake', 'poi', 'camp', 'npc', 'object'];
 
@@ -199,8 +330,14 @@ const SHOW_PLAYER_PREF_KEY = 'woc_editor_show_player';
 const LIGHTING_PREF_KEY = 'woc_editor_lighting';
 const CAMERA_SPEEDS_PREF_KEY = 'woc_editor_camera_speeds';
 const HIDE_COLLIDERS_PREF_KEY = 'woc_editor_hide_colliders';
+const HIDE_LOCATIONS_PREF_KEY = 'woc_editor_hide_locations';
 const PERF_OVERLAY_PREF_KEY = 'woc_editor_perf_overlay';
 const WIREFRAME_PREF_KEY = 'woc_editor_wireframe';
+// Collision hitbox overlay: ON by default (a stored '0' keeps it off).
+const FOOTPRINTS_PREF_KEY = 'woc_editor_show_hitboxes';
+// Per-asset hand-edited hitbox presets (this device only): new placements of
+// an asset copy its saved boxes.
+const HITBOX_PRESETS_PREF_KEY = 'woc_editor_hitbox_presets';
 const WATER_DEBOUNCE_MS = 100;
 
 /** Boolean editor preference read; blocked storage reads as off. */
@@ -261,6 +398,16 @@ interface Clipboard {
   edits: HeightStamp[]; // relative to center
 }
 
+type SelectionClipboard =
+  | { kind: 'placements'; items: AssetPlacement[] }
+  | { kind: 'mobs'; items: CampDef[] }
+  | { kind: 'npcs'; items: CopiedNpc[] };
+
+interface PlaytestRestore {
+  map: CustomMap;
+  dirty: boolean;
+}
+
 const LAYER_KEYS: Record<EntityKind, string> = {
   hub: 'editor.layers.hub',
   graveyard: 'editor.layers.graveyard',
@@ -314,13 +461,18 @@ export class EditorApp {
   // ---- editing state -----------------------------------------------------------
   private tool: EditorTool = 'select';
   private brushRadius = 18;
-  private brushStrength = 6;
+  // Sculpt strength SLIDER value (1..50). The height math consumes it divided
+  // by BRUSH_STRENGTH_SCALE, so every step is a fifth of the legacy 1..30
+  // scale's ? fine control at the low end without losing the old ceiling
+  // (50/5 = 10; the default 30/5 = 6 matches the legacy default of 6).
+  private brushStrength = 30;
   private paintBiome = 1;
   private flattenHardEdge = false;
   private placeAssetId: string | null = null;
   private placeAssetLabel: string | null = null;
   private placeScale = 1;
-  private placeCollide = false;
+  // Placed assets collide by default (baked hitboxes); uncheck to opt out.
+  private placeCollide = true;
   private placeRandomRot = true;
   private scatterCount = 80;
   private campMobId: string = Object.keys(MOBS)[0] ?? 'boar';
@@ -353,13 +505,25 @@ export class EditorApp {
   private foliageCapWarned = false;
   private foliagePoolWarned = false;
   /** The user's MANUAL footprint-overlay toggle; the effective overlay also
-   *  forces on while authoring collision (see syncFootprintOverlay). */
-  private footprintsOn = false;
+   *  forces on while authoring collision (see syncFootprintOverlay). ON by
+   *  default and persisted (Options): placed hitboxes are visible out of the
+   *  box so collision is never a surprise. */
+  private footprintsOn = readPrefDefaultOn(FOOTPRINTS_PREF_KEY);
+  // Per-asset hitbox presets (localStorage): assetId -> normalized boxes.
+  private hitboxPresets: Record<string, MapHitbox[]> =
+    readJsonPref<Record<string, MapHitbox[]>>(HITBOX_PRESETS_PREF_KEY) ?? {};
+  // Hitbox edit mode: individual baked boxes of ONE placement become
+  // selectable/transformable objects (Shift/Ctrl+click multi-select).
+  private hitboxEdit: { index: number; selected: Set<number> } | null = null;
+  // Snapshot of the boxes at gizmo-gesture start (one undo entry per gesture).
+  private hitboxDragBase: MapHitbox[] | null = null;
+  // Assets whose "true collision" fine bake is currently running.
+  private readonly meshBakesInFlight = new Set<string>();
   // Camera preferences (persisted): Free-Fly navigation and inverted drag-pan.
   // Free-Fly is ON by default (WASD/QE fly + mouse-look is the default editor
   // feel); a stored '0' keeps a maker who turned it off, off.
   private freeFlyOn = readPrefDefaultOn(FREE_FLY_PREF_KEY);
-  private invertPanOn = readPref(INVERT_PAN_PREF_KEY);
+  private invertPanOn = readPrefDefaultOn(INVERT_PAN_PREF_KEY);
   // The playtest player stand-in model; removed by default (game-editor feel).
   private showPlayerOn = readPref(SHOW_PLAYER_PREF_KEY);
   // Map-limit wall overlays; OFF by default (uncluttered viewport), shown when a
@@ -367,6 +531,12 @@ export class EditorApp {
   private showBoundaryOn = readPref(SHOW_BOUNDARY_PREF_KEY);
   // Collision-volume overlays; shown by default, hideable from the Collider tab.
   private collidersHiddenOn = readPref(HIDE_COLLIDERS_PREF_KEY);
+  // Named-location area boxes; shown by default, hideable from the Zone tool.
+  private locationsHiddenOn = readPref(HIDE_LOCATIONS_PREF_KEY);
+  // "Scale all copies" range (Selection panel): a random scale in [min, max] is
+  // rolled onto every placement of the selected asset. Session state, not saved.
+  private cloneScaleMin = 0.8;
+  private cloneScaleMax = 1.5;
   // Wireframe render mode (Camera tab); OFF by default, persisted per maker.
   private wireframeOn = readPref(WIREFRAME_PREF_KEY);
   // Editor camera speed multipliers (persisted): 1 = the shipped feel. Applied
@@ -414,8 +584,23 @@ export class EditorApp {
   private selectedSet = new Set<number>();
   private selectedCamp: number | null = null;
   private selectedKey: string | null = null; // 2D marker
+  // Entity-tool mob selection uses live Sim ids so a rendered mob, rather than
+  // its whole authored camp, is the unit of selection and movement.
+  private selectedMobIds = new Set<number>();
+  private selectedMobCamps = new Map<number, CampDef>();
+  // NPC authoring keys use the same Ctrl-click group semantics as runtime mobs.
+  private selectedNpcKeys = new Set<string>();
+  private npcDragBase: Map<string, { npc: NpcDef; point: Vec2 }> | null = null;
+  private mobDragStart: {
+    pointer: Vec2;
+    camps: Map<number, { camp: CampDef; point: Vec2 }>;
+    dx: number;
+    dz: number;
+  } | null = null;
   // Selected map point light (Light tool click or Select-tool bulb click).
   private selectedLight: number | null = null;
+  // Selected map point sound (Sound tool click or Select-tool badge click).
+  private selectedSound: number | null = null;
   private hoverKey: string | null = null;
   // Pre-drag placement value for slider undo (waterBase pattern): captured on
   // the first LIVE change so the trailing commit diffs against the real prev.
@@ -425,22 +610,92 @@ export class EditorApp {
   private transformTimer = 0;
   // A 3D drag-move is in flight: single-key tool shortcuts stay suppressed.
   private placementDragging = false;
+  // Preview mode (topbar toggle): in-game look, editor overlays hidden.
+  private previewOn = false;
   // Rotate/Scale drag reference (captured on the first drag sample): the
   // placement's pre-drag transform plus the cursor's angle/distance around the
   // pivot, so the whole drag applies deltas against one stable baseline.
-  private transformDragRef: { angle: number; dist: number; rotY: number; scale: number } | null =
-    null;
-  // Pre-drag x/z (plus detach state) of the OTHER multi-selection members during
-  // a group translation (the active one is covered by placementDragBase).
-  private groupDragBase: Map<
-    number,
-    { x: number; z: number; detached?: boolean; groundY?: number }
-  > | null = null;
+  private transformDragRef: {
+    angle: number;
+    dist: number;
+    rotY: number;
+    scale: number;
+  } | null = null;
+  // Pre-gesture snapshots of the OTHER multi-selection members during a group
+  // transform (move/rotate/scale; the active one is covered by
+  // placementDragBase). Full snapshots: every live sample re-derives each
+  // member from its snapshot, and the commit's undo restores it wholesale.
+  private groupDragBase: Map<number, AssetPlacement> | null = null;
 
   // stroke state
   // Merged-tool modes: Sculpt lowers instead of raising; Level smooths
   // instead of flattening.
   private sculptLower = false;
+  // Sculpt Grab mode (snake hook): press grabs the ground under the brush,
+  // and the drag pulls that spot ALONG the drag direction ? in 3D the cursor
+  // motion maps onto the camera's view plane (sideways slides the grabbed
+  // bump across the map, up/down on screen pulls it out of / into the
+  // ground); in 2D top-down only the height pull applies (one live stamp per
+  // gesture either way).
+  private sculptGrab = false;
+  private grabSession: {
+    stamp: HeightStamp;
+    startClientX: number;
+    startClientY: number;
+    // Where the stamp was planted (world): lateral drags offset from here.
+    startX: number;
+    startZ: number;
+    // World yards per screen pixel at the grab point (camera-scaled).
+    wpp: number;
+    // Camera view-plane basis at grab time (3D only; null in 2D).
+    axes: {
+      right: { x: number; y: number; z: number };
+      up: { x: number; y: number; z: number };
+    } | null;
+    region: RegionBox;
+  } | null = null;
+  // The Fluid tool's armed pool kind (preset).
+  private fluidKind: FluidKind = 'lava';
+  // Caves tool sub-mode: lay cave rig nodes, punch terrain holes, or patch
+  // ground back over unwanted parts of the cuts.
+  private tunnelMode: 'dig' | 'hole' | 'patch' = 'dig';
+  // Rock Generator tool: the sliders shaping the NEXT rock. Chain mode lays
+  // blue waypoint PLACEMENTS (rock/point, grouped by the chain id in
+  // placement.name, exactly like the cave rigs), so the nodes survive tool
+  // switches, move/scale with the ordinary gizmos, and undo/save.
+  private rockParams = {
+    size: 3,
+    noise: 0.5,
+    detail: 0.5,
+    sharp: 0.3,
+    tex: 0,
+    walkable: true,
+    height: 1,
+    depth: 0,
+    jag: 0,
+    texId: '',
+    texTile: DEFAULT_TEXTURE_TILE_YD,
+  };
+  private rockChainMode = false;
+  private caveEditBase: {
+    cave: CaveDef;
+    width: number;
+    height: number;
+    variance: number;
+    floorVariance: number;
+    stalactites: number;
+    stalagmites: number;
+    spikeSize: number;
+    startOpen: boolean;
+    endOpen: boolean;
+    tex: string | null;
+    texTile: number | null;
+    // Pre-edit node chain: a variance drag re-bores, so undo restores nodes too.
+    nodes: CaveNode[];
+  } | null = null;
+  // Pre-drag radius per hole/patch (live sliders; same pattern as caves).
+  private holeEditBase: { index: number; radius: number } | null = null;
+  private holePatchEditBase: { index: number; radius: number } | null = null;
   private flattenSmooth = false;
   // Paint brush edge hardness (percent; 100 = the legacy hard brush) and the
   // one-shot bucket fill arm state.
@@ -465,6 +720,13 @@ export class EditorApp {
   private autoTexOwnedGrid: BiomePaint | null = null;
   // Zone tool drag box (named locations) + spawn-tool marker placement mode.
   private zoneStart: Vec2 | null = null;
+  private spawnAreaStart: Vec2 | null = null;
+  private spawnAreaPreview: {
+    minX: number;
+    minZ: number;
+    maxX: number;
+    maxZ: number;
+  } | null = null;
   private zoneBox: RegionBox | null = null;
   private markerPlaceMode = false;
   private markerKind: 'npc' | 'object' = 'npc';
@@ -490,14 +752,18 @@ export class EditorApp {
   private regionStart: Vec2 | null = null;
   private selectingRegion = false;
   private clipboard: Clipboard | null = null;
+  private selectionClipboard: SelectionClipboard | null = null;
 
   // 2D pointer state
   private panning = false;
   private dragKey: string | null = null;
   private markerDragStart: { key: string; x: number; z: number } | null = null;
   private grab: Vec2 = { x: 0, z: 0 };
+  private npcFacingDragBase: { key: string; facing: number } | null = null;
   private lastPointer: ScreenPoint = { sx: 0, sy: 0 };
   private painting2d = false;
+  /** Pixels dragged since the 2D paint press; gates jitter, see pointermove. */
+  private paint2dDragPx = 0;
   private cursorWorld: Vec2 | null = null;
   private canvasDirty = true;
 
@@ -532,21 +798,12 @@ export class EditorApp {
       terrainEdits: [],
       placements: [],
     };
-    // Returning from a playtest in this tab: reopen the map that launched it
-    // (playtest() fully saved it and left this marker), so the round trip
-    // never lands on a blank document.
-    let resumed: CustomMap | null = null;
-    try {
-      const resumeId = sessionStorage.getItem(PLAYTEST_RESUME_KEY);
-      resumed = resumeId ? this.io.store.load(resumeId) : null;
-    } catch {
-      resumed = null; // storage blocked: start on the usual blank document
-    }
-    if (resumed) {
-      this.map = resumed;
-      this.content = resumed.content;
-      this.waterBase = resumed.waterLevel ?? WATER_LEVEL;
-    }
+    // The saved-map restore is DEFERRED to finishBoot(): the store hydrates
+    // from IndexedDB first (and migrates localStorage saves across, freeing
+    // the quota that used to block every save). The constructor proceeds on
+    // the built-in default; finishBoot loadMap()s the maker's real map the
+    // moment the store is ready.
+    promoteMajorWorldProps(this.map as CustomMap);
     this.entities = buildEntities(this.content);
     this.base = snapshot(this.entities);
     this.rebuildActiveWorld();
@@ -575,6 +832,7 @@ export class EditorApp {
       onPlaytest: () => this.playtest(),
       onDungeonMode: () => this.enterDungeonMode(),
       onViewMode: (mode) => this.setViewMode(mode),
+      onPreviewToggle: () => this.setPreviewMode(!this.previewOn),
       onUndo: () => this.doUndo(),
       onRedo: () => this.doRedo(),
       onHelp: () => this.tutorial.openHelp(),
@@ -589,7 +847,10 @@ export class EditorApp {
     try {
       const raw = localStorage.getItem(LIGHTING_PREF_KEY);
       if (raw) {
-        const saved = JSON.parse(raw) as { preset?: string; profile?: EditorLightingProfile };
+        const saved = JSON.parse(raw) as {
+          preset?: string;
+          profile?: EditorLightingProfile;
+        };
         if (saved.profile && typeof saved.profile.sunIntensity === 'number') {
           this.lighting = saved.profile;
           this.lightingPreset = typeof saved.preset === 'string' ? saved.preset : 'custom';
@@ -631,16 +892,46 @@ export class EditorApp {
       },
       confirm: (title, body) => confirmDialog(this.root, { title, body, danger: true }),
       toastError: (m) => this.toasts.error(m),
+      onCollisionMaster: (assetId, label) => this.enterCollisionMaster(assetId, label),
+    });
+
+    this.cmBar = new CollisionMasterBar(stageWrap, {
+      getMode: () => this.cmSubMode,
+      setMode: (m) => this.setCmSubMode(m),
+      addPrimitive: (kind) => this.addCmPrimitive(kind),
+      duplicateSelection: () => this.duplicateCmSelection(),
+      deleteSelection: () => this.deleteSelectedHitboxes(),
+      getPolySnap: () => this.cmPolySnap,
+      setPolySnap: (on) => {
+        this.cmPolySnap = on;
+        this.cmPolyPoints = null;
+        this.inspector.refresh();
+      },
     });
 
     this.toasts = new Toasts(this.root);
     this.drawer = new MapDrawer(this.root, {
       listLocal: () => this.io.store.list(),
       hasDraft: () => this.io.draftLoad() !== null,
+      onOpenShipped: async (mapId) => {
+        if (!(await this.confirmDiscard())) return;
+        const map = await createShippedMap(mapId, mintId(), now());
+        this.loadMap(map);
+        // Dense kit maps turn the global footprint overlay into one solid
+        // screen-sized wash. Open them clean; the toggle remains available.
+        this.footprintsOn = false;
+        writePref(FOOTPRINTS_PREF_KEY, false);
+        this.syncFootprintOverlay();
+        this.inspector.refresh();
+        this.toasts.info(t('editor.status.shippedMapOpened', { name: map.meta.name }));
+      },
       onOpenLocal: async (id) => {
         if (!(await this.confirmDiscard())) return;
         const loaded = this.io.store.load(id);
         if (loaded) this.loadMap(loaded);
+        // A listed save that fails to load (corrupt/truncated bytes) used to
+        // do NOTHING — the drawer closed and the maker was left guessing.
+        else this.toasts.error(t('editor.status.openFailedLocal'));
       },
       onOpenDraft: async () => {
         if (!(await this.confirmDiscard())) return;
@@ -682,15 +973,18 @@ export class EditorApp {
 
     this.topbar.setMapName(this.map.meta.name);
     this.topbar.setOffline(!signedIn());
-    this.topbar.setForkEnabled(resumed !== null && this.io.linkFor(this.map.meta.id) !== null);
-    if (resumed) this.toasts.info(t('editor.status.opened', { name: this.map.meta.name }));
+    // The reopened-map chrome (fork state, "Opened ..." toast, playtest dirty
+    // flag) moved to finishBoot(): the restore now runs there, after the
+    // async store hydration.
     this.topbar.setViewMode(this.viewMode);
     this.toolbar.setActive(this.tool);
 
     // Sky/birds preferences (applied through the viewport once it boots).
-    const savedBirds = readJsonPref<{ enabled: boolean; count: number; formation: boolean }>(
-      BIRDS_PREF_KEY,
-    );
+    const savedBirds = readJsonPref<{
+      enabled: boolean;
+      count: number;
+      formation: boolean;
+    }>(BIRDS_PREF_KEY);
     if (savedBirds && typeof savedBirds.enabled === 'boolean') {
       this.birds = {
         enabled: savedBirds.enabled,
@@ -699,9 +993,11 @@ export class EditorApp {
       };
     }
     // Camera-speed multipliers (persisted): clamp to the slider range on load.
-    const savedSpeeds = readJsonPref<{ move: number; look: number; pan: number }>(
-      CAMERA_SPEEDS_PREF_KEY,
-    );
+    const savedSpeeds = readJsonPref<{
+      move: number;
+      look: number;
+      pan: number;
+    }>(CAMERA_SPEEDS_PREF_KEY);
     if (savedSpeeds) {
       const clampSpeed = (v: unknown): number =>
         Number.isFinite(v) ? Math.min(4, Math.max(0.1, v as number)) : 1;
@@ -713,9 +1009,9 @@ export class EditorApp {
     }
     // Performance-overlay preferences (persisted): merge onto the defaults so a
     // partial/old stored object keeps every field a valid boolean.
-    const savedPerf = readJsonPref<Partial<typeof this.perfOverlay>>(PERF_OVERLAY_PREF_KEY);
+    const savedPerf = readJsonPref<Partial<EditorApp['perfOverlay']>>(PERF_OVERLAY_PREF_KEY);
     if (savedPerf && typeof savedPerf === 'object') {
-      for (const key of Object.keys(this.perfOverlay) as (keyof typeof this.perfOverlay)[]) {
+      for (const key of Object.keys(this.perfOverlay) as (keyof EditorApp['perfOverlay'])[]) {
         if (typeof savedPerf[key] === 'boolean') this.perfOverlay[key] = savedPerf[key];
       }
     }
@@ -736,6 +1032,95 @@ export class EditorApp {
     void this.ensureStoredLocalAssets().then((added) => {
       if (added) this.viewport3d?.rebuildPlacements();
     });
+
+    // Hydrate the map store, then reopen the maker's real map (playtest
+    // return first, else the most recent save). Deferred because the store
+    // now lives in IndexedDB (async): see the constructor comment above.
+    void this.finishBoot();
+  }
+
+  private async finishBoot(): Promise<void> {
+    await this.io.ready();
+    // Returning from a playtest in this tab: reopen the map that launched it.
+    // Prefer the newest copy across the full save, the launch draft, and the
+    // session recovery slot so a failed navigation cannot strand a blank editor.
+    const restored = this.restorePlaytestMap();
+    const resumed = restored?.map ?? null;
+    // Fresh page (nothing to resume): reopen the most recently saved local map
+    // so a maker lands back in their last work instead of the built-in world. A
+    // first-time visitor with no saves still gets the built-in world as before.
+    const autoloaded = resumed ? null : this.loadMostRecentSave();
+    const opened = resumed ?? autoloaded;
+    if (opened) {
+      this.loadMap(opened);
+      this.topbar.setForkEnabled(this.io.linkFor(this.map.meta.id) !== null);
+      this.toasts.info(t('editor.status.opened', { name: this.map.meta.name }));
+      if (restored?.dirty) this.markDirty();
+    }
+  }
+
+  private restorePlaytestMap(): PlaytestRestore | null {
+    let resumeId: string | null = null;
+    try {
+      resumeId = sessionStorage.getItem(PLAYTEST_RESUME_KEY);
+    } catch {
+      resumeId = null;
+    }
+
+    const candidates: {
+      map: CustomMap;
+      source: 'store' | 'draft' | 'recovery';
+    }[] = [];
+    if (resumeId) {
+      const stored = this.io.store.load(resumeId);
+      const draft = this.io.draftLoadById(resumeId);
+      if (stored) candidates.push({ map: stored, source: 'store' });
+      if (draft) candidates.push({ map: draft, source: 'draft' });
+    }
+    const recovery = loadPlaytestRecoveryDraft();
+    if (recovery && (!resumeId || recovery.meta.id === resumeId)) {
+      candidates.push({ map: recovery, source: 'recovery' });
+    }
+    if (candidates.length === 0) {
+      if (resumeId) {
+        try {
+          sessionStorage.removeItem(PLAYTEST_RESUME_KEY);
+        } catch {
+          // Blocked storage: ignore the stale marker.
+        }
+      }
+      return null;
+    }
+
+    candidates.sort((a, b) => b.map.meta.updatedAt - a.map.meta.updatedAt);
+    const picked = candidates[0];
+    const saved = picked.source === 'store' ? true : this.io.saveLocal(picked.map);
+    if (saved) {
+      this.io.draftClear(picked.map.meta.id);
+      clearPlaytestRecoveryDraft(picked.map.meta.id);
+    }
+    try {
+      sessionStorage.removeItem(PLAYTEST_RESUME_KEY);
+    } catch {
+      // Blocked storage: the stale marker can only point back to this map.
+    }
+    return { map: picked.map, dirty: !saved };
+  }
+
+  /**
+   * Reopen the most recently saved local map (newest by `updatedAt`), or null if
+   * this browser has none. `store.list()` is already sorted newest-first, so the
+   * head is the last map the maker touched. Called on a fresh launch (no playtest
+   * to resume) so the editor reopens their work instead of a blank world.
+   */
+  private loadMostRecentSave(): CustomMap | null {
+    // Walk past corrupt/unparseable entries: one bad newest save must not
+    // dump the maker onto the built-in world while their older saves are fine.
+    for (const meta of this.io.store.list()) {
+      const map = this.io.store.load(meta.id);
+      if (map) return map;
+    }
+    return null;
   }
 
   /**
@@ -783,17 +1168,35 @@ export class EditorApp {
       npcs: map.content.npcs as WorldContent['npcs'],
       groundObjects: map.content.objects as WorldContent['groundObjects'],
       roads: (map.content.roads ?? BUILTIN_WORLD.roads) as WorldContent['roads'],
-      props: map.propsMode === 'empty' ? emptyZoneProps() : BUILTIN_WORLD.props,
+      props:
+        map.propsMode === 'empty'
+          ? emptyZoneProps()
+          : map.propsMode === 'editable-all'
+            ? withoutEditableWorldProps(BUILTIN_WORLD.props)
+            : map.propsMode === 'editable-major'
+              ? withoutMajorWorldProps(BUILTIN_WORLD.props)
+              : BUILTIN_WORLD.props,
       playerStart: map.playerStart ? { ...map.playerStart } : { ...PLAYER_START },
       terrainEdits: map.terrainEdits,
       placements: [],
       biomePaint: map.biomePaint,
     };
+    if (map.playerSpawnArea) world.playerSpawnArea = { ...map.playerSpawnArea };
     if (map.blockers) world.blockers = map.blockers;
+    if (map.caves) world.caves = map.caves;
+    if (map.holes) world.holes = map.holes;
+    if (map.holePatches) world.holePatches = map.holePatches;
     if (map.waterLevel !== undefined) world.waterLevel = map.waterLevel;
+    if (map.waterHue !== undefined) world.waterHue = map.waterHue;
+    if (map.waterLum !== undefined) world.waterLum = map.waterLum;
+    const fluids = fluidVolumesFromPlacements(map.placements);
+    if (fluids.length > 0) world.fluids = fluids;
     if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
     if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
-    if (map.presentationMode === 'blank') world.presentationMode = 'blank';
+    if (map.decorationExclusions && map.decorationExclusions.length > 0) {
+      world.decorationExclusions = map.decorationExclusions;
+    }
+    if (map.presentationMode !== undefined) world.presentationMode = map.presentationMode;
     if (map.skybox !== undefined) world.skybox = map.skybox;
     if (map.terrainStyle) world.terrainStyle = map.terrainStyle;
     if (map.timeScale !== undefined) world.timeScale = map.timeScale;
@@ -814,6 +1217,35 @@ export class EditorApp {
       this.activeWorld.blockers = this.map.blockers;
     }
     return this.map.blockers;
+  }
+
+  /** The document's cave list, lazily created and SHARED with the active
+   *  WorldContent so terrainHeight()/groundHeightNear() read the live array. */
+  private cavesRef(): CaveDef[] {
+    if (!this.map.caves) this.map.caves = [];
+    if (this.activeWorld.caves !== this.map.caves) {
+      this.activeWorld.caves = this.map.caves;
+    }
+    return this.map.caves;
+  }
+
+  /** The document's terrain-hole list, lazily created and SHARED with the
+   *  active WorldContent (same contract as cavesRef). */
+  private holesRef(): TerrainHole[] {
+    if (!this.map.holes) this.map.holes = [];
+    if (this.activeWorld.holes !== this.map.holes) {
+      this.activeWorld.holes = this.map.holes;
+    }
+    return this.map.holes;
+  }
+
+  /** The document's hole-patch list (same contract as holesRef). */
+  private holePatchesRef(): TerrainHole[] {
+    if (!this.map.holePatches) this.map.holePatches = [];
+    if (this.activeWorld.holePatches !== this.map.holePatches) {
+      this.activeWorld.holePatches = this.map.holePatches;
+    }
+    return this.map.holePatches;
   }
 
   /** EVERY blocker mutation (add, erase, undo/redo) funnels here: the cached
@@ -859,7 +1291,7 @@ export class EditorApp {
         onEditEnd: () => this.editEnd(),
         onHover: (w) => this.hover3d(w),
         onTap: (cx, cy, w, additive) => this.tap3d(cx, cy, w, additive),
-        placementDragEnabled: () => isSelectionTool(this.tool),
+        placementDragEnabled: () => isSelectionTool(this.tool) && !this.hitboxEdit,
         onPlacementDragStart: (index) => this.beginPlacementDrag(index),
         onPlacementDragMove: (w) => this.placementDragMove(w),
         onPlacementDragEnd: () => this.endPlacementDrag(),
@@ -869,8 +1301,13 @@ export class EditorApp {
           isTransformTool(this.tool) && this.selectedPlacement !== null ? this.tool : null,
         onGizmoChange: (change) =>
           this.updateSelectedPlacement(change, false, { detachOnMove: true }),
+        onHitboxGizmoChange: (change) => this.applyHitboxGizmo(change),
+        onHitboxHandleEdit: (boxIndex, box) => this.applyHitboxHandleEdit(boxIndex, box),
+        onHitboxHandleCommit: () => this.commitHitboxes(),
+        onHitboxBoxSelect: (indices) => this.selectHitboxes(indices),
         onGizmoEnd: () => {
-          this.updateSelectedPlacement({}, true);
+          if (this.hitboxDragBase) this.commitHitboxes();
+          else this.updateSelectedPlacement({}, true);
           this.inspector.refresh();
         },
       });
@@ -878,6 +1315,7 @@ export class EditorApp {
       this.viewport3d.setInvertPan(this.invertPanOn);
       this.viewport3d.setShowPlayer(this.showPlayerOn);
       this.viewport3d.setCollidersHidden(this.collidersHiddenOn);
+      this.viewport3d.setLocationsHidden(this.locationsHiddenOn);
       this.viewport3d.setWireframe(this.wireframeOn);
       this.viewport3d.setCameraSpeeds(this.cameraSpeeds);
       this.viewport3d.setPerfOverlay(this.perfOverlay);
@@ -891,6 +1329,10 @@ export class EditorApp {
         .then(() => {
           this.hide3dLoading();
           this.syncFootprintOverlay();
+          // Node guides are always-on chrome now: sync them at boot/load too,
+          // not just on tool switches.
+          this.refreshCaveGuides();
+          this.refreshRockGuides();
         })
         .catch((e) => {
           console.error('3D viewport failed; falling back to 2D', e);
@@ -968,14 +1410,22 @@ export class EditorApp {
   // ---- tool state ----------------------------------------------------------------
 
   private setTool(tool: EditorTool): void {
-    this.viewport3d?.setLightPreview(tool === 'light');
     // Music-area rects are authoring chrome: draw them only for the tool.
     this.viewport3d?.setMusicPreview(tool === 'music');
+    // Point-sound radius spheres likewise show all only while the tool is active.
+    this.viewport3d?.setSoundPreview(tool === 'sound');
     if (this.viewport3d?.grabFollowing) {
       this.viewport3d.cancelGrabFollow();
       this.endPlacementDrag();
     }
     this.tool = tool;
+    // Cave + rock node guides stay visible in EVERY tool: the blue points are
+    // real placements the Move/Scale gizmos can grab, so hiding them on tool
+    // switch read as "my nodes disappeared". setTool only re-syncs them.
+    // Hole rings show only while the Caves tool is up (refreshHoleGuides gates).
+    this.refreshCaveGuides();
+    this.refreshRockGuides();
+    this.refreshHoleGuides();
     this.toolbar.setActive(tool);
     this.inspector.showToolTab();
     // The asset browser backs the Place tool and the Foliage tool's custom brush.
@@ -983,7 +1433,12 @@ export class EditorApp {
     // The placement selection survives switching among Select/Move/Rotate/Scale
     // (Blender flow: pick, then G/R/S); any other tool drops it.
     if (!isSelectionTool(tool)) this.setSelectedPlacement(null);
-    if (tool !== 'select') this.selectedKey = null;
+    if (tool !== 'select' && tool !== 'entity') this.selectedKey = null;
+    if (tool !== 'entity') {
+      this.clearMobSelection();
+      this.clearNpcSelection();
+      this.npcFacingDragBase = null;
+    }
     if (tool !== 'camp') this.selectedCamp = null;
     if (tool !== 'select' && tool !== 'light' && this.selectedLight !== null) {
       this.selectedLight = null;
@@ -993,7 +1448,13 @@ export class EditorApp {
       this.selectedMusicArea = null;
       this.viewport3d?.setSelectedMusicArea(null);
     }
+    if (tool !== 'select' && tool !== 'sound' && this.selectedSound !== null) {
+      this.selectedSound = null;
+      this.viewport3d?.setSelectedSound(null);
+    }
     if (tool !== 'blocker') this.clearBlockerDraft();
+    if (tool === 'spawn') this.viewport3d?.setZonePreview(this.map.playerSpawnArea ?? null);
+    else if (this.tool !== 'zone' && this.tool !== 'music') this.viewport3d?.setZonePreview(null);
     this.viewport3d?.clearBrush();
     this.syncFootprintOverlay();
     this.inspector.refresh();
@@ -1008,16 +1469,31 @@ export class EditorApp {
    */
   private syncFootprintOverlay(): void {
     const forced = this.tool === 'blocker' || (this.tool === 'place' && this.placeCollide);
-    this.viewport3d?.showFootprints(this.footprintsOn || forced);
+    // Preview mode wins: no editor chrome, whatever the tool wants.
+    this.viewport3d?.showFootprints((this.footprintsOn || forced) && !this.previewOn);
+  }
+
+  /** Preview mode (topbar): the map as it looks in-game ? every editor-only
+   *  overlay hidden. Purely a view state; nothing in the document changes. */
+  private setPreviewMode(on: boolean): void {
+    if (this.previewOn === on) return;
+    this.previewOn = on;
+    this.topbar.setPreview(on);
+    this.viewport3d?.setPreviewMode(on);
+    this.syncFootprintOverlay();
   }
 
   /** Tools that claim the left pointer in the 3D viewport. The transform trio
    *  goes through the placement-drag path instead, so empty ground still orbits. */
   private toolWantsPointer(): boolean {
+    // Collision Master's poly-snap brush claims the pointer on ANY tool: the
+    // drag samples the model surface instead of orbiting or box-selecting.
+    if (this.cmPolyActive()) return true;
     return this.tool !== 'select' && this.tool !== 'water' && !isTransformTool(this.tool);
   }
 
   private isDragTool(): boolean {
+    if (this.cmPolyActive()) return true;
     return (
       this.tool === 'raise' ||
       this.tool === 'lower' ||
@@ -1025,6 +1501,8 @@ export class EditorApp {
       this.tool === 'flatten' ||
       this.tool === 'paint' ||
       this.tool === 'foliage' ||
+      this.tool === 'entity' ||
+      this.tool === 'spawn' ||
       this.tool === 'zone' ||
       this.tool === 'music' ||
       this.tool === 'erase'
@@ -1035,13 +1513,24 @@ export class EditorApp {
 
   private editStart(w: Vec2, ev?: PointerEvent): void {
     this.pointerEditActive = true;
+    if (this.cmPolyActive() && ev) {
+      this.cmPolyBegin(ev);
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
       case 'smooth':
       case 'flatten':
+        if (this.tool === 'raise' && this.sculptGrab && ev) {
+          this.grabBegin(w, ev);
+          break;
+        }
         this.strokeInvert = ev?.shiftKey === true;
         this.strokeBegin(w);
+        break;
+      case 'tunnel':
+        this.tunnelBegin(w);
         break;
       case 'paint':
         if (this.bucketArmed) {
@@ -1063,6 +1552,9 @@ export class EditorApp {
       case 'collider':
         this.insertColliderAt(w);
         break;
+      case 'fluid':
+        this.insertFluidAt(w);
+        break;
       case 'blocker':
         this.blockerStart = { ...w };
         this.blockerPreview = null;
@@ -1070,9 +1562,101 @@ export class EditorApp {
       case 'camp':
         this.campClick(w);
         break;
+      case 'entity': {
+        const runtimeMob = ev ? this.viewport3d?.pickRuntimeMob(ev.clientX, ev.clientY) : null;
+        if (runtimeMob) {
+          const camp = this.individualCampForRuntimeMob(runtimeMob.id);
+          if (camp) {
+            this.clearNpcSelection();
+            this.selectedMobIds = toggledMobSelection(
+              this.selectedMobIds,
+              runtimeMob.id,
+              ev?.ctrlKey === true,
+            );
+            if (this.selectedMobIds.has(runtimeMob.id)) {
+              this.selectedMobCamps.set(runtimeMob.id, camp);
+            } else {
+              this.selectedMobCamps.delete(runtimeMob.id);
+            }
+            for (const id of [...this.selectedMobCamps.keys()]) {
+              if (!this.selectedMobIds.has(id)) this.selectedMobCamps.delete(id);
+            }
+            this.viewport3d?.setSelectedRuntimeMobs(this.selectedMobIds);
+            this.selectedKey = null;
+            this.markerDragStart = null;
+            this.mobDragStart = this.selectedMobIds.has(runtimeMob.id)
+              ? {
+                  pointer: { ...w },
+                  camps: new Map(
+                    [...this.selectedMobCamps].map(([id, selectedCamp]) => [
+                      id,
+                      { camp: selectedCamp, point: { ...selectedCamp.center } },
+                    ]),
+                  ),
+                  dx: 0,
+                  dz: 0,
+                }
+              : null;
+            this.inspector.refresh();
+            this.canvasDirty = true;
+            break;
+          }
+        }
+        this.clearMobSelection();
+        const hit = pickMovableEntity(this.entities, w);
+        if (hit?.kind === 'npc') {
+          this.selectedNpcKeys = toggledKeySelection(
+            this.selectedNpcKeys,
+            hit.key,
+            ev?.ctrlKey === true,
+          );
+          this.selectedKey = this.selectedNpcKeys.has(hit.key)
+            ? hit.key
+            : ([...this.selectedNpcKeys].pop() ?? null);
+          this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+        } else {
+          this.clearNpcSelection();
+          this.selectedKey = hit?.key ?? null;
+        }
+        if (hit && this.selectedKey === hit.key) {
+          this.markerDragStart = {
+            key: hit.key,
+            x: hit.point.x,
+            z: hit.point.z,
+          };
+          if (hit.kind === 'npc') {
+            this.npcDragBase = new Map(
+              [...this.selectedNpcKeys]
+                .map((key) => {
+                  const npc = this.map.content.npcs[key.slice('npc:'.length)];
+                  return npc ? ([key, { npc, point: { ...npc.pos } }] as const) : null;
+                })
+                .filter(
+                  (entry): entry is readonly [string, { npc: NpcDef; point: Vec2 }] =>
+                    entry !== null,
+                ),
+            );
+          }
+          this.grab = { x: w.x - hit.point.x, z: w.z - hit.point.z };
+        } else {
+          this.markerDragStart = null;
+          this.npcDragBase = null;
+        }
+        this.inspector.refresh();
+        this.canvasDirty = true;
+        break;
+      }
       case 'spawn':
         if (this.markerPlaceMode) this.addMarker(w);
-        else this.setSpawn(w);
+        else {
+          this.spawnAreaStart = { ...w };
+          this.spawnAreaPreview = {
+            minX: w.x,
+            minZ: w.z,
+            maxX: w.x,
+            maxZ: w.z,
+          };
+        }
         break;
       case 'zone':
       case 'music':
@@ -1087,6 +1671,16 @@ export class EditorApp {
         else this.placeLight(w);
         break;
       }
+      case 'sound': {
+        // A click on an existing sound badge selects it; empty ground places one.
+        const hit = ev ? (this.viewport3d?.pickMapSound(ev.clientX, ev.clientY) ?? null) : null;
+        if (hit !== null) this.setSelectedSound(hit);
+        else this.placeSound(w);
+        break;
+      }
+      case 'rock':
+        this.rockClick(w);
+        break;
       case 'region':
         this.regionStart = { ...w };
         this.regionBox = { minX: w.x, minZ: w.z, maxX: w.x, maxZ: w.z };
@@ -1098,15 +1692,28 @@ export class EditorApp {
   }
 
   private editMove(w: Vec2, ev?: PointerEvent): void {
+    if (this.cmPolyActive() && this.cmPolyPoints && ev) {
+      this.cmPolyMove(ev);
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
       case 'smooth':
       case 'flatten':
+        if (this.grabSession) {
+          if (ev) this.grabStep(ev);
+          this.brushRing(w);
+          break;
+        }
         // Live: pressing/releasing Shift mid-stroke flips the sub-mode from
         // the next stamp on (matching how sculpt modifiers feel elsewhere).
         if (ev) this.strokeInvert = ev.shiftKey;
         this.strokeStep(w);
+        this.brushRing(w);
+        break;
+      case 'tunnel':
+        // Click-only tool; the ring previews the node/hole size while aiming.
         this.brushRing(w);
         break;
       case 'paint':
@@ -1128,6 +1735,65 @@ export class EditorApp {
           // a drag past 200yd truncates live, so the preview IS the stored wall.
           this.blockerPreview = clampBlockerSegment(s.x, s.z, w.x, w.z);
           this.viewport3d?.setBlockerPreview(this.blockerPreview);
+          this.canvasDirty = true;
+        }
+        break;
+      case 'entity': {
+        if (this.mobDragStart) {
+          const drag = this.mobDragStart;
+          const dx = w.x - drag.pointer.x;
+          const dz = w.z - drag.pointer.z;
+          this.viewport3d?.moveRuntimeMobs(this.selectedMobIds, dx - drag.dx, dz - drag.dz);
+          drag.dx = dx;
+          drag.dz = dz;
+          for (const { camp, point } of drag.camps.values()) {
+            camp.center.x = point.x + dx;
+            camp.center.z = point.z + dz;
+          }
+          this.entities = buildEntities(this.content);
+          this.canvasDirty = true;
+          break;
+        }
+        if (this.npcDragBase && this.markerDragStart) {
+          const activeStart = this.markerDragStart;
+          const activeTo = { x: w.x - this.grab.x, z: w.z - this.grab.z };
+          const dx = activeTo.x - activeStart.x;
+          const dz = activeTo.z - activeStart.z;
+          for (const [key, entry] of this.npcDragBase) {
+            const from = { ...entry.npc.pos };
+            const to = { x: entry.point.x + dx, z: entry.point.z + dz };
+            entry.npc.pos.x = to.x;
+            entry.npc.pos.z = to.z;
+            const entity = this.entities.find((candidate) => candidate.key === key);
+            if (entity) {
+              entity.point.x = to.x;
+              entity.point.z = to.z;
+            }
+            this.viewport3d?.moveMapEntity(key, from, to);
+          }
+          this.canvasDirty = true;
+          break;
+        }
+        if (!this.selectedKey) break;
+        const entity = this.entities.find((candidate) => candidate.key === this.selectedKey);
+        if (!entity || !isMovableEntity(entity)) break;
+        const from = { x: entity.point.x, z: entity.point.z };
+        const to = { x: w.x - this.grab.x, z: w.z - this.grab.z };
+        entity.point.x = to.x;
+        entity.point.z = to.z;
+        this.viewport3d?.moveMapEntity(entity.key, from, to);
+        this.canvasDirty = true;
+        break;
+      }
+      case 'spawn':
+        if (this.spawnAreaStart && !this.markerPlaceMode) {
+          this.spawnAreaPreview = {
+            minX: Math.min(this.spawnAreaStart.x, w.x),
+            minZ: Math.min(this.spawnAreaStart.z, w.z),
+            maxX: Math.max(this.spawnAreaStart.x, w.x),
+            maxZ: Math.max(this.spawnAreaStart.z, w.z),
+          };
+          this.viewport3d?.setZonePreview(this.spawnAreaPreview);
           this.canvasDirty = true;
         }
         break;
@@ -1162,11 +1828,20 @@ export class EditorApp {
 
   private editEnd(): void {
     this.pointerEditActive = false;
+    if (this.cmPolyPoints) {
+      this.cmPolyEnd();
+      return;
+    }
     switch (this.tool) {
       case 'raise':
       case 'lower':
       case 'smooth':
       case 'flatten':
+        if (this.grabSession) {
+          this.grabCommit();
+          this.inspector.refresh();
+          break;
+        }
         this.strokeCommit();
         // The stroke mutated terrainEdits in place on the ACTIVE content.
         this.terrainEditsMutated();
@@ -1189,6 +1864,97 @@ export class EditorApp {
         break;
       case 'paint':
         this.paintCommit();
+        break;
+      case 'entity': {
+        const mobDrag = this.mobDragStart;
+        this.mobDragStart = null;
+        if (mobDrag && (mobDrag.dx !== 0 || mobDrag.dz !== 0)) {
+          const moves = new Map(
+            [...mobDrag.camps].map(([id, entry]) => [
+              id,
+              {
+                camp: entry.camp,
+                prev: entry.point,
+                next: { x: entry.camp.center.x, z: entry.camp.center.z },
+              },
+            ]),
+          );
+          const apply = (side: 'prev' | 'next'): void => {
+            for (const [id, move] of moves) {
+              const target = move[side];
+              const dx = target.x - move.camp.center.x;
+              const dz = target.z - move.camp.center.z;
+              this.viewport3d?.moveRuntimeMobs(new Set([id]), dx, dz);
+              move.camp.center.x = target.x;
+              move.camp.center.z = target.z;
+            }
+            this.entities = buildEntities(this.content);
+            this.canvasDirty = true;
+          };
+          this.pushUndo({
+            label: 'move-mobs',
+            undo: () => apply('prev'),
+            redo: () => apply('next'),
+          });
+          this.map.meta.updatedAt = now();
+          this.markDirty();
+          this.inspector.refresh();
+          break;
+        }
+        const npcDrag = this.npcDragBase;
+        this.npcDragBase = null;
+        if (npcDrag) {
+          const previous = new Map([...npcDrag].map(([key, entry]) => [key, entry.point]));
+          const next = new Map([...npcDrag].map(([key, entry]) => [key, { ...entry.npc.pos }]));
+          const changed = [...previous].some(([key, point]) => {
+            const target = next.get(key);
+            return target && (target.x !== point.x || target.z !== point.z);
+          });
+          this.markerDragStart = null;
+          if (changed) {
+            const apply = (points: ReadonlyMap<string, Vec2>): void => {
+              for (const [key, point] of points) {
+                const npc = this.map.content.npcs[key.slice('npc:'.length)];
+                if (!npc) continue;
+                const from = { ...npc.pos };
+                npc.pos.x = point.x;
+                npc.pos.z = point.z;
+                const entity = this.entities.find((candidate) => candidate.key === key);
+                if (entity) Object.assign(entity.point, point);
+                this.viewport3d?.moveMapEntity(key, from, point);
+              }
+              this.canvasDirty = true;
+            };
+            this.pushUndo({
+              label: 'move-npcs',
+              undo: () => apply(previous),
+              redo: () => apply(next),
+            });
+            this.map.meta.updatedAt = now();
+            this.markDirty();
+          }
+          this.inspector.refresh();
+          break;
+        }
+        const start = this.markerDragStart;
+        const entity = start
+          ? this.entities.find((candidate) => candidate.key === start.key)
+          : null;
+        this.markerDragStart = null;
+        if (start && entity && (entity.point.x !== start.x || entity.point.z !== start.z)) {
+          this.pushMarkerUndo(
+            start.key,
+            { x: start.x, z: start.z },
+            { x: entity.point.x, z: entity.point.z },
+          );
+          this.map.meta.updatedAt = now();
+          this.markDirty();
+        }
+        this.inspector.refresh();
+        break;
+      }
+      case 'spawn':
+        if (!this.markerPlaceMode) this.finishSpawnArea();
         break;
       case 'region': {
         // A click (no real drag) with a clipboard pastes at the click point.
@@ -1254,6 +2020,27 @@ export class EditorApp {
 
   private tap3d(clientX: number, clientY: number, w: Vec2 | null, additive: boolean): void {
     if (!isSelectionTool(this.tool) || !this.viewport3d) return;
+    // Hitbox edit mode captures every Select-mode tap: clicks pick individual
+    // hitboxes (Shift/Ctrl+click toggles them in the multi-selection); empty
+    // clicks clear the box selection but stay in edit mode.
+    if (this.hitboxEdit) {
+      const bi = this.viewport3d.pickHitbox(clientX, clientY);
+      const sel = this.hitboxEdit.selected;
+      if (bi !== null) {
+        if (additive) {
+          if (sel.has(bi)) sel.delete(bi);
+          else sel.add(bi);
+        } else {
+          sel.clear();
+          sel.add(bi);
+        }
+      } else if (!additive) {
+        sel.clear();
+      }
+      this.syncHitboxEditView();
+      this.inspector.refresh();
+      return;
+    }
     // Bulb badges pick first: a light's sprite is tiny next to placement
     // anchors, so the placement slack radius would otherwise swallow the tap.
     const light = additive ? null : this.viewport3d.pickMapLight(clientX, clientY);
@@ -1293,6 +2080,1124 @@ export class EditorApp {
     // Flatten mid-gesture and needs the press-point height as its target.
     this.flattenTarget = terrainHeight(w.x, w.z, this.map.meta.seed);
     this.strokeStep(w);
+  }
+
+  // ---- tunnel (cave) strokes -------------------------------------------------------
+
+  /** The bore radius: the shared brush radius clamped to the cave bounds. */
+  private tunnelRadius(): number {
+    return Math.min(CAVE_MAX_RADIUS, Math.max(CAVE_MIN_RADIUS, this.brushRadius * 0.5));
+  }
+
+  /** EVERY cave mutation (stroke, undo/redo) funnels here: the carve changed
+   *  terrainHeight, so colliders reseat and the region re-meshes. */
+  private cavesMutated(region: RegionBox | null): void {
+    invalidateStaticColliders();
+    this.map.meta.updatedAt = now();
+    this.canvasDirty = true;
+    if (region) {
+      this.viewport3d?.rebuildTerrainRegion(region);
+      this.viewport3d?.finishTerrainStroke(region);
+    }
+    this.refreshCaveGuides();
+    this.inspector.refresh();
+  }
+
+  // ---- Rock Generator tool -----------------------------------------------------
+
+  private rockClick(w: Vec2): void {
+    if (this.rockChainMode) {
+      const pending = this.pendingRockRig();
+      if (pending && pending.points.length >= MAX_ROCK_NODES) {
+        this.toasts.error(t('editor.status.caveCapReached', { max: MAX_ROCK_NODES }));
+        return;
+      }
+      this.appendPlacements(
+        [
+          {
+            assetId: ROCK_POINT_ASSET_ID,
+            name: pending?.id ?? mintId(),
+            x: w.x,
+            z: w.z,
+            rotY: 0,
+            scale: 1,
+            collide: false,
+          },
+        ],
+        'rock-point',
+      );
+      this.refreshRockGuides();
+      this.inspector.refresh();
+      return;
+    }
+    this.appendPlacements([this.rockRecord(w.x, w.z, this.rockParams.size)], 'rock');
+    this.inspector.refresh();
+  }
+
+  /** A generated-rock placement carrying the CURRENT panel sliders. */
+  private rockRecord(x: number, z: number, scale: number): AssetPlacement {
+    const rec: AssetPlacement = {
+      assetId: ROCK_ASSET_ID,
+      x,
+      z,
+      rotY: 0,
+      scale,
+      collide: false,
+      rockSeed: rockSeed(x, z),
+      rockNoise: this.rockParams.noise,
+      rockDetail: this.rockParams.detail,
+      rockSharp: this.rockParams.sharp,
+      rockTex: this.rockParams.tex,
+    };
+    if (this.rockParams.height !== 1) rec.rockHeight = this.rockParams.height;
+    if (this.rockParams.depth > 0) rec.rockDepth = this.rockParams.depth;
+    if (this.rockParams.jag > 0) rec.rockJag = this.rockParams.jag;
+    if (this.rockParams.texId) {
+      rec.rockTexId = this.rockParams.texId;
+      if (this.rockParams.texTile !== DEFAULT_TEXTURE_TILE_YD) {
+        rec.rockTexTile = this.rockParams.texTile;
+      }
+    }
+    return rec;
+  }
+
+  /** Every rock chain rig on the map (rock/point placements grouped by the
+   *  chain id in placement.name, in document order). */
+  private rockRigs(): { id: string; points: AssetPlacement[] }[] {
+    const byId = new Map<string, { id: string; points: AssetPlacement[] }>();
+    for (const p of this.map.placements) {
+      if (p.assetId !== ROCK_POINT_ASSET_ID) continue;
+      const id = p.name ?? '';
+      if (!id) continue;
+      let rig = byId.get(id);
+      if (!rig) {
+        rig = { id, points: [] };
+        byId.set(id, rig);
+      }
+      rig.points.push(p);
+    }
+    return [...byId.values()];
+  }
+
+  /** The rig still being laid out: the first one with no generated ridge. */
+  private pendingRockRig(): { id: string; points: AssetPlacement[] } | null {
+    return (
+      this.rockRigs().find(
+        (r) =>
+          !this.map.placements.some((p) => p.assetId === ROCK_RIDGE_ASSET_ID && p.name === r.id),
+      ) ?? null
+    );
+  }
+
+  /** Blue node markers + dotted connectors for every rock rig (all tools). */
+  private refreshRockGuides(): void {
+    const rigs = this.rockRigs().map((r) => ({
+      points: r.points.map((p) => ({ x: p.x, z: p.z, dy: p.y ?? 0 })),
+    }));
+    this.viewport3d?.setRockChainGuide(rigs.length ? rigs : null);
+  }
+
+  /**
+   * Ridge mode Generate: ONE merged solid body lofted along the rig's points
+   * (buildRockChainModel), replacing the old overlapping-boulder pile. The
+   * body's top follows a straight DECK line from the first point's ground to
+   * the last point's (spanning dips like a bridge); per-node girth/height come
+   * from each point placement's gizmo scale. The rig points stay after
+   * Generate: moving or scaling one live-regenerates the ridge.
+   */
+  private generateRockChain(): void {
+    let generated = 0;
+    for (const rig of this.rockRigs()) {
+      if (rig.points.length < 2) continue;
+      if (this.generateRockRidgeForRig(rig, true)) generated++;
+    }
+    if (generated === 0) this.toasts.error(t('editor.rock.chainTooShort'));
+    this.refreshRockGuides();
+    this.inspector.refresh();
+  }
+
+  /** Build the merged-ridge nodes for a rig (deck line + per-point scale). */
+  private rockRidgeNodes(rig: {
+    id: string;
+    points: AssetPlacement[];
+  }): { dx: number; dz: number; dy: number; r: number; h: number }[] | null {
+    const pts = rig.points;
+    if (pts.length < 2) return null;
+    const seed = this.map.meta.seed;
+    const lens: number[] = [];
+    let total = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const L = Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z);
+      lens.push(L);
+      total += L;
+    }
+    if (total < 1) return null;
+    const anchor = pts[0];
+    const anchorGround = terrainHeight(anchor.x, anchor.z, seed);
+    const h0 = anchorGround;
+    const h1 = terrainHeight(pts[pts.length - 1].x, pts[pts.length - 1].z, seed);
+    const size = this.rockParams.size;
+    const nodes: {
+      dx: number;
+      dz: number;
+      dy: number;
+      r: number;
+      h: number;
+    }[] = [];
+    let arc = 0;
+    for (let i = 0; i < pts.length; i++) {
+      if (i > 0) arc += lens[i - 1];
+      const p = pts[i];
+      const t01 = arc / total;
+      const deckY = h0 + (h1 - h0) * t01;
+      const ground = terrainHeight(p.x, p.z, seed);
+      // Girth from the point's gizmo scale (uniform * per-axis XZ), height
+      // multiplier from its Y scale, both on top of the panel size slider.
+      const sxz = p.scale * (((p.scaleX ?? 1) + (p.scaleZ ?? 1)) / 2);
+      const sy = p.scale * (p.scaleY ?? 1);
+      const r = Math.max(0.5, size * 0.55 * sxz);
+      const h = Math.max(0.3, Math.min(3, this.rockParams.height * sy));
+      // Ride the deck line where the ground drops away (bridge span); stay
+      // ground-seated where the terrain runs higher. The node's Y gizmo adds
+      // an authored lift/sink on top (floating arches, buried spans).
+      const seatY = Math.max(ground, deckY - r * h * 0.4) + (p.y ?? 0);
+      nodes.push({
+        dx: p.x - anchor.x,
+        dz: p.z - anchor.z,
+        dy: seatY - anchorGround,
+        r,
+        h,
+      });
+    }
+    return nodes;
+  }
+
+  /** Create or live-update the merged ridge placement for a rig. */
+  private generateRockRidgeForRig(
+    rig: { id: string; points: AssetPlacement[] },
+    withUndo: boolean,
+  ): boolean {
+    const nodes = this.rockRidgeNodes(rig);
+    if (!nodes) return false;
+    const anchor = rig.points[0];
+    const existingIndex = this.map.placements.findIndex(
+      (p) => p.assetId === ROCK_RIDGE_ASSET_ID && p.name === rig.id,
+    );
+    if (existingIndex >= 0) {
+      // Live regeneration: rebuild the body in place (no undo per drag sample).
+      const existing = this.map.placements[existingIndex];
+      existing.x = anchor.x;
+      existing.z = anchor.z;
+      existing.rockNodes = nodes;
+      this.map.meta.updatedAt = now();
+      this.canvasDirty = true;
+      this.viewport3d?.placementAdded(existingIndex);
+      return true;
+    }
+    const seed = this.map.meta.seed;
+    const ridge: AssetPlacement = {
+      assetId: ROCK_RIDGE_ASSET_ID,
+      name: rig.id,
+      x: anchor.x,
+      z: anchor.z,
+      rotY: 0,
+      scale: 1,
+      collide: false,
+      rockSeed: rockSeed(anchor.x, anchor.z),
+      rockNoise: this.rockParams.noise,
+      rockDetail: this.rockParams.detail,
+      rockSharp: this.rockParams.sharp,
+      rockTex: this.rockParams.tex,
+      rockNodes: nodes,
+    };
+    if (this.rockParams.jag > 0) ridge.rockJag = this.rockParams.jag;
+    if (this.rockParams.texId) {
+      ridge.rockTexId = this.rockParams.texId;
+      if (this.rockParams.texTile !== DEFAULT_TEXTURE_TILE_YD) {
+        ridge.rockTexTile = this.rockParams.texTile;
+      }
+    }
+    const placements: AssetPlacement[] = [ridge];
+    // Optional walkable deck: one plane collider per rig segment, following
+    // the ridge tops so the span can actually be crossed.
+    if (this.rockParams.walkable) {
+      const anchorGround = terrainHeight(anchor.x, anchor.z, seed);
+      for (let i = 1; i < rig.points.length; i++) {
+        const a = rig.points[i - 1];
+        const b = rig.points[i];
+        const na = nodes[i - 1];
+        const nb = nodes[i];
+        const L = Math.hypot(b.x - a.x, b.z - a.z);
+        if (L < 1) continue;
+        const midX = (a.x + b.x) / 2;
+        const midZ = (a.z + b.z) / 2;
+        const topA = anchorGround + na.dy + na.r * na.h * 1.35;
+        const topB = anchorGround + nb.dy + nb.r * nb.h * 1.35;
+        placements.push({
+          assetId: COLLIDER_ASSET_IDS.plane,
+          x: midX,
+          z: midZ,
+          rotY: Math.atan2(b.x - a.x, b.z - a.z),
+          scale: 1,
+          collide: true,
+          sizeX: Math.max(2, (na.r + nb.r) * 0.9),
+          sizeZ: L + Math.min(na.r, nb.r),
+          sizeY: (topA + topB) / 2 - terrainHeight(midX, midZ, seed) - 0.4,
+          rotX: -Math.atan2(topB - topA, L),
+        });
+      }
+    }
+    if (withUndo) this.appendPlacements(placements, 'rock-ridge');
+    return true;
+  }
+
+  /** Live ridge regeneration while a rig point is dragged/scaled. */
+  private regenerateRockRidgeForPoint(p: AssetPlacement): void {
+    const id = p.name ?? '';
+    if (!id) return;
+    const rig = this.rockRigs().find((r) => r.id === id);
+    if (rig) this.generateRockRidgeForRig(rig, false);
+  }
+
+  /** Clear the pending rig's blue points (one undoable step). */
+  private clearRockChain(): void {
+    const pending = this.pendingRockRig();
+    if (!pending) return;
+    const removed: { index: number; placement: AssetPlacement }[] = [];
+    for (let i = this.map.placements.length - 1; i >= 0; i--) {
+      const p = this.map.placements[i];
+      if (p.assetId === ROCK_POINT_ASSET_ID && p.name === pending.id) {
+        removed.push({ index: i, placement: p });
+        this.map.placements.splice(i, 1);
+      }
+    }
+    if (removed.length === 0) return;
+    this.setSelectedPlacement(null);
+    this.viewport3d?.rebuildPlacements();
+    this.map.meta.updatedAt = now();
+    this.canvasDirty = true;
+    this.refreshRockGuides();
+    this.pushUndo({
+      label: 'rock-clear-points',
+      undo: () => {
+        // Reverse order restores ascending indices correctly.
+        for (let i = removed.length - 1; i >= 0; i--) {
+          this.map.placements.splice(removed[i].index, 0, removed[i].placement);
+        }
+        this.viewport3d?.rebuildPlacements();
+        this.refreshRockGuides();
+        this.canvasDirty = true;
+      },
+      redo: () => {
+        for (const r of removed) {
+          const at = this.map.placements.indexOf(r.placement);
+          if (at >= 0) this.map.placements.splice(at, 1);
+        }
+        this.viewport3d?.rebuildPlacements();
+        this.refreshRockGuides();
+        this.canvasDirty = true;
+      },
+    });
+  }
+
+  private tunnelBegin(w: Vec2): void {
+    if (this.tunnelMode === 'hole') {
+      this.placeTerrainHole(w);
+      return;
+    }
+    if (this.tunnelMode === 'patch') {
+      this.placeHolePatch(w);
+      return;
+    }
+    this.placeCaveEndpoint(w);
+  }
+
+  /** A rig point's ABSOLUTE floor height. Cave markers are ANCHORED (frozen
+   *  ground captured at drop): re-sculpting the terrain under them never
+   *  reshapes the cave, and a group Y-lift moves the whole cave rigidly. */
+  private rigPointY(p: AssetPlacement): number {
+    const anchor = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.map.meta.seed);
+    return anchor + (p.y ?? 0);
+  }
+
+  /** The rig flow: the first click drops the ENTRANCE marker; every further
+   *  click (until the rig generates) appends a BLUE waypoint. The rig's last
+   *  point acts as the exit. All are ordinary placements (gizmo-movable);
+   *  Generate (or moving any point of a generated cave) builds the tube. */
+  private placeCaveEndpoint(w: Vec2): void {
+    const caves = this.map.caves ?? [];
+    if (caves.length >= MAX_CAVES) {
+      this.toasts.error(t('editor.status.caveCapReached', { max: MAX_CAVES }));
+      return;
+    }
+    // A rig with no generated cave yet is the pending one being laid out.
+    const pending = this.caveRigs().find((r) => !caves.some((c) => c.id === r.id));
+    if (pending && pending.points.length >= MAX_CAVE_RIG_POINTS) {
+      this.toasts.error(t('editor.status.caveCapReached', { max: MAX_CAVE_RIG_POINTS }));
+      return;
+    }
+    // Anchored at the CURRENT surface height: the node keeps this elevation
+    // (gizmo Y adjusts it) no matter what happens to the terrain later.
+    const placement: AssetPlacement = {
+      assetId: pending ? CAVE_POINT_ASSET_ID : CAVE_ENTRANCE_ASSET_ID,
+      name: pending ? pending.id : mintId(),
+      x: w.x,
+      z: w.z,
+      rotY: 0,
+      scale: 1,
+      collide: false,
+      detached: true,
+      groundY: terrainHeight(w.x, w.z, this.map.meta.seed),
+    };
+    this.appendPlacements([placement], 'cave-point');
+    this.inspector.refresh();
+    this.refreshCaveGuides();
+  }
+
+  /** Every cave rig on the map, keyed by the shared cave id carried in
+   *  placement.name: the ORDERED control points (entrance first, waypoints in
+   *  document order, a legacy exit marker last). */
+  private caveRigs(): { id: string; points: AssetPlacement[] }[] {
+    const byId = new Map<
+      string,
+      {
+        id: string;
+        entrance: AssetPlacement[];
+        mid: AssetPlacement[];
+        exit: AssetPlacement[];
+      }
+    >();
+    for (const p of this.map.placements) {
+      if (
+        p.assetId !== CAVE_ENTRANCE_ASSET_ID &&
+        p.assetId !== CAVE_EXIT_ASSET_ID &&
+        p.assetId !== CAVE_POINT_ASSET_ID
+      ) {
+        continue;
+      }
+      const id = p.name ?? '';
+      if (!id) continue;
+      let rig = byId.get(id);
+      if (!rig) {
+        rig = { id, entrance: [], mid: [], exit: [] };
+        byId.set(id, rig);
+      }
+      if (p.assetId === CAVE_ENTRANCE_ASSET_ID) rig.entrance.push(p);
+      else if (p.assetId === CAVE_EXIT_ASSET_ID) rig.exit.push(p);
+      else rig.mid.push(p);
+    }
+    return [...byId.values()].map((r) => ({
+      id: r.id,
+      points: [...r.entrance, ...r.mid, ...r.exit],
+    }));
+  }
+
+  /** Generated tubes' flow lines plus every rig's blue control points and
+   *  dotted connector. Always visible (every tool): the rig points are real
+   *  placements the Move/Scale gizmos edit, so hiding them outside the Caves
+   *  tool made in-progress rigs read as lost. */
+  private refreshCaveGuides(): void {
+    this.viewport3d?.setCaveGuides(
+      this.map.caves ?? [],
+      this.caveRigs().map((r) => ({
+        points: r.points.map((p) => ({ x: p.x, y: this.rigPointY(p), z: p.z })),
+      })),
+    );
+  }
+
+  /** Generate (or re-generate) the cave for a rig. Keeps the existing cave's
+   *  width/height/variance/spike sliders across regenerations. TERRAIN-BLIND:
+   *  the tube runs exactly through the rig points at exactly their authored
+   *  girth, so nothing about the surrounding ground can squish or reshape it. */
+  private generateCaveForRig(
+    rig: { id: string; points: AssetPlacement[] },
+    withUndo: boolean,
+  ): void {
+    if (rig.points.length < 2) return;
+    const seed = this.map.meta.seed;
+    const caves = this.cavesRef();
+    const existing = caves.find((c) => c.id === rig.id);
+    // The bore radius is AUTHORED at first generate and stored on the cave:
+    // regenerating (a node move) must never pick up the live brush slider, or
+    // the cave silently changes girth mid-edit.
+    const radius = existing?.radius ?? this.tunnelRadius();
+    const nodes = generateCaveRigNodes(
+      // Each rig point's gizmo scale sets the bore girth THERE (uniform scale
+      // times the XZ per-axis average); its anchored elevation + Y offset IS
+      // the cave floor there (rigPointY), interpolated along the path.
+      rig.points.map((p) => ({
+        x: p.x,
+        y: this.rigPointY(p),
+        z: p.z,
+        r: p.scale * (((p.scaleX ?? 1) + (p.scaleZ ?? 1)) / 2),
+      })),
+      radius,
+      {
+        variance: existing?.variance ?? DEFAULT_CAVE_VARIANCE,
+        seed: seed + caveWobbleSeed(rig.id),
+      },
+    );
+    if (nodes.length < 2) {
+      this.toasts.error(t('editor.tunnel.tooShort'));
+      return;
+    }
+    const prevNodes = existing ? existing.nodes : null;
+    const oldRegion = existing ? this.caveRegion(existing) : null;
+    let cave: CaveDef;
+    if (existing) {
+      existing.nodes = nodes;
+      if (existing.radius === undefined) existing.radius = radius;
+      cave = existing;
+    } else {
+      cave = { id: rig.id, nodes, radius, variance: DEFAULT_CAVE_VARIANCE };
+      caves.push(cave);
+    }
+    const region = this.caveRegion(cave);
+    const union: RegionBox = oldRegion
+      ? {
+          minX: Math.min(oldRegion.minX, region.minX),
+          minZ: Math.min(oldRegion.minZ, region.minZ),
+          maxX: Math.max(oldRegion.maxX, region.maxX),
+          maxZ: Math.max(oldRegion.maxZ, region.maxZ),
+        }
+      : region;
+    this.cavesMutated(union);
+    if (!withUndo) return;
+    this.pushUndo({
+      label: 'cave-generate',
+      undo: () => {
+        if (prevNodes) cave.nodes = prevNodes;
+        else {
+          const i = caves.indexOf(cave);
+          if (i >= 0) caves.splice(i, 1);
+        }
+        this.cavesMutated(union);
+      },
+      redo: () => {
+        if (prevNodes) cave.nodes = nodes;
+        else caves.push(cave);
+        this.cavesMutated(union);
+      },
+    });
+  }
+
+  /** The Tunnel panel's Generate button: build every rig with at least two
+   *  points that has no cave yet (each as its own undo step). */
+  private generatePendingCaves(): void {
+    const caves = this.map.caves ?? [];
+    for (const rig of this.caveRigs()) {
+      if (rig.points.length < 2) continue;
+      if (caves.some((c) => c.id === rig.id)) continue;
+      this.generateCaveForRig(rig, true);
+    }
+    this.inspector.refresh();
+  }
+
+  /** Live regeneration while any rig point is dragged/moved. */
+  private regenerateCaveForEndpoint(p: AssetPlacement): void {
+    const id = p.name ?? '';
+    if (!id) return;
+    if (!this.map.caves?.some((c) => c.id === id)) return; // not generated yet
+    const rig = this.caveRigs().find((q) => q.id === id);
+    if (rig) this.generateCaveForRig(rig, false);
+  }
+
+  /** EVERY hole mutation (punch, resize, delete, undo/redo) funnels here:
+   *  the shader cutout uniforms re-upload and the grass/dressing over the
+   *  cutout re-scatter. Terrain heights are untouched (holes only remove the
+   *  sheet), so no chunk re-mesh is needed ? just the region's decor. */
+  private holesMutated(region: RegionBox | null): void {
+    refreshTerrainHoles();
+    invalidateStaticColliders();
+    this.map.meta.updatedAt = now();
+    this.canvasDirty = true;
+    if (region) {
+      this.viewport3d?.rebuildTerrainRegion(region);
+      this.viewport3d?.finishTerrainStroke(region);
+    }
+    this.refreshHoleGuides();
+    this.inspector.refresh();
+  }
+
+  private refreshHoleGuides(): void {
+    const show = this.tool === 'tunnel';
+    this.viewport3d?.setHoleGuides(
+      show ? (this.map.holes ?? []) : null,
+      show ? (this.map.holePatches ?? []) : null,
+    );
+  }
+
+  private holeRegion(hole: TerrainHole): RegionBox {
+    const b = holeBounds(hole);
+    return {
+      minX: b.minX - 2,
+      minZ: b.minZ - 2,
+      maxX: b.maxX + 2,
+      maxZ: b.maxZ + 2,
+    };
+  }
+
+  /** Hole mode: one click punches a sphere cutout through the terrain sheet
+   *  (brush radius wide) ? a real opening you can drop or walk through when a
+   *  cave tube runs underneath. */
+  private placeTerrainHole(w: Vec2): void {
+    const holes = this.holesRef();
+    if (holes.length >= MAX_TERRAIN_HOLES) {
+      this.toasts.error(t('editor.status.holeCapReached', { max: MAX_TERRAIN_HOLES }));
+      return;
+    }
+    const hole: TerrainHole = {
+      x: w.x,
+      y: terrainHeight(w.x, w.z, this.map.meta.seed),
+      z: w.z,
+      radius: Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, this.brushRadius)),
+    };
+    holes.push(hole);
+    const region = this.holeRegion(hole);
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-punch',
+      undo: () => {
+        const i = holes.indexOf(hole);
+        if (i >= 0) holes.splice(i, 1);
+        this.holesMutated(region);
+      },
+      redo: () => {
+        holes.push(hole);
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  /** Hole panel edits: the per-hole radius slider (live while dragging, one
+   *  undo step at commit). */
+  private updateHole(index: number, change: { radius?: number }, commit: boolean): void {
+    const hole = this.map.holes?.[index];
+    if (!hole) return;
+    const base =
+      this.holeEditBase?.index === index ? this.holeEditBase : { index, radius: hole.radius };
+    this.holeEditBase = base;
+    if (change.radius !== undefined) {
+      hole.radius = Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, change.radius));
+    }
+    const region = this.holeRegion({
+      ...hole,
+      radius: Math.max(hole.radius, base.radius),
+    });
+    // Live: uniforms only (cheap). Commit: full region refresh + undo.
+    refreshTerrainHoles();
+    this.canvasDirty = true;
+    if (!commit) return;
+    this.holeEditBase = null;
+    const prev = base.radius;
+    const next = hole.radius;
+    if (prev === next) return;
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-size',
+      undo: () => {
+        hole.radius = prev;
+        this.holesMutated(region);
+      },
+      redo: () => {
+        hole.radius = next;
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  private deleteHole(index: number): void {
+    const holes = this.holesRef();
+    const hole = holes[index];
+    if (!hole) return;
+    const region = this.holeRegion(hole);
+    holes.splice(index, 1);
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-delete',
+      undo: () => {
+        holes.splice(index, 0, hole);
+        this.holesMutated(region);
+      },
+      redo: () => {
+        const i = holes.indexOf(hole);
+        if (i >= 0) holes.splice(i, 1);
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  /** Patch mode: one click drops a patch sphere (brush radius wide) that
+   *  RESTORES the ground inside any hole cutouts it overlaps ? fills in the
+   *  unwanted blank parts around the cuts. */
+  private placeHolePatch(w: Vec2): void {
+    const patches = this.holePatchesRef();
+    if (patches.length >= MAX_HOLE_PATCHES) {
+      this.toasts.error(t('editor.status.holeCapReached', { max: MAX_HOLE_PATCHES }));
+      return;
+    }
+    const patch: TerrainHole = {
+      x: w.x,
+      y: terrainHeight(w.x, w.z, this.map.meta.seed),
+      z: w.z,
+      radius: Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, this.brushRadius)),
+    };
+    patches.push(patch);
+    const region = this.holeRegion(patch);
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-patch',
+      undo: () => {
+        const i = patches.indexOf(patch);
+        if (i >= 0) patches.splice(i, 1);
+        this.holesMutated(region);
+      },
+      redo: () => {
+        patches.push(patch);
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  /** Patch panel edits: the per-patch radius slider (live while dragging,
+   *  one undo step at commit). */
+  private updateHolePatch(index: number, change: { radius?: number }, commit: boolean): void {
+    const patch = this.map.holePatches?.[index];
+    if (!patch) return;
+    const base =
+      this.holePatchEditBase?.index === index
+        ? this.holePatchEditBase
+        : { index, radius: patch.radius };
+    this.holePatchEditBase = base;
+    if (change.radius !== undefined) {
+      patch.radius = Math.min(HOLE_MAX_RADIUS, Math.max(HOLE_MIN_RADIUS, change.radius));
+    }
+    const region = this.holeRegion({
+      ...patch,
+      radius: Math.max(patch.radius, base.radius),
+    });
+    refreshTerrainHoles();
+    this.canvasDirty = true;
+    if (!commit) return;
+    this.holePatchEditBase = null;
+    const prev = base.radius;
+    const next = patch.radius;
+    if (prev === next) return;
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-patch-size',
+      undo: () => {
+        patch.radius = prev;
+        this.holesMutated(region);
+      },
+      redo: () => {
+        patch.radius = next;
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  private deleteHolePatch(index: number): void {
+    const patches = this.holePatchesRef();
+    const patch = patches[index];
+    if (!patch) return;
+    const region = this.holeRegion(patch);
+    patches.splice(index, 1);
+    this.holesMutated(region);
+    this.pushUndo({
+      label: 'hole-patch-delete',
+      undo: () => {
+        patches.splice(index, 0, patch);
+        this.holesMutated(region);
+      },
+      redo: () => {
+        const i = patches.indexOf(patch);
+        if (i >= 0) patches.splice(i, 1);
+        this.holesMutated(region);
+      },
+    });
+  }
+
+  /** "Select whole cave": multi-select every rig marker of the cave and arm
+   *  the Move tool, so the existing group gizmo translates the entire tube
+   *  rigidly (XZ drag and Y lift both move every node by the same delta; the
+   *  regenerated chain is translation-covariant, so the shape is preserved
+   *  exactly while you line the mouth up with a hole). */
+  private selectWholeCave(index: number): void {
+    const cave = this.map.caves?.[index];
+    if (!cave) return;
+    const indices: number[] = [];
+    for (let i = 0; i < this.map.placements.length; i++) {
+      const p = this.map.placements[i];
+      if (
+        (p.assetId === CAVE_ENTRANCE_ASSET_ID ||
+          p.assetId === CAVE_EXIT_ASSET_ID ||
+          p.assetId === CAVE_POINT_ASSET_ID) &&
+        p.name === cave.id
+      ) {
+        indices.push(i);
+      }
+    }
+    if (indices.length === 0) {
+      this.toasts.error(t('editor.tunnel.noRig'));
+      return;
+    }
+    this.setTool('move');
+    this.selectPlacements(indices);
+  }
+
+  /** Cave panel edits: width/height multipliers, organic variance (re-bores
+   *  through the rig), spike densities, reverse A<->B, delete. */
+  private updateCave(
+    index: number,
+    change: {
+      width?: number;
+      height?: number;
+      variance?: number;
+      floorVariance?: number;
+      stalactites?: number;
+      stalagmites?: number;
+      spikeSize?: number;
+      startOpen?: boolean;
+      endOpen?: boolean;
+      tex?: string | null;
+      texTile?: number | null;
+    },
+    commit: boolean,
+  ): void {
+    const cave = this.map.caves?.[index];
+    if (!cave) return;
+    const base =
+      this.caveEditBase?.cave === cave
+        ? this.caveEditBase
+        : {
+            cave,
+            width: cave.width ?? 1,
+            height: cave.height ?? 1,
+            variance: cave.variance ?? 0,
+            floorVariance: cave.floorVariance ?? 0,
+            stalactites: cave.stalactites ?? 0,
+            stalagmites: cave.stalagmites ?? 0,
+            spikeSize: cave.spikeSize ?? 1,
+            startOpen: cave.startOpen !== false,
+            endOpen: cave.endOpen !== false,
+            tex: cave.tex ?? null,
+            texTile: cave.texTile ?? null,
+            nodes: cave.nodes,
+          };
+    this.caveEditBase = base;
+    if (change.width !== undefined)
+      cave.width = Math.min(CAVE_MAX_MULT, Math.max(CAVE_MIN_MULT, change.width));
+    if (change.height !== undefined)
+      cave.height = Math.min(CAVE_MAX_MULT, Math.max(CAVE_MIN_MULT, change.height));
+    // Floor bumps live in the shared sampler (sim sheet + mesh): no re-bore
+    // needed, the region rebuild below refreshes the mesh.
+    if (change.floorVariance !== undefined)
+      cave.floorVariance = Math.min(1, Math.max(0, change.floorVariance));
+    if (change.stalactites !== undefined)
+      cave.stalactites = Math.min(1, Math.max(0, change.stalactites));
+    if (change.stalagmites !== undefined)
+      cave.stalagmites = Math.min(1, Math.max(0, change.stalagmites));
+    if (change.spikeSize !== undefined) {
+      cave.spikeSize = Math.min(
+        CAVE_SPIKE_SIZE_MAX,
+        Math.max(CAVE_SPIKE_SIZE_MIN, change.spikeSize),
+      );
+    }
+    // Mouth toggles: open is the default; store only an explicit seal.
+    if (change.startOpen !== undefined) {
+      if (change.startOpen) delete cave.startOpen;
+      else cave.startOpen = false;
+    }
+    if (change.endOpen !== undefined) {
+      if (change.endOpen) delete cave.endOpen;
+      else cave.endOpen = false;
+    }
+    if (change.tex !== undefined) {
+      if (change.tex === null) delete cave.tex;
+      else cave.tex = change.tex;
+    }
+    if (change.texTile !== undefined) {
+      if (change.texTile === null) delete cave.texTile;
+      else cave.texTile = Math.min(64, Math.max(1, change.texTile));
+    }
+    if (change.variance !== undefined) {
+      cave.variance = Math.min(1, Math.max(0, change.variance));
+      // Variance shapes the tube itself: re-generate through the rig live.
+      const rig = this.caveRigs().find((r) => r.id === cave.id);
+      if (rig && rig.points.length >= 2) this.generateCaveForRig(rig, false);
+    }
+    const region = this.caveRegion(cave);
+    invalidateStaticColliders();
+    this.viewport3d?.rebuildTerrainRegion(region);
+    this.canvasDirty = true;
+    if (!commit) return;
+    this.caveEditBase = null;
+    const snapshot = (): {
+      width: number;
+      height: number;
+      variance: number;
+      floorVariance: number;
+      stalactites: number;
+      stalagmites: number;
+      spikeSize: number;
+      startOpen: boolean;
+      endOpen: boolean;
+      tex: string | null;
+      texTile: number | null;
+      nodes: CaveNode[];
+    } => ({
+      width: cave.width ?? 1,
+      height: cave.height ?? 1,
+      variance: cave.variance ?? 0,
+      floorVariance: cave.floorVariance ?? 0,
+      stalactites: cave.stalactites ?? 0,
+      stalagmites: cave.stalagmites ?? 0,
+      spikeSize: cave.spikeSize ?? 1,
+      startOpen: cave.startOpen !== false,
+      endOpen: cave.endOpen !== false,
+      tex: cave.tex ?? null,
+      texTile: cave.texTile ?? null,
+      nodes: cave.nodes,
+    });
+    const prev = {
+      width: base.width,
+      height: base.height,
+      variance: base.variance,
+      floorVariance: base.floorVariance,
+      stalactites: base.stalactites,
+      stalagmites: base.stalagmites,
+      spikeSize: base.spikeSize,
+      startOpen: base.startOpen,
+      endOpen: base.endOpen,
+      tex: base.tex,
+      texTile: base.texTile,
+      nodes: base.nodes,
+    };
+    const next = snapshot();
+    this.viewport3d?.finishTerrainStroke(region);
+    this.map.meta.updatedAt = now();
+    const apply = (v: typeof prev): void => {
+      cave.width = v.width;
+      cave.height = v.height;
+      cave.variance = v.variance;
+      cave.floorVariance = v.floorVariance;
+      cave.stalactites = v.stalactites;
+      cave.stalagmites = v.stalagmites;
+      cave.spikeSize = v.spikeSize;
+      if (v.startOpen) delete cave.startOpen;
+      else cave.startOpen = false;
+      if (v.endOpen) delete cave.endOpen;
+      else cave.endOpen = false;
+      if (v.tex === null) delete cave.tex;
+      else cave.tex = v.tex;
+      if (v.texTile === null) delete cave.texTile;
+      else cave.texTile = v.texTile;
+      cave.nodes = v.nodes;
+      this.cavesMutated(this.caveRegion(cave));
+    };
+    this.pushUndo({
+      label: 'cave-size',
+      undo: () => apply(prev),
+      redo: () => apply(next),
+    });
+  }
+
+  private reverseCave(index: number): void {
+    const cave = this.map.caves?.[index];
+    if (!cave) return;
+    cave.nodes.reverse();
+    this.map.meta.updatedAt = now();
+    this.refreshCaveGuides();
+    this.inspector.refresh();
+    this.pushUndo({
+      label: 'cave-reverse',
+      undo: () => {
+        cave.nodes.reverse();
+        this.refreshCaveGuides();
+        this.inspector.refresh();
+      },
+      redo: () => {
+        cave.nodes.reverse();
+        this.refreshCaveGuides();
+        this.inspector.refresh();
+      },
+    });
+  }
+
+  private deleteCave(index: number): void {
+    const caves = this.cavesRef();
+    const cave = caves[index];
+    if (!cave) return;
+    const region = this.caveRegion(cave);
+    caves.splice(index, 1);
+    // The cave's rig points go with it (they exist to regenerate it).
+    const markers = this.map.placements.filter(
+      (p) =>
+        (p.assetId === CAVE_ENTRANCE_ASSET_ID ||
+          p.assetId === CAVE_EXIT_ASSET_ID ||
+          p.assetId === CAVE_POINT_ASSET_ID) &&
+        p.name === cave.id,
+    );
+    const markerIndices = markers.map((m) => this.map.placements.indexOf(m)).sort((a, b) => b - a);
+    for (const mi of markerIndices) this.map.placements.splice(mi, 1);
+    this.setSelectedPlacement(null);
+    this.viewport3d?.rebuildPlacements();
+    this.cavesMutated(region);
+    this.pushUndo({
+      label: 'cave-delete',
+      undo: () => {
+        caves.splice(index, 0, cave);
+        this.map.placements.push(...markers);
+        this.viewport3d?.rebuildPlacements();
+        this.cavesMutated(this.caveRegion(cave));
+      },
+      redo: () => {
+        const i = caves.indexOf(cave);
+        if (i >= 0) caves.splice(i, 1);
+        for (const m of markers) {
+          const mi = this.map.placements.indexOf(m);
+          if (mi >= 0) this.map.placements.splice(mi, 1);
+        }
+        this.setSelectedPlacement(null);
+        this.viewport3d?.rebuildPlacements();
+        this.cavesMutated(this.caveRegion(cave));
+      },
+    });
+  }
+
+  private caveRegion(cave: CaveDef): RegionBox {
+    const b = caveBounds(cave);
+    return {
+      minX: b.minX - 4,
+      minZ: b.minZ - 4,
+      maxX: b.maxX + 4,
+      maxZ: b.maxZ + 4,
+    };
+  }
+
+  // ---- Grab sculpt (snake hook) ---------------------------------------------------
+
+  /** Press: plant ONE live stamp under the brush; the drag pulls it. */
+  private grabBegin(w: Vec2, ev: PointerEvent): void {
+    if (this.map.terrainEdits.length >= MAX_TERRAIN_EDITS) {
+      this.warnTerrainCap();
+      return;
+    }
+    const stamp: HeightStamp = {
+      x: w.x,
+      z: w.z,
+      radius: this.brushRadius,
+      delta: 0,
+      falloff: 'smooth',
+    };
+    this.map.terrainEdits.push(stamp);
+    const wpp =
+      this.viewMode === '3d'
+        ? (this.viewport3d?.worldPerPixel(w.x, w.z) ?? 0.1)
+        : 1 / Math.max(1e-3, this.cam.pxPerYard);
+    const pad = stamp.radius + 2;
+    this.grabSession = {
+      stamp,
+      startClientX: ev.clientX,
+      startClientY: ev.clientY,
+      startX: w.x,
+      startZ: w.z,
+      wpp,
+      axes: this.viewMode === '3d' ? (this.viewport3d?.viewPlaneAxes() ?? null) : null,
+      region: {
+        minX: w.x - pad,
+        minZ: w.z - pad,
+        maxX: w.x + pad,
+        maxZ: w.z + pad,
+      },
+    };
+  }
+
+  /** Drag: the cursor motion (camera-scaled) IS the pull. In 3D it maps onto
+   *  the camera's view plane, so the grabbed ground follows the drag in all
+   *  three axes ? sideways slides the bump, up on screen lifts it, down
+   *  shoves it in. In 2D top-down only the height pull applies. */
+  private grabStep(ev: PointerEvent): void {
+    const g = this.grabSession;
+    if (!g) return;
+    const dxPx = ev.clientX - g.startClientX;
+    const dyPx = g.startClientY - ev.clientY; // up-screen positive
+    const s = g.stamp;
+    const pad = s.radius + 2;
+    const prevMinX = s.x - pad;
+    const prevMinZ = s.z - pad;
+    const prevMaxX = s.x + pad;
+    const prevMaxZ = s.z + pad;
+    if (g.axes) {
+      const { right, up } = g.axes;
+      const wx = (right.x * dxPx + up.x * dyPx) * g.wpp;
+      const wy = (right.y * dxPx + up.y * dyPx) * g.wpp;
+      const wz = (right.z * dxPx + up.z * dyPx) * g.wpp;
+      s.x = g.startX + wx;
+      s.z = g.startZ + wz;
+      s.delta = Math.max(-200, Math.min(200, wy));
+    } else {
+      s.delta = Math.max(-200, Math.min(200, dyPx * g.wpp));
+    }
+    // Rebuild the union of the stamp's previous and current footprints (it
+    // moves under a lateral drag); the session region keeps the union of the
+    // whole gesture for the commit/undo rebuilds.
+    const step: RegionBox = {
+      minX: Math.min(prevMinX, s.x - pad),
+      minZ: Math.min(prevMinZ, s.z - pad),
+      maxX: Math.max(prevMaxX, s.x + pad),
+      maxZ: Math.max(prevMaxZ, s.z + pad),
+    };
+    g.region = {
+      minX: Math.min(g.region.minX, step.minX),
+      minZ: Math.min(g.region.minZ, step.minZ),
+      maxX: Math.max(g.region.maxX, step.maxX),
+      maxZ: Math.max(g.region.maxZ, step.maxZ),
+    };
+    this.terrainEditsMutated();
+    this.viewport3d?.rebuildTerrainRegion(step);
+    this.canvasDirty = true;
+  }
+
+  /** Release: keep the pulled shape as one undoable stamp (a no-op pull is
+   *  dropped silently). */
+  private grabCommit(): void {
+    const g = this.grabSession;
+    this.grabSession = null;
+    if (!g) return;
+    const edits = this.map.terrainEdits;
+    const region = g.region;
+    if (Math.abs(g.stamp.delta) < 0.05) {
+      const i = edits.indexOf(g.stamp);
+      if (i >= 0) edits.splice(i, 1);
+      this.terrainEditsMutated();
+      this.viewport3d?.rebuildTerrainRegion(region);
+      return;
+    }
+    const stamp = g.stamp;
+    this.terrainEditsMutated();
+    this.viewport3d?.finishTerrainStroke(region);
+    this.map.meta.updatedAt = now();
+    this.canvasDirty = true;
+    this.pushUndo({
+      label: 'sculpt-grab',
+      undo: () => {
+        const i = edits.indexOf(stamp);
+        if (i >= 0) edits.splice(i, 1);
+        this.terrainEditsMutated();
+        this.viewport3d?.rebuildTerrainRegion(region);
+        this.viewport3d?.finishTerrainStroke(region);
+        this.canvasDirty = true;
+      },
+      redo: () => {
+        edits.push(stamp);
+        this.terrainEditsMutated();
+        this.viewport3d?.rebuildTerrainRegion(region);
+        this.viewport3d?.finishTerrainStroke(region);
+        this.canvasDirty = true;
+      },
+    });
   }
 
   /** One warning per stroke/action when the terrain-edit cap swallows stamps. */
@@ -1336,22 +3241,34 @@ export class EditorApp {
       let smoothing = this.tool === 'smooth' || (this.tool === 'flatten' && this.flattenSmooth);
       if (this.strokeInvert) smoothing = !smoothing;
       if (smoothing) {
-        stamp = smoothStamp(w.x, w.z, this.brushRadius, this.brushStrength, (x, z) =>
+        stamp = smoothStamp(w.x, w.z, this.brushRadius, this.effectiveBrushStrength(), (x, z) =>
           terrainHeight(x, z, seed),
         );
       } else {
-        stamp = flattenStamp(w.x, w.z, this.brushRadius, this.flattenTarget, this.flattenHardEdge);
+        // Flatten eases toward the captured target by SCULPT_POWER_SCALE (a
+        // fifth of the way from the current surface per stamp), the 5x-gentler
+        // twin of the Smooth reduction above.
+        stamp = flattenStamp(
+          w.x,
+          w.z,
+          this.brushRadius,
+          this.flattenTarget,
+          this.flattenHardEdge,
+          terrainHeight(w.x, w.z, seed),
+          SCULPT_POWER_SCALE,
+        );
       }
     } else {
       // Raise/Lower: base direction from the tool + the "lower" checkbox, then
       // Shift flips it (a Shift-click on Raise lowers, and vice versa).
       let down = this.tool === 'lower' || (this.tool === 'raise' && this.sculptLower);
       if (this.strokeInvert) down = !down;
+      const strength = this.effectiveBrushStrength();
       stamp = {
         x: w.x,
         z: w.z,
         radius: this.brushRadius,
-        delta: down ? -this.brushStrength : this.brushStrength,
+        delta: down ? -strength : strength,
         falloff: 'smooth',
       };
     }
@@ -1447,7 +3364,13 @@ export class EditorApp {
           // id so a later reshape can undo the auto paint.
           if (cur === desired) continue;
           const base = ownPrev !== undefined ? ownPrev : cur;
-          changes.push({ idx, prev: cur, next: desired, ownPrev, ownNext: base });
+          changes.push({
+            idx,
+            prev: cur,
+            next: desired,
+            ownPrev,
+            ownNext: base,
+          });
           bp.ids[idx] = desired;
           owned.set(idx, base);
         } else if (ownPrev !== undefined) {
@@ -1457,7 +3380,13 @@ export class EditorApp {
             owned.delete(idx);
             continue;
           }
-          changes.push({ idx, prev: cur, next: ownPrev, ownPrev, ownNext: undefined });
+          changes.push({
+            idx,
+            prev: cur,
+            next: ownPrev,
+            ownPrev,
+            ownNext: undefined,
+          });
           bp.ids[idx] = ownPrev;
           owned.delete(idx);
         }
@@ -1553,7 +3482,13 @@ export class EditorApp {
   /** Select a map light: bulb badge enlarges + range ring shows in 3D, the
    *  panel highlights the row. Exclusive with the placement selection. */
   private setSelectedLight(index: number | null): void {
-    if (index !== null) this.setSelectedPlacement(null);
+    if (index !== null) {
+      this.setSelectedPlacement(null);
+      if (this.selectedSound !== null) {
+        this.selectedSound = null;
+        this.viewport3d?.setSelectedSound(null);
+      }
+    }
     this.selectedLight = index;
     this.viewport3d?.setSelectedLight(index);
     this.inspector.refresh();
@@ -1721,13 +3656,15 @@ export class EditorApp {
       return;
     }
     // Bright enough to read clearly against the day rig (decay 1.8 falls off
-    // fast, so a timid default just vanished into the sunlight).
+    // fast, so a timid default just vanished into the sunlight). Campfires run
+    // ~12; an authored lamp starts a touch hotter so placing one visibly DOES
+    // something even at noon.
     const light = {
       x: Math.round(w.x * 10) / 10,
       z: Math.round(w.z * 10) / 10,
       y: 2,
       color: 0xffb46a,
-      intensity: 6,
+      intensity: 14,
       range: 32,
     };
     list.push(light);
@@ -1747,6 +3684,91 @@ export class EditorApp {
       },
       redo: () => {
         list.push(light);
+        this.authoredListsChanged();
+      },
+    });
+  }
+
+  /** Select a map point sound: its badge enlarges + radius sphere shows in 3D,
+   *  the panel highlights the row. Exclusive with the placement/light selection. */
+  private setSelectedSound(index: number | null): void {
+    if (index !== null) {
+      this.setSelectedPlacement(null);
+      if (this.selectedLight !== null) {
+        this.selectedLight = null;
+        this.viewport3d?.setSelectedLight(null);
+      }
+    }
+    this.selectedSound = index;
+    this.viewport3d?.setSelectedSound(index);
+    this.inspector.refresh();
+  }
+
+  private placeSound(w: Vec2): void {
+    if (!this.map.pointSounds) this.map.pointSounds = [];
+    const list = this.map.pointSounds;
+    if (list.length >= MAX_POINT_SOUNDS) {
+      this.toasts.error(t('editor.soundTool.capReached', { max: MAX_POINT_SOUNDS }));
+      return;
+    }
+    const sound = {
+      x: Math.round(w.x * 10) / 10,
+      z: Math.round(w.z * 10) / 10,
+      y: 2,
+      sound: DEFAULT_POINT_SOUND,
+      volume: 0.6,
+      radius: 24,
+    };
+    list.push(sound);
+    this.selectedSound = list.length - 1;
+    this.viewport3d?.setSelectedSound(this.selectedSound);
+    this.authoredListsChanged();
+    this.pushUndo({
+      label: 'add-point-sound',
+      undo: () => {
+        const i = list.indexOf(sound);
+        if (i >= 0) list.splice(i, 1);
+        if (this.selectedSound !== null) {
+          this.selectedSound = null;
+          this.viewport3d?.setSelectedSound(null);
+        }
+        this.authoredListsChanged();
+      },
+      redo: () => {
+        list.push(sound);
+        this.authoredListsChanged();
+      },
+    });
+  }
+
+  private deleteMapSound(index: number): void {
+    const list = this.map.pointSounds;
+    const sound = list?.[index];
+    if (!list || !sound) return;
+    list.splice(index, 1);
+    if (this.selectedSound !== null) {
+      this.selectedSound =
+        this.selectedSound === index
+          ? null
+          : this.selectedSound > index
+            ? this.selectedSound - 1
+            : this.selectedSound;
+      this.viewport3d?.setSelectedSound(this.selectedSound);
+    }
+    this.authoredListsChanged();
+    this.pushUndo({
+      label: 'delete-point-sound',
+      undo: () => {
+        list.splice(Math.min(index, list.length), 0, sound);
+        this.authoredListsChanged();
+      },
+      redo: () => {
+        const i = list.indexOf(sound);
+        if (i >= 0) list.splice(i, 1);
+        if (this.selectedSound !== null) {
+          this.selectedSound = null;
+          this.viewport3d?.setSelectedSound(null);
+        }
         this.authoredListsChanged();
       },
     });
@@ -1848,8 +3870,46 @@ export class EditorApp {
     });
   }
 
+  /** A map authored bigger after its first paint stroke (resized world, or a
+   *  save from before a zone was appended) keeps its original grid, which
+   *  clamps at its edge: painting past it silently does nothing and the
+   *  terrain out there renders unpainted. Grow the grid to today's bounds at
+   *  stroke start, preserving every painted cell in place. The GPU paint
+   *  field is sized/rected to the grid, so growth needs a full refresh NOW
+   *  (a region rebake would address the old texture). */
+  private growBiomeGridForPainting(): void {
+    const old = this.map.biomePaint;
+    if (!old) return;
+    const grown = growBiomePaint(old, this.worldBounds());
+    if (!grown) return;
+    this.map.biomePaint = grown;
+    this.activeWorld.biomePaint = grown;
+    this.map.meta.updatedAt = now();
+    this.refreshTerrain(null);
+    this.pushUndo({
+      label: 'paint-grow',
+      undo: () => {
+        this.map.biomePaint = old;
+        this.activeWorld.biomePaint = old;
+        this.refreshTerrain(null);
+      },
+      redo: () => {
+        this.map.biomePaint = grown;
+        this.activeWorld.biomePaint = grown;
+        this.refreshTerrain(null);
+      },
+    });
+  }
+
+  /** Sculpt strength in HEIGHT units: the 1..50 slider over a 5x finer scale
+   *  than the legacy 1..30 one (slider 5 == legacy 1), for gentle grading. */
+  private effectiveBrushStrength(): number {
+    return this.brushStrength / 5;
+  }
+
   private paintBegin(w: Vec2): void {
     this.refineBiomeGridForPainting();
+    this.growBiomeGridForPainting();
     this.paintChanges = new Map();
     this.paintCreatedGrid = false;
     this.strokeRegion = null;
@@ -1903,13 +3963,22 @@ export class EditorApp {
         if (bp.ids[idx] === this.paintBiome) continue;
         const change = this.paintChanges.get(idx);
         if (change) change.next = this.paintBiome;
-        else this.paintChanges.set(idx, { prev: bp.ids[idx], next: this.paintBiome });
+        else
+          this.paintChanges.set(idx, {
+            prev: bp.ids[idx],
+            next: this.paintBiome,
+          });
         bp.ids[idx] = this.paintBiome;
         touched = true;
       }
     }
     if (touched) {
-      const region = { minX: w.x - r, minZ: w.z - r, maxX: w.x + r, maxZ: w.z + r };
+      const region = {
+        minX: w.x - r,
+        minZ: w.z - r,
+        maxX: w.x + r,
+        maxZ: w.z + r,
+      };
       this.strokeRegion = unionRegion(this.strokeRegion, region);
       this.viewport3d?.rebuildTerrainRegion(region);
       this.canvasDirty = true;
@@ -2002,26 +4071,48 @@ export class EditorApp {
    * document's biomePaint layer, so it saves/exports with the map) and select
    * it for painting.
    */
-  private addCustomSwatch(color: number, label: string, textureSha?: string): void {
+  /** Pick a built-in library texture: reuse the map's existing swatch for it
+   *  or materialize a new one (builtin: pseudo-sha resolves from the bundle on
+   *  every machine, so these default textures always load). */
+  private pickBuiltinTexture(key: string): void {
+    const set = terrainTextureSet(key);
+    if (!set) return;
+    const sha = builtinShaFor(key);
+    const existing = this.map.biomePaint?.custom?.find((c) => c.textureSha === sha);
+    if (existing) {
+      this.paintBiome = existing.id;
+      this.inspector.refresh();
+      return;
+    }
+    this.addCustomSwatch(set.color, set.name, sha);
+  }
+
+  private addCustomSwatch(
+    color: number,
+    label: string,
+    textureSha?: string,
+    baseBiome?: number,
+  ): CustomPaintSwatch | null {
     this.ensureBiomeGrid();
     const bp = this.map.biomePaint;
-    if (!bp) return;
+    if (!bp) return null;
     if (!bp.custom) bp.custom = [];
     const list = bp.custom;
     if (list.length >= MAX_CUSTOM_PAINT_SWATCHES) {
       this.toasts.error(t('editor.biome.customFull', { max: MAX_CUSTOM_PAINT_SWATCHES }));
-      return;
+      return null;
     }
     const used = new Set(list.map((s) => s.id));
     let id = CUSTOM_PAINT_ID_MIN;
     while (used.has(id) && id <= CUSTOM_PAINT_ID_MAX) id++;
-    if (id > CUSTOM_PAINT_ID_MAX) return;
+    if (id > CUSTOM_PAINT_ID_MAX) return null;
     const trimmed = label.trim().slice(0, MAX_SWATCH_LABEL_LENGTH);
     const swatch: CustomPaintSwatch = trimmed ? { id, color, label: trimmed } : { id, color };
     if (textureSha) {
       swatch.textureSha = textureSha;
-      swatch.tileSize = 8;
+      swatch.tileSize = DEFAULT_TEXTURE_TILE_YD;
     }
+    if (baseBiome !== undefined) swatch.baseBiome = baseBiome;
     list.push(swatch);
     this.paintBiome = id;
     this.map.meta.updatedAt = now();
@@ -2029,6 +4120,102 @@ export class EditorApp {
     // A textured swatch claims a splat slot: (re)load the material uniforms.
     if (textureSha) refreshCustomGroundTextures();
     this.inspector.refresh();
+    return swatch;
+  }
+
+  /**
+   * Hue/light adjust of the ACTIVE paint texture. A custom swatch (imported
+   * texture or biome variant) edits its own fields; a built-in biome routes
+   * through a custom VARIANT swatch (created on first use, reused after) so
+   * the adjust persists in the map document, which stores only swatch ids in
+   * the paint grid. Already-painted cells update live via a paint-field
+   * rebake, coalesced to one per frame.
+   */
+  private setPaintAdjust(change: { hueShift?: number; light?: number }): void {
+    let createdNow = false;
+    let sw = this.map.biomePaint?.custom?.find((c) => c.id === this.paintBiome);
+    if (!sw) {
+      const base = this.paintBiome;
+      const opt = BIOME_OPTIONS.find((o) => o.id === base && o.id !== 255);
+      if (!opt) return; // not a paintable built-in and not a custom swatch
+      const existing = this.map.biomePaint?.custom?.find((c) => c.baseBiome === base && !c.saved);
+      if (existing) {
+        sw = existing;
+        this.paintBiome = existing.id;
+        createdNow = true; // selection changed: refresh AFTER the values land
+      } else {
+        const label = `${t(opt.labelKey as Parameters<typeof t>[0])} *`;
+        const created = this.addCustomSwatch(
+          Number.parseInt(opt.swatch.slice(1), 16),
+          label,
+          undefined,
+          base,
+        );
+        if (!created) return;
+        sw = created;
+        createdNow = true;
+      }
+    }
+    if (change.hueShift !== undefined) {
+      const v = Math.max(-180, Math.min(180, change.hueShift));
+      if (v === 0) delete sw.hueShift;
+      else sw.hueShift = v;
+    }
+    if (change.light !== undefined) {
+      const v = Math.max(-1, Math.min(1, change.light));
+      if (v === 0) delete sw.light;
+      else sw.light = v;
+    }
+    this.map.meta.updatedAt = now();
+    this.markDirty();
+    this.schedulePaintAdjustRebake();
+    // A variant created THIS call was refreshed (inside addCustomSwatch)
+    // before the slider value landed on it; refresh again so the panel
+    // renders the actual adjust rather than a centered slider.
+    if (createdNow) this.inspector.refresh();
+  }
+
+  /**
+   * Copy the ACTIVE adjusted swatch (biome variant or tinted import) into its
+   * own saved swatch, so the tint can be reused after the working sliders
+   * move on. The copy is selected for painting; `saved` keeps the biome
+   * sliders' auto-variant reuse from ever mutating it.
+   */
+  private saveAdjustedSwatch(): void {
+    const sw = this.map.biomePaint?.custom?.find((c) => c.id === this.paintBiome);
+    if (!sw || (!sw.hueShift && !sw.light)) return;
+    const base = (sw.label ?? '').replace(/ \*$/, '');
+    const hue = sw.hueShift ?? 0;
+    const light = Math.round((sw.light ?? 0) * 100);
+    const parts = [
+      hue !== 0 ? `${hue > 0 ? '+' : ''}${hue}?` : '',
+      light !== 0 ? `${light > 0 ? '+' : ''}${light}` : '',
+    ];
+    const label = `${base} ${parts.filter(Boolean).join(' ')}`.trim();
+    const created = this.addCustomSwatch(sw.color, label, sw.textureSha, sw.baseBiome);
+    if (!created) return;
+    created.saved = true;
+    if (sw.hueShift !== undefined) created.hueShift = sw.hueShift;
+    if (sw.light !== undefined) created.light = sw.light;
+    if (sw.tileSize !== undefined) created.tileSize = sw.tileSize;
+    this.map.meta.updatedAt = now();
+    this.markDirty();
+    this.schedulePaintAdjustRebake();
+    this.inspector.refresh();
+    this.toasts.info(t('editor.biome.swatchSaved', { name: label }));
+  }
+
+  // Coalesce slider ticks into one full paint-field rebake per frame (the
+  // rebake is the expensive part; range inputs can fire far faster).
+  private paintAdjustRebakeQueued = false;
+  private schedulePaintAdjustRebake(): void {
+    if (this.paintAdjustRebakeQueued) return;
+    this.paintAdjustRebakeQueued = true;
+    requestAnimationFrame(() => {
+      this.paintAdjustRebakeQueued = false;
+      rebakePaintFieldSwatches();
+      this.canvasDirty = true;
+    });
   }
 
   /** Tile size (yards per repeat) of a textured custom swatch. */
@@ -2229,6 +4416,16 @@ export class EditorApp {
       scale: this.placeScale,
       collide: this.placeCollide,
     };
+    // A saved hitbox preset for this asset (this device) is the maker's word:
+    // every fresh placement copies those boxes.
+    const preset = this.hitboxPresets[this.placeAssetId];
+    if (this.placeCollide && preset && preset.length > 0) {
+      placement.hitboxes = preset.map((b) => ({ ...b }));
+    } else {
+      // No preset: stamp the simple-collision default (fitted box or radius
+      // circle for solid props; walkable/pass-through assets keep their bake).
+      applyDefaultCollision(placement);
+    }
     this.appendPlacements([placement], 'place-asset');
     // A fresh placement lands selected under the Move gizmo (Blender flow);
     // the cap may have rejected it, so only when it actually landed.
@@ -2256,14 +4453,20 @@ export class EditorApp {
         removeSpan(this.map.placements, start, accepted);
         this.setSelectedPlacement(null);
         this.viewport3d?.rebuildPlacements();
+        this.refreshCaveGuides();
+        this.refreshRockGuides();
         this.canvasDirty = true;
       },
       redo: () => {
         this.map.placements.push(...accepted);
         this.viewport3d?.rebuildPlacements();
+        this.refreshCaveGuides();
+        this.refreshRockGuides();
         this.canvasDirty = true;
       },
     });
+    this.refreshCaveGuides();
+    this.refreshRockGuides();
   }
 
   private removePlacementAt(index: number): void {
@@ -2294,6 +4497,9 @@ export class EditorApp {
   }
 
   private setSelectedPlacement(index: number | null): void {
+    if (index !== null) this.clearNpcSelection();
+    // Switching objects (or clearing) leaves hitbox-edit mode.
+    if (this.hitboxEdit && this.hitboxEdit.index !== index) this.exitHitboxEdit();
     if (this.selectedPlacement !== index) {
       // An open wheel/nudge burst on the OLD selection commits now, or its
       // live changes would silently drop out of the undo history.
@@ -2326,6 +4532,7 @@ export class EditorApp {
       return;
     }
     this.selectedKey = null;
+    this.clearNpcSelection();
     this.selectedCamp = null;
     this.setSelectedPlacement(indices[0]);
     this.selectedSet = new Set(indices);
@@ -2350,6 +4557,7 @@ export class EditorApp {
       this.selectedSet = keep;
     }
     this.selectedKey = null;
+    this.clearNpcSelection();
     this.syncMultiSelectionView();
     this.inspector.refresh();
     this.canvasDirty = true;
@@ -2386,7 +4594,100 @@ export class EditorApp {
     this.inspector.refresh();
   }
 
+  private insertFluidAt(w: Vec2): void {
+    const placement: AssetPlacement = {
+      assetId: FLUID_ASSET_IDS[this.fluidKind],
+      x: w.x,
+      z: w.z,
+      rotY: 0,
+      scale: 1,
+      collide: false,
+      sizeX: FLUID_DEFAULT_SIZE.x,
+      sizeZ: FLUID_DEFAULT_SIZE.z,
+      sizeY: FLUID_DEFAULT_OFFSET_Y,
+    };
+    this.appendPlacements([placement], 'add-fluid');
+    const index = this.map.placements.lastIndexOf(placement);
+    if (index >= 0) {
+      this.setSelectedPlacement(index);
+      this.setTool('move');
+    }
+    this.inspector.refresh();
+  }
+
   // ---- foliage brush ------------------------------------------------------------
+
+  private hasAmbientFoliage(): boolean {
+    return this.map.decorationsMode !== 'empty' && this.map.presentationMode !== 'blank';
+  }
+
+  private refreshAmbientFoliage(selected: number | null): void {
+    this.rebuildActiveWorld();
+    this.setSelectedPlacement(selected);
+    this.canvasDirty = true;
+    this.inspector.refresh();
+    if (!this.viewport3d) return;
+    this.show3dLoading();
+    void this.viewport3d.reload(this.map).then(() => {
+      this.hide3dLoading();
+      this.syncFootprintOverlay();
+      this.viewport3d?.setSelectedPlacement(this.selectedPlacement);
+    });
+  }
+
+  private makeAmbientFoliageEditable(): void {
+    if (!this.hasAmbientFoliage()) return;
+    const room = capRoom(this.map.placements.length, MAX_PLACEMENTS);
+    if (room === 0) {
+      this.toasts.error(t('editor.status.placementCapReached', { max: MAX_PLACEMENTS }));
+      return;
+    }
+    const bounds = mapBounds(this.map);
+    const decorations = generateDecorationsInBounds(this.map.meta.seed, {
+      minX: -bounds.halfW,
+      maxX: bounds.halfW,
+      minZ: bounds.zMin,
+      maxZ: bounds.zMax,
+    });
+    const focus = this.viewport3d?.cameraFocus() ?? {
+      x: 0,
+      z: (bounds.zMin + bounds.zMax) / 2,
+    };
+    const selected = closestAmbientTrees(
+      decorations,
+      focus,
+      Math.min(AMBIENT_TREE_EDIT_BATCH, room),
+    );
+    const placements = ambientDecorationsToPlacements(selected);
+    if (placements.length === 0) {
+      this.toasts.success(t('editor.foliageTool.ambientConverted', { count: 0 }));
+      return;
+    }
+    const previousExclusions = [...(this.map.decorationExclusions ?? [])];
+    const nextExclusions = [
+      ...previousExclusions,
+      ...selected.map(ambientDecorationKey).filter((key) => !previousExclusions.includes(key)),
+    ];
+    const start = appendSpan(this.map.placements, placements);
+    this.map.decorationExclusions = nextExclusions;
+    this.map.meta.updatedAt = now();
+    this.refreshAmbientFoliage(placements.length > 0 ? start : null);
+    this.pushUndo({
+      label: 'make-ambient-foliage-editable',
+      undo: () => {
+        removeSpan(this.map.placements, start, placements);
+        this.map.decorationExclusions =
+          previousExclusions.length > 0 ? [...previousExclusions] : undefined;
+        this.refreshAmbientFoliage(null);
+      },
+      redo: () => {
+        this.map.placements.splice(start, 0, ...placements);
+        this.map.decorationExclusions = [...nextExclusions];
+        this.refreshAmbientFoliage(placements.length > 0 ? start : null);
+      },
+    });
+    this.toasts.success(t('editor.foliageTool.ambientConverted', { count: placements.length }));
+  }
 
   /** The enabled foliage asset ids (catalog 'foliage' category by family),
    *  plus the reserved animated-grass patch id when Grass is on. */
@@ -2511,7 +4812,854 @@ export class EditorApp {
     if (!p || p.detached) return;
     p.detached = true;
     p.groundY = terrainHeight(p.x, p.z, this.map.meta.seed);
-    this.viewport3d?.placementUpdated(index, { detached: true, groundY: p.groundY });
+    this.viewport3d?.placementUpdated(index, {
+      detached: true,
+      groundY: p.groundY,
+    });
+  }
+
+  // ---- hitbox editing (baked-collision boxes as first-class objects) ------------
+
+  /** The hitboxes the RENDER footprint should draw for a placement (what the
+   *  sim will block with): fine mesh bake, hand-edited boxes, or null (the
+   *  generated baked set / legacy footprint applies). */
+  private resolvedHitboxesFor(p: AssetPlacement): MapHitbox[] | null {
+    const mode = effectiveCollisionMode(p);
+    if (mode === 'mesh') {
+      const fine = this.map.assetCollisionMesh?.[p.assetId];
+      return fine && fine.length > 0 ? fine.map((b) => ({ ...b })) : null;
+    }
+    if (mode === 'baked' && p.hitboxes && p.hitboxes.length > 0) {
+      return p.hitboxes.map((b) => ({ ...b }));
+    }
+    return null;
+  }
+
+  /** Enter hitbox-edit mode for the selected placement: materialize the baked
+   *  boxes onto the placement (one undo entry) so they become editable. */
+  private enterHitboxEdit(): void {
+    const index = this.selectedPlacement;
+    if (index === null) return;
+    const p = this.map.placements[index];
+    if (!p) return;
+    if (!p.hitboxes || p.hitboxes.length === 0) {
+      this.setHitboxes(index, this.materializeHitboxes(p), 'edit-hitboxes');
+    }
+    this.hitboxEdit = { index, selected: new Set() };
+    this.syncFootprintOverlay();
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  private exitHitboxEdit(): void {
+    if (!this.hitboxEdit) return;
+    this.hitboxEdit = null;
+    this.hitboxDragBase = null;
+    this.viewport3d?.setHitboxEdit(null);
+    this.syncFootprintOverlay();
+    this.inspector.refresh();
+  }
+
+  /** The starting editable box set: the asset's baked boxes (catalogue or
+   *  imported), else one crate-sized box derived from the collide radius. */
+  private materializeHitboxes(p: AssetPlacement): MapHitbox[] {
+    const baked = boxesForAssetId(p.assetId) ?? this.map.assetCollision?.[p.assetId];
+    if (baked && baked.length > 0) {
+      return baked.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }));
+    }
+    const r = Math.max(0.3, collideRadiusFor(1, p.assetId));
+    return [{ x: 0, y: r, z: 0, hx: r, hy: r, hz: r }];
+  }
+
+  /** Push the current edit state (boxes + selection) to the 3D overlay. */
+  private syncHitboxEditView(): void {
+    if (!this.hitboxEdit) {
+      this.viewport3d?.setHitboxEdit(null);
+      return;
+    }
+    const p = this.map.placements[this.hitboxEdit.index];
+    if (!p || !p.hitboxes || p.hitboxes.length === 0) {
+      this.exitHitboxEdit();
+      return;
+    }
+    // Undo can shrink the box list under a live selection: drop strays.
+    for (const i of [...this.hitboxEdit.selected]) {
+      if (i >= p.hitboxes.length) this.hitboxEdit.selected.delete(i);
+    }
+    this.viewport3d?.setHitboxEdit({
+      index: this.hitboxEdit.index,
+      boxes: p.hitboxes,
+      selected: [...this.hitboxEdit.selected],
+    });
+  }
+
+  /** One live gizmo sample over the selected hitboxes: apply the world-space
+   *  gesture delta to the gesture-start snapshot in model space. */
+  private applyHitboxGizmo(change: GizmoHitboxChange): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes || he.selected.size === 0) return;
+    if (!this.hitboxDragBase) this.hitboxDragBase = p.hitboxes.map((b) => ({ ...b }));
+    const base = this.hitboxDragBase;
+    const s = p.scale > 0 ? p.scale : 1;
+    const sx = s * (p.scaleX ?? 1);
+    const sy = s * (p.scaleY ?? 1);
+    const sz = s * (p.scaleZ ?? 1);
+    // Pivot: the selection's centroid in model space (rotate/scale anchor).
+    let cx = 0;
+    let cy = 0;
+    let cz = 0;
+    let n = 0;
+    for (const i of he.selected) {
+      const b = base[i];
+      if (!b) continue;
+      cx += b.x;
+      cy += b.y;
+      cz += b.z;
+      n++;
+    }
+    if (n === 0) return;
+    cx /= n;
+    cy /= n;
+    cz /= n;
+    const clampC = (v: number): number => Math.max(-100, Math.min(100, v));
+    const clampH = (v: number): number => Math.max(0.05, Math.min(60, v));
+    const boxes = base.map((b) => ({ ...b }));
+    const cos = Math.cos(p.rotY);
+    const sin = Math.sin(p.rotY);
+    for (const i of he.selected) {
+      const b = boxes[i];
+      const b0 = base[i];
+      if (!b || !b0) continue;
+      if (change.dx !== undefined || change.dz !== undefined || change.dy !== undefined) {
+        const dx = change.dx ?? 0;
+        const dz = change.dz ?? 0;
+        // World delta -> model space: rotate by -rotY (three.js Y convention),
+        // then divide out the per-axis world scale.
+        const lx = (dx * cos - dz * sin) / (sx || 1);
+        const lz = (dx * sin + dz * cos) / (sz || 1);
+        b.x = clampC(b0.x + lx);
+        b.z = clampC(b0.z + lz);
+        if (change.dy !== undefined) b.y = clampC(b0.y + change.dy / (sy || 1));
+      }
+      if (change.dRotY !== undefined) {
+        // Orbit the centroid and spin the box itself (per-box yaw).
+        const ox = b0.x - cx;
+        const oz = b0.z - cz;
+        const cd = Math.cos(change.dRotY);
+        const sd = Math.sin(change.dRotY);
+        b.x = clampC(cx + ox * cd + oz * sd);
+        b.z = clampC(cz - ox * sd + oz * cd);
+        const ry = wrapAngle((b0.ry ?? 0) + change.dRotY);
+        if (ry === 0) delete b.ry;
+        else b.ry = ry;
+      }
+      if (change.ratio !== undefined) {
+        const r = Math.max(0.02, Math.min(50, change.ratio));
+        const axis = change.axis ?? 'uniform';
+        if (axis === 'uniform') {
+          b.hx = clampH(b0.hx * r);
+          b.hy = clampH(b0.hy * r);
+          b.hz = clampH(b0.hz * r);
+          b.x = clampC(cx + (b0.x - cx) * r);
+          b.y = clampC(cy + (b0.y - cy) * r);
+          b.z = clampC(cz + (b0.z - cz) * r);
+        } else if (axis === 'x') {
+          b.hx = clampH(b0.hx * r);
+          b.x = clampC(cx + (b0.x - cx) * r);
+        } else if (axis === 'y') {
+          b.hy = clampH(b0.hy * r);
+          b.y = clampC(cy + (b0.y - cy) * r);
+        } else {
+          b.hz = clampH(b0.hz * r);
+          b.z = clampC(cz + (b0.z - cz) * r);
+        }
+      }
+    }
+    p.hitboxes = boxes;
+    this.viewport3d?.placementUpdated(he.index, {
+      hitboxes: boxes.map((b) => ({ ...b })),
+    });
+    this.syncHitboxEditView();
+    this.canvasDirty = true;
+  }
+
+  /** End-of-gesture commit for a hitbox gizmo drag: ONE undo entry. */
+  private commitHitboxes(): void {
+    const he = this.hitboxEdit;
+    const prev = this.hitboxDragBase;
+    this.hitboxDragBase = null;
+    if (!he || !prev) return;
+    const index = he.index;
+    const p = this.map.placements[index];
+    if (!p || !p.hitboxes) return;
+    const next = p.hitboxes.map((b) => ({ ...b }));
+    if (JSON.stringify(next) === JSON.stringify(prev)) return;
+    this.map.meta.updatedAt = now();
+    this.markDirty();
+    this.pushUndo({
+      label: 'edit-hitboxes',
+      undo: () => this.restoreHitboxes(index, prev),
+      redo: () => this.restoreHitboxes(index, next),
+    });
+  }
+
+  private restoreHitboxes(index: number, boxes: MapHitbox[] | undefined): void {
+    const p = this.map.placements[index];
+    if (!p) return;
+    if (boxes && boxes.length > 0) p.hitboxes = boxes.map((b) => ({ ...b }));
+    else delete p.hitboxes;
+    this.afterHitboxesChanged(index);
+  }
+
+  private afterHitboxesChanged(index: number): void {
+    const p = this.map.placements[index];
+    this.viewport3d?.placementUpdated(index, {
+      hitboxes: p ? this.resolvedHitboxesFor(p) : null,
+    });
+    if (this.hitboxEdit?.index === index) this.syncHitboxEditView();
+    this.canvasDirty = true;
+  }
+
+  /** Replace a placement's hitboxes outright (add/delete/reset/preset paths):
+   *  ONE undo entry. `next` undefined clears back to the baked set. */
+  private setHitboxes(index: number, next: MapHitbox[] | undefined, label: string): void {
+    const p = this.map.placements[index];
+    if (!p) return;
+    const prev = p.hitboxes ? p.hitboxes.map((b) => ({ ...b })) : undefined;
+    const clamped = next?.slice(0, MAX_PLACEMENT_HITBOXES);
+    this.restoreHitboxes(index, clamped);
+    this.map.meta.updatedAt = now();
+    this.markDirty();
+    this.pushUndo({
+      label,
+      undo: () => this.restoreHitboxes(index, prev),
+      redo: () => this.restoreHitboxes(index, clamped),
+    });
+  }
+
+  private addHitbox(): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    if (!p) return;
+    const boxes = p.hitboxes ? p.hitboxes.map((b) => ({ ...b })) : [];
+    if (boxes.length >= MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    boxes.push({ x: 0, y: 1, z: 0, hx: 1, hy: 1, hz: 1 });
+    this.setHitboxes(he.index, boxes, 'add-hitbox');
+    he.selected.clear();
+    he.selected.add(boxes.length - 1);
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  private deleteSelectedHitboxes(): void {
+    const he = this.hitboxEdit;
+    if (!he || he.selected.size === 0) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes) return;
+    const boxes = p.hitboxes.filter((_, i) => !he.selected.has(i)).map((b) => ({ ...b }));
+    he.selected.clear();
+    if (boxes.length === 0) {
+      // Deleting every box = no collision left to edit: fall back to 'none'.
+      this.setHitboxes(he.index, undefined, 'delete-hitbox');
+      this.updateSelectedPlacement({ collisionMode: 'none' }, true);
+      this.exitHitboxEdit();
+      return;
+    }
+    this.setHitboxes(he.index, boxes, 'delete-hitbox');
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  /** Discard the hand-edits: back to the asset's baked box set. */
+  private resetHitboxes(): void {
+    const index = this.hitboxEdit?.index ?? this.selectedPlacement;
+    if (index === null) return;
+    this.exitHitboxEdit();
+    this.setHitboxes(index, undefined, 'reset-hitboxes');
+    this.inspector.refresh();
+  }
+
+  // ---- hitbox presets (localStorage, per asset) ---------------------------------
+
+  private saveHitboxPreset(): void {
+    const index = this.selectedPlacement;
+    const p = index === null ? undefined : this.map.placements[index];
+    if (!p || !p.hitboxes || p.hitboxes.length === 0) return;
+    this.hitboxPresets[p.assetId] = p.hitboxes.map((b) => ({ ...b }));
+    writeJsonPref(HITBOX_PRESETS_PREF_KEY, this.hitboxPresets);
+    this.toasts.info(
+      t('editor.selection.hitboxPresetSaved', {
+        name: this.placementLabel(p.assetId),
+      }),
+    );
+    this.inspector.refresh();
+  }
+
+  private clearHitboxPreset(): void {
+    const index = this.selectedPlacement;
+    const p = index === null ? undefined : this.map.placements[index];
+    if (!p || !this.hitboxPresets[p.assetId]) return;
+    delete this.hitboxPresets[p.assetId];
+    writeJsonPref(HITBOX_PRESETS_PREF_KEY, this.hitboxPresets);
+    this.toasts.info(t('editor.selection.hitboxPresetCleared'));
+    this.inspector.refresh();
+  }
+
+  // ---- Collision Master (per-asset authored collision -> repo default) ----------
+
+  /** Active Collision Master session: a dedicated single-asset authoring scene
+   *  entered from the asset browser. The working map is saved to the local
+   *  store on entry and restored on exit. Lock In posts the authored collision
+   *  to the dev server (/__collision_master/save), which writes
+   *  data/asset_collision_overrides.json + the generated module - making it
+   *  the asset's DEFAULT collision everywhere from then on. */
+  private collisionMaster: {
+    assetId: string;
+    label: string;
+    returnMapId: string;
+    /** The working map object itself: the return trip must not depend on
+     *  browser storage (quota-blocked storage stranded makers in CM). */
+    returnMap: CustomMap | null;
+  } | null = null;
+  /** The floating modeling toolbar over the 3D stage (CM sessions only). */
+  private cmBar: CollisionMasterBar | null = null;
+  /** Poly-snap brush: drag across the model surface to lay a collision plane
+   *  hugging the sampled geometry (built as a thin yawed box). */
+  private cmPolySnap = false;
+  private cmPolyPoints: { x: number; y: number; z: number }[] | null = null;
+
+  private collisionMasterVm(): { assetId: string; label: string; canSave: boolean } | null {
+    const cm = this.collisionMaster;
+    return cm ? { assetId: cm.assetId, label: cm.label, canSave: import.meta.env.DEV } : null;
+  }
+
+  private enterCollisionMaster(assetId: string, label: string): void {
+    if (this.collisionMaster) return;
+    if (!assetById(assetId)) {
+      // Only catalogue assets can persist a repo default; imported models keep
+      // their per-map import bake.
+      this.toasts.error(t('editor.collisionMaster.catalogOnly'));
+      return;
+    }
+    // The working map is stashed IN MEMORY for the return trip, so Collision
+    // Master opens even when browser storage is full/blocked. The store save
+    // is best-effort on top: it makes the return survive a page reload (the
+    // Lock In HMR reload boots the most recent save).
+    const returnMap = this.map;
+    if (!this.io.saveLocal(this.map)) {
+      this.toasts.info(t('editor.collisionMaster.stashOnly'));
+    }
+    const returnMapId = this.map.meta.id;
+    const cm = newFlatCustomMap(
+      t('editor.collisionMaster.mapName', { name: label }),
+      mintId(),
+      now(),
+      { width: 60, height: 60 },
+    );
+    const placement: AssetPlacement = { assetId, x: 0, z: 0, rotY: 0, scale: 1, collide: true };
+    // Seed the scene with the asset's CURRENT default so editing starts from
+    // the truth: authored override > box set (authored or baked) > heuristics.
+    const authored = collisionOverrideFor(assetId);
+    if (authored?.mode === 'none') {
+      placement.collisionMode = 'none';
+    } else if (authored?.mode === 'basic') {
+      placement.collisionMode = 'basic';
+      if (authored.shape === 'square') placement.collideShape = 'square';
+      if (authored.radius !== undefined) placement.collideRadius = authored.radius;
+    } else {
+      const boxes = boxesForAssetId(assetId);
+      if (boxes && boxes.length > 0) {
+        placement.collisionMode = 'baked';
+        placement.hitboxes = boxes.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }));
+      } else {
+        applyDefaultCollision(placement);
+      }
+    }
+    cm.placements.push(placement);
+    this.collisionMaster = { assetId, label, returnMapId, returnMap };
+    this.cmPolySnap = false;
+    this.cmSubMode = 'object';
+    this.loadMap(cm);
+    this.setTool('select');
+    this.setSelectedPlacement(0);
+    if (effectiveCollisionMode(placement) === 'baked') this.enterHitboxEdit();
+    this.cmBar?.setVisible(true);
+    // Frame the asset up close once the 3D reload lands (loadMap's frameAll
+    // framed the whole map, and the reload would stomp an immediate focus).
+    this.pendingFocus = {
+      x: placement.x,
+      z: placement.z,
+      extent: Math.max(2.5, placement.scale * 2.5),
+      y: terrainHeight(placement.x, placement.z, this.map.meta.seed),
+    };
+    this.inspector.refresh();
+  }
+
+  /** Camera focus applied after the next 3D viewport reload completes. */
+  private pendingFocus: { x: number; z: number; extent: number; y: number } | null = null;
+
+  private exitCollisionMaster(): void {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const cmMapId = this.map.meta.id;
+    this.collisionMaster = null;
+    this.cmPolySnap = false;
+    this.cmPolyPoints = null;
+    this.cmSubMode = 'object';
+    this.cmBar?.setVisible(false);
+    this.viewport3d?.setHitboxSubMode(null);
+    this.exitHitboxEdit();
+    this.pendingFocus = null; // an unconsumed enter-focus must not retarget the restored map
+    // The scratch scene must never resurface as a resumable draft.
+    this.io.draftClear(cmMapId);
+    // The in-memory stash is the primary return path (works with blocked
+    // storage); the store copy only matters across a page reload.
+    const back = cm.returnMap ?? this.io.store.load(cm.returnMapId);
+    if (back) this.loadMap(back);
+    else this.loadMap(newCustomMap(t('editor.untitledMap'), mintId(), now()));
+  }
+
+  /** Lock In: persist the scene's collision as the asset's repo default. */
+  private async commitCollisionMaster(): Promise<void> {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    const mode = effectiveCollisionMode(p);
+    let override: AssetCollisionOverride;
+    if (mode === 'none') {
+      override = { mode: 'none' };
+    } else if (mode === 'basic') {
+      override = { mode: 'basic' };
+      if (p.collideShape === 'square') override.shape = 'square';
+      // Scene scale is 1, so the effective radius IS the model-space radius.
+      override.radius = p.collideRadius ?? autoCollideRadius(p.assetId, 1, 'basic');
+    } else if (mode === 'baked') {
+      const boxes =
+        this.resolvedHitboxesFor(p) ?? boxesForAssetId(p.assetId)?.map((b) => ({ ...b })) ?? null;
+      if (!boxes || boxes.length === 0) {
+        this.toasts.error(t('editor.collisionMaster.noBoxes'));
+        return;
+      }
+      override = { mode: 'baked', boxes };
+    } else {
+      // 'mesh' is a per-map fine bake, not a repo default.
+      this.toasts.error(t('editor.collisionMaster.meshUnsupported'));
+      return;
+    }
+    try {
+      const res = await fetch('/__collision_master/save', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ assetId: cm.assetId, override }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+    } catch (err) {
+      this.toasts.error(t('editor.collisionMaster.saveEndpointFailed', { error: String(err) }));
+      return;
+    }
+    this.toasts.info(t('editor.collisionMaster.locked', { name: cm.label }));
+    // The generated-module write triggers a dev full reload moments after
+    // this; exiting first restores (and re-saves nothing), so the reload
+    // boots straight back into the working map.
+    this.exitCollisionMaster();
+  }
+
+  /** Starter box sets for the Collision Master scene. */
+  private collisionMasterStarter(kind: 'bake' | 'fitted' | 'single'): void {
+    const cm = this.collisionMaster;
+    if (!cm) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    this.setSelectedPlacement(0);
+    let boxes: MapHitbox[];
+    if (kind === 'bake') {
+      const baked = ASSET_COLLISION[cm.assetId];
+      boxes =
+        baked && baked.length > 0
+          ? baked.slice(0, MAX_PLACEMENT_HITBOXES).map((b) => ({ ...b }))
+          : this.materializeHitboxes(p);
+    } else if (kind === 'fitted') {
+      const a = analyzeBakedFootprint(cm.assetId);
+      boxes = a && a.boxCount > 0 ? [{ ...a.union }] : this.materializeHitboxes(p);
+    } else {
+      const r = Math.max(0.3, collideRadiusFor(1, cm.assetId));
+      boxes = [{ x: 0, y: r, z: 0, hx: r, hy: r, hz: r }];
+    }
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    this.setHitboxes(0, boxes, 'collision-master-starter');
+    if (!this.hitboxEdit) this.enterHitboxEdit();
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  // ---- Collision Master v2: sub-element modes, primitives, duplicate ------------
+
+  /** Blender-style sub-element select mode for the Collision Master scene:
+   *  object = whole-box gizmo, vertex/edge/face = direct handle editing. */
+  private cmSubMode: 'object' | 'vertex' | 'edge' | 'face' = 'object';
+
+  private setCmSubMode(mode: 'object' | 'vertex' | 'edge' | 'face'): void {
+    this.cmSubMode = mode;
+    if (this.collisionMaster && !this.hitboxEdit) this.enterHitboxEdit();
+    this.viewport3d?.setHitboxSubMode(mode === 'object' ? null : mode);
+    this.cmBar?.refresh();
+    this.inspector.refresh();
+  }
+
+  /** One live sub-element handle sample: replace ONE box, uncommitted (the
+   *  drag end commits via commitHitboxes — the gizmo's exact contract). */
+  private applyHitboxHandleEdit(boxIndex: number, box: MapHitbox): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes || !p.hitboxes[boxIndex]) return;
+    if (!this.hitboxDragBase) this.hitboxDragBase = p.hitboxes.map((b) => ({ ...b }));
+    const boxes = p.hitboxes.map((b) => ({ ...b }));
+    const clean: MapHitbox = { ...box };
+    if (!clean.ry) delete clean.ry;
+    boxes[boxIndex] = clean;
+    p.hitboxes = boxes;
+    this.viewport3d?.placementUpdated(he.index, { hitboxes: boxes.map((b) => ({ ...b })) });
+    this.syncHitboxEditView();
+    this.canvasDirty = true;
+  }
+
+  /** Primitive starters: append sim-ready box sets approximating the shape.
+   *  Cylinders/spheres are two crossed boxes (a tight octagon footprint),
+   *  ramps are step stacks the sim's step-over walks like stairs. */
+  private addCmPrimitive(kind: 'box' | 'plane' | 'cylinder' | 'sphere' | 'wedge'): void {
+    if (!this.collisionMaster) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    this.setSelectedPlacement(0);
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    if (!this.hitboxEdit) this.enterHitboxEdit();
+    // Size relative to the asset so primitives land usable, not microscopic.
+    const a = analyzeBakedFootprint(this.collisionMaster.assetId);
+    const r = Math.min(3, Math.max(0.5, a ? Math.max(a.union.hx, a.union.hz) * 0.8 : 1));
+    const h = Math.min(4, Math.max(0.5, a ? a.union.hy * 2 * 0.9 : 1.5));
+    const fresh: MapHitbox[] = [];
+    if (kind === 'box') {
+      fresh.push({ x: 0, y: h / 2, z: 0, hx: r, hy: h / 2, hz: r });
+    } else if (kind === 'plane') {
+      fresh.push({ x: 0, y: h / 2, z: 0, hx: r * 1.2, hy: h / 2, hz: 0.05 });
+    } else if (kind === 'cylinder' || kind === 'sphere') {
+      const hy = kind === 'sphere' ? r * 0.92 : h / 2;
+      const y = kind === 'sphere' ? r : h / 2;
+      const side = r * 0.92;
+      fresh.push({ x: 0, y, z: 0, hx: side, hy, hz: side });
+      fresh.push({ x: 0, y, z: 0, hx: side, hy, hz: side, ry: Math.PI / 4 });
+    } else {
+      // wedge/ramp: four rising steps along +X, walkable via step-over.
+      const steps = 4;
+      const len = Math.max(2, r * 2);
+      for (let i = 0; i < steps; i++) {
+        const hy = (h * (i + 1)) / (steps * 2);
+        fresh.push({
+          x: -len / 2 + (len / steps) * (i + 0.5),
+          y: hy,
+          z: 0,
+          hx: len / (steps * 2),
+          hy,
+          hz: r,
+        });
+      }
+    }
+    const existing = p.hitboxes ? p.hitboxes.map((b) => ({ ...b })) : [];
+    if (existing.length + fresh.length > MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    this.setHitboxes(0, [...existing, ...fresh], 'collision-master-primitive');
+    const he = this.hitboxEdit;
+    if (he) {
+      he.selected = new Set(fresh.map((_, i) => existing.length + i));
+      this.syncHitboxEditView();
+    }
+    this.inspector.refresh();
+  }
+
+  /** Marquee selection over collision boxes (Ctrl+drag in hitbox edit). */
+  private selectHitboxes(indices: number[]): void {
+    const he = this.hitboxEdit;
+    if (!he) return;
+    const p = this.map.placements[he.index];
+    const max = p?.hitboxes?.length ?? 0;
+    he.selected = new Set(indices.filter((i) => i >= 0 && i < max));
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  /** Duplicate the selected hitboxes, offset a step so the copies are visible. */
+  private duplicateCmSelection(): void {
+    const he = this.hitboxEdit;
+    if (!he || he.selected.size === 0) return;
+    const p = this.map.placements[he.index];
+    if (!p || !p.hitboxes) return;
+    const copies = [...he.selected]
+      .filter((i) => p.hitboxes?.[i])
+      .map((i) => {
+        const src = p.hitboxes?.[i] as MapHitbox;
+        return { ...src, x: src.x + Math.max(0.3, src.hx) };
+      });
+    const boxes = [...p.hitboxes.map((b) => ({ ...b })), ...copies];
+    if (boxes.length > MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    this.setHitboxes(he.index, boxes, 'duplicate-hitbox');
+    he.selected = new Set(copies.map((_, i) => boxes.length - copies.length + i));
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  // ---- poly-snap brush: sample the real model surface, emit a hugging box ----
+
+  private cmPolyActive(): boolean {
+    return this.collisionMaster !== null && this.cmPolySnap;
+  }
+
+  private cmPolyBegin(ev: PointerEvent): void {
+    const hit = this.viewport3d?.modelHitAt(ev.clientX, ev.clientY);
+    this.cmPolyPoints = hit ? [hit] : [];
+  }
+
+  private cmPolyMove(ev: PointerEvent): void {
+    if (!this.cmPolyPoints) return;
+    const hit = this.viewport3d?.modelHitAt(ev.clientX, ev.clientY);
+    if (hit) this.cmPolyPoints.push(hit);
+  }
+
+  private cmPolyEnd(): void {
+    const pts = this.cmPolyPoints;
+    this.cmPolyPoints = null;
+    if (!pts || pts.length < 2) return;
+    const p = this.map.placements[0];
+    if (!p) return;
+    // Model space: the scene placement sits at the origin, scale 1, yaw 0.
+    const seat = terrainHeight(p.x, p.z, this.map.meta.seed);
+    const a = pts[0];
+    const b = pts[pts.length - 1];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const len = Math.hypot(dx, dz);
+    if (len < 0.05) return;
+    // Yaw so the box's local X axis runs along the drag (rotY convention:
+    // rotY(x, z, ry) rotates model space into world space).
+    const ry = Math.atan2(dz, dx) * -1;
+    const midX = (a.x + b.x) / 2;
+    const midZ = (a.z + b.z) / 2;
+    const ux = dx / len;
+    const uz = dz / len;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    let maxPerp = 0.05;
+    for (const q of pts) {
+      minY = Math.min(minY, q.y);
+      maxY = Math.max(maxY, q.y);
+      // Spread perpendicular to the drag direction (thin wall by default,
+      // thicker when the drag wanders across the surface).
+      const perp = Math.abs((q.x - midX) * -uz + (q.z - midZ) * ux);
+      maxPerp = Math.max(maxPerp, perp);
+    }
+    const box: MapHitbox = {
+      x: midX - p.x,
+      y: (minY + maxY) / 2 - seat,
+      z: midZ - p.z,
+      hx: Math.max(0.05, len / 2),
+      hy: Math.max(0.1, (maxY - minY) / 2 + 0.05),
+      hz: Math.min(2, maxPerp + 0.05),
+      ry,
+    };
+    const existing = p.hitboxes ?? [];
+    if (existing.length >= MAX_PLACEMENT_HITBOXES) {
+      this.toasts.error(t('editor.selection.hitboxCap', { max: MAX_PLACEMENT_HITBOXES }));
+      return;
+    }
+    if (p.collisionMode !== 'baked') this.updateSelectedPlacement({ collisionMode: 'baked' }, true);
+    this.setHitboxes(0, [...existing.map((bx) => ({ ...bx })), box], 'collision-master-poly');
+    if (!this.hitboxEdit) this.hitboxEdit = { index: 0, selected: new Set() };
+    this.hitboxEdit.selected = new Set([(p.hitboxes ?? []).length - 1]);
+    this.syncFootprintOverlay();
+    this.syncHitboxEditView();
+    this.inspector.refresh();
+  }
+
+  /** Copy one placement's collision block (type, shape, hitbox edits) onto
+   *  another, SIZED to the target's own scale so a small copy never inherits a
+   *  big copy's oversized footprint. Hitboxes are mesh-space (the sim multiplies
+   *  them by each placement's scale) so they copy verbatim; the ABSOLUTE
+   *  basic-radius override is rescaled by the target/source scale ratio to keep
+   *  the source's collision-to-model proportion. Deletes fields the source does
+   *  not carry, so the target ends up a match rather than a merge. */
+  private copyCollisionSettings(src: AssetPlacement, dst: AssetPlacement): void {
+    if (src.collisionMode !== undefined) dst.collisionMode = src.collisionMode;
+    else delete dst.collisionMode;
+    dst.collide = src.collide;
+    if (src.collideRadius !== undefined) {
+      const srcScale = src.scale > 0 ? src.scale : 1;
+      const ratio = (dst.scale > 0 ? dst.scale : 1) / srcScale;
+      dst.collideRadius = Math.min(
+        MAX_COLLIDE_RADIUS,
+        Math.max(MIN_COLLIDE_RADIUS, src.collideRadius * ratio),
+      );
+    } else delete dst.collideRadius;
+    if (src.collideShape !== undefined) dst.collideShape = src.collideShape;
+    else delete dst.collideShape;
+    if (src.hitboxes !== undefined) dst.hitboxes = src.hitboxes.map((b) => ({ ...b }));
+    else delete dst.hitboxes;
+  }
+
+  /** "Copy collision to all {asset}" from the bottom of the collision menu:
+   *  after an in-app confirm, give every OTHER placement of the active asset the
+   *  active one's whole collision setup, as a single undo step. */
+  private async copyCollisionToSameAsset(): Promise<void> {
+    const index = this.selectedPlacement;
+    const src = index === null ? undefined : this.map.placements[index];
+    if (index === null || !src) return;
+    const targets = this.map.placements
+      .map((_, i) => i)
+      .filter((i) => i !== index && this.map.placements[i].assetId === src.assetId);
+    if (targets.length === 0) return;
+    const name = this.placementLabel(src.assetId);
+    const count = formatNumber(targets.length, { useGrouping: false });
+    const ok = await confirmDialog(this.root, {
+      title: t('editor.selection.collisionCopyConfirmTitle', { name }),
+      body: t('editor.selection.collisionCopyConfirmBody', { name, count }),
+      confirmLabel: t('editor.selection.collisionCopyConfirm'),
+    });
+    if (!ok) return;
+    // The dialog is modal, but guard the async gap: bail if the active placement
+    // is no longer the same object at the same index.
+    if (this.selectedPlacement !== index || this.map.placements[index] !== src) return;
+    const prev = new Map(targets.map((i) => [i, { ...this.map.placements[i] }]));
+    for (const i of targets) this.copyCollisionSettings(src, this.map.placements[i]);
+    const next = new Map(targets.map((i) => [i, { ...this.map.placements[i] }]));
+    const applyAll = (snaps: Map<number, AssetPlacement>): void => {
+      for (const [i, snap] of snaps) this.restorePlacementSnapshot(i, snap);
+      this.viewport3d?.rebuildPlacements();
+      this.canvasDirty = true;
+    };
+    this.map.meta.updatedAt = now();
+    this.pushUndo({
+      label: 'copy-collision-to-asset',
+      undo: () => applyAll(prev),
+      redo: () => applyAll(next),
+    });
+    this.viewport3d?.rebuildPlacements();
+    this.canvasDirty = true;
+    this.markDirty();
+    this.toasts.success(t('editor.selection.collisionCopied', { name, count }));
+  }
+
+  /** "Scale all copies" from the Selection panel: after an in-app confirm, roll a
+   *  random scale in [cloneScaleMin, cloneScaleMax] onto EVERY placement of the
+   *  selected asset (the active one included), as a single undo step. min==max
+   *  gives a uniform scale; a wider range adds natural size variation. */
+  private async scaleAllSameAsset(): Promise<void> {
+    const index = this.selectedPlacement;
+    const src = index === null ? undefined : this.map.placements[index];
+    if (index === null || !src) return;
+    const targets = this.map.placements
+      .map((_, i) => i)
+      .filter((i) => this.map.placements[i].assetId === src.assetId);
+    if (targets.length === 0) return;
+    const lo = Math.max(PLACEMENT_SCALE_MIN, Math.min(this.cloneScaleMin, this.cloneScaleMax));
+    const hi = Math.min(PLACEMENT_SCALE_MAX, Math.max(this.cloneScaleMin, this.cloneScaleMax));
+    const name = this.placementLabel(src.assetId);
+    const count = formatNumber(targets.length, { useGrouping: false });
+    const fmt = (v: number): string =>
+      formatNumber(v, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const ok = await confirmDialog(this.root, {
+      title: t('editor.selection.scaleAllConfirmTitle', { name }),
+      body: t('editor.selection.scaleAllConfirmBody', {
+        name,
+        count,
+        min: fmt(lo),
+        max: fmt(hi),
+      }),
+      confirmLabel: t('editor.selection.scaleAllConfirm'),
+    });
+    if (!ok) return;
+    if (this.selectedPlacement !== index || this.map.placements[index] !== src) return;
+    const prev = new Map(targets.map((i) => [i, { ...this.map.placements[i] }]));
+    // Seeded editor PRNG (never the sim Rng): deterministic per map, so the same
+    // range re-rolls the same look until the maker widens it.
+    const rng = makeRng(this.map.meta.seed);
+    for (const i of targets) {
+      const q = this.map.placements[i];
+      const s = lo >= hi ? lo : lo + rng() * (hi - lo);
+      q.scale = Math.min(PLACEMENT_SCALE_MAX, Math.max(PLACEMENT_SCALE_MIN, s));
+    }
+    const next = new Map(targets.map((i) => [i, { ...this.map.placements[i] }]));
+    const applyAll = (snaps: Map<number, AssetPlacement>): void => {
+      for (const [i, snap] of snaps) this.restorePlacementSnapshot(i, snap);
+      this.viewport3d?.rebuildPlacements();
+      this.canvasDirty = true;
+      this.inspector.refresh();
+    };
+    this.map.meta.updatedAt = now();
+    this.pushUndo({
+      label: 'scale-all-asset',
+      undo: () => applyAll(prev),
+      redo: () => applyAll(next),
+    });
+    this.viewport3d?.rebuildPlacements();
+    this.canvasDirty = true;
+    this.markDirty();
+    this.inspector.refresh();
+    this.toasts.success(t('editor.selection.scaleAllDone', { name, count }));
+  }
+
+  // ---- "true collision" fine bake -------------------------------------------------
+
+  /** Bake (once per asset, cached on the doc) the fine mesh-hugging box set
+   *  'mesh' collision mode blocks with. Async; placements fall back to the
+   *  standard baked boxes until it lands. */
+  private ensureMeshCollision(assetId: string): void {
+    if (this.map.assetCollisionMesh?.[assetId] || this.meshBakesInFlight.has(assetId)) return;
+    const url = localAssetUrl(assetId) ?? userAssetPath(assetId) ?? assetById(assetId)?.path;
+    if (!url) {
+      this.toasts.error(t('editor.selection.meshBakeFailed'));
+      return;
+    }
+    this.meshBakesInFlight.add(assetId);
+    this.toasts.info(t('editor.selection.meshBaking'));
+    void bakeTrueModelCollision(url)
+      .then((boxes) => {
+        this.meshBakesInFlight.delete(assetId);
+        if (!boxes || boxes.length === 0) {
+          this.toasts.error(t('editor.selection.meshBakeFailed'));
+          this.inspector.refresh();
+          return;
+        }
+        if (!this.map.assetCollisionMesh) this.map.assetCollisionMesh = {};
+        this.map.assetCollisionMesh[assetId] = boxes.slice(0, MAX_ASSET_COLLISION_MESH_BOXES);
+        this.map.meta.updatedAt = now();
+        this.markDirty();
+        // Re-project every placement so mesh-mode ones pick up the fine boxes.
+        this.viewport3d?.rebuildPlacements();
+        this.toasts.info(
+          t('editor.selection.meshBakeDone', {
+            count: formatNumber(this.map.assetCollisionMesh[assetId].length, {
+              useGrouping: false,
+            }),
+          }),
+        );
+        this.inspector.refresh();
+      })
+      .catch(() => {
+        this.meshBakesInFlight.delete(assetId);
+        this.toasts.error(t('editor.selection.meshBakeFailed'));
+        this.inspector.refresh();
+      });
   }
 
   private updateSelectedPlacement(
@@ -2529,6 +5677,7 @@ export class EditorApp {
       collide?: boolean;
       collideRadius?: number | null;
       collideShape?: 'square' | null;
+      collisionMode?: CollisionMode;
       sizeX?: number;
       sizeY?: number;
       sizeZ?: number;
@@ -2537,6 +5686,20 @@ export class EditorApp {
       glow?: number | null;
       glowStrength?: number | null;
       fire?: boolean | null;
+      hue?: number | null;
+      lum?: number | null;
+      fluidDps?: number | null;
+      fluidFx?: number | null;
+      rockSeed?: number;
+      rockNoise?: number;
+      rockDetail?: number;
+      rockSharp?: number;
+      rockTex?: number;
+      rockHeight?: number;
+      rockDepth?: number;
+      rockJag?: number;
+      rockTexId?: string | null;
+      rockTexTile?: number;
     },
     commit: boolean,
     opts?: { detachOnMove?: boolean },
@@ -2556,35 +5719,91 @@ export class EditorApp {
     // sample, AFTER the undo base is captured, so one Ctrl+Z restores the
     // grounded state, freezing the ground at the pre-move position so it does
     // not jump. A pure Y lift, rotate, or scale never detaches.
+    //
+    // Rig markers re-derive their bore/ridge from their transform: XZ moves
+    // the path, the Y gizmo lifts/dives the node, gizmo scale sets its girth.
+    const isCaveMarker =
+      p.assetId === CAVE_ENTRANCE_ASSET_ID ||
+      p.assetId === CAVE_EXIT_ASSET_ID ||
+      p.assetId === CAVE_POINT_ASSET_ID;
+    const isRigMarker = isCaveMarker || p.assetId === ROCK_POINT_ASSET_ID;
+    // Cave markers are ANCHORED (frozen ground): their elevation is absolute
+    // so the tube ignores whatever the terrain does. Heal markers from older
+    // sessions on first touch by freezing the CURRENT surface under them ?
+    // their y offset keeps meaning the same height it did before the freeze.
+    if (isCaveMarker && !p.detached) {
+      p.detached = true;
+      p.groundY = terrainHeight(p.x, p.z, this.map.meta.seed);
+    }
+    // Rock ridge markers keep the legacy terrain-relative behavior.
+    if (p.assetId === ROCK_POINT_ASSET_ID && p.detached) {
+      delete p.detached;
+      delete p.groundY;
+    }
     const detachMove =
-      opts?.detachOnMove === true && (change.x !== undefined || change.z !== undefined);
+      opts?.detachOnMove === true &&
+      !isRigMarker &&
+      (change.x !== undefined || change.z !== undefined);
     if (detachMove) this.detachPlacement(index);
-    // Group translation: an x/z move of the active placement carries the other
-    // multi-selection members along by the same delta (Blender group grab).
+    // Group transform: moving/rotating/scaling the active placement carries the
+    // other multi-selection members along (Blender-style). The group translates
+    // by the same delta and rotates/scales as a unit about the active
+    // placement's gesture-start pivot, each member also spinning/scaling in
+    // place to match. Deltas are taken against the active's pre-gesture base
+    // and applied to per-member snapshots, so every live sample re-derives the
+    // members from one stable baseline (no incremental drift).
     const groupIndices = [...this.selectedSet].filter(
       (gi) => gi !== index && this.map.placements[gi],
     );
-    if ((change.x !== undefined || change.z !== undefined) && groupIndices.length > 0) {
+    const groupChange =
+      change.x !== undefined ||
+      change.z !== undefined ||
+      change.y !== undefined ||
+      change.rotY !== undefined ||
+      change.scale !== undefined;
+    if (groupChange && groupIndices.length > 0) {
       if (!this.groupDragBase) {
         this.groupDragBase = new Map(
-          groupIndices.map((gi) => {
-            const q = this.map.placements[gi];
-            return [gi, { x: q.x, z: q.z, detached: q.detached, groundY: q.groundY }];
-          }),
+          groupIndices.map((gi) => [gi, { ...this.map.placements[gi] }]),
         );
       }
-      const dx = (change.x ?? p.x) - p.x;
-      const dz = (change.z ?? p.z) - p.z;
+      const prev = base.prev;
+      const dx = change.x !== undefined ? change.x - prev.x : 0;
+      const dz = change.z !== undefined ? change.z - prev.z : 0;
+      // Vertical lifts ride along too (the gizmo's Y arrow): same clamp as the
+      // active placement below.
+      const dy = change.y !== undefined ? change.y - (prev.y ?? 0) : 0;
+      const dRot = change.rotY !== undefined ? change.rotY - prev.rotY : 0;
+      const ratio = change.scale !== undefined && prev.scale > 0 ? change.scale / prev.scale : 1;
       for (const gi of groupIndices) {
+        const snap = this.groupDragBase.get(gi);
         const q = this.map.placements[gi];
+        if (!snap || !q) continue;
         // Detach each member too (before moving it, so the frozen ground is the
         // pre-move height), the whole group floats free consistently.
         if (detachMove) this.detachPlacement(gi);
-        q.x += dx;
-        q.z += dz;
+        const pt = groupMemberPoint(snap.x, snap.z, prev.x, prev.z, dx, dz, dRot, ratio);
+        q.x = pt.x;
+        q.z = pt.z;
+        if (change.y !== undefined) {
+          q.y = Math.min(
+            MAX_PLACEMENT_Y_OFFSET,
+            Math.max(-MAX_PLACEMENT_Y_OFFSET, (snap.y ?? 0) + dy),
+          );
+        }
+        if (change.rotY !== undefined) q.rotY = wrapAngle(snap.rotY + dRot);
+        if (change.scale !== undefined) {
+          q.scale = Math.min(
+            PLACEMENT_SCALE_MAX,
+            Math.max(PLACEMENT_SCALE_MIN, snap.scale * ratio),
+          );
+        }
         this.viewport3d?.placementUpdated(gi, {
           x: q.x,
           z: q.z,
+          y: change.y !== undefined ? q.y : undefined,
+          rotY: change.rotY !== undefined ? q.rotY : undefined,
+          scale: change.scale !== undefined ? q.scale : undefined,
           collideRadius: q.collide ? effectiveCollideRadius(q) : 0,
         });
       }
@@ -2608,20 +5827,34 @@ export class EditorApp {
     if (change.y !== undefined) {
       p.y = Math.min(MAX_PLACEMENT_Y_OFFSET, Math.max(-MAX_PLACEMENT_Y_OFFSET, change.y));
     }
-    if (change.collide !== undefined) p.collide = change.collide;
-    if (change.collideRadius !== undefined) {
-      // number = set the override (clamped), null = back to the derived auto.
-      if (change.collideRadius === null) delete p.collideRadius;
-      else {
-        p.collideRadius = Math.min(
-          MAX_COLLIDE_RADIUS,
-          Math.max(MIN_COLLIDE_RADIUS, change.collideRadius),
-        );
+    // Collision block (type dropdown, basic radius/shape, collide toggle). With
+    // several placements selected it edits EVERY selected one, not just the
+    // active: snapshot the other members up front so the commit path records a
+    // single group undo (the same move-placements machinery used for transforms).
+    const collisionChange =
+      change.collide !== undefined ||
+      change.collisionMode !== undefined ||
+      change.collideRadius !== undefined ||
+      change.collideShape !== undefined;
+    if (collisionChange && this.selectedSet.size > 1 && !this.groupDragBase) {
+      const members = [...this.selectedSet].filter((gi) => gi !== index && this.map.placements[gi]);
+      if (members.length > 0) {
+        this.groupDragBase = new Map(members.map((gi) => [gi, { ...this.map.placements[gi] }]));
       }
     }
-    if (change.collideShape !== undefined) {
-      if (change.collideShape === 'square') p.collideShape = 'square';
-      else delete p.collideShape;
+    this.applyCollisionFields(p, change, index);
+    if (collisionChange && this.groupDragBase) {
+      for (const gi of this.groupDragBase.keys()) {
+        const q = this.map.placements[gi];
+        if (!q || gi === index) continue;
+        this.applyCollisionFields(q, change, gi);
+        this.viewport3d?.placementUpdated(gi, {
+          collideRadius: effectiveCollisionMode(q) !== 'none' ? effectiveCollideRadius(q) : 0,
+          collideShape: q.collideShape ?? null,
+          collideCustom: effectiveCollisionMode(q) === 'basic',
+          hitboxes: change.collisionMode !== undefined ? this.resolvedHitboxesFor(q) : undefined,
+        });
+      }
     }
     for (const key of ['tint', 'opacity', 'glow', 'glowStrength'] as const) {
       const v = change[key];
@@ -2633,6 +5866,23 @@ export class EditorApp {
       if (change.fire) p.fire = true;
       else delete p.fire;
     }
+    // Fluid-pool fields (hue/lum shared with grass; DPS + effect bits fluid-only).
+    if (change.hue !== undefined) {
+      if (change.hue === null) delete p.hue;
+      else p.hue = Math.min(360, Math.max(0, change.hue));
+    }
+    if (change.lum !== undefined) {
+      if (change.lum === null) delete p.lum;
+      else p.lum = Math.min(1, Math.max(0, change.lum));
+    }
+    if (change.fluidDps !== undefined) {
+      if (change.fluidDps === null) delete p.fluidDps;
+      else p.fluidDps = Math.min(50, Math.max(0, change.fluidDps));
+    }
+    if (change.fluidFx !== undefined) {
+      if (change.fluidFx === null) delete p.fluidFx;
+      else p.fluidFx = Math.round(Math.min(15, Math.max(0, change.fluidFx)));
+    }
     // Collider-volume dimensions (same clamps as the shared sanitizer).
     if (change.sizeX !== undefined) {
       p.sizeX = Math.min(MAX_COLLIDER_SIZE, Math.max(MIN_COLLIDER_SIZE, change.sizeX));
@@ -2642,6 +5892,89 @@ export class EditorApp {
     }
     if (change.sizeZ !== undefined) {
       p.sizeZ = Math.min(MAX_COLLIDER_SIZE, Math.max(MIN_COLLIDER_SIZE, change.sizeZ));
+    }
+    // Generated-rock shape edits: clamp, then rebuild the procedural mesh in
+    // the view (the record is the source of truth; the model re-derives).
+    let rockChanged = false;
+    if (change.rockSeed !== undefined) {
+      p.rockSeed = Math.max(0, Math.round(change.rockSeed));
+      rockChanged = true;
+    }
+    if (change.rockNoise !== undefined) {
+      p.rockNoise = Math.min(1, Math.max(0, change.rockNoise));
+      rockChanged = true;
+    }
+    if (change.rockDetail !== undefined) {
+      p.rockDetail = Math.min(1, Math.max(0, change.rockDetail));
+      rockChanged = true;
+    }
+    if (change.rockSharp !== undefined) {
+      p.rockSharp = Math.min(1, Math.max(0, change.rockSharp));
+      rockChanged = true;
+    }
+    if (change.rockTex !== undefined) {
+      p.rockTex = Math.min(2, Math.max(0, Math.round(change.rockTex)));
+      // Picking a legacy look clears any texture-set override.
+      delete p.rockTexId;
+      rockChanged = true;
+    }
+    if (change.rockHeight !== undefined) {
+      p.rockHeight = Math.min(3, Math.max(0.3, change.rockHeight));
+      rockChanged = true;
+    }
+    if (change.rockDepth !== undefined) {
+      p.rockDepth = Math.min(1, Math.max(0, change.rockDepth));
+      rockChanged = true;
+    }
+    if (change.rockJag !== undefined) {
+      p.rockJag = Math.min(1, Math.max(0, change.rockJag));
+      rockChanged = true;
+    }
+    if (change.rockTexId !== undefined) {
+      if (change.rockTexId === null || change.rockTexId === '') delete p.rockTexId;
+      else p.rockTexId = change.rockTexId;
+      rockChanged = true;
+    }
+    if (change.rockTexTile !== undefined) {
+      p.rockTexTile = Math.min(64, Math.max(1, change.rockTexTile));
+      rockChanged = true;
+    }
+    if (rockChanged && (p.assetId === ROCK_ASSET_ID || p.assetId === ROCK_RIDGE_ASSET_ID)) {
+      this.viewport3d?.placementAdded(index);
+      // placementAdded rebuilds via remove+add, which drops the gold ring.
+      this.viewport3d?.setSelectedPlacement(index);
+    }
+    // Cave rig points regenerate their bore live as they move, scale, or
+    // lift: gizmo scale sets that node's bore girth, the Y gizmo its authored
+    // depth (the rig's dotted guide follows even before the cave generates).
+    if (
+      (p.assetId === CAVE_ENTRANCE_ASSET_ID ||
+        p.assetId === CAVE_EXIT_ASSET_ID ||
+        p.assetId === CAVE_POINT_ASSET_ID) &&
+      (change.x !== undefined ||
+        change.z !== undefined ||
+        change.y !== undefined ||
+        change.scale !== undefined ||
+        change.scaleX !== undefined ||
+        change.scaleY !== undefined ||
+        change.scaleZ !== undefined)
+    ) {
+      this.regenerateCaveForEndpoint(p);
+      this.refreshCaveGuides();
+    }
+    // Rock rig points likewise live-regenerate their merged ridge.
+    if (
+      p.assetId === ROCK_POINT_ASSET_ID &&
+      (change.x !== undefined ||
+        change.z !== undefined ||
+        change.y !== undefined ||
+        change.scale !== undefined ||
+        change.scaleX !== undefined ||
+        change.scaleY !== undefined ||
+        change.scaleZ !== undefined)
+    ) {
+      this.regenerateRockRidgeForPoint(p);
+      this.refreshRockGuides();
     }
     // The render view gets the transform change plus the EFFECTIVE footprint
     // radius (0 = walk-through), so collide toggles, radius drags, and scale
@@ -2657,8 +5990,16 @@ export class EditorApp {
       scaleX: change.scaleX !== undefined ? p.scaleX : undefined,
       scaleY: change.scaleY !== undefined ? p.scaleY : undefined,
       scaleZ: change.scaleZ !== undefined ? p.scaleZ : undefined,
-      collideRadius: p.collide ? effectiveCollideRadius(p) : 0,
+      collideRadius: effectiveCollisionMode(p) !== 'none' ? effectiveCollideRadius(p) : 0,
       collideShape: p.collideShape ?? null,
+      collideCustom:
+        change.collisionMode !== undefined ||
+        change.collideRadius !== undefined ||
+        change.collideShape !== undefined ||
+        change.collide !== undefined
+          ? effectiveCollisionMode(p) === 'basic'
+          : undefined,
+      hitboxes: change.collisionMode !== undefined ? this.resolvedHitboxesFor(p) : undefined,
       tint: change.tint !== undefined ? (p.tint ?? null) : undefined,
       opacity: change.opacity !== undefined ? (p.opacity ?? null) : undefined,
       glow: change.glow !== undefined ? (p.glow ?? null) : undefined,
@@ -2681,6 +6022,7 @@ export class EditorApp {
       prev.collide === next.collide &&
       prev.collideRadius === next.collideRadius &&
       prev.collideShape === next.collideShape &&
+      prev.collisionMode === next.collisionMode &&
       prev.tint === next.tint &&
       prev.opacity === next.opacity &&
       prev.glow === next.glow &&
@@ -2703,33 +6045,14 @@ export class EditorApp {
     }
     this.map.meta.updatedAt = now();
     if (groupPrev && groupPrev.size > 0) {
-      // One undo entry for the whole group translation.
-      const groupNext = new Map(
-        [...groupPrev.keys()].map((gi) => {
-          const q = this.map.placements[gi];
-          return [
-            gi,
-            { x: q?.x ?? 0, z: q?.z ?? 0, detached: q?.detached, groundY: q?.groundY },
-          ] as const;
-        }),
-      );
-      const applyGroup = (
-        positions: Map<number, { x: number; z: number; detached?: boolean; groundY?: number }>,
-      ): void => {
-        for (const [gi, pos] of positions) {
-          const q = this.map.placements[gi];
-          if (q) {
-            q.x = pos.x;
-            q.z = pos.z;
-            if (pos.detached) {
-              q.detached = true;
-              q.groundY = pos.groundY;
-            } else {
-              delete q.detached;
-              delete q.groundY;
-            }
-          }
-        }
+      // One undo entry for the whole group transform (move/rotate/scale).
+      const groupNext = new Map<number, AssetPlacement>();
+      for (const gi of groupPrev.keys()) {
+        const q = this.map.placements[gi];
+        if (q) groupNext.set(gi, { ...q });
+      }
+      const applyGroup = (snaps: Map<number, AssetPlacement>): void => {
+        for (const [gi, snap] of snaps) this.restorePlacementSnapshot(gi, snap);
       };
       this.pushUndo({
         label: 'move-placements',
@@ -2753,6 +6076,48 @@ export class EditorApp {
       undo: () => this.restorePlacementSnapshot(index, prev),
       redo: () => this.restorePlacementSnapshot(index, next),
     });
+  }
+
+  /** Apply the collision-block fields of an inspector change to ONE placement.
+   *  Shared by the active selection and, for a multi-selection, every other
+   *  selected member so the collision dropdown/sliders retarget the whole group
+   *  in one edit. `index` is the placement's own index (for the hitbox-edit
+   *  guard); `p` is that placement. */
+  private applyCollisionFields(
+    p: AssetPlacement,
+    change: {
+      collide?: boolean;
+      collisionMode?: CollisionMode;
+      collideRadius?: number | null;
+      collideShape?: 'square' | null;
+    },
+    index: number,
+  ): void {
+    if (change.collide !== undefined) p.collide = change.collide;
+    if (change.collisionMode !== undefined) {
+      p.collisionMode = change.collisionMode;
+      // `collide` mirrors the mode so legacy consumers (2D overlay, playtest
+      // projection) keep working; 'none' is the only walk-through mode.
+      p.collide = change.collisionMode !== 'none';
+      if (change.collisionMode !== 'baked' && this.hitboxEdit?.index === index) {
+        this.exitHitboxEdit();
+      }
+      if (change.collisionMode === 'mesh') this.ensureMeshCollision(p.assetId);
+    }
+    if (change.collideRadius !== undefined) {
+      // number = set the override (clamped), null = back to the derived auto.
+      if (change.collideRadius === null) delete p.collideRadius;
+      else {
+        p.collideRadius = Math.min(
+          MAX_COLLIDE_RADIUS,
+          Math.max(MIN_COLLIDE_RADIUS, change.collideRadius),
+        );
+      }
+    }
+    if (change.collideShape !== undefined) {
+      if (change.collideShape === 'square') p.collideShape = 'square';
+      else delete p.collideShape;
+    }
   }
 
   /** Undo/redo restore of a full placement snapshot. Object.assign alone would
@@ -2784,6 +6149,9 @@ export class EditorApp {
     if (snap.groundY === undefined) delete p.groundY;
     if (snap.name === undefined) delete p.name;
     if (snap.hidden === undefined) delete p.hidden;
+    if (snap.collisionMode === undefined) delete p.collisionMode;
+    if (snap.hitboxes === undefined) delete p.hitboxes;
+    if (this.hitboxEdit?.index === index) this.syncHitboxEditView();
     this.viewport3d?.rebuildPlacements();
     this.canvasDirty = true;
   }
@@ -2842,7 +6210,9 @@ export class EditorApp {
       }
       return;
     }
-    this.updateSelectedPlacement({ x: w.x, z: w.z }, false, { detachOnMove: true });
+    this.updateSelectedPlacement({ x: w.x, z: w.z }, false, {
+      detachOnMove: true,
+    });
   }
 
   /** Release: ONE commit diffed against the pre-drag base (single Ctrl+Z). */
@@ -2873,7 +6243,9 @@ export class EditorApp {
     const yaw =
       this.viewMode === '3d' ? (this.viewport3d?.cameraYaw() ?? NORTH_UP_YAW) : NORTH_UP_YAW;
     const d = nudgeDelta(key, yaw, big ? NUDGE_STEP_BIG_YD : NUDGE_STEP_YD);
-    this.updateSelectedPlacement({ x: p.x + d.dx, z: p.z + d.dz }, false, { detachOnMove: true });
+    this.updateSelectedPlacement({ x: p.x + d.dx, z: p.z + d.dz }, false, {
+      detachOnMove: true,
+    });
     this.scheduleTransformCommit();
   }
 
@@ -2895,6 +6267,98 @@ export class EditorApp {
     this.transformCoalescer.cancel();
     window.clearTimeout(this.transformTimer);
     this.updateSelectedPlacement({}, true);
+  }
+
+  private copySelection(): void {
+    if (this.selectedPlacement !== null) {
+      const indices =
+        this.selectedSet.size > 0 ? this.selectedSet : new Set([this.selectedPlacement]);
+      const items = copyPlacementSelection(this.map.placements, indices);
+      if (items.length > 0) this.selectionClipboard = { kind: 'placements', items };
+    } else if (this.selectedMobCamps.size > 0) {
+      const items = copyCampSelection(new Set(this.selectedMobCamps.values()));
+      if (items.length > 0) this.selectionClipboard = { kind: 'mobs', items };
+    } else if (this.selectedNpcKeys.size > 0) {
+      const items = copyNpcSelection(this.map.content.npcs, this.selectedNpcKeys);
+      if (items.length > 0) this.selectionClipboard = { kind: 'npcs', items };
+    } else {
+      this.toasts.info(t('editor.status.selectionNothingToCopy'));
+      return;
+    }
+    const count = this.selectionClipboard?.items.length ?? 0;
+    this.toasts.success(t('editor.status.selectionCopied', { count }));
+  }
+
+  private pasteSelection(): void {
+    const clipboard = this.selectionClipboard;
+    if (!clipboard) {
+      this.toasts.info(t('editor.status.selectionNothingToPaste'));
+      return;
+    }
+    if (clipboard.kind === 'placements') {
+      const start = this.map.placements.length;
+      this.appendPlacements(pastePlacementSelection(clipboard.items, 2, 2), 'paste-placements');
+      const added = this.map.placements.length - start;
+      if (added <= 0) return;
+      const indices = Array.from({ length: added }, (_, index) => start + index);
+      this.setSelectedPlacement(indices[indices.length - 1]);
+      this.selectedSet = new Set(indices);
+      this.syncMultiSelectionView();
+      this.inspector.refresh();
+      this.toasts.success(t('editor.status.selectionPasted', { count: added }));
+      return;
+    }
+    if (clipboard.kind === 'mobs') {
+      const room = capRoom(this.camps().length, MAX_CAMPS);
+      const accepted = pasteCampSelection(clipboard.items.slice(0, room), 2, 2);
+      if (accepted.length < clipboard.items.length) {
+        this.toasts.error(t('editor.status.entityCapReached'));
+      }
+      if (accepted.length === 0) return;
+      const start = appendSpan(this.camps(), accepted);
+      this.clearMobSelection();
+      this.map.meta.updatedAt = now();
+      this.refreshEntityWorld();
+      this.pushUndo({
+        label: 'paste-mobs',
+        undo: () => {
+          removeSpan(this.camps(), start, accepted);
+          this.refreshEntityWorld();
+        },
+        redo: () => {
+          this.camps().push(...accepted);
+          this.refreshEntityWorld();
+        },
+      });
+      this.inspector.refresh();
+      this.toasts.success(t('editor.status.selectionPasted', { count: accepted.length }));
+      return;
+    }
+
+    const npcs = this.map.content.npcs as Record<string, NpcDef>;
+    const room = capRoom(Object.keys(npcs).length, MAX_NPCS);
+    const accepted = pasteNpcSelection(npcs, clipboard.items.slice(0, room), 2, 2);
+    if (accepted.length < clipboard.items.length) {
+      this.toasts.error(t('editor.status.entityCapReached'));
+    }
+    if (accepted.length === 0) return;
+    const insert = (): void => {
+      for (const { key, npc } of accepted) npcs[key] = npc;
+      this.selectedNpcKeys = new Set(accepted.map(({ key }) => `npc:${key}`));
+      this.selectedKey = `npc:${accepted[accepted.length - 1].key}`;
+      this.refreshEntityWorld();
+    };
+    const remove = (): void => {
+      for (const { key } of accepted) delete npcs[key];
+      this.selectedKey = null;
+      this.clearNpcSelection();
+      this.refreshEntityWorld();
+    };
+    insert();
+    this.map.meta.updatedAt = now();
+    this.pushUndo({ label: 'paste-npcs', undo: remove, redo: insert });
+    this.inspector.refresh();
+    this.toasts.success(t('editor.status.selectionPasted', { count: accepted.length }));
   }
 
   private duplicateSelectedPlacement(): void {
@@ -3088,40 +6552,215 @@ export class EditorApp {
     this.markDirty();
   }
 
+  private clearMobSelection(): void {
+    this.selectedMobIds.clear();
+    this.selectedMobCamps.clear();
+    this.mobDragStart = null;
+    this.viewport3d?.setSelectedRuntimeMobs(this.selectedMobIds);
+  }
+
+  private clearNpcSelection(): void {
+    this.selectedNpcKeys.clear();
+    this.npcDragBase = null;
+    this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+  }
+
+  /** Rebuild authored NPC/mob entities after a structural paste or undo. */
+  private refreshEntityWorld(): void {
+    this.entities = buildEntities(this.content);
+    this.base = snapshot(this.entities);
+    this.rebuildActiveWorld();
+    this.canvasDirty = true;
+    this.markDirty();
+    if (!this.viewport3d) return;
+    this.show3dLoading();
+    void this.viewport3d.reload(this.map).then(() => {
+      this.hide3dLoading();
+      this.syncFootprintOverlay();
+      this.viewport3d?.setSelectedRuntimeNpcs(this.selectedNpcKeys);
+    });
+  }
+
+  /** Live-facing slider for selected NPCs, committed as one undo entry. */
+  private updateNpcFacing(key: string, facing: number, commit: boolean): void {
+    if (!key.startsWith('npc:') || !Number.isFinite(facing)) return;
+    const npcId = key.slice('npc:'.length);
+    const npc = this.map.content.npcs[npcId];
+    if (!npc) return;
+    if (!this.npcFacingDragBase || this.npcFacingDragBase.key !== key) {
+      this.npcFacingDragBase = { key, facing: npc.facing };
+    }
+    npc.facing = facing;
+    this.viewport3d?.setMapNpcFacing(key, facing);
+    this.canvasDirty = true;
+    if (!commit) return;
+
+    const previous = this.npcFacingDragBase.facing;
+    this.npcFacingDragBase = null;
+    if (previous === facing) return;
+    const apply = (value: number): void => {
+      npc.facing = value;
+      this.viewport3d?.setMapNpcFacing(key, value);
+      this.canvasDirty = true;
+    };
+    this.pushUndo({
+      label: 'rotate-npc',
+      undo: () => apply(previous),
+      redo: () => apply(facing),
+    });
+    this.map.meta.updatedAt = now();
+  }
+
+  /**
+   * Turn the picked mob's group camp into compatible one-mob camps. This is
+   * what makes an individual selection survive JSON export and a later import.
+   */
+  private individualCampForRuntimeMob(entityId: number): CampDef | null {
+    const runtime = this.viewport3d?.runtimeMobCamp(entityId);
+    if (!runtime) return null;
+    const camps = this.camps();
+    const original = camps[runtime.campIndex];
+    if (!original) return null;
+    if (original.count === 1) return original;
+
+    const individuals = splitCampIntoIndividuals(
+      original,
+      runtime.members.map((member) => ({ x: member.x, z: member.z })),
+    );
+    if (individuals.length === 0) return null;
+    const campByMobId = new Map(
+      runtime.members
+        .slice(0, individuals.length)
+        .map((member, index) => [member.id, individuals[index]]),
+    );
+    const selected = campByMobId.get(entityId);
+    if (!selected) return null;
+
+    const insertionIndex = runtime.campIndex;
+    camps.splice(insertionIndex, 1, ...individuals);
+    this.selectedCamp = null;
+    this.afterCampsChanged();
+    const clearAndRefresh = (): void => {
+      this.clearMobSelection();
+      this.afterCampsChanged();
+      this.inspector.refresh();
+    };
+    this.pushUndo({
+      label: 'split-mob-camp',
+      undo: () => {
+        const first = this.camps().indexOf(individuals[0]);
+        if (first >= 0) this.camps().splice(first, individuals.length, original);
+        clearAndRefresh();
+      },
+      redo: () => {
+        const index = this.camps().indexOf(original);
+        this.camps().splice(
+          index >= 0 ? index : insertionIndex,
+          index >= 0 ? 1 : 0,
+          ...individuals,
+        );
+        clearAndRefresh();
+      },
+    });
+    return selected;
+  }
+
   // ---- spawn -----------------------------------------------------------------------
 
-  private setSpawn(w: Vec2): void {
-    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
-    const next = { x: Math.round(w.x * 10) / 10, z: Math.round(w.z * 10) / 10 };
-    const apply = (v: { x: number; z: number } | null): void => {
-      if (v) this.map.playerStart = { ...v };
-      else delete this.map.playerStart;
-      this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
-      this.viewport3d?.setSpawnMarker(v);
+  private finishSpawnArea(): void {
+    const start = this.spawnAreaStart;
+    const area = this.spawnAreaPreview;
+    this.spawnAreaStart = null;
+    if (!start || !area) return;
+    const width = area.maxX - area.minX;
+    const height = area.maxZ - area.minZ;
+    if (width < 2 || height < 2) {
+      this.spawnAreaPreview = null;
+      this.viewport3d?.setZonePreview(null);
+      this.setSpawn(start);
+      return;
+    }
+    const prev = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const next = {
+      minX: Math.round(area.minX * 10) / 10,
+      minZ: Math.round(area.minZ * 10) / 10,
+      maxX: Math.round(area.maxX * 10) / 10,
+      maxZ: Math.round(area.maxZ * 10) / 10,
+    };
+    const apply = (value: typeof next | null): void => {
+      if (value) this.map.playerSpawnArea = { ...value };
+      else delete this.map.playerSpawnArea;
+      if (value) this.activeWorld.playerSpawnArea = { ...value };
+      else delete this.activeWorld.playerSpawnArea;
+      this.spawnAreaPreview = value ? { ...value } : null;
+      this.viewport3d?.setZonePreview(value);
       this.canvasDirty = true;
     };
     apply(next);
     this.map.meta.updatedAt = now();
     this.pushUndo({
-      label: 'set-spawn',
+      label: 'set-spawn-area',
       undo: () => apply(prev),
       redo: () => apply(next),
+    });
+    this.markDirty();
+    this.inspector.refresh();
+  }
+
+  private setSpawn(w: Vec2): void {
+    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
+    const prevArea = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const next = { x: Math.round(w.x * 10) / 10, z: Math.round(w.z * 10) / 10 };
+    const apply = (
+      v: { x: number; z: number } | null,
+      area: CustomMap['playerSpawnArea'] | null,
+    ): void => {
+      if (v) this.map.playerStart = { ...v };
+      else delete this.map.playerStart;
+      if (area) this.map.playerSpawnArea = { ...area };
+      else delete this.map.playerSpawnArea;
+      this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
+      if (area) this.activeWorld.playerSpawnArea = { ...area };
+      else delete this.activeWorld.playerSpawnArea;
+      this.viewport3d?.setSpawnMarker(v);
+      this.viewport3d?.setZonePreview(area ?? null);
+      this.canvasDirty = true;
+    };
+    apply(next, null);
+    this.map.meta.updatedAt = now();
+    this.pushUndo({
+      label: 'set-spawn',
+      undo: () => apply(prev, prevArea),
+      redo: () => apply(next, null),
     });
     this.inspector.refresh();
   }
 
   private clearSpawn(): void {
-    if (!this.map.playerStart) return;
-    const prev = { ...this.map.playerStart };
-    const apply = (v: { x: number; z: number } | null): void => {
+    if (!this.map.playerStart && !this.map.playerSpawnArea) return;
+    const prev = this.map.playerStart ? { ...this.map.playerStart } : null;
+    const prevArea = this.map.playerSpawnArea ? { ...this.map.playerSpawnArea } : null;
+    const apply = (
+      v: { x: number; z: number } | null,
+      area: CustomMap['playerSpawnArea'] | null,
+    ): void => {
       if (v) this.map.playerStart = { ...v };
       else delete this.map.playerStart;
+      if (area) this.map.playerSpawnArea = { ...area };
+      else delete this.map.playerSpawnArea;
       this.activeWorld.playerStart = v ? { ...v } : { ...PLAYER_START };
+      if (area) this.activeWorld.playerSpawnArea = { ...area };
+      else delete this.activeWorld.playerSpawnArea;
       this.viewport3d?.setSpawnMarker(v);
+      this.viewport3d?.setZonePreview(area ?? null);
       this.canvasDirty = true;
     };
-    apply(null);
-    this.pushUndo({ label: 'clear-spawn', undo: () => apply(prev), redo: () => apply(null) });
+    apply(null, null);
+    this.pushUndo({
+      label: 'clear-spawn',
+      undo: () => apply(prev, prevArea),
+      redo: () => apply(null, null),
+    });
   }
 
   // ---- water ------------------------------------------------------------------------
@@ -3157,6 +6796,40 @@ export class EditorApp {
     });
   }
 
+  private applyWaterTint(hue: number | null, lum: number | null): void {
+    if (hue === null) this.map.waterHue = undefined;
+    else this.map.waterHue = Math.min(360, Math.max(0, hue));
+    if (lum === null) this.map.waterLum = undefined;
+    else this.map.waterLum = Math.min(1, Math.max(0, lum));
+    if (this.map.waterHue !== undefined) this.activeWorld.waterHue = this.map.waterHue;
+    else delete this.activeWorld.waterHue;
+    if (this.map.waterLum !== undefined) this.activeWorld.waterLum = this.map.waterLum;
+    else delete this.activeWorld.waterLum;
+  }
+
+  private previewWaterTint(hue: number | null, lum: number | null): void {
+    this.applyWaterTint(hue, lum);
+    window.clearTimeout(this.waterTimer);
+    this.waterTimer = window.setTimeout(() => this.viewport3d?.rebuildWater(), WATER_DEBOUNCE_MS);
+  }
+
+  private commitWaterTint(hue: number | null, lum: number | null): void {
+    const prevHue = this.map.waterHue ?? null;
+    const prevLum = this.map.waterLum ?? null;
+    if (prevHue === hue && prevLum === lum) return;
+    const apply = (h: number | null, l: number | null): void => {
+      this.applyWaterTint(h, l);
+      this.viewport3d?.rebuildWater();
+    };
+    apply(hue, lum);
+    this.map.meta.updatedAt = now();
+    this.pushUndo({
+      label: 'water-tint',
+      undo: () => apply(prevHue, prevLum),
+      redo: () => apply(hue, lum),
+    });
+  }
+
   // ---- region clipboard ---------------------------------------------------------------
 
   private copyRegion(): void {
@@ -3177,7 +6850,10 @@ export class EditorApp {
       .map((e) => ({ ...e, x: e.x - cx, z: e.z - cz }));
     this.clipboard = { placements, edits };
     this.toasts.success(
-      t('editor.region.copied', { assets: placements.length, edits: edits.length }),
+      t('editor.region.copied', {
+        assets: placements.length,
+        edits: edits.length,
+      }),
     );
   }
 
@@ -3204,7 +6880,11 @@ export class EditorApp {
       x: p.x + world.x,
       z: p.z + world.z,
     }));
-    const edits = eClamp.accepted.map((e) => ({ ...e, x: e.x + world.x, z: e.z + world.z }));
+    const edits = eClamp.accepted.map((e) => ({
+      ...e,
+      x: e.x + world.x,
+      z: e.z + world.z,
+    }));
     if (placements.length === 0 && edits.length === 0) return;
     let region: RegionBox | null = null;
     for (const e of edits) region = unionRegion(region, stampRegion(e));
@@ -3302,7 +6982,10 @@ export class EditorApp {
     }
     this.appendPlacements(placed, 'procgen-scatter');
     this.toasts.success(
-      t('editor.procgen.scattered', { count: placed.length, category: category ?? '' }),
+      t('editor.procgen.scattered', {
+        count: placed.length,
+        category: category ?? '',
+      }),
     );
   }
 
@@ -3425,7 +7108,10 @@ export class EditorApp {
     try {
       const link = await this.io.saveServer(this.map);
       this.finishSave(
-        t('editor.status.savedServer', { name: this.map.meta.name, version: link.version }),
+        t('editor.status.savedServer', {
+          name: this.map.meta.name,
+          version: link.version,
+        }),
         link.version,
         generation,
         auto,
@@ -3505,7 +7191,10 @@ export class EditorApp {
       const link = await this.io.saveServerAsCopy(this.map);
       this.io.saveLocal(this.map);
       this.finishSave(
-        t('editor.status.savedServer', { name: this.map.meta.name, version: link.version }),
+        t('editor.status.savedServer', {
+          name: this.map.meta.name,
+          version: link.version,
+        }),
         link.version,
         generation,
       );
@@ -3569,7 +7258,10 @@ export class EditorApp {
     parsed.meta.name = full.name;
     this.loadMap(parsed);
     if (mine) {
-      this.io.setLink(parsed.meta.id, { serverId: full.id, version: full.version });
+      this.io.setLink(parsed.meta.id, {
+        serverId: full.id,
+        version: full.version,
+      });
       this.topbar.setForkEnabled(true);
       this.topbar.setSaveState(t('editor.topbar.savedServer', { version: full.version }));
     } else {
@@ -3694,7 +7386,9 @@ export class EditorApp {
       if (picker) {
         try {
           const root = await picker.call(window, { mode: 'readwrite' });
-          const dir = await root.getDirectoryHandle(`${safe} map bundle`, { create: true });
+          const dir = await root.getDirectoryHandle(`${safe} map bundle`, {
+            create: true,
+          });
           const writeFile = async (name: string, data: Uint8Array): Promise<void> => {
             const fh = await dir.getFileHandle(name, { create: true });
             const w = await fh.createWritable();
@@ -3731,10 +7425,29 @@ export class EditorApp {
       a.remove();
       URL.revokeObjectURL(url);
       this.toasts.success(t('editor.status.bundleExported', { name: this.map.meta.name }));
-    } catch {
-      // Bundle build failed (blocked storage?): at least export the JSON.
-      downloadMap(this.map);
-      this.toasts.success(t('editor.status.exported', { name: this.map.meta.name }));
+    } catch (error) {
+      if (error instanceof BundleDependencyError) {
+        this.toasts.error(t('editor.status.exportBlockedMissingDeps', { count: error.missing }));
+        return;
+      }
+      if (error instanceof ExportCompatibilityError) {
+        this.toasts.error(t('editor.status.exportBlockedInvalid'));
+        return;
+      }
+      const refs = bundleDependencyRefs(this.map);
+      const dependencyCount = refs.models.length + refs.textures.length + refs.skyboxes.length;
+      if (dependencyCount > 0) {
+        this.toasts.error(t('editor.status.exportBlockedMissingDeps', { count: dependencyCount }));
+        return;
+      }
+      // Folder/zip assembly failed for a dependency-free map. The canonical
+      // JSON still passes the same engine preflight through downloadMap().
+      try {
+        downloadMap(this.map);
+        this.toasts.success(t('editor.status.exported', { name: this.map.meta.name }));
+      } catch {
+        this.toasts.error(t('editor.status.exportBlockedInvalid'));
+      }
     }
   }
 
@@ -3845,15 +7558,25 @@ export class EditorApp {
     this.map.meta.updatedAt = now();
     const generation = this.editGen.current;
     if (this.io.saveLocal(this.map)) {
+      clearPlaytestRecoveryDraft(this.map.meta.id);
       this.finishSave(
         t('editor.status.savedLocalOnly', { name: this.map.meta.name }),
         null,
         generation,
         true,
       );
-    } else if (this.dirty) {
-      // Blocked store: fall back to the draft slot so edits still survive.
-      this.io.draftSave(this.map);
+    } else {
+      // Blocked store: require a launch draft before leaving the editor, so the
+      // browser Back button can recover this exact document even if playtest
+      // navigation fails before the game boots.
+      const draftSaved = this.io.draftSave(this.map);
+      const recoverySaved = draftSaved || savePlaytestRecoveryDraft(this.map);
+      if (!recoverySaved) {
+        this.dirty = true;
+        this.topbar.setDirty(true);
+        this.toasts.error(t('editor.status.playtestFailed'));
+        return;
+      }
     }
     try {
       sessionStorage.setItem(PLAYTEST_RESUME_KEY, this.map.meta.id);
@@ -3892,9 +7615,26 @@ export class EditorApp {
         const name = file.name.replace(/\.glb$/i, '');
         const { asset, existing } = await uploadAsset(bytes, name);
         registerUserAssets([
-          { id: asset.id, sha256: asset.sha256, name: asset.name, byteSize: asset.byteSize },
+          {
+            id: asset.id,
+            sha256: asset.sha256,
+            name: asset.name,
+            byteSize: asset.byteSize,
+          },
         ]);
         const assetId = userAssetIdFor(asset.sha256);
+        // One-time collision bake from the just-uploaded bytes (the server
+        // copy is identical): the boxes ride the map doc keyed by the user id.
+        const bakeUrl = URL.createObjectURL(new Blob([bytes], { type: 'model/gltf-binary' }));
+        void bakeImportedModelCollision(bakeUrl)
+          .then((boxes) => {
+            if (!boxes || boxes.length === 0) return;
+            if (!this.map.assetCollision) this.map.assetCollision = {};
+            this.map.assetCollision[assetId] = boxes;
+            this.viewport3d?.setAssetCollisionOverrides();
+            this.markDirty();
+          })
+          .finally(() => URL.revokeObjectURL(bakeUrl));
         this.placeAssetId = assetId;
         this.placeAssetLabel = asset.name ?? asset.sha256.slice(0, 8);
         this.setTool('place');
@@ -3956,17 +7696,19 @@ export class EditorApp {
             (Math.round(rSum / n) << 16) | (Math.round(gSum / n) << 8) | Math.round(bSum / n);
           const label = file.name.replace(/\.[a-z0-9]+$/i, '').slice(0, MAX_SWATCH_LABEL_LENGTH);
           // Persist the image (content-addressed) so painting tiles the REAL
-          // texture; the average color stays as the no-texture fallback.
+          // texture; the average color stays as the no-texture fallback. The
+          // stored bytes are the COMPRESSED encoding (downscale + WebP), so
+          // the sha is computed on exactly what IndexedDB keeps.
           let sha: string | undefined;
           try {
-            const bytes = await file.arrayBuffer();
-            const digest = await crypto.subtle.digest('SHA-256', bytes);
+            const stored = await compressGroundTextureImport(img, file);
+            const digest = await crypto.subtle.digest('SHA-256', stored.bytes);
             sha = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
             await storeGroundTexture({
               sha256: sha,
               name: label,
-              mime: file.type || 'image/png',
-              bytes,
+              mime: stored.mime,
+              bytes: stored.bytes,
             });
           } catch {
             sha = undefined; // insecure context: color-only swatch
@@ -4015,7 +7757,9 @@ export class EditorApp {
           sha = `s${Date.now().toString(36)}${Math.floor(Math.random() * 1e9).toString(36)}`;
         }
         const url = URL.createObjectURL(
-          new Blob([bytes], { type: isGlb ? 'model/gltf-binary' : 'model/gltf+json' }),
+          new Blob([bytes], {
+            type: isGlb ? 'model/gltf-binary' : 'model/gltf+json',
+          }),
         );
         const name = file.name.replace(/\.(glb|gltf)$/i, '');
         const assetId = registerLocalAsset({
@@ -4031,6 +7775,15 @@ export class EditorApp {
           mime: isGlb ? 'model/gltf-binary' : 'model/gltf+json',
           bytes,
           byteSize: file.size,
+        });
+        // One-time collision bake (type-aware): the boxes ride the map doc so
+        // playtests and exports collide with the model's real silhouette.
+        void bakeImportedModelCollision(url).then((boxes) => {
+          if (!boxes || boxes.length === 0) return;
+          if (!this.map.assetCollision) this.map.assetCollision = {};
+          this.map.assetCollision[assetId] = boxes;
+          this.viewport3d?.setAssetCollisionOverrides();
+          this.markDirty();
         });
         this.placeAssetId = assetId;
         this.placeAssetLabel = name;
@@ -4103,6 +7856,7 @@ export class EditorApp {
 
   // Replace the whole working document and rebuild the editor over its content.
   private loadMap(map: CustomMap): void {
+    promoteMajorWorldProps(map as CustomMap);
     this.map = map;
     this.content = map.content;
     this.entities = buildEntities(map.content);
@@ -4110,6 +7864,9 @@ export class EditorApp {
     this.undo.clear();
     this.dirty = false;
     this.selectedKey = null;
+    this.clearMobSelection();
+    this.clearNpcSelection();
+    this.npcFacingDragBase = null;
     this.hoverKey = null;
     this.selectedPlacement = null;
     this.placementDragBase = null;
@@ -4121,10 +7878,17 @@ export class EditorApp {
     this.selectedCamp = null;
     this.regionBox = null;
     this.clipboard = null;
+    this.selectionClipboard = null;
     this.blockerStart = null;
     this.blockerPreview = null;
     this.drawingBlocker2d = false;
     this.waterBase = map.waterLevel ?? WATER_LEVEL;
+    // The map's authored lighting is the source of truth: adopt it (or clear
+    // back to the shipped rig) so the Lighting tab, the viewport, and the next
+    // playtest all agree with the document. skipDoc: this IS the doc's value.
+    this.applyLighting(map.lighting ? 'custom' : 'day', map.lighting ? { ...map.lighting } : null, {
+      skipDoc: true,
+    });
     this.rebuildActiveWorld();
     this.applySkybox();
     this.topbar.setMapName(map.meta.name);
@@ -4142,6 +7906,11 @@ export class EditorApp {
       void this.viewport3d.reload(map).then(() => {
         this.hide3dLoading();
         this.syncFootprintOverlay();
+        if (this.pendingFocus) {
+          const f = this.pendingFocus;
+          this.pendingFocus = null;
+          this.viewport3d?.focusClose(f.x, f.z, f.extent, f.y);
+        }
       });
     }
     // Make this map's saved extra assets (imported 'local/<sha>' models kept in
@@ -4184,6 +7953,16 @@ export class EditorApp {
       void this.save();
       return;
     }
+    if (mod && ev.key.toLowerCase() === 'c') {
+      ev.preventDefault();
+      this.copySelection();
+      return;
+    }
+    if (mod && ev.key.toLowerCase() === 'v') {
+      ev.preventDefault();
+      this.pasteSelection();
+      return;
+    }
     if (mod && ev.key.toLowerCase() === 'd') {
       if (this.selectedPlacement !== null) {
         ev.preventDefault();
@@ -4195,6 +7974,11 @@ export class EditorApp {
     if (ev.key === 'Escape') {
       if (this.drawer.isOpen) {
         this.drawer.close();
+        return;
+      }
+      // Hitbox edit mode: first Escape leaves the mode, keeping the selection.
+      if (this.hitboxEdit) {
+        this.exitHitboxEdit();
         return;
       }
       // A Shift+D grab in flight: drop the copies where they are.
@@ -4212,6 +7996,7 @@ export class EditorApp {
       ) {
         this.setSelectedPlacement(null);
         this.selectedKey = null;
+        this.clearNpcSelection();
         this.selectedCamp = null;
         if (this.selectedLight !== null) this.setSelectedLight(null);
         if (this.selectedMusicArea !== null) this.setSelectedMusicArea(null);
@@ -4223,8 +8008,12 @@ export class EditorApp {
       return;
     }
     if (ev.key === 'Delete') {
-      if (this.selectedPlacement !== null) this.removeSelectedPlacements();
-      else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
+      if (this.hitboxEdit && this.hitboxEdit.selected.size > 0) this.deleteSelectedHitboxes();
+      // Collision Master: the scene's one placement is the workbench, never a
+      // delete target — Delete/X only ever remove collision boxes there.
+      else if (this.selectedPlacement !== null && !this.collisionMaster) {
+        this.removeSelectedPlacements();
+      } else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
       else if (this.selectedMusicArea !== null) this.deleteMusicArea(this.selectedMusicArea);
       else if (this.selectedCamp !== null) this.deleteSelectedCamp();
       return;
@@ -4242,13 +8031,15 @@ export class EditorApp {
     }
     if (ev.key === '[' || ev.key === '{') {
       if (ev.shiftKey) this.brushStrength = Math.max(1, this.brushStrength - 1);
-      else this.brushRadius = Math.max(4, this.brushRadius - 2);
+      // Proportional steps so the keys stay useful across the whole 0.4-300yd
+      // range (matching the log brush slider).
+      else this.brushRadius = Math.max(0.4, Math.round((this.brushRadius / 1.12) * 100) / 100);
       this.inspector.refresh();
       return;
     }
     if (ev.key === ']' || ev.key === '}') {
-      if (ev.shiftKey) this.brushStrength = Math.min(30, this.brushStrength + 1);
-      else this.brushRadius = Math.min(60, this.brushRadius + 2);
+      if (ev.shiftKey) this.brushStrength = Math.min(50, this.brushStrength + 1);
+      else this.brushRadius = Math.min(300, Math.round(this.brushRadius * 1.12 * 100) / 100);
       this.inspector.refresh();
       return;
     }
@@ -4278,8 +8069,10 @@ export class EditorApp {
     // X deletes the selection (Blender-style), same as the Delete key. The
     // region tool deliberately lost this shortcut: it is click-only now.
     if (ev.key.toLowerCase() === 'x' && !ev.altKey) {
-      if (this.selectedPlacement !== null) this.removeSelectedPlacements();
-      else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
+      if (this.hitboxEdit && this.hitboxEdit.selected.size > 0) this.deleteSelectedHitboxes();
+      else if (this.selectedPlacement !== null && !this.collisionMaster) {
+        this.removeSelectedPlacements();
+      } else if (this.selectedLight !== null) this.deleteMapLight(this.selectedLight);
       else if (this.selectedMusicArea !== null) this.deleteMusicArea(this.selectedMusicArea);
       else if (this.selectedCamp !== null) this.deleteSelectedCamp();
       return;
@@ -4395,10 +8188,28 @@ export class EditorApp {
     input.click();
   }
 
-  private applyLighting(preset: string, profile: EditorLightingProfile | null): void {
+  private applyLighting(
+    preset: string,
+    profile: EditorLightingProfile | null,
+    opts?: { skipDoc?: boolean },
+  ): void {
     this.lightingPreset = preset;
     this.lighting = profile;
     this.viewport3d?.setLighting(profile);
+    // Lighting is PART OF THE MAP: it saves into the document (sanitized,
+    // projected onto WorldContent) so playtest and the shipped map render the
+    // authored rig, not just this editor session. skipDoc = a load path
+    // applying the map's own value (no dirty, no rewrite).
+    if (!opts?.skipDoc) {
+      if (profile) this.map.lighting = { ...profile };
+      else delete this.map.lighting;
+      this.map.meta.updatedAt = now();
+      this.markDirty();
+      // The projected world must carry it too, or the next playtest launch
+      // (which reuses the active world) would boot without the change.
+      if (profile) this.activeWorld.lighting = { ...profile };
+      else delete this.activeWorld.lighting;
+    }
     try {
       localStorage.setItem(LIGHTING_PREF_KEY, JSON.stringify({ preset, profile }));
     } catch {
@@ -4529,8 +8340,21 @@ export class EditorApp {
         this.authoredListsChanged();
       },
       deleteMapLight: (index) => this.deleteMapLight(index),
+      getMapSounds: () => this.map.pointSounds ?? [],
+      getSelectedSound: () => this.selectedSound,
+      setSelectedSound: (index) => this.setSelectedSound(index),
+      updateMapSound: (index, change) => {
+        const sfxNode = this.map.pointSounds?.[index];
+        if (!sfxNode) return;
+        Object.assign(sfxNode, change);
+        this.authoredListsChanged();
+      },
+      deleteMapSound: (index) => this.deleteMapSound(index),
       getMarkers: () => this.map.markers ?? [],
-      getMarkerMode: () => ({ placing: this.markerPlaceMode, kind: this.markerKind }),
+      getMarkerMode: () => ({
+        placing: this.markerPlaceMode,
+        kind: this.markerKind,
+      }),
       setMarkerMode: (change) => {
         if (change.placing !== undefined) this.markerPlaceMode = change.placing;
         if (change.kind !== undefined) this.markerKind = change.kind;
@@ -4549,7 +8373,9 @@ export class EditorApp {
         this.paintBiome = id;
       },
       getCustomSwatches: () => this.map.biomePaint?.custom ?? [],
-      addCustomSwatch: (color, label) => this.addCustomSwatch(color, label),
+      pickBuiltinTexture: (key) => this.pickBuiltinTexture(key),
+      setPaintAdjust: (change) => this.setPaintAdjust(change),
+      saveAdjustedSwatch: () => this.saveAdjustedSwatch(),
       clearBiomePaint: () => void this.confirmClearBiomePaint(),
       getAutoTexture: () => ({ ...this.autoTexture }),
       setAutoTexture: (change) => {
@@ -4558,6 +8384,10 @@ export class EditorApp {
       getSculptLower: () => this.sculptLower,
       setSculptLower: (on) => {
         this.sculptLower = on;
+      },
+      getSculptGrab: () => this.sculptGrab,
+      setSculptGrab: (on) => {
+        this.sculptGrab = on;
       },
       getFlattenSmooth: () => this.flattenSmooth,
       setFlattenSmooth: (on) => {
@@ -4576,6 +8406,84 @@ export class EditorApp {
       previewWaterLevel: (v) => this.previewWater(v),
       commitWaterLevel: (v) => this.commitWater(v),
       resetWaterLevel: () => this.commitWater(WATER_LEVEL),
+      getWaterTint: () => ({
+        hue: this.map.waterHue ?? null,
+        lum: this.map.waterLum ?? null,
+      }),
+      previewWaterTint: (hue, lum) => this.previewWaterTint(hue, lum),
+      commitWaterTint: (hue, lum) => this.commitWaterTint(hue, lum),
+      resetWaterTint: () => this.commitWaterTint(null, null),
+      getFluidKind: () => this.fluidKind,
+      setFluidKind: (kind) => {
+        this.fluidKind = kind;
+      },
+      getRockParams: () => ({ ...this.rockParams }),
+      setRockParams: (change) => {
+        Object.assign(this.rockParams, change);
+      },
+      getRockChainState: () => ({
+        mode: this.rockChainMode,
+        count: this.pendingRockRig()?.points.length ?? 0,
+      }),
+      setRockChainMode: (on) => {
+        this.rockChainMode = on;
+        // Leaving chain mode keeps any laid points: they are real placements
+        // now (movable, undoable); Clear removes them explicitly.
+      },
+      generateRockChain: () => this.generateRockChain(),
+      clearRockChain: () => {
+        this.clearRockChain();
+        this.inspector.refresh();
+      },
+      getTunnelMode: () => this.tunnelMode,
+      setTunnelMode: (mode) => {
+        this.tunnelMode = mode;
+        this.refreshHoleGuides();
+      },
+      getCaves: () =>
+        (this.map.caves ?? []).map((c, i) => ({
+          index: i,
+          nodes: c.nodes.length,
+          width: c.width ?? 1,
+          height: c.height ?? 1,
+          variance: c.variance ?? 0,
+          floorVariance: c.floorVariance ?? 0,
+          stalactites: c.stalactites ?? 0,
+          stalagmites: c.stalagmites ?? 0,
+          spikeSize: c.spikeSize ?? 1,
+          startOpen: c.startOpen !== false,
+          endOpen: c.endOpen !== false,
+          tex: c.tex ?? null,
+          texTile: c.texTile ?? null,
+        })),
+      getHoles: () =>
+        (this.map.holes ?? []).map((h, i) => ({
+          index: i,
+          radius: h.radius,
+        })),
+      getHolePatches: () =>
+        (this.map.holePatches ?? []).map((h, i) => ({
+          index: i,
+          radius: h.radius,
+        })),
+      getCavePairState: () => {
+        const caves = this.map.caves ?? [];
+        const pending = this.caveRigs().filter((r) => !caves.some((c) => c.id === r.id));
+        return {
+          // A rig still needs points while it has only its entrance.
+          pendingExit: pending.some((r) => r.points.length === 1),
+          readyToGenerate: pending.filter((r) => r.points.length >= 2).length,
+        };
+      },
+      generateCaves: () => this.generatePendingCaves(),
+      updateCave: (index, change, commit) => this.updateCave(index, change, commit),
+      reverseCave: (index) => this.reverseCave(index),
+      deleteCave: (index) => this.deleteCave(index),
+      selectWholeCave: (index) => this.selectWholeCave(index),
+      updateHole: (index, change, commit) => this.updateHole(index, change, commit),
+      deleteHole: (index) => this.deleteHole(index),
+      updateHolePatch: (index, change, commit) => this.updateHolePatch(index, change, commit),
+      deleteHolePatch: (index) => this.deleteHolePatch(index),
       getPlaceScale: () => this.placeScale,
       setPlaceScale: (v) => {
         this.placeScale = v;
@@ -4609,7 +8517,27 @@ export class EditorApp {
       },
       updateCamp: (change) => this.updateSelectedCamp(change),
       deleteCamp: () => this.deleteSelectedCamp(),
+      getSelectedMovableEntity: () => {
+        if (this.selectedMobIds.size > 0) {
+          const count = this.selectedMobIds.size;
+          return {
+            key: `mobs:${[...this.selectedMobIds].join(',')}`,
+            name: count === 1 ? '1 mob' : `${count} mobs`,
+            facing: null,
+          };
+        }
+        const entity = this.entities.find((candidate) => candidate.key === this.selectedKey);
+        if (!entity || !isMovableEntity(entity)) return null;
+        const npcId = entity.key.startsWith('npc:') ? entity.key.slice('npc:'.length) : null;
+        return {
+          key: entity.key,
+          name: entity.label,
+          facing: npcId ? (this.map.content.npcs[npcId]?.facing ?? null) : null,
+        };
+      },
+      updateMovableEntityFacing: (key, facing, commit) => this.updateNpcFacing(key, facing, commit),
       getSpawn: () => this.map.playerStart ?? null,
+      getSpawnArea: () => this.map.playerSpawnArea ?? null,
       clearSpawn: () => this.clearSpawn(),
       copyRegion: () => this.copyRegion(),
       pasteBeside: () => this.pasteBeside(),
@@ -4621,6 +8549,8 @@ export class EditorApp {
       setFoliage: (change) => {
         Object.assign(this.foliage, change);
       },
+      hasAmbientFoliage: () => this.hasAmbientFoliage(),
+      makeAmbientFoliageEditable: () => this.makeAmbientFoliageEditable(),
       getFoliageCustom: () => (this.foliageCustom ? { ...this.foliageCustom } : null),
       pickFoliageCustom: () => {
         // Reuse the currently-selected asset in the browser (same id the Place
@@ -4669,6 +8599,20 @@ export class EditorApp {
           collide: p.collide,
           collideRadius: p.collideRadius ?? null,
           collideShape: p.collideShape ?? null,
+          collisionMode: effectiveCollisionMode(p),
+          hitboxCount:
+            p.hitboxes?.length ??
+            ASSET_COLLISION[p.assetId]?.length ??
+            this.map.assetCollision?.[p.assetId]?.length ??
+            0,
+          hasHitboxEdits: (p.hitboxes?.length ?? 0) > 0,
+          hasHitboxPreset: !!this.hitboxPresets[p.assetId],
+          sameAssetCount: this.map.placements.reduce(
+            (n, q, qi) => (qi !== i && q.assetId === p.assetId ? n + 1 : n),
+            0,
+          ),
+          meshBakeReady: !!this.map.assetCollisionMesh?.[p.assetId],
+          meshBakePending: this.meshBakesInFlight.has(p.assetId),
           colliderKind: kind,
           tint: p.tint ?? null,
           opacity: p.opacity ?? null,
@@ -4678,12 +8622,29 @@ export class EditorApp {
           sizeX: p.sizeX ?? null,
           sizeY: p.sizeY ?? null,
           sizeZ: p.sizeZ ?? null,
+          fluidKind: fluidKindFor(p.assetId),
+          hue: p.hue ?? null,
+          lum: p.lum ?? null,
+          fluidDps: p.fluidDps ?? null,
+          fluidFx: p.fluidFx ?? null,
+          rockSeed: p.rockSeed ?? null,
+          rockNoise: p.rockNoise ?? null,
+          rockDetail: p.rockDetail ?? null,
+          rockSharp: p.rockSharp ?? null,
+          rockTex: p.rockTex ?? null,
+          rockHeight: p.rockHeight ?? null,
+          rockDepth: p.rockDepth ?? null,
+          rockJag: p.rockJag ?? null,
+          rockTexId: p.rockTexId ?? null,
+          rockTexTile: p.rockTexTile ?? null,
         };
       },
       updateSelection: (change, commit) => this.updateSelectedPlacement(change, commit),
       duplicateSelection: () => this.duplicateSelectedPlacement(),
       deleteSelection: () => this.removeSelectedPlacements(),
       getSelectionCount: () => this.selectedSet.size,
+      getBakedCollisionCount: (assetId) =>
+        ASSET_COLLISION[assetId]?.length ?? this.map.assetCollision?.[assetId]?.length ?? 0,
       getFreeFly: () => this.freeFlyOn,
       setFreeFly: (on) => this.setFreeFly(on),
       getInvertPan: () => this.invertPanOn,
@@ -4764,6 +8725,12 @@ export class EditorApp {
         this.viewport3d?.setCollidersHidden(on);
         writePref(HIDE_COLLIDERS_PREF_KEY, on);
       },
+      getLocationsHidden: () => this.locationsHiddenOn,
+      setLocationsHidden: (on) => {
+        this.locationsHiddenOn = on;
+        this.viewport3d?.setLocationsHidden(on);
+        writePref(HIDE_LOCATIONS_PREF_KEY, on);
+      },
       getCameraSpeeds: () => ({ ...this.cameraSpeeds }),
       setCameraSpeeds: (change) => {
         Object.assign(this.cameraSpeeds, change);
@@ -4802,7 +8769,10 @@ export class EditorApp {
         this.musicChanged();
       },
       deleteMusicArea: (index) => this.deleteMusicArea(index),
-      getLighting: () => ({ preset: this.lightingPreset, profile: this.effectiveLighting() }),
+      getLighting: () => ({
+        preset: this.lightingPreset,
+        profile: this.effectiveLighting(),
+      }),
       setLightingPreset: (key) => this.setLightingPreset(key),
       updateLighting: (change) => this.updateLighting(change),
       getBirds: () => ({ ...this.birds }),
@@ -4826,8 +8796,62 @@ export class EditorApp {
       getFootprints: () => this.footprintsOn,
       setFootprints: (on) => {
         this.footprintsOn = on;
+        writePref(FOOTPRINTS_PREF_KEY, on);
         this.syncFootprintOverlay();
       },
+      // ---- collision hitbox editing + presets --------------------------------
+      getHitboxEdit: () => {
+        const he = this.hitboxEdit;
+        if (!he) return null;
+        const p = this.map.placements[he.index];
+        return {
+          count: p?.hitboxes?.length ?? 0,
+          selectedCount: he.selected.size,
+        };
+      },
+      enterHitboxEdit: () => this.enterHitboxEdit(),
+      exitHitboxEdit: () => this.exitHitboxEdit(),
+      addHitbox: () => this.addHitbox(),
+      deleteSelectedHitboxes: () => this.deleteSelectedHitboxes(),
+      resetHitboxes: () => this.resetHitboxes(),
+      saveHitboxPreset: () => this.saveHitboxPreset(),
+      clearHitboxPreset: () => this.clearHitboxPreset(),
+      copyCollisionToSameAsset: () => void this.copyCollisionToSameAsset(),
+      // ---- Collision Master ---------------------------------------------------
+      getCollisionMaster: () => this.collisionMasterVm(),
+      collisionMasterStarter: (kind) => this.collisionMasterStarter(kind),
+      getCollisionMasterPoly: () => this.cmPolySnap,
+      setCollisionMasterPoly: (on) => {
+        this.cmPolySnap = on;
+        this.cmPolyPoints = null;
+      },
+      collisionMasterCommit: () => void this.commitCollisionMaster(),
+      collisionMasterCancel: () => this.exitCollisionMaster(),
+      openCollisionMasterForSelection: () => {
+        const index = this.selectedPlacement;
+        const p = index === null ? undefined : this.map.placements[index];
+        if (!p) return;
+        this.enterCollisionMaster(p.assetId, this.placementLabel(p.assetId));
+      },
+      getCloneScaleRange: () => ({
+        min: this.cloneScaleMin,
+        max: this.cloneScaleMax,
+      }),
+      setCloneScaleRange: (change) => {
+        if (change.min !== undefined) {
+          this.cloneScaleMin = Math.min(
+            PLACEMENT_SCALE_MAX,
+            Math.max(PLACEMENT_SCALE_MIN, change.min),
+          );
+        }
+        if (change.max !== undefined) {
+          this.cloneScaleMax = Math.min(
+            PLACEMENT_SCALE_MAX,
+            Math.max(PLACEMENT_SCALE_MIN, change.max),
+          );
+        }
+      },
+      scaleAllSameAsset: () => void this.scaleAllSameAsset(),
       getMarkerSelection: () => {
         const e = this.entities.find((x) => x.key === this.selectedKey);
         return e ? { label: e.label, x: e.point.x, z: e.point.z } : null;
@@ -4865,7 +8889,11 @@ export class EditorApp {
           visible: this.visible.has(kind),
         })),
         // Blocker walls are a document layer, not a marker entity kind.
-        { kind: 'blocker', label: t('editor.layers.blocker'), visible: this.blockersVisible2d },
+        {
+          kind: 'blocker',
+          label: t('editor.layers.blocker'),
+          visible: this.blockersVisible2d,
+        },
       ],
       toggleLayer: (kind, on) => {
         if (kind === 'blocker') this.blockersVisible2d = on;
@@ -4890,8 +8918,10 @@ export class EditorApp {
     const apply = (v: Vec2): void => {
       const e = this.entities.find((x) => x.key === key);
       if (!e) return;
+      const from = { x: e.point.x, z: e.point.z };
       e.point.x = v.x;
       e.point.z = v.z;
+      if (isMovableEntity(e)) this.viewport3d?.moveMapEntity(e.key, from, v);
       this.markerMovedWhile2d = true;
       this.canvasDirty = true;
     };
@@ -4912,7 +8942,12 @@ export class EditorApp {
 
   private pickEntity(s: ScreenPoint): EditorEntity | null {
     const list = this.visibleEntities();
-    const handles = list.map((e) => ({ id: e.key, x: e.point.x, z: e.point.z, radius: e.radius }));
+    const handles = list.map((e) => ({
+      id: e.key,
+      x: e.point.x,
+      z: e.point.z,
+      radius: e.radius,
+    }));
     const hit = pickHandle(handles, s, this.cam, this.vp());
     return hit ? (list.find((e) => e.key === hit.id) ?? null) : null;
   }
@@ -4935,12 +8970,16 @@ export class EditorApp {
         selectedKey: this.selectedKey,
         hoverKey: this.hoverKey,
         terrainEdits: this.map.terrainEdits,
+        caves: this.map.caves ?? [],
+        holes: this.map.holes ?? [],
+        holePatches: this.map.holePatches ?? [],
         placements: this.map.placements,
         biomePaint: this.map.biomePaint ?? null,
         blockers: this.blockersVisible2d ? (this.map.blockers ?? []) : [],
         blockerPreview: this.blockerPreview,
         region: this.tool === 'region' ? this.regionBox : null,
         spawn: this.map.playerStart ?? null,
+        spawnArea: this.spawnAreaPreview ?? this.map.playerSpawnArea ?? null,
         brush:
           this.isDragTool() && this.cursorWorld
             ? {
@@ -4975,24 +9014,25 @@ export class EditorApp {
       }
       if (this.tool === 'region') {
         this.selectingRegion = true;
-        this.editStart(w);
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.tool === 'blocker') {
         this.drawingBlocker2d = true;
-        this.editStart(w);
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.isDragTool()) {
         this.painting2d = true;
-        this.editStart(w);
+        this.paint2dDragPx = 0;
+        this.editStart(w, ev);
         stage.setPointerCapture(ev.pointerId);
         return;
       }
       if (this.tool === 'place' || this.tool === 'camp' || this.tool === 'spawn') {
-        this.editStart(w);
+        this.editStart(w, ev);
         this.canvasDirty = true;
         return;
       }
@@ -5035,8 +9075,11 @@ export class EditorApp {
         this.editMove(this.cursorWorld);
       } else if (this.painting2d) {
         // Queued moves arriving after the physical release must not stroke on
-        // (same trailing-event gate as the 3D viewport).
-        if (ev.buttons !== 0) this.editMove(this.cursorWorld);
+        // (same trailing-event gate as the 3D viewport). Click jitter must not
+        // either: the world-space spacing gate is no protection zoomed out, so
+        // require a real drag before moves may stroke (the press already did).
+        this.paint2dDragPx += Math.abs(dx) + Math.abs(dy);
+        if (ev.buttons !== 0 && this.paint2dDragPx > 5) this.editMove(this.cursorWorld);
       } else if (this.dragKey) {
         const e = this.entities.find((x) => x.key === this.dragKey);
         if (e) {
@@ -5115,8 +9158,14 @@ export class EditorApp {
   private frameAll(): void {
     const pts = this.entities.map((e) => e.point);
     if (pts.length === 0) return;
-    const min = { x: Math.min(...pts.map((p) => p.x)), z: Math.min(...pts.map((p) => p.z)) };
-    const max = { x: Math.max(...pts.map((p) => p.x)), z: Math.max(...pts.map((p) => p.z)) };
+    const min = {
+      x: Math.min(...pts.map((p) => p.x)),
+      z: Math.min(...pts.map((p) => p.z)),
+    };
+    const max = {
+      x: Math.max(...pts.map((p) => p.x)),
+      z: Math.max(...pts.map((p) => p.z)),
+    };
     this.cam.frame(min, max, this.vp());
     this.canvasDirty = true;
   }
@@ -5143,4 +9192,51 @@ function mintId(): string {
   } catch {
     return `map-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
   }
+}
+
+// Imported ground textures are stored compressed: downscaled to fit 1024
+// (the splat atlas samples 512 per slot, so 1024 keeps headroom) and
+// re-encoded as WebP q0.9 (visually lossless at these sizes; the base game's
+// terrain sources are 1K jpg). Falls back to JPEG q0.92 where the browser
+// cannot encode WebP (Safari), except for PNGs that actually use alpha; and
+// keeps the ORIGINAL bytes whenever the re-encode is not smaller.
+async function compressGroundTextureImport(
+  img: HTMLImageElement,
+  file: File,
+): Promise<{ bytes: ArrayBuffer; mime: string }> {
+  const original = async (): Promise<{ bytes: ArrayBuffer; mime: string }> => ({
+    bytes: await file.arrayBuffer(),
+    mime: file.type || 'image/png',
+  });
+  const scale = Math.min(1, 1024 / Math.max(1, img.naturalWidth, img.naturalHeight));
+  const w = Math.max(1, Math.round(img.naturalWidth * scale));
+  const h = Math.max(1, Math.round(img.naturalHeight * scale));
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext('2d');
+  if (!ctx) return original();
+  ctx.drawImage(img, 0, 0, w, h);
+  const encode = (type: string, quality: number): Promise<Blob | null> =>
+    new Promise((res) => c.toBlob(res, type, quality));
+  let blob = await encode('image/webp', 0.9);
+  if (blob?.type !== 'image/webp') {
+    // No WebP encoder: JPEG drops alpha, so a PNG that uses transparency
+    // keeps its original bytes instead.
+    const isPng = (file.type || '').includes('png') || /\.png$/i.test(file.name);
+    let hasAlpha = false;
+    if (isPng) {
+      const d = ctx.getImageData(0, 0, w, h).data;
+      for (let i = 3; i < d.length; i += 4) {
+        if (d[i] < 255) {
+          hasAlpha = true;
+          break;
+        }
+      }
+    }
+    blob = hasAlpha ? null : await encode('image/jpeg', 0.92);
+    if (blob && blob.type !== 'image/jpeg') blob = null;
+  }
+  if (!blob || blob.size >= file.size) return original();
+  return { bytes: await blob.arrayBuffer(), mime: blob.type };
 }

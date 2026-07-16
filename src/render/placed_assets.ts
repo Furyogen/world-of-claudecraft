@@ -16,9 +16,11 @@
 
 import * as THREE from 'three';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
-import { GRASS_PATCH_PATH, WATERFALL_PATH } from '../sim/map_doc';
+import { type BakedCollisionBox, bakedBoxesForPath } from '../sim/asset_collision';
+import { GRASS_PATCH_PATH, ROCK_PATH, ROCK_RIDGE_PATH, WATERFALL_PATH } from '../sim/map_doc';
 import type { PlacedAsset } from '../sim/types';
 import { terrainHeight } from '../sim/world';
+import { targetHeightFor } from './asset_scale';
 import { loadGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import {
@@ -27,11 +29,9 @@ import {
   grassPatchRadius,
   grassPatchSeed,
 } from './grass_patch';
+import { buildRockChainModel, buildRockModel, rockSeed } from './rock_gen';
 import { buildWaterfallModel } from './waterfall';
 
-// Height (yards) a placed model is normalized to before its per-placement scale,
-// so arbitrary catalogue GLBs (which vary wildly in source units) land sanely.
-const TARGET_HEIGHT = 2.2;
 const RING_SEGMENTS = 40;
 const RING_LIFT = 0.08; // yards above the sampled ground, against z-fighting
 const SELECTION_COLOR = 0xd4af37; // the classic target-reticle gold
@@ -45,11 +45,12 @@ const RESEAT_MARGIN = 2;
 const MIN_NATIVE_EMISSIVE_INTENSITY = 2.2;
 // Distance culling (the base game's foliage/props hide by distance; placed
 // assets get the same treatment so thousands of decor placements stay cheap).
-// Placements cull with the terrain, at the fog/draw distance measured from the
-// camera (see updateLod), so nothing renders past where the ground has fogged
-// out. Grass is the one class that culls SOONER than the fog: it is dense and
-// cheap to lose, so it hides within this range to save draw calls.
-const LOD_RANGE_GRASS = 130;
+// EVERY placement hides past this camera distance (fading out over the band
+// below first), and sooner still where the fog or the maker's asset view
+// distance is tighter (see updateLod). Placed decor is the most expensive
+// per-model class (full-resolution GLB clones), so it gets a hard ceiling;
+// generous enough that landmark decor still reads across a vista.
+const LOD_RANGE_ASSETS = 500;
 const LOD_HYSTERESIS = 1.12; // re-show at range, re-hide at range * this
 // Fraction of the range over which a placement fades from fully opaque to
 // invisible before it is culled (base-game foliage fades near its far edge
@@ -109,6 +110,23 @@ export function reindexAfterRemoval<T>(entries: Map<number, T>, removed: number)
   }
 }
 
+// Shared unit-box edge geometry for the baked-collision footprint view (one
+// LineSegments per baked box, scaled/positioned per placement; the geometry
+// and material are module-shared, never disposed per entry).
+let boxEdges: THREE.EdgesGeometry | null = null;
+function boxEdgesGeometry(): THREE.EdgesGeometry {
+  if (!boxEdges) boxEdges = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+  return boxEdges;
+}
+const bakedFootprintMat = new THREE.LineBasicMaterial({
+  color: FOOTPRINT_COLOR,
+  transparent: true,
+  opacity: 0.9,
+  // X-ray: the collision shapes must read THROUGH the model they hug.
+  depthTest: false,
+  userData: { noWireframe: true },
+});
+
 // Shared flame profile for the placement fire effect (the campfire recipe in
 // props.ts); one geometry for every burning placement.
 let flameGeo: THREE.LatheGeometry | null = null;
@@ -142,7 +160,7 @@ interface Entry {
   placement: PlacedAsset;
   model: THREE.Object3D | null; // null until the GLB resolves (async pop-in)
   info: TemplateInfo | null;
-  footprint: THREE.Mesh | null;
+  footprint: THREE.Object3D | null; // draped ring Mesh, or baked-box wireframe Group
   // Per-entry material clones (created lazily when a shader tweak is set;
   // clones the shared template materials ONCE so overrides never leak).
   ownMats: THREE.Material[] | null;
@@ -168,6 +186,9 @@ export class PlacedAssetsView {
   private readonly entries = new Map<number, Entry>();
   private readonly templates = new Map<string, Promise<TemplateInfo | null>>();
   private footprintsOn = false;
+  // Imported-model collision bakes (MapDoc.assetCollision), for the footprint
+  // view: catalogue assets resolve into the generated table instead.
+  private assetCollision: Readonly<Record<string, readonly BakedCollisionBox[]>> | null = null;
   private selected: number | null = null;
   private selectionRing: THREE.Mesh | null = null;
   private lodCursor = 0;
@@ -237,6 +258,80 @@ export class PlacedAssetsView {
       };
       this.group.add(model);
       this.applyTransform(entry);
+      if (this.selected === index) this.refreshSelection();
+      return;
+    }
+    // Procedural generated rocks (see render/rock_gen.ts): a seeded displaced
+    // icosphere, rebuilt from the placement's rock* params, synchronously.
+    if (entry.placement.path === ROCK_PATH) {
+      const p = entry.placement;
+      const model = buildRockModel({
+        rockSeed: p.rockSeed ?? rockSeed(p.x, p.z),
+        rockNoise: p.rockNoise,
+        rockDetail: p.rockDetail,
+        rockSharp: p.rockSharp,
+        rockTex: p.rockTex,
+        rockHeight: p.rockHeight,
+        rockDepth: p.rockDepth,
+        rockJag: p.rockJag,
+        rockTexId: p.rockTexId,
+        rockTexTile: p.rockTexTile,
+        worldSize: 2.4 * (p.scale || 1),
+      });
+      const box = model.geometry.boundingBox as THREE.Box3;
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      // Ground embed: report a raised source floor so the seat calculation
+      // sinks that fraction of the rock below the terrain line.
+      const embed = Math.min(1, Math.max(0, p.rockDepth ?? 0)) * size.y * 0.7;
+      entry.model = model;
+      entry.info = {
+        object: model,
+        // Rocks land at believable boulder size (the foliage rock height).
+        norm: 2.4 / maxDim,
+        minY: box.min.y + embed,
+        maxY: box.max.y,
+        radiusSrc: Math.max(size.x, size.z) / 2 || 1,
+      };
+      this.group.add(model);
+      this.applyTransform(entry);
+      this.applyMaterialOverride(entry);
+      if (this.selected === index) this.refreshSelection();
+      return;
+    }
+    // Merged rock ridge (one solid body lofted along the chain's nodes). The
+    // node offsets are authored in world units relative to the anchor, so the
+    // model needs no normalization (norm 1); node dy values already carry the
+    // deck line, and minY 0 seats local origin on the anchor's ground.
+    if (entry.placement.path === ROCK_RIDGE_PATH) {
+      const p = entry.placement;
+      const nodes = p.rockNodes ?? [];
+      if (nodes.length < 2) return;
+      const model = buildRockChainModel(nodes, {
+        rockSeed: p.rockSeed ?? rockSeed(p.x, p.z),
+        rockNoise: p.rockNoise,
+        rockDetail: p.rockDetail,
+        rockSharp: p.rockSharp,
+        rockTex: p.rockTex,
+        rockJag: p.rockJag,
+        rockTexId: p.rockTexId,
+        rockTexTile: p.rockTexTile,
+      });
+      const box = model.geometry.boundingBox as THREE.Box3;
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      entry.model = model;
+      entry.info = {
+        object: model,
+        norm: 1,
+        minY: 0,
+        maxY: box.max.y,
+        radiusSrc: Math.max(size.x, size.z) / 2 || 1,
+      };
+      this.group.add(model);
+      this.applyTransform(entry);
+      this.applyMaterialOverride(entry);
       if (this.selected === index) this.refreshSelection();
       return;
     }
@@ -311,11 +406,21 @@ export class PlacedAssetsView {
       glow?: number | null;
       glowStrength?: number | null;
       fire?: boolean | null;
+      collideCustom?: boolean;
+      hitboxes?: PlacedAsset['hitboxes'] | null;
     },
   ): void {
     const entry = this.entries.get(index);
     if (!entry) return;
     const p = entry.placement;
+    if (change.collideCustom !== undefined) {
+      if (change.collideCustom) p.collideCustom = true;
+      else delete p.collideCustom;
+    }
+    if (change.hitboxes !== undefined) {
+      if (change.hitboxes && change.hitboxes.length > 0) p.hitboxes = change.hitboxes;
+      else delete p.hitboxes;
+    }
     if (change.detached !== undefined) p.detached = change.detached;
     if (change.groundY !== undefined) p.groundY = change.groundY;
     if (change.x !== undefined) p.x = change.x;
@@ -369,6 +474,13 @@ export class PlacedAssetsView {
     if (entry.placement.path === GRASS_PATCH_PATH && entry.model) {
       (entry.model as THREE.InstancedMesh).dispose();
     }
+    // A generated rock's geometry is per-entry (its material is shared).
+    if (
+      (entry.placement.path === ROCK_PATH || entry.placement.path === ROCK_RIDGE_PATH) &&
+      entry.model
+    ) {
+      (entry.model as THREE.Mesh).geometry.dispose();
+    }
     // A waterfall's sheet/pool geometry + materials are module-shared; only
     // its mist sprite materials are per-model.
     if (entry.placement.path === WATERFALL_PATH && entry.model) {
@@ -402,6 +514,12 @@ export class PlacedAssetsView {
   setSelected(index: number | null): void {
     this.selected = index;
     this.refreshSelection();
+  }
+
+  /** Imported-model bakes for the footprint view (doc assetCollision map). */
+  setAssetCollision(map: Readonly<Record<string, readonly BakedCollisionBox[]>> | null): void {
+    this.assetCollision = map;
+    if (this.footprintsOn) for (const entry of this.entries.values()) this.refreshFootprint(entry);
   }
 
   /** Editor-only: show/hide every colliding placement's collideRadius circle. */
@@ -476,7 +594,7 @@ export class PlacedAssetsView {
           const maxDim = Math.max(size.x, size.y, size.z) || 1;
           return {
             object,
-            norm: TARGET_HEIGHT / maxDim,
+            norm: targetHeightFor(path) / maxDim,
             minY: box.min.y,
             maxY: box.max.y,
             radiusSrc: Math.max(size.x, size.z) / 2 || 1,
@@ -677,10 +795,10 @@ export class PlacedAssetsView {
 
   /**
    * Distance culling, called once per frame by the renderer: placements past
-   * the view distance (or the fog, whichever is nearer) fade out and stop
-   * rendering. `maxFar` is the maker's chosen asset view distance; the fog cap
-   * keeps a placement from ever drawing past the terrain. Grass culls sooner
-   * still. Checks are strided so huge maps never spend more than
+   * LOD_RANGE_ASSETS (or the maker's view distance or the fog, whichever is
+   * nearest) fade out and stop rendering. `maxFar` is the maker's chosen asset
+   * view distance; the fog cap keeps a placement from ever drawing past the
+   * terrain. Checks are strided so huge maps never spend more than
    * LOD_BUDGET_PER_FRAME tests a frame.
    */
   updateLod(camX: number, camZ: number, fogFar: number, maxFar = Number.POSITIVE_INFINITY): void {
@@ -700,10 +818,9 @@ export class PlacedAssetsView {
       if (!entry?.model) continue;
       const p = entry.placement;
       const isGrass = p.path === GRASS_PATCH_PATH;
-      // The maker's view distance, but never past the fog (a placement must not
-      // render where the ground has fogged out). Grass culls sooner still.
-      const far = Math.min(fogFar + 60, maxFar);
-      const range = isGrass ? Math.min(far, LOD_RANGE_GRASS) : far;
+      // The asset ceiling, tightened by the maker's view distance and the fog
+      // (a placement must not render where the ground has fogged out).
+      const range = Math.min(fogFar + 60, maxFar, LOD_RANGE_ASSETS);
       const dx = p.x - camX;
       const dz = p.z - camZ;
       const d2 = dx * dx + dz * dz;
@@ -795,29 +912,65 @@ export class PlacedAssetsView {
   }
 
   private refreshFootprint(entry: Entry): void {
-    const r = entry.placement.collideRadius ?? 0;
-    if (!this.footprintsOn || r <= 0) {
-      this.dropFootprint(entry);
+    this.dropFootprint(entry);
+    const p = entry.placement;
+    const r = p.collideRadius ?? 0;
+    if (!this.footprintsOn || r <= 0) return;
+    // Baked per-asset collision (the sim's real playtest shapes): draw the box
+    // set as X-ray wireframes hugging the model. A hand-authored radius/square
+    // keeps the legacy draped circle/frame - exactly what the sim blocks with.
+    // Per-placement resolved hitboxes (hand-edited / fine mesh bake) first,
+    // then the baked catalogue/import set - matching the sim exactly.
+    const baked =
+      p.hitboxes && p.hitboxes.length > 0
+        ? p.hitboxes
+        : p.collideCustom
+          ? null
+          : bakedBoxesForPath(p.path, this.assetCollision ?? undefined);
+    if (baked) {
+      const g = new THREE.Group();
+      g.name = 'baked-collision-footprint';
+      const s = p.scale > 0 ? p.scale : 1;
+      const sx = s * (p.scaleX ?? 1);
+      const sy = s * (p.scaleY ?? 1);
+      const sz = s * (p.scaleZ ?? 1);
+      const groundY = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
+      g.position.set(p.x, groundY + (p.y ?? 0), p.z);
+      g.rotation.y = p.rotY;
+      for (const b of baked) {
+        const line = new THREE.LineSegments(boxEdgesGeometry(), bakedFootprintMat);
+        line.position.set(b.x * sx, b.y * sy, b.z * sz);
+        const bry = (b as { ry?: number }).ry ?? 0;
+        if (bry !== 0) line.rotation.y = bry;
+        line.scale.set(
+          Math.max(0.02, b.hx * 2 * sx),
+          Math.max(0.02, b.hy * 2 * sy),
+          Math.max(0.02, b.hz * 2 * sz),
+        );
+        line.renderOrder = 3;
+        g.add(line);
+      }
+      entry.footprint = g;
+      this.group.add(g);
       return;
     }
     const geo =
-      entry.placement.collideShape === 'square'
-        ? this.drapedSquareGeometry(entry.placement.x, entry.placement.z, r, entry.placement.rotY)
-        : this.drapedRingGeometry(entry.placement.x, entry.placement.z, r);
-    if (entry.footprint) {
-      entry.footprint.geometry.dispose();
-      entry.footprint.geometry = geo;
-    } else {
-      entry.footprint = new THREE.Mesh(geo, this.footprintMat);
-      this.group.add(entry.footprint);
-    }
-    entry.footprint.position.set(entry.placement.x, 0, entry.placement.z);
+      p.collideShape === 'square'
+        ? this.drapedSquareGeometry(p.x, p.z, r, p.rotY)
+        : this.drapedRingGeometry(p.x, p.z, r);
+    const mesh = new THREE.Mesh(geo, this.footprintMat);
+    mesh.position.set(p.x, 0, p.z);
+    entry.footprint = mesh;
+    this.group.add(mesh);
   }
 
   private dropFootprint(entry: Entry): void {
     if (!entry.footprint) return;
     this.group.remove(entry.footprint);
-    entry.footprint.geometry.dispose();
+    // The draped ring owns its geometry; baked-box groups share the module
+    // edge geometry + material (nothing per-entry to dispose).
+    const m = entry.footprint as THREE.Mesh;
+    if (m.isMesh) m.geometry.dispose();
     entry.footprint = null;
   }
 

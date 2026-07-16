@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
+import { caveCameraMaxDist } from '../sim/caves';
 import { cameraOcclusion } from '../sim/colliders';
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
   arenaOrigin,
+  CAMPS,
   CLASSES,
   DELVE_MODULE_Z_START,
   DUNGEON_LIST,
@@ -22,31 +24,39 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isRiftPos,
   isYumiMazePos,
   MOBS,
   NPCS,
-  WORLD_MAX_X,
-  WORLD_MAX_Z,
-  WORLD_MIN_Z,
   YUMI_MAZE_SLOT_COUNT,
   yumiMazeOrigin,
   ZONES,
+  zoneAt,
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { DungeonLayout } from '../sim/dungeon_layout';
 import { DEFAULT_ASSET_VIEW_DISTANCE } from '../sim/map_doc';
-import type { BiomeId, MapWeather } from '../sim/types';
+import {
+  interiorPresentationMode,
+  isAuthoredMapPresentation,
+  usesProceduralOverworldFoliage,
+} from '../sim/map_presentation';
+import { generateRiftFloor, riftLiftAt } from '../sim/rift/rift_gen';
+import type { BiomeId, MapPointSound, MapWeather, ZoneDef } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
+import { isAtSowfield } from '../sim/vale_cup_layout';
 import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
+import { type AmberFeaturesView, buildAmberFeatures } from './amber_features';
 import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import { resolveSkyboxUrl } from './assets/skyboxes';
 import type { AmbientPointSource, SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
 import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
+import { buildCaveMeshes, refreshCaveMeshes } from './cave_mesh';
 import { characterSoulRendActive } from './character_effects';
 import {
   type AnimState,
@@ -65,21 +75,42 @@ import { CloudLayer } from './clouds';
 import { trackWebGLContext } from './context_release';
 import { buildCritters, type CritterField } from './critters';
 import { animatesEveryFrame, crowdLodScaleSq, midAnimCadence } from './crowd_lod';
+import { currentDayNightPhase, dayNightPhaseOverride } from './day_night_clock';
+import {
+  aboveHorizon,
+  DAY_ONLY,
+  type DayNightGrade,
+  dayNightGrade,
+  effectiveDayness,
+  fullDayGrade,
+  globalDayness,
+  moonDirection,
+  NEUTRAL_DAY_GRADE,
+  nightStarAmount,
+  REALM_DAYNIGHT_AMPLITUDE,
+  sunDirection,
+} from './day_night_core';
 import { shouldPlayDeedFirework } from './deed_fx_gate';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable, syncDelveInteractableVisibility } from './delve_props';
-import { buildDoorBody } from './door_portal';
+import { buildDoorBody, buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import type { EditorLightingProfile } from './editor_lighting';
+import { buildEmberFeatures, type EmberFeaturesView } from './ember_features';
 import { objectDisplayName } from './entity_labels';
 import { advanceSelfFacing, releaseSelfFacing } from './facing_smooth';
+import { buildFenFeatures, type FenFeaturesView } from './fen_features';
 import { buildFish, type FishView } from './fish';
+import { FluidSurfaces } from './fluid_surfaces';
 import {
   buildFoliage,
   buildFoliageMaterialPrewarmGroup,
   type FoliagePerfStats,
   type FoliageView,
 } from './foliage';
+import { buildFrostSky, type FrostSkyView } from './frost_sky';
+import { buildGaleFeatures, type GaleFeaturesView } from './gale_features';
+import { buildGardenFeatures, type GardenFeaturesView } from './garden_features';
 import { buildGatherNodes } from './gather_nodes';
 import {
   GFX,
@@ -91,9 +122,12 @@ import {
   sharedUniforms,
   urlForcedTier,
 } from './gfx';
+import { buildHauntFeatures, type HauntFeaturesView } from './haunt_features';
+import { idleSlot } from './idle_queue';
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
 import { buildJailScene } from './jail_scene';
+import { buildJungleFeatures, type JungleFeaturesView } from './jungle_features';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildMailboxPillar } from './mailbox';
 import { buildMotes, type MotesView } from './motes';
@@ -104,6 +138,7 @@ import {
   nameplateScreenTransform,
 } from './nameplate_projection';
 import { facingAlpha, remoteEntityAlpha } from './net_interp_core';
+import { buildNightFeatures, type NightFeaturesView } from './night_features';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
 import {
@@ -112,15 +147,18 @@ import {
   reconcileViewPointLights,
 } from './point_light_budget';
 import { buildComposer, type PostPipeline } from './post';
+import { runBackgroundPrewarm } from './prewarm_pass';
 import { buildPropMaterialPrewarmGroup, buildProps } from './props';
 import { buildGroundQuestObject } from './quest_objects';
 import { isOwnedPetHostile } from './reaction';
+import { buildRealmFlora, type RealmFloraView } from './realm_flora';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
+import { buildRiftRankBadge } from './rift_rank';
 import { downscaleDims } from './screenshot';
 import { drapeRingLocalY } from './selection_ring';
-import { type SelfMotionFrame, SelfMotionPredictor } from './self_motion';
+import { type SelfMotionFrame, SelfMotionPredictor, updateSelfRenderFallback } from './self_motion';
 import { isSharedGeometry, isSharedMaterial } from './shared_resource';
-import { buildClouds, buildSky, type SkyView } from './sky';
+import { buildClouds, buildSky, ensureSkyAssetsAt, type SkyView } from './sky';
 import { nearestSloppyPickId, type SloppyPickCandidate } from './sloppy_pick';
 import { freezeStaticMatrices } from './static_matrix';
 import { shouldRenderStealthGhost } from './stealth';
@@ -148,6 +186,14 @@ import { Weather } from './weather';
 import { buildWorldAmbientSources, crowdAmbienceAt, footstepSurfaceAt } from './world_audio';
 import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
 import { YumiTeamMarkers } from './yumi_team_markers';
+import {
+  effectiveStreamingZones,
+  fogFarForPreparedZones,
+  MAX_OUTDOOR_FOG_FAR,
+  ZONE_STREAM_RECHECK_DISTANCE,
+  zoneEntryPoint,
+  zonesWithinStreamingHorizon,
+} from './zone_streaming';
 
 // Festival gold/white celebration palette, shared by the Vale Cup full-time
 // draw show and the Book of Deeds unlock burst (one palette, two sites).
@@ -155,6 +201,9 @@ const FESTIVAL_GOLD_COLORS: readonly number[] = [0xffd14d, 0xfff2c0];
 
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
+// Shared empty list so the per-frame point-sound update never allocates on the
+// common (no authored point sounds) path.
+const NO_POINT_SOUNDS: readonly MapPointSound[] = [];
 const ENTITY_DRAW_RANGE = 80;
 const ENTITY_VIEW_CREATE_RANGE_SQ = ENTITY_DRAW_RANGE * ENTITY_DRAW_RANGE;
 const ENTITY_VIEW_DESTROY_RANGE_SQ = 96 * 96;
@@ -174,6 +223,9 @@ const VIEW_PREWARM_MAX_MS = 12000;
 // stalls the parallel-compile queue; keep it modest, since a long hold here is
 // itself worse than the freeze it prevents.
 const PREWARM_COMPILE_MAX_MS = 10000;
+// A background prewarm waits for a browser idle slot between its per-group
+// compile chunks; the timeout forces progress under sustained frame load.
+const IDLE_PREWARM_TIMEOUT_MS = 250;
 // Safety ceiling for the per-view async-compile gate: if KHR_parallel_shader_compile
 // somehow never reports a program ready, show the view anyway (degrading to the old
 // synchronous first-use compile) rather than stranding an entity invisible.
@@ -205,6 +257,10 @@ const ENTITY_LOD_RANGE_SQ = 58 * 58;
 // the sim's own 0.4u grounded tolerance (sim.ts), so walking slopes doesn't trip
 // it but a jump (apex ~1.1u) does. Needed because online snapshots don't carry
 // `onGround`, so the flag alone never fires the jump clip for the mirrored world.
+// Rift portal-family template ids (module-hoisted: createView is a hot path and
+// allocated this Set per view).
+const RIFT_PORTAL_IDS = new Set(['rift_portal', 'rift_descent', 'rift_exit']);
+
 const AIRBORNE_EPS = 0.4;
 // Beyond this (squared) an entity's footsteps/movement are inaudible, so we skip
 // the surface sample + dispatch entirely. Kept under the engine's own cutoff (46u).
@@ -259,12 +315,9 @@ const CAMERA_PULL_OUT_RATE = 6;
 const CAMERA_SOFT_PULL_WEIGHT = 0.45;
 const CAMERA_BASE_FOV = 60;
 const CAMERA_MAX_COMP_FOV = 98;
-const SELF_RENDER_SMOOTH_RATE = 30;
-const SELF_RENDER_SNAP_DIST_SQ = 6 * 6;
 // Decay rate of the one-time offset captured when the self-motion predictor
 // takes over from the lead-smoothing path (gone in ~0.3 s, no camera step).
 const SELF_MOTION_HANDOFF_RATE = 15;
-const SUN_HALO_OPACITY = 0.35; // bloom now supplies most of the halo
 // lighting rig (high/ultra) — IBL supplies ambient, sun carries the key
 const HEMI_INTENSITY = 0.45;
 const SUN_INTENSITY = 2.8;
@@ -273,10 +326,31 @@ const ENV_INTENSITY = 0.5;
 // (env at 0.15 still lit rigs sky-blue against the pitch-dark crypt)
 const DUNGEON_SUN_INTENSITY = 0.3;
 const DUNGEON_ENV_INTENSITY = 0.05;
+const EDITOR_INTERIOR_SUN_INTENSITY = 0.72;
+const EDITOR_INTERIOR_ENV_INTENSITY = 0.16;
+// The authored Infernal Citadel is larger than a procedural floor and carries
+// real budgeted brazier lights. A stronger ambient floor preserves the black-red
+// infernal grade while keeping its loops, bosses, and doors readable between pools.
+const INFERNAL_SUN_INTENSITY = 0.48;
+const INFERNAL_HEMI_INTENSITY = 0.36;
+const INFERNAL_ENV_INTENSITY = 0.12;
+const INFERNAL_RIM_BOOST = 2.15;
 // raw HDRI PMREMs integrate the real sun the dome shader clamps away —
 // rescale so ambient matches the dome-capture look (see lookdev-hookup.md)
 const IBL_RAW_SCALE = 0.55;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
+const EDITOR_INTERIOR_HEMI_INTENSITY = 0.48;
+// day/night: at night the key sun and sky bounce cool toward moonlight. These
+// are the fully-night blend weights (scaled each frame by the grade's nightAmt).
+const MOON_SUN_COLOR = 0x9fb2e0; // pale cool moonlight the warm sun eases toward
+const MOON_HEMI_SKY_COLOR = 0x8b9cd0; // cool sky bounce at deepest night
+const MOON_HEMI_GROUND_COLOR = 0x2b3350; // dark cool ground bounce at deepest night
+const NIGHT_SUN_COOL = 0.55; // how far the sun hue shifts to moonlight at full night
+const NIGHT_HEMI_COOL = 0.5; // how far the sky-bounce hue shifts at full night
+// golden tone the sun light warms toward, strongest as the sun nears the horizon
+const WARM_SUN_COLOR = 0xff8a3a;
+// the moving sun/moon key light rides at the same distance the fixed anchor did
+const SUN_TRAVEL_DISTANCE = SUN_ANCHOR.length();
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
 // The Protect Yumi maze is a torch-lit NIGHT ARENA, not a crypt: a moon-key
@@ -922,7 +996,15 @@ export class Renderer {
   private sky!: THREE.Mesh;
   private skyView!: SkyView;
   private sunSprites: THREE.Sprite[] = [];
+  private moonSprites: THREE.Sprite[] = [];
   private sunDir = new THREE.Vector3();
+  // the moving moon direction plus how far above the horizon each body sits
+  // (0 down, 1 up); recomputed each frame in updateAmbience from the world clock
+  private moonDir = new THREE.Vector3(0, -1, 0);
+  private lightDir = new THREE.Vector3(); // blended sun/moon dir the key light uses
+  private sunUp = 1;
+  private moonUp = 0;
+  private starAmt = 0; // 0 day, 1 deep night: star-field strength for the sky dome
   private sunAzimuth = new THREE.Vector3(SUN_DIR.x, 0, SUN_DIR.z).normalize();
   // Editor lighting override (setEditorLighting): the boot rig values to
   // restore, and the overridden sun anchor the per-frame updates follow.
@@ -934,9 +1016,13 @@ export class Renderer {
     envIntensity: number;
   } | null = null;
   private editorSunAnchor: THREE.Vector3 | null = null;
+  /** Active authored lighting (editor tab / map doc); null = shipped rig. */
+  private lightingOverride: EditorLightingProfile | null = null;
   private clouds: THREE.Sprite[] = [];
   private waterView: WaterView;
   private terrainView: TerrainView;
+  private caveGroup: THREE.Group | null = null;
+  private fluidSurfaces: FluidSurfaces | null = null;
   // Map-editor placed GLB assets; null when the world has none and the editor
   // never asked for the view (the shipped game with the built-in world).
   private placedAssetsView: PlacedAssetsView | null = null;
@@ -946,11 +1032,24 @@ export class Renderer {
   private motes: MotesView;
   private birds: BirdsView;
   private impactSite: ImpactSiteView;
+  private realmFlora: RealmFloraView | null = null;
+  private emberFeatures: EmberFeaturesView | null = null;
+  private frostSky: FrostSkyView | null = null;
+  private fenFeatures: FenFeaturesView | null = null;
+  private amberFeatures: AmberFeaturesView | null = null;
+  private nightFeatures: NightFeaturesView | null = null;
+  private hauntFeatures: HauntFeaturesView | null = null;
+  private jungleFeatures: JungleFeaturesView | null = null;
+  private gardenFeatures: GardenFeaturesView | null = null;
+  private galeFeatures: GaleFeaturesView | null = null;
   private fogScratch = new THREE.Color();
-  // Editor skybox override (equirect image as scene.background); the URL tag
-  // guards against a stale async texture load winning over a newer pick.
-  private editorSkyboxUrl: string | null = null;
-  private editorSkyboxTex: THREE.Texture | null = null;
+  // world day/night grade, recomputed each frame from the UTC-anchored clock in
+  // updateAmbience and consumed by the outdoor fog/light easing, the sky dome,
+  // and the IBL intensity. Defaults to full day for the frames before the first
+  // updateAmbience runs.
+  private dnGrade: DayNightGrade = fullDayGrade();
+  private dnColorScratch = new THREE.Color();
+  private dnMoonScratch = new THREE.Color();
   private flames: THREE.Mesh[];
   private fireLights: THREE.PointLight[];
   // Point lights owned by entity views (e.g. the quest-object glow). These stream
@@ -975,8 +1074,41 @@ export class Renderer {
   private doomedIds: number[] = [];
   private dungeons: DungeonInteriors | null = null;
   private envRTs = new Map<BiomeId, THREE.WebGLRenderTarget>();
+  private envRTBySource = new WeakMap<THREE.Texture, THREE.WebGLRenderTarget>();
   private envBiome: BiomeId = 'vale';
   private envOutdoorIntensity = ENV_INTENSITY;
+  private preparedZones = new Set<string>();
+  private pendingZonePrepares = new Map<string, Promise<void>>();
+  // Static terrain/water/features just beyond the current zone are built in a
+  // single background lane when their rectangles enter the relaxed fog
+  // horizon, so a walked boundary crossing lands on already-resident ground.
+  // The queue is recomputed after meaningful camera travel, so teleports
+  // discard stale not-yet-started work instead of walking an old route first.
+  private visibleZonePrepareQueue: ZoneDef[] = [];
+  private visibleZonePrepareActive = false;
+  private visibleZoneCheckX = Number.NaN;
+  private visibleZoneCheckZ = Number.NaN;
+  private visibleZoneCheckFar = Number.NaN;
+  // The biome preset's requested fog far BEFORE fogFarForPreparedZones clamps
+  // it. The streaming horizon keys off this relaxed value: keying off the
+  // clamped live fog would only start preparing a zone once its boundary is
+  // already close enough to clamp the fog, i.e. too late.
+  private lastRequestedFogFar = MAX_OUTDOOR_FOG_FAR;
+  /** Fired whenever a zone becomes resident (any prepare path). Wired by
+   *  main.ts so presentation caches outside the renderer (the HUD's world-map
+   *  background) prewarm alongside the zone itself. */
+  onZonePrepared: ((zoneId: string) => void) | null = null;
+  private lastZonePrepareStats: {
+    zoneId: string;
+    totalMs: number;
+    skyMs: number;
+    terrainMs: number;
+    waterMs: number;
+    featuresMs: number;
+  } | null = null;
+  private prewarmedMobTemplates = new Set<string>();
+  private prewarmedNpcModels = new Set<string>();
+  private prewarmedZonePrograms = new Set<string>();
   private time = 0;
   // Ambience clock: like `time`, but advanced by `dt * ambienceScale`. It feeds
   // the shared uTime uniform (water/foliage/grass/waterfall sway) and the
@@ -984,6 +1116,8 @@ export class Renderer {
   // "world speed" scales all ambient motion. Purely cosmetic; never gameplay.
   private ambienceTime = 0;
   private ambienceScale = 1;
+  /** Blank editor/playtest worlds keep terrain and authored placements only. */
+  private readonly blankPresentation: boolean;
   // Maker-chosen placed-asset view distance (yards from the camera), capped at
   // the fog in updateLod. Seeded from the map at init, overridden live by the
   // editor slider, and inherited by a playtest. The max value reads as "as far
@@ -1003,6 +1137,8 @@ export class Renderer {
   private mapWeather: MapWeather | null = null;
   private cloudLayer: CloudLayer | null = null;
   private weatherClock = 0;
+  private editorSkyboxUrl: string | null = null;
+  private editorSkyboxTex: THREE.Texture | null = null;
   private audioSink: SpatialAudioSink | null = null;
   private readonly ambientPointSources: readonly AmbientPointSource[];
 
@@ -1082,6 +1218,8 @@ export class Renderer {
     canvas: HTMLCanvasElement,
     nameplateLayer: HTMLDivElement,
   ) {
+    const presentation = getActiveWorldContent().presentationMode;
+    this.blankPresentation = isAuthoredMapPresentation(presentation);
     this.nameplateLayer = nameplateLayer;
     this.travelSpeedFx = new TravelSpeedFxPainter(nameplateLayer);
     // The scene root sits at identity forever, but with the default
@@ -1131,6 +1269,17 @@ export class Renderer {
     this.viewport = this.measureViewport();
     this.webgl.setPixelRatio(Math.min(window.devicePixelRatio, GFX.pixelRatioCap));
     this.webgl.setSize(this.viewport.width, this.viewport.height, false);
+    // Three's default checkShaderErrors=true queries getShader/ProgramInfoLog
+    // after every link: a SYNCHRONOUS GPU-process roundtrip that blocks until
+    // the driver finishes compiling. Measured on a zone-streaming walk it was
+    // 25% of ALL main-thread time (multi-second stalls per new zone's program
+    // batch), so it stays off unless a shader author opts back in for
+    // diagnostics with ?shaderdebug=1.
+    try {
+      this.webgl.debug.checkShaderErrors = new URLSearchParams(location.search).has('shaderdebug');
+    } catch {
+      this.webgl.debug.checkShaderErrors = false;
+    }
     this.webgl.shadowMap.enabled = !LOW_GFX;
     this.webgl.shadowMap.type = THREE.PCFSoftShadowMap;
     this.webgl.toneMapping = THREE.ACESFilmicToneMapping; // OutputPass reads this on the composer path
@@ -1165,10 +1314,11 @@ export class Renderer {
       isHostilePlayer: (e) => this.isHostilePlayer(e),
     });
 
+    // Boot values match the vale/low presets; updateAmbience eases from here.
     this.scene.fog = new THREE.Fog(
       LOW_GFX ? 0xb6cddd : 0xa6c6e0,
-      LOW_GFX ? 150 : 130,
-      LOW_GFX ? 520 : 470,
+      LOW_GFX ? 90 : 190,
+      LOW_GFX ? 325 : 700,
     );
     // The void beyond the terrain/fog range must read as haze, never black:
     // big custom maps (worldHalfX up to 1000) put the far side well past the
@@ -1185,7 +1335,10 @@ export class Renderer {
     // sky dome — follows the camera so the world strip never outruns it.
     // High tier: shader gradient + sun glow with biome-aware horizon tints;
     // low keeps the legacy canvas-gradient dome.
-    this.skyView = buildSky(LOW_GFX, SUN_ANCHOR);
+    const initialX = this.sim.player.pos.x;
+    const initialZ = this.sim.player.pos.z;
+    const initialBiome = zoneBiomeAt(initialX, initialZ);
+    this.skyView = buildSky(LOW_GFX, SUN_ANCHOR, initialX, initialZ);
     this.sky = this.skyView.dome;
     setRenderCategory(this.sky, 'sky');
     this.scene.add(this.sky);
@@ -1196,24 +1349,22 @@ export class Renderer {
     // the unclamped sun that the dome shader tames with per-biome gain, so
     // the environment intensity is rescaled to match the shipped look.
     if (!LOW_GFX) {
-      const pmrem = new THREE.PMREMGenerator(this.webgl);
-      for (const b of ['vale', 'marsh', 'peaks'] as BiomeId[]) {
-        const eq = this.skyView.envTexture(b);
-        if (eq) this.envRTs.set(b, pmrem.fromEquirectangular(eq));
-      }
-      if (this.envRTs.size > 0) {
+      const envRT = this.ensureEnvironmentBiome(initialBiome);
+      if (envRT) {
         this.envOutdoorIntensity = ENV_INTENSITY * IBL_RAW_SCALE;
-        this.scene.environment = this.envRTs.get('vale')?.texture ?? null;
-        this.scene.environmentRotation.y = this.skyView.envRotationY('vale');
+        this.scene.environment = envRT.texture;
+        this.scene.environmentRotation.y = this.skyView.envRotationY(initialBiome);
+        this.envBiome = initialBiome;
       } else {
         // fallback: prefilter the dome itself (gain/clamp already applied)
+        const pmrem = new THREE.PMREMGenerator(this.webgl);
         const envScene = new THREE.Scene();
         envScene.add(this.sky.clone());
         const envRT = pmrem.fromScene(envScene, 0.04, 0.1, 1100); // far must cover the 560u dome
         this.scene.environment = envRT.texture;
+        pmrem.dispose();
       }
       this.scene.environmentIntensity = this.envOutdoorIntensity;
-      pmrem.dispose(); // prefiltered envRTs stay alive for the session
     }
 
     const hemi = new THREE.HemisphereLight(0xdcefff, 0x465f39, LOW_GFX ? 0.98 : HEMI_INTENSITY);
@@ -1252,29 +1403,48 @@ export class Renderer {
       skyColor: hemi.color.getHex(),
       envIntensity: this.envOutdoorIntensity,
     };
+    // A map with authored lighting (the editor's Lighting tab, saved into the
+    // document and projected onto WorldContent) applies it from boot: playtest
+    // and the editor render the same authored rig.
+    const mapLighting = getActiveWorldContent().lighting;
+    if (mapLighting) this.setEditorLighting(mapLighting);
 
     // visible sun disc + bloom halo
-    const sunCanvas = (core: boolean): THREE.CanvasTexture => {
-      const c = document.createElement('canvas');
-      c.width = c.height = 128;
-      const ctx = c.getContext('2d')!;
-      const g = ctx.createRadialGradient(64, 64, 2, 64, 64, 64);
-      if (core) {
-        g.addColorStop(0, 'rgba(255,252,238,1)');
-        g.addColorStop(0.35, 'rgba(255,238,180,0.95)');
-        g.addColorStop(1, 'rgba(255,220,140,0)');
-      } else {
-        g.addColorStop(0, 'rgba(255,236,180,0.55)');
-        g.addColorStop(1, 'rgba(255,220,150,0)');
-      }
-      ctx.fillStyle = g;
+    // The sun and moon are billboard sprites: always camera-facing, so they read
+    // as perfect circles wherever they sit on screen (a dome-shader disc would
+    // project to an ellipse off-axis). Each is a crisp filled disc plus a soft
+    // glow; the renderer aims them along the sun/moon direction each frame and
+    // fades them by how far the body is above the horizon.
+    const discTex = (r: number, g: number, b: number): THREE.CanvasTexture => {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 128;
+      const ctx = cv.getContext('2d')!;
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 60);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 1)`);
+      grad.addColorStop(0.82, `rgba(${r}, ${g}, ${b}, 1)`); // solid plateau = crisp disc
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`); // feathered rim to anti-alias the edge
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 128, 128);
-      return new THREE.CanvasTexture(c);
+      return new THREE.CanvasTexture(cv);
     };
-    for (const [tex, scale] of [
-      [sunCanvas(true), 60],
-      [sunCanvas(false), 190],
-    ] as const) {
+    const glowTex = (r: number, g: number, b: number): THREE.CanvasTexture => {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 128;
+      const ctx = cv.getContext('2d')!;
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.5)`);
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 128, 128);
+      return new THREE.CanvasTexture(cv);
+    };
+    const makeCelestialSprite = (
+      tex: THREE.CanvasTexture,
+      scale: number,
+      opacity: number,
+      blending: THREE.Blending = THREE.AdditiveBlending,
+      renderOrder = -9,
+    ): THREE.Sprite => {
       const sp = new THREE.Sprite(
         new THREE.SpriteMaterial({
           map: tex,
@@ -1282,18 +1452,30 @@ export class Renderer {
           fog: false,
           depthWrite: false,
           depthTest: false,
-          blending: THREE.AdditiveBlending,
-          // bloom supplies the big halo on the composer path; the painted one
-          // would double up and wash out the sky
-          opacity: scale === 190 && !LOW_GFX ? SUN_HALO_OPACITY : 1,
+          blending,
+          opacity,
         }),
       );
       setRenderCategory(sp, 'sky');
       sp.scale.set(scale, scale, 1);
-      sp.renderOrder = -9;
-      this.sunSprites.push(sp);
+      sp.renderOrder = renderOrder;
+      sp.frustumCulled = false; // rides the camera at a fixed offset; never cull it
+      sp.userData.baseOpacity = opacity;
       this.scene.add(sp);
-    }
+      return sp;
+    };
+    // sun: a warm disc under a soft warm glow
+    this.sunSprites = [
+      makeCelestialSprite(glowTex(255, 214, 150), 150, LOW_GFX ? 0.6 : 0.3),
+      makeCelestialSprite(discTex(255, 224, 168), 42, 0.9),
+    ];
+    // moon: a bright cratered face (normal-blended so the maria read as dark)
+    // under a soft cool additive glow kept modest so it does not wash the face
+    // moon: a plain bright disc (as bright as the stars) under a soft cool glow
+    this.moonSprites = [
+      makeCelestialSprite(glowTex(150, 170, 220), 128, 0.22),
+      makeCelestialSprite(discTex(247, 250, 255), 52, 1),
+    ];
 
     // god-ray shafts: elongated additive gradient sprites hanging sunward of
     // the camera; opacity follows how directly the camera faces the sun
@@ -1347,9 +1529,9 @@ export class Renderer {
     }
 
     // A returning character can log out anywhere in a zone, not only at a
-    // hub, so the far streaming queue is ordered by distance to the actual
-    // entry position (entity_roster.ts: this.sim.player.pos.x/z) rather than
-    // whatever row-major order the chunk grid happens to walk.
+    // hub, so ensureZone builds the cells nearest the actual entry position
+    // first (a bounded reorder inside each zone build) rather than wherever
+    // row-major order happens to reach them.
     this.terrainView = buildTerrain(this.sim.cfg.seed, {
       x: this.sim.player.pos.x,
       z: this.sim.player.pos.z,
@@ -1359,26 +1541,43 @@ export class Renderer {
     // Terrain chunks never move after build (the LOD update only toggles
     // visibility): stop their per-frame matrix recompose (static_matrix.ts).
     freezeStaticMatrices(this.terrainView.group);
+    this.caveGroup = buildCaveMeshes();
+    setRenderCategory(this.caveGroup, 'terrain');
+    this.scene.add(this.caveGroup);
+    this.fluidSurfaces = new FluidSurfaces(this.sim.cfg.seed);
+    setRenderCategory(this.fluidSurfaces.group, 'water');
+    this.scene.add(this.fluidSurfaces.group);
     this.waterView = buildWater(this.sim.cfg.seed);
-    for (const mesh of this.waterView.meshes) {
-      setRenderCategory(mesh, 'water');
-      this.scene.add(mesh);
-      freezeStaticMatrices(mesh); // water animates via uniforms, never transforms
-    }
+    // Interior authoring uses explicit room fluids. The outdoor ocean plane is
+    // far below the room but remains visible from the editor's high overview.
+    this.waterView.group.visible =
+      interiorPresentationMode(getActiveWorldContent().presentationMode) === null;
+    setRenderCategory(this.waterView.group, 'water');
+    this.scene.add(this.waterView.group);
+    freezeStaticMatrices(this.waterView.group); // water animates via uniforms, never transforms
 
     this.foliage = buildFoliage(this.sim.cfg.seed);
+    // Authored maps supply deliberate placement foliage. The procedural
+    // overworld buckets are baked in global coordinates and become stray grass
+    // after fixed layouts are rebased around the editor origin.
+    this.foliage.group.visible = usesProceduralOverworldFoliage(presentation);
     setRenderCategory(this.foliage.group, 'foliage');
     this.scene.add(this.foliage.group);
     this.fish = buildFish(this.sim.cfg.seed);
     setRenderCategory(this.fish.group, 'fish');
     this.scene.add(this.fish.group);
     this.critters = buildCritters(this.sim.cfg.seed);
+    this.critters.group.visible = !this.blankPresentation;
     this.scene.add(this.critters.group);
     this.motes = buildMotes(this.sim.cfg.seed);
+    this.motes.group.visible = !this.blankPresentation;
     this.scene.add(this.motes.group);
     this.birds = buildBirds(this.sim.cfg.seed);
+    this.birds.group.visible = !this.blankPresentation;
     this.scene.add(this.birds.group);
     this.impactSite = buildImpactSite(this.sim.cfg.seed);
+    this.impactSite.group.visible = !this.blankPresentation;
+    this.impactSite.light.visible = !this.blankPresentation;
     this.scene.add(this.impactSite.group);
     this.scene.add(this.impactSite.light);
     const props = buildProps(this.sim.cfg.seed, (delveId) =>
@@ -1388,6 +1587,7 @@ export class Renderer {
     this.scene.add(props.group);
     this.flames = props.flames;
     this.fireLights = props.fireLights;
+    if (this.fluidSurfaces) this.fireLights.push(...this.fluidSurfaces.lights);
     // Props are baked into world space at build and their update() only toggles
     // visibility, so the whole tree is matrix-static, EXCEPT the campfire
     // flames, whose flicker rescales them every frame: re-enable those.
@@ -1415,10 +1615,14 @@ export class Renderer {
     // the fireLights budget (never the cull-toggled group) and its flames join the
     // campfire flicker + ember pass.
     this.valeCupStadium = buildValeCupStadium(this.sim.cfg.seed);
+    const authoredSowfield = presentation === 'sowfield';
+    this.valeCupStadium.setAuthoredMapMode(authoredSowfield);
+    this.valeCupStadium.group.visible = authoredSowfield || !this.blankPresentation;
     this.scene.add(this.valeCupStadium.group);
     // The private practice-pitch copy (shown at a far instance origin when the
     // local player is practicing; positioned/toggled by valeCupStadium.update).
     this.scene.add(this.valeCupStadium.practiceGroup);
+    if (this.blankPresentation) this.valeCupStadium.practiceGroup.visible = false;
     // The practice skybox (camera-centred; shown only while practicing, driven
     // in updateAmbience). Category 'sky' so the FX governor treats it like the dome.
     setRenderCategory(this.valeCupSky.mesh, 'sky');
@@ -1428,8 +1632,18 @@ export class Renderer {
       this.fireLights.push(light);
     }
     this.flames.push(...this.valeCupStadium.flames);
+    if (presentation === 'yumiMaze') {
+      const authoredYumi = buildYumiMaze({ x: 0, z: 0 }, this.sim.cfg.seed, {
+        flames: this.flames,
+        fireLights: this.fireLights,
+        lowGfx: this.lowGfx,
+      });
+      this.scene.add(authoredYumi.group);
+      this.yumiMazeViews.set(-1, authoredYumi);
+    }
     // Team glow rings under live match fighters (ally/enemy/self readability).
     this.valeCupTeamRings = buildValeCupTeamRings();
+    this.valeCupTeamRings.group.visible = !this.blankPresentation;
     this.scene.add(this.valeCupTeamRings.group);
     this.propsView = props;
 
@@ -1709,6 +1923,400 @@ export class Renderer {
   /** Tone-mapping exposure multiplier (1.0 = the default look). */
   setBrightness(mult: number): void {
     this.webgl.toneMappingExposure = this.baseExposure * mult;
+  }
+
+  zoneIdAt(x: number, z: number): string | null {
+    // The east instance band (dungeons/arenas) is not zone terrain — but a
+    // custom world sized past the threshold legitimately owns that x range,
+    // so the guard only applies where the active world does not reach.
+    if (x > DUNGEON_X_THRESHOLD) {
+      const content = getActiveWorldContent();
+      const halfX = content.worldHalfX;
+      if (halfX === undefined || Math.abs(x) > halfX) return null;
+    }
+    return zoneAt(x, z).id;
+  }
+
+  isZonePreparedAt(x: number, z: number): boolean {
+    const id = this.zoneIdAt(x, z);
+    return id === null || this.preparedZones.has(id);
+  }
+
+  isZoneReadyAt(x: number, z: number): boolean {
+    const id = this.zoneIdAt(x, z);
+    return id === null || (this.preparedZones.has(id) && this.prewarmedZonePrograms.has(id));
+  }
+
+  zoneStreamingStats(): {
+    prepared: number;
+    pending: number;
+    last: {
+      zoneId: string;
+      totalMs: number;
+      skyMs: number;
+      terrainMs: number;
+      waterMs: number;
+      featuresMs: number;
+    } | null;
+  } {
+    return {
+      prepared: this.preparedZones.size,
+      pending: this.pendingZonePrepares.size + this.visibleZonePrepareQueue.length,
+      last: this.lastZonePrepareStats,
+    };
+  }
+
+  private ensureEnvironmentBiome(biome: BiomeId): THREE.WebGLRenderTarget | null {
+    if (this.lowGfx) return null;
+    const existing = this.envRTs.get(biome);
+    if (existing) return existing;
+    const source = this.skyView.envTexture(biome);
+    if (!source) return null;
+    let target = this.envRTBySource.get(source);
+    if (!target) {
+      const pmrem = new THREE.PMREMGenerator(this.webgl);
+      target = pmrem.fromEquirectangular(source);
+      pmrem.dispose();
+      this.envRTBySource.set(source, target);
+    }
+    this.envRTs.set(biome, target);
+    return target;
+  }
+
+  /**
+   * Materialize the terrain, water and bespoke render layer for one overworld
+   * zone. Calls for an already-loaded (or currently-loading) zone are cheap and
+   * share the same promise, so teleports and boundary jitter cannot duplicate
+   * geometry. `opts.pace: 'idle'` marks a background prepare (the visible-zone
+   * streaming lane): the terrain build then advances one small batch per
+   * browser idle slot instead of racing, so it never steals interactive frame
+   * time. (x, z) doubles as the build's priority point, so the chunks nearest
+   * the expected entry land first.
+   */
+  prepareZoneAt(
+    x: number,
+    z: number,
+    onProgress?: (done: number, total: number) => void,
+    opts?: { pace?: 'fast' | 'idle' },
+  ): Promise<void> {
+    const zoneId = this.zoneIdAt(x, z);
+    if (zoneId === null || this.preparedZones.has(zoneId)) {
+      onProgress?.(1, 1);
+      return Promise.resolve();
+    }
+    const pending = this.pendingZonePrepares.get(zoneId);
+    if (pending) return pending;
+    const zone = zoneAt(x, z);
+    const task = (async () => {
+      const started = performance.now();
+      onProgress?.(0, 100);
+      await ensureSkyAssetsAt(x, z);
+      this.ensureEnvironmentBiome(zone.biome);
+      const skyDone = performance.now();
+      onProgress?.(5, 100);
+      const terrainForPrepare = this.terrainView;
+      await terrainForPrepare.ensureZone(
+        zone,
+        (done, total) => onProgress?.(5 + Math.round((done / Math.max(1, total)) * 83), 100),
+        { priority: { x, z }, pace: opts?.pace },
+      );
+      // A full terrain rebuild (editor map load, water change, undo, ...) both
+      // CANCELS in-flight zone builds — which resolve WITHOUT loading the
+      // zone — and can swap this.terrainView under the await above. Marking
+      // the zone prepared anyway stranded it invisible for the whole session:
+      // the streaming queue skips "prepared" zones and the fog opens over the
+      // void, so the terrain never appeared until a page reload. Bail
+      // UNPREPARED instead; the next streaming pass re-runs this prepare
+      // against the live view.
+      if (this.terrainView !== terrainForPrepare || !this.terrainView.isZoneLoaded(zone.id)) {
+        onProgress?.(100, 100);
+        return;
+      }
+      // The group itself was frozen while still empty in the constructor.
+      // Freeze the children added by this zone as well; subsequent zones are
+      // handled by their own prepare pass.
+      freezeStaticMatrices(this.terrainView.group);
+      const terrainDone = performance.now();
+      onProgress?.(89, 100);
+      const waterMeshes = await this.waterView.ensureZone(zone);
+      for (const mesh of waterMeshes) freezeStaticMatrices(mesh);
+      const waterDone = performance.now();
+      onProgress?.(96, 100);
+      this.lastAttachedFeatureGroups = [];
+      this.ensureZoneFeatures(zone);
+      // A background prepare precompiles every program this zone just added
+      // (water lakes, bespoke biome features), one idle slot apart: a program
+      // whose driver link has not finished BLOCKS the main thread at its first
+      // draw (getUniforms queries ACTIVE_UNIFORMS synchronously), which was a
+      // measured multi-hundred-ms stall per new biome. compileAsync resolves
+      // only once the programs report ready, so the live render never pays it.
+      if (opts?.pace === 'idle' && this.asyncCompileSupported) {
+        for (const obj of [...waterMeshes, ...this.lastAttachedFeatureGroups]) {
+          await idleSlot(IDLE_PREWARM_TIMEOUT_MS);
+          await Promise.race([
+            this.webgl.compileAsync(obj, this.camera, this.scene),
+            sleep(PREWARM_COMPILE_MAX_MS),
+          ]);
+        }
+      }
+      const featuresDone = performance.now();
+      this.preparedZones.add(zone.id);
+      // Presentation layers beyond the renderer (main.ts wires the HUD's map
+      // background prewarm here) piggyback on zone residency, so their own
+      // caches are warm before the player can interact with the new zone.
+      this.onZonePrepared?.(zone.id);
+      this.lastZonePrepareStats = {
+        zoneId: zone.id,
+        totalMs: Math.round((featuresDone - started) * 10) / 10,
+        skyMs: Math.round((skyDone - started) * 10) / 10,
+        terrainMs: Math.round((terrainDone - skyDone) * 10) / 10,
+        waterMs: Math.round((waterDone - terrainDone) * 10) / 10,
+        featuresMs: Math.round((featuresDone - waterDone) * 10) / 10,
+      };
+      onProgress?.(100, 100);
+    })().finally(() => this.pendingZonePrepares.delete(zoneId));
+    this.pendingZonePrepares.set(zoneId, task);
+    return task;
+  }
+
+  /** Stage wall-times of the most recent prewarmZoneAt, for perf tooling. */
+  lastZonePrewarmStats: {
+    zoneId: string;
+    buildMs: number;
+    compileMs: number;
+    passMs: number;
+  } | null = null;
+
+  async prewarmZoneAt(x: number, z: number, opts?: { background?: boolean }): Promise<void> {
+    const zoneId = this.zoneIdAt(x, z);
+    if (zoneId === null || this.prewarmedZonePrograms.has(zoneId)) return;
+    const zone = zoneAt(x, z);
+    const deadline = performance.now() + 5000;
+    const t0 = performance.now();
+    const mobGroup = this.buildEntityPrewarmGroup(zone);
+    const npcGroup = this.buildNpcPrewarmGroup(zone, deadline);
+    this.scene.add(mobGroup, npcGroup);
+    const tBuild = performance.now();
+    let tCompile = tBuild;
+    try {
+      // A background prewarm (the visible-zone streaming lane) links the new
+      // programs off-thread BEFORE the warm pass renders with them, so the
+      // pass never compiles inside a live gameplay frame. Compile the PREWARM
+      // GROUPS, one idle slot apart, never the whole scene: compileAsync's
+      // synchronous prologue walks and re-initializes every material it is
+      // handed, and a full-scene walk was a measured multi-hundred-ms stall
+      // per streamed zone. Live frames keep rendering across that whole
+      // awaited window, so runBackgroundPrewarm keeps both groups invisible
+      // until the synchronous warm pass (a visible group is a grid of T-posed
+      // rigs stacked next to the player). The gating path (behind the loading
+      // screen) keeps render-first, which also covers renderers without
+      // KHR_parallel_shader_compile.
+      if (opts?.background) {
+        await runBackgroundPrewarm([mobGroup, npcGroup], {
+          supportsAsyncCompile: this.asyncCompileSupported,
+          idleSlot: () => idleSlot(IDLE_PREWARM_TIMEOUT_MS),
+          compileChild: async (child) => {
+            await Promise.race([
+              this.webgl.compileAsync(child as THREE.Object3D, this.camera, this.scene),
+              sleep(PREWARM_COMPILE_MAX_MS),
+            ]);
+          },
+          renderWarmPass: () => {
+            tCompile = performance.now();
+            this.renderPrewarmPass(1 / 60, { offscreen: true });
+          },
+        });
+      } else {
+        tCompile = performance.now();
+        this.renderPrewarmPass(1 / 60);
+        // The gating path compiles after the pass, exactly as before.
+        if (this.asyncCompileSupported) {
+          await Promise.race([
+            this.webgl.compileAsync(this.scene, this.camera),
+            sleep(PREWARM_COMPILE_MAX_MS),
+          ]);
+        }
+      }
+      this.prewarmedZonePrograms.add(zoneId);
+    } finally {
+      mobGroup.removeFromParent();
+      npcGroup.removeFromParent();
+      this.lastZonePrewarmStats = {
+        zoneId,
+        buildMs: Math.round(tBuild - t0),
+        compileMs: Math.round(tCompile - tBuild),
+        passMs: Math.round(performance.now() - tCompile),
+      };
+    }
+  }
+
+  // Recompute the background prepare queue from the RELAXED fog horizon (the
+  // biome preset request, not the clamped live fog: the clamp only engages
+  // because a zone is unprepared, which is exactly what this lane fixes).
+  // Cheap frame-loop guard: skip until the camera has travelled a bit or the
+  // horizon changed. Runs from sync(), one zone in flight at a time.
+  private queueVisibleZonePrepares(horizon: number): void {
+    const player = this.sim.player;
+    if (this.fogState !== 'outdoor' || this.zoneIdAt(player.pos.x, player.pos.z) === null) {
+      this.visibleZonePrepareQueue = [];
+      return;
+    }
+    const cameraX = this.camera.position.x;
+    const cameraZ = this.camera.position.z;
+    const moved = Math.hypot(cameraX - this.visibleZoneCheckX, cameraZ - this.visibleZoneCheckZ);
+    if (
+      Number.isFinite(this.visibleZoneCheckX) &&
+      moved < ZONE_STREAM_RECHECK_DISTANCE &&
+      Math.abs(horizon - this.visibleZoneCheckFar) < 1
+    ) {
+      return;
+    }
+    this.visibleZoneCheckX = cameraX;
+    this.visibleZoneCheckZ = cameraZ;
+    this.visibleZoneCheckFar = horizon;
+    const forwardX = this.cameraLookAt.x - cameraX;
+    const forwardZ = this.cameraLookAt.z - cameraZ;
+    // effectiveStreamingZones: rects expanded to a larger custom world's
+    // margins, so the queue still fills when the camera flies out there.
+    this.visibleZonePrepareQueue = zonesWithinStreamingHorizon(
+      effectiveStreamingZones(),
+      cameraX,
+      cameraZ,
+      horizon,
+      forwardX,
+      forwardZ,
+    ).filter((zone) => !this.preparedZones.has(zone.id) && !this.pendingZonePrepares.has(zone.id));
+    this.pumpVisibleZonePrepareQueue();
+  }
+
+  private pumpVisibleZonePrepareQueue(): void {
+    if (this.visibleZonePrepareActive) return;
+    const zone = this.visibleZonePrepareQueue.shift();
+    if (!zone) return;
+    if (this.preparedZones.has(zone.id) || this.pendingZonePrepares.has(zone.id)) {
+      this.pumpVisibleZonePrepareQueue();
+      return;
+    }
+    this.visibleZonePrepareActive = true;
+    // The likely entry point is where the zone's rectangle sits closest to the
+    // camera, so prioritize the build there (not at the hub, which can be on
+    // the far side of the zone). zoneEntryPoint's one-yard inset keeps the
+    // point resolving to THIS zone (see its doc: an entry point resolving to
+    // the neighbour would no-op the prepare and starve this queue entry).
+    const { x: entryX, z: entryZ } = zoneEntryPoint(
+      zone,
+      this.camera.position.x,
+      this.camera.position.z,
+    );
+    void this.prepareZoneAt(entryX, entryZ, undefined, { pace: 'idle' })
+      // Prewarm the zone's shader programs too: isZoneReadyAt() requires both,
+      // so without this a walked crossing would still trip the blocking warmup
+      // just to compile programs.
+      .then(() => {
+        if (!this.preparedZones.has(zone.id)) {
+          // The entry point resolved to some other zone, or the prepare bailed
+          // because a terrain rebuild cancelled/swapped the view mid-build:
+          // this queue entry was consumed without making its zone resident.
+          // Invalidate the movement gate so the next frame recomputes the
+          // queue and retries even with a stationary camera.
+          console.warn(`Visible-zone prepare resolved without residency: ${zone.id}`);
+          this.visibleZoneCheckX = Number.NaN;
+        }
+        return this.prewarmZoneAt(entryX, entryZ, { background: true });
+      })
+      .catch((err) => {
+        console.warn(`Visible-zone preparation failed: ${zone.id}`, err);
+        // Permit a retry on the next frame even if the camera has not moved.
+        this.visibleZoneCheckX = Number.NaN;
+      })
+      .finally(() => {
+        this.visibleZonePrepareActive = false;
+        this.pumpVisibleZonePrepareQueue();
+      });
+  }
+
+  // Groups attachZoneFeature added during the current ensureZoneFeatures pass:
+  // a background prepare precompiles their programs (see prepareZoneAt), so a
+  // new biome's bespoke feature shaders never first-draw inside a live frame.
+  private lastAttachedFeatureGroups: THREE.Group[] = [];
+
+  private attachZoneFeature(
+    view: { group: THREE.Group; glowLights?: THREE.PointLight[] },
+    freeze = true,
+  ): void {
+    setRenderCategory(view.group, 'props');
+    this.scene.add(view.group);
+    if (freeze) freezeStaticMatrices(view.group);
+    for (const light of view.glowLights ?? []) this.fireLights.push(light);
+    this.lightRankDirty = true;
+    this.lastAttachedFeatureGroups.push(view.group);
+  }
+
+  private ensureZoneFeatures(zone: ZoneDef): void {
+    switch (zone.biome) {
+      case 'dusk':
+        if (!this.realmFlora) {
+          this.realmFlora = buildRealmFlora(this.sim.cfg.seed);
+          this.attachZoneFeature(this.realmFlora);
+        }
+        break;
+      case 'ember':
+        if (!this.emberFeatures) {
+          this.emberFeatures = buildEmberFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.emberFeatures);
+        }
+        break;
+      case 'frost':
+        if (!this.frostSky) {
+          this.frostSky = buildFrostSky(this.sim.cfg.seed);
+          this.attachZoneFeature(this.frostSky, false);
+        }
+        break;
+      case 'fen':
+        if (!this.fenFeatures) {
+          this.fenFeatures = buildFenFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.fenFeatures);
+        }
+        break;
+      case 'amber':
+        if (!this.amberFeatures) {
+          this.amberFeatures = buildAmberFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.amberFeatures);
+        }
+        break;
+      case 'night':
+        if (!this.nightFeatures) {
+          this.nightFeatures = buildNightFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.nightFeatures);
+        }
+        break;
+      case 'haunt':
+        if (!this.hauntFeatures) {
+          this.hauntFeatures = buildHauntFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.hauntFeatures, false);
+        }
+        break;
+      case 'jungle':
+        if (!this.jungleFeatures) {
+          this.jungleFeatures = buildJungleFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.jungleFeatures);
+        }
+        break;
+      case 'garden':
+        if (!this.gardenFeatures) {
+          this.gardenFeatures = buildGardenFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.gardenFeatures);
+        }
+        break;
+      case 'gale':
+        if (!this.galeFeatures) {
+          this.galeFeatures = buildGaleFeatures(this.sim.cfg.seed);
+          this.attachZoneFeature(this.galeFeatures, false);
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   /** Toggle biome-driven ambient precipitation (snow/rain). */
@@ -2311,7 +2919,16 @@ export class Renderer {
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     this.budgetFireLights(p.pos.x, p.pos.z);
     this.waterView.update(this.ambienceTime);
+    this.fluidSurfaces?.update(
+      dt * this.ambienceScale,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.vfx,
+    );
     const fogFar = (this.scene.fog as THREE.Fog).far;
+    // The foliage LOD swaps real trees for impostors relative to the fog, not at
+    // a fixed distance, so it needs both planes (src/render/foliage_lod.ts).
+    const fogNear = (this.scene.fog as THREE.Fog).near;
     this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.propsView.update(
       this.camera.position.x,
@@ -2322,36 +2939,36 @@ export class Renderer {
       this.cameraLookAt.z,
       fogFar,
     );
-    this.foliage.update(
-      p.pos.x,
-      p.pos.z,
-      this.camera.position.x,
-      this.camera.position.y,
-      this.camera.position.z,
-      this.cameraLookAt.x,
-      this.cameraLookAt.y,
-      this.cameraLookAt.z,
-      fogFar,
-    );
+    if (!this.blankPresentation) {
+      this.foliage.update(
+        p.pos.x,
+        p.pos.z,
+        this.camera.position.x,
+        this.camera.position.y,
+        this.camera.position.z,
+        this.cameraLookAt.x,
+        this.cameraLookAt.y,
+        this.cameraLookAt.z,
+        fogNear,
+        fogFar,
+      );
+    }
     this.fish.update(p.pos.x, p.pos.z, dt);
     this.vfx.update(dt);
     const pv = this.views.get(p.id);
     if (pv) {
       const pp = pv.group.position;
-      const anchor = this.editorSunAnchor ?? SUN_ANCHOR;
-      this.sun.position.set(pp.x + anchor.x, pp.y + anchor.y, pp.z + anchor.z);
-      this.sun.target.position.set(pp.x, pp.y, pp.z);
+      this.updateKeyLight(pp);
     }
     this.sky.position.set(this.camera.position.x, 0, this.camera.position.z);
-    this.sky.visible = this.fogState === 'outdoor' && !this.editorSkyboxTex;
-    if (this.fogState === 'outdoor') {
-      this.skyView.setCameraZ(this.camera.position.z, dt);
+    this.sky.visible = this.fogState === 'outdoor';
+    if (this.sky.visible) {
+      this.skyView.setCameraPos(this.camera.position.x, this.camera.position.z, dt);
+      this.skyView.setDayNight(this.dnGrade.sky);
+      this.skyView.setStars(this.starAmt, this.time);
       this.updateEnvBiome(dt);
     }
-    for (const sp of this.sunSprites) {
-      sp.position.copy(this.camera.position).addScaledVector(this.sunDir, 760);
-      sp.visible = this.fogState === 'outdoor';
-    }
+    this.updateCelestialSprites();
     this.updateGodRays();
     this.nameplatePainter.update(true);
     this.updateChatBubbles();
@@ -2465,7 +3082,31 @@ export class Renderer {
     pool.push(object);
   }
 
-  private buildEntityPrewarmGroup(): THREE.Group {
+  private templateIdsInZone(zone: ZoneDef, kind: 'mob' | 'npc'): string[] {
+    const ids = new Set<string>();
+    // Static content is authoritative here: online clients only receive nearby
+    // entities, so a just-crossed zone may not have delivered its first snapshot
+    // by the time the transition prewarm starts.
+    if (kind === 'mob') {
+      for (const camp of CAMPS) {
+        if (zoneAt(camp.center.x, camp.center.z).id === zone.id) ids.add(camp.mobId);
+      }
+    } else {
+      for (const npc of Object.values(NPCS)) {
+        if (!npc.dynamic && zoneAt(npc.pos.x, npc.pos.z).id === zone.id) ids.add(npc.id);
+      }
+    }
+    // Dynamic/event content has no static camp record. Union whatever the sim
+    // already knows without making correctness depend on snapshot timing.
+    for (const entity of this.sim.entities.values()) {
+      if (entity.kind !== kind || !entity.templateId || entity.pos.x > DUNGEON_X_THRESHOLD)
+        continue;
+      if (zoneAt(entity.pos.x, entity.pos.z).id === zone.id) ids.add(entity.templateId);
+    }
+    return [...ids].sort();
+  }
+
+  private buildEntityPrewarmGroup(zone: ZoneDef): THREE.Group {
     const group = new THREE.Group();
     const p = this.sim.player;
     group.position.set(p.pos.x, p.pos.y, p.pos.z - 14);
@@ -2476,16 +3117,11 @@ export class Renderer {
       group.add(obj);
       idx++;
     };
-    // Track which visual MODELS have been built (visualKeyFor = the model selector;
-    // distinct shader programs are per-model, so this is what we must cover). The
-    // pool itself is still keyed per template via visualPoolKeyFor.
-    const builtModels = new Set<string>();
     const build = (templateId: string, copies: number): void => {
       const template = MOBS[templateId];
       if (!template) return;
       for (let i = 0; i < copies; i++) {
         const entity = this.prewarmEntity('mob', template.id, template.color, template.scale);
-        builtModels.add(visualKeyFor(entity));
         const visual = createCharacterVisual(entity);
         const poolKey = this.visualPoolKeyFor(entity);
         if (poolKey) this.storePooledVisual(poolKey, visual);
@@ -2493,26 +3129,13 @@ export class Renderer {
         place(visual.root);
       }
     };
-    // Common mobs spawn in packs → pool several copies per template (this also
-    // compiles their shaders).
-    for (const templateId of PREWARM_MOB_TEMPLATE_IDS) build(templateId, PREWARM_MOB_POOL_COPIES);
-    // Then every remaining mob whose visual MODEL hasn't been built yet — one copy,
-    // so its shader program is compiled at load and never hitches in-world. Mobs that
-    // share a family model are built only once. NOT deadline-gated: the distinct-model
-    // set is small (deduped by visualKeyFor) and is the whole point of this pass — a
-    // skipped model is a guaranteed in-world compile stall (real-GPU walk profiling
-    // caught a beast model linking ~4 programs / ~240ms when first seen north of spawn
-    // because the shared build deadline cut this loop off). The deadline still bounds
-    // the EXTRA pool copies above; one copy per model is cheap and mandatory.
-    for (const templateId of Object.keys(MOBS)) {
-      if (PREWARM_MOB_COMMON_IDS.has(templateId)) continue;
-      const template = MOBS[templateId];
-      if (!template) continue;
-      const modelKey = visualKeyFor(
-        this.prewarmEntity('mob', template.id, template.color, template.scale),
-      );
-      if (builtModels.has(modelKey)) continue;
-      build(templateId, 1);
+    // Warm only templates that can appear in this zone. The per-template set
+    // persists across transitions, so shared families are paid once per session.
+    for (const templateId of this.templateIdsInZone(zone, 'mob')) {
+      if (this.prewarmedMobTemplates.has(templateId)) continue;
+      const copies = PREWARM_MOB_COMMON_IDS.has(templateId) ? PREWARM_MOB_POOL_COPIES : 1;
+      build(templateId, copies);
+      this.prewarmedMobTemplates.add(templateId);
     }
     return group;
   }
@@ -2520,19 +3143,20 @@ export class Renderer {
   // Every NPC visual MODEL once (NPCs were not prewarmed at all — entering a zone hub
   // compiled their shaders live). Most NPCs share a handful of models (npc_knight,
   // npc_mage, ...), so dedup by model key (visualKeyFor) builds each only once.
-  private buildNpcPrewarmGroup(deadline: number): THREE.Group {
+  private buildNpcPrewarmGroup(zone: ZoneDef, deadline: number): THREE.Group {
     const group = new THREE.Group();
     const p = this.sim.player;
     group.position.set(p.pos.x, p.pos.y, p.pos.z - 24);
     setRenderCategory(group, 'prewarm');
     let idx = 0;
-    const builtModels = new Set<string>();
-    for (const npc of Object.values(NPCS)) {
+    for (const npcId of this.templateIdsInZone(zone, 'npc')) {
       if (performance.now() >= deadline) break;
+      const npc = NPCS[npcId];
+      if (!npc) continue;
       const entity = this.prewarmEntity('npc', npc.id, npc.color, 1);
       const modelKey = visualKeyFor(entity);
-      if (builtModels.has(modelKey)) continue;
-      builtModels.add(modelKey);
+      if (this.prewarmedNpcModels.has(modelKey)) continue;
+      this.prewarmedNpcModels.add(modelKey);
       const visual = createCharacterVisual(entity);
       const poolKey = this.visualPoolKeyFor(entity);
       if (poolKey) this.storePooledVisual(poolKey, visual);
@@ -2647,8 +3271,27 @@ export class Renderer {
     return count;
   }
 
-  private renderPrewarmPass(dt: number): void {
+  // A tiny throwaway target for the background warm pass, so the warm frame
+  // (the prewarm grid is visible during that one call) is never presented on
+  // the canvas. Lazily built once and kept: 8x8 RGBA plus depth is negligible.
+  private prewarmRenderTarget: THREE.WebGLRenderTarget | null = null;
+
+  private renderPrewarmPass(dt: number, opts?: { offscreen?: boolean }): void {
     this.prewarmWorldFrame(dt);
+    // Offscreen only applies on a composer tier: there gameplay's scene pass
+    // renders into the composer's buffer, so its programs are the
+    // render-target variants and an offscreen pass warms the exact same ones
+    // (the post chain itself is already warm from live frames). Without a
+    // composer the live variant is the canvas one, so the pass keeps
+    // rendering to the canvas; at worst that is a single presented frame.
+    if (opts?.offscreen && this.post) {
+      this.prewarmRenderTarget ??= new THREE.WebGLRenderTarget(8, 8);
+      const previousTarget = this.webgl.getRenderTarget();
+      this.webgl.setRenderTarget(this.prewarmRenderTarget);
+      this.webgl.render(this.scene, this.camera);
+      this.webgl.setRenderTarget(previousTarget);
+      return;
+    }
     if (this.post) this.post.render();
     else this.webgl.render(this.scene, this.camera);
   }
@@ -2686,6 +3329,9 @@ export class Renderer {
     const startCounts = this.prewarmCounts();
     const createdViewTypes: string[] = [];
     const p = this.sim.player;
+    const activeZone = zoneAt(p.pos.x, p.pos.z);
+    const zoneMobTemplateIds = this.templateIdsInZone(activeZone, 'mob');
+    const zoneNpcTemplateIds = this.templateIdsInZone(activeZone, 'npc');
     let createdViews = 0;
     let candidateViews = 0;
     let doorPrewarmGroup: THREE.Group | null = null;
@@ -2848,11 +3494,11 @@ export class Renderer {
         priority: 35,
         required: true,
         run: () => {
-          entityPrewarmGroup = this.buildEntityPrewarmGroup();
+          entityPrewarmGroup = this.buildEntityPrewarmGroup(activeZone);
           this.scene.add(entityPrewarmGroup);
         },
         detail: () =>
-          `mobs=${Object.keys(MOBS).length};common=${PREWARM_MOB_TEMPLATE_IDS.length};copies=${PREWARM_MOB_POOL_COPIES}`,
+          `zone=${activeZone.id};mobs=${zoneMobTemplateIds.length};copies=${PREWARM_MOB_POOL_COPIES}`,
       },
       {
         id: 'entities.npc-archetypes',
@@ -2860,10 +3506,10 @@ export class Renderer {
         priority: 36,
         required: true,
         run: () => {
-          npcPrewarmGroup = this.buildNpcPrewarmGroup(buildDeadline);
+          npcPrewarmGroup = this.buildNpcPrewarmGroup(activeZone, buildDeadline);
           this.scene.add(npcPrewarmGroup);
         },
-        detail: () => `npcs=${Object.keys(NPCS).length}`,
+        detail: () => `zone=${activeZone.id};npcs=${zoneNpcTemplateIds.length}`,
       },
       {
         id: 'objects.quest-archetypes',
@@ -2980,17 +3626,15 @@ export class Renderer {
         detail: () => `mode=${compileMode};timedOut=${compileTimedOut}`,
       },
       {
-        id: 'sky.biome-variants',
+        id: 'sky.current-zone',
         category: 'sky',
         priority: 90,
         required: false,
         run: () => {
-          const zs = [p.pos.z, ...ZONES.map((z) => z.zMax - 8), ...ZONES.map((z) => z.zMax + 8)]
-            .filter((z) => Number.isFinite(z) && z > WORLD_MIN_Z && z < WORLD_MAX_Z)
-            .slice(0, this.lowGfx ? 3 : 8);
-          for (const z of zs) {
+          const points = [p.pos, activeZone.hub];
+          for (const point of points) {
             if (performance.now() >= deadline) break;
-            this.skyView.setCameraZ(z, 1 / 20);
+            this.skyView.setCameraPos(point.x, point.z, 1 / 20);
             this.renderPrewarmPass(1 / 60);
             renderPasses++;
           }
@@ -3077,6 +3721,7 @@ export class Renderer {
       diagnosticsBaseline,
     };
     this.lastPrewarmStats = stats;
+    this.prewarmedZonePrograms.add(activeZone.id);
     return stats;
   }
 
@@ -3503,15 +4148,76 @@ export class Renderer {
     const isQuestVision = e.kind === 'mob' && e.templateId.startsWith('vision_');
 
     let portal: THREE.Mesh | undefined;
+    // Rift portals reuse the dungeon-door arch+swirl body: the overworld entrance
+    // (rift_portal) and the in-rift descent are "entering" portals; the egress is a
+    // "leaving" portal. Pylons and the other puzzle props are bespoke procedural
+    // bodies (handled in the next branch).
     if (
       e.kind === 'object' &&
-      (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+      (e.templateId === 'dungeon_door' ||
+        e.templateId === 'dungeon_exit' ||
+        RIFT_PORTAL_IDS.has(e.templateId))
     ) {
-      const entering = e.templateId === 'dungeon_door';
-      const built = buildDoorBody(entering, e.dungeonId, this.lowGfx);
+      const entering =
+        e.templateId === 'dungeon_door' ||
+        e.templateId === 'rift_portal' ||
+        e.templateId === 'rift_descent';
+      // The overworld ranked portal AND the post-boss victory exit both get the
+      // bespoke "gate" GLB (the exit is literally the way home tearing open); the
+      // in-rift descent/pylons keep the procedural arch. Gate builder falls back to
+      // the arch if its asset is missing.
+      const asGate = e.templateId === 'rift_portal' || e.templateId === 'rift_exit';
+      const built =
+        (asGate ? buildRiftGateBody(this.lowGfx, e.riftTier) : null) ??
+        buildDoorBody(entering, e.dungeonId, this.lowGfx);
       body = built.body;
       portal = built.portal;
       height = built.height ?? 4.6;
+      objectMesh = body!;
+      // World-spawned ranked portals carry their rank as a big floating badge
+      // (colour square + letter) so the tier reads from across the zone.
+      if (e.templateId === 'rift_portal' && e.riftTier) {
+        body?.add(buildRiftRankBadge(e.riftTier));
+      }
+    } else if (
+      e.kind === 'object' &&
+      (e.templateId === 'rift_beacon' ||
+        e.templateId === 'rift_ice_goal' ||
+        e.templateId === 'rift_boulder' ||
+        e.templateId === 'rift_boulder_placed' ||
+        e.templateId === 'rift_boulder_pad' ||
+        e.templateId === 'rift_seq_rune' ||
+        e.templateId === 'rift_seq_rune_lit' ||
+        e.templateId === 'rift_pylon' ||
+        e.templateId === 'rift_pylon_lit' ||
+        e.templateId === 'rift_roller' ||
+        e.templateId === 'rift_locked_chest' ||
+        e.templateId === 'rift_chest_open' ||
+        e.templateId === 'rift_chest_jammed' ||
+        e.templateId === 'rift_treasure' ||
+        e.templateId === 'rift_treasure_open' ||
+        e.templateId === 'rift_gate' ||
+        e.templateId === 'rift_gate_open' ||
+        e.templateId === 'rift_switch' ||
+        e.templateId === 'rift_switch_on' ||
+        e.templateId === 'rift_infernal_orb' ||
+        e.templateId === 'rift_infernal_orb_active')
+    ) {
+      // In-rift puzzle props (procedural; glowing ones spin via `portal`, the
+      // rolling boulder rolls via `userData.rollRock`).
+      const built = buildRiftPuzzleProp(e.templateId, this.lowGfx);
+      body = built.body;
+      portal = built.portal;
+      height =
+        e.templateId === 'rift_pylon' || e.templateId === 'rift_pylon_lit'
+          ? 4.0
+          : e.templateId === 'rift_gate' || e.templateId === 'rift_gate_open'
+            ? 5.6
+            : e.templateId === 'rift_roller'
+              ? 3.0
+              : e.templateId === 'rift_infernal_orb' || e.templateId === 'rift_infernal_orb_active'
+                ? 2.2
+                : 2.4;
       objectMesh = body!;
     } else if (e.kind === 'object' && e.templateId === 'mailbox') {
       // Ravenpost pillar: bespoke procedural prop (no sparkle; the unread-mail
@@ -3626,6 +4332,15 @@ export class Renderer {
       body?.traverse((o) => {
         o.userData.entityId = e.id;
       });
+      // Prop builders hang their ambience handles (rolling rock, orbiting
+      // shards, pulsing veins, pylon flame, the mail votive) on the BODY they
+      // return, but the per-frame animation pass reads them from the view
+      // GROUP: hoist them across or every one of those animations sits inert.
+      if (body) {
+        for (const key of ['rollRock', 'riftOrbiters', 'riftPulse', 'riftFlame', 'mailGlow']) {
+          if (body.userData[key] !== undefined) group.userData[key] = body.userData[key];
+        }
+      }
       clickTarget = body!;
     }
     group.scale.setScalar(e.scale);
@@ -3946,6 +4661,15 @@ export class Renderer {
   // module constant; setting it tears down the built copies so the lazy pass
   // rebuilds them from the override on the next frame.
   private dungeonLayoutOverrides = new Map<string, DungeonLayout>();
+  // Rift interiors are the one interior class whose world origin is REUSED: an
+  // empty slot frees after 60s and the next run rebuilds at the same z-stacked
+  // origin, so a stale group would overlap the new build and its torch lights
+  // would stack into the per-frame fire-light budget forever. Tracked per key;
+  // every build retires the others (a descended-from floor included: there is
+  // no way back up). Geometries/materials are NOT disposed here: kit meshes
+  // share the loader cache and the instance-held kit materials, so only the
+  // scene-graph nodes and the light/flame registries are reclaimed.
+  private riftInteriorGroups = new Map<string, THREE.Group>();
   // Protect Yumi maze interiors, one per match slot, built lazily like the
   // arena copies; their update() anchors the team beacons each frame.
   private yumiMazeViews = new Map<number, YumiMazeView>();
@@ -3954,6 +4678,12 @@ export class Renderer {
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
+  // Re-applied rift fog is keyed by the floor descriptor (seed:floorIndex) so a
+  // descent (same 'rift' fogState, different palette) still refreshes the fog.
+  private riftFogKey: string | null = null;
+  // Cached with riftFogKey: whether the current rift floor is an authored set
+  // piece, so the per-frame lighting read avoids regenerating the floor.
+  private riftFogAuthored = false;
   private fogState:
     | 'outdoor'
     | 'dungeon'
@@ -3963,7 +4693,23 @@ export class Renderer {
     | 'delve'
     | 'yumiMaze'
     | 'underwater'
+    | 'rift'
     | 'practice' = 'outdoor';
+
+  /** Drop a retired interior's scene nodes and prune its lights/flames out of
+   * the per-frame registries. See riftInteriorGroups for why nothing here
+   * calls dispose(): the meshes share cached kit geometry and materials. */
+  private retireInteriorGroup(group: THREE.Group): void {
+    this.scene.remove(group);
+    const doomed = new Set<THREE.Object3D>();
+    group.traverse((o) => doomed.add(o));
+    for (let i = this.fireLights.length - 1; i >= 0; i--) {
+      if (doomed.has(this.fireLights[i])) this.fireLights.splice(i, 1);
+    }
+    for (let i = this.flames.length - 1; i >= 0; i--) {
+      if (doomed.has(this.flames[i])) this.flames.splice(i, 1);
+    }
+  }
 
   private buildInterior(interior: string, ox: number, oz: number, key?: string): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
@@ -3990,49 +4736,90 @@ export class Renderer {
     }
   }
 
-  // Outdoor fog presets per biome (high tier eases between them as the
-  // player crosses zone bands; low keeps the legacy vale fog everywhere).
-  // far/near trimmed from the original release so a zone's own mountains (the
-  // rim wall, the inter-zone ridges) fade into haze instead of standing out
-  // crisp when viewed from the zone's hub/centre; ratio near:far kept roughly
-  // constant per biome so the fog gradient itself doesn't change shape.
+  // Outdoor fog presets per biome (high tier eases between them as the player
+  // crosses zone bands; low keeps one preset everywhere). Distances are the
+  // pre-residency-clamp table opened back up (roughly x1.5): with the
+  // visible-zone streaming lane keeping neighbours resident before they can
+  // be seen, the fog no longer has to hide unloaded regions itself, so the
+  // sky and real vistas read again. fogFarForPreparedZones stays as the
+  // safety clamp for the brief window a build is still catching up. The
+  // near:far ratio is kept roughly constant per biome so the fog gradient
+  // itself does not change shape, and no far exceeds MAX_OUTDOOR_FOG_FAR
+  // (the rendering/culling envelope).
   private static BIOME_FOG: Record<BiomeId, { color: number; near: number; far: number }> = {
-    vale: { color: 0xa6c6e0, near: 95, far: 340 },
-    marsh: { color: 0xa3b294, near: 60, far: 240 },
-    peaks: { color: 0xbdd3ec, near: 110, far: 390 },
-    beach: { color: 0xbcd6e6, near: 105, far: 370 },
-    desert: { color: 0xd8c9a8, near: 100, far: 360 },
-    volcano: { color: 0x8a7468, near: 50, far: 220 },
-    cave: { color: 0x76807c, near: 45, far: 190 },
+    vale: { color: 0xa6c6e0, near: 190, far: 700 },
+    marsh: { color: 0xa3b294, near: 115, far: 495 },
+    peaks: { color: 0xbdd3ec, near: 230, far: 840 },
+    beach: { color: 0xbcd6e6, near: 150, far: 555 },
+    desert: { color: 0xd8c9a8, near: 145, far: 540 },
+    volcano: { color: 0x8a7468, near: 75, far: 330 },
+    cave: { color: 0x76807c, near: 65, far: 285 },
+    // permanent dusk: dense rose-mauve murk, the realm's signature
+    dusk: { color: 0xc9a3bd, near: 80, far: 375 },
+    // scorched haze south, thicker toward the volcanic north (looks pass)
+    ember: { color: 0x9a5844, near: 80, far: 360 },
+    // the Frostveil: dense icy mist, visibility closes right in
+    frost: { color: 0xa9bed2, near: 55, far: 285 },
+    // the Amberfall: warm golden haze under an endless afternoon
+    amber: { color: 0xdec18e, near: 95, far: 405 },
+    // the Willowfen: clear airy morning, the lightest fog in the world
+    fen: { color: 0xcfe2dc, near: 140, far: 510 },
+    // the Nightbloom: a soft lavender dream-haze over the violet downs
+    night: { color: 0xbfb0e8, near: 130, far: 495 },
+    // the Wraithwood: dense dead-grey murk, sightlines close right in
+    haunt: { color: 0x454c46, near: 45, far: 225 },
+    // the Palmreach: bright humid haze, the clearest air in the world
+    jungle: { color: 0xd6efe2, near: 165, far: 600 },
+    // the Evergarden: crystal parkland air with the faintest green cast
+    garden: { color: 0xdcefdc, near: 175, far: 630 },
+    // the Galecrest: scrubbed salt air, dawn-lit haze off the sea
+    gale: { color: 0xe2dee4, near: 170, far: 645 },
   };
-  private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
-  // Fog far may stretch up to this on oversized custom maps; the camera far
-  // plane is 950, so haze must resolve before the frustum clips. Kept modest:
-  // terrain chunk visibility is culled by fog.far, so every extra yard of fog
-  // renders more of a big map each frame (the far side reads as haze either
-  // way, because the clear color tracks the fog color).
-  private static MAX_FOG_FAR = 680;
+  // Low tier trades view distance for draw count (its own perf knob, never a
+  // gameplay one: entities draw within their own much shorter ranges on every
+  // tier, so fog distance sheds only cosmetic scenery).
+  private static LOW_FOG = { color: 0xa6c6e0, near: 90, far: 325 };
+
+  // Per-biome outdoor light grade, eased alongside fog in updateAmbience.
+  // The three original biomes keep the exact constants the lights were
+  // created with; the dusk realm warms the sun to late-evening orange and
+  // turns the sky bounce rose over violet ground.
+  private static BIOME_LIGHT: Record<
+    BiomeId,
+    { hemiSky: number; hemiGround: number; sun: number }
+  > = {
+    vale: { hemiSky: 0xdcefff, hemiGround: 0x465f39, sun: 0xffedd0 },
+    marsh: { hemiSky: 0xdcefff, hemiGround: 0x465f39, sun: 0xffedd0 },
+    peaks: { hemiSky: 0xdcefff, hemiGround: 0x465f39, sun: 0xffedd0 },
+    dusk: { hemiSky: 0xffc9dd, hemiGround: 0x4d3f63, sun: 0xffb072 },
+    ember: { hemiSky: 0xe89070, hemiGround: 0x422424, sun: 0xff7440 },
+    frost: { hemiSky: 0x9cb6d6, hemiGround: 0x66748a, sun: 0xccdaea },
+    amber: { hemiSky: 0xffe2b0, hemiGround: 0x5a4a30, sun: 0xffc86a },
+    fen: { hemiSky: 0xdceeff, hemiGround: 0x51704e, sun: 0xfff0d2 },
+    // the Nightbloom: dreamlight. A rose-white sun over lavender sky bounce
+    // and deep violet ground, bright as day but nothing like it
+    night: { hemiSky: 0xd8ccff, hemiGround: 0x564a80, sun: 0xffe6f0 },
+    // the Wraithwood: sickly grey light strangled by the canopy (the rig has
+    // no intensity knob, so the gloom lives in the color luminance)
+    haunt: { hemiSky: 0x4d564c, hemiGround: 0x0e120e, sun: 0x6e7a66 },
+    // the Palmreach: hard tropical daylight over deep green bounce
+    jungle: { hemiSky: 0xeafcff, hemiGround: 0x3a6a42, sun: 0xfff4d8 },
+    // the Evergarden: soft perfect afternoon over clipped lawns
+    garden: { hemiSky: 0xe8f8ff, hemiGround: 0x4a7a44, sun: 0xfff2d0 },
+    // the Galecrest: cool dawn light, sea-grey bounce off the downs
+    gale: { hemiSky: 0xe4e8f2, hemiGround: 0x4e6a52, sun: 0xffe8c8 },
+    // paint-only biomes (map editor, never a built-in realm): beach reuses the
+    // neutral vale grade, desert the amber warmth, volcano the ember glow, cave
+    // the wraithwood gloom.
+    beach: { hemiSky: 0xdcefff, hemiGround: 0x465f39, sun: 0xffedd0 },
+    desert: { hemiSky: 0xffe2b0, hemiGround: 0x5a4a30, sun: 0xffc86a },
+    volcano: { hemiSky: 0xe89070, hemiGround: 0x422424, sun: 0xff7440 },
+    cave: { hemiSky: 0x4d564c, hemiGround: 0x0e120e, sun: 0x6e7a66 },
+  };
 
   private outdoorFogPreset(): { color: number; near: number; far: number } {
-    const base = this.lowGfx
-      ? Renderer.LOW_FOG
-      : Renderer.BIOME_FOG[zoneBiomeAt(this.sim.player.pos.z)];
-    // Custom maps can span far past the built-in world (worldHalfX up to
-    // 1000 / tall zone bands). Push the fog out proportionally so terrain
-    // visibility (terrainView.update culls by fog.far) covers the map instead
-    // of dissolving its far side into haze a few hundred yards out.
-    const w = getActiveWorldContent();
-    const halfX = w.worldHalfX ?? WORLD_MAX_X;
-    let halfZ = 180;
-    for (const z of w.zones) halfZ = Math.max(halfZ, (z.zMax - z.zMin) / 2);
-    const extent = Math.max(halfX, halfZ);
-    const stretch = Math.min(Renderer.MAX_FOG_FAR / base.far, Math.max(1, extent / 320));
-    if (stretch <= 1) return base;
-    return {
-      color: base.color,
-      near: base.near * stretch,
-      far: Math.min(Renderer.MAX_FOG_FAR, base.far * stretch),
-    };
+    if (this.lowGfx) return Renderer.LOW_FOG;
+    return Renderer.BIOME_FOG[zoneBiomeAt(this.sim.player.pos.x, this.sim.player.pos.z)];
   }
 
   private scheduleDelveModuleBuild(
@@ -4076,6 +4863,7 @@ export class Renderer {
 
   /** Prebuild the full module stack when a delve run starts (offline + online). */
   private prebuildDelveInteriors(delveId: string): void {
+    if (getActiveWorldContent().presentationMode === 'blank') return;
     const run = this.sim.delveRun;
     if (!run || run.delveId !== delveId || !run.modules.length) return;
     this.buildAllDelveModules(delveId, run.slot, run.origin, run.modules as DelveModuleId[]);
@@ -4106,7 +4894,14 @@ export class Renderer {
   }
 
   private updateAmbience(px: number, camY: number, dt: number): void {
-    const inside = px > DUNGEON_X_THRESHOLD;
+    // Blank-slate maps have no dungeons/delves/arena: the instance bands live
+    // at fixed world x (beyond DUNGEON_X_THRESHOLD), so without this gate
+    // their interior rooms build floating past the map perimeter and the
+    // position-based fog/daylight kill blacks out the camera near them.
+    const presentation = getActiveWorldContent().presentationMode;
+    const blank = presentation === 'blank';
+    const authoredInterior = interiorPresentationMode(presentation);
+    const inside = !blank && px > DUNGEON_X_THRESHOLD;
     const pz = this.sim.player.pos.z;
     // Private Vale Cup practice instance: the pitch sits far out in an instance
     // band (which would otherwise read as a delve), so give it its own futuristic
@@ -4122,6 +4917,40 @@ export class Renderer {
     } else {
       this.valeCupSky.mesh.visible = false;
     }
+    // recompute the world day/night grade from the shared UTC-anchored clock.
+    // This is render-only, so the Date.now() read never touches sim parity; the
+    // grade is per-realm, the player's biome deciding how far the global cycle
+    // pulls its authored look (signature realms swing less, see day_night_core).
+    const biome = zoneBiomeAt(this.sim.player.pos.x, pz);
+    const phase = currentDayNightPhase();
+    const gday = globalDayness(phase);
+    // DAY ONLY: the released world renders under its authored daylight rig, not the
+    // cycle's (deliberately dimmed and cooled) day. A dev `/daynight <phase>`
+    // override still drives the real grade, so the cycle stays testable in place.
+    this.dnGrade =
+      DAY_ONLY && dayNightPhaseOverride() === null
+        ? NEUTRAL_DAY_GRADE
+        : dayNightGrade(effectiveDayness(gday, biome));
+    // the sun and moon track the world clock; each disc/key-light strength is
+    // scaled by the realm's day/night amplitude so signature-sky realms (the
+    // Nightbloom, the Veiled Hollow, ...) keep their look instead of gaining a
+    // hard noon sun. The moon keeps a higher floor since it suits most realms.
+    const amp = REALM_DAYNIGHT_AMPLITUDE[biome];
+    const sd = sunDirection(phase);
+    const md = moonDirection(phase);
+    this.sunDir.set(sd[0], sd[1], sd[2]);
+    this.moonDir.set(md[0], md[1], md[2]);
+    this.sunUp = aboveHorizon(sd[1]) * amp;
+    this.moonUp = aboveHorizon(md[1]) * Math.max(amp, 0.6);
+    // Authored lighting pins the sun where the maker aimed it: the world clock
+    // must not swing the key light (or its disc) away from the authored angle.
+    if (this.editorSunAnchor) {
+      this.sunDir.copy(this.editorSunAnchor).normalize();
+      this.sunUp = aboveHorizon(this.sunDir.y) * amp;
+      this.moonUp = 0;
+    }
+    // stars follow the global cycle (not per-realm), fading in past dusk
+    this.starAmt = nightStarAmount(gday);
     if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
     } else if (inside && isYumiMazePos(px)) {
@@ -4152,6 +4981,51 @@ export class Renderer {
           this.buildInterior('arena', o.x, o.z, key);
         }
       }
+    } else if (isRiftPos(px)) {
+      // Procedural rift: regenerate the floor's geometry + style from the
+      // descriptor (IWorld.riftFloor) and build it at the floor's own z-stacked
+      // origin. Each (seed, floorIndex) is a distinct key + origin, so descending
+      // builds a fresh interior; the previous floor's geometry harmlessly persists
+      // off-screen (the player has descended away), like authored dungeon copies.
+      const rf = this.sim.riftFloor;
+      if (rf) {
+        void ensureDungeonAssets().catch(() => undefined);
+        const key = `rift:${rf.instanceId}:${rf.contentHash}:${rf.floorIndex}`;
+        if (!this.builtInteriors.has(key)) {
+          const o = rf.origin;
+          if (Math.abs(px - o.x) < 200 && Math.abs(pz - o.z) < 250) {
+            this.builtInteriors.add(key);
+            const floor = generateRiftFloor(rf.seed, rf.baseLevel, rf.floorIndex, rf.upgrade);
+            this.dungeons ??= new DungeonInteriors(
+              this.scene,
+              this.lowGfx,
+              this.flames,
+              this.fireLights,
+            );
+            void this.dungeons
+              .buildInterior(floor.style.kit, o.x, o.z, {
+                layout: floor.layout,
+                style: floor.style,
+                hazards: floor.hazards,
+                hazardStyle: 'lava',
+                iceZone: floor.iceZone,
+                platform: floor.platform,
+              })
+              .then((group) => {
+                for (const [staleKey, staleGroup] of this.riftInteriorGroups) {
+                  if (staleKey === key) continue;
+                  this.retireInteriorGroup(staleGroup);
+                  this.riftInteriorGroups.delete(staleKey);
+                  this.builtInteriors.delete(staleKey);
+                }
+                this.riftInteriorGroups.set(key, group);
+              })
+              .catch((err) => {
+                console.error('Failed to build rift interior:', err);
+              });
+          }
+        }
+      }
     } else if (inside) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the interior copy the player is standing in
@@ -4176,24 +5050,56 @@ export class Renderer {
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
     const inInfernalAbyss = interior === 'infernal_abyss';
-    const desired = inPractice
-      ? 'practice'
-      : inDelve
-        ? 'delve'
-        : inYumiMaze
-          ? 'yumiMaze'
-          : inTemple
-            ? 'temple'
-            : inNythraxis
-              ? 'nythraxis'
-              : inInfernalAbyss
-                ? 'infernalAbyss'
-                : inside
-                  ? 'dungeon'
-                  : camY < waterLevelAt(px, pz) - 0.05
-                    ? 'underwater'
-                    : 'outdoor';
+    const desired =
+      authoredInterior ??
+      (inPractice
+        ? 'practice'
+        : inDelve
+          ? 'delve'
+          : inYumiMaze
+            ? 'yumiMaze'
+            : inTemple
+              ? 'temple'
+              : inNythraxis
+                ? 'nythraxis'
+                : inInfernalAbyss
+                  ? 'infernalAbyss'
+                  : inside
+                    ? 'dungeon'
+                    : camY < waterLevelAt(px, pz) - 0.05
+                      ? 'underwater'
+                      : 'outdoor');
     const fog = this.scene.fog as THREE.Fog;
+    // Procedural rift: dynamic fog from the generated floor style, re-applied when
+    // the floor changes (descent keeps fogState='rift' but swaps the palette).
+    const riftFloor = inside && isRiftPos(px) ? this.sim.riftFloor : null;
+    if (riftFloor) {
+      const fogKey = `${riftFloor.contentHash}:${riftFloor.floorIndex}`;
+      if (fogKey !== this.riftFogKey) {
+        this.riftFogKey = fogKey;
+        const floor = generateRiftFloor(
+          riftFloor.seed,
+          riftFloor.baseLevel,
+          riftFloor.floorIndex,
+          riftFloor.upgrade,
+        );
+        this.riftFogAuthored = floor.authored === true;
+        const style = floor.style;
+        fog.color.setHex(style.fog.color);
+        fog.near = style.fog.near;
+        fog.far = style.fog.far;
+      }
+      this.fogState = 'rift';
+      if (!this.lowGfx) {
+        const authored = this.riftFogAuthored;
+        this.sun.intensity = authored ? INFERNAL_SUN_INTENSITY : DUNGEON_SUN_INTENSITY;
+        this.hemi.intensity = authored ? INFERNAL_HEMI_INTENSITY : DUNGEON_HEMI_INTENSITY;
+        this.scene.environmentIntensity = authored ? INFERNAL_ENV_INTENSITY : DUNGEON_ENV_INTENSITY;
+        sharedUniforms.uRimBoost.value = authored ? INFERNAL_RIM_BOOST : DUNGEON_RIM_BOOST;
+      }
+      return;
+    }
+    this.riftFogKey = null;
     if (desired !== this.fogState) {
       this.fogState = desired;
       if (desired === 'dungeon') {
@@ -4256,21 +5162,31 @@ export class Renderer {
           desired === 'nythraxis' ||
           desired === 'infernalAbyss' ||
           desired === 'delve';
+        const editorInterior = underground && authoredInterior !== null && this.editorCam !== null;
+        // The maze runs its own night rig; otherwise returning outdoors restores the
+        // full daylight rig scaled by the current day/night grade, so stepping out
+        // of a cave at night stays night.
         this.sun.intensity = mazeNight
           ? YUMI_MAZE_SUN_INTENSITY
           : underground
-            ? DUNGEON_SUN_INTENSITY
-            : SUN_INTENSITY;
+            ? editorInterior
+              ? EDITOR_INTERIOR_SUN_INTENSITY
+              : DUNGEON_SUN_INTENSITY
+            : SUN_INTENSITY * this.dnGrade.lightScale;
         this.hemi.intensity = mazeNight
           ? YUMI_MAZE_HEMI_INTENSITY
           : underground
-            ? DUNGEON_HEMI_INTENSITY
-            : HEMI_INTENSITY;
+            ? editorInterior
+              ? EDITOR_INTERIOR_HEMI_INTENSITY
+              : DUNGEON_HEMI_INTENSITY
+            : HEMI_INTENSITY * this.dnGrade.lightScale;
         this.scene.environmentIntensity = mazeNight
           ? YUMI_MAZE_ENV_INTENSITY
           : underground
-            ? DUNGEON_ENV_INTENSITY
-            : this.envOutdoorIntensity;
+            ? editorInterior
+              ? EDITOR_INTERIOR_ENV_INTENSITY
+              : DUNGEON_ENV_INTENSITY
+            : this.envOutdoorIntensity * this.dnGrade.lightScale;
         sharedUniforms.uRimBoost.value = mazeNight
           ? YUMI_MAZE_RIM_BOOST
           : underground
@@ -4280,14 +5196,77 @@ export class Renderer {
       this.webgl.setClearColor(fog.color, 1);
       return;
     }
-    // outdoors: ease fog toward the current biome's preset (~2s)
-    if (desired === 'outdoor' && !this.lowGfx) {
+    // Outdoors, fog is also the residency boundary. Pull it inward immediately
+    // before an unloaded zone can become visible; once that zone has been
+    // loaded by the boundary transition, ease the view distance back out.
+    if (desired === 'outdoor') {
+      const g = this.dnGrade;
       const preset = this.outdoorFogPreset();
       const k = 1 - Math.exp(-dt * 1.5);
-      fog.color.lerp(this.fogScratch.setHex(preset.color), k);
-      fog.near += (preset.near - fog.near) * k;
-      fog.far += (preset.far - fog.far) * k;
-      this.webgl.setClearColor(fog.color, 1);
+      const requestedFar = preset.far * (this.lowGfx ? 1 : g.farScale);
+      this.lastRequestedFogFar = requestedFar;
+      const targetFar = fogFarForPreparedZones(
+        effectiveStreamingZones(),
+        this.preparedZones,
+        this.camera.position.x,
+        this.camera.position.z,
+        requestedFar,
+      );
+      const targetNear = Math.min(preset.near, targetFar * 0.55);
+      fog.near += (targetNear - fog.near) * k;
+      if (fog.far > targetFar) fog.far = targetFar;
+      else fog.far += (targetFar - fog.far) * k;
+      if (this.lowGfx) return;
+      // fog color: the biome hue multiplied by the day/night color (a dark
+      // dusk-blue by night)
+      this.fogScratch.setHex(preset.color);
+      this.fogScratch.r *= g.fog[0];
+      this.fogScratch.g *= g.fog[1];
+      this.fogScratch.b *= g.fog[2];
+      fog.color.lerp(this.fogScratch, k);
+      // ...and the light grade with it (the dusk realm's warm sun and rose sky
+      // bounce, a no-op elsewhere by day since the presets match the ctor hues):
+      // the sun and sky hues cool toward moonlight at night, and the sun + sky
+      // intensity scales down with the grade (the IBL follows in updateEnvBiome).
+      // Authored lighting (editor tab / map doc): ease toward the authored
+      // values instead of the biome + day/night targets, which would silently
+      // pull any override back to the shipped rig within seconds.
+      const authored = this.lightingOverride;
+      if (authored) {
+        this.sun.color.lerp(this.dnColorScratch.setHex(authored.sunColor), k);
+        this.hemi.color.lerp(this.dnColorScratch.setHex(authored.skyColor), k);
+        this.sun.intensity += (authored.sunIntensity - this.sun.intensity) * k;
+        this.hemi.intensity += (authored.hemiIntensity - this.hemi.intensity) * k;
+        return;
+      }
+      const light = Renderer.BIOME_LIGHT[biome];
+      // the sun light warms toward gold, gently by day and strongly as it nears
+      // the horizon (a golden hour), then cools toward moonlight deep at night.
+      // The warm blend is gated by aboveHorizon so it never tints the moonlight.
+      const sunElev = this.sunDir.y;
+      let hi = (sunElev - 0.08) / 0.5;
+      hi = hi < 0 ? 0 : hi > 1 ? 1 : hi;
+      const lowness = 1 - hi * hi * (3 - 2 * hi);
+      const warmAmt = aboveHorizon(sunElev) * (0.34 + lowness * 0.45);
+      this.dnColorScratch.setHex(light.sun);
+      this.dnColorScratch.lerp(this.dnMoonScratch.setHex(WARM_SUN_COLOR), warmAmt);
+      this.dnColorScratch.lerp(
+        this.dnMoonScratch.setHex(MOON_SUN_COLOR),
+        g.nightAmt * NIGHT_SUN_COOL,
+      );
+      this.sun.color.lerp(this.dnColorScratch, k);
+      this.dnColorScratch
+        .setHex(light.hemiSky)
+        .lerp(this.dnMoonScratch.setHex(MOON_HEMI_SKY_COLOR), g.nightAmt * NIGHT_HEMI_COOL);
+      this.hemi.color.lerp(this.dnColorScratch, k);
+      // the ground bounce cools with the sky side so night shading does not keep
+      // a warm daytime tint (its brightness still rides the hemi intensity above)
+      this.dnColorScratch
+        .setHex(light.hemiGround)
+        .lerp(this.dnMoonScratch.setHex(MOON_HEMI_GROUND_COLOR), g.nightAmt * NIGHT_HEMI_COOL);
+      this.hemi.groundColor.lerp(this.dnColorScratch, k);
+      this.sun.intensity += (SUN_INTENSITY * g.lightScale - this.sun.intensity) * k;
+      this.hemi.intensity += (HEMI_INTENSITY * g.lightScale - this.hemi.intensity) * k;
     }
   }
 
@@ -4296,17 +5275,56 @@ export class Renderer {
   // brief intensity dip masks the hard texture swap, then eases back like fog.
   private updateEnvBiome(dt: number): void {
     if (this.lowGfx || this.envRTs.size < 2) return;
-    const blend = this.skyView.biomeAt(this.camera.position.z);
+    const blend = this.skyView.biomeAt(this.camera.position.x, this.camera.position.z);
     const dominant = blend.t < 0.5 ? blend.from : blend.to;
     if (dominant !== this.envBiome && this.envRTs.has(dominant)) {
       this.envBiome = dominant;
       this.scene.environment = this.envRTs.get(dominant)?.texture ?? null;
       this.scene.environmentRotation.y = this.skyView.envRotationY(dominant);
-      this.scene.environmentIntensity = this.envOutdoorIntensity * 0.4;
+      this.scene.environmentIntensity = this.envOutdoorIntensity * 0.4 * this.dnGrade.lightScale;
     }
     const k = 1 - Math.exp(-dt * 1.5);
     this.scene.environmentIntensity +=
-      (this.envOutdoorIntensity - this.scene.environmentIntensity) * k;
+      (this.envOutdoorIntensity * this.dnGrade.lightScale - this.scene.environmentIntensity) * k;
+  }
+
+  // Aim the key light (sun by day, moon by night) at the player. On the low tier
+  // day/night is off, so it keeps the fixed anchor for a stable, cheap look.
+  private updateKeyLight(pp: THREE.Vector3): void {
+    if (this.lowGfx) {
+      this.sun.position.set(pp.x + SUN_ANCHOR.x, pp.y + SUN_ANCHOR.y, pp.z + SUN_ANCHOR.z);
+    } else {
+      // the key light hands off from the sun to the moon across the terminator.
+      // Blend the two directions smoothly (rather than a hard switch) as the sun
+      // sinks through the horizon, so the shadow direction glides instead of
+      // popping; the swap happens at dusk/dawn when the light is dim anyway.
+      let t = (0.05 - this.sunDir.y) / 0.2; // sunDir.y 0.05 -> sun, -0.15 -> moon
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      const blend = t * t * (3 - 2 * t);
+      this.lightDir.copy(this.sunDir).lerp(this.moonDir, blend).normalize();
+      this.sun.position.set(
+        pp.x + this.lightDir.x * SUN_TRAVEL_DISTANCE,
+        pp.y + this.lightDir.y * SUN_TRAVEL_DISTANCE,
+        pp.z + this.lightDir.z * SUN_TRAVEL_DISTANCE,
+      );
+    }
+    this.sun.target.position.set(pp.x, pp.y, pp.z);
+  }
+
+  // Aim the sun and moon disc sprites along their directions and fade them by how
+  // far each body sits above the horizon (out when below, and only outdoors).
+  private updateCelestialSprites(): void {
+    const outdoor = this.fogState === 'outdoor';
+    for (const sp of this.sunSprites) {
+      sp.position.copy(this.camera.position).addScaledVector(this.sunDir, 760);
+      sp.visible = outdoor && this.sunUp > 0.02;
+      sp.material.opacity = (sp.userData.baseOpacity as number) * this.sunUp;
+    }
+    for (const sp of this.moonSprites) {
+      sp.position.copy(this.camera.position).addScaledVector(this.moonDir, 760);
+      sp.visible = outdoor && this.moonUp > 0.02;
+      sp.material.opacity = (sp.userData.baseOpacity as number) * this.moonUp;
+    }
   }
 
   // Drop the view of an entity that left the world / our interest area.
@@ -4424,6 +5442,7 @@ export class Renderer {
     renderFacingOverride: number | null,
     selfAlphaLead = 0,
     selfMotion: SelfMotionFrame | null = null,
+    selfAuthoritativeDiscontinuity = false,
   ): void {
     const totalStart = performance.now();
     let phaseStart = totalStart;
@@ -4472,7 +5491,13 @@ export class Renderer {
       this.selfMotionOffset.set(0, 0, 0);
     }
     const now = performance.now();
-    const selfPos = this.updateSelfRenderPosition(alpha, dt, selfAlphaLead, selfMotion);
+    const selfPos = this.updateSelfRenderPosition(
+      alpha,
+      dt,
+      selfAlphaLead,
+      selfMotion,
+      selfAuthoritativeDiscontinuity,
+    );
     markPhase('setup');
 
     // dynamic worlds: create nearby views lazily and drop views for leavers or
@@ -4696,6 +5721,47 @@ export class Renderer {
           (v.portal.material as THREE.MeshBasicMaterial).opacity =
             0.45 + Math.sin(this.time * 2.2 + e.id) * 0.15;
         }
+        if (vis && e.templateId === 'rift_roller') {
+          // Roll the boulder about X in proportion to distance travelled (radius
+          // 1.4), so it appears to roll without slipping as its entity advances.
+          const rock = v.group.userData.rollRock as THREE.Object3D | undefined;
+          if (rock) rock.rotation.x = e.pos.z * 0.714;
+        }
+        // Rift prop ambience: orbiting shards spin + bob; glowing veins/beams pulse.
+        // Cheap (a handful of meshes on a few props per floor) and only when visible.
+        if (vis) {
+          const orbiters = v.group.userData.riftOrbiters as THREE.Object3D[] | undefined;
+          if (orbiters) {
+            for (let oi = 0; oi < orbiters.length; oi++) {
+              const pv = orbiters[oi];
+              pv.rotation.y = this.time * 1.1 + oi * 2.1;
+              pv.position.y = 3.6 + Math.sin(this.time * 2 + oi * 1.7) * 0.18;
+            }
+          }
+          const pulse = v.group.userData.riftPulse as THREE.Mesh[] | undefined;
+          if (pulse) {
+            const k = 0.7 + Math.sin(this.time * 3 + e.id) * 0.3;
+            for (const m of pulse) {
+              const mat = m.material as THREE.MeshBasicMaterial;
+              if (mat.userData.baseOpacity === undefined) mat.userData.baseOpacity = mat.opacity;
+              mat.opacity = (mat.userData.baseOpacity as number) * k;
+            }
+          }
+          // Arcane flame crowning a lit pylon: flicker the height + a lick of sway,
+          // so the Tripo flame reads as living fire rather than a frozen mesh.
+          const flame = v.group.userData.riftFlame as THREE.Object3D | undefined;
+          if (flame) {
+            const t = this.time * 9 + e.id;
+            flame.scale.y = 1 + Math.sin(t) * 0.14 + Math.sin(t * 2.3) * 0.06;
+            flame.scale.x = flame.scale.z = 1 + Math.sin(t * 1.7 + 1) * 0.06;
+            flame.rotation.y = Math.sin(this.time * 1.3 + e.id) * 0.25;
+          }
+          // Continuous particle ambience via the real VFX system (like the Nythraxis
+          // wardstone above): a lit pylon fizzes arcane motes; the rolling boulder
+          // trails embers. Rate-scaled by dt, skipped on low-gfx by the emitter.
+          if (e.templateId === 'rift_pylon_lit') this.vfx.castSparkle(e.id, 'arcane', dt * 2.2);
+          else if (e.templateId === 'rift_roller') this.vfx.castSparkle(e.id, 'fire', dt * 2.4);
+        }
         if (vis && e.templateId === 'mailbox') {
           // The unread-mail votive: per-viewer beacon driven by the IWorld
           // mirror (a cheap field online, a small filter offline; <=4 pillars).
@@ -4764,11 +5830,9 @@ export class Renderer {
         v.group.scale.setScalar(e.scale);
       }
 
-      // swimming pose: prone at the surface (derived here — the sim is unaware).
-      // waterLevelAt is -Infinity outside a declared lake, so the cheap feet-depth
-      // test also gates entities standing in a dry sunken feature: they can't be
-      // swimming there, and the vast majority (everyone on land) skip
-      // groundHeight() entirely each frame.
+      // swimming pose: prone at the surface (derived here, the sim is unaware).
+      // waterLevelAt is -Infinity outside a declared lake, so dry terrain never
+      // enters the swimming pose even when its sculpted height is below sea level.
       const wl = waterLevelAt(e.pos.x, e.pos.z);
       const swimming =
         !e.dead &&
@@ -4851,7 +5915,7 @@ export class Renderer {
       const visuallyDead = isVisuallyDead(e) && !e.ghost;
       // `onGround` is authoritative offline but is never sent in online snapshots
       // (ClientWorld defaults it to true), so for players fall back to deriving the
-      // airborne state from foot height vs terrain — keeps the jump pose working in
+      // airborne state from foot height vs ground — keeps the jump pose working in
       // both worlds without a wire change. Gated to players (only they jump) to keep
       // the extra groundHeight sample off the hot path for mobs/NPCs.
       // The local player uses the predictor's kernel onGround when it is active:
@@ -4860,12 +5924,22 @@ export class Renderer {
       // hitches transiently lift the sampled pose off the terrain, and a
       // single-frame false positive flips the base state to `jump` and back,
       // replaying the jump clip's crouch (the world-entry anim glitch).
-      if (
-        e.kind === 'player' &&
-        e.onGround &&
-        !swimming &&
-        ay - groundHeight(ax, az, this.sim.cfg.seed) > AIRBORNE_EPS
-      ) {
+      // In a rift, the raised-tier height field lifts a standing player's Y above
+      // the flat dungeon floor; without accounting for it the foot-height heuristic
+      // (and the self predictor's kernel) read the lift as airborne and freeze the
+      // jump pose, and stairs never animate as walking. Add the platform lift to the
+      // ground reference (regenerated from the floor descriptor, memoised) so the
+      // raised tier reads as solid floor. Also force the heuristic path over the
+      // predictor's onGround inside a rift (the predictor samples the same flat
+      // ground, so it would still report airborne on the platform).
+      const inRift = isRiftPos(ax) && this.sim.riftFloor !== null;
+      let effGround = groundHeight(ax, az, this.sim.cfg.seed);
+      if (inRift) {
+        const rf = this.sim.riftFloor!;
+        const floor = generateRiftFloor(rf.seed, rf.baseLevel, rf.floorIndex, rf.upgrade);
+        effGround += riftLiftAt(floor, ax - rf.origin.x, az - rf.origin.z);
+      }
+      if (e.kind === 'player' && e.onGround && !swimming && ay - effGround > AIRBORNE_EPS) {
         v.airborneHeurFrames++;
       } else {
         v.airborneHeurFrames = 0;
@@ -4873,7 +5947,7 @@ export class Renderer {
       const airborne =
         !visuallyDead &&
         !swimming &&
-        (animFromDisplay && this.selfMotionPredictor
+        (animFromDisplay && this.selfMotionPredictor && !inRift
           ? !this.selfMotionPredictor.onGround
           : !e.onGround || v.airborneHeurFrames >= 2);
       const st = this.animScratch;
@@ -4887,6 +5961,14 @@ export class Renderer {
       st.casting = e.castingAbility !== null && !visuallyDead;
       st.swimming = swimming;
       st.sitting = e.kind === 'player' && (e.sitting || e.eating !== null || e.drinking !== null);
+      // Ice slide: the sim glides the player at speed but they should read as
+      // FROZEN (gliding stiff on the ice), not sprinting. Suppress locomotion +
+      // airborne so the state machine holds the static idle pose while they slide.
+      if (e.riftSliding && !visuallyDead) {
+        st.moving = false;
+        st.running = false;
+        st.airborne = false;
+      }
       // --- spatial movement audio (self + others) --------------------------
       // All gated by audibility (squared distance) so far entities cost nothing.
       const sink = this.audioSink;
@@ -5150,7 +6232,7 @@ export class Renderer {
     // they tint warm sunward / cool anti-sun to anchor the key light's azimuth
     for (const cl of this.clouds) {
       cl.position.x += dt * ((cl.userData.drift as number | undefined) ?? 1.6);
-      if (cl.position.x > 320) cl.position.x = -320;
+      if (cl.position.x > 620) cl.position.x = -620;
       if (!this.lowGfx) {
         const along =
           ((cl.position.x - this.camera.position.x) * this.sunAzimuth.x +
@@ -5169,6 +6251,12 @@ export class Renderer {
     // water shimmer (low-tier texture scroll; shader water rides uTime) and
     // waterfalls ride the ambience clock so a map's world speed scales them.
     this.waterView.update(this.ambienceTime);
+    this.fluidSurfaces?.update(
+      dt * this.ambienceScale,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.vfx,
+    );
     advanceWaterfallTime(this.ambienceTime);
     worldStart = markWorldPhase('water', worldStart);
     this.vfx.update(dt);
@@ -5185,6 +6273,10 @@ export class Renderer {
     // Fully-fogged terrain chunks / tree buckets are dropped before the
     // frustum; camera-ghost props hide against the current eye-to-camera ray.
     const fogFar = (this.scene.fog as THREE.Fog).far;
+    // The foliage LOD swaps real trees for impostors relative to the fog, not at
+    // a fixed distance, so it needs both planes (src/render/foliage_lod.ts).
+    const fogNear = (this.scene.fog as THREE.Fog).near;
+    this.queueVisibleZonePrepares(Math.max(fogFar, this.lastRequestedFogFar));
     this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
     worldStart = markWorldPhase('terrain', worldStart);
     this.propsView.update(
@@ -5217,6 +6309,7 @@ export class Renderer {
       this.cameraLookAt.x,
       this.cameraLookAt.y,
       this.cameraLookAt.z,
+      fogNear,
       fogFar,
     );
     // Placements cull from the CAMERA at the maker's chosen view distance,
@@ -5230,26 +6323,43 @@ export class Renderer {
       this.placedAssetViewDistance,
     );
     worldStart = markWorldPhase('foliage', worldStart);
-    // Ambient wildlife/particles ride the ambience clock (world-speed scaled).
-    this.fish.update(p.pos.x, p.pos.z, ambDt);
-    this.critters.update(p.pos.x, p.pos.z, ambDt);
-    this.motes.update(p.pos.x, p.pos.z, ambDt);
-    this.birds.update(p.pos.x, p.pos.z, ambDt);
-    this.impactSite.update(p.pos.x, p.pos.z, dt);
+    this.fish.update(p.pos.x, p.pos.z, dt);
+    if (!this.blankPresentation) {
+      this.critters.update(p.pos.x, p.pos.z, dt);
+      this.motes.update(p.pos.x, p.pos.z, dt);
+    }
+    this.realmFlora?.update(this.time);
+    this.emberFeatures?.update(this.time);
+    this.frostSky?.update(this.time, this.camera.position.x, this.camera.position.z);
+    this.fenFeatures?.update(this.time);
+    this.amberFeatures?.update(this.time);
+    this.nightFeatures?.update(this.time);
+    this.hauntFeatures?.update(this.time);
+    this.jungleFeatures?.update(this.time);
+    this.gardenFeatures?.update(this.time);
+    this.galeFeatures?.update(this.time);
+    if (!this.blankPresentation) {
+      this.birds.update(p.pos.x, p.pos.z, dt);
+      this.impactSite.update(p.pos.x, p.pos.z, dt);
+    }
     // null-safe cupInfo read: the offline Sim may predate the Vale Cup module
-    this.valeCupStadium.update(p.pos.x, p.pos.z, dt, this.sim.cupInfo ?? null);
+    if (!this.blankPresentation) {
+      this.valeCupStadium.update(p.pos.x, p.pos.z, dt, this.sim.cupInfo ?? null);
+    }
     // Team rings ride the live entity views (positions are fresh: the entity loop
     // ran above). Reads cupInfo.match for a participant, else cupInfo.spectate (a
     // nearby walk-up at the Sowfield): the sim only fills spectate near the field,
     // so the rings self-gate to the stadium. The online mirror works the same.
-    this.valeCupTeamRings.update(
-      this.sim.cupInfo?.match ?? this.sim.cupInfo?.spectate ?? null,
-      this.time,
-      dt,
-      this.lowGfx,
-      this.groundSample,
-      this.views,
-    );
+    if (!this.blankPresentation) {
+      this.valeCupTeamRings.update(
+        this.sim.cupInfo?.match ?? this.sim.cupInfo?.spectate ?? null,
+        this.time,
+        dt,
+        this.lowGfx,
+        this.groundSample,
+        this.views,
+      );
+    }
     worldStart = markWorldPhase('fish', worldStart);
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     worldStart = markWorldPhase('ambience', worldStart);
@@ -5257,31 +6367,28 @@ export class Renderer {
     const pv = this.views.get(p.id);
     if (pv) {
       const pp = pv.group.position;
-      const anchor = this.editorSunAnchor ?? SUN_ANCHOR;
-      this.sun.position.set(pp.x + anchor.x, pp.y + anchor.y, pp.z + anchor.z);
-      this.sun.target.position.set(pp.x, pp.y, pp.z);
+      this.updateKeyLight(pp);
     }
     worldStart = markWorldPhase('shadows', worldStart);
     // sky dome + sun disc ride along with the camera
     this.sky.position.set(this.camera.position.x, 0, this.camera.position.z);
-    this.sky.visible = this.fogState === 'outdoor' && !this.editorSkyboxTex;
-    if (this.fogState === 'outdoor') {
-      this.skyView.setCameraZ(this.camera.position.z, dt);
+    this.sky.visible = this.fogState === 'outdoor';
+    if (this.sky.visible) {
+      this.skyView.setCameraPos(this.camera.position.x, this.camera.position.z, dt);
+      this.skyView.setDayNight(this.dnGrade.sky);
+      this.skyView.setStars(this.starAmt, this.time);
       this.updateEnvBiome(dt);
     }
     // precipitation only falls outdoors; indoors/underwater pass null to clear
     this.applyWeatherOverride(dt);
     this.weather.update(
       this.camera.position,
-      ambDt,
-      this.fogState === 'outdoor' ? zoneBiomeAt(p.pos.z) : null,
+      dt,
+      this.fogState === 'outdoor' ? zoneBiomeAt(p.pos.x, p.pos.z) : null,
     );
     this.cloudLayer?.update(this.camera.position, ambDt);
     worldStart = markWorldPhase('sky', worldStart);
-    for (const sp of this.sunSprites) {
-      sp.position.copy(this.camera.position).addScaledVector(this.sunDir, 760);
-      sp.visible = this.fogState === 'outdoor';
-    }
+    this.updateCelestialSprites();
     worldStart = markWorldPhase('sunSprites', worldStart);
     this.updateGodRays();
     worldStart = markWorldPhase('godRays', worldStart);
@@ -5358,7 +6465,7 @@ export class Renderer {
         y: roundMs(p.pos.y),
         z: roundMs(p.pos.z),
       },
-      biome: zoneBiomeAt(p.pos.z),
+      biome: zoneBiomeAt(p.pos.x, p.pos.z),
       lastQualityChange: qualityChange,
       createdViews,
       createdViewTypes,
@@ -5501,7 +6608,7 @@ export class Renderer {
         .addScaledVector(sunAzimuth, 48 + i * 26)
         .addScaledVector(side, (i - 1) * 30 + sway);
       sp.position.y = this.camera.position.y + 16 + i * 7;
-      sp.material.opacity = facing * facing * facing * (0.3 - i * 0.05);
+      sp.material.opacity = facing * facing * facing * (0.3 - i * 0.05) * this.sunUp;
     }
   }
 
@@ -5510,6 +6617,7 @@ export class Renderer {
     dt: number,
     selfAlphaLead: number,
     selfMotion: SelfMotionFrame | null = null,
+    authoritativeDiscontinuity = false,
   ): THREE.Vector3 {
     const p = this.sim.player;
     // Online intent-driven extrapolation: when active it owns the position and
@@ -5520,14 +6628,16 @@ export class Renderer {
       if (!this.selfMotionPredictor) {
         this.selfMotionPredictor = new SelfMotionPredictor(this.sim.cfg.seed);
       }
-      const predicted = this.selfMotionPredictor.step(p, selfMotion);
+      const predicted = this.selfMotionPredictor.step(p, selfMotion, authoritativeDiscontinuity);
       if (predicted) {
         // Follow the predictor output exactly (it is already continuous;
         // smoothing it again would re-add the display lag this exists to
         // remove). The only discontinuity is the handoff frame from the
         // lead-smoothing path below: capture that gap once as an offset and
         // decay it, so the camera glides instead of stepping.
-        if (this.selfRenderPositionReady && !this.selfMotionActive) {
+        if (authoritativeDiscontinuity) {
+          this.selfMotionOffset.set(0, 0, 0);
+        } else if (this.selfRenderPositionReady && !this.selfMotionActive) {
           this.selfMotionOffset.set(
             this.selfRenderPosition.x - predicted.x,
             this.selfRenderPosition.y - predicted.y,
@@ -5550,23 +6660,17 @@ export class Renderer {
     const px = p.prevPos.x + (p.pos.x - p.prevPos.x) * playerAlpha;
     const py = p.prevPos.y + (p.pos.y - p.prevPos.y) * playerAlpha;
     const pz = p.prevPos.z + (p.pos.z - p.prevPos.z) * playerAlpha;
-    if (selfAlphaLead > 0) {
-      const dx = px - this.selfRenderPosition.x;
-      const dy = py - this.selfRenderPosition.y;
-      const dz = pz - this.selfRenderPosition.z;
-      if (!this.selfRenderPositionReady || dx * dx + dy * dy + dz * dz > SELF_RENDER_SNAP_DIST_SQ) {
-        this.selfRenderPosition.set(px, py, pz);
-        this.selfRenderPositionReady = true;
-      } else {
-        const t = 1 - Math.exp(-SELF_RENDER_SMOOTH_RATE * Math.max(0, dt));
-        this.selfRenderPosition.x += dx * t;
-        this.selfRenderPosition.y += dy * t;
-        this.selfRenderPosition.z += dz * t;
-      }
-    } else {
-      this.selfRenderPosition.set(px, py, pz);
-      this.selfRenderPositionReady = true;
-    }
+    updateSelfRenderFallback(
+      this.selfRenderPosition,
+      px,
+      py,
+      pz,
+      this.selfRenderPositionReady,
+      dt,
+      selfAlphaLead > 0,
+      authoritativeDiscontinuity,
+    );
+    this.selfRenderPositionReady = true;
     return this.selfRenderPosition;
   }
 
@@ -5607,6 +6711,7 @@ export class Renderer {
   rebuildTerrain(region?: { minX: number; minZ: number; maxX: number; maxZ: number }): void {
     if (region) {
       this.terrainView.rebuildRegion(region.minX, region.minZ, region.maxX, region.maxZ);
+      if (this.caveGroup) refreshCaveMeshes(this.caveGroup, region);
       return;
     }
     this.terrainView.cancelStreaming();
@@ -5628,6 +6733,15 @@ export class Renderer {
     this.terrainView = buildTerrain(this.sim.cfg.seed);
     setRenderCategory(this.terrainView.group, 'terrain');
     this.scene.add(this.terrainView.group);
+    freezeStaticMatrices(this.terrainView.group);
+    // A full editor rebuild replaces the zone cache along with the geometry.
+    // Re-run the same preparation path for every resident zone so the renderer
+    // cannot mistake an empty replacement view for an already-ready region.
+    const residentZones = ZONES.filter((zone) => this.preparedZones.has(zone.id));
+    this.preparedZones.clear();
+    for (const zone of residentZones) {
+      void this.prepareZoneAt(zone.hub.x, zone.hub.z);
+    }
   }
 
   /**
@@ -5651,6 +6765,20 @@ export class Renderer {
     this.waterView.setLevel();
   }
 
+  /** Rebuild the fluid-pool surfaces + lights (editor-only; playtest builds
+   *  once at boot). Pass `volumes` to render a live editor set; omit to read
+   *  the active world's fluids. */
+  rebuildFluids(volumes?: import('../sim/types').FluidVolume[]): void {
+    if (!this.fluidSurfaces) return;
+    // Pool lights live in the shared ranked budget: drop the stale ones first.
+    for (const l of this.fluidSurfaces.lights) {
+      const i = this.fireLights.indexOf(l);
+      if (i >= 0) this.fireLights.splice(i, 1);
+    }
+    this.fluidSurfaces.rebuild(volumes);
+    this.fireLights.push(...this.fluidSurfaces.lights);
+  }
+
   /**
    * Full water rebuild: dispose every existing lake mesh and rebuild from the
    * CURRENT `waterBodies()` (declared lake list). Needed after the editor adds,
@@ -5660,18 +6788,23 @@ export class Renderer {
    * while the terrain basin itself has already moved. Editor-only.
    */
   rebuildWaterBodies(): void {
-    for (const mesh of this.waterView.meshes) {
-      this.scene.remove(mesh);
+    const old = this.waterView;
+    this.scene.remove(old.group);
+    for (const mesh of old.meshes) {
       mesh.geometry.dispose();
       const mat = mesh.material as THREE.Material | THREE.Material[];
       if (Array.isArray(mat)) for (const m of mat) m.dispose();
       else mat.dispose();
     }
     this.waterView = buildWater(this.sim.cfg.seed);
-    for (const mesh of this.waterView.meshes) {
-      setRenderCategory(mesh, 'water');
-      this.scene.add(mesh);
-      freezeStaticMatrices(mesh);
+    setRenderCategory(this.waterView.group, 'water');
+    this.scene.add(this.waterView.group);
+    freezeStaticMatrices(this.waterView.group);
+    for (const zone of ZONES) {
+      if (!this.preparedZones.has(zone.id)) continue;
+      void this.waterView.ensureZone(zone).then((meshes) => {
+        for (const mesh of meshes) freezeStaticMatrices(mesh);
+      });
     }
   }
 
@@ -5697,6 +6830,9 @@ export class Renderer {
   setEditorLighting(profile: EditorLightingProfile | null): void {
     const b = this.baseLighting;
     if (!b) return;
+    // Remembered for updateAmbience: the per-frame day/night easing otherwise
+    // pulls the rig back to the biome targets within seconds of any change.
+    this.lightingOverride = profile;
     this.sun.intensity = profile ? profile.sunIntensity : b.sunIntensity;
     this.sun.color.setHex(profile ? profile.sunColor : b.sunColor);
     this.hemi.intensity = profile ? profile.hemiIntensity : b.hemiIntensity;
@@ -5818,7 +6954,19 @@ export class Renderer {
       // Thread the active run's module chain so camera collision matches the
       // delve's actual (possibly Heroic/varied) layout, not just the default.
       const delveMods = this.sim.delveRun?.modules;
-      let hardT = cameraOcclusion(seed, px, eyeY, pz, cx, cy, cz, CAMERA_COLLIDER_PAD, delveMods);
+      const riftToken = this.sim.riftCollisionToken;
+      let hardT = cameraOcclusion(
+        seed,
+        px,
+        eyeY,
+        pz,
+        cx,
+        cy,
+        cz,
+        CAMERA_COLLIDER_PAD,
+        delveMods,
+        riftToken,
+      );
       let softT = cameraOcclusion(
         seed,
         px,
@@ -5829,7 +6977,9 @@ export class Renderer {
         cz,
         CAMERA_SOFT_COLLIDER_PAD,
         delveMods,
+        riftToken,
       );
+      softT = Math.min(softT, hardT);
       const segLen = Math.hypot(cx - px, cy - eyeY, cz - pz);
       if (segLen > 1e-3) {
         const minT = CAMERA_MIN_DIST / segLen;
@@ -5852,7 +7002,14 @@ export class Renderer {
     cx = px + (cx - px) * ct;
     cy = eyeY + (cy - eyeY) * ct;
     cz = pz + (cz - pz) * ct;
-    const groundY = groundHeight(cx, cz, seed) + 0.6;
+    let groundY = groundHeight(cx, cz, seed) + 0.6;
+    // On a raised rift tier the flat ground clamp would let the camera sink
+    // into the riser: add the same lift the sim stands entities on.
+    const rfCam = this.sim.riftFloor;
+    if (rfCam && isRiftPos(cx)) {
+      const floor = generateRiftFloor(rfCam.seed, rfCam.baseLevel, rfCam.floorIndex, rfCam.upgrade);
+      groundY += riftLiftAt(floor, cx - rfCam.origin.x, cz - rfCam.origin.z);
+    }
     this.camera.position.set(cx, Math.max(cy, groundY), cz);
     if (Math.abs(this.camera.fov - this.camOcclusion.fov) > 0.01) {
       this.camera.fov = this.camOcclusion.fov;
@@ -5874,14 +7031,14 @@ export class Renderer {
       const fl = Math.hypot(fx, fy, fz) || 1;
       sink.setListener(cpx, cpy, cpz, fx / fl, fy / fl, fz / fl);
       const inDungeon = px > DUNGEON_X_THRESHOLD;
-      const biome = zoneBiomeAt(pz);
+      const biome = zoneBiomeAt(px, pz);
       const precip =
         !this.weatherOn || inDungeon
           ? null
-          : biome === 'peaks'
+          : biome === 'peaks' || biome === 'frost'
             ? 'snow'
-            : biome === 'marsh'
-              ? 'rain'
+            : biome === 'marsh' || biome === 'haunt'
+              ? 'rain' // the haunted wood drips under a permanent drizzle
               : null;
       // Only at the water's edge / in it — sampled at the player, so a loose
       // threshold made the loop bleed across the low marsh from far off.

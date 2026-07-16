@@ -23,6 +23,8 @@ export interface PathOpts {
   // bottom — is what the body rides, so a sloped bed isn't a wall and the climb
   // check at the shore measures the real waterline-to-bank step.
   swim?: boolean;
+  // Per-Sim rift collision token (colliders.ts registry); 0/undefined = none.
+  riftToken?: number;
 }
 
 function minGroundAt(o: PathOpts, x: number, z: number): number {
@@ -70,7 +72,8 @@ function segmentWalkable(
     const isEnd = i === steps;
     if (
       (!isEnd || !allowBlockedEnd) &&
-      (h < minGroundAt(o, x, z) || isBlocked(o.seed, x, z, o.bodyRadius, o.ignoreFences))
+      (h < minGroundAt(o, x, z) ||
+        isBlocked(o.seed, x, z, o.bodyRadius, o.ignoreFences, undefined, o.riftToken))
     ) {
       return false;
     }
@@ -148,7 +151,7 @@ export function findPath(
         i === startIdx ||
         i === goalIdx ||
         (groundAt(i) >= minGroundAt(o, cellX, cellZ) &&
-          !isBlocked(o.seed, cellX, cellZ, o.bodyRadius, o.ignoreFences));
+          !isBlocked(o.seed, cellX, cellZ, o.bodyRadius, o.ignoreFences, undefined, o.riftToken));
       walk[i] = ok ? 1 : -1;
     }
     return walk[i] === 1;
@@ -250,6 +253,7 @@ export function findPlayerPath(
   maxSpan = 128,
   ignoreFences = false,
   swim = false,
+  riftToken = 0,
 ): { x: number; z: number }[] {
   return findPath(from, to, {
     seed,
@@ -264,6 +268,7 @@ export function findPlayerPath(
     maxSpan,
     ignoreFences,
     swim,
+    riftToken,
   });
 }
 

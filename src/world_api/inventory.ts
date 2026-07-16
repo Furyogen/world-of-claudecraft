@@ -1,3 +1,4 @@
+import type { PlayerEquipmentInstances } from '../sim/entity';
 import type { EquipSlot, InvSlot } from '../sim/types';
 
 export interface IWorldInventory {
@@ -9,6 +10,7 @@ export interface IWorldInventory {
   bagCapacity: number;
   vendorBuyback: InvSlot[];
   equipment: Partial<Record<EquipSlot, string>>;
+  equipmentInstances: PlayerEquipmentInstances;
   copper: number;
   equipItem(itemId: string): void;
   /** Reorder the bags: move the stack at inventory index `from` onto the bag cell at
@@ -33,4 +35,8 @@ export interface IWorldInventory {
   // Quest items and anything flagged noVendorSell are left untouched.
   sellAllJunk(): void;
   buyBackItem(itemId: string): void;
+  salvageItem(itemId: string): void;
+  upgradeRiftItem(itemId: string): void;
+  enchantRiftItem(itemId: string, stat: string): void;
+  socketRiftGem(itemId: string, gemId: string): void;
 }

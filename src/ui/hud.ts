@@ -21,6 +21,8 @@ import { CharacterPreview } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
 import { mechHeldWeaponOverride } from '../render/characters/manifest';
 import { onPortraitsReady } from '../render/characters/portrait';
+import { currentDayNightPhase } from '../render/day_night_clock';
+import { globalDayness, skyTintForDayness } from '../render/day_night_core';
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
 import {
@@ -42,7 +44,6 @@ import {
   DUNGEON_LIST,
   DUNGEON_X_THRESHOLD,
   dungeonAt,
-  getActiveWorldContent,
   ITEMS,
   MOBS,
   NPCS,
@@ -68,6 +69,7 @@ import type {
   EquipSlot,
   HonorReason,
   InvSlot,
+  ItemInstancePayload,
   ItemSlot,
   MailResultCode,
   PetMode,
@@ -313,10 +315,19 @@ import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
 import { mailIndicatorView } from './mailbox_view';
 import { MailboxWindow } from './mailbox_window';
-import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
+import { onMapArtReady } from './map_art';
+import { bakedMapBgEligible, loadBakedMapBg } from './map_bg';
+import {
+  type MapRegion,
+  mapCanvasHeight,
+  mapZoneRegion,
+  type PaintRowCarry,
+  paintTerrainRows,
+} from './map_terrain';
 import { MapWindowPainter } from './map_window_painter';
 import {
   MAP_MAX_ZOOM,
+  MAP_OPEN_ZOOM,
   type MapNpcMarker,
   type MapQuestAreaMarker,
   mapWindowMode,
@@ -397,6 +408,7 @@ import { type UnitFrameDescriptor, unitFrameView } from './unit_frame';
 import { UnitFramePainter } from './unit_frame_painter';
 import { crestIdForEntity } from './unit_portrait';
 import { UnitPortraitPainter } from './unit_portrait_painter';
+import { unstuckFeedback } from './unstuck_feedback';
 import { ValeCupBetting } from './vale_cup_betting';
 import { buildVcupBettingView } from './vale_cup_betting_view';
 import { ValeCupBriefing } from './vale_cup_briefing';
@@ -1006,6 +1018,7 @@ export class Hud {
   private errorTimer: number | undefined;
   private lastMirroredErrorText: string | undefined;
   private bannerTimer: number | undefined;
+  private bannerSource: 'unstuck' | null = null;
   private pfLevelEl = $('#pf-level');
   private pfHpEl = $('#pf-hp');
   private pfHpTextEl = $('#pf-hp-text');
@@ -1102,6 +1115,8 @@ export class Hud {
   private minimapCtx: CanvasRenderingContext2D;
   private minimapBg: HTMLCanvasElement;
   private clockEl: HTMLElement | null = null;
+  private dayNightCtx: CanvasRenderingContext2D | null = null;
+  private lastDayNightDrawAt = 0; // the dial redraws ~1Hz; the 12h cycle barely moves
   private raidLockoutEl: HTMLElement | null = null;
   private raidLockoutLocked = false;
   private clock24 = false; // 24-hour vs 12-hour AM/PM display
@@ -1136,7 +1151,17 @@ export class Hud {
     H: number;
     row: number;
     region: MapRegion;
+    carry: PaintRowCarry;
   } | null = null;
+  // Zones waiting for their background prewarm behind the single in-flight
+  // job: fed by zone streaming (every zone the renderer prepares also gets its
+  // map background rendered ahead of the first open). The committed-zone
+  // prewarm (prewarmMapBg on a crossing) preempts; the preempted zone returns
+  // to the front of this queue.
+  private mapPrewarmQueue: string[] = [];
+  // Blank-paper placeholders handed to an open map while a baked plate is
+  // still decoding; dropped the moment the real background commits.
+  private mapBgPending = new Map<string, HTMLCanvasElement>();
   private mapPrewarmHandle = 0;
   // Which scheduler produced mapPrewarmHandle. requestIdleCallback and setTimeout
   // hand out ids from separate pools, so the handle must be cancelled with the
@@ -1196,6 +1221,7 @@ export class Hud {
   private lastNythraxisCombatEventAt = 0;
   private lastResting = false;
   private lastZoneId = '';
+  private mapZoneId = '';
   private mapZoom = 1; // world-map zoom: 1 = whole zone, up to MAP_MAX_ZOOM
   private mapCenter: { x: number; z: number } | null = null; // pan target; null = follow player
   // Dungeon Finder "Show on Map": a highlighted entrance + the zone band to
@@ -1547,12 +1573,47 @@ export class Hud {
     });
     const mm = $('#minimap') as unknown as HTMLCanvasElement;
     this.minimapCtx = require2dContext(mm);
-    this.minimapBg = this.renderTerrainCanvas(140, {
+    // The whole-world minimap strip: on the shipped world it is a baked plate
+    // (public/map_bg/world_strip.webp) blitted in as soon as it decodes, so
+    // boot skips ~50k pixels of synchronous terrain painting; other worlds
+    // keep the procedural render.
+    const worldStripRegion = {
       minX: WORLD_MIN_X,
       maxX: WORLD_MAX_X,
       minZ: WORLD_MIN_Z,
       maxZ: WORLD_MAX_Z,
-    });
+    };
+    if (bakedMapBgEligible(this.sim.cfg.seed, 'world_strip')) {
+      const stripCanvas = document.createElement('canvas');
+      stripCanvas.width = 140;
+      stripCanvas.height = mapCanvasHeight(140, worldStripRegion);
+      const stripCtx = require2dContext(stripCanvas);
+      stripCtx.fillStyle = '#163058'; // the painter's deep-sea tone until the plate lands
+      stripCtx.fillRect(0, 0, stripCanvas.width, stripCanvas.height);
+      this.minimapBg = stripCanvas;
+      loadBakedMapBg(
+        'world_strip',
+        (img) =>
+          require2dContext(stripCanvas).drawImage(img, 0, 0, stripCanvas.width, stripCanvas.height),
+        () => {
+          this.minimapBg = this.renderTerrainCanvas(140, worldStripRegion);
+        },
+      );
+    } else {
+      this.minimapBg = this.renderTerrainCanvas(140, worldStripRegion);
+    }
+    // hand-painted plates land in the world strip too, each over its own band
+    {
+      const stripH = this.minimapBg.height;
+      const spanZ = WORLD_MAX_Z - WORLD_MIN_Z;
+      for (const zn of ZONES) {
+        onMapArtReady(zn.id, (img) => {
+          const top = ((WORLD_MAX_Z - zn.zMax) / spanZ) * stripH;
+          const rows = ((zn.zMax - zn.zMin) / spanZ) * stripH;
+          require2dContext(this.minimapBg).drawImage(img, 0, top, this.minimapBg.width, rows);
+        });
+      }
+    }
     mm.style.cursor = 'var(--cursor-point)';
     mm.title = t('controls.worldMap');
     mm.addEventListener('click', () => this.toggleMap());
@@ -1637,6 +1698,10 @@ export class Hud {
     // UI-only concern, so `new Date()` here is fine (the sim-only time ban
     // doesn't apply — cf. meters.ts using performance.now()).
     this.clockEl = $('#minimap-clock');
+    // day/night dial on the minimap rim: a decorative canvas showing the 12h
+    // world cycle. Same UI-only wall-clock allowance as the clock above.
+    const dayNightCanvas = document.getElementById('minimap-daynight') as HTMLCanvasElement | null;
+    this.dayNightCtx = dayNightCanvas?.getContext('2d') ?? null;
     // raid-lockout badge on the minimap rim: a lock icon whose hover/tap panel
     // lists the player's raid lockouts (the unlock countdown). Always visible;
     // it lights up (.locked) while any raid is on cooldown. attachTooltip handles
@@ -1993,17 +2058,13 @@ export class Hud {
       music.setEnabled(!music.enabled);
       styleMusicBtn();
     });
-    const startZone = zoneAt(sim.player.pos.z);
+    const startZone = zoneAt(sim.player.pos.x, sim.player.pos.z);
     const startZoneName = zoneDisplayName(startZone.id);
     this.lastZoneId = startZone.id;
     this.prewarmMapBg(startZone.id); // render the spawn-zone map bg during idle, not on first open
-    // Unnamed zones (blank authoring maps before the maker adds locations)
-    // skip the banner/welcome entirely.
-    if (startZoneName) {
-      this.showBanner(startZoneName);
-      this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
-      this.logZoneWelcome(startZone);
-    }
+    this.showBanner(startZoneName);
+    this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
+    this.logZoneWelcome(startZone);
     this.log(t('hudChrome.tips.joinChannels'), '#7fd4ff');
   }
 
@@ -3128,7 +3189,7 @@ export class Hud {
     },
   );
   // Overworld world-map painter (the delve branch stays with delvePainter). Owns
-  // the cached whole-world decorations; redraws from the mediumHud band while open.
+  // the cached current-zone decorations; redraws from the mediumHud band while open.
   private readonly mapPainter = new MapWindowPainter();
   private readonly infernalWorldMapPainter = new InfernalAbyssWorldMapPainter();
   // The aura strips are the keyed-pool aura painter, two instances of the
@@ -3223,13 +3284,17 @@ export class Hud {
   // Overworld minimap canvas painter (the delve branch stays with delvePainter). Owns
   // the marker core; redraws from the fastHud (~10Hz) band. classCss colors the party
   // discs/arrows; zoneDisplayName localizes the '#zone-label' it writes via setText.
-  private readonly minimapPainter = new MinimapPainter(this.writerFacet, classCss, (zoneId) =>
-    zoneDisplayName(zoneId),
+  private readonly minimapPainter = new MinimapPainter(
+    this.writerFacet,
+    classCss,
+    (zoneId) => zoneDisplayName(zoneId),
+    (name, rank) =>
+      rank ? t('hud.core.riftLabelRanked', { name, rank }) : t('hud.core.riftLabel', { name }),
   );
   private readonly presentationBag: PainterHostPresentation = {
     itemIcon: (item) => this.itemIcon(item),
     moneyHtml: (copper) => this.moneyHtml(copper),
-    itemTooltip: (item) => this.itemTooltip(item),
+    itemTooltip: (item, instance) => this.itemTooltip(item, true, instance),
     attachTooltip: (el, html) => this.attachTooltip(el, html),
   };
   // The interactive talents window. Hud stays the coordinator (closeOtherWindows
@@ -4170,7 +4235,7 @@ export class Hud {
     this.hideTooltip();
   }
 
-  private itemTooltip(item: ItemDef, compare = true): string {
+  private itemTooltip(item: ItemDef, compare = true, instance?: ItemInstancePayload): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
     // Quality/kind line, e.g. "Epic Armor". Heroic upgraded variants append a gold
@@ -4245,6 +4310,34 @@ export class Hud {
           )}</div>`;
         }
       }
+    }
+    if (instance?.rolled?.stats) {
+      for (const [stat, value] of Object.entries(instance.rolled.stats)) {
+        if (!Number.isFinite(value) || value === 0) continue;
+        html += `<div class="tt-green">${esc(
+          t('itemUi.tooltip.stat', {
+            value: itemNumber(value),
+            stat: itemStatName(stat),
+          }),
+        )}</div>`;
+      }
+    }
+    if (instance?.rift) {
+      html += `<div class="tt-sub">${esc(
+        t('hudChrome.itemTooltip.riftTier', { tier: instance.rift.tier }),
+      )}</div>`;
+      html += `<div class="tt-sub">${esc(
+        t('hudChrome.itemTooltip.riftUpgrade', {
+          level: itemNumber(instance.rift.upgradeLevel),
+          max: itemNumber(instance.rift.maxUpgradeLevel),
+        }),
+      )}</div>`;
+      html += `<div class="tt-sub">${esc(
+        t('hudChrome.itemTooltip.riftSockets', {
+          used: itemNumber(instance.rift.gems.length),
+          total: itemNumber(instance.rift.gemSlots),
+        }),
+      )}</div>`;
     }
     const warfareRating = Math.min(item.pvpOffenseRating ?? 0, item.pvpDefenseRating ?? 0);
     if (warfareRating > 0) {
@@ -6679,59 +6772,31 @@ export class Hud {
     }
 
     const inDungeon = p.pos.x > DUNGEON_X_THRESHOLD;
-    const currentZone = zoneAt(p.pos.z);
+    const currentZone = zoneAt(p.pos.x, p.pos.z);
     if (mediumHud) {
       // zone transitions: banner + welcome hint when crossing into a new band.
       // A ~5yd dead-band past the boundary stops a player straddling the border
       // from re-triggering the banner/log (and the map canvas regen) every step.
       if (!inDungeon && currentZone.id !== this.lastZoneId) {
-        // Active-world zones, so custom-map playtests dead-band against THEIR
-        // bands (the static table would re-trigger the banner every step).
-        const lastZone = getActiveWorldContent().zones.find((z) => z.id === this.lastZoneId);
-        const pastDeadBand =
-          !lastZone ||
-          p.pos.z < lastZone.zMin - ZONE_BANNER_DEADBAND ||
-          p.pos.z >= lastZone.zMax + ZONE_BANNER_DEADBAND;
-        if (pastDeadBand) {
-          if (this.lastZoneId !== '') {
-            const currentZoneName = zoneDisplayName(currentZone.id);
-            // Unnamed custom zones show no banner/welcome (blank maps stay
-            // quiet until the maker authors locations).
-            if (currentZoneName) {
-              this.showBanner(currentZoneName);
-              this.log(t('hud.core.enteringZone', { zone: currentZoneName }), '#ffd100');
-              this.logZoneWelcome(currentZone);
-            }
-          }
-          this.lastZoneId = currentZone.id;
-          this.prewarmMapBg(currentZone.id); // get the new zone's map bg ready before the player opens it
+        // commit the moment zoneAt flips: the old 1D z deadband never fired
+        // on an east-west crossing (the grid's column borders share the z
+        // band), so the banner and map lagged the border by a whole realm.
+        // Re-crossing costs only a banner re-emit; the map bg is cached.
+        if (this.lastZoneId !== '') {
+          const currentZoneName = zoneDisplayName(currentZone.id);
+          this.showBanner(currentZoneName);
+          this.log(t('hud.core.enteringZone', { zone: currentZoneName }), '#ffd100');
+          this.logZoneWelcome(currentZone);
         }
+        this.lastZoneId = currentZone.id;
+        this.prewarmMapBg(currentZone.id); // get the new zone's map bg ready before the player opens it
       }
 
       // subzone text: a smaller banner when you step into a named landmark
       // (classic "subzone" display). POIs are the same labels the minimap pins.
-      // Editor-authored location rects (custom maps) take precedence: standing
-      // inside one shows ITS name as the current location.
-      let subzone: string | null = null;
-      if (!inDungeon) {
-        const locations = getActiveWorldContent().locations;
-        if (locations) {
-          for (const loc of locations) {
-            if (
-              p.pos.x >= loc.minX &&
-              p.pos.x <= loc.maxX &&
-              p.pos.z >= loc.minZ &&
-              p.pos.z <= loc.maxZ
-            ) {
-              subzone = loc.name;
-              break;
-            }
-          }
-        }
-        if (subzone === null) {
-          subzone = nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
-        }
-      }
+      const subzone = inDungeon
+        ? null
+        : nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
       if (subzone !== this.lastSubzone) {
         this.lastSubzone = subzone;
         if (subzone) {
@@ -6831,6 +6896,7 @@ export class Hud {
         this.updateMinimap();
       }
       this.updateClock();
+      this.updateDayNightDial();
       this.updateMinimapCoords();
       this.updateCompass();
     }
@@ -7079,33 +7145,139 @@ export class Hud {
     return c;
   }
 
-  // The full-zone band used by the world map (and prewarm), keyed only on z.
+  // The full-zone band used by the world map (and prewarm): the shared
+  // map_terrain helper, so the HUD, the build-time plate bake, and the
+  // freshness guard can never disagree about a plate's bounds.
   private mapZoneRegion(zone: ZoneDef): MapRegion {
-    return { minX: WORLD_MIN_X, maxX: WORLD_MAX_X, minZ: zone.zMin, maxZ: zone.zMax };
+    return mapZoneRegion(zone);
   }
 
   // The cached terrain background for a zone, rendering it synchronously only if
   // a prewarm hasn't already produced it. The synchronous path is the fallback
   // for "opened the map the instant we entered a zone"; normally the idle
   // prewarm has it ready and this is a Map hit.
+  // Composite a hand-painted plate (public/map_art/<zoneId>.*) over a zone's
+  // procedural background canvas once it loads; the caches hold the canvas by
+  // reference, so the next blit picks the art up without invalidation.
+  private compositeMapArt(zoneId: string, canvas: HTMLCanvasElement): void {
+    onMapArtReady(zoneId, (img) => {
+      const ctx = require2dContext(canvas);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    });
+  }
+
   private mapZoneBg(zone: ZoneDef): HTMLCanvasElement {
     const cached = this.mapBgCache.get(zone.id);
     if (cached) return cached;
-    const bg = this.renderTerrainCanvas(MAP_BG_RES, this.mapZoneRegion(zone));
-    this.mapBgCache.set(zone.id, bg);
-    // a redundant in-flight prewarm for this same zone can be dropped now
-    if (this.mapPrewarm?.zoneId === zone.id) this.cancelMapPrewarm();
-    return bg;
+    // Cache miss with the map ALREADY open: never render synchronously (a
+    // full zone background is seconds of terrain sampling over the grid
+    // world). Prioritize this zone's plate (the baked image on the shipped
+    // world, else the sliced procedural prewarm) and hand back an interim
+    // canvas: the open map redraws on the medium HUD cadence, so the plate
+    // appears the moment the image decodes, or fills in top-down as the
+    // sliced prewarm publishes rows.
+    if (this.mapPrewarm?.zoneId !== zone.id) this.prewarmMapBg(zone.id);
+    const rechecked = this.mapBgCache.get(zone.id);
+    if (rechecked) return rechecked; // an already-decoded baked plate commits synchronously
+    if (this.mapPrewarm?.zoneId === zone.id) return this.mapPrewarm.canvas;
+    // A baked plate is still decoding: show blank map paper for a frame or two.
+    let placeholder = this.mapBgPending.get(zone.id);
+    if (!placeholder) {
+      const region = mapZoneRegion(zone);
+      placeholder = document.createElement('canvas');
+      placeholder.width = MAP_BG_RES;
+      placeholder.height = mapCanvasHeight(MAP_BG_RES, region);
+      const ctx = require2dContext(placeholder);
+      ctx.fillStyle = '#3c3a30';
+      ctx.fillRect(0, 0, placeholder.width, placeholder.height);
+      this.mapBgPending.set(zone.id, placeholder);
+    }
+    return placeholder;
   }
 
-  // Kick off (or no-op) an idle, time-sliced render of a zone's map background
-  // so opening the map never pays the ~200ms terrain cost on the click. Called
-  // when the committed zone changes and once at startup for the spawn zone.
+  /**
+   * Enqueue a zone's map background for the idle prewarm lane. Wired by
+   * main.ts to the renderer's zone streaming, so every zone that becomes
+   * resident also gets its map background rendered ahead of the first open
+   * (opening the map must never pay the ~200ms terrain render on the click).
+   * One job runs at a time; the committed-zone prewarm preempts the lane and
+   * the preempted zone resumes from the queue.
+   */
+  queueMapBgPrewarm(zoneId: string): void {
+    if (this.mapBgCache.has(zoneId)) return;
+    if (this.mapPrewarm?.zoneId === zoneId) return;
+    if (this.mapPrewarmQueue.includes(zoneId)) return;
+    if (this.mapPrewarm) {
+      this.mapPrewarmQueue.push(zoneId);
+      return;
+    }
+    this.prewarmMapBg(zoneId);
+  }
+
+  private startNextMapPrewarm(): void {
+    while (!this.mapPrewarm) {
+      const next = this.mapPrewarmQueue.shift();
+      if (next === undefined) return;
+      if (this.mapBgCache.has(next)) continue;
+      this.prewarmMapBg(next);
+      return;
+    }
+  }
+
+  // Commit a ready background (baked plate or finished prewarm) to the cache
+  // and let the map-art overlay land on it.
+  private commitMapBg(zoneId: string, canvas: HTMLCanvasElement): void {
+    this.mapBgCache.set(zoneId, canvas);
+    this.mapBgPending.delete(zoneId);
+    this.compositeMapArt(zoneId, canvas);
+  }
+
+  // Ready a zone's map background so opening the map never pays terrain
+  // rendering on the click. On the shipped world this only DECODES the baked
+  // plate (public/map_bg, see scripts/build_map_backgrounds.mjs); custom
+  // seeds, edited worlds, and missing plates fall back to the idle-sliced
+  // procedural painter. Called when the committed zone changes, once at
+  // startup for the spawn zone, and for every zone the streaming lane
+  // prepares (queueMapBgPrewarm).
   private prewarmMapBg(zoneId: string): void {
     if (this.mapBgCache.has(zoneId)) return;
     if (this.mapPrewarm?.zoneId === zoneId) return; // already prewarming it
     const zone = ZONES.find((z) => z.id === zoneId);
     if (!zone) return;
+    if (bakedMapBgEligible(this.sim.cfg.seed, zoneId)) {
+      loadBakedMapBg(
+        zoneId,
+        (img) => {
+          if (this.mapBgCache.has(zoneId)) return;
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          require2dContext(canvas).drawImage(img, 0, 0);
+          this.commitMapBg(zoneId, canvas);
+          // a redundant procedural job or queue entry for this zone can stop
+          if (this.mapPrewarm?.zoneId === zoneId) {
+            this.cancelMapPrewarm();
+            this.startNextMapPrewarm();
+          }
+        },
+        () => this.prewarmMapBgProcedural(zone),
+      );
+      return;
+    }
+    this.prewarmMapBgProcedural(zone);
+  }
+
+  // The runtime fallback painter: an idle, time-sliced render of the zone's
+  // background through the single prewarm lane.
+  private prewarmMapBgProcedural(zone: ZoneDef): void {
+    const zoneId = zone.id;
+    if (this.mapBgCache.has(zoneId)) return;
+    if (this.mapPrewarm?.zoneId === zoneId) return; // already prewarming it
+    // Preempt any in-flight prewarm (the committed zone is the most urgent
+    // open), but keep the preempted zone: it resumes from the queue front.
+    if (this.mapPrewarm && !this.mapPrewarmQueue.includes(this.mapPrewarm.zoneId)) {
+      this.mapPrewarmQueue.unshift(this.mapPrewarm.zoneId);
+    }
     this.cancelMapPrewarm(); // drop any prewarm for a now-stale zone
     const region = this.mapZoneRegion(zone);
     const W = MAP_BG_RES;
@@ -7114,6 +7286,11 @@ export class Hud {
     c.width = W;
     c.height = H;
     const ctx = require2dContext(c);
+    // A neutral parchment underlay: a cache-miss open blits this canvas while
+    // it fills top-down (see mapZoneBg), so the unpainted remainder reads as
+    // blank map paper rather than black.
+    ctx.fillStyle = '#3c3a30';
+    ctx.fillRect(0, 0, W, H);
     this.mapPrewarm = {
       zoneId,
       canvas: c,
@@ -7123,6 +7300,7 @@ export class Hud {
       H,
       row: 0,
       region,
+      carry: { prevRow: null },
     };
     this.scheduleMapPrewarm();
   }
@@ -7163,29 +7341,41 @@ export class Hud {
     }
   }
 
-  // Paint a budgeted slice of the in-flight prewarm, then reschedule until the
-  // zone is fully rendered. Whole rows per slice keeps it byte-identical to a
-  // one-shot render (the only per-row state, hillshade, resets each row).
-  // With an idle deadline we paint as many slices as fit; without one (the
-  // setTimeout fallback) we paint a single slice and let the reschedule pace it,
-  // so the no-requestIdleCallback path stays sliced instead of rendering the
-  // whole canvas in one ~200ms hitch.
+  // Paint a TIME-budgeted slice of the in-flight prewarm, then reschedule
+  // until the zone is fully rendered. Whole rows per step keep it
+  // byte-identical to a one-shot render; the carry threads the previous row's
+  // heights between pumps so one-row steps never pay a chunk-start recompute.
+  // Rows are expensive (~5ms each at MAP_BG_RES over the grid world), so the
+  // budget is wall time, never a fixed row count: a pump stops after
+  // MAP_PREWARM_SLICE_MS or when the idle deadline runs dry. Each pump also
+  // publishes its rows to the canvas, so a cache-miss open (mapZoneBg) shows
+  // the map filling in top-down instead of freezing on a full render.
   private pumpMapPrewarm = (deadline?: { timeRemaining(): number }): void => {
     const job = this.mapPrewarm;
     if (!job) return;
     const seed = this.sim.cfg.seed;
-    const ROWS_PER_SLICE = 16; // ~6ms at MAP_BG_RES; one frame fits several
+    const MAP_PREWARM_SLICE_MS = 6;
+    const start = performance.now();
+    const firstRow = job.row;
     do {
-      const end = Math.min(job.H, job.row + ROWS_PER_SLICE);
-      paintTerrainRows(job.img.data, job.W, job.H, job.region, seed, job.row, end);
+      const end = Math.min(job.H, job.row + 1);
+      paintTerrainRows(job.img.data, job.W, job.H, job.region, seed, job.row, end, job.carry);
       job.row = end;
-    } while (job.row < job.H && deadline !== undefined && deadline.timeRemaining() > 3);
+    } while (
+      job.row < job.H &&
+      performance.now() - start < MAP_PREWARM_SLICE_MS &&
+      (deadline === undefined || deadline.timeRemaining() > 3)
+    );
+    if (job.row > firstRow) {
+      job.ctx.putImageData(job.img, 0, 0, 0, firstRow, job.W, job.row - firstRow);
+    }
     if (job.row >= job.H) {
       job.ctx.putImageData(job.img, 0, 0);
-      this.mapBgCache.set(job.zoneId, job.canvas);
+      this.commitMapBg(job.zoneId, job.canvas);
       this.mapPrewarm = null;
       this.mapPrewarmHandle = 0;
       this.mapPrewarmVia = null;
+      this.startNextMapPrewarm(); // drain the streamed-zone backlog
       return;
     }
     this.scheduleMapPrewarm();
@@ -7201,6 +7391,98 @@ export class Hud {
       this.lastClockText = text;
       this.clockEl.textContent = text;
     }
+  }
+
+  /** Force the minimap day/night dial to redraw on the next tick (the /daynight
+   *  dev command calls this so an override shows without the ~1s throttle wait). */
+  refreshDayNightDial(): void {
+    this.lastDayNightDrawAt = 0;
+  }
+
+  // Draw the minimap day/night dial: a ring painted with the 12h world sky cycle
+  // (deep navy night, warm dawn/dusk glow, bright day blue), a "now" marker that
+  // sweeps it once per cycle, and a centre sun or moon. Purely visual (the canvas
+  // is aria-hidden) and reads the shared UTC-anchored cycle, so a glance shows the
+  // current time of day and how far the marker sits from the coming day or night.
+  private updateDayNightDial(): void {
+    const ctx = this.dayNightCtx;
+    if (!ctx) return;
+    const now = Date.now();
+    if (now - this.lastDayNightDrawAt < 1000) return; // the 12h cycle crawls; ~1Hz is ample
+    this.lastDayNightDrawAt = now;
+
+    const S = 60; // backing resolution (CSS shows it at 30px, so 2x for crispness)
+    const cx = S / 2;
+    const cy = S / 2;
+    const rMid = 23; // ring centreline radius
+    const ringW = 8;
+    const rInner = rMid - ringW / 2 - 2; // centre disc radius
+    // noon (brightest) sits at the top, midnight at the bottom; the marker sweeps
+    // clockwise once per 12h. angle = pi/2 + phase*2pi (canvas y is down).
+    const angleForPhase = (p: number): number => Math.PI / 2 + p * Math.PI * 2;
+    const rgb = (c: readonly [number, number, number]): string =>
+      `rgb(${Math.round(c[0] * 255)}, ${Math.round(c[1] * 255)}, ${Math.round(c[2] * 255)})`;
+
+    ctx.clearRect(0, 0, S, S);
+
+    // the ring: sample the cycle in segments, each an arc of its sky color. The
+    // small angular overlap hides seams between the butt-capped arc segments.
+    const SEG = 60;
+    ctx.lineWidth = ringW;
+    ctx.lineCap = 'butt';
+    for (let i = 0; i < SEG; i++) {
+      const p0 = i / SEG;
+      const p1 = (i + 1) / SEG;
+      ctx.strokeStyle = rgb(skyTintForDayness(globalDayness((p0 + p1) / 2)));
+      ctx.beginPath();
+      ctx.arc(cx, cy, rMid, angleForPhase(p0), angleForPhase(p1) + 0.02);
+      ctx.stroke();
+    }
+
+    const phaseNow = currentDayNightPhase();
+    const daynessNow = globalDayness(phaseNow);
+    const skyNow = skyTintForDayness(daynessNow);
+
+    // centre disc tinted to the current sky, with a sun by day or a moon by night
+    ctx.fillStyle = rgb(skyNow);
+    ctx.beginPath();
+    ctx.arc(cx, cy, rInner, 0, Math.PI * 2);
+    ctx.fill();
+    if (daynessNow >= 0.5) {
+      ctx.fillStyle = '#ffd45a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffd45a';
+      ctx.lineWidth = 1.4;
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(a) * 8, cy + Math.sin(a) * 8);
+        ctx.lineTo(cx + Math.cos(a) * 10.5, cy + Math.sin(a) * 10.5);
+        ctx.stroke();
+      }
+    } else {
+      // crescent: a pale disc minus an offset disc repainted in the sky color
+      ctx.fillStyle = '#e2e8f6';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = rgb(skyNow);
+      ctx.beginPath();
+      ctx.arc(cx + 3, cy - 2.2, 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // the "now" marker: a bright pip riding the ring at the current phase
+    const am = angleForPhase(phaseNow);
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(am) * rMid, cy + Math.sin(am) * rMid, 3.6, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
   }
 
   // Classic-style coordinate readout pinned under the minimap. Reads only the
@@ -7342,13 +7624,22 @@ export class Hud {
     }
     // The overworld minimap: a pure marker core (minimap_markers) + the thin canvas
     // painter. It owns the cached terrain blit + the marker draws and writes
-    // '#zone-label' through the write-elision facet.
+    // '#zone-label' through the write-elision facet. It blits the current zone's
+    // high-res map background sharp over the coarse whole-world fallback, so the
+    // player's surroundings are crisp instead of a handful of upscaled pixels.
+    // The zone bg is only PEEKED from the cache (never rendered here: a 10Hz
+    // sync terrain render would hitch); the idle prewarm normally has it ready,
+    // and the coarse fallback covers the gap until then.
+    const p = this.sim.player;
+    const zone = ZONES.find((z) => z.id === this.lastZoneId) ?? zoneAt(p.pos.x, p.pos.z);
+    const cachedZoneBg = this.mapBgCache.get(zone.id);
     this.minimapPainter.paintOverworld(
       ctx,
       this.sim,
       $('#zone-label'),
       this.minimapBg,
       this.minimapZoom,
+      cachedZoneBg ? { canvas: cachedZoneBg, region: this.mapZoneRegion(zone) } : null,
     );
   }
 
@@ -7441,7 +7732,7 @@ export class Hud {
       return;
     }
     this.closeOtherWindows('#map-window');
-    this.mapZoom = 1; // always open at the full-zone view, following the player
+    this.mapZoom = MAP_OPEN_ZOOM; // open on the complete current zone
     this.mapCenter = null;
     this.mapPing = null;
     this.mapZoneOverride = null;
@@ -7456,7 +7747,7 @@ export class Hud {
   showFinderOnMap(x: number, z: number): void {
     const el = $('#map-window');
     if (el.style.display !== 'block') this.toggleMap();
-    this.mapZoneOverride = zoneAt(z).id;
+    this.mapZoneOverride = zoneAt(x, z).id;
     this.mapPing = { x, z };
     this.mapZoom = Math.max(this.mapZoom, 2);
     this.mapCenter = { x, z };
@@ -7524,13 +7815,24 @@ export class Hud {
     // border-straddling can't thrash the cached terrain regen.
     const dungeon = dungeonAt(p.pos.x);
     const zone: ZoneDef = this.mapZoneOverride
-      ? (ZONES.find((z) => z.id === this.mapZoneOverride) ?? zoneAt(p.pos.z))
+      ? (ZONES.find((z) => z.id === this.mapZoneOverride) ?? zoneAt(p.pos.x, p.pos.z))
       : dungeon
-        ? zoneAt(dungeon.doorPos.z)
-        : (ZONES.find((z) => z.id === this.lastZoneId) ?? zoneAt(p.pos.z));
+        ? zoneAt(dungeon.doorPos.x, dungeon.doorPos.z)
+        : (ZONES.find((z) => z.id === this.lastZoneId) ?? zoneAt(p.pos.x, p.pos.z));
+    // Crossing a zone while the map is open starts that zone at its full frame;
+    // a pan target from the previous zone must never leak into the new one.
+    if (this.mapZoneId !== zone.id) {
+      this.mapZoneId = zone.id;
+      this.mapZoom = MAP_OPEN_ZOOM;
+      this.mapCenter = null;
+    }
+    const zoneBg = {
+      canvas: this.mapZoneBg(zone),
+      region: this.mapZoneRegion(zone),
+    };
     const result = this.mapPainter.paintOverworld(ctx, this.sim, {
       zone,
-      bg: this.mapZoneBg(zone), // cached per zone; prewarmed during idle
+      zoneBg,
       canvasSize: S,
       zoom: this.mapZoom,
       center: this.mapCenter,
@@ -7706,6 +8008,18 @@ export class Hud {
         const cue = spellFxCue(ev);
         const anchor = cue ? sim.entities.get(cue.anchorId) : null;
         if (cue && anchor) this.combat(cue.key, anchor.pos.x, anchor.pos.y, anchor.pos.z, 0.6);
+        return;
+      }
+      case 'spellfxAt': {
+        // Ground-anchored bursts (ground-target detonations, the citadel's Blood
+        // Orb flare, the portcullis release nova) were silent: give novas the
+        // shared burst layered with a school-flavored impact, so the orb's fire
+        // flare reads differently from the gate's holy release. The listener is
+        // on the same floor, so the player's own y is the right height anchor.
+        if (ev.fx !== 'nova') return;
+        const y = sim.player.pos.y;
+        this.combat('spell_nova', ev.x, y, ev.z, 0.6, { cooldown: 0.08 });
+        this.combat(`impact_${ev.school}`, ev.x, y, ev.z, 0.5, { rate: 0.8, cooldown: 0.08 });
         return;
       }
       case 'heal':
@@ -8895,6 +9209,22 @@ export class Hud {
         case 'delveFailed':
           this.showBanner(t('delveUi.run.failed'));
           break;
+        case 'riftRaceResult':
+          if (ev.outcome === 'won') {
+            this.showBanner(
+              t('sim.rift.raceWinBanner', {
+                seconds: formatNumber(ev.clearTime, { maximumFractionDigits: 1 }),
+              }),
+            );
+            audio.duelEnd();
+          } else {
+            this.showBanner(t('sim.rift.raceLostBanner'));
+            audio.death();
+          }
+          break;
+        case 'riftRaceWorld':
+        case 'riftForgeResult':
+          break; // their localized log line carries the non-modal detail
         case 'companionBark': {
           // Acolyte Tessa's voice line: overhead bubble over her (when on-screen),
           // plus an attributed combat-log line so it is never missed off-screen.
@@ -8970,6 +9300,21 @@ export class Hud {
         case 'respawn':
           this.log(t('hud.system.respawn'), '#7fdc4f');
           break;
+        case 'unstuck': {
+          const feedback = unstuckFeedback(ev);
+          const text = t(feedback.key, feedback.values);
+          if (feedback.clearBanner) this.clearUnstuckBanner();
+          if (feedback.kind === 'error') {
+            this.showError(text);
+            break;
+          }
+          if (feedback.banner) {
+            const bannerText = t(feedback.bannerKey ?? feedback.key, feedback.values);
+            this.showBanner(bannerText, feedback.kind === 'progress' ? 'unstuck' : null);
+          }
+          if (feedback.log) this.log(text, feedback.kind === 'success' ? '#7fdc4f' : '#ffd100');
+          break;
+        }
         case 'castStart':
           break; // cast-loop SFX is spatial now (see playEventSfx)
         case 'castStop':
@@ -9058,8 +9403,7 @@ export class Hud {
 
   private logZoneWelcome(zone: ZoneDef): void {
     if (zone.welcomeQuestId && this.sim.questState(zone.welcomeQuestId) !== 'available') return;
-    const text = zoneWelcome(zone.id);
-    if (text) this.log(text, '#ffd100');
+    this.log(zoneWelcome(zone.id), '#ffd100');
   }
 
   private chatLogFrom(
@@ -9274,6 +9618,8 @@ export class Hud {
       'You mutter to yourself. Nobody hears it.': 'hud.errors.whisperSelf',
       'You are not in a party.': 'hud.errors.notInParty',
       'You must be in a party to start a ready check.': 'hudChrome.readyCheck.notInPartyError',
+      'Recovery: /unstuck starts a stationary countdown to move you to a nearby reachable safe spot.':
+        'hudChrome.unstuck.help',
       'A ready check is already in progress.': 'hudChrome.readyCheck.inProgressError',
       'Only the party leader can change the loot method.': 'hudChrome.masterLoot.leaderOnly',
       'Only the party leader may invite.': 'hud.errors.partyLeaderInvite',
@@ -9699,12 +10045,23 @@ export class Hud {
     }
   }
 
-  showBanner(text: string): void {
+  private clearUnstuckBanner(): void {
+    if (this.bannerSource !== 'unstuck') return;
+    clearTimeout(this.bannerTimer);
+    this.bannerTimer = undefined;
+    this.bannerSource = null;
+    this.bannerEl.textContent = '';
+    this.bannerEl.style.opacity = '0';
+  }
+
+  showBanner(text: string, source: 'unstuck' | null = null): void {
     this.bannerEl.textContent = text;
     this.bannerEl.style.opacity = '1';
+    this.bannerSource = source;
     clearTimeout(this.bannerTimer);
     this.bannerTimer = window.setTimeout(() => {
       this.bannerEl.style.opacity = '0';
+      this.bannerSource = null;
     }, 2600);
   }
 
@@ -9918,7 +10275,7 @@ export class Hud {
 
   private isInTown(): boolean {
     const pos = this.sim.player.pos;
-    return isInTownZone(pos, zoneAt(pos.z));
+    return isInTownZone(pos, zoneAt(pos.x, pos.z));
   }
 
   toggleTownFocus(): void {

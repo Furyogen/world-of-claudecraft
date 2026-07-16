@@ -29,6 +29,7 @@ import type { SimContext } from './sim_context';
 import {
   CONSUME_DURATION,
   CONSUME_TICKS,
+  cloneItemInstancePayload,
   dist2d,
   type Entity,
   type EquipSlot,
@@ -538,6 +539,15 @@ export function buyBackItem(ctx: SimContext, itemId: string, pid?: number): void
   });
 }
 
-function addItemSilent(itemId: string, count: number, meta: PlayerMeta): void {
+function addItemSilent(
+  itemId: string,
+  count: number,
+  meta: PlayerMeta,
+  instance?: import('./types').ItemInstancePayload,
+): void {
+  if (instance) {
+    meta.inventory.push({ itemId, count: 1, instance: cloneItemInstancePayload(instance) });
+    return;
+  }
   addStacked(meta.inventory, itemId, count);
 }
