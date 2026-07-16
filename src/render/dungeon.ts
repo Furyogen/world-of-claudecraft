@@ -622,9 +622,7 @@ export class DungeonInteriors {
   private infernalFloorMats = new Map<Pack, THREE.Material>();
   private waterMat: THREE.ShaderMaterial | null = null;
   private arenaHideables: ArenaHideable[] = [];
-  private infernalPortcullises: Array<
-    InfernalPortcullis & { worldX: number; worldZ: number }
-  > = [];
+  private infernalPortcullises: Array<InfernalPortcullis & { worldX: number; worldZ: number }> = [];
 
   constructor(
     private scene: THREE.Scene,
@@ -731,12 +729,7 @@ export class DungeonInteriors {
     }
     if (variant !== 'infernal_abyss') this.placeWallDressing(p, layout, variant, arenaWalls);
     else {
-      const portcullises = placeInfernalAbyssDressing(
-        group,
-        layout,
-        this.lowGfx,
-        this.fireLights,
-      );
+      const portcullises = placeInfernalAbyssDressing(group, layout, this.lowGfx, this.fireLights);
       for (const portcullis of portcullises) {
         this.infernalPortcullises.push({
           ...portcullis,
