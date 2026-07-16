@@ -16,8 +16,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "3aab6491",
+=======
+      "nextId": 409,
+      "state": "6bd4c62d",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -43,9 +48,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -80,7 +98,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -123,9 +145,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "e834ec49",
       "events": "fdb88b46",
+=======
+      "nextId": 409,
+      "state": "2aade3b7",
+      "events": "26c10977",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -150,9 +178,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -187,12 +228,17 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0895,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -235,9 +281,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "1e447864",
       "events": "4a6b0046",
+=======
+      "nextId": 409,
+      "state": "6d4a276a",
+      "events": "91f5b638",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -262,9 +314,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -296,12 +361,17 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0695,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -344,9 +414,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "9e0bf307",
       "events": "1a0f79a1",
+=======
+      "nextId": 409,
+      "state": "3115b42d",
+      "events": "e641cf31",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -370,9 +446,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -423,12 +512,17 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -471,9 +565,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "86f05ac2",
       "events": "139b71d4",
+=======
+      "nextId": 409,
+      "state": "2f6db990",
+      "events": "a75c7e72",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -497,9 +597,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -550,12 +663,17 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0695,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -598,9 +716,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "63c9fa80",
       "events": "fdb88b46",
+=======
+      "nextId": 409,
+      "state": "4103aa22",
+      "events": "99cc841e",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -624,9 +748,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -671,16 +808,20 @@
       "entities": [
         {
           "aiState": "idle",
-          "attackPower": 132,
+          "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.1195,
+          "critChance": 0.1695,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -723,8 +864,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "63c9fa80",
+=======
+      "nextId": 409,
+      "state": "4103aa22",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -749,9 +895,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -796,16 +955,20 @@
       "entities": [
         {
           "aiState": "idle",
-          "attackPower": 132,
+          "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.1195,
+          "critChance": 0.1695,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",

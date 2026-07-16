@@ -15,7 +15,11 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 406,
+=======
+      "nextId": 408,
+>>>>>>> origin/release/v0.27.0
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -29,9 +33,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "b5b237f8",
+=======
+      "nextId": 415,
+      "state": "158a3301",
+      "events": "2a2ab0d9",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -55,9 +65,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -96,9 +121,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -141,9 +182,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -182,9 +238,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -227,9 +299,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -272,9 +360,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -317,9 +419,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -354,7 +469,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -403,7 +522,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -453,7 +576,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -504,7 +631,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -555,7 +686,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -605,7 +740,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -655,7 +794,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -698,9 +841,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "deb8cb43",
+=======
+      "nextId": 415,
+      "state": "158a3301",
+      "events": "a9294ea9",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -724,9 +873,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -765,9 +929,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -810,9 +990,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -851,9 +1046,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -896,9 +1107,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -941,9 +1168,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -986,9 +1227,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1023,7 +1277,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1072,7 +1330,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1122,7 +1384,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1173,7 +1439,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1224,7 +1494,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1274,7 +1548,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1324,7 +1602,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1367,9 +1649,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "b57b8bc6",
+=======
+      "nextId": 415,
+      "state": "41348d3d",
+      "events": "7e3ba8ec",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -1393,9 +1681,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1434,9 +1737,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1479,9 +1798,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1520,9 +1854,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -1565,9 +1915,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1610,9 +1976,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -1655,9 +2037,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1692,7 +2089,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1741,7 +2142,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1791,7 +2196,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1842,7 +2251,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1893,7 +2306,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1943,7 +2360,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1993,7 +2414,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2036,9 +2461,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "a161604a",
+=======
+      "nextId": 415,
+      "state": "41348d3d",
+      "events": "9014bdd2",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -2062,9 +2493,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -2103,9 +2549,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -2148,9 +2610,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -2189,9 +2666,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -2234,9 +2727,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -2279,9 +2788,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -2324,9 +2849,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -2361,7 +2901,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2410,7 +2954,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2460,7 +3008,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2511,7 +3063,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2562,7 +3118,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2612,7 +3172,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2662,7 +3226,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2705,9 +3273,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "bf7b9875",
+=======
+      "nextId": 415,
+      "state": "41348d3d",
+      "events": "3676950d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -2731,9 +3305,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -2772,9 +3361,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -2817,9 +3422,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -2858,9 +3478,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -2903,9 +3539,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -2948,9 +3600,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -2993,9 +3661,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -3030,7 +3713,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3079,7 +3766,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3129,7 +3820,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3180,7 +3875,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3231,7 +3930,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3281,7 +3984,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3331,7 +4038,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3374,9 +4085,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
       "events": "d440ee36",
+=======
+      "nextId": 415,
+      "state": "41348d3d",
+      "events": "1d9857f7",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -3400,9 +4117,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -3441,9 +4173,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -3486,9 +4234,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -3527,9 +4290,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -3572,9 +4351,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -3617,9 +4412,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -3662,9 +4473,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -3699,7 +4525,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3748,7 +4578,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3798,7 +4632,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3849,7 +4687,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3900,7 +4742,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -3950,7 +4796,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4000,7 +4850,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4043,8 +4897,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 413,
       "state": "4e28b335",
+=======
+      "nextId": 415,
+      "state": "41348d3d",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -4069,9 +4928,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -4110,9 +4984,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -4155,9 +5045,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -4196,9 +5101,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -4241,9 +5162,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 410,
+=======
+          "entityId": 412,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -4286,9 +5223,25 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 411,
+=======
+          "entityId": 413,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -4331,9 +5284,24 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 412,
+=======
+          "entityId": 414,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -4368,7 +5336,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4417,7 +5389,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4467,7 +5443,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4518,7 +5498,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 69,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4569,7 +5553,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 57,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4619,7 +5607,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -4669,7 +5661,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",

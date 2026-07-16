@@ -15,7 +15,11 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 406,
+=======
+      "nextId": 408,
+>>>>>>> origin/release/v0.27.0
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -29,9 +33,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "9cec1b3d",
       "events": "70822bc9",
+=======
+      "nextId": 412,
+      "state": "4a7a1da1",
+      "events": "acbb306d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 3,
         "digest": "44b810ef"
@@ -57,9 +67,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 30
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -100,9 +125,25 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 30
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -147,9 +188,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 30
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -183,7 +239,11 @@
           "fallStartY": 2.312838,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -232,7 +292,11 @@
           "fallStartY": 2.307095,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -282,7 +346,11 @@
           "fallStartY": 2.299474,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -324,7 +392,11 @@
           }
         },
         {
+<<<<<<< HEAD
           "aggroTargetId": 406,
+=======
+          "aggroTargetId": 408,
+>>>>>>> origin/release/v0.27.0
           "aiState": "chase",
           "auras": [
             {
@@ -334,9 +406,18 @@
               "name": "Blood Frenzy",
               "remaining": 8,
               "school": "physical",
+<<<<<<< HEAD
               "sourceId": 409,
+=======
+              "sourceId": 411,
+>>>>>>> origin/release/v0.27.0
               "value": 1.3
             }
+          ],
+          "bossDamagers": [
+            408,
+            409,
+            410
           ],
           "comboUntil": -1,
           "critChance": 0.05,
@@ -346,7 +427,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 199910,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -375,6 +460,7 @@
           "stats": {
             "armor": 80
           },
+<<<<<<< HEAD
           "tappedById": 406,
           "templateId": "old_greyjaw",
           "threat": [
@@ -388,6 +474,21 @@
             ],
             [
               408,
+=======
+          "tappedById": 408,
+          "templateId": "old_greyjaw",
+          "threat": [
+            [
+              408,
+              31
+            ],
+            [
+              409,
+              30
+            ],
+            [
+              410,
+>>>>>>> origin/release/v0.27.0
               30
             ]
           ],
@@ -402,9 +503,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "5d4e0f7a",
       "events": "a08c6fb3",
+=======
+      "nextId": 412,
+      "state": "047a3d01",
+      "events": "da74e837",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 6,
         "digest": "c15af9da"
@@ -430,9 +537,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 60
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -473,9 +595,25 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 60
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -520,9 +658,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 60
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -556,7 +709,11 @@
           "fallStartY": 2.312838,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -605,7 +762,11 @@
           "fallStartY": 2.307095,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -655,7 +816,11 @@
           "fallStartY": 2.299474,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -697,7 +862,11 @@
           }
         },
         {
+<<<<<<< HEAD
           "aggroTargetId": 406,
+=======
+          "aggroTargetId": 408,
+>>>>>>> origin/release/v0.27.0
           "aiState": "chase",
           "auras": [
             {
@@ -707,9 +876,18 @@
               "name": "Blood Frenzy",
               "remaining": 8,
               "school": "physical",
+<<<<<<< HEAD
               "sourceId": 409,
+=======
+              "sourceId": 411,
+>>>>>>> origin/release/v0.27.0
               "value": 1.3
             }
+          ],
+          "bossDamagers": [
+            408,
+            409,
+            410
           ],
           "comboUntil": -1,
           "critChance": 0.05,
@@ -719,7 +897,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 199820,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -748,6 +930,7 @@
           "stats": {
             "armor": 80
           },
+<<<<<<< HEAD
           "tappedById": 406,
           "templateId": "old_greyjaw",
           "threat": [
@@ -761,6 +944,21 @@
             ],
             [
               408,
+=======
+          "tappedById": 408,
+          "templateId": "old_greyjaw",
+          "threat": [
+            [
+              408,
+              61
+            ],
+            [
+              409,
+              60
+            ],
+            [
+              410,
+>>>>>>> origin/release/v0.27.0
               60
             ]
           ],
@@ -775,9 +973,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "b3db5b62",
       "events": "a08c6fb3",
+=======
+      "nextId": 412,
+      "state": "771cc200",
+      "events": "da74e837",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 9,
         "digest": "88aac2f9"
@@ -803,9 +1007,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 90
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -846,9 +1065,25 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 90
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -893,9 +1128,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 90
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -929,7 +1179,11 @@
           "fallStartY": 2.312838,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -978,7 +1232,11 @@
           "fallStartY": 2.307095,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1028,7 +1286,11 @@
           "fallStartY": 2.299474,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1070,7 +1332,11 @@
           }
         },
         {
+<<<<<<< HEAD
           "aggroTargetId": 406,
+=======
+          "aggroTargetId": 408,
+>>>>>>> origin/release/v0.27.0
           "aiState": "chase",
           "auras": [
             {
@@ -1080,9 +1346,18 @@
               "name": "Blood Frenzy",
               "remaining": 8,
               "school": "physical",
+<<<<<<< HEAD
               "sourceId": 409,
+=======
+              "sourceId": 411,
+>>>>>>> origin/release/v0.27.0
               "value": 1.3
             }
+          ],
+          "bossDamagers": [
+            408,
+            409,
+            410
           ],
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1092,7 +1367,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 199730,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1121,6 +1400,7 @@
           "stats": {
             "armor": 80
           },
+<<<<<<< HEAD
           "tappedById": 406,
           "templateId": "old_greyjaw",
           "threat": [
@@ -1134,6 +1414,21 @@
             ],
             [
               408,
+=======
+          "tappedById": 408,
+          "templateId": "old_greyjaw",
+          "threat": [
+            [
+              408,
+              91
+            ],
+            [
+              409,
+              90
+            ],
+            [
+              410,
+>>>>>>> origin/release/v0.27.0
               90
             ]
           ],
@@ -1148,9 +1443,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "118d59e7",
       "events": "a08c6fb3",
+=======
+      "nextId": 412,
+      "state": "e719bd07",
+      "events": "da74e837",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 12,
         "digest": "1a1053bd"
@@ -1176,9 +1477,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1219,9 +1535,25 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1266,9 +1598,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1302,7 +1649,11 @@
           "fallStartY": 2.312838,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1351,7 +1702,11 @@
           "fallStartY": 2.307095,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1401,7 +1756,11 @@
           "fallStartY": 2.299474,
           "fiveSecondRule": 99,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1443,7 +1802,11 @@
           }
         },
         {
+<<<<<<< HEAD
           "aggroTargetId": 406,
+=======
+          "aggroTargetId": 408,
+>>>>>>> origin/release/v0.27.0
           "aiState": "chase",
           "auras": [
             {
@@ -1453,9 +1816,18 @@
               "name": "Blood Frenzy",
               "remaining": 8,
               "school": "physical",
+<<<<<<< HEAD
               "sourceId": 409,
+=======
+              "sourceId": 411,
+>>>>>>> origin/release/v0.27.0
               "value": 1.3
             }
+          ],
+          "bossDamagers": [
+            408,
+            409,
+            410
           ],
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1465,7 +1837,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 199640,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1494,6 +1870,7 @@
           "stats": {
             "armor": 80
           },
+<<<<<<< HEAD
           "tappedById": 406,
           "templateId": "old_greyjaw",
           "threat": [
@@ -1507,6 +1884,21 @@
             ],
             [
               408,
+=======
+          "tappedById": 408,
+          "templateId": "old_greyjaw",
+          "threat": [
+            [
+              408,
+              121
+            ],
+            [
+              409,
+              120
+            ],
+            [
+              410,
+>>>>>>> origin/release/v0.27.0
               120
             ]
           ],
@@ -1521,9 +1913,15 @@
     {
       "tick": 5,
       "time": 0.25,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "9d7c26f7",
       "events": "6a4034d5",
+=======
+      "nextId": 412,
+      "state": "83575a6d",
+      "events": "a8be1cf0",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 15,
         "digest": "ca70052b"
@@ -1532,8 +1930,13 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "649ae19e",
+=======
+      "nextId": 412,
+      "state": "183ffc2c",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1543,8 +1946,13 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "649ae19e",
+=======
+      "nextId": 412,
+      "state": "183ffc2c",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1572,9 +1980,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1615,9 +2038,25 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1662,9 +2101,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 120
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1699,7 +2153,11 @@
           "fallStartY": 2.312838,
           "fiveSecondRule": 99.5,
           "hp": 49987,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1749,7 +2207,11 @@
           "fallStartY": 2.307095,
           "fiveSecondRule": 99.5,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1800,7 +2262,11 @@
           "fallStartY": 2.299474,
           "fiveSecondRule": 99.5,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1842,7 +2308,11 @@
           }
         },
         {
+<<<<<<< HEAD
           "aggroTargetId": 406,
+=======
+          "aggroTargetId": 408,
+>>>>>>> origin/release/v0.27.0
           "aiState": "attack",
           "auras": [
             {
@@ -1852,9 +2322,18 @@
               "name": "Blood Frenzy",
               "remaining": 7.5,
               "school": "physical",
+<<<<<<< HEAD
               "sourceId": 409,
+=======
+              "sourceId": 411,
+>>>>>>> origin/release/v0.27.0
               "value": 1.3
             }
+          ],
+          "bossDamagers": [
+            408,
+            409,
+            410
           ],
           "combatTimer": 0.45,
           "comboUntil": -1,
@@ -1866,7 +2345,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 199640,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1896,6 +2379,7 @@
             "armor": 80
           },
           "swingTimer": 0.934615,
+<<<<<<< HEAD
           "tappedById": 406,
           "templateId": "old_greyjaw",
           "threat": [
@@ -1909,6 +2393,21 @@
             ],
             [
               408,
+=======
+          "tappedById": 408,
+          "templateId": "old_greyjaw",
+          "threat": [
+            [
+              408,
+              121
+            ],
+            [
+              409,
+              120
+            ],
+            [
+              410,
+>>>>>>> origin/release/v0.27.0
               120
             ]
           ],

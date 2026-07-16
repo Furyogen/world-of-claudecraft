@@ -16,7 +16,11 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 406,
+=======
+      "nextId": 408,
+>>>>>>> origin/release/v0.27.0
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -30,9 +34,15 @@
     {
       "tick": 25,
       "time": 1.25,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "cfd71e9d",
       "events": "67db66bb",
+=======
+      "nextId": 412,
+      "state": "ac7dcab1",
+      "events": "40e930a1",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -41,9 +51,15 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "ec04fd53",
       "events": "c375b755",
+=======
+      "nextId": 412,
+      "state": "c865f733",
+      "events": "b46d41a9",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 28,
         "digest": "35d4471d"
@@ -52,9 +68,15 @@
     {
       "tick": 75,
       "time": 3.75,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "ca36bc9d",
       "events": "8710c185",
+=======
+      "nextId": 412,
+      "state": "46926261",
+      "events": "3a440865",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 138,
         "digest": "22786cdd"
@@ -63,9 +85,15 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "9633d8d3",
       "events": "8052505d",
+=======
+      "nextId": 412,
+      "state": "ce6711b3",
+      "events": "8025fc6d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 294,
         "digest": "5f2d9bca"
@@ -74,9 +102,15 @@
     {
       "tick": 101,
       "time": 5.05,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "fd85769a",
       "events": "70224ef7",
+=======
+      "nextId": 412,
+      "state": "14c34662",
+      "events": "ea0dab16",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 300,
         "digest": "bf906891"
@@ -102,9 +136,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 50
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -157,9 +206,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -218,9 +281,22 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -273,9 +349,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -322,11 +412,16 @@
           "attackPower": 122,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0795,
           "fiveSecondRule": 104.05,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -375,12 +470,16 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.05,
           "hp": 418,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 418,
-          "maxResource": 1671,
+          "maxResource": 1611,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -390,18 +489,19 @@
             "z": -1264
           },
           "potionCooldownUntil": -1,
-          "resource": 1671,
+          "resource": 1611,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 47,
+          "spellHaste": 0.1,
+          "spellPower": 45,
           "stats": {
             "agi": 12,
             "armor": 133,
-            "int": 93,
+            "int": 89,
             "spi": 60,
             "sta": 33,
             "str": 10
@@ -426,7 +526,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 4950,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -468,7 +572,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 141,
+          "attackPower": 131,
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.121,
@@ -477,7 +581,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 848,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -492,7 +600,7 @@
             "z": -1232
           },
           "potionCooldownUntil": -1,
-          "rangedPower": 194,
+          "rangedPower": 180,
           "resource": 622,
           "resourceType": "mana",
           "spawnPos": {
@@ -521,9 +629,15 @@
     {
       "tick": 101,
       "time": 5.05,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "9c9119ec",
       "events": "e43f440e",
+=======
+      "nextId": 412,
+      "state": "671c9454",
+      "events": "988754a2",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 300,
         "digest": "bf906891"
@@ -549,9 +663,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 100
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -604,9 +733,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -665,9 +808,22 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -720,9 +876,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -769,11 +939,16 @@
           "attackPower": 122,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0795,
           "fiveSecondRule": 104.05,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -822,12 +997,16 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.05,
           "hp": 418,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 418,
-          "maxResource": 1671,
+          "maxResource": 1611,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -837,18 +1016,19 @@
             "z": -1264
           },
           "potionCooldownUntil": -1,
-          "resource": 1671,
+          "resource": 1611,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 47,
+          "spellHaste": 0.1,
+          "spellPower": 45,
           "stats": {
             "agi": 12,
             "armor": 133,
-            "int": 93,
+            "int": 89,
             "spi": 60,
             "sta": 33,
             "str": 10
@@ -871,7 +1051,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 4900,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -913,7 +1097,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 141,
+          "attackPower": 131,
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.121,
@@ -922,7 +1106,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 848,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -937,7 +1125,7 @@
             "z": -1232
           },
           "potionCooldownUntil": -1,
-          "rangedPower": 194,
+          "rangedPower": 180,
           "resource": 622,
           "resourceType": "mana",
           "spawnPos": {
@@ -966,9 +1154,15 @@
     {
       "tick": 101,
       "time": 5.05,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "4c482d3a",
       "events": "13a2a689",
+=======
+      "nextId": 412,
+      "state": "c305a3fb",
+      "events": "d0d9c966",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 300,
         "digest": "bf906891"
@@ -995,9 +1189,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 5000
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1012,12 +1221,14 @@
           },
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 20,
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 20,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
@@ -1050,9 +1261,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1112,9 +1337,22 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1167,9 +1405,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -1216,11 +1468,16 @@
           "attackPower": 122,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0795,
           "fiveSecondRule": 104.05,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -1269,12 +1526,16 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.05,
           "hp": 418,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 418,
-          "maxResource": 1671,
+          "maxResource": 1611,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -1284,18 +1545,19 @@
             "z": -1264
           },
           "potionCooldownUntil": -1,
-          "resource": 1671,
+          "resource": 1611,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 47,
+          "spellHaste": 0.1,
+          "spellPower": 45,
           "stats": {
             "agi": 12,
             "armor": 133,
-            "int": 93,
+            "int": 89,
             "spi": 60,
             "sta": 33,
             "str": 10
@@ -1318,7 +1580,11 @@
           "dodgeChance": 0.1345,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -1360,7 +1626,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 141,
+          "attackPower": 131,
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.121,
@@ -1369,7 +1635,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 848,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -1384,7 +1654,7 @@
             "z": -1232
           },
           "potionCooldownUntil": -1,
-          "rangedPower": 194,
+          "rangedPower": 180,
           "resource": 622,
           "resourceType": "mana",
           "spawnPos": {
@@ -1413,8 +1683,13 @@
     {
       "tick": 125,
       "time": 6.25,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "18ae33f0",
+=======
+      "nextId": 412,
+      "state": "0875c01d",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 429,
@@ -1424,8 +1699,13 @@
     {
       "tick": 142,
       "time": 7.1,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "c9daa6ac",
+=======
+      "nextId": 412,
+      "state": "2a42f8f9",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1453,9 +1733,24 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 5000
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1470,12 +1765,14 @@
           },
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 20,
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 20,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
@@ -1508,9 +1805,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1570,9 +1881,22 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1625,9 +1949,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -1675,11 +2013,16 @@
           "combatTimer": 2.05,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0795,
           "fiveSecondRule": 106.1,
           "hp": 812,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -1728,12 +2071,16 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 106.1,
           "hp": 418,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 418,
-          "maxResource": 1671,
+          "maxResource": 1611,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -1743,18 +2090,19 @@
             "z": -1264
           },
           "potionCooldownUntil": -1,
-          "resource": 1671,
+          "resource": 1611,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 47,
+          "spellHaste": 0.1,
+          "spellPower": 45,
           "stats": {
             "agi": 12,
             "armor": 133,
-            "int": 93,
+            "int": 89,
             "spi": 60,
             "sta": 33,
             "str": 10
@@ -1778,7 +2126,11 @@
           "dodgeChance": 0.1345,
           "facing": 3.141593,
           "fiveSecondRule": 106.1,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -1820,7 +2172,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 141,
+          "attackPower": 131,
           "combatTimer": 101.05,
           "comboUntil": -1,
           "critChance": 0.121,
@@ -1829,7 +2181,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 106.1,
           "hp": 848,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -1844,7 +2200,7 @@
             "z": -1232
           },
           "potionCooldownUntil": -1,
-          "rangedPower": 194,
+          "rangedPower": 180,
           "resource": 622,
           "resourceType": "mana",
           "spawnPos": {

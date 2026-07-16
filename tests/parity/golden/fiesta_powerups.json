@@ -14,7 +14,11 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 406,
+=======
+      "nextId": 408,
+>>>>>>> origin/release/v0.27.0
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -28,9 +32,15 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8b25983f",
       "events": "63fcf21e",
+=======
+      "nextId": 412,
+      "state": "5d6416eb",
+      "events": "993c914e",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -39,9 +49,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "0cdd5499",
       "events": "78517471",
+=======
+      "nextId": 412,
+      "state": "398d3967",
+      "events": "01717203",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -50,9 +66,15 @@
     {
       "tick": 30,
       "time": 1.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "27424ca1",
       "events": "60305085",
+=======
+      "nextId": 412,
+      "state": "4a0b6259",
+      "events": "2289f461",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -61,8 +83,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "db4b43a3",
+=======
+      "nextId": 412,
+      "state": "6ae87eb3",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -72,9 +99,15 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "5f480849",
       "events": "c375b755",
+=======
+      "nextId": 412,
+      "state": "96db27e5",
+      "events": "b46d41a9",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 34,
         "digest": "2b304a25"
@@ -83,8 +116,13 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "1ed2db07",
+=======
+      "nextId": 412,
+      "state": "6db2c977",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 67,
@@ -94,9 +132,15 @@
     {
       "tick": 70,
       "time": 3.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "adbeb329",
       "events": "8710c185",
+=======
+      "nextId": 412,
+      "state": "0652f4b9",
+      "events": "3a440865",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 113,
         "digest": "198b9c8a"
@@ -105,8 +149,13 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "cffe95c3",
+=======
+      "nextId": 412,
+      "state": "0f01e32b",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 168,
@@ -116,9 +165,15 @@
     {
       "tick": 90,
       "time": 4.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "33f207c1",
       "events": "8052505d",
+=======
+      "nextId": 412,
+      "state": "7c192605",
+      "events": "8025fc6d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 206,
         "digest": "ba397eb7"
@@ -127,8 +182,13 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8e5e3f2f",
+=======
+      "nextId": 412,
+      "state": "822a51c7",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 257,
@@ -138,9 +198,15 @@
     {
       "tick": 110,
       "time": 5.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "5323a031",
       "events": "c28cc6db",
+=======
+      "nextId": 412,
+      "state": "f16748eb",
+      "events": "b3257cc5",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 325,
         "digest": "025a1e07"
@@ -149,8 +215,13 @@
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "e06366bf",
+=======
+      "nextId": 412,
+      "state": "cd796c71",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 377,
@@ -160,8 +231,13 @@
     {
       "tick": 130,
       "time": 6.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "d69da907",
+=======
+      "nextId": 412,
+      "state": "8c317573",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 434,
@@ -171,8 +247,13 @@
     {
       "tick": 140,
       "time": 7,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "56506f91",
+=======
+      "nextId": 412,
+      "state": "184660a9",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 500,
@@ -182,8 +263,13 @@
     {
       "tick": 150,
       "time": 7.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "e465083b",
+=======
+      "nextId": 412,
+      "state": "0a67eaff",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 571,
@@ -193,8 +279,13 @@
     {
       "tick": 160,
       "time": 8,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "49ca55a9",
+=======
+      "nextId": 412,
+      "state": "79240bc5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 646,
@@ -204,8 +295,13 @@
     {
       "tick": 170,
       "time": 8.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "b078d17f",
+=======
+      "nextId": 412,
+      "state": "b0ef4083",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 693,
@@ -215,8 +311,13 @@
     {
       "tick": 180,
       "time": 9,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "008d92b1",
+=======
+      "nextId": 412,
+      "state": "ad31d851",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 753,
@@ -226,8 +327,13 @@
     {
       "tick": 190,
       "time": 9.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "bbb54a33",
+=======
+      "nextId": 412,
+      "state": "9e7cfaef",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 825,
@@ -237,8 +343,13 @@
     {
       "tick": 200,
       "time": 10,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "04e6e9f9",
+=======
+      "nextId": 412,
+      "state": "a01df10d",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 888,
@@ -248,8 +359,13 @@
     {
       "tick": 210,
       "time": 10.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "d8ed2edf",
+=======
+      "nextId": 412,
+      "state": "efe0afb3",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 929,
@@ -259,8 +375,13 @@
     {
       "tick": 220,
       "time": 11,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "2f08708f",
+=======
+      "nextId": 412,
+      "state": "c3c1be2f",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 969,
@@ -270,8 +391,13 @@
     {
       "tick": 230,
       "time": 11.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8bb882ad",
+=======
+      "nextId": 412,
+      "state": "7c4b97d1",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1024,
@@ -281,8 +407,13 @@
     {
       "tick": 240,
       "time": 12,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "b9661ec7",
+=======
+      "nextId": 412,
+      "state": "37e9e983",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1063,
@@ -292,8 +423,13 @@
     {
       "tick": 250,
       "time": 12.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "b64ffc45",
+=======
+      "nextId": 412,
+      "state": "00bd7ba9",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1098,
@@ -303,8 +439,13 @@
     {
       "tick": 260,
       "time": 13,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "a05407f7",
+=======
+      "nextId": 412,
+      "state": "030885e7",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1123,
@@ -314,9 +455,15 @@
     {
       "tick": 270,
       "time": 13.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "d28173d5",
       "events": "543cea91",
+=======
+      "nextId": 412,
+      "state": "e2fd9349",
+      "events": "9ffce17d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 1159,
         "digest": "914c3ac4"
@@ -325,8 +472,13 @@
     {
       "tick": 280,
       "time": 14,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "2bf5704f",
+=======
+      "nextId": 412,
+      "state": "1d9b31ab",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1196,
@@ -336,8 +488,13 @@
     {
       "tick": 290,
       "time": 14.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "6cf133f5",
+=======
+      "nextId": 412,
+      "state": "76276af9",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1233,
@@ -347,8 +504,13 @@
     {
       "tick": 300,
       "time": 15,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8fb31397",
+=======
+      "nextId": 412,
+      "state": "27b10e4f",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1297,
@@ -358,8 +520,13 @@
     {
       "tick": 310,
       "time": 15.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "523c1155",
+=======
+      "nextId": 412,
+      "state": "e322a121",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1362,
@@ -369,8 +536,13 @@
     {
       "tick": 320,
       "time": 16,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "c801d01f",
+=======
+      "nextId": 412,
+      "state": "9649610b",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1418,
@@ -380,8 +552,13 @@
     {
       "tick": 330,
       "time": 16.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "71d5770f",
+=======
+      "nextId": 412,
+      "state": "3f232dc3",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1474,
@@ -391,8 +568,13 @@
     {
       "tick": 340,
       "time": 17,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "d2a79af1",
+=======
+      "nextId": 412,
+      "state": "2345f259",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1524,
@@ -402,8 +584,13 @@
     {
       "tick": 350,
       "time": 17.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "a210c7e3",
+=======
+      "nextId": 412,
+      "state": "b7521497",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1578,
@@ -413,8 +600,13 @@
     {
       "tick": 360,
       "time": 18,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "18d19b21",
+=======
+      "nextId": 412,
+      "state": "d42172e5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1623,
@@ -424,8 +616,13 @@
     {
       "tick": 370,
       "time": 18.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "2a411bbf",
+=======
+      "nextId": 412,
+      "state": "4f4d8ac3",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1678,
@@ -435,8 +632,13 @@
     {
       "tick": 380,
       "time": 19,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "523f7f01",
+=======
+      "nextId": 412,
+      "state": "84a03949",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1722,
@@ -446,8 +648,13 @@
     {
       "tick": 390,
       "time": 19.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "fcf07a63",
+=======
+      "nextId": 412,
+      "state": "522db6d7",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1768,
@@ -457,8 +664,13 @@
     {
       "tick": 400,
       "time": 20,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "91520a21",
+=======
+      "nextId": 412,
+      "state": "bfc0ceb5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1825,
@@ -468,8 +680,13 @@
     {
       "tick": 410,
       "time": 20.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "d3696ce7",
+=======
+      "nextId": 412,
+      "state": "3d369fd3",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 1884,
@@ -479,9 +696,15 @@
     {
       "tick": 420,
       "time": 21,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "fbdf9be3",
       "events": "edc3791a",
+=======
+      "nextId": 412,
+      "state": "e8dc0eaf",
+      "events": "b97f49a6",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 1920,
         "digest": "8bb6b16e"
@@ -490,9 +713,15 @@
     {
       "tick": 430,
       "time": 21.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "87f92fc9",
       "events": "edc3791a",
+=======
+      "nextId": 412,
+      "state": "6669f0d3",
+      "events": "b97f49a6",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 1962,
         "digest": "d84129b6"
@@ -501,9 +730,15 @@
     {
       "tick": 440,
       "time": 22,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "0a99e124",
       "events": "edc3791a",
+=======
+      "nextId": 412,
+      "state": "001dbe22",
+      "events": "b97f49a6",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 1998,
         "digest": "38981b7a"
@@ -512,9 +747,15 @@
     {
       "tick": 450,
       "time": 22.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "53e70b5e",
       "events": "0f00cebb",
+=======
+      "nextId": 412,
+      "state": "e840a466",
+      "events": "e078bfbd",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2032,
         "digest": "bd5a88fb"
@@ -523,9 +764,15 @@
     {
       "tick": 460,
       "time": 23,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "fd2ea605",
       "events": "edc3791a",
+=======
+      "nextId": 412,
+      "state": "f26e670b",
+      "events": "b97f49a6",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2081,
         "digest": "e780131a"
@@ -534,9 +781,15 @@
     {
       "tick": 470,
       "time": 23.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "3097e2bc",
       "events": "87841b7e",
+=======
+      "nextId": 412,
+      "state": "aa12b550",
+      "events": "4cd280a3",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2133,
         "digest": "90e98754"
@@ -545,9 +798,15 @@
     {
       "tick": 480,
       "time": 24,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "44d3d1af",
       "events": "3e483822",
+=======
+      "nextId": 412,
+      "state": "10ea4063",
+      "events": "3b879573",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2175,
         "digest": "58c08acc"
@@ -556,9 +815,15 @@
     {
       "tick": 490,
       "time": 24.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "1ca2f2ea",
       "events": "3e483822",
+=======
+      "nextId": 412,
+      "state": "f8f99a80",
+      "events": "3b879573",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2218,
         "digest": "966ff040"
@@ -567,9 +832,15 @@
     {
       "tick": 500,
       "time": 25,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8e84387f",
       "events": "f6489981",
+=======
+      "nextId": 412,
+      "state": "43d29579",
+      "events": "dde65e41",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2262,
         "digest": "59167284"
@@ -578,9 +849,15 @@
     {
       "tick": 510,
       "time": 25.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "076db057",
       "events": "06d17204",
+=======
+      "nextId": 412,
+      "state": "9866bb61",
+      "events": "2222965b",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2311,
         "digest": "8962dee4"
@@ -589,9 +866,15 @@
     {
       "tick": 520,
       "time": 26,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "3de5a6a7",
       "events": "06d17204",
+=======
+      "nextId": 412,
+      "state": "92e43a2b",
+      "events": "2222965b",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2369,
         "digest": "28ca5080"
@@ -600,9 +883,15 @@
     {
       "tick": 530,
       "time": 26.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "8bbf5271",
       "events": "65e4acf9",
+=======
+      "nextId": 412,
+      "state": "255ad503",
+      "events": "dc18739b",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2430,
         "digest": "4874eae4"
@@ -611,9 +900,15 @@
     {
       "tick": 540,
       "time": 27,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "3dadf4cd",
       "events": "cc693d64",
+=======
+      "nextId": 412,
+      "state": "00b425ef",
+      "events": "b31b9bee",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2473,
         "digest": "a5743492"
@@ -622,9 +917,15 @@
     {
       "tick": 550,
       "time": 27.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "fb9ad00b",
       "events": "cc693d64",
+=======
+      "nextId": 412,
+      "state": "933b3ce3",
+      "events": "b31b9bee",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2527,
         "digest": "83a11947"
@@ -633,9 +934,15 @@
     {
       "tick": 560,
       "time": 28,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "503ad221",
       "events": "ccedefe7",
+=======
+      "nextId": 412,
+      "state": "0ce5c433",
+      "events": "58ec978b",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2576,
         "digest": "9f688515"
@@ -644,9 +951,15 @@
     {
       "tick": 570,
       "time": 28.5,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "47fae663",
       "events": "edc3791a",
+=======
+      "nextId": 412,
+      "state": "da5c6f75",
+      "events": "b97f49a6",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 2631,
         "digest": "e1e53275"
@@ -655,8 +968,13 @@
     {
       "tick": 573,
       "time": 28.65,
+<<<<<<< HEAD
       "nextId": 410,
       "state": "05d25743",
+=======
+      "nextId": 412,
+      "state": "852f6667",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 2649,
@@ -685,9 +1003,33 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 448
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "fiesta:pow_berserker"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "hid_fall_death",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -702,14 +1044,17 @@
           },
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 20,
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 20,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {
@@ -740,9 +1085,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -801,9 +1160,22 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 408,
+=======
+          "entityId": 410,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -856,9 +1228,23 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 409,
+=======
+          "entityId": 411,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -906,11 +1292,16 @@
           "combatTimer": 99.75,
           "comboUntil": -1,
           "critChance": 0.0995,
+          "critDmgPhysBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0795,
           "fiveSecondRule": 127.65,
           "hp": 764,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -957,12 +1348,16 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 127.65,
           "hp": 258,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 418,
-          "maxResource": 1671,
+          "maxResource": 1611,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -972,18 +1367,19 @@
             "z": -1264
           },
           "potionCooldownUntil": -1,
-          "resource": 1671,
+          "resource": 1611,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 47,
+          "spellHaste": 0.1,
+          "spellPower": 45,
           "stats": {
             "agi": 12,
             "armor": 133,
-            "int": 93,
+            "int": 89,
             "spi": 60,
             "sta": 33,
             "str": 10
@@ -1006,7 +1402,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 127.65,
           "hp": 448,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -1056,7 +1456,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 127.65,
           "hp": 289,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",

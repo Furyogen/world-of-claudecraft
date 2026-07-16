@@ -16,7 +16,11 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 406,
+=======
+      "nextId": 408,
+>>>>>>> origin/release/v0.27.0
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -30,9 +34,15 @@
     {
       "tick": 2,
       "time": 0.1,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "fea49993",
       "events": "4c2422eb",
+=======
+      "nextId": 424,
+      "state": "0b549f6e",
+      "events": "8f0e000e",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 39,
         "digest": "40bc3d04"
@@ -56,9 +66,30 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -74,6 +105,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -97,9 +129,31 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -119,6 +173,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -137,7 +192,11 @@
           "dodgeChance": 0.06,
           "fiveSecondRule": 99.1,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -185,7 +244,11 @@
           "fallStartY": -1.613579,
           "fiveSecondRule": 99.1,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -234,7 +297,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -278,7 +345,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -322,7 +393,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -366,7 +441,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -410,7 +489,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -454,7 +537,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 413,
+=======
+          "id": 415,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -498,7 +585,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 416,
+<<<<<<< HEAD
           "id": 414,
+=======
+          "id": 416,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -542,7 +633,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 460,
+<<<<<<< HEAD
           "id": 415,
+=======
+          "id": 417,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 9,
           "lootFfaTimer": "Infinity",
@@ -586,7 +681,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 695,
+<<<<<<< HEAD
           "id": 416,
+=======
+          "id": 418,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 9,
           "lootFfaTimer": "Infinity",
@@ -630,7 +729,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 417,
+=======
+          "id": 419,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -674,7 +777,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1191,
+<<<<<<< HEAD
           "id": 418,
+=======
+          "id": 420,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -718,7 +825,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 419,
+=======
+          "id": 421,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -762,7 +873,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 420,
+=======
+          "id": 422,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -805,7 +920,11 @@
           "dungeonId": "hollow_crypt",
           "fiveSecondRule": 99,
           "hp": 1,
+<<<<<<< HEAD
           "id": 421,
+=======
+          "id": 423,
+>>>>>>> origin/release/v0.27.0
           "kind": "object",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -837,9 +956,15 @@
     {
       "tick": 4,
       "time": 0.2,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "04d01638",
       "events": "296f74ec",
+=======
+      "nextId": 424,
+      "state": "652f4d5b",
+      "events": "788172e5",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 47,
         "digest": "08510889"
@@ -866,9 +991,39 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1,
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "hid_fall_death",
+              ""
+            ],
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -884,6 +1039,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -907,9 +1063,31 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -929,6 +1107,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -948,7 +1127,11 @@
           "dodgeChance": 0.06,
           "fallStartY": -1.484002,
           "fiveSecondRule": 99.2,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -997,7 +1180,11 @@
           "fallStartY": 57.122741,
           "fiveSecondRule": 99.2,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1046,7 +1233,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 408,
+=======
+          "id": 410,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1090,7 +1281,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 409,
+=======
+          "id": 411,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -1134,7 +1329,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 410,
+=======
+          "id": 412,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1178,7 +1377,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 411,
+=======
+          "id": 413,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1222,7 +1425,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 412,
+=======
+          "id": 414,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1266,7 +1473,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 413,
+=======
+          "id": 415,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1310,7 +1521,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 416,
+<<<<<<< HEAD
           "id": 414,
+=======
+          "id": 416,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1354,7 +1569,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 460,
+<<<<<<< HEAD
           "id": 415,
+=======
+          "id": 417,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 9,
           "lootFfaTimer": "Infinity",
@@ -1398,7 +1617,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 695,
+<<<<<<< HEAD
           "id": 416,
+=======
+          "id": 418,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 9,
           "lootFfaTimer": "Infinity",
@@ -1442,7 +1665,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 391,
+<<<<<<< HEAD
           "id": 417,
+=======
+          "id": 419,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1486,7 +1713,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1191,
+<<<<<<< HEAD
           "id": 418,
+=======
+          "id": 420,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -1530,7 +1761,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 419,
+=======
+          "id": 421,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1574,7 +1809,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 437,
+<<<<<<< HEAD
           "id": 420,
+=======
+          "id": 422,
+>>>>>>> origin/release/v0.27.0
           "kind": "mob",
           "level": 8,
           "lootFfaTimer": "Infinity",
@@ -1617,7 +1856,11 @@
           "dungeonId": "hollow_crypt",
           "fiveSecondRule": 99,
           "hp": 1,
+<<<<<<< HEAD
           "id": 421,
+=======
+          "id": 423,
+>>>>>>> origin/release/v0.27.0
           "kind": "object",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1649,9 +1892,15 @@
     {
       "tick": 5,
       "time": 0.25,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "e4bf0a17",
       "events": "be1af648",
+=======
+      "nextId": 424,
+      "state": "378dce30",
+      "events": "22429d6f",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 47,
         "digest": "08510889"
@@ -1660,8 +1909,13 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "b1afdc79",
+=======
+      "nextId": 424,
+      "state": "826c834e",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 47,
@@ -1671,8 +1925,13 @@
     {
       "tick": 15,
       "time": 0.75,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "48dbf9f7",
+=======
+      "nextId": 424,
+      "state": "d0c64c7c",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 47,
@@ -1682,9 +1941,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "7eba73df",
       "events": "d788fa5c",
+=======
+      "nextId": 424,
+      "state": "f1890a84",
+      "events": "2ad38728",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 47,
         "digest": "08510889"
@@ -1693,8 +1958,13 @@
     {
       "tick": 24,
       "time": 1.2,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "2ff70d1f",
+=======
+      "nextId": 424,
+      "state": "9477b7d4",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 47,
@@ -1722,9 +1992,39 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1,
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "hid_fall_death",
+              ""
+            ],
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1740,6 +2040,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1766,9 +2067,40 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1,
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "hid_fall_death",
+              ""
+            ],
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1788,6 +2120,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1807,7 +2140,11 @@
           "dodgeChance": 0.06,
           "fallStartY": -1.484002,
           "fiveSecondRule": 100.2,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1856,7 +2193,11 @@
           "dodgeChance": 0.056,
           "fallStartY": -1.484002,
           "fiveSecondRule": 100.2,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1900,8 +2241,13 @@
     {
       "tick": 24,
       "time": 1.2,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "2ff70d1f",
+=======
+      "nextId": 424,
+      "state": "9477b7d4",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 47,
@@ -1929,9 +2275,39 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1,
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "hid_fall_death",
+              ""
+            ],
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1947,6 +2323,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1973,9 +2350,40 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1,
+              "partiesJoined": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "hid_fall_death",
+              ""
+            ],
+            [
+              "soc_first_party",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 407,
+=======
+          "entityId": 409,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1995,6 +2403,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -2014,7 +2423,11 @@
           "dodgeChance": 0.06,
           "fallStartY": -1.484002,
           "fiveSecondRule": 100.2,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2063,7 +2476,11 @@
           "dodgeChance": 0.056,
           "fallStartY": -1.484002,
           "fiveSecondRule": 100.2,
+<<<<<<< HEAD
           "id": 407,
+=======
+          "id": 409,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",

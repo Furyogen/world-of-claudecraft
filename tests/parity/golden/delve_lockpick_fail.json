@@ -15,8 +15,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 407,
       "state": "f9f2bda8",
+=======
+      "nextId": 409,
+      "state": "20380ff5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -42,9 +47,22 @@
           "counters": {},
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -79,7 +97,11 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -124,9 +146,15 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "2ff349dd",
       "events": "b291ba36",
+=======
+      "nextId": 420,
+      "state": "24589aab",
+      "events": "36e6ec57",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 3,
         "digest": "ad960248"
@@ -135,9 +163,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "61f74d3d",
       "events": "a3b147e3",
+=======
+      "nextId": 420,
+      "state": "d31021cb",
+      "events": "e8535d0d",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 3,
         "digest": "ad960248"
@@ -146,8 +180,13 @@
     {
       "tick": 30,
       "time": 1.5,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "fa22ea4b",
+=======
+      "nextId": 420,
+      "state": "8b39a0a1",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -157,8 +196,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "e10c804d",
+=======
+      "nextId": 420,
+      "state": "68eb175b",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -168,8 +212,13 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "1c3a8397",
+=======
+      "nextId": 420,
+      "state": "a6ed73a5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -179,8 +228,13 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "32ce4cd1",
+=======
+      "nextId": 420,
+      "state": "d9ca13a7",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -190,9 +244,15 @@
     {
       "tick": 69,
       "time": 3.45,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "ccd9144b",
       "events": "25f3cd2e",
+=======
+      "nextId": 421,
+      "state": "11dc8ea1",
+      "events": "1ea15824",
+>>>>>>> origin/release/v0.27.0
       "rng": {
         "draws": 3,
         "digest": "ad960248"
@@ -221,9 +281,43 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 636,
+              "kills": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_blood",
+              ""
+            ],
+            [
+              "dlv_varric_ringers",
+              ""
+            ],
+            [
+              "prog_finding_your_feet",
+              ""
+            ],
+            [
+              "prog_first_steps",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -240,6 +334,7 @@
           "lifetimeXp": 11398,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 25,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -259,7 +354,11 @@
           "dodgeChance": 0.0715,
           "fiveSecondRule": 102.45,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 7,
@@ -309,7 +408,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hp": 1,
+<<<<<<< HEAD
           "id": 417,
+=======
+          "id": 419,
+>>>>>>> origin/release/v0.27.0
           "kind": "object",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -342,8 +445,13 @@
     {
       "tick": 70,
       "time": 3.5,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "83a8edbb",
+=======
+      "nextId": 421,
+      "state": "55a75491",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -353,8 +461,13 @@
     {
       "tick": 71,
       "time": 3.55,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "52120557",
+=======
+      "nextId": 421,
+      "state": "95955ce5",
+>>>>>>> origin/release/v0.27.0
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -384,9 +497,43 @@
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 636,
+              "kills": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_blood",
+              ""
+            ],
+            [
+              "dlv_varric_ringers",
+              ""
+            ],
+            [
+              "prog_finding_your_feet",
+              ""
+            ],
+            [
+              "prog_first_steps",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
+<<<<<<< HEAD
           "entityId": 406,
+=======
+          "entityId": 408,
+>>>>>>> origin/release/v0.27.0
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -403,6 +550,7 @@
           "lifetimeXp": 11398,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 25,
           "talents": {
             "choices": {},
             "ranks": {}
@@ -422,7 +570,11 @@
           "dodgeChance": 0.0715,
           "fiveSecondRule": 102.55,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 406,
+=======
+          "id": 408,
+>>>>>>> origin/release/v0.27.0
           "inCombat": true,
           "kind": "player",
           "level": 7,
@@ -472,7 +624,11 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hp": 1,
+<<<<<<< HEAD
           "id": 417,
+=======
+          "id": 419,
+>>>>>>> origin/release/v0.27.0
           "kind": "object",
           "level": 1,
           "lootFfaTimer": "Infinity",
