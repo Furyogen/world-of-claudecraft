@@ -1121,6 +1121,8 @@ export const editorStrings = {
   // barriers, decor) on top of the live interior in the 3D viewport.
   dungeon: {
     title: 'Dungeon layout',
+    collapse: 'Fold',
+    expand: 'Expand',
     exit: 'Back to map',
     hint: 'Click selects (again cycles overlaps). Drag moves. Arrows nudge, Delete removes, Ctrl+Z undoes. Shift-drag pans, middle-drag orbits.',
     none: 'Nothing selected. Click an outline on the floor plan.',

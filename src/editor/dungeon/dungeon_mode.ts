@@ -396,8 +396,14 @@ export class DungeonEditorMode {
     header.className = 'dungeon-panel-header';
     const title = document.createElement('span');
     title.textContent = t('editor.dungeon.title');
+    // Fold toggle: collapses the panel to its header pill so it never blocks
+    // the floor plan or the editor's own inspector.
+    const fold = this.button(t('editor.dungeon.collapse'), () => {
+      const collapsed = panel.classList.toggle('collapsed');
+      fold.textContent = collapsed ? t('editor.dungeon.expand') : t('editor.dungeon.collapse');
+    });
     const exit = this.button(t('editor.dungeon.exit'), () => this.exit());
-    header.append(title, exit);
+    header.append(title, fold, exit);
     panel.append(header);
 
     const hint = document.createElement('div');

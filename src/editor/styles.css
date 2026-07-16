@@ -1612,9 +1612,11 @@ input[type="range"] {
 /* ---- dungeon-layout mode (src/editor/dungeon/dungeon_mode.ts) -------------------------- */
 
 .dungeon-panel {
+  /* Docked left, beside the tool rail, so the editor's right-hand inspector
+     stays fully visible while the dungeon mode runs. */
   position: fixed;
   top: 56px;
-  right: 12px;
+  left: 64px;
   z-index: 40;
   width: 300px;
   max-height: calc(100vh - 80px);
@@ -1700,4 +1702,14 @@ input[type="range"] {
 .dungeon-panel-status {
   font-size: 12px;
   color: var(--ed-dim, #9aa4b2);
+}
+
+/* Collapsed dungeon panel: only the header pill stays; everything else folds
+   away so the floor plan is unobstructed. */
+.dungeon-panel.collapsed > :not(.dungeon-panel-header) {
+  display: none;
+}
+
+.dungeon-panel.collapsed {
+  width: auto;
 }
