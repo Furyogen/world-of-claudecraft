@@ -67,9 +67,6 @@ services:
       # Runtime dev cheats. Empty by default for production; the isolated PTR
       # bootstrap opts in explicitly so its tester vendor and commands work.
       ALLOW_DEV_COMMANDS: ${ALLOW_DEV_COMMANDS:-}
-      # Runtime PBE convenience: new accounts get a level-20 roster in
-      # non-heroic best-in-slot gear (server/pbe_boost.ts). Never in production.
-      PBE_BOOST_ACCOUNTS: ${PBE_BOOST_ACCOUNTS:-}
       # Runtime: bearer token that gates GET /metrics (server/http/health.ts).
       # Empty (unset) leaves the endpoint feature-off (404); a non-empty value
       # turns it on behind Authorization: Bearer <token>. Set on the host .env by
