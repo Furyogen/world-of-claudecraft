@@ -13,7 +13,6 @@ import type {
 import * as bagsMod from './bags';
 import { addStacked, BAG_SOCKETS, bagCapacity, canAddItem, migrationBagsFor } from './bags';
 import * as bankMod from './bank';
-import { spawnPointInArea } from './spawn_area';
 import { type BankState, clampBonusSlots, sanitizeBankState } from './bank';
 import { campSpawnOffset } from './camp_scatter';
 import {
@@ -301,6 +300,7 @@ import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
 import * as tradeMod from './social/trade';
+import { spawnPointInArea } from './spawn_area';
 import {
   applyResurrectionSickness,
   RESURRECTION_SICKNESS_ID,
@@ -1577,6 +1577,13 @@ export class Sim {
     // Mobs from camps
     for (const camp of worldContent.camps) {
       const template = MOBS[camp.mobId];
+      // A custom map may reference a mob id this build does not register (an
+      // older/newer content set): skip the camp instead of crashing the boot.
+      // The editor still shows the camp marker, so nothing is silently lost.
+      if (!template) {
+        console.warn(`camp mob id not in MOBS registry, skipping camp: ${camp.mobId}`);
+        continue;
+      }
       // Aquatic/flagged swimmers may wade in the shallows; everyone else
       // still spawns on dry land even though combat movement can enter water.
       const minHeight = this.mobCanSpawnInWater(template) ? waterLevel() - 0.5 : waterLevel() + 0.4;

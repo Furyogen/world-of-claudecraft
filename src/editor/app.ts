@@ -796,21 +796,11 @@ export class EditorApp {
       terrainEdits: [],
       placements: [],
     };
-    // Returning from a playtest in this tab: reopen the map that launched it.
-    // Prefer the newest copy across the full save, the launch draft, and the
-    // session recovery slot so a failed navigation cannot strand a blank editor.
-    const restored = this.restorePlaytestMap();
-    const resumed = restored?.map ?? null;
-    // Fresh page (nothing to resume): reopen the most recently saved local map
-    // so a maker lands back in their last work instead of the built-in world. A
-    // first-time visitor with no saves still gets the built-in world as before.
-    const autoloaded = resumed ? null : this.loadMostRecentSave();
-    const opened = resumed ?? autoloaded;
-    if (opened) {
-      this.map = opened;
-      this.content = opened.content;
-      this.waterBase = opened.waterLevel ?? WATER_LEVEL;
-    }
+    // The saved-map restore is DEFERRED to finishBoot(): the store hydrates
+    // from IndexedDB first (and migrates localStorage saves across, freeing
+    // the quota that used to block every save). The constructor proceeds on
+    // the built-in default; finishBoot loadMap()s the maker's real map the
+    // moment the store is ready.
     promoteMajorWorldProps(this.map as CustomMap);
     this.entities = buildEntities(this.content);
     this.base = snapshot(this.entities);
@@ -936,6 +926,9 @@ export class EditorApp {
         if (!(await this.confirmDiscard())) return;
         const loaded = this.io.store.load(id);
         if (loaded) this.loadMap(loaded);
+        // A listed save that fails to load (corrupt/truncated bytes) used to
+        // do NOTHING — the drawer closed and the maker was left guessing.
+        else this.toasts.error(t('editor.status.openFailedLocal'));
       },
       onOpenDraft: async () => {
         if (!(await this.confirmDiscard())) return;
@@ -977,12 +970,9 @@ export class EditorApp {
 
     this.topbar.setMapName(this.map.meta.name);
     this.topbar.setOffline(!signedIn());
-    this.topbar.setForkEnabled(opened !== null && this.io.linkFor(this.map.meta.id) !== null);
-    if (opened) this.toasts.info(t('editor.status.opened', { name: this.map.meta.name }));
-    if (restored?.dirty) {
-      this.dirty = true;
-      this.topbar.setDirty(true);
-    }
+    // The reopened-map chrome (fork state, "Opened ..." toast, playtest dirty
+    // flag) moved to finishBoot(): the restore now runs there, after the
+    // async store hydration.
     this.topbar.setViewMode(this.viewMode);
     this.toolbar.setActive(this.tool);
 
@@ -1039,6 +1029,31 @@ export class EditorApp {
     void this.ensureStoredLocalAssets().then((added) => {
       if (added) this.viewport3d?.rebuildPlacements();
     });
+
+    // Hydrate the map store, then reopen the maker's real map (playtest
+    // return first, else the most recent save). Deferred because the store
+    // now lives in IndexedDB (async): see the constructor comment above.
+    void this.finishBoot();
+  }
+
+  private async finishBoot(): Promise<void> {
+    await this.io.ready();
+    // Returning from a playtest in this tab: reopen the map that launched it.
+    // Prefer the newest copy across the full save, the launch draft, and the
+    // session recovery slot so a failed navigation cannot strand a blank editor.
+    const restored = this.restorePlaytestMap();
+    const resumed = restored?.map ?? null;
+    // Fresh page (nothing to resume): reopen the most recently saved local map
+    // so a maker lands back in their last work instead of the built-in world. A
+    // first-time visitor with no saves still gets the built-in world as before.
+    const autoloaded = resumed ? null : this.loadMostRecentSave();
+    const opened = resumed ?? autoloaded;
+    if (opened) {
+      this.loadMap(opened);
+      this.topbar.setForkEnabled(this.io.linkFor(this.map.meta.id) !== null);
+      this.toasts.info(t('editor.status.opened', { name: this.map.meta.name }));
+      if (restored?.dirty) this.markDirty();
+    }
   }
 
   private restorePlaytestMap(): PlaytestRestore | null {
@@ -1096,8 +1111,13 @@ export class EditorApp {
    * to resume) so the editor reopens their work instead of a blank world.
    */
   private loadMostRecentSave(): CustomMap | null {
-    const latest = this.io.store.list()[0];
-    return latest ? this.io.store.load(latest.id) : null;
+    // Walk past corrupt/unparseable entries: one bad newest save must not
+    // dump the maker onto the built-in world while their older saves are fine.
+    for (const meta of this.io.store.list()) {
+      const map = this.io.store.load(meta.id);
+      if (map) return map;
+    }
+    return null;
   }
 
   /**
@@ -5065,7 +5085,14 @@ export class EditorApp {
    *  to the dev server (/__collision_master/save), which writes
    *  data/asset_collision_overrides.json + the generated module - making it
    *  the asset's DEFAULT collision everywhere from then on. */
-  private collisionMaster: { assetId: string; label: string; returnMapId: string } | null = null;
+  private collisionMaster: {
+    assetId: string;
+    label: string;
+    returnMapId: string;
+    /** The working map object itself: the return trip must not depend on
+     *  browser storage (quota-blocked storage stranded makers in CM). */
+    returnMap: CustomMap | null;
+  } | null = null;
   /** The floating modeling toolbar over the 3D stage (CM sessions only). */
   private cmBar: CollisionMasterBar | null = null;
   /** Poly-snap brush: drag across the model surface to lay a collision plane
@@ -5086,10 +5113,13 @@ export class EditorApp {
       this.toasts.error(t('editor.collisionMaster.catalogOnly'));
       return;
     }
-    // Auto-save the working map so Cancel/Lock In can restore it exactly.
+    // The working map is stashed IN MEMORY for the return trip, so Collision
+    // Master opens even when browser storage is full/blocked. The store save
+    // is best-effort on top: it makes the return survive a page reload (the
+    // Lock In HMR reload boots the most recent save).
+    const returnMap = this.map;
     if (!this.io.saveLocal(this.map)) {
-      this.toasts.error(t('editor.collisionMaster.saveFailed'));
-      return;
+      this.toasts.info(t('editor.collisionMaster.stashOnly'));
     }
     const returnMapId = this.map.meta.id;
     const cm = newFlatCustomMap(
@@ -5118,7 +5148,7 @@ export class EditorApp {
       }
     }
     cm.placements.push(placement);
-    this.collisionMaster = { assetId, label, returnMapId };
+    this.collisionMaster = { assetId, label, returnMapId, returnMap };
     this.cmPolySnap = false;
     this.cmSubMode = 'object';
     this.loadMap(cm);
@@ -5154,7 +5184,9 @@ export class EditorApp {
     this.pendingFocus = null; // an unconsumed enter-focus must not retarget the restored map
     // The scratch scene must never resurface as a resumable draft.
     this.io.draftClear(cmMapId);
-    const back = this.io.store.load(cm.returnMapId);
+    // The in-memory stash is the primary return path (works with blocked
+    // storage); the store copy only matters across a page reload.
+    const back = cm.returnMap ?? this.io.store.load(cm.returnMapId);
     if (back) this.loadMap(back);
     else this.loadMap(newCustomMap(t('editor.untitledMap'), mintId(), now()));
   }

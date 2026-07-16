@@ -1,8 +1,8 @@
-// Scorching Wastes ? a custom-map endgame desert zone (billed 20-30; mobs run
+// Scorching Wastes — a custom-map endgame desert zone (billed 20-30; mobs run
 // level 19-24 against the level-20 cap, so the back half plays as hard elite
 // content). South-east beyond Thornpeak's rim, the land the first sealing of
-// Korzul the Gravewyrm drank dry. Zar'Keth, the Sunken Crown ? a sun-court
-// city older than Eastbrook ? bound a shard of the Wyrm's own fire (the First
+// Korzul the Gravewyrm drank dry. Zar'Keth, the Sunken Crown — a sun-court
+// city older than Eastbrook — bound a shard of the Wyrm's own fire (the First
 // Ember) to relight their dying kingdom; it burned the city to glass in one
 // night. Only the Heartspring still runs, fed by veins that pass beneath the
 // Wyrm's prison. Now the Ashen Court keeps a dead king's protocol in the
@@ -130,7 +130,7 @@ export const SCORCHING_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 26,
     moveSpeed: 7.5,
     aggroRadius: 12,
-    // Every landed cut feeds the thirst ? an escalating frenzy that only
+    // Every landed cut feeds the thirst — an escalating frenzy that only
     // burning him down or breaking melee resets.
     rampage: { ap: 9, maxStacks: 8, duration: 10, name: 'Parched Fury', school: 'physical' },
     // Once, when the fight turns, he upends a stolen skin over his cracked
@@ -149,7 +149,7 @@ export const SCORCHING_MOBS: Record<string, MobTemplate> = {
     color: 0x8f5a2b,
   },
   // The stone wardens the Sun-Court set to watch its mesa vigil. They wake
-  // only when the obelisk rite is worked out of order ? or finished.
+  // only when the obelisk rite is worked out of order — or finished.
   vigil_sentinel: {
     id: 'vigil_sentinel',
     name: 'Vigil Sentinel',
@@ -402,7 +402,7 @@ export const SCORCHING_MOBS: Record<string, MobTemplate> = {
     color: 0xffa14a,
   },
   // The First Ember itself: a shard of Korzul's fire the Sun-Court chained
-  // into a crown and could not hold. Not the Wyrm ? but the Wyrm's temper,
+  // into a crown and could not hold. Not the Wyrm — but the Wyrm's temper,
   // orphaned, wearing the memory of a king.
   ember_of_korzul: {
     id: 'ember_of_korzul',
@@ -438,7 +438,7 @@ export const SCORCHING_MOBS: Record<string, MobTemplate> = {
     enrage: { belowHpPct: 0.25, dmgMult: 1.4, hasteMult: 1.2 },
     yells: {
       engage: 'The sun remembers this land. And I remember the sun.',
-      summon: 'Rise, my sparks ? the night is full of tinder!',
+      summon: 'Rise, my sparks — the night is full of tinder!',
       enrage: 'BURN WITH ME.',
     },
     loot: [
@@ -802,7 +802,7 @@ export const SCORCHING_ITEMS: Record<string, ItemDef> = {
 };
 
 // ---------------------------------------------------------------------------
-// NPCs ? registered dynamic:true so the base world never surface-spawns them.
+// NPCs — registered dynamic:true so the base world never surface-spawns them.
 // The Scorching Wastes map document carries live (non-dynamic) copies of the
 // same ids at their real desert coordinates; quest giver/turn-in linkage is by
 // id string, so both copies resolve the same quests. Dummy positions sit in
@@ -820,7 +820,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
     dynamic: true,
     questIds: ['q_sw_arrival', 'q_sw_lost_caravan', 'q_sw_marauders', 'q_sw_afterglow'],
     greeting:
-      'Water is the only coin out here, friend. Highwatch sent us to spend it well ? and the Wastes mean to bankrupt us.',
+      'Water is the only coin out here, friend. Highwatch sent us to spend it well — and the Wastes mean to bankrupt us.',
   },
   scout_maren_wastes: {
     id: 'scout_maren_wastes',
@@ -853,7 +853,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
       'q_sw_sunspeaker',
     ],
     greeting:
-      "Zar'Keth fell in one night, $N ? a whole kingdom, fused to glass mid-sentence. I have waited my entire life to hear the rest of that sentence.",
+      "Zar'Keth fell in one night, $N — a whole kingdom, fused to glass mid-sentence. I have waited my entire life to hear the rest of that sentence.",
   },
   brother_aldric_wastes: {
     id: 'brother_aldric_wastes',
@@ -865,7 +865,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
     dynamic: true,
     questIds: ['q_sw_emberveil', 'q_sw_writs', 'q_sw_glasscut', 'q_sw_first_ember'],
     greeting:
-      "The Wyrm's heat bleeds even here, $N ? I feel it through my boot-soles. Whatever the cult digs for in that glass, they must not carry it home.",
+      "The Wyrm's heat bleeds even here, $N — I feel it through my boot-soles. Whatever the cult digs for in that glass, they must not carry it home.",
   },
   old_haruk: {
     id: 'old_haruk',
@@ -876,7 +876,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
     color: 0x7a9b8e,
     dynamic: true,
     // q_sw_first_ember is given by Brother Aldric but turned in here, at the
-    // falls ? the fire goes back to the water that drowned it once before.
+    // falls — the fire goes back to the water that drowned it once before.
     questIds: ['q_sw_offering', 'q_sw_first_ember'],
     greeting:
       'My family has watered this spring since before it needed watching. Nine kings drank from it. The tenth tried to drink it ALL.',
@@ -918,7 +918,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
     greeting:
       'Sand in the forge, sand in the quench, sand in my teeth. The blades come out sharper for the grudge.',
   },
-  // Hub flavor roster (no quests) ? registered so nameplates and the online
+  // Hub flavor roster (no quests) — registered so nameplates and the online
   // client resolve their display names; live copies spawn from the map doc.
   wellwatch_hana: {
     id: 'wellwatch_hana',
@@ -980,7 +980,7 @@ export const SCORCHING_NPCS: Record<string, NpcDef> = {
 };
 
 // ---------------------------------------------------------------------------
-// Ground objects ? registered with EMPTY positions (base-world-safe). The
+// Ground objects — registered with EMPTY positions (base-world-safe). The
 // custom map's content.objects places the live sparkles at real coordinates.
 // ---------------------------------------------------------------------------
 
@@ -997,21 +997,21 @@ export const SCORCHING_OBJECTS: GroundObjectDef[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Quests ? four acts, level 20-30 billing (level-20 cap: XP past the cap
+// Quests — four acts, level 20-30 billing (level-20 cap: XP past the cap
 // feeds prestige). Ordered puzzles ride quest chains: the mural survey names
 // the obelisk order, and each obelisk quest gates the next interact.
 // ---------------------------------------------------------------------------
 
 export const SCORCHING_QUESTS: Record<string, QuestDef> = {
-  // --- ACT I ? The Last Well ---
+  // --- ACT I — The Last Well ---
   q_sw_arrival: {
     id: 'q_sw_arrival',
     name: 'The Last Well',
     giverNpcId: 'caravan_master_saffa',
     turnInNpcId: 'caravan_master_saffa',
-    text: 'Welcome to the end of the map, $N. Highwatch calls this venture "the southern expedition"; I call it forty souls and one spring. Before anything else ? water. Draw four skins from the Heartspring pools north of camp so I know the line to the falls is safe to walk.',
+    text: 'Welcome to the end of the map, $N. Highwatch calls this venture "the southern expedition"; I call it forty souls and one spring. Before anything else — water. Draw four skins from the Heartspring pools north of camp so I know the line to the falls is safe to walk.',
     completionText:
-      'Cold, clear, and no arrows in you ? that is the best news the Last Well has had all season.',
+      'Cold, clear, and no arrows in you — that is the best news the Last Well has had all season.',
     objectives: [
       { type: 'collect', itemId: 'brimming_waterskin', count: 4, label: 'Brimming Waterskin' },
     ],
@@ -1027,7 +1027,7 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'scout_maren_wastes',
     text: 'The duskmanes have learned the sound of our water-carts, $N. Every dusk they pace closer, and last night one dragged off a mule with the harness still on it. Thin the packs on the Bonewind Flats south of camp and bring me eight pelts as proof the lesson took.',
     completionText:
-      'Eight pelts, eight fewer shadows at the picket line. The mules may finally sleep ? which is more than I do.',
+      'Eight pelts, eight fewer shadows at the picket line. The mules may finally sleep — which is more than I do.',
     objectives: [
       { type: 'kill', targetMobId: 'duskmane_prowler', count: 10, label: 'Duskmane Prowler slain' },
       { type: 'collect', itemId: 'duskmane_pelt', count: 8, label: 'Duskmane Pelt' },
@@ -1043,7 +1043,7 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'Carrion Glass',
     giverNpcId: 'scout_maren_wastes',
     turnInNpcId: 'scout_maren_wastes',
-    text: 'Glasscarabs, the drovers call them ? beetles the size of hounds with shells of fused glass, boiling out of the burn to the east. Derin swears the shells will edge a blade finer than any whetstone. Crack eight carabs and bring six unbroken shells; mind the shine, it means they are hardening.',
+    text: 'Glasscarabs, the drovers call them — beetles the size of hounds with shells of fused glass, boiling out of the burn to the east. Derin swears the shells will edge a blade finer than any whetstone. Crack eight carabs and bring six unbroken shells; mind the shine, it means they are hardening.',
     completionText:
       'Look at that edge-light! Derin owes me a sharpening for life, and the east road owes you a quieter crossing.',
     objectives: [
@@ -1061,9 +1061,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'What the Dunes Kept',
     giverNpcId: 'caravan_master_saffa',
     turnInNpcId: 'caravan_master_saffa',
-    text: "Three wagons never made the well, $N ? grain, tools, and my sister's husband driving the lead cart. The storm scattered them across the southwest dunes. Find the wrecks and search them. I need the manifests to know what we lost... and I need to know if anyone walked away.",
+    text: "Three wagons never made the well, $N — grain, tools, and my sister's husband driving the lead cart. The storm scattered them across the southwest dunes. Find the wrecks and search them. I need the manifests to know what we lost... and I need to know if anyone walked away.",
     completionText:
-      'Boot prints leading AWAY from the wrecks ? then nothing but marauder tracks. They took the drivers alive. That is either mercy or arithmetic, and out here I know which one to bet on.',
+      'Boot prints leading AWAY from the wrecks — then nothing but marauder tracks. They took the drivers alive. That is either mercy or arithmetic, and out here I know which one to bet on.',
     objectives: [
       {
         type: 'interact',
@@ -1083,7 +1083,7 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Water Tax',
     giverNpcId: 'caravan_master_saffa',
     turnInNpcId: 'caravan_master_saffa',
-    text: "The Duneblades call it a tax: your water or your blood, payable on sight. They hold a camp in the hollow southwest of the dunes, drinking our stolen skins around our stolen fires. Break them, $N. Ten marauders down, and bring back five skins ? those are our people's lives in leather.",
+    text: "The Duneblades call it a tax: your water or your blood, payable on sight. They hold a camp in the hollow southwest of the dunes, drinking our stolen skins around our stolen fires. Break them, $N. Ten marauders down, and bring back five skins — those are our people's lives in leather.",
     completionText:
       'Every skin you carry is a day someone at this well does not die. The Duneblades will remember the price of taxing us.',
     objectives: [
@@ -1106,9 +1106,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Parched King',
     giverNpcId: 'scout_maren_wastes',
     turnInNpcId: 'scout_maren_wastes',
-    text: "Their chief styles himself Karesh the Parched ? he drank his own cistern dry and salted the dregs so no rival could follow him. A man who will do that to his own well will do worse to ours. He holds court in Karesh's Hollow under the western ridge. End his reign, $N, and bring me the last skin he is hoarding.",
+    text: "Their chief styles himself Karesh the Parched — he drank his own cistern dry and salted the dregs so no rival could follow him. A man who will do that to his own well will do worse to ours. He holds court in Karesh's Hollow under the western ridge. End his reign, $N, and bring me the last skin he is hoarding.",
     completionText:
-      'So that is the last skin of the Parched King. Saffa will pour it back into the well ? every drop, on principle.',
+      'So that is the last skin of the Parched King. Saffa will pour it back into the well — every drop, on principle.',
     objectives: [
       {
         type: 'kill',
@@ -1125,15 +1125,15 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     minLevel: 18,
     suggestedPlayers: 2,
   },
-  // --- ACT II ? The Mesa of the Vigil ---
+  // --- ACT II — The Mesa of the Vigil ---
   q_sw_survey: {
     id: 'q_sw_survey',
     name: 'The Sentence Interrupted',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "Now that the well can spare you ? walk history with me, $N. The Sun-Court left murals: one under the Aqueduct Spine, one at the mesa's foot, one by the twin towers at the oasis ruin. Take rubbings of all three. Zar'Keth died mid-sentence, and I mean to read the rest of it.",
+    text: "Now that the well can spare you — walk history with me, $N. The Sun-Court left murals: one under the Aqueduct Spine, one at the mesa's foot, one by the twin towers at the oasis ruin. Take rubbings of all three. Zar'Keth died mid-sentence, and I mean to read the rest of it.",
     completionText:
-      'There ? the sentence completes: "When the crown grew too hot to wear, the kings climbed the mesa and gave the fire BACK." A rite of renunciation, worked on obelisks ? dawn, then noon, then dusk. That order matters, $N. Rites always mind their order.',
+      'There — the sentence completes: "When the crown grew too hot to wear, the kings climbed the mesa and gave the fire BACK." A rite of renunciation, worked on obelisks — dawn, then noon, then dusk. That order matters, $N. Rites always mind their order.',
     objectives: [
       { type: 'collect', itemId: 'mural_rubbing', count: 3, label: 'Mural rubbing taken' },
     ],
@@ -1148,9 +1148,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Vigil: Dawn',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "The mesa west of camp is the Vigil itself ? the kings' renunciation path. The Obelisk of Dawn stands on the first terrace, where the sun strikes first. Climb the switchbacks and lay your hand on it. Dawn wakes first; the mural is quite insistent.",
+    text: "The mesa west of camp is the Vigil itself — the kings' renunciation path. The Obelisk of Dawn stands on the first terrace, where the sun strikes first. Climb the switchbacks and lay your hand on it. Dawn wakes first; the mural is quite insistent.",
     completionText:
-      'You felt it hum? Marvelous. The rite still holds its charge after two ages. Dawn is lit ? noon waits above.',
+      'You felt it hum? Marvelous. The rite still holds its charge after two ages. Dawn is lit — noon waits above.',
     objectives: [
       {
         type: 'collect',
@@ -1170,9 +1170,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Vigil: Noon',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "Noon crowns the summit ? the second obelisk stands at the mesa's very top, where the sun owns the whole sky. The climb is the point, $N: the kings carried their crowns up every step of it. Wake the Obelisk of Noon.",
+    text: "Noon crowns the summit — the second obelisk stands at the mesa's very top, where the sun owns the whole sky. The climb is the point, $N: the kings carried their crowns up every step of it. Wake the Obelisk of Noon.",
     completionText:
-      'Dawn, then noon. One hour of the rite remains ? and the Vigil is beginning to notice us.',
+      'Dawn, then noon. One hour of the rite remains — and the Vigil is beginning to notice us.',
     objectives: [
       {
         type: 'collect',
@@ -1192,9 +1192,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Vigil: Dusk',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: 'Dusk is always last to the vigil ? its obelisk stands on the western spur, over the canyon. But understand what the rite is, $N: a renunciation must be WITNESSED. The court set a sentinel of living mesa-stone to stand witness, and when dusk lights, it will wake to judge whether you renounce or merely take. Convince it. Thoroughly.',
+    text: 'Dusk is always last to the vigil — its obelisk stands on the western spur, over the canyon. But understand what the rite is, $N: a renunciation must be WITNESSED. The court set a sentinel of living mesa-stone to stand witness, and when dusk lights, it will wake to judge whether you renounce or merely take. Convince it. Thoroughly.',
     completionText:
-      "The Sentinel judged you worthy ? or judged you unkillable, which to a stone is the same finding. The Vigil is complete, and every door in Zar'Keth just became a question worth asking.",
+      "The Sentinel judged you worthy — or judged you unkillable, which to a stone is the same finding. The Vigil is complete, and every door in Zar'Keth just became a question worth asking.",
     objectives: [
       {
         type: 'interact',
@@ -1215,15 +1215,15 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     minLevel: 19,
     suggestedPlayers: 2,
   },
-  // --- ACT III ? The Sunken Crown ---
+  // --- ACT III — The Sunken Crown ---
   q_sw_revenants: {
     id: 'q_sw_revenants',
     name: 'Posts of the Dead',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "Zar'Keth's soldiery never learned the war was lost ? never learned it was BRIEF. They walk the outer ruin north of the falls with their armor fused to their bones, challenging travelers for passwords no living tongue remembers. Put twelve of them to rest, $N, and gather their guard-seals; the seals will pass us deeper into the city.",
+    text: "Zar'Keth's soldiery never learned the war was lost — never learned it was BRIEF. They walk the outer ruin north of the falls with their armor fused to their bones, challenging travelers for passwords no living tongue remembers. Put twelve of them to rest, $N, and gather their guard-seals; the seals will pass us deeper into the city.",
     completionText:
-      'Each seal still warm ? loyal to the last, and past it. Whatever holds their watch together sits further in, and now we outrank it.',
+      'Each seal still warm — loyal to the last, and past it. Whatever holds their watch together sits further in, and now we outrank it.',
     objectives: [
       {
         type: 'kill',
@@ -1244,9 +1244,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Court of Ash',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "Deeper in, the court itself still sits ? chamberlains and lectors keeping a dead king's protocol, reading psalms to a throne of slag. Their psalters hold the sanctum liturgy, and the liturgy holds the rite that lights the Crown's braziers. Break up the session, $N, and bring me a psalter with its pages intact.",
+    text: "Deeper in, the court itself still sits — chamberlains and lectors keeping a dead king's protocol, reading psalms to a throne of slag. Their psalters hold the sanctum liturgy, and the liturgy holds the rite that lights the Crown's braziers. Break up the session, $N, and bring me a psalter with its pages intact.",
     completionText:
-      "Oh, this is beautiful work ? the whole brazier rite, notated in a dead cantor's hand. They kept singing it for two hundred years to an empty throne. I almost pity them. Almost.",
+      "Oh, this is beautiful work — the whole brazier rite, notated in a dead cantor's hand. They kept singing it for two hundred years to an empty throne. I almost pity them. Almost.",
     objectives: [
       { type: 'kill', targetMobId: 'ashen_courtier', count: 8, label: 'Ashen Courtier slain' },
       { type: 'collect', itemId: 'ashen_psalter', count: 1, label: 'Ashen Psalter' },
@@ -1262,9 +1262,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Crown Alight',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: 'The psalter names three Crown Braziers among the towers ? light all three and the inner sanctum opens itself, as it did for coronations. I have chalked the rite onto your gauntlet, $N; try not to sweat. Fair warning: a lit crown is a visible crown. Everything in that city will know the moment the third flame takes.',
+    text: 'The psalter names three Crown Braziers among the towers — light all three and the inner sanctum opens itself, as it did for coronations. I have chalked the rite onto your gauntlet, $N; try not to sweat. Fair warning: a lit crown is a visible crown. Everything in that city will know the moment the third flame takes.',
     completionText:
-      'From the well we watched the towers catch light one by one ? Saffa wept, and I confess I lectured no one about it. The sanctum stands open. And something inside is singing back.',
+      'From the well we watched the towers catch light one by one — Saffa wept, and I confess I lectured no one about it. The sanctum stands open. And something inside is singing back.',
     objectives: [
       {
         type: 'interact',
@@ -1284,7 +1284,7 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The Tenth Coronation',
     giverNpcId: 'loremaster_caddis_wastes',
     turnInNpcId: 'loremaster_caddis_wastes',
-    text: "The voice in the sanctum is Sunspeaker Atharis ? crowner of all nine kings of Zar'Keth. The psalms name him the court's living memory, and he has spent two ages preparing a tenth coronation: for the fire itself. He stands at the Sun-Throne between the twin towers. Depose him, $N, before he finishes a rite the whole desert will regret.",
+    text: "The voice in the sanctum is Sunspeaker Atharis — crowner of all nine kings of Zar'Keth. The psalms name him the court's living memory, and he has spent two ages preparing a tenth coronation: for the fire itself. He stands at the Sun-Throne between the twin towers. Depose him, $N, before he finishes a rite the whole desert will regret.",
     completionText:
       "Nine crowns he set on nine brows, and the tenth would have burned the world to fit it. History will record that you adjourned the court of Zar'Keth. I will make certain history phrases it exactly that way.",
     objectives: [
@@ -1306,15 +1306,15 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     minLevel: 20,
     suggestedPlayers: 2,
   },
-  // --- ACT IV ? The First Ember ---
+  // --- ACT IV — The First Ember ---
   q_sw_emberveil: {
     id: 'q_sw_emberveil',
     name: 'The Emberveil',
     giverNpcId: 'brother_aldric_wastes',
     turnInNpcId: 'brother_aldric_wastes',
-    text: 'You have seen the veiled camps along the eastern rim, $N. They are Wyrmcult ? a splinter sect, the Emberveil, come over the pass while Highwatch watched the Sanctum gates. Where the mother cult sings to wake the Wyrm, these dig to ARM it. Their zealots and pyromancers are sweeping the glass for something. Thin them before they find it.',
+    text: 'You have seen the veiled camps along the eastern rim, $N. They are Wyrmcult — a splinter sect, the Emberveil, come over the pass while Highwatch watched the Sanctum gates. Where the mother cult sings to wake the Wyrm, these dig to ARM it. Their zealots and pyromancers are sweeping the glass for something. Thin them before they find it.',
     completionText:
-      'Sixteen fewer shovels in that glass. But the digging goes on day and night ? they are not searching anymore, $N. They are excavating.',
+      'Sixteen fewer shovels in that glass. But the digging goes on day and night — they are not searching anymore, $N. They are excavating.',
     objectives: [
       { type: 'kill', targetMobId: 'emberveil_zealot', count: 10, label: 'Emberveil Zealot slain' },
       {
@@ -1335,9 +1335,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'Writs of the Veil',
     giverNpcId: 'brother_aldric_wastes',
     turnInNpcId: 'brother_aldric_wastes',
-    text: "Their leaders carry writs ? orders in the mother cult's cipher. I broke that cipher at Highwatch and I will break it again here. Bring me five writs from the Emberveil, $N, and we will read exactly what they were sent to fetch.",
+    text: "Their leaders carry writs — orders in the mother cult's cipher. I broke that cipher at Highwatch and I will break it again here. Bring me five writs from the Emberveil, $N, and we will read exactly what they were sent to fetch.",
     completionText:
-      "As I feared. \"Recover the FIRST EMBER ? the shard of the Master's fire the sun-kings stole and chained. Carry it to the Sanctum gate; the seal will not suffer its own flame.\" They mean to burn the Wyrm's door open with the Wyrm's own stolen fire, $N.",
+      "As I feared. \"Recover the FIRST EMBER — the shard of the Master's fire the sun-kings stole and chained. Carry it to the Sanctum gate; the seal will not suffer its own flame.\" They mean to burn the Wyrm's door open with the Wyrm's own stolen fire, $N.",
     objectives: [{ type: 'collect', itemId: 'emberveil_writ', count: 5, label: 'Emberveil Writ' }],
     xpReward: 5800,
     copperReward: 3100,
@@ -1350,9 +1350,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'Where the Sky Burned',
     giverNpcId: 'brother_aldric_wastes',
     turnInNpcId: 'brother_aldric_wastes',
-    text: "The Glasscut is where the First Ember fell the night it unmade Zar'Keth ? the ground still runs hot, and cinder elementals walk it like sparks that never landed. The Ember is waking, $N; its sparks grow bolder as the cult digs closer. Scatter eight of them and bring me five living cinders. I must take the measure of the fire we face.",
+    text: "The Glasscut is where the First Ember fell the night it unmade Zar'Keth — the ground still runs hot, and cinder elementals walk it like sparks that never landed. The Ember is waking, $N; its sparks grow bolder as the cult digs closer. Scatter eight of them and bring me five living cinders. I must take the measure of the fire we face.",
     completionText:
-      "They squirm even in blessed salt... this is dragonfire, no mistaking it now. The Ember is not a relic, $N. It is a REMNANT ? a living piece of Korzul's temper, and it remembers being worn as a crown.",
+      "They squirm even in blessed salt... this is dragonfire, no mistaking it now. The Ember is not a relic, $N. It is a REMNANT — a living piece of Korzul's temper, and it remembers being worn as a crown.",
     objectives: [
       { type: 'kill', targetMobId: 'cinder_elemental', count: 8, label: 'Cinder Elemental slain' },
       { type: 'collect', itemId: 'living_cinder', count: 5, label: 'Living Cinder' },
@@ -1370,7 +1370,7 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'old_haruk',
     text: "The priest means to face the fire, and you with him. Then hear a well-keeper's wisdom, $N: the Heartspring rises from beneath the Wyrm's own prison, and what passes under a thing knows that thing. Take my offering bowl to the pool atop the falls, pour, and listen. The spring has drowned this fire once before. Let it bless you before you go asking to be burned.",
     completionText:
-      'You heard it too ? the deep water, moving under the world. Wear that sound like armor, $N. Fire is loud, but the spring was here first, and it will be here after.',
+      'You heard it too — the deep water, moving under the world. Wear that sound like armor, $N. Fire is loud, but the spring was here first, and it will be here after.',
     objectives: [
       {
         type: 'interact',
@@ -1390,9 +1390,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'The First Ember',
     giverNpcId: 'brother_aldric_wastes',
     turnInNpcId: 'old_haruk',
-    text: "It is uncovered, $N. The cult's pit broke open at dawn and the Glasscut lit from within ? the First Ember stands in the crater it made two ages ago, wearing fire like a king's regalia, and the Emberveil kneel to it in rows. If it reaches the Sanctum gate, everything Highwatch bled for is ash. You carry the spring's blessing and the Vigil's witness. Go down into the glass and finish the sentence Zar'Keth began: the fire goes BACK.",
+    text: "It is uncovered, $N. The cult's pit broke open at dawn and the Glasscut lit from within — the First Ember stands in the crater it made two ages ago, wearing fire like a king's regalia, and the Emberveil kneel to it in rows. If it reaches the Sanctum gate, everything Highwatch bled for is ash. You carry the spring's blessing and the Vigil's witness. Go down into the glass and finish the sentence Zar'Keth began: the fire goes BACK.",
     completionText:
-      'The falls ran quick and bright the moment it died ? the spring, taking its old enemy under. You have done what nine kings could not, $N: you gave the fire back. Sit. Drink. The water is sweetest tonight.',
+      'The falls ran quick and bright the moment it died — the spring, taking its old enemy under. You have done what nine kings could not, $N: you gave the fire back. Sit. Drink. The water is sweetest tonight.',
     objectives: [
       {
         type: 'kill',
@@ -1417,9 +1417,9 @@ export const SCORCHING_QUESTS: Record<string, QuestDef> = {
     name: 'Water for the Living',
     giverNpcId: 'caravan_master_saffa',
     turnInNpcId: 'caravan_master_saffa',
-    text: 'Haruk says the spring sings a note lower now, like a debt paid off. The Emberveil are ash or fled, the court is adjourned, and my ledger finally shows more water than worry. One last task, $N ? walk the camp and let Maren, Caddis, and Brother Aldric each thank you properly. They have earned the chance, and so have you.',
+    text: 'Haruk says the spring sings a note lower now, like a debt paid off. The Emberveil are ash or fled, the court is adjourned, and my ledger finally shows more water than worry. One last task, $N — walk the camp and let Maren, Caddis, and Brother Aldric each thank you properly. They have earned the chance, and so have you.',
     completionText:
-      'Then it is done, and the Last Well is just... a well. First of many along a living road, if this old caravaneer has any say. The Scorching Wastes will remember your name, $N ? the water remembers everything.',
+      'Then it is done, and the Last Well is just... a well. First of many along a living road, if this old caravaneer has any say. The Scorching Wastes will remember your name, $N — the water remembers everything.',
     objectives: [
       {
         type: 'interact',

@@ -1,7 +1,7 @@
 // DOM file I/O for CustomMap documents: download to a .json file and pick one back
 // in. Kept apart from persist.ts so the (de)serializer stays DOM-free and testable.
 
-import { restoreBundleDeps, zipRead } from './bundle';
+import { type BundleFile, restoreBundleDeps, zipReadAny } from './bundle';
 import type { CustomMap } from './custom_map';
 import { missingBundleEntries, prepareMapForEngine } from './export_contract';
 import { parseMap } from './persist';
@@ -52,12 +52,49 @@ export type MapPickOutcome =
   | { status: 'invalid' }
   | { status: 'cancelled' };
 
-/** Read a chosen file into a CustomMap: a .wocmap.zip bundle verifies and
- *  restores every dependency before accepting map.json; anything else is
+/**
+ * Find the bundle inside arbitrary zip contents. Handles what makers actually
+ * hand us: (1) a real .wocmap.zip (map.json at the root); (2) a zip OF a
+ * folder (map.json nested under a directory — every entry's shared prefix is
+ * stripped so models/<sha> still resolve); (3) a zip that merely CONTAINS a
+ * .wocmap.zip (Finder-zipped export folders) — unwrapped recursively, a
+ * couple of levels deep.
+ */
+async function bundleFilesFrom(files: BundleFile[], depth = 0): Promise<BundleFile[] | null> {
+  // (1) map.json at the root: already a bundle.
+  if (files.some((f) => f.path === 'map.json')) return files;
+  // (2) map.json under a folder prefix: strip that prefix from everything.
+  const nested = files.find((f) => f.path.endsWith('/map.json'));
+  if (nested) {
+    const prefix = nested.path.slice(0, -'map.json'.length);
+    const stripped = files
+      .filter((f) => f.path.startsWith(prefix))
+      .map((f) => ({ path: f.path.slice(prefix.length), bytes: f.bytes }));
+    return stripped;
+  }
+  // (3) a wrapped .wocmap.zip inside: unwrap it (nearest to the root first).
+  if (depth >= 2) return null;
+  const inner = files
+    .filter((f) => /\.wocmap\.zip$/i.test(f.path))
+    .sort((a, b) => a.path.split('/').length - b.path.split('/').length)[0];
+  if (!inner) return null;
+  const innerFiles = await zipReadAny(inner.bytes);
+  return innerFiles ? bundleFilesFrom(innerFiles, depth + 1) : null;
+}
+
+/** Read a chosen file into a CustomMap: zips (by extension OR magic bytes)
+ *  resolve to a bundle — including Finder-zipped export folders — verifying
+ *  and restoring every dependency before accepting map.json; anything else is
  *  parsed as plain map JSON. Returns null when the bytes are not a whole map. */
 async function readMapFile(file: File): Promise<CustomMap | null> {
-  if (/\.zip$/i.test(file.name)) {
-    const files = zipRead(new Uint8Array(await file.arrayBuffer()));
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  // Sniff the zip magic too: a bundle renamed to .json (or anything else)
+  // should still import as a bundle instead of failing a text parse.
+  const looksZip =
+    bytes.length > 4 && bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] <= 8 && bytes[3] <= 8;
+  if (/\.zip$/i.test(file.name) || looksZip) {
+    const raw = await zipReadAny(bytes);
+    const files = raw ? await bundleFilesFrom(raw) : null;
     const mapEntry = files?.find((f) => f.path === 'map.json');
     if (!files || !mapEntry) return null;
     const map = parseMap(new TextDecoder().decode(mapEntry.bytes));
@@ -69,7 +106,7 @@ async function readMapFile(file: File): Promise<CustomMap | null> {
     }
     return map;
   }
-  return parseMap(await file.text());
+  return parseMap(new TextDecoder().decode(bytes));
 }
 
 /**

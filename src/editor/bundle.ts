@@ -100,6 +100,82 @@ export function zipStore(files: readonly BundleFile[]): Uint8Array {
   return out;
 }
 
+/**
+ * Read ANY zip: the editor's own STORED bundles plus foreign zips (Finder,
+ * `zip`, 7-Zip, ...). Parses the CENTRAL directory (so data-descriptor
+ * entries with zeroed local sizes still read) and inflates DEFLATE entries
+ * through the browser's native DecompressionStream — no zip dependency.
+ * Directory entries and macOS junk (__MACOSX/, .DS_Store, AppleDouble ._*)
+ * are skipped. Returns null when the bytes are not a readable zip.
+ */
+export async function zipReadAny(bytes: Uint8Array): Promise<BundleFile[] | null> {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  // EOCD: scan back from the tail (the record allows a trailing comment).
+  let eocd = -1;
+  const scanFloor = Math.max(0, bytes.length - 22 - 65535);
+  for (let pos = bytes.length - 22; pos >= scanFloor; pos--) {
+    if (view.getUint32(pos, true) === 0x06054b50) {
+      eocd = pos;
+      break;
+    }
+  }
+  if (eocd < 0) return null;
+  const count = view.getUint16(eocd + 10, true);
+  let cd = view.getUint32(eocd + 16, true);
+  const dec = new TextDecoder();
+  const files: BundleFile[] = [];
+  const seen = new Set<string>();
+  for (let i = 0; i < count; i++) {
+    if (cd + 46 > bytes.length || view.getUint32(cd, true) !== 0x02014b50) return null;
+    const method = view.getUint16(cd + 10, true);
+    const expectedCrc = view.getUint32(cd + 16, true);
+    const compSize = view.getUint32(cd + 20, true);
+    const rawSize = view.getUint32(cd + 24, true);
+    const nameLen = view.getUint16(cd + 28, true);
+    const extraLen = view.getUint16(cd + 30, true);
+    const commentLen = view.getUint16(cd + 32, true);
+    const localOff = view.getUint32(cd + 42, true);
+    const path = dec.decode(bytes.subarray(cd + 46, cd + 46 + nameLen));
+    cd += 46 + nameLen + extraLen + commentLen;
+    // Zip64 sentinel: out of scope (bundles are far below 4GB).
+    if (compSize === 0xffffffff || rawSize === 0xffffffff || localOff === 0xffffffff) return null;
+    // Skip directories and macOS packaging junk.
+    const base = path.slice(path.lastIndexOf('/') + 1);
+    if (path.endsWith('/') || path.startsWith('__MACOSX/')) continue;
+    if (base === '.DS_Store' || base.startsWith('._')) continue;
+    if (seen.has(path)) continue;
+    // The data offset comes from the entry's own LOCAL header (its name/extra
+    // lengths can differ from the central copy).
+    if (localOff + 30 > bytes.length || view.getUint32(localOff, true) !== 0x04034b50) return null;
+    const lNameLen = view.getUint16(localOff + 26, true);
+    const lExtraLen = view.getUint16(localOff + 28, true);
+    const dataStart = localOff + 30 + lNameLen + lExtraLen;
+    if (dataStart + compSize > bytes.length) return null;
+    const raw = bytes.slice(dataStart, dataStart + compSize);
+    let payload: Uint8Array;
+    if (method === 0) {
+      payload = raw;
+    } else if (method === 8 && typeof DecompressionStream === 'function') {
+      try {
+        const stream = new Blob([raw as BlobPart]).stream().pipeThrough(
+          // biome-ignore lint/suspicious/noExplicitAny: deflate-raw is in every supported browser but older lib.dom typings lag
+          new DecompressionStream('deflate-raw' as any),
+        );
+        payload = new Uint8Array(await new Response(stream).arrayBuffer());
+      } catch {
+        return null;
+      }
+      if (payload.length !== rawSize) return null;
+    } else {
+      return null; // unsupported method (or no DecompressionStream)
+    }
+    if (crc32(payload) !== expectedCrc) return null;
+    seen.add(path);
+    files.push({ path, bytes: payload });
+  }
+  return files.length > 0 ? files : null;
+}
+
 /** Read a STORED-entries zip (the format zipStore writes). Compressed entries
  *  return null (foreign zips are out of scope). */
 export function zipRead(bytes: Uint8Array): BundleFile[] | null {
