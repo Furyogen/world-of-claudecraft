@@ -35,7 +35,10 @@ function rectLoop(
     new THREE.Vector3(x1, y, z1),
     new THREE.Vector3(x0, y, z1),
   ]);
-  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }));
+  return new THREE.LineLoop(
+    geo,
+    new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }),
+  );
 }
 
 function circleLoop(x: number, z: number, r: number, color: number, y: number): THREE.LineLoop {
@@ -45,7 +48,10 @@ function circleLoop(x: number, z: number, r: number, color: number, y: number): 
     pts.push(new THREE.Vector3(x + Math.cos(a) * r, y, z + Math.sin(a) * r));
   }
   const geo = new THREE.BufferGeometry().setFromPoints(pts);
-  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }));
+  return new THREE.LineLoop(
+    geo,
+    new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }),
+  );
 }
 
 function refsEqual(a: DungeonEntityRef | null, b: DungeonEntityRef): boolean {
@@ -76,15 +82,21 @@ export function buildDungeonOverlays(
     line.renderOrder = 999;
     group.add(line);
   };
-  draft.rooms.forEach((_, index) => add({ kind: 'room', index }, COLORS.room));
-  draft.doors.forEach((_, index) => add({ kind: 'door', index }, COLORS.door));
-  draft.visualOpenings.forEach((_, index) => add({ kind: 'opening', index }, COLORS.opening));
-  draft.barriers.forEach((barrier, index) =>
+  draft.rooms.forEach((_, index) => {
+    add({ kind: 'room', index }, COLORS.room);
+  });
+  draft.doors.forEach((_, index) => {
+    add({ kind: 'door', index }, COLORS.door);
+  });
+  draft.visualOpenings.forEach((_, index) => {
+    add({ kind: 'opening', index }, COLORS.opening);
+  });
+  draft.barriers.forEach((barrier, index) => {
     add(
       { kind: 'barrier', index },
       barrier.style === 'pit' ? COLORS.barrierPit : COLORS.barrierMaze,
-    ),
-  );
+    );
+  });
   draft.decor.forEach((decor, index) => {
     const b = entityBounds(draft, { kind: 'decor', index });
     const r = Math.max(b.x1 - b.x0, b.z1 - b.z0) / 2;
