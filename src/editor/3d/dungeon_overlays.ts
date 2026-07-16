@@ -35,7 +35,7 @@ function rectLoop(
     new THREE.Vector3(x1, y, z1),
     new THREE.Vector3(x0, y, z1),
   ]);
-  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false }));
+  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }));
 }
 
 function circleLoop(x: number, z: number, r: number, color: number, y: number): THREE.LineLoop {
@@ -45,7 +45,7 @@ function circleLoop(x: number, z: number, r: number, color: number, y: number): 
     pts.push(new THREE.Vector3(x + Math.cos(a) * r, y, z + Math.sin(a) * r));
   }
   const geo = new THREE.BufferGeometry().setFromPoints(pts);
-  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false }));
+  return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, depthTest: false, fog: false }));
 }
 
 function refsEqual(a: DungeonEntityRef | null, b: DungeonEntityRef): boolean {
