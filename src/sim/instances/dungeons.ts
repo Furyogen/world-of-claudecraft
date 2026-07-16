@@ -749,7 +749,9 @@ export function updateInstances(ctx: SimContext): void {
   for (const inst of ctx.instances) {
     if (inst.partyKey === null) continue;
     const origin = instanceOriginOf(inst);
-    if (inst.dungeonId === 'infernal_abyss') tickInfernalAbyssLava(ctx, origin);
+    if (inst.dungeonId === 'infernal_abyss') {
+      tickInfernalAbyssLava(ctx, origin, (pos) => instanceContains(origin, { ...pos, y: 0 }));
+    }
     let occupied = false;
     for (const meta of ctx.players.values()) {
       const e = ctx.entities.get(meta.entityId);
