@@ -2,6 +2,8 @@
 // Vitest suite type-checks its imports (same convention as the electron/*.d.cts
 // files). Keep in sync with the .mjs exports.
 
+import type { UpdateChannel } from '../electron/update_guard.cjs';
+
 export interface AzureSignOptions {
   publisherName: string;
   endpoint: string;
@@ -13,6 +15,15 @@ export function azureSignOptionsFromEnv(
   env?: Record<string, string | undefined>,
 ): AzureSignOptions | null;
 
+export interface KeyVaultSignConfig {
+  sign: string;
+  signingHashAlgorithms: string[];
+}
+
+export function keyVaultSignConfigFromEnv(
+  env?: Record<string, string | undefined>,
+): KeyVaultSignConfig | null;
+
 export interface DesktopBuilderConfig {
   extraMetadata: {
     wocDesktop: {
@@ -20,13 +31,20 @@ export interface DesktopBuilderConfig {
       apiOrigin?: string;
       loginOrigin?: string;
       crashSubmitUrl?: string;
+      steamAppId?: string;
     };
   };
-  publish: unknown;
+  publish: { channel?: UpdateChannel; [key: string]: unknown } | null;
   directories: { output?: string; [key: string]: unknown };
   mac: { [key: string]: unknown };
-  win: { azureSignOptions?: AzureSignOptions; [key: string]: unknown };
+  win: {
+    azureSignOptions?: AzureSignOptions;
+    signtoolOptions?: KeyVaultSignConfig & { [key: string]: unknown };
+    [key: string]: unknown;
+  };
   linux: { [key: string]: unknown };
+  files?: string[];
+  asarUnpack?: string[];
   [key: string]: unknown;
 }
 
@@ -38,4 +56,23 @@ export function desktopBuilderConfig(input: {
   loginOrigin?: string;
   crashSubmitUrl?: string;
   azureSign?: AzureSignOptions | null;
+  keyVaultSign?: KeyVaultSignConfig | null;
+  updateChannel?: string | null;
+  steamAppId?: string;
+  steamworksInstalled?: (() => boolean) | null;
 }): DesktopBuilderConfig;
+
+export function isChannelFeedFile(fileName: unknown, channel: unknown): boolean;
+export function stampFeedFile(text: string, apiOrigin: string): string;
+export function stampChannelFeedFiles(input: {
+  outDir: string;
+  channel: unknown;
+  apiOrigin: string;
+  fs: {
+    existsSync: (path: string) => boolean;
+    readdirSync: (path: string) => string[];
+    readFileSync: (path: string, encoding: 'utf8') => string;
+    writeFileSync: (path: string, data: string) => void;
+  };
+  joinPath: (...parts: string[]) => string;
+}): string[];

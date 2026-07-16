@@ -1,5 +1,13 @@
-import type { AbilityDef, AbilityEffect, PlayerClass, Stats, WeaponInfo } from '../types';
+import type {
+  AbilityDef,
+  AbilityEffect,
+  AuraKind,
+  CoreStats,
+  PlayerClass,
+  WeaponInfo,
+} from '../types';
 import type { TalentModifiers } from './talents';
+import { SPORT_ABILITIES } from './vale_cup';
 
 // ---------------------------------------------------------------------------
 // Player classes — per-level base stats follow classic-era growth curves.
@@ -10,8 +18,8 @@ import type { TalentModifiers } from './talents';
 export interface ClassDef {
   id: PlayerClass;
   name: string;
-  baseStats: Stats;
-  statsPerLevel: Stats;
+  baseStats: CoreStats;
+  statsPerLevel: CoreStats;
   baseHp: number; // class hp before stamina at level 1
   hpPerLevel: number;
   baseMana: number;
@@ -73,6 +81,8 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'demoralizing_shout',
       'sunder_armor',
       'taunt',
+      'pummel',
+      'ironhold',
     ],
     color: 0xc79c6e,
   },
@@ -106,6 +116,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'ice_barrier',
       'pyroblast',
       'flamestrike',
+      'counterspell',
     ],
     color: 0x69ccf0,
   },
@@ -144,6 +155,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'deadly_poison',
       'blind',
       'stealth',
+      'kick',
     ],
     color: 0xfff569,
   },
@@ -169,11 +181,14 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'divine_protection',
       'hammer_of_justice',
       'lay_on_hands',
+      'holy_taunt',
       'flash_of_light',
       'exorcism',
       'consecration',
       'righteous_fury',
       'retribution_aura',
+      'rebuke',
+      'sacred_bulwark',
     ],
     color: 0xf58cba,
   },
@@ -207,6 +222,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'aimed_shot',
       'rapid_fire',
       'volley',
+      'counter_shot',
     ],
     color: 0xabd473,
   },
@@ -262,7 +278,6 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'frost_shock',
       'frostbrand_weapon',
       'ghost_wolf',
-      'stormstrike',
       'earthquake',
     ],
     color: 0x0070de,
@@ -300,6 +315,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'summon_infernal',
       'summon_doomguard',
       'rain_of_fire',
+      'spell_lock',
     ],
     color: 0x9482c9,
   },
@@ -349,6 +365,8 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'tigers_fury',
       'rip',
       'hurricane',
+      'skull_bash',
+      'primal_reflexes',
     ],
     color: 0xff7d0a,
   },
@@ -412,22 +430,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: false,
     exclusiveGroup: 'warrior_shout',
-    effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 20, duration: 120 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 10,
-        effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 35, duration: 120 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 10,
-        effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 50, duration: 120 }],
-      },
-    ],
-    description: 'Increases your attack power by 20 for 2 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_ap_pct', value: 10, duration: 120, party: true }],
+    description: 'A shout that increases the attack power of all party members by $b% for 2 min.',
   },
   commanding_shout: {
     id: 'commanding_shout',
@@ -450,7 +454,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'selfBuff', kind: 'buff_sta', value: 11, duration: 120 }],
       },
     ],
-    description: 'Increases your Stamina by 6 for 2 min.',
+    description: 'Increases your Stamina by $b for 2 min.',
   },
   demoralizing_shout: {
     id: 'demoralizing_shout',
@@ -473,7 +477,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Lets out a fearsome shout, reducing the attack power of all nearby enemies by 30 for 30 sec.',
+      'Lets out a fearsome shout, reducing the attack power of all nearby enemies by $b for 30 sec.',
   },
   charge: {
     id: 'charge',
@@ -517,7 +521,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'dot', total: 36, duration: 12, interval: 3 }],
       },
     ],
-    description: 'Wounds the target, causing them to bleed for $d damage over 9 sec.',
+    description: 'Wounds the target, causing them to bleed for $d damage over $t sec.',
   },
   thunder_clap: {
     id: 'thunder_clap',
@@ -583,7 +587,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         ],
       },
     ],
-    description: 'Maims the enemy for 5 damage, slowing its movement by 50% for 15 sec.',
+    description: 'Maims the enemy for $d damage, slowing its movement by 50% for 15 sec.',
   },
   bloodrage: {
     id: 'bloodrage',
@@ -625,7 +629,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Instant attack for weapon damage +5. Only usable after the target dodges. Cannot be dodged.',
+      'Instant attack for weapon damage plus $d. Only usable after the target dodges. Cannot be dodged.',
   },
   execute: {
     id: 'execute',
@@ -688,6 +692,24 @@ export const ABILITIES: Record<string, AbilityDef> = {
     description:
       'A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast again to leave the stance.',
   },
+  // Warrior tank cooldown: a flat mitigation wall (the `shield_wall` aura, read in
+  // damage.ts). One of three distinct tank cooldowns (paladin Sacred Bulwark is a
+  // cheat-death, druid Primal Reflexes is dodge-based).
+  ironhold: {
+    id: 'ironhold',
+    name: 'Ironhold',
+    class: 'warrior',
+    learnLevel: 20,
+    cost: 10,
+    castTime: 0,
+    cooldown: 180,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    offGcd: true,
+    effects: [{ type: 'selfBuff', kind: 'shield_wall', value: 0.4, duration: 8 }],
+    description: 'Brace behind your guard, reducing all damage taken by 40% for 8 sec.',
+  },
   sunder_armor: {
     id: 'sunder_armor',
     name: 'Armor Shear',
@@ -711,7 +733,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      "Sunders the target's armor, reducing it by $d per application. Stacks up to 5 times. Generates a high amount of threat.",
+      "Sunders the target's armor, reducing it by $d% per application. Stacks up to 5 times. Generates a high amount of threat.",
   },
   taunt: {
     id: 'taunt',
@@ -806,7 +828,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 70, duration: 1800 }],
       },
     ],
-    description: 'Encases you in frost, increasing armor by 30 for 30 min.',
+    description: 'Encases you in frost, increasing armor by $b for 30 min.',
   },
   arcane_intellect: {
     id: 'arcane_intellect',
@@ -819,16 +841,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'arcane',
     requiresTarget: false,
-    effects: [{ type: 'selfBuff', kind: 'buff_int', value: 2, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 14,
-        cost: 60,
-        effects: [{ type: 'selfBuff', kind: 'buff_int', value: 7, duration: 1800 }],
-      },
-    ],
-    description: 'Increases Intellect by 2 for 30 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_int_pct', value: 5, duration: 1800, party: true }],
+    description: 'Increases the Intellect of all party members by $b% for 30 min.',
   },
   frostbolt: {
     id: 'frostbolt',
@@ -969,7 +983,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'polymorph', duration: 15 }],
     ranks: [{ rank: 2, level: 18, cost: 70, effects: [{ type: 'polymorph', duration: 20 }] }],
     description:
-      'Transforms the enemy into a toad for up to 15 sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only.',
+      'Transforms the enemy into a toad for up to $t sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only.',
   },
   frost_nova: {
     id: 'frost_nova',
@@ -1042,7 +1056,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     targetMode: 'position',
     channel: { duration: 4, ticks: 4 },
     effects: [{ type: 'aoeDamage', min: 14, max: 18, radius: 7 }],
-    description: 'Calls a rain of fire onto the target area, burning enemies for $d Fire damage.',
+    description:
+      'Calls a rain of fire onto the target area for 4 sec, burning enemies for $d Fire damage each second.',
   },
   volley: {
     id: 'volley',
@@ -1059,7 +1074,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     targetMode: 'position',
     channel: { duration: 3, ticks: 6 },
     effects: [{ type: 'aoeDamage', min: 12, max: 16, radius: 8 }],
-    description: 'Rains arrows on the target area, dealing $d damage to enemies caught in it.',
+    description:
+      'Rains arrows on the target area for 3 sec, dealing $d damage every 0.5 sec to enemies caught in it.',
   },
   hurricane: {
     id: 'hurricane',
@@ -1075,7 +1091,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     targetMode: 'position',
     channel: { duration: 6, ticks: 6 },
     effects: [{ type: 'aoeDamage', min: 12, max: 16, radius: 8 }],
-    description: 'Calls a hurricane onto the target area, battering enemies for $d Nature damage.',
+    description:
+      'Calls a hurricane onto the target area for 6 sec, battering enemies for $d Nature damage each second.',
   },
   earthquake: {
     id: 'earthquake',
@@ -1090,7 +1107,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     targetMode: 'position',
     effects: [{ type: 'groundAoE', min: 13, max: 17, radius: 8, duration: 6, interval: 1.5 }],
-    description: 'Shakes the target area, battering enemies for $d Nature damage.',
+    description:
+      'Shakes the target area for 6 sec, battering enemies for $d Nature damage every 1.5 sec.',
   },
   scorch: {
     id: 'scorch',
@@ -1136,7 +1154,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'frost',
     requiresTarget: false,
     effects: [{ type: 'absorb', amount: 130, duration: 60 }],
-    description: 'Shields you in ice, absorbing 130 damage for 60 sec.',
+    description: 'Shields you in ice, absorbing $d damage for 60 sec.',
   },
 
   // ====================== ROGUE ======================
@@ -1187,7 +1205,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'finisherDamage', base: 14, perCombo: 18, variance: 9 }],
       },
     ],
-    description: 'Finishing move that causes damage per combo point.',
+    description: 'Finishing move that causes $d.',
   },
   backstab: {
     id: 'backstab',
@@ -1247,7 +1265,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Strikes the target, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point.',
+      'Strikes the target for $d damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point.',
   },
   evasion: {
     id: 'evasion',
@@ -1388,7 +1406,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Garrote the enemy, causing damage now and bleeding it for $d over 18 sec. Must be stealthed. Awards 1 combo point.',
+      'Garrote the enemy, causing $d damage now and bleeding it for $o over 18 sec. Must be stealthed. Awards 1 combo point.',
   },
   cheap_shot: {
     id: 'cheap_shot',
@@ -1408,7 +1426,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'stun', duration: 4 },
     ],
     description:
-      'Strike the target, stunning it for 4 sec. Must be stealthed. Awards 2 combo points.',
+      'Strike the target for $d damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points.',
   },
   sap: {
     id: 'sap',
@@ -1443,7 +1461,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'slow', mult: 0.5, duration: 12 },
     ],
     description:
-      'Strikes the target with a crippling poison, dealing {damage} Nature damage and slowing its movement speed by 50% for 12 sec.',
+      'Strikes the target with a crippling poison, dealing $d Nature damage and slowing its movement speed by 50% for 12 sec.',
   },
   expose_armor: {
     id: 'expose_armor',
@@ -1457,9 +1475,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: true,
     spendsCombo: true,
-    effects: [{ type: 'sunder', armor: 170, maxStacks: 1 }],
-    description:
-      'Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut.',
+    // Finisher: lands the full Sunder cap (5 stacks = 10% armor) in one cast.
+    effects: [{ type: 'sunder', armor: 170, maxStacks: 5, full: true }],
+    description: 'Finishing move that exposes the target, reducing its armor by $d% for 30 sec.',
   },
   rupture: {
     id: 'rupture',
@@ -1566,14 +1584,14 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Fills you with Holy power for 30 sec, causing each of your melee swings to deal 4 additional Holy damage. Unleash with Verdict.',
+      'Fills you with Holy power for 30 sec, causing each of your melee swings to deal $d additional Holy damage. Unleash with Verdict.',
   },
   holy_light: {
     id: 'holy_light',
     name: 'Mending Light',
     class: 'paladin',
     learnLevel: 1,
-    cost: 35,
+    cost: 25,
     castTime: 2.5,
     cooldown: 0,
     range: 30,
@@ -1582,9 +1600,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     targetType: 'friendly',
     effects: [{ type: 'heal', min: 42, max: 51 }],
     ranks: [
-      { rank: 2, level: 8, cost: 60, effects: [{ type: 'heal', min: 76, max: 90 }] },
-      { rank: 3, level: 14, cost: 95, effects: [{ type: 'heal', min: 122, max: 144 }] },
-      { rank: 4, level: 20, cost: 140, effects: [{ type: 'heal', min: 190, max: 222 }] },
+      { rank: 2, level: 8, cost: 50, effects: [{ type: 'heal', min: 76, max: 90 }] },
+      { rank: 3, level: 14, cost: 70, effects: [{ type: 'heal', min: 122, max: 144 }] },
+      { rank: 4, level: 20, cost: 115, effects: [{ type: 'heal', min: 190, max: 222 }] },
     ],
     description: 'Heals a friendly target for $d.',
   },
@@ -1600,22 +1618,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: false,
     exclusiveGroup: 'paladin_aura',
-    effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 40, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 0,
-        effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 75, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 18,
-        cost: 0,
-        effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 110, duration: 1800 }],
-      },
+    effects: [
+      { type: 'buffTarget', kind: 'buff_armor_pct', value: 10, duration: 1800, party: true },
     ],
-    description: 'Increases your armor by 40 for 30 min.',
+    description: 'Increases the armor of all party members by $b% for 30 min.',
   },
   judgement: {
     id: 'judgement',
@@ -1644,22 +1650,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 15, duration: 300 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 40,
-        effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 30, duration: 300 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 60,
-        effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 45, duration: 300 }],
-      },
-    ],
-    description: 'Places a Blessing on a friendly target, increasing attack power by 15 for 5 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_ap_pct', value: 10, duration: 1800, party: true }],
+    description:
+      'Blesses the party, increasing the attack power of all party members by $b% for 30 min.',
   },
   divine_protection: {
     id: 'divine_protection',
@@ -1677,7 +1670,26 @@ export const ABILITIES: Record<string, AbilityDef> = {
     ranks: [
       { rank: 2, level: 14, cost: 25, effects: [{ type: 'absorb', amount: 110, duration: 10 }] },
     ],
-    description: 'A holy shield absorbs 50 damage for 10 sec.',
+    description: 'A holy shield absorbs $d damage for 10 sec.',
+  },
+  // Paladin tank cooldown: a predictive divine cheat-death (the `guardian_ward`
+  // aura, consumed by an enemy lethal blow in damage.ts). Its short window and
+  // long cooldown make timing the defense the choice, rather than keeping it up.
+  sacred_bulwark: {
+    id: 'sacred_bulwark',
+    name: 'Sacred Bulwark',
+    class: 'paladin',
+    learnLevel: 20,
+    cost: 15,
+    castTime: 0,
+    cooldown: 180,
+    range: 0,
+    school: 'holy',
+    requiresTarget: false,
+    offGcd: true,
+    effects: [{ type: 'selfBuff', kind: 'guardian_ward', value: 0.35, duration: 10 }],
+    description:
+      'For $t sec, the next enemy hit that would kill you is denied, restoring you to 35% health instead.',
   },
   hammer_of_justice: {
     id: 'hammer_of_justice',
@@ -1692,7 +1704,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     effects: [{ type: 'stun', duration: 3 }],
     ranks: [{ rank: 2, level: 16, cost: 45, effects: [{ type: 'stun', duration: 4 }] }],
-    description: 'Stuns the target for 3 sec.',
+    description: 'Stuns the target for $t sec.',
   },
   lay_on_hands: {
     id: 'lay_on_hands',
@@ -1708,7 +1720,23 @@ export const ABILITIES: Record<string, AbilityDef> = {
     targetType: 'friendly',
     effects: [{ type: 'heal', min: 250, max: 250 }],
     ranks: [{ rank: 2, level: 18, cost: 0, effects: [{ type: 'heal', min: 600, max: 600 }] }],
-    description: 'A massive surge of healing: restores 250 health. 10 min cooldown.',
+    description: 'A massive surge of healing: restores $d health. 10 min cooldown.',
+  },
+  holy_taunt: {
+    id: 'holy_taunt',
+    name: 'Sacred Goad',
+    class: 'paladin',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 10,
+    range: 30,
+    school: 'holy',
+    requiresTarget: true,
+    offGcd: true,
+    effects: [{ type: 'taunt' }],
+    description:
+      'Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec.',
   },
   flash_of_light: {
     id: 'flash_of_light',
@@ -1751,7 +1779,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: false,
     effects: [{ type: 'groundAoE', min: 28, max: 34, radius: 8, duration: 10, interval: 2 }],
-    description: 'Consecrates the ground beneath you, searing nearby enemies for $d Holy damage.',
+    description:
+      'Consecrates the ground beneath you, searing nearby enemies for $d Holy damage every 2 sec for 10 sec.',
   },
   righteous_fury: {
     id: 'righteous_fury',
@@ -1848,7 +1877,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 3, level: 14, cost: 35, effects: [{ type: 'weaponDamage', bonus: 18 }] },
       { rank: 4, level: 20, cost: 45, effects: [{ type: 'weaponDamage', bonus: 27 }] },
     ],
-    description: 'A strong melee attack that increases damage by 5. Activates on your next swing.',
+    description: 'A strong melee attack that increases damage by $d. Activates on your next swing.',
   },
   aspect_of_the_hawk: {
     id: 'aspect_of_the_hawk',
@@ -1877,7 +1906,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 50, duration: 1800 }],
       },
     ],
-    description: 'Take on the aspect of the hawk, increasing attack power by 20 for 30 min.',
+    description: 'Take on the aspect of the hawk, increasing attack power by $b for 30 min.',
   },
   serpent_sting: {
     id: 'serpent_sting',
@@ -1949,7 +1978,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'directDamage', min: 4, max: 6 },
       { type: 'slow', mult: 0.5, duration: 4 },
     ],
-    description: 'Dazes the target, slowing movement by 50% for 4 sec.',
+    description: 'Dazes the target for $d damage, slowing movement by 50% for 4 sec.',
   },
   mongoose_bite: {
     id: 'mongoose_bite',
@@ -1973,7 +2002,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Counterattack after the target dodges for weapon damage plus 12. Cannot be dodged.',
+      'Counterattack after the target dodges for weapon damage plus $d. Cannot be dodged.',
   },
   wing_clip: {
     id: 'wing_clip',
@@ -1990,7 +2019,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'directDamage', min: 3, max: 5 },
       { type: 'slow', mult: 0.6, duration: 10 },
     ],
-    description: 'Inflicts a wound that slows the enemy by 40% for 10 sec.',
+    description: 'Inflicts a wound for $d damage, slowing the enemy by 40% for 10 sec.',
   },
   aspect_of_the_monkey: {
     id: 'aspect_of_the_monkey',
@@ -2118,22 +2147,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 3, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 55,
-        effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 7, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 80,
-        effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 12, duration: 1800 }],
-      },
-    ],
-    description: "Increases the target's Stamina by 3 for 30 min.",
+    effects: [{ type: 'buffTarget', kind: 'buff_sta_pct', value: 5, duration: 1800, party: true }],
+    description: 'Increases the Stamina of all party members by $b% for 30 min.',
   },
   shadow_word_pain: {
     id: 'shadow_word_pain',
@@ -2180,7 +2195,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 2, level: 12, cost: 70, effects: [{ type: 'absorb', amount: 90, duration: 30 }] },
       { rank: 3, level: 18, cost: 100, effects: [{ type: 'absorb', amount: 145, duration: 30 }] },
     ],
-    description: 'Shields the target, absorbing 48 damage for 30 sec.',
+    description: 'Shields the target, absorbing $d damage for 30 sec.',
   },
   renew: {
     id: 'renew',
@@ -2333,7 +2348,26 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 3, level: 16, cost: 45, effects: [{ type: 'imbue', bonus: 14, duration: 300 }] },
     ],
     description:
-      'Imbues your weapon with the fury of stone: each swing deals 5 additional damage for 5 min.',
+      'Imbues your weapon with the fury of stone: each swing deals $d additional damage for 5 min.',
+  },
+  // Restoration shaman signature (granted only via the Restoration spec, not in the base
+  // kit). v1 is a strong single-target heal; the multi-target "chain" bounce is a
+  // follow-up once a bounce/jump primitive exists.
+  chain_heal: {
+    id: 'chain_heal',
+    name: 'Chain Heal',
+    class: 'shaman',
+    learnLevel: 10,
+    cost: 60,
+    castTime: 2.5,
+    cooldown: 0,
+    range: 30,
+    school: 'nature',
+    requiresTarget: true,
+    targetType: 'friendly',
+    effects: [{ type: 'chainHeal', min: 120, max: 145, jumps: 2, falloff: 0.5, radius: 12 }],
+    description:
+      'Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)',
   },
   healing_wave: {
     id: 'healing_wave',
@@ -2439,7 +2473,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Surrounds you with crackling lightning: melee attackers take 13 Nature damage, up to 3 charges and at most once every 5 seconds.',
+      'Surrounds you with crackling lightning: melee attackers take $b Nature damage, up to 3 charges and at most once every 5 seconds.',
   },
   flame_shock: {
     id: 'flame_shock',
@@ -2467,7 +2501,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         ],
       },
     ],
-    description: 'Sears the target with fire for 25 damage plus $d over 12 sec.',
+    description: 'Sears the target with fire for $d damage plus $o over 12 sec.',
   },
   flametongue_weapon: {
     id: 'flametongue_weapon',
@@ -2485,7 +2519,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 2, level: 18, cost: 40, effects: [{ type: 'imbue', bonus: 13, duration: 300 }] },
     ],
     description:
-      'Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min.',
+      'Imbues your weapon with elemental fire: each swing deals $d additional Fire damage for 5 min.',
   },
   frost_shock: {
     id: 'frost_shock',
@@ -2521,7 +2555,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 2, level: 20, cost: 40, effects: [{ type: 'imbue', bonus: 13, duration: 300 }] },
     ],
     description:
-      'Imbues your weapon with biting frost: each swing deals 8 additional damage for 5 min.',
+      'Imbues your weapon with biting frost: each swing deals $d additional damage for 5 min.',
   },
   ghost_wolf: {
     id: 'ghost_wolf',
@@ -2618,7 +2652,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 80, duration: 1800 }],
       },
     ],
-    description: 'Demonic skin increases your armor by 30 for 30 min.',
+    description: 'Demonic skin increases your armor by $b for 30 min.',
   },
   immolate: {
     id: 'immolate',
@@ -2655,7 +2689,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         ],
       },
     ],
-    description: 'Burns the enemy for 11 Fire damage and an additional $d over 15 sec.',
+    description: 'Burns the enemy for $d Fire damage and an additional $o over 15 sec.',
   },
   corruption: {
     id: 'corruption',
@@ -2701,7 +2735,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 2, level: 14, cost: 0, effects: [{ type: 'lifeTap', hp: 55, mana: 55 }] },
       { rank: 3, level: 20, cost: 0, effects: [{ type: 'lifeTap', hp: 85, mana: 85 }] },
     ],
-    description: 'Converts 30 health into 30 mana.',
+    description: 'Converts $d health into $d mana.',
   },
   curse_of_agony: {
     id: 'curse_of_agony',
@@ -2967,22 +3001,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'nature',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 25, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 10,
-        cost: 35,
-        effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 50, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 16,
-        cost: 50,
-        effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 75, duration: 1800 }],
-      },
+    effects: [
+      { type: 'buffTarget', kind: 'buff_stats_pct', value: 5, duration: 1800, party: true },
     ],
-    description: 'Places the Wildward on a friendly target, increasing armor by 25 for 30 min.',
+    description:
+      'Places the Wildward on the party, increasing all attributes of all party members by $b% for 30 min.',
   },
   moonfire: {
     id: 'moonfire',
@@ -3083,7 +3106,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'buffTarget', kind: 'thorns', value: 9, duration: 600 }],
       },
     ],
-    description: 'Thorns sprout from the target: melee attackers take 3 Nature damage.',
+    description: 'Thorns sprout from the target: melee attackers take $b Nature damage.',
   },
   entangling_roots: {
     id: 'entangling_roots',
@@ -3123,7 +3146,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_bear', value: 0.65, duration: 3600 }],
     description:
-      'Shapeshift into a bear: armor +65%, attack power +15, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
+      'Shapeshift into a bear: armor +90%, greatly increased attack power, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
   },
   bear_charge: {
     id: 'bear_charge',
@@ -3306,7 +3329,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     spendsCombo: true,
     requiresForm: 'cat',
     effects: [{ type: 'finisherDamage', base: 10, perCombo: 14, variance: 6 }],
-    description: 'Finishing move that causes damage per combo point. Wolf Form only.',
+    description: 'Finishing move that causes $d. Wolf Form only.',
   },
   swipe: {
     id: 'swipe',
@@ -3356,6 +3379,25 @@ export const ABILITIES: Record<string, AbilityDef> = {
     offGcd: true,
     effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 150, duration: 15 }],
     description: 'Your skin hardens like bark, increasing armor by 150 for 15 sec.',
+  },
+  // Druid tank cooldown: a dodge-based defensive (distinct from Oakhide's armor
+  // boost). Usable while shapeshifted so a bear tank pops it mid-fight; buff_dodge
+  // rides into dodgeChance in recalcPlayerStats.
+  primal_reflexes: {
+    id: 'primal_reflexes',
+    name: 'Primal Reflexes',
+    class: 'druid',
+    learnLevel: 20,
+    cost: 0,
+    castTime: 0,
+    cooldown: 60,
+    range: 0,
+    school: 'nature',
+    requiresTarget: false,
+    offGcd: true,
+    usableInForm: true,
+    effects: [{ type: 'selfBuff', kind: 'buff_dodge', value: 0.5, duration: 6 }],
+    description: 'Your instincts sharpen, increasing your chance to dodge by 50% for 6 sec.',
   },
   starfire: {
     id: 'starfire',
@@ -3428,8 +3470,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 30,
     school: 'nature',
     requiresTarget: true,
-    effects: [{ type: 'sunder', armor: 35, maxStacks: 1 }],
-    description: "Decreases the target's armor by 35 for 40 sec.",
+    effects: [{ type: 'faerieFire', duration: 40 }],
+    description: "Decreases the target's armor by $d% for 40 sec. Does not stack with Armor Shear.",
   },
   hibernate: {
     id: 'hibernate',
@@ -3523,7 +3565,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresForm: 'cat',
     effects: [{ type: 'dot', total: 60, duration: 12, interval: 2 }],
     description:
-      'Finishing move that causes Bleed damage over 12 sec. Consumes combo points. Wolf Form only.',
+      'Finishing move that causes $d Bleed damage over 12 sec. Consumes combo points. Wolf Form only.',
   },
 
   // ============== TALENT-GRANTED (Warrior) ==============
@@ -3556,7 +3598,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: true,
     effects: [{ type: 'weaponStrike', bonus: 35, weaponMult: 0.6 }],
-    description: 'Instantly attack in a blood frenzy for $d. (Fury signature)',
+    description:
+      'Instantly attack in a blood frenzy for 60% weapon damage plus $d. (Fury signature)',
   },
   shield_slam: {
     id: 'shield_slam',
@@ -3572,7 +3615,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     threat: { flat: 110 },
     effects: [{ type: 'weaponStrike', bonus: 30, weaponMult: 0.5 }],
     description:
-      'Slam the target with your shield for $d and massive threat. (Protection signature)',
+      'Slam the target with your shield for 50% weapon damage plus $d and massive threat. (Protection signature)',
   },
   whirlwind: {
     id: 'whirlwind',
@@ -3603,6 +3646,484 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'gainResource', amount: 20 }],
     description: 'Enter a berserker rage, generating 20 rage. (Warrior talent)',
   },
+  crusader_strike: {
+    id: 'crusader_strike',
+    name: 'Crusader Strike',
+    class: 'paladin',
+    learnLevel: 10,
+    cost: 30,
+    castTime: 0,
+    cooldown: 4,
+    range: 0,
+    school: 'holy',
+    requiresTarget: true,
+    effects: [{ type: 'weaponStrike', bonus: 24 }],
+    description: 'Strikes the target for weapon damage plus $d Holy damage. (Paladin talent)',
+  },
+  metamorphosis: {
+    id: 'metamorphosis',
+    name: 'Dread Aspect',
+    class: 'warlock',
+    learnLevel: 10,
+    cost: 75,
+    castTime: 0,
+    cooldown: 180,
+    range: 0,
+    school: 'shadow',
+    requiresTarget: false,
+    effects: [
+      { type: 'selfBuff', kind: 'form_metamorph', value: 1, duration: 20 },
+      { type: 'selfBuff', kind: 'buff_spelldmg', value: 0.2, duration: 20 },
+      { type: 'selfBuff', kind: 'buff_spellhaste', value: 0.2, duration: 20 },
+      { type: 'petBuff', kind: 'pet_damage_pct', value: 50, duration: 20 },
+      { type: 'petBuff', kind: 'pet_spellhaste', value: 0.2, duration: 20 },
+    ],
+    description:
+      'Transform into a monstrous demon for 20 sec, increasing your spell damage by 20% and casting speed by 20%. Your demon gains 50% damage and 20% casting speed. (Demonology signature)',
+  },
+  holy_shock: {
+    id: 'holy_shock',
+    name: 'Holy Shock',
+    class: 'paladin',
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 8,
+    range: 30,
+    school: 'holy',
+    requiresTarget: true,
+    targetType: 'any',
+    effects: [
+      { type: 'heal', min: 40, max: 50 },
+      { type: 'directDamage', min: 40, max: 50 },
+    ],
+    description:
+      'Shocks a friendly target with Holy energy to heal them, or an enemy for $d Holy damage. (Holy signature)',
+  },
+  holy_shield: {
+    id: 'holy_shield',
+    name: 'Hallowed Wall',
+    class: 'paladin',
+    learnLevel: 10,
+    cost: 30,
+    castTime: 0,
+    cooldown: 8,
+    range: 30,
+    school: 'holy',
+    requiresTarget: true,
+    effects: [
+      { type: 'directDamage', min: 90, max: 110 },
+      { type: 'chainDamage', min: 60, max: 75, jumps: 2, falloff: 1, radius: 10 },
+    ],
+    description:
+      'Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)',
+  },
+  bestial_wrath: {
+    id: 'bestial_wrath',
+    name: 'Howling Rage',
+    class: 'hunter',
+    learnLevel: 10,
+    cost: 40,
+    castTime: 0,
+    cooldown: 120,
+    range: 0,
+    school: 'nature',
+    requiresTarget: false,
+    effects: [
+      { type: 'selfBuff', kind: 'buff_ap_pct', value: 20, duration: 15 },
+      { type: 'petBuff', kind: 'pet_damage_pct', value: 100, duration: 15 },
+    ],
+    description:
+      'Sends you into a bestial rage, increasing your attack power by 20% and your pet damage by 100% for 15 sec. (Beast Mastery signature)',
+  },
+  trueshot_aura: {
+    id: 'trueshot_aura',
+    name: 'Sureflight Aura',
+    class: 'hunter',
+    learnLevel: 10,
+    cost: 40,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'aoeAllyAttackPower', apPct: 10, duration: 1800, radius: 30 }],
+    description:
+      'Inspires nearby allies, increasing attack power by 10% for 30 min. (Marksmanship signature)',
+  },
+  wyvern_sting: {
+    id: 'wyvern_sting',
+    name: 'Wyvern Sting',
+    class: 'hunter',
+    learnLevel: 10,
+    cost: 35,
+    castTime: 0,
+    cooldown: 60,
+    range: 30,
+    minRange: 8,
+    school: 'nature',
+    scalesWith: 'ranged',
+    requiresTarget: true,
+    effects: [{ type: 'incapacitate', duration: 4 }],
+    description:
+      'Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)',
+  },
+  arcane_power: {
+    id: 'arcane_power',
+    name: 'Aether Surge',
+    class: 'mage',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 90,
+    range: 0,
+    school: 'arcane',
+    requiresTarget: false,
+    effects: [
+      { type: 'selfBuff', kind: 'buff_spelldmg', value: 0.2, duration: 10 },
+      { type: 'selfBuff', kind: 'buff_spellhaste', value: 0.1, duration: 10 },
+    ],
+    description:
+      'Increases spell damage by 20% and spell haste by 10% for 10 sec. (Arcane signature)',
+  },
+  combustion: {
+    id: 'combustion',
+    name: 'Flashfire',
+    class: 'mage',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 120,
+    range: 0,
+    school: 'fire',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'buff_spellcrit', value: 0.5, duration: 15 }],
+    description: 'Increases spell critical chance by 50% for 15 sec. (Fire signature)',
+  },
+  icy_veins: {
+    id: 'icy_veins',
+    name: 'Icy Veins',
+    class: 'mage',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 180,
+    range: 0,
+    school: 'frost',
+    requiresTarget: false,
+    effects: [
+      { type: 'selfBuff', kind: 'buff_spellhaste', value: 0.3, duration: 10 },
+      { type: 'selfBuff', kind: 'cast_shield', value: 1, duration: 10 },
+    ],
+    description:
+      'Increases spell haste by 30% and prevents cast interruption and pushback for 10 sec. (Frost signature)',
+  },
+  cold_blood: {
+    id: 'cold_blood',
+    name: "Killer's Calm",
+    class: 'rogue',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 120,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'next_attack_crit', value: 1, duration: 60 }],
+    description:
+      'Focuses your killing intent so your next attack is a critical strike. (Assassination signature)',
+  },
+  blade_flurry: {
+    id: 'blade_flurry',
+    name: 'Mirrored Blades',
+    class: 'rogue',
+    learnLevel: 10,
+    cost: 25,
+    castTime: 0,
+    cooldown: 120,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'buff_haste', value: 1.2, duration: 12 }],
+    description:
+      'Unleashes a flurry of blades, increasing attack speed by 20% for 12 sec. (Combat signature)',
+  },
+  hemorrhage: {
+    id: 'hemorrhage',
+    name: 'Red Ribbon',
+    class: 'rogue',
+    learnLevel: 10,
+    cost: 35,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'physical',
+    requiresTarget: true,
+    awardsCombo: 1,
+    effects: [
+      { type: 'weaponStrike', bonus: 16 },
+      { type: 'dot', total: 36, duration: 12, interval: 3 },
+      { type: 'applyDebuff', kind: 'bleed_vuln', value: 0.4, duration: 12 },
+    ],
+    description:
+      'Strikes the enemy for weapon damage plus $d, causes bleeding damage over 12 sec, and increases bleed damage taken by 40%. Awards 1 combo point. (Subtlety signature)',
+  },
+  power_infusion: {
+    id: 'power_infusion',
+    name: 'Anointing',
+    class: 'priest',
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 120,
+    range: 30,
+    school: 'holy',
+    requiresTarget: true,
+    targetType: 'friendly',
+    effects: [{ type: 'buffTarget', kind: 'buff_spellhaste', value: 0.2, duration: 15 }],
+    description:
+      'Infuses a friendly target with power, increasing spell haste by 20% for 15 sec. (Discipline signature)',
+  },
+  holy_nova: {
+    id: 'holy_nova',
+    name: 'Holy Nova',
+    class: 'priest',
+    learnLevel: 10,
+    cost: 70,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'holy',
+    requiresTarget: false,
+    effects: [
+      { type: 'aoeHeal', min: 34, max: 42, radius: 10 },
+      { type: 'aoeDamage', min: 24, max: 30, radius: 10 },
+    ],
+    description:
+      'Causes an explosion of holy radiance, healing nearby allies for $d and damaging nearby enemies. (Holy signature)',
+  },
+  shadowform: {
+    id: 'shadowform',
+    name: 'Gloamveil Form',
+    class: 'priest',
+    learnLevel: 10,
+    cost: 60,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'form_shadow', value: 15, duration: 3600 }],
+    description:
+      'Assume a Shadowform, increasing your Shadow damage by 15% until you shift back. Casting a healing spell ends the form. Cast again to return to normal form. (Shadow signature)',
+  },
+  elemental_mastery: {
+    id: 'elemental_mastery',
+    name: 'Primal Mastery',
+    class: 'shaman',
+    learnLevel: 10,
+    cost: 45,
+    castTime: 0,
+    cooldown: 120,
+    range: 0,
+    school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'next_cast_instant', value: 1, duration: 60 }],
+    description: 'Calls on the storm, making your next spell instant. (Elemental signature)',
+  },
+  siphon_life: {
+    id: 'siphon_life',
+    name: 'Veinleech',
+    class: 'warlock',
+    learnLevel: 10,
+    cost: 45,
+    castTime: 0,
+    cooldown: 0,
+    range: 30,
+    school: 'shadow',
+    requiresTarget: true,
+    effects: [{ type: 'dot', total: 60, duration: 30, interval: 3, leechPct: 1 }],
+    description:
+      'Siphons life from the enemy, causing $d Shadow damage over 30 sec and healing you for the damage done. (Affliction signature)',
+  },
+  conflagrate: {
+    id: 'conflagrate',
+    name: 'Conflagrate',
+    class: 'warlock',
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 6,
+    range: 30,
+    school: 'fire',
+    requiresTarget: true,
+    effects: [{ type: 'consumeAura', auraIds: ['immolate'], deal: { min: 54, max: 64 } }],
+    description:
+      'Consumes your Immolate on the enemy to ignite them for $d Fire damage. (Destruction signature)',
+  },
+  moonkin_form: {
+    id: 'moonkin_form',
+    name: 'Moonwing Form',
+    class: 'druid',
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'arcane',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'form_moonkin', value: 0, duration: 3600 }],
+    description:
+      'Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Cast again to return to caster form. (Balance signature)',
+  },
+  feral_charge: {
+    id: 'feral_charge',
+    name: 'Primal Surge',
+    class: 'druid',
+    learnLevel: 10,
+    cost: 0,
+    castTime: 0,
+    cooldown: 90,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    offGcd: true,
+    usableInForm: true,
+    effects: [{ type: 'feralCharge' }],
+    description:
+      'Unleash a primal surge. In Wolf Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)',
+  },
+  swiftmend: {
+    id: 'swiftmend',
+    name: 'Swiftmend',
+    class: 'druid',
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 8,
+    range: 30,
+    school: 'nature',
+    requiresTarget: true,
+    targetType: 'friendly',
+    effects: [{ type: 'consumeAura', auraKind: 'hot', heal: { min: 105, max: 125 } }],
+    description:
+      'Consumes a heal-over-time effect on a friendly target to heal them for $d. (Restoration signature)',
+  },
+
+  // Baseline class interrupts: every caster-pressuring class trains a short-cooldown
+  // spell-kick that stops the target's cast and locks that spell school for a few sec.
+  // Core kit (learned outright), not a talent choice.
+  pummel: {
+    id: 'pummel',
+    name: 'Jawcrack',
+    class: 'warrior',
+    learnLevel: 10,
+    cost: 10,
+    castTime: 0,
+    cooldown: 10,
+    range: 0,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 4 }],
+    description:
+      "Interrupts the target's spellcast and prevents casting from that school for 4 sec.",
+  },
+  kick: {
+    id: 'kick',
+    name: 'Boot',
+    class: 'rogue',
+    learnLevel: 10,
+    cost: 25,
+    castTime: 0,
+    cooldown: 10,
+    range: 0,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 4 }],
+    description:
+      "Interrupts the target's spellcast and prevents casting from that school for 4 sec.",
+  },
+  counterspell: {
+    id: 'counterspell',
+    name: 'Spellbreak',
+    class: 'mage',
+    learnLevel: 10,
+    cost: 45,
+    castTime: 0,
+    cooldown: 24,
+    range: 30,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 6 }],
+    description: "Counters the target's spellcast and prevents casting from that school for 6 sec.",
+  },
+  counter_shot: {
+    id: 'counter_shot',
+    name: 'Hushing Shot',
+    class: 'hunter',
+    learnLevel: 10,
+    cost: 35,
+    castTime: 0,
+    cooldown: 20,
+    range: 35,
+    minRange: 8,
+    school: 'physical',
+    scalesWith: 'ranged',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 4 }],
+    description:
+      "A snap shot that interrupts the target's spellcast and locks that school for 4 sec.",
+  },
+  rebuke: {
+    id: 'rebuke',
+    name: 'Reproach',
+    class: 'paladin',
+    learnLevel: 10,
+    cost: 20,
+    castTime: 0,
+    cooldown: 12,
+    range: 0,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 4 }],
+    description:
+      "Interrupts the target's spellcast and prevents casting from that school for 4 sec.",
+  },
+  skull_bash: {
+    id: 'skull_bash',
+    name: 'Headbutt',
+    class: 'druid',
+    learnLevel: 10,
+    cost: 10,
+    castTime: 0,
+    cooldown: 15,
+    range: 8,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 4 }],
+    description:
+      "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec.",
+  },
+  spell_lock: {
+    id: 'spell_lock',
+    name: 'Gag Order',
+    class: 'warlock',
+    learnLevel: 10,
+    cost: 35,
+    castTime: 0,
+    cooldown: 24,
+    range: 30,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'interrupt', lockout: 5 }],
+    description: 'Silences the target mid-cast and prevents casting from that school for 5 sec.',
+  },
+
+  // The Vale Cup sport kit (class-agnostic; docs/prd/vale-cup.md). Merged here
+  // so every ABILITIES consumer (casting, icons, hotbar validation, tooltips)
+  // resolves sport ids; no class lists them, so abilitiesKnownAt never grants
+  // them outside a match (resolveSportKit is the only entry).
+  ...SPORT_ABILITIES,
 };
 
 // A class ability resolved to a concrete rank, with talent modifiers already
@@ -3621,6 +4142,23 @@ export interface KnownAbility {
   castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
 }
 
+// The buff kinds whose value is a flat MAGNITUDE (armor, attack power, a flat primary
+// stat, spell power) and so scales with an ability/global damage-power mod. Every other
+// selfBuff/buffTarget kind is a rate, multiplier, percent, or a locked caster-form value
+// and passes through scaleEffect untouched (see the selfBuff/buffTarget arm).
+const SCALABLE_BUFF_KINDS = new Set<AuraKind>([
+  'buff_ap',
+  'buff_armor',
+  'buff_int',
+  'buff_agi',
+  'buff_spi',
+  'buff_sta',
+  'buff_spellpower',
+  // Thorns is flat reflect DAMAGE (Retribution Aura, thornshield), so it scales with a
+  // damage-power mod exactly like the other flat magnitudes above.
+  'thorns',
+]);
+
 // Scale one effect's damage/heal magnitudes, returning a NEW effect object — the
 // base content arrays are shared module data and must never be mutated. `flat`
 // is added once to the effect's primary magnitude.
@@ -3628,6 +4166,9 @@ function scaleEffect(
   eff: AbilityEffect,
   dmgMult: number,
   healMult: number,
+  dotMult: number,
+  hotMult: number,
+  absorbMult: number,
   flat: number,
 ): AbilityEffect {
   switch (eff.type) {
@@ -3642,12 +4183,36 @@ function scaleEffect(
         max: Math.round(eff.max * dmgMult + flat),
       };
     case 'dot':
-      return { ...eff, total: Math.round(eff.total * dmgMult + flat) };
+      return { ...eff, total: Math.round(eff.total * dmgMult * dotMult + flat) };
     case 'aoeDamage':
       return {
         ...eff,
         min: Math.round(eff.min * dmgMult + flat),
         max: Math.round(eff.max * dmgMult + flat),
+      };
+    case 'chainDamage':
+      // Bounce damage (Hallowed Wall): a damage effect, scale by the damage mult like
+      // aoeDamage so the Protection mastery / talent dmg mods reach the bounces too.
+      return {
+        ...eff,
+        min: Math.round(eff.min * dmgMult + flat),
+        max: Math.round(eff.max * dmgMult + flat),
+      };
+    case 'groundAoE':
+      // Ground-persisted AoE damage (Consecration, Earthquake): scale the per-tick
+      // magnitude by the damage mult so the Retribution / Elemental masteries reach it.
+      return {
+        ...eff,
+        min: Math.round(eff.min * dmgMult + flat),
+        max: Math.round(eff.max * dmgMult + flat),
+      };
+    case 'aoeHeal':
+      // AoE heal (Holy Nova, Tranquility): scale by the heal mult so the Holy / heal
+      // masteries reach it, mirroring the single-target heal case below.
+      return {
+        ...eff,
+        min: Math.round(eff.min * healMult + flat),
+        max: Math.round(eff.max * healMult + flat),
       };
     case 'aoeRoot':
       return { ...eff, min: Math.round(eff.min * dmgMult), max: Math.round(eff.max * dmgMult) };
@@ -3675,17 +4240,25 @@ function scaleEffect(
         max: Math.round(eff.max * healMult + flat),
       };
     case 'hot':
-      return { ...eff, total: Math.round(eff.total * healMult + flat) };
+      return { ...eff, total: Math.round(eff.total * healMult * hotMult + flat) };
     case 'absorb':
-      return { ...eff, amount: Math.round(eff.amount * healMult + flat) };
+      return { ...eff, amount: Math.round(eff.amount * healMult * absorbMult + flat) };
+    // A flat-MAGNITUDE buff (armor, attack power, a flat stat, spell power) DOES scale
+    // with an ability/global damage-power mod, e.g. the Demonic Skin talent hardening
+    // Demon Skin's armor. But a RATE / MULTIPLIER / PERCENT buff (haste, move speed, any
+    // `_pct` buff) and the caster-form SP grants (Gloamveil / Moonkin, locked values)
+    // must NOT: scaling a 1.2 haste or 1.4 speed multiplier and rounding corrupted it
+    // (1.2 -> 1, 1.4 -> 2), and a whole-number percent (buff_ap_pct 20) would be inflated.
+    // The old `value < 1` heuristic mislabeled every rate stored at >= 1; gate on the
+    // KIND instead. Intentional per-ability buff scaling still also rides the separate
+    // buffPct pass in applyTalentMods.
     case 'buffTarget':
-      return { ...eff, value: Math.round(eff.value * dmgMult + flat) };
     case 'selfBuff':
-      return { ...eff, value: Math.round(eff.value * dmgMult + flat) };
-    case 'lifeTap':
-      return { ...eff, mana: Math.round(eff.mana * dmgMult + flat) };
-    case 'gainResource':
-      return { ...eff, amount: Math.round(eff.amount * dmgMult + flat) };
+      return SCALABLE_BUFF_KINDS.has(eff.kind)
+        ? { ...eff, value: Math.round(eff.value * dmgMult + flat) }
+        : eff;
+    // lifeTap / gainResource fall through: a damage/heal mod must not inflate a mana or
+    // resource gain.
     default:
       return eff;
   }
@@ -3700,14 +4273,26 @@ function applyTalentMods(entry: KnownAbility, mods: TalentModifiers): void {
   const globalDmg = physical ? mods.global.meleeDmgPct : mods.global.spellDmgPct;
   const dmgMult = 1 + globalDmg + (am?.dmgPct ?? 0);
   const healMult = 1 + mods.global.healPct + (am?.dmgPct ?? 0);
+  const dotMult = 1 + mods.global.dotDmgPct;
+  const hotMult = 1 + mods.global.hotHealPct;
+  const absorbMult = 1 + mods.global.absorbPct;
   const flat = am?.flatDmg ?? 0;
   if (am?.addEffects.length) {
     // Append copies before the scaling pass so added effects inherit the same
     // global and per-ability damage/heal modifiers as native effects.
     entry.effects = [...entry.effects, ...am.addEffects.map((e) => ({ ...e }))];
   }
-  if (dmgMult !== 1 || healMult !== 1 || flat !== 0) {
-    entry.effects = entry.effects.map((e) => scaleEffect(e, dmgMult, healMult, flat));
+  if (
+    dmgMult !== 1 ||
+    healMult !== 1 ||
+    dotMult !== 1 ||
+    hotMult !== 1 ||
+    absorbMult !== 1 ||
+    flat !== 0
+  ) {
+    entry.effects = entry.effects.map((e) =>
+      scaleEffect(e, dmgMult, healMult, dotMult, hotMult, absorbMult, flat),
+    );
   }
   if (am) {
     if (am.costPct) entry.cost = Math.max(0, Math.round(entry.cost * (1 + am.costPct)));
@@ -3719,7 +4304,7 @@ function applyTalentMods(entry: KnownAbility, mods: TalentModifiers): void {
     if (am.buffPct) {
       const mul = 1 + am.buffPct;
       entry.effects = entry.effects.map((e) =>
-        e.type === 'selfBuff' || e.type === 'buffTarget'
+        (e.type === 'selfBuff' || e.type === 'buffTarget') && Math.abs(e.value) >= 1
           ? { ...e, value: Math.round(e.value * mul) }
           : e,
       );

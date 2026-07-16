@@ -3,6 +3,7 @@
 // Pure data + dispatch — no three.js imports, no loading.
 
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
+import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { MOBS } from '../../sim/data';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
@@ -34,6 +35,9 @@ export interface ClipMap {
   walkBack?: string;
   /** one-shot played on respawn (skeleton awaken / boss taunt) */
   flourish?: string;
+  /** arm gesture for the Z-key sheathe toggle; the held-prop swap lands at its
+   *  midpoint (see visual.ts setWeaponStowed). Absent = snap with no gesture. */
+  stow?: string;
   /** player-facing overhead emote one-shots; clips are sourced from the GLB. */
   emote?: Partial<Record<OverheadEmoteId, EmoteClipSpec>>;
 }
@@ -130,6 +134,10 @@ const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   sitIdle: 'Sit_Floor_Idle',
   swim: 'Lie_Idle',
   jump: 'Jump_Idle',
+  // The trimmed player GLBs ship no dedicated sheathe clip; the 1H chop WINDUP
+  // (the clip's first ~40%, cut at the swap point by visual.ts) reaches over the
+  // shoulder toward the back, which reads as grabbing/planting the hilt.
+  stow: '1H_Melee_Attack_Chop',
   emote: KAYKIT_EMOTES,
 });
 
@@ -156,6 +164,17 @@ const animal = (attack: string[]): ClipMap => ({
   hit: ['Idle_HitReact_Left', 'Idle_HitReact_Right'],
   death: 'Death',
 });
+
+// Custom baked wolf rig (wolf_basic/greyjaw, Dog_Animation donor skeleton): the
+// animal() core plus the donor's Sit/Fall clips so player wolf forms sit and
+// jump properly, and a Walk swim base (a paddling gait at the gentle clip
+// pitch beats the steep no-clip procedural prone on a quadruped).
+const WOLF_BAKED: ClipMap = {
+  ...animal(['Attack']),
+  sitIdle: 'Sit',
+  swim: 'Walk',
+  jump: 'Fall',
+};
 
 // Custom wild boar rig (wild_boar.glb)
 const WILD_BOAR: ClipMap = {
@@ -267,6 +286,21 @@ export function itemWeaponModelUrls(): string[] {
   return [...new Set(Object.values(ITEM_WEAPON_VARIANTS).map((key) => `${WEAPONS}/${key}.glb`))];
 }
 
+/** GLB url for a Season 1 Armory weapon-skin cosmetic, or null for no/unknown
+ *  skin. The skin model replaces the equipped item's held model (same bone, its
+ *  own KAYKIT_WEAPON_ACCESSORY grip family + WEAPON_GRIP_OVERRIDES fine-tune). */
+export function weaponSkinModelUrl(skinId: string | null | undefined): string | null {
+  if (!skinId) return null;
+  const def = WEAPON_SKINS[skinId];
+  return def ? `${WEAPONS}/${def.model}.glb` : null;
+}
+
+/** Distinct weapon-skin GLB urls, preloaded like item weapon models: any nearby
+ *  player can have a skin applied, and the attach path is synchronous. */
+export function weaponSkinModelUrls(): string[] {
+  return [...new Set(Object.values(WEAPON_SKINS).map((def) => `${WEAPONS}/${def.model}.glb`))];
+}
+
 const LOW_URL_ALIAS: Record<string, string> = {
   'models/chars/players/rogue_hooded.glb': 'models/chars/players/rogue.glb',
 };
@@ -351,6 +385,11 @@ export const SKINS: Record<string, (string | null)[]> = {
   // Combat Mech chromas — every index is a real full-model texture (no null
   // default; the embedded base texture is not one of the rewards).
   player_mech: MECH_CHROMAS.map(mechChromaUrl),
+  // Bursar Fernando (the Eastbrook banker easter egg): the rogue palette with
+  // the skin swatch repainted light brown and the hair/brow swatch black, in
+  // the real Fernando's likeness. Index 0 is the real texture (mech precedent):
+  // NPCs always resolve skin 0, so the embedded default is deliberately unused.
+  npc_fernando: [`${SKINS_DIR}/rogue/fernando.png`],
 };
 
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
@@ -412,6 +451,10 @@ export const VISUALS: Record<string, VisualDef> = {
     url: `${PLAYERS}/ranger.glb`,
     height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
+    // Bow-draw clips for the Season 1 bow skins (scripts/build_bow_anims.mjs):
+    // with a bow displayed the shot plays a draw instead of the crossbow
+    // shoulder-aim (visual.ts weaponSkinAttackClips).
+    animUrls: [`${PLAYERS}/bow_anims.glb`],
     // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
     // a separate chest attachment
     attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
@@ -511,10 +554,13 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 0x5a4030,
     tintStrength: 0.55,
   },
+  // Druid Wolf Form AND shaman Shadewolf (ghost_wolf renders this visual with
+  // the ghost material on top). Same custom baked wolf as the world wolves;
+  // the tawny tint keeps the druid form readable against grey pack wolves.
   form_cat: {
-    url: `${CREATURES}/wolf.glb`,
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 0xd08b45,
     tintStrength: 0.35,
   },
@@ -528,11 +574,24 @@ export const VISUALS: Record<string, VisualDef> = {
 
   // -- mob families --------------------------------------------------------
   mob_wolf: {
-    url: `${CREATURES}/wolf.glb`,
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton
+    // (same pipeline as greyjaw), clips renamed to the animal() names at bake
+    // time. Baked basecolor texture; keeps a light entity tint so this doubles
+    // as the beast-family fallback and each beast keeps its own colour.
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 'entity',
     tintStrength: 0.35,
+  },
+  greyjaw: {
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton;
+    // clips renamed to the animal() names at bake time. Baked texture, no tint.
+    // Old Greyjaw's model: 2.2 at scale 1 (his template scale 1.25 makes the
+    // rare ~2.75 in-world vs the 1.6 pack wolf).
+    url: `${CREATURES}/greyjaw.glb`,
+    height: 2.2,
+    clips: WOLF_BAKED,
   },
   mob_boar: {
     url: `${CREATURES}/wild_boar.glb`,
@@ -558,6 +617,25 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: animal(['Attack']),
     tint: 'entity',
     tintStrength: 0.35,
+  },
+  // Yumi, the Protect Yumi objective cat familiar (Meshy rig, scale baked by
+  // scripts/_bake_meshy_scale.mjs, meshopt + 1024 webp). The GLB ships ONE
+  // clip, the block: mapped as the HIT reaction so she blocks when struck
+  // (playHit rides every landed damage event). No idle/walk clips on
+  // purpose: the objective never moves on its own, and baseAction falls back
+  // to the authored rest pose when a slot's clip is absent. Painted texture,
+  // so no entity tint.
+  mob_yumi_cat: {
+    url: `${CREATURES}/yumi_cat.glb`,
+    height: HUMANOID_H * 1.2, // the objective reads over player heads
+    clips: {
+      idle: 'None',
+      walk: 'None',
+      run: 'None',
+      attack: [],
+      death: 'None',
+      hit: ['Armature|Block5|baselayer'],
+    },
   },
   mob_stag: {
     url: `${CREATURES}/stag.glb`,
@@ -888,6 +966,15 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // Bursar Fernando: the villager body with the likeness atlas (SKINS above)
+  // carrying black shoulder-length hair and light brown skin. No entity tint:
+  // the gold NpcDef color would wash the repaint back toward the villager look.
+  npc_fernando: {
+    url: `${PLAYERS}/rogue.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    show: [],
+  },
   // Brother Halven, the Reliquary Keeper: a devout male guardian tending the crypt
   // door. Uses the KayKit paladin, one of the newer full-pack adventurer models
   // (unused elsewhere), for a sturdier, holier silhouette than the old hooded
@@ -907,6 +994,23 @@ export const VISUALS: Record<string, VisualDef> = {
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
+  },
+  // The three zone Chroniclers (Saul, Osric Fenn, Zenzie): one shared
+  // scholarly-mage silhouette (hat, staff, open ledger in the off hand,
+  // the warlock spellbook grip) with the per-NPC entity tint carrying each
+  // identity. When the bespoke chronicler .glb files arrive, split this into
+  // one def per chronicler with its own url.
+  npc_chronicler: {
+    url: `${PLAYERS}/mage.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['2H_Melee_Attack_Chop']),
+    show: ['Mage_Hat'],
+    attach: [
+      { url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
+    ],
+    tint: 'entity',
+    tintStrength: 0.55,
   },
   // Reedbound Acolyte (The Drowned Litany trash mob): Stone Cantor model from
   // the Raid 02 asset batch. The earlier Meshy mesh (reedbound_acolyte.glb) was
@@ -950,6 +1054,9 @@ export const VISUALS: Record<string, VisualDef> = {
 // ---------------------------------------------------------------------------
 
 const MOB_KEYS: Record<string, string> = {
+  // Protect Yumi objective cat: the dedicated Meshy familiar
+  // (docs/prd/protect-yumi-assets.md item 1, delivered).
+  yumi_cat: 'mob_yumi_cat',
   emberkin: 'mob_demon',
   gloomshade: 'mob_demon',
   duskborn: 'mob_demon',
@@ -959,6 +1066,9 @@ const MOB_KEYS: Record<string, string> = {
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',
+  // Old Greyjaw: the named rare wolf gets his own custom model (the pack
+  // wolves keep the light mob_wolf)
+  old_greyjaw: 'greyjaw',
   // The Drowned Litany (Mirefen Marsh): give marsh enemies the right silhouette
   // instead of the family fallback (beast -> wolf, undead -> skeleton minion).
   mirefen_widowling: 'mob_spider',
@@ -1006,6 +1116,13 @@ const MOB_KEYS: Record<string, string> = {
   fallen_captain_aldren: 'skel_warrior',
   corrupted_priest_malric: 'skel_necromancer',
   deathstalker_voss: 'skel_rogue',
+  // The Nythraxis phase-2 heroic court is Aldren / Malric / Voss risen again, so
+  // the "Spirit of X" adds reuse each character's crypt visual above. Without these
+  // the ids fall through to FAMILY_KEYS.undead (skel_minion) and the whole court
+  // renders as identical generic skeletons. See spawnNythraxisHeroicAdds.
+  nythraxis_heroic_warrior_add: 'skel_warrior', // Spirit of Aldren
+  nythraxis_heroic_priest_add: 'skel_necromancer', // Spirit of Malric
+  nythraxis_heroic_rogue_add: 'skel_rogue', // Spirit of Voss
   vision_aldren_warrior: 'player_warrior',
   vision_malric_mage: 'player_mage',
   vision_deathstalker_voss: 'player_rogue',
@@ -1023,9 +1140,16 @@ const FAMILY_KEYS: Record<string, string> = {
   elemental: 'mob_elemental',
   dragonkin: 'mob_dragonkin',
   demon: 'mob_demonalt',
+  // deepfen_spearjaw already has an explicit MOB_KEYS override to mob_spearjaw
+  // (visualKeyFor checks MOB_KEYS first), so this default stays unreachable
+  // for it even after its family retag. It only matters for a future reptile
+  // mob with no override of its own; reuse the same model so that fallback
+  // is sane too.
+  reptile: 'mob_spearjaw',
 };
 
 const NPC_KEYS: Record<string, string> = {
+  bursar_fernando: 'npc_fernando',
   marshal_redbrook: 'npc_knight',
   warden_fenwick: 'npc_knight',
   captain_thessaly: 'npc_knight',
@@ -1043,6 +1167,9 @@ const NPC_KEYS: Record<string, string> = {
   quartermaster_bree: 'npc_villager',
   brother_halven: 'npc_reliquary_keeper',
   brother_halven_marsh: 'npc_reliquary_keeper',
+  chronicler_saul: 'npc_chronicler',
+  chronicler_osric_fenn: 'npc_chronicler',
+  chronicler_edda_hartwell: 'npc_chronicler',
   // The graveyard angel: a robed figure, rendered translucent (ethereal) with a
   // holy shimmer by the renderer (see the spirit_healer branches there).
   spirit_healer: 'npc_villager_robed',
@@ -1088,6 +1215,9 @@ export function manifestUrls(): string[] {
   // Equipped-weapon models a player may swap to at runtime (any nearby player's
   // gear), so they are resolved-and-ready when setWeapon attaches them.
   for (const url of itemWeaponModelUrls()) urls.add(url);
+  // Season 1 Armory weapon-skin models: also attachable on any nearby player at
+  // any moment (account-wide cosmetics), so they preload with the same sweep.
+  for (const url of weaponSkinModelUrls()) urls.add(url);
   return [...urls];
 }
 

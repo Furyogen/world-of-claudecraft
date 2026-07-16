@@ -9,7 +9,7 @@ import {
   RIGHTEOUS_FURY_THREAT_MULT,
 } from '../src/sim/threat';
 import type { Entity } from '../src/sim/types';
-import { dist2d } from '../src/sim/types';
+import { dist2d, SUNDER_ARMOR_PCT_PER_STACK } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
 function makeSim(cls: Parameters<typeof simClass>[0] = 'warrior', seed = 42) {
@@ -389,6 +389,65 @@ describe('taunt and growl', () => {
     expect(wolf.aggroTargetId).toBe(tank.id);
   });
 
+  it('level 10 paladins know Sacred Goad and taunt at 30 yards', () => {
+    expect(abilitiesKnownAt('paladin', 10).some((a) => a.def.id === 'holy_taunt')).toBe(true);
+
+    const sim = new Sim({ seed: 42, playerClass: 'paladin', noPlayer: true });
+    const tank = sim.entities.get(sim.addPlayer('paladin', 'Tank'))!;
+    const dps = sim.entities.get(sim.addPlayer('mage', 'Dps'))!;
+    sim.setPlayerLevel(10, tank.id);
+    const wolf = nearestMob(sim, 'forest_wolf', tank);
+    teleport(sim, tank, wolf.pos.x + 25, wolf.pos.z);
+    teleport(sim, dps, wolf.pos.x - 2, wolf.pos.z);
+    wolf.threat.set(dps.id, 1000);
+    wolf.aggroTargetId = dps.id;
+    wolf.aiState = 'chase';
+    wolf.inCombat = true;
+    sim.targetEntity(wolf.id, tank.id);
+    tank.facing = Math.atan2(wolf.pos.x - tank.pos.x, wolf.pos.z - tank.pos.z);
+
+    sim.castAbility('holy_taunt', tank.id);
+    for (let i = 0; i < 25; i++) sim.tick();
+
+    expect(wolf.threat.get(tank.id)).toBe(1000);
+    expect(wolf.aggroTargetId).toBe(tank.id);
+    expect(wolf.forcedTargetTimer).toBeGreaterThan(0);
+  });
+
+  it('Sacred Goad always lands (never resists), even against a higher-level mob', () => {
+    // The paladin taunt is holy-school (a spell), so on impact it used to roll a full
+    // resist. A resisted taunt silently breaks tanking, so taunts now skip the roll.
+    // Against a +3 mob the old roll would resist a large fraction of the time; across
+    // many seeds the taunt must now land every time and never emit a 'resist'.
+    for (let seed = 1; seed <= 40; seed++) {
+      const sim = new Sim({ seed, playerClass: 'paladin', noPlayer: true });
+      const tank = sim.entities.get(sim.addPlayer('paladin', 'Tank'))!;
+      const dps = sim.entities.get(sim.addPlayer('mage', 'Dps'))!;
+      sim.setPlayerLevel(10, tank.id);
+      const wolf = nearestMob(sim, 'forest_wolf', tank);
+      wolf.level = tank.level + 3; // a wide level gap: a spell would often fully resist
+      teleport(sim, tank, wolf.pos.x + 25, wolf.pos.z);
+      teleport(sim, dps, wolf.pos.x - 2, wolf.pos.z);
+      wolf.threat.set(dps.id, 1000);
+      wolf.aggroTargetId = dps.id;
+      wolf.aiState = 'chase';
+      wolf.inCombat = true;
+      sim.targetEntity(wolf.id, tank.id);
+      tank.facing = Math.atan2(wolf.pos.x - tank.pos.x, wolf.pos.z - tank.pos.z);
+
+      sim.castAbility('holy_taunt', tank.id);
+      let resisted = false;
+      for (let i = 0; i < 25; i++) {
+        for (const ev of sim.tick()) {
+          if (ev.type === 'damage' && ev.kind === 'resist' && ev.ability === 'Sacred Goad')
+            resisted = true;
+        }
+      }
+      expect(resisted, `seed ${seed}`).toBe(false);
+      expect(wolf.aggroTargetId, `seed ${seed}`).toBe(tank.id);
+    }
+  });
+
   it('growl requires bear form', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(10);
@@ -425,7 +484,10 @@ describe('sunder armor', () => {
       applications = aura?.stacks ?? 0;
     }
     expect(applications).toBeGreaterThanOrEqual(2);
-    expect((sim as any).effectiveArmor(wolf)).toBe(armorBefore - 25 * applications);
+    // Sunder is now a PERCENT armor reduction: 2% of base armor per stack.
+    expect((sim as any).effectiveArmor(wolf)).toBe(
+      armorBefore * (1 - SUNDER_ARMOR_PCT_PER_STACK * applications),
+    );
     // 100 flat threat per landed sunder (no stance up) + auto-attack noise is
     // excluded because auto-attack never started
     expect(wolf.threat.get(sim.playerId)).toBeGreaterThanOrEqual(100 * applications);
@@ -580,27 +642,33 @@ describe('hunter pets', () => {
     const druid = sim.entities.get(druidId)!;
     teleport(sim, druid, pet.pos.x + 5, pet.pos.z);
     druid.resource = druid.maxResource;
-    const armorBefore = (sim as any).effectiveArmor(pet);
+    const maxHpBefore = pet.maxHp;
 
+    // Mark of the Wild is now a percent all-attributes raid buff; on a pet its
+    // Stamina share scales the HP pool (pets derive no armor/AP from attributes).
     sim.targetEntity(pet.id, druidId);
     sim.castAbility('mark_of_the_wild', druidId);
     expect(pet.auras.some((a) => a.id === 'mark_of_the_wild')).toBe(true);
-    expect((sim as any).effectiveArmor(pet)).toBeGreaterThan(armorBefore);
+    expect(pet.maxHp).toBeGreaterThan(maxHpBefore);
 
     const priestId = sim.addPlayer('priest', 'Priest');
     const priest = sim.entities.get(priestId)!;
     teleport(sim, priest, pet.pos.x + 6, pet.pos.z);
     priest.resource = priest.maxResource;
-    const maxHpBefore = pet.maxHp;
+    const maxHpAfterMotW = pet.maxHp;
     sim.targetEntity(pet.id, priestId);
     sim.castAbility('power_word_fortitude', priestId);
-    expect(pet.maxHp).toBeGreaterThan(maxHpBefore);
+    expect(pet.maxHp).toBeGreaterThan(maxHpAfterMotW);
 
     const paladinId = sim.addPlayer('paladin', 'Paladin');
     const paladin = sim.entities.get(paladinId)!;
     sim.setPlayerLevel(4, paladinId);
     teleport(sim, paladin, pet.pos.x + 7, pet.pos.z);
     paladin.resource = paladin.maxResource;
+    // Blessing of Might is now a percent attack-power raid buff. Give the pet a base
+    // AP so the percent has something to scale (tamed pets otherwise deal template
+    // damage with 0 attack power, leaving a percent buff inert).
+    pet.attackPower = 50;
     const attackPowerBefore = (sim as any).effectiveAttackPower(pet);
     sim.targetEntity(pet.id, paladinId);
     sim.castAbility('blessing_of_might', paladinId);
@@ -1654,7 +1722,7 @@ describe('warlock demon summons', () => {
     expect(voidwalker.petTauntTimer).toBeGreaterThan(0);
   });
 
-  it('recasting the same demon unsummons it', () => {
+  it('recasting the same demon dismisses it and summons a fresh one', () => {
     const sim = makeSim('warlock');
     const demon = summonImp(sim);
     expect(demon.templateId).toBe('emberkin');
@@ -1664,7 +1732,11 @@ describe('warlock demon summons', () => {
     for (let i = 0; i < 20 * 5; i++) sim.tick();
 
     expect(sim.entities.has(demon.id)).toBe(false);
-    expect(sim.petOf(sim.playerId, true)).toBe(null);
+    const fresh = sim.petOf(sim.playerId, true);
+    expect(fresh).not.toBe(null);
+    expect(fresh?.templateId).toBe('emberkin');
+    expect(fresh?.id).not.toBe(demon.id);
+    expect(fresh?.hp).toBe(fresh?.maxHp);
   });
 
   it('recasting a dead demon resummons it instead of dismissing', () => {

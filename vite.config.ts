@@ -252,9 +252,9 @@ function musicEditorSavePlugin() {
             for (const name of names) {
               const t = overrides[name];
               lines.push(
-                '  ' + name + ': {',
-                '    bpm: ' + t.bpm + ',',
-                '    bars: ' + t.bars + ',',
+                `  ${name}: {`,
+                `    bpm: ${t.bpm},`,
+                `    bars: ${t.bars},`,
                 '    events: [',
               );
               const sorted = [...t.events].sort((a, b) => a.beat - b.beat);
@@ -346,22 +346,49 @@ export default defineConfig({
         guide: fileURLToPath(new URL('guide.html', import.meta.url)),
         editor: fileURLToPath(new URL('editor.html', import.meta.url)),
       },
+      output: {
+        // three.js almost never changes between our releases and is the single
+        // heaviest dependency in the game/editor bundles; splitting it into its
+        // own chunk lets the browser fetch it in parallel with app code and
+        // reuse the browser cache across app-only redeploys (its content hash
+        // stays stable unless the three version itself bumps).
+        manualChunks(id: string): string | undefined {
+          if (id.includes('node_modules/three/')) return 'vendor-three';
+          return undefined;
+        },
+      },
     },
   },
   test: {
+    // server/db.ts (and every module importing it) requires DATABASE_URL at module
+    // load. Locally db.ts fills it from .env; a CI checkout has no .env, so default
+    // a dummy here to keep the suite runnable in plain Node. Unit tests never open
+    // a connection (the pg Pool connects only on first query, and db-touching tests
+    // use FakeDb/mocks), and a real DATABASE_URL from the shell still wins.
+    env: {
+      DATABASE_URL:
+        process.env.DATABASE_URL ?? 'postgres://vitest:vitest@127.0.0.1:5433/wocc_vitest_dummy',
+    },
+    globalSetup: ['./tests/global_setup.ts'],
     // Two kinds of exclusion, kept together:
-    // - .codex/.venv are local-only worktree/venv pollution a clean CI checkout never has;
-    //   excluding them keeps the local gate mirroring CI (otherwise stale .codex worktree
-    //   copies of test files run and falsely fail).
+    // - agent-runtime directories may contain local worktree copies, and their tracked
+    //   config or instruction files are not product test sources. Excluding them keeps a
+    //   stale local worktree from duplicating tests. .venv is local Python tooling.
     // - the opt-in browser suite (vitest.browser.config.ts, npm run test:browser) must NOT
     //   leak into a bare `vitest run`: excluding its files keeps the default Node run from
     //   importing the Playwright provider or launching a browser. Cross-engine CI is P17b.
+    // - tmp/ is gitignored scratch (screenshot tours, the new:endpoint golden test's emitted
+    //   *.test.ts under a temp root); excluding it keeps a crashed golden run's orphan emitted
+    //   test out of a bare `vitest run`. The golden test runs its emitted test through a child
+    //   vitest with an explicit --config override so this exclude does not block it.
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
       '**/.claude/**',
       '**/.codex/**',
+      '**/.agents/**',
       '**/.venv/**',
+      'tmp/**',
       'tests/browser/**',
       '**/*.browser.test.ts',
     ],

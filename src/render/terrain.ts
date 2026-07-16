@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { getActiveWorldContent, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z, ZONES } from '../sim/data';
+import { fbm2 } from '../sim/rng';
 import type { BiomeId, CustomPaintSwatch } from '../sim/types';
 import {
   BIOME_BY_ID,
@@ -8,12 +9,14 @@ import {
   roadDistance,
   terrainHeight,
   waterLevel,
+  waterLevelAt,
   zoneBiomeAt,
 } from '../sim/world';
 import { groundImageFor } from './assets/ground_textures';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { GFX } from './gfx';
+import { runIdleQueue } from './idle_queue';
 import { impactCraterTerrainBlend } from './impact_terrain';
 import { chunkIntersectsRegion, normalTexelBounds } from './terrain_region_core';
 import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textures';
@@ -24,7 +27,14 @@ import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textu
 //   works (the old single-plane-per-zone terrain was always fully submitted).
 // - LOD by distance from the nearest hub at build time: settlements (where
 //   the camera lingers) get dense vertices, the wilderness gets coarse ones.
-// - 0.3u skirts hang from every chunk edge to hide LOD cracks.
+//   Chunks carrying the impassable mountain walls (inter-zone ridges, world
+//   rim) are promoted to the densest band regardless: the terraced walls hold
+//   the heightfield's highest frequencies and the far band smears them into
+//   ragged shards.
+// - Skirts hang from every chunk edge to hide LOD cracks: a 0.3u base drop
+//   plus the vertex slope times the coarsest band spacing, since a T-junction
+//   hole grows with both the neighbor's chord span and the local gradient
+//   (terraced cliffs open multi-yard holes that a flat drop cannot cover).
 // - High tier: MeshStandardMaterial + splat shading (grass/dirt/rock/sand
 //   weights precomputed per vertex from slope/height/roadDistance into a vec4
 //   attribute) over the biome vertex-color tint, plus a world-space macro
@@ -99,8 +109,8 @@ const ROUGH_SNOW = 0.72;
 const LOD_BANDS = {
   high: [
     { maxHubDist: 95, spacing: 1.2 },
-    { maxHubDist: 185, spacing: 2.0 },
-    { maxHubDist: Infinity, spacing: 3.5 },
+    { maxHubDist: 185, spacing: 1.6 },
+    { maxHubDist: Infinity, spacing: 2.6 },
   ],
   low: [
     { maxHubDist: 95, spacing: 3.0 },
@@ -108,6 +118,13 @@ const LOD_BANDS = {
     { maxHubDist: Infinity, spacing: 6.5 },
   ],
 } as const;
+
+// Mountain-wall chunks are promoted to the densest LOD band. Half-widths
+// mirror sim/world.ts: the ridge contribution lives within RIDGE_SIGMA*3
+// (30yd) of each inter-zone ridge line, and the rim rise starts 30yd inside
+// the world edge (plus crest-noise margin).
+const WALL_LOD_RIDGE_HALF = 30;
+const WALL_LOD_RIM_MARGIN = 40;
 
 // terrain normal map resolution (~0.56u per texel over 360x1080)
 const NORMAL_TEX_W = 640;
@@ -128,48 +145,61 @@ const BIOME_PALETTE: Record<
     dirt: 0x8a6f47,
     sand: 0xc2b283,
   },
+  // Darker, murkier and more desaturated than the vale so the swamp reads as
+  // gloomy lowland rather than "vale but slightly duller". Pushed further
+  // toward drab olive/brown than a first pass so it reads at a glance.
   marsh: {
-    grass: 0x596d36,
-    grassDark: 0x41522b,
-    grassYellow: 0x71764a,
-    dirt: 0x6e5a3e,
-    sand: 0x8f7f5c,
+    grass: 0x3f4d28,
+    grassDark: 0x2c3a1e,
+    grassYellow: 0x505c34,
+    dirt: 0x4f4028,
+    sand: 0x655741,
   },
+  // Cooler and greyer than the vale/marsh's warm greens, pushing toward sage
+  // and stone since altitude thins out the lush growth. Pushed further blue-
+  // grey than a first pass so peaks are unmistakably a different biome.
   peaks: {
-    grass: 0x687a55,
-    grassDark: 0x4d5c45,
-    grassYellow: 0x8d9168,
-    dirt: 0x7d6a50,
-    sand: 0xb0a486,
+    grass: 0x7a8878,
+    grassDark: 0x5c6862,
+    grassYellow: 0x9aa192,
+    dirt: 0x8a7d6a,
+    sand: 0xbdb49c,
   },
   // Paint-only biomes (editor brush): flat palettes, no zone-band blend.
+  // Coastal green-blue, brighter sand than the desert's.
   beach: {
-    grass: 0x9aa55e,
-    grassDark: 0x7a8a4e,
-    grassYellow: 0xb5b06a,
-    dirt: 0xb59a6b,
-    sand: 0xe2d3a4,
+    grass: 0x9ab86a,
+    grassDark: 0x7d9a5a,
+    grassYellow: 0xb8c278,
+    dirt: 0xc2a575,
+    sand: 0xf0e4bc,
   },
+  // Warmer and browner than the beach, less green. Pushed further orange
+  // than a first pass to separate it clearly from the beach at a glance.
   desert: {
-    grass: 0xb0a060,
-    grassDark: 0x8f8350,
-    grassYellow: 0xc4b070,
-    dirt: 0xa87f4f,
-    sand: 0xd8b581,
+    grass: 0xcbaa5e,
+    grassDark: 0xa88d48,
+    grassYellow: 0xe0c070,
+    dirt: 0xc08f4a,
+    sand: 0xecc890,
   },
+  // Dark, red-tinted ash rather than the cave's neutral grey. Pushed darker
+  // still so it reads as scorched ground, not just "dirty".
   volcano: {
-    grass: 0x5a4a42,
-    grassDark: 0x40332e,
-    grassYellow: 0x6e5a4a,
-    dirt: 0x4a3a32,
-    sand: 0x6a5548,
+    grass: 0x3c2c28,
+    grassDark: 0x281c18,
+    grassYellow: 0x503830,
+    dirt: 0x2c2018,
+    sand: 0x4c342c,
   },
+  // Neutral blue-grey stone, distinct from volcano's warm ash. Pushed cooler
+  // and darker so it reads as underground rock, not daylight dirt.
   cave: {
-    grass: 0x6a6a62,
-    grassDark: 0x50504a,
-    grassYellow: 0x7a7a6e,
-    dirt: 0x5a5248,
-    sand: 0x8a8274,
+    grass: 0x585e66,
+    grassDark: 0x3e444c,
+    grassYellow: 0x6a7078,
+    dirt: 0x484e56,
+    sand: 0x767c86,
   },
 };
 
@@ -208,6 +238,7 @@ const dirtC = new THREE.Color(),
   sandC = new THREE.Color();
 const dirtDarkC = new THREE.Color(0x73592f);
 const rockC = new THREE.Color(0x7a7a72);
+const wetRockC = new THREE.Color(0x3f4442); // dark wet-rock shoreline (peaks/volcano/cave)
 const impactAshC = new THREE.Color(0x18110d);
 const impactScorchC = new THREE.Color(0x2a160c);
 const hazyPeakC = new THREE.Color(0xa8bdd4); // world-rim mountains, atmospheric
@@ -507,7 +538,7 @@ function paintSmoothAt(x: number, z: number): { id: number | null; weight: numbe
 // Palette at a point. A painted cell (biome differs from its zone band) uses that
 // biome's flat palette; otherwise the smooth zone-band blend. With no paint layer
 // `biome === zoneBiomeAt(z)` always, so this is the original z-blend exactly.
-function paletteAt(x: number, z: number, biome: BiomeId): void {
+function paletteAt(_x: number, z: number, biome: BiomeId): void {
   if (biome !== zoneBiomeAt(z)) {
     const p = biomePalettes[biome];
     grassC.copy(p.grass);
@@ -651,23 +682,35 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
   }
   const impact = impactCraterTerrainBlend(x, z);
 
-  // base grass with patchy variation
-  const v = (Math.sin(x * 0.21) * Math.cos(z * 0.17) + 1) / 2;
+  // base grass with patchy variation: a coarse fbm layer for dry/lush
+  // patches plus a fine one for grain, replacing the old pure-sine tint
+  // (sine repeats on a visible grid at a distance; noise reads as natural
+  // ground cover instead).
+  const v = fbm2(x * 0.045, z * 0.045, seed + 53, 3);
   cTmp.copy(grassC).lerp(grassDarkC, v);
-  const v2 = (Math.sin(x * 0.043 + 5) * Math.cos(z * 0.05 + 2) + 1) / 2;
+  const v2 = fbm2(x * 0.16, z * 0.16, seed + 59, 2);
   cTmp.lerp(grassYellowC, v2 * 0.35);
   // the marsh reads muddier: patches of wet dirt across the lowland
   if (biome === 'marsh') lerpSplat(w, 1, 0.3 * v2 * clamp01((4 - h) / 6));
-  // shoreline sand — color and splat weight share one feathered falloff so
-  // the beach blends out instead of cutting a razor-hard grass/sand line.
-  // waterLevel() (not the const) so the beach tracks a custom map's water.
-  // Optional per map (shoreSand toggle) and suppressed by paint (autoW), so a
-  // painted texture stays put when the ground dips toward the water instead of
-  // snapping to sand.
-  const wl = waterLevel();
+  // shoreline blend, biome-specific: marsh has no sandy beach (wet mud
+  // instead), rocky/ashen biomes get a darker wet-rock tint, everywhere else
+  // keeps the classic sandy bank. Color and splat weight share one feathered
+  // falloff so the shore blends out instead of cutting a razor-hard edge.
+  // waterLevelAt(x, z) (not the flat const) so the beach only tracks water inside
+  // a declared lake's footprint (and a custom map's authored water); a dry
+  // sunken feature elsewhere gets no shore tint. Optional per map (shoreSand
+  // toggle) and suppressed by paint (autoW), so a painted texture stays put
+  // when the ground dips toward the water instead of snapping to sand.
+  const wl = waterLevelAt(x, z);
   const shore = clamp01((wl + 1.6 - h) / 1.6);
-  if (shoreSandOn) {
-    const shoreW = shore * autoW;
+  const shoreW = shore * autoW;
+  if (shoreSandOn && biome === 'marsh') {
+    cTmp.lerp(dirtDarkC, shoreW);
+    lerpSplat(w, 1, shoreW);
+  } else if (shoreSandOn && (biome === 'peaks' || biome === 'volcano' || biome === 'cave')) {
+    cTmp.lerp(wetRockC, shoreW);
+    lerpSplat(w, 2, shoreW);
+  } else if (shoreSandOn) {
     cTmp.lerp(sandC, shoreW);
     lerpSplat(w, 3, shoreW);
   }
@@ -696,17 +739,27 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
     cTmp.lerp(dirtC, t);
     lerpSplat(w, 1, t);
   }
+  // Break up the rock/snow blend so cliffs read as striated stone and snow
+  // reads as patchy drifts instead of a single flat tone / a clean cutoff.
+  const rockStreak = fbm2(x * 0.09, z * 0.09, seed + 41, 3);
+  const snowPatch = fbm2(x * 0.06, z * 0.06, seed + 47, 3);
   const rockStart = ROCK_SLOPE_START[biome];
   if (slopeRockOn && slope > rockStart && autoW > 0) {
     const t = Math.min(1, (slope - rockStart) * 2) * autoW;
     cTmp.lerp(rockC, t);
+    cTmp.lerp(dirtDarkC, t * (rockStreak - 0.5) * 0.35);
     lerpSplat(w, 2, t);
   }
-  // high ground (ridges, peaks) goes rocky then snowy
+  // high ground (ridges, peaks) goes rocky then snowy. The snow ramp is wide
+  // (26u, over four terrace bands) with a strong patch-noise term: the terraced
+  // heightfield steps 6u at a time, and a ramp comparable to the step paints
+  // alternate treads fully white / fully bare, which reads as a repetitive
+  // checkerboard from a distance.
   let snow = 0;
   if (snowCapsOn && h > 22 && autoW > 0) {
-    cTmp.lerp(rockC, clamp01((h - 22) / 10) * 0.7 * autoW);
-    snow = clamp01((h - 34) / 14) * 0.85 * autoW;
+    const rockT = clamp01((h - 22) / 10) * (0.6 + rockStreak * 0.25) * autoW;
+    cTmp.lerp(rockC, rockT);
+    snow = clamp01((h - 28 + (snowPatch - 0.5) * 14) / 26) * 0.85 * autoW;
     cTmp.lerp(snowCapC, snow);
     lerpSplat(w, 2, clamp01((h - 22) / 10) * 0.8 * autoW);
   }
@@ -722,16 +775,23 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
     paintMixC.copy(cTmp);
     cTmp.copy(blankGroundC).lerp(paintMixC, pw);
   }
-  // the rim wall reads as distant sunlit peaks, not a black cliff. Optional
-  // per map, and painted ground wins here too (the perimeter used to force
-  // rock over any stroke near the world edge).
+  // the rim wall reads as distant sunlit peaks, not a black cliff. The haze
+  // kicks in well before the wall itself (edge starts negative deep inland)
+  // so from a zone's centre the rim reads as atmospheric haze rather than a
+  // crisp silhouette, reinforcing the reduced BIOME_FOG draw distance.
+  // Optional per map, sized from the live render bounds (custom maps), and
+  // painted ground wins here too (the perimeter used to force rock over any
+  // stroke near the world edge).
   if (rimOn) {
     const rb = renderBounds();
-    const edge = Math.max(Math.abs(x) - (rb.maxX - 32), rb.minZ + 32 - z, z - (rb.maxZ - 32));
-    const rim = clamp01(edge / 26) * autoW;
+    const edge = Math.max(Math.abs(x) - (rb.maxX - 70), rb.minZ + 70 - z, z - (rb.maxZ - 70));
+    const rim = clamp01(edge / 64) * autoW;
     if (rim > 0) {
-      cTmp.lerp(hazyPeakC, rim * 0.9);
-      const rimSnow = clamp01((h - 26) / 16) * rim * 0.8;
+      cTmp.lerp(hazyPeakC, rim * 0.95);
+      // same wide, noise-broken ramp as the interior snow above: a pure
+      // height threshold snowed every terrace tread above the line uniformly,
+      // turning the rim's 2D terrace lattice into a white/grey checkerboard
+      const rimSnow = clamp01((h - 21 + (snowPatch - 0.5) * 12) / 26) * rim * 0.8;
       cTmp.lerp(snowCapC, rimSnow);
       snow = Math.max(snow, rimSnow);
       lerpSplat(w, 2, rim * 0.85);
@@ -774,6 +834,7 @@ function buildChunkGeometry(
   spacing: number,
   seed: number,
   withSplat: boolean,
+  skirtSpan: number,
 ): THREE.BufferGeometry {
   const nx = Math.max(4, Math.round(size / spacing));
   const nz = nx;
@@ -812,7 +873,11 @@ function buildChunkGeometry(
       }
       const vi = gj * gw + gi;
       positions[vi * 3] = x;
-      positions[vi * 3 + 1] = s.height - (isSkirt ? SKIRT_DROP : 0);
+      // Slope-aware drop: a T-junction hole under a coarse neighbor's chord is
+      // bounded by the local gradient times that neighbor's vertex spacing, so
+      // a flat cliff-side skirt must deepen with the slope or the hole shows
+      // sky (skirtSpan is the coarsest spacing any neighbor can have).
+      positions[vi * 3 + 1] = s.height - (isSkirt ? SKIRT_DROP + s.slope * skirtSpan : 0);
       positions[vi * 3 + 2] = z;
       normals[vi * 3] = s.normal[0];
       normals[vi * 3 + 1] = s.normal[1];
@@ -854,12 +919,29 @@ function buildChunkGeometry(
       const b = a + 1;
       const c = a + gw;
       const d = c + 1;
-      indices[k++] = a;
-      indices[k++] = c;
-      indices[k++] = b;
-      indices[k++] = b;
-      indices[k++] = c;
-      indices[k++] = d;
+      // Split each quad along the diagonal whose endpoints are closest in
+      // height, so the fold line follows a ridge/terrace edge instead of
+      // cutting across it (a fixed diagonal saws terraced cliffs into
+      // alternating shards). Both windings keep the +y face up.
+      const ha = positions[a * 3 + 1];
+      const hb = positions[b * 3 + 1];
+      const hc = positions[c * 3 + 1];
+      const hd = positions[d * 3 + 1];
+      if (Math.abs(hb - hc) <= Math.abs(ha - hd)) {
+        indices[k++] = a;
+        indices[k++] = c;
+        indices[k++] = b;
+        indices[k++] = b;
+        indices[k++] = c;
+        indices[k++] = d;
+      } else {
+        indices[k++] = a;
+        indices[k++] = c;
+        indices[k++] = d;
+        indices[k++] = a;
+        indices[k++] = d;
+        indices[k++] = b;
+      }
     }
   }
 
@@ -943,7 +1025,15 @@ function terrainNormalTexture(seed: number): THREE.DataTexture {
   tex.colorSpace = THREE.NoColorSpace;
   tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
   tex.magFilter = THREE.LinearFilter;
-  tex.minFilter = THREE.LinearFilter;
+  // Mipmapped minification (DataTexture defaults it off): the bake packs the
+  // terraces' near-vertical risers next to flat treads at 0.56u/texel, and
+  // sampling that unfiltered from a distant camera aliases the lighting into
+  // shimmering checker patterns. Mips average the relief away smoothly with
+  // distance instead. WebGL2 handles the NPOT mip chain; the editor's
+  // rebakeNormalRegion re-upload regenerates it automatically.
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.generateMipmaps = true;
+  tex.anisotropy = NORMAL_ANISOTROPY;
   tex.needsUpdate = true;
   return tex;
 }
@@ -1293,9 +1383,27 @@ export interface TerrainView {
   setBrush(x: number, z: number, radius: number, color?: THREE.ColorRepresentation): void;
   /** Editor-only: hide the brush ring. */
   clearBrush(): void;
+  /**
+   * Resolves once every streamed-in far chunk (see buildTerrain) has been
+   * added to `group`. Only the near ring around the world's zone hubs is
+   * built synchronously; everything else streams in across idle slots so
+   * first paint isn't gated on the whole map's geometry. Most callers don't
+   * need this - `chunks` is a live array shared with update()/rebuildRegion(),
+   * so those already see streamed chunks as they arrive. Use this only when a
+   * caller needs the FULL map built before doing something else (e.g. a
+   * screenshot tour), and call cancelStreaming() before discarding this view.
+   */
+  streamingDone: Promise<void>;
+  /** Stops any in-flight far-chunk streaming. Call before discarding this view (see rebuildTerrain). */
+  cancelStreaming(): void;
 }
 
-export function buildTerrain(seed: number): TerrainView {
+// Chunks farther than the near ring stream in this many at a time per idle
+// slot, forced forward even under sustained load by the timeout.
+const STREAM_BATCH_SIZE = 4;
+const STREAM_TIMEOUT_MS = 200;
+
+export function buildTerrain(seed: number, priorityPoint?: { x: number; z: number }): TerrainView {
   // Blank authoring maps use the FULL textured splat material too, so biome
   // paint lays down real ground textures (the flat blank material made paint
   // read as untextured vertex tint). Only the true low tier falls back.
@@ -1327,9 +1435,32 @@ export function buildTerrain(seed: number): TerrainView {
     spacing: number;
   }[] = [];
 
+  // True when the chunk cell overlaps a mountain-wall band: an inter-zone
+  // ridge line (ZONES[i].zMax) or the world rim. Those chunks always take the
+  // densest band; the walls sit far from every hub, so hub-distance LOD alone
+  // hands the steepest, most looked-at cliffs the coarsest grid.
+  const wallChunkAt = (x0: number, z0: number, size: number): boolean => {
+    if (x0 < rb.minX + WALL_LOD_RIM_MARGIN || x0 + size > rb.maxX - WALL_LOD_RIM_MARGIN) {
+      return true;
+    }
+    if (z0 < rb.minZ + WALL_LOD_RIM_MARGIN || z0 + size > rb.maxZ - WALL_LOD_RIM_MARGIN) {
+      return true;
+    }
+    for (let i = 0; i + 1 < ZONES.length; i++) {
+      const ridgeZ = ZONES[i].zMax;
+      if (z0 - WALL_LOD_RIDGE_HALF < ridgeZ && z0 + size + WALL_LOD_RIDGE_HALF > ridgeZ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const bandIndexAt = (cx: number, cz: number): number => {
-    const centerX = rb.minX + cx * CHUNK_SIZE + CHUNK_SIZE / 2;
-    const centerZ = rb.minZ + cz * CHUNK_SIZE + CHUNK_SIZE / 2;
+    const x0 = rb.minX + cx * CHUNK_SIZE;
+    const z0 = rb.minZ + cz * CHUNK_SIZE;
+    if (wallChunkAt(x0, z0, CHUNK_SIZE)) return 0;
+    const centerX = x0 + CHUNK_SIZE / 2;
+    const centerZ = z0 + CHUNK_SIZE / 2;
     let hubDist = Infinity;
     for (const zn of ZONES) {
       hubDist = Math.min(hubDist, Math.hypot(centerX - zn.hub.x, centerZ - zn.hub.z));
@@ -1338,11 +1469,25 @@ export function buildTerrain(seed: number): TerrainView {
     return idx === -1 ? bands.length - 1 : idx;
   };
 
+  // the coarsest spacing any neighbor chunk can have; sizes the slope-aware
+  // skirt drop so a fine chunk's skirt always reaches past the coarsest
+  // neighbor's chord (and vice versa)
+  const skirtSpan = bands[bands.length - 1].spacing;
+
   const addChunk = (x0: number, z0: number, size: number, spacing: number): void => {
-    const geo = buildChunkGeometry(x0, z0, size, spacing, seed, !lowGfx);
+    const geo = buildChunkGeometry(x0, z0, size, spacing, seed, !lowGfx, skirtSpan);
     const mesh = new THREE.Mesh(geo, mat);
     mesh.receiveShadow = true;
     group.add(mesh);
+    // A chunk's transform never changes after this point (its shape lives in
+    // the geometry, not the mesh matrix), so it can freeze immediately rather
+    // than waiting for the caller's group-wide freezeStaticMatrices pass.
+    // That pass only runs once, right after the synchronous near ring returns,
+    // so every chunk streamed in afterward (the majority, on the far bands)
+    // would otherwise keep matrixAutoUpdate = true and recompose every frame
+    // for the rest of the session.
+    mesh.updateMatrixWorld(true);
+    mesh.matrixAutoUpdate = false;
     chunks.push({
       mesh,
       x: x0 + size / 2,
@@ -1354,6 +1499,20 @@ export function buildTerrain(seed: number): TerrainView {
       spacing,
     });
   };
+
+  // Collect every chunk to build as a job first, instead of building inline,
+  // so the near ring (around the zone hubs, i.e. where a fresh character
+  // actually stands) can build synchronously while the rest streams in
+  // across idle slots below. bandIndexAt returns 0 only for the densest,
+  // closest-to-a-hub band, which is what we treat as "near".
+  interface ChunkJob {
+    x0: number;
+    z0: number;
+    size: number;
+    spacing: number;
+    near: boolean;
+  }
+  const jobs: ChunkJob[] = [];
 
   // far-LOD cells merge 2x2 into super-chunks: the far field is where draw
   // count hurts and culling granularity matters least
@@ -1380,21 +1539,67 @@ export function buildTerrain(seed: number): TerrainView {
         ]) {
           built.add((cz + dz) * chunksX + (cx + dx));
         }
-        addChunk(
-          rb.minX + cx * CHUNK_SIZE,
-          rb.minZ + cz * CHUNK_SIZE,
-          CHUNK_SIZE * 2,
-          bands[farBand].spacing,
-        );
+        // a merged super-chunk only forms from four far-band cells, so it's
+        // never near
+        jobs.push({
+          x0: rb.minX + cx * CHUNK_SIZE,
+          z0: rb.minZ + cz * CHUNK_SIZE,
+          size: CHUNK_SIZE * 2,
+          spacing: bands[farBand].spacing,
+          near: false,
+        });
       } else {
         built.add(cz * chunksX + cx);
-        const band = bands[bandIndexAt(cx, cz)];
-        addChunk(rb.minX + cx * CHUNK_SIZE, rb.minZ + cz * CHUNK_SIZE, CHUNK_SIZE, band.spacing);
+        const bandIdx = bandIndexAt(cx, cz);
+        jobs.push({
+          x0: rb.minX + cx * CHUNK_SIZE,
+          z0: rb.minZ + cz * CHUNK_SIZE,
+          size: CHUNK_SIZE,
+          spacing: bands[bandIdx].spacing,
+          near: bandIdx === 0,
+        });
       }
     }
   }
+
+  for (const job of jobs) {
+    if (job.near) addChunk(job.x0, job.z0, job.size, job.spacing);
+  }
+  const farJobs = jobs.filter((job) => !job.near);
+  // A returning character can log out anywhere, not just at a zone hub, so
+  // the near ring alone can leave them standing on not-yet-streamed terrain.
+  // Ordering the far queue by distance to the actual entry point (falling
+  // back to world center when none is given) guarantees the chunk directly
+  // underfoot streams in first rather than landing wherever row-major order
+  // happens to reach it.
+  if (priorityPoint) {
+    const centerX = (job: (typeof farJobs)[number]): number => job.x0 + job.size / 2;
+    const centerZ = (job: (typeof farJobs)[number]): number => job.z0 + job.size / 2;
+    farJobs.sort(
+      (a, b) =>
+        Math.hypot(centerX(a) - priorityPoint.x, centerZ(a) - priorityPoint.z) -
+        Math.hypot(centerX(b) - priorityPoint.x, centerZ(b) - priorityPoint.z),
+    );
+  }
+  let cancelled = false;
+  const streamingDone = runIdleQueue(
+    farJobs,
+    (job) => {
+      addChunk(job.x0, job.z0, job.size, job.spacing);
+    },
+    {
+      batchSize: STREAM_BATCH_SIZE,
+      timeoutMs: STREAM_TIMEOUT_MS,
+      cancelled: () => cancelled,
+    },
+  );
+
   return {
     group,
+    streamingDone,
+    cancelStreaming(): void {
+      cancelled = true;
+    },
     update(camX: number, camZ: number, fogFar: number): void {
       // fully-fogged chunks are pure overdraw; drop them before the frustum
       for (const chunk of chunks) {
@@ -1417,6 +1622,7 @@ export function buildTerrain(seed: number): TerrainView {
           chunk.spacing,
           seed,
           !lowGfx,
+          skirtSpan,
         );
         chunk.mesh.geometry.dispose();
         chunk.mesh.geometry = geo; // bounding box/sphere already computed by the build

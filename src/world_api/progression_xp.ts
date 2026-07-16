@@ -15,6 +15,10 @@ export interface LeaderboardEntry {
   virtualLevel: number;
   lifetimeXp: number;
   prestigeRank: number;
+  // The character's selected Book of Deeds title: a deed id the client
+  // localizes through deed_i18n.ts (never display text), null when untitled
+  // (the DeedsLeaderboardEntry shape).
+  title: string | null;
   realm?: string; // present on the global (cross-realm) home-page board
 }
 
@@ -58,6 +62,11 @@ export interface IWorldProgressionXp {
   // (see src/sim/content/professions.ts and src/sim/professions/wheel.ts). No
   // conserved-mass economy yet, so this is a plain read of the persisted counters.
   craftSkills: Record<string, number>;
+  // Gathering profession proficiency (Mining/Logging/Herbalism), keyed by
+  // profession id. Independent, additive counters: gaining one never changes
+  // another. Minimal read stub for issue #1119; reconcile with issue #1164
+  // (a broader professions facet) once that lands.
+  gatheringProficiency: Record<string, number>;
   // Post-cap progression: the realm-scoped lifetime-XP leaderboard, and the
   // opt-in cosmetic prestige action. Paged server-side (a realm can hold far
   // more than one page of max-level players); page is 0-based.

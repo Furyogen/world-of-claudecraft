@@ -1,25 +1,28 @@
 import * as THREE from 'three';
-import { getActiveWorldContent, WORLD_MAX_Z, WORLD_MIN_Z, WORLD_SIZE, ZONES } from '../sim/data';
-import { MIN_WATER_LEVEL } from '../sim/map_doc';
-import { waterLevel } from '../sim/world';
+import { waterBodies, waterLevel } from '../sim/world';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { GFX, SUN_DIR, sharedUniforms } from './gfx';
 import { waterNormalish, waterNormalMaps } from './textures';
 import { shoreDepthAt } from './water_core';
 
-// Water for the whole zone strip.
+// Water only where a declared lake actually is: one plane per lake footprint
+// (`waterBodies()`, `src/sim/world.ts`), not one plane spanning an entire
+// zone's width. A zone with no lakes gets no water mesh at all, so any
+// terrain that happens to dip below waterLevel() elsewhere (a crater, a
+// sunken tunnel) never reads as flooded.
 //
-// High tier: one ShaderMaterial plane per zone (so off-screen zones frustum
+// High tier: one ShaderMaterial plane per lake (so off-screen lakes frustum
 // cull away) with a CPU-precomputed per-vertex shore depth. Dual scrolling
 // real normal maps (three.js r165 water set, MIT) + a broad ocean-swell map
 // at range, fresnel sky tint, HDR sun glints (>1 so bloom catches them), a
 // shoreline foam band and a subtle wave displacement.
 //
-// Low tier keeps the legacy scrolling Phong plane, upgraded with the real
-// swell normal map for textured speculars.
+// Low tier keeps the legacy scrolling Phong plane, one per lake, upgraded with
+// the real swell normal map for textured speculars.
 
-const SEGMENTS_PER_ZONE = 180; // ~2u vertex spacing — enough for the foam band
+const VERTEX_SPACING = 2; // yards/segment, matches the old whole-zone density
+const MIN_SEGMENTS = 8;
 
 // Real water normal maps, fetched at module import and gated by the boot
 // preload only for the shader tier. Low/mobile uses generated canvas water
@@ -91,11 +94,17 @@ const WATER_FRAG = /* glsl */ `
   uniform vec3 uDeep;
   uniform vec3 uShallow;
   uniform float uTime;
+  uniform vec2 uCenter;
+  uniform float uRadius;
   varying vec3 vWPos;
   varying float vShoreDepth;
   #include <common>
   #include <fog_pars_fragment>
   void main() {
+    // the plane is a square footprint around a circular lake: drop the
+    // corner fragments outside the declared radius so they never read as
+    // flooded ground.
+    if (length(vWPos.xz - uCenter) > uRadius) discard;
     float camDist = length(cameraPosition - vWPos);
     // dual-scroll detail ripples (real three.js water normal maps)
     vec3 n1 = texture2D(uNorm1, vWPos.xz * 0.055 + uTime * vec2(0.013, 0.019)).xyz * 2.0 - 1.0;
@@ -141,25 +150,31 @@ function buildShaderWater(seed: number): WaterView {
   // legacy procedural maps still get generated (unused) to preserve the
   // shared-LCG call order in textures.ts for everything generated after
   waterNormalMaps();
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog),
-      uNorm1: { value: WATER_TEX.n1 },
-      uNorm2: { value: WATER_TEX.n2 },
-      uNorm3: { value: WATER_TEX.broad },
-      uSunDir: { value: SUN_DIR.clone() }, // the one shared sun (gfx.ts)
-      uSunColor: { value: SUN_COLOR },
-      uSkyColor: { value: SKY_TINT },
-      uDeep: { value: DEEP_COLOR },
-      uShallow: { value: SHALLOW_COLOR },
-      uTime: sharedUniforms.uTime,
-    },
-    vertexShader: WATER_VERT,
-    fragmentShader: WATER_FRAG,
-    transparent: true,
-    depthWrite: false,
-    fog: true,
-  });
+  // Each lake gets its own material instance (its uCenter/uRadius differ);
+  // uTime/uSunDir/textures are shared by reference so a single sync() still
+  // drives every lake.
+  const makeMaterial = (center: THREE.Vector2, radius: number): THREE.ShaderMaterial =>
+    new THREE.ShaderMaterial({
+      uniforms: {
+        ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog),
+        uNorm1: { value: WATER_TEX.n1 },
+        uNorm2: { value: WATER_TEX.n2 },
+        uNorm3: { value: WATER_TEX.broad },
+        uSunDir: { value: SUN_DIR.clone() }, // the one shared sun (gfx.ts)
+        uSunColor: { value: SUN_COLOR },
+        uSkyColor: { value: SKY_TINT },
+        uDeep: { value: DEEP_COLOR },
+        uShallow: { value: SHALLOW_COLOR },
+        uTime: sharedUniforms.uTime,
+        uCenter: { value: center },
+        uRadius: { value: radius },
+      },
+      vertexShader: WATER_VERT,
+      fragmentShader: WATER_FRAG,
+      transparent: true,
+      depthWrite: false,
+      fog: true,
+    });
 
   // (Re)fill the per-vertex shore depth from the CURRENT terrain + water level,
   // writing into the existing attribute in place (build and setLevel share it).
@@ -178,24 +193,17 @@ function buildShaderWater(seed: number): WaterView {
   };
 
   const meshes: THREE.Mesh[] = [];
-  // Active-content extents: a sized custom map's water covers exactly its own
-  // rect (the built-in world's zones/width match the constants, so its build
-  // is unchanged).
-  const content = getActiveWorldContent();
-  const width = (content.worldHalfX ?? WORLD_SIZE / 2) * 2;
-  const zones = content.zones.length > 0 ? content.zones : ZONES;
-  for (const zone of zones) {
-    const depth = zone.zMax - zone.zMin;
-    const geo = new THREE.PlaneGeometry(width, depth, SEGMENTS_PER_ZONE, SEGMENTS_PER_ZONE).rotateX(
-      -Math.PI / 2,
-    );
-    geo.translate(0, 0, (zone.zMin + zone.zMax) / 2);
+  for (const lake of waterBodies()) {
+    const size = lake.radius * 2;
+    const segments = Math.max(MIN_SEGMENTS, Math.ceil(size / VERTEX_SPACING));
+    const geo = new THREE.PlaneGeometry(size, size, segments, segments).rotateX(-Math.PI / 2);
+    geo.translate(lake.x, 0, lake.z);
     fillShoreDepth(geo);
     geo.computeBoundingBox();
     geo.computeBoundingSphere();
+    const material = makeMaterial(new THREE.Vector2(lake.x, lake.z), lake.radius);
     const mesh = new THREE.Mesh(geo, material);
     mesh.position.y = waterLevel();
-    mesh.visible = waterVisible();
     meshes.push(mesh);
   }
   return {
@@ -203,10 +211,8 @@ function buildShaderWater(seed: number): WaterView {
     update: () => {},
     setLevel(): void {
       const y = waterLevel();
-      const visible = waterVisible();
       for (const mesh of meshes) {
         mesh.position.y = y;
-        mesh.visible = visible;
         // vertices never move (only the attribute + the mesh transform change),
         // so the baked bounding volumes stay valid.
         fillShoreDepth(mesh.geometry);
@@ -230,18 +236,23 @@ function buildPhongWater(): WaterView {
     normalMap: norm,
     normalScale: new THREE.Vector2(0.8, 0.8),
   });
-  const content = getActiveWorldContent();
-  const width = (content.worldHalfX ?? WORLD_SIZE / 2) * 2;
-  const zMin = content.zones[0]?.zMin ?? WORLD_MIN_Z;
-  const zMax = content.zones[content.zones.length - 1]?.zMax ?? WORLD_MAX_Z;
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(width, zMax - zMin).rotateX(-Math.PI / 2),
-    mat,
-  );
-  mesh.position.set(0, waterLevel(), (zMin + zMax) / 2);
-  mesh.visible = waterVisible();
+  const meshes = waterBodies().map((lake) => {
+    // a disc, not a square plane: the low tier has no per-fragment shore
+    // mask, so the geometry itself must not cover the corners outside the
+    // declared lake radius.
+    const segments = Math.max(
+      MIN_SEGMENTS,
+      Math.ceil((Math.PI * lake.radius * 2) / VERTEX_SPACING),
+    );
+    const mesh = new THREE.Mesh(
+      new THREE.CircleGeometry(lake.radius, segments).rotateX(-Math.PI / 2),
+      mat,
+    );
+    mesh.position.set(lake.x, waterLevel(), lake.z);
+    return mesh;
+  });
   return {
-    meshes: [mesh],
+    meshes,
     update(time: number): void {
       tex.offset.x = time * 0.008;
       tex.offset.y = time * 0.011;
@@ -249,17 +260,10 @@ function buildPhongWater(): WaterView {
       norm.offset.y = time * 0.009;
     },
     setLevel(): void {
-      mesh.position.y = waterLevel();
-      mesh.visible = waterVisible();
+      const y = waterLevel();
+      for (const mesh of meshes) mesh.position.y = y;
     },
   };
-}
-
-/** The editor's blank/flat maps park the level at the sanitizer minimum to
- *  mean "no water"; the surface is hidden there instead of floating far
- *  under the world. */
-function waterVisible(): boolean {
-  return waterLevel() > MIN_WATER_LEVEL + 1e-6;
 }
 
 export function buildWater(seed: number): WaterView {

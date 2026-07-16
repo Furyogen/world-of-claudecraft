@@ -238,6 +238,8 @@ export interface OverworldMapModel {
   allies: MapAllyMarker[];
   /** The zoomed-detail overlay, or null below MAP_DETAIL_ZOOM. */
   detail: MapDetail | null;
+  /** Canvas-space "Show on Map" highlight, or null when absent / out of view. */
+  ping: { mx: number; my: number } | null;
 }
 
 /** Inputs the painter feeds the builder each redraw. The cached terrain bg + the
@@ -254,9 +256,8 @@ export interface OverworldMapInput {
   canvasSize: number;
   /** The cached whole-world decorations (generated once from the seed). */
   decorations: readonly Decoration[];
-  /** Quest ids the player untracked from the map side list: their objective
-   *  areas are not plotted. Omitted = every quest tracked. */
-  untrackedQuestIds?: ReadonlySet<string>;
+  /** Dungeon Finder "Show on Map" highlight in world coords, or null. */
+  ping?: { x: number; z: number } | null;
 }
 
 /** Which world-map surface this world renders. Delve when the player stands in a
@@ -276,7 +277,6 @@ export function mapWindowMode(world: IWorld): MapWindowMode {
  */
 export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapModel {
   const { world, zone, zoom, center, canvasSize: S, decorations } = input;
-  const untracked = input.untrackedQuestIds;
   const p = world.player;
 
   // The full committed-zone region: the whole world in X, the zone band in Z.
@@ -318,6 +318,17 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
     my: ((region.maxZ - z) / spanZ) * S,
   });
 
+  // Dungeon Finder "Show on Map" ping: a canvas-space highlight at an authored
+  // entrance, drawn only while the point sits inside the painted region.
+  const ping =
+    input.ping &&
+    input.ping.x >= region.minX &&
+    input.ping.x <= region.maxX &&
+    input.ping.z >= region.minZ &&
+    input.ping.z <= region.maxZ
+      ? toMap(input.ping.x, input.ping.z)
+      : null;
+
   const detail =
     zoom >= MAP_DETAIL_ZOOM ? buildDetail(region, toMap, S / spanX, decorations) : null;
 
@@ -330,15 +341,12 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
   // derived from the static content tables (camps / ground objects / NPCs), so
   // the online interest radius never hides a far-away camp. Filtered to the
   // committed zone's band like every other marker; radius scales with the zoom.
-  // Untracked quests (hidden from the map side list) drop out here, and each
-  // surviving area carries its quests' acceptance-order numbers for the badges.
+  // Each area carries its quests' acceptance-order numbers for the badges.
   const questNumbers = questNumbersByLog(world.questLog);
   const questAreas: MapQuestAreaMarker[] = [];
   for (const area of questObjectiveAreas(world.questLog)) {
     if (area.center.z < zone.zMin || area.center.z >= zone.zMax) continue;
-    const objectives = untracked
-      ? area.objectives.filter((ref) => !untracked.has(ref.questId))
-      : area.objectives;
+    const objectives = area.objectives;
     if (objectives.length === 0) continue;
     const numbers: number[] = [];
     for (const ref of objectives) {
@@ -428,6 +436,7 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
     player,
     allies,
     detail,
+    ping,
   };
 }
 

@@ -1,18 +1,33 @@
-import { describe, it, expect } from 'vitest';
-import type { ItemDef, InvSlot } from '../src/sim/types';
+import { describe, expect, it } from 'vitest';
+import type { InvSlot, ItemDef } from '../src/sim/types';
 import {
   applyBagFilter,
-  serializeBagFilter,
-  parseBagFilter,
-  DEFAULT_BAG_FILTER,
   BAG_CATEGORIES,
   type BagFilterState,
+  bagFilterIsDefault,
+  bagOrderIsManual,
+  DEFAULT_BAG_FILTER,
+  parseBagFilter,
+  serializeBagFilter,
 } from '../src/ui/bag_filter';
 
 // A tiny synthetic item table so the test never depends on live content balance.
 const ITEMS: Record<string, ItemDef> = {
-  blade: { id: 'blade', name: 'Redbrook Blade', kind: 'weapon', slot: 'mainhand', quality: 'uncommon' },
-  dagger: { id: 'dagger', name: 'Rusty Dirk', kind: 'weapon', slot: 'mainhand', quality: 'common', weapon: { min: 1, max: 2, speed: 1.5, dagger: true } },
+  blade: {
+    id: 'blade',
+    name: 'Redbrook Blade',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'uncommon',
+  },
+  dagger: {
+    id: 'dagger',
+    name: 'Rusty Dirk',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'common',
+    weapon: { min: 1, max: 2, speed: 1.5, dagger: true },
+  },
   helm: { id: 'helm', name: 'Iron Helm', kind: 'armor', slot: 'helmet', quality: 'rare' },
   potion: { id: 'potion', name: 'Minor Healing Potion', kind: 'potion', quality: 'common' },
   bread: { id: 'bread', name: 'Crusty Bread', kind: 'food', quality: 'common' },
@@ -86,7 +101,11 @@ describe('applyBagFilter — search', () => {
   });
 
   it('combines search with a category', () => {
-    const out = applyBagFilter(INV, lookup, { category: 'consumable', sort: 'recent', search: 'potion' });
+    const out = applyBagFilter(INV, lookup, {
+      category: 'consumable',
+      sort: 'recent',
+      search: 'potion',
+    });
     expect(ids(out)).toEqual(['potion']);
   });
 
@@ -99,12 +118,32 @@ describe('applyBagFilter — search', () => {
 describe('applyBagFilter — sorting', () => {
   it('sorts by quality descending (legendary first, poor last), ties keep insertion order', () => {
     const out = applyBagFilter(INV, lookup, { category: 'all', sort: 'quality', search: '' });
-    expect(ids(out)).toEqual(['relic', 'helm', 'blade', 'potion', 'keystone', 'bread', 'dagger', 'rod', 'pelt']);
+    expect(ids(out)).toEqual([
+      'relic',
+      'helm',
+      'blade',
+      'potion',
+      'keystone',
+      'bread',
+      'dagger',
+      'rod',
+      'pelt',
+    ]);
   });
 
   it('sorts by name A to Z', () => {
     const out = applyBagFilter(INV, lookup, { category: 'all', sort: 'name', search: '' });
-    expect(ids(out)).toEqual(['relic', 'bread', 'keystone', 'rod', 'helm', 'potion', 'blade', 'dagger', 'pelt']);
+    expect(ids(out)).toEqual([
+      'relic',
+      'bread',
+      'keystone',
+      'rod',
+      'helm',
+      'potion',
+      'blade',
+      'dagger',
+      'pelt',
+    ]);
   });
 
   it('does not mutate the input array', () => {
@@ -123,7 +162,9 @@ describe('serialize / parse round-trip', () => {
   it('falls back to defaults on garbage input', () => {
     expect(parseBagFilter('not json')).toEqual(DEFAULT_BAG_FILTER);
     expect(parseBagFilter(null)).toEqual(DEFAULT_BAG_FILTER);
-    expect(parseBagFilter('{"category":"bogus","sort":"nope","search":42}')).toEqual(DEFAULT_BAG_FILTER);
+    expect(parseBagFilter('{"category":"bogus","sort":"nope","search":42}')).toEqual(
+      DEFAULT_BAG_FILTER,
+    );
   });
 
   it('coerces a non-string search to empty and keeps valid enum fields', () => {
@@ -136,5 +177,38 @@ describe('BAG_CATEGORIES', () => {
   it('lists every category exactly once, starting with all', () => {
     expect(BAG_CATEGORIES[0]).toBe('all');
     expect(new Set(BAG_CATEGORIES).size).toBe(BAG_CATEGORIES.length);
+  });
+});
+
+describe('bagFilterIsDefault (shared by the bags grid and the bank window)', () => {
+  const state = (over: Partial<BagFilterState> = {}): BagFilterState => ({
+    ...DEFAULT_BAG_FILTER,
+    ...over,
+  });
+
+  it('is true only with the all category and an empty search (any sort)', () => {
+    expect(bagFilterIsDefault(state())).toBe(true);
+    expect(bagFilterIsDefault(state({ sort: 'quality' }))).toBe(true);
+    expect(bagFilterIsDefault(state({ category: 'weapon' }))).toBe(false);
+    expect(bagFilterIsDefault(state({ search: 'x' }))).toBe(false);
+    expect(bagFilterIsDefault(state({ search: '   ' }))).toBe(true);
+  });
+});
+
+describe('bagOrderIsManual (the reorder gate)', () => {
+  // Dragging a stack onto a cell only means "put it there" while the view PRESERVES the
+  // inventory array order. A quality/name sort REORDERS the view, so a cell names no
+  // array position and the sort would put both stacks straight back: that view refuses
+  // the drop (with a toast). A category chip or a search only HIDES stacks, leaving the
+  // survivors in array order, so a swap between two visible stacks stays coherent there.
+  it('is true only for the pristine view, the one that shows the bag REAL cells', () => {
+    expect(bagOrderIsManual({ category: 'all', sort: 'recent', search: '' })).toBe(true);
+  });
+
+  it('is false for any derived view: its squares are rows, not bag positions', () => {
+    expect(bagOrderIsManual({ category: 'all', sort: 'quality', search: '' })).toBe(false);
+    expect(bagOrderIsManual({ category: 'all', sort: 'name', search: '' })).toBe(false);
+    expect(bagOrderIsManual({ category: 'weapon', sort: 'recent', search: '' })).toBe(false);
+    expect(bagOrderIsManual({ category: 'all', sort: 'recent', search: 'clo' })).toBe(false);
   });
 });

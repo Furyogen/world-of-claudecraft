@@ -7,6 +7,7 @@
 // mob-template hooks are NOT used.
 
 import { DELVES, MOBS } from '../data';
+import * as deedsMod from '../deeds';
 import { createMob } from '../entity';
 import type { SimContext } from '../sim_context';
 import {
@@ -95,6 +96,25 @@ export function resetDrownedLitanyBossEncounter(ctx: SimContext, boss: Entity): 
   initDrownedLitanyBossState(run);
 }
 
+// Player death: the Tolling Bells volley and Blackwater Mark puddles must not
+// outlive the death, or an in-delve respawn at the module entry can be hit (or
+// insta-killed) by an effect that was already in flight before they died. Drop
+// every in-flight bell entity and empty both collections. Unlike the evade/leash
+// reset above, this does NOT re-init the encounter: firedCantorPhases,
+// finalBellFired, cantorShieldAdds, and bellVolleyTimer stay untouched so the
+// fight keeps progressing for any party members still alive.
+export function clearDrownedLitanyBellsAndMarks(ctx: SimContext, run: DelveRun): void {
+  if (run.delveId !== 'drowned_litany') return;
+  const st = run.nhaliaBoss;
+  if (!st) return;
+  for (const bell of st.bells) {
+    const be = ctx.entities.get(bell.entityId);
+    if (be && !be.dead) ctx.dropEntity(bell.entityId);
+  }
+  st.bells = [];
+  st.marks = [];
+}
+
 function findNhaliaBoss(ctx: SimContext, run: DelveRun): Entity | null {
   for (const id of run.mobIds) {
     const e = ctx.entities.get(id);
@@ -166,7 +186,10 @@ function tickCantorPhases(
     if (run.affixes.includes('lively_choir')) {
       ctx.spawnBossAdds(boss, 'choir_thrall', 2);
     }
-    st.cantorShieldAdds = boss.summonedIds.slice(before);
+    // A burst can cross both HP thresholds in one update. Keep every phase's
+    // shield adds tracked until all of them die instead of replacing the first
+    // pair with the second pair.
+    st.cantorShieldAdds.push(...boss.summonedIds.slice(before));
     applyCantorShield(ctx, boss);
     ctx.emit({
       type: 'log',
@@ -214,6 +237,7 @@ function tickBlackwaterMarkCast(
     text: `${boss.name} marks ${target.name} with Blackwater!`,
     color: '#6af',
     entityId: boss.id,
+    telegraph: true,
   });
   ctx.emit({
     type: 'spellfx',
@@ -272,6 +296,7 @@ function tickFinalBell(
     type: 'log',
     text: `${boss.name} unleashes Final Bell!`,
     color: '#ff9933',
+    telegraph: true,
     entityId: boss.id,
   });
   ctx.spawnBossAdds(
@@ -414,6 +439,8 @@ function tickBells(
       if (dx * dx + dz * dz > BELL_HIT_RADIUS * BELL_HIT_RADIUS) continue;
       const dmg = Math.max(1, Math.round(p.maxHp * BELL_DMG_PCT));
       ctx.dealDamage(boss, p, dmg, false, 'nature', 'Tolling Bell', 'hit', true);
+      // A landed bell contact taints the footwork task.
+      deedsMod.onBellContactForDeeds(ctx, boss);
       if (p.dead) continue;
       // Knockback: push radially outward from altar center.
       // Build a fake "source" position at the altar center so applyKnockback

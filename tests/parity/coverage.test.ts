@@ -152,9 +152,10 @@ describe('coverage: each scenario fires its subsystem', () => {
     expect(logs.some((t) => t.startsWith('You abandon'))).toBe(true);
     // Demon Heal channel ticked: applyDemonHealTick emits a heal2 with ability 'Demon Heal'.
     expect(ev.some((e) => e.type === 'heal2' && e.ability === 'Demon Heal')).toBe(true);
-    // Demon swap exercised BOTH branches: a new demon answered, then the same demon faded.
-    expect(logs.some((t) => t.includes('answers your summons'))).toBe(true);
-    expect(logs.some((t) => t.includes('fades back into the void'))).toBe(true);
+    // Demon swap AND same-demon re-summon both produce a fresh demon answering the call
+    // (re-summoning while the current demon is alive dismisses it and summons anew, it
+    // never toggles off into no pet).
+    expect(logs.filter((t) => t.includes('answers your summons')).length).toBeGreaterThanOrEqual(4);
     // despawnPet scrubbed the hunter's targetId (set to the demon, nulled on its hard despawn).
     expect((rec.sim as any).player.targetId).toBeNull();
     // abandon's despawnPersistentPet scrub pulled the biter off the (now-gone) pet.
@@ -729,6 +730,26 @@ describe('coverage: each scenario fires its subsystem', () => {
     const druid = ents.find((e) => e.id === rec.notes.druidId);
     expect(druid?.auras?.some((a: Ev) => a.kind === 'form_cat')).toBe(true);
     expect(druid?.auras?.some((a: Ev) => a.kind === 'form_bear')).toBe(false);
+  });
+
+  it('hit_rating_heroic pair: gear changes the threshold, never the RNG draw order', () => {
+    const ungearedScenario = SCENARIOS.find((s) => s.name === 'hit_rating_heroic_ungeared')!;
+    const gearedScenario = SCENARIOS.find((s) => s.name === 'hit_rating_heroic_geared')!;
+    const ungeared = record(ungearedScenario);
+    const geared = record(gearedScenario);
+
+    expect(ungeared.rec.sim.player.hitRating).toBe(0);
+    expect(geared.rec.sim.player.hitRating).toBe(170);
+    const gearedMob = (geared.rec.sim as any).entities.get(geared.rec.notes.mobId);
+    expect(gearedMob.level - geared.rec.sim.player.level).toBe(3);
+    expect(
+      geared.rec.allEvents.some(
+        (e: Ev) => e.type === 'damage' && e.sourceId === geared.rec.sim.player.id,
+      ),
+    ).toBe(true);
+
+    expect(geared.trace.draws).toBe(ungeared.trace.draws);
+    expect(geared.trace.drawDigest).toBe(ungeared.trace.drawDigest);
   });
 
   it('c5_auto_attack: melee swing table + ranged Auto Shot + wand + queued on-swing fire', () => {

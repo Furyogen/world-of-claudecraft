@@ -14,18 +14,21 @@ re-verification fix commits `8bae7110` + `3d4e49b8`).
   (website, self-updating installers) and `npm run electron:build:steam`
   (SteamPipe depot layouts, updater hard-off). The build stamps `wocDesktop`
   into the packaged `package.json` (the `distribution` channel, the web
-  origins the bundle was baked with, the optional crash-submit URL), resolved
+  origins the bundle was baked with, the optional crash-submit URL, and on the
+  steam channel the `steamAppId`), resolved
   at runtime by `electron/desktop_config.cjs`. Dev env overrides
   (`WOC_DISTRIBUTION`, `WOC_CRASH_SUBMIT_URL`, `VITE_DESKTOP_API_ORIGIN`,
   `VITE_DESKTOP_LOGIN_ORIGIN`) apply ONLY to unpackaged checkouts; an
   installed build's stamp is final.
 - **The app stopped shipping the repo's server/web node_modules.** electron-
   builder's dependency collection was packing pg, three, ws and friends into the
-  asar (~1,244 entries). `build.files` now excludes node_modules entirely; the
+  asar (~1,244 entries). `build.files` now excludes node_modules on the website channel (the steam
+  channel re-includes exactly `node_modules/steamworks.js/**`, a napi native
+  module that cannot be esbuild-bundled, asar-unpacked to load from disk); the
   two main-process runtime deps (electron-log, electron-updater) are esbuild-
   bundled into gitignored `electron/vendor/` by `scripts/electron-vendor.mjs`,
-  and a packaged build loads ONLY the in-asar vendor bundle (no node_modules
-  fallback; `tests/electron_vendor_loading.test.ts` pins it).
+  and a packaged build loads ONLY the in-asar vendor bundle for them (no
+  node_modules fallback; `tests/electron_vendor_loading.test.ts` pins it).
 - **Every error surface is caught and logged.** Rotating 5 MB file log;
   Crashpad minidumps for all processes from before the first window; main-
   process uncaughtException (log + dialog + exit) and unhandledRejection;
@@ -67,17 +70,26 @@ node_modules in the asar, all seven fuses set.
 
 1. At build time, electron-builder bakes `resources/app-update.yml` into the
    app (from `build.publish`: generic provider, feed URL
-   `https://updates.worldofclaudecraft.com/desktop`).
+   `https://updates.worldofclaudecraft.com/desktop`), and the publish channel
+   is derived from the baked API origin (`electron/update_guard.cjs`): the
+   production origin emits the `latest` feed files, any other origin (dev,
+   staging, localhost smoke packs) emits `dev` ones, and each emitted feed
+   file is stamped with the `wocApiOrigin` its artifact was baked with.
 2. At runtime, `electron/updater.cjs` initializes ONLY when the build is
    packaged AND stamped `website`. It checks the feed 15 seconds after launch
-   and every 4 hours: it GETs the platform's `latest*.yml`, compares the
-   version there against the running `app.getVersion()`, and only ever moves
-   FORWARD (no downgrades).
-3. If newer, it downloads in the background (delta via blockmap when the host
-   supports HTTP range requests, full download otherwise), verifies the SHA512
-   from the yml, then emits `update-downloaded`. The player sees a toast:
-   "Restart now" calls `quitAndInstall`; ignoring it still installs on next
-   quit (`autoInstallOnAppQuit`). Failed checks (offline, host down) only log.
+   and every 4 hours: it GETs the yml of the channel derived from its OWN
+   baked origin (production installs: `latest*.yml`; anything else:
+   `dev*.yml`), compares the version there against the running
+   `app.getVersion()`, and only ever moves FORWARD (no downgrades).
+3. If newer AND the feed file's `wocApiOrigin` stamp matches the install's own
+   baked origin (a missing stamp, from a pre-split feed file, is accepted; a
+   mismatch is REFUSED with a loud `main.log` entry, so a wrong-track artifact
+   can never flip an install to another backend), it downloads in the
+   background (delta via blockmap when the host supports HTTP range requests,
+   full download otherwise), verifies the SHA512 from the yml, then emits
+   `update-downloaded`. The player sees a toast: "Restart now" calls
+   `quitAndInstall`; ignoring it still installs on next quit
+   (`autoInstallOnAppQuit`). Failed checks (offline, host down) only log.
 4. Staged rollout: hand-edit `stagingPercentage: N` into the uploaded yml; each
    install hashes a persistent per-machine ID against N. Rollback: you MUST
    publish a higher version; machines that took a bad build will not downgrade.
@@ -222,9 +234,10 @@ bump the version, rebuild, upload, and watch the toast + install cycle.
 3. Set the new build live on the default branch in the partner site. Steam
    clients delta-patch on their own.
 4. Do not apply the Valve DRM wrapper on any platform. `steam_appid.txt` must
-   not ship. The Steamworks SDK is deliberately not linked (distribution and
-   updates need none of it); consequence: no overlay/achievements/cloud for
-   now, accepted for v1.
+   not ship (`electron/steam.cjs` passes the app id straight to `init`). The
+   Steamworks SDK loads on this channel only to mint the account-link ticket
+   for the Book of Deeds achievement mirror; distribution and updates still
+   need none of it, and the overlay stays unhooked.
 5. The mac Steam build must still be Developer ID signed + notarized, so run
    the steam build with the mac signing env present.
 

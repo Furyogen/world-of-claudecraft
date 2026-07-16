@@ -183,16 +183,17 @@ function legacyRectShellColliders(geo: LitanyModuleGeometry): Collider[] {
 // authored polygon edge before it is split into more pieces.
 const WALL_SEGMENT_MAX = 6;
 
-/** Chain of rotated OBB wall segments tracing a CCW simple polygon boundary.
- * Each edge is split into ceil(len / WALL_SEGMENT_MAX) equal segments so a
- * long straight run still reads as a wall of DUNGEON_WALL_HW thickness. The
- * OBB rotation aligns its local hw-axis (half-width, local x) with the edge
- * direction under colliders.ts's rotY convention (rotY(1,0,rot) =
- * {x:cos(rot), z:-sin(rot)} is the world direction of local +x), so
- * rot = atan2(-edgeDz, edgeDx) points the OBB's long axis along the edge:
- * the same atan2(-dz, dx) convention colliders.ts already uses for fences. */
-export function polygonShellColliders(points: readonly Point2D[]): Collider[] {
-  const out: Collider[] = [];
+export interface LitanyWallSegment {
+  x: number;
+  z: number;
+  halfLength: number;
+  rot: number;
+}
+
+/** Exact wall-module spans for a polygon shell. Render and collision both consume
+ * these segments so short or angled edges never draw past their solid footprint. */
+export function polygonWallSegments(points: readonly Point2D[]): LitanyWallSegment[] {
+  const out: LitanyWallSegment[] = [];
   const n = points.length;
   for (let i = 0; i < n; i++) {
     const a = points[i];
@@ -207,16 +208,33 @@ export function polygonShellColliders(points: readonly Point2D[]): Collider[] {
     for (let s = 0; s < segCount; s++) {
       const midT = (s + 0.5) / segCount;
       out.push({
-        type: 'obb',
         x: a.x + dx * midT,
         z: a.z + dz * midT,
-        hw: segLen / 2,
-        hd: DUNGEON_WALL_HW,
+        halfLength: segLen / 2,
         rot,
       });
     }
   }
   return out;
+}
+
+/** Chain of rotated OBB wall segments tracing a CCW simple polygon boundary.
+ * Each edge is split into ceil(len / WALL_SEGMENT_MAX) equal segments so a
+ * long straight run still reads as a wall of DUNGEON_WALL_HW thickness. The
+ * OBB rotation aligns its local hw-axis (half-width, local x) with the edge
+ * direction under colliders.ts's rotY convention (rotY(1,0,rot) =
+ * {x:cos(rot), z:-sin(rot)} is the world direction of local +x), so
+ * rot = atan2(-edgeDz, edgeDx) points the OBB's long axis along the edge:
+ * the same atan2(-dz, dx) convention colliders.ts already uses for fences. */
+export function polygonShellColliders(points: readonly Point2D[]): Collider[] {
+  return polygonWallSegments(points).map((segment) => ({
+    type: 'obb',
+    x: segment.x,
+    z: segment.z,
+    hw: segment.halfLength,
+    hd: DUNGEON_WALL_HW,
+    rot: segment.rot,
+  }));
 }
 
 function shellColliders(geo: LitanyModuleGeometry): Collider[] {
@@ -279,14 +297,17 @@ const LITANY_SLUICE = litanyRoom({
     },
   ],
   // Wall-hugging pool chain: west, east, west. The dry lane snakes between the
-  // pools instead of skirting one central blob.
+  // pools instead of skirting one central blob. Each shallow/deep pair stays
+  // concentric; the east z33 and west z47 pairs are pulled a touch inward (x 7->5,
+  // -7->-6) so the shallow rim keeps a ~2yd dry margin off the side wall (at the
+  // authored x it reached the wall edge and drowned the outer walkway ring).
   hazards: [
     { x: -8, z: 18, r: 8, tier: 'shallow' },
     { x: -8, z: 18, r: 5, tier: 'deep' },
-    { x: 7, z: 33, r: 8, tier: 'shallow' },
-    { x: 7, z: 33, r: 5, tier: 'deep' },
-    { x: -7, z: 47, r: 7, tier: 'shallow' },
-    { x: -7, z: 47, r: 4, tier: 'deep' },
+    { x: 5, z: 33, r: 8, tier: 'shallow' },
+    { x: 5, z: 33, r: 5, tier: 'deep' },
+    { x: -6, z: 47, r: 7, tier: 'shallow' },
+    { x: -6, z: 47, r: 4, tier: 'deep' },
   ],
   islands: [
     { x: 0, z: -9, hw: 5, hd: 3 },
@@ -368,15 +389,18 @@ const LITANY_LEDGER = litanyRoom({
     },
   ],
   // Staggered pool chain east, center, west, east: the island line threads the
-  // center pool as stepping stones while the dry bank alternates sides.
+  // center pool as stepping stones while the dry bank alternates sides. The three
+  // wall-side pairs are pulled inward (x 14->9, -13->-9, 13->10), keeping each
+  // shallow/deep pair concentric, so the shallow rim clears the side wall by ~2yd:
+  // at the authored x these rims crossed the wall edge and drowned the walkway ring.
   hazards: [
-    { x: 14, z: 24, r: 9, tier: 'shallow' },
-    { x: 14, z: 24, r: 6, tier: 'deep' },
+    { x: 9, z: 24, r: 9, tier: 'shallow' },
+    { x: 9, z: 24, r: 6, tier: 'deep' },
     { x: 0, z: 40, r: 7, tier: 'shallow' },
-    { x: -13, z: 42, r: 9, tier: 'shallow' },
-    { x: -13, z: 42, r: 6, tier: 'deep' },
-    { x: 13, z: 60, r: 8, tier: 'shallow' },
-    { x: 13, z: 60, r: 5, tier: 'deep' },
+    { x: -9, z: 42, r: 9, tier: 'shallow' },
+    { x: -9, z: 42, r: 6, tier: 'deep' },
+    { x: 10, z: 60, r: 8, tier: 'shallow' },
+    { x: 10, z: 60, r: 5, tier: 'deep' },
   ],
   islands: [
     { x: 0, z: -11, hw: 5, hd: 3 },
@@ -547,12 +571,15 @@ const LITANY_BAPTISTRY = litanyRoom({
     },
   ],
   // Sinkhole font with a diagonal feed: inlet channel from the northeast,
-  // outlet to the southwest, so the rim walk spirals rather than circles.
+  // outlet to the southwest, so the rim walk spirals rather than circles. The
+  // two feeder pools are pulled in (x 14->12, -14->-12) so their rims keep a
+  // ~2yd dry margin off the side wall: at the authored x they touched the wall
+  // edge and drowned the outer walkway ring.
   hazards: [
     { x: 0, z: 38, r: 14, tier: 'shallow' },
     { x: 0, z: 38, r: 10, tier: 'deep' },
-    { x: 14, z: 24, r: 7, tier: 'shallow' },
-    { x: -14, z: 50, r: 7, tier: 'shallow' },
+    { x: 12, z: 24, r: 7, tier: 'shallow' },
+    { x: -12, z: 50, r: 7, tier: 'shallow' },
   ],
   islands: [
     { x: 0, z: -9, hw: 5, hd: 3 },
@@ -632,16 +659,19 @@ const LITANY_CHOIR_LOFT = litanyRoom({
     },
   ],
   // Two slanted seepage channels drifting inward toward the dais: the fan's
-  // dry aisles zigzag between them instead of running three straight lanes.
+  // dry aisles zigzag between them instead of running three straight lanes. The
+  // two wall-side pairs are pulled inward (x -16->-12, 16->15), staying
+  // concentric, so their shallow rims keep a ~2yd dry margin off the side wall:
+  // at the authored x they overshot the wall and drowned the outer walkway ring.
   hazards: [
-    { x: -16, z: 22, r: 7, tier: 'shallow' },
-    { x: -16, z: 22, r: 4, tier: 'deep' },
+    { x: -12, z: 22, r: 7, tier: 'shallow' },
+    { x: -12, z: 22, r: 4, tier: 'deep' },
     { x: -11, z: 36, r: 7, tier: 'shallow' },
     { x: 2, z: 30, r: 7, tier: 'shallow' },
     { x: -3, z: 46, r: 7, tier: 'shallow' },
     { x: -3, z: 46, r: 4, tier: 'deep' },
-    { x: 16, z: 28, r: 8, tier: 'shallow' },
-    { x: 16, z: 28, r: 5, tier: 'deep' },
+    { x: 15, z: 28, r: 8, tier: 'shallow' },
+    { x: 15, z: 28, r: 5, tier: 'deep' },
     { x: 9, z: 46, r: 7, tier: 'shallow' },
   ],
   islands: [
@@ -818,7 +848,10 @@ const LITANY_APSE = litanyRoom({
     },
   ],
   hazards: [
-    { x: 0, z: 56, rx: 24, rz: 17, r: 24, tier: 'shallow' },
+    // Shallow moat rx pulls in to 22 (from 24) so the outer walkway ring
+    // (|x| ~= 23.8 at z 48 to 91) keeps a dry flank margin: at rx 24 the moat
+    // edge reached x=24 at z=56 and drowned the authored safe path.
+    { x: 0, z: 56, rx: 22, rz: 17, r: 22, tier: 'shallow' },
     { x: 0, z: 56, rx: 21, rz: 14, r: 21, tier: 'deep' },
     { x: -12, z: 22, r: 6, tier: 'deep' },
     { x: 12, z: 26, r: 6, tier: 'deep' },

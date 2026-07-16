@@ -467,6 +467,51 @@ describe('parties', () => {
     expect(info.z).toBeCloseTo(-23, 3);
   });
 
+  it('partyInfo produces tactical frame data and filters auras before the cap', () => {
+    const { sim, a, b } = makeDuo();
+    const member = mustEntity(sim, b);
+    const meta = sim.meta(b);
+    if (!meta) throw new Error('missing party member metadata');
+    meta.talentMods.role = 'healer';
+    for (let i = 0; i < 8; i++) {
+      member.auras.push({
+        id: `maintenance_${i}`,
+        name: `Maintenance ${i}`,
+        kind: 'buff_ap',
+        remaining: 60,
+        duration: 60,
+        value: 5,
+        sourceId: b,
+        school: 'physical',
+      });
+    }
+    member.auras.push({
+      id: 'power_word_shield',
+      name: 'Psalm of Warding',
+      kind: 'absorb',
+      remaining: 4.2,
+      duration: 12,
+      value: 75,
+      sourceId: b,
+      school: 'holy',
+    });
+    const hostile = createMob(sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: 0 });
+    hostile.aggroTargetId = b;
+    sim.entities.set(hostile.id, hostile);
+    member.castingAbility = 'lesser_heal';
+    member.castTargetId = a;
+
+    const memberInfo = mustPartyMember(sim, b);
+    expect(memberInfo).toMatchObject({
+      absorb: 75,
+      role: 'healer',
+      connected: 1,
+      hasAggro: 1,
+    });
+    expect(memberInfo.auras).toEqual([{ id: 'power_word_shield', kind: 'absorb', remaining: 5 }]);
+    expect(mustPartyMember(sim, a).incomingHeal).toBe(52.5);
+  });
+
   it('converts a party to a two-group raid with a ten player cap', () => {
     const sim = makeWorld();
     const leader = sim.addPlayer('warrior', 'Leader');
@@ -1224,5 +1269,105 @@ describe('the new dungeons', () => {
     korgath.hp = Math.floor(korgath.maxHp * 0.25);
     sim.tick();
     expect(korgath.enraged).toBe(true);
+  });
+});
+
+describe('dungeon difficulty slash command', () => {
+  it('routes /dungeon reset to the owned-instance reset', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+    sim.enterDungeon('hollow_crypt', p);
+    sim.leaveDungeon(p);
+    sim.setDungeonDifficulty('heroic', p);
+
+    sim.drainEvents();
+    sim.chat('/dungeon reset', p);
+
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (event) =>
+          event.type === 'error' &&
+          event.pid === p &&
+          event.text === 'All instances have been reset.',
+      ),
+    ).toBe(true);
+  });
+
+  it('routes the /dungeons and /instances reset aliases', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Aliases');
+    for (const cmd of ['/dungeons reset', '/instances reset']) {
+      sim.drainEvents();
+      sim.chat(cmd, p);
+      expect(
+        (sim.drainEvents() as any[]).some(
+          (event) =>
+            event.type === 'error' &&
+            event.pid === p &&
+            event.text === 'You have no instances to reset.',
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it('lets a leader switch normal and heroic without using dev commands', () => {
+    const sim = makeWorld();
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const member = sim.addPlayer('mage', 'Mage');
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+
+    sim.drainEvents();
+    sim.chat('/dungeon heroic', member);
+    expect(sim.dungeonDifficulty(leader)).toBe('normal');
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (e) => e.type === 'error' && e.pid === member && e.text === 'You are not the party leader.',
+      ),
+    ).toBe(true);
+
+    sim.chat('/dungeon heroic', leader);
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (e) =>
+          e.type === 'error' && e.pid === leader && e.text === 'Dungeon difficulty set to Heroic.',
+      ),
+    ).toBe(true);
+
+    sim.chat('/dungeon normal', leader);
+    expect(sim.dungeonDifficulty(member)).toBe('normal');
+  });
+
+  it('routes the /instances and /dungeons aliases, case-insensitively', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+
+    sim.chat('/instances heroic', p);
+    expect(sim.dungeonDifficulty(p)).toBe('heroic');
+    sim.chat('/dungeons normal', p);
+    expect(sim.dungeonDifficulty(p)).toBe('normal');
+    sim.chat('/DUNGEON HEROIC', p);
+    expect(sim.dungeonDifficulty(p)).toBe('heroic');
+  });
+
+  it('the /dungeon readout reports the current selection and how to change it', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+
+    sim.drainEvents();
+    sim.chat('/dungeon', p);
+    let texts = (sim.drainEvents() as any[])
+      .filter((e) => e.type === 'error' && e.pid === p)
+      .map((e) => e.text);
+    expect(texts).toContain('Dungeon difficulty: Normal. Use /dungeon heroic to change it.');
+
+    sim.chat('/dungeon heroic', p);
+    sim.drainEvents();
+    sim.chat('/dungeon', p);
+    texts = (sim.drainEvents() as any[])
+      .filter((e) => e.type === 'error' && e.pid === p)
+      .map((e) => e.text);
+    expect(texts).toContain('Dungeon difficulty: Heroic. Use /dungeon normal to change it.');
   });
 });

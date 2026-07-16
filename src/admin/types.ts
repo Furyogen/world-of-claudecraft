@@ -1,3 +1,4 @@
+import type { StreamerLinks } from './account_flair';
 import type { AccountStatus } from './account_status';
 
 // Shapes returned by the /admin/api endpoints (mirrors server/admin_db.ts
@@ -106,6 +107,13 @@ export interface SuspiciousEvidence {
   weight: number;
   detail: string;
   expiresAt: number;
+  // Recurrence history, present only on kinds where re-triggering carries
+  // information: distinct episodes this session, first and latest (epoch ms),
+  // and the opening timestamps of the most recent episodes (bounded ring).
+  occurrences?: number;
+  firstAt?: number;
+  lastAt?: number;
+  episodesAt?: number[];
 }
 
 export interface SuspiciousPlayer {
@@ -115,6 +123,8 @@ export interface SuspiciousPlayer {
     name: string;
     ip: string;
   };
+  // CONFIRMED = an automated moderator report went out for this session.
+  state: 'SUSPICIOUS' | 'CONFIRMED';
   snapshot: {
     capturedAt: number;
   } | null;
@@ -193,6 +203,8 @@ export interface AccountRow {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
   characterCount: number;
@@ -263,6 +275,9 @@ export interface AccountDetail {
   createdAt: string;
   lastLogin: string | null;
   isAdmin: boolean;
+  isAi: boolean;
+  isStreamer: boolean;
+  streamerLinks: StreamerLinks;
   online: boolean;
   bannedAt: string | null;
   suspendedUntil: string | null;
@@ -270,6 +285,8 @@ export interface AccountDetail {
   chatMutedUntil: string | null;
   chatMuteReason: string;
   chatStrikes: number;
+  dailyRewardsBan?: { reason: string; createdAt: string; expiresAt: string | null } | null;
+  dailyRewardsIpBans?: { ip: string; reason: string; createdAt: string }[];
   lastLoginIp: string | null;
   playtimeSeconds: number;
   characters: {
@@ -294,6 +311,22 @@ export interface AccountDetail {
   moderationHistory: ModerationHistoryEntry[];
 }
 
+export interface DailyRewardPointEventRow {
+  id: number;
+  createdAt: string;
+  kind: string;
+  points: number;
+  totalPoints: number;
+  meta: Record<string, unknown>;
+}
+
+export interface DailyRewardPointEventLog {
+  day: string;
+  rows: DailyRewardPointEventRow[];
+  total: number;
+  truncated: boolean;
+}
+
 export interface ModerationHistoryEntry {
   id: number;
   action: string;
@@ -302,6 +335,13 @@ export interface ModerationHistoryEntry {
   expiresAt: string | null;
   adminAccountId: number | null;
   adminUsername: string | null;
+}
+
+export interface ModerationActionHistoryRow extends ModerationHistoryEntry {
+  source: 'account' | 'ip';
+  accountId: number | null;
+  username: string | null;
+  ip: string | null;
 }
 
 export interface ModerationQueueRow {
@@ -504,4 +544,42 @@ export interface RoleChangeRow {
 
 export interface StaffHistoryData {
   rows: RoleChangeRow[];
+}
+
+// Server tick-loop profiling (GET /admin/api/perf/tick, POST .../capture). Mirrors
+// server/game.ts PerfCaptureResult/PerfCaptureStatus and the TickProfiler shape.
+export interface PerfPhaseStats {
+  mean: number;
+  p50: number;
+  p95: number;
+  p99: number;
+  max: number;
+}
+
+export interface PerfCaptureResult {
+  captureId: string;
+  capturedAt: number; // epoch ms the window closed
+  durationMs: number;
+  loopCallbacks: number;
+  simTicks: number;
+  catchUpCallbacks: number;
+  maxTicksPerCallback: number;
+  online: number;
+  simEntities: number;
+  aggroVisitsTotal: number;
+  aggroVisitsMaxPerTick: number;
+  threatVisitsTotal: number;
+  threatVisitsMaxPerTick: number;
+  profile: {
+    samples: number;
+    windowTicks: number;
+    phases: Record<string, PerfPhaseStats>;
+  };
+}
+
+export interface PerfCaptureStatus {
+  captureId: string | null;
+  capturing: boolean;
+  endsAt: number | null; // epoch ms the in-flight capture closes
+  last: PerfCaptureResult | null;
 }

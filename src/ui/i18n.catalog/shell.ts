@@ -39,7 +39,27 @@ export const shellStrings = {
       rendererFailed: 'Could not start the renderer: try reloading. {error}',
       enterTimeout: 'Could not enter world. The connection timed out. Is the game server running?',
       connectionLost: 'Connection to the server was lost.',
+      reconnecting: 'Connection lost. Reconnecting...',
       connectionRejected: 'The server closed the connection.',
+      realmFull: 'This world is full right now. Please try again in a few minutes.',
+      tooManyConnections:
+        'Too many connections to this world are coming from your network. Please close extra game windows or try again in a few minutes.',
+      tips: {
+        classes:
+          'Tip: each of the 9 classes plays differently. Try a few before committing to one.',
+        talents:
+          'Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.',
+        dungeons:
+          'Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.',
+        market: 'Tip: the World Market lets you buy and sell with players across the whole realm.',
+        guilds:
+          'Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.',
+        professions:
+          'Tip: gathering and crafting professions can be trained alongside your combat class.',
+        loadouts:
+          'Tip: save more than one talent loadout to swap between builds without spending points twice.',
+        pvp: 'Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build.',
+      },
     },
     errors: {
       nothingInteract: 'Nothing to interact with.',
@@ -72,9 +92,12 @@ export const shellStrings = {
         webLoginOnly: 'Logins are only allowed from the game client.',
         accountSuspended: 'This account is suspended until {date}.',
         alreadyInWorld: 'Character is already in world.',
+        accountSessionLimit: 'Too many characters on this account are already in the world.',
         takenOver: 'Your character was taken over by another session.',
         renameBeforeEntering: 'This character must be renamed before entering the world.',
         renameNotPermitted: 'Renaming this character is not allowed.',
+        unsupportedMediaType: 'Unsupported request format.',
+        crossSiteOrigin: 'Request blocked for security reasons.',
       },
     },
     // Desktop (Electron) shell surfaces: the auto-update toast rendered by the
@@ -111,11 +134,11 @@ export const shellStrings = {
       popTipLow:
         'Low population: fewer than 15 players online right now. Plenty of room; great for a fresh start.',
       popTipMedium:
-        'Medium population: 15 to 39 players online right now. A healthy, active world.',
+        'Medium population: 15 to 79 players online right now. A healthy, active world.',
       popTipHigh:
-        'High population: 40 to 79 players online right now. Busy, with lots of players around.',
+        'High population: 80 or more players online right now. Busy, with lots of players around.',
       popTipFull:
-        'Full population: 80 or more players online right now. Very busy; you may wait in a login queue.',
+        'Full population: this world is at capacity right now. New logins are declined until a player logs out.',
       popTipOffline: 'Offline: this world is unreachable right now and cannot be joined.',
       characterCountOne: '{count} character',
       characterCountOther: '{count} characters',
@@ -228,7 +251,7 @@ export const shellStrings = {
       title: 'Play in Landscape Fullscreen',
       continue: 'Continue to Game',
       rotateTitle: 'Rotate to Landscape',
-      rotateSub: 'Play in landscape fullscreen for the best mobile experience.',
+      rotateSub: 'Portrait mode is not supported. Rotate your device to landscape to continue.',
       baseLandscape: 'Rotate your device to landscape before entering the world.',
       basePerformance:
         'Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.',
@@ -1255,7 +1278,7 @@ export const shellStrings = {
       title: 'Play in Landscape Fullscreen',
       continue: 'Continue to Game',
       rotateTitle: 'Rotate to Landscape',
-      rotateSub: 'Play in landscape fullscreen for the best mobile experience.',
+      rotateSub: 'Portrait mode is not supported. Rotate your device to landscape to continue.',
       baseLandscape: 'Rotate your device to landscape before entering the world.',
       basePerformance:
         'Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.',

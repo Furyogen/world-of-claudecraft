@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 401,
-      "state": "efe5d830",
+      "nextId": 409,
+      "state": "bc8a8713",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -25,6 +25,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -34,18 +35,32 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 408,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -61,7 +76,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -76,7 +92,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 95,
-          "id": 400,
+          "id": 408,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -120,9 +136,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 402,
-      "state": "fd6b4fbb",
-      "events": "e12ec889",
+      "nextId": 410,
+      "state": "23299f44",
+      "events": "a395d807",
       "rng": {
         "draws": 4,
         "digest": "e457e920"
@@ -131,8 +147,8 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 402,
-      "state": "77c4ec74",
+      "nextId": 410,
+      "state": "855f4edb",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -142,9 +158,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 402,
-      "state": "16d92ec4",
-      "events": "9c2aab97",
+      "nextId": 410,
+      "state": "c1a1735c",
+      "events": "ae1ee5e7",
       "rng": {
         "draws": 80,
         "digest": "ae0d25c6"
@@ -153,8 +169,8 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 402,
-      "state": "57abb355",
+      "nextId": 410,
+      "state": "6188c2d9",
       "events": "741638a5",
       "rng": {
         "draws": 170,
@@ -164,9 +180,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 402,
-      "state": "a7f65efd",
-      "events": "0fafa7a2",
+      "nextId": 410,
+      "state": "b36d8c0e",
+      "events": "287ca592",
       "rng": {
         "draws": 270,
         "digest": "afc4bc0b"
@@ -175,8 +191,8 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 402,
-      "state": "b00bd3c2",
+      "nextId": 410,
+      "state": "d23e2fad",
       "events": "741638a5",
       "rng": {
         "draws": 387,
@@ -186,9 +202,9 @@
     {
       "tick": 140,
       "time": 7,
-      "nextId": 402,
-      "state": "1aa18bba",
-      "events": "ae361e7a",
+      "nextId": 410,
+      "state": "9ff84c06",
+      "events": "70f60dea",
       "rng": {
         "draws": 501,
         "digest": "9e9280f3"
@@ -197,8 +213,8 @@
     {
       "tick": 160,
       "time": 8,
-      "nextId": 402,
-      "state": "909fc074",
+      "nextId": 410,
+      "state": "4548cb1c",
       "events": "741638a5",
       "rng": {
         "draws": 627,
@@ -208,9 +224,9 @@
     {
       "tick": 180,
       "time": 9,
-      "nextId": 402,
-      "state": "e813a372",
-      "events": "8c880780",
+      "nextId": 410,
+      "state": "ebd7884b",
+      "events": "a84abbb0",
       "rng": {
         "draws": 765,
         "digest": "84d7375c"
@@ -219,8 +235,8 @@
     {
       "tick": 200,
       "time": 10,
-      "nextId": 402,
-      "state": "f6ddf479",
+      "nextId": 410,
+      "state": "782d69f2",
       "events": "741638a5",
       "rng": {
         "draws": 931,
@@ -230,8 +246,8 @@
     {
       "tick": 201,
       "time": 10.05,
-      "nextId": 402,
-      "state": "d9af9f6f",
+      "nextId": 410,
+      "state": "d6677ae8",
       "events": "741638a5",
       "rng": {
         "draws": 932,
@@ -241,6 +257,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -250,6 +267,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {
@@ -257,14 +275,58 @@
             "damageTaken": 22
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 164
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "spring_water",
+              "training_mace"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "feat_era_cap",
+              ""
+            ],
+            [
+              "prog_double_digits",
+              ""
+            ],
+            [
+              "prog_finding_your_feet",
+              ""
+            ],
+            [
+              "prog_first_steps",
+              ""
+            ],
+            [
+              "prog_level_cap",
+              ""
+            ],
+            [
+              "prog_the_long_middle",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 408,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -278,10 +340,12 @@
           "lifetimeXp": 167200,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 55,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -296,7 +360,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 10,
           "hp": 49978,
-          "id": 400,
+          "id": 408,
           "inCombat": true,
           "kind": "player",
           "level": 20,
@@ -329,7 +393,7 @@
             "sta": 60,
             "str": 60
           },
-          "targetId": 401,
+          "targetId": 409,
           "templateId": "paladin",
           "weapon": {
             "max": 5,
@@ -338,7 +402,7 @@
           }
         },
         {
-          "aggroTargetId": 400,
+          "aggroTargetId": 408,
           "aiState": "attack",
           "combatTimer": 1.95,
           "comboUntil": -1,
@@ -350,7 +414,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 39836,
-          "id": 401,
+          "id": 409,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -380,11 +444,11 @@
             "armor": 40
           },
           "swingTimer": 0.05,
-          "tappedById": 400,
+          "tappedById": 408,
           "templateId": "forest_wolf",
           "threat": [
             [
-              400,
+              408,
               165
             ]
           ],

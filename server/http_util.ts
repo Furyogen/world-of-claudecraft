@@ -1,5 +1,7 @@
 import type * as http from 'node:http';
 import { inflateSync } from 'node:zlib';
+import type { AccountModerationStatus } from './db';
+import type { ErrorCode } from './http/error_codes';
 
 export function json(res: http.ServerResponse, status: number, body: unknown): void {
   const data = JSON.stringify(body);
@@ -8,6 +10,33 @@ export function json(res: http.ServerResponse, status: number, body: unknown): v
     'Content-Length': Buffer.byteLength(data),
   });
   res.end(data);
+}
+
+/**
+ * The legacy 403 moderation-lock body, PLUS the additive machine `code` the client
+ * code-matcher keys on (and, for a timed suspension, the machine-readable `date`
+ * the client formats).
+ * The prose `status.message` stays byte-identical; the code is derived from the
+ * same status fields, mirroring the problem+json requireAccount mapping EXACTLY
+ * (server/http/middleware/require_account.ts: banned -> moderation.banned;
+ * an active suspension -> moderation.suspended_until { date }; a self-deactivation
+ * -> account.deactivated; the fallback -> moderation.suspended). Callers invoke
+ * this only when status.locked is true. One source so the ~10 legacy emit sites
+ * (both the migrated RouteDef guards and their legacy main.ts twins) cannot drift.
+ */
+export function moderationErrorBody(
+  status: Pick<AccountModerationStatus, 'message' | 'banned' | 'suspendedUntil' | 'deactivated'>,
+): { error: string; code: ErrorCode; date?: string } {
+  if (status.banned) return { error: status.message, code: 'moderation.banned' };
+  if (status.suspendedUntil) {
+    return {
+      error: status.message,
+      code: 'moderation.suspended_until',
+      date: status.suspendedUntil,
+    };
+  }
+  if (status.deactivated) return { error: status.message, code: 'account.deactivated' };
+  return { error: status.message, code: 'moderation.suspended' };
 }
 
 // A Postgres unique-constraint violation (SQLSTATE 23505). The REST layer maps
@@ -20,19 +49,34 @@ export function isUniqueViolation(err: unknown): boolean {
   return e?.code === '23505' || (typeof e?.message === 'string' && e.message.includes('unique'));
 }
 
-export function readBody(req: http.IncomingMessage, maxBytes = 64 * 1024): Promise<any> {
+// The default JSON request-body cap (64 KiB). The single source of truth so
+// readBody and the withBody middleware (server/http/middleware/body.ts) can
+// never drift apart.
+export const DEFAULT_JSON_BODY_MAX_BYTES = 64 * 1024;
+
+export function readBody(
+  req: http.IncomingMessage,
+  maxBytes = DEFAULT_JSON_BODY_MAX_BYTES,
+): Promise<any> {
   return new Promise((resolve, reject) => {
-    let data = '';
+    // Collect raw bytes and decode ONCE at the end. Concatenating each chunk onto
+    // a string (`data += c`) decodes every chunk independently, which mangles a
+    // multi-byte UTF-8 character split across a chunk boundary into replacement
+    // characters. Same buffer-then-decode-once strategy as readBinaryBody; the cap
+    // ordering here matches the old readBody (push the chunk, then check the cap),
+    // not readBinaryBody (which rejects before pushing an over-cap chunk).
+    const chunks: Buffer[] = [];
     let bytes = 0;
     let aborted = false;
     req.on('data', (c: Buffer | string) => {
       if (aborted) return;
-      bytes += typeof c === 'string' ? Buffer.byteLength(c) : c.byteLength;
-      data += c;
+      const chunk = typeof c === 'string' ? Buffer.from(c) : c;
+      bytes += chunk.byteLength;
+      chunks.push(chunk);
       if (bytes > maxBytes) {
         // Rejecting the promise does not pause the socket, so without
         // destroying the request a client could keep streaming unbounded
-        // data into `data`. Stop reading and ignore any further chunks.
+        // data into memory. Stop reading and ignore any further chunks.
         aborted = true;
         req.destroy();
         reject(new Error('body too large'));
@@ -40,6 +84,7 @@ export function readBody(req: http.IncomingMessage, maxBytes = 64 * 1024): Promi
     });
     req.on('end', () => {
       if (aborted) return;
+      const data = Buffer.concat(chunks).toString('utf8');
       try {
         // Every route reads properties off the body, so only a JSON object is
         // a valid request body: a literal null, an array, or a primitive is

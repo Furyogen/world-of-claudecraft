@@ -14,12 +14,13 @@ import type { Entity, SimEvent } from '../src/sim/types';
 type Invite = { fromPid: number; expires: number };
 
 // A minimal SimContext that supplies only what PartyMachine reads: resolve/players/
-// error/emit/time + the trade/duel invite maps + dropPartyMarkers. The rest of the
-// seam is irrelevant to the party machine and left unimplemented.
+// error/emit/time + the trade/duel invite maps + readyChecks + dropPartyMarkers. The
+// rest of the seam is irrelevant to the party machine and left unimplemented.
 function makeCtx() {
   const players = new Map<number, PlayerMeta>();
   const tradeInvites = new Map<number, Invite>();
   const duelInvites = new Map<number, Invite>();
+  const readyChecks = new Map();
   const events: SimEvent[] = [];
   const errors: { pid: number; text: string }[] = [];
   const droppedMarkers: number[] = [];
@@ -38,6 +39,9 @@ function makeCtx() {
     get duelInvites() {
       return duelInvites;
     },
+    get readyChecks() {
+      return readyChecks;
+    },
     resolve(pid?: number) {
       if (pid === undefined) return null;
       const meta = players.get(pid);
@@ -46,6 +50,8 @@ function makeCtx() {
     error(pid: number, text: string) {
       errors.push({ pid, text });
     },
+    bumpDeedStat() {},
+    inheritDungeonResetLocks() {},
     emit(ev: SimEvent) {
       events.push(ev);
     },
@@ -74,6 +80,35 @@ function makeCtx() {
 
 const logTexts = (events: SimEvent[]): string[] =>
   events.filter((e) => e.type === 'log').map((e) => (e as { text: string }).text);
+
+describe('PartyMachine: dungeon finder formation', () => {
+  it('runs reset-lock inheritance for every finder-merged member', () => {
+    const t = makeCtx();
+    const leader = t.addPlayer(1, 'L');
+    const member = t.addPlayer(2, 'M');
+    const solo = t.addPlayer(3, 'S');
+    (t.ctx as any).entities = { has: () => true };
+    const inherited: number[] = [];
+    (t.ctx as any).inheritDungeonResetLocks = (pid: number) => inherited.push(pid);
+    const party = new PartyMachine(t.ctx);
+    party.partyInvite(member, leader);
+    party.partyAccept(member);
+    // The invite join inherits too; isolate the finder merge below.
+    inherited.length = 0;
+
+    const formed = party.formDungeonFinderGroup(
+      [
+        { partyId: party.partyOf(leader)!.id, leaderPid: leader, members: [leader, member] },
+        { partyId: null, leaderPid: solo, members: [solo] },
+      ],
+      { raid: false },
+    );
+
+    expect(formed).not.toBeNull();
+    expect(formed!.members).toEqual([leader, member, solo]);
+    expect(inherited).toEqual([solo]);
+  });
+});
 
 describe('PartyMachine: formation', () => {
   it('invite -> accept forms a party with leader + member, both resolving via partyOf', () => {

@@ -6,6 +6,7 @@
 import { ITEM_SETS } from '../../sim/data';
 import { worldEntityText as worldNames } from '../world_entity_i18n';
 import { abilityStrings, classAbilityNames } from './abilities';
+import { apiErrorStrings } from './api_error';
 import { editorStrings } from './editor';
 import { gameStrings } from './game';
 import { guideStrings } from './guide';
@@ -17,6 +18,7 @@ import { questStrings } from './quests';
 import { shellStrings } from './shell';
 
 export { abilityStrings, classAbilityNames } from './abilities';
+export { apiErrorStrings } from './api_error';
 export { editorStrings } from './editor';
 export {
   gameStrings,
@@ -43,7 +45,10 @@ export { questStrings } from './quests';
 // Re-export the catalog public surface (every name the old i18n.en.ts exported).
 export { shellStrings } from './shell';
 
-type ItemSetEntityText = Record<string, { name: string; bonus2?: string; bonus3?: string }>;
+type ItemSetEntityText = Record<
+  string,
+  { name: string; bonus2?: string; bonus3?: string; bonus4?: string }
+>;
 
 const itemSetEntityText: ItemSetEntityText = Object.fromEntries(
   Object.values(ITEM_SETS)
@@ -53,9 +58,15 @@ const itemSetEntityText: ItemSetEntityText = Object.fromEntries(
       // 3-piece tier, so emitting a bonus2 row would bake in an id-fallback string.
       const bonus2 = set.bonuses.find((bonus) => bonus.pieces === 2)?.text;
       const bonus3 = set.bonuses.find((bonus) => bonus.pieces === 3)?.text;
+      const bonus4 = set.bonuses.find((bonus) => bonus.pieces === 4)?.text;
       return [
         set.id,
-        { name: set.name, ...(bonus2 ? { bonus2 } : {}), ...(bonus3 ? { bonus3 } : {}) },
+        {
+          name: set.name,
+          ...(bonus2 ? { bonus2 } : {}),
+          ...(bonus3 ? { bonus3 } : {}),
+          ...(bonus4 ? { bonus4 } : {}),
+        },
       ];
     }),
 );
@@ -76,8 +87,121 @@ export type Leaves<T, D extends number = 5> = [D] extends [never]
 export const en = {
   meta: { builtOn: 'Built {date}' },
   realmTypes: { normal: 'Normal', pvp: 'PvP', rp: 'RP', rpPvp: 'RP-PvP' },
+  devCommand: {
+    dialogLabel: 'Developer Command Center',
+    kicker: 'Development tools',
+    title: 'Command Center',
+    subtitle: 'Authoritative test controls for the active world.',
+    closeAria: 'Close developer commands',
+    categoryNavAria: 'Developer command categories',
+    categories: {
+      player: 'Player',
+      spawns: 'Spawns',
+      inventory: 'Inventory',
+      progress: 'Progress',
+      travel: 'Travel',
+      scenarios: 'Scenarios',
+    },
+    filterLabel: 'Filter commands',
+    filterPlaceholder: 'Search this category',
+    noMatches: 'No matching commands.',
+    serverRequirement: 'Server cheats still require ALLOW_DEV_COMMANDS=1.',
+    invalidValues: 'Choose valid values before running this command.',
+    sent: 'Sent: {command}',
+    run: 'Run',
+    fields: {
+      level: 'Level',
+      mob: 'Mob',
+      count: 'Count',
+      item: 'Item',
+      gold: 'Gold',
+      quest: 'Quest',
+      profession: 'Profession',
+      amount: 'Amount',
+      x: 'X',
+      z: 'Z',
+      dungeon: 'Dungeon',
+      difficulty: 'Difficulty',
+      name: 'Name',
+    },
+    difficulty: { normal: 'Normal', heroic: 'Heroic' },
+    actions: {
+      heal: { label: 'Restore health', description: 'Fill the health pool.' },
+      resource: {
+        label: 'Restore resource',
+        description: 'Fill mana, rage, or energy.',
+      },
+      cooldowns: {
+        label: 'Clear cooldowns',
+        description: 'Reset ability, GCD, and potion timers.',
+      },
+      god: {
+        label: 'Toggle god mode',
+        description: 'Toggle invulnerability and boosted damage.',
+      },
+      revive: {
+        label: 'Revive',
+        description: 'Revive through the normal resurrection path.',
+      },
+      kill: { label: 'Kill player', description: 'Test death, ghost, and corpse flows.' },
+      combatreset: {
+        label: 'Reset combat',
+        description: 'Clear combat state and hostile threat.',
+      },
+      level: { label: 'Set level', description: 'Set the current character level.' },
+      spawn: { label: 'Spawn mob', description: 'Create a concrete mob near the player.' },
+      killtarget: { label: 'Kill target', description: 'Kill the selected living mob.' },
+      despawntarget: {
+        label: 'Despawn target',
+        description: 'Remove a selected mob created by this tool.',
+      },
+      despawnall: {
+        label: 'Clear my spawns',
+        description: 'Remove every mob spawned by this developer.',
+      },
+      give: { label: 'Give item', description: 'Add an item to the player inventory.' },
+      gold: { label: 'Add gold', description: 'Add gold to the current purse.' },
+      quest: { label: 'Complete quest', description: 'Complete a specific quest by id.' },
+      quests: {
+        label: 'Complete active quests',
+        description: 'Complete every quest in the current log.',
+      },
+      attune: {
+        label: 'Unlock attunements',
+        description: 'Mark all attunement requirements complete.',
+      },
+      gather: {
+        label: 'Grant gathering skill',
+        description: 'Increase a gathering profession.',
+      },
+      teleport: { label: 'Teleport', description: 'Move to exact world coordinates.' },
+      dungeon: {
+        label: 'Enter dungeon',
+        description: 'Enter a dungeon with dev gate bypass.',
+      },
+      raid: { label: 'Enter raid', description: 'Enter the Nythraxis arena directly.' },
+      raidreset: {
+        label: 'Reset raid lockout',
+        description: 'Clear the current raid lockouts.',
+      },
+      bot: {
+        label: 'Spawn social bot',
+        description: 'Create a whisperable stationary player.',
+      },
+      lfgqueue: {
+        label: 'Seed finder queue',
+        description: 'Create a Dungeon Finder queue scenario.',
+      },
+      lfgraid: { label: 'Seed raid finder', description: 'Create a raid finder scenario.' },
+      lfgboard: {
+        label: 'Seed listing board',
+        description: 'Create a premade listing scenario.',
+      },
+    },
+  },
   game: gameStrings,
   hudChrome: hudChromeStrings,
+  apiError: apiErrorStrings,
   guide: guideStrings,
   editor: editorStrings,
   // Cosmetic skin-select event overlay. Rarity names reuse itemUi.quality.*.
@@ -170,6 +294,9 @@ export const en = {
     title: 'Download Desktop Launcher',
     desc: 'Get the standalone launcher for optimized performance and full-screen play.',
     macCta: 'Download for macOS',
+    windowsCta: 'Download for Windows',
+    linuxCta: 'Download for Linux',
+    linuxHint: 'AppImage: make it executable, then run it. No install needed.',
     windowsPending: 'Windows build pending.',
   },
   comingSoon: {
@@ -607,6 +734,12 @@ export const en = {
   // Delve UI chrome + companion/boss/lore flavor (board, run tracker, completion
   // summary, affixes, module/objective labels). Rendered through t() from hud.ts.
   // {playerName} / {className} interpolate at render time.
+  heroicShop: {
+    // The Heroic Quartermaster window: title/price/buy reuse the vendor and
+    // delve-shop keys; only the marks-specific strings live here.
+    balance: 'Heroic Marks: {count}',
+    buyAria: 'Buy {item} for {marks} Heroic Marks',
+  },
   delveUi: {
     board: {
       title: 'Delve Board',
@@ -815,6 +948,45 @@ export const en = {
       flavor: 'The dead have surrendered what they can spare.',
     },
   },
+  yumi: {
+    bracket3: 'Yumi 3v3',
+    bracket5: 'Yumi 5v5',
+    enterQueue: 'Join Protect Yumi!',
+    queue: {
+      join: 'You join the Protect Yumi queue. Guard your familiar…',
+      leave: 'You leave the Protect Yumi queue.',
+      teamLeave: 'Your team leaves the Protect Yumi queue.',
+    },
+    error: {
+      partyTooBig3: 'Protect Yumi 3v3 allows a party of up to three.',
+      partyTooBig5: 'Protect Yumi 5v5 allows a party of up to five.',
+    },
+    log: {
+      start: 'Protect Yumi! Defend your familiar and hunt theirs.',
+    },
+    hud: {
+      title: 'PROTECT YUMI',
+      getReady: 'Get ready…',
+      teleportIn: 'Yumis move in {s}',
+      suddenDeath: 'SUDDEN DEATH',
+      yourYumi: 'Your Yumi',
+      enemyYumi: 'Enemy Yumi',
+      aria: 'Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.',
+      collapse: 'Collapse the Protect Yumi bars',
+      expand: 'Expand the Protect Yumi bars',
+    },
+    respawn: {
+      title: 'DOWNED!',
+    },
+    banner: {
+      sudden: 'SUDDEN DEATH! The Yumis hold their ground!',
+      teleport: 'The Yumis teleport!',
+    },
+    end: {
+      win: 'VICTORY! Yumi is safe!',
+      loss: 'DEFEAT! Your Yumi has fallen.',
+    },
+  },
   fiesta: {
     bracket: 'Fiesta',
     enterQueue: 'Join the Fiesta!',
@@ -1015,6 +1187,48 @@ export const en = {
       crypt_ritual_circle: { name: 'Ritual Circle' },
       kings_signet: { name: "King's Signet" },
       event_skin_token: { name: 'Mysterious Cosmetic Cache' },
+      heroic_mark: { name: 'Heroic Mark' },
+      morthens_cryptforged_hauberk: { name: "Morthen's Cryptforged Hauberk" },
+      shadowpulse_handwraps: { name: 'Shadowpulse Handwraps' },
+      bonechill_striders: { name: 'Bonechill Striders' },
+      mistcallers_fang: { name: "Mistcaller's Fang" },
+      tidebound_spaulders: { name: 'Tidebound Spaulders' },
+      sash_of_the_sunken_court: { name: 'Sash of the Sunken Court' },
+      lunar_tide_greatstaff: { name: 'Lunar Tide Greatstaff' },
+      tidewoven_trousers: { name: 'Tidewoven Trousers' },
+      choirmothers_casque: { name: "Choirmother's Casque" },
+      gravewyrm_cleaver: { name: 'Gravewyrm Cleaver' },
+      shroud_of_the_gravewyrm: { name: 'Shroud of the Gravewyrm' },
+      sanctum_prowlers_grips: { name: "Sanctum Prowler's Grips" },
+      scepter_of_the_deathless_court: { name: 'Scepter of the Deathless Court' },
+      deathless_warguard_legmail: { name: 'Deathless Warguard Legmail' },
+      soulrend_diadem: { name: 'Soulrend Diadem' },
+      scourgehide_carapace: { name: 'Scourgehide Carapace' },
+      cryptplate_helm: { name: 'Cryptplate Helm' },
+      shadowpulse_slippers: { name: 'Shadowpulse Slippers' },
+      bonechill_cord: { name: 'Bonechill Cord' },
+      mistforged_pauldrons: { name: 'Mistforged Pauldrons' },
+      tideguard_faceguard: { name: 'Tideguard Faceguard' },
+      sunken_court_mantle: { name: 'Sunken Court Mantle' },
+      lunar_choir_leggings: { name: 'Lunar Choir Leggings' },
+      choir_blessed_spaulders: { name: 'Choir-Blessed Spaulders' },
+      tideworn_warboots: { name: 'Tideworn Warboots' },
+      gravewyrm_claws: { name: 'Gravewyrm Claws' },
+      gravescale_girdle: { name: 'Gravescale Girdle' },
+      wyrmchoir_handwraps: { name: 'Wyrmchoir Handwraps' },
+      deathless_greatblade: { name: 'Deathless Greatblade' },
+      soulforged_warplate: { name: 'Soulforged Warplate' },
+      stormcallers_focus: { name: "Stormcaller's Focus" },
+      seal_of_the_nine_oaths: { name: 'Seal of the Nine Oaths' },
+      nielas_coldlight_band: { name: "Niela's Coldlight Band" },
+      sutils_gambit: { name: "Sutil's Gambit" },
+      oath_of_the_round_table: { name: 'Oath of the Round Table' },
+      zyzzs_deathless_signet: { name: "Zyzz's Deathless Signet" },
+      architects_cornerstone: { name: "The Architect's Cornerstone" },
+      swiftfang_talisman: { name: 'Swiftfang Talisman' },
+      yumis_keepsake_locket: { name: "Yumi's Keepsake Locket" },
+      zense_meridian: { name: 'Zense Meridian' },
+      medallion_of_endless_profit: { name: 'Medallion of Endless Profit' },
       deathless_heartwood: { name: 'Heartwood of the Deathless Crown' },
       kingsbane_last_oath: { name: 'Thronebane, Last Oath of Thornpeak' },
       crownforged_dreadhelm: { name: 'Bonewrought Dreadhelm' },
@@ -1043,14 +1257,14 @@ export const en = {
       vanguard_azure_armor_plate: { name: 'Vanguard Azure' },
       vanguard_chrome_armor_plate: { name: 'Vanguard Chrome' },
       // Thunzharr, the Waking Peak (world boss): epic Tier-2 set gloves and belts
-      crownforged_gauntlets: { name: 'Crownforged Gauntlets' },
-      nighttalon_grips: { name: 'Nighttalon Grips' },
-      soulflame_gloves: { name: 'Soulflame Gloves' },
-      stormcallers_handguards: { name: "Stormcaller's Handguards" },
-      crownforged_girdle: { name: 'Crownforged Girdle' },
-      nighttalon_waistband: { name: 'Nighttalon Waistband' },
-      soulflame_cord: { name: 'Soulflame Cord' },
-      stormcallers_waistguard: { name: "Stormcaller's Waistguard" },
+      crownforged_gauntlets: { name: 'Bonewrought Gauntlets' },
+      nighttalon_grips: { name: 'Direfang Grips' },
+      soulflame_gloves: { name: 'Wraithfire Gloves' },
+      stormcallers_handguards: { name: 'Galecall Handguards' },
+      crownforged_girdle: { name: 'Bonewrought Girdle' },
+      nighttalon_waistband: { name: 'Direfang Waistband' },
+      soulflame_cord: { name: 'Wraithfire Cord' },
+      stormcallers_waistguard: { name: 'Galecall Waistguard' },
     },
     itemSets: itemSetEntityText,
     mobs: { ...worldNames.en.entities.mobs, ...mergeEntities.en.mobs, ...mergeExtra.en.mobs },
@@ -1071,11 +1285,21 @@ export const en = {
 // ": EnTranslations" so tsc still red-fails any missing or renamed key.
 export type EnTranslations = typeof en;
 
-// Depth 6 so the deepest real leaves (entities.quests.<id>.objectives.<n>.label,
-// entities.zones.<id>.pois.<n>.label) are members. The sparse overlays are typed
-// `Partial<Record<TranslationKey, string>>`, so TranslationKey must reach
-// every overlay key; depth 5 stopped one segment short. (Measured: no tsc cost.)
-export type TranslationKey = Leaves<typeof en, 6>;
+// TranslationKey is the build-generated flat literal union of every dotted leaf
+// path in `en` (./translation_keys.generated.ts, emitted by scripts/i18n_build.mjs;
+// regenerate with `npm run i18n:gen`). It replaced the recursive computation
+// `Leaves<typeof en, 6>`: the recursive union normalized to thousands of string
+// literals plus 85 template-literal patterns (from the four Record-over-id entity
+// subtrees: abilities, item sets, quest objectives, zone POIs), whose
+// literal-times-pattern subsumption checks exceed TypeScript 7's native-compiler
+// work budget (TS2590; issue #1868 is the durable evidence trail), and the
+// patterns accepted ANY entity id, so a typo'd id type-checked. The generated
+// union keeps every legal key, rejects typo'd entity ids (strictly stronger
+// checking), and roughly halves tsc wall time. The sparse overlays stay typed
+// `Partial<Record<TranslationKey, string>>`, so TranslationKey still reaches
+// every overlay key. Leaves above stays exported for compatibility; it has no
+// other instantiations repo-wide.
+export type TranslationKey = import('./translation_keys.generated').TranslationKeyFlat;
 export type InterpolationValue = string | number;
 export type InterpolationValues = Record<string, InterpolationValue>;
 

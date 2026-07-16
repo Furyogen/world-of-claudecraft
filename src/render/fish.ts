@@ -7,7 +7,9 @@ import {
   WORLD_MAX_Z,
   WORLD_MIN_Z,
 } from '../sim/data';
-import { terrainHeight, waterLevel } from '../sim/world';
+import { terrainHeight, waterLevel, waterLevelAt } from '../sim/world';
+import { loadGltf } from './assets/loader';
+import { registerPreload } from './assets/preload';
 import { GFX } from './gfx';
 
 // Ambient leaping fish — a RENDER-ONLY decoration, no sim/IWorld/server state.
@@ -22,6 +24,24 @@ import { GFX } from './gfx';
 //
 // Placement RNG is a local mulberry32 seeded from the world seed — the render
 // convention forbids Math.random so the ambient field is reproducible.
+//
+// The fish body is a small Tripo-generated GLB (see public/models/creatures/
+// CLAUDE.md); a merged-primitive body is kept as a fallback for the brief
+// window before the GLB preload resolves.
+
+const FISH_ASSET_URL = '/models/creatures/leaping_fish.glb';
+let loadedFishGltf: THREE.Group | null = null;
+
+if (typeof window !== 'undefined') {
+  registerPreload(
+    loadGltf(FISH_ASSET_URL).then((gltf) => {
+      loadedFishGltf = gltf.scene;
+    }),
+  );
+}
+
+/** Test-only window into the preload asset (mirrors props.ts). */
+export const fishPreloadInternalsForTest = { fishAssetUrl: FISH_ASSET_URL };
 
 const SPAWN_RADIUS = 72; // fish surface within this distance of the player
 const MIN_RADIUS = 9; // ...but never right on top of the camera
@@ -71,7 +91,9 @@ export function fishLeapPose(
 }
 
 // PURE (unit-tested): is (x, z) deep, in-bounds open water fit for a leap?
-// `depthAt` returns waterLevel() - terrainHeight at that spot (negative on land).
+// `depthAt` returns waterLevelAt() - terrainHeight at that spot (negative on
+// land, and always negative outside every declared lake since waterLevelAt()
+// is -Infinity there, so a dry sunken feature never gets fish).
 export function isLeapableWater(
   x: number,
   z: number,
@@ -85,7 +107,7 @@ export function isLeapableWater(
 type Phase = 'rest' | 'leap';
 
 interface Fish {
-  body: THREE.Mesh;
+  body: THREE.Object3D;
   splash: THREE.Mesh;
   phase: Phase;
   timer: number; // rest countdown / leap elapsed depending on phase
@@ -146,11 +168,26 @@ export function buildFish(seed: number): FishView {
     side: THREE.DoubleSide,
   });
 
-  const depthAt = (x: number, z: number): number => waterLevel() - terrainHeight(x, z, seed);
+  const depthAt = (x: number, z: number): number => waterLevelAt(x, z) - terrainHeight(x, z, seed);
+
+  const buildBody = (): THREE.Object3D => {
+    if (loadedFishGltf) {
+      // Not Box3-normalized: assumes the fish GLB is authored at world scale
+      // with its body centered at the origin, same assumption as critters.ts.
+      // A re-export at a different scale or origin will silently sink or
+      // oversize the fish.
+      const inst = loadedFishGltf.clone(true);
+      inst.traverse((child) => {
+        if (child instanceof THREE.Mesh) child.castShadow = GFX.standardMaterials;
+      });
+      return inst;
+    }
+    return new THREE.Mesh(bodyGeo, bodyMat);
+  };
 
   const fish: Fish[] = [];
   for (let i = 0; i < count; i++) {
-    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    const body = buildBody();
     body.visible = false;
     const splash = new THREE.Mesh(splashGeo, splashMat.clone());
     splash.visible = false;

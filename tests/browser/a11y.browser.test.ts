@@ -18,11 +18,11 @@ import { ArenaWindow } from '../../src/ui/arena_window';
 import { BagsWindow } from '../../src/ui/bags_window';
 import { CharWindow } from '../../src/ui/char_window';
 import { FOCUSABLE_SELECTOR } from '../../src/ui/focus_manager';
+import { QuestLogWindow } from '../../src/ui/hud/quest/questlog_window';
 import { t } from '../../src/ui/i18n';
 import { LeaderboardWindow } from '../../src/ui/leaderboard_window';
 import { MarketWindow } from '../../src/ui/market_window';
 import { OptionsWindow } from '../../src/ui/options_window';
-import { QuestLogWindow } from '../../src/ui/questlog_window';
 import { SocialWindow } from '../../src/ui/social_window';
 import { SpellbookWindow } from '../../src/ui/spellbook_window';
 import { TalentsWindow } from '../../src/ui/talents_window';
@@ -62,6 +62,7 @@ function entry(over: Partial<LeaderboardEntry> = {}): LeaderboardEntry {
     lifetimeXp: 5_000_000,
     prestigeRank: 0,
     ...over,
+    title: over.title ?? null,
   };
 }
 
@@ -488,6 +489,7 @@ describe('axe: character window', () => {
             cfg: { playerClass: 'warrior' },
             player: { name: 'Aurelia', level: 60, skin: 0 },
             equipment: {},
+            professionsState: { skills: [] },
           }) as never,
         statCellHtml: () => '',
         statTooltipHtml: () => '',

@@ -38,6 +38,9 @@ function inputFor(cls: PlayerClass, p: ReturnType<typeof freshPlayer>): StatTool
     spellPower: p.spellPower,
     critChance: p.critChance,
     dodgeChance: p.dodgeChance,
+    critRating: p.critRating,
+    hasteRating: p.hasteRating,
+    hitRating: p.hitRating,
     dps: 0,
   };
 }
@@ -298,6 +301,9 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
       spellPower: p.spellPower,
       critChance: p.critChance,
       dodgeChance: p.dodgeChance,
+      critRating: p.critRating,
+      hasteRating: p.hasteRating,
+      hitRating: p.hitRating,
       dps: 0,
       gear,
       buffs,
@@ -351,7 +357,7 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
       sourceId: p.id,
       school: 'holy',
     });
-    recalcPlayerStats(p, 'warrior', sim.equipment);
+    recalcPlayerStats(p, 'warrior', sim.equipment, undefined, {});
     const input = inputWithGear(sim, 'warrior');
     const sta = buildStatTooltip('sta', input);
     const buffLine = sta.sources.find((s) => s.kind === 'buff');
@@ -393,7 +399,7 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
       sourceId: p.id,
       school: 'physical',
     });
-    recalcPlayerStats(p, 'druid', sim.equipment);
+    recalcPlayerStats(p, 'druid', sim.equipment, undefined, {});
     const armor = buildStatTooltip('armor', inputWithGear(sim, 'druid'));
     // recalc adds armor from Agility BEFORE Cat Form raises Agility (max(2, floor(lvl/2))),
     // so the "From Agility" line must exclude that bonus - and the lines still reconcile.
@@ -401,5 +407,41 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
     const fromAgi = armor.sources.find((s) => s.kind === 'attributes');
     expect(fromAgi?.value).toBe((p.stats.agi - catBonus) * 2);
     expect(armor.sources.reduce((acc, s) => acc + s.value, 0)).toBe(armor.statValue);
+  });
+});
+
+describe('rating stat cells', () => {
+  it('critRating and hasteRating display the accumulated gear/set rating', () => {
+    const p = freshPlayer('mage', 20);
+    p.critRating = 20;
+    p.hasteRating = 150;
+    const crit = buildStatTooltip('critRating', inputFor('mage', p));
+    const haste = buildStatTooltip('hasteRating', inputFor('mage', p));
+    expect(crit.statValue).toBe(20);
+    expect(haste.statValue).toBe(150);
+    expect(crit.isPrimary).toBe(false);
+    // rating cells show the value + description, no per-source breakdown line
+    expect(crit.sources).toEqual([]);
+    expect(haste.sources).toEqual([]);
+  });
+
+  it('summarizes both capped PvP effects in one Warfare stat', () => {
+    const p = freshPlayer('warrior', 20);
+    const input = inputFor('warrior', p);
+    input.stats = {
+      ...input.stats,
+      pvpOffense: 0.2,
+      pvpDefense: 0.137,
+    };
+
+    const warfare = buildStatTooltip('warfare', input);
+    expect(warfare.statValue).toBe(20);
+    expect(warfare.warfareDamageIncrease).toBe(20);
+    expect(warfare.warfareDamageReduction).toBeCloseTo(13.7, 6);
+    expect(warfare.isPrimary).toBe(false);
+    expect(warfare.effects).toEqual([]);
+    // Warfare fractions are already derived from all equipped ratings and capped
+    // by recalcPlayerStats, so inventing a second source breakdown here would lie.
+    expect(warfare.sources).toEqual([]);
   });
 });

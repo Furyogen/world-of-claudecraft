@@ -40,6 +40,11 @@ export interface SliderControl {
   /** Current value at build time; the painter re-reads the live value on input. */
   value: number;
   fmt: SliderFmt;
+  /** Commit the setting on release ('change') instead of live on every 'input'
+   *  tick. Set for uiScale, whose live rescale moves the slider under the cursor
+   *  mid-drag (issue 1558); dragging updates only the readout, not the setting.
+   *  Other sliders keep their intended live preview (volume, fov, frame scale). */
+  commitOnChange?: boolean;
 }
 
 export interface ToggleControl {
@@ -305,6 +310,12 @@ export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv)
   if (env.touch) out.push(slider(s, 'actionButtonScale', 'hud.options.buttonSize'));
   if (env.touch) out.push(slider(s, 'joystickDeadzone', 'hud.options.joystickDeadzone'));
   if (env.touch) out.push(boolToggle(s, 'touchInvertLook', 'hud.options.invertLook'));
+  // Camera joystick is hidden/off by default (swipe-look is primary); left-handed
+  // layout already has a Key Bindings row (leftHandedTouch), but is surfaced here
+  // too since it is squarely a touch/graphics-panel concern for touch players.
+  if (env.touch)
+    out.push(boolToggle(s, 'mobileCameraJoystick', 'hudChrome.options.mobileCameraJoystick'));
+  if (env.touch) out.push(boolToggle(s, 'leftHandedTouch', 'hudChrome.options.mobileLeftHanded'));
   return out;
 }
 
@@ -351,9 +362,38 @@ export function buildControllerControls(s: OptionsSettingsSource): OptionsContro
 
 export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl[] {
   return [
-    slider(s, 'uiScale', 'hudChrome.options.uiScale'),
+    // uiScale commits on release: applying it live rescales the whole UI (the
+    // options window included), which shoves the slider under the cursor and makes
+    // the value hard to land (issue 1558).
+    { ...slider(s, 'uiScale', 'hudChrome.options.uiScale'), commitOnChange: true },
     slider(s, 'playerFrameScale', 'hudChrome.options.playerFrameScale'),
     slider(s, 'targetFrameScale', 'hudChrome.options.targetFrameScale'),
+    note('hudChrome.partyFrames.section'),
+    choice(s, 'partyFrameStyle', 'hudChrome.partyFrames.style', [
+      { value: 0, labelKey: 'hudChrome.partyFrames.styleAutomatic' },
+      { value: 1, labelKey: 'hudChrome.partyFrames.styleClassic' },
+      { value: 2, labelKey: 'hudChrome.partyFrames.styleRaid' },
+    ]),
+    slider(s, 'partyFrameScale', 'hudChrome.partyFrames.scale'),
+    slider(s, 'partyFrameWidth', 'hudChrome.partyFrames.width', 'oneDecimal', 5),
+    slider(s, 'partyFrameHeight', 'hudChrome.partyFrames.height', 'oneDecimal', 2),
+    slider(s, 'partyFrameSpacing', 'hudChrome.partyFrames.spacing', 'oneDecimal', 1),
+    slider(s, 'partyFrameColumns', 'hudChrome.partyFrames.columns', 'oneDecimal', 1),
+    choice(s, 'partyFrameHealthText', 'hudChrome.partyFrames.healthText', [
+      { value: 0, labelKey: 'hudChrome.partyFrames.healthNone' },
+      { value: 1, labelKey: 'hudChrome.partyFrames.healthPercent' },
+      { value: 2, labelKey: 'hudChrome.partyFrames.healthCurrent' },
+      { value: 3, labelKey: 'hudChrome.partyFrames.healthCurrentMax' },
+    ]),
+    choice(s, 'partyFrameSort', 'hudChrome.partyFrames.sort', [
+      { value: 0, labelKey: 'hudChrome.partyFrames.sortGroup' },
+      { value: 1, labelKey: 'hudChrome.partyFrames.sortRole' },
+      { value: 2, labelKey: 'hudChrome.partyFrames.sortName' },
+    ]),
+    boolToggle(s, 'partyFrameShowResource', 'hudChrome.partyFrames.showResource'),
+    boolToggle(s, 'partyFrameShowAbsorbs', 'hudChrome.partyFrames.showAbsorbs'),
+    boolToggle(s, 'partyFrameShowAuras', 'hudChrome.partyFrames.showAuras'),
+    boolToggle(s, 'partyFrameShowSelf', 'hudChrome.partyFrames.showSelf'),
     slider(s, 'hudOpacity', 'hud.options.hudOpacity'),
     slider(s, 'tooltipScale', 'hud.options.tooltipScale'),
     slider(s, 'fctScale', 'hud.options.fctScale'),
@@ -370,6 +410,7 @@ export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl
     boolToggle(s, 'landingHighContrast', 'hudChrome.options.highContrastBackground'),
     boolToggle(s, 'invertLookY', 'hud.options.invertLookY'),
     boolToggle(s, 'startAttackOnAbilityUse', 'hudChrome.options.startAttackOnAbility'),
+    boolToggle(s, 'showAttackButton', 'hudChrome.options.showAttackButton'),
     boolToggle(s, 'walkByAutoloot', 'hudChrome.options.walkByAutoloot'),
     boolToggle(s, 'groundReticle', 'hudChrome.options.groundReticle'),
     boolToggle(s, 'aurasOnPlayerFrame', 'hudChrome.options.aurasOnPlayerFrame'),

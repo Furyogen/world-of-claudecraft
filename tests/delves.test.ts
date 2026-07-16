@@ -25,10 +25,15 @@ import {
   litanyModuleGeometry,
   litanyModuleIsNonRectangular,
 } from '../src/sim/delve_litany_layout';
-import { isLitanyPuzzleKind, LITANY_PUZZLE_KINDS } from '../src/sim/delves/drowned_litany_rooms';
-import { rollDelveAffixes } from '../src/sim/delves/runs';
-
+import {
+  BAPTISTRY_EGG_SAC_SPOTS,
+  isLitanyPuzzleKind,
+  LITANY_PUZZLE_KINDS,
+  litanyHatchlingSpawnClear,
+} from '../src/sim/delves/drowned_litany_rooms';
+import { clampDelveModuleBounds, rollDelveAffixes } from '../src/sim/delves/runs';
 import { createMob } from '../src/sim/entity';
+import { polygonContainsPoint } from '../src/sim/geometry2d';
 import { solveLockActions } from '../src/sim/lockpick';
 import { PLAYER_BODY_RADIUS } from '../src/sim/pathfind';
 import { Rng } from '../src/sim/rng';
@@ -776,8 +781,8 @@ describe('delve reward chest + surface exit flow', () => {
   function killBoss(sim: ReturnType<typeof makeSim>, _run: ReturnType<typeof enterFinale>) {
     const boss = [...sim.entities.values()].find((e) => e.templateId === 'deacon_varric')!;
     (sim as any).dealDamage(sim.player, boss, boss.maxHp + 1, false, 'physical', null, 'hit', true);
-    sim.tick();
-    return boss;
+    const events = sim.tick();
+    return { boss, events };
   }
 
   // Drive the lockpicking minigame to a flawless solve. Returns the chest id.
@@ -805,7 +810,7 @@ describe('delve reward chest + surface exit flow', () => {
     sim.setPlayerLevel(DELVES.collapsed_reliquary.minLevel);
     const run = enterFinale(sim);
     const playerPosBefore = { ...sim.player.pos };
-    killBoss(sim, run);
+    const { events } = killBoss(sim, run);
 
     // run.completed still false, chest not yet opened
     expect(run.completed).toBe(false);
@@ -818,6 +823,12 @@ describe('delve reward chest + surface exit flow', () => {
     const chestId = run.objectIds.find((id) => run.objectState[id]?.kind === 'locked_chest');
     expect(chestId).toBeDefined();
     expect(run.rewardChestId).not.toBeNull();
+    expect(events).toContainEqual({
+      type: 'delveObjectiveComplete',
+      delveId: 'collapsed_reliquary',
+      tierId: 'normal',
+      pid: sim.playerId,
+    });
     expect(run.objectState[chestId!].attemptAvailable).toBe(true);
     expect(run.objectState[chestId!].open).toBe(false);
   });
@@ -885,6 +896,7 @@ describe('delve reward chest + surface exit flow', () => {
 
     const marksBefore = sim.delveMarksFor(sim.playerId);
     const chestId = pickLockFlawless(sim, run, 1);
+    const events = sim.drainEvents();
 
     expect(run.completed).toBe(true);
     // base clear (+1 mark) + premium ante bonus (+2 marks)
@@ -892,6 +904,16 @@ describe('delve reward chest + surface exit flow', () => {
     expect(run.objectState[chestId].looted).toBe(true);
     expect(run.objectState[chestId].open).toBe(true);
     expect(run.objectState[chestId].lootedTier).toBe('premium');
+    expect(events).toContainEqual({
+      type: 'delveChestLoot',
+      chestId,
+      delveId: 'collapsed_reliquary',
+      tierId: 'normal',
+      lootTier: 'premium',
+      bountiful: false,
+      items: run.objectState[chestId].pendingLoot,
+      pid: sim.playerId,
+    });
     expect(run.lockpick).toBeNull();
     // surface exit spawned
     expect(run.surfaceExitId).not.toBeNull();
@@ -1437,7 +1459,9 @@ describe('The Drowned Litany (Phase 2 marsh layouts: navigable, distinct)', () =
   // comfortably more than 2 * BODY_R. A* (findPlayerPath) uses a similar radius.
   const BODY_R = 0.9;
 
-  // All delve colliders are rot:0, so circle = radius test and obb = AABB test.
+  // Test a player-sized body against the real collider orientation. Litany shell
+  // segments follow curved/angled room polygons, so treating their OBBs as AABBs
+  // can incorrectly certify an interactable or exit as reachable.
   function blockedAt(
     cols: ReturnType<typeof delveModuleColliders>,
     x: number,
@@ -1448,7 +1472,11 @@ describe('The Drowned Litany (Phase 2 marsh layouts: navigable, distinct)', () =
       if (c.type === 'circle') {
         if (Math.hypot(x - c.x, z - c.z) < c.r + r) return true;
       } else if (c.type === 'obb') {
-        if (Math.abs(x - c.x) < c.hw + r && Math.abs(z - c.z) < c.hd + r) return true;
+        const cos = Math.cos(-c.rot);
+        const sin = Math.sin(-c.rot);
+        const lx = (x - c.x) * cos + (z - c.z) * sin;
+        const lz = -(x - c.x) * sin + (z - c.z) * cos;
+        if (Math.abs(lx) < c.hw + r && Math.abs(lz) < c.hd + r) return true;
       }
     }
     return false;
@@ -1493,6 +1521,67 @@ describe('The Drowned Litany (Phase 2 marsh layouts: navigable, distinct)', () =
     }
     return seen[idx(goalGx, goalGz)] === 1;
   }
+
+  it('does not impose legacy rectangular walls inside polygon room lobes', () => {
+    const sim = makeSim();
+    enterLitany(sim);
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    const probes = [
+      { moduleId: 'litany_sluice', x: -16, z: 24 },
+      { moduleId: 'litany_baptistry', x: 19, z: 30 },
+    ] as const;
+    for (const probe of probes) {
+      run.modules = [probe.moduleId];
+      run.moduleIndex = 0;
+      const zBase = delveModuleZOffset(run.modules, 0);
+      expect(blockedAt(delveModuleColliders(probe.moduleId), probe.x, probe.z, 0.5)).toBe(false);
+      const worldX = run.origin.x + probe.x;
+      const worldZ = run.origin.z + zBase + probe.z;
+      expect(clampDelveModuleBounds(run, worldX, worldZ, 0.5)).toEqual({
+        x: worldX,
+        z: worldZ,
+      });
+    }
+  });
+
+  it('swept movement cannot leak through any polygon-shell edge', () => {
+    for (const moduleId of LITANY_MODULES) {
+      const sim = makeSim();
+      enterLitany(sim);
+      const run = sim.delveRunForPlayer(sim.playerId)!;
+      run.modules = [moduleId];
+      run.moduleIndex = 0;
+      const geo = litanyModuleGeometry(moduleId)!;
+      const points = geo.walkable[0].points;
+      const zBase = delveModuleZOffset(run.modules, 0);
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i];
+        const b = points[(i + 1) % points.length];
+        const dx = b.x - a.x;
+        const dz = b.z - a.z;
+        const len = Math.hypot(dx, dz);
+        const inwardX = -dz / len;
+        const inwardZ = dx / len;
+        const midX = (a.x + b.x) / 2;
+        const midZ = (a.z + b.z) / 2;
+        const fromX = run.origin.x + midX + inwardX * 2;
+        const fromZ = run.origin.z + zBase + midZ + inwardZ * 2;
+        const toX = run.origin.x + midX - inwardX * 4;
+        const toZ = run.origin.z + zBase + midZ - inwardZ * 4;
+        sim.player.pos = { x: fromX, y: sim.player.pos.y, z: fromZ };
+        sim.player.prevPos = { ...sim.player.pos };
+        const resolved = (sim as any).resolveMove(fromX, fromZ, toX, toZ, 0.5, sim.player);
+        expect(
+          polygonContainsPoint(
+            points,
+            resolved.x - run.origin.x,
+            resolved.z - run.origin.z - zBase,
+          ),
+          `${moduleId} leaked across edge ${i}`,
+        ).toBe(true);
+      }
+    }
+  });
 
   it('every marsh module is navigable from the entry spawn to the dais', () => {
     for (const m of LITANY_MODULES) {
@@ -1637,15 +1726,20 @@ describe('The Drowned Litany (Phase 4 enemy kits)', () => {
       y: 0,
       z: p.pos.z + 14,
     });
+    // This test owns ranged behavior, not the spell-hit curve. Force the vial to
+    // connect and track peak damage so out-of-combat regen cannot hide the hit.
+    acolyte.hitBonus = 1;
     (sim as any).addEntity(acolyte);
     run.mobIds.push(acolyte.id);
     const hp0 = p.hp;
+    let minHp = hp0;
     let minDist = Number.POSITIVE_INFINITY;
     for (let i = 0; i < 20 * 12 && !acolyte.dead; i++) {
       sim.tick();
+      minHp = Math.min(minHp, p.hp);
       minDist = Math.min(minDist, Math.hypot(acolyte.pos.x - p.pos.x, acolyte.pos.z - p.pos.z));
     }
-    expect(p.hp, 'acolyte should land ranged Rotwater Vials').toBeLessThan(hp0);
+    expect(minHp, 'acolyte should land ranged Rotwater Vials').toBeLessThan(hp0);
     expect(minDist, 'acolyte should hold at range, never melee').toBeGreaterThan(8);
   });
 
@@ -1760,7 +1854,7 @@ describe('The Drowned Litany (Phase 3 static Blackwater hazard)', () => {
     const sim = makeSim('warrior');
     enterLitany(sim);
     enterModule(sim, 'litany_apse');
-    const hz = hazardWorld(sim, 'litany_apse', 0); // shallow: rx 24, rz 17, r 24
+    const hz = hazardWorld(sim, 'litany_apse', 0); // shallow: rx 22, rz 17, r 22
     const p = sim.player;
     const hitsAt = (dx: number, dz: number) => {
       p.pos.x = hz.x + dx;
@@ -1908,6 +2002,65 @@ describe('The Drowned Litany (Phase 3 static Blackwater hazard)', () => {
     expect(countBlackwaterHits(sim, 25)).toBeGreaterThan(0);
   });
 
+  it('the apse outer walkway ring has a dry flank path (no Blackwater on the ring)', () => {
+    const sim = makeSim('warrior');
+    enterLitany(sim, 'heroic');
+    enterModule(sim, 'litany_apse');
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    const zBase = delveModuleZOffset(run.modules, run.moduleIndex);
+    // Clear the room so only the hazard could deal damage during the window.
+    for (const id of [...run.mobIds]) (sim as any).dropEntity(id);
+    const p = sim.player;
+    const ringHits = (localX: number, localZ: number) => {
+      p.pos.x = run.origin.x + localX;
+      p.pos.z = run.origin.z + zBase + localZ;
+      p.prevPos = { ...p.pos };
+      return countBlackwaterHits(sim, 45);
+    };
+    // The outer walkway ring reaches |x| ~= 23.8 at z 48 to 91 (the authored
+    // safe path). One yard in from the wall on the east and west flanks at
+    // z=56 must be dry: the shallow moat must not pinch the ring.
+    expect(ringHits(22.8, 56)).toBe(0);
+    expect(ringHits(-22.8, 56)).toBe(0);
+    // Control: the central moat is still lethal (the fix must not neuter it).
+    expect(ringHits(18, 56)).toBeGreaterThan(0);
+  });
+
+  it('the trash modules keep a dry wall-hugging walkway (shallow pools do not drown the ring)', () => {
+    // The same class of bug as the apse moat: a shallow Blackwater pool authored
+    // so its rim reaches the outer walkable-ring wall band drowns ground that
+    // reads as clean walkway, dealing invisible damage. Each probe below is a
+    // point ~1-2yd inside the side wall on the flank the pool overshot; it must
+    // be dry. A same-module control confirms the pool still damages further in.
+    const cases: Array<{
+      moduleId: string;
+      dry: [number, number];
+      wet: [number, number];
+    }> = [
+      { moduleId: 'litany_sluice', dry: [13, 29], wet: [7, 33] },
+      { moduleId: 'litany_baptistry', dry: [17, 18], wet: [12, 24] },
+      { moduleId: 'litany_ledger', dry: [19, 18], wet: [9, 24] },
+      { moduleId: 'litany_choir_loft', dry: [-18, 17], wet: [-12, 22] },
+    ];
+    for (const c of cases) {
+      const sim = makeSim('warrior');
+      enterLitany(sim, 'heroic');
+      enterModule(sim, c.moduleId);
+      const run = sim.delveRunForPlayer(sim.playerId)!;
+      const zBase = delveModuleZOffset(run.modules, run.moduleIndex);
+      for (const id of [...run.mobIds]) (sim as any).dropEntity(id);
+      const p = sim.player;
+      const hitsAt = (localX: number, localZ: number) => {
+        p.pos.x = run.origin.x + localX;
+        p.pos.z = run.origin.z + zBase + localZ;
+        p.prevPos = { ...p.pos };
+        return countBlackwaterHits(sim, 45);
+      };
+      expect(hitsAt(...c.dry), `${c.moduleId} wall-hug walkway must be dry`).toBe(0);
+      expect(hitsAt(...c.wet), `${c.moduleId} interior pool must still damage`).toBeGreaterThan(0);
+    }
+  });
+
   it('pins the deep (2.0x) and shallow (0.35x) tier multipliers on the 4% Normal base', () => {
     const pulse = (localX: number, localZ: number) => {
       const sim = makeSim('warrior');
@@ -1942,13 +2095,17 @@ describe('The Drowned Litany (Phase 3 static Blackwater hazard)', () => {
 describe('The Drowned Litany (Phase 5 room puzzles)', () => {
   const BODY_R = 0.9;
 
-  // All delve colliders are rot:0, so circle = radius test and obb = AABB test.
+  // Test a player-sized body against the real collider orientation.
   function plateBlocked(moduleId: string, x: number, z: number): boolean {
     for (const c of delveModuleColliders(moduleId as any)) {
       if (c.type === 'circle') {
         if (Math.hypot(x - c.x, z - c.z) < c.r + BODY_R) return true;
       } else if (c.type === 'obb') {
-        if (Math.abs(x - c.x) < c.hw + BODY_R && Math.abs(z - c.z) < c.hd + BODY_R) return true;
+        const cos = Math.cos(-c.rot);
+        const sin = Math.sin(-c.rot);
+        const lx = (x - c.x) * cos + (z - c.z) * sin;
+        const lz = -(x - c.x) * sin + (z - c.z) * cos;
+        if (Math.abs(lx) < c.hw + BODY_R && Math.abs(lz) < c.hd + BODY_R) return true;
       }
     }
     return false;
@@ -2047,6 +2204,159 @@ describe('The Drowned Litany (Phase 5 room puzzles)', () => {
       expect(run.exitPortalOpen, `after puzzle ${i + 1}/${puzzles.length}`).toBe(
         i === puzzles.length - 1,
       );
+    }
+  });
+
+  it('every standard Litany room updates its puzzle meshes and advances to the next room', () => {
+    const rooms = [
+      { moduleId: 'litany_sluice', kind: 'sluice_valve', template: 'delve_sluice_valve_open' },
+      { moduleId: 'litany_ledger', kind: 'grave_tablet', template: 'delve_grave_tablet_lit' },
+      { moduleId: 'litany_ring', kind: 'corpse_candle', template: 'delve_corpse_candle_lit' },
+      { moduleId: 'litany_choir_loft', kind: 'bell_rope', template: 'delve_bell_rope_pulled' },
+      { moduleId: 'litany_causeway', kind: null, template: null },
+    ] as const;
+
+    for (const room of rooms) {
+      const sim = makeSim('warrior');
+      enterLitany(sim);
+      const run = sim.delveRunForPlayer(sim.playerId)!;
+      run.modules = [room.moduleId, 'litany_apse'];
+      run.moduleIndex = 0;
+      (sim as any).spawnDelveModule(run);
+      for (const id of run.mobIds) {
+        const mob = sim.entities.get(id);
+        if (mob) mob.dead = true;
+      }
+      sim.tick();
+
+      if (room.kind) {
+        const puzzleIds = run.objectIds.filter((id) => run.objectState[id]?.kind === room.kind);
+        expect(puzzleIds.length, `${room.moduleId} puzzle count`).toBeGreaterThan(0);
+        for (const id of puzzleIds) {
+          const obj = sim.entities.get(id)!;
+          sim.player.pos = { ...obj.pos };
+          sim.player.prevPos = { ...obj.pos };
+          if (room.kind === 'bell_rope') sim.delveInteract(id);
+          sim.tick();
+          expect(run.objectState[id].triggered, `${room.moduleId} ${room.kind} triggered`).toBe(
+            true,
+          );
+          expect(obj.templateId, `${room.moduleId} ${room.kind} mesh state`).toBe(room.template);
+        }
+      }
+
+      sim.tick();
+      expect(run.exitPortalOpen, `${room.moduleId} exit opened`).toBe(true);
+      const exitId = run.objectIds.find((id) => run.objectState[id]?.kind === 'module_exit')!;
+      const exit = sim.entities.get(exitId)!;
+      sim.player.pos = { ...exit.pos };
+      sim.player.prevPos = { ...exit.pos };
+      sim.delveInteract(exitId);
+      expect(run.moduleIndex, `${room.moduleId} advanced`).toBe(1);
+      expect(run.modules[run.moduleIndex]).toBe('litany_apse');
+    }
+  });
+
+  it('the Baptistry wave and egg-sac sequence advances to the next room', () => {
+    const sim = makeSim('warrior');
+    enterLitany(sim);
+    const run = sim.delveRunForPlayer(sim.playerId)!;
+    run.modules = ['litany_baptistry', 'litany_apse'];
+    run.moduleIndex = 0;
+    (sim as any).spawnDelveModule(run);
+    const zBase = delveModuleZOffset(run.modules, 0);
+    for (const spot of BAPTISTRY_EGG_SAC_SPOTS) {
+      expect(
+        litanyHatchlingSpawnClear(run, run.origin.x + spot.x, run.origin.z + zBase + spot.z),
+        `egg-sac fallback (${spot.x},${spot.z})`,
+      ).toBe(true);
+    }
+    expect(
+      litanyHatchlingSpawnClear(run, run.origin.x + 19, run.origin.z + zBase + 10),
+      'east sac candidate inside the polygon wall',
+    ).toBe(false);
+    expect(
+      litanyHatchlingSpawnClear(run, run.origin.x - 18, run.origin.z + zBase + 3.7),
+      'west sac candidate inside the polygon wall',
+    ).toBe(false);
+
+    for (let round = 0; round < 10 && !run.exitPortalOpen; round++) {
+      for (const id of [...run.mobIds]) {
+        const mob = sim.entities.get(id);
+        if (mob && !mob.dead) {
+          (sim as any).dealDamage(
+            sim.player,
+            mob,
+            mob.maxHp + 1,
+            false,
+            'physical',
+            null,
+            'hit',
+            true,
+          );
+        }
+      }
+      sim.tick();
+    }
+
+    expect(run.litanyBaptistry?.eggsEnabled).toBe(true);
+    expect(run.exitPortalOpen).toBe(true);
+    const exitId = run.objectIds.find((id) => run.objectState[id]?.kind === 'module_exit')!;
+    const exit = sim.entities.get(exitId)!;
+    sim.player.pos = { ...exit.pos };
+    sim.player.prevPos = { ...exit.pos };
+    sim.delveInteract(exitId);
+    expect(run.moduleIndex).toBe(1);
+    expect(run.modules[run.moduleIndex]).toBe('litany_apse');
+  });
+
+  it('the north-passage exit spawns on findable, walkable, hazard-clear ground in every trash module', () => {
+    // Findability guard for the progression object (the module_exit "Sealed
+    // Passage" the player walks into to advance): in every non-finale Drowned
+    // Litany module it must be spawned, sit on the walkable polygon, be clear of
+    // the shell/interior colliders (reachable, not walled off), and not sit under
+    // a Blackwater hazard (a submerged or blocked exit reads as "no way forward").
+    for (const moduleId of DELVES.drowned_litany.modules) {
+      const sim = makeSim('warrior');
+      enterLitany(sim);
+      const run = sim.delveRunForPlayer(sim.playerId)!;
+      // Two-module run so this module is NOT the finale (the finale has a boss,
+      // not a north-passage exit).
+      run.modules = [moduleId, 'litany_apse'];
+      run.moduleIndex = 0;
+      (sim as any).spawnDelveModule(run);
+      const zBase = delveModuleZOffset(run.modules, 0);
+      const exitId = run.objectIds.find((id) => run.objectState[id]?.kind === 'module_exit');
+      expect(exitId, `${moduleId} spawns a module_exit`).toBeDefined();
+      const exit = sim.entities.get(exitId!)!;
+      const localX = exit.pos.x - run.origin.x;
+      const localZ = exit.pos.z - run.origin.z - zBase;
+      // On the authored walkable polygon (not off the mapped floor).
+      const poly = litanyModuleGeometry(moduleId as any)!.walkable[0].points;
+      expect(
+        polygonContainsPoint(poly, localX, localZ),
+        `${moduleId} exit (${localX.toFixed(1)},${localZ.toFixed(1)}) is inside the walkable polygon`,
+      ).toBe(true);
+      // Reachable: the exit body is not inside a movement collider (wall/pillar/
+      // island). The exit portal radius is generous, so require the centre clear.
+      expect(
+        plateBlocked(moduleId, localX, localZ),
+        `${moduleId} exit is walled off by a collider`,
+      ).toBe(false);
+      // Not under a Blackwater pool: a player standing on the exit takes no damage.
+      const p = sim.player;
+      for (const id of [...run.mobIds]) (sim as any).dropEntity(id);
+      p.pos.x = exit.pos.x;
+      p.pos.z = exit.pos.z;
+      p.prevPos = { ...p.pos };
+      let blackwaterHits = 0;
+      for (let i = 0; i < 45; i++) {
+        for (const ev of sim.tick()) {
+          if (ev.type === 'damage' && ev.targetId === p.id && ev.ability === 'Blackwater')
+            blackwaterHits++;
+        }
+      }
+      expect(blackwaterHits, `${moduleId} exit sits under a Blackwater hazard`).toBe(0);
     }
   });
 
@@ -2313,6 +2623,8 @@ describe('The Drowned Litany (Phase 5 room puzzles)', () => {
     sim.delveInteract(exitId);
     events = sim.drainEvents();
     expect(events.some((e) => e.type === 'error')).toBe(false);
+    expect(run.moduleIndex).toBe(1);
+    expect(run.modules[run.moduleIndex]).toBe('litany_apse');
   });
 
   it('the sealed exit hints to apply pressure for walk-on puzzles (sluice valves)', () => {
@@ -2553,6 +2865,49 @@ describe('The Drowned Litany (Phase 6 boss mechanics)', () => {
     expect(boss.auras.some((a) => a.id === 'nhalia_cantor_shield')).toBe(true);
   });
 
+  it('keeps both Cantor waves tracked when one hit crosses both HP thresholds', () => {
+    const sim = makeSim();
+    const run = enterLitanyApse(sim);
+    const boss = nhalia(sim);
+    boss.inCombat = true;
+    boss.hp = Math.ceil(boss.maxHp * 0.34);
+    (sim as any).updateDelveRuns();
+
+    const cantors = [...sim.entities.values()].filter(
+      (e) => e.templateId === 'drowned_cantor' && !e.dead,
+    );
+    expect(cantors).toHaveLength(4);
+    expect(run.nhaliaBoss?.cantorShieldAdds).toHaveLength(4);
+    for (const cantor of cantors.slice(0, 2)) {
+      (sim as any).dealDamage(
+        sim.player,
+        cantor,
+        cantor.maxHp + 1,
+        false,
+        'physical',
+        null,
+        'hit',
+        true,
+      );
+    }
+    (sim as any).updateDelveRuns();
+    expect(boss.auras.some((a) => a.id === 'nhalia_cantor_shield')).toBe(true);
+    for (const cantor of cantors.slice(2)) {
+      (sim as any).dealDamage(
+        sim.player,
+        cantor,
+        cantor.maxHp + 1,
+        false,
+        'physical',
+        null,
+        'hit',
+        true,
+      );
+    }
+    (sim as any).updateDelveRuns();
+    expect(boss.auras.some((a) => a.id === 'nhalia_cantor_shield')).toBe(false);
+  });
+
   it('Final Bell at 10% HP spawns Bog Thralls and hits the party once', () => {
     const sim = makeSim();
     enterLitanyApse(sim);
@@ -2666,6 +3021,68 @@ describe('The Drowned Litany (Phase 6 boss mechanics)', () => {
       (e) => e.templateId === 'choir_thrall' && !e.dead,
     );
     expect(thralls.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('a player death clears in-flight bells and Blackwater marks so an in-delve respawn is not insta-killed', () => {
+    const sim = makeSim();
+    const run = enterLitanyApse(sim);
+    const boss = nhalia(sim);
+    boss.inCombat = true;
+
+    // Force a bell volley: bells are now in flight.
+    run.nhaliaBoss!.bellVolleyTimer = 0.001;
+    (sim as any).updateDelveRuns();
+    expect(run.nhaliaBoss!.bells.length).toBeGreaterThan(0);
+    const bellIds = run.nhaliaBoss!.bells.map((b) => b.entityId);
+
+    // Force a Blackwater mark: a puddle is now persisted at the player's position.
+    run.nhaliaBoss!.markTimer = 0.001;
+    (sim as any).updateDelveRuns();
+    expect(run.nhaliaBoss!.marks.length).toBeGreaterThanOrEqual(1);
+
+    // Kill the player and respawn in-delve (first death: 50% HP at the module entry).
+    killPlayer(sim);
+    expect(sim.player.dead).toBe(true);
+    sim.releaseSpirit();
+    expect(sim.player.dead).toBe(false);
+
+    // The bell/mark lethal effects must not outlive the death: they are cleared
+    // at respawn, so the entity ids are gone and the collections are empty.
+    expect(run.nhaliaBoss!.bells).toEqual([]);
+    expect(run.nhaliaBoss!.marks).toEqual([]);
+    for (const id of bellIds) expect(sim.entities.has(id)).toBe(false);
+
+    // The respawned player takes no further bell/mark damage: the loop is broken.
+    const hpAfterRespawn = sim.player.hp;
+    for (let i = 0; i < 20; i++) (sim as any).updateDelveRuns();
+    expect(sim.player.hp).toBe(hpAfterRespawn);
+
+    // The encounter itself is not re-armed by the death (unlike an evade reset):
+    // Cantor phases / Final Bell progress and the volley timer are untouched.
+    expect(run.nhaliaBoss!.bellVolleyTimer).toBeGreaterThan(0);
+  });
+
+  it('a player death clearing bells does not perturb the shared rng draw order', () => {
+    const runOnce = (seed: number) => {
+      const sim = makeSim('warrior', seed);
+      const run = enterLitanyApse(sim);
+      const boss = nhalia(sim);
+      boss.inCombat = true;
+      run.nhaliaBoss!.bellVolleyTimer = 0.001;
+      (sim as any).updateDelveRuns();
+      killPlayer(sim);
+      sim.releaseSpirit();
+      // A few more volleys/marks after the respawn to exercise further rng draws.
+      for (let i = 0; i < 20 * 15; i++) (sim as any).updateDelveRuns();
+      return {
+        firedCantorPhases: run.nhaliaBoss!.firedCantorPhases,
+        finalBellFired: run.nhaliaBoss!.finalBellFired,
+        bells: run.nhaliaBoss!.bells.length,
+        marks: run.nhaliaBoss!.marks.length,
+        bellVolleyTimer: Math.round(run.nhaliaBoss!.bellVolleyTimer * 1000),
+      };
+    };
+    expect(runOnce(42)).toEqual(runOnce(42));
   });
 });
 
@@ -2990,5 +3407,111 @@ describe('The Drowned Litany (Phase 7 Drowned Reliquary Rite)', () => {
     expect(run.drownedLitanyRite?.opened).toBe(true);
     expect(run.objectState[run.rewardChestId!].lootedTier).toBe('low');
     expect(run.completed).toBe(true);
+  });
+});
+
+// Delve run slots are a fixed pool recycled for the process lifetime: enterDelve
+// reclaims the first free slot, so a slot that hosted a duo must not carry its
+// whole-run roster watermark (run.deedMaxParty) into the next claimed run. The
+// dlv_solo_heroic deed reads that watermark at completion, so a stale 2 would
+// silently deny a genuine solo Heroic clear its restriction deed.
+describe('delve slot recycle resets the roster watermark (dlv_solo_heroic)', () => {
+  // Enter the Collapsed Reliquary on Heroic as an arbitrary player id (the
+  // module-level enterReliquary only drives the primary player).
+  function enterHeroicAs(sim: Sim, pid: number) {
+    const heroic = DELVES.collapsed_reliquary.tiers.find((t) => t.id === 'heroic');
+    const level = heroic?.minPlayerLevel ?? DELVES.collapsed_reliquary.minLevel;
+    sim.setPlayerLevel(level, pid);
+    const door = DELVES.collapsed_reliquary.doorPos;
+    const e = sim.entities.get(pid)!;
+    e.pos.x = door.x;
+    e.pos.z = door.z;
+    e.pos.y = terrainHeight(door.x, door.z, sim.cfg.seed);
+    e.prevPos = { ...e.pos };
+    sim.enterDelve('collapsed_reliquary', 'heroic', pid);
+  }
+
+  // Collapse a claimed run down to the finale as its only module and respawn it.
+  function toFinale(sim: Sim, run: any) {
+    run.bountiful = false;
+    run.modules = ['reliquary_finale'];
+    run.moduleIndex = 0;
+    (sim as any).spawnDelveModule(run);
+  }
+
+  function killVarric(sim: Sim, attackerPid: number) {
+    const boss = [...sim.entities.values()].find((e) => e.templateId === 'deacon_varric')!;
+    const attacker = sim.entities.get(attackerPid)!;
+    (sim as any).dealDamage(attacker, boss, boss.maxHp + 1, false, 'physical', null, 'hit', true);
+    sim.tick();
+  }
+
+  // Flawlessly solve the reward-chest lock as a given player, granting the clear.
+  function pickFlawlessAs(sim: Sim, run: any, pickerPid: number, ante: 1 | 2 | 3 = 3) {
+    const chestEnt = sim.entities.get(run.rewardChestId!)!;
+    const picker = sim.entities.get(pickerPid)!;
+    picker.pos = { ...chestEnt.pos };
+    picker.prevPos = { ...chestEnt.pos };
+    sim.lockpickEngage(run.rewardChestId!, ante, pickerPid);
+    let guard = 0;
+    while (run.lockpick && run.lockpick.state === 'IN_PROGRESS' && guard++ < 12) {
+      const actions = solveLockActions(run.lockpick.pages[run.lockpick.pageIndex])!;
+      for (const a of actions) sim.lockpickAction(a, pickerPid);
+    }
+  }
+
+  it('a solo Heroic clear on a slot a duo just freed earns dlv_solo_heroic (watermark reset at claim)', () => {
+    const sim = makeSim();
+    // A duo claims the first Collapsed Reliquary slot on Heroic; the whole-run
+    // roster watermark climbs to 2. Then the run is freed back to the pool.
+    const a = sim.addPlayer('warrior', 'DuoA');
+    const b = sim.addPlayer('warrior', 'DuoB');
+    sim.partyInvite(b, a);
+    sim.partyAccept(b);
+    enterHeroicAs(sim, a);
+    enterHeroicAs(sim, b);
+    const slot = sim.delveRunForPlayer(a)!;
+    expect(slot.deedMaxParty).toBe(2);
+    (sim as any).freeDelveRun(slot);
+
+    // The primary (solo, never partied) enters Heroic and reclaims the SAME freed
+    // slot object. Its watermark must read 1, not the stale 2 the duo left behind.
+    enterReliquary(sim, 'heroic');
+    const soloRun = sim.delveRunForPlayer(sim.playerId)!;
+    expect(soloRun).toBe(slot); // same recycled DelveRun slot object
+    expect(soloRun.deedMaxParty).toBe(1); // claim-time reset, not the leaked 2
+
+    // Clearing the finale solo grants the Heroic solo-restriction deed.
+    toFinale(sim, soloRun);
+    killVarric(sim, sim.playerId);
+    pickFlawlessAs(sim, soloRun, sim.playerId);
+    expect(sim.players.get(sim.playerId)!.deedsEarned.has('dlv_solo_heroic')).toBe(true);
+  });
+
+  it('a duo Heroic clear on a recycled slot still withholds dlv_solo_heroic (in-run watermark climbs to 2)', () => {
+    const sim = makeSim();
+    // Dirty the first slot with a prior solo Heroic run (watermark 1), then free it.
+    enterReliquary(sim, 'heroic');
+    const slot = sim.delveRunForPlayer(sim.playerId)!;
+    expect(slot.deedMaxParty).toBe(1);
+    (sim as any).freeDelveRun(slot);
+
+    // A genuine duo reclaims that same recycled slot; the watermark climbs back to 2.
+    const a = sim.addPlayer('warrior', 'DuoA');
+    const b = sim.addPlayer('warrior', 'DuoB');
+    sim.partyInvite(b, a);
+    sim.partyAccept(b);
+    enterHeroicAs(sim, a);
+    enterHeroicAs(sim, b);
+    const duoRun = sim.delveRunForPlayer(a)!;
+    expect(duoRun).toBe(slot); // same recycled slot object
+    expect(duoRun.deedMaxParty).toBe(2); // reset to 0 at claim, then climbed to 2
+
+    // Clearing it grants no solo-restriction deed to either member.
+    toFinale(sim, duoRun);
+    killVarric(sim, a);
+    pickFlawlessAs(sim, duoRun, a);
+    expect(sim.players.get(a)!.deedsEarned.has('dlv_solo_heroic')).toBe(false);
+    expect(sim.players.get(b)!.deedsEarned.has('dlv_solo_heroic')).toBe(false);
   });
 });

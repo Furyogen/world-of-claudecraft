@@ -155,6 +155,31 @@ export function addNote(accountId: number, note: string): Built {
   };
 }
 
+// Admin-initiated password reset. Length bounds mirror server/auth.ts
+// (MIN/MAX_PASSWORD_LENGTH); the password itself never renders in a confirm row.
+export const PASSWORD_MIN_LENGTH = 6;
+export const PASSWORD_MAX_LENGTH = 128;
+
+export function resetPassword(accountId: number, password: string, note: string): Built {
+  if (!note) return { errorKey: 'alert.noteRequired' };
+  if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
+    return { errorKey: 'alert.passwordLength' };
+  }
+  return {
+    pending: {
+      title: t('dialog.confirmResetPassword'),
+      rows: [
+        accountRow(accountId),
+        { label: t('dialog.action'), value: t('dialog.actionResetPassword') },
+        reasonRow(note),
+      ],
+      endpoint: `/admin/api/accounts/${accountId}/reset-password`,
+      body: { password, reason: note },
+      danger: true,
+    },
+  };
+}
+
 export function banAccount(accountId: number, note: string): Built {
   if (!note) return { errorKey: 'alert.noteRequired' };
   return {
@@ -184,6 +209,80 @@ export function unbanAccount(accountId: number, note: string): Built {
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/unban`,
       body: { reason: note },
+    },
+  };
+}
+
+export function banDailyRewards(accountId: number, note: string, durationHours?: number): Built {
+  if (!note) return { errorKey: 'alert.noteRequired' };
+  if (
+    durationHours !== undefined &&
+    (!Number.isInteger(durationHours) || durationHours < 1 || durationHours > 8760)
+  ) {
+    return { errorKey: 'alert.dailyRewardsBanDurationInvalid' };
+  }
+  const durationRow =
+    durationHours === undefined
+      ? { label: t('dialog.length'), value: t('detail.dailyRewardsPermanent') }
+      : {
+          label: t('dialog.length'),
+          value: t('detail.lengthHours', { count: durationHours }),
+        };
+  return {
+    pending: {
+      title: t('dialog.confirmDailyRewardsBan'),
+      rows: [
+        accountRow(accountId),
+        { label: t('dialog.action'), value: t('dialog.actionDailyRewardsBan') },
+        durationRow,
+        reasonRow(note),
+      ],
+      endpoint: `/admin/api/moderation/accounts/${accountId}/daily-rewards-ban`,
+      body: durationHours === undefined ? { reason: note } : { reason: note, durationHours },
+      danger: true,
+    },
+  };
+}
+
+export function unbanDailyRewards(accountId: number, note: string): Built {
+  if (!note) return { errorKey: 'alert.noteRequired' };
+  return {
+    pending: {
+      title: t('dialog.confirmDailyRewardsUnban'),
+      rows: [
+        accountRow(accountId),
+        { label: t('dialog.action'), value: t('dialog.actionDailyRewardsUnban') },
+        reasonRow(note),
+      ],
+      endpoint: `/admin/api/moderation/accounts/${accountId}/daily-rewards-unban`,
+      body: { reason: note },
+    },
+  };
+}
+
+export function moderateDailyRewardsIp(
+  accountId: number,
+  ip: string,
+  banned: boolean,
+  note: string,
+): Built {
+  if (!note) return { errorKey: 'alert.noteRequired' };
+  const action = banned
+    ? t('dialog.actionDailyRewardsIpBan')
+    : t('dialog.actionDailyRewardsIpUnban');
+  return {
+    pending: {
+      title: banned ? t('dialog.confirmDailyRewardsIpBan') : t('dialog.confirmDailyRewardsIpUnban'),
+      rows: [
+        accountRow(accountId),
+        { label: t('blockedIps.colIp'), value: ip },
+        { label: t('dialog.action'), value: action },
+        reasonRow(note),
+        ...(banned ? [{ label: t('dialog.warning'), value: t('blockedIps.sharedIpWarning') }] : []),
+      ],
+      endpoint: `/admin/api/moderation/accounts/${accountId}/daily-rewards-ip-${banned ? 'ban' : 'unban'}`,
+      body: { ip, reason: note },
+      danger: banned,
     },
   };
 }

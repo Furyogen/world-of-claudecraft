@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
@@ -43,16 +43,14 @@ function walk(dir: string): string[] {
   return out;
 }
 
-// On-disk pure-core candidates in a single layer dir (non-recursive): the modules
+// On-disk pure-core candidates in the full UI tree: the modules
 // named with the pure-core convention <thing>_view.ts / <thing>_core.ts. The
 // COMPLETENESS sweep below asserts every one of these IS registered, so a new
 // extraction that forgets to add its core to the allowlist fails the guard instead
 // of silently escaping it. Bare-named cores (xp_bar.ts, swing_timer.ts, ...) are
 // not caught by this convention; new extractions follow the *_view/*_core naming.
 function onDiskCores(dir: string): string[] {
-  return readdirSync(dir)
-    .filter((name) => /_(?:view|core)\.ts$/.test(name) && !name.endsWith('.d.ts'))
-    .map((name) => join(dir, name));
+  return walk(dir).filter((file) => /_(?:view|core)\.ts$/.test(file) && !file.endsWith('.d.ts'));
 }
 
 // Blank out comments while preserving line count and column positions, so prose
@@ -120,28 +118,43 @@ const simFiles = walk(simRoot);
 // import), so it is registered here even though it lives in src/game. Paths are
 // repo-relative for the failure messages.
 const UI_PURE_CORES = [
+  'src/ui/camera_prompt_core.ts',
+  'src/ui/chat_ignore_core.ts',
+  'src/ui/char_bags_pairing_core.ts',
+  'src/ui/equip_drop_core.ts',
+  'src/ui/log_event_route.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
   'src/ui/clock.ts',
   'src/ui/compass.ts',
   'src/ui/coords.ts',
-  'src/ui/quest_tracker.ts',
-  'src/ui/delve_map.ts',
+  'src/ui/hud/quest/quest_tracker.ts',
+  'src/ui/hud/delve/delve_map.ts',
   'src/ui/raid_lockout_view.ts',
   'src/ui/stat_tooltip_view.ts',
+  'src/ui/target_portrait_view.ts',
+  'src/ui/target_rank_view.ts',
   'src/ui/mob_tooltip_view.ts',
   'src/ui/talents_view.ts',
   'src/ui/social_view.ts',
   'src/ui/bags_view.ts',
+  'src/ui/bank_view.ts',
   'src/ui/item_set_tooltip_view.ts',
+  'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
-  'src/ui/vendor_view.ts',
-  'src/ui/loot_settings_view.ts',
+  'src/ui/hud/vendor/vendor_view.ts',
+  'src/ui/hud/vendor/heroic_vendor_view.ts',
+  'src/ui/claudium_view.ts',
+  'src/ui/woc_store_view.ts',
+  'src/ui/hud/loot/loot_roll_status_view.ts',
+  'src/ui/hud/loot/loot_settings_view.ts',
+  'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
   'src/ui/mailbox_view.ts',
   'src/ui/calendar_view.ts',
@@ -149,26 +162,45 @@ const UI_PURE_CORES = [
   'src/ui/map_window_view.ts',
   'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/dungeon_finder_view.ts',
+  'src/ui/yumi_match_view.ts',
+  'src/ui/vale_cup_window_view.ts',
+  'src/ui/vale_cup_indicator_view.ts',
+  'src/ui/vale_cup_hud_view.ts',
+  'src/ui/vale_cup_briefing_view.ts',
+  'src/ui/vale_cup_betting_view.ts',
+  'src/ui/vale_cup_charge_view.ts',
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
   'src/ui/dev_leaderboard_view.ts',
+  'src/ui/dev_command_view.ts',
+  'src/ui/deeds_leaderboard_view.ts',
   'src/ui/daily_rewards_view.ts',
+  'src/ui/deeds_view.ts',
   'src/ui/spellbook_view.ts',
-  'src/ui/questlog_view.ts',
+  'src/ui/hud/quest/questlog_view.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
-  'src/ui/action_bar_view.ts',
+  'src/ui/hud/action_bar/action_bar_view.ts',
+  'src/ui/hud/action_bar/mobile_action_page_view.ts',
+  'src/ui/hud/action_bar/consumable_bar_view.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/ui/auras_view.ts',
   'src/ui/minimap_markers.ts',
   'src/ui/gathering_view.ts',
   'src/ui/fct_core.ts',
   'src/ui/fct_event.ts',
+  'src/ui/window_drag_core.ts',
   'src/ui/window_resize_core.ts',
+  'src/ui/window_stack_state_core.ts',
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
   'src/ui/discord_widget_view.ts',
   'src/ui/desktop_update_view.ts',
+  'src/ui/hud/loot/corpse_harvest_view.ts',
+  'src/ui/town_focus_view.ts',
+  'src/ui/pet_action_icons.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
 ].map((rel) => join(repoRoot, rel));
@@ -183,7 +215,9 @@ const UI_PURE_CORES = [
 // the same contract for the map editor's realtime terrain/water edits.
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
+  'src/render/delve_interactable_visibility_core.ts',
   'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
 ].map((rel) => join(repoRoot, rel));
@@ -201,14 +235,15 @@ const BARE_NAMED = [
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
   'src/ui/clock.ts',
   'src/ui/compass.ts',
   'src/ui/coords.ts',
-  'src/ui/quest_tracker.ts',
-  'src/ui/delve_map.ts',
+  'src/ui/hud/quest/quest_tracker.ts',
+  'src/ui/hud/delve/delve_map.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
   'src/ui/minimap_markers.ts',
@@ -216,6 +251,9 @@ const BARE_NAMED = [
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/log_event_route.ts',
+  'src/ui/mobile_hud_layout.ts',
+  'src/ui/pet_action_icons.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/render/cast_bar.ts',

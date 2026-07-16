@@ -16,12 +16,14 @@
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts). This region draws NO rng.
 
-import { addStacked, bagsFullError, equipBag as equipBagCmd } from './bags';
+import { addStacked, bagCapacity, bagsFullError, equipBag as equipBagCmd } from './bags';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
-import { canEquipItem } from './equipment_rules';
+import { canEquipItem, resolveEquipSlot, slotAcceptsItem } from './equipment_rules';
 import { formatMoney } from './format_money';
+import { moveStackToCell } from './inventory_order';
 import { meetsLevelRequirement, requiredLevelFor } from './item_level_req';
+import { battlefieldExperienceTrickle } from './professions/battlefield_xp';
 import type { ItemUseResult, PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import {
@@ -32,11 +34,34 @@ import {
   type EquipSlot,
   FISHING_CAST_ID,
   INTERACT_RANGE,
+  type ItemInstancePayload,
   POTION_COOLDOWN,
 } from './types';
 import { vendorStackSize } from './vendor_stack';
 
 const VENDOR_BUYBACK_LIMIT = 12;
+
+// Fungible-preferring removal: consumes plain (non-instanced) copies first and
+// only reaches for an instanced copy (an enchanted or otherwise signed/rolled
+// piece) once no fungible copy remains. removeItem's own ordering (sim.ts) scans
+// highest-index-first, which is exactly where applyEnchant's addItemInstance
+// pushes a freshly-enchanted copy (professions/enchanting.ts), so a plain
+// ctx.removeItem there would eat the enchanted copy first when both exist.
+// sellItem/discardItem below and trade.ts's drop arm route through this instead
+// so "sell/discard/trade one" prefers the plain copy a player almost always means.
+export function removePreferFungible(
+  ctx: SimContext,
+  itemId: string,
+  count: number,
+  pid?: number,
+): ItemInstancePayload[] {
+  const fungibleAvailable = ctx.countFungibleItem(itemId, pid);
+  const fungibleTake = Math.min(fungibleAvailable, count);
+  if (fungibleTake > 0) ctx.removeFungibleItem(itemId, fungibleTake, pid);
+  const remaining = count - fungibleTake;
+  if (remaining <= 0) return [];
+  return ctx.removeItem(itemId, remaining, pid);
+}
 
 export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: number): void {
   const r = ctx.resolve(pid);
@@ -51,7 +76,7 @@ export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: nu
   if (def.noDiscard) return;
   const discardCount = Number.isFinite(count) ? Math.min(Math.floor(count), available) : 0;
   if (discardCount <= 0) return;
-  ctx.removeItem(itemId, discardCount, meta.entityId);
+  removePreferFungible(ctx, itemId, discardCount, meta.entityId);
   ctx.emit({
     type: 'log',
     // biome-ignore lint/style/useTemplate: keep this scanner-friendly shape for i18n extraction.
@@ -61,13 +86,39 @@ export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: nu
   });
 }
 
-export function equipItem(ctx: SimContext, itemId: string, pid?: number): void {
+// Manual bag arrangement: the player dragged the stack at inventory index `from` onto
+// bag CELL `to`. An empty cell parks the stack there (leaving a hole behind it, which is
+// the point of fixed cells); an occupied one trades cells with its stack. The arrangement
+// rides on each stack (InvSlot.slot) and is serialized with the character, so it
+// persists. Authoritative like every other inventory command: moveStackToCell
+// re-validates both ends against the live bag and refuses anything illegal.
+export function moveInventoryItem(ctx: SimContext, from: number, to: number, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const { meta } = r;
+  moveStackToCell(meta.inventory, from, to, bagCapacity(meta.bags));
+}
+
+// `targetSlot` names the exact equipment key the player aimed at (the paperdoll
+// drop target). It is a REQUEST, never a bypass: the sim re-validates it against
+// the item's declared slot (slotAcceptsItem), so a hand-crafted packet cannot put
+// a helm on a ring finger. Omitted (the click path), the slot resolves as before.
+export function equipItem(
+  ctx: SimContext,
+  itemId: string,
+  pid?: number,
+  targetSlot?: EquipSlot,
+): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
   const def = ITEMS[itemId];
   if (!def?.slot || (def.kind !== 'weapon' && def.kind !== 'armor')) return;
   if (ctx.countItem(itemId, meta.entityId) <= 0) return;
+  if (targetSlot && !slotAcceptsItem(def, targetSlot)) {
+    ctx.error(meta.entityId, 'That does not go in that slot.');
+    return;
+  }
   if (!canEquipItem(meta.cls, def)) {
     ctx.error(meta.entityId, 'You cannot equip that.');
     return;
@@ -76,12 +127,39 @@ export function equipItem(ctx: SimContext, itemId: string, pid?: number): void {
     ctx.error(meta.entityId, `You must be level ${requiredLevelFor(def)} to equip that.`);
     return;
   }
-  const slot = def.slot;
+  // Rings declare slot 'ring'; with no aimed slot the resolver picks ring1/ring2
+  // (empty-first). An aimed slot is honored verbatim once validated above, so
+  // dropping a ring on the ring2 socket fills ring2 even while ring1 is free.
+  const slot = targetSlot ?? resolveEquipSlot(def, meta.equipment);
+  if (!slot) return;
   const old = meta.equipment[slot];
-  ctx.removeItem(itemId, 1, meta.entityId);
-  if (old) addItemSilent(old, 1, meta);
+  const oldInstance = meta.equipmentInstance?.[slot];
+  // removeItem scans from the highest inventory index down (sim.ts), so a
+  // freshly-enchanted copy (pushed onto the end by addItemInstance,
+  // src/sim/professions/enchanting.ts applyEnchant) is what this picks up first
+  // when both a plain and an enchanted copy of the same item exist and nothing
+  // else has been looted since. That only holds while the enchanted copy stays
+  // the highest-index match: loot another plain copy afterward and the plain
+  // one gets equipped instead. Deterministic, acceptable for v1, but a future
+  // picker UI should not assume the enchanted copy is always favored.
+  const consumed = ctx.removeItem(itemId, 1, meta.entityId);
+  if (old) {
+    // Return the piece that was worn: if it carried an enchant, give it back
+    // its own instanced slot (never merge it into a plain stack, which would
+    // silently drop the enchant), same non-merge rule addItemInstance follows.
+    if (oldInstance) meta.inventory.push({ itemId: old, count: 1, instance: oldInstance });
+    else addItemSilent(old, 1, meta);
+  }
   meta.equipment[slot] = itemId;
-  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+  if (consumed[0]) {
+    meta.equipmentInstance ??= {};
+    meta.equipmentInstance[slot] = consumed[0];
+  } else if (meta.equipmentInstance) {
+    delete meta.equipmentInstance[slot];
+  }
+  // The all-slots deed reads equipment, so re-check this player's triggers.
+  ctx.markDeedsDirty(meta.entityId);
+  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   ctx.emit({ type: 'log', text: `Equipped ${def.name}.`, color: '#8f8', pid: meta.entityId });
 }
 
@@ -99,12 +177,18 @@ export function unequipItem(ctx: SimContext, slot: EquipSlot, pid?: number): boo
     bagsFullError(ctx, meta.entityId);
     return false;
   }
+  const instance = meta.equipmentInstance?.[slot];
   delete meta.equipment[slot];
+  if (meta.equipmentInstance) delete meta.equipmentInstance[slot];
+  // The all-slots deed reads equipment, so re-check this player's triggers.
+  ctx.markDeedsDirty(meta.entityId);
   // addItemSilent (not addItem): returning a piece you already owned to bags is
   // not a fresh acquisition, so it must not fire collect-quest credit. No quest
-  // today keys on an unequip, so there is nothing to award here regardless.
-  addItemSilent(itemId, 1, meta);
-  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+  // today keys on an unequip, so there is nothing to award here regardless. An
+  // enchanted piece gets its own instanced slot instead, so its enchant survives.
+  if (instance) meta.inventory.push({ itemId, count: 1, instance });
+  else addItemSilent(itemId, 1, meta);
+  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   const def = ITEMS[itemId];
   ctx.emit({
     type: 'log',
@@ -185,7 +269,28 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
       );
       return;
     }
-    ctx.removeItem(itemId, 1, meta.entityId);
+    // #1149 Battlefield Experience: credit the instance removeItem actually
+    // consumed (PR #1281 review, High: a self-signed instance sitting
+    // untouched at a different slot must never be credited for a plain copy
+    // drunk instead; addItemInstance appends to the end of `inventory` while
+    // removeItem consumes from the end backward, so an EARLIER signed slot
+    // and a LATER plain stack of the same itemId can silently diverge). A
+    // cheap gate inside battlefieldExperienceTrickle short-circuits
+    // everything below rare tier, so this is a no-op for every plain/common/
+    // uncommon potion, exactly as before this issue.
+    const [drunkInstance] = ctx.removeItem(itemId, 1, meta.entityId);
+    if (drunkInstance) {
+      const granted = battlefieldExperienceTrickle(meta.craftSkills, {
+        itemId,
+        instance: drunkInstance,
+        observerName: meta.name,
+        observerActiveArchetype: meta.archetype.activeArchetype,
+        observerPairedMajor: meta.archetype.pairedMajor,
+      });
+      // A nonzero trickle changed a craft skill (returns 0 on every
+      // short-circuit), so the craft-skill deeds re-check this player.
+      if (granted > 0) ctx.markDeedsDirty(meta.entityId);
+    }
     p.potionCooldownUntil = ctx.time + POTION_COOLDOWN;
     p.potionCdRemaining = POTION_COOLDOWN; // materialized remaining for the action-bar swipe
     if (restoresHp) {
@@ -235,7 +340,17 @@ export function buyItem(ctx: SimContext, npcId: number, itemId: string, pid?: nu
     ctx.error(meta.entityId, 'That item is not sold here.');
     return;
   }
-  if (!def?.buyValue) {
+  const copperUnitPrice =
+    def?.buyValue !== undefined && Number.isFinite(def.buyValue) && def.buyValue > 0
+      ? def.buyValue
+      : 0;
+  const honorPrice =
+    def?.priceHonor !== undefined && Number.isFinite(def.priceHonor) && def.priceHonor > 0
+      ? Math.floor(def.priceHonor)
+      : 0;
+  const hasCopperPrice = copperUnitPrice > 0;
+  const hasHonorPrice = honorPrice > 0;
+  if (!def || (!hasCopperPrice && !hasHonorPrice)) {
     ctx.error(meta.entityId, 'That item is not for sale.');
     return;
   }
@@ -253,16 +368,22 @@ export function buyItem(ctx: SimContext, npcId: number, itemId: string, pid?: nu
   // the per-unit buyValue for every unit, so the per-unit price stays classic and
   // vendor buy price stays above the per-unit sell value (no buy-low/sell-high loop).
   const qty = vendorStackSize(def);
-  const cost = def.buyValue * qty;
-  if (meta.copper < cost) {
+  const copperCost = copperUnitPrice * qty;
+  const honorCost = honorPrice;
+  if (meta.copper < copperCost) {
     ctx.error(meta.entityId, 'Not enough money.');
+    return;
+  }
+  if (meta.honor < honorCost) {
+    ctx.error(meta.entityId, 'Not enough honor.');
     return;
   }
   if (!ctx.canAddItem(itemId, qty, meta.entityId)) {
     bagsFullError(ctx, meta.entityId);
     return;
   }
-  meta.copper -= cost;
+  meta.copper -= copperCost;
+  meta.honor -= honorCost;
   ctx.addItem(itemId, qty, meta.entityId);
   ctx.emit({ type: 'vendor', action: 'buy', itemId, pid: meta.entityId });
 }
@@ -306,7 +427,7 @@ export function sellItem(ctx: SimContext, itemId: string, count = 1, pid?: numbe
     ctx.error(meta.entityId, 'There is no merchant nearby.');
     return;
   }
-  if (def.noVendorSell) {
+  if (def.noVendorSell || def.soulbound) {
     ctx.error(meta.entityId, 'That item is not for sale.');
     return;
   }
@@ -314,7 +435,7 @@ export function sellItem(ctx: SimContext, itemId: string, count = 1, pid?: numbe
     ctx.error(meta.entityId, 'You cannot sell quest items.');
     return;
   }
-  ctx.removeItem(itemId, sellCount, meta.entityId);
+  removePreferFungible(ctx, itemId, sellCount, meta.entityId);
   recordVendorBuyback(meta, itemId, sellCount);
   const payout = def.sellValue * sellCount;
   meta.copper += payout;
@@ -347,7 +468,12 @@ export function sellAllJunk(ctx: SimContext, pid?: number): void {
     .filter((s) => {
       const def = ITEMS[s.itemId];
       return (
-        !!def && def.quality === 'poor' && def.kind !== 'quest' && !def.noVendorSell && s.count > 0
+        !!def &&
+        def.quality === 'poor' &&
+        def.kind !== 'quest' &&
+        !def.noVendorSell &&
+        !def.soulbound &&
+        s.count > 0
       );
     })
     .map((s) => ({ itemId: s.itemId, count: s.count }));
@@ -400,6 +526,9 @@ export function buyBackItem(ctx: SimContext, itemId: string, pid?: number): void
   slot.count -= 1;
   if (slot.count <= 0) meta.vendorBuyback = meta.vendorBuyback.filter((s) => s !== slot);
   addItemSilent(itemId, 1, meta);
+  // The silent add bypasses the inventory hub, so credit the discovery
+  // ledger here (an acquisition like any other; the mark is idempotent).
+  ctx.markItemDiscovered(meta, itemId);
   ctx.onInventoryChangedForQuests(meta);
   ctx.emit({ type: 'vendor', action: 'buyback', itemId, pid: meta.entityId });
   ctx.emit({
