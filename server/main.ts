@@ -2752,10 +2752,10 @@ export async function startServer(): Promise<http.Server> {
   // tests/server/game_boot_order.test.ts pins against).
   registerLivenessSource(gameStateSource);
 
-  // Business gauges run one bounded, timeout-protected fact query every 15 minutes.
-  // Scrapes publish only the cached snapshot and never query Postgres. Client FPS
-  // stays available in the admin tooling but is intentionally not polled for the
-  // business dashboard.
+  // Business gauges use isolated, staggered, timeout-protected engagement and
+  // funnel snapshots every 15 minutes. Scrapes publish only cached data and never
+  // query Postgres. Client FPS stays available in the admin tooling but is
+  // intentionally not polled for the business dashboard.
   const businessMetrics = registerBusinessMetrics(httpMetrics.registry);
   businessMetrics.start();
 
