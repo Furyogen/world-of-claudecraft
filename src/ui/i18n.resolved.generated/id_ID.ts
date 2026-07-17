@@ -1162,6 +1162,7 @@ export const id_ID: EnTranslations = {
         "spellPower": "Kekuatan Mantra",
         "critRating": "Rating Kritis",
         "hasteRating": "Rating Kecepatan",
+        "parry": "Parry",
         "hitRating": "Rating Pukulan",
         "warfare": "Perang"
       },
@@ -1180,6 +1181,7 @@ export const id_ID: EnTranslations = {
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan.",
         "critRating": "Rating kritis dari perlengkapan dan bonus set Anda, menaikkan peluang serangan kritis Anda. Sekitar 10 rating memberi 1% kritis.",
         "hasteRating": "Rating kecepatan dari perlengkapan dan bonus set Anda, mempercepat serangan dan rapalan mantra Anda. Sekitar 10 rating memberi 1% kecepatan.",
+        "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Rating pukulan dari perlengkapan dan bonus setelanmu, mengurangi seberapa sering seranganmu meleset dan mantramu ditangkal, terutama melawan musuh level lebih tinggi. Sekitar 10 rating memberikan 1% hit.",
         "warfare": "Meningkatkan kerusakan yang diberikan kepada pemain sebesar {increase}% dan mengurangi kerusakan yang diterima dari pemain sebesar {reduction}%."
       },
@@ -5347,6 +5349,7 @@ export const id_ID: EnTranslations = {
     "combat": {
       "floatingMiss": "Meleset",
       "floatingDodge": "Elak",
+      "floatingParry": "Parry",
       "floatingResist": "Ditahan",
       "cannotMove": "Tidak bisa bergerak!",
       "attack": "serang",
@@ -5356,6 +5359,7 @@ export const id_ID: EnTranslations = {
       "damageTakenCrit": "{source} mengenaimu secara kritis sebesar {amount}.",
       "miss": "{ability}-mu meleset dari {target}.",
       "dodged": "{ability}-mu dielakkan oleh {target}.",
+      "parried": "Your {ability} is parried by {target}.",
       "resisted": "{target} menahan {ability} milikmu.",
       "healSelf": "{ability}-mu menyembuhkanmu sebesar {amount}.",
       "healSelfCrit": "{ability}-mu menyembuhkanmu secara kritis sebesar {amount}.",

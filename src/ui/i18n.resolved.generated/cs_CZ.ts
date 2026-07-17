@@ -1162,6 +1162,7 @@ export const cs_CZ: EnTranslations = {
         "spellPower": "Síla kouzel",
         "critRating": "Hodnocení kritického zásahu",
         "hasteRating": "Hodnocení rychlosti",
+        "parry": "Parry",
         "hitRating": "Hodnocení zásahu",
         "warfare": "Válečnictví"
       },
@@ -1180,6 +1181,7 @@ export const cs_CZ: EnTranslations = {
         "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
         "critRating": "Hodnocení kritického zásahu z tvé výbavy a bonusů sad, které zvyšuje tvoji šanci na kritický zásah. Přibližně 10 hodnocení dá 1 % kritického zásahu.",
         "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti.",
+        "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Hodnocení zásahu z vybavení a bonusů sady, snižující četnost mašení tvých útoků a odolávání tvým kouzlům, zejména proti nepřátelům vyšší úrovně. Přibližně 10 bodů hodnocení přidá 1 % zásahu.",
         "warfare": "Zvýší poškození způsobené hráčům o {increase} % a sníží poškození utrpěné od hráčů o {reduction} %."
       },
@@ -5347,6 +5349,7 @@ export const cs_CZ: EnTranslations = {
     "combat": {
       "floatingMiss": "Minutí",
       "floatingDodge": "Vyhnutí",
+      "floatingParry": "Parry",
       "floatingResist": "Odoláno",
       "cannotMove": "Nemůžeš se hýbat!",
       "attack": "útok",
@@ -5356,6 +5359,7 @@ export const cs_CZ: EnTranslations = {
       "damageTakenCrit": "{source} tě kriticky zasahuje za {amount}.",
       "miss": "Tvoje {ability} míjí {target}.",
       "dodged": "{target} se vyhýbá tvé schopnosti {ability}.",
+      "parried": "Your {ability} is parried by {target}.",
       "resisted": "{target} odolává tvé schopnosti {ability}.",
       "healSelf": "Tvoje {ability} tě léčí za {amount}.",
       "healSelfCrit": "Tvoje {ability} tě kriticky léčí za {amount}.",

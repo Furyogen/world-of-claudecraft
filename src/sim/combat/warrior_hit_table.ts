@@ -13,6 +13,13 @@ export interface WarriorMeleeDefense {
   blockChance: number;
 }
 
+// The Strength-scaled parry chance on its own, so the character sheet can show
+// the same number combat rolls against (front-arc gating stays in
+// warriorMeleeDefense; the sheet shows the in-arc chance).
+export function warriorParryChance(str: number): number {
+  return Math.max(0, WARRIOR_PARRY_BASE + str * WARRIOR_PARRY_PER_STRENGTH);
+}
+
 export function warriorMeleeDefense(defender: Entity, attacker: Entity): WarriorMeleeDefense {
   if (defender.kind !== 'player' || defender.templateId !== 'warrior') {
     return { parryChance: 0, blockChance: 0 };
@@ -21,7 +28,7 @@ export function warriorMeleeDefense(defender: Entity, attacker: Entity): Warrior
     Math.abs(normAngle(angleTo(defender.pos, attacker.pos) - defender.facing)) < WARRIOR_FRONT_ARC;
   if (!inFront) return { parryChance: 0, blockChance: 0 };
   return {
-    parryChance: Math.max(0, WARRIOR_PARRY_BASE + defender.stats.str * WARRIOR_PARRY_PER_STRENGTH),
+    parryChance: warriorParryChance(defender.stats.str),
     blockChance: defender.blockValue > 0 && defender.blockChance > 0 ? defender.blockChance : 0,
   };
 }

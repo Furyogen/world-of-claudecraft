@@ -765,6 +765,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
   'hudChrome.statInfo.names.hasteRating': '急速等级',
+  'hudChrome.statInfo.names.parry': '招架',
+  'hudChrome.statInfo.desc.parry':
+    '你完全招架来自正面近战攻击、不受任何伤害的几率。来自背后的攻击无法被招架。',
   'hudChrome.statInfo.names.hitRating': '命中等级',
   'hudChrome.statInfo.desc.hitRating':
     '来自装备和套装奖励的命中等级，降低你的攻击被闪避和法术被抵抗的几率，对更高等级的敌人尤其有效。约每10点等级提供1%命中。',

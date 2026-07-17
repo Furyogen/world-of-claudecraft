@@ -1162,6 +1162,7 @@ export const en_CA: EnTranslations = {
         "spellPower": "Spell Power",
         "critRating": "Crit Rating",
         "hasteRating": "Haste Rating",
+        "parry": "Parry",
         "hitRating": "Hit Rating",
         "warfare": "Warfare"
       },
@@ -1180,6 +1181,7 @@ export const en_CA: EnTranslations = {
         "dodge": "Your chance to completely avoid an incoming melee attack, taking no damage.",
         "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
         "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste.",
+        "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Hit rating from your gear and set bonuses, reducing how often your attacks miss and your spells are resisted, especially against higher-level enemies. About 10 rating grants 1% hit.",
         "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
       },
@@ -5347,6 +5349,7 @@ export const en_CA: EnTranslations = {
     "combat": {
       "floatingMiss": "Miss",
       "floatingDodge": "Dodge",
+      "floatingParry": "Parry",
       "floatingResist": "Resist",
       "cannotMove": "Can't move!",
       "attack": "attack",
@@ -5356,6 +5359,7 @@ export const en_CA: EnTranslations = {
       "damageTakenCrit": "{source} critically hits you for {amount}.",
       "miss": "Your {ability} misses {target}.",
       "dodged": "Your {ability} is dodged by {target}.",
+      "parried": "Your {ability} is parried by {target}.",
       "resisted": "Your {ability} is resisted by {target}.",
       "healSelf": "Your {ability} heals you for {amount}.",
       "healSelfCrit": "Your {ability} critically heals you for {amount}.",

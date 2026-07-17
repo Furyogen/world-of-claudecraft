@@ -165,3 +165,49 @@ describe('offhand surfacing (paperdoll, player card, chat readout)', () => {
     expect(formReadout(p)).toBe('You are not in any form or stance.');
   });
 });
+
+describe('parry stat surfacing (stat_tooltip + warrior_hit_table)', () => {
+  it('derives the sheet parry chance from the same helper combat rolls', async () => {
+    const { warriorParryChance, warriorMeleeDefense } = await import(
+      '../src/sim/combat/warrior_hit_table'
+    );
+    expect(warriorParryChance(100)).toBeCloseTo(0.05 + 100 * 0.0005, 10);
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior' });
+    const p = sim.player;
+    const attacker = { ...p, id: p.id + 1, pos: { ...p.pos, z: p.pos.z + 1 } };
+    p.facing = 0; // attacker at +z sits in the frontal arc
+    const def = warriorMeleeDefense(p, attacker as typeof p);
+    expect(def.parryChance).toBeCloseTo(warriorParryChance(p.stats.str), 10);
+  });
+
+  it('builds the parry tooltip cell as a percent with a Strength source line', async () => {
+    const { buildStatTooltip, buildStatSources } = await import('../src/ui/stat_tooltip');
+    const { warriorParryChance } = await import('../src/sim/combat/warrior_hit_table');
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior' });
+    const p = sim.player;
+    const input = {
+      cls: 'warrior' as const,
+      stats: p.stats,
+      level: p.level,
+      attackPower: p.attackPower,
+      spellPower: p.spellPower,
+      critChance: p.critChance,
+      dodgeChance: p.dodgeChance,
+      critRating: p.critRating,
+      hasteRating: p.hasteRating,
+      hitRating: p.hitRating,
+      parryChance: warriorParryChance(p.stats.str),
+      dps: 0,
+      gear: [],
+      buffs: [],
+    };
+    const cell = buildStatTooltip('parry', input);
+    expect(cell.statValue).toBeCloseTo(warriorParryChance(p.stats.str) * 100, 6);
+    const sources = buildStatSources('parry', input);
+    expect(sources.some((line) => line.kind === 'base' && line.value === 5)).toBe(true);
+    expect(sources.some((line) => line.kind === 'attributes')).toBe(p.stats.str > 0);
+    // A non-parry class shows a bare zero with no misleading base line.
+    const casterSources = buildStatSources('parry', { ...input, parryChance: 0 });
+    expect(casterSources.some((line) => line.kind === 'base')).toBe(false);
+  });
+});

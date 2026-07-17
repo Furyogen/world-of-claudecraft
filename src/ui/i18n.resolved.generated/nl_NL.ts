@@ -1162,6 +1162,7 @@ export const nl_NL: EnTranslations = {
         "spellPower": "Spreukkracht",
         "critRating": "Crit-waardering",
         "hasteRating": "Snelheidswaardering",
+        "parry": "Parry",
         "hitRating": "Raakwaarde",
         "warfare": "Oorlogvoering"
       },
@@ -1180,6 +1181,7 @@ export const nl_NL: EnTranslations = {
         "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen.",
         "critRating": "Crit-waardering van je uitrusting en setbonussen, die je kans op een kritieke treffer verhoogt. Ongeveer 10 waardering verleent 1% crit.",
         "hasteRating": "Snelheidswaardering van je uitrusting en setbonussen, die je aanvallen en spreukbezwering versnelt. Ongeveer 10 waardering verleent 1% snelheid.",
+        "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Raakwaarde van je uitrusting en setbonussen, waardoor je aanvallen minder vaak missen en je spreuken minder weerstand ondervinden, vooral tegen vijanden van een hoger niveau. Ongeveer 10 raakwaarde geeft 1% raakkans.",
         "warfare": "Verhoogt de schade die aan spelers wordt toegebracht met {increase}% en vermindert de schade die aan spelers wordt toegebracht met {reduction}%."
       },
@@ -5347,6 +5349,7 @@ export const nl_NL: EnTranslations = {
     "combat": {
       "floatingMiss": "Mis",
       "floatingDodge": "Ontwijking",
+      "floatingParry": "Parry",
       "floatingResist": "Weerstaan",
       "cannotMove": "Kan niet bewegen!",
       "attack": "aanval",
@@ -5356,6 +5359,7 @@ export const nl_NL: EnTranslations = {
       "damageTakenCrit": "{source} raakt je kritiek voor {amount}.",
       "miss": "Je {ability} mist {target}.",
       "dodged": "Je {ability} wordt ontweken door {target}.",
+      "parried": "Your {ability} is parried by {target}.",
       "resisted": "{target} weerstaat je {ability}.",
       "healSelf": "Je {ability} geneest je voor {amount}.",
       "healSelfCrit": "Je {ability} geneest je kritiek voor {amount}.",
