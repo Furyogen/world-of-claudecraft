@@ -8104,4 +8104,25 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Aktiviere Gegenstandsstufe anzeigen in den Optionen, um zwei Ausrüstungsteile schnell zu vergleichen. Ausrüstung bekannter Herkunft, von Gegnern, Quests und Handwerksberufen, zeigt dann eine Gegenstandsstufe: eine einzelne Zahl, die ihre Stärke anhand der Quelle grob angibt und Verbesserungen auch über verschiedene Plätze hinweg vergleichbar macht. Teile ohne solche Herkunft, etwa einfache Händlerware und Startausrüstung, zeigen keine Gegenstandsstufe; eine fehlende Zahl ist normal.',
   'guide.professions.craftHowBody':
     'Öffne das Handwerksfenster (Standardtaste T), um alle bekannten Rezepte, ihre Zutaten und deinen Vorrat zu sehen; sind die Materialien vorhanden, genügt ein Klick. Gewöhnliche Rezepte lassen sich überall herstellen. Einige fortgeschrittene Rezepte, darunter höherstufige Werkzeuge und seltene Zaubererrüstung, erfordern dagegen das Handwerkszentrum in Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Kampfhaltung: 10% mehr Wuterzeugung',
+  'hudChrome.auraEffect.berserkerStance':
+    'Berserkerhaltung: Kritische Treffer gelingen 3% öfter und treffen 3% härter',
+  'hudChrome.auraEffect.crit': 'Erhöht kritische Trefferchance um {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Erhöht Wuterzeugung um {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Erhöht kritische Trefferchance um {pct}% und Wuterzeugung um {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Koloss: Verursachter Schaden um {pct}% erhöht',
+  'hudChrome.auraEffect.bloodbath':
+    'Erhöht kritische Trefferchance und verursachten Schaden um {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Verringert erlittenen Schaden um {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Erhöht Angriffstempo um {hastePct}% und verursachten Schaden um {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Euer nächster Reaver-Hieb oder Verstümmelnder Hieb kostet keine Wut',
+  'hudChrome.auraEffect.revengeFree': 'Eure nächste Rache kostet keine Wut',
+  'hudChrome.auraEffect.victoryRush': 'Siegesrausch ist bereit',
+  'hudChrome.auraEffect.maxHpPct': 'Erhöht maximale Gesundheit um {pct}%',
+  'hudChrome.statInfo.names.parry': 'Parieren',
+  'hudChrome.statInfo.desc.parry':
+    'Deine Chance, einen frontalen Nahkampfangriff vollständig zu parieren und keinen Schaden zu erleiden. Ein Schlag von hinten kann nicht pariert werden.',
 };

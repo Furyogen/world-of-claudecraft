@@ -8023,4 +8023,27 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Untuk membandingkan dua perlengkapan dengan cepat, aktifkan Tampilkan Level Item di opsi. Perlengkapan yang sumbernya diketahui, dari musuh, misi, dan profesi kerajinan, kemudian menampilkan level item: satu angka yang memperkirakan kekuatan berdasarkan asalnya dan memudahkan melihat peningkatan terbaik, bahkan antar-slot. Item tanpa sumber seperti itu, misalnya barang dasar pedagang dan perlengkapan awal, tidak menampilkan level; angka yang tidak ada adalah hal normal.',
   'guide.professions.craftHowBody':
     'Buka jendela Kerajinan (tombol bawaan T) untuk melihat semua resep yang diketahui, kebutuhan tiap resep, dan bahan yang tersedia; jika bahannya lengkap, satu klik menyelesaikannya. Resep umum dapat dibuat di mana saja. Beberapa resep lanjutan, termasuk alat tingkat tinggi dan zirah langka untuk perapal, mengharuskanmu berada di pusat kerajinan Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Kuda-kuda Tempur: penghasilan amarah 10% lebih banyak',
+  'hudChrome.auraEffect.berserkerStance':
+    'Kuda-kuda Berserker: kritis 3% lebih sering dan menghantam 3% lebih keras',
+  'hudChrome.auraEffect.crit': 'Meningkatkan peluang serangan kritis sebesar {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Meningkatkan penghasilan Amarah sebesar {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Meningkatkan peluang serangan kritis sebesar {pct}% dan penghasilan Amarah sebesar {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Kolosus: kerusakan yang diberikan meningkat {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Meningkatkan peluang serangan kritis dan kerusakan yang diberikan sebesar {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Mengurangi kerusakan yang diterima sebesar {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Meningkatkan kecepatan serangan sebesar {hastePct}% dan kerusakan yang diberikan sebesar {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Serangan Perampas atau Serangan Pelukai berikutnya tidak membutuhkan Amarah',
+  'hudChrome.auraEffect.revengeFree': 'Balas Dendam berikutnya tidak membutuhkan Amarah',
+  'hudChrome.auraEffect.victoryRush': 'Terjangan Kemenangan siap digunakan',
+  'hudChrome.auraEffect.maxHpPct': 'Meningkatkan nyawa maksimum sebesar {pct}%',
+  'hudChrome.statInfo.names.parry': 'Tangkis',
+  'hudChrome.statInfo.desc.parry':
+    'Peluang Anda untuk sepenuhnya menangkis serangan jarak dekat dari depan, tanpa menerima kerusakan. Pukulan dari belakang tidak dapat ditangkis.',
+  'hud.combat.floatingParry': 'Tangkis',
+  'hud.combat.parried': '{ability}-mu ditangkis oleh {target}.',
 };

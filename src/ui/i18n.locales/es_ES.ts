@@ -333,4 +333,21 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.watchAria': 'Seguir {name} en el seguimiento en pantalla',
   'guide.deedsPage.cat.delve': 'Profundidades',
   'hudChrome.deeds.catDelve': 'Profundidades',
+  'hudChrome.auraEffect.battleStance': 'Actitud de Combate: un 10% más de generación de ira',
+  'hudChrome.auraEffect.crit': 'Incrementa la probabilidad de golpe crítico un {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Incrementa la generación de ira un {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Incrementa la probabilidad de golpe crítico un {pct}% y la generación de ira un {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Coloso: daño infligido incrementado un {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Incrementa la probabilidad de golpe crítico y el daño infligido un {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Disminuye el daño recibido un {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Incrementa la velocidad de ataque un {hastePct}% y el daño infligido un {dmgPct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Incrementa la salud máxima un {pct}%',
+  'hudChrome.statInfo.names.parry': 'Rechazo',
+  'hudChrome.statInfo.desc.parry':
+    'Tu probabilidad de rechazar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede rechazar.',
+  'hud.combat.floatingParry': 'Rechazo',
+  'hud.combat.parried': '{target} rechaza tu {ability}.',
 };

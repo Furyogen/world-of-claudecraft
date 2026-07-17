@@ -8139,4 +8139,23 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.professions.focusTitle': 'Focalisation de la ville',
   'guide.professions.focusBody':
     'Chaque ville principale propose un panneau de Focalisation de la ville aux récolteurs de passage : restez en ville, ouvrez-le près de la minicarte et attribuez un petit capital de points aux types de composants qui vous intéressent. Plus un composant reçoit de focalisation, plus les dépouilles suivantes en fournissent une version fine et abondante. Cette répartition suit votre personnage et peut être modifiée gratuitement lors de chaque visite en ville.',
+  'hudChrome.auraEffect.battleStance': 'Posture de combat : 10% de génération de rage en plus',
+  'hudChrome.auraEffect.berserkerStance':
+    'Posture berserker : coups critiques 3% plus fréquents et 3% plus puissants',
+  'hudChrome.auraEffect.crit': 'Augmente les chances de coup critique de {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Augmente la génération de rage de {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Augmente les chances de coup critique de {pct}% et la génération de rage de {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Colosse : dégâts infligés augmentés de {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Augmente les chances de coup critique et les dégâts infligés de {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Réduit les dégâts subis de {pct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Votre prochaine Frappe du pillard ou Frappe mutilante ne coûte aucune rage',
+  'hudChrome.auraEffect.revengeFree': 'Votre prochaine Vengeance ne coûte aucune rage',
+  'hudChrome.auraEffect.victoryRush': 'Ruée victorieuse est prête',
+  'hudChrome.auraEffect.maxHpPct': 'Augmente les points de vie maximum de {pct}%',
+  'hudChrome.statInfo.names.parry': 'Parade',
+  'hudChrome.statInfo.desc.parry':
+    'Vos chances de parer entièrement une attaque de mêlée frontale, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré.',
 };

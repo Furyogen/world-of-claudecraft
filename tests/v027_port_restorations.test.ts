@@ -211,3 +211,59 @@ describe('parry stat surfacing (stat_tooltip + warrior_hit_table)', () => {
     expect(casterSources.some((line) => line.kind === 'base')).toBe(false);
   });
 });
+
+describe('stance and warrior choice-row aura UI (aura_effect, auras_view, sim_i18n)', () => {
+  it('describes the stances and warrior buffs on the buff tooltip', async () => {
+    const { auraEffectDescriptor } = await import('../src/ui/aura_effect');
+    const { RECKLESSNESS_RAGE_GEN } = await import('../src/sim/types');
+    const d = (kind: string, value = 0, value2?: number) =>
+      auraEffectDescriptor({ kind, value, value2 } as Parameters<typeof auraEffectDescriptor>[0]);
+    expect(d('battle_stance')?.key).toBe('hudChrome.auraEffect.battleStance');
+    expect(d('berserker_stance')?.key).toBe('hudChrome.auraEffect.berserkerStance');
+    expect(d('buff_crit', 0.05)).toEqual({
+      key: 'hudChrome.auraEffect.crit',
+      nums: { pct: 5 },
+    });
+    expect(d('buff_reckless', 0.2)).toEqual({
+      key: 'hudChrome.auraEffect.reckless',
+      nums: { pct: 20, ragePct: RECKLESSNESS_RAGE_GEN * 100 },
+    });
+    // die_by_sword reads the aura value (the live dealDamage cut), no fixed constant.
+    expect(d('die_by_sword', 0.3)).toEqual({
+      key: 'hudChrome.auraEffect.dieBySword',
+      nums: { pct: 30 },
+    });
+    // sanguine: interval mult 1/1.1 reads exactly 10% attack speed, plus value2 damage.
+    expect(d('sanguine', 1 / 1.1, 0.05)).toEqual({
+      key: 'hudChrome.auraEffect.sanguine',
+      nums: { hastePct: 10, dmgPct: 5 },
+    });
+    expect(d('battle_trance')?.key).toBe('hudChrome.auraEffect.battleTrance');
+    expect(d('victory_rush')?.key).toBe('hudChrome.auraEffect.victoryRush');
+  });
+
+  it('hides the countdown under battle and berserker stances like other toggles', async () => {
+    const { createAurasView } = await import('../src/ui/auras_view');
+    const v = createAurasView('all', {
+      iconId: (a) => a.id,
+      auraName: (a) => a.name,
+      formatStacks: (n) => String(n),
+      isOwn: () => true,
+      durationUnits: () => ({ s: 's', m: 'm', h: 'h', d: 'd' }),
+      auraEffectHtml: () => '',
+    });
+    for (const kind of ['battle_stance', 'berserker_stance']) {
+      const view = v.tick({
+        auras: [{ id: kind, name: kind, kind, remaining: 3600, value: 0 }],
+      } as Parameters<typeof v.tick>[0]);
+      expect(view.slots[0].durationText).toBe('');
+    }
+  });
+
+  it('re-localizes the sim-emitted warrior buff names', async () => {
+    const { localizeSimAuraName } = await import('../src/ui/sim_i18n');
+    expect(localizeSimAuraName('Bladed Echo')).not.toBeNull();
+    expect(localizeSimAuraName('Emboldened')).not.toBeNull();
+    expect(localizeSimAuraName('Enraged')).not.toBeNull();
+  });
+});

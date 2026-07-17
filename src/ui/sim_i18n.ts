@@ -342,6 +342,9 @@ const baseEnTable = {
   'aura.bonesplinter': 'Bonesplinter',
   'aura.raggedGash': 'Ragged Gash',
   'aura.soulblaze': 'Soulblaze',
+  'aura.bladedEcho': 'Bladed Echo',
+  'aura.emboldened': 'Emboldened',
+  'aura.enraged': 'Enraged',
   'aura.fingersOfFrost': 'Fingers of Frost',
   'aura.brainFreeze': 'Brain Freeze',
   'aura.wintersChill': "Winter's Chill",
@@ -5174,6 +5177,15 @@ function locPetGrowlAutoState(state: string): string {
 // player (stun/incapacitate/absorb aura) and as the boss "unleashes" combat-log line, so
 // they share a single English source here.
 const AURA_NAME_KEY: Record<string, SimMessageKey> = {
+  // Bladed Gyre's armed echo buff (whirlwind's selfBuff auraName in
+  // src/sim/content/classes.ts); shown on the buff bar and combat log.
+  'Bladed Echo': 'aura.bladedEcho',
+  // Emboldening Roar's armed guaranteed-crit buff (the aoeAllySureCrit case in
+  // src/sim/combat/effect_dispatch.ts); shown on the buff bar and combat log.
+  Emboldened: 'aura.emboldened',
+  // Fury's Enrage buff (the enrageChance case in src/sim/combat/effect_dispatch.ts),
+  // procced by Bloodletting and Red Harvest; shown on the buff bar.
+  Enraged: 'aura.enraged',
   Tamed: 'aura.tamed',
   'Temporal Exhaustion': 'aura.temporalExhaustion',
   'Cauterize Fatigue': 'aura.cauterizeFatigue',

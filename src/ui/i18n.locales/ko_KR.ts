@@ -7926,4 +7926,18 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'welcome.armory.cta': '무기고 둘러보기',
   'welcome.news.new': '신규',
   'welcome.news.viewAll': 'GitHub에서 모든 업데이트 보기',
+  'hudChrome.auraEffect.battleStance': '전투 태세: 분노 생성 10% 증가',
+  'hudChrome.auraEffect.berserkerStance': '광전사 태세: 치명타 확률 3% 증가, 피해 3% 증가',
+  'hudChrome.auraEffect.crit': '치명타 확률이 {pct}% 증가합니다',
+  'hudChrome.auraEffect.rageGen': '분노 생성이 {pct}% 증가합니다',
+  'hudChrome.auraEffect.reckless': '치명타 확률이 {pct}%, 분노 생성이 {ragePct}% 증가합니다',
+  'hudChrome.auraEffect.avatar': '거상: 입히는 피해가 {pct}% 증가합니다',
+  'hudChrome.auraEffect.bloodbath': '치명타 확률과 입히는 피해가 {pct}% 증가합니다',
+  'hudChrome.auraEffect.dieBySword': '받는 피해가 {pct}% 감소합니다',
+  'hudChrome.auraEffect.sanguine': '공격 속도가 {hastePct}%, 입히는 피해가 {dmgPct}% 증가합니다',
+  'hudChrome.auraEffect.battleTrance':
+    '다음 약탈자의 일격 또는 불구의 일격이 분노를 소모하지 않습니다',
+  'hudChrome.auraEffect.revengeFree': '다음 복수가 분노를 소모하지 않습니다',
+  'hudChrome.auraEffect.victoryRush': '연전연승을 사용할 수 있습니다',
+  'hudChrome.auraEffect.maxHpPct': '최대 생명력이 {pct}% 증가합니다',
 };

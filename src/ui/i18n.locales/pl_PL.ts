@@ -7977,4 +7977,27 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Aby szybko porównać dwa przedmioty, włącz w opcjach Pokaż poziom przedmiotu. Wyposażenie o znanym źródle, zdobyte z wrogów, zadań i profesji rzemieślniczych, pokazuje wtedy poziom przedmiotu: jedną liczbę przybliżającą jego moc na podstawie pochodzenia, co ułatwia ocenę ulepszeń nawet między różnymi miejscami. Przedmioty bez takiego źródła, jak podstawowe towary kupców i sprzęt startowy, nie pokazują poziomu; brak liczby jest normalny.',
   'guide.professions.craftHowBody':
     'Otwórz okno Rzemiosła (domyślnie klawisz T), aby zobaczyć wszystkie znane receptury, ich wymagania i posiadane materiały; gdy masz składniki, wystarczy jedno kliknięcie. Zwykłe receptury można tworzyć wszędzie. Niektóre zaawansowane, w tym narzędzia wyższego poziomu i rzadkie pancerze dla czarujących, wymagają centrum rzemiosła w Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Postawa bojowa: generowanie wściekłości zwiększone o 10%',
+  'hudChrome.auraEffect.berserkerStance':
+    'Postawa berserkera: trafienia krytyczne o 3% częstsze i o 3% silniejsze',
+  'hudChrome.auraEffect.crit': 'Zwiększa szansę na trafienie krytyczne o {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Zwiększa generowanie wściekłości o {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Zwiększa szansę na trafienie krytyczne o {pct}%, a generowanie wściekłości o {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Kolos: zadawane obrażenia zwiększone o {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Zwiększa szansę na trafienie krytyczne i zadawane obrażenia o {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Zmniejsza otrzymywane obrażenia o {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Zwiększa szybkość ataku o {hastePct}%, a zadawane obrażenia o {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Następny Cios łupieżcy lub Okaleczające uderzenie nie kosztuje wściekłości',
+  'hudChrome.auraEffect.revengeFree': 'Twój następny Odwet nie kosztuje wściekłości',
+  'hudChrome.auraEffect.victoryRush': 'Zryw zwycięstwa jest gotowy',
+  'hudChrome.auraEffect.maxHpPct': 'Zwiększa maksymalne zdrowie o {pct}%',
+  'hudChrome.statInfo.names.parry': 'Parowanie',
+  'hudChrome.statInfo.desc.parry':
+    'Twoja szansa na całkowite sparowanie ataku wręcz z przodu, bez otrzymania obrażeń. Ciosu zadanego od tyłu nie można sparować.',
+  'hud.combat.floatingParry': 'Parowanie',
+  'hud.combat.parried': 'Twój {ability} zostaje sparowany przez {target}.',
 };

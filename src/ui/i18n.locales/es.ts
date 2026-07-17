@@ -8114,4 +8114,25 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Para comparar rápidamente dos piezas, activa Mostrar nivel de objeto en las opciones. El equipo de origen conocido, obtenido de enemigos, misiones y profesiones de artesanía, mostrará un nivel de objeto: una cifra que aproxima su poder según su procedencia y permite ver de un vistazo qué mejora pesa más, incluso entre ranuras distintas. Las piezas sin ese origen, como los artículos básicos de vendedor y el equipo inicial, no muestran nivel de objeto; que falte la cifra es normal, no un error.',
   'guide.professions.craftHowBody':
     'Abre la ventana de Artesanía (tecla T de forma predeterminada) para ver todas las recetas que conoces, lo que requiere cada una y los materiales que tienes; cuando estén disponibles, basta un clic. Las recetas comunes pueden elaborarse en cualquier lugar. Algunas recetas avanzadas, como herramientas de nivel superior y armaduras raras para taumaturgos, exigen estar en el centro de artesanía de Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Actitud de Batalla: un 10% más de generación de ira',
+  'hudChrome.auraEffect.berserkerStance':
+    'Actitud Rabiosa: los críticos aciertan un 3% más a menudo y golpean un 3% más fuerte',
+  'hudChrome.auraEffect.crit': 'Aumenta la probabilidad de golpe crítico un {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Aumenta la generación de ira un {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Aumenta la probabilidad de golpe crítico un {pct}% y la generación de ira un {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Coloso: daño infligido aumentado un {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Aumenta la probabilidad de golpe crítico y el daño infligido un {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Reduce el daño recibido un {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Aumenta la velocidad de ataque un {hastePct}% y el daño infligido un {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Tu siguiente Golpe del Saqueador o Golpe Mutilador no cuesta ira',
+  'hudChrome.auraEffect.revengeFree': 'Tu siguiente Venganza no cuesta ira',
+  'hudChrome.auraEffect.victoryRush': 'Ímpetu de Victoria está listo',
+  'hudChrome.auraEffect.maxHpPct': 'Aumenta la salud máxima un {pct}%',
+  'hudChrome.statInfo.names.parry': 'Parada',
+  'hudChrome.statInfo.desc.parry':
+    'Tu probabilidad de parar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede parar.',
 };

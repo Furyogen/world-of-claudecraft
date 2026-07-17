@@ -8036,4 +8036,24 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Para comparar duas peças rapidamente, ative Mostrar nível do item nas opções. Equipamentos de origem conhecida, obtidos de inimigos, missões e profissões de criação, passam a mostrar um nível do item: um único número que estima a força com base na origem e permite identificar a melhor melhoria, mesmo entre espaços diferentes. Peças sem essa origem, como itens básicos de vendedores e equipamento inicial, não mostram nível; a ausência do número é normal.',
   'guide.professions.craftHowBody':
     'Abra a janela de Criação (tecla padrão T) para ver todas as receitas conhecidas, o que cada uma exige e os materiais disponíveis; quando tudo estiver à mão, basta um clique. Receitas comuns podem ser criadas em qualquer lugar. Algumas receitas avançadas, incluindo ferramentas de nível alto e armaduras raras para conjuradores, exigem o centro de criação de Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Postura de Batalha: 10% mais geração de raiva',
+  'hudChrome.auraEffect.berserkerStance':
+    'Postura de Berserker: críticos 3% mais frequentes e 3% mais fortes',
+  'hudChrome.auraEffect.crit': 'Aumenta a chance de acerto crítico em {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Aumenta a geração de raiva em {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Aumenta a chance de acerto crítico em {pct}% e a geração de raiva em {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Colosso: dano causado aumentado em {pct}%',
+  'hudChrome.auraEffect.bloodbath': 'Aumenta a chance de acerto crítico e o dano causado em {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Reduz o dano recebido em {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Aumenta a velocidade de ataque em {hastePct}% e o dano causado em {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Seu próximo Golpe do Saqueador ou Golpe Mutilador não custa raiva',
+  'hudChrome.auraEffect.revengeFree': 'Sua próxima Vingança não custa raiva',
+  'hudChrome.auraEffect.victoryRush': 'Ímpeto da Vitória está pronto',
+  'hudChrome.auraEffect.maxHpPct': 'Aumenta a vida máxima em {pct}%',
+  'hudChrome.statInfo.names.parry': 'Aparar',
+  'hudChrome.statInfo.desc.parry':
+    'Sua chance de aparar completamente um ataque corpo a corpo frontal, sem sofrer dano. Um golpe pelas costas não pode ser aparado.',
 };

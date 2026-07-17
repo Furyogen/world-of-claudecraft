@@ -7859,4 +7859,27 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Pro rychlé porovnání dvou kusů zapněte v možnostech Zobrazit úroveň předmětu. Výbava se známým původem, od nepřátel, z úkolů a řemesel, pak ukazuje úroveň předmětu: jediné číslo, které přibližně vyjadřuje sílu podle zdroje a umožňuje poznat lepší vylepšení i mezi různými sloty. Kusy bez takového původu, například základní zboží obchodníků a počáteční výbava, úroveň neukazují; chybějící číslo je normální.',
   'guide.professions.craftHowBody':
     'Otevřete okno Výroba (výchozí klávesa T) a uvidíte všechny známé recepty, jejich požadavky i své zásoby; máte-li materiály, stačí jedno kliknutí. Běžné recepty lze vyrábět kdekoli. Některé pokročilé recepty, včetně nástrojů vyšší úrovně a vzácné zbroje pro sesilatele, vyžadují výrobní centrum v Highwatchi.',
+  'hudChrome.auraEffect.battleStance': 'Bojový postoj: o 10 % vyšší generování vzteku',
+  'hudChrome.auraEffect.berserkerStance':
+    'Postoj berserka: kritické zásahy o 3 % častěji a o 3 % tvrdší',
+  'hudChrome.auraEffect.crit': 'Zvyšuje šanci na kritický zásah o {pct} %',
+  'hudChrome.auraEffect.rageGen': 'Zvyšuje generování vzteku o {pct} %',
+  'hudChrome.auraEffect.reckless':
+    'Zvyšuje šanci na kritický zásah o {pct} % a generování vzteku o {ragePct} %',
+  'hudChrome.auraEffect.avatar': 'Kolos: způsobené poškození zvýšeno o {pct} %',
+  'hudChrome.auraEffect.bloodbath':
+    'Zvyšuje šanci na kritický zásah a způsobené poškození o {pct} %',
+  'hudChrome.auraEffect.dieBySword': 'Snižuje obdržené poškození o {pct} %',
+  'hudChrome.auraEffect.sanguine':
+    'Zvyšuje rychlost útoku o {hastePct} % a způsobené poškození o {dmgPct} %',
+  'hudChrome.auraEffect.battleTrance':
+    'Tvůj příští Nájezdnický úder nebo Mrzačící úder nestojí žádný vztek',
+  'hudChrome.auraEffect.revengeFree': 'Tvá příští Odveta nestojí žádný vztek',
+  'hudChrome.auraEffect.victoryRush': 'Vítězný nápor je připraven',
+  'hudChrome.auraEffect.maxHpPct': 'Zvyšuje maximální zdraví o {pct} %',
+  'hudChrome.statInfo.names.parry': 'Odražení',
+  'hudChrome.statInfo.desc.parry':
+    'Tvoje šance zcela odrazit čelní útok na blízko a neutrpět žádné poškození. Úder zezadu odrazit nelze.',
+  'hud.combat.floatingParry': 'Odraženo',
+  'hud.combat.parried': '{target} odráží tvoji schopnost {ability}.',
 };

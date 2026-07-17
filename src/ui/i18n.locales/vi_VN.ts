@@ -7956,4 +7956,26 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Để so sánh nhanh hai món, hãy bật Hiện Cấp Vật Phẩm trong tùy chọn. Trang bị có nguồn rõ ràng từ kẻ địch, nhiệm vụ và nghề chế tạo sẽ hiện cấp vật phẩm: một con số ước lượng sức mạnh theo nguồn gốc, giúp nhận ra nâng cấp tốt hơn ngay cả giữa các ô khác nhau. Các món không có nguồn như vậy, chẳng hạn hàng cơ bản của thương nhân và trang bị khởi đầu, không hiện cấp; thiếu con số là bình thường.',
   'guide.professions.craftHowBody':
     'Mở cửa sổ Chế Tạo (phím mặc định T) để xem mọi công thức đã biết, nguyên liệu cần thiết và số bạn đang có; khi đủ nguyên liệu, chỉ cần một lần nhấp. Công thức thường có thể chế tạo ở bất cứ đâu. Một số công thức nâng cao, gồm công cụ cấp cao và giáp hiếm cho người thi triển, yêu cầu đứng tại trung tâm chế tạo ở Highwatch.',
+  'hudChrome.auraEffect.battleStance': 'Thế Công: tạo nộ khí nhiều hơn 10%',
+  'hudChrome.auraEffect.berserkerStance':
+    'Thế Cuồng Chiến: chí mạng thường xuyên hơn 3% và mạnh hơn 3%',
+  'hudChrome.auraEffect.crit': 'Tăng tỉ lệ chí mạng thêm {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Tăng lượng nộ khí tạo ra thêm {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Tăng tỉ lệ chí mạng thêm {pct}% và lượng nộ khí tạo ra thêm {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Khổng Tượng: sát thương gây ra tăng {pct}%',
+  'hudChrome.auraEffect.bloodbath': 'Tăng tỉ lệ chí mạng và sát thương gây ra thêm {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Giảm sát thương phải chịu đi {pct}%',
+  'hudChrome.auraEffect.sanguine':
+    'Tăng tốc độ tấn công thêm {hastePct}% và sát thương gây ra thêm {dmgPct}%',
+  'hudChrome.auraEffect.battleTrance':
+    'Đòn Cướp Phá hoặc Đòn Tàn Phế tiếp theo của bạn không tốn nộ khí',
+  'hudChrome.auraEffect.revengeFree': 'Phục Thù tiếp theo của bạn không tốn nộ khí',
+  'hudChrome.auraEffect.victoryRush': 'Đà Chiến Thắng đã sẵn sàng',
+  'hudChrome.auraEffect.maxHpPct': 'Tăng máu tối đa thêm {pct}%',
+  'hudChrome.statInfo.names.parry': 'Gạt Đòn',
+  'hudChrome.statInfo.desc.parry':
+    'Cơ hội để bạn gạt trọn vẹn một đòn cận chiến từ phía trước, không nhận chút sát thương nào. Đòn đánh từ phía sau không thể bị gạt.',
+  'hud.combat.floatingParry': 'Gạt Đòn',
+  'hud.combat.parried': '{ability} của bạn bị {target} gạt đòn.',
 };

@@ -17,7 +17,11 @@
 //   - mortal_wound/cost_tax/critvuln/vulnerability/spellvuln/expose/buff_dodge:
 //     value is a 0..1 fraction shown as a percent.
 import type { AuraKind } from '../sim/types';
-import { FAERIE_FIRE_ARMOR_PCT, SUNDER_ARMOR_PCT_PER_STACK } from '../sim/types';
+import {
+  FAERIE_FIRE_ARMOR_PCT,
+  RECKLESSNESS_RAGE_GEN,
+  SUNDER_ARMOR_PCT_PER_STACK,
+} from '../sim/types';
 
 export type AuraSchool = 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
 
@@ -229,6 +233,10 @@ export function auraEffectDescriptor(a: AuraEffectInput): AuraEffectDescriptor |
       return { key: `${KEY}.formCat` };
     case 'form_travel':
       return { key: `${KEY}.formTravel`, nums: { pct: pctFromMult(a.value) } };
+    case 'battle_stance':
+      return { key: `${KEY}.battleStance` };
+    case 'berserker_stance':
+      return { key: `${KEY}.berserkerStance` };
     case 'form_fireball':
       return { key: `${KEY}.formFireball`, nums: { pct: pctFromMult(a.value) } };
     case 'defensive_stance':
@@ -249,6 +257,54 @@ export function auraEffectDescriptor(a: AuraEffectInput): AuraEffectDescriptor |
         key: a.value < 0 ? `${KEY}.dmgDoneReduce` : `${KEY}.dmgDone`,
         nums: { pct: pctFromFrac(a.value) },
       };
+
+    // Warrior choice-row auras. Value semantics follow the live consumers:
+    //   - buff_crit/buff_rage_gen: 0..1 fraction added to crit chance / rage gen.
+    //   - buff_reckless: value is the crit fraction; the rage-gen half is the
+    //     fixed RECKLESSNESS_RAGE_GEN rageGenAuraMult applies.
+    //   - buff_avatar: value is the damage-dealt fraction (the colossus body
+    //     scale is the cosmetic AVATAR_SCALE, not shown).
+    //   - bloodbath: value is the TOTAL crit+damage fraction (stack-scaled).
+    //   - die_by_sword: value is the damage-taken cut dealDamage applies.
+    //   - sanguine: value is the swing-interval multiplier (< 1 = faster; shown
+    //     as the attacks-per-second gain, 1/value - 1) and value2 the damage
+    //     fraction.
+    case 'buff_crit':
+      return { key: `${KEY}.crit`, nums: { pct: pctFromFrac(a.value) } };
+    case 'buff_rage_gen':
+      return { key: `${KEY}.rageGen`, nums: { pct: pctFromFrac(a.value) } };
+    case 'buff_reckless':
+      return {
+        key: `${KEY}.reckless`,
+        nums: { pct: pctFromFrac(a.value), ragePct: pctFromFrac(RECKLESSNESS_RAGE_GEN) },
+      };
+    case 'buff_avatar':
+      return { key: `${KEY}.avatar`, nums: { pct: pctFromFrac(a.value) } };
+    case 'bloodbath':
+      return { key: `${KEY}.bloodbath`, nums: { pct: pctFromFrac(a.value) } };
+    case 'die_by_sword':
+      return { key: `${KEY}.dieBySword`, nums: { pct: pctFromFrac(a.value) } };
+    case 'sanguine':
+      // The haste half is shown as the attacks-per-second gain (1/mult - 1),
+      // so the designed 10% (mult 1/1.1) reads exactly 10%, not 9%.
+      return {
+        key: `${KEY}.sanguine`,
+        nums: {
+          hastePct: a.value > 0 ? Math.abs(round((1 / a.value - 1) * 100)) : 0,
+          dmgPct: pctFromFrac(a.value2 ?? 0),
+        },
+      };
+    case 'battle_trance':
+      // The warrior free-strike proc: the summary is the covered abilities,
+      // not a number (their names are baked per locale in the catalog value).
+      return { key: `${KEY}.battleTrance` };
+    case 'revenge_free':
+      return { key: `${KEY}.revengeFree` };
+    case 'victory_rush':
+      return { key: `${KEY}.victoryRush` };
+    case 'buff_maxhp_pct':
+      // Rallying Cry: value is the temporary max-health fraction.
+      return { key: `${KEY}.maxHpPct`, nums: { pct: pctFromFrac(a.value) } };
 
     default:
       return null;

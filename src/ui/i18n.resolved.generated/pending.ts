@@ -63,9 +63,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.dmgDoneReduce",
     "hudChrome.auraEffect.formFireball",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "es_ES": [
     "entities.abilities.arcane_surge.description",
@@ -112,8 +110,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -121,9 +117,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.dmgDoneReduce",
     "hudChrome.auraEffect.formFireball",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "fr_FR": [
     "entities.abilities.arcane_surge.description",
@@ -196,11 +190,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.instantCast",
     "hudChrome.auraEffect.overloadNext",
     "hudChrome.auraEffect.powerEchoNext",
+    "hudChrome.auraEffect.sanguine",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "fr_CA": [
     "entities.abilities.arcane_surge.description",
@@ -273,11 +266,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.instantCast",
     "hudChrome.auraEffect.overloadNext",
     "hudChrome.auraEffect.powerEchoNext",
+    "hudChrome.auraEffect.sanguine",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "en_CA": [],
   "it_IT": [
@@ -351,11 +343,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.instantCast",
     "hudChrome.auraEffect.overloadNext",
     "hudChrome.auraEffect.powerEchoNext",
+    "hudChrome.auraEffect.sanguine",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "de_DE": [
     "entities.abilities.arcane_surge.description",
@@ -430,9 +421,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "zh_CN": [
     "hud.combat.floatingParry",
@@ -523,9 +512,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "ru_RU": [
     "hud.combat.floatingParry",
@@ -586,8 +573,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -604,9 +589,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "nl_NL": [
     "entities.abilities.arcane_surge.description",
@@ -663,8 +646,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -681,9 +662,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "pl_PL": [
     "entities.abilities.arcane_surge.description",
@@ -740,8 +719,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -758,9 +735,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "id_ID": [
     "entities.abilities.arcane_surge.description",
@@ -817,8 +792,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -835,9 +808,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "tr_TR": [
     "entities.abilities.arcane_surge.description",
@@ -894,8 +865,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -912,9 +881,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "sv_SE": [
     "entities.abilities.arcane_surge.description",
@@ -971,8 +938,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -989,9 +954,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "vi_VN": [
     "entities.abilities.arcane_surge.description",
@@ -1048,8 +1011,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -1066,9 +1027,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ],
   "da_DK": [
     "entities.abilities.arcane_surge.description",
@@ -1125,8 +1084,6 @@ export const pending: Record<string, readonly string[]> = {
     "guide.abilityHook.frozen_orb",
     "guide.abilityHook.ice_lance",
     "guide.abilityHook.shatter",
-    "hud.combat.floatingParry",
-    "hud.combat.parried",
     "hud.pet.waterJet",
     "hud.pet.waterJetDesc",
     "hud.pet.waterJetTitle",
@@ -1143,8 +1100,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auraEffect.powerEchoNext",
     "hudChrome.auraEffect.temporalHourglass",
     "hudChrome.specPanel.specUnlockBanner",
-    "hudChrome.specPanel.specUnlockHint",
-    "hudChrome.statInfo.desc.parry",
-    "hudChrome.statInfo.names.parry"
+    "hudChrome.specPanel.specUnlockHint"
   ]
 };

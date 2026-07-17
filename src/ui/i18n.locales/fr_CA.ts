@@ -277,4 +277,19 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.nature': 'nature',
   'guide.deedsPage.cat.delve': 'Excavations',
   'hudChrome.deeds.catDelve': 'Excavations',
+  'hudChrome.auraEffect.battleStance': 'Posture de combat : génération de rage accrue de 10%',
+  'hudChrome.auraEffect.berserkerStance':
+    'Posture de berserker : coups critiques 3% plus fréquents et 3% plus puissants',
+  'hudChrome.auraEffect.crit': 'Accroît les chances de coup critique de {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Accroît la génération de rage de {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Accroît les chances de coup critique de {pct}% et la génération de rage de {ragePct}%',
+  'hudChrome.auraEffect.avatar': 'Colosse : dégâts infligés accrus de {pct}%',
+  'hudChrome.auraEffect.bloodbath':
+    'Accroît les chances de coup critique et les dégâts infligés de {pct}%',
+  'hudChrome.auraEffect.dieBySword': 'Diminue les dégâts subis de {pct}%',
+  'hudChrome.auraEffect.victoryRush': 'Élan de victoire est prêt',
+  'hudChrome.auraEffect.maxHpPct': 'Accroît les points de vie maximum de {pct}%',
+  'hudChrome.statInfo.desc.parry':
+    'Vos chances de parer entièrement une attaque de mêlée de front, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré.',
 };
