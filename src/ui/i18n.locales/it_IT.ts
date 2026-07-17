@@ -8087,4 +8087,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.desc.parry':
     'La tua probabilità di parare completamente un attacco in mischia frontale, senza subire danni. Un colpo alle spalle non può essere parato.',
   'hudChrome.options.mouseoverCast': 'Lancio al passaggio del mouse sui riquadri del gruppo',
+  'hudChrome.options.showTargetOfTarget': 'Mostra il bersaglio del bersaglio',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Il bersaglio del bersaglio',
 };

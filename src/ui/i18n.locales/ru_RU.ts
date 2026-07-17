@@ -8103,4 +8103,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.victoryRush': '«Порыв победы» готов',
   'hudChrome.auraEffect.maxHpPct': 'Повышает максимальное здоровье на {pct}%',
   'hudChrome.options.mouseoverCast': 'Применение по наведению на рамки группы',
+  'hudChrome.options.showTargetOfTarget': 'Показывать цель цели',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Цель цели',
 };

@@ -2027,6 +2027,10 @@ export class ClientWorld implements IWorld {
       e.sitting = !!w.sit;
       e.weaponStowed = !!w.ws;
       e.aggroTargetId = w.aggro ?? null;
+      // Another entity's selected target (players/bots; mobs use aggro above). Powers
+      // the target-of-target frame for a player target. For the SELF record this is
+      // re-set authoritatively from `s.target` in the self-decode below (same value).
+      e.targetId = w.tgt ?? null;
       e.tappedById = w.tap ?? null;
       e.ownerId = w.own ?? null;
       e.petMode = w.pm ?? 'defensive';

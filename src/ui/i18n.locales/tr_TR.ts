@@ -7961,4 +7961,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Karşılama',
   'hud.combat.parried': '{ability} yeteneğin {target} tarafından karşılandı.',
   'hudChrome.options.mouseoverCast': 'Grup Çerçevelerinde İmleçle Büyü Yapma',
+  'hudChrome.options.showTargetOfTarget': 'Hedefin Hedefini Göster',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Hedefin Hedefi',
 };

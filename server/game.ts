@@ -956,6 +956,12 @@ function dynamicFields(e: Entity): Record<string, unknown> {
   if (e.sitting || e.eating || e.drinking) out.sit = 1;
   if (e.weaponStowed) out.ws = 1; // Z-key sheathe: weapons render on the back
   if (e.aggroTargetId !== null) out.aggro = e.aggroTargetId;
+  // A player's/bot's SELECTED target (mobs use aggroTargetId above): rides so the
+  // client can render the target-of-target frame for a PLAYER target, exactly as
+  // `aggro` already enables it for a mob/pet target. Emitted only for an entity that
+  // HAS a target (players/bots in combat), so idle mobs (targetId stays null) add
+  // nothing. The SELF record still carries its own precise `target` field.
+  if (e.targetId !== null) out.tgt = e.targetId;
   if (e.tappedById !== null) out.tap = e.tappedById;
   if (e.ownerId !== null) out.own = e.ownerId;
   if (e.overheadEmoteId) {

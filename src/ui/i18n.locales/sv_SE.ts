@@ -7955,4 +7955,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Parerade',
   'hud.combat.parried': 'Din {ability} pareras av {target}.',
   'hudChrome.options.mouseoverCast': 'Kasta via muspekaren på gruppramarna',
+  'hudChrome.options.showTargetOfTarget': 'Visa målets mål',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Målets mål',
 };

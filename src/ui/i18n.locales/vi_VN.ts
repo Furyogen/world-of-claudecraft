@@ -7979,4 +7979,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Gạt Đòn',
   'hud.combat.parried': '{ability} của bạn bị {target} gạt đòn.',
   'hudChrome.options.mouseoverCast': 'Thi Triển Khi Rê Chuột Trên Khung Tổ Đội',
+  'hudChrome.options.showTargetOfTarget': 'Hiện Mục Tiêu Của Mục Tiêu',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Mục Tiêu Của Mục Tiêu',
 };

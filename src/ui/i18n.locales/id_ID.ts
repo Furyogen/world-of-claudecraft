@@ -8047,4 +8047,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Tangkis',
   'hud.combat.parried': '{ability}-mu ditangkis oleh {target}.',
   'hudChrome.options.mouseoverCast': 'Rapal Saat Menyorot Bingkai Kelompok',
+  'hudChrome.options.showTargetOfTarget': 'Tampilkan Sasaran dari Sasaran',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Sasaran dari Sasaran',
 };

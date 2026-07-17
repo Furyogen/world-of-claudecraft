@@ -7954,4 +7954,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.victoryRush': '勝利の追撃が使用可能',
   'hudChrome.auraEffect.maxHpPct': '最大体力を{pct}%上昇させる',
   'hudChrome.options.mouseoverCast': 'パーティフレームでマウスオーバーキャスト',
+  'hudChrome.options.showTargetOfTarget': 'ターゲットのターゲットを表示',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'ターゲットのターゲット',
 };

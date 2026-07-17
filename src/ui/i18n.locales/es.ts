@@ -8136,4 +8136,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.desc.parry':
     'Tu probabilidad de parar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede parar.',
   'hudChrome.options.mouseoverCast': 'Lanzar al pasar el cursor sobre los marcos de grupo',
+  'hudChrome.options.showTargetOfTarget': 'Mostrar el objetivo del objetivo',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Objetivo del objetivo',
 };

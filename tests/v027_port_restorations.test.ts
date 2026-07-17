@@ -35,6 +35,7 @@ import { directHealBonus } from '../src/sim/spell_scaling';
 import { stunDrCategory } from '../src/sim/stun_dr';
 import type { Aura } from '../src/sim/types';
 import { AVATAR_SCALE, SPELL_AOE_COEFF_MULT } from '../src/sim/types';
+import { targetOfTargetId } from '../src/ui/target_of_target';
 
 describe('rogue starting dual wield (classes.ts startOffhand)', () => {
   it('starts rogues with a rusty dagger in BOTH hands', () => {
@@ -355,8 +356,9 @@ describe('dev bots auto-accept party invites (party.ts partyInvite)', () => {
 });
 
 // ---------------------------------------------------------------------------
-// The mouseover-cast target routing the #1757 revert severed (the server
-// 'cast' command's optional friendly-target rider).
+// The two wire features the #1757 revert severed: the mouseover-cast target
+// routing on the server 'cast' command, and the target-of-target `tgt` dynamic
+// field + its kind-based client resolution.
 // ---------------------------------------------------------------------------
 
 // A ClientWorld without the WebSocket plumbing (the snapshots.test.ts harness),
@@ -409,8 +411,9 @@ function bareClient(pid: number): ClientWorld {
 }
 
 describe('mouseover cast settings + server target routing (game.ts case cast)', () => {
-  it('defaults mouseoverCast on', () => {
+  it('defaults mouseoverCast on and showTargetOfTarget off', () => {
     expect(BOOL_SETTINGS.mouseoverCast.def).toBe(true);
+    expect(BOOL_SETTINGS.showTargetOfTarget.def).toBe(false);
   });
 
   it('routes a numeric msg.target to castAbilityOn and falls back without one', () => {
@@ -455,5 +458,54 @@ describe('mouseover cast settings + server target routing (game.ts case cast)', 
     (client as unknown as { cmd(c: unknown): void }).cmd = (c: unknown) => cmds.push(c);
     client.castAbilityOn('renew', 42);
     expect(cmds).toEqual([{ cmd: 'cast', ability: 'renew', target: 42 }]);
+  });
+});
+
+describe('target-of-target wire field (dynamicFields tgt) and resolution', () => {
+  it('resolves a player target by targetId and a mob target by aggroTargetId', () => {
+    expect(targetOfTargetId({ kind: 'player', targetId: 7, aggroTargetId: null })).toBe(7);
+    // A pet is a mob-kind entity with an owner, so the mob arm covers it too.
+    expect(targetOfTargetId({ kind: 'mob', targetId: null, aggroTargetId: 9 })).toBe(9);
+    expect(targetOfTargetId({ kind: 'npc', targetId: null, aggroTargetId: null })).toBeNull();
+    // A player's aggroTargetId must never leak into the resolution (kind rule).
+    expect(targetOfTargetId({ kind: 'player', targetId: null, aggroTargetId: 9 })).toBeNull();
+  });
+
+  it('carries a player selected target as tgt through wireEntity, absent when null', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Aaa');
+    const b = sim.addPlayer('mage', 'Bbb');
+    sim.targetEntity(b, a);
+    const e = sim.entities.get(a);
+    if (!e) throw new Error('missing player entity');
+    expect(e.targetId).toBe(b);
+    expect(wireEntity(e).tgt).toBe(b);
+
+    // Absent, not tgt: null: an idle entity's record must be byte-unchanged.
+    sim.targetEntity(null, a);
+    expect(wireEntity(e)).not.toHaveProperty('tgt');
+  });
+
+  it('mirrors tgt onto entity.targetId through the real applySnapshot decode', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Aaa');
+    const b = sim.addPlayer('mage', 'Bbb');
+    sim.targetEntity(b, a);
+    const e = sim.entities.get(a);
+    if (!e) throw new Error('missing player entity');
+
+    // A DIFFERENT player's client seeing this pair in the world.
+    const client = bareClient(a + 1000);
+    const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
+    internals.applySnapshot({ t: 'snap', ents: [wireEntity(e)] });
+    const mirrored = client.entities.get(a);
+    if (!mirrored) throw new Error('missing mirrored entity');
+    expect(mirrored.targetId).toBe(b);
+    expect(targetOfTargetId(mirrored)).toBe(b);
+
+    // Dropping the target clears the mirror on the next record (tgt absent).
+    sim.targetEntity(null, a);
+    internals.applySnapshot({ t: 'snap', ents: [wireEntity(e)] });
+    expect(client.entities.get(a)?.targetId).toBeNull();
   });
 });

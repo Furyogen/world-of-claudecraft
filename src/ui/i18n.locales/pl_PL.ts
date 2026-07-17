@@ -8001,4 +8001,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Parowanie',
   'hud.combat.parried': 'Twój {ability} zostaje sparowany przez {target}.',
   'hudChrome.options.mouseoverCast': 'Rzucanie po najechaniu na ramki drużyny',
+  'hudChrome.options.showTargetOfTarget': 'Pokaż cel celu',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Cel celu',
 };

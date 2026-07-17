@@ -399,6 +399,7 @@ import { swingTimerState } from './swing_timer';
 import { SwingTimerPainter } from './swing_timer_painter';
 import { roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
+import { targetOfTargetId } from './target_of_target';
 import { targetPortraitUrl } from './target_portrait_view';
 import { targetRankView, targetUsesEliteFrame } from './target_rank_view';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
@@ -1069,6 +1070,21 @@ export class Hud {
   private targetResEl = $('#tf-res');
   private targetResTextEl = $('#tf-res-text');
   private targetDebuffsEl = $('#tf-debuffs');
+  // Target of Target (showTargetOfTarget option): element refs for the #totarget-frame
+  // mini-frame, resolved ONCE like the target refs above (never per-frame queried). The
+  // frame is a THIRD instance of the unit_frame family (totFramePainter below).
+  private totFrameEl = $('#totarget-frame');
+  private totNameEl = $('#totf-name');
+  private totLevelEl = $('#totf-level');
+  private totHpEl = $('#totf-hp');
+  private totHpTextEl = $('#totf-hp-text');
+  private totPortraitEl = $('#totf-portrait') as unknown as HTMLCanvasElement;
+  // The subject the tot painter's portrait gate redraws this frame (mirrors
+  // targetPortraitSubject); set just before the paint() call that fires the gate.
+  private totPortraitSubject: Entity | null = null;
+  // Cached showTargetOfTarget preference (set from main.ts applySetting via
+  // setShowTargetOfTarget); when off, the frame is painted hidden every frame.
+  private showTargetOfTarget = false;
   // The target whose portrait the family painter's repaint gate redraws this frame.
   // The gate fires synchronously inside the targetFramePainter.paint() call below,
   // so this holds the subject for that one call (the old inline block read `target`
@@ -1271,6 +1287,10 @@ export class Hud {
   private lastTargetDebuffsPaintAt = 0;
   private lastTargetFramePaintAt = 0;
   private lastTargetFrameId: number | null = null;
+  // Target-of-target frame throttle + identity tracking, the non-self cadence twins
+  // of the target frame's fields above (see the showTargetOfTarget paint block).
+  private lastTotFramePaintAt = 0;
+  private lastTotFrameId: number | null = null;
   // Title resolve elision for the target frame (the lastIcon pattern): the
   // pattern-key composition re-runs only when the (language, title id)
   // signature changes; every steady frame reuses the cached decoration and
@@ -1566,6 +1586,7 @@ export class Hud {
     onPortraitsReady(() => {
       this.drawPlayerFramePortrait();
       this.targetFramePainter.invalidatePortrait();
+      this.totFramePainter.invalidatePortrait();
     });
     const mm = $('#minimap') as unknown as HTMLCanvasElement;
     this.minimapCtx = require2dContext(mm);
@@ -3118,6 +3139,25 @@ export class Hud {
       repaintPortrait: () => this.drawTargetPortrait(),
     },
   );
+  // The target-of-target frame is the THIRD instance of the unit_frame family (after
+  // the player and target). It carries name + level + hp (no absorb, no resource
+  // group: the mini-frame has no shield overlay or power rail), toggles flex/none via
+  // shownDisplay, and owns its own portrait repaint gate. It is painted only when the
+  // showTargetOfTarget option is on and the target-of-target entity is known.
+  private readonly totFramePainter = new UnitFramePainter(
+    this.writerFacet,
+    {
+      frame: this.totFrameEl,
+      name: this.totNameEl,
+      level: this.totLevelEl,
+      hpFill: this.totHpEl,
+      hpText: this.totHpTextEl,
+    },
+    {
+      shownDisplay: 'flex',
+      repaintPortrait: () => this.drawTargetOfTargetPortrait(),
+    },
+  );
   // Deferred "Auto-Attack on Ability Use" for TIMED casts: set by castSlot when
   // the QoL would engage but the ability has a cast time, consumed by the
   // castStop event (engage on success, drop on interrupt), so starting a Smite
@@ -3835,6 +3875,28 @@ export class Hud {
         );
       }
     }
+  }
+
+  // Redraw the target-of-target portrait canvas, the twin of drawTargetPortrait for
+  // the #totarget-frame. Called by the tot painter's repaint gate only on identity
+  // change (or after invalidatePortrait), reading the subject set just before paint().
+  private drawTargetOfTargetPortrait(): void {
+    const tot = this.totPortraitSubject;
+    if (!tot) return;
+    if (tot.kind === 'player') {
+      this.portraits.drawClass(this.totPortraitEl, tot.templateId as PlayerClass, tot.skin ?? 0);
+    } else {
+      this.portraits.drawCrest(
+        this.totPortraitEl,
+        crestIdForEntity(tot.kind, MOBS[tot.templateId]?.family),
+      );
+    }
+  }
+
+  // Toggle the target-of-target mini-frame (showTargetOfTarget option), driven from
+  // main.ts applySetting. When off, the per-frame update paints the frame hidden.
+  setShowTargetOfTarget(on: boolean): void {
+    this.showTargetOfTarget = on;
   }
 
   private itemIcon(item: ItemDef): string {
@@ -6795,6 +6857,50 @@ export class Hud {
         cast: castBarState(target),
         castRemaining: target.castRemaining,
       });
+      // Target of Target (showTargetOfTarget): resolve who the target is targeting (a
+      // mob/pet's aggro target, a player's selected target) and paint the mini-frame.
+      // The id already rides the wire (aggro for mobs, tgt for players), but the ENTITY
+      // is only known when it is inside the player's ~120yd interest bubble, so an
+      // unknown (out of range) or world-object target-of-target hides the frame
+      // gracefully. Gated on the setting: off keeps the frame hidden every frame. A
+      // non-self frame, throttled like the target frame; a tot SWAP bypasses the throttle.
+      const totId = targetOfTargetId(target);
+      const tot = this.showTargetOfTarget && totId !== null ? sim.entities.get(totId) : undefined;
+      if (tot && tot.kind !== 'object') {
+        this.totPortraitSubject = tot;
+        const totChanged = tot.id !== this.lastTotFrameId;
+        if (
+          nonSelfRepaintDue(
+            totChanged,
+            this.lastTotFramePaintAt,
+            now,
+            targetFrameNonSelfIntervalMs(fxTier),
+          )
+        ) {
+          this.lastTotFramePaintAt = now;
+          this.lastTotFrameId = tot.id;
+          this.totFramePainter.paint(
+            unitFrameView({
+              present: true,
+              hpFrac: tot.hp / Math.max(1, tot.maxHp),
+              hpText: tot.dead ? t('hud.core.dead') : `${tot.hp} / ${tot.maxHp}`,
+              showAbsorbText: false,
+              resourceKind: 'none',
+              resFrac: 0,
+              resText: '',
+              levelText: null,
+              name: entityDisplayName(tot),
+              portraitKey: String(tot.id),
+              absorb: null,
+              dead: false,
+              outOfRange: false,
+            }),
+          );
+        }
+      } else {
+        this.lastTotFrameId = null;
+        this.totFramePainter.paint(unitFrameView(ABSENT_TARGET_DESCRIPTOR));
+      }
     } else {
       // No target (or a world object): hide the frame. The painter also resets its
       // portrait gate here, so re-acquiring a target repaints (the old -999 reset). Reset
@@ -6813,6 +6919,11 @@ export class Hud {
         this.lastAnnouncedTargetId = null;
       }
       this.targetFramePainter.paint(unitFrameView(ABSENT_TARGET_DESCRIPTOR));
+      // Hide the target-of-target frame too. Its parent (#target-frame) is already
+      // display:none, but paint hidden anyway to reset the painter's portrait gate +
+      // cadence id so re-acquiring a target repaints the mini-frame immediately.
+      this.lastTotFrameId = null;
+      this.totFramePainter.paint(unitFrameView(ABSENT_TARGET_DESCRIPTOR));
     }
 
     // cast bar: the player instance localizes the cast id (castDisplayName), layers

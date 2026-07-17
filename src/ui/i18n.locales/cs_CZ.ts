@@ -7883,4 +7883,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Odraženo',
   'hud.combat.parried': '{target} odráží tvoji schopnost {ability}.',
   'hudChrome.options.mouseoverCast': 'Sesílání najetím myší na rámech skupiny',
+  'hudChrome.options.showTargetOfTarget': 'Zobrazit cíl cíle',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Značka tvé značky',
 };

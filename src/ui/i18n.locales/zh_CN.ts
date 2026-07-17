@@ -7577,4 +7577,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.victoryRush': '乘胜追击已就绪',
   'hudChrome.auraEffect.maxHpPct': '最大生命值提高 {pct}%',
   'hudChrome.options.mouseoverCast': '队伍头像上鼠标悬停施法',
+  'hudChrome.options.showTargetOfTarget': '显示目标的目标',
+  'hudChrome.unitFrame.targetOfTargetLabel': '目标的目标',
 };

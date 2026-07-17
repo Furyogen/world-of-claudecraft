@@ -536,6 +536,34 @@
     max-width: 100%;
     pointer-events: auto;
   }
+  /* Target of Target (showTargetOfTarget option): a smaller twin of the target
+     frame, a #target-frame child anchored under the frame's RIGHT edge so it clears
+     the debuff strip that hangs below-left. Shrunk with zoom (compounding the
+     target frame's children-zoom, so it stays proportional), and shown by its own
+     unit_frame painter only when the target-of-target is known. Portrait + name +
+     hp bar only: no resource rail, cast bar, elite tag, or level chip. */
+  #totarget-frame {
+    position: absolute;
+    right: -6px;
+    top: calc(100% + 6px);
+    z-index: 7;
+    zoom: 0.74;
+    display: none;
+  }
+  #totarget-frame .uf-bars {
+    order: 1;
+    width: 132px;
+    margin-left: 0;
+    margin-right: -16px;
+    border-radius: 6px 11px 11px 6px;
+    padding: 4px 22px 4px 8px;
+  }
+  #totarget-frame .portrait-wrap {
+    order: 2;
+  }
+  #totarget-frame .level-chip {
+    display: none;
+  }
   /* Movable unit frames: the small corner toggle (built by MovableFrame in
      movable_frame.ts) that unlocks
      the frame for dragging and locks it back. Sits just outside the top-right

@@ -300,6 +300,7 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'aurasOnPlayerFrame',
       'showItemLevel',
       'showSecondaryActionBar',
+      'showTargetOfTarget',
       'showAttackButton',
       'showDailyRewardsChest',
     ]);

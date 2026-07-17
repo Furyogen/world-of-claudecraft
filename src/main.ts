@@ -1633,6 +1633,10 @@ async function startGame(
       );
       return;
     }
+    if (key === 'showTargetOfTarget') {
+      hud.setShowTargetOfTarget(settings.set('showTargetOfTarget', !!value));
+      return;
+    }
     if (key === 'showDailyRewardsChest') {
       hud.setDailyRewardsChestButtonVisible(settings.set('showDailyRewardsChest', !!value));
       return;

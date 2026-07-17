@@ -351,4 +351,5 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Rechazo',
   'hud.combat.parried': '{target} rechaza tu {ability}.',
   'hudChrome.options.mouseoverCast': 'Lanzar al pasar el ratón sobre los marcos de grupo',
+  'hudChrome.options.showTargetOfTarget': 'Mostrar objetivo del objetivo',
 };

@@ -7940,4 +7940,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Pareret',
   'hud.combat.parried': 'Din {ability} pareres af {target}.',
   'hudChrome.options.mouseoverCast': 'Museover-kast på grupperammer',
+  'hudChrome.options.showTargetOfTarget': 'Vis målets mål',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Målets Mål',
 };

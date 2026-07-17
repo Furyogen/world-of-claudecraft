@@ -8059,4 +8059,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hud.combat.floatingParry': 'Parering',
   'hud.combat.parried': 'Je {ability} wordt gepareerd door {target}.',
   'hudChrome.options.mouseoverCast': 'Mouseover-bezwering op groepsframes',
+  'hudChrome.options.showTargetOfTarget': 'Doelwit van doelwit tonen',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Doelwit van het doelwit',
 };
