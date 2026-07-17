@@ -98,6 +98,9 @@ export interface VisualDef {
    *  flip the standalone weapon files carry). Node name as authored in the GLB;
    *  applied as a local-space rotation (radians) after the bind transform. */
   weaponFix?: { node: string; rotX?: number; rotY?: number; rotZ?: number }[];
+  /** Glowing ring parented behind the head bone (the priest's Light halo).
+   *  Value is the glow color; geometry/placement live in visual.ts. */
+  halo?: number;
 }
 
 /** The slice of a VisualDef that decides how held weapons attach (which bones, and
@@ -563,6 +566,8 @@ export const VISUALS: Record<string, VisualDef> = {
     url: `${PLAYERS}/mage.glb`,
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
+    // The priest's Light: a warm golden halo ring above the crown.
+    halo: 0xffd766,
     show: [],
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],

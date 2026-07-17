@@ -3058,6 +3058,16 @@ const AURA_RECIPES: Record<string, IconRecipe> = {
   // Parameterized damage-reduction buffs (Furious Mending's 20% cut, aura id
   // 'furious_mending_dr')
   aura_buff_dr: r('blood', 'gold', ['shield', { p: 'heart', ...TR }], ['glow']),
+  // Bladed Echo (Bladed Gyre's armed echo buff)
+  aura_aoe_echo: r('fury', 'steel', ['sword'], ['motion']),
+  // Emboldened (Emboldening Roar's armed guaranteed-crit buff)
+  aura_sure_crit: r('fury', 'gold', ['sunburst'], ['glow']),
+  // Physical-only damage-reduction buffs (Raised Guard's cut), mirroring
+  // aura_buff_dr on the steel palette
+  aura_buff_dr_phys: r('steel', 'steel', ['shield', { p: 'heart', ...TR }], ['glow']),
+  // Breachmaker's source-scoped vulnerability debuff (kind 'vuln_source'), shown
+  // on the target's debuff frame: a cracked guard struck by a blade
+  aura_vuln_source: r('blood', 'earthBrown', ['sword', { p: 'sunburst', ...BR }], ['crack']),
 };
 
 // Crests: class / mob-family / status glyphs, painted with the same primitive

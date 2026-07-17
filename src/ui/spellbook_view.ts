@@ -73,6 +73,14 @@ export interface SpellbookInput {
   hasFreeSlot: boolean;
   /** The class has per-form bars (druid), so the reset-bar button is shown. */
   hasFormBars: boolean;
+  /** The player's committed spec, or null/undefined. Abilities another spec would
+   *  gate away (a wrong `specs`, or this spec in `excludeSpecs`) are dropped so the
+   *  book never dangles a "Trainable at level X" the committed spec can never
+   *  learn. No committed spec keeps the whole kit, since any spec is still open. */
+  spec?: string | null;
+  /** The player's level, gating `excludeSpecsAtLevel` hand-offs. Omitted = the
+   *  exclusion always applies, the pre-hand-off behavior. */
+  level?: number;
   /** Optional: the hotbar's ability id per bar slot (index 0 = barSlot 1, matching
    *  Hud.hotbarActions' own index = barSlot-1 convention), used to derive each
    *  row's mobilePage. Omitted (or an ability id not found here) yields
@@ -88,9 +96,31 @@ export interface SpellbookInput {
  * data, so the offline Sim and the online ClientWorld mirror produce identical
  * rows.
  */
+/** Can the committed spec ever learn this ability? Mirrors the sim's
+ *  specs / excludeSpecs gate (classes.ts abilitiesKnownAt). A null spec keeps
+ *  everything (nothing is committed yet). */
+function specCanLearn(abilityId: string, spec: string | null | undefined, level?: number): boolean {
+  if (!spec) return true;
+  const def = ABILITIES[abilityId];
+  if (!def) return true;
+  if (def.specs && !def.specs.includes(spec)) return false;
+  if (
+    def.excludeSpecs?.includes(spec) &&
+    (level === undefined || level >= (def.excludeSpecsAtLevel ?? 0))
+  )
+    return false;
+  return true;
+}
+
 export function buildSpellbookView(input: SpellbookInput): SpellbookView {
   const barIds = new Set(input.barAbilityIds);
-  const rows: SpellbookRow[] = input.abilities.map((abilityId) => {
+  const knownIds = new Set(input.known.map((k) => k.def.id));
+  // An already-learned ability always keeps its row (it exists regardless of the
+  // gate); only never-learnable trainable rows are dropped.
+  const learnable = input.abilities.filter(
+    (id) => knownIds.has(id) || specCanLearn(id, input.spec, input.level),
+  );
+  const rows: SpellbookRow[] = learnable.map((abilityId) => {
     const known = input.known.find((k) => k.def.id === abilityId) ?? null;
     const onBar = known !== null && barIds.has(abilityId);
     return {

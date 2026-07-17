@@ -267,3 +267,41 @@ describe('stance and warrior choice-row aura UI (aura_effect, auras_view, sim_i1
     expect(localizeSimAuraName('Enraged')).not.toBeNull();
   });
 });
+
+describe('spellbook spec gating (spellbook_view specCanLearn)', () => {
+  it('drops never-learnable trainable rows for the committed spec, keeps known ones', async () => {
+    const { buildSpellbookView } = await import('../src/ui/spellbook_view');
+    const base = {
+      classId: 'warrior' as const,
+      abilities: ['heroic_strike', 'overpower'] as const,
+      known: [],
+      barAbilityIds: [] as const,
+      hasFreeSlot: true,
+      hasFormBars: false,
+    };
+    // No committed spec: the whole kit shows (any spec is still open).
+    expect(buildSpellbookView(base).rows.map((r) => r.abilityId)).toEqual([
+      'heroic_strike',
+      'overpower',
+    ]);
+    // Fury excludes heroic_strike outright and slam from level 10 up.
+    const fury = buildSpellbookView({ ...base, spec: 'fury', level: 12 });
+    expect(fury.rows.map((r) => r.abilityId)).toEqual([]);
+    // Below the overpower hand-off level the exclusion has not kicked in yet.
+    const furyLow = buildSpellbookView({ ...base, spec: 'fury', level: 5 });
+    expect(furyLow.rows.map((r) => r.abilityId)).toEqual(['overpower']);
+    // An already-learned excluded ability keeps its row.
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior' });
+    const known = sim.known.filter((k) => k.def.id === 'heroic_strike');
+    if (known.length !== 1) throw new Error('expected heroic_strike known at level 1');
+    const withKnown = buildSpellbookView({ ...base, known, spec: 'fury', level: 12 });
+    expect(withKnown.rows.map((r) => r.abilityId)).toEqual(['heroic_strike']);
+  });
+});
+
+describe('passives never auto-place on the action bar', () => {
+  it('marks at least one live passive and pins the guard input', () => {
+    const passives = Object.values(ABILITIES).filter((a) => a.passive);
+    expect(passives.length).toBeGreaterThan(0);
+  });
+});

@@ -174,6 +174,8 @@ export class SpellbookWindow {
       abilityIdByBarSlot: this.deps.abilityIdByBarSlot(),
       hasFreeSlot: this.deps.hasFreeSlot(),
       hasFormBars: this.deps.hasFormBars(),
+      spec: world.talentSpec,
+      level: world.player.level,
     });
     const className = classDisplayName(view.classId);
     markDialogRoot(el, { label: t('abilityUi.spellbook.title') });

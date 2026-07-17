@@ -4673,6 +4673,13 @@ export class Hud {
         // Pass the ability id so the effect line can resolve its damage school
         // (the {school} placeholder in the thorns/dot/absorb summaries).
         html += this.auraEffectTooltipHtml({ kind: eff.kind, value: eff.value, id: a.id });
+      } else if (eff.type === 'partyMeleeBuff') {
+        // Sanguine Aura: surface the same composite line the buff icon shows.
+        html += this.auraEffectTooltipHtml({
+          kind: 'sanguine',
+          value: eff.attackSpeedMult,
+          value2: eff.dmgPct,
+        });
       }
     }
     const requirements = abilityRequirementLines(a);
@@ -6588,6 +6595,7 @@ export class Hud {
         present: true,
         hpFrac: p.hp / Math.max(1, p.maxHp),
         hpText: `${p.hp} / ${p.maxHp}`,
+        showAbsorbText: true,
         resourceKind: p.resourceType,
         resFrac: p.resource / Math.max(1, p.maxResource),
         resText: `${Math.round(p.resource)} / ${p.maxResource}`,
@@ -6693,6 +6701,7 @@ export class Hud {
             present: true,
             hpFrac: target.hp / Math.max(1, target.maxHp),
             hpText: target.dead ? t('hud.core.dead') : `${target.hp} / ${target.maxHp}`,
+            showAbsorbText: !target.dead,
             // The target's power bar (classic target frame): players and caster
             // mobs show their mana/rage/energy; a resource-less target (a plain
             // beast, rtype null) maps to 'none' EXPLICITLY (unitResourceClass
