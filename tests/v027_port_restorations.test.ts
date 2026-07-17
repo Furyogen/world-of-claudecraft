@@ -305,3 +305,27 @@ describe('passives never auto-place on the action bar', () => {
     expect(passives.length).toBeGreaterThan(0);
   });
 });
+
+describe('dev bots auto-accept party invites (party.ts partyInvite)', () => {
+  it('forms the party immediately when the invitee is a dev bot', () => {
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior' });
+    const botPid = sim.spawnDevBot('PartyDummy');
+    expect(botPid).toBeGreaterThan(0);
+    sim.partyInvite(botPid, sim.playerId);
+    const party = sim.partyOf(sim.playerId);
+    if (!party) throw new Error('expected the party to form without a manual accept');
+    expect(party.members).toContain(sim.playerId);
+    expect(party.members).toContain(botPid);
+  });
+
+  it('still leaves a regular player invite pending until they accept', () => {
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Aaa');
+    const b = sim.addPlayer('mage', 'Bbb');
+    sim.partyInvite(b, a);
+    expect(sim.partyOf(a)).toBeNull();
+    expect(sim.partyOf(b)).toBeNull();
+    sim.partyAccept(b);
+    expect(sim.partyOf(b)?.members).toContain(a);
+  });
+});
