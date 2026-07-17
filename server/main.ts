@@ -1,3 +1,6 @@
+// FIRST import on purpose: loads .env before realm.ts (or any other module
+// with an import-time process.env read) evaluates. See server/env.ts.
+import './env';
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
