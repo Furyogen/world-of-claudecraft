@@ -31,7 +31,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 412,
-      "state": "56de2fb8",
+      "state": "728fdfa3",
       "events": "5ce63f3d",
       "rng": {
         "draws": 0,
@@ -42,7 +42,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 412,
-      "state": "3071ac85",
+      "state": "d736efde",
       "events": "b46d41a9",
       "rng": {
         "draws": 28,
@@ -53,7 +53,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 412,
-      "state": "e97c8813",
+      "state": "9f6266b8",
       "events": "3a440865",
       "rng": {
         "draws": 138,
@@ -64,7 +64,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 412,
-      "state": "f2117d76",
+      "state": "8bb5af77",
       "events": "8025fc6d",
       "rng": {
         "draws": 294,
@@ -75,7 +75,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 412,
-      "state": "35a47ea3",
+      "state": "dc347666",
       "events": "1f5aecd1",
       "rng": {
         "draws": 300,
@@ -253,7 +253,8 @@
           "entityId": 410,
           "equipment": {
             "chest": "footpad_jerkin",
-            "mainhand": "rusty_dagger"
+            "mainhand": "rusty_dagger",
+            "offhand": "rusty_dagger"
           },
           "equipmentInstance": {},
           "fiestaRestore": {
@@ -475,6 +476,7 @@
           "critChance": 0.121,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.091,
+          "dualWielding": true,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 4950,
@@ -486,6 +488,13 @@
           "maxHp": 5000,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "rusty_dagger",
+          "offhandWeapon": {
+            "dagger": true,
+            "max": 4,
+            "min": 2,
+            "speed": 1.8
+          },
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -574,7 +583,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 412,
-      "state": "70837de5",
+      "state": "cc670cda",
       "events": "90e7589b",
       "rng": {
         "draws": 300,
@@ -752,7 +761,8 @@
           "entityId": 410,
           "equipment": {
             "chest": "footpad_jerkin",
-            "mainhand": "rusty_dagger"
+            "mainhand": "rusty_dagger",
+            "offhand": "rusty_dagger"
           },
           "equipmentInstance": {},
           "fiestaRestore": {
@@ -972,6 +982,7 @@
           "critChance": 0.121,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.091,
+          "dualWielding": true,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 4900,
@@ -983,6 +994,13 @@
           "maxHp": 5000,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "rusty_dagger",
+          "offhandWeapon": {
+            "dagger": true,
+            "max": 4,
+            "min": 2,
+            "speed": 1.8
+          },
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -1071,7 +1089,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 412,
-      "state": "cb7ac95c",
+      "state": "04f94cf9",
       "events": "43da5f5f",
       "rng": {
         "draws": 300,
@@ -1253,7 +1271,8 @@
           "entityId": 410,
           "equipment": {
             "chest": "footpad_jerkin",
-            "mainhand": "rusty_dagger"
+            "mainhand": "rusty_dagger",
+            "offhand": "rusty_dagger"
           },
           "equipmentInstance": {},
           "fiestaRestore": {
@@ -1474,6 +1493,7 @@
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.091,
+          "dualWielding": true,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "id": 410,
@@ -1484,6 +1504,13 @@
           "maxHp": 5000,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "rusty_dagger",
+          "offhandWeapon": {
+            "dagger": true,
+            "max": 4,
+            "min": 2,
+            "speed": 1.8
+          },
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -1572,7 +1599,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 412,
-      "state": "db0e33f0",
+      "state": "71af153b",
       "events": "741638a5",
       "rng": {
         "draws": 429,
@@ -1583,7 +1610,7 @@
       "tick": 142,
       "time": 7.1,
       "nextId": 412,
-      "state": "f60db4af",
+      "state": "4a97ad94",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1765,7 +1792,8 @@
           "entityId": 410,
           "equipment": {
             "chest": "footpad_jerkin",
-            "mainhand": "rusty_dagger"
+            "mainhand": "rusty_dagger",
+            "offhand": "rusty_dagger"
           },
           "equipmentInstance": {},
           "fiestaRestore": {
@@ -1988,6 +2016,7 @@
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.091,
+          "dualWielding": true,
           "facing": 3.141593,
           "fiveSecondRule": 106.1,
           "id": 410,
@@ -1998,6 +2027,13 @@
           "maxHp": 5000,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "rusty_dagger",
+          "offhandWeapon": {
+            "dagger": true,
+            "max": 4,
+            "min": 2,
+            "speed": 1.8
+          },
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
