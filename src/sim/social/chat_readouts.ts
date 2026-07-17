@@ -289,7 +289,12 @@ export function overpowerReadout(ctx: SimContext, e: Entity, meta: PlayerMeta): 
 // only one is ever active, so the first match is the answer.
 export function formReadout(e: Entity): string {
   const form = e.auras.find(
-    (a) => isFormAuraKind(a.kind) || a.kind === 'defensive_stance' || a.kind === 'stealth',
+    (a) =>
+      isFormAuraKind(a.kind) ||
+      a.kind === 'battle_stance' ||
+      a.kind === 'berserker_stance' ||
+      a.kind === 'defensive_stance' ||
+      a.kind === 'stealth',
   );
   if (!form) return 'You are not in any form or stance.';
   if (form.kind === 'stealth') return 'You are stealthed.';
@@ -430,6 +435,7 @@ export function questReadout(meta: PlayerMeta): string {
 export function gearReadout(meta: PlayerMeta): string {
   const slots: [EquipSlot, string][] = [
     ['mainhand', 'Main Hand'],
+    ['offhand', 'Off Hand'],
     ['helmet', 'Helmet'],
     ['shoulder', 'Shoulder'],
     ['chest', 'Chest'],

@@ -126,3 +126,42 @@ describe('selfHotPctMax effect (effect_dispatch)', () => {
     expect(hot.value).toBe(Math.max(1, Math.round((p.maxHp * 0.3) / 4)));
   });
 });
+
+describe('offhand surfacing (paperdoll, player card, chat readout)', () => {
+  it('shows the offhand cell on the character sheet paperdoll', async () => {
+    const { PAPERDOLL_RIGHT_SLOTS } = await import('../src/ui/char_view');
+    expect(PAPERDOLL_RIGHT_SLOTS).toContain('offhand');
+  });
+
+  it('lists the offhand in the chat gear readout', async () => {
+    const { gearReadout } = await import('../src/sim/social/chat_readouts');
+    const sim = new Sim({ seed: 1234, playerClass: 'rogue' });
+    const meta = sim.meta(sim.playerId);
+    if (!meta) throw new Error('missing player metadata');
+    expect(gearReadout(meta)).toContain('Off Hand: Rusty Dagger');
+  });
+
+  it('recognizes battle and berserker stances in the form readout', async () => {
+    const { formReadout } = await import('../src/sim/social/chat_readouts');
+    const sim = new Sim({ seed: 1234, playerClass: 'warrior' });
+    const p = sim.player;
+    for (const kind of ['battle_stance', 'berserker_stance'] as const) {
+      p.auras.length = 0;
+      p.auras.push({
+        id: kind,
+        name: kind === 'battle_stance' ? 'Battle Stance' : 'Berserker Stance',
+        kind,
+        remaining: 3600,
+        duration: 3600,
+        value: 0,
+        sourceId: p.id,
+        school: 'physical',
+      });
+      expect(formReadout(p)).toContain(
+        kind === 'battle_stance' ? 'Battle Stance' : 'Berserker Stance',
+      );
+    }
+    p.auras.length = 0;
+    expect(formReadout(p)).toBe('You are not in any form or stance.');
+  });
+});

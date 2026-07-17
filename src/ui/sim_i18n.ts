@@ -6335,6 +6335,7 @@ function tRaidExtra(key: RaidExtraKey, params?: InterpolationValues): string {
 // src/sim/sim.ts (the slot order/labels it emits).
 const GEAR_SLOT_KEYS: Record<string, TranslationKey> = {
   'Main Hand': 'itemUi.slots.mainhand',
+  'Off Hand': 'itemUi.slots.offhand',
   Helmet: 'itemUi.slots.helmet',
   Shoulder: 'itemUi.slots.shoulder',
   Chest: 'itemUi.slots.chest',
