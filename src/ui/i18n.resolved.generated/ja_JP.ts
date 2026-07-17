@@ -5365,7 +5365,7 @@ export const ja_JP: EnTranslations = {
     "combat": {
       "floatingMiss": "ミス",
       "floatingDodge": "回避",
-      "floatingParry": "Parry",
+      "floatingParry": "受け流し",
       "floatingResist": "抵抗",
       "cannotMove": "動けない！",
       "attack": "攻撃",
@@ -5375,7 +5375,7 @@ export const ja_JP: EnTranslations = {
       "damageTakenCrit": "{source}からクリティカルで{amount}のダメージを受けました。",
       "miss": "{ability}は{target}に外れました。",
       "dodged": "{target}は{ability}を回避しました。",
-      "parried": "Your {ability} is parried by {target}.",
+      "parried": "{target}は{ability}を受け流しました。",
       "resisted": "{target}は{ability}に抵抗しました。",
       "healSelf": "{ability}が自分を{amount}回復しました。",
       "healSelfCrit": "{ability}が自分をクリティカルで{amount}回復しました。",

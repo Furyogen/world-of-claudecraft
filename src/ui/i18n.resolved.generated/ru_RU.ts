@@ -5365,7 +5365,7 @@ export const ru_RU: EnTranslations = {
     "combat": {
       "floatingMiss": "Промах",
       "floatingDodge": "Уклон",
-      "floatingParry": "Parry",
+      "floatingParry": "Парировано",
       "floatingResist": "Сопротивление",
       "cannotMove": "Не двигается!",
       "attack": "атака",
@@ -5375,7 +5375,7 @@ export const ru_RU: EnTranslations = {
       "damageTakenCrit": "{source} критически поражает вас на {amount}.",
       "miss": "Ваше {ability} промахивается по {target}.",
       "dodged": "{target} уклоняется от вашего {ability}.",
-      "parried": "Your {ability} is parried by {target}.",
+      "parried": "{target} парирует ваш {ability}.",
       "resisted": "{target} сопротивляется вашему {ability}.",
       "healSelf": "Ваше {ability} исцеляет вас на {amount}.",
       "healSelfCrit": "Ваше {ability} критически исцеляет вас на {amount}.",

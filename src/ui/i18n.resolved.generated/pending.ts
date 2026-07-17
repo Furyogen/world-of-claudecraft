@@ -423,22 +423,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.specPanel.specUnlockBanner",
     "hudChrome.specPanel.specUnlockHint"
   ],
-  "zh_CN": [
-    "hud.combat.floatingParry",
-    "hud.combat.parried"
-  ],
-  "zh_TW": [
-    "hud.combat.floatingParry",
-    "hud.combat.parried"
-  ],
-  "ko_KR": [
-    "hud.combat.floatingParry",
-    "hud.combat.parried"
-  ],
-  "ja_JP": [
-    "hud.combat.floatingParry",
-    "hud.combat.parried"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.abilities.arcane_surge.description",
     "entities.abilities.arcane_surge.name",
@@ -514,10 +502,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.specPanel.specUnlockBanner",
     "hudChrome.specPanel.specUnlockHint"
   ],
-  "ru_RU": [
-    "hud.combat.floatingParry",
-    "hud.combat.parried"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.abilities.arcane_surge.description",
     "entities.abilities.arcane_surge.name",

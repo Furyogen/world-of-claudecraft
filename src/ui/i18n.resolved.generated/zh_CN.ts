@@ -5365,7 +5365,7 @@ export const zh_CN: EnTranslations = {
     "combat": {
       "floatingMiss": "未命中",
       "floatingDodge": "闪避",
-      "floatingParry": "Parry",
+      "floatingParry": "招架",
       "floatingResist": "抵抗",
       "cannotMove": "无法移动！",
       "attack": "攻击",
@@ -5375,7 +5375,7 @@ export const zh_CN: EnTranslations = {
       "damageTakenCrit": "{source}对你造成暴击，造成 {amount} 点伤害。",
       "miss": "你的{ability}未命中{target}。",
       "dodged": "{target}闪避了你的{ability}。",
-      "parried": "Your {ability} is parried by {target}.",
+      "parried": "{target}招架了你的{ability}。",
       "resisted": "{target}抵抗了你的{ability}。",
       "healSelf": "你的{ability}为你恢复 {amount} 点生命。",
       "healSelfCrit": "你的{ability}对你造成暴击治疗，恢复 {amount} 点生命。",

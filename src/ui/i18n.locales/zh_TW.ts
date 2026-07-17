@@ -7577,6 +7577,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.revengeFree': '你的下一次復仇不消耗怒氣',
   'hudChrome.auraEffect.victoryRush': '乘勝追擊已就緒',
   'hudChrome.auraEffect.maxHpPct': '最大生命值提高 {pct}%',
+  'hud.combat.floatingParry': '招架',
+  'hud.combat.parried': '你的{ability}被{target}招架了。',
   'hudChrome.options.mouseoverCast': '對隊伍框架滑鼠指向施法',
   'hudChrome.options.showTargetOfTarget': '顯示目標的目標',
   'hudChrome.unitFrame.targetOfTargetLabel': '目標的目標',

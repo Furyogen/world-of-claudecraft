@@ -7953,6 +7953,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.revengeFree': '次の意趣返しの怒りコストが0になる',
   'hudChrome.auraEffect.victoryRush': '勝利の追撃が使用可能',
   'hudChrome.auraEffect.maxHpPct': '最大体力を{pct}%上昇させる',
+  'hud.combat.floatingParry': '受け流し',
+  'hud.combat.parried': '{target}は{ability}を受け流しました。',
   'hudChrome.options.mouseoverCast': 'パーティフレームでマウスオーバーキャスト',
   'hudChrome.options.showTargetOfTarget': 'ターゲットのターゲットを表示',
   'hudChrome.unitFrame.targetOfTargetLabel': 'ターゲットのターゲット',
