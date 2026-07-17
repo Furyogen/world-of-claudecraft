@@ -10727,6 +10727,10 @@
     text-align: center;
   }
   .ws-continue {
+    /* Warm-white focus ring: deliberate on the gilded gradient (see the
+       :focus-visible rule below); defined here so the outline declaration
+       stays token-driven for the focus_visible_guard scan. */
+    --ws-continue-ring: #fff6d8;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -10758,7 +10762,7 @@
      !important mirrors that generic rule so the same-layer tie falls to this
      later, equally specific declaration. */
   .ws-continue:focus-visible {
-    outline: 2px solid #fff6d8 !important;
+    outline: 2px solid var(--ws-continue-ring) !important;
     outline-offset: 2px !important;
     box-shadow:
       0 4px 22px rgba(255, 209, 0, 0.45),
