@@ -264,7 +264,10 @@ describe('axe: spellbook window', () => {
     const win = new SpellbookWindow(
       stubDeps({
         root: () => root,
-        world: () => ({ cfg: { playerClass: 'warrior' }, known: [] }) as never,
+        // The render reads world.player.level for the spec/level learn gate
+        // (IWorld always carries a player); level 1 keeps every row locked.
+        world: () =>
+          ({ cfg: { playerClass: 'warrior' }, known: [], player: { level: 1 } }) as never,
         barAbilityIds: () => [],
         hasFreeSlot: () => true,
         hasFormBars: () => false,
