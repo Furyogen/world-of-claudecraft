@@ -16,6 +16,7 @@ import type {
 } from './types';
 import {
   ALL_EQUIP_SLOTS,
+  AVATAR_SCALE,
   BERSERKER_CRIT_CHANCE,
   cloneItemInstancePayload,
   critFractionFromRating,
@@ -377,6 +378,9 @@ export function recalcPlayerStats(
     else if (a.kind === 'buff_sta_pct') staPct += a.value / 100;
     else if (a.kind === 'buff_armor_pct') buffArmorPct += a.value / 100;
     else if (a.kind === 'buff_ap_pct') buffApPct += a.value / 100;
+    // Avatar: the colossus transform grows the body by the fixed scale (its
+    // aura value carries the damage amp, consumed in dealDamage).
+    else if (a.kind === 'buff_avatar') scaleMul *= AVATAR_SCALE;
     else if (a.kind === 'form_bear') bearForm = true;
     else if (a.kind === 'form_cat') catForm = true;
     // Moonkin Form carries its Spell Power bonus in the form aura's value, so it lives and
@@ -434,6 +438,9 @@ export function recalcPlayerStats(
   // Moonkin Form: a hardy caster form that adds 50% armor (its +20% spell damage rides a
   // separate buff_spelldmg aura the form applies).
   if (moonkinForm) s.armor = Math.round(s.armor * 1.5);
+  // Protection's Vanguard: bonus armor from Strength, added (on the fully-summed
+  // Strength) before the armor multiplier so armorPct amplifies it too.
+  if (mods?.stats.armorFromStrPct) s.armor += Math.round(s.str * mods.stats.armorFromStrPct);
   if (mods?.stats.armorPct) s.armor = Math.round(s.armor * (1 + mods.stats.armorPct));
   if (buffArmorPct) s.armor = Math.round(s.armor * (1 + buffArmorPct)); // Devotion Aura
   // Floor Spirit at 0 so a Spirit-siphoning debuff (negative buff_spi) can never

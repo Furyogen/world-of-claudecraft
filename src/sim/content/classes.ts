@@ -221,6 +221,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     manaPerLevel: 0,
     resourceType: 'energy',
     startWeapon: 'rusty_dagger',
+    startOffhand: 'rusty_dagger',
     startChest: 'footpad_jerkin',
     startItems: START_RATIONS,
     abilities: [

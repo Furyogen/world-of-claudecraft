@@ -3933,6 +3933,8 @@ export const SHIELD_BLOCK_BASE = 0.05;
 export const ENRAGE_DMG_DONE = 0.07;
 export const ENRAGE_HASTE_PCT = 0.25;
 export const ENRAGE_MOVE_MULT = 1.1;
+// Avatar's colossus body-size multiplier while the buff_avatar aura is worn.
+export const AVATAR_SCALE = 1.15;
 export const REVENGE_FREE_CHANCE = 0.3;
 export const REVENGE_FREE_DURATION = 10;
 export const BATTLE_TRANCE_CHANCE = 0.2;

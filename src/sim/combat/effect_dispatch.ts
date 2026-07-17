@@ -1452,7 +1452,8 @@ export function runEffects(
           school: ability.school,
           fx: 'nova',
         });
-        const aoeHealBonus = directHealBonus(p.spellPower, res.castTime);
+        // AoE heals take the same per-target coefficient penalty as AoE damage.
+        const aoeHealBonus = directHealBonus(p.spellPower, res.castTime, true);
         for (const m of friendliesInRadius(ctx, p, eff.radius)) {
           if (!ctx.hasLineOfSight(p, m)) continue;
           const healAmount = ctx.rng.range(eff.min, eff.max) + aoeHealBonus;
@@ -2345,6 +2346,25 @@ export function runEffects(
           ? Math.max(eff.pct, 0.2)
           : eff.pct;
         ctx.applyHeal(p, p, Math.round(p.maxHp * pct), ability.name);
+        break;
+      }
+      case 'selfHotPctMax': {
+        // A plain self 'hot' aura (the same kind Renew applies, ticked by
+        // combat/auras.ts) whose total is a fraction of the caster's MAXIMUM
+        // health. No spell-power rider: the pct already scales with the caster.
+        const ticks = Math.max(1, Math.round(eff.duration / eff.interval));
+        ctx.applyAura(p, {
+          id: ability.id,
+          name: ability.name,
+          kind: 'hot',
+          remaining: eff.duration,
+          duration: eff.duration,
+          value: Math.max(1, Math.round((p.maxHp * eff.pct) / ticks)),
+          tickInterval: eff.interval,
+          tickTimer: eff.interval,
+          sourceId: p.id,
+          school: ability.school,
+        });
         break;
       }
       case 'charge': {
