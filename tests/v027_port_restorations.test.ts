@@ -2,7 +2,31 @@
 // v027 port initially missed (AUDIT-v027-port-drops-2026-07-17). Each block
 // pins one restored behavior so a future merge or revert cannot silently drop
 // it again.
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Mock the db layer so no Postgres is needed; the server wire/routing pins below
+// drive the real GameServer (the snapshots.test.ts harness convention).
+vi.mock('../server/db', () => ({
+  pool: { query: vi.fn(async () => ({ rows: [] })) },
+  saveCharacterState: vi.fn(async () => {}),
+  openPlaySession: vi.fn(async () => 1),
+  touchCharacterLogin: vi.fn(async () => {}),
+  closePlaySession: vi.fn(async () => {}),
+  insertChatLogs: vi.fn(async () => {}),
+  walletForAccount: vi.fn(async () => null),
+  markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  setAccountWeaponSkinLoadout: vi.fn(async () => ({
+    completedQuestIds: [],
+    mechChromaIds: [],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
+  })),
+}));
+
+import { GameServer, wireEntity } from '../server/game';
+import { BOOL_SETTINGS } from '../src/game/settings';
+import { ClientWorld } from '../src/net/online';
 import { ABILITIES, CLASSES } from '../src/sim/content/classes';
 import { emptyModifiers } from '../src/sim/content/talents';
 import { recalcPlayerStats } from '../src/sim/entity';
@@ -327,5 +351,109 @@ describe('dev bots auto-accept party invites (party.ts partyInvite)', () => {
     expect(sim.partyOf(b)).toBeNull();
     sim.partyAccept(b);
     expect(sim.partyOf(b)?.members).toContain(a);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The mouseover-cast target routing the #1757 revert severed (the server
+// 'cast' command's optional friendly-target rider).
+// ---------------------------------------------------------------------------
+
+// A ClientWorld without the WebSocket plumbing (the snapshots.test.ts harness),
+// to drive the REAL applySnapshot decode directly.
+function bareClient(pid: number): ClientWorld {
+  const c = Object.create(ClientWorld.prototype);
+  c.cfg = { seed: 20061, playerClass: 'warrior' };
+  c.entities = new Map();
+  c.playerId = pid;
+  c.ownPlayerId = pid;
+  c.ownPlayerClass = 'warrior';
+  c.spectating = null;
+  c.cupInfo = null;
+  c.sportRole = null;
+  c.moveInput = {};
+  c.inventory = [];
+  c.vendorBuyback = [];
+  c.equipment = {};
+  c.accountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
+  c.copper = 0;
+  c.honor = 0;
+  c.lifetimeHonor = 0;
+  c.xp = 0;
+  c.known = [];
+  c.questLog = new Map();
+  c.questsDone = new Set();
+  c.pendingQuestCommands = new Map();
+  c.partyInfo = null;
+  c.selectedDungeonDifficulty = 'normal';
+  c.tradeInfo = null;
+  c.duelInfo = null;
+  c.lastSnapAt = 0;
+  c.snapInterval = 50;
+  c.serverTickHz = null;
+  c.missingSince = new Map();
+  c.pendingFacingDelta = 0;
+  c.connected = true;
+  c.eventQueue = [];
+  c.mouselookFacing = null;
+  c.lastInputSentAt = 0;
+  c.lastInputSig = '';
+  c.inputSeq = 0;
+  c.pendingInputSeqSentAt = new Map();
+  c.ackedInputSeq = 0;
+  c.inputEchoSamples = [];
+  c.spectateFacingPending = false;
+  c.pendingSpectateFacing = null;
+  c.nodeCooldowns = new Map();
+  return c as ClientWorld;
+}
+
+describe('mouseover cast settings + server target routing (game.ts case cast)', () => {
+  it('defaults mouseoverCast on', () => {
+    expect(BOOL_SETTINGS.mouseoverCast.def).toBe(true);
+  });
+
+  it('routes a numeric msg.target to castAbilityOn and falls back without one', () => {
+    const server = new GameServer();
+    const sent: unknown[] = [];
+    const ws = { readyState: 1, send: (payload: string) => sent.push(JSON.parse(payload)) };
+    const session = server.join(ws as never, 9001, 9001, 'Cliquer', 'priest', null);
+    if ('error' in session) throw new Error(session.error);
+    session.blockListLoaded = true;
+    const calls: unknown[][] = [];
+    server.sim.castAbilityOn = ((ability: string, targetId: number, pid?: number) => {
+      calls.push(['on', ability, targetId, pid]);
+    }) as typeof server.sim.castAbilityOn;
+    server.sim.castAbility = ((ability: string, pid?: number) => {
+      calls.push(['plain', ability, pid]);
+    }) as typeof server.sim.castAbility;
+
+    // The wire string 'cast' and the msg.target field ARE the protocol; a float
+    // is coerced with | 0 exactly as the handler does.
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'cast', ability: 'renew', target: 55.9 }),
+    );
+    expect(calls).toEqual([['on', 'renew', 55, session.pid]]);
+
+    calls.length = 0;
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'cast', ability: 'renew' }));
+    expect(calls).toEqual([['plain', 'renew', session.pid]]);
+
+    // A non-numeric target must never reach castAbilityOn (type-checked field).
+    calls.length = 0;
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'cast', ability: 'renew', target: 'evil' }),
+    );
+    expect(calls).toEqual([['plain', 'renew', session.pid]]);
+  });
+
+  it('sends the target rider on the ClientWorld castAbilityOn command', () => {
+    const client = bareClient(1);
+    const cmds: unknown[] = [];
+    (client as unknown as { cmd(c: unknown): void }).cmd = (c: unknown) => cmds.push(c);
+    client.castAbilityOn('renew', 42);
+    expect(cmds).toEqual([{ cmd: 'cast', ability: 'renew', target: 42 }]);
   });
 });

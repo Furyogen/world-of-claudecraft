@@ -1021,6 +1021,7 @@ export const en_XA: EnTranslations = {
       "startAttackOnAbility": "[Áúţó-Áţţáçķ óñ Áƀíļíţý Úšé]",
       "walkByAutoloot": "[Ŵáļķ-ƀý Áúţóļóóţ]",
       "groundReticle": "[Ĝŕóúñð-Ţáŕĝéţíñĝ Ŕéţíçļé]",
+      "mouseoverCast": "[Ɱóúšéóʋéŕ Çášţ óñ Þáŕţý Ƒŕáɱéš]",
       "showItemLevel": "[Šĥóŵ Íţéɱ Ļéʋéļ]",
       "itemLevelLine": "[Íţéɱ Ļéʋéļ {level}]",
       "itemScoreLine": "[Šçóŕé {score}]",

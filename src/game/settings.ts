@@ -193,6 +193,11 @@ export const BOOL_SETTINGS = {
   // vacated top spot) so incoming debuffs keep one glanceable classic corner.
   // Desktop only; the mobile layout keeps its own aura placement.
   aurasOnPlayerFrame: { def: false },
+  // on by default: Clique-style mouseover casting. Pressing an action-bar key
+  // for a friendly (heal/buff) ability while the cursor is over a party frame
+  // casts it on the hovered member without touching the current target (read
+  // live by Hud.castSlot). Off restores the classic target-else-self routing.
+  mouseoverCast: { def: true },
   // Party/raid frame display profile. Health is always visible; these switches
   // choose the supporting information layered around it.
   partyFrameShowResource: { def: true },

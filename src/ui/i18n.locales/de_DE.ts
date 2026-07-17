@@ -8125,4 +8125,5 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.parry': 'Parieren',
   'hudChrome.statInfo.desc.parry':
     'Deine Chance, einen frontalen Nahkampfangriff vollständig zu parieren und keinen Schaden zu erleiden. Ein Schlag von hinten kann nicht pariert werden.',
+  'hudChrome.options.mouseoverCast': 'Mouseover-Wirken auf Gruppenfenstern',
 };

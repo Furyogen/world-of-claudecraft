@@ -1021,6 +1021,7 @@ export const pt_BR: EnTranslations = {
       "startAttackOnAbility": "Ataque Automático ao Usar Habilidade",
       "walkByAutoloot": "Saque Automático ao Passar",
       "groundReticle": "Retícula de mira no chão",
+      "mouseoverCast": "Conjuração ao Apontar nos Quadros do Grupo",
       "showItemLevel": "Mostrar nível do item",
       "itemLevelLine": "Nível do item {level}",
       "itemScoreLine": "Pontuação {score}",

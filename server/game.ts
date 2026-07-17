@@ -3757,7 +3757,16 @@ export class GameServer {
         }
         break;
       case 'cast':
-        if (typeof msg.ability === 'string') sim.castAbility(msg.ability, pid);
+        if (typeof msg.ability === 'string') {
+          // Optional mouseover-cast override: an explicit friendly-target id.
+          // The sim validates it (friendly, alive, in range) and falls back to
+          // the classic current-target-else-self resolution when invalid.
+          if (typeof msg.target === 'number') {
+            sim.castAbilityOn(msg.ability, msg.target | 0, pid);
+          } else {
+            sim.castAbility(msg.ability, pid);
+          }
+        }
         break;
       case 'releaseEmpowered':
         if (typeof msg.ability === 'string') sim.releaseEmpoweredAbility(msg.ability, pid);

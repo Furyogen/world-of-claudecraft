@@ -8102,4 +8102,5 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.revengeFree': 'Ваша следующая Месть не потребует ярости',
   'hudChrome.auraEffect.victoryRush': '«Порыв победы» готов',
   'hudChrome.auraEffect.maxHpPct': 'Повышает максимальное здоровье на {pct}%',
+  'hudChrome.options.mouseoverCast': 'Применение по наведению на рамки группы',
 };

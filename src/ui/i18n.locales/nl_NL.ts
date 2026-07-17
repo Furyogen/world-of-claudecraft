@@ -8058,4 +8058,5 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Je kans om een frontale melee-aanval volledig te pareren, zodat je geen schade oploopt. Een klap van achteren kan niet worden gepareerd.',
   'hud.combat.floatingParry': 'Parering',
   'hud.combat.parried': 'Je {ability} wordt gepareerd door {target}.',
+  'hudChrome.options.mouseoverCast': 'Mouseover-bezwering op groepsframes',
 };

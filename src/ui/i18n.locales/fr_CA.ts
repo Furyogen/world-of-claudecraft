@@ -292,4 +292,5 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.maxHpPct': 'Accroît les points de vie maximum de {pct}%',
   'hudChrome.statInfo.desc.parry':
     'Vos chances de parer entièrement une attaque de mêlée de front, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré.',
+  'hudChrome.options.mouseoverCast': 'Lancement au survol sur les cadres de groupe',
 };

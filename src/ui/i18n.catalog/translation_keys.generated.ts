@@ -5410,6 +5410,7 @@ export type TranslationKeyFlat =
   | 'hudChrome.options.lockCursorOnRotate'
   | 'hudChrome.options.mobileCameraJoystick'
   | 'hudChrome.options.mobileLeftHanded'
+  | 'hudChrome.options.mouseoverCast'
   | 'hudChrome.options.playerFrameScale'
   | 'hudChrome.options.showAttackButton'
   | 'hudChrome.options.showDailyRewardsChest'

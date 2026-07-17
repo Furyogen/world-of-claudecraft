@@ -1021,6 +1021,7 @@ export const es: EnTranslations = {
       "startAttackOnAbility": "Ataque automático al usar habilidad",
       "walkByAutoloot": "Saqueo automático al pasar",
       "groundReticle": "Retícula de objetivo terrestre",
+      "mouseoverCast": "Lanzar al pasar el cursor sobre los marcos de grupo",
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",

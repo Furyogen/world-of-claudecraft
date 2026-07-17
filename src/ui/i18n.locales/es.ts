@@ -8135,4 +8135,5 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.parry': 'Parada',
   'hudChrome.statInfo.desc.parry':
     'Tu probabilidad de parar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede parar.',
+  'hudChrome.options.mouseoverCast': 'Lanzar al pasar el cursor sobre los marcos de grupo',
 };

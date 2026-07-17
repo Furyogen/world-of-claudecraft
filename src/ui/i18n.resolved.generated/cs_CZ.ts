@@ -1021,6 +1021,7 @@ export const cs_CZ: EnTranslations = {
       "startAttackOnAbility": "Automatický útok při použití schopnosti",
       "walkByAutoloot": "Automatická kořist při průchodu",
       "groundReticle": "Zaměřovací kruh na zemi",
+      "mouseoverCast": "Sesílání najetím myší na rámech skupiny",
       "showItemLevel": "Zobrazit úroveň předmětu",
       "itemLevelLine": "Úroveň předmětu {level}",
       "itemScoreLine": "Skóre {score}",

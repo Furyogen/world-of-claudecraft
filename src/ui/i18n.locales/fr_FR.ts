@@ -8158,4 +8158,5 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.parry': 'Parade',
   'hudChrome.statInfo.desc.parry':
     'Vos chances de parer entièrement une attaque de mêlée frontale, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré.',
+  'hudChrome.options.mouseoverCast': 'Incantation au survol sur les cadres de groupe',
 };

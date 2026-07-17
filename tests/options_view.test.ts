@@ -296,6 +296,7 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'showAttackButton',
       'walkByAutoloot',
       'groundReticle',
+      'mouseoverCast',
       'aurasOnPlayerFrame',
       'showItemLevel',
       'showSecondaryActionBar',

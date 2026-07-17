@@ -1021,6 +1021,7 @@ export const id_ID: EnTranslations = {
       "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
       "walkByAutoloot": "Jarah Otomatis Sambil Lewat",
       "groundReticle": "Retikel bidik darat",
+      "mouseoverCast": "Rapal Saat Menyorot Bingkai Kelompok",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",

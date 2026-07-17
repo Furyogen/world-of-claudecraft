@@ -8086,4 +8086,5 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.parry': 'Parata',
   'hudChrome.statInfo.desc.parry':
     'La tua probabilità di parare completamente un attacco in mischia frontale, senza subire danni. Un colpo alle spalle non può essere parato.',
+  'hudChrome.options.mouseoverCast': 'Lancio al passaggio del mouse sui riquadri del gruppo',
 };

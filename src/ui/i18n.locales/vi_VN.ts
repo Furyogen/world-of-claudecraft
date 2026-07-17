@@ -7978,4 +7978,5 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Cơ hội để bạn gạt trọn vẹn một đòn cận chiến từ phía trước, không nhận chút sát thương nào. Đòn đánh từ phía sau không thể bị gạt.',
   'hud.combat.floatingParry': 'Gạt Đòn',
   'hud.combat.parried': '{ability} của bạn bị {target} gạt đòn.',
+  'hudChrome.options.mouseoverCast': 'Thi Triển Khi Rê Chuột Trên Khung Tổ Đội',
 };

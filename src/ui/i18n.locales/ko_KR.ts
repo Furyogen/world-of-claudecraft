@@ -7940,4 +7940,5 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.revengeFree': '다음 복수가 분노를 소모하지 않습니다',
   'hudChrome.auraEffect.victoryRush': '연전연승을 사용할 수 있습니다',
   'hudChrome.auraEffect.maxHpPct': '최대 생명력이 {pct}% 증가합니다',
+  'hudChrome.options.mouseoverCast': '파티 창에서 마우스오버 시전',
 };
