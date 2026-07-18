@@ -297,6 +297,28 @@ describe('terrain wall standoff', () => {
     expect(closest).toBeLessThan(2.0);
   });
 
+  it('keeps the Abandoned Crypt door clear of the mine-mound collider (door trigger 2.0yd)', () => {
+    // The crypt entrance reuses the "mine entrance" prop (rock mound + timber
+    // portal) for its visual, sharing the door's exact (x, z). The mound's
+    // collider circle must not swallow the door tile itself: a ghost can only
+    // ever re-enter through the walk-in proximity trigger (interact() refuses
+    // it while dead), so if the full collider stack (not just terrain) pushes
+    // every approach outside the 2.0yd trigger, no released spirit can ever
+    // get back in.
+    const door = { x: -152, z: 610 };
+    expect(isBlocked(SEED, door.x, door.z, PLAYER_BODY_RADIUS)).toBe(false);
+    let closest = Infinity;
+    for (let x = -156; x <= -148; x += 0.25) {
+      for (let z = 606; z <= 614; z += 0.25) {
+        if (isBlocked(SEED, x, z, PLAYER_BODY_RADIUS)) continue;
+        const s = resolvePosition(SEED, x, z, PLAYER_BODY_RADIUS);
+        if (isBlocked(SEED, s.x, s.z, PLAYER_BODY_RADIUS)) continue;
+        closest = Math.min(closest, Math.hypot(s.x - door.x, s.z - door.z));
+      }
+    }
+    expect(closest).toBeLessThan(2.0);
+  });
+
   it('eases a player parked at a rim wall foot off it, end to end through the Sim', () => {
     // A cell the Sim itself treats as FLAT footing (terrainSteepnessAt well under
     // the limit, so no downhill slide and no move gate fires) that still has a

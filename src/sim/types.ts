@@ -2342,7 +2342,12 @@ export interface ZonePropsDef {
   buildings: BuildingDef[];
   wells: { x: number; z: number; r: number }[];
   stalls: { x: number; z: number; rot: number; r: number; smithy?: true }[];
-  mines: { x: number; z: number; rot: number }[];
+  // moundOffset overrides the collider's default backward offset (colliders.ts)
+  // for the rock mound behind the timber portal, for a mine entry whose (x, z)
+  // doubles as a real interactable's trigger point (the Abandoned Crypt door):
+  // the default offset lets the mound's collision circle bleed into the
+  // approach side and swallow the point itself.
+  mines: { x: number; z: number; rot: number; moundOffset?: number }[];
   docks: {
     x: number;
     z: number;

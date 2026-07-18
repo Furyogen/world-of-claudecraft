@@ -126,7 +126,7 @@ function staticWorldColliders(seed: number): Collider[] {
 
   // mines: mound behind the timber portal
   for (const m of PROPS.mines) {
-    const mound = rotY(0, -3.4, m.rot);
+    const mound = rotY(0, -(m.moundOffset ?? 3.4), m.rot);
     const x = m.x + mound.x,
       z = m.z + mound.z;
     out.push({ type: 'circle', x, z, r: 5, cameraTopY: topY(seed, x, z, 5.2), camGhost: true });

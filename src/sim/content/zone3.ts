@@ -3298,7 +3298,12 @@ export const ZONE3_PROPS: ZonePropsDef = {
   ],
   mines: [
     { x: 88, z: 612, rot: -2.0 }, // Deeprock Burrows
-    { x: -152, z: 610, rot: Math.PI / 2 }, // Abandoned crypt entrance
+    // Abandoned crypt entrance: shares its (x, z) with the dungeon door's own
+    // trigger point, so the mound's collider needs a bigger backward offset
+    // (moundOffset) than the generic mine default or it swallows the door
+    // itself, stranding any ghost that can only walk-trigger it (issue: dead
+    // players unable to enter/corpse-run the crypt).
+    { x: -152, z: 610, rot: Math.PI / 2, moundOffset: 8 },
   ],
   docks: [],
   tents: [
