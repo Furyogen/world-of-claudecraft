@@ -45,7 +45,6 @@ import {
   mobXpValue,
   NYTHRAXIS_BOSS_ID,
   PARTY_XP_RANGE,
-  rageConversion,
   rageFromDealing,
   rageFromTaking,
   rageGenAuraMult,
@@ -845,9 +844,10 @@ export function dealDamage(
         meta.known.some((known) => known.def.id === 'seasoned_soldier' && known.def.passive)
           ? 1.1
           : 1;
-      const baseRage = isWarrior
-        ? (9 * amount) / rageConversion(source.level)
-        : rageFromDealing(amount, source.level);
+      // v0.27.1 rage fix: warriors are back on the shared classic 7.5x outgoing
+      // scale (rageFromDealing). The talents-v2 era ran a warrior-only 9x mint
+      // here, a hidden ~20% income buff that co-fed the fury overpower incident.
+      const baseRage = rageFromDealing(amount, source.level);
       const talentMult = isWarrior ? 1 + ctx.playerMods(meta).global.autoRagePct : 1;
       source.resource = Math.min(
         source.maxResource,
