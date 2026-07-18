@@ -2651,6 +2651,10 @@ export interface Entity {
   swingTimer: number;
   offhandSwingTimer: number;
   dualWielding: boolean;
+  /** Dual-wielding with a two-hander in either hand (Titan's Grip). Derived at
+   *  equip time (entity.recalcPlayerStats); pays the flat physical-damage
+   *  penalty in combat/damage.ts (TITANS_GRIP_DMG_PENALTY). */
+  titansGrip: boolean;
   /** petSpell windup in flight: sim tick the committed release fires on
    *  (transient combat state like swingTimer; never persisted or wired). */
   rangedWindupReleaseTick?: number | null;
@@ -4052,6 +4056,12 @@ export function rageFromTaking(damage: number, attackerLevel: number): number {
 export const STANCE_RAGE_GEN = 0.1;
 // Recklessness' rage-generation half (its aura value carries the crit half).
 export const RECKLESSNESS_RAGE_GEN = 0.5;
+// Titan's Grip (dual-wielding with a two-hander involved) reduces ALL physical
+// damage done by this fraction: the WoW 3.1.0 model, chosen over a miss-chance
+// penalty (Blizzard shipped the miss version at 15%, cut it to 5% within weeks
+// under player revolt, then replaced it with the flat 10% in 3.1). The stat side
+// of the tradeoff is item_budget.ts TWOHAND_STAT_MULT; applied in combat/damage.ts.
+export const TITANS_GRIP_DMG_PENALTY = 0.12;
 export const BERSERKER_CRIT_CHANCE = 0.03;
 export const BERSERKER_CRIT_DAMAGE = 0.03;
 export const SHIELD_BLOCK_BASE = 0.05;

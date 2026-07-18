@@ -14,7 +14,7 @@ const SPECS: SpecDef[] = [
   },
   {
     id: 'fury', class: 'warrior', name: 'Bloodrush', role: 'dps', icon: 'x',
-    description: 'A berserker who fights with a weapon in each hand and lets rage drive his every move. The longer he fights, the greater his Enrage, unleashing a relentless storm of attacks that gives his enemies no respite. A frenzied, savage, aggressive style where the offensive never stops. Committing to Bloodrush unlocks dual wielding, and through Titan\'s Grip even a two-handed weapon in each hand.',
+    description: 'A berserker who fights with a weapon in each hand and lets rage drive his every move. The longer he fights, the greater his Enrage, unleashing a relentless storm of attacks that gives his enemies no respite. A frenzied, savage, aggressive style where the offensive never stops. Committing to Bloodrush unlocks dual wielding, and through Titan\'s Grip even a two-handed weapon in each hand, though wielding two-handers in both hands reduces physical damage dealt by 12%.',
     signature: 'bloodthirst',
     mastery: { name: 'Bloodletter', description: 'Increases your critical strike chance by 5% and attack power by 10.', effect: { stats: { crit: 0.05, ap: 10 } } },
   },

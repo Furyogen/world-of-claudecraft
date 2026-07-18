@@ -52,6 +52,7 @@ import {
   STANCE_MASTERY_BATTLE_CRIT_DMG,
   STANCE_MASTERY_GUARDED_CUT,
   STANCE_MASTERY_GUARDED_HP_PCT,
+  TITANS_GRIP_DMG_PENALTY,
   virtualLevel,
   xpForLevel,
 } from '../types';
@@ -250,6 +251,21 @@ export function dealDamage(
       }
     }
     if (damageDone !== 0) amount = Math.round(amount * Math.max(0, 1 + damageDone));
+  }
+
+  // Titan's Grip: dual-wielding with a two-hander in either hand pays a flat
+  // physical-damage penalty (the WoW 3.1.0 model; TITANS_GRIP_DMG_PENALTY in
+  // types.ts). Source-side and physical-only: whites, weapon strikes, and
+  // physical dots all pay it; spells and incidental non-physical damage never do.
+  if (
+    !alreadyFinal &&
+    source &&
+    source.id !== target.id &&
+    amount > 0 &&
+    school === 'physical' &&
+    source.titansGrip
+  ) {
+    amount = Math.round(amount * (1 - TITANS_GRIP_DMG_PENALTY));
   }
 
   if (source && source.id !== target.id && amount > 0) {

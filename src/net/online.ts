@@ -1083,6 +1083,9 @@ function blankEntity(id: number): Entity {
     swingTimer: 0,
     offhandSwingTimer: 0,
     dualWielding: false,
+    // Server-side combat state: the mirror never computes damage, so the
+    // authoritative titansGrip never needs to cross the wire.
+    titansGrip: false,
     inCombat: false,
     combatTimer: 99,
     auras: [],
