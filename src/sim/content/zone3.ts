@@ -3302,8 +3302,11 @@ export const ZONE3_PROPS: ZonePropsDef = {
     // trigger point, so the mound's collider needs a bigger backward offset
     // (moundOffset) than the generic mine default or it swallows the door
     // itself, stranding any ghost that can only walk-trigger it (issue: dead
-    // players unable to enter/corpse-run the crypt).
-    { x: -152, z: 610, rot: Math.PI / 2, moundOffset: 8 },
+    // players unable to enter/corpse-run the crypt). moundRadius is also
+    // shrunk from the generic default so the circle hugs this entry's own,
+    // smaller-footprint rock pile (src/render/props.ts) instead of bleeding
+    // onto open ground behind it and off the flanking boulders themselves.
+    { x: -152, z: 610, rot: Math.PI / 2, moundOffset: 4, moundRadius: 3.3 },
   ],
   docks: [],
   tents: [

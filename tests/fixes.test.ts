@@ -319,6 +319,21 @@ describe('terrain wall standoff', () => {
     expect(closest).toBeLessThan(2.0);
   });
 
+  it('keeps the Abandoned Crypt mound collider matched to its visible rock pile', () => {
+    // Follow-up to the door-clear fix above: the mound circle must clear the
+    // door trigger WITHOUT drifting so far back that it disagrees with the
+    // rendered pile (src/render/props.ts), which would open a collision gap
+    // under the flanking boulders and wall off open ground behind them that
+    // no player ever needed to cross.
+    const door = { x: -152, z: 610 };
+    // A point inside the rendered flanking boulder (local (2.65, -2.3), r 1.75;
+    // world (-154.5, 607.5), rot PI/2) stays blocked under the tightened mound.
+    expect(isBlocked(SEED, -154.5, 607.5, PLAYER_BODY_RADIUS)).toBe(true);
+    // Open ground well behind the pile's rendered extent (local z < -8, past
+    // the farthest rock at z -4.15, r 2.35) is not swallowed by the collider.
+    expect(isBlocked(SEED, door.x - 9, door.z, PLAYER_BODY_RADIUS)).toBe(false);
+  });
+
   it('eases a player parked at a rim wall foot off it, end to end through the Sim', () => {
     // A cell the Sim itself treats as FLAT footing (terrainSteepnessAt well under
     // the limit, so no downhill slide and no move gate fires) that still has a
