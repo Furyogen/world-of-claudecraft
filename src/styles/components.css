@@ -10607,10 +10607,15 @@
     display: none;
   }
   #welcome-screen::before {
-    /* ridge silhouettes along the bottom, same trick as the mock's .scene::before */
+    /* ridge silhouettes along the bottom, same trick as the mock's .scene::before.
+       Negative z: scene decor must paint BEHIND every panel and text run (it used
+       to sit above in the positioned-z-auto step and dimmed the footer chrome).
+       The 2px overscan stops device-pixel snapping at fractional zoom from
+       exposing a bare edge row. */
     content: "";
     position: fixed;
-    inset: auto 0 0 0;
+    z-index: -1;
+    inset: auto -2px -2px -2px;
     height: 46%;
     background:
       radial-gradient(58% 120% at 22% 128%, #050509 48%, transparent 50%),
@@ -10620,15 +10625,19 @@
   }
   #welcome-screen::after {
     /* soft vignette; an inset shadow leaves the center clear so it never
-       obscures panel content, only darkens the far edges. */
+       obscures panel content, only darkens the far edges. Kept behind content
+       (negative z) and gentle: the old 60px full-strength ring blacked out the
+       CTA valley at the bottom center. */
     content: "";
     position: fixed;
-    inset: 0;
-    box-shadow: inset 0 0 180px 60px rgba(0, 0, 0, 0.72);
+    z-index: -1;
+    inset: -2px;
+    box-shadow: inset 0 0 160px 24px rgba(0, 0, 0, 0.55);
     pointer-events: none;
   }
   .ws-stars {
     position: fixed;
+    z-index: -1;
     top: 26px;
     left: 18%;
     width: 2px;
@@ -10833,6 +10842,12 @@
      its flex share: it silently squeezed the news column off-center on wide
      desktops whenever every tile was gated off. */
   .ws-rail:not(:has(> :not([hidden]))) {
+    display: none;
+  }
+  /* Character stage host: desktop-only centerpiece (the live char-select
+     CharacterPreview canvas is re-parented here while the welcome screen is
+     up); display: none outside the desktop composition. */
+  .ws-stage {
     display: none;
   }
   .ws-armory-card[hidden],
@@ -11139,18 +11154,20 @@
   /* Desktop launcher composition: the exact complement of the compact media
      query above, so touch and short viewports keep the base flow untouched.
      The mobile-first column markup is recomposed with grid + display: contents
-     into the AAA-launcher shape: a full-height news rail on the left, a
-     cinematic stage on the right (hero greeting, promo cards, Discord card),
-     one dominant gilded CTA, and status/version as corner chrome. Cold path
-     (shown once per login), so the entrance motion and star twinkle cost
-     nothing per-frame in-world; both respect prefers-reduced-motion. */
+     into the AAA-launcher shape: a content-hugging glass news rail on the
+     left; on the right a cinematic stage with the player's live character
+     render as the centerpiece (the greeting above it, one dominant gilded
+     CTA below it, the Discord strip demoted to a slim bottom card); status
+     and version as corner chrome. Cold path (shown once per login), so the
+     entrance motion and star twinkle cost nothing per-frame in-world; both
+     respect prefers-reduced-motion. */
   @media (min-width: 861px) and (pointer: fine) {
     #welcome-screen {
       display: grid;
       grid-template-columns: minmax(430px, 33vw) minmax(0, 1fr);
-      grid-template-rows: minmax(0, 1fr) auto auto auto;
+      grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
       column-gap: clamp(36px, 4.5vw, 84px);
-      row-gap: 18px;
+      row-gap: 16px;
       padding: clamp(28px, 4vh, 48px) clamp(32px, 5.5vw, 110px);
       background:
         radial-gradient(1400px 640px at 76% -12%, rgba(64, 52, 118, 0.6), transparent 64%),
@@ -11164,10 +11181,36 @@
     .ws-footer {
       display: contents;
     }
+    /* Stage layering: the character canvas fills the whole right column
+       behind the greeting/CTA/Discord, which stack above it. */
+    .ws-stage {
+      display: block;
+      grid-column: 2;
+      grid-row: 1 / 6;
+      position: relative;
+      z-index: 0;
+      min-height: 0;
+      animation: ws-fade 0.7s ease-out backwards;
+    }
+    .ws-stage canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .ws-header,
+    .ws-rail,
+    .ws-discord-strip,
+    .ws-enter-wrap,
+    .ws-status,
+    .ws-version {
+      position: relative;
+      z-index: 1;
+    }
     .ws-news-panel {
       grid-column: 1;
-      grid-row: 1 / 4;
-      align-self: stretch;
+      grid-row: 1 / 6;
+      align-self: start;
+      max-height: 100%;
       border-radius: 10px;
       border-color: rgba(111, 90, 42, 0.85);
       background: linear-gradient(180deg, rgba(19, 17, 30, 0.92), rgba(10, 9, 16, 0.94));
@@ -11179,19 +11222,29 @@
     }
     .ws-panel-title {
       letter-spacing: 0.18em;
+      font-size: 15px;
+    }
+    .ws-news-collapsed-summary {
       font-size: 14px;
     }
-    /* The stage: greeting as the hero, vertically centered in the flexible
-       row so an empty promo rail reads as intentional negative space. */
     .ws-header {
       grid-column: 2;
       grid-row: 1;
-      align-self: center;
+      align-self: start;
       justify-self: center;
       max-width: none;
       margin: 0;
+      padding-top: clamp(4px, 2.5vh, 28px);
       text-align: center;
       animation: ws-rise 0.55s ease-out 0.05s backwards;
+    }
+    /* No live character render mounted (WebGL unavailable, /play, or assets
+       still warming): re-center the greeting across the hero space so the
+       stage reads as intentional, not abandoned. */
+    #welcome-screen:has(#ws-stage:empty) .ws-header {
+      grid-row: 1 / 3;
+      align-self: center;
+      padding-top: 0;
     }
     .ws-welcome-back {
       font-size: clamp(38px, 3.6vw, 54px);
@@ -11211,44 +11264,28 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
     }
-    /* Ornamental divider under the meta line: gold hairlines tapering out
-       from a center diamond, the classic launcher flourish. */
     .ws-header::after {
-      content: "\25c6";
+      content: "";
       display: block;
-      margin: 16px auto 0;
-      width: min(340px, 60%);
-      font-size: 8px;
-      line-height: 1;
-      color: var(--gold-dim);
-      background:
-        linear-gradient(90deg, transparent, rgba(199, 168, 87, 0.55) 45%, transparent 52%) left
-        center / 48% 1px no-repeat,
-        linear-gradient(270deg, transparent, rgba(199, 168, 87, 0.55) 45%, transparent 52%) right
-        center / 48% 1px no-repeat;
+      height: 1px;
+      width: min(300px, 50%);
+      margin: 18px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(199, 168, 87, 0.6), transparent);
     }
     .ws-rail {
       grid-column: 2;
-      grid-row: 2;
+      grid-row: 3;
       justify-self: center;
       width: min(420px, 100%);
       max-width: 420px;
       animation: ws-rise 0.55s ease-out 0.1s backwards;
-    }
-    .ws-discord-strip {
-      grid-column: 2;
-      grid-row: 3;
-      justify-self: center;
-      width: min(560px, 100%);
-      background: linear-gradient(180deg, rgba(19, 17, 30, 0.9), rgba(10, 9, 16, 0.92));
-      animation: ws-rise 0.55s ease-out 0.15s backwards;
     }
     .ws-enter-wrap {
       grid-column: 2;
       grid-row: 4;
       align-self: end;
       justify-self: center;
-      animation: ws-rise 0.55s ease-out 0.2s backwards;
+      animation: ws-rise 0.55s ease-out 0.15s backwards;
     }
     .ws-continue {
       position: relative;
@@ -11277,8 +11314,6 @@
         0 2px 8px rgba(0, 0, 0, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
-    /* Slow sheen sweep across the gilded face; paused entirely under
-       reduced motion and while disabled. */
     .ws-continue:not(:disabled)::after {
       content: "";
       position: absolute;
@@ -11294,20 +11329,63 @@
       margin-top: 10px;
       font-size: 12px;
       letter-spacing: 0.08em;
+      color: var(--color-text-light);
+      opacity: 0.75;
+    }
+    /* Discord demoted to a slim, quiet card under the CTA: the strip must
+       never outweigh Enter World. */
+    .ws-discord-strip {
+      grid-column: 2;
+      grid-row: 5;
+      justify-self: center;
+      width: min(640px, 100%);
+      padding: 8px 12px;
+      gap: 12px;
+      border-color: rgba(88, 101, 242, 0.28);
+      background: linear-gradient(180deg, rgba(19, 17, 30, 0.72), rgba(10, 9, 16, 0.74));
+      box-shadow: none;
+      animation: ws-rise 0.55s ease-out 0.2s backwards;
+    }
+    .ws-discord-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 34% 46%, #fff 2.8px, transparent 3.4px),
+        radial-gradient(circle at 66% 46%, #fff 2.8px, transparent 3.4px), #5865f2;
+      box-shadow: none;
+    }
+    .ws-discord-title {
+      font-size: 13px;
+    }
+    .ws-discord-sub {
+      font-size: 11.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-discord {
+      flex: none;
+      white-space: nowrap;
+      min-height: 34px;
+      padding: 6px 14px;
+      font-size: 12.5px;
+      box-shadow: none;
     }
     .ws-status {
       grid-column: 1;
-      grid-row: 4;
+      grid-row: 6;
       align-self: end;
       justify-content: flex-start;
       text-align: left;
     }
     .ws-version {
       grid-column: 2;
-      grid-row: 4;
+      grid-row: 6;
       align-self: end;
       justify-self: end;
       flex: none;
+      color: var(--color-text-muted);
       pointer-events: none;
     }
     /* Denser two-layer starfield with a slow twinkle. */
@@ -11356,6 +11434,11 @@
       transform: translateY(14px);
     }
   }
+  @keyframes ws-fade {
+    from {
+      opacity: 0;
+    }
+  }
   @keyframes ws-sheen {
     0%,
     62% {
@@ -11378,11 +11461,12 @@
     .ws-news-panel,
     .ws-header,
     .ws-rail,
+    .ws-stage,
     .ws-discord-strip,
     .ws-enter-wrap,
     .ws-stars,
     .ws-stars::after,
-    .ws-continue::after,
+    .ws-continue,
     .ws-continue:not(:disabled)::after {
       animation: none !important;
       transition: none !important;
