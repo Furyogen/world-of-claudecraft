@@ -4525,20 +4525,30 @@ export class Sim {
     });
   }
 
-  // swing interval multiplier: >1 = slower (thunder clap), haste divides
+  // swing interval multiplier: >1 = slower (thunder clap), haste divides.
+  // v0.27.1: ALL haste folds into ONE additive bucket applied once, mirroring
+  // spellHasteMult (always additive). Before this, each buff_haste aura divided
+  // the interval independently and the meleeHaste stat (item sets + the warrior
+  // Enrage) divided again in auto_attack, so stacked raid buffs COMPOUNDED:
+  // Bloodlust 1.3 x Wildfang Rally 1.05 x Enrage 1.25 = 1.71x attack speed
+  // instead of the additive 1.6x. Single-source cases are unchanged
+  // (1/(1 + x) === 1/mult for one aura). Slows keep their own multiplicative
+  // axis so layered slows are not weakened by the haste change.
   swingIntervalMult(e: Entity): number {
-    let m = 1;
+    let slow = 1;
+    let haste = e.meleeHaste;
     for (const a of e.auras) {
-      if (a.kind === 'attackspeed' || a.kind === 'sanguine') m *= a.value;
-      if (a.kind === 'buff_haste') m /= a.value;
+      if (a.kind === 'attackspeed' || a.kind === 'sanguine') slow *= a.value;
+      if (a.kind === 'buff_haste') haste += a.value - 1;
     }
     // Enrage frenzy: an enraged mob swings faster (mirrors the inline dmgMult
-    // applied in mobSwing). Composes with any slow/haste auras above.
+    // applied in mobSwing). Joins the same additive bucket; identical when it
+    // is the mob's only haste, which it always is today.
     if (e.enraged) {
       const h = MOBS[e.templateId]?.enrage?.hasteMult;
-      if (h && h > 0) m /= h;
+      if (h && h > 0) haste += h - 1;
     }
-    return m;
+    return slow / (1 + Math.max(0, haste));
   }
 
   // Body moved to player_motion.ts (MV1); thin delegate (also bound on the seam).

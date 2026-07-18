@@ -218,11 +218,12 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
     maybeProcBattleTrance(ctx, p, meta, connected);
     maybeProcSuddenDeath(ctx, p, meta, connected);
     // Wolf Form swings at the rogue's fixed feral cadence, not the carried weapon's
-    // speed (see combat/form_swing.ts); everyone else uses their weapon speed. Melee
-    // haste (item-set bonus) then shortens whatever base interval that yields.
+    // speed (see combat/form_swing.ts); everyone else uses their weapon speed.
+    // Melee haste (item sets + Enrage + haste buffs) lives in the ONE additive
+    // bucket inside swingIntervalMult (v0.27.1); only the stance-mastery auto
+    // haste stays a separate factor (it needs the meta the seam call lacks).
     p.swingTimer =
-      (baseSwingSpeed(p) * ctx.swingIntervalMult(p)) /
-      ((1 + p.meleeHaste) * (1 + stanceMasteryAutoHaste(ctx, p, meta)));
+      (baseSwingSpeed(p) * ctx.swingIntervalMult(p)) / (1 + stanceMasteryAutoHaste(ctx, p, meta));
   }
   if (p.dualWielding && p.offhandWeapon && p.offhandSwingTimer <= 0) {
     const offhand = p.offhandWeapon;
@@ -235,8 +236,7 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
     maybeProcBattleTrance(ctx, p, meta, connected);
     maybeProcSuddenDeath(ctx, p, meta, connected);
     p.offhandSwingTimer =
-      (offhand.speed * ctx.swingIntervalMult(p)) /
-      ((1 + p.meleeHaste) * (1 + stanceMasteryAutoHaste(ctx, p, meta)));
+      (offhand.speed * ctx.swingIntervalMult(p)) / (1 + stanceMasteryAutoHaste(ctx, p, meta));
   }
 }
 
