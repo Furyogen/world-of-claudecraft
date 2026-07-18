@@ -391,8 +391,12 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     hand: 'twohand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 45, max: 68, speed: 3.4 },
-    stats: { str: 28, sta: 18 },
+    // 2H dps premium at the raid tier: weaponDpsBudget(33) = 16.6 x
+    // TWOHAND_DPS_MULT -> 19.1 dps.
+    weapon: { min: 52, max: 78, speed: 3.4 },
+    // v0.27.1 re-budget: round(primaryStatBudget(33, epic, mainhand) = 23 x
+    // TWOHAND_STAT_MULT) = 30 points; the dps premium is the 2H's compensation.
+    stats: { str: 18, sta: 12 },
     hitRating: RAID_WEAPON_PRIMARY_RATING,
     critRating: RAID_SECONDARY_RATING,
     sellValue: 16000,

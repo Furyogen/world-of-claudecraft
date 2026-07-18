@@ -11,6 +11,7 @@ import {
   itemLevel,
   primaryStatBudget,
   primaryStatSum,
+  TWOHAND_STAT_MULT,
 } from '../src/sim/item_level';
 import type { ItemDef, WeaponItemDef } from '../src/sim/types';
 
@@ -46,27 +47,27 @@ describe('v0.26 two-handed greatblade itemization', () => {
     );
   });
 
-  it('declares the current greatblades two-handed at their doubled budgets', () => {
+  it('declares the current greatblades two-handed at their v0.27.1 re-budgeted totals', () => {
     const wyrmfang = weapon('wyrmfang_greatblade');
     expect(wyrmfang.hand).toBe('twohand');
     expect(itemLevel(wyrmfang)).toBe(26);
-    expect(wyrmfang.stats).toMatchObject({ str: 22, sta: 14 });
-    expect(primaryStatSum(wyrmfang)).toBe(36);
-    expect(expectedStatBudget(wyrmfang)).toBe(36);
+    expect(wyrmfang.stats).toMatchObject({ str: 14, sta: 9 });
+    expect(primaryStatSum(wyrmfang)).toBe(23);
+    expect(expectedStatBudget(wyrmfang)).toBe(23);
 
     const deathless = weapon('deathless_greatblade');
     expect(deathless.hand).toBe('twohand');
     expect(itemLevel(deathless)).toBe(33);
-    expect(deathless.stats).toMatchObject({ str: 28, sta: 18 });
-    expect(primaryStatSum(deathless)).toBe(46);
-    expect(expectedStatBudget(deathless)).toBe(46);
+    expect(deathless.stats).toMatchObject({ str: 18, sta: 12 });
+    expect(primaryStatSum(deathless)).toBe(30);
+    expect(expectedStatBudget(deathless)).toBe(30);
   });
 
-  it('doubles the current item-level budget only for two-handed weapons', () => {
+  it('applies the two-hand stat premium only to two-handed weapons', () => {
     const wyrmfang = weapon('wyrmfang_greatblade');
     const oneHandBudget = primaryStatBudget(26, wyrmfang.quality, wyrmfang.slot);
     expect(oneHandBudget).toBe(18);
-    expect(expectedStatBudget(wyrmfang)).toBe(oneHandBudget * 2);
+    expect(expectedStatBudget(wyrmfang)).toBe(Math.round(oneHandBudget * TWOHAND_STAT_MULT));
 
     const oneHand = weapon('kingsbane_last_oath');
     const expectedOneHand = primaryStatBudget(
@@ -78,13 +79,13 @@ describe('v0.26 two-handed greatblade itemization', () => {
     expect(expectedStatBudget(oneHand)).toBe(expectedOneHand);
   });
 
-  it('carries the doubled budget through generated heroic variants', () => {
+  it('carries the re-budgeted premium through generated heroic variants', () => {
     const variant = weapon('heroic_wyrmfang_greatblade');
     expect(variant.heroicOf).toBe('wyrmfang_greatblade');
     expect(variant.hand).toBe('twohand');
     expect(itemLevel(variant)).toBe(28);
     expect(expectedStatBudget(variant)).toBe(
-      primaryStatBudget(28, variant.quality, variant.slot) * 2,
+      Math.round(primaryStatBudget(28, variant.quality, variant.slot) * TWOHAND_STAT_MULT),
     );
     expect(primaryStatSum(variant)).toBe(expectedStatBudget(variant));
   });
