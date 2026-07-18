@@ -1,8 +1,10 @@
-// Throwaway measurement probe (not committed): sustained fury DPS with the real
-// v0.27 kit, Titan's Grip dual two-handers, Anger Management + Recklessness +
-// Colossal Might row picks, and a competent Red Harvest priority rotation,
-// against a training dummy for the same 123 seconds as the live meter fight.
-// Run in each tree with: npx tsx scripts/fury_dps_probe.ts
+// Fury DPS measurement probe: sustained fury DPS with the real v0.27 kit,
+// Titan's Grip dual two-handers, Anger Management + Recklessness + Colossal
+// Might row picks, and a competent Red Harvest priority rotation, against a
+// training dummy for 123 seconds (the length of the live meter fight that
+// anchored the v0.27.1 nerf: live 222/s mapped to 230.6 here on the pre-fix
+// tree, 147.2 post-fix). Kept for sizing coefficient follow-ups: run the same
+// file on both trees and compare. npx tsx scripts/fury_dps_probe.ts
 import { MOBS } from '../src/sim/data';
 import { createMob, recalcPlayerStats } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
