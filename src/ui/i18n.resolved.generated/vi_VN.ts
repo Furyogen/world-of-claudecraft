@@ -7007,7 +7007,7 @@ export const vi_VN: EnTranslations = {
       },
       "raging_gale": {
         "name": "Song Kích",
-        "description": "Lập tức vung vũ khí đánh hai lần, mỗi đòn gây 40% sát thương vũ khí cộng thêm {damage}, và tạo 8 nộ khí. Tích trữ tối đa 2 lượt dùng. (nhánh Cuồng Nộ)"
+        "description": "Lập tức vung vũ khí đánh hai lần, mỗi đòn gây 40% sát thương vũ khí cộng thêm {damage}, và tạo 4 nộ khí. Tích trữ tối đa 2 lượt dùng. (nhánh Cuồng Nộ)"
       },
       "red_harvest": {
         "name": "Mùa Gặt Đỏ",

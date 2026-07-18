@@ -7007,7 +7007,7 @@ export const fr_FR: EnTranslations = {
       },
       "raging_gale": {
         "name": "Double frappe",
-        "description": "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère 8 points de rage. Cumule jusqu'à 2 charges. (Fureur)"
+        "description": "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère 4 points de rage. Cumule jusqu'à 2 charges. (Fureur)"
       },
       "red_harvest": {
         "name": "Moisson rouge",

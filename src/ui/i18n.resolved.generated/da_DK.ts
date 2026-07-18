@@ -7007,7 +7007,7 @@ export const da_DK: EnTranslations = {
       },
       "raging_gale": {
         "name": "Tvillingeslag",
-        "description": "Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér 8 raseri. Gemmer op til 2 ladninger. (Furie)"
+        "description": "Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér 4 raseri. Gemmer op til 2 ladninger. (Furie)"
       },
       "red_harvest": {
         "name": "Rød Høst",

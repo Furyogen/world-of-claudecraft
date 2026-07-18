@@ -491,7 +491,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Pronikavý pokřik, který na 8 s zpomalí všechny nepřátele do 15 yardů o 50 %.',
   'entities.abilities.piercing_howl.name': 'Pronikavé zavytí',
   'entities.abilities.raging_gale.description':
-    'Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ 8 vzteku. Ukládá až 2 nabití. (Fury)',
+    'Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ 4 vzteku. Ukládá až 2 nabití. (Fury)',
   'entities.abilities.raging_gale.name': 'Dvojúder',
   'entities.abilities.raised_guard.description':
     'Zapři se za štítem: po dobu 6 s utrpíš o 50 % méně fyzického poškození. Ukládá až 2 nabití. (Protection)',

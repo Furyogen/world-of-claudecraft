@@ -72,7 +72,8 @@ describe('progression/talents: apply + respec', () => {
       8: 'war_row_die_by_the_sword',
       14: 'war_row_anger_management',
     });
-    expect(meta.talentMods.global.autoRagePct).toBe(0.25);
+    // v0.27.1 rage fix: Anger Management trimmed to +10% auto rage.
+    expect(meta.talentMods.global.autoRagePct).toBe(0.1);
     expect(knownIds(meta)).toContain('die_by_sword');
     expect(knownIds(meta)).not.toEqual(knownBase); // arms spec changed the known list
 

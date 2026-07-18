@@ -7007,7 +7007,7 @@ export const id_ID: EnTranslations = {
       },
       "raging_gale": {
         "name": "Twinstrike",
-        "description": "Seketika menyerang dengan senjatamu dua kali, setiap pukulan memberikan 40% kerusakan senjata ditambah {damage}, dan menghasilkan 8 amarah. Menyimpan hingga 2 muatan. (Fury)"
+        "description": "Seketika menyerang dengan senjatamu dua kali, setiap pukulan memberikan 40% kerusakan senjata ditambah {damage}, dan menghasilkan 4 amarah. Menyimpan hingga 2 muatan. (Fury)"
       },
       "red_harvest": {
         "name": "Panen Merah",

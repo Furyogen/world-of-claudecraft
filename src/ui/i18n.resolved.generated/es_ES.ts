@@ -7007,7 +7007,7 @@ export const es_ES: EnTranslations = {
       },
       "raging_gale": {
         "name": "Golpe Gemelo",
-        "description": "Golpeas al instante dos veces con tu arma; cada golpe inflige un 40% de daño de arma más {damage}, y generas 8 de ira. Almacena hasta 2 cargas. (Furia)"
+        "description": "Golpeas al instante dos veces con tu arma; cada golpe inflige un 40% de daño de arma más {damage}, y generas 4 de ira. Almacena hasta 2 cargas. (Furia)"
       },
       "red_harvest": {
         "name": "Cosecha Roja",

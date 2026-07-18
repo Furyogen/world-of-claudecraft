@@ -7007,7 +7007,7 @@ export const sv_SE: EnTranslations = {
       },
       "raging_gale": {
         "name": "Tvillingslag",
-        "description": "Slå omedelbart två gånger med ditt vapen, där varje träff vållar 40 % vapenskada plus {damage}, och generera 8 raseri. Lagrar upp till 2 laddningar. (Raseri)"
+        "description": "Slå omedelbart två gånger med ditt vapen, där varje träff vållar 40 % vapenskada plus {damage}, och generera 4 raseri. Lagrar upp till 2 laddningar. (Raseri)"
       },
       "red_harvest": {
         "name": "Röd skörd",

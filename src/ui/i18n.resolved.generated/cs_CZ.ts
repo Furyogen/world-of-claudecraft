@@ -7007,7 +7007,7 @@ export const cs_CZ: EnTranslations = {
       },
       "raging_gale": {
         "name": "Dvojúder",
-        "description": "Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ 8 vzteku. Ukládá až 2 nabití. (Fury)"
+        "description": "Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ 4 vzteku. Ukládá až 2 nabití. (Fury)"
       },
       "red_harvest": {
         "name": "Rudá žeň",

@@ -492,7 +492,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Teriakan menusuk yang memperlambat semua musuh dalam 15 yard sebesar 50% selama 8 detik.',
   'entities.abilities.piercing_howl.name': 'Lolongan Menusuk',
   'entities.abilities.raging_gale.description':
-    'Seketika menyerang dengan senjatamu dua kali, setiap pukulan memberikan 40% kerusakan senjata ditambah {damage}, dan menghasilkan 8 amarah. Menyimpan hingga 2 muatan. (Fury)',
+    'Seketika menyerang dengan senjatamu dua kali, setiap pukulan memberikan 40% kerusakan senjata ditambah {damage}, dan menghasilkan 4 amarah. Menyimpan hingga 2 muatan. (Fury)',
   'entities.abilities.raging_gale.name': 'Twinstrike',
   'entities.abilities.raised_guard.description':
     'Bersiaga di balik perisaimu: kamu menerima kerusakan Fisik 50% lebih sedikit selama 6 detik. Menyimpan hingga 2 muatan. (Protection)',

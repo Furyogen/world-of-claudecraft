@@ -7007,7 +7007,7 @@ export const pt_BR: EnTranslations = {
       },
       "raging_gale": {
         "name": "Golpe Gêmeo",
-        "description": "Golpeia instantaneamente com sua arma duas vezes, cada acerto causando 40% do dano da arma mais {damage}, e gera 8 de raiva. Acumula até 2 cargas. (Fúria)"
+        "description": "Golpeia instantaneamente com sua arma duas vezes, cada acerto causando 40% do dano da arma mais {damage}, e gera 4 de raiva. Acumula até 2 cargas. (Fúria)"
       },
       "red_harvest": {
         "name": "Colheita Vermelha",

@@ -7007,7 +7007,7 @@ export const de_DE: EnTranslations = {
       },
       "raging_gale": {
         "name": "Zwillingsschlag",
-        "description": "Schlagt sofort zweimal mit Eurer Waffe zu, jeder Treffer verursacht 40% Waffenschaden plus {damage}, und erzeugt 8 Wut. Speichert bis zu 2 Aufladungen. (Furor)"
+        "description": "Schlagt sofort zweimal mit Eurer Waffe zu, jeder Treffer verursacht 40% Waffenschaden plus {damage}, und erzeugt 4 Wut. Speichert bis zu 2 Aufladungen. (Furor)"
       },
       "red_harvest": {
         "name": "Rote Ernte",
