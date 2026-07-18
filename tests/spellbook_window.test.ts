@@ -89,6 +89,37 @@ describe('spellbook_window: the pinned Attack row', () => {
   });
 });
 
+describe('spellbook_window: the Attack row is draggable onto the action bar', () => {
+  it('marks the Attack row draggable, like an ability row', () => {
+    // The row previously offered only the +/- toggle, so a player dragging Attack
+    // (the natural gesture other spells support) got nothing. It now drags too.
+    const attackStart = code.indexOf('private appendAttackRow(');
+    const attackRow = code.slice(attackStart, code.indexOf('private appendRow(', attackStart));
+    expect(attackRow).toContain('el.draggable = true');
+  });
+
+  it('writes the dedicated Attack marker MIME on dragstart (not an encoded action)', () => {
+    // Attack has no ability/item id, so it cannot ride the HotbarAction path; the
+    // dragstart carries the marker MIME the action bar recognizes.
+    const attackStart = code.indexOf('private appendAttackRow(');
+    const attackRow = code.slice(attackStart, code.indexOf('private appendRow(', attackStart));
+    expect(attackRow).toContain('HOTBAR_ATTACK_MIME');
+    expect(attackRow).toMatch(/dragstart/);
+  });
+});
+
+describe('hud action bar: accepts a dragged Attack (turns showAttackButton on)', () => {
+  it('recognizes the Attack drag marker on the bar', () => {
+    expect(hud).toContain('dragCarriesAttack');
+  });
+
+  it('restores Attack to slot 0 by enabling showAttackButton on drop', () => {
+    // Attack lives only on slot 0 (the attack slot), so accepting the drag anywhere
+    // on the bar routes through the same showAttackButton state the +/- toggle drives.
+    expect(hud).toMatch(/settings\.set\('showAttackButton',\s*true\)/);
+  });
+});
+
 describe('spellbook_window: mobile action-ring page label (Phase 4, touch-only)', () => {
   it('feeds abilityIdByBarSlot through to the pure view core', () => {
     expect(code).toContain('abilityIdByBarSlot: this.deps.abilityIdByBarSlot()');

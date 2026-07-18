@@ -241,6 +241,7 @@ import {
   applyLoadoutBar as applyLoadoutBarActions,
   assignAttackSlotAction,
   clearHotbarSlot,
+  dragCarriesAttack,
   encodeHotbarAction,
   HOTBAR_ACTION_MIME,
   type HotbarAction,
@@ -5321,6 +5322,31 @@ export class Hud {
     );
   }
 
+  // A drag of the spellbook Attack row carries the marker MIME (dragCarriesAttack),
+  // not a HotbarAction: Attack lives only on slot 0, gated by the showAttackButton
+  // setting. Accept the drop anywhere on the bar by turning that setting back on,
+  // which restores Attack to slot 0 (the same state the spellbook +/- toggle and the
+  // Interface option drive). Returns true when it handled the event so the caller's
+  // normal action-drop path is skipped; `phase` splits the dragover permit (allow the
+  // drop, show the target) from the drop commit.
+  private tryAcceptAttackDrag(
+    e: DragEvent,
+    btn: HTMLButtonElement,
+    phase: 'over' | 'drop',
+  ): boolean {
+    if (!dragCarriesAttack(e.dataTransfer?.types)) return false;
+    e.preventDefault();
+    if (phase === 'over') {
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      btn.classList.add('drop-target');
+    } else {
+      btn.classList.remove('drop-target');
+      this.optionsHooks?.settings.set('showAttackButton', true);
+      this.hideTooltip();
+    }
+    return true;
+  }
+
   private buildActionBar(): void {
     const bar = $('#actionbar');
     const bar2 = $('#actionbar2');
@@ -5430,6 +5456,7 @@ export class Hud {
           this.hideTooltip();
         });
         btn.addEventListener('dragover', (e) => {
+          if (this.tryAcceptAttackDrag(e, btn, 'over')) return;
           const dragged = this.dragAction?.action ?? this.readDraggedAction(e.dataTransfer);
           if (!dragged) return;
           if (!this.actionBarController.isAssignableAction(dragged)) return;
@@ -5446,6 +5473,7 @@ export class Hud {
         });
         btn.addEventListener('dragleave', () => btn.classList.remove('drop-target'));
         btn.addEventListener('drop', (e) => {
+          if (this.tryAcceptAttackDrag(e, btn, 'drop')) return;
           e.preventDefault();
           btn.classList.remove('drop-target');
           const dragged = this.dragAction ?? {
@@ -5520,6 +5548,7 @@ export class Hud {
         });
         // With Attack removed, the freed slot accepts a drag like any other slot.
         btn.addEventListener('dragover', (e) => {
+          if (this.tryAcceptAttackDrag(e, btn, 'over')) return;
           if (this.attackSlotIsAttack()) return;
           if (this.dragAction?.sourceAttackSlot) return;
           const dragged = this.dragAction?.action ?? this.readDraggedAction(e.dataTransfer);
@@ -5530,6 +5559,7 @@ export class Hud {
         });
         btn.addEventListener('dragleave', () => btn.classList.remove('drop-target'));
         btn.addEventListener('drop', (e) => {
+          if (this.tryAcceptAttackDrag(e, btn, 'drop')) return;
           e.preventDefault();
           btn.classList.remove('drop-target');
           if (this.attackSlotIsAttack()) return;

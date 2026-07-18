@@ -9,7 +9,10 @@ import {
   buildDefaultFormBar,
   classHasFormBars,
   clearHotbarSlot,
+  dragCarriesAttack,
   encodeStoredHotbarAction,
+  HOTBAR_ACTION_MIME,
+  HOTBAR_ATTACK_MIME,
   handleMobileAttackTap,
   hotbarActionsEqual,
   loadAttackSlotAction,
@@ -145,6 +148,23 @@ describe('mobile attack tap', () => {
     );
 
     expect(calls).toEqual(['toggle']);
+  });
+});
+
+describe('attack drag marker', () => {
+  it('uses a MIME distinct from the normal action MIME', () => {
+    expect(HOTBAR_ATTACK_MIME).not.toBe(HOTBAR_ACTION_MIME);
+  });
+
+  it('detects the attack marker among the dragged types', () => {
+    expect(dragCarriesAttack([HOTBAR_ATTACK_MIME])).toBe(true);
+    expect(dragCarriesAttack(['text/plain', HOTBAR_ATTACK_MIME])).toBe(true);
+  });
+
+  it('does not treat a normal action drag as an attack drag', () => {
+    expect(dragCarriesAttack([HOTBAR_ACTION_MIME, 'text/plain'])).toBe(false);
+    expect(dragCarriesAttack([])).toBe(false);
+    expect(dragCarriesAttack(undefined)).toBe(false);
   });
 });
 
