@@ -183,8 +183,10 @@ export const WARRIOR_ROWS: RowTree = [
         id: 'war_row_colossal_might',
         name: 'Colossal Might',
         description:
-          'Each point of Rage you spend shaves 0.1 sec off the cooldown of your major offensive abilities.',
-        // LIVE: spendAbilityCost shaves the big offensive cooldowns per rage spent.
+          'Each point of Rage you spend shaves 0.1 sec off the cooldown of your major offensive abilities, up to 10 sec every 30 sec.',
+        // LIVE: spendAbilityCost shaves the big offensive cooldowns per rage
+        // spent, capped per rolling window (v0.27.1; see
+        // COLOSSAL_MIGHT_CAP_SECONDS in combat/casting_lifecycle.ts).
         effect: { global: { cdrPerRage: 0.1 } },
       },
       {
