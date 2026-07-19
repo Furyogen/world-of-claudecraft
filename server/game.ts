@@ -173,7 +173,11 @@ import { PartyFrameProjectionCache } from './party_frame_projection';
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
-import { StableAuraWireCache, StableSelfTimerWireCache } from './snapshot_timer_wire';
+import {
+  jsonWithField,
+  StableAuraWireCache,
+  StableSelfTimerWireCache,
+} from './snapshot_timer_wire';
 import type { Presence, PresenceStatus, SocialActor, SocialTransport } from './social';
 import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
@@ -1104,10 +1108,6 @@ function emptyWireVariant(): EntityWireVariantCache {
     fullAuraJson: '',
     liteAuraJson: '',
   };
-}
-
-function jsonWithField(objectJson: string, key: string, valueJson: string): string {
-  return `${objectJson.slice(0, -1)},"${key}":${valueJson}}`;
 }
 
 function fullEntityJson(id: number, idJson: string, dynJson: string): string {

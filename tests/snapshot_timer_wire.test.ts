@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { StableAuraWireCache, StableSelfTimerWireCache } from '../server/snapshot_timer_wire';
+import {
+  jsonWithField,
+  StableAuraWireCache,
+  StableSelfTimerWireCache,
+} from '../server/snapshot_timer_wire';
 import type { Aura, Entity } from '../src/sim/types';
 
 function aura(id: string, remaining: number): Aura {
@@ -22,6 +26,14 @@ function timerEntity(
 ): Pick<Entity, 'cooldowns' | 'auras' | 'dead'> {
   return { cooldowns, auras, dead };
 }
+
+describe('jsonWithField', () => {
+  it('adds the first field to an empty serialized object without a leading comma', () => {
+    const json = jsonWithField('{}', 'auras', '[]');
+
+    expect(JSON.parse(json)).toEqual({ auras: [] });
+  });
+});
 
 describe('StableAuraWireCache', () => {
   it('does not rebuild while live remaining time and sim time advance together', () => {

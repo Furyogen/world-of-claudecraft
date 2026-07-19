@@ -6,6 +6,11 @@ export interface SerializedTimerWire {
   revision: number;
 }
 
+export function jsonWithField(objectJson: string, key: string, valueJson: string): string {
+  const separator = objectJson === '{}' ? '' : ',';
+  return `${objectJson.slice(0, -1)}${separator}"${key}":${valueJson}}`;
+}
+
 type CooldownDeadline = StableCooldownWire;
 
 interface StableAuraRecord {
