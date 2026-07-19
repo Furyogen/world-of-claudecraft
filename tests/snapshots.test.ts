@@ -1179,6 +1179,95 @@ describe('raid party wire', () => {
       connected: 0,
     });
   });
+
+  it('projects common party member history once per broadcast and refreshes same-tick broadcasts', () => {
+    const server = new GameServer();
+    const leaderClient = fakeWs();
+    const leader = joinServer(server, leaderClient, 11, 'Leader');
+    const memberClient = fakeWs();
+    const member = joinServer(server, memberClient, 22, 'Member');
+    const thirdClient = fakeWs();
+    const third = joinServer(server, thirdClient, 33, 'Third');
+    server.sim.partyInvite(member.pid, leader.pid);
+    server.sim.partyAccept(member.pid);
+    server.sim.partyInvite(third.pid, leader.pid);
+    server.sim.partyAccept(third.pid);
+
+    let historyReads = 0;
+    for (const pid of [leader.pid, member.pid, third.pid]) {
+      const entity = server.sim.entities.get(pid)!;
+      let history = [{ tick: server.sim.tickCount, amount: 10 }];
+      Object.defineProperty(entity, 'damageHistory', {
+        configurable: true,
+        get: () => {
+          historyReads++;
+          return history;
+        },
+        set: (next) => {
+          history = next ?? [];
+        },
+      });
+    }
+
+    broadcast(server);
+    expect(historyReads).toBe(3);
+
+    const memberEntity = server.sim.entities.get(member.pid)!;
+    memberEntity.hp = 777;
+    broadcast(server);
+    expect(historyReads).toBe(6);
+    const memberRow = lastSnap(leaderClient.sent).self.party.members.find(
+      (row: any) => row.pid === member.pid,
+    );
+    expect(memberRow.hp).toBe(777);
+  });
+
+  it('uses the observed player as the Echo viewer for a spectator party snapshot', () => {
+    const moderatorClient = fakeWs();
+    const moderator = joinServer(server, moderatorClient, 3, 'Modera');
+    const target = server.sim.entities.get(member.pid)!;
+    target.auras.push(
+      {
+        id: 'temporal_echo',
+        name: 'Temporal Echo',
+        kind: 'temporal_echo',
+        remaining: 11.1,
+        duration: 15,
+        value: 0,
+        sourceId: leader.pid,
+        school: 'arcane',
+      },
+      {
+        id: 'temporal_echo',
+        name: 'Temporal Echo',
+        kind: 'temporal_echo',
+        remaining: 22.1,
+        duration: 15,
+        value: 0,
+        sourceId: member.pid,
+        school: 'arcane',
+      },
+    );
+    (server as any).enterSpectate(moderator, leader);
+
+    broadcast(server);
+
+    const echoAurasFor = (client: FakeClient) => {
+      const memberRow = lastSnap(client.sent).self.party.members.find(
+        (row: any) => row.pid === member.pid,
+      );
+      return memberRow.auras.filter((row: any) => row.kind === 'temporal_echo');
+    };
+    expect(echoAurasFor(fcLeader)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 12 },
+    ]);
+    expect(echoAurasFor(fcMember)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 23 },
+    ]);
+    expect(echoAurasFor(moderatorClient)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 12 },
+    ]);
+  });
 });
 
 describe('dungeon difficulty wire', () => {

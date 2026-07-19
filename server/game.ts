@@ -9,7 +9,6 @@ import {
   wireStreamerLinks,
 } from '../src/sim/account_flair';
 import { verifyChallenge } from '../src/sim/client_challenge';
-import { echoVisibleTo } from '../src/sim/combat/chronomancy';
 import { damageTakenWithin } from '../src/sim/combat/damage_history';
 import { rewindHealAmount } from '../src/sim/combat/rewind';
 import { DEEDS } from '../src/sim/content/deeds';
@@ -46,7 +45,6 @@ import { parseMoveInputFrame } from '../src/sim/move_input';
 import {
   partyFrameAbsorb,
   partyFrameAggroTargets,
-  partyFrameAuras,
   partyFrameIncomingHeals,
   partyFrameRole,
 } from '../src/sim/party_frame_info';
@@ -71,7 +69,6 @@ import {
   isDungeonDifficulty,
   MAX_LEVEL,
   type MobFamily,
-  PARTY_MEMBER_AURA_CAP,
   RUN_SPEED,
   type SimEvent,
   type SportRole,
@@ -166,6 +163,7 @@ import {
   ModerationService,
 } from './moderation_service';
 import { consumeMsgToken, createMsgRateBucket, type MsgRateBucketState } from './msg_rate_limit';
+import { PartyFrameProjectionCache } from './party_frame_projection';
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
@@ -1117,14 +1115,15 @@ export class GameServer {
   private readonly moderation: ModerationService<ClientSession>;
   private wireCache = new Map<number, EntityWireCache>();
   // partyFrameAggroTargets / partyFrameIncomingHeals scan the whole entity set and
-  // are GLOBAL (identical for every grouped session), yet partyWire runs once per
-  // grouped session per tick. Memoize both once per tick so a 40-raid does one scan,
-  // not one per member. (see review #1864, finding 1)
+  // are GLOBAL (identical for every grouped session), yet partyWire runs once for
+  // each grouped session. Memoize both for one broadcast so each party does one
+  // scan, not one per member. (see review #1864, finding 1)
   private partyFrameGlobalsCache: {
     tick: number;
     aggroTargets: ReturnType<typeof partyFrameAggroTargets>;
     incomingHeals: ReturnType<typeof partyFrameIncomingHeals>;
   } | null = null;
+  private readonly partyFrameProjectionCache = new PartyFrameProjectionCache();
   private lastWireSweepTick = 0;
   private interval: NodeJS.Timeout | null = null;
   private holderTierInterval: NodeJS.Timeout | null = null;
@@ -4895,6 +4894,8 @@ export class GameServer {
 
   private broadcastSnapshots(): void {
     if (this.clients.size === 0) return;
+    this.partyFrameGlobalsCache = null;
+    this.partyFrameProjectionCache.beginBroadcast();
     const tick = this.sim.tickCount;
     // tickHz rides the head at ~2 Hz, not on every snapshot: it is omitted while
     // the meter warms up (first ~1s, so a fresh server never shows a bogus
@@ -5338,7 +5339,7 @@ export class GameServer {
   }
 
   // Global party-frame aggregates (aggro holders + incoming heals), scanned once
-  // per tick and shared by every partyWire call in that tick.
+  // per broadcast and shared by every partyWire call in that broadcast.
   private partyFrameGlobals(): {
     aggroTargets: ReturnType<typeof partyFrameAggroTargets>;
     incomingHeals: ReturnType<typeof partyFrameIncomingHeals>;
@@ -5361,51 +5362,52 @@ export class GameServer {
     const party = this.sim.partyOf(pid);
     if (!party) return null;
     const { aggroTargets, incomingHeals } = this.partyFrameGlobals();
-    return {
-      leader: party.leader,
-      raid: party.raid,
-      master: { ...party.lootStrategies.master },
-      members: party.members
-        .map((mPid) => {
-          const meta = this.sim.meta(mPid);
-          const e = this.sim.entities.get(mPid);
-          const pos = this.clients.get(mPid)?.spectating?.savedPos ?? e?.pos;
-          return meta && e && pos
-            ? {
-                pid: mPid,
-                name: meta.name,
-                cls: meta.cls,
-                level: e.level,
-                hp: e.hp,
-                mhp: e.maxHp,
-                res: Math.round(e.resource),
-                mres: e.maxResource,
-                rtype: e.resourceType,
-                x: round2(pos.x),
-                z: round2(pos.z),
-                dead: e.dead ? 1 : 0,
-                inCombat: e.inCombat ? 1 : 0,
-                group: party.raidGroups.get(mPid) ?? 1,
-                absorb: partyFrameAbsorb(e.auras),
-                role: partyFrameRole(meta.talentMods.role),
-                // Effective health Rewind could currently restore to this member
-                // (combat/rewind.ts); 0 for members with no recent recorded loss.
-                rewind: rewindHealAmount(damageTakenWithin(e, this.sim.tickCount), e.hp, e.maxHp),
-                connected:
-                  meta.isDevBot || (this.clients.has(mPid) && !this.clients.get(mPid)?.linkdead)
-                    ? 1
-                    : 0,
-                hasAggro: aggroTargets.has(mPid) ? 1 : 0,
-                incomingHeal: incomingHeals.get(mPid) ?? 0,
-                // Temporal Echo marks are filtered per-viewer to `pid`'s own, so
-                // other chronomancers' echoes (which still heal in the sim) never
-                // show in this player's group/raid strip.
-                auras: partyFrameAuras(e.auras.filter((a) => echoVisibleTo(a, pid))),
-              }
-            : null;
-        })
-        .filter(Boolean),
-    };
+    return this.partyFrameProjectionCache.forViewer(
+      {
+        id: party.id,
+        leader: party.leader,
+        raid: party.raid,
+        master: party.lootStrategies.master,
+        members: party.members,
+      },
+      pid,
+      (mPid) => {
+        const meta = this.sim.meta(mPid);
+        const e = this.sim.entities.get(mPid);
+        const pos = this.clients.get(mPid)?.spectating?.savedPos ?? e?.pos;
+        if (!meta || !e || !pos) return null;
+        return {
+          member: {
+            pid: mPid,
+            name: meta.name,
+            cls: meta.cls,
+            level: e.level,
+            hp: e.hp,
+            mhp: e.maxHp,
+            res: Math.round(e.resource),
+            mres: e.maxResource,
+            rtype: e.resourceType,
+            x: round2(pos.x),
+            z: round2(pos.z),
+            dead: e.dead ? 1 : 0,
+            inCombat: e.inCombat ? 1 : 0,
+            group: party.raidGroups.get(mPid) ?? 1,
+            absorb: partyFrameAbsorb(e.auras),
+            role: partyFrameRole(meta.talentMods.role),
+            // Effective health Rewind could currently restore to this member
+            // (combat/rewind.ts); 0 for members with no recent recorded loss.
+            rewind: rewindHealAmount(damageTakenWithin(e, this.sim.tickCount), e.hp, e.maxHp),
+            connected:
+              meta.isDevBot || (this.clients.has(mPid) && !this.clients.get(mPid)?.linkdead)
+                ? 1
+                : 0,
+            hasAggro: aggroTargets.has(mPid) ? 1 : 0,
+            incomingHeal: incomingHeals.get(mPid) ?? 0,
+          },
+          auras: e.auras,
+        };
+      },
+    );
   }
 
   // Raid markers the player's party can see, as { entityId: markerId }; null

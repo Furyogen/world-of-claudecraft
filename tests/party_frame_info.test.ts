@@ -5,7 +5,11 @@
 // remaining). Both hosts (offline sim and server wire) consume this module.
 
 import { describe, expect, it } from 'vitest';
-import { partyFrameAuras } from '../src/sim/party_frame_info';
+import {
+  partyFrameAuras,
+  partyFrameAurasForViewer,
+  preparePartyFrameAuras,
+} from '../src/sim/party_frame_info';
 import type { Aura } from '../src/sim/types';
 import { PARTY_MEMBER_AURA_CAP } from '../src/sim/types';
 
@@ -72,6 +76,7 @@ describe('partyFrameAuras', () => {
   });
 
   it('returns no summaries when the caller sets a zero cap', () => {
-    expect(partyFrameAuras([aura({ id: 'renew', kind: 'hot', value: 20 })], 0)).toEqual([]);
+    const prepared = preparePartyFrameAuras([aura({ id: 'renew', kind: 'hot', value: 20 })]);
+    expect(partyFrameAurasForViewer(prepared, 1, 0)).toEqual([]);
   });
 });

@@ -1,5 +1,5 @@
 import { isPartyFrameRelevantAura } from './aura_classify';
-import { partyAuraPriority } from './combat/chronomancy';
+import { echoVisibleTo, partyAuraPriority } from './combat/chronomancy';
 import type { Role } from './content/talents';
 import type { AbilityEffect, Aura, Entity } from './types';
 import { PARTY_MEMBER_AURA_CAP } from './types';
@@ -13,6 +13,49 @@ export interface PartyFrameAuraSummary {
 
 export interface PartyFrameResolvedAbility {
   effects: readonly AbilityEffect[];
+}
+
+export interface PreparedPartyFrameAura {
+  summary: PartyFrameAuraSummary;
+  sourceId: number;
+}
+
+/** Perform the relevance, priority, and summary work once before applying a
+ * viewer-specific Temporal Echo visibility filter. */
+export function preparePartyFrameAuras(auras: readonly Aura[]): PreparedPartyFrameAura[] {
+  const relevant = auras.filter((aura) => isPartyFrameRelevantAura(aura));
+  relevant.sort((a, b) => partyAuraPriority(a) - partyAuraPriority(b));
+  return relevant.map((aura) => ({
+    sourceId: aura.sourceId,
+    summary: {
+      id: aura.id,
+      kind: aura.kind,
+      ...(aura.value < 0 ? { neg: 1 as const } : {}),
+      remaining: Math.max(0, Math.ceil(aura.remaining)),
+    },
+  }));
+}
+
+/** Apply only the cheap viewer-specific Echo filter and cap to prepared rows. */
+export function partyFrameAurasForViewer(
+  prepared: readonly PreparedPartyFrameAura[],
+  viewerId?: number,
+  cap = PARTY_MEMBER_AURA_CAP,
+): PartyFrameAuraSummary[] {
+  const normalizedCap = Number.isNaN(cap) ? 0 : Math.trunc(cap);
+  if (normalizedCap === 0) return [];
+  const visible: PartyFrameAuraSummary[] = [];
+  for (const aura of prepared) {
+    if (
+      viewerId !== undefined &&
+      !echoVisibleTo({ kind: aura.summary.kind, sourceId: aura.sourceId }, viewerId)
+    ) {
+      continue;
+    }
+    visible.push(aura.summary);
+    if (normalizedCap > 0 && visible.length === normalizedCap) break;
+  }
+  return normalizedCap < 0 ? visible.slice(0, normalizedCap) : visible;
 }
 
 /** Compact actionable auras for a party row. Filtering before the cap prevents
