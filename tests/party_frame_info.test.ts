@@ -70,4 +70,8 @@ describe('partyFrameAuras', () => {
     partyFrameAuras(input);
     expect(input.map((a) => a.id)).toEqual(before);
   });
+
+  it('returns no summaries when the caller sets a zero cap', () => {
+    expect(partyFrameAuras([aura({ id: 'renew', kind: 'hot', value: 20 })], 0)).toEqual([]);
+  });
 });
