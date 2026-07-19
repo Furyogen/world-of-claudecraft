@@ -310,6 +310,11 @@ const DUNGEON_ENV_INTENSITY = 0.05;
 // raw HDRI PMREMs integrate the real sun the dome shader clamps away —
 // rescale so ambient matches the dome-capture look (see lookdev-hookup.md)
 const IBL_RAW_SCALE = 0.55;
+// Memory-ceiling profile: non-default biome env prefilters wait this long after the
+// synchronous scene build (plus a stagger between each) so they never stack onto the
+// world-entry allocation spike that gets phone WebKit's WebContent process killed.
+const DEFERRED_ENV_PREFILTER_MS = 12000;
+const DEFERRED_ENV_PREFILTER_STAGGER_MS = 4000;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
@@ -1217,9 +1222,32 @@ export class Renderer {
     // the environment intensity is rescaled to match the shipped look.
     if (!LOW_GFX) {
       const pmrem = new THREE.PMREMGenerator(this.webgl);
-      for (const b of ['vale', 'marsh', 'peaks'] as BiomeId[]) {
+      // Memory-ceiling profile (phone WebKit): prefiltering all three biome envs here adds
+      // three mip-chained HalfFloat cubemaps to the world-entry allocation spike, the moment
+      // iOS WebKit is most likely to kill the WebContent process. Build only the default
+      // ('vale') env synchronously and stagger the rest onto idle timers: the biome-crossing
+      // swap below already guards on envRTs.has(dominant), so until a deferred env lands the
+      // scene just keeps the current one (a brief, cosmetic-only ambient mismatch).
+      const entryBiomes: BiomeId[] = GFX.constrainedMemory ? ['vale'] : ['vale', 'marsh', 'peaks'];
+      for (const b of entryBiomes) {
         const eq = this.skyView.envTexture(b);
         if (eq) this.envRTs.set(b, pmrem.fromEquirectangular(eq));
+      }
+      if (GFX.constrainedMemory) {
+        const deferred: BiomeId[] = ['marsh', 'peaks'];
+        deferred.forEach((b, i) => {
+          window.setTimeout(
+            () => {
+              if (this.envRTs.has(b)) return;
+              const eq = this.skyView.envTexture(b);
+              if (!eq) return;
+              const latePmrem = new THREE.PMREMGenerator(this.webgl);
+              this.envRTs.set(b, latePmrem.fromEquirectangular(eq));
+              latePmrem.dispose();
+            },
+            DEFERRED_ENV_PREFILTER_MS + i * DEFERRED_ENV_PREFILTER_STAGGER_MS,
+          );
+        });
       }
       if (this.envRTs.size > 0) {
         this.envOutdoorIntensity = ENV_INTENSITY * IBL_RAW_SCALE;
