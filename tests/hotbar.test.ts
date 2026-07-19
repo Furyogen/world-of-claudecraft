@@ -5,6 +5,7 @@ import {
   actionForAttackSlot,
   applyLoadoutBar,
   assignAttackSlotAction,
+  attackDragDisposition,
   attackSlotStorageKey,
   buildDefaultFormBar,
   classHasFormBars,
@@ -165,6 +166,22 @@ describe('attack drag marker', () => {
     expect(dragCarriesAttack([HOTBAR_ACTION_MIME, 'text/plain'])).toBe(false);
     expect(dragCarriesAttack([])).toBe(false);
     expect(dragCarriesAttack(undefined)).toBe(false);
+  });
+
+  it('accepts the drag across the bar but highlights only its slot-0 destination', () => {
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 0, 'over')).toBe('highlight');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 1, 'over')).toBe('accept');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 11, 'over')).toBe('accept');
+  });
+
+  it('restores Attack on drop from any accepted action-bar slot', () => {
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 0, 'drop')).toBe('restore');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 7, 'drop')).toBe('restore');
+  });
+
+  it('ignores non-Attack drags in both phases', () => {
+    expect(attackDragDisposition([HOTBAR_ACTION_MIME], 0, 'over')).toBe('ignore');
+    expect(attackDragDisposition(undefined, 0, 'drop')).toBe('ignore');
   });
 });
 

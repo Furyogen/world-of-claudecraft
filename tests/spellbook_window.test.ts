@@ -108,18 +108,6 @@ describe('spellbook_window: the Attack row is draggable onto the action bar', ()
   });
 });
 
-describe('hud action bar: accepts a dragged Attack (turns showAttackButton on)', () => {
-  it('recognizes the Attack drag marker on the bar', () => {
-    expect(hud).toContain('dragCarriesAttack');
-  });
-
-  it('restores Attack to slot 0 by enabling showAttackButton on drop', () => {
-    // Attack lives only on slot 0 (the attack slot), so accepting the drag anywhere
-    // on the bar routes through the same showAttackButton state the +/- toggle drives.
-    expect(hud).toMatch(/settings\.set\('showAttackButton',\s*true\)/);
-  });
-});
-
 describe('spellbook_window: mobile action-ring page label (Phase 4, touch-only)', () => {
   it('feeds abilityIdByBarSlot through to the pure view core', () => {
     expect(code).toContain('abilityIdByBarSlot: this.deps.abilityIdByBarSlot()');
