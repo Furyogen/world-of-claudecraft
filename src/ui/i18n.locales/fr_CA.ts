@@ -21,10 +21,6 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
     'Lancez-vous dans une aventure épique dans World of ClaudeCraft, un micro-MMO de style classique jouable directement dans votre navigateur. Rejoignez un monde partagé et persistant, faites monter vos classes en niveau et terrassez vos ennemis.',
   'seo.operatingSystem': 'Navigateur Web',
   'a11y.toggleMenu': 'Ouvrir ou fermer le menu',
-  'entryGuard.body':
-    "Le jeu s'est fermé de manière inattendue en entrant dans le monde, les graphismes sont donc maintenant réglés sur {preset}. Vous pouvez modifier cela dans le sélecteur de graphismes ci-dessous ou dans les options en jeu.",
-  'entryGuard.dismiss': 'Fermer',
-  'entryGuard.title': 'Graphismes réduits',
   'loading.assetsFailed': 'Le chargement des ressources a échoué: rechargez la page. {error}',
   'loading.rendererFailed': 'Impossible de démarrer le rendu: rechargez la page. {error}',
   'loading.enterTimeout':
