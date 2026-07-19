@@ -244,7 +244,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     const clientSeed = typeof msg.clientSeed === 'string' ? msg.clientSeed : '';
     // Optional rolling-deploy capability. Exact numeric equality is deliberate:
     // strings, booleans, and unknown future versions stay on the legacy wire.
-    const timerWireVersion =
+    const timerWireVersion: 1 | typeof STABLE_TIMER_WIRE_VERSION =
       msg.timerWire === STABLE_TIMER_WIRE_VERSION ? STABLE_TIMER_WIRE_VERSION : 1;
     const accountId = await accountForToken(token);
     if (accountId === null || !Number.isFinite(characterId)) {
