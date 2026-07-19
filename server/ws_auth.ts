@@ -15,8 +15,7 @@ import { randomUUID } from 'node:crypto';
 import type { EventEmitter } from 'node:events';
 import type * as http from 'node:http';
 import type { WebSocket, WebSocketServer } from 'ws';
-import { STABLE_TIMER_WIRE_VERSION } from '../src/net/snapshot_timer_wire';
-import type { BankBonusSource } from '../src/world_api';
+import { type BankBonusSource, STABLE_TIMER_WIRE_VERSION } from '../src/world_api';
 import type {
   AccountChatMuteStatus,
   AccountCosmetics,

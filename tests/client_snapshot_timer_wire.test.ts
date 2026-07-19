@@ -108,10 +108,7 @@ describe('stable snapshot timer protocol', () => {
     expect(stableDeadlineRemaining(1, -1)).toBeNull();
     expect(stableDeadlineRemaining(Number.MAX_VALUE, -Number.MAX_VALUE)).toBeNull();
     expect(
-      stableCooldownRemaining(
-        [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE],
-        0,
-      ),
+      stableCooldownRemaining([Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE], 0),
     ).toBeNull();
   });
 

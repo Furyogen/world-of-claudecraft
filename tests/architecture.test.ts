@@ -331,7 +331,7 @@ describe('src/sim architecture invariants', () => {
 
 // ---------------------------------------------------------------------------
 // IWorld seam purity (W1b). The seam render/ui depend on is src/world_api.ts (the
-// aggregate interface + the COMMAND_NAMES wire table) plus every facet interface
+// aggregate interface + shared wire constants) plus every facet interface
 // under src/world_api/. W1 split IWorld into those files as a string-free,
 // TYPE-ONLY boundary: every host (render/ui/game/net) and the server talk to the
 // world ONLY through it, so it sits ABOVE them and must import nothing from
@@ -340,8 +340,9 @@ describe('src/sim architecture invariants', () => {
 // i18n/UI logic (no t()/tSim()/tServer()). Without this scan the facet files'
 // purity is convention-only; a later W6-W10 re-home could add a net/ui import or a
 // t() call to a facet and no gate would redden. This closes that gap. The one
-// blessed value site is COMMAND_NAMES (world_api.ts); string literals are NOT
-// banned (only imports + DOM + i18n calls are). chat.ts's OVERHEAD_EMOTES +
+// blessed value sites are local protocol constants such as COMMAND_NAMES and
+// STABLE_TIMER_WIRE_VERSION (world_api.ts); string literals are NOT banned (only
+// imports + DOM + i18n calls are). chat.ts's OVERHEAD_EMOTES +
 // isOverheadEmoteId derive their runtime id set from OVERHEAD_EMOTES itself
 // (not sim/types' OVERHEAD_EMOTE_IDS), so there is currently no sanctioned
 // runtime sim import; SANCTIONED_VALUE_SIM_IMPORTS below stays as the escape

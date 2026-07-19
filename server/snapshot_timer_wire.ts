@@ -1,5 +1,5 @@
-import type { StableCooldownWire } from '../src/net/snapshot_timer_wire';
 import type { Aura, Entity } from '../src/sim/types';
+import type { StableCooldownWire } from '../src/world_api';
 
 export interface SerializedTimerWire {
   json: string;

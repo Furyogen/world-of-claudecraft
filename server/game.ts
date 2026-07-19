@@ -2,10 +2,6 @@ import { randomUUID } from 'node:crypto';
 import type { WebSocket } from 'ws';
 import { createBotDetector } from '#bot-detector';
 import {
-  STABLE_TIMER_WIRE_VERSION,
-  type StableTimerWireVersion,
-} from '../src/net/snapshot_timer_wire';
-import {
   type AccountFlair,
   type ChatSenderFlair,
   EMPTY_ACCOUNT_FLAIR,
@@ -80,7 +76,13 @@ import {
   type VcNationId,
 } from '../src/sim/types';
 import { isAtSowfield } from '../src/sim/vale_cup_layout';
-import { type BankBonusSource, type CommandName, isOverheadEmoteId } from '../src/world_api';
+import {
+  type BankBonusSource,
+  type CommandName,
+  isOverheadEmoteId,
+  STABLE_TIMER_WIRE_VERSION,
+  type StableTimerWireVersion,
+} from '../src/world_api';
 import { recordOnlineSample } from './admin_db';
 import { offensiveName } from './auth';
 import { recordBankOp } from './bank_ledger';
@@ -3359,7 +3361,7 @@ export class GameServer {
     console.log(
       `[perf] online=${this.clients.size} ents=${this.sim.entities.size} tickHz=${this.tickHz == null ? 'n/a' : round2(this.tickHz)} tickMs=${round2(tickMs)}${overBudget ? ' OVER' : ''}` +
         ` | p95/max ${['total', 'tick', 'broadcast', 'bcastSelf', 'bcastGrid', 'events', 'social'].map(fmt).join(' ')}` +
-        ` | visits=${this.bcVisits} serializes=${this.bcSerializes} serializeMs=${round2(Number(this.bcSerializeNs) / 1e6)} timerVariants=${this.bcLegacySerializes}/${this.bcStableSerializes} aggroVisits=${this.mobScanTickStats.lastAggroScanVisits} threatVisits=${this.mobScanTickStats.lastThreatEntryVisits}`,
+        ` | visits=${this.bcVisits} serializes=${this.bcSerializes} baseSerializes=${this.bcBaseSerializes} serializeMs=${round2(Number(this.bcSerializeNs) / 1e6)} timerVariants=${this.bcLegacySerializes}/${this.bcStableSerializes} aggroVisits=${this.mobScanTickStats.lastAggroScanVisits} threatVisits=${this.mobScanTickStats.lastThreatEntryVisits}`,
     );
     // The sim.tick() internal breakdown, mean-sorted so the phase that actually eats
     // the average (not just a spike) leads. Populated only while detailed timing is on.

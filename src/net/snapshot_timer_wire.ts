@@ -1,19 +1,14 @@
-export const STABLE_TIMER_WIRE_VERSION = 2 as const;
+import {
+  STABLE_TIMER_WIRE_VERSION,
+  type StableCooldownWire,
+  type StableTimerWireVersion,
+} from '../world_api';
 
-export type StableTimerWireVersion = typeof STABLE_TIMER_WIRE_VERSION;
+export type { StableCooldownWire, StableTimerWireVersion };
+export { STABLE_TIMER_WIRE_VERSION };
 
-/**
- * A cooldown's absolute wall schedule in server simulation seconds.
- *
- * A plain number is the expiry time for a cooldown recovering at 1x. The
- * tuple carries an expiry time plus a temporary recovery-rate segment. The
- * segment ends at `acceleratedUntil`; after that, recovery continues at 1x
- * until `expiresAt`.
- */
-export type StableCooldownWire =
-  | number
-  | readonly [expiresAt: number, recoveryRate: number, acceleratedUntil: number];
-
+// Unknown markers are isolated from both legacy and v2 decoding so a future
+// server cannot make an older client reinterpret fields it does not understand.
 export type SnapshotTimerWireMode = 'legacy' | 'stable' | 'unsupported';
 
 export function snapshotTimerWireMode(value: unknown): SnapshotTimerWireMode {
@@ -27,12 +22,20 @@ export function isStableTimerWireVersion(value: unknown): value is StableTimerWi
 }
 
 export function stableDeadlineRemaining(value: unknown, now: number): number | null {
-  if (typeof value !== 'number' || !Number.isFinite(value) || !Number.isFinite(now)) return null;
-  return Math.max(0, value - now);
+  if (
+    typeof value !== 'number' ||
+    !Number.isFinite(value) ||
+    value < 0 ||
+    !Number.isFinite(now) ||
+    now < 0
+  )
+    return null;
+  const remaining = Math.max(0, value - now);
+  return Number.isFinite(remaining) ? remaining : null;
 }
 
 export function stableCooldownRemaining(value: unknown, now: number): number | null {
-  if (!Number.isFinite(now)) return null;
+  if (!Number.isFinite(now) || now < 0) return null;
   if (typeof value === 'number') return stableDeadlineRemaining(value, now);
   if (!Array.isArray(value) || value.length !== 3) return null;
 
@@ -40,18 +43,21 @@ export function stableCooldownRemaining(value: unknown, now: number): number | n
   if (
     typeof expiresAt !== 'number' ||
     !Number.isFinite(expiresAt) ||
+    expiresAt < 0 ||
     typeof recoveryRate !== 'number' ||
     !Number.isFinite(recoveryRate) ||
     recoveryRate <= 0 ||
     typeof acceleratedUntilRaw !== 'number' ||
-    !Number.isFinite(acceleratedUntilRaw)
+    !Number.isFinite(acceleratedUntilRaw) ||
+    acceleratedUntilRaw < 0
   )
     return null;
 
   const acceleratedUntil = Math.min(expiresAt, acceleratedUntilRaw);
-  if (now >= acceleratedUntil) return Math.max(0, expiresAt - now);
-  return Math.max(
+  if (now >= acceleratedUntil) return stableDeadlineRemaining(expiresAt, now);
+  const remaining = Math.max(
     0,
     (acceleratedUntil - now) * recoveryRate + Math.max(0, expiresAt - acceleratedUntil),
   );
+  return Number.isFinite(remaining) ? remaining : null;
 }

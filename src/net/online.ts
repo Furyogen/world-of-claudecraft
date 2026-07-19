@@ -1998,7 +1998,12 @@ export class ClientWorld implements IWorld {
       this.stableCooldownSchedules?.clear();
       this.stableNodeDeadlines?.clear();
     }
-    if (mode !== 'stable' || typeof rawTime !== 'number' || !Number.isFinite(rawTime)) {
+    if (
+      mode !== 'stable' ||
+      typeof rawTime !== 'number' ||
+      !Number.isFinite(rawTime) ||
+      rawTime < 0
+    ) {
       return { mode, time: null };
     }
 
@@ -2150,6 +2155,13 @@ export class ClientWorld implements IWorld {
     const prevSelf = this.entities.get(this.playerId);
     const prevSelfFacing = prevSelf?.facing;
     const prevSelfDead = prevSelf?.dead ?? false;
+
+    const auraRemaining = (aura: ClientWireAura): number => {
+      if (timerWire.mode !== 'stable' || timerWire.time === null) return Number(aura.rem);
+      const deadlineRemaining = stableDeadlineRemaining(aura.exp, timerWire.time);
+      if (deadlineRemaining !== null) return deadlineRemaining;
+      return typeof aura.rem === 'number' && Number.isFinite(aura.rem) ? aura.rem : 0;
+    };
 
     const applyWire = (w: any): Entity | null => {
       let e = this.entities.get(w.id);
@@ -2334,12 +2346,6 @@ export class ClientWorld implements IWorld {
         (timerWire.mode === 'stable' && timerWire.time !== null && w.auras !== undefined);
       if (shouldApplyAuras) {
         const wireAuras = (Array.isArray(w.auras) ? w.auras : []) as ClientWireAura[];
-        const auraRemaining = (aura: ClientWireAura): number => {
-          if (timerWire.mode !== 'stable' || timerWire.time === null) return Number(aura.rem);
-          const deadlineRemaining = stableDeadlineRemaining(aura.exp, timerWire.time);
-          if (deadlineRemaining !== null) return deadlineRemaining;
-          return typeof aura.rem === 'number' && Number.isFinite(aura.rem) ? aura.rem : 0;
-        };
         let sameAuraShape = e.auras.length === wireAuras.length;
         if (sameAuraShape) {
           for (let i = 0; i < wireAuras.length; i++) {
