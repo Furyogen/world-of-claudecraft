@@ -278,6 +278,33 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
   });
 });
 
+describe('createWsAuth: timer-wire capability negotiation', () => {
+  it('passes only the exact optional v2 capability into the recipient session meta', async () => {
+    const capable = setup();
+    await createWsAuth(capable.deps).authenticateWebSocket(
+      asWs(capable.ws),
+      authRaw({ timerWire: 2 }),
+      capable.req,
+    );
+    expect(capable.game.join).toHaveBeenCalledTimes(1);
+    expect(capable.game.join.mock.calls[0][7]).toMatchObject({ timerWireVersion: 2 });
+
+    const legacy = setup();
+    await createWsAuth(legacy.deps).authenticateWebSocket(asWs(legacy.ws), authRaw(), legacy.req);
+    expect(legacy.game.join).toHaveBeenCalledTimes(1);
+    expect(legacy.game.join.mock.calls[0][7]).toMatchObject({ timerWireVersion: 1 });
+
+    const unknown = setup();
+    await createWsAuth(unknown.deps).authenticateWebSocket(
+      asWs(unknown.ws),
+      authRaw({ timerWire: 99 }),
+      unknown.req,
+    );
+    expect(unknown.game.join).toHaveBeenCalledTimes(1);
+    expect(unknown.game.join.mock.calls[0][7]).toMatchObject({ timerWireVersion: 1 });
+  });
+});
+
 describe('createWsAuth: realm admission cap', () => {
   it('a. refuses an at-cap fresh join with "realm is full", before the lease and the join', async () => {
     const { ws, game, deps, req } = setup();
