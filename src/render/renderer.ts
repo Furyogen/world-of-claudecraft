@@ -339,8 +339,15 @@ const IBL_RAW_SCALE = 0.55;
 // Memory-ceiling profile: non-default biome env prefilters wait this long after the
 // synchronous scene build (plus a stagger between each) so they never stack onto the
 // world-entry allocation spike that gets phone WebKit's WebContent process killed.
-const DEFERRED_ENV_PREFILTER_MS = 12000;
-const DEFERRED_ENV_PREFILTER_STAGGER_MS = 4000;
+// 30s/10s (was 12s/4s): the earlier schedule dropped a mip-chained HalfFloat
+// cubemap build right into the first-half-minute window where a phone player is
+// still settling in (opening the More tray, first camera swings), stacking the
+// prefilter's transient GPU spike onto whatever the player just triggered while
+// the post-entry footprint is at its peak. 30s also clears the entry crash
+// guard's stable window, so a prefilter-coincident kill can never read as an
+// entry crash and cost a tier.
+const DEFERRED_ENV_PREFILTER_MS = 30000;
+const DEFERRED_ENV_PREFILTER_STAGGER_MS = 10000;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
@@ -1271,6 +1278,10 @@ export class Renderer {
               if (this.envRTs.has(b)) return;
               const eq = this.skyView.envTexture(b);
               if (!eq) return;
+              // Dev-channel diagnostic: this build is a transient GPU spike; if a
+              // process kill correlates with this line on a device, this is the
+              // allocation to chase.
+              console.info(`[entry-guard] deferred env prefilter: ${b}`);
               const latePmrem = new THREE.PMREMGenerator(this.webgl);
               this.envRTs.set(b, latePmrem.fromEquirectangular(eq));
               latePmrem.dispose();
