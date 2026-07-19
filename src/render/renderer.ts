@@ -212,6 +212,22 @@ const VIEW_PREWARM_MAX_MS = 12000;
 // hitches this trades into are strictly better than a process kill at world entry.
 const VIEW_PREWARM_MAX_MS_CONSTRAINED = 5000;
 const PREWARM_COMPILE_MAX_MS_CONSTRAINED = 2500;
+// Constrained devices run a deliberately MINIMAL prewarm manifest: only the entries
+// needed to enter the world without a giant first-frame block. The archetype /
+// material-variant / whole-scene-texture warms are polish (they trade entry-time
+// work for less in-world pop-in), and on phone WebKit that trade is wrong twice
+// over: given main-thread time they trip the responsiveness watchdog, and given
+// budget they re-inflate the world-entry GPU footprint past the memory ceiling
+// (observed on an iPhone 17 Pro: the entry survived while these entries timed out
+// at 54 texture uploads, then died once they fit the budget at 165). The skipped
+// warms happen lazily in-world instead, spread across gameplay frames.
+const CONSTRAINED_PREWARM_KEEP = new Set([
+  'views.required',
+  'views.nearby',
+  'programs.compile',
+  'world.initial-frame',
+  'render.settle-passes',
+]);
 // Shader linking is the whole point of the prewarm: if it doesn't finish, the
 // first in-world frame that needs a program compiles it synchronously — the
 // multi-hundred-ms (up to ~1.7s) freeze players feel when new model types
@@ -3067,6 +3083,30 @@ export class Renderer {
     }
     try {
       for (const entry of orderedManifest) {
+        // Constrained: skip everything outside the minimal keep-list (see
+        // CONSTRAINED_PREWARM_KEEP), recording the skip so the prewarm summary
+        // stays honest about what was deliberately not warmed.
+        if (constrainedPrewarm && !CONSTRAINED_PREWARM_KEEP.has(entry.id)) {
+          const counts = this.prewarmCounts();
+          manifestEntries.push({
+            id: entry.id,
+            category: entry.category,
+            priority: entry.priority,
+            required: entry.required,
+            status: 'skipped',
+            elapsedMs: 0,
+            remainingMsAfter: roundMs(Math.max(0, deadline - performance.now())),
+            passes: renderPasses,
+            programsBefore: counts.programs,
+            programsAfter: counts.programs,
+            programDelta: 0,
+            texturesBefore: counts.textures,
+            texturesAfter: counts.textures,
+            textureDelta: 0,
+            detail: 'constrained-minimal',
+          });
+          continue;
+        }
         // Constrained (phone WebKit): yield the EVENT LOOP between entries (the
         // awaits above are microtask-only, which never lets the process service
         // events) so the responsiveness watchdog sees a live process.
@@ -3150,7 +3190,8 @@ export class Renderer {
         `programs=${stats.programsBefore}->${stats.programsAfter} ` +
         `textures=${stats.texturesBefore}->${stats.texturesAfter} ` +
         `compile=${stats.compileMode}/${stats.compileMs}ms parallelCompile=${this.asyncCompileSupported} ` +
-        `timedOut=[${stats.timedOutEntryIds.join(',')}] failed=[${stats.failedEntryIds.join(',')}]`,
+        `skipped=${stats.manifestSkipped} timedOut=[${stats.timedOutEntryIds.join(',')}] ` +
+        `failed=[${stats.failedEntryIds.join(',')}]`,
     );
     return stats;
   }
