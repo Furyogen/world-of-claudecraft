@@ -43,19 +43,73 @@ describe('StableAuraWireCache', () => {
     const second = aura('second', 12);
     cache.encode([first, second], 0, false);
 
-    first.remaining = 20;
-    expect(cache.encode([first, second], 0.1, false).revision).toBe(2);
-    second.value = 8;
-    expect(cache.encode([first, second], 0.1, false).revision).toBe(3);
-    second.stacks = 2;
-    expect(cache.encode([first, second], 0.1, false).revision).toBe(4);
-    second.charges = 3;
-    expect(cache.encode([first, second], 0.1, false).revision).toBe(5);
-    expect(cache.encode([second, first], 0.1, false).revision).toBe(6);
+    const mutations = [
+      () => {
+        first.remaining = 20;
+      },
+      () => {
+        first.name = 'renamed';
+      },
+      () => {
+        first.kind = 'buff_int';
+      },
+      () => {
+        first.duration = 21;
+      },
+      () => {
+        second.value = 8;
+      },
+      () => {
+        second.value2 = 9;
+      },
+      () => {
+        second.value3 = 10;
+      },
+      () => {
+        second.tickInterval = 2;
+      },
+      () => {
+        second.school = 'arcane';
+      },
+      () => {
+        second.stacks = 2;
+      },
+      () => {
+        second.charges = 3;
+      },
+      () => {
+        second.empowerAbilities = ['cast_a', 'cast_b'];
+      },
+      () => {
+        second.empowerAbilities?.reverse();
+      },
+      () => {
+        second.sourceId = 42;
+      },
+    ];
+    let revision = 1;
+    for (const mutate of mutations) {
+      mutate();
+      expect(cache.encode([first, second], 0.1, false).revision).toBe(++revision);
+    }
+    expect(cache.encode([second, first], 0.1, false).revision).toBe(++revision);
     const removed = cache.encode([], 0.1, false);
-    expect(removed.revision).toBe(7);
+    expect(removed.revision).toBe(++revision);
     expect(removed.json).toBe('[]');
-    expect(cache.rebuilds).toBe(7);
+    expect(cache.rebuilds).toBe(revision);
+  });
+
+  it('absorbs floating-point drift across hundreds of ordinary ticks', () => {
+    const cache = new StableAuraWireCache();
+    const active = aura('drift', 20);
+    const first = cache.encode([active], 0, false);
+    let simTime = 0;
+    for (let i = 0; i < 200; i++) {
+      simTime += 0.05;
+      active.remaining -= 0.05;
+      expect(cache.encode([active], simTime, false)).toBe(first);
+    }
+    expect(cache.rebuilds).toBe(1);
   });
 
   it('uses a stable frozen remaining value while dead and resumes an expiry when alive', () => {
@@ -134,6 +188,50 @@ describe('StableSelfTimerWireCache', () => {
     const expired = cache.encodeCooldowns(1, entity, 1);
     expect(JSON.parse(expired.json)).toEqual({ cast: 3, temporal_hourglass: 5 });
     expect(expired.revision).toBe(first.revision + 1);
+  });
+
+  it('keeps a dead retained Hourglass schedule stable while normal cooldown work advances', () => {
+    const cache = new StableSelfTimerWireCache();
+    const hourglass: Aura = {
+      ...aura('temporal_hourglass', 2),
+      kind: 'stasis',
+      value: 2,
+    };
+    const cooldowns = new Map([['cast', 6]]);
+    const entity = timerEntity(cooldowns, [hourglass], true);
+    const first = cache.encodeCooldowns(1, entity, 4);
+    expect(JSON.parse(first.json)).toEqual({ cast: [7, 2, 7] });
+
+    cooldowns.set('cast', 5);
+    expect(cache.encodeCooldowns(1, entity, 4.5)).toBe(first);
+    expect(hourglass.remaining).toBe(2);
+  });
+
+  it('revises same-tick cooldown changes but ignores charge recharge countdown churn', () => {
+    const cache = new StableSelfTimerWireCache();
+    const cooldowns = new Map([['cast', 5]]);
+    const entity = timerEntity(cooldowns);
+    const firstCooldowns = cache.encodeCooldowns(1, entity, 10);
+    cooldowns.set('cast', 4);
+    const reduced = cache.encodeCooldowns(1, entity, 10);
+    expect(reduced).not.toBe(firstCooldowns);
+    expect(JSON.parse(reduced.json)).toEqual({ cast: 14 });
+
+    const charges = {
+      cast: {
+        charges: 1,
+        maxCharges: 2,
+        recharge: 4,
+        rechargeLength: 5,
+        recharges: [4],
+      },
+    };
+    const firstCharges = cache.encodeCharges(1, charges);
+    charges.cast.recharge = 3.5;
+    charges.cast.recharges[0] = 3.5;
+    expect(cache.encodeCharges(1, charges)).toBe(firstCharges);
+    charges.cast.charges = 2;
+    expect(cache.encodeCharges(1, charges)).not.toBe(firstCharges);
   });
 
   it('resets all sub-caches when a spectator changes anchor owner', () => {

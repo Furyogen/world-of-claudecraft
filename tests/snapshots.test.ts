@@ -4380,4 +4380,108 @@ describe('negotiated stable timer wire v2', () => {
     expect(client.player.auras[0].remaining).toBeCloseTo(5.85, 5);
     expect(client.player.cooldowns.get('old_cast')).toBeCloseTo(3.85, 5);
   });
+
+  it('omits stable auras from moving lite records, then sends an explicit remote removal', () => {
+    const server = new GameServer();
+    const viewerWs = fakeWs();
+    const subjectWs = fakeWs();
+    const viewer = joinServer(server, viewerWs, 1, 'MovingViewer', 'mage', timerV2);
+    const subject = joinServer(server, subjectWs, 2, 'MovingSubject', 'mage');
+    const subjectEntity = server.sim.entities.get(subject.pid)!;
+    subjectEntity.auras = [testAura('moving_aura', 20)];
+
+    broadcast(server);
+    const first = lastSnap(viewerWs.sent);
+    const client = bareClient(viewer.pid, 'mage');
+    (client as any).applySnapshot(first);
+    expect(client.entities.get(subject.pid)?.auras[0].remaining).toBe(20);
+
+    viewerWs.sent.length = 0;
+    server.sim.tick();
+    subjectEntity.pos.x += 1;
+    subjectEntity.prevPos.x += 1;
+    server.sim.grid.update(subjectEntity);
+    broadcast(server);
+    const moving = lastSnap(viewerWs.sent);
+    const lite = moving.ents.find((entity: any) => entity.id === subject.pid);
+    expect(lite).toBeDefined();
+    expect(lite.k).toBeUndefined();
+    expect(lite).not.toHaveProperty('auras');
+    (client as any).applySnapshot(moving);
+    expect(client.entities.get(subject.pid)?.auras[0].remaining).toBeCloseTo(19.95, 5);
+
+    subjectEntity.auras = [];
+    viewerWs.sent.length = 0;
+    server.sim.tick();
+    broadcast(server);
+    const removed = lastSnap(viewerWs.sent);
+    const removalRow = removed.ents.find((entity: any) => entity.id === subject.pid);
+    expect(removalRow.auras).toEqual([]);
+    (client as any).applySnapshot(removed);
+    expect(client.entities.get(subject.pid)?.auras).toEqual([]);
+  });
+
+  it('retains a remote aura revision across a non-due distance-tier tick', () => {
+    const server = new GameServer();
+    const viewerWs = fakeWs();
+    const subjectWs = fakeWs();
+    const viewer = joinServer(server, viewerWs, 1, 'DeferredViewer', 'mage', timerV2);
+    const subject = joinServer(server, subjectWs, 2, 'DeferredSubject', 'mage');
+    const viewerEntity = server.sim.entities.get(viewer.pid)!;
+    const subjectEntity = server.sim.entities.get(subject.pid)!;
+    subjectEntity.auras = [testAura('deferred_aura', 20, 2)];
+    subjectEntity.pos.x = viewerEntity.pos.x + 60;
+    subjectEntity.pos.z = viewerEntity.pos.z;
+    subjectEntity.prevPos = { ...subjectEntity.pos };
+    server.sim.grid.update(subjectEntity);
+
+    broadcast(server);
+    expect(lastSnap(viewerWs.sent).ents.some((entity: any) => entity.id === subject.pid)).toBe(
+      true,
+    );
+
+    server.sim.tick();
+    subjectEntity.auras[0].value = 9;
+    viewerWs.sent.length = 0;
+    broadcast(server);
+    const deferred = lastSnap(viewerWs.sent);
+    expect(deferred.ents.find((entity: any) => entity.id === subject.pid)).toBeUndefined();
+    expect(deferred.keep).toContain(subject.pid);
+
+    server.sim.tick();
+    viewerWs.sent.length = 0;
+    broadcast(server);
+    const delivered = lastSnap(viewerWs.sent).ents.find((entity: any) => entity.id === subject.pid);
+    expect(delivered.k).toBeUndefined();
+    expect(delivered.auras[0]).toMatchObject({ id: 'deferred_aura', value: 9 });
+  });
+
+  it('eliminates stable aura rebuild churn and aggregate bytes over 160 ticks', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'LongWindow', 'mage');
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [testAura('long_window', 60)];
+    const internals = server as any;
+    internals.perfDetailActive = true;
+    internals.bcBaseSerializes = 0;
+    internals.bcLegacySerializes = 0;
+    internals.bcStableSerializes = 0;
+    let legacyBytes = 0;
+    let stableBytes = 0;
+
+    for (let i = 0; i < 160; i++) {
+      const legacy = internals.wireCacheFor(player, false);
+      const stable = internals.wireCacheFor(player, true);
+      legacyBytes += (i === 0 ? legacy.fullJson : legacy.liteJson).length;
+      stableBytes += i === 0 ? stable.fullAuraJson.length : `{"keep":[${player.id}]}`.length;
+      if (i < 159) server.sim.tick();
+    }
+
+    expect(internals.bcBaseSerializes).toBe(160);
+    expect(internals.bcLegacySerializes).toBeGreaterThan(150);
+    expect(internals.bcStableSerializes).toBe(1);
+    expect(internals.wireCache.get(player.id).auraCache.rebuilds).toBe(1);
+    expect(stableBytes).toBeLessThan(legacyBytes * 0.35);
+  });
 });
