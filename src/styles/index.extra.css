@@ -249,7 +249,8 @@
    after a crash-recovery downgrade, so the two banners do not stack in practice. */
 #entry-guard-banner {
   position: fixed;
-  top: 10px;
+  /* iOS-scoped notice: respect the notch/status bar (matches the HUD's inset idiom). */
+  top: max(10px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
   z-index: 201;

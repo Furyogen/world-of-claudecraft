@@ -32,7 +32,12 @@ export function showEntryGuardBanner(preset: number): void {
     body.textContent = t('entryGuard.body', { preset: graphicsPresetDisplayName(preset) });
   }
   banner.hidden = false;
-  banner.querySelector<HTMLButtonElement>('.entry-guard-dismiss')?.addEventListener('click', () => {
-    banner.hidden = true;
-  });
+  const dismiss = banner.querySelector<HTMLButtonElement>('.entry-guard-dismiss');
+  // dataset guard: a repeat call (re-shown banner) must not stack dismiss listeners.
+  if (dismiss && !dismiss.dataset.wired) {
+    dismiss.dataset.wired = '1';
+    dismiss.addEventListener('click', () => {
+      banner.hidden = true;
+    });
+  }
 }

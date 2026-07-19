@@ -1238,6 +1238,10 @@ export class Renderer {
         deferred.forEach((b, i) => {
           window.setTimeout(
             () => {
+              // The timer can outlive the context (editor viewport rebuilds, page
+              // teardown force-loses tracked contexts): a lost context makes the
+              // prefilter throw and leak, so just skip it.
+              if (this.webgl.getContext().isContextLost()) return;
               if (this.envRTs.has(b)) return;
               const eq = this.skyView.envTexture(b);
               if (!eq) return;
