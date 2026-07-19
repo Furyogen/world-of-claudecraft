@@ -491,6 +491,18 @@
   </div>
 
   <main id="start-screen">
+    <!-- World-entry crash recovery notice (src/game/entry_crash_guard.ts): parity with
+         index.html so a /play player who hit a process kill sees the same explanation
+         after the preset is stepped down. /play has no footer graphics selector, but the
+         in-game Options menu (reachable once in-world) is the graphics path the banner
+         body points to as well. -->
+    <div id="entry-guard-banner" class="entry-guard-banner" role="status" hidden>
+      <div class="entry-guard-text">
+        <strong class="entry-guard-title" data-i18n="entryGuard.title">Graphics lowered</strong>
+        <span class="entry-guard-body"></span>
+      </div>
+      <button type="button" class="entry-guard-dismiss" data-i18n="entryGuard.dismiss">Dismiss</button>
+    </div>
     <!-- Keep the backdrop here at the top level so it spans the entire screen behind content -->
     <div id="start-screen-backdrop" aria-hidden="true">
       <!-- Looping cinematic background video; poster = static key-art for instant paint + fallback. -->

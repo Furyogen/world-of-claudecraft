@@ -20,24 +20,47 @@ export function graphicsPresetDisplayName(preset: number): string {
   return key ? t(key) : t('hud.options.graphicsPresetLow');
 }
 
-/**
- * Reveal the banner with the recovered preset named in the body. Safe to call on
- * entries whose DOM lacks the banner shell (play.html): it no-ops.
- */
-export function showEntryGuardBanner(preset: number): void {
-  const banner = document.getElementById('entry-guard-banner');
-  if (!banner) return;
+/** Body class that suppresses the Discord CTA while the recovery banner is up. */
+const ENTRY_GUARD_OPEN_CLASS = 'entry-guard-open';
+
+function paintBanner(banner: HTMLElement, preset: number): void {
   const body = banner.querySelector<HTMLElement>('.entry-guard-body');
   if (body) {
     body.textContent = t('entryGuard.body', { preset: graphicsPresetDisplayName(preset) });
   }
+}
+
+/**
+ * Reveal the banner with the recovered preset named in the body. Safe to call on
+ * entries whose DOM lacks the banner shell: it no-ops. While visible it suppresses
+ * the Discord CTA (both live in the same fixed top-center slot), and it repaints the
+ * dynamic body on a locale flip (the title/dismiss retranslate via data-i18n, but the
+ * body's interpolated preset label is painted here).
+ */
+export function showEntryGuardBanner(preset: number): void {
+  const banner = document.getElementById('entry-guard-banner');
+  if (!banner) return;
+  // Remember the preset so a woc:languagechange can repaint the body in the new locale.
+  banner.dataset.preset = String(preset);
+  paintBanner(banner, preset);
   banner.hidden = false;
+  document.body.classList.add(ENTRY_GUARD_OPEN_CLASS);
+  const hide = () => {
+    banner.hidden = true;
+    document.body.classList.remove(ENTRY_GUARD_OPEN_CLASS);
+  };
   const dismiss = banner.querySelector<HTMLButtonElement>('.entry-guard-dismiss');
-  // dataset guard: a repeat call (re-shown banner) must not stack dismiss listeners.
+  // dataset guard: a repeat call (re-shown banner) must not stack listeners.
   if (dismiss && !dismiss.dataset.wired) {
     dismiss.dataset.wired = '1';
-    dismiss.addEventListener('click', () => {
-      banner.hidden = true;
+    dismiss.addEventListener('click', hide);
+  }
+  if (!banner.dataset.langWired) {
+    banner.dataset.langWired = '1';
+    document.addEventListener('woc:languagechange', () => {
+      if (banner.hidden) return;
+      const stored = Number(banner.dataset.preset);
+      if (Number.isFinite(stored)) paintBanner(banner, stored);
     });
   }
 }

@@ -298,6 +298,13 @@
 #entry-guard-banner .entry-guard-dismiss:hover {
   background: #ffffff30;
 }
+/* The recovery banner and the Discord CTA share the fixed top-center slot. The recovery
+   notice is a rare, must-read boot message, so suppress the promotional CTA while it is
+   up (entry_guard_banner.ts toggles body.entry-guard-open); the CTA returns once the
+   banner is dismissed. Class + id outranks the CTA's own id rule, so no !important. */
+body.entry-guard-open #discord-cta-banner {
+  display: none;
+}
 /* Phones: the desktop flex row squeezes the title column down to one word per line
    (the fixed logo/button/dismiss starve it) and the vertically centered button then
    overlaps it. Re-flow to a grid (logo + title + dismiss on top, the link button

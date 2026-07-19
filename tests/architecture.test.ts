@@ -228,6 +228,7 @@ const RENDER_PURE_CORES = [
   'src/render/delve_interactable_visibility_core.ts',
   'src/render/nameplate_view.ts',
   'src/render/net_interp_core.ts',
+  'src/render/prewarm_policy.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
   'src/render/warrior_cast_fx_core.ts',
@@ -243,6 +244,7 @@ const RENDER_PURE_CORES = [
 // updating this list) fails the cross-check instead of silently escaping the
 // reverse-completeness guard.
 const BARE_NAMED = [
+  'src/render/prewarm_policy.ts',
   'src/ui/mob_idle_sfx.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',

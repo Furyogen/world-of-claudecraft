@@ -66,8 +66,40 @@ describe('showEntryGuardBanner', () => {
     expect(banner.hidden).toBe(true);
   });
 
-  it('no-ops on entries whose DOM lacks the banner shell (play.html)', () => {
+  it('suppresses the Discord CTA while open and restores it on dismiss', () => {
+    showEntryGuardBanner(2);
+    expect(document.body.classList.contains('entry-guard-open')).toBe(true);
+    const dismiss = document.querySelector('.entry-guard-dismiss') as HTMLButtonElement;
+    dismiss.click();
+    expect(document.body.classList.contains('entry-guard-open')).toBe(false);
+  });
+
+  it('repaints the interpolated body on a locale change while visible', () => {
+    showEntryGuardBanner(3);
+    const body = document.querySelector('.entry-guard-body') as HTMLElement;
+    const first = body.textContent;
+    // Force a different resolved body string, then fire the locale-flip event the
+    // shell/options language selector dispatches; the body must repaint from the
+    // stored preset rather than staying in the boot locale.
+    body.textContent = 'stale';
+    document.dispatchEvent(new Event('woc:languagechange'));
+    expect(body.textContent).toBe(first);
+    expect(body.textContent).not.toBe('stale');
+  });
+
+  it('does not repaint after dismiss (no work while hidden)', () => {
+    showEntryGuardBanner(3);
+    const banner = document.getElementById('entry-guard-banner') as HTMLElement;
+    (banner.querySelector('.entry-guard-dismiss') as HTMLButtonElement).click();
+    const body = banner.querySelector('.entry-guard-body') as HTMLElement;
+    body.textContent = 'stale';
+    document.dispatchEvent(new Event('woc:languagechange'));
+    expect(body.textContent).toBe('stale');
+  });
+
+  it('no-ops on entries whose DOM lacks the banner shell', () => {
     document.body.innerHTML = '';
     expect(() => showEntryGuardBanner(2)).not.toThrow();
+    expect(document.body.classList.contains('entry-guard-open')).toBe(false);
   });
 });
