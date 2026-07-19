@@ -26,9 +26,10 @@ const party: PartyFrameProjectionParty = {
 };
 
 describe('PartyFrameProjectionCache', () => {
-  it('projects each member once per tick while preserving viewer-owned Echo auras', () => {
+  it('projects each member once per broadcast while preserving viewer-owned Echo auras', () => {
     const cache = new PartyFrameProjectionCache();
     let memberProjections = 0;
+    let hp = 900;
     const projectMember = (pid: number) => {
       memberProjections++;
       return {
@@ -37,7 +38,7 @@ describe('PartyFrameProjectionCache', () => {
           name: `Player ${pid}`,
           cls: 'mage' as const,
           level: 60,
-          hp: 900,
+          hp,
           mhp: 1_000,
           res: 80,
           mres: 100,
@@ -71,13 +72,17 @@ describe('PartyFrameProjectionCache', () => {
             remaining: 22.1,
           }),
           aura({ id: 'renew', kind: 'hot', value: 20, sourceId: 33 }),
+          ...Array.from({ length: 7 }, (_, index) =>
+            aura({ id: `hot_${index}`, kind: 'hot', value: 20, sourceId: 33 }),
+          ),
         ],
       };
     };
 
-    const forEleven = cache.forViewer(100, party, 11, projectMember);
-    const forTwentyTwo = cache.forViewer(100, party, 22, projectMember);
-    const forThirtyThree = cache.forViewer(100, party, 33, projectMember);
+    cache.beginBroadcast();
+    const forEleven = cache.forViewer(party, 11, projectMember);
+    const forTwentyTwo = cache.forViewer(party, 22, projectMember);
+    const forThirtyThree = cache.forViewer(party, 33, projectMember);
 
     // Three viewers of a three-person party must perform three common member
     // projections, not the previous 3 x 3 history/aura projection work.
@@ -86,18 +91,39 @@ describe('PartyFrameProjectionCache', () => {
       { id: 'rend', kind: 'dot', remaining: 10 },
       { id: 'temporal_echo', kind: 'temporal_echo', remaining: 12 },
       { id: 'renew', kind: 'hot', remaining: 10 },
+      { id: 'hot_0', kind: 'hot', remaining: 10 },
+      { id: 'hot_1', kind: 'hot', remaining: 10 },
+      { id: 'hot_2', kind: 'hot', remaining: 10 },
+      { id: 'hot_3', kind: 'hot', remaining: 10 },
+      { id: 'hot_4', kind: 'hot', remaining: 10 },
     ]);
     expect(forTwentyTwo.members[0].auras).toEqual([
       { id: 'rend', kind: 'dot', remaining: 10 },
       { id: 'temporal_echo', kind: 'temporal_echo', remaining: 23 },
       { id: 'renew', kind: 'hot', remaining: 10 },
+      { id: 'hot_0', kind: 'hot', remaining: 10 },
+      { id: 'hot_1', kind: 'hot', remaining: 10 },
+      { id: 'hot_2', kind: 'hot', remaining: 10 },
+      { id: 'hot_3', kind: 'hot', remaining: 10 },
+      { id: 'hot_4', kind: 'hot', remaining: 10 },
     ]);
     expect(forThirtyThree.members[0].auras).toEqual([
       { id: 'rend', kind: 'dot', remaining: 10 },
       { id: 'renew', kind: 'hot', remaining: 10 },
+      { id: 'hot_0', kind: 'hot', remaining: 10 },
+      { id: 'hot_1', kind: 'hot', remaining: 10 },
+      { id: 'hot_2', kind: 'hot', remaining: 10 },
+      { id: 'hot_3', kind: 'hot', remaining: 10 },
+      { id: 'hot_4', kind: 'hot', remaining: 10 },
+      { id: 'hot_5', kind: 'hot', remaining: 10 },
     ]);
 
-    cache.forViewer(101, party, 11, projectMember);
+    // A second broadcast can happen without a sim tick. It must rebuild from
+    // live state rather than reuse the previous broadcast's projection.
+    hp = 700;
+    cache.beginBroadcast();
+    const nextBroadcast = cache.forViewer(party, 11, projectMember);
     expect(memberProjections).toBe(party.members.length * 2);
+    expect(nextBroadcast.members[0].hp).toBe(700);
   });
 });
