@@ -1987,6 +1987,10 @@ export class ClientWorld implements IWorld {
     rawTime: unknown,
   ): { mode: SnapshotTimerWireMode; time: number | null } {
     const mode = snapshotTimerWireMode(rawVersion);
+    // An unknown future marker may use timer fields this client cannot decode.
+    // Ignore those fields without disturbing the last understood v2 schedule,
+    // so one unsupported snapshot cannot freeze a later valid v2 stream.
+    if (mode === 'unsupported') return { mode, time: null };
     if (mode !== this.timerWireMode) {
       this.timerWireMode = mode;
       this.stableTimerTime = undefined;

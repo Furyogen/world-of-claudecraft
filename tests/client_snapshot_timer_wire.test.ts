@@ -188,6 +188,10 @@ describe('stable snapshot timer protocol', () => {
     expect(client.player.auras[0].id).toBe('stable');
     expect(client.player.cooldowns.get('cast')).toBe(4);
 
+    apply(client, { tw: 2, time: 12, self: playerWire(1) });
+    expect(client.player.auras[0]).toMatchObject({ id: 'stable', remaining: 3 });
+    expect(client.player.cooldowns.get('cast')).toBe(3);
+
     apply(client, {
       time: 2,
       self: playerWire(1, { auras: [aura('legacy-again', { rem: 3 })], cds: { cast: 3 } }),
