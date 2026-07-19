@@ -61,6 +61,8 @@ export class PartyFrameProjectionCache {
       master: { ...projection.master },
       members: projection.members.map(({ member, auras }) => ({
         ...member,
+        // Prepared summaries are immutable for the lifetime of this broadcast.
+        // Only the per-viewer array is new; rows are safe to share through stringify.
         auras: partyFrameAurasForViewer(auras, viewerId),
       })),
     };

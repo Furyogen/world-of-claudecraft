@@ -67,6 +67,9 @@ export function partyFrameAuras(
   auras: readonly Aura[],
   cap = PARTY_MEMBER_AURA_CAP,
 ): PartyFrameAuraSummary[] {
+  // Keep the offline path single-pass. Routing it through the prepared server
+  // representation would allocate both an intermediate wrapper list and the
+  // final summaries for every offline tick.
   const relevant = auras.filter((aura) => isPartyFrameRelevantAura(aura));
   relevant.sort((a, b) => partyAuraPriority(a) - partyAuraPriority(b));
   return relevant.slice(0, cap).map((aura) => ({

@@ -56,6 +56,10 @@ describe('PartyFrameProjectionCache', () => {
           incomingHeal: 200,
         },
         auras: [
+          // The server cache must discard maintenance buffs and priority-sort
+          // actionable rows rather than trusting the entity's aura order.
+          aura({ id: 'maintenance', kind: 'buff_ap', value: 2, sourceId: 33 }),
+          aura({ id: 'renew', kind: 'hot', value: 20, sourceId: 33 }),
           aura({ id: 'rend', kind: 'dot', value: 5, sourceId: 99 }),
           aura({
             id: 'temporal_echo',
@@ -71,7 +75,6 @@ describe('PartyFrameProjectionCache', () => {
             sourceId: 22,
             remaining: 22.1,
           }),
-          aura({ id: 'renew', kind: 'hot', value: 20, sourceId: 33 }),
           ...Array.from({ length: 7 }, (_, index) =>
             aura({ id: `hot_${index}`, kind: 'hot', value: 20, sourceId: 33 }),
           ),
@@ -125,5 +128,51 @@ describe('PartyFrameProjectionCache', () => {
     const nextBroadcast = cache.forViewer(party, 11, projectMember);
     expect(memberProjections).toBe(party.members.length * 2);
     expect(nextBroadcast.members[0].hp).toBe(700);
+  });
+
+  it('isolates party cache keys and skips members that disappeared during projection', () => {
+    const cache = new PartyFrameProjectionCache();
+    const firstParty = { ...party, id: 8, members: [11, 22] };
+    const secondParty = { ...party, id: 9, leader: 44, members: [44] };
+    const projected: number[] = [];
+    const projectMember = (pid: number) => {
+      projected.push(pid);
+      if (pid === 22) return null;
+      return {
+        member: {
+          pid,
+          name: `Player ${pid}`,
+          cls: 'warrior' as const,
+          level: 60,
+          hp: 1_000,
+          mhp: 1_000,
+          res: 0,
+          mres: 100,
+          rtype: 'rage' as const,
+          x: 0,
+          z: 0,
+          dead: 0,
+          inCombat: 0,
+          group: 1 as const,
+          absorb: 0,
+          role: 'dps' as const,
+          rewind: 0,
+          connected: 1,
+          hasAggro: 0,
+          incomingHeal: 0,
+        },
+        auras: [],
+      };
+    };
+
+    cache.beginBroadcast();
+    const first = cache.forViewer(firstParty, 11, projectMember);
+    const second = cache.forViewer(secondParty, 44, projectMember);
+    const firstAgain = cache.forViewer(firstParty, 11, projectMember);
+
+    expect(first.members.map((member) => member.pid)).toEqual([11]);
+    expect(second.members.map((member) => member.pid)).toEqual([44]);
+    expect(firstAgain.members.map((member) => member.pid)).toEqual([11]);
+    expect(projected).toEqual([11, 22, 44]);
   });
 });
