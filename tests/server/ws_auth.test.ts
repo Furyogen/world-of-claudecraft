@@ -111,6 +111,11 @@ function setup() {
   return { ws, game, session, deps, req };
 }
 
+function joinedMeta(game: ReturnType<typeof setup>['game']): Record<string, unknown> {
+  const calls = game.join.mock.calls as unknown as unknown[][];
+  return calls[0][7] as Record<string, unknown>;
+}
+
 const authRaw = (over: Record<string, unknown> = {}) =>
   JSON.stringify({ t: 'auth', token: 'tok', character: 7, ...over });
 
@@ -275,6 +280,54 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     await authenticateWebSocket(asWs(ws), authRaw(), req);
     expectSendThenClose(ws, errorFrame('You are banned.'));
     expect(deps.getCharacter).not.toHaveBeenCalled();
+  });
+});
+
+describe('createWsAuth: timer-wire capability negotiation', () => {
+  it('passes only the exact optional v2 capability into the recipient session meta', async () => {
+    const capable = setup();
+    await createWsAuth(capable.deps).authenticateWebSocket(
+      asWs(capable.ws),
+      authRaw({ timerWire: 2 }),
+      capable.req,
+    );
+    expect(capable.game.join).toHaveBeenCalledTimes(1);
+    expect(joinedMeta(capable.game)).toMatchObject({ timerWireVersion: 2 });
+
+    const legacy = setup();
+    await createWsAuth(legacy.deps).authenticateWebSocket(asWs(legacy.ws), authRaw(), legacy.req);
+    expect(legacy.game.join).toHaveBeenCalledTimes(1);
+    expect(joinedMeta(legacy.game)).toMatchObject({ timerWireVersion: 1 });
+
+    const unknown = setup();
+    await createWsAuth(unknown.deps).authenticateWebSocket(
+      asWs(unknown.ws),
+      authRaw({ timerWire: 99 }),
+      unknown.req,
+    );
+    expect(unknown.game.join).toHaveBeenCalledTimes(1);
+    expect(joinedMeta(unknown.game)).toMatchObject({ timerWireVersion: 1 });
+
+    for (const coercible of ['2', true, { valueOf: () => 2 }]) {
+      const strict = setup();
+      await createWsAuth(strict.deps).authenticateWebSocket(
+        asWs(strict.ws),
+        authRaw({ timerWire: coercible }),
+        strict.req,
+      );
+      expect(strict.game.join).toHaveBeenCalledTimes(1);
+      expect(joinedMeta(strict.game)).toMatchObject({ timerWireVersion: 1 });
+    }
+
+    const resume = setup();
+    resume.game.hasSessionForCharacter.mockReturnValue(true);
+    await createWsAuth(resume.deps).authenticateWebSocket(
+      asWs(resume.ws),
+      authRaw({ timerWire: 2 }),
+      resume.req,
+    );
+    expect(resume.deps.acquireCharacterLease).not.toHaveBeenCalled();
+    expect(joinedMeta(resume.game)).toMatchObject({ timerWireVersion: 2 });
   });
 });
 

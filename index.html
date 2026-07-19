@@ -352,6 +352,7 @@
           <div id="petbar" class="panel"></div>
           <div id="xpbar"><div class="fill"></div><div class="rested"></div><div class="ticks"></div><div class="label"></div></div>
           <div id="stancebar"></div>
+          <div id="actionbar3" class="panel"></div>
           <div id="actionbar2" class="panel"></div>
           <div id="actionbar" class="panel"></div>
         </div>
@@ -548,6 +549,17 @@
   </div>
 
   <main id="start-screen">
+    <!-- World-entry crash recovery notice (src/game/entry_crash_guard.ts): shown by main.ts
+         when the previous entry attempt killed the WebView process and the graphics preset
+         was stepped down. Lives inside #start-screen, the screen the recovery guarantees the
+         player reaches (the same one carrying the footer graphics selector). -->
+    <div id="entry-guard-banner" class="entry-guard-banner" role="status" hidden>
+      <div class="entry-guard-text">
+        <strong class="entry-guard-title" data-i18n="entryGuard.title">Graphics lowered</strong>
+        <span class="entry-guard-body"></span>
+      </div>
+      <button type="button" class="entry-guard-dismiss" data-i18n="entryGuard.dismiss">Dismiss</button>
+    </div>
     <!-- Keep the backdrop here at the top level so it spans the entire screen behind content -->
     <div id="start-screen-backdrop" aria-hidden="true">
       <!-- Looping cinematic background video; poster = static key-art for instant paint + fallback. -->
@@ -1160,19 +1172,19 @@
             <a
               class="btn btn-primary desktop-download-link"
               data-platform="mac"
-              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.0-mac-universal.dmg"
+              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.2-mac-universal.dmg"
               data-i18n="download.macCta"
             >Download for macOS</a>
             <a
               class="btn btn-primary desktop-download-link"
               data-platform="win"
-              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.0-win.exe"
+              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.2-win.exe"
               data-i18n="download.windowsCta"
             >Download for Windows</a>
             <a
               class="btn btn-primary desktop-download-link"
               data-platform="linux"
-              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.0-linux-x86_64.AppImage"
+              href="https://updates.worldofclaudecraft.com/desktop/world-of-claudecraft-0.27.2-linux-x86_64.AppImage"
               data-i18n="download.linuxCta"
             >Download for Linux</a>
           </div>
@@ -1381,7 +1393,7 @@
           <span data-i18n="nav.donate">Donate</span>
         </a>
       </div>
-      <div id="game-version">v0.27.0</div>
+      <div id="game-version">v0.27.2</div>
       </div>
       <div class="footer-legal-row">
         <a href="/World-of-ClaudeCraft-Whitepaper-v1.0.pdf" class="footer-link" data-i18n="footer.whitepaper">Whitepaper</a>
@@ -1530,6 +1542,7 @@
       <div class="ls-bar"><div id="ls-fill"></div></div>
       <div id="ls-status" data-i18n="loading.enteringWorld">Entering the world...</div>
       <div id="ls-tip"></div>
+      <div id="ls-slow-hint" data-i18n="loading.slowConnection" role="status" aria-live="polite">This is taking longer than usual. Check your internet connection.</div>
     </div>
   </div>
 

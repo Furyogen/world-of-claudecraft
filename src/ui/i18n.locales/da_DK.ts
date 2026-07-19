@@ -428,6 +428,10 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Rammevurdering',
   'abilityUi.actionBar.attackRemoveHint':
     'Højreklik for at fjerne den fra bjælken og frigøre pladsen.',
+  'entryGuard.body':
+    'Spillet lukkede uventet, mens du trådte ind i verdenen, så grafikken er nu sat til {preset}. Du kan ændre det i grafikvælgeren nedenfor eller i indstillingerne i spillet.',
+  'entryGuard.dismiss': 'Afvis',
+  'entryGuard.title': 'Grafik sænket',
   'loading.realmFull': 'Denne verden er fuld i øjeblikket. Prøv igen om et par minutter.',
   'loading.tooManyConnections':
     'Der kommer for mange forbindelser til denne verden fra dit netværk. Luk ekstra spilvinduer, eller prøv igen om et par minutter.',
@@ -2283,7 +2287,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Indhyller dig i frost og øger rustningen med {buff} i 30 min.',
   'entities.abilities.frost_armor.name': 'Rimfrost-Kappe',
   'entities.abilities.frost_nova.description':
-    'Fryser alle nærliggende fjender fast i op til 8 sek og volder {damage} frostskade.',
+    'Fryser alle nærliggende fjender fast i op til 8 sek og volder {damage} frostskade. Fastfrysningen brydes efter samlet skade svarende til 15 % af målets maksimale helbred, dog mindst 20 og højst 60 skade.',
   'entities.abilities.frost_nova.name': 'Isbinding',
   'entities.abilities.frost_shock.description':
     'Chokerer øjeblikkeligt målet med frost for {damage} frostskade og sænker dets bevægelse med 50% i 8 sek.',
@@ -6995,7 +6999,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'download.windowsCta': 'Download til Windows',
   'download.linuxHint':
     'AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.',
-  'loading.reconnecting': 'Forbindelse mistet. Genopretter forbindelse...',
   'guide.nav.settings': 'Indstillinger og ydeevne',
   'guide.settingsPage.advancedBody':
     'Avanceret starter fra High-niveauet og låser op for fire ekstra vælgere, så du kan bruge dine rammer, hvor du rent faktisk bemærker dem: Terrændetaljer, Løvtæthed, Effekter og belysning og Skyggekvalitet. Ligesom grafikkvalitet gælder de efter en genindlæsning.',
@@ -7182,8 +7185,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.increasePct.armor': 'Øger rustning med {pct}%',
   'hudChrome.auraEffect.increasePct.int': 'Øger Intellekt med {pct}%',
   'hudChrome.auraEffect.increasePct.sta': 'Øger Udholdenhed med {pct}%',
-  'hudChrome.crafting.notAtHub':
-    'Du skal være ved håndværksstationen og på det krævede niveau for at lave det.',
   'hudChrome.crafting.recipeNotLearned': 'Du har ikke lært den opskrift endnu.',
   'hudChrome.crafting.throttled': 'Du laver ting for hurtigt. Vent et øjeblik, og prøv igen.',
   'hudChrome.mobile.chatPlaceholder': 'Sig noget...',
@@ -7977,7 +7978,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Låses op på niveau {level}',
   'entities.abilities.blazing_barrier.name': 'Flammende barriere',
   'entities.abilities.blazing_barrier.description':
-    'Indhyl dig i flammer og absorber 130 skade i 60 sek. (Ild)',
+    'Indhyl dig i flammer og absorber {damage} skade i 60 sek. (Ild)',
   'entities.abilities.cold_snap.name': 'Vinterens kalden',
   'entities.abilities.cold_snap.description':
     'Afslutter nedkølingen for Flimmertrin, Frostslør og Større usynlighed. (magikertalent)',

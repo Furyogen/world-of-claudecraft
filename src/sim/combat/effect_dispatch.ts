@@ -26,6 +26,7 @@ import type { PlayerMeta, ResolvedAbility } from '../sim';
 import type { SimContext } from '../sim_context';
 import {
   abilityScalingPower,
+  absorbBonus,
   directHealBonus,
   directHitBonus,
   dotTickBonus,
@@ -54,7 +55,7 @@ import {
   hasSweepingStrikes,
   sweepStrikeDamage,
 } from './area_echo';
-import { isRootedOrChilled } from './cc';
+import { damageBreakThreshold, isRootedOrChilled } from './cc';
 import {
   ARCANE_SURGE_ID,
   aetherSurgeAddStack,
@@ -798,7 +799,7 @@ export function runEffects(
           kind: 'absorb',
           remaining: eff.duration,
           duration: eff.duration,
-          value: eff.amount,
+          value: eff.amount + absorbBonus(p.spellPower, eff.spellPowerCoeff ?? 0),
           sourceId: p.id,
           school: ability.school,
         });
@@ -2096,6 +2097,7 @@ export function runEffects(
                 `${ability.id}_root`,
                 eff.duration,
                 ability.school,
+                eff.breakOnDamage ? damageBreakThreshold(m.maxHp, eff.breakOnDamage) : undefined,
               );
             }
           }

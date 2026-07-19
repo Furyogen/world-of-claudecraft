@@ -683,6 +683,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.playerMenu.profileUnavailable': '{name} のプロフィールが見つかりません。',
   'hudChrome.playerMenu.aiTag': '[AI]',
   'hudChrome.playerMenu.aiTagTitle': 'AI操作アカウント',
+  'hudChrome.playerMenu.streamerBadgeTitle': '認証済み配信者',
   'hudChrome.playerMenu.watchTwitch': 'Twitch で視聴',
   'hudChrome.playerMenu.watchX': 'X で見る',
   'hudChrome.playerMenu.watchKick': 'Kick で視聴',
@@ -972,6 +973,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.highContrastBackground': '高コントラスト背景',
   'hudChrome.options.showItemLevel': 'アイテムレベルを表示',
   'hudChrome.options.showSecondaryActionBar': 'セカンダリアクションバーを表示',
+  'hudChrome.options.showThirdActionBar': '3本目のアクションバーを表示',
   'hudChrome.options.showDailyRewardsChest': 'デイリー報酬の宝箱を表示',
   'hudChrome.options.mobileCameraJoystick': 'カメラスティック',
   'hudChrome.options.mobileLeftHanded': '左利き用レイアウト',
@@ -1440,6 +1442,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHubでWorld of ClaudeCraftプロジェクトを開く',
   'a11y.discordCommunity': 'World of ClaudeCraftのDiscordコミュニティに参加',
   'a11y.donateProject': 'World of ClaudeCraftを支援するために寄付',
+  'entryGuard.body':
+    'ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。',
+  'entryGuard.dismiss': '閉じる',
+  'entryGuard.title': 'グラフィックを下げました',
   'loading.world': '世界を読み込み中...',
   'loading.worldProgress': '世界を読み込み中... {done}/{total}',
   'loading.enteringWorld': '世界に入っています...',
@@ -1449,7 +1455,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'loading.enterTimeout':
     '世界に入れませんでした。接続がタイムアウトしました。ゲームサーバーは動作していますか？',
   'loading.connectionLost': 'サーバーとの接続が切断されました。',
-  'loading.reconnecting': 'サーバーとの接続が切断されました。再接続しています...',
+  'loading.reconnectingAttempt':
+    'サーバーとの接続が切断されました。再接続しています...（試行 {attempt}/{maxAttempts}、{seconds}秒後に再試行）',
+  'loading.reconnectingNow':
+    'サーバーとの接続が切断されました。今すぐ再接続しています...（試行 {attempt}/{maxAttempts}）',
+  'loading.slowConnection':
+    '読み込みに時間がかかっています。インターネット接続を確認してください。',
   'loading.connectionRejected': 'サーバーが接続を閉じました。',
   'loading.realmFull': 'このワールドは現在満員です。数分後にもう一度お試しください。',
   'loading.tooManyConnections':
@@ -2488,7 +2499,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '敵を最大{duration}秒間ヒキガエルに変えます。ヒキガエルは歩き回り、急速に回復します。ダメージを受けると効果が切れます。獣と人型のみ。',
   'entities.abilities.frost_nova.name': '氷縛',
   'entities.abilities.frost_nova.description':
-    '周囲の敵すべてを最大8秒間その場に凍結させ、{damage} の冷気ダメージを与えます。',
+    '周囲の敵すべてを最大8秒間その場に凍結させ、{damage} の冷気ダメージを与えます。移動不能効果は、対象の最大体力の15%に相当する累積ダメージを受けると解除されます。解除に必要なダメージは最低20、最大60です。',
   'entities.abilities.arcane_explosion.name': 'エーテルバースト',
   'entities.abilities.arcane_explosion.description':
     '秘術エネルギーの爆発が周囲の敵すべてに {damage} の秘術ダメージを与えます。',
@@ -6288,6 +6299,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.comboNotAttuned': '先にアーキタイプの組み合わせを選んでください。',
   'hudChrome.crafting.comboWrongPair': '製作するには、この組み合わせを有効にしてください。',
   'hudChrome.crafting.comboTierUnmet': '両方の主専攻を必要ティアまで上げてください。',
+  'hudChrome.crafting.comboTierUnmetNamed': '{crafts}をティア {tier} まで上げてください。',
   'hudChrome.crafting.professionChoice': '職業の選択',
   'hudChrome.crafting.noProfessionChoice': '現在選択できる職業はありません。',
   'hudChrome.crafting.attunementPreview':
@@ -6920,7 +6932,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'どのレシピにも、採集または購入して手に入れる特定の材料が必要です。最も単純なレシピは一般的な材料だけで作れ、最初から製作できるので、その職を手に入れた瞬間から作業を始められます。レシピ一覧はまだ充実の途中です。いくつかの職は最初のレシピを待っている状態で、職が育つにつれてさらに増えていきます。',
   'guide.professions.craftMasteryTitle': '技能と熟達',
   'guide.professions.craftMasteryBody':
-    '製作に成功するとその職の技能が上がりますが、技能がレシピを閉ざしてしまうことはありません。レシピを知っていて材料を持っていれば、いつでも挑戦できます。技能が高まって得られるのは品質です。熟練した手ほど、より上等な品を作り上げます。唯一の例外は組み合わせレシピで、これは解放される前に、その両方の職で腕前を証明しておくことを求めます。',
+    '製作に成功するとその職の技能が上がりますが、技能がレシピを閉ざしてしまうことはありません。レシピを知っていて材料を持っていれば、いつでも挑戦できます。どのレシピも約束どおりの品を仕上げますが、熟練した手はときに傑作を生み出します。同じ品ながら仕上がりが上等で、わずかな追加の力を宿しています。唯一の例外は組み合わせレシピで、二つの職をつなぐアーキタイプに調律し、両方の職で確かな腕前を示した製作者にのみ開かれます。',
   'guide.professions.craftComboTitle': '組み合わせレシピ',
   'guide.professions.craftComboBody':
     '単独の職自身のレシピ一覧に加えて、この輪は隣り合う二つの職を同時に呼び出す組み合わせレシピにも対応しており、孤立した一職だけでなく、輪の上で隣接する職に投資したキャラクターに報います。製作者はその二つの職を自分自身で修めていなければならず、いずれの側も取引相手の技能で代わりを務めることはできません。',
@@ -6929,7 +6941,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '十の職はそれぞれ生き方も体現しており、その職に単に従事すること以上の、より広いアイデンティティを取り入れることができる。あなたの現在の生き方は一度にひとつだけであり、チェックリストではない：あなたは一つを担い、望むならば後で変更することもできる。',
   'guide.professions.archetypeChooseTitle': '生き方を選ぶ',
   'guide.professions.archetypeChooseBody':
-    '生き方の宣言は、物語の一幕になる予定だ：そのアイデンティティへとあなたを正式に迎え入れるクエストである。その道はまだ建設中なので、今のところすべてのキャラクターは選択を前に残したまま世界を歩いており、その間、すべての製作はレアの品質ティアまで進められる。',
+    '生き方の宣言は、物語の一幕だ：そのアイデンティティへとあなたを正式に迎え入れるクエストである。宣言するまでは、どの職の技能もレアのティアまで伸ばせる。ひと組を選び取れば、その二つの職は最後まで開かれ、輪の向こう側にある一つの職は趣味として手元に残り、やはりレアのティアまで働く。そのアイデンティティを掲げているあいだ、残るすべての職はコモンのティアにとどまる。',
   'guide.professions.archetypeSwitchTitle': '心変わり',
   'guide.professions.archetypeSwitchBody':
     '宣言が終身刑になるわけでもない。予定されているのは、新しい職を取り上げる前に古い職へ「償い」をする繰り返し可能な行いで、切り替えるたびに償いは少しずつ重くなる。そのため選択は代償のないものにはならず、意味を持ち続ける。宣言そのものと同じく、これもまだ道の途上にある。',
@@ -7078,6 +7090,49 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.letters.heroic_marks_reward.subject': 'あなたの英雄の印',
   'entities.letters.heroic_marks_reward.body':
     'あなたが後方で、あるいは倒れて戦っている間に、あなたの部隊が英雄級の試練を突破しました。ロックアウトは同じように科されたので、あなたの分の英雄の印は失われることなく、ここへ飛んできました。大切に使ってください。\n\n- 英雄級補給官',
+  'entities.letters.guild_trend_engineering_alchemy.sender': '製作ギルド',
+  'entities.letters.guild_trend_engineering_alchemy.subject': '工作と錬金術の腕前について',
+  'entities.letters.guild_trend_engineering_alchemy.body':
+    '職人へ\n\n工作と錬金術に励むあなたの評判がギルドに届いています。火薬を量り、試薬を計り、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。この組を結んだ者は、やがて爆破師の名を得ます。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_alchemy_cooking.sender': '製作ギルド',
+  'entities.letters.guild_trend_alchemy_cooking.subject': '錬金術と料理の腕前について',
+  'entities.letters.guild_trend_alchemy_cooking.body':
+    '職人へ\n\n錬金術と料理に励むあなたの評判がギルドに届いています。秘薬を煎じ、皿の味を調え、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。この組を結んだ者は、やがて薬師の名を得ます。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_cooking_leatherworking.sender': '製作ギルド',
+  'entities.letters.guild_trend_cooking_leatherworking.subject': '料理と皮革加工の腕前について',
+  'entities.letters.guild_trend_cooking_leatherworking.body':
+    '職人へ\n\n料理と皮革加工に励むあなたの評判がギルドに届いています。料理を仕上げ、革をなめし、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_leatherworking_tailoring.sender': '製作ギルド',
+  'entities.letters.guild_trend_leatherworking_tailoring.subject': '皮革加工と裁縫の腕前について',
+  'entities.letters.guild_trend_leatherworking_tailoring.body':
+    '職人へ\n\n皮革加工と裁縫に励むあなたの評判がギルドに届いています。革を裁ち、布を縫い、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。この組を結んだ者は、やがて装具師の名を得ます。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_tailoring_inscription.sender': '製作ギルド',
+  'entities.letters.guild_trend_tailoring_inscription.subject': '裁縫と銘文の腕前について',
+  'entities.letters.guild_trend_tailoring_inscription.body':
+    '職人へ\n\n裁縫と銘文に励むあなたの評判がギルドに届いています。縫い目を整え、銘を書き入れ、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_inscription_enchanting.sender': '製作ギルド',
+  'entities.letters.guild_trend_inscription_enchanting.subject': '銘文とエンチャントの腕前について',
+  'entities.letters.guild_trend_inscription_enchanting.body':
+    '職人へ\n\n銘文とエンチャントに励むあなたの評判がギルドに届いています。巻物に銘を記し、魔力を編み、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.sender': '製作ギルド',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.subject':
+    'エンチャントと宝石細工の腕前について',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.body':
+    '職人へ\n\nエンチャントと宝石細工に励むあなたの評判がギルドに届いています。魔力を吹き込み、石を磨き、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.sender': '製作ギルド',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.subject':
+    '宝石細工と武器鍛冶の腕前について',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.body':
+    '職人へ\n\n宝石細工と武器鍛冶に励むあなたの評判がギルドに届いています。宝石を据え、刃を研ぎ、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.sender': '製作ギルド',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.subject':
+    '武器鍛冶と防具鍛冶の腕前について',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.body':
+    '職人へ\n\n武器鍛冶と防具鍛冶に励むあなたの評判がギルドに届いています。刃を鍛え、板金を合わせ、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。この組を結んだ者は、やがて鍛冶師の名を得ます。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
+  'entities.letters.guild_trend_armorcrafting_engineering.sender': '製作ギルド',
+  'entities.letters.guild_trend_armorcrafting_engineering.subject': '防具鍛冶と工作の腕前について',
+  'entities.letters.guild_trend_armorcrafting_engineering.body':
+    '職人へ\n\n防具鍛冶と工作に励むあなたの評判がギルドに届いています。板金を鋲で留め、歯車を調え、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド',
   'hudChrome.calendar.title': 'イベントカレンダー',
   'hudChrome.calendar.close': 'カレンダーを閉じる',
   'hudChrome.calendar.keybindLabel': 'イベントカレンダー',
@@ -7188,9 +7243,27 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'yumi.end.loss': '敗北！Yumiが倒れてしまった。',
   'hudChrome.crafting.comboRequirementUnmet':
     'その組み合わせレシピに必要な両方の生産スキルの熟練度に達していません。',
-  'hudChrome.crafting.notAtHub': 'それを製作するには、必要なレベルで製作拠点にいる必要があります。',
   'hudChrome.crafting.throttled': '製作が速すぎます。少し待ってからもう一度お試しください。',
   'hudChrome.crafting.recipeNotLearned': 'そのレシピはまだ習得していません。',
+  'hudChrome.crafting.skillReqLine': '{craft} {skill} が必要',
+  'hudChrome.crafting.difficultyFull': '技能上昇（全量）',
+  'hudChrome.crafting.difficultyReduced': '技能上昇（減少）',
+  'hudChrome.crafting.difficultyNone': '技能上昇なし',
+  'hudChrome.crafting.stationBadge': '製作拠点',
+  'hudChrome.crafting.masterworkToast': '傑作！{name}',
+  'hudChrome.crafting.masterworkZoneLine': '{crafter}が傑作{name}を作り上げました！',
+  'hudChrome.crafting.tierUpToast': '{craft}がティア {tier} に到達しました！',
+  'hudChrome.crafting.makersMark': '製作者：{name}',
+  'hudChrome.crafting.masterworkSeal': '傑作',
+  'hudChrome.crafting.enchantedLine': 'エンチャント済み',
+  'hudChrome.crafting.stationRequired': 'それを製作するには{station}にいる必要があります。',
+  'hudChrome.crafting.stationOutOfRangeNamed': '{station}に移動して製作してください。',
+  'hudChrome.crafting.stationName.forge': '鍛冶場',
+  'hudChrome.crafting.stationName.kitchens': '厨房',
+  'hudChrome.crafting.stationName.apothecary': '薬房',
+  'hudChrome.crafting.stationName.tannery': '皮なめし場',
+  'hudChrome.crafting.stationName.loom': '織機',
+  'hudChrome.crafting.stationName.toolworks': '工作場',
   'hudChrome.mobile.actionPageIndicator': '{page}ページ',
   'hudChrome.mobile.spellbookPageLabel': 'ページ{page}',
   'hudChrome.mobile.hideKeyboard': 'キーボードを隠す',
@@ -7947,7 +8020,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': '魔法の湧き水',
   'entities.abilities.blazing_barrier.name': 'ブレイジングバリア',
   'entities.abilities.blazing_barrier.description':
-    '自身を炎で包み、130ダメージを吸収します。60秒間持続します。（火）',
+    '自身を炎で包み、{damage}ダメージを吸収します。60秒間持続します。（火）',
   'entities.abilities.cold_snap.name': '冬の呼び戻し',
   'entities.abilities.cold_snap.description':
     'フリッカーステップ、フロストヴェール、グレーターインビジビリティのクールダウンを完了させます。（メイジタレント）',
@@ -8146,4 +8219,28 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.majorsLabel': '主専攻：{a}と{b}',
   'hudChrome.professions.pairsHeld': '保持している組み合わせ：{count}',
   'hudChrome.professions.returnsLabel': '復帰：{count}',
+  'entities.npcs.forgemistress_darva.name': '鍛冶長ダルヴァ',
+  'entities.npcs.forgemistress_darva.title': '鍛冶場の主',
+  'entities.npcs.forgemistress_darva.greeting':
+    '炉は私に従う、{className}。良い鉱石を持って来れば、おまえにも従うようになる。',
+  'entities.npcs.cook_marlow.name': '料理人マーロウ',
+  'entities.npcs.cook_marlow.title': '厨房の主',
+  'entities.npcs.cook_marlow.greeting':
+    '私の厨房から生煮えのまま出ていくものはない、{className}。座って食べて、それからまた行きな。',
+  'entities.npcs.weaver_ottilie.name': '織り手オッティリー',
+  'entities.npcs.weaver_ottilie.title': '機織り場の主',
+  'entities.npcs.weaver_ottilie.greeting':
+    '糸に気をつけて、{className}。機を扱うなら、強い手より確かな手だよ。',
+  'entities.npcs.tinker_gizzel.name': 'からくり師ギッゼル',
+  'entities.npcs.tinker_gizzel.title': '工房の主',
+  'entities.npcs.tinker_gizzel.greeting':
+    'バネに歯車に切れ味のいい刃、{className}。あんたの手に足りないものは、この工房が何でも揃えるよ。',
+  'entities.npcs.tanner_hesk.name': '皮なめし職人ヘスク',
+  'entities.npcs.tanner_hesk.title': 'なめし場の主',
+  'entities.npcs.tanner_hesk.greeting':
+    '革の良し悪しはなめしで決まる、{className}。桶の用意はできている、あとはあんた次第だ。',
+  'entities.npcs.alchemist_verane.name': '錬金術師ヴェレーン',
+  'entities.npcs.alchemist_verane.title': '薬房の主',
+  'entities.npcs.alchemist_verane.greeting':
+    '二度量って一度で注ぐ、{className}。薬房ではこぼした試薬に容赦はしない。',
 };

@@ -1396,7 +1396,7 @@ export const guideStrings = {
 
     craftMasteryTitle: 'Skill and mastery',
     craftMasteryBody:
-      "Crafting successfully builds skill in that trade, and skill never locks a craft's recipes away: if you know a recipe and hold its materials, you can attempt it. What skill buys you instead is quality, a practiced hand turns out finer work. The one exception is combination recipes, which open only to a crafter attuned to the archetype that joins their two crafts, with proven skill in both.",
+      "Crafting successfully builds skill in that trade, and skill never locks a craft's recipes away: if you know a recipe and hold its materials, you can attempt it. Every recipe turns out exactly the piece it promises, and a practiced hand sometimes produces a masterwork: the same piece finished finer, with a little extra power worked in. The one exception is combination recipes, which open only to a crafter attuned to the archetype that joins their two crafts, with proven skill in both.",
 
     craftComboTitle: 'Combination recipes',
     craftComboBody:
@@ -1409,7 +1409,7 @@ export const guideStrings = {
 
     archetypeChooseTitle: 'Choosing your archetype',
     archetypeChooseBody:
-      'Declaring an archetype is a story moment: a quest that formally accepts you into that identity. Until you declare, every craft advances to the rare quality tier. Once you take up a pair, its two trades open all the way, a craft from the far side of the wheel stays with you as a hobby that still works to the rare tier, and every other trade rests at the common tier while you carry that identity.',
+      "Declaring an archetype is a story moment: a quest that formally accepts you into that identity. Until you declare, every craft's skill advances as far as the rare tier. Once you take up a pair, its two trades open all the way, a craft from the far side of the wheel stays with you as a hobby that still works to the rare tier, and every other trade rests at the common tier while you carry that identity.",
 
     archetypeSwitchTitle: 'Changing your mind',
     archetypeSwitchBody:

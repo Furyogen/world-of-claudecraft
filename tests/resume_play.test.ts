@@ -231,10 +231,11 @@ describe('main.ts resume wiring', () => {
   it('clears the marker beside every clearSession-style logout site', () => {
     // Exact count: in-game logout, account logout, session expiry, deactivate,
     // recovery-email hatch, boot auth failure, roster mismatch, fatalOverlay,
-    // and the boot dead-marker clear. A new terminal site must bump this; a
-    // silently deleted one fails it.
+    // the boot dead-marker clear, and the world-entry crash recovery (a crashed
+    // entry must not auto-resume back into the crash loop; entry_crash_guard.ts).
+    // A new terminal site must bump this; a silently deleted one fails it.
     const clears = mainTs.match(/clearPlayMarker\(\);/g) ?? [];
-    expect(clears.length).toBe(9);
+    expect(clears.length).toBe(10);
     expect(mainTs).toContain('api.clearSession();\n    clearPlayMarker();');
   });
 
@@ -267,7 +268,17 @@ describe('main.ts resume wiring', () => {
   });
 
   it('re-stamps on hide and pagehide via the freshness-gated refresh', () => {
-    expect(mainTs).toContain("if (document.visibilityState === 'hidden') refreshPlayMarker(");
-    expect(mainTs).toContain("window.addEventListener('pagehide', () => refreshPlayMarker(");
+    expect(mainTs).toContain(
+      "if (document.visibilityState === 'hidden') {\n      refreshPlayMarker(Date.now());",
+    );
+    expect(mainTs).toContain(
+      "window.addEventListener('pagehide', () => {\n    refreshPlayMarker(Date.now());",
+    );
+    // The same hide/pagehide moments also disarm the world-entry crash probe: leaving
+    // the foreground (or a deliberate reload) is not a foreground entry crash, so it
+    // must never cost the player a graphics tier (entry_crash_guard.ts).
+    expect(mainTs).toContain(
+      "window.addEventListener('pagehide', () => {\n    refreshPlayMarker(Date.now());\n    clearEntryProbe();\n  });",
+    );
   });
 });

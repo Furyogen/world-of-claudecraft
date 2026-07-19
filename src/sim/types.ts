@@ -483,6 +483,12 @@ export interface Aura {
   temporalHealTicksRemaining?: number;
 }
 
+export interface DamageBreakBudget {
+  maxHpPct: number;
+  min: number;
+  max: number;
+}
+
 export type CrowdControlDrCategory =
   | 'root'
   | 'polymorph'
@@ -1683,6 +1689,44 @@ export interface MobTemplate {
   purgeOnHit?: { chance: number; name: string };
 }
 
+interface AoeRootBase {
+  type: 'aoeRoot';
+  duration: number;
+  radius: number;
+  min: number;
+  max: number;
+}
+
+type AoeRootEffect =
+  | (AoeRootBase & {
+      breakOnDamage?: DamageBreakBudget;
+      stun?: false;
+      ring?: never;
+      trap?: never;
+    })
+  | (AoeRootBase & {
+      breakOnDamage?: never;
+      stun: true;
+      ring?: never;
+      trap?: never;
+    })
+  | (AoeRootBase & {
+      breakOnDamage?: never;
+      stun?: boolean;
+      // Persistent annular root. `duration` remains the root duration; the
+      // nested duration is how long the ring can catch new enemies.
+      ring: { duration: number; innerRadius: number };
+      trap?: never;
+    })
+  | (AoeRootBase & {
+      breakOnDamage?: never;
+      ring?: never;
+      stun?: boolean;
+      // Armed trap at the caster's feet. It freezes the first enemy contact
+      // after armTime and expires after lifetime.
+      trap: { armTime: number; lifetime: number };
+    });
+
 export type AbilityEffect =
   | { type: 'weaponDamage'; bonus: number } // on-next-swing bonus (heroic strike)
   | {
@@ -1806,7 +1850,7 @@ export type AbilityEffect =
       radius: number;
     }
   | { type: 'hot'; total: number; duration: number; interval: number } // renew, rejuvenation
-  | { type: 'absorb'; amount: number; duration: number } // power word: shield
+  | { type: 'absorb'; amount: number; duration: number; spellPowerCoeff?: number } // power word: shield
   | { type: 'imbue'; bonus: number; duration: number; judgeMin?: number; judgeMax?: number } // seals / rockbiter: extra damage per swing
   | { type: 'judgement'; dmgMult?: number; flat?: number } // consume your imbue, deal its judgement damage to the target
   | { type: 'lifeTap'; hp: number; mana: number }
@@ -1923,21 +1967,7 @@ export type AbilityEffect =
   | { type: 'aoeAllyDamage'; pct: number; duration: number; radius: number }
   | { type: 'aoeAllySureCrit'; charges: number; duration: number; radius: number }
   | { type: 'aoeSlow'; mult: number; duration: number; radius: number }
-  | {
-      type: 'aoeRoot';
-      duration: number;
-      radius: number;
-      min: number;
-      max: number;
-      stun?: boolean;
-      // Optional persistent annular trap. `duration` remains the root duration;
-      // the nested duration is how long the ring can catch new enemies.
-      ring?: { duration: number; innerRadius: number };
-      // Optional armed trap at the caster's feet (combat/hunter_trap.ts):
-      // arms after armTime, freezes the first enemy contact for `duration`,
-      // expires after lifetime. One per owner.
-      trap?: { armTime: number; lifetime: number };
-    }
+  | AoeRootEffect
   | {
       type: 'empoweredCone';
       angle: number;
@@ -2880,8 +2910,11 @@ export interface Entity {
   // ItemInstancePayload of whichever equipped piece carries one (an enchanted
   // item's `rolled.stats`), keyed the same as equippedItems. Sparse: a slot with
   // a plain (unenchanted) piece, or nothing equipped, has no entry. Recomputed in
-  // recalcPlayerStats alongside equippedItems; the sim reads the SOURCE
-  // (PlayerMeta.equipmentInstance) for the actual stat bonus, never this mirror.
+  // recalcPlayerStats alongside equippedItems and synced in identity fields
+  // (terse `eqi`, players only, only when non-empty, like `eq`) so the inspect
+  // window shows another player's masterwork/enchant payloads (Phase 6); the sim
+  // reads the SOURCE (PlayerMeta.equipmentInstance) for the actual stat bonus,
+  // never this mirror.
   equippedInstances: Partial<Record<EquipSlot, ItemInstancePayload>>;
   // $WOC holder-tier flair (cosmetic): 0/undefined = none, 1-10 = Ember…Sovereign.
   // Set server-side from the player's connected-wallet balance and synced in
@@ -3146,6 +3179,14 @@ export type SimEvent = { pid?: number } & (
       // from players far outside your ~120yd interest scope, where no entity
       // record exists locally.
       flair?: ChatSenderFlair;
+      // The SENDER's class, for the same reason and by the same rule as `flair`
+      // above: it rides the event rather than being read off the sender's
+      // entity because general/world/lfg/guild chat reaches you from players
+      // far outside your ~120yd interest scope, where `IWorld.entities` (world-
+      // complete offline, interest-scoped online) has no record for them. Set
+      // for every player-sourced chat line (mob/boss yells omit it, same as
+      // fromTitle).
+      classId?: PlayerClass;
     }
   | { type: 'partyInvite'; fromPid: number; fromName: string }
   // The party/raid leader started a ready check: the recipient's client plays a
@@ -3284,6 +3325,22 @@ export type SimEvent = { pid?: number } & (
     }
   // personal outcome line for each fighter (rides beside the anchored vcupEnd)
   | { type: 'vcupResult'; won: boolean; draw: boolean }
+  // Card Duel minigame (src/sim/social/card_duel.ts). Personal (pid), text-free
+  // on purpose (the client picks its own audio/copy off the structured
+  // fields, same as gatherResult/craftResult above).
+  | { type: 'cardDuelMatchStart'; pid?: number }
+  | { type: 'cardPlayed'; pid?: number }
+  | {
+      type: 'cardRoundResolved';
+      mine: number;
+      theirs: number;
+      outcome: 'win' | 'lose' | 'push';
+      // True when this side's post-round draw emptied the deck and had to
+      // reshuffle the discard pile back in (see card_hand.ts drawOne).
+      reshuffled: boolean;
+      pid?: number;
+    }
+  | { type: 'cardDuelMatchEnd'; won: boolean; pid?: number }
   | {
       type: 'heal2';
       sourceId: number;
@@ -3482,7 +3539,7 @@ export type SimEvent = { pid?: number } & (
         | 'combo_requirement_unmet'
         | 'recipe_not_learned'
         | 'throttled'
-        | 'not_at_hub';
+        | 'station_required';
     }
   // Masterwork proc (Professions 2.0 Phase 2): a successful craft's single
   // output-side rng draw procced, minting a masterwork instance with baked
@@ -3490,6 +3547,26 @@ export type SimEvent = { pid?: number } & (
   // `crafter` repeats as payload). Ids only, text-free on purpose (like
   // craftResult above): the client renders its own localized copy.
   | { type: 'masterwork'; recipeId: string; itemId: string; crafter: number }
+  // Masterwork zone broadcast (Professions 2.0 Phase 6): the soft zone-wide
+  // copy of a masterwork proc, one per overworld player currently in the
+  // crafter's zone INCLUDING the crafter, `pid` being the RECIPIENT (the
+  // gatherRareEvent/chat fanout idiom); crafterPid/crafterName identify the
+  // crafter. Deliberately a SEPARATE type from the personal `masterwork`
+  // event above: the online client rebuilds lastMasterwork from ANY
+  // 'masterwork' event, so a bystander copy under that type would corrupt
+  // their own-proc mirror. Skipped entirely for instanced crafters (the
+  // personal event alone fires there). Ids plus values only, text-free on
+  // purpose: the client renders its own localized line
+  // (hudChrome.crafting.masterworkZoneLine).
+  | {
+      type: 'masterworkZone';
+      pid: number;
+      crafterPid: number;
+      crafterName: string;
+      itemId: string;
+      recipeId: string;
+      zoneId: string;
+    }
   // Gather-node harvest outcome (#1729): a successful resource harvest emits
   // this so the client can play a gathering audio cue for the acting player.
   // Personal (carries pid), delivered only to the harvester. Emitted only on a

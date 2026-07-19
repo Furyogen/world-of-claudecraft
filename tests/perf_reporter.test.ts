@@ -215,7 +215,7 @@ function snapshot(): PerfSnapshot {
     },
     mainMs: { renderer: { count: 1, avg: 5, p95: 5, max: 5 } },
     renderer: {
-      graphicsConfigVersion: 14,
+      graphicsConfigVersion: 15,
       tier: 'high',
       qualityBuckets: qualityBuckets(),
       autoGovernor: true,
@@ -363,7 +363,7 @@ describe('perf reporter payload', () => {
     // reports medium; first-run device detection (main.ts) would persist a device tier, but
     // this unit constructs Settings directly with no persisted value.
     expect(body.graphicsPreset).toBe('medium');
-    expect(body.graphicsConfigVersion).toBe(14);
+    expect(body.graphicsConfigVersion).toBe(15);
     expect(body.gfxTier).toBe('high');
     expect(body.autoGovernor).toBe(true);
     expect(body.effectiveRenderScale).toBe(0.9);
@@ -373,7 +373,7 @@ describe('perf reporter payload', () => {
     expect(body.source).toBe('benchmark');
     expect(body.zoneOrScenario).toBe('bench_dense_foliage');
     expect(JSON.stringify(body.rawSummary)).not.toContain('Safari/605');
-    expect((body.rawSummary as { graphicsConfigVersion?: number }).graphicsConfigVersion).toBe(14);
+    expect((body.rawSummary as { graphicsConfigVersion?: number }).graphicsConfigVersion).toBe(15);
     expect(
       (body.rawSummary as { rendererQualityBuckets?: { levels?: { foliage?: number } } })
         .rendererQualityBuckets?.levels?.foliage,

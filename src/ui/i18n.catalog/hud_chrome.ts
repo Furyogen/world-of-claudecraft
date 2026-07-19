@@ -863,6 +863,9 @@ export const hudChromeStrings = {
     // Interface panel toggle that reveals the optional second action bar row (off
     // by default). The abilities bound to its slots stay castable via their keybinds.
     showSecondaryActionBar: 'Show Secondary Action Bar',
+    // Enabled only while the secondary row is visible. Slots remain reachable
+    // through keybinds and the mobile action-ring pages while this row is hidden.
+    showThirdActionBar: 'Show Third Action Bar',
     // Interface panel toggle for the classic "target of target" mini-frame (off by
     // default): a small unit frame under the target frame showing who your target
     // is targeting.
@@ -1433,6 +1436,9 @@ export const hudChromeStrings = {
     watchX: 'View on X',
     watchKick: 'Watch on Kick',
     watchYouTube: 'Watch on YouTube',
+    // The chat-line badge marking a verified streamer's name; opens the same
+    // player menu the name itself opens, with the channel link(s) up top.
+    streamerBadgeTitle: 'Verified streamer',
   },
   lootSettings: {
     title: 'Loot Settings',
@@ -2292,6 +2298,11 @@ export const hudChromeStrings = {
     comboNotAttuned: 'Choose an archetype pair first.',
     comboWrongPair: 'Activate this exact pair to craft it.',
     comboTierUnmet: 'Raise both major crafts to the required tier.',
+    // Named tier_unmet guidance (Phase 6 QA): {crafts} is the localized
+    // craft-name list of ONLY the under-tier crafts, so the player can tell
+    // which one to raise from the row alone. comboTierUnmet above stays the
+    // defensive fallback when the eligibility result names no craft.
+    comboTierUnmetNamed: 'Raise {crafts} to tier {tier}.',
     professionChoice: 'Profession choice',
     noProfessionChoice: 'No valid profession choice is currently available.',
     // One selectable pair in the attunement quest dropdown: the pair archetype
@@ -2331,14 +2342,44 @@ export const hudChromeStrings = {
       dormantKnowledge:
         '{craft} knowledge is retained but dormant until its pair or hobby is active.',
     },
-    // #1297: denied because the recipe is station-bound (the level-20
-    // crafting hub) and the player is either not there or not high enough
-    // level.
-    notAtHub: 'You must be at the crafting hub, at the required level, to craft that.',
+    // Professions 2.0 Phase 8 (supersedes the retired notAtHub key): denied
+    // because the recipe is station-bound and the player is not at a station
+    // of its type. {station} is the localized stationName.* value below.
+    stationRequired: 'You must be at the {station} to craft that.',
+    // The six station display names (stations.ts StationType), resolved via
+    // crafting_window.ts stationNameText, the craftName-table idiom.
+    stationName: {
+      forge: 'Forge',
+      kitchens: 'Kitchens',
+      apothecary: 'Apothecary',
+      tannery: 'Tannery',
+      loom: 'Loom',
+      toolworks: 'Toolworks',
+    },
     // #1301: denied because the rolling craft-output window is full.
     throttled: 'You are crafting too quickly. Wait a moment and try again.',
     // #1299: the recipe exists but this player has not learned it yet.
     recipeNotLearned: 'You have not learned that recipe yet.',
+    // Professions 2.0 Phase 6: crafting window legibility (skill requirement
+    // line, skill-gain difficulty labels, hub-station badge) plus the
+    // masterwork and tier-up celebration copy. Masterwork is a proc with
+    // baked bonus stats; the copy never claims a quality-rank upgrade.
+    skillReqLine: 'Requires {craft} {skill}',
+    difficultyFull: 'Full skill gain',
+    difficultyReduced: 'Reduced skill gain',
+    difficultyNone: 'No skill gain',
+    stationBadge: 'Station',
+    // Phase 8 (supersedes the retired stationOutOfRange key): the crafting
+    // window's out-of-range row note, naming WHICH station to walk to.
+    stationOutOfRangeNamed: 'Move to the {station} to craft this.',
+    masterworkToast: 'Masterwork! {name}',
+    masterworkZoneLine: '{crafter} crafted a masterwork {name}!',
+    tierUpToast: '{craft} advanced to tier {tier}!',
+    makersMark: 'Crafted by {name}',
+    masterworkSeal: 'Masterwork',
+    // Generic enchanted marker: EnchantDef.name has no localized display
+    // surface yet, so the tooltip marks the state without naming the enchant.
+    enchantedLine: 'Enchanted',
   },
   // Dungeon Finder window (docs/prd/dungeon-finder.md). Dungeon, creature,
   // item, quest, and zone NAMES resolve through tEntity/world_entity_i18n,

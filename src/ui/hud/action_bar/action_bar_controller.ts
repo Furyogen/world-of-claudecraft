@@ -2,6 +2,7 @@ import { SPORT_ABILITIES } from '../../../sim/content/vale_cup';
 import { ABILITIES, ITEMS } from '../../../sim/data';
 import type { PlayerClass } from '../../../sim/types';
 import { WARRIOR_STANCE_GROUP } from '../../stance_bar_view';
+import { ACTION_BAR_ABILITY_SLOTS } from './action_bar_layout_core';
 import {
   actionForAttackSlot,
   attackSlotStorageKey,
@@ -21,7 +22,7 @@ import {
   saveAttackSlotAction as writeAttackSlotAction,
 } from './hotbar';
 
-export const ACTION_BAR_ABILITY_SLOTS = 22;
+export { ACTION_BAR_ABILITY_SLOTS } from './action_bar_layout_core';
 
 export type HotbarForm = 'normal' | 'bear' | 'cat' | 'cat_stealth' | 'stealth' | 'sport';
 

@@ -78,12 +78,13 @@ import { ITEMS } from '../data';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import type { ItemDef } from '../types';
-import { archetypeCeilingFor } from './archetype';
+import { archetypeCeilingFor, craftSkillGainMultiplier } from './archetype';
 import { comboEligibility } from './combo_eligibility';
-import { canUseCraftingHubStation } from './crafting_hub';
 import { isSignableMaterialRarity, type MaterialRarity } from './gathering';
 import { masterworkBonusStats, masterworkBumpedQuality, masterworkProcChance } from './masterwork';
+import { isStationActive } from './mobile_station';
 import { craftActionXp } from './profession_xp';
+import { isAtStation, stationTypeForCraft } from './stations';
 import type { ProfessionReagent, ProfessionRecipeRecord } from './types';
 import {
   type CraftSkillState,
@@ -93,7 +94,6 @@ import {
   materialCostMultiplier,
   tierCapability,
   tierForSkill,
-  tierProgressMultiplier,
 } from './wheel';
 
 // One flat craft-skill point per successful common-tier craft (the free-floor
@@ -127,7 +127,7 @@ export interface CraftResult {
     | 'combo_requirement_unmet'
     | 'recipe_not_learned'
     | 'throttled'
-    | 'not_at_hub';
+    | 'station_required';
 }
 
 /** Whether `meta` currently knows `recipe` (issue #1299): a recipe with no
@@ -314,14 +314,20 @@ export function resolveCraftForRecipe(
   recipe: ProfessionRecipeRecord,
 ): CraftResult {
   const meta = ctx.players.get(pid);
-  // #1297: a station-bound recipe (TOOL_RECIPES today) requires the player to
-  // be physically present at the level-20 crafting hub. Checked before every
-  // other gate, no side effect on denial, same shape as the combo-requirement
-  // check below.
-  if (recipe.requiresHubStation) {
+  // Phase 8 station gate (supersedes #1297's hub gate; the level arm retired
+  // with it): a station-bound recipe requires the player to stand at a
+  // station of the recipe's type, OR to have their own ACTIVE mobile station
+  // (mobile_station.ts) whose craft maps to that type. Checked before every
+  // other gate, no side effect on denial, no rng, same shape as the
+  // combo-requirement check below.
+  if (recipe.stationType) {
     const entity = ctx.entities.get(pid);
-    if (!entity || !canUseCraftingHubStation(entity.pos, entity.level)) {
-      return { ok: false, recipeId: recipe.id, reason: 'not_at_hub' };
+    const mobileSatisfies =
+      !!meta?.mobileStation &&
+      isStationActive(meta.mobileStation, ctx.tickCount) &&
+      stationTypeForCraft(meta.mobileStation.craftId) === recipe.stationType;
+    if (!entity || (!isAtStation(entity.pos, recipe.stationType) && !mobileSatisfies)) {
+      return { ok: false, recipeId: recipe.id, reason: 'station_required' };
     }
   }
   if (
@@ -450,25 +456,18 @@ export function resolveCraftForRecipe(
     ctx.addItem(recipe.resultItemId, recipe.resultCount, pid);
   }
   if (meta) {
-    // #1129/#1148 review: a recipe whose tier is ABOVE this craft's ARCHETYPE
-    // ceiling (ceilingTier, the same archetypeCeilingFor value the quality
-    // clamp reads above) must grant zero progress, full stop, never the
-    // ordinary diminishing-returns treatment: that is what makes a dormant or
-    // hobby craft's climb actually stop at its cap. The guard deliberately
-    // compares against the archetype ceiling ALONE, never craftCeiling's
-    // min-with-raw-capability: there is NO skillReq admission gate on
-    // crafting (content/recipes.ts documents that resolveCraft does not read
-    // skillReq), so a recipe tier above the player's RAW capability is the
-    // ordinary, doc-confirmed climb ("full at or above capability: this is
-    // how capability advances in the first place", wheel.ts) and must keep
-    // granting full progress exactly as base did. Below or at the ceiling,
-    // the ordinary curve (full at/above raw capability, reduced one tier
-    // under, zero two-plus under) applies unchanged off raw capability.
-    const recipeTier = tierForSkill(recipe.skillReq);
-    const multiplier =
-      recipeTier > ceilingTier
-        ? 0
-        : tierProgressMultiplier(tierCapability(meta.craftSkills, recipe.professionId), recipeTier);
+    // The #1129/#1148 gain doctrine (archetype ceiling alone zeroes, ordinary
+    // curve off raw capability otherwise) lives in the shared
+    // craftSkillGainMultiplier, which the crafting window's difficulty label
+    // also consumes so the hint can never diverge from this grant.
+    const multiplier = craftSkillGainMultiplier(
+      meta.craftSkills,
+      meta.archetype.activeArchetype,
+      meta.archetype.pairedMajor,
+      recipe.professionId,
+      meta.archetype.hobbyCraft,
+      recipe.skillReq,
+    );
     gainCraftSkill(meta.craftSkills, recipe.professionId, CRAFT_SKILL_GAIN * multiplier);
     meta.craftThrottle.count += 1;
     // Character XP for the craft (profession_xp.ts), tier-scaled and
@@ -523,9 +522,11 @@ export function craftItem(ctx: SimContext, recipeId: string, pid?: number): Craf
   const result = resolveCraft(ctx, r.meta.entityId, recipeId);
   if (result.ok) {
     ctx.bumpDeedStat(r.meta, 'craftsPerformed', 1);
-    // A station-bound success already proved hub position and level in the
-    // resolve's hub gate, so the recipe flag alone identifies a hub craft.
-    if (recipeById(recipeId)?.requiresHubStation) {
+    // A station-bound success already proved station presence in the
+    // resolve's station gate, so stationType alone identifies one. The
+    // persisted stat key stays 'hubCraftsPerformed' for save back-compat: it
+    // now means station-bound crafts (Phase 8 renamed the gate, not the key).
+    if (recipeById(recipeId)?.stationType) {
       ctx.bumpDeedStat(r.meta, 'hubCraftsPerformed', 1);
     }
     // The dirty mark also covers the craft-skill gain the resolve applied.

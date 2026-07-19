@@ -423,6 +423,10 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Puntuacion de impacto',
   'abilityUi.actionBar.attackRemoveHint':
     'Clic derecho para quitarlo de la barra y liberar el espacio.',
+  'entryGuard.body':
+    'El juego se cerró inesperadamente al entrar al mundo, así que los gráficos ahora están en {preset}. Puedes cambiarlo en el selector de gráficos de abajo o en las opciones del juego.',
+  'entryGuard.dismiss': 'Descartar',
+  'entryGuard.title': 'Gráficos reducidos',
   'loading.realmFull':
     'Este mundo esta lleno en este momento. Por favor, intentalo de nuevo en unos minutos.',
   'loading.tooManyConnections':
@@ -3436,7 +3440,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Lanza una descarga de escarcha que causa {damage} de daño de Escarcha y reduce la velocidad de movimiento un 40%.',
   'entities.abilities.blazing_barrier.name': 'Barrera llameante',
   'entities.abilities.blazing_barrier.description':
-    'Te envuelve en llamas y absorbe 130 de daño durante 60 s. (Fuego)',
+    'Te envuelve en llamas y absorbe {damage} de daño durante 60 s. (Fuego)',
   'entities.abilities.cold_snap.name': 'Llamada del invierno',
   'entities.abilities.cold_snap.description':
     'Finaliza el tiempo de reutilización de Paso centelleante, Velo de Escarcha e Invisibilidad superior. (Talento de mago)',
@@ -3487,7 +3491,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Transforma al enemigo en sapo durante hasta {duration} s. El sapo deambula y se cura rápidamente. Cualquier daño rompe el efecto. Solo bestias y humanoides.',
   'entities.abilities.frost_nova.name': 'Atadura de Hielo',
   'entities.abilities.frost_nova.description':
-    'Congela a todos los enemigos cercanos en el sitio durante hasta 8 s e inflige {damage} de daño de Escarcha.',
+    'Congela a todos los enemigos cercanos en el sitio durante hasta 8 s e inflige {damage} de daño de Escarcha. El enraizamiento se rompe tras recibir daño acumulado equivalente al 15 % de la salud máxima del objetivo, con un mínimo de 20 y un máximo de 60 de daño.',
   'entities.abilities.arcane_explosion.name': 'Estallido de Éter',
   'entities.abilities.arcane_explosion.description':
     'Una explosión de energía Arcana golpea a todos los enemigos cercanos por {damage} de daño Arcano.',
@@ -7158,7 +7162,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Descargar para Linux',
   'download.windowsCta': 'Descargar para Windows',
   'download.linuxHint': 'AppImage: hazlo ejecutable y luego ejecútalo. No se necesita instalación.',
-  'loading.reconnecting': 'Conexión perdida. Reconectando...',
   'guide.nav.settings': 'Configuración y rendimiento',
   'guide.settingsPage.advancedBody':
     'Avanzado comienza desde el nivel High y desbloquea cuatro selectores adicionales, para que puedas pasar tus fotogramas donde realmente los notes: Detalle del terreno, Densidad del follaje, Efectos e iluminación y Calidad de las sombras. Al igual que la calidad de los gráficos, se aplican después de una recarga.',
@@ -7350,8 +7353,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.increasePct.armor': 'Aumenta la armadura un {pct}%',
   'hudChrome.auraEffect.increasePct.int': 'Aumenta el Intelecto un {pct}%',
   'hudChrome.auraEffect.increasePct.sta': 'Aumenta el Aguante un {pct}%',
-  'hudChrome.crafting.notAtHub':
-    'Debes estar en el centro de elaboración, con el nivel requerido, para elaborar eso.',
   'hudChrome.crafting.recipeNotLearned': 'Aún no has aprendido esa receta.',
   'hudChrome.crafting.throttled':
     'Estás elaborando demasiado rápido. Espera un momento e inténtalo de nuevo.',

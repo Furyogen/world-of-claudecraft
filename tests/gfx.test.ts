@@ -203,6 +203,49 @@ describe('graphics tier resolution', () => {
     );
   });
 
+  it('sheds the memory-spike knobs on constrained (phone-class) browsers, cosmetics only', () => {
+    // A phone-class hint set (touch + coarse pointer): matches iOS WebKit, whose
+    // per-process memory ceiling kills the WebContent process at world entry.
+    const phone = { maxTouchPoints: 5, coarsePointer: true, narrowViewport: true };
+    const medium = gfxInternalsForTest.settingsFor('medium', phone);
+    const high = gfxInternalsForTest.settingsFor('high', phone);
+    const ultra = gfxInternalsForTest.settingsFor('ultra', phone);
+    const desktopMedium = gfxInternalsForTest.settingsFor('medium');
+    const desktopHigh = gfxInternalsForTest.settingsFor('high');
+
+    expect(medium.constrainedMemory).toBe(true);
+    expect(desktopMedium.constrainedMemory).toBe(false);
+
+    // The big one-shot GPU allocations shrink...
+    expect(medium.shadowMap).toBe(1536);
+    expect(high.shadowMap).toBe(2048);
+    expect(ultra.shadowMap).toBe(2048);
+    expect(high.msaaSamples).toBe(0);
+    expect(ultra.msaaSamples).toBe(0);
+    expect(high.pixelRatioCap).toBe(1.48);
+    expect(ultra.pixelRatioCap).toBe(1.48);
+
+    // ...while everything a player can SEE OR REACT TO is untouched (fairness rule):
+    // materials, splat, composer availability, grass density, and view behavior all
+    // match the unconstrained tier.
+    expect(medium.standardMaterials).toBe(desktopMedium.standardMaterials);
+    expect(medium.terrainSplat).toBe(desktopMedium.terrainSplat);
+    expect(medium.grassRadius).toBe(desktopMedium.grassRadius);
+    expect(medium.grassStep).toBe(desktopMedium.grassStep);
+    expect(high.composer).toBe(desktopHigh.composer);
+    expect(high.ao).toBe(desktopHigh.ao);
+
+    // Low deviceMemory alone (Chromium's clamped signal) also lands constrained.
+    const lowMem = gfxInternalsForTest.settingsFor('medium', {
+      maxTouchPoints: 0,
+      coarsePointer: false,
+      narrowViewport: false,
+      deviceMemory: 4,
+    });
+    expect(lowMem.constrainedMemory).toBe(true);
+    expect(lowMem.shadowMap).toBe(1536);
+  });
+
   it('detects older Intel integrated GPUs and lows the unset 3D tier instead of defaulting ultra', () => {
     expect(
       isWeakIntegratedGpu(

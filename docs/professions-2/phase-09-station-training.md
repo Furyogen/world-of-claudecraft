@@ -24,9 +24,9 @@ truth exists (Phase 8), and the recipe ladder content that depends on live train
 - `src/ui/hud/vendor/`: the vendor window family (`vendor_view.ts` pure core,
   `vendor_window.ts` painter; the heroic variant shows how the family extends).
 - `src/sim/professions/crafting.ts` (`acquireRecipe`, `acquireRecipeForRecipe`,
-  `isRecipeKnown`), `src/sim/professions/types.ts` (`knownRecipes`),
-  `src/sim/professions/crafting_hub.ts` (today's station gate), and the Phase 8 station
-  registry module named in `state.md`.
+  `isRecipeKnown`, and the `resolveCraftForRecipe` station gate),
+  `src/sim/professions/types.ts` (`knownRecipes`), and the Phase 8 station registry
+  `src/sim/professions/stations.ts` named in `state.md` (`crafting_hub.ts` is deleted).
 - `src/world_api/professions.ts` (the facet for the new command) and
   `tests/world_api_parity.test.ts` (the pin).
 - `server/game.ts` (command dispatch) and `src/net/online.ts` (wire command send plus the
@@ -61,8 +61,8 @@ Spawn one Explore agent to read and summarize:
 - docs/professions-2/phase-09-station-training.md (this phase file)
 - src/render/props.ts, src/render/characters/manifest.ts (NPC_KEYS), src/ui/minimap_markers.ts,
   src/ui/minimap_painter.ts, the src/ui/hud/vendor/ modules, src/sim/professions/crafting.ts,
-  src/sim/professions/types.ts, src/sim/professions/crafting_hub.ts, the Phase 8 station
-  registry module (see state.md "New surfaces per phase"), src/world_api/professions.ts,
+  src/sim/professions/types.ts, src/sim/professions/stations.ts (the Phase 8 station
+  registry; see state.md "New surfaces per phase"), src/world_api/professions.ts,
   server/game.ts (command dispatch only), src/net/online.ts (command send + ClientWorld mirror)
 - CLAUDE.md files: src/sim/CLAUDE.md, src/sim/professions/CLAUDE.md, src/render/CLAUDE.md,
   src/ui/CLAUDE.md, src/ui/hud/CLAUDE.md, src/world_api/CLAUDE.md, src/styles/CLAUDE.md

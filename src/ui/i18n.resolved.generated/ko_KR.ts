@@ -1040,6 +1040,7 @@ export const ko_KR: EnTranslations = {
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
       "showSecondaryActionBar": "보조 액션 바 표시",
+      "showThirdActionBar": "세 번째 액션 바 표시",
       "showTargetOfTarget": "대상의 대상 표시",
       "showAttackButton": "공격 버튼 표시",
       "showDailyRewardsChest": "일일 보상 보물상자 표시",
@@ -1469,7 +1470,8 @@ export const ko_KR: EnTranslations = {
       "watchTwitch": "Twitch에서 시청",
       "watchX": "X에서 보기",
       "watchKick": "Kick에서 시청",
-      "watchYouTube": "YouTube에서 시청"
+      "watchYouTube": "YouTube에서 시청",
+      "streamerBadgeTitle": "인증된 스트리머"
     },
     "lootSettings": {
       "title": "전리품 설정",
@@ -2170,6 +2172,7 @@ export const ko_KR: EnTranslations = {
       "comboNotAttuned": "먼저 원형 기술 조합을 선택하세요.",
       "comboWrongPair": "제작하려면 이 정확한 조합을 활성화하세요.",
       "comboTierUnmet": "두 주 전공을 모두 필요한 티어까지 올리세요.",
+      "comboTierUnmetNamed": "{crafts}을(를) 티어 {tier}까지 올리세요.",
       "professionChoice": "전문 기술 선택",
       "noProfessionChoice": "현재 선택할 수 있는 전문 기술이 없습니다.",
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
@@ -2200,9 +2203,29 @@ export const ko_KR: EnTranslations = {
         "nearTier": "{craft}는 다음 티어까지 숙련도 {points}이 필요합니다.",
         "dormantKnowledge": "{craft} 지식은 유지되지만 해당 조합이나 취미가 활성화될 때까지 비활성 상태입니다."
       },
-      "notAtHub": "그것을 제작하려면 필요한 레벨로 제작 거점에 있어야 합니다.",
+      "stationRequired": "그것을 제작하려면 {station}에 있어야 합니다.",
+      "stationName": {
+        "forge": "대장간",
+        "kitchens": "주방",
+        "apothecary": "약방",
+        "tannery": "무두질 작업장",
+        "loom": "베틀",
+        "toolworks": "공작소"
+      },
       "throttled": "너무 빨리 제작하고 있습니다. 잠시 후 다시 시도하세요.",
-      "recipeNotLearned": "아직 그 제작법을 배우지 않았습니다."
+      "recipeNotLearned": "아직 그 제작법을 배우지 않았습니다.",
+      "skillReqLine": "{craft} {skill} 필요",
+      "difficultyFull": "숙련도 전량 상승",
+      "difficultyReduced": "숙련도 상승 감소",
+      "difficultyNone": "숙련도 상승 없음",
+      "stationBadge": "제작 거점",
+      "stationOutOfRangeNamed": "{station}(으)로 이동하여 제작하세요.",
+      "masterworkToast": "걸작! {name}",
+      "masterworkZoneLine": "{crafter}님이 걸작 {name}을(를) 제작했습니다!",
+      "tierUpToast": "{craft} 티어 {tier} 달성!",
+      "makersMark": "제작자: {name}",
+      "masterworkSeal": "걸작",
+      "enchantedLine": "마법부여됨"
     },
     "finder": {
       "title": "던전 찾기",
@@ -3427,13 +3450,13 @@ export const ko_KR: EnTranslations = {
       "craftHowTitle": "제작 창",
       "craftHowBody": "제작 창(기본 키 T)을 열면 여러분이 아는 모든 제작법과 각각에 필요한 재료, 그리고 지금 지닌 재료를 볼 수 있다. 재료가 갖춰져 있으면 클릭 한 번으로 제작된다. 일반적인 제작법은 세계 어디에서나 만들 수 있다. 다만 상위 도구와 희귀한 시전자 방어구를 비롯한 몇몇 고급 제작법은 하이워치의 제작 거점에 서 있어야 한다.",
       "craftMasteryTitle": "숙련도와 통달",
-      "craftMasteryBody": "제작에 성공하면 해당 전문직의 숙련도가 오르며, 숙련도가 제작법을 잠가 두는 일은 결코 없다. 제작법을 알고 그 재료를 지녔다면 언제든 시도할 수 있다. 숙련도가 대신 안겨 주는 것은 품질이니, 손에 익은 솜씨일수록 더 뛰어난 결과물을 내놓는다. 유일한 예외는 조합 제작법으로, 열리기 전에 두 전문직 모두에서 실력을 입증하기를 요구한다.",
+      "craftMasteryBody": "제작에 성공하면 해당 전문직의 숙련도가 오르며, 숙련도가 제작법을 잠가 두는 일은 결코 없다. 제작법을 알고 그 재료를 지녔다면 언제든 시도할 수 있다. 모든 제작법은 약속한 그대로의 결과물을 내놓지만, 손에 익은 솜씨는 이따금 걸작을 만들어 낸다. 같은 물건이되 마무리가 더 정교하고, 약간의 추가 힘이 깃들어 있다. 유일한 예외는 조합 제작법으로, 두 전문직을 잇는 원형에 조율하고 두 전문직 모두에서 검증된 실력을 갖춘 제작자에게만 열린다.",
       "craftComboTitle": "조합 제작법",
       "craftComboBody": "단일 전문직 자체의 제작법 목록을 넘어, 이 원환은 인접한 두 전문직을 동시에 필요로 하는 조합 제작법도 지원하여, 고립된 하나의 전문직이 아니라 원환 위에서 인접한 전문직들에 투자한 캐릭터에게 보상을 준다. 제작자는 두 전문직을 모두 스스로 지녀야 하며, 파트너의 숙련도가 어느 한쪽을 대신할 수는 없다.",
       "archetypeTitle": "열 가지 원형",
       "archetypeIntro": "열 가지 전문직은 각각 원형도 상징하며, 단순히 그 전문직에 종사하는 것을 넘어서는 더 넓은 정체성을 받아들일 수 있다. 당신의 현재 원형은 한 번에 하나뿐이며 목록이 아니다: 당신은 하나를 지니며, 원한다면 나중에 다른 것으로 바꿀 수 있다.",
       "archetypeChooseTitle": "원형 선택하기",
-      "archetypeChooseBody": "원형을 선언하는 것은 하나의 이야기 장면이 될 것이다: 그 정체성으로 당신을 공식적으로 받아들이는 퀘스트다. 그 길은 아직 만들어지는 중이므로, 지금은 모든 캐릭터가 그 선택을 앞에 둔 채 세계를 걷고 있으며, 그동안 모든 제작은 희귀 품질 등급까지 나아간다.",
+      "archetypeChooseBody": "원형을 선언하는 것은 하나의 이야기 장면이다: 그 정체성으로 당신을 공식적으로 받아들이는 퀘스트다. 선언하기 전에는 모든 전문직의 숙련도가 희귀 티어까지 오를 수 있다. 한 쌍을 받아들이면 그 두 전문직은 끝까지 열리고, 수레바퀴 반대편의 한 전문직은 취미로 곁에 남아 여전히 희귀 티어까지 쓸 수 있으며, 그 정체성을 지니는 동안 나머지 모든 전문직은 일반 티어에 머문다.",
       "archetypeSwitchTitle": "마음을 바꾸기",
       "archetypeSwitchBody": "선언이 종신형이 되는 일도 없을 것이다. 계획은 새 원형을 받아들이기 전에 옛 전문직에 속죄하는 반복 가능한 절차이며, 바꿀 때마다 그 속죄는 조금씩 더 무거워져, 선택이 대가 없는 것이 아니라 늘 의미 있는 것으로 남는다. 선언 그 자체와 마찬가지로, 이 역시 아직 오는 중이다.",
       "archetypeIdentityTitle": "당신의 원형이 의미하는 것",
@@ -5015,6 +5038,11 @@ export const ko_KR: EnTranslations = {
     "discordCommunity": "World of ClaudeCraft Discord 커뮤니티 참여",
     "donateProject": "World of ClaudeCraft 후원하기"
   },
+  "entryGuard": {
+    "title": "그래픽 낮춤",
+    "body": "월드 입장 중 게임이 예기치 않게 종료되어 그래픽이 {preset}(으)로 설정되었습니다. 아래 그래픽 선택기나 게임 내 옵션에서 변경할 수 있습니다.",
+    "dismiss": "닫기"
+  },
   "loading": {
     "world": "세계 불러오는 중...",
     "worldProgress": "세계 불러오는 중... {done}/{total}",
@@ -5024,7 +5052,9 @@ export const ko_KR: EnTranslations = {
     "rendererFailed": "렌더러를 시작할 수 없습니다. 새로고침해 보세요. {error}",
     "enterTimeout": "세계에 입장할 수 없습니다. 연결 시간이 초과되었습니다. 게임 서버가 실행 중인가요?",
     "connectionLost": "서버와의 연결이 끊어졌습니다.",
-    "reconnecting": "연결이 끊어졌습니다. 다시 연결하는 중...",
+    "reconnectingAttempt": "연결이 끊어졌습니다. 다시 연결하는 중...(시도 {attempt}/{maxAttempts}, {seconds}초 후 재시도)",
+    "reconnectingNow": "연결이 끊어졌습니다. 지금 다시 연결하는 중...(시도 {attempt}/{maxAttempts})",
+    "slowConnection": "로딩이 평소보다 오래 걸리고 있습니다. 인터넷 연결을 확인하세요.",
     "connectionRejected": "서버가 연결을 종료했습니다.",
     "realmFull": "이 월드는 현재 포화 상태입니다. 몇 분 후에 다시 시도해 주세요.",
     "tooManyConnections": "사용 중인 네트워크에서 이 월드로 연결이 너무 많습니다. 추가 게임 창을 닫거나 몇 분 후에 다시 시도해 주세요.",
@@ -6328,7 +6358,7 @@ export const ko_KR: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "이글거리는 방벽",
-        "description": "자신을 불길로 감싸 130의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)"
+        "description": "자신을 불길로 감싸 {damage}의 피해를 흡수합니다. 60초 동안 지속됩니다. (화염)"
       },
       "cold_snap": {
         "name": "겨울의 부름",
@@ -6436,7 +6466,7 @@ export const ko_KR: EnTranslations = {
       },
       "frost_nova": {
         "name": "얼음 속박",
-        "description": "주위 모든 적을 최대 8초 동안 제자리에 얼리고 {damage}의 냉기 피해를 입힙니다."
+        "description": "주위 모든 적을 최대 8초 동안 제자리에 얼리고 {damage}의 냉기 피해를 입힙니다. 이동 불가 효과는 대상 최대 생명력의 15%에 해당하는 누적 피해를 받으면 해제되며, 피해 기준은 최소 20, 최대 60입니다."
       },
       "arcane_explosion": {
         "name": "에테르 폭발",
@@ -9452,6 +9482,36 @@ export const ko_KR: EnTranslations = {
         "title": "쏜피크 고지 연대기",
         "greeting": "산은 아무것도 잊지 않네, {playerName}. 나도 마찬가지지. 자네가 이룬 일을 보여 주게."
       },
+      "forgemistress_darva": {
+        "name": "단조사 다르바",
+        "title": "대장간의 주인",
+        "greeting": "화로는 내 말을 따르지, {className}. 좋은 광석을 가져오면 네 말도 따르게 될 거다."
+      },
+      "cook_marlow": {
+        "name": "요리사 말로우",
+        "title": "주방의 주인",
+        "greeting": "내 주방에서 설익은 채 나가는 것은 없다, {className}. 앉아서 먹고, 다시 나가라."
+      },
+      "weaver_ottilie": {
+        "name": "직조공 오틸리에",
+        "title": "베틀의 주인",
+        "greeting": "실을 조심해라, {className}. 베틀 앞에서는 힘센 손보다 흔들리지 않는 손이 낫지."
+      },
+      "tinker_gizzel": {
+        "name": "땜장이 기즐",
+        "title": "공방의 주인",
+        "greeting": "용수철에 톱니바퀴에 날카로운 날까지, {className}. 네 손에 부족한 것은 이 공방에 다 있지."
+      },
+      "tanner_hesk": {
+        "name": "무두장이 헤스크",
+        "title": "무두질장의 주인",
+        "greeting": "가죽은 무두질이 전부다, {className}. 무두통은 준비됐으니 너만 오면 된다."
+      },
+      "alchemist_verane": {
+        "name": "연금술사 베레인",
+        "title": "약방의 주인",
+        "greeting": "두 번 재고 한 번에 부어라, {className}. 약방에서는 쏟은 시약을 봐주지 않는다."
+      },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",
         "title": "조수지기",
@@ -10521,6 +10581,56 @@ export const ko_KR: EnTranslations = {
         "sender": "영웅 병참장교",
         "subject": "당신의 영웅의 징표",
         "body": "당신이 후방에서, 혹은 쓰러진 채로 싸우는 동안 당신의 부대가 영웅 시련을 돌파했습니다. 잠금은 똑같이 적용되었으니, 당신 몫의 영웅의 징표는 사라지지 않고 이곳으로 날아왔습니다. 잘 쓰십시오.\n\n- 영웅 병참장교"
+      },
+      "guild_trend_engineering_alchemy": {
+        "sender": "제작 길드",
+        "subject": "기계공학과 연금술 솜씨에 관하여",
+        "body": "장인에게,\n\n기계공학과 연금술에 힘쓰는 그대의 소문이 길드에 닿았습니다. 장약을 재고 시약을 달며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이 짝을 맺은 이는 언젠가 폭격수의 이름을 얻습니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_alchemy_cooking": {
+        "sender": "제작 길드",
+        "subject": "연금술과 요리 솜씨에 관하여",
+        "body": "장인에게,\n\n연금술과 요리에 힘쓰는 그대의 소문이 길드에 닿았습니다. 물약을 달이고 요리에 간을 맞추며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이 짝을 맺은 이는 언젠가 약제사의 이름을 얻습니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_cooking_leatherworking": {
+        "sender": "제작 길드",
+        "subject": "요리와 가죽세공 솜씨에 관하여",
+        "body": "장인에게,\n\n요리와 가죽세공에 힘쓰는 그대의 소문이 길드에 닿았습니다. 음식을 차려 내고 가죽을 무두질하며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_leatherworking_tailoring": {
+        "sender": "제작 길드",
+        "subject": "가죽세공과 재봉 솜씨에 관하여",
+        "body": "장인에게,\n\n가죽세공과 재봉에 힘쓰는 그대의 소문이 길드에 닿았습니다. 가죽을 마름질하고 천을 꿰매며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이 짝을 맺은 이는 언젠가 의복 장인의 이름을 얻습니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_tailoring_inscription": {
+        "sender": "제작 길드",
+        "subject": "재봉과 각인 솜씨에 관하여",
+        "body": "장인에게,\n\n재봉과 각인에 힘쓰는 그대의 소문이 길드에 닿았습니다. 솔기를 다듬고 문양을 새기며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_inscription_enchanting": {
+        "sender": "제작 길드",
+        "subject": "각인과 마법부여 솜씨에 관하여",
+        "body": "장인에게,\n\n각인과 마법부여에 힘쓰는 그대의 소문이 길드에 닿았습니다. 두루마리에 글을 새기고 마력을 엮으며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_enchanting_jewelcrafting": {
+        "sender": "제작 길드",
+        "subject": "마법부여와 보석세공 솜씨에 관하여",
+        "body": "장인에게,\n\n마법부여와 보석세공에 힘쓰는 그대의 소문이 길드에 닿았습니다. 마력을 불어넣고 보석을 갈고닦으며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_jewelcrafting_weaponcrafting": {
+        "sender": "제작 길드",
+        "subject": "보석세공과 무기 제작 솜씨에 관하여",
+        "body": "장인에게,\n\n보석세공과 무기 제작에 힘쓰는 그대의 소문이 길드에 닿았습니다. 보석을 물리고 날을 갈며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_weaponcrafting_armorcrafting": {
+        "sender": "제작 길드",
+        "subject": "무기 제작과 방어구 제작 솜씨에 관하여",
+        "body": "장인에게,\n\n무기 제작과 방어구 제작에 힘쓰는 그대의 소문이 길드에 닿았습니다. 칼날을 벼리고 판금을 맞추며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이 짝을 맺은 이는 언젠가 대장장이의 이름을 얻습니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "guild_trend_armorcrafting_engineering": {
+        "sender": "제작 길드",
+        "subject": "방어구 제작과 기계공학 솜씨에 관하여",
+        "body": "장인에게,\n\n방어구 제작과 기계공학에 힘쓰는 그대의 소문이 길드에 닿았습니다. 판금에 못을 박고 톱니를 맞추며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
       }
     },
     "itemSets": {

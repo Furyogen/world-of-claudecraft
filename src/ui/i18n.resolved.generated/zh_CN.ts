@@ -1040,6 +1040,7 @@ export const zh_CN: EnTranslations = {
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",
       "showSecondaryActionBar": "显示副动作条",
+      "showThirdActionBar": "显示第三动作条",
       "showTargetOfTarget": "显示目标的目标",
       "showAttackButton": "显示攻击按钮",
       "showDailyRewardsChest": "显示每日奖励宝箱",
@@ -1469,7 +1470,8 @@ export const zh_CN: EnTranslations = {
       "watchTwitch": "在 Twitch 观看",
       "watchX": "在 X 查看",
       "watchKick": "在 Kick 观看",
-      "watchYouTube": "在 YouTube 观看"
+      "watchYouTube": "在 YouTube 观看",
+      "streamerBadgeTitle": "认证主播"
     },
     "lootSettings": {
       "title": "拾取设置",
@@ -2170,6 +2172,7 @@ export const zh_CN: EnTranslations = {
       "comboNotAttuned": "请先选择一个原型组合。",
       "comboWrongPair": "启用这个确切组合才能制作。",
       "comboTierUnmet": "将两项主修技艺提升到所需阶级。",
+      "comboTierUnmetNamed": "将{crafts}提升到阶级 {tier}。",
       "professionChoice": "专业选择",
       "noProfessionChoice": "当前没有可用的专业选择。",
       "pairOptionLabel": "{pair}（{craftA} + {craftB}）",
@@ -2200,9 +2203,29 @@ export const zh_CN: EnTranslations = {
         "nearTier": "{craft}距离下一阶级还差 {points} 点技能。",
         "dormantKnowledge": "{craft}知识已保留，但在其组合或爱好未启用时处于休眠状态。"
       },
-      "notAtHub": "必须达到所需等级并位于制作站，才能制作该物品。",
+      "stationRequired": "必须位于{station}才能制作该物品。",
+      "stationName": {
+        "forge": "锻造坊",
+        "kitchens": "厨房",
+        "apothecary": "药坊",
+        "tannery": "制革坊",
+        "loom": "织机",
+        "toolworks": "工坊"
+      },
       "throttled": "你制作得太快了，请稍等片刻后再试。",
-      "recipeNotLearned": "你还没有学会这个配方。"
+      "recipeNotLearned": "你还没有学会这个配方。",
+      "skillReqLine": "需要{craft} {skill}",
+      "difficultyFull": "完整技能成长",
+      "difficultyReduced": "技能成长减少",
+      "difficultyNone": "无技能成长",
+      "stationBadge": "制作站",
+      "stationOutOfRangeNamed": "前往{station}即可制作该物品。",
+      "masterworkToast": "杰作！{name}",
+      "masterworkZoneLine": "{crafter}制作出了杰作{name}！",
+      "tierUpToast": "{craft}提升至阶级 {tier}！",
+      "makersMark": "制作者：{name}",
+      "masterworkSeal": "杰作",
+      "enchantedLine": "已附魔"
     },
     "finder": {
       "title": "地下城查找器",
@@ -3427,13 +3450,13 @@ export const zh_CN: EnTranslations = {
       "craftHowTitle": "制作窗口",
       "craftHowBody": "打开制作窗口（默认按键 T），即可查看你已知的每个配方、各自所需的材料，以及你手头现有的材料；材料齐备时，点击一下即可完成制作。普通配方可以在世界的任何地方制作。少数进阶配方，包括高阶工具和稀有的施法者护甲，则要求你站在高守哨站的制作枢纽处。",
       "craftMasteryTitle": "技能与精通",
-      "craftMasteryBody": "成功制作会提升你在该行业的技能，而技能绝不会把某个行业的配方锁起来：只要你知道一个配方并持有它的材料，你就可以尝试制作。技能为你换来的是品质，熟练的手艺能打造出更精良的作品。唯一的例外是组合配方，它们要求你在其涉及的两门行业中都证明过自己，才会向你开放。",
+      "craftMasteryBody": "成功制作会提升你在该行业的技能，而技能绝不会把某个行业的配方锁起来：只要你知道一个配方并持有它的材料，你就可以尝试制作。每个配方产出的都是它所承诺的那件成品，而熟练的手艺偶尔能打造出一件杰作：同样的成品，做工更精，并蕴含一丝额外的力量。唯一的例外是组合配方：只有调谐到连接这两门行业的原型、并在两门行业都证明过技艺的制作者，才能使用它们。",
       "craftComboTitle": "组合配方",
       "craftComboBody": "除了单一行业自身的配方列表之外，这个轮环还支持需要同时调用两个相邻行业的组合配方，用以奖励那些在轮环上投入了相邻行业、而非只专精孤立一项的角色。制作者必须自己同时掌握这两门行业；搭档的技能无法替代其中任何一半。",
       "archetypeTitle": "十大命途",
       "archetypeIntro": "十种行业各自也代表一种命途，一种超越单纯从事该行业本身的更广阔身份。你的当前命途一次只能有一个，而非一份清单：你只承载一个命途，但如果愿意，之后可以更改。",
       "archetypeChooseTitle": "选择你的命途",
-      "archetypeChooseBody": "宣告命途将会是一个剧情时刻：一个正式接纳你进入该身份的任务。这条路仍在铺设之中，所以眼下每位角色都还带着这个尚未做出的选择行走世间，而在此期间，每种制作行业都可以推进到精良品质层级。",
+      "archetypeChooseBody": "宣告命途是一个剧情时刻：一个正式接纳你进入该身份的任务。在你宣告之前，每种行业的技能都能提升到稀有层级。一旦你选定一对行业，这两门行业便完全放开；轮盘对侧的一门行业会作为爱好留在你身边，仍能练到稀有层级；而在你保有这一身份期间，其余所有行业都停留在普通层级。",
       "archetypeSwitchTitle": "回心转意",
       "archetypeSwitchBody": "宣告也不会是一纸终身判决。按照规划，在改投新的命途之前，你需要先向旧行业完成一次可重复的赎罪，而每转换一次，下一次赎罪的代价都会更沉，因此这个选择始终有分量，而非毫无代价。与宣告本身一样，它也仍在路上。",
       "archetypeIdentityTitle": "你的命途意味着什么",
@@ -5015,6 +5038,11 @@ export const zh_CN: EnTranslations = {
     "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社区",
     "donateProject": "捐赠支持 World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "已降低图形设置",
+    "body": "进入世界时游戏意外关闭，图形设置现已设为{preset}。你可以在下方的图形选择器或游戏内选项中更改。",
+    "dismiss": "关闭"
+  },
   "loading": {
     "world": "正在加载世界...",
     "worldProgress": "正在加载世界... {done}/{total}",
@@ -5024,7 +5052,9 @@ export const zh_CN: EnTranslations = {
     "rendererFailed": "无法启动渲染器：请尝试刷新。{error}",
     "enterTimeout": "无法进入世界。连接已超时。游戏服务器是否正在运行？",
     "connectionLost": "与服务器的连接已断开。",
-    "reconnecting": "连接已断开。正在重新连接...",
+    "reconnectingAttempt": "连接已断开。正在重新连接...（第 {attempt}/{maxAttempts} 次尝试，{seconds} 秒后重试）",
+    "reconnectingNow": "连接已断开，正在立即重新连接...（第 {attempt}/{maxAttempts} 次尝试）",
+    "slowConnection": "加载时间比平时长。请检查您的网络连接。",
     "connectionRejected": "服务器关闭了连接。",
     "realmFull": "当前服务器已满，请稍后几分钟再试。",
     "tooManyConnections": "您的网络向该服务器发起的连接过多。请关闭多余的游戏窗口，或稍后几分钟再试。",
@@ -6328,7 +6358,7 @@ export const zh_CN: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "炽热屏障",
-        "description": "以烈焰环绕自身，吸收 130 点伤害，持续 60 秒。（火焰）"
+        "description": "以烈焰环绕自身，吸收 {damage} 点伤害，持续 60 秒。（火焰）"
       },
       "cold_snap": {
         "name": "冬之召还",
@@ -6436,7 +6466,7 @@ export const zh_CN: EnTranslations = {
       },
       "frost_nova": {
         "name": "冰缚",
-        "description": "将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。"
+        "description": "将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。定身效果会在累计受到相当于目标最大生命值15%的伤害后解除，伤害阈值最低为20点，最高为60点。"
       },
       "arcane_explosion": {
         "name": "以太爆发",
@@ -9452,6 +9482,36 @@ export const zh_CN: EnTranslations = {
         "title": "荆峰高地编年史",
         "greeting": "高山什么都不会忘记，{playerName}，我也一样。让我看看你都做过什么吧。"
       },
+      "forgemistress_darva": {
+        "name": "达尔瓦锻造师",
+        "title": "熔炉大师",
+        "greeting": "熔炉听我的话，{className}。带来好矿石，它也会听你的。"
+      },
+      "cook_marlow": {
+        "name": "马洛厨师",
+        "title": "厨房大师",
+        "greeting": "没有半生不熟的东西能离开我的厨房，{className}。坐下吃完，再回去闯荡。"
+      },
+      "weaver_ottilie": {
+        "name": "奥蒂莉织工",
+        "title": "织机大师",
+        "greeting": "当心丝线，{className}。在织机前，稳的手胜过有力的手。"
+      },
+      "tinker_gizzel": {
+        "name": "吉泽尔修补匠",
+        "title": "工坊大师",
+        "greeting": "弹簧、齿轮、锋利的刃口，{className}：你手上缺什么，工坊里就有什么。"
+      },
+      "tanner_hesk": {
+        "name": "赫斯克制革匠",
+        "title": "制革坊大师",
+        "greeting": "皮子的好坏全看鞣制，{className}。鞣槽已经备好，就等你了。"
+      },
+      "alchemist_verane": {
+        "name": "韦兰炼金术士",
+        "title": "药坊大师",
+        "greeting": "量两次，倒一次，{className}。药坊里容不得洒掉的药剂。"
+      },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
         "title": "守潮者",
@@ -10521,6 +10581,56 @@ export const zh_CN: EnTranslations = {
         "sender": "英勇军需官",
         "subject": "你的英勇印记",
         "body": "你的部队清剿了英勇试炼，而你在后排作战，或已倒在尘土之中。你的锁定同样已经生效，因此你那一份英勇印记飞到了这里，而非就此遗失。好好使用它们。\n\n- 英勇军需官"
+      },
+      "guild_trend_engineering_alchemy": {
+        "sender": "工匠公会",
+        "subject": "关于你的工程学与炼金术",
+        "body": "工匠：\n\n你钻研工程学与炼金术的名声已传到公会：称好装药，量好试剂，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得爆破师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_alchemy_cooking": {
+        "sender": "工匠公会",
+        "subject": "关于你的炼金术与烹饪",
+        "body": "工匠：\n\n你钻研炼金术与烹饪的名声已传到公会：熬好药剂，调好菜肴，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得药剂师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_cooking_leatherworking": {
+        "sender": "工匠公会",
+        "subject": "关于你的烹饪与制皮",
+        "body": "工匠：\n\n你钻研烹饪与制皮的名声已传到公会：端出菜肴，鞣好皮革，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_leatherworking_tailoring": {
+        "sender": "工匠公会",
+        "subject": "关于你的制皮与裁缝",
+        "body": "工匠：\n\n你钻研制皮与裁缝的名声已传到公会：裁好皮革，缝好衣料，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得制装师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_tailoring_inscription": {
+        "sender": "工匠公会",
+        "subject": "关于你的裁缝与铭文",
+        "body": "工匠：\n\n你钻研裁缝与铭文的名声已传到公会：缝好衣线，写好铭文，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_inscription_enchanting": {
+        "sender": "工匠公会",
+        "subject": "关于你的铭文与附魔",
+        "body": "工匠：\n\n你钻研铭文与附魔的名声已传到公会：写满卷轴，织入魔力，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_enchanting_jewelcrafting": {
+        "sender": "工匠公会",
+        "subject": "关于你的附魔与珠宝加工",
+        "body": "工匠：\n\n你钻研附魔与珠宝加工的名声已传到公会：注入魔力，磨亮宝石，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_jewelcrafting_weaponcrafting": {
+        "sender": "工匠公会",
+        "subject": "关于你的珠宝加工与武器锻造",
+        "body": "工匠：\n\n你钻研珠宝加工与武器锻造的名声已传到公会：镶好宝石，磨利刀锋，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_weaponcrafting_armorcrafting": {
+        "sender": "工匠公会",
+        "subject": "关于你的武器锻造与护甲锻造",
+        "body": "工匠：\n\n你钻研武器锻造与护甲锻造的名声已传到公会：淬好刀刃，敲合甲片，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得铁匠之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
+      },
+      "guild_trend_armorcrafting_engineering": {
+        "sender": "工匠公会",
+        "subject": "关于你的护甲锻造与工程学",
+        "body": "工匠：\n\n你钻研护甲锻造与工程学的名声已传到公会：铆好甲片，校准齿轮，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会"
       }
     },
     "itemSets": {

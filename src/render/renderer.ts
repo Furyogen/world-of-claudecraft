@@ -39,6 +39,7 @@ import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
 import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
+import { buildArtisanRowProps } from './artisan_row_props';
 import type { AmbientPointSource, SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
 import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
@@ -134,6 +135,12 @@ import {
   reconcileViewPointLights,
 } from './point_light_budget';
 import { buildComposer, type PostPipeline } from './post';
+import {
+  orderedPrewarmIds,
+  type PrewarmPolicy,
+  prewarmEntryRuns,
+  resolvePrewarmPolicy,
+} from './prewarm_policy';
 import { buildPropMaterialPrewarmGroup, buildProps } from './props';
 import { buildGroundQuestObject } from './quest_objects';
 import { isOwnedPetHostile } from './reaction';
@@ -202,6 +209,15 @@ const VIEW_CREATE_BACKOFF_SECONDS = 0.75;
 const VIEW_CREATE_FAIL_RETRY_MS = 2000;
 const VIEW_PREWARM_RANGE_SQ = ENTITY_VIEW_CREATE_RANGE_SQ;
 const VIEW_PREWARM_MAX_MS = 12000;
+// Memory-ceiling profile (phone WebKit): the desktop budgets here allow the prewarm to
+// occupy the main thread for 12s of view builds plus up to 10s of shader linking, with
+// only microtask yields in between. iOS kills a WebContent process that stays
+// unresponsive on that order (the same invisible kill as the memory ceiling, and RAM
+// size is irrelevant to it), so constrained devices get a much smaller budget, an
+// event-loop yield between manifest entries, and a link pass after each entry so no
+// later single pass links every program at once. Full policy: prewarm_policy.ts.
+const VIEW_PREWARM_MAX_MS_CONSTRAINED = 5000;
+const PREWARM_COMPILE_MAX_MS_CONSTRAINED = 2500;
 // Shader linking is the whole point of the prewarm: if it doesn't finish, the
 // first in-world frame that needs a program compiles it synchronously — the
 // multi-hundred-ms (up to ~1.7s) freeze players feel when new model types
@@ -220,6 +236,12 @@ const VIEW_COMPILE_GATE_MAX_MS = 1500;
 const PREWARM_BUILD_RESERVE_MS = 3000;
 const VIEW_PREWARM_MAX_VIEWS_LOW = 48;
 const VIEW_PREWARM_MAX_VIEWS_HIGH = 72;
+// Constrained (phone WebKit): a hard cap on nearby character views built
+// SYNCHRONOUSLY at entry. A populated production hub has dozens of nearby players
+// and NPCs; building them all up front is a large skinned-mesh + bone-texture +
+// skin-upload spike that survives an empty local world but kills Medium in
+// production. The rest stream in lazily via the per-frame view-create budget.
+const VIEW_PREWARM_MAX_VIEWS_CONSTRAINED = 12;
 const VIEW_CREATED_TYPE_SAMPLE_LIMIT = 24;
 const PERSISTENT_PORTAL_VIEW_PREWARM_LIMIT = 16;
 // rigs further than this stop casting articulated shadows (~7 draws each) and
@@ -310,6 +332,18 @@ const DUNGEON_ENV_INTENSITY = 0.05;
 // raw HDRI PMREMs integrate the real sun the dome shader clamps away —
 // rescale so ambient matches the dome-capture look (see lookdev-hookup.md)
 const IBL_RAW_SCALE = 0.55;
+// Memory-ceiling profile: non-default biome env prefilters wait this long after the
+// synchronous scene build (plus a stagger between each) so they never stack onto the
+// world-entry allocation spike that gets phone WebKit's WebContent process killed.
+// 30s/10s (was 12s/4s): the earlier schedule dropped a mip-chained HalfFloat
+// cubemap build right into the first-half-minute window where a phone player is
+// still settling in (opening the More tray, first camera swings), stacking the
+// prefilter's transient GPU spike onto whatever the player just triggered while
+// the post-entry footprint is at its peak. 30s also clears the entry crash
+// guard's stable window, so a prefilter-coincident kill can never read as an
+// entry crash and cost a tier.
+const DEFERRED_ENV_PREFILTER_MS = 30000;
+const DEFERRED_ENV_PREFILTER_STAGGER_MS = 10000;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
@@ -1217,14 +1251,63 @@ export class Renderer {
     // the environment intensity is rescaled to match the shipped look.
     if (!LOW_GFX) {
       const pmrem = new THREE.PMREMGenerator(this.webgl);
-      for (const b of ['vale', 'marsh', 'peaks'] as BiomeId[]) {
+      // Memory-ceiling profile (phone WebKit): prefiltering all three biome envs here adds
+      // three mip-chained HalfFloat cubemaps to the world-entry allocation spike, the moment
+      // iOS WebKit is most likely to kill the WebContent process. Build only the default
+      // ('vale') env synchronously and stagger the rest onto idle timers: the biome-crossing
+      // swap below already guards on envRTs.has(dominant), so until a deferred env lands the
+      // scene just keeps the current one (a brief, cosmetic-only ambient mismatch).
+      // Constrained: build only the player's INITIAL dominant biome env
+      // synchronously (a returning character can spawn in Marsh or Peaks, not
+      // just Vale), then defer the other two. Prefiltering the wrong biome left a
+      // Marsh/Peaks starter with Vale IBL and sun rotation until a timer fired.
+      const allBiomes: BiomeId[] = ['vale', 'marsh', 'peaks'];
+      let entryBiomes: BiomeId[] = allBiomes;
+      if (GFX.constrainedMemory) {
+        const blend = this.skyView.biomeAt(this.sim.player.pos.z);
+        const initial = blend.t < 0.5 ? blend.from : blend.to;
+        const initialEnv: BiomeId = allBiomes.includes(initial as BiomeId)
+          ? (initial as BiomeId)
+          : 'vale';
+        entryBiomes = [initialEnv];
+        this.envBiome = initialEnv;
+      }
+      for (const b of entryBiomes) {
         const eq = this.skyView.envTexture(b);
         if (eq) this.envRTs.set(b, pmrem.fromEquirectangular(eq));
       }
+      if (GFX.constrainedMemory) {
+        const deferred: BiomeId[] = allBiomes.filter((b) => !entryBiomes.includes(b));
+        deferred.forEach((b, i) => {
+          window.setTimeout(
+            () => {
+              // The timer can outlive the context (editor viewport rebuilds, page
+              // teardown force-loses tracked contexts): a lost context makes the
+              // prefilter throw and leak, so just skip it.
+              if (this.webgl.getContext().isContextLost()) return;
+              if (this.envRTs.has(b)) return;
+              const eq = this.skyView.envTexture(b);
+              if (!eq) return;
+              // Dev-channel diagnostic: this build is a transient GPU spike; if a
+              // process kill correlates with this line on a device, this is the
+              // allocation to chase.
+              console.info(`[entry-guard] deferred env prefilter: ${b}`);
+              const latePmrem = new THREE.PMREMGenerator(this.webgl);
+              this.envRTs.set(b, latePmrem.fromEquirectangular(eq));
+              latePmrem.dispose();
+            },
+            DEFERRED_ENV_PREFILTER_MS + i * DEFERRED_ENV_PREFILTER_STAGGER_MS,
+          );
+        });
+      }
       if (this.envRTs.size > 0) {
+        // Seed from the biome actually built at entry (the player's initial one on
+        // constrained devices, else 'vale'), so IBL and sun rotation match the dome
+        // from the first frame instead of only after a deferred prefilter lands.
+        const seedBiome: BiomeId = this.envRTs.has(this.envBiome) ? this.envBiome : entryBiomes[0];
         this.envOutdoorIntensity = ENV_INTENSITY * IBL_RAW_SCALE;
-        this.scene.environment = this.envRTs.get('vale')?.texture ?? null;
-        this.scene.environmentRotation.y = this.skyView.envRotationY('vale');
+        this.scene.environment = this.envRTs.get(seedBiome)?.texture ?? null;
+        this.scene.environmentRotation.y = this.skyView.envRotationY(seedBiome);
       } else {
         // fallback: prefilter the dome itself (gain/clamp already applied)
         const envScene = new THREE.Scene();
@@ -1452,6 +1535,11 @@ export class Renderer {
     // Baked into world space at build with no per-frame update(), same as props.
     freezeStaticMatrices(gatherNodes.group);
     this.gatherNodeMeshes = gatherNodes.group.children;
+
+    const artisanRow = buildArtisanRowProps(this.sim.cfg.seed);
+    setRenderCategory(artisanRow.group, 'props');
+    this.scene.add(artisanRow.group);
+    freezeStaticMatrices(artisanRow.group);
 
     // selection ring — a classic target reticle: a base ring plus four
     // inward-pointing ticks. The base ring is draped over the terrain each
@@ -2644,7 +2732,20 @@ export class Renderer {
   }
 
   async prewarmInitialScene(options: { maxMs?: number } = {}): Promise<RendererPrewarmStats> {
-    const maxMs = Math.max(0, options.maxMs ?? VIEW_PREWARM_MAX_MS);
+    const policy: PrewarmPolicy = resolvePrewarmPolicy({
+      constrainedMemory: GFX.constrainedMemory,
+      asyncCompileSupported: this.asyncCompileSupported,
+      lowGfx: this.lowGfx,
+      defaultMaxMs: VIEW_PREWARM_MAX_MS,
+      constrainedMaxMs: VIEW_PREWARM_MAX_MS_CONSTRAINED,
+      defaultCompileMaxMs: PREWARM_COMPILE_MAX_MS,
+      constrainedCompileMaxMs: PREWARM_COMPILE_MAX_MS_CONSTRAINED,
+      maxViewsLow: VIEW_PREWARM_MAX_VIEWS_LOW,
+      maxViewsHigh: VIEW_PREWARM_MAX_VIEWS_HIGH,
+      maxViewsConstrained: VIEW_PREWARM_MAX_VIEWS_CONSTRAINED,
+    });
+    const constrainedPrewarm = policy.minimalManifest;
+    const maxMs = Math.max(0, options.maxMs ?? policy.maxMs);
     const started = performance.now();
     const deadline = started + maxMs;
     // Stop the archetype-build steps early so the later entries — crucially
@@ -2755,9 +2856,8 @@ export class Renderer {
         run: () => {
           this.collectMissingViewCandidates(p, VIEW_PREWARM_RANGE_SQ, false);
           candidateViews = this.viewCandidates.length;
-          const maxViews = this.lowGfx ? VIEW_PREWARM_MAX_VIEWS_LOW : VIEW_PREWARM_MAX_VIEWS_HIGH;
           createdViews += this.createCandidateViews(
-            Math.max(0, maxViews - createdViews),
+            Math.max(0, policy.maxViews - createdViews),
             createdViewTypes,
             deadline,
           );
@@ -2925,6 +3025,16 @@ export class Renderer {
           // exactly what prevents the in-world freeze, so a near-empty leftover budget
           // must not cut it short (the old bug — the async compile timed out and the
           // programs linked synchronously on first sight instead).
+          // Constrained (phone WebKit) without KHR_parallel_shader_compile: BOTH arms
+          // below are one multi-second synchronous main-thread block (compileAsync
+          // without the extension takes the same up-front compile), which is exactly
+          // the unresponsiveness that gets the WebContent process killed. The
+          // per-entry link passes already linked every visible program, so leave the
+          // remainder to the bounded first-sight view gates and skip the monolith.
+          if (policy.skipMonolithCompile) {
+            compileMs = 0;
+            return;
+          }
           if (this.webgl.compileAsync) {
             compileMode = 'async';
             let settled = false;
@@ -2937,7 +3047,7 @@ export class Renderer {
                 settled = true;
                 console.warn('Renderer async prewarm compile failed', err);
               });
-            await Promise.race([compilePromise, sleep(PREWARM_COMPILE_MAX_MS)]);
+            await Promise.race([compilePromise, sleep(policy.compileMaxMs)]);
             compileTimedOut = !settled;
             compileMs = roundMs(performance.now() - compileStart);
           } else {
@@ -2990,9 +3100,54 @@ export class Renderer {
       },
     ];
 
+    // Order per policy: with parallel compile, programs.compile moves ahead of
+    // world.initial-frame so that pass draws already-linked programs off-thread
+    // instead of force-linking them in one synchronous block (prewarm_policy.ts).
+    const byId = new Map(manifest.map((entry) => [entry.id, entry]));
+    const orderedManifest = orderedPrewarmIds(
+      manifest.map((entry) => entry.id),
+      policy,
+    ).map((id) => byId.get(id) as PrewarmManifestEntry);
     try {
-      for (const entry of manifest) {
+      for (const entry of orderedManifest) {
+        // Skip everything outside the minimal keep-list (prewarm_policy.ts),
+        // recording the skip so the prewarm summary stays honest about what was
+        // deliberately not warmed. The skipped warms happen lazily in-world.
+        if (!prewarmEntryRuns(entry.id, policy)) {
+          const counts = this.prewarmCounts();
+          manifestEntries.push({
+            id: entry.id,
+            category: entry.category,
+            priority: entry.priority,
+            required: entry.required,
+            status: 'skipped',
+            elapsedMs: 0,
+            remainingMsAfter: roundMs(Math.max(0, deadline - performance.now())),
+            passes: renderPasses,
+            programsBefore: counts.programs,
+            programsAfter: counts.programs,
+            programDelta: 0,
+            texturesBefore: counts.textures,
+            texturesAfter: counts.textures,
+            textureDelta: 0,
+            detail: 'constrained-minimal',
+          });
+          continue;
+        }
+        // Yield the EVENT LOOP between entries (the awaits inside runEntry are
+        // microtask-only, which never lets the process service events) so the
+        // responsiveness watchdog sees a live process.
+        if (policy.yieldBetweenEntries) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
         await runEntry(entry);
+        // Without parallel compile, link group-by-group per entry (the monolith is
+        // skipped). With it, these passes are counterproductive and the async
+        // compile entry links off-thread instead (prewarm_policy.ts).
+        if (policy.linkPassPerEntry && performance.now() < buildDeadline) {
+          this.renderPrewarmPass(1 / 60);
+          renderPasses++;
+        }
       }
     } finally {
       this.vfx.clear();
@@ -3046,6 +3201,18 @@ export class Renderer {
       diagnosticsBaseline,
     };
     this.lastPrewarmStats = stats;
+    // Dev-channel diagnostic (pairs with main.ts's "[entry-guard] scene built"): one
+    // line naming where the entry-time main-thread budget went, for isolating
+    // world-entry process kills on real devices.
+    console.info(
+      `[entry-guard] prewarm done: ${stats.elapsedMs}ms/${stats.maxMs}ms passes=${stats.renderPasses} ` +
+        `views=${stats.createdViews}/${stats.candidateViews} ` +
+        `programs=${stats.programsBefore}->${stats.programsAfter} ` +
+        `textures=${stats.texturesBefore}->${stats.texturesAfter} ` +
+        `compile=${stats.compileMode}/${stats.compileMs}ms parallelCompile=${this.asyncCompileSupported} ` +
+        `skipped=${stats.manifestSkipped} timedOut=[${stats.timedOutEntryIds.join(',')}] ` +
+        `failed=[${stats.failedEntryIds.join(',')}]`,
+    );
     return stats;
   }
 

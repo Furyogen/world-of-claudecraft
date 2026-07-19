@@ -19,7 +19,7 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 409,
+      "nextId": 415,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -33,9 +33,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 418,
-      "state": "a6acf2c6",
-      "events": "f9d103a3",
+      "nextId": 424,
+      "state": "34dc6ee6",
+      "events": "8461f434",
       "rng": {
         "draws": 6,
         "digest": "e9e34462"
@@ -71,7 +71,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 409,
+          "entityId": 415,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -125,7 +125,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 410,
+          "entityId": 416,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -179,7 +179,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 411,
+          "entityId": 417,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
@@ -233,7 +233,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 418,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
@@ -287,7 +287,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 413,
+          "entityId": 419,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -322,7 +322,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99,
           "hp": 51,
-          "id": 409,
+          "id": 415,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -371,7 +371,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99,
           "hp": 95,
-          "id": 410,
+          "id": 416,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -421,7 +421,7 @@
               "name": "Weakening Hex",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 0.3
             }
           ],
@@ -433,7 +433,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 411,
+          "id": 417,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -483,7 +483,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99,
           "hp": 68,
-          "id": 412,
+          "id": 418,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -533,7 +533,7 @@
               "name": "Battle Stance",
               "remaining": 3600,
               "school": "physical",
-              "sourceId": 413
+              "sourceId": 419
             },
             {
               "duration": 60,
@@ -542,7 +542,7 @@
               "name": "Necrotic",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 3700
             }
           ],
@@ -556,7 +556,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 10000,
-          "id": 413,
+          "id": 419,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -605,7 +605,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 414,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -613,7 +613,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 413,
+          "ownerId": 419,
           "petMode": "defensive",
           "pos": {
             "x": 80,
@@ -647,7 +647,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 415,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -674,19 +674,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               87.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -707,7 +707,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 416,
+          "id": 422,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -734,19 +734,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               87.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -767,7 +767,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 417,
+          "id": 423,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -794,19 +794,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               87.5
             ],
             [
-              414,
+              420,
               10
             ]
           ],
@@ -821,9 +821,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 418,
-      "state": "a763f1da",
-      "events": "ed060643",
+      "nextId": 424,
+      "state": "a7613ad4",
+      "events": "a18f2672",
       "rng": {
         "draws": 6,
         "digest": "e9e34462"
@@ -859,7 +859,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 409,
+          "entityId": 415,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -913,7 +913,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 410,
+          "entityId": 416,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -972,7 +972,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 411,
+          "entityId": 417,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
@@ -1026,7 +1026,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 418,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
@@ -1080,7 +1080,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 413,
+          "entityId": 419,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -1115,7 +1115,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99,
           "hp": 51,
-          "id": 409,
+          "id": 415,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1164,7 +1164,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99,
           "hp": 95,
-          "id": 410,
+          "id": 416,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1214,7 +1214,7 @@
               "name": "Weakening Hex",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 0.3
             }
           ],
@@ -1225,7 +1225,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 411,
+          "id": 417,
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -1276,7 +1276,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99,
           "hp": 68,
-          "id": 412,
+          "id": 418,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1326,7 +1326,7 @@
               "name": "Battle Stance",
               "remaining": 3600,
               "school": "physical",
-              "sourceId": 413
+              "sourceId": 419
             },
             {
               "duration": 60,
@@ -1335,7 +1335,7 @@
               "name": "Necrotic",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 3700
             }
           ],
@@ -1349,7 +1349,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 10000,
-          "id": 413,
+          "id": 419,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1398,7 +1398,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 414,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1406,7 +1406,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 413,
+          "ownerId": 419,
           "petMode": "defensive",
           "pos": {
             "x": 80,
@@ -1430,7 +1430,7 @@
           }
         },
         {
-          "aggroTargetId": 411,
+          "aggroTargetId": 417,
           "aiState": "chase",
           "auras": [
             {
@@ -1440,7 +1440,7 @@
               "name": "Find Weakness",
               "remaining": 60,
               "school": "physical",
-              "sourceId": 411,
+              "sourceId": 417,
               "value": 0.5
             }
           ],
@@ -1452,7 +1452,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49895,
-          "id": 415,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1481,23 +1481,23 @@
           "stats": {
             "armor": 40
           },
-          "tappedById": 411,
+          "tappedById": 417,
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               193.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -1518,7 +1518,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 416,
+          "id": 422,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -1545,19 +1545,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               87.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -1578,7 +1578,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 417,
+          "id": 423,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -1605,19 +1605,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               87.5
             ],
             [
-              414,
+              420,
               10
             ]
           ],
@@ -1632,9 +1632,9 @@
     {
       "tick": 5,
       "time": 0.25,
-      "nextId": 418,
-      "state": "480a8b49",
-      "events": "73b69d5d",
+      "nextId": 424,
+      "state": "1bba5221",
+      "events": "6f93363d",
       "rng": {
         "draws": 10,
         "digest": "fce7a45d"
@@ -1643,9 +1643,9 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 418,
-      "state": "b07c6c8e",
-      "events": "73b69d5d",
+      "nextId": 424,
+      "state": "b4ea8894",
+      "events": "6f93363d",
       "rng": {
         "draws": 10,
         "digest": "fce7a45d"
@@ -1681,7 +1681,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 409,
+          "entityId": 415,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1735,7 +1735,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 410,
+          "entityId": 416,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
@@ -1794,7 +1794,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 411,
+          "entityId": 417,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "gnarled_staff"
@@ -1848,7 +1848,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 418,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "training_mace"
@@ -1902,7 +1902,7 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 413,
+          "entityId": 419,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword",
@@ -1937,7 +1937,7 @@
           "fallStartY": 2.338163,
           "fiveSecondRule": 99.4,
           "hp": 51,
-          "id": 409,
+          "id": 415,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1986,7 +1986,7 @@
           "fallStartY": 2.403234,
           "fiveSecondRule": 99.4,
           "hp": 95,
-          "id": 410,
+          "id": 416,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2036,7 +2036,7 @@
               "name": "Weakening Hex",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 0.3
             }
           ],
@@ -2048,7 +2048,7 @@
           "fallStartY": 2.479635,
           "fiveSecondRule": 99.4,
           "hp": 62,
-          "id": 411,
+          "id": 417,
           "inCombat": true,
           "kind": "player",
           "level": 1,
@@ -2099,7 +2099,7 @@
           "fallStartY": 2.354059,
           "fiveSecondRule": 99.4,
           "hp": 68,
-          "id": 412,
+          "id": 418,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2149,7 +2149,7 @@
               "name": "Battle Stance",
               "remaining": 3599.6,
               "school": "physical",
-              "sourceId": 413
+              "sourceId": 419
             },
             {
               "duration": 60,
@@ -2158,7 +2158,7 @@
               "name": "Necrotic",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 415,
+              "sourceId": 421,
               "value": 3700
             },
             {
@@ -2168,7 +2168,7 @@
               "name": "Rejuvenation",
               "remaining": 2.6,
               "school": "physical",
-              "sourceId": 411,
+              "sourceId": 417,
               "tickInterval": 0.1,
               "tickTimer": 0.1,
               "value": 300
@@ -2184,7 +2184,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99.4,
           "hp": 3200,
-          "id": 413,
+          "id": 419,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -2233,7 +2233,7 @@
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
-          "id": 414,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -2241,7 +2241,7 @@
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
-          "ownerId": 413,
+          "ownerId": 419,
           "petMode": "defensive",
           "petPathCooldown": 0.15,
           "pos": {
@@ -2266,7 +2266,7 @@
           }
         },
         {
-          "aggroTargetId": 411,
+          "aggroTargetId": 417,
           "aiState": "chase",
           "auras": [
             {
@@ -2276,7 +2276,7 @@
               "name": "Find Weakness",
               "remaining": 59.6,
               "school": "physical",
-              "sourceId": 411,
+              "sourceId": 417,
               "value": 0.5
             }
           ],
@@ -2290,7 +2290,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 49895,
-          "id": 415,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2319,23 +2319,23 @@
           "stats": {
             "armor": 40
           },
-          "tappedById": 411,
+          "tappedById": 417,
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               393.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -2357,7 +2357,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 416,
+          "id": 422,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -2384,19 +2384,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               287.5
             ],
             [
-              413,
+              419,
               10
             ]
           ],
@@ -2424,7 +2424,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
-          "id": 417,
+          "id": 423,
           "inCombat": true,
           "kind": "mob",
           "level": 5,
@@ -2451,19 +2451,19 @@
           "templateId": "forest_wolf",
           "threat": [
             [
-              409,
+              415,
               115.666667
             ],
             [
-              410,
+              416,
               200
             ],
             [
-              411,
+              417,
               287.5
             ],
             [
-              414,
+              420,
               10
             ]
           ],

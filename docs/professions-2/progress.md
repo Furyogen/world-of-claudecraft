@@ -17,12 +17,12 @@ Update this file at the end of every implementation and QA session. Statuses:
 | 4 QA | Verify node materials and pristine veins | complete | 2026-07-18 | 2026-07-18 |
 | 5 | The professions wheel window | complete | 2026-07-18 | 2026-07-18 |
 | 5 QA | Verify the professions wheel window | complete | 2026-07-18 | 2026-07-18 |
-| 6 | Crafting window upgrades and celebrations | not started | | |
-| 6 QA | Verify crafting window upgrades | not started | | |
-| 7 | The Guild letter and quest objectives | not started | | |
-| 7 QA | Verify the Guild letter and quest objectives | not started | | |
-| 8 | Stations and masters (sim and server) | not started | | |
-| 8 QA | Verify stations and masters | not started | | |
+| 6 | Crafting window upgrades and celebrations | complete | 2026-07-18 | 2026-07-19 |
+| 6 QA | Verify crafting window upgrades | complete | 2026-07-19 | 2026-07-19 |
+| 7 | The Guild letter and quest objectives | complete | 2026-07-19 | 2026-07-19 |
+| 7 QA | Verify the Guild letter and quest objectives | complete | 2026-07-19 | 2026-07-19 |
+| 8 | Stations and masters (sim and server) | complete | 2026-07-19 | 2026-07-19 |
+| 8 QA | Verify stations and masters | complete | 2026-07-19 | 2026-07-19 |
 | 9 | Station presence and recipe training | not started | | |
 | 9 QA | Verify station presence and training | not started | | |
 | 10 | Recipe ladders and materials content | not started | | |
@@ -330,22 +330,25 @@ tree; the packet's shots live under docs/screenshots/ per root
 CLAUDE.md.
 
 ### Phase 6: Crafting window upgrades and celebrations
-- [ ] Recipe rows show profession + required skill + skill-gain difficulty tint (#2037)
-- [ ] Combo rows name their requirement; station-bound rows show a badge and disable reason
-- [ ] Masterwork toast + zone-visible broadcast (Phase 4 soft-zone mechanism); tier-up toasts; maker's mark and masterwork in item tooltips
-- [ ] Online inspect carries instance payloads (identity wire extended, parity pinned)
-- [ ] Craft button never lies: same eligibility rule as the sim in both hosts
+- [x] Recipe rows show profession + required skill + skill-gain difficulty tint (#2037)
+- [x] Combo rows name their requirement; station-bound rows show a badge and disable reason
+- [x] Masterwork toast + zone-visible broadcast (Phase 4 soft-zone mechanism); tier-up toasts; maker's mark and masterwork in item tooltips
+- [x] Online inspect carries instance payloads (identity wire extended, parity pinned)
+- [x] Craft button never lies: same eligibility rule as the sim in both hosts (shared craftSkillGainMultiplier and combo_eligibility)
 
 ### Phase 7: The Guild letter and quest objectives
-- [ ] Craft/gather quest objective types (minimal set for the letter quest)
-- [ ] The Guild letter arrives via the mail system on trend detection; starts the first-attunement quest hook
-- [ ] S3 scanner gap closed: `src/sim/quests/quest_commands.ts` in scan scope, guard test updated
+- [x] Trending-pair classifier: pure, deterministic, own module (`src/sim/professions/trend.ts`; `GUILD_LETTER_SKILL_THRESHOLD` = `TIER_SKILL_STEP`), unit-tested (closes the #1295 gap)
+- [x] The Guild letter arrives via the mail system on trend detection: exactly one pair-correct `guild_trend_` letter on a fresh crossing; backfill single-fire for legacy high-skill saves; attuned and threshold-hovering characters never (re)receive it (`guildLetterSent` one-shot, the `mailWelcomed` shape)
+- [x] Letter content id-based in `src/sim/content/letters.ts` (10 pair-keyed letters naming Smith Haldren, the stand-in master until Phase 8); `entities.letters` coverage via `LETTER_IDS` and `LETTERS_BY_ID`; M16 fills in the five non-Latin overlays
+- [x] S3 scanner gap closed for good: `src/sim/quests/quest_commands.ts` was ALREADY in scan scope (PR 2039); every player-facing string verified covered; scan-list membership now pinned by a meta-guard in `tests/localization_fixes.test.ts`
+- [x] Tutorial-panel timing item: no defect exists (the surface is the pure derived hint in `profession_identity_view.ts`, correct by construction); pinned by test
+- Note: the "craft/gather quest objective types" line above predated the approved amendments; the letter rides `q_archetype_acceptance` (gather objective, shipped with PR 2039), so no new objective types were needed.
 
 ### Phase 8: Stations and masters (sim and server)
-- [ ] Station registry generalizes `requiresHubStation` to typed stations (forge, kitchens, apothecary, tannery, loom, toolworks); `CRAFTING_HUB_MIN_LEVEL` retired
-- [ ] Master NPC records for the six deep crafts, spread across the three zone hubs (four archetype anchors in zone 1; tannery in Fenbridge; apothecary in Highwatch; assignment pinned)
-- [ ] Automated placement-safety test: no profession NPC or station within aggro-plus-buffer of hostile spawns
-- [ ] Mobile crafting station perk activates (bypasses the station gate; specialization-gated)
+- [x] Station registry generalizes `requiresHubStation` to typed stations (forge, kitchens, apothecary, tannery, loom, toolworks); `CRAFTING_HUB_MIN_LEVEL` retired (`src/sim/professions/stations.ts` + `STATIONS`/`STATION_TYPE_BY_CRAFT` content; `recipe.stationType`; stable deny id `station_required`; `crafting_hub.ts` deleted with every consumer migrated; no recipe strands, the nine former hub recipes craft at their typed stations)
+- [x] Master NPC records for the six deep crafts, spread across the three zone hubs (four archetype anchors in zone 1; tannery in Fenbridge; apothecary in Highwatch; assignment pinned in `tests/professions_station_placement.test.ts`)
+- [x] Automated placement-safety test: no profession NPC or station within aggro-plus-buffer of hostile spawns (content-derived buffer, per-zone camps, mutation-proven failable)
+- [x] Mobile crafting station perk activates (bypasses the station gate for the placed craft's station type; specialization-gated `place_mobile_station` wire command in both worlds with the `mst` self-delta mirror, plus a `/dev mobilestation` arm)
 
 ### Phase 9: Station presence and recipe training
 - [ ] Stations render as world props; masters render and are interactable; minimap markers
@@ -419,3 +422,268 @@ bodies. Deferred and surfaced items live in the Phase 2 drift notes in
 state.md: the rollback enchantability caveat for the release notes, the
 two battlefield trickle questions, the guide prose deferral to Phases 6
 and 15, and the standing instance-payload wire invariant.
+
+2026-07-19 Phase 6 (crafting window upgrades and celebrations) landed on
+feature/professions-2-phase-06-crafting-window off release/v0.28.0
+(phase-start 0a4fd8078, the Phase 5 QA merge). All five checklist rows
+check; #2037's scope closes with the PR (close by hand at merge,
+release-branch merges never auto-close). Both sanctioned seam touches
+landed as specified: announceMasterworkZone (a new structured
+masterworkZone SimEvent riding the exported Phase 4 emitToZonePlayers,
+rng-free, instance space excluded) and the eqi identity-wire inspect
+extension (server-trimmed to signer/enchant/rolled, mirrored into
+ClientWorld equippedInstances, no new IWorld member). As-landed
+deviations, all recorded in the state.md Phase 6 surfaces entry: NO
+sim_i18n matcher row exists (the broadcast is text-free ids+values on
+the gatherRareEvent precedent; the S3 guard passes by construction);
+the celebration gate is the deeds pure-plan style (no fireworks module
+exists; reduced motion trims only the banner fade, information and the
+ARIA announcer never gated); the parity golden professions_craft
+eventDigest was re-pinned deliberately (the crafter's own zone copy,
+rng fingerprints byte-identical); armory_inspect.ts is the cosmetic
+skin panel, the real gear-inspect surface is hud openInspect (threaded
+there). Five-reviewer fan-out (architecture, cross-platform-sync,
+frontend-seam, privacy-security, qa-checklist): zero blocking; all four
+should-fixes landed in-phase (shared craftSkillGainMultiplier consumed
+by sim and view, eqi payload data minimization with a negative pin,
+the tier-up diff bounded to a post-craftResult drain window, a real
+plan.motion consumer). Deferred: the enchanted marker names the STATE
+only (EnchantDef.name has no localized display surface; a named enchant
+line needs an i18n surface first, Phase 13/15 candidate); bags/bank
+grid painters still pass the def only where no instance exists on the
+row (correct today); the online two-banner corner (masterwork and
+tier-up can land in separate drains online, each keeps its own banner,
+cosmetic only).
+
+Phase 6 QA (2026-07-19): PASS with fixes. QA diff 0a4fd8078..206b0ffe7
+(the PR 2150 merge, linear, eight commits). The whole validation matrix
+ran green at the untouched tip first (tsc, the seventeen matched
+suites, the mobile guard trio, i18n:gen plus completeness), so every
+audit agent got already-verified ground instead of re-running suites.
+Eight-agent fan-out (three packet audits plus the five matched dispatch
+rows: frontend-seam, cross-platform-sync, architecture,
+privacy-security, qa-checklist), all eight complete first try under
+hard tool-call budgets with schema-forced structured output. Zero
+blocking findings. Landed from the audit: tier_unmet now names the
+unmet craft(s) (the acceptance criterion the painter missed: the view
+threaded unmetCrafts but the status line rendered the generic
+both-crafts sentence; the new comboTierUnmetNamed key renders only the
+under-tier craft names with the required tier, the param-less key stays
+the defensive fallback so no existing locale fill goes stale or loses a
+placeholder, M16 fills in the five non-Latin overlays, jsdom pins for
+the single, multi, and fallback arms); the tier-up armed drain window
+moved from hud.ts into observeCraftSkillsForTierUps beside the plan
+builder (four reviewers converged on the untested state machine; the
+Phase 5 painter-to-core precedent; hud is now a three-line consumer
+with identical behavior and the armed-window edges are unit-pinned,
+including the delayed-toast contract for a crossing that outlives the
+window); a live GameServer masterworkZone routing suite (three
+sessions, the real sim.tick into routeEvents pump, each in-zone session
+receives exactly its own recipient-pid copy, the other-zone session
+receives nothing; the hcb broadcast-suite precedent, standing in for
+the two-browser online probe since no local Postgres exists); threading
+pins for the bags forwarding call site, the char_window self-mirror
+closure, the openInspect slot rows, and the hud.itemTooltip composition
+order; plan.motion consumer pins (banner-no-motion and the never-gated
+ARIA announcer); DOM pins for the none band, the in-range station
+badge, and the hover-tooltip sentence; dead imports dropped
+(tierProgressMultiplier in crafting.ts, Stats in hud.ts) and the
+emitToZonePlayers export comment corrected. Live verification: an
+18-check puppeteer probe over the real dev client, all green (21 recipe
+rows with skill line, difficulty text, and aria fold-in; 9 station
+badges, every out-of-range row with its inline reason note; the three
+difficulty bands driven live including the free floor and the unattuned
+ceiling arm; a real tier-up crossing through the armed-window path at
+the 25 and 50 boundaries with banner and chat line; reduced motion
+keeping the text while setting banner-no-motion; masterwork and
+legacy-signed tooltips over the real bags surface). Deferred with
+reasons: the station out-of-range copy omits the level arm of the
+predicate (Phase 8 retires CRAFTING_HUB_MIN_LEVEL, revisit with the
+masters rework); the bounded 100-drain window can delay a toast past
+severe mirror lag until the next armed window (deliberate, no per-frame
+poll); the pre-cprof difficulty label transient (documented,
+presentation-neutral); two procs in one drain coalesce to one
+masterworkToast log line (zone and loot lines still per proc); the
+crafter's third-person zone line beside their own toast (deliberate,
+parity-pinned); eqi cosmetic payloads reach every interest-scoped
+client like eq (identity-record semantics); the server eqi build shares
+a live rolled reference (JSON-snapshotted per broadcast, server-owned,
+no leak); the #ffd100 seal literal (matches the soulbound idiom,
+tokenization is DESIGN.md territory) and the rule-less
+tt-instance-bonus hook class; the guide.ts reword leaving Latin overlay
+fills stale until the release-tier refill (standard workflow);
+archetypeCeilingFor computed twice per resolveCraftForRecipe
+(behavior-neutral).
+
+2026-07-19 Phase 7 (the Guild letter) landed on
+feature/professions-2-phase-07-guild-letter off the release/v0.28.0 tip
+8e88b27f5 (the phase-start commit for the QA diff). Three-agent build
+fan-out plus a four-reviewer dispatch (architecture,
+cross-platform-sync, migration-safety, frontend-seam), zero blocking;
+two review fixes landed: the letter trigger books mail through the NEW
+append-only SimContext callback mailAuthoredLetter instead of a raw
+injected PostOffice (registry, createSimContext passthrough, both test
+stub hosts, and the pinned callback list all updated), and
+entity_i18n.ts LETTERS_BY_ID now mirrors GUILD_TREND_LETTERS (the
+parallel-registry drift cross-platform-sync confirmed; the
+localization_coverage world-entry count formula was re-pinned to
+include the 10 letters, a deliberate count re-pin, no rng golden
+touched). Surprises: the phase file's S3 premise was stale (scan
+coverage landed with PR 2039, so the deliverable reduced to the
+membership meta-guard plus per-string verification);
+nearTier/dormantKnowledge live in profession_identity_view.ts, not
+wheel.ts; letters localize via entities.letters + LETTER_IDS, not the
+i18n catalog, and the letter emits no free sim text, so no sim_i18n
+matcher row was needed. Deliberate content choice for the design owner:
+only the four wave-one archetype pairs name their titles in the letter
+body (the other six titles exist in hudChrome.archetypePair but would
+promise pre-Phase-14 content). Deploy note: a deploy, rollback,
+roll-forward sequence can re-fire one duplicate letter (the
+mailWelcomed precedent, cosmetic). Golden caution for future scenario
+authors: an unattuned character with a craft pair sum of 25 or more
+ticked past the 90 second delivery delay starts emitting guild_trend
+mailArrived events into event digests. Fixed in passing: the status
+table's Phase 6 QA row (completion was recorded in Notes but the row
+still said not started). Phase 7 QA plays the vertical-slice checkpoint
+(phase-07-qa.md).
+
+2026-07-19 Phase 7 QA complete: PASS with fixes, zero blocking. Seven
+agent fan-out (correctness, test-coverage, dead-code packet audits plus
+migration-safety, cross-platform-sync, architecture, qa-checklist per
+the dispatch matrix; privacy-security, database-performance, and
+frontend-seam did not match the diff), 5 should-fix findings deduping to
+3 unique, all fixed on the QA branch: (1) the online path was verified
+live by inspection by three agents independently but had no pin, closed
+by the live GameServer session-routing suite
+tests/guild_letter_online.test.ts (owner-only mailArrived with exact
+payload, mailU unread mirror 2 vs 1, booking-level one-shot when a
+second pair qualifies); (2) the activeArchetype eligibility clause had
+no isolating negative (the attuned test flips two fields at once),
+closed by per-clause unit negatives on the exported
+maybeSendGuildTrendLetter plus a flip-before-send spy pin, both
+mutation-verified (deleting the guard or the finiteness check each
+kills exactly one test); (3) no same-seed determinism pin for the sweep
+through the real Sim, closed with an identical-arrival-tick run-twice
+test. Also landed: skillOf now enforces its own positive-FINITE comment
+contract (Number.isFinite; Infinity or NaN in a malformed save can no
+longer classify as crossed), the system MailKind and Guild sender
+pinned on the real mailInfo mailbox surface, a two-player same-sweep
+case, and the letters.ts header enumerating all four authored families.
+The vertical-slice checkpoint (kernel exit) PLAYED end to end in the
+seeded offline world: pristine vein fired at harvest 41 with the finder
+line and x5 signed mats; crafting surfaced loot line, XP, Crafted line,
+Made By Hand deed, live identity-card skill movement and the first-tier
+next-unlock hint; the crossing craft flipped guildLetterSent 12 ticks
+later (the 1 Hz sweep) and the raven landed at exactly 90 seconds with
+banner, whisper cue, chat line, correct pair letter (system kind, The
+Crafting Guild) whose body names the Smith title and Smith Haldren; the
+acceptance quest flow attuned the pair through the 10-archetype chooser
+with its live Result line (Title Smith, majors uncapped, hobby
+Leatherworking); a masterwork procced with the full-screen marquee,
+personal toast line, AND the zone-broadcast line; the sole-copy
+masterwork traded to a second player with signer + rolled.masterwork +
+stats payload intact. ONE experiential finding, DEFERRED to the
+maintainer (design decision): the letter's call to action dead-ends for
+a player who has not done q_prof_intro, Smith Haldren shows only his
+greeting and vendor line (q_archetype_acceptance reads unavailable
+behind requiresQuest, no locked-row hint, no redirect to Foreman
+Odell), so the letter's promise silently fails for exactly its target
+audience (players who leveled crafts without the mining intro); options
+recorded: a locked-quest hint row in the dialog, a letter-body pointer
+to the Copper Dig (needs the 5 overlay refills), or softening the
+requiresQuest gate when skills already qualify. Observations, no
+action: the starter weapon recipe (arming sword) can never masterwork,
+masterworkBonusStats is null for its stat-less def, so the tier-1 Smith
+proc path is the caster-stat warded leggings (design note for Phase
+8/10 recipe ladders); zone-1 pristine copper feeds no recipe (the
+recorded Phase 4 zone-1 mitigation), so the signed-mats-into-craft link
+starts with battlefield-drop reagents or zone 2+; trade removal prefers
+fungible copies, a signed copy transfers only when it is the only copy
+(the recorded Phase 3 model, a specific-instance offer UX is a future
+call); the mail arrival banner is lost if the recipient is offline when
+the raven lands (pre-existing PostOffice announce semantics, welcome
+letter identical); an old client renders an unknown guild_trend_
+letterId as the raw id (pre-existing letters behavior, system-wide
+resolver fallback filed as a future nicety). NITs recorded, not worth
+churn: source-scan pins tolerate commented-out entries (accepted
+precedent), replaceAll clarity in the letterId scheme, the sweep bills
+to the postOffice lap bucket, a third backfill load, a dedicated parity
+scenario (the determinism pin covers the risk, the sweep draws zero
+rng). Release cut reminder: the 10 letters' pending rows for the
+non-M16 locales fill at the release-tier gate as usual.
+
+2026-07-19 Phase 8 (stations and masters) landed on
+feature/professions-2-phase-08-stations-masters off the release/v0.28.0
+tip 571ab0219 (the phase-start commit for the QA diff). Three-agent
+sequential build workflow (sim, content, tests) plus a six-reviewer
+dispatch (privacy-security, cross-platform-sync, architecture,
+frontend-seam, migration-safety, qa-checklist), zero blocking; the one
+should-fix (a stale optimistic-mirror doc comment on the
+activeMobileStationCraft facet member) was fixed with two follow-up
+guard tests (recipe-stamp stranding guard, mst expiry-to-null arm).
+Notable calls: the online liveness gap the build left (ClientWorld's
+activeMobileStationCraft pinned null) was closed IN-PHASE with the mst
+self-delta mirror rather than deferred, because a disabled online
+Craft button beside an active mobile station is exactly the 2033 stub
+class; the parity goldens were regenerated in their own commit for the
+six static NPCs' purely mechanical +6 entity-id shift (id-family keys
+only, draw order untouched, determinism arms green); the Tools of the
+Trade deed desc was reworded station-neutral with the 18 stale locale
+desc fills dropped for the release refill. Surprises: the
+placement-safety buffer is bound by bursar_fernando against the boar
+camp (11.19), not smith_haldren against the wolves (12.34) as
+predicted; sim/items.ts rejects vendor rows without a positive
+buyValue, so several natural reagent stocks were dead rows (tanner and
+weaver stocks are flavor picks instead); deleting an i18n catalog key
+hard-fails tsc on every overlay still carrying it (the retire recipe
+is catalog delete + orphan-row delete + i18n:gen in one pass); the
+RELEASE TIP ITSELF was red in tests/chronomancy.test.ts (the absorbed
+PR 2154 barrier-scaling merge missed the chronomancy absorb pins),
+repaired here in its own labeled commit (184/84 to 194/94, the
+documented 25 percent spell-power term). Content flow note for the
+maintainer: the six premium reagents still sell only at Quartermaster
+Bree in Highwatch while the toolworks/loom/forge recipes now craft in
+Eastbrook, a deliberate buy-then-travel loop to reconsider in Phase 9
+stocking. STILL OPEN (unchanged from Phase 7): the Guild letter's
+call to action dead-ends pre-q_prof_intro; the masters ship with
+EMPTY questIds hooks and no redirect was silently implemented.
+
+Phase 8 QA (2026-07-19): PASS with fixes, zero blocking. Nine-agent
+fan-out (three packet audits plus privacy-security, migration-safety,
+cross-platform-sync, architecture, frontend-seam and the closing
+qa-checklist; database-performance did not match the diff), every
+agent complete first try under the 30-call budget, with the phase
+validation matrix pre-verified green at the untouched tip and passed
+to every agent as ground. The correctness audit ran six live
+headless-Sim probes (deny away from the station, wrong-type deny,
+at-station success, all nine field recipes far from any station, the
+full mobile place/craft/expire cycle against real ticks, caster-recipe
+radius behavior at 19 vs 30 out) plus proof that FIELD_RECIPES equals
+the pre-phase nine COMMON_RECIPES ids. Findings: 18 total, 3
+should-fix, all fixed: the Phase 9 phase file still pointed its
+reader at the deleted crafting_hub.ts (swept to stations.ts and the
+crafting.ts gate), the /dev mobilestation arm had zero coverage (now
+proves the cheat routes through the real specialization gate), and
+the hud station_required deny toast had no binding pin (source-pinned
+in profession_identity_card.test.ts). Fixed NITs: the FIELD_RECIPES
+set pin was a tautology against its own definition source (now pins
+the nine literal ids), the mobile expiry boundary was only incidental
+(exact strict-below pin added: active at expiry-1, expired at the
+expiry tick), and two comments (stations.ts header, CraftResultView)
+implied a mobile-arm proximity check the spec'd gate deliberately
+does not have (reworded). Dissolved on verification: the
+crafting_hub test filename misnomer (its header documents the
+deliberate keep for the deeds.ts anchors), the hud fallthrough
+mislabel (unreachable by construction and documented in-code), the
+slow-band set allocation (cold painter, throttled, pre-phase
+equivalent), and the place_mobile_station rate-limit worry
+(self-scoped transient slot overwrite, no growth, no rng, no db).
+Closed decisively: guide freshness (wiki:content regenerates no
+diff; the guide does not enumerate town NPCs). Deferred with notes
+in state.md: the Eastbrook loom-toolworks radius overlap (design
+observation for Phase 9 props and minimap), the consumer-less
+MobileCraftingStation pos/placedAtTick/playerId fields (Phase 9
+props are the natural consumer), the expired station object
+lingering on the meta slot until the next placement (benign, every
+reader checks isStationActive), and the mobile-viewport station row
+being screenshot-verified only.

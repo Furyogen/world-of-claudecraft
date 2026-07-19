@@ -39,12 +39,15 @@ import type { ResolvedAbility } from '../sim/sim';
 import { parseTalentAllocation } from '../sim/talent_allocation_input';
 import { repairTalentLoadouts } from '../sim/talent_loadouts';
 import {
+  type Aura,
+  cloneItemInstancePayload,
   type DeedStats,
   type DungeonDifficulty,
   type Entity,
   type EquipSlot,
   emptyMoveInput,
   type InvSlot,
+  type ItemInstancePayload,
   type LootRollChoice,
   type LootRollGroupStatus,
   type LootRollPrompt,
@@ -107,6 +110,32 @@ import type { MasterworkView } from '../world_api/professions';
 import { computeBackoffDelay } from './backoff';
 import { optimisticQuestState } from './quest_state_optimistic';
 import { isTransientReconnectRejection, isTransientTimeoutRejection } from './reconnect_policy';
+import {
+  type SnapshotTimerWireMode,
+  STABLE_TIMER_WIRE_VERSION,
+  type StableCooldownWire,
+  snapshotTimerWireMode,
+  stableCooldownRemaining,
+  stableDeadlineRemaining,
+} from './snapshot_timer_wire';
+
+interface ClientWireAura {
+  id: string;
+  name: string;
+  kind: Aura['kind'];
+  rem?: number;
+  exp?: number;
+  dur: number;
+  value?: number;
+  value2?: number;
+  value3?: number;
+  tickInterval?: number;
+  school?: Aura['school'];
+  stacks?: number;
+  charges?: number;
+  emp?: Aura['empowerAbilities'];
+  src?: number;
+}
 
 // ---------------------------------------------------------------------------
 // REST
@@ -171,8 +200,20 @@ export function buildWebSocketAuthMessage(
   token: string,
   characterId: number,
   clientSeed = '',
-): { t: 'auth'; token: string; character: number; clientSeed: string } {
-  return { t: 'auth', token, character: characterId, clientSeed };
+): {
+  t: 'auth';
+  token: string;
+  character: number;
+  clientSeed: string;
+  timerWire: typeof STABLE_TIMER_WIRE_VERSION;
+} {
+  return {
+    t: 'auth',
+    token,
+    character: characterId,
+    clientSeed,
+    timerWire: STABLE_TIMER_WIRE_VERSION,
+  };
 }
 
 export type RealmType = 'Normal' | 'PvP' | 'RP' | 'RP-PvP';
@@ -1359,6 +1400,13 @@ export class ClientWorld implements IWorld {
   // server's `masterwork` event (applyMasterworkEvent below), exactly like
   // lastCraftResult above. Null until this session's first masterwork proc.
   lastMasterwork: MasterworkView | null = null;
+  // The viewer's own active mobile crafting station (Professions 2.0 Phase 8),
+  // mirrored from the server's `mst` self-delta (applySnapshot below). The
+  // server computes the active/expired state against its own tickCount, so
+  // this is always a server-authoritative value: placement is never predicted
+  // locally (net/ optimism rules), the delta lands after the server accepts
+  // the specialization-gated command, and it flips back to null on expiry.
+  activeMobileStationCraft: string | null = null;
   // Compatibility scalar projections of the atomic `cprof` identity mirror.
   // Quest acceptance is the only online transition path, so these direct legacy
   // methods deliberately send no wire commands.
@@ -1397,6 +1445,14 @@ export class ClientWorld implements IWorld {
   // server-measured achieved sim tick rate (Hz), mirrored from the snap head;
   // null until the server's meter warms up (perf overlay hides the row)
   serverTickHz: number | null = null;
+  // Stable timer-wire decode state. These stay separate from the public
+  // remaining-time mirrors so an omitted v2 field can be re-derived from the
+  // server simulation clock without accumulating client-frame drift.
+  private timerWireMode: SnapshotTimerWireMode | undefined;
+  private stableTimerTime: number | undefined;
+  private stableTimerOwnerId: number | undefined;
+  private stableCooldownSchedules: Map<string, StableCooldownWire> | undefined = new Map();
+  private stableNodeDeadlines: Map<string, number> | undefined = new Map();
   // entity id -> performance.now() when it first went missing from a snapshot;
   // used for the despawn grace window (anti-flicker), cleared once it returns
   private missingSince = new Map<number, number>();
@@ -1408,8 +1464,11 @@ export class ClientWorld implements IWorld {
   connected = false;
   onDisconnect: ((reason: string) => void) | null = null;
   // fired on each unexpected socket drop while auto-reconnect is pending, and
-  // once the world is live again; main.ts shows/hides the reconnect overlay
-  onConnectionLost: (() => void) | null = null;
+  // once the world is live again; main.ts shows/hides the reconnect overlay.
+  // attempt/maxAttempts/nextRetryAtMs let the overlay show live progress
+  // (attempt count + retry countdown) instead of a static "reconnecting" string.
+  onConnectionLost: ((attempt: number, maxAttempts: number, nextRetryAtMs: number) => void) | null =
+    null;
   onReconnected: (() => void) | null = null;
   private reconnectAttempts = 0;
   // consecutive 'character already in world' rejections during a reconnect;
@@ -1498,10 +1557,15 @@ export class ClientWorld implements IWorld {
       // visibilitychange while it is pending takes the clearTimeout branch
       // below: never two live timers, never a double openSocket.
       clearTimeout(this.reconnectTimer);
+      const delayMs = Math.random() * 1000;
       this.reconnectTimer = window.setTimeout(() => {
         this.reconnectTimer = undefined;
         this.openSocket();
-      }, Math.random() * 1000);
+      }, delayMs);
+      // Keep the overlay's countdown honest: without this it keeps counting down
+      // toward the ORIGINAL backoff delay (which can be tens of seconds at a high
+      // attempt count) while the real retry now fires in under a second.
+      this.onConnectionLost?.(this.reconnectAttempts, RECONNECT_MAX_ATTEMPTS, Date.now() + delayMs);
       return;
     }
     // No reconnect scheduled yet but the socket is not open: onclose was
@@ -1553,7 +1617,6 @@ export class ClientWorld implements IWorld {
       return;
     }
     this.reconnectAttempts++;
-    this.onConnectionLost?.();
     const delayMs = computeBackoffDelay(
       this.reconnectAttempts,
       RECONNECT_BASE_DELAY_MS,
@@ -1567,6 +1630,12 @@ export class ClientWorld implements IWorld {
       this.reconnectTimer = undefined;
       this.openSocket();
     }, delayMs);
+    // Fired AFTER reconnectTimer is armed: onConnectionLost creates/mutates DOM,
+    // starts an interval, and resolves a t() key, any of which could throw. If it
+    // threw before the timer was set, reconnectAttempts would already be
+    // incremented with no retry scheduled, no onDisconnect, and no fatal overlay,
+    // permanently dead auto-reconnect for the rest of the session.
+    this.onConnectionLost?.(this.reconnectAttempts, RECONNECT_MAX_ATTEMPTS, Date.now() + delayMs);
   }
 
   private endSession(): void {
@@ -1935,11 +2004,98 @@ export class ClientWorld implements IWorld {
     return v;
   }
 
+  private prepareSnapshotTimers(
+    rawVersion: unknown,
+    rawTime: unknown,
+  ): { mode: SnapshotTimerWireMode; time: number | null } {
+    const mode = snapshotTimerWireMode(rawVersion);
+    // An unknown future marker may use timer fields this client cannot decode.
+    // Ignore those fields without disturbing the last understood v2 schedule,
+    // so one unsupported snapshot cannot freeze a later valid v2 stream.
+    if (mode === 'unsupported') return { mode, time: null };
+    if (mode !== this.timerWireMode) {
+      this.timerWireMode = mode;
+      this.stableTimerTime = undefined;
+      this.stableTimerOwnerId = undefined;
+      this.stableCooldownSchedules?.clear();
+      this.stableNodeDeadlines?.clear();
+    }
+    if (
+      mode !== 'stable' ||
+      typeof rawTime !== 'number' ||
+      !Number.isFinite(rawTime) ||
+      rawTime < 0
+    ) {
+      return { mode, time: null };
+    }
+
+    if (this.stableCooldownSchedules === undefined) this.stableCooldownSchedules = new Map();
+    if (this.stableNodeDeadlines === undefined) this.stableNodeDeadlines = new Map();
+    if (this.stableTimerOwnerId !== this.playerId) {
+      this.stableTimerOwnerId = this.playerId;
+      this.stableCooldownSchedules.clear();
+      this.stableNodeDeadlines.clear();
+      this.nodeCooldowns = new Map();
+    }
+
+    const previous = this.stableTimerTime;
+    if (previous !== undefined && rawTime >= previous) {
+      const elapsed = rawTime - previous;
+      if (elapsed > 0) {
+        for (const entity of this.entities.values()) {
+          if (entity.dead || entity.auras.length === 0) continue;
+          let retained = 0;
+          for (const aura of entity.auras) {
+            if (Number.isFinite(aura.remaining))
+              aura.remaining = Math.max(0, aura.remaining - elapsed);
+            if (aura.remaining > 0) entity.auras[retained++] = aura;
+          }
+          entity.auras.length = retained;
+        }
+      }
+    } else if (previous !== undefined) {
+      // A reconnect can land on a restarted realm whose simulation clock is
+      // behind the prior socket. Its first snapshot is complete, so discard
+      // schedules tied to the old clock before decoding it.
+      this.stableCooldownSchedules.clear();
+      this.stableNodeDeadlines.clear();
+    }
+    this.stableTimerTime = rawTime;
+    this.refreshStableSelfTimers(rawTime);
+    return { mode, time: rawTime };
+  }
+
+  private refreshStableSelfTimers(now: number): void {
+    const player = this.entities.get(this.playerId);
+    if (player && this.stableCooldownSchedules) {
+      for (const [abilityId, schedule] of this.stableCooldownSchedules) {
+        const remaining = stableCooldownRemaining(schedule, now);
+        if (remaining !== null && remaining > 0) player.cooldowns.set(abilityId, remaining);
+        else {
+          this.stableCooldownSchedules.delete(abilityId);
+          player.cooldowns.delete(abilityId);
+        }
+      }
+    }
+    if (this.stableNodeDeadlines) {
+      if (this.nodeCooldowns === undefined) this.nodeCooldowns = new Map();
+      for (const [nodeId, deadline] of this.stableNodeDeadlines) {
+        const remaining = stableDeadlineRemaining(deadline, now);
+        if (remaining !== null && remaining > 0) this.nodeCooldowns.set(nodeId, remaining);
+        else {
+          this.stableNodeDeadlines.delete(nodeId);
+          this.nodeCooldowns.delete(nodeId);
+        }
+      }
+    }
+  }
+
   private applySnapshot(snap: any): void {
     const now = performance.now();
     if (typeof this.spectating === 'string' && typeof snap.self?.id === 'number') {
       this.playerId = snap.self.id;
     }
+    const timerWire = this.prepareSnapshotTimers(snap.tw, snap.time);
     // the interpolation alpha the render loop reached on its last frame
     // (same formula and caps as main.ts); used below to re-anchor the new
     // interpolation segment at the pose currently on screen
@@ -2022,6 +2178,13 @@ export class ClientWorld implements IWorld {
     const prevSelfFacing = prevSelf?.facing;
     const prevSelfDead = prevSelf?.dead ?? false;
 
+    const auraRemaining = (aura: ClientWireAura): number => {
+      if (timerWire.mode !== 'stable' || timerWire.time === null) return Number(aura.rem);
+      const deadlineRemaining = stableDeadlineRemaining(aura.exp, timerWire.time);
+      if (deadlineRemaining !== null) return deadlineRemaining;
+      return typeof aura.rem === 'number' && Number.isFinite(aura.rem) ? aura.rem : 0;
+    };
+
     const applyWire = (w: any): Entity | null => {
       let e = this.entities.get(w.id);
       // identity fields ride only in "full" records: first sight and changes
@@ -2047,6 +2210,16 @@ export class ClientWorld implements IWorld {
         e.offhandItemId = w.oh ?? null; // equipped offhand → held weapon model (render-only)
         e.weaponSkinId = w.wsk ?? null; // active weapon-skin cosmetic (render-only)
         e.equippedItems = w.eq ?? {}; // full worn set (render-only), for the inspect window
+        // Worn per-slot instance payloads (masterwork/enchant rolls), for the
+        // inspect window (terse `eqi`, sparse like `eq`: an absent key on a
+        // full record means no worn piece carries one, so it resets to {}).
+        // Deep-cloned per slot: a payload's own rolled.stats map must never
+        // alias wire-parsed JSON a later message could mutate.
+        e.equippedInstances = Object.fromEntries(
+          Object.entries((w.eqi ?? {}) as Record<string, ItemInstancePayload>).map(
+            ([slot, inst]) => [slot, cloneItemInstancePayload(inst)],
+          ),
+        );
         e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';
         e.holderTier = w.ht ?? 0; // $WOC holder-tier flair (cosmetic, server-set)
         e.holderBalance = typeof w.hb === 'number' ? w.hb : undefined; // exact $WOC, for inspect
@@ -2200,56 +2373,61 @@ export class ClientWorld implements IWorld {
       // records in place: no array + per-aura object allocation per entity at 20 Hz, and the
       // preserved object identity matches the offline Sim (one live aura object across ticks).
       // Any composition change (gain/fade/reorder) falls back to the fresh build below.
-      const wireAuras: any[] = w.auras ?? [];
-      let sameAuraShape = e.auras.length === wireAuras.length;
-      if (sameAuraShape) {
-        for (let i = 0; i < wireAuras.length; i++) {
-          if (e.auras[i].id !== wireAuras[i].id) {
-            sameAuraShape = false;
-            break;
+      const shouldApplyAuras =
+        timerWire.mode === 'legacy' ||
+        (timerWire.mode === 'stable' && timerWire.time !== null && w.auras !== undefined);
+      if (shouldApplyAuras) {
+        const wireAuras = (Array.isArray(w.auras) ? w.auras : []) as ClientWireAura[];
+        let sameAuraShape = e.auras.length === wireAuras.length;
+        if (sameAuraShape) {
+          for (let i = 0; i < wireAuras.length; i++) {
+            if (e.auras[i].id !== wireAuras[i].id) {
+              sameAuraShape = false;
+              break;
+            }
           }
         }
-      }
-      if (sameAuraShape) {
-        for (let i = 0; i < wireAuras.length; i++) {
-          const a = wireAuras[i];
-          const rec = e.auras[i];
-          rec.name = a.name;
-          rec.kind = a.kind;
-          rec.remaining = a.rem;
-          rec.duration = a.dur;
-          rec.value = a.value ?? 0;
-          rec.value2 = a.value2;
-          rec.value3 = a.value3;
-          rec.tickInterval = a.tickInterval;
-          rec.school = a.school ?? 'physical';
-          rec.stacks = a.stacks;
-          // Mirror the charge count for a charge-limited aura (Lightning Shield); the wire
-          // sends it only when defined (server/game.ts), so an ordinary aura or an old server
-          // decodes to undefined and the badge falls back to the stacks path, exactly as before.
-          rec.charges = a.charges;
-          rec.empowerAbilities = a.emp;
-          // The caster's entity id, for the target strip's own-aura prominence
-          // (auras_view ownFirst). An old server omits it; 0 matches no player id.
-          rec.sourceId = a.src ?? 0;
+        if (sameAuraShape) {
+          for (let i = 0; i < wireAuras.length; i++) {
+            const a = wireAuras[i];
+            const rec = e.auras[i];
+            rec.name = a.name;
+            rec.kind = a.kind;
+            rec.remaining = auraRemaining(a);
+            rec.duration = a.dur;
+            rec.value = a.value ?? 0;
+            rec.value2 = a.value2;
+            rec.value3 = a.value3;
+            rec.tickInterval = a.tickInterval;
+            rec.school = a.school ?? 'physical';
+            rec.stacks = a.stacks;
+            // Mirror the charge count for a charge-limited aura (Lightning Shield); the wire
+            // sends it only when defined (server/game.ts), so an ordinary aura or an old server
+            // decodes to undefined and the badge falls back to the stacks path, exactly as before.
+            rec.charges = a.charges;
+            rec.empowerAbilities = a.emp;
+            // The caster's entity id, for the target strip's own-aura prominence
+            // (auras_view ownFirst). An old server omits it; 0 matches no player id.
+            rec.sourceId = a.src ?? 0;
+          }
+        } else {
+          e.auras = wireAuras.map((a) => ({
+            id: a.id,
+            name: a.name,
+            kind: a.kind,
+            remaining: auraRemaining(a),
+            duration: a.dur,
+            value: a.value ?? 0,
+            value2: a.value2,
+            value3: a.value3,
+            tickInterval: a.tickInterval,
+            sourceId: a.src ?? 0,
+            school: a.school ?? 'physical',
+            stacks: a.stacks,
+            charges: a.charges,
+            empowerAbilities: a.emp,
+          }));
         }
-      } else {
-        e.auras = wireAuras.map((a: any) => ({
-          id: a.id,
-          name: a.name,
-          kind: a.kind,
-          remaining: a.rem,
-          duration: a.dur,
-          value: a.value ?? 0,
-          value2: a.value2,
-          value3: a.value3,
-          tickInterval: a.tickInterval,
-          sourceId: a.src ?? 0,
-          school: a.school ?? 'physical',
-          stacks: a.stacks,
-          charges: a.charges,
-          empowerAbilities: a.emp,
-        }));
       }
       e.loot = w.lootList ?? null;
       return e;
@@ -2296,7 +2474,20 @@ export class ClientWorld implements IWorld {
       // corpse position while a ghost (null once resurrected). Delta-guarded: kept
       // unchanged when the server omits it; drives the corpse marker + resurrect button.
       if (s.corpse !== undefined) e.corpsePos = s.corpse ?? null;
-      if (s.cds !== undefined) {
+      if (timerWire.mode === 'stable' && timerWire.time !== null && s.cds !== undefined) {
+        if (this.stableCooldownSchedules === undefined) this.stableCooldownSchedules = new Map();
+        this.stableCooldownSchedules.clear();
+        e.cooldowns.clear();
+        if (s.cds && typeof s.cds === 'object' && !Array.isArray(s.cds)) {
+          for (const abilityId in s.cds) {
+            const schedule = s.cds[abilityId] as unknown;
+            const remaining = stableCooldownRemaining(schedule, timerWire.time);
+            if (remaining === null || remaining <= 0) continue;
+            this.stableCooldownSchedules.set(abilityId, schedule as StableCooldownWire);
+            e.cooldowns.set(abilityId, remaining);
+          }
+        }
+      } else if (timerWire.mode === 'legacy' && s.cds !== undefined) {
         // in-place rebuild (same result as `new Map(Object.entries(...))`): no
         // intermediate entry arrays and no Map churn on the 20 Hz self record
         e.cooldowns.clear();
@@ -2306,7 +2497,20 @@ export class ClientWorld implements IWorld {
       // Map (always constructed by the shared entity factory), this field lives
       // on ClientWorld itself, and a hand-built test fixture (`Object.create`,
       // see tests/CLAUDE.md) may not have pre-initialized it.
-      if (s.ncd !== undefined) {
+      if (timerWire.mode === 'stable' && timerWire.time !== null && s.ncd !== undefined) {
+        if (this.stableNodeDeadlines === undefined) this.stableNodeDeadlines = new Map();
+        this.stableNodeDeadlines.clear();
+        this.nodeCooldowns = new Map();
+        if (s.ncd && typeof s.ncd === 'object' && !Array.isArray(s.ncd)) {
+          for (const nodeId in s.ncd) {
+            const deadline = s.ncd[nodeId] as unknown;
+            const remaining = stableDeadlineRemaining(deadline, timerWire.time);
+            if (remaining === null || remaining <= 0 || typeof deadline !== 'number') continue;
+            this.stableNodeDeadlines.set(nodeId, deadline);
+            this.nodeCooldowns.set(nodeId, remaining);
+          }
+        }
+      } else if (timerWire.mode === 'legacy' && s.ncd !== undefined) {
         this.nodeCooldowns = new Map(Object.entries(s.ncd).map(([k, v]) => [k, Number(v)]));
       }
       if (s.achg !== undefined) {
@@ -2480,6 +2684,9 @@ export class ClientWorld implements IWorld {
       if (s.dclears !== undefined) this.delveClears = s.dclears ?? {};
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
       if (s.tfocus !== undefined) this.townFocus = s.tfocus ?? {};
+      // mst -> activeMobileStationCraft: a nullable scalar, so the delta's
+      // explicit null (station expired or never placed) must overwrite.
+      if (s.mst !== undefined) this.activeMobileStationCraft = (s.mst as string | null) ?? null;
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.cprof !== undefined && s.cprof) {
@@ -2773,6 +2980,9 @@ export class ClientWorld implements IWorld {
   }
   craftItem(recipeId: string): void {
     this.cmd({ cmd: 'craft_item', recipe: recipeId });
+  }
+  placeMobileStation(craftId: string): void {
+    this.cmd({ cmd: 'place_mobile_station', craft: craftId });
   }
   sellItem(itemId: string, count?: number): void {
     this.cmd({ cmd: 'sell', item: itemId, count });

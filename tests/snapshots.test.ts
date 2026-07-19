@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('../server/db', () => ({
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),
   touchCharacterLogin: vi.fn(async () => {}),
   closePlaySession: vi.fn(async () => {}),
@@ -19,6 +20,7 @@ vi.mock('../server/db', () => ({
     weaponSkinIds: [],
     weaponSkinLoadout: {},
   })),
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
 }));
 
 import { saveCharacterState } from '../server/db';
@@ -77,8 +79,9 @@ function joinServer(
   characterId: number,
   name: string,
   cls: PlayerClass = 'warrior',
+  meta: Parameters<GameServer['join']>[7] = {},
 ): ClientSession {
-  const session = server.join(fc.ws, characterId, characterId, name, cls, null);
+  const session = server.join(fc.ws, characterId, characterId, name, cls, null, false, meta);
   if ('error' in session) throw new Error(session.error);
   session.blockListLoaded = true;
   return session;
@@ -1178,6 +1181,95 @@ describe('raid party wire', () => {
       role: 'healer',
       connected: 0,
     });
+  });
+
+  it('projects common party member history once per broadcast and refreshes same-tick broadcasts', () => {
+    const server = new GameServer();
+    const leaderClient = fakeWs();
+    const leader = joinServer(server, leaderClient, 11, 'Leader');
+    const memberClient = fakeWs();
+    const member = joinServer(server, memberClient, 22, 'Member');
+    const thirdClient = fakeWs();
+    const third = joinServer(server, thirdClient, 33, 'Third');
+    server.sim.partyInvite(member.pid, leader.pid);
+    server.sim.partyAccept(member.pid);
+    server.sim.partyInvite(third.pid, leader.pid);
+    server.sim.partyAccept(third.pid);
+
+    let historyReads = 0;
+    for (const pid of [leader.pid, member.pid, third.pid]) {
+      const entity = server.sim.entities.get(pid)!;
+      let history = [{ tick: server.sim.tickCount, amount: 10 }];
+      Object.defineProperty(entity, 'damageHistory', {
+        configurable: true,
+        get: () => {
+          historyReads++;
+          return history;
+        },
+        set: (next) => {
+          history = next ?? [];
+        },
+      });
+    }
+
+    broadcast(server);
+    expect(historyReads).toBe(3);
+
+    const memberEntity = server.sim.entities.get(member.pid)!;
+    memberEntity.hp = 777;
+    broadcast(server);
+    expect(historyReads).toBe(6);
+    const memberRow = lastSnap(leaderClient.sent).self.party.members.find(
+      (row: any) => row.pid === member.pid,
+    );
+    expect(memberRow.hp).toBe(777);
+  });
+
+  it('uses the observed player as the Echo viewer for a spectator party snapshot', () => {
+    const moderatorClient = fakeWs();
+    const moderator = joinServer(server, moderatorClient, 3, 'Modera');
+    const target = server.sim.entities.get(member.pid)!;
+    target.auras.push(
+      {
+        id: 'temporal_echo',
+        name: 'Temporal Echo',
+        kind: 'temporal_echo',
+        remaining: 11.1,
+        duration: 15,
+        value: 0,
+        sourceId: leader.pid,
+        school: 'arcane',
+      },
+      {
+        id: 'temporal_echo',
+        name: 'Temporal Echo',
+        kind: 'temporal_echo',
+        remaining: 22.1,
+        duration: 15,
+        value: 0,
+        sourceId: member.pid,
+        school: 'arcane',
+      },
+    );
+    (server as any).enterSpectate(moderator, leader);
+
+    broadcast(server);
+
+    const echoAurasFor = (client: FakeClient) => {
+      const memberRow = lastSnap(client.sent).self.party.members.find(
+        (row: any) => row.pid === member.pid,
+      );
+      return memberRow.auras.filter((row: any) => row.kind === 'temporal_echo');
+    };
+    expect(echoAurasFor(fcLeader)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 12 },
+    ]);
+    expect(echoAurasFor(fcMember)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 23 },
+    ]);
+    expect(echoAurasFor(moderatorClient)).toEqual([
+      { id: 'temporal_echo', kind: 'temporal_echo', remaining: 12 },
+    ]);
   });
 });
 
@@ -2459,6 +2551,105 @@ describe('weapon skin wire (weaponSkinId)', () => {
   });
 });
 
+// Worn per-slot instance payloads ride the identity wire (terse key `eqi`,
+// Professions 2.0 Phase 6) so the inspect window shows another player's
+// masterwork/enchant rolls. Sparse exactly like `eq`: players only, present
+// only while at least one worn piece carries a payload, absent otherwise (the
+// no-bloat tooth: an instance-less player's identity record is byte-unchanged).
+// `eqi` is an IDENTITY key, not a maybe() delta key, so it stays out of
+// ALL_DELTA_KEYS; and like `eq` it is outside TERSE_TO_IWORLD scope (that map
+// pins delta keys + self scalars only). End-to-end GameServer liveness plus
+// clone-not-alias live in tests/inspect_instances.test.ts.
+describe('equipped instance wire (eqi)', () => {
+  const inst = { rolled: { masterwork: true, stats: { int: 3, spi: 1 } }, signer: 'Aldric' };
+
+  it('carries eqi through wireEntity only while an instanced piece is worn', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Thaldrin');
+    const e = sim.entities.get(pid)!;
+    // The fresh auto-equipped worn set is all plain pieces: eq rides, eqi
+    // stays off the wire entirely.
+    expect(wireEntity(e).eq).toBeDefined();
+    expect(wireEntity(e).eqi).toBeUndefined();
+
+    sim.addItemInstance('eastbrook_ritual_vestments', structuredClone(inst), pid);
+    sim.equipItem('eastbrook_ritual_vestments', pid);
+    expect((wireEntity(e).eq as any).chest).toBe('eastbrook_ritual_vestments');
+    expect(wireEntity(e).eqi).toEqual({ chest: inst });
+
+    // Unequipping the one instanced piece drops the key again (sparse, like wsk).
+    sim.unequipItem('chest', pid);
+    expect(wireEntity(e).eqi).toBeUndefined();
+  });
+
+  it('strips non-cosmetic instance fields from the wire payload (data minimization)', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Yrsa');
+    const e = sim.entities.get(pid)!;
+    sim.addItemInstance(
+      'eastbrook_ritual_vestments',
+      {
+        signer: 'Aldric',
+        rolled: { masterwork: true, stats: { int: 3 } },
+        boundTo: pid,
+        charges: { mend: 2 },
+      },
+      pid,
+    );
+    sim.equipItem('eastbrook_ritual_vestments', pid);
+    const wired = wireEntity(e).eqi as Record<string, Record<string, unknown>>;
+    // Only the cosmetic inspect fields (signer, enchant, rolled) leave the
+    // server; boundTo and charges are gameplay state no inspecting client
+    // needs and must never ride the identity wire.
+    expect(wired.chest.signer).toBe('Aldric');
+    expect(wired.chest.rolled).toEqual({ masterwork: true, stats: { int: 3 } });
+    expect(wired.chest.boundTo).toBeUndefined();
+    expect(wired.chest.charges).toBeUndefined();
+    expect(Object.keys(wired.chest).sort()).toEqual(['rolled', 'signer']);
+  });
+
+  it('restores equippedInstances from a full record, deep-cloned; an eqi-less full record resets', () => {
+    const client = bareClient(99);
+    const base = {
+      id: 7,
+      k: 'player',
+      tid: 'warrior',
+      nm: 'Brae',
+      lv: 5,
+      x: 0,
+      y: 0,
+      z: 0,
+      f: 0,
+      hp: 100,
+      mhp: 100,
+    };
+    const wireInst = structuredClone(inst);
+    (client as any).applySnapshot({
+      t: 'snap',
+      ents: [{ ...base, eq: { chest: 'eastbrook_ritual_vestments' }, eqi: { chest: wireInst } }],
+    });
+    const e = client.entities.get(7)!;
+    expect(e.equippedInstances).toEqual({ chest: inst });
+    // Deep-cloned, never aliased: mutating the wire-parsed payload (a later
+    // message could) must not reach the mirror, rolled.stats included.
+    expect(e.equippedInstances.chest).not.toBe(wireInst);
+    wireInst.rolled.stats.int = 99;
+    expect(e.equippedInstances.chest?.rolled?.stats?.int).toBe(3);
+
+    // A lite record (no identity fields) leaves the mirror in place.
+    (client as any).applySnapshot({
+      t: 'snap',
+      ents: [{ id: 7, x: 1, y: 0, z: 1, f: 0, hp: 100, mhp: 100 }],
+    });
+    expect(client.entities.get(7)?.equippedInstances).toEqual({ chest: inst });
+
+    // A later full record WITHOUT eqi means no worn piece carries a payload
+    // anymore: the mirror resets to empty (the `eq` absent-key semantics).
+    (client as any).applySnapshot({ t: 'snap', ents: [base] });
+    expect(client.entities.get(7)?.equippedInstances).toEqual({});
+  });
+});
+
 describe('delve self-state mirrors over the wire', () => {
   let server: GameServer;
   let fc: FakeClient;
@@ -2686,7 +2877,7 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 48 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 49 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
 // 49th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
@@ -2725,6 +2916,7 @@ const ALL_DELTA_KEYS = [
   'market',
   'marks',
   'milestones',
+  'mst',
   'ncd',
   'party',
   'prof',
@@ -2781,6 +2973,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   marks: 'markers',
   milestones: 'unlockedMilestones',
   mres: 'maxResource',
+  mst: 'activeMobileStationCraft',
   party: 'partyInfo',
   prk: 'prestigeRank',
   prof: 'professionsState',
@@ -2884,6 +3077,17 @@ function dirtyEveryDeltaField(): {
     attunedPairs: ['weaponcrafting+armorcrafting'],
     switchCount: 2,
     amendsProgress: 4,
+  };
+  // An ACTIVE mobile crafting station (Phase 8, `mst`): set directly on the
+  // meta slot (the placement command's specialization gate is pinned in
+  // tests/professions_crafting_hub.test.ts; this suite pins the WIRE mirror),
+  // far from expiry so the server-side liveness check reads it active.
+  meta.mobileStation = {
+    playerId: 'Alld',
+    craftId: 'armorcrafting',
+    pos: { x: 1, z: 2 },
+    placedAtTick: sim.tickCount,
+    expiresAtTick: sim.tickCount + 12000,
   };
   // Per-player gather-node respawn cooldown (#1866): one node still cooling
   // down (readyAt 30s in the sim future), so `ncd` mirrors it as ~30 remaining
@@ -3106,6 +3310,9 @@ describe('full self-state snapshot delta fixture', () => {
     // craft id, and it must reflect the cprof delta just applied.
     expect(client.archetypeTitle).toBe('weaponcrafting+armorcrafting');
     expect(client.craftSkills).toMatchObject({ armorcrafting: 31, weaponcrafting: 29 });
+    // mst -> activeMobileStationCraft: the server-computed ACTIVE craft id
+    // (expiry resolved server-side against the sim's own tickCount).
+    expect(client.activeMobileStationCraft).toBe('armorcrafting');
     expect(client.delveClears).toEqual({ 'collapsed_reliquary:heroic': 1 }); // dclears -> delveClears
     expect(client.delveDaily).toMatchObject({ markClears: 4 }); // delveDaily
     // deeds -> deedsEarned: the Map rebuilds from the plain wire object with
@@ -3126,6 +3333,26 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.talentSpec).toBe('arms');
     expect(client.loadouts).toEqual([{ name: 'PvP', alloc: { spec: 'arms', rows: {} }, bar: [] }]);
     expect(client.activeLoadout).toBe(0);
+  });
+
+  it('flips mst to null when the mobile station expires (server-side tick-domain check)', () => {
+    // The expiry arm of the mst self-delta: activeMobileStationCraftFor
+    // resolves active-vs-expired against the SERVER sim's own tickCount, so
+    // the lapse must reach the client as an explicit mst: null delta (a
+    // nullable scalar; omission would leave the stale craft id mirrored).
+    const { server, fc, leader } = dirtyEveryDeltaField();
+    broadcast(server);
+    const client = bareClient(leader.pid);
+    (client as any).applySnapshot(lastSnap(fc.sent));
+    expect(client.activeMobileStationCraft).toBe('armorcrafting');
+
+    const meta = server.sim.meta(leader.pid);
+    if (!meta?.mobileStation) throw new Error('mobile station missing from the harness');
+    meta.mobileStation.expiresAtTick = server.sim.tickCount; // isStationActive: now < expiry fails
+    server.sim.tick();
+    broadcast(server);
+    (client as any).applySnapshot(lastSnap(fc.sent));
+    expect(client.activeMobileStationCraft).toBeNull();
   });
 
   it('omits all delta keys on a no-op re-broadcast and preserves the prior mirror', () => {
@@ -3202,9 +3429,9 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 48 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(48);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(48);
+  it('ALL_DELTA_KEYS contains exactly 49 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(49);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(49);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -3216,7 +3443,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(48);
+    expect(scraped.size).toBe(49);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -3887,5 +4114,509 @@ describe('authoritative interaction command outcomes', () => {
     expect(fc.sent).toContainEqual({ t: 'commandOutcome', rid: 43, ok: true });
     expect(server.sim.countItem('supply_crate', session.pid)).toBe(1);
     expect(object.lootable).toBe(false);
+  });
+});
+
+describe('negotiated stable timer wire v2', () => {
+  const timerV2 = { timerWireVersion: 2 } as unknown as Parameters<GameServer['join']>[7];
+
+  function testAura(id: string, remaining: number, value = 7): Aura {
+    return {
+      id,
+      name: id,
+      kind: 'buff_ap',
+      remaining,
+      duration: remaining,
+      value,
+      sourceId: 0,
+      school: 'physical',
+    };
+  }
+
+  it('keeps an unnegotiated recipient on the legacy remaining-time wire', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Legacy', 'mage');
+    const player = server.sim.entities.get(session.pid)!;
+    const meta = server.sim.meta(session.pid)!;
+    player.auras = [];
+    player.auras.push(testAura('legacy_aura', 10));
+    player.cooldowns.set('legacy_cast', 5);
+    meta.nodeHarvestReadyAt.legacy_node = server.sim.time + 30;
+
+    broadcast(server);
+    const first = lastSnap(fc.sent);
+    expect(first.tw).toBeUndefined();
+    expect(first.self.auras[0]).toMatchObject({ id: 'legacy_aura', rem: 10 });
+    expect(first.self.auras[0]).not.toHaveProperty('exp');
+    expect(first.self.cds.legacy_cast).toBe(5);
+    expect(first.self.ncd.legacy_node).toBe(30);
+
+    fc.sent.length = 0;
+    server.sim.tick();
+    broadcast(server);
+    const second = lastSnap(fc.sent);
+    expect(second.self.auras[0].rem).toBeLessThan(10);
+    expect(second.self.cds.legacy_cast).toBeLessThan(5);
+    expect(second.self.ncd.legacy_node).toBeLessThan(30);
+  });
+
+  it('sends a complete stable first snapshot, then ages omitted timers across skipped ticks', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Stable', 'mage', timerV2);
+    const player = server.sim.entities.get(session.pid)!;
+    const meta = server.sim.meta(session.pid)!;
+    player.auras = [];
+    player.auras.push(testAura('stable_aura', 10));
+    player.cooldowns.set('stable_cast', 5);
+    player.abilityCharges = {
+      stable_cast: {
+        charges: 1,
+        maxCharges: 2,
+        recharge: 5,
+        rechargeLength: 5,
+        recharges: [5],
+      },
+    };
+    meta.nodeHarvestReadyAt.stable_node = server.sim.time + 30;
+
+    broadcast(server);
+    const first = lastSnap(fc.sent);
+    expect(first.tw).toBe(2);
+    expect(first.self.auras[0]).toMatchObject({ id: 'stable_aura', exp: 10 });
+    expect(first.self.auras[0]).not.toHaveProperty('rem');
+    expect(first.self.cds.stable_cast).toBe(5);
+    expect(first.self.achg.stable_cast).toBe(1);
+    expect(first.self.ncd.stable_node).toBe(30);
+
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(first);
+    expect(client.player.auras[0].remaining).toBe(10);
+    expect(client.player.cooldowns.get('stable_cast')).toBe(5);
+    expect(client.nodeHarvestableByMe('stable_node')).toBe(false);
+
+    fc.sent.length = 0;
+    for (let i = 0; i < 5; i++) server.sim.tick();
+    broadcast(server);
+    const later = lastSnap(fc.sent);
+    expect(later.tick - first.tick).toBe(5);
+    expect(later.self).not.toHaveProperty('auras');
+    expect(later.self).not.toHaveProperty('cds');
+    expect(later.self).not.toHaveProperty('achg');
+    expect(later.self).not.toHaveProperty('ncd');
+
+    (client as any).applySnapshot(later);
+    expect(client.player.auras[0].remaining).toBeCloseTo(9.75, 5);
+    expect(client.player.cooldowns.get('stable_cast')).toBeCloseTo(4.75, 5);
+    expect(client.nodeHarvestableByMe('stable_node')).toBe(false);
+
+    player.auras.length = 0;
+    player.cooldowns.clear();
+    player.abilityCharges.stable_cast.charges = 2;
+    meta.nodeHarvestReadyAt.stable_node = server.sim.time - 1;
+    fc.sent.length = 0;
+    broadcast(server);
+    const cleared = lastSnap(fc.sent);
+    expect(cleared.self.auras).toEqual([]);
+    expect(cleared.self.cds).toEqual({});
+    expect(cleared.self.achg).toEqual({ stable_cast: 2 });
+    expect(cleared.self.ncd).toEqual({});
+
+    (client as any).applySnapshot(cleared);
+    expect(client.player.auras).toEqual([]);
+    expect(client.player.cooldowns.size).toBe(0);
+    expect(client.player.abilityCharges?.stable_cast?.charges).toBe(2);
+    expect(client.nodeHarvestableByMe('stable_node')).toBe(true);
+  });
+
+  it('re-sends aura refreshes, reorder, values, stacks, and charges without timer churn', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'AuraMutations', 'mage', timerV2);
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [];
+    const firstAura = testAura('first', 10, 2);
+    const secondAura = testAura('second', 12, 3);
+    player.auras.push(firstAura, secondAura);
+
+    broadcast(server);
+    const first = lastSnap(fc.sent);
+    const firstExpiry = first.self.auras.find((a: any) => a.id === 'first').exp;
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(first);
+
+    server.sim.tick();
+    player.auras.reverse();
+    firstAura.remaining = 20;
+    secondAura.value = 9;
+    secondAura.stacks = 3;
+    secondAura.charges = 4;
+    fc.sent.length = 0;
+    broadcast(server);
+    const changed = lastSnap(fc.sent);
+    expect(changed.self.auras.map((a: any) => a.id)).toEqual(['second', 'first']);
+    expect(changed.self.auras[0]).toMatchObject({ value: 9, stacks: 3, charges: 4 });
+    expect(changed.self.auras[1].exp).toBeGreaterThan(firstExpiry);
+
+    (client as any).applySnapshot(changed);
+    expect(client.player.auras.map((a) => a.id)).toEqual(['second', 'first']);
+    expect(client.player.auras[0]).toMatchObject({ value: 9, stacks: 3, charges: 4 });
+    expect(client.player.auras[1].remaining).toBeCloseTo(20, 5);
+  });
+
+  it('keeps rate-aware cooldown deadlines stable through Temporal Hourglass acceleration', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Accelerated', 'mage', timerV2);
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [];
+    player.auras.push({
+      ...testAura('temporal_hourglass', 1, 3),
+      kind: 'stasis',
+      duration: 1,
+    });
+    player.cooldowns.set('accelerated_cast', 5);
+    player.cooldowns.set('temporal_hourglass', 5);
+
+    broadcast(server);
+    const first = lastSnap(fc.sent);
+    expect(first.self.cds.accelerated_cast).toEqual([3, 3, 1]);
+    expect(first.self.cds.temporal_hourglass).toBe(5);
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(first);
+    expect(client.player.cooldowns.get('accelerated_cast')).toBe(5);
+
+    fc.sent.length = 0;
+    for (let i = 0; i < 10; i++) server.sim.tick();
+    broadcast(server);
+    const accelerated = lastSnap(fc.sent);
+    expect(accelerated.self).not.toHaveProperty('cds');
+    (client as any).applySnapshot(accelerated);
+    expect(client.player.cooldowns.get('accelerated_cast')).toBeCloseTo(3.5, 5);
+
+    fc.sent.length = 0;
+    for (let i = 0; i < 10; i++) server.sim.tick();
+    broadcast(server);
+    const expired = lastSnap(fc.sent);
+    expect(expired.self.cds.accelerated_cast).toBe(3);
+    (client as any).applySnapshot(expired);
+    expect(client.player.cooldowns.get('accelerated_cast')).toBeCloseTo(2, 5);
+
+    player.cooldowns.set('accelerated_cast', 6);
+    player.auras.push({
+      ...testAura('temporal_hourglass', 2, 2),
+      kind: 'stasis',
+      duration: 2,
+    });
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).self.cds.accelerated_cast).toEqual([5, 2, 3]);
+
+    player.auras = player.auras.filter((aura) => aura.id !== 'temporal_hourglass');
+    fc.sent.length = 0;
+    broadcast(server);
+    const removed = lastSnap(fc.sent);
+    expect(removed.self.cds.accelerated_cast).toBe(7);
+    (client as any).applySnapshot(removed);
+    expect(client.player.cooldowns.get('accelerated_cast')).toBe(6);
+  });
+
+  it('freezes retained auras while dead, then resumes absolute decay after resurrection', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Paused', 'mage', timerV2);
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [];
+    player.auras.push(testAura('retained', 8));
+    broadcast(server);
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(lastSnap(fc.sent));
+
+    player.dead = true;
+    player.hp = 0;
+    fc.sent.length = 0;
+    broadcast(server);
+    const frozen = lastSnap(fc.sent);
+    expect(frozen.self.auras[0]).toMatchObject({ id: 'retained', rem: 8 });
+    expect(frozen.self.auras[0]).not.toHaveProperty('exp');
+    (client as any).applySnapshot(frozen);
+    const frozenRemaining = client.player.auras[0].remaining;
+
+    fc.sent.length = 0;
+    for (let i = 0; i < 6; i++) server.sim.tick();
+    broadcast(server);
+    const whileDead = lastSnap(fc.sent);
+    expect(whileDead.self).not.toHaveProperty('auras');
+    (client as any).applySnapshot(whileDead);
+    expect(client.player.auras[0].remaining).toBe(frozenRemaining);
+
+    player.dead = false;
+    player.hp = player.maxHp;
+    fc.sent.length = 0;
+    broadcast(server);
+    const resumed = lastSnap(fc.sent);
+    expect(resumed.self.auras[0]).toHaveProperty('exp');
+    expect(resumed.self.auras[0]).not.toHaveProperty('rem');
+    (client as any).applySnapshot(resumed);
+
+    fc.sent.length = 0;
+    server.sim.tick();
+    server.sim.tick();
+    broadcast(server);
+    const decayed = lastSnap(fc.sent);
+    expect(decayed.self).not.toHaveProperty('auras');
+    (client as any).applySnapshot(decayed);
+    expect(client.player.auras[0].remaining).toBeCloseTo(frozenRemaining - 0.1, 5);
+  });
+
+  it('keeps legacy and v2 entity variants isolated and builds each at most once per tick', () => {
+    const server = new GameServer();
+    const stableWs = fakeWs();
+    const legacyWs = fakeWs();
+    const subjectWs = fakeWs();
+    const stable = joinServer(server, stableWs, 1, 'StableViewer', 'warrior', timerV2);
+    joinServer(server, legacyWs, 2, 'LegacyViewer');
+    const subject = joinServer(server, subjectWs, 3, 'Subject', 'mage');
+    const subjectEntity = server.sim.entities.get(subject.pid)!;
+    subjectEntity.auras = [];
+    subjectEntity.auras.push(testAura('shared_aura', 20));
+
+    (server as any).perfDetailActive = true;
+    (server as any).bcLegacySerializes = 0;
+    (server as any).bcStableSerializes = 0;
+    (server as any).bcBaseSerializes = 0;
+    broadcast(server);
+    const stableFirst = lastSnap(stableWs.sent);
+    const legacyFirst = lastSnap(legacyWs.sent);
+    const stableRow = stableFirst.ents.find((e: any) => e.id === subject.pid);
+    const legacyRow = legacyFirst.ents.find((e: any) => e.id === subject.pid);
+    expect(stableRow.auras[0]).toHaveProperty('exp');
+    expect(stableRow.auras[0]).not.toHaveProperty('rem');
+    expect(legacyRow.auras[0]).toHaveProperty('rem');
+    expect(legacyRow.auras[0]).not.toHaveProperty('exp');
+    expect((server as any).bcLegacySerializes).toBeLessThanOrEqual(server.sim.entities.size);
+    expect((server as any).bcStableSerializes).toBeLessThanOrEqual(server.sim.entities.size);
+    expect((server as any).bcBaseSerializes).toBeLessThanOrEqual(server.sim.entities.size);
+    expect(
+      (server as any).bcLegacySerializes + (server as any).bcStableSerializes,
+    ).toBeLessThanOrEqual(server.sim.entities.size * 2);
+
+    const stableClient = bareClient(stable.pid);
+    (stableClient as any).applySnapshot(stableFirst);
+    stableWs.sent.length = 0;
+    legacyWs.sent.length = 0;
+    subjectWs.sent.length = 0;
+    server.sim.tick();
+    broadcast(server);
+    const stableSecond = lastSnap(stableWs.sent);
+    const legacySecond = lastSnap(legacyWs.sent);
+    expect(stableSecond.ents.find((e: any) => e.id === subject.pid)).toBeUndefined();
+    expect(stableSecond.keep).toContain(subject.pid);
+    expect(legacySecond.ents.find((e: any) => e.id === subject.pid)?.auras[0]).toHaveProperty(
+      'rem',
+    );
+    expect(JSON.stringify(stableSecond).length).toBeLessThan(JSON.stringify(legacySecond).length);
+    (stableClient as any).applySnapshot(stableSecond);
+    expect(stableClient.entities.get(subject.pid)?.auras[0].remaining).toBeCloseTo(19.95, 5);
+  });
+
+  it('uses the recipient capability for spectator self records', () => {
+    const server = new GameServer();
+    const stableWs = fakeWs();
+    const legacyWs = fakeWs();
+    const targetWs = fakeWs();
+    const stableSpectator = joinServer(server, stableWs, 1, 'StableSpec', 'mage', timerV2);
+    const legacySpectator = joinServer(server, legacyWs, 2, 'LegacySpec', 'mage');
+    const target = joinServer(server, targetWs, 3, 'Observed', 'mage');
+    for (let i = 0; i < 5; i++) server.sim.tick();
+    const targetEntity = server.sim.entities.get(target.pid)!;
+    targetEntity.auras = [];
+    targetEntity.auras.push(testAura('observed_aura', 10));
+    targetEntity.cooldowns.set('observed_cast', 5);
+    (server as any).enterSpectate(stableSpectator, target);
+    (server as any).enterSpectate(legacySpectator, target);
+    stableWs.sent.length = 0;
+    legacyWs.sent.length = 0;
+    broadcast(server);
+
+    const stableSnap = lastSnap(stableWs.sent);
+    const legacySnap = lastSnap(legacyWs.sent);
+    expect(stableSnap.self.id).toBe(target.pid);
+    expect(stableSnap.tw).toBe(2);
+    expect(stableSnap.self.auras[0]).toHaveProperty('exp');
+    expect(stableSnap.self.cds.observed_cast).toBeCloseTo(server.sim.time + 5, 5);
+    expect(legacySnap.self.id).toBe(target.pid);
+    expect(legacySnap.tw).toBeUndefined();
+    expect(legacySnap.self.auras[0]).toHaveProperty('rem');
+    expect(legacySnap.self.cds.observed_cast).toBe(5);
+  });
+
+  it('refreshes the negotiated capability on linkdead resume in both directions', () => {
+    const server = new GameServer();
+    const legacyWs = fakeWs();
+    const original = joinServer(server, legacyWs, 1, 'ResumeWire');
+    legacyWs.ws.readyState = 3;
+    expect(server.socketClosed(original, legacyWs.ws)).toBe(true);
+
+    const stableWs = fakeWs();
+    const stableResult = server.join(
+      stableWs.ws,
+      1,
+      1,
+      'ResumeWire',
+      'warrior',
+      null,
+      false,
+      timerV2,
+    );
+    if ('error' in stableResult) throw new Error(stableResult.error);
+    expect(stableResult).toBe(original);
+    expect((stableResult as any).timerWireVersion).toBe(2);
+    stableWs.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(stableWs.sent).tw).toBe(2);
+
+    stableWs.ws.readyState = 3;
+    expect(server.socketClosed(stableResult, stableWs.ws)).toBe(true);
+    const fallbackWs = fakeWs();
+    const fallback = server.join(fallbackWs.ws, 1, 1, 'ResumeWire', 'warrior', null);
+    if ('error' in fallback) throw new Error(fallback.error);
+    expect(fallback).toBe(original);
+    expect((fallback as any).timerWireVersion).toBe(1);
+    fallbackWs.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fallbackWs.sent).tw).toBeUndefined();
+  });
+
+  it('falls back to legacy decode solely when the snapshot has no v2 marker', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'OldServer', 'mage');
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [];
+    player.auras.push(testAura('old_wire', 6));
+    player.cooldowns.set('old_cast', 4);
+    broadcast(server);
+    const first = lastSnap(fc.sent);
+    expect(first.tw).toBeUndefined();
+
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(first);
+    expect(client.player.auras[0].remaining).toBe(6);
+    expect(client.player.cooldowns.get('old_cast')).toBe(4);
+
+    fc.sent.length = 0;
+    for (let i = 0; i < 3; i++) server.sim.tick();
+    broadcast(server);
+    const second = lastSnap(fc.sent);
+    expect(second.tw).toBeUndefined();
+    (client as any).applySnapshot(second);
+    expect(client.player.auras[0].remaining).toBeCloseTo(5.85, 5);
+    expect(client.player.cooldowns.get('old_cast')).toBeCloseTo(3.85, 5);
+  });
+
+  it('omits stable auras from moving lite records, then sends an explicit remote removal', () => {
+    const server = new GameServer();
+    const viewerWs = fakeWs();
+    const subjectWs = fakeWs();
+    const viewer = joinServer(server, viewerWs, 1, 'MovingViewer', 'mage', timerV2);
+    const subject = joinServer(server, subjectWs, 2, 'MovingSubject', 'mage');
+    const subjectEntity = server.sim.entities.get(subject.pid)!;
+    subjectEntity.auras = [testAura('moving_aura', 20)];
+
+    broadcast(server);
+    const first = lastSnap(viewerWs.sent);
+    const client = bareClient(viewer.pid, 'mage');
+    (client as any).applySnapshot(first);
+    expect(client.entities.get(subject.pid)?.auras[0].remaining).toBe(20);
+
+    viewerWs.sent.length = 0;
+    server.sim.tick();
+    subjectEntity.pos.x += 1;
+    subjectEntity.prevPos.x += 1;
+    server.sim.grid.update(subjectEntity);
+    broadcast(server);
+    const moving = lastSnap(viewerWs.sent);
+    const lite = moving.ents.find((entity: any) => entity.id === subject.pid);
+    expect(lite).toBeDefined();
+    expect(lite.k).toBeUndefined();
+    expect(lite).not.toHaveProperty('auras');
+    (client as any).applySnapshot(moving);
+    expect(client.entities.get(subject.pid)?.auras[0].remaining).toBeCloseTo(19.95, 5);
+
+    subjectEntity.auras = [];
+    viewerWs.sent.length = 0;
+    server.sim.tick();
+    broadcast(server);
+    const removed = lastSnap(viewerWs.sent);
+    const removalRow = removed.ents.find((entity: any) => entity.id === subject.pid);
+    expect(removalRow.auras).toEqual([]);
+    (client as any).applySnapshot(removed);
+    expect(client.entities.get(subject.pid)?.auras).toEqual([]);
+  });
+
+  it('retains a remote aura revision across a non-due distance-tier tick', () => {
+    const server = new GameServer();
+    const viewerWs = fakeWs();
+    const subjectWs = fakeWs();
+    const viewer = joinServer(server, viewerWs, 1, 'DeferredViewer', 'mage', timerV2);
+    const subject = joinServer(server, subjectWs, 2, 'DeferredSubject', 'mage');
+    const viewerEntity = server.sim.entities.get(viewer.pid)!;
+    const subjectEntity = server.sim.entities.get(subject.pid)!;
+    subjectEntity.auras = [testAura('deferred_aura', 20, 2)];
+    subjectEntity.pos.x = viewerEntity.pos.x + 60;
+    subjectEntity.pos.z = viewerEntity.pos.z;
+    subjectEntity.prevPos = { ...subjectEntity.pos };
+    server.sim.grid.update(subjectEntity);
+
+    broadcast(server);
+    expect(lastSnap(viewerWs.sent).ents.some((entity: any) => entity.id === subject.pid)).toBe(
+      true,
+    );
+
+    server.sim.tick();
+    subjectEntity.auras[0].value = 9;
+    viewerWs.sent.length = 0;
+    broadcast(server);
+    const deferred = lastSnap(viewerWs.sent);
+    expect(deferred.ents.find((entity: any) => entity.id === subject.pid)).toBeUndefined();
+    expect(deferred.keep).toContain(subject.pid);
+
+    server.sim.tick();
+    viewerWs.sent.length = 0;
+    broadcast(server);
+    const delivered = lastSnap(viewerWs.sent).ents.find((entity: any) => entity.id === subject.pid);
+    expect(delivered.k).toBeUndefined();
+    expect(delivered.auras[0]).toMatchObject({ id: 'deferred_aura', value: 9 });
+  });
+
+  it('eliminates stable aura rebuild churn and aggregate bytes over 160 ticks', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'LongWindow', 'mage');
+    const player = server.sim.entities.get(session.pid)!;
+    player.auras = [testAura('long_window', 60)];
+    const internals = server as any;
+    internals.perfDetailActive = true;
+    internals.bcBaseSerializes = 0;
+    internals.bcLegacySerializes = 0;
+    internals.bcStableSerializes = 0;
+    let legacyBytes = 0;
+    let stableBytes = 0;
+
+    for (let i = 0; i < 160; i++) {
+      const legacy = internals.wireCacheFor(player, false);
+      const stable = internals.wireCacheFor(player, true);
+      legacyBytes += (i === 0 ? legacy.fullJson : legacy.liteJson).length;
+      stableBytes += i === 0 ? stable.fullAuraJson.length : `{"keep":[${player.id}]}`.length;
+      if (i < 159) server.sim.tick();
+    }
+
+    expect(internals.bcBaseSerializes).toBe(160);
+    expect(internals.bcLegacySerializes).toBeGreaterThan(150);
+    expect(internals.bcStableSerializes).toBe(1);
+    expect(internals.wireCache.get(player.id).auraCache.rebuilds).toBe(1);
+    expect(stableBytes).toBeLessThan(legacyBytes * 0.35);
   });
 });

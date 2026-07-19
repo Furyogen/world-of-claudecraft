@@ -286,6 +286,7 @@ import {
   isEnchantedInstance,
 } from './professions/enchanting';
 import * as professionsFocus from './professions/focus';
+import { announceMasterworkZone } from './professions/gather_events';
 import {
   drainGatheringGrants,
   emptyGatheringProficiency,
@@ -295,7 +296,13 @@ import {
   isNodeHarvestableBy,
   normalizeGatheringProficiency,
 } from './professions/gathering';
+import { updateGuildTrendLetters } from './professions/guild_letter';
 import type { MasterworkProc } from './professions/masterwork';
+import {
+  isStationActive,
+  type MobileCraftingStation,
+  placeMobileStationForPlayer,
+} from './professions/mobile_station';
 import { type SalvageResult, salvageItem as salvageItemImpl } from './professions/salvage';
 import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
 import {
@@ -1108,12 +1115,23 @@ export interface PlayerMeta {
   // persisted: a fresh login gets a fresh window rather than carrying a
   // logout-time cooldown across sessions.
   craftThrottle: { windowStart: number; count: number };
+  // The player's own placed mobile crafting station (#1134, wired live in
+  // Professions 2.0 Phase 8: see professions/mobile_station.ts). TRANSIENT:
+  // never serialized to the character save (CharacterState has no field for
+  // it and serializeCharacter never writes one), and defaults to null at
+  // construction AND on load, because its expiry is tick-domain
+  // (expiresAtTick) and tick counts are not restart-safe.
+  mobileStation: MobileCraftingStation | null;
   // Active-archetype state and quest-gated switching (#1129, superseded scope: see
   // professions/archetype.ts). Never touches craftSkills. Persisted in CharacterState.
   archetype: ArchetypeState;
   // One-time Ravenpost welcome letter sent (persisted in CharacterState, so
   // existing characters get the service announcement exactly once).
   mailWelcomed: boolean;
+  // One-time Guild trend letter sent (Professions 2.0 Phase 7): flipped when
+  // the craft-trend sweep books the letter (professions/guild_letter.ts).
+  // Persisted in CharacterState so no later load can re-send it.
+  guildLetterSent: boolean;
   // Delve meta progression (persisted in CharacterState).
   delveMarks: number;
   delveClears: Record<string, number>;
@@ -1285,6 +1303,9 @@ export interface CharacterState {
   // Ravenpost welcome letter already sent (optional so pre-mail saves load
   // cleanly and receive the announcement letter once on their next login).
   mailWelcomed?: boolean;
+  // Guild trend letter already sent (optional so pre-phase-7 saves load
+  // cleanly and receive at most one letter when their crafts qualify).
+  guildLetterSent?: boolean;
   // World-boss loot lockouts now ride `raidLockouts` (keyed worldboss:<mobId>). The
   // legacy per-day `worldBossDaily` field is intentionally dropped: pre-migration saves
   // that still carry it just ignore it (a player locked at deploy may loot once more, a
@@ -2077,8 +2098,12 @@ export class Sim {
       craftSkills: emptyCraftSkills(),
       knownRecipes: new Set(),
       craftThrottle: { windowStart: 0, count: 0 },
+      // Transient (never persisted; see the PlayerMeta field doc): stays null
+      // on load too, since savedState carries no mobile-station field.
+      mobileStation: null,
       marketQuery: defaultMarketQuery(),
       mailWelcomed: false,
+      guildLetterSent: false,
       archetype: emptyArchetypeState(),
       delveMarks: 0,
       delveClears: {},
@@ -2191,6 +2216,7 @@ export class Sim {
       if (s.knownRecipes) meta.knownRecipes = new Set(s.knownRecipes);
       meta.archetype = normalizeArchetypeState(s.archetype, meta.craftSkills);
       meta.mailWelcomed = s.mailWelcomed === true;
+      meta.guildLetterSent = s.guildLetterSent === true;
       meta.delveMarks = s.delveMarks ?? 0;
       meta.delveClears = { ...(s.delveClears ?? {}) };
       meta.companionUpgrades = { ...(s.companionUpgrades ?? {}) };
@@ -2846,6 +2872,7 @@ export class Sim {
       },
       heroicDaily: { date: meta.heroicDaily.date, marked: [...meta.heroicDaily.marked] },
       mailWelcomed: meta.mailWelcomed,
+      guildLetterSent: meta.guildLetterSent,
       townFocus: { ...meta.townFocus },
       // World-boss lockouts serialize via raidLockouts (above), not a separate field.
       // Book of Deeds: every field conditional (absent while empty/null/zero)
@@ -3935,6 +3962,8 @@ export class Sim {
       marketListingBelongsTo: (listing, meta) => sim.market.marketListingBelongsTo(listing, meta),
       queueQuestLetter: (questId, pid) => sim.postOffice.queueQuestLetter(questId, pid),
       mailHeroicMarks: (pid, itemId, count) => sim.postOffice.mailHeroicMarks(pid, itemId, count),
+      mailAuthoredLetter: (meta, letter) =>
+        sim.postOffice.sendLetter(sim.postOffice.mailKeyFor(meta), meta.name, letter, 'system'),
       // Book of Deeds seam callbacks (owned by deeds.ts). Late-bound arrows so
       // sim.ctx resolves at call time (the Q1 pattern).
       bumpDeedStat: (meta, stat, delta) => deedsMod.bumpDeedStat(sim.ctx, meta, stat, delta),
@@ -4326,6 +4355,12 @@ export class Sim {
     this.market.update();
     lap?.('market');
     this.postOffice.update();
+    // The Guild trend letter sweep (Professions 2.0 Phase 7): the single 1 Hz
+    // chokepoint that watches every craft-skill mutation path plus the load
+    // backfill case. Draws ZERO rng and emits nothing itself (it only books a
+    // letter via ctx.mailAuthoredLetter), so appending it inside the mail
+    // phase cannot fork the draw order.
+    updateGuildTrendLetters(this.ctx);
     lap?.('postOffice');
     drainDelayedEvents(this.ctx);
     lap?.('delayedEv');
@@ -5065,6 +5100,7 @@ export class Sim {
     id: string,
     duration: number,
     school: Aura['school'],
+    breakThreshold?: number,
   ): void {
     const remaining = this.diminishedCrowdControlDuration(source, target, 'root', duration);
     if (remaining === null) return;
@@ -5077,6 +5113,7 @@ export class Sim {
       value: 0,
       sourceId: source.id,
       school,
+      ...(breakThreshold !== undefined ? { breaksOnDamage: true, breakThreshold } : {}),
     });
   }
 
@@ -6803,6 +6840,10 @@ export class Sim {
       };
       meta.lastMasterwork = proc;
       this.emit({ type: 'masterwork', ...proc, pid: meta.entityId });
+      // Zone-wide celebration copy (Phase 6): the professions module owns the
+      // fanout and the instance-space exclusion; draws no rng, runs after the
+      // personal emit.
+      announceMasterworkZone(this.ctx, meta.entityId, meta.name, proc);
     }
   }
 
@@ -6816,6 +6857,32 @@ export class Sim {
   // recent masterwork proc, or null before their first proc this session.
   get lastMasterwork(): MasterworkProc | null {
     return this.players.get(this.primaryId)?.lastMasterwork ?? null;
+  }
+
+  // Mobile crafting station command (Professions 2.0 Phase 8, wiring #1134):
+  // a thin delegate onto professions/mobile_station.ts, resolved on the
+  // deterministic tick the command arrives on, same shape as craftItem
+  // above. Specialization-gated inside the impl; a failed placement is a
+  // silent no-op (the crafting window's station row already communicates
+  // range, and the server re-validates the gate on every craft).
+  placeMobileStation(craftId: string, pid?: number): void {
+    placeMobileStationForPlayer(this.ctx, craftId, pid);
+  }
+
+  // IWorld read surface (IWorldProfessions, Phase 8): the craft id of the
+  // local viewer's own ACTIVE mobile station, or null when none is placed or
+  // the placed one has expired (tick-domain expiry, checked live).
+  get activeMobileStationCraft(): string | null {
+    return this.activeMobileStationCraftFor(this.primaryId);
+  }
+
+  /** Per-player form of `activeMobileStationCraft`, for the server's `mst`
+   *  self-delta (server/game.ts): the expiry check runs server-side against
+   *  this sim's own tickCount, so the client mirrors a server-authoritative
+   *  value and never reasons about tick domains. */
+  activeMobileStationCraftFor(pid: number): string | null {
+    const station = this.players.get(pid)?.mobileStation;
+    return station && isStationActive(station, this.tickCount) ? station.craftId : null;
   }
 
   // Recipe acquisition command (#1299): a thin delegate onto

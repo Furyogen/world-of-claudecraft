@@ -663,6 +663,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.playerMenu.profileUnavailable': '未找到 {name} 的资料。',
   'hudChrome.playerMenu.aiTag': '[AI]',
   'hudChrome.playerMenu.aiTagTitle': 'AI 操作的账号',
+  'hudChrome.playerMenu.streamerBadgeTitle': '认证主播',
   'hudChrome.playerMenu.watchTwitch': '在 Twitch 观看',
   'hudChrome.playerMenu.watchX': '在 X 查看',
   'hudChrome.playerMenu.watchKick': '在 Kick 观看',
@@ -942,6 +943,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.highContrastBackground': '高对比度背景',
   'hudChrome.options.showItemLevel': '显示物品等级',
   'hudChrome.options.showSecondaryActionBar': '显示副动作条',
+  'hudChrome.options.showThirdActionBar': '显示第三动作条',
   'hudChrome.options.showDailyRewardsChest': '显示每日奖励宝箱',
   'hudChrome.options.mobileCameraJoystick': '摄像机摇杆',
   'hudChrome.options.mobileLeftHanded': '左手布局',
@@ -1379,6 +1381,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': '打开 World of ClaudeCraft 的 GitHub 项目',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社区',
   'a11y.donateProject': '捐赠支持 World of ClaudeCraft',
+  'entryGuard.body':
+    '进入世界时游戏意外关闭，图形设置现已设为{preset}。你可以在下方的图形选择器或游戏内选项中更改。',
+  'entryGuard.dismiss': '关闭',
+  'entryGuard.title': '已降低图形设置',
   'loading.world': '正在加载世界...',
   'loading.worldProgress': '正在加载世界... {done}/{total}',
   'loading.enteringWorld': '正在进入世界...',
@@ -1387,7 +1393,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.rendererFailed': '无法启动渲染器：请尝试刷新。{error}',
   'loading.enterTimeout': '无法进入世界。连接已超时。游戏服务器是否正在运行？',
   'loading.connectionLost': '与服务器的连接已断开。',
-  'loading.reconnecting': '连接已断开。正在重新连接...',
+  'loading.reconnectingAttempt':
+    '连接已断开。正在重新连接...（第 {attempt}/{maxAttempts} 次尝试，{seconds} 秒后重试）',
+  'loading.reconnectingNow': '连接已断开，正在立即重新连接...（第 {attempt}/{maxAttempts} 次尝试）',
+  'loading.slowConnection': '加载时间比平时长。请检查您的网络连接。',
   'loading.connectionRejected': '服务器关闭了连接。',
   'loading.realmFull': '当前服务器已满，请稍后几分钟再试。',
   'loading.tooManyConnections':
@@ -2385,7 +2394,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '将敌人变成蟾蜍，最多持续 {duration} 秒。蟾蜍会四处游荡并快速恢复。任何伤害都会打破效果。仅限野兽和人型生物。',
   'entities.abilities.frost_nova.name': '冰缚',
   'entities.abilities.frost_nova.description':
-    '将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。',
+    '将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。定身效果会在累计受到相当于目标最大生命值15%的伤害后解除，伤害阈值最低为20点，最高为60点。',
   'entities.abilities.arcane_explosion.name': '以太爆发',
   'entities.abilities.arcane_explosion.description':
     '奥术能量爆发，对附近所有敌人造成 {damage} 点奥术伤害。',
@@ -6010,6 +6019,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.comboNotAttuned': '请先选择一个原型组合。',
   'hudChrome.crafting.comboWrongPair': '启用这个确切组合才能制作。',
   'hudChrome.crafting.comboTierUnmet': '将两项主修技艺提升到所需阶级。',
+  'hudChrome.crafting.comboTierUnmetNamed': '将{crafts}提升到阶级 {tier}。',
   'hudChrome.crafting.professionChoice': '专业选择',
   'hudChrome.crafting.noProfessionChoice': '当前没有可用的专业选择。',
   'hudChrome.crafting.attunementPreview':
@@ -6586,7 +6596,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '每个配方都需要你采集或购买的特定材料。最简单的配方只需要普通材料，从一开始就能制作，因此你拿起一门行业的那一刻就能着手打造。配方列表仍在不断充实：少数行业还在等待它们的第一批配方，随着这些行业的成长，更多配方会陆续到来。',
   'guide.professions.craftMasteryTitle': '技能与精通',
   'guide.professions.craftMasteryBody':
-    '成功制作会提升你在该行业的技能，而技能绝不会把某个行业的配方锁起来：只要你知道一个配方并持有它的材料，你就可以尝试制作。技能为你换来的是品质，熟练的手艺能打造出更精良的作品。唯一的例外是组合配方，它们要求你在其涉及的两门行业中都证明过自己，才会向你开放。',
+    '成功制作会提升你在该行业的技能，而技能绝不会把某个行业的配方锁起来：只要你知道一个配方并持有它的材料，你就可以尝试制作。每个配方产出的都是它所承诺的那件成品，而熟练的手艺偶尔能打造出一件杰作：同样的成品，做工更精，并蕴含一丝额外的力量。唯一的例外是组合配方：只有调谐到连接这两门行业的原型、并在两门行业都证明过技艺的制作者，才能使用它们。',
   'guide.professions.craftComboTitle': '组合配方',
   'guide.professions.craftComboBody':
     '除了单一行业自身的配方列表之外，这个轮环还支持需要同时调用两个相邻行业的组合配方，用以奖励那些在轮环上投入了相邻行业、而非只专精孤立一项的角色。制作者必须自己同时掌握这两门行业；搭档的技能无法替代其中任何一半。',
@@ -6595,7 +6605,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '十种行业各自也代表一种命途，一种超越单纯从事该行业本身的更广阔身份。你的当前命途一次只能有一个，而非一份清单：你只承载一个命途，但如果愿意，之后可以更改。',
   'guide.professions.archetypeChooseTitle': '选择你的命途',
   'guide.professions.archetypeChooseBody':
-    '宣告命途将会是一个剧情时刻：一个正式接纳你进入该身份的任务。这条路仍在铺设之中，所以眼下每位角色都还带着这个尚未做出的选择行走世间，而在此期间，每种制作行业都可以推进到精良品质层级。',
+    '宣告命途是一个剧情时刻：一个正式接纳你进入该身份的任务。在你宣告之前，每种行业的技能都能提升到稀有层级。一旦你选定一对行业，这两门行业便完全放开；轮盘对侧的一门行业会作为爱好留在你身边，仍能练到稀有层级；而在你保有这一身份期间，其余所有行业都停留在普通层级。',
   'guide.professions.archetypeSwitchTitle': '回心转意',
   'guide.professions.archetypeSwitchBody':
     '宣告也不会是一纸终身判决。按照规划，在改投新的命途之前，你需要先向旧行业完成一次可重复的赎罪，而每转换一次，下一次赎罪的代价都会更沉，因此这个选择始终有分量，而非毫无代价。与宣告本身一样，它也仍在路上。',
@@ -6733,6 +6743,46 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.letters.heroic_marks_reward.subject': '你的英勇印记',
   'entities.letters.heroic_marks_reward.body':
     '你的部队清剿了英勇试炼，而你在后排作战，或已倒在尘土之中。你的锁定同样已经生效，因此你那一份英勇印记飞到了这里，而非就此遗失。好好使用它们。\n\n- 英勇军需官',
+  'entities.letters.guild_trend_engineering_alchemy.sender': '工匠公会',
+  'entities.letters.guild_trend_engineering_alchemy.subject': '关于你的工程学与炼金术',
+  'entities.letters.guild_trend_engineering_alchemy.body':
+    '工匠：\n\n你钻研工程学与炼金术的名声已传到公会：称好装药，量好试剂，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得爆破师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_alchemy_cooking.sender': '工匠公会',
+  'entities.letters.guild_trend_alchemy_cooking.subject': '关于你的炼金术与烹饪',
+  'entities.letters.guild_trend_alchemy_cooking.body':
+    '工匠：\n\n你钻研炼金术与烹饪的名声已传到公会：熬好药剂，调好菜肴，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得药剂师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_cooking_leatherworking.sender': '工匠公会',
+  'entities.letters.guild_trend_cooking_leatherworking.subject': '关于你的烹饪与制皮',
+  'entities.letters.guild_trend_cooking_leatherworking.body':
+    '工匠：\n\n你钻研烹饪与制皮的名声已传到公会：端出菜肴，鞣好皮革，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_leatherworking_tailoring.sender': '工匠公会',
+  'entities.letters.guild_trend_leatherworking_tailoring.subject': '关于你的制皮与裁缝',
+  'entities.letters.guild_trend_leatherworking_tailoring.body':
+    '工匠：\n\n你钻研制皮与裁缝的名声已传到公会：裁好皮革，缝好衣料，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得制装师之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_tailoring_inscription.sender': '工匠公会',
+  'entities.letters.guild_trend_tailoring_inscription.subject': '关于你的裁缝与铭文',
+  'entities.letters.guild_trend_tailoring_inscription.body':
+    '工匠：\n\n你钻研裁缝与铭文的名声已传到公会：缝好衣线，写好铭文，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_inscription_enchanting.sender': '工匠公会',
+  'entities.letters.guild_trend_inscription_enchanting.subject': '关于你的铭文与附魔',
+  'entities.letters.guild_trend_inscription_enchanting.body':
+    '工匠：\n\n你钻研铭文与附魔的名声已传到公会：写满卷轴，织入魔力，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.sender': '工匠公会',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.subject': '关于你的附魔与珠宝加工',
+  'entities.letters.guild_trend_enchanting_jewelcrafting.body':
+    '工匠：\n\n你钻研附魔与珠宝加工的名声已传到公会：注入魔力，磨亮宝石，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.sender': '工匠公会',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.subject': '关于你的珠宝加工与武器锻造',
+  'entities.letters.guild_trend_jewelcrafting_weaponcrafting.body':
+    '工匠：\n\n你钻研珠宝加工与武器锻造的名声已传到公会：镶好宝石，磨利刀锋，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.sender': '工匠公会',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.subject': '关于你的武器锻造与护甲锻造',
+  'entities.letters.guild_trend_weaponcrafting_armorcrafting.body':
+    '工匠：\n\n你钻研武器锻造与护甲锻造的名声已传到公会：淬好刀刃，敲合甲片，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。缔结这一对技艺的人，终会赢得铁匠之名。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
+  'entities.letters.guild_trend_armorcrafting_engineering.sender': '工匠公会',
+  'entities.letters.guild_trend_armorcrafting_engineering.subject': '关于你的护甲锻造与工程学',
+  'entities.letters.guild_trend_armorcrafting_engineering.body':
+    '工匠：\n\n你钻研护甲锻造与工程学的名声已传到公会：铆好甲片，校准齿轮，两门技艺相辅相成。能同时打磨相邻两门技艺的手，正是准备好调谐的手。请到东溪镇拜访哈德伦铁匠：眼下由他代诸位大师发言。用亲手做出的成果向他证明你的技艺，他便会把这两门技艺调谐为你的主修。\n\n谨此，\n工匠公会',
   'hudChrome.calendar.title': '活动日历',
   'hudChrome.calendar.close': '关闭日历',
   'hudChrome.calendar.keybindLabel': '活动日历',
@@ -6837,9 +6887,27 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'yumi.end.win': '胜利！Yumi安全了！',
   'yumi.end.loss': '战败！你的Yumi倒下了。',
   'hudChrome.crafting.comboRequirementUnmet': '你没有达到该配方所需组合的两项制造技能等级。',
-  'hudChrome.crafting.notAtHub': '必须达到所需等级并位于制作站，才能制作该物品。',
   'hudChrome.crafting.throttled': '你制作得太快了，请稍等片刻后再试。',
   'hudChrome.crafting.recipeNotLearned': '你还没有学会这个配方。',
+  'hudChrome.crafting.skillReqLine': '需要{craft} {skill}',
+  'hudChrome.crafting.difficultyFull': '完整技能成长',
+  'hudChrome.crafting.difficultyReduced': '技能成长减少',
+  'hudChrome.crafting.difficultyNone': '无技能成长',
+  'hudChrome.crafting.stationBadge': '制作站',
+  'hudChrome.crafting.masterworkToast': '杰作！{name}',
+  'hudChrome.crafting.masterworkZoneLine': '{crafter}制作出了杰作{name}！',
+  'hudChrome.crafting.tierUpToast': '{craft}提升至阶级 {tier}！',
+  'hudChrome.crafting.makersMark': '制作者：{name}',
+  'hudChrome.crafting.masterworkSeal': '杰作',
+  'hudChrome.crafting.enchantedLine': '已附魔',
+  'hudChrome.crafting.stationRequired': '必须位于{station}才能制作该物品。',
+  'hudChrome.crafting.stationOutOfRangeNamed': '前往{station}即可制作该物品。',
+  'hudChrome.crafting.stationName.forge': '锻造坊',
+  'hudChrome.crafting.stationName.kitchens': '厨房',
+  'hudChrome.crafting.stationName.apothecary': '药坊',
+  'hudChrome.crafting.stationName.tannery': '制革坊',
+  'hudChrome.crafting.stationName.loom': '织机',
+  'hudChrome.crafting.stationName.toolworks': '工坊',
   'hudChrome.mobile.actionPageIndicator': '第{page}页',
   'hudChrome.mobile.spellbookPageLabel': '页{page}',
   'hudChrome.mobile.hideKeyboard': '隐藏键盘',
@@ -7564,7 +7632,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': '魔法泉水',
   'entities.abilities.blazing_barrier.name': '炽热屏障',
   'entities.abilities.blazing_barrier.description':
-    '以烈焰环绕自身，吸收 130 点伤害，持续 60 秒。（火焰）',
+    '以烈焰环绕自身，吸收 {damage} 点伤害，持续 60 秒。（火焰）',
   'entities.abilities.cold_snap.name': '冬之召还',
   'entities.abilities.cold_snap.description':
     '立即结束闪烁步、霜幕和强效隐形术的冷却时间。（法师天赋）',
@@ -7758,4 +7826,26 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.majorsLabel': '主修：{a}和{b}',
   'hudChrome.professions.pairsHeld': '已持有组合：{count}',
   'hudChrome.professions.returnsLabel': '回归：{count}',
+  'entities.npcs.forgemistress_darva.name': '达尔瓦锻造师',
+  'entities.npcs.forgemistress_darva.title': '熔炉大师',
+  'entities.npcs.forgemistress_darva.greeting':
+    '熔炉听我的话，{className}。带来好矿石，它也会听你的。',
+  'entities.npcs.cook_marlow.name': '马洛厨师',
+  'entities.npcs.cook_marlow.title': '厨房大师',
+  'entities.npcs.cook_marlow.greeting':
+    '没有半生不熟的东西能离开我的厨房，{className}。坐下吃完，再回去闯荡。',
+  'entities.npcs.weaver_ottilie.name': '奥蒂莉织工',
+  'entities.npcs.weaver_ottilie.title': '织机大师',
+  'entities.npcs.weaver_ottilie.greeting': '当心丝线，{className}。在织机前，稳的手胜过有力的手。',
+  'entities.npcs.tinker_gizzel.name': '吉泽尔修补匠',
+  'entities.npcs.tinker_gizzel.title': '工坊大师',
+  'entities.npcs.tinker_gizzel.greeting':
+    '弹簧、齿轮、锋利的刃口，{className}：你手上缺什么，工坊里就有什么。',
+  'entities.npcs.tanner_hesk.name': '赫斯克制革匠',
+  'entities.npcs.tanner_hesk.title': '制革坊大师',
+  'entities.npcs.tanner_hesk.greeting': '皮子的好坏全看鞣制，{className}。鞣槽已经备好，就等你了。',
+  'entities.npcs.alchemist_verane.name': '韦兰炼金术士',
+  'entities.npcs.alchemist_verane.title': '药坊大师',
+  'entities.npcs.alchemist_verane.greeting':
+    '量两次，倒一次，{className}。药坊里容不得洒掉的药剂。',
 };

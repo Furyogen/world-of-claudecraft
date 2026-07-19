@@ -433,6 +433,10 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Ocena Trafienia',
   'abilityUi.actionBar.attackRemoveHint':
     'Kliknij prawym przyciskiem, aby usunąć z paska i zwolnić miejsce.',
+  'entryGuard.body':
+    'Gra nieoczekiwanie zamknęła się podczas wchodzenia do świata, więc grafika jest teraz ustawiona na {preset}. Możesz to zmienić w wyborze grafiki poniżej lub w opcjach w grze.',
+  'entryGuard.dismiss': 'Zamknij',
+  'entryGuard.title': 'Obniżono grafikę',
   'loading.realmFull': 'Ten świat jest teraz pełny. Spróbuj ponownie za kilka minut.',
   'loading.tooManyConnections':
     'Z twojej sieci pochodzi zbyt wiele połączeń do tego świata. Zamknij dodatkowe okna gry lub spróbuj ponownie za kilka minut.',
@@ -2301,7 +2305,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Otacza cię szronem, zwiększając pancerz o {buff} na 30 min.',
   'entities.abilities.frost_armor.name': 'Płaszcz szronu',
   'entities.abilities.frost_nova.description':
-    'Zamraża wszystkich pobliskich wrogów w miejscu na nawet 8 sek, zadając {damage} obrażeń od mrozu.',
+    'Zamraża wszystkich pobliskich wrogów w miejscu na nawet 8 sek, zadając {damage} obrażeń od mrozu. Unieruchomienie zostaje przerwane po otrzymaniu łącznych obrażeń równych 15% maksymalnego zdrowia celu, nie mniej niż 20 i nie więcej niż 60 obrażeń.',
   'entities.abilities.frost_nova.name': 'Lodowe okowy',
   'entities.abilities.frost_shock.description':
     'Natychmiast razi cel mrozem, zadając {damage} obrażeń od mrozu i spowalniając jego ruch o 50% na 8 sek.',
@@ -7052,7 +7056,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'download.windowsCta': 'Pobierz dla Windows',
   'download.linuxHint':
     'AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.',
-  'loading.reconnecting': 'Połączenie utracone. Ponowne łączenie...',
   'guide.nav.settings': 'Ustawienia i wydajność',
   'guide.settingsPage.advancedBody':
     'Zaawansowany zaczyna się od poziomu High i odblokowuje cztery dodatkowe selektory, dzięki czemu możesz spędzać klatki tam, gdzie je faktycznie zauważasz: szczegóły terenu, gęstość listowia, efekty i oświetlenie oraz jakość cieni. Podobnie jak jakość grafiki, obowiązują one po przeładowaniu.',
@@ -7241,8 +7244,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.increasePct.armor': 'Zwiększa pancerz o {pct}%',
   'hudChrome.auraEffect.increasePct.int': 'Zwiększa Intelekt o {pct}%',
   'hudChrome.auraEffect.increasePct.sta': 'Zwiększa Wytrzymałość o {pct}%',
-  'hudChrome.crafting.notAtHub':
-    'Musisz być w warsztacie rzemieślniczym i mieć wymagany poziom, aby to wytworzyć.',
   'hudChrome.crafting.recipeNotLearned': 'Nie nauczyłeś się jeszcze tego przepisu.',
   'hudChrome.crafting.throttled': 'Wytwarzasz zbyt szybko. Zaczekaj chwilę i spróbuj ponownie.',
   'hudChrome.mobile.chatPlaceholder': 'Powiedz coś...',
@@ -8038,7 +8039,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'game.talents.rowUnlocks': 'Odblokowuje się na poziomie {level}',
   'entities.abilities.blazing_barrier.name': 'Płonąca bariera',
   'entities.abilities.blazing_barrier.description':
-    'Otaczasz się płomieniami, pochłaniając 130 obrażeń przez 60 sek. (Ogień)',
+    'Otaczasz się płomieniami, pochłaniając {damage} obrażeń przez 60 sek. (Ogień)',
   'entities.abilities.cold_snap.name': 'Zew zimy',
   'entities.abilities.cold_snap.description':
     'Kończy czas odnowienia Migotliwego kroku, Mroźnej zasłony i Większej niewidzialności. (talent maga)',

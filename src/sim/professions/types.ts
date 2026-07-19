@@ -7,6 +7,8 @@
 // Zero DOM/browser/Three.js imports here (this is `src/sim/`, guarded by
 // tests/architecture.test.ts). No randomness: pure declarative shapes.
 
+import type { StationType } from './stations';
+
 export type ProfessionCategory = 'gathering' | 'crafting' | 'secondary';
 
 // A profession itself (mining, herbalism, alchemy, cooking, ...). Content
@@ -78,13 +80,17 @@ export interface ProfessionRecipeRecord {
   // before it can be crafted, independent of the player's tier/skill: knowing
   // a recipe and being able to craft it at tier are orthogonal gates.
   acquisition?: readonly ('trainer' | 'drop' | 'quest')[];
-  // Station-bound crafting (issue #1297): true only for the tier-4/5 recipes
-  // that require the player to be present at the level-20 crafting hub (see
-  // ../professions/crafting_hub.ts + content/professions.ts CRAFTING_HUB_*).
-  // Absent (the default) for every common-tier and combo recipe today: the
-  // free floor stays field-craftable, matching the existing "common tier
-  // never costs anything beyond materials" rule.
-  requiresHubStation?: boolean;
+  // Station-bound crafting (Professions 2.0 Phase 8, the hands-vs-stations
+  // split; supersedes #1297's requiresHubStation boolean and its level-20
+  // hub). Present only on a recipe that must be crafted AT a station of this
+  // type (see ../professions/stations.ts + content/professions.ts STATIONS),
+  // or beside the crafter's own active mobile station whose craft maps to
+  // it. Absent (the default) for every common-tier and combo recipe today:
+  // the free floor stays field-craftable ("hands" recipes, see
+  // content/recipes.ts FIELD_RECIPES), matching the existing "common tier
+  // never costs anything beyond materials" rule. There is NO level arm: the
+  // old hub's level-20 gate retired with it (2026-07-17 maintainer ruling).
+  stationType?: StationType;
 }
 
 // One performed craft (a runtime instance of a RecipeRecord being worked),

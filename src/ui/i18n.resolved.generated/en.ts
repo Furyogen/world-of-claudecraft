@@ -1040,6 +1040,7 @@ export const en: EnTranslations = {
       "itemLevelLine": "Item Level {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Show Secondary Action Bar",
+      "showThirdActionBar": "Show Third Action Bar",
       "showTargetOfTarget": "Show Target of Target",
       "showAttackButton": "Show Attack Button",
       "showDailyRewardsChest": "Show Daily Rewards Chest",
@@ -1469,7 +1470,8 @@ export const en: EnTranslations = {
       "watchTwitch": "Watch on Twitch",
       "watchX": "View on X",
       "watchKick": "Watch on Kick",
-      "watchYouTube": "Watch on YouTube"
+      "watchYouTube": "Watch on YouTube",
+      "streamerBadgeTitle": "Verified streamer"
     },
     "lootSettings": {
       "title": "Loot Settings",
@@ -2170,6 +2172,7 @@ export const en: EnTranslations = {
       "comboNotAttuned": "Choose an archetype pair first.",
       "comboWrongPair": "Activate this exact pair to craft it.",
       "comboTierUnmet": "Raise both major crafts to the required tier.",
+      "comboTierUnmetNamed": "Raise {crafts} to tier {tier}.",
       "professionChoice": "Profession choice",
       "noProfessionChoice": "No valid profession choice is currently available.",
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
@@ -2200,9 +2203,29 @@ export const en: EnTranslations = {
         "nearTier": "{craft} is {points} skill from its next tier.",
         "dormantKnowledge": "{craft} knowledge is retained but dormant until its pair or hobby is active."
       },
-      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "stationRequired": "You must be at the {station} to craft that.",
+      "stationName": {
+        "forge": "Forge",
+        "kitchens": "Kitchens",
+        "apothecary": "Apothecary",
+        "tannery": "Tannery",
+        "loom": "Loom",
+        "toolworks": "Toolworks"
+      },
       "throttled": "You are crafting too quickly. Wait a moment and try again.",
-      "recipeNotLearned": "You have not learned that recipe yet."
+      "recipeNotLearned": "You have not learned that recipe yet.",
+      "skillReqLine": "Requires {craft} {skill}",
+      "difficultyFull": "Full skill gain",
+      "difficultyReduced": "Reduced skill gain",
+      "difficultyNone": "No skill gain",
+      "stationBadge": "Station",
+      "stationOutOfRangeNamed": "Move to the {station} to craft this.",
+      "masterworkToast": "Masterwork! {name}",
+      "masterworkZoneLine": "{crafter} crafted a masterwork {name}!",
+      "tierUpToast": "{craft} advanced to tier {tier}!",
+      "makersMark": "Crafted by {name}",
+      "masterworkSeal": "Masterwork",
+      "enchantedLine": "Enchanted"
     },
     "finder": {
       "title": "Dungeon Finder",
@@ -3427,13 +3450,13 @@ export const en: EnTranslations = {
       "craftHowTitle": "The crafting window",
       "craftHowBody": "Open the Crafting window (default key T) to see every recipe you know, what each one needs, and what you have on hand; when the materials are there, one click does the work. Common recipes can be crafted anywhere in the world. A handful of advanced recipes, higher-tier tools and rare caster armor among them, instead ask you to stand at the crafting hub in Highwatch.",
       "craftMasteryTitle": "Skill and mastery",
-      "craftMasteryBody": "Crafting successfully builds skill in that trade, and skill never locks a craft's recipes away: if you know a recipe and hold its materials, you can attempt it. What skill buys you instead is quality, a practiced hand turns out finer work. The one exception is combination recipes, which open only to a crafter attuned to the archetype that joins their two crafts, with proven skill in both.",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and skill never locks a craft's recipes away: if you know a recipe and hold its materials, you can attempt it. Every recipe turns out exactly the piece it promises, and a practiced hand sometimes produces a masterwork: the same piece finished finer, with a little extra power worked in. The one exception is combination recipes, which open only to a crafter attuned to the archetype that joins their two crafts, with proven skill in both.",
       "craftComboTitle": "Combination recipes",
       "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character who has invested in adjacent trades on the ring rather than one in isolation. The crafter must hold both trades themselves and carry the attunement that joins them; a partner's skill cannot stand in for either half.",
       "archetypeTitle": "The ten archetypes",
       "archetypeIntro": "Every two neighboring crafts on the wheel together form an archetype, a broader identity you can adopt beyond just working a trade, and each of the ten pairs carries a name of its own. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
       "archetypeChooseTitle": "Choosing your archetype",
-      "archetypeChooseBody": "Declaring an archetype is a story moment: a quest that formally accepts you into that identity. Until you declare, every craft advances to the rare quality tier. Once you take up a pair, its two trades open all the way, a craft from the far side of the wheel stays with you as a hobby that still works to the rare tier, and every other trade rests at the common tier while you carry that identity.",
+      "archetypeChooseBody": "Declaring an archetype is a story moment: a quest that formally accepts you into that identity. Until you declare, every craft's skill advances as far as the rare tier. Once you take up a pair, its two trades open all the way, a craft from the far side of the wheel stays with you as a hobby that still works to the rare tier, and every other trade rests at the common tier while you carry that identity.",
       "archetypeSwitchTitle": "Changing your mind",
       "archetypeSwitchBody": "Nor is a declaration a life sentence. Taking up a pair you have never carried is simply a fresh declaration, while returning to an identity you once held asks a repeatable act of making amends first, growing steeper with each switch you have made, so the choice stays meaningful rather than costless.",
       "archetypeIdentityTitle": "What your archetype means",
@@ -5015,6 +5038,11 @@ export const en: EnTranslations = {
     "discordCommunity": "Join the World of ClaudeCraft Discord community",
     "donateProject": "Donate to support World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Graphics lowered",
+    "body": "The game closed unexpectedly while entering the world, so graphics are now set to {preset}. You can change this in the graphics selector below or in the in-game Options.",
+    "dismiss": "Dismiss"
+  },
   "loading": {
     "world": "Loading world...",
     "worldProgress": "Loading world... {done}/{total}",
@@ -5024,7 +5052,9 @@ export const en: EnTranslations = {
     "rendererFailed": "Could not start the renderer: try reloading. {error}",
     "enterTimeout": "Could not enter world. The connection timed out. Is the game server running?",
     "connectionLost": "Connection to the server was lost.",
-    "reconnecting": "Connection lost. Reconnecting...",
+    "reconnectingAttempt": "Connection lost. Reconnecting... (attempt {attempt}/{maxAttempts}, retrying in {seconds}s)",
+    "reconnectingNow": "Connection lost. Reconnecting now... (attempt {attempt}/{maxAttempts})",
+    "slowConnection": "This is taking longer than usual. Check your internet connection.",
     "connectionRejected": "The server closed the connection.",
     "realmFull": "This world is full right now. Please try again in a few minutes.",
     "tooManyConnections": "Too many connections to this world are coming from your network. Please close extra game windows or try again in a few minutes.",
@@ -6328,7 +6358,7 @@ export const en: EnTranslations = {
       },
       "blazing_barrier": {
         "name": "Blazing Barrier",
-        "description": "Wreathe yourself in flame, absorbing 130 damage for 60 sec. (Fire)"
+        "description": "Wreathe yourself in flame, absorbing {damage} damage for 60 sec. (Fire)"
       },
       "cold_snap": {
         "name": "Winter's Recall",
@@ -6436,7 +6466,7 @@ export const en: EnTranslations = {
       },
       "frost_nova": {
         "name": "Icebind",
-        "description": "Freezes all nearby enemies in place for up to 8 sec, dealing {damage} Frost damage."
+        "description": "Freezes all nearby enemies in place for up to 8 sec, dealing {damage} Frost damage. The root breaks after cumulative damage equal to 15% of the target's maximum health, with a minimum of 20 and a maximum of 60 damage."
       },
       "arcane_explosion": {
         "name": "Aetherburst",
@@ -9452,6 +9482,36 @@ export const en: EnTranslations = {
         "title": "The Peaks Chronicle",
         "greeting": "The mountain forgets nothing, {playerName}, and neither do I. Let us see what you have done."
       },
+      "forgemistress_darva": {
+        "name": "Forgemistress Darva",
+        "title": "Master of the Forge",
+        "greeting": "The forge answers to me, {className}. Bring good ore and it will answer to you too."
+      },
+      "cook_marlow": {
+        "name": "Cook Marlow",
+        "title": "Master of the Kitchens",
+        "greeting": "Nothing leaves my kitchens half-cooked, {className}. Sit, eat, then get back out there."
+      },
+      "weaver_ottilie": {
+        "name": "Weaver Ottilie",
+        "title": "Master of the Loom",
+        "greeting": "Mind the threads, {className}. A steady hand at the loom beats a strong one."
+      },
+      "tinker_gizzel": {
+        "name": "Tinker Gizzel",
+        "title": "Master of the Toolworks",
+        "greeting": "Springs, sprockets, and sharp edges, {className}: the toolworks has whatever your hands lack."
+      },
+      "tanner_hesk": {
+        "name": "Tanner Hesk",
+        "title": "Master of the Tannery",
+        "greeting": "A hide is only as good as its tanning, {className}. The vats are ready when you are."
+      },
+      "alchemist_verane": {
+        "name": "Alchemist Verane",
+        "title": "Master of the Apothecary",
+        "greeting": "Measure twice and pour once, {className}. The apothecary has no patience for spilled reagents."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Tidewatcher",
@@ -10521,6 +10581,56 @@ export const en: EnTranslations = {
         "sender": "The Heroic Quartermaster",
         "subject": "Your Heroic Marks",
         "body": "Your warband cleared the heroic trial while you fought from the back, or from the dirt. Your lockout was struck all the same, so your share of Heroic Marks flies to you here rather than being lost. Spend them well.\n\n- The Heroic Quartermaster"
+      },
+      "guild_trend_engineering_alchemy": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Engineering and Alchemy",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Engineering and Alchemy: charges measured and reagents weighed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Bombardier in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_alchemy_cooking": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Alchemy and Cooking",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Alchemy and Cooking: draughts simmered and dishes seasoned, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Apothecary in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_cooking_leatherworking": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Cooking and Leatherworking",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Cooking and Leatherworking: meals plated and hides cured, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_leatherworking_tailoring": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Leatherworking and Tailoring",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Leatherworking and Tailoring: leather cut and cloth hemmed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Outfitter in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_tailoring_inscription": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Tailoring and Inscription",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Tailoring and Inscription: seams stitched and glyphs inked, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_inscription_enchanting": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Inscription and Enchanting",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Inscription and Enchanting: scrolls lettered and charms woven, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_enchanting_jewelcrafting": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Enchanting and Jewelcrafting",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Enchanting and Jewelcrafting: charms bound and stones polished, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_jewelcrafting_weaponcrafting": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Jewelcrafting and Weaponcrafting",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Jewelcrafting and Weaponcrafting: gems seated and edges ground, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_weaponcrafting_armorcrafting": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Weaponcrafting and Armorcrafting",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Weaponcrafting and Armorcrafting: blades tempered and plates fitted, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Smith in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "guild_trend_armorcrafting_engineering": {
+        "sender": "The Crafting Guild",
+        "subject": "Your work in Armorcrafting and Engineering",
+        "body": "Artisan,\n\nWord reaches the Guild of your work in Armorcrafting and Engineering: plates riveted and gears trued, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       }
     },
     "itemSets": {

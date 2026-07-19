@@ -9,6 +9,7 @@ import type { Rng } from '../rng';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import type { GatherNodeDef, GatherNodeType, GatherRareEventFlavor, SimEvent } from '../types';
+import type { MasterworkProc } from './masterwork';
 
 // One shared cadence knob: state.md target of roughly 1 per zone per 20
 // minutes, from 120s node respawn and up to 9 nodes per zone giving at most
@@ -40,8 +41,11 @@ export function rollGatherRareEvent(
 
 // Soft zone broadcast: one pid-scoped copy of the event per player whose
 // current zone matches, the finder included (the chat yell fanout precedent,
-// src/sim/social/chat.ts). Phase 6 masterwork broadcasts reuse this pattern.
-function emitToZonePlayers(
+// src/sim/social/chat.ts). The Phase 6 masterworkZone fanout
+// (announceMasterworkZone below) is the first reuser; exported so later
+// zone-visible celebrations can ride the same fanout and exclusion rules
+// without re-deriving them.
+export function emitToZonePlayers(
   ctx: SimContext,
   zoneId: string,
   build: (recipientPid: number) => SimEvent,
@@ -77,4 +81,31 @@ export function announceGatherRareEvent(
   // Dormant deed-mark hook: Phase 15 registers the per-flavor gather-event
   // deeds; markVisited tolerates mark ids no deed reads yet.
   ctx.markVisited(finder, 'gather_event:' + flavor);
+}
+
+/** Phase 6: the zone-wide masterwork celebration copy. One pid-scoped
+ *  masterworkZone event per overworld player in the crafter's zone, the
+ *  crafter included, via the shared fanout above. Skipped entirely when the
+ *  crafter is in instance space (instanced masterworks stay a personal toast,
+ *  deliberately). Draws NO rng and must run AFTER the personal masterwork
+ *  emit in Sim.craftItem, keeping the craft path's pinned single-draw
+ *  contract and event order intact. */
+export function announceMasterworkZone(
+  ctx: SimContext,
+  crafterPid: number,
+  crafterName: string,
+  proc: MasterworkProc,
+): void {
+  const crafterE = ctx.entities.get(crafterPid);
+  if (!crafterE || crafterE.pos.x > DUNGEON_X_THRESHOLD) return;
+  const zoneId = zoneAt(crafterE.pos.z).id;
+  emitToZonePlayers(ctx, zoneId, (recipientPid) => ({
+    type: 'masterworkZone',
+    pid: recipientPid,
+    crafterPid,
+    crafterName,
+    itemId: proc.itemId,
+    recipeId: proc.recipeId,
+    zoneId,
+  }));
 }

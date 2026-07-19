@@ -49,9 +49,13 @@ export interface CraftResultView {
     | 'combo_requirement_unmet'
     | 'recipe_not_learned'
     | 'throttled'
-    // #1297: denied because the recipe is station-bound and the player is not
-    // currently at the level-20 crafting hub (or not yet the required level).
-    | 'not_at_hub';
+    // Phase 8 (supersedes #1297's not_at_hub): denied because the recipe is
+    // station-bound and the player is neither at a station of its type nor
+    // holding an ACTIVE mobile station for that craft (the mobile arm checks
+    // activity and type, never distance). The ui resolves
+    // WHICH station from recipeById(recipeId)?.stationType (static content,
+    // identical in both worlds): no station field rides the event.
+    | 'station_required';
   // Professions 2.0 Phase 2: true only when the masterwork effect applied to
   // this craft's output. `quality` now reports the output def's static
   // quality (outputs are deterministic; the quality roll is retired).
@@ -127,4 +131,18 @@ export interface IWorldProfessions {
   // Attempt to switch the active archetype; blocked unless enough amends
   // progress has accrued for the current switchCount.
   switchArchetype(craftId: string): void;
+  // Mobile crafting station (Professions 2.0 Phase 8, wiring the inert #1134
+  // mechanic): place the viewer's own temporary station for `craftId`.
+  // Specialization-gated server-side (mobile_station.ts
+  // placeMobileCraftingStation); Sim validates and stores on PlayerMeta,
+  // ClientWorld sends the place_mobile_station command.
+  placeMobileStation(craftId: string): void;
+  // The craft id of the viewer's own currently ACTIVE (placed, unexpired)
+  // mobile station, or null. An identifier, string-free per the seam rule.
+  // Offline this reads the live PlayerMeta slot (expiry checked against the
+  // sim tick); online it mirrors the server's `mst` self-delta
+  // (server/game.ts computes active-vs-expired against ITS tickCount, so the
+  // client never predicts placement or reasons about tick domains). The slot
+  // is transient either way: never serialized into the character save.
+  activeMobileStationCraft: string | null;
 }

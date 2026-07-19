@@ -196,9 +196,12 @@ Phase 13), and interaction handlers return an outcome boolean (#1982).
 - Quests: objective union has 'craft' and 'gather' (2039);
   QuestDef.repeatable/completionEffect ('attunePair'|'switchHobby');
   QuestProgress.selection + resolvedCounts; profession_quest_effects.ts.
-- Crafting: resolveCraftForRecipe gates = station (crafting_hub.ts),
+- Crafting: resolveCraftForRecipe gates = station (professions/stations.ts,
+  typed per recipe.stationType, position-only, own active mobile station of
+  the matching craft also satisfies; stable deny id station_required),
   combo_eligibility, isRecipeKnown (acquireRecipe, #1299), materials,
-  throttle + gold sink (#1301). NO skillReq admission gate.
+  throttle + gold sink (#1301). NO skillReq admission gate, NO level gate
+  (CRAFTING_HUB_MIN_LEVEL retired in Phase 8 per the 2026-07-17 ruling).
 - Instances: ItemInstancePayload {signer, charges, rolled, boundTo} rides the
   inv wire; bags/bank/equip/save-load correct; trade CARRIES payloads (the
   Phase 3 trade deliverable pre-landed on release via PR 2045; Phase 3 added
@@ -215,8 +218,12 @@ Phase 13), and interaction handlers return an outcome boolean (#1982).
   lastSalvageResult/lastDisenchantResult/lastEnchantResult on PlayerMeta;
   no IWorld/wire/UI until Phase 13 (salvage wiring JOINS Phase 13 per the
   2026-07-17 amendments; it no longer waits for wave 2).
-- Stations today: requiresHubStation + CRAFTING_HUB_STATIONS (per-craft
-  coordinates, unrendered) + canUseCraftingHubStation.
+- Stations today (Phase 8): STATIONS content records (six typed stations
+  across the three hubs) + the pure registry src/sim/professions/stations.ts
+  (StationType, isAtStation, stationTypeForCraft) + recipe.stationType +
+  FIELD_RECIPES. requiresHubStation, CRAFTING_HUB_STATIONS,
+  CRAFTING_HUB_POS/RADIUS/ZONE_ID/MIN_LEVEL, and crafting_hub.ts are GONE
+  (retired with their consumers; unrendered until Phase 9 props).
 - Icons: iconDataUrl(kind, id, size), procedural recipes + WebP override sets
   (ITEM_IMAGE_IDS / ABILITY_IMAGE_IDS / DEED_IMAGE_IDS), converters
   npm run assets:items|skills|deeds, 128px WebP under public/ui/<set>/,
@@ -357,7 +364,10 @@ tables, i18n key namespaces, files created)
     correctly against the masterwork ceiling but was authored for the
     rolled-output model; rewording is deferred to Phase 6 (masterwork
     surfacing) and Phase 15 (full rewrite) to avoid the i18n
-    semantic-regression pins mid-packet.
+    semantic-regression pins mid-packet. DONE 2026-07-19: Phase 6 landed
+    the minimal accuracy reword (the two factually wrong sentences only:
+    masterwork proc instead of quality-buying, skill tier instead of
+    quality tier); the full page rewrite stays Phase 15.
   - Standing wire invariant (security review): equipped stats flow from
     instance rolled.stats server-side, which is safe because no wire
     command ingests a client-supplied ItemInstancePayload; any future
@@ -529,10 +539,131 @@ tables, i18n key namespaces, files created)
   lives in the core (SimplifiedCta on SimplifiedCallToAction, both arms
   pinned), not the painter; Hud exposes only toggleProfessions (the
   open/close/isOpen wrappers were unconsumed and dropped).
-- Phase 7: (planned) trend detection module; Guild letter content; S3 scan
-  list gains src/sim/quests/quest_commands.ts.
-- Phase 8: (planned) station registry (typed stations, multi-zone); master
-  NpcDefs across the three hubs; placement-safety test.
+- Phase 6: (landed 2026-07-19, branch
+  feature/professions-2-phase-06-crafting-window) SimEvent masterworkZone
+  { recipeId, itemId, crafterPid, crafterName, zoneId } (one pid-scoped
+  copy per overworld zone player, the crafter included; instance space
+  excluded; a SEPARATE type from the personal masterwork event so
+  bystander copies never touch lastMasterwork), emitted via
+  announceMasterworkZone in src/sim/professions/gather_events.ts (the
+  Phase 4 emitToZonePlayers is now exported); wire identity key eqi
+  (players only, sparse, beside eq, NEVER a delta key; payload trimmed
+  server-side to signer/enchant/rolled, the boundTo/charges strip pinned)
+  mirrored into ClientWorld EntityView.equippedInstances with
+  cloneItemInstancePayload; NO new IWorld member (EntityView already
+  declared equippedInstances; parity counts unchanged);
+  craftSkillGainMultiplier in src/sim/professions/archetype.ts (the ONE
+  gain composition, consumed by crafting.ts AND the crafting view so the
+  difficulty label cannot diverge); crafting_view rows gain skillReq,
+  difficulty ('full'/'reduced'/'none'), station { required, inRange }
+  (requiresHubStation joined RecipeDefLike, buildCraftingView gained
+  stationInRange); pure cores src/ui/craft_celebration_view.ts
+  (computeCraftTierUps + buildCraftCelebrationPlan, in UI_PURE_CORES) and
+  sibling module src/ui/item_instance_tooltip.ts (seal, enchanted marker,
+  bonus stat lines, makers mark; also now owns itemStatName/itemNumber,
+  moved out of hud.ts); PainterHostPresentation.itemTooltip widened to
+  (item, instance?) and threaded at bags/bank/paperdoll/inspect;
+  hudChrome.crafting.* keys skillReqLine, difficultyFull/Reduced/None,
+  stationBadge, stationOutOfRange, masterworkToast, masterworkZoneLine,
+  tierUpToast, makersMark, masterworkSeal, enchantedLine (M16 fills in
+  the five non-Latin overlays); NO sim_i18n matcher row (as-landed
+  deviation: the broadcast is a structured text-free event on the
+  gatherRareEvent precedent, so the S3 guard is satisfied by
+  construction; the phase file's premised matcher rule does not exist);
+  parity golden professions_craft eventDigest re-pinned deliberately (the
+  crafter's own zone copy; rng fingerprints byte-identical); tier-up
+  toasts derive client-side from craftSkills inside a bounded
+  post-craftResult drain window; the celebration consumer trims only the
+  banner fade under reduced motion (plan.motion), the polite ARIA
+  announcer is never gated. Tests: crafting_view boundary sweep pinned to
+  the shared multiplier, masterwork_zone_broadcast + inspect_instances
+  liveness suites, snapshots eqi round-trip + data-minimization pin,
+  item_instance_tooltip + craft_celebration_view unit suites, bank_view
+  instance passthrough pin. Phase 6 QA additions (2026-07-19, PASS with
+  fixes, zero blocking): tier_unmet now names the under-tier craft(s)
+  via hudChrome.crafting.comboTierUnmetNamed ({crafts} + {tier}; the
+  param-less comboTierUnmet stays the defensive fallback, M16 fills in
+  the five non-Latin overlays); the tier-up armed drain window is the
+  pure step observeCraftSkillsForTierUps (+
+  CRAFT_TIER_UP_DRAIN_WINDOW) in craft_celebration_view.ts, hud.ts a
+  thin consumer; masterwork_zone_broadcast gained a live GameServer
+  session-routing suite (the hcb broadcast-suite precedent) and hud
+  zone-arm source pins; threading pins landed for the bags forwarding
+  call site, the char_window self-mirror closure, the openInspect slot
+  rows, and hud.itemTooltip composition order; plan.motion consumer and
+  station-repaint liveness are source-pinned.
+- Phase 7 (landed 2026-07-19; phase start 8e88b27f5): trend module
+  src/sim/professions/trend.ts (classifyCraftTrend, CraftTrend,
+  GUILD_LETTER_SKILL_THRESHOLD = TIER_SKILL_STEP; pair score = member
+  sum over ARCHETYPE_PAIR_TARGETS, leading pair by score then min
+  member then first member then ring order, crossed at the threshold);
+  trigger src/sim/professions/guild_letter.ts (maybeSendGuildTrendLetter
+  + updateGuildTrendLetters, the 1 Hz sweep beside postOffice.update in
+  the tick mail phase) booking mail through the NEW append-only
+  SimContext callback mailAuthoredLetter; one-shot
+  PlayerMeta.guildLetterSent (optional CharacterState field, normalize
+  default false via s.guildLetterSent === true, serialized
+  unconditionally, the mailWelcomed shape); GUILD_TREND_LETTERS in
+  src/sim/content/letters.ts (10 pair-keyed letters, ids
+  guild_trend_<a>_<b>, load-time ring-completeness guard, Smith Haldren
+  stands in for masters until Phase 8); entities.letters coverage via
+  LETTER_IDS in world_entity_i18n.ts + LETTERS_BY_ID in entity_i18n.ts
+  + M16 fills in the five non-Latin overlays; the S3 scan list ALREADY
+  contained src/sim/quests/quest_commands.ts (PR 2039), its membership
+  now pinned by a meta-guard in tests/localization_fixes.test.ts.
+  Phase 7 QA additions (2026-07-19): skillOf counts only positive
+  FINITE numbers (Number.isFinite, the comment contract made real);
+  per-clause eligibility negatives and a flip-before-send pin on the
+  exported maybeSendGuildTrendLetter, the system MailKind pinned on the
+  mailInfo surface, a two-player same-sweep case, and a same-seed
+  determinism pin (tests/professions_trend.test.ts); live GameServer
+  session-routing suite tests/guild_letter_online.test.ts (owner-only
+  mailArrived, mailU mirrors, booking-level one-shot). OPEN maintainer
+  decision from the vertical slice: the letter to Haldren hop dead-ends
+  pre-q_prof_intro (no locked-row hint, no redirect to Odell).
+- Phase 8 (landed 2026-07-19; phase start 571ab0219): station registry
+  src/sim/professions/stations.ts (StationType union
+  forge/kitchens/apothecary/tannery/loom/toolworks; StationDef
+  {id, type, zoneId, pos, masterNpcId}; isAtStation/stationsOfType/
+  stationTypeForCraft/inRangeStationTypes) over STATIONS +
+  STATION_TYPE_BY_CRAFT + STATION_RADIUS in content/professions.ts;
+  recipe.stationType (six TOOL_RECIPES toolworks, wardweave_cowl loom,
+  duskhide_wraps tannery, sootscale_mantle forge) replacing
+  requiresHubStation; FIELD_RECIPES = the nine COMMON_RECIPES ids,
+  field-craftable (COMBO_RECIPES stay ungated); deny reason
+  station_required on the craftResult surface, rendered via
+  hudChrome.crafting.stationRequired + stationName.<type> (no sim_i18n
+  matcher row, the Phase 6 text-free-id precedent); the six masters
+  forgemistress_darva/cook_marlow/weaver_ottilie/tinker_gizzel (zone 1)
+  + tanner_hesk (Fenbridge) + alchemist_verane (Highwatch), empty
+  questIds, entity i18n via NPC_IDS + M16 fills; mobile station live:
+  transient PlayerMeta.mobileStation, IWorld placeMobileStation +
+  activeMobileStationCraft, place_mobile_station wire command, mst
+  self-delta mirror, /dev mobilestation arm; placement-safety suite
+  tests/professions_station_placement.test.ts (content-derived buffer
+  11.19 bound by bursar_fernando vs the boar camp, mutation-proven) +
+  live-wire suite tests/professions_station_online.test.ts; parity
+  goldens regenerated deliberately for the purely mechanical +6
+  entity-id shift of the six static NPCs (own reviewed commit);
+  Tools of the Trade deed desc reworded station-neutral (stale locale
+  desc fills dropped for the release refill). The nine former hub
+  recipes relocated from Highwatch to their typed stations (seven in
+  Eastbrook, tannery in Fenbridge); Highwatch keeps the apothecary
+  (no alchemy station recipe exists yet, forward content). Phase 8 QA
+  drift notes (2026-07-19): Eastbrook loom-to-toolworks separation is
+  about 13.6 against STATION_RADIUS 20, so standing at the loom also
+  satisfies the toolworks gate (and forge-to-kitchens clears by only
+  1.6), accepted town-square density with no strand and no info
+  hiding, for Phase 9 props/minimap to be aware of;
+  MobileCraftingStation.pos, placedAtTick, and playerId are recorded
+  but consumer-less today (the gate reads craftId plus expiresAtTick
+  only; Phase 9 props are the natural pos consumer); an expired
+  mobileStation object lingers on the meta slot until the next
+  placement (benign, every reader checks isStationActive);
+  content/professions.ts reads ZONE1/2/3_ZONE.id at module init (no
+  runtime cycle today because the zone modules never import
+  professions content, but a future reverse import would see
+  undefined during init).
 - Phase 13: (planned) disenchantItem/applyEnchant/salvageItem IWorld
   members + wire commands.
 

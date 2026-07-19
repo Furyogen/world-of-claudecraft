@@ -194,11 +194,16 @@ export const TARGETS = [
     key: 'crafting',
     label: 'Crafting window',
     when: ['ui/crafting_view', 'ui/crafting_window', 'sim/content/recipes', 'sim/professions'],
+    // Desktop and mobile variants: the Phase 6 legibility rows (skill line,
+    // difficulty label, station badge, combo reason) are actionable info and
+    // must read on both form factors.
+    variants: [{ key: 'desktop' }, { key: 'mobile', mobile: true }],
     // Grant a spread of reagents across a few professions so several recipes read
     // craftable, force-hide then toggle so the open is deterministic, and clip to
     // the window.
-    async capture(page) {
+    async capture(page, variant) {
       await page.evaluate(() => {
+        document.querySelector('#gpu-notice')?.remove();
         const sim = window.__game?.sim;
         const ids = ['bone_fragments', 'linen_scrap', 'spider_leg'];
         for (const id of ids) {
@@ -215,7 +220,69 @@ export const TARGETS = [
       // bags/map windows do (getBoundingClientRect can report 0x0 for 2-4s), so
       // poll for a real size instead of guessing a fixed wait.
       const open = await pollForSize(page, '#crafting-window');
+      if (open && variant?.mobile) {
+        // The short landscape viewport shows only the identity card; scroll the
+        // first recipe section into view so the legibility rows are the shot.
+        await page.evaluate(() => {
+          document
+            .querySelector('#crafting-window .vendor-section-title')
+            ?.scrollIntoView({ block: 'start' });
+        });
+        await wait(300);
+      }
       return open ? { clip: '#crafting-window' } : {};
+    },
+  },
+  {
+    key: 'masterwork-tooltip',
+    label: 'Bag tooltip: masterwork seal, enchanted marker, makers mark',
+    when: ['ui/item_instance_tooltip', 'ui/painter_host', 'ui/bank_view'],
+    // Grant a signed masterwork copy, open bags, hover its slot: the tooltip's
+    // per-copy lines (gold seal, green baked bonus stats, Crafted by) all read
+    // in one frame. Full-frame shot: the tooltip renders beside the window and
+    // the single-selector clip cannot union the two rects.
+    async capture(page) {
+      await page.evaluate(() => {
+        document.querySelector('#gpu-notice')?.remove();
+        document.querySelector('.camera-prompt-confirm')?.click();
+        const game = window.__game;
+        try {
+          // A dungeon-drop def the starter bag can never contain, so the
+          // aria-label lookup below is unambiguous.
+          game?.sim?.addItemInstance('gravewyrm_gauntlets', {
+            signer: 'Thorgar',
+            rolled: { masterwork: true, stats: { str: 2, sta: 1 } },
+          });
+        } catch {}
+        const el = document.querySelector('#bags');
+        if (el) el.style.display = 'none';
+        game?.hud?.toggleBags?.();
+      });
+      // toggleBags tracks logical open state, so a shared page where an earlier
+      // target left the bags logically open needs a second toggle to reopen.
+      let open = await pollForSize(page, '#bags');
+      if (!open) {
+        await page.evaluate(() => window.__game?.hud?.toggleBags?.());
+        open = await pollForSize(page, '#bags');
+      }
+      if (!open) return {};
+      await page.evaluate(() => {
+        // The grant can pop a transient deed banner and the camera prompt on
+        // the shared page; clear both so the tooltip is the frame's subject.
+        document.querySelector('.camera-prompt-confirm')?.click();
+        const banner = document.querySelector('#banner');
+        if (banner) banner.style.opacity = '0';
+        // Real focus fires attachTooltip's focusin arm (keyboard-nav path), a
+        // sturdier trigger than synthetic mouseenter under headless.
+        const cell = Array.from(document.querySelectorAll('#bags button')).find((b) =>
+          b.getAttribute('aria-label')?.includes('Gravewyrm Gauntlets'),
+        );
+        cell?.scrollIntoView({ block: 'center' });
+        cell?.focus();
+      });
+      await pollForSize(page, '#tooltip');
+      await wait(300);
+      return {};
     },
   },
   {
@@ -262,6 +329,21 @@ export const TARGETS = [
         return !!w && getComputedStyle(w).display !== 'none';
       });
       return open ? { clip: '#char-window' } : {};
+    },
+  },
+  {
+    key: 'social-window',
+    label: 'Social window (Friends tab, landscape layout)',
+    when: ['ui/social_window'],
+    variants: [{ key: 'desktop' }, { key: 'mobile', mobile: true }],
+    async capture(page) {
+      await page.evaluate(() => {
+        const el = document.querySelector('#social-window');
+        if (el) el.classList.remove('open');
+        window.__game?.hud?.toggleSocial?.();
+      });
+      const open = await pollForSize(page, '#social-window');
+      return open ? { clip: '#social-window' } : {};
     },
   },
   {
@@ -317,6 +399,65 @@ export const TARGETS = [
       await page.evaluate(() => {
         document
           .querySelector('#chatlog-tabs button[data-tab="combat"]')
+          ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      await wait(200);
+      return { clip: '#chatlog-wrap' };
+    },
+  },
+  {
+    key: 'chat-flair-class-color',
+    label: 'Chat: class-colored name + verified-streamer badge',
+    when: ['ui/hud/chat/chat_line'],
+    // Mage: a bright, unmistakably-not-default-white class color, so the
+    // before/after class-color diff is obvious at a glance (the default
+    // 'warrior' tan reads close to the plain sender-name white already).
+    variants: [
+      { key: 'desktop', charClass: 'mage', charName: 'Lyravel' },
+      { key: 'mobile', charClass: 'mage', charName: 'Lyravel', mobile: true },
+    ],
+    // Synthesizes one party-channel 'chat' SimEvent, anchored on the real player
+    // entity (so its class resolves and the sender name colors accordingly) with
+    // a fabricated streamer flair, through the real dispatch (hud.handleEvents).
+    // Mirrors the log_event_route targets above: no live second player needed.
+    async capture(page, variant) {
+      // On mobile the chat log is collapsed behind the overlay toggle (body
+      // .mobile-chat-open); a real tap on the chat-open control sets this same
+      // class (src/game/mobile_controls.ts), so this reproduces that state
+      // directly rather than re-deriving the touch gesture. Also drop the
+      // headless-swiftshader GPU notice: it is a capture-environment artifact
+      // (no real GPU in CI/headless), not part of what this target shows.
+      await page.evaluate(() => {
+        document.querySelector('#gpu-notice')?.remove();
+      });
+      if (variant?.mobile) {
+        await page.evaluate(() => document.body.classList.add('mobile-chat-open'));
+      }
+      await pollForSize(page, '#chatlog-wrap', 60, 500);
+      await page.evaluate(() => {
+        const hud = window.__game?.hud;
+        const sim = window.__game?.sim;
+        if (!hud || !sim) return;
+        hud.handleEvents([
+          {
+            type: 'chat',
+            channel: 'party',
+            from: sim.player?.name ?? 'Zyx',
+            fromPid: sim.playerId,
+            text: 'checking flair: class-colored name and verified-streamer badge render correctly',
+            flair: { links: { twitch: 'https://twitch.tv/zyx' } },
+          },
+          // A trailing filler line, so the flair line above is not the very
+          // bottom row: the mobile chat log fades its bottom-most row under a
+          // "more content below" peek gradient (see hud.mobile.css), which
+          // would otherwise wash out the exact line this target exists to show.
+          { type: 'log', text: 'ready.', color: '#8a8a8a' },
+        ]);
+      });
+      await wait(300);
+      await page.evaluate(() => {
+        document
+          .querySelector('#chatlog-tabs button[data-tab="all"]')
           ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
       await wait(200);

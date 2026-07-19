@@ -693,6 +693,71 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting:
       'Every deed worth doing is worth writing down twice, $N: once for the ledger and once for the fireside.',
   },
+  // Crafting-station masters (Professions 2.0 Phase 8): each stands 1 to 3
+  // units beside their station (content/professions.ts STATIONS) with a
+  // guard-safe camp margin (the placement math is in the Phase 8 notes).
+  forgemistress_darva: {
+    id: 'forgemistress_darva',
+    name: 'Forgemistress Darva',
+    title: 'Master of the Forge',
+    // Across the anvil from Smith Haldren, at the Eastbrook forge.
+    pos: { x: 5, z: 15 },
+    facing: -2.4,
+    color: 0xb5541c,
+    questIds: [],
+    vendorItems: ['copper_mining_pick', 'iron_mining_pick', 'mithril_mining_pick'],
+    greeting: 'The forge answers to me, $C. Bring good ore and it will answer to you too.',
+  },
+  cook_marlow: {
+    id: 'cook_marlow',
+    name: 'Cook Marlow',
+    title: 'Master of the Kitchens',
+    // West side of the square, beside the kitchens station.
+    pos: { x: -12.5, z: 3 },
+    facing: Math.PI / 2,
+    color: 0xc98a4b,
+    questIds: [],
+    vendorItems: [
+      'baked_bread',
+      'spring_water',
+      'roasted_boar',
+      'tough_jerky',
+      'brightwood_venison',
+    ],
+    greeting: 'Nothing leaves my kitchens half-cooked, $C. Sit, eat, then get back out there.',
+  },
+  weaver_ottilie: {
+    id: 'weaver_ottilie',
+    name: 'Weaver Ottilie',
+    title: 'Master of the Loom',
+    // South of the well, beside the loom station.
+    pos: { x: -4, z: -9 },
+    facing: 0.8,
+    color: 0x7161a8,
+    questIds: [],
+    vendorItems: ['linen_pouch', 'travelers_knapsack', 'gathering_sickle'],
+    greeting: 'Mind the threads, $C. A steady hand at the loom beats a strong one.',
+  },
+  tinker_gizzel: {
+    id: 'tinker_gizzel',
+    name: 'Tinker Gizzel',
+    title: 'Master of the Toolworks',
+    // Southeast corner of the square, beside the toolworks station.
+    pos: { x: 9.5, z: -14 },
+    facing: -0.8,
+    color: 0xb08d57,
+    questIds: [],
+    vendorItems: [
+      'handaxe',
+      'felling_axe',
+      'ironbark_axe',
+      'bronze_sickle',
+      'silverleaf_sickle',
+      'simple_fishing_pole',
+    ],
+    greeting:
+      'Springs, sprockets, and sharp edges, $C: the toolworks has whatever your hands lack.',
+  },
 };
 
 // ---------------------------------------------------------------------------
