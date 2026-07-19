@@ -16,7 +16,7 @@ Update this file at the end of every implementation and QA session. Statuses:
 | 4 | Node materials and pristine veins | complete | 2026-07-18 | 2026-07-18 |
 | 4 QA | Verify node materials and pristine veins | complete | 2026-07-18 | 2026-07-18 |
 | 5 | The professions wheel window | complete | 2026-07-18 | 2026-07-18 |
-| 5 QA | Verify the professions wheel window | not started | | |
+| 5 QA | Verify the professions wheel window | complete | 2026-07-18 | 2026-07-18 |
 | 6 | Crafting window upgrades and celebrations | not started | | |
 | 6 QA | Verify crafting window upgrades | not started | | |
 | 7 | The Guild letter and quest objectives | not started | | |
@@ -278,6 +278,56 @@ short-viewport compaction gap tightened from 2px to 1px (652px of the
 660px budget) with the `crafting_launcher` guard re-pinned deliberately;
 the next button added must revisit the rail (DESIGN.md phase 3 replaces
 it with the launcher hub).
+
+Phase 5 QA (2026-07-18): PASS with fixes. QA-start HEAD aee72d830 (the
+PR 2145 merge; the phase diff is that merge's FIRST-PARENT diff, the
+branch having absorbed the #2133 SFX sweep mid-phase). Three packet
+audits plus the two matched dispatch-matrix rows (frontend seam,
+qa-checklist; no sim/server/wire/database row matched the pure-UI
+diff), all five reports complete first try under hard tool-call
+budgets. Zero blocking findings. Landed from the audit: the simplified
+raise-vs-start CTA decision moved from the painter into the view core
+as a SimplifiedCta union on SimplifiedCallToAction (model logic the
+both-worlds core tests could not reach), both arms pinned; the three
+unconsumed Hud wrappers (openProfessions, closeProfessions,
+professionsWindowOpen) dropped, toggleProfessions staying the one
+consumed entry point (closeDeeds and deedsWindowOpen carry the same
+dead-member debt pre-existing, left alone); sixteen new test pins
+across the three suites: the painter's simplified/syncing surface (the
+whole pre-cprof online render path had no DOM test), unknown gathering
+id renders no row plus all-unknown omits the section, above-display-cap
+saturation (pips, fraction, and max above 300, not only at it),
+missing-craft-key-equals-zero signature equivalence (a materializing
+zero can never trigger a spurious rebuild), gathering maxSkill as its
+own signature dimension, unknown-major null arc, the raise CTA and
+specialized perk-line interpolation arms, ring node/arc/chord emission
+gating, opener-focus restore-once, the PERK_THRESHOLDS uniformity
+premise behind the single perk explainer, and an icons manifest
+lockstep guard that reads asset-manifest.json itself (the deed crests
+are deed_prof_*, a separate namespace; two audit reports misread them
+as prof_* and dissolved on verification). Live verification:
+mobile_tray_overflow OK (19 buttons, none clipped) and an 18-assertion
+probe over the real dev client, all green (desktop Shift+KeyP, Esc,
+minimap button, stubbed attuned full mode with arc, chord, ten rows,
+perks, and switch cost 8, mobile More-tray open and close, no NaN in
+any state). Copy verified against sim constants: per-tier masterwork
+odds (MASTERWORK_PER_TIER_ABOVE_CHANCE) and the specialization
+material discount are real mechanics. Deferred with reasons: the
+switch-cost line rendering for never-attuned full-mode players (the
+amendment scopes the line without an attunement condition; maintainer
+copy call); richer CTA copy for the practically unreachable
+specialized-boundary corner (points stay arithmetically correct since
+the 75 threshold coincides with a tier boundary, documented in the
+core; a new key would need M16 fills); RingArc endpoint symmetry with
+RingChord (painter-side SVG assembly, math unit-pinned); the
+pr_shot_targets stateIsFn dual-shape guard (harmless script
+robustness); painter open-while-open and toggle branch pins (low
+value); a real-ClientWorld pre-sync empty-craftSkills pin (belongs to
+a Phase 3 net suite; the missing-key signature equivalence covers the
+risk). Also corrected: the state.md screenshot-convention drift note
+claimed a docs/pr-screenshots/ convention that never existed in the
+tree; the packet's shots live under docs/screenshots/ per root
+CLAUDE.md.
 
 ### Phase 6: Crafting window upgrades and celebrations
 - [ ] Recipe rows show profession + required skill + skill-gain difficulty tint (#2037)

@@ -10808,22 +10808,11 @@ export class Hud {
     return this.deedsWindow.isOpen;
   }
 
-  // The Professions window trio (keybind toggle, minimap/More-tray opens,
-  // Esc close), the deeds shape exactly.
-  openProfessions(): void {
-    this.professionsWindow.open();
-  }
-
-  closeProfessions(): void {
-    this.professionsWindow.close();
-  }
-
+  // The Professions window entry point (keybind, minimap, and More-tray all
+  // toggle; Esc closes via the managed-window case directly). Open/close/isOpen
+  // wrappers land only when a consumer lands with them.
   toggleProfessions(): void {
     this.professionsWindow.toggle();
-  }
-
-  get professionsWindowOpen(): boolean {
-    return this.professionsWindow.isOpen;
   }
 
   // Repaint the deed tracker from the live facet: the slow band, a watch

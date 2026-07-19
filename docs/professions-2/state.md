@@ -292,10 +292,12 @@ tables, i18n key namespaces, files created)
     under the old ring. Do not roll v0.27.0 back to v0.26.0 once the
     attunement quests are live; mirror this in the v0.27.0 release notes
     at tag time.
-  - Screenshot convention: this packet's phases commit PR shots under
-    docs/pr-screenshots/ (established earlier in the program), while root
-    CLAUDE.md names docs/screenshots. Keep the program-local convention
-    consistent within the packet; the maintainer may unify later.
+  - Screenshot convention (corrected by Phase 5 QA, 2026-07-18): the
+    packet's shots live under docs/screenshots/ per root CLAUDE.md. No
+    docs/pr-screenshots/ directory has ever existed in the tree; the
+    earlier version of this note recorded a packet-local convention that
+    was never actually used, and Phases 1 to 5 all committed under
+    docs/screenshots/.
 - Phase 2: (landed 2026-07-17, branch
   feature/professions-2-phase-02-masterwork) SimEvent masterwork
   { recipeId, itemId, crafter } (personal, pid = crafter, ids only),
@@ -523,6 +525,10 @@ tables, i18n key namespaces, files created)
   professionsState with a representative attuned Smith (renown-board
   precedent). Phase 11 touch point: the painter's GATHERING_NAME_KEYS
   map gains the fishing row and its catalog key with the fishing read.
+  QA (2026-07-18): the simplified raise-vs-start call-to-action decision
+  lives in the core (SimplifiedCta on SimplifiedCallToAction, both arms
+  pinned), not the painter; Hud exposes only toggleProfessions (the
+  open/close/isOpen wrappers were unconsumed and dropped).
 - Phase 7: (planned) trend detection module; Guild letter content; S3 scan
   list gains src/sim/quests/quest_commands.ts.
 - Phase 8: (planned) station registry (typed stations, multi-zone); master

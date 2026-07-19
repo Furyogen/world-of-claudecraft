@@ -255,10 +255,18 @@ export interface SwitchCostModel {
 
 export type ProfessionsWindowMode = 'simplified' | 'full';
 
+/** The copy decision for the one call-to-action line, derived in the core so
+ *  both worlds' tests pin it: 'raise' once the trending craft has any skill
+ *  and a milestone ahead, 'start' otherwise. `points` always equals the
+ *  distance to the next tier boundary: the specialized threshold only wins in
+ *  craftNextUnlock when it coincides with that boundary. */
+export type SimplifiedCta = { kind: 'raise'; craftId: string; points: number } | { kind: 'start' };
+
 export interface SimplifiedCallToAction {
   /** Highest-skill craft, ties broken by ring order. */
   trendingCraftId: string;
   nextUnlock: CraftNextUnlock;
+  cta: SimplifiedCta;
   /** The identity tutorial line, promoted ({ targetSkill: 25 } pre-first-tier). */
   tutorial: { targetSkill: number } | null;
 }
@@ -283,9 +291,15 @@ function buildSimplifiedCallToAction(identity: ProfessionIdentityModel): Simplif
   for (const row of identity.skills) {
     if (row.skill > trending.skill) trending = row;
   }
+  const nextUnlock = craftNextUnlock(trending.craftId, trending.skill);
+  const cta: SimplifiedCta =
+    trending.skill > 0 && nextUnlock.kind !== 'max'
+      ? { kind: 'raise', craftId: trending.craftId, points: nextUnlock.pointsRemaining }
+      : { kind: 'start' };
   return {
     trendingCraftId: trending.craftId,
-    nextUnlock: craftNextUnlock(trending.craftId, trending.skill),
+    nextUnlock,
+    cta,
     tutorial: identity.tutorial,
   };
 }

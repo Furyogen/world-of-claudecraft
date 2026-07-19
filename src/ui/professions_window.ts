@@ -187,14 +187,11 @@ export class ProfessionsWindow {
       model.identity.state === 'syncing'
         ? t('hudChrome.professions.syncing')
         : t('hudChrome.professions.unattunedIdentity');
-    const trending = model.crafts.find(
-      (row) => row.identity.craftId === simplified.trendingCraftId,
-    );
     const cta =
-      trending !== undefined && trending.identity.skill > 0 && simplified.nextUnlock.kind !== 'max'
+      simplified.cta.kind === 'raise'
         ? t('hudChrome.professions.ctaRaise', {
-            craft: craftNameText(simplified.trendingCraftId),
-            points: this.fmt(simplified.nextUnlock.pointsRemaining),
+            craft: craftNameText(simplified.cta.craftId),
+            points: this.fmt(simplified.cta.points),
           })
         : t('hudChrome.professions.ctaStart');
     const tutorial = simplified.tutorial

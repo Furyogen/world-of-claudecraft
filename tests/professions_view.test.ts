@@ -105,6 +105,7 @@ describe('buildProfessionsView: model construction', () => {
     expect(model.simplified).toEqual({
       trendingCraftId: 'engineering',
       nextUnlock: { kind: 'tier', targetTier: 1, pointsRemaining: 25 },
+      cta: { kind: 'start' },
       tutorial: { targetSkill: 25 },
     });
     expect(model.ring.pairArc).toBeNull();
@@ -164,6 +165,11 @@ describe('ring layout', () => {
     expect(buildRingLayout(null, null).pairArc).toBeNull();
     expect(buildRingLayout(null, null).hobbyChord).toBeNull();
     expect(buildRingLayout(null, 'fishing').hobbyChord).toBeNull();
+  });
+
+  it('yields no arc when either major id is unknown to the ring', () => {
+    expect(buildRingLayout(['fishing', 'engineering'], null).pairArc).toBeNull();
+    expect(buildRingLayout(['engineering', 'fishing'], null).pairArc).toBeNull();
   });
 
   it('draws the hobby chord from the hobby node to its ring opposite', () => {
@@ -229,6 +235,17 @@ describe('tier pips and perks', () => {
     expect(buildSkillBar(45, 300).fillFraction).toBeCloseTo(0.15, 12);
   });
 
+  it('saturates pips, fill, and fraction above the display cap', () => {
+    // Sim craft skill is uncapped (wheel.ts gainCraftSkill), so a mirrored
+    // skill above 300 must clamp every bar-facing field, not just fillFraction.
+    expect(buildSkillBar(450, CRAFT_MAX_SKILL)).toMatchObject({
+      pipSlots: 12,
+      filledPips: 12,
+      tierFraction: 0,
+      fillFraction: 1,
+    });
+  });
+
   it('flips specialized exactly at the content threshold', () => {
     // Deliberate literal pin: silent content drift in the specialization
     // constants must fail here, not just re-derive.
@@ -249,6 +266,16 @@ describe('tier pips and perks', () => {
     expect(at.materialCostMultiplier).toBeCloseTo(0.8, 12);
     expect(at.specializedSkillThreshold).toBe(threshold);
     expect(at.materialDiscountPct).toBe(PERK_THRESHOLDS.engineering.materialDiscountPct);
+  });
+
+  it('pins the perk thresholds uniform across the ring (the single-explainer premise)', () => {
+    // The painter's unspecialized explainer renders the FIRST craft row's
+    // threshold for all ten crafts; a per-craft divergence (Phase 9/10) must
+    // fail here first and force a per-craft explainer.
+    const first = PERK_THRESHOLDS[CRAFT_RING[0].id];
+    for (const craft of CRAFT_RING) {
+      expect(PERK_THRESHOLDS[craft.id]).toEqual(first);
+    }
   });
 });
 
@@ -293,6 +320,10 @@ describe('craftNextUnlock', () => {
     });
     expect(craftNextUnlock('engineering', CRAFT_MAX_SKILL)).toEqual({ kind: 'max' });
     expect(() => craftNextUnlock('fishing', 0)).toThrow();
+  });
+
+  it('stays max above the display cap, not only exactly at it', () => {
+    expect(craftNextUnlock('engineering', CRAFT_MAX_SKILL + 150)).toEqual({ kind: 'max' });
   });
 });
 
@@ -357,6 +388,16 @@ describe('progressive disclosure', () => {
     expect(tied?.nextUnlock).toEqual({ kind: 'tier', targetTier: 1, pointsRemaining: 15 });
     expect(tied?.tutorial).toEqual({ targetSkill: 25 });
   });
+
+  it('derives the cta in the core: start at zero skill, raise once any skill exists', () => {
+    // The raise-vs-start choice is model logic, so it is pinned here against
+    // both simplified triggers, not decided in the painter.
+    expect(view(identity()).simplified?.cta).toEqual({ kind: 'start' });
+    expect(
+      view(identity({ craftSkills: { ...ZERO_SKILLS, cooking: 10 } })).simplified?.cta,
+    ).toEqual({ kind: 'raise', craftId: 'cooking', points: 15 });
+    expect(view({ ...attunedIdentity, synced: false }).simplified?.cta.kind).toBe('raise');
+  });
 });
 
 describe('professionsRefreshSig', () => {
@@ -378,6 +419,14 @@ describe('professionsRefreshSig', () => {
     expect(professionsRefreshSig(input(), ['tab:perks'])).toBe(
       professionsRefreshSig(input(), ['tab:perks']),
     );
+  });
+
+  it('treats a missing craft key as zero, so a materialized zero never repaints', () => {
+    // Pre-sync ClientWorld records may omit zero-skill keys entirely; the
+    // CRAFT_RING enumeration with ?? 0 must make {} and explicit zeros equal.
+    expect(
+      professionsRefreshSig({ identity: identity({ craftSkills: { cooking: 30 } }), gathering }),
+    ).toBe(professionsRefreshSig(input()));
   });
 
   it('moves when any single repaint dimension moves', () => {
@@ -408,6 +457,14 @@ describe('professionsRefreshSig', () => {
       }),
     ).not.toBe(base);
     expect(professionsRefreshSig(input(), ['craft:alchemy'])).not.toBe(base);
+    // The gathering cap is its own repaint dimension (Phase 11 rows may cap
+    // differently), so a cap move alone must move the signature.
+    expect(
+      professionsRefreshSig({
+        ...input(),
+        gathering: [{ professionId: 'mining', skill: 12, maxSkill: 450 }],
+      }),
+    ).not.toBe(base);
   });
 });
 

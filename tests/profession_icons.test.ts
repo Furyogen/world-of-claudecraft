@@ -161,6 +161,27 @@ describe('profession webp icons', () => {
     ]);
   });
 
+  it('stays in lockstep with the prof_/gather_ icon ids the asset manifest declares', () => {
+    // The pin above is a literal list; this guard reads the manifest itself so
+    // the two cannot drift apart silently. Deed crest ids are deed_prof_*, a
+    // different namespace, and stay out of this window's set by prefix.
+    const manifest = JSON.parse(
+      readFileSync(path.join(repoRoot, 'docs/professions-2/asset-manifest.json'), 'utf8'),
+    ) as unknown;
+    const declared: string[] = [];
+    const collect = (node: unknown): void => {
+      if (Array.isArray(node)) {
+        for (const item of node) collect(item);
+      } else if (node !== null && typeof node === 'object') {
+        const rec = node as Record<string, unknown>;
+        if (typeof rec.id === 'string' && /^(prof|gather)_/.test(rec.id)) declared.push(rec.id);
+        for (const value of Object.values(rec)) collect(value);
+      }
+    };
+    collect(manifest);
+    expect([...declared].sort()).toEqual([...ICON_IDS].sort());
+  });
+
   it('A) every image-backed profession id resolves to a committed, valid .webp', () => {
     const broken: string[] = [];
     for (const id of PROFESSION_IMAGE_IDS) {
