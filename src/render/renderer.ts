@@ -202,6 +202,16 @@ const VIEW_CREATE_BACKOFF_SECONDS = 0.75;
 const VIEW_CREATE_FAIL_RETRY_MS = 2000;
 const VIEW_PREWARM_RANGE_SQ = ENTITY_VIEW_CREATE_RANGE_SQ;
 const VIEW_PREWARM_MAX_MS = 12000;
+// Memory-ceiling profile (phone WebKit): the desktop budgets here allow the prewarm to
+// occupy the main thread for 12s of view builds plus up to 10s of shader linking, with
+// only microtask yields in between. iOS kills a WebContent process that stays
+// unresponsive on that order (the same invisible kill as the memory ceiling, and RAM
+// size is irrelevant to it), so constrained devices get a much smaller budget, an
+// event-loop yield between manifest entries, and a link pass after each entry so no
+// later single pass links every program at once. The bounded first-sight compile
+// hitches this trades into are strictly better than a process kill at world entry.
+const VIEW_PREWARM_MAX_MS_CONSTRAINED = 5000;
+const PREWARM_COMPILE_MAX_MS_CONSTRAINED = 2500;
 // Shader linking is the whole point of the prewarm: if it doesn't finish, the
 // first in-world frame that needs a program compiles it synchronously — the
 // multi-hundred-ms (up to ~1.7s) freeze players feel when new model types
@@ -2676,7 +2686,11 @@ export class Renderer {
   }
 
   async prewarmInitialScene(options: { maxMs?: number } = {}): Promise<RendererPrewarmStats> {
-    const maxMs = Math.max(0, options.maxMs ?? VIEW_PREWARM_MAX_MS);
+    const constrainedPrewarm = GFX.constrainedMemory;
+    const maxMs = Math.max(
+      0,
+      options.maxMs ?? (constrainedPrewarm ? VIEW_PREWARM_MAX_MS_CONSTRAINED : VIEW_PREWARM_MAX_MS),
+    );
     const started = performance.now();
     const deadline = started + maxMs;
     // Stop the archetype-build steps early so the later entries — crucially
@@ -2957,6 +2971,16 @@ export class Renderer {
           // exactly what prevents the in-world freeze, so a near-empty leftover budget
           // must not cut it short (the old bug — the async compile timed out and the
           // programs linked synchronously on first sight instead).
+          // Constrained (phone WebKit) without KHR_parallel_shader_compile: BOTH arms
+          // below are one multi-second synchronous main-thread block (compileAsync
+          // without the extension takes the same up-front compile), which is exactly
+          // the unresponsiveness that gets the WebContent process killed. The
+          // per-entry link passes already linked every visible program, so leave the
+          // remainder to the bounded first-sight view gates and skip the monolith.
+          if (constrainedPrewarm && !this.asyncCompileSupported) {
+            compileMs = 0;
+            return;
+          }
           if (this.webgl.compileAsync) {
             compileMode = 'async';
             let settled = false;
@@ -2969,7 +2993,12 @@ export class Renderer {
                 settled = true;
                 console.warn('Renderer async prewarm compile failed', err);
               });
-            await Promise.race([compilePromise, sleep(PREWARM_COMPILE_MAX_MS)]);
+            await Promise.race([
+              compilePromise,
+              sleep(
+                constrainedPrewarm ? PREWARM_COMPILE_MAX_MS_CONSTRAINED : PREWARM_COMPILE_MAX_MS,
+              ),
+            ]);
             compileTimedOut = !settled;
             compileMs = roundMs(performance.now() - compileStart);
           } else {
@@ -3024,7 +3053,19 @@ export class Renderer {
 
     try {
       for (const entry of manifest) {
+        // Constrained (phone WebKit): yield the EVENT LOOP between entries (the
+        // awaits above are microtask-only, which never lets the process service
+        // events) so the responsiveness watchdog sees a live process, and follow
+        // each entry with a link pass so shader compilation lands group-by-group
+        // instead of in one multi-second block at the first full-scene pass.
+        if (constrainedPrewarm) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
         await runEntry(entry);
+        if (constrainedPrewarm && performance.now() < buildDeadline) {
+          this.renderPrewarmPass(1 / 60);
+          renderPasses++;
+        }
       }
     } finally {
       this.vfx.clear();
@@ -3078,6 +3119,16 @@ export class Renderer {
       diagnosticsBaseline,
     };
     this.lastPrewarmStats = stats;
+    // Dev-channel diagnostic (pairs with main.ts's "[entry-guard] scene built"): one
+    // line naming where the entry-time main-thread budget went, for isolating
+    // world-entry process kills on real devices.
+    console.info(
+      `[entry-guard] prewarm done: ${stats.elapsedMs}ms/${stats.maxMs}ms passes=${stats.renderPasses} ` +
+        `programs=${stats.programsBefore}->${stats.programsAfter} ` +
+        `textures=${stats.texturesBefore}->${stats.texturesAfter} ` +
+        `compile=${stats.compileMode}/${stats.compileMs}ms parallelCompile=${this.asyncCompileSupported} ` +
+        `timedOut=[${stats.timedOutEntryIds.join(',')}] failed=[${stats.failedEntryIds.join(',')}]`,
+    );
     return stats;
   }
 
