@@ -28,6 +28,13 @@ import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
+import {
+  clearEntryProbe,
+  ENTRY_PROBE_STABLE_MS,
+  planEntryCrashRecovery,
+  readEntryProbeRaw,
+  stampEntryProbe,
+} from './game/entry_crash_guard';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { handleGatherNodeInteract } from './game/gather_node_interact';
@@ -206,6 +213,7 @@ import {
 } from './ui/discord_status';
 import { renderDiscordWidget } from './ui/discord_widget';
 import { classDisplayName, tEntity } from './ui/entity_i18n';
+import { showEntryGuardBanner } from './ui/entry_guard_banner';
 import { FocusManager, type FocusTrapHandle } from './ui/focus_manager';
 import { type ClaudiumHooks, Hud } from './ui/hud';
 import { chatInputSize } from './ui/hud/chat/chat_input_autosize';
@@ -1010,6 +1018,19 @@ async function startGame(
   let hud!: Hud;
   const autoLoot = new AutoLoot();
   const perf = createPerfMonitor(null);
+  // World-entry crash guard: persist a probe RIGHT BEFORE the synchronous scene build.
+  // If phone WebKit kills the WebContent process during the build (no event, no error,
+  // just a reload), the next boot finds the probe still armed and steps the graphics
+  // preset down one tier (see the recovery block in wireStartScreens). Cleared once the
+  // entry demonstrably survives, on the handled failure path below, and whenever the
+  // page is hidden (a backgrounded eviction is NOT an entry crash).
+  stampEntryProbe(settings.get('graphicsPreset'), Date.now());
+  // Dev-channel diagnostic (English on purpose): grep "[entry-guard]" in the WebView
+  // inspector / device console to isolate crash-at-entry causes on real hardware.
+  console.info(
+    `[entry-guard] world entry: preset=${settings.get('graphicsPreset')} ` +
+      `(${graphicsPresetLabel(settings.get('graphicsPreset'))}) native=${isNativeRuntime()}`,
+  );
   try {
     renderer = new Renderer(world, canvas, nameplates);
     renderer.setAudioSink(sfx);
@@ -1032,10 +1053,19 @@ async function startGame(
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
   } catch (err) {
     // e.g. WebGL context creation failure: surface it instead of leaving the
-    // loading screen up forever
+    // loading screen up forever. A HANDLED failure is not a process kill, so the
+    // crash probe must not survive to cost the player a graphics tier next boot.
+    clearEntryProbe();
+    console.warn('[entry-guard] scene build failed with a handled error; probe cleared', err);
     fatalOverlay(t('loading.rendererFailed', { error: technicalErrorMessage(err) }));
     return;
   }
+  // The build survived; give the post-build tail (first-frame texture uploads and
+  // shader compiles) time to settle before declaring the entry stable.
+  window.setTimeout(() => {
+    clearEntryProbe();
+    console.info('[entry-guard] world entry stable; probe cleared');
+  }, ENTRY_PROBE_STABLE_MS);
 
   // Offline only: expose the dev "2v2 Fiesta vs Bots" practice toggle to the HUD.
   if (offlineSim) hud.setFiestaPracticeHook(() => offlineSim.startFiestaPractice());
@@ -8626,6 +8656,43 @@ function wireStartScreens(): void {
     DISCORD_BUILD_ENABLED && document.getElementById('discord-choice-panel')
       ? readDiscordChoice()
       : null;
+  // World-entry crash recovery: a probe still armed from the previous boot means the last
+  // entry attempt died mid scene-build (phone WebKit kills the WebContent process with no
+  // event when the tab crosses its per-process memory ceiling, then the shell reloads).
+  // Step the persisted preset down ONE tier and pin it (graphicsDefaultApplied) so the
+  // auto default can never re-select a tier this device has proven it cannot enter the
+  // world at, drop the active-play resume marker so this boot lands HERE (a screen with a
+  // reachable graphics control) instead of auto-reentering the world through the welcome
+  // screen in a crash loop, and tell the player what happened. Scoped to iOS/native
+  // runtimes, the environments where the OS reload makes the crash otherwise invisible;
+  // elsewhere the probe is only logged (and cleared: it is a one-shot signal).
+  const entryRecovery = planEntryCrashRecovery(readEntryProbeRaw(), Date.now());
+  clearEntryProbe();
+  if (entryRecovery) {
+    if (isNativeRuntime() || mobilePlatform() === 'ios') {
+      const recoverySettings = new Settings();
+      if (entryRecovery.to < entryRecovery.from) {
+        recoverySettings.set('graphicsPreset', entryRecovery.to);
+      }
+      recoverySettings.set('graphicsDefaultApplied', true);
+      clearPlayMarker();
+      console.warn(
+        `[entry-guard] previous world entry crashed ${Math.round(entryRecovery.ageMs / 1000)}s ` +
+          `ago at preset=${entryRecovery.from}; graphics now preset=${entryRecovery.to}, ` +
+          'resume marker cleared',
+      );
+      // Wait for the boot locale so the banner body never paints in the wrong language.
+      void ensureLocaleLoaded(getLanguage()).then(
+        () => showEntryGuardBanner(entryRecovery.to),
+        () => showEntryGuardBanner(entryRecovery.to),
+      );
+    } else {
+      console.warn(
+        '[entry-guard] previous world entry did not complete (probe was still armed); ' +
+          'automatic downgrade is scoped to iOS/native runtimes',
+      );
+    }
+  }
   // Restore a persisted session: show the Account tab immediately, then confirm
   // the stored token is still valid against the server (clearing it if not).
   if (RESET_TOKEN && document.getElementById('reset-panel')) {
@@ -8692,10 +8759,19 @@ function wireStartScreens(): void {
   // resumes into the world on the reload that follows an OS WebView eviction. A
   // no-op when no session is in play, so it is safe to register unconditionally.
   const restampResumeMarker = () => {
-    if (document.visibilityState === 'hidden') refreshPlayMarker(Date.now());
+    if (document.visibilityState === 'hidden') {
+      refreshPlayMarker(Date.now());
+      // A page that leaves the foreground mid-entry was not killed by a foreground
+      // memory spike: a later eviction while backgrounded (or a deliberate reload,
+      // which also fires pagehide) must not read as an entry crash next boot.
+      clearEntryProbe();
+    }
   };
   document.addEventListener('visibilitychange', restampResumeMarker);
-  window.addEventListener('pagehide', () => refreshPlayMarker(Date.now()));
+  window.addEventListener('pagehide', () => {
+    refreshPlayMarker(Date.now());
+    clearEntryProbe();
+  });
 
   // Header Logo click listener to return to homepage
   const headerLogoBtn = $('#header-logo-btn');

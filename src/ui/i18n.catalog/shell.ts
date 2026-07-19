@@ -30,6 +30,11 @@ export const shellStrings = {
       discordCommunity: 'Join the World of ClaudeCraft Discord community',
       donateProject: 'Donate to support World of ClaudeCraft',
     },
+    entryGuard: {
+      title: 'Graphics lowered',
+      body: 'The game closed unexpectedly while entering the world, so graphics are now set to {preset}. You can change this in the graphics selector below or in the in-game Options.',
+      dismiss: 'Dismiss',
+    },
     loading: {
       world: 'Loading world...',
       worldProgress: 'Loading world... {done}/{total}',
