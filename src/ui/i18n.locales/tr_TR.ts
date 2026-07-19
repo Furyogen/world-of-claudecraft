@@ -426,6 +426,10 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'İsabetlilik Puanı',
   'abilityUi.actionBar.attackRemoveHint':
     'Çubuktan kaldırıp yuvayı serbest bırakmak için sağ tıkla.',
+  'entryGuard.body':
+    'Dünyaya girerken oyun beklenmedik şekilde kapandı, bu yüzden grafikler artık {preset} olarak ayarlandı. Bunu aşağıdaki grafik seçicisinden veya oyun içi seçeneklerden değiştirebilirsiniz.',
+  'entryGuard.dismiss': 'Kapat',
+  'entryGuard.title': 'Grafikler düşürüldü',
   'loading.realmFull': 'Bu dünya şu an dolu. Lütfen birkaç dakika sonra tekrar dene.',
   'loading.tooManyConnections':
     'Ağından bu dünyaya çok fazla bağlantı geliyor. Lütfen fazladan oyun pencerelerini kapat ya da birkaç dakika sonra tekrar dene.',

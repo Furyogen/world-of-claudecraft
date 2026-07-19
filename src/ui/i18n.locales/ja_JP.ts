@@ -1440,6 +1440,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHubでWorld of ClaudeCraftプロジェクトを開く',
   'a11y.discordCommunity': 'World of ClaudeCraftのDiscordコミュニティに参加',
   'a11y.donateProject': 'World of ClaudeCraftを支援するために寄付',
+  'entryGuard.body':
+    'ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。',
+  'entryGuard.dismiss': '閉じる',
+  'entryGuard.title': 'グラフィックを下げました',
   'loading.world': '世界を読み込み中...',
   'loading.worldProgress': '世界を読み込み中... {done}/{total}',
   'loading.enteringWorld': '世界に入っています...',

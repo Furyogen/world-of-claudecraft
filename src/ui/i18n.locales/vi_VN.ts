@@ -426,6 +426,10 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Chỉ số trúng đòn từ trang bị và các chỉ số bộ của bạn, giảm tần suất tấn công bị hụt và phép thuật bị kháng, đặc biệt khi đối mặt với kẻ địch cấp cao hơn. Khoảng 10 chỉ số cho 1% trúng đòn.',
   'hudChrome.statInfo.names.hitRating': 'Chỉ Số Trúng Đòn',
   'abilityUi.actionBar.attackRemoveHint': 'Nhấp chuột phải để gỡ khỏi thanh và giải phóng ô trống.',
+  'entryGuard.body':
+    'Trò chơi đã đóng đột ngột khi vào thế giới, nên đồ họa hiện được đặt ở mức {preset}. Bạn có thể thay đổi trong bộ chọn đồ họa bên dưới hoặc trong tùy chọn trong trò chơi.',
+  'entryGuard.dismiss': 'Đóng',
+  'entryGuard.title': 'Đã hạ đồ họa',
   'loading.realmFull': 'Thế giới này đang đầy người chơi. Vui lòng thử lại sau vài phút.',
   'loading.tooManyConnections':
     'Có quá nhiều kết nối đến thế giới này từ mạng của bạn. Vui lòng đóng bớt cửa sổ trò chơi hoặc thử lại sau vài phút.',

@@ -427,6 +427,10 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Träffvärde',
   'abilityUi.actionBar.attackRemoveHint':
     'Högerklicka för att ta bort det från fältet och frigöra platsen.',
+  'entryGuard.body':
+    'Spelet stängdes oväntat när du gick in i världen, så grafiken är nu inställd på {preset}. Du kan ändra detta i grafikväljaren nedan eller i alternativen i spelet.',
+  'entryGuard.dismiss': 'Stäng',
+  'entryGuard.title': 'Grafik sänkt',
   'loading.realmFull': 'Denna värld är full just nu. Försök igen om några minuter.',
   'loading.tooManyConnections':
     'För många anslutningar till denna värld kommer från ditt nätverk. Stäng extra spelfönster eller försök igen om några minuter.',

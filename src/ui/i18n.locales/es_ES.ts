@@ -63,6 +63,10 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'a11y.goHome': 'Ir a la página de inicio',
   'a11y.characterActions': 'Acciones del personaje',
   'a11y.githubProject': 'Abrir el proyecto World of ClaudeCraft en GitHub',
+  'entryGuard.body':
+    'El juego se cerró inesperadamente al entrar al mundo, así que los gráficos ahora están en {preset}. Puedes cambiarlo en el selector de gráficos de abajo o en las opciones del juego.',
+  'entryGuard.dismiss': 'Descartar',
+  'entryGuard.title': 'Gráficos reducidos',
   'loading.enteringWorld': 'Entrando en el mundo...',
   'loading.assetsFailed': 'Error al cargar recursos: prueba a recargar. {error}',
   'loading.rendererFailed': 'No se pudo iniciar el renderizador: prueba a recargar. {error}',

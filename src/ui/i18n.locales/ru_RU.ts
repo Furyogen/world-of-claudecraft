@@ -1455,6 +1455,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'Открыть проект World of ClaudeCraft на GitHub',
   'a11y.discordCommunity': 'Присоединиться к Discord-сообществу World of ClaudeCraft',
   'a11y.donateProject': 'Пожертвовать на поддержку World of ClaudeCraft',
+  'entryGuard.body':
+    'Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.',
+  'entryGuard.dismiss': 'Закрыть',
+  'entryGuard.title': 'Графика снижена',
   'loading.world': 'Загрузка мира...',
   'loading.worldProgress': 'Загрузка мира... {done}/{total}',
   'loading.enteringWorld': 'Вход в мир...',

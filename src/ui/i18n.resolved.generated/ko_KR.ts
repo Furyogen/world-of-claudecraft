@@ -4971,6 +4971,11 @@ export const ko_KR: EnTranslations = {
     "discordCommunity": "World of ClaudeCraft Discord 커뮤니티 참여",
     "donateProject": "World of ClaudeCraft 후원하기"
   },
+  "entryGuard": {
+    "title": "그래픽 낮춤",
+    "body": "월드 입장 중 게임이 예기치 않게 종료되어 그래픽이 {preset}(으)로 설정되었습니다. 아래 그래픽 선택기나 게임 내 옵션에서 변경할 수 있습니다.",
+    "dismiss": "닫기"
+  },
   "loading": {
     "world": "세계 불러오는 중...",
     "worldProgress": "세계 불러오는 중... {done}/{total}",

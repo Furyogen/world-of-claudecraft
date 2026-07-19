@@ -433,6 +433,10 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Ocena Trafienia',
   'abilityUi.actionBar.attackRemoveHint':
     'Kliknij prawym przyciskiem, aby usunąć z paska i zwolnić miejsce.',
+  'entryGuard.body':
+    'Gra nieoczekiwanie zamknęła się podczas wchodzenia do świata, więc grafika jest teraz ustawiona na {preset}. Możesz to zmienić w wyborze grafiki poniżej lub w opcjach w grze.',
+  'entryGuard.dismiss': 'Zamknij',
+  'entryGuard.title': 'Obniżono grafikę',
   'loading.realmFull': 'Ten świat jest teraz pełny. Spróbuj ponownie za kilka minut.',
   'loading.tooManyConnections':
     'Z twojej sieci pochodzi zbyt wiele połączeń do tego świata. Zamknij dodatkowe okna gry lub spróbuj ponownie za kilka minut.',

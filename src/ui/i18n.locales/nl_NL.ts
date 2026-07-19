@@ -428,6 +428,10 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Raakwaarde',
   'abilityUi.actionBar.attackRemoveHint':
     'Klik met rechts om het van de balk te verwijderen en de plek vrij te maken.',
+  'entryGuard.body':
+    'Het spel is onverwacht afgesloten bij het betreden van de wereld, dus de grafische kwaliteit staat nu op {preset}. Je kunt dit wijzigen in de grafische keuzelijst hieronder of in de opties in het spel.',
+  'entryGuard.dismiss': 'Sluiten',
+  'entryGuard.title': 'Grafische kwaliteit verlaagd',
   'loading.realmFull':
     'Deze wereld is op dit moment vol. Probeer het over een paar minuten opnieuw.',
   'loading.tooManyConnections':

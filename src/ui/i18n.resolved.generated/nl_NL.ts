@@ -4971,6 +4971,11 @@ export const nl_NL: EnTranslations = {
     "discordCommunity": "Word lid van de World of ClaudeCraft Discord-community",
     "donateProject": "Doneer om World of ClaudeCraft te steunen"
   },
+  "entryGuard": {
+    "title": "Grafische kwaliteit verlaagd",
+    "body": "Het spel is onverwacht afgesloten bij het betreden van de wereld, dus de grafische kwaliteit staat nu op {preset}. Je kunt dit wijzigen in de grafische keuzelijst hieronder of in de opties in het spel.",
+    "dismiss": "Sluiten"
+  },
   "loading": {
     "world": "Wereld laden...",
     "worldProgress": "Wereld laden... {done}/{total}",

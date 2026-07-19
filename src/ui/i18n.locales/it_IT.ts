@@ -453,6 +453,10 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Valutazione Colpo',
   'abilityUi.actionBar.attackRemoveHint':
     'Clic destro per rimuoverlo dalla barra e liberare lo slot.',
+  'entryGuard.body':
+    'Il gioco si è chiuso in modo imprevisto entrando nel mondo, quindi la grafica è ora impostata su {preset}. Puoi cambiarla nel selettore della grafica qui sotto o nelle opzioni di gioco.',
+  'entryGuard.dismiss': 'Chiudi',
+  'entryGuard.title': 'Grafica ridotta',
   'loading.realmFull': 'Questo mondo e al completo in questo momento. Riprova tra qualche minuto.',
   'loading.tooManyConnections':
     'Troppe connessioni a questo mondo provengono dalla tua rete. Chiudi le finestre di gioco extra o riprova tra qualche minuto.',

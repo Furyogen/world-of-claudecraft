@@ -454,6 +454,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Précision',
   'abilityUi.actionBar.attackRemoveHint':
     "Clic droit pour le retirer de la barre et libérer l'emplacement.",
+  'entryGuard.body':
+    "Le jeu s'est fermé de manière inattendue en entrant dans le monde, les graphismes sont donc maintenant réglés sur {preset}. Vous pouvez modifier cela dans le sélecteur de graphismes ci-dessous ou dans les options en jeu.",
+  'entryGuard.dismiss': 'Fermer',
+  'entryGuard.title': 'Graphismes réduits',
   'loading.realmFull':
     'Ce monde est complet en ce moment. Veuillez réessayer dans quelques minutes.',
   'loading.tooManyConnections':

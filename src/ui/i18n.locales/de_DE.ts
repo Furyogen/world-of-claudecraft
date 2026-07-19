@@ -445,6 +445,10 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Trefferwertung',
   'abilityUi.actionBar.attackRemoveHint':
     'Rechtsklick, um es von der Leiste zu entfernen und den Slot freizugeben.',
+  'entryGuard.body':
+    'Das Spiel wurde beim Betreten der Welt unerwartet beendet, daher ist die Grafik jetzt auf {preset} eingestellt. Du kannst dies unten in der Grafikauswahl oder in den Optionen im Spiel ändern.',
+  'entryGuard.dismiss': 'Schließen',
+  'entryGuard.title': 'Grafik verringert',
   'loading.realmFull': 'Diese Welt ist derzeit voll. Bitte versuche es in wenigen Minuten erneut.',
   'loading.tooManyConnections':
     'Zu viele Verbindungen zu dieser Welt kommen von deinem Netzwerk. Bitte schliesse zusatzliche Spielfenster oder versuche es in wenigen Minuten erneut.',

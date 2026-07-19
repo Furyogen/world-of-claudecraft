@@ -1379,6 +1379,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': '打开 World of ClaudeCraft 的 GitHub 项目',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社区',
   'a11y.donateProject': '捐赠支持 World of ClaudeCraft',
+  'entryGuard.body':
+    '进入世界时游戏意外关闭，图形设置现已设为{preset}。你可以在下方的图形选择器或游戏内选项中更改。',
+  'entryGuard.dismiss': '关闭',
+  'entryGuard.title': '已降低图形设置',
   'loading.world': '正在加载世界...',
   'loading.worldProgress': '正在加载世界... {done}/{total}',
   'loading.enteringWorld': '正在进入世界...',

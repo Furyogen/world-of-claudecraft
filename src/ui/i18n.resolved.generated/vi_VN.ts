@@ -4971,6 +4971,11 @@ export const vi_VN: EnTranslations = {
     "discordCommunity": "Tham gia cộng đồng Discord của World of ClaudeCraft",
     "donateProject": "Quyên góp ủng hộ World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Đã hạ đồ họa",
+    "body": "Trò chơi đã đóng đột ngột khi vào thế giới, nên đồ họa hiện được đặt ở mức {preset}. Bạn có thể thay đổi trong bộ chọn đồ họa bên dưới hoặc trong tùy chọn trong trò chơi.",
+    "dismiss": "Đóng"
+  },
   "loading": {
     "world": "Đang tải thế giới...",
     "worldProgress": "Đang tải thế giới... {done}/{total}",

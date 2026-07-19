@@ -4971,6 +4971,11 @@ export const sv_SE: EnTranslations = {
     "discordCommunity": "Gå med i World of ClaudeCraft-gemenskapen på Discord",
     "donateProject": "Donera för att stödja World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Grafik sänkt",
+    "body": "Spelet stängdes oväntat när du gick in i världen, så grafiken är nu inställd på {preset}. Du kan ändra detta i grafikväljaren nedan eller i alternativen i spelet.",
+    "dismiss": "Stäng"
+  },
   "loading": {
     "world": "Läser in världen...",
     "worldProgress": "Läser in världen... {done}/{total}",

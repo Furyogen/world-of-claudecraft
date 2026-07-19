@@ -4971,6 +4971,11 @@ export const tr_TR: EnTranslations = {
     "discordCommunity": "World of ClaudeCraft Discord topluluğuna katıl",
     "donateProject": "World of ClaudeCraft'a destek olmak için bağış yap"
   },
+  "entryGuard": {
+    "title": "Grafikler düşürüldü",
+    "body": "Dünyaya girerken oyun beklenmedik şekilde kapandı, bu yüzden grafikler artık {preset} olarak ayarlandı. Bunu aşağıdaki grafik seçicisinden veya oyun içi seçeneklerden değiştirebilirsiniz.",
+    "dismiss": "Kapat"
+  },
   "loading": {
     "world": "Dünya yükleniyor...",
     "worldProgress": "Dünya yükleniyor... {done}/{total}",

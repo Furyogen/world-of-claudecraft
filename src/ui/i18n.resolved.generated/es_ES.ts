@@ -4971,6 +4971,11 @@ export const es_ES: EnTranslations = {
     "discordCommunity": "Unirse a la comunidad de World of ClaudeCraft en Discord",
     "donateProject": "Donar para apoyar World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Gráficos reducidos",
+    "body": "El juego se cerró inesperadamente al entrar al mundo, así que los gráficos ahora están en {preset}. Puedes cambiarlo en el selector de gráficos de abajo o en las opciones del juego.",
+    "dismiss": "Descartar"
+  },
   "loading": {
     "world": "Cargando mundo...",
     "worldProgress": "Cargando mundo... {done}/{total}",

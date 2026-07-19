@@ -4971,6 +4971,11 @@ export const ru_RU: EnTranslations = {
     "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
     "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Графика снижена",
+    "body": "Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.",
+    "dismiss": "Закрыть"
+  },
   "loading": {
     "world": "Загрузка мира...",
     "worldProgress": "Загрузка мира... {done}/{total}",

@@ -433,6 +433,10 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Rating Pukulan',
   'abilityUi.actionBar.attackRemoveHint':
     'Klik kanan untuk menghapusnya dari bilah dan mengosongkan slot.',
+  'entryGuard.body':
+    'Game tertutup secara tidak terduga saat memasuki dunia, jadi grafis sekarang diatur ke {preset}. Anda dapat mengubahnya di pemilih grafis di bawah atau di opsi dalam game.',
+  'entryGuard.dismiss': 'Tutup',
+  'entryGuard.title': 'Grafis diturunkan',
   'loading.realmFull': 'Dunia ini sedang penuh. Coba lagi dalam beberapa menit.',
   'loading.tooManyConnections':
     'Terlalu banyak koneksi ke dunia ini dari jaringanmu. Tutup jendela permainan ekstra atau coba lagi dalam beberapa menit.',

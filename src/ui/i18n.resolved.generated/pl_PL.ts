@@ -4971,6 +4971,11 @@ export const pl_PL: EnTranslations = {
     "discordCommunity": "Dołącz do społeczności Discord World of ClaudeCraft",
     "donateProject": "Wesprzyj World of ClaudeCraft datkiem"
   },
+  "entryGuard": {
+    "title": "Obniżono grafikę",
+    "body": "Gra nieoczekiwanie zamknęła się podczas wchodzenia do świata, więc grafika jest teraz ustawiona na {preset}. Możesz to zmienić w wyborze grafiki poniżej lub w opcjach w grze.",
+    "dismiss": "Zamknij"
+  },
   "loading": {
     "world": "Wczytywanie świata...",
     "worldProgress": "Wczytywanie świata... {done}/{total}",

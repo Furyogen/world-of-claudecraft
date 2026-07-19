@@ -4971,6 +4971,11 @@ export const ja_JP: EnTranslations = {
     "discordCommunity": "World of ClaudeCraftのDiscordコミュニティに参加",
     "donateProject": "World of ClaudeCraftを支援するために寄付"
   },
+  "entryGuard": {
+    "title": "グラフィックを下げました",
+    "body": "ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。",
+    "dismiss": "閉じる"
+  },
   "loading": {
     "world": "世界を読み込み中...",
     "worldProgress": "世界を読み込み中... {done}/{total}",

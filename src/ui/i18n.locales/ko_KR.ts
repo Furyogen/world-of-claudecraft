@@ -1432,6 +1432,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHub에서 World of ClaudeCraft 프로젝트 열기',
   'a11y.discordCommunity': 'World of ClaudeCraft Discord 커뮤니티 참여',
   'a11y.donateProject': 'World of ClaudeCraft 후원하기',
+  'entryGuard.body':
+    '월드 입장 중 게임이 예기치 않게 종료되어 그래픽이 {preset}(으)로 설정되었습니다. 아래 그래픽 선택기나 게임 내 옵션에서 변경할 수 있습니다.',
+  'entryGuard.dismiss': '닫기',
+  'entryGuard.title': '그래픽 낮춤',
   'loading.world': '세계 불러오는 중...',
   'loading.worldProgress': '세계 불러오는 중... {done}/{total}',
   'loading.enteringWorld': '세계에 입장하는 중...',

@@ -428,6 +428,10 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Rammevurdering',
   'abilityUi.actionBar.attackRemoveHint':
     'Højreklik for at fjerne den fra bjælken og frigøre pladsen.',
+  'entryGuard.body':
+    'Spillet lukkede uventet, mens du trådte ind i verdenen, så grafikken er nu sat til {preset}. Du kan ændre det i grafikvælgeren nedenfor eller i indstillingerne i spillet.',
+  'entryGuard.dismiss': 'Afvis',
+  'entryGuard.title': 'Grafik sænket',
   'loading.realmFull': 'Denne verden er fuld i øjeblikket. Prøv igen om et par minutter.',
   'loading.tooManyConnections':
     'Der kommer for mange forbindelser til denne verden fra dit netværk. Luk ekstra spilvinduer, eller prøv igen om et par minutter.',

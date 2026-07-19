@@ -4971,6 +4971,11 @@ export const id_ID: EnTranslations = {
     "discordCommunity": "Gabung komunitas Discord World of ClaudeCraft",
     "donateProject": "Berdonasi untuk mendukung World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Grafis diturunkan",
+    "body": "Game tertutup secara tidak terduga saat memasuki dunia, jadi grafis sekarang diatur ke {preset}. Anda dapat mengubahnya di pemilih grafis di bawah atau di opsi dalam game.",
+    "dismiss": "Tutup"
+  },
   "loading": {
     "world": "Memuat dunia...",
     "worldProgress": "Memuat dunia... {done}/{total}",

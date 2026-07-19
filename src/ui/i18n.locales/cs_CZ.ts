@@ -432,6 +432,10 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Hodnocení zásahu',
   'abilityUi.actionBar.attackRemoveHint':
     'Klikni pravým tlačítkem pro odebrání z lišty a uvolnění slotu.',
+  'entryGuard.body':
+    'Hra se při vstupu do světa neočekávaně ukončila, grafika je proto nyní nastavena na {preset}. Můžete to změnit ve výběru grafiky níže nebo v nastavení ve hře.',
+  'entryGuard.dismiss': 'Zavřít',
+  'entryGuard.title': 'Grafika snížena',
   'loading.realmFull': 'Tento svět je momentálně plný. Zkus to prosím znovu za několik minut.',
   'loading.tooManyConnections':
     'Z tvé sítě se k tomuto světu připojuje příliš mnoho spojení. Zavři nadbytečná herní okna nebo to zkus znovu za několik minut.',

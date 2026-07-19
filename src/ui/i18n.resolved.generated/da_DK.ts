@@ -4971,6 +4971,11 @@ export const da_DK: EnTranslations = {
     "discordCommunity": "Deltag i World of ClaudeCraft Discord-fællesskabet",
     "donateProject": "Donér for at støtte World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "Grafik sænket",
+    "body": "Spillet lukkede uventet, mens du trådte ind i verdenen, så grafikken er nu sat til {preset}. Du kan ændre det i grafikvælgeren nedenfor eller i indstillingerne i spillet.",
+    "dismiss": "Afvis"
+  },
   "loading": {
     "world": "Indlæser verden...",
     "worldProgress": "Indlæser verden... {done}/{total}",

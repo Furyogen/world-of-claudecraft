@@ -4971,6 +4971,11 @@ export const zh_TW: EnTranslations = {
     "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社群",
     "donateProject": "捐贈支持 World of ClaudeCraft"
   },
+  "entryGuard": {
+    "title": "已降低圖形設定",
+    "body": "進入世界時遊戲意外關閉，圖形設定現已設為{preset}。你可以在下方的圖形選擇器或遊戲內選項中變更。",
+    "dismiss": "關閉"
+  },
   "loading": {
     "world": "正在載入世界...",
     "worldProgress": "正在載入世界... {done}/{total}",

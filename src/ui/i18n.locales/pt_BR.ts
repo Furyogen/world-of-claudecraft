@@ -448,6 +448,10 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Classificação de Acerto',
   'abilityUi.actionBar.attackRemoveHint':
     'Clique com o botão direito para removê-lo da barra e liberar o espaço.',
+  'entryGuard.body':
+    'O jogo fechou inesperadamente ao entrar no mundo, então os gráficos agora estão definidos como {preset}. Você pode alterar isso no seletor de gráficos abaixo ou nas opções do jogo.',
+  'entryGuard.dismiss': 'Fechar',
+  'entryGuard.title': 'Gráficos reduzidos',
   'loading.realmFull': 'Este mundo está lotado no momento. Tente novamente em alguns minutos.',
   'loading.tooManyConnections':
     'Há conexões em excesso a este mundo vindas da sua rede. Feche janelas extras do jogo ou tente novamente em alguns minutos.',

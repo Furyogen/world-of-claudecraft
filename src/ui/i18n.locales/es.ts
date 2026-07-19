@@ -423,6 +423,10 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.hitRating': 'Puntuacion de impacto',
   'abilityUi.actionBar.attackRemoveHint':
     'Clic derecho para quitarlo de la barra y liberar el espacio.',
+  'entryGuard.body':
+    'El juego se cerró inesperadamente al entrar al mundo, así que los gráficos ahora están en {preset}. Puedes cambiarlo en el selector de gráficos de abajo o en las opciones del juego.',
+  'entryGuard.dismiss': 'Descartar',
+  'entryGuard.title': 'Gráficos reducidos',
   'loading.realmFull':
     'Este mundo esta lleno en este momento. Por favor, intentalo de nuevo en unos minutos.',
   'loading.tooManyConnections':
