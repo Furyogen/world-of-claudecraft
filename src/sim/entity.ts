@@ -93,6 +93,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     swingTimer: 0,
     offhandSwingTimer: 0,
     dualWielding: false,
+    titansGrip: false,
     inCombat: false,
     combatTimer: 99,
     auras: [],
@@ -474,6 +475,18 @@ export function recalcPlayerStats(
       : null;
   e.offhandWeapon = offhandWeapon;
   e.dualWielding = offhandWeapon !== null;
+  // Titan's Grip state: dual-wielding with a two-hander in either hand (only a
+  // Fury warrior can reach this via equipment_rules.canDualWieldTwoHand). Pays the
+  // flat physical-damage penalty in combat/damage.ts (TITANS_GRIP_DMG_PENALTY):
+  // the throughput side of the tradeoff whose stat side is item_budget.ts's
+  // TWOHAND_STAT_MULT. The offhand arm needs no level re-check: a non-null
+  // offhandWeapon already proved the offhand is a level-legal weapon.
+  e.titansGrip =
+    offhandWeapon !== null &&
+    ((mainhand?.kind === 'weapon' &&
+      mainhand.hand === 'twohand' &&
+      meetsLevelRequirement(lvl, mainhand)) ||
+      (offhand?.kind === 'weapon' && offhand.hand === 'twohand'));
   const activeShield =
     cls === 'warrior' && isShieldItem(offhand) && meetsLevelRequirement(lvl, offhand);
   e.blockChance = activeShield ? SHIELD_BLOCK_BASE : 0;

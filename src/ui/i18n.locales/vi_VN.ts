@@ -485,7 +485,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Một tiếng hét xuyên thấu làm chậm mọi kẻ địch trong vòng 15 thước đi 50% trong 8 giây.',
   'entities.abilities.piercing_howl.name': 'Tiếng Hú Xuyên Thấu',
   'entities.abilities.raging_gale.description':
-    'Lập tức vung vũ khí đánh hai lần, mỗi đòn gây 40% sát thương vũ khí cộng thêm {damage}, và tạo 8 nộ khí. Tích trữ tối đa 2 lượt dùng. (nhánh Cuồng Nộ)',
+    'Lập tức vung vũ khí đánh hai lần, mỗi đòn gây 40% sát thương vũ khí cộng thêm {damage}, và tạo 4 nộ khí. Tích trữ tối đa 2 lượt dùng. (nhánh Cuồng Nộ)',
   'entities.abilities.raging_gale.name': 'Song Kích',
   'entities.abilities.raised_guard.description':
     'Ghì chặt sau tấm khiên: bạn nhận ít hơn 50% sát thương Vật Lý trong 6 giây. Tích trữ tối đa 2 lượt dùng. (nhánh Hộ Vệ)',

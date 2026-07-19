@@ -200,7 +200,9 @@ async function shootGenericHud(frames) {
       const mobile = await browser.newPage();
       watch(mobile, 'mobile');
       await mobile.emulate({
-        viewport: { width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
+        // Landscape metrics: in-game mobile is landscape-only on the web client,
+        // so portrait would capture the rotate interstitial instead of the HUD.
+        viewport: { width: 844, height: 390, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
         userAgent:
           'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
       });

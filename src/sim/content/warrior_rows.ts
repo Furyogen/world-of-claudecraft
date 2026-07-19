@@ -119,9 +119,11 @@ export const WARRIOR_ROWS: RowTree = [
       {
         id: 'war_row_anger_management',
         name: 'Anger Management',
-        description: 'Your auto-attacks generate 25% more rage and your abilities 15% more.',
+        description: 'Your auto-attacks generate 10% more rage and your abilities 5% more.',
         // LIVE: the rage-generation globals folded by the shared engine.
-        effect: { global: { autoRagePct: 0.25, abilityRagePct: 0.15 } },
+        // v0.27.1 rage fix: trimmed from 25/15, which alone was a third of the
+        // fury income overshoot. The row id stays stable so saved picks survive.
+        effect: { global: { autoRagePct: 0.1, abilityRagePct: 0.05 } },
       },
       {
         // Final owner design (2026-07-11): each stance gains an extra effect, so
@@ -181,8 +183,10 @@ export const WARRIOR_ROWS: RowTree = [
         id: 'war_row_colossal_might',
         name: 'Colossal Might',
         description:
-          'Each point of Rage you spend shaves 0.1 sec off the cooldown of your major offensive abilities.',
-        // LIVE: spendAbilityCost shaves the big offensive cooldowns per rage spent.
+          'Each point of Rage you spend shaves 0.1 sec off the cooldown of your major offensive abilities, up to 10 sec every 30 sec.',
+        // LIVE: spendAbilityCost shaves the big offensive cooldowns per rage
+        // spent, capped per rolling window (v0.27.1; see
+        // COLOSSAL_MIGHT_CAP_SECONDS in combat/casting_lifecycle.ts).
         effect: { global: { cdrPerRage: 0.1 } },
       },
       {

@@ -750,6 +750,7 @@ export const en_XA: EnTranslations = {
       "leaderboard": "[Ŕáñķš]",
       "dailyRewards": "[Šţóŕé]",
       "deeds": "[Ðééðš]",
+      "professions": "[Þŕóƒéššíóñš]",
       "nameplates": "[Ñáɱéš]",
       "haptics": "[Ĥáþţíçš]",
       "hapticsOff": "[Ĥáþţíçš Óƒƒ]",
@@ -2082,7 +2083,9 @@ export const en_XA: EnTranslations = {
       "mining": "[Ɱíñíñĝ]",
       "logging": "[Ļóĝĝíñĝ]",
       "herbalism": "[Ĥéŕƀáļíšɱ]",
-      "notReady": "[Ţĥíš ŕéšóúŕçé ñóðé ĥáš ñóţ ŕéšþáŵñéð ƒóŕ ýóú ýéţ.]"
+      "notReady": "[Ţĥíš ŕéšóúŕçé ñóðé ĥáš ñóţ ŕéšþáŵñéð ƒóŕ ýóú ýéţ.]",
+      "gatherLine": "[Ýóú ĝáţĥéŕ: {name}.]",
+      "gatherLineQty": "[Ýóú ĝáţĥéŕ: {name} ẋ{qty}.]"
     },
     "archetypeTitle": {
       "label": "[Ţíţļé]",
@@ -2112,6 +2115,42 @@ export const en_XA: EnTranslations = {
       "enchanting": "[Éñçĥáñţíñĝ]",
       "tailoring": "[Ţáíļóŕíñĝ]",
       "leatherworking": "[Ļéáţĥéŕŵóŕķíñĝ]"
+    },
+    "professions": {
+      "title": "[Þŕóƒéššíóñš]",
+      "close": "[Çļóšé þŕóƒéššíóñš]",
+      "ringAria": "[Çŕáƒţ ŵĥééļ]",
+      "skillsHeader": "[Çŕáƒţ šķíļļš]",
+      "gatheringHeader": "[Ĝáţĥéŕíñĝ]",
+      "perksHeader": "[Þéŕķš]",
+      "identityHeader": "[Íðéñţíţý]",
+      "roleMajor": "[Ɱáĵóŕ]",
+      "roleHobby": "[Ĥóƀƀý]",
+      "roleDormant": "[Ðóŕɱáñţ]",
+      "roleUnattuned": "[Úñáţţúñéð]",
+      "ceilingUnlimited": "[Ñó éɱþóŵéŕɱéñţ çáþ]",
+      "ceilingRare": "[Ŕáŕé çáþ]",
+      "ceilingCommon": "[Çóɱɱóñ çáþ]",
+      "skillValue": "[{skill} / {max}]",
+      "tierPipAria": "[Ţíéŕ {tier}]",
+      "nextUnlockTier": "[{points} þóíñţš ţó ţĥé ñéẋţ ţíéŕ: ɱášţéŕŵóŕķ óððš íɱþŕóʋé]",
+      "nextUnlockSpecialized": "[{points} þóíñţš ţó Šþéçíáļížéð: ɱáţéŕíáļ çóšţš ðŕóþ]",
+      "nextUnlockMax": "[Áţ ɱáẋíɱúɱ šķíļļ]",
+      "perkSpecializedLine": "[{craft}: Šþéçíáļížéð, ɱáţéŕíáļ çóšţš -{pct}%]",
+      "perkSpecializedAt": "[Šþéçíáļížéš áţ {threshold} šķíļļ]",
+      "switchCost": "[Ñéẋţ áŕçĥéţýþé šŵíţçĥ çóšţš {cost} áɱéñðš]",
+      "syncing": "[Ŵáíţíñĝ ƒóŕ ýóúŕ þŕóƒéššíóñ ðáţá ƒŕóɱ ţĥé ŕéáļɱ.]",
+      "tutorialLine": "[Ŕéáçĥ {target} šķíļļ íñ áñý çŕáƒţ ţó úñļóçķ ýóúŕ ƒíŕšţ ţíéŕ.]",
+      "ctaHeader": "[Ñéẋţ šţéþ]",
+      "ctaRaise": "[Ķééþ ŕáíšíñĝ {craft}: {points} ɱóŕé þóíñţš ţó ţĥé ñéẋţ ţíéŕ.]",
+      "ctaStart": "[Çŕáƒţ óŕ ĝáţĥéŕ ŵíţĥ áñý þŕóƒéššíóñ ţó ƀéĝíñ.]",
+      "unattunedIdentity": "[Ýóú áŕé ñóţ ýéţ áţţúñéð ţó áñ áŕçĥéţýþé. Ŕáíšé ýóúŕ çŕáƒţš áñð çóɱþļéţé áñ áţţúñéɱéñţ ţó çĥóóšé ýóúŕ þáíŕ.]",
+      "nudgeNearTier": "[{craft}: {points} þóíñţš ƒŕóɱ ţĥé ñéẋţ ţíéŕ]",
+      "nudgeDormant": "[Ýóúŕ {craft} ķñóŵļéðĝé ļíéš ðóŕɱáñţ]",
+      "hobbyLabel": "[Ĥóƀƀý: {craft}]",
+      "majorsLabel": "[Ɱáĵóŕš: {a} áñð {b}]",
+      "pairsHeld": "[Þáíŕš ĥéļð: {count}]",
+      "returnsLabel": "[Ŕéţúŕñš: {count}]"
     },
     "crafting": {
       "title": "[Çŕáƒţíñĝ]",
@@ -2331,6 +2370,11 @@ export const en_XA: EnTranslations = {
       "broadcastsLabel": "[Šĥáŕé ðééð úñļóçķš ŵíţĥ ĝúíļð áñð ƒŕíéñðš]",
       "titledName": "[{name} [{title}]]"
     }
+  },
+  "gatherEvent": {
+    "pristineVein": "[{finder} šţŕúçķ á þŕíšţíñé ʋéíñ!]",
+    "ancientHeartwood": "[{finder} ƒéļļéð áñ áñçíéñţ ĥéáŕţŵóóð!]",
+    "moonlitBloom": "[{finder} ðíšçóʋéŕéð á ɱóóñļíţ ƀļóóɱ!]"
   },
   "apiError": {
     "validation": {
@@ -6083,6 +6127,7 @@ export const en_XA: EnTranslations = {
       "rarityUncommon": "[Úñçóɱɱóñ]",
       "rarityRare": "[Ŕáŕé]",
       "rarityEpic": "[Éþíç]",
+      "rarityLegendary": "[Ļéĝéñðáŕý]",
       "merchantStock": "[Ɱéŕçĥáñţ šţóçķ]",
       "stackCount": "[ẋ{count}]",
       "each": "[{money} éáçĥ]",
@@ -7007,7 +7052,7 @@ export const en_XA: EnTranslations = {
       },
       "raging_gale": {
         "name": "[Ţŵíñšţŕíķé]",
-        "description": "[Íñšţáñţļý šţŕíķé ŵíţĥ ýóúŕ ŵéáþóñ ţŵíçé, éáçĥ ĥíţ ðéáļíñĝ 40% ŵéáþóñ ðáɱáĝé þļúš {damage}, áñð ĝéñéŕáţé 8 ŕáĝé. Šţóŕéš úþ ţó 2 çĥáŕĝéš. (Ƒúŕý)]"
+        "description": "[Íñšţáñţļý šţŕíķé ŵíţĥ ýóúŕ ŵéáþóñ ţŵíçé, éáçĥ ĥíţ ðéáļíñĝ 40% ŵéáþóñ ðáɱáĝé þļúš {damage}, áñð ĝéñéŕáţé 4 ŕáĝé. Šţóŕéš úþ ţó 2 çĥáŕĝéš. (Ƒúŕý)]"
       },
       "red_harvest": {
         "name": "[Ŕéð Ĥáŕʋéšţ]",
@@ -8137,6 +8182,18 @@ export const en_XA: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "[Éɱƀéŕĝļášš Ŵáŕšţáƒƒ]"
+      },
+      "copper_ore": {
+        "name": "[Çóþþéŕ Óŕé]"
+      },
+      "iron_ore": {
+        "name": "[Íŕóñ Óŕé]"
+      },
+      "ironbark_log": {
+        "name": "[Íŕóñƀáŕķ Ļóĝ]"
+      },
+      "silverleaf_herb": {
+        "name": "[Šíļʋéŕļéáƒ Ĥéŕƀ]"
       },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"

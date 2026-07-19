@@ -144,7 +144,8 @@ describe('v0.26 winning Warrior release contracts', () => {
       effects: [
         { type: 'weaponStrike', bonus: 14, weaponMult: 0.4 },
         { type: 'weaponStrike', bonus: 14, weaponMult: 0.4 },
-        { type: 'gainResource', amount: 8 },
+        // v0.27.1 rage fix: halved from 8; Bloodletting is the generating builder.
+        { type: 'gainResource', amount: 4 },
       ],
     });
     expect(ABILITIES.bloodthirst).toMatchObject({
@@ -173,11 +174,11 @@ describe('v0.26 winning Warrior release contracts', () => {
       cooldown: 10,
       effects: [
         {
+          // v0.27.1 rage fix: the spin no longer mints (rageOnHit removed).
           type: 'aoeDamage',
           min: 30,
           max: 42,
           radius: 8,
-          rageOnHit: { base: 5, perTarget: 1, capTargets: 5 },
         },
         {
           type: 'selfBuff',

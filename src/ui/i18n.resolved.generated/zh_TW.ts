@@ -750,6 +750,7 @@ export const zh_TW: EnTranslations = {
       "leaderboard": "排行榜",
       "dailyRewards": "商店",
       "deeds": "功績",
+      "professions": "專業",
       "nameplates": "名條",
       "haptics": "觸覺回饋",
       "hapticsOff": "觸覺回饋已關閉",
@@ -2082,7 +2083,9 @@ export const zh_TW: EnTranslations = {
       "mining": "採礦",
       "logging": "伐木",
       "herbalism": "藥草學",
-      "notReady": "這個資源節點尚未為你重新生成。"
+      "notReady": "這個資源節點尚未為你重新生成。",
+      "gatherLine": "你採集了：{name}。",
+      "gatherLineQty": "你採集了：{name} x{qty}。"
     },
     "archetypeTitle": {
       "label": "稱號",
@@ -2112,6 +2115,42 @@ export const zh_TW: EnTranslations = {
       "enchanting": "附魔",
       "tailoring": "裁縫",
       "leatherworking": "製皮"
+    },
+    "professions": {
+      "title": "專業",
+      "close": "關閉專業",
+      "ringAria": "技藝之輪",
+      "skillsHeader": "製作技能",
+      "gatheringHeader": "採集",
+      "perksHeader": "加成",
+      "identityHeader": "身分",
+      "roleMajor": "主修",
+      "roleHobby": "嗜好",
+      "roleDormant": "休眠",
+      "roleUnattuned": "未調諧",
+      "ceilingUnlimited": "無強化上限",
+      "ceilingRare": "精良品質上限",
+      "ceilingCommon": "普通品質上限",
+      "skillValue": "{skill} / {max}",
+      "tierPipAria": "階級 {tier}",
+      "nextUnlockTier": "距離下一階級還差 {points} 點：打造大師之作的機率將提升",
+      "nextUnlockSpecialized": "距離專精還差 {points} 點：材料消耗將降低",
+      "nextUnlockMax": "已達技能上限",
+      "perkSpecializedLine": "{craft}：專精，材料消耗 -{pct}%",
+      "perkSpecializedAt": "技能達到 {threshold} 後專精",
+      "switchCost": "下次切換原型需要 {cost} 點補償",
+      "syncing": "正在等待伺服器傳送你的專業資料。",
+      "tutorialLine": "將任意一門技藝提升到技能 {target}，即可解鎖你的第一個階級。",
+      "ctaHeader": "下一步",
+      "ctaRaise": "繼續提升{craft}：距離下一階級還差 {points} 點。",
+      "ctaStart": "使用任意專業進行製作或採集，即可開始。",
+      "unattunedIdentity": "你尚未調諧任何原型。提升你的技藝並完成一次調諧，以選擇你的組合。",
+      "nudgeNearTier": "{craft}：距離下一階級還差 {points} 點",
+      "nudgeDormant": "你的{craft}知識正處於休眠狀態",
+      "hobbyLabel": "嗜好：{craft}",
+      "majorsLabel": "主修：{a}和{b}",
+      "pairsHeld": "已持有組合：{count}",
+      "returnsLabel": "回歸：{count}"
     },
     "crafting": {
       "title": "製作",
@@ -2331,6 +2370,11 @@ export const zh_TW: EnTranslations = {
       "broadcastsLabel": "與公會和好友分享功績達成",
       "titledName": "{name}【{title}】"
     }
+  },
+  "gatherEvent": {
+    "pristineVein": "{finder}挖到了一條純淨的礦脈！",
+    "ancientHeartwood": "{finder}砍倒了一棵遠古心木！",
+    "moonlitBloom": "{finder}發現了一朵月光之花！"
   },
   "apiError": {
     "validation": {
@@ -6083,6 +6127,7 @@ export const zh_TW: EnTranslations = {
       "rarityUncommon": "優秀",
       "rarityRare": "稀有",
       "rarityEpic": "史詩",
+      "rarityLegendary": "傳奇",
       "merchantStock": "商人庫存",
       "stackCount": "x{count}",
       "each": "每個 {money}",
@@ -7007,7 +7052,7 @@ export const zh_TW: EnTranslations = {
       },
       "raging_gale": {
         "name": "雙擊",
-        "description": "立即以武器攻擊兩次，每擊造成 40% 武器傷害外加 {damage}，並產生 8 點怒氣。最多儲存 2 次充能。（狂怒）"
+        "description": "立即以武器攻擊兩次，每擊造成 40% 武器傷害外加 {damage}，並產生 4 點怒氣。最多儲存 2 次充能。（狂怒）"
       },
       "red_harvest": {
         "name": "血色收割",
@@ -8137,6 +8182,18 @@ export const zh_TW: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "燼晶戰杖"
+      },
+      "copper_ore": {
+        "name": "銅礦石"
+      },
+      "iron_ore": {
+        "name": "鐵礦石"
+      },
+      "ironbark_log": {
+        "name": "鐵皮木原木"
+      },
+      "silverleaf_herb": {
+        "name": "銀葉草"
       },
       "conjured_water4": {
         "name": "魔法泉水"

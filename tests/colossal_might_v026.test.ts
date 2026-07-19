@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { updatePlayerAutoAttack } from '../src/sim/combat/auto_attack';
+import {
+  applyRageSpendCooldownRefund,
+  COLOSSAL_MIGHT_CAP_SECONDS,
+  COLOSSAL_MIGHT_CAP_WINDOW,
+} from '../src/sim/combat/casting_lifecycle';
 import { Sim } from '../src/sim/sim';
 import { dist2d, MAX_LEVEL } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
@@ -96,5 +101,50 @@ describe('v0.26 Colossal Might', () => {
     sim.castAbility('heroic_strike');
     updatePlayerAutoAttack(sim.ctx, player, sim.meta(player.id)!);
     expect(player.cooldowns.get('recklessness')).toBe(180);
+  });
+});
+
+// v0.27.1: the rolling CDR cap. Uncapped, a fury spamming 80-rage Red Harvests
+// banked ~78s of CDR per minute and collapsed the 180s cooldowns to ~78s
+// effective; the cap bounds the shave to 10s per 30s rolling window, the same
+// mechanism the mage's Overflowing Power always had.
+describe('v0.27.1 Colossal Might CDR cap', () => {
+  it('pins the cap constants', () => {
+    expect(COLOSSAL_MIGHT_CAP_SECONDS).toBe(10);
+    expect(COLOSSAL_MIGHT_CAP_WINDOW).toBe(30);
+  });
+
+  it('caps the shave at 10s per rolling window, then resumes when it expires', () => {
+    const sim = warrior('prot');
+    const player = sim.player;
+    const meta = sim.meta(player.id)!;
+    player.resource = 100;
+    sim.castAbility('recklessness');
+    expect(player.cooldowns.get('recklessness')).toBe(180);
+
+    // An 80-rage spend (a Red Harvest bar) shaves its full 8s...
+    applyRageSpendCooldownRefund(sim.ctx, player, meta, 80);
+    expect(player.cooldowns.get('recklessness')).toBeCloseTo(172);
+
+    // ...the next 80-rage spend inside the window only reaches the 10s cap...
+    applyRageSpendCooldownRefund(sim.ctx, player, meta, 80);
+    expect(player.cooldowns.get('recklessness')).toBeCloseTo(170);
+
+    // ...and further spends in the window shave nothing.
+    applyRageSpendCooldownRefund(sim.ctx, player, meta, 80);
+    expect(player.cooldowns.get('recklessness')).toBeCloseTo(170);
+
+    // The accumulator rides a visible aura with the window as its duration.
+    const capAura = player.auras.find((aura) => aura.id === 'colossal_might_cap');
+    expect(capAura).toMatchObject({
+      kind: 'internal_cd',
+      value: COLOSSAL_MIGHT_CAP_SECONDS,
+      duration: COLOSSAL_MIGHT_CAP_WINDOW,
+    });
+
+    // When the window aura expires, refunds flow again.
+    player.auras = player.auras.filter((aura) => aura.id !== 'colossal_might_cap');
+    applyRageSpendCooldownRefund(sim.ctx, player, meta, 80);
+    expect(player.cooldowns.get('recklessness')).toBeCloseTo(162);
   });
 });

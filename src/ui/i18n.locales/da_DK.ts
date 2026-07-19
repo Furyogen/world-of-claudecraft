@@ -487,7 +487,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Et gennemtrængende råb, der sænker alle fjender inden for 15 m med 50% i 8 sek.',
   'entities.abilities.piercing_howl.name': 'Gennemtrængende Hyl',
   'entities.abilities.raging_gale.description':
-    'Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér 8 raseri. Gemmer op til 2 ladninger. (Furie)',
+    'Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér 4 raseri. Gemmer op til 2 ladninger. (Furie)',
   'entities.abilities.raging_gale.name': 'Tvillingeslag',
   'entities.abilities.raised_guard.description':
     'Sæt dig fast bag dit skjold: du tager 50% mindre fysisk skade i 6 sek. Gemmer op til 2 ladninger. (Beskyttelse)',

@@ -19,6 +19,7 @@ import {
   primaryStatBudget,
   QUALITY_ILVL_BONUS,
   scaleWeaponDamage,
+  TWOHAND_DPS_MULT,
   TWOHAND_STAT_MULT,
   weaponDpsBudget,
 } from '../item_budget';
@@ -84,8 +85,13 @@ function applyRaidVariantRatings(variant: ItemDef, base: ItemDef): void {
 function makeHeroicVariant(base: ItemDef, sourceLevel = HEROIC_VARIANT_SOURCE_LEVEL): ItemDef {
   const quality = base.quality ?? 'common';
   const targetLevel = sourceLevel + (QUALITY_ILVL_BONUS[quality] ?? 0);
-  const handMultiplier = base.kind === 'weapon' && base.hand === 'twohand' ? TWOHAND_STAT_MULT : 1;
-  const targetBudget = primaryStatBudget(targetLevel, base.quality, base.slot) * handMultiplier;
+  const isTwoHand = base.kind === 'weapon' && base.hand === 'twohand';
+  const handMultiplier = isTwoHand ? TWOHAND_STAT_MULT : 1;
+  // Rounded like expectedStatBudget so variant budgets stay integral under the
+  // fractional TWOHAND_STAT_MULT.
+  const targetBudget = Math.round(
+    primaryStatBudget(targetLevel, base.quality, base.slot) * handMultiplier,
+  );
   const baseBudget = base.stats
     ? PRIMARY_STATS.reduce((sum, stat) => sum + (base.stats?.[stat] ?? 0), 0)
     : 0;
@@ -96,8 +102,9 @@ function makeHeroicVariant(base: ItemDef, sourceLevel = HEROIC_VARIANT_SOURCE_LE
     ? normalizePrimaryStats(base.stats, Math.max(targetBudget, baseBudget))
     : base.stats;
   // Weapon damage tracks item level too: scale the base weapon to the heroic-tier
-  // dps for this variant's item level, keeping its swing speed and spread. A base
-  // weapon already above that curve retains its realized dps.
+  // dps for this variant's item level (two-handers ride TWOHAND_DPS_MULT above the
+  // one-hand line), keeping its swing speed and spread. A base weapon already above
+  // that curve retains its realized dps.
   const variant = {
     ...base,
     id: heroicVariantId(base.id),
@@ -109,9 +116,10 @@ function makeHeroicVariant(base: ItemDef, sourceLevel = HEROIC_VARIANT_SOURCE_LE
   };
   if (base.weapon) {
     const baseDps = (base.weapon.min + base.weapon.max) / 2 / base.weapon.speed;
+    const curveDps = weaponDpsBudget(targetLevel) * (isTwoHand ? TWOHAND_DPS_MULT : 1);
     variant.weapon = {
       ...base.weapon,
-      ...scaleWeaponDamage(base.weapon, Math.max(weaponDpsBudget(targetLevel), baseDps)),
+      ...scaleWeaponDamage(base.weapon, Math.max(curveDps, baseDps)),
     };
   }
   // Heroic RAID variants (source level 27 -> item level 33/37) get the dual rating;

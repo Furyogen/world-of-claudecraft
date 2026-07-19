@@ -84,4 +84,29 @@ describe("Nature's Fury", () => {
     sim.setPlayerLevel(20);
     expect(sim.resolvedAbility('hurricane')?.def.name).toBe('Galeheart');
   });
+
+  it('does not re-announce a gained buff on every 1s refresh pulse', () => {
+    const { sim, druid } = setup();
+    (sim as unknown as { applyAura(t: Entity, a: Aura): void }).applyAura(
+      druid,
+      moonwingAura(druid.id),
+    );
+    let druidGainedCount = 0;
+    // 4 seconds: long enough to cross several 1s refresh pulses (each pulse
+    // carries a 3s window), while the druid stays in form the whole time. The
+    // druid should only ever "gain" the buff once; later pulses just extend it.
+    for (let i = 0; i < 80; i++) {
+      for (const ev of sim.tick()) {
+        if (
+          ev.type === 'aura' &&
+          ev.name === "Nature's Fury" &&
+          ev.gained &&
+          ev.targetId === druid.id
+        )
+          druidGainedCount++;
+      }
+    }
+    expect(druidGainedCount).toBe(1);
+    expect(fury(druid)?.remaining).toBeGreaterThan(0);
+  });
 });

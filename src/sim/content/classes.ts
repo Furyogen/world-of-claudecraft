@@ -732,10 +732,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
       // free, rage-generating, 2-charge spell); retuned to 0.45 weapon + 16.
       { type: 'weaponStrike', bonus: 14, weaponMult: 0.4 },
       { type: 'weaponStrike', bonus: 14, weaponMult: 0.4 },
-      { type: 'gainResource', amount: 8 },
+      // v0.27.1 rage fix: halved from 8. Bloodletting is Fury's generating
+      // builder; Twinstrike keeps a taste of rage but no longer co-funds a
+      // Red Harvest every ~6 seconds.
+      { type: 'gainResource', amount: 4 },
     ],
     description:
-      'Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus $d, and generate 8 rage. Stores up to 2 charges. (Fury)',
+      'Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus $d, and generate 4 rage. Stores up to 2 charges. (Fury)',
   },
   execute: {
     id: 'execute',
@@ -4904,9 +4907,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // Bladed Gyre back as its spec AoE tool. Arms/Prot keep their own AoE
     // (Reaping Arc / Quaking Blow); no-spec never learns it.
     specs: ['fury'],
-    // Bladed Gyre GENERATES rage instead of costing it (operator, Batch
-    // 2026-07-08): cost 0, and the aoeDamage's rageOnHit grants 5 rage plus 1
-    // per enemy struck (capped at +5), so 5 to 10 rage per spin.
+    // Bladed Gyre is free but mints nothing (v0.27.1 rage fix): with Twinstrike,
+    // Bloodletting, AND the spin all generating, Fury's whole rotation was
+    // rage-positive and Red Harvest fired every ~6s. Bloodletting is now the one
+    // generating builder; the spin keeps its zero cost and echo utility.
     cost: 0,
     castTime: 0,
     cooldown: 10,
@@ -4919,7 +4923,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
         min: 30,
         max: 42,
         radius: 8,
-        rageOnHit: { base: 5, perTarget: 1, capTargets: 5 },
       },
       // Bladed Echo: arms the caster for 2 echoing casts (combat/area_echo.ts).
       // Its own aoeDamage disqualifies whirlwind from consuming the charge.
@@ -4934,7 +4937,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Spin in a deadly arc, striking all nearby enemies for $d and generating rage for each foe struck instead of costing any. Your next 2 single-target abilities also strike enemies near their target. (Fury talent)',
+      'Spin in a deadly arc, striking all nearby enemies for $d at no rage cost. Your next 2 single-target abilities also strike enemies near their target. (Fury talent)',
   },
   berserker_rage: {
     id: 'berserker_rage',

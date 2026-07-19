@@ -1154,7 +1154,7 @@
   /* ---------- spellbook ---------- */
   /* spellbook */
   #spellbook {
-    width: 430px;
+    width: 760px;
   }
   .spellbook-class,
   .spell-rank {
@@ -1162,9 +1162,17 @@
     font-size: 11px;
   }
   .spell-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2px;
+  }
+  @media (min-width: 900px) {
+    body:not(.mobile-touch) .spell-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .spell-list > .spell-sub {
+    grid-column: 1 / -1;
   }
   .spell-row {
     display: flex;
@@ -5767,6 +5775,233 @@
     color: #ffe9a0;
     font-family: var(--title-font);
     margin-top: -2px;
+  }
+  /* ---------- professions ---------- */
+  /* The Professions window: a cold, read-only identity browser (identity
+     card, craft wheel, ten skill bars with tier pips, perks readout, nudges,
+     gathering rows) over IWorldProfessions. Bar widths and ring node
+     positions are build-time inline writes; ring strokes carry
+     vector-effect="non-scaling-stroke" so these pixel widths survive the
+     unit-circle viewBox; every colour in this section is a token. */
+  #professions-window {
+    width: 560px;
+    max-height: calc(var(--app-vh, 100vh) * 0.78 / var(--window-scale) - 24px);
+    flex-direction: column;
+  }
+  #professions-window .panel-title {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #professions-window .panel-title > span {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .prof-scroll {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 120px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .prof-section-header {
+    margin: 0;
+    font-family: var(--title-font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-dim);
+  }
+  .prof-identity,
+  .prof-crafts,
+  .prof-perks,
+  .prof-gathering,
+  .prof-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .prof-pair-title {
+    font-family: var(--title-font);
+    font-size: 14px;
+    color: var(--gold);
+  }
+  .prof-identity-line,
+  .prof-identity-paragraph,
+  .prof-cta-line {
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-text-light);
+  }
+  .prof-switch-cost,
+  .prof-tutorial {
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+  .prof-ring {
+    position: relative;
+    flex: none;
+    width: 220px;
+    height: 220px;
+    margin: 4px auto;
+  }
+  .prof-ring-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .prof-ring-circle {
+    fill: none;
+    stroke: var(--color-border-default);
+    stroke-width: 2px;
+  }
+  .prof-ring-arc {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 3px;
+    stroke-linecap: round;
+  }
+  .prof-ring-chord {
+    stroke: var(--gold-dim);
+    stroke-width: 2px;
+    stroke-dasharray: 6 4;
+  }
+  .prof-ring-node {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default);
+    border-radius: 50%;
+    background: var(--color-bg-dark);
+  }
+  .prof-ring-node img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+  }
+  .prof-ring-node.role-major {
+    border-color: var(--gold);
+    box-shadow: 0 0 6px var(--color-primary-glow-heavy);
+  }
+  .prof-ring-node.role-hobby {
+    border-color: var(--gold-dim);
+  }
+  .prof-ring-node.role-dormant {
+    opacity: 0.55;
+  }
+  .prof-list,
+  .prof-perk-list,
+  .prof-nudges {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .prof-craft-row,
+  .prof-gather-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .prof-craft-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 4px;
+  }
+  .prof-craft-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .prof-craft-head {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .prof-craft-name {
+    font-family: var(--title-font);
+    color: var(--gold);
+  }
+  .role-dormant .prof-craft-name {
+    color: var(--color-text-muted);
+  }
+  .prof-role-badge,
+  .prof-ceiling {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    padding: 0 6px;
+  }
+  .role-major .prof-role-badge {
+    color: var(--gold);
+    border-color: var(--gold-dim);
+  }
+  .role-hobby .prof-role-badge {
+    color: var(--gold-dim);
+  }
+  .prof-skill-value {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--color-text-light);
+  }
+  .prof-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .prof-bar {
+    display: inline-block;
+    flex: 1 1 auto;
+    height: 8px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 4px;
+    background: var(--color-bg-input);
+    overflow: hidden;
+  }
+  .prof-bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--gold-dim);
+  }
+  .prof-pips {
+    display: inline-flex;
+    flex: none;
+    gap: 2px;
+  }
+  .prof-pip {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-input);
+  }
+  .prof-pip.filled {
+    background: var(--gold);
+    border-color: var(--gold-dim);
+  }
+  .prof-next,
+  .prof-perk-line,
+  .prof-nudges li {
+    margin: 0;
+    font-size: 11px;
+    color: var(--color-text-muted);
   }
   /* ---------- AAA window-frame adoption: master-detail windows (batch 2) ---------- */
   /* The quest log, mailbox, social panel, and spellbook adopt the shared

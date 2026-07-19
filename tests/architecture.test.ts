@@ -161,6 +161,7 @@ const UI_PURE_CORES = [
   'src/ui/hud/loot/loot_settings_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/profession_identity_view.ts',
+  'src/ui/professions_view.ts',
   'src/ui/market_view.ts',
   'src/ui/mailbox_view.ts',
   'src/ui/calendar_view.ts',

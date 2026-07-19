@@ -1886,10 +1886,15 @@ describe('client HTML shell', () => {
     );
     expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
     expect(mainTs).toContain('stopAutorunForInteraction(\n      tryNearbyInteraction(');
-    expect(mainTs).toContain("t('errors.nothingInteract'),\n        online === null,");
+    // Phase 4 open-gate flip: the trailing (online === null) override is gone,
+    // so the helpers default harvestStateReliable = true (trusting the hcb
+    // corpse-claim mirror online); the call now closes right after the
+    // nothing-to-interact string.
+    expect(mainTs).toContain("t('errors.nothingInteract'),\n      ),");
+    expect(mainTs).not.toContain('online === null');
     expect(mainTs).toContain('const interactionOutcome = handlePickedEntity(');
     expect(mainTs).toContain(
-      'isClickMoveButton &&\n        shouldApproachPickedEntity(world.player, e, didInteractImmediately, online === null)',
+      'isClickMoveButton &&\n        shouldApproachPickedEntity(world.player, e, didInteractImmediately)',
     );
     expect(mainTs).toContain(
       'stopAutorunForInteraction(interactionOutcome, input, mobileControls);',

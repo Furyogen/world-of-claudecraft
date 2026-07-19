@@ -750,6 +750,7 @@ export const ru_RU: EnTranslations = {
       "leaderboard": "Рейтинг",
       "dailyRewards": "Магазин",
       "deeds": "Деяния",
+      "professions": "Профессии",
       "nameplates": "Имена",
       "haptics": "Вибрация",
       "hapticsOff": "Вибрация выкл.",
@@ -2082,7 +2083,9 @@ export const ru_RU: EnTranslations = {
       "mining": "Горное дело",
       "logging": "Лесозаготовка",
       "herbalism": "Травничество",
-      "notReady": "Этот ресурсный узел еще не восстановился для вас."
+      "notReady": "Этот ресурсный узел еще не восстановился для вас.",
+      "gatherLine": "Вы добываете: {name}.",
+      "gatherLineQty": "Вы добываете: {name} x{qty}."
     },
     "archetypeTitle": {
       "label": "Титул",
@@ -2112,6 +2115,42 @@ export const ru_RU: EnTranslations = {
       "enchanting": "Наложение чар",
       "tailoring": "Портняжное дело",
       "leatherworking": "Кожевничество"
+    },
+    "professions": {
+      "title": "Профессии",
+      "close": "Закрыть профессии",
+      "ringAria": "Колесо ремёсел",
+      "skillsHeader": "Ремесленные навыки",
+      "gatheringHeader": "Сбор",
+      "perksHeader": "Бонусы",
+      "identityHeader": "Специализация",
+      "roleMajor": "Главное ремесло",
+      "roleHobby": "Увлечение",
+      "roleDormant": "Неактивно",
+      "roleUnattuned": "Без настройки",
+      "ceilingUnlimited": "Без потолка усиления",
+      "ceilingRare": "Потолок редкого",
+      "ceilingCommon": "Потолок обычного качества",
+      "skillValue": "{skill} / {max}",
+      "tierPipAria": "Ранг {tier}",
+      "nextUnlockTier": "До следующего ранга {points} навыка: шанс шедевра повысится",
+      "nextUnlockSpecialized": "До специализации {points} навыка: расход материалов снизится",
+      "nextUnlockMax": "Навык на максимуме",
+      "perkSpecializedLine": "{craft}: Специалист, расход материалов -{pct}%",
+      "perkSpecializedAt": "Специализация при навыке {threshold}",
+      "switchCost": "Следующая смена архетипа потребует искупления: {cost}",
+      "syncing": "Ожидаем данные о профессиях от сервера.",
+      "tutorialLine": "Достигните навыка {target} в любом ремесле, чтобы открыть первый ранг.",
+      "ctaHeader": "Следующий шаг",
+      "ctaRaise": "Продолжайте развивать {craft}: до следующего ранга {points} навыка.",
+      "ctaStart": "Чтобы начать, создайте предмет или соберите ресурсы любой профессией.",
+      "unattunedIdentity": "Вы ещё не настроены на архетип. Развивайте ремёсла и завершите настройку, чтобы выбрать пару.",
+      "nudgeNearTier": "{craft}: до следующего ранга {points} навыка",
+      "nudgeDormant": "Знания ремесла {craft} неактивны",
+      "hobbyLabel": "Увлечение: {craft}",
+      "majorsLabel": "Главные ремёсла: {a} и {b}",
+      "pairsHeld": "Открыто пар: {count}",
+      "returnsLabel": "Возвращений: {count}"
     },
     "crafting": {
       "title": "Крафт",
@@ -2331,6 +2370,11 @@ export const ru_RU: EnTranslations = {
       "broadcastsLabel": "Делиться деяниями с гильдией и друзьями",
       "titledName": "{name} [{title}]"
     }
+  },
+  "gatherEvent": {
+    "pristineVein": "{finder} находит нетронутую жилу!",
+    "ancientHeartwood": "{finder} добывает древнюю сердцевину!",
+    "moonlitBloom": "{finder} находит лунный цветок!"
   },
   "apiError": {
     "validation": {
@@ -6083,6 +6127,7 @@ export const ru_RU: EnTranslations = {
       "rarityUncommon": "Необычное",
       "rarityRare": "Редкое",
       "rarityEpic": "Эпическое",
+      "rarityLegendary": "Легендарное",
       "merchantStock": "Запасы Торговца",
       "stackCount": "x{count}",
       "each": "{money} за штуку",
@@ -7007,7 +7052,7 @@ export const ru_RU: EnTranslations = {
       },
       "raging_gale": {
         "name": "Двойной удар",
-        "description": "Мгновенно бьет оружием дважды, каждый удар наносит 40% урона оружием плюс {damage}, и создает 8 ярости. Хранит до 2 зарядов. (ветка «Неистовство»)"
+        "description": "Мгновенно бьет оружием дважды, каждый удар наносит 40% урона оружием плюс {damage}, и создает 4 ярости. Хранит до 2 зарядов. (ветка «Неистовство»)"
       },
       "red_harvest": {
         "name": "Кровавая жатва",
@@ -8137,6 +8182,18 @@ export const ru_RU: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "Боевой посох из огненного стекла"
+      },
+      "copper_ore": {
+        "name": "Медная руда"
+      },
+      "iron_ore": {
+        "name": "Железная руда"
+      },
+      "ironbark_log": {
+        "name": "Бревно железнокорого дерева"
+      },
+      "silverleaf_herb": {
+        "name": "Трава серебролист"
       },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"

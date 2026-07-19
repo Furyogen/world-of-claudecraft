@@ -2659,8 +2659,12 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    weapon: { min: 30, max: 48, speed: 2.6 },
-    stats: { str: 22, sta: 14 },
+    // 2H dps premium: weaponDpsBudget(26) = 14.5 x TWOHAND_DPS_MULT -> 16.7 dps
+    // (this pre-dated the Eastbrook/Highwatch rule and sat on the flat curve).
+    weapon: { min: 33, max: 53, speed: 2.6 },
+    // v0.27.1 re-budget: round(primaryStatBudget(26, epic, mainhand) = 18 x
+    // TWOHAND_STAT_MULT) = 23 points; a 2H's compensation lives on the dps side.
+    stats: { str: 14, sta: 9 },
     sellValue: 8000,
     requiredClass: ['warrior', 'hunter', 'shaman', 'paladin'],
   },
@@ -3017,13 +3021,13 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    // Two-handers trade the offhand for a slow, heavy swing at the top of the
-    // 10-to-15% DPS premium band over the one-hand line (the Eastbrook/Highwatch
-    // greatsword rule): weaponDpsBudget(29) = 15.4, x1.15 -> 17.65 dps here.
+    // Two-handers trade stats for a slow, heavy swing: weaponDpsBudget(29) = 15.4
+    // x TWOHAND_DPS_MULT -> 17.65 dps here.
     weapon: { min: 45, max: 75, speed: 3.4 },
-    // A 2H carries BOTH hands' stat budgets: 2x primaryStatBudget(29, epic,
-    // mainhand) = 2 x 20 = 40 points (TWOHAND_STAT_MULT in item_budget.ts).
-    stats: { str: 22, sta: 18 },
+    // v0.27.1 re-budget: round(primaryStatBudget(29, epic, mainhand) = 20 x
+    // TWOHAND_STAT_MULT) = 26 points (a mainhand + offhand pair at this tier
+    // carries 35, so any dual-wield or shield setup out-stats this).
+    stats: { str: 14, sta: 12 },
     // Physical melee identity: Hit, like the crownforged pieces.
     hitRating: 20,
     sellValue: 12000,
@@ -3040,10 +3044,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    // Same 2H rules as the Bonewrought Greatsword: weaponDpsBudget(29) x 1.15
-    // -> 17.67 dps at a faster 3.0 swing, and the doubled 40-point stat budget.
+    // Same 2H rules as the Bonewrought Greatsword: weaponDpsBudget(29) x
+    // TWOHAND_DPS_MULT -> 17.67 dps at a faster 3.0 swing, same 26-point budget.
     weapon: { min: 40, max: 66, speed: 3.0 },
-    stats: { agi: 22, sta: 18 },
+    stats: { agi: 14, sta: 12 },
     // Physical melee identity: Hit, like the nighttalon pieces.
     hitRating: 20,
     sellValue: 12000,
@@ -3298,7 +3302,15 @@ export const ZONE3_PROPS: ZonePropsDef = {
   ],
   mines: [
     { x: 88, z: 612, rot: -2.0 }, // Deeprock Burrows
-    { x: -152, z: 610, rot: Math.PI / 2 }, // Abandoned crypt entrance
+    // Abandoned crypt entrance: shares its (x, z) with the dungeon door's own
+    // trigger point, so the mound's collider needs a bigger backward offset
+    // (moundOffset) than the generic mine default or it swallows the door
+    // itself, stranding any ghost that can only walk-trigger it (issue: dead
+    // players unable to enter/corpse-run the crypt). moundRadius is also
+    // shrunk from the generic default so the circle hugs this entry's own,
+    // smaller-footprint rock pile (src/render/props.ts) instead of bleeding
+    // onto open ground behind it and off the flanking boulders themselves.
+    { x: -152, z: 610, rot: Math.PI / 2, moundOffset: 4, moundRadius: 3.3 },
   ],
   docks: [],
   tents: [

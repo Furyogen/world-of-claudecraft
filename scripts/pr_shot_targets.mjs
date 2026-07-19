@@ -403,8 +403,6 @@ export const TARGETS = [
         if (!game) return;
         const fakePage = {
           leaders: [
-            // deedCount rides the wire for stale clients (issue #2044); the
-            // pre-change painter renders it, the current one never reads it.
             {
               rank: 1,
               name: 'Aldwin',
@@ -412,7 +410,6 @@ export const TARGETS = [
               cls: 'warrior',
               level: 20,
               renown: 1620,
-              deedCount: 129,
               title: 'prog_veteran',
             },
             {
@@ -422,7 +419,6 @@ export const TARGETS = [
               cls: 'mage',
               level: 20,
               renown: 1490,
-              deedCount: 117,
               title: null,
             },
             {
@@ -432,7 +428,6 @@ export const TARGETS = [
               cls: 'priest',
               level: 19,
               renown: 1390,
-              deedCount: 112,
               title: null,
             },
             {
@@ -442,7 +437,6 @@ export const TARGETS = [
               cls: 'rogue',
               level: 20,
               renown: 1350,
-              deedCount: 108,
               title: 'prog_veteran',
             },
             {
@@ -452,7 +446,6 @@ export const TARGETS = [
               cls: 'druid',
               level: 18,
               renown: 1245,
-              deedCount: 97,
               title: null,
             },
           ],
@@ -478,6 +471,81 @@ export const TARGETS = [
       );
       if (!open) throw new Error('Renown board rows did not render');
       return { clip: '#leaderboard-window' };
+    },
+  },
+  {
+    key: 'professions',
+    label: 'Professions wheel window',
+    when: ['src/ui/professions_view.ts', 'src/ui/professions_window.ts'],
+    variants: [
+      { key: 'desktop-full', charClass: 'warrior', charName: 'Forgeheart' },
+      { key: 'desktop-simplified', charClass: 'mage', charName: 'Newhand', simplified: true },
+      { key: 'mobile', charClass: 'warrior', charName: 'Anvilmar', mobile: true },
+    ],
+    // The offline sandbox starts unattuned with zero craft skill, which IS the
+    // simplified variant. The full variants stub the two IWorld reads with a
+    // representative attuned Smith (the renown-board precedent: the real pure
+    // core and painter render it exactly as a live identity), picking values
+    // that light every section: both majors specialized, a tier-1 hobby, a
+    // dormant-knowledge craft, a near-tier craft, and mixed gathering skill.
+    async capture(page, variant) {
+      await page.evaluate(() => {
+        document.querySelector('.camera-prompt-confirm')?.click();
+        document.querySelector('.tut-skip')?.click();
+        document.querySelector('.gpu-notice-dismiss')?.click();
+      });
+      await wait(300);
+      await page.evaluate((shot) => {
+        const game = window.__game;
+        if (!game) return;
+        if (!shot.simplified) {
+          const identity = {
+            version: 1,
+            synced: true,
+            craftSkills: {
+              weaponcrafting: 132,
+              armorcrafting: 87,
+              tailoring: 23,
+              leatherworking: 0,
+              cooking: 26,
+              alchemy: 4,
+              engineering: 51,
+              enchanting: 0,
+              jewelcrafting: 0,
+              inscription: 61,
+            },
+            activeArchetype: 'weaponcrafting',
+            pairedMajor: 'armorcrafting',
+            hobbyCraft: 'cooking',
+            attunedPairs: ['weaponcrafting+armorcrafting'],
+            switchCount: 1,
+            amendsProgress: 2,
+            amendsRequired: 8,
+          };
+          Object.defineProperty(game.world, 'craftingIdentity', {
+            value: identity,
+            configurable: true,
+          });
+          const gathering = {
+            skills: [
+              { professionId: 'mining', skill: 112, maxSkill: 300 },
+              { professionId: 'logging', skill: 45, maxSkill: 300 },
+              { professionId: 'herbalism', skill: 203, maxSkill: 300 },
+            ],
+          };
+          const stateIsFn = typeof game.world.professionsState === 'function';
+          Object.defineProperty(game.world, 'professionsState', {
+            value: stateIsFn ? () => gathering : gathering,
+            configurable: true,
+          });
+        }
+        const el = document.querySelector('#professions-window');
+        if (el) el.style.display = 'none';
+        game.hud.toggleProfessions?.();
+      }, variant);
+      const open = await pollForSize(page, '#professions-window');
+      if (!open) throw new Error('professions window did not open');
+      return { clip: '#professions-window' };
     },
   },
 ];

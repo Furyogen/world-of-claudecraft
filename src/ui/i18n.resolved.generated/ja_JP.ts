@@ -750,6 +750,7 @@ export const ja_JP: EnTranslations = {
       "leaderboard": "ランキング",
       "dailyRewards": "ストア",
       "deeds": "功績",
+      "professions": "専門技能",
       "nameplates": "ネームプレート",
       "haptics": "振動",
       "hapticsOff": "振動オフ",
@@ -2082,7 +2083,9 @@ export const ja_JP: EnTranslations = {
       "mining": "採掘",
       "logging": "伐採",
       "herbalism": "薬草学",
-      "notReady": "この資源ノードはまだあなたのために再生していません。"
+      "notReady": "この資源ノードはまだあなたのために再生していません。",
+      "gatherLine": "{name}を採集した。",
+      "gatherLineQty": "{name}を{qty}個採集した。"
     },
     "archetypeTitle": {
       "label": "称号",
@@ -2112,6 +2115,42 @@ export const ja_JP: EnTranslations = {
       "enchanting": "エンチャント",
       "tailoring": "裁縫",
       "leatherworking": "皮革加工"
+    },
+    "professions": {
+      "title": "専門技能",
+      "close": "専門技能を閉じる",
+      "ringAria": "技の輪",
+      "skillsHeader": "製作技能",
+      "gatheringHeader": "採集",
+      "perksHeader": "特典",
+      "identityHeader": "専門性",
+      "roleMajor": "主専攻",
+      "roleHobby": "趣味",
+      "roleDormant": "休眠中",
+      "roleUnattuned": "未調律",
+      "ceilingUnlimited": "強化上限なし",
+      "ceilingRare": "レア上限",
+      "ceilingCommon": "コモン上限",
+      "skillValue": "{skill} / {max}",
+      "tierPipAria": "ティア {tier}",
+      "nextUnlockTier": "次のティアまであと {points}：傑作の成功率が上がります",
+      "nextUnlockSpecialized": "専門化まであと {points}：素材コストが下がります",
+      "nextUnlockMax": "技能は最大です",
+      "perkSpecializedLine": "{craft}：専門化、素材コスト -{pct}%",
+      "perkSpecializedAt": "技能 {threshold} で専門化します",
+      "switchCost": "次のアーキタイプ切り替えには償いが {cost} 必要です",
+      "syncing": "サーバーから専門技能のデータを受信しています。",
+      "tutorialLine": "いずれかの技を技能 {target} まで上げると、最初のティアが解放されます。",
+      "ctaHeader": "次のステップ",
+      "ctaRaise": "{craft}を伸ばしましょう。次のティアまであと {points} です。",
+      "ctaStart": "いずれかの専門技能で製作か採集を行うと始まります。",
+      "unattunedIdentity": "まだアーキタイプに調律していません。技を伸ばし、調律を完了して組み合わせを選びましょう。",
+      "nudgeNearTier": "{craft}：次のティアまであと {points}",
+      "nudgeDormant": "{craft}の知識は休眠中です",
+      "hobbyLabel": "趣味：{craft}",
+      "majorsLabel": "主専攻：{a}と{b}",
+      "pairsHeld": "保持している組み合わせ：{count}",
+      "returnsLabel": "復帰：{count}"
     },
     "crafting": {
       "title": "製作",
@@ -2331,6 +2370,11 @@ export const ja_JP: EnTranslations = {
       "broadcastsLabel": "功績の達成をギルドとフレンドに共有する",
       "titledName": "{name}【{title}】"
     }
+  },
+  "gatherEvent": {
+    "pristineVein": "{finder}が純粋な鉱脈を掘り当てた！",
+    "ancientHeartwood": "{finder}が太古の心木を切り倒した！",
+    "moonlitBloom": "{finder}が月光の花を発見した！"
   },
   "apiError": {
     "validation": {
@@ -6083,6 +6127,7 @@ export const ja_JP: EnTranslations = {
       "rarityUncommon": "高品質",
       "rarityRare": "レア",
       "rarityEpic": "エピック",
+      "rarityLegendary": "伝説",
       "merchantStock": "商人の在庫",
       "stackCount": "x{count}",
       "each": "各 {money}",
@@ -7007,7 +7052,7 @@ export const ja_JP: EnTranslations = {
       },
       "raging_gale": {
         "name": "双撃",
-        "description": "武器で即座に2回攻撃し、それぞれ武器ダメージの40%に{damage}を加えたダメージを与え、怒りを8生成します。最大2チャージまで蓄積します。（狂怒）"
+        "description": "武器で即座に2回攻撃し、それぞれ武器ダメージの40%に{damage}を加えたダメージを与え、怒りを4生成します。最大2チャージまで蓄積します。（狂怒）"
       },
       "red_harvest": {
         "name": "赤い収穫",
@@ -8137,6 +8182,18 @@ export const ja_JP: EnTranslations = {
       },
       "emberglass_warstaff": {
         "name": "熾火硝子の戦杖"
+      },
+      "copper_ore": {
+        "name": "銅鉱石"
+      },
+      "iron_ore": {
+        "name": "鉄鉱石"
+      },
+      "ironbark_log": {
+        "name": "アイアンバークの丸太"
+      },
+      "silverleaf_herb": {
+        "name": "シルバーリーフ草"
       },
       "conjured_water4": {
         "name": "魔法の湧き水"

@@ -3339,6 +3339,39 @@
   body.mobile-touch.hud-mobile-compact #deed-tracker .dt-chevron {
     display: none;
   }
+  /* ---------- mobile professions (standalone window) ---------- */
+  /* The Professions window follows the deeds/bank STANDALONE full-screen
+     convention on touch (no companion panel, so no 50/50 pairing): fixed
+     inside the safe-area insets, transform reset (neutralizing the desktop
+     centering), max-width unclamped (the base .window clamp divides by
+     --window-scale, not --ui-scale, and under-fills below uiScale 1). The
+     single .prof-scroll column is the internal scroll container (the window
+     has no desktop rail to collapse); the title bar stays pinned chrome and
+     the close button keeps the shared 40px x-btn tap floor. */
+  body.mobile-touch #professions-window {
+    position: fixed;
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    top: max(10px, env(safe-area-inset-top));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    transform: none;
+    max-width: none;
+    max-height: none;
+    box-sizing: border-box;
+    /* The generic mobile .window rule pads the bottom for the safe area; this
+       window is already inset-pinned on all four edges, so that rule would
+       double count the inset. */
+    padding-bottom: var(--window-pad);
+    overflow: hidden;
+    z-index: 95;
+  }
+  /* Phones get a slightly smaller wheel so the craft list keeps the height
+     budget in short landscape. */
+  body.mobile-touch #professions-window .prof-ring {
+    width: 180px;
+    height: 180px;
+  }
   /* On touch, stack the categories back into a single column so the large
      touch targets keep their full width. */
   body.mobile-touch .kb-cols {
@@ -3534,6 +3567,13 @@
     padding: 0;
     box-sizing: border-box;
     font-size: 16px;
+  }
+  /* Desktop lays the spell list out as a landscape grid; touch stays a single
+     scrollable column so the existing 40x40px tap targets below keep working. */
+  body.mobile-touch #spellbook .spell-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   body.mobile-touch #spellbook .spell-row {
     min-height: 52px;

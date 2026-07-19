@@ -87,6 +87,7 @@ export interface InputCallbacks {
       | 'calendar'
       | 'discord'
       | 'deeds'
+      | 'professions'
       | 'crafting'
       | 'sheathe',
   ): void;
@@ -932,6 +933,9 @@ export class Input {
         return;
       case 'deeds':
         this.cb.onUiKey('deeds');
+        return;
+      case 'professions':
+        this.cb.onUiKey('professions');
         return;
       case 'chat':
         this.cb.onUiKey('chat');

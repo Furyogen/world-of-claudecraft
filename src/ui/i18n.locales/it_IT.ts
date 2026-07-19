@@ -512,7 +512,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Un urlo penetrante che rallenta del 50% tutti i nemici entro 15 metri per 8 sec.',
   'entities.abilities.piercing_howl.name': 'Ululato Penetrante',
   'entities.abilities.raging_gale.description':
-    "Colpisci istantaneamente due volte con la tua arma: ogni colpo infligge il 40% dei danni dell'arma più {damage}, e generi 8 rabbia. Accumula fino a 2 cariche. (Furia)",
+    "Colpisci istantaneamente due volte con la tua arma: ogni colpo infligge il 40% dei danni dell'arma più {damage}, e generi 4 rabbia. Accumula fino a 2 cariche. (Furia)",
   'entities.abilities.raging_gale.name': 'Colpo Gemello',
   'entities.abilities.raised_guard.description':
     'Ti pianti dietro il tuo scudo: subisci il 50% di danni fisici in meno per 6 sec. Accumula fino a 2 cariche. (Protezione)',

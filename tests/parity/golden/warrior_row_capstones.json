@@ -883,7 +883,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 412,
-      "state": "f9638790",
+      "state": "4369a6b3",
       "events": "c9a2ce78",
       "rng": {
         "draws": 9,
@@ -894,7 +894,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 412,
-      "state": "486c2b7f",
+      "state": "7ce012f6",
       "events": "741638a5",
       "rng": {
         "draws": 9,
@@ -905,7 +905,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 414,
-      "state": "e54df47c",
+      "state": "95d47f47",
       "events": "83ccde84",
       "rng": {
         "draws": 18,
@@ -1082,7 +1082,7 @@
             "z": 54.896638
           },
           "potionCooldownUntil": -1,
-          "resource": 52.594125,
+          "resource": 52.161771,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,

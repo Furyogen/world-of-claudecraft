@@ -940,6 +940,15 @@ function formShiftKind(p: Entity, ability: AbilityDef): 'off' | 'cross' | null {
   return null;
 }
 
+// Colossal Might's rolling CDR cap (v0.27.1). Uncapped, sustained Red Harvest
+// spam banked ~78s of CDR per minute and collapsed the 180s offensive cooldowns
+// to an effective ~78s. Same numbers and aura mechanism as the mage Overflowing
+// Power cap below (which copied this feature and got the cap the original
+// lacked); the accumulator rides an 'internal_cd' aura the player can watch
+// tick down, so no new entity field enters the parity state hash.
+export const COLOSSAL_MIGHT_CAP_SECONDS = 10;
+export const COLOSSAL_MIGHT_CAP_WINDOW = 30;
+
 export function applyRageSpendCooldownRefund(
   ctx: SimContext,
   p: Entity,
@@ -948,7 +957,24 @@ export function applyRageSpendCooldownRefund(
 ): void {
   const rate = ctx.playerMods(meta).global.cdrPerRage;
   if (spentRage <= 0 || rate <= 0) return;
-  const refund = spentRage * rate;
+  const capAura = p.auras.find((a) => a.id === 'colossal_might_cap');
+  const used = capAura?.value ?? 0;
+  const refund = Math.min(spentRage * rate, COLOSSAL_MIGHT_CAP_SECONDS - used);
+  if (refund <= 0) return;
+  if (capAura) {
+    capAura.value += refund;
+  } else {
+    ctx.applyAura(p, {
+      id: 'colossal_might_cap',
+      name: 'Colossal Might',
+      kind: 'internal_cd',
+      value: refund,
+      remaining: COLOSSAL_MIGHT_CAP_WINDOW,
+      duration: COLOSSAL_MIGHT_CAP_WINDOW,
+      sourceId: p.id,
+      school: 'physical',
+    });
+  }
   for (const id of COLOSSAL_MIGHT_COOLDOWNS) {
     const current = p.cooldowns.get(id);
     if (current === undefined) continue;

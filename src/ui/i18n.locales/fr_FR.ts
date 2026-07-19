@@ -514,7 +514,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Un cri perçant qui ralentit de 50% tous les ennemis dans un rayon de 15 mètres pendant 8 s.',
   'entities.abilities.piercing_howl.name': 'Hurlement perçant',
   'entities.abilities.raging_gale.description':
-    "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère 8 points de rage. Cumule jusqu'à 2 charges. (Fureur)",
+    "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère 4 points de rage. Cumule jusqu'à 2 charges. (Fureur)",
   'entities.abilities.raging_gale.name': 'Double frappe',
   'entities.abilities.raised_guard.description':
     "Arc-boutez-vous derrière votre bouclier : vous subissez 50% de dégâts physiques en moins pendant 6 s. Cumule jusqu'à 2 charges. (Protection)",

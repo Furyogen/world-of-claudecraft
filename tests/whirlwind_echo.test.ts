@@ -207,14 +207,23 @@ describe('Widening Arc (sweeping strikes) replays the full strike', () => {
   });
 });
 
-describe('Bladed Gyre generates rage instead of costing it', () => {
+describe('Bladed Gyre costs no rage and mints none (v0.27.1 rage fix)', () => {
   it('(g) whirlwind costs no rage', () => {
     expect(ABILITIES.whirlwind.cost).toBe(0);
   });
 
+  it('(g2) whirlwind carries no rage generation of any kind', () => {
+    const hasMint = ABILITIES.whirlwind.effects.some(
+      (eff: any) => eff.type === 'gainResource' || eff.rageOnHit !== undefined,
+    );
+    expect(hasMint).toBe(false);
+  });
+
   // Cast Bladed Gyre against `n` enemies clustered inside the 8 yd spin (the
   // first is the melee target) from an EMPTY rage bar, and return the rage
-  // gained: rageOnHit = 5 base + 1 per enemy struck, capped at +5 (5 to 10).
+  // gained. Since the v0.27.1 rage fix the spin mints nothing: with Twinstrike,
+  // Bloodletting, AND the spin all generating, Fury's rotation was rage-positive
+  // and Red Harvest fired every ~6 seconds.
   function rageFromSpin(n: number, seed = 4242): number {
     const { sim, p } = makeSim(seed);
     const zs = [3, 2, 4, 5, 6, 7, 7.5, 6.5, 5.5, 4.5];
@@ -224,17 +233,17 @@ describe('Bladed Gyre generates rage instead of costing it', () => {
     p.resource = 0;
     sim.drainEvents();
     sim.castAbility('whirlwind');
-    // Every clustered enemy was struck, so each counts toward the rage grant.
+    // Every clustered enemy was struck; striking must still grant nothing.
     for (const m of mobs) expect(m.hp).toBeLessThan(m.maxHp);
     return p.resource;
   }
 
-  it('(h) 2 enemies struck grants 5 + min(2,5) = 7 rage', () => {
-    expect(rageFromSpin(2)).toBe(7);
+  it('(h) 2 enemies struck grants no rage', () => {
+    expect(rageFromSpin(2)).toBe(0);
   });
 
-  it('(i) 7 enemies struck is capped at 5 + min(7,5) = 10 rage', () => {
-    expect(rageFromSpin(7)).toBe(10);
+  it('(i) a full 7-enemy spin still grants no rage', () => {
+    expect(rageFromSpin(7)).toBe(0);
   });
 });
 

@@ -4,6 +4,7 @@
 // the party-shared instance, the claim -> free empty-reset, and the raid-lockout gate.
 
 import { describe, expect, it } from 'vitest';
+import { resolvePosition } from '../src/sim/colliders';
 import { HEROIC_DUNGEON_TUNING, HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { HEROIC_BOSS_LOOT } from '../src/sim/content/heroic_loot';
 import { HEROIC_MARK_LETTER } from '../src/sim/content/letters';
@@ -2299,6 +2300,39 @@ describe('dungeons: ghost corpse-run re-entry', () => {
     expect(p.dead).toBe(false);
     expect(p.ghost).toBe(false);
     expect(sim.instanceSlotAt(p.pos)).not.toBeNull(); // back inside, alive
+  });
+
+  it('pulls a ghost back into the Abandoned Crypt from a realistic (collision-resolved) approach', () => {
+    // A ghost can only re-enter through the walk-in proximity trigger (interact()
+    // refuses it while dead), so the door's own world position must be reachable
+    // through the FULL collider stack, not just teleportable onto directly. The
+    // crypt door reuses the "mine entrance" decorative prop for its visual, and
+    // that prop's rock-mound collider used to bleed forward far enough to swallow
+    // the door tile itself, stranding every ghost outside the 2.0yd trigger.
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'CryptRunner');
+    const p = sim.entities.get(pid) as AnyEntity;
+    enterDungeon(sim.ctx, 'nythraxis_crypt', pid);
+    expect(sim.instanceSlotAt(p.pos)).not.toBeNull();
+    p.dead = true;
+    sim.releaseSpirit(pid);
+    expect(p.ghost).toBe(true);
+    expect(sim.instanceSlotAt(p.pos)).toBeNull();
+
+    const door = [...sim.entities.values()].find(
+      (e: AnyEntity) => e.templateId === 'dungeon_door' && e.dungeonId === 'nythraxis_crypt',
+    ) as AnyEntity;
+    // The door's own world position must itself be walkable (not buried inside
+    // the mound's collider); resolving it against the full collider stack must
+    // be a no-op, proving a real approach can actually reach the trigger.
+    const resolved = resolvePosition(sim.cfg.seed, door.pos.x, door.pos.z, 0.5);
+    expect(dist2d({ ...resolved, y: 0 }, door.pos)).toBeLessThan(1e-6);
+    teleport(sim, p, resolved.x, resolved.z);
+    sim.tick();
+
+    expect(p.dead).toBe(false);
+    expect(p.ghost).toBe(false);
+    expect(sim.instanceSlotAt(p.pos)).not.toBeNull();
   });
 });
 

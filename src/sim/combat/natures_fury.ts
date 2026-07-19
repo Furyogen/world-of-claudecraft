@@ -22,6 +22,19 @@ export function tickNaturesFury(ctx: SimContext, p: Entity, meta: PlayerMeta): v
   if (!p.auras.some((aura) => aura.kind === 'form_moonkin')) return;
   if (ctx.tickCount % PULSE_EVERY_TICKS !== p.id % PULSE_EVERY_TICKS) return;
   const apply = (target: Entity): void => {
+    // A pulse this cadence just extends an aura that is already up: refresh the
+    // window in place rather than round-tripping through applyAura, which would
+    // re-fire an 'aura' gained:true SimEvent (buff-gained FCT/SFX) every second
+    // even though nothing actually changed for the player.
+    const existing = target.auras.find(
+      (aura) => aura.id === NATURES_FURY_ID && aura.sourceId === p.id,
+    );
+    if (existing) {
+      existing.remaining = REFRESH_SECONDS;
+      existing.duration = REFRESH_SECONDS;
+      existing.value = pct;
+      return;
+    }
     ctx.applyAura(target, {
       id: NATURES_FURY_ID,
       name: "Nature's Fury",

@@ -206,13 +206,15 @@ describe('melee / ranged haste shorten the swing interval', () => {
     const meta = sim.players.get(p.id)!;
     spawnDummy(sim, p);
     p.autoAttack = true;
+    // v0.27.1: meleeHaste lives in swingIntervalMult's one additive haste
+    // bucket, so the interval mult itself carries the set bonus (the timer no
+    // longer divides by it a second time in auto_attack).
+    const baseMult = sim.swingIntervalMult(p);
     p.meleeHaste = SET_HASTE_3PC;
+    expect(sim.swingIntervalMult(p)).toBeCloseTo(baseMult / (1 + SET_HASTE_3PC), 6);
     p.swingTimer = 0;
     updatePlayerAutoAttack(sim.ctx, p, meta);
-    expect(p.swingTimer).toBeCloseTo(
-      (p.weapon.speed * sim.swingIntervalMult(p)) / (1 + SET_HASTE_3PC),
-      6,
-    );
+    expect(p.swingTimer).toBeCloseTo(p.weapon.speed * sim.swingIntervalMult(p), 6);
   });
 
   it('ranged haste shortens the next auto-shot timer (hunter)', () => {

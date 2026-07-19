@@ -45,13 +45,13 @@ import {
   mobXpValue,
   NYTHRAXIS_BOSS_ID,
   PARTY_XP_RANGE,
-  rageConversion,
   rageFromDealing,
   rageFromTaking,
   rageGenAuraMult,
   STANCE_MASTERY_BATTLE_CRIT_DMG,
   STANCE_MASTERY_GUARDED_CUT,
   STANCE_MASTERY_GUARDED_HP_PCT,
+  TITANS_GRIP_DMG_PENALTY,
   virtualLevel,
   xpForLevel,
 } from '../types';
@@ -250,6 +250,21 @@ export function dealDamage(
       }
     }
     if (damageDone !== 0) amount = Math.round(amount * Math.max(0, 1 + damageDone));
+  }
+
+  // Titan's Grip: dual-wielding with a two-hander in either hand pays a flat
+  // physical-damage penalty (the WoW 3.1.0 model; TITANS_GRIP_DMG_PENALTY in
+  // types.ts). Source-side and physical-only: whites, weapon strikes, and
+  // physical dots all pay it; spells and incidental non-physical damage never do.
+  if (
+    !alreadyFinal &&
+    source &&
+    source.id !== target.id &&
+    amount > 0 &&
+    school === 'physical' &&
+    source.titansGrip
+  ) {
+    amount = Math.round(amount * (1 - TITANS_GRIP_DMG_PENALTY));
   }
 
   if (source && source.id !== target.id && amount > 0) {
@@ -829,9 +844,10 @@ export function dealDamage(
         meta.known.some((known) => known.def.id === 'seasoned_soldier' && known.def.passive)
           ? 1.1
           : 1;
-      const baseRage = isWarrior
-        ? (9 * amount) / rageConversion(source.level)
-        : rageFromDealing(amount, source.level);
+      // v0.27.1 rage fix: warriors are back on the shared classic 7.5x outgoing
+      // scale (rageFromDealing). The talents-v2 era ran a warrior-only 9x mint
+      // here, a hidden ~20% income buff that co-fed the fury overpower incident.
+      const baseRage = rageFromDealing(amount, source.level);
       const talentMult = isWarrior ? 1 + ctx.playerMods(meta).global.autoRagePct : 1;
       source.resource = Math.min(
         source.maxResource,
