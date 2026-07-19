@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
-import { snapshotTimerWireMode, stableCooldownRemaining } from '../src/net/snapshot_timer_wire';
+import {
+  snapshotTimerWireMode,
+  stableCooldownRemaining,
+  stableDeadlineRemaining,
+} from '../src/net/snapshot_timer_wire';
 import type { PlayerClass } from '../src/sim/types';
 
 function bareClient(pid: number, playerClass: PlayerClass = 'warrior'): ClientWorld {
@@ -100,6 +104,33 @@ describe('stable snapshot timer protocol', () => {
     expect(stableCooldownRemaining(accelerated, 1)).toBe(2);
     expect(stableCooldownRemaining(accelerated, 3)).toBe(0);
     expect(stableCooldownRemaining([3, 0, 1], 0)).toBeNull();
+    expect(stableDeadlineRemaining(-1, 0)).toBeNull();
+    expect(stableDeadlineRemaining(1, -1)).toBeNull();
+    expect(stableDeadlineRemaining(Number.MAX_VALUE, -Number.MAX_VALUE)).toBeNull();
+    expect(
+      stableCooldownRemaining(
+        [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE],
+        0,
+      ),
+    ).toBeNull();
+  });
+
+  it('ignores negative stable clocks without poisoning retained schedules', () => {
+    const client = bareClient(1);
+    apply(client, {
+      tw: 2,
+      time: 10,
+      self: playerWire(1, {
+        auras: [aura('retained', { exp: 20 })],
+        cds: { cast: 20 },
+      }),
+    });
+
+    apply(client, { tw: 2, time: -Number.MAX_VALUE, self: playerWire(1) });
+    apply(client, { tw: 2, time: 11, self: playerWire(1) });
+
+    expect(client.player.auras[0]).toMatchObject({ id: 'retained', remaining: 9 });
+    expect(client.player.cooldowns.get('cast')).toBe(9);
   });
 
   it('ages omitted v2 timers and preserves auras on moving lite records', () => {

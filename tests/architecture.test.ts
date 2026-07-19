@@ -477,6 +477,28 @@ describe('src/world_api IWorld seam purity invariants', () => {
   });
 });
 
+describe('server host-layer import invariants', () => {
+  it('does not import browser host layers from the authoritative server', () => {
+    const serverRoot = join(repoRoot, 'server');
+    const violations: string[] = [];
+    for (const file of walk(serverRoot)) {
+      const src = stripComments(readFileSync(file, 'utf8'));
+      const specs: string[] = [];
+      for (const match of src.matchAll(IMPORT_RE)) specs.push(match[1]);
+      for (const match of src.matchAll(DYN_IMPORT_RE)) specs.push(match[1]);
+      for (const spec of specs) {
+        if (/(?:^|\/)(?:render|ui|game|net)\//.test(spec)) {
+          violations.push(`${relative(repoRoot, file)} imports '${spec}'`);
+        }
+      }
+    }
+    expect(
+      violations,
+      `the authoritative server must not import browser host layers:\n${violations.join('\n')}`,
+    ).toEqual([]);
+  });
+});
+
 describe('src/ui pure-core invariants', () => {
   it('lists only files that exist (the curated pure cores)', () => {
     const missing = UI_PURE_CORES.filter((f) => !statSync(f).isFile());
