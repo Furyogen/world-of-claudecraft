@@ -3051,18 +3051,41 @@ export class Renderer {
       },
     ];
 
+    // Constrained with parallel compile: link programs OFF the main thread BEFORE the
+    // first full-scene pass, so that pass draws already-linked programs instead of
+    // force-linking every program built so far in one synchronous block (a block the
+    // desktop-size budget tolerates but the phone watchdog does not).
+    let orderedManifest = manifest;
+    if (constrainedPrewarm && this.asyncCompileSupported) {
+      const compileIdx = manifest.findIndex((entry) => entry.id === 'programs.compile');
+      const frameIdx = manifest.findIndex((entry) => entry.id === 'world.initial-frame');
+      if (frameIdx >= 0 && compileIdx > frameIdx) {
+        orderedManifest = [...manifest];
+        const [compileEntry] = orderedManifest.splice(compileIdx, 1);
+        orderedManifest.splice(frameIdx, 0, compileEntry);
+      }
+    }
     try {
-      for (const entry of manifest) {
+      for (const entry of orderedManifest) {
         // Constrained (phone WebKit): yield the EVENT LOOP between entries (the
         // awaits above are microtask-only, which never lets the process service
-        // events) so the responsiveness watchdog sees a live process, and follow
-        // each entry with a link pass so shader compilation lands group-by-group
-        // instead of in one multi-second block at the first full-scene pass.
+        // events) so the responsiveness watchdog sees a live process.
         if (constrainedPrewarm) {
           await new Promise((resolve) => setTimeout(resolve, 0));
         }
         await runEntry(entry);
-        if (constrainedPrewarm && performance.now() < buildDeadline) {
+        // Without KHR_parallel_shader_compile the programs.compile monolith is
+        // skipped (one giant synchronous block), so linking must land here,
+        // group-by-group, one bounded pass per entry. WITH the extension these
+        // passes are counterproductive: a first pass links every program built so
+        // far in one synchronous block and starves the rest of the manifest (seen
+        // on iPhone: one 35-program pass ate the whole budget), while the async
+        // compile entry links the same programs off the main thread.
+        if (
+          constrainedPrewarm &&
+          !this.asyncCompileSupported &&
+          performance.now() < buildDeadline
+        ) {
           this.renderPrewarmPass(1 / 60);
           renderPasses++;
         }
