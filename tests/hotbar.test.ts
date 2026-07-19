@@ -168,15 +168,15 @@ describe('attack drag marker', () => {
     expect(dragCarriesAttack(undefined)).toBe(false);
   });
 
-  it('accepts the drag across the bar but highlights only its slot-0 destination', () => {
+  it('accepts the drag only over its slot-0 destination', () => {
     expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 0, 'over')).toBe('highlight');
-    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 1, 'over')).toBe('accept');
-    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 11, 'over')).toBe('accept');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 1, 'over')).toBe('ignore');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 11, 'over')).toBe('ignore');
   });
 
-  it('restores Attack on drop from any accepted action-bar slot', () => {
+  it('restores Attack only when dropped on slot 0', () => {
     expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 0, 'drop')).toBe('restore');
-    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 7, 'drop')).toBe('restore');
+    expect(attackDragDisposition([HOTBAR_ATTACK_MIME], 7, 'drop')).toBe('ignore');
   });
 
   it('ignores non-Attack drags in both phases', () => {

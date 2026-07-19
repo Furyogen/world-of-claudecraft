@@ -5343,8 +5343,8 @@ export class Hud {
     );
   }
 
-  // Attack is accepted across the bar but always restores to slot 0. The pure
-  // disposition keeps that behavior testable and highlights only the real target.
+  // Attack is accepted only by slot 0, its fixed destination. The pure disposition
+  // keeps that behavior testable and lets every other slot reject the drag truthfully.
   private tryAcceptAttackDrag(
     e: DragEvent,
     btn: HTMLButtonElement,

@@ -26,18 +26,18 @@ export function dragCarriesAttack(types: readonly string[] | undefined): boolean
   return types?.includes(HOTBAR_ATTACK_MIME) ?? false;
 }
 
-export type AttackDragDisposition = 'ignore' | 'accept' | 'highlight' | 'restore';
+export type AttackDragDisposition = 'ignore' | 'highlight' | 'restore';
 
-// Keep the bar-wide drop affordance while showing the one truthful destination.
-// Attack can be dropped over any action slot, but it always returns to slot 0.
+// Only the fixed slot-0 destination accepts the drag. Other slots keep the browser's
+// not-allowed cursor instead of promising a drop whose result would land elsewhere.
 export function attackDragDisposition(
   types: readonly string[] | undefined,
   slot: number,
   phase: 'over' | 'drop',
 ): AttackDragDisposition {
-  if (!dragCarriesAttack(types)) return 'ignore';
+  if (!dragCarriesAttack(types) || slot !== 0) return 'ignore';
   if (phase === 'drop') return 'restore';
-  return slot === 0 ? 'highlight' : 'accept';
+  return 'highlight';
 }
 
 /** One rule for every action-bar entry point: passive abilities are informational only. */
