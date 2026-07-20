@@ -80,6 +80,9 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   crag_warden_cudgel: 'mace',
   drownedmoon_maul: 'mace',
   nhalias_bell_maul: 'mace',
+  fenshadow_maul: 'mace',
+  gravewyrm_thornmaul: 'mace',
+  maul_of_the_scourged_wilds: 'mace',
   // Axes
   rusty_hatchet: 'axe',
   copper_bearded_axe: 'axe',
@@ -112,6 +115,9 @@ export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
   craghorn_staff: 'staff',
   lunar_tide_greatstaff: 'staff',
   emberglass_warstaff: 'staff',
+  briarroot_staff: 'staff',
+  cragthorn_greatstaff: 'staff',
+  nightfangs_greatstaff: 'staff',
   // Wands
   drowned_tide_scepter: 'wand',
   palecoil_rod: 'wand',

@@ -5,6 +5,14 @@ import type { ItemDef, PlayerClass } from '../types';
 const WAR: PlayerClass[] = ['warrior', 'paladin', 'shaman'];
 const MAG: PlayerClass[] = ['mage', 'priest', 'warlock', 'druid'];
 const ROG: PlayerClass[] = ['rogue', 'hunter'];
+// Feral druid weapons. A bespoke, druid-only lock: it is NOT one of the three
+// weapon-proficiency groups, so weaponArchetypeForItem returns null and
+// canEquipItem falls through to this literal list (see src/sim/equipment_rules.ts).
+// Bear form swings with the equipped weapon, so these carry real 2H dps + str/agi/sta.
+const FERAL: PlayerClass[] = ['druid'];
+// Every caster class, for held-offhand stat sticks (no armor class / weapon
+// proficiency: the literal requiredClass list is the whole rule for held_offhand).
+const CASTER_ALL: PlayerClass[] = ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'];
 
 // ---------------------------------------------------------------------------
 // Items
@@ -1345,6 +1353,84 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 11, max: 18, speed: 3.0 },
     stats: { int: 4, spi: 3 },
     sellValue: 850,
+  },
+  // --- Class/spec gap fill (uncommon/green leveling pieces) ---
+  // Budgeted via primaryStatBudget(item level, uncommon, slot); see
+  // src/sim/item_budget.ts. The leather int/spi pieces open the druid caster
+  // line, the mail int/spi pieces the shaman/paladin caster line, and the
+  // FERAL-locked two-handers start the bear-form weapon ladder (bear form
+  // swings the equipped weapon, src/sim/combat/form_swing.ts).
+  mosshide_vest: {
+    id: 'mosshide_vest',
+    name: 'Mosshide Vest',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'chest',
+    quality: 'uncommon',
+    // Sableweb Lurkers (level 4) -> item level 5, chest budget 2.
+    stats: { armor: 40, int: 1, spi: 1 },
+    sellValue: 130,
+  },
+  thornling_grips: {
+    id: 'thornling_grips',
+    name: 'Thornling Grips',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'gloves',
+    quality: 'uncommon',
+    // Deeprock Diggers (level 6) -> item level 7, gloves budget 2.
+    stats: { armor: 24, int: 1, spi: 1 },
+    sellValue: 140,
+  },
+  acolyte_chain_grips: {
+    id: 'acolyte_chain_grips',
+    name: 'Acolyte Chain Grips',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'gloves',
+    quality: 'uncommon',
+    // Old Greyjaw (level 4 rare) -> item level 5, gloves budget 1.
+    stats: { armor: 22, int: 1 },
+    sellValue: 120,
+  },
+  votive_chain_belt: {
+    id: 'votive_chain_belt',
+    name: 'Votive Chain Belt',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'waist',
+    quality: 'uncommon',
+    // Gorrak (level 6 boss) -> item level 7, waist budget 2.
+    stats: { armor: 28, int: 1, spi: 1 },
+    sellValue: 150,
+  },
+  briarroot_staff: {
+    id: 'briarroot_staff',
+    name: 'Briarroot Staff',
+    kind: 'weapon',
+    slot: 'mainhand',
+    hand: 'twohand',
+    quality: 'uncommon',
+    // Grix the Tunnelking (level 7 rare elite) -> item level 8: the 2H stat
+    // budget round(primaryStatBudget(8, uncommon, mainhand) = 3 x
+    // TWOHAND_STAT_MULT) = 4, dps on the weaponDpsBudget(8) x TWOHAND_DPS_MULT
+    // curve (~10.47 at speed 3.3).
+    weapon: { min: 29, max: 40, speed: 3.3 },
+    stats: { str: 2, sta: 2 },
+    sellValue: 320,
+    requiredClass: FERAL,
+  },
+  valefire_lantern: {
+    id: 'valefire_lantern',
+    name: 'Valefire Lantern',
+    kind: 'held_offhand',
+    slot: 'offhand',
+    quality: 'uncommon',
+    // Mogger (level 6 rare elite) -> item level 7, offhand budget 2. The first
+    // low-level held offhand; equips by the literal CASTER_ALL list.
+    stats: { int: 1, spi: 1 },
+    sellValue: 160,
+    requiredClass: CASTER_ALL,
   },
   // --- quest items ---
   boar_hide: {
