@@ -1,0 +1,579 @@
+{
+ "rend": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 0,
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Bleed goes fully quiet — zero fireworks on application; the lingering falling drips ARE the effect.",
+  "_cls": "warrior"
+ },
+ "hamstring": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 8
+  },
+  "notes": "Intimate leg-cut: burst stack stripped to a whisper of sparks so the low slice + bleed drips read, not an explosion.",
+  "_cls": "warrior"
+ },
+ "overpower": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": true,
+   "sparks": 14,
+   "smoke": false
+  },
+  "notes": "Surgical counter-stab: flat ring and flipbook removed, one vertical pierce-ring snaps perpendicular to the thrust line.",
+  "_cls": "warrior"
+ },
+ "sunder_armor": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 45,
+   "debris": true,
+   "smoke": false
+  },
+  "notes": "Armor shear is metal-on-metal: no fireball, no shockwave — cranked sparks plus flying plate debris carry the rip.",
+  "_cls": "warrior"
+ },
+ "slam": {
+  "motifs": [
+   "fissure"
+  ],
+  "notes": "The 1.5s charge now pays off seismically — the ground splits caster-to-target under the blow, breaking the vertical+groundSlam twin with Execute.",
+  "_cls": "warrior"
+ },
+ "execute": {
+  "impact": {
+   "flipbook": true,
+   "ring": true,
+   "vRing": true,
+   "sparks": 60,
+   "debris": true,
+   "smoke": true
+  },
+  "notes": "THE kill moment keeps no motif but becomes the kit's only full-stack cataclysm impact — everything on, so nothing else in the kit compares.",
+  "_cls": "warrior"
+ },
+ "thunder_clap": {
+  "motifs": [
+   "pillars"
+  ],
+  "notes": "Weapon-into-dirt now ejects five sequential ground eruptions ringing the warrior — the seismic clap finally earns its name.",
+  "_cls": "warrior"
+ },
+ "cleave": {
+  "motifs": [
+   "bladestorm"
+  ],
+  "notes": "Slash ribbons whirl around the caster at release — the blade-flurry read splits it from Thunder Clap's ground shock for good.",
+  "_cls": "warrior"
+ },
+ "defensive_stance": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "Translucent plates snap into a guarding forward arc as the stance settles — block fantasy made literal, unique among the kit's buffs.",
+  "_cls": "warrior"
+ },
+ "frostbolt": {
+  "impact": {
+   "flipbook": false,
+   "smoke": false,
+   "debris": true,
+   "sparks": 18
+  },
+  "notes": "Cold shatters instead of exploding: fire-flash flipbook and smoke removed, crystalline shard debris added — the impact frame finally splits from fireball's blaze.",
+  "_cls": "mage"
+ },
+ "fire_blast": {
+  "impact": {
+   "vRing": false,
+   "smoke": false,
+   "debris": false,
+   "sparks": 30
+  },
+  "notes": "The instant punch is a clean concussive pop — flipbook flash + heavy sparks only, no lingering dressing, the snap-hit foil to scorch's smolder.",
+  "_cls": "mage"
+ },
+ "scorch": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 6,
+   "smoke": true
+  },
+  "notes": "Intimate char, no fireworks: rings and flipbook stripped to a few ignition sparks and a rising smolder — the target scorches rather than detonates.",
+  "_cls": "mage"
+ },
+ "arcane_missiles": {
+  "motifs": [
+   "orbitals"
+  ],
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 14
+  },
+  "notes": "Orbitals ARE the missiles — three orbs circle then slam one-two-three matching the 3 ticks; stock flipbook/ring stripped so the sequenced slams carry the whole read.",
+  "_cls": "mage"
+ },
+ "frost_nova": {
+  "motifs": [
+   "pillars"
+  ],
+  "impact": {
+   "flipbook": false,
+   "smoke": false,
+   "debris": true,
+   "sparks": 26
+  },
+  "notes": "The finisher freeze earns a set-piece: ice pillars erupt around the ring while icy chunk debris flies — no fire flash, splitting it cleanly from arcane_explosion.",
+  "_cls": "mage"
+ },
+ "arcane_explosion": {
+  "impact": {
+   "flipbook": false,
+   "smoke": false,
+   "debris": false,
+   "sparks": 20
+  },
+  "notes": "Spammable pulse stays motif-free by design; impact sculpted to an immaculate ring+sparks arcane wave — no flipbook, no dirt, pure energy.",
+  "_cls": "mage"
+ },
+ "conjure_water": {
+  "motifs": [
+   "fountain"
+  ],
+  "notes": "Fantasy made literal: arcing streams rain into the condensing orb between the palms — the flattest buff in the kit finally shows what it conjures.",
+  "_cls": "mage"
+ },
+ "ice_barrier": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "The L20 absorb IS a shield: translucent plates snap into a guarding arc at cast, splitting it from frost_armor's quiet drifting glints.",
+  "_cls": "mage"
+ },
+ "sinister_strike": {
+  "impact": {
+   "ring": false,
+   "sparks": 14
+  },
+  "notes": "Spam builder goes lean — slash flash only, no ground ring, a short spit of sparks; the lone horizontal saber arc stays the show.",
+  "_cls": "rogue"
+ },
+ "backstab": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 6
+  },
+  "notes": "The quiet kill: no flash, no ring, six sparks — silence from the blind spot IS the signature, opposite pole to eviscerate.",
+  "_cls": "rogue"
+ },
+ "gouge": {
+  "impact": {
+   "flipbook": false,
+   "sparks": 12
+  },
+  "notes": "Dirty eye-rake drops the burst flash and keeps only the low ground ripple, which now reads as the daze settling under the stars.",
+  "_cls": "rogue"
+ },
+ "eviscerate": {
+  "impact": {
+   "debris": true,
+   "sparks": 36
+  },
+  "notes": "The kit's one full-violence hit: debris torn loose plus a 36-spark spray on the twin cross-slash — maximal where backstab is silent; no motif, the stance-crouch finisher identity already carries it.",
+  "_cls": "rogue"
+ },
+ "kidney_shot": {
+  "motifs": [
+   "chains"
+  ],
+  "impact": {
+   "ring": false,
+   "vRing": true,
+   "sparks": 20
+  },
+  "notes": "The stun made visible: chains snap up and bind through the stun, ground ring ceded to them, vertical shock ring for the blunt drop.",
+  "_cls": "rogue"
+ },
+ "adrenaline_rush": {
+  "motifs": [
+   "bladestorm"
+  ],
+  "notes": "L20 capstone announces the frenzy — slash ribbons whirl around the rogue at release while the heartbeat rings still carry the duration.",
+  "_cls": "rogue"
+ },
+ "judgement": {
+  "motifs": [
+   "cross"
+  ],
+  "impact": {
+   "flipbook": false
+  },
+  "notes": "The verdict IS the radiant cross-flash: generic flipbook burst cut so the cross owns the skybeam's landing.",
+  "_cls": "paladin"
+ },
+ "consecration": {
+  "motifs": [
+   "pillars"
+  ],
+  "impact": {
+   "flipbook": false
+  },
+  "notes": "Five sequential holy pillars erupt around the hallowed 8yd ring; center flipbook cut so the story stays on the ground.",
+  "_cls": "paladin"
+ },
+ "hammer_of_justice": {
+  "motifs": [
+   "chains"
+  ],
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 12
+  },
+  "notes": "Golden chains snap up and bind through the stun — no ring, no flipbook, sparse sparks: a sentence, not an explosion.",
+  "_cls": "paladin"
+ },
+ "divine_protection": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "Translucent plates snap into a guarding arc at cast then hand off to the orbiting facets — the bubble gets an arrival moment.",
+  "_cls": "paladin"
+ },
+ "holy_light": {
+  "motifs": [
+   "fountain"
+  ],
+  "notes": "The answered prayer lands as arcing light-streams raining onto the ally, splitting the big heal from Flash of Light's humble orb.",
+  "_cls": "paladin"
+ },
+ "serpent_sting": {
+  "motifs": [
+   "vines"
+  ],
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 6,
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Vines re-read as the spectral serpent coiling up the target; impact stripped to a wet fang-prick flicker so the rising venom fumes carry the dot.",
+  "_cls": "hunter"
+ },
+ "mongoose_bite": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 14,
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Intimate reflex-counter: no fireworks, just the vRing as the jaws' snap-plane and a short spark spit — pure speed, zero spectacle.",
+  "_cls": "hunter"
+ },
+ "wing_clip": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 8,
+   "smoke": false
+  },
+  "notes": "Humble low leg-hack: flash and rings removed, kept debris so the cut scuffs dirt at ankle height; the bleed drips do the talking.",
+  "_cls": "hunter"
+ },
+ "concussive_shot": {
+  "impact": {
+   "flipbook": false,
+   "sparks": 0
+  },
+  "notes": "Blunt daze reads blunt: no flash, zero sparks — just the shock ring, kicked debris and a dusty smoke thud, nothing like aimed_shot's crack.",
+  "_cls": "hunter"
+ },
+ "arcane_shot": {
+  "impact": {
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Clean arcane pop: full flash and rings kept but no dirt or smoke — magic detonation, not a physical hit; splits it from both physical bolts.",
+  "_cls": "hunter"
+ },
+ "aimed_shot": {
+  "impact": {
+   "flipbook": true,
+   "ring": true,
+   "vRing": true,
+   "sparks": 48,
+   "debris": true,
+   "smoke": false
+  },
+  "notes": "The kit's lone max-stack payoff after the 2.5s draw — every layer plus near-max sparks, smokeless because it's a piercing crack, not an explosion (also splits it from raptor_strike's stock stack).",
+  "_cls": "hunter"
+ },
+ "smite": {
+  "motifs": [
+   "cross"
+  ],
+  "impact": {
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Radiant cross-flash seals the skybeam; holy light kicks up no dirt or smoke — clean judgement, splits it from every earthy burst.",
+  "_cls": "priest"
+ },
+ "shadow_word_pain": {
+  "motifs": [
+   "swarm"
+  ],
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 6
+  },
+  "notes": "A whispered curse, not an explosion: dark shapes burst away from the victim and the stock fireworks are stripped — the fleeing swarm IS the hit.",
+  "_cls": "priest"
+ },
+ "power_word_shield": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "The iconic bubble earns its apply moment: translucent plates snap into a guarding arc before settling into the orbiting facet shell.",
+  "_cls": "priest"
+ },
+ "heal": {
+  "motifs": [
+   "fountain"
+  ],
+  "notes": "The flagship 2.5s prayer's payoff: arcing streams of light rain onto the ally, so the long cast lands visibly bigger than the lesser heals.",
+  "_cls": "priest"
+ },
+ "mind_flay": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "debris": false,
+   "smoke": false,
+   "sparks": 4
+  },
+  "notes": "Mental drain has no physical fireworks — ticks are stripped to a few sparks so the writhing drain-worm carries the read, not a stock burst x3.",
+  "_cls": "priest"
+ },
+ "flash_heal": {
+  "hot": 0.18,
+  "notes": "Urgency as exposure: white-hot core on the release splits it from lesser_heal's warm humble flare — the last same-palette pair reading identical.",
+  "_cls": "priest"
+ },
+ "healing_wave": {
+  "motifs": [
+   "fountain"
+  ],
+  "notes": "Fountain streams arc down onto the ally with the sky-light release — the shaman water-heal fantasy made literal; the kit's only heal now carries its own signature.",
+  "_cls": "shaman"
+ },
+ "flame_shock": {
+  "impact": {
+   "ring": false,
+   "vRing": false,
+   "smoke": true,
+   "sparks": 12
+  },
+  "notes": "A searing brand, not a blast: shockwave rings stripped, smolder-smoke and a few embers only, so the hit reads as branding flesh and feeds straight into the rising-ember DoT.",
+  "_cls": "shaman"
+ },
+ "frost_shock": {
+  "impact": {
+   "flipbook": false,
+   "sparks": 0,
+   "debris": true
+  },
+  "notes": "Flash-freeze crack: fiery flipbook and spark fireworks removed, ice-shard debris added — a brittle shatter silhouette fully split from earth_shock's fissure slam.",
+  "_cls": "shaman"
+ },
+ "stormstrike": {
+  "motifs": [
+   "bladestorm"
+  ],
+  "impact": {
+   "sparks": 45,
+   "debris": true
+  },
+  "notes": "Storm-blade flurry: slash ribbons whirl around the shaman as both charged weapons release, with cranked electric sparks and slam debris — the L40 payoff earns full fireworks.",
+  "_cls": "shaman"
+ },
+ "shadow_bolt": {
+  "motifs": [
+   "implosion"
+  ],
+  "impact": {
+   "ring": false,
+   "vRing": false,
+   "sparks": 16
+  },
+  "notes": "Void collapse: space sucks inward right before the hit and no shockwave rings escape — the bolt swallows, it doesn't explode; splits it from every other class's filler bolt.",
+  "_cls": "warlock"
+ },
+ "demon_skin": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "Chitin plates snap into a guarding arc on cast so the armor buff reads ARMOR at a glance, not another generic shell raise.",
+  "_cls": "warlock"
+ },
+ "immolate": {
+  "impact": {
+   "ring": false,
+   "vRing": false,
+   "debris": false,
+   "smoke": true,
+   "sparks": 28
+  },
+  "notes": "Ignition, not concussion — flame flipbook, ember spray, and a smoke curl with zero shockwave rings; the target catches fire rather than getting punched.",
+  "_cls": "warlock"
+ },
+ "corruption": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "debris": false,
+   "sparks": 6,
+   "smoke": true
+  },
+  "notes": "Rot blooms wet and quiet — no fireworks, just a smoky seep; the identity stays in the festering ichor orb windup and venom fall drips.",
+  "_cls": "warlock"
+ },
+ "curse_of_agony": {
+  "motifs": [
+   "swarm"
+  ],
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 10
+  },
+  "notes": "The curse seats with a burst of dark shapes fleeing the victim — dread made visible — while the stock explosion is stripped so only the ramping wave-drips carry it.",
+  "_cls": "warlock"
+ },
+ "drain_life": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 4,
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "Intimate siphon — each drain tick lands as a bare fleck so the sinuous toward-caster flow stays the whole picture.",
+  "_cls": "warlock"
+ },
+ "searing_pain": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "vRing": false,
+   "sparks": 30,
+   "debris": false,
+   "smoke": false
+  },
+  "notes": "White-hot needle: no explosion at all, just a grinding spray of sparks off the point of contact — the anti-shadow_bolt silhouette finished.",
+  "_cls": "warlock"
+ },
+ "shadowburn": {
+  "impact": {
+   "flipbook": true,
+   "ring": true,
+   "vRing": true,
+   "sparks": 50,
+   "debris": true,
+   "smoke": true
+  },
+  "notes": "The kit's one cataclysm — every impact layer on under the shadowflame skybeam, earned by being the only ability that gets it.",
+  "_cls": "warlock"
+ },
+ "healing_touch": {
+  "motifs": [
+   "fountain"
+  ],
+  "notes": "Fountain: arcing life-streams rain onto the ally as the canopy light releases - the flagship heal's set-piece, splitting it from the quieter HoTs.",
+  "_cls": "druid"
+ },
+ "thorns": {
+  "motifs": [
+   "vines"
+  ],
+  "notes": "Vines coil up and wrap the blessed target as the bramble armor takes - thorns finally LOOK like growth, not a generic spark shell.",
+  "_cls": "druid"
+ },
+ "barkskin": {
+  "motifs": [
+   "barrier"
+  ],
+  "notes": "Barrier plates snap into a guarding arc as the skin hardens to bark - the panic button reads as a block, distinct from Thorns' living coils.",
+  "_cls": "druid"
+ },
+ "demoralizing_roar": {
+  "motifs": [
+   "swarm"
+  ],
+  "notes": "Swarm: courage visibly flees - dark shapes scatter off the demoralized enemies, splitting the big roar from Growl's plain taunt wave.",
+  "_cls": "druid"
+ },
+ "starfire": {
+  "motifs": [
+   "crescents"
+  ],
+  "notes": "Crescents: twin moon-blades sweep through the target at the stellar impact - the finisher's payoff finally matches its constellation-ritual windup.",
+  "_cls": "druid"
+ },
+ "claw": {
+  "impact": {
+   "ring": false,
+   "sparks": 14
+  },
+  "notes": "Light spam builder de-fireworked: no shockwave ring, just the triple gash and a few sparks.",
+  "_cls": "druid"
+ },
+ "rake": {
+  "impact": {
+   "flipbook": false,
+   "ring": false,
+   "sparks": 8
+  },
+  "notes": "Intimate bleed opener: no flipbook, no ring, 8 sparks - a quiet tearing cut that lets the lingering wound speak.",
+  "_cls": "druid"
+ },
+ "maul": {
+  "impact": {
+   "debris": true,
+   "smoke": true,
+   "sparks": 10
+  },
+  "notes": "Blunt paw slam: dirt debris and smoke with sparks cut to 10 - heavy and earthen, the opposite silhouette of Claw's quick gashes.",
+  "_cls": "druid"
+ },
+ "ferocious_bite": {
+  "impact": {
+   "vRing": true,
+   "debris": true,
+   "sparks": 26
+  },
+  "notes": "Finisher crunch: vertical ring and debris on the jaw snap - the kit's heaviest melee impact, towering over Rake's near-silent bleed.",
+  "_cls": "druid"
+ }
+}

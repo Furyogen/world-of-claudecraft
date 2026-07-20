@@ -1,0 +1,764 @@
+{
+ "battle_shout": {
+  "buff": {
+   "style": "raise",
+   "orbit": "weaponGlow",
+   "shellDur": 1.5
+  },
+  "windupStyle": "none",
+  "notes": "L1 war cry now sets the weapon alight — blood-red shimmer and light trails ride the blade for the buff's whole 2-min life; rune orbit retired so runes stay rare.",
+  "_cls": "warrior"
+ },
+ "thunder_clap": {
+  "windup": 0.3,
+  "windupStyle": "vortex",
+  "notes": "First AoE unveil (L6): storm-charge spirals inward around the body for a beat before the weapon hits dirt and the 8yd shock ring answers — the gather makes the clap feel earned.",
+  "_cls": "warrior"
+ },
+ "bloodrage": {
+  "buff": {
+   "style": "raise",
+   "orbit": "heartbeat",
+   "shellDur": 1.5
+  },
+  "windupStyle": "none",
+  "notes": "Blood-for-rage made literal: crimson heartbeat rings thump off the chest for the duration — pure racing pulse, no rune flash, unmistakable from any other warrior buff.",
+  "_cls": "warrior"
+ },
+ "defensive_stance": {
+  "windup": 0.4,
+  "windupStyle": "stance",
+  "buff": {
+   "style": "raise",
+   "orbit": "plates",
+   "shellDur": 2
+  },
+  "notes": "The stance earns the 'stance' windup — feet plant, dust and pebbles lift — then steel shield facets orbit the body for the whole toggle so the tank silhouette reads at a glance.",
+  "_cls": "warrior"
+ },
+ "execute": {
+  "windup": 0.5,
+  "windupStyle": "stance",
+  "notes": "THE warrior moment gets anticipation: half a second of grounded gather (dust rises, weapon hand glows deep red) before the colossal sky-strike overhead — the pause is what makes the clip.",
+  "_cls": "warrior"
+ },
+ "slam": {
+  "windupStyle": "weapon",
+  "notes": "Its 1.5s cast is now enchant-light crawling up the raised haft with climbing sparks — reads as charged melee being wound up, never a caster's rune circle.",
+  "_cls": "warrior"
+ },
+ "cleave": {
+  "power": 0.95,
+  "strike": {
+   "swings": 1,
+   "arc": "horizontal"
+  },
+  "windupStyle": "none",
+  "notes": "L18 finale differentiated from thunder_clap: a huge horizontal weapon-arc ribbon layered over the forward ring so it reads as one sweeping blade stroke, not another shock ring.",
+  "_cls": "warrior"
+ },
+ "fireball": {
+  "windupStyle": "orb",
+  "notes": "De-runed: the molten orb swelling between the hands IS the first-spell fantasy - no circle needed.",
+  "_cls": "mage"
+ },
+ "frostbolt": {
+  "windupStyle": "vortex",
+  "notes": "Cold gathers: freezing mist spirals inward and condenses into the coiled lance - reads COLD, not a blue fireball.",
+  "_cls": "mage"
+ },
+ "conjure_water": {
+  "windupStyle": "orb",
+  "notes": "A wobbling blue water orb condenses between the palms over the 3s cast; rune circle dropped, stays modest per the utility rule.",
+  "_cls": "mage"
+ },
+ "frost_armor": {
+  "buff": {
+   "style": "raise",
+   "shellDur": 2,
+   "orbit": "sparks"
+  },
+  "notes": "Persistent frost-palette spark motes read as drifting ice-glint crystals - 'encased in frost' finally visible while it lasts.",
+  "_cls": "mage"
+ },
+ "arcane_intellect": {
+  "buff": {
+   "style": "raise",
+   "shellDur": 1.2,
+   "orbit": "runes"
+  },
+  "notes": "Glinting sigils orbit the head for the duration - the intellect fantasy made literal; sparks freed for Frost Armor.",
+  "_cls": "mage"
+ },
+ "polymorph": {
+  "windupStyle": "runes",
+  "spirit": {
+   "model": "sheep",
+   "path": "rise",
+   "at": "target",
+   "scale": 0.8,
+   "dur": 2.4
+  },
+  "notes": "THE mage ritual keeps the kit's only rune circle: arcane ceremony into poof into the pinned ghost-sheep rising - the L8 clip moment.",
+  "_cls": "mage"
+ },
+ "arcane_explosion": {
+  "windup": 0.25,
+  "windupStyle": "vortex",
+  "notes": "Inhale/exhale: 0.25s violet vortex sucks power into the chest, then the ring detonates outward - spammable pulse rhythm, pure AoE-gather fantasy.",
+  "_cls": "mage"
+ },
+ "scorch": {
+  "windupStyle": "none",
+  "notes": "Snap-cast filler: no windup telegraphy, the flame just ignites on the target - instant-feeling foil to fireball's swelling orb.",
+  "_cls": "mage"
+ },
+ "ice_barrier": {
+  "buff": {
+   "style": "raise",
+   "shellDur": 3,
+   "orbit": "plates"
+  },
+  "notes": "Interlocking ice facets orbit the body for the whole absorb - the L20 reward you can see; runes orbit retired to keep circles rare.",
+  "_cls": "mage"
+ },
+ "eviscerate": {
+  "palette": "blood",
+  "power": 1.45,
+  "windup": 0.2,
+  "windupStyle": "stance",
+  "strike": {
+   "swings": 2,
+   "stars": false,
+   "arc": "uppercut",
+   "bleed": true
+  },
+  "notes": "Capstone keeps the twin blood cross-slash but gains a 0.2s grounded crouch (dust kick, late dagger-glow) so the finisher visibly coils before it erupts.",
+  "_cls": "rogue"
+ },
+ "backstab": {
+  "palette": "shadow",
+  "power": 1,
+  "windupStyle": "none",
+  "strike": {
+   "swings": 1,
+   "stars": false,
+   "arc": "thrust"
+  },
+  "notes": "L4 unveil: the same thrust now strikes from the blind spot in dark violet with a shadow-wisp trail — positional dagger work, no longer a recolored sinister_strike.",
+  "_cls": "rogue"
+ },
+ "gouge": {
+  "palette": "physical",
+  "power": 0.85,
+  "windupStyle": "none",
+  "strike": {
+   "swings": 1,
+   "stars": true,
+   "arc": "claws"
+  },
+  "notes": "Eye-rake is now three parallel raking gashes across the face (claws, never a sword arc) with the daze stars orbiting after — creature-true rule.",
+  "_cls": "rogue"
+ },
+ "evasion": {
+  "palette": "physical",
+  "power": 0.9,
+  "buff": {
+   "style": "veil",
+   "shellDur": 1.5,
+   "orbit": "wings"
+  },
+  "linger": 4,
+  "notes": "Untouchable blur: smoke-grey afterimage fans flicker behind the shoulders like ghost-images of dodges — unique orbit, reads defensive without armor plates.",
+  "_cls": "rogue"
+ },
+ "slice_and_dice": {
+  "palette": "physical",
+  "power": 0.85,
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "shellDur": 1.2,
+   "orbit": "weaponGlow"
+  },
+  "linger": 4,
+  "notes": "Rune circle deleted (runes stay rare); the haste lives on the blades — both daggers shimmer and trail light-whirr for the duration.",
+  "_cls": "rogue"
+ },
+ "sprint": {
+  "palette": "physical",
+  "power": 0.7,
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "shellDur": 0.8,
+   "orbit": "speedlines"
+  },
+  "linger": 2,
+  "notes": "Wind-blur streaks stream off the legs for the whole buff — the L10 'I am fast now' moment finally looks like it.",
+  "_cls": "rogue"
+ },
+ "kidney_shot": {
+  "palette": "blood",
+  "power": 1.2,
+  "windupStyle": "none",
+  "strike": {
+   "swings": 1,
+   "stars": true,
+   "arc": "vertical"
+  },
+  "notes": "Stun finisher goes visceral deep-red: brutal low jab with screen-weight impact and stun stars — blood palette splits it from gouge's steel claw-rake.",
+  "_cls": "rogue"
+ },
+ "ambush": {
+  "palette": "shadow",
+  "power": 1.3,
+  "windup": 0.35,
+  "windupStyle": "vortex",
+  "strike": {
+   "swings": 1,
+   "stars": false,
+   "arc": "vertical"
+  },
+  "spirit": {
+   "model": "fox",
+   "path": "pounce",
+   "at": "target",
+   "scale": 0.9,
+   "dur": 1.2
+  },
+  "notes": "THE L16 reward: shadows coil inward (the held breath), then the dagger plunges as a spectral shadow-fox pounces out of the dark onto the target — the clip moment.",
+  "_cls": "rogue"
+ },
+ "adrenaline_rush": {
+  "palette": "blood",
+  "power": 1.1,
+  "buff": {
+   "style": "raise",
+   "shellDur": 1.5,
+   "orbit": "heartbeat"
+  },
+  "linger": 3.5,
+  "notes": "Blood runs hot made literal: pulsing crimson rings thump off the chest like a racing pulse — the L20 capstone buff no longer shares sparks with evasion.",
+  "_cls": "rogue"
+ },
+ "seal_of_righteousness": {
+  "windupStyle": "weapon",
+  "windup": 0.5,
+  "buff": {
+   "style": "raise",
+   "orbit": "weaponGlow",
+   "shellDur": 1.2
+  },
+  "notes": "It's an imbue, not a rune ritual: gilded enchantment crawls up the mace with climbing sparks, and the weapon keeps a golden glow + light trail while the seal lasts.",
+  "_cls": "paladin"
+ },
+ "holy_light": {
+  "windupStyle": "ascend",
+  "windup": 2.5,
+  "notes": "The big prayer answered from above: dawn-light gathers from the sky down onto the caster across the full 2.5s cast, then releases into the target.",
+  "_cls": "paladin"
+ },
+ "devotion_aura": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "runes",
+   "shellDur": 2
+  },
+  "notes": "Quiet 30-min litany: faint glinting devotional sigils orbit the armor — subtle enough to live with, and no longer identical to every other paladin buff.",
+  "_cls": "paladin"
+ },
+ "judgement": {
+  "windupStyle": "runes",
+  "windup": 0.5,
+  "notes": "The kit's ONE rune-circle ritual: a golden verdict circle snaps underfoot for half a beat, the seal is consumed, and the skybeam gavel falls.",
+  "_cls": "paladin"
+ },
+ "blessing_of_might": {
+  "windupStyle": "none",
+  "palette": "gold",
+  "buff": {
+   "style": "raise",
+   "orbit": "wings",
+   "shellDur": 1.5
+  },
+  "notes": "A true benediction: spectral golden wing-fans unfurl and flap behind the ally's shoulders for the buff — a blessing visible across the battlefield, not another spark shell.",
+  "_cls": "paladin"
+ },
+ "divine_protection": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "plates",
+   "shellDur": 2.5
+  },
+  "notes": "Armor-of-light: translucent shield facets snap into orbit around the bubble for its duration — instant and off-GCD, so no windup; the plates ARE the absorb.",
+  "_cls": "paladin"
+ },
+ "hammer_of_justice": {
+  "windupStyle": "none",
+  "notes": "Justice does not telegraph: explicitly instant (no default rune circle), spectral golden maul flash + stun stars stay the kit's only CC read.",
+  "_cls": "paladin"
+ },
+ "lay_on_hands": {
+  "windupStyle": "vortex",
+  "windup": 0.8,
+  "notes": "The 10-minute miracle: the paladin's own light spirals inward off their body before pouring into the ally — the self-sacrifice made visible, unlike either cast heal.",
+  "_cls": "paladin"
+ },
+ "flash_of_light": {
+  "windupStyle": "orb",
+  "windup": 1.5,
+  "notes": "The humble handcast: a compact warm light-orb cupped between the hands over the 1.5s cast — deliberately small next to Holy Light's sky-prayer.",
+  "_cls": "paladin"
+ },
+ "exorcism": {
+  "windupStyle": "none",
+  "spirit": {
+   "model": "ghost",
+   "path": "rise",
+   "at": "target",
+   "scale": 0.9,
+   "dur": 1.2
+  },
+  "notes": "Banishment made literal: on impact a ghostly spirit is TORN out of the target, rising and dissolving in the white-gold flare — the kit's one spirit moment, earned at L14.",
+  "_cls": "paladin"
+ },
+ "consecration": {
+  "windupStyle": "vortex",
+  "windup": 0.5,
+  "linger": 4,
+  "notes": "Hallowed ground: holy power spirals inward for half a beat, then slams outward to the full 8yd ring; extended linger keeps the gilded floor burning.",
+  "_cls": "paladin"
+ },
+ "righteous_fury": {
+  "windupStyle": "stance",
+  "windup": 0.4,
+  "buff": {
+   "style": "raise",
+   "orbit": "heartbeat",
+   "shellDur": 1.5
+  },
+  "notes": "The tank switch: grounded stance windup (dust, pebbles, late hand-glow), then flame-gold heartbeat rings thumping off the chest — burning zeal you can practically hear.",
+  "_cls": "paladin"
+ },
+ "raptor_strike": {
+  "windup": 0.5,
+  "windupStyle": "stance",
+  "notes": "Pinned raptor pounce kept; added grounded stance windup (dust, planted feet) so the on-next-swing wait reads as coiled anticipation before the spirit hits.",
+  "_cls": "hunter"
+ },
+ "aspect_of_the_hawk": {
+  "power": 0.85,
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "wings",
+   "shellDur": 1.5
+  },
+  "spirit": {
+   "model": "hawk",
+   "path": "swoop",
+   "at": "caster",
+   "scale": 1,
+   "dur": 1.6
+  },
+  "linger": 3,
+  "notes": "The L4 unveil: a spectral hawk dives out of the sky onto the hunter and spectral wing fans keep beating behind the shoulders — no rune circle, the bird IS the cast.",
+  "_cls": "hunter"
+ },
+ "serpent_sting": {
+  "windupStyle": "none",
+  "notes": "Instant loose stays lean — fang-snap flash and rising venom fumes are already the kit's only dot; explicit none kills any inherited circle.",
+  "_cls": "hunter"
+ },
+ "arcane_shot": {
+  "windupStyle": "none",
+  "notes": "Instant violet quarrel — the kit's one arcane accent stays a zero-telegraph snapshot.",
+  "_cls": "hunter"
+ },
+ "concussive_shot": {
+  "windupStyle": "none",
+  "notes": "Blunt daze tracer fires from the hip; the wobble-shimmer linger differentiates it from aimed_shot, not a circle.",
+  "_cls": "hunter"
+ },
+ "mongoose_bite": {
+  "windupStyle": "none",
+  "strike": {
+   "swings": 1,
+   "arc": "bite"
+  },
+  "notes": "Bite is not a sword swing: spectral jaws snap shut on the target the instant the dodge procs — pure reflex, zero windup, sibling contrast to raptor's deliberate stance.",
+  "_cls": "hunter"
+ },
+ "wing_clip": {
+  "windupStyle": "none",
+  "notes": "Quick low hamstring hack stays instant and humble — utility, not spectacle.",
+  "_cls": "hunter"
+ },
+ "tame_beast": {
+  "power": 0.8,
+  "windup": 2.5,
+  "windupStyle": "runes",
+  "spirit": {
+   "model": "boar",
+   "path": "rise",
+   "at": "target",
+   "scale": 0.9,
+   "dur": 2.2
+  },
+  "linger": 3,
+  "notes": "The hunter's one true ritual earns the kit's only rune circle: the 6s bonding ceremony ends with the beast's wild spirit rising out of it as the drowsy stars settle — the pet-class covenant moment.",
+  "_cls": "hunter"
+ },
+ "dismiss_pet": {
+  "windupStyle": "none",
+  "notes": "Quiet release-to-the-wild veil stays understated; explicit none so no circle flashes on a farewell.",
+  "_cls": "hunter"
+ },
+ "revive_pet": {
+  "windup": 1.5,
+  "windupStyle": "ascend",
+  "notes": "Life gathers from the sky down onto the hunter during the cast, then pours into the leafy portal — resurrection light, unique windup in the kit.",
+  "_cls": "hunter"
+ },
+ "aspect_of_the_cheetah": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "speedlines",
+   "shellDur": 1.2
+  },
+  "spirit": {
+   "model": "fox",
+   "path": "circle",
+   "at": "caster",
+   "scale": 0.85,
+   "dur": 2
+  },
+  "linger": 2.5,
+  "notes": "A spectral fox sprints a full lap around the hunter and wind-blur streaks stay on the legs — speed you can see, no shared shell language with the hawk aspect.",
+  "_cls": "hunter"
+ },
+ "aimed_shot": {
+  "power": 1.45,
+  "windup": 2.5,
+  "windupStyle": "weapon",
+  "notes": "The sniper payoff: enchantment and climbing sparks crawl up the bow for the full draw, tension peaks, then the killshot streaks flat — charge language owned by no other shot.",
+  "_cls": "hunter"
+ },
+ "rapid_fire": {
+  "windup": 0.4,
+  "windupStyle": "stance",
+  "buff": {
+   "style": "raise",
+   "orbit": "heartbeat",
+   "shellDur": 1.2
+  },
+  "linger": 3,
+  "notes": "Plant the feet (dust kick), then pulsing rings thump off the chest like a racing pulse for the haste window — adrenaline, not another spark shell.",
+  "_cls": "hunter"
+ },
+ "smite": {
+  "windupStyle": "ascend",
+  "notes": "Level-1 hook: the 2s prayer pulls light DOWN from the sky onto the caster, then the skybeam burst answers on the target — call and response, no rune circle.",
+  "_cls": "priest"
+ },
+ "lesser_heal": {
+  "windupStyle": "orb",
+  "notes": "The novice prayer: a small warm orb cupped between the hands — deliberately humble so the later heals visibly outgrow it.",
+  "_cls": "priest"
+ },
+ "power_word_fortitude": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "heartbeat",
+   "shellDur": 1.5
+  },
+  "notes": "Fortitude finally LOOKS like fortitude — golden pulse rings thumping off the ally's chest for the duration; instant word, no windup.",
+  "_cls": "priest"
+ },
+ "power_word_shield": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "orbit": "plates",
+   "shellDur": 2.5
+  },
+  "notes": "The iconic bubble becomes armor of light: glassy shield facets orbiting the body (the engine's absorb language), replacing the generic rune orbit.",
+  "_cls": "priest"
+ },
+ "mind_blast": {
+  "windupStyle": "vortex",
+  "spirit": {
+   "model": "ghost",
+   "path": "rise",
+   "at": "target",
+   "scale": 0.9,
+   "dur": 1.2
+  },
+  "notes": "The apocalyptic moment earns the kit's ONE spirit: dark power spirals inward during the 1.5s cast, and on detonation a ghost is torn upright out of the victim — their psyche made visible. Clip bait.",
+  "_cls": "priest"
+ },
+ "heal": {
+  "windupStyle": "runes",
+  "notes": "The class's single rune ritual: the full 2.5s prayer kneels over a scripture circle — the ceremony upgrade from lesser_heal that makes learning Heal feel like ordination.",
+  "_cls": "priest"
+ },
+ "mind_flay": {
+  "windupStyle": "none",
+  "beam": {
+   "dur": 3,
+   "ticks": 3,
+   "drain": true
+  },
+  "notes": "Catalog mechanic is drainTick, so the visual now honors it: the writhing violet mind-worm pulses TOWARD the caster, pulling something out of the victim's head — instantly distinct from arcane_missiles and from warlock's blood-red drain_life.",
+  "_cls": "priest"
+ },
+ "flash_heal": {
+  "windupStyle": "none",
+  "notes": "The emergency heal is the only priest cast with NO ceremony — hands simply flare and light slams in; urgency reads through the absence every sibling heal has.",
+  "_cls": "priest"
+ },
+ "rockbiter_weapon": {
+  "windup": 0.5,
+  "windupStyle": "weapon",
+  "notes": "Pinned weaponGlow kept; 0.5s hold lets the earthen enchant visibly crawl up the weapon with climbing grit-sparks before the glow settles.",
+  "_cls": "shaman"
+ },
+ "healing_wave": {
+  "windupStyle": "ascend",
+  "notes": "Ancestral spirits answer: soft water-green light gathers from the sky down onto the caster during the cast — no more default rune circle on the bread-and-butter heal.",
+  "_cls": "shaman"
+ },
+ "earth_shock": {
+  "windup": 0.3,
+  "windupStyle": "stance",
+  "notes": "Grounded anticipation — dust and pebbles lift around the caster for a beat before the fault-line ground burst, making earth feel like EARTH versus frost_shock's instant snap.",
+  "_cls": "shaman"
+ },
+ "lightning_shield": {
+  "windup": 0.4,
+  "windupStyle": "orb",
+  "notes": "A crackling storm-orb forms between the hands then splits apart into the orbiting spark orbs — the level-8 unveil is watching the shield assemble; 'sparks' orbit stays, it IS the ability.",
+  "_cls": "shaman"
+ },
+ "flame_shock": {
+  "windupStyle": "none",
+  "notes": "Instant searing brand — explicit none so the fire shock never inherits a rune circle; the rising-ember dot carries its identity.",
+  "_cls": "shaman"
+ },
+ "frost_shock": {
+  "windupStyle": "none",
+  "notes": "Instant flash-freeze snap — no windup, pure link-crack impact; the fast twin to earth_shock's grounded slam.",
+  "_cls": "shaman"
+ },
+ "ghost_wolf": {
+  "windupStyle": "vortex",
+  "buff": {
+   "style": "morph",
+   "shellDur": 1,
+   "orbit": "speedlines"
+  },
+  "notes": "Pinned wolf-circle spirit kept; the 2s cast becomes a true vortex (silver motes spiral inward to the implosion), and the form now streams wind-blur speedlines while it lasts — the travel-form clip moment.",
+  "_cls": "shaman"
+ },
+ "stormstrike": {
+  "windup": 0.45,
+  "windupStyle": "weapon",
+  "notes": "The level-40 payoff: electric-blue charge crawls up BOTH weapons with climbing sparks in a short pre-strike hold, then the twin uppercut ground-slam answers the locked lightning_bolt hue.",
+  "_cls": "shaman"
+ },
+ "shadow_bolt": {
+  "windupStyle": "orb",
+  "notes": "Rune circle retired: the 1.7s cast now charges a coiling two-handed void orb, violet wisps sucked into its rim before launch.",
+  "_cls": "warlock"
+ },
+ "immolate": {
+  "windupStyle": "vortex",
+  "notes": "Heat spirals INWARD over the 2s cast (embers + shimmer converging on the chest), then the whole gathered charge dumps onto the target in the ignition whoomph.",
+  "_cls": "warlock"
+ },
+ "corruption": {
+  "windupStyle": "orb",
+  "notes": "A festering black-green ichor orb swells between the palms — fly-swarm rot texture, nothing like shadow_bolt's clean void sphere — then seeps into the target.",
+  "_cls": "warlock"
+ },
+ "searing_pain": {
+  "windupStyle": "orb",
+  "notes": "A white-hot pinpoint compressed between two fingertips — tiny and searing, the opposite silhouette of shadow_bolt's two-handed sphere — before the lean dart snaps out.",
+  "_cls": "warlock"
+ },
+ "demon_skin": {
+  "buff": {
+   "style": "raise",
+   "orbit": "plates",
+   "shellDur": 2
+  },
+  "notes": "Armor now reads as armor: dark leathery chitin plates orbiting the body instead of generic rune glints.",
+  "_cls": "warlock"
+ },
+ "life_tap": {
+  "buff": {
+   "style": "raise",
+   "orbit": "heartbeat",
+   "shellDur": 0.8
+  },
+  "notes": "You pay in heartbeats — crimson pulse rings thump off the chest as health becomes mana; the kit's only heartbeat orbit, unmistakable at a glance.",
+  "_cls": "warlock"
+ },
+ "summon_imp": {
+  "windupStyle": "runes",
+  "spirit": {
+   "model": "demon",
+   "path": "rise",
+   "at": "portal",
+   "scale": 0.6,
+   "dur": 2
+  },
+  "notes": "Earns the rare rune circle (a true 5s summoning rite): ember runes etch the portal, then a small ghostly demon claws up out of it as your first demon arrives — level-1 hook moment.",
+  "_cls": "warlock"
+ },
+ "summon_voidwalker": {
+  "windupStyle": "runes",
+  "power": 1.1,
+  "spirit": {
+   "model": "voidwalker",
+   "path": "rise",
+   "at": "portal",
+   "scale": 1.2,
+   "dur": 2.5
+  },
+  "notes": "THE ritual: the heavyweight rune circle spins up the void portal and a hulking spectral voidwalker rises out of it — the demon actually appears.",
+  "_cls": "warlock"
+ },
+ "fear": {
+  "windupStyle": "vortex",
+  "spirit": {
+   "model": "ghost",
+   "path": "rise",
+   "at": "target",
+   "scale": 1,
+   "dur": 2
+  },
+  "notes": "Terror gathers as shadows spiral into the warlock, then a wailing ghost rises through the victim as the tendrils claw over them — the clip-worthy unveil.",
+  "_cls": "warlock"
+ },
+ "wrath": {
+  "windupStyle": "orb",
+  "bolt": {
+   "speed": 24,
+   "jagged": false,
+   "coils": true,
+   "forkEvery": 0,
+   "headScale": 1
+  },
+  "notes": "Rune circle gone: a crackling verdant orb charges between the hands and the bolt coils with spiraling leaf motes, so it reads druid, not mage.",
+  "_cls": "druid"
+ },
+ "healing_touch": {
+  "windupStyle": "ascend",
+  "notes": "Sunlight filters down through an unseen canopy onto the caster across the 2.5s cast, then releases into the full flower-ring bloom.",
+  "_cls": "druid"
+ },
+ "mark_of_the_wild": {
+  "windupStyle": "none",
+  "spirit": {
+   "model": "stag",
+   "path": "circle",
+   "at": "target",
+   "scale": 1,
+   "dur": 2.2
+  },
+  "notes": "The level-1 clip: a ghostly stag runs one proud lap around the blessed ally while the leaf motes spiral up, the Wild itself acknowledging them.",
+  "_cls": "druid"
+ },
+ "entangling_roots": {
+  "windupStyle": "stance",
+  "notes": "Grounded stance windup: dust and pebbles shiver as the earth cracks underfoot, selling the vines about to erupt.",
+  "_cls": "druid"
+ },
+ "bear_charge": {
+  "spirit": {
+   "model": "bear",
+   "path": "lunge",
+   "at": "caster",
+   "scale": 1.15,
+   "dur": 1.1
+  },
+  "notes": "A spectral bear lunges along the gallop, overlaying the charging druid; L10's answer to the warrior's bull.",
+  "_cls": "druid"
+ },
+ "maul": {
+  "strike": {
+   "swings": 1,
+   "arc": "claws",
+   "groundSlam": true
+  },
+  "notes": "Paw, not blade: three raking gashes crash down together with the ground slam.",
+  "_cls": "druid"
+ },
+ "rake": {
+  "palette": "blood",
+  "strike": {
+   "swings": 1,
+   "arc": "claws",
+   "bleed": true
+  },
+  "notes": "Claws arc in blood palette, bleeding rakes torn across the target, clearly distinct from Claw's clean physical swipe.",
+  "_cls": "druid"
+ },
+ "claw": {
+  "strike": {
+   "swings": 1,
+   "arc": "claws"
+  },
+  "notes": "True claw arc: three parallel gashes replace the sword uppercut on the bread-and-butter builder.",
+  "_cls": "druid"
+ },
+ "ferocious_bite": {
+  "strike": {
+   "swings": 1,
+   "arc": "bite",
+   "bleed": true
+  },
+  "notes": "Bite must not be a sword swing: spectral jaws snap shut on the target with a bleeding deep-red crunch.",
+  "_cls": "druid"
+ },
+ "swipe": {
+  "strike": {
+   "swings": 1,
+   "arc": "claws"
+  },
+  "notes": "Claw-rake gashes layered over the low nova ring so the bear AoE reads paw-swipe, not shockwave.",
+  "_cls": "druid"
+ },
+ "regrowth": {
+  "windupStyle": "vortex",
+  "notes": "Life-motes vortex inward around the druid then release as the fast bloom, the inverse of Healing Touch's descending light.",
+  "_cls": "druid"
+ },
+ "thorns": {
+  "windupStyle": "none",
+  "notes": "No windup flash; the orbiting spark orbs re-tint as glinting thorn barbs circling the bramble shell (unique orbit kept).",
+  "_cls": "druid"
+ },
+ "barkskin": {
+  "windupStyle": "none",
+  "buff": {
+   "style": "raise",
+   "shellDur": 2.5,
+   "orbit": "plates"
+  },
+  "notes": "Bark-textured facets orbit as shield plates (rune orbit retired to keep circles rare); instant panic button, no windup.",
+  "_cls": "druid"
+ },
+ "starfire": {
+  "windup": 2.5,
+  "windupStyle": "runes",
+  "notes": "The one sanctioned ritual: a constellation rune circle under a long ceremonial 2.5s charge for the druid class signature.",
+  "_cls": "druid"
+ }
+}

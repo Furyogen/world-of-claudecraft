@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WoC Ability VFX Gallery (dev only)</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #05070d; }
+  #app { position: fixed; inset: 0; }
+  canvas { display: block; }
+  #flash { position: fixed; inset: 0; background: #dceaff; opacity: 0; pointer-events: none; z-index: 5; }
+  #hud {
+    position: fixed; top: 14px; left: 16px; z-index: 10; color: #cfe3ff;
+    font-family: "Segoe UI", system-ui, sans-serif; user-select: none;
+  }
+  #hud h1 { font-size: 17px; margin: 0 0 2px 0; letter-spacing: 2px; text-transform: uppercase;
+    color: #9fd0ff; text-shadow: 0 0 12px rgba(90,160,255,.8); }
+  #hud .sub { font-size: 11px; opacity: .55; margin-bottom: 10px; }
+  #abilityInfo { font-size: 13px; color: #eaf4ff; margin-bottom: 4px; min-height: 17px;
+    text-shadow: 0 0 8px rgba(120,180,255,.5); }
+  #phase { font-size: 12px; color: #7fe0ff; min-height: 16px; letter-spacing: 1px; text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(80,200,255,.7); margin-bottom: 10px; }
+  .btnrow { display: flex; gap: 6px; flex-wrap: wrap; max-width: 380px; margin-bottom: 6px; }
+  button, select {
+    background: rgba(14,22,40,.82); color: #cfe3ff; border: 1px solid rgba(110,160,255,.35);
+    border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;
+    font-family: inherit; letter-spacing: .5px;
+  }
+  button:hover, select:hover { border-color: rgba(140,200,255,.8); box-shadow: 0 0 10px rgba(80,150,255,.35); }
+  button.on { background: rgba(30,70,130,.85); border-color: #6fb4ff; color: #eaf4ff; }
+  select { max-width: 170px; }
+  #hint { position: fixed; bottom: 12px; left: 16px; z-index: 10; font-size: 11px; color: #8ea6c8; opacity: .6;
+    font-family: "Segoe UI", system-ui, sans-serif; user-select: none; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="flash"></div>
+<div id="hud">
+  <h1>⚡ Ability VFX Gallery</h1>
+  <div class="sub">every class · every ability — dev page, not shipped</div>
+  <div id="abilityInfo">loading…</div>
+  <div id="phase">—</div>
+  <div class="btnrow">
+    <select id="selClass"></select>
+    <select id="selAbility"></select>
+    <button id="btnPrev">◀</button>
+    <button id="btnNext">▶</button>
+    <button id="btnTour">🎬 Auto-tour</button>
+    <button id="btnCombo">🔗 Combo</button>
+  </div>
+  <div class="btnrow">
+    <button id="btnReplay">↺ Replay</button>
+    <button id="btnSlow">🐌 Slow-mo</button>
+    <button id="btnFinisher" class="on">⛈ Finisher</button>
+    <button id="btnSound">🔇 Sound off</button>
+    <button id="btnAB" style="display:none">🎚 SFX: Generated</button>
+  </div>
+  <div class="btnrow">
+    <button id="btnCine">🎥 Cinematic cam</button>
+    <button id="btnRec">⏺ Clip 6s</button>
+    <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8ea6c8;">
+      speed <input id="speedSlider" type="range" min="0.1" max="1" step="0.05" value="1" style="width:90px;">
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8ea6c8;">
+      vol <input id="volSlider" type="range" min="0" max="1.5" step="0.05" value="1" style="width:70px;">
+    </label>
+  </div>
+</div>
+<div id="hint">drag to orbit · scroll to zoom · loops alternate normal/crit · auto-tour walks every ability</div>
+<script type="module" src="/arc_bolt_preview.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+{
+ "slice_and_dice": {
+  "buff": {
+   "orbit": "sparks"
+  },
+  "rim": "#e8c860"
+ },
+ "deadly_poison": {
+  "buff": {
+   "orbit": "none"
+  },
+  "rim": "#c8ff3c"
+ },
+ "adrenaline_rush": {
+  "rim": "#e03a2e"
+ },
+ "frostbrand_weapon": {
+  "rim": "#4f9fd8"
+ },
+ "ghost_wolf": {
+  "rim": "#b4a8e0"
+ },
+ "demon_skin": {
+  "buff": {
+   "orbit": "plates"
+  }
+ },
+ "life_tap": {
+  "buff": {
+   "orbit": "heartbeat"
+  }
+ },
+ "enrage": {
+  "buff": {
+   "orbit": "heartbeat"
+  }
+ },
+ "tigers_fury": {
+  "buff": {
+   "orbit": "heartbeat"
+  }
+ },
+ "thorns": {
+  "rim": "#3f7a2e"
+ },
+ "primal_reflexes": {
+  "rim": "#4fd9a6"
+ },
+ "travel_form": {
+  "rim": "#d9c060"
+ },
+ "bloodrage": {
+  "buff": {
+   "orbit": "heartbeat"
+  }
+ },
+ "ironhold": {
+  "buff": {
+   "orbit": "runes"
+  },
+  "rim": "#e8862e"
+ },
+ "blessing_of_might": {
+  "buff": {
+   "orbit": "wings"
+  },
+  "rim": "#d4941e"
+ },
+ "righteous_fury": {
+  "buff": {
+   "orbit": "heartbeat"
+  }
+ },
+ "sacred_bulwark": {
+  "buff": {
+   "orbit": "plates"
+  },
+  "rim": "#d8e4f2"
+ },
+ "rapid_fire": {
+  "rim": "#ff6242"
+ }
+}
