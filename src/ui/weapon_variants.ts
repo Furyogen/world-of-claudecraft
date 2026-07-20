@@ -81,7 +81,6 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   briarroot_staff: 'staff_b', // feral ladder, zone-1 rung
   cragthorn_greatstaff: 'staff_c', // feral ladder, zone-3 rung
   nightfangs_greatstaff: 'adv_staff', // feral ladder, Korzul epic rung
-  maul_of_the_scourged_wilds: 'adv_druid_staff', // feral ladder, Nythraxis raid rung (druid relic model)
   staff_of_the_gravewyrm: 'adv_druid_staff',
   deathless_heartwood: 'adv_druid_staff', // LEGENDARY druid relic (antler staff)
   drovers_staff: 'adv_druid_staff',
@@ -112,6 +111,7 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   ironshod_maul: 'hammer_d', // crafted 2H maul
   fenshadow_maul: 'hammer_d', // feral ladder maul
   gravewyrm_thornmaul: 'hammer_d', // feral ladder maul
+  maul_of_the_scourged_wilds: 'hammer_d', // feral ladder, Nythraxis raid rung
 
   // ---- axes (axe_a..d + adv axes) --------------------------------------------
   rusty_hatchet: 'axe_a',
