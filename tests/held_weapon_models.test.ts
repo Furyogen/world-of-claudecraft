@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   KAYKIT_SHIELD_ACCESSORIES,
@@ -18,6 +18,18 @@ import { WEAPON_SKIN_LIST } from '../src/sim/content/weapon_skins';
 import { ITEMS } from '../src/sim/data';
 import { weaponHand } from '../src/sim/equipment_rules';
 import { ITEM_WEAPON_VARIANTS } from '../src/ui/weapon_variants';
+
+const visualCtor = vi.hoisted(() => ({
+  calls: [] as unknown[][],
+}));
+
+vi.mock('../src/render/characters/visual', () => ({
+  CharacterVisual: class {
+    constructor(...args: unknown[]) {
+      visualCtor.calls.push(args);
+    }
+  },
+}));
 
 // The per-item held weapon models: each weapon item maps (via the shared
 // ITEM_WEAPON_VARIANTS table) to a variant key that must have BOTH a 3D model GLB
@@ -96,6 +108,26 @@ describe('held weapon models', () => {
     expect(itemOffhandModelUrl('chest_armor_not_an_offhand')).toBeNull();
     expect(itemOffhandModelUrl(null)).toBeNull();
     expect(itemOffhandModelUrl(undefined)).toBeNull();
+  });
+
+  it('maps a live rogue with the same dagger in both hands to mainhand plus offhand visuals', async () => {
+    visualCtor.calls.length = 0;
+    const { createCharacterVisual } = await import('../src/render/characters/index');
+
+    createCharacterVisual({
+      kind: 'player',
+      templateId: 'rogue',
+      color: 0xffffff,
+      skin: 0,
+      mainhandItemId: 'rusty_dagger',
+      offhandItemId: 'rusty_dagger',
+    } as never);
+
+    expect(visualCtor.calls).toEqual([
+      ['player_rogue', 0xffffff, 0, 'rusty_dagger', null, 'rusty_dagger'],
+    ]);
+    expect(itemWeaponModelUrl('rusty_dagger')).toBe('models/weapons/dagger_a.glb');
+    expect(itemOffhandModelUrl('rusty_dagger')).toBe('models/weapons/dagger_a.glb');
   });
 
   it('preloads every live shield model used by an actual offhand', () => {
