@@ -8484,106 +8484,106 @@ export const ja_JP: EnTranslations = {
         "name": "蛇のエリクサー"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "苔皮のベスト"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "茨精の篭手"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "侍祭の鎖篭手"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "誓願の鎖ベルト"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "茨根の杖"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "谷火のランタン"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "沼皮の脚当て"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "泥花の靴"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "沼の番人の鉄靴"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "沼灯りの鎖帷子"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "暮棘のマント"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "沼影の大槌"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "野林の締め帯"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "岩守りの肩甲"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "岩棘の大杖"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "月皮の祭服"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "峰歌の兜"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "嵐詠いの篭手"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "岩歩きのベルト"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "嵐根の頭巾"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "雷守りの脚甲"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "亡魂歩きの靴"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "欠片牙の篭手"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "欠片歌のマント"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "竜教団の呪文篭手"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "ソーンピークの野生手甲"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "嵐誓願の鎖帷子"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "墓花の肩当て"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "墓竜の棘槌"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "目覚める林の祭服"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "夜牙の大杖"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "災いの荒野の大槌"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "潮詩の靴"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "真珠守りの聖盾"
       },
       "conjured_water4": {
         "name": "魔法の湧き水"

@@ -8484,106 +8484,106 @@ export const ko_KR: EnTranslations = {
         "name": "뱀의 비약"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "이끼가죽 조끼"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "가시령 장갑"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "수행자 사슬 장갑"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "서원 사슬 허리띠"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "가시뿌리 지팡이"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "골짜기불 랜턴"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "늪껍질 다리보호구"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "수렁꽃 장화"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "늪지기 철장화"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "습지빛 사슬갑옷"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "황혼가시 어깨망토"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "늪그림자 철퇴"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "야생숲 허리띠"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "바위수비 어깨갑옷"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "바위가시 대지팡이"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "달껍질 예복"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "봉우리노래 투구"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "폭풍영창 건틀릿"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "바위배회 허리띠"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "폭풍뿌리 두건"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "천둥수호 다리갑옷"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "망령발걸음 장화"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "파편송곳니 장갑"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "파편노래 어깨망토"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "용교단 주문장갑"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "쏜피크 야생손싸개"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "폭풍서원 사슬갑옷"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "무덤꽃 어깨보호구"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "무덤용 가시철퇴"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "깨어나는 숲의 예복"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "밤송곳니의 대지팡이"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "재앙 들판의 철퇴"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "물결찬가 슬리퍼"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "진주수호 방패"
       },
       "conjured_water4": {
         "name": "창조된 샘물"

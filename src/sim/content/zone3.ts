@@ -3575,6 +3575,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // ladder, beside the direfang_greatblade on the same boss.
     weapon: { min: 56, max: 75, speed: 3.7 },
     stats: { str: 10, agi: 8, sta: 8 },
+    // Every item-level-29 raid epic carries exactly one rating at 20 (the tier
+    // ladder pin in tests/combat_rating.test.ts); the maul takes Hit like the
+    // direfang_greatblade beside it.
+    hitRating: 20,
     sellValue: 14000,
     requiredClass: ['druid'],
   },

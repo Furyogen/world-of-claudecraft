@@ -8484,106 +8484,106 @@ export const zh_CN: EnTranslations = {
         "name": "巨蛇药剂"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "苔皮背心"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "棘灵护手"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "侍僧链甲护手"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "誓愿链甲腰带"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "棘根法杖"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "谷火灯笼"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "沼皮护腿"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "泥花软靴"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "沼卫铁靴"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "沼光锁甲"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "暮棘披肩"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "沼影重锤"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "野林束带"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "岩卫肩甲"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "岩棘巨杖"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "月皮祭服"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "峰歌头盔"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "风暴咏唱护手"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "岩行腰带"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "风根兜帽"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "雷卫护腿"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "亡魂行靴"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "片牙护手"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "碎片之歌披肩"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "龙教法术护手"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "荆峰野性裹手"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "风暴誓愿锁甲"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "墓花护肩"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "墓龙棘锤"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "苏醒林地祭服"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "夜牙巨杖"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "灾野重锤"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "潮诗便鞋"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "珍珠守护盾"
       },
       "conjured_water4": {
         "name": "魔法泉水"

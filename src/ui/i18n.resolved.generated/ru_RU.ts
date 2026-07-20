@@ -8484,106 +8484,106 @@ export const ru_RU: EnTranslations = {
         "name": "Эликсир змея"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Жилет из мшистой кожи"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Перчатки Колючки"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Кольчужные перчатки послушника"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Кольчужный пояс обета"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Посох из тернового корня"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Фонарь долинного огня"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Поножи из болотной коры"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Сапоги топкого цветения"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Сабатоны болотного стража"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Хауберк болотного света"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Оплечье сумеречного терна"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Молот болотной тени"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Пояс Дикой рощи"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Наплечники скального стража"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Большой посох скального терна"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Облачение лунной коры"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Шлем песни пиков"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Рукавицы грозового песнопения"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Пояс скального охотника"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Капюшон грозового корня"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Набедренники грозового стража"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Сапоги шага призрака"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Перчатки оскольчатого клыка"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Оплечье песни осколков"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Перчатки заклинаний культа дракона"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Дикие обмотки Терновых Пиков"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Хауберк грозового обета"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Наплечники склепного цветения"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Терновый молот могильного дракона"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Облачение Пробуждающейся рощи"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Большой посох Ночного клыка"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Молот опустошенных диких земель"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Туфли приливного гимна"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Эгида жемчужного стража"
       },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
