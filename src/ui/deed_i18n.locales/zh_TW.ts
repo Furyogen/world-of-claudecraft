@@ -7,54 +7,163 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: '我的地盤我的規矩',
-    desc: '在牌局大師處贏得一場紙牌對決。',
+  prog_first_steps: {
+    name: '最初的腳步',
+    desc: '達到2級，在漫漫長路上踏出你的第一步。',
   },
-  prog_first_steps: { name: '最初的腳步', desc: '達到2級，在漫漫長路上踏出你的第一步。' },
-  prog_finding_your_feet: { name: '站穩腳步', desc: '達到5級；荒野在你眼中已經小了一些。' },
-  prog_double_digits: { name: '邁入兩位數', desc: '達到10級並解鎖你的天賦。' },
-  prog_the_long_middle: { name: '漫漫中程', desc: '達到15級。' },
-  prog_level_cap: { name: '頂峰風光', desc: '達到20級，也就是等級上限。' },
-  prog_well_rested: { name: '充分休息', desc: '在旅店安歇，直到獲得充分休息經驗值。' },
-  prog_talented: { name: '用在刀口上', desc: '花費你的第一點天賦點數。' },
-  prog_specialized: { name: '志向宣言', desc: '選擇一項專精並習得其招牌技能。' },
-  prog_deep_roots: { name: '根深柢固', desc: '將一點天賦點數投入最後一列的天賦。' },
+  prog_finding_your_feet: {
+    name: '站穩腳步',
+    desc: '達到5級；荒野在你眼中已經小了一些。',
+  },
+  prog_double_digits: {
+    name: '邁入兩位數',
+    desc: '達到10級並解鎖你的天賦。',
+  },
+  prog_the_long_middle: {
+    name: '漫漫中程',
+    desc: '達到15級。',
+  },
+  prog_level_cap: {
+    name: '頂峰風光',
+    desc: '達到20級，也就是等級上限。',
+  },
+  prog_well_rested: {
+    name: '充分休息',
+    desc: '在旅店安歇，直到獲得充分休息經驗值。',
+  },
+  prog_talented: {
+    name: '用在刀口上',
+    desc: '花費你的第一點天賦點數。',
+  },
+  prog_specialized: {
+    name: '志向宣言',
+    desc: '選擇一項專精並習得其招牌技能。',
+  },
+  prog_deep_roots: {
+    name: '根深柢固',
+    desc: '將一點天賦點數投入最後一列的天賦。',
+  },
   prog_full_build: {
     name: '六列俱全',
     desc: '在同一套配置的六列天賦中各選擇一個選項。',
   },
-  prog_veteran: { name: '老兵', desc: '生涯累計獲得250,000點經驗值。', title: '老兵' },
-  prog_champion: { name: '冠軍', desc: '生涯累計獲得500,000點經驗值。', title: '冠軍' },
-  prog_paragon: { name: '典範', desc: '生涯累計獲得1,000,000點經驗值。', title: '典範' },
-  prog_mythic: { name: '神話', desc: '生涯累計獲得2,500,000點經驗值。', title: '神話' },
-  prog_eternal: { name: '永恆', desc: '生涯累計獲得5,000,000點經驗值。', title: '永恆' },
-  prog_prestige: { name: '重新啟程', desc: '達到等級上限，再次填滿經驗條，並取得威望階級1。' },
-  prog_prestige_5: { name: '積習難改', desc: '達到威望階級5。' },
-  prog_prestige_10: { name: '永動不息', desc: '達到威望階級10。' },
-  prog_first_harvest: { name: '田野的果實', desc: '採收你的第一個採集點。' },
-  prog_mining_100: { name: '血中礦脈', desc: '採礦熟練度達到100。' },
-  prog_logging_100: { name: '心材伐手', desc: '伐木熟練度達到100。' },
-  prog_herbalism_100: { name: '百草宗師', desc: '草藥學熟練度達到100。' },
-  prog_master_gatherer: { name: '採集大師', desc: '採礦、伐木與草藥學的熟練度皆達到100。' },
-  prog_first_craft: { name: '親手打造', desc: '完成你的第一次成功製作。' },
-  prog_craft_specialist: { name: '不傳之秘', desc: '任一工藝技能達到75，並解鎖其專精特長。' },
-  prog_around_the_ring: { name: '環座巡禮', desc: '五種不同工藝的技能各達到25。' },
-  cmb_first_blood: { name: '首開殺戒', desc: '擊敗你的第一個敵人。' },
-  cmb_slayer: { name: '殺戮者', desc: '擊敗1,000個敵人。' },
-  cmb_legion_of_one: { name: '一人成軍', desc: '擊敗10,000個敵人。' },
-  cmb_heavy_hitter: { name: '出手千鈞', desc: '累計造成500,000點傷害。' },
-  cmb_critical_eye: { name: '致命之眼', desc: '打出500次致命一擊。' },
-  cmb_giantslayer: { name: '屠巨者', desc: '對高出你至少五級的敵人打出最後一擊。' },
+  prog_veteran: {
+    name: '老兵',
+    desc: '生涯累計獲得250,000點經驗值。',
+    title: '老兵',
+  },
+  prog_champion: {
+    name: '冠軍',
+    desc: '生涯累計獲得500,000點經驗值。',
+    title: '冠軍',
+  },
+  prog_paragon: {
+    name: '典範',
+    desc: '生涯累計獲得1,000,000點經驗值。',
+    title: '典範',
+  },
+  prog_mythic: {
+    name: '神話',
+    desc: '生涯累計獲得2,500,000點經驗值。',
+    title: '神話',
+  },
+  prog_eternal: {
+    name: '永恆',
+    desc: '生涯累計獲得5,000,000點經驗值。',
+    title: '永恆',
+  },
+  prog_prestige: {
+    name: '重新啟程',
+    desc: '達到等級上限，再次填滿經驗條，並取得威望階級1。',
+  },
+  prog_prestige_5: {
+    name: '積習難改',
+    desc: '達到威望階級5。',
+  },
+  prog_prestige_10: {
+    name: '永動不息',
+    desc: '達到威望階級10。',
+  },
+  prog_first_harvest: {
+    name: '田野的果實',
+    desc: '採收你的第一個採集點。',
+  },
+  prog_mining_100: {
+    name: '血中礦脈',
+    desc: '採礦熟練度達到100。',
+  },
+  prog_logging_100: {
+    name: '心材伐手',
+    desc: '伐木熟練度達到100。',
+  },
+  prog_herbalism_100: {
+    name: '百草宗師',
+    desc: '草藥學熟練度達到100。',
+  },
+  prog_master_gatherer: {
+    name: '採集大師',
+    desc: '採礦、伐木與草藥學的熟練度皆達到100。',
+  },
+  prog_first_craft: {
+    name: '親手打造',
+    desc: '完成你的第一次成功製作。',
+  },
+  prog_craft_specialist: {
+    name: '不傳之秘',
+    desc: '任一工藝技能達到75，並解鎖其專精特長。',
+  },
+  prog_around_the_ring: {
+    name: '環座巡禮',
+    desc: '五種不同工藝的技能各達到25。',
+  },
+  cmb_first_blood: {
+    name: '首開殺戒',
+    desc: '擊敗你的第一個敵人。',
+  },
+  cmb_slayer: {
+    name: '殺戮者',
+    desc: '擊敗1,000個敵人。',
+  },
+  cmb_legion_of_one: {
+    name: '一人成軍',
+    desc: '擊敗10,000個敵人。',
+  },
+  cmb_heavy_hitter: {
+    name: '出手千鈞',
+    desc: '累計造成500,000點傷害。',
+  },
+  cmb_critical_eye: {
+    name: '致命之眼',
+    desc: '打出500次致命一擊。',
+  },
+  cmb_giantslayer: {
+    name: '屠巨者',
+    desc: '對高出你至少五級的敵人打出最後一擊。',
+  },
   cmb_first_fall: {
     name: '拍拍塵土再出發',
     desc: '迎來你的第一次死亡；再出色的冒險者也難免如此。',
   },
-  dgn_hollow_crypt: { name: '破墓者', desc: '在空洞墓穴擊敗喚墓者莫森。' },
-  dgn_sunken_bastion: { name: '霧散縛解', desc: '在沉沒堡壘擊敗縛霧者維爾。' },
-  dgn_drowned_temple: { name: '溺月終溺', desc: '在溺亡神殿擊敗「伊索蕾，溺月化身」。' },
-  dgn_gravewyrm_sanctum: { name: '地底之龍', desc: '在墓龍聖所擊敗墓龍科祖爾。' },
-  dgn_hollow_crypt_heroic: { name: '英雄：空洞墓穴', desc: '以英雄難度在空洞墓穴擊敗喚墓者莫森。' },
+  dgn_hollow_crypt: {
+    name: '破墓者',
+    desc: '在空洞墓穴擊敗喚墓者莫森。',
+  },
+  dgn_sunken_bastion: {
+    name: '霧散縛解',
+    desc: '在沉沒堡壘擊敗縛霧者維爾。',
+  },
+  dgn_drowned_temple: {
+    name: '溺月終溺',
+    desc: '在溺亡神殿擊敗「伊索蕾，溺月化身」。',
+  },
+  dgn_gravewyrm_sanctum: {
+    name: '地底之龍',
+    desc: '在墓龍聖所擊敗墓龍科祖爾。',
+  },
+  dgn_hollow_crypt_heroic: {
+    name: '英雄：空洞墓穴',
+    desc: '以英雄難度在空洞墓穴擊敗喚墓者莫森。',
+  },
   dgn_sunken_bastion_heroic: {
     name: '英雄：沉沒堡壘',
     desc: '以英雄難度在沉沒堡壘擊敗縛霧者維爾。',
@@ -67,20 +176,38 @@ export const table: DeedLocaleTable = {
     name: '英雄：墓龍聖所',
     desc: '以英雄難度在墓龍聖所擊敗墓龍科祖爾。',
   },
-  dgn_nythraxis: { name: '災禍止息', desc: '在封印的王室之門後，擊敗「尼思拉克西斯，荊峰之災」。' },
+  dgn_nythraxis: {
+    name: '災禍止息',
+    desc: '在封印的王室之門後，擊敗「尼思拉克西斯，荊峰之災」。',
+  },
   dgn_nythraxis_heroic: {
     name: '英雄：災禍止息',
     desc: '以英雄難度擊敗「尼思拉克西斯，荊峰之災」。',
   },
-  dgn_thornpeak_rounds: { name: '逐一登門', desc: '通關空洞墓穴、沉沒堡壘、溺亡神殿與墓龍聖所。' },
-  dgn_deepward: { name: '深淵之衛', desc: '以英雄難度征服每一座地城、團隊副本，以及兩座秘探。' },
-  dgn_mark_circuit: { name: '全套巡迴', desc: '在同一天內從全部四座英雄地城獲得英雄徽記。' },
-  dgn_boss_clears_50: { name: '五十扇門之後', desc: '擊敗50個地城最終首領。' },
+  dgn_thornpeak_rounds: {
+    name: '逐一登門',
+    desc: '通關空洞墓穴、沉沒堡壘、溺亡神殿與墓龍聖所。',
+  },
+  dgn_deepward: {
+    name: '深淵之衛',
+    desc: '以英雄難度征服每一座地城、團隊副本，以及兩座秘探。',
+  },
+  dgn_mark_circuit: {
+    name: '全套巡迴',
+    desc: '在同一天內從全部四座英雄地城獲得英雄徽記。',
+  },
+  dgn_boss_clears_50: {
+    name: '五十扇門之後',
+    desc: '擊敗50個地城最終首領。',
+  },
   dgn_morthen_flawless: {
     name: '屍骨無存',
     desc: '以英雄難度擊敗喚墓者莫森，且沒有任何隊伍成員死亡。',
   },
-  dgn_morthen_trio: { name: '三人抗墓', desc: '以三名或更少的玩家擊敗喚墓者莫森。' },
+  dgn_morthen_trio: {
+    name: '三人抗墓',
+    desc: '以三名或更少的玩家擊敗喚墓者莫森。',
+  },
   dgn_olen_arc: {
     name: '側身避鐮',
     desc: '擊敗騎士指揮官奧倫，且他的收割弧斬從未擊中其當前目標以外的任何人。',
@@ -123,24 +250,51 @@ export const table: DeedLocaleTable = {
     desc: '以英雄難度擊敗「尼思拉克西斯，荊峰之災」，且沒有任何團隊成員死亡。',
     title: '不死者',
   },
-  cmb_thunzharr: { name: '山嶽傾頹', desc: '在風暴岩擊倒「桑扎爾，覺醒之峰」。' },
+  cmb_thunzharr: {
+    name: '山嶽傾頹',
+    desc: '在風暴岩擊倒「桑扎爾，覺醒之峰」。',
+  },
   cmb_thunzharr_unbroken: {
     name: '碎峰者',
     desc: '擊倒「桑扎爾，覺醒之峰」，且從你出手的第一擊到他的最後一口氣，你不曾死亡。',
     title: '碎峰者',
   },
-  cmb_thunzharr_ten: { name: '屠山成癖', desc: '擊倒「桑扎爾，覺醒之峰」十次。' },
-  dlv_reliquary: { name: '聖物庫行者', desc: '清剿崩塌的聖物庫。' },
-  dlv_reliquary_heroic: { name: '英雄：崩塌的聖物庫', desc: '以英雄層級清剿崩塌的聖物庫。' },
-  dlv_litany: { name: '止息連禱', desc: '清剿溺亡連禱。' },
-  dlv_litany_heroic: { name: '英雄：溺亡連禱', desc: '以英雄層級清剿溺亡連禱。' },
-  dlv_lore_journal: { name: '頁邊眉批', desc: '解鎖秘探日誌的全部五則記述。' },
-  dlv_companion_max: { name: '深處的摯友', desc: '將一名秘探同伴培養至她的最高階級。' },
+  cmb_thunzharr_ten: {
+    name: '屠山成癖',
+    desc: '擊倒「桑扎爾，覺醒之峰」十次。',
+  },
+  dlv_reliquary: {
+    name: '聖物庫行者',
+    desc: '清剿崩塌的聖物庫。',
+  },
+  dlv_reliquary_heroic: {
+    name: '英雄：崩塌的聖物庫',
+    desc: '以英雄層級清剿崩塌的聖物庫。',
+  },
+  dlv_litany: {
+    name: '止息連禱',
+    desc: '清剿溺亡連禱。',
+  },
+  dlv_litany_heroic: {
+    name: '英雄：溺亡連禱',
+    desc: '以英雄層級清剿溺亡連禱。',
+  },
+  dlv_lore_journal: {
+    name: '頁邊眉批',
+    desc: '解鎖秘探日誌的全部五則記述。',
+  },
+  dlv_companion_max: {
+    name: '深處的摯友',
+    desc: '將一名秘探同伴培養至她的最高階級。',
+  },
   dlv_companions_both: {
     name: '雙燈皆明',
     desc: '將兩名秘探同伴，侍僧泰莎與艾達·蘆手，都培養至最高階級。',
   },
-  dlv_clears_50: { name: '五十噚深', desc: '完成 50 次秘探。' },
+  dlv_clears_50: {
+    name: '五十噚深',
+    desc: '完成 50 次秘探。',
+  },
   dlv_solo_heroic: {
     name: '二人足矣',
     desc: '在沒有其他玩家的情況下清剿一場英雄層級的秘探，只有你和你的同伴。',
@@ -149,7 +303,10 @@ export const table: DeedLocaleTable = {
     name: '鎖簧之道，臻於化境',
     desc: '在最高賭注下開啟一口設有結界的聖物庫寶箱，僅有的一次嘗試毫無失誤。',
   },
-  dlv_rite_flawless: { name: '一字不差', desc: '完成溺亡聖物庫儀式，全程沒有一次失誤。' },
+  dlv_rite_flawless: {
+    name: '一字不差',
+    desc: '完成溺亡聖物庫儀式，全程沒有一次失誤。',
+  },
   dlv_varric_ringers: {
     name: '鐘聲止息',
     desc: '擊敗執事瓦瑞克時，他喚起的每一名喪儀鳴鐘者都已被斬殺。',
@@ -172,10 +329,22 @@ export const table: DeedLocaleTable = {
     desc: '見證溪谷故事的始末：揭穿喚墓者的真面目、滌淨空洞墓穴，並剷除溪谷每一個有名有姓的惡煞。',
     title: '溪谷之譽',
   },
-  chr_vale_gatherer: { name: '靠山吃山', desc: '在東溪谷採集一處礦脈、一處林木與一叢草藥。' },
-  chr_vale_first_cast: { name: '鏡湖有物', desc: '在東溪谷的水域釣起一條魚。' },
-  chr_vale_packbreaker: { name: '狼群剋星', desc: '在 10 秒內斬殺 3 隻森林狼。' },
-  chr_vale_cup_debut: { name: '銅桶新秀', desc: '在母豬場的溪谷盃比賽中上場並觸球。' },
+  chr_vale_gatherer: {
+    name: '靠山吃山',
+    desc: '在東溪谷採集一處礦脈、一處林木與一叢草藥。',
+  },
+  chr_vale_first_cast: {
+    name: '鏡湖有物',
+    desc: '在東溪谷的水域釣起一條魚。',
+  },
+  chr_vale_packbreaker: {
+    name: '狼群剋星',
+    desc: '在 10 秒內斬殺 3 隻森林狼。',
+  },
+  chr_vale_cup_debut: {
+    name: '銅桶新秀',
+    desc: '在母豬場的溪谷盃比賽中上場並觸球。',
+  },
   chr_vale_rares: {
     name: '溪谷惡煞',
     desc: '斬殺東溪谷五個有名有姓的惡煞：老灰顎、莫格、隧道之王葛瑞克斯、維爾蘭隊長與縛魂者瑪爾德雷克。',
@@ -193,7 +362,10 @@ export const table: DeedLocaleTable = {
     desc: '見證沼地故事的始末：搗毀邪教營地、在沉沒堡壘讓縛霧者噤聲，並剷除迷霧中每一個有名有姓的惡煞。',
     title: '泥沼之譽',
   },
-  chr_marsh_gatherer: { name: '芬橋採拾', desc: '在泥沼濕地採集一處礦脈、一處林木與一叢草藥。' },
+  chr_marsh_gatherer: {
+    name: '芬橋採拾',
+    desc: '在泥沼濕地採集一處礦脈、一處林木與一叢草藥。',
+  },
   chr_marsh_unburst: {
     name: '別站在孢子裡',
     desc: '斬殺 8 隻沼澤腫脹獸，且不被其腐蝕孢子的爆裂波及。',
@@ -219,9 +391,18 @@ export const table: DeedLocaleTable = {
     desc: '見證山嶽故事的始末：擊潰龍教、讓聖所歸於沉寂、擊倒覺醒之峰，並剷除峭壁間每一個有名有姓的惡煞。',
     title: '荊峰之譽',
   },
-  chr_peaks_sparring: { name: '城牆操練', desc: '對高望上方的訓練假人造成總計 1,000 點傷害。' },
-  chr_peaks_glimmer_cast: { name: '水寒，光更寒', desc: '在微光湖釣起一條魚。' },
-  chr_peaks_moongate: { name: '穿過寒門', desc: '穿過微光湖畔的月門。' },
+  chr_peaks_sparring: {
+    name: '城牆操練',
+    desc: '對高望上方的訓練假人造成總計 1,000 點傷害。',
+  },
+  chr_peaks_glimmer_cast: {
+    name: '水寒，光更寒',
+    desc: '在微光湖釣起一條魚。',
+  },
+  chr_peaks_moongate: {
+    name: '穿過寒門',
+    desc: '穿過微光湖畔的月門。',
+  },
   chr_peaks_waking_witness: {
     name: '行走的山嶽',
     desc: '親眼目睹桑扎爾，覺醒之峰跨行山間的身影。',
@@ -234,58 +415,174 @@ export const table: DeedLocaleTable = {
     name: '囤積鼠',
     desc: '發現 25 種不同的物品（每件物品在首次歸你所有時計入）。',
   },
-  col_discovery_75: { name: '喜鵲', desc: '發現 75 種不同的物品。' },
-  col_discovery_150: { name: '珍奇櫃', desc: '發現 150 種不同的物品。', title: '館長' },
-  col_discovery_250: { name: '萬物總錄', desc: '發現 250 種不同的物品。' },
-  col_first_rare: { name: '一抹湛藍', desc: '獲得你的第一件稀有品質物品。' },
-  col_first_epic: { name: '紫氣東來', desc: '獲得你的第一件史詩品質物品。' },
-  col_first_legendary: { name: '橙心如意', desc: '獲得你的第一件傳說品質物品。' },
-  col_set_vale_arcanist: { name: '溪谷秘法師華服', desc: '發現溪谷秘法師華服的每一個部件。' },
-  col_set_boundstone_vanguard: { name: '縛石先鋒', desc: '發現縛石先鋒的每一個部件。' },
-  col_set_greyjaw_stalker: { name: '灰顎潛獵者裝束', desc: '發現灰顎潛獵者裝束的每一個部件。' },
-  col_set_deathlord: { name: '塚陵領主戰裝', desc: '發現塚陵領主戰裝的每一個部件。' },
-  col_set_wyrmshadow: { name: '夜牙法衣', desc: '發現夜牙法衣的每一個部件。' },
-  col_set_necromancers: { name: '哀織衣裝', desc: '發現哀織衣裝的每一個部件。' },
-  col_set_crownforged: { name: '骨鑄華服', desc: '發現骨鑄華服的每一個部件。' },
-  col_set_nighttalon: { name: '厲牙毛皮', desc: '發現厲牙毛皮的每一個部件。' },
-  col_set_soulflame: { name: '怨焰華服', desc: '發現怨焰華服的每一個部件。' },
-  col_set_stormcallers: { name: '喚風法衣', desc: '發現喚風法衣的每一個部件。' },
+  col_discovery_75: {
+    name: '喜鵲',
+    desc: '發現 75 種不同的物品。',
+  },
+  col_discovery_150: {
+    name: '珍奇櫃',
+    desc: '發現 150 種不同的物品。',
+    title: '館長',
+  },
+  col_discovery_250: {
+    name: '萬物總錄',
+    desc: '發現 250 種不同的物品。',
+  },
+  col_first_rare: {
+    name: '一抹湛藍',
+    desc: '獲得你的第一件稀有品質物品。',
+  },
+  col_first_epic: {
+    name: '紫氣東來',
+    desc: '獲得你的第一件史詩品質物品。',
+  },
+  col_first_legendary: {
+    name: '橙心如意',
+    desc: '獲得你的第一件傳說品質物品。',
+  },
+  col_set_vale_arcanist: {
+    name: '溪谷秘法師華服',
+    desc: '發現溪谷秘法師華服的每一個部件。',
+  },
+  col_set_boundstone_vanguard: {
+    name: '縛石先鋒',
+    desc: '發現縛石先鋒的每一個部件。',
+  },
+  col_set_greyjaw_stalker: {
+    name: '灰顎潛獵者裝束',
+    desc: '發現灰顎潛獵者裝束的每一個部件。',
+  },
+  col_set_deathlord: {
+    name: '塚陵領主戰裝',
+    desc: '發現塚陵領主戰裝的每一個部件。',
+  },
+  col_set_wyrmshadow: {
+    name: '夜牙法衣',
+    desc: '發現夜牙法衣的每一個部件。',
+  },
+  col_set_necromancers: {
+    name: '哀織衣裝',
+    desc: '發現哀織衣裝的每一個部件。',
+  },
+  col_set_crownforged: {
+    name: '骨鑄華服',
+    desc: '發現骨鑄華服的每一個部件。',
+  },
+  col_set_nighttalon: {
+    name: '厲牙毛皮',
+    desc: '發現厲牙毛皮的每一個部件。',
+  },
+  col_set_soulflame: {
+    name: '怨焰華服',
+    desc: '發現怨焰華服的每一個部件。',
+  },
+  col_set_stormcallers: {
+    name: '喚風法衣',
+    desc: '發現喚風法衣的每一個部件。',
+  },
   col_seven_regalia: {
     name: '七重華櫥',
     desc: '發現全部七個史詩護甲系列的每一個部件。',
     title: '絢爛者',
   },
-  col_true_colors: { name: '本色登場', desc: '穿上職業預設以外的任一外觀上場。' },
-  col_all_slots: { name: '十一分體面', desc: '同時在全部十一個裝備欄位裝上物品。' },
-  col_quartermaster_buyout: { name: '老主顧', desc: '發現軍需官維克斯所販售的全部十件貨品。' },
-  col_glimmerfin: { name: '一線微光', desc: '釣起一條微光鰭錦鯉。' },
-  col_full_creel: { name: '滿簍而歸', desc: '發現溪谷、沼澤與高地水域的全部六種常見漁獲。' },
-  col_junk_drawer: { name: '雜物抽屜', desc: '發現 10 種不同的粗糙品質物品。' },
-  pvp_arena_first_match: { name: '靴中之沙', desc: '在灰燼競技場打一場積分賽，任一組別皆可。' },
-  pvp_arena_first_win: { name: '歡聲雷動', desc: '在任一組別贏得一場競技場積分賽。' },
-  pvp_arena_1v1_1600: { name: '競技場挑戰者', desc: '在 1v1 競技場組別達到 1600 積分。' },
-  pvp_arena_1v1_1750: { name: '競技場勁敵', desc: '在 1v1 競技場組別達到 1750 積分。' },
+  col_true_colors: {
+    name: '本色登場',
+    desc: '穿上職業預設以外的任一外觀上場。',
+  },
+  col_all_slots: {
+    name: '十一分體面',
+    desc: '同時在全部十一個裝備欄位裝上物品。',
+  },
+  col_quartermaster_buyout: {
+    name: '老主顧',
+    desc: '發現軍需官維克斯所販售的全部十件貨品。',
+  },
+  col_glimmerfin: {
+    name: '一線微光',
+    desc: '釣起一條微光鰭錦鯉。',
+  },
+  col_full_creel: {
+    name: '滿簍而歸',
+    desc: '發現溪谷、沼澤與高地水域的全部六種常見漁獲。',
+  },
+  col_junk_drawer: {
+    name: '雜物抽屜',
+    desc: '發現 10 種不同的粗糙品質物品。',
+  },
+  pvp_arena_first_match: {
+    name: '靴中之沙',
+    desc: '在灰燼競技場打一場積分賽，任一組別皆可。',
+  },
+  pvp_arena_first_win: {
+    name: '歡聲雷動',
+    desc: '在任一組別贏得一場競技場積分賽。',
+  },
+  pvp_arena_1v1_1600: {
+    name: '競技場挑戰者',
+    desc: '在 1v1 競技場組別達到 1600 積分。',
+  },
+  pvp_arena_1v1_1750: {
+    name: '競技場勁敵',
+    desc: '在 1v1 競技場組別達到 1750 積分。',
+  },
   pvp_arena_1v1_1900: {
     name: '劍鬥士',
     desc: '在 1v1 競技場組別達到 1900 積分。',
     title: '劍鬥士',
   },
-  pvp_arena_2v2_1600: { name: '二人成軍', desc: '在 2v2 競技場組別達到 1600 積分。' },
-  pvp_arena_2v2_1750: { name: '悍勇雙煞', desc: '在 2v2 競技場組別達到 1750 積分。' },
-  pvp_arena_2v2_1900: { name: '天作之合', desc: '在 2v2 競技場組別達到 1900 積分。' },
-  pvp_duel_first_win: { name: '到外頭解決', desc: '贏得一場決鬥。' },
-  pvp_duel_grace: { name: '謙遜的一課', desc: '輸掉一場決鬥，尊嚴大致無損。' },
-  pvp_vcup_first_match: { name: '踏上球場', desc: '在母豬場完整打完一場溪谷盃比賽，無論勝負。' },
-  pvp_vcup_first_win: { name: '首座獎盃', desc: '贏得一場溪谷盃積分賽。' },
-  pvp_vcup_wins_10: { name: '野豬球老手', desc: '贏得 10 場溪谷盃積分賽。' },
-  pvp_vcup_wins_25: { name: '野豬球傳奇', desc: '贏得 25 場溪谷盃積分賽。', title: '野豬球傳奇' },
-  pvp_vcup_first_goal: { name: '首開紀錄', desc: '在溪谷盃積分賽中射進一球。' },
+  pvp_arena_2v2_1600: {
+    name: '二人成軍',
+    desc: '在 2v2 競技場組別達到 1600 積分。',
+  },
+  pvp_arena_2v2_1750: {
+    name: '悍勇雙煞',
+    desc: '在 2v2 競技場組別達到 1750 積分。',
+  },
+  pvp_arena_2v2_1900: {
+    name: '天作之合',
+    desc: '在 2v2 競技場組別達到 1900 積分。',
+  },
+  pvp_duel_first_win: {
+    name: '到外頭解決',
+    desc: '贏得一場決鬥。',
+  },
+  pvp_duel_grace: {
+    name: '謙遜的一課',
+    desc: '輸掉一場決鬥，尊嚴大致無損。',
+  },
+  pvp_vcup_first_match: {
+    name: '踏上球場',
+    desc: '在母豬場完整打完一場溪谷盃比賽，無論勝負。',
+  },
+  pvp_vcup_first_win: {
+    name: '首座獎盃',
+    desc: '贏得一場溪谷盃積分賽。',
+  },
+  pvp_vcup_wins_10: {
+    name: '野豬球老手',
+    desc: '贏得 10 場溪谷盃積分賽。',
+  },
+  pvp_vcup_wins_25: {
+    name: '野豬球傳奇',
+    desc: '贏得 25 場溪谷盃積分賽。',
+    title: '野豬球傳奇',
+  },
+  pvp_vcup_first_goal: {
+    name: '首開紀錄',
+    desc: '在溪谷盃積分賽中射進一球。',
+  },
   pvp_vcup_hat_trick: {
     name: '帽子戲法英雄',
     desc: '在單場溪谷盃積分賽中射進三球（限 3v3 或更大的組別）。',
   },
-  pvp_vcup_golden_goal: { name: '黃金時刻', desc: '射進決定一場溪谷盃積分賽勝負的黃金一球。' },
-  pvp_vcup_first_save: { name: '穩健雙手', desc: '在溪谷盃積分賽中以守門員身分完成一次撲救。' },
+  pvp_vcup_golden_goal: {
+    name: '黃金時刻',
+    desc: '射進決定一場溪谷盃積分賽勝負的黃金一球。',
+  },
+  pvp_vcup_first_save: {
+    name: '穩健雙手',
+    desc: '在溪谷盃積分賽中以守門員身分完成一次撲救。',
+  },
   pvp_vcup_clean_sheet: {
     name: '一夫當關',
     desc: '以守門員身分贏得一場溪谷盃積分賽，且未失一球。',
@@ -294,10 +591,22 @@ export const table: DeedLocaleTable = {
     name: '為了旗幟',
     desc: '以你公會的旗幟名義出賽，並贏得一場溪谷盃積分賽。',
   },
-  pvp_fiesta_first_bout: { name: '不請自來', desc: '完整打完一場 2v2 嘉年華對決，無論勝負。' },
-  pvp_fiesta_first_win: { name: '嘉年華的靈魂人物', desc: '贏得一場 2v2 嘉年華對決。' },
-  pvp_fiesta_double: { name: '雙重打擊', desc: '在四秒內完成兩次嘉年華擊倒。' },
-  pvp_fiesta_shutdown: { name: '掃興鬼', desc: '擊倒一名連續擊倒數達三次或以上的嘉年華對手。' },
+  pvp_fiesta_first_bout: {
+    name: '不請自來',
+    desc: '完整打完一場 2v2 嘉年華對決，無論勝負。',
+  },
+  pvp_fiesta_first_win: {
+    name: '嘉年華的靈魂人物',
+    desc: '贏得一場 2v2 嘉年華對決。',
+  },
+  pvp_fiesta_double: {
+    name: '雙重打擊',
+    desc: '在四秒內完成兩次嘉年華擊倒。',
+  },
+  pvp_fiesta_shutdown: {
+    name: '掃興鬼',
+    desc: '擊倒一名連續擊倒數達三次或以上的嘉年華對手。',
+  },
   pvp_fiesta_full_build: {
     name: '盛裝赴會',
     desc: '在三波強化各鎖定一項的情況下，贏得一場嘉年華對決。',
@@ -306,41 +615,120 @@ export const table: DeedLocaleTable = {
     name: '樣樣來一份',
     desc: '把四種擂台強化道具各拾取至少一次：速度惡魔、巨像、月亮靴與狂戰士。',
   },
-  pvp_fiesta_five_kills: { name: '全場我來扛', desc: '在單場嘉年華對決中完成五次擊倒。' },
-  soc_first_party: { name: '結伴同行', desc: '與另一名玩家組成隊伍。' },
-  soc_full_house: { name: '五人滿座', desc: '以五人滿編隊伍通關一座地城。' },
-  soc_guild_joined: { name: '同旗之下', desc: '成為公會的一員。' },
-  soc_guild_founded: { name: '創會者之筆', desc: '創立一個屬於你自己的公會。' },
-  soc_first_trade: { name: '公平交易', desc: '與另一名玩家完成一筆交易。' },
-  soc_first_sale: { name: '開張大吉', desc: '領取你在世界市場首筆成交的貨款。' },
-  soc_steady_custom: { name: '細水長流', desc: '從你的世界市場銷售累計領取 10 金幣。' },
+  pvp_fiesta_five_kills: {
+    name: '全場我來扛',
+    desc: '在單場嘉年華對決中完成五次擊倒。',
+  },
+  soc_first_party: {
+    name: '結伴同行',
+    desc: '與另一名玩家組成隊伍。',
+  },
+  soc_full_house: {
+    name: '五人滿座',
+    desc: '以五人滿編隊伍通關一座地城。',
+  },
+  soc_guild_joined: {
+    name: '同旗之下',
+    desc: '成為公會的一員。',
+  },
+  soc_guild_founded: {
+    name: '創會者之筆',
+    desc: '創立一個屬於你自己的公會。',
+  },
+  soc_first_trade: {
+    name: '公平交易',
+    desc: '與另一名玩家完成一筆交易。',
+  },
+  soc_first_sale: {
+    name: '開張大吉',
+    desc: '領取你在世界市場首筆成交的貨款。',
+  },
+  soc_steady_custom: {
+    name: '細水長流',
+    desc: '從你的世界市場銷售累計領取 10 金幣。',
+  },
   soc_market_magnate: {
     name: '市場巨賈',
     desc: '從你的世界市場銷售累計領取 100 金幣。',
     title: '巨賈',
   },
-  soc_by_ravens_wing: { name: '鴉翼傳書', desc: '寄出一封附有錢幣或包裹的鴉郵信件。' },
-  soc_room_for_more: { name: '還裝得下', desc: '購買你的第一項銀行擴充。' },
-  soc_gilded_strongbox: { name: '鍍金保險箱', desc: '買下司庫們願意賣給你的每一項銀行擴充。' },
+  soc_by_ravens_wing: {
+    name: '鴉翼傳書',
+    desc: '寄出一封附有錢幣或包裹的鴉郵信件。',
+  },
+  soc_room_for_more: {
+    name: '還裝得下',
+    desc: '購買你的第一項銀行擴充。',
+  },
+  soc_gilded_strongbox: {
+    name: '鍍金保險箱',
+    desc: '買下司庫們願意賣給你的每一項銀行擴充。',
+  },
   soc_meet_bursar: {
     name: '信託費爾南多',
     desc: '向司庫費爾南多致意：他是東溪鍍金保險箱的看守人。',
   },
-  soc_pocket_money: { name: '零用錢', desc: '累計拾取 1 金幣的錢幣。' },
-  soc_heavy_purse: { name: '沉甸甸的錢袋', desc: '累計拾取 10 金幣的錢幣。' },
-  soc_wyrms_hoard: { name: '巨龍的寶藏', desc: '累計拾取 100 金幣的錢幣。' },
-  soc_civic_duty: { name: '公民義務', desc: '分配你的第一點城鎮發展點數。' },
-  exp_long_road_north: { name: '北上長路', desc: '造訪全部三座主城：東溪、芬橋與高望。' },
-  exp_vale_wayfarer: { name: '溪谷遠行者', desc: '造訪東溪谷全部十一處具名地點。' },
-  exp_marsh_wayfarer: { name: '濕地遠行者', desc: '造訪泥沼濕地全部八處具名地點。' },
-  exp_peaks_wayfarer: { name: '高地遠行者', desc: '造訪荊峰高地全部十處具名地點。' },
-  exp_world_traveler: { name: '行遍天下', desc: '贏得全部三個區域的遠行者功績。', title: '遠行者' },
-  exp_something_shiny: { name: '閃亮的小東西', desc: '從地上撿起一件閃閃發亮的物品。' },
-  exp_first_ore: { name: '開鑿大地', desc: '採集你的第一處礦石採集點。' },
-  exp_first_timber: { name: '樹倒啦！', desc: '採集你的第一處木材採集點。' },
-  exp_first_herb: { name: '綠手指', desc: '採集你的第一處草藥採集點。' },
-  feat_era_cap: { name: '第一紀元之子', desc: '於第一紀元尚為當世紀元時達到 20 級。' },
-  feat_book_complete: { name: '全書在握', desc: '贏得功績之書中的每一項功績。' },
+  soc_pocket_money: {
+    name: '零用錢',
+    desc: '累計拾取 1 金幣的錢幣。',
+  },
+  soc_heavy_purse: {
+    name: '沉甸甸的錢袋',
+    desc: '累計拾取 10 金幣的錢幣。',
+  },
+  soc_wyrms_hoard: {
+    name: '巨龍的寶藏',
+    desc: '累計拾取 100 金幣的錢幣。',
+  },
+  soc_civic_duty: {
+    name: '公民義務',
+    desc: '分配你的第一點城鎮發展點數。',
+  },
+  exp_long_road_north: {
+    name: '北上長路',
+    desc: '造訪全部三座主城：東溪、芬橋與高望。',
+  },
+  exp_vale_wayfarer: {
+    name: '溪谷遠行者',
+    desc: '造訪東溪谷全部十一處具名地點。',
+  },
+  exp_marsh_wayfarer: {
+    name: '濕地遠行者',
+    desc: '造訪泥沼濕地全部八處具名地點。',
+  },
+  exp_peaks_wayfarer: {
+    name: '高地遠行者',
+    desc: '造訪荊峰高地全部十處具名地點。',
+  },
+  exp_world_traveler: {
+    name: '行遍天下',
+    desc: '贏得全部三個區域的遠行者功績。',
+    title: '遠行者',
+  },
+  exp_something_shiny: {
+    name: '閃亮的小東西',
+    desc: '從地上撿起一件閃閃發亮的物品。',
+  },
+  exp_first_ore: {
+    name: '開鑿大地',
+    desc: '採集你的第一處礦石採集點。',
+  },
+  exp_first_timber: {
+    name: '樹倒啦！',
+    desc: '採集你的第一處木材採集點。',
+  },
+  exp_first_herb: {
+    name: '綠手指',
+    desc: '採集你的第一處草藥採集點。',
+  },
+  feat_era_cap: {
+    name: '第一紀元之子',
+    desc: '於第一紀元尚為當世紀元時達到 20 級。',
+  },
+  feat_book_complete: {
+    name: '全書在握',
+    desc: '贏得功績之書中的每一項功績。',
+  },
   feat_brightwood_relic: {
     name: '猶記明木',
     desc: '保有一件昔日明木林地的遺物：棘皮皮衣或君主之冠。',
@@ -350,14 +738,38 @@ export const table: DeedLocaleTable = {
     desc: '不停歇地糾纏了編年史者紹爾九次。',
     title: '註腳',
   },
-  hid_gilded_tour: { name: '鍍金巡禮', desc: '與鍍金保險箱的全部三家分號都做過生意。' },
-  hid_fall_death: { name: '重力不敗', desc: '死於與地面的一番長談。' },
-  hid_keepers_toll_twice: { name: '守護者二度收帳', desc: '在「守護者的代價」仍纏身時死去。' },
-  hid_roll_hundred: { name: '天賜滿百', desc: '在一次普通的 /roll 中擲出完美的 100。' },
-  hid_yumi_cheer: { name: '由美的頭號粉絲', desc: '在比賽進行中，於由美聽得見你的地方為她歡呼。' },
-  hid_bountiful_coffer: { name: '紫色寶匣', desc: '在豐饒寶匣卡死之前將它撬開。' },
-  hid_companion_save: { name: '有她看著呢', desc: '你的秘探同伴把一名倒下的隊友重新拉了起來。' },
-  hid_codfather: { name: '入了家族', desc: '把鱈魚教父從深沼淺灘中拖上岸。' },
+  hid_gilded_tour: {
+    name: '鍍金巡禮',
+    desc: '與鍍金保險箱的全部三家分號都做過生意。',
+  },
+  hid_fall_death: {
+    name: '重力不敗',
+    desc: '死於與地面的一番長談。',
+  },
+  hid_keepers_toll_twice: {
+    name: '守護者二度收帳',
+    desc: '在「守護者的代價」仍纏身時死去。',
+  },
+  hid_roll_hundred: {
+    name: '天賜滿百',
+    desc: '在一次普通的 /roll 中擲出完美的 100。',
+  },
+  hid_yumi_cheer: {
+    name: '由美的頭號粉絲',
+    desc: '在比賽進行中，於由美聽得見你的地方為她歡呼。',
+  },
+  hid_bountiful_coffer: {
+    name: '紫色寶匣',
+    desc: '在豐饒寶匣卡死之前將它撬開。',
+  },
+  hid_companion_save: {
+    name: '有她看著呢',
+    desc: '你的秘探同伴把一名倒下的隊友重新拉了起來。',
+  },
+  hid_codfather: {
+    name: '入了家族',
+    desc: '把鱈魚教父從深沼淺灘中拖上岸。',
+  },
   prog_crown_below: {
     name: '地底之冠',
     desc: '追隨王冠的蹤跡，從不寧的骸骨之地直至尼思拉克西斯王的陵墓，將「災禍之終」進行到底。',
@@ -372,10 +784,18 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: '吃飯的傢伙',
+    desc: '[ZH-TW] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: '墓穴深藏之物',
     desc: '勇闖廢棄墓穴，從其守衛手中奪回墓穴鑰石的上下兩半與古老日記。',
   },
-  chr_marsh_first_cast: { name: '蘆葦間有鰻', desc: '在泥沼濕地的水域釣起一條魚。' },
+  chr_marsh_first_cast: {
+    name: '蘆葦間有鰻',
+    desc: '在泥沼濕地的水域釣起一條魚。',
+  },
+  pvp_card_duel_first_win: {
+    name: '我的地盤我的規矩',
+    desc: '在牌局大師處贏得一場紙牌對決。',
+  },
 };

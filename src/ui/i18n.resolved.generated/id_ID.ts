@@ -318,10 +318,10 @@ export const id_ID: EnTranslations = {
       "resurrectAtCorpse": "Bangkit di Jasad",
       "resurrectAtHealer": "Sang Penjaga Pucat (Upeti Sang Penjaga)",
       "spiritHealerAlive": "Sang Penjaga Pucat mengawasi para mati. Kamu masih termasuk yang hidup.",
-      "healerConfirmTitle": "Accept the Keeper's Toll?",
-      "healerConfirmBody": "The Pale Keeper will revive you here, but the Keeper's Toll reduces all of your attributes by 75%, for up to 10 minutes at higher levels. Walking your spirit back to your corpse revives you with no penalty.",
-      "healerConfirmAccept": "Revive Me",
-      "healerConfirmCancel": "Cancel"
+      "healerConfirmTitle": "[ID] Accept the Keeper's Toll?",
+      "healerConfirmBody": "[ID] The Pale Keeper will revive you here, but the Keeper's Toll reduces all of your attributes by 75%, for up to 10 minutes at higher levels. Walking your spirit back to your corpse revives you with no penalty.",
+      "healerConfirmAccept": "[ID] Revive Me",
+      "healerConfirmCancel": "[ID] Cancel"
     },
     "fct": {
       "absorbed": "{amount} diserap",
@@ -754,7 +754,7 @@ export const id_ID: EnTranslations = {
       "leaderboard": "Peringkat",
       "dailyRewards": "Toko",
       "deeds": "Jasa",
-      "professions": "Professions",
+      "professions": "[ID] Professions",
       "nameplates": "Nama",
       "haptics": "Haptik",
       "hapticsOff": "Haptik Nonaktif",
@@ -1044,7 +1044,7 @@ export const id_ID: EnTranslations = {
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
       "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
-      "showThirdActionBar": "Show Third Action Bar",
+      "showThirdActionBar": "[ID] Show Third Action Bar",
       "showTargetOfTarget": "Tampilkan Sasaran dari Sasaran",
       "showAttackButton": "Tampilkan Tombol Serang",
       "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
@@ -1475,7 +1475,7 @@ export const id_ID: EnTranslations = {
       "watchX": "Lihat di X",
       "watchKick": "Tonton di Kick",
       "watchYouTube": "Tonton di YouTube",
-      "streamerBadgeTitle": "Verified streamer"
+      "streamerBadgeTitle": "[ID] Verified streamer"
     },
     "lootSettings": {
       "title": "Pengaturan Jarahan",
@@ -2090,8 +2090,8 @@ export const id_ID: EnTranslations = {
       "logging": "Penebangan",
       "herbalism": "Herbalisme",
       "notReady": "Simpul sumber daya ini belum muncul kembali untukmu.",
-      "gatherLine": "You gather: {name}.",
-      "gatherLineQty": "You gather: {name} x{qty}."
+      "gatherLine": "[ID] You gather: {name}.",
+      "gatherLineQty": "[ID] You gather: {name} x{qty}."
     },
     "archetypeTitle": {
       "label": "Gelar",
@@ -2123,40 +2123,40 @@ export const id_ID: EnTranslations = {
       "leatherworking": "Pengolahan Kulit"
     },
     "professions": {
-      "title": "Professions",
-      "close": "Close professions",
-      "ringAria": "Craft wheel",
-      "skillsHeader": "Craft skills",
-      "gatheringHeader": "Gathering",
-      "perksHeader": "Perks",
-      "identityHeader": "Identity",
-      "roleMajor": "Major",
-      "roleHobby": "Hobby",
-      "roleDormant": "Dormant",
-      "roleUnattuned": "Unattuned",
-      "ceilingUnlimited": "No empowerment cap",
-      "ceilingRare": "Rare cap",
-      "ceilingCommon": "Common cap",
-      "skillValue": "{skill} / {max}",
-      "tierPipAria": "Tier {tier}",
-      "nextUnlockTier": "{points} points to the next tier: masterwork odds improve",
-      "nextUnlockSpecialized": "{points} points to Specialized: material costs drop",
-      "nextUnlockMax": "At maximum skill",
-      "perkSpecializedLine": "{craft}: Specialized, material costs -{pct}%",
-      "perkSpecializedAt": "Specializes at {threshold} skill",
-      "switchCost": "Next archetype switch costs {cost} amends",
-      "syncing": "Waiting for your profession data from the realm.",
-      "tutorialLine": "Reach {target} skill in any craft to unlock your first tier.",
-      "ctaHeader": "Next step",
-      "ctaRaise": "Keep raising {craft}: {points} more points to the next tier.",
-      "ctaStart": "Craft or gather with any profession to begin.",
-      "unattunedIdentity": "You are not yet attuned to an archetype. Raise your crafts and complete an attunement to choose your pair.",
-      "nudgeNearTier": "{craft}: {points} points from the next tier",
-      "nudgeDormant": "Your {craft} knowledge lies dormant",
-      "hobbyLabel": "Hobby: {craft}",
-      "majorsLabel": "Majors: {a} and {b}",
-      "pairsHeld": "Pairs held: {count}",
-      "returnsLabel": "Returns: {count}"
+      "title": "[ID] Professions",
+      "close": "[ID] Close professions",
+      "ringAria": "[ID] Craft wheel",
+      "skillsHeader": "[ID] Craft skills",
+      "gatheringHeader": "[ID] Gathering",
+      "perksHeader": "[ID] Perks",
+      "identityHeader": "[ID] Identity",
+      "roleMajor": "[ID] Major",
+      "roleHobby": "[ID] Hobby",
+      "roleDormant": "[ID] Dormant",
+      "roleUnattuned": "[ID] Unattuned",
+      "ceilingUnlimited": "[ID] No empowerment cap",
+      "ceilingRare": "[ID] Rare cap",
+      "ceilingCommon": "[ID] Common cap",
+      "skillValue": "[ID] {skill} / {max}",
+      "tierPipAria": "[ID] Tier {tier}",
+      "nextUnlockTier": "[ID] {points} points to the next tier: masterwork odds improve",
+      "nextUnlockSpecialized": "[ID] {points} points to Specialized: material costs drop",
+      "nextUnlockMax": "[ID] At maximum skill",
+      "perkSpecializedLine": "[ID] {craft}: Specialized, material costs -{pct}%",
+      "perkSpecializedAt": "[ID] Specializes at {threshold} skill",
+      "switchCost": "[ID] Next archetype switch costs {cost} amends",
+      "syncing": "[ID] Waiting for your profession data from the realm.",
+      "tutorialLine": "[ID] Reach {target} skill in any craft to unlock your first tier.",
+      "ctaHeader": "[ID] Next step",
+      "ctaRaise": "[ID] Keep raising {craft}: {points} more points to the next tier.",
+      "ctaStart": "[ID] Craft or gather with any profession to begin.",
+      "unattunedIdentity": "[ID] You are not yet attuned to an archetype. Raise your crafts and complete an attunement to choose your pair.",
+      "nudgeNearTier": "[ID] {craft}: {points} points from the next tier",
+      "nudgeDormant": "[ID] Your {craft} knowledge lies dormant",
+      "hobbyLabel": "[ID] Hobby: {craft}",
+      "majorsLabel": "[ID] Majors: {a} and {b}",
+      "pairsHeld": "[ID] Pairs held: {count}",
+      "returnsLabel": "[ID] Returns: {count}"
     },
     "crafting": {
       "title": "kerajinan",
@@ -2176,7 +2176,7 @@ export const id_ID: EnTranslations = {
       "comboNotAttuned": "Pilih pasangan arketipe terlebih dahulu.",
       "comboWrongPair": "Aktifkan pasangan yang tepat ini untuk membuatnya.",
       "comboTierUnmet": "Naikkan kedua kerajinan utama ke tingkat yang disyaratkan.",
-      "comboTierUnmetNamed": "Raise {crafts} to tier {tier}.",
+      "comboTierUnmetNamed": "[ID] Raise {crafts} to tier {tier}.",
       "professionChoice": "Pilihan profesi",
       "noProfessionChoice": "Tidak ada pilihan profesi yang tersedia saat ini.",
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
@@ -2207,48 +2207,48 @@ export const id_ID: EnTranslations = {
         "nearTier": "{craft} berjarak {points} keahlian dari tingkat berikutnya.",
         "dormantKnowledge": "Pengetahuan {craft} tersimpan namun tidak aktif hingga pasangan atau hobinya aktif."
       },
-      "stationRequired": "You must be at the {station} to craft that.",
+      "stationRequired": "[ID] You must be at the {station} to craft that.",
       "stationName": {
-        "forge": "Forge",
-        "kitchens": "Kitchens",
-        "apothecary": "Apothecary",
-        "tannery": "Tannery",
-        "loom": "Loom",
-        "toolworks": "Toolworks"
+        "forge": "[ID] Forge",
+        "kitchens": "[ID] Kitchens",
+        "apothecary": "[ID] Apothecary",
+        "tannery": "[ID] Tannery",
+        "loom": "[ID] Loom",
+        "toolworks": "[ID] Toolworks"
       },
       "throttled": "Kamu membuat terlalu cepat. Tunggu sejenak dan coba lagi.",
       "recipeNotLearned": "Kamu belum mempelajari resep itu.",
-      "skillReqLine": "Requires {craft} {skill}",
-      "difficultyFull": "Full skill gain",
-      "difficultyReduced": "Reduced skill gain",
-      "difficultyNone": "No skill gain",
-      "stationBadge": "Station",
-      "stationOutOfRangeNamed": "Move to the {station} to craft this.",
-      "masterworkToast": "Masterwork! {name}",
-      "masterworkZoneLine": "{crafter} crafted a masterwork {name}!",
-      "tierUpToast": "{craft} advanced to tier {tier}!",
-      "makersMark": "Crafted by {name}",
-      "masterworkSeal": "Masterwork",
-      "enchantedLine": "Enchanted"
+      "skillReqLine": "[ID] Requires {craft} {skill}",
+      "difficultyFull": "[ID] Full skill gain",
+      "difficultyReduced": "[ID] Reduced skill gain",
+      "difficultyNone": "[ID] No skill gain",
+      "stationBadge": "[ID] Station",
+      "stationOutOfRangeNamed": "[ID] Move to the {station} to craft this.",
+      "masterworkToast": "[ID] Masterwork! {name}",
+      "masterworkZoneLine": "[ID] {crafter} crafted a masterwork {name}!",
+      "tierUpToast": "[ID] {craft} advanced to tier {tier}!",
+      "makersMark": "[ID] Crafted by {name}",
+      "masterworkSeal": "[ID] Masterwork",
+      "enchantedLine": "[ID] Enchanted"
     },
     "training": {
-      "title": "Training: {name}",
-      "close": "Close training",
-      "empty": "This master has nothing to teach.",
-      "free": "Free",
-      "stateKnown": "Known",
-      "stateTeachable": "Available",
-      "stateLocked": "Locked",
-      "requirement": "Taught at {craft} {skill}",
-      "trainAria": "Learn {name} for {fee}",
-      "dialogOption": "Training",
-      "dialogOptionAria": "Browse training from {name}",
-      "learned": "Recipe learned: {recipe}",
-      "tierUnmet": "You need {craft} {skill} to learn that recipe.",
-      "cannotAfford": "You cannot afford that training.",
-      "notTaughtHere": "That recipe is not taught here.",
-      "alreadyKnown": "You already know that recipe.",
-      "outOfRange": "You must be at the station to train."
+      "title": "[ID] Training: {name}",
+      "close": "[ID] Close training",
+      "empty": "[ID] This master has nothing to teach.",
+      "free": "[ID] Free",
+      "stateKnown": "[ID] Known",
+      "stateTeachable": "[ID] Available",
+      "stateLocked": "[ID] Locked",
+      "requirement": "[ID] Taught at {craft} {skill}",
+      "trainAria": "[ID] Learn {name} for {fee}",
+      "dialogOption": "[ID] Training",
+      "dialogOptionAria": "[ID] Browse training from {name}",
+      "learned": "[ID] Recipe learned: {recipe}",
+      "tierUnmet": "[ID] You need {craft} {skill} to learn that recipe.",
+      "cannotAfford": "[ID] You cannot afford that training.",
+      "notTaughtHere": "[ID] That recipe is not taught here.",
+      "alreadyKnown": "[ID] You already know that recipe.",
+      "outOfRange": "[ID] You must be at the station to train."
     },
     "finder": {
       "title": "Pencari Dungeon",
@@ -2418,9 +2418,9 @@ export const id_ID: EnTranslations = {
     }
   },
   "gatherEvent": {
-    "pristineVein": "{finder} struck a pristine vein!",
-    "ancientHeartwood": "{finder} felled an ancient heartwood!",
-    "moonlitBloom": "{finder} discovered a moonlit bloom!"
+    "pristineVein": "[ID] {finder} struck a pristine vein!",
+    "ancientHeartwood": "[ID] {finder} felled an ancient heartwood!",
+    "moonlitBloom": "[ID] {finder} discovered a moonlit bloom!"
   },
   "apiError": {
     "validation": {
@@ -4620,10 +4620,10 @@ export const id_ID: EnTranslations = {
   "heroicShop": {
     "balance": "Tanda Heroik: {count}",
     "buyAria": "Beli {item} seharga {marks} Tanda Heroik",
-    "buyConfirmTitle": "Confirm Purchase",
-    "buyConfirmBody": "Buy {item} for {marks} Heroic Marks? Marks purchases cannot be refunded.",
-    "buyConfirmAccept": "Buy",
-    "buyConfirmCancel": "Cancel"
+    "buyConfirmTitle": "[ID] Confirm Purchase",
+    "buyConfirmBody": "[ID] Buy {item} for {marks} Heroic Marks? Marks purchases cannot be refunded.",
+    "buyConfirmAccept": "[ID] Buy",
+    "buyConfirmCancel": "[ID] Cancel"
   },
   "cardDuel": {
     "title": "Duel Kartu",
@@ -4677,10 +4677,10 @@ export const id_ID: EnTranslations = {
       "reqHeroic": "Membutuhkan penyelesaian Heroik",
       "reqClears": "Membutuhkan {count} kali penyelesaian",
       "empty": "Tidak ada stok.",
-      "buyConfirmTitle": "Confirm Purchase",
-      "buyConfirmBody": "Buy {item} for {marks} Delve Marks? Marks purchases cannot be refunded.",
-      "buyConfirmAccept": "Buy",
-      "buyConfirmCancel": "Cancel"
+      "buyConfirmTitle": "[ID] Confirm Purchase",
+      "buyConfirmBody": "[ID] Buy {item} for {marks} Delve Marks? Marks purchases cannot be refunded.",
+      "buyConfirmAccept": "[ID] Buy",
+      "buyConfirmCancel": "[ID] Cancel"
     },
     "tracker": {
       "title": "Delve",
@@ -5083,9 +5083,9 @@ export const id_ID: EnTranslations = {
     "rendererFailed": "Tidak bisa memulai perender: coba muat ulang. {error}",
     "enterTimeout": "Tidak bisa masuk dunia. Koneksi kehabisan waktu. Apakah server gim berjalan?",
     "connectionLost": "Koneksi ke server terputus.",
-    "reconnectingAttempt": "Connection lost. Reconnecting... (attempt {attempt}/{maxAttempts}, retrying in {seconds}s)",
-    "reconnectingNow": "Connection lost. Reconnecting now... (attempt {attempt}/{maxAttempts})",
-    "slowConnection": "This is taking longer than usual. Check your internet connection.",
+    "reconnectingAttempt": "[ID] Connection lost. Reconnecting... (attempt {attempt}/{maxAttempts}, retrying in {seconds}s)",
+    "reconnectingNow": "[ID] Connection lost. Reconnecting now... (attempt {attempt}/{maxAttempts})",
+    "slowConnection": "[ID] This is taking longer than usual. Check your internet connection.",
     "connectionRejected": "Server menutup koneksi.",
     "realmFull": "Dunia ini sedang penuh. Coba lagi dalam beberapa menit.",
     "tooManyConnections": "Terlalu banyak koneksi ke dunia ini dari jaringanmu. Tutup jendela permainan ekstra atau coba lagi dalam beberapa menit.",
@@ -6188,7 +6188,7 @@ export const id_ID: EnTranslations = {
       "rarityUncommon": "Tak Biasa",
       "rarityRare": "Langka",
       "rarityEpic": "Epik",
-      "rarityLegendary": "Legendary",
+      "rarityLegendary": "[ID] Legendary",
       "merchantStock": "Stok pedagang",
       "stackCount": "x{count}",
       "each": "{money} per buah",
@@ -8245,220 +8245,220 @@ export const id_ID: EnTranslations = {
         "name": "Tongkat Perang Emberglass"
       },
       "copper_ore": {
-        "name": "Copper Ore"
+        "name": "[ID] Copper Ore"
       },
       "iron_ore": {
-        "name": "Iron Ore"
+        "name": "[ID] Iron Ore"
       },
       "ironbark_log": {
-        "name": "Ironbark Log"
+        "name": "[ID] Ironbark Log"
       },
       "silverleaf_herb": {
-        "name": "Silverleaf Herb"
+        "name": "[ID] Silverleaf Herb"
       },
       "rough_hide": {
-        "name": "Rough Hide"
+        "name": "[ID] Rough Hide"
       },
       "spider_silk": {
-        "name": "Spider Silk"
+        "name": "[ID] Spider Silk"
       },
       "venom_gland": {
-        "name": "Venom Gland"
+        "name": "[ID] Venom Gland"
       },
       "game_meat": {
-        "name": "Game Meat"
+        "name": "[ID] Game Meat"
       },
       "homespun_cloth": {
-        "name": "Homespun Cloth"
+        "name": "[ID] Homespun Cloth"
       },
       "pristine_hide": {
-        "name": "Pristine Hide"
+        "name": "[ID] Pristine Hide"
       },
       "pristine_silk": {
-        "name": "Pristine Silk"
+        "name": "[ID] Pristine Silk"
       },
       "pristine_venom_gland": {
-        "name": "Pristine Venom Gland"
+        "name": "[ID] Pristine Venom Gland"
       },
       "prime_cut": {
-        "name": "Prime Cut"
+        "name": "[ID] Prime Cut"
       },
       "smithing_flux": {
-        "name": "Smithing Flux"
+        "name": "[ID] Smithing Flux"
       },
       "spool_of_thread": {
-        "name": "Spool of Thread"
+        "name": "[ID] Spool of Thread"
       },
       "tanning_agent": {
-        "name": "Tanning Agent"
+        "name": "[ID] Tanning Agent"
       },
       "cooking_salt": {
-        "name": "Cooking Salt"
+        "name": "[ID] Cooking Salt"
       },
       "glass_vial": {
-        "name": "Glass Vial"
+        "name": "[ID] Glass Vial"
       },
       "copper_bearded_axe": {
-        "name": "Copper Bearded Axe"
+        "name": "[ID] Copper Bearded Axe"
       },
       "copper_flanged_mace": {
-        "name": "Copper Flanged Mace"
+        "name": "[ID] Copper Flanged Mace"
       },
       "ironbark_boar_spear": {
-        "name": "Ironbark Boar Spear"
+        "name": "[ID] Ironbark Boar Spear"
       },
       "ironedge_longsword": {
-        "name": "Ironedge Longsword"
+        "name": "[ID] Ironedge Longsword"
       },
       "ironshod_maul": {
-        "name": "Ironshod Maul"
+        "name": "[ID] Ironshod Maul"
       },
       "whetted_iron_dirk": {
-        "name": "Whetted Iron Dirk"
+        "name": "[ID] Whetted Iron Dirk"
       },
       "thorium_warblade": {
-        "name": "Thorium Warblade"
+        "name": "[ID] Thorium Warblade"
       },
       "arcanite_war_axe": {
-        "name": "Arcanite War Axe"
+        "name": "[ID] Arcanite War Axe"
       },
       "elderwood_battle_staff": {
-        "name": "Elderwood Battle Staff"
+        "name": "[ID] Elderwood Battle Staff"
       },
       "riveted_copper_girdle": {
-        "name": "Riveted Copper Girdle"
+        "name": "[ID] Riveted Copper Girdle"
       },
       "coppermail_sabatons": {
-        "name": "Coppermail Sabatons"
+        "name": "[ID] Coppermail Sabatons"
       },
       "coppermail_gauntlets": {
-        "name": "Coppermail Gauntlets"
+        "name": "[ID] Coppermail Gauntlets"
       },
       "ironlink_hauberk": {
-        "name": "Ironlink Hauberk"
+        "name": "[ID] Ironlink Hauberk"
       },
       "ironlink_legguards": {
-        "name": "Ironlink Legguards"
+        "name": "[ID] Ironlink Legguards"
       },
       "ironlink_spaulders": {
-        "name": "Ironlink Spaulders"
+        "name": "[ID] Ironlink Spaulders"
       },
       "thoriumscale_greathelm": {
-        "name": "Thoriumscale Greathelm"
+        "name": "[ID] Thoriumscale Greathelm"
       },
       "thoriumscale_cuirass": {
-        "name": "Thoriumscale Cuirass"
+        "name": "[ID] Thoriumscale Cuirass"
       },
       "thoriumscale_leggings": {
-        "name": "Thoriumscale Leggings"
+        "name": "[ID] Thoriumscale Leggings"
       },
       "homespun_hood": {
-        "name": "Homespun Hood"
+        "name": "[ID] Homespun Hood"
       },
       "homespun_mitts": {
-        "name": "Homespun Mitts"
+        "name": "[ID] Homespun Mitts"
       },
       "silverthread_slippers": {
-        "name": "Silverthread Slippers"
+        "name": "[ID] Silverthread Slippers"
       },
       "goldweave_robe": {
-        "name": "Goldweave Robe"
+        "name": "[ID] Goldweave Robe"
       },
       "goldweave_leggings": {
-        "name": "Goldweave Leggings"
+        "name": "[ID] Goldweave Leggings"
       },
       "silkspun_satchel": {
-        "name": "Silkspun Satchel"
+        "name": "[ID] Silkspun Satchel"
       },
       "silkbinders_raiment": {
-        "name": "Silkbinder's Raiment"
+        "name": "[ID] Silkbinder's Raiment"
       },
       "sunweave_mantle": {
-        "name": "Sunweave Mantle"
+        "name": "[ID] Sunweave Mantle"
       },
       "sunweave_treads": {
-        "name": "Sunweave Treads"
+        "name": "[ID] Sunweave Treads"
       },
       "fenbridge_hide_leggings": {
-        "name": "Fenbridge Hide Leggings"
+        "name": "[ID] Fenbridge Hide Leggings"
       },
       "fenbridge_hide_boots": {
-        "name": "Fenbridge Hide Boots"
+        "name": "[ID] Fenbridge Hide Boots"
       },
       "fenbridge_hide_belt": {
-        "name": "Fenbridge Hide Belt"
+        "name": "[ID] Fenbridge Hide Belt"
       },
       "marshstalker_jerkin": {
-        "name": "Marshstalker Jerkin"
+        "name": "[ID] Marshstalker Jerkin"
       },
       "marshstalker_hood": {
-        "name": "Marshstalker Hood"
+        "name": "[ID] Marshstalker Hood"
       },
       "marshstalker_spaulders": {
-        "name": "Marshstalker Spaulders"
+        "name": "[ID] Marshstalker Spaulders"
       },
       "mirewarden_jerkin": {
-        "name": "Mirewarden Jerkin"
+        "name": "[ID] Mirewarden Jerkin"
       },
       "mirewarden_leggings": {
-        "name": "Mirewarden Leggings"
+        "name": "[ID] Mirewarden Leggings"
       },
       "mirewarden_treads": {
-        "name": "Mirewarden Treads"
+        "name": "[ID] Mirewarden Treads"
       },
       "pan_seared_perch": {
-        "name": "Pan-Seared River Perch"
+        "name": "[ID] Pan-Seared River Perch"
       },
       "hunters_game_skewer": {
-        "name": "Hunter's Game Skewer"
+        "name": "[ID] Hunter's Game Skewer"
       },
       "herbed_marsh_pike": {
-        "name": "Herbed Marsh Pike"
+        "name": "[ID] Herbed Marsh Pike"
       },
       "ashwood_smoked_eel": {
-        "name": "Ashwood Smoked Eel"
+        "name": "[ID] Ashwood Smoked Eel"
       },
       "goldleaf_game_stew": {
-        "name": "Goldleaf Game Stew"
+        "name": "[ID] Goldleaf Game Stew"
       },
       "frostgill_chowder": {
-        "name": "Frostgill Chowder"
+        "name": "[ID] Frostgill Chowder"
       },
       "silvered_carp_supper": {
-        "name": "Silvered Carp Supper"
+        "name": "[ID] Silvered Carp Supper"
       },
       "anglers_feast_platter": {
-        "name": "Angler's Feast Platter"
+        "name": "[ID] Angler's Feast Platter"
       },
       "marlows_grand_roast": {
-        "name": "Marlow's Grand Roast"
+        "name": "[ID] Marlow's Grand Roast"
       },
       "silverleaf_healing_draught": {
-        "name": "Silverleaf Healing Draught"
+        "name": "[ID] Silverleaf Healing Draught"
       },
       "silverleaf_mana_draught": {
-        "name": "Silverleaf Mana Draught"
+        "name": "[ID] Silverleaf Mana Draught"
       },
       "elixir_of_the_boar": {
-        "name": "Elixir of the Boar"
+        "name": "[ID] Elixir of the Boar"
       },
       "goldleaf_healing_draught": {
-        "name": "Goldleaf Healing Draught"
+        "name": "[ID] Goldleaf Healing Draught"
       },
       "goldleaf_mana_draught": {
-        "name": "Goldleaf Mana Draught"
+        "name": "[ID] Goldleaf Mana Draught"
       },
       "venomfire_elixir": {
-        "name": "Venomfire Elixir"
+        "name": "[ID] Venomfire Elixir"
       },
       "sunpetal_healing_draught": {
-        "name": "Sunpetal Healing Draught"
+        "name": "[ID] Sunpetal Healing Draught"
       },
       "sunpetal_mana_draught": {
-        "name": "Sunpetal Mana Draught"
+        "name": "[ID] Sunpetal Mana Draught"
       },
       "elixir_of_the_serpent": {
-        "name": "Elixir of the Serpent"
+        "name": "[ID] Elixir of the Serpent"
       },
       "conjured_water4": {
         "name": "Air Mata Air Sihir"
@@ -9718,34 +9718,34 @@ export const id_ID: EnTranslations = {
         "greeting": "Gunung tidak melupakan apa pun, {playerName}, dan aku pun tidak. Mari kita lihat apa saja yang telah kau lakukan."
       },
       "forgemistress_darva": {
-        "name": "Forgemistress Darva",
-        "title": "Master of the Forge",
-        "greeting": "The forge answers to me, {className}. Bring good ore and it will answer to you too."
+        "name": "[ID] Forgemistress Darva",
+        "title": "[ID] Master of the Forge",
+        "greeting": "[ID] The forge answers to me, {className}. Bring good ore and it will answer to you too."
       },
       "cook_marlow": {
-        "name": "Cook Marlow",
-        "title": "Master of the Kitchens",
-        "greeting": "Nothing leaves my kitchens half-cooked, {className}. Sit, eat, then get back out there."
+        "name": "[ID] Cook Marlow",
+        "title": "[ID] Master of the Kitchens",
+        "greeting": "[ID] Nothing leaves my kitchens half-cooked, {className}. Sit, eat, then get back out there."
       },
       "weaver_ottilie": {
-        "name": "Weaver Ottilie",
-        "title": "Master of the Loom",
-        "greeting": "Mind the threads, {className}. A steady hand at the loom beats a strong one."
+        "name": "[ID] Weaver Ottilie",
+        "title": "[ID] Master of the Loom",
+        "greeting": "[ID] Mind the threads, {className}. A steady hand at the loom beats a strong one."
       },
       "tinker_gizzel": {
-        "name": "Tinker Gizzel",
-        "title": "Master of the Toolworks",
-        "greeting": "Springs, sprockets, and sharp edges, {className}: the toolworks has whatever your hands lack."
+        "name": "[ID] Tinker Gizzel",
+        "title": "[ID] Master of the Toolworks",
+        "greeting": "[ID] Springs, sprockets, and sharp edges, {className}: the toolworks has whatever your hands lack."
       },
       "tanner_hesk": {
-        "name": "Tanner Hesk",
-        "title": "Master of the Tannery",
-        "greeting": "A hide is only as good as its tanning, {className}. The vats are ready when you are."
+        "name": "[ID] Tanner Hesk",
+        "title": "[ID] Master of the Tannery",
+        "greeting": "[ID] A hide is only as good as its tanning, {className}. The vats are ready when you are."
       },
       "alchemist_verane": {
-        "name": "Alchemist Verane",
-        "title": "Master of the Apothecary",
-        "greeting": "Measure twice and pour once, {className}. The apothecary has no patience for spilled reagents."
+        "name": "[ID] Alchemist Verane",
+        "title": "[ID] Master of the Apothecary",
+        "greeting": "[ID] Measure twice and pour once, {className}. The apothecary has no patience for spilled reagents."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -10818,54 +10818,54 @@ export const id_ID: EnTranslations = {
         "body": "Kelompokmu menuntaskan ujian heroik saat kamu bertempur di barisan belakang atau telah tumbang. Penguncianmu juga tercatat, jadi bagian Tanda Heroik milikmu dikirim ke sini alih-alih hilang. Gunakan dengan baik.\n\n- Perbekal heroik"
       },
       "guild_trend_engineering_alchemy": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Engineering and Alchemy",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Engineering and Alchemy: charges measured and reagents weighed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Bombardier in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Engineering and Alchemy",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Engineering and Alchemy: charges measured and reagents weighed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Bombardier in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_alchemy_cooking": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Alchemy and Cooking",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Alchemy and Cooking: draughts simmered and dishes seasoned, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Apothecary in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Alchemy and Cooking",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Alchemy and Cooking: draughts simmered and dishes seasoned, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Apothecary in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_cooking_leatherworking": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Cooking and Leatherworking",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Cooking and Leatherworking: meals plated and hides cured, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Cooking and Leatherworking",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Cooking and Leatherworking: meals plated and hides cured, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_leatherworking_tailoring": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Leatherworking and Tailoring",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Leatherworking and Tailoring: leather cut and cloth hemmed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Outfitter in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Leatherworking and Tailoring",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Leatherworking and Tailoring: leather cut and cloth hemmed, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Outfitter in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_tailoring_inscription": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Tailoring and Inscription",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Tailoring and Inscription: seams stitched and glyphs inked, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Tailoring and Inscription",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Tailoring and Inscription: seams stitched and glyphs inked, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_inscription_enchanting": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Inscription and Enchanting",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Inscription and Enchanting: scrolls lettered and charms woven, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Inscription and Enchanting",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Inscription and Enchanting: scrolls lettered and charms woven, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_enchanting_jewelcrafting": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Enchanting and Jewelcrafting",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Enchanting and Jewelcrafting: charms bound and stones polished, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Enchanting and Jewelcrafting",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Enchanting and Jewelcrafting: charms bound and stones polished, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_jewelcrafting_weaponcrafting": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Jewelcrafting and Weaponcrafting",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Jewelcrafting and Weaponcrafting: gems seated and edges ground, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Jewelcrafting and Weaponcrafting",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Jewelcrafting and Weaponcrafting: gems seated and edges ground, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_weaponcrafting_armorcrafting": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Weaponcrafting and Armorcrafting",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Weaponcrafting and Armorcrafting: blades tempered and plates fitted, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Smith in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Weaponcrafting and Armorcrafting",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Weaponcrafting and Armorcrafting: blades tempered and plates fitted, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Those who bind this pair earn the name of Smith in time. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       },
       "guild_trend_armorcrafting_engineering": {
-        "sender": "The Crafting Guild",
-        "subject": "Your work in Armorcrafting and Engineering",
-        "body": "Artisan,\n\nWord reaches the Guild of your work in Armorcrafting and Engineering: plates riveted and gears trued, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+        "sender": "[ID] The Crafting Guild",
+        "subject": "[ID] Your work in Armorcrafting and Engineering",
+        "body": "[ID] Artisan,\n\nWord reaches the Guild of your work in Armorcrafting and Engineering: plates riveted and gears trued, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
       }
     },
     "itemSets": {

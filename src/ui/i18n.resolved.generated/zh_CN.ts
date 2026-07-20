@@ -2137,7 +2137,7 @@ export const zh_CN: EnTranslations = {
       "ceilingUnlimited": "无强化上限",
       "ceilingRare": "稀有品质上限",
       "ceilingCommon": "普通品质上限",
-      "skillValue": "{skill} / {max}",
+      "skillValue": "[ZH-CN] {skill} / {max}",
       "tierPipAria": "阶级 {tier}",
       "nextUnlockTier": "距离下一阶级还差 {points} 点：打造大师之作的几率将提升",
       "nextUnlockSpecialized": "距离专精还差 {points} 点：材料消耗将降低",

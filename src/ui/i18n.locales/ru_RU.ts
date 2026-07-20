@@ -8499,4 +8499,5 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.sunpetal_healing_draught.name': 'Целебный настой солнцелепеста',
   'entities.items.sunpetal_mana_draught.name': 'Настой маны солнцелепеста',
   'entities.items.elixir_of_the_serpent.name': 'Эликсир змея',
+  'hudChrome.professions.skillValue': '[RU] {skill} / {max}',
 };

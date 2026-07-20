@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Husets Regler',
-    desc: 'Vind en Kortduel hos Kortmesteren.',
-  },
   prog_first_steps: {
     name: 'De Første Skridt',
     desc: 'Nå niveau 2, og tag dit første skridt på en lang vej.',
@@ -19,14 +15,26 @@ export const table: DeedLocaleTable = {
     name: 'Fast Grund under Fødderne',
     desc: 'Nå niveau 5; vildmarken ser allerede en smule mindre ud.',
   },
-  prog_double_digits: { name: 'Tocifret', desc: 'Nå niveau 10, og lås dine talenter op.' },
-  prog_the_long_middle: { name: 'Den Lange Midte', desc: 'Nå niveau 15.' },
-  prog_level_cap: { name: 'Udsigten fra Toppen', desc: 'Nå niveau 20, det højeste niveau.' },
+  prog_double_digits: {
+    name: 'Tocifret',
+    desc: 'Nå niveau 10, og lås dine talenter op.',
+  },
+  prog_the_long_middle: {
+    name: 'Den Lange Midte',
+    desc: 'Nå niveau 15.',
+  },
+  prog_level_cap: {
+    name: 'Udsigten fra Toppen',
+    desc: 'Nå niveau 20, det højeste niveau.',
+  },
   prog_well_rested: {
     name: 'Veludhvilet',
     desc: 'Slå dig til ro på en kro, indtil du har optjent udhvilet erfaring.',
   },
-  prog_talented: { name: 'Godt Givet Ud', desc: 'Brug dit første talentpoint.' },
+  prog_talented: {
+    name: 'Godt Givet Ud',
+    desc: 'Brug dit første talentpoint.',
+  },
   prog_specialized: {
     name: 'En Klar Hensigt',
     desc: 'Vælg en specialisering, og lær dens signaturevne.',
@@ -39,30 +47,67 @@ export const table: DeedLocaleTable = {
     name: 'Alle Seks',
     desc: 'Vælg én mulighed i alle seks talentrækker i ét build.',
   },
-  prog_veteran: { name: 'Veteran', desc: 'Optjen sammenlagt 250.000 erfaring.', title: 'Veteran' },
-  prog_champion: { name: 'Mester', desc: 'Optjen sammenlagt 500.000 erfaring.', title: 'Mester' },
+  prog_veteran: {
+    name: '[DA] Veteran',
+    desc: 'Optjen sammenlagt 250.000 erfaring.',
+    title: 'Veteran',
+  },
+  prog_champion: {
+    name: 'Mester',
+    desc: 'Optjen sammenlagt 500.000 erfaring.',
+    title: 'Mester',
+  },
   prog_paragon: {
     name: 'Forbillede',
     desc: 'Optjen sammenlagt 1.000.000 erfaring.',
     title: 'Forbillede',
   },
-  prog_mythic: { name: 'Mytisk', desc: 'Optjen sammenlagt 2.500.000 erfaring.', title: 'Mytisk' },
-  prog_eternal: { name: 'Evig', desc: 'Optjen sammenlagt 5.000.000 erfaring.', title: 'Evig' },
+  prog_mythic: {
+    name: 'Mytisk',
+    desc: 'Optjen sammenlagt 2.500.000 erfaring.',
+    title: 'Mytisk',
+  },
+  prog_eternal: {
+    name: 'Evig',
+    desc: 'Optjen sammenlagt 5.000.000 erfaring.',
+    title: 'Evig',
+  },
   prog_prestige: {
     name: 'Begynd Forfra',
     desc: 'Nå det højeste niveau, fyld bjælken endnu en gang, og gør krav på prestigerang 1.',
   },
-  prog_prestige_5: { name: 'Gamle Vaner', desc: 'Nå prestigerang 5.' },
-  prog_prestige_10: { name: 'Evighedsmaskinen', desc: 'Nå prestigerang 10.' },
-  prog_first_harvest: { name: 'Markens Frugter', desc: 'Høst din første indsamlingsforekomst.' },
-  prog_mining_100: { name: 'Malm i Blodet', desc: 'Nå 100 i færdigheden Minedrift.' },
-  prog_logging_100: { name: 'Kernevedshugger', desc: 'Nå 100 i færdigheden Skovhugst.' },
-  prog_herbalism_100: { name: 'Engens Mester', desc: 'Nå 100 i færdigheden Urtekundskab.' },
+  prog_prestige_5: {
+    name: 'Gamle Vaner',
+    desc: 'Nå prestigerang 5.',
+  },
+  prog_prestige_10: {
+    name: 'Evighedsmaskinen',
+    desc: 'Nå prestigerang 10.',
+  },
+  prog_first_harvest: {
+    name: 'Markens Frugter',
+    desc: 'Høst din første indsamlingsforekomst.',
+  },
+  prog_mining_100: {
+    name: 'Malm i Blodet',
+    desc: 'Nå 100 i færdigheden Minedrift.',
+  },
+  prog_logging_100: {
+    name: 'Kernevedshugger',
+    desc: 'Nå 100 i færdigheden Skovhugst.',
+  },
+  prog_herbalism_100: {
+    name: 'Engens Mester',
+    desc: 'Nå 100 i færdigheden Urtekundskab.',
+  },
   prog_master_gatherer: {
     name: 'Mestersamler',
     desc: 'Nå 100 i færdighed i Minedrift, Skovhugst og Urtekundskab.',
   },
-  prog_first_craft: { name: 'Håndlavet', desc: 'Fuldfør din første vellykkede fremstilling.' },
+  prog_first_craft: {
+    name: 'Håndlavet',
+    desc: 'Fuldfør din første vellykkede fremstilling.',
+  },
   prog_craft_specialist: {
     name: 'Fagets Hemmeligheder',
     desc: 'Nå 75 i færdighed i ét enkelt håndværk, og lås dets specialiseringsfordele op.',
@@ -71,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'Ringen Rundt',
     desc: 'Nå 25 i færdighed i fem forskellige håndværk.',
   },
-  cmb_first_blood: { name: 'Første Blod', desc: 'Besejr din første fjende.' },
-  cmb_slayer: { name: 'Dræber', desc: 'Besejr 1.000 fjender.' },
-  cmb_legion_of_one: { name: 'Én Mands Legion', desc: 'Besejr 10.000 fjender.' },
-  cmb_heavy_hitter: { name: 'Hårdtslående', desc: 'Uddel 500.000 skade i alt.' },
-  cmb_critical_eye: { name: 'Kritisk Blik', desc: 'Uddel 500 kritiske træf.' },
+  cmb_first_blood: {
+    name: 'Første Blod',
+    desc: 'Besejr din første fjende.',
+  },
+  cmb_slayer: {
+    name: 'Dræber',
+    desc: 'Besejr 1.000 fjender.',
+  },
+  cmb_legion_of_one: {
+    name: 'Én Mands Legion',
+    desc: 'Besejr 10.000 fjender.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Hårdtslående',
+    desc: 'Uddel 500.000 skade i alt.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritisk Blik',
+    desc: 'Uddel 500 kritiske træf.',
+  },
   cmb_giantslayer: {
     name: 'Kæmpedræber',
     desc: 'Giv dødsstødet til en fjende mindst fem niveauer over dig.',
@@ -84,7 +144,10 @@ export const table: DeedLocaleTable = {
     name: 'Børst Støvet Af',
     desc: 'Dø for første gang; det sker for de bedste af os.',
   },
-  dgn_hollow_crypt: { name: 'Kryptbryder', desc: 'Besejr Morthen Gravkalderen i Den Hule Krypt.' },
+  dgn_hollow_crypt: {
+    name: 'Kryptbryder',
+    desc: 'Besejr Morthen Gravkalderen i Den Hule Krypt.',
+  },
   dgn_sunken_bastion: {
     name: 'Fogbinderen Ubundet',
     desc: 'Besejr Vael Fogbinderen i Den Sunkne Bastion.',
@@ -200,17 +263,26 @@ export const table: DeedLocaleTable = {
     name: 'Bjerge som Vane',
     desc: 'Fæld Thunzharr, den Vågnende Tinde, ti gange.',
   },
-  dlv_reliquary: { name: 'Relikvarieløber', desc: 'Ryd Det Sammenstyrtede Relikvarium.' },
+  dlv_reliquary: {
+    name: 'Relikvarieløber',
+    desc: 'Ryd Det Sammenstyrtede Relikvarium.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroisk: Det Sammenstyrtede Relikvarium',
     desc: 'Ryd Det Sammenstyrtede Relikvarium på heroisk niveau.',
   },
-  dlv_litany: { name: 'Tys på Litaniet', desc: 'Ryd Det Druknede Litani.' },
+  dlv_litany: {
+    name: 'Tys på Litaniet',
+    desc: 'Ryd Det Druknede Litani.',
+  },
   dlv_litany_heroic: {
     name: 'Heroisk: Det Druknede Litani',
     desc: 'Ryd Det Druknede Litani på heroisk niveau.',
   },
-  dlv_lore_journal: { name: 'Randnoter', desc: 'Lås alle fem optegnelser i delve-dagbogen op.' },
+  dlv_lore_journal: {
+    name: 'Randnoter',
+    desc: 'Lås alle fem optegnelser i delve-dagbogen op.',
+  },
   dlv_companion_max: {
     name: 'En Ven i Dybet',
     desc: 'Optræn en delve-følgesvend til hendes højeste rang.',
@@ -219,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Begge Lygter Tændt',
     desc: 'Optræn begge delve-følgesvende, Akolyt Tessa og Edda Sivhånd, til deres højeste rang.',
   },
-  dlv_clears_50: { name: 'Halvtreds Favne', desc: 'Gennemfør 50 delve-ture.' },
+  dlv_clears_50: {
+    name: 'Halvtreds Favne',
+    desc: 'Gennemfør 50 delve-ture.',
+  },
   dlv_solo_heroic: {
     name: 'To er en Hel Flok',
     desc: 'Ryd en delve på heroisk niveau uden nogen anden spiller, kun dig og din følgesvend.',
@@ -258,8 +333,14 @@ export const table: DeedLocaleTable = {
     name: 'Leve af Landet',
     desc: 'Høst en malmåre, en skovbevoksning og et urtebed i Østbæk Dal.',
   },
-  chr_vale_first_cast: { name: 'Noget i Spejlsøen', desc: 'Fang en fisk i Østbæk Dals vande.' },
-  chr_vale_packbreaker: { name: 'Flokbryder', desc: 'Dræb 3 Skovulve inden for 10 sekunder.' },
+  chr_vale_first_cast: {
+    name: 'Noget i Spejlsøen',
+    desc: 'Fang en fisk i Østbæk Dals vande.',
+  },
+  chr_vale_packbreaker: {
+    name: 'Flokbryder',
+    desc: 'Dræb 3 Skovulve inden for 10 sekunder.',
+  },
   chr_vale_cup_debut: {
     name: 'Kobberspandens Kandidat',
     desc: 'Gå på banen og rør bolden i en Dalpokal-kamp på Somarken.',
@@ -314,7 +395,10 @@ export const table: DeedLocaleTable = {
     name: 'Øvelser på Muren',
     desc: 'Tilføj træningsdukken over Højvagten 1.000 skade i alt.',
   },
-  chr_peaks_glimmer_cast: { name: 'Koldt Vand, Koldere Lys', desc: 'Fang en fisk i Glimmersøen.' },
+  chr_peaks_glimmer_cast: {
+    name: 'Koldt Vand, Koldere Lys',
+    desc: 'Fang en fisk i Glimmersøen.',
+  },
   chr_peaks_moongate: {
     name: 'Gennem den Kolde Port',
     desc: 'Træd gennem måneporten ved Glimmersøens bred.',
@@ -331,15 +415,27 @@ export const table: DeedLocaleTable = {
     name: 'Hamstrer',
     desc: 'Opdag 25 forskellige genstande (en genstand tæller første gang, den nogensinde kommer i din besiddelse).',
   },
-  col_discovery_75: { name: 'Husskade', desc: 'Opdag 75 forskellige genstande.' },
+  col_discovery_75: {
+    name: 'Husskade',
+    desc: 'Opdag 75 forskellige genstande.',
+  },
   col_discovery_150: {
     name: 'Raritetskabinet',
     desc: 'Opdag 150 forskellige genstande.',
     title: 'Kuratoren',
   },
-  col_discovery_250: { name: 'Det Store Katalog', desc: 'Opdag 250 forskellige genstande.' },
-  col_first_rare: { name: 'Noget Blåt', desc: 'Skaf din første genstand af sjælden kvalitet.' },
-  col_first_epic: { name: 'Født i Purpur', desc: 'Skaf din første genstand af episk kvalitet.' },
+  col_discovery_250: {
+    name: 'Det Store Katalog',
+    desc: 'Opdag 250 forskellige genstande.',
+  },
+  col_first_rare: {
+    name: 'Noget Blåt',
+    desc: 'Skaf din første genstand af sjælden kvalitet.',
+  },
+  col_first_epic: {
+    name: 'Født i Purpur',
+    desc: 'Skaf din første genstand af episk kvalitet.',
+  },
   col_first_legendary: {
     name: 'Appelsinen i Turbanen',
     desc: 'Skaf din første genstand af legendarisk kvalitet.',
@@ -360,15 +456,30 @@ export const table: DeedLocaleTable = {
     name: 'Barrowlord-Krigsudstyr',
     desc: 'Opdag hver del af Barrowlord-Krigsudstyret.',
   },
-  col_set_wyrmshadow: { name: 'Nightfang-Ornat', desc: 'Opdag hver del af Nightfang-Ornatet.' },
-  col_set_necromancers: { name: 'Mournweave-Dragt', desc: 'Opdag hver del af Mournweave-Dragten.' },
+  col_set_wyrmshadow: {
+    name: 'Nightfang-Ornat',
+    desc: 'Opdag hver del af Nightfang-Ornatet.',
+  },
+  col_set_necromancers: {
+    name: 'Mournweave-Dragt',
+    desc: 'Opdag hver del af Mournweave-Dragten.',
+  },
   col_set_crownforged: {
     name: 'Bonewrought-Skrud',
     desc: 'Opdag hver del af Bonewrought-Skruddet.',
   },
-  col_set_nighttalon: { name: 'Direfang-Pels', desc: 'Opdag hver del af Direfang-Pelsen.' },
-  col_set_soulflame: { name: 'Wraithfire-Skrud', desc: 'Opdag hver del af Wraithfire-Skruddet.' },
-  col_set_stormcallers: { name: 'Galecall-Ornat', desc: 'Opdag hver del af Galecall-Ornatet.' },
+  col_set_nighttalon: {
+    name: 'Direfang-Pels',
+    desc: 'Opdag hver del af Direfang-Pelsen.',
+  },
+  col_set_soulflame: {
+    name: 'Wraithfire-Skrud',
+    desc: 'Opdag hver del af Wraithfire-Skruddet.',
+  },
+  col_set_stormcallers: {
+    name: 'Galecall-Ornat',
+    desc: 'Opdag hver del af Galecall-Ornatet.',
+  },
   col_seven_regalia: {
     name: 'Den Syvfoldige Garderobe',
     desc: 'Opdag hver del af alle syv episke rustningsfamilier.',
@@ -386,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Stamkunde',
     desc: 'Opdag alle ti dele af den Heroiske Kvartermesters lager.',
   },
-  col_glimmerfin: { name: 'Et Glimt af Håb', desc: 'Fang en Glimtfinne-Koi.' },
+  col_glimmerfin: {
+    name: 'Et Glimt af Håb',
+    desc: 'Fang en Glimtfinne-Koi.',
+  },
   col_full_creel: {
     name: 'Fyldt Fiskekurv',
     desc: 'Opdag alle seks almindelige fangster fra Dalens, Sumpens og Højdernes vande.',
@@ -403,17 +517,35 @@ export const table: DeedLocaleTable = {
     name: 'Publikum Brøler',
     desc: 'Vind en ranglistekamp i arenaen, i en af rækkerne.',
   },
-  pvp_arena_1v1_1600: { name: 'Kolosseets Udfordrer', desc: 'Nå 1600 i rating i 1v1-arenarækken.' },
-  pvp_arena_1v1_1750: { name: 'Kolosseets Rival', desc: 'Nå 1750 i rating i 1v1-arenarækken.' },
-  pvp_arena_1v1_1900: {
-    name: 'Gladiator',
-    desc: 'Nå 1900 i rating i 1v1-arenarækken.',
-    title: 'Gladiator',
+  pvp_arena_1v1_1600: {
+    name: 'Kolosseets Udfordrer',
+    desc: 'Nå 1600 i rating i 1v1-arenarækken.',
   },
-  pvp_arena_2v2_1600: { name: 'To Mand Høj', desc: 'Nå 1600 i rating i 2v2-arenarækken.' },
-  pvp_arena_2v2_1750: { name: 'Frygtet Makkerpar', desc: 'Nå 1750 i rating i 2v2-arenarækken.' },
-  pvp_arena_2v2_1900: { name: 'Perfekt Parløb', desc: 'Nå 1900 i rating i 2v2-arenarækken.' },
-  pvp_duel_first_win: { name: 'Vi Tager Den Udenfor', desc: 'Vind en duel.' },
+  pvp_arena_1v1_1750: {
+    name: 'Kolosseets Rival',
+    desc: 'Nå 1750 i rating i 1v1-arenarækken.',
+  },
+  pvp_arena_1v1_1900: {
+    name: '[DA] Gladiator',
+    desc: 'Nå 1900 i rating i 1v1-arenarækken.',
+    title: '[DA] Gladiator',
+  },
+  pvp_arena_2v2_1600: {
+    name: 'To Mand Høj',
+    desc: 'Nå 1600 i rating i 2v2-arenarækken.',
+  },
+  pvp_arena_2v2_1750: {
+    name: 'Frygtet Makkerpar',
+    desc: 'Nå 1750 i rating i 2v2-arenarækken.',
+  },
+  pvp_arena_2v2_1900: {
+    name: 'Perfekt Parløb',
+    desc: 'Nå 1900 i rating i 2v2-arenarækken.',
+  },
+  pvp_duel_first_win: {
+    name: 'Vi Tager Den Udenfor',
+    desc: 'Vind en duel.',
+  },
   pvp_duel_grace: {
     name: 'En Lektion i Ydmyghed',
     desc: 'Tab en duel med værdigheden nogenlunde i behold.',
@@ -422,7 +554,10 @@ export const table: DeedLocaleTable = {
     name: 'Støvler på Banen',
     desc: 'Spil en hel Dalpokal-kamp til ende på Somarken, uanset sejr eller nederlag.',
   },
-  pvp_vcup_first_win: { name: 'Det Første Sølvtøj', desc: 'Vind en ranglistekamp i Dalpokalen.' },
+  pvp_vcup_first_win: {
+    name: 'Det Første Sølvtøj',
+    desc: 'Vind en ranglistekamp i Dalpokalen.',
+  },
   pvp_vcup_wins_10: {
     name: 'Garvet Vildsvineboldspiller',
     desc: 'Vind 10 ranglistekampe i Dalpokalen.',
@@ -432,7 +567,10 @@ export const table: DeedLocaleTable = {
     desc: 'Vind 25 ranglistekampe i Dalpokalen.',
     title: 'Vildsvinebold-Legende',
   },
-  pvp_vcup_first_goal: { name: 'På Måltavlen', desc: 'Scor et mål i en Dalpokal-ranglistekamp.' },
+  pvp_vcup_first_goal: {
+    name: 'På Måltavlen',
+    desc: 'Scor et mål i en Dalpokal-ranglistekamp.',
+  },
   pvp_vcup_hat_trick: {
     name: 'Hattrick-Helt',
     desc: 'Scor tre mål i en enkelt Dalpokal-ranglistekamp, i 3v3-rækken eller større.',
@@ -457,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Ubuden Gæst',
     desc: 'Kæmp en fuld 2v2 Fiesta-dyst, uanset sejr eller nederlag.',
   },
-  pvp_fiesta_first_win: { name: 'Festens Midtpunkt', desc: 'Vind en 2v2 Fiesta-dyst.' },
+  pvp_fiesta_first_win: {
+    name: 'Festens Midtpunkt',
+    desc: 'Vind en 2v2 Fiesta-dyst.',
+  },
   pvp_fiesta_double: {
     name: 'Dobbelt Ballade',
     desc: 'Lav to Fiesta-nedlæggelser inden for fire sekunder.',
@@ -478,13 +619,22 @@ export const table: DeedLocaleTable = {
     name: 'Bærer Hele Festen',
     desc: 'Lav fem nedlæggelser i en enkelt Fiesta-dyst.',
   },
-  soc_first_party: { name: 'Bedre Sammen', desc: 'Slut dig til en gruppe med en anden spiller.' },
+  soc_first_party: {
+    name: 'Bedre Sammen',
+    desc: 'Slut dig til en gruppe med en anden spiller.',
+  },
   soc_full_house: {
     name: 'Fuldt Hus',
     desc: 'Gennemfør en fangekælder med en fuld gruppe på fem.',
   },
-  soc_guild_joined: { name: 'Under Samme Banner', desc: 'Bliv medlem af et gilde.' },
-  soc_guild_founded: { name: 'Stifterens Fjerpen', desc: 'Stift dit eget gilde.' },
+  soc_guild_joined: {
+    name: 'Under Samme Banner',
+    desc: 'Bliv medlem af et gilde.',
+  },
+  soc_guild_founded: {
+    name: 'Stifterens Fjerpen',
+    desc: 'Stift dit eget gilde.',
+  },
   soc_first_trade: {
     name: 'En Ærlig Handel',
     desc: 'Gennemfør en byttehandel med en anden spiller.',
@@ -506,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'På Ravnevinger',
     desc: 'Send et Ravnepost-brev med mønter eller en pakke.',
   },
-  soc_room_for_more: { name: 'Plads til Mere', desc: 'Køb din første bankudvidelse.' },
+  soc_room_for_more: {
+    name: 'Plads til Mere',
+    desc: 'Køb din første bankudvidelse.',
+  },
   soc_gilded_strongbox: {
     name: 'Det Forgyldte Pengeskrin',
     desc: 'Køb hver eneste bankudvidelse, som skatmestrene vil sælge dig.',
@@ -527,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'En Orms Skat',
     desc: 'Saml en samlet livstidssum på 100 guld i mønt som bytte.',
   },
-  soc_civic_duty: { name: 'Borgerpligt', desc: 'Tildel dit første byfokus-point.' },
+  soc_civic_duty: {
+    name: 'Borgerpligt',
+    desc: 'Tildel dit første byfokus-point.',
+  },
   exp_long_road_north: {
     name: 'Den Lange Vej mod Nord',
     desc: 'Besøg alle tre hovedbyer: Østbæk, Sumpbroen og Højvagten.',
@@ -553,14 +709,26 @@ export const table: DeedLocaleTable = {
     name: 'Noget, der Glimter',
     desc: 'Saml en funklende genstand op fra jorden.',
   },
-  exp_first_ore: { name: 'Hak i Klippen', desc: 'Høst din første malmforekomst.' },
-  exp_first_timber: { name: 'Træet Falder!', desc: 'Høst din første træforekomst.' },
-  exp_first_herb: { name: 'Grønne Fingre', desc: 'Høst din første urteforekomst.' },
+  exp_first_ore: {
+    name: 'Hak i Klippen',
+    desc: 'Høst din første malmforekomst.',
+  },
+  exp_first_timber: {
+    name: 'Træet Falder!',
+    desc: 'Høst din første træforekomst.',
+  },
+  exp_first_herb: {
+    name: 'Grønne Fingre',
+    desc: 'Høst din første urteforekomst.',
+  },
   feat_era_cap: {
     name: 'Barn af Den Første Æra',
     desc: 'Nåede niveau 20, mens Den Første Æra stod på.',
   },
-  feat_book_complete: { name: 'Hele Bogen', desc: 'Opnå hver eneste bedrift i Bedrifternes Bog.' },
+  feat_book_complete: {
+    name: 'Hele Bogen',
+    desc: 'Opnå hver eneste bedrift i Bedrifternes Bog.',
+  },
   feat_brightwood_relic: {
     name: 'Til Minde om Lysskoven',
     desc: 'Gem et relikvie fra den gamle Lysskov: Tornehude-Vams eller Monarkens Krone.',
@@ -616,10 +784,18 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Fagets Redskaber',
+    desc: '[DA] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Hvad Krypten Gemte',
     desc: 'Vov dig ind i Den Forladte Krypt, og hent begge halvdele af nøglestenen og den ældgamle dagbog fra dens vogtere.',
   },
-  chr_marsh_first_cast: { name: 'Ål i Sivene', desc: 'Fang en fisk i Mosekær Sumps vande.' },
+  chr_marsh_first_cast: {
+    name: 'Ål i Sivene',
+    desc: 'Fang en fisk i Mosekær Sumps vande.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Husets Regler',
+    desc: 'Vind en Kortduel hos Kortmesteren.',
+  },
 };

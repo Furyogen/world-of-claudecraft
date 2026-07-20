@@ -979,6 +979,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': 'Astilla de Hueso',
     'aura.raggedGash': 'Tajo Desgarrado',
     'aura.soulblaze': 'Fulgor del Alma',
+
+    'log.readyCheckNotReady': '[ES] {name} is not ready.',
+    'log.readyCheckNoResponse': '[ES] {name} did not respond to the ready check.',
   },
   es_ES: {
     'error.notInGroup': 'Ese aliado no está en tu grupo.',
@@ -1298,6 +1301,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': 'Astilla de Hueso',
     'aura.raggedGash': 'Tajo Desgarrado',
     'aura.soulblaze': 'Fulgor del Alma',
+
+    'log.readyCheckNotReady': '[ES-ES] {name} is not ready.',
+    'log.readyCheckNoResponse': '[ES-ES] {name} did not respond to the ready check.',
   },
   fr_FR: {
     'error.notInGroup': "Cet allié n'est pas dans votre groupe.",
@@ -1622,6 +1628,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': "Éclat d'os",
     'aura.raggedGash': 'Entaille déchiquetée',
     'aura.soulblaze': "Embrasement d'âme",
+
+    'log.readyCheckNotReady': '[FR] {name} is not ready.',
+    'log.readyCheckNoResponse': '[FR] {name} did not respond to the ready check.',
   },
   fr_CA: {
     'error.notInGroup': "Cet allié n'est pas dans votre groupe.",
@@ -1946,6 +1955,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': "Éclat d'os",
     'aura.raggedGash': 'Entaille déchiquetée',
     'aura.soulblaze': "Embrasement d'âme",
+
+    'log.readyCheckNotReady': '[FR-CA] {name} is not ready.',
+    'log.readyCheckNoResponse': '[FR-CA] {name} did not respond to the ready check.',
   },
   en_CA: {
     'log.deathwardSaves': 'A deathward saves you!',
@@ -2438,6 +2450,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': 'Scheggiaossa',
     'aura.raggedGash': 'Squarcio Frastagliato',
     'aura.soulblaze': 'Vampanima',
+
+    'log.readyCheckNotReady': '[IT] {name} is not ready.',
+    'log.readyCheckNoResponse': '[IT] {name} did not respond to the ready check.',
   },
   de_DE: {
     'error.notInGroup': 'Dieser Verbündete ist nicht in deiner Gruppe.',
@@ -2761,6 +2776,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': 'Knochensplitter',
     'aura.raggedGash': 'Zerfetzte Wunde',
     'aura.soulblaze': 'Seelenbrand',
+
+    'log.readyCheckNotReady': '[DE] {name} is not ready.',
+    'log.readyCheckNoResponse': '[DE] {name} did not respond to the ready check.',
   },
   zh_CN: {
     'error.notInGroup': '该盟友不在你的队伍中。',
@@ -3122,6 +3140,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dungeonDifficultyIsHeroic': '地下城难度：英雄。使用 /dungeon normal 可以更改。',
     'log.dungeonDifficultyIsNormal': '地下城难度：普通。使用 /dungeon heroic 可以更改。',
     'mechanic.siltWard': '淤泥护罩',
+
+    'log.readyCheckNotReady': '[ZH-CN] {name} is not ready.',
+    'log.readyCheckNoResponse': '[ZH-CN] {name} did not respond to the ready check.',
   },
   zh_TW: {
     'error.notInGroup': '該盟友不在你的隊伍中。',
@@ -3483,6 +3504,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dungeonDifficultyIsHeroic': '地城難度：英雄。使用 /dungeon normal 來變更。',
     'log.dungeonDifficultyIsNormal': '地城難度：普通。使用 /dungeon heroic 來變更。',
     'mechanic.siltWard': '淤泥守護',
+
+    'log.readyCheckNotReady': '[ZH-TW] {name} is not ready.',
+    'log.readyCheckNoResponse': '[ZH-TW] {name} did not respond to the ready check.',
   },
   ko_KR: {
     'error.notInGroup': '그 아군은 당신의 그룹에 속해 있지 않습니다.',
@@ -3853,6 +3877,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dungeonDifficultyIsNormal':
       '던전 난이도: 일반. 변경하려면 /dungeon heroic 명령을 사용하세요.',
     'mechanic.siltWard': '진흙 결계',
+
+    'log.readyCheckNotReady': '[KO] {name} is not ready.',
+    'log.readyCheckNoResponse': '[KO] {name} did not respond to the ready check.',
   },
   ja_JP: {
     'error.notInGroup': 'その仲間はあなたのグループに入っていません。',
@@ -4232,6 +4259,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dungeonDifficultyIsNormal':
       'ダンジョン難易度：ノーマル。変更するには/dungeon heroicを使用してください。',
     'mechanic.siltWard': '沈泥の守り',
+
+    'log.readyCheckNotReady': '[JA] {name} is not ready.',
+    'log.readyCheckNoResponse': '[JA] {name} did not respond to the ready check.',
   },
   pt_BR: {
     'error.notInGroup': 'Esse aliado não está no seu grupo.',
@@ -4550,6 +4580,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.bonesplinter': 'Estilhaço Ósseo',
     'aura.raggedGash': 'Corte Dilacerado',
     'aura.soulblaze': 'Chama da Alma',
+
+    'log.readyCheckNotReady': '[PT-BR] {name} is not ready.',
+    'log.readyCheckNoResponse': '[PT-BR] {name} did not respond to the ready check.',
   },
   ru_RU: {
     'error.notInGroup': 'Этот союзник не состоит в вашей группе.',
@@ -4927,6 +4960,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dungeonDifficultyIsNormal':
       'Сложность подземелий: обычная. Чтобы изменить её, введите /dungeon heroic.',
     'mechanic.siltWard': 'Иловый оберег',
+
+    'log.readyCheckNotReady': '[RU] {name} is not ready.',
+    'log.readyCheckNoResponse': '[RU] {name} did not respond to the ready check.',
   },
   ...BASE_NEW,
   cs_CZ: {
@@ -4960,6 +4996,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Není co spotřebovat.',
     'error.nothingToDevour': 'Není co pohltit.',
     'log.cheatDeathSave': 'Oklamání smrti tě zachránilo!',
+
+    'log.readyCheckNotReady': '[CS] {name} is not ready.',
+    'log.readyCheckNoResponse': '[CS] {name} did not respond to the ready check.',
   },
   nl_NL: {
     ...BASE_NEW.nl_NL,
@@ -4991,6 +5030,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Niets om te gebruiken.',
     'error.nothingToDevour': 'Niets om te verslinden.',
     'log.cheatDeathSave': 'De dood bedriegen redt je!',
+
+    'log.readyCheckNotReady': '[NL] {name} is not ready.',
+    'log.readyCheckNoResponse': '[NL] {name} did not respond to the ready check.',
   },
   pl_PL: {
     ...BASE_NEW.pl_PL,
@@ -5024,6 +5066,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Nie ma czego użyć.',
     'error.nothingToDevour': 'Nie ma czego pochłonąć.',
     'log.cheatDeathSave': 'Oszukanie śmierci cię ratuje!',
+
+    'log.readyCheckNotReady': '[PL] {name} is not ready.',
+    'log.readyCheckNoResponse': '[PL] {name} did not respond to the ready check.',
   },
   id_ID: {
     ...BASE_NEW.id_ID,
@@ -5055,6 +5100,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Tidak ada yang bisa dikonsumsi.',
     'error.nothingToDevour': 'Tidak ada yang bisa dilahap.',
     'log.cheatDeathSave': 'Tipu Maut menyelamatkanmu!',
+
+    'log.readyCheckNotReady': '[ID] {name} is not ready.',
+    'log.readyCheckNoResponse': '[ID] {name} did not respond to the ready check.',
   },
   tr_TR: {
     ...BASE_NEW.tr_TR,
@@ -5087,6 +5135,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Tüketecek bir şey yok.',
     'error.nothingToDevour': 'Yutulacak bir şey yok.',
     'log.cheatDeathSave': 'Ölümü Aldatmak seni kurtardı!',
+
+    'log.readyCheckNotReady': '[TR] {name} is not ready.',
+    'log.readyCheckNoResponse': '[TR] {name} did not respond to the ready check.',
   },
   sv_SE: {
     ...BASE_NEW.sv_SE,
@@ -5118,6 +5169,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Inget att förbruka.',
     'error.nothingToDevour': 'Inget att sluka.',
     'log.cheatDeathSave': 'Lura döden räddar dig!',
+
+    'log.readyCheckNotReady': '[SV] {name} is not ready.',
+    'log.readyCheckNoResponse': '[SV] {name} did not respond to the ready check.',
   },
   vi_VN: {
     ...BASE_NEW.vi_VN,
@@ -5148,6 +5202,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Không có gì để tiêu thụ.',
     'error.nothingToDevour': 'Không có gì để nuốt chửng.',
     'log.cheatDeathSave': 'Lừa Tử thần cứu bạn!',
+
+    'log.readyCheckNotReady': '[VI] {name} is not ready.',
+    'log.readyCheckNoResponse': '[VI] {name} did not respond to the ready check.',
   },
   da_DK: {
     ...BASE_NEW.da_DK,
@@ -5179,6 +5236,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.nothingToConsume': 'Intet at indtage.',
     'error.nothingToDevour': 'Intet at fortære.',
     'log.cheatDeathSave': 'Snyd døden redder dig!',
+
+    'log.readyCheckNotReady': '[DA] {name} is not ready.',
+    'log.readyCheckNoResponse': '[DA] {name} did not respond to the ready check.',
   },
 };
 

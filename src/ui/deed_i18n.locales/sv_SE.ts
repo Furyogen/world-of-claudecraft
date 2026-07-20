@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Husregler',
-    desc: 'Vinn en kortduell hos Kortmästaren.',
-  },
   prog_first_steps: {
     name: 'Första stegen',
     desc: 'Nå nivå 2 och ta ditt första steg på en lång väg.',
@@ -19,14 +15,26 @@ export const table: DeedLocaleTable = {
     name: 'Varm i kläderna',
     desc: 'Nå nivå 5; vildmarken ser redan lite mindre ut.',
   },
-  prog_double_digits: { name: 'Tvåsiffrigt', desc: 'Nå nivå 10 och lås upp dina talanger.' },
-  prog_the_long_middle: { name: 'Den långa mitten', desc: 'Nå nivå 15.' },
-  prog_level_cap: { name: 'Utsikten från toppen', desc: 'Nå nivå 20, den högsta nivån.' },
+  prog_double_digits: {
+    name: 'Tvåsiffrigt',
+    desc: 'Nå nivå 10 och lås upp dina talanger.',
+  },
+  prog_the_long_middle: {
+    name: 'Den långa mitten',
+    desc: 'Nå nivå 15.',
+  },
+  prog_level_cap: {
+    name: 'Utsikten från toppen',
+    desc: 'Nå nivå 20, den högsta nivån.',
+  },
   prog_well_rested: {
     name: 'Utvilad',
     desc: 'Slå dig till ro på ett värdshus tills du har tjänat in utvilad erfarenhet.',
   },
-  prog_talented: { name: 'En väl spenderad poäng', desc: 'Spendera din första talangpoäng.' },
+  prog_talented: {
+    name: 'En väl spenderad poäng',
+    desc: 'Spendera din första talangpoäng.',
+  },
   prog_specialized: {
     name: 'Avsiktsförklaring',
     desc: 'Välj en specialisering och lär dig dess signaturförmåga.',
@@ -39,7 +47,11 @@ export const table: DeedLocaleTable = {
     name: 'Hela sexan',
     desc: 'Välj ett alternativ i alla sex talangrader i ett och samma bygge.',
   },
-  prog_veteran: { name: 'Veteran', desc: 'Tjäna sammanlagt 250 000 erfarenhet.', title: 'Veteran' },
+  prog_veteran: {
+    name: '[SV] Veteran',
+    desc: 'Tjäna sammanlagt 250 000 erfarenhet.',
+    title: 'Veteran',
+  },
   prog_champion: {
     name: 'Mästare',
     desc: 'Tjäna sammanlagt 500 000 erfarenhet.',
@@ -50,33 +62,80 @@ export const table: DeedLocaleTable = {
     desc: 'Tjäna sammanlagt 1 000 000 erfarenhet.',
     title: 'Förebild',
   },
-  prog_mythic: { name: 'Mytisk', desc: 'Tjäna sammanlagt 2 500 000 erfarenhet.', title: 'Mytisk' },
-  prog_eternal: { name: 'Evig', desc: 'Tjäna sammanlagt 5 000 000 erfarenhet.', title: 'Evig' },
+  prog_mythic: {
+    name: 'Mytisk',
+    desc: 'Tjäna sammanlagt 2 500 000 erfarenhet.',
+    title: 'Mytisk',
+  },
+  prog_eternal: {
+    name: 'Evig',
+    desc: 'Tjäna sammanlagt 5 000 000 erfarenhet.',
+    title: 'Evig',
+  },
   prog_prestige: {
     name: 'Börja om',
     desc: 'Nå den högsta nivån, fyll mätaren en gång till och gör anspråk på prestigerang 1.',
   },
-  prog_prestige_5: { name: 'Gamla vanor', desc: 'Nå prestigerang 5.' },
-  prog_prestige_10: { name: 'Evighetsmaskinen', desc: 'Nå prestigerang 10.' },
-  prog_first_harvest: { name: 'Markens frukter', desc: 'Skörda din första fyndighet.' },
-  prog_mining_100: { name: 'Malm i blodet', desc: 'Nå 100 i färdigheten Gruvdrift.' },
-  prog_logging_100: { name: 'Kärnvedshuggare', desc: 'Nå 100 i färdigheten Timmerhuggning.' },
-  prog_herbalism_100: { name: 'Ängens mästare', desc: 'Nå 100 i färdigheten Örtkunskap.' },
+  prog_prestige_5: {
+    name: 'Gamla vanor',
+    desc: 'Nå prestigerang 5.',
+  },
+  prog_prestige_10: {
+    name: 'Evighetsmaskinen',
+    desc: 'Nå prestigerang 10.',
+  },
+  prog_first_harvest: {
+    name: 'Markens frukter',
+    desc: 'Skörda din första fyndighet.',
+  },
+  prog_mining_100: {
+    name: 'Malm i blodet',
+    desc: 'Nå 100 i färdigheten Gruvdrift.',
+  },
+  prog_logging_100: {
+    name: 'Kärnvedshuggare',
+    desc: 'Nå 100 i färdigheten Timmerhuggning.',
+  },
+  prog_herbalism_100: {
+    name: 'Ängens mästare',
+    desc: 'Nå 100 i färdigheten Örtkunskap.',
+  },
   prog_master_gatherer: {
     name: 'Mästersamlare',
     desc: 'Nå 100 i färdigheterna Gruvdrift, Timmerhuggning och Örtkunskap.',
   },
-  prog_first_craft: { name: 'Handgjort', desc: 'Slutför ditt första lyckade hantverk.' },
+  prog_first_craft: {
+    name: 'Handgjort',
+    desc: 'Slutför ditt första lyckade hantverk.',
+  },
   prog_craft_specialist: {
     name: 'Yrkeshemligheter',
     desc: 'Nå 75 i skicklighet i ett valfritt hantverk och lås upp dess specialiseringsförmåner.',
   },
-  prog_around_the_ring: { name: 'Runt ringen', desc: 'Nå 25 i skicklighet i fem olika hantverk.' },
-  cmb_first_blood: { name: 'Första blodet', desc: 'Besegra din första fiende.' },
-  cmb_slayer: { name: 'Dräpare', desc: 'Besegra 1 000 fiender.' },
-  cmb_legion_of_one: { name: 'En mans legion', desc: 'Besegra 10 000 fiender.' },
-  cmb_heavy_hitter: { name: 'Tungviktare', desc: 'Utdela sammanlagt 500 000 skada.' },
-  cmb_critical_eye: { name: 'Kritiskt öga', desc: 'Utdela 500 kritiska träffar.' },
+  prog_around_the_ring: {
+    name: 'Runt ringen',
+    desc: 'Nå 25 i skicklighet i fem olika hantverk.',
+  },
+  cmb_first_blood: {
+    name: 'Första blodet',
+    desc: 'Besegra din första fiende.',
+  },
+  cmb_slayer: {
+    name: 'Dräpare',
+    desc: 'Besegra 1 000 fiender.',
+  },
+  cmb_legion_of_one: {
+    name: 'En mans legion',
+    desc: 'Besegra 10 000 fiender.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Tungviktare',
+    desc: 'Utdela sammanlagt 500 000 skada.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritiskt öga',
+    desc: 'Utdela 500 kritiska träffar.',
+  },
   cmb_giantslayer: {
     name: 'Jättedräpare',
     desc: 'Utdela dödsstöten mot en fiende som är minst fem nivåer över dig.',
@@ -204,12 +263,18 @@ export const table: DeedLocaleTable = {
     name: 'Bergsvana',
     desc: 'Fäll Thunzharr, den vaknande toppen, tio gånger.',
   },
-  dlv_reliquary: { name: 'Relikvarielöpare', desc: 'Rensa Det rasade relikvariet.' },
+  dlv_reliquary: {
+    name: 'Relikvarielöpare',
+    desc: 'Rensa Det rasade relikvariet.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroisk: Det rasade relikvariet',
     desc: 'Rensa Det rasade relikvariet på heroisk nivå.',
   },
-  dlv_litany: { name: 'Tysta litanian', desc: 'Rensa Den dränkta litanian.' },
+  dlv_litany: {
+    name: 'Tysta litanian',
+    desc: 'Rensa Den dränkta litanian.',
+  },
   dlv_litany_heroic: {
     name: 'Heroisk: Den dränkta litanian',
     desc: 'Rensa Den dränkta litanian på heroisk nivå.',
@@ -226,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Båda lyktorna tända',
     desc: 'För båda delve-följeslagarna, Akolyten Tessa och Edda Reedhand, till deras högsta rang.',
   },
-  dlv_clears_50: { name: 'Femtio famnar', desc: 'Fullborda 50 delve-vändor.' },
+  dlv_clears_50: {
+    name: 'Femtio famnar',
+    desc: 'Fullborda 50 delve-vändor.',
+  },
   dlv_solo_heroic: {
     name: 'Två är en för mycket',
     desc: 'Rensa en delve på heroisk nivå utan någon annan spelare, bara du och din följeslagare.',
@@ -269,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: 'Något i Spegelsjön',
     desc: 'Fånga en fisk ur Östbäcksdalens vatten.',
   },
-  chr_vale_packbreaker: { name: 'Flockbrytare', desc: 'Dräp 3 skogsvargar inom 10 sekunder.' },
+  chr_vale_packbreaker: {
+    name: 'Flockbrytare',
+    desc: 'Dräp 3 skogsvargar inom 10 sekunder.',
+  },
   chr_vale_cup_debut: {
     name: 'Kopparspannens utmanare',
     desc: 'Gå ut på planen och rör bollen i en Dalcupsmatch på Suggfältet.',
@@ -344,15 +415,27 @@ export const table: DeedLocaleTable = {
     name: 'Hamstrare',
     desc: 'Upptäck 25 olika föremål (ett föremål räknas första gången det någonsin hamnar i din ägo).',
   },
-  col_discovery_75: { name: 'Skata', desc: 'Upptäck 75 olika föremål.' },
+  col_discovery_75: {
+    name: 'Skata',
+    desc: 'Upptäck 75 olika föremål.',
+  },
   col_discovery_150: {
     name: 'Kuriosakabinett',
     desc: 'Upptäck 150 olika föremål.',
     title: 'Intendenten',
   },
-  col_discovery_250: { name: 'Den stora katalogen', desc: 'Upptäck 250 olika föremål.' },
-  col_first_rare: { name: 'Något blått', desc: 'Skaffa ditt första föremål av sällsynt kvalitet.' },
-  col_first_epic: { name: 'Född i purpurn', desc: 'Skaffa ditt första föremål av episk kvalitet.' },
+  col_discovery_250: {
+    name: 'Den stora katalogen',
+    desc: 'Upptäck 250 olika föremål.',
+  },
+  col_first_rare: {
+    name: 'Något blått',
+    desc: 'Skaffa ditt första föremål av sällsynt kvalitet.',
+  },
+  col_first_epic: {
+    name: 'Född i purpurn',
+    desc: 'Skaffa ditt första föremål av episk kvalitet.',
+  },
   col_first_legendary: {
     name: 'Tur att den är orange',
     desc: 'Skaffa ditt första föremål av legendarisk kvalitet.',
@@ -373,7 +456,10 @@ export const table: DeedLocaleTable = {
     name: 'Barrowlords stridsutrustning',
     desc: 'Upptäck varje del av Barrowlords stridsutrustning.',
   },
-  col_set_wyrmshadow: { name: 'Nightfang-skrud', desc: 'Upptäck varje del av Nightfang-skruden.' },
+  col_set_wyrmshadow: {
+    name: 'Nightfang-skrud',
+    desc: 'Upptäck varje del av Nightfang-skruden.',
+  },
   col_set_necromancers: {
     name: 'Mournweave-klädnad',
     desc: 'Upptäck varje del av Mournweave-klädnaden.',
@@ -382,12 +468,18 @@ export const table: DeedLocaleTable = {
     name: 'Bonewrought-regalier',
     desc: 'Upptäck varje del av Bonewrought-regalierna.',
   },
-  col_set_nighttalon: { name: 'Direfang-päls', desc: 'Upptäck varje del av Direfang-pälsen.' },
+  col_set_nighttalon: {
+    name: 'Direfang-päls',
+    desc: 'Upptäck varje del av Direfang-pälsen.',
+  },
   col_set_soulflame: {
     name: 'Wraithfire-regalier',
     desc: 'Upptäck varje del av Wraithfire-regalierna.',
   },
-  col_set_stormcallers: { name: 'Galecall-skrud', desc: 'Upptäck varje del av Galecall-skruden.' },
+  col_set_stormcallers: {
+    name: 'Galecall-skrud',
+    desc: 'Upptäck varje del av Galecall-skruden.',
+  },
   col_seven_regalia: {
     name: 'Den sjufaldiga garderoben',
     desc: 'Upptäck varje del av alla sju episka rustningsfamiljer.',
@@ -405,12 +497,18 @@ export const table: DeedLocaleTable = {
     name: 'Stamkund',
     desc: 'Upptäck alla tio delar av den heroiska kvartersmästarens utbud.',
   },
-  col_glimmerfin: { name: 'Ett skimmer av hopp', desc: 'Fånga en skimmerfenad koi.' },
+  col_glimmerfin: {
+    name: 'Ett skimmer av hopp',
+    desc: 'Fånga en skimmerfenad koi.',
+  },
   col_full_creel: {
     name: 'Full fiskekorg',
     desc: 'Upptäck alla sex vanliga fångster ur dalens, träskets och höjdernas vatten.',
   },
-  col_junk_drawer: { name: 'Skräplådan', desc: 'Upptäck 10 olika föremål av usel kvalitet.' },
+  col_junk_drawer: {
+    name: 'Skräplådan',
+    desc: 'Upptäck 10 olika föremål av usel kvalitet.',
+  },
   pvp_arena_first_match: {
     name: 'Sand i stövlarna',
     desc: 'Utkämpa en rankad match i Askans colosseum, i valfri division.',
@@ -428,20 +526,26 @@ export const table: DeedLocaleTable = {
     desc: 'Nå 1750 i rating i arenans 1 mot 1-division.',
   },
   pvp_arena_1v1_1900: {
-    name: 'Gladiator',
+    name: '[SV] Gladiator',
     desc: 'Nå 1900 i rating i arenans 1 mot 1-division.',
-    title: 'Gladiator',
+    title: '[SV] Gladiator',
   },
   pvp_arena_2v2_1600: {
     name: 'Två man starka',
     desc: 'Nå 1600 i rating i arenans 2 mot 2-division.',
   },
-  pvp_arena_2v2_1750: { name: 'Fruktad duo', desc: 'Nå 1750 i rating i arenans 2 mot 2-division.' },
+  pvp_arena_2v2_1750: {
+    name: 'Fruktad duo',
+    desc: 'Nå 1750 i rating i arenans 2 mot 2-division.',
+  },
   pvp_arena_2v2_1900: {
     name: 'Perfekta parhästar',
     desc: 'Nå 1900 i rating i arenans 2 mot 2-division.',
   },
-  pvp_duel_first_win: { name: 'Ta det utanför', desc: 'Vinn en duell.' },
+  pvp_duel_first_win: {
+    name: 'Ta det utanför',
+    desc: 'Vinn en duell.',
+  },
   pvp_duel_grace: {
     name: 'En läxa i ödmjukhet',
     desc: 'Förlora en duell med värdigheten någorlunda i behåll.',
@@ -450,14 +554,23 @@ export const table: DeedLocaleTable = {
     name: 'Stövlar på planen',
     desc: 'Spela färdigt en hel Dalcupsmatch på Suggfältet, oavsett vinst eller förlust.',
   },
-  pvp_vcup_first_win: { name: 'Första bucklan', desc: 'Vinn en rankad Dalcupsmatch.' },
-  pvp_vcup_wins_10: { name: 'Rutinerad vildsvinsbollare', desc: 'Vinn 10 rankade Dalcupsmatcher.' },
+  pvp_vcup_first_win: {
+    name: 'Första bucklan',
+    desc: 'Vinn en rankad Dalcupsmatch.',
+  },
+  pvp_vcup_wins_10: {
+    name: 'Rutinerad vildsvinsbollare',
+    desc: 'Vinn 10 rankade Dalcupsmatcher.',
+  },
   pvp_vcup_wins_25: {
     name: 'Vildsvinsbollslegend',
     desc: 'Vinn 25 rankade Dalcupsmatcher.',
     title: 'Vildsvinsbollslegend',
   },
-  pvp_vcup_first_goal: { name: 'Målkontot öppnat', desc: 'Gör ett mål i en rankad Dalcupsmatch.' },
+  pvp_vcup_first_goal: {
+    name: 'Målkontot öppnat',
+    desc: 'Gör ett mål i en rankad Dalcupsmatch.',
+  },
   pvp_vcup_hat_trick: {
     name: 'Hattrickhjälte',
     desc: 'Gör tre mål i en och samma rankade Dalcupsmatch, i 3 mot 3-divisionen eller större.',
@@ -506,11 +619,26 @@ export const table: DeedLocaleTable = {
     name: 'Bär hela festen',
     desc: 'Fäll fem motståndare i en och samma Fiestadrabbning.',
   },
-  soc_first_party: { name: 'Bättre tillsammans', desc: 'Gå med i en grupp med en annan spelare.' },
-  soc_full_house: { name: 'Fullt hus', desc: 'Rensa ett fängelsehål med en full grupp om fem.' },
-  soc_guild_joined: { name: 'Under samma baner', desc: 'Bli medlem i ett gille.' },
-  soc_guild_founded: { name: 'Grundarens fjäderpenna', desc: 'Grunda ett eget gille.' },
-  soc_first_trade: { name: 'Ärligt byte', desc: 'Genomför en handel med en annan spelare.' },
+  soc_first_party: {
+    name: 'Bättre tillsammans',
+    desc: 'Gå med i en grupp med en annan spelare.',
+  },
+  soc_full_house: {
+    name: 'Fullt hus',
+    desc: 'Rensa ett fängelsehål med en full grupp om fem.',
+  },
+  soc_guild_joined: {
+    name: 'Under samma baner',
+    desc: 'Bli medlem i ett gille.',
+  },
+  soc_guild_founded: {
+    name: 'Grundarens fjäderpenna',
+    desc: 'Grunda ett eget gille.',
+  },
+  soc_first_trade: {
+    name: 'Ärligt byte',
+    desc: 'Genomför en handel med en annan spelare.',
+  },
   soc_first_sale: {
     name: 'Öppet för affärer',
     desc: 'Hämta ut mynten från din första försäljning på Världsmarknaden.',
@@ -528,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'På korpens vingar',
     desc: 'Skicka ett korppostbrev med mynt eller ett paket.',
   },
-  soc_room_for_more: { name: 'Plats för mer', desc: 'Köp din första valvutbyggnad.' },
+  soc_room_for_more: {
+    name: 'Plats för mer',
+    desc: 'Köp din första valvutbyggnad.',
+  },
   soc_gilded_strongbox: {
     name: 'Förgyllda kassakistan',
     desc: 'Köp varje valvutbyggnad som kamrerarna är villiga att sälja dig.',
@@ -537,10 +668,22 @@ export const table: DeedLocaleTable = {
     name: 'Vår Fernando är oss en väldig borg',
     desc: 'Visa din aktning för kamrer Fernando, Förgyllda kassakistans väktare i Östbäck.',
   },
-  soc_pocket_money: { name: 'Fickpengar', desc: 'Plundra sammanlagt 1 guld i mynt.' },
-  soc_heavy_purse: { name: 'Tung börs', desc: 'Plundra sammanlagt 10 guld i mynt.' },
-  soc_wyrms_hoard: { name: 'En lindorms skatt', desc: 'Plundra sammanlagt 100 guld i mynt.' },
-  soc_civic_duty: { name: 'Medborgerlig plikt', desc: 'Placera din första stadsfokuspoäng.' },
+  soc_pocket_money: {
+    name: 'Fickpengar',
+    desc: 'Plundra sammanlagt 1 guld i mynt.',
+  },
+  soc_heavy_purse: {
+    name: 'Tung börs',
+    desc: 'Plundra sammanlagt 10 guld i mynt.',
+  },
+  soc_wyrms_hoard: {
+    name: 'En lindorms skatt',
+    desc: 'Plundra sammanlagt 100 guld i mynt.',
+  },
+  soc_civic_duty: {
+    name: 'Medborgerlig plikt',
+    desc: 'Placera din första stadsfokuspoäng.',
+  },
   exp_long_road_north: {
     name: 'Den långa vägen norrut',
     desc: 'Besök alla tre huvudorterna: Östbäck, Kärrbron och Högvakten.',
@@ -566,11 +709,26 @@ export const table: DeedLocaleTable = {
     name: 'Något som glimmar',
     desc: 'Plocka upp ett gnistrande föremål från marken.',
   },
-  exp_first_ore: { name: 'Hugg i berget', desc: 'Skörda din första malmådra.' },
-  exp_first_timber: { name: 'Träd faller!', desc: 'Skörda ditt första timmerbestånd.' },
-  exp_first_herb: { name: 'Gröna fingrar', desc: 'Skörda ditt första örtstånd.' },
-  feat_era_cap: { name: 'Första erans barn', desc: 'Nådde nivå 20 medan Första eran ännu rådde.' },
-  feat_book_complete: { name: 'Hela boken', desc: 'Fullborda varenda bedrift i Bedrifternas bok.' },
+  exp_first_ore: {
+    name: 'Hugg i berget',
+    desc: 'Skörda din första malmådra.',
+  },
+  exp_first_timber: {
+    name: 'Träd faller!',
+    desc: 'Skörda ditt första timmerbestånd.',
+  },
+  exp_first_herb: {
+    name: 'Gröna fingrar',
+    desc: 'Skörda ditt första örtstånd.',
+  },
+  feat_era_cap: {
+    name: 'Första erans barn',
+    desc: 'Nådde nivå 20 medan Första eran ännu rådde.',
+  },
+  feat_book_complete: {
+    name: 'Hela boken',
+    desc: 'Fullborda varenda bedrift i Bedrifternas bok.',
+  },
   feat_brightwood_relic: {
     name: 'Till minne av Ljusskogen',
     desc: 'Bevara en relik från den gamla Ljusskogen: Snårhudsjackan eller Monarkens krona.',
@@ -584,12 +742,18 @@ export const table: DeedLocaleTable = {
     name: 'Den förgyllda rundturen',
     desc: 'Gjorde affärer med alla tre filialerna av Förgyllda kassakistan.',
   },
-  hid_fall_death: { name: 'Tyngdlagen vinner alltid', desc: 'Dog av ett långt samtal med marken.' },
+  hid_fall_death: {
+    name: 'Tyngdlagen vinner alltid',
+    desc: 'Dog av ett långt samtal med marken.',
+  },
   hid_keepers_toll_twice: {
     name: 'Väktaren kräver dubbelt',
     desc: 'Dog medan Väktarens tull ännu vilade tungt på dig.',
   },
-  hid_roll_hundred: { name: 'Naturlig hundra', desc: 'Slog en perfekt 100 på ett vanligt /roll.' },
+  hid_roll_hundred: {
+    name: 'Naturlig hundra',
+    desc: 'Slog en perfekt 100 på ett vanligt /roll.',
+  },
   hid_yumi_cheer: {
     name: 'Yumis största beundrare',
     desc: 'Hejade på Yumi där hon kunde höra dig, mitt under en drabbning.',
@@ -602,7 +766,10 @@ export const table: DeedLocaleTable = {
     name: 'Inte på hennes vakt',
     desc: 'Din delveföljeslagare drog en fallen gruppkamrat på fötter igen.',
   },
-  hid_codfather: { name: 'Upptagen i familjen', desc: 'Drog upp Torskfadern ur Djupkärrsgrunden.' },
+  hid_codfather: {
+    name: 'Upptagen i familjen',
+    desc: 'Drog upp Torskfadern ur Djupkärrsgrunden.',
+  },
   prog_crown_below: {
     name: 'Kronan därnere',
     desc: 'Följ kronan från de rastlösa benfälten till kung Nythraxis grav och fullborda Gisslets slut.',
@@ -617,10 +784,18 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Yrkets verktyg',
+    desc: '[SV] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Vad kryptan gömde',
     desc: 'Trotsa Den övergivna kryptan och återta båda nyckelstenshalvorna och den uråldriga dagboken från dess väktare.',
   },
-  chr_marsh_first_cast: { name: 'Ålar i vassen', desc: 'Fånga en fisk ur Dykärrsträskets vatten.' },
+  chr_marsh_first_cast: {
+    name: 'Ålar i vassen',
+    desc: 'Fånga en fisk ur Dykärrsträskets vatten.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Husregler',
+    desc: 'Vinn en kortduell hos Kortmästaren.',
+  },
 };

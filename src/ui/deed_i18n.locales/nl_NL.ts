@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Eigen Spelregels',
-    desc: 'Win een Kaartduel bij de Kaartmeester.',
-  },
   prog_first_steps: {
     name: 'Eerste Stappen',
     desc: 'Bereik level 2 en zet je eerste stap op een lange weg.',
@@ -23,7 +19,10 @@ export const table: DeedLocaleTable = {
     name: 'Dubbele Cijfers',
     desc: 'Bereik level 10 en ontgrendel je talenten.',
   },
-  prog_the_long_middle: { name: 'Het Lange Midden', desc: 'Bereik level 15.' },
+  prog_the_long_middle: {
+    name: 'Het Lange Midden',
+    desc: 'Bereik level 15.',
+  },
   prog_level_cap: {
     name: 'Het Uitzicht vanaf de Top',
     desc: 'Bereik level 20, het hoogste level.',
@@ -32,7 +31,10 @@ export const table: DeedLocaleTable = {
     name: 'Goed Uitgerust',
     desc: 'Nestel je in een herberg tot je uitgeruste ervaring hebt verdiend.',
   },
-  prog_talented: { name: 'Een Punt Goed Besteed', desc: 'Besteed je eerste talentpunt.' },
+  prog_talented: {
+    name: 'Een Punt Goed Besteed',
+    desc: 'Besteed je eerste talentpunt.',
+  },
   prog_specialized: {
     name: 'Kleur Bekennen',
     desc: 'Kies een specialisatie en leer haar kenmerkende vaardigheid.',
@@ -74,11 +76,26 @@ export const table: DeedLocaleTable = {
     name: 'Opnieuw Beginnen',
     desc: 'Bereik het hoogste level, vul de balk nog eens en eis prestigerang 1 op.',
   },
-  prog_prestige_5: { name: 'Oude Gewoonten', desc: 'Bereik prestigerang 5.' },
-  prog_prestige_10: { name: 'Perpetuum Mobile', desc: 'Bereik prestigerang 10.' },
-  prog_first_harvest: { name: 'Vruchten van het Veld', desc: 'Oogst je eerste verzamelplek.' },
-  prog_mining_100: { name: 'Erts in het Bloed', desc: 'Bereik 100 vaardigheid in Mijnbouw.' },
-  prog_logging_100: { name: 'Kernhouthakker', desc: 'Bereik 100 vaardigheid in Houthakken.' },
+  prog_prestige_5: {
+    name: 'Oude Gewoonten',
+    desc: 'Bereik prestigerang 5.',
+  },
+  prog_prestige_10: {
+    name: 'Perpetuum Mobile',
+    desc: 'Bereik prestigerang 10.',
+  },
+  prog_first_harvest: {
+    name: 'Vruchten van het Veld',
+    desc: 'Oogst je eerste verzamelplek.',
+  },
+  prog_mining_100: {
+    name: 'Erts in het Bloed',
+    desc: 'Bereik 100 vaardigheid in Mijnbouw.',
+  },
+  prog_logging_100: {
+    name: 'Kernhouthakker',
+    desc: 'Bereik 100 vaardigheid in Houthakken.',
+  },
   prog_herbalism_100: {
     name: 'Meester van de Weide',
     desc: 'Bereik 100 vaardigheid in Kruidenkunde.',
@@ -87,7 +104,10 @@ export const table: DeedLocaleTable = {
     name: 'Meesterverzamelaar',
     desc: 'Bereik 100 vaardigheid in Mijnbouw, Houthakken en Kruidenkunde.',
   },
-  prog_first_craft: { name: 'Handwerk', desc: 'Voltooi je eerste geslaagde ambachtswerk.' },
+  prog_first_craft: {
+    name: 'Handwerk',
+    desc: 'Voltooi je eerste geslaagde ambachtswerk.',
+  },
   prog_craft_specialist: {
     name: 'Vakgeheimen',
     desc: 'Bereik 75 vaardigheid in één ambacht en ontgrendel de bijbehorende specialisatievoordelen.',
@@ -96,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'De Ring Rond',
     desc: 'Bereik 25 vaardigheid in vijf verschillende ambachten.',
   },
-  cmb_first_blood: { name: 'Eerste Bloed', desc: 'Versla je eerste vijand.' },
-  cmb_slayer: { name: 'Slachter', desc: 'Versla 1.000 vijanden.' },
-  cmb_legion_of_one: { name: 'Eenmanslegioen', desc: 'Versla 10.000 vijanden.' },
-  cmb_heavy_hitter: { name: 'Zware Jongen', desc: 'Deel in totaal 500.000 schade uit.' },
-  cmb_critical_eye: { name: 'Kritisch Oog', desc: 'Plaats 500 kritieke treffers.' },
+  cmb_first_blood: {
+    name: 'Eerste Bloed',
+    desc: 'Versla je eerste vijand.',
+  },
+  cmb_slayer: {
+    name: 'Slachter',
+    desc: 'Versla 1.000 vijanden.',
+  },
+  cmb_legion_of_one: {
+    name: 'Eenmanslegioen',
+    desc: 'Versla 10.000 vijanden.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Zware Jongen',
+    desc: 'Deel in totaal 500.000 schade uit.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritisch Oog',
+    desc: 'Plaats 500 kritieke treffers.',
+  },
   cmb_giantslayer: {
     name: 'Reuzendoder',
     desc: 'Deel de genadeslag uit aan een vijand die minstens vijf levels boven je staat.',
@@ -161,7 +196,10 @@ export const table: DeedLocaleTable = {
     name: 'Het Volledige Circuit',
     desc: 'Verdien op één dag Heroïsche Merken uit alle vier de Heroïsche kerkers.',
   },
-  dgn_boss_clears_50: { name: 'Vijftig Deuren Verder', desc: 'Versla 50 eindbazen van kerkers.' },
+  dgn_boss_clears_50: {
+    name: 'Vijftig Deuren Verder',
+    desc: 'Versla 50 eindbazen van kerkers.',
+  },
   dgn_morthen_flawless: {
     name: 'Geen Botje Gebroken',
     desc: 'Versla Morthen de Grafroeper op Heroïsche moeilijkheidsgraad zonder dat een groepslid sterft.',
@@ -225,18 +263,24 @@ export const table: DeedLocaleTable = {
     name: 'Bergen als Gewoonte',
     desc: 'Vel Thunzharr, de Ontwakende Piek, tien keer.',
   },
-  dlv_reliquary: { name: 'Schrijnloper', desc: 'Zuiver het Ingestorte Reliekschrijn.' },
+  dlv_reliquary: {
+    name: 'Schrijnloper',
+    desc: 'Zuiver het Ingestorte Reliekschrijn.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroïsch: Het Ingestorte Reliekschrijn',
     desc: 'Zuiver het Ingestorte Reliekschrijn op het Heroïsche niveau.',
   },
-  dlv_litany: { name: 'Stil de Litanie', desc: 'Zuiver de Verdronken Litanie.' },
+  dlv_litany: {
+    name: 'Stil de Litanie',
+    desc: 'Zuiver de Verdronken Litanie.',
+  },
   dlv_litany_heroic: {
     name: 'Heroïsch: De Verdronken Litanie',
     desc: 'Zuiver de Verdronken Litanie op het Heroïsche niveau.',
   },
   dlv_lore_journal: {
-    name: 'Marginalia',
+    name: '[NL] Marginalia',
     desc: 'Ontgrendel alle vijf de aantekeningen in het delve-dagboek.',
   },
   dlv_companion_max: {
@@ -247,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Beide Lantaarns Ontstoken',
     desc: 'Breng beide delve-metgezellen, Acoliet Tessa en Edda Reedhand, naar hun hoogste rang.',
   },
-  dlv_clears_50: { name: 'Vijftig Vadem', desc: 'Voltooi 50 delve-tochten.' },
+  dlv_clears_50: {
+    name: 'Vijftig Vadem',
+    desc: 'Voltooi 50 delve-tochten.',
+  },
   dlv_solo_heroic: {
     name: 'Twee is al een Menigte',
     desc: 'Zuiver een delve op het Heroïsche niveau zonder enige andere speler, alleen jij en je metgezel.',
@@ -290,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: 'Er Zit Iets in het Spiegelmeer',
     desc: 'Vang een vis in de wateren van Oostbeekdal.',
   },
-  chr_vale_packbreaker: { name: 'Roedelbreker', desc: 'Dood 3 Boswolven binnen 10 seconden.' },
+  chr_vale_packbreaker: {
+    name: 'Roedelbreker',
+    desc: 'Dood 3 Boswolven binnen 10 seconden.',
+  },
   chr_vale_cup_debut: {
     name: 'Kanshebber op de Koperen Emmer',
     desc: 'Betreed het veld en raak de bal in een Dalbeker-wedstrijd op het Zeugveld.',
@@ -365,13 +415,19 @@ export const table: DeedLocaleTable = {
     name: 'Hamsteraar',
     desc: 'Ontdek 25 verschillende voorwerpen (een voorwerp telt de eerste keer dat het ooit in je bezit komt).',
   },
-  col_discovery_75: { name: 'Ekster', desc: 'Ontdek 75 verschillende voorwerpen.' },
+  col_discovery_75: {
+    name: 'Ekster',
+    desc: 'Ontdek 75 verschillende voorwerpen.',
+  },
   col_discovery_150: {
     name: 'Rariteitenkabinet',
     desc: 'Ontdek 150 verschillende voorwerpen.',
     title: 'de Curator',
   },
-  col_discovery_250: { name: 'De Grote Catalogus', desc: 'Ontdek 250 verschillende voorwerpen.' },
+  col_discovery_250: {
+    name: 'De Grote Catalogus',
+    desc: 'Ontdek 250 verschillende voorwerpen.',
+  },
   col_first_rare: {
     name: 'Iets Blauws',
     desc: 'Bemachtig je eerste voorwerp van zeldzame kwaliteit.',
@@ -441,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Vaste Klant',
     desc: 'Ontdek alle tien de stukken uit de voorraad van de Heroïsche Kwartiermeester.',
   },
-  col_glimmerfin: { name: 'Een Glansje Hoop', desc: 'Vang een Glansvin-Koi.' },
+  col_glimmerfin: {
+    name: 'Een Glansje Hoop',
+    desc: 'Vang een Glansvin-Koi.',
+  },
   col_full_creel: {
     name: 'Volle Viskorf',
     desc: 'Ontdek alle zes de gewone vangsten uit de wateren van het Dal, het Moeras en de Hoogten.',
@@ -467,9 +526,9 @@ export const table: DeedLocaleTable = {
     desc: 'Bereik een rating van 1750 in de 1v1-arenadivisie.',
   },
   pvp_arena_1v1_1900: {
-    name: 'Gladiator',
+    name: '[NL] Gladiator',
     desc: 'Bereik een rating van 1900 in de 1v1-arenadivisie.',
-    title: 'Gladiator',
+    title: '[NL] Gladiator',
   },
   pvp_arena_2v2_1600: {
     name: 'Twee Man Sterk',
@@ -483,7 +542,10 @@ export const table: DeedLocaleTable = {
     name: 'Perfect Samenspel',
     desc: 'Bereik een rating van 1900 in de 2v2-arenadivisie.',
   },
-  pvp_duel_first_win: { name: 'Dat Lossen We Buiten Op', desc: 'Win een duel.' },
+  pvp_duel_first_win: {
+    name: 'Dat Lossen We Buiten Op',
+    desc: 'Win een duel.',
+  },
   pvp_duel_grace: {
     name: 'Een Les in Nederigheid',
     desc: 'Verlies een duel met je waardigheid grotendeels intact.',
@@ -533,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Ongenode Gast',
     desc: 'Vecht een volledige 2v2 Fiesta-partij uit, winst of verlies.',
   },
-  pvp_fiesta_first_win: { name: 'De Gangmaker van de Fiesta', desc: 'Win een 2v2 Fiesta-partij.' },
+  pvp_fiesta_first_win: {
+    name: 'De Gangmaker van de Fiesta',
+    desc: 'Win een 2v2 Fiesta-partij.',
+  },
   pvp_fiesta_double: {
     name: 'Dubbelslag',
     desc: 'Scoor twee Fiesta-uitschakelingen binnen vier seconden.',
@@ -554,14 +619,26 @@ export const table: DeedLocaleTable = {
     name: 'De Kar Trekken',
     desc: 'Scoor vijf uitschakelingen in een enkele Fiesta-partij.',
   },
-  soc_first_party: { name: 'Samen Sterker', desc: 'Vorm een groep met een andere speler.' },
+  soc_first_party: {
+    name: 'Samen Sterker',
+    desc: 'Vorm een groep met een andere speler.',
+  },
   soc_full_house: {
-    name: 'Full House',
+    name: '[NL] Full House',
     desc: 'Zuiver een kerker met een voltallige groep van vijf.',
   },
-  soc_guild_joined: { name: 'Onder Eén Vaandel', desc: 'Word lid van een gilde.' },
-  soc_guild_founded: { name: 'De Veerpen van de Stichter', desc: 'Sticht je eigen gilde.' },
-  soc_first_trade: { name: 'Een Eerlijke Ruil', desc: 'Voltooi een ruil met een andere speler.' },
+  soc_guild_joined: {
+    name: 'Onder Eén Vaandel',
+    desc: 'Word lid van een gilde.',
+  },
+  soc_guild_founded: {
+    name: 'De Veerpen van de Stichter',
+    desc: 'Sticht je eigen gilde.',
+  },
+  soc_first_trade: {
+    name: 'Een Eerlijke Ruil',
+    desc: 'Voltooi een ruil met een andere speler.',
+  },
   soc_first_sale: {
     name: 'Open voor Zaken',
     desc: 'Strijk de munten van je eerste verkoop op de Wereldmarkt op.',
@@ -579,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'Op Ravenwieken',
     desc: 'Verstuur een Ravenpost-brief met munten of een pakket.',
   },
-  soc_room_for_more: { name: 'Ruimte voor Meer', desc: 'Koop je eerste bankuitbreiding.' },
+  soc_room_for_more: {
+    name: 'Ruimte voor Meer',
+    desc: 'Koop je eerste bankuitbreiding.',
+  },
   soc_gilded_strongbox: {
     name: 'De Vergulde Geldkist',
     desc: 'Koop elke bankuitbreiding die de thesauriers je willen verkopen.',
@@ -588,7 +668,10 @@ export const table: DeedLocaleTable = {
     name: 'Op Fernando Vertrouwen Wij',
     desc: 'Betuig je respect aan Thesaurier Fernando, hoeder van De Vergulde Geldkist in Oostbeek.',
   },
-  soc_pocket_money: { name: 'Zakgeld', desc: 'Maak een levenstotaal van 1 goud aan munten buit.' },
+  soc_pocket_money: {
+    name: 'Zakgeld',
+    desc: 'Maak een levenstotaal van 1 goud aan munten buit.',
+  },
   soc_heavy_purse: {
     name: 'Een Zware Buidel',
     desc: 'Maak een levenstotaal van 10 goud aan munten buit.',
@@ -597,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'Een Wurmschat',
     desc: 'Maak een levenstotaal van 100 goud aan munten buit.',
   },
-  soc_civic_duty: { name: 'Burgerplicht', desc: 'Wijs je eerste stadsfocuspunt toe.' },
+  soc_civic_duty: {
+    name: 'Burgerplicht',
+    desc: 'Wijs je eerste stadsfocuspunt toe.',
+  },
   exp_long_road_north: {
     name: 'De Lange Weg naar het Noorden',
     desc: 'Bezoek alle drie de hoofdnederzettingen: Oostbeek, Veenbrug en Hoogwacht.',
@@ -623,14 +709,26 @@ export const table: DeedLocaleTable = {
     name: 'Iets Glinsterends',
     desc: 'Raap een fonkelend voorwerp op van de grond.',
   },
-  exp_first_ore: { name: 'De Eerste Ader', desc: 'Oogst je eerste ertsader.' },
-  exp_first_timber: { name: 'Van Onderen!', desc: 'Oogst je eerste houtvindplaats.' },
-  exp_first_herb: { name: 'Groene Vingers', desc: 'Oogst je eerste kruidenvindplaats.' },
+  exp_first_ore: {
+    name: 'De Eerste Ader',
+    desc: 'Oogst je eerste ertsader.',
+  },
+  exp_first_timber: {
+    name: 'Van Onderen!',
+    desc: 'Oogst je eerste houtvindplaats.',
+  },
+  exp_first_herb: {
+    name: 'Groene Vingers',
+    desc: 'Oogst je eerste kruidenvindplaats.',
+  },
   feat_era_cap: {
     name: 'Kind van het Eerste Tijdperk',
     desc: 'Bereikte level 20 toen het Eerste Tijdperk nog het huidige was.',
   },
-  feat_book_complete: { name: 'Het Hele Boek', desc: 'Behaal elke daad in het Boek der Daden.' },
+  feat_book_complete: {
+    name: 'Het Hele Boek',
+    desc: 'Behaal elke daad in het Boek der Daden.',
+  },
   feat_brightwood_relic: {
     name: 'Helderwoud Herdacht',
     desc: 'Bewaar een relikwie van het oude Helderwoud: het Doornhuid-Wambuis of de Monarchenkroon.',
@@ -686,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Gereedschap van het Vak',
+    desc: '[NL] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Wat de Crypte Bewaarde',
@@ -694,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Alen in het Riet',
     desc: 'Vang een vis in de wateren van Slijkveenmoeras.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Eigen Spelregels',
+    desc: 'Win een Kaartduel bij de Kaartmeester.',
   },
 };

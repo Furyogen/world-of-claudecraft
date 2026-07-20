@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'La baza es mía',
-    desc: 'Gana un Duelo de Cartas en el Maestro de Cartas.',
-  },
   prog_first_steps: {
     name: 'Primeros pasos',
     desc: 'Alcanza el nivel 2 y da tu primer paso en un largo camino.',
@@ -23,13 +19,22 @@ export const table: DeedLocaleTable = {
     name: 'Dos dígitos',
     desc: 'Alcanza el nivel 10 y desbloquea tus talentos.',
   },
-  prog_the_long_middle: { name: 'El largo trecho', desc: 'Alcanza el nivel 15.' },
-  prog_level_cap: { name: 'La vista desde la cima', desc: 'Alcanza el nivel 20, el nivel máximo.' },
+  prog_the_long_middle: {
+    name: 'El largo trecho',
+    desc: 'Alcanza el nivel 15.',
+  },
+  prog_level_cap: {
+    name: 'La vista desde la cima',
+    desc: 'Alcanza el nivel 20, el nivel máximo.',
+  },
   prog_well_rested: {
     name: 'Bien descansado',
     desc: 'Instálate en una posada hasta obtener experiencia de descanso.',
   },
-  prog_talented: { name: 'Un punto bien gastado', desc: 'Gasta tu primer punto de talento.' },
+  prog_talented: {
+    name: 'Un punto bien gastado',
+    desc: 'Gasta tu primer punto de talento.',
+  },
   prog_specialized: {
     name: 'Declaración de intenciones',
     desc: 'Elige una especialización y aprende su habilidad distintiva.',
@@ -71,11 +76,26 @@ export const table: DeedLocaleTable = {
     name: 'Volver a empezar',
     desc: 'Alcanza el nivel máximo, llena la barra una vez más y reclama el rango de prestigio 1.',
   },
-  prog_prestige_5: { name: 'Viejas costumbres', desc: 'Alcanza el rango de prestigio 5.' },
-  prog_prestige_10: { name: 'Movimiento perpetuo', desc: 'Alcanza el rango de prestigio 10.' },
-  prog_first_harvest: { name: 'Frutos del campo', desc: 'Cosecha tu primer nodo de recolección.' },
-  prog_mining_100: { name: 'Mineral en la sangre', desc: 'Alcanza 100 de competencia en Minería.' },
-  prog_logging_100: { name: 'Talador de duramen', desc: 'Alcanza 100 de competencia en Tala.' },
+  prog_prestige_5: {
+    name: 'Viejas costumbres',
+    desc: 'Alcanza el rango de prestigio 5.',
+  },
+  prog_prestige_10: {
+    name: 'Movimiento perpetuo',
+    desc: 'Alcanza el rango de prestigio 10.',
+  },
+  prog_first_harvest: {
+    name: 'Frutos del campo',
+    desc: 'Cosecha tu primer nodo de recolección.',
+  },
+  prog_mining_100: {
+    name: 'Mineral en la sangre',
+    desc: 'Alcanza 100 de competencia en Minería.',
+  },
+  prog_logging_100: {
+    name: 'Talador de duramen',
+    desc: 'Alcanza 100 de competencia en Tala.',
+  },
   prog_herbalism_100: {
     name: 'Maestro del prado',
     desc: 'Alcanza 100 de competencia en Herboristería.',
@@ -84,7 +104,10 @@ export const table: DeedLocaleTable = {
     name: 'Maestro recolector',
     desc: 'Alcanza 100 de competencia en Minería, Tala y Herboristería.',
   },
-  prog_first_craft: { name: 'Hecho a mano', desc: 'Completa con éxito tu primera fabricación.' },
+  prog_first_craft: {
+    name: 'Hecho a mano',
+    desc: 'Completa con éxito tu primera fabricación.',
+  },
   prog_craft_specialist: {
     name: 'Secretos del oficio',
     desc: 'Alcanza 75 de habilidad en un mismo oficio y desbloquea sus ventajas de especialización.',
@@ -93,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'La vuelta al anillo',
     desc: 'Alcanza 25 de habilidad en cinco oficios distintos.',
   },
-  cmb_first_blood: { name: 'Primera sangre', desc: 'Derrota a tu primer enemigo.' },
-  cmb_slayer: { name: 'Matador', desc: 'Derrota a 1,000 enemigos.' },
-  cmb_legion_of_one: { name: 'Legión de uno', desc: 'Derrota a 10,000 enemigos.' },
-  cmb_heavy_hitter: { name: 'Mano pesada', desc: 'Inflige 500,000 de daño en total.' },
-  cmb_critical_eye: { name: 'Ojo crítico', desc: 'Asesta 500 golpes críticos.' },
+  cmb_first_blood: {
+    name: 'Primera sangre',
+    desc: 'Derrota a tu primer enemigo.',
+  },
+  cmb_slayer: {
+    name: 'Matador',
+    desc: 'Derrota a 1,000 enemigos.',
+  },
+  cmb_legion_of_one: {
+    name: 'Legión de uno',
+    desc: 'Derrota a 10,000 enemigos.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Mano pesada',
+    desc: 'Inflige 500,000 de daño en total.',
+  },
+  cmb_critical_eye: {
+    name: 'Ojo crítico',
+    desc: 'Asesta 500 golpes críticos.',
+  },
   cmb_giantslayer: {
     name: 'Matagigantes',
     desc: 'Asesta el golpe mortal a un enemigo al menos cinco niveles por encima del tuyo.',
@@ -225,12 +263,18 @@ export const table: DeedLocaleTable = {
     name: 'Costumbre de montañas',
     desc: 'Derriba a Thunzharr, el Pico Despierto, diez veces.',
   },
-  dlv_reliquary: { name: 'Corredor del Relicario', desc: 'Limpia el Relicario Hundido.' },
+  dlv_reliquary: {
+    name: 'Corredor del Relicario',
+    desc: 'Limpia el Relicario Hundido.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroico: El Relicario Hundido',
     desc: 'Limpia el Relicario Hundido en el nivel Heroico.',
   },
-  dlv_litany: { name: 'Acalla la Letanía', desc: 'Limpia la Letanía Ahogada.' },
+  dlv_litany: {
+    name: 'Acalla la Letanía',
+    desc: 'Limpia la Letanía Ahogada.',
+  },
   dlv_litany_heroic: {
     name: 'Heroico: La Letanía Ahogada',
     desc: 'Limpia la Letanía Ahogada en el nivel Heroico.',
@@ -247,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Ambas linternas encendidas',
     desc: 'Lleva a las dos compañeras de expedición, la Acólita Tessa y Edda Reedhand, a su rango más alto.',
   },
-  dlv_clears_50: { name: 'Cincuenta brazas', desc: 'Completa 50 expediciones.' },
+  dlv_clears_50: {
+    name: 'Cincuenta brazas',
+    desc: 'Completa 50 expediciones.',
+  },
   dlv_solo_heroic: {
     name: 'Dos son multitud',
     desc: 'Limpia una expedición de nivel Heroico sin ningún otro jugador: solo tú y tu compañera.',
@@ -368,14 +415,23 @@ export const table: DeedLocaleTable = {
     name: 'Acaparador',
     desc: 'Descubre 25 objetos distintos (un objeto cuenta la primera vez que llega a tu poder).',
   },
-  col_discovery_75: { name: 'Urraca', desc: 'Descubre 75 objetos distintos.' },
+  col_discovery_75: {
+    name: 'Urraca',
+    desc: 'Descubre 75 objetos distintos.',
+  },
   col_discovery_150: {
     name: 'Gabinete de curiosidades',
     desc: 'Descubre 150 objetos distintos.',
     title: 'el Curador',
   },
-  col_discovery_250: { name: 'El gran catálogo', desc: 'Descubre 250 objetos distintos.' },
-  col_first_rare: { name: 'Algo azul', desc: 'Consigue tu primer objeto de calidad rara.' },
+  col_discovery_250: {
+    name: 'El gran catálogo',
+    desc: 'Descubre 250 objetos distintos.',
+  },
+  col_first_rare: {
+    name: 'Algo azul',
+    desc: 'Consigue tu primer objeto de calidad rara.',
+  },
   col_first_epic: {
     name: 'Nacido en la púrpura',
     desc: 'Consigue tu primer objeto de calidad épica.',
@@ -412,7 +468,10 @@ export const table: DeedLocaleTable = {
     name: 'Vestiduras Bonewrought',
     desc: 'Descubre cada pieza de las Vestiduras Bonewrought.',
   },
-  col_set_nighttalon: { name: 'Pelaje Direfang', desc: 'Descubre cada pieza del Pelaje Direfang.' },
+  col_set_nighttalon: {
+    name: 'Pelaje Direfang',
+    desc: 'Descubre cada pieza del Pelaje Direfang.',
+  },
   col_set_soulflame: {
     name: 'Vestiduras Wraithfire',
     desc: 'Descubre cada pieza de las Vestiduras Wraithfire.',
@@ -438,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Cliente preferente',
     desc: 'Descubre las diez piezas del inventario del Intendente Vex.',
   },
-  col_glimmerfin: { name: 'Un destello de esperanza', desc: 'Pesca un Koi de aletas brillantes.' },
+  col_glimmerfin: {
+    name: 'Un destello de esperanza',
+    desc: 'Pesca un Koi de aletas brillantes.',
+  },
   col_full_creel: {
     name: 'Nasa llena',
     desc: 'Descubre las seis capturas comunes de las aguas del Valle, la Ciénaga y las Alturas.',
@@ -480,7 +542,10 @@ export const table: DeedLocaleTable = {
     name: 'Compenetración perfecta',
     desc: 'Alcanza un índice de 1900 en la categoría 2c2 de la arena.',
   },
-  pvp_duel_first_win: { name: 'Esto se arregla afuera', desc: 'Gana un duelo.' },
+  pvp_duel_first_win: {
+    name: 'Esto se arregla afuera',
+    desc: 'Gana un duelo.',
+  },
   pvp_duel_grace: {
     name: 'Una lección de humildad',
     desc: 'Pierde un duelo con la dignidad casi intacta.',
@@ -530,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Colado en la Fiesta',
     desc: 'Disputa un combate completo de Fiesta 2c2, ganes o pierdas.',
   },
-  pvp_fiesta_first_win: { name: 'El alma de la Fiesta', desc: 'Gana un combate de Fiesta 2c2.' },
+  pvp_fiesta_first_win: {
+    name: 'El alma de la Fiesta',
+    desc: 'Gana un combate de Fiesta 2c2.',
+  },
   pvp_fiesta_double: {
     name: 'Doble problema',
     desc: 'Consigue dos derribos en la Fiesta en un lapso de cuatro segundos.',
@@ -551,7 +619,10 @@ export const table: DeedLocaleTable = {
     name: 'Cargando con la Fiesta',
     desc: 'Consigue cinco derribos en un solo combate de Fiesta.',
   },
-  soc_first_party: { name: 'Mejor acompañados', desc: 'Únete a un grupo con otro jugador.' },
+  soc_first_party: {
+    name: 'Mejor acompañados',
+    desc: 'Únete a un grupo con otro jugador.',
+  },
   soc_full_house: {
     name: 'Casa llena',
     desc: 'Supera una mazmorra con un grupo completo de cinco.',
@@ -560,8 +631,14 @@ export const table: DeedLocaleTable = {
     name: 'Bajo un mismo estandarte',
     desc: 'Conviértete en miembro de una hermandad.',
   },
-  soc_guild_founded: { name: 'La pluma fundadora', desc: 'Funda tu propia hermandad.' },
-  soc_first_trade: { name: 'Un trato justo', desc: 'Completa un intercambio con otro jugador.' },
+  soc_guild_founded: {
+    name: 'La pluma fundadora',
+    desc: 'Funda tu propia hermandad.',
+  },
+  soc_first_trade: {
+    name: 'Un trato justo',
+    desc: 'Completa un intercambio con otro jugador.',
+  },
   soc_first_sale: {
     name: 'Abierto al público',
     desc: 'Cobra las monedas de tu primera venta en el Mercado Mundial.',
@@ -573,13 +650,16 @@ export const table: DeedLocaleTable = {
   soc_market_magnate: {
     name: 'Magnate del mercado',
     desc: 'Cobra un total acumulado de 100 de oro por tus ventas en el Mercado Mundial.',
-    title: 'Magnate',
+    title: '[ES] Magnate',
   },
   soc_by_ravens_wing: {
     name: 'En alas del cuervo',
     desc: 'Envía una carta del Correo del Cuervo que lleve monedas o un paquete.',
   },
-  soc_room_for_more: { name: 'Sitio para más', desc: 'Compra tu primera ampliación de banco.' },
+  soc_room_for_more: {
+    name: 'Sitio para más',
+    desc: 'Compra tu primera ampliación de banco.',
+  },
   soc_gilded_strongbox: {
     name: 'El Arca Dorada',
     desc: 'Compra cada ampliación de banco que los tesoreros estén dispuestos a venderte.',
@@ -600,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'Un tesoro de wyrm',
     desc: 'Saquea un total acumulado de 100 de oro en monedas.',
   },
-  soc_civic_duty: { name: 'Deber cívico', desc: 'Asigna tu primer punto de enfoque del pueblo.' },
+  soc_civic_duty: {
+    name: 'Deber cívico',
+    desc: 'Asigna tu primer punto de enfoque del pueblo.',
+  },
   exp_long_road_north: {
     name: 'El largo camino al norte',
     desc: 'Visita los tres asentamientos principales: Eastbrook, Fenbridge y Highwatch.',
@@ -622,10 +705,22 @@ export const table: DeedLocaleTable = {
     desc: 'Consigue la gesta de caminante de las tres zonas.',
     title: 'Caminante',
   },
-  exp_something_shiny: { name: 'Algo brillante', desc: 'Recoge un objeto reluciente del suelo.' },
-  exp_first_ore: { name: '¡A picar piedra!', desc: 'Recolecta tu primer nodo de mineral.' },
-  exp_first_timber: { name: '¡Árbol va!', desc: 'Recolecta tu primer nodo de madera.' },
-  exp_first_herb: { name: 'Mano verde', desc: 'Recolecta tu primer nodo de hierbas.' },
+  exp_something_shiny: {
+    name: 'Algo brillante',
+    desc: 'Recoge un objeto reluciente del suelo.',
+  },
+  exp_first_ore: {
+    name: '¡A picar piedra!',
+    desc: 'Recolecta tu primer nodo de mineral.',
+  },
+  exp_first_timber: {
+    name: '¡Árbol va!',
+    desc: 'Recolecta tu primer nodo de madera.',
+  },
+  exp_first_herb: {
+    name: 'Mano verde',
+    desc: 'Recolecta tu primer nodo de hierbas.',
+  },
   feat_era_cap: {
     name: 'Hijo de la Primera Era',
     desc: 'Alcanzaste el nivel 20 mientras la Primera Era estaba en curso.',
@@ -655,7 +750,10 @@ export const table: DeedLocaleTable = {
     name: 'El Guardián cobra dos veces',
     desc: 'Moriste mientras el Tributo del Guardián aún pesaba sobre ti.',
   },
-  hid_roll_hundred: { name: 'Cien natural', desc: 'Sacaste un 100 perfecto en un /roll sin más.' },
+  hid_roll_hundred: {
+    name: 'Cien natural',
+    desc: 'Sacaste un 100 perfecto en un /roll sin más.',
+  },
   hid_yumi_cheer: {
     name: 'Fan número uno de Yumi',
     desc: 'Vitoreaste a Yumi donde podía oírte, en pleno combate.',
@@ -686,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Las herramientas del oficio',
+    desc: '[ES] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Lo que guardaba la cripta',
@@ -694,6 +793,10 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Anguilas entre los juncos',
     desc: 'Pesca un pez en las aguas de la Ciénaga de Mirefen.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'La baza es mía',
+    desc: 'Gana un Duelo de Cartas en el Maestro de Cartas.',
   },
 };
 

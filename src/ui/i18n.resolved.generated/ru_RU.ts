@@ -2137,7 +2137,7 @@ export const ru_RU: EnTranslations = {
       "ceilingUnlimited": "Без потолка усиления",
       "ceilingRare": "Потолок редкого",
       "ceilingCommon": "Потолок обычного качества",
-      "skillValue": "{skill} / {max}",
+      "skillValue": "[RU] {skill} / {max}",
       "tierPipAria": "Ранг {tier}",
       "nextUnlockTier": "До следующего ранга {points} навыка: шанс шедевра повысится",
       "nextUnlockSpecialized": "До специализации {points} навыка: расход материалов снизится",

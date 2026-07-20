@@ -2137,7 +2137,7 @@ export const ja_JP: EnTranslations = {
       "ceilingUnlimited": "強化上限なし",
       "ceilingRare": "レア上限",
       "ceilingCommon": "コモン上限",
-      "skillValue": "{skill} / {max}",
+      "skillValue": "[JA] {skill} / {max}",
       "tierPipAria": "ティア {tier}",
       "nextUnlockTier": "次のティアまであと {points}：傑作の成功率が上がります",
       "nextUnlockSpecialized": "専門化まであと {points}：素材コストが下がります",

@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Vlastní pravidla',
-    desc: 'Vyhraj Karetní souboj u Karetního mistra.',
-  },
   prog_first_steps: {
     name: 'První kroky',
     desc: 'Dosáhni úrovně 2 a udělej první krok na dlouhé cestě.',
@@ -19,14 +15,26 @@ export const table: DeedLocaleTable = {
     name: 'Pevná půda pod nohama',
     desc: 'Dosáhni úrovně 5; divočina už vypadá o kousek menší.',
   },
-  prog_double_digits: { name: 'Dvě cifry', desc: 'Dosáhni úrovně 10 a odemkni své talenty.' },
-  prog_the_long_middle: { name: 'Dlouhý střed cesty', desc: 'Dosáhni úrovně 15.' },
-  prog_level_cap: { name: 'Výhled z vrcholu', desc: 'Dosáhni úrovně 20, nejvyšší možné úrovně.' },
+  prog_double_digits: {
+    name: 'Dvě cifry',
+    desc: 'Dosáhni úrovně 10 a odemkni své talenty.',
+  },
+  prog_the_long_middle: {
+    name: 'Dlouhý střed cesty',
+    desc: 'Dosáhni úrovně 15.',
+  },
+  prog_level_cap: {
+    name: 'Výhled z vrcholu',
+    desc: 'Dosáhni úrovně 20, nejvyšší možné úrovně.',
+  },
   prog_well_rested: {
     name: 'Dobře odpočatý',
     desc: 'Usaď se v hostinci, dokud nezískáš odpočaté zkušenosti.',
   },
-  prog_talented: { name: 'Dobře vynaložený bod', desc: 'Utrať svůj první talentový bod.' },
+  prog_talented: {
+    name: 'Dobře vynaložený bod',
+    desc: 'Utrať svůj první talentový bod.',
+  },
   prog_specialized: {
     name: 'Vyhlášení záměru',
     desc: 'Zvol si specializaci a nauč se její stěžejní schopnost.',
@@ -49,7 +57,11 @@ export const table: DeedLocaleTable = {
     desc: 'Získej za celý život 500 000 zkušeností.',
     title: 'Šampion',
   },
-  prog_paragon: { name: 'Vzor', desc: 'Získej za celý život 1 000 000 zkušeností.', title: 'Vzor' },
+  prog_paragon: {
+    name: 'Vzor',
+    desc: 'Získej za celý život 1 000 000 zkušeností.',
+    title: 'Vzor',
+  },
   prog_mythic: {
     name: 'Mýtický',
     desc: 'Získej za celý život 2 500 000 zkušeností.',
@@ -64,20 +76,38 @@ export const table: DeedLocaleTable = {
     name: 'Začít znovu',
     desc: 'Dosáhni nejvyšší úrovně, naplň ukazatel ještě jednou a získej prestižní hodnost 1.',
   },
-  prog_prestige_5: { name: 'Staré zvyky', desc: 'Dosáhni prestižní hodnosti 5.' },
-  prog_prestige_10: { name: 'Perpetuum mobile', desc: 'Dosáhni prestižní hodnosti 10.' },
-  prog_first_harvest: { name: 'Plody polí', desc: 'Skliď své první sběrné naleziště.' },
-  prog_mining_100: { name: 'Ruda v krvi', desc: 'Dosáhni zdatnosti 100 v hornictví.' },
+  prog_prestige_5: {
+    name: 'Staré zvyky',
+    desc: 'Dosáhni prestižní hodnosti 5.',
+  },
+  prog_prestige_10: {
+    name: 'Perpetuum mobile',
+    desc: 'Dosáhni prestižní hodnosti 10.',
+  },
+  prog_first_harvest: {
+    name: 'Plody polí',
+    desc: 'Skliď své první sběrné naleziště.',
+  },
+  prog_mining_100: {
+    name: 'Ruda v krvi',
+    desc: 'Dosáhni zdatnosti 100 v hornictví.',
+  },
   prog_logging_100: {
     name: 'Sekáč jádrového dřeva',
     desc: 'Dosáhni zdatnosti 100 v dřevorubectví.',
   },
-  prog_herbalism_100: { name: 'Mistr lučin', desc: 'Dosáhni zdatnosti 100 v bylinkářství.' },
+  prog_herbalism_100: {
+    name: 'Mistr lučin',
+    desc: 'Dosáhni zdatnosti 100 v bylinkářství.',
+  },
   prog_master_gatherer: {
     name: 'Mistr sběrač',
     desc: 'Dosáhni zdatnosti 100 v hornictví, dřevorubectví a bylinkářství.',
   },
-  prog_first_craft: { name: 'Vlastníma rukama', desc: 'Dokonči svou první úspěšnou výrobu.' },
+  prog_first_craft: {
+    name: 'Vlastníma rukama',
+    desc: 'Dokonči svou první úspěšnou výrobu.',
+  },
   prog_craft_specialist: {
     name: 'Tajemství řemesla',
     desc: 'Dosáhni dovednosti 75 v kterémkoli řemesle a odemkni výhody jeho specializace.',
@@ -86,17 +116,38 @@ export const table: DeedLocaleTable = {
     name: 'Kolem dokola',
     desc: 'Dosáhni dovednosti 25 v pěti různých řemeslech.',
   },
-  cmb_first_blood: { name: 'První krev', desc: 'Poraz svého prvního nepřítele.' },
-  cmb_slayer: { name: 'Zabiják', desc: 'Poraz 1 000 nepřátel.' },
-  cmb_legion_of_one: { name: 'Armáda jednoho', desc: 'Poraz 10 000 nepřátel.' },
-  cmb_heavy_hitter: { name: 'Těžká váha', desc: 'Uštědři celkem 500 000 poškození.' },
-  cmb_critical_eye: { name: 'Kritické oko', desc: 'Zasaď 500 kritických úderů.' },
+  cmb_first_blood: {
+    name: 'První krev',
+    desc: 'Poraz svého prvního nepřítele.',
+  },
+  cmb_slayer: {
+    name: 'Zabiják',
+    desc: 'Poraz 1 000 nepřátel.',
+  },
+  cmb_legion_of_one: {
+    name: 'Armáda jednoho',
+    desc: 'Poraz 10 000 nepřátel.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Těžká váha',
+    desc: 'Uštědři celkem 500 000 poškození.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritické oko',
+    desc: 'Zasaď 500 kritických úderů.',
+  },
   cmb_giantslayer: {
     name: 'Obrobijce',
     desc: 'Zasaď smrtící úder nepříteli alespoň o pět úrovní nad tebou.',
   },
-  cmb_first_fall: { name: 'Oklepat a jít dál', desc: 'Zemři poprvé; stává se to i těm nejlepším.' },
-  dgn_hollow_crypt: { name: 'Lamač krypty', desc: 'Poraz Morthena Hrobovolajícího v Duté kryptě.' },
+  cmb_first_fall: {
+    name: 'Oklepat a jít dál',
+    desc: 'Zemři poprvé; stává se to i těm nejlepším.',
+  },
+  dgn_hollow_crypt: {
+    name: 'Lamač krypty',
+    desc: 'Poraz Morthena Hrobovolajícího v Duté kryptě.',
+  },
   dgn_sunken_bastion: {
     name: 'Mlhovazač bez pout',
     desc: 'Poraz Vaela Mlhovazače v Potopené baště.',
@@ -212,12 +263,18 @@ export const table: DeedLocaleTable = {
     name: 'Hory ze zvyku',
     desc: 'Sraz Thunzharra, probouzející se štít, desetkrát.',
   },
-  dlv_reliquary: { name: 'Relikviářový běžec', desc: 'Vyčisti Zhroucený relikviář.' },
+  dlv_reliquary: {
+    name: 'Relikviářový běžec',
+    desc: 'Vyčisti Zhroucený relikviář.',
+  },
   dlv_reliquary_heroic: {
     name: 'Hrdinsky: Zhroucený relikviář',
     desc: 'Vyčisti Zhroucený relikviář na hrdinském stupni.',
   },
-  dlv_litany: { name: 'Utiš Litanii', desc: 'Vyčisti Utopenou litanii.' },
+  dlv_litany: {
+    name: 'Utiš Litanii',
+    desc: 'Vyčisti Utopenou litanii.',
+  },
   dlv_litany_heroic: {
     name: 'Hrdinsky: Utopená litanie',
     desc: 'Vyčisti Utopenou litanii na hrdinském stupni.',
@@ -234,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Obě lucerny rozžaté',
     desc: 'Doveď obě společnice z výprav, Akolytku Tessu a Eddu Reedhand, na nejvyšší hodnost.',
   },
-  dlv_clears_50: { name: 'Padesát sáhů', desc: 'Dokonči 50 výprav.' },
+  dlv_clears_50: {
+    name: 'Padesát sáhů',
+    desc: 'Dokonči 50 výprav.',
+  },
   dlv_solo_heroic: {
     name: 'Ve dvou se to lépe táhne',
     desc: 'Vyčisti výpravu na hrdinském stupni bez jediného dalšího hráče, jen ty a tvá společnice.',
@@ -277,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: 'Něco v Zrcadlovém jezeře',
     desc: 'Chyť rybu ve vodách Eastbrookského údolí.',
   },
-  chr_vale_packbreaker: { name: 'Postrach smeček', desc: 'Zab 3 Lesní vlky během 10 sekund.' },
+  chr_vale_packbreaker: {
+    name: 'Postrach smeček',
+    desc: 'Zab 3 Lesní vlky během 10 sekund.',
+  },
   chr_vale_cup_debut: {
     name: 'Uchazeč o Měděné vědro',
     desc: 'Nastup na hřiště a dotkni se míče v zápase Poháru Údolí na Prasečím poli.',
@@ -352,15 +415,27 @@ export const table: DeedLocaleTable = {
     name: 'Křeček',
     desc: 'Objev 25 různých předmětů (předmět se počítá, když se poprvé ocitne ve tvém vlastnictví).',
   },
-  col_discovery_75: { name: 'Straka', desc: 'Objev 75 různých předmětů.' },
+  col_discovery_75: {
+    name: 'Straka',
+    desc: 'Objev 75 různých předmětů.',
+  },
   col_discovery_150: {
     name: 'Kabinet kuriozit',
     desc: 'Objev 150 různých předmětů.',
     title: 'Kurátor',
   },
-  col_discovery_250: { name: 'Velký katalog', desc: 'Objev 250 různých předmětů.' },
-  col_first_rare: { name: 'Něco modrého', desc: 'Získej svůj první předmět vzácné kvality.' },
-  col_first_epic: { name: 'Zrozen v purpuru', desc: 'Získej svůj první předmět epické kvality.' },
+  col_discovery_250: {
+    name: 'Velký katalog',
+    desc: 'Objev 250 různých předmětů.',
+  },
+  col_first_rare: {
+    name: 'Něco modrého',
+    desc: 'Získej svůj první předmět vzácné kvality.',
+  },
+  col_first_epic: {
+    name: 'Zrozen v purpuru',
+    desc: 'Získej svůj první předmět epické kvality.',
+  },
   col_first_legendary: {
     name: 'Oranžové terno',
     desc: 'Získej svůj první předmět legendární kvality.',
@@ -385,8 +460,14 @@ export const table: DeedLocaleTable = {
     name: 'Roucha nočního tesáku',
     desc: 'Objev každý kus Rouch nočního tesáku.',
   },
-  col_set_necromancers: { name: 'Oděv smutkotkaní', desc: 'Objev každý kus Oděvu smutkotkaní.' },
-  col_set_crownforged: { name: 'Regálie z kosti', desc: 'Objev každý kus Regálií z kosti.' },
+  col_set_necromancers: {
+    name: 'Oděv smutkotkaní',
+    desc: 'Objev každý kus Oděvu smutkotkaní.',
+  },
+  col_set_crownforged: {
+    name: 'Regálie z kosti',
+    desc: 'Objev každý kus Regálií z kosti.',
+  },
   col_set_nighttalon: {
     name: 'Kožešina děsivého tesáku',
     desc: 'Objev každý kus Kožešiny děsivého tesáku.',
@@ -416,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Věrný zákazník',
     desc: 'Objev všech deset kusů z nabídky Zásobovače Vexe.',
   },
-  col_glimmerfin: { name: 'Třpyt naděje', desc: 'Chyť Koi se třpytivou ploutví.' },
+  col_glimmerfin: {
+    name: 'Třpyt naděje',
+    desc: 'Chyť Koi se třpytivou ploutví.',
+  },
   col_full_creel: {
     name: 'Plný košík',
     desc: 'Objev všech šest běžných úlovků z vod Údolí, Močálu a Výšin.',
@@ -458,13 +542,22 @@ export const table: DeedLocaleTable = {
     name: 'Dokonalá souhra',
     desc: 'Dosáhni hodnocení 1900 v arénové kategorii 2 na 2.',
   },
-  pvp_duel_first_win: { name: 'Vyřídíme si to venku', desc: 'Vyhraj duel.' },
-  pvp_duel_grace: { name: 'Lekce pokory', desc: 'Prohraj duel s důstojností víceméně nedotčenou.' },
+  pvp_duel_first_win: {
+    name: 'Vyřídíme si to venku',
+    desc: 'Vyhraj duel.',
+  },
+  pvp_duel_grace: {
+    name: 'Lekce pokory',
+    desc: 'Prohraj duel s důstojností víceméně nedotčenou.',
+  },
   pvp_vcup_first_match: {
     name: 'Kopačky na hřišti',
     desc: 'Odehraj celý zápas Poháru údolí na Prasečím poli, ať vyhraješ, nebo prohraješ.',
   },
-  pvp_vcup_first_win: { name: 'První trofej', desc: 'Vyhraj hodnocený zápas Poháru údolí.' },
+  pvp_vcup_first_win: {
+    name: 'První trofej',
+    desc: 'Vyhraj hodnocený zápas Poháru údolí.',
+  },
   pvp_vcup_wins_10: {
     name: 'Ostřílený kančbalista',
     desc: 'Vyhraj 10 hodnocených zápasů Poháru údolí.',
@@ -502,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Nezvaný host',
     desc: 'Odehraj celý souboj Fiesty 2 na 2, ať vyhraješ, nebo prohraješ.',
   },
-  pvp_fiesta_first_win: { name: 'Duše Fiesty', desc: 'Vyhraj souboj Fiesty 2 na 2.' },
+  pvp_fiesta_first_win: {
+    name: 'Duše Fiesty',
+    desc: 'Vyhraj souboj Fiesty 2 na 2.',
+  },
   pvp_fiesta_double: {
     name: 'Dvojitý malér',
     desc: 'Zaznamenej dvě eliminace ve Fiestě během čtyř sekund.',
@@ -527,10 +623,22 @@ export const table: DeedLocaleTable = {
     name: 'Ve dvou se to lépe táhne',
     desc: 'Připoj se do skupiny s dalším hráčem.',
   },
-  soc_full_house: { name: 'Plná sestava', desc: 'Vyčisti dungeon v plné pětičlenné skupině.' },
-  soc_guild_joined: { name: 'Pod jednou zástavou', desc: 'Staň se členem cechu.' },
-  soc_guild_founded: { name: 'Zakladatelův brk', desc: 'Založ vlastní cech.' },
-  soc_first_trade: { name: 'Poctivý obchod', desc: 'Dokonči obchod s jiným hráčem.' },
+  soc_full_house: {
+    name: 'Plná sestava',
+    desc: 'Vyčisti dungeon v plné pětičlenné skupině.',
+  },
+  soc_guild_joined: {
+    name: 'Pod jednou zástavou',
+    desc: 'Staň se členem cechu.',
+  },
+  soc_guild_founded: {
+    name: 'Zakladatelův brk',
+    desc: 'Založ vlastní cech.',
+  },
+  soc_first_trade: {
+    name: 'Poctivý obchod',
+    desc: 'Dokonči obchod s jiným hráčem.',
+  },
   soc_first_sale: {
     name: 'Máme otevřeno',
     desc: 'Vyzvedni mince ze svého prvního prodeje na Světovém trhu.',
@@ -548,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'Na havraních křídlech',
     desc: 'Pošli Havraní poštou dopis nesoucí mince nebo balíček.',
   },
-  soc_room_for_more: { name: 'Kam s tím', desc: 'Kup si své první rozšíření banky.' },
+  soc_room_for_more: {
+    name: 'Kam s tím',
+    desc: 'Kup si své první rozšíření banky.',
+  },
   soc_gilded_strongbox: {
     name: 'Pozlacená truhlice',
     desc: 'Kup všechna rozšíření banky, která ti pokladníci prodají.',
@@ -557,7 +668,10 @@ export const table: DeedLocaleTable = {
     name: 'Věříme ve Fernanda',
     desc: 'Slož poklonu pokladníku Fernandovi, správci Pozlacené truhlice v Eastbrooku.',
   },
-  soc_pocket_money: { name: 'Kapesné', desc: 'Ukořisti za celý život celkem 1 zlatý v mincích.' },
+  soc_pocket_money: {
+    name: 'Kapesné',
+    desc: 'Ukořisti za celý život celkem 1 zlatý v mincích.',
+  },
   soc_heavy_purse: {
     name: 'Těžký měšec',
     desc: 'Ukořisti za celý život celkem 10 zlatých v mincích.',
@@ -566,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'Dračí poklad',
     desc: 'Ukořisti za celý život celkem 100 zlatých v mincích.',
   },
-  soc_civic_duty: { name: 'Občanská povinnost', desc: 'Přiděl svůj první bod zaměření města.' },
+  soc_civic_duty: {
+    name: 'Občanská povinnost',
+    desc: 'Přiděl svůj první bod zaměření města.',
+  },
   exp_long_road_north: {
     name: 'Dlouhá cesta na sever',
     desc: 'Navštiv všechna tři hlavní sídla: Eastbrook, Fenbridge a Highwatch.',
@@ -588,15 +705,30 @@ export const table: DeedLocaleTable = {
     desc: 'Vykonej skutek pocestného všech tří zón.',
     title: 'Pocestný',
   },
-  exp_something_shiny: { name: 'Něco se třpytí', desc: 'Seber ze země třpytící se předmět.' },
-  exp_first_ore: { name: 'Udeř do země', desc: 'Skliď své první naleziště rudy.' },
-  exp_first_timber: { name: 'Pozor, padá!', desc: 'Skliď své první naleziště dřeva.' },
-  exp_first_herb: { name: 'Zelené prsty', desc: 'Skliď své první naleziště bylin.' },
+  exp_something_shiny: {
+    name: 'Něco se třpytí',
+    desc: 'Seber ze země třpytící se předmět.',
+  },
+  exp_first_ore: {
+    name: 'Udeř do země',
+    desc: 'Skliď své první naleziště rudy.',
+  },
+  exp_first_timber: {
+    name: 'Pozor, padá!',
+    desc: 'Skliď své první naleziště dřeva.',
+  },
+  exp_first_herb: {
+    name: 'Zelené prsty',
+    desc: 'Skliď své první naleziště bylin.',
+  },
   feat_era_cap: {
     name: 'Dítě První éry',
     desc: 'Dosáhl(a) jsi úrovně 20 v době, kdy trvala První éra.',
   },
-  feat_book_complete: { name: 'Celá kniha', desc: 'Vykonej každý skutek v Knize skutků.' },
+  feat_book_complete: {
+    name: 'Celá kniha',
+    desc: 'Vykonej každý skutek v Knize skutků.',
+  },
   feat_brightwood_relic: {
     name: 'Vzpomínka na Brightwood',
     desc: 'Uchovej relikvii starého Brightwoodu: Kazajku z trnité kůže nebo Korunu monarchy.',
@@ -618,7 +750,10 @@ export const table: DeedLocaleTable = {
     name: 'Strážce vybírá dvakrát',
     desc: 'Zemřel(a) jsi, když na tobě ještě leželo Strážcovo mýto.',
   },
-  hid_roll_hundred: { name: 'Čistá stovka', desc: 'Hodil(a) jsi rovných 100 při obyčejném /roll.' },
+  hid_roll_hundred: {
+    name: 'Čistá stovka',
+    desc: 'Hodil(a) jsi rovných 100 při obyčejném /roll.',
+  },
   hid_yumi_cheer: {
     name: 'Největší fanoušek Yumi',
     desc: 'Povzbuzoval(a) jsi Yumi uprostřed souboje tam, kde tě mohla slyšet.',
@@ -649,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Nástroje řemesla',
+    desc: '[CS] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Co krypta skrývala',
@@ -657,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Úhoři v rákosí',
     desc: 'Chyť rybu ve vodách Mirefenského močálu.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Vlastní pravidla',
+    desc: 'Vyhraj Karetní souboj u Karetního mistra.',
   },
 };

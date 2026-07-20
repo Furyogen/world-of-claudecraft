@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Aturan Sendiri',
-    desc: 'Menangkan Duel Kartu di hadapan Ahli Kartu.',
-  },
   prog_first_steps: {
     name: 'Langkah Pertama',
     desc: 'Capai level 2 dan ayunkan langkah pertamamu di jalan yang masih panjang.',
@@ -19,8 +15,14 @@ export const table: DeedLocaleTable = {
     name: 'Mulai Menapak',
     desc: 'Capai level 5; alam liar sudah terasa sedikit lebih kecil.',
   },
-  prog_double_digits: { name: 'Dua Digit', desc: 'Capai level 10 dan buka talentamu.' },
-  prog_the_long_middle: { name: 'Jalan Tengah yang Panjang', desc: 'Capai level 15.' },
+  prog_double_digits: {
+    name: 'Dua Digit',
+    desc: 'Capai level 10 dan buka talentamu.',
+  },
+  prog_the_long_middle: {
+    name: 'Jalan Tengah yang Panjang',
+    desc: 'Capai level 15.',
+  },
   prog_level_cap: {
     name: 'Pemandangan dari Puncak',
     desc: 'Capai level 20, batas level tertinggi.',
@@ -29,7 +31,10 @@ export const table: DeedLocaleTable = {
     name: 'Istirahat Cukup',
     desc: 'Beristirahatlah di penginapan hingga kau memperoleh pengalaman istirahat.',
   },
-  prog_talented: { name: 'Poin yang Tak Sia-sia', desc: 'Gunakan poin talenta pertamamu.' },
+  prog_talented: {
+    name: 'Poin yang Tak Sia-sia',
+    desc: 'Gunakan poin talenta pertamamu.',
+  },
   prog_specialized: {
     name: 'Pernyataan Tekad',
     desc: 'Pilih satu spesialisasi dan pelajari kemampuan khasnya.',
@@ -43,7 +48,7 @@ export const table: DeedLocaleTable = {
     desc: 'Pilih satu opsi pada keenam baris talenta dalam satu build.',
   },
   prog_veteran: {
-    name: 'Veteran',
+    name: '[ID] Veteran',
     desc: 'Kumpulkan total 250.000 pengalaman sepanjang hayat.',
     title: 'Veteran',
   },
@@ -71,17 +76,38 @@ export const table: DeedLocaleTable = {
     name: 'Mulai Lagi dari Awal',
     desc: 'Capai batas level, penuhi bilah pengalaman sekali lagi, dan raih peringkat prestise 1.',
   },
-  prog_prestige_5: { name: 'Kebiasaan Lama', desc: 'Capai peringkat prestise 5.' },
-  prog_prestige_10: { name: 'Gerak Abadi', desc: 'Capai peringkat prestise 10.' },
-  prog_first_harvest: { name: 'Buah Ladang', desc: 'Panen titik pengumpulan pertamamu.' },
-  prog_mining_100: { name: 'Bijih dalam Darah', desc: 'Capai 100 kecakapan Penambangan.' },
-  prog_logging_100: { name: 'Penebas Inti Kayu', desc: 'Capai 100 kecakapan Penebangan Kayu.' },
-  prog_herbalism_100: { name: 'Penguasa Padang Rumput', desc: 'Capai 100 kecakapan Herbalisme.' },
+  prog_prestige_5: {
+    name: 'Kebiasaan Lama',
+    desc: 'Capai peringkat prestise 5.',
+  },
+  prog_prestige_10: {
+    name: 'Gerak Abadi',
+    desc: 'Capai peringkat prestise 10.',
+  },
+  prog_first_harvest: {
+    name: 'Buah Ladang',
+    desc: 'Panen titik pengumpulan pertamamu.',
+  },
+  prog_mining_100: {
+    name: 'Bijih dalam Darah',
+    desc: 'Capai 100 kecakapan Penambangan.',
+  },
+  prog_logging_100: {
+    name: 'Penebas Inti Kayu',
+    desc: 'Capai 100 kecakapan Penebangan Kayu.',
+  },
+  prog_herbalism_100: {
+    name: 'Penguasa Padang Rumput',
+    desc: 'Capai 100 kecakapan Herbalisme.',
+  },
   prog_master_gatherer: {
     name: 'Pengumpul Ulung',
     desc: 'Capai 100 kecakapan dalam Penambangan, Penebangan Kayu, dan Herbalisme.',
   },
-  prog_first_craft: { name: 'Buatan Tangan', desc: 'Selesaikan hasil kerajinan sukses pertamamu.' },
+  prog_first_craft: {
+    name: 'Buatan Tangan',
+    desc: 'Selesaikan hasil kerajinan sukses pertamamu.',
+  },
   prog_craft_specialist: {
     name: 'Rahasia Dapur',
     desc: 'Capai 75 keahlian pada satu kerajinan mana pun dan buka bonus spesialisasinya.',
@@ -90,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'Mengitari Lingkaran',
     desc: 'Capai 25 keahlian pada lima kerajinan yang berbeda.',
   },
-  cmb_first_blood: { name: 'Darah Pertama', desc: 'Kalahkan musuh pertamamu.' },
-  cmb_slayer: { name: 'Pembantai', desc: 'Kalahkan 1.000 musuh.' },
-  cmb_legion_of_one: { name: 'Legiun Seorang Diri', desc: 'Kalahkan 10.000 musuh.' },
-  cmb_heavy_hitter: { name: 'Pemukul Kelas Berat', desc: 'Timbulkan total 500.000 kerusakan.' },
-  cmb_critical_eye: { name: 'Mata Jeli', desc: 'Daratkan 500 serangan kritis.' },
+  cmb_first_blood: {
+    name: 'Darah Pertama',
+    desc: 'Kalahkan musuh pertamamu.',
+  },
+  cmb_slayer: {
+    name: 'Pembantai',
+    desc: 'Kalahkan 1.000 musuh.',
+  },
+  cmb_legion_of_one: {
+    name: 'Legiun Seorang Diri',
+    desc: 'Kalahkan 10.000 musuh.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Pemukul Kelas Berat',
+    desc: 'Timbulkan total 500.000 kerusakan.',
+  },
+  cmb_critical_eye: {
+    name: 'Mata Jeli',
+    desc: 'Daratkan 500 serangan kritis.',
+  },
   cmb_giantslayer: {
     name: 'Penumbang Raksasa',
     desc: 'Daratkan pukulan penghabisan pada musuh yang setidaknya lima level di atasmu.',
@@ -222,17 +263,26 @@ export const table: DeedLocaleTable = {
     name: 'Kebiasaan Menumbangkan Gunung',
     desc: 'Tumbangkan Thunzharr, Puncak yang Terjaga, sepuluh kali.',
   },
-  dlv_reliquary: { name: 'Pelari Reliquary', desc: 'Tuntaskan Reliquary yang Runtuh.' },
+  dlv_reliquary: {
+    name: 'Pelari Reliquary',
+    desc: 'Tuntaskan Reliquary yang Runtuh.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroik: Reliquary yang Runtuh',
     desc: 'Tuntaskan Reliquary yang Runtuh pada tingkat Heroik.',
   },
-  dlv_litany: { name: 'Bungkam Litani', desc: 'Tuntaskan Litani Tenggelam.' },
+  dlv_litany: {
+    name: 'Bungkam Litani',
+    desc: 'Tuntaskan Litani Tenggelam.',
+  },
   dlv_litany_heroic: {
     name: 'Heroik: Litani Tenggelam',
     desc: 'Tuntaskan Litani Tenggelam pada tingkat Heroik.',
   },
-  dlv_lore_journal: { name: 'Catatan Pinggir', desc: 'Buka kelima entri jurnal delve.' },
+  dlv_lore_journal: {
+    name: 'Catatan Pinggir',
+    desc: 'Buka kelima entri jurnal delve.',
+  },
   dlv_companion_max: {
     name: 'Sahabat di Kedalaman',
     desc: 'Naikkan seorang pendamping delve hingga pangkat tertingginya.',
@@ -241,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Dua Lentera Menyala',
     desc: 'Naikkan kedua pendamping delve, Akolit Tessa dan Edda Reedhand, hingga pangkat tertinggi mereka.',
   },
-  dlv_clears_50: { name: 'Lima Puluh Depa', desc: 'Tuntaskan 50 penjelajahan delve.' },
+  dlv_clears_50: {
+    name: 'Lima Puluh Depa',
+    desc: 'Tuntaskan 50 penjelajahan delve.',
+  },
   dlv_solo_heroic: {
     name: 'Berdua Saja Sudah Ramai',
     desc: 'Tuntaskan sebuah delve tingkat Heroik tanpa pemain lain, hanya kau dan pendampingmu.',
@@ -362,13 +415,19 @@ export const table: DeedLocaleTable = {
     name: 'Tukang Timbun',
     desc: 'Temukan 25 barang berbeda (sebuah barang terhitung saat pertama kali masuk ke dalam kepemilikanmu).',
   },
-  col_discovery_75: { name: 'Pemburu Kilauan', desc: 'Temukan 75 barang berbeda.' },
+  col_discovery_75: {
+    name: 'Pemburu Kilauan',
+    desc: 'Temukan 75 barang berbeda.',
+  },
   col_discovery_150: {
     name: 'Lemari Keajaiban',
     desc: 'Temukan 150 barang berbeda.',
     title: 'sang Kurator',
   },
-  col_discovery_250: { name: 'Katalog Agung', desc: 'Temukan 250 barang berbeda.' },
+  col_discovery_250: {
+    name: 'Katalog Agung',
+    desc: 'Temukan 250 barang berbeda.',
+  },
   col_first_rare: {
     name: 'Sesuatu yang Biru',
     desc: 'Dapatkan barang pertamamu yang berkualitas langka.',
@@ -409,7 +468,10 @@ export const table: DeedLocaleTable = {
     name: 'Regalia Bonewrought',
     desc: 'Temukan setiap bagian dari Regalia Bonewrought.',
   },
-  col_set_nighttalon: { name: 'Bulu Direfang', desc: 'Temukan setiap bagian dari Bulu Direfang.' },
+  col_set_nighttalon: {
+    name: 'Bulu Direfang',
+    desc: 'Temukan setiap bagian dari Bulu Direfang.',
+  },
   col_set_soulflame: {
     name: 'Regalia Wraithfire',
     desc: 'Temukan setiap bagian dari Regalia Wraithfire.',
@@ -435,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Pelanggan Kesayangan',
     desc: 'Temukan kesepuluh barang dagangan Kepala Perbekalan Vex.',
   },
-  col_glimmerfin: { name: 'Kilau Harapan', desc: 'Pancing seekor Koi Sirip Kilau.' },
+  col_glimmerfin: {
+    name: 'Kilau Harapan',
+    desc: 'Pancing seekor Koi Sirip Kilau.',
+  },
   col_full_creel: {
     name: 'Keranjang Ikan Penuh',
     desc: 'Temukan keenam tangkapan umum dari perairan Lembah, Rawa, dan Dataran Tinggi.',
@@ -456,19 +521,31 @@ export const table: DeedLocaleTable = {
     name: 'Penantang Koliseum',
     desc: 'Capai rating 1600 di divisi arena 1v1.',
   },
-  pvp_arena_1v1_1750: { name: 'Rival Koliseum', desc: 'Capai rating 1750 di divisi arena 1v1.' },
-  pvp_arena_1v1_1900: {
-    name: 'Gladiator',
-    desc: 'Capai rating 1900 di divisi arena 1v1.',
-    title: 'Gladiator',
+  pvp_arena_1v1_1750: {
+    name: 'Rival Koliseum',
+    desc: 'Capai rating 1750 di divisi arena 1v1.',
   },
-  pvp_arena_2v2_1600: { name: 'Kuat Berdua', desc: 'Capai rating 1600 di divisi arena 2v2.' },
-  pvp_arena_2v2_1750: { name: 'Duet Maut', desc: 'Capai rating 1750 di divisi arena 2v2.' },
+  pvp_arena_1v1_1900: {
+    name: '[ID] Gladiator',
+    desc: 'Capai rating 1900 di divisi arena 1v1.',
+    title: '[ID] Gladiator',
+  },
+  pvp_arena_2v2_1600: {
+    name: 'Kuat Berdua',
+    desc: 'Capai rating 1600 di divisi arena 2v2.',
+  },
+  pvp_arena_2v2_1750: {
+    name: 'Duet Maut',
+    desc: 'Capai rating 1750 di divisi arena 2v2.',
+  },
   pvp_arena_2v2_1900: {
     name: 'Kemitraan Sempurna',
     desc: 'Capai rating 1900 di divisi arena 2v2.',
   },
-  pvp_duel_first_win: { name: 'Selesaikan di Luar', desc: 'Menangkan sebuah duel.' },
+  pvp_duel_first_win: {
+    name: 'Selesaikan di Luar',
+    desc: 'Menangkan sebuah duel.',
+  },
   pvp_duel_grace: {
     name: 'Pelajaran Kerendahan Hati',
     desc: 'Kalah dalam duel dengan martabat yang sebagian besar masih utuh.',
@@ -518,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Penyusup Pesta',
     desc: 'Bertarunglah dalam satu laga Fiesta 2v2 secara penuh, menang ataupun kalah.',
   },
-  pvp_fiesta_first_win: { name: 'Bintang Fiesta', desc: 'Menangkan satu laga Fiesta 2v2.' },
+  pvp_fiesta_first_win: {
+    name: 'Bintang Fiesta',
+    desc: 'Menangkan satu laga Fiesta 2v2.',
+  },
   pvp_fiesta_double: {
     name: 'Sekali Dayung, Dua Tumbang',
     desc: 'Robohkan dua lawan Fiesta dalam rentang empat detik.',
@@ -547,8 +627,14 @@ export const table: DeedLocaleTable = {
     name: 'Formasi Lengkap',
     desc: 'Taklukkan sebuah dungeon dengan party lengkap berisi lima orang.',
   },
-  soc_guild_joined: { name: 'Di Bawah Satu Panji', desc: 'Jadilah anggota sebuah guild.' },
-  soc_guild_founded: { name: 'Pena Sang Pendiri', desc: 'Dirikan guild milikmu sendiri.' },
+  soc_guild_joined: {
+    name: 'Di Bawah Satu Panji',
+    desc: 'Jadilah anggota sebuah guild.',
+  },
+  soc_guild_founded: {
+    name: 'Pena Sang Pendiri',
+    desc: 'Dirikan guild milikmu sendiri.',
+  },
   soc_first_trade: {
     name: 'Pertukaran yang Adil',
     desc: 'Selesaikan satu pertukaran barang dengan pemain lain.',
@@ -570,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'Lewat Sayap Gagak',
     desc: 'Kirim sepucuk surat Pos Gagak yang memuat uang atau paket.',
   },
-  soc_room_for_more: { name: 'Ruang Tambahan', desc: 'Beli perluasan bank pertamamu.' },
+  soc_room_for_more: {
+    name: 'Ruang Tambahan',
+    desc: 'Beli perluasan bank pertamamu.',
+  },
   soc_gilded_strongbox: {
     name: 'Brankas Bersepuh Emas',
     desc: 'Beli setiap perluasan bank yang bersedia dijual para bendahara kepadamu.',
@@ -591,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'Timbunan Sang Wyrm',
     desc: 'Jarah total 100 emas seumur hidup dalam bentuk kepingan uang.',
   },
-  soc_civic_duty: { name: 'Tugas Warga', desc: 'Alokasikan poin fokus kota pertamamu.' },
+  soc_civic_duty: {
+    name: 'Tugas Warga',
+    desc: 'Alokasikan poin fokus kota pertamamu.',
+  },
   exp_long_road_north: {
     name: 'Jalan Panjang ke Utara',
     desc: 'Kunjungi ketiga permukiman pusat: Eastbrook, Jembatan Rawa, dan Menara Pengawas.',
@@ -617,14 +709,26 @@ export const table: DeedLocaleTable = {
     name: 'Sesuatu yang Berkilau',
     desc: 'Pungut sebuah benda berkilauan dari tanah.',
   },
-  exp_first_ore: { name: 'Belah Bumi', desc: 'Panen titik bijih pertamamu.' },
-  exp_first_timber: { name: 'Awas, Tumbang!', desc: 'Panen titik kayu pertamamu.' },
-  exp_first_herb: { name: 'Tangan Dingin', desc: 'Panen titik herba pertamamu.' },
+  exp_first_ore: {
+    name: 'Belah Bumi',
+    desc: 'Panen titik bijih pertamamu.',
+  },
+  exp_first_timber: {
+    name: 'Awas, Tumbang!',
+    desc: 'Panen titik kayu pertamamu.',
+  },
+  exp_first_herb: {
+    name: 'Tangan Dingin',
+    desc: 'Panen titik herba pertamamu.',
+  },
   feat_era_cap: {
     name: 'Anak Era Pertama',
     desc: 'Mencapai level 20 selagi Era Pertama masih berjalan.',
   },
-  feat_book_complete: { name: 'Seisi Kitab', desc: 'Raih setiap jasa dalam Kitab Jasa.' },
+  feat_book_complete: {
+    name: 'Seisi Kitab',
+    desc: 'Raih setiap jasa dalam Kitab Jasa.',
+  },
   feat_brightwood_relic: {
     name: 'Mengenang Brightwood',
     desc: 'Simpan sebuah relik dari Brightwood lama: Jaket Kulit Berduri atau Mahkota Sang Raja.',
@@ -680,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Perkakas Sang Tukang',
+    desc: '[ID] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Yang Disimpan Kripta',
@@ -688,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Belut di Sela Buluh',
     desc: 'Pancing seekor ikan dari perairan Rawa Mirefen.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Aturan Sendiri',
+    desc: 'Menangkan Duel Kartu di hadapan Ahli Kartu.',
   },
 };

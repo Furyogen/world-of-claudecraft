@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Ev Kuralları',
-    desc: "Kart Ustası'nın yanında bir Kart Düellosu kazan.",
-  },
   prog_first_steps: {
     name: 'İlk Adımlar',
     desc: '2. seviyeye ulaş ve uzun bir yolun ilk adımını at.',
@@ -23,18 +19,30 @@ export const table: DeedLocaleTable = {
     name: 'Çift Haneler',
     desc: '10. seviyeye ulaş ve yeteneklerinin kilidini aç.',
   },
-  prog_the_long_middle: { name: 'Yolun Uzun Ortası', desc: '15. seviyeye ulaş.' },
-  prog_level_cap: { name: 'Zirveden Manzara', desc: 'Seviye tavanı olan 20. seviyeye ulaş.' },
+  prog_the_long_middle: {
+    name: 'Yolun Uzun Ortası',
+    desc: '15. seviyeye ulaş.',
+  },
+  prog_level_cap: {
+    name: 'Zirveden Manzara',
+    desc: 'Seviye tavanı olan 20. seviyeye ulaş.',
+  },
   prog_well_rested: {
     name: 'Dinlenmiş ve Dinç',
     desc: 'Dinlenmiş tecrübe kazanana kadar bir hana yerleş.',
   },
-  prog_talented: { name: 'Yerini Bulan Puan', desc: 'İlk yetenek puanını harca.' },
+  prog_talented: {
+    name: 'Yerini Bulan Puan',
+    desc: 'İlk yetenek puanını harca.',
+  },
   prog_specialized: {
     name: 'Niyet Beyanı',
     desc: 'Bir uzmanlık seç ve onun imza yeteneğini öğren.',
   },
-  prog_deep_roots: { name: 'Derin Kökler', desc: 'Son sıradaki bir yeteneğe yetenek puanı harca.' },
+  prog_deep_roots: {
+    name: 'Derin Kökler',
+    desc: 'Son sıradaki bir yeteneğe yetenek puanı harca.',
+  },
   prog_full_build: {
     name: 'Altının Tamamı',
     desc: 'Tek bir dizilimde altı yetenek sırasının her birinden bir seçenek seç.',
@@ -68,11 +76,26 @@ export const table: DeedLocaleTable = {
     name: 'Baştan Al',
     desc: 'Seviye tavanına ulaş, çubuğu bir kez daha doldur ve 1. prestij rütbesini al.',
   },
-  prog_prestige_5: { name: 'Eski Alışkanlıklar', desc: '5. prestij rütbesine ulaş.' },
-  prog_prestige_10: { name: 'Devridaim', desc: '10. prestij rütbesine ulaş.' },
-  prog_first_harvest: { name: 'Tarlanın Meyveleri', desc: 'İlk toplama kaynağını hasat et.' },
-  prog_mining_100: { name: 'Kanında Cevher Var', desc: 'Madencilikte 100 yetkinliğe ulaş.' },
-  prog_logging_100: { name: 'Öz Odun Baltacısı', desc: 'Odunculukta 100 yetkinliğe ulaş.' },
+  prog_prestige_5: {
+    name: 'Eski Alışkanlıklar',
+    desc: '5. prestij rütbesine ulaş.',
+  },
+  prog_prestige_10: {
+    name: 'Devridaim',
+    desc: '10. prestij rütbesine ulaş.',
+  },
+  prog_first_harvest: {
+    name: 'Tarlanın Meyveleri',
+    desc: 'İlk toplama kaynağını hasat et.',
+  },
+  prog_mining_100: {
+    name: 'Kanında Cevher Var',
+    desc: 'Madencilikte 100 yetkinliğe ulaş.',
+  },
+  prog_logging_100: {
+    name: 'Öz Odun Baltacısı',
+    desc: 'Odunculukta 100 yetkinliğe ulaş.',
+  },
   prog_herbalism_100: {
     name: 'Çayırların Efendisi',
     desc: 'Şifalı Otçulukta 100 yetkinliğe ulaş.',
@@ -81,17 +104,38 @@ export const table: DeedLocaleTable = {
     name: 'Usta Toplayıcı',
     desc: 'Madencilik, Odunculuk ve Şifalı Otçulukta 100 yetkinliğe ulaş.',
   },
-  prog_first_craft: { name: 'El Emeği Göz Nuru', desc: 'İlk başarılı üretimini tamamla.' },
+  prog_first_craft: {
+    name: 'El Emeği Göz Nuru',
+    desc: 'İlk başarılı üretimini tamamla.',
+  },
   prog_craft_specialist: {
     name: 'Meslek Sırları',
     desc: 'Herhangi bir zanaatta 75 beceriye ulaş ve uzmanlık avantajlarının kilidini aç.',
   },
-  prog_around_the_ring: { name: 'Halkayı Dolaşmak', desc: 'Beş farklı zanaatta 25 beceriye ulaş.' },
-  cmb_first_blood: { name: 'İlk Kan', desc: 'İlk düşmanını alt et.' },
-  cmb_slayer: { name: 'Kıyıcı', desc: '1.000 düşman alt et.' },
-  cmb_legion_of_one: { name: 'Tek Kişilik Ordu', desc: '10.000 düşman alt et.' },
-  cmb_heavy_hitter: { name: 'Eli Ağır', desc: 'Toplam 500.000 hasar ver.' },
-  cmb_critical_eye: { name: 'Kritik Göz', desc: '500 kritik vuruş isabet ettir.' },
+  prog_around_the_ring: {
+    name: 'Halkayı Dolaşmak',
+    desc: 'Beş farklı zanaatta 25 beceriye ulaş.',
+  },
+  cmb_first_blood: {
+    name: 'İlk Kan',
+    desc: 'İlk düşmanını alt et.',
+  },
+  cmb_slayer: {
+    name: 'Kıyıcı',
+    desc: '1.000 düşman alt et.',
+  },
+  cmb_legion_of_one: {
+    name: 'Tek Kişilik Ordu',
+    desc: '10.000 düşman alt et.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Eli Ağır',
+    desc: 'Toplam 500.000 hasar ver.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritik Göz',
+    desc: '500 kritik vuruş isabet ettir.',
+  },
   cmb_giantslayer: {
     name: 'Devkıran',
     desc: 'Senden en az beş seviye yüksek bir düşmana son darbeyi indir.',
@@ -100,7 +144,10 @@ export const table: DeedLocaleTable = {
     name: 'Silkelen ve Kalk',
     desc: 'İlk kez öl; en iyilerimizin bile başına gelir.',
   },
-  dgn_hollow_crypt: { name: 'Mezarkıran', desc: "Oyuk Mezar'da Mezarçağıran Morthen'i alt et." },
+  dgn_hollow_crypt: {
+    name: 'Mezarkıran',
+    desc: "Oyuk Mezar'da Mezarçağıran Morthen'i alt et.",
+  },
   dgn_sunken_bastion: {
     name: 'Sisin Bağı Çözüldü',
     desc: "Batık Kale'de Fogbinder Vael'i alt et.",
@@ -149,7 +196,10 @@ export const table: DeedLocaleTable = {
     name: 'Tam Tur',
     desc: 'Dört Kahramanca zindanın hepsinden tek bir günde Kahramanca Nişan kazan.',
   },
-  dgn_boss_clears_50: { name: 'Ellinci Kapı', desc: "50 zindan sonu boss'unu alt et." },
+  dgn_boss_clears_50: {
+    name: 'Ellinci Kapı',
+    desc: "50 zindan sonu boss'unu alt et.",
+  },
   dgn_morthen_flawless: {
     name: 'Kemiğimiz Bile Kırılmadı',
     desc: "Hiçbir grup üyesi ölmeden Mezarçağıran Morthen'i Kahramanca zorlukta alt et.",
@@ -213,12 +263,18 @@ export const table: DeedLocaleTable = {
     name: 'Dağ Devirme Alışkanlığı',
     desc: "Thunzharr, Uyanan Zirve'yi on kez yere ser.",
   },
-  dlv_reliquary: { name: 'Emanetlik Akıncısı', desc: "Çökmüş Emanetlik'i temizle." },
+  dlv_reliquary: {
+    name: 'Emanetlik Akıncısı',
+    desc: "Çökmüş Emanetlik'i temizle.",
+  },
   dlv_reliquary_heroic: {
     name: 'Kahramanca: Çökmüş Emanetlik',
     desc: "Çökmüş Emanetlik'i Kahramanca kademesinde temizle.",
   },
-  dlv_litany: { name: 'Litanyayı Sustur', desc: "Boğulmuş Litanya'yı temizle." },
+  dlv_litany: {
+    name: 'Litanyayı Sustur',
+    desc: "Boğulmuş Litanya'yı temizle.",
+  },
   dlv_litany_heroic: {
     name: 'Kahramanca: Boğulmuş Litanya',
     desc: "Boğulmuş Litanya'yı Kahramanca kademesinde temizle.",
@@ -235,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'İki Fener de Yanıyor',
     desc: "Her iki mağara seferi yoldaşını da, Çömez Tessa ile Edda Reedhand'i, en yüksek rütbelerine çıkar.",
   },
-  dlv_clears_50: { name: 'Elli Kulaç', desc: '50 mağara seferi tamamla.' },
+  dlv_clears_50: {
+    name: 'Elli Kulaç',
+    desc: '50 mağara seferi tamamla.',
+  },
   dlv_solo_heroic: {
     name: 'İki Kişilik Kalabalık',
     desc: 'Kahramanca kademesindeki bir mağara seferini başka hiçbir oyuncu olmadan, yalnızca sen ve yoldaşınla temizle.',
@@ -278,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: "Ayna Gölü'nde Bir Şey Var",
     desc: "Doğudere Vadisi'nin sularından bir balık tut.",
   },
-  chr_vale_packbreaker: { name: 'Sürü Kıran', desc: '10 saniye içinde 3 Orman Kurdu öldür.' },
+  chr_vale_packbreaker: {
+    name: 'Sürü Kıran',
+    desc: '10 saniye içinde 3 Orman Kurdu öldür.',
+  },
   chr_vale_cup_debut: {
     name: 'Bakır Kova Adayı',
     desc: "Domuz Tarlası'ndaki bir Vadi Kupası maçında sahaya çık ve topa dokun.",
@@ -337,7 +399,10 @@ export const table: DeedLocaleTable = {
     name: 'Soğuk Su, Daha Soğuk Işık',
     desc: "Işıltıgöl'den bir balık tut.",
   },
-  chr_peaks_moongate: { name: 'Soğuk Geçitten', desc: 'Işıltıgöl kıyısındaki ay geçidinden geç.' },
+  chr_peaks_moongate: {
+    name: 'Soğuk Geçitten',
+    desc: 'Işıltıgöl kıyısındaki ay geçidinden geç.',
+  },
   chr_peaks_waking_witness: {
     name: 'Yürüyen Dağ',
     desc: "Thunzharr, Uyanan Zirve'yi dağı arşınlarken kendi gözlerinle gör.",
@@ -350,11 +415,27 @@ export const table: DeedLocaleTable = {
     name: 'İstifçi',
     desc: '25 farklı eşya keşfet (bir eşya, eline ilk geçtiği anda sayılır).',
   },
-  col_discovery_75: { name: 'Saksağan', desc: '75 farklı eşya keşfet.' },
-  col_discovery_150: { name: 'Nadire Kabinesi', desc: '150 farklı eşya keşfet.', title: 'Küratör' },
-  col_discovery_250: { name: 'Büyük Katalog', desc: '250 farklı eşya keşfet.' },
-  col_first_rare: { name: 'Mavi Boncuk', desc: 'Nadir kalitede ilk eşyanı edin.' },
-  col_first_epic: { name: 'Mor Doğan', desc: 'Destansı kalitede ilk eşyanı edin.' },
+  col_discovery_75: {
+    name: 'Saksağan',
+    desc: '75 farklı eşya keşfet.',
+  },
+  col_discovery_150: {
+    name: 'Nadire Kabinesi',
+    desc: '150 farklı eşya keşfet.',
+    title: 'Küratör',
+  },
+  col_discovery_250: {
+    name: 'Büyük Katalog',
+    desc: '250 farklı eşya keşfet.',
+  },
+  col_first_rare: {
+    name: 'Mavi Boncuk',
+    desc: 'Nadir kalitede ilk eşyanı edin.',
+  },
+  col_first_epic: {
+    name: 'Mor Doğan',
+    desc: 'Destansı kalitede ilk eşyanı edin.',
+  },
   col_first_legendary: {
     name: 'Turnayı Turuncusundan',
     desc: 'Efsanevi kalitede ilk eşyanı edin.',
@@ -387,7 +468,10 @@ export const table: DeedLocaleTable = {
     name: 'Bonewrought Kisvesi',
     desc: "Bonewrought Kisvesi'nin her parçasını keşfet.",
   },
-  col_set_nighttalon: { name: 'Direfang Postu', desc: "Direfang Postu'nun her parçasını keşfet." },
+  col_set_nighttalon: {
+    name: 'Direfang Postu',
+    desc: "Direfang Postu'nun her parçasını keşfet.",
+  },
   col_set_soulflame: {
     name: 'Wraithfire Kisvesi',
     desc: "Wraithfire Kisvesi'nin her parçasını keşfet.",
@@ -413,12 +497,18 @@ export const table: DeedLocaleTable = {
     name: 'Gedikli Müşteri',
     desc: "Kahramanca Levazımcısı'nın tezgâhındaki on parçanın tamamını keşfet.",
   },
-  col_glimmerfin: { name: 'Umut Pırıltısı', desc: 'Bir Pırıltıyüzgeç Koi tut.' },
+  col_glimmerfin: {
+    name: 'Umut Pırıltısı',
+    desc: 'Bir Pırıltıyüzgeç Koi tut.',
+  },
   col_full_creel: {
     name: 'Dolu Sepet',
     desc: "Vadi'nin, Bataklık'ın ve Tepeler'in sularındaki altı yaygın avın tümünü keşfet.",
   },
-  col_junk_drawer: { name: 'Ivır Zıvır Çekmecesi', desc: 'Kötü kalitede 10 farklı eşya keşfet.' },
+  col_junk_drawer: {
+    name: 'Ivır Zıvır Çekmecesi',
+    desc: 'Kötü kalitede 10 farklı eşya keşfet.',
+  },
   pvp_arena_first_match: {
     name: 'Çizmelerindeki Kum',
     desc: "Kül Kolezyumu'nda, iki ligden herhangi birinde dereceli bir maça çık.",
@@ -427,17 +517,35 @@ export const table: DeedLocaleTable = {
     name: 'Tribünler Kükrüyor',
     desc: 'İki ligden herhangi birinde dereceli bir arena maçı kazan.',
   },
-  pvp_arena_1v1_1600: { name: 'Kolezyum Namzedi', desc: '1v1 arena liginde 1600 puana ulaş.' },
-  pvp_arena_1v1_1750: { name: 'Kolezyum Hasmı', desc: '1v1 arena liginde 1750 puana ulaş.' },
+  pvp_arena_1v1_1600: {
+    name: 'Kolezyum Namzedi',
+    desc: '1v1 arena liginde 1600 puana ulaş.',
+  },
+  pvp_arena_1v1_1750: {
+    name: 'Kolezyum Hasmı',
+    desc: '1v1 arena liginde 1750 puana ulaş.',
+  },
   pvp_arena_1v1_1900: {
     name: 'Gladyatör',
     desc: '1v1 arena liginde 1900 puana ulaş.',
     title: 'Gladyatör',
   },
-  pvp_arena_2v2_1600: { name: 'İki Kişilik Ordu', desc: '2v2 arena liginde 1600 puana ulaş.' },
-  pvp_arena_2v2_1750: { name: 'Korkunç İkili', desc: '2v2 arena liginde 1750 puana ulaş.' },
-  pvp_arena_2v2_1900: { name: 'Kusursuz Ortaklık', desc: '2v2 arena liginde 1900 puana ulaş.' },
-  pvp_duel_first_win: { name: 'Bunu Dışarıda Halledelim', desc: 'Bir düello kazan.' },
+  pvp_arena_2v2_1600: {
+    name: 'İki Kişilik Ordu',
+    desc: '2v2 arena liginde 1600 puana ulaş.',
+  },
+  pvp_arena_2v2_1750: {
+    name: 'Korkunç İkili',
+    desc: '2v2 arena liginde 1750 puana ulaş.',
+  },
+  pvp_arena_2v2_1900: {
+    name: 'Kusursuz Ortaklık',
+    desc: '2v2 arena liginde 1900 puana ulaş.',
+  },
+  pvp_duel_first_win: {
+    name: 'Bunu Dışarıda Halledelim',
+    desc: 'Bir düello kazan.',
+  },
   pvp_duel_grace: {
     name: 'Tevazu Dersi',
     desc: 'Onurunu büyük ölçüde koruyarak bir düello kaybet.',
@@ -446,7 +554,10 @@ export const table: DeedLocaleTable = {
     name: 'Sahaya İlk Adım',
     desc: "Kazan ya da kaybet, Domuz Tarlası'nda bir Vadi Kupası maçını sonuna kadar oyna.",
   },
-  pvp_vcup_first_win: { name: 'İlk Kupa', desc: 'Dereceli bir Vadi Kupası maçı kazan.' },
+  pvp_vcup_first_win: {
+    name: 'İlk Kupa',
+    desc: 'Dereceli bir Vadi Kupası maçı kazan.',
+  },
   pvp_vcup_wins_10: {
     name: 'Domuztopunun Eski Kurdu',
     desc: '10 dereceli Vadi Kupası maçı kazan.',
@@ -456,7 +567,10 @@ export const table: DeedLocaleTable = {
     desc: '25 dereceli Vadi Kupası maçı kazan.',
     title: 'Domuztopu Efsanesi',
   },
-  pvp_vcup_first_goal: { name: 'Siftah', desc: 'Dereceli bir Vadi Kupası maçında gol at.' },
+  pvp_vcup_first_goal: {
+    name: 'Siftah',
+    desc: 'Dereceli bir Vadi Kupası maçında gol at.',
+  },
   pvp_vcup_hat_trick: {
     name: 'Hat-Trick Kahramanı',
     desc: '3v3 ya da daha büyük ligde, tek bir dereceli Vadi Kupası maçında üç gol at.',
@@ -481,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Davetsiz Misafir',
     desc: 'Kazan ya da kaybet, eksiksiz bir 2v2 Fiesta müsabakasında dövüş.',
   },
-  pvp_fiesta_first_win: { name: "Fiesta'nın Neşesi", desc: 'Bir 2v2 Fiesta müsabakası kazan.' },
+  pvp_fiesta_first_win: {
+    name: "Fiesta'nın Neşesi",
+    desc: 'Bir 2v2 Fiesta müsabakası kazan.',
+  },
   pvp_fiesta_double: {
     name: 'Çifte Bela',
     desc: "Fiesta'da dört saniye içinde rakiplerini iki kez yere ser.",
@@ -506,10 +623,22 @@ export const table: DeedLocaleTable = {
     name: 'Birlikten Kuvvet Doğar',
     desc: 'Başka bir oyuncuyla aynı gruba katıl.',
   },
-  soc_full_house: { name: 'Tam Kadro', desc: 'Beş kişilik tam bir grupla bir zindanı temizle.' },
-  soc_guild_joined: { name: 'Tek Sancak Altında', desc: 'Bir loncaya üye ol.' },
-  soc_guild_founded: { name: 'Kurucunun Tüy Kalemi', desc: 'Kendi loncanı kur.' },
-  soc_first_trade: { name: 'Adil Bir Takas', desc: 'Başka bir oyuncuyla bir takası tamamla.' },
+  soc_full_house: {
+    name: 'Tam Kadro',
+    desc: 'Beş kişilik tam bir grupla bir zindanı temizle.',
+  },
+  soc_guild_joined: {
+    name: 'Tek Sancak Altında',
+    desc: 'Bir loncaya üye ol.',
+  },
+  soc_guild_founded: {
+    name: 'Kurucunun Tüy Kalemi',
+    desc: 'Kendi loncanı kur.',
+  },
+  soc_first_trade: {
+    name: 'Adil Bir Takas',
+    desc: 'Başka bir oyuncuyla bir takası tamamla.',
+  },
   soc_first_sale: {
     name: 'Dükkân Açıldı',
     desc: 'İlk Dünya Pazarı satışından kazandığın parayı tahsil et.',
@@ -527,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'Kuzgun Kanadıyla',
     desc: 'Para ya da paket taşıyan bir Kuzgun Postası mektubu gönder.',
   },
-  soc_room_for_more: { name: 'Daha Fazlasına Yer Var', desc: 'İlk banka genişletmeni satın al.' },
+  soc_room_for_more: {
+    name: 'Daha Fazlasına Yer Var',
+    desc: 'İlk banka genişletmeni satın al.',
+  },
   soc_gilded_strongbox: {
     name: 'Yaldızlı Kasa',
     desc: 'Veznedarların sana satacağı her banka genişletmesini satın al.',
@@ -548,7 +680,10 @@ export const table: DeedLocaleTable = {
     name: 'Ejder İstifi',
     desc: 'Ömür boyu toplamda 100 altın değerinde para yağmala.',
   },
-  soc_civic_duty: { name: 'Vatandaşlık Görevi', desc: 'İlk kasaba odak puanını ata.' },
+  soc_civic_duty: {
+    name: 'Vatandaşlık Görevi',
+    desc: 'İlk kasaba odak puanını ata.',
+  },
   exp_long_road_north: {
     name: 'Kuzeye Giden Uzun Yol',
     desc: 'Üç merkez yerleşimin hepsini ziyaret et: Doğudere, Bataklık Köprüsü ve Yüksek Gözcü.',
@@ -570,10 +705,22 @@ export const table: DeedLocaleTable = {
     desc: 'Üç bölgenin de seyyah yiğitliğini kazan.',
     title: 'Seyyah',
   },
-  exp_something_shiny: { name: 'Parlak Bir Şey', desc: 'Işıldayan bir nesneyi yerden al.' },
-  exp_first_ore: { name: 'Kazmayı Toprağa Vur', desc: 'İlk cevher kaynağını topla.' },
-  exp_first_timber: { name: 'Ağaç Devriliyor!', desc: 'İlk odun kaynağını topla.' },
-  exp_first_herb: { name: 'Bereketli Eller', desc: 'İlk şifalı ot kaynağını topla.' },
+  exp_something_shiny: {
+    name: 'Parlak Bir Şey',
+    desc: 'Işıldayan bir nesneyi yerden al.',
+  },
+  exp_first_ore: {
+    name: 'Kazmayı Toprağa Vur',
+    desc: 'İlk cevher kaynağını topla.',
+  },
+  exp_first_timber: {
+    name: 'Ağaç Devriliyor!',
+    desc: 'İlk odun kaynağını topla.',
+  },
+  exp_first_herb: {
+    name: 'Bereketli Eller',
+    desc: 'İlk şifalı ot kaynağını topla.',
+  },
   feat_era_cap: {
     name: 'Birinci Çağın Evladı',
     desc: 'Birinci Çağ hüküm sürerken 20. seviyeye ulaştın.',
@@ -637,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Alet İşler, El Övünür',
+    desc: '[TR] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Mahzenin Sakladığı',
@@ -645,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Sazlıktaki Yılanbalıkları',
     desc: "Mirefen Bataklığı'nın sularından bir balık tut.",
+  },
+  pvp_card_duel_first_win: {
+    name: 'Ev Kuralları',
+    desc: "Kart Ustası'nın yanında bir Kart Düellosu kazan.",
   },
 };

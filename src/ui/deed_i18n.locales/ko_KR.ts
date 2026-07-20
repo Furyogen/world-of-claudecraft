@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: '패를 보여줘',
-    desc: '카드 마스터에게서 카드 대결에 승리하십시오.',
-  },
   prog_first_steps: {
     name: '첫걸음',
     desc: '레벨 2를 달성하고 머나먼 여정의 첫걸음을 내디디십시오.',
@@ -19,37 +15,99 @@ export const table: DeedLocaleTable = {
     name: '걸음마 떼기',
     desc: '레벨 5를 달성하십시오. 야생이 벌써 조금은 만만해 보입니다.',
   },
-  prog_double_digits: { name: '두 자릿수', desc: '레벨 10을 달성하고 특성을 해금하십시오.' },
-  prog_the_long_middle: { name: '길고 긴 중반', desc: '레벨 15를 달성하십시오.' },
-  prog_level_cap: { name: '정상에서 보는 풍경', desc: '최고 레벨인 레벨 20을 달성하십시오.' },
-  prog_well_rested: { name: '충분한 휴식', desc: '휴식 경험치가 쌓일 때까지 여관에 머무르십시오.' },
-  prog_talented: { name: '값진 한 점', desc: '첫 특성 점수를 사용하십시오.' },
-  prog_specialized: { name: '출사표', desc: '전문화를 선택하고 그 대표 기술을 배우십시오.' },
-  prog_deep_roots: { name: '깊이 내린 뿌리', desc: '마지막 단의 특성에 특성 점수를 사용하십시오.' },
+  prog_double_digits: {
+    name: '두 자릿수',
+    desc: '레벨 10을 달성하고 특성을 해금하십시오.',
+  },
+  prog_the_long_middle: {
+    name: '길고 긴 중반',
+    desc: '레벨 15를 달성하십시오.',
+  },
+  prog_level_cap: {
+    name: '정상에서 보는 풍경',
+    desc: '최고 레벨인 레벨 20을 달성하십시오.',
+  },
+  prog_well_rested: {
+    name: '충분한 휴식',
+    desc: '휴식 경험치가 쌓일 때까지 여관에 머무르십시오.',
+  },
+  prog_talented: {
+    name: '값진 한 점',
+    desc: '첫 특성 점수를 사용하십시오.',
+  },
+  prog_specialized: {
+    name: '출사표',
+    desc: '전문화를 선택하고 그 대표 기술을 배우십시오.',
+  },
+  prog_deep_roots: {
+    name: '깊이 내린 뿌리',
+    desc: '마지막 단의 특성에 특성 점수를 사용하십시오.',
+  },
   prog_full_build: {
     name: '온전한 여섯',
     desc: '하나의 조합에서 특성 6개 줄마다 하나씩 선택하십시오.',
   },
-  prog_veteran: { name: '베테랑', desc: '누적 경험치 250,000을 획득하십시오.', title: '베테랑' },
-  prog_champion: { name: '용사', desc: '누적 경험치 500,000을 획득하십시오.', title: '용사' },
-  prog_paragon: { name: '귀감', desc: '누적 경험치 1,000,000을 획득하십시오.', title: '귀감' },
-  prog_mythic: { name: '신화', desc: '누적 경험치 2,500,000을 획득하십시오.', title: '신화' },
-  prog_eternal: { name: '영원', desc: '누적 경험치 5,000,000을 획득하십시오.', title: '영원' },
+  prog_veteran: {
+    name: '베테랑',
+    desc: '누적 경험치 250,000을 획득하십시오.',
+    title: '베테랑',
+  },
+  prog_champion: {
+    name: '용사',
+    desc: '누적 경험치 500,000을 획득하십시오.',
+    title: '용사',
+  },
+  prog_paragon: {
+    name: '귀감',
+    desc: '누적 경험치 1,000,000을 획득하십시오.',
+    title: '귀감',
+  },
+  prog_mythic: {
+    name: '신화',
+    desc: '누적 경험치 2,500,000을 획득하십시오.',
+    title: '신화',
+  },
+  prog_eternal: {
+    name: '영원',
+    desc: '누적 경험치 5,000,000을 획득하십시오.',
+    title: '영원',
+  },
   prog_prestige: {
     name: '다시, 처음부터',
     desc: '최고 레벨에 도달한 뒤 경험치 막대를 한 번 더 채워 프레스티지 1등급을 획득하십시오.',
   },
-  prog_prestige_5: { name: '몸에 밴 습관', desc: '프레스티지 5등급을 달성하십시오.' },
-  prog_prestige_10: { name: '영구 기관', desc: '프레스티지 10등급을 달성하십시오.' },
-  prog_first_harvest: { name: '들녘의 결실', desc: '첫 채집 지점을 수확하십시오.' },
-  prog_mining_100: { name: '핏줄에 흐르는 광석', desc: '채광 숙련도 100을 달성하십시오.' },
-  prog_logging_100: { name: '심재를 베는 자', desc: '벌목 숙련도 100을 달성하십시오.' },
-  prog_herbalism_100: { name: '초원의 달인', desc: '약초 채집 숙련도 100을 달성하십시오.' },
+  prog_prestige_5: {
+    name: '몸에 밴 습관',
+    desc: '프레스티지 5등급을 달성하십시오.',
+  },
+  prog_prestige_10: {
+    name: '영구 기관',
+    desc: '프레스티지 10등급을 달성하십시오.',
+  },
+  prog_first_harvest: {
+    name: '들녘의 결실',
+    desc: '첫 채집 지점을 수확하십시오.',
+  },
+  prog_mining_100: {
+    name: '핏줄에 흐르는 광석',
+    desc: '채광 숙련도 100을 달성하십시오.',
+  },
+  prog_logging_100: {
+    name: '심재를 베는 자',
+    desc: '벌목 숙련도 100을 달성하십시오.',
+  },
+  prog_herbalism_100: {
+    name: '초원의 달인',
+    desc: '약초 채집 숙련도 100을 달성하십시오.',
+  },
   prog_master_gatherer: {
     name: '채집의 대가',
     desc: '채광, 벌목, 약초 채집 숙련도를 모두 100까지 올리십시오.',
   },
-  prog_first_craft: { name: '손수 만든 물건', desc: '첫 제작을 성공적으로 완료하십시오.' },
+  prog_first_craft: {
+    name: '손수 만든 물건',
+    desc: '첫 제작을 성공적으로 완료하십시오.',
+  },
   prog_craft_specialist: {
     name: '장인의 비법',
     desc: '한 가지 제작 기술을 75까지 올려 전문화 특전을 해금하십시오.',
@@ -58,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: '공방 한 바퀴',
     desc: '서로 다른 다섯 가지 제작 기술을 25까지 올리십시오.',
   },
-  cmb_first_blood: { name: '첫 피', desc: '첫 적을 처치하십시오.' },
-  cmb_slayer: { name: '학살자', desc: '적 1,000명을 처치하십시오.' },
-  cmb_legion_of_one: { name: '1인 군단', desc: '적 10,000명을 처치하십시오.' },
-  cmb_heavy_hitter: { name: '강타자', desc: '총 500,000의 피해를 입히십시오.' },
-  cmb_critical_eye: { name: '치명적인 눈', desc: '치명타를 500회 적중시키십시오.' },
+  cmb_first_blood: {
+    name: '첫 피',
+    desc: '첫 적을 처치하십시오.',
+  },
+  cmb_slayer: {
+    name: '학살자',
+    desc: '적 1,000명을 처치하십시오.',
+  },
+  cmb_legion_of_one: {
+    name: '1인 군단',
+    desc: '적 10,000명을 처치하십시오.',
+  },
+  cmb_heavy_hitter: {
+    name: '강타자',
+    desc: '총 500,000의 피해를 입히십시오.',
+  },
+  cmb_critical_eye: {
+    name: '치명적인 눈',
+    desc: '치명타를 500회 적중시키십시오.',
+  },
   cmb_giantslayer: {
     name: '거인 사냥꾼',
     desc: '자신보다 레벨이 5 이상 높은 적에게 결정타를 날리십시오.',
@@ -123,7 +196,10 @@ export const table: DeedLocaleTable = {
     name: '완주',
     desc: '하루 안에 네 곳의 영웅 던전 모두에서 영웅의 징표를 획득하십시오.',
   },
-  dgn_boss_clears_50: { name: '쉰 번째 문 너머', desc: '던전 최종 우두머리를 50번 처치하십시오.' },
+  dgn_boss_clears_50: {
+    name: '쉰 번째 문 너머',
+    desc: '던전 최종 우두머리를 50번 처치하십시오.',
+  },
   dgn_morthen_flawless: {
     name: '뼈도 못 추리게',
     desc: '파티원이 한 명도 죽지 않고 영웅 난이도에서 무덤부름 모르덴을 처치하십시오.',
@@ -187,17 +263,26 @@ export const table: DeedLocaleTable = {
     name: '산 사냥이 몸에 배다',
     desc: '천자르, 깨어나는 봉우리를 10번 쓰러뜨리십시오.',
   },
-  dlv_reliquary: { name: '성물실 질주', desc: '무너진 성물실을 돌파하십시오.' },
+  dlv_reliquary: {
+    name: '성물실 질주',
+    desc: '무너진 성물실을 돌파하십시오.',
+  },
   dlv_reliquary_heroic: {
     name: '영웅: 무너진 성물실',
     desc: '영웅 단계에서 무너진 성물실을 돌파하십시오.',
   },
-  dlv_litany: { name: '잠잠해진 연도', desc: '익사한 연도를 돌파하십시오.' },
+  dlv_litany: {
+    name: '잠잠해진 연도',
+    desc: '익사한 연도를 돌파하십시오.',
+  },
   dlv_litany_heroic: {
     name: '영웅: 익사한 연도',
     desc: '영웅 단계에서 익사한 연도를 돌파하십시오.',
   },
-  dlv_lore_journal: { name: '여백의 기록', desc: '탐굴 일지의 다섯 항목을 모두 해금하십시오.' },
+  dlv_lore_journal: {
+    name: '여백의 기록',
+    desc: '탐굴 일지의 다섯 항목을 모두 해금하십시오.',
+  },
   dlv_companion_max: {
     name: '깊은 곳의 벗',
     desc: '탐굴 동료 하나를 최고 등급까지 성장시키십시오.',
@@ -206,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: '두 등불을 밝히다',
     desc: '두 탐굴 동료, 수련사제 테사와 에다 리드핸드를 모두 최고 등급까지 성장시키십시오.',
   },
-  dlv_clears_50: { name: '쉰 길 깊이', desc: '탐굴을 50회 완료하십시오.' },
+  dlv_clears_50: {
+    name: '쉰 길 깊이',
+    desc: '탐굴을 50회 완료하십시오.',
+  },
   dlv_solo_heroic: {
     name: '둘이면 만원',
     desc: '다른 플레이어 없이 당신과 동료 단둘이서 영웅 단계 탐굴을 돌파하십시오.',
@@ -249,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: '거울호수의 무언가',
     desc: '이스트브룩 골짜기의 물에서 물고기 한 마리를 낚으십시오.',
   },
-  chr_vale_packbreaker: { name: '무리를 흩는 자', desc: '10초 안에 숲늑대 3마리를 처치하십시오.' },
+  chr_vale_packbreaker: {
+    name: '무리를 흩는 자',
+    desc: '10초 안에 숲늑대 3마리를 처치하십시오.',
+  },
   chr_vale_cup_debut: {
     name: '구리 양동이 도전자',
     desc: '소우필드에서 열리는 골짜기 컵 경기에 나서서 공을 만져 보십시오.',
@@ -324,18 +415,27 @@ export const table: DeedLocaleTable = {
     name: '못 버리는 성미',
     desc: '서로 다른 아이템 25종을 발견하십시오 (아이템은 처음으로 당신의 소유가 된 순간 집계됩니다).',
   },
-  col_discovery_75: { name: '까치의 눈', desc: '서로 다른 아이템 75종을 발견하십시오.' },
+  col_discovery_75: {
+    name: '까치의 눈',
+    desc: '서로 다른 아이템 75종을 발견하십시오.',
+  },
   col_discovery_150: {
     name: '호기심의 방',
     desc: '서로 다른 아이템 150종을 발견하십시오.',
     title: '학예사',
   },
-  col_discovery_250: { name: '대도감', desc: '서로 다른 아이템 250종을 발견하십시오.' },
+  col_discovery_250: {
+    name: '대도감',
+    desc: '서로 다른 아이템 250종을 발견하십시오.',
+  },
   col_first_rare: {
     name: '파랗게 빛나는 것',
     desc: '희귀 등급 아이템을 처음으로 손에 넣으십시오.',
   },
-  col_first_epic: { name: '자줏빛 태생', desc: '영웅 등급 아이템을 처음으로 손에 넣으십시오.' },
+  col_first_epic: {
+    name: '자줏빛 태생',
+    desc: '영웅 등급 아이템을 처음으로 손에 넣으십시오.',
+  },
   col_first_legendary: {
     name: '행운의 주황빛',
     desc: '전설 등급 아이템을 처음으로 손에 넣으십시오.',
@@ -356,17 +456,26 @@ export const table: DeedLocaleTable = {
     name: '고분군주 전투장비',
     desc: '고분군주 전투장비의 모든 부위를 발견하십시오.',
   },
-  col_set_wyrmshadow: { name: '밤송곳니 의복', desc: '밤송곳니 의복의 모든 부위를 발견하십시오.' },
+  col_set_wyrmshadow: {
+    name: '밤송곳니 의복',
+    desc: '밤송곳니 의복의 모든 부위를 발견하십시오.',
+  },
   col_set_necromancers: {
     name: '비탄직물 의복',
     desc: '비탄직물 의복의 모든 부위를 발견하십시오.',
   },
-  col_set_crownforged: { name: '뼈벼림 예복', desc: '뼈벼림 예복의 모든 부위를 발견하십시오.' },
+  col_set_crownforged: {
+    name: '뼈벼림 예복',
+    desc: '뼈벼림 예복의 모든 부위를 발견하십시오.',
+  },
   col_set_nighttalon: {
     name: '흉포송곳니 가죽',
     desc: '흉포송곳니 가죽의 모든 부위를 발견하십시오.',
   },
-  col_set_soulflame: { name: '망령불꽃 예복', desc: '망령불꽃 예복의 모든 부위를 발견하십시오.' },
+  col_set_soulflame: {
+    name: '망령불꽃 예복',
+    desc: '망령불꽃 예복의 모든 부위를 발견하십시오.',
+  },
   col_set_stormcallers: {
     name: '강풍부름 의복',
     desc: '강풍부름 의복의 모든 부위를 발견하십시오.',
@@ -388,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: '단골 손님',
     desc: '병참장교 벡스의 취급 물품 열 가지를 모두 발견하십시오.',
   },
-  col_glimmerfin: { name: '희망의 반짝임', desc: '반짝이는 지느러미 코이를 낚으십시오.' },
+  col_glimmerfin: {
+    name: '희망의 반짝임',
+    desc: '반짝이는 지느러미 코이를 낚으십시오.',
+  },
   col_full_creel: {
     name: '가득 찬 어망',
     desc: '골짜기, 습지, 고지의 물에서 나는 여섯 가지 흔한 어획물을 모두 발견하십시오.',
@@ -430,13 +542,22 @@ export const table: DeedLocaleTable = {
     name: '완벽한 공조',
     desc: '2대2 투기장 부문에서 평점 1900을 달성하십시오.',
   },
-  pvp_duel_first_win: { name: '결판은 밖에서', desc: '결투에서 승리하십시오.' },
-  pvp_duel_grace: { name: '겸손의 가르침', desc: '결투에서 지되, 체면은 그럭저럭 지켜 내십시오.' },
+  pvp_duel_first_win: {
+    name: '결판은 밖에서',
+    desc: '결투에서 승리하십시오.',
+  },
+  pvp_duel_grace: {
+    name: '겸손의 가르침',
+    desc: '결투에서 지되, 체면은 그럭저럭 지켜 내십시오.',
+  },
   pvp_vcup_first_match: {
     name: '그라운드에 선 첫발',
     desc: '소우필드에서 골짜기 컵 경기 한 판을 승패에 관계없이 끝까지 치르십시오.',
   },
-  pvp_vcup_first_win: { name: '첫 우승컵', desc: '등급전 골짜기 컵 경기에서 승리하십시오.' },
+  pvp_vcup_first_win: {
+    name: '첫 우승컵',
+    desc: '등급전 골짜기 컵 경기에서 승리하십시오.',
+  },
   pvp_vcup_wins_10: {
     name: '노련한 멧돼지공 선수',
     desc: '등급전 골짜기 컵 경기에서 10회 승리하십시오.',
@@ -446,7 +567,10 @@ export const table: DeedLocaleTable = {
     desc: '등급전 골짜기 컵 경기에서 25회 승리하십시오.',
     title: '멧돼지공의 전설',
   },
-  pvp_vcup_first_goal: { name: '마수걸이 골', desc: '등급전 골짜기 컵 경기에서 골을 넣으십시오.' },
+  pvp_vcup_first_goal: {
+    name: '마수걸이 골',
+    desc: '등급전 골짜기 컵 경기에서 골을 넣으십시오.',
+  },
   pvp_vcup_hat_trick: {
     name: '해트트릭의 주인공',
     desc: '3대3 이상 부문의 등급전 골짜기 컵 경기 한 판에서 세 골을 넣으십시오.',
@@ -475,7 +599,10 @@ export const table: DeedLocaleTable = {
     name: '피에스타의 주인공',
     desc: '2대2 피에스타 한 판에서 승리하십시오.',
   },
-  pvp_fiesta_double: { name: '연달아 둘', desc: '4초 안에 피에스타 처치 2회를 기록하십시오.' },
+  pvp_fiesta_double: {
+    name: '연달아 둘',
+    desc: '4초 안에 피에스타 처치 2회를 기록하십시오.',
+  },
   pvp_fiesta_shutdown: {
     name: '흥을 깨는 자',
     desc: '연속 처치 3회 이상을 이어 가던 피에스타 상대를 쓰러뜨리십시오.',
@@ -492,13 +619,34 @@ export const table: DeedLocaleTable = {
     name: '잔치를 짊어지다',
     desc: '피에스타 한 판에서 처치 5회를 기록하십시오.',
   },
-  soc_first_party: { name: '함께라면 더 멀리', desc: '다른 플레이어와 함께 파티에 들어가십시오.' },
-  soc_full_house: { name: '풀 하우스', desc: '다섯 명이 꽉 찬 파티로 던전을 끝까지 공략하십시오.' },
-  soc_guild_joined: { name: '하나의 깃발 아래', desc: '길드의 일원이 되십시오.' },
-  soc_guild_founded: { name: '창립자의 깃펜', desc: '자신만의 길드를 창설하십시오.' },
-  soc_first_trade: { name: '공정한 거래', desc: '다른 플레이어와 거래를 완료하십시오.' },
-  soc_first_sale: { name: '개업 첫날', desc: '세계 시장에서 첫 판매 대금을 수령하십시오.' },
-  soc_steady_custom: { name: '단골 장사', desc: '세계 시장 판매로 통산 10골드를 수령하십시오.' },
+  soc_first_party: {
+    name: '함께라면 더 멀리',
+    desc: '다른 플레이어와 함께 파티에 들어가십시오.',
+  },
+  soc_full_house: {
+    name: '풀 하우스',
+    desc: '다섯 명이 꽉 찬 파티로 던전을 끝까지 공략하십시오.',
+  },
+  soc_guild_joined: {
+    name: '하나의 깃발 아래',
+    desc: '길드의 일원이 되십시오.',
+  },
+  soc_guild_founded: {
+    name: '창립자의 깃펜',
+    desc: '자신만의 길드를 창설하십시오.',
+  },
+  soc_first_trade: {
+    name: '공정한 거래',
+    desc: '다른 플레이어와 거래를 완료하십시오.',
+  },
+  soc_first_sale: {
+    name: '개업 첫날',
+    desc: '세계 시장에서 첫 판매 대금을 수령하십시오.',
+  },
+  soc_steady_custom: {
+    name: '단골 장사',
+    desc: '세계 시장 판매로 통산 10골드를 수령하십시오.',
+  },
   soc_market_magnate: {
     name: '시장의 거물',
     desc: '세계 시장 판매로 통산 100골드를 수령하십시오.',
@@ -508,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: '까마귀 날개에 실어',
     desc: '돈이나 소포를 담은 까마귀 우편 편지를 보내십시오.',
   },
-  soc_room_for_more: { name: '더 넣을 자리', desc: '첫 은행 확장을 구매하십시오.' },
+  soc_room_for_more: {
+    name: '더 넣을 자리',
+    desc: '첫 은행 확장을 구매하십시오.',
+  },
   soc_gilded_strongbox: {
     name: '도금 금고',
     desc: '출납관이 팔아 주는 모든 은행 확장을 구매하십시오.',
@@ -517,13 +668,22 @@ export const table: DeedLocaleTable = {
     name: '페르난도를 믿을지어다',
     desc: '이스트브룩의 도금 금고를 지키는 출납관 페르난도에게 경의를 표하십시오.',
   },
-  soc_pocket_money: { name: '쌈짓돈', desc: '통산 1골드의 돈을 전리품으로 획득하십시오.' },
-  soc_heavy_purse: { name: '묵직한 돈주머니', desc: '통산 10골드의 돈을 전리품으로 획득하십시오.' },
+  soc_pocket_money: {
+    name: '쌈짓돈',
+    desc: '통산 1골드의 돈을 전리품으로 획득하십시오.',
+  },
+  soc_heavy_purse: {
+    name: '묵직한 돈주머니',
+    desc: '통산 10골드의 돈을 전리품으로 획득하십시오.',
+  },
   soc_wyrms_hoard: {
     name: '고룡의 보물더미',
     desc: '통산 100골드의 돈을 전리품으로 획득하십시오.',
   },
-  soc_civic_duty: { name: '시민의 의무', desc: '첫 마을 중점 포인트를 배분하십시오.' },
+  soc_civic_duty: {
+    name: '시민의 의무',
+    desc: '첫 마을 중점 포인트를 배분하십시오.',
+  },
   exp_long_road_north: {
     name: '북으로 가는 먼 길',
     desc: '세 거점 정착지를 모두 방문하십시오: 이스트브룩, 펜브리지, 하이워치.',
@@ -545,11 +705,26 @@ export const table: DeedLocaleTable = {
     desc: '세 지역의 길손 업적을 모두 획득하십시오.',
     title: '길손',
   },
-  exp_something_shiny: { name: '반짝이는 무언가', desc: '땅에 떨어진 반짝이는 물건을 주우십시오.' },
-  exp_first_ore: { name: '땅을 내리쳐라', desc: '처음으로 광맥을 캐내십시오.' },
-  exp_first_timber: { name: '나무 넘어간다!', desc: '처음으로 나무를 베어 목재를 거두십시오.' },
-  exp_first_herb: { name: '약초 캐는 손', desc: '처음으로 약초를 캐십시오.' },
-  feat_era_cap: { name: '제1시대의 아이', desc: '제1시대가 이어지는 동안 레벨 20을 달성했습니다.' },
+  exp_something_shiny: {
+    name: '반짝이는 무언가',
+    desc: '땅에 떨어진 반짝이는 물건을 주우십시오.',
+  },
+  exp_first_ore: {
+    name: '땅을 내리쳐라',
+    desc: '처음으로 광맥을 캐내십시오.',
+  },
+  exp_first_timber: {
+    name: '나무 넘어간다!',
+    desc: '처음으로 나무를 베어 목재를 거두십시오.',
+  },
+  exp_first_herb: {
+    name: '약초 캐는 손',
+    desc: '처음으로 약초를 캐십시오.',
+  },
+  feat_era_cap: {
+    name: '제1시대의 아이',
+    desc: '제1시대가 이어지는 동안 레벨 20을 달성했습니다.',
+  },
   feat_book_complete: {
     name: '책 한 권을 통째로',
     desc: '업적의 서에 실린 모든 업적을 획득하십시오.',
@@ -563,13 +738,22 @@ export const table: DeedLocaleTable = {
     desc: '연대기 기록관 사울을 쉴 틈 없이 아홉 번이나 졸라 댔습니다.',
     title: '각주',
   },
-  hid_gilded_tour: { name: '도금빛 유람', desc: '도금 금고의 세 지점 모두와 거래를 했습니다.' },
-  hid_fall_death: { name: '중력은 언제나 이긴다', desc: '땅바닥과 긴 대화를 나누다 죽었습니다.' },
+  hid_gilded_tour: {
+    name: '도금빛 유람',
+    desc: '도금 금고의 세 지점 모두와 거래를 했습니다.',
+  },
+  hid_fall_death: {
+    name: '중력은 언제나 이긴다',
+    desc: '땅바닥과 긴 대화를 나누다 죽었습니다.',
+  },
   hid_keepers_toll_twice: {
     name: '지킴이는 두 번 거둔다',
     desc: '지킴이의 대가를 아직 짊어진 채 죽었습니다.',
   },
-  hid_roll_hundred: { name: '내추럴 100', desc: '평범한 /roll에서 완벽한 100을 굴렸습니다.' },
+  hid_roll_hundred: {
+    name: '내추럴 100',
+    desc: '평범한 /roll에서 완벽한 100을 굴렸습니다.',
+  },
   hid_yumi_cheer: {
     name: '유미의 열혈 팬',
     desc: '한창 경기 중에, 유미가 들을 수 있는 곳에서 응원을 보냈습니다.',
@@ -582,7 +766,10 @@ export const table: DeedLocaleTable = {
     name: '그녀가 지켜보는 한',
     desc: '탐굴 동료가 쓰러진 파티원을 부축해 다시 일으켜 세웠습니다.',
   },
-  hid_codfather: { name: '패밀리 입단', desc: '딥펜 얕은 물에서 대구 대부를 끌어냈습니다.' },
+  hid_codfather: {
+    name: '패밀리 입단',
+    desc: '딥펜 얕은 물에서 대구 대부를 끌어냈습니다.',
+  },
   prog_crown_below: {
     name: '지하의 왕관',
     desc: "잠들지 못한 뼈밭에서 나이트락시스 왕의 무덤까지 왕관의 자취를 좇아 '재앙의 종말'을 끝까지 완수하십시오.",
@@ -597,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: '장인의 연장',
+    desc: '[KO] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: '납골당이 지켜 온 것',
@@ -605,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: '갈대밭의 뱀장어',
     desc: '마이어펜 습지의 물에서 물고기 한 마리를 낚으십시오.',
+  },
+  pvp_card_duel_first_win: {
+    name: '패를 보여줘',
+    desc: '카드 마스터에게서 카드 대결에 승리하십시오.',
   },
 };

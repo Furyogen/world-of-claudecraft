@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Nach eigenen Regeln',
-    desc: 'Gewinne einen Kartenkampf beim Kartenmeister.',
-  },
   prog_first_steps: {
     name: 'Erste Schritte',
     desc: 'Erreiche Stufe 2 und mache den ersten Schritt auf einem langen Weg.',
@@ -23,13 +19,22 @@ export const table: DeedLocaleTable = {
     name: 'Zweistellig',
     desc: 'Erreiche Stufe 10 und schalte deine Talente frei.',
   },
-  prog_the_long_middle: { name: 'Die lange Mitte', desc: 'Erreiche Stufe 15.' },
-  prog_level_cap: { name: 'Der Blick von ganz oben', desc: 'Erreiche Stufe 20, die Höchststufe.' },
+  prog_the_long_middle: {
+    name: 'Die lange Mitte',
+    desc: 'Erreiche Stufe 15.',
+  },
+  prog_level_cap: {
+    name: 'Der Blick von ganz oben',
+    desc: 'Erreiche Stufe 20, die Höchststufe.',
+  },
   prog_well_rested: {
     name: 'Gut ausgeruht',
     desc: 'Kehre in einem Gasthaus ein, bis du ausgeruhte Erfahrung verdient hast.',
   },
-  prog_talented: { name: 'Ein gut angelegter Punkt', desc: 'Verteile deinen ersten Talentpunkt.' },
+  prog_talented: {
+    name: 'Ein gut angelegter Punkt',
+    desc: 'Verteile deinen ersten Talentpunkt.',
+  },
   prog_specialized: {
     name: 'Eine klare Ansage',
     desc: 'Wähle eine Spezialisierung und erlerne ihre Signaturfähigkeit.',
@@ -42,14 +47,18 @@ export const table: DeedLocaleTable = {
     name: 'Die vollen Sechs',
     desc: 'Wähle in allen sechs Talentreihen einer einzigen Skillung jeweils eine Option.',
   },
-  prog_veteran: { name: 'Veteran', desc: 'Sammle insgesamt 250.000 Erfahrung.', title: 'Veteran' },
+  prog_veteran: {
+    name: '[DE] Veteran',
+    desc: 'Sammle insgesamt 250.000 Erfahrung.',
+    title: 'Veteran',
+  },
   prog_champion: {
-    name: 'Champion',
+    name: '[DE] Champion',
     desc: 'Sammle insgesamt 500.000 Erfahrung.',
     title: 'Champion',
   },
   prog_paragon: {
-    name: 'Paragon',
+    name: '[DE] Paragon',
     desc: 'Sammle insgesamt 1.000.000 Erfahrung.',
     title: 'Paragon',
   },
@@ -58,15 +67,31 @@ export const table: DeedLocaleTable = {
     desc: 'Sammle insgesamt 2.500.000 Erfahrung.',
     title: 'Mythisch',
   },
-  prog_eternal: { name: 'Ewig', desc: 'Sammle insgesamt 5.000.000 Erfahrung.', title: 'Ewig' },
+  prog_eternal: {
+    name: 'Ewig',
+    desc: 'Sammle insgesamt 5.000.000 Erfahrung.',
+    title: 'Ewig',
+  },
   prog_prestige: {
     name: 'Noch einmal von vorn',
     desc: 'Erreiche die Höchststufe, fülle den Balken noch einmal und beanspruche Prestigerang 1.',
   },
-  prog_prestige_5: { name: 'Alte Gewohnheiten', desc: 'Erreiche Prestigerang 5.' },
-  prog_prestige_10: { name: 'Perpetuum mobile', desc: 'Erreiche Prestigerang 10.' },
-  prog_first_harvest: { name: 'Früchte des Feldes', desc: 'Ernte dein erstes Sammelvorkommen.' },
-  prog_mining_100: { name: 'Erz im Blut', desc: 'Erreiche eine Fertigkeit von 100 im Bergbau.' },
+  prog_prestige_5: {
+    name: 'Alte Gewohnheiten',
+    desc: 'Erreiche Prestigerang 5.',
+  },
+  prog_prestige_10: {
+    name: 'Perpetuum mobile',
+    desc: 'Erreiche Prestigerang 10.',
+  },
+  prog_first_harvest: {
+    name: 'Früchte des Feldes',
+    desc: 'Ernte dein erstes Sammelvorkommen.',
+  },
+  prog_mining_100: {
+    name: 'Erz im Blut',
+    desc: 'Erreiche eine Fertigkeit von 100 im Bergbau.',
+  },
   prog_logging_100: {
     name: 'Kernholzhauer',
     desc: 'Erreiche eine Fertigkeit von 100 in der Holzfällerei.',
@@ -91,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'Einmal um den Ring',
     desc: 'Erreiche eine Fertigkeit von 25 in fünf verschiedenen Handwerken.',
   },
-  cmb_first_blood: { name: 'Erstes Blut', desc: 'Besiege deinen ersten Gegner.' },
-  cmb_slayer: { name: 'Schlächter', desc: 'Besiege 1.000 Gegner.' },
-  cmb_legion_of_one: { name: 'Eine Legion für sich', desc: 'Besiege 10.000 Gegner.' },
-  cmb_heavy_hitter: { name: 'Schwergewicht', desc: 'Richte insgesamt 500.000 Schaden an.' },
-  cmb_critical_eye: { name: 'Kritischer Blick', desc: 'Lande 500 kritische Treffer.' },
+  cmb_first_blood: {
+    name: 'Erstes Blut',
+    desc: 'Besiege deinen ersten Gegner.',
+  },
+  cmb_slayer: {
+    name: 'Schlächter',
+    desc: 'Besiege 1.000 Gegner.',
+  },
+  cmb_legion_of_one: {
+    name: 'Eine Legion für sich',
+    desc: 'Besiege 10.000 Gegner.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Schwergewicht',
+    desc: 'Richte insgesamt 500.000 Schaden an.',
+  },
+  cmb_critical_eye: {
+    name: 'Kritischer Blick',
+    desc: 'Lande 500 kritische Treffer.',
+  },
   cmb_giantslayer: {
     name: 'Riesentöter',
     desc: 'Führe den Todesstoß gegen einen Gegner aus, der mindestens fünf Stufen über dir liegt.',
@@ -156,7 +196,10 @@ export const table: DeedLocaleTable = {
     name: 'Der volle Rundgang',
     desc: 'Verdiene an einem einzigen Tag Heroische Marken aus allen vier heroischen Dungeons.',
   },
-  dgn_boss_clears_50: { name: 'Fünfzig Türen weiter', desc: 'Besiege 50 Dungeon-Endbosse.' },
+  dgn_boss_clears_50: {
+    name: 'Fünfzig Türen weiter',
+    desc: 'Besiege 50 Dungeon-Endbosse.',
+  },
   dgn_morthen_flawless: {
     name: 'Ohne Wenn und Knochen',
     desc: 'Besiege Morthen den Gravecaller auf heroischem Schwierigkeitsgrad, ohne dass ein Gruppenmitglied stirbt.',
@@ -220,12 +263,18 @@ export const table: DeedLocaleTable = {
     name: 'Berge aus Gewohnheit',
     desc: 'Bringe Thunzharr, den Erwachenden Gipfel, zehnmal zu Fall.',
   },
-  dlv_reliquary: { name: 'Reliquiarläufer', desc: 'Säubere das Eingestürzte Reliquiar.' },
+  dlv_reliquary: {
+    name: 'Reliquiarläufer',
+    desc: 'Säubere das Eingestürzte Reliquiar.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroisch: Das Eingestürzte Reliquiar',
     desc: 'Säubere das Eingestürzte Reliquiar auf heroischer Stufe.',
   },
-  dlv_litany: { name: 'Die Litanei verstummt', desc: 'Säubere die Ertrunkene Litanei.' },
+  dlv_litany: {
+    name: 'Die Litanei verstummt',
+    desc: 'Säubere die Ertrunkene Litanei.',
+  },
   dlv_litany_heroic: {
     name: 'Heroisch: Die Ertrunkene Litanei',
     desc: 'Säubere die Ertrunkene Litanei auf heroischer Stufe.',
@@ -242,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Beide Laternen entzündet',
     desc: 'Bringe beide Tiefgangsgefährtinnen, Akolythin Tessa und Edda Reedhand, auf ihren höchsten Rang.',
   },
-  dlv_clears_50: { name: 'Fünfzig Faden tief', desc: 'Schließe 50 Tiefgangsläufe ab.' },
+  dlv_clears_50: {
+    name: 'Fünfzig Faden tief',
+    desc: 'Schließe 50 Tiefgangsläufe ab.',
+  },
   dlv_solo_heroic: {
     name: 'Zwei sind ein Heer',
     desc: 'Säubere einen Tiefgang auf heroischer Stufe ohne weitere Spieler, nur du und deine Gefährtin.',
@@ -363,13 +415,19 @@ export const table: DeedLocaleTable = {
     name: 'Hamsterer',
     desc: 'Entdecke 25 verschiedene Gegenstände (ein Gegenstand zählt, wenn er zum ersten Mal in deinen Besitz gelangt).',
   },
-  col_discovery_75: { name: 'Elster', desc: 'Entdecke 75 verschiedene Gegenstände.' },
+  col_discovery_75: {
+    name: 'Elster',
+    desc: 'Entdecke 75 verschiedene Gegenstände.',
+  },
   col_discovery_150: {
     name: 'Wunderkammer',
     desc: 'Entdecke 150 verschiedene Gegenstände.',
     title: 'Kustos',
   },
-  col_discovery_250: { name: 'Der große Katalog', desc: 'Entdecke 250 verschiedene Gegenstände.' },
+  col_discovery_250: {
+    name: 'Der große Katalog',
+    desc: 'Entdecke 250 verschiedene Gegenstände.',
+  },
   col_first_rare: {
     name: 'Etwas Blaues',
     desc: 'Erhalte deinen ersten Gegenstand von seltener Qualität.',
@@ -410,7 +468,10 @@ export const table: DeedLocaleTable = {
     name: 'Bonewrought-Ornat',
     desc: 'Entdecke jedes Teil des Bonewrought-Ornats.',
   },
-  col_set_nighttalon: { name: 'Direfang-Pelz', desc: 'Entdecke jedes Teil des Direfang-Pelzes.' },
+  col_set_nighttalon: {
+    name: 'Direfang-Pelz',
+    desc: 'Entdecke jedes Teil des Direfang-Pelzes.',
+  },
   col_set_soulflame: {
     name: 'Wraithfire-Ornat',
     desc: 'Entdecke jedes Teil des Wraithfire-Ornats.',
@@ -436,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Stammkunde',
     desc: 'Entdecke alle zehn Stücke aus dem Vorrat des Heroischen Quartiermeisters.',
   },
-  col_glimmerfin: { name: 'Ein Schimmer Hoffnung', desc: 'Fange einen Schimmerflossen-Koi.' },
+  col_glimmerfin: {
+    name: 'Ein Schimmer Hoffnung',
+    desc: 'Fange einen Schimmerflossen-Koi.',
+  },
   col_full_creel: {
     name: 'Voller Fangkorb',
     desc: 'Entdecke alle sechs gewöhnlichen Fänge aus den Gewässern des Tals, des Moors und der Höhen.',
@@ -462,9 +526,9 @@ export const table: DeedLocaleTable = {
     desc: 'Erreiche eine Wertung von 1750 im 1v1-Arenamodus.',
   },
   pvp_arena_1v1_1900: {
-    name: 'Gladiator',
+    name: '[DE] Gladiator',
     desc: 'Erreiche eine Wertung von 1900 im 1v1-Arenamodus.',
-    title: 'Gladiator',
+    title: '[DE] Gladiator',
   },
   pvp_arena_2v2_1600: {
     name: 'Zu zweit stark',
@@ -478,7 +542,10 @@ export const table: DeedLocaleTable = {
     name: 'Perfektes Gespann',
     desc: 'Erreiche eine Wertung von 1900 im 2v2-Arenamodus.',
   },
-  pvp_duel_first_win: { name: 'Das klären wir draußen', desc: 'Gewinne ein Duell.' },
+  pvp_duel_first_win: {
+    name: 'Das klären wir draußen',
+    desc: 'Gewinne ein Duell.',
+  },
   pvp_duel_grace: {
     name: 'Eine Lektion in Demut',
     desc: 'Verliere ein Duell und bewahre dabei den Großteil deiner Würde.',
@@ -487,7 +554,10 @@ export const table: DeedLocaleTable = {
     name: 'Stiefel auf dem Rasen',
     desc: 'Bestreite ein Talpokal-Match auf dem Saufeld bis zum Schlusspfiff, ob Sieg oder Niederlage.',
   },
-  pvp_vcup_first_win: { name: 'Der erste Pott', desc: 'Gewinne ein gewertetes Talpokal-Match.' },
+  pvp_vcup_first_win: {
+    name: 'Der erste Pott',
+    desc: 'Gewinne ein gewertetes Talpokal-Match.',
+  },
   pvp_vcup_wins_10: {
     name: 'Keilerball-Routinier',
     desc: 'Gewinne 10 gewertete Talpokal-Matches.',
@@ -525,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Partycrasher',
     desc: 'Bestreite eine volle 2v2-Fiesta-Runde, ob Sieg oder Niederlage.',
   },
-  pvp_fiesta_first_win: { name: 'Die Seele der Fiesta', desc: 'Gewinne eine 2v2-Fiesta-Runde.' },
+  pvp_fiesta_first_win: {
+    name: 'Die Seele der Fiesta',
+    desc: 'Gewinne eine 2v2-Fiesta-Runde.',
+  },
   pvp_fiesta_double: {
     name: 'Doppelter Ärger',
     desc: 'Erziele zwei Fiesta-Niederschläge innerhalb von vier Sekunden.',
@@ -554,8 +627,14 @@ export const table: DeedLocaleTable = {
     name: 'Volles Haus',
     desc: 'Bezwinge einen Dungeon mit einer vollen Fünfergruppe.',
   },
-  soc_guild_joined: { name: 'Unter einem Banner', desc: 'Werde Mitglied einer Gilde.' },
-  soc_guild_founded: { name: 'Die Feder des Gründers', desc: 'Gründe deine eigene Gilde.' },
+  soc_guild_joined: {
+    name: 'Unter einem Banner',
+    desc: 'Werde Mitglied einer Gilde.',
+  },
+  soc_guild_founded: {
+    name: 'Die Feder des Gründers',
+    desc: 'Gründe deine eigene Gilde.',
+  },
   soc_first_trade: {
     name: 'Ein fairer Handel',
     desc: 'Schließe einen Handel mit einem anderen Spieler ab.',
@@ -577,7 +656,10 @@ export const table: DeedLocaleTable = {
     name: 'Auf Rabenschwingen',
     desc: 'Verschicke einen Rabenpost-Brief mit Münzen oder einem Paket.',
   },
-  soc_room_for_more: { name: 'Platz für mehr', desc: 'Kaufe deine erste Bankerweiterung.' },
+  soc_room_for_more: {
+    name: 'Platz für mehr',
+    desc: 'Kaufe deine erste Bankerweiterung.',
+  },
   soc_gilded_strongbox: {
     name: 'Die Vergoldete Schatulle',
     desc: 'Kaufe jede Bankerweiterung, die die Kämmerer dir verkaufen.',
@@ -586,10 +668,22 @@ export const table: DeedLocaleTable = {
     name: 'Auf Fernando ist Verlass',
     desc: 'Erweise Kämmerer Fernando, dem Hüter der Vergoldeten Schatulle in Eastbrook, deine Ehrerbietung.',
   },
-  soc_pocket_money: { name: 'Taschengeld', desc: 'Erbeute insgesamt 1 Gold in Münzen.' },
-  soc_heavy_purse: { name: 'Ein schwerer Beutel', desc: 'Erbeute insgesamt 10 Gold in Münzen.' },
-  soc_wyrms_hoard: { name: 'Der Hort eines Wyrms', desc: 'Erbeute insgesamt 100 Gold in Münzen.' },
-  soc_civic_duty: { name: 'Bürgerpflicht', desc: 'Vergib deinen ersten Stadtfokus-Punkt.' },
+  soc_pocket_money: {
+    name: 'Taschengeld',
+    desc: 'Erbeute insgesamt 1 Gold in Münzen.',
+  },
+  soc_heavy_purse: {
+    name: 'Ein schwerer Beutel',
+    desc: 'Erbeute insgesamt 10 Gold in Münzen.',
+  },
+  soc_wyrms_hoard: {
+    name: 'Der Hort eines Wyrms',
+    desc: 'Erbeute insgesamt 100 Gold in Münzen.',
+  },
+  soc_civic_duty: {
+    name: 'Bürgerpflicht',
+    desc: 'Vergib deinen ersten Stadtfokus-Punkt.',
+  },
   exp_long_road_north: {
     name: 'Die lange Straße gen Norden',
     desc: 'Besuche alle drei Hauptorte: Eastbrook, Fenbridge und Highwatch.',
@@ -615,14 +709,26 @@ export const table: DeedLocaleTable = {
     name: 'Etwas Glitzerndes',
     desc: 'Hebe ein funkelndes Objekt vom Boden auf.',
   },
-  exp_first_ore: { name: 'Hau in den Fels', desc: 'Baue dein erstes Erzvorkommen ab.' },
-  exp_first_timber: { name: 'Baum fällt!', desc: 'Ernte dein erstes Holzvorkommen.' },
-  exp_first_herb: { name: 'Ein grüner Daumen', desc: 'Ernte dein erstes Kräutervorkommen.' },
+  exp_first_ore: {
+    name: 'Hau in den Fels',
+    desc: 'Baue dein erstes Erzvorkommen ab.',
+  },
+  exp_first_timber: {
+    name: 'Baum fällt!',
+    desc: 'Ernte dein erstes Holzvorkommen.',
+  },
+  exp_first_herb: {
+    name: 'Ein grüner Daumen',
+    desc: 'Ernte dein erstes Kräutervorkommen.',
+  },
   feat_era_cap: {
     name: 'Kind der Ersten Ära',
     desc: 'Stufe 20 erreicht, als die Erste Ära noch im Gange war.',
   },
-  feat_book_complete: { name: 'Das ganze Buch', desc: 'Erringe jede Tat im Buch der Taten.' },
+  feat_book_complete: {
+    name: 'Das ganze Buch',
+    desc: 'Erringe jede Tat im Buch der Taten.',
+  },
   feat_brightwood_relic: {
     name: 'Hellholz unvergessen',
     desc: 'Bewahre ein Relikt des alten Hellholzes: das Dornhaut-Wams oder die Krone des Monarchen.',
@@ -678,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Werkzeuge des Handwerks',
+    desc: '[DE] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Was die Krypta hütete',
@@ -686,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Aale im Schilf',
     desc: 'Fange einen Fisch aus den Gewässern des Mirefen-Moors.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Nach eigenen Regeln',
+    desc: 'Gewinne einen Kartenkampf beim Kartenmeister.',
   },
 };

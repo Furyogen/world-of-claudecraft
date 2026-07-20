@@ -7947,4 +7947,5 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.sunpetal_healing_draught.name': '陽瓣治療藥水',
   'entities.items.sunpetal_mana_draught.name': '陽瓣法力藥水',
   'entities.items.elixir_of_the_serpent.name': '巨蛇藥劑',
+  'hudChrome.professions.skillValue': '[ZH-TW] {skill} / {max}',
 };

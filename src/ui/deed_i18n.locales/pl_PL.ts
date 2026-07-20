@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Zasady Domu',
-    desc: 'Wygraj Pojedynek Karciany u Mistrza Kart.',
-  },
   prog_first_steps: {
     name: 'Pierwsze Kroki',
     desc: 'Osiągnij poziom 2 i postaw pierwszy krok na długiej drodze.',
@@ -19,14 +15,26 @@ export const table: DeedLocaleTable = {
     name: 'Pewny Grunt',
     desc: 'Osiągnij poziom 5; dzicz wydaje się już odrobinę mniejsza.',
   },
-  prog_double_digits: { name: 'Dwie Cyfry', desc: 'Osiągnij poziom 10 i odblokuj swoje talenty.' },
-  prog_the_long_middle: { name: 'Długi Środek Drogi', desc: 'Osiągnij poziom 15.' },
-  prog_level_cap: { name: 'Widok ze Szczytu', desc: 'Osiągnij poziom 20, maksymalny poziom.' },
+  prog_double_digits: {
+    name: 'Dwie Cyfry',
+    desc: 'Osiągnij poziom 10 i odblokuj swoje talenty.',
+  },
+  prog_the_long_middle: {
+    name: 'Długi Środek Drogi',
+    desc: 'Osiągnij poziom 15.',
+  },
+  prog_level_cap: {
+    name: 'Widok ze Szczytu',
+    desc: 'Osiągnij poziom 20, maksymalny poziom.',
+  },
   prog_well_rested: {
     name: 'Dobrze Wypoczęty',
     desc: 'Zatrzymaj się w gospodzie, aż zdobędziesz doświadczenie za wypoczynek.',
   },
-  prog_talented: { name: 'Dobrze Wydany Punkt', desc: 'Wydaj swój pierwszy punkt talentu.' },
+  prog_talented: {
+    name: 'Dobrze Wydany Punkt',
+    desc: 'Wydaj swój pierwszy punkt talentu.',
+  },
   prog_specialized: {
     name: 'Deklaracja Zamiarów',
     desc: 'Wybierz specjalizację i naucz się jej sztandarowej zdolności.',
@@ -68,20 +76,38 @@ export const table: DeedLocaleTable = {
     name: 'Od Nowa',
     desc: 'Osiągnij maksymalny poziom, zapełnij pasek raz jeszcze i odbierz rangę prestiżu 1.',
   },
-  prog_prestige_5: { name: 'Stare Nawyki', desc: 'Osiągnij rangę prestiżu 5.' },
-  prog_prestige_10: { name: 'Perpetuum Mobile', desc: 'Osiągnij rangę prestiżu 10.' },
+  prog_prestige_5: {
+    name: 'Stare Nawyki',
+    desc: 'Osiągnij rangę prestiżu 5.',
+  },
+  prog_prestige_10: {
+    name: 'Perpetuum Mobile',
+    desc: 'Osiągnij rangę prestiżu 10.',
+  },
   prog_first_harvest: {
     name: 'Plony Pola',
     desc: 'Zbierz plon ze swojego pierwszego źródła surowców.',
   },
-  prog_mining_100: { name: 'Ruda we Krwi', desc: 'Osiągnij 100 biegłości w Górnictwie.' },
-  prog_logging_100: { name: 'Rębacz Twardzieli', desc: 'Osiągnij 100 biegłości w Drwalnictwie.' },
-  prog_herbalism_100: { name: 'Mistrz Łąk', desc: 'Osiągnij 100 biegłości w Zielarstwie.' },
+  prog_mining_100: {
+    name: 'Ruda we Krwi',
+    desc: 'Osiągnij 100 biegłości w Górnictwie.',
+  },
+  prog_logging_100: {
+    name: 'Rębacz Twardzieli',
+    desc: 'Osiągnij 100 biegłości w Drwalnictwie.',
+  },
+  prog_herbalism_100: {
+    name: 'Mistrz Łąk',
+    desc: 'Osiągnij 100 biegłości w Zielarstwie.',
+  },
   prog_master_gatherer: {
     name: 'Mistrz Zbieractwa',
     desc: 'Osiągnij 100 biegłości w Górnictwie, Drwalnictwie i Zielarstwie.',
   },
-  prog_first_craft: { name: 'Własnoręczna Robota', desc: 'Ukończ swój pierwszy udany wyrób.' },
+  prog_first_craft: {
+    name: 'Własnoręczna Robota',
+    desc: 'Ukończ swój pierwszy udany wyrób.',
+  },
   prog_craft_specialist: {
     name: 'Tajniki Fachu',
     desc: 'Osiągnij 75 umiejętności w dowolnym rzemiośle i odblokuj atuty jego specjalizacji.',
@@ -90,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'Dookoła Kręgu',
     desc: 'Osiągnij 25 umiejętności w pięciu różnych rzemiosłach.',
   },
-  cmb_first_blood: { name: 'Pierwsza Krew', desc: 'Pokonaj swojego pierwszego wroga.' },
-  cmb_slayer: { name: 'Pogromca', desc: 'Pokonaj 1000 wrogów.' },
-  cmb_legion_of_one: { name: 'Jednoosobowy Legion', desc: 'Pokonaj 10 000 wrogów.' },
-  cmb_heavy_hitter: { name: 'Ciężka Ręka', desc: 'Zadaj łącznie 500 000 obrażeń.' },
-  cmb_critical_eye: { name: 'Krytyczne Oko', desc: 'Zadaj 500 trafień krytycznych.' },
+  cmb_first_blood: {
+    name: 'Pierwsza Krew',
+    desc: 'Pokonaj swojego pierwszego wroga.',
+  },
+  cmb_slayer: {
+    name: 'Pogromca',
+    desc: 'Pokonaj 1000 wrogów.',
+  },
+  cmb_legion_of_one: {
+    name: 'Jednoosobowy Legion',
+    desc: 'Pokonaj 10 000 wrogów.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Ciężka Ręka',
+    desc: 'Zadaj łącznie 500 000 obrażeń.',
+  },
+  cmb_critical_eye: {
+    name: 'Krytyczne Oko',
+    desc: 'Zadaj 500 trafień krytycznych.',
+  },
   cmb_giantslayer: {
     name: 'Pogromca Olbrzymów',
     desc: 'Zadaj ostateczny cios wrogowi o co najmniej pięć poziomów wyższemu od ciebie.',
@@ -222,18 +263,24 @@ export const table: DeedLocaleTable = {
     name: 'Górski Nawyk',
     desc: 'Powal Thunzharra, Budzący się Szczyt, dziesięć razy.',
   },
-  dlv_reliquary: { name: 'Goniec z Relikwiarza', desc: 'Oczyść Zawalony Relikwiarz.' },
+  dlv_reliquary: {
+    name: 'Goniec z Relikwiarza',
+    desc: 'Oczyść Zawalony Relikwiarz.',
+  },
   dlv_reliquary_heroic: {
     name: 'Heroiczny: Zawalony Relikwiarz',
     desc: 'Oczyść Zawalony Relikwiarz na poziomie heroicznym.',
   },
-  dlv_litany: { name: 'Uciszyć Litanię', desc: 'Oczyść Utopioną Litanię.' },
+  dlv_litany: {
+    name: 'Uciszyć Litanię',
+    desc: 'Oczyść Utopioną Litanię.',
+  },
   dlv_litany_heroic: {
     name: 'Heroiczna: Utopiona Litania',
     desc: 'Oczyść Utopioną Litanię na poziomie heroicznym.',
   },
   dlv_lore_journal: {
-    name: 'Marginalia',
+    name: '[PL] Marginalia',
     desc: 'Odblokuj wszystkie pięć wpisów w dzienniku wypraw.',
   },
   dlv_companion_max: {
@@ -244,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Obie latarnie płoną',
     desc: 'Doprowadź obie towarzyszki wypraw, Akolitkę Tessę i Eddę Trzcinoręką, do najwyższej rangi.',
   },
-  dlv_clears_50: { name: 'Pięćdziesiąt sążni', desc: 'Ukończ 50 wypraw.' },
+  dlv_clears_50: {
+    name: 'Pięćdziesiąt sążni',
+    desc: 'Ukończ 50 wypraw.',
+  },
   dlv_solo_heroic: {
     name: 'Dwoje to już tłum',
     desc: 'Oczyść wyprawę na poziomie heroicznym bez żadnego innego gracza, tylko ty i twoja towarzyszka.',
@@ -287,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: 'Coś siedzi w Jeziorze Lustrzanym',
     desc: 'Złów rybę w wodach Doliny Wschodniego Strumienia.',
   },
-  chr_vale_packbreaker: { name: 'Pogromca Watahy', desc: 'Zabij 3 Leśne Wilki w ciągu 10 sekund.' },
+  chr_vale_packbreaker: {
+    name: 'Pogromca Watahy',
+    desc: 'Zabij 3 Leśne Wilki w ciągu 10 sekund.',
+  },
   chr_vale_cup_debut: {
     name: 'Pretendent do Miedzianego Wiadra',
     desc: 'Wyjdź na boisko i dotknij piłki w meczu Pucharu Doliny na Maciorowym Błoniu.',
@@ -362,13 +415,19 @@ export const table: DeedLocaleTable = {
     name: 'Chomik',
     desc: 'Odkryj 25 różnych przedmiotów (przedmiot liczy się, gdy po raz pierwszy trafi w twoje posiadanie).',
   },
-  col_discovery_75: { name: 'Sroka', desc: 'Odkryj 75 różnych przedmiotów.' },
+  col_discovery_75: {
+    name: 'Sroka',
+    desc: 'Odkryj 75 różnych przedmiotów.',
+  },
   col_discovery_150: {
     name: 'Gabinet osobliwości',
     desc: 'Odkryj 150 różnych przedmiotów.',
     title: 'Kustosz',
   },
-  col_discovery_250: { name: 'Wielki katalog', desc: 'Odkryj 250 różnych przedmiotów.' },
+  col_discovery_250: {
+    name: 'Wielki katalog',
+    desc: 'Odkryj 250 różnych przedmiotów.',
+  },
   col_first_rare: {
     name: 'Coś niebieskiego',
     desc: 'Zdobądź swój pierwszy przedmiot rzadkiej jakości.',
@@ -397,7 +456,10 @@ export const table: DeedLocaleTable = {
     name: 'Rynsztunek Bojowy Barrowlorda',
     desc: 'Odkryj każdą część Rynsztunku Bojowego Barrowlorda.',
   },
-  col_set_wyrmshadow: { name: 'Szaty Nightfang', desc: 'Odkryj każdą część Szat Nightfang.' },
+  col_set_wyrmshadow: {
+    name: 'Szaty Nightfang',
+    desc: 'Odkryj każdą część Szat Nightfang.',
+  },
   col_set_necromancers: {
     name: 'Odzienie Mournweave',
     desc: 'Odkryj każdą część Odzienia Mournweave.',
@@ -406,12 +468,18 @@ export const table: DeedLocaleTable = {
     name: 'Regalia Bonewrought',
     desc: 'Odkryj każdą część Regaliów Bonewrought.',
   },
-  col_set_nighttalon: { name: 'Futro Direfang', desc: 'Odkryj każdą część Futra Direfang.' },
+  col_set_nighttalon: {
+    name: 'Futro Direfang',
+    desc: 'Odkryj każdą część Futra Direfang.',
+  },
   col_set_soulflame: {
     name: 'Regalia Wraithfire',
     desc: 'Odkryj każdą część Regaliów Wraithfire.',
   },
-  col_set_stormcallers: { name: 'Szaty Galecall', desc: 'Odkryj każdą część Szat Galecall.' },
+  col_set_stormcallers: {
+    name: 'Szaty Galecall',
+    desc: 'Odkryj każdą część Szat Galecall.',
+  },
   col_seven_regalia: {
     name: 'Siedmioraka garderoba',
     desc: 'Odkryj każdą część wszystkich siedmiu epickich rodzin pancerzy.',
@@ -429,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Stały klient',
     desc: 'Odkryj wszystkie dziesięć przedmiotów z zapasów Kwatermistrza Vexa.',
   },
-  col_glimmerfin: { name: 'Promyk nadziei', desc: 'Złów Lśniącopłetwego karpia koi.' },
+  col_glimmerfin: {
+    name: 'Promyk nadziei',
+    desc: 'Złów Lśniącopłetwego karpia koi.',
+  },
   col_full_creel: {
     name: 'Pełen kosz',
     desc: 'Odkryj wszystkie sześć pospolitych ryb z wód Doliny, Trzęsawiska i Wyżyn.',
@@ -455,9 +526,9 @@ export const table: DeedLocaleTable = {
     desc: 'Osiągnij 1750 punktów rankingowych w arenowej lidze 1v1.',
   },
   pvp_arena_1v1_1900: {
-    name: 'Gladiator',
+    name: '[PL] Gladiator',
     desc: 'Osiągnij 1900 punktów rankingowych w arenowej lidze 1v1.',
-    title: 'Gladiator',
+    title: '[PL] Gladiator',
   },
   pvp_arena_2v2_1600: {
     name: 'W dwójce siła',
@@ -471,7 +542,10 @@ export const table: DeedLocaleTable = {
     name: 'Zgranie doskonałe',
     desc: 'Osiągnij 1900 punktów rankingowych w arenowej lidze 2v2.',
   },
-  pvp_duel_first_win: { name: 'Załatwmy to na zewnątrz', desc: 'Wygraj pojedynek.' },
+  pvp_duel_first_win: {
+    name: 'Załatwmy to na zewnątrz',
+    desc: 'Wygraj pojedynek.',
+  },
   pvp_duel_grace: {
     name: 'Lekcja pokory',
     desc: 'Przegraj pojedynek, ocalając niemal całą godność.',
@@ -480,7 +554,10 @@ export const table: DeedLocaleTable = {
     name: 'Buty na murawie',
     desc: 'Rozegraj pełny mecz Pucharu Doliny na Maciorowym Błoniu, wygrany czy przegrany.',
   },
-  pvp_vcup_first_win: { name: 'Pierwsze trofeum', desc: 'Wygraj rankingowy mecz Pucharu Doliny.' },
+  pvp_vcup_first_win: {
+    name: 'Pierwsze trofeum',
+    desc: 'Wygraj rankingowy mecz Pucharu Doliny.',
+  },
   pvp_vcup_wins_10: {
     name: 'Wyjadacz dziczego balonu',
     desc: 'Wygraj 10 rankingowych meczów Pucharu Doliny.',
@@ -518,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Nieproszony gość',
     desc: 'Stocz pełne starcie Fiesty 2v2, wygrane czy przegrane.',
   },
-  pvp_fiesta_first_win: { name: 'Dusza Fiesty', desc: 'Wygraj starcie Fiesty 2v2.' },
+  pvp_fiesta_first_win: {
+    name: 'Dusza Fiesty',
+    desc: 'Wygraj starcie Fiesty 2v2.',
+  },
   pvp_fiesta_double: {
     name: 'Podwójny kłopot',
     desc: 'Zalicz dwa powalenia w Fieście w ciągu czterech sekund.',
@@ -539,11 +619,26 @@ export const table: DeedLocaleTable = {
     name: 'Cała impreza na barkach',
     desc: 'Zalicz pięć powaleń w jednym starciu Fiesty.',
   },
-  soc_first_party: { name: 'Razem raźniej', desc: 'Dołącz do drużyny z innym graczem.' },
-  soc_full_house: { name: 'Pełen skład', desc: 'Ukończ loch w pełnej, pięcioosobowej drużynie.' },
-  soc_guild_joined: { name: 'Pod jednym sztandarem', desc: 'Zostań członkiem gildii.' },
-  soc_guild_founded: { name: 'Pióro założyciela', desc: 'Załóż własną gildię.' },
-  soc_first_trade: { name: 'Uczciwa wymiana', desc: 'Dokonaj wymiany z innym graczem.' },
+  soc_first_party: {
+    name: 'Razem raźniej',
+    desc: 'Dołącz do drużyny z innym graczem.',
+  },
+  soc_full_house: {
+    name: 'Pełen skład',
+    desc: 'Ukończ loch w pełnej, pięcioosobowej drużynie.',
+  },
+  soc_guild_joined: {
+    name: 'Pod jednym sztandarem',
+    desc: 'Zostań członkiem gildii.',
+  },
+  soc_guild_founded: {
+    name: 'Pióro założyciela',
+    desc: 'Załóż własną gildię.',
+  },
+  soc_first_trade: {
+    name: 'Uczciwa wymiana',
+    desc: 'Dokonaj wymiany z innym graczem.',
+  },
   soc_first_sale: {
     name: 'Otwarcie interesu',
     desc: 'Odbierz monety ze swojej pierwszej sprzedaży na Światowym Rynku.',
@@ -610,18 +705,30 @@ export const table: DeedLocaleTable = {
     desc: 'Zdobądź czyn wędrowca każdej z trzech krain.',
     title: 'Wędrowiec',
   },
-  exp_something_shiny: { name: 'Błyskotka', desc: 'Podnieś z ziemi migoczący przedmiot.' },
+  exp_something_shiny: {
+    name: 'Błyskotka',
+    desc: 'Podnieś z ziemi migoczący przedmiot.',
+  },
   exp_first_ore: {
     name: 'Kilofem w ziemię!',
     desc: 'Wydobądź surowce ze swojego pierwszego złoża rudy.',
   },
-  exp_first_timber: { name: 'Uwaga, drzewo!', desc: 'Pozyskaj swoje pierwsze stanowisko drewna.' },
-  exp_first_herb: { name: 'Ręka do zieleni', desc: 'Zbierz swoją pierwszą kępę ziół.' },
+  exp_first_timber: {
+    name: 'Uwaga, drzewo!',
+    desc: 'Pozyskaj swoje pierwsze stanowisko drewna.',
+  },
+  exp_first_herb: {
+    name: 'Ręka do zieleni',
+    desc: 'Zbierz swoją pierwszą kępę ziół.',
+  },
   feat_era_cap: {
     name: 'Dziecię Pierwszej Ery',
     desc: 'Poziom 20 osiągnięty, gdy trwała jeszcze Pierwsza Era.',
   },
-  feat_book_complete: { name: 'Od deski do deski', desc: 'Zdobądź każdy czyn w Księdze Czynów.' },
+  feat_book_complete: {
+    name: 'Od deski do deski',
+    desc: 'Zdobądź każdy czyn w Księdze Czynów.',
+  },
   feat_brightwood_relic: {
     name: 'Pamięci Jasnego Boru',
     desc: 'Zachowaj relikt dawnego Jasnego Boru: Kaftan z ciernistej skóry lub Koronę monarchy.',
@@ -643,7 +750,10 @@ export const table: DeedLocaleTable = {
     name: 'Strażnik pobiera dwa razy',
     desc: 'Śmierć, gdy Myto Strażnika wciąż na tobie ciążyło.',
   },
-  hid_roll_hundred: { name: 'Czysta setka', desc: 'Wyrzucone idealne 100 na zwykłym /roll.' },
+  hid_roll_hundred: {
+    name: 'Czysta setka',
+    desc: 'Wyrzucone idealne 100 na zwykłym /roll.',
+  },
   hid_yumi_cheer: {
     name: 'Fanklub Yumi',
     desc: 'Wiwaty dla Yumi w samym środku walki, tam gdzie mogła cię usłyszeć.',
@@ -674,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Narzędzia Fachu',
+    desc: '[PL] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Co Kryła Krypta',
@@ -682,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Węgorze w trzcinach',
     desc: 'Złów rybę w wodach Trzęsawiska Mokrzawia.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Zasady Domu',
+    desc: 'Wygraj Pojedynek Karciany u Mistrza Kart.',
   },
 };

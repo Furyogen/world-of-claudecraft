@@ -7,10 +7,6 @@
 import type { DeedLocaleTable } from '../deed_i18n';
 
 export const table: DeedLocaleTable = {
-  pvp_card_duel_first_win: {
-    name: 'Luật Của Ta',
-    desc: 'Thắng một ván Đấu Bài tại Bậc Thầy Bài.',
-  },
   prog_first_steps: {
     name: 'Những Bước Đầu Tiên',
     desc: 'Đạt cấp 2 và đặt bước chân đầu tiên lên một con đường dài.',
@@ -19,14 +15,26 @@ export const table: DeedLocaleTable = {
     name: 'Vững Đôi Chân',
     desc: 'Đạt cấp 5; chốn hoang dã trông đã nhỏ đi đôi chút.',
   },
-  prog_double_digits: { name: 'Hai Chữ Số', desc: 'Đạt cấp 10 và mở khóa thiên phú của bạn.' },
-  prog_the_long_middle: { name: 'Chặng Giữa Đằng Đẵng', desc: 'Đạt cấp 15.' },
-  prog_level_cap: { name: 'Cảnh Sắc Từ Đỉnh Cao', desc: 'Đạt cấp 20, cấp tối đa.' },
+  prog_double_digits: {
+    name: 'Hai Chữ Số',
+    desc: 'Đạt cấp 10 và mở khóa thiên phú của bạn.',
+  },
+  prog_the_long_middle: {
+    name: 'Chặng Giữa Đằng Đẵng',
+    desc: 'Đạt cấp 15.',
+  },
+  prog_level_cap: {
+    name: 'Cảnh Sắc Từ Đỉnh Cao',
+    desc: 'Đạt cấp 20, cấp tối đa.',
+  },
   prog_well_rested: {
     name: 'Ngơi Nghỉ Trọn Vẹn',
     desc: 'Nghỉ chân tại quán trọ cho đến khi bạn tích được kinh nghiệm nghỉ ngơi.',
   },
-  prog_talented: { name: 'Một Điểm Đáng Giá', desc: 'Tiêu điểm thiên phú đầu tiên của bạn.' },
+  prog_talented: {
+    name: 'Một Điểm Đáng Giá',
+    desc: 'Tiêu điểm thiên phú đầu tiên của bạn.',
+  },
   prog_specialized: {
     name: 'Tuyên Bố Chí Hướng',
     desc: 'Chọn một hệ phái và học kỹ năng đặc trưng của hệ phái ấy.',
@@ -68,15 +76,30 @@ export const table: DeedLocaleTable = {
     name: 'Khởi Đầu Lại',
     desc: 'Đạt cấp tối đa, lấp đầy thanh kinh nghiệm thêm một lần nữa, và nhận bậc Uy Danh 1.',
   },
-  prog_prestige_5: { name: 'Thói Quen Cũ', desc: 'Đạt bậc Uy Danh 5.' },
-  prog_prestige_10: { name: 'Chuyển Động Vĩnh Cửu', desc: 'Đạt bậc Uy Danh 10.' },
+  prog_prestige_5: {
+    name: 'Thói Quen Cũ',
+    desc: 'Đạt bậc Uy Danh 5.',
+  },
+  prog_prestige_10: {
+    name: 'Chuyển Động Vĩnh Cửu',
+    desc: 'Đạt bậc Uy Danh 10.',
+  },
   prog_first_harvest: {
     name: 'Hoa Trái Đồng Nội',
     desc: 'Thu hoạch điểm thu thập đầu tiên của bạn.',
   },
-  prog_mining_100: { name: 'Quặng Trong Huyết Quản', desc: 'Đạt 100 điểm thành thạo Khai Khoáng.' },
-  prog_logging_100: { name: 'Kẻ Đốn Lõi Gỗ', desc: 'Đạt 100 điểm thành thạo Đốn Gỗ.' },
-  prog_herbalism_100: { name: 'Bậc Thầy Đồng Cỏ', desc: 'Đạt 100 điểm thành thạo Thảo Dược Học.' },
+  prog_mining_100: {
+    name: 'Quặng Trong Huyết Quản',
+    desc: 'Đạt 100 điểm thành thạo Khai Khoáng.',
+  },
+  prog_logging_100: {
+    name: 'Kẻ Đốn Lõi Gỗ',
+    desc: 'Đạt 100 điểm thành thạo Đốn Gỗ.',
+  },
+  prog_herbalism_100: {
+    name: 'Bậc Thầy Đồng Cỏ',
+    desc: 'Đạt 100 điểm thành thạo Thảo Dược Học.',
+  },
   prog_master_gatherer: {
     name: 'Bậc Thầy Thu Thập',
     desc: 'Đạt 100 điểm thành thạo trong Khai Khoáng, Đốn Gỗ, và Thảo Dược Học.',
@@ -93,11 +116,26 @@ export const table: DeedLocaleTable = {
     name: 'Một Vòng Quanh Xưởng',
     desc: 'Đạt 25 điểm kỹ năng trong năm nghề chế tác khác nhau.',
   },
-  cmb_first_blood: { name: 'Vết Máu Đầu Tiên', desc: 'Đánh bại kẻ địch đầu tiên của bạn.' },
-  cmb_slayer: { name: 'Kẻ Tàn Sát', desc: 'Đánh bại 1,000 kẻ địch.' },
-  cmb_legion_of_one: { name: 'Một Người Một Quân Đoàn', desc: 'Đánh bại 10,000 kẻ địch.' },
-  cmb_heavy_hitter: { name: 'Tay Đấm Hạng Nặng', desc: 'Gây tổng cộng 500,000 sát thương.' },
-  cmb_critical_eye: { name: 'Con Mắt Chí Mạng', desc: 'Tung 500 đòn chí mạng.' },
+  cmb_first_blood: {
+    name: 'Vết Máu Đầu Tiên',
+    desc: 'Đánh bại kẻ địch đầu tiên của bạn.',
+  },
+  cmb_slayer: {
+    name: 'Kẻ Tàn Sát',
+    desc: 'Đánh bại 1,000 kẻ địch.',
+  },
+  cmb_legion_of_one: {
+    name: 'Một Người Một Quân Đoàn',
+    desc: 'Đánh bại 10,000 kẻ địch.',
+  },
+  cmb_heavy_hitter: {
+    name: 'Tay Đấm Hạng Nặng',
+    desc: 'Gây tổng cộng 500,000 sát thương.',
+  },
+  cmb_critical_eye: {
+    name: 'Con Mắt Chí Mạng',
+    desc: 'Tung 500 đòn chí mạng.',
+  },
   cmb_giantslayer: {
     name: 'Kẻ Diệt Khổng Lồ',
     desc: 'Tung đòn kết liễu một kẻ địch cao hơn bạn ít nhất năm cấp.',
@@ -158,7 +196,10 @@ export const table: DeedLocaleTable = {
     name: 'Trọn Một Vòng Đua',
     desc: 'Kiếm Dấu Ấn Anh Hùng từ cả bốn hầm ngục Anh Hùng trong cùng một ngày.',
   },
-  dgn_boss_clears_50: { name: 'Năm Mươi Cánh Cửa Sâu', desc: 'Đánh bại 50 trùm cuối hầm ngục.' },
+  dgn_boss_clears_50: {
+    name: 'Năm Mươi Cánh Cửa Sâu',
+    desc: 'Đánh bại 50 trùm cuối hầm ngục.',
+  },
   dgn_morthen_flawless: {
     name: 'Không Ai Bỏ Xương Lại',
     desc: 'Đánh bại Morthen Kẻ Gọi Mộ ở độ khó Anh Hùng mà không một thành viên tổ đội nào tử trận.',
@@ -209,7 +250,10 @@ export const table: DeedLocaleTable = {
     desc: 'Đánh bại Nythraxis, Tai Họa Đỉnh Gai, ở độ khó Anh Hùng mà không một thành viên raid nào tử trận.',
     title: 'Kẻ Bất Tử',
   },
-  cmb_thunzharr: { name: 'Núi Đã Đổ', desc: 'Hạ gục Thunzharr, Đỉnh Núi Thức Giấc, tại Vách Bão.' },
+  cmb_thunzharr: {
+    name: 'Núi Đã Đổ',
+    desc: 'Hạ gục Thunzharr, Đỉnh Núi Thức Giấc, tại Vách Bão.',
+  },
   cmb_thunzharr_unbroken: {
     name: 'Kẻ Phá Đỉnh',
     desc: 'Hạ gục Thunzharr, Đỉnh Núi Thức Giấc, mà không chết lần nào từ đòn đầu tiên của bạn đến hơi thở cuối cùng của hắn.',
@@ -219,17 +263,26 @@ export const table: DeedLocaleTable = {
     name: 'Thói Quen Hạ Núi',
     desc: 'Hạ gục Thunzharr, Đỉnh Núi Thức Giấc, mười lần.',
   },
-  dlv_reliquary: { name: 'Chân Chạy Thánh Tích', desc: 'Quét sạch Thánh Tích Sụp Đổ.' },
+  dlv_reliquary: {
+    name: 'Chân Chạy Thánh Tích',
+    desc: 'Quét sạch Thánh Tích Sụp Đổ.',
+  },
   dlv_reliquary_heroic: {
     name: 'Anh Hùng: Thánh Tích Sụp Đổ',
     desc: 'Quét sạch Thánh Tích Sụp Đổ ở bậc Anh Hùng.',
   },
-  dlv_litany: { name: 'Bặt Tiếng Kinh Cầu', desc: 'Quét sạch Kinh Cầu Chết Chìm.' },
+  dlv_litany: {
+    name: 'Bặt Tiếng Kinh Cầu',
+    desc: 'Quét sạch Kinh Cầu Chết Chìm.',
+  },
   dlv_litany_heroic: {
     name: 'Anh Hùng: Kinh Cầu Chết Chìm',
     desc: 'Quét sạch Kinh Cầu Chết Chìm ở bậc Anh Hùng.',
   },
-  dlv_lore_journal: { name: 'Ghi Chú Bên Lề', desc: 'Mở khóa cả năm mục của nhật ký hang sâu.' },
+  dlv_lore_journal: {
+    name: 'Ghi Chú Bên Lề',
+    desc: 'Mở khóa cả năm mục của nhật ký hang sâu.',
+  },
   dlv_companion_max: {
     name: 'Bạn Nơi Vực Sâu',
     desc: 'Nâng một bạn đồng hành hang sâu lên bậc cao nhất của cô ấy.',
@@ -238,7 +291,10 @@ export const table: DeedLocaleTable = {
     name: 'Hai Ngọn Đèn Cùng Sáng',
     desc: 'Nâng cả hai bạn đồng hành hang sâu, Tế Đồ Tessa và Edda Reedhand, lên bậc cao nhất.',
   },
-  dlv_clears_50: { name: 'Năm Mươi Sải Sâu', desc: 'Hoàn thành 50 chuyến hang sâu.' },
+  dlv_clears_50: {
+    name: 'Năm Mươi Sải Sâu',
+    desc: 'Hoàn thành 50 chuyến hang sâu.',
+  },
   dlv_solo_heroic: {
     name: 'Hai Người Đã Đủ Chật',
     desc: 'Quét sạch một hang sâu bậc Anh Hùng không cùng người chơi nào khác, chỉ bạn và bạn đồng hành của mình.',
@@ -281,7 +337,10 @@ export const table: DeedLocaleTable = {
     name: 'Có Gì Dưới Hồ Gương',
     desc: 'Câu một con cá từ vùng nước của Thung Lũng Đông Khê.',
   },
-  chr_vale_packbreaker: { name: 'Kẻ Phá Bầy', desc: 'Hạ 3 Sói Rừng trong vòng 10 giây.' },
+  chr_vale_packbreaker: {
+    name: 'Kẻ Phá Bầy',
+    desc: 'Hạ 3 Sói Rừng trong vòng 10 giây.',
+  },
   chr_vale_cup_debut: {
     name: 'Kẻ Tranh Xô Đồng',
     desc: 'Ra sân và chạm bóng trong một trận Cúp Thung Lũng tại Sân Heo Nái.',
@@ -356,13 +415,19 @@ export const table: DeedLocaleTable = {
     name: 'Chuột Gom Đồ',
     desc: 'Khám phá 25 món đồ khác nhau (mỗi món được tính vào lần đầu tiên nó về tay bạn).',
   },
-  col_discovery_75: { name: 'Chim Ác Là', desc: 'Khám phá 75 món đồ khác nhau.' },
+  col_discovery_75: {
+    name: 'Chim Ác Là',
+    desc: 'Khám phá 75 món đồ khác nhau.',
+  },
   col_discovery_150: {
     name: 'Tủ Kỳ Trân',
     desc: 'Khám phá 150 món đồ khác nhau.',
     title: 'Người Giữ Kỳ Trân',
   },
-  col_discovery_250: { name: 'Đại Danh Mục', desc: 'Khám phá 250 món đồ khác nhau.' },
+  col_discovery_250: {
+    name: 'Đại Danh Mục',
+    desc: 'Khám phá 250 món đồ khác nhau.',
+  },
   col_first_rare: {
     name: 'Chút Gì Xanh Biếc',
     desc: 'Sở hữu món đồ phẩm chất hiếm đầu tiên của bạn.',
@@ -403,7 +468,10 @@ export const table: DeedLocaleTable = {
     name: 'Vương Phục Bonewrought',
     desc: 'Khám phá đủ mọi món của bộ Vương Phục Bonewrought.',
   },
-  col_set_nighttalon: { name: 'Bộ Da Direfang', desc: 'Khám phá đủ mọi món của Bộ Da Direfang.' },
+  col_set_nighttalon: {
+    name: 'Bộ Da Direfang',
+    desc: 'Khám phá đủ mọi món của Bộ Da Direfang.',
+  },
   col_set_soulflame: {
     name: 'Vương Phục Wraithfire',
     desc: 'Khám phá đủ mọi món của bộ Vương Phục Wraithfire.',
@@ -429,7 +497,10 @@ export const table: DeedLocaleTable = {
     name: 'Khách Quen Hạng Nhất',
     desc: 'Khám phá đủ cả mười món hàng của Quân Nhu Trưởng Vex.',
   },
-  col_glimmerfin: { name: 'Tia Hy Vọng Lấp Lánh', desc: 'Câu được một con Cá Koi Vây Lấp Lánh.' },
+  col_glimmerfin: {
+    name: 'Tia Hy Vọng Lấp Lánh',
+    desc: 'Câu được một con Cá Koi Vây Lấp Lánh.',
+  },
   col_full_creel: {
     name: 'Giỏ Cá Đầy Ắp',
     desc: 'Khám phá đủ sáu loại cá thường từ vùng nước của Thung Lũng, Đầm Lầy và Cao Nguyên.',
@@ -471,7 +542,10 @@ export const table: DeedLocaleTable = {
     name: 'Ăn Ý Tuyệt Đối',
     desc: 'Đạt 1900 điểm xếp hạng ở nhánh đấu trường 2v2.',
   },
-  pvp_duel_first_win: { name: 'Ra Ngoài Giải Quyết', desc: 'Thắng một trận đấu tay đôi.' },
+  pvp_duel_first_win: {
+    name: 'Ra Ngoài Giải Quyết',
+    desc: 'Thắng một trận đấu tay đôi.',
+  },
   pvp_duel_grace: {
     name: 'Bài Học Khiêm Nhường',
     desc: 'Thua một trận đấu tay đôi mà thể diện vẫn gần như nguyên vẹn.',
@@ -484,7 +558,10 @@ export const table: DeedLocaleTable = {
     name: 'Chiếc Cúp Đầu Tay',
     desc: 'Thắng một trận Cúp Thung Lũng xếp hạng.',
   },
-  pvp_vcup_wins_10: { name: 'Cầu Thủ Dạn Dày', desc: 'Thắng 10 trận Cúp Thung Lũng xếp hạng.' },
+  pvp_vcup_wins_10: {
+    name: 'Cầu Thủ Dạn Dày',
+    desc: 'Thắng 10 trận Cúp Thung Lũng xếp hạng.',
+  },
   pvp_vcup_wins_25: {
     name: 'Huyền Thoại Bóng Heo Rừng',
     desc: 'Thắng 25 trận Cúp Thung Lũng xếp hạng.',
@@ -518,7 +595,10 @@ export const table: DeedLocaleTable = {
     name: 'Khách Không Mời',
     desc: 'Đấu trọn một trận Fiesta 2v2, dù thắng hay thua.',
   },
-  pvp_fiesta_first_win: { name: 'Linh Hồn Của Bữa Tiệc', desc: 'Thắng một trận Fiesta 2v2.' },
+  pvp_fiesta_first_win: {
+    name: 'Linh Hồn Của Bữa Tiệc',
+    desc: 'Thắng một trận Fiesta 2v2.',
+  },
   pvp_fiesta_double: {
     name: 'Họa Vô Đơn Chí',
     desc: 'Ghi hai pha hạ gục trong Fiesta chỉ trong bốn giây.',
@@ -539,9 +619,18 @@ export const table: DeedLocaleTable = {
     name: 'Gánh Cả Bữa Tiệc',
     desc: 'Ghi năm pha hạ gục trong cùng một trận Fiesta.',
   },
-  soc_first_party: { name: 'Có Nhau Vẫn Hơn', desc: 'Gia nhập một tổ đội cùng người chơi khác.' },
-  soc_full_house: { name: 'Kín Đội Hình', desc: 'Dọn sạch một hầm ngục với tổ đội đủ năm người.' },
-  soc_guild_joined: { name: 'Dưới Một Ngọn Cờ', desc: 'Trở thành thành viên của một bang hội.' },
+  soc_first_party: {
+    name: 'Có Nhau Vẫn Hơn',
+    desc: 'Gia nhập một tổ đội cùng người chơi khác.',
+  },
+  soc_full_house: {
+    name: 'Kín Đội Hình',
+    desc: 'Dọn sạch một hầm ngục với tổ đội đủ năm người.',
+  },
+  soc_guild_joined: {
+    name: 'Dưới Một Ngọn Cờ',
+    desc: 'Trở thành thành viên của một bang hội.',
+  },
   soc_guild_founded: {
     name: 'Ngòi Bút Khai Hội',
     desc: 'Tự tay sáng lập một bang hội của riêng bạn.',
@@ -579,7 +668,10 @@ export const table: DeedLocaleTable = {
     name: 'Niềm Tin Đặt Nơi Fernando',
     desc: 'Đến bái kiến Thủ Quỹ Fernando, người trông coi Két Sắt Mạ Vàng ở Đông Khê.',
   },
-  soc_pocket_money: { name: 'Tiền Tiêu Vặt', desc: 'Nhặt được tổng cộng trọn đời 1 vàng tiền xu.' },
+  soc_pocket_money: {
+    name: 'Tiền Tiêu Vặt',
+    desc: 'Nhặt được tổng cộng trọn đời 1 vàng tiền xu.',
+  },
   soc_heavy_purse: {
     name: 'Hầu Bao Nặng Trĩu',
     desc: 'Nhặt được tổng cộng trọn đời 10 vàng tiền xu.',
@@ -617,9 +709,18 @@ export const table: DeedLocaleTable = {
     name: 'Thứ Gì Đó Lấp Lánh',
     desc: 'Nhặt một vật thể lấp lánh trên mặt đất.',
   },
-  exp_first_ore: { name: 'Cuốc Vỡ Đất', desc: 'Thu hoạch mạch quặng đầu tiên của bạn.' },
-  exp_first_timber: { name: 'Cây Đổ Đấy!', desc: 'Thu hoạch cụm gỗ đầu tiên của bạn.' },
-  exp_first_herb: { name: 'Mát Tay', desc: 'Thu hoạch bụi thảo dược đầu tiên của bạn.' },
+  exp_first_ore: {
+    name: 'Cuốc Vỡ Đất',
+    desc: 'Thu hoạch mạch quặng đầu tiên của bạn.',
+  },
+  exp_first_timber: {
+    name: 'Cây Đổ Đấy!',
+    desc: 'Thu hoạch cụm gỗ đầu tiên của bạn.',
+  },
+  exp_first_herb: {
+    name: 'Mát Tay',
+    desc: 'Thu hoạch bụi thảo dược đầu tiên của bạn.',
+  },
   feat_era_cap: {
     name: 'Đứa Con Của Kỷ Nguyên Thứ Nhất',
     desc: 'Đã đạt cấp 20 khi Kỷ Nguyên Thứ Nhất vẫn còn hiện hành.',
@@ -683,6 +784,7 @@ export const table: DeedLocaleTable = {
   },
   prog_tools_of_the_trade: {
     name: 'Dụng Cụ Nhà Nghề',
+    desc: '[VI] Complete a craft at a crafting station.',
   },
   dgn_nythraxis_crypt: {
     name: 'Điều Hầm Mộ Cất Giữ',
@@ -691,5 +793,9 @@ export const table: DeedLocaleTable = {
   chr_marsh_first_cast: {
     name: 'Lươn Trong Lau Sậy',
     desc: 'Câu một con cá từ vùng nước của Đầm Lầy Bùn Sâu.',
+  },
+  pvp_card_duel_first_win: {
+    name: 'Luật Của Ta',
+    desc: 'Thắng một ván Đấu Bài tại Bậc Thầy Bài.',
   },
 };

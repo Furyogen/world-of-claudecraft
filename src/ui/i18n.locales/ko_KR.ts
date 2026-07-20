@@ -8327,4 +8327,5 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.sunpetal_healing_draught.name': '태양꽃잎 치유 물약',
   'entities.items.sunpetal_mana_draught.name': '태양꽃잎 마나 물약',
   'entities.items.elixir_of_the_serpent.name': '뱀의 비약',
+  'hudChrome.professions.skillValue': '[KO] {skill} / {max}',
 };
