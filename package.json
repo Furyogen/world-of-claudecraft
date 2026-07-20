@@ -120,6 +120,7 @@
     "@capacitor/cli": "^8.4.0",
     "@capacitor/core": "^8.4.0",
     "@capacitor/ios": "^8.4.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "@gltf-transform/cli": "^4.4.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@testing-library/jest-dom": "^6.9.1",

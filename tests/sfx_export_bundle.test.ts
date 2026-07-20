@@ -12,8 +12,8 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import ffmpegPath from 'ffmpeg-static';
-import ffprobeStatic from 'ffprobe-static';
 import { describe, expect, it } from 'vitest';
+import { FFMPEG_PATH, FFPROBE_PATH } from '../scripts/sfx/ffmpeg_paths.mjs';
 // @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as exportBundleModule from '../scripts/sfx_studio/export_bundle.mjs';
 // @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
@@ -170,15 +170,11 @@ describe('SFX production bundle', () => {
   }, 30_000);
 
   it('measures the production-conformance verdict with the bundled ffmpeg toolchain', () => {
-    // The export validator must resolve the same binaries that gate the checked-in
-    // assets (scripts/sfx_conform.mjs / npm run sfx:check use ffmpeg-static and
-    // ffprobe-static), not the PATH ffmpeg the Studio spawns for playback. A newer
-    // PATH ffmpeg measures MP3 duration a few tens of milliseconds shorter, which
-    // flips these clips across the one-second peak/LUFS branch boundary and rejects a
-    // clip the gate accepts. Pinning the resolution keeps that regression from
-    // silently returning.
-    expect(exportBundleModule.CONFORMANCE_FFMPEG_PATH).toBe(ffmpegPath);
-    expect(exportBundleModule.CONFORMANCE_FFPROBE_PATH).toBe(ffprobeStatic.path);
+    // The export validator must use the same resolver that gates the checked-in
+    // assets, including the Linux arm64 ffprobe fallback, not a direct
+    // ffprobe-static path that may not exist on this host.
+    expect(exportBundleModule.CONFORMANCE_FFMPEG_PATH).toBe(FFMPEG_PATH);
+    expect(exportBundleModule.CONFORMANCE_FFPROBE_PATH).toBe(FFPROBE_PATH);
     // The constants alone do not prove the validator USES them: pin the call-site
     // wiring so a revert to the PATH binaries (which only misbehaves on machines
     // whose PATH ffmpeg diverges from the bundled one) reds deterministically.

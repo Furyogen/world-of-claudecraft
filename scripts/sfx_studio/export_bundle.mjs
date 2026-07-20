@@ -14,9 +14,8 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
-import ffmpegStaticPath from 'ffmpeg-static';
-import ffprobeStatic from 'ffprobe-static';
 import { inspectSfxConformance } from '../sfx/conform_audio.mjs';
+import { FFMPEG_PATH, FFPROBE_PATH } from '../sfx/ffmpeg_paths.mjs';
 import {
   buildSfxManifestData,
   catalogHashForEntries,
@@ -49,20 +48,13 @@ const conformanceCache = new Set();
 // scripts/sfx_conform.mjs's own preserveLoudness handling.
 const customMasterPolicy = buildSfxConformPolicy(SFX, {}, []);
 
-// The published-conformance verdict must be measured with the same toolchain that
+// The published-conformance verdict must be measured with the same resolver that
 // gates the checked-in assets: npm run sfx:check (scripts/sfx_conform.mjs) and the
-// SFX generators resolve ffmpeg-static/ffprobe-static, not the PATH ffmpeg the
-// Studio spawns for playback and encoding. A newer PATH ffmpeg reports MP3 duration
-// a few tens of milliseconds shorter, enough to flip a clip across the one-second
-// peak/LUFS branch boundary and demand the wrong loudness target, so a clip the gate
-// accepts would fail export. Keep validation bound to the bundled binaries.
-if (!ffmpegStaticPath || !ffprobeStatic?.path) {
-  // ffmpeg-static exports null on an unsupported platform; fail here with a
-  // clear message instead of handing inspectSfxConformance a null binary path.
-  throw new Error('sfx export: bundled ffmpeg-static/ffprobe-static unavailable on this platform');
-}
-export const CONFORMANCE_FFMPEG_PATH = ffmpegStaticPath;
-export const CONFORMANCE_FFPROBE_PATH = ffprobeStatic.path;
+// gate preflight both use scripts/sfx/ffmpeg_paths.mjs. Keep export validation on
+// that shared path so unsupported static package gaps, such as Linux arm64
+// ffprobe-static, do not make the Studio stricter than the gate.
+export const CONFORMANCE_FFMPEG_PATH = FFMPEG_PATH;
+export const CONFORMANCE_FFPROBE_PATH = FFPROBE_PATH;
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');

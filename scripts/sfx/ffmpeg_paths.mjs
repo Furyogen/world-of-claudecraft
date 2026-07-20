@@ -13,11 +13,15 @@
 // measured with the exact toolchain that gates the checked-in assets.
 import { existsSync } from 'node:fs';
 import ffmpegStatic from 'ffmpeg-static';
+import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import ffprobeStatic from 'ffprobe-static';
 
-export function resolveSfxTool({ overridePath, staticPath, fallback }) {
+export function resolveSfxTool({ overridePath, staticPath, fallback, extraStaticPaths = [] }) {
   if (overridePath) return overridePath;
   if (staticPath && existsSync(staticPath)) return staticPath;
+  for (const path of extraStaticPaths) {
+    if (path && existsSync(path)) return path;
+  }
   return fallback;
 }
 
@@ -30,5 +34,6 @@ export const FFMPEG_PATH = resolveSfxTool({
 export const FFPROBE_PATH = resolveSfxTool({
   overridePath: process.env.WOC_FFPROBE_PATH,
   staticPath: ffprobeStatic.path,
+  extraStaticPaths: [ffprobeInstaller.path],
   fallback: 'ffprobe',
 });
