@@ -1,0 +1,1328 @@
+{
+  "storm_bolt": {
+    "_cls": "warrior",
+    "archetype": "bolt",
+    "palette": "physical",
+    "power": 1.1,
+    "bolt": {
+      "speed": 22,
+      "headScale": 1.1,
+      "style": "rock",
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "windup": 0.3,
+    "windupStyle": "weapon",
+    "linger": 1.5,
+    "rim": "#cfdae6",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.2,
+      "vRing": true,
+      "sparks": 24,
+      "debris": false,
+      "smoke": false,
+      "light": 0.9
+    },
+    "notes": "The warrior's only projectile: the weapon itself tumbles downrange and the stun reads in the double ring snap"
+  },
+  "bladestorm": {
+    "_cls": "warrior",
+    "archetype": "nova",
+    "palette": "physical",
+    "power": 1.5,
+    "nova": { "radius": 6 },
+    "windup": 0.5,
+    "windupStyle": "vortex",
+    "motifs": ["bladestorm"],
+    "hot": 0.3,
+    "linger": 3.5,
+    "rim": "#eef2f8",
+    "impact": {
+      "trail": "sweep",
+      "ring": 2.2,
+      "vRing": true,
+      "sparks": 44,
+      "debris": true,
+      "smoke": false,
+      "flipbook": false,
+      "light": 1.0
+    },
+    "notes": "THE whirl: white-hot steel, the longest-lingering blade vortex in the kit; Bladed Gyre stays the quick instant spin, this one keeps turning"
+  },
+  "victory_rush": {
+    "_cls": "warrior",
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.15,
+    "strike": { "swings": 1, "arc": "uppercut" },
+    "windupStyle": "none",
+    "motifs": ["fountain"],
+    "motifAt": "caster",
+    "accent": "#b8e6c8",
+    "linger": 1.5,
+    "rim": "#dfe8dd",
+    "impact": {
+      "trail": "riposte",
+      "ring": false,
+      "vRing": false,
+      "sparks": 18,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4
+    },
+    "notes": "Triumph made visible: the kill-window uppercut lands and life fountains back INTO the caster with a mint glint, the kit's only strike that heals"
+  },
+  "piercing_howl": {
+    "_cls": "warrior",
+    "archetype": "shout",
+    "palette": "physical",
+    "power": 1.1,
+    "shout": { "radius": 12 },
+    "windupStyle": "none",
+    "linger": 2,
+    "rim": "#9fb4c8",
+    "impact": {
+      "ring": 3,
+      "vRing": false,
+      "sparks": 0,
+      "flipbook": false,
+      "debris": false,
+      "smoke": true,
+      "light": 1.6
+    },
+    "notes": "The slow: the widest single cry wave in the kit with dragging smoke, enemies wading through thick air"
+  },
+  "die_by_sword": {
+    "_cls": "warrior",
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.95,
+    "buff": {
+      "style": "raise",
+      "orbit": "speedlines",
+      "shellDur": 2.5,
+      "o": { "rate": 3, "tickEvery": 1.3 }
+    },
+    "windup": 0.3,
+    "windupStyle": "weapon",
+    "linger": 4,
+    "rim": "#d4dde8",
+    "impact": {
+      "vRing": 1.5,
+      "ring": false,
+      "sparks": 16,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.0,
+      "liteAudio": true
+    },
+    "notes": "Parry stance: blade-blur speedlines whip around the legs at triple rate, every incoming swing met; Onrush's dash lines are a one-second transient so the band stays honest"
+  },
+  "recklessness": {
+    "_cls": "warrior",
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.2,
+    "buff": {
+      "style": "raise",
+      "orbit": "heartbeat",
+      "shellDur": 2,
+      "o": { "bpm": 170, "ringR": 3, "tickEvery": 0.5 }
+    },
+    "windup": 0.25,
+    "windupStyle": "stance",
+    "linger": 4,
+    "rim": "#ff3820",
+    "impact": {
+      "sparks": 22,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4,
+      "liteAudio": true
+    },
+    "notes": "The fastest, widest heartbeat in the game (bpm 170, ring 3): reckless enrage past Blood Toll's 96 and Seething Fury's 150; row-exclusive with Avatar"
+  },
+  "avatar": {
+    "_cls": "warrior",
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 1.5,
+    "buff": {
+      "style": "morph",
+      "orbit": "plates",
+      "shellDur": 3,
+      "o": {
+        "n": 6,
+        "size": 1.5,
+        "tex": "chip",
+        "rate": 0.35,
+        "weave": 0.02,
+        "radius": 1.35,
+        "incline": 0,
+        "tickEvery": 2
+      }
+    },
+    "windup": 0.5,
+    "windupStyle": "stance",
+    "motifs": ["implosion"],
+    "decal": "crack",
+    "hot": 0.1,
+    "linger": 4,
+    "rim": "#d8dce2",
+    "impact": {
+      "ring": 1.8,
+      "vRing": false,
+      "sparks": 16,
+      "debris": true,
+      "smoke": true,
+      "flipbook": false,
+      "light": 1.6
+    },
+    "notes": "Colossus morph: six huge slow stone slabs orbit the waist and the ground cracks under the new weight; DNA worlds apart from Guarded Stance's thin quick guard arc"
+  },
+  "sanguine_aura": {
+    "_cls": "warrior",
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.1,
+    "buff": {
+      "style": "raise",
+      "orbit": "weaponGlow",
+      "shellDur": 2.5,
+      "o": { "rate": 0.5, "tickEvery": 1.6 }
+    },
+    "windup": 0.3,
+    "windupStyle": "weapon",
+    "linger": 4,
+    "rim": "#8e1220",
+    "impact": {
+      "ring": 2.0,
+      "vRing": false,
+      "sparks": 12,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "blood": true,
+      "light": 1.8
+    },
+    "notes": "Blood-imbued weapon with a party pulse ring: deep slow crimson soak against Iron Bellow's bright fast shimmer, the two weapon glows deliberately opposite tempos"
+  },
+  "evocation": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 1.0,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 3, "o": { "tickEvery": 1.5 } },
+    "windup": 0.4,
+    "windupStyle": "orb",
+    "motifs": ["fountain"],
+    "motifAt": "caster",
+    "linger": 4,
+    "rim": "#c9a6ff",
+    "impact": {
+      "sparks": 20,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.6,
+      "liteAudio": true
+    },
+    "notes": "Aetherwell: violet mana streams fountain INTO the caster for the whole channel read, the only inward fountain in the mage kit"
+  },
+  "presence_of_mind": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 0.85,
+    "buff": {
+      "style": "raise",
+      "orbit": "speedlines",
+      "shellDur": 2,
+      "o": { "rate": 3.2, "tickEvery": 1 }
+    },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#d0aaff",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 12,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "Racing Mind: violet thought-speedlines at the fastest rate in the kit; Ember Form's fire lines never co-exist since the form locks casting"
+  },
+  "ice_floes": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 0.75,
+    "buff": {
+      "style": "raise",
+      "orbit": "runes",
+      "shellDur": 2,
+      "o": {
+        "n": 2,
+        "size": 0.8,
+        "tex": "chip",
+        "rate": 0.5,
+        "weave": 0.04,
+        "radius": 1.15,
+        "incline": 0,
+        "tickEvery": 3
+      }
+    },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#bfeaff",
+    "impact": {
+      "sparks": 8,
+      "debris": true,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "smoke": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Two large ice floes drift under the feet, casting on the move made literal; nothing like Blazing Barrier's five ember glows on the same band"
+  },
+  "greater_invisibility": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 0.8,
+    "buff": { "style": "veil", "orbit": "none", "shellDur": 3, "o": { "tickEvery": 4 } },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#d0c2f0",
+    "impact": {
+      "smoke": true,
+      "sparks": 0,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.6,
+      "liteAudio": true
+    },
+    "notes": "The mage's only veil: an airy violet fade-out, quieter than any rogue vanish"
+  },
+  "rings_of_frost": {
+    "_cls": "mage",
+    "archetype": "nova",
+    "palette": "frost",
+    "power": 1.05,
+    "nova": { "radius": 6 },
+    "windup": 1.4,
+    "windupStyle": "orb",
+    "motifs": ["orbitals"],
+    "motifAt": "target",
+    "decal": "rune",
+    "linger": 4,
+    "rim": "#a8d8ec",
+    "impact": {
+      "ring": 2.6,
+      "vRing": false,
+      "sparks": 12,
+      "debris": false,
+      "flipbook": false,
+      "smoke": false,
+      "light": 0.9,
+      "liteAudio": true
+    },
+    "notes": "A persistent perimeter: frost orbitals patrol the inscribed ring long after the cast; Icebind stays the instant pillar burst"
+  },
+  "cold_snap": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 0.85,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 1.5, "o": { "tickEvery": 2.5 } },
+    "windupStyle": "none",
+    "linger": 1.5,
+    "rim": "#dff4ff",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 20,
+      "debris": true,
+      "smoke": false,
+      "flipbook": false,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "Winter's Recall: one crisp shatter of chip debris as the cooldowns snap back frozen-fresh"
+  },
+  "mass_barrier": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 1.05,
+    "barrier": true,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 3.5, "o": { "tickEvery": 2.8 } },
+    "windup": 0.3,
+    "windupStyle": "orb",
+    "linger": 4,
+    "rim": "#bfe8f8",
+    "impact": {
+      "ring": 2.8,
+      "sparks": 8,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.8,
+      "liteAudio": true
+    },
+    "notes": "The group shield: one huge outbound shield wave then the shell holds; no orbiters, so Frostveil's six plates stay unmistakable"
+  },
+  "overload": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 1.0,
+    "buff": {
+      "style": "raise",
+      "orbit": "weaponGlow",
+      "shellDur": 2,
+      "o": { "rate": 2.5, "tickEvery": 1.1 }
+    },
+    "windupStyle": "none",
+    "hot": 0.2,
+    "linger": 4,
+    "rim": "#d08cff",
+    "impact": {
+      "sparks": 26,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4,
+      "liteAudio": true
+    },
+    "notes": "The overcharged focus: the mage's first weapon glow, the staff crackling white-violet at double rate until the amplified cast spends it"
+  },
+  "power_echo": {
+    "_cls": "mage",
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 0.8,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 2, "o": { "tickEvery": 2 } },
+    "windupStyle": "none",
+    "linger": 3,
+    "rim": "#b892e8",
+    "impact": {
+      "vRing": 1.8,
+      "ring": false,
+      "sparks": 10,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.1,
+      "liteAudio": true
+    },
+    "notes": "The repeat armed: a tall violet ripple that visibly re-rings, the next spell's echo waiting; violet buff against Temporal Echo's teal heal"
+  },
+  "rune_of_power": {
+    "_cls": "mage",
+    "archetype": "burst",
+    "palette": "arcane",
+    "power": 1.0,
+    "burst": { "style": "ground" },
+    "windup": 1.4,
+    "windupStyle": "runes",
+    "decal": "rune",
+    "motifs": ["orbitals"],
+    "motifAt": "caster",
+    "linger": 5,
+    "rim": "#c86bff",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.6,
+      "vRing": false,
+      "sparks": 14,
+      "debris": false,
+      "smoke": false,
+      "light": 1.5,
+      "liteAudio": true
+    },
+    "notes": "The deliberate exception to the rune-circle scarcity rule: this ability IS a rune inscription, so the ceremony windup finally earns a second user beside Bewitch"
+  },
+  "smoke_screen": {
+    "_cls": "rogue",
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.75,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 2, "o": { "tickEvery": 2.4 } },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#9aa4ae",
+    "impact": {
+      "ring": 1.4,
+      "smoke": true,
+      "sparks": 0,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.5,
+      "liteAudio": true
+    },
+    "notes": "A rolling grey smoke ring that hangs around the rogue for the whole dodge window; Smokestep and Duskveil stay clean veils, this one is weather"
+  },
+  "preparation": {
+    "_cls": "rogue",
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.6,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 1.5, "o": { "tickEvery": 3 } },
+    "windupStyle": "none",
+    "linger": 2,
+    "rim": "#c8d2dc",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 8,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Contingency: one cool steel flick through a vertical ring, the escape kit quietly reloaded"
+  },
+  "ghostly_strike": {
+    "_cls": "rogue",
+    "archetype": "strike",
+    "palette": "moon",
+    "power": 1.0,
+    "strike": { "swings": 1, "arc": "thrust" },
+    "windupStyle": "none",
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 1.5, "o": { "tickEvery": 2.5 } },
+    "linger": 3,
+    "rim": "#b4a8e0",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 14,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Wraith Strike: the kit's only moon-pale blade, a spectral thrust whose afterglow lingers as the dodge window; no apparition, the spirit rule holds"
+  },
+  "cloak_of_shadows": {
+    "_cls": "rogue",
+    "archetype": "buff",
+    "palette": "shadow",
+    "power": 0.9,
+    "barrier": true,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 4, "o": { "tickEvery": 2.6 } },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#7e6ba8",
+    "impact": {
+      "smoke": true,
+      "sparks": 0,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.7,
+      "liteAudio": true
+    },
+    "notes": "Shadecloak: the rogue's only shell, woven of shadow-smoke rather than light; an absorb that shields, honestly"
+  },
+  "shadowstep": {
+    "_cls": "rogue",
+    "archetype": "dash",
+    "palette": "shadow",
+    "power": 0.85,
+    "spirit": null,
+    "windupStyle": "none",
+    "linger": 0.8,
+    "rim": "#7a6a9e",
+    "impact": {
+      "smoke": true,
+      "sparks": 8,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Shadeslip: a soundless shadow-smoke dash to the target's back; Swift Heels stays the running buff, this is the teleporting cut"
+  },
+  "cleansing_verdict": {
+    "_cls": "paladin",
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.85,
+    "windupStyle": "none",
+    "shaft": 0.6,
+    "linger": 2,
+    "rim": "#f0e6c8",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 8,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4,
+      "liteAudio": true
+    },
+    "notes": "Dispel and mend in one flick: the harmful magic snaps out through the vertical ring as the gentle light settles in"
+  },
+  "holy_wrath": {
+    "_cls": "paladin",
+    "archetype": "nova",
+    "palette": "holy",
+    "power": 1.2,
+    "nova": { "radius": 10 },
+    "windup": 0.3,
+    "windupStyle": "ascend",
+    "linger": 1.5,
+    "rim": "#ffe9a8",
+    "impact": {
+      "ring": 2.2,
+      "vRing": false,
+      "sparks": 26,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.6
+    },
+    "notes": "Saint's Ire: the paladin's radial judgment wave; Holy Ground stays the lingering floor, this is the instant flash"
+  },
+  "divine_shield": {
+    "_cls": "paladin",
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 1.2,
+    "barrier": true,
+    "buff": { "style": "raise", "orbit": "none", "shellDur": 5, "o": { "tickEvery": 3 } },
+    "windup": 0.4,
+    "windupStyle": "ascend",
+    "linger": 5,
+    "rim": "#ffd970",
+    "impact": {
+      "ring": 1.4,
+      "sparks": 0,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 2.2,
+      "liteAudio": true
+    },
+    "notes": "Lightward, THE bubble: pure golden shell and nothing else, held longer than any other barrier; gold earned, it is holy"
+  },
+  "avenging_wrath": {
+    "_cls": "paladin",
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 1.35,
+    "buff": {
+      "style": "raise",
+      "orbit": "wings",
+      "shellDur": 2.5,
+      "o": { "ribs": 6, "span": 1.6, "flapRate": 1.6, "tickEvery": 2 }
+    },
+    "windup": 0.4,
+    "windupStyle": "ascend",
+    "linger": 4,
+    "rim": "#ffdf8a",
+    "impact": {
+      "ring": 1.8,
+      "vRing": false,
+      "sparks": 20,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 2.4
+    },
+    "notes": "Wrathwing: six blazing full-span wings beating fast, the avenging moment; Oath of Iron's small slow blessing wings usually ride an ally, and never look like this"
+  },
+  "hammer_of_wrath": {
+    "_cls": "paladin",
+    "archetype": "bolt",
+    "palette": "holy",
+    "power": 1.3,
+    "bolt": {
+      "speed": 26,
+      "headScale": 1.3,
+      "style": "rock",
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "windupStyle": "none",
+    "motifs": ["gavel"],
+    "motifAt": "target",
+    "hot": 0.2,
+    "linger": 1.5,
+    "rim": "#f4d060",
+    "impact": {
+      "ring": 1.4,
+      "vRing": true,
+      "sparks": 30,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4
+    },
+    "notes": "Tolling Hammer: the thrown execute, a blunt golden mass that arrives with the ceremonial gavel toll on the dying target"
+  },
+  "aura_surge": {
+    "_cls": "paladin",
+    "archetype": "bolt",
+    "palette": "holy",
+    "power": 1.1,
+    "bolt": {
+      "speed": 28,
+      "headScale": 1.0,
+      "style": "comet",
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0,
+      "tracer": true
+    },
+    "windupStyle": "none",
+    "linger": 1.5,
+    "rim": "#f4e2a0",
+    "impact": {
+      "vRing": true,
+      "ring": 1.2,
+      "sparks": 22,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.2
+    },
+    "notes": "Dawnward Ricochet: the thrown shield etches its bounce path in light, the tracer selling the ricochet; the silence lands in the sharp vertical ring"
+  },
+  "startle_shot": {
+    "_cls": "hunter",
+    "archetype": "bolt",
+    "palette": "physical",
+    "power": 0.8,
+    "bolt": {
+      "speed": 30,
+      "headScale": 0.8,
+      "style": "arrow",
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "windupStyle": "none",
+    "linger": 2,
+    "rim": "#c8d4b8",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 6,
+      "debris": false,
+      "smoke": true,
+      "light": 0.7,
+      "liteAudio": true
+    },
+    "notes": "A cracker arrow: barely any impact, all daze, the smoke puff hanging around the disoriented target's head"
+  },
+  "frost_trap": {
+    "_cls": "hunter",
+    "archetype": "burst",
+    "palette": "frost",
+    "power": 0.9,
+    "burst": { "style": "ground" },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "linger": 4,
+    "rim": "#a8e0e8",
+    "impact": {
+      "ring": 1.3,
+      "debris": true,
+      "sparks": 14,
+      "vRing": false,
+      "flipbook": false,
+      "smoke": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Rime Snare: the hunter kneels and sets it, and the armed frost patch keeps glittering underfoot; the kit's only frost ability, unmistakable by palette alone"
+  },
+  "multi_shot": {
+    "_cls": "hunter",
+    "archetype": "bolt",
+    "palette": "physical",
+    "power": 1.05,
+    "bolt": {
+      "volley": 3,
+      "speed": 30,
+      "headScale": 0.7,
+      "style": "arrow",
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "windupStyle": "none",
+    "linger": 1,
+    "rim": "#d8e0c8",
+    "impact": {
+      "sparks": 18,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 0.7
+    },
+    "notes": "Splitshot: the fan of three arrows in the air at once, the hunter's only volley"
+  },
+  "deterrence": {
+    "_cls": "hunter",
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.9,
+    "buff": {
+      "style": "raise",
+      "orbit": "plates",
+      "shellDur": 2.5,
+      "o": {
+        "n": 5,
+        "size": 0.7,
+        "tex": "chip",
+        "rate": 1.0,
+        "weave": 0.06,
+        "radius": 1.1,
+        "incline": 0,
+        "tickEvery": 2.2
+      }
+    },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "linger": 4,
+    "rim": "#c2b8a0",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 10,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 0.9,
+      "liteAudio": true
+    },
+    "notes": "Bristleguard: five quill-plates bristle around the waist, the hunter's first plate band and the deflection made spiky"
+  },
+  "aspect_of_the_wild": {
+    "_cls": "hunter",
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 1.1,
+    "buff": {
+      "style": "raise",
+      "orbit": "leaves",
+      "shellDur": 2.5,
+      "o": { "density": 14, "up": 1.3, "spread": 0.9, "tickEvery": 1.8 }
+    },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#8cd07a",
+    "impact": {
+      "ring": 2.0,
+      "sparks": 12,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.5,
+      "liteAudio": true
+    },
+    "notes": "Wildfang Rally: a green rising column of wild vigor with a party ring, the hunter's only nature aura and only leaves band"
+  },
+  "silence": {
+    "_cls": "priest",
+    "archetype": "burst",
+    "palette": "shadow",
+    "power": 0.85,
+    "burst": { "style": "link" },
+    "windupStyle": "none",
+    "linger": 2,
+    "rim": "#6b5a8c",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 0,
+      "smoke": true,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Hushword: sound leaves the frame, a sparkless muffling of smoke through one vertical ring; Spellbreak keeps its crossed arcane snap"
+  },
+  "psychic_scream": {
+    "_cls": "priest",
+    "archetype": "shout",
+    "palette": "shadow",
+    "power": 1.1,
+    "shout": { "radius": 8, "target": true },
+    "windupStyle": "none",
+    "linger": 2,
+    "rim": "#9a7ec8",
+    "impact": {
+      "ring": 2.2,
+      "vRing": true,
+      "sparks": 0,
+      "smoke": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 1.8
+    },
+    "notes": "Terror Canticle: a clean psychic double-ripple with no smoke at all, mind-terror where Dread Chorus is bat-wing dread and Intimidating Shout is battlefield dread"
+  },
+  "inner_focus": {
+    "_cls": "priest",
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "orbit": "runes",
+      "shellDur": 2,
+      "o": {
+        "n": 3,
+        "size": 0.35,
+        "tex": "star",
+        "rate": 0.5,
+        "weave": 0.03,
+        "radius": 1.0,
+        "incline": 0,
+        "tickEvery": 3.5
+      }
+    },
+    "windup": 0.25,
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#f2ecd8",
+    "impact": {
+      "sparks": 4,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 0.8,
+      "liteAudio": true
+    },
+    "notes": "Stilled Mind: three scripture stars turn slowly at the feet, the quietest buff in the priest kit; Anointing's halo stays overhead"
+  },
+  "desperate_prayer": {
+    "_cls": "priest",
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.9,
+    "windupStyle": "none",
+    "shaft": 0.7,
+    "linger": 2,
+    "rim": "#ffe8b0",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 6,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.8,
+      "liteAudio": true
+    },
+    "notes": "Last Prayer: the urgent self-heal, brighter and sharper than Urgent Prayer's hand-flare, answered before the word finishes"
+  },
+  "prayer_of_healing": {
+    "_cls": "priest",
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 1.05,
+    "windup": 2.5,
+    "windupStyle": "ascend",
+    "shaft": 1.2,
+    "motifs": ["orbitals"],
+    "motifAt": "caster",
+    "linger": 3,
+    "rim": "#ffe9b8",
+    "impact": {
+      "ring": 2.4,
+      "vRing": false,
+      "sparks": 10,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.8,
+      "liteAudio": true
+    },
+    "notes": "Choirmend: voices circle the caster through the long prayer, then the mending ring rolls over the whole group"
+  },
+  "mind_sear": {
+    "_cls": "priest",
+    "archetype": "beam",
+    "palette": "shadow",
+    "power": 1.15,
+    "beam": { "dur": 2.4, "ticks": 3 },
+    "windupStyle": "orb",
+    "hot": 0.15,
+    "linger": 2,
+    "rim": "#7a5f9e",
+    "impact": {
+      "sparks": 18,
+      "smoke": true,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.9
+    },
+    "notes": "Thoughtburn: the wide hot sear against Litany of Woe's thin drill, white-edged and smoking where the beam lands"
+  },
+  "healing_stream": {
+    "_cls": "shaman",
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 0.8,
+    "accent": "#aee7ff",
+    "windupStyle": "none",
+    "shaft": 0.5,
+    "motifs": ["fountain"],
+    "motifAt": "target",
+    "linger": 4,
+    "rim": "#9fd8c8",
+    "impact": {
+      "sparks": 6,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.3,
+      "liteAudio": true
+    },
+    "notes": "Springwell: water arcs onto the ally and keeps welling for the whole HoT, the gentlest shaman cast"
+  },
+  "chain_lightning": {
+    "_cls": "shaman",
+    "archetype": "burst",
+    "palette": "storm",
+    "power": 1.25,
+    "burst": { "style": "skybeam" },
+    "windup": 2.2,
+    "windupStyle": "vortex",
+    "linger": 2,
+    "rim": "#9fd0ff",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.6,
+      "vRing": false,
+      "sparks": 34,
+      "debris": false,
+      "smoke": false,
+      "light": 1.3
+    },
+    "notes": "Skybranch: the bolt comes DOWN, a sky-to-ground lightning column branching over the target area; Arc Bolt keeps the horizontal flagship throw"
+  },
+  "earthbind": {
+    "_cls": "shaman",
+    "archetype": "nova",
+    "palette": "nature",
+    "power": 1.0,
+    "nova": { "radius": 8 },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "motifs": ["vines"],
+    "motifAt": "caster",
+    "decal": "crack",
+    "linger": 2.5,
+    "rim": "#b89a6a",
+    "impact": {
+      "ring": 1.8,
+      "debris": true,
+      "sparks": 8,
+      "vRing": false,
+      "flipbook": false,
+      "smoke": false,
+      "light": 0.7,
+      "liteAudio": true
+    },
+    "notes": "Gripping Earth: roots burst from cracked ground in a ring, the earth itself doing the holding; Earthquake stays the violent one"
+  },
+  "bloodlust": {
+    "_cls": "shaman",
+    "archetype": "buff",
+    "palette": "storm",
+    "power": 1.3,
+    "buff": {
+      "style": "raise",
+      "orbit": "heartbeat",
+      "shellDur": 2.5,
+      "o": { "bpm": 160, "ringR": 2.0, "tickEvery": 0.6 }
+    },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#8fd0ff",
+    "impact": {
+      "ring": 2.6,
+      "vRing": true,
+      "sparks": 24,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 2.2,
+      "sample": "imp_bloodlust"
+    },
+    "notes": "Storm Chorus: the raid moment, storm-blue war drums pounding off the chest with a double party ring; the shaman's first heartbeat and it thunders"
+  },
+  "voidfeast": {
+    "_cls": "warlock",
+    "archetype": "burst",
+    "palette": "shadow",
+    "power": 0.95,
+    "burst": { "style": "link" },
+    "windupStyle": "none",
+    "motifs": ["implosion"],
+    "motifAt": "caster",
+    "linger": 1.5,
+    "rim": "#8a6ab8",
+    "impact": {
+      "smoke": true,
+      "sparks": 10,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "The devour: the stolen magic streams back and implodes INTO the warlock, feeding where Spellbreak merely cuts"
+  },
+  "howl_of_terror": {
+    "_cls": "warlock",
+    "archetype": "shout",
+    "palette": "shadow",
+    "power": 1.15,
+    "shout": { "radius": 8, "target": true },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "motifs": ["swarm"],
+    "motifAt": "caster",
+    "linger": 2.5,
+    "rim": "#5a4a7e",
+    "impact": {
+      "ring": 2.0,
+      "vRing": false,
+      "sparks": 0,
+      "smoke": true,
+      "flipbook": false,
+      "debris": false,
+      "light": 1.6
+    },
+    "notes": "Dread Chorus: the fear that has WINGS, a swarm bursting out with the howl through rolling smoke; the priest's scream stays clean and psychic"
+  },
+  "curse_of_exhaustion": {
+    "_cls": "warlock",
+    "archetype": "burst",
+    "palette": "shadow",
+    "power": 0.7,
+    "burst": { "style": "link" },
+    "windupStyle": "none",
+    "decal": "rune",
+    "linger": 4,
+    "rim": "#4a4258",
+    "impact": {
+      "ring": false,
+      "vRing": false,
+      "sparks": 0,
+      "smoke": true,
+      "flipbook": false,
+      "debris": false,
+      "light": 0.5,
+      "liteAudio": true
+    },
+    "notes": "Leaden Hex: almost nothing happens, deliberately; a dim link, a curse sigil under the target and dragging smoke, heaviness as absence of spectacle"
+  },
+  "death_coil": {
+    "_cls": "warlock",
+    "archetype": "bolt",
+    "palette": "shadow",
+    "tint": "#7ae87a",
+    "power": 1.2,
+    "bolt": {
+      "speed": 24,
+      "headScale": 1.2,
+      "style": "wisp",
+      "coils": true,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "windupStyle": "none",
+    "motifs": ["implosion"],
+    "motifAt": "target",
+    "linger": 2,
+    "rim": "#8ae88a",
+    "impact": {
+      "vRing": true,
+      "ring": false,
+      "sparks": 18,
+      "smoke": true,
+      "flipbook": false,
+      "debris": false,
+      "light": 1.1
+    },
+    "notes": "Morrowlash: the sickly GREEN coil, unique in the kit, and the horror reads as the target's own space imploding around them"
+  },
+  "typhoon": {
+    "_cls": "druid",
+    "archetype": "nova",
+    "palette": "nature",
+    "power": 1.15,
+    "nova": { "radius": 8 },
+    "windup": 0.3,
+    "windupStyle": "vortex",
+    "linger": 1.5,
+    "rim": "#a8d890",
+    "impact": {
+      "ring": 2.8,
+      "vRing": false,
+      "sparks": 0,
+      "debris": true,
+      "smoke": true,
+      "flipbook": false,
+      "light": 0.9
+    },
+    "notes": "The gust: a sparkless wall of wind, all displaced air and tumbling debris; Galeheart stays the raging sustained storm"
+  },
+  "innervate": {
+    "_cls": "druid",
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.85,
+    "buff": {
+      "style": "raise",
+      "orbit": "runes",
+      "shellDur": 2.5,
+      "o": {
+        "n": 4,
+        "size": 0.4,
+        "tex": "glow",
+        "rate": 0.7,
+        "weave": 0.05,
+        "radius": 1.0,
+        "incline": 0,
+        "tickEvery": 2.2
+      }
+    },
+    "windupStyle": "none",
+    "linger": 4,
+    "rim": "#a8e890",
+    "impact": {
+      "sparks": 10,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "Lifesap: sap-green glows well up from the ground around the feet in waves; Wildward's leaf column stays the class blessing"
+  },
+  "frenzied_regeneration": {
+    "_cls": "druid",
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 0.85,
+    "accent": "#d89a6a",
+    "windupStyle": "none",
+    "shaft": false,
+    "linger": 4,
+    "rim": "#c86a4a",
+    "impact": {
+      "sparks": 4,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "Savage Mending: a rough russet knitting-together with no light column at all, a bear licking its wounds rather than a blessing"
+  },
+  "berserk": {
+    "_cls": "druid",
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.15,
+    "buff": {
+      "style": "raise",
+      "orbit": "weaponGlow",
+      "shellDur": 2,
+      "o": { "rate": 2.2, "tickEvery": 1.2 }
+    },
+    "windup": 0.25,
+    "windupStyle": "stance",
+    "linger": 4,
+    "rim": "#d42a1e",
+    "impact": {
+      "sparks": 20,
+      "ring": false,
+      "vRing": false,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "blood": true,
+      "light": 1.2,
+      "liteAudio": true
+    },
+    "notes": "Red Haze: the claws themselves drench red, the druid's first weapon-band glow; Stoke and Wolfsblood keep their racing heartbeats"
+  },
+  "tranquility": {
+    "_cls": "druid",
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 1.15,
+    "windup": 2.5,
+    "windupStyle": "ascend",
+    "shaft": 1.4,
+    "motifs": ["fountain"],
+    "motifAt": "caster",
+    "linger": 4,
+    "rim": "#bfe8a8",
+    "impact": {
+      "ring": 2.6,
+      "vRing": false,
+      "sparks": 8,
+      "flipbook": false,
+      "debris": false,
+      "smoke": false,
+      "light": 2.0,
+      "liteAudio": true
+    },
+    "notes": "Gladesong: the tallest green column in the game, restorative streams fountaining over the whole grove; Wildmend stays the single humble handcast"
+  }
+}

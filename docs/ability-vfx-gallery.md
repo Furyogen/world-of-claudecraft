@@ -91,7 +91,8 @@ Overlay order (each merges over the last; later wins): `authored_specs` →
 `diversity` → `unveil` → `accent` → `signature` → `round2` → `round3_new`
 (may create) → `round3_spirit_policy` → `round4_semantics` → `round5_buff_slots`
 → `round5_buff_dna` → `round6_talent_sigs` (may create) → `round7_v28`
-(may create; the v0.27/v0.28 warrior + mage rework set). `abilities.json` is the
+(may create; the v0.27/v0.28 warrior + mage rework set) → `round8_row_actives`
+(may create; every talent row-grant active). `abilities.json` is the
 catalog ground truth, regenerated from a sim checkout with:
 
 ```bash
@@ -126,12 +127,17 @@ node scripts/vfx/build_artifact.mjs        # → tmp/vfx/woc_vfx_gallery_artifac
 
 ## Coverage status
 
-Current against `origin/release/v0.28.0`: **243 abilities** covered, every one
-with an authored spec (base kits + talent spec-signatures + the Feed/Abandon
-pet commands + Ruinbolt). The v0.27/v0.28 warrior and mage reworks landed in
-the `round7_v28` overlay: the mage Temporal/Frost/Fire buildout (with a
-chrono-teal tint branding the temporal school), the warrior stance/rework kit,
-Chaos Bolt, and subtle proc-glow auras for the 12 passives. The three ids the
-warrior rework renamed away (`commanding_shout`, `rend`, `ironhold`) are gone
-from the catalog and every overlay; their roles live on in `rallying_cry`,
-`deep_wounds`, and `iron_resolve`/`raised_guard`.
+Current against `origin/release/v0.28.0`: **296 abilities** covered, every one
+with an authored spec, which is full player-reachable coverage (base kits +
+talent spec-signatures + every talent row-grant active + the Feed/Abandon pet
+commands; the only exclusions are the Vale Cup sport kit and four unreachable
+content-debt defs nothing grants: `spellsteal`, `cone_of_cold`, `deep_freeze`,
+`mend_pet`). The v0.27/v0.28 warrior and mage reworks landed in the
+`round7_v28` overlay: the mage Temporal/Frost/Fire buildout (with a chrono-teal
+tint branding the temporal school), the warrior stance/rework kit, Chaos Bolt,
+and subtle proc-glow auras for the 12 passives. The `round8_row_actives`
+overlay covers all 53 talent row-grant actives (Bladestorm, Storm Chorus,
+Lightward, Gladesong, and kin). The three ids the warrior rework renamed away
+(`commanding_shout`, `rend`, `ironhold`) are gone from the catalog and every
+overlay; their roles live on in `rallying_cry`, `deep_wounds`, and
+`iron_resolve`/`raised_guard`.

@@ -6,10 +6,10 @@
 // the three spec SIGNATURE grants per class (TALENTS), plus the two
 // pet-command pseudo abilities (feed_pet / abandon_pet, hunter), plus EXTRAS
 // (chaos_bolt: the one v2 row-grant active the gallery tracks, per the v0.28
-// handoff brief), plus a CARRYOVER of ids already in the committed catalog
+// full v0.28 coverage), plus a CARRYOVER of ids already in the committed catalog
 // that still resolve in ABILITIES (keeps legacy showcase entries such as
 // berserker_rage / arcane_power alive across kit reworks). SPORT_ABILITIES
-// (Vale Cup minigame) and non-signature talent row grants stay excluded.
+// (Vale Cup minigame) stays excluded.
 // Ability defs all resolve through ABILITIES (classes.ts), which already folds
 // in talents_classic / talents_warrior signature defs and TALENT_ABILITIES_V2.
 
@@ -31,17 +31,29 @@ const entry = `
 import { ABILITIES, CLASSES } from ${JSON.stringify(path.join(SRC, 'src/sim/content/classes.ts'))};
 import { SPORT_ABILITIES } from ${JSON.stringify(path.join(SRC, 'src/sim/content/vale_cup.ts'))};
 import { TALENTS } from ${JSON.stringify(path.join(SRC, 'src/sim/content/talents.ts'))};
+import { CHOICE_ROWS } from ${JSON.stringify(path.join(SRC, 'src/sim/content/choice_rows.ts'))};
+import { WARRIOR_ROWS } from ${JSON.stringify(path.join(SRC, 'src/sim/content/warrior_rows.ts'))};
 const classOrder = Object.keys(CLASSES);
 const learnLists = {};
 for (const cls of classOrder) learnLists[cls] = CLASSES[cls].abilities ?? [];
 const signatures = {};
 for (const [cls, tree] of Object.entries(TALENTS)) signatures[cls] = (tree.specs ?? []).map((s) => s.signature);
+// talent row-grant actives: walk every row tree for grant effects
+const rowGrants = [];
+const walk = (v) => {
+  if (!v || typeof v !== 'object') return;
+  if (typeof v.grant?.ability === 'string') rowGrants.push(v.grant.ability);
+  for (const x of Object.values(v)) walk(x);
+};
+walk(CHOICE_ROWS);
+walk(WARRIOR_ROWS);
 console.log(JSON.stringify({
   abilities: ABILITIES,
   sportIds: Object.keys(SPORT_ABILITIES),
   classOrder,
   learnLists,
   signatures,
+  rowGrants,
 }));
 `;
 
@@ -57,11 +69,11 @@ await esbuild.build({
 });
 const raw = execFileSync(process.execPath, [bundle], { maxBuffer: 64 * 1024 * 1024 }).toString();
 rmSync(tmp, { recursive: true, force: true });
-const { abilities, sportIds, classOrder, learnLists, signatures } = JSON.parse(raw);
+const { abilities, sportIds, classOrder, learnLists, signatures, rowGrants } = JSON.parse(raw);
 
 const sport = new Set(sportIds);
-// v2 row-grant actives the gallery tracks beyond the signature rule
-const EXTRAS = ['chaos_bolt'];
+// every talent row-grant active is in scope (full player-ability coverage)
+const EXTRAS = rowGrants;
 // carryover: ids already in the committed catalog that still resolve
 let carryover = [];
 try {

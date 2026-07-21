@@ -257,6 +257,11 @@ const SHOTLIST = [
     2.0,
     'Temporal healing chime: a soft reversed shimmer blooming into warm harmonic bells with a gentle clockwork ticking undertone, soothing restorative fantasy magic, no music',
   ],
+  [
+    'imp_bloodlust',
+    2.0,
+    'Tribal war drums surging into a rallying thunder roll: deep pounding percussion accelerating with a stormy electric crackle rising underneath, primal group battle fervor, no melody, no music',
+  ],
   // ---- motif foley ----
   [
     'motif_fissure',

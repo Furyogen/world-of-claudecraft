@@ -877,6 +877,173 @@ export const CATALOG = {
       ],
       description: 'Enter a berserker rage, generating 20 rage. (Warrior talent)',
     },
+    {
+      id: 'storm_bolt',
+      name: 'Storm Bolt',
+      learnLevel: 11,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 30,
+      range: 20,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'directDamage',
+        },
+        {
+          type: 'stun',
+          duration: 3,
+        },
+      ],
+      description: 'Hurl your weapon at the target for $d, stunning it for 3 sec.',
+    },
+    {
+      id: 'bladestorm',
+      name: 'Bladestorm',
+      learnLevel: 20,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: true,
+      effects: [
+        {
+          type: 'aoeDamage',
+          radius: 6,
+        },
+      ],
+      description:
+        'Become a whirling storm of steel, striking all enemies within 6 yards for $d every second for 4 sec.',
+    },
+    {
+      id: 'victory_rush',
+      name: 'Victory Rush',
+      learnLevel: 8,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 0,
+      range: 0,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'weaponStrike',
+        },
+        {
+          type: 'selfHealPctMax',
+        },
+      ],
+      description:
+        'Strike for weapon damage plus $d and heal 20% of your maximum health. Only usable within 20 sec of killing an enemy.',
+    },
+    {
+      id: 'piercing_howl',
+      name: 'Piercing Howl',
+      learnLevel: 11,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 0,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeSlow',
+          duration: 8,
+          radius: 15,
+        },
+      ],
+      description: 'A piercing shout that slows all enemies within 15 yards by 50% for 8 sec.',
+    },
+    {
+      id: 'die_by_sword',
+      name: 'Die by the Sword',
+      learnLevel: 8,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 120,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 8,
+        },
+      ],
+      description:
+        'Defensive cooldown: for 8 sec you take 30% less damage and dodge far more attacks.',
+    },
+    {
+      id: 'recklessness',
+      name: 'Recklessness',
+      learnLevel: 17,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 180,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 12,
+        },
+      ],
+      description:
+        'Enrage: your rage generation increases by 50% and your critical strike chance by 20% for 12 sec.',
+    },
+    {
+      id: 'avatar',
+      name: 'Avatar',
+      learnLevel: 17,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 180,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'breakControl',
+        },
+        {
+          type: 'selfBuff',
+          duration: 20,
+        },
+      ],
+      description:
+        'Transform into a colossus for 20 sec, breaking all control on you and increasing your damage dealt by 20%.',
+    },
+    {
+      id: 'sanguine_aura',
+      name: 'Sanguine Aura',
+      learnLevel: 20,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 180,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'partyMeleeBuff',
+          duration: 20,
+        },
+      ],
+      description:
+        'Imbue your weapon with the blood of your foes: you and your melee allies gain 10% attack speed and 10% damage for 20 sec.',
+    },
   ],
   mage: [
     {
@@ -1828,6 +1995,210 @@ export const CATALOG = {
       description:
         'Increases spell damage by 20% and spell haste by 10% for 10 sec. (Arcane signature)',
     },
+    {
+      id: 'evocation',
+      name: 'Aetherwell',
+      learnLevel: 5,
+      school: 'arcane',
+      castTime: 0,
+      cooldown: 120,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: true,
+      effects: [
+        {
+          type: 'gainResource',
+        },
+        {
+          type: 'selfBuff',
+          duration: 15,
+        },
+      ],
+      description:
+        'Channel for 6 sec: each second restores 100 mana and builds 8 spell power, stacking while you channel and lasting 15 sec. (Mage talent)',
+    },
+    {
+      id: 'presence_of_mind',
+      name: 'Racing Mind',
+      learnLevel: 5,
+      school: 'arcane',
+      castTime: 0,
+      cooldown: 60,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 60,
+        },
+      ],
+      description: 'Makes your next spell with a cast time instant. Lasts 60 sec. (Mage talent)',
+    },
+    {
+      id: 'ice_floes',
+      name: 'Ice Floes',
+      learnLevel: 5,
+      school: 'frost',
+      castTime: 0,
+      cooldown: 25,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 15,
+        },
+      ],
+      description:
+        'Your next two spells with a cast time can be cast while moving. Lasts 15 sec. (Mage talent)',
+    },
+    {
+      id: 'greater_invisibility',
+      name: 'Greater Invisibility',
+      learnLevel: 8,
+      school: 'arcane',
+      castTime: 0,
+      cooldown: 120,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'greaterInvisibility',
+          duration: 20,
+        },
+      ],
+      description:
+        'Vanish for 20 sec: removes 2 damage-over-time effects and you take 90% less damage while invisible and shortly after. (Mage talent)',
+    },
+    {
+      id: 'rings_of_frost',
+      name: 'Ring of Frost',
+      learnLevel: 11,
+      school: 'frost',
+      castTime: 1.5,
+      cooldown: 30,
+      range: 25,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeRoot',
+          duration: 4,
+          radius: 6,
+        },
+      ],
+      description:
+        'Summons a ring for 10 sec. Enemies crossing its perimeter are frozen for 4 sec. (Mage talent)',
+    },
+    {
+      id: 'cold_snap',
+      name: "Winter's Recall",
+      learnLevel: 17,
+      school: 'frost',
+      castTime: 0,
+      cooldown: 120,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'clearCooldowns',
+        },
+      ],
+      description:
+        'Finishes the cooldown on Flickerstep, Frostveil, and Greater Invisibility. (Mage talent)',
+    },
+    {
+      id: 'mass_barrier',
+      name: 'Mass Barrier',
+      learnLevel: 17,
+      school: 'frost',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeAllyAbsorb',
+          duration: 60,
+          radius: 30,
+        },
+      ],
+      description:
+        'Shields you and up to 4 nearby allies within 30 yd, each absorbing 130 damage for 60 sec. (Mage talent)',
+    },
+    {
+      id: 'overload',
+      name: 'Overload',
+      learnLevel: 14,
+      school: 'arcane',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 10,
+        },
+      ],
+      description:
+        'Your next spell is amplified by 40% but costs 50% more mana. Lasts 10 sec. (Mage talent)',
+    },
+    {
+      id: 'power_echo',
+      name: 'Power Echo',
+      learnLevel: 14,
+      school: 'arcane',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 10,
+        },
+      ],
+      description:
+        'Your next direct spell repeats at 50% power on the same target. Lasts 10 sec. (Mage talent)',
+    },
+    {
+      id: 'rune_of_power',
+      name: 'Rune of Power',
+      learnLevel: 20,
+      school: 'arcane',
+      castTime: 1.5,
+      cooldown: 45,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'groundAoE',
+          duration: 15,
+          radius: 8,
+        },
+      ],
+      description:
+        'Inscribe a rune of power at your feet for 15 sec: allies standing within 8 yd deal 10% more damage. (Mage talent)',
+    },
   ],
   rogue: [
     {
@@ -2332,6 +2703,105 @@ export const CATALOG = {
       description:
         'Strikes the enemy for weapon damage plus $d, causes bleeding damage over 12 sec, and increases bleed damage taken by 40%. Awards 1 combo point. (Subtlety signature)',
     },
+    {
+      id: 'smoke_screen',
+      name: 'Smoke Screen',
+      learnLevel: 8,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 8,
+        },
+      ],
+      description:
+        'Vanish into a cloud of smoke, increasing your chance to dodge by 30% for 8 sec.',
+    },
+    {
+      id: 'preparation',
+      name: 'Contingency',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 300,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'clearCooldowns',
+        },
+      ],
+      description: 'Finishes the cooldown on Swift Heels, Ghostfoot, and Smokestep. (Rogue talent)',
+    },
+    {
+      id: 'ghostly_strike',
+      name: 'Wraith Strike',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 20,
+      range: 0,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'weaponStrike',
+        },
+        {
+          type: 'selfBuff',
+          duration: 7,
+        },
+      ],
+      description:
+        'Strikes the enemy for weapon damage plus $d and briefly increases dodge. Awards 1 combo point. (Rogue talent)',
+    },
+    {
+      id: 'cloak_of_shadows',
+      name: 'Shadecloak',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'absorb',
+          duration: 5,
+        },
+      ],
+      description: 'Wraps you in shadows, absorbing 420 damage for 5 sec. (Rogue talent)',
+    },
+    {
+      id: 'shadowstep',
+      name: 'Shadeslip',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 24,
+      range: 24,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'blinkForward',
+        },
+      ],
+      description:
+        'Steps through the shadows toward your target without breaking Duskveil. (Rogue talent)',
+    },
   ],
   paladin: [
     {
@@ -2703,6 +3173,133 @@ export const CATALOG = {
       ],
       description:
         'Hurls a radiant aegis at an enemy for 90 to 110 Holy damage, then bounces to 2 nearby enemies for 60 to 75 Holy damage each. (Protection signature)',
+    },
+    {
+      id: 'cleansing_verdict',
+      name: 'Cleansing Verdict',
+      learnLevel: 8,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 8,
+      range: 30,
+      targetType: 'friendly',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'dispel',
+        },
+        {
+          type: 'heal',
+        },
+      ],
+      description:
+        'Purges a harmful magic effect from a friendly target and heals them for $d Holy.',
+    },
+    {
+      id: 'holy_wrath',
+      name: "Saint's Ire",
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 20,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeDamage',
+          radius: 10,
+        },
+      ],
+      description: 'Unleashes holy power, damaging nearby enemies for $d. (Paladin talent)',
+    },
+    {
+      id: 'divine_shield',
+      name: 'Lightward',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 300,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'absorb',
+          duration: 8,
+        },
+      ],
+      description: 'Shields you with holy power, absorbing 900 damage for 8 sec. (Paladin talent)',
+    },
+    {
+      id: 'avenging_wrath',
+      name: 'Wrathwing',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 180,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 20,
+        },
+        {
+          type: 'selfBuff',
+          duration: 20,
+        },
+      ],
+      description:
+        'Calls down avenging power, increasing attack power by 60 and spell power by 30 for 20 sec. (Paladin talent)',
+    },
+    {
+      id: 'hammer_of_wrath',
+      name: 'Tolling Hammer',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 6,
+      range: 30,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'directDamage',
+        },
+      ],
+      description:
+        'Hurls a holy hammer at a wounded enemy for $d Holy damage. Only usable below 20% health. (Paladin talent)',
+    },
+    {
+      id: 'aura_surge',
+      name: 'Dawnward Ricochet',
+      learnLevel: 20,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 20,
+      range: 30,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'chainDamage',
+          radius: 10,
+        },
+        {
+          type: 'silence',
+          duration: 2,
+        },
+      ],
+      description:
+        'Hurl a dawnforged shield for $d Holy damage and silence the primary target for 2 sec. It bounces to up to 2 additional enemies within 10 yd for 75% damage per bounce. (Paladin talent)',
     },
   ],
   hunter: [
@@ -3083,6 +3680,117 @@ export const CATALOG = {
         'Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)',
     },
     {
+      id: 'startle_shot',
+      name: 'Startle Shot',
+      learnLevel: 8,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 20,
+      range: 35,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'incapacitate',
+          duration: 4,
+        },
+      ],
+      description:
+        'A wild shot that disorients the target for $t sec. Any damage breaks the effect.',
+    },
+    {
+      id: 'frost_trap',
+      name: 'Rime Snare',
+      learnLevel: 10,
+      school: 'frost',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeRoot',
+          duration: 3,
+          radius: 3,
+        },
+      ],
+      description:
+        'Places a frost trap at your feet that arms after 1.5 sec. The first enemy to touch it is frozen for 3 sec, unable to move or act. One trap at a time. Lasts 60 sec. (Hunter talent)',
+    },
+    {
+      id: 'multi_shot',
+      name: 'Splitshot',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 8,
+      range: 35,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeDamage',
+          radius: 8,
+        },
+      ],
+      description:
+        'Loose a spread at the target area, dealing $d Physical damage to enemies within 8 yd. (Hunter talent)',
+    },
+    {
+      id: 'deterrence',
+      name: 'Bristleguard',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 300,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 10,
+        },
+        {
+          type: 'selfBuff',
+          duration: 10,
+        },
+      ],
+      description:
+        'Increases your dodge chance by 25 percentage points and reduces all damage taken by 30% for 10 sec. (Hunter talent)',
+    },
+    {
+      id: 'aspect_of_the_wild',
+      name: 'Wildfang Rally',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 0,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeAllyAttackPower',
+          duration: 300,
+          radius: 30,
+        },
+        {
+          type: 'aoeAllyHaste',
+          duration: 300,
+          radius: 30,
+        },
+      ],
+      description:
+        'Inspires allies within 30 yd with wild strength, increasing attack power by 45 and attack speed by 5% for 5 min. (Hunter talent)',
+    },
+    {
       id: 'feed_pet',
       name: 'Feed Pet',
       learnLevel: 10,
@@ -3370,6 +4078,122 @@ export const CATALOG = {
       description:
         'Assume a Gloamveil, empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)',
     },
+    {
+      id: 'silence',
+      name: 'Hushword',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 30,
+      range: 30,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'silence',
+          duration: 4,
+        },
+      ],
+      description: 'Silences the target for 4 sec. (Priest talent)',
+    },
+    {
+      id: 'psychic_scream',
+      name: 'Terror Canticle',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeFear',
+          duration: 4,
+          radius: 8,
+        },
+      ],
+      description:
+        'Frightens nearby enemies for up to 4 sec. Damage may break the effect. (Priest talent)',
+    },
+    {
+      id: 'inner_focus',
+      name: 'Stilled Mind',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 60,
+        },
+      ],
+      description: 'Makes your next spell free. Lasts 60 sec. (Priest talent)',
+    },
+    {
+      id: 'desperate_prayer',
+      name: 'Last Prayer',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'heal',
+        },
+      ],
+      description: 'Instantly heals you for $d. (Priest talent)',
+    },
+    {
+      id: 'prayer_of_healing',
+      name: 'Choirmend',
+      learnLevel: 10,
+      school: 'holy',
+      castTime: 3,
+      cooldown: 0,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeHeal',
+          radius: 30,
+        },
+      ],
+      description: 'Heals nearby allies for $d. (Priest talent)',
+    },
+    {
+      id: 'mind_sear',
+      name: 'Thoughtburn',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 0,
+      range: 30,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: true,
+      effects: [
+        {
+          type: 'aoeDamage',
+          radius: 8,
+        },
+      ],
+      description:
+        'Channels shadow energy at the target area, damaging nearby enemies each second for $d. (Priest talent)',
+    },
   ],
   shaman: [
     {
@@ -3649,6 +4473,86 @@ export const CATALOG = {
         },
       ],
       description: 'Calls on primal mastery, making your next spell instant. (Elemental signature)',
+    },
+    {
+      id: 'healing_stream',
+      name: 'Springwell',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 0,
+      range: 30,
+      targetType: 'friendly',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'hot',
+          duration: 12,
+        },
+      ],
+      description: 'Restores 120 health to a friendly target over 12 sec. (Shaman talent)',
+    },
+    {
+      id: 'chain_lightning',
+      name: 'Skybranch',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 2.5,
+      cooldown: 6,
+      range: 30,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeDamage',
+          radius: 8,
+        },
+      ],
+      description:
+        'Hurls lightning at the target area, damaging nearby enemies for $d. (Shaman talent)',
+    },
+    {
+      id: 'earthbind',
+      name: 'Gripping Earth',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 30,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeRoot',
+          duration: 2,
+          radius: 8,
+        },
+      ],
+      description: 'Binds nearby enemies to the earth, rooting them for 2 sec. (Shaman talent)',
+    },
+    {
+      id: 'bloodlust',
+      name: 'Storm Chorus',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 300,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeAllyHaste',
+          duration: 15,
+          radius: 30,
+        },
+      ],
+      description:
+        'Whips your group or raid into a frenzy, increasing attack, casting, and channeling speed by 30% for 15 sec. Allies recently affected by Storm Chorus or Temporal Acceleration are too exhausted to benefit. (Shaman talent)',
     },
   ],
   warlock: [
@@ -4087,6 +4991,88 @@ export const CATALOG = {
       ],
       description:
         'Consumes your Burning Pact on the enemy to ignite them for $d Fire damage. (Destruction signature)',
+    },
+    {
+      id: 'voidfeast',
+      name: 'Voidfeast',
+      learnLevel: 8,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 15,
+      range: 30,
+      targetType: 'any',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'dispel',
+        },
+      ],
+      description:
+        'Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health. Only usable when there is an effect to devour.',
+    },
+    {
+      id: 'howl_of_terror',
+      name: 'Dread Chorus',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 40,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeFear',
+          duration: 3,
+          radius: 8,
+        },
+      ],
+      description:
+        'Frightens nearby enemies for up to 3 sec. Damage may break the effect. (Warlock talent)',
+    },
+    {
+      id: 'curse_of_exhaustion',
+      name: 'Leaden Hex',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 0,
+      range: 30,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'slow',
+          duration: 12,
+        },
+      ],
+      description: 'Curses the target, slowing movement by 30% for 12 sec. (Warlock talent)',
+    },
+    {
+      id: 'death_coil',
+      name: 'Morrowlash',
+      learnLevel: 10,
+      school: 'shadow',
+      castTime: 0,
+      cooldown: 120,
+      range: 20,
+      targetType: 'enemy',
+      requiresTarget: true,
+      channel: false,
+      effects: [
+        {
+          type: 'directDamage',
+        },
+        {
+          type: 'incapacitate',
+          duration: 3,
+        },
+      ],
+      description:
+        'Strikes the enemy for $d Shadow damage, then horrifies them for 3 sec. (Warlock talent)',
     },
     {
       id: 'chaos_bolt',
@@ -4832,6 +5818,104 @@ export const CATALOG = {
       ],
       description:
         'Consumes a heal-over-time effect on a friendly target to heal them for $d. (Restoration signature)',
+    },
+    {
+      id: 'typhoon',
+      name: 'Typhoon',
+      learnLevel: 8,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 20,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'aoeKnockback',
+          radius: 8,
+        },
+      ],
+      description:
+        'A blast of wind knocks back all enemies within 8 yd and dazes them, slowing their movement by 50% for 4 sec.',
+    },
+    {
+      id: 'innervate',
+      name: 'Lifesap',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 90,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 10,
+        },
+      ],
+      description:
+        'Living sap wells up in you for 10 sec, restoring 20 of your current resource in waves: mana, Rage, or Energy, and shifting forms does not break it. Sleep, stun, or stasis stills the sap. (Druid talent)',
+    },
+    {
+      id: 'frenzied_regeneration',
+      name: 'Savage Mending',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 60,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'hot',
+          duration: 10,
+        },
+      ],
+      description: 'Restores 180 health over 10 sec. Bruin Form only. (Druid talent)',
+    },
+    {
+      id: 'berserk',
+      name: 'Red Haze',
+      learnLevel: 10,
+      school: 'physical',
+      castTime: 0,
+      cooldown: 180,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: false,
+      effects: [
+        {
+          type: 'selfBuff',
+          duration: 15,
+        },
+      ],
+      description: 'Increases attack power by 70 for 15 sec. (Druid talent)',
+    },
+    {
+      id: 'tranquility',
+      name: 'Gladesong',
+      learnLevel: 10,
+      school: 'nature',
+      castTime: 0,
+      cooldown: 300,
+      range: 0,
+      targetType: 'self',
+      requiresTarget: false,
+      channel: true,
+      effects: [
+        {
+          type: 'aoeHeal',
+          radius: 30,
+        },
+      ],
+      description:
+        'Channels restorative energy for 4 sec, healing allies within 30 yd for 42 to 52 each second. (Druid talent)',
     },
   ],
 };

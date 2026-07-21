@@ -24,11 +24,13 @@ for (const overlay of [
   'round5_buff_dna.json',
   'round6_talent_sigs.json',
   'round7_v28.json',
+  'round8_row_actives.json',
 ]) {
   const mayCreate =
     overlay === 'round3_new_specs.json' ||
     overlay === 'round6_talent_sigs.json' ||
-    overlay === 'round7_v28.json';
+    overlay === 'round7_v28.json' ||
+    overlay === 'round8_row_actives.json';
   try {
     const patches = JSON.parse(readFileSync(`${SPECS_DIR}/${overlay}`, 'utf8'));
     let n = 0;

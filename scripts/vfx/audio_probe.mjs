@@ -84,6 +84,7 @@ await run('mage', 'dragons_breath', 0.3); // imp_dragons_breath cone roar
 await run('mage', 'temporal_rewind', 0.3); // imp_temporal rewind warp
 await run('mage', 'temporal_mend', 0.4); // heal_temporal chime (heal path)
 await run('warlock', 'chaos_bolt', 0.4); // imp_chaos detonation
+await run('shaman', 'bloodlust', 0.5); // imp_bloodlust war drums (round8)
 
 // full combo with escalation + finisher duck
 await page.evaluate(() => {
