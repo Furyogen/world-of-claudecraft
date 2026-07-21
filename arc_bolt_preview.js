@@ -6734,13 +6734,30 @@ const ARCHETYPES = {
     aftermathDur: 2.0,
     centered: true,
     begin() {
+      if (ctx.spinning) {
+        // defensive: a cut-short spin must never leave the rig facing away
+        rig.group.rotation.y = ctx.spinStart ?? rig.group.rotation.y;
+        ctx.spinning = false;
+      }
       rig.play('Spellcasting', { fade: 0.15 });
     },
     windup(p, dt) {
       windupFx(p, dt);
     },
     release() {
-      rig.play('Spellcast_Raise', { loop: false, fade: 0.08, timeScale: 1.3 });
+      if (ctx.spec.spin) {
+        // the caster BECOMES the whirl: body rotation + a looping weapon-out
+        // slice carry the fantasy for the whole held window
+        ctx.spinStart = rig.group.rotation.y;
+        ctx.spinning = true;
+        rig.play(ctx.spec.spin.clip ?? '1H_Melee_Attack_Slice_Diagonal', {
+          loop: true,
+          fade: 0.1,
+          timeScale: ctx.spec.spin.timeScale ?? 1.1,
+        });
+      } else {
+        rig.play('Spellcast_Raise', { loop: false, fade: 0.08, timeScale: 1.3 });
+      }
       casterChest(orbPos);
       projDir.set(0, -1, 0);
       releaseFlashFx(0.9);
@@ -6830,15 +6847,27 @@ const ARCHETYPES = {
     },
     aftermath(_p, dt) {
       standardAftermath(dt, true);
+      const hold = ctx.buffHold ?? ctx.spec.linger ?? 0;
       // motifEvery: a channeled nova may loop its motifs through the held
       // window so a sustained spin never breaks (Bladestorm re-arms its slash
       // ribbons every beat; each re-fire brings its foley whoosh with it)
-      if (ctx.spec.motifEvery && stateT < (ctx.buffHold ?? ctx.spec.linger ?? 0)) {
+      if (ctx.spec.motifEvery && stateT < hold) {
         ctx.motifClock = (ctx.motifClock ?? 0) + dt;
         if (ctx.motifClock >= ctx.spec.motifEvery) {
           ctx.motifClock = 0;
           runMotifs('release', rig.group.position);
           runMotifs('impact', rig.group.position);
+        }
+      }
+      // spec.spin: rotate the caster bodily through the held window, then
+      // snap the facing back so the next cast still addresses the dummy
+      if (ctx.spinning) {
+        if (stateT < hold) {
+          rig.group.rotation.y += dt * (ctx.spec.spin.rate ?? 1.6) * Math.PI * 2;
+        } else {
+          rig.group.rotation.y = ctx.spinStart;
+          ctx.spinning = false;
+          rig.play('Idle', { fade: 0.25 });
         }
       }
     },
@@ -7931,16 +7960,19 @@ const MOTIFS = {
   bladestorm: {
     phase: 'release',
     run(_at) {
-      // slash ribbons whirl around the caster
+      // slash ribbons whirl around the caster; spec.motifR widens the whirl
+      // to the ability's real AoE (Bladestorm sweeps its whole 6yd circle)
       const pal = ctx.pal;
       const c = casterChest(new THREE.Vector3());
+      const r = ctx.spec.motifR ?? 1.1;
+      const w = Math.sqrt(r / 1.1); // wider whirls need thicker ribbons to read
       for (let i = 0; i < 3; i++) {
         const ph = (i / 3) * Math.PI * 2;
         spawnBoltFx({
           life: 0.55,
           flicker: 0.03,
-          width: 0.11,
-          glowWidth: 0.3,
+          width: 0.11 * w,
+          glowWidth: 0.3 * w,
           hdr: 2.2,
           colCore: pal.core,
           colGlow: pal.main,
@@ -7952,9 +7984,9 @@ const MOTIFS = {
               const a = t0 + (s / 8) * 1.6;
               pts.push(
                 new THREE.Vector3(
-                  c.x + Math.cos(a) * 1.1,
+                  c.x + Math.cos(a) * r,
                   c.y + Math.sin(t0 * 0.7) * 0.3,
-                  c.z + Math.sin(a) * 1.1,
+                  c.z + Math.sin(a) * r,
                 ),
               );
             }

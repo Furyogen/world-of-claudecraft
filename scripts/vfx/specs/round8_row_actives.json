@@ -37,6 +37,8 @@
     "windupStyle": "vortex",
     "motifs": ["bladestorm"],
     "motifEvery": 0.45,
+    "motifR": 4.2,
+    "spin": { "rate": 1.7, "clip": "1H_Melee_Attack_Slice_Diagonal", "timeScale": 1.15 },
     "hot": 0.3,
     "linger": 4,
     "rim": "#eef2f8",
@@ -45,12 +47,12 @@
       "orbit": "sparks",
       "shellDur": 2,
       "o": {
-        "n": 3,
-        "size": 0.5,
+        "n": 4,
+        "size": 0.7,
         "tex": "chip",
         "rate": 4.5,
-        "weave": 0.1,
-        "radius": 1.5,
+        "weave": 0.12,
+        "radius": 3.4,
         "incline": 0.05,
         "tickEvery": 0.9
       }
