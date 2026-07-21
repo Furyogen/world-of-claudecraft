@@ -447,11 +447,19 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   }
 }
 
-/** True when the mob belongs to a live rift instance (kit bosses AND their
- * summoned adds). Only consulted on mechanic-fire ticks, never per tick. */
+/** True when the mob belongs to a live rift instance: kit bosses via the
+ * instance mob roster, and their summoned adds via the roster mobs'
+ * summonedIds links (the summon path registers adds on the dungeon/delve
+ * rosters, never riftInstance.mobIds, so the reverse link is what keeps a
+ * future add template with a raw mechanic inside the cap). Only consulted on
+ * mechanic-fire ticks, never per tick. */
 function mobInRiftInstance(ctx: SimContext, mob: Entity): boolean {
   for (const ri of ctx.riftInstances) {
-    if (ri.partyKey !== null && ri.mobIds.includes(mob.id)) return true;
+    if (ri.partyKey === null) continue;
+    if (ri.mobIds.includes(mob.id)) return true;
+    for (const id of ri.mobIds) {
+      if (ctx.entities.get(id)?.summonedIds.includes(mob.id)) return true;
+    }
   }
   return false;
 }
@@ -474,15 +482,17 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         school,
         fx: pulse.fx ?? 'nova',
       });
+      // Rift rule: raw un-telegraphed damage never one-shots from full HP
+      // (the heroic_s x4 multiplier would otherwise cross that line).
+      // Mob-invariant, so computed once outside the player loop.
+      const capPulse = mobInRiftInstance(ctx, mob);
       for (const meta of ctx.players.values()) {
         const pe = ctx.entities.get(meta.entityId);
         if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= pulse.radius) {
           // Heroic scaling multiplies AFTER the draw so the rng stream is
           // identical across difficulties (mechanicDamageMult, difficulty.ts).
           let dmg = Math.round(ctx.rng.range(pulse.min, pulse.max) * (mob.mechanicDamageMult ?? 1));
-          // Rift rule: raw un-telegraphed damage never one-shots from full HP
-          // (the heroic_s x4 multiplier would otherwise cross that line).
-          if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
+          if (capPulse) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
           ctx.dealDamage(mob, pe, dmg, false, school, pulse.name, 'hit', true);
         }
       }
@@ -505,12 +515,13 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
           color: '#ff9933',
           entityId: mob.id,
         });
+      const capStomp = mobInRiftInstance(ctx, mob);
       for (const meta of ctx.players.values()) {
         const pe = ctx.entities.get(meta.entityId);
         if (!pe || pe.dead || dist2d(pe.pos, mob.pos) > stomp.radius) continue;
         if (stomp.min !== undefined && stomp.max !== undefined) {
           let dmg = Math.round(ctx.rng.range(stomp.min, stomp.max) * (mob.mechanicDamageMult ?? 1));
-          if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
+          if (capStomp) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
           ctx.dealDamage(mob, pe, dmg, false, school, stomp.name, 'hit', true);
         }
         if (pe.dead) continue; // a fatal slam should not also stun the corpse
@@ -549,13 +560,14 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
             color: '#ff9933',
             entityId: mob.id,
           });
+        const capBigCast = mobInRiftInstance(ctx, mob);
         for (const meta of ctx.players.values()) {
           const pe = ctx.entities.get(meta.entityId);
           if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= bigCast.radius) {
             let dmg = Math.round(
               ctx.rng.range(bigCast.min, bigCast.max) * (mob.mechanicDamageMult ?? 1),
             );
-            if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
+            if (capBigCast) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
             ctx.dealDamage(mob, pe, dmg, false, school, bigCast.name, 'hit', true);
           }
         }

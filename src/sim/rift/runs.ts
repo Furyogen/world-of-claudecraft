@@ -537,13 +537,17 @@ export function enterRift(
   // Members of one group share an instance. Every other group entering the same
   // event receives another slot with identical generated content. A dead
   // member may match their own DECIDED run (corpse retrieval, above).
+  // A dead entrant matches by MEMBERSHIP ONLY (never the partyKey arm), so the
+  // instance entered is guaranteed to be the same one the combat gate above
+  // checked, and may be a decided (won) run for corpse retrieval.
   let inst =
     ctx.riftInstances.find(
       (candidate) =>
         candidate.partyKey !== null &&
-        (candidate.outcome === 'active' ||
-          (deadEntry && candidate.memberIds.has(r.meta.entityId))) &&
-        (candidate.memberIds.has(r.meta.entityId) || candidate.partyKey === key) &&
+        (deadEntry
+          ? candidate.memberIds.has(r.meta.entityId)
+          : candidate.outcome === 'active' &&
+            (candidate.memberIds.has(r.meta.entityId) || candidate.partyKey === key)) &&
         (eventId !== null
           ? candidate.eventId === eventId
           : candidate.eventId === null && candidate.seed === seed >>> 0),
