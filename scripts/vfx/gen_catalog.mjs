@@ -12,10 +12,11 @@
 // (Vale Cup minigame) and non-signature talent row grants stay excluded.
 // Ability defs all resolve through ABILITIES (classes.ts), which already folds
 // in talents_classic / talents_warrior signature defs and TALENT_ABILITIES_V2.
+
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import esbuild from 'esbuild';
 
 const argv = process.argv.slice(2);
@@ -65,9 +66,25 @@ const EXTRAS = ['chaos_bolt'];
 let carryover = [];
 try {
   const prev = JSON.parse(readFileSync('scripts/vfx/specs/abilities.json', 'utf8'));
-  carryover = Object.values(prev).flat().map((a) => a.id).filter((id) => abilities[id] && !sport.has(id));
-} catch { /* first generation: no previous catalog */ }
-const allowed = new Set([...Object.values(learnLists).flat(), ...Object.values(signatures).flat(), ...EXTRAS, ...carryover]);
+  carryover = Object.values(prev)
+    .flat()
+    .map((a) => a.id)
+    .filter((id) => abilities[id] && !sport.has(id));
+} catch {
+  /* first generation: no previous catalog */
+}
+const allowed = new Set([
+  ...Object.values(learnLists).flat(),
+  ...Object.values(signatures).flat(),
+  ...EXTRAS,
+  ...carryover,
+]);
+// repo copy rule: no em or en dashes in generated output (a couple of sim
+// descriptions still carry them upstream)
+const noDash = (s) =>
+  String(s)
+    .replace(/ [\u2013\u2014\u2015] /g, ', ')
+    .replace(/[\u2013\u2014\u2015]/g, '-');
 const toEntry = (d) => {
   const e = {
     id: d.id,
@@ -86,7 +103,7 @@ const toEntry = (d) => {
       if (f.radius !== undefined) out.radius = f.radius;
       return out;
     }),
-    description: d.description ?? '',
+    description: noDash(d.description ?? ''),
   };
   if (d.passive) e.passive = true;
   return e;
@@ -100,7 +117,10 @@ const placed = new Set();
 for (const cls of classOrder) {
   for (const id of learnLists[cls]) {
     const d = abilities[id];
-    if (!d) { problems.push(`${cls} learn list references unknown ability ${id}`); continue; }
+    if (!d) {
+      problems.push(`${cls} learn list references unknown ability ${id}`);
+      continue;
+    }
     catalog[cls].push(toEntry(d));
     placed.add(id);
   }
@@ -108,7 +128,10 @@ for (const cls of classOrder) {
 // then the remaining allowed defs (signatures / extras / carryover), source order
 for (const [id, d] of Object.entries(abilities)) {
   if (placed.has(id) || sport.has(id) || !allowed.has(id)) continue;
-  if (!catalog[d.class]) { problems.push(`${id} has non-class owner '${d.class}' - skipped`); continue; }
+  if (!catalog[d.class]) {
+    problems.push(`${id} has non-class owner '${d.class}' - skipped`);
+    continue;
+  }
   catalog[d.class].push(toEntry(d));
   placed.add(id);
 }
@@ -150,12 +173,31 @@ catalog.hunter.push(
 );
 
 const total = Object.values(catalog).reduce((n, l) => n + l.length, 0);
-const json = JSON.stringify(catalog, null, 1);
-writeFileSync('scripts/vfx/specs/abilities.json', json);
+const json = JSON.stringify(catalog, null, 2);
+writeFileSync('scripts/vfx/specs/abilities.json', `${json}\n`);
 writeFileSync(
   'ability_catalog.js',
-  `// GENERATED from ${LABEL} src/sim/content (ABILITIES + talent signatures + pet commands) — dev preview only\nexport const CATALOG = ${json};\n`,
+  `// GENERATED from ${LABEL} src/sim/content (ABILITIES + talent signatures + pet commands), dev preview only\nexport const CATALOG = ${json};\n`,
 );
+// normalize to the repo's biome style so a regen never leaves format drift
+try {
+  execFileSync(
+    'npx',
+    [
+      '@biomejs/biome',
+      'format',
+      '--write',
+      'scripts/vfx/specs/abilities.json',
+      'ability_catalog.js',
+    ],
+    { stdio: 'ignore' },
+  );
+} catch {
+  /* biome unavailable: output is still valid, just unformatted */
+}
 console.log(`catalog: ${total} abilities across ${classOrder.length} classes`);
 for (const cls of classOrder) console.log(` ${cls}: ${catalog[cls].length}`);
-if (problems.length) { console.log('PROBLEMS:'); for (const p of problems) console.log(' -', p); }
+if (problems.length) {
+  console.log('PROBLEMS:');
+  for (const p of problems) console.log(' -', p);
+}

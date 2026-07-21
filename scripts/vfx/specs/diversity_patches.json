@@ -1,768 +1,768 @@
 {
- "heroic_strike": {
-  "strike": {
-   "arc": "horizontal",
-   "swings": 1
-  },
-  "notes": "Locked in as the kit's flat horizontal baseline arc; every other warrior strike now deliberately breaks from this plane.",
-  "_cls": "warrior"
- },
- "battle_shout": {
-  "buff": {
-   "style": "raise",
-   "orbit": "runes",
-   "shellDur": 1.5
-  },
-  "linger": 3,
-  "notes": "2-min rally buff now visibly holds: blood-red war-sigil runes orbit the caster with a pulsing shell lingering 3s after the cry wave.",
-  "_cls": "warrior"
- },
- "hamstring": {
-  "palette": "blood",
-  "strike": {
-   "arc": "horizontal",
-   "swings": 1,
-   "bleed": true
-  },
-  "notes": "Shifted to blood palette with a low horizontal leg-cut plus weeping bleed drips — splits it from Heroic Strike and sells the crippling maim.",
-  "_cls": "warrior"
- },
- "bloodrage": {
-  "buff": {
-   "style": "raise",
-   "orbit": "sparks",
-   "shellDur": 1.5
-  },
-  "linger": 2,
-  "notes": "Rage-for-health now orbits crackling blood-red spark orbs for a short 2s linger — the paid-in-blood surge visibly burns on the caster.",
-  "_cls": "warrior"
- },
- "overpower": {
-  "strike": {
-   "arc": "thrust",
-   "swings": 1
-  },
-  "notes": "Riposte is now a straight thrust lunge line — reads as a reactive counter-stab, no longer confusable with Heroic Strike's swing.",
-  "_cls": "warrior"
- },
- "execute": {
-  "power": 1.6,
-  "strike": {
-   "arc": "vertical",
-   "swings": 1,
-   "groundSlam": true
-  },
-  "notes": "Death-sentence capstone maxed to 1.6 power: vertical executioner overhead with groundSlam shock ring + cracked earth; splits from Slam by blood palette, power, and finisher sky-strike.",
-  "_cls": "warrior"
- },
- "slam": {
-  "windup": 1.5,
-  "strike": {
-   "arc": "vertical",
-   "swings": 1,
-   "groundSlam": true
-  },
-  "notes": "Vertical overhead with groundSlam ground-thud its notes promised, plus a 1.5s windup matching its cast time; grey-steel vs Execute's blood-red keeps the pair distinct.",
-  "_cls": "warrior"
- },
- "cleave": {
-  "notes": "Untouched visuals — kept as the flat forward steel sweep; already distinct from Thunder Clap by palette and radius.",
-  "_cls": "warrior"
- },
- "defensive_stance": {
-  "buff": {
-   "style": "raise",
-   "orbit": "none",
-   "shellDur": 2
-  },
-  "linger": 2,
-  "notes": "Utility stance toggle: orbit none with a short 2s shell linger — quietly held shield-shell, still the least flashy effect by design.",
-  "_cls": "warrior"
- },
- "sunder_armor": {
-  "strike": {
-   "arc": "uppercut",
-   "swings": 1
-  },
-  "notes": "Rising uppercut shear that rips armor plates skyward in a spray of sparks — unique arc splits it from the other physical strikes.",
-  "_cls": "warrior"
- },
- "fireball": {
-  "dot": {
-   "drip": "rise"
-  },
-  "linger": 3,
-  "notes": "Added drip:rise + linger 3 so the 4s ignite DoT keeps ember flecks rising off the target for its duration - the burn now visibly outlives the impact.",
-  "_cls": "mage"
- },
- "frostbolt": {
-  "linger": 2,
-  "notes": "Added linger 2 so rime glitter and the underfoot frost decal hold on the target, reading the 5s 40% slow instead of vanishing on impact.",
-  "_cls": "mage"
- },
- "frost_armor": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "orbit none + linger 2: the creeping-frost shell now persists briefly but stays hushed, keeping the hierarchy where ice_barrier is the one loud frost buff.",
-  "_cls": "mage"
- },
- "arcane_intellect": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "sparks"
-  },
-  "linger": 2,
-  "notes": "orbit sparks + linger 2 - three violet motes with tiny arcs circling the head like firing synapses; unique orbit so no two mage buffs share a look.",
-  "_cls": "mage"
- },
- "conjure_water": {
-  "palette": "arcane",
-  "buff": {
-   "style": "raise",
-   "shellDur": 1,
-   "orbit": "none"
-  },
-  "linger": 1.5,
-  "notes": "Re-shaded frost->arcane to match its arcane school (the authored note already calls for an arcane rune circle) and split it from frost_armor; orbit none + minimum linger keeps it a utility whisper.",
-  "_cls": "mage"
- },
- "polymorph": {
-  "linger": 4,
-  "notes": "linger 4 keeps the drifting wool tufts and gentle stars orbiting the sheep so the long CC reads for its duration, not just at apply.",
-  "_cls": "mage"
- },
- "frost_nova": {
-  "linger": 3.5,
-  "notes": "linger 3.5 holds the frozen enemy shells and spreading floor rime through the root - the signature freeze now visibly persists instead of melting in 1-2s.",
-  "_cls": "mage"
- },
- "scorch": {
-  "burst": {
-   "style": "ground"
-  },
-  "notes": "burst.style ground - the flame erupts from beneath the target (ignition-from-below) which matches 'ignites directly on the target' and cleanly splits Scorch from Fire Blast's snap link zap; power/scale hierarchy unchanged.",
-  "_cls": "mage"
- },
- "ice_barrier": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 3,
-   "orbit": "runes"
-  },
-  "linger": 4,
-  "notes": "orbit runes + linger 4 - four glinting ice sigils circle the caster while the interlocking plate shell keeps pulsing, holding the absorb read as a persistent wall of ice.",
-  "_cls": "mage"
- },
- "sinister_strike": {
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "horizontal"
-  },
-  "notes": "Kit's lone horizontal arc: the signature saber sweep, so the spam builder reads instantly apart from every dagger move.",
-  "_cls": "rogue"
- },
- "backstab": {
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "thrust"
-  },
-  "notes": "Sole thrust in the kit — straight lunge line punched into the target's back, cleanly split from sinister_strike's sweep.",
-  "_cls": "rogue"
- },
- "gouge": {
-  "strike": {
-   "swings": 1,
-   "stars": true,
-   "arc": "uppercut"
-  },
-  "notes": "Rising eye-rake uppercut whose upward flick launches the daze stars; arc + stars now fully separate it from same-palette same-power sinister_strike.",
-  "_cls": "rogue"
- },
- "eviscerate": {
-  "strike": {
-   "swings": 2,
-   "stars": false,
-   "arc": "uppercut",
-   "bleed": true
-  },
-  "notes": "Capstone gut-rip: twin rising uppercut slashes with camera kick plus weeping blood drips — shares uppercut with gouge but blood palette/1.45/2 swings/bleed keep it unmistakable.",
-  "_cls": "rogue"
- },
- "kidney_shot": {
-  "strike": {
-   "swings": 1,
-   "stars": true,
-   "arc": "vertical"
-  },
-  "notes": "Reworked as an icepick-grip vertical stab into the lower back; pairs with ambush on vertical but steel palette + bright stun stars vs shadow keep them apart, and it no longer doubles backstab's thrust.",
-  "_cls": "rogue"
- },
- "ambush": {
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "vertical"
-  },
-  "notes": "Overhead shadow dagger plunge — vertical chop matches the stealth-opener fantasy; shadow palette splits it from kidney_shot's steel vertical.",
-  "_cls": "rogue"
- },
- "evasion": {
-  "buff": {
-   "style": "veil",
-   "shellDur": 1.5,
-   "orbit": "sparks"
-  },
-  "linger": 4,
-  "notes": "Deflection now persists: steel parry-sparks orbit the blur veil for the full 4s linger — blades glancing off an untouchable silhouette.",
-  "_cls": "rogue"
- },
- "slice_and_dice": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "runes"
-  },
-  "linger": 4,
-  "notes": "Whirring dagger-glint sigils orbit for the duration so the spun-up-blades haste read holds instead of vanishing after the flash.",
-  "_cls": "rogue"
- },
- "sprint": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 0.8,
-   "orbit": "none"
-  },
-  "linger": 1.5,
-  "notes": "Utility treatment: no orbit and a brief 1.5s linger so the kick-off reads without ever upstaging combat VFX.",
-  "_cls": "rogue"
- },
- "adrenaline_rush": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "sparks"
-  },
-  "linger": 3.5,
-  "notes": "Blood-red adrenal sparks crackle around the heartbeat shell for 3.5s — the 3-min moment visibly runs hot; blood palette + raise style split it from evasion's steel-spark veil.",
-  "_cls": "rogue"
- },
- "stealth": {
-  "buff": {
-   "style": "veil",
-   "shellDur": 2,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Kept deliberately quiet: no orbiters (they would betray concealment), short 2s shimmer as the veil settles into translucency.",
-  "_cls": "rogue"
- },
- "seal_of_righteousness": {
-  "palette": "gold",
-  "power": 0.8,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "runes"
-  },
-  "linger": 3,
-  "notes": "Added orbiting golden seal-sigils (runes) + 3s linger so the 30s imbue stays visibly active on the caster; the payoff still belongs to Judgement.",
-  "_cls": "paladin"
- },
- "devotion_aura": {
-  "palette": "holy",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Shifted to white-silver holy palette with orbit 'none' + short 2s linger — quiet protective toggle, now visually distinct from the gold seal/blessing cluster.",
-  "_cls": "paladin"
- },
- "blessing_of_might": {
-  "palette": "gold",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "sparks"
-  },
-  "linger": 2,
-  "notes": "Gilded valor-sparks orbit + 2s linger — the ally knighting now holds a martial crackle, splitting it from Seal's rune orbit.",
-  "_cls": "paladin"
- },
- "divine_protection": {
-  "palette": "holy",
-  "power": 0.9,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5,
-   "orbit": "runes"
-  },
-  "linger": 3.5,
-  "notes": "Holy ward-glyphs (runes) orbiting the bubble + 3.5s linger so the 10s absorb reads as a persistent physical barrier of light, not a flash.",
-  "_cls": "paladin"
- },
- "righteous_fury": {
-  "palette": "fire",
-  "power": 0.75,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "sparks"
-  },
-  "linger": 2.5,
-  "notes": "Split hard from the gold buff cluster: flame palette with ember-spark orbit + 2.5s linger — righteous wrath simmering as a live threat aura on the tank toggle.",
-  "_cls": "paladin"
- },
- "judgement": {
-  "burst": {
-   "style": "skybeam"
-  },
-  "notes": "burst.style skybeam — the verdict now literally crashes from the heavens as the gilded class-signature column; kept power 1.3 finisher.",
-  "_cls": "paladin"
- },
- "exorcism": {
-  "burst": {
-   "style": "ground"
-  },
-  "notes": "burst.style ground — purging white-gold light erupts from beneath the wicked, opposite polarity to Judgement's skybeam so the kit's two bursts never read alike.",
-  "_cls": "paladin"
- },
- "hammer_of_justice": {
-  "cc": {
-   "style": "stars"
-  },
-  "linger": 3,
-  "notes": "Added 3s linger so the stun stars orbit the target's head for the full 3s lockdown duration.",
-  "_cls": "paladin"
- },
- "consecration": {
-  "linger": 3.5,
-  "notes": "3.5s linger keeps the searing consecration sigil and rising holy embers burning underfoot — hallowed ground now visibly persists.",
-  "_cls": "paladin"
- },
- "raptor_strike": {
-  "strike": {
-   "swings": 1,
-   "arc": "vertical"
-  },
-  "notes": "Assigned arc vertical - the raptor-talon chop is the kit's overhead blow, anchoring the strike trio's orientation spread.",
-  "_cls": "hunter"
- },
- "mongoose_bite": {
-  "strike": {
-   "swings": 1,
-   "arc": "thrust"
-  },
-  "notes": "Assigned arc thrust - snapping riposte now reads as a straight lunging bite, splitting it from raptor_strike's vertical chop despite matching palette/power.",
-  "_cls": "hunter"
- },
- "wing_clip": {
-  "strike": {
-   "swings": 1,
-   "arc": "horizontal",
-   "bleed": true
-  },
-  "linger": 2,
-  "notes": "Assigned arc horizontal (low sweeping cut at the legs) + bleed so the crippling wound weeps through a short 2s linger, selling the 10s snare and completing the vertical/thrust/horizontal strike spread.",
-  "_cls": "hunter"
- },
- "concussive_shot": {
-  "bolt": {
-   "speed": 30,
-   "headScale": 0.9,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "linger": 2,
-  "notes": "Was a near-twin of arcane_shot in flight (38 vs 40, same 0.7 head); slowed to 30 with a fatter 0.9 blunt head so it reads thud-not-dart, plus linger 2 for the dazed wobble during the 4s slow.",
-  "_cls": "hunter"
- },
- "serpent_sting": {
-  "dot": {
-   "drip": "rise"
-  },
-  "linger": 4,
-  "notes": "DoT persistence pass: linger 4 so the 15s poison visibly bubbles noxious rising fumes for the full read; drip rise kept - venom fumes climb, they don't pool.",
-  "_cls": "hunter"
- },
- "aspect_of_the_hawk": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "leaves"
-  },
-  "linger": 3,
-  "notes": "Duration-buff pass: leaves orbit reads as drifting feather motes spiraling off the hawk shell, held for a 3s linger - and it splits this aspect from cheetah's.",
-  "_cls": "hunter"
- },
- "aspect_of_the_cheetah": {
-  "palette": "gold",
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Collided with hawk (both nature raise buffs at similar power); shaded to tawny gold sun-speed with orbit none - identity comes from streaking speed-lines, not orbiters - and a short 2s stance linger.",
-  "_cls": "hunter"
- },
- "rapid_fire": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "sparks"
-  },
-  "linger": 3,
-  "notes": "Big-cooldown haste now persists: sparks orbit like hot-metal glints whirring around the quiver, shell pulsing for a 3s linger to sell the 15s fire-rate surge.",
-  "_cls": "hunter"
- },
- "dismiss_pet": {
-  "buff": {
-   "style": "veil",
-   "shellDur": 0.8,
-   "orbit": "none"
-  },
-  "linger": 1.5,
-  "notes": "Utility toggle treatment: explicit orbit none with the minimum 1.5s linger - the release-to-the-wild veil settles briefly, stays the quietest effect in the kit.",
-  "_cls": "hunter"
- },
- "smite": {
-  "burst": {
-   "style": "skybeam"
-  },
-  "notes": "Skybeam by fantasy: the 2s prayer resolves as a literal golden column of judgement crashing from the sky onto the target, crisp impact stack, warm pulse - Smite alone owns the sky silhouette in this kit.",
-  "_cls": "priest"
- },
- "mind_blast": {
-  "burst": {
-   "style": "link"
-  },
-  "notes": "Pinned to link (a psychic zap, not judgement): single-frame violet lance snaps brow-to-skull, then the detonation stack and distorted shock rings carry the apocalypse - keeps the kit's two bursts from twinning with Smite's skybeam.",
-  "_cls": "priest"
- },
- "shadow_word_pain": {
-  "dot": {
-   "drip": "fall"
-  },
-  "linger": 4,
-  "notes": "Persistence pass on the 18s DoT: linger 4 so inky violet drips keep sinking off the target with a low flicker for the whole read; drip stays fall - viscous and oppressive, never fountaining.",
-  "_cls": "priest"
- },
- "power_word_shield": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5,
-   "orbit": "runes"
-  },
-  "linger": 4,
-  "notes": "THE bubble now holds: glassy gold-rimmed shell keeps pulsing for linger 4 with glinting Power-Word sigils orbiting it - instantly distinguishable from Fortitude's plain orbit-less blessing.",
-  "_cls": "priest"
- },
- "power_word_fortitude": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Long utility blessing kept deliberately quiet: orbit none with a short linger 2 so the warm shell visibly holds a beat then settles - the humble sibling that makes PW:Shield's runed bubble read as special.",
-  "_cls": "priest"
- },
- "renew": {
-  "power": 0.7,
-  "linger": 4,
-  "notes": "HoT persistence + twin-split: steady trickle of rising golden motes now holds for linger 4 to sell the 15s tick cadence, and power nudged to 0.7 so it no longer mirrors Lesser Heal's instant 0.65 pop.",
-  "_cls": "priest"
- },
- "earth_shock": {
-  "burst": {
-   "style": "ground"
-  },
-  "notes": "Set burst.style ground — the impact now erupts from beneath the target (seismic fantasy) and cleanly splits it from frost_shock's instant link zap.",
-  "_cls": "shaman"
- },
- "frost_shock": {
-  "burst": {
-   "style": "link"
-  },
-  "linger": 2.5,
-  "notes": "Kept link (it is a zap, and earth_shock owns ground) and added a 2.5s linger so the rimed frost-mist keeps clinging to the target for the 50% slow read.",
-  "_cls": "shaman"
- },
- "flame_shock": {
-  "dot": {
-   "drip": "rise"
-  },
-  "linger": 4,
-  "notes": "Real 12s DoT now holds: linger 4 keeps the smoldering flicker and rising embers alive on the target; drip rise confirmed correct for fire.",
-  "_cls": "shaman"
- },
- "lightning_shield": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5,
-   "orbit": "sparks"
-  },
-  "linger": 4,
-  "notes": "Gave it the iconic orbit sparks — three crackling orbs with arcs jumping between them — plus linger 4 so the pulsing shell persists; the buff finally reads as a live lightning shield.",
-  "_cls": "shaman"
- },
- "rockbiter_weapon": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "runes"
-  },
-  "linger": 2.5,
-  "notes": "Duration imbue gets orbit runes (earthen sigils glinting around the caster) + linger 2.5 — persistent but clearly the quiet earthy sibling of lightning_shield's sparks.",
-  "_cls": "shaman"
- },
- "ghost_wolf": {
-  "buff": {
-   "style": "morph",
-   "shellDur": 1,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Utility toggle per the rules: orbit none with a short linger 2 so the ghost-mist breath wisps trail briefly after the morph, keeping it hushed and distinct from the combat buffs.",
-  "_cls": "shaman"
- },
- "stormstrike": {
-  "strike": {
-   "arc": "uppercut",
-   "swings": 2,
-   "groundSlam": true
-  },
-  "notes": "The kit's lone strike gets arc uppercut — the second swing rises with an upward camera kick to meet the sky-strike column — and groundSlam so the answering shock ring cracks the earth; signature moment, mind-blowing on purpose.",
-  "_cls": "shaman"
- },
- "demon_skin": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "runes"
-  },
-  "linger": 3.5,
-  "notes": "Added slow demonic rune sigils orbiting + 3.5s linger so the 30-min armor buff visibly holds; kept the quiet leathery raise shell so it still reads as skin hardening.",
-  "_cls": "warlock"
- },
- "immolate": {
-  "dot": {
-   "drip": "rise"
-  },
-  "linger": 4,
-  "notes": "linger 4 so the rising-ember burn flickers on the victim for the DoT's read — the burning linger is the fantasy; drip 'rise' confirmed correct for fire.",
-  "_cls": "warlock"
- },
- "corruption": {
-  "palette": "venom",
-  "dot": {
-   "drip": "fall"
-  },
-  "linger": 4,
-  "notes": "Reshaded shadow->venom + linger 4 to split it from Curse of Agony (was same archetype/palette/drip/~power) — sick green-black ichor sells the authored 'rotting from within' infection read.",
-  "_cls": "warlock"
- },
- "curse_of_agony": {
-  "power": 0.95,
-  "dot": {
-   "drip": "fall"
-  },
-  "linger": 4,
-  "notes": "linger 4 for the wave-ramping drips + power up 0.8->0.95 so the 24s ramping curse outweighs Corruption; keeps the iconic skeletal violet now that Corruption went venom-green.",
-  "_cls": "warlock"
- },
- "life_tap": {
-  "buff": {
-   "style": "raise",
-   "shellDur": 0.8,
-   "orbit": "none"
-  },
-  "notes": "Explicit orbit 'none' and no linger — instant health-to-mana pop, not a held buff; the short inverted-squeeze shell stays punchy and uncomfortable.",
-  "_cls": "warlock"
- },
- "fear": {
-  "cc": {
-   "style": "tendrils"
-  },
-  "linger": 4,
-  "notes": "linger 4 so the crawling tendril cage persists writhing around the victim as the authored notes intend — dread holds for the duration instead of flashing once.",
-  "_cls": "warlock"
- },
- "shadowburn": {
-  "burst": {
-   "style": "skybeam"
-  },
-  "linger": 2,
-  "notes": "burst.style 'skybeam' realizes the authored column-of-shadowflame judgement slam (was defaulting to a flat link zap); linger 2 keeps the charred violet decal smoldering after the execute.",
-  "_cls": "warlock"
- },
- "mark_of_the_wild": {
-  "palette": "nature",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "leaves"
-  },
-  "linger": 3,
-  "notes": "Added leaf-mote orbit + 3s linger so the 30-min blessing visibly holds; leaves distinguish it from Thorns (sparks) and Barkskin (runes).",
-  "_cls": "druid"
- },
- "moonfire": {
-  "palette": "moon",
-  "power": 0.95,
-  "dot": {
-   "drip": "rise"
-  },
-  "burst": {
-   "style": "skybeam"
-  },
-  "linger": 4,
-  "notes": "Skybeam burst — a column of moonlight crashes onto the target (the iconic moonfire read) — and linger 4 keeps lunar embers rising for the 9s DoT.",
-  "_cls": "druid"
- },
- "rejuvenation": {
-  "palette": "nature",
-  "power": 0.7,
-  "linger": 4,
-  "notes": "Linger 4 so the sparse rising leaf motes persist and sell the 12s HoT; stays the softest, quietest heal vs Regrowth/Healing Touch.",
-  "_cls": "druid"
- },
- "thorns": {
-  "palette": "nature",
-  "power": 0.65,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "sparks"
-  },
-  "linger": 3.5,
-  "notes": "Sparks orbit reads as prickly green retaliation crackle circling the target, splitting it from the other two nature raise-buffs; linger 3.5 holds the bramble shell.",
-  "_cls": "druid"
- },
- "entangling_roots": {
-  "palette": "nature",
-  "power": 0.8,
-  "cc": {
-   "style": "tendrils"
-  },
-  "linger": 4,
-  "notes": "Linger 4 keeps the vine tendrils lashed around the legs for the root's visible duration instead of evaporating instantly.",
-  "_cls": "druid"
- },
- "bear_form": {
-  "palette": "nature",
-  "power": 0.9,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Toggle: orbit none + short 2s linger on the post-poof shell; power up to 0.9 for bear mass, splitting it from the now-lighter Wolf Form.",
-  "_cls": "druid"
- },
- "maul": {
-  "palette": "physical",
-  "power": 1,
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "vertical",
-   "groundSlam": true
-  },
-  "notes": "Vertical overhead crush with groundSlam — shock ring + cracked earth sell bear weight; owns the vertical arc in the kit.",
-  "_cls": "druid"
- },
- "cat_form": {
-  "palette": "moon",
-  "power": 0.8,
-  "buff": {
-   "style": "morph",
-   "shellDur": 0.8,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Split from Bear Form twin: moonlit-silver palette (wolf under the moon, echoing Prowl), quicker leaner poof (shellDur 0.8, power 0.8); toggle gets orbit none + 2s linger.",
-  "_cls": "druid"
- },
- "prowl": {
-  "palette": "moon",
-  "power": 0.6,
-  "buff": {
-   "style": "veil",
-   "shellDur": 1.5,
-   "orbit": "none"
-  },
-  "linger": 2,
-  "notes": "Stealth toggle: orbit none (nothing glowing should circle a stalker) with a short 2s linger on the settling mist veil.",
-  "_cls": "druid"
- },
- "rake": {
-  "palette": "physical",
-  "power": 0.9,
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "horizontal",
-   "bleed": true
-  },
-  "linger": 4,
-  "notes": "Horizontal claw-drag arc + bleed weeping drips, linger 4 to telegraph the 9s bleed; fully split from Claw (uppercut, no bleed).",
-  "_cls": "druid"
- },
- "claw": {
-  "palette": "physical",
-  "power": 0.85,
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "uppercut"
-  },
-  "notes": "Rising uppercut claw swipe with the upward camera kick — spammable builder now reads opposite to Rake's flat drag; no linger, stays crisp.",
-  "_cls": "druid"
- },
- "regrowth": {
-  "palette": "nature",
-  "power": 0.9,
-  "linger": 3.5,
-  "notes": "Linger 3.5 keeps the trickle of rising petals alive for the 21s HoT tail; brighter/faster bloom plus linger separates it from instant-only Healing Touch.",
-  "_cls": "druid"
- },
- "ferocious_bite": {
-  "palette": "blood",
-  "power": 1.3,
-  "strike": {
-   "swings": 1,
-   "stars": false,
-   "arc": "thrust",
-   "bleed": true
-  },
-  "notes": "Thrust arc — a straight lunging jaw snap — plus bleed so the wound weeps crimson after the finisher; completes the 4-way arc spread (vertical/horizontal/uppercut/thrust).",
-  "_cls": "druid"
- },
- "barkskin": {
-  "palette": "nature",
-  "power": 0.8,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5,
-   "orbit": "runes"
-  },
-  "linger": 4,
-  "notes": "Rune orbit — four glinting sigils like carvings in bark — plus linger 4 so the 15s defensive shell visibly persists; third distinct orbit among the nature buffs.",
-  "_cls": "druid"
- }
+  "heroic_strike": {
+    "strike": {
+      "arc": "horizontal",
+      "swings": 1
+    },
+    "notes": "Locked in as the kit's flat horizontal baseline arc; every other warrior strike now deliberately breaks from this plane.",
+    "_cls": "warrior"
+  },
+  "battle_shout": {
+    "buff": {
+      "style": "raise",
+      "orbit": "runes",
+      "shellDur": 1.5
+    },
+    "linger": 3,
+    "notes": "2-min rally buff now visibly holds: blood-red war-sigil runes orbit the caster with a pulsing shell lingering 3s after the cry wave.",
+    "_cls": "warrior"
+  },
+  "hamstring": {
+    "palette": "blood",
+    "strike": {
+      "arc": "horizontal",
+      "swings": 1,
+      "bleed": true
+    },
+    "notes": "Shifted to blood palette with a low horizontal leg-cut plus weeping bleed drips, splits it from Heroic Strike and sells the crippling maim.",
+    "_cls": "warrior"
+  },
+  "bloodrage": {
+    "buff": {
+      "style": "raise",
+      "orbit": "sparks",
+      "shellDur": 1.5
+    },
+    "linger": 2,
+    "notes": "Rage-for-health now orbits crackling blood-red spark orbs for a short 2s linger, the paid-in-blood surge visibly burns on the caster.",
+    "_cls": "warrior"
+  },
+  "overpower": {
+    "strike": {
+      "arc": "thrust",
+      "swings": 1
+    },
+    "notes": "Riposte is now a straight thrust lunge line, reads as a reactive counter-stab, no longer confusable with Heroic Strike's swing.",
+    "_cls": "warrior"
+  },
+  "execute": {
+    "power": 1.6,
+    "strike": {
+      "arc": "vertical",
+      "swings": 1,
+      "groundSlam": true
+    },
+    "notes": "Death-sentence capstone maxed to 1.6 power: vertical executioner overhead with groundSlam shock ring + cracked earth; splits from Slam by blood palette, power, and finisher sky-strike.",
+    "_cls": "warrior"
+  },
+  "slam": {
+    "windup": 1.5,
+    "strike": {
+      "arc": "vertical",
+      "swings": 1,
+      "groundSlam": true
+    },
+    "notes": "Vertical overhead with groundSlam ground-thud its notes promised, plus a 1.5s windup matching its cast time; grey-steel vs Execute's blood-red keeps the pair distinct.",
+    "_cls": "warrior"
+  },
+  "cleave": {
+    "notes": "Untouched visuals, kept as the flat forward steel sweep; already distinct from Thunder Clap by palette and radius.",
+    "_cls": "warrior"
+  },
+  "defensive_stance": {
+    "buff": {
+      "style": "raise",
+      "orbit": "none",
+      "shellDur": 2
+    },
+    "linger": 2,
+    "notes": "Utility stance toggle: orbit none with a short 2s shell linger, quietly held shield-shell, still the least flashy effect by design.",
+    "_cls": "warrior"
+  },
+  "sunder_armor": {
+    "strike": {
+      "arc": "uppercut",
+      "swings": 1
+    },
+    "notes": "Rising uppercut shear that rips armor plates skyward in a spray of sparks, unique arc splits it from the other physical strikes.",
+    "_cls": "warrior"
+  },
+  "fireball": {
+    "dot": {
+      "drip": "rise"
+    },
+    "linger": 3,
+    "notes": "Added drip:rise + linger 3 so the 4s ignite DoT keeps ember flecks rising off the target for its duration - the burn now visibly outlives the impact.",
+    "_cls": "mage"
+  },
+  "frostbolt": {
+    "linger": 2,
+    "notes": "Added linger 2 so rime glitter and the underfoot frost decal hold on the target, reading the 5s 40% slow instead of vanishing on impact.",
+    "_cls": "mage"
+  },
+  "frost_armor": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "orbit none + linger 2: the creeping-frost shell now persists briefly but stays hushed, keeping the hierarchy where ice_barrier is the one loud frost buff.",
+    "_cls": "mage"
+  },
+  "arcane_intellect": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "sparks"
+    },
+    "linger": 2,
+    "notes": "orbit sparks + linger 2 - three violet motes with tiny arcs circling the head like firing synapses; unique orbit so no two mage buffs share a look.",
+    "_cls": "mage"
+  },
+  "conjure_water": {
+    "palette": "arcane",
+    "buff": {
+      "style": "raise",
+      "shellDur": 1,
+      "orbit": "none"
+    },
+    "linger": 1.5,
+    "notes": "Re-shaded frost->arcane to match its arcane school (the authored note already calls for an arcane rune circle) and split it from frost_armor; orbit none + minimum linger keeps it a utility whisper.",
+    "_cls": "mage"
+  },
+  "polymorph": {
+    "linger": 4,
+    "notes": "linger 4 keeps the drifting wool tufts and gentle stars orbiting the sheep so the long CC reads for its duration, not just at apply.",
+    "_cls": "mage"
+  },
+  "frost_nova": {
+    "linger": 3.5,
+    "notes": "linger 3.5 holds the frozen enemy shells and spreading floor rime through the root - the signature freeze now visibly persists instead of melting in 1-2s.",
+    "_cls": "mage"
+  },
+  "scorch": {
+    "burst": {
+      "style": "ground"
+    },
+    "notes": "burst.style ground - the flame erupts from beneath the target (ignition-from-below) which matches 'ignites directly on the target' and cleanly splits Scorch from Fire Blast's snap link zap; power/scale hierarchy unchanged.",
+    "_cls": "mage"
+  },
+  "ice_barrier": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 3,
+      "orbit": "runes"
+    },
+    "linger": 4,
+    "notes": "orbit runes + linger 4 - four glinting ice sigils circle the caster while the interlocking plate shell keeps pulsing, holding the absorb read as a persistent wall of ice.",
+    "_cls": "mage"
+  },
+  "sinister_strike": {
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "horizontal"
+    },
+    "notes": "Kit's lone horizontal arc: the signature saber sweep, so the spam builder reads instantly apart from every dagger move.",
+    "_cls": "rogue"
+  },
+  "backstab": {
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "thrust"
+    },
+    "notes": "Sole thrust in the kit, straight lunge line punched into the target's back, cleanly split from sinister_strike's sweep.",
+    "_cls": "rogue"
+  },
+  "gouge": {
+    "strike": {
+      "swings": 1,
+      "stars": true,
+      "arc": "uppercut"
+    },
+    "notes": "Rising eye-rake uppercut whose upward flick launches the daze stars; arc + stars now fully separate it from same-palette same-power sinister_strike.",
+    "_cls": "rogue"
+  },
+  "eviscerate": {
+    "strike": {
+      "swings": 2,
+      "stars": false,
+      "arc": "uppercut",
+      "bleed": true
+    },
+    "notes": "Capstone gut-rip: twin rising uppercut slashes with camera kick plus weeping blood drips, shares uppercut with gouge but blood palette/1.45/2 swings/bleed keep it unmistakable.",
+    "_cls": "rogue"
+  },
+  "kidney_shot": {
+    "strike": {
+      "swings": 1,
+      "stars": true,
+      "arc": "vertical"
+    },
+    "notes": "Reworked as an icepick-grip vertical stab into the lower back; pairs with ambush on vertical but steel palette + bright stun stars vs shadow keep them apart, and it no longer doubles backstab's thrust.",
+    "_cls": "rogue"
+  },
+  "ambush": {
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "vertical"
+    },
+    "notes": "Overhead shadow dagger plunge, vertical chop matches the stealth-opener fantasy; shadow palette splits it from kidney_shot's steel vertical.",
+    "_cls": "rogue"
+  },
+  "evasion": {
+    "buff": {
+      "style": "veil",
+      "shellDur": 1.5,
+      "orbit": "sparks"
+    },
+    "linger": 4,
+    "notes": "Deflection now persists: steel parry-sparks orbit the blur veil for the full 4s linger, blades glancing off an untouchable silhouette.",
+    "_cls": "rogue"
+  },
+  "slice_and_dice": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "runes"
+    },
+    "linger": 4,
+    "notes": "Whirring dagger-glint sigils orbit for the duration so the spun-up-blades haste read holds instead of vanishing after the flash.",
+    "_cls": "rogue"
+  },
+  "sprint": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 0.8,
+      "orbit": "none"
+    },
+    "linger": 1.5,
+    "notes": "Utility treatment: no orbit and a brief 1.5s linger so the kick-off reads without ever upstaging combat VFX.",
+    "_cls": "rogue"
+  },
+  "adrenaline_rush": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "sparks"
+    },
+    "linger": 3.5,
+    "notes": "Blood-red adrenal sparks crackle around the heartbeat shell for 3.5s, the 3-min moment visibly runs hot; blood palette + raise style split it from evasion's steel-spark veil.",
+    "_cls": "rogue"
+  },
+  "stealth": {
+    "buff": {
+      "style": "veil",
+      "shellDur": 2,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Kept deliberately quiet: no orbiters (they would betray concealment), short 2s shimmer as the veil settles into translucency.",
+    "_cls": "rogue"
+  },
+  "seal_of_righteousness": {
+    "palette": "gold",
+    "power": 0.8,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "runes"
+    },
+    "linger": 3,
+    "notes": "Added orbiting golden seal-sigils (runes) + 3s linger so the 30s imbue stays visibly active on the caster; the payoff still belongs to Judgement.",
+    "_cls": "paladin"
+  },
+  "devotion_aura": {
+    "palette": "holy",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Shifted to white-silver holy palette with orbit 'none' + short 2s linger, quiet protective toggle, now visually distinct from the gold seal/blessing cluster.",
+    "_cls": "paladin"
+  },
+  "blessing_of_might": {
+    "palette": "gold",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "sparks"
+    },
+    "linger": 2,
+    "notes": "Gilded valor-sparks orbit + 2s linger, the ally knighting now holds a martial crackle, splitting it from Seal's rune orbit.",
+    "_cls": "paladin"
+  },
+  "divine_protection": {
+    "palette": "holy",
+    "power": 0.9,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5,
+      "orbit": "runes"
+    },
+    "linger": 3.5,
+    "notes": "Holy ward-glyphs (runes) orbiting the bubble + 3.5s linger so the 10s absorb reads as a persistent physical barrier of light, not a flash.",
+    "_cls": "paladin"
+  },
+  "righteous_fury": {
+    "palette": "fire",
+    "power": 0.75,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "sparks"
+    },
+    "linger": 2.5,
+    "notes": "Split hard from the gold buff cluster: flame palette with ember-spark orbit + 2.5s linger, righteous wrath simmering as a live threat aura on the tank toggle.",
+    "_cls": "paladin"
+  },
+  "judgement": {
+    "burst": {
+      "style": "skybeam"
+    },
+    "notes": "burst.style skybeam, the verdict now literally crashes from the heavens as the gilded class-signature column; kept power 1.3 finisher.",
+    "_cls": "paladin"
+  },
+  "exorcism": {
+    "burst": {
+      "style": "ground"
+    },
+    "notes": "burst.style ground, purging white-gold light erupts from beneath the wicked, opposite polarity to Judgement's skybeam so the kit's two bursts never read alike.",
+    "_cls": "paladin"
+  },
+  "hammer_of_justice": {
+    "cc": {
+      "style": "stars"
+    },
+    "linger": 3,
+    "notes": "Added 3s linger so the stun stars orbit the target's head for the full 3s lockdown duration.",
+    "_cls": "paladin"
+  },
+  "consecration": {
+    "linger": 3.5,
+    "notes": "3.5s linger keeps the searing consecration sigil and rising holy embers burning underfoot, hallowed ground now visibly persists.",
+    "_cls": "paladin"
+  },
+  "raptor_strike": {
+    "strike": {
+      "swings": 1,
+      "arc": "vertical"
+    },
+    "notes": "Assigned arc vertical - the raptor-talon chop is the kit's overhead blow, anchoring the strike trio's orientation spread.",
+    "_cls": "hunter"
+  },
+  "mongoose_bite": {
+    "strike": {
+      "swings": 1,
+      "arc": "thrust"
+    },
+    "notes": "Assigned arc thrust - snapping riposte now reads as a straight lunging bite, splitting it from raptor_strike's vertical chop despite matching palette/power.",
+    "_cls": "hunter"
+  },
+  "wing_clip": {
+    "strike": {
+      "swings": 1,
+      "arc": "horizontal",
+      "bleed": true
+    },
+    "linger": 2,
+    "notes": "Assigned arc horizontal (low sweeping cut at the legs) + bleed so the crippling wound weeps through a short 2s linger, selling the 10s snare and completing the vertical/thrust/horizontal strike spread.",
+    "_cls": "hunter"
+  },
+  "concussive_shot": {
+    "bolt": {
+      "speed": 30,
+      "headScale": 0.9,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "linger": 2,
+    "notes": "Was a near-twin of arcane_shot in flight (38 vs 40, same 0.7 head); slowed to 30 with a fatter 0.9 blunt head so it reads thud-not-dart, plus linger 2 for the dazed wobble during the 4s slow.",
+    "_cls": "hunter"
+  },
+  "serpent_sting": {
+    "dot": {
+      "drip": "rise"
+    },
+    "linger": 4,
+    "notes": "DoT persistence pass: linger 4 so the 15s poison visibly bubbles noxious rising fumes for the full read; drip rise kept - venom fumes climb, they don't pool.",
+    "_cls": "hunter"
+  },
+  "aspect_of_the_hawk": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "leaves"
+    },
+    "linger": 3,
+    "notes": "Duration-buff pass: leaves orbit reads as drifting feather motes spiraling off the hawk shell, held for a 3s linger - and it splits this aspect from cheetah's.",
+    "_cls": "hunter"
+  },
+  "aspect_of_the_cheetah": {
+    "palette": "gold",
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Collided with hawk (both nature raise buffs at similar power); shaded to tawny gold sun-speed with orbit none - identity comes from streaking speed-lines, not orbiters - and a short 2s stance linger.",
+    "_cls": "hunter"
+  },
+  "rapid_fire": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "sparks"
+    },
+    "linger": 3,
+    "notes": "Big-cooldown haste now persists: sparks orbit like hot-metal glints whirring around the quiver, shell pulsing for a 3s linger to sell the 15s fire-rate surge.",
+    "_cls": "hunter"
+  },
+  "dismiss_pet": {
+    "buff": {
+      "style": "veil",
+      "shellDur": 0.8,
+      "orbit": "none"
+    },
+    "linger": 1.5,
+    "notes": "Utility toggle treatment: explicit orbit none with the minimum 1.5s linger - the release-to-the-wild veil settles briefly, stays the quietest effect in the kit.",
+    "_cls": "hunter"
+  },
+  "smite": {
+    "burst": {
+      "style": "skybeam"
+    },
+    "notes": "Skybeam by fantasy: the 2s prayer resolves as a literal golden column of judgement crashing from the sky onto the target, crisp impact stack, warm pulse - Smite alone owns the sky silhouette in this kit.",
+    "_cls": "priest"
+  },
+  "mind_blast": {
+    "burst": {
+      "style": "link"
+    },
+    "notes": "Pinned to link (a psychic zap, not judgement): single-frame violet lance snaps brow-to-skull, then the detonation stack and distorted shock rings carry the apocalypse - keeps the kit's two bursts from twinning with Smite's skybeam.",
+    "_cls": "priest"
+  },
+  "shadow_word_pain": {
+    "dot": {
+      "drip": "fall"
+    },
+    "linger": 4,
+    "notes": "Persistence pass on the 18s DoT: linger 4 so inky violet drips keep sinking off the target with a low flicker for the whole read; drip stays fall - viscous and oppressive, never fountaining.",
+    "_cls": "priest"
+  },
+  "power_word_shield": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5,
+      "orbit": "runes"
+    },
+    "linger": 4,
+    "notes": "THE bubble now holds: glassy gold-rimmed shell keeps pulsing for linger 4 with glinting Power-Word sigils orbiting it - instantly distinguishable from Fortitude's plain orbit-less blessing.",
+    "_cls": "priest"
+  },
+  "power_word_fortitude": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Long utility blessing kept deliberately quiet: orbit none with a short linger 2 so the warm shell visibly holds a beat then settles - the humble sibling that makes PW:Shield's runed bubble read as special.",
+    "_cls": "priest"
+  },
+  "renew": {
+    "power": 0.7,
+    "linger": 4,
+    "notes": "HoT persistence + twin-split: steady trickle of rising golden motes now holds for linger 4 to sell the 15s tick cadence, and power nudged to 0.7 so it no longer mirrors Lesser Heal's instant 0.65 pop.",
+    "_cls": "priest"
+  },
+  "earth_shock": {
+    "burst": {
+      "style": "ground"
+    },
+    "notes": "Set burst.style ground, the impact now erupts from beneath the target (seismic fantasy) and cleanly splits it from frost_shock's instant link zap.",
+    "_cls": "shaman"
+  },
+  "frost_shock": {
+    "burst": {
+      "style": "link"
+    },
+    "linger": 2.5,
+    "notes": "Kept link (it is a zap, and earth_shock owns ground) and added a 2.5s linger so the rimed frost-mist keeps clinging to the target for the 50% slow read.",
+    "_cls": "shaman"
+  },
+  "flame_shock": {
+    "dot": {
+      "drip": "rise"
+    },
+    "linger": 4,
+    "notes": "Real 12s DoT now holds: linger 4 keeps the smoldering flicker and rising embers alive on the target; drip rise confirmed correct for fire.",
+    "_cls": "shaman"
+  },
+  "lightning_shield": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5,
+      "orbit": "sparks"
+    },
+    "linger": 4,
+    "notes": "Gave it the iconic orbit sparks, three crackling orbs with arcs jumping between them, plus linger 4 so the pulsing shell persists; the buff finally reads as a live lightning shield.",
+    "_cls": "shaman"
+  },
+  "rockbiter_weapon": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "runes"
+    },
+    "linger": 2.5,
+    "notes": "Duration imbue gets orbit runes (earthen sigils glinting around the caster) + linger 2.5, persistent but clearly the quiet earthy sibling of lightning_shield's sparks.",
+    "_cls": "shaman"
+  },
+  "ghost_wolf": {
+    "buff": {
+      "style": "morph",
+      "shellDur": 1,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Utility toggle per the rules: orbit none with a short linger 2 so the ghost-mist breath wisps trail briefly after the morph, keeping it hushed and distinct from the combat buffs.",
+    "_cls": "shaman"
+  },
+  "stormstrike": {
+    "strike": {
+      "arc": "uppercut",
+      "swings": 2,
+      "groundSlam": true
+    },
+    "notes": "The kit's lone strike gets arc uppercut, the second swing rises with an upward camera kick to meet the sky-strike column, and groundSlam so the answering shock ring cracks the earth; signature moment, mind-blowing on purpose.",
+    "_cls": "shaman"
+  },
+  "demon_skin": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "runes"
+    },
+    "linger": 3.5,
+    "notes": "Added slow demonic rune sigils orbiting + 3.5s linger so the 30-min armor buff visibly holds; kept the quiet leathery raise shell so it still reads as skin hardening.",
+    "_cls": "warlock"
+  },
+  "immolate": {
+    "dot": {
+      "drip": "rise"
+    },
+    "linger": 4,
+    "notes": "linger 4 so the rising-ember burn flickers on the victim for the DoT's read, the burning linger is the fantasy; drip 'rise' confirmed correct for fire.",
+    "_cls": "warlock"
+  },
+  "corruption": {
+    "palette": "venom",
+    "dot": {
+      "drip": "fall"
+    },
+    "linger": 4,
+    "notes": "Reshaded shadow->venom + linger 4 to split it from Curse of Agony (was same archetype/palette/drip/~power), sick green-black ichor sells the authored 'rotting from within' infection read.",
+    "_cls": "warlock"
+  },
+  "curse_of_agony": {
+    "power": 0.95,
+    "dot": {
+      "drip": "fall"
+    },
+    "linger": 4,
+    "notes": "linger 4 for the wave-ramping drips + power up 0.8->0.95 so the 24s ramping curse outweighs Corruption; keeps the iconic skeletal violet now that Corruption went venom-green.",
+    "_cls": "warlock"
+  },
+  "life_tap": {
+    "buff": {
+      "style": "raise",
+      "shellDur": 0.8,
+      "orbit": "none"
+    },
+    "notes": "Explicit orbit 'none' and no linger, instant health-to-mana pop, not a held buff; the short inverted-squeeze shell stays punchy and uncomfortable.",
+    "_cls": "warlock"
+  },
+  "fear": {
+    "cc": {
+      "style": "tendrils"
+    },
+    "linger": 4,
+    "notes": "linger 4 so the crawling tendril cage persists writhing around the victim as the authored notes intend, dread holds for the duration instead of flashing once.",
+    "_cls": "warlock"
+  },
+  "shadowburn": {
+    "burst": {
+      "style": "skybeam"
+    },
+    "linger": 2,
+    "notes": "burst.style 'skybeam' realizes the authored column-of-shadowflame judgement slam (was defaulting to a flat link zap); linger 2 keeps the charred violet decal smoldering after the execute.",
+    "_cls": "warlock"
+  },
+  "mark_of_the_wild": {
+    "palette": "nature",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "leaves"
+    },
+    "linger": 3,
+    "notes": "Added leaf-mote orbit + 3s linger so the 30-min blessing visibly holds; leaves distinguish it from Thorns (sparks) and Barkskin (runes).",
+    "_cls": "druid"
+  },
+  "moonfire": {
+    "palette": "moon",
+    "power": 0.95,
+    "dot": {
+      "drip": "rise"
+    },
+    "burst": {
+      "style": "skybeam"
+    },
+    "linger": 4,
+    "notes": "Skybeam burst, a column of moonlight crashes onto the target (the iconic moonfire read), and linger 4 keeps lunar embers rising for the 9s DoT.",
+    "_cls": "druid"
+  },
+  "rejuvenation": {
+    "palette": "nature",
+    "power": 0.7,
+    "linger": 4,
+    "notes": "Linger 4 so the sparse rising leaf motes persist and sell the 12s HoT; stays the softest, quietest heal vs Regrowth/Healing Touch.",
+    "_cls": "druid"
+  },
+  "thorns": {
+    "palette": "nature",
+    "power": 0.65,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "sparks"
+    },
+    "linger": 3.5,
+    "notes": "Sparks orbit reads as prickly green retaliation crackle circling the target, splitting it from the other two nature raise-buffs; linger 3.5 holds the bramble shell.",
+    "_cls": "druid"
+  },
+  "entangling_roots": {
+    "palette": "nature",
+    "power": 0.8,
+    "cc": {
+      "style": "tendrils"
+    },
+    "linger": 4,
+    "notes": "Linger 4 keeps the vine tendrils lashed around the legs for the root's visible duration instead of evaporating instantly.",
+    "_cls": "druid"
+  },
+  "bear_form": {
+    "palette": "nature",
+    "power": 0.9,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Toggle: orbit none + short 2s linger on the post-poof shell; power up to 0.9 for bear mass, splitting it from the now-lighter Wolf Form.",
+    "_cls": "druid"
+  },
+  "maul": {
+    "palette": "physical",
+    "power": 1,
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "vertical",
+      "groundSlam": true
+    },
+    "notes": "Vertical overhead crush with groundSlam, shock ring + cracked earth sell bear weight; owns the vertical arc in the kit.",
+    "_cls": "druid"
+  },
+  "cat_form": {
+    "palette": "moon",
+    "power": 0.8,
+    "buff": {
+      "style": "morph",
+      "shellDur": 0.8,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Split from Bear Form twin: moonlit-silver palette (wolf under the moon, echoing Prowl), quicker leaner poof (shellDur 0.8, power 0.8); toggle gets orbit none + 2s linger.",
+    "_cls": "druid"
+  },
+  "prowl": {
+    "palette": "moon",
+    "power": 0.6,
+    "buff": {
+      "style": "veil",
+      "shellDur": 1.5,
+      "orbit": "none"
+    },
+    "linger": 2,
+    "notes": "Stealth toggle: orbit none (nothing glowing should circle a stalker) with a short 2s linger on the settling mist veil.",
+    "_cls": "druid"
+  },
+  "rake": {
+    "palette": "physical",
+    "power": 0.9,
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "horizontal",
+      "bleed": true
+    },
+    "linger": 4,
+    "notes": "Horizontal claw-drag arc + bleed weeping drips, linger 4 to telegraph the 9s bleed; fully split from Claw (uppercut, no bleed).",
+    "_cls": "druid"
+  },
+  "claw": {
+    "palette": "physical",
+    "power": 0.85,
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "uppercut"
+    },
+    "notes": "Rising uppercut claw swipe with the upward camera kick, spammable builder now reads opposite to Rake's flat drag; no linger, stays crisp.",
+    "_cls": "druid"
+  },
+  "regrowth": {
+    "palette": "nature",
+    "power": 0.9,
+    "linger": 3.5,
+    "notes": "Linger 3.5 keeps the trickle of rising petals alive for the 21s HoT tail; brighter/faster bloom plus linger separates it from instant-only Healing Touch.",
+    "_cls": "druid"
+  },
+  "ferocious_bite": {
+    "palette": "blood",
+    "power": 1.3,
+    "strike": {
+      "swings": 1,
+      "stars": false,
+      "arc": "thrust",
+      "bleed": true
+    },
+    "notes": "Thrust arc, a straight lunging jaw snap, plus bleed so the wound weeps crimson after the finisher; completes the 4-way arc spread (vertical/horizontal/uppercut/thrust).",
+    "_cls": "druid"
+  },
+  "barkskin": {
+    "palette": "nature",
+    "power": 0.8,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5,
+      "orbit": "runes"
+    },
+    "linger": 4,
+    "notes": "Rune orbit, four glinting sigils like carvings in bark, plus linger 4 so the 15s defensive shell visibly persists; third distinct orbit among the nature buffs.",
+    "_cls": "druid"
+  }
 }

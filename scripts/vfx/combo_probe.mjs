@@ -7,16 +7,29 @@ import { BROWSER_PATH } from '../browser_path.mjs';
 
 const OUT = 'tmp/vfx';
 const browser = await puppeteer.launch({
-  executablePath: BROWSER_PATH, headless: 'new', protocolTimeout: 240000,
+  executablePath: BROWSER_PATH,
+  headless: 'new',
+  protocolTimeout: 240000,
   args: ['--use-angle=swiftshader', '--window-size=1280,760', '--hide-scrollbars'],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1280, height: 760, deviceScaleFactor: 1 });
 let bad = 0;
-page.on('pageerror', (e) => { bad++; console.log('[pageerror]', e.message.slice(0, 250)); });
-page.on('console', (m) => { if (m.type() === 'error') { bad++; console.log('[console.error]', m.text().slice(0, 200)); } });
+page.on('pageerror', (e) => {
+  bad++;
+  console.log('[pageerror]', e.message.slice(0, 250));
+});
+page.on('console', (m) => {
+  if (m.type() === 'error') {
+    bad++;
+    console.log('[console.error]', m.text().slice(0, 200));
+  }
+});
 
-await page.goto('http://localhost:5177/arc_bolt_preview.html?full', { waitUntil: 'domcontentloaded', timeout: 60000 });
+await page.goto('http://localhost:5177/arc_bolt_preview.html?full', {
+  waitUntil: 'domcontentloaded',
+  timeout: 60000,
+});
 await page.waitForFunction('window.__ab && window.__ab.current', { timeout: 90000, polling: 200 });
 
 async function snap(name) {
@@ -25,8 +38,14 @@ async function snap(name) {
 }
 async function waitAbilityImpact(id, minT = 0.15) {
   await page.waitForFunction(
-    (i, mt) => window.__ab.current && window.__ab.current.id === i && window.__ab.state === 'aftermath' && window.__ab.t >= mt,
-    { timeout: 120000, polling: 100 }, id, minT
+    (i, mt) =>
+      window.__ab.current &&
+      window.__ab.current.id === i &&
+      window.__ab.state === 'aftermath' &&
+      window.__ab.t >= mt,
+    { timeout: 120000, polling: 100 },
+    id,
+    minT,
   );
 }
 
@@ -60,6 +79,6 @@ for (const [cls, seq] of [
   });
   await new Promise((r) => setTimeout(r, 400));
 }
-console.log(`done — ${bad} error(s)`);
+console.log(`done, ${bad} error(s)`);
 await browser.close();
 process.exit(bad ? 1 : 0);

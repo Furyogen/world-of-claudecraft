@@ -6,14 +6,22 @@ import { BROWSER_PATH } from '../browser_path.mjs';
 
 const OUT = 'tmp/vfx';
 const browser = await puppeteer.launch({
-  executablePath: BROWSER_PATH, headless: 'new', protocolTimeout: 180000,
+  executablePath: BROWSER_PATH,
+  headless: 'new',
+  protocolTimeout: 180000,
   args: ['--use-angle=swiftshader', '--window-size=1280,760', '--hide-scrollbars'],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1280, height: 760, deviceScaleFactor: 1 });
 let bad = 0;
-page.on('pageerror', (e) => { bad++; console.log('[pageerror]', e.message.slice(0, 200)); });
-await page.goto('http://localhost:5177/arc_bolt_preview.html?full', { waitUntil: 'domcontentloaded', timeout: 60000 });
+page.on('pageerror', (e) => {
+  bad++;
+  console.log('[pageerror]', e.message.slice(0, 200));
+});
+await page.goto('http://localhost:5177/arc_bolt_preview.html?full', {
+  waitUntil: 'domcontentloaded',
+  timeout: 60000,
+});
 await page.waitForFunction('window.__ab && window.__ab.current', { timeout: 90000, polling: 200 });
 await page.evaluate(() => window.__ab.prewarmSpirits()); // GLBs cached before any timed capture
 
@@ -38,14 +46,29 @@ for (const [cls, id, st, minT, name, needSp] of SHOTS) {
   await page.evaluate((c, i) => window.__ab.setAbility(c, i), cls, id);
   try {
     await page.waitForFunction(
-      (i, s, mt, sp) => window.__ab.current && window.__ab.current.id === i && window.__ab.state === s && window.__ab.t >= mt && (!sp || window.__ab.spirits > 0),
-      { timeout: 60000, polling: 100 }, id, st, minT, needSp
+      (i, s, mt, sp) =>
+        window.__ab.current &&
+        window.__ab.current.id === i &&
+        window.__ab.state === s &&
+        window.__ab.t >= mt &&
+        (!sp || window.__ab.spirits > 0),
+      { timeout: 60000, polling: 100 },
+      id,
+      st,
+      minT,
+      needSp,
     );
-    const data = await page.evaluate(() => { window.__ab.composeShot(); return window.__ab.shot(); });
+    const data = await page.evaluate(() => {
+      window.__ab.composeShot();
+      return window.__ab.shot();
+    });
     writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(data.split(',')[1], 'base64'));
     console.log('ok', name);
-  } catch { console.log('TIMEOUT', name); bad++; }
+  } catch {
+    console.log('TIMEOUT', name);
+    bad++;
+  }
 }
-console.log(`done — ${bad} problem(s)`);
+console.log(`done, ${bad} problem(s)`);
 await browser.close();
 process.exit(bad ? 1 : 0);

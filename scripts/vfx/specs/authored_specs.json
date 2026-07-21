@@ -1,1149 +1,1149 @@
 {
- "heroic_strike": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.9,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Bread-and-butter on-next-swing attack: one clean heavy weapon arc with a warm steel slash ribbon, crisp spark burst on contact, short metallic linger. No frills — this is the baseline every other warrior hit is measured against.",
-  "_cls": "warrior"
- },
- "battle_shout": {
-  "archetype": "shout",
-  "palette": "blood",
-  "power": 0.8,
-  "shout": {
-   "radius": 6
-  },
-  "notes": "Rousing war cry: deep-red vertical cry wave off the chest plus expanding ground rings and short arc ribbons rippling outward to allies. Utility read — bold but brief, no screen shake, warm rally feel rather than aggression.",
-  "_cls": "warrior"
- },
- "charge": {
-  "archetype": "dash",
-  "palette": "physical",
-  "power": 1.1,
-  "notes": "Signature gap-closer: caster rockets at the target trailing steel-grey speed ribbons and kicked-up dust, then a hard shoulder-check impact stack on arrival. Cap the arrival with a brief stun-star orbit on the target to sell the 1s stun.",
-  "_cls": "warrior"
- },
- "thunder_clap": {
-  "archetype": "nova",
-  "palette": "storm",
-  "power": 1,
-  "nova": {
-   "radius": 8
-  },
-  "notes": "Weapon slammed to earth releases a thunderous electric-blue shock ring to the full 8yd radius with jagged crackle licks along the rim and a low rumble linger. Storm palette sells the thunder fantasy despite the physical school; one strong ground pulse, no vertical column.",
-  "_cls": "warrior"
- },
- "hamstring": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.7,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Low crippling cut aimed at the legs: short downward-biased slash ribbon, small impact, then a faint dragging red wisp at the target's feet to read the 50% snare. Utility slash — deliberately smaller than Heroic Strike.",
-  "_cls": "warrior"
- },
- "bloodrage": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "notes": "Self-harm for rage: crimson rune flash underfoot, a pained inward pulse (veins of red light crawling up the body), then a short blood-red shell pulse as rage floods in. Modest scale — it's a resource button, but the color must read as costing health.",
-  "_cls": "warrior"
- },
- "overpower": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Punishing riposte after a dodge: extra-fast, extra-crisp single counter-swing with a bright steel glint at the blade head and a sharp snap impact. Timing should feel reactive — near-zero windup, all release.",
-  "_cls": "warrior"
- },
- "execute": {
-  "archetype": "strike",
-  "palette": "blood",
-  "power": 1.5,
-  "finisher": true,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "THE warrior moment — the sky-strike capstone. Colossal executioner's overhead swing wreathed in deep-red rage fire, sky-strike flourish crashing onto the wounded target, oversized blood shock ring and heavy 1.5-2s ember linger. Only usable under 20% health, so it must feel like a death sentence landing.",
-  "_cls": "warrior"
- },
- "slam": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1.1,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "The kit's only cast-time melee: let its 1.5s cast drive a visible haft-raise charge-up (converging grey-steel motes onto the weapon head), then one massive overhead slam with a heavier-than-normal ground thud decal. Weight over speed.",
-  "_cls": "warrior"
- },
- "cleave": {
-  "archetype": "nova",
-  "palette": "physical",
-  "power": 0.9,
-  "nova": {
-   "radius": 5
-  },
-  "notes": "Sweeping frontal arc: flat, low-to-the-ground steel slash ring biased forward with a broad horizontal ribbon following the weapon sweep. Suppress vertical column effects — this should read as one wide blade sweep catching everything in reach, not an explosion.",
-  "_cls": "warrior"
- },
- "defensive_stance": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2
-  },
-  "notes": "Stance toggle, pure utility: muted steel-grey rune flash and a slow shield-like shell pulse that settles into stillness. Quiet, grounded, defensive posture read — deliberately the least flashy effect in the kit.",
-  "_cls": "warrior"
- },
- "sunder_armor": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.8,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Armor-shearing chop: single focused swing with a grinding metal-on-metal impact — spalling armor-shard sparks flying off the target and a brief cracked-plate glint linger. Repeated stack applications should feel identical and cheap to spam.",
-  "_cls": "warrior"
- },
- "taunt": {
-  "archetype": "shout",
-  "palette": "physical",
-  "power": 0.6,
-  "shout": {
-   "radius": 3
-  },
-  "notes": "Provoking bark: tight, sharp cry wave with a single small ground ring and one aggressive arc ribbon snapping toward the target to mark the compel. Utility scale — an insult, not an attack; over in a blink.",
-  "_cls": "warrior"
- },
- "fireball": {
-  "archetype": "bolt",
-  "palette": "fire",
-  "power": 1,
-  "bolt": {
-   "speed": 17,
-   "headScale": 1.4,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "notes": "The mage's bread and butter. Cast-time charge-up: molten orb swells between the hands with a rune circle and converging embers. Release a big, slow, roiling head with a fat smoke-and-ember ribbon trail; impact stack blooms hot orange-white, and the lingering DoT reads as residual flames licking off the target for the 1-2s tail.",
-  "_cls": "mage"
- },
- "frost_armor": {
-  "archetype": "buff",
-  "palette": "frost",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2
-  },
-  "notes": "Utility self-armor. Rune flash at the feet, then a crystalline shell pulse that climbs the body like frost creeping over glass; leave faint icy glints in the linger. Modest and quiet - reads as protection, not aggression.",
-  "_cls": "mage"
- },
- "arcane_intellect": {
-  "archetype": "buff",
-  "palette": "arcane",
-  "power": 0.65,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "notes": "Cerebral utility buff. Violet rune flash with rising sparkle motes converging on the head - the intellect fantasy. Brief shell pulse, no shake, no drama; the quietest effect in the mage kit.",
-  "_cls": "mage"
- },
- "frostbolt": {
-  "archetype": "bolt",
-  "palette": "frost",
-  "power": 0.95,
-  "bolt": {
-   "speed": 20,
-   "headScale": 1.1,
-   "coils": true,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "notes": "Cast-time charge-up: pale-blue orb with orbiting ice motes and a frost rune circle. The projectile is a sharp crystalline core with orbiting frost spirals (coils) shedding snow-glitter ribbon. Impact is a cold crack with a brief rime decal underfoot to sell the 40% slow.",
-  "_cls": "mage"
- },
- "conjure_water": {
-  "archetype": "buff",
-  "palette": "frost",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1
-  },
-  "notes": "Conjuration utility - keep it modest per the utility rule. Arcane rune circle flashes, then cool blue-white droplet motes condense downward into the hands like water pulled out of thin air. Soft glass-chime feel, tiny light pulse, no impact stack.",
-  "_cls": "mage"
- },
- "fire_blast": {
-  "archetype": "burst",
-  "palette": "fire",
-  "power": 1.05,
-  "notes": "Instant punch on a short cooldown. Brief fire link flicker from the caster's snapped hand, then the full impact stack detonates on the target: HDR flash, fast flipbook fireburst, scorch decal, one hard light pulse. Snappier and more percussive than Fireball - a finger-snap of flame.",
-  "_cls": "mage"
- },
- "arcane_missiles": {
-  "archetype": "beam",
-  "palette": "arcane",
-  "power": 0.95,
-  "beam": {
-   "dur": 3,
-   "ticks": 3,
-   "drain": false
-  },
-  "notes": "Channeled stream, one tick per second for 3s. Style the beam as a shimmering violet conduit with each tick reading as a discrete missile pulse racing caster-to-target down the beam and popping a small impact stack - the classic missile volley feel without discrete projectile spawns.",
-  "_cls": "mage"
- },
- "polymorph": {
-  "archetype": "cc",
-  "palette": "arcane",
-  "power": 0.85,
-  "cc": {
-   "style": "poof"
-  },
-  "notes": "The sheep. Transform flash swallows the target in a soft arcane-pink poof cloud with drifting wool tufts, then gentle stars orbit for the linger. Whimsical, bouncy easing - this should get a laugh, not a flinch. No screen shake.",
-  "_cls": "mage"
- },
- "frost_nova": {
-  "archetype": "nova",
-  "palette": "frost",
-  "power": 1.35,
-  "finisher": true,
-  "nova": {
-   "radius": 8
-  },
-  "notes": "The mage's signature moment. Sky-strike capstone: a shard of glacial light slams down on the caster as the release flash, then the expanding shock ring flash-freezes the floor - jagged ice decal spreading to the full radius, frozen shells crackling up around every enemy caught. Everything holds crystalline-still for a beat before the 1-2s glitter linger. Apocalyptic cold.",
-  "_cls": "mage"
- },
- "arcane_explosion": {
-  "archetype": "nova",
-  "palette": "arcane",
-  "power": 1,
-  "nova": {
-   "radius": 7
-  },
-  "notes": "Spammable AoE - big but repeatable. Instant violet shock ring bursting from the caster with a vertical energy flare and sparkle motes flung outward; short-lived rune decal underfoot. Keep the linger tight (~1s) so back-to-back casts stack cleanly without visual mud.",
-  "_cls": "mage"
- },
- "scorch": {
-  "archetype": "burst",
-  "palette": "fire",
-  "power": 0.85,
-  "notes": "Quick filler cast - no projectile, the flame ignites directly on the target. Thin heat-shimmer link flicker, then a lean impact stack: licking flame flipbook, small char decal, warm light pulse. Deliberately lighter than Fire Blast so the fire kit has a clear visual hierarchy.",
-  "_cls": "mage"
- },
- "ice_barrier": {
-  "archetype": "buff",
-  "palette": "frost",
-  "power": 1.1,
-  "buff": {
-   "style": "raise",
-   "shellDur": 3
-  },
-  "notes": "Defensive cooldown - the loudest of the mage self-buffs. Frost rune flash, then interlocking ice-plate shell assembles around the caster with a hard crystalline light pulse and slow refracting shimmer for the full 3s shell duration. Reads as a wall of ice, not a sparkle.",
-  "_cls": "mage"
- },
- "sinister_strike": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.85,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "Bread-and-butter combo builder: one crisp steel arc with a short warm-sparks impact stack, minimal linger so it reads clean at spam cadence.",
-  "_cls": "rogue"
- },
- "eviscerate": {
-  "archetype": "strike",
-  "palette": "blood",
-  "power": 1.45,
-  "finisher": true,
-  "strike": {
-   "swings": 2,
-   "stars": false
-  },
-  "notes": "THE rogue capstone — twin cross-slash in deep red with heavy ribbon trails, sky-strike finisher flourish, blood-mist decal dissolving 1.5s. Apocalyptic at 5 combo points.",
-  "_cls": "rogue"
- },
- "backstab": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "Dagger punch from behind: tight single thrust, sharper/narrower flash than sinister_strike, impact stack biased low at the target's back.",
-  "_cls": "rogue"
- },
- "gouge": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.85,
-  "strike": {
-   "swings": 1,
-   "stars": true
-  },
-  "notes": "Eye-rake incapacitate: quick swipe then classic daze stars orbiting the target's head for the linger — reads as 'do not touch, it breaks'.",
-  "_cls": "rogue"
- },
- "evasion": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.9,
-  "buff": {
-   "style": "veil",
-   "shellDur": 1.5
-  },
-  "notes": "Untouchable blur: smoke-shimmer veil with faint steel-grey afterimage ribbons flickering around the silhouette — motion, not glow.",
-  "_cls": "rogue"
- },
- "slice_and_dice": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.85,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "notes": "Haste finisher: rune flash then a shell pulse ringed by thin whirring blade-glint ribbons, like daggers spinning up to speed.",
-  "_cls": "rogue"
- },
- "sprint": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 0.8
-  },
-  "notes": "Utility burst: short ground-ring kick-off with horizontal speed-line ribbons streaming off the legs; modest and fast so it never upstages combat VFX.",
-  "_cls": "rogue"
- },
- "kidney_shot": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1.2,
-  "strike": {
-   "swings": 1,
-   "stars": true
-  },
-  "notes": "Stun finisher: brutal low dagger jab, hard 150ms impact stack with screen-weight, then bright stun stars orbiting for the full linger — sells the long lockdown.",
-  "_cls": "rogue"
- },
- "ambush": {
-  "archetype": "strike",
-  "palette": "shadow",
-  "power": 1.25,
-  "windup": 0.35,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "Stealth opener: brief coiled-shadow converge (the held breath) then one massive dagger plunge — dark violet release flash, shadow-wisp decal sinking away. Second-biggest hit in the kit, kept below eviscerate.",
-  "_cls": "rogue"
- },
- "adrenaline_rush": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 1.1,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "notes": "Blood runs hot: deep-red rune flash and a pulsing heartbeat shell — light pulses ticking like a racing pulse. Big 3-min cooldown moment but self-cast, so punchy not apocalyptic.",
-  "_cls": "rogue"
- },
- "stealth": {
-  "archetype": "buff",
-  "palette": "shadow",
-  "power": 0.6,
-  "buff": {
-   "style": "veil",
-   "shellDur": 2
-  },
-  "notes": "Classic vanish-into-shadows: soft smoke shimmer wrapping upward, no flash, long quiet dissolve into translucency — utility-quiet by design.",
-  "_cls": "rogue"
- },
- "seal_of_righteousness": {
-  "archetype": "buff",
-  "palette": "gold",
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "power": 0.8,
-  "notes": "Seal utility: gilded rune circle flashes underfoot, a quick shell pulse, and the weapon keeps a faint golden imbue sheen for the linger. Reads as a stance-setter, not a nuke — the payoff is saved for Judgement.",
-  "_cls": "paladin"
- },
- "holy_light": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 1,
-  "notes": "The big prayerful heal. Full 2.5s cast charge-up (hands cupping a warm orb, converging motes), then a golden ring blooms at the target's feet with slow rising motes and a soft pooled light pulse. Zero shake — pure warmth and relief.",
-  "_cls": "paladin"
- },
- "devotion_aura": {
-  "archetype": "buff",
-  "palette": "gold",
-  "buff": {
-   "style": "raise",
-   "shellDur": 2
-  },
-  "power": 0.6,
-  "notes": "Understated aura utility: steady rune flash and a faint armor-glint shell that settles into a barely-there ambient shimmer. Deliberately quiet so it never competes with combat reads.",
-  "_cls": "paladin"
- },
- "judgement": {
-  "archetype": "burst",
-  "palette": "gold",
-  "power": 1.3,
-  "finisher": true,
-  "notes": "The class signature — the verdict. Brief caster-to-target link flicker, then the seal is consumed as a sky-strike column of gilded radiance slams the impact stack: HDR flash, shock ring, gavel-like light pulse. The one apocalyptic paladin moment.",
-  "_cls": "paladin"
- },
- "blessing_of_might": {
-  "archetype": "buff",
-  "palette": "gold",
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "power": 0.7,
-  "notes": "Benediction cast onto an ally: play the raise at the friendly target — rune circle underfoot, a strength-red-free clean gold shell pulse, brief upward ribbon accents like a knighting. Utility-modest.",
-  "_cls": "paladin"
- },
- "divine_protection": {
-  "archetype": "buff",
-  "palette": "holy",
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5
-  },
-  "power": 0.9,
-  "notes": "The holy shield: rune flash then a persistent translucent bubble-shell pulse that holds visibly for the linger — the absorb should read as a physical barrier of light, with slow orbiting motes tracing its surface.",
-  "_cls": "paladin"
- },
- "hammer_of_justice": {
-  "archetype": "cc",
-  "palette": "gold",
-  "cc": {
-   "style": "stars"
-  },
-  "power": 1,
-  "notes": "A spectral golden hammer flash at the target on impact — sharp HDR release, small shock ring — then classic stun stars orbiting the head for the duration. Punchy but clearly control, not damage.",
-  "_cls": "paladin"
- },
- "lay_on_hands": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 1.6,
-  "windup": 0.8,
-  "notes": "The 10-minute miracle. Instant by mechanics, but flavor demands a 0.8s windup: light drains from the caster's whole body into their palms before releasing a massive golden ring, dense rising mote fountain, and a screen-warming light pulse. Biggest heal read in the game, still no shake.",
-  "_cls": "paladin"
- },
- "flash_of_light": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 0.8,
-  "notes": "The quick efficient heal: short 1.5s cast charge, then a compact golden ring and a brisk single puff of rising motes. Snappier ease curves and shorter linger than Holy Light so the two heals are instantly distinguishable.",
-  "_cls": "paladin"
- },
- "exorcism": {
-  "archetype": "burst",
-  "palette": "holy",
-  "power": 1.1,
-  "notes": "Banishment of the wicked: instant link flicker then a searing white-gold impact stack — flipbook burst reads like the target is briefly lit from within, with purging light ribbons peeling off during the linger. Harsher and whiter than Judgement's gilded verdict.",
-  "_cls": "paladin"
- },
- "consecration": {
-  "archetype": "nova",
-  "palette": "gold",
-  "nova": {
-   "radius": 8
-  },
-  "power": 1,
-  "notes": "Hallowed ground: radial shock ring from the caster at full 8yd radius, then the star of the show is the dissolving ground decal — a glowing consecration sigil that sears and slowly fades over the linger with small ember-like holy motes rising off it.",
-  "_cls": "paladin"
- },
- "righteous_fury": {
-  "archetype": "buff",
-  "palette": "gold",
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "power": 0.7,
-  "notes": "The tank switch: rune flash and a shell pulse with a slightly hotter, flame-tinged gold edge — righteous wrath simmering, not exploding. Modest power so it reads as a long-duration utility toggle.",
-  "_cls": "paladin"
- },
- "raptor_strike": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Heavy on-next-swing melee chop: warm-steel arc ribbon with a raptor-talon triple-scratch decal on impact, short sparks-off-metal flipbook, modest shake. Reads as a beefed-up auto-attack, not a spell.",
-  "_cls": "hunter"
- },
- "aspect_of_the_hawk": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "notes": "Aspect utility: green rune circle flashes underfoot, a hawk-silhouette shell pulse sweeps up the body, a few drifting feather motes spiral off. Calm, stance-like — no shake, quick read.",
-  "_cls": "hunter"
- },
- "serpent_sting": {
-  "archetype": "dot",
-  "palette": "venom",
-  "power": 0.85,
-  "dot": {
-   "drip": "rise"
-  },
-  "notes": "Fanged snap of sickly green at apply, then lingering noxious fumes bubbling upward off the target with a faint spreading venom decal. Poison-injection fantasy — thin, seeping, unhealthy.",
-  "_cls": "hunter"
- },
- "arcane_shot": {
-  "archetype": "bolt",
-  "palette": "arcane",
-  "power": 0.95,
-  "bolt": {
-   "speed": 40,
-   "headScale": 0.7,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "notes": "Crossbow quarrel wrapped in violet arcane charge: instant loose from the weapon, flat fast trajectory, thin ribbon tail, sharp crackling arcane pop on impact. Projectile shot first, magic second.",
-  "_cls": "hunter"
- },
- "concussive_shot": {
-  "archetype": "bolt",
-  "palette": "physical",
-  "power": 0.8,
-  "bolt": {
-   "speed": 38,
-   "headScale": 0.7,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "notes": "Blunt-tipped shot: dull steel tracer, then a soft concussion ring and a brief dazed wobble shimmer over the target's head as the slow lands. Impact reads thud, not slash.",
-  "_cls": "hunter"
- },
- "mongoose_bite": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.95,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Snapping counterattack: one lightning-quick low slash with a whip-crack ribbon and a bite-mark decal flash. Faster attack anticipation than raptor_strike — riposte timing, minimal windup.",
-  "_cls": "hunter"
- },
- "wing_clip": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.7,
-  "strike": {
-   "swings": 1
-  },
-  "notes": "Crippling utility swipe aimed low at the legs: short downward arc, small dust kick decal at the target's feet, lingering hobble-drag streaks trailing the slow. Kept modest — it's a snare, not a nuke.",
-  "_cls": "hunter"
- },
- "tame_beast": {
-  "archetype": "cc",
-  "palette": "nature",
-  "power": 0.6,
-  "cc": {
-   "style": "stars"
-  },
-  "notes": "Pacifying tame over the 6s cast: soft green motes drift from caster to beast, drowsy stars orbit its head as it calms, gentle nature ring on completion. Soothing utility — zero aggression, no shake.",
-  "_cls": "hunter"
- },
- "dismiss_pet": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.5,
-  "buff": {
-   "style": "veil",
-   "shellDur": 0.8
-  },
-  "notes": "Release-to-the-wild: brief green-tinged smoke shimmer as the companion fades out, a few leaf motes settling. Pure utility whisper — smallest effect in the kit.",
-  "_cls": "hunter"
- },
- "revive_pet": {
-  "archetype": "summon",
-  "palette": "nature",
-  "power": 0.75,
-  "notes": "Companion returns at the hunter's side: leafy portal decal, soft green rising pillar with life-motes instead of harsh smoke, warm settle as the pet reforms. Gentler and warmer than a warlock summon.",
-  "_cls": "hunter"
- },
- "aspect_of_the_cheetah": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "notes": "Speed aspect: rune flash then a sleek shell pulse with horizontal speed-line ribbons streaking past the legs, feline afterimage flicker. Utility read — quick, light, no ground shake.",
-  "_cls": "hunter"
- },
- "aimed_shot": {
-  "archetype": "bolt",
-  "palette": "physical",
-  "power": 1.35,
-  "finisher": true,
-  "bolt": {
-   "speed": 42,
-   "headScale": 1.1,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0
-  },
-  "notes": "The sniper payoff and the class's one apocalyptic moment. Full 3s charge-up (steadying rune circle + converging motes down the sight line), then a screaming steel tracer at max shot speed with a heavier head, brutal pierce impact stack and the sky-strike capstone. Still a projectile — no coils, no magic frills.",
-  "_cls": "hunter"
- },
- "rapid_fire": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.9,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "notes": "Big-cooldown haste: sharp steel rune flash, then whirling speed ribbons cycling around the weapon and quiver like a spinning bolt-feeder, brief hot-metal glint pulses. Energetic but still a self-buff — excitement from motion, not blast.",
-  "_cls": "hunter"
- },
- "smite": {
-  "archetype": "burst",
-  "palette": "holy",
-  "power": 0.9,
-  "notes": "The 2s cast already sells the prayer; on release the link flicker should read as a shaft of judgment from above, then a crisp golden impact stack with a warm light pulse. Righteous and clean, minimal shake.",
-  "_cls": "priest"
- },
- "lesser_heal": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 0.65,
-  "notes": "Novice prayer — small golden ring, a handful of soft rising motes, one gentle light pulse. Clearly the humble sibling of Heal; short linger.",
-  "_cls": "priest"
- },
- "power_word_fortitude": {
-  "archetype": "buff",
-  "palette": "holy",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "notes": "Utility blessing — brief rune flash and one clean warm shell pulse that reads as a long-duration ward. Modest and unceremonious; no shake, no lingering ground decal.",
-  "_cls": "priest"
- },
- "shadow_word_pain": {
-  "archetype": "dot",
-  "palette": "shadow",
-  "power": 0.85,
-  "dot": {
-   "drip": "fall"
-  },
-  "notes": "A whispered word of darkness — small violet-black impact flicker, then inky drips sinking off the target through the linger. Oppressive and quiet rather than explosive.",
-  "_cls": "priest"
- },
- "power_word_shield": {
-  "archetype": "buff",
-  "palette": "holy",
-  "power": 0.95,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5
-  },
-  "notes": "The iconic bubble — bright rune flash, then a persistent glassy shell pulse held for the full shellDur so the absorb reads as a physical barrier. Give the shell a faint gold rim to distinguish it from Fortitude's plain blessing.",
-  "_cls": "priest"
- },
- "renew": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 0.65,
-  "notes": "Heal-over-time — soft golden ring on apply, then a slow, steady trickle of rising motes spread across a longer linger to sell the tick cadence. No flash spike, no shake; serenity is the point.",
-  "_cls": "priest"
- },
- "mind_blast": {
-  "archetype": "burst",
-  "palette": "shadow",
-  "power": 1.3,
-  "finisher": true,
-  "notes": "The priest's one apocalyptic moment — a psychic detonation. The 1.5s cast converges dark motes at the temples, then the sky-strike capstone slams a violet-black lance into the target with a hard HDR release flash, heavy impact stack and a ripple of distorted shock rings.",
-  "_cls": "priest"
- },
- "heal": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 1,
-  "notes": "The slow, powerful prayer — full golden ring, dense column of rising motes and the strongest light pulse in the kit. After the 2.5s cast the release should feel weighty and warm, with a generous linger.",
-  "_cls": "priest"
- },
- "mind_flay": {
-  "archetype": "beam",
-  "palette": "shadow",
-  "power": 0.9,
-  "beam": {
-   "dur": 3,
-   "ticks": 3,
-   "drain": false
-  },
-  "notes": "Channeled mind-worm — a writhing violet ribbon beam from the caster's brow to the victim's head, pulsing on each 1s tick. Energy assaults outward (no drain flow); add subtle jitter to the beam core so it feels like a flaying, not a steady ray.",
-  "_cls": "priest"
- },
- "flash_heal": {
-  "archetype": "heal",
-  "palette": "holy",
-  "power": 0.8,
-  "notes": "Emergency prayer — compress the whole anatomy: snappy bright flash, fast burst of rising motes, short linger. Same golden language as Heal but with urgent, quick ease curves; still no shake.",
-  "_cls": "priest"
- },
- "lightning_bolt": {
-  "archetype": "bolt",
-  "palette": "storm",
-  "notes": "locked reference look",
-  "_cls": "shaman"
- },
- "rockbiter_weapon": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2
-  },
-  "notes": "Earthen imbue: dusty rune circle flashes underfoot, warm-steel shell pulse hugs the weapon arm; brief grit motes converge like pebbles snapping onto the blade. Utility read — short shell, no shake, low bloom.",
-  "_cls": "shaman"
- },
- "healing_wave": {
-  "archetype": "heal",
-  "palette": "nature",
-  "power": 0.9,
-  "notes": "Restorative tide: golden-green ring blooms at the target's feet, soft water-glint motes rise in a slow wave rhythm. Windup converge reads as gathering spring water; release flash kept soft and cool, zero camera shake.",
-  "_cls": "shaman"
- },
- "earth_shock": {
-  "archetype": "burst",
-  "palette": "nature",
-  "power": 1,
-  "notes": "Concussive earth slam: link flicker snaps taut like a fault line, impact stack lands heavy — thick shock ring hugging the ground, cracked-earth decal dissolving slowly, short stubby debris ribbons instead of sparks. Feels blunt and seismic, not electric.",
-  "_cls": "shaman"
- },
- "lightning_shield": {
-  "archetype": "buff",
-  "palette": "storm",
-  "power": 0.8,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5
-  },
-  "notes": "Kid sibling of the locked lightning_bolt look: same electric-blue core hue, static crackle instead of a bolt. Rune flash then a longer-lived shell pulse with three orbiting spark motes; light pulse flickers at a nervous 2-3 Hz to sell live current. Utility power, no ground decal.",
-  "_cls": "shaman"
- },
- "flame_shock": {
-  "archetype": "dot",
-  "palette": "fire",
-  "power": 0.9,
-  "dot": {
-   "drip": "rise"
-  },
-  "notes": "Searing brand: quick fiery impact stamp with a small scorched decal, then embers float upward off the target for the linger — drip rise, uneven timing so it reads as smoldering, not fountaining. Impact flash hotter/whiter than the linger embers.",
-  "_cls": "shaman"
- },
- "frost_shock": {
-  "archetype": "burst",
-  "palette": "frost",
-  "power": 0.9,
-  "notes": "Flash-freeze counterpart to earth_shock: instant link flicker then a crisp icy impact stack — thin sharp shock ring, crystalline shard ribbons, and a rimed frost-mist ground decal that lingers to sell the 50% slow. Cold blue-white release flash, brittle rather than heavy.",
-  "_cls": "shaman"
- },
- "ghost_wolf": {
-  "archetype": "buff",
-  "palette": "moon",
-  "power": 0.7,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1
-  },
-  "notes": "Spectral shapeshift: silver-violet motes spiral inward over the 2s cast, implosion pinch then a soft ghost-mist poof as the wolf form appears. Wisps trail off like breath in cold air during the linger. Ethereal and quiet — low bloom, no ground scorch, utility read.",
-  "_cls": "shaman"
- },
- "stormstrike": {
-  "archetype": "strike",
-  "palette": "storm",
-  "power": 1.5,
-  "strike": {
-   "swings": 2
-  },
-  "finisher": true,
-  "notes": "THE shaman signature — the sky answers the locked lightning_bolt hue. Two weapon swings wrapped in electric-blue arc ribbons, and on the second hit the capstone sky-strike: a column of storm light crashes onto the target with a fat shock ring, forked ground arcs, and a scorched dissolving decal. Full HDR release flash, strongest light pulse in the kit.",
-  "_cls": "shaman"
- },
- "shadow_bolt": {
-  "archetype": "bolt",
-  "palette": "shadow",
-  "power": 1,
-  "bolt": {
-   "speed": 21,
-   "jagged": false,
-   "coils": true,
-   "forkEvery": 0,
-   "headScale": 1.3
-  },
-  "notes": "The warlock's bread-and-butter. 1.7s cast charges a void orb between the hands with a violet rune circle and inward-spiraling motes; release hurls a slow, heavy umbral head wrapped in two orbiting shadow coils that shed a smoky ribbon trail. Impact is a muffled dark burst — purple core flash, black smoke petals, brief desaturating vignette on the target rather than a bright flash.",
-  "_cls": "warlock"
- },
- "summon_imp": {
-  "archetype": "summon",
-  "palette": "fire",
-  "power": 0.85,
-  "notes": "Ritual summon: a small ember-orange portal decal etches itself rune by rune over the 5s cast, then a squat pillar of flame belches up with popping cinder flipbook and a puff of sooty smoke at the caster's side. Keep it impish — small radius, crackly, a few mischievous ember sparks that dart sideways before dying.",
-  "_cls": "warlock"
- },
- "demon_skin": {
-  "archetype": "buff",
-  "palette": "shadow",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2
-  },
-  "notes": "Utility armor buff — reads quiet. Dull violet rune flash at the feet, then a leathery translucent shell pulse crawls up the body and settles into a faint chitinous shimmer before dissolving. No shake, low bloom; it should feel like skin hardening, not a spell landing.",
-  "_cls": "warlock"
- },
- "immolate": {
-  "archetype": "dot",
-  "palette": "fire",
-  "power": 0.9,
-  "dot": {
-   "drip": "rise"
-  },
-  "notes": "2s cast ends in a whoomph of ignition on the target — small orange impact stack with a licking-flame flipbook — then the linger carries it: embers float up off the victim for the DoT read, with a soft heat-ripple decal under their feet. The initial hit is secondary; the burning linger is the fantasy.",
-  "_cls": "warlock"
- },
- "corruption": {
-  "archetype": "dot",
-  "palette": "shadow",
-  "power": 0.85,
-  "dot": {
-   "drip": "fall"
-  },
-  "notes": "Sickness, not explosion. Tiny violet impact flicker as the corruption takes hold, then black-purple ichor drips sink from the target into a spreading, slowly dissolving ground stain. Drips should feel viscous and irregular — the target looks infected, rotting from within.",
-  "_cls": "warlock"
- },
- "life_tap": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 0.65,
-  "buff": {
-   "style": "raise",
-   "shellDur": 0.8
-  },
-  "notes": "Self-sacrifice conversion. Sharp crimson rune flash at the chest, a quick inverted shell pulse that squeezes inward (life being torn out), and a handful of deep-red motes ripped upward that pop into pale blue glints at the apex — health becoming mana. Short, punchy, slightly uncomfortable; no lingering shell.",
-  "_cls": "warlock"
- },
- "summon_voidwalker": {
-  "archetype": "summon",
-  "palette": "shadow",
-  "power": 1,
-  "notes": "The heavyweight summon. Over the 5s ritual a wide void-black portal decal spins up with violet rune ticks; completion raises a thick churning pillar of shadow with slow-orbiting smoke ribbons that collapses outward into ground fog. Deeper, slower, and more ominous than the imp's fiery pop — bass-heavy presence.",
-  "_cls": "warlock"
- },
- "curse_of_agony": {
-  "archetype": "dot",
-  "palette": "shadow",
-  "power": 0.8,
-  "dot": {
-   "drip": "fall"
-  },
-  "notes": "Instant curse — no travel. A skeletal violet sigil flares once above the target's head at apply, then long thin shadow drips sink and pool beneath them. Differentiate from Corruption: Agony's drips come in slow waves that ramp in density across the linger, echoing the classic ramping tick damage.",
-  "_cls": "warlock"
- },
- "drain_life": {
-  "archetype": "beam",
-  "palette": "blood",
-  "power": 0.9,
-  "beam": {
-   "dur": 3,
-   "ticks": 5,
-   "drain": true
-  },
-  "notes": "Channeled siphon: a sinuous deep-red beam links target to caster with drain flow TOWARD the caster — pulses of stolen life travel the ribbon and pop as small crimson glints at the warlock's hand on each tick. Target gets a subtle desaturation and drooping drip motes; caster gets a faint warm pulse. Wet, parasitic, not laser-like.",
-  "_cls": "warlock"
- },
- "fear": {
-  "archetype": "cc",
-  "palette": "shadow",
-  "power": 0.85,
-  "cc": {
-   "style": "tendrils"
-  },
-  "notes": "Terror, not damage. On land, dark crawling arcs snake up from the ground around the victim and claw over their silhouette while a cold violet flash hollows out their eyeline; tendrils persist as a low writhing cage during the linger. Minimal screen shake — dread should come from the crawling motion, not impact.",
-  "_cls": "warlock"
- },
- "searing_pain": {
-  "archetype": "bolt",
-  "palette": "fire",
-  "power": 0.85,
-  "bolt": {
-   "speed": 30,
-   "jagged": false,
-   "coils": false,
-   "forkEvery": 0,
-   "headScale": 0.9
-  },
-  "notes": "The fast fire jab. Short 1.5s charge, then a lean white-orange dart streaks out — small head, tight cinder trail, noticeably quicker than Shadow Bolt. Impact is a sharp searing snap with a thin ring and a brief branding-iron glow on the target. Reads urgent and spiteful next to the warlock's slow shadow arsenal.",
-  "_cls": "warlock"
- },
- "shadowburn": {
-  "archetype": "burst",
-  "palette": "shadow",
-  "power": 1.4,
-  "finisher": true,
-  "notes": "The signature apocalyptic moment — instant Shadow Flame execute on a 15s cooldown. Caster-to-target link flickers for a single frame, then the sky-strike capstone: a column of black-violet flame slams down through the target, impact stack fires with an edge of fire-orange rim light inside the shadow (the 'shadowflame' duality), wide shock ring, and charred violet ground decal that smolders through the linger. The one warlock effect allowed to fill the screen.",
-  "_cls": "warlock"
- },
- "wrath": {
-  "archetype": "bolt",
-  "palette": "nature",
-  "power": 0.9,
-  "bolt": {
-   "speed": 24,
-   "jagged": false,
-   "coils": false,
-   "forkEvery": 0,
-   "headScale": 1
-  },
-  "notes": "Cast-time charge-up: verdant orb gathers leaf-mote converge over a green rune circle, then a dense emerald energy bolt with a soft leafy ribbon tail; impact pops a small green shock ring with drifting leaf flecks.",
-  "_cls": "druid"
- },
- "healing_touch": {
-  "archetype": "heal",
-  "palette": "nature",
-  "power": 1,
-  "notes": "The big slow heal: long converge of green-gold pollen motes during the 2.5s cast, release blooms a full flower-burst ring at the feet, tall rising petal motes, warm pooled light swell. Zero shake, all softness.",
-  "_cls": "druid"
- },
- "mark_of_the_wild": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.6,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5
-  },
-  "notes": "Utility blessing: brief paw-print rune flash under the target, thin green shell pulse with tiny leaf sparkles. Quiet and quick — reads as a long-duration mark, not a combat moment.",
-  "_cls": "druid"
- },
- "moonfire": {
-  "archetype": "dot",
-  "palette": "moon",
-  "power": 0.95,
-  "dot": {
-   "drip": "rise"
-  },
-  "notes": "Instant silver-violet moonbeam flash on the target (bright vertical accent in the impact stack), then pale lunar embers float upward for the 9s linger read. Cold, serene burn — no fire orange anywhere.",
-  "_cls": "druid"
- },
- "rejuvenation": {
-  "archetype": "heal",
-  "palette": "nature",
-  "power": 0.7,
-  "notes": "Instant, feather-light HoT: small green ring, slow sparse rising leaf motes that persist into the linger to sell healing-over-time. Softest heal in the kit — clearly gentler than Healing Touch.",
-  "_cls": "druid"
- },
- "thorns": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.65,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2
-  },
-  "notes": "Bramble armor: rune flash then a spiky shell pulse — ribbon trails kink into short thorn barbs around the target silhouette. Slightly prickly timing (staccato pulses) but modest utility scale.",
-  "_cls": "druid"
- },
- "entangling_roots": {
-  "archetype": "cc",
-  "palette": "nature",
-  "power": 0.8,
-  "cc": {
-   "style": "tendrils"
-  },
-  "notes": "Cast-time converge low to the ground, then green-brown vine tendrils crawl up from a cracked-earth decal and lash around the target's legs; dirt-mote puffs at the root points. Grasping and organic, not shadowy.",
-  "_cls": "druid"
- },
- "bear_form": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.85,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1
-  },
-  "notes": "Shapeshift: quick inward implosion of green wild-magic motes, HDR flash, big soft smoke poof that hides the model swap; heavy low dust ring on 'landing' to sell bear mass.",
-  "_cls": "druid"
- },
- "bear_charge": {
-  "archetype": "dash",
-  "palette": "physical",
-  "power": 0.9,
-  "notes": "Four-paw gallop: thick low speed ribbons with kicked-up dirt decals along the path; arrival slams a stubby shock ring and a brief stun flick (single star glint) on the target for the 1s stun.",
-  "_cls": "druid"
- },
- "maul": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "One heavy overhead paw crush: slow-in fast-out swing arc ribbon, oversized dull-steel impact thud with a wide flat ring — weight and threat, not flash.",
-  "_cls": "druid"
- },
- "growl": {
-  "archetype": "shout",
-  "palette": "physical",
-  "power": 0.55,
-  "shout": {
-   "radius": 4
-  },
-  "notes": "Taunt utility: short bear-roar wave — one small vertical ring cone toward the target and a faint ground ripple. Deliberately modest; a provocation, not an attack.",
-  "_cls": "druid"
- },
- "demoralizing_roar": {
-  "archetype": "shout",
-  "palette": "physical",
-  "power": 0.8,
-  "shout": {
-   "radius": 8
-  },
-  "notes": "Full-radius intimidation roar: stacked vertical + ground rings pushing out to 8yd with heavy arc ribbons and a low dust wave; a brief desaturating shimmer on the wavefront sells the debuff.",
-  "_cls": "druid"
- },
- "cat_form": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.85,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1
-  },
-  "notes": "Shapeshift to wolf: same implosion + poof language as Bear Form but tighter and quicker — leaner smoke, a swift horizontal ribbon streak through the poof to sell agility.",
-  "_cls": "druid"
- },
- "prowl": {
-  "archetype": "buff",
-  "palette": "moon",
-  "power": 0.6,
-  "buff": {
-   "style": "veil",
-   "shellDur": 1.5
-  },
-  "notes": "Moonlit stealth: silver-violet smoke shimmer wraps the wolf, model fades under a soft veil with faint downward-settling mist. Hushed — minimal light pulse, no ring pop.",
-  "_cls": "druid"
- },
- "rake": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.9,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "Stealth-opener claw drag: one sharp three-line slash ribbon across the target, then a handful of deep-red bleed flecks that drip through the linger to telegraph the 9s bleed.",
-  "_cls": "druid"
- },
- "claw": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.85,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "The bread-and-butter swipe: quick single claw arc with a crisp small impact ring and short spark flecks. Fast recovery, minimal linger — built to read cleanly when spammed.",
-  "_cls": "druid"
- },
- "regrowth": {
-  "archetype": "heal",
-  "palette": "nature",
-  "power": 0.9,
-  "notes": "Fast bloom heal + HoT: 2s converge, release pops a brighter, quicker flower ring than Healing Touch, then a thin trickle of rising petal motes persists well into the linger to sell the 21s HoT tail.",
-  "_cls": "druid"
- },
- "ferocious_bite": {
-  "archetype": "strike",
-  "palette": "blood",
-  "power": 1.3,
-  "strike": {
-   "swings": 1,
-   "stars": false
-  },
-  "notes": "Combo-point finisher: single savage jaw-snap — twin closing arc ribbons like jaws, deep-red HDR flash, heavy crimson spray flecks and a dark spatter decal that dissolves through the linger. Biggest melee hit in the kit.",
-  "_cls": "druid"
- },
- "barkskin": {
-  "archetype": "buff",
-  "palette": "nature",
-  "power": 0.8,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.5
-  },
-  "notes": "Defensive cooldown: brown-green rune flash then a rigid bark-textured shell pulse that ripples like grain in wood; slower, steadier pulses than Thorns — armor, not retaliation.",
-  "_cls": "druid"
- },
- "swipe": {
-  "archetype": "nova",
-  "palette": "physical",
-  "power": 0.85,
-  "nova": {
-   "radius": 5
-  },
-  "notes": "Bear AoE: low flat claw-arc ring sweeping out to 5yd, hugging the ground with dust kicks at the rim; three faint radial slash ribbons inside the ring echo the paw sweep.",
-  "_cls": "druid"
- },
- "starfire": {
-  "archetype": "bolt",
-  "palette": "moon",
-  "power": 1.5,
-  "finisher": true,
-  "bolt": {
-   "speed": 18,
-   "jagged": false,
-   "coils": true,
-   "forkEvery": 0,
-   "headScale": 1.7
-  },
-  "notes": "CLASS SIGNATURE. 3s cast builds a swelling silver-violet star over a constellation rune circle with heavy mote converge; release hurls a huge slow coiling stellar orb, and the finisher sky-strike crashes a column of starlight down through the impact — apocalyptic lunar payoff.",
-  "_cls": "druid"
- }
+  "heroic_strike": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.9,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Bread-and-butter on-next-swing attack: one clean heavy weapon arc with a warm steel slash ribbon, crisp spark burst on contact, short metallic linger. No frills, this is the baseline every other warrior hit is measured against.",
+    "_cls": "warrior"
+  },
+  "battle_shout": {
+    "archetype": "shout",
+    "palette": "blood",
+    "power": 0.8,
+    "shout": {
+      "radius": 6
+    },
+    "notes": "Rousing war cry: deep-red vertical cry wave off the chest plus expanding ground rings and short arc ribbons rippling outward to allies. Utility read, bold but brief, no screen shake, warm rally feel rather than aggression.",
+    "_cls": "warrior"
+  },
+  "charge": {
+    "archetype": "dash",
+    "palette": "physical",
+    "power": 1.1,
+    "notes": "Signature gap-closer: caster rockets at the target trailing steel-grey speed ribbons and kicked-up dust, then a hard shoulder-check impact stack on arrival. Cap the arrival with a brief stun-star orbit on the target to sell the 1s stun.",
+    "_cls": "warrior"
+  },
+  "thunder_clap": {
+    "archetype": "nova",
+    "palette": "storm",
+    "power": 1,
+    "nova": {
+      "radius": 8
+    },
+    "notes": "Weapon slammed to earth releases a thunderous electric-blue shock ring to the full 8yd radius with jagged crackle licks along the rim and a low rumble linger. Storm palette sells the thunder fantasy despite the physical school; one strong ground pulse, no vertical column.",
+    "_cls": "warrior"
+  },
+  "hamstring": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.7,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Low crippling cut aimed at the legs: short downward-biased slash ribbon, small impact, then a faint dragging red wisp at the target's feet to read the 50% snare. Utility slash, deliberately smaller than Heroic Strike.",
+    "_cls": "warrior"
+  },
+  "bloodrage": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "notes": "Self-harm for rage: crimson rune flash underfoot, a pained inward pulse (veins of red light crawling up the body), then a short blood-red shell pulse as rage floods in. Modest scale, it's a resource button, but the color must read as costing health.",
+    "_cls": "warrior"
+  },
+  "overpower": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Punishing riposte after a dodge: extra-fast, extra-crisp single counter-swing with a bright steel glint at the blade head and a sharp snap impact. Timing should feel reactive, near-zero windup, all release.",
+    "_cls": "warrior"
+  },
+  "execute": {
+    "archetype": "strike",
+    "palette": "blood",
+    "power": 1.5,
+    "finisher": true,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "THE warrior moment, the sky-strike capstone. Colossal executioner's overhead swing wreathed in deep-red rage fire, sky-strike flourish crashing onto the wounded target, oversized blood shock ring and heavy 1.5-2s ember linger. Only usable under 20% health, so it must feel like a death sentence landing.",
+    "_cls": "warrior"
+  },
+  "slam": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.1,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "The kit's only cast-time melee: let its 1.5s cast drive a visible haft-raise charge-up (converging grey-steel motes onto the weapon head), then one massive overhead slam with a heavier-than-normal ground thud decal. Weight over speed.",
+    "_cls": "warrior"
+  },
+  "cleave": {
+    "archetype": "nova",
+    "palette": "physical",
+    "power": 0.9,
+    "nova": {
+      "radius": 5
+    },
+    "notes": "Sweeping frontal arc: flat, low-to-the-ground steel slash ring biased forward with a broad horizontal ribbon following the weapon sweep. Suppress vertical column effects, this should read as one wide blade sweep catching everything in reach, not an explosion.",
+    "_cls": "warrior"
+  },
+  "defensive_stance": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2
+    },
+    "notes": "Stance toggle, pure utility: muted steel-grey rune flash and a slow shield-like shell pulse that settles into stillness. Quiet, grounded, defensive posture read, deliberately the least flashy effect in the kit.",
+    "_cls": "warrior"
+  },
+  "sunder_armor": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.8,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Armor-shearing chop: single focused swing with a grinding metal-on-metal impact, spalling armor-shard sparks flying off the target and a brief cracked-plate glint linger. Repeated stack applications should feel identical and cheap to spam.",
+    "_cls": "warrior"
+  },
+  "taunt": {
+    "archetype": "shout",
+    "palette": "physical",
+    "power": 0.6,
+    "shout": {
+      "radius": 3
+    },
+    "notes": "Provoking bark: tight, sharp cry wave with a single small ground ring and one aggressive arc ribbon snapping toward the target to mark the compel. Utility scale, an insult, not an attack; over in a blink.",
+    "_cls": "warrior"
+  },
+  "fireball": {
+    "archetype": "bolt",
+    "palette": "fire",
+    "power": 1,
+    "bolt": {
+      "speed": 17,
+      "headScale": 1.4,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "notes": "The mage's bread and butter. Cast-time charge-up: molten orb swells between the hands with a rune circle and converging embers. Release a big, slow, roiling head with a fat smoke-and-ember ribbon trail; impact stack blooms hot orange-white, and the lingering DoT reads as residual flames licking off the target for the 1-2s tail.",
+    "_cls": "mage"
+  },
+  "frost_armor": {
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2
+    },
+    "notes": "Utility self-armor. Rune flash at the feet, then a crystalline shell pulse that climbs the body like frost creeping over glass; leave faint icy glints in the linger. Modest and quiet - reads as protection, not aggression.",
+    "_cls": "mage"
+  },
+  "arcane_intellect": {
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 0.65,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "notes": "Cerebral utility buff. Violet rune flash with rising sparkle motes converging on the head - the intellect fantasy. Brief shell pulse, no shake, no drama; the quietest effect in the mage kit.",
+    "_cls": "mage"
+  },
+  "frostbolt": {
+    "archetype": "bolt",
+    "palette": "frost",
+    "power": 0.95,
+    "bolt": {
+      "speed": 20,
+      "headScale": 1.1,
+      "coils": true,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "notes": "Cast-time charge-up: pale-blue orb with orbiting ice motes and a frost rune circle. The projectile is a sharp crystalline core with orbiting frost spirals (coils) shedding snow-glitter ribbon. Impact is a cold crack with a brief rime decal underfoot to sell the 40% slow.",
+    "_cls": "mage"
+  },
+  "conjure_water": {
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1
+    },
+    "notes": "Conjuration utility - keep it modest per the utility rule. Arcane rune circle flashes, then cool blue-white droplet motes condense downward into the hands like water pulled out of thin air. Soft glass-chime feel, tiny light pulse, no impact stack.",
+    "_cls": "mage"
+  },
+  "fire_blast": {
+    "archetype": "burst",
+    "palette": "fire",
+    "power": 1.05,
+    "notes": "Instant punch on a short cooldown. Brief fire link flicker from the caster's snapped hand, then the full impact stack detonates on the target: HDR flash, fast flipbook fireburst, scorch decal, one hard light pulse. Snappier and more percussive than Fireball - a finger-snap of flame.",
+    "_cls": "mage"
+  },
+  "arcane_missiles": {
+    "archetype": "beam",
+    "palette": "arcane",
+    "power": 0.95,
+    "beam": {
+      "dur": 3,
+      "ticks": 3,
+      "drain": false
+    },
+    "notes": "Channeled stream, one tick per second for 3s. Style the beam as a shimmering violet conduit with each tick reading as a discrete missile pulse racing caster-to-target down the beam and popping a small impact stack - the classic missile volley feel without discrete projectile spawns.",
+    "_cls": "mage"
+  },
+  "polymorph": {
+    "archetype": "cc",
+    "palette": "arcane",
+    "power": 0.85,
+    "cc": {
+      "style": "poof"
+    },
+    "notes": "The sheep. Transform flash swallows the target in a soft arcane-pink poof cloud with drifting wool tufts, then gentle stars orbit for the linger. Whimsical, bouncy easing - this should get a laugh, not a flinch. No screen shake.",
+    "_cls": "mage"
+  },
+  "frost_nova": {
+    "archetype": "nova",
+    "palette": "frost",
+    "power": 1.35,
+    "finisher": true,
+    "nova": {
+      "radius": 8
+    },
+    "notes": "The mage's signature moment. Sky-strike capstone: a shard of glacial light slams down on the caster as the release flash, then the expanding shock ring flash-freezes the floor - jagged ice decal spreading to the full radius, frozen shells crackling up around every enemy caught. Everything holds crystalline-still for a beat before the 1-2s glitter linger. Apocalyptic cold.",
+    "_cls": "mage"
+  },
+  "arcane_explosion": {
+    "archetype": "nova",
+    "palette": "arcane",
+    "power": 1,
+    "nova": {
+      "radius": 7
+    },
+    "notes": "Spammable AoE - big but repeatable. Instant violet shock ring bursting from the caster with a vertical energy flare and sparkle motes flung outward; short-lived rune decal underfoot. Keep the linger tight (~1s) so back-to-back casts stack cleanly without visual mud.",
+    "_cls": "mage"
+  },
+  "scorch": {
+    "archetype": "burst",
+    "palette": "fire",
+    "power": 0.85,
+    "notes": "Quick filler cast - no projectile, the flame ignites directly on the target. Thin heat-shimmer link flicker, then a lean impact stack: licking flame flipbook, small char decal, warm light pulse. Deliberately lighter than Fire Blast so the fire kit has a clear visual hierarchy.",
+    "_cls": "mage"
+  },
+  "ice_barrier": {
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 1.1,
+    "buff": {
+      "style": "raise",
+      "shellDur": 3
+    },
+    "notes": "Defensive cooldown - the loudest of the mage self-buffs. Frost rune flash, then interlocking ice-plate shell assembles around the caster with a hard crystalline light pulse and slow refracting shimmer for the full 3s shell duration. Reads as a wall of ice, not a sparkle.",
+    "_cls": "mage"
+  },
+  "sinister_strike": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.85,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "Bread-and-butter combo builder: one crisp steel arc with a short warm-sparks impact stack, minimal linger so it reads clean at spam cadence.",
+    "_cls": "rogue"
+  },
+  "eviscerate": {
+    "archetype": "strike",
+    "palette": "blood",
+    "power": 1.45,
+    "finisher": true,
+    "strike": {
+      "swings": 2,
+      "stars": false
+    },
+    "notes": "THE rogue capstone, twin cross-slash in deep red with heavy ribbon trails, sky-strike finisher flourish, blood-mist decal dissolving 1.5s. Apocalyptic at 5 combo points.",
+    "_cls": "rogue"
+  },
+  "backstab": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "Dagger punch from behind: tight single thrust, sharper/narrower flash than sinister_strike, impact stack biased low at the target's back.",
+    "_cls": "rogue"
+  },
+  "gouge": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.85,
+    "strike": {
+      "swings": 1,
+      "stars": true
+    },
+    "notes": "Eye-rake incapacitate: quick swipe then classic daze stars orbiting the target's head for the linger, reads as 'do not touch, it breaks'.",
+    "_cls": "rogue"
+  },
+  "evasion": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.9,
+    "buff": {
+      "style": "veil",
+      "shellDur": 1.5
+    },
+    "notes": "Untouchable blur: smoke-shimmer veil with faint steel-grey afterimage ribbons flickering around the silhouette, motion, not glow.",
+    "_cls": "rogue"
+  },
+  "slice_and_dice": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.85,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "notes": "Haste finisher: rune flash then a shell pulse ringed by thin whirring blade-glint ribbons, like daggers spinning up to speed.",
+    "_cls": "rogue"
+  },
+  "sprint": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 0.8
+    },
+    "notes": "Utility burst: short ground-ring kick-off with horizontal speed-line ribbons streaming off the legs; modest and fast so it never upstages combat VFX.",
+    "_cls": "rogue"
+  },
+  "kidney_shot": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.2,
+    "strike": {
+      "swings": 1,
+      "stars": true
+    },
+    "notes": "Stun finisher: brutal low dagger jab, hard 150ms impact stack with screen-weight, then bright stun stars orbiting for the full linger, sells the long lockdown.",
+    "_cls": "rogue"
+  },
+  "ambush": {
+    "archetype": "strike",
+    "palette": "shadow",
+    "power": 1.25,
+    "windup": 0.35,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "Stealth opener: brief coiled-shadow converge (the held breath) then one massive dagger plunge, dark violet release flash, shadow-wisp decal sinking away. Second-biggest hit in the kit, kept below eviscerate.",
+    "_cls": "rogue"
+  },
+  "adrenaline_rush": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.1,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "notes": "Blood runs hot: deep-red rune flash and a pulsing heartbeat shell, light pulses ticking like a racing pulse. Big 3-min cooldown moment but self-cast, so punchy not apocalyptic.",
+    "_cls": "rogue"
+  },
+  "stealth": {
+    "archetype": "buff",
+    "palette": "shadow",
+    "power": 0.6,
+    "buff": {
+      "style": "veil",
+      "shellDur": 2
+    },
+    "notes": "Classic vanish-into-shadows: soft smoke shimmer wrapping upward, no flash, long quiet dissolve into translucency, utility-quiet by design.",
+    "_cls": "rogue"
+  },
+  "seal_of_righteousness": {
+    "archetype": "buff",
+    "palette": "gold",
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "power": 0.8,
+    "notes": "Seal utility: gilded rune circle flashes underfoot, a quick shell pulse, and the weapon keeps a faint golden imbue sheen for the linger. Reads as a stance-setter, not a nuke, the payoff is saved for Judgement.",
+    "_cls": "paladin"
+  },
+  "holy_light": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 1,
+    "notes": "The big prayerful heal. Full 2.5s cast charge-up (hands cupping a warm orb, converging motes), then a golden ring blooms at the target's feet with slow rising motes and a soft pooled light pulse. Zero shake, pure warmth and relief.",
+    "_cls": "paladin"
+  },
+  "devotion_aura": {
+    "archetype": "buff",
+    "palette": "gold",
+    "buff": {
+      "style": "raise",
+      "shellDur": 2
+    },
+    "power": 0.6,
+    "notes": "Understated aura utility: steady rune flash and a faint armor-glint shell that settles into a barely-there ambient shimmer. Deliberately quiet so it never competes with combat reads.",
+    "_cls": "paladin"
+  },
+  "judgement": {
+    "archetype": "burst",
+    "palette": "gold",
+    "power": 1.3,
+    "finisher": true,
+    "notes": "The class signature, the verdict. Brief caster-to-target link flicker, then the seal is consumed as a sky-strike column of gilded radiance slams the impact stack: HDR flash, shock ring, gavel-like light pulse. The one apocalyptic paladin moment.",
+    "_cls": "paladin"
+  },
+  "blessing_of_might": {
+    "archetype": "buff",
+    "palette": "gold",
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "power": 0.7,
+    "notes": "Benediction cast onto an ally: play the raise at the friendly target, rune circle underfoot, a strength-red-free clean gold shell pulse, brief upward ribbon accents like a knighting. Utility-modest.",
+    "_cls": "paladin"
+  },
+  "divine_protection": {
+    "archetype": "buff",
+    "palette": "holy",
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5
+    },
+    "power": 0.9,
+    "notes": "The holy shield: rune flash then a persistent translucent bubble-shell pulse that holds visibly for the linger, the absorb should read as a physical barrier of light, with slow orbiting motes tracing its surface.",
+    "_cls": "paladin"
+  },
+  "hammer_of_justice": {
+    "archetype": "cc",
+    "palette": "gold",
+    "cc": {
+      "style": "stars"
+    },
+    "power": 1,
+    "notes": "A spectral golden hammer flash at the target on impact, sharp HDR release, small shock ring, then classic stun stars orbiting the head for the duration. Punchy but clearly control, not damage.",
+    "_cls": "paladin"
+  },
+  "lay_on_hands": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 1.6,
+    "windup": 0.8,
+    "notes": "The 10-minute miracle. Instant by mechanics, but flavor demands a 0.8s windup: light drains from the caster's whole body into their palms before releasing a massive golden ring, dense rising mote fountain, and a screen-warming light pulse. Biggest heal read in the game, still no shake.",
+    "_cls": "paladin"
+  },
+  "flash_of_light": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.8,
+    "notes": "The quick efficient heal: short 1.5s cast charge, then a compact golden ring and a brisk single puff of rising motes. Snappier ease curves and shorter linger than Holy Light so the two heals are instantly distinguishable.",
+    "_cls": "paladin"
+  },
+  "exorcism": {
+    "archetype": "burst",
+    "palette": "holy",
+    "power": 1.1,
+    "notes": "Banishment of the wicked: instant link flicker then a searing white-gold impact stack, flipbook burst reads like the target is briefly lit from within, with purging light ribbons peeling off during the linger. Harsher and whiter than Judgement's gilded verdict.",
+    "_cls": "paladin"
+  },
+  "consecration": {
+    "archetype": "nova",
+    "palette": "gold",
+    "nova": {
+      "radius": 8
+    },
+    "power": 1,
+    "notes": "Hallowed ground: radial shock ring from the caster at full 8yd radius, then the star of the show is the dissolving ground decal, a glowing consecration sigil that sears and slowly fades over the linger with small ember-like holy motes rising off it.",
+    "_cls": "paladin"
+  },
+  "righteous_fury": {
+    "archetype": "buff",
+    "palette": "gold",
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "power": 0.7,
+    "notes": "The tank switch: rune flash and a shell pulse with a slightly hotter, flame-tinged gold edge, righteous wrath simmering, not exploding. Modest power so it reads as a long-duration utility toggle.",
+    "_cls": "paladin"
+  },
+  "raptor_strike": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Heavy on-next-swing melee chop: warm-steel arc ribbon with a raptor-talon triple-scratch decal on impact, short sparks-off-metal flipbook, modest shake. Reads as a beefed-up auto-attack, not a spell.",
+    "_cls": "hunter"
+  },
+  "aspect_of_the_hawk": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "notes": "Aspect utility: green rune circle flashes underfoot, a hawk-silhouette shell pulse sweeps up the body, a few drifting feather motes spiral off. Calm, stance-like, no shake, quick read.",
+    "_cls": "hunter"
+  },
+  "serpent_sting": {
+    "archetype": "dot",
+    "palette": "venom",
+    "power": 0.85,
+    "dot": {
+      "drip": "rise"
+    },
+    "notes": "Fanged snap of sickly green at apply, then lingering noxious fumes bubbling upward off the target with a faint spreading venom decal. Poison-injection fantasy, thin, seeping, unhealthy.",
+    "_cls": "hunter"
+  },
+  "arcane_shot": {
+    "archetype": "bolt",
+    "palette": "arcane",
+    "power": 0.95,
+    "bolt": {
+      "speed": 40,
+      "headScale": 0.7,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "notes": "Crossbow quarrel wrapped in violet arcane charge: instant loose from the weapon, flat fast trajectory, thin ribbon tail, sharp crackling arcane pop on impact. Projectile shot first, magic second.",
+    "_cls": "hunter"
+  },
+  "concussive_shot": {
+    "archetype": "bolt",
+    "palette": "physical",
+    "power": 0.8,
+    "bolt": {
+      "speed": 38,
+      "headScale": 0.7,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "notes": "Blunt-tipped shot: dull steel tracer, then a soft concussion ring and a brief dazed wobble shimmer over the target's head as the slow lands. Impact reads thud, not slash.",
+    "_cls": "hunter"
+  },
+  "mongoose_bite": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.95,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Snapping counterattack: one lightning-quick low slash with a whip-crack ribbon and a bite-mark decal flash. Faster attack anticipation than raptor_strike, riposte timing, minimal windup.",
+    "_cls": "hunter"
+  },
+  "wing_clip": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.7,
+    "strike": {
+      "swings": 1
+    },
+    "notes": "Crippling utility swipe aimed low at the legs: short downward arc, small dust kick decal at the target's feet, lingering hobble-drag streaks trailing the slow. Kept modest, it's a snare, not a nuke.",
+    "_cls": "hunter"
+  },
+  "tame_beast": {
+    "archetype": "cc",
+    "palette": "nature",
+    "power": 0.6,
+    "cc": {
+      "style": "stars"
+    },
+    "notes": "Pacifying tame over the 6s cast: soft green motes drift from caster to beast, drowsy stars orbit its head as it calms, gentle nature ring on completion. Soothing utility, zero aggression, no shake.",
+    "_cls": "hunter"
+  },
+  "dismiss_pet": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.5,
+    "buff": {
+      "style": "veil",
+      "shellDur": 0.8
+    },
+    "notes": "Release-to-the-wild: brief green-tinged smoke shimmer as the companion fades out, a few leaf motes settling. Pure utility whisper, smallest effect in the kit.",
+    "_cls": "hunter"
+  },
+  "revive_pet": {
+    "archetype": "summon",
+    "palette": "nature",
+    "power": 0.75,
+    "notes": "Companion returns at the hunter's side: leafy portal decal, soft green rising pillar with life-motes instead of harsh smoke, warm settle as the pet reforms. Gentler and warmer than a warlock summon.",
+    "_cls": "hunter"
+  },
+  "aspect_of_the_cheetah": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "notes": "Speed aspect: rune flash then a sleek shell pulse with horizontal speed-line ribbons streaking past the legs, feline afterimage flicker. Utility read, quick, light, no ground shake.",
+    "_cls": "hunter"
+  },
+  "aimed_shot": {
+    "archetype": "bolt",
+    "palette": "physical",
+    "power": 1.35,
+    "finisher": true,
+    "bolt": {
+      "speed": 42,
+      "headScale": 1.1,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0
+    },
+    "notes": "The sniper payoff and the class's one apocalyptic moment. Full 3s charge-up (steadying rune circle + converging motes down the sight line), then a screaming steel tracer at max shot speed with a heavier head, brutal pierce impact stack and the sky-strike capstone. Still a projectile, no coils, no magic frills.",
+    "_cls": "hunter"
+  },
+  "rapid_fire": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.9,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "notes": "Big-cooldown haste: sharp steel rune flash, then whirling speed ribbons cycling around the weapon and quiver like a spinning bolt-feeder, brief hot-metal glint pulses. Energetic but still a self-buff, excitement from motion, not blast.",
+    "_cls": "hunter"
+  },
+  "smite": {
+    "archetype": "burst",
+    "palette": "holy",
+    "power": 0.9,
+    "notes": "The 2s cast already sells the prayer; on release the link flicker should read as a shaft of judgment from above, then a crisp golden impact stack with a warm light pulse. Righteous and clean, minimal shake.",
+    "_cls": "priest"
+  },
+  "lesser_heal": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.65,
+    "notes": "Novice prayer, small golden ring, a handful of soft rising motes, one gentle light pulse. Clearly the humble sibling of Heal; short linger.",
+    "_cls": "priest"
+  },
+  "power_word_fortitude": {
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "notes": "Utility blessing, brief rune flash and one clean warm shell pulse that reads as a long-duration ward. Modest and unceremonious; no shake, no lingering ground decal.",
+    "_cls": "priest"
+  },
+  "shadow_word_pain": {
+    "archetype": "dot",
+    "palette": "shadow",
+    "power": 0.85,
+    "dot": {
+      "drip": "fall"
+    },
+    "notes": "A whispered word of darkness, small violet-black impact flicker, then inky drips sinking off the target through the linger. Oppressive and quiet rather than explosive.",
+    "_cls": "priest"
+  },
+  "power_word_shield": {
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 0.95,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5
+    },
+    "notes": "The iconic bubble, bright rune flash, then a persistent glassy shell pulse held for the full shellDur so the absorb reads as a physical barrier. Give the shell a faint gold rim to distinguish it from Fortitude's plain blessing.",
+    "_cls": "priest"
+  },
+  "renew": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.65,
+    "notes": "Heal-over-time, soft golden ring on apply, then a slow, steady trickle of rising motes spread across a longer linger to sell the tick cadence. No flash spike, no shake; serenity is the point.",
+    "_cls": "priest"
+  },
+  "mind_blast": {
+    "archetype": "burst",
+    "palette": "shadow",
+    "power": 1.3,
+    "finisher": true,
+    "notes": "The priest's one apocalyptic moment, a psychic detonation. The 1.5s cast converges dark motes at the temples, then the sky-strike capstone slams a violet-black lance into the target with a hard HDR release flash, heavy impact stack and a ripple of distorted shock rings.",
+    "_cls": "priest"
+  },
+  "heal": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 1,
+    "notes": "The slow, powerful prayer, full golden ring, dense column of rising motes and the strongest light pulse in the kit. After the 2.5s cast the release should feel weighty and warm, with a generous linger.",
+    "_cls": "priest"
+  },
+  "mind_flay": {
+    "archetype": "beam",
+    "palette": "shadow",
+    "power": 0.9,
+    "beam": {
+      "dur": 3,
+      "ticks": 3,
+      "drain": false
+    },
+    "notes": "Channeled mind-worm, a writhing violet ribbon beam from the caster's brow to the victim's head, pulsing on each 1s tick. Energy assaults outward (no drain flow); add subtle jitter to the beam core so it feels like a flaying, not a steady ray.",
+    "_cls": "priest"
+  },
+  "flash_heal": {
+    "archetype": "heal",
+    "palette": "holy",
+    "power": 0.8,
+    "notes": "Emergency prayer, compress the whole anatomy: snappy bright flash, fast burst of rising motes, short linger. Same golden language as Heal but with urgent, quick ease curves; still no shake.",
+    "_cls": "priest"
+  },
+  "lightning_bolt": {
+    "archetype": "bolt",
+    "palette": "storm",
+    "notes": "locked reference look",
+    "_cls": "shaman"
+  },
+  "rockbiter_weapon": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2
+    },
+    "notes": "Earthen imbue: dusty rune circle flashes underfoot, warm-steel shell pulse hugs the weapon arm; brief grit motes converge like pebbles snapping onto the blade. Utility read, short shell, no shake, low bloom.",
+    "_cls": "shaman"
+  },
+  "healing_wave": {
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 0.9,
+    "notes": "Restorative tide: golden-green ring blooms at the target's feet, soft water-glint motes rise in a slow wave rhythm. Windup converge reads as gathering spring water; release flash kept soft and cool, zero camera shake.",
+    "_cls": "shaman"
+  },
+  "earth_shock": {
+    "archetype": "burst",
+    "palette": "nature",
+    "power": 1,
+    "notes": "Concussive earth slam: link flicker snaps taut like a fault line, impact stack lands heavy, thick shock ring hugging the ground, cracked-earth decal dissolving slowly, short stubby debris ribbons instead of sparks. Feels blunt and seismic, not electric.",
+    "_cls": "shaman"
+  },
+  "lightning_shield": {
+    "archetype": "buff",
+    "palette": "storm",
+    "power": 0.8,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5
+    },
+    "notes": "Kid sibling of the locked lightning_bolt look: same electric-blue core hue, static crackle instead of a bolt. Rune flash then a longer-lived shell pulse with three orbiting spark motes; light pulse flickers at a nervous 2-3 Hz to sell live current. Utility power, no ground decal.",
+    "_cls": "shaman"
+  },
+  "flame_shock": {
+    "archetype": "dot",
+    "palette": "fire",
+    "power": 0.9,
+    "dot": {
+      "drip": "rise"
+    },
+    "notes": "Searing brand: quick fiery impact stamp with a small scorched decal, then embers float upward off the target for the linger, drip rise, uneven timing so it reads as smoldering, not fountaining. Impact flash hotter/whiter than the linger embers.",
+    "_cls": "shaman"
+  },
+  "frost_shock": {
+    "archetype": "burst",
+    "palette": "frost",
+    "power": 0.9,
+    "notes": "Flash-freeze counterpart to earth_shock: instant link flicker then a crisp icy impact stack, thin sharp shock ring, crystalline shard ribbons, and a rimed frost-mist ground decal that lingers to sell the 50% slow. Cold blue-white release flash, brittle rather than heavy.",
+    "_cls": "shaman"
+  },
+  "ghost_wolf": {
+    "archetype": "buff",
+    "palette": "moon",
+    "power": 0.7,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1
+    },
+    "notes": "Spectral shapeshift: silver-violet motes spiral inward over the 2s cast, implosion pinch then a soft ghost-mist poof as the wolf form appears. Wisps trail off like breath in cold air during the linger. Ethereal and quiet, low bloom, no ground scorch, utility read.",
+    "_cls": "shaman"
+  },
+  "stormstrike": {
+    "archetype": "strike",
+    "palette": "storm",
+    "power": 1.5,
+    "strike": {
+      "swings": 2
+    },
+    "finisher": true,
+    "notes": "THE shaman signature, the sky answers the locked lightning_bolt hue. Two weapon swings wrapped in electric-blue arc ribbons, and on the second hit the capstone sky-strike: a column of storm light crashes onto the target with a fat shock ring, forked ground arcs, and a scorched dissolving decal. Full HDR release flash, strongest light pulse in the kit.",
+    "_cls": "shaman"
+  },
+  "shadow_bolt": {
+    "archetype": "bolt",
+    "palette": "shadow",
+    "power": 1,
+    "bolt": {
+      "speed": 21,
+      "jagged": false,
+      "coils": true,
+      "forkEvery": 0,
+      "headScale": 1.3
+    },
+    "notes": "The warlock's bread-and-butter. 1.7s cast charges a void orb between the hands with a violet rune circle and inward-spiraling motes; release hurls a slow, heavy umbral head wrapped in two orbiting shadow coils that shed a smoky ribbon trail. Impact is a muffled dark burst, purple core flash, black smoke petals, brief desaturating vignette on the target rather than a bright flash.",
+    "_cls": "warlock"
+  },
+  "summon_imp": {
+    "archetype": "summon",
+    "palette": "fire",
+    "power": 0.85,
+    "notes": "Ritual summon: a small ember-orange portal decal etches itself rune by rune over the 5s cast, then a squat pillar of flame belches up with popping cinder flipbook and a puff of sooty smoke at the caster's side. Keep it impish, small radius, crackly, a few mischievous ember sparks that dart sideways before dying.",
+    "_cls": "warlock"
+  },
+  "demon_skin": {
+    "archetype": "buff",
+    "palette": "shadow",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2
+    },
+    "notes": "Utility armor buff, reads quiet. Dull violet rune flash at the feet, then a leathery translucent shell pulse crawls up the body and settles into a faint chitinous shimmer before dissolving. No shake, low bloom; it should feel like skin hardening, not a spell landing.",
+    "_cls": "warlock"
+  },
+  "immolate": {
+    "archetype": "dot",
+    "palette": "fire",
+    "power": 0.9,
+    "dot": {
+      "drip": "rise"
+    },
+    "notes": "2s cast ends in a whoomph of ignition on the target, small orange impact stack with a licking-flame flipbook, then the linger carries it: embers float up off the victim for the DoT read, with a soft heat-ripple decal under their feet. The initial hit is secondary; the burning linger is the fantasy.",
+    "_cls": "warlock"
+  },
+  "corruption": {
+    "archetype": "dot",
+    "palette": "shadow",
+    "power": 0.85,
+    "dot": {
+      "drip": "fall"
+    },
+    "notes": "Sickness, not explosion. Tiny violet impact flicker as the corruption takes hold, then black-purple ichor drips sink from the target into a spreading, slowly dissolving ground stain. Drips should feel viscous and irregular, the target looks infected, rotting from within.",
+    "_cls": "warlock"
+  },
+  "life_tap": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 0.65,
+    "buff": {
+      "style": "raise",
+      "shellDur": 0.8
+    },
+    "notes": "Self-sacrifice conversion. Sharp crimson rune flash at the chest, a quick inverted shell pulse that squeezes inward (life being torn out), and a handful of deep-red motes ripped upward that pop into pale blue glints at the apex, health becoming mana. Short, punchy, slightly uncomfortable; no lingering shell.",
+    "_cls": "warlock"
+  },
+  "summon_voidwalker": {
+    "archetype": "summon",
+    "palette": "shadow",
+    "power": 1,
+    "notes": "The heavyweight summon. Over the 5s ritual a wide void-black portal decal spins up with violet rune ticks; completion raises a thick churning pillar of shadow with slow-orbiting smoke ribbons that collapses outward into ground fog. Deeper, slower, and more ominous than the imp's fiery pop, bass-heavy presence.",
+    "_cls": "warlock"
+  },
+  "curse_of_agony": {
+    "archetype": "dot",
+    "palette": "shadow",
+    "power": 0.8,
+    "dot": {
+      "drip": "fall"
+    },
+    "notes": "Instant curse, no travel. A skeletal violet sigil flares once above the target's head at apply, then long thin shadow drips sink and pool beneath them. Differentiate from Corruption: Agony's drips come in slow waves that ramp in density across the linger, echoing the classic ramping tick damage.",
+    "_cls": "warlock"
+  },
+  "drain_life": {
+    "archetype": "beam",
+    "palette": "blood",
+    "power": 0.9,
+    "beam": {
+      "dur": 3,
+      "ticks": 5,
+      "drain": true
+    },
+    "notes": "Channeled siphon: a sinuous deep-red beam links target to caster with drain flow TOWARD the caster, pulses of stolen life travel the ribbon and pop as small crimson glints at the warlock's hand on each tick. Target gets a subtle desaturation and drooping drip motes; caster gets a faint warm pulse. Wet, parasitic, not laser-like.",
+    "_cls": "warlock"
+  },
+  "fear": {
+    "archetype": "cc",
+    "palette": "shadow",
+    "power": 0.85,
+    "cc": {
+      "style": "tendrils"
+    },
+    "notes": "Terror, not damage. On land, dark crawling arcs snake up from the ground around the victim and claw over their silhouette while a cold violet flash hollows out their eyeline; tendrils persist as a low writhing cage during the linger. Minimal screen shake, dread should come from the crawling motion, not impact.",
+    "_cls": "warlock"
+  },
+  "searing_pain": {
+    "archetype": "bolt",
+    "palette": "fire",
+    "power": 0.85,
+    "bolt": {
+      "speed": 30,
+      "jagged": false,
+      "coils": false,
+      "forkEvery": 0,
+      "headScale": 0.9
+    },
+    "notes": "The fast fire jab. Short 1.5s charge, then a lean white-orange dart streaks out, small head, tight cinder trail, noticeably quicker than Shadow Bolt. Impact is a sharp searing snap with a thin ring and a brief branding-iron glow on the target. Reads urgent and spiteful next to the warlock's slow shadow arsenal.",
+    "_cls": "warlock"
+  },
+  "shadowburn": {
+    "archetype": "burst",
+    "palette": "shadow",
+    "power": 1.4,
+    "finisher": true,
+    "notes": "The signature apocalyptic moment, instant Shadow Flame execute on a 15s cooldown. Caster-to-target link flickers for a single frame, then the sky-strike capstone: a column of black-violet flame slams down through the target, impact stack fires with an edge of fire-orange rim light inside the shadow (the 'shadowflame' duality), wide shock ring, and charred violet ground decal that smolders through the linger. The one warlock effect allowed to fill the screen.",
+    "_cls": "warlock"
+  },
+  "wrath": {
+    "archetype": "bolt",
+    "palette": "nature",
+    "power": 0.9,
+    "bolt": {
+      "speed": 24,
+      "jagged": false,
+      "coils": false,
+      "forkEvery": 0,
+      "headScale": 1
+    },
+    "notes": "Cast-time charge-up: verdant orb gathers leaf-mote converge over a green rune circle, then a dense emerald energy bolt with a soft leafy ribbon tail; impact pops a small green shock ring with drifting leaf flecks.",
+    "_cls": "druid"
+  },
+  "healing_touch": {
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 1,
+    "notes": "The big slow heal: long converge of green-gold pollen motes during the 2.5s cast, release blooms a full flower-burst ring at the feet, tall rising petal motes, warm pooled light swell. Zero shake, all softness.",
+    "_cls": "druid"
+  },
+  "mark_of_the_wild": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.6,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5
+    },
+    "notes": "Utility blessing: brief paw-print rune flash under the target, thin green shell pulse with tiny leaf sparkles. Quiet and quick, reads as a long-duration mark, not a combat moment.",
+    "_cls": "druid"
+  },
+  "moonfire": {
+    "archetype": "dot",
+    "palette": "moon",
+    "power": 0.95,
+    "dot": {
+      "drip": "rise"
+    },
+    "notes": "Instant silver-violet moonbeam flash on the target (bright vertical accent in the impact stack), then pale lunar embers float upward for the 9s linger read. Cold, serene burn, no fire orange anywhere.",
+    "_cls": "druid"
+  },
+  "rejuvenation": {
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 0.7,
+    "notes": "Instant, feather-light HoT: small green ring, slow sparse rising leaf motes that persist into the linger to sell healing-over-time. Softest heal in the kit, clearly gentler than Healing Touch.",
+    "_cls": "druid"
+  },
+  "thorns": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.65,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2
+    },
+    "notes": "Bramble armor: rune flash then a spiky shell pulse, ribbon trails kink into short thorn barbs around the target silhouette. Slightly prickly timing (staccato pulses) but modest utility scale.",
+    "_cls": "druid"
+  },
+  "entangling_roots": {
+    "archetype": "cc",
+    "palette": "nature",
+    "power": 0.8,
+    "cc": {
+      "style": "tendrils"
+    },
+    "notes": "Cast-time converge low to the ground, then green-brown vine tendrils crawl up from a cracked-earth decal and lash around the target's legs; dirt-mote puffs at the root points. Grasping and organic, not shadowy.",
+    "_cls": "druid"
+  },
+  "bear_form": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.85,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1
+    },
+    "notes": "Shapeshift: quick inward implosion of green wild-magic motes, HDR flash, big soft smoke poof that hides the model swap; heavy low dust ring on 'landing' to sell bear mass.",
+    "_cls": "druid"
+  },
+  "bear_charge": {
+    "archetype": "dash",
+    "palette": "physical",
+    "power": 0.9,
+    "notes": "Four-paw gallop: thick low speed ribbons with kicked-up dirt decals along the path; arrival slams a stubby shock ring and a brief stun flick (single star glint) on the target for the 1s stun.",
+    "_cls": "druid"
+  },
+  "maul": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "One heavy overhead paw crush: slow-in fast-out swing arc ribbon, oversized dull-steel impact thud with a wide flat ring, weight and threat, not flash.",
+    "_cls": "druid"
+  },
+  "growl": {
+    "archetype": "shout",
+    "palette": "physical",
+    "power": 0.55,
+    "shout": {
+      "radius": 4
+    },
+    "notes": "Taunt utility: short bear-roar wave, one small vertical ring cone toward the target and a faint ground ripple. Deliberately modest; a provocation, not an attack.",
+    "_cls": "druid"
+  },
+  "demoralizing_roar": {
+    "archetype": "shout",
+    "palette": "physical",
+    "power": 0.8,
+    "shout": {
+      "radius": 8
+    },
+    "notes": "Full-radius intimidation roar: stacked vertical + ground rings pushing out to 8yd with heavy arc ribbons and a low dust wave; a brief desaturating shimmer on the wavefront sells the debuff.",
+    "_cls": "druid"
+  },
+  "cat_form": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.85,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1
+    },
+    "notes": "Shapeshift to wolf: same implosion + poof language as Bear Form but tighter and quicker, leaner smoke, a swift horizontal ribbon streak through the poof to sell agility.",
+    "_cls": "druid"
+  },
+  "prowl": {
+    "archetype": "buff",
+    "palette": "moon",
+    "power": 0.6,
+    "buff": {
+      "style": "veil",
+      "shellDur": 1.5
+    },
+    "notes": "Moonlit stealth: silver-violet smoke shimmer wraps the wolf, model fades under a soft veil with faint downward-settling mist. Hushed, minimal light pulse, no ring pop.",
+    "_cls": "druid"
+  },
+  "rake": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.9,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "Stealth-opener claw drag: one sharp three-line slash ribbon across the target, then a handful of deep-red bleed flecks that drip through the linger to telegraph the 9s bleed.",
+    "_cls": "druid"
+  },
+  "claw": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.85,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "The bread-and-butter swipe: quick single claw arc with a crisp small impact ring and short spark flecks. Fast recovery, minimal linger, built to read cleanly when spammed.",
+    "_cls": "druid"
+  },
+  "regrowth": {
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 0.9,
+    "notes": "Fast bloom heal + HoT: 2s converge, release pops a brighter, quicker flower ring than Healing Touch, then a thin trickle of rising petal motes persists well into the linger to sell the 21s HoT tail.",
+    "_cls": "druid"
+  },
+  "ferocious_bite": {
+    "archetype": "strike",
+    "palette": "blood",
+    "power": 1.3,
+    "strike": {
+      "swings": 1,
+      "stars": false
+    },
+    "notes": "Combo-point finisher: single savage jaw-snap, twin closing arc ribbons like jaws, deep-red HDR flash, heavy crimson spray flecks and a dark spatter decal that dissolves through the linger. Biggest melee hit in the kit.",
+    "_cls": "druid"
+  },
+  "barkskin": {
+    "archetype": "buff",
+    "palette": "nature",
+    "power": 0.8,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.5
+    },
+    "notes": "Defensive cooldown: brown-green rune flash then a rigid bark-textured shell pulse that ripples like grain in wood; slower, steadier pulses than Thorns, armor, not retaliation.",
+    "_cls": "druid"
+  },
+  "swipe": {
+    "archetype": "nova",
+    "palette": "physical",
+    "power": 0.85,
+    "nova": {
+      "radius": 5
+    },
+    "notes": "Bear AoE: low flat claw-arc ring sweeping out to 5yd, hugging the ground with dust kicks at the rim; three faint radial slash ribbons inside the ring echo the paw sweep.",
+    "_cls": "druid"
+  },
+  "starfire": {
+    "archetype": "bolt",
+    "palette": "moon",
+    "power": 1.5,
+    "finisher": true,
+    "bolt": {
+      "speed": 18,
+      "jagged": false,
+      "coils": true,
+      "forkEvery": 0,
+      "headScale": 1.7
+    },
+    "notes": "CLASS SIGNATURE. 3s cast builds a swelling silver-violet star over a constellation rune circle with heavy mote converge; release hurls a huge slow coiling stellar orb, and the finisher sky-strike crashes a column of starlight down through the impact, apocalyptic lunar payoff.",
+    "_cls": "druid"
+  }
 }

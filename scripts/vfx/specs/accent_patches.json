@@ -1,55 +1,50 @@
 {
- "fireball": {
-  "hot": 0.22
- },
- "scorch": {
-  "accent": 12073488
- },
- "fire_blast": {
-  "accent": 16765502
- },
- "frostbolt": {
-  "accent": 15267583
- },
- "moonfire": {
-  "hot": 0.3
- },
- "mind_blast": {
-  "hot": 0.28
- },
- "searing_pain": {
-  "accent": 16765502
- },
- "shadowburn": {
-  "hot": 0.2
- },
- "earth_shock": {
-  "motifs": [
-   "fissure"
-  ],
-  "impact": {
-   "flipbook": false
+  "fireball": {
+    "hot": 0.22
+  },
+  "scorch": {
+    "accent": 12073488
+  },
+  "fire_blast": {
+    "accent": 16765502
+  },
+  "frostbolt": {
+    "accent": 15267583
+  },
+  "moonfire": {
+    "hot": 0.3
+  },
+  "mind_blast": {
+    "hot": 0.28
+  },
+  "searing_pain": {
+    "accent": 16765502
+  },
+  "shadowburn": {
+    "hot": 0.2
+  },
+  "earth_shock": {
+    "motifs": ["fissure"],
+    "impact": {
+      "flipbook": false
+    }
+  },
+  "entangling_roots": {
+    "motifs": ["vines", "chains"],
+    "impact": {
+      "ring": false
+    }
+  },
+  "flash_heal": {
+    "accent": 15922943
+  },
+  "heal": {
+    "accent": 15922943
+  },
+  "lesser_heal": {
+    "accent": 15922943
+  },
+  "renew": {
+    "accent": 15922943
   }
- },
- "entangling_roots": {
-  "motifs": [
-   "vines",
-   "chains"
-  ],
-  "impact": {
-   "ring": false
-  }
- },
- "flash_heal": {
-  "accent": 15922943
- },
- "heal": {
-  "accent": 15922943
- },
- "lesser_heal": {
-  "accent": 15922943
- },
- "renew": {
-  "accent": 15922943
- }
 }

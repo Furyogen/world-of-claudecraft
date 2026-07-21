@@ -1,990 +1,951 @@
 {
- "arcane_power": {
-  "archetype": "buff",
-  "palette": "arcane",
-  "power": 1.4,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.4,
-   "orbit": "runes",
-   "o": {
-    "n": 6,
-    "size": 0.85,
-    "tex": "glow",
-    "rate": 1.5,
-    "weave": 0.18,
-    "radius": 1.6,
-    "incline": 0,
-    "tickEvery": 1.4
-   }
+  "arcane_power": {
+    "archetype": "buff",
+    "palette": "arcane",
+    "power": 1.4,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.4,
+      "orbit": "runes",
+      "o": {
+        "n": 6,
+        "size": 0.85,
+        "tex": "glow",
+        "rate": 1.5,
+        "weave": 0.18,
+        "radius": 1.6,
+        "incline": 0,
+        "tickEvery": 1.4
+      }
+    },
+    "linger": 4,
+    "windup": 0.5,
+    "windupStyle": "vortex",
+    "motifs": ["orbitals"],
+    "motifAt": "caster",
+    "rim": "#c86bff",
+    "decal": "rune",
+    "impact": {
+      "flipbook": false,
+      "ring": 2,
+      "vRing": true,
+      "sparks": 30,
+      "debris": false,
+      "smoke": false,
+      "light": 3.4
+    }
   },
-  "linger": 4,
-  "windup": 0.5,
-  "windupStyle": "vortex",
-  "motifs": [
-   "orbitals"
-  ],
-  "motifAt": "caster",
-  "rim": "#c86bff",
-  "decal": "rune",
-  "impact": {
-   "flipbook": false,
-   "ring": 2,
-   "vRing": true,
-   "sparks": 30,
-   "debris": false,
-   "smoke": false,
-   "light": 3.4
+  "combustion": {
+    "archetype": "buff",
+    "palette": "fire",
+    "power": 1.3,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "sparks",
+      "o": {
+        "n": 5,
+        "size": 0.4,
+        "tex": "rays",
+        "rate": 2.2,
+        "weave": 0.35,
+        "radius": 1.15,
+        "incline": 0.2,
+        "tickEvery": 1.1
+      }
+    },
+    "linger": 4,
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "hot": 0.42,
+    "rim": "#ff7a2a",
+    "decal": "scorch",
+    "impact": {
+      "flipbook": true,
+      "ring": false,
+      "vRing": false,
+      "sparks": 42,
+      "debris": false,
+      "smoke": true,
+      "light": 2.8
+    }
+  },
+  "icy_veins": {
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 1.2,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2.2,
+      "orbit": "halo",
+      "o": {
+        "n": 7,
+        "size": 0.4,
+        "tex": "chip",
+        "rate": 2.4,
+        "weave": 0.12,
+        "radius": 0.7,
+        "incline": 0.1,
+        "tickEvery": 1.3
+      }
+    },
+    "linger": 4,
+    "windup": 0.4,
+    "windupStyle": "orb",
+    "rim": "#8fe6ff",
+    "decal": "crack",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 0,
+      "debris": true,
+      "smoke": false,
+      "light": 1.9
+    }
+  },
+  "holy_nova": {
+    "archetype": "nova",
+    "palette": "holy",
+    "power": 1.35,
+    "self": true,
+    "nova": {
+      "radius": 10
+    },
+    "windup": 0.3,
+    "windupStyle": "ascend",
+    "motifs": ["cross", "fountain"],
+    "motifAt": "caster",
+    "linger": 2.5,
+    "decal": "rune",
+    "rim": "#fff2c8",
+    "accent": "#fff4cf",
+    "impact": {
+      "flipbook": false,
+      "ring": 2.6,
+      "vRing": true,
+      "sparks": 32,
+      "debris": false,
+      "smoke": false,
+      "light": 2.4
+    }
+  },
+  "power_infusion": {
+    "archetype": "buff",
+    "palette": "holy",
+    "power": 1.05,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.6,
+      "orbit": "halo",
+      "o": {
+        "n": 8,
+        "size": 0.42,
+        "tex": "rays",
+        "rate": 1.6,
+        "weave": 0.05,
+        "radius": 0.42,
+        "incline": 0,
+        "tickEvery": 2.4
+      }
+    },
+    "linger": 3,
+    "windup": 0.3,
+    "windupStyle": "ascend",
+    "rim": "#ffe08a",
+    "accent": "#fff4cf",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 18,
+      "debris": false,
+      "smoke": false,
+      "light": 1.9
+    }
+  },
+  "shadowform": {
+    "archetype": "buff",
+    "palette": "shadow",
+    "power": 1.15,
+    "self": true,
+    "buff": {
+      "style": "morph",
+      "shellDur": 2.5,
+      "orbit": "none",
+      "o": {
+        "tickEvery": 3
+      }
+    },
+    "linger": 3,
+    "windup": 0.5,
+    "windupStyle": "vortex",
+    "motifs": ["implosion"],
+    "motifAt": "caster",
+    "rim": "#6b4fbf",
+    "spirit": {
+      "model": "ghost",
+      "path": "rise",
+      "at": "caster",
+      "scale": 1.15,
+      "dur": 2.4,
+      "tint": "#4a2f7a",
+      "dim": 0.7
+    },
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 0,
+      "debris": false,
+      "smoke": true,
+      "light": 1.2
+    }
+  },
+  "conflagrate": {
+    "archetype": "burst",
+    "palette": "fire",
+    "power": 1.4,
+    "burst": {
+      "style": "ground"
+    },
+    "windupStyle": "none",
+    "motifs": ["fissure"],
+    "motifAt": "target",
+    "decal": "scorch",
+    "hot": 0.4,
+    "linger": 2,
+    "accent": 16750899,
+    "rim": "#ff7a2a",
+    "impact": {
+      "flipbook": true,
+      "ring": 2,
+      "vRing": true,
+      "sparks": 50,
+      "debris": true,
+      "smoke": true,
+      "light": 1.8
+    }
+  },
+  "metamorphosis": {
+    "archetype": "buff",
+    "palette": "shadow",
+    "power": 1.35,
+    "self": true,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1.4,
+      "orbit": "wings",
+      "o": {
+        "ribs": 5,
+        "span": 1.45,
+        "flapRate": 1,
+        "tickEvery": 5
+      }
+    },
+    "spirit": {
+      "model": "demon",
+      "path": "rise",
+      "at": "caster",
+      "scale": 1.25,
+      "dur": 2.2,
+      "tint": "#7a3ff0",
+      "dim": 0.7
+    },
+    "motifs": ["implosion"],
+    "motifAt": "caster",
+    "windupStyle": "vortex",
+    "windup": 0.7,
+    "linger": 3,
+    "decal": "rune",
+    "rim": "#8b3ff5",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.5,
+      "vRing": true,
+      "sparks": 22,
+      "debris": false,
+      "smoke": true,
+      "light": 1.4
+    }
+  },
+  "siphon_life": {
+    "archetype": "dot",
+    "palette": "blood",
+    "power": 1.1,
+    "dot": {
+      "drip": "rise"
+    },
+    "linger": 4,
+    "windupStyle": "orb",
+    "motifs": ["vines"],
+    "motifAt": "target",
+    "accent": "#c8203a",
+    "rim": "#ff4a5a",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 8,
+      "debris": false,
+      "smoke": true,
+      "blood": true,
+      "light": 0.5
+    }
+  },
+  "chain_heal": {
+    "archetype": "heal",
+    "palette": "frost",
+    "power": 1.35,
+    "windup": 2.4,
+    "windupStyle": "ascend",
+    "motifs": ["chains"],
+    "motifAt": "target",
+    "shaft": 0.7,
+    "linger": 2.6,
+    "rim": "#aee7ff",
+    "accent": "#cdefff",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": 1.2,
+      "sparks": 12,
+      "debris": false,
+      "smoke": false,
+      "light": 1.35
+    }
+  },
+  "elemental_mastery": {
+    "archetype": "buff",
+    "palette": "storm",
+    "power": 1.1,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.8,
+      "orbit": "halo",
+      "o": {
+        "n": 4,
+        "size": 0.4,
+        "tex": "star",
+        "rate": 2,
+        "weave": 0.25,
+        "radius": 0.5,
+        "incline": 0.02,
+        "tickEvery": 2
+      }
+    },
+    "linger": 3,
+    "windup": 0.6,
+    "windupStyle": "vortex",
+    "rim": "#a8e6ff",
+    "impact": {
+      "flipbook": true,
+      "ring": false,
+      "vRing": true,
+      "sparks": 26,
+      "debris": false,
+      "smoke": false,
+      "light": 1.6
+    }
+  },
+  "stormstrike": {
+    "archetype": "strike",
+    "palette": "storm",
+    "power": 1.3,
+    "strike": {
+      "swings": 2,
+      "arc": "vertical",
+      "stars": false
+    },
+    "windup": 0.45,
+    "windupStyle": "weapon",
+    "decal": "crack",
+    "rim": "#8fd6ff",
+    "impact": {
+      "flipbook": true,
+      "ring": false,
+      "vRing": true,
+      "sparks": 48,
+      "debris": true,
+      "smoke": false,
+      "trail": "x",
+      "light": 1.5
+    }
+  },
+  "feral_charge": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.3,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.4,
+      "orbit": "sparks",
+      "o": {
+        "n": 6,
+        "size": 0.32,
+        "tex": "paw",
+        "rate": 2,
+        "weave": 0.3,
+        "radius": 1,
+        "incline": 0.25,
+        "tickEvery": 1.1
+      }
+    },
+    "linger": 3.5,
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "motifs": ["claws"],
+    "motifAt": "caster",
+    "spirit": {
+      "model": "bear",
+      "path": "lunge",
+      "at": "caster",
+      "scale": 1.15,
+      "dur": 1.2,
+      "tint": "#ff5a3c",
+      "dim": 0.7
+    },
+    "decal": "crack",
+    "rim": "#e0341f",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.4,
+      "vRing": true,
+      "sparks": 26,
+      "debris": true,
+      "smoke": true,
+      "light": 1.2
+    }
+  },
+  "moonkin_form": {
+    "archetype": "buff",
+    "palette": "moon",
+    "power": 1.2,
+    "self": true,
+    "buff": {
+      "style": "morph",
+      "shellDur": 1.2,
+      "orbit": "halo",
+      "o": {
+        "n": 4,
+        "size": 0.35,
+        "tex": "star",
+        "rate": 0.9,
+        "weave": 0.06,
+        "radius": 0.55,
+        "incline": 0.2,
+        "tickEvery": 5
+      }
+    },
+    "linger": 2.5,
+    "windup": 0.5,
+    "windupStyle": "vortex",
+    "motifs": ["crescents"],
+    "motifAt": "caster",
+    "spirit": {
+      "model": "bear",
+      "path": "rise",
+      "at": "caster",
+      "scale": 1.25,
+      "dur": 2.2,
+      "tint": "#b9a4ff",
+      "dim": 0.85
+    },
+    "decal": "rune",
+    "rim": "#c9a6ff",
+    "accent": "#b48cff",
+    "impact": {
+      "flipbook": true,
+      "ring": 1.6,
+      "vRing": false,
+      "sparks": 26,
+      "debris": true,
+      "smoke": true,
+      "light": 1.4
+    }
+  },
+  "swiftmend": {
+    "archetype": "heal",
+    "palette": "nature",
+    "power": 1.1,
+    "windupStyle": "none",
+    "shaft": false,
+    "motifs": ["implosion"],
+    "motifAt": "target",
+    "linger": 2,
+    "accent": "#a8ff8c",
+    "rim": "#8fe86a",
+    "impact": {
+      "flipbook": true,
+      "ring": false,
+      "vRing": true,
+      "sparks": 20,
+      "debris": false,
+      "smoke": false,
+      "light": 1.5
+    }
+  },
+  "blade_flurry": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 1.05,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.4,
+      "orbit": "plates",
+      "o": {
+        "n": 6,
+        "size": 0.7,
+        "rate": 2.4,
+        "weave": 0,
+        "radius": 1.25,
+        "incline": 0,
+        "tickEvery": 1.2
+      }
+    },
+    "linger": 3.5,
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "rim": "#dfe9f4",
+    "tint": "#eef4fb",
+    "accent": "#f4f8ff",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 22,
+      "debris": false,
+      "smoke": false,
+      "trail": "sweep",
+      "light": 0.7
+    }
+  },
+  "cold_blood": {
+    "archetype": "buff",
+    "palette": "frost",
+    "power": 0.95,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.1,
+      "orbit": "none",
+      "o": {
+        "tickEvery": 5
+      }
+    },
+    "linger": 3.5,
+    "windup": 0.5,
+    "windupStyle": "orb",
+    "rim": "#bfeaff",
+    "tint": "#dff4ff",
+    "accent": "#eaf8ff",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 12,
+      "debris": true,
+      "smoke": false,
+      "light": 1.2
+    }
+  },
+  "hemorrhage": {
+    "archetype": "strike",
+    "palette": "blood",
+    "power": 1.2,
+    "strike": {
+      "swings": 2,
+      "stars": false,
+      "arc": "horizontal",
+      "bleed": true
+    },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "dot": {
+      "drip": "fall"
+    },
+    "linger": 3.5,
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 14,
+      "debris": false,
+      "smoke": false,
+      "trail": "sweep",
+      "blood": true,
+      "light": 0.65
+    }
+  },
+  "bestial_wrath": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.35,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.8,
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 144,
+        "ringR": 1.6,
+        "tickEvery": 0.6
+      }
+    },
+    "linger": 3.5,
+    "windup": 0.4,
+    "windupStyle": "stance",
+    "motifs": ["claws"],
+    "motifAt": "caster",
+    "rim": "#ff2e1a",
+    "tint": "#a01414",
+    "accent": "#ff5a3c",
+    "impact": {
+      "flipbook": false,
+      "ring": 2,
+      "vRing": true,
+      "sparks": 24,
+      "debris": false,
+      "smoke": false,
+      "light": 2.6
+    }
+  },
+  "trueshot_aura": {
+    "archetype": "buff",
+    "palette": "storm",
+    "power": 1.05,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "sparks",
+      "o": {
+        "n": 6,
+        "size": 0.3,
+        "tex": "rays",
+        "rate": 0.7,
+        "weave": 0.1,
+        "radius": 1.6,
+        "incline": 0,
+        "tickEvery": 6
+      }
+    },
+    "linger": 2.5,
+    "windup": 0.3,
+    "windupStyle": "ascend",
+    "rim": "#9fd0ff",
+    "accent": "#ffe6a8",
+    "impact": {
+      "flipbook": false,
+      "ring": 3,
+      "vRing": true,
+      "sparks": 20,
+      "debris": false,
+      "smoke": false,
+      "light": 2.2
+    }
+  },
+  "wyvern_sting": {
+    "archetype": "cc",
+    "palette": "venom",
+    "power": 1.15,
+    "cc": {
+      "style": "stars"
+    },
+    "linger": 4,
+    "windupStyle": "none",
+    "motifAt": "target",
+    "motifs": ["crescents"],
+    "dot": {
+      "drip": "fall"
+    },
+    "tint": "#3f6d1f",
+    "rim": "#c8ff3c",
+    "accent": "#b6ff6e",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 14,
+      "debris": false,
+      "smoke": true,
+      "trail": "sweep",
+      "light": 0.5
+    }
+  },
+  "berserker_rage": {
+    "archetype": "buff",
+    "palette": "blood",
+    "power": 1.15,
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "orbit": "heartbeat",
+      "shellDur": 1.5,
+      "o": {
+        "bpm": 150,
+        "ringR": 2.4,
+        "tickEvery": 0.6
+      }
+    },
+    "motifs": ["claws"],
+    "motifAt": "caster",
+    "linger": 3.5,
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "rim": "#ff2a14",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.8,
+      "vRing": true,
+      "sparks": 20,
+      "debris": false,
+      "smoke": false,
+      "blood": true,
+      "light": 2.6
+    }
+  },
+  "bloodthirst": {
+    "archetype": "strike",
+    "palette": "blood",
+    "power": 1.2,
+    "strike": {
+      "swings": 2,
+      "arc": "claws",
+      "bleed": true
+    },
+    "windupStyle": "none",
+    "motifs": ["fountain"],
+    "motifAt": "target",
+    "linger": 1,
+    "rim": "#c41022",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.4,
+      "vRing": true,
+      "sparks": 34,
+      "debris": true,
+      "smoke": false,
+      "trail": "x",
+      "blood": true,
+      "light": 0.6
+    }
+  },
+  "mortal_strike": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.3,
+    "strike": {
+      "swings": 1,
+      "arc": "vertical",
+      "bleed": true
+    },
+    "windup": 0.4,
+    "windupStyle": "weapon",
+    "motifs": ["crescents"],
+    "motifAt": "target",
+    "linger": 1.5,
+    "rim": "#e5e9f0",
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": true,
+      "sparks": 40,
+      "debris": true,
+      "smoke": false,
+      "trail": "overhead",
+      "blood": true,
+      "light": 0.8
+    }
+  },
+  "shield_slam": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.2,
+    "strike": {
+      "swings": 1,
+      "arc": "thrust"
+    },
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "motifs": ["gavel"],
+    "motifAt": "target",
+    "decal": "crack",
+    "linger": 1,
+    "rim": "#bcd0e8",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.6,
+      "vRing": true,
+      "sparks": 16,
+      "debris": true,
+      "smoke": true,
+      "blood": false,
+      "light": 1.4
+    }
+  },
+  "whirlwind": {
+    "archetype": "nova",
+    "palette": "physical",
+    "power": 1.2,
+    "nova": {
+      "radius": 8
+    },
+    "strike": {
+      "swings": 2,
+      "arc": "horizontal"
+    },
+    "windup": 0.3,
+    "windupStyle": "vortex",
+    "motifs": ["bladestorm"],
+    "linger": 1.5,
+    "rim": "#dbe6f4",
+    "impact": {
+      "flipbook": false,
+      "ring": 1.6,
+      "vRing": false,
+      "sparks": 34,
+      "debris": true,
+      "smoke": false,
+      "trail": "sweep",
+      "blood": true,
+      "light": 0.7
+    }
+  },
+  "crusader_strike": {
+    "archetype": "strike",
+    "palette": "gold",
+    "power": 1.35,
+    "strike": {
+      "swings": 1,
+      "arc": "uppercut",
+      "stars": true
+    },
+    "windup": 0.4,
+    "windupStyle": "stance",
+    "decal": "scorch",
+    "rim": "#ffcf5a",
+    "linger": 0.6,
+    "impact": {
+      "flipbook": true,
+      "ring": false,
+      "vRing": true,
+      "sparks": 40,
+      "debris": false,
+      "smoke": false,
+      "trail": "arc",
+      "light": 1.5,
+      "blood": false
+    }
+  },
+  "holy_shield": {
+    "archetype": "bolt",
+    "palette": "holy",
+    "power": 1.3,
+    "bolt": {
+      "speed": 22,
+      "headScale": 1.7,
+      "coils": false,
+      "jagged": false,
+      "forkEvery": 0.5,
+      "tracer": true
+    },
+    "windup": 0.3,
+    "windupStyle": "orb",
+    "motifs": ["barrier"],
+    "motifAt": "target",
+    "decal": "rune",
+    "rim": "#fff0c0",
+    "linger": 1.5,
+    "impact": {
+      "flipbook": true,
+      "ring": 2,
+      "vRing": true,
+      "sparks": 30,
+      "debris": false,
+      "smoke": false,
+      "light": 1.4
+    }
+  },
+  "holy_shock": {
+    "archetype": "burst",
+    "palette": "holy",
+    "power": 1.35,
+    "burst": {
+      "style": "link"
+    },
+    "windup": 0.3,
+    "windupStyle": "orb",
+    "motifs": ["cross"],
+    "motifAt": "target",
+    "decal": "rune",
+    "rim": "#fff2cc",
+    "linger": 1.5,
+    "impact": {
+      "flipbook": true,
+      "ring": 2,
+      "vRing": true,
+      "sparks": 36,
+      "debris": false,
+      "smoke": false,
+      "light": 1.8
+    }
+  },
+  "feed_pet": {
+    "archetype": "summon",
+    "palette": "nature",
+    "power": 0.6,
+    "windupStyle": "none",
+    "linger": 2.5,
+    "decal": "rune",
+    "spirit": {
+      "model": "wolf",
+      "path": "rise",
+      "at": "portal",
+      "scale": 0.85,
+      "dur": 2.4,
+      "tint": "#a8e8b0",
+      "dim": 0.8
+    },
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": 1.1,
+      "sparks": 12,
+      "debris": false,
+      "smoke": false,
+      "light": 0.6
+    }
+  },
+  "abandon_pet": {
+    "archetype": "summon",
+    "palette": "nature",
+    "power": 0.55,
+    "windupStyle": "none",
+    "linger": 2.2,
+    "decal": "rune",
+    "spirit": {
+      "model": "wolf",
+      "path": "rise",
+      "at": "portal",
+      "scale": 0.85,
+      "dur": 1.8,
+      "tint": "#9fd8a8",
+      "dim": 0.5
+    },
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 0,
+      "debris": false,
+      "smoke": true,
+      "light": 0.4
+    }
   }
- },
- "combustion": {
-  "archetype": "buff",
-  "palette": "fire",
-  "power": 1.3,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "sparks",
-   "o": {
-    "n": 5,
-    "size": 0.4,
-    "tex": "rays",
-    "rate": 2.2,
-    "weave": 0.35,
-    "radius": 1.15,
-    "incline": 0.2,
-    "tickEvery": 1.1
-   }
-  },
-  "linger": 4,
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "hot": 0.42,
-  "rim": "#ff7a2a",
-  "decal": "scorch",
-  "impact": {
-   "flipbook": true,
-   "ring": false,
-   "vRing": false,
-   "sparks": 42,
-   "debris": false,
-   "smoke": true,
-   "light": 2.8
-  }
- },
- "icy_veins": {
-  "archetype": "buff",
-  "palette": "frost",
-  "power": 1.2,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2.2,
-   "orbit": "halo",
-   "o": {
-    "n": 7,
-    "size": 0.4,
-    "tex": "chip",
-    "rate": 2.4,
-    "weave": 0.12,
-    "radius": 0.7,
-    "incline": 0.1,
-    "tickEvery": 1.3
-   }
-  },
-  "linger": 4,
-  "windup": 0.4,
-  "windupStyle": "orb",
-  "rim": "#8fe6ff",
-  "decal": "crack",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 0,
-   "debris": true,
-   "smoke": false,
-   "light": 1.9
-  }
- },
- "holy_nova": {
-  "archetype": "nova",
-  "palette": "holy",
-  "power": 1.35,
-  "self": true,
-  "nova": {
-   "radius": 10
-  },
-  "windup": 0.3,
-  "windupStyle": "ascend",
-  "motifs": [
-   "cross",
-   "fountain"
-  ],
-  "motifAt": "caster",
-  "linger": 2.5,
-  "decal": "rune",
-  "rim": "#fff2c8",
-  "accent": "#fff4cf",
-  "impact": {
-   "flipbook": false,
-   "ring": 2.6,
-   "vRing": true,
-   "sparks": 32,
-   "debris": false,
-   "smoke": false,
-   "light": 2.4
-  }
- },
- "power_infusion": {
-  "archetype": "buff",
-  "palette": "holy",
-  "power": 1.05,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.6,
-   "orbit": "halo",
-   "o": {
-    "n": 8,
-    "size": 0.42,
-    "tex": "rays",
-    "rate": 1.6,
-    "weave": 0.05,
-    "radius": 0.42,
-    "incline": 0,
-    "tickEvery": 2.4
-   }
-  },
-  "linger": 3,
-  "windup": 0.3,
-  "windupStyle": "ascend",
-  "rim": "#ffe08a",
-  "accent": "#fff4cf",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 18,
-   "debris": false,
-   "smoke": false,
-   "light": 1.9
-  }
- },
- "shadowform": {
-  "archetype": "buff",
-  "palette": "shadow",
-  "power": 1.15,
-  "self": true,
-  "buff": {
-   "style": "morph",
-   "shellDur": 2.5,
-   "orbit": "none",
-   "o": {
-    "tickEvery": 3
-   }
-  },
-  "linger": 3,
-  "windup": 0.5,
-  "windupStyle": "vortex",
-  "motifs": [
-   "implosion"
-  ],
-  "motifAt": "caster",
-  "rim": "#6b4fbf",
-  "spirit": {
-   "model": "ghost",
-   "path": "rise",
-   "at": "caster",
-   "scale": 1.15,
-   "dur": 2.4,
-   "tint": "#4a2f7a",
-   "dim": 0.7
-  },
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 0,
-   "debris": false,
-   "smoke": true,
-   "light": 1.2
-  }
- },
- "conflagrate": {
-  "archetype": "burst",
-  "palette": "fire",
-  "power": 1.4,
-  "burst": {
-   "style": "ground"
-  },
-  "windupStyle": "none",
-  "motifs": [
-   "fissure"
-  ],
-  "motifAt": "target",
-  "decal": "scorch",
-  "hot": 0.4,
-  "linger": 2,
-  "accent": 16750899,
-  "rim": "#ff7a2a",
-  "impact": {
-   "flipbook": true,
-   "ring": 2,
-   "vRing": true,
-   "sparks": 50,
-   "debris": true,
-   "smoke": true,
-   "light": 1.8
-  }
- },
- "metamorphosis": {
-  "archetype": "buff",
-  "palette": "shadow",
-  "power": 1.35,
-  "self": true,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1.4,
-   "orbit": "wings",
-   "o": {
-    "ribs": 5,
-    "span": 1.45,
-    "flapRate": 1,
-    "tickEvery": 5
-   }
-  },
-  "spirit": {
-   "model": "demon",
-   "path": "rise",
-   "at": "caster",
-   "scale": 1.25,
-   "dur": 2.2,
-   "tint": "#7a3ff0",
-   "dim": 0.7
-  },
-  "motifs": [
-   "implosion"
-  ],
-  "motifAt": "caster",
-  "windupStyle": "vortex",
-  "windup": 0.7,
-  "linger": 3,
-  "decal": "rune",
-  "rim": "#8b3ff5",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.5,
-   "vRing": true,
-   "sparks": 22,
-   "debris": false,
-   "smoke": true,
-   "light": 1.4
-  }
- },
- "siphon_life": {
-  "archetype": "dot",
-  "palette": "blood",
-  "power": 1.1,
-  "dot": {
-   "drip": "rise"
-  },
-  "linger": 4,
-  "windupStyle": "orb",
-  "motifs": [
-   "vines"
-  ],
-  "motifAt": "target",
-  "accent": "#c8203a",
-  "rim": "#ff4a5a",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 8,
-   "debris": false,
-   "smoke": true,
-   "blood": true,
-   "light": 0.5
-  }
- },
- "chain_heal": {
-  "archetype": "heal",
-  "palette": "frost",
-  "power": 1.35,
-  "windup": 2.4,
-  "windupStyle": "ascend",
-  "motifs": [
-   "chains"
-  ],
-  "motifAt": "target",
-  "shaft": 0.7,
-  "linger": 2.6,
-  "rim": "#aee7ff",
-  "accent": "#cdefff",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": 1.2,
-   "sparks": 12,
-   "debris": false,
-   "smoke": false,
-   "light": 1.35
-  }
- },
- "elemental_mastery": {
-  "archetype": "buff",
-  "palette": "storm",
-  "power": 1.1,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.8,
-   "orbit": "halo",
-   "o": {
-    "n": 4,
-    "size": 0.4,
-    "tex": "star",
-    "rate": 2,
-    "weave": 0.25,
-    "radius": 0.5,
-    "incline": 0.02,
-    "tickEvery": 2
-   }
-  },
-  "linger": 3,
-  "windup": 0.6,
-  "windupStyle": "vortex",
-  "rim": "#a8e6ff",
-  "impact": {
-   "flipbook": true,
-   "ring": false,
-   "vRing": true,
-   "sparks": 26,
-   "debris": false,
-   "smoke": false,
-   "light": 1.6
-  }
- },
- "stormstrike": {
-  "archetype": "strike",
-  "palette": "storm",
-  "power": 1.3,
-  "strike": {
-   "swings": 2,
-   "arc": "vertical",
-   "stars": false
-  },
-  "windup": 0.45,
-  "windupStyle": "weapon",
-  "decal": "crack",
-  "rim": "#8fd6ff",
-  "impact": {
-   "flipbook": true,
-   "ring": false,
-   "vRing": true,
-   "sparks": 48,
-   "debris": true,
-   "smoke": false,
-   "trail": "x",
-   "light": 1.5
-  }
- },
- "feral_charge": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 1.3,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.4,
-   "orbit": "sparks",
-   "o": {
-    "n": 6,
-    "size": 0.32,
-    "tex": "paw",
-    "rate": 2,
-    "weave": 0.3,
-    "radius": 1,
-    "incline": 0.25,
-    "tickEvery": 1.1
-   }
-  },
-  "linger": 3.5,
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "motifs": [
-   "claws"
-  ],
-  "motifAt": "caster",
-  "spirit": {
-   "model": "bear",
-   "path": "lunge",
-   "at": "caster",
-   "scale": 1.15,
-   "dur": 1.2,
-   "tint": "#ff5a3c",
-   "dim": 0.7
-  },
-  "decal": "crack",
-  "rim": "#e0341f",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.4,
-   "vRing": true,
-   "sparks": 26,
-   "debris": true,
-   "smoke": true,
-   "light": 1.2
-  }
- },
- "moonkin_form": {
-  "archetype": "buff",
-  "palette": "moon",
-  "power": 1.2,
-  "self": true,
-  "buff": {
-   "style": "morph",
-   "shellDur": 1.2,
-   "orbit": "halo",
-   "o": {
-    "n": 4,
-    "size": 0.35,
-    "tex": "star",
-    "rate": 0.9,
-    "weave": 0.06,
-    "radius": 0.55,
-    "incline": 0.2,
-    "tickEvery": 5
-   }
-  },
-  "linger": 2.5,
-  "windup": 0.5,
-  "windupStyle": "vortex",
-  "motifs": [
-   "crescents"
-  ],
-  "motifAt": "caster",
-  "spirit": {
-   "model": "bear",
-   "path": "rise",
-   "at": "caster",
-   "scale": 1.25,
-   "dur": 2.2,
-   "tint": "#b9a4ff",
-   "dim": 0.85
-  },
-  "decal": "rune",
-  "rim": "#c9a6ff",
-  "accent": "#b48cff",
-  "impact": {
-   "flipbook": true,
-   "ring": 1.6,
-   "vRing": false,
-   "sparks": 26,
-   "debris": true,
-   "smoke": true,
-   "light": 1.4
-  }
- },
- "swiftmend": {
-  "archetype": "heal",
-  "palette": "nature",
-  "power": 1.1,
-  "windupStyle": "none",
-  "shaft": false,
-  "motifs": [
-   "implosion"
-  ],
-  "motifAt": "target",
-  "linger": 2,
-  "accent": "#a8ff8c",
-  "rim": "#8fe86a",
-  "impact": {
-   "flipbook": true,
-   "ring": false,
-   "vRing": true,
-   "sparks": 20,
-   "debris": false,
-   "smoke": false,
-   "light": 1.5
-  }
- },
- "blade_flurry": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 1.05,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.4,
-   "orbit": "plates",
-   "o": {
-    "n": 6,
-    "size": 0.7,
-    "rate": 2.4,
-    "weave": 0,
-    "radius": 1.25,
-    "incline": 0,
-    "tickEvery": 1.2
-   }
-  },
-  "linger": 3.5,
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "rim": "#dfe9f4",
-  "tint": "#eef4fb",
-  "accent": "#f4f8ff",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 22,
-   "debris": false,
-   "smoke": false,
-   "trail": "sweep",
-   "light": 0.7
-  }
- },
- "cold_blood": {
-  "archetype": "buff",
-  "palette": "frost",
-  "power": 0.95,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.1,
-   "orbit": "none",
-   "o": {
-    "tickEvery": 5
-   }
-  },
-  "linger": 3.5,
-  "windup": 0.5,
-  "windupStyle": "orb",
-  "rim": "#bfeaff",
-  "tint": "#dff4ff",
-  "accent": "#eaf8ff",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 12,
-   "debris": true,
-   "smoke": false,
-   "light": 1.2
-  }
- },
- "hemorrhage": {
-  "archetype": "strike",
-  "palette": "blood",
-  "power": 1.2,
-  "strike": {
-   "swings": 2,
-   "stars": false,
-   "arc": "horizontal",
-   "bleed": true
-  },
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "dot": {
-   "drip": "fall"
-  },
-  "linger": 3.5,
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 14,
-   "debris": false,
-   "smoke": false,
-   "trail": "sweep",
-   "blood": true,
-   "light": 0.65
-  }
- },
- "bestial_wrath": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 1.35,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.8,
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 144,
-    "ringR": 1.6,
-    "tickEvery": 0.6
-   }
-  },
-  "linger": 3.5,
-  "windup": 0.4,
-  "windupStyle": "stance",
-  "motifs": [
-   "claws"
-  ],
-  "motifAt": "caster",
-  "rim": "#ff2e1a",
-  "tint": "#a01414",
-  "accent": "#ff5a3c",
-  "impact": {
-   "flipbook": false,
-   "ring": 2,
-   "vRing": true,
-   "sparks": 24,
-   "debris": false,
-   "smoke": false,
-   "light": 2.6
-  }
- },
- "trueshot_aura": {
-  "archetype": "buff",
-  "palette": "storm",
-  "power": 1.05,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "sparks",
-   "o": {
-    "n": 6,
-    "size": 0.3,
-    "tex": "rays",
-    "rate": 0.7,
-    "weave": 0.1,
-    "radius": 1.6,
-    "incline": 0,
-    "tickEvery": 6
-   }
-  },
-  "linger": 2.5,
-  "windup": 0.3,
-  "windupStyle": "ascend",
-  "rim": "#9fd0ff",
-  "accent": "#ffe6a8",
-  "impact": {
-   "flipbook": false,
-   "ring": 3,
-   "vRing": true,
-   "sparks": 20,
-   "debris": false,
-   "smoke": false,
-   "light": 2.2
-  }
- },
- "wyvern_sting": {
-  "archetype": "cc",
-  "palette": "venom",
-  "power": 1.15,
-  "cc": {
-   "style": "stars"
-  },
-  "linger": 4,
-  "windupStyle": "none",
-  "motifAt": "target",
-  "motifs": [
-   "crescents"
-  ],
-  "dot": {
-   "drip": "fall"
-  },
-  "tint": "#3f6d1f",
-  "rim": "#c8ff3c",
-  "accent": "#b6ff6e",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 14,
-   "debris": false,
-   "smoke": true,
-   "trail": "sweep",
-   "light": 0.5
-  }
- },
- "berserker_rage": {
-  "archetype": "buff",
-  "palette": "blood",
-  "power": 1.15,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "orbit": "heartbeat",
-   "shellDur": 1.5,
-   "o": {
-    "bpm": 150,
-    "ringR": 2.4,
-    "tickEvery": 0.6
-   }
-  },
-  "motifs": [
-   "claws"
-  ],
-  "motifAt": "caster",
-  "linger": 3.5,
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "rim": "#ff2a14",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.8,
-   "vRing": true,
-   "sparks": 20,
-   "debris": false,
-   "smoke": false,
-   "blood": true,
-   "light": 2.6
-  }
- },
- "bloodthirst": {
-  "archetype": "strike",
-  "palette": "blood",
-  "power": 1.2,
-  "strike": {
-   "swings": 2,
-   "arc": "claws",
-   "bleed": true
-  },
-  "windupStyle": "none",
-  "motifs": [
-   "fountain"
-  ],
-  "motifAt": "target",
-  "linger": 1,
-  "rim": "#c41022",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.4,
-   "vRing": true,
-   "sparks": 34,
-   "debris": true,
-   "smoke": false,
-   "trail": "x",
-   "blood": true,
-   "light": 0.6
-  }
- },
- "mortal_strike": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1.3,
-  "strike": {
-   "swings": 1,
-   "arc": "vertical",
-   "bleed": true
-  },
-  "windup": 0.4,
-  "windupStyle": "weapon",
-  "motifs": [
-   "crescents"
-  ],
-  "motifAt": "target",
-  "linger": 1.5,
-  "rim": "#e5e9f0",
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": true,
-   "sparks": 40,
-   "debris": true,
-   "smoke": false,
-   "trail": "overhead",
-   "blood": true,
-   "light": 0.8
-  }
- },
- "shield_slam": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1.2,
-  "strike": {
-   "swings": 1,
-   "arc": "thrust"
-  },
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "motifs": [
-   "gavel"
-  ],
-  "motifAt": "target",
-  "decal": "crack",
-  "linger": 1,
-  "rim": "#bcd0e8",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.6,
-   "vRing": true,
-   "sparks": 16,
-   "debris": true,
-   "smoke": true,
-   "blood": false,
-   "light": 1.4
-  }
- },
- "whirlwind": {
-  "archetype": "nova",
-  "palette": "physical",
-  "power": 1.2,
-  "nova": {
-   "radius": 8
-  },
-  "strike": {
-   "swings": 2,
-   "arc": "horizontal"
-  },
-  "windup": 0.3,
-  "windupStyle": "vortex",
-  "motifs": [
-   "bladestorm"
-  ],
-  "linger": 1.5,
-  "rim": "#dbe6f4",
-  "impact": {
-   "flipbook": false,
-   "ring": 1.6,
-   "vRing": false,
-   "sparks": 34,
-   "debris": true,
-   "smoke": false,
-   "trail": "sweep",
-   "blood": true,
-   "light": 0.7
-  }
- },
- "crusader_strike": {
-  "archetype": "strike",
-  "palette": "gold",
-  "power": 1.35,
-  "strike": {
-   "swings": 1,
-   "arc": "uppercut",
-   "stars": true
-  },
-  "windup": 0.4,
-  "windupStyle": "stance",
-  "decal": "scorch",
-  "rim": "#ffcf5a",
-  "linger": 0.6,
-  "impact": {
-   "flipbook": true,
-   "ring": false,
-   "vRing": true,
-   "sparks": 40,
-   "debris": false,
-   "smoke": false,
-   "trail": "arc",
-   "light": 1.5,
-   "blood": false
-  }
- },
- "holy_shield": {
-  "archetype": "bolt",
-  "palette": "holy",
-  "power": 1.3,
-  "bolt": {
-   "speed": 22,
-   "headScale": 1.7,
-   "coils": false,
-   "jagged": false,
-   "forkEvery": 0.5,
-   "tracer": true
-  },
-  "windup": 0.3,
-  "windupStyle": "orb",
-  "motifs": [
-   "barrier"
-  ],
-  "motifAt": "target",
-  "decal": "rune",
-  "rim": "#fff0c0",
-  "linger": 1.5,
-  "impact": {
-   "flipbook": true,
-   "ring": 2,
-   "vRing": true,
-   "sparks": 30,
-   "debris": false,
-   "smoke": false,
-   "light": 1.4
-  }
- },
- "holy_shock": {
-  "archetype": "burst",
-  "palette": "holy",
-  "power": 1.35,
-  "burst": {
-   "style": "link"
-  },
-  "windup": 0.3,
-  "windupStyle": "orb",
-  "motifs": [
-   "cross"
-  ],
-  "motifAt": "target",
-  "decal": "rune",
-  "rim": "#fff2cc",
-  "linger": 1.5,
-  "impact": {
-   "flipbook": true,
-   "ring": 2,
-   "vRing": true,
-   "sparks": 36,
-   "debris": false,
-   "smoke": false,
-   "light": 1.8
-  }
- },
- "feed_pet": {
-  "archetype": "summon",
-  "palette": "nature",
-  "power": 0.6,
-  "windupStyle": "none",
-  "linger": 2.5,
-  "decal": "rune",
-  "spirit": {
-   "model": "wolf",
-   "path": "rise",
-   "at": "portal",
-   "scale": 0.85,
-   "dur": 2.4,
-   "tint": "#a8e8b0",
-   "dim": 0.8
-  },
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": 1.1,
-   "sparks": 12,
-   "debris": false,
-   "smoke": false,
-   "light": 0.6
-  }
- },
- "abandon_pet": {
-  "archetype": "summon",
-  "palette": "nature",
-  "power": 0.55,
-  "windupStyle": "none",
-  "linger": 2.2,
-  "decal": "rune",
-  "spirit": {
-   "model": "wolf",
-   "path": "rise",
-   "at": "portal",
-   "scale": 0.85,
-   "dur": 1.8,
-   "tint": "#9fd8a8",
-   "dim": 0.5
-  },
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 0,
-   "debris": false,
-   "smoke": true,
-   "light": 0.4
-  }
- }
 }

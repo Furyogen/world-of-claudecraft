@@ -1,479 +1,479 @@
 {
- "slice_and_dice": {
-  "buff": {
-   "orbit": "sparks",
-   "o": {
-    "n": 5,
-    "size": 0.24,
-    "tex": "star",
-    "rate": 1.9,
-    "weave": 0.3,
-    "incline": 0.28,
-    "tickEvery": 1.2
-   }
-  }
- },
- "evasion": {
-  "buff": {
-   "o": {
-    "ribs": 4,
-    "span": 0.72,
-    "flapRate": 2.2,
-    "tickEvery": 1.6
-   }
-  }
- },
- "sprint": {
-  "buff": {
-   "o": {
-    "rate": 1.95,
-    "tickEvery": 0.9
-   }
-  }
- },
- "adrenaline_rush": {
-  "buff": {
-   "o": {
-    "bpm": 128,
-    "ringR": 1.1,
-    "tickEvery": 0.7
-   }
-  }
- },
- "instant_poison": {
-  "buff": {
-   "o": {
-    "rate": 1.7,
-    "tickEvery": 1.5
-   }
-  }
- },
- "deadly_poison": {
-  "buff": {
-   "orbit": "none",
-   "o": {
-    "tickEvery": 2.8
-   }
-  }
- },
- "stealth": {
-  "buff": {
-   "o": {
-    "tickEvery": 6
-   }
-  }
- },
- "vanish": {
-  "buff": {
-   "o": {
-    "tickEvery": 4.5
-   }
-  }
- },
- "frost_armor": {
-  "buff": {
-   "o": {
-    "n": 3,
-    "size": 0.5,
-    "tex": "chip",
-    "rate": 0.55,
-    "weave": 0.1,
-    "incline": 0.05,
-    "tickEvery": 4
-   }
-  }
- },
- "arcane_intellect": {
-  "buff": {
-   "orbit": "halo",
-   "o": {
-    "n": 4,
-    "size": 0.3,
-    "tex": "star",
-    "rate": 1.1,
-    "weave": 0.08,
-    "radius": 0.5,
-    "incline": 0.15,
-    "tickEvery": 3
-   }
-  }
- },
- "ice_barrier": {
-  "rim": "#58b8dc",
-  "buff": {
-   "o": {
-    "n": 6,
-    "size": 0.75,
-    "rate": 0.55,
-    "tickEvery": 3.5
-   }
-  }
- },
- "conjure_water": {
-  "buff": {
-   "o": {
-    "tickEvery": 3
-   }
-  }
- },
- "conjure_food": {
-  "buff": {
-   "o": {
-    "tickEvery": 3.6
-   }
-  }
- },
- "power_word_fortitude": {
-  "buff": {
-   "o": {
-    "bpm": 48,
-    "ringR": 1.9,
-    "tickEvery": 5
-   }
-  }
- },
- "power_word_shield": {
-  "rim": "#eef4ff",
-  "buff": {
-   "o": {
-    "n": 3,
-    "size": 1.35,
-    "rate": 0.8,
-    "tickEvery": 2.5
-   }
-  }
- },
- "rockbiter_weapon": {
-  "buff": {
-   "o": {
-    "rate": 0.5,
-    "tickEvery": 6
-   }
-  }
- },
- "lightning_shield": {
-  "buff": {
-   "o": {
-    "n": 3,
-    "size": 0.45,
-    "tex": "star",
-    "rate": 1.9,
-    "weave": 0.3,
-    "incline": 0.35,
-    "tickEvery": 2
-   }
-  }
- },
- "flametongue_weapon": {
-  "buff": {
-   "o": {
-    "rate": 1.8,
-    "tickEvery": 2.5
-   }
-  }
- },
- "frostbrand_weapon": {
-  "buff": {
-   "o": {
-    "rate": 0.8,
-    "tickEvery": 4.5
-   }
+  "slice_and_dice": {
+    "buff": {
+      "orbit": "sparks",
+      "o": {
+        "n": 5,
+        "size": 0.24,
+        "tex": "star",
+        "rate": 1.9,
+        "weave": 0.3,
+        "incline": 0.28,
+        "tickEvery": 1.2
+      }
+    }
   },
-  "rim": "#4f9fd8"
- },
- "ghost_wolf": {
-  "buff": {
-   "o": {
-    "rate": 1.3,
-    "tickEvery": 3.5
-   }
+  "evasion": {
+    "buff": {
+      "o": {
+        "ribs": 4,
+        "span": 0.72,
+        "flapRate": 2.2,
+        "tickEvery": 1.6
+      }
+    }
   },
-  "rim": "#b4a8e0"
- },
- "demon_skin": {
-  "buff": {
-   "orbit": "plates",
-   "o": {
-    "n": 4,
-    "size": 0.85,
-    "rate": 0.85,
-    "tickEvery": 5
-   }
-  }
- },
- "life_tap": {
-  "buff": {
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 58,
-    "ringR": 1.7,
-    "tickEvery": 4
-   }
-  }
- },
- "mark_of_the_wild": {
-  "buff": {
-   "o": {
-    "density": 9,
-    "spread": 1.25,
-    "up": 0.65,
-    "tickEvery": 6
-   }
-  }
- },
- "thorns": {
-  "buff": {
-   "o": {
-    "n": 5,
-    "size": 0.3,
-    "tex": "chip",
-    "rate": 0.65,
-    "weave": 0.05,
-    "incline": 0.1,
-    "radius": 0.8,
-    "tickEvery": 5
-   }
+  "sprint": {
+    "buff": {
+      "o": {
+        "rate": 1.95,
+        "tickEvery": 0.9
+      }
+    }
   },
-  "rim": "#3f7a2e"
- },
- "bear_form": {
-  "buff": {
-   "o": {
-    "tickEvery": 5.5
-   }
-  }
- },
- "cat_form": {
-  "buff": {
-   "o": {
-    "tickEvery": 3
-   }
-  }
- },
- "prowl": {
-  "buff": {
-   "o": {
-    "tickEvery": 8
-   }
-  }
- },
- "barkskin": {
-  "buff": {
-   "o": {
-    "n": 6,
-    "size": 1.2,
-    "rate": 0.5,
-    "tickEvery": 5
-   }
+  "adrenaline_rush": {
+    "buff": {
+      "o": {
+        "bpm": 128,
+        "ringR": 1.1,
+        "tickEvery": 0.7
+      }
+    }
   },
-  "rim": "#7a8f66"
- },
- "travel_form": {
-  "buff": {
-   "o": {
-    "rate": 1.7,
-    "tickEvery": 3
-   }
+  "instant_poison": {
+    "buff": {
+      "o": {
+        "rate": 1.7,
+        "tickEvery": 1.5
+      }
+    }
   },
-  "rim": "#d9c060"
- },
- "enrage": {
-  "buff": {
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 92,
-    "ringR": 1.45,
-    "tickEvery": 2.5
-   }
-  }
- },
- "dash": {
-  "buff": {
-   "o": {
-    "rate": 2,
-    "tickEvery": 1.8
-   }
+  "deadly_poison": {
+    "buff": {
+      "orbit": "none",
+      "o": {
+        "tickEvery": 2.8
+      }
+    }
   },
-  "rim": "#6f8fd8"
- },
- "tigers_fury": {
-  "buff": {
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 118,
-    "ringR": 1.05,
-    "tickEvery": 1.2
-   }
+  "stealth": {
+    "buff": {
+      "o": {
+        "tickEvery": 6
+      }
+    }
   },
-  "rim": "#b81f3c"
- },
- "primal_reflexes": {
-  "buff": {
-   "o": {
-    "ribs": 4,
-    "span": 1,
-    "flapRate": 2.2,
-    "tickEvery": 2
-   }
+  "vanish": {
+    "buff": {
+      "o": {
+        "tickEvery": 4.5
+      }
+    }
   },
-  "rim": "#4fd9a6"
- },
- "battle_shout": {
-  "buff": {
-   "o": {
-    "rate": 1.8,
-    "tickEvery": 4
-   }
-  }
- },
- "charge": {
-  "buff": {
-   "o": {
-    "rate": 2
-   }
-  }
- },
- "bloodrage": {
-  "buff": {
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 96,
-    "ringR": 1,
-    "tickEvery": 2.8
-   }
+  "frost_armor": {
+    "buff": {
+      "o": {
+        "n": 3,
+        "size": 0.5,
+        "tex": "chip",
+        "rate": 0.55,
+        "weave": 0.1,
+        "incline": 0.05,
+        "tickEvery": 4
+      }
+    }
   },
-  "rim": "#9e1622"
- },
- "defensive_stance": {
-  "buff": {
-   "o": {
-    "n": 3,
-    "size": 1.3,
-    "rate": 0.8,
-    "tickEvery": 5
-   }
-  }
- },
- "seal_of_righteousness": {
-  "buff": {
-   "o": {
-    "rate": 0.7,
-    "tickEvery": 4.5
-   }
-  }
- },
- "devotion_aura": {
-  "buff": {
-   "orbit": "halo",
-   "o": {
-    "n": 3,
-    "size": 0.4,
-    "tex": "glow",
-    "rate": 0.5,
-    "weave": 0.04,
-    "incline": 0.12,
-    "tickEvery": 9
-   }
+  "arcane_intellect": {
+    "buff": {
+      "orbit": "halo",
+      "o": {
+        "n": 4,
+        "size": 0.3,
+        "tex": "star",
+        "rate": 1.1,
+        "weave": 0.08,
+        "radius": 0.5,
+        "incline": 0.15,
+        "tickEvery": 3
+      }
+    }
   },
-  "rim": "#f7edc6"
- },
- "blessing_of_might": {
-  "buff": {
-   "orbit": "wings",
-   "o": {
-    "ribs": 7,
-    "span": 1.25,
-    "flapRate": 0.9,
-    "tickEvery": 8
-   }
+  "ice_barrier": {
+    "rim": "#58b8dc",
+    "buff": {
+      "o": {
+        "n": 6,
+        "size": 0.75,
+        "rate": 0.55,
+        "tickEvery": 3.5
+      }
+    }
   },
-  "rim": "#d4941e"
- },
- "divine_protection": {
-  "buff": {
-   "o": {
-    "tickEvery": 2.2
-   }
-  }
- },
- "righteous_fury": {
-  "buff": {
-   "orbit": "heartbeat",
-   "o": {
-    "bpm": 70,
-    "ringR": 1.9,
-    "tickEvery": 6.5
-   }
-  }
- },
- "retribution_aura": {
-  "buff": {
-   "o": {
-    "n": 3,
-    "size": 0.28,
-    "tex": "rays",
-    "rate": 1.6,
-    "weave": 0.25,
-    "incline": 0.3,
-    "tickEvery": 7
-   }
-  }
- },
- "sacred_bulwark": {
-  "buff": {
-   "orbit": "plates",
-   "o": {
-    "n": 6,
-    "size": 0.95,
-    "rate": 0.4,
-    "tickEvery": 2.6
-   }
+  "conjure_water": {
+    "buff": {
+      "o": {
+        "tickEvery": 3
+      }
+    }
   },
-  "rim": "#d8e4f2"
- },
- "aspect_of_the_hawk": {
-  "buff": {
-   "o": {
-    "ribs": 5,
-    "span": 0.75,
-    "flapRate": 2.1,
-    "tickEvery": 7.5
-   }
-  }
- },
- "aspect_of_the_monkey": {
-  "buff": {
-   "o": {
-    "n": 2,
-    "size": 0.25,
-    "tex": "paw",
-    "rate": 2,
-    "weave": 0.35,
-    "radius": 0.9,
-    "incline": 0.1,
-    "tickEvery": 6
-   }
-  }
- },
- "aspect_of_the_cheetah": {
-  "buff": {
-   "o": {
-    "rate": 1.4,
-    "tickEvery": 5.5
-   }
-  }
- },
- "rapid_fire": {
-  "buff": {
-   "o": {
-    "bpm": 126,
-    "ringR": 1.4,
-    "tickEvery": 3
-   }
+  "conjure_food": {
+    "buff": {
+      "o": {
+        "tickEvery": 3.6
+      }
+    }
   },
-  "rim": "#ff6242"
- },
- "dismiss_pet": {
-  "rim": "#86cfae"
- }
+  "power_word_fortitude": {
+    "buff": {
+      "o": {
+        "bpm": 48,
+        "ringR": 1.9,
+        "tickEvery": 5
+      }
+    }
+  },
+  "power_word_shield": {
+    "rim": "#eef4ff",
+    "buff": {
+      "o": {
+        "n": 3,
+        "size": 1.35,
+        "rate": 0.8,
+        "tickEvery": 2.5
+      }
+    }
+  },
+  "rockbiter_weapon": {
+    "buff": {
+      "o": {
+        "rate": 0.5,
+        "tickEvery": 6
+      }
+    }
+  },
+  "lightning_shield": {
+    "buff": {
+      "o": {
+        "n": 3,
+        "size": 0.45,
+        "tex": "star",
+        "rate": 1.9,
+        "weave": 0.3,
+        "incline": 0.35,
+        "tickEvery": 2
+      }
+    }
+  },
+  "flametongue_weapon": {
+    "buff": {
+      "o": {
+        "rate": 1.8,
+        "tickEvery": 2.5
+      }
+    }
+  },
+  "frostbrand_weapon": {
+    "buff": {
+      "o": {
+        "rate": 0.8,
+        "tickEvery": 4.5
+      }
+    },
+    "rim": "#4f9fd8"
+  },
+  "ghost_wolf": {
+    "buff": {
+      "o": {
+        "rate": 1.3,
+        "tickEvery": 3.5
+      }
+    },
+    "rim": "#b4a8e0"
+  },
+  "demon_skin": {
+    "buff": {
+      "orbit": "plates",
+      "o": {
+        "n": 4,
+        "size": 0.85,
+        "rate": 0.85,
+        "tickEvery": 5
+      }
+    }
+  },
+  "life_tap": {
+    "buff": {
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 58,
+        "ringR": 1.7,
+        "tickEvery": 4
+      }
+    }
+  },
+  "mark_of_the_wild": {
+    "buff": {
+      "o": {
+        "density": 9,
+        "spread": 1.25,
+        "up": 0.65,
+        "tickEvery": 6
+      }
+    }
+  },
+  "thorns": {
+    "buff": {
+      "o": {
+        "n": 5,
+        "size": 0.3,
+        "tex": "chip",
+        "rate": 0.65,
+        "weave": 0.05,
+        "incline": 0.1,
+        "radius": 0.8,
+        "tickEvery": 5
+      }
+    },
+    "rim": "#3f7a2e"
+  },
+  "bear_form": {
+    "buff": {
+      "o": {
+        "tickEvery": 5.5
+      }
+    }
+  },
+  "cat_form": {
+    "buff": {
+      "o": {
+        "tickEvery": 3
+      }
+    }
+  },
+  "prowl": {
+    "buff": {
+      "o": {
+        "tickEvery": 8
+      }
+    }
+  },
+  "barkskin": {
+    "buff": {
+      "o": {
+        "n": 6,
+        "size": 1.2,
+        "rate": 0.5,
+        "tickEvery": 5
+      }
+    },
+    "rim": "#7a8f66"
+  },
+  "travel_form": {
+    "buff": {
+      "o": {
+        "rate": 1.7,
+        "tickEvery": 3
+      }
+    },
+    "rim": "#d9c060"
+  },
+  "enrage": {
+    "buff": {
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 92,
+        "ringR": 1.45,
+        "tickEvery": 2.5
+      }
+    }
+  },
+  "dash": {
+    "buff": {
+      "o": {
+        "rate": 2,
+        "tickEvery": 1.8
+      }
+    },
+    "rim": "#6f8fd8"
+  },
+  "tigers_fury": {
+    "buff": {
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 118,
+        "ringR": 1.05,
+        "tickEvery": 1.2
+      }
+    },
+    "rim": "#b81f3c"
+  },
+  "primal_reflexes": {
+    "buff": {
+      "o": {
+        "ribs": 4,
+        "span": 1,
+        "flapRate": 2.2,
+        "tickEvery": 2
+      }
+    },
+    "rim": "#4fd9a6"
+  },
+  "battle_shout": {
+    "buff": {
+      "o": {
+        "rate": 1.8,
+        "tickEvery": 4
+      }
+    }
+  },
+  "charge": {
+    "buff": {
+      "o": {
+        "rate": 2
+      }
+    }
+  },
+  "bloodrage": {
+    "buff": {
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 96,
+        "ringR": 1,
+        "tickEvery": 2.8
+      }
+    },
+    "rim": "#9e1622"
+  },
+  "defensive_stance": {
+    "buff": {
+      "o": {
+        "n": 3,
+        "size": 1.3,
+        "rate": 0.8,
+        "tickEvery": 5
+      }
+    }
+  },
+  "seal_of_righteousness": {
+    "buff": {
+      "o": {
+        "rate": 0.7,
+        "tickEvery": 4.5
+      }
+    }
+  },
+  "devotion_aura": {
+    "buff": {
+      "orbit": "halo",
+      "o": {
+        "n": 3,
+        "size": 0.4,
+        "tex": "glow",
+        "rate": 0.5,
+        "weave": 0.04,
+        "incline": 0.12,
+        "tickEvery": 9
+      }
+    },
+    "rim": "#f7edc6"
+  },
+  "blessing_of_might": {
+    "buff": {
+      "orbit": "wings",
+      "o": {
+        "ribs": 7,
+        "span": 1.25,
+        "flapRate": 0.9,
+        "tickEvery": 8
+      }
+    },
+    "rim": "#d4941e"
+  },
+  "divine_protection": {
+    "buff": {
+      "o": {
+        "tickEvery": 2.2
+      }
+    }
+  },
+  "righteous_fury": {
+    "buff": {
+      "orbit": "heartbeat",
+      "o": {
+        "bpm": 70,
+        "ringR": 1.9,
+        "tickEvery": 6.5
+      }
+    }
+  },
+  "retribution_aura": {
+    "buff": {
+      "o": {
+        "n": 3,
+        "size": 0.28,
+        "tex": "rays",
+        "rate": 1.6,
+        "weave": 0.25,
+        "incline": 0.3,
+        "tickEvery": 7
+      }
+    }
+  },
+  "sacred_bulwark": {
+    "buff": {
+      "orbit": "plates",
+      "o": {
+        "n": 6,
+        "size": 0.95,
+        "rate": 0.4,
+        "tickEvery": 2.6
+      }
+    },
+    "rim": "#d8e4f2"
+  },
+  "aspect_of_the_hawk": {
+    "buff": {
+      "o": {
+        "ribs": 5,
+        "span": 0.75,
+        "flapRate": 2.1,
+        "tickEvery": 7.5
+      }
+    }
+  },
+  "aspect_of_the_monkey": {
+    "buff": {
+      "o": {
+        "n": 2,
+        "size": 0.25,
+        "tex": "paw",
+        "rate": 2,
+        "weave": 0.35,
+        "radius": 0.9,
+        "incline": 0.1,
+        "tickEvery": 6
+      }
+    }
+  },
+  "aspect_of_the_cheetah": {
+    "buff": {
+      "o": {
+        "rate": 1.4,
+        "tickEvery": 5.5
+      }
+    }
+  },
+  "rapid_fire": {
+    "buff": {
+      "o": {
+        "bpm": 126,
+        "ringR": 1.4,
+        "tickEvery": 3
+      }
+    },
+    "rim": "#ff6242"
+  },
+  "dismiss_pet": {
+    "rim": "#86cfae"
+  }
 }

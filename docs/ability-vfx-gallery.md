@@ -48,7 +48,7 @@ Each ability in `ability_specs.js` is one JSON object. Key fields:
 - `motifs`: composable set-pieces — `fissure vines chains swarm pillars orbitals
   cross fountain crescents bladestorm implosion barrier gavel claws`; `motifAt`.
 - `impact` overrides: `flipbook ring vRing sparks debris smoke light trail
-  (arc|overhead|low|riposte|x|sweep) blood liteAudio sample` — **the spec always
+  (arc|overhead|low|riposte|x|sweep) blood liteAudio sample`: **the spec always
   wins over the archetype's defaults.** `sample` names a bespoke `sfx_pack.json`
   one-shot (e.g. `imp_meteor`, `heal_temporal`) tried before the palette
   identity; a missing take degrades silently to `imp_<palette>` / synthesis.

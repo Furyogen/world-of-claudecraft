@@ -1,79 +1,79 @@
 {
- "tame_beast": {
-  "archetype": "summon",
-  "palette": "nature",
-  "windupStyle": "runes",
-  "spirit": {
-   "model": "bull",
-   "path": "rise",
-   "at": "portal",
-   "scale": 0.9,
-   "dur": 2.2,
-   "tint": "#cfe8b0",
-   "dim": 0.8
+  "tame_beast": {
+    "archetype": "summon",
+    "palette": "nature",
+    "windupStyle": "runes",
+    "spirit": {
+      "model": "bull",
+      "path": "rise",
+      "at": "portal",
+      "scale": 0.9,
+      "dur": 2.2,
+      "tint": "#cfe8b0",
+      "dim": 0.8
+    },
+    "linger": 3,
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 8,
+      "debris": false,
+      "smoke": true,
+      "light": 0.6
+    }
   },
-  "linger": 3,
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 8,
-   "debris": false,
-   "smoke": true,
-   "light": 0.6
+  "rapid_fire": {
+    "archetype": "buff",
+    "self": true,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "heartbeat"
+    }
+  },
+  "mind_flay": {
+    "beam": {
+      "drain": false
+    }
+  },
+  "summon_imp": {
+    "spirit": {
+      "model": "demon",
+      "path": "pounce",
+      "at": "portal",
+      "scale": 0.55,
+      "dur": 2.2,
+      "tint": "#ff7a2e"
+    }
+  },
+  "summon_voidwalker": {
+    "spirit": {
+      "model": "demon",
+      "path": "rise",
+      "at": "portal",
+      "scale": 1.35,
+      "dur": 2.5,
+      "tint": "#5a3bd6",
+      "dim": 0.85
+    }
+  },
+  "mark_of_the_wild": {
+    "spirit": {
+      "model": "stag",
+      "path": "circle",
+      "at": "caster",
+      "scale": 1,
+      "dur": 2.2,
+      "tint": "#d6e6a3",
+      "dim": 0.62
+    }
+  },
+  "faerie_fire": {
+    "impact": {
+      "liteAudio": true,
+      "sparks": 6,
+      "light": 0.4
+    }
   }
- },
- "rapid_fire": {
-  "archetype": "buff",
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "heartbeat"
-  }
- },
- "mind_flay": {
-  "beam": {
-   "drain": false
-  }
- },
- "summon_imp": {
-  "spirit": {
-   "model": "demon",
-   "path": "pounce",
-   "at": "portal",
-   "scale": 0.55,
-   "dur": 2.2,
-   "tint": "#ff7a2e"
-  }
- },
- "summon_voidwalker": {
-  "spirit": {
-   "model": "demon",
-   "path": "rise",
-   "at": "portal",
-   "scale": 1.35,
-   "dur": 2.5,
-   "tint": "#5a3bd6",
-   "dim": 0.85
-  }
- },
- "mark_of_the_wild": {
-  "spirit": {
-   "model": "stag",
-   "path": "circle",
-   "at": "caster",
-   "scale": 1,
-   "dur": 2.2,
-   "tint": "#d6e6a3",
-   "dim": 0.62
-  }
- },
- "faerie_fire": {
-  "impact": {
-   "liteAudio": true,
-   "sparks": 6,
-   "light": 0.4
-  }
- }
 }

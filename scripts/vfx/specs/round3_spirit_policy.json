@@ -1,192 +1,186 @@
 {
- "ambush": {
-  "palette": "shadow",
-  "power": 1.4,
-  "windup": 0.5,
-  "windupStyle": "vortex",
-  "accent": "#6242a8",
-  "rim": "#2e2640",
-  "motifs": [
-   "implosion"
-  ],
-  "motifAt": "target",
-  "spirit": null,
-  "strike": {
-   "swings": 2,
-   "stars": false,
-   "arc": "vertical"
+  "ambush": {
+    "palette": "shadow",
+    "power": 1.4,
+    "windup": 0.5,
+    "windupStyle": "vortex",
+    "accent": "#6242a8",
+    "rim": "#2e2640",
+    "motifs": ["implosion"],
+    "motifAt": "target",
+    "spirit": null,
+    "strike": {
+      "swings": 2,
+      "stars": false,
+      "arc": "vertical"
+    },
+    "impact": {
+      "flipbook": false,
+      "ring": false,
+      "vRing": false,
+      "sparks": 18,
+      "smoke": true,
+      "blood": true,
+      "light": 0.35,
+      "trail": "x"
+    },
+    "linger": 0.6,
+    "screenFx": false
   },
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 18,
-   "smoke": true,
-   "blood": true,
-   "light": 0.35,
-   "trail": "x"
+  "charge": {
+    "spirit": null,
+    "power": 1.35,
+    "tint": "#dfe9f4",
+    "accent": "#f2f7ff",
+    "hot": 0.25,
+    "rim": "#e5231b",
+    "windup": 0.2,
+    "windupStyle": "stance",
+    "buff": {
+      "style": "raise",
+      "orbit": "speedlines",
+      "shellDur": 1.1
+    },
+    "motifs": ["fissure"],
+    "motifAt": "target",
+    "decal": "crack",
+    "linger": 1.2,
+    "impact": {
+      "flipbook": false,
+      "ring": 1.8,
+      "vRing": true,
+      "sparks": 34,
+      "debris": true,
+      "smoke": true,
+      "light": 1.5,
+      "trail": "sweep"
+    }
   },
-  "linger": 0.6,
-  "screenFx": false
- },
- "charge": {
-  "spirit": null,
-  "power": 1.35,
-  "tint": "#dfe9f4",
-  "accent": "#f2f7ff",
-  "hot": 0.25,
-  "rim": "#e5231b",
-  "windup": 0.2,
-  "windupStyle": "stance",
-  "buff": {
-   "style": "raise",
-   "orbit": "speedlines",
-   "shellDur": 1.1
+  "raptor_strike": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 1.15,
+    "strike": {
+      "swings": 1,
+      "arc": "claws",
+      "bleed": true
+    },
+    "windup": 0.5,
+    "windupStyle": "stance",
+    "motifs": ["claws"],
+    "motifAt": "target",
+    "accent": "#e03a24",
+    "impact": {
+      "trail": "x",
+      "flipbook": true,
+      "ring": false,
+      "vRing": true,
+      "sparks": 26,
+      "debris": true,
+      "smoke": false,
+      "blood": true,
+      "light": 0.6
+    },
+    "spirit": null
   },
-  "motifs": [
-   "fissure"
-  ],
-  "motifAt": "target",
-  "decal": "crack",
-  "linger": 1.2,
-  "impact": {
-   "flipbook": false,
-   "ring": 1.8,
-   "vRing": true,
-   "sparks": 34,
-   "debris": true,
-   "smoke": true,
-   "light": 1.5,
-   "trail": "sweep"
+  "mongoose_bite": {
+    "archetype": "strike",
+    "palette": "physical",
+    "power": 0.95,
+    "strike": {
+      "swings": 1,
+      "arc": "bite"
+    },
+    "windupStyle": "none",
+    "accent": "#a4ff4f",
+    "impact": {
+      "trail": "riposte",
+      "flipbook": false,
+      "ring": false,
+      "vRing": 1.4,
+      "sparks": 18,
+      "debris": false,
+      "smoke": false,
+      "light": 0.6
+    },
+    "spirit": null
+  },
+  "wing_clip": {
+    "spirit": null
+  },
+  "aspect_of_the_hawk": {
+    "archetype": "buff",
+    "palette": "storm",
+    "power": 1,
+    "buff": {
+      "style": "raise",
+      "shellDur": 2,
+      "orbit": "wings"
+    },
+    "linger": 3.5,
+    "windup": 0.3,
+    "windupStyle": "ascend",
+    "rim": "#8fc6ff",
+    "accent": "#cfe6ff",
+    "impact": {
+      "ring": 1.6,
+      "vRing": true,
+      "sparks": 14,
+      "debris": false,
+      "smoke": false,
+      "flipbook": false,
+      "light": 1.6
+    },
+    "spirit": null
+  },
+  "aspect_of_the_cheetah": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.8,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.5,
+      "orbit": "speedlines"
+    },
+    "linger": 3,
+    "windup": 0.3,
+    "windupStyle": "stance",
+    "rim": "#e8a34c",
+    "accent": "#ffc36b",
+    "impact": {
+      "ring": 1.4,
+      "vRing": false,
+      "sparks": 10,
+      "debris": true,
+      "smoke": true,
+      "flipbook": false,
+      "light": 1.4
+    },
+    "spirit": null
+  },
+  "aspect_of_the_monkey": {
+    "archetype": "buff",
+    "palette": "physical",
+    "power": 0.7,
+    "buff": {
+      "style": "raise",
+      "shellDur": 1.2,
+      "orbit": "sparks"
+    },
+    "linger": 3,
+    "windupStyle": "none",
+    "tint": "#9fe07a",
+    "rim": "#8fd455",
+    "accent": "#b6ff6e",
+    "impact": {
+      "ring": false,
+      "vRing": 1.3,
+      "sparks": 22,
+      "debris": false,
+      "smoke": false,
+      "flipbook": false,
+      "light": 1.2
+    },
+    "spirit": null
   }
- },
- "raptor_strike": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 1.15,
-  "strike": {
-   "swings": 1,
-   "arc": "claws",
-   "bleed": true
-  },
-  "windup": 0.5,
-  "windupStyle": "stance",
-  "motifs": [
-   "claws"
-  ],
-  "motifAt": "target",
-  "accent": "#e03a24",
-  "impact": {
-   "trail": "x",
-   "flipbook": true,
-   "ring": false,
-   "vRing": true,
-   "sparks": 26,
-   "debris": true,
-   "smoke": false,
-   "blood": true,
-   "light": 0.6
-  },
-  "spirit": null
- },
- "mongoose_bite": {
-  "archetype": "strike",
-  "palette": "physical",
-  "power": 0.95,
-  "strike": {
-   "swings": 1,
-   "arc": "bite"
-  },
-  "windupStyle": "none",
-  "accent": "#a4ff4f",
-  "impact": {
-   "trail": "riposte",
-   "flipbook": false,
-   "ring": false,
-   "vRing": 1.4,
-   "sparks": 18,
-   "debris": false,
-   "smoke": false,
-   "light": 0.6
-  },
-  "spirit": null
- },
- "wing_clip": {
-  "spirit": null
- },
- "aspect_of_the_hawk": {
-  "archetype": "buff",
-  "palette": "storm",
-  "power": 1,
-  "buff": {
-   "style": "raise",
-   "shellDur": 2,
-   "orbit": "wings"
-  },
-  "linger": 3.5,
-  "windup": 0.3,
-  "windupStyle": "ascend",
-  "rim": "#8fc6ff",
-  "accent": "#cfe6ff",
-  "impact": {
-   "ring": 1.6,
-   "vRing": true,
-   "sparks": 14,
-   "debris": false,
-   "smoke": false,
-   "flipbook": false,
-   "light": 1.6
-  },
-  "spirit": null
- },
- "aspect_of_the_cheetah": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.8,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.5,
-   "orbit": "speedlines"
-  },
-  "linger": 3,
-  "windup": 0.3,
-  "windupStyle": "stance",
-  "rim": "#e8a34c",
-  "accent": "#ffc36b",
-  "impact": {
-   "ring": 1.4,
-   "vRing": false,
-   "sparks": 10,
-   "debris": true,
-   "smoke": true,
-   "flipbook": false,
-   "light": 1.4
-  },
-  "spirit": null
- },
- "aspect_of_the_monkey": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 0.7,
-  "buff": {
-   "style": "raise",
-   "shellDur": 1.2,
-   "orbit": "sparks"
-  },
-  "linger": 3,
-  "windupStyle": "none",
-  "tint": "#9fe07a",
-  "rim": "#8fd455",
-  "accent": "#b6ff6e",
-  "impact": {
-   "ring": false,
-   "vRing": 1.3,
-   "sparks": 22,
-   "debris": false,
-   "smoke": false,
-   "flipbook": false,
-   "light": 1.2
-  },
-  "spirit": null
- }
 }
