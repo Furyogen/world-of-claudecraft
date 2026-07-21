@@ -3,6 +3,7 @@
 // Pure data + dispatch — no three.js imports, no loading.
 
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
+import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { ITEMS, MOBS } from '../../sim/data';
 import type { Entity, PlayerClass } from '../../sim/types';
@@ -323,6 +324,7 @@ const ITEM_OFFHAND_MODELS: Readonly<Record<string, string>> = {
   eastbrook_buckler: 'shield_round',
   highwatch_wallshield: 'shield_square',
   bonewrought_bulwark: 'shield_square',
+  pearlward_aegis: 'shield_round', // the first caster (int/spi) shield
 };
 
 function itemModelKey(
@@ -352,6 +354,22 @@ export function itemWeaponModelUrl(itemId: string | null | undefined): string | 
 export function itemOffhandModelUrl(itemId: string | null | undefined): string | null {
   const key = itemModelKey(itemId, ITEM_OFFHAND_MODELS);
   return key ? `${WEAPONS}/${key}.glb` : null;
+}
+
+/** GLB url the offhand slot should render: the active weapon skin's model when it
+ *  mirrors onto a matching-type offhand weapon (a rogue's second dagger
+ *  under a dagger skin), otherwise the equipped offhand item's own model. A shield,
+ *  held offhand (orb/tome), or different-type offhand weapon never mirrors, so it
+ *  keeps its item model; null when the offhand has no mapped model. The mirror
+ *  decision is the pure sim rule, so server and clients agree on both hands. */
+export function offhandModelUrl(
+  offhandItemId: string | null | undefined,
+  weaponSkinId: string | null | undefined,
+): string | null {
+  if (offhandMirrorsWeaponSkin(weaponSkinId, offhandItemId)) {
+    return weaponSkinModelUrl(weaponSkinId);
+  }
+  return itemOffhandModelUrl(offhandItemId);
 }
 
 /** Distinct held-weapon GLB urls (one per variant), for the boot preload sweep so

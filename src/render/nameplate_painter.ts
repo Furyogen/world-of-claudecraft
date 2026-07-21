@@ -26,6 +26,7 @@ import {
   devTierByIndex,
   devTierDisplayName,
   devTierNameOutlineColor,
+  isSignificantDevTier,
 } from '../ui/dev_tier';
 import { discordRoleTagLabel } from '../ui/discord_role_tag';
 import { tEntity } from '../ui/entity_i18n';
@@ -33,6 +34,7 @@ import {
   holderTierBadgeDataUrl,
   holderTierByIndex,
   holderTierDisplayName,
+  holderTierIsRegalia,
 } from '../ui/holder_tier';
 import { formatNumber, getLanguage, t } from '../ui/i18n';
 import { raidMarkerDataUrl } from '../ui/icons';
@@ -222,7 +224,14 @@ export class NameplatePainter {
         const roleKey = suppressSelf ? undefined : e.discordRole;
         const roleColor = specialRoleColor(roleKey);
         const roleTag = discordRoleTagLabel(roleKey);
-        const displayName = roleTag ? `[${roleTag}] ${e.name}` : e.name;
+        const baseName = roleTag ? `[${roleTag}] ${e.name}` : e.name;
+        // Client-side AFK tag: the away flag rides the entity (`ak` wire bit ->
+        // e.afk), but the label is localized HERE, never baked into the wire
+        // name. Suppressed on your own hidden plate; shown on everyone else's.
+        // Folded into displayName so it flows through the repaint signature
+        // below (the plate repaints the instant AFK toggles).
+        const displayName =
+          !suppressSelf && e.afk ? `<${t('hudChrome.nameplate.afkTag')}> ${baseName}` : baseName;
         // Significant-contributor outline: a glowing outline drawn on top of the
         // existing name color (Discord staff or default) for a high dev tier, so
         // both read at once. Null for non-significant tiers, for a suppressed self
@@ -470,9 +479,18 @@ export class NameplatePainter {
     if (def) {
       v.tierEl.src = holderTierBadgeDataUrl(def, 32);
       v.tierEl.title = t('wallet.holderTierTitle', { tier: holderTierDisplayName(def) });
+      // Static per-tier halo (the "stand out" knob): the tier glow hue drives a
+      // CSS drop-shadow whose strength is a named CSS tunable (--holder-halo /
+      // --holder-halo-strong), moderately stronger for the two band IV regalia.
+      // Cosmetic-only and static, written here on the tier cheap-diff (never per
+      // frame), like the src/title/display above.
+      v.tierEl.style.setProperty('--holder-glow', def.glow);
+      v.tierEl.classList.toggle('np-tier-regalia', holderTierIsRegalia(def));
       v.tierEl.style.display = '';
     } else {
       v.tierEl.removeAttribute('src');
+      v.tierEl.style.removeProperty('--holder-glow');
+      v.tierEl.classList.remove('np-tier-regalia');
       v.tierEl.style.display = 'none';
     }
   }
@@ -486,9 +504,17 @@ export class NameplatePainter {
     if (def) {
       v.devTierEl.src = devTierBadgeDataUrl(def, 32);
       v.devTierEl.title = t('hudChrome.devBadge.badgeTitle', { tier: devTierDisplayName(def) });
+      // Static per-tier halo, mirroring the holder badge: the tier glow hue drives
+      // a CSS drop-shadow whose strength is the shared named tunable, stronger for
+      // the two significant-contributor rungs (Architect, Worldwright). Cosmetic and
+      // static, written on the tier cheap-diff (never per frame), like src above.
+      v.devTierEl.style.setProperty('--dev-glow', def.glow);
+      v.devTierEl.classList.toggle('np-dev-tier-strong', isSignificantDevTier(def.index));
       v.devTierEl.style.display = '';
     } else {
       v.devTierEl.removeAttribute('src');
+      v.devTierEl.style.removeProperty('--dev-glow');
+      v.devTierEl.classList.remove('np-dev-tier-strong');
       v.devTierEl.style.display = 'none';
     }
   }

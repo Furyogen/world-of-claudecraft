@@ -5,9 +5,17 @@
 // side of hud.itemTooltip's instance composition.
 import { describe, expect, it } from 'vitest';
 import {
+  HARVEST_COMPONENT_ITEMS,
+  HARVEST_COMPONENT_SPECIMENS,
+} from '../src/sim/content/professions';
+import { ALL_RECIPES } from '../src/sim/content/recipes';
+import { ITEMS } from '../src/sim/data';
+import { NODE_MATERIAL_TABLE } from '../src/sim/professions/gathering';
+import {
   instanceBadgeLines,
   instanceBonusStatLines,
   instanceMakersMarkLine,
+  isGatheredProvenanceKind,
   itemNumber,
   itemStatName,
 } from '../src/ui/item_instance_tooltip';
@@ -77,10 +85,62 @@ describe('item_instance_tooltip', () => {
     expect(instanceMakersMarkLine(undefined)).toBe('');
   });
 
+  it('a gathered-kind signed copy reads Gathered by, a crafted-kind keeps Crafted by (Phase 12d)', () => {
+    // Both arms of the kind split, against real defs from each family.
+    expect(ITEMS.copper_ore.kind).toBe('junk');
+    const gathered = instanceMakersMarkLine({ signer: 'Anna' }, ITEMS.copper_ore.kind);
+    expect(gathered).toContain('Gathered by Anna');
+    expect(gathered).not.toContain('Crafted by');
+    expect(ITEMS.ironedge_longsword.kind).toBe('weapon');
+    const crafted = instanceMakersMarkLine({ signer: 'Anna' }, ITEMS.ironedge_longsword.kind);
+    expect(crafted).toContain('Crafted by Anna');
+    expect(crafted).not.toContain('Gathered by');
+    // No kind at all (a caller without the def) stays the crafted wording.
+    expect(instanceMakersMarkLine({ signer: 'Anna' })).toContain('Crafted by Anna');
+  });
+
   it('itemNumber pins fraction digits and itemStatName capitalizes unknown keys', () => {
     expect(itemNumber(3)).toBe('3');
     expect(itemNumber(2.5, 1)).toBe('2.5');
     expect(itemStatName('weird')).toBe('Weird');
+  });
+});
+
+// The Phase 12d provenance partition: the signed universe splits cleanly on
+// item KIND. Every signable gathered item (corpse components, Pristine
+// specimens, the zone node materials) is kind 'junk'; every crafted recipe
+// output lands on a non-junk kind. If either side ever drifts (a junk-kind
+// recipe output, a gathered material moved off 'junk'), the wording of its
+// signed copies silently flips, so both sides are pinned against the live
+// content tables. Fish are out of scope by construction: they share kind
+// 'food' with crafted meals but fishing never signs a catch.
+describe('isGatheredProvenanceKind partition over the live content (Phase 12d)', () => {
+  it('every signable gathered item id resolves to a gathered-kind def', () => {
+    const gatheredIds = [
+      ...Object.values(HARVEST_COMPONENT_ITEMS),
+      ...Object.values(HARVEST_COMPONENT_SPECIMENS),
+      ...Object.values(NODE_MATERIAL_TABLE).flatMap((byZone) =>
+        Object.values(byZone).map((row) => row.itemId),
+      ),
+    ];
+    expect(gatheredIds.length).toBeGreaterThan(0);
+    for (const id of gatheredIds) {
+      const def = ITEMS[id];
+      expect(def, id).toBeDefined();
+      expect(def.kind, `${id} kind`).toBe('junk');
+      expect(isGatheredProvenanceKind(def.kind), id).toBe(true);
+    }
+  });
+
+  it('every crafted recipe output resolves to a crafted-kind def', () => {
+    expect(ALL_RECIPES.length).toBeGreaterThan(0);
+    for (const recipe of ALL_RECIPES) {
+      const def = ITEMS[recipe.resultItemId];
+      expect(def, recipe.resultItemId).toBeDefined();
+      expect(isGatheredProvenanceKind(def.kind), `${recipe.resultItemId} (${def.kind})`).toBe(
+        false,
+      );
+    }
   });
 });
 
@@ -94,7 +154,9 @@ describe('hud.itemTooltip composition order (source pins)', () => {
   const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
   const badges = hud.indexOf('instanceBadgeLines(instance)');
   const bonus = hud.indexOf('instanceBonusStatLines(instance)');
-  const mark = hud.indexOf('instanceMakersMarkLine(instance)');
+  // The mark line takes the def's kind too (Phase 12d): the gathered-vs-crafted
+  // wording split resolves from item.kind at the one composition site.
+  const mark = hud.indexOf('instanceMakersMarkLine(instance, item.kind)');
   const soulbound = hud.indexOf("t('hudChrome.itemSoulbound')");
   const setBlock = hud.indexOf('this.itemSetBlock(item)');
 
@@ -104,7 +166,7 @@ describe('hud.itemTooltip composition order (source pins)', () => {
     expect(mark).toBeGreaterThan(-1);
     expect(hud.indexOf('instanceBadgeLines(instance)', badges + 1)).toBe(-1);
     expect(hud.indexOf('instanceBonusStatLines(instance)', bonus + 1)).toBe(-1);
-    expect(hud.indexOf('instanceMakersMarkLine(instance)', mark + 1)).toBe(-1);
+    expect(hud.indexOf('instanceMakersMarkLine(', mark + 1)).toBe(-1);
   });
 
   it('orders them badge lines, then bonus stats, then the makers mark', () => {

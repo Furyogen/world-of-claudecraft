@@ -113,7 +113,12 @@ import {
   type ActionBarLayoutRestore,
   sanitizeActionBarLayout,
 } from '../world_api/action_bar';
-import type { MasterworkView } from '../world_api/professions';
+import type {
+  ApplyEnchantResultView,
+  DisenchantResultView,
+  MasterworkView,
+  SalvageResultView,
+} from '../world_api/professions';
 import { computeBackoffDelay } from './backoff';
 import { optimisticQuestState } from './quest_state_optimistic';
 import { isTransientReconnectRejection, isTransientTimeoutRejection } from './reconnect_policy';
@@ -776,6 +781,7 @@ export class Api {
 
   async projectStats(): Promise<{
     accounts_created: number;
+    characters_created: number;
     players_online: number;
     realm: string;
   }> {
@@ -839,9 +845,16 @@ export class Api {
     native = false,
     challenge = '',
     nativeAttestation: unknown = undefined,
+    desktop = false,
   ): Promise<{ url: string }> {
     const nativeQuery = native ? `&native=1&challenge=${encodeURIComponent(challenge)}` : '';
-    return this.post(`/api/auth/discord/start?mode=${mode}${nativeQuery}`, { nativeAttestation });
+    // `desktop` and `native` are mutually exclusive: native is the mobile-app PKCE
+    // handoff, desktop marks a login start from the Electron/Steam shell's system
+    // browser so the callback bounces back to /desktop-login instead of '/'.
+    const desktopQuery = !native && desktop ? '&desktop=1' : '';
+    return this.post(`/api/auth/discord/start?mode=${mode}${nativeQuery}${desktopQuery}`, {
+      nativeAttestation,
+    });
   }
 
   async exchangeNativeDiscordCode(
@@ -896,18 +909,6 @@ export class Api {
   // Current account's Discord link status + reward points + live guild presence.
   async discordStatus(): Promise<Record<string, unknown>> {
     return this.get('/api/discord');
-  }
-
-  // Server-side Welcome Screen flags (today: the Season 1 Armory promo gate).
-  async welcomeFlags(): Promise<{ armoryPromoEnabled: boolean }> {
-    return this.get('/api/welcome/flags');
-  }
-
-  // Daily rewards status (bearer-only, no world/character needed): the Welcome
-  // Screen's chest-tile readiness read reuses the same endpoint the in-world
-  // daily rewards window polls via ClientWorld.dailyRewards().
-  async dailyRewards(): Promise<DailyRewardStatus> {
-    return this.get('/api/daily-rewards');
   }
 
   // Unlink Discord. A Discord-provisioned account (no real password yet) must send a
@@ -1178,6 +1179,7 @@ function blankEntity(id: number): Entity {
     chargePath: [],
     followTargetId: null,
     sitting: false,
+    afk: false,
     weaponStowed: false,
     eating: null,
     drinking: null,
@@ -1426,6 +1428,15 @@ export class ClientWorld implements IWorld {
   // server's `masterwork` event (applyMasterworkEvent below), exactly like
   // lastCraftResult above. Null until this session's first masterwork proc.
   lastMasterwork: MasterworkView | null = null;
+  // Enchanting-action outcome surfaces (Professions 2.0 Phase 13), each mirrored
+  // from BOTH the server's pid-scoped disenchantResult/enchantResult/salvageResult
+  // event (applyDisenchantResultEvent/applyEnchantResultEvent/applySalvageResultEvent
+  // below, the immediacy arm) AND the denc/ench/salv self-delta (applySnapshot, the
+  // convergence arm) exactly the way lastCraftResult mirrors craftResult. Null until
+  // this session's first such attempt.
+  lastDisenchantResult: DisenchantResultView | null = null;
+  lastEnchantResult: ApplyEnchantResultView | null = null;
+  lastSalvageResult: SalvageResultView | null = null;
   // The viewer's own active mobile crafting station (Professions 2.0 Phase 8),
   // mirrored from the server's `mst` self-delta (applySnapshot below). The
   // server computes the active/expired state against its own tickCount, so
@@ -1983,6 +1994,9 @@ export class ClientWorld implements IWorld {
         this.applyLockpickEvent(ev as SimEvent);
         this.applyCraftResultEvent(ev as SimEvent);
         this.applyMasterworkEvent(ev as SimEvent);
+        this.applyDisenchantResultEvent(ev as SimEvent);
+        this.applyEnchantResultEvent(ev as SimEvent);
+        this.applySalvageResultEvent(ev as SimEvent);
         this.applyChatFlairEvent(ev as SimEvent);
         this.eventQueue.push(ev as SimEvent);
       }
@@ -2397,6 +2411,7 @@ export class ClientWorld implements IWorld {
       e.castTotal = w.castTot ?? 0;
       e.channeling = !!w.chan;
       e.sitting = !!w.sit;
+      e.afk = !!w.ak; // /afk display bit: drives the nameplate tag + social presence dot
       e.weaponStowed = !!w.ws;
       e.aggroTargetId = w.aggro ?? null;
       // Another entity's selected target (players/bots; mobs use aggro above). Powers
@@ -2747,6 +2762,14 @@ export class ClientWorld implements IWorld {
       // mst -> activeMobileStationCraft: a nullable scalar, so the delta's
       // explicit null (station expired or never placed) must overwrite.
       if (s.mst !== undefined) this.activeMobileStationCraft = (s.mst as string | null) ?? null;
+      // Enchanting-action outcome mirrors (Professions 2.0 Phase 13): the
+      // convergence arm for lastDisenchantResult/lastEnchantResult/lastSalvageResult
+      // (the event mirror above is the immediacy arm; both feed the same field).
+      // Server-diffed per tick, so two identical consecutive deny results produce
+      // no delta change, which is exactly why the event arm also exists.
+      if (s.denc !== undefined) this.lastDisenchantResult = s.denc ?? null;
+      if (s.ench !== undefined) this.lastEnchantResult = s.ench ?? null;
+      if (s.salv !== undefined) this.lastSalvageResult = s.salv ?? null;
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.cprof !== undefined && s.cprof) {
@@ -3096,6 +3119,19 @@ export class ClientWorld implements IWorld {
   // trainResult event; the learned set mirrors back via the cprof delta.
   trainRecipe(recipeId: string): void {
     this.cmd({ cmd: 'train_recipe', recipe: recipeId });
+  }
+  // Enchanting profession commands (Professions 2.0 Phase 13): command only,
+  // never predicted. The server re-validates ownership/eligibility/throttle in
+  // the sim resolvers and answers with the personal disenchantResult/
+  // enchantResult/salvageResult event plus the denc/ench/salv self-delta.
+  disenchantItem(itemId: string): void {
+    this.cmd({ cmd: 'disenchant_item', item: itemId });
+  }
+  applyEnchant(itemId: string, enchantId: string): void {
+    this.cmd({ cmd: 'apply_enchant', item: itemId, enchant: enchantId });
+  }
+  salvageItem(itemId: string): void {
+    this.cmd({ cmd: 'salvage_item', item: itemId });
   }
   sellItem(itemId: string, count?: number): void {
     this.cmd({ cmd: 'sell', item: itemId, count });
@@ -3761,6 +3797,42 @@ export class ClientWorld implements IWorld {
   private applyMasterworkEvent(ev: SimEvent): void {
     if (ev.type !== 'masterwork') return;
     this.lastMasterwork = { recipeId: ev.recipeId, itemId: ev.itemId, crafter: ev.crafter };
+  }
+  // Mirror the authoritative enchanting-action outcomes into their lastX field
+  // (Professions 2.0 Phase 13), each modeled exactly on applyCraftResultEvent
+  // above (the immediacy arm; the denc/ench/salv self-delta is the convergence
+  // arm in applySnapshot). The events still flow to the HUD (drainEvents) for a
+  // toast/log line.
+  private applyDisenchantResultEvent(ev: SimEvent): void {
+    if (ev.type !== 'disenchantResult') return;
+    this.lastDisenchantResult = {
+      ok: ev.ok,
+      itemId: ev.itemId,
+      materialItemId: ev.materialItemId,
+      count: ev.count,
+      secondaryItemId: ev.secondaryItemId,
+      secondaryCount: ev.secondaryCount,
+      reason: ev.reason,
+    };
+  }
+  private applyEnchantResultEvent(ev: SimEvent): void {
+    if (ev.type !== 'enchantResult') return;
+    this.lastEnchantResult = {
+      ok: ev.ok,
+      itemId: ev.itemId,
+      enchantId: ev.enchantId,
+      reason: ev.reason,
+    };
+  }
+  private applySalvageResultEvent(ev: SimEvent): void {
+    if (ev.type !== 'salvageResult') return;
+    this.lastSalvageResult = {
+      ok: ev.ok,
+      itemId: ev.itemId,
+      materialItemId: ev.materialItemId,
+      count: ev.count,
+      reason: ev.reason,
+    };
   }
   delveRiteChoose(intensity: RiteIntensity): void {
     this.cmd({ cmd: 'delve_rite_choose', intensity });

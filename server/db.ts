@@ -1449,6 +1449,13 @@ export async function getAccountsCount(): Promise<number> {
   return res.rows[0]?.count ?? 0;
 }
 
+export async function getCharactersCount(realm: string): Promise<number> {
+  const res = await pool.query('SELECT COUNT(*)::int AS count FROM characters WHERE realm = $1', [
+    realm,
+  ]);
+  return res.rows[0]?.count ?? 0;
+}
+
 export async function touchLogin(accountId: number, meta: RequestMetadata = {}): Promise<void> {
   await pool.query(
     `UPDATE accounts

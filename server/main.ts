@@ -115,6 +115,7 @@ import {
   getAccountsCount,
   getCharacter,
   getCharacterById,
+  getCharactersCount,
   guildNameForCharacter,
   isAdminAccount,
   lifetimeXpRankForCharacter,
@@ -794,33 +795,43 @@ async function getDeedsRarity(): Promise<import('../src/world_api').DeedsRarity>
   }
 }
 
-// Project-stats accounts-created counter cache. Unlike the player/guild/arena
-// boards, a COUNT(*) over accounts is moderation-INVARIANT (a ban or unban never
-// changes the row count, only eligibility), so it needs NO bust or epoch wiring,
-// the same call getDeedsRarity's cache makes above. It is a single-key read, so it
-// rides createCachedRead (server/cached_read.ts) directly rather than the per-scope
-// singleFlight the boards use. 60s TTL (the D11 exception): accounts-created is a
-// slow-moving marketing counter, not a moderation-sensitive ranked list, so a
-// minute of staleness is fine. Named to avoid colliding with db.ts's imported
-// getAccountsCount (mirrors getLeaderboard wrapping topLifetimeXp under a domain
-// name). readProjectStats (server/leaderboard.ts) is the INNER read; players_online
-// is a live per-request value the handler re-attaches, so the cache holds only the
-// count and the inner read gets a throwaway 0 for players_online that it discards.
+// Project-stats counters cache. Unlike the player/guild/arena boards, the
+// COUNT(*) reads over accounts and characters are moderation-INVARIANT (a ban or
+// unban never changes a row count, only eligibility), so they need NO bust or
+// epoch wiring, the same call getDeedsRarity's cache makes above. They are a
+// single-key read, so they ride createCachedRead (server/cached_read.ts) directly
+// rather than the per-scope singleFlight the boards use. 60s TTL (the D11
+// exception): both are slow-moving marketing counters, not moderation-sensitive
+// ranked lists, so a minute of staleness is fine. ONE cache holds the whole
+// readProjectStats body (server/leaderboard.ts, the INNER read), so a cold burst
+// costs one shared flight with exactly one getAccountsCount and one
+// getCharactersCount read between both getters; players_online is a live
+// per-request value the handler re-attaches, so the inner read gets a throwaway 0
+// for players_online that the getters discard.
 const PROJECT_STATS_TTL_MS = 60_000;
-const accountsCreatedCache = createCachedRead(
-  async () => (await readProjectStats({ getAccountsCount }, 0, REALM)).accounts_created,
+const projectStatsCache = createCachedRead(
+  () => readProjectStats({ getAccountsCount, getCharactersCount }, 0, REALM),
   { ttlMs: PROJECT_STATS_TTL_MS },
 );
 
 async function getAccountsCreatedCount(): Promise<number> {
   try {
-    return await accountsCreatedCache.read();
+    return (await projectStatsCache.read()).accounts_created;
   } catch (err) {
     // Only a never-warmed cache reaches here (createCachedRead stale-serves the
-    // last count on a later failure). Serve 0 rather than 500, the same
+    // last counts on a later failure). Serve 0 rather than 500, the same
     // degrade-not-throw contract getLeaderboard / getDeedsRarity already ship, so
     // /api/project-stats stays 200 when the db is unreachable.
     console.error('accounts-created count refresh failed:', err);
+    return 0;
+  }
+}
+
+async function getCharactersCreatedCount(): Promise<number> {
+  try {
+    return (await projectStatsCache.read()).characters_created;
+  } catch (err) {
+    console.error('characters-created count refresh failed:', err);
     return 0;
   }
 }
@@ -838,6 +849,7 @@ export const boardReadTestSeam = {
   getGuildLeaderboard,
   getArenaLeaderboard,
   getAccountsCreatedCount,
+  getCharactersCreatedCount,
   refreshDeedsRarityShared,
   refreshLeaderboardShared,
   refreshGuildLeaderboardShared,
@@ -852,7 +864,7 @@ export const boardReadTestSeam = {
     arenaLeaderboardCache['2v2'] = null;
     deedsBoardCache = null;
     deedsRarityCache = null;
-    accountsCreatedCache.bust();
+    projectStatsCache.bust();
   },
 };
 
@@ -1850,8 +1862,13 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // per-request read, so it is re-attached here rather than cached. Rate-limited
       // per IP like its migrated twin (same public-read budget, same 429 body).
       if (!publicReadRateLimited(req).allowed) return json(res, 429, { error: 'rate limited' });
+      const [accountsCreated, charactersCreated] = await Promise.all([
+        getAccountsCreatedCount(),
+        getCharactersCreatedCount(),
+      ]);
       return json(res, 200, {
-        accounts_created: await getAccountsCreatedCount(),
+        accounts_created: accountsCreated,
+        characters_created: charactersCreated,
         players_online: liveGame().clients.size,
         realm: REALM,
       });
@@ -2178,6 +2195,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const mode = discordStartUrl.searchParams.get('mode') === 'link' ? 'link' : 'login';
       const native = discordStartUrl.searchParams.get('native') === '1';
       const nativeChallenge = discordStartUrl.searchParams.get('challenge') ?? undefined;
+      const desktop = mode === 'login' && discordStartUrl.searchParams.get('desktop') === '1';
       let accountId: number | null = null;
       if (mode === 'link') {
         accountId = await bearerActiveAccount(req, res);
@@ -2192,6 +2210,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         native,
         nativeChallenge,
         nativeAttestation: body.nativeAttestation,
+        desktop,
       });
     }
     if (req.method === 'GET' && url === '/api/auth/discord/callback') {
@@ -2453,6 +2472,7 @@ configureLeaderboardRuntime({
   deedsSelfRank,
   getArenaLeaderboard,
   getAccountsCreatedCount,
+  getCharactersCreatedCount,
   getReleases,
   // A getter, not a value: configureLeaderboardRuntime runs at module load (before
   // startServer primes the config), but leaderboard.ts reads rt.githubRepo only at

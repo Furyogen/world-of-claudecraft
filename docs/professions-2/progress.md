@@ -33,12 +33,12 @@ Update this file at the end of every implementation and QA session. Statuses:
 | 12 QA | Verify tool tier gating | complete (PR #2223 merged) | 2026-07-20 | 2026-07-20 |
 | 12b | Gathering rhythm | complete (PR #2226 merged into release/v0.29.0) | 2026-07-20 | 2026-07-20 |
 | 12b QA | Verify gathering rhythm | complete (PASS, zero blocking) | 2026-07-20 | 2026-07-20 |
-| 12c | The Mastery Curve | not started | | |
-| 12c QA | Verify The Mastery Curve | not started | | |
-| 12d | Provenance and the harvest loop | not started | | |
-| 12d QA | Verify provenance and the harvest loop | not started | | |
-| 13 | Enchanting reachable | not started | | |
-| 13 QA | Verify enchanting reachable | not started | | |
+| 12c | The Mastery Curve | complete (PR #2242 merged into release/v0.29.0) | 2026-07-20 | 2026-07-20 |
+| 12c QA | Verify The Mastery Curve | complete (PASS, zero blocking) | 2026-07-20 | 2026-07-20 |
+| 12d | Provenance and the harvest loop | complete (PR #2264 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
+| 12d QA | Verify provenance and the harvest loop | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
+| 13 | Enchanting reachable | complete (PR #2269 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
+| 13 QA | Verify enchanting reachable | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
 | 14 | Attunement quests and nudges | not started | | |
 | 14 QA | Verify attunement quests and nudges | not started | | |
 | 14b | Commissions and the Maker's Bond | not started | | |
@@ -534,28 +534,34 @@ were re-run green first-hand at the head before review dispatch.
 - [x] Every Pin-cost appendix row executed as briefed; no unlisted pin weakened (two pre-briefed additive extensions outside the appendix, recorded in the as-landed block: the game_audio cue census 14 to 20 and the gather_event_i18n fishingResult cue pin)
 
 ### Phase 12c: The Mastery Curve
-- [ ] The four-state curve replaces the free floor (1 / 0.5 / 0.25 / 0; every recipe tier included; zero new Rng draws)
-- [ ] Enforced per-profession caps as content data (crafts + enchanting 125, mining/logging/herbalism 100, fishing 200) at all four clamp arms
-- [ ] Gathering gains node-tier-relative; fishing gains band-relative and fractional; constants named, exported, pinned
-- [ ] The one-time reset (two maps + one flag, nothing else): keep ledger pinned, re-crossing audit green, blob-diff rehearsal evidence recorded, notice letter delivered once
-- [ ] The shared action throttle covers crafting, disenchant, enchant-apply, salvage
-- [ ] Enchanting gains quality-tiered with the soft ceiling; q_prof_hobby_switch xpReward 0
-- [ ] Four-state difficulty colors and the cap-aware mastered state in the UI
-- [ ] Pin-cost appendix executed as briefed; goldens byte-identical outside the appendix pair
+- [x] The four-state curve replaces the free floor (1 / 0.5 / 0.25 / 0; every recipe tier included; zero new Rng draws)
+- [x] Enforced per-profession caps as content data (crafts + enchanting 125, mining/logging/herbalism 100, fishing 200) at all four clamp arms
+- [x] Gathering gains node-tier-relative; fishing gains band-relative and fractional; constants named, exported, pinned
+- [x] The one-time reset (two maps + one flag, nothing else): keep ledger pinned, re-crossing audit green, blob-diff rehearsal evidence recorded (synthetic corpus; the production-copy run is the maintainer's pre-deploy step), notice letter delivered once
+- [x] The shared action throttle covers crafting, disenchant, enchant-apply, salvage
+- [x] Enchanting gains quality-tiered with the soft ceiling; q_prof_hobby_switch xpReward 0
+- [x] Four-state difficulty colors and the cap-aware mastered state in the UI
+- [x] Pin-cost appendix executed as briefed; goldens byte-identical outside the appendix pair (addendum rows recorded in both phase files)
 
 ### Phase 12d: Provenance and the harvest loop
-- [ ] Identical-payload material stacking in bags AND through the bank move path; counted instanced stacks ride trade, wire, and removal correctly
-- [ ] Gathered by copy, the bag-grid instanced marker, and the full-bag signed-downgrade notice
-- [ ] One interact press loots AND harvests; denial of either half never blocks the other; corpse lifecycle decoupled; town focus verified and fixed or made legible
-- [ ] Mail attachment expiry (30 days, one return cycle, system mail exempt)
-- [ ] Companion fixes landed and pinned: #2139 and the force-rename signer sweep
+- [x] Identical-payload material stacking in bags AND through the bank move path; counted instanced stacks ride trade, wire, and removal correctly
+- [x] Gathered by copy, the bag-grid instanced marker, and the full-bag signed-downgrade notice
+- [x] One interact press loots AND harvests; denial of either half never blocks the other; corpse lifecycle decoupled; town focus verified and made legible (picker pre-checked, hint copy)
+- [x] Mail attachment expiry (30 days, one return cycle, system mail exempt by construction)
+- [x] Companion fixes landed and pinned: #2139 (verify-not-refix: the filed overflow was already guarded, now pinned + merge-aware guards) and the force-rename signer sweep
 
 ### Phase 13: Enchanting reachable
-- [ ] Disenchant + enchant-apply + salvage on IWorld, wire commands, bags context UI, both hosts
-- [ ] Enchanting skill visible in the wheel window
-- [ ] Typed disenchant reagents (hybrid): rare+ adds the type-keyed secondary; every typed material has a same-phase consumer (the wolf_fang rule); staves/wands in the WEAPON bucket per the resolved decision
-- [ ] Bind-on-trade primitive live against the typed rare+ reagents (generic enforcement arm for Phase 14b)
-- [ ] Inherited 12c pacing verified: the shared throttle and quality-tiered gains govern the newly reachable actions
+Built 2026-07-21 on feature/professions-2-phase-13-enchanting, phase-start
+682df1b7b (the 12d QA merge); QA diffs 682df1b7b..the PR head. Commit
+train: content (typed reagents + consumer enchants + bind-on-trade), seam
+(IWorld + wire + server dispatch + pins), wire-minimization docs,
+coverage suites, UI (bags menu + confirm + picker + toasts), review
+fixes, mobile ctx-menu stacking fix, screenshots, docs.
+- [x] Disenchant + enchant-apply + salvage on IWorld, wire commands, bags context UI, both hosts
+- [x] Enchanting skill visible in the wheel window (already a CRAFT_RING craft; pinned by tests/professions_enchanting_reachable.test.ts)
+- [x] Typed disenchant reagents (hybrid): rare+ adds the type-keyed secondary; every typed material has a same-phase consumer (the wolf_fang rule, referentially pinned); staves/wands in the WEAPON bucket per the resolved decision
+- [x] Bind-on-trade primitive live against the typed rare+ reagents (generic enforcement arm for Phase 14b; two-session online arc pinned)
+- [x] Inherited 12c pacing verified: the shared throttle and quality-tiered gains govern the newly reachable actions (online cross-action attribution pinned)
 
 ### Phase 14: Attunement quests and nudges
 - [ ] Acceptance lore quests at the masters for all four wave-one archetypes
@@ -1080,3 +1086,262 @@ re-confirmed), cooking rungs are sit-heal food only (maintainer
 glance), and the retro CI reds on the release push (Release gate
 locale shards + version gate) are the branch-wide mid-cycle state,
 identical on the pre-phase push, with the Browser job green.
+
+2026-07-20 Phase 12c (The Mastery Curve) built: phase-start commit 67ae62629
+(the PR #2240 docs merge), PR #2242 off release/v0.29.0, branch
+feature/professions-2-phase-12c. Five thematic commits per the phase cadence
+plus the M16 letter-fill fix, the two appendix golden regens, a
+deeds_reconcile fixture re-pin the full gate caught, screenshots with a new
+four-states shot variant, and the review-round fix commit (six reviewers, all
+READY, zero blocking).
+- KEEP LEDGER (pinned row by row in tests/professions_mastery_reset.test.ts):
+  inventory items KEPT; bank KEPT; copper KEPT; tools KEPT; knownRecipes
+  KEPT; recipesGrandfathered KEPT; attunedPairs and switch history KEPT;
+  hobbyCraft KEPT; deeds and renown KEPT; level and XP KEPT; quest state
+  KEPT; mail KEPT; craftSkills RESET; gatheringProficiency RESET (legacy
+  professions key included); masteryResetApplied ADDED (CharacterState
+  only); perk and specialization activation DERIVED; tier capability
+  DERIVED.
+- BLOB-DIFF REHEARSAL EVIDENCE: tests/mastery_reset_rehearsal.test.ts
+  default synthetic-corpus mode (modern 12b-era blob, legacy
+  professions-key-only blob, over-cap values, minimal fresh blob,
+  already-reset blob; the corpus is built from serializeCharacter with fixed
+  seeds plus a stabilization round trip so deed retro grants never pollute
+  the diff): 7 passed, per-blob assertion that the ONLY deltas are the two
+  zeroed maps (plus the legacy professions dual-write mirror), the flag
+  true, and the documented cap clamps on over-cap rows. The 12c QA added the
+  completeness arm: a flag-absent row must also show every craft and
+  gathering leaf (legacy professions mirror included) at exactly 0 in the
+  output, so a PARTIAL reset fails loudly instead of tallying as applied,
+  in the synthetic corpus and the production-copy run alike. The
+  PRODUCTION-COPY run is the maintainer's pre-deploy step: export characters
+  as JSON rows [{id, state, playerClass}] (include playerClass so each row
+  rehearses under its true class; omitting it defaults the row to warrior,
+  which the diff discipline tolerates but does not prefer) and run
+  RESET_REHEARSAL_INPUT=<path>
+  npx vitest run tests/mastery_reset_rehearsal.test.ts. The deploy does not
+  ship without that run.
+- BATTLEFIELD TRICKLE SHARE (for the Phase 15 review): BATTLEFIELD_XP_TRICKLE
+  stays 0.25 through the capped gainCraftSkill. Under the curve, 0.25 per
+  qualifying observed use equals one green own craft, half a yellow, a
+  quarter of an orange; once a specialist's recipes gray out the trickle is
+  the only nonzero channel at a quarter of the old per-craft rate. Dormant
+  in shipped content.
+- MAINTAINER-VISIBLE consequences (deliberate, pinned): pre-curve characters
+  who never logged in since the Book of Deeds shipped do not receive the
+  join-time skill-proof retro deed grants at first curve-era login (the
+  reset zeroes skills before the retro sweep); they re-earn on the next real
+  action. The rollback strip-refire caveat is DESTRUCTIVE of
+  rollback-window progress (release-notes item, pinned as a conscious
+  acceptance). The reset-notice letter can be lost in the bounded
+  crash-between-saves and sub-tick-disconnect windows (the authored-letter
+  non-atomic class; skill zeroing itself is never affected).
+- Deferrals: fixture-hygiene rows deliberately left at maxSkill 300 where
+  they are pure pass-through view inputs never compared against content
+  (professions_window_focus incl. its fictional skinning row, the
+  professions_contracts type-contract record); battlefieldExperienceTrickle
+  still RETURNS 0.25 at cap while the write clamps (return-contract chore
+  candidate); craft-celebration tier-up toasts can re-fire for a reset
+  character re-crossing a tier (client-side session-scoped, cosmetic,
+  approved); herbalism/logging finish 75 to 100 on t2 nodes at 0.25 (only
+  ore ships a t3 node), roughly twice mining's time-to-cap for that stretch
+  (Phase 15 balance review). Phase 13 heads-up: the shared throttle gates
+  disenchant/salvage BEFORE their rng draw (unwired today; the wiring QA
+  should remember the budget couples them to crafting's window).
+
+Phase 12c QA (2026-07-20): PASS, zero blocking. QA phase-start 61959116c (the
+PR #2242 merge, the release/v0.29.0 tip); QA diff 67ae62629..75e261deb
+first-parent audited off that merge. Validation matrix green at the untouched
+tip (tsc + 1755 tests); eleven mutations all decisive (free-floor restore,
+each of the four cap clamp arms, partial reset, serialize-flag strip, letter
+flip-before-send, salvage recordAction removal, fishing junk-cutoff removal,
+enchanting soft-ceiling-to-hard-zero). Fan-out: 12-agent Workflow (3 packet
+audits + 5 dispatch-matrix reviewers + refute-and-impact skeptics +
+qa-checklist last); four agents died on mid-run API connection errors and
+were re-dispatched via the Agent tool, 4 of 4 delivered (the standing
+big-diff recovery recipe); skeptics dissolved 2 of 3 SHOULD-FIX findings
+(sanctioned appendix addendum rows), the third survived at nit impact.
+- REAL FINDING, fixed test-first: the blob-diff rehearsal verified only the
+  allowlist direction, so a PARTIAL reset (one map left unzeroed) passed the
+  synthetic corpus AND would have passed the env-gated production-copy run
+  while tallying the row as applied. The completeness arm now requires every
+  craft/gathering leaf (legacy mirror included) at exactly 0 on flag-absent
+  rows; mutation-proven (a partial reset reds three corpus rows).
+- Coverage closures: tests/mastery_reset_online.test.ts (NEW, live
+  GameServer): join-time reset on the authoritative host, the notice booked
+  exactly once through the server tick, the persisted blob carrying the flag
+  and a zeroed legacy mirror, restart-plus-relog never re-firing. Re-crossing
+  positive control (a never-earned prog_mining_100 granted FRESH on the
+  climb, proving the deed sweep runs in the no-duplicate pins' exact idiom).
+  GOLD_ACCENT_COLOR lockstep pin (tokens.css --gold, the TS twin, and the
+  literal #ffd100 agree).
+- Shot-stub sweep: scripts/pr_shot_targets.mjs staged post-curve-impossible
+  values (weaponcrafting 132 over the 125 cap, gathering rows at maxSkill 300
+  with herbalism 203); the LIVE IWorld path was verified correct
+  (gatheringSkillsView reads the content caps), so this was a committed-
+  screenshot fidelity defect only; the stubs now stage post-12c-legal values
+  (125 mastered, 88/45/100/68 over 100/100/100/200) and the six after-shots
+  were recaptured.
+- Played beats (real Sim + the CDP capture): pre-curve blob reset with the
+  letter exactly once; a real curve climb 0 to 75 through all four states at
+  the exact boundaries (25 full + 50 reduced + 100 minimal crafts, then
+  gray); the honest throttle window (10 fill, the 11th throttled, cross-kind
+  deny, a 1201-tick restore); a real reduced-arm 0.5 gain crossing to exactly
+  125 at the Eastbrook forge and a masterwork proc at cap (with the
+  dormant-never-procs ceiling gate confirmed empirically along the way); the
+  enchanting quality ladder at skill 75 (common gray, uncommon 0.25, epic 0.5
+  under the soft ceiling); the four-state window and the mastered state
+  verified in the live client.
+- New recorded caveat (display-only): raw-blob readers (character sheet,
+  armory, character select) show STALE pre-reset skills for a pre-curve
+  character until that character's next login; no live entity is built from
+  those reads, and the display self-heals at login (the authored-letter
+  non-atomic class's display sibling).
+- Load-bearing ordering note: normalizeArchetypeState is the single
+  load-time reader of PRE-reset skill values (identity derivation only, by
+  design); any future archetype-POWER change must key off the live
+  post-reset skill number, never the derived attunement alone.
+- Declined with reasons: a same-tick multi-grant band-straddle pin (reachable
+  only via repeated /dev gather on one profession; queue semantics and the
+  drain clamp are already pinned); a 49.99 fishing boundary pin (the 49/50
+  pair already pins strict-less semantics). Comment-only free-floor drift
+  fixed in place (crafting.ts CRAFT_SKILL_GAIN, wheel.ts tier-0 wording).
+
+Phase 12d (2026-07-21): complete, PR #2264 merged into release/v0.29.0
+(e302c8be5, PR head 1e7019d6c). Phase-start commit
+a9d499291 (the Phase 12c QA merge, the release tip all session). Build =
+six-stage sequential workflow, one cadence commit each, plus follow-ups.
+- The four merge points landed together with the equality module
+  (item_instance_merge.ts); the charges carve-out is the one deliberate
+  extension of the byte-equality spec (mutate-in-place field, forward guard).
+  sanitizeBankState's count clamp flipped in the same commit (the item-loss
+  hazard); the rollback caveat is recorded in state.md and the PR body.
+- The unified press needed NO new command or IWorld member: client-side
+  composition of harvest_corpse then loot_corpse, availability-gated, with
+  the town-focus default server-derived from the components-omitted arm.
+  Sim.interact()'s TARGETED-corpse arm was missed by the build stage and
+  unified in a follow-up commit with its own pin (the scan arm alone was
+  landed first).
+- Two deliberate parity golden regens, draws verified byte-identical outside
+  the moved rows: professions_gather (merged stacks move inventory shape)
+  and l1_loot_distribution (the grace window defers the respawn wanderTimer
+  draw past the trace window).
+- The full suite caught six contract pins the build matrix missed (five
+  emptied-tagged-corpse fast-collapse pins across sim/social/fixes suites,
+  plus the retired-heroic mail round trip absorbing the deploy clock); all
+  re-pinned with comments. The recurring full-gate-catches class.
+- Review fan-out 7/7 delivered first try, zero blocking; three should-fixes
+  landed (marker accessible-name arm via hudChrome.bags.itemAriaInstanced,
+  removeItem survivor-clone pin, the rollback caveat recording).
+- #2139 verify-not-refix: the filed crossing case was ALREADY guarded by the
+  Phase 10 QA grant-order fix; the phase pinned it at the hunted seed and
+  made all signed-grant guards merge-aware (canGrantItemInstance), so a full
+  bag with a byte-equal stack keeps the signature instead of downgrading.
+- Deferred with reasons: foreign-held copies keep a renamed signer's old
+  name (own-blob scope per the phase file, flagged maintainer surface);
+  zero-loot tagged corpses never open (pre-existing, the Phase 3 note);
+  partial instanced splits and the bags/bank split-prompt gate on counted
+  instanced stacks (wave 2 polish); mail expiry has no UI countdown (the
+  return letter's arrival toast is the visibility surface).
+- Mid-PR release sync (2026-07-21): the tip moved 7 commits (loot class
+  balance #2237, the character showcase redesign #2248/#2255, offline-mode
+  dev gating #2254, the unspectate resync #2253); merged in as 4b7280cdb
+  with TWO conflicts (hud.ts import block: union of the gatherDowngrade
+  import and the release's holder_tier removal; generated pending.ts by
+  regen). Release-merge-audit CLEAN: the true branch overlap was hud.ts,
+  components.css, the catalog, and the five overlays, all intents verified
+  present post-merge; loot_roll.ts and sim_context untouched by the delta
+  so the lifecycle premises stand; the release's nythraxis_full_pull golden
+  re-pin does not overlap the phase's two regens and full parity is green
+  on the merged tree; the delta's new db-mock key (getCharactersCount) is
+  release-owned, not the branch-export trap.
+
+Phase 12d QA (2026-07-21): PASS, zero blocking. QA phase-start 402deef1c (the
+release/v0.29.0 tip: the e302c8be5 merge plus the a02823fb7 packet amendment
+and one release merge); QA diff a9d499291..1e7019d6c first-parent audited
+across the 4b7280cdb release sync. Validation matrix green at the untouched
+tip (tsc + full suite, 1432 files / 17752 tests). Fan-out: 21-agent Workflow
+(5 probe charters + 5 dispatch-matrix reviewers + qa-checklist sweep + paired
+refute-and-impact skeptics per serious finding); the two custom-agentType
+reviewers (cross-platform-sync, privacy-security-review) completed without
+structured output and were re-dispatched via the Agent tool, 2 of 2 delivered
+(the standing recovery recipe). The re-dispatched wire review confirmed
+against the real encode/decode that the omitted-vs-[] harvest components
+distinction survives the online path (JSON.stringify drops undefined; the
+server decode maps a non-array back to the town-focus default), that NO new
+command or IWorld member landed, and that gatherDowngrade reaches online
+clients through the generic per-pid event routing; parity and census suites
+green (318 tests). Conservation held in EVERY inventory,
+lifecycle, mail, companion, and provenance probe; the companion agent
+mutation-verified all three #2139 guard pins (cp-restore dance, pristine
+tree). Five skeptic-confirmed (REAL/REAL) SHOULD-FIX findings, ALL landed
+this pass, plus the directed should-fix:
+- DIRECTED (user-approved wording): the corpse loot window's Take All button
+  is now Take Loot, both corpse buttons moved off native title attributes
+  onto the shared attachTooltip idiom (hover, mobile long-press, keyboard
+  focus), and the approved unified-press footer hint landed on the
+  town-focus-hint idiom. Four NEW keys with five non-Latin fills each (M16);
+  the retired takeAllTooltip/harvestButtonTooltip rows left the catalog and
+  ALL overlays (in-place rewords go stale; the union regen makes tsc enforce
+  the removal). Pins: literal labels both arms, both tooltip bindings, the
+  hint, empty native titles. Before/after shots desktop + mobile.
+- INV-1: the carried-inventory hydration in addPlayer loaded tampered counts
+  verbatim while the bank arm sanitized; both load arms now consume ONE
+  bags.ts helper (instancedCountCap), mutation-verified pin on the real
+  addPlayer path. Includes the INV-4 refinement: an unknown item def stays
+  dormant uncapped data on the mergeable arm (never destroyed), while the
+  charge cap stays def-independent.
+- INV-2: every instanced-trade pin drove a hand-copied stub of removeItem;
+  landed a REAL-Sim counted-stack trade pin (both directions, both sides
+  offering the same payload in one confirm, unit conservation).
+- QA12D-CL-01 + F1: the harvestCorpse-arm grace clamp's never-raise side and
+  the press-level denial decoupling (capacity-denied harvest still delivers
+  the loot half, claim unconsumed) were live-verified but unpinned; pinned
+  on both interact arms.
+- MAIL-1 (nit, landed): the deploy clock's absent-secondsLeft legacy arm
+  pinned beside the sentinel arm. FE-2 (nit, landed): the gathering toast
+  key helpers now return TranslationKey (casts removed, typo'd keys fail
+  tsc).
+- Deferred with reasons: fitsAfterSwap's payload-blind scratch removal
+  (capacity modeling only, over-capacity tolerated by design; wave 2 with
+  partial splits); the rename-save no-nonce TOCTOU (self-state only, tiny
+  window, mirrors the existing delete-guard class); harvest_corpse
+  components array length unbounded (short-circuited server-side, ws
+  maxPayload bounds the frame); the marker accessible-name "maker-marked"
+  overclaim on non-signed per-copy stacks (maintainer copy call); the
+  unified-press hint showing on loot-only corpses (the approved wording is
+  unqualified); release-notes propagation of the DESTRUCTIVE
+  sanitizeBankState rollback caveat (recorded in state.md; no v0.29.0 notes
+  file exists yet, a cut-time item).
+
+Phase 13 QA (2026-07-21): PASS, zero blocking. QA phase-start 90e502786
+(the PR #2269 merge, the release/v0.29.0 tip); QA diff 682df1b7b..90e502786;
+fix branch fix/professions-2-phase-13-qa. All 13 acceptance criteria
+verified against real code; validation rows green (wire quartet 444, phase
+suites 103, i18n guard, architecture + trade, tsc, parity goldens 183,
+browser suite 66/66 with the known armory environmental red not even
+reproducing). Fan-out: STEP 1 context loader, then a 6-agent Workflow
+(correctness / coverage / dead-code audits + race, live-mirror,
+mail-market emphasis probers), then 4 dispatch-matrix reviewers plus
+qa-checklist over the fix diff; the orchestrator ran the live browser
+probes itself (confirm-dialog keyboard arc, picker captures).
+- REAL FIX (sim): fitsAfterSwap modeled the pre-stamp payload while
+  grantOffer stamps boundTo on arrival; wrong in both directions (full
+  receiver with a byte-equal armed slot granted OVER capacity 17/16;
+  already-stamped byte-equal slot denied a fitting trade). Now models the
+  stamped arrival; test-first, both directions pinned incl. the locked
+  decoy that makes the isTradeLocked walk skip discriminating.
+- REAL FIX (ui, live keyboard probe): Enter on the focused confirm OK
+  fired the chat edge (focus escaped the aria-modal dialog), Space died
+  to the jump preventDefault; keyboard users could never confirm.
+  bindDialogKeyActivation repairs the family; jsdom pins + live re-probe
+  ALL PASS.
+- MAINTAINER-DIRECTED: Apply Enchant picker sizing (ctx-menu-picker
+  modifier, both arms capped and scrolling, seven clear sites, CSS guard,
+  refreshed desktop + new mobile picker shots).
+- Promoted the five QA probe suites as durable pins (arc, coverage,
+  races, result mirror, bound surfaces); bound-surface refusal is
+  EMERGENT from the #1165 fungible-only escrow, flagged for #1146.
+- Deferred as maintainer calls: salvage skill-gain absence (by design?),
+  mid-trade enchant not resetting accept flags, all-enchanted disenchant
+  row UX, generic mail/market bound-deny copy (#1146).

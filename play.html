@@ -591,7 +591,7 @@
             </button>
             <div class="play-online-status">
               <span class="server-dot" data-mode="online" aria-hidden="true"></span>
-              <b class="stats-value js-stat-accounts">…</b> <span data-i18n="stats.accountsCreated">Players</span>
+              <b class="stats-value js-stat-characters">…</b> <span data-i18n="stats.charactersCreated">Characters Created</span>
             </div>
           </div>
 
@@ -807,7 +807,14 @@
                 <div class="cs-preview-name" id="charselect-preview-name" aria-live="polite"></div>
                 <canvas id="char-preview-canvas"></canvas>
               </div>
-              <div id="charselect-class-details" class="class-details-panel" aria-live="polite"></div>
+            </div>
+            <!-- Desktop docks this over the stage's left edge; mobile lets it
+                 flow below the roster/preview so the page scrolls to it. -->
+            <div id="charselect-news" class="cs-news-panel">
+              <div class="cs-news-title" data-i18n="news.title">News &amp; Updates</div>
+              <div id="charselect-news-feed" class="cs-news-feed" aria-live="polite">
+                <div class="news-loading" data-i18n="news.loading">Loading the latest updates...</div>
+              </div>
             </div>
           </div>
         </div>

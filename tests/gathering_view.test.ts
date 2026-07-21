@@ -7,6 +7,7 @@
 // property of this pure core, not of Sim's respawn timer itself).
 
 import { describe, expect, it } from 'vitest';
+import { GATHERING_PROFESSIONS, type GatheringProfessionId } from '../src/sim/content/professions';
 import { GATHER_NODES } from '../src/sim/data';
 import type { InvSlot } from '../src/sim/types';
 import {
@@ -15,6 +16,7 @@ import {
   buildNearbyGatherNodes,
   classifyGatherNode,
   gatherDeniedLineKey,
+  gatherDowngradeLineKey,
   isNodeToolLockedFor,
   viewerBestToolTier,
 } from '../src/ui/gathering_view';
@@ -36,10 +38,12 @@ function makeWorld(opts: {
     inventory: opts.inventory ?? [],
     nodeHarvestableByMe: opts.harvestable ?? (() => true),
     professionsState: {
+      // The rows carry the RESOLVED per-profession content caps (Phase 12c:
+      // 100 gathering, 200 fishing), matching what both worlds now emit.
       skills: Object.entries(proficiency).map(([professionId, skill]) => ({
         professionId,
         skill,
-        maxSkill: 300,
+        maxSkill: GATHERING_PROFESSIONS[professionId as GatheringProfessionId]?.maxSkill ?? 100,
       })),
     },
   } as unknown as IWorld;
@@ -169,6 +173,11 @@ describe('tool-tier lock dimension (Phase 12)', () => {
     // back to the profession-neutral corpse line.
     expect(gatherDeniedLineKey('node', 'fishing')).toBe('hudChrome.gathering.toolTierUnmetCorpse');
     expect(gatherDeniedLineKey('node')).toBe('hudChrome.gathering.toolTierUnmetCorpse');
+  });
+
+  it('gatherDowngradeLineKey maps each lost arm to its exact key (Phase 12d)', () => {
+    expect(gatherDowngradeLineKey('mark')).toBe('hudChrome.gathering.downgradeMark');
+    expect(gatherDowngradeLineKey('find')).toBe('hudChrome.gathering.downgradeFind');
   });
 });
 

@@ -705,6 +705,12 @@ export const id_ID: EnTranslations = {
       "collapseHint": "Ciutkan pelacak misi",
       "expandHint": "Bentangkan pelacak misi"
     },
+    "interfaceTabs": {
+      "general": "General",
+      "frames": "Frames",
+      "chat": "Chat",
+      "combat": "Combat"
+    },
     "chatTimestamps": {
       "show": "Tampilkan Cap Waktu Obrolan",
       "format": "Format Cap Waktu",
@@ -1177,6 +1183,10 @@ export const id_ID: EnTranslations = {
         "fiestaWin": "Kemenangan Fiesta"
       }
     },
+    "charSheet": {
+      "offense": "Offense",
+      "defense": "Defense"
+    },
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
@@ -1435,7 +1445,7 @@ export const id_ID: EnTranslations = {
     "corpseHarvest": {
       "title": "Panen",
       "harvestButton": "Panen",
-      "harvestButtonTooltip": "Panen: kumpulkan bahan kerajinan dari mayat ini (kulit, taring, sutra, dan komponen serupa), pisahkan dari jarahan apa pun. Siapapun bisa memanen; hanya satu pemain yang dapat memanen mayat tertentu.",
+      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
       "concentrateHint": "Semakin sedikit bagian yang dipilih, semakin tinggi tingkat mutu tiap bagian.",
       "alreadyHarvested": "Bangkai ini sudah dipanen.",
       "componentAria": "Panen {component}",
@@ -1453,6 +1463,8 @@ export const id_ID: EnTranslations = {
     "townFocus": {
       "title": "Fokus Kota",
       "hint": "Poin fokus menambahkan bonus di atas hasil dasar setiap komponen. Komponen tanpa fokus tetap pada hasil dasar.",
+      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
+      "townOnlyHint": "Focus can only be changed while you are in town.",
       "budgetLabel": "Sisa poin: {remaining} / {budget}",
       "saveButton": "Simpan Fokus",
       "notInTownHint": "Kamu harus berada di kota untuk mengatur fokusmu.",
@@ -1511,6 +1523,7 @@ export const id_ID: EnTranslations = {
       "dragEquipHint": "Seret ke karaktermu untuk memakai",
       "dragDestroyHint": "Seret ke dunia untuk menghancurkan",
       "reorderNeedsRecent": "Hapus filter dan urutkan berdasarkan Terbaru untuk mengatur ulang tasmu",
+      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1676,7 +1689,9 @@ export const id_ID: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Peti",
-      "takeAllTooltip": "Ambil Semua: kumpulkan setiap koin dan item di jendela jarahan ini."
+      "takeLootButton": "Take Loot",
+      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
+      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
     },
     "spellbook": {
       "addToBarAria": "Tambahkan {name} ke bilah aksi",
@@ -1684,7 +1699,8 @@ export const id_ID: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{family} Level {level}",
@@ -2082,7 +2098,11 @@ export const id_ID: EnTranslations = {
       "blockSearchPlaceholder": "Nama pemain",
       "blockAction": "Blokir",
       "nowBlocking": "{name} diblokir.",
-      "stopBlockingTitle": "Buka blokir {name}"
+      "stopBlockingTitle": "Buka blokir {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Hide offline",
+      "hideOfflineTitle": "Hide offline guild members"
     },
     "gathering": {
       "title": "Pengumpulan",
@@ -2112,6 +2132,8 @@ export const id_ID: EnTranslations = {
         "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
       },
       "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
+      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
+      "downgradeFind": "Bags full: a pristine find slipped away.",
       "stateReady": "Ready",
       "stateCooldown": "Respawning"
     },
@@ -2144,6 +2166,49 @@ export const id_ID: EnTranslations = {
       "tailoring": "Menjahit",
       "leatherworking": "Pengolahan Kulit"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Enchant Weapon - Might",
+      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
+      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
+      "enchant_neck_spirit": "Enchant Necklace - Spirit",
+      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
+      "enchant_chest_stamina": "Enchant Chest - Stamina",
+      "enchant_waist_stamina": "Enchant Belt - Stamina",
+      "enchant_legs_stamina": "Enchant Legs - Stamina",
+      "enchant_gloves_agility": "Enchant Gloves - Agility",
+      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
+      "enchant_feet_agility": "Enchant Boots - Agility",
+      "enchant_ring_spirit": "Enchant Ring - Spirit",
+      "enchant_weapon_agility": "Enchant Weapon - Agility",
+      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
+      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
+      "enchant_neck_intellect": "Enchant Necklace - Intellect",
+      "enchant_neck_agility": "Enchant Necklace - Agility",
+      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
+      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
+      "enchant_chest_spirit": "Enchant Chest - Spirit",
+      "enchant_chest_armor": "Enchant Chest - Reinforcement",
+      "enchant_waist_strength": "Enchant Belt - Strength",
+      "enchant_waist_agility": "Enchant Belt - Agility",
+      "enchant_legs_intellect": "Enchant Legs - Intellect",
+      "enchant_gloves_strength": "Enchant Gloves - Strength",
+      "enchant_feet_strength": "Enchant Boots - Strength",
+      "enchant_feet_stamina": "Enchant Boots - Stamina",
+      "enchant_ring_strength": "Enchant Ring - Strength",
+      "enchant_ring_agility": "Enchant Ring - Agility",
+      "enchant_ring_intellect": "Enchant Ring - Intellect",
+      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
+      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
+      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
+      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
+      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
+      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
+      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
+      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
+      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
+      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
+      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+    },
     "professions": {
       "title": "Profesi",
       "close": "Tutup profesi",
@@ -2163,7 +2228,7 @@ export const id_ID: EnTranslations = {
       "tierPipAria": "Tingkat {tier}",
       "nextUnlockTier": "{points} menunjuk ke tingkat berikutnya: peluang karya besar meningkat",
       "nextUnlockSpecialized": "{points} menunjuk ke Khusus: biaya material turun",
-      "nextUnlockMax": "Pada keterampilan maksimal",
+      "nextUnlockMastered": "Mastered, for now",
       "perkSpecializedLine": "{craft}: Khusus, biaya material -{pct}%",
       "perkSpecializedAt": "Mengkhususkan diri pada keterampilan {threshold}",
       "switchCost": "Peralihan arketipe berikutnya membutuhkan {cost} poin penebusan",
@@ -2243,6 +2308,7 @@ export const id_ID: EnTranslations = {
       "skillReqLine": "Membutuhkan {craft} {skill}",
       "difficultyFull": "Peningkatan keterampilan penuh",
       "difficultyReduced": "Mengurangi perolehan keterampilan",
+      "difficultyMinimal": "Minimal skill gain",
       "difficultyNone": "Tidak ada perolehan keterampilan",
       "stationBadge": "Tempat Kerja Kerajinan",
       "stationOutOfRangeNamed": "Pindah ke {station} untuk membuat ini.",
@@ -2250,8 +2316,40 @@ export const id_ID: EnTranslations = {
       "masterworkZoneLine": "{crafter} membuat karya besar {name}!",
       "tierUpToast": "{craft} maju ke tingkat {tier}!",
       "makersMark": "Dibuat oleh {name}",
+      "gatheredBy": "Gathered by {name}",
       "masterworkSeal": "Karya besar",
       "enchantedLine": "Terpesona"
+    },
+    "itemMenu": {
+      "use": "Use",
+      "equip": "Equip",
+      "disenchant": "Disenchant",
+      "salvage": "Salvage",
+      "applyEnchant": "Apply Enchant"
+    },
+    "enchanting": {
+      "disenchantedLine": "You disenchant {item}.",
+      "salvagedLine": "You salvage {item}.",
+      "enchantAppliedLine": "You enchant {item} with {enchant}.",
+      "notHeld": "You do not have that item.",
+      "notDisenchantable": "You cannot disenchant that.",
+      "notSalvageable": "You cannot salvage that.",
+      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
+      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
+      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
+      "enchantWrongSlot": "That enchant cannot be applied to that item.",
+      "enchantUnknown": "That enchant does not exist.",
+      "enchantInsufficient": "You do not have the materials for that enchant.",
+      "disenchantConfirmTitle": "Disenchant {item}?",
+      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
+      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
+      "salvageConfirmTitle": "Salvage {item}?",
+      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
+      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
+      "pickerTitle": "Apply Enchant",
+      "targetTitle": "Choose an item to enchant",
+      "noEnchants": "No enchant uses this reagent.",
+      "noTargets": "No eligible item to enchant."
     },
     "training": {
       "title": "Pelatihan: {name}",
@@ -2545,9 +2643,6 @@ export const id_ID: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Otorisasi dompet itu telah kedaluwarsa atau tidak dapat diverifikasi. Coba lagi."
-    },
-    "welcome": {
-      "invalid_input": "Data yang dimasukkan tidak valid."
     }
   },
   "guide": {
@@ -4121,6 +4216,7 @@ export const id_ID: EnTranslations = {
   "stats": {
     "title": "Status Dunia",
     "accountsCreated": "Pemain",
+    "charactersCreated": "Characters Created",
     "playersOnline": "Pemain Online",
     "realmName": "Nama Dunia"
   },
@@ -4154,7 +4250,9 @@ export const id_ID: EnTranslations = {
     "error": "Tidak dapat memuat pembaruan. Silakan coba lagi nanti.",
     "empty": "Belum ada pembaruan — periksa lagi nanti.",
     "prerelease": "Pra-rilis",
-    "viewOnGithub": "Lihat di GitHub"
+    "viewOnGithub": "Lihat di GitHub",
+    "new": "Baru",
+    "viewAll": "Lihat semua pembaruan di GitHub"
   },
   "download": {
     "title": "Unduh Peluncur Desktop",
@@ -5331,29 +5429,6 @@ export const id_ID: EnTranslations = {
     "body": "Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",
     "status": "Segera kembali"
   },
-  "welcome": {
-    "back": "Selamat datang kembali, {name}",
-    "level": "Level {level}",
-    "lastPlayed": "Terakhir dimainkan: {when}",
-    "continue": "Masuki Dunia",
-    "continueHint": "Tekan Enter untuk melanjutkan, Esc untuk melewati",
-    "continueHintTouch": "Ketuk untuk melanjutkan",
-    "discord": {
-      "title": "Komunitas berkumpul di Discord",
-      "sub": "Pratinjau pembaruan, acara, obrolan pengembang, serta 2 slot bank bonus saat Discord ditautkan.",
-      "join": "Gabung ke Discord kami"
-    },
-    "chest": {
-      "ready": "Peti harian siap dibuka"
-    },
-    "armory": {
-      "cta": "Masuki dunia dan jelajahi Gudang Senjata"
-    },
-    "news": {
-      "new": "Baru",
-      "viewAll": "Lihat semua pembaruan di GitHub"
-    }
-  },
   "hud": {
     "core": {
       "elite": "ELITE",
@@ -5723,7 +5798,8 @@ export const id_ID: EnTranslations = {
       "tradeInProgress": "Perdagangan sudah berlangsung.",
       "tradeTooFar": "Sasaran terlalu jauh untuk berdagang.",
       "tradeExpired": "Permintaan perdagangan telah kedaluwarsa.",
-      "tradeFailed": "Perdagangan gagal: barang atau uang sudah tidak tersedia."
+      "tradeFailed": "Perdagangan gagal: barang atau uang sudah tidak tersedia.",
+      "tradeBound": "That item is bound and cannot be traded."
     },
     "logs": {
       "standUp": "Kamu berdiri.",
@@ -5871,7 +5947,8 @@ export const id_ID: EnTranslations = {
         "offline": "Luring",
         "combat": "Dalam Pertempuran",
         "dungeon": "Dalam Dungeon",
-        "dead": "Tewas"
+        "dead": "Tewas",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -8493,6 +8570,144 @@ export const id_ID: EnTranslations = {
       "elixir_of_the_serpent": {
         "name": "Ramuan Ular"
       },
+      "mosshide_vest": {
+        "name": "Mosshide Vest"
+      },
+      "thornling_grips": {
+        "name": "Thornling Grips"
+      },
+      "acolyte_chain_grips": {
+        "name": "Acolyte Chain Grips"
+      },
+      "votive_chain_belt": {
+        "name": "Votive Chain Belt"
+      },
+      "briarroot_staff": {
+        "name": "Briarroot Staff"
+      },
+      "valefire_lantern": {
+        "name": "Valefire Lantern"
+      },
+      "fenbark_leggings": {
+        "name": "Fenbark Leggings"
+      },
+      "mirebloom_treads": {
+        "name": "Mirebloom Treads"
+      },
+      "fenwarden_sabatons": {
+        "name": "Fenwarden Sabatons"
+      },
+      "marshlight_hauberk": {
+        "name": "Marshlight Hauberk"
+      },
+      "duskthorn_mantle": {
+        "name": "Duskthorn Mantle"
+      },
+      "fenshadow_maul": {
+        "name": "Fenshadow Maul"
+      },
+      "wildgrove_cinch": {
+        "name": "Wildgrove Cinch"
+      },
+      "cragward_pauldrons": {
+        "name": "Cragward Pauldrons"
+      },
+      "cragthorn_greatstaff": {
+        "name": "Cragthorn Greatstaff"
+      },
+      "moonbark_vestments": {
+        "name": "Moonbark Vestments"
+      },
+      "peaksong_helm": {
+        "name": "Peaksong Helm"
+      },
+      "stormchant_gauntlets": {
+        "name": "Stormchant Gauntlets"
+      },
+      "cragprowl_belt": {
+        "name": "Cragprowl Belt"
+      },
+      "stormroot_cowl": {
+        "name": "Stormroot Cowl"
+      },
+      "thunderward_legguards": {
+        "name": "Thunderward Legguards"
+      },
+      "revenantstep_treads": {
+        "name": "Revenantstep Treads"
+      },
+      "shardfang_grips": {
+        "name": "Shardfang Grips"
+      },
+      "shardsong_mantle": {
+        "name": "Shardsong Mantle"
+      },
+      "wyrmcult_spellgrips": {
+        "name": "Wyrmcult Spellgrips"
+      },
+      "thornpeak_wildwraps": {
+        "name": "Thornpeak Wildwraps"
+      },
+      "stormvotive_hauberk": {
+        "name": "Stormvotive Hauberk"
+      },
+      "cryptbloom_shoulderguards": {
+        "name": "Cryptbloom Shoulderguards"
+      },
+      "gravewyrm_thornmaul": {
+        "name": "Gravewyrm Thornmaul"
+      },
+      "vestments_of_the_waking_grove": {
+        "name": "Vestments of the Waking Grove"
+      },
+      "nightfangs_greatstaff": {
+        "name": "Nightfang's Greatstaff"
+      },
+      "maul_of_the_scourged_wilds": {
+        "name": "Maul of the Scourged Wilds"
+      },
+      "tidehymn_slippers": {
+        "name": "Tidehymn Slippers"
+      },
+      "pearlward_aegis": {
+        "name": "Pearlward Aegis"
+      },
+      "wildgrowth_leggings": {
+        "name": "Wildgrowth Leggings"
+      },
+      "grovewardens_grips": {
+        "name": "Grovewarden's Grips"
+      },
+      "verdant_walkers": {
+        "name": "Verdant Walkers"
+      },
+      "lunarward_cinch": {
+        "name": "Lunarward Cinch"
+      },
+      "dreamroot_boots": {
+        "name": "Dreamroot Boots"
+      },
+      "stormbark_mantle": {
+        "name": "Stormbark Mantle"
+      },
+      "wildsoul_maul": {
+        "name": "Wildsoul Maul"
+      },
+      "resonant_thread": {
+        "name": "Resonant Thread"
+      },
+      "resonant_hide": {
+        "name": "Resonant Hide"
+      },
+      "resonant_links": {
+        "name": "Resonant Links"
+      },
+      "resonant_steel": {
+        "name": "Resonant Steel"
+      },
+      "resonant_timber": {
+        "name": "Resonant Timber"
+      },
       "conjured_water4": {
         "name": "Air Mata Air Sihir"
       },
@@ -10905,6 +11120,11 @@ export const id_ID: EnTranslations = {
         "sender": "Persatuan Perajin",
         "subject": "Pekerjaan Anda di bidang Pembuatan Zirah dan Teknik",
         "body": "Perajin,\n\nKabar sampai ke Persekutuan tentang pekerjaan Anda di bidang Pembuatan Zirah dan Teknik: pelat-pelat dipaku dan roda gigi dipasang, kedua kerajinan itu saling memberi makan. Kerajinan tetangga bekerja sama menandai tangan yang siap untuk penyelarasan. Carilah Pandai Besi Haldren, pembuat zirah di Eastbrook: dia mewakili para master untuk saat ini. Buktikan keahlian Anda kepadanya dengan karya tangan Anda sendiri, dan dia akan melihat dua keahlian utama Anda selaras.\n\nHormat kami,\nPersatuan Perajin"
+      },
+      "mastery_reset_notice": {
+        "sender": "The Guildhall",
+        "subject": "Your craft, made honest",
+        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
       }
     },
     "itemSets": {

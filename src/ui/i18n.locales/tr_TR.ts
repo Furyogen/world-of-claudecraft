@@ -7660,11 +7660,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'Claudium mağazası şu anda kullanılamıyor. Bakiyeniz ve satın alımlarınız etkilenmez; lütfen kısa süre sonra tekrar kontrol edin.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Hasat: Bu cesetten işçilik malzemelerini (deri, diş, ipek ve benzeri bileşenler) herhangi bir ganimetten ayrı olarak toplayın. Herkes hasat yapabilir; belirli bir cesedi yalnızca bir oyuncu toplayabilir.',
   'hudChrome.deeds.openBookHint': "Yiğitlikler Kitabı'nı açın",
-  'hudChrome.loot.takeAllTooltip':
-    "Tümü'yi alın: bu ganimet penceresindeki tüm paraları ve eşyaları toplayın.",
   'hudChrome.statInfo.desc.warfare':
     'Oyunculara verilen hasarı {increase}% artırır ve oyunculardan alınan hasarı {reduction}% azaltır.',
   'hudChrome.statInfo.names.warfare': 'Harp',
@@ -8151,21 +8147,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleRaid': 'Akın Çerçeveleri',
   'hudChrome.partyFrames.unlock': 'Grup ve akın çerçevelerini taşı',
   'hudChrome.partyFrames.width': 'Çerçeve Genişliği',
-  'apiError.welcome.invalid_input': 'Geçersiz girdi.',
-  'welcome.back': 'Tekrar hoş geldin, {name}',
-  'welcome.level': 'Seviye {level}',
-  'welcome.lastPlayed': 'Son oynama tarihi: {when}',
-  'welcome.continue': 'Dünyaya Gir',
-  'welcome.continueHint': "Devam etmek için Enter'a, atlamak için Esc'ye bas",
-  'welcome.continueHintTouch': 'Devam etmek için dokun',
-  'welcome.discord.title': "Topluluk Discord'da yaşıyor",
-  'welcome.discord.sub':
-    'Yama ön izlemeleri, etkinlikler, geliştirici sohbeti ve Discord hesabını bağlayınca 2 bonus banka yuvası.',
-  'welcome.discord.join': 'Discord topluluğumuza katıl',
-  'welcome.chest.ready': 'Günlük sandık hazır',
-  'welcome.armory.cta': 'Dünyaya gir ve Cephaneliğe göz at',
-  'welcome.news.new': 'Yeni',
-  'welcome.news.viewAll': "GitHub'daki tüm güncellemeleri görüntüle",
+  'news.new': 'Yeni',
+  'news.viewAll': "GitHub'daki tüm güncellemeleri görüntüle",
   'entities.letters.heroic_marks_reward.sender': 'Kahraman levazım subayı',
   'entities.letters.heroic_marks_reward.subject': 'Kahramanlık Nişanların',
   'entities.letters.heroic_marks_reward.body':
@@ -8421,7 +8404,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Hobi: {craft}',
   'hudChrome.professions.identityHeader': 'Kimlik',
   'hudChrome.professions.majorsLabel': 'Ana dallar: {a} ve {b}',
-  'hudChrome.professions.nextUnlockMax': 'Maksimum beceride',
   'hudChrome.professions.nextUnlockSpecialized':
     "{points} Uzmanlaşmış'a işaret ediyor: malzeme maliyetlerinde düşüş",
   'hudChrome.professions.nextUnlockTier':

@@ -310,3 +310,65 @@ phase lands before 12c starts (the rule from the 12b appendix experience).
 - NEW suites this phase adds (not re-pins, listed for the QA twin): the reset one-shot
   suite, the keep-ledger row pins, the re-crossing suite, the four-arm clamp suite, the
   shared-throttle suite, and the enchanting soft-ceiling suite.
+
+## As landed (2026-07-20, PR #2242): appendix addendum and deviations
+
+The appendix held for goldens: exactly professions_craft and
+professions_gather regenerated, draws and drawDigest byte-identical in both.
+The zero-new-fields requirement drove the reset flag design:
+masteryResetApplied is CharacterState-ONLY (serializeCharacter writes literal
+true; no PlayerMeta field, so samplePlayerMeta sees zero new keys), and the
+transient PlayerMeta.pendingMasteryResetNotice (inert false, never
+serialized) carries the one-time mail-phase letter send. ADDENDUM rows the
+appendix did not list, each a legitimate old-curve premise re-pinned
+minimally (the 12b appendix-incompleteness precedent):
+
+- tests/crafting_view.test.ts: beyond the budgeted three-to-four-state row,
+  3 tests re-pinned (two-below now reads minimal, the free-floor test became
+  the retirement test, the never-gates-craftable fixture moved to a genuinely
+  gray row) plus 2 boundary-sweep table rows.
+- tests/archetype_ceiling.test.ts: the dormant free-floor progress test
+  became the curve-not-ceiling test (gray outside-common at 100; a 30 to
+  30.5 yellow arm preserves the ceiling-independence claim).
+- tests/professions_crafting.test.ts: two-below re-pinned to minimal 0.25
+  with a new three-below zero arm; the high-capability common arm is gray.
+- tests/deeds_sites.test.ts: the enchanting threshold-crossing stages move
+  from 74 plus flat 1 to 74.75 plus green 0.25.
+- tests/deeds.test.ts and tests/deeds_reconcile.test.ts: fixtures carry
+  masteryResetApplied true (curve-era blobs; the reconcile arm was caught by
+  the FULL gate, not the phase matrix); the pre-curve arm (retro inferences
+  read RESET values) is pinned in professions_mastery_reset.test.ts.
+- The reset letter needed the five non-Latin M16 fills (the Phase 7 authored
+  letter precedent); landed as the fix(i18n) commit.
+
+Fixture rows deliberately NOT re-pinned (pure pass-through view inputs never
+compared against content): professions_window_focus maxSkill 300 rows incl.
+the fictional skinning row, the professions_contracts type-contract record.
+
+Review-round additions (six reviewers, zero blocking): GOLD_ACCENT_COLOR in
+icons.ts (the named TS twin of --gold) replaces the anonymous tint literal;
+skill readouts floor and points-to-go ceil in both view cores (fractional
+gains never render an uncrossed threshold as crossed, pinned); the
+destructive rollback strip-refire arm and the second ui letter registry are
+consciously pinned in professions_mastery_reset.test.ts. Phase 13 heads-up:
+the shared throttle gates disenchant/salvage BEFORE their rng draw (unwired
+today).
+
+QA addendum rows (Phase 12c QA, all additive):
+- tests/mastery_reset_rehearsal.test.ts gains the completeness arm (arm 3):
+  flag-absent rows must show every craft/gathering leaf, legacy mirror
+  included, at exactly 0 in the output; a partial reset now fails the
+  synthetic corpus AND the production-copy run instead of tallying as
+  applied.
+- tests/mastery_reset_online.test.ts (NEW suite): the reset and the notice
+  letter through a live GameServer.join plus the restart-relog no-refire
+  arm (the db-mock boilerplate from deeds_reconcile.test.ts).
+- tests/professions_mastery_reset.test.ts gains the re-crossing positive
+  control (a never-earned prog_mining_100 grants fresh on the climb).
+- tests/profession_identity_card.test.ts gains the GOLD_ACCENT_COLOR
+  lockstep pin (tokens.css --gold = the TS twin = #ffd100).
+- scripts/pr_shot_targets.mjs stub values re-staged post-12c-legal
+  (craft 125 at cap; gathering 88/45/100/68 over caps 100/100/100/200) and
+  the six committed after-shots recaptured; the live IWorld path was always
+  correct, the stale stub only misrepresented the UI in the committed
+  screenshots.

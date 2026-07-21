@@ -18,7 +18,7 @@ import {
 import { voice, voiceDistanceGain } from '../game/voice';
 import type { ClaudiumStoreItem } from '../net/economy_sdk';
 import { castBarState, consumeBarState } from '../render/cast_bar';
-import { CharacterPreview } from '../render/characters';
+import { CharacterPreview, type PreviewFramingName } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
 import { mechHeldWeaponOverride } from '../render/characters/manifest';
 import { onPortraitsReady } from '../render/characters/portrait';
@@ -77,6 +77,7 @@ import type {
   PetMode,
   PlayerClass,
   ResourceType,
+  SkinCatalog,
 } from '../sim/types';
 import {
   type AbilityEffect,
@@ -125,6 +126,7 @@ import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
 import { attachAvatarFallback } from './avatar_fallback';
+import { BagItemActionMenu, CTX_MENU_PICKER_CLASS } from './bag_item_action_menu';
 import { bagsWindowShown } from './bags_view';
 import { BagsWindow, dismissBagPrompts } from './bags_window';
 import { BankWindow } from './bank_window';
@@ -133,7 +135,6 @@ import { CardDuelWindow } from './card_duel_window';
 import { CastBarPainter } from './cast_bar_painter';
 import { charBagsPaired } from './char_bags_pairing_core';
 import { type CharSkinPainterHost, paintCharSkinPicker } from './char_skin_window';
-import { buildPaperdollView, type PaperdollSlot } from './char_view';
 import { CharWindow, craftNameText } from './char_window';
 import { activeCharacterAppearancePreview } from './character_appearance';
 import {
@@ -190,13 +191,19 @@ import {
 } from './deeds_view';
 import { DeedsWindow } from './deeds_window';
 import { DevCommandWindow } from './dev_command_window';
-import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
+import { devTierByIndex, devTierDisplayName } from './dev_tier';
+import { bindDialogKeyActivation } from './dialog_key_activation';
 import { discordRoleTagLabel } from './discord_role_tag';
-import { discordStatusBadgeDataUrl, discordStatusDisplayName } from './discord_tier';
+import { discordStatusDisplayName } from './discord_tier';
 import { dropdownKeyNav } from './dropdown_nav';
 import { DungeonFinderProposalPopup } from './dungeon_finder_proposal_popup';
 import { DungeonFinderWindow } from './dungeon_finder_window';
 import { emoteIconUrl } from './emote_icons';
+import {
+  applyEnchantResultToast,
+  disenchantResultToast,
+  salvageResultToast,
+} from './enchanting_view';
 import {
   classDisplayName,
   dungeonDisplayName,
@@ -216,8 +223,7 @@ import {
   resetFramePositionsOnce,
   TARGET_FRAME_POS_KEY,
 } from './frame_pos_reset';
-import { gatherDeniedLineKey } from './gathering_view';
-import { holderTierBadgeDataUrl, holderTierByIndex, holderTierDisplayName } from './holder_tier';
+import { gatherDeniedLineKey, gatherDowngradeLineKey } from './gathering_view';
 import { isSelfOnlyAbility } from './hud/action_bar/ability_self_only';
 import { ActionBarController } from './hud/action_bar/action_bar_controller';
 import {
@@ -327,6 +333,7 @@ import {
   tPlural,
 } from './i18n';
 import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
+import { InspectWindow } from './inspect_window';
 import { itemArmorTypeLabelKey } from './item_armor_type';
 import { requiredClassesForTooltip } from './item_class_restriction';
 import { itemStatDeltas } from './item_compare';
@@ -378,6 +385,7 @@ import {
   pickIdleBarkCandidates,
 } from './mob_idle_sfx';
 import { type MobTooltipI18n, type MobTooltipModel, mobTooltipHtml } from './mob_tooltip_view';
+import { isMobileFullscreenWindowOpen } from './mobile_fullscreen_window_core';
 import { MovableFrame } from './movable_frame';
 import { OptionsWindow } from './options_window';
 import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
@@ -2320,6 +2328,18 @@ export class Hud {
       .filter((win) => win.id !== 'mobile-extra-controls')
       .some((win) => this.isWindowVisible(win));
     document.body.classList.toggle('mobile-window-open', anyOpen);
+    const bagsWindow = document.getElementById('bags');
+    const charWindow = document.getElementById('char-window');
+    document.body.classList.toggle(
+      'mobile-fullscreen-window-open',
+      isMobileFullscreenWindowOpen(
+        !!bagsWindow && this.isWindowVisible(bagsWindow),
+        !!charWindow && this.isWindowVisible(charWindow),
+        document.body.classList.contains('vendor-open'),
+        document.body.classList.contains('bank-open'),
+        document.body.classList.contains('char-bags-paired'),
+      ),
+    );
     const storeWindow = document.getElementById('daily-rewards-window') as HTMLElement | null;
     const claudiumWindow = document.getElementById('claudium-window') as HTMLElement | null;
     const storeVisible = !!storeWindow && this.isWindowVisible(storeWindow);
@@ -2548,6 +2568,10 @@ export class Hud {
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
         this.charWindow.close();
         this.syncCharBagsPairing();
+        break;
+      case 'inspect-window':
+        // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
+        this.inspectWindow.close();
         break;
       case 'trade-window':
         this.sim.tradeCancel();
@@ -3542,6 +3566,31 @@ export class Hud {
     isTouchHud: () => document.body.classList.contains('mobile-touch'),
     markEquipDropTargets: (itemId) => this.charWindow.markDropTargets(itemId),
     dropOnEquipSlot: (itemId, slot) => this.charWindow.dropOnEquipSlot(itemId, slot),
+    openItemActionMenu: (def, itemId, x, y, runDefault) =>
+      this.bagItemActionMenu.open(def, itemId, x, y, runDefault),
+  });
+  // Bag-item action menu (Professions 2.0 Phase 13): the right-click / touch
+  // menu that surfaces Disenchant / Salvage / Apply Enchant on a bag stack.
+  // Composes the shared #ctx-menu popup family (placePopupAt + keepPopupOnScreen,
+  // bindContextMenuActions) and the one confirm-dialog family; the bags window
+  // opens it via the openItemActionMenu dep above.
+  private readonly bagItemActionMenu = new BagItemActionMenu({
+    world: () => this.sim,
+    ctxMenu: {
+      element: () => $('#ctx-menu'),
+      place: (element, x, y, reserveRight, reserveBottom) => {
+        this.placePopupAt(element, x, y, reserveRight, reserveBottom);
+        this.keepPopupOnScreen(element);
+      },
+      bind: (onActivate) => this.bindContextMenuActions(onActivate),
+    },
+    confirmDialog: (title, body, okText, cancelText, onOk) =>
+      this.confirmDialog(title, body, okText, cancelText, onOk),
+    slotName: (slot) => itemSlotName(slot),
+    isMobileLayout: () => this.isMobileLayout(),
+    afterAction: () => {
+      if ($('#bags').style.display !== 'none') this.renderBags();
+    },
   });
   // World Market window painter (market_view.ts core + market_window.ts painter).
   // It composes the shared presentation bag (icon/money/tooltip) and owns the
@@ -3764,7 +3813,7 @@ export class Hud {
     hideTooltip: () => this.hideTooltip(),
     ...this.windowFocus('#char-window'),
     slotName: (slot) => itemSlotName(slot),
-    statCellHtml: (stat) => statCellHtml(this.statModel(stat), STAT_VIEW_DEPS),
+    statCellHtml: (stat) => statCellHtml(this.statModel(stat), STAT_VIEW_DEPS, { colon: false }),
     statTooltipHtml: (stat) => statTooltipHtml(this.statModel(stat), STAT_VIEW_DEPS),
     talentSummaryHtml: () => this.talentSummaryHtml(),
     progressionHtml: (level) => this.progressionHtml(level),
@@ -3803,6 +3852,21 @@ export class Hud {
     dragState: this.itemDragState,
     renderBags: () => this.renderBags(),
     showError: (text) => this.showError(text),
+  });
+  // Inspect ("Profile") window painter (inspect_view.ts pure core + inspect_window.ts
+  // painter). It paints #inspect-window for both the rich in-range card (live
+  // class-colored turntable of the inspected player + their worn paperdoll) and the
+  // thin out-of-range remote card. The shared turntable is HUD-owned (single WebGL
+  // context), so the painter mounts it through mountInspectPreview.
+  private readonly inspectWindow = new InspectWindow({
+    ...this.presentationBag,
+    root: () => $('#inspect-window'),
+    closeOthers: () => this.closeOtherWindows('#inspect-window'),
+    hideTooltip: () => this.hideTooltip(),
+    ...this.windowFocus('#inspect-window'),
+    slotName: (slot) => itemSlotName(slot),
+    showDevBadges: () => this.optionsHooks?.settings.get('showDevBadges') ?? true,
+    mountPreview: (container, params) => this.mountInspectPreview(container, params),
   });
   // Options window painter (options_view.ts core + options_window.ts painter). The
   // window renders no item rows, so it composes no PainterHostPresentation bag; it
@@ -4613,7 +4677,7 @@ export class Hud {
     }
     html += this.itemProcBlock(item);
     html += this.itemSetBlock(item);
-    html += instanceMakersMarkLine(instance);
+    html += instanceMakersMarkLine(instance, item.kind);
     if (item.sellValue > 0)
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.sellPrice', { money: formatLocalizedMoney(item.sellValue) }))}</div>`;
     if (compare) html += this.itemCompareBlock(item);
@@ -8951,10 +9015,60 @@ export class Hud {
           // trap); the sim event is text-free, so the pure core resolves the
           // key off surface + professionId and requiredTier interpolates.
           this.showError(
-            t(gatherDeniedLineKey(ev.surface, ev.professionId) as TranslationKey, {
+            t(gatherDeniedLineKey(ev.surface, ev.professionId), {
               tier: formatNumber(ev.requiredTier, { maximumFractionDigits: 0 }),
             }),
           );
+          break;
+        }
+        case 'gatherDowngrade': {
+          // Full-bag signed-grant downgrade (Professions 2.0 Phase 12d): a
+          // toast ONLY, the gatherDenied pattern above. No loot line, no cue,
+          // no other state (the grant-hub double-log trap); the sim event is
+          // text-free, so the pure core resolves the key off the lost arm.
+          this.showError(t(gatherDowngradeLineKey(ev.lost)));
+          break;
+        }
+        case 'disenchantResult': {
+          // Enchanting disenchant outcome (Professions 2.0 Phase 13): text-free,
+          // so enchanting_view.ts maps the event to its key + sink and the item
+          // name interpolates. The grant hub's own 'loot' events already print
+          // the material yield lines, so success is a distinct action line (the
+          // gatherResult pattern), never a second receive notification.
+          const toast = disenchantResultToast(ev);
+          const item = ITEMS[ev.itemId];
+          const params = { item: item ? itemDisplayName(item) : ev.itemId };
+          if (toast.sink === 'log') this.log(t(toast.key, params), '#7fdc4f');
+          else this.showError(t(toast.key));
+          break;
+        }
+        case 'salvageResult': {
+          // Enchanting salvage outcome (Professions 2.0 Phase 13): same shape as
+          // disenchantResult above.
+          const toast = salvageResultToast(ev);
+          const item = ITEMS[ev.itemId];
+          const params = { item: item ? itemDisplayName(item) : ev.itemId };
+          if (toast.sink === 'log') this.log(t(toast.key, params), '#7fdc4f');
+          else this.showError(t(toast.key));
+          break;
+        }
+        case 'enchantResult': {
+          // Apply-enchant outcome (Professions 2.0 Phase 13): the success line
+          // names the item AND the enchant (enchantName.<id>, its first render
+          // sink); every deny is an error toast.
+          const toast = applyEnchantResultToast(ev);
+          const item = ITEMS[ev.itemId];
+          if (toast.sink === 'log') {
+            this.log(
+              t(toast.key, {
+                item: item ? itemDisplayName(item) : ev.itemId,
+                enchant: t(`hudChrome.enchantName.${ev.enchantId}` as TranslationKey),
+              }),
+              '#7fdc4f',
+            );
+          } else {
+            this.showError(t(toast.key));
+          }
           break;
         }
         case 'fishingResult': {
@@ -10357,6 +10471,7 @@ export class Hud {
       'Target is too far away to trade.': 'hud.errors.tradeTooFar',
       'The trade request has expired.': 'hud.errors.tradeExpired',
       'Trade failed: items or money no longer available.': 'hud.errors.tradeFailed',
+      'That item is bound and cannot be traded.': 'hud.errors.tradeBound',
       'That quest is not available.': 'questUi.errors.unavailable',
       'That quest is not in your log.': 'questUi.errors.notInLog',
       'That quest is not complete.': 'questUi.errors.incomplete',
@@ -11444,14 +11559,21 @@ export class Hud {
       .catch((err) => console.error('failed to load mech cosmetic preview:', err));
   }
 
-  /** Mount the shared character turntable into `container` showing `cls`/`skin`.
-   *  The single CharacterPreview canvas is moved between hosts (char sheet, the
-   *  skin-select overlay) via setContainer, so only one WebGL context exists. */
-  private mountCharPreview(
+  /** Mount the shared character turntable into `container`. The single
+   *  CharacterPreview canvas is moved between hosts (char sheet, the skin-select
+   *  overlay, the inspect stage) via setContainer, so only one WebGL context
+   *  exists; every mount re-asserts its own framing, so the sheet and the inspect
+   *  stage can trade the camera without inheriting each other's framing. */
+  private mountSharedPreview(
     container: HTMLElement,
-    cls: PlayerClass,
-    skin: number,
-    previewKey?: string,
+    opts: {
+      cls: PlayerClass;
+      skin: number;
+      previewKey?: string;
+      mainhand: string | null;
+      offhand: string | null;
+      framing: PreviewFramingName;
+    },
   ): void {
     if (!this.charPreviewCanvas) this.charPreviewCanvas = document.createElement('canvas');
     if (!this.charPreview) {
@@ -11460,19 +11582,77 @@ export class Hud {
     } else {
       this.charPreview.setContainer(container);
     }
-    // Show both currently equipped hands on the character sheet, so the 3D model
-    // reflects shields and dual wield as well as mainhand gear changes.
-    const weapon = this.sim.equipment.mainhand ?? null;
-    const offhand = this.sim.equipment.offhand ?? null;
-    if (previewKey) {
+    if (opts.previewKey) {
       // Mech is class-agnostic; mirror the wearer class's hand layout so the
       // paperdoll matches the in-world render.
-      const override = previewKey === 'player_mech' ? mechHeldWeaponOverride(cls) : null;
-      this.charPreview.setVisualKey(previewKey, weapon, override, offhand);
+      const override = opts.previewKey === 'player_mech' ? mechHeldWeaponOverride(opts.cls) : null;
+      this.charPreview.setVisualKey(opts.previewKey, opts.mainhand, override, opts.offhand);
     } else {
-      this.charPreview.setClass(cls, weapon, offhand);
+      this.charPreview.setClass(opts.cls, opts.mainhand, opts.offhand);
     }
-    this.charPreview.setSkin(skin);
+    this.charPreview.setSkin(opts.skin);
+    this.charPreview.setFraming(opts.framing);
+  }
+
+  /** Char-sheet / skin-picker mount: the SELF character with both currently
+   *  equipped hands (so the 3D model reflects shields and dual wield as well as
+   *  mainhand gear changes), in the close self-sheet framing. */
+  private mountCharPreview(
+    container: HTMLElement,
+    cls: PlayerClass,
+    skin: number,
+    previewKey?: string,
+  ): void {
+    this.mountSharedPreview(container, {
+      cls,
+      skin,
+      previewKey,
+      mainhand: this.sim.equipment.mainhand ?? null,
+      offhand: this.sim.equipment.offhand ?? null,
+      framing: 'sheet',
+    });
+  }
+
+  /** Mount the shared turntable into the inspect stage showing the INSPECTED
+   *  player's appearance and worn hands, with the pulled-back inspect framing.
+   *  The skin CATALOG picks the rig exactly as renderCharPreview does for self:
+   *  a mech-cosmetic player mounts after the lazy mech-asset preload resolves,
+   *  and only while this stage is still the live inspect target. */
+  private mountInspectPreview(
+    container: HTMLElement,
+    params: {
+      cls: PlayerClass;
+      skin: number;
+      skinCatalog: SkinCatalog;
+      mainhand: string | null;
+      offhand: string | null;
+    },
+  ): void {
+    const preview = activeCharacterAppearancePreview(params.cls, params.skin, params.skinCatalog);
+    const mount = (): void =>
+      this.mountSharedPreview(container, {
+        cls: params.cls,
+        skin: preview.skin,
+        previewKey: preview.visualKey === 'player_mech' ? preview.visualKey : undefined,
+        mainhand: params.mainhand,
+        offhand: params.offhand,
+        framing: 'inspect',
+      });
+    if (preview.visualKey !== 'player_mech') {
+      mount();
+      return;
+    }
+    if (!this.mechAssetsPromise) this.mechAssetsPromise = preloadMechAssets();
+    void this.mechAssetsPromise
+      .then(() => {
+        // Mount only while the inspect window is still open AND this stage is still
+        // the painted one (a reopen replaces the innerHTML, disconnecting it), so a
+        // late resolve can never steal the canvas from the character sheet.
+        const inspectWindow = $('#inspect-window') as HTMLElement | null;
+        if (inspectWindow?.style.display !== 'block' || !container.isConnected) return;
+        mount();
+      })
+      .catch((err) => console.error('failed to load mech cosmetic preview:', err));
   }
 
   private renderCharSkinPicker(): void {
@@ -11673,6 +11853,7 @@ export class Hud {
     // both or a purchase confirmation opens invisibly underneath.
     el.style.zIndex = String(Math.max(Number(el.style.zIndex) || 0, 95));
     this.confirmTrap = this.focusManager.open({ root: () => el });
+    bindDialogKeyActivation(el);
     el.querySelector<HTMLElement>('[data-ok]')?.focus();
     const close = () => {
       this.confirmTrap?.release();
@@ -11734,6 +11915,7 @@ export class Hud {
       `</div>`;
     document.body.appendChild(el);
     this.confirmTrap = this.focusManager.open({ root: () => el });
+    bindDialogKeyActivation(el);
     const input = el.querySelector('.cd-input') as HTMLInputElement | HTMLTextAreaElement;
     const close = () => {
       this.confirmTrap?.release();
@@ -12164,6 +12346,7 @@ export class Hud {
 
   private openSelfContextMenu(x: number, y: number, opener: HTMLElement | null = null): void {
     const el = $('#ctx-menu');
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     this.ctxMenuOpener = opener;
     const party = this.sim.partyInfo;
     let html = `<div class="ctx-title ctx-title-player">${portraitChipHtml({ cls: this.sim.cfg.playerClass, skin: this.sim.player.skin ?? 0, name: this.sim.player.name, variant: 'sm' })}<span class="ctx-title-name">${esc(this.sim.player.name)}</span></div>`;
@@ -12316,6 +12499,7 @@ export class Hud {
 
   openContextMenu(pid: number, name: string, x: number, y: number): void {
     const el = $('#ctx-menu');
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     const party = this.sim.partyInfo;
     const isLeader = party?.leader === this.sim.playerId;
     const isMember = !!party?.members.some((m) => m.pid === pid);
@@ -12467,152 +12651,19 @@ export class Hud {
    * strictly more than looking their name up from chat.
    */
   private openRemoteProfile(profile: CharacterProfile): void {
-    const cls = profile.cls as PlayerClass;
-    const el = $('#inspect-window');
-    this.closeOtherWindows('#inspect-window');
-    const guildHtml = profile.guild ? `<div class="inspect-meta">${esc(profile.guild)}</div>` : '';
-    el.innerHTML =
-      `<div class="panel-title"><span>${esc(t('character.profile'))}</span>` +
-      `<button type="button" class="x-btn" data-close aria-label="${esc(t('character.closeProfile'))}">${svgIcon('close')}</button></div>` +
-      `<div class="inspect-card">` +
-      portraitChipHtml({ cls, skin: profile.skin, name: profile.name, variant: 'lg' }) +
-      `<div class="inspect-name">${esc(profile.name)}</div>` +
-      `<div class="inspect-meta">${esc(
-        t('itemUi.equipment.levelClass', {
-          level: formatNumber(profile.level, { maximumFractionDigits: 0 }),
-          className: classDisplayName(cls),
-        }),
-      )}</div>` +
-      guildHtml +
-      `</div>`;
-    hydratePortraits(el);
-    el.querySelector('[data-close]')?.addEventListener('click', () => {
-      el.style.display = 'none';
+    this.inspectWindow.openRemote({
+      name: profile.name,
+      level: profile.level,
+      cls: profile.cls as PlayerClass,
+      skin: profile.skin,
+      guild: profile.guild,
     });
-    el.style.display = 'block';
   }
 
   openInspect(pid: number): void {
     const e = this.sim.entities.get(pid);
     if (e?.kind !== 'player') return;
-    const cls = e.templateId as PlayerClass;
-    const className = classDisplayName(cls);
-    const el = $('#inspect-window');
-    this.closeOtherWindows('#inspect-window');
-    // $WOC holder-tier flair: cosmetic badge for a connected/holder wallet,
-    // broadcast per-entity via the `ht`/`hb` identity fields (server-set). Shown
-    // only when the inspected player has a tier (> 0); the exact balance rides
-    // along in `hb` and reads out beneath the rung name when present.
-    const tierDef = holderTierByIndex(e.holderTier ?? 0);
-    const holderHtml = tierDef
-      ? `<div class="inspect-holder">` +
-        `<img class="inspect-holder-badge" src="${holderTierBadgeDataUrl(tierDef)}" alt="" draggable="false">` +
-        `<div class="inspect-holder-text">` +
-        `<div class="inspect-holder-name">${esc(holderTierDisplayName(tierDef))}</div>` +
-        `<div class="inspect-holder-sub">${e.holderBalance ? esc(t('wallet.balanceAmount', { amount: formatNumber(e.holderBalance, { maximumFractionDigits: 0 }) })) : esc(t('wallet.holder'))}</div>` +
-        `</div></div>`
-      : '';
-    // Linked-Discord flair: avatar/badge, nickname, rank, "member since", role.
-    const discordTierIdx = e.discordTier ?? 0;
-    const discordImg = e.discordAvatar
-      ? `<img class="inspect-holder-badge inspect-discord-pfp" src="${esc(e.discordAvatar)}" referrerpolicy="no-referrer" alt="" draggable="false">`
-      : `<img class="inspect-holder-badge" src="${discordStatusBadgeDataUrl(discordTierIdx)}" alt="" draggable="false">`;
-    const memberDays =
-      typeof e.discordJoined === 'number'
-        ? Math.max(0, Math.floor((Date.now() - e.discordJoined) / 86_400_000))
-        : null;
-    const memberSinceHtml =
-      memberDays !== null
-        ? `<div class="inspect-holder-sub">${esc(t('hudChrome.discord.memberSince'))}: ${esc(t('hudChrome.discord.memberSinceDays', { days: formatNumber(memberDays, { maximumFractionDigits: 0 }) }))}</div>`
-        : '';
-    const roleLabel = discordRoleTagLabel(e.discordRole);
-    const roleHtml = roleLabel
-      ? `<div class="inspect-holder-sub inspect-discord-role">${esc(roleLabel)}</div>`
-      : '';
-    const discordHtml =
-      discordTierIdx > 0
-        ? `<div class="inspect-holder">` +
-          discordImg +
-          `<div class="inspect-holder-text">` +
-          `<div class="inspect-holder-name">${esc(e.discordName ? e.discordName : discordStatusDisplayName(discordTierIdx))}</div>` +
-          `<div class="inspect-holder-sub">${esc(t('hudChrome.discord.title'))} · ${esc(discordStatusDisplayName(discordTierIdx))}</div>` +
-          memberSinceHtml +
-          roleHtml +
-          `</div></div>`
-        : '';
-    // Developer badge: the cosmetic contributor tier, broadcast per-entity via the
-    // `dvt`/`dvc`/`dgl` identity fields. Shown only for an actual contributor
-    // (tier > 0), with the merged-PR count and the @login under the rung name,
-    // and only while the viewer's own showDevBadges display preference is on.
-    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
-    const devTierDef = showDevBadges ? devTierByIndex(e.devTier ?? 0) : undefined;
-    const devSub = e.devMergedPrs
-      ? t('hudChrome.devBadge.prsLanded', {
-          count: formatNumber(e.devMergedPrs, { maximumFractionDigits: 0 }),
-        })
-      : t('hudChrome.devBadge.contributor');
-    const devLoginHtml = e.githubLogin
-      ? `<div class="inspect-holder-sub inspect-dev-login">@${esc(e.githubLogin)}</div>`
-      : '';
-    const devHtml = devTierDef
-      ? `<div class="inspect-holder">` +
-        `<img class="inspect-holder-badge" src="${devTierBadgeDataUrl(devTierDef)}" alt="" draggable="false">` +
-        `<div class="inspect-holder-text">` +
-        `<div class="inspect-holder-name">${esc(devTierDisplayName(devTierDef))}</div>` +
-        `<div class="inspect-holder-sub">${esc(devSub)}</div>` +
-        devLoginHtml +
-        `</div></div>`
-      : '';
-    el.innerHTML =
-      `<div class="panel-title"><span>${esc(t('character.profile'))}</span>` +
-      `<button type="button" class="x-btn" data-close aria-label="${esc(t('character.closeProfile'))}">${svgIcon('close')}</button></div>` +
-      `<div class="inspect-card">` +
-      portraitChipHtml({ cls, skin: e.skin ?? 0, name: e.name, variant: 'lg', framing: 'body' }) +
-      `<div class="inspect-name">${esc(e.name)}</div>` +
-      // The active Book of Deeds title (the entity `title` wire field, a deed
-      // id): a subtitle line under the name, exactly the nameplate surface.
-      (e.title && deedTitleText(e.title) !== ''
-        ? `<div class="inspect-title">${esc(deedTitleText(e.title))}</div>`
-        : '') +
-      `<div class="inspect-meta">${esc(t('itemUi.equipment.levelClass', { level: formatNumber(e.level, { maximumFractionDigits: 0 }), className }))}</div>` +
-      holderHtml +
-      discordHtml +
-      devHtml +
-      `</div>` +
-      // Worn gear, mirrored from the entity's render-only `equippedItems` (the
-      // `eq` identity field). Item names/icons/tooltips resolve fully client-side
-      // from the static ITEMS table, so only the slot->id map crosses the wire.
-      `<div class="inspect-equip">` +
-      `<div class="inspect-equip-title">${esc(t('classDetails.sections.equipment'))}</div>` +
-      `<div class="paperdoll inspect-paperdoll">` +
-      `<div class="equip-col" id="inspect-equip-left"></div>` +
-      `<div class="equip-col equip-col-right" id="inspect-equip-right"></div>` +
-      `</div></div>`;
-    hydratePortraits(el);
-    // If the linked-Discord avatar fails to load from the CDN, degrade to exactly the
-    // no-avatar rendering (the plain status-tier badge, without the pfp's blue ring)
-    // instead of the browser's broken-image placeholder.
-    const inspectPfp = el.querySelector<HTMLImageElement>('.inspect-discord-pfp');
-    if (inspectPfp) {
-      attachAvatarFallback(inspectPfp, (img) => {
-        img.classList.remove('inspect-discord-pfp');
-        img.src = discordStatusBadgeDataUrl(discordTierIdx);
-      });
-    }
-    const view = buildPaperdollView(e.equippedItems, ITEMS);
-    const leftCol = el.querySelector('#inspect-equip-left');
-    const rightCol = el.querySelector('#inspect-equip-right');
-    // Per-copy payloads ride the `eqi` identity mirror (EntityView
-    // .equippedInstances) so an inspected player's masterwork seal / maker's
-    // mark shows in the row tooltip; sparse, so most slots pass undefined.
-    for (const cell of view.left)
-      leftCol?.appendChild(this.buildInspectSlotRow(cell, e.equippedInstances[cell.slot]));
-    for (const cell of view.right)
-      rightCol?.appendChild(this.buildInspectSlotRow(cell, e.equippedInstances[cell.slot]));
-    el.querySelector('[data-close]')?.addEventListener('click', () => {
-      el.style.display = 'none';
-    });
-    el.style.display = 'block';
+    this.inspectWindow.openInspect(e, Date.now());
   }
 
   /** Open the Loot Settings window: the leader gets the editable master-loot
@@ -12687,29 +12738,13 @@ export class Hud {
     );
   }
 
-  // One read-only equipment row for the inspect window: icon, slot name, and the
-  // equipped item (quality-tinted) with its tooltip. Unlike the character window's
-  // own paperdoll row, there are no unequip / drag affordances (another player's
-  // gear is view-only); the quality color comes from the shared QUALITY_COLOR map.
-  private buildInspectSlotRow(cell: PaperdollSlot, instance?: ItemInstancePayload): HTMLElement {
-    const { slot, item } = cell;
-    const row = document.createElement('div');
-    row.className = 'equip-slot';
-    const qColor = item ? (QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff') : '';
-    const icon = item
-      ? this.itemIcon(item)
-      : `<img class="item-icon" src="${iconDataUrl('item', 'slot_empty')}" alt="" draggable="false">`;
-    row.innerHTML = `${icon}<div><div class="slot-name">${esc(itemSlotName(slot))}</div><div class="slot-item"${item ? ` style="color:${qColor}"` : ''}>${item ? esc(itemDisplayName(item)) : esc(t('itemUi.equipment.empty'))}</div></div>`;
-    if (item) this.attachTooltip(row, () => this.itemTooltip(item, true, instance));
-    return row;
-  }
-
   // Raid/target marker picker for an enemy, opened from its target unit frame.
   // Party-only (markers are a coordination feature); shows the 8 symbols with a
   // check on the one currently on this mob, plus localized clear and cancel actions.
   openMarkerMenu(entityId: number, name: string, x: number, y: number): void {
     if (!this.sim.partyInfo) return;
     const el = $('#ctx-menu');
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     const current = this.sim.markerFor(entityId);
     let html = `<div class="ctx-title">${esc(name)}</div>`;
     for (let i = 0; i < RAID_MARKER_LABEL_KEYS.length; i++) {
@@ -12744,6 +12779,7 @@ export class Hud {
 
   openPetMenu(_entityId: number, name: string, dead: boolean, x: number, y: number): void {
     const el = $('#ctx-menu');
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     const isWarlock = this.sim.cfg.playerClass === 'warlock';
     let html = `<div class="ctx-title">${esc(name)}</div>`;
     html += `<div class="ctx-item" data-act="rename">${esc(t('hud.pet.rename'))}</div>`;
@@ -12790,6 +12826,7 @@ export class Hud {
     opener?: HTMLElement,
   ): void {
     const el = $('#ctx-menu');
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     // Clicking the same name twice closes the menu. Without this branch, the
     // outside-click dismiss refuses to close a menu whose opener was clicked
     // (it treats the opener as "inside"), so the second click would silently
@@ -13030,7 +13067,9 @@ export class Hud {
   }
 
   closeContextMenu(): void {
-    $('#ctx-menu').style.display = 'none';
+    const el = $('#ctx-menu');
+    el.style.display = 'none';
+    el.classList.remove(CTX_MENU_PICKER_CLASS);
     this.ctxMenuOpener = null;
   }
 

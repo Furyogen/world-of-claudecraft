@@ -9,6 +9,7 @@ import {
   type PreviewAppearance,
   previewAppearanceVisual,
 } from './preview_appearance';
+import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { CharacterVisual } from './visual';
 
 export type { PreviewAppearance } from './preview_appearance';
@@ -81,8 +82,9 @@ export class CharacterPreview {
         ? this.container.clientWidth / this.container.clientHeight
         : 1;
     this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
-    this.camera.position.set(LIVE_PREVIEW_X, 1.45, 5.1);
-    this.camera.lookAt(new THREE.Vector3(LIVE_PREVIEW_X, 1.3, 0));
+    // Default to the self character-sheet framing; the inspect window switches to
+    // its pulled-back framing via setFraming('inspect') on mount.
+    this.applyFraming(PREVIEW_FRAMING.sheet);
 
     // 4. Initialize Character Group
     this.characterGroup = new THREE.Group();
@@ -235,6 +237,21 @@ export class CharacterPreview {
 
     // Re-observe the new container
     this.setupResizeObserver();
+  }
+
+  /** Switch the camera framing (see preview_framing.ts). The self character sheet
+   *  uses 'sheet' (close, face-on); the inspect window uses 'inspect' (pulled back
+   *  so a tall silhouette stays framed). Re-asserted on every mount so reopening
+   *  the character sheet after inspecting restores the close framing. */
+  setFraming(name: PreviewFramingName): void {
+    if (this.destroyed) return;
+    this.applyFraming(PREVIEW_FRAMING[name]);
+  }
+
+  private applyFraming(f: { y: number; z: number; lookY: number }): void {
+    this.camera.position.set(LIVE_PREVIEW_X, f.y, f.z);
+    this.camera.lookAt(new THREE.Vector3(LIVE_PREVIEW_X, f.lookY, 0));
+    this.camera.updateProjectionMatrix();
   }
 
   /** Force the renderer to match the current visible container size. */

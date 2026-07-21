@@ -294,6 +294,12 @@ export const hudChromeStrings = {
     collapseHint: 'Collapse quest tracker',
     expandHint: 'Expand quest tracker',
   },
+  interfaceTabs: {
+    general: 'General',
+    frames: 'Frames',
+    chat: 'Chat',
+    combat: 'Combat',
+  },
   chatTimestamps: {
     show: 'Show Chat Timestamps',
     format: 'Timestamp Format',
@@ -1044,6 +1050,13 @@ export const hudChromeStrings = {
       fiestaWin: 'Fiesta victory',
     },
   },
+  // Character sheet showcase layout: the two titled stat-panel headings under the
+  // primary attribute tiles. Stat NAMES themselves reuse itemUi.stats.* / the
+  // statInfo.names.* labels below; only these two group headings are new here.
+  charSheet: {
+    offense: 'Offense',
+    defense: 'Defense',
+  },
   // Character-screen stat tooltips (hover a stat on the C panel). The stat NAMES
   // reuse itemUi.stats.*; only these descriptions / effect lines / notes are new.
   // The breakdown numbers are recomputed live from the player's current stats
@@ -1379,12 +1392,12 @@ export const hudChromeStrings = {
   corpseHarvest: {
     title: 'Harvest',
     harvestButton: 'Harvest',
-    // Playtester-clarity fix: new players did not know Harvest is a separate,
-    // no-cost gathering action (not a profession skill check) that extracts raw
-    // crafting materials (hide, fang, silk, and the rest of the component list
-    // below) from the corpse, on top of any coin or items taken with Take All.
-    harvestButtonTooltip:
-      'Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.',
+    // Loot-window legibility reword (Phase 12d QA): states the once-per-corpse,
+    // first-come claim rule and that harvesting leaves the loot untouched.
+    // Successor to the retired harvestButtonTooltip; a new key because the old
+    // one carried reviewed fills in every locale (in-place rewords go stale).
+    harvestTooltip:
+      'Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.',
     concentrateHint: 'Fewer chosen components yield a higher tier each.',
     alreadyHarvested: 'This corpse has already been harvested.',
     componentAria: 'Harvest {component}',
@@ -1405,6 +1418,11 @@ export const hudChromeStrings = {
   townFocus: {
     title: 'Town Focus',
     hint: "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
+    // Phase 12d legibility: the tier-shift rule ({points} = POINTS_PER_TIER_BONUS,
+    // {steps} = MAX_FOCUS_TIER_BONUS) and the town-only rule, always visible.
+    tierHint:
+      'Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.',
+    townOnlyHint: 'Focus can only be changed while you are in town.',
     budgetLabel: 'Points remaining: {remaining} / {budget}',
     saveButton: 'Save Focus',
     notInTownHint: 'You must be in town to set your focus.',
@@ -1504,6 +1522,10 @@ export const hudChromeStrings = {
     // that grid is a derived list, its squares hold no bag position, so honoring the drop
     // would move a stack the player never aimed at. Say so instead of doing nothing.
     reorderNeedsRecent: 'Clear the filter and sort by Recent to rearrange your bags',
+    // Accessible-name arm of the Phase 12d instanced-slot corner marker: the
+    // visual tab is aria-hidden, so the per-copy flag rides the cell's label
+    // (the tooltip on focus stays the detail surface).
+    itemAriaInstanced: '{item}, quantity {count}, maker-marked copy',
     filterGroupAria: 'Filter bags by category',
     filterAll: 'All',
     filterWeapon: 'Weapons',
@@ -1705,9 +1727,17 @@ export const hudChromeStrings = {
   // uses the chest's localized entity name); replaces a former hard-coded 'Chest'.
   loot: {
     chestTitle: 'Chest',
-    // Playtester-clarity fix: pairs with corpseHarvest.harvestButtonTooltip so
-    // the two loot-window buttons read as clearly distinct actions.
-    takeAllTooltip: 'Take All: collect every coin and item in this loot window.',
+    // Loot-window legibility reword (Phase 12d QA): the corpse arm's button is
+    // "Take Loot" (the old "Take All" label promised the harvest too); the
+    // delve-chest arm keeps itemUi.loot.takeAll, where "all" is accurate.
+    // takeLootTooltip pairs with corpseHarvest.harvestTooltip so the two
+    // loot-window buttons read as clearly distinct actions; successors to the
+    // retired takeAllTooltip/harvestButtonTooltip (reviewed fills in every
+    // locale, so a reword mints new keys rather than going stale in place).
+    takeLootButton: 'Take Loot',
+    takeLootTooltip: 'Takes the coins and dropped items. Does not use up the harvest.',
+    // Footer hint on the corpse loot window, the town-focus hint-line idiom.
+    unifiedPressHint: 'The interact key loots and harvests in one press, using your town focus.',
   },
   // Spellbook action-bar toggle accessible names. The visible glyph is +/-; the
   // accessible name states the action so a screen reader is not left with a bare
@@ -1724,6 +1754,9 @@ export const hudChromeStrings = {
     // to the bracket only, not the mob name text.
     mobLevel: '{level}',
     mobEliteLevel: '{level}+',
+    // /afk tag prefixed to a player's overhead name (nameplate_painter.ts wraps
+    // it in angle brackets: "<AFK> Name"). Short label, not a sentence.
+    afkTag: 'AFK',
   },
   // World mouseover tooltip shown when hovering a mob (mob_tooltip_view.ts):
   // name (colored by the nameplate con-color), then "Level N <type>" ({family}
@@ -2181,6 +2214,13 @@ export const hudChromeStrings = {
     blockAction: 'Block',
     nowBlocking: 'Blocked {name}.',
     stopBlockingTitle: 'Stop blocking {name}',
+    // Guild roster grouping: members are split into an online group over an offline
+    // group, each header carrying its member count ({n}, formatted). The hide-offline
+    // toggle is a persisted USER choice that suppresses the offline group.
+    onlineHeader: 'Online ({n})',
+    offlineHeader: 'Offline ({n})',
+    hideOffline: 'Hide offline',
+    hideOfflineTitle: 'Hide offline guild members',
   },
   // Gathering proficiency section on the character sheet (#1124). Profession
   // display names mirror src/sim/content/professions.ts (GatheringProfessionId).
@@ -2239,6 +2279,11 @@ export const hudChromeStrings = {
     // harvest is gated by the best owned tool across ALL gathering
     // professions, so no single tool is named).
     toolTierUnmetCorpse: 'You need a tier {tier} gathering tool to recover the finest materials.',
+    // Full-bag signed-grant downgrade toasts (Phase 12d), rendered from the
+    // text-free personal gatherDowngrade SimEvent, one key per lost arm:
+    // 'mark' (the yield arrived unsigned) and 'find' (the jackpot dropped).
+    downgradeMark: "Bags full: the find was stored without its gatherer's mark.",
+    downgradeFind: 'Bags full: a pristine find slipped away.',
     // Tooltip third line: the per-viewer respawn state.
     stateReady: 'Ready',
     stateCooldown: 'Respawning',
@@ -2286,6 +2331,54 @@ export const hudChromeStrings = {
     tailoring: 'Tailoring',
     leatherworking: 'Leatherworking',
   },
+  // Per-enchant display names (Professions 2.0 Phase 13), keyed by the same
+  // enchant id as content/enchants.ts ENCHANTS; keep both in sync. This is the
+  // FIRST render sink for EnchantDef.name (it never rendered before), resolved
+  // by enchant_apply_view.ts enchantNameKey in the Apply Enchant picker; never
+  // the raw def name in the DOM.
+  enchantName: {
+    enchant_weapon_might: 'Enchant Weapon - Might',
+    enchant_weapon_intellect: 'Enchant Weapon - Spellpower',
+    enchant_helmet_fortitude: 'Enchant Helmet - Fortitude',
+    enchant_neck_spirit: 'Enchant Necklace - Spirit',
+    enchant_shoulder_agility: 'Enchant Shoulders - Agility',
+    enchant_chest_stamina: 'Enchant Chest - Stamina',
+    enchant_waist_stamina: 'Enchant Belt - Stamina',
+    enchant_legs_stamina: 'Enchant Legs - Stamina',
+    enchant_gloves_agility: 'Enchant Gloves - Agility',
+    enchant_gloves_intellect: 'Enchant Gloves - Spellpower',
+    enchant_feet_agility: 'Enchant Boots - Agility',
+    enchant_ring_spirit: 'Enchant Ring - Spirit',
+    enchant_weapon_agility: 'Enchant Weapon - Agility',
+    enchant_helmet_intellect: 'Enchant Helmet - Intellect',
+    enchant_helmet_armor: 'Enchant Helmet - Reinforcement',
+    enchant_neck_intellect: 'Enchant Necklace - Intellect',
+    enchant_neck_agility: 'Enchant Necklace - Agility',
+    enchant_shoulder_strength: 'Enchant Shoulders - Strength',
+    enchant_shoulder_intellect: 'Enchant Shoulders - Intellect',
+    enchant_chest_spirit: 'Enchant Chest - Spirit',
+    enchant_chest_armor: 'Enchant Chest - Reinforcement',
+    enchant_waist_strength: 'Enchant Belt - Strength',
+    enchant_waist_agility: 'Enchant Belt - Agility',
+    enchant_legs_intellect: 'Enchant Legs - Intellect',
+    enchant_gloves_strength: 'Enchant Gloves - Strength',
+    enchant_feet_strength: 'Enchant Boots - Strength',
+    enchant_feet_stamina: 'Enchant Boots - Stamina',
+    enchant_ring_strength: 'Enchant Ring - Strength',
+    enchant_ring_agility: 'Enchant Ring - Agility',
+    enchant_ring_intellect: 'Enchant Ring - Intellect',
+    enchant_weapon_greater_might: 'Enchant Weapon - Greater Might',
+    enchant_weapon_greater_spellpower: 'Enchant Weapon - Greater Spellpower',
+    enchant_helmet_greater_fortitude: 'Enchant Helmet - Greater Fortitude',
+    enchant_chest_greater_stamina: 'Enchant Chest - Greater Stamina',
+    enchant_legs_greater_stamina: 'Enchant Legs - Greater Stamina',
+    enchant_gloves_greater_agility: 'Enchant Gloves - Greater Agility',
+    enchant_weapon_runed_edge: 'Enchant Weapon - Runed Edge',
+    enchant_weapon_runed_focus: 'Enchant Weapon - Runed Focus',
+    enchant_chest_runeweave: 'Enchant Chest - Runeweave',
+    enchant_legs_runed_hide: 'Enchant Legs - Runed Hide',
+    enchant_helmet_runed_links: 'Enchant Helmet - Runed Links',
+  },
   // Professions window (Professions 2.0 Phase 5): the read-only craft-wheel
   // window. Craft and pair NAMES resolve through craftName / archetypePair
   // above; these keys are the window's own chrome. Wording follows the
@@ -2309,7 +2402,7 @@ export const hudChromeStrings = {
     tierPipAria: 'Tier {tier}',
     nextUnlockTier: '{points} points to the next tier: masterwork odds improve',
     nextUnlockSpecialized: '{points} points to Specialized: material costs drop',
-    nextUnlockMax: 'At maximum skill',
+    nextUnlockMastered: 'Mastered, for now',
     perkSpecializedLine: '{craft}: Specialized, material costs -{pct}%',
     perkSpecializedAt: 'Specializes at {threshold} skill',
     switchCost: 'Next archetype switch costs {cost} amends',
@@ -2417,6 +2510,7 @@ export const hudChromeStrings = {
     skillReqLine: 'Requires {craft} {skill}',
     difficultyFull: 'Full skill gain',
     difficultyReduced: 'Reduced skill gain',
+    difficultyMinimal: 'Minimal skill gain',
     difficultyNone: 'No skill gain',
     stationBadge: 'Station',
     // Phase 8 (supersedes the retired stationOutOfRange key): the crafting
@@ -2426,10 +2520,60 @@ export const hudChromeStrings = {
     masterworkZoneLine: '{crafter} crafted a masterwork {name}!',
     tierUpToast: '{craft} advanced to tier {tier}!',
     makersMark: 'Crafted by {name}',
+    // Phase 12d: the gathered-material sibling of makersMark, resolved by item
+    // KIND (item_instance_tooltip.ts isGatheredProvenanceKind); same signer
+    // payload, different wording.
+    gatheredBy: 'Gathered by {name}',
     masterworkSeal: 'Masterwork',
     // Generic enchanted marker: EnchantDef.name has no localized display
     // surface yet, so the tooltip marks the state without naming the enchant.
     enchantedLine: 'Enchanted',
+  },
+  // Bag-item context menu verbs (Professions 2.0 Phase 13): the row labels for
+  // the right-click / touch action menu (bag_item_context_menu.ts). The first
+  // row mirrors the classic left-click action (equip gear, use everything else);
+  // the rest are the eligible Phase 13 actions.
+  itemMenu: {
+    use: 'Use',
+    equip: 'Equip',
+    disenchant: 'Disenchant',
+    salvage: 'Salvage',
+    applyEnchant: 'Apply Enchant',
+  },
+  // Enchanting actions (Professions 2.0 Phase 13): the result toasts for the
+  // disenchant / apply-enchant / salvage commands (enchanting_view.ts maps each
+  // text-free SimEvent to one of these), the destroy-confirm copy (a stronger
+  // body when the copy consumed is special), and the Apply Enchant picker chrome.
+  // Each throttled key names ITS OWN action: the 10-per-60s throttle is shared
+  // with crafting and gathering, so a generic "crafting is busy" line would
+  // mis-attribute the deny.
+  enchanting: {
+    disenchantedLine: 'You disenchant {item}.',
+    salvagedLine: 'You salvage {item}.',
+    enchantAppliedLine: 'You enchant {item} with {enchant}.',
+    notHeld: 'You do not have that item.',
+    notDisenchantable: 'You cannot disenchant that.',
+    notSalvageable: 'You cannot salvage that.',
+    disenchantThrottled: 'You are disenchanting too quickly. Wait a moment and try again.',
+    salvageThrottled: 'You are salvaging too quickly. Wait a moment and try again.',
+    enchantThrottled: 'You are enchanting too quickly. Wait a moment and try again.',
+    enchantWrongSlot: 'That enchant cannot be applied to that item.',
+    enchantUnknown: 'That enchant does not exist.',
+    enchantInsufficient: 'You do not have the materials for that enchant.',
+    disenchantConfirmTitle: 'Disenchant {item}?',
+    disenchantConfirmBody:
+      'This destroys {item} and yields arcane materials. This cannot be undone.',
+    disenchantConfirmBodySpecial:
+      'This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.',
+    salvageConfirmTitle: 'Salvage {item}?',
+    salvageConfirmBody:
+      'This destroys {item} and yields crafting materials. This cannot be undone.',
+    salvageConfirmBodySpecial:
+      'This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.',
+    pickerTitle: 'Apply Enchant',
+    targetTitle: 'Choose an item to enchant',
+    noEnchants: 'No enchant uses this reagent.',
+    noTargets: 'No eligible item to enchant.',
   },
   // Recipe training window (Professions 2.0 Phase 9): a station master
   // teaches trainer-acquisition recipes for a tier-priced copper fee

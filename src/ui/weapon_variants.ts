@@ -78,6 +78,9 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   staff_of_velkhar: 'staff_d',
   vaels_mist_staff: 'adv_staff',
   ogre_bonecharm_staff: 'adv_staff',
+  briarroot_staff: 'staff_b', // feral ladder, zone-1 rung
+  cragthorn_greatstaff: 'staff_c', // feral ladder, zone-3 rung
+  nightfangs_greatstaff: 'adv_staff', // feral ladder, Korzul epic rung
   staff_of_the_gravewyrm: 'adv_druid_staff',
   deathless_heartwood: 'adv_druid_staff', // LEGENDARY druid relic (antler staff)
   drovers_staff: 'adv_druid_staff',
@@ -106,6 +109,10 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   drownedmoon_maul: 'hammer_d',
   nhalias_bell_maul: 'hammer_d', // mauls share hammer_d
   ironshod_maul: 'hammer_d', // crafted 2H maul
+  fenshadow_maul: 'hammer_d', // feral ladder maul
+  gravewyrm_thornmaul: 'hammer_d', // feral ladder maul
+  maul_of_the_scourged_wilds: 'hammer_d', // feral ladder, Nythraxis raid rung
+  wildsoul_maul: 'hammer_d', // feral ladder, heroic-only ilvl 31 rung
 
   // ---- axes (axe_a..d + adv axes) --------------------------------------------
   rusty_hatchet: 'axe_a',

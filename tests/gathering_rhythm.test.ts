@@ -42,7 +42,11 @@ import {
   FISH_BITE_DELAY_MIN_SEC,
   startFishing,
 } from '../src/sim/professions/fishing';
-import { gatherCastDurationSec, nodeMaterialFor } from '../src/sim/professions/gathering';
+import {
+  drainGatheringGrants,
+  gatherCastDurationSec,
+  nodeMaterialFor,
+} from '../src/sim/professions/gathering';
 import { type PlayerMeta, Sim } from '../src/sim/sim';
 import { readyArenaFighter } from '../src/sim/social/arena';
 import { fiestaDownEntity } from '../src/sim/social/fiesta';
@@ -450,6 +454,34 @@ describe('gather completion re-validation', () => {
     denialAtCompletion(sim, pid, 'Too far away.');
     // The respawn timer is only set inside resolveHarvest, which never ran.
     expect(sim.nodeHarvestableByMeFor(NODE.id, pid)).toBe(true);
+  });
+});
+
+describe('node-tier-relative proficiency gain through the live cast loop (Phase 12c)', () => {
+  // The resolveHarvest call site queues gatherNodeGainMultiplier(proficiency,
+  // node.tier) instead of the old flat 1. NODE is tier 1, so mining 50 sits
+  // two gain tiers above it (green, 0.25) and mining 75 grays it out
+  // entirely (queueGatheringGrant drops the 0: nothing is queued).
+  function harvestAt(proficiency: number): { queued: number[]; settled: number } {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Curved');
+    const meta = mustMeta(sim, pid);
+    meta.gatheringProficiency.mining = proficiency;
+    teleportOntoNode(sim, pid, NODE.id);
+    expect(sim.harvestNode(NODE.id, pid)).toBe(true);
+    completeCastNow(sim, pid);
+    const queued = meta.pendingGatherGrants.map((g) => g.amount);
+    drainGatheringGrants(meta);
+    return { queued, settled: meta.gatheringProficiency.mining };
+  }
+
+  it('a t1 harvest at mining 50 queues the minimal 0.25 and settles at 50.25', () => {
+    // 50 + gatherNodeGainMultiplier(50, 1) = 50 + 0.25 (green: two tiers below).
+    expect(harvestAt(50)).toEqual({ queued: [0.25], settled: 50.25 });
+  });
+
+  it('a t1 harvest at mining 75 is gray: queues nothing, proficiency stays 75', () => {
+    expect(harvestAt(75)).toEqual({ queued: [], settled: 75 });
   });
 });
 

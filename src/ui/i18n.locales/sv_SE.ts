@@ -7660,10 +7660,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'Claudium-butiken är inte tillgänglig just nu. Ditt saldo och dina köp påverkas inte. Försök igen om en stund.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Skörda: samla hantverksmaterial från liket (skinn, huggtand, silke och liknande delar), separat från dess byte. Vem som helst kan skörda, men varje lik kan bara skördas av en spelare.',
   'hudChrome.deeds.openBookHint': 'Öppna Bedrifternas bok',
-  'hudChrome.loot.takeAllTooltip': 'Ta allt: samla alla mynt och föremål i bytesfönstret.',
   'hudChrome.statInfo.desc.warfare':
     'Ökar skadan mot spelare med {increase}% och minskar skadan från spelare med {reduction}%.',
   'hudChrome.statInfo.names.warfare': 'Krigföring',
@@ -8144,21 +8141,8 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleRaid': 'Raidramar',
   'hudChrome.partyFrames.unlock': 'Flytta grupp- och raidramar',
   'hudChrome.partyFrames.width': 'Rambredd',
-  'apiError.welcome.invalid_input': 'Ogiltig indata.',
-  'welcome.back': 'Välkommen tillbaka, {name}',
-  'welcome.level': 'Nivå {level}',
-  'welcome.lastPlayed': 'Senast spelad: {when}',
-  'welcome.continue': 'Träd in i världen',
-  'welcome.continueHint': 'Enter för att fortsätta, Esc för att hoppa över',
-  'welcome.continueHintTouch': 'Tryck för att fortsätta',
-  'welcome.discord.title': 'Gemenskapen lever på Discord',
-  'welcome.discord.sub':
-    'Förhandsvisningar av patchar, evenemang, utvecklarchatt och 2 bonusfack i banken när du länkar ditt Discord-konto.',
-  'welcome.discord.join': 'Gå med i vår Discord',
-  'welcome.chest.ready': 'Kistan för dagliga belöningar är klar',
-  'welcome.armory.cta': 'Träd in i världen och utforska Vapenhuset',
-  'welcome.news.new': 'Ny',
-  'welcome.news.viewAll': 'Se alla uppdateringar på GitHub',
+  'news.new': 'Ny',
+  'news.viewAll': 'Se alla uppdateringar på GitHub',
   'entities.letters.heroic_marks_reward.sender': 'Heroisk kvartermästare',
   'entities.letters.heroic_marks_reward.subject': 'Dina heroiska märken',
   'entities.letters.heroic_marks_reward.body':
@@ -8411,7 +8395,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Hobby: {craft}',
   'hudChrome.professions.identityHeader': 'Identitet',
   'hudChrome.professions.majorsLabel': 'Huvudämnen: {a} och {b}',
-  'hudChrome.professions.nextUnlockMax': 'Med maximal skicklighet',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} poäng till Specialiserad: materialkostnaderna sjunker',
   'hudChrome.professions.nextUnlockTier':

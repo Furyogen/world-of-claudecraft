@@ -80,3 +80,19 @@ STOPPING RULES: stop if a BLOCKING finding cannot be fixed without changing a lo
 decision or a resolved cap number in state.md; stop if the blob-diff rehearsal evidence
 is missing or shows unexplained deltas (the reset does not ship on vibes).
 ```
+
+## As landed (2026-07-20, PR #2242): read this before auditing
+
+The build session's as-landed block in phase-12c-mastery-curve.md is
+authoritative over the older wording here. QA-relevant deltas: the reset
+flag is CharacterState-ONLY (no PlayerMeta field; the sampler pin asserts
+zero new keys) with the transient pendingMasteryResetNotice mail-phase
+letter; the appendix ADDENDUM rows (crafting_view, archetype_ceiling,
+professions_crafting, deeds_sites, deeds, deeds_reconcile, the letter M16
+fills) are recorded there and are NOT defects; the blob-diff rehearsal ran
+in synthetic-corpus mode (tests/mastery_reset_rehearsal.test.ts) and the
+production-copy run is the maintainer's pre-deploy step via
+RESET_REHEARSAL_INPUT; display readouts floor/ceil under fractional gains
+(pinned in professions_view + profession_identity_view); the rollback
+strip-refire caveat is pinned as a conscious acceptance and is DESTRUCTIVE
+of rollback-window progress (release-notes item).

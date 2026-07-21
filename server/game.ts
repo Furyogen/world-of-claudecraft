@@ -887,8 +887,11 @@ function identityFields(e: Entity): Record<string, unknown> {
     // payload, riding the identity record (wireCacheFor diffs the identity
     // JSON, so an equip/unequip of an instanced piece re-emits automatically).
     // Data minimization: only the cosmetic inspect fields (signer, enchant,
-    // rolled) leave the server; boundTo and charges are gameplay state no
-    // inspecting client needs and never ride this key.
+    // rolled) leave the server; boundTo, charges, and the Phase 13 bindOnTrade
+    // arm are gameplay state no inspecting client needs and never ride this key.
+    // The pub allowlist below (signer/enchant/rolled ONLY) is what enforces this,
+    // so a new non-cosmetic ItemInstancePayload field is excluded by construction;
+    // the owner still sees their own payload in full via the self `inv` mirror.
     let eqi: Record<string, unknown> | undefined;
     for (const [slot, inst] of Object.entries(e.equippedInstances)) {
       if (!inst) continue;
@@ -1002,6 +1005,7 @@ function dynamicFields(e: Entity, includeAuras = true): Record<string, unknown> 
   if (e.ghost) out.gh = 1; // released spirit (ghost form); renders translucent
   if (e.lootable) out.loot = 1;
   if (e.hostile) out.h = 1;
+  if (e.afk) out.ak = 1; // /afk display bit: other clients tag the nameplate + presence dot
   // The target frame's resource bar: type + current/max, sent only for entities
   // that HAVE a resource (players and caster mobs; a resource-less wolf omits all
   // three and the frame hides its bar). The rounded res keeps an idle entity's
@@ -1555,6 +1559,11 @@ export class GameServer {
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
     moderator.lastDfWireTick = -DF_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
+    // force the heavy self block (tal/inv/equip/bags/...) to re-run next
+    // snapshot: it is gated on meta.wireRev vs session.lastWireRev, and that
+    // comparison is keyed to whichever entity's meta is being wired, so
+    // without this the target's heavy fields can silently fail to resend.
+    moderator.selfHeavyDirty = true;
     this.send(moderator, { t: 'spectate', name: target.name });
     this.sendSystemNotice(moderator, `Now spectating ${target.name}.`);
   }
@@ -1579,6 +1588,10 @@ export class GameServer {
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
     moderator.lastDfWireTick = -DF_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
+    // same as enterSpectate: force the heavy self block to re-run so the
+    // moderator's OWN talents/inventory/equip/etc. resend immediately
+    // instead of staying stuck on the spectated target's last-sent values.
+    moderator.selfHeavyDirty = true;
     this.send(moderator, { t: 'spectate', name: null });
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
   }
@@ -1748,6 +1761,9 @@ export class GameServer {
     if (e.dead) status = 'dead';
     else if (instanceZone != null) status = 'dungeon';
     else if (e.inCombat) status = 'combat';
+    // AFK is the lowest-priority active state: a dead/instanced/in-combat player
+    // reports that first, but an idle /afk player shows 'afk' over plain 'online'.
+    else if (this.sim.meta(session.pid)?.away?.mode === 'afk') status = 'afk';
     // The Sowfield is overworld ground (no instance band, no status change),
     // but the stadium is the presence players expect on match days: fighters
     // and walk-up spectators inside the footprint report the venue, not the
@@ -4150,6 +4166,23 @@ export class GameServer {
       case 'craft_item':
         if (typeof msg.recipe === 'string') sim.craftItem(msg.recipe, pid);
         break;
+      // Enchanting profession commands (Professions 2.0 Phase 13): the sim
+      // resolvers re-validate ownership/eligibility/throttle (nothing trusted
+      // from the client); the outcome reaches this client as the pid-scoped
+      // disenchantResult/enchantResult/salvageResult event plus the denc/ench/salv
+      // self-delta. A successful action emits a `loot` event (a HEAVY_SELF_EVENTS
+      // member) via the inventory hub, so the self inventory refreshes exactly like
+      // a craft; no explicit dirty-marking is needed here.
+      case 'disenchant_item':
+        if (typeof msg.item === 'string') sim.disenchantItem(msg.item, pid);
+        break;
+      case 'apply_enchant':
+        if (typeof msg.item === 'string' && typeof msg.enchant === 'string')
+          sim.applyEnchant(msg.item, msg.enchant, pid);
+        break;
+      case 'salvage_item':
+        if (typeof msg.item === 'string') sim.salvageItem(msg.item, pid);
+        break;
       case 'place_mobile_station':
         if (typeof msg.craft === 'string') sim.placeMobileStation(msg.craft, pid);
         break;
@@ -5716,6 +5749,15 @@ export class GameServer {
     // naturally flips to null the tick a station lapses and the client never
     // reasons about tick domains. Small scalar, diffed per tick like atitle.
     maybe('mst', this.sim.activeMobileStationCraftFor(anchorSession.pid));
+    // The viewer's own most recent enchanting-action outcomes (Professions 2.0
+    // Phase 13), or null. Small per-player reads diffed per tick like the other
+    // scalars above (a successful action already refreshed the self inventory via
+    // its loot event); the convergence arm for lastDisenchantResult/lastEnchantResult/
+    // lastSalvageResult, alongside the pid-scoped disenchantResult/enchantResult/
+    // salvageResult event. See TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
+    maybe('denc', this.sim.lastDisenchantResultFor(anchorSession.pid));
+    maybe('ench', this.sim.lastEnchantResultFor(anchorSession.pid));
+    maybe('salv', this.sim.lastSalvageResultFor(anchorSession.pid));
     maybe('tfocus', this.sim.townFocusFor(anchorSession.pid));
     // Raw gathering-profession proficiency map (IWorld `gatheringProficiency`,
     // #1119), a second small read alongside `prof` for the ORIGINAL flat-map

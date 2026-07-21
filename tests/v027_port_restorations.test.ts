@@ -154,8 +154,11 @@ describe('selfHotPctMax effect (effect_dispatch)', () => {
 
 describe('offhand surfacing (paperdoll, player card, chat readout)', () => {
   it('shows the offhand cell on the character sheet paperdoll', async () => {
-    const { PAPERDOLL_RIGHT_SLOTS } = await import('../src/ui/char_view');
-    expect(PAPERDOLL_RIGHT_SLOTS).toContain('offhand');
+    // Showcase redesign: the offhand moved to the LEFT column (under Main Hand) to
+    // balance the paperdoll 6/6. It is still surfaced on the sheet, now on the left.
+    const { PAPERDOLL_LEFT_SLOTS, PAPERDOLL_RIGHT_SLOTS } = await import('../src/ui/char_view');
+    expect(PAPERDOLL_LEFT_SLOTS).toContain('offhand');
+    expect(PAPERDOLL_RIGHT_SLOTS).not.toContain('offhand');
   });
 
   it('lists the offhand in the chat gear readout', async () => {

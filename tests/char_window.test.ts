@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { CRAFT_RING } from '../src/sim/content/professions';
 import { ARCHETYPE_PAIR_TARGETS } from '../src/sim/professions/archetype';
+import { STAT_DEFENSE, STAT_GRID } from '../src/ui/char_stats_view';
 import { archetypeTitleText, craftNameText, hobbyCraftText } from '../src/ui/char_window';
 import { hasTranslation } from '../src/ui/i18n';
 
@@ -74,10 +75,15 @@ describe('char_window: paperdoll core + HUD-owned preview boundary', () => {
     }
   });
 
-  it('renders one player-facing Warfare stat row', () => {
-    expect(painter).toContain("'warfare'");
-    expect(painter).not.toContain("'pvpOffense'");
-    expect(painter).not.toContain("'pvpDefense'");
+  it('renders one player-facing Warfare stat row (never the raw pvpOffense/pvpDefense stats)', () => {
+    // The stat partition now lives in the char_stats_view core; the sheet shows a
+    // single Warfare summary and never the internal pvpOffense/pvpDefense ids.
+    expect(STAT_DEFENSE).toContain('warfare');
+    expect(STAT_GRID).not.toContain('pvpOffense' as unknown as (typeof STAT_GRID)[number]);
+    expect(STAT_GRID).not.toContain('pvpDefense' as unknown as (typeof STAT_GRID)[number]);
+    // And the painter composes those groups off the pure core, not an inline grid.
+    expect(painter).toContain("from './char_stats_view'");
+    expect(painter).toContain('STAT_PANELS');
   });
 
   it('shows the current spendable Honor balance in the character-sheet header', () => {

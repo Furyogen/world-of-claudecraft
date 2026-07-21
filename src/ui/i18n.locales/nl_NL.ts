@@ -7747,11 +7747,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'De Claudium-winkel is momenteel niet beschikbaar. Je saldo en aankopen zijn niet aangetast. Probeer het binnenkort opnieuw.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Oogsten: verzamel ambachtsmaterialen van dit lijk (vel, hoektand, zijde en vergelijkbare onderdelen), los van de buit. Iedereen kan oogsten, maar elk lijk kan maar door één speler worden geoogst.',
   'hudChrome.deeds.openBookHint': 'Open het Boek der Daden',
-  'hudChrome.loot.takeAllTooltip':
-    'Alles nemen: verzamel alle munten en voorwerpen in dit buitvenster.',
   'hudChrome.statInfo.desc.warfare':
     'Verhoogt de schade die aan spelers wordt toegebracht met {increase}% en vermindert de schade die aan spelers wordt toegebracht met {reduction}%.',
   'hudChrome.statInfo.names.warfare': 'Oorlogvoering',
@@ -8243,21 +8239,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleRaid': 'Raidframes',
   'hudChrome.partyFrames.unlock': 'Groeps- en raidframes verplaatsen',
   'hudChrome.partyFrames.width': 'Framebreedte',
-  'apiError.welcome.invalid_input': 'Ongeldige invoer.',
-  'welcome.back': 'Welkom terug, {name}',
-  'welcome.level': 'Niveau {level}',
-  'welcome.lastPlayed': 'Laatst gespeeld: {when}',
-  'welcome.continue': 'Wereld betreden',
-  'welcome.continueHint': 'Enter om door te gaan, Esc om over te slaan',
-  'welcome.continueHintTouch': 'Tik om door te gaan',
-  'welcome.discord.title': 'De community leeft op Discord',
-  'welcome.discord.sub':
-    'Voorproefjes van patches, evenementen, chat met de ontwikkelaars en 2 bonusvakken in de bank als je je Discord-account koppelt.',
-  'welcome.discord.join': 'Word lid van onze Discord',
-  'welcome.chest.ready': 'Kist met dagelijkse beloningen staat klaar',
-  'welcome.armory.cta': 'Wereld betreden en het Arsenaal bekijken',
-  'welcome.news.new': 'Nieuw',
-  'welcome.news.viewAll': 'Bekijk alle updates op GitHub',
+  'news.new': 'Nieuw',
+  'news.viewAll': 'Bekijk alle updates op GitHub',
   'entities.letters.heroic_marks_reward.sender': 'Heroïsche kwartiermeester',
   'entities.letters.heroic_marks_reward.subject': 'Je heroïsche marken',
   'entities.letters.heroic_marks_reward.body':
@@ -8514,7 +8497,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Hobby: {craft}',
   'hudChrome.professions.identityHeader': 'Identiteit',
   'hudChrome.professions.majorsLabel': 'Hoofdvakken: {a} en {b}',
-  'hudChrome.professions.nextUnlockMax': 'Op maximale vaardigheid',
   'hudChrome.professions.nextUnlockSpecialized':
     'Nog {points} punten tot Gespecialiseerd: materiaalkosten dalen',
   'hudChrome.professions.nextUnlockTier':

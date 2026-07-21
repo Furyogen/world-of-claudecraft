@@ -38,7 +38,10 @@ import { DEEPFEN_SHALLOWS_LAKE, LAKE } from '../src/sim/data';
 import {
   completeFishing,
   FISHING_BAND_THRESHOLDS,
+  FISHING_GAIN_SCHEDULE,
+  FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY,
   fishingBandFor,
+  fishingCatchGain,
   startFishing,
 } from '../src/sim/professions/fishing';
 import { type PlayerMeta, Sim } from '../src/sim/sim';
@@ -491,8 +494,87 @@ describe('fishing proficiency accrual (pin 3)', () => {
     expect(sim.professionsStateFor(sim.playerId).skills).toContainEqual({
       professionId: 'fishing',
       skill: landed,
-      maxSkill: 300,
+      // Phase 12c stage 2 appendix re-pin: fishing's enforced cap is 200.
+      maxSkill: 200,
     });
+  });
+});
+
+describe('fishing catch gain schedule (Professions 2.0 Phase 12c)', () => {
+  it('fishingCatchGain walks the fractional schedule AT the half-band boundaries', () => {
+    expect(fishingCatchGain(0, false)).toBe(1);
+    expect(fishingCatchGain(49, false)).toBe(1);
+    expect(fishingCatchGain(50, false)).toBe(0.5);
+    expect(fishingCatchGain(99, false)).toBe(0.5);
+    expect(fishingCatchGain(100, false)).toBe(0.1);
+    expect(fishingCatchGain(149, false)).toBe(0.1);
+    expect(fishingCatchGain(150, false)).toBe(0.02);
+    expect(fishingCatchGain(199, false)).toBe(0.02);
+    // At or past the last row the schedule returns 0: the maxSkill cap clamp
+    // is the real stop, not this function.
+    expect(fishingCatchGain(200, false)).toBe(0);
+  });
+
+  it('junk follows the schedule below the cutoff and grants 0 at or past it', () => {
+    expect(fishingCatchGain(0, true)).toBe(1);
+    expect(fishingCatchGain(99, true)).toBe(0.5);
+    expect(fishingCatchGain(100, true)).toBe(0);
+    expect(fishingCatchGain(150, true)).toBe(0);
+  });
+
+  it('pins the schedule and cutoff literals', () => {
+    expect(FISHING_GAIN_SCHEDULE).toEqual([
+      { belowProficiency: 50, gain: 1 },
+      { belowProficiency: 100, gain: 0.5 },
+      { belowProficiency: 150, gain: 0.1 },
+      { belowProficiency: 200, gain: 0.02 },
+    ]);
+    expect(FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY).toBe(100);
+  });
+
+  it('live completeFishing queues the schedule amount: 0.5 per landed catch at proficiency 50', () => {
+    const sim = makeSim(4242);
+    const meta = sim.meta(sim.playerId)!;
+    teleportToValeShore(sim);
+    meta.gatheringProficiency.fishing = 50;
+    let caught: string | null = null;
+    for (let i = 0; i < 30 && caught === null; i++) caught = castOnce(sim, meta).caught;
+    expect(caught).not.toBeNull();
+    // Exactly one landed catch so far: one queued grant, at the 50-99 row.
+    expect(meta.pendingGatherGrants).toEqual([{ professionId: 'fishing', amount: 0.5 }]);
+  });
+
+  it('live junk cutoff: at proficiency 150 a weed queues nothing while a fish queues 0.02', () => {
+    // No rod, so the band-1 proficiency silently caps to the band-0 table,
+    // which still carries the weed row: junk-ness comes from the caught
+    // item's def kind (ItemDef kind 'junk'), never from the band.
+    const sim = makeSim(4242);
+    const meta = sim.meta(sim.playerId)!;
+    teleportToValeShore(sim);
+    meta.gatheringProficiency.fishing = 150;
+    let sawJunk = false;
+    let sawFish = false;
+    for (let i = 0; i < 60 && !(sawJunk && sawFish); i++) {
+      const before = meta.pendingGatherGrants.length;
+      const { caught } = castOnce(sim, meta);
+      if (caught === null) {
+        expect(meta.pendingGatherGrants).toHaveLength(before);
+      } else if (caught === WEED) {
+        sawJunk = true;
+        expect(meta.pendingGatherGrants).toHaveLength(before); // cut off past band 0
+      } else {
+        sawFish = true;
+        expect(meta.pendingGatherGrants).toHaveLength(before + 1);
+        expect(meta.pendingGatherGrants[meta.pendingGatherGrants.length - 1]).toEqual({
+          professionId: 'fishing',
+          amount: 0.02,
+        });
+      }
+    }
+    // Decisive only if the drive really saw both kinds (seed 4242's band-0
+    // walk lands both well inside 60 casts).
+    expect(sawJunk).toBe(true);
+    expect(sawFish).toBe(true);
   });
 });
 

@@ -705,6 +705,12 @@ export const zh_TW: EnTranslations = {
       "collapseHint": "收合任務追蹤器",
       "expandHint": "展開任務追蹤器"
     },
+    "interfaceTabs": {
+      "general": "一般",
+      "frames": "頭像框",
+      "chat": "聊天",
+      "combat": "戰鬥"
+    },
     "chatTimestamps": {
       "show": "顯示聊天時間戳記",
       "format": "時間戳記格式",
@@ -1177,6 +1183,10 @@ export const zh_TW: EnTranslations = {
         "fiestaWin": "嘉年華勝利"
       }
     },
+    "charSheet": {
+      "offense": "攻擊",
+      "defense": "防禦"
+    },
     "statInfo": {
       "fromYour": "來自你的 {value} 點{stat}：",
       "names": {
@@ -1435,7 +1445,7 @@ export const zh_TW: EnTranslations = {
     "corpseHarvest": {
       "title": "採集",
       "harvestButton": "採集",
-      "harvestButtonTooltip": "採集：從這具屍體取得製作材料（獸皮、尖牙、絲線等類似部位），與戰利品分開。任何人都可以採集，但每具屍體只能被一名玩家採集。",
+      "harvestTooltip": "採集勾選的部位。每具屍體只能被採集一次，先到先得。不會拾取戰利品。",
       "concentrateHint": "選擇的部位越少，每個部位的品質越高。",
       "alreadyHarvested": "這具屍體已經被採集過了。",
       "componentAria": "採集{component}",
@@ -1453,6 +1463,8 @@ export const zh_TW: EnTranslations = {
     "townFocus": {
       "title": "城鎮專注",
       "hint": "專注點會在每種材料的基礎產出上疊加加成。未專注的材料保持基礎產出不變。",
+      "tierHint": "每在一種材料上投入{points}點專注，其採集品階就會提升一階，最多提升{steps}階；不足{points}點時仍會提高產出。",
+      "townOnlyHint": "專注只能在城鎮中調整。",
       "budgetLabel": "剩餘點數：{remaining} / {budget}",
       "saveButton": "儲存專注",
       "notInTownHint": "你必須在城鎮中才能設定專注。",
@@ -1511,6 +1523,7 @@ export const zh_TW: EnTranslations = {
       "dragEquipHint": "拖曳到角色身上以裝備",
       "dragDestroyHint": "拖曳到世界中以銷毀",
       "reorderNeedsRecent": "清除篩選並按「最近」排序即可整理背包",
+      "itemAriaInstanced": "{item}，數量 {count}，帶工匠印記的物品",
       "filterGroupAria": "依類別篩選背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -1676,7 +1689,9 @@ export const zh_TW: EnTranslations = {
     },
     "loot": {
       "chestTitle": "寶箱",
-      "takeAllTooltip": "全部拾取：收取此戰利品視窗中的所有金幣和物品。"
+      "takeLootButton": "拾取戰利品",
+      "takeLootTooltip": "收取金幣和掉落的物品。不會用掉採集機會。",
+      "unifiedPressHint": "按一次互動鍵即可同時拾取戰利品並按城鎮專注進行採集。"
     },
     "spellbook": {
       "addToBarAria": "將 {name} 加入動作列",
@@ -1684,7 +1699,8 @@ export const zh_TW: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "等級 {level} {family}",
@@ -2082,7 +2098,11 @@ export const zh_TW: EnTranslations = {
       "blockSearchPlaceholder": "玩家名稱",
       "blockAction": "封鎖",
       "nowBlocking": "已封鎖 {name}。",
-      "stopBlockingTitle": "取消對 {name} 的封鎖"
+      "stopBlockingTitle": "取消對 {name} 的封鎖",
+      "onlineHeader": "在線 ({n})",
+      "offlineHeader": "離線 ({n})",
+      "hideOffline": "隱藏離線",
+      "hideOfflineTitle": "隱藏離線公會成員"
     },
     "gathering": {
       "title": "採集",
@@ -2112,6 +2132,8 @@ export const zh_TW: EnTranslations = {
         "herbalism": "你需要{tier}階草藥鐮才能採集這片草藥叢。"
       },
       "toolTierUnmetCorpse": "你需要{tier}階採集工具才能取得最上等的材料。",
+      "downgradeMark": "背包已滿：這份收穫未能留下採集者的印記。",
+      "downgradeFind": "背包已滿：一件完美的收穫溜走了。",
       "stateReady": "可採集",
       "stateCooldown": "恢復中"
     },
@@ -2144,6 +2166,49 @@ export const zh_TW: EnTranslations = {
       "tailoring": "裁縫",
       "leatherworking": "製皮"
     },
+    "enchantName": {
+      "enchant_weapon_might": "附魔武器 - 威力",
+      "enchant_weapon_intellect": "附魔武器 - 法術強度",
+      "enchant_helmet_fortitude": "附魔頭部 - 堅韌",
+      "enchant_neck_spirit": "附魔頸部 - 精神",
+      "enchant_shoulder_agility": "附魔肩部 - 敏捷",
+      "enchant_chest_stamina": "附魔胸部 - 耐力",
+      "enchant_waist_stamina": "附魔腰部 - 耐力",
+      "enchant_legs_stamina": "附魔腿部 - 耐力",
+      "enchant_gloves_agility": "附魔手部 - 敏捷",
+      "enchant_gloves_intellect": "附魔手部 - 法術強度",
+      "enchant_feet_agility": "附魔腳部 - 敏捷",
+      "enchant_ring_spirit": "附魔手指 - 精神",
+      "enchant_weapon_agility": "附魔武器 - 敏捷",
+      "enchant_helmet_intellect": "附魔頭部 - 智力",
+      "enchant_helmet_armor": "附魔頭部 - 強化",
+      "enchant_neck_intellect": "附魔頸部 - 智力",
+      "enchant_neck_agility": "附魔頸部 - 敏捷",
+      "enchant_shoulder_strength": "附魔肩部 - 力量",
+      "enchant_shoulder_intellect": "附魔肩部 - 智力",
+      "enchant_chest_spirit": "附魔胸部 - 精神",
+      "enchant_chest_armor": "附魔胸部 - 強化",
+      "enchant_waist_strength": "附魔腰部 - 力量",
+      "enchant_waist_agility": "附魔腰部 - 敏捷",
+      "enchant_legs_intellect": "附魔腿部 - 智力",
+      "enchant_gloves_strength": "附魔手部 - 力量",
+      "enchant_feet_strength": "附魔腳部 - 力量",
+      "enchant_feet_stamina": "附魔腳部 - 耐力",
+      "enchant_ring_strength": "附魔手指 - 力量",
+      "enchant_ring_agility": "附魔手指 - 敏捷",
+      "enchant_ring_intellect": "附魔手指 - 智力",
+      "enchant_weapon_greater_might": "附魔武器 - 強效威力",
+      "enchant_weapon_greater_spellpower": "附魔武器 - 強效法術強度",
+      "enchant_helmet_greater_fortitude": "附魔頭部 - 強效堅韌",
+      "enchant_chest_greater_stamina": "附魔胸部 - 強效耐力",
+      "enchant_legs_greater_stamina": "附魔腿部 - 強效耐力",
+      "enchant_gloves_greater_agility": "附魔手部 - 強效敏捷",
+      "enchant_weapon_runed_edge": "附魔武器 - 符文鋒刃",
+      "enchant_weapon_runed_focus": "附魔武器 - 符文聚能",
+      "enchant_chest_runeweave": "附魔胸部 - 符文織紋",
+      "enchant_legs_runed_hide": "附魔腿部 - 符文獸皮",
+      "enchant_helmet_runed_links": "附魔頭部 - 符文鎖環"
+    },
     "professions": {
       "title": "專業",
       "close": "關閉專業",
@@ -2163,7 +2228,7 @@ export const zh_TW: EnTranslations = {
       "tierPipAria": "階級 {tier}",
       "nextUnlockTier": "距離下一階級還差 {points} 點：打造大師之作的機率將提升",
       "nextUnlockSpecialized": "距離專精還差 {points} 點：材料消耗將降低",
-      "nextUnlockMax": "已達技能上限",
+      "nextUnlockMastered": "已精通，暫時如此",
       "perkSpecializedLine": "{craft}：專精，材料消耗 -{pct}%",
       "perkSpecializedAt": "技能達到 {threshold} 後專精",
       "switchCost": "下次切換原型需要 {cost} 點補償",
@@ -2243,6 +2308,7 @@ export const zh_TW: EnTranslations = {
       "skillReqLine": "需要{craft} {skill}",
       "difficultyFull": "完整技能成長",
       "difficultyReduced": "技能成長減少",
+      "difficultyMinimal": "微量技能成長",
       "difficultyNone": "無技能成長",
       "stationBadge": "製作站",
       "stationOutOfRangeNamed": "前往{station}即可製作該物品。",
@@ -2250,8 +2316,40 @@ export const zh_TW: EnTranslations = {
       "masterworkZoneLine": "{crafter}製作出了傑作{name}！",
       "tierUpToast": "{craft}提升至階級 {tier}！",
       "makersMark": "製作者：{name}",
+      "gatheredBy": "採集者：{name}",
       "masterworkSeal": "傑作",
       "enchantedLine": "已附魔"
+    },
+    "itemMenu": {
+      "use": "Use",
+      "equip": "裝備",
+      "disenchant": "分解",
+      "salvage": "拆解",
+      "applyEnchant": "施加附魔"
+    },
+    "enchanting": {
+      "disenchantedLine": "你分解了 {item}。",
+      "salvagedLine": "你拆解了 {item}。",
+      "enchantAppliedLine": "你為 {item} 施加了 {enchant}。",
+      "notHeld": "你沒有那件物品。",
+      "notDisenchantable": "你無法分解那件物品。",
+      "notSalvageable": "你無法拆解那件物品。",
+      "disenchantThrottled": "你分解得太快了。請稍候再試。",
+      "salvageThrottled": "你拆解得太快了。請稍候再試。",
+      "enchantThrottled": "你附魔得太快了。請稍候再試。",
+      "enchantWrongSlot": "該附魔無法施加於那件物品。",
+      "enchantUnknown": "該附魔不存在。",
+      "enchantInsufficient": "你沒有該附魔所需的材料。",
+      "disenchantConfirmTitle": "分解 {item}？",
+      "disenchantConfirmBody": "這會摧毀 {item} 並產出奧術材料。此操作無法復原。",
+      "disenchantConfirmBodySpecial": "這會摧毀一件特殊的 {item}（署名、傑作或已附魔）並產出奧術材料。此操作無法復原。",
+      "salvageConfirmTitle": "拆解 {item}？",
+      "salvageConfirmBody": "這會摧毀 {item} 並產出製作材料。此操作無法復原。",
+      "salvageConfirmBodySpecial": "這會摧毀一件特殊的 {item}（署名、傑作或已附魔）並產出製作材料。此操作無法復原。",
+      "pickerTitle": "施加附魔",
+      "targetTitle": "選擇要附魔的物品",
+      "noEnchants": "沒有附魔會用到此材料。",
+      "noTargets": "沒有可附魔的合適物品。"
     },
     "training": {
       "title": "訓練：{name}",
@@ -2545,9 +2643,6 @@ export const zh_TW: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "錢包授權已過期或無法驗證。請再試一次。"
-    },
-    "welcome": {
-      "invalid_input": "輸入無效。"
     }
   },
   "guide": {
@@ -4121,6 +4216,7 @@ export const zh_TW: EnTranslations = {
   "stats": {
     "title": "世界狀態",
     "accountsCreated": "玩家",
+    "charactersCreated": "已創建角色",
     "playersOnline": "線上玩家數",
     "realmName": "世界名稱"
   },
@@ -4154,7 +4250,9 @@ export const zh_TW: EnTranslations = {
     "error": "無法載入更新。請稍後再試。",
     "empty": "目前尚無更新，敬請期待。",
     "prerelease": "搶先版",
-    "viewOnGithub": "在 GitHub 上檢視"
+    "viewOnGithub": "在 GitHub 上檢視",
+    "new": "新",
+    "viewAll": "在 GitHub 上查看全部更新"
   },
   "download": {
     "title": "下載電腦版啟動器",
@@ -5331,29 +5429,6 @@ export const zh_TW: EnTranslations = {
     "body": "我們正在重新啟動遊戲服務，Claudemoon 應會很快恢復。此頁面會自動持續檢查。",
     "status": "即將恢復"
   },
-  "welcome": {
-    "back": "歡迎回來，{name}",
-    "level": "等級 {level}",
-    "lastPlayed": "上次遊玩：{when}",
-    "continue": "進入世界",
-    "continueHint": "按 Enter 繼續，按 Esc 跳過",
-    "continueHintTouch": "點擊繼續",
-    "discord": {
-      "title": "社群活躍在 Discord",
-      "sub": "版本預告、活動、開發者聊天，綁定還可獲得 2 個額外銀行格。",
-      "join": "加入我們的 Discord"
-    },
-    "chest": {
-      "ready": "每日寶箱已就緒"
-    },
-    "armory": {
-      "cta": "進入並瀏覽軍械庫"
-    },
-    "news": {
-      "new": "新",
-      "viewAll": "在 GitHub 上查看全部更新"
-    }
-  },
   "hud": {
     "core": {
       "elite": "精英",
@@ -5723,7 +5798,8 @@ export const zh_TW: EnTranslations = {
       "tradeInProgress": "已有交易正在進行。",
       "tradeTooFar": "目標太遠，無法交易。",
       "tradeExpired": "交易請求已過期。",
-      "tradeFailed": "交易失敗：物品或金錢已不可用。"
+      "tradeFailed": "交易失敗：物品或金錢已不可用。",
+      "tradeBound": "該物品已綁定，無法交易。"
     },
     "logs": {
       "standUp": "你站了起來。",
@@ -5871,7 +5947,8 @@ export const zh_TW: EnTranslations = {
         "offline": "離線",
         "combat": "戰鬥中",
         "dungeon": "地城中",
-        "dead": "死亡"
+        "dead": "死亡",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -8493,6 +8570,144 @@ export const zh_TW: EnTranslations = {
       "elixir_of_the_serpent": {
         "name": "巨蛇藥劑"
       },
+      "mosshide_vest": {
+        "name": "苔皮背心"
+      },
+      "thornling_grips": {
+        "name": "棘靈護手"
+      },
+      "acolyte_chain_grips": {
+        "name": "侍僧鏈甲護手"
+      },
+      "votive_chain_belt": {
+        "name": "誓願鏈甲腰帶"
+      },
+      "briarroot_staff": {
+        "name": "棘根法杖"
+      },
+      "valefire_lantern": {
+        "name": "谷火燈籠"
+      },
+      "fenbark_leggings": {
+        "name": "沼皮護腿"
+      },
+      "mirebloom_treads": {
+        "name": "泥花軟靴"
+      },
+      "fenwarden_sabatons": {
+        "name": "沼衛鐵靴"
+      },
+      "marshlight_hauberk": {
+        "name": "沼光鎖甲"
+      },
+      "duskthorn_mantle": {
+        "name": "暮棘披肩"
+      },
+      "fenshadow_maul": {
+        "name": "沼影重錘"
+      },
+      "wildgrove_cinch": {
+        "name": "野林束帶"
+      },
+      "cragward_pauldrons": {
+        "name": "岩衛肩甲"
+      },
+      "cragthorn_greatstaff": {
+        "name": "岩棘巨杖"
+      },
+      "moonbark_vestments": {
+        "name": "月皮祭服"
+      },
+      "peaksong_helm": {
+        "name": "峰歌頭盔"
+      },
+      "stormchant_gauntlets": {
+        "name": "風暴詠唱護手"
+      },
+      "cragprowl_belt": {
+        "name": "岩行腰帶"
+      },
+      "stormroot_cowl": {
+        "name": "風根兜帽"
+      },
+      "thunderward_legguards": {
+        "name": "雷衛護腿"
+      },
+      "revenantstep_treads": {
+        "name": "亡魂行靴"
+      },
+      "shardfang_grips": {
+        "name": "片牙護手"
+      },
+      "shardsong_mantle": {
+        "name": "碎片之歌披肩"
+      },
+      "wyrmcult_spellgrips": {
+        "name": "龍教法術護手"
+      },
+      "thornpeak_wildwraps": {
+        "name": "荊峰野性裹手"
+      },
+      "stormvotive_hauberk": {
+        "name": "風暴誓願鎖甲"
+      },
+      "cryptbloom_shoulderguards": {
+        "name": "墓花護肩"
+      },
+      "gravewyrm_thornmaul": {
+        "name": "墓龍棘錘"
+      },
+      "vestments_of_the_waking_grove": {
+        "name": "甦醒林地祭服"
+      },
+      "nightfangs_greatstaff": {
+        "name": "夜牙巨杖"
+      },
+      "maul_of_the_scourged_wilds": {
+        "name": "災野重錘"
+      },
+      "tidehymn_slippers": {
+        "name": "潮詩便鞋"
+      },
+      "pearlward_aegis": {
+        "name": "珍珠守護盾"
+      },
+      "wildgrowth_leggings": {
+        "name": "荒野生長護腿"
+      },
+      "grovewardens_grips": {
+        "name": "林地守護者護手"
+      },
+      "verdant_walkers": {
+        "name": "翠綠行者長靴"
+      },
+      "lunarward_cinch": {
+        "name": "月衛束帶"
+      },
+      "dreamroot_boots": {
+        "name": "夢根長靴"
+      },
+      "stormbark_mantle": {
+        "name": "風暴樹皮披肩"
+      },
+      "wildsoul_maul": {
+        "name": "荒野之魂重錘"
+      },
+      "resonant_thread": {
+        "name": "共鳴絲線"
+      },
+      "resonant_hide": {
+        "name": "共鳴獸皮"
+      },
+      "resonant_links": {
+        "name": "共鳴鎖環"
+      },
+      "resonant_steel": {
+        "name": "共鳴鋼材"
+      },
+      "resonant_timber": {
+        "name": "共鳴木材"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
@@ -10905,6 +11120,11 @@ export const zh_TW: EnTranslations = {
         "sender": "工匠公會",
         "subject": "關於你的護甲鍛造與工程學",
         "body": "工匠：\n\n你鑽研護甲鍛造與工程學的名聲已傳到公會：鉚好甲片，校準齒輪，兩門技藝相輔相成。能同時打磨相鄰兩門技藝的手，正是準備好調諧的手。請到東溪鎮拜訪哈德倫鐵匠：眼下由他代諸位大師發言。用親手做出的成果向他證明你的技藝，他便會把這兩門技藝調諧為你的主修。\n\n謹此，\n工匠公會"
+      },
+      "mastery_reset_notice": {
+        "sender": "公會會館",
+        "subject": "你的手藝，從此作數",
+        "body": "公會同仁：\n\n公會已啟用全新的技藝衡量之法。人人從頭攀登：你的製作技能與採集熟練度已歸零。\n\n其餘一切分毫未動，仍歸你所有：你的配方、工具與材料、銀行與金幣、調諧與頭銜、功績與名望、任務與郵件。\n\n如今的攀登童叟無欺。廉價的活計再也帶不動你。去尋求更難的配方、更富的礦脈、更深的水域吧。\n\n謹致敬意，\n公會會館"
       }
     },
     "itemSets": {

@@ -14,6 +14,7 @@ import type {
   ZoneDef,
   ZonePropsDef,
 } from '../types';
+import { FERAL } from './items';
 
 export const DEEPFEN_SHALLOWS_LAKE = { x: -110, z: 310, radius: 35 };
 
@@ -175,6 +176,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'mirejaw_scale_vest', chance: 0.25 },
       { itemId: 'fen_reaver_glaive', chance: 0.25, rollGroup: 'mirejaw_chase' },
       { itemId: 'mirejaw_oracle_staff', chance: 0.25, rollGroup: 'mirejaw_chase' },
+      { itemId: 'mirebloom_treads', chance: 0.25 },
     ],
     scale: 1.05,
     color: 0x1abc9c,
@@ -252,6 +254,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { copper: 38, chance: 1 },
       { itemId: 'widow_venom_sac', chance: 0.65, questId: 'q_widows' },
       { itemId: 'spider_leg', chance: 0.4 },
+      { itemId: 'fenbark_leggings', chance: 0.12 },
     ],
     scale: 1.0,
     color: 0x283747,
@@ -286,6 +289,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'marshstrider_boots', chance: 0.4 },
       { itemId: 'broodmother_silk_robe', chance: 0.25 },
       { itemId: 'spider_leg', chance: 1 },
+      { itemId: 'fenwarden_sabatons', chance: 0.3 },
     ],
     scale: 1.4,
     color: 0x641e16,
@@ -339,6 +343,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'chipped_tusk', chance: 0.4 },
       { itemId: 'bogiron_nugget', chance: 0.3 },
       { itemId: 'elixir_of_the_bear', chance: 0.07 },
+      { itemId: 'marshlight_hauberk', chance: 0.1 },
     ],
     scale: 1.15,
     color: 0x229954,
@@ -463,6 +468,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { copper: 58, chance: 1 },
       { itemId: 'cult_cipher', chance: 0.4, questId: 'q_summoners' },
       { itemId: 'tallow_candle', chance: 0.3 },
+      { itemId: 'duskthorn_mantle', chance: 0.12 },
     ],
     scale: 1.0,
     color: 0x9b59b6,
@@ -553,6 +559,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { copper: 600, chance: 1 },
       { itemId: 'tallow_candle', chance: 1 },
       { itemId: 'voss_sanctified_mace', chance: 0.25 },
+      { itemId: 'fenshadow_maul', chance: 0.25 },
     ],
     scale: 1.3,
     color: 0x512e5f,
@@ -1088,6 +1095,9 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
       warrior: 'deacons_cleaver',
       mage: 'staff_of_drowned_prayers',
       rogue: 'mistbinder_kris',
+      // Druid-specific override: the feral 2H ladder rung instead of the
+      // mage-archetype caster staff (questRewardItem checks the class first).
+      druid: 'fenshadow_maul',
     },
     requiresQuest: 'q_summoners',
   },
@@ -2034,6 +2044,84 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     kind: 'junk',
     quality: 'poor',
     sellValue: 600,
+  },
+  // --- Class/spec gap fill (uncommon/green leveling pieces) ---
+  // Budgeted via primaryStatBudget(item level, uncommon, slot); see
+  // src/sim/item_budget.ts. The leather int/spi pieces continue the druid
+  // caster line, the mail int/spi pieces the shaman/paladin caster line, and
+  // the druid-locked two-hander is the second rung of the feral weapon ladder
+  // (a bespoke druid-only lock: weaponArchetypeForItem returns null for it and
+  // canEquipItem falls through to the literal list, src/sim/equipment_rules.ts).
+  fenbark_leggings: {
+    id: 'fenbark_leggings',
+    name: 'Fenbark Leggings',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'legs',
+    quality: 'uncommon',
+    // Sableweb Widows (level 10) -> item level 11, legs budget 4.
+    stats: { armor: 48, int: 3, spi: 1 },
+    sellValue: 320,
+  },
+  mirebloom_treads: {
+    id: 'mirebloom_treads',
+    name: 'Mirebloom Treads',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'feet',
+    quality: 'uncommon',
+    // Mirejaw the Ravenous (level 10 rare elite) -> item level 11, feet budget 3.
+    stats: { armor: 28, int: 2, spi: 1 },
+    sellValue: 300,
+  },
+  fenwarden_sabatons: {
+    id: 'fenwarden_sabatons',
+    name: 'Fenwarden Sabatons',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'feet',
+    quality: 'uncommon',
+    // Mirefen Broodmother (level 10 boss) -> item level 11, feet budget 3.
+    stats: { armor: 42, int: 2, spi: 1 },
+    sellValue: 310,
+  },
+  marshlight_hauberk: {
+    id: 'marshlight_hauberk',
+    name: 'Marshlight Hauberk',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'chest',
+    quality: 'uncommon',
+    // Mirefen Trolls (level 12) -> item level 13, chest budget 5.
+    stats: { armor: 110, int: 3, spi: 2 },
+    sellValue: 380,
+  },
+  duskthorn_mantle: {
+    id: 'duskthorn_mantle',
+    name: 'Duskthorn Mantle',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'shoulder',
+    quality: 'uncommon',
+    // Gravecaller Menders (level 12) -> item level 13, shoulder budget 4.
+    stats: { armor: 34, int: 3, spi: 1 },
+    sellValue: 340,
+  },
+  fenshadow_maul: {
+    id: 'fenshadow_maul',
+    name: 'Fenshadow Maul',
+    kind: 'weapon',
+    slot: 'mainhand',
+    hand: 'twohand',
+    quality: 'uncommon',
+    // Deacon Voss (level 12 boss; also the q_deacon druid reward) -> item level
+    // 13: 2H stat budget round(primaryStatBudget(13, uncommon, mainhand) = 5 x
+    // TWOHAND_STAT_MULT) = 7, dps on the weaponDpsBudget(13) x TWOHAND_DPS_MULT
+    // curve (~12.19 at speed 3.4).
+    weapon: { min: 35, max: 48, speed: 3.4 },
+    stats: { str: 3, agi: 2, sta: 2 },
+    sellValue: 420,
+    requiredClass: FERAL,
   },
 };
 

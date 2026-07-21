@@ -9,7 +9,7 @@
 // 20 Hz tick loop (sim.ts `tick()`, next to `updateRested`), so a grant only
 // ever takes effect on the deterministic tick path, never out of band.
 
-import { bagCapacity } from '../bags';
+import { bagCapacity, countFit } from '../bags';
 import { GATHER_NODES } from '../content/gather_nodes';
 import {
   GATHERING_PROFESSION_IDS,
@@ -40,6 +40,7 @@ import { gatherActionXp } from './profession_xp';
 import { proficiencyBandFor } from './proficiency_bands';
 import { BARE_HANDS_TOOL_TIER, bestOwnedGatherToolTier, canGatherTier } from './tools';
 import type { PlayerProfessionSkill } from './types';
+import { tierProgressMultiplier } from './wheel';
 
 export type GatheringProficiency = Record<GatheringProfessionId, number>;
 
@@ -188,6 +189,25 @@ export function isNodeHarvestableBy(meta: PlayerMeta, nodeId: string, now: numbe
   return readyAt === undefined || now >= readyAt;
 }
 
+// Node-tier-relative proficiency gain (Professions 2.0 Phase 12c): every
+// GATHER_GAIN_TIER_STEP points of proficiency is one gain tier, scored
+// against the node's tier through the same four-state mastery curve crafting
+// uses (wheel.ts tierProgressMultiplier). A node of tier T (1 = bare-hands)
+// maps to gain tier T - 1, so it carries the player through the band below
+// T * 25 at full-to-minimal gain: t1 nodes gray out at proficiency 75+, and
+// Thornpeak's t3 nodes are what finish the climb to 100.
+export const GATHER_GAIN_TIER_STEP = 25;
+
+// The per-harvest proficiency gain for one node harvest: deterministic
+// fractional amounts (1 / 0.5 / 0.25 / 0 by tiers below), never a skill-up
+// roll and never an rng draw.
+export function gatherNodeGainMultiplier(proficiency: number, nodeTier: number): number {
+  return tierProgressMultiplier(
+    Math.floor(Math.max(0, proficiency) / GATHER_GAIN_TIER_STEP),
+    Math.max(0, nodeTier - 1),
+  );
+}
+
 export interface HarvestResolution {
   granted: boolean;
   itemId?: string;
@@ -236,7 +256,14 @@ export function resolveHarvest(
   const material = nodeMaterialFor(node.type, node.zoneId);
   const qty = material.qtyByRarity[rarity] * (rareEvent ? GATHER_RARE_EVENT_YIELD_MULT : 1);
   const signed = rareEvent !== null || isSignableMaterialRarity(rarity);
-  queueGatheringGrant(meta, entry.professionId, 1);
+  // Phase 12c: the queued gain is node-tier-relative (gatherNodeGainMultiplier
+  // above), read off the proficiency at the moment of harvest; a gray harvest
+  // resolves to 0, which queueGatheringGrant drops, so it queues nothing.
+  queueGatheringGrant(
+    meta,
+    entry.professionId,
+    gatherNodeGainMultiplier(meta.gatheringProficiency[entry.professionId], node.tier),
+  );
   return {
     granted: true,
     itemId: material.itemId,
@@ -424,21 +451,29 @@ export function completeGatherCast(ctx: SimContext, p: Entity, meta: PlayerMeta)
     return fit;
   };
   if (signed) {
-    // Signed instances never merge into stacks (bags.ts addStacked, #1165):
-    // each unit is its own slot, so EVERY unit (the first included) needs a
-    // genuinely free slot and an oversized rare-event windfall truncates
-    // instead of overflowing the bag. The fungible pre-gate above can pass on
-    // stack top-up room alone, so when no free slot exists the yield falls
-    // back to an unsigned top-up grant (the truncation contract wins over
-    // signing in that self-inflicted edge; the crossing-case pin lives in
+    // A signed instance merges only into a byte-equal same-signer stack
+    // (identical-payload stacking, Phase 12d; never a plain stack, #1165):
+    // countFit with the payload counts that merge room plus free slots, so a
+    // rare-event windfall lands whole once a single slot (or same-signer
+    // stack room) is open, where the pre-12d contract needed one free slot
+    // per unit. The fungible pre-gate above can pass on plain-stack top-up
+    // room alone, so when no signed unit fits the yield falls back to an
+    // unsigned top-up grant (the truncation contract wins over signing in
+    // that self-inflicted edge; the crossing-case pin lives in
     // tests/gather_rare_events.test.ts).
     const capacity = bagCapacity(meta.bags);
-    for (let i = 0; i < qty; i++) {
-      if (meta.inventory.length >= capacity) break;
+    const fit = countFit(meta.inventory, capacity, itemId, qty, { signer: meta.name });
+    for (let i = 0; i < fit; i++) {
       ctx.addItemInstance(itemId, { signer: meta.name }, meta.entityId);
       grantedQty++;
     }
-    if (grantedQty === 0) grantedQty = grantFungibleFit();
+    if (grantedQty === 0) {
+      grantedQty = grantFungibleFit();
+      // Phase 12d: the yield survived as a plain top-up but its signature did
+      // not; tell the player (a text-free personal event, the gatherDenied
+      // idiom; one signed batch per harvest, so no dedupe flag is needed).
+      ctx.emit({ type: 'gatherDowngrade', pid: meta.entityId, surface: 'node', lost: 'mark' });
+    }
   } else {
     grantedQty = grantFungibleFit();
   }
@@ -487,7 +522,11 @@ export function isGatheringProfessionId(id: string): id is GatheringProfessionId
 
 // Normalizes a possibly-absent, possibly-partial saved record (old character
 // saves predate this field entirely) into a full, zero-defaulted proficiency
-// record. Never throws on an absent or malformed field.
+// record. Never throws on an absent or malformed field. Phase 12c: a loaded
+// value above the profession's enforced content cap (GATHERING_PROFESSIONS
+// maxSkill) clamps DOWN to it; the sim.ts call site feeds this both the
+// current gatheringProficiency key and the legacy pre-rename `professions`
+// key, so the clamp covers both save shapes.
 export function normalizeGatheringProficiency(
   saved: Partial<Record<string, number>> | undefined | null,
 ): GatheringProficiency {
@@ -495,7 +534,8 @@ export function normalizeGatheringProficiency(
   if (!saved) return out;
   for (const id of GATHERING_PROFESSION_IDS) {
     const v = saved[id];
-    if (typeof v === 'number' && Number.isFinite(v)) out[id] = Math.max(0, v);
+    if (typeof v === 'number' && Number.isFinite(v))
+      out[id] = Math.max(0, Math.min(GATHERING_PROFESSIONS[id].maxSkill, v));
   }
   return out;
 }
@@ -519,13 +559,19 @@ export function queueGatheringGrant(
 // Drains one player's queued grants, applying each additively to that
 // profession's own counter only. Called once per player per tick (sim.ts
 // `tick()`), so a grant issued this tick is visible starting next tick, the
-// same cadence as every other per-tick system.
+// same cadence as every other per-tick system. Phase 12c: each result clamps
+// at the profession's enforced content cap (GATHERING_PROFESSIONS maxSkill),
+// the gain-time arm for harvests, catches, and the `/dev gather` cheat; at
+// cap, harvests and catches still yield, only proficiency gain stops.
 export function drainGatheringGrants(meta: PlayerMeta): void {
   if (meta.pendingGatherGrants.length === 0) return;
   for (const grant of meta.pendingGatherGrants) {
     meta.gatheringProficiency[grant.professionId] = Math.max(
       0,
-      meta.gatheringProficiency[grant.professionId] + grant.amount,
+      Math.min(
+        GATHERING_PROFESSIONS[grant.professionId].maxSkill,
+        meta.gatheringProficiency[grant.professionId] + grant.amount,
+      ),
     );
   }
   meta.pendingGatherGrants.length = 0;

@@ -290,17 +290,26 @@ describe('Nythraxis raid encounter', () => {
     const loot = MOBS.nythraxis_scourge_of_thornpeak.loot.filter((entry) => entry.itemId);
     const groups = new Map<string, typeof loot>();
     for (const entry of loot) {
-      expect(entry.rollGroup).toMatch(/^nythraxis_drop_[1-4]$/);
+      expect(entry.rollGroup).toMatch(/^nythraxis_drop_[1-5]$/);
       const group = entry.rollGroup!;
       groups.set(group, [...(groups.get(group) ?? []), entry]);
       expect(ITEMS[entry.itemId!], entry.itemId).toBeTruthy();
     }
 
-    expect(groups.size).toBe(4);
-    for (const entries of groups.values()) {
+    expect(groups.size).toBe(5);
+    for (const [name, entries] of groups) {
       const total = entries.reduce((sum, entry) => sum + entry.chance, 0);
-      expect(total).toBeCloseTo(1, 5);
+      // nythraxis_drop_5 is the feral ladder's bonus draw (maul_of_the_scourged_wilds):
+      // a single independent 25% roll on top of the four guaranteed equipment
+      // groups, which keep their exact 1.00 partitions untouched.
+      if (name === 'nythraxis_drop_5') {
+        expect(entries.map((entry) => entry.itemId)).toEqual(['maul_of_the_scourged_wilds']);
+        expect(total).toBe(0.25);
+      } else {
+        expect(total).toBeCloseTo(1, 5);
+      }
     }
+    expect(ITEMS.maul_of_the_scourged_wilds.requiredClass).toEqual(['druid']);
 
     for (const itemId of ['deathless_heartwood', 'kingsbane_last_oath']) {
       const item = ITEMS[itemId];

@@ -148,6 +148,9 @@ export interface LeaderboardRuntime {
   /** Cache-fronted accounts-created count for project-stats (main.ts
    *  getAccountsCreatedCount): the moderation-invariant COUNT(*), its own 60s TTL. */
   getAccountsCreatedCount(): Promise<number>;
+  /** Cache-fronted characters-created count for project-stats (main.ts
+   *  getCharactersCreatedCount): realm-scoped COUNT(*), same 60s TTL. */
+  getCharactersCreatedCount(): Promise<number>;
   /** Cache-fronted GitHub releases proxy read (main.ts getReleases). */
   getReleases(): Promise<ReleaseEntry[]>;
   /** The repo slug the releases feed reports (main.ts GITHUB_REPO). */
@@ -384,9 +387,10 @@ export async function readRealms(
   return { current: realm, realms: directory, characters };
 }
 
-/** DB read project-stats needs (account-scoped, so not on the character Db). */
+/** DB read project-stats needs (account-scoped for accounts; realm-scoped for characters). */
 interface ProjectStatsReadDb {
   getAccountsCount(): Promise<number>;
+  getCharactersCount(realm: string): Promise<number>;
 }
 
 /** GET /api/project-stats body. */
@@ -394,9 +398,22 @@ export async function readProjectStats(
   db: ProjectStatsReadDb,
   playersOnline: number,
   realm: string,
-): Promise<{ accounts_created: number; players_online: number; realm: string }> {
-  const accountsCount = await db.getAccountsCount();
-  return { accounts_created: accountsCount, players_online: playersOnline, realm };
+): Promise<{
+  accounts_created: number;
+  characters_created: number;
+  players_online: number;
+  realm: string;
+}> {
+  const [accountsCount, charactersCount] = await Promise.all([
+    db.getAccountsCount(),
+    db.getCharactersCount(realm),
+  ]);
+  return {
+    accounts_created: accountsCount,
+    characters_created: charactersCount,
+    players_online: playersOnline,
+    realm,
+  };
 }
 
 /** DB reads the public character sheet needs. */
@@ -564,8 +581,8 @@ async function releasesHandler(ctx: Ctx): Promise<void> {
   json(ctx.res, 200, { repo: rt.githubRepo, releases: entries.slice(0, limit) });
 }
 
-/** GET /api/project-stats: accounts created, players online, realm. The
- *  accounts-created COUNT is served from the cache-fronted runtime (the same 60s
+/** GET /api/project-stats: characters created, players online, realm. The
+ *  characters-created COUNT is served from the cache-fronted runtime (the same 60s
  *  cache the legacy main.ts arm reads); players_online stays a live per-request
  *  read, so it is re-attached here rather than cached. Now an anonymous DB-fronted
  *  read, it carries publicReadRateLimited in-handler (the same per-IP public-read
@@ -577,8 +594,13 @@ async function projectStatsHandler(ctx: Ctx): Promise<void> {
     return;
   }
   const rt = useRuntime();
+  const [accountsCreated, charactersCreated] = await Promise.all([
+    rt.getAccountsCreatedCount(),
+    rt.getCharactersCreatedCount(),
+  ]);
   json(ctx.res, 200, {
-    accounts_created: await rt.getAccountsCreatedCount(),
+    accounts_created: accountsCreated,
+    characters_created: charactersCreated,
     players_online: rt.playersOnline(),
     realm: REALM,
   });

@@ -7823,11 +7823,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'La tienda de Claudium no está disponible en este momento. Tu saldo y tus compras no se verán afectados; vuelve a intentarlo dentro de poco.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Recolectar: obtén materiales de artesanía de este cadáver (piel, colmillos, seda y componentes similares), por separado del botín. Cualquiera puede recolectarlo, pero solo un jugador puede recolectar cada cadáver.',
   'hudChrome.deeds.openBookHint': 'Abrir el Libro de Gestas',
-  'hudChrome.loot.takeAllTooltip':
-    'Recoger todos: recoge todas las monedas y objetos de esta ventana de botín.',
   'hudChrome.statInfo.desc.warfare':
     'Aumenta un {increase}% el daño infligido a jugadores y reduce un {reduction}% el daño recibido de jugadores.',
   'hudChrome.statInfo.names.warfare': 'Pericia bélica',
@@ -8306,21 +8302,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleAutomatic': 'Automático',
   'hudChrome.partyFrames.styleClassic': 'Marcos de grupo clásicos',
   'hudChrome.partyFrames.styleRaid': 'Marcos de banda',
-  'apiError.welcome.invalid_input': 'Entrada no válida.',
-  'welcome.back': 'Te damos la bienvenida de nuevo, {name}',
-  'welcome.level': 'Nivel {level}',
-  'welcome.lastPlayed': 'Última partida: {when}',
-  'welcome.continue': 'Entrar al Mundo',
-  'welcome.continueHint': 'Pulsa Enter para continuar, Esc para omitir',
-  'welcome.continueHintTouch': 'Toca para continuar',
-  'welcome.discord.title': 'La comunidad vive en Discord',
-  'welcome.discord.sub':
-    'Avances de parches, eventos, chat con los desarrolladores y 2 espacios extra en el banco al vincular tu cuenta de Discord.',
-  'welcome.discord.join': 'Únete a nuestro Discord',
-  'welcome.chest.ready': 'Cofre de recompensas diarias listo',
-  'welcome.armory.cta': 'Entrar al Mundo y explorar la Armería',
-  'welcome.news.new': 'Nuevo',
-  'welcome.news.viewAll': 'Ver todas las actualizaciones en GitHub',
+  'news.new': 'Nuevo',
+  'news.viewAll': 'Ver todas las actualizaciones en GitHub',
   'entities.letters.heroic_marks_reward.sender': 'Intendente heroico',
   'entities.letters.heroic_marks_reward.subject': 'Tus Marcas heroicas',
   'entities.letters.heroic_marks_reward.body':
@@ -8573,7 +8556,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Pasatiempo: {craft}',
   'hudChrome.professions.identityHeader': 'Identidad',
   'hudChrome.professions.majorsLabel': 'Mayores: {a} y {b}',
-  'hudChrome.professions.nextUnlockMax': 'En máxima habilidad',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} apunta a Specialized: bajan los costes de materiales',
   'hudChrome.professions.nextUnlockTier':

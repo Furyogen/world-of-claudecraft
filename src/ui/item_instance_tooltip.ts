@@ -9,7 +9,7 @@
 // enchanted marker is generic: EnchantDef.name has no localized display
 // surface, and an unlocalized string must never reach the tooltip.
 import { isEnchantedInstance } from '../sim/professions/enchanting';
-import type { ItemInstancePayload, Stats } from '../sim/types';
+import type { ItemDef, ItemInstancePayload, Stats } from '../sim/types';
 import { esc } from './esc';
 import { formatNumber, type TranslationKey, t } from './i18n';
 import { QUALITY_COLOR } from './icons';
@@ -71,11 +71,32 @@ export function instanceBonusStatLines(instance?: ItemInstancePayload): string {
   return html;
 }
 
-/** The classic "Crafted by X" flavor line for a signed copy. Legacy signed
- *  instances (signer without the masterwork flag) render the mark alone. */
-export function instanceMakersMarkLine(instance?: ItemInstancePayload): string {
+/** Whether a signed copy of this item KIND reads as a gathered material
+ *  (Professions 2.0 Phase 12d). Every signable gathered item (node materials,
+ *  corpse components, Pristine specimens) is kind 'junk', while every crafted
+ *  recipe output lands on the equip/consume kinds (weapon, armor, food,
+ *  potion, elixir, tool, bag), so the signed universe partitions cleanly on
+ *  the kind alone; the partition is pinned in tests/item_instance_tooltip.test.ts.
+ *  Fish share kind 'food' with crafted meals but are never signed, so they
+ *  never reach the provenance line at all. */
+export function isGatheredProvenanceKind(kind: ItemDef['kind'] | undefined): boolean {
+  return kind === 'junk';
+}
+
+/** The classic "Crafted by X" flavor line for a signed copy, or "Gathered by
+ *  X" when the item's kind marks it as a gathered material (Phase 12d). No
+ *  payload change: the same eqi signer field feeds both wordings. Legacy
+ *  signed instances (signer without the masterwork flag) render the mark
+ *  alone. */
+export function instanceMakersMarkLine(
+  instance?: ItemInstancePayload,
+  kind?: ItemDef['kind'],
+): string {
   if (!instance?.signer) return '';
+  const key = isGatheredProvenanceKind(kind)
+    ? 'hudChrome.crafting.gatheredBy'
+    : 'hudChrome.crafting.makersMark';
   return `<div class="tt-sub" style="color:${QUALITY_COLOR.uncommon}">${esc(
-    t('hudChrome.crafting.makersMark', { name: instance.signer }),
+    t(key, { name: instance.signer }),
   )}</div>`;
 }

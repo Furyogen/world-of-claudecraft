@@ -240,20 +240,29 @@ describe('server authority over instance payloads', () => {
   });
 });
 
-// The last link of the inspect chain is hud.ts DOM glue no suite instantiates
-// (openInspect -> buildInspectSlotRow -> the widened itemTooltip), so the
-// threading is source-pinned: the eqi wire and mirror above are liveness-
-// tested, and these pins keep the rendered row actually consuming them.
+// The last link of the inspect chain is the inspect_window.ts painter DOM glue no
+// suite instantiates (openInspect -> buildSlotRow -> the widened itemTooltip), so
+// the threading is source-pinned: the eqi wire and mirror above are liveness-
+// tested, and these pins keep the rendered row actually consuming them. The
+// showcase redesign moved this glue out of hud.ts into the inspect_window painter
+// (a thin delegate remains in hud.ts), so the pins follow it there.
 import { readFileSync } from 'node:fs';
 
-describe('hud openInspect instance threading (source pins)', () => {
+describe('inspect_window painter instance threading (source pins)', () => {
+  const painter = readFileSync(new URL('../src/ui/inspect_window.ts', import.meta.url), 'utf8');
   const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
 
   it('threads the inspected entity payload per slot into both paperdoll columns', () => {
-    expect(hud).toContain('buildInspectSlotRow(cell, e.equippedInstances[cell.slot])');
+    expect(painter).toContain('this.buildSlotRow(cell, e.equippedInstances[cell.slot])');
   });
 
   it('the slot row forwards the instance into the tooltip builder', () => {
-    expect(hud).toContain('this.attachTooltip(row, () => this.itemTooltip(item, true, instance))');
+    expect(painter).toContain(
+      'this.deps.attachTooltip(row, () => this.deps.itemTooltip(item, instance))',
+    );
+  });
+
+  it('hud.ts openInspect is now a thin delegate to the painter', () => {
+    expect(hud).toContain('this.inspectWindow.openInspect(e, Date.now())');
   });
 });

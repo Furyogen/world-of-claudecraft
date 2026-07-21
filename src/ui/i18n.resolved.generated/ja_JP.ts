@@ -705,6 +705,12 @@ export const ja_JP: EnTranslations = {
       "collapseHint": "クエストトラッカーを折りたたむ",
       "expandHint": "クエストトラッカーを展開する"
     },
+    "interfaceTabs": {
+      "general": "全般",
+      "frames": "フレーム",
+      "chat": "チャット",
+      "combat": "戦闘"
+    },
     "chatTimestamps": {
       "show": "チャットに時刻を表示",
       "format": "時刻の表記形式",
@@ -1177,6 +1183,10 @@ export const ja_JP: EnTranslations = {
         "fiestaWin": "フィエスタ勝利"
       }
     },
+    "charSheet": {
+      "offense": "攻撃",
+      "defense": "防御"
+    },
     "statInfo": {
       "fromYour": "あなたの{stat}{value}による効果:",
       "names": {
@@ -1435,7 +1445,7 @@ export const ja_JP: EnTranslations = {
     "corpseHarvest": {
       "title": "採取",
       "harvestButton": "採取",
-      "harvestButtonTooltip": "採取：この死体から製作素材（毛皮、牙、絹糸など）を戦利品とは別に集めます。誰でも採取できますが、1体の死体を採取できるのは1人だけです。",
+      "harvestTooltip": "チェックした部位を採取します。各死体は早い者勝ちで一度だけ採取できます。戦利品は取りません。",
       "concentrateHint": "選ぶ部位が少ないほど、各部位の品質が高くなります。",
       "alreadyHarvested": "この死体はすでに採取されています。",
       "componentAria": "{component}を採取",
@@ -1453,6 +1463,8 @@ export const ja_JP: EnTranslations = {
     "townFocus": {
       "title": "町のフォーカス",
       "hint": "フォーカスポイントは各素材の基本産出量にボーナスを加算します。フォーカスしていない素材は基本産出量のままです。",
+      "tierHint": "素材にフォーカスを{points}ポイント割り振るごとに採取ティアが1段階上がります（最大{steps}段階）。{points}ポイント未満でも産出量は増えます。",
+      "townOnlyHint": "フォーカスは町の中でのみ変更できます。",
       "budgetLabel": "残りポイント：{remaining} / {budget}",
       "saveButton": "フォーカスを保存",
       "notInTownHint": "フォーカスを設定するには町にいる必要があります。",
@@ -1511,6 +1523,7 @@ export const ja_JP: EnTranslations = {
       "dragEquipHint": "キャラクターにドラッグして装備",
       "dragDestroyHint": "世界へドラッグして破壊",
       "reorderNeedsRecent": "絞り込みを解除し並び順を「最近」にすると持ち物を並べ替えられます",
+      "itemAriaInstanced": "{item}、数量 {count}、銘入りの品",
       "filterGroupAria": "バッグをカテゴリーで絞り込む",
       "filterAll": "すべて",
       "filterWeapon": "武器",
@@ -1676,7 +1689,9 @@ export const ja_JP: EnTranslations = {
     },
     "loot": {
       "chestTitle": "宝箱",
-      "takeAllTooltip": "すべて取る：この戦利品ウィンドウ内のすべてのお金とアイテムを回収します。"
+      "takeLootButton": "戦利品を取る",
+      "takeLootTooltip": "お金とドロップしたアイテムを受け取ります。採取の機会は消費しません。",
+      "unifiedPressHint": "相互作用キーを一度押すだけで、町のフォーカスに従って戦利品の回収と採取を同時に行います。"
     },
     "spellbook": {
       "addToBarAria": "{name}をアクションバーに追加",
@@ -1684,7 +1699,8 @@ export const ja_JP: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "レベル{level} {family}",
@@ -2082,7 +2098,11 @@ export const ja_JP: EnTranslations = {
       "blockSearchPlaceholder": "プレイヤー名",
       "blockAction": "ブロック",
       "nowBlocking": "{name} をブロックしました。",
-      "stopBlockingTitle": "{name} のブロックを解除"
+      "stopBlockingTitle": "{name} のブロックを解除",
+      "onlineHeader": "オンライン ({n})",
+      "offlineHeader": "オフライン ({n})",
+      "hideOffline": "オフラインを非表示",
+      "hideOfflineTitle": "オフラインのギルドメンバーを非表示"
     },
     "gathering": {
       "title": "採集",
@@ -2112,6 +2132,8 @@ export const ja_JP: EnTranslations = {
         "herbalism": "この群生地を採取するにはティア{tier}の薬草鎌が必要です。"
       },
       "toolTierUnmetCorpse": "最高の素材を回収するにはティア{tier}の採集道具が必要です。",
+      "downgradeMark": "バッグが満杯です：収穫は採集者の印なしで収納されました。",
+      "downgradeFind": "バッグが満杯です：極上の獲物を逃してしまいました。",
       "stateReady": "採集可能",
       "stateCooldown": "再生中"
     },
@@ -2144,6 +2166,49 @@ export const ja_JP: EnTranslations = {
       "tailoring": "裁縫",
       "leatherworking": "皮革加工"
     },
+    "enchantName": {
+      "enchant_weapon_might": "武器エンチャント - 剛力",
+      "enchant_weapon_intellect": "武器エンチャント - 呪文威力",
+      "enchant_helmet_fortitude": "頭エンチャント - 堅牢",
+      "enchant_neck_spirit": "首エンチャント - 精神力",
+      "enchant_shoulder_agility": "肩エンチャント - 敏捷性",
+      "enchant_chest_stamina": "胸エンチャント - スタミナ",
+      "enchant_waist_stamina": "腰エンチャント - スタミナ",
+      "enchant_legs_stamina": "脚エンチャント - スタミナ",
+      "enchant_gloves_agility": "手エンチャント - 敏捷性",
+      "enchant_gloves_intellect": "手エンチャント - 呪文威力",
+      "enchant_feet_agility": "足エンチャント - 敏捷性",
+      "enchant_ring_spirit": "指エンチャント - 精神力",
+      "enchant_weapon_agility": "武器エンチャント - 敏捷性",
+      "enchant_helmet_intellect": "頭エンチャント - 知力",
+      "enchant_helmet_armor": "頭エンチャント - 強化",
+      "enchant_neck_intellect": "首エンチャント - 知力",
+      "enchant_neck_agility": "首エンチャント - 敏捷性",
+      "enchant_shoulder_strength": "肩エンチャント - 筋力",
+      "enchant_shoulder_intellect": "肩エンチャント - 知力",
+      "enchant_chest_spirit": "胸エンチャント - 精神力",
+      "enchant_chest_armor": "胸エンチャント - 強化",
+      "enchant_waist_strength": "腰エンチャント - 筋力",
+      "enchant_waist_agility": "腰エンチャント - 敏捷性",
+      "enchant_legs_intellect": "脚エンチャント - 知力",
+      "enchant_gloves_strength": "手エンチャント - 筋力",
+      "enchant_feet_strength": "足エンチャント - 筋力",
+      "enchant_feet_stamina": "足エンチャント - スタミナ",
+      "enchant_ring_strength": "指エンチャント - 筋力",
+      "enchant_ring_agility": "指エンチャント - 敏捷性",
+      "enchant_ring_intellect": "指エンチャント - 知力",
+      "enchant_weapon_greater_might": "武器エンチャント - 上級剛力",
+      "enchant_weapon_greater_spellpower": "武器エンチャント - 上級呪文威力",
+      "enchant_helmet_greater_fortitude": "頭エンチャント - 上級堅牢",
+      "enchant_chest_greater_stamina": "胸エンチャント - 上級スタミナ",
+      "enchant_legs_greater_stamina": "脚エンチャント - 上級スタミナ",
+      "enchant_gloves_greater_agility": "手エンチャント - 上級敏捷性",
+      "enchant_weapon_runed_edge": "武器エンチャント - ルーンの刃",
+      "enchant_weapon_runed_focus": "武器エンチャント - ルーンの焦点",
+      "enchant_chest_runeweave": "胸エンチャント - ルーン織り",
+      "enchant_legs_runed_hide": "脚エンチャント - ルーンの獣皮",
+      "enchant_helmet_runed_links": "頭エンチャント - ルーンの鎖"
+    },
     "professions": {
       "title": "専門技能",
       "close": "専門技能を閉じる",
@@ -2163,7 +2228,7 @@ export const ja_JP: EnTranslations = {
       "tierPipAria": "ティア {tier}",
       "nextUnlockTier": "次のティアまであと {points}：傑作の成功率が上がります",
       "nextUnlockSpecialized": "専門化まであと {points}：素材コストが下がります",
-      "nextUnlockMax": "技能は最大です",
+      "nextUnlockMastered": "マスターしました（今のところ）",
       "perkSpecializedLine": "{craft}：専門化、素材コスト -{pct}%",
       "perkSpecializedAt": "技能 {threshold} で専門化します",
       "switchCost": "次のアーキタイプ切り替えには償いが {cost} 必要です",
@@ -2243,6 +2308,7 @@ export const ja_JP: EnTranslations = {
       "skillReqLine": "{craft} {skill} が必要",
       "difficultyFull": "技能上昇（全量）",
       "difficultyReduced": "技能上昇（減少）",
+      "difficultyMinimal": "技能上昇（微量）",
       "difficultyNone": "技能上昇なし",
       "stationBadge": "製作拠点",
       "stationOutOfRangeNamed": "{station}に移動して製作してください。",
@@ -2250,8 +2316,40 @@ export const ja_JP: EnTranslations = {
       "masterworkZoneLine": "{crafter}が傑作{name}を作り上げました！",
       "tierUpToast": "{craft}がティア {tier} に到達しました！",
       "makersMark": "製作者：{name}",
+      "gatheredBy": "採集者：{name}",
       "masterworkSeal": "傑作",
       "enchantedLine": "エンチャント済み"
+    },
+    "itemMenu": {
+      "use": "Use",
+      "equip": "装備する",
+      "disenchant": "魔力分解",
+      "salvage": "解体",
+      "applyEnchant": "エンチャントを付与"
+    },
+    "enchanting": {
+      "disenchantedLine": "{item}を魔力分解した。",
+      "salvagedLine": "{item}を解体した。",
+      "enchantAppliedLine": "{item}に{enchant}をエンチャントした。",
+      "notHeld": "そのアイテムを所持していません。",
+      "notDisenchantable": "それは魔力分解できません。",
+      "notSalvageable": "それは解体できません。",
+      "disenchantThrottled": "魔力分解が速すぎます。少し待ってからもう一度お試しください。",
+      "salvageThrottled": "解体が速すぎます。少し待ってからもう一度お試しください。",
+      "enchantThrottled": "エンチャントが速すぎます。少し待ってからもう一度お試しください。",
+      "enchantWrongSlot": "そのエンチャントはそのアイテムには付与できません。",
+      "enchantUnknown": "そのエンチャントは存在しません。",
+      "enchantInsufficient": "そのエンチャントに必要な素材がありません。",
+      "disenchantConfirmTitle": "{item}を魔力分解しますか？",
+      "disenchantConfirmBody": "{item}を破壊し、秘術素材を得ます。この操作は元に戻せません。",
+      "disenchantConfirmBodySpecial": "特別な{item}（銘入り、傑作、またはエンチャント済み）を破壊し、秘術素材を得ます。この操作は元に戻せません。",
+      "salvageConfirmTitle": "{item}を解体しますか？",
+      "salvageConfirmBody": "{item}を破壊し、製作素材を得ます。この操作は元に戻せません。",
+      "salvageConfirmBodySpecial": "特別な{item}（銘入り、傑作、またはエンチャント済み）を破壊し、製作素材を得ます。この操作は元に戻せません。",
+      "pickerTitle": "エンチャントを付与",
+      "targetTitle": "エンチャントするアイテムを選択",
+      "noEnchants": "この素材を使うエンチャントはありません。",
+      "noTargets": "エンチャントできるアイテムがありません。"
     },
     "training": {
       "title": "訓練：{name}",
@@ -2545,9 +2643,6 @@ export const ja_JP: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "ウォレット認証の有効期限が切れたか、確認できませんでした。もう一度お試しください。"
-    },
-    "welcome": {
-      "invalid_input": "入力が無効です。"
     }
   },
   "guide": {
@@ -4121,6 +4216,7 @@ export const ja_JP: EnTranslations = {
   "stats": {
     "title": "ワールドステータス",
     "accountsCreated": "プレイヤー",
+    "charactersCreated": "作成済みキャラクター",
     "playersOnline": "オンラインプレイヤー数",
     "realmName": "ワールド名"
   },
@@ -4154,7 +4250,9 @@ export const ja_JP: EnTranslations = {
     "error": "更新情報を読み込めませんでした。しばらくしてからお試しください。",
     "empty": "まだ更新はありません。またのぞいてみてください。",
     "prerelease": "プレリリース",
-    "viewOnGithub": "GitHubで見る"
+    "viewOnGithub": "GitHubで見る",
+    "new": "新着",
+    "viewAll": "GitHubですべての更新を見る"
   },
   "download": {
     "title": "デスクトップランチャーのダウンロード",
@@ -5331,29 +5429,6 @@ export const ja_JP: EnTranslations = {
     "body": "ゲームサービスを再起動しています。Claudemoonはまもなく戻る予定です。このページは自動的に確認を続けます。",
     "status": "まもなく復帰"
   },
-  "welcome": {
-    "back": "おかえりなさい、{name}さん",
-    "level": "レベル {level}",
-    "lastPlayed": "最終プレイ：{when}",
-    "continue": "ワールドに入る",
-    "continueHint": "Enterで続行、Escでスキップ",
-    "continueHintTouch": "タップして続行",
-    "discord": {
-      "title": "コミュニティはDiscordで活動しています",
-      "sub": "パッチプレビュー、イベント、開発者チャット、連携でボーナス銀行スロット2枠。",
-      "join": "Discordに参加する"
-    },
-    "chest": {
-      "ready": "デイリーチェストの準備ができました"
-    },
-    "armory": {
-      "cta": "武器庫を見に行く"
-    },
-    "news": {
-      "new": "新着",
-      "viewAll": "GitHubですべての更新を見る"
-    }
-  },
   "hud": {
     "core": {
       "elite": "エリート",
@@ -5723,7 +5798,8 @@ export const ja_JP: EnTranslations = {
       "tradeInProgress": "すでに取引が進行中です。",
       "tradeTooFar": "対象が遠すぎて取引できません。",
       "tradeExpired": "取引リクエストは期限切れです。",
-      "tradeFailed": "取引失敗: アイテムまたは所持金が利用できません。"
+      "tradeFailed": "取引失敗: アイテムまたは所持金が利用できません。",
+      "tradeBound": "そのアイテムはバインドされているため取引できません。"
     },
     "logs": {
       "standUp": "立ち上がりました。",
@@ -5871,7 +5947,8 @@ export const ja_JP: EnTranslations = {
         "offline": "オフライン",
         "combat": "戦闘中",
         "dungeon": "ダンジョン内",
-        "dead": "死亡"
+        "dead": "死亡",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -8493,6 +8570,144 @@ export const ja_JP: EnTranslations = {
       "elixir_of_the_serpent": {
         "name": "蛇のエリクサー"
       },
+      "mosshide_vest": {
+        "name": "苔皮のベスト"
+      },
+      "thornling_grips": {
+        "name": "茨精の篭手"
+      },
+      "acolyte_chain_grips": {
+        "name": "侍祭の鎖篭手"
+      },
+      "votive_chain_belt": {
+        "name": "誓願の鎖ベルト"
+      },
+      "briarroot_staff": {
+        "name": "茨根の杖"
+      },
+      "valefire_lantern": {
+        "name": "谷火のランタン"
+      },
+      "fenbark_leggings": {
+        "name": "沼皮の脚当て"
+      },
+      "mirebloom_treads": {
+        "name": "泥花の靴"
+      },
+      "fenwarden_sabatons": {
+        "name": "沼の番人の鉄靴"
+      },
+      "marshlight_hauberk": {
+        "name": "沼灯りの鎖帷子"
+      },
+      "duskthorn_mantle": {
+        "name": "暮棘のマント"
+      },
+      "fenshadow_maul": {
+        "name": "沼影の大槌"
+      },
+      "wildgrove_cinch": {
+        "name": "野林の締め帯"
+      },
+      "cragward_pauldrons": {
+        "name": "岩守りの肩甲"
+      },
+      "cragthorn_greatstaff": {
+        "name": "岩棘の大杖"
+      },
+      "moonbark_vestments": {
+        "name": "月皮の祭服"
+      },
+      "peaksong_helm": {
+        "name": "峰歌の兜"
+      },
+      "stormchant_gauntlets": {
+        "name": "嵐詠いの篭手"
+      },
+      "cragprowl_belt": {
+        "name": "岩歩きのベルト"
+      },
+      "stormroot_cowl": {
+        "name": "嵐根の頭巾"
+      },
+      "thunderward_legguards": {
+        "name": "雷守りの脚甲"
+      },
+      "revenantstep_treads": {
+        "name": "亡魂歩きの靴"
+      },
+      "shardfang_grips": {
+        "name": "欠片牙の篭手"
+      },
+      "shardsong_mantle": {
+        "name": "欠片歌のマント"
+      },
+      "wyrmcult_spellgrips": {
+        "name": "竜教団の呪文篭手"
+      },
+      "thornpeak_wildwraps": {
+        "name": "ソーンピークの野生手甲"
+      },
+      "stormvotive_hauberk": {
+        "name": "嵐誓願の鎖帷子"
+      },
+      "cryptbloom_shoulderguards": {
+        "name": "墓花の肩当て"
+      },
+      "gravewyrm_thornmaul": {
+        "name": "墓竜の棘槌"
+      },
+      "vestments_of_the_waking_grove": {
+        "name": "目覚める林の祭服"
+      },
+      "nightfangs_greatstaff": {
+        "name": "夜牙の大杖"
+      },
+      "maul_of_the_scourged_wilds": {
+        "name": "災いの荒野の大槌"
+      },
+      "tidehymn_slippers": {
+        "name": "潮詩の靴"
+      },
+      "pearlward_aegis": {
+        "name": "真珠守りの聖盾"
+      },
+      "wildgrowth_leggings": {
+        "name": "野生の成長のレギンス"
+      },
+      "grovewardens_grips": {
+        "name": "木立の番人の篭手"
+      },
+      "verdant_walkers": {
+        "name": "新緑の歩靴"
+      },
+      "lunarward_cinch": {
+        "name": "月守りの締め帯"
+      },
+      "dreamroot_boots": {
+        "name": "夢根の長靴"
+      },
+      "stormbark_mantle": {
+        "name": "嵐樹皮のマントル"
+      },
+      "wildsoul_maul": {
+        "name": "野生魂の大槌"
+      },
+      "resonant_thread": {
+        "name": "共鳴の糸"
+      },
+      "resonant_hide": {
+        "name": "共鳴の獣皮"
+      },
+      "resonant_links": {
+        "name": "共鳴の鎖"
+      },
+      "resonant_steel": {
+        "name": "共鳴の鋼"
+      },
+      "resonant_timber": {
+        "name": "共鳴の木材"
+      },
       "conjured_water4": {
         "name": "魔法の湧き水"
       },
@@ -10905,6 +11120,11 @@ export const ja_JP: EnTranslations = {
         "sender": "製作ギルド",
         "subject": "防具鍛冶と工作の腕前について",
         "body": "職人へ\n\n防具鍛冶と工作に励むあなたの評判がギルドに届いています。板金を鋲で留め、歯車を調え、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド"
+      },
+      "mastery_reset_notice": {
+        "sender": "ギルド会館",
+        "subject": "腕前に、偽りなし",
+        "body": "ギルドの同志へ\n\nギルドは熟練の新しい尺度を定めました。誰もが登り直しです。あなたの製作スキルと採集熟練度はゼロに戻されました。\n\nそれ以外はすべて、手つかずのままあなたのものです。レシピ、道具と素材、銀行と所持金、調律と称号、功績と名声、クエストと郵便。\n\nこれからの登りにごまかしは利きません。安い仕事では上へは行けません。より難しいレシピを、より豊かな鉱脈を、より深い水を求めてください。\n\n敬意を込めて、\nギルド会館"
       }
     },
     "itemSets": {

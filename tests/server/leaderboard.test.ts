@@ -135,6 +135,7 @@ function fakeRuntime(overrides: Partial<LeaderboardRuntime> = {}): LeaderboardRu
     deedsSelfRank: async () => null,
     getArenaLeaderboard: async () => [],
     getAccountsCreatedCount: async () => 0,
+    getCharactersCreatedCount: async () => 0,
     getReleases: async () => [],
     githubRepo: 'levy-street/world-of-claudecraft',
     releasesMaxLimit: 20,
@@ -380,9 +381,18 @@ describe('readRealms (FakeCharactersDb)', () => {
 });
 
 describe('readProjectStats', () => {
-  it('reports accounts_created from the db, players_online from the arg, and the realm', async () => {
-    const out = await readProjectStats({ getAccountsCount: async () => 123 }, 7, REALM_NAME);
-    expect(out).toEqual({ accounts_created: 123, players_online: 7, realm: REALM_NAME });
+  it('reports accounts_created and characters_created from the db, players_online from the arg, and the realm', async () => {
+    const out = await readProjectStats(
+      { getAccountsCount: async () => 123, getCharactersCount: async () => 456 },
+      7,
+      REALM_NAME,
+    );
+    expect(out).toEqual({
+      accounts_created: 123,
+      characters_created: 456,
+      players_online: 7,
+      realm: REALM_NAME,
+    });
   });
 });
 
@@ -797,15 +807,24 @@ describe('arena leaderboard handler (through the injected cache-fronted runtime)
 });
 
 describe('project-stats handler (through the injected cache-fronted runtime)', () => {
-  it('serves accounts_created from the runtime count, players_online live, and the realm', async () => {
+  it('serves characters_created from the runtime count, players_online live, and the realm', async () => {
     configureLeaderboardRuntime(
-      fakeRuntime({ playersOnline: () => 9, getAccountsCreatedCount: async () => 123 }),
+      fakeRuntime({
+        playersOnline: () => 9,
+        getAccountsCreatedCount: async () => 123,
+        getCharactersCreatedCount: async () => 456,
+      }),
     );
     const ctx = fakeCtx({ method: 'GET', url: '/api/project-stats' });
     await handlerFor('/api/project-stats')(ctx);
     const { status, body } = captured(ctx.res);
     expect(status).toBe(200);
-    expect(body).toEqual({ accounts_created: 123, players_online: 9, realm: REALM_NAME });
+    expect(body).toEqual({
+      accounts_created: 123,
+      characters_created: 456,
+      players_online: 9,
+      realm: REALM_NAME,
+    });
   });
 });
 

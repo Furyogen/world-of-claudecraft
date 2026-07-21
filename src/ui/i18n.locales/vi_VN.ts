@@ -7679,11 +7679,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'Cửa hàng Claudium hiện không có sẵn. Số dư và giao dịch mua hàng của bạn không bị ảnh hưởng; vui lòng kiểm tra lại trong thời gian ngắn.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Thu hoạch: thu thập nguyên liệu chế tạo từ xác chết này (da, răng nanh, lụa và các thành phần tương tự), tách biệt với bất kỳ chiến lợi phẩm nào. Bất cứ ai cũng có thể thu hoạch; chỉ một người chơi có thể thu hoạch một xác chết nhất định.',
   'hudChrome.deeds.openBookHint': 'Mở Sách Kỳ Công',
-  'hudChrome.loot.takeAllTooltip':
-    'Lấy Tất Cả: thu thập mọi xu và vật phẩm trong cửa sổ chiến lợi phẩm này.',
   'hudChrome.statInfo.desc.warfare':
     'Tăng sát thương gây ra cho người chơi thêm {increase}% và giảm sát thương nhận từ người chơi thêm {reduction}%.',
   'hudChrome.statInfo.names.warfare': 'Chiến Tranh',
@@ -8170,21 +8166,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleRaid': 'Khung Raid',
   'hudChrome.partyFrames.unlock': 'Di chuyển khung tổ đội và raid',
   'hudChrome.partyFrames.width': 'Chiều Rộng Khung',
-  'apiError.welcome.invalid_input': 'Dữ liệu nhập không hợp lệ.',
-  'welcome.back': 'Mừng bạn trở lại, {name}',
-  'welcome.level': 'Cấp {level}',
-  'welcome.lastPlayed': 'Lần chơi gần nhất: {when}',
-  'welcome.continue': 'Vào Thế Giới',
-  'welcome.continueHint': 'Nhấn Enter để tiếp tục, Esc để bỏ qua',
-  'welcome.continueHintTouch': 'Chạm để tiếp tục',
-  'welcome.discord.title': 'Cộng đồng tụ hội trên Discord',
-  'welcome.discord.sub':
-    'Xem trước các bản cập nhật, tham gia sự kiện, trò chuyện cùng nhà phát triển và nhận 2 ô ngân hàng thưởng khi liên kết Discord.',
-  'welcome.discord.join': 'Tham gia Discord của chúng tôi',
-  'welcome.chest.ready': 'Rương thưởng hằng ngày đã sẵn sàng',
-  'welcome.armory.cta': 'Vào thế giới và khám phá Kho Vũ Khí',
-  'welcome.news.new': 'Mới',
-  'welcome.news.viewAll': 'Xem tất cả cập nhật trên GitHub',
+  'news.new': 'Mới',
+  'news.viewAll': 'Xem tất cả cập nhật trên GitHub',
   'entities.letters.heroic_marks_reward.sender': 'Quân nhu Anh Hùng',
   'entities.letters.heroic_marks_reward.subject': 'Dấu Ấn Anh Hùng của bạn',
   'entities.letters.heroic_marks_reward.body':
@@ -8441,7 +8424,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Sở thích: {craft}',
   'hudChrome.professions.identityHeader': 'Danh tính',
   'hudChrome.professions.majorsLabel': 'Chuyên ngành: {a} và {b}',
-  'hudChrome.professions.nextUnlockMax': 'Ở kỹ năng tối đa',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} chỉ vào Chuyên ngành: giảm chi phí nguyên vật liệu',
   'hudChrome.professions.nextUnlockTier':

@@ -21,6 +21,7 @@ import { audio } from '../game/audio';
 import { ITEMS } from '../sim/data';
 import type { EquipSlot } from '../sim/types';
 import type { IWorld } from '../world_api';
+import { STAT_PANELS } from './char_stats_view';
 import { buildPaperdollView, type PaperdollSlot } from './char_view';
 import { markDialogRoot } from './dialog_root';
 import { classDisplayName, itemDisplayName } from './entity_i18n';
@@ -32,6 +33,7 @@ import { iconDataUrl, QUALITY_COLOR } from './icons';
 import type { ItemDragState } from './item_drag_state';
 import type { PainterHostPresentation } from './painter_host';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
+import { qualityGlowShadow } from './quality_glow';
 import { tSim } from './sim_i18n';
 import type { StatId } from './stat_tooltip';
 import { svgIcon } from './ui_icons';
@@ -102,29 +104,6 @@ export function craftNameText(craftId: string | null): string {
 export function hobbyCraftText(craftId: string | null): string {
   return craftNameText(craftId);
 }
-
-// The character-sheet stat cells, primaries down the left column and derived
-// stats down the right (the CSS grid wraps two per row). The HUD builds each cell
-// from the unit-tested stat_tooltip_view model, so the order is the only stat
-// concern this painter owns.
-const STAT_GRID: readonly StatId[] = [
-  'str',
-  'armor',
-  'agi',
-  'attackPower',
-  'sta',
-  'dps',
-  'int',
-  'critChance',
-  'spi',
-  'dodge',
-  'parry',
-  'spellPower',
-  'critRating',
-  'hasteRating',
-  'hitRating',
-  'warfare',
-];
 
 /**
  * Hud-supplied glue. Composes the shared PainterHostPresentation bag
@@ -239,7 +218,18 @@ export class CharWindow {
       </div>
       <div class="equip-col equip-col-right" id="equip-col-right"></div>
     </div>`;
-    html += `<div class="char-stats">${STAT_GRID.map((stat) => this.deps.statCellHtml(stat)).join('')}</div>`;
+    // Stats as the showcase layout: five primary tiles, then the Offense and
+    // Defense panels. The partition + heading keys come from the char_stats_view
+    // pure core; each cell is the same unit-tested stat_tooltip_view cell (colon
+    // dropped, since flex layout separates label from value in tiles and panels).
+    html += `<div class="stat-panels">${STAT_PANELS.map((panel) => {
+      const cells = panel.stats.map((stat) => this.deps.statCellHtml(stat)).join('');
+      const title = panel.titleKey
+        ? `<div class="sp-title">${esc(t(panel.titleKey as TranslationKey))}</div>`
+        : '';
+      const cls = panel.kind === 'tiles' ? 'stat-panel attrs-tiles' : 'stat-panel';
+      return `<div class="${cls}">${title}${cells}</div>`;
+    }).join('')}</div>`;
     html += this.deps.talentSummaryHtml();
     html += this.deps.progressionHtml(p.level);
     html += this.gatheringHtml(world);
@@ -264,7 +254,7 @@ export class CharWindow {
     for (const cell of view.left) leftCol?.appendChild(this.buildSlotRow(cell));
     for (const cell of view.right) rightCol?.appendChild(this.buildSlotRow(cell));
 
-    for (const cell of el.querySelectorAll<HTMLElement>('.char-stats [data-stat]')) {
+    for (const cell of el.querySelectorAll<HTMLElement>('.stat-panels [data-stat]')) {
       const stat = cell.dataset.stat as StatId;
       // Resolve the tooltip lazily, on show, so the breakdown reflects the
       // player's current stats at the moment they hover, not at render time.
@@ -312,6 +302,9 @@ export class CharWindow {
     row.innerHTML = `${icon}
         <div><div class="slot-name">${esc(this.deps.slotName(slot))}</div><div class="slot-item" style="color:${qColor}">${item ? esc(itemDisplayName(item)) : esc(t('itemUi.equipment.empty'))}</div></div>`;
     if (item) {
+      // Soft glow in the item's quality color (derived, no getComputedStyle).
+      const iconEl = row.querySelector<HTMLImageElement>('.item-icon');
+      if (iconEl) iconEl.style.boxShadow = qualityGlowShadow(qColor);
       this.deps.attachTooltip(row, () => {
         // Own worn copy's per-copy lines (seal, enchanted marker, maker's mark):
         // the self entity mirror carries equippedInstances in both worlds.

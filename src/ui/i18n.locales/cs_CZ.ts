@@ -7681,11 +7681,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.unavailable':
     'Obchod Claudium nyní není dostupný. Tvůj zůstatek ani nákupy to neovlivní, zkus to za chvíli znovu.',
   'hudChrome.claudium.wocBalance': 'WOC: {amount}',
-  'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Sklidit: získá z tohoto těla výrobní materiály (kůži, tesák, hedvábí a podobné součásti), odděleně od kořisti. Sklízet může každý, ale dané tělo smí sklidit jen jeden hráč.',
   'hudChrome.deeds.openBookHint': 'Otevřít Knihu skutků',
-  'hudChrome.loot.takeAllTooltip':
-    'Vzít vše: sebere všechny mince a předměty v tomto okně kořisti.',
   'hudChrome.statInfo.desc.warfare':
     'Zvýší poškození způsobené hráčům o {increase} % a sníží poškození utrpěné od hráčů o {reduction} %.',
   'hudChrome.statInfo.names.warfare': 'Válečnictví',
@@ -8077,21 +8073,8 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.styleRaid': 'Rámečky raidu',
   'hudChrome.partyFrames.unlock': 'Přesunout rámečky skupiny a raidu',
   'hudChrome.partyFrames.width': 'Šířka rámečku',
-  'apiError.welcome.invalid_input': 'Neplatný vstup.',
-  'welcome.back': 'Vítej zpět, {name}',
-  'welcome.level': 'Úroveň {level}',
-  'welcome.lastPlayed': 'Naposledy ve hře: {when}',
-  'welcome.continue': 'Vstoupit do světa',
-  'welcome.continueHint': 'Enter pro pokračování, Esc pro přeskočení',
-  'welcome.continueHintTouch': 'Klepnutím pokračuj',
-  'welcome.discord.title': 'Komunita žije na Discordu',
-  'welcome.discord.sub':
-    'Ukázky aktualizací, události, chat s vývojáři a 2 bonusové sloty v bance za propojení účtu s Discordem.',
-  'welcome.discord.join': 'Připojit se na náš Discord',
-  'welcome.chest.ready': 'Denní truhla je připravená',
-  'welcome.armory.cta': 'Vstoupit a prohlédnout si Zbrojnici',
-  'welcome.news.new': 'Nové',
-  'welcome.news.viewAll': 'Zobrazit všechny aktualizace na GitHubu',
+  'news.new': 'Nové',
+  'news.viewAll': 'Zobrazit všechny aktualizace na GitHubu',
   'entities.letters.heroic_marks_reward.sender': 'Hrdinský zásobovač',
   'entities.letters.heroic_marks_reward.subject': 'Vaše hrdinské marky',
   'entities.letters.heroic_marks_reward.body':
@@ -8347,7 +8330,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Hobby: {craft}',
   'hudChrome.professions.identityHeader': 'Identita',
   'hudChrome.professions.majorsLabel': 'Hlavní: {a} a {b}',
-  'hudChrome.professions.nextUnlockMax': 'Při maximální zručnosti',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} bodů do specializace: náklady na materiál klesnou',
   'hudChrome.professions.nextUnlockTier':

@@ -302,6 +302,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
       { itemId: 'cracked_wyrm_scale', chance: 0.5 },
       { itemId: 'gravewyrm_mantle', chance: 0.05, rollGroup: 'drakonid_bonus' },
       { itemId: 'gravewyrm_gauntlets', chance: 0.05, rollGroup: 'drakonid_bonus' },
+      { itemId: 'gravewyrm_thornmaul', chance: 0.05 },
     ],
     scale: 1.45,
     color: 0x567d46, // Korzul's rig at 0.8x his bulk
@@ -428,6 +429,10 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
       { itemId: 'deathlords_dread_visage', chance: 0.04, rollGroup: 'korzul_bonus' },
       { itemId: 'necromancers_soulspire_mantle', chance: 0.04, rollGroup: 'korzul_bonus' },
       { itemId: 'wyrmshadow_talongrips', chance: 0.04, rollGroup: 'korzul_bonus' },
+      { itemId: 'nightfangs_greatstaff', chance: 0.05, rollGroup: 'korzul_bonus' },
+      { itemId: 'wildgrowth_leggings', chance: 0.05, rollGroup: 'korzul_bonus' },
+      { itemId: 'grovewardens_grips', chance: 0.05, rollGroup: 'korzul_bonus' },
+      { itemId: 'verdant_walkers', chance: 0.05, rollGroup: 'korzul_bonus' },
     ],
     scale: 1.8,
     color: 0x3d5c45,
@@ -600,6 +605,10 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
       { itemId: 'stormcallers_spaulders', chance: 0.14, rollGroup: 'nythraxis_drop_4' },
       { itemId: 'crownforged_dreadhelm', chance: 0.14, rollGroup: 'nythraxis_drop_4' },
       { itemId: 'nighttalon_crown', chance: 0.14, rollGroup: 'nythraxis_drop_4' },
+      // The feral ladder's top rung rides its own bonus group: a fifth,
+      // independent draw so the four guaranteed groups above keep their exact
+      // 1.00 partitions (a 25% bonus shot, never displacing a set piece).
+      { itemId: 'maul_of_the_scourged_wilds', chance: 0.25, rollGroup: 'nythraxis_drop_5' },
     ],
     scale: 3.1,
     color: 0x221b2d,

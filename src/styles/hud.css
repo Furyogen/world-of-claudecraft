@@ -91,23 +91,43 @@
   .np-ai.ai-tag {
     display: inline-block;
   }
-  /* $WOC holder-tier flair badge, inline to the left of a player's name */
+  /* $WOC holder-tier flair badge, inline to the left of a player's name. The
+     legibility outline is layered with a static per-tier halo (the "stand out"
+     knob): the glow hue comes from the painter via --holder-glow, the blur
+     strength from the named --holder-halo tunable in tokens.css. No animation, so
+     it is reduced-motion safe. Falls back to transparent (no halo) when unset. */
   .np-tier {
     display: inline-block;
     width: 15px;
     height: 15px;
     vertical-align: middle;
     margin-right: 3px;
-    filter: drop-shadow(0 1px 1px #000);
+    filter: drop-shadow(0 1px 1px #000)
+      drop-shadow(0 0 var(--holder-halo) var(--holder-glow, transparent));
   }
-  /* developer-badge flair, inline to the left of a player's name */
+  /* Band IV regalia (Worldbearer, Sovereign): a moderately stronger halo. */
+  .np-tier.np-tier-regalia {
+    filter: drop-shadow(0 1px 1px #000)
+      drop-shadow(0 0 var(--holder-halo-strong) var(--holder-glow, transparent));
+  }
+  /* developer-badge flair, inline to the left of a player's name. Mirrors the
+     holder badge: a legibility outline plus a static per-tier halo, the hue from
+     the painter via --dev-glow and the blur strength from the shared --holder-halo
+     tunable (tokens.css). No animation, so it is reduced-motion safe. Falls back to
+     transparent (no halo) when unset. */
   .np-dev-tier {
     display: inline-block;
     width: 15px;
     height: 15px;
     vertical-align: middle;
     margin-right: 3px;
-    filter: drop-shadow(0 1px 1px #000);
+    filter: drop-shadow(0 1px 1px #000)
+      drop-shadow(0 0 var(--holder-halo) var(--dev-glow, transparent));
+  }
+  /* Significant-contributor rungs (Architect, Worldwright): a stronger halo. */
+  .np-dev-tier.np-dev-tier-strong {
+    filter: drop-shadow(0 1px 1px #000)
+      drop-shadow(0 0 var(--holder-halo-strong) var(--dev-glow, transparent));
   }
   /* significant-contributor name outline: a steady halo layered over whatever
      name color applies (Discord staff or default). The colour is supplied by the
@@ -2686,7 +2706,6 @@
   #minimap {
     border-radius: 50%;
     border: 4px solid var(--border);
-    outline: 1px solid #000;
     box-shadow:
       0 0 14px #000c,
       inset 0 0 20px #0008;
@@ -2844,6 +2863,65 @@
     position: relative;
     display: inline-block;
     line-height: 0;
+  }
+  /* Hand-gilded ring around the round minimap disc, reusing the Performance
+     Overlay's gilt-gradient technique (#2196, perf_ornament_svg.ts /
+     applyMinimapOrnamentVars, called once at boot). A circular disc needs no
+     mask geometry the way that window's straight edges/corners did: the ring
+     is simply a same-shape ::before sized a few px larger than the canvas,
+     painted BEHIND it (negative z-index), so the canvas's own fully opaque
+     pixels cover the center and only the extra outer band reads as the ring.
+     No layout change: the ring lives outside #minimap-disc's own box (which
+     stays exactly canvas-sized), so the rim badges below keep their existing
+     positions and z-index: 3 stacks safely above this ring. */
+  #minimap-disc::before {
+    content: "";
+    position: absolute;
+    /* Thin: matches a real gold ring's proportions (and this element's own
+       pre-ornament width), not a thick painted band. An earlier pass widened
+       this to make the texture easier to see and overshot into "thick single
+       color border" territory; the fix was better texture, not more width.
+       -6px (not the -5px this narrowly missed) also gives the dark tarnish
+       speckles (minimap_gilded_ornament.ts) enough visible band width to
+       render as more than sub-pixel dots. */
+    inset: -6px;
+    z-index: -1;
+    border-radius: 50%;
+    /* Not a stack of discrete color BANDS (an earlier pass read as a
+       striped/layered ring once actually compared against the reference):
+       real hand-gilded gold reads as textured because of slight dark
+       tarnish spotting across the surface, not because the metal is
+       painted in rings. Three layers, each a real axis of variation:
+       1) `--minimap-gilt` (#2196's perfGiltGradientBackground(), reused
+          as-is): hand-applied, uneven tone BY ANGLE around the ring;
+       2) `--minimap-speckle` (minimap_gilded_ornament.ts,
+          minimapGiltSpeckleBackground(), reusing that same file's seeded
+          mulberry32 PRNG): a sparse field of small dark tarnish spots
+          (weighted heavily toward the dark end of the gold ramp, matching
+          the reference's brass-with-dark-spotting look, not bright
+          flecks). `hard-light` (not `overlay`) blends it into (1):
+          hard-light's multiply-vs-screen choice is decided by the SOURCE
+          (this speckle layer), so a dark spot consistently darkens
+          wherever it sits; overlay decides by the BACKDROP instead, which
+          read as washed out against the gilt gradient's own swings. The
+          spots read as tarnish IN the metal, not decals on top of it;
+       3) a soft directional sheen on top (normal blend; the same
+          `radial-gradient(circle at 50% 30%, ...)` fake-3D highlight
+          convention this file already uses on #minimap-clock/#raid-lockout/
+          #minimap-zoom). */
+    background:
+      radial-gradient(circle at 50% 20%, #fff8df50, transparent 55%), var(--minimap-speckle),
+      var(--minimap-gilt);
+    background-size:
+      auto,
+      100% 100%,
+      auto;
+    background-blend-mode: normal, hard-light, normal;
+    box-shadow:
+      inset 0 0 0 1px #fff2c440,
+      inset 0 0 2px 1px #00000060,
+      0 1px 3px #000a;
+    pointer-events: none;
   }
   /* raid-lockout badge: a small satellite button hugging the bottom-left rim of
      the round minimap (classic tracking-button placement). Dim when every
@@ -4821,6 +4899,39 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+  }
+  /* Bag-item action menu (Professions 2.0 Phase 13): the Apply Enchant picker
+     rows carry a dim meta sub-line (target slot + reagent affordability), and an
+     unaffordable enchant row is shown but not selectable (aria-disabled), so the
+     player can see what a reagent unlocks before they have it. */
+  #ctx-menu .ctx-item-meta {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+  #ctx-menu .ctx-item[aria-disabled="true"] {
+    color: var(--color-text-muted);
+    cursor: default;
+  }
+  #ctx-menu .ctx-item[aria-disabled="true"]:hover {
+    background: none;
+    color: var(--color-text-muted);
+  }
+  /* Apply Enchant picker sizing (Phase 13 QA, maintainer direction): the full
+     enchant list plus per-row meta sub-lines outgrew the shared popup's natural
+     size and ran nearly the whole viewport. The picker states alone (the
+     painter-managed ctx-menu-picker modifier) take a wider, height-capped,
+     scrolling box; the shared base block above, and with it the player/chat
+     menus, keeps its exact sizing. placePopupAt reserves the capped box and
+     keepPopupOnScreen still clamps it fully on-screen. */
+  #ctx-menu.ctx-menu-picker {
+    box-sizing: border-box;
+    min-width: 280px;
+    max-width: 400px;
+    max-height: min(60vh, 560px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   /* ---------- ai account tag ---------- */

@@ -10,6 +10,7 @@ import {
   RESUME_MAX_AGE_MS,
   readPlayMarker,
   refreshPlayMarker,
+  resumeRoute,
   savePlayMarker,
   serializeMarker,
 } from '../src/net/resume_play';
@@ -280,5 +281,19 @@ describe('main.ts resume wiring', () => {
     expect(mainTs).toContain(
       "window.addEventListener('pagehide', () => {\n    refreshPlayMarker(Date.now());\n    clearEntryProbe();\n  });",
     );
+  });
+});
+
+describe('resumeRoute', () => {
+  it('routes a fresh marker into the world only on runtimes with involuntary reloads', () => {
+    // The native app and the mobile web client both suffer OS WebView
+    // eviction reloads mid-play; auto-entering the world there is recovery.
+    expect(resumeRoute({ nativeApp: true, mobileTouch: true })).toBe('world');
+    expect(resumeRoute({ nativeApp: true, mobileTouch: false })).toBe('world');
+    expect(resumeRoute({ nativeApp: false, mobileTouch: true })).toBe('world');
+  });
+
+  it('lands a desktop browser reload on character select, never straight in-world', () => {
+    expect(resumeRoute({ nativeApp: false, mobileTouch: false })).toBe('charselect');
   });
 });

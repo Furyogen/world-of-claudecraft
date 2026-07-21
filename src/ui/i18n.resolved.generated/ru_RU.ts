@@ -705,6 +705,12 @@ export const ru_RU: EnTranslations = {
       "collapseHint": "Свернуть трекер заданий",
       "expandHint": "Развернуть трекер заданий"
     },
+    "interfaceTabs": {
+      "general": "Общие",
+      "frames": "Рамки",
+      "chat": "Чат",
+      "combat": "Бой"
+    },
     "chatTimestamps": {
       "show": "Показывать время в чате",
       "format": "Формат времени",
@@ -1177,6 +1183,10 @@ export const ru_RU: EnTranslations = {
         "fiestaWin": "Победа на Фиесте"
       }
     },
+    "charSheet": {
+      "offense": "Атака",
+      "defense": "Защита"
+    },
     "statInfo": {
       "fromYour": "От вашей характеристики ({value} {stat}):",
       "names": {
@@ -1435,7 +1445,7 @@ export const ru_RU: EnTranslations = {
     "corpseHarvest": {
       "title": "Сбор",
       "harvestButton": "Собрать",
-      "harvestButtonTooltip": "Добыча: собрать с этого трупа материалы для крафта (шкура, клык, шелк и подобные компоненты) отдельно от добычи. Добывать может любой, но каждый труп может обработать только один игрок.",
+      "harvestTooltip": "Собирает отмеченные компоненты. Каждый труп можно обработать только один раз, кто успел первым. Добычу при этом не забирает.",
       "concentrateHint": "Чем меньше выбрано компонентов, тем выше их качество.",
       "alreadyHarvested": "Этот труп уже был собран.",
       "componentAria": "Собрать {component}",
@@ -1453,6 +1463,8 @@ export const ru_RU: EnTranslations = {
     "townFocus": {
       "title": "Фокус города",
       "hint": "Очки фокуса добавляют бонус поверх базового выхода каждого компонента. Компоненты без фокуса остаются на базовом уровне.",
+      "tierHint": "Каждые {points} очков на компоненте повышают уровень его добычи на одну ступень, максимум на {steps} ступени; меньше {points} очков по-прежнему увеличивают выход.",
+      "townOnlyHint": "Фокус можно менять только в городе.",
       "budgetLabel": "Осталось очков: {remaining} / {budget}",
       "saveButton": "Сохранить фокус",
       "notInTownHint": "Чтобы задать фокус, нужно находиться в городе.",
@@ -1511,6 +1523,7 @@ export const ru_RU: EnTranslations = {
       "dragEquipHint": "Перетащите на персонажа, чтобы надеть",
       "dragDestroyHint": "Перетащите в мир, чтобы уничтожить",
       "reorderNeedsRecent": "Сбросьте фильтр и выберите сортировку «Недавние», чтобы менять порядок в сумках",
+      "itemAriaInstanced": "{item}, количество {count}, копия с клеймом мастера",
       "filterGroupAria": "Фильтровать сумки по категории",
       "filterAll": "Все",
       "filterWeapon": "Оружие",
@@ -1676,7 +1689,9 @@ export const ru_RU: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Сундук",
-      "takeAllTooltip": "Взять все: забрать все монеты и предметы из этого окна добычи."
+      "takeLootButton": "Взять добычу",
+      "takeLootTooltip": "Забирает монеты и выпавшие предметы. Возможность сбора не расходуется.",
+      "unifiedPressHint": "Клавиша взаимодействия одним нажатием забирает добычу и собирает компоненты, следуя фокусу города."
     },
     "spellbook": {
       "addToBarAria": "Добавить {name} на панель действий",
@@ -1684,7 +1699,8 @@ export const ru_RU: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Уровень {level} {family}",
@@ -2082,7 +2098,11 @@ export const ru_RU: EnTranslations = {
       "blockSearchPlaceholder": "Имя персонажа",
       "blockAction": "Заблокировать",
       "nowBlocking": "{name} заблокирован.",
-      "stopBlockingTitle": "Разблокировать {name}"
+      "stopBlockingTitle": "Разблокировать {name}",
+      "onlineHeader": "В сети ({n})",
+      "offlineHeader": "Не в сети ({n})",
+      "hideOffline": "Скрыть офлайн",
+      "hideOfflineTitle": "Скрыть офлайн участников гильдии"
     },
     "gathering": {
       "title": "Собирательство",
@@ -2112,6 +2132,8 @@ export const ru_RU: EnTranslations = {
         "herbalism": "Чтобы собрать эти заросли, нужен серп травника {tier} уровня."
       },
       "toolTierUnmetCorpse": "Чтобы добыть лучшие материалы, нужен инструмент сбора {tier} уровня.",
+      "downgradeMark": "Сумки полны: добыча сохранена без метки сборщика.",
+      "downgradeFind": "Сумки полны: превосходная находка ускользнула.",
       "stateReady": "Готово",
       "stateCooldown": "Восстанавливается"
     },
@@ -2144,6 +2166,49 @@ export const ru_RU: EnTranslations = {
       "tailoring": "Портняжное дело",
       "leatherworking": "Кожевничество"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Зачарование оружия - Мощь",
+      "enchant_weapon_intellect": "Зачарование оружия - Сила заклинаний",
+      "enchant_helmet_fortitude": "Зачарование шлема - Стойкость",
+      "enchant_neck_spirit": "Зачарование ожерелья - Дух",
+      "enchant_shoulder_agility": "Зачарование наплечников - Ловкость",
+      "enchant_chest_stamina": "Зачарование нагрудника - Выносливость",
+      "enchant_waist_stamina": "Зачарование пояса - Выносливость",
+      "enchant_legs_stamina": "Зачарование поножей - Выносливость",
+      "enchant_gloves_agility": "Зачарование перчаток - Ловкость",
+      "enchant_gloves_intellect": "Зачарование перчаток - Сила заклинаний",
+      "enchant_feet_agility": "Зачарование сапог - Ловкость",
+      "enchant_ring_spirit": "Зачарование кольца - Дух",
+      "enchant_weapon_agility": "Зачарование оружия - Ловкость",
+      "enchant_helmet_intellect": "Зачарование шлема - Интеллект",
+      "enchant_helmet_armor": "Зачарование шлема - Укрепление",
+      "enchant_neck_intellect": "Зачарование ожерелья - Интеллект",
+      "enchant_neck_agility": "Зачарование ожерелья - Ловкость",
+      "enchant_shoulder_strength": "Зачарование наплечников - Сила",
+      "enchant_shoulder_intellect": "Зачарование наплечников - Интеллект",
+      "enchant_chest_spirit": "Зачарование нагрудника - Дух",
+      "enchant_chest_armor": "Зачарование нагрудника - Укрепление",
+      "enchant_waist_strength": "Зачарование пояса - Сила",
+      "enchant_waist_agility": "Зачарование пояса - Ловкость",
+      "enchant_legs_intellect": "Зачарование поножей - Интеллект",
+      "enchant_gloves_strength": "Зачарование перчаток - Сила",
+      "enchant_feet_strength": "Зачарование сапог - Сила",
+      "enchant_feet_stamina": "Зачарование сапог - Выносливость",
+      "enchant_ring_strength": "Зачарование кольца - Сила",
+      "enchant_ring_agility": "Зачарование кольца - Ловкость",
+      "enchant_ring_intellect": "Зачарование кольца - Интеллект",
+      "enchant_weapon_greater_might": "Зачарование оружия - Высшая мощь",
+      "enchant_weapon_greater_spellpower": "Зачарование оружия - Высшая сила заклинаний",
+      "enchant_helmet_greater_fortitude": "Зачарование шлема - Высшая стойкость",
+      "enchant_chest_greater_stamina": "Зачарование нагрудника - Высшая выносливость",
+      "enchant_legs_greater_stamina": "Зачарование поножей - Высшая выносливость",
+      "enchant_gloves_greater_agility": "Зачарование перчаток - Высшая ловкость",
+      "enchant_weapon_runed_edge": "Зачарование оружия - Рунная кромка",
+      "enchant_weapon_runed_focus": "Зачарование оружия - Рунное средоточие",
+      "enchant_chest_runeweave": "Зачарование нагрудника - Рунное плетение",
+      "enchant_legs_runed_hide": "Зачарование поножей - Рунная шкура",
+      "enchant_helmet_runed_links": "Зачарование шлема - Рунные звенья"
+    },
     "professions": {
       "title": "Профессии",
       "close": "Закрыть профессии",
@@ -2163,7 +2228,7 @@ export const ru_RU: EnTranslations = {
       "tierPipAria": "Ранг {tier}",
       "nextUnlockTier": "До следующего ранга {points} навыка: шанс шедевра повысится",
       "nextUnlockSpecialized": "До специализации {points} навыка: расход материалов снизится",
-      "nextUnlockMax": "Навык на максимуме",
+      "nextUnlockMastered": "Освоено, пока что",
       "perkSpecializedLine": "{craft}: Специалист, расход материалов -{pct}%",
       "perkSpecializedAt": "Специализация при навыке {threshold}",
       "switchCost": "Следующая смена архетипа потребует искупления: {cost}",
@@ -2243,6 +2308,7 @@ export const ru_RU: EnTranslations = {
       "skillReqLine": "Требуется {craft} {skill}",
       "difficultyFull": "Полный рост навыка",
       "difficultyReduced": "Сниженный рост навыка",
+      "difficultyMinimal": "Минимальный рост навыка",
       "difficultyNone": "Без роста навыка",
       "stationBadge": "Станция",
       "stationOutOfRangeNamed": "Подойдите к станции \"{station}\", чтобы изготовить это.",
@@ -2250,8 +2316,40 @@ export const ru_RU: EnTranslations = {
       "masterworkZoneLine": "Шедевр от {crafter}: {name}!",
       "tierUpToast": "{craft}: достигнут ранг {tier}!",
       "makersMark": "Создатель: {name}",
+      "gatheredBy": "Сборщик: {name}",
       "masterworkSeal": "Шедевр",
       "enchantedLine": "Зачаровано"
+    },
+    "itemMenu": {
+      "use": "Use",
+      "equip": "Надеть",
+      "disenchant": "Распылить",
+      "salvage": "Разобрать",
+      "applyEnchant": "Наложить чары"
+    },
+    "enchanting": {
+      "disenchantedLine": "Вы распыляете {item}.",
+      "salvagedLine": "Вы разбираете {item}.",
+      "enchantAppliedLine": "Вы накладываете на {item} чары «{enchant}».",
+      "notHeld": "У вас нет этого предмета.",
+      "notDisenchantable": "Это нельзя распылить.",
+      "notSalvageable": "Это нельзя разобрать.",
+      "disenchantThrottled": "Вы распыляете слишком быстро. Подождите немного и попробуйте снова.",
+      "salvageThrottled": "Вы разбираете слишком быстро. Подождите немного и попробуйте снова.",
+      "enchantThrottled": "Вы зачаровываете слишком быстро. Подождите немного и попробуйте снова.",
+      "enchantWrongSlot": "Эти чары нельзя наложить на этот предмет.",
+      "enchantUnknown": "Таких чар не существует.",
+      "enchantInsufficient": "У вас нет материалов для этих чар.",
+      "disenchantConfirmTitle": "Распылить {item}?",
+      "disenchantConfirmBody": "Это уничтожит {item} и даст тайные материалы. Действие необратимо.",
+      "disenchantConfirmBodySpecial": "Это уничтожит особый экземпляр предмета {item} (подписанный, шедевр или зачарованный) и даст тайные материалы. Действие необратимо.",
+      "salvageConfirmTitle": "Разобрать {item}?",
+      "salvageConfirmBody": "Это уничтожит {item} и даст ремесленные материалы. Действие необратимо.",
+      "salvageConfirmBodySpecial": "Это уничтожит особый экземпляр предмета {item} (подписанный, шедевр или зачарованный) и даст ремесленные материалы. Действие необратимо.",
+      "pickerTitle": "Наложить чары",
+      "targetTitle": "Выберите предмет для зачарования",
+      "noEnchants": "Нет чар, использующих этот реагент.",
+      "noTargets": "Нет подходящего предмета для зачарования."
     },
     "training": {
       "title": "Обучение: {name}",
@@ -2545,9 +2643,6 @@ export const ru_RU: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Срок действия авторизации кошелька истек или ее не удалось проверить. Повторите попытку."
-    },
-    "welcome": {
-      "invalid_input": "Неверные входные данные."
     }
   },
   "guide": {
@@ -4121,6 +4216,7 @@ export const ru_RU: EnTranslations = {
   "stats": {
     "title": "Статус игрового мира",
     "accountsCreated": "Игроки",
+    "charactersCreated": "Персонажей создано",
     "playersOnline": "Игроков в сети",
     "realmName": "Название игрового мира"
   },
@@ -4154,7 +4250,9 @@ export const ru_RU: EnTranslations = {
     "error": "Не удалось загрузить обновления. Попробуйте позже.",
     "empty": "Обновлений пока нет: загляните позже.",
     "prerelease": "Предварительная версия",
-    "viewOnGithub": "Открыть на GitHub"
+    "viewOnGithub": "Открыть на GitHub",
+    "new": "Новое",
+    "viewAll": "Смотреть все обновления на GitHub"
   },
   "download": {
     "title": "Скачать загрузчик для ПК",
@@ -5331,29 +5429,6 @@ export const ru_RU: EnTranslations = {
     "body": "Мы перезапускаем игровой сервис и ожидаем, что Claudemoon скоро вернется. Эта страница продолжит проверку автоматически.",
     "status": "Скоро вернется"
   },
-  "welcome": {
-    "back": "С возвращением, {name}",
-    "level": "Уровень {level}",
-    "lastPlayed": "Последняя игра: {when}",
-    "continue": "Войти в мир",
-    "continueHint": "Enter, чтобы продолжить, Esc, чтобы пропустить",
-    "continueHintTouch": "Нажмите, чтобы продолжить",
-    "discord": {
-      "title": "Сообщество живёт в Discord",
-      "sub": "Превью патчей, события, чат разработчиков и 2 бонусных банковских слота за привязку.",
-      "join": "Присоединиться к Discord"
-    },
-    "chest": {
-      "ready": "Ежедневный сундук готов"
-    },
-    "armory": {
-      "cta": "Открыть и просмотреть Арсенал"
-    },
-    "news": {
-      "new": "Новое",
-      "viewAll": "Смотреть все обновления на GitHub"
-    }
-  },
   "hud": {
     "core": {
       "elite": "ЭЛИТА",
@@ -5723,7 +5798,8 @@ export const ru_RU: EnTranslations = {
       "tradeInProgress": "Обмен уже идет.",
       "tradeTooFar": "Цель слишком далеко для обмена.",
       "tradeExpired": "Запрос обмена истек.",
-      "tradeFailed": "Обмен не удался: предметы или деньги больше недоступны."
+      "tradeFailed": "Обмен не удался: предметы или деньги больше недоступны.",
+      "tradeBound": "Этот предмет привязан и не может быть обменян."
     },
     "logs": {
       "standUp": "Вы встаете.",
@@ -5871,7 +5947,8 @@ export const ru_RU: EnTranslations = {
         "offline": "Не в сети",
         "combat": "В бою",
         "dungeon": "В подземелье",
-        "dead": "Мертв"
+        "dead": "Мертв",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -8493,6 +8570,144 @@ export const ru_RU: EnTranslations = {
       "elixir_of_the_serpent": {
         "name": "Эликсир змея"
       },
+      "mosshide_vest": {
+        "name": "Жилет из мшистой кожи"
+      },
+      "thornling_grips": {
+        "name": "Перчатки Колючки"
+      },
+      "acolyte_chain_grips": {
+        "name": "Кольчужные перчатки послушника"
+      },
+      "votive_chain_belt": {
+        "name": "Кольчужный пояс обета"
+      },
+      "briarroot_staff": {
+        "name": "Посох из тернового корня"
+      },
+      "valefire_lantern": {
+        "name": "Фонарь долинного огня"
+      },
+      "fenbark_leggings": {
+        "name": "Поножи из болотной коры"
+      },
+      "mirebloom_treads": {
+        "name": "Сапоги топкого цветения"
+      },
+      "fenwarden_sabatons": {
+        "name": "Сабатоны болотного стража"
+      },
+      "marshlight_hauberk": {
+        "name": "Хауберк болотного света"
+      },
+      "duskthorn_mantle": {
+        "name": "Оплечье сумеречного терна"
+      },
+      "fenshadow_maul": {
+        "name": "Молот болотной тени"
+      },
+      "wildgrove_cinch": {
+        "name": "Пояс Дикой рощи"
+      },
+      "cragward_pauldrons": {
+        "name": "Наплечники скального стража"
+      },
+      "cragthorn_greatstaff": {
+        "name": "Большой посох скального терна"
+      },
+      "moonbark_vestments": {
+        "name": "Облачение лунной коры"
+      },
+      "peaksong_helm": {
+        "name": "Шлем песни пиков"
+      },
+      "stormchant_gauntlets": {
+        "name": "Рукавицы грозового песнопения"
+      },
+      "cragprowl_belt": {
+        "name": "Пояс скального охотника"
+      },
+      "stormroot_cowl": {
+        "name": "Капюшон грозового корня"
+      },
+      "thunderward_legguards": {
+        "name": "Набедренники грозового стража"
+      },
+      "revenantstep_treads": {
+        "name": "Сапоги шага призрака"
+      },
+      "shardfang_grips": {
+        "name": "Перчатки оскольчатого клыка"
+      },
+      "shardsong_mantle": {
+        "name": "Оплечье песни осколков"
+      },
+      "wyrmcult_spellgrips": {
+        "name": "Перчатки заклинаний культа дракона"
+      },
+      "thornpeak_wildwraps": {
+        "name": "Дикие обмотки Терновых Пиков"
+      },
+      "stormvotive_hauberk": {
+        "name": "Хауберк грозового обета"
+      },
+      "cryptbloom_shoulderguards": {
+        "name": "Наплечники склепного цветения"
+      },
+      "gravewyrm_thornmaul": {
+        "name": "Терновый молот могильного дракона"
+      },
+      "vestments_of_the_waking_grove": {
+        "name": "Облачение Пробуждающейся рощи"
+      },
+      "nightfangs_greatstaff": {
+        "name": "Большой посох Ночного клыка"
+      },
+      "maul_of_the_scourged_wilds": {
+        "name": "Молот опустошенных диких земель"
+      },
+      "tidehymn_slippers": {
+        "name": "Туфли приливного гимна"
+      },
+      "pearlward_aegis": {
+        "name": "Эгида жемчужного стража"
+      },
+      "wildgrowth_leggings": {
+        "name": "Поножи дикого роста"
+      },
+      "grovewardens_grips": {
+        "name": "Перчатки стража рощи"
+      },
+      "verdant_walkers": {
+        "name": "Сапоги зеленого странника"
+      },
+      "lunarward_cinch": {
+        "name": "Пояс лунного стража"
+      },
+      "dreamroot_boots": {
+        "name": "Сапоги корня снов"
+      },
+      "stormbark_mantle": {
+        "name": "Мантия штормовой коры"
+      },
+      "wildsoul_maul": {
+        "name": "Молот дикой души"
+      },
+      "resonant_thread": {
+        "name": "Резонирующая нить"
+      },
+      "resonant_hide": {
+        "name": "Резонирующая шкура"
+      },
+      "resonant_links": {
+        "name": "Резонирующие звенья"
+      },
+      "resonant_steel": {
+        "name": "Резонирующая сталь"
+      },
+      "resonant_timber": {
+        "name": "Резонирующая древесина"
+      },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
       },
@@ -10905,6 +11120,11 @@ export const ru_RU: EnTranslations = {
         "sender": "Гильдия ремесленников",
         "subject": "О вашей работе: бронное дело и инженерное дело",
         "body": "Ремесленник!\n\nДо гильдии дошли вести о вашей работе: бронное дело и инженерное дело, пластины склёпаны, шестерни выверены, и два ремесла питают друг друга. Соседние ремесла, освоенные вместе, выдают руку, готовую к настройке. Разыщите кузнеца Халдрена в Истбруке: пока он говорит от лица мастеров. Докажите ему своё умение работой собственных рук, и он настроит эти два ремесла как ваши основные.\n\nС уважением,\nГильдия ремесленников"
+      },
+      "mastery_reset_notice": {
+        "sender": "Дом гильдии",
+        "subject": "Мастерство по-честному",
+        "body": "Собрат по гильдии!\n\nГильдия приняла новую меру мастерства. Каждый начинает подъём заново: ваши навыки ремесла и сноровка добытчика обнулены.\n\nВсё остальное осталось при вас, нетронутым: рецепты, инструменты и материалы, банк и золото, настройки и титулы, деяния и известность, задания и почта.\n\nТеперь подъём честен. Дешёвая работа наверх не вывезет. Ищите рецепты посложнее, жилы побогаче и воды поглубже.\n\nС уважением,\nДом гильдии"
       }
     },
     "itemSets": {

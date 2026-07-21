@@ -11,8 +11,14 @@ sessions merged into release/v0.29.0 (12b QA is PR #2229). The 2026-07-20
 timing and economy amendments restructured the remaining plan to 12, 12b,
 13, 14, 14b, 15; the SECOND 2026-07-20 block (mastery and provenance, see
 Locked design decisions) inserts Phases 12c and 12d after the 12b QA, so
-the remaining order is 12c, 12d, 13, 14, 14b, 15. Next: Phase 12c
-(phase-12c-mastery-curve.md, issue #2235).
+the remaining order is 12c, 12d, 13, 14, 14b, 15. Phases 12c and 12d plus
+both QA sessions are MERGED into release/v0.29.0 (12c PR #2242, 12c QA
+PR #2246, 12d PR #2264, 12d QA PR #2267 = 682df1b7b; this pointer had
+gone stale at "12c BUILT" and was corrected by the Phase 13 session).
+Phase 13 is MERGED (PR #2269 = 90e502786 into release/v0.29.0,
+2026-07-21; as-landed surfaces below) and Phase 13 QA is COMPLETE
+(2026-07-21, PASS; the QA entry below the as-landed block). Next:
+Phase 14.
 
 ## Locked design decisions
 
@@ -1251,23 +1257,300 @@ tables, i18n key namespaces, files created)
   pre-existing, gatherResult/fishingResult log lines use the repo's raw
   hex log-color idiom, and the six cues stay PLACEHOLDER pending #2208
   (release-notes caveat).
-- Phase 12c: (planned) the four-state curve constants in wheel.ts, the
-  enforced per-profession maxSkill content rows and four clamp arms, the
-  node-tier and band-relative gathering/fishing gain constants, the
-  one-time reset flag and its authored notice letter, the shared action
-  throttle seam, the enchanting soft-ceiling gain arm, q_prof_hobby_switch
-  xpReward 0, and the four-state difficulty + cap-aware UI states.
-- Phase 12d: (planned) the identical-payload merge rule in bags/bank/
-  addItemInstance, the Gathered by key + bag-grid instanced marker + the
-  signed-downgrade notice event, the unified loot-and-harvest interact
-  flow with the decoupled corpse lifecycle and verified town focus, mail
-  attachment expiry with the return cycle, and the companion fixes
-  (#2139, the rename signer sweep).
-- Phase 13: (planned) disenchantItem/applyEnchant/salvageItem IWorld
-  members + wire commands; plus, per the 2026-07-20 amendments, the typed
-  disenchant reagents (hybrid model, same-phase consumers) and the
-  bind-on-trade primitive applied to them; inherits the Phase 12c shared
-  throttle and quality-tiered soft-ceiling gain model on day one.
+- Phase 12c (built 2026-07-20, phase start 67ae62629, PR #2242): the
+  four-state curve is tierProgressMultiplier in wheel.ts (free floor
+  DELETED; REDUCED_TIER_MULTIPLIER 0.5 and the new MINIMAL_TIER_MULTIPLIER
+  0.25 both exported); gathering gain = gatherNodeGainMultiplier(prof,
+  nodeTier) with GATHER_GAIN_TIER_STEP 25 (node tier T teaches as curve
+  tier T-1: t1 grays at 75+, t3 carries to 100); fishing gain =
+  fishingCatchGain via FISHING_GAIN_SCHEDULE (1 below 50, 0.5 below 100,
+  0.1 below 150, 0.02 below 200) and FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY
+  100 (junk = ItemDef.kind 'junk'). Caps as content data: CraftDef.maxSkill
+  (all ten ring crafts 125) + craftMaxSkillFor in content/professions.ts;
+  gathering maxSkill 100/100/100/200; clamps at gainCraftSkill,
+  drainGatheringGrants, normalizeCraftSkills, normalizeGatheringProficiency
+  (the legacy professions key flows through the sim.ts call-site shape
+  s.gatheringProficiency ?? s.professions). THE RESET: masteryResetApplied
+  is a CharacterState-ONLY optional boolean (serializeCharacter writes
+  literal true; NO PlayerMeta field, so samplePlayerMeta sees zero new keys
+  and only the two appendix goldens regenerated, draws byte-identical);
+  applyMasteryReset + updateMasteryResetNotices live in
+  professions/mastery_reset.ts; the transient
+  PlayerMeta.pendingMasteryResetNotice (inert false, never serialized)
+  drives the one-time mail-phase send of MASTERY_RESET_LETTER (letterId
+  mastery_reset_notice, sender The Guildhall, letters.ts + BOTH ui letter
+  registries + the coverage count pin + five non-Latin M16 fills incl. the
+  letter body). Shared pacing: professions/action_throttle.ts WRAPS the
+  meta.craftThrottle seam (historical name kept deliberately;
+  CRAFT_THROTTLE_* re-exported); crafting, disenchant, enchant-apply, and
+  salvage draw one budget, and the throttle gates disenchant/salvage BEFORE
+  their rng draw (unwired until Phase 13; wiring QA heads-up). Enchanting:
+  enchantingGainMultiplier in archetype.ts (SOFT ceiling min(input tier,
+  ceiling), never crafting's hard zero) with ENCHANTING_GAIN_TIER_BY_QUALITY
+  exported from enchanting.ts; the apply arm reads the enchant's max
+  reagent ItemDef quality via enchantGainTier (dust 0, essence 1, shard 2,
+  pinned). q_prof_hobby_switch xpReward 0. UI: CraftDifficulty four-state
+  (full/reduced/minimal/none) from the shared multiplier; DIFFICULTY_TINT
+  orange QUALITY_COLOR.legendary / yellow GOLD_ACCENT_COLOR (the new named
+  TS twin of --gold in icons.ts) / green uncommon / gray poor;
+  CRAFT_MAX_SKILL RETIRED, craftNextUnlock kind 'mastered' at cap; skill
+  readouts FLOOR and points-to-go CEIL in both view cores (fractional gains
+  never render an uncrossed threshold as crossed); new keys
+  hudChrome.crafting.difficultyMinimal +
+  hudChrome.professions.nextUnlockMastered (nextUnlockMax deleted
+  catalog-wide); S3 scan list gained mastery_reset.ts and
+  action_throttle.ts. Appendix ADDENDUM rows (old-curve premises re-pinned
+  minimally, the 12b incompleteness precedent): crafting_view (3 tests + 2
+  boundary rows), archetype_ceiling (dormant free-floor test became
+  curve-not-ceiling), professions_crafting (two-below/minimal + gray
+  common), deeds_sites (74 to 74.75 staging), deeds + deeds_reconcile
+  (curve-era masteryResetApplied fixtures; the pre-curve arm pinned in
+  professions_mastery_reset).
+  - Phase 12c QA drift notes (2026-07-20): the rehearsal gained the
+    completeness arm (a partial reset now fails, production-copy mode
+    included) and a live GameServer online suite
+    (mastery_reset_online.test.ts). Two standing constraints for later
+    phases: (1) normalizeArchetypeState is the SINGLE load-time reader of
+    PRE-reset skill values (identity derivation only, by design, ordering
+    load-bearing); any future archetype-POWER surface must key off the live
+    post-reset skill number, never the derived attunement alone. (2) The
+    disenchant/salvage/enchant-apply commands are un-surfaced on every host
+    today (no SimEvent, not on IWorld, no server dispatch, no UI); when
+    Phase 13 wires them, EACH needs a personal SimEvent plus a sim/server
+    i18n matcher entry mirroring craftItem's craftResult path, and their new
+    'throttled' deny reason (the shared budget) surfaces then, including the
+    message-attribution question of a craft denial caused by silent
+    disenchant/salvage spend. Raw-blob readers (character sheet, armory,
+    character select) show stale pre-reset skills for a pre-curve character
+    until next login (display-only, self-heals; recorded in progress.md).
+- Phase 12d (built 2026-07-21, merged as PR #2264 = e302c8be5; QA PASS
+  2026-07-21, phase start a9d499291): identical-payload
+  stacking lives in src/sim/item_instance_merge.ts
+  (itemInstancePayloadsEqual, isMergeableInstancePayload,
+  canStackInstancePayloads; a charges-bearing payload NEVER merges, the
+  one mutate-in-place field) consumed by all four merge points (bags.ts
+  countFit/addStacked via a new instance param, Sim.addItemInstance, the
+  moveBetweenContainers bank arm both directions) plus bags.ts
+  canGrantItemInstance, the merge-aware signed-grant guard that closed
+  the #2139 modeling ask (the filed overflow itself was already dead:
+  the Phase 10 QA grant-order fix guards it, now pinned at the hunted
+  crossing case). removeItem/removeEnchantableItem return one payload
+  PER UNIT, deep-cloned while the source slot survives (the
+  enchant-aliasing guard); sanitizeBankState preserves counted instanced
+  slots (capped at stackSizeOf, 1 for charges). Provenance is
+  kind-driven (junk = gathered, both partition sides pinned) via
+  isGatheredProvenanceKind; new keys hudChrome.crafting.gatheredBy,
+  hudChrome.gathering.downgradeMark/downgradeFind,
+  hudChrome.townFocus.tierHint/townOnlyHint, and
+  hudChrome.bags.itemAriaInstanced (the marker's accessible-name arm);
+  gatherDowngrade SimEvent {pid, surface, lost:'mark'|'find'} text-free,
+  at most one per command, mark wins when a command loses both. The
+  unified press composes the two EXISTING commands client-side (harvest
+  then loot, availability-gated; NO new command, facet member, or
+  census/parity re-pin); harvestCorpse's components-OMITTED arm is the
+  server-derived town-focus default (explicit [] keeps spread; the
+  picker now opens pre-checked from town focus). Lifecycle:
+  CORPSE_INTERACT_GRACE_SECONDS 30 in loot_roll.ts; the prune keeps a
+  fully-looted unclaimed-harvest corpse open for the grace window; a
+  successful harvest collapses an exhausted corpse fast (4) or clamps
+  remaining loot to the grace, guarded by hasPendingLootRollForMob (now
+  exported) so a pending need-greed roll is never undercut; the respawn
+  gate formula is untouched. Mail: MAIL_ATTACHMENT_EXPIRY_SECONDS (30
+  days, sim-time) on player-kind parcels; MailMessage/MailSave gained
+  returned (additive); the sweep returns-to-sender once then deletes
+  (the delete arm structurally requires returned); the return is an
+  in-place re-key onto the senderName bucket that bypasses the
+  send-time box cap (a full box holds the letter); loadMail starts
+  legacy never-sentinel player parcels at deploy; system/npc mail is
+  exempt by construction (kind filter, no clock ever set). Rename sweep
+  = src/sim/character_rename.ts rekeyInstanceSigner over the renamed
+  character's OWN blob (carried + bank + equipped instances), wired
+  into renameHandler beside the market/mail rekeys; foreign-held copies
+  keep the stale name BY SCOPE (a flagged maintainer surface). The S3
+  scan list gained item_instance_merge.ts and character_rename.ts.
+  Parity: exactly two deliberate golden regens, draws verified
+  (professions_gather: merges move inventory shape only;
+  l1_loot_distribution: the grace defers the respawn wanderTimer draw
+  past the trace window, every pre-existing frame byte-identical).
+  - ROLLBACK CAVEAT (release-notes item; the counted-instanced-stack
+    class, DESTRUCTIVE in one arm): v0.29.0 sanitizeBankState clamps a
+    counted instanced BANK stack back to count 1 on next load, silently
+    destroying the merged surplus (deposit 5 same-signer fangs, roll
+    back, reload: 4 units gone). Carried-bag counted stacks survive a
+    rollback with count intact, but old bags.ts never models count>1
+    instanced slots, so do not linger on old code. A returned mail
+    parcel round-tripped through old code loses its returned flag and
+    can fire ONE extra return flight after re-upgrade (bounded, no item
+    loss, the accepted mailWelcomed additive-flag class).
+  - Phase 12d drift notes (2026-07-21): a tagged corpse whose death
+    roll yields NO loot still gets lootable=false at handleDeath and
+    never opens for harvest (pre-existing, the Phase 3 note stands);
+    fish are kind food and never signed, so the provenance split never
+    sees them (revisit if fishing ever signs a catch); the bank window
+    is a bespoke painter, so the instanced marker is bags-only; partial
+    instanced slot splits are unimplemented (wave 2); vendor buyback
+    still re-grants plain copies (pre-existing payload loss, documented
+    at the site); trade fitsAfterSwap keeps the conservative
+    one-fresh-slot model as the fallback for stub harnesses; the RL env
+    interact() action now draws harvest rng where pre-12d it was
+    draw-free on a corpse (deterministic semantic expansion, no
+    headless golden pins the old shape).
+  - Phase 12d QA additions (2026-07-21, the QA pass): BOTH persisted
+    load arms (carried inventory in addPlayer AND the bank) now consume
+    one shared tamper ceiling, bags.ts instancedCountCap (merge-legal
+    stack cap; charges capped at 1 def-independently; an UNKNOWN item
+    def is dormant recoverable data, uncapped on the mergeable arm,
+    refining the bank arm's old DEFAULT_STACK clamp). Loot-window
+    legibility (user-approved wording): the corpse arm's button is Take
+    Loot (the chest arm keeps Take All), both corpse buttons carry
+    attachTooltip-idiom tooltips (native title attributes gone from the
+    corpse loot path), and the unified-press footer hint renders on the
+    town-focus-hint idiom; keys minted NEW
+    (hudChrome.loot.takeLootButton/takeLootTooltip/unifiedPressHint,
+    hudChrome.corpseHarvest.harvestTooltip) with five non-Latin fills
+    each, and the retired takeAllTooltip/harvestButtonTooltip rows left
+    the catalog and every overlay. The gathering toast key helpers
+    (gatherDeniedLineKey/gatherDowngradeLineKey) now return
+    TranslationKey, so a typo'd or retired key fails tsc.
+- Phase 13 (built 2026-07-21, phase start 682df1b7b, PR #2269): enchanting,
+  disenchant, and salvage reachable in both hosts. IWorld
+  (src/world_api/professions.ts): disenchantItem(itemId)/
+  applyEnchant(itemId, enchantId)/salvageItem(itemId) plus
+  lastDisenchantResult/lastEnchantResult/lastSalvageResult
+  (SalvageResultView/DisenchantResultView/ApplyEnchantResultView typed
+  views). Wire: commands disenchant_item{item}/apply_enchant{item,
+  enchant}/salvage_item{item}; per-tick self-deltas denc/ench/salv
+  (outside the heavy gate, the convergence arm); pid-scoped text-free
+  SimEvents disenchantResult/enchantResult/salvageResult (the immediacy
+  arm; both arms feed the same lastX mirror, the lastCraftResult dual-arm
+  pattern; the S3 guard needs no matcher rows for text-free events, only
+  the trade deny below). Census pins moved: IWORLD_MEMBERS 259 (71 data,
+  188 method), ALL_DELTA_KEYS 54, commands 162 send / 171 dispatch; the
+  professions command cluster stays untagged in COMMAND_FACETS (matches
+  craft_item/train_recipe/place_mobile_station/harvest_node) and out of
+  JAILED_BLOCKED_COMMANDS (same treatment as its siblings).
+  Typed reagents (hybrid): rare+ disenchants ALSO yield one type-keyed
+  bind-on-trade secondary via src/sim/professions/disenchant_reagents.ts
+  typedSecondaryFor (cloth resonant_thread, leather resonant_hide, mail
+  resonant_links; sword/axe/dagger/mace/polearm resonant_steel;
+  staff/wand/bow/crossbow resonant_timber, the resolved WEAPON bucket;
+  unclassified weapons fall back to steel; rare+ pieces with no typed
+  material, e.g. jewelry, yield the primary only). Rare+ primary counts
+  moved to the APPROVED tuning: rare exactly 1 essence plus 1 secondary
+  with zero rng draws; epic/legendary exactly 1 shard plus 1-2
+  secondaries via one draw; SUB-RARE IS BYTE-IDENTICAL to pre-phase
+  behavior. DEVIATION NOTE (maintainer heads-up): the Tuning-targets row
+  "uncommon 1 to 2 arcane_dust" was NOT implemented because it conflicts
+  with the phase acceptance criterion "sub-rare disenchants are
+  byte-identical to today"; the Tuning targets header marks those rows
+  Phase 15 placeholders, so the uncommon retune is deferred to the Phase
+  15 evidence check as a flagged call. Five typed materials
+  (content/items.ts, junk kind, quality rare, sellValue 40, NO buyValue
+  per the market ruling) each consumed by one new always-known Runed
+  enchant (content/enchants.ts: enchant_weapon_runed_edge/
+  enchant_weapon_runed_focus/enchant_chest_runeweave/
+  enchant_legs_runed_hide/enchant_helmet_runed_links, essence x2 + typed
+  x1, magnitudes pinned between base and Greater per slot).
+  Bind-on-trade primitive (generic, Phase 14b extends it): payload field
+  ItemInstancePayload.bindOnTrade ARMS the lock, boundTo IS the lock;
+  secondaries mint armed via addItemInstance and stack as 12d counted
+  instanced stacks; trade.ts isTradeLocked/offerableCount gate
+  tradeSetOffer (clamp + ONE English deny 'That item is bound and cannot
+  be traded.' matcher-mapped to hud.errors.tradeBound), offerCovered,
+  removeOffer (removePreferFungible grew an optional skip predicate;
+  every other caller byte-identical), and the fitsAfterSwap capacity
+  walk; grantOffer stamps boundTo = recipient pid on first trade. The
+  foreign inspect eqi wire strips bindOnTrade by allowlist construction;
+  the self inv mirror is unfiltered. MIXED-FLEET DEPLOY NOTE: the
+  enforcement arms do not exist on pre-Phase-13 binaries, so during a
+  rolling deploy an armed copy traded on an old realm crosses unstamped;
+  exposure is bounded (minting needs the new command) and self-heals once
+  the fleet upgrades.
+  UI: bags right-click (desktop) / tap (mobile-touch, plain-use default
+  mode only) opens the shared #ctx-menu popup with the classic action as
+  row one, then Disenchant/Salvage/Apply Enchant per the pure core
+  src/ui/bag_item_context_menu.ts (UI_PURE_CORES + BARE_NAMED); painter
+  src/ui/bag_item_action_menu.ts; destruction routes through the ONE
+  Hud.confirmDialog family with the stronger warning only when the copy
+  the sim would actually consume is signed/masterwork/enchanted
+  (mirroring each action's removal order); the Apply Enchant two-step
+  picker (src/ui/enchant_apply_view.ts) is the FIRST render sink for
+  enchant names: hudChrome.enchantName.<id> covers every ENCHANTS row
+  with five non-Latin fills; result toasts via src/ui/enchanting_view.ts
+  behind three thin hud.ts drainEvents arms, each throttled deny naming
+  its own action (the 12c cross-action attribution nuance); the wheel row
+  needed no code (enchanting is a CRAFT_RING craft), pinned by
+  tests/professions_enchanting_reachable.test.ts. Mobile stacking fix:
+  body.mobile-touch #ctx-menu rises to z-index 96 above the forced
+  window-sheet 95 (tests/ctx_menu_mobile_stacking.test.ts pins both
+  directions). i18n namespaces: hudChrome.enchantName.*,
+  hudChrome.itemMenu.*, hudChrome.enchanting.*, hud.errors.tradeBound,
+  and the five reagent entity names (M16 fills in the five non-Latin
+  overlays). New sim module on the S3 scan list:
+  disenchant_reagents.ts. New tests: professions_typed_reagents,
+  professions_enchanting_commands, professions_p13_coverage,
+  bag_item_context_menu, enchant_apply_view, enchanting_view,
+  professions_enchanting_reachable, ctx_menu_mobile_stacking; the
+  Phase 3 trade payload-survival test dropped its decorative boundTo
+  fields (boundTo is now the lock; a deliberate re-pin). Known interplay
+  kept BY SCOPE: vendor buyback re-grants plain copies (a sold bound
+  reagent launders its payload; pre-existing class); bow/crossbow timber
+  rows are unreachable until such a weapon classifies in
+  WEAPON_TYPE_BY_ITEM; persisted enchant ids have no shipped_enchant_ids
+  golden (flagged as a possible follow-up, the shipped_item_ids
+  precedent).
+- Phase 13 QA (2026-07-21, QA diff 682df1b7b..90e502786, fix branch
+  fix/professions-2-phase-13-qa): PASS, zero blocking; all 13 acceptance
+  criteria verified against the real code and every validation row green.
+  REAL FIX (found by the QA capacity probe, landed test-first):
+  fitsAfterSwap modeled the giver's PRE-STAMP payload while grantOffer
+  stamps boundTo on arrival, wrong in both directions: a full receiver
+  holding a byte-equal armed slot was granted OVER capacity (17/16
+  slots), and a receiver whose byte-equal slot was already stamped to
+  them was denied a trade that genuinely fits. The model now stamps armed
+  arrivals (no rng; parity goldens untouched). REAL FIX (live keyboard
+  probe of the destroy confirm): with OK focused, Enter fired the
+  chat-open edge action (focus left the aria-modal dialog, nothing
+  activated) and Space died to the jump preventDefault, so a keyboard
+  user could cancel but never confirm; bindDialogKeyActivation
+  (src/ui/dialog_key_activation.ts) repairs the whole confirm family
+  dialog-scoped (Escape, Tab trap, and movement keys unchanged).
+  MAINTAINER-DIRECTED amendment: the Apply Enchant picker takes a
+  painter-managed ctx-menu-picker modifier (wider; max-height
+  min(60vh, 560px) desktop, 60 percent of app-vh on touch; scrolling
+  with overscroll containment; capped placement reserve). Every plain
+  paint site clears the modifier (seven sites incl. the chat channel
+  picker: keyboard-activated openers fire click with no pointerdown, so
+  clearing only at the close path was insufficient); pinned by
+  tests/ctx_menu_picker_sizing.test.ts; both picker shots re-captured
+  and the mobile picker shot added. Durable suites promoted from the QA
+  probes: professions_p13_qa_arc (offline plus live-GameServer end to
+  end), professions_p13_qa_coverage (jewelry zero-draw resolve arm,
+  trade partial clamp plus deny-once, mirror negative arms, salvage
+  unknown_item, both capacity-model directions),
+  professions_p13_races (11 interleaved destroy-vs-trade/inv_move
+  scenarios, conservation pinned in each),
+  professions_p13_result_mirror (event arm alone via the real onMessage
+  path, identical-consecutive-deny delta suppression, ordering both
+  ways, reconnect full snapshot, throttled enchant attribution), and
+  professions_p13_bound_surfaces (mail/market/vendor/bank vs armed and
+  stamped resonant copies; refusal today is EMERGENT from the #1165
+  fungible-only escrow, so the #1146 instanced-listing work must
+  re-enforce the boundTo lock explicitly, these pins are the wall).
+  Doctrine notes: consumers of repeat-deny feedback ride the drainEvents
+  arm, never lastX equality (the self-delta JSON-diff suppresses an
+  identical stash); the result-mirror handlers carry no ev.pid guard
+  (the inherited applyCraftResultEvent pattern; spectate bleed is
+  possible and unprobed, add the guard family-wide if ever confirmed
+  undesirable). Deferred as maintainer calls: salvage grants no
+  craft-skill gain (reads as by design under criterion 11's inherited
+  clause; confirm); an enchant of an offered copy mid-trade does not
+  reset the accept flags (coherent, conservation holds; stricter
+  semantics would re-run the handshake when an offered item's instance
+  composition changes); the disenchant menu row shows on all-enchanted
+  holdings and ends in a safe localized deny (UX polish candidate);
+  mail and market deny copy for bound-only holdings stays the generic
+  notEnoughItems (defer to #1146).
 - Phase 14b: (planned) the commission marker, bind-on-first-trade
   enforcement, the master unbind service; the three maintainer decisions
   are RESOLVED in OPEN items (character binding, equipment-only opt-in
@@ -1292,8 +1575,11 @@ tables, i18n key namespaces, files created)
   tier included (the free floor is retired); enforced per-profession caps:
   nine crafts and enchanting 125, mining/logging/herbalism 100, fishing
   200; gathering gains node-tier-relative, fishing gains band-relative and
-  fractional (exact fractions land as named exported pinned constants in
-  12c). Time-to-master TARGETS to tune against: first tier-up in 15 to 20
+  fractional (AS LANDED 2026-07-20, PR #2242: gatherNodeGainMultiplier with
+  GATHER_GAIN_TIER_STEP 25 and node tier T teaching as curve tier T-1;
+  FISHING_GAIN_SCHEDULE 1 below 50, 0.5 below 100, 0.1 below 150, 0.02
+  below 200; junk zero at FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY 100).
+  Time-to-master TARGETS to tune against: first tier-up in 15 to 20
   minutes; skill 50 in an evening; craft mastery (major, materials
   included) 10 to 20 focused hours spread over days; gathering 100 in 8 to
   12 hours; fishing 200 in 15 to 25 hours. If mastery should get longer,
