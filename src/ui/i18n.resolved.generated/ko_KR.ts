@@ -4630,6 +4630,8 @@ export const ko_KR: EnTranslations = {
       "portalSealed": "{zone}의 {tier}등급 균열이 봉인되었습니다.",
       "portalCollapses": "{zone}의 {tier}등급 균열이 무너졌습니다.",
       "levelGate": "레벨 {level} 이상의 모험가만 이 균열에 들어갈 수 있습니다.",
+      "deadEntry": "죽은 상태로는 균열에 들어갈 수 없습니다.",
+      "deadEntryCombat": "파티가 아직 전투 중입니다. 전투가 끝나면 죽은 자도 다시 들어갈 수 있습니다.",
       "iceGoalLit": "서리 문양이 타오릅니다. 길이 꿈틀거립니다.",
       "socketsShut": "받침대가 갈리며 닫힙니다. 길이 꿈틀거립니다.",
       "seqProgress": "룬이 차례로 응답합니다 ({step}/{total}).",

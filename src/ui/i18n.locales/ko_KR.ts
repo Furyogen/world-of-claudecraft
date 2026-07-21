@@ -7220,6 +7220,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'sim.rift.descendFloor': '{name}의 더 깊은 곳으로 내려갑니다.',
   'sim.rift.enterFloor': '균열을 통과해 {name}에 들어섰습니다.',
   'sim.rift.exitOpens': '균열이 요동칩니다. 쓰러진 적 너머로 귀환의 길이 열립니다.',
+  'sim.rift.deadEntry': '죽은 상태로는 균열에 들어갈 수 없습니다.',
+  'sim.rift.deadEntryCombat':
+    '파티가 아직 전투 중입니다. 전투가 끝나면 죽은 자도 다시 들어갈 수 있습니다.',
   'sim.rift.iceGoalLit': '서리 문양이 타오릅니다. 길이 꿈틀거립니다.',
   'sim.rift.levelGate': '레벨 {level} 이상의 모험가만 이 균열에 들어갈 수 있습니다.',
   'sim.rift.portalCollapses': '{zone}의 {tier}등급 균열이 무너졌습니다.',

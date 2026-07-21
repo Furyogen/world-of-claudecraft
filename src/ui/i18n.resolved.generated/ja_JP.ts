@@ -4630,6 +4630,8 @@ export const ja_JP: EnTranslations = {
       "portalSealed": "{zone}の{tier}ランクの裂け目が封印された。",
       "portalCollapses": "{zone}の{tier}ランクの裂け目が崩れ落ちた。",
       "levelGate": "この裂け目に入れるのはレベル{level}以上の冒険者だけだ。",
+      "deadEntry": "死亡した状態では裂け目に入れない。",
+      "deadEntryCombat": "パーティーはまだ戦闘中だ。戦いが終われば、死者も再び入れる。",
       "iceGoalLit": "霜の紋章が燃え上がる。道が動き出す。",
       "socketsShut": "台座が音を立てて閉じる。道が動き出す。",
       "seqProgress": "ルーンが順に応える（{step}/{total}）。",

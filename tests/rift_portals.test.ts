@@ -5,7 +5,7 @@ import {
   RIFT_GEAR_ITEM_IDS,
   RIFT_GEM_IDS,
 } from '../src/sim/content/rift/items';
-import { ZONES } from '../src/sim/data';
+import { isRiftPos, ZONES } from '../src/sim/data';
 import {
   RIFT_MIN_LEVEL,
   RIFT_PORTAL_LIFETIME,
@@ -344,5 +344,81 @@ describe('rift portals: sealing pays Heroic Marks by rank', () => {
       (i) => (RIFT_GEM_IDS as readonly string[]).includes(i.itemId) && i.personalFor?.includes(pid),
     );
     expect(gemItem, 'A/S gem is personal to the winner').toBeDefined();
+  });
+});
+
+describe('rift entry: death rules (anti-zerg + corpse retrieval)', () => {
+  const makeGhost = (e: Entity) => {
+    e.hp = 0;
+    e.dead = true;
+    e.ghost = true;
+  };
+
+  it('a dead player with no run in a rift cannot enter, throttled to one notice per window', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(RIFT_MIN_LEVEL);
+    makeGhost(sim.player);
+    sim.drainEvents();
+    let notices = 0;
+    // 40 ticks = 2s, inside the 4s denial window: exactly one notice.
+    for (let i = 0; i < 40; i++) {
+      sim.enterRift(41, 20, sim.player.id);
+      for (const ev of sim.tick()) {
+        if (JSON.stringify(ev).includes('You cannot enter a rift while dead.')) notices++;
+      }
+    }
+    expect(
+      sim.riftInstances.find((i) => i.partyKey !== null),
+      'no run allocated',
+    ).toBeUndefined();
+    expect(isRiftPos(sim.player.pos.x), 'ghost never teleported in').toBe(false);
+    expect(notices, 'denial throttled to one notice per window').toBe(1);
+  });
+
+  it('a ghost member is barred while the run is in combat, and re-enters once it settles', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(RIFT_MIN_LEVEL);
+    sim.enterRift(SEED, 20, sim.player.id);
+    const inst = sim.riftInstances.find((i) => i.partyKey !== null)!;
+    const mob = inst.mobIds
+      .map((id) => sim.entities.get(id))
+      .find((m): m is Entity => !!m && !m.dead)!;
+    mob.inCombat = true;
+    makeGhost(sim.player);
+    sim.player.pos = { x: inst.returnPos.x, y: 0, z: inst.returnPos.z };
+    sim.player.prevPos = { ...sim.player.pos };
+    sim.drainEvents();
+    sim.enterRift(SEED, 20, sim.player.id);
+    expect(isRiftPos(sim.player.pos.x), 'combat bars the ghost').toBe(false);
+    expect(JSON.stringify(sim.drainEvents()), 'the combat denial explains itself').toContain(
+      'Your party is still in combat.',
+    );
+    // The fight settles (wipe recovery): the corpse run is allowed.
+    mob.inCombat = false;
+    sim.enterRift(SEED, 20, sim.player.id);
+    expect(isRiftPos(sim.player.pos.x), 'out of combat the ghost re-enters').toBe(true);
+    expect(sim.player.dead, 'still a ghost: entry does not resurrect').toBe(true);
+  });
+
+  it('a ghost member re-enters a WON run for their corpse instead of forced rez sickness', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(RIFT_MIN_LEVEL);
+    sim.utcDay = '2026-07-09';
+    sim.enterRift(SEED, 20, sim.player.id);
+    const inst = sim.riftInstances.find((i) => i.partyKey !== null)!;
+    clearRiftToBossKill(sim, inst);
+    tickSeconds(sim, 1.2);
+    expect(inst.outcome, 'the run is decided').toBe('won');
+    sim.leaveRift(sim.player.id);
+    makeGhost(sim.player);
+    sim.player.pos = { x: inst.returnPos.x, y: 0, z: inst.returnPos.z };
+    sim.player.prevPos = { ...sim.player.pos };
+    const allocated = sim.riftInstances.filter((i) => i.partyKey !== null).length;
+    sim.enterRift(SEED, 20, sim.player.id);
+    expect(isRiftPos(sim.player.pos.x), 'the ghost walks back into the won run').toBe(true);
+    expect(
+      sim.riftInstances.filter((i) => i.partyKey !== null).length,
+      'no fresh run allocated',
+    ).toBe(allocated);
   });
 });

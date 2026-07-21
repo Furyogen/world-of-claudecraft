@@ -6894,6 +6894,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'sim.rift.descendFloor': '你深入{name}的更深处。',
   'sim.rift.enterFloor': '你穿过裂隙，进入了{name}。',
   'sim.rift.exitOpens': '裂隙震颤。一条归途在倒下的敌人身后撕裂开来。',
+  'sim.rift.deadEntry': '死亡状态下无法进入裂隙。',
+  'sim.rift.deadEntryCombat': '你的队伍仍在战斗中。战斗结束后，死者方可重新进入。',
   'sim.rift.iceGoalLit': '霜之印记熊熊燃起。去路随之震动。',
   'sim.rift.levelGate': '只有等级达到{level}级或以上的冒险者才能进入这道裂隙。',
   'sim.rift.portalCollapses': '{zone}的{tier}级裂隙坍塌了。',

@@ -81,7 +81,11 @@ function inIceZone(
 ): boolean {
   return ice !== null && Math.abs(lx - ice.x) <= ice.hw && Math.abs(lz - ice.z) <= ice.hd;
 }
-const RIFT_EMPTY_TIMEOUT = 60; // seconds with nobody inside before the slot frees
+// Seconds with nobody inside before the slot frees. Long enough for a wiped
+// party to graveyard-run back for their corpses (dead members may re-enter an
+// out-of-combat run, enterRift's death rules): portals sit anywhere in the
+// world, so a 60s window regularly stranded corpses behind a freed slot.
+const RIFT_EMPTY_TIMEOUT = 180;
 
 // Deterministic per-channel colour jitter (server-side; the result rides the
 // entity snapshot to the client, so it need not be client-reproducible).
@@ -484,7 +488,39 @@ export function enterRift(
   }
   const key = riftKeyFor(ctx, r.meta.entityId);
   const eventId = portal?.riftEventId ?? null;
-  if (eventId !== null) {
+  // Death rules (2026-07-21 S-raid playtest): a dead player (ghost) may enter
+  // ONLY a run they are already a member of, and only while that run has no
+  // mob in combat. That kills the die-and-run-back zerg (a ghost can never
+  // rejoin a live fight) while keeping the two legitimate corpse runs open:
+  // wipe recovery (everyone died, mobs reset out of combat) and corpse
+  // retrieval after the run is decided (a member who died before the boss fell
+  // must never be forced into resurrection sickness). The decided-run
+  // exception is why the member match below accepts a non-active outcome for
+  // dead entrants, and why the cleared-event denial is skipped for them.
+  const deadEntry = r.e.dead;
+  if (deadEntry) {
+    const own = ctx.riftInstances.find(
+      (candidate) =>
+        candidate.partyKey !== null &&
+        candidate.memberIds.has(r.meta.entityId) &&
+        (eventId !== null
+          ? candidate.eventId === eventId
+          : candidate.eventId === null && candidate.seed === seed >>> 0),
+    );
+    if (!own || riftInstanceInCombat(ctx, own)) {
+      if (ctx.time >= (r.e.riftDeniedAt ?? -Infinity) + 4) {
+        r.e.riftDeniedAt = ctx.time;
+        ctx.error(
+          r.meta.entityId,
+          own
+            ? 'Your party is still in combat. The dead may re-enter once the fighting stops.'
+            : 'You cannot enter a rift while dead.',
+        );
+      }
+      return;
+    }
+  }
+  if (eventId !== null && !deadEntry) {
     const event = ctx.riftEvents.find((candidate) => candidate.eventId === eventId);
     if (!event || event.status === 'cleared' || event.status === 'collapsed') {
       if (ctx.time >= (r.e.riftPoolFullAt ?? -Infinity) + POOL_FULL_NOTICE_COOLDOWN) {
@@ -499,18 +535,21 @@ export function enterRift(
   }
 
   // Members of one group share an instance. Every other group entering the same
-  // event receives another slot with identical generated content.
+  // event receives another slot with identical generated content. A dead
+  // member may match their own DECIDED run (corpse retrieval, above).
   let inst =
     ctx.riftInstances.find(
       (candidate) =>
         candidate.partyKey !== null &&
-        candidate.outcome === 'active' &&
+        (candidate.outcome === 'active' ||
+          (deadEntry && candidate.memberIds.has(r.meta.entityId))) &&
         (candidate.memberIds.has(r.meta.entityId) || candidate.partyKey === key) &&
         (eventId !== null
           ? candidate.eventId === eventId
           : candidate.eventId === null && candidate.seed === seed >>> 0),
     ) ?? null;
   if (!inst) {
+    if (deadEntry) return; // a ghost never allocates a fresh run
     const free = ctx.riftInstances.find((i) => i.partyKey === null);
     if (!free) {
       if (ctx.time >= (r.e.riftPoolFullAt ?? -Infinity) + POOL_FULL_NOTICE_COOLDOWN) {
@@ -1209,6 +1248,16 @@ function completeRiftClear(ctx: SimContext, inst: RiftInstance, boss: Entity | n
     for (const competitor of competitors) terminateLosingInstance(ctx, competitor);
   }
   return true;
+}
+
+/** True while any living mob of the instance is engaged: the window in which
+ * dead members may NOT walk back in (enterRift's anti-zerg death rule). */
+export function riftInstanceInCombat(ctx: SimContext, inst: RiftInstance): boolean {
+  for (const id of inst.mobIds) {
+    const m = ctx.entities.get(id);
+    if (m && !m.dead && m.inCombat) return true;
+  }
+  return false;
 }
 
 export function instancePlayerIds(ctx: SimContext, inst: RiftInstance): number[] {

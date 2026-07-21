@@ -7240,6 +7240,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'sim.rift.descendFloor': '{name}のさらに深くへ降りていく。',
   'sim.rift.enterFloor': '裂け目をくぐり、{name}へ足を踏み入れた。',
   'sim.rift.exitOpens': '裂け目が震える。倒れた敵の後ろに帰り道が裂け開いた。',
+  'sim.rift.deadEntry': '死亡した状態では裂け目に入れない。',
+  'sim.rift.deadEntryCombat': 'パーティーはまだ戦闘中だ。戦いが終われば、死者も再び入れる。',
   'sim.rift.iceGoalLit': '霜の紋章が燃え上がる。道が動き出す。',
   'sim.rift.levelGate': 'この裂け目に入れるのはレベル{level}以上の冒険者だけだ。',
   'sim.rift.portalCollapses': '{zone}の{tier}ランクの裂け目が崩れ落ちた。',

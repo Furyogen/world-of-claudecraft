@@ -4630,6 +4630,8 @@ export const zh_CN: EnTranslations = {
       "portalSealed": "{zone}的{tier}级裂隙已被封印。",
       "portalCollapses": "{zone}的{tier}级裂隙坍塌了。",
       "levelGate": "只有等级达到{level}级或以上的冒险者才能进入这道裂隙。",
+      "deadEntry": "死亡状态下无法进入裂隙。",
+      "deadEntryCombat": "你的队伍仍在战斗中。战斗结束后，死者方可重新进入。",
       "iceGoalLit": "霜之印记熊熊燃起。去路随之震动。",
       "socketsShut": "凹槽隆隆合拢。去路随之震动。",
       "seqProgress": "符文依次回应（{step}/{total}）。",

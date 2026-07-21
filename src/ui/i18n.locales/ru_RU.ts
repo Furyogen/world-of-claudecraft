@@ -7353,6 +7353,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'sim.rift.descendFloor': 'Вы спускаетесь глубже в {name}.',
   'sim.rift.enterFloor': 'Вы проходите сквозь разлом и попадаете в {name}.',
   'sim.rift.exitOpens': 'Разлом содрогается. Позади павших разверзается путь домой.',
+  'sim.rift.deadEntry': 'Мертвым нельзя войти в разлом.',
+  'sim.rift.deadEntryCombat':
+    'Ваша группа все еще в бою. Мертвые смогут вернуться, когда бой закончится.',
   'sim.rift.iceGoalLit': 'Морозная печать вспыхивает. Путь пробуждается.',
   'sim.rift.levelGate':
     'Войти в этот разлом могут лишь искатели приключений уровня {level} и выше.',

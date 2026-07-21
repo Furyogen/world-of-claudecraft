@@ -4630,6 +4630,8 @@ export const en: EnTranslations = {
       "portalSealed": "The {tier}-rank rift in {zone} has been sealed.",
       "portalCollapses": "The {tier}-rank rift in {zone} collapses.",
       "levelGate": "Only adventurers of level {level} or higher may enter this rift.",
+      "deadEntry": "You cannot enter a rift while dead.",
+      "deadEntryCombat": "Your party is still in combat. The dead may re-enter once the fighting stops.",
       "iceGoalLit": "The frost sigil blazes. The way stirs.",
       "socketsShut": "The sockets grind shut. The way stirs.",
       "seqProgress": "The runes answer in turn ({step}/{total}).",

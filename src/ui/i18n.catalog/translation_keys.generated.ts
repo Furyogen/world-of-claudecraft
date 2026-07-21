@@ -7307,6 +7307,8 @@ export type TranslationKeyFlat =
   | 'sim.lockpick.toolSlips'
   | 'sim.rift.allUnstable'
   | 'sim.rift.alreadyCleared'
+  | 'sim.rift.deadEntry'
+  | 'sim.rift.deadEntryCombat'
   | 'sim.rift.descendFloor'
   | 'sim.rift.detonateAbsoluteZero'
   | 'sim.rift.detonateAbyssalMaw'

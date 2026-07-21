@@ -7732,6 +7732,14 @@ const RULES: Rule[] = [
     build: (m) => t('sim.rift.levelGate', { level: m[1] }),
   },
   {
+    re: /^You cannot enter a rift while dead\.$/,
+    build: () => t('sim.rift.deadEntry'),
+  },
+  {
+    re: /^Your party is still in combat\. The dead may re-enter once the fighting stops\.$/,
+    build: () => t('sim.rift.deadEntryCombat'),
+  },
+  {
     re: /^The rift shudders\. A way home tears open behind the fallen\.$/,
     build: () => t('sim.rift.exitOpens'),
   },
