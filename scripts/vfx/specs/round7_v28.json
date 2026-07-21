@@ -33,12 +33,12 @@
  },
  "iron_resolve": {
   "_cls": "warrior",
-  "archetype": "buff", "palette": "physical", "power": 0.95,
+  "archetype": "buff", "palette": "physical", "power": 0.95, "barrier": true,
   "buff": { "style": "raise", "orbit": "halo", "shellDur": 2.5, "o": { "n": 5, "size": 0.34, "tex": "chip", "rate": 0.6, "weave": 0.04, "radius": 0.55, "incline": 0, "tickEvery": 2.4 } },
   "motifs": ["chains"], "motifAt": "caster",
   "windup": 0.4, "windupStyle": "stance", "linger": 4, "rim": "#8b97a6", "decal": "crack",
   "impact": { "flipbook": false, "ring": 1.2, "vRing": false, "sparks": 14, "debris": true, "smoke": false, "light": 1.2 },
-  "notes": "Rage-for-absorb grit: iron chips crown the head while chains snap taut around the caster, the Ironhold chains reborn where they now belong"
+  "notes": "Rage-for-absorb grit: the absorb SHELL seals while iron chips crown the head and chains snap taut, the Ironhold chains reborn where they now belong"
  },
  "red_harvest": {
   "_cls": "warrior",
@@ -174,10 +174,10 @@
  "deep_wounds": {
   "_cls": "warrior",
   "archetype": "buff", "palette": "blood", "power": 0.55,
-  "buff": { "style": "raise", "orbit": "none", "shellDur": 1.5, "o": { "tickEvery": 3 } },
+  "buff": { "style": "raise", "orbit": "none", "shellDur": 1.5, "o": { "tickEvery": 3.8 } },
   "windup": 0.2, "windupStyle": "none", "linger": 3, "rim": "#9e1622",
   "impact": { "flipbook": false, "ring": false, "vRing": false, "sparks": 0, "debris": false, "smoke": false, "blood": true, "light": 0.4, "liteAudio": true },
-  "notes": "Gaping Wounds passive: the darkest rim in the kit with a single quiet blood fleck, the Rend fantasy living on as a whisper"
+  "notes": "Gaping Wounds passive: the darkest rim in the kit with a single quiet blood fleck, the Rend fantasy living on as a whisper; tickEvery split from Sudden Death's 3 so no two DNAs match"
  },
  "enrage_passive": {
   "_cls": "warrior",

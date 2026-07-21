@@ -24,7 +24,7 @@ const ASSETS = [
   'models/weapons/wand.glb',
   'models/weapons/spellbook_open.glb',
   // spirit apparition creatures
-  'models/creatures/wolf.glb',
+  'models/creatures/wolf_basic.glb',
   'models/creatures/yetialt.glb',
   'models/creatures/velociraptor.glb',
   'models/creatures/stag.glb',
