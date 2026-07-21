@@ -54,12 +54,6 @@
    "orbit": "heartbeat"
   }
  },
- "ironhold": {
-  "buff": {
-   "orbit": "runes"
-  },
-  "rim": "#e8862e"
- },
  "blessing_of_might": {
   "buff": {
    "orbit": "wings"

@@ -17,14 +17,6 @@
   "notes": "2-min rally buff now visibly holds: blood-red war-sigil runes orbit the caster with a pulsing shell lingering 3s after the cry wave.",
   "_cls": "warrior"
  },
- "rend": {
-  "dot": {
-   "drip": "fall"
-  },
-  "linger": 4,
-  "notes": "9s bleed now lingers 4s — wound keeps flickering and weeping falling blood drips so the DoT reads for its duration.",
-  "_cls": "warrior"
- },
  "hamstring": {
   "palette": "blood",
   "strike": {

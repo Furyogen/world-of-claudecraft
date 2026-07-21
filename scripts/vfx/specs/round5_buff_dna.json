@@ -326,13 +326,6 @@
    }
   }
  },
- "commanding_shout": {
-  "buff": {
-   "o": {
-    "tickEvery": 6
-   }
-  }
- },
  "charge": {
   "buff": {
    "o": {
@@ -360,22 +353,6 @@
     "tickEvery": 5
    }
   }
- },
- "ironhold": {
-  "buff": {
-   "orbit": "runes",
-   "o": {
-    "n": 5,
-    "size": 0.5,
-    "tex": "chip",
-    "rate": 0.5,
-    "weave": 0,
-    "radius": 1.1,
-    "incline": 0,
-    "tickEvery": 2
-   }
-  },
-  "rim": "#e8862e"
  },
  "seal_of_righteousness": {
   "buff": {

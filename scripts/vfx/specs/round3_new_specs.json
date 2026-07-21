@@ -232,35 +232,6 @@
    "light": 0.5
   }
  },
- "commanding_shout": {
-  "archetype": "shout",
-  "palette": "physical",
-  "power": 1,
-  "shout": {
-   "radius": 8
-  },
-  "buff": {
-   "style": "raise",
-   "orbit": "none",
-   "shellDur": 2
-  },
-  "motifs": [
-   "fountain"
-  ],
-  "motifAt": "caster",
-  "linger": 3,
-  "windupStyle": "none",
-  "rim": "#e6eef5",
-  "impact": {
-   "ring": 2.4,
-   "vRing": false,
-   "sparks": 0,
-   "flipbook": false,
-   "smoke": false,
-   "debris": false,
-   "light": 2.4
-  }
- },
  "demoralizing_shout": {
   "archetype": "shout",
   "palette": "shadow",
@@ -305,35 +276,6 @@
    "debris": false,
    "smoke": false,
    "light": 0.5
-  }
- },
- "ironhold": {
-  "archetype": "buff",
-  "palette": "physical",
-  "power": 1.35,
-  "self": true,
-  "buff": {
-   "style": "raise",
-   "orbit": "none",
-   "shellDur": 3
-  },
-  "linger": 4,
-  "windup": 0.6,
-  "windupStyle": "stance",
-  "motifs": [
-   "chains"
-  ],
-  "motifAt": "caster",
-  "rim": "#9fb0bf",
-  "decal": "crack",
-  "impact": {
-   "ring": 1.5,
-   "vRing": false,
-   "sparks": 14,
-   "debris": true,
-   "smoke": true,
-   "flipbook": false,
-   "light": 1.8
   }
  },
  "conjure_food": {

@@ -1,16 +1,4 @@
 {
- "rend": {
-  "impact": {
-   "flipbook": false,
-   "ring": false,
-   "vRing": false,
-   "sparks": 0,
-   "debris": false,
-   "smoke": false
-  },
-  "notes": "Bleed goes fully quiet — zero fireworks on application; the lingering falling drips ARE the effect.",
-  "_cls": "warrior"
- },
  "hamstring": {
   "impact": {
    "flipbook": false,

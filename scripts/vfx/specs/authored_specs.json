@@ -26,16 +26,6 @@
   "notes": "Signature gap-closer: caster rockets at the target trailing steel-grey speed ribbons and kicked-up dust, then a hard shoulder-check impact stack on arrival. Cap the arrival with a brief stun-star orbit on the target to sell the 1s stun.",
   "_cls": "warrior"
  },
- "rend": {
-  "archetype": "dot",
-  "palette": "blood",
-  "power": 0.8,
-  "dot": {
-   "drip": "fall"
-  },
-  "notes": "Bleed applicator: quick shallow slash impact, then deep-red droplets welling from the wound and sinking to a small dissolving blood decal at the target's feet for the 9s duration. Wet and heavy, not fiery.",
-  "_cls": "warrior"
- },
  "thunder_clap": {
   "archetype": "nova",
   "palette": "storm",

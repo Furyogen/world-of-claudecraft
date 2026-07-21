@@ -594,13 +594,6 @@
    "light": 0.8
   }
  },
- "rend": {
-  "impact": {
-   "trail": "x",
-   "blood": true,
-   "light": 0.6
-  }
- },
  "hamstring": {
   "impact": {
    "trail": "low",
