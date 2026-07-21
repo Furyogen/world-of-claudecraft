@@ -2945,6 +2945,9 @@ export class MusicDirector {
     stream.gain.gain.setTargetAtTime(target, this.ctx.currentTime, fadeSeconds);
     if (target > 0) {
       stream.silentAt = -1;
+      // While muted (toggle off or menu open) do not start the download; the
+      // keeper revives the stream the moment music is audible again.
+      if (!this._enabled || this._menuPaused) return;
       void this.ctx.resume?.();
       if (stream.el) void stream.el.play().catch(() => {});
     } else {

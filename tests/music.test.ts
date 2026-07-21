@@ -297,6 +297,18 @@ describe('MusicDirector stream keeper', () => {
     expect(el.play).toHaveBeenCalledTimes(1);
   });
 
+  it('never starts a download while music is disabled, then streams on enable', () => {
+    director.setEnabled(false);
+    director.update('vale', false);
+    const inner = internals(director);
+    const el = inner.zoneStreams.vale?.el;
+    if (!el) throw new Error('vale stream element missing');
+    expect(el.play).not.toHaveBeenCalled();
+    expect(inner.zoneStreams.vale?.target).toBe(1);
+    director.setEnabled(true);
+    expect(el.play).toHaveBeenCalledTimes(1);
+  });
+
   it('pauses streams while the game menu is open and revives on close', () => {
     director.update('vale', false);
     const inner = internals(director);
