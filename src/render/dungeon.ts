@@ -46,6 +46,7 @@ import {
   placeMarshTombs,
   placeMarshWallDressing,
 } from './delve_marsh_dressing';
+import { rectShellWallSegments, stubFaceSegments } from './dungeon_wall_segments';
 import { sharedUniforms } from './gfx';
 import { buildInfernalDecor, ensureInfernalDecorAssets } from './rift_decor';
 import { radialGlowTexture } from './textures';
@@ -1716,43 +1717,48 @@ export class DungeonInteriors {
       return;
     }
     const bannerEvery = variant === 'crypt' ? 4 : 3;
-    const wallX = layout.wallX ?? DUNGEON_WALL_X;
-    const endWallHw = layout.endWallHw ?? DUNGEON_END_WALL_HW;
+    // Exact collider-run coverage (see dungeon_wall_segments.ts): each side/end
+    // run is split into equal segments and one module is scaled to each span,
+    // so the drawn shell always matches the collision shell (the legacy fixed
+    // 8u grid left visual corner gaps whenever endWallHw was not module-aligned,
+    // which a rift's arbitrary wallX + 1 almost never is).
+    const shell = rectShellWallSegments(layout, DUNGEON_WALL_X, DUNGEON_END_WALL_HW);
     for (const side of [-1, 1]) {
       const target = arenaWalls
         ? side < 0
           ? arenaWalls.left.placements
           : arenaWalls.right.placements
         : p;
-      const ry = side < 0 ? Math.PI / 2 : -Math.PI / 2; // detail + banners face the room
+      const segments = side < 0 ? shell.left : shell.right;
       let i = 0;
-      for (let z = layout.zMin; z <= layout.zMax + 2; z += 8, i++) {
-        const kind = this.wallKind(variant, hash2(side * 13.7, z));
-        target.add(kind, side * wallX, 0, z, ry, MODULE_SCALE);
+      for (const seg of segments) {
+        const kind = this.wallKind(variant, hash2(side * 13.7, seg.z));
+        target.add(kind, seg.x, 0, seg.z, seg.ry, [seg.halfLength / 2, MODULE_SCALE, MODULE_SCALE]);
         if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
           target.add(
-            this.bannerKind(variant, hash2(z, side * 7.3)),
-            side * wallX,
+            this.bannerKind(variant, hash2(seg.z, side * 7.3)),
+            seg.x,
             0,
-            z,
-            ry,
+            seg.z,
+            seg.ry,
             MODULE_SCALE,
           );
         }
+        i++;
       }
     }
     for (const end of [
-      { z: layout.zMin, ry: 0 },
-      { z: layout.zMax, ry: Math.PI },
+      { segments: shell.front, atMin: true },
+      { segments: shell.back, atMin: false },
     ]) {
       const target = arenaWalls
-        ? end.z === layout.zMin
+        ? end.atMin
           ? arenaWalls.front.placements
           : arenaWalls.back.placements
         : p;
-      for (let x = -endWallHw + 4; x <= endWallHw - 4; x += 8) {
-        const kind = this.wallKind(variant, hash2(x, end.z * 3.1));
-        target.add(kind, x, 0, end.z, end.ry, MODULE_SCALE);
+      for (const seg of end.segments) {
+        const kind = this.wallKind(variant, hash2(seg.x, seg.z * 3.1));
+        target.add(kind, seg.x, 0, seg.z, seg.ry, [seg.halfLength / 2, MODULE_SCALE, MODULE_SCALE]);
       }
     }
     // back wall banners flank the boss dais
@@ -2014,21 +2020,36 @@ export class DungeonInteriors {
       }
       return;
     }
-    const archZ = new Set<number>();
+    // Derive every pier face from the stub's own collider OBB
+    // (dungeon_wall_segments.ts). The legacy branch hardcoded the classic
+    // crypt/sanctum geometry (cap at |x| 6, faces spanning |x| 5..23), which a
+    // parameterized rift waist (passage half 7 to 8.5, piers out to a variable
+    // wallX) turned into a phantom wall panel INSIDE the open passage plus an
+    // uncovered invisible collider strip beyond |x| 23. Evaluated at the
+    // classic stub geometry (hw 9 around |x| 14) these segments reproduce the
+    // old faces exactly.
+    const archAt = new Map<number, number>();
     for (const s of stubs) {
-      const sign = s.x < 0 ? -1 : 1;
-      // passage-facing cap (length 2*hd along z)
-      p.add('wall', sign * 6, 0, s.z, Math.PI / 2, [s.hd / 2, MODULE_SCALE, MODULE_SCALE]);
-      // front/back faces, two 9u modules from |x| 5..23, flush inside the OBB
-      for (const fz of [s.z - s.hd + 1, s.z + s.hd - 1]) {
-        const ry = fz < s.z ? 0 : Math.PI;
-        p.add('wall_pillar', sign * 9.5, 0, fz, ry, [2.25, MODULE_SCALE, MODULE_SCALE]);
-        p.add('wall', sign * 18.5, 0, fz, ry, [2.25, MODULE_SCALE, MODULE_SCALE]);
+      const faces = stubFaceSegments(s);
+      for (const seg of faces.caps) {
+        p.add('wall', seg.x, 0, seg.z, seg.ry, [seg.halfLength / 2, MODULE_SCALE, MODULE_SCALE]);
       }
-      archZ.add(s.z);
+      let i = 0;
+      for (const seg of faces.faces) {
+        // Alternate the classic pillar-then-wall reading along each face.
+        const kind = i % 2 === 0 ? 'wall_pillar' : 'wall';
+        p.add(kind, seg.x, 0, seg.z, seg.ry, [seg.halfLength / 2, MODULE_SCALE, MODULE_SCALE]);
+        i++;
+      }
+      const prior = archAt.get(s.z);
+      archAt.set(s.z, prior === undefined ? faces.innerFaceX : Math.min(prior, faces.innerFaceX));
     }
     if (variant === 'sanctum' || variant === 'temple') {
-      for (const z of archZ) p.add('arch', 0, 0, z, 0, [2.6, 1.9, 2.0]);
+      // The arch module spans ~10.4u; only span passages it actually fits
+      // (classic half-5 aisles). A wider rift passage gets no floating arch.
+      for (const [z, innerFaceX] of archAt) {
+        if (innerFaceX <= 5.5) p.add('arch', 0, 0, z, 0, [2.6, 1.9, 2.0]);
+      }
     }
   }
 
