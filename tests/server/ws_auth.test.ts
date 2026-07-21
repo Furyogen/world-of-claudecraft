@@ -160,6 +160,33 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
     expectSendThenClose(ws, errorFrame('not authenticated'));
   });
 
+  it('3b. rejects a read-scoped token before any account-bound lookup', async () => {
+    const { ws, game, deps, req } = setup();
+    const accountAndScopeForToken = vi.fn(async () => ({
+      accountId: 1,
+      scope: 'read' as const,
+    }));
+    Object.assign(deps, { accountAndScopeForToken });
+    // A staff result makes this test decisive for the privileged escalation too:
+    // the scope gate must run before the staff lookup can confer permissions.
+    deps.adminRolesForAccount = vi.fn(async () => ({
+      username: 'staff',
+      roles: ['superadmin'],
+    }));
+
+    await createWsAuth(deps).authenticateWebSocket(asWs(ws), authRaw(), req);
+
+    expectSendThenClose(ws, errorFrame('not authenticated'));
+    expect(accountAndScopeForToken).toHaveBeenCalledWith('tok');
+    expect(deps.moderationStatusForAccount).not.toHaveBeenCalled();
+    expect(deps.getCharacter).not.toHaveBeenCalled();
+    expect(deps.adminRolesForAccount).not.toHaveBeenCalled();
+    expect(deps.loadAccountCosmetics).not.toHaveBeenCalled();
+    expect(deps.acquireCharacterLease).not.toHaveBeenCalled();
+    expect(deps.bankBonusForAccount).not.toHaveBeenCalled();
+    expect(game.join).not.toHaveBeenCalled();
+  });
+
   it('4. rejects a non-finite character with "not authenticated"', async () => {
     const { ws, deps, req } = setup();
     // account resolves fine here; the branch is forced via a non-numeric character.

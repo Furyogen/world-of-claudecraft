@@ -18,7 +18,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../server/db', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../server/db')>();
-  return { ...actual, accountForToken: vi.fn() };
+  return {
+    ...actual,
+    accountForToken: vi.fn(),
+    accountAndScopeForToken: vi.fn(),
+  };
 });
 vi.mock('../../server/staff_db', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../server/staff_db')>();
@@ -39,7 +43,7 @@ import {
   resetOverviewCacheForTests,
   setOverviewCacheForTests,
 } from '../../server/admin_overview_cache';
-import { accountForToken } from '../../server/db';
+import { accountAndScopeForToken, accountForToken } from '../../server/db';
 import { compose } from '../../server/http/compose';
 import { withErrors } from '../../server/http/middleware/with_errors';
 import type { Method, Middleware } from '../../server/http/types';
@@ -182,6 +186,10 @@ beforeEach(() => {
     now: () => nowMs,
   });
   vi.mocked(accountForToken).mockResolvedValue(ADMIN_ACCOUNT_ID);
+  vi.mocked(accountAndScopeForToken).mockResolvedValue({
+    accountId: ADMIN_ACCOUNT_ID,
+    scope: 'full',
+  });
   vi.mocked(adminRolesForAccount).mockResolvedValue({ username: 'op', roles: ['superadmin'] });
   configureAdminRuntime({ adminStats: vi.fn(() => ROUTE_STATS) } as unknown as AdminRuntime);
 });
@@ -194,6 +202,27 @@ afterEach(() => {
 });
 
 describe('admin overview cache arm parity', () => {
+  it('both arms reject a staff read token before staff or overview reads', async () => {
+    vi.mocked(accountAndScopeForToken).mockResolvedValue({
+      accountId: ADMIN_ACCOUNT_ID,
+      scope: 'read',
+    });
+    vi.mocked(adminRolesForAccount).mockClear();
+
+    const legacy = await runLegacyOverview();
+    const routed = await runRouteOverview();
+
+    const body = {
+      success: false,
+      data: null,
+      error: 'admin authentication required',
+    };
+    expect(legacy).toEqual({ status: 401, body });
+    expect(routed).toEqual({ status: 401, body });
+    expect(adminRolesForAccount).not.toHaveBeenCalled();
+    expect(calls).toBe(0);
+  });
+
   it('both arms share the singleton: two requests inside the TTL, one refresh', async () => {
     const legacy = await runLegacyOverview();
     const routed = await runRouteOverview();
