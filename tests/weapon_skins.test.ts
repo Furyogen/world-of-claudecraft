@@ -140,8 +140,8 @@ describe('weapon type classification', () => {
   });
 
   it('heroic variants resolve through their base row', () => {
-    expect(weaponTypeForItem('heroic_moggers_shiv')).toBe('dagger');
-    expect(weaponTypeForItem('heroic_brutoks_maul')).toBe('mace');
+    expect(weaponTypeForItem('heroic_fang_of_korzul')).toBe('dagger');
+    expect(weaponTypeForItem('heroic_staff_of_velkhar')).toBe('staff');
   });
 });
 
@@ -216,8 +216,8 @@ describe('offhand weapon-skin mirror rule', () => {
   });
 
   it('resolves a heroic-prefixed offhand item to its base weapon type', () => {
-    expect(offhandMirrorsWeaponSkin('frostbite_dagger', 'heroic_moggers_shiv')).toBe(true);
-    expect(offhandMirrorsWeaponSkin('ice_fang_sword', 'heroic_moggers_shiv')).toBe(false);
+    expect(offhandMirrorsWeaponSkin('frostbite_dagger', 'heroic_fang_of_korzul')).toBe(true);
+    expect(offhandMirrorsWeaponSkin('ice_fang_sword', 'heroic_fang_of_korzul')).toBe(false);
   });
 
   it('returns false for an unknown or absent skin, or an empty offhand', () => {

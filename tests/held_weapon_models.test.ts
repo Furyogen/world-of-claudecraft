@@ -94,7 +94,7 @@ describe('held weapon models', () => {
     expect(itemOffhandModelUrl('eastbrook_buckler')).toBe('models/weapons/shield_round.glb');
     expect(itemOffhandModelUrl('highwatch_wallshield')).toBe('models/weapons/shield_square.glb');
     expect(itemOffhandModelUrl('rusty_dagger')).toBe('models/weapons/dagger_a.glb');
-    expect(itemOffhandModelUrl('heroic_moggers_shiv')).toBe('models/weapons/dagger_c.glb');
+    expect(itemOffhandModelUrl('heroic_fang_of_korzul')).toBe('models/weapons/dagger_c.glb');
     expect(itemOffhandModelUrl('chest_armor_not_an_offhand')).toBeNull();
     expect(itemOffhandModelUrl(null)).toBeNull();
     expect(itemOffhandModelUrl(undefined)).toBeNull();
@@ -273,7 +273,7 @@ describe('weapon skin held models', () => {
     expect(offhandModelUrl('rusty_dagger', 'frostbite_dagger')).toBe(
       weaponSkinModelUrl('frostbite_dagger'),
     );
-    expect(offhandModelUrl('heroic_moggers_shiv', 'ashspark_dagger')).toBe(
+    expect(offhandModelUrl('heroic_fang_of_korzul', 'ashspark_dagger')).toBe(
       weaponSkinModelUrl('ashspark_dagger'),
     );
     // Sword skin + offhand one-hand sword: also mirrors.
