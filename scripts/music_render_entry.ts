@@ -1,10 +1,7 @@
 // Page-side entry for scripts/render_music.mjs: renders a procedural music
-// theme from src/game/music.ts through an OfflineAudioContext using the synth
-// voices and the authoring mix chain (master 0.15, compressor, hall reverb)
-// the MusicDirector built back when the game synthesized at runtime. That
-// chain now lives here and in the music editor: the shipped game streams the
-// remastered mp3 renders (public/audio/music/), and this render is the first
-// step in producing them, so keep the chain stable or re-remaster.
+// theme from src/game/music.ts through an OfflineAudioContext using the exact
+// same synth voices and mix chain (master gain, compressor, hall reverb) the
+// in-game MusicDirector builds, so a saved WAV is the true in-game sound.
 // Bundled with esbuild (iife) and injected into a headless browser page.
 import { buildMusicThemes, MusicSynth, THEME_TRIM } from '../src/game/music';
 
@@ -40,9 +37,8 @@ async function renderMusicTheme(name: string, opts: RenderOpts = {}): Promise<Re
   const seconds = lead + loops * loopSeconds + tail;
   const ctx = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
 
-  // The authoring chain (formerly MusicDirector.init()): master (0.15) ->
-  // compressor -> destination, plus the generated 2.6s hall impulse on a
-  // 0.55 send.
+  // Mirror MusicDirector.init(): master (0.15) -> compressor -> destination,
+  // plus the generated 2.6s hall impulse on a 0.55 send.
   const master = ctx.createGain();
   master.gain.value = 0.15;
   const compressor = ctx.createDynamicsCompressor();
