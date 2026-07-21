@@ -9,8 +9,8 @@
 // Guard are the maintainer's original pre-v02 design (the shout roar + ground
 // shockwave is a built-in feature), so it keeps its castFx/attackByAbility.
 import { describe, expect, it } from 'vitest';
-import { ABILITIES } from '../src/sim/data';
 import { VISUALS } from '../src/render/characters/manifest';
+import { ABILITIES } from '../src/sim/data';
 
 // every v02 class except the warrior (whose flourishes are intentional)
 const CLEANED = [
