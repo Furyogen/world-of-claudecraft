@@ -17,9 +17,12 @@ import {
   RIFT_EPIC_MOUNT_REINS,
 } from '../src/sim/rift/progression';
 import {
+  capRiftNonLethalMechanicDamage,
   RIFT_HEROIC_MIN_MOVE_SPEED,
   RIFT_HEROIC_TUNING,
+  RIFT_NONLETHAL_MECHANIC_CAP_PCT,
   RIFT_RANK_MECHANIC_BUDGET,
+  RIFT_S_ZONE_TEMPO,
   riftFloorLevel,
   riftMechanicSuppressed,
   riftRankForBaseLevel,
@@ -348,6 +351,146 @@ describe('rift ranks: lethal boss death zone (deathZoneCast / deathZoneStrike)',
     expect(inst.bossDeathZones, 'zones cleared between floors').toHaveLength(0);
   });
 
+  it('heroic_s tempo: S death zones cast faster and recycle sooner; A keeps the base tempo', () => {
+    const seed = seedWithFinalBoss('rift_boss_frost');
+    const def = MOBS.rift_boss_frost.deathZoneCast!;
+    const fire = (baseLevel: number) => {
+      const sim = enterAtBossFloor(seed, baseLevel);
+      const inst = active(sim);
+      const boss = sim.entities.get(inst.bossId!)!;
+      // Aggro warm-up: mechanics only tick in the chase/attack AI states, and
+      // the player must SURVIVE it (heroic_s hits one-shot a naked level-20; a
+      // dead player drops combat and resets the boss). The boss floor's trash
+      // is culled and a big absorb shield soaks the warm-up swings.
+      killTrash(sim);
+      sim.player.auras.push({
+        id: 'test_absorb',
+        name: 'Test Absorb',
+        kind: 'absorb',
+        remaining: 999,
+        duration: 999,
+        value: 100_000_000,
+        sourceId: sim.player.id,
+        school: 'physical',
+      } as Entity['auras'][number]);
+      boss.deathZoneCastTimer = 999;
+      boss.deathZoneStrikeTimer = 999;
+      sim.player.pos = { ...boss.pos, z: boss.pos.z - 3 };
+      sim.player.prevPos = { ...sim.player.pos };
+      tickAlive(sim, 5);
+      // Fire tick from outside melee reach so nothing else lands this tick.
+      sim.player.pos = { ...boss.pos, z: boss.pos.z - 6 };
+      sim.player.prevPos = { ...sim.player.pos };
+      sim.player.hp = sim.player.maxHp;
+      boss.deathZoneCastTimer = 0.01;
+      inst.bossDeathZones = [];
+      sim.tick();
+      return { sim, inst, boss };
+    };
+    const s = fire(28);
+    expect(s.boss.castTotal, 'S cast bar runs at tempo').toBeCloseTo(
+      def.castTime * RIFT_S_ZONE_TEMPO,
+      5,
+    );
+    expect(s.inst.bossDeathZones, 'S zone placed').toHaveLength(1);
+    // The zone ticks down once within the fire tick, hence the elapsed DT.
+    expect(s.inst.bossDeathZones[0].remaining, 'S fuse matches the tempo cast').toBeCloseTo(
+      def.castTime * RIFT_S_ZONE_TEMPO - 1 / 20,
+      5,
+    );
+    expect(s.boss.deathZoneCastTimer, 'S cadence recycles sooner').toBeCloseTo(
+      (def.every + def.castTime) * RIFT_S_ZONE_TEMPO,
+      5,
+    );
+    const a = fire(25);
+    expect(a.boss.castTotal, 'A cast bar unchanged').toBeCloseTo(def.castTime, 5);
+    expect(a.inst.bossDeathZones[0].remaining, 'A fuse unchanged').toBeCloseTo(
+      def.castTime - 1 / 20,
+      5,
+    );
+    expect(a.boss.deathZoneCastTimer, 'A cadence unchanged').toBeCloseTo(
+      def.every + def.castTime,
+      5,
+    );
+  });
+
+  it('heroic_s barrage: at S deathZoneStrike drops a zone under EVERY living member', () => {
+    const seed = seedWithFinalBoss('rift_boss_frost');
+    const sim = makeSim(seed);
+    sim.player.level = 20;
+    const pid2 = sim.addPlayer('warrior', 'P2', { autoEquip: true });
+    const p2 = sim.entities.get(pid2)!;
+    p2.level = 20;
+    sim.partyInvite(pid2, sim.player.id);
+    sim.partyAccept(pid2);
+    sim.enterRift(seed, 28, sim.player.id);
+    sim.enterRift(seed, 28, pid2);
+    const inst = active(sim);
+    // Drive the party to the boss floor (the enterAtBossFloor loop, keeping
+    // both members alive through hazards and trash).
+    p2.gm = true;
+    for (let guard = 0; guard < 10 && inst.floorIndex < inst.floorCount - 1; guard++) {
+      killTrash(sim);
+      inst.litPylons = new Set(inst.pylonIds);
+      inst.puzzleSolved = true;
+      for (let i = 0; i < 21; i++) {
+        sim.player.hp = sim.player.maxHp;
+        p2.hp = p2.maxHp;
+        sim.tick();
+      }
+      if (inst.descentId === null) break;
+      const desc = sim.entities.get(inst.descentId)!;
+      sim.player.pos = { ...desc.pos };
+      p2.pos = { ...desc.pos };
+      sim.player.hp = sim.player.maxHp;
+      p2.hp = p2.maxHp;
+      sim.tick();
+    }
+    expect(inst.floorIndex).toBe(inst.floorCount - 1);
+    const boss = sim.entities.get(inst.bossId!)!;
+    // Aggro warm-up in melee reach (mechanics tick in chase/attack only); both
+    // members must survive it (heroic_s hits one-shot a naked 20), so the boss
+    // floor's trash is culled and both get big absorb shields.
+    killTrash(sim);
+    p2.gm = false;
+    const shield = (e: Entity) =>
+      e.auras.push({
+        id: 'test_absorb',
+        name: 'Test Absorb',
+        kind: 'absorb',
+        remaining: 999,
+        duration: 999,
+        value: 100_000_000,
+        sourceId: e.id,
+        school: 'physical',
+      } as Entity['auras'][number]);
+    shield(sim.player);
+    shield(p2);
+    boss.deathZoneCastTimer = 999;
+    boss.deathZoneStrikeTimer = 999;
+    sim.player.pos = { ...boss.pos, z: boss.pos.z - 3 };
+    sim.player.prevPos = { ...sim.player.pos };
+    for (let i = 0; i < 5; i++) {
+      sim.player.hp = sim.player.maxHp;
+      p2.hp = p2.maxHp;
+      sim.tick();
+    }
+    // ...then spread the two members outside melee so the barrage anchors are
+    // distinguishable and nothing else lands on the fire tick.
+    sim.player.pos = { ...boss.pos, z: boss.pos.z - 6 };
+    sim.player.prevPos = { ...sim.player.pos };
+    p2.pos = { ...boss.pos, x: boss.pos.x + 6 };
+    p2.prevPos = { ...p2.pos };
+    sim.player.hp = sim.player.maxHp;
+    p2.hp = p2.maxHp;
+    boss.deathZoneStrikeTimer = 0.01;
+    inst.bossDeathZones = [];
+    sim.tick();
+    expect(inst.bossDeathZones, 'one zone per living member at S').toHaveLength(2);
+    const anchors = inst.bossDeathZones.map((z) => `${Math.round(z.x)}:${Math.round(z.z)}`);
+    expect(new Set(anchors).size, 'zones land on distinct member positions').toBe(2);
+  });
+
   it('the heroic tuning table carries the approved literals', () => {
     // The transform tests above assert WIRING against this table (field on the
     // mob === field in the table), so the numbers themselves must be pinned
@@ -365,10 +508,13 @@ describe('rift ranks: lethal boss death zone (deathZoneCast / deathZoneStrike)',
         addDamageMultiplier: 1.25,
         armorMultiplier: 1.25,
       },
+      // heroic_s: S is a full difficulty tier above the B/A heroic ladder,
+      // double the old S hp and damage (playtest verdict 2026-07-21: a 5-man
+      // of capped players cleared S without pressure).
       S: {
-        healthMultiplier: 2.5,
-        damageMultiplier: 2,
-        addDamageMultiplier: 1.5,
+        healthMultiplier: 5.0,
+        damageMultiplier: 4.0,
+        addDamageMultiplier: 3.0,
         armorMultiplier: 1.4,
       },
     });
@@ -401,6 +547,61 @@ describe('rift ranks: lethal boss death zone (deathZoneCast / deathZoneStrike)',
       const swing = t.dmgBase * 1.12 + t.dmgPerLevel * 1.12 * (add.level - 1);
       expect(add.weapon.min, 'add swings at the softer multiplier').toBe(Math.round(swing * 0.8));
     }
+  });
+});
+
+describe('rift ranks: non-lethal mechanic damage cap (heroic_s safety rule)', () => {
+  it('caps a raw hit below max HP, never below 1', () => {
+    expect(capRiftNonLethalMechanicDamage(1_000_000, 1000)).toBe(900);
+    expect(capRiftNonLethalMechanicDamage(500, 1000)).toBe(500);
+    expect(capRiftNonLethalMechanicDamage(5, 1)).toBe(1);
+  });
+
+  it('a rift boss aoePulse never one-shots a full-health player, even absurdly multiplied', () => {
+    const seed = seedWithFinalBoss('rift_boss_frost');
+    const sim = enterAtBossFloor(seed, 28);
+    const inst = active(sim);
+    const boss = sim.entities.get(inst.bossId!)!;
+    const pulse = MOBS.rift_boss_frost.aoePulse!;
+    sim.player.gm = false;
+    // Aggro warm-up within melee reach (mechanics tick in chase/attack only);
+    // the boss floor's trash is culled and an absorb shield (consumed BEFORE
+    // hp, so the cap assertion below still reads raw amounts) soaks the
+    // warm-up swings. The shield is stripped again before the fire tick.
+    killTrash(sim);
+    sim.player.auras.push({
+      id: 'test_absorb',
+      name: 'Test Absorb',
+      kind: 'absorb',
+      remaining: 999,
+      duration: 999,
+      value: 100_000_000,
+      sourceId: sim.player.id,
+      school: 'physical',
+    } as Entity['auras'][number]);
+    sim.player.pos = { ...boss.pos, z: boss.pos.z - 3 };
+    sim.player.prevPos = { ...sim.player.pos };
+    boss.pulseTimer = 999;
+    boss.deathZoneCastTimer = 999;
+    boss.deathZoneStrikeTimer = 999;
+    tickAlive(sim, 5);
+    // Strip the shield so the pulse's damage event reports the applied amount.
+    sim.player.auras = sim.player.auras.filter((a) => a.id !== 'test_absorb');
+    // ...then step outside melee but inside the pulse radius for the fire tick,
+    // so the only damage this tick is the pulse itself.
+    sim.player.pos = { ...boss.pos, z: boss.pos.z - Math.min(6, pulse.radius - 1) };
+    sim.player.prevPos = { ...sim.player.pos };
+    sim.player.hp = sim.player.maxHp;
+    boss.mechanicDamageMult = 10_000_000; // force the raw roll far beyond max HP
+    boss.pulseTimer = 0.01;
+    const events = sim.tick();
+    const hit = events.find(
+      (ev) => ev.type === 'damage' && ev.ability === pulse.name && ev.targetId === sim.player.id,
+    ) as { amount: number } | undefined;
+    expect(hit, 'the pulse landed').toBeTruthy();
+    const cap = Math.floor(sim.player.maxHp * RIFT_NONLETHAL_MECHANIC_CAP_PCT);
+    expect(hit!.amount, 'the cap engaged exactly').toBe(cap);
+    expect(sim.player.dead, 'full-health player survives the raw mechanic').toBe(false);
   });
 });
 

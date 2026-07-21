@@ -33,7 +33,12 @@ import { DUNGEON_X_THRESHOLD, MOBS } from '../data';
 import * as deedsMod from '../deeds';
 import { resetDrownedLitanyBossEncounter } from '../delves/drowned_litany_boss';
 import { PLAYER_BODY_RADIUS, PLAYER_SWIM_DEPTH } from '../pathfind';
-import { riftMechanicSuppressed } from '../rift/ranks';
+import {
+  capRiftNonLethalMechanicDamage,
+  RIFT_S_ZONE_TEMPO,
+  riftMechanicSuppressed,
+  riftRankForBaseLevel,
+} from '../rift/ranks';
 import { instancePlayerIds } from '../rift/runs';
 import type { SimContext } from '../sim_context';
 import { clearThreat, stealthDetectionRadius } from '../threat';
@@ -442,6 +447,15 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   }
 }
 
+/** True when the mob belongs to a live rift instance (kit bosses AND their
+ * summoned adds). Only consulted on mechanic-fire ticks, never per tick. */
+function mobInRiftInstance(ctx: SimContext, mob: Entity): boolean {
+  for (const ri of ctx.riftInstances) {
+    if (ri.partyKey !== null && ri.mobIds.includes(mob.id)) return true;
+  }
+  return false;
+}
+
 function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
   // Every driver below consults riftMechanicSuppressed: a rift boss spawned at
   // a low rank runs only the head of its template's rankMechanics list (C=1 ..
@@ -465,9 +479,10 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= pulse.radius) {
           // Heroic scaling multiplies AFTER the draw so the rng stream is
           // identical across difficulties (mechanicDamageMult, difficulty.ts).
-          const dmg = Math.round(
-            ctx.rng.range(pulse.min, pulse.max) * (mob.mechanicDamageMult ?? 1),
-          );
+          let dmg = Math.round(ctx.rng.range(pulse.min, pulse.max) * (mob.mechanicDamageMult ?? 1));
+          // Rift rule: raw un-telegraphed damage never one-shots from full HP
+          // (the heroic_s x4 multiplier would otherwise cross that line).
+          if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
           ctx.dealDamage(mob, pe, dmg, false, school, pulse.name, 'hit', true);
         }
       }
@@ -494,9 +509,8 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         const pe = ctx.entities.get(meta.entityId);
         if (!pe || pe.dead || dist2d(pe.pos, mob.pos) > stomp.radius) continue;
         if (stomp.min !== undefined && stomp.max !== undefined) {
-          const dmg = Math.round(
-            ctx.rng.range(stomp.min, stomp.max) * (mob.mechanicDamageMult ?? 1),
-          );
+          let dmg = Math.round(ctx.rng.range(stomp.min, stomp.max) * (mob.mechanicDamageMult ?? 1));
+          if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
           ctx.dealDamage(mob, pe, dmg, false, school, stomp.name, 'hit', true);
         }
         if (pe.dead) continue; // a fatal slam should not also stun the corpse
@@ -538,9 +552,10 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         for (const meta of ctx.players.values()) {
           const pe = ctx.entities.get(meta.entityId);
           if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= bigCast.radius) {
-            const dmg = Math.round(
+            let dmg = Math.round(
               ctx.rng.range(bigCast.min, bigCast.max) * (mob.mechanicDamageMult ?? 1),
             );
+            if (mobInRiftInstance(ctx, mob)) dmg = capRiftNonLethalMechanicDamage(dmg, pe.maxHp);
             ctx.dealDamage(mob, pe, dmg, false, school, bigCast.name, 'hit', true);
           }
         }
@@ -602,6 +617,14 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
           (ri) => ri.partyKey !== null && ri.mobIds.includes(mob.id),
         );
         if (!inst) return; // no live instance for this boss - do not cast
+        // heroic_s tempo: at S the zones cast faster AND recycle sooner, and
+        // deathZoneStrike becomes a barrage (a zone under every living member).
+        // Applied AFTER the rng target draw so the draw count and order stay
+        // identical across ranks (the difficulty.ts multiplier precedent).
+        const heroicS = riftRankForBaseLevel(inst.baseLevel) === 'S';
+        const tempo = heroicS ? RIFT_S_ZONE_TEMPO : 1;
+        const fuse = def.castTime * tempo;
+        if (heroicS) mob[timerKey] = (def.every + def.castTime) * tempo;
         const instPids = instancePlayerIds(ctx, inst).filter((pid) => {
           const e = ctx.entities.get(pid);
           return e && !e.dead;
@@ -610,26 +633,34 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         const targetPid = instPids[ctx.rng.int(0, instPids.length - 1)];
         const targetE = ctx.entities.get(targetPid);
         if (!targetE || targetE.dead) return;
-        // Place zone at the picked player's current position.
-        inst.bossDeathZones.push({
-          x: targetE.pos.x,
-          z: targetE.pos.z,
-          radius: def.radius,
-          remaining: def.castTime,
-        });
-        // Notify online clients so they can mirror the zone countdown locally.
-        // Interest-scoped by world position, so only instance players receive it.
-        ctx.emit({
-          type: 'riftDeathZoneSpawn',
-          x: targetE.pos.x,
-          z: targetE.pos.z,
-          radius: def.radius,
-          durationSecs: def.castTime,
-        });
+        // Zone anchors: the picked player, or at S for deathZoneStrike, EVERY
+        // living member (the barrage forces the whole party to keep moving).
+        // The anchor list is iterated in instancePlayerIds order and draws no
+        // further rng, so the stream stays deterministic.
+        const anchorPids = heroicS && tmplKey === 'deathZoneStrike' ? instPids : [targetPid];
+        for (const anchorPid of anchorPids) {
+          const anchorE = ctx.entities.get(anchorPid);
+          if (!anchorE || anchorE.dead) continue;
+          inst.bossDeathZones.push({
+            x: anchorE.pos.x,
+            z: anchorE.pos.z,
+            radius: def.radius,
+            remaining: fuse,
+          });
+          // Notify online clients so they can mirror the zone countdown locally.
+          // Interest-scoped by world position, so only instance players receive it.
+          ctx.emit({
+            type: 'riftDeathZoneSpawn',
+            x: anchorE.pos.x,
+            z: anchorE.pos.z,
+            radius: def.radius,
+            durationSecs: fuse,
+          });
+        }
         // Begin casting - cast bar is the visual telegraph for players to move.
         mob.castingAbility = def.castId;
-        mob.castTotal = def.castTime;
-        mob.castRemaining = def.castTime;
+        mob.castTotal = fuse;
+        mob.castRemaining = fuse;
         mob.castTargetId = targetPid;
         mob.channeling = false;
         if (def.yell) emitMobYell(ctx, mob, def.yell);

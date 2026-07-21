@@ -118,13 +118,38 @@ export const RIFT_HEROIC_TUNING: Partial<Record<RiftTier, RiftHeroicTuning>> = {
     addDamageMultiplier: 1.25,
     armorMultiplier: 1.25,
   },
+  // "heroic_s": S-rank is a full difficulty tier of its own, double the old S
+  // hp and damage (the 2026-07-21 playtest: a 5-man of capped players cleared
+  // S without pressure). Mobs and the boss hit through damageMultiplier x4
+  // (autos via the template transform, mechanics via mechanicDamageMult);
+  // non-lethal mechanics stay survivable from full HP through
+  // capRiftNonLethalMechanicDamage, and the lethal pressure comes from the
+  // telegraphed death zones, the boulder, and S lava instead.
   S: {
-    healthMultiplier: 2.5,
-    damageMultiplier: 2.0,
-    addDamageMultiplier: 1.5,
+    healthMultiplier: 5.0,
+    damageMultiplier: 4.0,
+    addDamageMultiplier: 3.0,
     armorMultiplier: 1.4,
   },
 };
+
+/** heroic_s death-zone tempo: at S rank the lethal telegraphed zones cast (and
+ * therefore detonate) this much faster AND recycle this much sooner, so the
+ * boss fight stays in constant motion ("make the red circle faster", playtest
+ * 2026-07-21). A radius-9 zone at 0.7 tempo still leaves ~1.8s+ to step out at
+ * player run speed 7, so every zone remains fully dodgeable from its centre. */
+export const RIFT_S_ZONE_TEMPO = 0.7;
+
+/** Non-dodgeable rift mechanic damage (aoePulse, stomp, bigCast: raw numbers
+ * with no ground telegraph to step out of) may be VERY threatening but never a
+ * one-shot from full health: a single hit is capped below the target's max HP.
+ * Dodgeable mechanics (death zones, the boulder, S lava) stay guaranteed kills
+ * by design; this cap deliberately does not apply to them. */
+export const RIFT_NONLETHAL_MECHANIC_CAP_PCT = 0.9;
+
+export function capRiftNonLethalMechanicDamage(dmg: number, targetMaxHp: number): number {
+  return Math.min(dmg, Math.max(1, Math.floor(targetMaxHp * RIFT_NONLETHAL_MECHANIC_CAP_PCT)));
+}
 
 /** The heroic rift tuning for a descriptor baseLevel, or null (C only). */
 export function riftHeroicTuningFor(baseLevel: number): RiftHeroicTuning | null {
