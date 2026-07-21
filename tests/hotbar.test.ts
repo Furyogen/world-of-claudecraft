@@ -17,6 +17,7 @@ import {
   parseHotbarActions,
   parseStoredHotbarAction,
   placeAbilityOnSlot,
+  placeAttackOnSlot,
   placeItemOnSlot,
   resolveMobileHotbarDrop,
   saveAttackSlotAction,
@@ -234,15 +235,19 @@ describe('hotbar action placement', () => {
     expect(slots).toHaveLength(barSlots);
     // ice_barrier is an overflow spell learned beyond the initial bar slots.
     expect(mageAbilities.indexOf('ice_barrier')).toBeGreaterThanOrEqual(barSlots);
-    expect(slots.some((action) => action.id === 'ice_barrier')).toBe(false);
+    expect(slots.some((action) => action?.type === 'ability' && action.id === 'ice_barrier')).toBe(
+      false,
+    );
 
     const next = placeAbilityOnSlot(slots, 'ice_barrier', targetIndex);
-    const occupied = next.filter((action) => action !== null);
+    const occupied = next.flatMap((action) => (action === null ? [] : [action]));
 
     expect(next[targetIndex]).toEqual({ type: 'ability', id: 'ice_barrier' });
     expect(next).not.toContain(displacedAbility);
     expect(occupied).toHaveLength(barSlots);
-    expect(new Set(occupied.map((action) => action!.id)).size).toBe(occupied.length);
+    expect(
+      new Set(occupied.map((action) => (action.type === 'attack' ? 'attack' : action.id))).size,
+    ).toBe(occupied.length);
     expect(slots).toEqual(mageAbilities.slice(0, barSlots).map((id) => ({ type: 'ability', id })));
   });
 });
@@ -635,6 +640,30 @@ describe('desktop attack slot behavior', () => {
     });
     saveAttackSlotAction(store, key, null);
     expect(store.getItem(key)).toBeNull();
+  });
+
+  it('round-trips Attack as an assignable persisted action', () => {
+    const store = storage();
+    const key = attackSlotStorageKey('woc_hotbar_warrior_Thorgar');
+
+    saveAttackSlotAction(store, key, { type: 'attack' });
+
+    expect(loadAttackSlotAction(store, key, abilityExists, itemExists)).toEqual({
+      type: 'attack',
+    });
+    expect(parseHotbarActions([{ type: 'attack' }], 1, abilityExists, itemExists)).toEqual([
+      { type: 'attack' },
+    ]);
+  });
+
+  it('places Attack on a target slot without duplicating it', () => {
+    const actions = [{ type: 'attack' as const }, { type: 'ability' as const, id: 'fireball' }];
+
+    expect(placeAttackOnSlot(actions, 1)).toEqual([
+      { type: 'ability', id: 'fireball' },
+      { type: 'attack' },
+    ]);
+    expect(placeAttackOnSlot([null, null], 1)).toEqual([null, { type: 'attack' }]);
   });
 
   it('rejects malformed and stale persisted actions', () => {

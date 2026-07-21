@@ -260,6 +260,7 @@ import {
   loadoutKnownAbilityIds,
   parseHotbarAction,
   placeAbilityOnSlot,
+  placeAttackOnSlot,
   placeItemOnSlot,
   resolveMobileHotbarDrop,
   swapHotbarSlots,
@@ -3945,10 +3946,12 @@ export class Hud {
     abilityIdByBarSlot: () =>
       this.hotbarActions.map((a) => (a && a.type === 'ability' ? a.id : null)),
     hasFreeSlot: () => this.actionBarController.hasFreeSlot(),
-    attackOnBar: () => this.attackSlotIsAttack(),
-    // Routes through the Interface showAttackButton setting, the same state the
-    // options window and the slot-0 right-click drive, so all three stay one.
-    setAttackOnBar: (on) => this.optionsHooks?.settings.set('showAttackButton', on),
+    attackOnBar: () =>
+      this.attackSlotIsAttack() ||
+      this.attackSlotAction?.type === 'attack' ||
+      this.hasAttackOnHotbar(),
+    addAttackToBar: () => this.addAttackToHotbar(),
+    removeAttackFromBar: () => this.removeAttackFromHotbar(),
     addToBar: (id) => this.addAbilityToHotbar(id),
     removeFromBar: (id) => this.removeAbilityFromHotbar(id),
     hasFormBars: () => this.classHasFormBars(),
@@ -4963,6 +4966,34 @@ export class Hud {
     return this.actionBarController.removeAbility(abilityId);
   }
 
+  private hasAttackOnHotbar(): boolean {
+    return this.actionBarController.hasAttackAction();
+  }
+
+  private addAttackToHotbar(): boolean {
+    if (this.attackSlotIsAttack() || this.attackSlotAction?.type === 'attack') return false;
+    if (this.attackSlotAction === null) {
+      this.attackSlotAction = { type: 'attack' };
+      this.saveAttackSlotAction();
+      return true;
+    }
+    return this.actionBarController.addAttack();
+  }
+
+  private removeAttackFromHotbar(): boolean {
+    if (this.attackSlotAction?.type === 'attack') {
+      this.attackSlotAction = null;
+      this.saveAttackSlotAction();
+      return true;
+    }
+    if (this.actionBarController.removeAttack()) return true;
+    if (this.attackSlotIsAttack()) {
+      this.optionsHooks?.settings.set('showAttackButton', false);
+      return true;
+    }
+    return false;
+  }
+
   private resetActiveFormBarToDefault(): void {
     this.actionBarController.resetActiveBar();
     this.spellbookWindow.refreshHotbarControls();
@@ -4982,6 +5013,10 @@ export class Hud {
 
   private attackSlotIsAttack(): boolean {
     return this.actionBarController.isAttackSlotFixed();
+  }
+
+  private slotRendersAttack(barSlot: number): boolean {
+    return this.actionBarController.slotRendersAttack(barSlot);
   }
 
   private saveAttackSlotAction(): void {
@@ -5287,6 +5322,10 @@ export class Hud {
       return;
     }
     const action = this.actionForSlot(barSlot);
+    if (action?.type === 'attack') {
+      this.activateFixedAttackSlot();
+      return;
+    }
     if (action?.type === 'ability') {
       // cast by ability id: the server validates against its own known list,
       // so the client-side slot remap never desyncs slot semantics
@@ -5405,7 +5444,7 @@ export class Hud {
   private writeDraggedAction(dt: DataTransfer | null, action: Exclude<HotbarAction, null>): void {
     if (!dt) return;
     dt.setData(HOTBAR_ACTION_MIME, encodeHotbarAction(action));
-    dt.setData('text/plain', action.id);
+    dt.setData('text/plain', action.type === 'attack' ? 'attack' : action.id);
   }
 
   private readDraggedAction(dt: DataTransfer | null): Exclude<HotbarAction, null> | null {
@@ -5480,8 +5519,12 @@ export class Hud {
         e.stopPropagation();
       });
       this.attachTooltip(btn, () => {
-        if (slot === 0 && this.attackSlotIsAttack()) {
-          return `<div class="tt-title">${esc(t('abilityUi.actionBar.attackName'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackTooltip'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackRemoveHint'))}</div>`;
+        if (this.slotRendersAttack(slot)) {
+          const clearHint =
+            slot === 0 && this.attackSlotIsAttack()
+              ? t('abilityUi.actionBar.attackRemoveHint')
+              : t('abilityUi.actionBar.clearHint');
+          return `<div class="tt-title">${esc(t('abilityUi.actionBar.attackName'))}</div><div class="tt-sub">${esc(t('abilityUi.actionBar.attackTooltip'))}</div><div class="tt-sub">${esc(clearHint)}</div>`;
         }
         const known = this.abilityForSlot(slot);
         const clearHint = `<div class="tt-sub">${esc(t('abilityUi.actionBar.clearHint'))}</div>`;
@@ -5566,7 +5609,9 @@ export class Hud {
           if (!this.actionBarController.isAssignableAction(action)) return;
           if (dragged.sourceIndex !== null)
             this.hotbarActions = swapHotbarSlots(this.hotbarActions, dragged.sourceIndex, slot - 1);
-          else if (
+          else if (action.type === 'attack') {
+            this.hotbarActions = placeAttackOnSlot(this.hotbarActions, slot - 1);
+          } else if (
             action.type === 'ability' &&
             this.sim.known.some((k) => k.def.id === action.id)
           ) {
@@ -5687,9 +5732,9 @@ export class Hud {
           const slotKey = `slot${i}`;
           return {
             slotIndex: i,
-            // Live accessor: slot 0 stops being the Attack toggle when the player
-            // removes it (Interface option showAttackButton off / right-click).
-            isAttack: () => i === 0 && this.attackSlotIsAttack(),
+            // Live accessor: slot 0 may be the fixed Attack toggle, and any slot
+            // can render an assigned Attack action from the spellbook.
+            isAttack: () => this.slotRendersAttack(i),
             // Raw binding presence (any assigned slot, even one whose ability is
             // unlearned or item id is unknown): the many-spells count source, kept
             // byte-identical to the former hotbarActions.filter(a => a !== null).
@@ -5841,7 +5886,8 @@ export class Hud {
           },
           ...Array.from({ length: 5 }, (_, i) => ({
             slotIndex: i + 1,
-            isAttack: () => false,
+            isAttack: () =>
+              this.slotRendersAttack(sourceSlotForMobileButton(this.mobileActionPage, i)),
             hasAction: () =>
               this.actionForSlot(sourceSlotForMobileButton(this.mobileActionPage, i)) !== null,
             ability: () => this.abilityForSlot(sourceSlotForMobileButton(this.mobileActionPage, i)),

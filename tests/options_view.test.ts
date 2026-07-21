@@ -302,9 +302,9 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'showSecondaryActionBar',
       'showThirdActionBar',
       'showTargetOfTarget',
-      'showAttackButton',
       'showDailyRewardsChest',
     ]);
+    expect(controls.filter((c) => 'key' in c && c.key === 'showAttackButton')).toHaveLength(1);
     expect(find(controls, 'partyFrameStyle')).toMatchObject({
       control: 'choice',
       options: [

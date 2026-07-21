@@ -150,6 +150,17 @@ export class ActionBarController {
     return true;
   }
 
+  addAttack(): boolean {
+    if (this.actionState.some((action) => action?.type === 'attack')) return false;
+    const target = this.actionState.indexOf(null);
+    if (target === -1) return false;
+    const next = this.actionState.slice();
+    next[target] = { type: 'attack' };
+    this.actionState = next;
+    this.saveActions();
+    return true;
+  }
+
   hasFreeSlot(): boolean {
     return this.actionState.includes(null);
   }
@@ -158,6 +169,18 @@ export class ActionBarController {
     const target = this.actionState.findIndex(
       (action) => action?.type === 'ability' && action.id === abilityId,
     );
+    if (target === -1) return false;
+    this.actionState = clearHotbarSlot(this.actionState, target);
+    this.saveActions();
+    return true;
+  }
+
+  hasAttackAction(): boolean {
+    return this.actionState.some((action) => action?.type === 'attack');
+  }
+
+  removeAttack(): boolean {
+    const target = this.actionState.findIndex((action) => action?.type === 'attack');
     if (target === -1) return false;
     this.actionState = clearHotbarSlot(this.actionState, target);
     this.saveActions();
@@ -193,6 +216,7 @@ export class ActionBarController {
   }
 
   isAssignableAction(action: Exclude<HotbarAction, null>): boolean {
+    if (action.type === 'attack') return true;
     if (action.type === 'item') return this.isHotbarItemId(action.id);
     return (
       this.deps.knownAbilityIds().includes(action.id) && this.isAbilityPlacementAllowed(action.id)
@@ -208,6 +232,11 @@ export class ActionBarController {
       return actionForAttackSlot(this.isAttackSlotFixed(), this.attackActionState);
     }
     return this.actionState[barSlot - 1] ?? null;
+  }
+
+  slotRendersAttack(barSlot: number): boolean {
+    if (barSlot === 0) return this.isAttackSlotFixed() || this.attackActionState?.type === 'attack';
+    return this.actionState[barSlot - 1]?.type === 'attack';
   }
 
   saveActions(): void {

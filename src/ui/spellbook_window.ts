@@ -27,6 +27,7 @@ import { esc } from './esc';
 import {
   encodeHotbarAction,
   HOTBAR_ACTION_MIME,
+  type HotbarAction,
   isAbilityActionBarEligible,
 } from './hud/action_bar/hotbar';
 import { formatNumber, t } from './i18n';
@@ -59,12 +60,12 @@ export interface SpellbookWindowDeps {
   abilityIdByBarSlot(): (string | null)[];
   /** The action bar has at least one empty slot. */
   hasFreeSlot(): boolean;
-  /** The Attack toggle currently occupies bar slot 0 (showAttackButton on). */
+  /** The Attack action is currently present on the bar. */
   attackOnBar(): boolean;
-  /** Restore (true) or remove (false) the Attack toggle on bar slot 0; routes
-   *  through the same Interface showAttackButton setting the options window and
-   *  the slot's right-click use, so all three controls stay one state. */
-  setAttackOnBar(on: boolean): void;
+  /** Place the basic Attack action on the first free assignable slot. */
+  addAttackToBar(): boolean;
+  /** Remove an assigned Attack action, or hide the fixed Attack slot if present. */
+  removeAttackFromBar(): boolean;
   /** Place an ability on the first free slot; returns whether it changed. */
   addToBar(abilityId: string): boolean;
   /** Remove an ability from the bar; returns whether it changed. */
@@ -73,7 +74,7 @@ export interface SpellbookWindowDeps {
   hasFormBars(): boolean;
   /** Reset the active form bar to its default kit. */
   resetFormBar(): void;
-  setDragAction(action: { type: 'ability'; id: string } | null): void;
+  setDragAction(action: Exclude<HotbarAction, null> | null): void;
   clearActionDropTargets(): void;
 }
 
@@ -224,9 +225,9 @@ export class SpellbookWindow {
   // keybind use) without a full rebuild. Mirrors the inline refreshSpellbookHotbar
   // controls but scoped to this window's root.
   refreshHotbarControls(): void {
-    // The Attack toggle tracks the Interface showAttackButton setting, which can
-    // flip while the window is open (the options window, or a right-click on the
-    // slot-0 button itself). Same elision discipline as the ability toggles:
+    // The Attack toggle tracks whether Attack is available on the bar, either as
+    // the fixed slot-0 button or as an assigned action. Same elision discipline as
+    // the ability toggles:
     // rewrite only when the on-bar state actually flips.
     const attackBtn = this.deps.root().querySelector<HTMLButtonElement>('[data-attack-toggle]');
     if (attackBtn) {
@@ -285,10 +286,8 @@ export class SpellbookWindow {
   }
 
   // The pinned basic Attack row, first in the list (classic spellbooks lead with
-  // Attack). Attack is not an ability: its +/- toggle restores or removes the
-  // fixed Attack button on bar slot 0 through the same Interface
-  // showAttackButton setting the options window drives, so a player who
-  // right-clicked the button away can always get it back from here. Reuses the
+  // Attack). Attack is not an ability, but it is an assignable hotbar action: its
+  // +/- toggle uses the same add/remove flow as normal spell rows. Reuses the
   // existing attackName/attackTooltip keys and the add/remove aria pair; no new
   // player strings.
   private appendAttackRow(list: HTMLElement, onBar: boolean): void {
@@ -319,11 +318,26 @@ export class SpellbookWindow {
     toggle.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      this.deps.setAttackOnBar(!this.deps.attackOnBar());
+      const changed = this.deps.attackOnBar()
+        ? this.deps.removeAttackFromBar()
+        : this.deps.addAttackToBar();
+      if (!changed) return;
       audio.click();
       this.refreshHotbarControls();
     });
     el.appendChild(toggle);
+    el.draggable = true;
+    el.addEventListener('dragstart', (e) => {
+      const action = { type: 'attack' as const };
+      this.deps.setDragAction(action);
+      this.writeDraggedAction(e.dataTransfer, action);
+      if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+      this.deps.hideTooltip();
+    });
+    el.addEventListener('dragend', () => {
+      this.deps.setDragAction(null);
+      this.deps.clearActionDropTargets();
+    });
     this.deps.attachTooltip(
       el,
       () =>
@@ -434,13 +448,10 @@ export class SpellbookWindow {
 
   // Reproduced from the exported hotbar encoder so cross-window drag state stays on
   // the HUD via the deps (mirrors bags_window).
-  private writeDraggedAction(
-    dt: DataTransfer | null,
-    action: { type: 'ability'; id: string },
-  ): void {
+  private writeDraggedAction(dt: DataTransfer | null, action: Exclude<HotbarAction, null>): void {
     if (!dt) return;
     dt.setData(HOTBAR_ACTION_MIME, encodeHotbarAction(action));
-    dt.setData('text/plain', action.id);
+    dt.setData('text/plain', action.type === 'attack' ? 'attack' : action.id);
   }
 
   private abilityName(def: AbilityDef): string {

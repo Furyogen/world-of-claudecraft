@@ -429,7 +429,6 @@ export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl
       disabled: !s.bool('showSecondaryActionBar'),
     }),
     boolToggle(s, 'showTargetOfTarget', 'hudChrome.options.showTargetOfTarget'),
-    boolToggle(s, 'showAttackButton', 'hudChrome.options.showAttackButton'),
     boolToggle(s, 'showDailyRewardsChest', 'hudChrome.options.showDailyRewardsChest'),
   ];
 }

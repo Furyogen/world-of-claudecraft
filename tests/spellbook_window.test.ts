@@ -78,9 +78,17 @@ describe('spellbook_window: the pinned Attack row', () => {
     expect(code).toContain("iconDataUrl('ability', 'attack')");
   });
 
-  it('routes the toggle through setAttackOnBar with aria-pressed state', () => {
-    expect(code).toContain('this.deps.setAttackOnBar(!this.deps.attackOnBar())');
+  it('routes the toggle through assignable Attack add/remove callbacks', () => {
+    expect(code).toContain('this.deps.removeAttackFromBar()');
+    expect(code).toContain('this.deps.addAttackToBar()');
     expect(code).toContain("toggle.dataset.attackToggle = '1'");
+  });
+
+  it('makes Attack draggable as a hotbar action payload', () => {
+    expect(code).toContain("const action = { type: 'attack' as const }");
+    expect(code).toContain(
+      "dt.setData('text/plain', action.type === 'attack' ? 'attack' : action.id)",
+    );
   });
 
   it('keeps the per-frame refresh syncing the Attack toggle (options can flip it)', () => {

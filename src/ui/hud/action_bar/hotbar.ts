@@ -2,7 +2,11 @@ import { computeTalentModifiers, type TalentAllocation } from '../../../sim/cont
 import { abilitiesKnownAt } from '../../../sim/data';
 import type { AbilityDef, PlayerClass } from '../../../sim/types';
 
-export type HotbarAction = { type: 'ability'; id: string } | { type: 'item'; id: string } | null;
+export type HotbarAction =
+  | { type: 'attack' }
+  | { type: 'ability'; id: string }
+  | { type: 'item'; id: string }
+  | null;
 
 export interface HotbarStorage {
   getItem(key: string): string | null;
@@ -63,6 +67,7 @@ export function parseHotbarAction(
 ): Exclude<HotbarAction, null> | null {
   if (!value || typeof value !== 'object') return null;
   const action = value as { type?: unknown; id?: unknown };
+  if (action.type === 'attack') return { type: 'attack' };
   if (typeof action.id !== 'string') return null;
   if (action.type === 'ability' && abilityExists(action.id))
     return { type: 'ability', id: action.id };
@@ -174,6 +179,22 @@ export function placeAbilityOnSlot(
   return next;
 }
 
+export function placeAttackOnSlot(
+  actions: readonly HotbarAction[],
+  targetIndex: number,
+): HotbarAction[] {
+  const next = actions.slice();
+  if (targetIndex < 0 || targetIndex >= next.length) return next;
+  const sourceIndex = next.findIndex((action) => action?.type === 'attack');
+  if (sourceIndex === targetIndex) return next;
+  if (sourceIndex !== -1) {
+    [next[sourceIndex], next[targetIndex]] = [next[targetIndex], next[sourceIndex]];
+    return next;
+  }
+  next[targetIndex] = { type: 'attack' };
+  return next;
+}
+
 export function clearHotbarSlot(
   actions: readonly HotbarAction[],
   targetIndex: number,
@@ -253,6 +274,7 @@ export function hotbarActionsEqual(
   return a.every((action, i) => {
     const other = b[i];
     if (action === null || other === null) return action === other;
+    if (action.type === 'attack' || other.type === 'attack') return action.type === other.type;
     return action.type === other.type && action.id === other.id;
   });
 }

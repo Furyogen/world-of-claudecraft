@@ -359,6 +359,26 @@ describe('ActionBarController attack slot', () => {
     expect(storage.getItem('woc_hotbar_warrior_ActionbarTester:s0')).toBeNull();
   });
 
+  it('assigns Attack into the normal layout and renders it as an Attack slot', () => {
+    const harness = makeHarness('warrior', ['strike'], bar('strike'));
+    harness.state.showAttackButton = false;
+    harness.controller.init();
+
+    expect(harness.controller.addAttack()).toBe(true);
+    expect(harness.controller.actionForSlot(1)).toEqual({ type: 'attack' });
+    expect(harness.controller.slotRendersAttack(1)).toBe(true);
+
+    harness.controller.replaceAttackAction({ type: 'attack' });
+    harness.controller.saveAttackAction();
+
+    const reloaded = makeHarness('warrior', ['strike'], bar(), harness.storage);
+    reloaded.state.showAttackButton = false;
+    reloaded.controller.init();
+
+    expect(reloaded.controller.actionForSlot(0)).toEqual({ type: 'attack' });
+    expect(reloaded.controller.slotRendersAttack(0)).toBe(true);
+  });
+
   it('reloads a druid form-scoped attack slot on shapeshift instead of leaking the caster slot', () => {
     const harness = makeHarness('druid', ['bear_form', 'cat_form', 'claw', 'mangle'], bar());
     harness.state.showAttackButton = false;

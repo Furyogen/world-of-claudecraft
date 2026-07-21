@@ -55,10 +55,10 @@ export interface SpellbookView {
   classId: PlayerClass;
   /** Drives the per-form "reset bar" button (only classes with form bars). */
   hasFormBars: boolean;
-  /** The pinned basic Attack row's toggle state: whether the Attack toggle
-   *  currently occupies action-bar slot 0 (the Interface showAttackButton
-   *  option). Attack is not an ability, so it rides the view beside `rows`
-   *  instead of forging a fake ResolvedAbility row. */
+  /** Whether the basic Attack action is currently available on the action bar,
+   *  either as the fixed slot-0 button or as an assigned hotbar action. Attack is
+   *  not an ability, so it rides the view beside `rows` instead of forging a fake
+   *  ResolvedAbility row. */
   attackOnBar: boolean;
   rows: SpellbookRow[];
   /** No rows rendered at all (the class kit was empty). */
@@ -76,7 +76,7 @@ export interface SpellbookInput {
   barAbilityIds: readonly string[];
   /** The action bar has at least one empty slot. */
   hasFreeSlot: boolean;
-  /** The Attack toggle currently occupies bar slot 0 (showAttackButton on). */
+  /** The Attack action is currently present on the bar. */
   attackOnBar: boolean;
   /** The class has per-form bars (druid), so the reset-bar button is shown. */
   hasFormBars: boolean;
