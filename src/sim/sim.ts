@@ -1200,6 +1200,17 @@ export interface AwayStatus {
 // Persistable character state (stored as JSONB server-side). The arena fields
 // are optional so characters saved before the Ashen Coliseum existed load
 // cleanly (addPlayer falls back to the unranked defaults).
+/** Head-cosmetic appearance chosen at character creation: hairstyle + beard + face
+ *  index, plus optional hair/face colour tints (undefined = the model default).
+ *  Applied via Sim.setPlayerHead; persisted in CharacterState and synced online. */
+export interface HeadAppearance {
+  hairStyle?: number;
+  beard?: boolean;
+  face?: number;
+  hairColor?: number;
+  faceColor?: number;
+}
+
 export interface CharacterState {
   // Production content migration revision. Revision 1 is the v0.26 all-class
   // Talents V2 migration; absent means a pre-v0.26 character JSONB save.
@@ -1306,6 +1317,14 @@ export interface CharacterState {
   weaponStowed?: boolean;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
+  // Cosmetic head customization (players; render-only). Chosen at character
+  // creation (offline + online) and persisted; optional so pre-cosmetic saves
+  // load as the model default. Mirrors `skin`: also synced in identity fields.
+  face?: number;
+  hairStyle?: number;
+  beard?: boolean;
+  hairColor?: number;
+  faceColor?: number;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
   pendingSkinRank?: SkinRank | null;
   pendingSkinCatalog?: SkinCatalog | null;
@@ -2160,6 +2179,15 @@ export class Sim {
       player.level = Math.max(1, Math.min(MAX_LEVEL, s.level));
       player.facing = s.facing;
       player.prevFacing = s.facing;
+      // Head cosmetics chosen at creation (offline + online). Absent on pre-cosmetic
+      // saves -> left undefined so the renderer uses the model default. Values are
+      // already clamped at their setPlayerHead write site; the renderer also
+      // range-guards the hair index.
+      player.face = s.face;
+      player.hairStyle = s.hairStyle;
+      player.beard = s.beard;
+      player.hairColor = s.hairColor;
+      player.faceColor = s.faceColor;
       meta.xp = s.xp;
       // Backfill lifetimeXp for pre-overflow saves from the level they reached
       // plus their current bar progress, so the leaderboard is meaningful for
@@ -2890,6 +2918,13 @@ export class Sim {
       ),
       skin: meta.skin,
       skinCatalog: meta.skinCatalog,
+      // Head cosmetics live on the entity (setPlayerHead); undefined fields drop
+      // out of the JSONB, so a default look persists nothing and loads as default.
+      face: e.face,
+      hairStyle: e.hairStyle,
+      beard: e.beard,
+      hairColor: e.hairColor,
+      faceColor: e.faceColor,
       pendingSkinRank: meta.pendingSkinRank,
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,
@@ -3028,10 +3063,11 @@ export class Sim {
     weaponStowMod.toggleWeaponStow(r.e);
   }
 
-  /** Cosmetic head customization (render-only, offline). hairStyle indexes the
-   *  visual's cosmetics.hair list; beard toggles the facial-hair mesh. Like skin
-   *  these ride only on the entity for the renderer to read; the sim never uses
-   *  them and they are not synced online. */
+  /** Cosmetic head customization (players; render-only). hairStyle indexes the
+   *  visual's cosmetics.hair list; beard toggles the facial-hair mesh. Set at
+   *  character creation (offline spawn + the online create endpoint's fresh Sim),
+   *  persisted by serializeCharacter and synced in identity fields, so the sim
+   *  never reads them but both hosts render them. */
   setPlayerHead(
     pid: number,
     hairStyle: number,

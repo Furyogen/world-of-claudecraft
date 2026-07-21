@@ -181,6 +181,41 @@ describe('self stat wire round-trip', () => {
     expect(client.player.hitRating).toBe(30);
   });
 
+  it('mirrors head cosmetics from a full entity record onto the decoded entity', () => {
+    const client = bareClient(1);
+    const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
+    internals.applySnapshot({
+      t: 'snap',
+      ents: [
+        {
+          id: 2,
+          k: 'player',
+          tid: 'warrior',
+          nm: 'Other',
+          lv: 20,
+          x: 0,
+          y: 0,
+          z: 0,
+          f: 0,
+          hp: 100,
+          mhp: 100,
+          // identity-field head cosmetics: fac/hs/bd/hcl/fcl
+          fac: 1,
+          hs: 3,
+          bd: 1,
+          hcl: 0x112233,
+          fcl: 0x445566,
+        },
+      ],
+    });
+    const e = client.entities.get(2);
+    expect(e?.face).toBe(1);
+    expect(e?.hairStyle).toBe(3);
+    expect(e?.beard).toBe(true);
+    expect(e?.hairColor).toBe(0x112233);
+    expect(e?.faceColor).toBe(0x445566);
+  });
+
   it('backfills WARFARE fractions when an older server sends the legacy six-field stats shape', () => {
     const client = bareClient(1);
     const internals = client as unknown as { applySnapshot(snapshot: unknown): void };

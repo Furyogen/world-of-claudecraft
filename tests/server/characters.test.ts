@@ -21,6 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   type CharactersRuntime,
   configureCharactersRuntime,
+  parseHeadAppearance,
   resetCharactersDbForTests,
   resetCharactersRuntimeForTests,
   routes,
@@ -704,7 +705,8 @@ describe('create handler', () => {
     });
     expect(res.status).toBe(200);
     expect(bodyRecord(res.body).skin).toBe(expected);
-    expect(initialCharacterState).toHaveBeenCalledWith('warrior', 'Clamped', expected);
+    // The parsed head appearance rides as the 4th arg; empty here (no head fields).
+    expect(initialCharacterState).toHaveBeenCalledWith('warrior', 'Clamped', expected, {});
   });
 });
 
@@ -1210,5 +1212,33 @@ describe('routes table', () => {
       const route = routeFor(method as Method, path);
       expect(route.meta?.requireOwned).toEqual({ kind: 'character', ownerScope: 'account' });
     }
+  });
+});
+
+describe('parseHeadAppearance', () => {
+  it('parses valid head fields verbatim', () => {
+    expect(
+      parseHeadAppearance({
+        hairStyle: 3,
+        beard: true,
+        face: 1,
+        hairColor: 0x112233,
+        faceColor: 0x445566,
+      }),
+    ).toEqual({ hairStyle: 3, beard: true, face: 1, hairColor: 0x112233, faceColor: 0x445566 });
+  });
+
+  it('clamps out-of-range indices and 24-bit colours', () => {
+    expect(parseHeadAppearance({ hairStyle: 99, face: 99, hairColor: 0x1000000 })).toEqual({
+      hairStyle: 15,
+      face: 3,
+      hairColor: 0xffffff,
+    });
+    expect(parseHeadAppearance({ hairStyle: -3 })).toEqual({ hairStyle: 0 });
+  });
+
+  it('drops wrong-typed and absent fields (falls back to the model default)', () => {
+    expect(parseHeadAppearance({ hairStyle: 'x', beard: 'yes', face: null })).toEqual({});
+    expect(parseHeadAppearance({})).toEqual({});
   });
 });

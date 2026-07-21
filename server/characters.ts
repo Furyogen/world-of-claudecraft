@@ -42,7 +42,7 @@
 // takes no req/res and is the one authority; the client never decides ownership.
 
 import type * as http from 'node:http';
-import type { CharacterState } from '../src/sim/sim';
+import type { CharacterState, HeadAppearance } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
 import { characterSheet, SHEET_RECENT_DEEDS, type SheetRank } from './character_sheet';
@@ -135,6 +135,27 @@ const VALID_CLASSES: readonly string[] = [
 ];
 /** Highest selectable skin index (mirrors the legacy Math.min(7, ...) clamp). */
 const MAX_SKIN = 7;
+// Loose upper bounds for the head-cosmetic indices; the renderer range-guards the
+// hair list and face set, so these only cap absurd stored values (anti-abuse).
+const MAX_HAIR = 15;
+const MAX_FACE = 3;
+
+/** Validate the optional head-cosmetic appearance from a create body: type-check
+ *  each field, floor + clamp the indices, and clamp the colour tints to 24-bit.
+ *  Omitted/invalid fields drop out so the character falls back to the default. */
+export function parseHeadAppearance(body: Record<string, unknown>): HeadAppearance {
+  const head: HeadAppearance = {};
+  if (typeof body.hairStyle === 'number' && Number.isFinite(body.hairStyle))
+    head.hairStyle = Math.max(0, Math.min(MAX_HAIR, Math.floor(body.hairStyle)));
+  if (typeof body.beard === 'boolean') head.beard = body.beard;
+  if (typeof body.face === 'number' && Number.isFinite(body.face))
+    head.face = Math.max(0, Math.min(MAX_FACE, Math.floor(body.face)));
+  if (typeof body.hairColor === 'number' && Number.isFinite(body.hairColor))
+    head.hairColor = Math.max(0, Math.min(0xffffff, Math.floor(body.hairColor)));
+  if (typeof body.faceColor === 'number' && Number.isFinite(body.faceColor))
+    head.faceColor = Math.max(0, Math.min(0xffffff, Math.floor(body.faceColor)));
+  return head;
+}
 const BEARER_PATTERN = /^Bearer ([a-f0-9]{64})$/;
 
 // ---------------------------------------------------------------------------
@@ -158,7 +179,12 @@ export interface CharactersRuntime {
   /** game.saveMail: persist the Ravenpost mail book after a rekey. */
   saveMail(): Promise<void>;
   /** main.ts initialCharacterState: the serialized fresh-character state for create. */
-  initialCharacterState(cls: PlayerClass, name: string, skin: number): CharacterState;
+  initialCharacterState(
+    cls: PlayerClass,
+    name: string,
+    skin: number,
+    head?: HeadAppearance,
+  ): CharacterState;
   /** main.ts publicOrigin: canonical share origin for the owner-sheet URLs. */
   publicOrigin(req: http.IncomingMessage): string;
 }
@@ -375,13 +401,14 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
     0,
     Math.min(MAX_SKIN, Math.floor(typeof body.skin === 'number' ? body.skin : 0)),
   );
+  const head = parseHeadAppearance(body);
   const create = () =>
     charactersDb.createCharacterCapped(
       accountId,
       name,
       cls,
       CHARACTER_LIMIT,
-      rt.initialCharacterState(cls, name, skin),
+      rt.initialCharacterState(cls, name, skin, head),
     );
   const respondCreated = (c: CharacterRow): void => {
     gameMetricsCounters().characterCreated();
