@@ -663,6 +663,41 @@ describe('rift ranks: A/S one-shot rolling boulder', () => {
     }
     expect(a.player.dead, 'an A-rank boulder is a one-shot kill').toBe(true);
   });
+
+  it('lava burns below S and executes outright at S (environmental one-shot)', () => {
+    // A floor-0 hazard clear of every roller lane, so only the lava acts.
+    const hazardFor = (baseLevel: number) => {
+      for (let s = 1; s < 600; s++) {
+        if (isSetPieceSeed(s)) continue;
+        const floor = generateRiftFloor(s, baseLevel, 0);
+        const hz = (floor.hazards ?? []).find((h) =>
+          floor.rollers.every((rl) => Math.abs(h.x - rl.x) > rl.r + (h.rx ?? h.r) + 1),
+        );
+        if (!floor.isBoss && hz) return { seed: s, hz };
+      }
+      throw new Error('no floor-0 hazard seed found');
+    };
+    const soak = (baseLevel: number) => {
+      const { seed, hz } = hazardFor(baseLevel);
+      const sim = makeSim(seed);
+      sim.enterRift(seed, baseLevel, sim.player.id);
+      const inst = active(sim);
+      killTrash(sim);
+      const origin = riftInstanceOrigin(inst.slot, inst.floorIndex);
+      sim.player.hp = sim.player.maxHp;
+      for (let i = 0; i < 20 * 4 && !sim.player.dead; i++) {
+        sim.player.pos = { x: origin.x + hz.x, y: 0, z: origin.z + hz.z };
+        sim.player.prevPos = { ...sim.player.pos };
+        sim.tick();
+      }
+      return sim;
+    };
+    const a = soak(25);
+    expect(a.player.dead, 'A lava is a burn, not an execute').toBe(false);
+    expect(a.player.hp, 'A lava burns').toBeLessThan(a.player.maxHp);
+    const s = soak(28);
+    expect(s.player.dead, 'S lava executes outright').toBe(true);
+  });
 });
 
 describe('rift loot: every rift creature pays out', () => {

@@ -1296,7 +1296,13 @@ function tickRiftHazards(
     const lz = p.pos.z - origin.z;
     const tier = riftHazardTierAt(hazards, lx, lz);
     if (!tier) continue;
-    const dmg = Math.max(1, Math.round(p.maxHp * 0.06 * (tier === 'deep' ? 2 : 1)));
+    // heroic_s: at S rank every environmental hazard is a one-shot (playtest
+    // verdict 2026-07-21), the boulder pattern: flat hp + maxHp, no modifier.
+    // Below S lava stays the 6/12 percent-per-second burn.
+    const dmg =
+      riftRankForBaseLevel(inst.baseLevel) === 'S'
+        ? p.hp + p.maxHp
+        : Math.max(1, Math.round(p.maxHp * 0.06 * (tier === 'deep' ? 2 : 1)));
     ctx.dealDamage(null, p, dmg, false, 'fire', 'Molten Rift', 'hit', true);
     riftFx(ctx, p.pos.x, p.pos.z, 'fire'); // flames lick up as the lava sears you (1 Hz)
   }
