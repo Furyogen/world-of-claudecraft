@@ -52,6 +52,15 @@ await run('rogue', 'slice_and_dice');         // bladestorm swishes + buff arpeg
 await run('hunter', 'aimed_shot', 0.4);       // arrow + max-stack physical crack
 await run('priest', 'mind_flay', 0.4);        // shadow beam
 
+// v0.28 bespoke one-shots (the spec impact.sample hook, both choke points)
+await run('mage', 'meteor', 0.4);             // imp_meteor under the sky column
+await run('mage', 'frozen_orb', 0.4);         // imp_frozen_orb on the drifting orb
+await run('mage', 'blizzard', 0.4);           // imp_blizzard under the ice-fall
+await run('mage', 'dragons_breath', 0.3);     // imp_dragons_breath cone roar
+await run('mage', 'temporal_rewind', 0.3);    // imp_temporal rewind warp
+await run('mage', 'temporal_mend', 0.4);      // heal_temporal chime (heal path)
+await run('warlock', 'chaos_bolt', 0.4);      // imp_chaos detonation
+
 // full combo with escalation + finisher duck
 await page.evaluate(() => {
   const sel = document.getElementById('selClass');

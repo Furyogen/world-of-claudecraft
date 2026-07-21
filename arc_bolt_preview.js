@@ -1923,7 +1923,7 @@ function updateDrips(dt) {
 // druid's Maul summons a spectral bear through the strike, Polymorph flashes
 // the sheep itself, Ghost Wolf runs a lap around the shaman.
 const SPIRIT_URLS = {
-  wolf: '/models/creatures/wolf.glb',
+  wolf: '/models/creatures/wolf_basic.glb',
   bear: '/models/creatures/yetialt.glb',
   raptor: '/models/creatures/velociraptor.glb',
   stag: '/models/creatures/stag.glb',
