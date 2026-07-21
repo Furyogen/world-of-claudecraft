@@ -705,6 +705,12 @@ export const ko_KR: EnTranslations = {
       "collapseHint": "퀘스트 추적기 접기",
       "expandHint": "퀘스트 추적기 펼치기"
     },
+    "interfaceTabs": {
+      "general": "일반",
+      "frames": "프레임",
+      "chat": "채팅",
+      "combat": "전투"
+    },
     "chatTimestamps": {
       "show": "채팅 시각 표시",
       "format": "시각 표시 형식",
@@ -1684,7 +1690,8 @@ export const ko_KR: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{level}레벨 {family}",
@@ -2082,7 +2089,11 @@ export const ko_KR: EnTranslations = {
       "blockSearchPlaceholder": "플레이어 이름",
       "blockAction": "차단",
       "nowBlocking": "{name} 님을 차단했습니다.",
-      "stopBlockingTitle": "{name} 님 차단 해제"
+      "stopBlockingTitle": "{name} 님 차단 해제",
+      "onlineHeader": "온라인 ({n})",
+      "offlineHeader": "오프라인 ({n})",
+      "hideOffline": "오프라인 숨기기",
+      "hideOfflineTitle": "오프라인 길드원 숨기기"
     },
     "gathering": {
       "title": "채집",
@@ -2163,7 +2174,7 @@ export const ko_KR: EnTranslations = {
       "tierPipAria": "티어 {tier}",
       "nextUnlockTier": "다음 티어까지 숙련도 {points} 남음: 걸작 확률이 높아집니다",
       "nextUnlockSpecialized": "전문화까지 숙련도 {points} 남음: 재료 소모가 줄어듭니다",
-      "nextUnlockMax": "최대 숙련도입니다",
+      "nextUnlockMastered": "지금은 통달했습니다",
       "perkSpecializedLine": "{craft}: 전문화, 재료 소모 -{pct}%",
       "perkSpecializedAt": "숙련도 {threshold}에서 전문화됩니다",
       "switchCost": "다음 원형 전환에는 속죄 {cost}이 필요합니다",
@@ -2243,6 +2254,7 @@ export const ko_KR: EnTranslations = {
       "skillReqLine": "{craft} {skill} 필요",
       "difficultyFull": "숙련도 전량 상승",
       "difficultyReduced": "숙련도 상승 감소",
+      "difficultyMinimal": "숙련도 소폭 상승",
       "difficultyNone": "숙련도 상승 없음",
       "stationBadge": "제작 거점",
       "stationOutOfRangeNamed": "{station}(으)로 이동하여 제작하세요.",
@@ -5861,7 +5873,8 @@ export const ko_KR: EnTranslations = {
         "offline": "오프라인",
         "combat": "전투 중",
         "dungeon": "던전 안",
-        "dead": "죽음"
+        "dead": "죽음",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const ko_KR: EnTranslations = {
         "sender": "제작 길드",
         "subject": "방어구 제작과 기계공학 솜씨에 관하여",
         "body": "장인에게,\n\n방어구 제작과 기계공학에 힘쓰는 그대의 소문이 길드에 닿았습니다. 판금에 못을 박고 톱니를 맞추며 두 기술이 서로를 키워 주고 있다지요. 이웃한 두 기술을 함께 갈고닦는 손은 조율할 준비가 되었다는 증표입니다. 이스트브룩의 대장장이 할드렌을 찾아가십시오. 지금은 그가 장인들을 대신해 말합니다. 자신의 손으로 해낸 결과물로 솜씨를 증명하면, 그가 그 두 기술을 그대의 주 전공으로 조율해 줄 것입니다.\n\n경의를 담아,\n제작 길드"
+      },
+      "mastery_reset_notice": {
+        "sender": "길드 회관",
+        "subject": "정직해진 장인의 길",
+        "body": "길드 동료에게,\n\n길드가 숙련을 새로이 헤아리기로 했습니다. 모두가 처음부터 다시 오릅니다. 그대의 제작 기술과 채집 숙련도는 0으로 되돌아갔습니다.\n\n그 밖의 모든 것은 손대지 않은 채 그대의 것입니다. 제조법, 도구와 재료, 은행과 골드, 조율과 칭호, 업적과 명성, 퀘스트와 우편까지.\n\n이제 오르는 길에 눈속임은 없습니다. 값싼 일은 그대를 올려 주지 못합니다. 더 어려운 제조법, 더 풍부한 광맥, 더 깊은 물을 찾으십시오.\n\n경의를 담아,\n길드 회관"
       }
     },
     "itemSets": {

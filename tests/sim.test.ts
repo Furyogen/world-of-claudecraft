@@ -14,7 +14,6 @@ import { Sim } from '../src/sim/sim';
 import {
   dist2d,
   FISHING_CAST_ID,
-  FISHING_SESSION_CAP_SEC,
   MAX_LEVEL,
   meleeMissChance,
   mobXpValue,
@@ -1181,14 +1180,17 @@ describe('food, drink, vendor', () => {
     }
     expect(draws).toBe(1);
     expect(sim.player.castingAbility).toBe(FISHING_CAST_ID);
-    expect(sim.player.castTotal).toBe(FISHING_SESSION_CAP_SEC);
-    expect(sim.player.castRemaining).toBe(FISHING_SESSION_CAP_SEC);
+    // Literal 15, not the imported constant: the broadcast session cap is a
+    // wire-visible contract, so this pin must red if the constant moves (the
+    // packet's constant-self-comparison trap).
+    expect(sim.player.castTotal).toBe(15);
+    expect(sim.player.castRemaining).toBe(15);
     expect(sim.player.channeling).toBe(false);
     expect(sim.events).toContainEqual(
       expect.objectContaining({
         type: 'castStart',
         ability: FISHING_CAST_ID,
-        time: FISHING_SESSION_CAP_SEC,
+        time: 15,
       }),
     );
   });

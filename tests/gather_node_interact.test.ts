@@ -234,7 +234,8 @@ describe('the real harvestNode behind the helper (Phase 12b cast start)', () => 
     p.prevPos = { ...p.pos };
     expect(sim.harvestNode(node.id, pid)).toBe(true);
     expect(p.castingAbility).toBe(GATHER_CAST_ID);
-    expect(p.castTotal).toBeGreaterThan(0);
+    // Fresh player, bare hands, band 0, tier-1 node: the 2.5 s base literal.
+    expect(p.castTotal).toBe(2.5);
     // The grant has NOT landed yet: it belongs to cast completion.
     expect(sim.countItem(nodeMaterialFor(node.type, node.zoneId).itemId, pid)).toBe(0);
   });

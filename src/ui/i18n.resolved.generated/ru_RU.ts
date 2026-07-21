@@ -705,6 +705,12 @@ export const ru_RU: EnTranslations = {
       "collapseHint": "Свернуть трекер заданий",
       "expandHint": "Развернуть трекер заданий"
     },
+    "interfaceTabs": {
+      "general": "Общие",
+      "frames": "Рамки",
+      "chat": "Чат",
+      "combat": "Бой"
+    },
     "chatTimestamps": {
       "show": "Показывать время в чате",
       "format": "Формат времени",
@@ -1684,7 +1690,8 @@ export const ru_RU: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Уровень {level} {family}",
@@ -2082,7 +2089,11 @@ export const ru_RU: EnTranslations = {
       "blockSearchPlaceholder": "Имя персонажа",
       "blockAction": "Заблокировать",
       "nowBlocking": "{name} заблокирован.",
-      "stopBlockingTitle": "Разблокировать {name}"
+      "stopBlockingTitle": "Разблокировать {name}",
+      "onlineHeader": "В сети ({n})",
+      "offlineHeader": "Не в сети ({n})",
+      "hideOffline": "Скрыть офлайн",
+      "hideOfflineTitle": "Скрыть офлайн участников гильдии"
     },
     "gathering": {
       "title": "Собирательство",
@@ -2163,7 +2174,7 @@ export const ru_RU: EnTranslations = {
       "tierPipAria": "Ранг {tier}",
       "nextUnlockTier": "До следующего ранга {points} навыка: шанс шедевра повысится",
       "nextUnlockSpecialized": "До специализации {points} навыка: расход материалов снизится",
-      "nextUnlockMax": "Навык на максимуме",
+      "nextUnlockMastered": "Освоено, пока что",
       "perkSpecializedLine": "{craft}: Специалист, расход материалов -{pct}%",
       "perkSpecializedAt": "Специализация при навыке {threshold}",
       "switchCost": "Следующая смена архетипа потребует искупления: {cost}",
@@ -2243,6 +2254,7 @@ export const ru_RU: EnTranslations = {
       "skillReqLine": "Требуется {craft} {skill}",
       "difficultyFull": "Полный рост навыка",
       "difficultyReduced": "Сниженный рост навыка",
+      "difficultyMinimal": "Минимальный рост навыка",
       "difficultyNone": "Без роста навыка",
       "stationBadge": "Станция",
       "stationOutOfRangeNamed": "Подойдите к станции \"{station}\", чтобы изготовить это.",
@@ -5861,7 +5873,8 @@ export const ru_RU: EnTranslations = {
         "offline": "Не в сети",
         "combat": "В бою",
         "dungeon": "В подземелье",
-        "dead": "Мертв"
+        "dead": "Мертв",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const ru_RU: EnTranslations = {
         "sender": "Гильдия ремесленников",
         "subject": "О вашей работе: бронное дело и инженерное дело",
         "body": "Ремесленник!\n\nДо гильдии дошли вести о вашей работе: бронное дело и инженерное дело, пластины склёпаны, шестерни выверены, и два ремесла питают друг друга. Соседние ремесла, освоенные вместе, выдают руку, готовую к настройке. Разыщите кузнеца Халдрена в Истбруке: пока он говорит от лица мастеров. Докажите ему своё умение работой собственных рук, и он настроит эти два ремесла как ваши основные.\n\nС уважением,\nГильдия ремесленников"
+      },
+      "mastery_reset_notice": {
+        "sender": "Дом гильдии",
+        "subject": "Мастерство по-честному",
+        "body": "Собрат по гильдии!\n\nГильдия приняла новую меру мастерства. Каждый начинает подъём заново: ваши навыки ремесла и сноровка добытчика обнулены.\n\nВсё остальное осталось при вас, нетронутым: рецепты, инструменты и материалы, банк и золото, настройки и титулы, деяния и известность, задания и почта.\n\nТеперь подъём честен. Дешёвая работа наверх не вывезет. Ищите рецепты посложнее, жилы побогаче и воды поглубже.\n\nС уважением,\nДом гильдии"
       }
     },
     "itemSets": {

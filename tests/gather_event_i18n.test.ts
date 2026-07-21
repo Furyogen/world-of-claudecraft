@@ -163,10 +163,11 @@ describe('hudChrome.gathering catch line (Professions 2.0 Phase 11)', () => {
     const block = source.slice(caseStart, source.indexOf('break;', caseStart));
     expect(block.includes('hudChrome.gathering.catchLine')).toBe(true);
     expect(block.includes('QUALITY_COLOR[ev.quality]')).toBe(true);
-    // Phase 12b: the reel cue rides this arm; the loot notification cue must
-    // not (the grant hub's own 'loot' event already plays it).
-    expect(block.includes('audio.fishReel()')).toBe(true);
-    expect(block.includes('audio.lootItem')).toBe(false);
+    // Phase 12b: the reel cue rides this arm and it is the ONLY cue there
+    // (the pre-12b pin excluded every cue; the exact-set form keeps the
+    // same third-cue protection while mandating the reel).
+    const cueCalls = [...block.matchAll(/audio\.(\w+)\(/g)].map((m) => m[1]);
+    expect(cueCalls).toEqual(['fishReel']);
   });
 
   it('every gathering profession id has a catalog label and both window rows', () => {

@@ -32,7 +32,7 @@ vi.mock('../server/db', () => ({
 
 import { type ClientSession, GameServer } from '../server/game';
 import { bagCapacity } from '../src/sim/bags';
-import { updateCasting } from '../src/sim/combat/casting_lifecycle';
+import { cancelCast, updateCasting } from '../src/sim/combat/casting_lifecycle';
 import { runEffects } from '../src/sim/combat/effect_dispatch';
 import { GATHER_NODES } from '../src/sim/content/gather_nodes';
 import { ABILITIES, LAKE, MOBS } from '../src/sim/data';
@@ -42,8 +42,14 @@ import {
   FISH_BITE_DELAY_MIN_SEC,
   startFishing,
 } from '../src/sim/professions/fishing';
-import { gatherCastDurationSec, nodeMaterialFor } from '../src/sim/professions/gathering';
+import {
+  drainGatheringGrants,
+  gatherCastDurationSec,
+  nodeMaterialFor,
+} from '../src/sim/professions/gathering';
 import { type PlayerMeta, Sim } from '../src/sim/sim';
+import { readyArenaFighter } from '../src/sim/social/arena';
+import { fiestaDownEntity } from '../src/sim/social/fiesta';
 import {
   type Aura,
   DEMON_HEAL_CAST_ID,
@@ -226,6 +232,15 @@ describe('reel deadline boundary', () => {
     startFishing(sim.ctx, p, meta);
     sim.tickCount = p.fishBiteAtTick;
     updateCasting(sim.ctx, p, meta);
+    // AT the deadline tick the window is still open: the tick phase must NOT
+    // miss yet (kills a `>` -> `>=` regression in the miss comparison, which
+    // would steal the last valid reel tick from the player).
+    sim.tickCount = p.fishReelDeadlineTick;
+    sim.events = [];
+    updateCasting(sim.ctx, p, meta);
+    expect(sim.events).not.toContainEqual(expect.objectContaining({ type: 'fishingGotAway' }));
+    expect(p.castingAbility).toBe(FISHING_CAST_ID);
+    expect(p.fishReelDeadlineTick).toBeGreaterThan(0);
     sim.tickCount = p.fishReelDeadlineTick + 1;
     sim.events = [];
     updateCasting(sim.ctx, p, meta); // the miss fires here, before any press
@@ -439,6 +454,34 @@ describe('gather completion re-validation', () => {
     denialAtCompletion(sim, pid, 'Too far away.');
     // The respawn timer is only set inside resolveHarvest, which never ran.
     expect(sim.nodeHarvestableByMeFor(NODE.id, pid)).toBe(true);
+  });
+});
+
+describe('node-tier-relative proficiency gain through the live cast loop (Phase 12c)', () => {
+  // The resolveHarvest call site queues gatherNodeGainMultiplier(proficiency,
+  // node.tier) instead of the old flat 1. NODE is tier 1, so mining 50 sits
+  // two gain tiers above it (green, 0.25) and mining 75 grays it out
+  // entirely (queueGatheringGrant drops the 0: nothing is queued).
+  function harvestAt(proficiency: number): { queued: number[]; settled: number } {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Curved');
+    const meta = mustMeta(sim, pid);
+    meta.gatheringProficiency.mining = proficiency;
+    teleportOntoNode(sim, pid, NODE.id);
+    expect(sim.harvestNode(NODE.id, pid)).toBe(true);
+    completeCastNow(sim, pid);
+    const queued = meta.pendingGatherGrants.map((g) => g.amount);
+    drainGatheringGrants(meta);
+    return { queued, settled: meta.gatheringProficiency.mining };
+  }
+
+  it('a t1 harvest at mining 50 queues the minimal 0.25 and settles at 50.25', () => {
+    // 50 + gatherNodeGainMultiplier(50, 1) = 50 + 0.25 (green: two tiers below).
+    expect(harvestAt(50)).toEqual({ queued: [0.25], settled: 50.25 });
+  });
+
+  it('a t1 harvest at mining 75 is gray: queues nothing, proficiency stays 75', () => {
+    expect(harvestAt(75)).toEqual({ queued: [], settled: 75 });
   });
 });
 
@@ -772,5 +815,150 @@ describe('death clears the hidden cast state (review fix)', () => {
     expect(p.gatherCastNodeId).toBe('');
     expect(p.fishBiteAtTick).toBe(0);
     expect(p.fishReelDeadlineTick).toBe(0);
+  });
+});
+
+describe('every other cast-end path returns the hidden fields to inert (QA pins)', () => {
+  // The build pinned the death clear; these pin the remaining end paths the
+  // storage decision names (cancelCast, arena reset, fiesta down, the
+  // defensive session-cap end), each mutation-decisive: deleting the clear
+  // under test reds exactly its arm.
+  it('a fresh entity starts with all three hidden fields inert', () => {
+    const sim = makeSim(4242);
+    expect(sim.player.gatherCastNodeId).toBe('');
+    expect(sim.player.fishBiteAtTick).toBe(0);
+    expect(sim.player.fishReelDeadlineTick).toBe(0);
+  });
+
+  it('cancelCast inside the armed reel window clears both fishing fields, so the next session cannot instant-reel off a stale deadline', () => {
+    const sim = makeSim(4242);
+    const meta = mustMeta(sim, sim.playerId);
+    teleportToValeShore(sim);
+    const p = sim.player;
+    startFishing(sim.ctx, p, meta);
+    sim.tickCount = p.fishBiteAtTick;
+    updateCasting(sim.ctx, p, meta); // the bite arms the window
+    expect(p.fishReelDeadlineTick).toBeGreaterThan(sim.tickCount);
+    cancelCast(sim.ctx, p);
+    expect(p.castingAbility).toBe(null);
+    expect(p.fishBiteAtTick).toBe(0);
+    expect(p.fishReelDeadlineTick).toBe(0);
+    // Without the cancelCast clears, this recast would still see the OLD
+    // deadline armed and the immediate re-press would land a catch with no
+    // bite: the re-press must stay the busy error instead.
+    startFishing(sim.ctx, p, meta);
+    expect(p.castingAbility).toBe(FISHING_CAST_ID);
+    let draws = 0;
+    sim.rng.setObserver(() => draws++);
+    sim.events = [];
+    try {
+      startFishing(sim.ctx, p, meta);
+    } finally {
+      sim.rng.setObserver(null);
+    }
+    expect(draws).toBe(0);
+    expect(p.castingAbility).toBe(FISHING_CAST_ID);
+    expect(sim.events).toContainEqual(
+      expect.objectContaining({ type: 'error', text: 'You are busy.' }),
+    );
+  });
+
+  it('the arena fighter reset clears the hidden fields', () => {
+    const sim = makeSim(4242);
+    const meta = mustMeta(sim, sim.playerId);
+    teleportToValeShore(sim);
+    startFishing(sim.ctx, sim.player, meta);
+    expect(sim.player.fishBiteAtTick).toBeGreaterThan(0);
+    sim.player.gatherCastNodeId = NODE.id; // belt-and-braces: all three clear
+    readyArenaFighter(sim.ctx, sim.player, { clearPrep: false });
+    expect(sim.player.gatherCastNodeId).toBe('');
+    expect(sim.player.fishBiteAtTick).toBe(0);
+    expect(sim.player.fishReelDeadlineTick).toBe(0);
+  });
+
+  it('the fiesta down path clears the hidden fields', () => {
+    const sim = makeSim(4242);
+    const meta = mustMeta(sim, sim.playerId);
+    teleportToValeShore(sim);
+    startFishing(sim.ctx, sim.player, meta);
+    expect(sim.player.fishBiteAtTick).toBeGreaterThan(0);
+    sim.player.gatherCastNodeId = NODE.id;
+    fiestaDownEntity(sim.ctx, sim.player, null);
+    expect(sim.player.gatherCastNodeId).toBe('');
+    expect(sim.player.fishBiteAtTick).toBe(0);
+    expect(sim.player.fishReelDeadlineTick).toBe(0);
+  });
+
+  it('the defensive session-cap end gets away with zero draws and clears the hidden fields', () => {
+    // Unreachable in real flow (max delay + max window end well before the
+    // 15 s cap); reachable by the parity cancel drives and any future
+    // direct-assigned cast. Shape: the last DT of castRemaining expires with
+    // the bite still pending.
+    const sim = makeSim(4242);
+    const meta = mustMeta(sim, sim.playerId);
+    teleportToValeShore(sim);
+    const p = sim.player;
+    startFishing(sim.ctx, p, meta);
+    p.castRemaining = DT; // exhaust the cap on the next lifecycle tick
+    p.fishBiteAtTick = sim.tickCount + 999; // bite still pending, window unarmed
+    sim.events = [];
+    let draws = 0;
+    sim.rng.setObserver(() => draws++);
+    try {
+      updateCasting(sim.ctx, p, meta);
+    } finally {
+      sim.rng.setObserver(null);
+    }
+    expect(draws).toBe(0);
+    expect(sim.events).toContainEqual({ type: 'fishingGotAway', pid: sim.playerId });
+    expect(sim.events).toContainEqual(
+      expect.objectContaining({ type: 'castStop', success: false }),
+    );
+    expect(p.castingAbility).toBe(null);
+    expect(p.fishBiteAtTick).toBe(0);
+    expect(p.fishReelDeadlineTick).toBe(0);
+  });
+});
+
+describe('the widened useItem busy guard covers the gather cast (QA pin)', () => {
+  it('a potion press mid-gather-cast denies busy and leaves the cast untouched', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Sipper');
+    const p = sim.entities.get(pid);
+    if (!p) throw new Error('missing entity');
+    sim.addItem('minor_mana_potion', 1, pid);
+    teleportOntoNode(sim, pid, NODE.id);
+    expect(sim.harvestNode(NODE.id, pid)).toBe(true);
+    const nodeId = p.gatherCastNodeId;
+    sim.drainEvents();
+    sim.useItem('minor_mana_potion', pid);
+    expect(sim.drainEvents()).toContainEqual(
+      expect.objectContaining({ type: 'error', text: 'You are busy.' }),
+    );
+    expect(p.castingAbility).toBe(GATHER_CAST_ID);
+    expect(p.gatherCastNodeId).toBe(nodeId);
+    expect(sim.countItem('minor_mana_potion', pid)).toBe(1);
+  });
+});
+
+describe('rod synergy is literal-pinned on one shared draw (QA pins)', () => {
+  // The same seed-4242 first draw walks all three rod arms, so these three
+  // literals pin FISH_BITE_DELAY_MIN_SEC and the 1.5 s/tier max-side
+  // reduction in BOTH directions (the sampled-bounds arms above catch only
+  // a shrink of the reduction, not a growth).
+  it('first-cast delay ticks at seed 4242: bare 127, tier-2 rod 107, tier-3 rod 87', () => {
+    for (const [rod, ticks] of [
+      [null, 127],
+      ['ironreel_fishing_rod', 107],
+      ['silverstream_fishing_rod', 87],
+    ] as [string | null, number][]) {
+      const sim = makeSim(4242);
+      const meta = mustMeta(sim, sim.playerId);
+      if (rod) sim.addItem(rod, 1);
+      teleportToValeShore(sim);
+      const p = sim.player;
+      startFishing(sim.ctx, p, meta);
+      expect(p.fishBiteAtTick - sim.tickCount, rod ?? 'bare').toBe(ticks);
+    }
   });
 });

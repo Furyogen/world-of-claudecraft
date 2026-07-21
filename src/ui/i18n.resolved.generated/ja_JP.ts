@@ -705,6 +705,12 @@ export const ja_JP: EnTranslations = {
       "collapseHint": "クエストトラッカーを折りたたむ",
       "expandHint": "クエストトラッカーを展開する"
     },
+    "interfaceTabs": {
+      "general": "全般",
+      "frames": "フレーム",
+      "chat": "チャット",
+      "combat": "戦闘"
+    },
     "chatTimestamps": {
       "show": "チャットに時刻を表示",
       "format": "時刻の表記形式",
@@ -1684,7 +1690,8 @@ export const ja_JP: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "レベル{level} {family}",
@@ -2082,7 +2089,11 @@ export const ja_JP: EnTranslations = {
       "blockSearchPlaceholder": "プレイヤー名",
       "blockAction": "ブロック",
       "nowBlocking": "{name} をブロックしました。",
-      "stopBlockingTitle": "{name} のブロックを解除"
+      "stopBlockingTitle": "{name} のブロックを解除",
+      "onlineHeader": "オンライン ({n})",
+      "offlineHeader": "オフライン ({n})",
+      "hideOffline": "オフラインを非表示",
+      "hideOfflineTitle": "オフラインのギルドメンバーを非表示"
     },
     "gathering": {
       "title": "採集",
@@ -2163,7 +2174,7 @@ export const ja_JP: EnTranslations = {
       "tierPipAria": "ティア {tier}",
       "nextUnlockTier": "次のティアまであと {points}：傑作の成功率が上がります",
       "nextUnlockSpecialized": "専門化まであと {points}：素材コストが下がります",
-      "nextUnlockMax": "技能は最大です",
+      "nextUnlockMastered": "マスターしました（今のところ）",
       "perkSpecializedLine": "{craft}：専門化、素材コスト -{pct}%",
       "perkSpecializedAt": "技能 {threshold} で専門化します",
       "switchCost": "次のアーキタイプ切り替えには償いが {cost} 必要です",
@@ -2243,6 +2254,7 @@ export const ja_JP: EnTranslations = {
       "skillReqLine": "{craft} {skill} が必要",
       "difficultyFull": "技能上昇（全量）",
       "difficultyReduced": "技能上昇（減少）",
+      "difficultyMinimal": "技能上昇（微量）",
       "difficultyNone": "技能上昇なし",
       "stationBadge": "製作拠点",
       "stationOutOfRangeNamed": "{station}に移動して製作してください。",
@@ -5861,7 +5873,8 @@ export const ja_JP: EnTranslations = {
         "offline": "オフライン",
         "combat": "戦闘中",
         "dungeon": "ダンジョン内",
-        "dead": "死亡"
+        "dead": "死亡",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const ja_JP: EnTranslations = {
         "sender": "製作ギルド",
         "subject": "防具鍛冶と工作の腕前について",
         "body": "職人へ\n\n防具鍛冶と工作に励むあなたの評判がギルドに届いています。板金を鋲で留め、歯車を調え、二つの技が互いを高め合っていると。隣り合う技を共に磨く手は、調律の備えができた証です。イーストブルックの鍛冶師ハルドレンを訪ねてください。今は彼が親方たちの代弁を務めています。自らの手がけた仕事で腕前を示せば、彼がその二つの技をあなたの主専攻として調律してくれるでしょう。\n\n敬意を込めて、\n製作ギルド"
+      },
+      "mastery_reset_notice": {
+        "sender": "ギルド会館",
+        "subject": "腕前に、偽りなし",
+        "body": "ギルドの同志へ\n\nギルドは熟練の新しい尺度を定めました。誰もが登り直しです。あなたの製作スキルと採集熟練度はゼロに戻されました。\n\nそれ以外はすべて、手つかずのままあなたのものです。レシピ、道具と素材、銀行と所持金、調律と称号、功績と名声、クエストと郵便。\n\nこれからの登りにごまかしは利きません。安い仕事では上へは行けません。より難しいレシピを、より豊かな鉱脈を、より深い水を求めてください。\n\n敬意を込めて、\nギルド会館"
       }
     },
     "itemSets": {

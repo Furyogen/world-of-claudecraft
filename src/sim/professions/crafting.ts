@@ -68,16 +68,13 @@
 // game/net imports, no Math.random/Date.now, host-agnostic so it runs
 // offline, on the server, and in the headless RL env unchanged.
 
-import {
-  CRAFT_GOLD_SINK_COPPER_PER_BUDGET,
-  CRAFT_THROTTLE_MAX_PER_WINDOW,
-  CRAFT_THROTTLE_WINDOW_SECONDS,
-} from '../content/professions';
+import { CRAFT_GOLD_SINK_COPPER_PER_BUDGET } from '../content/professions';
 import { recipeById } from '../content/recipes';
 import { ITEMS } from '../data';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import type { ItemDef } from '../types';
+import { recordAction, withinActionThrottle } from './action_throttle';
 import { archetypeCeilingFor, craftSkillGainMultiplier } from './archetype';
 import { comboEligibility } from './combo_eligibility';
 import { isSignableMaterialRarity, type MaterialRarity } from './gathering';
@@ -97,9 +94,12 @@ import {
   tierForSkill,
 } from './wheel';
 
-// One flat craft-skill point per successful common-tier craft (the free-floor
-// rule: common-tier crafting itself never costs anything, but skill still
-// accrues so later tiers have something to build a gate against).
+// The BASE craft-skill amount per successful craft, scaled by the Phase 12c
+// four-state mastery curve at the gain site below (CRAFT_SKILL_GAIN *
+// craftSkillGainMultiplier): full 1, reduced 0.5, minimal 0.25, gray 0. The
+// old tier-0 free-floor GAIN rule (skill always accrues on the cheapest
+// recipe) is retired; the free-floor COST rule (common-tier crafting never
+// costs anything) lives on in recipes.ts/types.ts.
 const CRAFT_SKILL_GAIN = 1;
 
 export interface CraftResult {
@@ -192,20 +192,6 @@ export function acquireRecipeForRecipe(
   }
   meta.knownRecipes.add(recipeId);
   return { ok: true, recipeId };
-}
-
-/** Whether `meta`'s rolling craft-output window (issue #1301) still has room
- *  for one more successful craft, advancing/resetting the window against
- *  `now` (sim time, deterministic) as a side effect exactly like a real
- *  rolling window would. A maxed specialist is capped at
- *  `CRAFT_THROTTLE_MAX_PER_WINDOW` successful crafts per
- *  `CRAFT_THROTTLE_WINDOW_SECONDS`, regardless of skill or material supply. */
-function withinCraftThrottle(meta: PlayerMeta, now: number): boolean {
-  if (now - meta.craftThrottle.windowStart >= CRAFT_THROTTLE_WINDOW_SECONDS) {
-    meta.craftThrottle.windowStart = now;
-    meta.craftThrottle.count = 0;
-  }
-  return meta.craftThrottle.count < CRAFT_THROTTLE_MAX_PER_WINDOW;
 }
 
 /** Whether `meta` holds an inventory slot for `itemId` carrying a signed
@@ -352,10 +338,11 @@ export function resolveCraftForRecipe(
   if (!hasRecipeMaterials(ctx, recipe, pid)) {
     return { ok: false, recipeId: recipe.id, reason: 'insufficient_materials' };
   }
-  // #1301 output throttle: a flat cap on successful crafts per rolling
-  // window, checked (never side-effected on denial beyond the window's own
-  // natural rollover) before any reagent is consumed.
-  if (meta && !withinCraftThrottle(meta, ctx.time)) {
+  // #1301 output throttle, Phase 12c shared: one action window paced across
+  // crafting, disenchant, enchant-apply, and salvage (action_throttle.ts),
+  // checked (never side-effected on denial beyond the window's own natural
+  // rollover) before any reagent is consumed.
+  if (meta && !withinActionThrottle(meta, ctx.time)) {
     return { ok: false, recipeId: recipe.id, reason: 'throttled' };
   }
   // #1301 gold sink: a fee proportional to the recipe's item-level budget,
@@ -477,7 +464,7 @@ export function resolveCraftForRecipe(
       recipe.skillReq,
     );
     gainCraftSkill(meta.craftSkills, recipe.professionId, CRAFT_SKILL_GAIN * multiplier);
-    meta.craftThrottle.count += 1;
+    recordAction(meta);
     // Character XP for the craft (profession_xp.ts), tier-scaled and
     // level-gated the same way gathering/kill XP are: a max-level player
     // spamming a trivial (gray) recipe gets zero.

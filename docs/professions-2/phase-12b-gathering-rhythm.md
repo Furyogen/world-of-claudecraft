@@ -55,6 +55,13 @@ full surfaces record is state.md's Phase 12b entry):
   of scope; the latter is a pure ClientWorld ncd-mirror suite); the online
   castStart-wire-shape and completion-grant arms live in gather_node_harvest's live
   GameServer describe, and the interact-starts-a-cast arm in gather_node_interact.test.ts.
+- Predicate-consumer precision (QA wording correction, 2026-07-20): of the eleven
+  exemption sites, SEVEN consume the isNonSpellCast boolean directly (casting_lifecycle
+  silence/lockout/blink-through/spell-queue, effect_dispatch interrupt immunity, damage
+  cancel-not-pushback, items useItem busy guard) and FOUR are id-discriminating by
+  construction, comparing the sentinels individually beside it (casting_lifecycle
+  completion routing, castingReadout, castBarState, castDisplayName). The Starter
+  Prompt's "all eleven route through the shared predicate" reads as the former only.
 
 ## Context pointers
 
@@ -391,3 +398,18 @@ this list closed.
   keeps its single draw, re-pin consciously if that draw moves. The corpse premium-arm
   suite (tests/corpse_harvest_sim.test.ts) is OUTSIDE this phase's blast radius: 12b adds
   no corpse timing.
+- (post-inventory, Phase 12b QA, 2026-07-20) The QA pass added pins inside this
+  appendix's blast radius (the standing re-inventory rule; all additive, nothing
+  weakened, every one mutation-verified): tests/gathering_rhythm.test.ts gained the
+  deadline-tick no-miss arm (the tick phase runs AT the deadline and must not miss; a
+  `>` to `>=` flip previously survived the suite), a cast-end-clears describe pinning
+  cancelCast (with the stale-deadline instant-reel scenario), arena reset, fiesta down,
+  and the defensive session-cap end, the useItem busy-guard gather arm, and same-draw
+  rod-synergy literals (seed 4242 first cast: bare 127 / tier-2 107 / tier-3 87 ticks,
+  decisive on the reduction in both directions); tests/game_audio.test.ts gained the six
+  cue ROUTING pins (five feedback-gated, fishBite on the always-audible arm);
+  tests/cast_bar.test.ts pins fishing fill 1 under broadcast decay plus the gather
+  honest fill; tests/gather_event_i18n.test.ts re-tightened the fishingResult arm to
+  exactly one cue (exact-set form); tests/sim.test.ts re-pinned castTotal/castRemaining/
+  castStart.time to the literal 15 (constant-self-comparison removal); and
+  tests/gather_node_interact.test.ts pinned the 2.5 s base-duration literal.

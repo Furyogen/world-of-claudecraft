@@ -190,7 +190,12 @@ import {
 } from './deeds_view';
 import { DeedsWindow } from './deeds_window';
 import { DevCommandWindow } from './dev_command_window';
-import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
+import {
+  devCardBadgeClass,
+  devTierBadgeDataUrl,
+  devTierByIndex,
+  devTierDisplayName,
+} from './dev_tier';
 import { discordRoleTagLabel } from './discord_role_tag';
 import { discordStatusBadgeDataUrl, discordStatusDisplayName } from './discord_tier';
 import { dropdownKeyNav } from './dropdown_nav';
@@ -217,7 +222,12 @@ import {
   TARGET_FRAME_POS_KEY,
 } from './frame_pos_reset';
 import { gatherDeniedLineKey } from './gathering_view';
-import { holderTierBadgeDataUrl, holderTierByIndex, holderTierDisplayName } from './holder_tier';
+import {
+  holderCardBadgeClass,
+  holderTierBadgeDataUrl,
+  holderTierByIndex,
+  holderTierDisplayName,
+} from './holder_tier';
 import { isSelfOnlyAbility } from './hud/action_bar/ability_self_only';
 import { ActionBarController } from './hud/action_bar/action_bar_controller';
 import {
@@ -225,6 +235,11 @@ import {
   ACTION_BAR_ABILITY_SLOTS_PER_ROW,
   actionBarRowForSlot,
 } from './hud/action_bar/action_bar_layout_core';
+import {
+  applyActionBarLayout,
+  captureActionBarLayout,
+  planActionBarRestore,
+} from './hud/action_bar/action_bar_layout_sync';
 import { ActionBarPainter, type ActionBarSlotElements } from './hud/action_bar/action_bar_painter';
 import {
   ABILITY_ICON_PREFIX,
@@ -950,6 +965,8 @@ export class Hud {
   // stop autorun without making Hud own Input or MobileControls.
   onResurrectAtSpiritHealer: (() => void) | null = null;
   private readonly actionBarController: ActionBarController;
+  // One-shot latch for the login-time action-bar layout reconciliation.
+  private actionBarLayoutRestored = false;
   private get hotbarActions(): HotbarAction[] {
     return this.actionBarController.actions;
   }
@@ -1417,6 +1434,10 @@ export class Hud {
         return !!match && match.team !== null;
       },
       showAttackButton: () => this.optionsHooks?.settings.get('showAttackButton') ?? true,
+      // Persistence seam: online, the ClientWorld debounces a per-character wire
+      // save; offline, Sim.saveActionBarLayout is a no-op (localStorage is the
+      // store). The controller always writes the localStorage mirror itself.
+      persistLayout: (layout) => this.sim.saveActionBarLayout(layout),
     });
     this.delveTracker = new DelveTrackerController({
       element: $('#delve-tracker'),
@@ -4964,6 +4985,30 @@ export class Hud {
     this.actionBarController.saveActions();
   }
 
+  // Runs once at world entry (polled each frame until the world resolves the
+  // decision): reconcile the device's local action-bar layout with the server
+  // copy. Offline resolves immediately to 'noop'. Online waits for the login
+  // self-payload, then either the server copy WINS (overwrite the local mirror
+  // and re-seed the controller) or the local layout seeds the first server copy.
+  private maybeRestoreActionBarLayout(): void {
+    if (this.actionBarLayoutRestored) return;
+    const restore = this.sim.takeActionBarLayoutRestore();
+    if (restore === undefined) return; // still pending (online, pre-login-payload)
+    this.actionBarLayoutRestored = true;
+    const playerClass = this.sim.cfg.playerClass;
+    const playerName = this.sim.player.name;
+    const plan = planActionBarRestore(restore, () =>
+      captureActionBarLayout(localStorage, playerClass, playerName),
+    );
+    if (plan.action === 'apply-server') {
+      applyActionBarLayout(localStorage, playerClass, playerName, plan.layout);
+      this.actionBarController.reload();
+      this.spellbookWindow.refreshHotbarControls();
+    } else if (plan.action === 'seed-local') {
+      this.sim.saveActionBarLayout(plan.layout);
+    }
+  }
+
   private addAbilityToHotbar(abilityId: string): boolean {
     return this.actionBarController.addAbility(abilityId);
   }
@@ -6853,6 +6898,7 @@ export class Hud {
     this.lootRolls.update(now);
     if (slowHud) this.updateRaidLockoutBadge();
     if (slowHud) this.refreshDailyRewardsLauncher();
+    this.maybeRestoreActionBarLayout();
     this.syncActiveHotbarForm();
     this.syncSlotMap(); // picks up newly learned abilities mid-session
 
@@ -12470,7 +12516,7 @@ export class Hud {
     const tierDef = holderTierByIndex(e.holderTier ?? 0);
     const holderHtml = tierDef
       ? `<div class="inspect-holder">` +
-        `<img class="inspect-holder-badge" src="${holderTierBadgeDataUrl(tierDef)}" alt="" draggable="false">` +
+        `<img class="${holderCardBadgeClass(tierDef)}" style="--holder-glow:${tierDef.glow}" src="${holderTierBadgeDataUrl(tierDef)}" alt="" draggable="false">` +
         `<div class="inspect-holder-text">` +
         `<div class="inspect-holder-name">${esc(holderTierDisplayName(tierDef))}</div>` +
         `<div class="inspect-holder-sub">${e.holderBalance ? esc(t('wallet.balanceAmount', { amount: formatNumber(e.holderBalance, { maximumFractionDigits: 0 }) })) : esc(t('wallet.holder'))}</div>` +
@@ -12520,7 +12566,7 @@ export class Hud {
       : '';
     const devHtml = devTierDef
       ? `<div class="inspect-holder">` +
-        `<img class="inspect-holder-badge" src="${devTierBadgeDataUrl(devTierDef)}" alt="" draggable="false">` +
+        `<img class="${devCardBadgeClass(devTierDef)}" style="--dev-glow:${devTierDef.glow}" src="${devTierBadgeDataUrl(devTierDef)}" alt="" draggable="false">` +
         `<div class="inspect-holder-text">` +
         `<div class="inspect-holder-name">${esc(devTierDisplayName(devTierDef))}</div>` +
         `<div class="inspect-holder-sub">${esc(devSub)}</div>` +

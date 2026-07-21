@@ -107,7 +107,8 @@ describe('sampled GameAudio facade', () => {
     audio.setFeedbackEnabled(false);
     expect(audio.feedbackEnabled).toBe(false);
 
-    // The interface/feedback cues fall silent (loot, level, quest, whisper, etc.).
+    // The interface/feedback cues fall silent (loot, level, quest, whisper,
+    // etc.), including five of the six Phase 12b gathering-rhythm cues.
     const feedback = [
       'coin',
       'levelUp',
@@ -119,21 +120,30 @@ describe('sampled GameAudio facade', () => {
       'arenaLoss',
       'error',
       'invitePrompt',
+      'gatherCast',
+      'gatherStrike',
+      'gatherRare',
+      'fishCast',
+      'fishReel',
     ] as const;
     for (const m of feedback) audio[m]();
     expect(sfxMock.playUi).not.toHaveBeenCalled();
 
     // Direct-affordance cues (you clicked/opened) and gameplay-timing cues (duel
-    // countdown, fiesta) are NOT gated, so they still play.
+    // countdown, fiesta, the fishing BITE that opens the live reel window) are
+    // NOT gated, so they still play. fishBite on this arm is a fairness
+    // contract: the reaction window must never be silenceable.
     audio.click();
     audio.bagOpen();
     audio.duelCountdownTick();
     audio.fiestaWave();
+    audio.fishBite();
     expect(sfxMock.playUi.mock.calls.map(([k]) => k)).toEqual([
       'ui_click',
       'ui_bag_open',
       'ui_duel_countdown',
       'ui_fiesta_wave',
+      'ui_fish_bite',
     ]);
 
     // Re-enabling restores the feedback cues.

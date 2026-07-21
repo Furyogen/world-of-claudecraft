@@ -705,6 +705,12 @@ export const en_CA: EnTranslations = {
       "collapseHint": "Collapse quest tracker",
       "expandHint": "Expand quest tracker"
     },
+    "interfaceTabs": {
+      "general": "General",
+      "frames": "Frames",
+      "chat": "Chat",
+      "combat": "Combat"
+    },
     "chatTimestamps": {
       "show": "Show Chat Timestamps",
       "format": "Timestamp Format",
@@ -1684,7 +1690,8 @@ export const en_CA: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Level {level} {family}",
@@ -2082,7 +2089,11 @@ export const en_CA: EnTranslations = {
       "blockSearchPlaceholder": "Player name",
       "blockAction": "Block",
       "nowBlocking": "Blocked {name}.",
-      "stopBlockingTitle": "Stop blocking {name}"
+      "stopBlockingTitle": "Stop blocking {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Hide offline",
+      "hideOfflineTitle": "Hide offline guild members"
     },
     "gathering": {
       "title": "Gathering",
@@ -2163,7 +2174,7 @@ export const en_CA: EnTranslations = {
       "tierPipAria": "Tier {tier}",
       "nextUnlockTier": "{points} points to the next tier: masterwork odds improve",
       "nextUnlockSpecialized": "{points} points to Specialized: material costs drop",
-      "nextUnlockMax": "At maximum skill",
+      "nextUnlockMastered": "Mastered, for now",
       "perkSpecializedLine": "{craft}: Specialized, material costs -{pct}%",
       "perkSpecializedAt": "Specializes at {threshold} skill",
       "switchCost": "Next archetype switch costs {cost} amends",
@@ -2243,6 +2254,7 @@ export const en_CA: EnTranslations = {
       "skillReqLine": "Requires {craft} {skill}",
       "difficultyFull": "Full skill gain",
       "difficultyReduced": "Reduced skill gain",
+      "difficultyMinimal": "Minimal skill gain",
       "difficultyNone": "No skill gain",
       "stationBadge": "Station",
       "stationOutOfRangeNamed": "Move to the {station} to craft this.",
@@ -5861,7 +5873,8 @@ export const en_CA: EnTranslations = {
         "offline": "Offline",
         "combat": "In Combat",
         "dungeon": "In Dungeon",
-        "dead": "Dead"
+        "dead": "Dead",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const en_CA: EnTranslations = {
         "sender": "The Crafting Guild",
         "subject": "Your work in Armorcrafting and Engineering",
         "body": "Artisan,\n\nWord reaches the Guild of your work in Armorcrafting and Engineering: plates riveted and gears trued, the two crafts feeding one another. Neighboring crafts worked together mark a hand ready for attunement. Seek out Smith Haldren, the armorer of Eastbrook: he speaks for the masters for now. Prove your craft to him with work of your own hands, and he will see your two majors attuned.\n\nIn good standing,\nThe Crafting Guild"
+      },
+      "mastery_reset_notice": {
+        "sender": "The Guildhall",
+        "subject": "Your craft, made honest",
+        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
       }
     },
     "itemSets": {

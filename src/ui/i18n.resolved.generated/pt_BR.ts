@@ -705,6 +705,12 @@ export const pt_BR: EnTranslations = {
       "collapseHint": "Recolher missões",
       "expandHint": "Expandir missões"
     },
+    "interfaceTabs": {
+      "general": "General",
+      "frames": "Frames",
+      "chat": "Chat",
+      "combat": "Combat"
+    },
     "chatTimestamps": {
       "show": "Mostrar horário no chat",
       "format": "Formato do horário",
@@ -1684,7 +1690,8 @@ export const pt_BR: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{family} de nível {level}",
@@ -2082,7 +2089,11 @@ export const pt_BR: EnTranslations = {
       "blockSearchPlaceholder": "Nome do jogador",
       "blockAction": "Bloquear",
       "nowBlocking": "{name} bloqueado.",
-      "stopBlockingTitle": "Parar de bloquear {name}"
+      "stopBlockingTitle": "Parar de bloquear {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Hide offline",
+      "hideOfflineTitle": "Hide offline guild members"
     },
     "gathering": {
       "title": "Coleta",
@@ -2163,7 +2174,7 @@ export const pt_BR: EnTranslations = {
       "tierPipAria": "Camada {tier}",
       "nextUnlockTier": "{points} aponta para o próximo nível: as probabilidades de obra-prima melhoram",
       "nextUnlockSpecialized": "{points} aponta para Specialized: queda nos custos de materiais",
-      "nextUnlockMax": "Na habilidade máxima",
+      "nextUnlockMastered": "Mastered, for now",
       "perkSpecializedLine": "{craft}: Especializado, custos de material -{pct}%",
       "perkSpecializedAt": "Especializado na habilidade {threshold}",
       "switchCost": "A próxima mudança de arquétipo custa {cost} pontos de reparação",
@@ -2243,6 +2254,7 @@ export const pt_BR: EnTranslations = {
       "skillReqLine": "Requer {craft} {skill}",
       "difficultyFull": "Ganho total de habilidade",
       "difficultyReduced": "Ganho de habilidade reduzido",
+      "difficultyMinimal": "Minimal skill gain",
       "difficultyNone": "Sem ganho de habilidade",
       "stationBadge": "Bancada de artesanato",
       "stationOutOfRangeNamed": "Vá para o {station} para criar isso.",
@@ -5861,7 +5873,8 @@ export const pt_BR: EnTranslations = {
         "offline": "Offline",
         "combat": "Em combate",
         "dungeon": "Em masmorra",
-        "dead": "Morto"
+        "dead": "Morto",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const pt_BR: EnTranslations = {
         "sender": "A Guilda de Artesanato",
         "subject": "Seu trabalho em Fabricação de Armaduras e Engenharia",
         "body": "Artesão,\n\nA notícia chega à Guilda sobre seu trabalho em Fabricação de Armaduras e Engenharia: placas rebitadas e engrenagens ajustadas, as duas artes alimentando uma à outra. Artesanatos vizinhos trabalhados juntos marcam uma mão pronta para sintonização. Procure Ferreiro Haldren, o armeiro de Eastbrook: ele fala pelos mestres por enquanto. Prove a ele seu ofício com o trabalho de suas próprias mãos, e ele verá seus dois ofícios principais em sintonia.\n\nEm situação regular,\nA Guilda de Artesanato"
+      },
+      "mastery_reset_notice": {
+        "sender": "The Guildhall",
+        "subject": "Your craft, made honest",
+        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
       }
     },
     "itemSets": {

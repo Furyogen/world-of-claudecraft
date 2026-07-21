@@ -64,6 +64,39 @@ export const FISH_REEL_WINDOW_ROD_BONUS_SEC = 0.75;
 // to band 0 (see proficiencyBandFor).
 export const fishingBandFor = proficiencyBandFor;
 
+// Per-catch proficiency gain schedule (Professions 2.0 Phase 12c): fishing has
+// no per-node tier to score against, so its gain is proficiency-relative by
+// design. The effective fishing band is min(profBand, rodBand), so a
+// band-appropriate catch always reduces to a function of proficiency alone;
+// the breakpoints are the half-band boundaries (50 inside band 0, 150 inside
+// band 1), halving-then-tapering the gain each step. Proficiency 200 (band 2)
+// is a thousands-of-catches journey by design: the 0.02 trickle is the climb's
+// long tail, and at or past the last row the gain is 0 (the maxSkill cap clamp
+// is the real stop, not this schedule).
+export const FISHING_GAIN_SCHEDULE = [
+  { belowProficiency: 50, gain: 1 },
+  { belowProficiency: 100, gain: 0.5 },
+  { belowProficiency: 150, gain: 0.1 },
+  { belowProficiency: 200, gain: 0.02 },
+] as const;
+
+// Junk catches (ItemDef kind 'junk': tangled weed, soggy boots) stop granting
+// proficiency entirely once band 0 is outgrown: a seasoned angler learns
+// nothing from dredging up boots.
+export const FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY = 100;
+
+// The per-catch proficiency gain: deterministic fractional amounts off the
+// schedule above, NEVER a skill-up roll and never an rng draw. The first
+// schedule row the proficiency sits below wins; at or past the last row the
+// gain is 0.
+export function fishingCatchGain(proficiency: number, isJunk: boolean): number {
+  if (isJunk && proficiency >= FISHING_JUNK_GAIN_CUTOFF_PROFICIENCY) return 0;
+  for (const row of FISHING_GAIN_SCHEDULE) {
+    if (proficiency < row.belowProficiency) return row.gain;
+  }
+  return 0;
+}
+
 function hasFishableWaterAhead(ctx: SimContext, p: Entity): boolean {
   const sin = Math.sin(p.facing);
   const cos = Math.cos(p.facing);
@@ -231,10 +264,17 @@ export function completeFishing(ctx: SimContext, p: Entity, meta: PlayerMeta): v
   // Book of Deeds: a real fish (never weeds or boots) from this zone's
   // waters feeds the per-zone first-cast mark.
   onFishCaughtForDeeds(ctx, meta, zoneAt(p.pos.z).id, caught);
-  // Fishing proficiency: a landed catch (fish AND junk alike) accrues one point
-  // through the shared gathering-grant queue, draining on the tick path exactly
-  // like a world-node harvest. Deliberately queued only here, on the landed
-  // path: the no-bite null branch, the bags-full got-away branch, and the
-  // codfather quest branch (which returns above) never accrue.
-  queueGatheringGrant(meta, 'fishing', 1);
+  // Fishing proficiency: a landed catch accrues the Phase 12c fractional
+  // schedule amount (fishingCatchGain above, junk cut off past band 0) through
+  // the shared gathering-grant queue, draining on the tick path exactly like a
+  // world-node harvest. The gain is pure state computed AFTER the single table
+  // draw (zero rng draws, zero draw reordering), and a 0 gain queues nothing
+  // (queueGatheringGrant drops non-positive amounts). Deliberately queued only
+  // here, on the landed path: the no-bite null branch, the bags-full got-away
+  // branch, and the codfather quest branch (which returns above) never accrue.
+  queueGatheringGrant(
+    meta,
+    'fishing',
+    fishingCatchGain(meta.gatheringProficiency.fishing ?? 0, ITEMS[caught]?.kind === 'junk'),
+  );
 }

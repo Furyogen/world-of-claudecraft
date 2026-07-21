@@ -705,6 +705,12 @@ export const es_ES: EnTranslations = {
       "collapseHint": "Contraer el seguimiento de misiones",
       "expandHint": "Expandir el seguimiento de misiones"
     },
+    "interfaceTabs": {
+      "general": "General",
+      "frames": "Frames",
+      "chat": "Chat",
+      "combat": "Combat"
+    },
     "chatTimestamps": {
       "show": "Mostrar hora en el chat",
       "format": "Formato de hora",
@@ -1684,7 +1690,8 @@ export const es_ES: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Nivel {level} {family}",
@@ -2082,7 +2089,11 @@ export const es_ES: EnTranslations = {
       "blockSearchPlaceholder": "Nombre del jugador",
       "blockAction": "Bloquear",
       "nowBlocking": "{name} bloqueado.",
-      "stopBlockingTitle": "Dejar de bloquear a {name}"
+      "stopBlockingTitle": "Dejar de bloquear a {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Hide offline",
+      "hideOfflineTitle": "Hide offline guild members"
     },
     "gathering": {
       "title": "Recolección",
@@ -2163,7 +2174,7 @@ export const es_ES: EnTranslations = {
       "tierPipAria": "Nivel {tier}",
       "nextUnlockTier": "{points} apunta al siguiente nivel: las probabilidades de obra maestra mejoran",
       "nextUnlockSpecialized": "{points} apunta a Specialized: bajan los costes de materiales",
-      "nextUnlockMax": "En máxima habilidad",
+      "nextUnlockMastered": "Mastered, for now",
       "perkSpecializedLine": "{craft}: Especializado, costos de material -{pct}%",
       "perkSpecializedAt": "Se especializa en la habilidad {threshold}",
       "switchCost": "El próximo cambio de arquetipo cuesta {cost} puntos de expiación",
@@ -2243,6 +2254,7 @@ export const es_ES: EnTranslations = {
       "skillReqLine": "Requiere {craft} {skill}",
       "difficultyFull": "Ganancia total de habilidad",
       "difficultyReduced": "Ganancia de habilidad reducida",
+      "difficultyMinimal": "Minimal skill gain",
       "difficultyNone": "Sin ganancia de habilidad",
       "stationBadge": "Estación",
       "stationOutOfRangeNamed": "Vaya a {station} para crear esto.",
@@ -5861,7 +5873,8 @@ export const es_ES: EnTranslations = {
         "offline": "Desconectado",
         "combat": "En combate",
         "dungeon": "En mazmorra",
-        "dead": "Muerto"
+        "dead": "Muerto",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const es_ES: EnTranslations = {
         "sender": "El gremio de artesanos",
         "subject": "Tu trabajo en fabricación de armaduras e ingeniería",
         "body": "Artesano,\n\nAl gremio le llega la noticia de tu trabajo en la fabricación de armaduras y la ingeniería: placas remachadas y engranajes rectificados, los dos oficios se alimentan mutuamente. Los oficios vecinos trabajados juntos marcan una mano lista para la sintonía. Busca al herrero Haldren, el armero de Eastbrook: por ahora habla en nombre de los maestros. Demuéstrale tu oficio con el trabajo de tus propias manos y él verá tus dos especialidades en sintonía.\n\nAtentamente,\nEl gremio de artesanos"
+      },
+      "mastery_reset_notice": {
+        "sender": "The Guildhall",
+        "subject": "Your craft, made honest",
+        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
       }
     },
     "itemSets": {

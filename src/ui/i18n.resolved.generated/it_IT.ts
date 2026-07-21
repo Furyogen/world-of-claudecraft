@@ -705,6 +705,12 @@ export const it_IT: EnTranslations = {
       "collapseHint": "Comprimi il riquadro Missioni",
       "expandHint": "Espandi il riquadro Missioni"
     },
+    "interfaceTabs": {
+      "general": "General",
+      "frames": "Frames",
+      "chat": "Chat",
+      "combat": "Combat"
+    },
     "chatTimestamps": {
       "show": "Mostra orari della chat",
       "format": "Formato orario",
@@ -1684,7 +1690,8 @@ export const it_IT: EnTranslations = {
     },
     "nameplate": {
       "mobLevel": "{level}",
-      "mobEliteLevel": "{level}+"
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{family} di livello {level}",
@@ -2082,7 +2089,11 @@ export const it_IT: EnTranslations = {
       "blockSearchPlaceholder": "Nome del giocatore",
       "blockAction": "Blocca",
       "nowBlocking": "{name} bloccato.",
-      "stopBlockingTitle": "Sblocca {name}"
+      "stopBlockingTitle": "Sblocca {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Hide offline",
+      "hideOfflineTitle": "Hide offline guild members"
     },
     "gathering": {
       "title": "Raccolta",
@@ -2163,7 +2174,7 @@ export const it_IT: EnTranslations = {
       "tierPipAria": "Livello {tier}",
       "nextUnlockTier": "{points} punta al livello successivo: le probabilità di capolavori migliorano",
       "nextUnlockSpecialized": "{points} punti alla specializzazione: i costi dei materiali diminuiscono",
-      "nextUnlockMax": "Alla massima abilità",
+      "nextUnlockMastered": "Mastered, for now",
       "perkSpecializedLine": "{craft}: costi materiali specializzati -{pct}%",
       "perkSpecializedAt": "Specializzato nell'abilità {threshold}",
       "switchCost": "Il prossimo cambio di archetipo costa {cost} punti di espiazione",
@@ -2243,6 +2254,7 @@ export const it_IT: EnTranslations = {
       "skillReqLine": "Richiede {craft} {skill}",
       "difficultyFull": "Guadagno completo di abilità",
       "difficultyReduced": "Guadagno di abilità ridotto",
+      "difficultyMinimal": "Minimal skill gain",
       "difficultyNone": "Nessun guadagno di abilità",
       "stationBadge": "Stazione",
       "stationOutOfRangeNamed": "Passa a {station} per crearlo.",
@@ -5861,7 +5873,8 @@ export const it_IT: EnTranslations = {
         "offline": "Offline",
         "combat": "In combattimento",
         "dungeon": "In spedizione",
-        "dead": "Morto"
+        "dead": "Morto",
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -10997,6 +11010,11 @@ export const it_IT: EnTranslations = {
         "sender": "La Gilda degli Artigiani",
         "subject": "Il tuo lavoro nell'artigianato e nell'ingegneria delle armature",
         "body": "Artigiano,\n\nAlla Gilda arriva la voce del tuo lavoro nell'ingegneria e nell'artigianato delle armature: piastre rivettate e ingranaggi centrati, le due arti si alimentano a vicenda. Mestieri vicini lavorati insieme segnano una mano pronta per la sintonizzazione. Cerca il Fabbro Haldren, l'armaiolo di Eastbrook: per ora parla a nome dei maestri. Dimostragli la tua abilità con il lavoro delle tue mani e vedrà le tue due specializzazioni in sintonia.\n\nIn regola,\nLa Gilda degli Artigiani"
+      },
+      "mastery_reset_notice": {
+        "sender": "The Guildhall",
+        "subject": "Your craft, made honest",
+        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
       }
     },
     "itemSets": {
