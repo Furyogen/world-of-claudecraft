@@ -5177,12 +5177,21 @@
     overflow: visible;
   }
   body.mobile-touch #charselect-panel #charselect-news {
-    flex: 1 1 auto;
+    flex: none;
     width: 100%;
     height: auto;
     min-height: 0;
     max-height: none;
     margin-bottom: 0;
+  }
+  /* The page is the scroller on mobile: the feed renders at natural height
+     (no nested scroll region, no bottom fade hiding the tail mid-read). */
+  body.mobile-touch #charselect-panel .cs-news-feed {
+    flex: none;
+    min-height: 0;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
   body.mobile-touch .char-row {
     display: grid;
@@ -6178,6 +6187,18 @@
       overflow: hidden;
       padding: 0;
     }
+    /* charselect only: the news panel flows BELOW the roster/preview stage,
+       so the panel grows with it and the page scrolls; the .cs-body grid row
+       above keeps (roughly) the old one-screen height. charcreate keeps the
+       clamped, non-scrolling panel. */
+    body.mobile-touch #charselect-panel {
+      height: auto;
+      overflow: visible;
+    }
+    body.mobile-touch #charselect-panel .cs-body {
+      flex: 0 0 auto;
+      grid-template-rows: calc(min(560px, var(--app-vh) - 20px) - 118px) auto;
+    }
     body.mobile-touch #charselect-panel .auth-title,
     body.mobile-touch #charcreate-panel .auth-title {
       font-size: 18px;
@@ -6324,45 +6345,24 @@
     body.mobile-touch #charselect-panel .cs-detail-col {
       display: flex;
       flex-direction: column;
-      gap: 8px;
     }
     body.mobile-touch #charselect-panel .cs-detail-col .cs-preview {
-      flex: 0 0 38%;
+      flex: 1 1 auto;
       height: auto;
       min-height: 110px;
       min-width: 0;
     }
     body.mobile-touch #charselect-panel #charselect-news {
+      grid-column: 1 / -1;
       box-sizing: border-box;
-      min-height: 0;
-      height: auto;
-      padding: 10px 12px;
+      width: auto;
+      margin: 0 10px 10px;
+      padding: 12px 14px;
     }
     body.mobile-touch #charselect-panel .cs-news-title {
       font-size: 12px;
       padding-bottom: 6px;
       margin-bottom: 8px;
-    }
-    body.mobile-touch #charselect-panel .cs-news-feed {
-      overflow-y: auto;
-      scrollbar-gutter: stable;
-      scrollbar-width: auto;
-      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-      padding-right: 12px;
-      font-size: 11.5px;
-    }
-    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar {
-      width: 10px;
-    }
-    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar-track {
-      background: var(--scrollbar-track);
-      border: 1px solid #35270f;
-      border-radius: 999px;
-    }
-    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--scrollbar-thumb) 0%, #3a2b10 100%);
-      border: 1px solid var(--scrollbar-border);
-      border-radius: 999px;
     }
     body.mobile-touch #charcreate-panel .cs-body {
       grid-template-columns: minmax(310px, 0.95fr) minmax(360px, 1.05fr);
