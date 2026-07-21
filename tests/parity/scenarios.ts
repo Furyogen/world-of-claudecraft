@@ -3415,7 +3415,7 @@ function targetingMarkers(): Scenario {
     name: 'targeting_markers',
     coverage: [
       'tabTarget cycle over visible enemies via orderTabTargets + grid order (~9690)',
-      'targetNearestEnemy / enemyCandidates grid scan, engaged vs idle (~9724/9740)',
+      'targetNearestEnemy / enemyCandidates focused order, engaged vs idle (~9724/9740)',
       'targetNearestFriendly + friendlyTabTarget wrap, autoAttack never armed (~9782/9797)',
       'setMarker set/toggle-off/symbol-uniqueness + clearEntityMarker death-strip (~11956/12002)',
     ],

@@ -93,16 +93,19 @@ export class Targeting {
     const r = this.ctx.resolve(pid);
     if (!r) return;
     const p = r.e;
-    let best: Entity | null = null;
-    let bestD2 = TAB_QUERY_RADIUS * TAB_QUERY_RADIUS;
-    this.ctx.grid.forEachInRadius(p.pos.x, p.pos.z, TAB_QUERY_RADIUS, (e, d2) => {
-      if (!this.isEnemyTargetCandidate(p, e)) return;
-      if (d2 < bestD2) {
-        bestD2 = d2;
-        best = e;
-      }
-    });
-    if (best) p.targetId = (best as Entity).id;
+    const candidates = this.enemyCandidates(p);
+    if (candidates.length === 0) return;
+    const { ids } = orderTabTargets(
+      candidates.map((c) => ({
+        id: c.e.id,
+        dx: c.e.pos.x - p.pos.x,
+        dz: c.e.pos.z - p.pos.z,
+        d: c.d,
+        engaged: c.e.aggroTargetId === p.id || c.e.targetId === p.id,
+      })),
+      p.facing,
+    );
+    p.targetId = ids[0];
   }
 
   private enemyCandidates(p: Entity): { e: Entity; d: number }[] {

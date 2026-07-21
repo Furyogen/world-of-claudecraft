@@ -170,6 +170,30 @@ describe('Targeting: target selection', () => {
     expect(actor.targetId).toBe(11); // the nearer mob
   });
 
+  it('targetNearestEnemy keeps the target on an engaged fight before idle mobs', () => {
+    const t = makeCtx();
+    const actor = t.add(ent({ id: 1, kind: 'player', pos: { x: 0, y: 0, z: 0 }, facing: 0 }));
+    t.add(ent({ id: 10, hostile: true, pos: { x: 0, y: 0, z: 6 } }));
+    const engaged = t.add(
+      ent({ id: 11, hostile: true, pos: { x: 0, y: 0, z: 24 }, aggroTargetId: actor.id }),
+    );
+    const targeting = new Targeting(t.ctx);
+    targeting.targetNearestEnemy(1);
+    expect(actor.targetId).toBe(engaged.id);
+  });
+
+  it('targetNearestEnemy does not jump from a visible fight cluster to distant idle mobs', () => {
+    const t = makeCtx();
+    const actor = t.add(ent({ id: 1, kind: 'player', pos: { x: 0, y: 0, z: 0 }, facing: 0 }));
+    t.add(ent({ id: 10, hostile: true, pos: { x: 0, y: 0, z: 12 }, aggroTargetId: actor.id }));
+    const farIdle = t.add(ent({ id: 11, hostile: true, pos: { x: 0, y: 0, z: 38 } }));
+    const targeting = new Targeting(t.ctx);
+    for (let i = 0; i < 4; i++) {
+      targeting.targetNearestEnemy(1);
+      expect(actor.targetId).not.toBe(farIdle.id);
+    }
+  });
+
   it('friendlyTabTarget cycles party-mates by distance and wraps', () => {
     const t = makeCtx();
     const actor = t.add(ent({ id: 1, kind: 'player', pos: { x: 0, y: 0, z: 0 } }));
