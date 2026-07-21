@@ -1830,11 +1830,12 @@ const STORAGE_KEY = 'ev_music_on';
 // cues share a single level through the master gain; 0.5 matches the level
 // the Sowfield file tracks already play at.
 const STREAM_LEVEL = 0.5;
-// Pause a stream once it has been silent this long: every fade time constant
-// in play (0.35s and FADE_SECONDS / 3) has decayed inaudible by then, and a
-// paused element stops decoding and downloading. Playback later resumes from
-// the same position, so re-entering a zone picks its theme back up mid-phrase.
-const STREAM_PAUSE_AFTER_S = 3;
+// Pause a stream once it has been silent this long: the slowest fade time
+// constant in play (FADE_SECONDS / 3, about 0.73s) has decayed below 0.5%
+// (under -45 dB) by then, and a paused element stops decoding and
+// downloading. Playback later resumes from the same position, so re-entering
+// a zone picks its theme back up mid-phrase.
+const STREAM_PAUSE_AFTER_S = 4;
 const STREAM_KEEPER_MS = 500;
 
 export function buildMusicThemes(withOverrides = true): Record<string, Theme> {
@@ -2619,9 +2620,11 @@ export class MusicSynth {
 }
 
 // One streamed cue: a looping media element (progressive download, decoded on
-// demand) behind its own crossfade gain. el stays null where the host has no
-// Audio constructor (plain-Node tests); targets still track for the logic.
+// demand) behind its own crossfade gain. el stays null until the cue is first
+// audible (and always in plain-Node tests, which have no Audio constructor);
+// targets still track for the logic either way.
 interface StreamTrack {
+  url: string;
   el: HTMLAudioElement | null;
   gain: GainNode;
   target: number; // logical 0..1; the master gain applies the shared level
@@ -2691,6 +2694,8 @@ export class MusicDirector {
     this.applyBossPlayback();
     if (this.ctx && this.master)
       this.master.gain.setTargetAtTime(this.masterTarget(), this.ctx.currentTime, on ? 0.4 : 0.7);
+    // handing the mix back must revive paused streams now, not a tick later
+    if (!on) this.streamKeeper();
   }
 
   resetForDungeonEntry(dungeonId: string | null): void {
@@ -2808,6 +2813,8 @@ export class MusicDirector {
         track ? 0.4 : 0.7,
       );
     }
+    // walking away from the stadium must revive paused streams now
+    if (enteringOrLeaving && track === null) this.streamKeeper();
   }
 
   private ensureSowfieldElements(): void {
@@ -2865,6 +2872,8 @@ export class MusicDirector {
     }
     this.applyBossPlayback();
     this.applySowfield();
+    // leaving volume 0 must revive paused streams now, not a tick later
+    if (this.streamsAudible()) this.streamKeeper();
   }
 
   get volume(): number {
@@ -2899,37 +2908,45 @@ export class MusicDirector {
     this.sowfieldMatchGain.gain.value = 0;
     this.sowfieldMatchGain.connect(compressor);
 
-    // Warm both battle themes now: a fight can start at any moment and its
-    // opening hit must not wait on a first-byte fetch. Zone streams are made
-    // lazily on first activation instead; a zone change always has the old
-    // theme's crossfade window to cover the new stream spinning up.
+    // Register both battle themes now (and warm their downloads whenever the
+    // mix is audible, see streamKeeper): a fight can start at any moment and
+    // its opening hit must not wait on a first-byte fetch. Zone streams are
+    // made lazily on first activation instead; a zone change always has the
+    // old theme's crossfade window to cover the new stream spinning up.
     for (const url of COMBAT_STREAM_URLS) {
       const stream = this.makeStream(url);
       if (stream) this.combatStreams.push(stream);
     }
     this.timer = window.setInterval(() => this.streamKeeper(), STREAM_KEEPER_MS);
+    this.streamKeeper();
   }
 
-  /** Build one streamed cue: a looping, progressively-downloaded media element
-   *  routed into the shared graph behind its own crossfade gain. */
+  /** Build one streamed cue's bookkeeping and crossfade gain. The media
+   *  element itself is created on the first audible activation
+   *  (ensureElement), so a muted player never downloads anything. */
   private makeStream(url: string): StreamTrack | null {
     const ctx = this.ctx;
     if (!ctx || !this.master) return null;
     const gain = ctx.createGain();
     gain.gain.value = 0;
     gain.connect(this.master);
-    let el: HTMLAudioElement | null = null;
-    if (typeof Audio === 'function') {
-      el = new Audio(url);
-      el.loop = true;
-      el.preload = 'auto';
-      try {
-        ctx.createMediaElementSource(el).connect(gain);
-      } catch {
-        /* element already wired or unsupported */
-      }
+    return { url, el: null, gain, target: 0, silentAt: 0 };
+  }
+
+  /** Create and wire the looping, progressively-downloaded media element. */
+  private ensureElement(stream: StreamTrack): void {
+    if (stream.el || !this.ctx || typeof Audio !== 'function') return;
+    const el = new Audio(stream.url);
+    el.loop = true;
+    el.preload = 'auto';
+    try {
+      this.ctx.createMediaElementSource(el).connect(stream.gain);
+    } catch {
+      // Without a graph route the element would play at full volume outside
+      // every gain, duck, and mute in the mix; silence is the safer failure.
+      el.muted = true;
     }
-    return { el, gain, target: 0, silentAt: 0 };
+    stream.el = el;
   }
 
   private ensureZoneStream(zone: MusicZone): void {
@@ -2940,16 +2957,31 @@ export class MusicDirector {
     if (stream) this.zoneStreams[zone] = stream;
   }
 
+  // Streams are audible only when nothing has the master ducked to zero: the
+  // toggle, the menu fade, the volume slider, and the dedicated boss and
+  // Sowfield file tracks (which own the mix while active). While inaudible,
+  // streams pause instead of decoding silence.
+  private streamsAudible(): boolean {
+    return (
+      this._enabled &&
+      !this._menuPaused &&
+      this._vol > 0 &&
+      !this.bossActive &&
+      this.sowfieldTrack === null
+    );
+  }
+
   private setStreamTarget(stream: StreamTrack, target: number, fadeSeconds: number): void {
     if (!this.ctx || stream.target === target) return;
     stream.target = target;
     stream.gain.gain.setTargetAtTime(target, this.ctx.currentTime, fadeSeconds);
     if (target > 0) {
       stream.silentAt = -1;
-      // While muted (toggle off or menu open) do not start the download; the
-      // keeper revives the stream the moment music is audible again.
-      if (!this._enabled || this._menuPaused) return;
+      // While the mix is inaudible do not start the download; the keeper
+      // revives the stream the moment it is audible again.
+      if (!this.streamsAudible()) return;
       void this.ctx.resume?.();
+      this.ensureElement(stream);
       if (stream.el) void stream.el.play().catch(() => {});
     } else {
       stream.silentAt = this.ctx.currentTime;
@@ -2961,19 +2993,26 @@ export class MusicDirector {
     yield* this.combatStreams;
   }
 
-  // Runs every STREAM_KEEPER_MS (and directly on unmute/menu-close so revival
-  // is instant): pauses cues that finished fading out, so an inaudible stream
-  // costs no decoding or bandwidth, and nudges active cues that a refused
-  // autoplay or a tab restore left paused.
+  // Runs every STREAM_KEEPER_MS (and directly on unmute, menu close, volume
+  // restore, and boss/Sowfield handback so revival is instant): pauses cues
+  // that finished fading out, so an inaudible stream costs no decoding or
+  // bandwidth, revives active cues that a refused autoplay, a tab restore,
+  // or a mute window left paused, and keeps the battle themes' downloads
+  // warm whenever the mix is audible.
   private streamKeeper(): void {
     const ctx = this.ctx;
     if (!ctx) return;
-    const audibleBase = this._enabled && !this._menuPaused;
+    const audibleBase = this.streamsAudible();
     const now = ctx.currentTime;
+    if (audibleBase) for (const stream of this.combatStreams) this.ensureElement(stream);
     for (const stream of this.allStreams()) {
       if (audibleBase && stream.target > 0) {
         stream.silentAt = -1;
-        if (stream.el?.paused) void stream.el.play().catch(() => {});
+        this.ensureElement(stream);
+        if (stream.el?.paused) {
+          void ctx.resume?.();
+          void stream.el.play().catch(() => {});
+        }
       } else if (stream.silentAt < 0) {
         stream.silentAt = now;
       } else if (stream.el && !stream.el.paused && now - stream.silentAt > STREAM_PAUSE_AFTER_S) {
@@ -3045,10 +3084,13 @@ export class MusicDirector {
     // Each fight opens on one of the battle themes, chosen at random per
     // fight and restarted from the top so the opening hit lands; the pick
     // then holds for the whole fight, even across a zone border mid-chase.
+    // A pull chained within the previous fight's fade-out (element not yet
+    // paused) continues from position instead: rewinding an audibly fading
+    // track would jump-cut, and rolling combat reads as one long fight.
     if (combatStarting && this.combatStreams.length > 0) {
       this.combatIdx = pickCombatTrackIndex(this.combatStreams.length, Math.random);
       const el = this.combatStreams[this.combatIdx].el;
-      if (el) {
+      if (el?.paused) {
         try {
           el.currentTime = 0;
         } catch {

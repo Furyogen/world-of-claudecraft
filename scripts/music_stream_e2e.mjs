@@ -118,12 +118,20 @@ check(
 // --- combat: random battle theme replaces the zone, then hands back --------
 await page.evaluate(() => {
   const sim = window.__game.sim;
+  const p = sim.player.pos;
+  // Aggro the NEAREST living mob: a distant one can leash-clear on the next
+  // tick before the director ever sees the fight, flaking the checks below.
+  let best = null;
+  let bestD = Infinity;
   for (const e of sim.entities.values()) {
-    if (e.kind === 'mob' && !e.dead) {
-      e.aggroTargetId = sim.playerId;
-      break;
+    if (e.kind !== 'mob' || e.dead) continue;
+    const d = Math.hypot(e.pos.x - p.x, e.pos.z - p.z);
+    if (d < bestD) {
+      bestD = d;
+      best = e;
     }
   }
+  if (best) best.aggroTargetId = sim.playerId;
 });
 await sleep(1200);
 s = await snap();

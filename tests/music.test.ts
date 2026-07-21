@@ -231,6 +231,16 @@ describe('MusicDirector random combat theme pick', () => {
     expect(combat[1].el?.currentTime).toBe(0);
   });
 
+  it('does not rewind a battle theme still fading out from a chained pull', () => {
+    const combat = internals(director).combatStreams;
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    director.update('vale', true);
+    director.update('vale', false); // fade-out begins; the element keeps playing
+    if (combat[0].el) combat[0].el.currentTime = 7;
+    director.update('vale', true); // chained pull before the keeper paused it
+    expect(combat[0].el?.currentTime).toBe(7); // resumes, no jump cut
+  });
+
   it('keeps the picked theme through a zone border mid-fight', () => {
     const combat = internals(director).combatStreams;
     vi.spyOn(Math, 'random').mockReturnValue(0.99);
@@ -267,7 +277,7 @@ describe('MusicDirector stream keeper', () => {
     director.update('vale', true); // vale fades out
     inner.streamKeeper();
     expect(el.pause).not.toHaveBeenCalled();
-    inner.ctx.currentTime += 4;
+    inner.ctx.currentTime += 5;
     inner.streamKeeper();
     expect(el.pause).toHaveBeenCalledTimes(1);
   });
@@ -289,7 +299,7 @@ describe('MusicDirector stream keeper', () => {
     if (!el) throw new Error('vale stream element missing');
     director.setEnabled(false);
     inner.streamKeeper();
-    inner.ctx.currentTime += 4;
+    inner.ctx.currentTime += 5;
     inner.streamKeeper();
     expect(el.paused).toBe(true);
     el.play.mockClear();
@@ -297,15 +307,48 @@ describe('MusicDirector stream keeper', () => {
     expect(el.play).toHaveBeenCalledTimes(1);
   });
 
-  it('never starts a download while music is disabled, then streams on enable', () => {
+  it('never even creates a download while music is disabled, then streams on enable', () => {
     director.setEnabled(false);
+    const elementsBefore = FakeAudio.instances.length;
+    director.update('vale', false);
+    const inner = internals(director);
+    expect(inner.zoneStreams.vale?.target).toBe(1);
+    expect(inner.zoneStreams.vale?.el).toBeNull();
+    expect(FakeAudio.instances.length).toBe(elementsBefore);
+    director.setEnabled(true); // revives synchronously, no keeper tick needed
+    const el = inner.zoneStreams.vale?.el;
+    expect(el?.src).toBe(ZONE_STREAM_URLS.vale);
+    expect(el?.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('pauses streams while the dedicated boss track owns the mix and revives on handback', () => {
+    director.update('dungeon_hollow_crypt', false);
+    const inner = internals(director);
+    const el = inner.zoneStreams.dungeon_hollow_crypt?.el;
+    if (!el) throw new Error('dungeon stream element missing');
+    director.setBossCombat(true);
+    inner.streamKeeper();
+    inner.ctx.currentTime += 5;
+    inner.streamKeeper();
+    expect(el.paused).toBe(true);
+    expect(inner.zoneStreams.dungeon_hollow_crypt?.target).toBe(1);
+    el.play.mockClear();
+    director.setBossCombat(false); // revives synchronously
+    expect(el.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('pauses streams at volume zero and revives when the slider comes back', () => {
     director.update('vale', false);
     const inner = internals(director);
     const el = inner.zoneStreams.vale?.el;
     if (!el) throw new Error('vale stream element missing');
-    expect(el.play).not.toHaveBeenCalled();
-    expect(inner.zoneStreams.vale?.target).toBe(1);
-    director.setEnabled(true);
+    director.setVolume(0);
+    inner.streamKeeper();
+    inner.ctx.currentTime += 5;
+    inner.streamKeeper();
+    expect(el.paused).toBe(true);
+    el.play.mockClear();
+    director.setVolume(0.7); // revives synchronously
     expect(el.play).toHaveBeenCalledTimes(1);
   });
 
@@ -316,7 +359,7 @@ describe('MusicDirector stream keeper', () => {
     if (!el) throw new Error('vale stream element missing');
     director.pauseForMenu();
     inner.streamKeeper();
-    inner.ctx.currentTime += 4;
+    inner.ctx.currentTime += 5;
     inner.streamKeeper();
     expect(el.paused).toBe(true);
     el.play.mockClear();
@@ -392,6 +435,82 @@ describe('dungeon music entry reset', () => {
     expect(dungeonMusicZoneForDungeon('nythraxis_boss_arena')).toBe('dungeon_hollow_crypt');
     expect(el.currentTime).toBe(0);
     expect(bossElement.currentTime).toBe(0);
+    clearInterval(internals(director).timer);
+  });
+});
+
+describe('MusicDirector lifecycle and mix levels', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    FakeAudio.instances = [];
+  });
+
+  const boot = () => {
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('Audio', FakeAudio);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
+    return makeDirector();
+  };
+
+  it('pins the crossfade time constants: zones fade in slow and out fast, combat inverse', () => {
+    const director = boot();
+    const inner = internals(director);
+    director.update('vale', false);
+    const zoneIn = inner.zoneStreams.vale?.gain.gain.setTargetAtTime.mock.calls.at(-1);
+    expect(zoneIn?.[0]).toBe(1);
+    expect(zoneIn?.[2]).toBeCloseTo(2.2 / 3, 5); // FADE_SECONDS / 3
+    director.update('vale', true);
+    const zoneOut = inner.zoneStreams.vale?.gain.gain.setTargetAtTime.mock.calls.at(-1);
+    expect(zoneOut?.[0]).toBe(0);
+    expect(zoneOut?.[2]).toBeCloseTo(0.35, 5);
+    const active = inner.combatStreams.find((stream) => stream.target === 1);
+    const combatIn = active?.gain.gain.setTargetAtTime.mock.calls.at(-1);
+    expect(combatIn?.[2]).toBeCloseTo(0.35, 5);
+    director.update('vale', false);
+    const combatOut = active?.gain.gain.setTargetAtTime.mock.calls.at(-1);
+    expect(combatOut?.[0]).toBe(0);
+    expect(combatOut?.[2]).toBeCloseTo(2.2 / 3, 5);
+    clearInterval(inner.timer);
+  });
+
+  it('drives the master at the shared file-track level through the volume slider', () => {
+    const director = boot();
+    const master = (director as unknown as { master: FakeGain }).master;
+    expect(master.gain.value).toBe(0.5); // STREAM_LEVEL at the default volume 1
+    director.setVolume(0.5);
+    expect(master.gain.value).toBeCloseTo(0.25, 5);
+    director.setVolume(2);
+    expect(director.volume).toBe(1);
+    director.setVolume(-1);
+    expect(director.volume).toBe(0);
+    clearInterval(internals(director).timer);
+  });
+
+  it('update() before init() is a safe no-op', () => {
+    const director = new MusicDirector();
+    expect(() => director.update('vale', true)).not.toThrow();
+  });
+
+  it('init() twice does not rebuild the graph or duplicate combat streams', () => {
+    const director = boot();
+    const inner = internals(director);
+    const ctx = inner.ctx;
+    director.init();
+    expect(inner.ctx).toBe(ctx);
+    expect(inner.combatStreams).toHaveLength(COMBAT_STREAM_URLS.length);
+    clearInterval(inner.timer);
+  });
+
+  it('a stored music-off preference means init downloads nothing at all', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: vi.fn(() => '0'),
+      setItem: vi.fn(),
+    });
+    const director = boot();
+    expect(director.enabled).toBe(false);
+    director.update('vale', false);
+    expect(FakeAudio.instances).toHaveLength(0);
     clearInterval(internals(director).timer);
   });
 });
