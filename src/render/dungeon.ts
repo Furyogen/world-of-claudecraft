@@ -38,6 +38,7 @@ import { authoredLiftAt, authoredWallSegments, doorRampHalf } from '../sim/rift/
 import { loadGltf, releaseGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { fitAuthoredWallSegment } from './authored_walls_core';
+import { DAIS_PLATFORM_HEIGHT } from './dais_lift';
 import {
   placeLitanyMarshDressing,
   placeMarshBlackwaterPools,
@@ -2078,7 +2079,13 @@ export class DungeonInteriors {
       for (let z = -16; z <= 16; z += 4) {
         if (Math.hypot(x, z) > d.r) continue;
         const rot = Math.floor(hash2(x, z) * 4) * quarter;
-        p.add('floor_foundation_allsides', d.x + x, 0, d.z + z, rot, [1.85, 0.3, 1.85]);
+        // y-scale = DAIS_PLATFORM_HEIGHT / 2 (2u blocks): ground cues (the
+        // death-zone danger ring) lift by the same shared constant.
+        p.add('floor_foundation_allsides', d.x + x, 0, d.z + z, rot, [
+          1.85,
+          DAIS_PLATFORM_HEIGHT / 2,
+          1.85,
+        ]);
       }
     }
     // ritual glow pooled on the dais top so the boss stage never reads as a

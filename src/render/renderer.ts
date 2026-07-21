@@ -79,6 +79,7 @@ import { CLICK_MARKER_LIFETIME, clickMarkerAnim, clickMarkerColor } from './clic
 import { trackWebGLContext } from './context_release';
 import { buildCritters, type CritterField } from './critters';
 import { animatesEveryFrame, crowdLodScaleSq, midAnimCadence } from './crowd_lod';
+import { daisVisualLift } from './dais_lift';
 import { currentDayNightPhase, dayNightPhaseOverride } from './day_night_clock';
 import {
   aboveHorizon,
@@ -98,7 +99,7 @@ import { shouldPlayDeedFirework } from './deed_fx_gate';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable, syncDelveInteractableVisibility } from './delve_props';
 import { buildDoorBody, buildRiftGateBody, buildRiftPuzzleProp } from './door_portal';
-import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
+import { DungeonInteriors, dungeonDaisHasRaisedPlatform, ensureDungeonAssets } from './dungeon';
 import { buildEmberFeatures, type EmberFeaturesView } from './ember_features';
 import { objectDisplayName } from './entity_labels';
 import { advanceSelfFacing, releaseSelfFacing } from './facing_smooth';
@@ -1905,18 +1906,22 @@ export class Renderer {
       this.riftDeathZoneVisuals = new RiftDeathZoneVisuals(this.scene, (x, z) => {
         const base = groundHeight(x, z, this.sim.cfg.seed);
         // Add the rift platform lift so rings on elevated sanctum boss arenas
-        // sit on the arena floor, not under it. Same pattern as entity ground
-        // (line ~6603) and camera clamp (~line 7643).
+        // sit on the arena floor, not under it (same pattern as entity ground
+        // and the camera clamp), PLUS the raised boss dais: the dais is a
+        // render-only platform the sim keeps flat, so without daisVisualLift a
+        // ring under the tanked boss hides beneath the foundation blocks (the
+        // playtest's invisible aoe circles). Mirrors placeDais's raised
+        // decision exactly (style.daisRaised override, else the kit default).
         const rf = this.sim.riftFloor;
-        if (rf)
+        if (rf) {
+          const floor = generateRiftFloor(rf.seed, rf.baseLevel, rf.floorIndex, rf.upgrade);
+          const lx = x - rf.origin.x;
+          const lz = z - rf.origin.z;
+          const raised = floor.style.daisRaised ?? dungeonDaisHasRaisedPlatform(floor.style.kit);
           return (
-            base +
-            riftLiftAt(
-              generateRiftFloor(rf.seed, rf.baseLevel, rf.floorIndex, rf.upgrade),
-              x - rf.origin.x,
-              z - rf.origin.z,
-            )
+            base + riftLiftAt(floor, lx, lz) + daisVisualLift(floor.layout.dais, raised, lx, lz)
           );
+        }
         return base;
       });
     });
