@@ -20,7 +20,6 @@ vi.mock('../../server/db', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../server/db')>();
   return {
     ...actual,
-    accountForToken: vi.fn(),
     accountAndScopeForToken: vi.fn(),
   };
 });
@@ -43,7 +42,7 @@ import {
   resetOverviewCacheForTests,
   setOverviewCacheForTests,
 } from '../../server/admin_overview_cache';
-import { accountAndScopeForToken, accountForToken } from '../../server/db';
+import { accountAndScopeForToken } from '../../server/db';
 import { compose } from '../../server/http/compose';
 import { withErrors } from '../../server/http/middleware/with_errors';
 import type { Method, Middleware } from '../../server/http/types';
@@ -185,7 +184,6 @@ beforeEach(() => {
     },
     now: () => nowMs,
   });
-  vi.mocked(accountForToken).mockResolvedValue(ADMIN_ACCOUNT_ID);
   vi.mocked(accountAndScopeForToken).mockResolvedValue({
     accountId: ADMIN_ACCOUNT_ID,
     scope: 'full',

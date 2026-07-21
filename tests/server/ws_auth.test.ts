@@ -70,7 +70,10 @@ function setup() {
   };
   const deps: WsAuthDeps = {
     game: game as unknown as WsAuthDeps['game'],
-    accountForToken: vi.fn(async () => 1 as number | null),
+    accountAndScopeForToken: vi.fn(async () => ({
+      accountId: 1,
+      scope: 'full' as const,
+    })),
     moderationStatusForAccount: vi.fn(async () => modStatus()),
     getCharacter: vi.fn(async () => baseChar() as CharacterRow | null),
     chatMuteStatusForAccount: vi.fn(async () => ({
@@ -154,7 +157,7 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
 
   it('3. rejects a null account with "not authenticated"', async () => {
     const { ws, deps, req } = setup();
-    deps.accountForToken = vi.fn(async () => null);
+    deps.accountAndScopeForToken = vi.fn(async () => null);
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw({ character: 1 }), req);
     expectSendThenClose(ws, errorFrame('not authenticated'));
@@ -166,7 +169,7 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
       accountId: 1,
       scope: 'read' as const,
     }));
-    Object.assign(deps, { accountAndScopeForToken });
+    deps.accountAndScopeForToken = accountAndScopeForToken;
     // A staff result makes this test decisive for the privileged escalation too:
     // the scope gate must run before the staff lookup can confer permissions.
     deps.adminRolesForAccount = vi.fn(async () => ({
@@ -190,7 +193,10 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
   it('4. rejects a non-finite character with "not authenticated"', async () => {
     const { ws, deps, req } = setup();
     // account resolves fine here; the branch is forced via a non-numeric character.
-    deps.accountForToken = vi.fn(async () => 1);
+    deps.accountAndScopeForToken = vi.fn(async () => ({
+      accountId: 1,
+      scope: 'full' as const,
+    }));
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw({ character: 'abc' }), req);
     expectSendThenClose(ws, errorFrame('not authenticated'));
@@ -895,7 +901,7 @@ describe('createWsAuth: onConnection', () => {
     // reject, never swallow: the character_lease_ws pin requires that). The caller
     // must convert the escaped rejection into the client's classified retry path
     // instead of leaving an unhandled rejection that hangs the client.
-    deps.accountForToken = vi.fn(async () => {
+    deps.accountAndScopeForToken = vi.fn(async () => {
       throw new Error('db down');
     });
     // Model an OPEN socket so the caller sends the classified error frame.
@@ -917,7 +923,7 @@ describe('createWsAuth: onConnection', () => {
 
   it('logs but sends no frame when the socket already closed during a rejected handshake', async () => {
     const { ws, deps, req } = setup();
-    deps.accountForToken = vi.fn(async () => {
+    deps.accountAndScopeForToken = vi.fn(async () => {
       throw new Error('db down');
     });
     // Socket already closed (readyState CLOSED, not OPEN): the caller must not

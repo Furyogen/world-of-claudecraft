@@ -53,6 +53,7 @@
 
 import { type AdminPermission, permissionsForRoles } from '../../admin_permissions';
 import { adminPathKnown, permissionForAdminRoute } from '../../admin_routes';
+import type { TokenScope } from '../../db';
 import { json } from '../../http_util';
 import { num } from '../schema';
 import type { Ctx, Middleware, Next, RouteMeta } from '../types';
@@ -88,11 +89,12 @@ export interface AdminIdentity {
 /**
  * The two db reads the admin gate needs, bundled so a unit test can inject a fake
  * with no Postgres. The shape mirrors the real server exports the legacy
- * adminIdentity(req) resolver calls (db.accountForToken, staff_db.adminRolesForAccount).
+ * adminIdentity(req) resolver calls (the scoped token resolver and
+ * staff_db.adminRolesForAccount).
  */
 export interface AdminAuthDb {
-  /** Account id for a live bearer token, or null (mirrors db.accountForToken). */
-  accountForToken(token: string): Promise<number | null>;
+  /** Account id and authority for a live bearer token, or null. */
+  accountAndScopeForToken(token: string): Promise<{ accountId: number; scope: TokenScope } | null>;
   /** Staff username + roles, or null when not staff (mirrors staff_db.adminRolesForAccount). */
   adminRolesForAccount(accountId: number): Promise<{ username: string; roles: string[] } | null>;
 }
@@ -109,9 +111,14 @@ export function createRequireAdmin(getDb: () => AdminAuthDb): Middleware {
   return async (ctx: Ctx, next: Next) => {
     const token = bearerToken(ctx.req);
     const db = getDb();
-    const accountId = token === null ? null : await db.accountForToken(token);
-    const staff = accountId === null ? null : await db.adminRolesForAccount(accountId);
-    if (accountId === null || staff === null) {
+    const account = token === null ? null : await db.accountAndScopeForToken(token);
+    if (account === null || account.scope !== 'full') {
+      json(ctx.res, 401, ADMIN_AUTH_REQUIRED);
+      return;
+    }
+    const accountId = account.accountId;
+    const staff = await db.adminRolesForAccount(accountId);
+    if (staff === null) {
       json(ctx.res, 401, ADMIN_AUTH_REQUIRED);
       return;
     }
@@ -151,12 +158,7 @@ export function createRequireAdmin(getDb: () => AdminAuthDb): Middleware {
       return;
     }
 
-    // NOMINAL stamp, not the token's real scope: the legacy gate never scope-checks
-    // an admin bearer (accountForToken ignores the scope column, so a read-scope
-    // companion token of a staff account passes too, parity-first). Today's admin
-    // handlers read only ctxAccountId; do NOT trust ctx.account.scope downstream of
-    // requireAdmin for a scope decision without resolving the token's actual scope.
-    ctx.account = { accountId, scope: 'full' };
+    ctx.account = { accountId, scope: account.scope };
     ctx.state.set(ADMIN_IDENTITY, identity);
     await next();
   };

@@ -50,8 +50,8 @@ import {
 } from './chat_filter_db';
 import { currentDailyRewardDay } from './daily_rewards';
 import {
+  accountAndScopeForToken,
   accountById,
-  accountForToken,
   accountMailTarget,
   findAccount,
   isAdminAccount,
@@ -275,8 +275,9 @@ interface AdminIdentity {
 async function adminIdentity(req: http.IncomingMessage): Promise<AdminIdentity | null> {
   const m = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization ?? '');
   if (!m) return null;
-  const accountId = await accountForToken(m[1]);
-  if (accountId === null) return null;
+  const account = await accountAndScopeForToken(m[1]);
+  if (account === null || account.scope !== 'full') return null;
+  const accountId = account.accountId;
   const staff = await adminRolesForAccount(accountId);
   if (staff === null) return null;
   return {
@@ -1051,15 +1052,15 @@ export async function handleAdminApi(
 //    internal throw). The happy + guard paths never reach withErrors.
 //
 //  - AUTH is the legacy-body admin gate (createRequireAdmin), mirroring
-//    adminIdentity(req) EXACTLY (v0.22.0 staff roles): bearer -> accountForToken ->
-//    staff_db.adminRolesForAccount (fail closed; no roles means not staff), a
+//    adminIdentity(req) EXACTLY (v0.22.0 staff roles): bearer -> scoped token
+//    resolver (full required) -> staff_db.adminRolesForAccount (fail closed), a
 //    uniform 401 { ...error: 'admin authentication required' } on any failure, then
 //    the CENTRAL AUTHORIZATION gate: the route's declared permission resolves from
 //    ADMIN_ROUTE_PERMISSIONS (server/admin_routes.ts) against the concrete request
 //    path, fail-closed (unmapped -> 404 'unknown admin endpoint' / 405; missing
 //    permission -> 403), mirroring the legacy handleAdminApi preamble byte-for-byte.
-//    NO read-only-scope 403 and NO moderation gate (legacy admin auth applies
-//    neither). Mounted on every route except login (anonymous by design).
+//    Read-scope tokens receive the same uniform 401 as every other invalid admin
+//    credential. No moderation gate applies. Mounted on every route except login.
 //    requireAdmin runs BEFORE the :id / :action decode, so an unauthenticated
 //    malformed request 401s exactly as legacy did (auth precedes route/method).
 //
@@ -1224,7 +1225,7 @@ function makeRealAdminDb() {
     moderationQueue,
     moderationReportsForAccount,
     muteAccountChat,
-    accountForToken,
+    accountAndScopeForToken,
     accountMailTarget,
     findAccount,
     // Target-account staff check (the "admin accounts cannot be suspended / banned /
@@ -1289,7 +1290,7 @@ export function resetAdminDbForTests(): void {
   adminDbOverride = undefined;
 }
 
-// The admin-auth gate reads its two db functions (accountForToken,
+// The admin-auth gate reads its two db functions (accountAndScopeForToken and
 // adminRolesForAccount) off the active bundle, so a setAdminDbForTests fake drives
 // it too. AdminDb is a superset of AdminAuthDb, so the getter is assignable.
 const requireAdmin = createRequireAdmin((): AdminAuthDb => adminDb());
