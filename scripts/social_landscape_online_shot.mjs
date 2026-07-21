@@ -221,17 +221,6 @@ async function loginAndEnter(page, username, charName, cls, mobile = false) {
       .catch(() => {});
     await page.evaluate(() => document.querySelector('#mobile-preflight-continue')?.click());
   }
-  // The post-login Welcome Screen (news/patch notes/Discord strip) gates startGame behind
-  // a Continue click, same #ws-continue id enterOfflineGame (scripts/enter_offline_game.mjs)
-  // dismisses offline; online shows it too and window.__game never appears until it clears.
-  await sleep(1000);
-  await page
-    .waitForSelector('#ws-continue:not([disabled])', { visible: true, timeout: 20000 })
-    .catch(() => {});
-  await page.evaluate(() => {
-    const btn = document.querySelector('#ws-continue');
-    if (btn && !btn.disabled) btn.click();
-  });
   await page.waitForFunction(() => window.__game?.world?.entities?.size >= 1, {
     timeout: 30000,
     polling: 500,

@@ -2551,9 +2551,6 @@ export const pt_BR: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Essa autorização de carteira expirou ou não pôde ser verificada. Tente novamente."
-    },
-    "welcome": {
-      "invalid_input": "Entrada inválida."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const pt_BR: EnTranslations = {
     "error": "Não foi possível carregar as novidades. Tente novamente mais tarde.",
     "empty": "Ainda não há novidades; volte em breve.",
     "prerelease": "Pré-lançamento",
-    "viewOnGithub": "Ver no GitHub"
+    "viewOnGithub": "Ver no GitHub",
+    "new": "Novo",
+    "viewAll": "Ver todas as atualizações no GitHub"
   },
   "download": {
     "title": "Baixar launcher para desktop",
@@ -5326,29 +5325,6 @@ export const pt_BR: EnTranslations = {
     "heading": "O mundo está temporariamente indisponível.",
     "body": "Estamos reiniciando o serviço do jogo e esperamos que Claudemoon volte em breve. Esta página continuará verificando automaticamente.",
     "status": "Voltamos em breve"
-  },
-  "welcome": {
-    "back": "Que bom ter você de volta, {name}",
-    "level": "Nível {level}",
-    "lastPlayed": "Última vez em jogo: {when}",
-    "continue": "Entrar no mundo",
-    "continueHint": "Pressione Enter para continuar, Esc para pular",
-    "continueHintTouch": "Toque para continuar",
-    "discord": {
-      "title": "A comunidade vive no Discord",
-      "sub": "Prévias de patches, eventos, bate-papo com os desenvolvedores e 2 espaços bônus no banco ao vincular sua conta do Discord.",
-      "join": "Entre no nosso Discord"
-    },
-    "chest": {
-      "ready": "Baú de Recompensas Diárias pronto"
-    },
-    "armory": {
-      "cta": "Entrar no mundo e explorar o Arsenal"
-    },
-    "news": {
-      "new": "Novo",
-      "viewAll": "Ver todas as atualizações no GitHub"
-    }
   },
   "hud": {
     "core": {

@@ -2551,9 +2551,6 @@ export const sv_SE: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Den plånboksbehörigheten har gått ut eller kunde inte verifieras. Försök igen."
-    },
-    "welcome": {
-      "invalid_input": "Ogiltig indata."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const sv_SE: EnTranslations = {
     "error": "Kunde inte ladda uppdateringar. Försök igen senare.",
     "empty": "Inga uppdateringar ännu, kom tillbaka snart.",
     "prerelease": "Förhandsutgåva",
-    "viewOnGithub": "Visa på GitHub"
+    "viewOnGithub": "Visa på GitHub",
+    "new": "Ny",
+    "viewAll": "Se alla uppdateringar på GitHub"
   },
   "download": {
     "title": "Ladda ner skrivbordsstartaren",
@@ -5326,29 +5325,6 @@ export const sv_SE: EnTranslations = {
     "heading": "Världen är tillfälligt otillgänglig.",
     "body": "Vi startar om speltjänsten och förväntar oss att Claudemoon är tillbaka inom kort. Den här sidan fortsätter att kontrollera automatiskt.",
     "status": "Tillbaka snart"
-  },
-  "welcome": {
-    "back": "Välkommen tillbaka, {name}",
-    "level": "Nivå {level}",
-    "lastPlayed": "Senast spelad: {when}",
-    "continue": "Träd in i världen",
-    "continueHint": "Enter för att fortsätta, Esc för att hoppa över",
-    "continueHintTouch": "Tryck för att fortsätta",
-    "discord": {
-      "title": "Gemenskapen lever på Discord",
-      "sub": "Förhandsvisningar av patchar, evenemang, utvecklarchatt och 2 bonusfack i banken när du länkar ditt Discord-konto.",
-      "join": "Gå med i vår Discord"
-    },
-    "chest": {
-      "ready": "Kistan för dagliga belöningar är klar"
-    },
-    "armory": {
-      "cta": "Träd in i världen och utforska Vapenhuset"
-    },
-    "news": {
-      "new": "Ny",
-      "viewAll": "Se alla uppdateringar på GitHub"
-    }
   },
   "hud": {
     "core": {

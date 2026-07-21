@@ -1683,10 +1683,9 @@
     background: var(--color-border-default);
     border-radius: 4px;
   }
-  /* Welcome Screen news column: .ws-news already scrolls as a whole
-     (components.css), so the per-article 460px cap would nest a second
-     scrollbar inside it. */
-  .ws-news .news-body {
+  /* Character-select news feed: .cs-news-feed already scrolls as a whole,
+     so the per-article 460px cap would nest a second scrollbar inside it. */
+  .cs-news-feed .news-body {
     max-height: none;
     overflow-y: visible;
     padding-right: 0;
@@ -1738,6 +1737,67 @@
   .news-link:hover,
   .news-link:focus-visible {
     text-decoration: underline;
+  }
+
+  /* Compact feed (the character-select news panel): the latest release stays a
+     full .news-item article; older releases collapse to a native
+     <details>/<summary> disclosure so expand-in-place needs no JS wiring, same
+     pattern as the guide FAQ (src/guide/pages/faq.ts). */
+  .news-collapsed {
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .news-collapsed[open] {
+    padding-bottom: 10px;
+  }
+  .news-collapsed-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    min-height: 24px;
+    padding: 9px 2px;
+    list-style: none;
+  }
+  .news-collapsed-summary::-webkit-details-marker {
+    display: none;
+  }
+  .news-collapsed-version {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+  }
+  .news-collapsed-version::before {
+    content: "\25b8";
+    display: inline-block;
+    color: var(--gold-dim);
+    font-size: 11px;
+    transition: transform 0.15s ease;
+  }
+  .news-collapsed[open] .news-collapsed-version::before {
+    transform: rotate(90deg);
+  }
+  .news-collapsed-date {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    flex: none;
+  }
+  .news-collapsed .news-body {
+    margin-top: 8px;
+  }
+  .news-view-all {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .news-view-all a {
+    color: inherit;
   }
 
   body.mobile-touch .news-item-head {
@@ -3165,35 +3225,38 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.45);
       transform: translateY(-1px);
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel {
+    /* The news panel docks where the class-details sheet used to sit: the
+       left column of the full-bleed stage, mirroring the roster dock. */
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-panel {
       position: absolute;
       left: var(--cs-stage-gutter);
       top: 18px;
       bottom: var(--cs-dock-bottom);
       width: var(--cs-details-width);
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: color-mix(in srgb, var(--scrollbar-thumb) 42%, transparent) transparent;
+      height: auto;
       background: #0d0d16d9;
       border: 1px solid var(--color-border-default);
+      box-shadow: none;
       border-radius: var(--radius-md);
       padding: 14px;
       z-index: 2;
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel::-webkit-scrollbar {
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed {
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in srgb, var(--scrollbar-thumb) 42%, transparent) transparent;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed::-webkit-scrollbar {
       width: 6px;
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel::-webkit-scrollbar-track {
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed::-webkit-scrollbar-track {
       background: transparent;
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel::-webkit-scrollbar-thumb {
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed::-webkit-scrollbar-thumb {
       background: color-mix(in srgb, var(--scrollbar-thumb) 42%, transparent);
       border: 0;
       border-radius: 999px;
     }
-    body:not(.mobile-touch)
-      #charselect-panel.cs-wow
-      .class-details-panel::-webkit-scrollbar-thumb:hover {
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed::-webkit-scrollbar-thumb:hover {
       background: color-mix(in srgb, var(--scrollbar-thumb) 68%, transparent);
     }
     body:not(.mobile-touch) #charselect-panel.cs-wow #char-list .char-row {
@@ -3217,41 +3280,6 @@
     body:not(.mobile-touch) #charselect-panel.cs-wow #char-list .char-delete-btn {
       justify-self: end;
     }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: clamp(18px, 2vh, 28px);
-    }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .details-spells-section {
-      grid-column: 1;
-      padding-top: clamp(6px, 1vh, 12px);
-    }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .details-gear-row {
-      display: grid;
-      grid-template-columns: clamp(76px, 5vw, 92px) minmax(0, 1fr);
-      align-items: baseline;
-      gap: 12px;
-    }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .details-gear-row .badge {
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: none;
-      text-transform: none;
-      line-height: 1.45;
-      white-space: normal;
-    }
-    body:not(.mobile-touch) #charselect-panel.cs-wow .details-gear-row .badge-resource::before {
-      content: "";
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      margin-right: 7px;
-      border-radius: 50%;
-      background: currentColor;
-      box-shadow: 0 0 7px currentColor;
-      vertical-align: 1px;
-    }
-
     /* The class summary's base type is sized for the small pre-game card
        (10px to 12px); on the full-screen stage it reads too small. Scale the
        whole details sheet up one step in every cs-wow panel. */
@@ -3854,31 +3882,6 @@
     box-shadow: 0 0 10px rgba(255, 209, 0, 0.2);
     outline: none;
   }
-  /* The welcome screen's Enter World CTA keeps its gilded design mock. Its
-     .ws-continue rules live in the earlier components layer, so without this
-     re-assertion the generic dark .btn-primary arms above win the cascade and
-     the autofocused CTA renders as the plain dark button wearing the loud
-     offset focus ring (the reported green-ringed button). */
-  .ws-continue,
-  .ws-continue:hover,
-  .ws-continue:focus-visible {
-    color: #1a1608;
-    background: linear-gradient(180deg, #ffe066, var(--gold) 45%, #cfa400);
-    border: 1px solid #8a6f33;
-    box-shadow:
-      0 4px 22px rgba(255, 209, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-  .ws-continue:hover:not(:disabled) {
-    background: linear-gradient(180deg, #fff0a0, #ffdd33 45%, #d9ae00);
-  }
-  .ws-continue:disabled {
-    background: linear-gradient(180deg, #2a2a38, #1b1b26);
-    color: var(--color-text-muted);
-    border-color: var(--color-border-default);
-    box-shadow: none;
-  }
-
   .btn-secondary {
     background: linear-gradient(180deg, #1b1b26 0%, #0d0d14 100%);
     color: var(--color-text-light);
@@ -4553,6 +4556,47 @@
     pointer-events: auto;
   }
 
+  /* Character-select "News & Updates" panel: lives in the class-details
+     sheet's old slot, shares its card chrome, but is always visible (no
+     fade-in handshake with a renderer) and scrolls its feed internally. */
+  .cs-news-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-sizing: border-box;
+    height: 520px;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.96) 0%, rgba(10, 10, 15, 0.98) 100%);
+    border: 2px solid var(--color-border-default);
+    box-shadow:
+      inset 0 0 15px rgba(0, 0, 0, 0.8),
+      0 6px 20px rgba(0, 0, 0, 0.6);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    color: var(--color-text-light);
+    font-family: var(--font-sans);
+    text-align: left;
+  }
+  .cs-news-title {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-border-default);
+    margin-bottom: 12px;
+  }
+  .cs-news-feed {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    font-size: 13px;
+    mask-image: linear-gradient(180deg, #000 0%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 88%, transparent 100%);
+  }
+
   .class-details-content {
     transition:
       opacity 0.15s ease-in-out,
@@ -5079,26 +5123,13 @@
     margin: 0;
     overflow: visible;
   }
-  body.mobile-touch #charselect-panel #charselect-class-details,
-  body.mobile-touch #charselect-panel #online-class-details {
+  body.mobile-touch #charselect-panel #charselect-news {
     flex: 1 1 auto;
     width: 100%;
     height: auto;
     min-height: 0;
     max-height: none;
     margin-bottom: 0;
-    overflow: visible;
-  }
-  body.mobile-touch #charselect-panel #charselect-class-details .class-details-content,
-  body.mobile-touch #charselect-panel #online-class-details .class-details-content {
-    min-height: 100%;
-    height: auto;
-  }
-  body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid,
-  body.mobile-touch #charselect-panel #online-class-details .class-details-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
   }
   body.mobile-touch .char-row {
     display: grid;
@@ -6029,47 +6060,6 @@
       height: clamp(264px, 34vh, 360px);
       min-height: 264px;
     }
-
-    /* More prominent stats + signature abilities in the (now taller) showcase.
-       Scoped to #charselect-panel so the create screen's .cs-detail-col (same
-       renderClassDetails output, but no extra room) keeps the base sizing. */
-    #charselect-panel .cs-detail-col .details-section-title {
-      font-size: 13px;
-    }
-    #charselect-panel .cs-detail-col .details-stat-bar-row {
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-    #charselect-panel .cs-detail-col .details-stat-label {
-      width: 68px;
-    }
-    #charselect-panel .cs-detail-col .details-stat-bar-track {
-      height: 11px;
-    }
-    #charselect-panel .cs-detail-col .details-stat-val {
-      width: 22px;
-      font-size: 12px;
-    }
-    #charselect-panel .cs-detail-col .details-gear-row {
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-    #charselect-panel .cs-detail-col .badge {
-      font-size: 11px;
-      padding: 3px 8px;
-    }
-    #charselect-panel .cs-detail-col .details-spell-item {
-      font-size: 12px;
-      padding: 10px 14px;
-      gap: 12px;
-    }
-    #charselect-panel .cs-detail-col .details-spell-icon-img {
-      width: 40px;
-      height: 40px;
-    }
-    #charselect-panel .cs-detail-col .details-spell-text strong {
-      font-size: 13px;
-    }
   }
 
   body.mobile-touch .charselect-screen {
@@ -6195,7 +6185,7 @@
     }
     /* charcreate's columns hold a single tall flow (name input, 9-class grid,
        appearance swatches, Back/Create actions) with no inner scroll container
-       of its own, unlike charselect (whose #char-list and #charselect-class-details
+       of its own, unlike charselect (whose #char-list and .cs-news-feed
        children scroll). Under the panel's min(560px, ...) height clamp that flow
        exceeds the column height on short landscape phones and, with overflow:hidden,
        clipped the Create button off with no way to reach it. Let the columns
@@ -6289,125 +6279,37 @@
       min-height: 0;
       min-width: 0;
     }
-    body.mobile-touch #charselect-panel #charselect-class-details {
+    body.mobile-touch #charselect-panel #charselect-news {
       box-sizing: border-box;
       min-height: 0;
+      height: auto;
+      padding: 10px 12px;
+    }
+    body.mobile-touch #charselect-panel .cs-news-title {
+      font-size: 12px;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    body.mobile-touch #charselect-panel .cs-news-feed {
       overflow-y: auto;
       scrollbar-gutter: stable;
       scrollbar-width: auto;
       scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-      opacity: 1;
-      transform: none;
       padding-right: 12px;
+      font-size: 11.5px;
     }
-    body.mobile-touch #charselect-panel #charselect-class-details::-webkit-scrollbar {
+    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar {
       width: 10px;
     }
-    body.mobile-touch #charselect-panel #charselect-class-details::-webkit-scrollbar-track {
+    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar-track {
       background: var(--scrollbar-track);
       border: 1px solid #35270f;
       border-radius: 999px;
     }
-    body.mobile-touch #charselect-panel #charselect-class-details::-webkit-scrollbar-thumb {
+    body.mobile-touch #charselect-panel .cs-news-feed::-webkit-scrollbar-thumb {
       background: linear-gradient(180deg, var(--scrollbar-thumb) 0%, #3a2b10 100%);
       border: 1px solid var(--scrollbar-border);
       border-radius: 999px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-content {
-      max-width: 100%;
-      min-height: 0;
-      height: auto;
-      overflow: visible;
-      gap: 5px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-lore {
-      display: none;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-role {
-      display: none;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: stretch;
-      max-width: 100%;
-      min-width: 0;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid > * {
-      max-width: 100%;
-      min-width: 0;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spells-section {
-      min-width: 0;
-      padding-top: 2px;
-      padding-bottom: 4px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .class-details-name {
-      font-size: 16px;
-      line-height: 1;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-section-title {
-      margin-bottom: 3px;
-      font-size: 10px;
-      line-height: 1.05;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-bar-row {
-      min-width: 0;
-      margin-bottom: 2px;
-      gap: 6px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-label {
-      flex: 0 0 64px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-val {
-      flex: 0 0 22px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-label,
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-val,
-    body.mobile-touch #charselect-panel #charselect-class-details .details-gear-row {
-      font-size: 10.5px;
-      margin-bottom: 3px;
-      line-height: 1.15;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-stat-bar-track {
-      flex: 1 1 auto;
-      height: 8px;
-      min-width: 0;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-gear-row {
-      max-width: 100%;
-      overflow-wrap: anywhere;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spells-list {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 5px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spell-item {
-      box-sizing: border-box;
-      width: 100%;
-      min-width: 0;
-      padding: 5px 7px;
-      gap: 6px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spell-icon-img {
-      width: 26px;
-      height: 26px;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spell-text {
-      min-width: 0;
-      font-size: 10.5px;
-      line-height: 1.12;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spell-text br {
-      display: none;
-    }
-    body.mobile-touch #charselect-panel #charselect-class-details .details-spell-text strong {
-      font-size: 11.5px;
     }
     body.mobile-touch #charcreate-panel .cs-body {
       grid-template-columns: minmax(310px, 0.95fr) minmax(360px, 1.05fr);

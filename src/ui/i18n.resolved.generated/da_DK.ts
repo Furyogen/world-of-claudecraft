@@ -2551,9 +2551,6 @@ export const da_DK: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Den pung-godkendelse udløb eller kunne ikke bekræftes. Prøv igen."
-    },
-    "welcome": {
-      "invalid_input": "Ugyldig indtastning."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const da_DK: EnTranslations = {
     "error": "Kunne ikke indlæse opdateringer. Prøv venligst igen senere.",
     "empty": "Ingen opdateringer endnu — kig forbi igen snart.",
     "prerelease": "Forhåndsudgivelse",
-    "viewOnGithub": "Vis på GitHub"
+    "viewOnGithub": "Vis på GitHub",
+    "new": "Ny",
+    "viewAll": "Se alle opdateringer på GitHub"
   },
   "download": {
     "title": "Download Desktop-launcher",
@@ -5326,29 +5325,6 @@ export const da_DK: EnTranslations = {
     "heading": "Verdenen er midlertidigt utilgængelig.",
     "body": "Vi genstarter spiltjenesten og forventer, at Claudemoon vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",
     "status": "Tilbage snart"
-  },
-  "welcome": {
-    "back": "Velkommen tilbage, {name}",
-    "level": "Niveau {level}",
-    "lastPlayed": "Sidst spillet: {when}",
-    "continue": "Træd ind i verden",
-    "continueHint": "Enter for at fortsætte, Esc for at springe over",
-    "continueHintTouch": "Tryk for at fortsætte",
-    "discord": {
-      "title": "Fællesskabet lever på Discord",
-      "sub": "Forhåndsvisninger af patches, begivenheder, udviklerchat og 2 bonuspladser i banken, når du forbinder din Discord-konto.",
-      "join": "Tilslut dig vores Discord"
-    },
-    "chest": {
-      "ready": "Kisten med daglige belønninger er klar"
-    },
-    "armory": {
-      "cta": "Træd ind i verden, og udforsk Våbenhuset"
-    },
-    "news": {
-      "new": "Ny",
-      "viewAll": "Se alle opdateringer på GitHub"
-    }
   },
   "hud": {
     "core": {

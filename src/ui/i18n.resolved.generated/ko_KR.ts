@@ -2551,9 +2551,6 @@ export const ko_KR: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "지갑 인증이 만료되었거나 확인할 수 없습니다. 다시 시도해 주세요."
-    },
-    "welcome": {
-      "invalid_input": "입력이 올바르지 않습니다."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const ko_KR: EnTranslations = {
     "error": "소식을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "empty": "아직 새 소식이 없습니다. 곧 다시 확인해 주세요.",
     "prerelease": "사전 출시",
-    "viewOnGithub": "GitHub에서 보기"
+    "viewOnGithub": "GitHub에서 보기",
+    "new": "신규",
+    "viewAll": "GitHub에서 모든 업데이트 보기"
   },
   "download": {
     "title": "데스크톱 런처 다운로드",
@@ -5326,29 +5325,6 @@ export const ko_KR: EnTranslations = {
     "heading": "월드를 일시적으로 이용할 수 없습니다.",
     "body": "게임 서비스를 재시작하고 있으며 Claudemoon은 곧 돌아올 예정입니다. 이 페이지는 자동으로 계속 확인합니다.",
     "status": "곧 돌아옵니다"
-  },
-  "welcome": {
-    "back": "다시 오신 것을 환영합니다, {name}",
-    "level": "레벨 {level}",
-    "lastPlayed": "마지막 플레이: {when}",
-    "continue": "월드 입장",
-    "continueHint": "Enter로 계속, Esc로 건너뛰기",
-    "continueHintTouch": "탭하여 계속",
-    "discord": {
-      "title": "커뮤니티는 Discord에서 활동합니다",
-      "sub": "패치 미리보기, 이벤트, 개발자 채팅, 연동 시 보너스 은행 슬롯 2개.",
-      "join": "Discord에 참여하기"
-    },
-    "chest": {
-      "ready": "일일 상자 준비 완료"
-    },
-    "armory": {
-      "cta": "무기고 둘러보기"
-    },
-    "news": {
-      "new": "신규",
-      "viewAll": "GitHub에서 모든 업데이트 보기"
-    }
   },
   "hud": {
     "core": {

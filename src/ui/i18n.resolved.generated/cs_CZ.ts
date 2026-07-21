@@ -2551,9 +2551,6 @@ export const cs_CZ: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Toto oprávnění peněženky vypršelo nebo je neověřitelné. Zkus to znovu."
-    },
-    "welcome": {
-      "invalid_input": "Neplatný vstup."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const cs_CZ: EnTranslations = {
     "error": "Aktualizace se nepodařilo načíst. Zkus to prosím později znovu.",
     "empty": "Zatím žádné aktualizace - brzy se vrať.",
     "prerelease": "Předběžné vydání",
-    "viewOnGithub": "Zobrazit na GitHubu"
+    "viewOnGithub": "Zobrazit na GitHubu",
+    "new": "Nové",
+    "viewAll": "Zobrazit všechny aktualizace na GitHubu"
   },
   "download": {
     "title": "Stáhnout desktopový launcher",
@@ -5326,29 +5325,6 @@ export const cs_CZ: EnTranslations = {
     "heading": "Svět je dočasně nedostupný.",
     "body": "Restartujeme herní službu a očekáváme, že se Claudemoon brzy vrátí. Tato stránka bude stav automaticky kontrolovat.",
     "status": "Brzy zpět"
-  },
-  "welcome": {
-    "back": "Vítej zpět, {name}",
-    "level": "Úroveň {level}",
-    "lastPlayed": "Naposledy ve hře: {when}",
-    "continue": "Vstoupit do světa",
-    "continueHint": "Enter pro pokračování, Esc pro přeskočení",
-    "continueHintTouch": "Klepnutím pokračuj",
-    "discord": {
-      "title": "Komunita žije na Discordu",
-      "sub": "Ukázky aktualizací, události, chat s vývojáři a 2 bonusové sloty v bance za propojení účtu s Discordem.",
-      "join": "Připojit se na náš Discord"
-    },
-    "chest": {
-      "ready": "Denní truhla je připravená"
-    },
-    "armory": {
-      "cta": "Vstoupit a prohlédnout si Zbrojnici"
-    },
-    "news": {
-      "new": "Nové",
-      "viewAll": "Zobrazit všechny aktualizace na GitHubu"
-    }
   },
   "hud": {
     "core": {

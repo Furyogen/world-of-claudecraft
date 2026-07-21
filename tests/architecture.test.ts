@@ -218,7 +218,6 @@ const UI_PURE_CORES = [
   'src/ui/hud/loot/corpse_harvest_view.ts',
   'src/ui/town_focus_view.ts',
   'src/ui/pet_action_icons.ts',
-  'src/ui/welcome_screen_view.ts',
   'src/ui/loading_slow_hint_core.ts',
   'src/ui/reconnect_status_core.ts',
   'src/game/ui_effects_profile.ts',

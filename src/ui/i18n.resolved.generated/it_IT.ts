@@ -2551,9 +2551,6 @@ export const it_IT: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "L'autorizzazione del portafoglio è scaduta o non ha potuto essere verificata. Riprova."
-    },
-    "welcome": {
-      "invalid_input": "Dati non validi."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const it_IT: EnTranslations = {
     "error": "Impossibile caricare gli aggiornamenti. Riprova più tardi.",
     "empty": "Ancora nessun aggiornamento: torna presto a controllare.",
     "prerelease": "Anteprima",
-    "viewOnGithub": "Vedi su GitHub"
+    "viewOnGithub": "Vedi su GitHub",
+    "new": "Novità",
+    "viewAll": "Vedi tutti gli aggiornamenti su GitHub"
   },
   "download": {
     "title": "Scarica il launcher per desktop",
@@ -5326,29 +5325,6 @@ export const it_IT: EnTranslations = {
     "heading": "Il mondo è temporaneamente non disponibile.",
     "body": "Stiamo riavviando il servizio di gioco e prevediamo che Claudemoon torni a breve. Questa pagina continuerà a controllare automaticamente.",
     "status": "Torna presto"
-  },
-  "welcome": {
-    "back": "Bentornato, {name}",
-    "level": "Livello {level}",
-    "lastPlayed": "Ultima partita: {when}",
-    "continue": "Entra nel mondo",
-    "continueHint": "Invio per continuare, Esc per saltare",
-    "continueHintTouch": "Tocca per continuare",
-    "discord": {
-      "title": "La community vive su Discord",
-      "sub": "Anteprime delle patch, eventi, chat con gli sviluppatori e 2 spazi bonus in banca collegando il tuo account Discord.",
-      "join": "Unisciti al nostro Discord"
-    },
-    "chest": {
-      "ready": "Forziere delle ricompense giornaliere pronto"
-    },
-    "armory": {
-      "cta": "Entra nel mondo ed esplora l’Armeria"
-    },
-    "news": {
-      "new": "Novità",
-      "viewAll": "Vedi tutti gli aggiornamenti su GitHub"
-    }
   },
   "hud": {
     "core": {

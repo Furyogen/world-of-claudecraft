@@ -2551,9 +2551,6 @@ export const en_CA: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "That wallet authorization expired or could not be verified. Try again."
-    },
-    "welcome": {
-      "invalid_input": "Invalid input."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const en_CA: EnTranslations = {
     "error": "Couldn't load updates. Please try again later.",
     "empty": "No updates yet — check back soon.",
     "prerelease": "Pre-release",
-    "viewOnGithub": "View on GitHub"
+    "viewOnGithub": "View on GitHub",
+    "new": "New",
+    "viewAll": "View all updates on GitHub"
   },
   "download": {
     "title": "Download Desktop Launcher",
@@ -5326,29 +5325,6 @@ export const en_CA: EnTranslations = {
     "heading": "The world is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
     "status": "Back soon"
-  },
-  "welcome": {
-    "back": "Welcome back, {name}",
-    "level": "Level {level}",
-    "lastPlayed": "Last played {when}",
-    "continue": "Enter World",
-    "continueHint": "Enter to continue, Esc to skip",
-    "continueHintTouch": "Tap to continue",
-    "discord": {
-      "title": "The community lives on Discord",
-      "sub": "Patch previews, events, dev chat, and 2 bonus bank slots for linking.",
-      "join": "Join our Discord"
-    },
-    "chest": {
-      "ready": "Daily chest ready"
-    },
-    "armory": {
-      "cta": "Enter and browse the Armory"
-    },
-    "news": {
-      "new": "New",
-      "viewAll": "View all updates on GitHub"
-    }
   },
   "hud": {
     "core": {

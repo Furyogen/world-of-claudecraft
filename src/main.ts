@@ -192,6 +192,7 @@ import {
   maybeShowFirstRunCameraPrompt,
 } from './ui/camera_prompt';
 import { deleteCharButtonHtml } from './ui/char_delete_button';
+import { loadCharselectNews } from './ui/charselect_news';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
 import { claudiumBalanceAddress } from './ui/claudium_view';
@@ -281,12 +282,6 @@ import {
   shouldDisconnectUnverifiedWallet,
 } from './ui/wallet_balance';
 import { buildWalletConnectionView } from './ui/wallet_connection_view';
-import { mountWelcomeStage } from './ui/welcome_screen_stage';
-import {
-  mountWelcomeScreen,
-  takeArmoryOpenIntent,
-  type WelcomeScreenController,
-} from './ui/welcome_screen_window';
 import { formatXp } from './ui/xp_bar';
 import type { IWorld, LeaderboardEntry } from './world_api';
 
@@ -868,11 +863,6 @@ function nextPaint(): Promise<void> {
 // focus, so Enter/Space could re-fire it mid-entry. One entry per page load;
 // every failure path recovers via fatalOverlay's reload.
 let hasBegunWorldEntry = false;
-
-// The one live Welcome Screen instance, if the DOM has it (absent on /play).
-// module-scoped so enterWorld/startOffline and the intro-finish hook below can
-// share the single mounted controller.
-let welcomeScreen: WelcomeScreenController | null = null;
 
 function beginWorldEntry(): boolean {
   if (hasBegunWorldEntry) return false;
@@ -3221,10 +3211,6 @@ async function startGame(
     } catch {
       // storage unavailable: worst case the intro replays next session
     }
-    // The Armory card's one-shot open intent (if the player clicked it on the
-    // Welcome Screen) fires here, never during the pan and never while #ui is
-    // hidden: the pan just finished and setIntroUiHidden(false) ran above.
-    if (takeArmoryOpenIntent()) hud.openWocStore();
   };
   const introTaps: number[] = [];
   const skipIntro = (e: Event): void => {
@@ -3276,10 +3262,6 @@ async function startGame(
     setIntroUiHidden(true);
     window.addEventListener('keydown', skipIntro, true);
     window.addEventListener('pointerdown', skipIntro, true);
-  } else if (takeArmoryOpenIntent()) {
-    // No intro pan this login (returning character, or reduced motion): the
-    // loading fade already happened by this point, so open right away.
-    hud.openWocStore();
   }
   input.setSuspendMovement(true);
   await nextPaint();
@@ -3366,52 +3348,6 @@ async function startOffline(
   seedOverride?: number,
 ): Promise<void> {
   if (!(await prepareWorldEntry())) return;
-  // Offline path: same Welcome Screen before startGame, but Continue enables
-  // immediately (no connection to wait on) and every store/chest/discord tile
-  // stays hidden per the gating matrix; the news fetch still hits the site
-  // origin and fails soft if offline.
-  const welcomeRoot = $('#welcome-screen');
-  if (welcomeRoot) {
-    await new Promise<void>((resolve) => {
-      welcomeScreen = mountWelcomeScreen(welcomeRoot, {
-        mountStage: (el) =>
-          mountWelcomeStage(
-            el,
-            () => characterPreview,
-            () => window.matchMedia('(min-width: 861px) and (pointer: fine)').matches,
-          ),
-        // offline: true already forces every store/chest/discord-desktop tile off in the
-        // gating matrix regardless of platform, but mobileTouch/nativeApp still drive the
-        // touch-vs-keyboard Continue hint ("Tap to continue"), so derive them for real
-        // instead of hardcoding false (the online mount below does the same).
-        platform: {
-          nativeApp: NATIVE_APP,
-          desktopApp: DESKTOP_APP,
-          mobileTouch: document.body.classList.contains('mobile-touch'),
-          offline: true,
-        },
-        fetchReleases: () => api.releases(20),
-        fetchArmoryPromoEnabled: () => Promise.resolve(false),
-        fetchDiscord: () =>
-          Promise.resolve({ enabled: null, linked: null, guildMember: null, fetchFailed: false }),
-        fetchChest: () => Promise.resolve({ ready: false, unknown: true }),
-        header: () => ({
-          characterName: name,
-          level: 1,
-          className: classDisplayName(playerClass),
-          realmName: '',
-          lastPlayed: null,
-        }),
-        onContinue: () => {
-          welcomeScreen?.hide();
-          welcomeScreen?.destroy();
-          welcomeScreen = null;
-          resolve();
-        },
-      });
-      void welcomeScreen.show();
-    });
-  }
   enterLoadingState(t('loading.world'));
   // Editor play-test: route terrain + props at the custom world too (the renderer
   // reaches it by module global), in addition to the Sim reading cfg.world.
@@ -3661,17 +3597,14 @@ function syncPreviewAfterPanelLayout(): void {
 
 const currentlyRenderedClass: Record<string, PlayerClass | null> = {
   'offline-class-details': null,
-  'charselect-class-details': null,
   'charcreate-class-details': null,
 };
 const revertTimeouts: Record<string, number | null> = {
   'offline-class-details': null,
-  'charselect-class-details': null,
   'charcreate-class-details': null,
 };
 const hoverTimeouts: Record<string, number | null> = {
   'offline-class-details': null,
-  'charselect-class-details': null,
   'charcreate-class-details': null,
 };
 
@@ -3782,12 +3715,15 @@ function show(el: string): void {
     document.activeElement.blur();
   }
 
+  // The character-select news panel loads when its screen opens: entry is the
+  // moment the player can actually read it, and the NEW-badge marker should
+  // advance only then.
+  if (el === '#charselect-panel') {
+    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+  }
+
   // Reset currently rendered classes to force re-render/animation when opening a panel
-  for (const key of [
-    'offline-class-details',
-    'charselect-class-details',
-    'charcreate-class-details',
-  ]) {
+  for (const key of ['offline-class-details', 'charcreate-class-details']) {
     currentlyRenderedClass[key] = null;
     if (revertTimeouts[key] !== null && revertTimeouts[key] !== undefined) {
       window.clearTimeout(revertTimeouts[key]!);
@@ -4748,7 +4684,10 @@ async function refreshCharacters(): Promise<void> {
 
         row.classList.add('sel');
         row.setAttribute('aria-selected', 'true');
-        renderClassDetails('charselect-class-details', c.class, charselectAppearance(c));
+        // The class-details sheet is gone from this screen (the news panel sits
+        // there now), so drive the 3D preview directly: two characters of the
+        // same class can still differ in gear, skin, or cosmetic body.
+        characterPreview?.setAppearance(charselectAppearance(c));
         charselectSelected = c;
         syncCharselectEnterButton();
         setCharselectPreviewName(c.name);
@@ -4789,7 +4728,7 @@ async function refreshCharacters(): Promise<void> {
     if (firstRow) {
       firstRow.click();
     } else {
-      renderClassDetails('charselect-class-details', 'warrior');
+      characterPreview?.setClass('warrior');
     }
   } catch (err) {
     // A failed roster load must also drop any boot resume intent: leaving it
@@ -4915,70 +4854,14 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     setStandingProvider(null);
   };
 
-  // Post-login Welcome Screen: news + patch notes + Join our Discord strip, plus
-  // (desktop web only) the Season 1 Armory promo. Shown instead of the bare
-  // loading screen while the realm connection establishes behind it; Continue
-  // is the only way forward, gated on the same readiness condition the old
-  // auto-poll used to gate startGame on. Falls back to the old bare loading
-  // screen if the welcome-screen DOM is absent (the /play entry lacks it).
-  const welcomeRoot = $('#welcome-screen');
   let started = false;
   const proceedToGame = () => {
     if (started) return;
     started = true;
     clearInterval(poll);
-    welcomeScreen?.hide();
-    welcomeScreen?.destroy();
-    welcomeScreen = null;
     void startGame(world, null, world, `char:${c.id}`, true);
   };
-  if (welcomeRoot) {
-    welcomeScreen = mountWelcomeScreen(welcomeRoot, {
-      mountStage: (el) =>
-        mountWelcomeStage(
-          el,
-          () => characterPreview,
-          () => window.matchMedia('(min-width: 861px) and (pointer: fine)').matches,
-        ),
-      platform: {
-        nativeApp: NATIVE_APP,
-        desktopApp: DESKTOP_APP,
-        mobileTouch: document.body.classList.contains('mobile-touch'),
-        offline: false,
-      },
-      fetchReleases: () => api.releases(20),
-      fetchArmoryPromoEnabled: () => api.welcomeFlags().then((f) => f.armoryPromoEnabled),
-      fetchDiscord: () =>
-        api.discordStatus().then((d) => ({
-          enabled: typeof d.enabled === 'boolean' ? d.enabled : null,
-          linked: typeof d.linked === 'boolean' ? d.linked : null,
-          guildMember: typeof d.guildMember === 'boolean' ? d.guildMember : null,
-          fetchFailed: false,
-        })),
-      fetchChest: () =>
-        api.dailyRewards().then((s) => ({
-          ready: s.eligibility.eligible === true && s.spin.claimed === false,
-          unknown: false,
-        })),
-      header: () => ({
-        characterName: c.name,
-        level: c.level,
-        className: classDisplayName(c.class),
-        realmName: (() => {
-          try {
-            return new URL(api.base).host;
-          } catch {
-            return '';
-          }
-        })(),
-        lastPlayed: c.lastPlayed ?? null,
-      }),
-      onContinue: proceedToGame,
-    });
-    void welcomeScreen.show();
-  } else {
-    enterLoadingState(t('loading.connectingRealm'));
-  }
+  enterLoadingState(t('loading.connectingRealm'));
 
   // wait for hello + first snapshot so the world starts populated
   const waitStart = Date.now();
@@ -4990,17 +4873,11 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
       // home/login screen. Also resets the resume-attempt budget: entry
       // completed, the session is known-good.
       if (api.realm) savePlayMarker(c.id, api.realm, Date.now());
-      if (welcomeRoot) {
-        welcomeScreen?.setConnectionReady(true);
-      } else {
-        proceedToGame();
-      }
+      proceedToGame();
     } else if (Date.now() - waitStart > 10000) {
       clearInterval(poll);
       world.close();
       clearCardProviders();
-      welcomeScreen?.destroy();
-      welcomeScreen = null;
       hideReconnectOverlay();
       // Entry never completed: fatalOverlay drops the resume marker so the next
       // boot does not loop straight back into a session that will not start.
@@ -5012,8 +4889,6 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   world.onDisconnect = (reason) => {
     clearInterval(poll);
     clearCardProviders();
-    welcomeScreen?.destroy();
-    welcomeScreen = null;
     hideReconnectOverlay();
     // The session ended for good (retries exhausted, kick, takeover, auth fail):
     // fatalOverlay clears the resume marker so a reload does not loop back into
@@ -8737,8 +8612,8 @@ function wireStartScreens(): void {
   // Step the persisted preset down ONE tier and pin it (graphicsDefaultApplied) so the
   // auto default can never re-select a tier this device has proven it cannot enter the
   // world at, drop the active-play resume marker so this boot lands HERE (a screen with a
-  // reachable graphics control) instead of auto-reentering the world through the welcome
-  // screen in a crash loop, and tell the player what happened. Scoped to iOS/native
+  // reachable graphics control) instead of auto-reentering the world in a crash
+  // loop, and tell the player what happened. Scoped to iOS/native
   // runtimes, the environments where the OS reload makes the crash otherwise invisible;
   // elsewhere the probe is only logged (and cleared: it is a one-shot signal).
   const entryRecovery = planEntryCrashRecovery(readEntryProbeRaw(), Date.now());

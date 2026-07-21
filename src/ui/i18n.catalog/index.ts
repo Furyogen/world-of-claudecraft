@@ -297,6 +297,8 @@ export const en = {
     empty: 'No updates yet — check back soon.',
     prerelease: 'Pre-release',
     viewOnGithub: 'View on GitHub',
+    new: 'New',
+    viewAll: 'View all updates on GitHub',
   },
   download: {
     title: 'Download Desktop Launcher',

@@ -2551,9 +2551,6 @@ export const zh_TW: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "錢包授權已過期或無法驗證。請再試一次。"
-    },
-    "welcome": {
-      "invalid_input": "輸入無效。"
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const zh_TW: EnTranslations = {
     "error": "無法載入更新。請稍後再試。",
     "empty": "目前尚無更新，敬請期待。",
     "prerelease": "搶先版",
-    "viewOnGithub": "在 GitHub 上檢視"
+    "viewOnGithub": "在 GitHub 上檢視",
+    "new": "新",
+    "viewAll": "在 GitHub 上查看全部更新"
   },
   "download": {
     "title": "下載電腦版啟動器",
@@ -5326,29 +5325,6 @@ export const zh_TW: EnTranslations = {
     "heading": "這個世界暫時無法使用。",
     "body": "我們正在重新啟動遊戲服務，Claudemoon 應會很快恢復。此頁面會自動持續檢查。",
     "status": "即將恢復"
-  },
-  "welcome": {
-    "back": "歡迎回來，{name}",
-    "level": "等級 {level}",
-    "lastPlayed": "上次遊玩：{when}",
-    "continue": "進入世界",
-    "continueHint": "按 Enter 繼續，按 Esc 跳過",
-    "continueHintTouch": "點擊繼續",
-    "discord": {
-      "title": "社群活躍在 Discord",
-      "sub": "版本預告、活動、開發者聊天，綁定還可獲得 2 個額外銀行格。",
-      "join": "加入我們的 Discord"
-    },
-    "chest": {
-      "ready": "每日寶箱已就緒"
-    },
-    "armory": {
-      "cta": "進入並瀏覽軍械庫"
-    },
-    "news": {
-      "new": "新",
-      "viewAll": "在 GitHub 上查看全部更新"
-    }
   },
   "hud": {
     "core": {

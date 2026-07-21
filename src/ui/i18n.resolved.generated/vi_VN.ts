@@ -2551,9 +2551,6 @@ export const vi_VN: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Quyền ủy quyền ví đó đã hết hạn hoặc không thể xác minh. Hãy thử lại."
-    },
-    "welcome": {
-      "invalid_input": "Dữ liệu nhập không hợp lệ."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const vi_VN: EnTranslations = {
     "error": "Không thể tải cập nhật. Vui lòng thử lại sau.",
     "empty": "Chưa có cập nhật nào — hãy quay lại sau.",
     "prerelease": "Bản thử nghiệm",
-    "viewOnGithub": "Xem trên GitHub"
+    "viewOnGithub": "Xem trên GitHub",
+    "new": "Mới",
+    "viewAll": "Xem tất cả cập nhật trên GitHub"
   },
   "download": {
     "title": "Tải Trình Khởi Chạy Trên Máy Tính",
@@ -5326,29 +5325,6 @@ export const vi_VN: EnTranslations = {
     "heading": "Thế giới tạm thời không khả dụng.",
     "body": "Chúng tôi đang khởi động lại dịch vụ trò chơi và dự kiến Claudemoon sẽ trở lại trong giây lát. Trang này sẽ tự động tiếp tục kiểm tra.",
     "status": "Sớm trở lại"
-  },
-  "welcome": {
-    "back": "Mừng bạn trở lại, {name}",
-    "level": "Cấp {level}",
-    "lastPlayed": "Lần chơi gần nhất: {when}",
-    "continue": "Vào Thế Giới",
-    "continueHint": "Nhấn Enter để tiếp tục, Esc để bỏ qua",
-    "continueHintTouch": "Chạm để tiếp tục",
-    "discord": {
-      "title": "Cộng đồng tụ hội trên Discord",
-      "sub": "Xem trước các bản cập nhật, tham gia sự kiện, trò chuyện cùng nhà phát triển và nhận 2 ô ngân hàng thưởng khi liên kết Discord.",
-      "join": "Tham gia Discord của chúng tôi"
-    },
-    "chest": {
-      "ready": "Rương thưởng hằng ngày đã sẵn sàng"
-    },
-    "armory": {
-      "cta": "Vào thế giới và khám phá Kho Vũ Khí"
-    },
-    "news": {
-      "new": "Mới",
-      "viewAll": "Xem tất cả cập nhật trên GitHub"
-    }
   },
   "hud": {
     "core": {

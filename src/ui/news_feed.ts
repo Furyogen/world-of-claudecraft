@@ -1,11 +1,12 @@
 // News & Updates feed: renders GitHub release notes for the home page's
-// "News & Updates" panel and the post-login Welcome Screen's news column.
+// "News & Updates" panel and the character-select screen's news panel.
 // Extracted out of main.ts (the sanctioned firewall) so the sanitizing
 // markdown renderer and the fetch/paint loop have their own tested home.
 //
 // renderReleaseBody is pure and DOM-free; loadNewsInto is a thin consumer that
-// takes an injected fetch (so it composes with either the char-select origin's
-// api.releases or a fresh Welcome Screen fetch) and paints into a host element.
+// takes an injected fetch and paints into a host element. The compact-feed
+// helpers (markNewReleases / nextLastSeenReleaseId / renderCompactNews) are
+// pure too; the character-select consumer is src/ui/charselect_news.ts.
 import { formatDateTime, t } from './i18n';
 
 export interface NewsReleaseEntry {
@@ -16,6 +17,40 @@ export interface NewsReleaseEntry {
   url: string;
   prerelease: boolean;
   publishedAt: string;
+}
+
+/** The minimal release shape the NEW-badge marker logic needs. */
+export interface ReleaseSummary {
+  id: number;
+  publishedAt: string;
+}
+
+const MAX_RELEASES_SHOWN = 5;
+
+/**
+ * Marks each release NEW relative to the stored last-seen id, then caps the
+ * list at 5. Generic over T so a caller holding the FULL release shape
+ * (body/url/prerelease, see NewsReleaseEntry) gets those fields back too: the
+ * compact news layout (renderCompactNews) needs the full article to render the
+ * expanded latest release.
+ */
+export function markNewReleases<T extends ReleaseSummary>(
+  releases: T[],
+  lastSeenReleaseId: number | null,
+): (T & { isNew: boolean })[] {
+  return releases
+    .slice(0, MAX_RELEASES_SHOWN)
+    .map((r) => ({ ...r, isNew: lastSeenReleaseId === null || r.id > lastSeenReleaseId }));
+}
+
+/** The next last-seen marker to persist once the player has viewed the feed. */
+export function nextLastSeenReleaseId(
+  releases: ReleaseSummary[],
+  previous: number | null,
+): number | null {
+  const max = releases.reduce((m, r) => Math.max(m, r.id), Number.NEGATIVE_INFINITY);
+  if (!Number.isFinite(max)) return previous;
+  return previous === null ? max : Math.max(previous, max);
 }
 
 function escapeHtml(s: string): string {
@@ -98,7 +133,7 @@ export function renderReleaseArticle(r: NewsReleaseEntry, opts?: { isNew?: boole
     ? `<span class="news-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
     : '';
   const tag = r.tag ? `<span class="news-tag">${escapeHtml(r.tag)}</span>` : '';
-  const newBadge = opts?.isNew ? `<span class="news-badge">${t('welcome.news.new')}</span>` : '';
+  const newBadge = opts?.isNew ? `<span class="news-badge">${t('news.new')}</span>` : '';
   const badge = r.prerelease ? `<span class="news-badge">${t('news.prerelease')}</span>` : '';
   const title = escapeHtml(r.name || r.tag || '');
   return (
@@ -125,11 +160,10 @@ let newsLoading = false;
 
 /**
  * Fetches releases (via the injected loader) and paints them into `host`.
- * Guarded against overlapping calls the same way the original main.ts loop was
- * (a Welcome Screen open + a home-page News panel open could otherwise race).
+ * Guarded against overlapping calls the same way the original main.ts loop was.
  * This is the homepage "News & Updates" panel's full-list view: every fetched
- * release, fully expanded, uncapped. The Welcome Screen's compact column
- * (latest expanded, older collapsed, capped at 5) is renderWelcomeNews below.
+ * release, fully expanded, uncapped. The character-select panel's compact feed
+ * (latest expanded, older collapsed, capped at 5) is renderCompactNews below.
  */
 export async function loadNewsInto(
   host: HTMLElement | null,
@@ -154,16 +188,16 @@ export async function loadNewsInto(
   host.innerHTML = releases.map((r) => renderReleaseArticle(r)).join('');
 }
 
-function renderWelcomeNewsCollapsedRow(r: NewsReleaseEntry & { isNew?: boolean }): string {
+function renderCompactNewsCollapsedRow(r: NewsReleaseEntry & { isNew?: boolean }): string {
   const when = r.publishedAt
-    ? `<span class="ws-news-collapsed-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
+    ? `<span class="news-collapsed-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
     : '';
-  const newBadge = r.isNew ? `<span class="news-badge">${t('welcome.news.new')}</span>` : '';
+  const newBadge = r.isNew ? `<span class="news-badge">${t('news.new')}</span>` : '';
   const label = escapeHtml(r.name || r.tag || '');
   return (
-    `<details class="ws-news-collapsed">` +
-    `<summary class="ws-news-collapsed-summary">` +
-    `<span class="ws-news-collapsed-version">${label}${newBadge}</span>${when}` +
+    `<details class="news-collapsed">` +
+    `<summary class="news-collapsed-summary">` +
+    `<span class="news-collapsed-version">${label}${newBadge}</span>${when}` +
     `</summary>` +
     `<div class="news-body">${renderReleaseBody(stripReleaseNotesPreamble(r.body))}</div>${newsItemFoot(r.url)}` +
     `</details>`
@@ -171,15 +205,15 @@ function renderWelcomeNewsCollapsedRow(r: NewsReleaseEntry & { isNew?: boolean }
 }
 
 /**
- * The Welcome Screen's compact "News and Updates" column: the latest release
- * fully expanded (title, date, NEW badge, rendered body), older releases (the
- * caller has already capped the list, see markNewReleases/MAX_RELEASES_SHOWN in
- * welcome_screen_view.ts) collapsed to version + date rows that expand in place
- * (a native <details>/<summary> disclosure, same pattern as the guide FAQ:
- * src/guide/pages/faq.ts), plus a "View all updates on GitHub" link at the
- * bottom. DOM-free: returns a markup string, painted by the caller.
+ * The compact "News and Updates" feed: the latest release fully expanded
+ * (title, date, NEW badge, rendered body), older releases (the caller has
+ * already capped the list via markNewReleases) collapsed to version + date
+ * rows that expand in place (a native <details>/<summary> disclosure, same
+ * pattern as the guide FAQ: src/guide/pages/faq.ts), plus a "View all updates
+ * on GitHub" link at the bottom. DOM-free: returns a markup string, painted by
+ * the caller (the character-select panel, src/ui/charselect_news.ts).
  */
-export function renderWelcomeNews(
+export function renderCompactNews(
   releases: (NewsReleaseEntry & { isNew: boolean })[],
   githubReleasesUrl: string,
 ): string {
@@ -187,8 +221,8 @@ export function renderWelcomeNews(
   const [latest, ...older] = releases;
   const parts = [
     renderReleaseArticle(latest, { isNew: latest.isNew }),
-    ...older.map(renderWelcomeNewsCollapsedRow),
-    `<div class="ws-news-view-all"><a href="${escapeHtml(githubReleasesUrl)}" target="_blank" rel="noopener noreferrer">${t('welcome.news.viewAll')}</a></div>`,
+    ...older.map(renderCompactNewsCollapsedRow),
+    `<div class="news-view-all"><a href="${escapeHtml(githubReleasesUrl)}" target="_blank" rel="noopener noreferrer">${t('news.viewAll')}</a></div>`,
   ];
   return parts.join('');
 }

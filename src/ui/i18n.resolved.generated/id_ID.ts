@@ -2551,9 +2551,6 @@ export const id_ID: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Otorisasi dompet itu telah kedaluwarsa atau tidak dapat diverifikasi. Coba lagi."
-    },
-    "welcome": {
-      "invalid_input": "Data yang dimasukkan tidak valid."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const id_ID: EnTranslations = {
     "error": "Tidak dapat memuat pembaruan. Silakan coba lagi nanti.",
     "empty": "Belum ada pembaruan — periksa lagi nanti.",
     "prerelease": "Pra-rilis",
-    "viewOnGithub": "Lihat di GitHub"
+    "viewOnGithub": "Lihat di GitHub",
+    "new": "Baru",
+    "viewAll": "Lihat semua pembaruan di GitHub"
   },
   "download": {
     "title": "Unduh Peluncur Desktop",
@@ -5326,29 +5325,6 @@ export const id_ID: EnTranslations = {
     "heading": "Dunia sementara tidak tersedia.",
     "body": "Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",
     "status": "Segera kembali"
-  },
-  "welcome": {
-    "back": "Selamat datang kembali, {name}",
-    "level": "Level {level}",
-    "lastPlayed": "Terakhir dimainkan: {when}",
-    "continue": "Masuki Dunia",
-    "continueHint": "Tekan Enter untuk melanjutkan, Esc untuk melewati",
-    "continueHintTouch": "Ketuk untuk melanjutkan",
-    "discord": {
-      "title": "Komunitas berkumpul di Discord",
-      "sub": "Pratinjau pembaruan, acara, obrolan pengembang, serta 2 slot bank bonus saat Discord ditautkan.",
-      "join": "Gabung ke Discord kami"
-    },
-    "chest": {
-      "ready": "Peti harian siap dibuka"
-    },
-    "armory": {
-      "cta": "Masuki dunia dan jelajahi Gudang Senjata"
-    },
-    "news": {
-      "new": "Baru",
-      "viewAll": "Lihat semua pembaruan di GitHub"
-    }
   },
   "hud": {
     "core": {

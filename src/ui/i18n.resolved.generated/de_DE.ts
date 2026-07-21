@@ -2551,9 +2551,6 @@ export const de_DE: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Diese Wallet-Autorisierung ist abgelaufen oder konnte nicht verifiziert werden. Bitte versuche es erneut."
-    },
-    "welcome": {
-      "invalid_input": "Ungültige Eingabe."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const de_DE: EnTranslations = {
     "error": "Neuigkeiten konnten nicht geladen werden. Bitte versuche es später erneut.",
     "empty": "Noch keine Neuigkeiten - schau bald wieder vorbei.",
     "prerelease": "Vorabversion",
-    "viewOnGithub": "Auf GitHub ansehen"
+    "viewOnGithub": "Auf GitHub ansehen",
+    "new": "Neu",
+    "viewAll": "Alle Updates auf GitHub ansehen"
   },
   "download": {
     "title": "Desktop-Launcher herunterladen",
@@ -5326,29 +5325,6 @@ export const de_DE: EnTranslations = {
     "heading": "Die Welt ist vorübergehend nicht verfügbar.",
     "body": "Wir starten den Spieldienst neu und erwarten, dass Claudemoon bald zurückkehrt. Diese Seite prüft automatisch weiter.",
     "status": "Bald zurück"
-  },
-  "welcome": {
-    "back": "Willkommen zurück, {name}",
-    "level": "Stufe {level}",
-    "lastPlayed": "Zuletzt gespielt: {when}",
-    "continue": "Welt betreten",
-    "continueHint": "Enter zum Fortfahren, Esc zum Überspringen",
-    "continueHintTouch": "Tippe, um fortzufahren",
-    "discord": {
-      "title": "Die Gemeinschaft lebt auf Discord",
-      "sub": "Patch-Vorschauen, Events, Entwicklerchat und 2 Bonusfächer in der Bank, wenn du dein Discord-Konto verknüpfst.",
-      "join": "Tritt unserem Discord bei"
-    },
-    "chest": {
-      "ready": "Truhe der täglichen Belohnungen ist bereit"
-    },
-    "armory": {
-      "cta": "Welt betreten und die Waffenkammer durchstöbern"
-    },
-    "news": {
-      "new": "Neu",
-      "viewAll": "Alle Updates auf GitHub ansehen"
-    }
   },
   "hud": {
     "core": {

@@ -2551,9 +2551,6 @@ export const fr_FR: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Cette autorisation de portefeuille a expiré ou n'a pas pu être vérifiée. Réessayez."
-    },
-    "welcome": {
-      "invalid_input": "Saisie invalide."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const fr_FR: EnTranslations = {
     "error": "Impossible de charger les mises à jour. Réessayez plus tard.",
     "empty": "Aucune mise à jour pour l'instant ; revenez bientôt.",
     "prerelease": "Préversion",
-    "viewOnGithub": "Voir sur GitHub"
+    "viewOnGithub": "Voir sur GitHub",
+    "new": "Nouveau",
+    "viewAll": "Voir toutes les mises à jour sur GitHub"
   },
   "download": {
     "title": "Télécharger le lanceur de bureau",
@@ -5326,29 +5325,6 @@ export const fr_FR: EnTranslations = {
     "heading": "Le monde est temporairement indisponible.",
     "body": "Nous redémarrons le service de jeu et Claudemoon devrait revenir bientôt. Cette page continuera de vérifier automatiquement.",
     "status": "Bientôt de retour"
-  },
-  "welcome": {
-    "back": "Bon retour parmi nous, {name}",
-    "level": "Niveau {level}",
-    "lastPlayed": "Dernière partie : {when}",
-    "continue": "Entrer dans le monde",
-    "continueHint": "Entrée pour continuer, Échap pour passer",
-    "continueHintTouch": "Touchez pour continuer",
-    "discord": {
-      "title": "La communauté vit sur Discord",
-      "sub": "Aperçus des patchs, événements, discussions avec les développeurs et 2 emplacements de banque bonus en liant votre compte Discord.",
-      "join": "Rejoindre notre Discord"
-    },
-    "chest": {
-      "ready": "Coffre des récompenses quotidiennes prêt"
-    },
-    "armory": {
-      "cta": "Entrer dans le monde et parcourir l’Armurerie"
-    },
-    "news": {
-      "new": "Nouveau",
-      "viewAll": "Voir toutes les mises à jour sur GitHub"
-    }
   },
   "hud": {
     "core": {

@@ -2551,9 +2551,6 @@ export const tr_TR: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "Cüzdan yetkilendirmesi süresi dolmuş veya doğrulanamadı. Tekrar dene."
-    },
-    "welcome": {
-      "invalid_input": "Geçersiz girdi."
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const tr_TR: EnTranslations = {
     "error": "Güncellemeler yüklenemedi. Lütfen daha sonra tekrar dene.",
     "empty": "Henüz güncelleme yok — yakında tekrar bak.",
     "prerelease": "Ön sürüm",
-    "viewOnGithub": "GitHub'da Görüntüle"
+    "viewOnGithub": "GitHub'da Görüntüle",
+    "new": "Yeni",
+    "viewAll": "GitHub'daki tüm güncellemeleri görüntüle"
   },
   "download": {
     "title": "Masaüstü Başlatıcısını İndir",
@@ -5326,29 +5325,6 @@ export const tr_TR: EnTranslations = {
     "heading": "Dünya geçici olarak kullanılamıyor.",
     "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
     "status": "Birazdan döneriz"
-  },
-  "welcome": {
-    "back": "Tekrar hoş geldin, {name}",
-    "level": "Seviye {level}",
-    "lastPlayed": "Son oynama tarihi: {when}",
-    "continue": "Dünyaya Gir",
-    "continueHint": "Devam etmek için Enter'a, atlamak için Esc'ye bas",
-    "continueHintTouch": "Devam etmek için dokun",
-    "discord": {
-      "title": "Topluluk Discord'da yaşıyor",
-      "sub": "Yama ön izlemeleri, etkinlikler, geliştirici sohbeti ve Discord hesabını bağlayınca 2 bonus banka yuvası.",
-      "join": "Discord topluluğumuza katıl"
-    },
-    "chest": {
-      "ready": "Günlük sandık hazır"
-    },
-    "armory": {
-      "cta": "Dünyaya gir ve Cephaneliğe göz at"
-    },
-    "news": {
-      "new": "Yeni",
-      "viewAll": "GitHub'daki tüm güncellemeleri görüntüle"
-    }
   },
   "hud": {
     "core": {

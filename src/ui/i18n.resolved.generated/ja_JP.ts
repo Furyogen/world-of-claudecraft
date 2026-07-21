@@ -2551,9 +2551,6 @@ export const ja_JP: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "ウォレット認証の有効期限が切れたか、確認できませんでした。もう一度お試しください。"
-    },
-    "welcome": {
-      "invalid_input": "入力が無効です。"
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const ja_JP: EnTranslations = {
     "error": "更新情報を読み込めませんでした。しばらくしてからお試しください。",
     "empty": "まだ更新はありません。またのぞいてみてください。",
     "prerelease": "プレリリース",
-    "viewOnGithub": "GitHubで見る"
+    "viewOnGithub": "GitHubで見る",
+    "new": "新着",
+    "viewAll": "GitHubですべての更新を見る"
   },
   "download": {
     "title": "デスクトップランチャーのダウンロード",
@@ -5326,29 +5325,6 @@ export const ja_JP: EnTranslations = {
     "heading": "ワールドは一時的に利用できません。",
     "body": "ゲームサービスを再起動しています。Claudemoonはまもなく戻る予定です。このページは自動的に確認を続けます。",
     "status": "まもなく復帰"
-  },
-  "welcome": {
-    "back": "おかえりなさい、{name}さん",
-    "level": "レベル {level}",
-    "lastPlayed": "最終プレイ：{when}",
-    "continue": "ワールドに入る",
-    "continueHint": "Enterで続行、Escでスキップ",
-    "continueHintTouch": "タップして続行",
-    "discord": {
-      "title": "コミュニティはDiscordで活動しています",
-      "sub": "パッチプレビュー、イベント、開発者チャット、連携でボーナス銀行スロット2枠。",
-      "join": "Discordに参加する"
-    },
-    "chest": {
-      "ready": "デイリーチェストの準備ができました"
-    },
-    "armory": {
-      "cta": "武器庫を見に行く"
-    },
-    "news": {
-      "new": "新着",
-      "viewAll": "GitHubですべての更新を見る"
-    }
   },
   "hud": {
     "core": {

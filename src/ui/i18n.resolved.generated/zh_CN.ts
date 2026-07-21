@@ -2551,9 +2551,6 @@ export const zh_CN: EnTranslations = {
     },
     "wallet": {
       "handoff_invalid": "钱包授权已过期或无法验证。请重试。"
-    },
-    "welcome": {
-      "invalid_input": "输入无效。"
     }
   },
   "guide": {
@@ -4160,7 +4157,9 @@ export const zh_CN: EnTranslations = {
     "error": "无法加载更新，请稍后重试。",
     "empty": "暂无更新，敬请期待。",
     "prerelease": "预发布",
-    "viewOnGithub": "在 GitHub 上查看"
+    "viewOnGithub": "在 GitHub 上查看",
+    "new": "新",
+    "viewAll": "在 GitHub 上查看全部更新"
   },
   "download": {
     "title": "下载电脑版启动器",
@@ -5326,29 +5325,6 @@ export const zh_CN: EnTranslations = {
     "heading": "服务器暂时不可用。",
     "body": "我们正在重启游戏服务，Claudemoon 应会很快恢复。此页面会自动继续检查。",
     "status": "即将恢复"
-  },
-  "welcome": {
-    "back": "欢迎回来，{name}",
-    "level": "等级 {level}",
-    "lastPlayed": "上次游玩：{when}",
-    "continue": "进入世界",
-    "continueHint": "按 Enter 继续，按 Esc 跳过",
-    "continueHintTouch": "点击继续",
-    "discord": {
-      "title": "社区活跃在 Discord",
-      "sub": "版本预告、活动、开发者聊天，绑定还可获得 2 个额外银行格。",
-      "join": "加入我们的 Discord"
-    },
-    "chest": {
-      "ready": "每日宝箱已就绪"
-    },
-    "armory": {
-      "cta": "进入并浏览军械库"
-    },
-    "news": {
-      "new": "新",
-      "viewAll": "在 GitHub 上查看全部更新"
-    }
   },
   "hud": {
     "core": {
