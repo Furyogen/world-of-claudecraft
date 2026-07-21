@@ -106,9 +106,10 @@ import {
 } from './staff_db';
 import { PgUserAssetsDb } from './user_assets_db';
 
-// Admin API: everything under /admin/api/*. Auth is a bearer token whose
-// account has at least one staff role (accounts.admin_roles; is_admin stays
-// the derived "is staff" flag): the admin.* hostname is routing, not security.
+// Admin API: everything under /admin/api/*. Auth is an exact full-scope bearer
+// token whose account has at least one staff role (accounts.admin_roles;
+// is_admin stays the derived "is staff" flag): the admin.* hostname is routing,
+// not security.
 // Authorization is per route: every route is declared with a permission in
 // admin_routes.ts and gated centrally in handleAdminApi before any handler
 // runs, so a route absent from that table can never execute.

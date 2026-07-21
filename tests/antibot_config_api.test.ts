@@ -146,9 +146,7 @@ describe('GET /admin/api/antibot-config', () => {
     await handleAdminApi(fakeReq(), res, game);
     expect(res.statusCode).toBe(200);
     expect(res.body.data?.updatedAt).toBe('2026-07-04T00:00:00.000Z');
-    expect((res.body.data?.fields as ConfigField[] | undefined)?.[0]?.id).toBe(
-      'gate.kick_score',
-    );
+    expect((res.body.data?.fields as ConfigField[] | undefined)?.[0]?.id).toBe('gate.kick_score');
   });
 });
 

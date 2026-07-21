@@ -4,10 +4,11 @@
 //
 //  - createRequireAdmin(getDb): the admin-auth gate. It mirrors the legacy
 //    adminIdentity(req) resolver EXACTLY (server/admin.ts): resolve the 64-hex
-//    bearer, look up the account, require at least one staff role
-//    (staff_db.adminRolesForAccount, fail closed; roles are re-read on every
-//    request so a dashboard revocation applies to the next call). On ANY failure
-//    (absent/bad token, unknown account, non-staff account) it writes the legacy
+//    bearer, require its exact scope to be 'full', then require at least one
+//    staff role (staff_db.adminRolesForAccount, fail closed; roles are re-read
+//    on every request so a dashboard revocation applies to the next call). On
+//    ANY failure
+//    (absent/bad/read token, unknown account, non-staff account) it writes the legacy
 //    admin envelope body { success: false, data: null, error: 'admin authentication
 //    required' } at 401 and short-circuits (no next()), so the no-auth admin goldens
 //    replay byte-identically. A missing/malformed bearer 401s WITHOUT a DB call.
@@ -23,8 +24,8 @@
 //    ('any' admits any staff account). On success it sets ctx.account (admin
 //    tokens are full-scope), stashes the resolved AdminIdentity on ctx.state for
 //    the handlers (/me, staff-role writes), and calls next(). The gate applies NO
-//    read-only-scope 403 and NO moderation gate (staff is trusted operator
-//    authority), preserving the legacy gate byte-for-byte.
+//    separate read-only-scope 403 and NO moderation gate (staff is trusted operator
+//    authority). Read tokens use the same uniform 401 as other invalid credentials.
 //
 //  - requireAdminTarget(kind): the admin-scope :id loader. It decodes the :id param
 //    with num({ int, min: 1 }) BEFORE any DB call (a non-numeric / non-positive id

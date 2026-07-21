@@ -178,6 +178,24 @@ const LIFETIME_XP_EXPR = "((state->>'lifetimeXp')::bigint)";
 export const ELIGIBLE_ACCOUNT_SQL =
   'a.banned_at IS NULL AND (a.suspended_until IS NULL OR a.suspended_until <= now())';
 
+// Additive scope-domain hardening for auth_tokens. NOT VALID avoids a table
+// scan and tolerates any historical bad rows during deploy, while PostgreSQL
+// still enforces the constraint for every new or updated row. Runtime token
+// decoding independently fails closed on historical values outside this set.
+// Exported so the opt-in real-Postgres migration test executes this exact DDL.
+export const AUTH_TOKENS_SCOPE_CONSTRAINT_SQL = `DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'auth_tokens_scope_check'
+      AND conrelid = 'auth_tokens'::regclass
+  ) THEN
+    ALTER TABLE auth_tokens
+      ADD CONSTRAINT auth_tokens_scope_check CHECK (scope IN ('full', 'read')) NOT VALID;
+  END IF;
+END $$;`;
+
 export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS accounts (
   id SERIAL PRIMARY KEY,
@@ -200,18 +218,7 @@ CREATE INDEX IF NOT EXISTS auth_tokens_account ON auth_tokens(account_id);
 -- token in the account portal so a user can revoke a specific one.
 ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'full';
 ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS label TEXT;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1
-    FROM pg_constraint
-    WHERE conname = 'auth_tokens_scope_check'
-      AND conrelid = 'auth_tokens'::regclass
-  ) THEN
-    ALTER TABLE auth_tokens
-      ADD CONSTRAINT auth_tokens_scope_check CHECK (scope IN ('full', 'read')) NOT VALID;
-  END IF;
-END $$;
+${AUTH_TOKENS_SCOPE_CONSTRAINT_SQL}
 CREATE TABLE IF NOT EXISTS characters (
   id SERIAL PRIMARY KEY,
   account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,

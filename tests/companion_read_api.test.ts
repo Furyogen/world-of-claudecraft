@@ -60,8 +60,8 @@ describe('migration is additive; old tokens read full', () => {
   });
 });
 
-describe('token identity lookups retain authority context', () => {
-  it('has no production resolver that erases token scope', () => {
+describe('legacy scope-blind resolver removal', () => {
+  it('has no production reference to the removed accountForToken helper', () => {
     const offenders = serverTypeScriptFiles(SERVER_DIR)
       .filter((file) => /\baccountForToken\b/.test(stripComments(readFileSync(file, 'utf8'))))
       .map((file) => file.slice(SERVER_DIR.length + 1))
