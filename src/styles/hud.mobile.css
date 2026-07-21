@@ -2373,7 +2373,7 @@
     }
     body.mobile-touch .armory-card-copy {
       gap: 2px;
-      padding: 6px 7px 7px;
+      padding: 4px 7px 4px;
     }
     body.mobile-touch .armory-inspect-overlay {
       padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
