@@ -2925,6 +2925,17 @@ export interface Entity {
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
   skin: number; // player appearance: index into SKINS[visualKey]; 0 = default. synced in identity fields.
+  // Cosmetic head customization (players only, render-only). hairStyle indexes
+  // VisualDef.cosmetics.hair (0 = default); beard toggles the facial-hair mesh.
+  // Offline-only for now (set via Sim.setPlayerHead); NOT synced in identity
+  // fields, so online falls back to the model default. The sim never reads them.
+  face?: number; // 0 = default/male face, 1 = female, etc. (index into cosmetics.faces)
+  hairStyle?: number;
+  beard?: boolean;
+  // Cosmetic colour tints (hex 0xRRGGBB). hairColor recolours the hair+beard+brow
+  // group; faceColor multiplies the face/skin. undefined = the model default.
+  hairColor?: number;
+  faceColor?: number;
   // Equipped mainhand item id (players only; null otherwise). Render-only: the
   // client maps it to a held weapon model. Recomputed in recalcPlayerStats and
   // synced in identity fields (terse `mh`). The sim never reads it for gameplay.

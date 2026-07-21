@@ -244,26 +244,25 @@ function copyAccessoryTransform(payload: THREE.Object3D, ref: THREE.Object3D): v
   payload.scale.copy(ref.scale);
 }
 
-function applyHandGrip(
-  payload: THREE.Object3D,
-  root: THREE.Object3D,
-  bone: string,
-  url: string,
-): void {
-  const accessory = kaykitAccessoryFor(url);
+function applyHandGrip(payload: THREE.Object3D, root: THREE.Object3D, att: AttachDef): void {
+  const accessory = kaykitAccessoryFor(att.url);
   if (!accessory) return;
-  const side = handSide(bone);
+  const side = handSide(att.bone);
   const ref = findAccessoryNode(root, accessoryNodeName(accessory, side));
   if (ref) {
     copyAccessoryTransform(payload, ref);
-    return;
+  } else {
+    const grips = KAYKIT_HAND_GRIPS[accessory];
+    if (!grips) return;
+    const grip = side === 'l' ? (grips.l ?? grips.r) : grips.r;
+    payload.position.set(...grip.position);
+    payload.quaternion.set(...grip.quaternion);
+    payload.scale.setScalar(grip.scale);
   }
-  const grips = KAYKIT_HAND_GRIPS[accessory];
-  if (!grips) return;
-  const grip = side === 'l' ? (grips.l ?? grips.r) : grips.r;
-  payload.position.set(...grip.position);
-  payload.quaternion.set(...grip.quaternion);
-  payload.scale.setScalar(grip.scale);
+  // per-attach grip modifiers (stack on the resolved grip)
+  if (att.flipY) payload.quaternion.multiply(new THREE.Quaternion(0, 1, 0, 0));
+  if (att.scaleMul !== undefined) payload.scale.multiplyScalar(att.scaleMul);
+  if (att.gripOffset) payload.position.add(new THREE.Vector3(...att.gripOffset));
 }
 
 function flattenWeaponScene(src: THREE.Object3D): THREE.Object3D {
@@ -355,7 +354,7 @@ function attachProp(
     const ref = findAccessoryNode(root, att.gripRef);
     if (ref) copyAccessoryTransform(payload, ref);
   } else if (isHandslotBone(att.bone)) {
-    applyHandGrip(payload, root, att.bone, att.url);
+    applyHandGrip(payload, root, att);
   }
   // Sheathed: override where the prop SITS (on-back position/lean, chest-bone
   // space; the caller resolved the chest bone) but keep the SCALE the normal
@@ -381,7 +380,17 @@ function swapAttachDef(
   weaponSkinId: string | null | undefined = null,
 ): AttachDef {
   const url = weaponSkinModelUrl(weaponSkinId) ?? itemWeaponModelUrl(weaponItemId);
-  return url ? { url, bone: base.bone } : base;
+  // carry the generic grip modifiers (flipY/scaleMul/gripOffset) onto the substituted
+  // model so an equipped shield keeps the same orientation/size as the class default.
+  return url
+    ? {
+        url,
+        bone: base.bone,
+        flipY: base.flipY,
+        scaleMul: base.scaleMul,
+        gripOffset: base.gripOffset,
+      }
+    : base;
 }
 
 function offhandAttachDef(
@@ -603,9 +612,16 @@ export function assembleModel(
 ): THREE.Object3D {
   const root = cloneSkinned(optimizedScene(def.url));
   // tag the character's own meshes (body + accessories share one texture atlas)
-  // so a skin override hits them but not the separate weapons attached below
+  // so a skin override hits them but not the separate weapons attached below.
+  // `skinnable` narrows WHICH of those meshes a chroma atlas actually remaps:
+  // undefined skinMeshNames = every body mesh (single-atlas KayKit rigs + mech);
+  // an allowlist = only the named armor meshes (dual-atlas v02 players), leaving
+  // the head atlas untouched.
+  const skinNames = def.skinMeshNames;
   root.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) o.userData.bodyMesh = true;
+    if (!(o as THREE.Mesh).isMesh) return;
+    o.userData.bodyMesh = true;
+    o.userData.skinnable = !skinNames || skinNames.includes(o.name);
   });
   // KayKit characters ship every accessory mesh visible; keep only the kit
   if (def.show) {
@@ -897,6 +913,8 @@ export function applyMaterials(
   root.traverse((o) => {
     const mesh = o as THREE.Mesh;
     if (!mesh.isMesh) return;
+    // the head halo keeps its own additive glow material (visual.ts/halo.ts)
+    if (mesh.name === 'class_halo') return;
     // Weapon-skin VFX rigs own their ShaderMaterials, and a skinned weapon's
     // payload materials are per-instance clones the VFX emissive derive mutates
     // and restores. Tinting either (or re-deriving them from the shared cache
@@ -909,9 +927,13 @@ export function applyMaterials(
     sourceMaterials.set(mesh, source);
     const role: MaterialRole = mesh.userData.weaponMesh ? 'weapon' : 'body';
     const materialTint = role === 'weapon' ? null : tint;
-    // skin/emissive override only touches the character's own atlas meshes, not weapons
-    const sk = skinTex && mesh.userData.bodyMesh ? skinTex : null;
-    const em = emisTex && mesh.userData.bodyMesh ? emisTex : null;
+    // skin/emissive override only touches the character's own body atlas meshes:
+    // `bodyMesh` excludes attached weapons, and `skinnable !== false` additionally
+    // drops a dual-atlas body's head meshes (skinMeshNames marks them non-skinnable)
+    // so the v02 head atlas is left untouched.
+    const skinTarget = mesh.userData.bodyMesh && mesh.userData.skinnable !== false;
+    const sk = skinTex && skinTarget ? skinTex : null;
+    const em = emisTex && skinTarget ? emisTex : null;
     if (Array.isArray(source)) {
       mesh.material = source.map((m) => tintedMaterial(m, materialTint, strength, sk, em, role));
     } else {

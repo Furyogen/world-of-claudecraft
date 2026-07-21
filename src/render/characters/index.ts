@@ -40,6 +40,12 @@ export function createCharacterVisual(
       formKey ? null : e.mainhandItemId,
       weaponOverride,
       formKey ? null : e.offhandItemId,
+      // head cosmetics only apply to the base body, not shapeshift forms
+      formKey ? 0 : (e.hairStyle ?? 0),
+      formKey ? true : (e.beard ?? true),
+      formKey ? undefined : e.hairColor,
+      formKey ? undefined : e.faceColor,
+      formKey ? 0 : (e.face ?? 0),
     );
   } catch (err) {
     // key the dedupe on visual key PLUS message: two models failing with an

@@ -36,6 +36,11 @@ export class CharacterPreview {
   private characterGroup: THREE.Group;
   private currentVisual: CharacterVisual | null = null;
   private currentSkin = 0;
+  private currentFace = 0;
+  private currentHairStyle = 0;
+  private currentBeard = true;
+  private currentHairColor: number | undefined = undefined;
+  private currentFaceColor: number | undefined = undefined;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
   private appearanceSig: string | null = null;
@@ -127,6 +132,11 @@ export class CharacterPreview {
   setAppearance(a: PreviewAppearance): void {
     if (this.destroyed) return;
     this.currentSkin = a.skin;
+    this.currentFace = a.face ?? 0;
+    this.currentHairStyle = a.hairStyle ?? 0;
+    this.currentBeard = a.beard ?? true;
+    this.currentHairColor = a.hairColor;
+    this.currentFaceColor = a.faceColor;
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
@@ -166,6 +176,11 @@ export class CharacterPreview {
         weaponItemId,
         weaponOverride,
         offhandItemId,
+        this.currentHairStyle,
+        this.currentBeard,
+        this.currentHairColor,
+        this.currentFaceColor,
+        this.currentFace,
       );
       this.characterGroup.add(this.currentVisual.root);
 
@@ -185,6 +200,25 @@ export class CharacterPreview {
     this.appearanceSig = null;
     this.currentSkin = skinIndex;
     this.currentVisual?.setSkin(skinIndex);
+  }
+
+  /** Swap the previewed head look (face + hairstyle/beard + hair/face colour);
+   *  persists across setClass. */
+  setCosmetics(
+    hairStyle: number,
+    beard: boolean,
+    hairColor?: number,
+    faceColor?: number,
+    face = 0,
+  ): void {
+    if (this.destroyed) return;
+    this.appearanceSig = null;
+    this.currentFace = face;
+    this.currentHairStyle = hairStyle;
+    this.currentBeard = beard;
+    this.currentHairColor = hairColor;
+    this.currentFaceColor = faceColor;
+    this.currentVisual?.setCosmetics(hairStyle, beard, hairColor, faceColor, face);
   }
 
   /** Dynamically shift the canvas to a new container */

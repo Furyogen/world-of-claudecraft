@@ -144,7 +144,7 @@ import { installWalletResumeHandlers } from './net/wallet_resume';
 import { assetsReady } from './render/assets/preload';
 import { CharacterPreview, type PreviewAppearance } from './render/characters';
 import { preloadMechAssets } from './render/characters/assets';
-import { skinCount } from './render/characters/manifest';
+import { headOptions, skinCount, skinSwatchColor } from './render/characters/manifest';
 import { playerPortraitDataUrl } from './render/characters/portrait';
 import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
@@ -3362,6 +3362,11 @@ async function startOffline(
   skin = 0,
   world?: WorldContent,
   seedOverride?: number,
+  hairStyle = 0,
+  beard = true,
+  hairColor?: number,
+  faceColor?: number,
+  face = 0,
 ): Promise<void> {
   if (!(await prepareWorldEntry())) return;
   // Offline path: same Welcome Screen before startGame, but Continue enables
@@ -3423,6 +3428,7 @@ async function startOffline(
     world,
   });
   sim.setPlayerSkin(sim.playerId, skin);
+  sim.setPlayerHead(sim.playerId, hairStyle, beard, hairColor, faceColor, face);
   // Dev convenience: ?mech drops an offline session straight into the Combat Mech
   // cosmetic body holding a spread of class-usable weapons, to eyeball the held
   // weapon model on the mech (swap them in the bag to see each one). DEV builds
@@ -3494,6 +3500,13 @@ let characterPreview: CharacterPreview | null = null;
 let authModeApply: ((mode: 'login' | 'register') => void) | null = null;
 let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
 let onlineSkin = 0; // chosen appearance skin for new online characters
+// chosen head look for the offline character (face index + hairStyle + beard +
+// optional hair/face colour tints; undefined = the model's baked colour)
+let offlineFace = 0;
+let offlineHairStyle = 0;
+let offlineBeard = true;
+let offlineHairColor: number | undefined;
+let offlineFaceColor: number | undefined;
 
 function releaseStartScreenPreview(): void {
   if (!characterPreview) return;
@@ -3525,20 +3538,16 @@ function renderSkinPicker(
   for (let i = 0; i < count; i++) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = `skin-swatch skin-swatch-portrait${i === current ? ' sel' : ''}`;
+    // Chroma swatch shows just the armour colour (a plain colour dot), not a portrait.
+    const color = skinSwatchColor(`player_${cls}`, i);
+    b.className = `skin-swatch skin-swatch-color${i === current ? ' sel' : ''}`;
     b.dataset.skin = String(i);
     b.setAttribute('role', 'listitem');
     b.setAttribute('aria-label', t('auth.chromaOption', { n: i + 1 }));
-    const url = playerPortraitDataUrl(cls, i);
-    if (url) {
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = '';
-      img.className = 'skin-swatch-img';
-      b.appendChild(img);
-    } else {
-      b.textContent = String(i + 1);
-    }
+    // Chroma swatch shows just the armour colour (a plain colour dot), not a
+    // portrait; preview/revert/pick are wired centrally by wireSkinPicker below.
+    if (color) b.style.setProperty('--skin-swatch', color);
+    else b.textContent = String(i + 1);
     swatches.push(b);
     row.appendChild(b);
   }
@@ -3552,6 +3561,173 @@ function renderSkinPicker(
     onRevert: (i) => characterPreview?.setSkin(i),
     onPick,
   });
+}
+
+/** Fill a head-customization row with hair + beard toggles for a class, live-
+ *  previewing on the turntable. Hidden for classes with no head options. Hair
+ *  toggles between the styled look (index 0) and bald (the last option). */
+interface HeadState {
+  face: number;
+  hairStyle: number;
+  beard: boolean;
+  hairColor?: number;
+  faceColor?: number;
+}
+
+// swatch shown in the hair colour picker before the player touches it (the tint
+// only applies on change; until then the model keeps its baked colour).
+const HAIR_COLOR_SWATCH = '#86553f';
+
+// Skin is a fixed set of shades (NOT a free picker) so it can't be abused. `tint`
+// multiplies the baked face; the first (natural) keeps the baked skin; the rest
+// step darker. `swatch` is what the button shows.
+const FACE_SHADES: { swatch: string; tint: number | undefined }[] = [
+  { swatch: '#e6c2a2', tint: undefined },
+  { swatch: '#c99a6e', tint: 0xd8ccbf },
+  { swatch: '#a06f45', tint: 0xa68c7a },
+];
+
+function renderHeadPicker(
+  rowId: string,
+  cls: PlayerClass,
+  init: HeadState,
+  onChange: (s: HeadState) => void,
+): void {
+  const row = $(rowId) as HTMLElement | null;
+  if (!row) return;
+  const opts = headOptions(`player_${cls}`);
+  if (!opts) {
+    row.style.display = 'none';
+    row.innerHTML = '';
+    return;
+  }
+  row.style.display = '';
+  row.style.setProperty('--class-color', `#${CLASSES[cls].color.toString(16).padStart(6, '0')}`);
+  const state: HeadState = { ...init };
+
+  // a labelled group: a game-font header over one or more rows of controls.
+  // `items` is the first row; `addRow()` appends a further row (so the primary
+  // options and their secondary tints sit on separate lines, per the mockup).
+  const group = (
+    labelKey: Parameters<typeof t>[0],
+    kind: string,
+  ): { items: HTMLElement; addRow: () => HTMLElement } => {
+    const g = document.createElement('div');
+    g.className = `head-group head-group-${kind}`;
+    const h = document.createElement('div');
+    h.className = 'head-group-title';
+    h.textContent = t(labelKey);
+    const addRow = (): HTMLElement => {
+      const items = document.createElement('div');
+      items.className = 'head-group-items';
+      g.appendChild(items);
+      return items;
+    };
+    g.appendChild(h);
+    const items = addRow();
+    row.appendChild(g);
+    return { items, addRow };
+  };
+  const pressedBtn = (label: string, aria: string, on: boolean, click: () => void) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'head-toggle';
+    b.textContent = label;
+    b.setAttribute('aria-label', aria);
+    b.setAttribute('aria-pressed', String(on));
+    b.addEventListener('click', click);
+    return b;
+  };
+
+  // FACE + HAIR + BEARD depend on the selected face, so rebuild them together.
+  const build = (): void => {
+    row.innerHTML = '';
+    const faceIdx = Math.min(state.face, opts.faces.length - 1);
+    const faceOpt = opts.faces[faceIdx];
+
+    // FACE: one button per face (male / female), plus the skin shades on their
+    // own row below.
+    if (opts.faces.length > 1 || opts.hasFaceColor) {
+      const { items, addRow } = group('auth.face', 'face');
+      opts.faces.forEach((_f, i) => {
+        items.appendChild(
+          pressedBtn(String(i + 1), t('auth.faceOption', { n: i + 1 }), i === state.face, () => {
+            state.face = i;
+            state.hairStyle = 0; // hair options differ per face
+            build();
+            onChange(state);
+          }),
+        );
+      });
+      if (opts.hasFaceColor) {
+        const shadeRow = addRow();
+        FACE_SHADES.forEach((shade, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'head-skin';
+          b.style.setProperty('--skin-swatch', shade.swatch);
+          b.setAttribute('aria-label', t('auth.skinTone', { n: i + 1 }));
+          b.setAttribute('aria-pressed', String(shade.tint === state.faceColor));
+          b.addEventListener('click', () => {
+            state.faceColor = shade.tint;
+            build();
+            onChange(state);
+          });
+          shadeRow.appendChild(b);
+        });
+      }
+    }
+
+    // HAIR: one numbered button per style (the last is bald when the face has it,
+    // shown as its number but with a descriptive accessible name), plus the free
+    // hair-colour picker.
+    if (faceOpt.hairCount > 1 || opts.hasHairColor) {
+      const { items, addRow } = group('auth.hair', 'hair');
+      for (let i = 0; i < faceOpt.hairCount; i++) {
+        const isBald = faceOpt.hasBald && i === faceOpt.hairCount - 1;
+        items.appendChild(
+          pressedBtn(
+            String(i + 1),
+            isBald ? t('auth.bald') : t('auth.hairStyle', { n: i + 1 }),
+            i === state.hairStyle,
+            () => {
+              state.hairStyle = i;
+              build();
+              onChange(state);
+            },
+          ),
+        );
+      }
+      if (opts.hasHairColor) {
+        const colorRow = addRow();
+        const inp = document.createElement('input');
+        inp.type = 'color';
+        inp.className = 'head-color';
+        inp.value =
+          state.hairColor !== undefined
+            ? `#${state.hairColor.toString(16).padStart(6, '0')}`
+            : HAIR_COLOR_SWATCH;
+        inp.setAttribute('aria-label', t('auth.hairColor'));
+        inp.addEventListener('input', () => {
+          state.hairColor = Number.parseInt(inp.value.slice(1), 16);
+          onChange(state);
+        });
+        colorRow.appendChild(inp);
+      }
+    }
+
+    // BEARD: only for faces that have one (hidden for the female head).
+    if (faceOpt.hasBeard) {
+      const { items } = group('auth.beard', 'beard');
+      const beardBtn = pressedBtn(t('auth.beard'), t('auth.beard'), state.beard, () => {
+        state.beard = !state.beard;
+        build();
+        onChange(state);
+      });
+      items.appendChild(beardBtn);
+    }
+  };
+  build();
 }
 
 /** Give each class button a small portrait preview of that class (run once
@@ -3594,6 +3770,21 @@ function refreshOfflineSkins(cls: PlayerClass): void {
   renderSkinPicker('#offline-skin-row', cls, 0, (i) => {
     offlineSkin = i;
     characterPreview?.setSkin(i);
+  });
+  // Head look: reset to default (male face, styled hair + beard, baked colours).
+  offlineFace = 0;
+  offlineHairStyle = 0;
+  offlineBeard = true;
+  offlineHairColor = undefined;
+  offlineFaceColor = undefined;
+  characterPreview?.setCosmetics(offlineHairStyle, offlineBeard, undefined, undefined, offlineFace);
+  renderHeadPicker('#offline-head-row', cls, { face: 0, hairStyle: 0, beard: true }, (s) => {
+    offlineFace = s.face;
+    offlineHairStyle = s.hairStyle;
+    offlineBeard = s.beard;
+    offlineHairColor = s.hairColor;
+    offlineFaceColor = s.faceColor;
+    characterPreview?.setCosmetics(s.hairStyle, s.beard, s.hairColor, s.faceColor, s.face);
   });
 }
 
@@ -7539,7 +7730,18 @@ function wireStartScreens(): void {
     music.init();
     sfx.init();
     const name = sanitizeOfflineName(rawName);
-    void startOffline(cls, name, selectedSkin('#offline-skin-row', offlineSkin));
+    void startOffline(
+      cls,
+      name,
+      selectedSkin('#offline-skin-row', offlineSkin),
+      undefined,
+      undefined,
+      offlineHairStyle,
+      offlineBeard,
+      offlineHairColor,
+      offlineFaceColor,
+      offlineFace,
+    );
   };
 
   const handleOfflineSelect = () => {

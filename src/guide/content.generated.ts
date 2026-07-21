@@ -809,8 +809,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       }
     ],
     "model": "player_priest",
-    "tint": "#f0e9d6",
-    "still": "/guide-stills/player_priest__f0e9d6.webp"
+    "still": "/guide-stills/player_priest.webp"
   },
   {
     "id": "shaman",
@@ -913,8 +912,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       }
     ],
     "model": "player_shaman",
-    "tint": "#6f8fc9",
-    "still": "/guide-stills/player_shaman__6f8fc9.webp"
+    "still": "/guide-stills/player_shaman.webp"
   },
   {
     "id": "mage",
@@ -1291,8 +1289,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       }
     ],
     "model": "player_warlock",
-    "tint": "#8d5fd3",
-    "still": "/guide-stills/player_warlock__8d5fd3.webp"
+    "still": "/guide-stills/player_warlock.webp"
   },
   {
     "id": "druid",
@@ -3590,13 +3587,9 @@ export const GUIDE_DEEDS: GuideDeed[] = [
 
 export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   "player_warrior": {
-    "url": "models/chars/players/knight.glb",
+    "url": "models/chars/players/warrior_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [
-      "Knight_Helmet",
-      "Knight_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/sword_1handed.glb",
@@ -3609,7 +3602,7 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_paladin": {
-    "url": "models/chars/players/paladin.glb",
+    "url": "models/chars/players/paladin_v02.glb",
     "idle": "Idle",
     "height": 2.6,
     "attach": [
@@ -3624,7 +3617,7 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_hunter": {
-    "url": "models/chars/players/ranger.glb",
+    "url": "models/chars/players/hunter_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
     "attach": [
@@ -3635,12 +3628,9 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_rogue": {
-    "url": "models/chars/players/rogue.glb",
+    "url": "models/chars/players/rogue_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [
-      "Rogue_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/dagger.glb",
@@ -3653,25 +3643,20 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_priest": {
-    "url": "models/chars/players/mage.glb",
+    "url": "models/chars/players/priest_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [],
     "attach": [
       {
         "url": "models/weapons/staff.glb",
         "bone": "handslot.r"
       }
-    ],
-    "tintStrength": 0.5
+    ]
   },
   "player_shaman": {
-    "url": "models/chars/players/barbarian.glb",
+    "url": "models/chars/players/shaman_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [
-      "Barbarian_BearHat"
-    ],
     "attach": [
       {
         "url": "models/weapons/axe_1handed.glb",
@@ -3681,16 +3666,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
         "url": "models/weapons/shield_round.glb",
         "bone": "handslot.l"
       }
-    ],
-    "tintStrength": 0.4
+    ]
   },
   "player_mage": {
-    "url": "models/chars/players/mage.glb",
+    "url": "models/chars/players/mage_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [
-      "Mage_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/staff.glb",
@@ -3699,10 +3680,9 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_warlock": {
-    "url": "models/chars/players/mage.glb",
+    "url": "models/chars/players/warlock_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
-    "show": [],
     "attach": [
       {
         "url": "models/weapons/wand.glb",
@@ -3713,11 +3693,10 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
         "bone": "handslot.l",
         "gripRef": "Spellbook_open"
       }
-    ],
-    "tintStrength": 0.45
+    ]
   },
   "player_druid": {
-    "url": "models/chars/players/druid.glb",
+    "url": "models/chars/players/druid_male_v02.glb",
     "idle": "Idle",
     "height": 2.6,
     "attach": [

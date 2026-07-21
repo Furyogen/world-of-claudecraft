@@ -13,6 +13,12 @@ export interface PreviewAppearance {
   mainhandItemId: string | null;
   /** Optional for older character-summary callers; absent renders no offhand. */
   offhandItemId?: string | null;
+  /** Cosmetic head look (defaults: face 0, hairStyle 0, beard on, model colours). */
+  face?: number;
+  hairStyle?: number;
+  beard?: boolean;
+  hairColor?: number;
+  faceColor?: number;
 }
 
 /** The model key + held-weapon layout the appearance resolves to. */
@@ -40,5 +46,5 @@ export function previewAppearanceVisual(a: PreviewAppearance): PreviewVisual {
 /** Stable identity of an appearance, so an async mech re-apply can bail out if a
  *  newer selection superseded it. */
 export function appearanceSignature(a: PreviewAppearance): string {
-  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}`;
+  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}|${a.face ?? 0}|${a.hairStyle ?? 0}|${a.beard ?? true}|${a.hairColor ?? ''}|${a.faceColor ?? ''}`;
 }

@@ -3028,6 +3028,28 @@ export class Sim {
     weaponStowMod.toggleWeaponStow(r.e);
   }
 
+  /** Cosmetic head customization (render-only, offline). hairStyle indexes the
+   *  visual's cosmetics.hair list; beard toggles the facial-hair mesh. Like skin
+   *  these ride only on the entity for the renderer to read; the sim never uses
+   *  them and they are not synced online. */
+  setPlayerHead(
+    pid: number,
+    hairStyle: number,
+    beard: boolean,
+    hairColor?: number,
+    faceColor?: number,
+    face = 0,
+  ): boolean {
+    const e = this.entities.get(pid);
+    if (!e) return false;
+    e.face = Math.max(0, Math.floor(face));
+    e.hairStyle = Math.max(0, Math.floor(hairStyle));
+    e.beard = beard;
+    e.hairColor = hairColor;
+    e.faceColor = faceColor;
+    return true;
+  }
+
   /** Set a player's guild name (online only) so it rides the entity wire and
    *  shows under their nameplate. Guilds live in the server social DB, not the
    *  Sim, so this is a passive display field. Offline/headless leave it ''.

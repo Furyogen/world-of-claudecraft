@@ -53,6 +53,13 @@ export interface AttachDef {
   rotationY?: number;
   /** Copy grip from a built-in accessory node on the character rig (e.g. Spellbook_open). */
   gripRef?: string;
+  /** Hand-grip modifiers that STACK on the resolved family grip (applyHandGrip),
+   *  for a per-attach tweak without disturbing the shared grip other classes use.
+   *  `flipY` adds a 180 deg turn about the hand's up axis; `scaleMul` scales the
+   *  grip size (e.g. 0.5 = half); `gripOffset` nudges the prop in bone-local space. */
+  flipY?: boolean;
+  scaleMul?: number;
+  gripOffset?: [number, number, number];
 }
 
 export interface VisualDef {
@@ -80,6 +87,23 @@ export interface VisualDef {
    *  separate from `weaponSlots` so mainhand cosmetics cannot overwrite a live
    *  shield or second weapon. */
   offhandSlot?: number;
+  /** Body-mesh node names a skin/chroma atlas applies to. Undefined = every
+   *  character mesh (single-atlas KayKit rigs + the Combat Mech). Set it for the
+   *  dual-atlas v02 players (a body atlas + a separate head atlas) so a body
+   *  chroma recolors the armor meshes only and never remaps the head's UVs. */
+  skinMeshNames?: string[];
+  /** Cosmetic head-mesh toggles (char-select customization). Each face in `faces`
+   *  carries its own head meshes (`face`), mutually-exclusive hairstyle options
+   *  (`hair`, each a mesh set to SHOW; an empty set = bald), and optional `beard`
+   *  meshes toggled by the beard flag (omitted for faces with no beard, e.g. the
+   *  female head). The chosen `face` index shows that head + its hair and hides the
+   *  others. `hairMeshes` are recoloured by the hairColor tint (all hair + beard +
+   *  brow, across faces); `faceMeshes` are multiplied by the faceColor skin tint. */
+  cosmetics?: {
+    faces: { face: string[]; hair: string[][]; beard?: string[] }[];
+    hairMeshes?: string[];
+    faceMeshes?: string[];
+  };
   /** material tint: explicit color, 'entity' (use e.color), or none */
   tint?: number | 'entity';
   /** lerp amount toward the tint (default 0.4) */
@@ -388,55 +412,52 @@ function mechEmissiveUrl(c: MechChroma): string | null {
 // to the body material's .map (same UVs). Classes sharing a model share its skin
 // set. Players only — mobs/npcs keep their default look. See public/textures/skins/.
 export const SKINS: Record<string, (string | null)[]> = {
+  // Warrior chromas: color-key recolors of the v02 body atlas itself (plate +
+  // leather remapped by hue, shading preserved, skin/face kept natural), so they
+  // line up with the v02 clean UVs. Applied to the armor meshes only (see
+  // player_warrior.skinMeshNames). Length stays 4 (SKIN_COUNTS lockstep).
   player_warrior: [
     null,
-    `${SKINS_DIR}/knight/alt_a.png`,
-    `${SKINS_DIR}/knight/alt_b.png`,
-    `${SKINS_DIR}/knight/alt_c.png`,
+    `${SKINS_DIR}/warrior/crimson.webp`,
+    `${SKINS_DIR}/warrior/azure.webp`,
+    `${SKINS_DIR}/warrior/gold.webp`,
   ],
-  player_paladin: [null, `${SKINS_DIR}/paladin/alt_a.png`],
-  player_hunter: [
-    null,
-    `${SKINS_DIR}/ranger/alt_a.png`,
-    `${SKINS_DIR}/ranger/alt_b.png`,
-    `${SKINS_DIR}/ranger/alt_c.png`,
-  ],
-  player_rogue: [
-    null,
-    `${SKINS_DIR}/rogue/alt_a.png`,
-    `${SKINS_DIR}/rogue/alt_b.png`,
-    `${SKINS_DIR}/rogue/alt_c.png`,
-  ],
-  player_priest: [
-    null,
-    `${SKINS_DIR}/mage/alt_a.png`,
-    `${SKINS_DIR}/mage/alt_b.png`,
-    `${SKINS_DIR}/mage/alt_c.png`,
-  ],
-  player_mage: [
-    null,
-    `${SKINS_DIR}/mage/alt_a.png`,
-    `${SKINS_DIR}/mage/alt_b.png`,
-    `${SKINS_DIR}/mage/alt_c.png`,
-  ],
-  player_warlock: [
-    null,
-    `${SKINS_DIR}/mage/alt_a.png`,
-    `${SKINS_DIR}/mage/alt_b.png`,
-    `${SKINS_DIR}/mage/alt_c.png`,
-  ],
-  player_shaman: [
-    null,
-    `${SKINS_DIR}/barbarian/alt_a.png`,
-    `${SKINS_DIR}/barbarian/alt_b.png`,
-    `${SKINS_DIR}/barbarian/alt_c.png`,
-  ],
-  player_druid: [
-    null,
-    `${SKINS_DIR}/druid/alt_a.png`,
-    `${SKINS_DIR}/druid/alt_b.png`,
-    `${SKINS_DIR}/druid/alt_c.png`,
-  ],
+  // The v02 paladin body has its own clean UVs; the paladin alt atlas was
+  // authored for the retired KayKit UVs and would scramble on it. Slots stay
+  // null so saved skin indices remain valid (SKIN_COUNTS lockstep: paladin 2).
+  player_paladin: [null, null],
+  // v02 hunter body: own clean UVs + embedded texture; the shared ranger alt
+  // atlases were authored for ranger.glb's UVs. Slots stay null so saved skin
+  // indices remain valid (SKIN_COUNTS.hunter = 4).
+  player_hunter: [null, null, null, null],
+  // v02 rogue body: own clean UVs + embedded texture; the shared rogue alt
+  // atlases were authored for rogue.glb's UVs. Slots stay null so saved skin
+  // indices remain valid (SKIN_COUNTS.rogue = 4).
+  player_rogue: [null, null, null, null],
+  // Priest and mage share the mage.glb rig but each gets its OWN default look
+  // (index 0 is a real recolored atlas, not the embedded texture): white-and-
+  // gold linen for the priest, night-indigo with muted gold trim and glowing
+  // eyes for the mage. The alt skins stay the shared mage set.
+  // v02 priest body: own clean UVs + embedded white-and-gold texture; the old
+  // priest/base and shared mage alt atlases were authored for mage.glb's UVs.
+  // Slots stay null so saved skin indices remain valid (SKIN_COUNTS.priest = 4).
+  player_priest: [null, null, null, null],
+  // The v02 mage body has its own clean UVs; the night look and the shared
+  // mage alt atlases were authored for the retired mage.glb UVs and would
+  // scramble on it. Slots stay null so saved skin indices remain valid
+  // (SKIN_COUNTS.mage = 4). The night eye-glow emissive went with it.
+  player_mage: [null, null, null, null],
+  // v02 warlock body: own clean UVs + embedded dark texture; the shared mage
+  // alt atlases were authored for mage.glb's UVs. Slots stay null so saved skin
+  // indices remain valid (SKIN_COUNTS.warlock = 4).
+  player_warlock: [null, null, null, null],
+  // v02 shaman body: own clean UVs + embedded texture; the shared barbarian alt
+  // atlases were authored for barbarian.glb's UVs. Slots stay null so saved
+  // skin indices remain valid (SKIN_COUNTS.shaman = 4).
+  player_shaman: [null, null, null, null],
+  // v02 druid body: own clean UVs, the druid alt atlases were authored for the
+  // retired druid.glb UVs. Slots stay null (SKIN_COUNTS.druid lockstep).
+  player_druid: [null, null, null, null],
   // Combat Mech chromas — every index is a real full-model texture (no null
   // default; the embedded base texture is not one of the rewards).
   player_mech: MECH_CHROMAS.map(mechChromaUrl),
@@ -447,15 +468,53 @@ export const SKINS: Record<string, (string | null)[]> = {
   npc_fernando: [`${SKINS_DIR}/rogue/fernando.png`],
 };
 
+// Representative armour colour per skin index, shown as the char-select chroma
+// swatch (a plain colour dot, not a portrait). Keyed + ordered like SKINS.
+export const SKIN_SWATCH_COLORS: Record<string, string[]> = {
+  // default plate grey, then crimson / azure / gold (the shipped warrior chromas)
+  player_warrior: ['#c2c2c8', '#9e2f35', '#37659e', '#a8862c'],
+};
+SKIN_SWATCH_COLORS.player_warrior_classic = SKIN_SWATCH_COLORS.player_warrior;
+
+/** Chroma swatch colour (CSS hex) for a visual key + skin index, or null. */
+export function skinSwatchColor(key: string, index: number): string | null {
+  return SKIN_SWATCH_COLORS[key]?.[index] ?? null;
+}
+
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
 // skin index has one. Only the Combat Mech epics glow; null entries mean no glow.
 export const SKIN_EMISSIVE: Record<string, (string | null)[]> = {
+  // (the mage's night-look eye glow retired with the night atlas: both were
+  // authored for the old mage.glb UVs, which the v02 body no longer uses)
   player_mech: MECH_CHROMAS.map(mechEmissiveUrl),
 };
 
 /** Number of skins (including the default) available for a visual key — min 1. */
 export function skinCount(key: string): number {
   return SKINS[key]?.length ?? 1;
+}
+
+/** Head-customization options a visual key offers (char-select head picker), or
+ *  null when it has none. `hairCount` includes every hairstyle option (a bald
+ *  option counts); `hasBeard` is whether a facial-hair toggle applies. */
+export function headOptions(key: string): {
+  faces: { hairCount: number; hasBeard: boolean; hasBald: boolean }[];
+  hasHairColor: boolean;
+  hasFaceColor: boolean;
+} | null {
+  const cos = VISUALS[key]?.cosmetics;
+  if (!cos?.faces?.length) return null;
+  const faces = cos.faces.map((f) => ({
+    hairCount: f.hair?.length ?? 0,
+    hasBeard: (f.beard?.length ?? 0) > 0,
+    // the bald option is an empty hair set, kept last by convention
+    hasBald: (f.hair?.[f.hair.length - 1]?.length ?? 1) === 0,
+  }));
+  return {
+    faces,
+    hasHairColor: (cos.hairMeshes?.length ?? 0) > 0,
+    hasFaceColor: (cos.faceMeshes?.length ?? 0) > 0,
+  };
 }
 
 /** Texture url to preview a skin option (default index 0 → the model's base.png). */
@@ -485,7 +544,10 @@ const VELOCIRAPTOR: ClipMap = {
 export const VISUALS: Record<string, VisualDef> = {
   // -- player classes ------------------------------------------------------
   player_warrior: {
-    url: `${PLAYERS}/knight.glb`,
+    // dedicated warrior body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded textures - no show-list. Revert by pointing back at
+    // knight.glb (+ its Knight_Helmet/Knight_Cape show list and knight skins).
+    url: `${PLAYERS}/warrior_v02.glb`,
     height: HUMANOID_H,
     clips: {
       ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
@@ -513,24 +575,67 @@ export const VISUALS: Record<string, VisualDef> = {
         raised_guard: 'Block',
       },
     },
-    show: ['Knight_Helmet', 'Knight_Cape'], // v2 knight dropped the built-in Badge_Shield mesh
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
-      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+      // shield faced inward + oversized on the v02 body: flip it face-out, halve it,
+      // and cancel the shared Shield grip's forward lift so it seats ON the hand slot
+      // (net local pos 0) instead of floating in front of the forearm. Measured
+      // against the live handslot.l bone (see head_cosmetics shield-grip test).
+      {
+        url: `${WEAPONS}/shield_round.glb`,
+        bone: 'handslot.l',
+        flipY: true,
+        scaleMul: 0.5,
+        gripOffset: [0, -0.38, 0],
+      },
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+    // v02 warrior is dual-atlas (body `warrior_armor` + head `ranger.002`): a
+    // chroma recolors these four armor meshes only, so the head keeps its own atlas.
+    skinMeshNames: ['Pants', 'Arms', 'Shoulders', 'Torso'],
+    // Head customization: two faces (0 = male, 1 = female). Male = 3 hairstyles +
+    // bald + a beard toggle; female = 3 hairstyles, no bald, no beard.
+    cosmetics: {
+      faces: [
+        {
+          face: ['Head', 'Head_Brow'],
+          hair: [['Head_Male_Hair_01'], ['Head_Male_Hair_02'], ['Head_Male_Hair_03'], []],
+          beard: ['Head_Beard'],
+        },
+        {
+          face: ['Head_Female_Head'],
+          hair: [['Head_Female_Hair_01'], ['Head_Female_Hair_02'], ['Head_Female_Hair_03']],
+        },
+      ],
+      // hairColor recolours the whole flat hair group; faceColor tints the skin.
+      hairMeshes: [
+        'Head_Male_Hair_01',
+        'Head_Male_Hair_02',
+        'Head_Male_Hair_03',
+        'Head_Female_Hair_01',
+        'Head_Female_Hair_02',
+        'Head_Female_Hair_03',
+        'Head_Beard',
+        'Head_Brow',
+      ],
+      faceMeshes: ['Head', 'Head_Female_Head'],
+    },
   },
   player_paladin: {
-    url: `${PLAYERS}/paladin.glb`,
+    // dedicated paladin body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded textures - no show-list/tint. Revert by pointing back
+    // at paladin.glb (+ its paladin/alt_a skin).
+    url: `${PLAYERS}/paladin_v02.glb`,
     height: HUMANOID_H,
     clips: {
       ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+      // Paladins can wield the vendor greatswords; no dual wield. This is the
+      // weapon swing, not a spell anim. No attackByAbility: cast-time holy
+      // spells (holy_light/flash_of_light) animate via the base cast state; the
+      // instants (seal, blessings, auras, hammer, judgement) play no anim.
       attackByHand: { twohand: '2H_Melee_Attack_Chop' },
     },
-    // dedicated paladin model (helmeted variant) — ships its own Cape + Helmet
-    // meshes and texture, so no show-list/tint. Shield + paladin hammer arrive
-    // in the weapons pass; the gripped axe holds the slot until then.
     attach: [
       { url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_square.glb`, bone: 'handslot.l' },
@@ -539,22 +644,32 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   },
   player_hunter: {
-    url: `${PLAYERS}/ranger.glb`,
+    // dedicated hunter body (artist-rigged v02 bow pack + bald chibi head),
+    // ships its own embedded ranger texture. Revert by pointing back at
+    // ranger.glb (+ its ranger skins).
+    url: `${PLAYERS}/hunter_male_v02.glb`,
     height: HUMANOID_H,
+    // 2H_Ranged_Shoot is the bow auto-shot. No attackByAbility: aimed_shot's 3s
+    // cast draws via the base cast state (Spellcasting = the bow draw); every
+    // instant shot/trap/sting plays no cast anim (the shots fire via the weapon
+    // path). The crossbow is fixed to the hand (no weaponSlots swap).
     clips: kaykit(['2H_Ranged_Shoot']),
     // Bow-draw clips for the Season 1 bow skins (scripts/build_bow_anims.mjs):
     // with a bow displayed the shot plays a draw instead of the crossbow
     // shoulder-aim (visual.ts weaponSkinAttackClips).
     animUrls: [`${PLAYERS}/bow_anims.glb`],
-    // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
-    // a separate chest attachment
     attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
   },
   player_rogue: {
-    url: `${PLAYERS}/rogue.glb`,
+    // dedicated rogue body (artist-rigged v02 pack + bald chibi head with a
+    // baked-on hairstyle), ships its own embedded textures - no show-list.
+    // Revert by pointing back at rogue.glb (+ its Rogue_Cape + rogue skins).
+    url: `${PLAYERS}/rogue_male_v02.glb`,
     height: HUMANOID_H,
+    // Every rogue ability is INSTANT (no cast time), so none play a cast/flourish
+    // animation - the dagger strikes just swing via the auto-attack path (the
+    // default dual chop). No attackByAbility.
     clips: kaykit(['Dualwield_Melee_Attack_Chop']),
-    show: ['Rogue_Cape'],
     attach: [
       { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.l' },
@@ -563,62 +678,84 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   },
   player_priest: {
-    url: `${PLAYERS}/mage.glb`,
+    // dedicated priest body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded white-and-gold textures. Revert by pointing back at
+    // mage.glb (+ its priest/base skin at index 0). Keeps the Light halo.
+    url: `${PLAYERS}/priest_male_v02.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['2H_Melee_Attack_Chop']),
+    // No attackByAbility: cast-time spells (smite/heal/flash_heal/mind_blast/
+    // lesser_heal/prayer_of_healing) animate via the base cast state; every
+    // instant (buffs, shields, shadow spells, AoE bursts) plays no anim.
+    clips: kaykit(['1H_Melee_Attack_Chop']),
     // The priest's Light: a warm golden halo ring above the crown.
     halo: 0xffd766,
-    show: [],
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
-    tint: 0xf0e9d6,
-    tintStrength: 0.5,
   },
   player_shaman: {
-    url: `${PLAYERS}/barbarian.glb`,
+    // dedicated shaman body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded teal-and-leather texture - no show-list/tint. Revert by
+    // pointing back at barbarian.glb (+ its BearHat, tint, and shaman skins).
+    url: `${PLAYERS}/shaman_male_v02.glb`,
     height: HUMANOID_H,
     clips: {
       ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+      // Shamans can wield the vendor greatswords; no dual wield. This is the
+      // weapon swing (auto-attack), not a spell anim. No attackByAbility: the
+      // cast-time spells (lightning_bolt, heals, chain, ghost_wolf) animate via
+      // the base cast state; every instant (shocks, imbues, buffs) plays none.
       attackByHand: { twohand: '2H_Melee_Attack_Chop' },
     },
-    show: ['Barbarian_BearHat'], // v2 barbarian renamed Hat→BearHat and dropped the round shield mesh
     attach: [
       { url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
     offhandSlot: 1,
-    tint: 0x6f8fc9,
-    tintStrength: 0.4,
   },
   player_mage: {
-    url: `${PLAYERS}/mage.glb`,
+    // dedicated mage body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded textures - no show-list/skins. Revert by pointing back
+    // at mage.glb (+ its Mage_Cape show list, night skin, and eye emissive).
+    url: `${PLAYERS}/mage_male_v02.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['2H_Melee_Attack_Chop']),
-    // no Mage_Hat on players: the brim hides the whole body from the default
-    // chase-camera pitch (NPC mages keep theirs — they're seen from the side)
-    show: ['Mage_Cape'],
+    // the pack authors a real staff auto-attack for the melee swing. No
+    // attackByAbility: cast-time spells (fireball/frostbolt/scorch/pyroblast/
+    // polymorph/conjures) animate via the base cast state; every instant
+    // (armors, barriers, bolts, novas) plays no anim.
+    clips: kaykit(['1H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
   },
   player_warlock: {
-    url: `${PLAYERS}/mage.glb`,
+    // dedicated warlock body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded dark textures - no tint/show. Revert by pointing back at
+    // mage.glb (+ its 0x8d5fd3 tint and the shared mage skins).
+    url: `${PLAYERS}/warlock_male_v02.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['Spellcast_Shoot']), // wand zap reads better than a staff bonk
-    show: [],
+    // wand zap auto-attack (Spellcast_Shoot). No attackByAbility: every warlock
+    // spell that has a cast time or channel already animates via the base cast
+    // state (clips.cast = Spellcasting); the instants play no animation.
+    clips: kaykit(['Spellcast_Shoot']),
     attach: [
       { url: `${WEAPONS}/wand.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
     ],
     weaponSlots: [0], // mainhand (wand) swaps; spellbook offhand stays
-    tint: 0x8d5fd3,
-    tintStrength: 0.45,
   },
   player_druid: {
-    url: `${PLAYERS}/druid.glb`,
+    // dedicated druid body (artist-rigged v02 pack + bald chibi head), ships
+    // its own embedded textures - no show-list/skins. Revert by pointing back
+    // at druid.glb (+ its druid alt skins). Form abilities (bear/cat/travel/
+    // moonkin and their strikes) play on the form rigs, not this body.
+    url: `${PLAYERS}/druid_male_v02.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['2H_Melee_Attack_Chop']),
-    // dedicated druid model (own texture, ships a Backpack mesh)
+    // the pack authors one melee attack; it serves the auto and (cloned in the
+    // bake) the greatsword/staff slam slot. No attackByAbility: cast-time spells
+    // (wrath/starfire/heals/roots) animate via the base cast state; every
+    // instant (buffs, HoTs, moonfire, faerie fire) plays no anim. Form abilities
+    // (bear/cat/travel/moonkin) play on the form rigs.
+    clips: kaykit(['1H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
   },
