@@ -8,6 +8,7 @@
 // /audio/music/. Needs `npm run dev` on :5173.
 import puppeteer from 'puppeteer-core';
 import { BROWSER_PATH } from './browser_path.mjs';
+import { enterOfflineGame } from './enter_offline_game.mjs';
 
 const URL = process.env.GAME_URL ?? 'http://localhost:5173';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -38,35 +39,13 @@ page.on('request', (req) => {
 });
 
 await page.goto(URL, { waitUntil: 'networkidle0', timeout: 30000 });
-const jsClick = (sel) =>
-  page.evaluate((s) => {
-    const el = document.querySelector(s);
-    if (!el) throw new Error(`missing ${s}`);
-    el.click();
-  }, sel);
-await page.waitForSelector('#btn-offline', { timeout: 20000 });
-await sleep(400);
-await jsClick('#btn-offline');
-await sleep(300);
-await page.type('#char-name', 'Bard');
-await jsClick('#offline-select .mini-class[data-class="warrior"]');
-await jsClick('#btn-start-offline');
-// v0.28 lands on the welcome screen; its Enter World button (#ws-continue)
-// enables once the world is prewarmed.
-await page.waitForSelector('#ws-continue:not([disabled])', { timeout: 40000 });
-await sleep(300);
-await jsClick('#ws-continue');
-await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 40000 });
-await sleep(2000);
-
-// Dismiss the new-adventurer tutorial overlay, which otherwise intercepts input.
-await page.evaluate(() => {
-  const btn = [...document.querySelectorAll('button')].find((b) =>
-    /skip tutorial/i.test(b.textContent || ''),
-  );
-  btn?.click();
-});
-await sleep(1000);
+const booted = await enterOfflineGame(page, { charName: 'Bard', gameBootTimeoutMs: 60000 });
+check('world booted', booted);
+if (!booted) {
+  await browser.close();
+  console.log('ABORTED: world never booted, remaining checks skipped');
+  process.exit(1);
+}
 
 // Reach into the live director exactly the way the unit tests do.
 const snap = () =>
