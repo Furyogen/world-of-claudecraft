@@ -145,7 +145,6 @@ import { assetsReady } from './render/assets/preload';
 import { CharacterPreview, type PreviewAppearance } from './render/characters';
 import { preloadMechAssets } from './render/characters/assets';
 import { headOptions, skinCount, skinSwatchColor } from './render/characters/manifest';
-import { playerPortraitDataUrl } from './render/characters/portrait';
 import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
@@ -257,7 +256,7 @@ import { createMetricsSampler } from './ui/perf_metrics_sampler';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
 import { buildPerfOverlayView, FrameMeter } from './ui/perf_overlay_model';
-import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
+import { classIconUrl, hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
@@ -3363,7 +3362,7 @@ async function startOffline(
   world?: WorldContent,
   seedOverride?: number,
   hairStyle = 0,
-  beard = true,
+  beard = false,
   hairColor?: number,
   faceColor?: number,
   face = 0,
@@ -3507,6 +3506,12 @@ let offlineHairStyle = 0;
 let offlineBeard = true;
 let offlineHairColor: number | undefined;
 let offlineFaceColor: number | undefined;
+// Chosen head look for a NEW online character (sent in the create request).
+let onlineFace = 0;
+let onlineHairStyle = 0;
+let onlineBeard = false;
+let onlineHairColor: number | undefined;
+let onlineFaceColor: number | undefined;
 
 function releaseStartScreenPreview(): void {
   if (!characterPreview) return;
@@ -3716,10 +3721,12 @@ function renderHeadPicker(
       }
     }
 
-    // BEARD: only for faces that have one (hidden for the female head).
+    // BEARD: only for faces that have one (hidden for the female head). The
+    // group header carries the "Beard" label; the toggle itself reads "1" to
+    // match the numbered face/hair chips (aria still announces "Beard").
     if (faceOpt.hasBeard) {
       const { items } = group('auth.beard', 'beard');
-      const beardBtn = pressedBtn(t('auth.beard'), t('auth.beard'), state.beard, () => {
+      const beardBtn = pressedBtn('1', t('auth.beard'), state.beard, () => {
         state.beard = !state.beard;
         build();
         onChange(state);
@@ -3748,8 +3755,8 @@ function decorateClassChips(): void {
       const img = document.createElement('img');
       img.className = 'mini-class-portrait';
       img.alt = '';
-      const url = playerPortraitDataUrl(cls, 0);
-      if (url) img.src = url;
+      // Painted class icon (pre-game create screen) instead of the 3D snapshot.
+      img.src = classIconUrl(cls);
       li.appendChild(img);
       li.appendChild(label);
       li.classList.add('has-portrait');
@@ -3774,11 +3781,11 @@ function refreshOfflineSkins(cls: PlayerClass): void {
   // Head look: reset to default (male face, styled hair + beard, baked colours).
   offlineFace = 0;
   offlineHairStyle = 0;
-  offlineBeard = true;
+  offlineBeard = false;
   offlineHairColor = undefined;
   offlineFaceColor = undefined;
   characterPreview?.setCosmetics(offlineHairStyle, offlineBeard, undefined, undefined, offlineFace);
-  renderHeadPicker('#offline-head-row', cls, { face: 0, hairStyle: 0, beard: true }, (s) => {
+  renderHeadPicker('#offline-head-row', cls, { face: 0, hairStyle: 0, beard: false }, (s) => {
     offlineFace = s.face;
     offlineHairStyle = s.hairStyle;
     offlineBeard = s.beard;
@@ -3788,13 +3795,28 @@ function refreshOfflineSkins(cls: PlayerClass): void {
   });
 }
 
-/** Reset to the default skin and (re)render the online creation picker for a class. */
+/** Reset to the default skin/head and (re)render the online creation pickers for a
+ *  class. Mirrors the offline creator: the head picker feeds the create request. */
 function refreshOnlineSkins(cls: PlayerClass): void {
   onlineSkin = 0;
   characterPreview?.setSkin(0);
   renderSkinPicker('#online-skin-row', cls, 0, (i) => {
     onlineSkin = i;
     characterPreview?.setSkin(i);
+  });
+  onlineFace = 0;
+  onlineHairStyle = 0;
+  onlineBeard = false;
+  onlineHairColor = undefined;
+  onlineFaceColor = undefined;
+  characterPreview?.setCosmetics(onlineHairStyle, onlineBeard, undefined, undefined, onlineFace);
+  renderHeadPicker('#charcreate-head-row', cls, { face: 0, hairStyle: 0, beard: false }, (s) => {
+    onlineFace = s.face;
+    onlineHairStyle = s.hairStyle;
+    onlineBeard = s.beard;
+    onlineHairColor = s.hairColor;
+    onlineFaceColor = s.faceColor;
+    characterPreview?.setCosmetics(s.hairStyle, s.beard, s.hairColor, s.faceColor, s.face);
   });
 }
 
@@ -4885,7 +4907,7 @@ async function refreshCharacters(): Promise<void> {
       const inWorldHint = c.online
         ? `<span class="char-inworld-hint">${escapeHtml(t('character.inWorldHint'))}</span>`
         : '';
-      row.innerHTML = `${portraitChipHtml({ cls: c.class, skin: c.skin ?? 0, name: c.name, variant: 'sm' })}
+      row.innerHTML = `${portraitChipHtml({ cls: c.class, skin: c.skin ?? 0, name: c.name, variant: 'sm', iconUrl: classIconUrl(c.class) })}
         <div class="char-id">
           <span class="char-name">${escapeHtml(c.name)}</span>
           <span class="char-sub">${escapeHtml(t('character.levelClass', { level: c.level, className }))}${escapeHtml(statusText)}</span>
@@ -8559,6 +8581,13 @@ function wireStartScreens(): void {
         name,
         clsEl.dataset.class as PlayerClass,
         selectedSkin('#online-skin-row', onlineSkin),
+        {
+          hairStyle: onlineHairStyle,
+          beard: onlineBeard,
+          face: onlineFace,
+          hairColor: onlineHairColor,
+          faceColor: onlineFaceColor,
+        },
       );
       newCharNameInput.value = '';
       charselectError.textContent = '';

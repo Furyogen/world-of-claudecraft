@@ -207,7 +207,7 @@ describe('held weapon models', () => {
       {
         url: 'models/weapons/shield_round.glb',
         bone: 'handslot.l',
-        flipY: true,
+        flipY: false,
         scaleMul: 0.5,
         gripOffset: [0, -0.38, 0],
       },
@@ -253,7 +253,7 @@ describe('held weapon models', () => {
     expect(warrior?.attach?.[1]).toEqual({
       url: 'models/weapons/shield_round.glb',
       bone: 'handslot.l',
-      flipY: true,
+      flipY: false,
       scaleMul: 0.5,
       gripOffset: [0, -0.38, 0],
     });

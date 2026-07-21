@@ -40,9 +40,10 @@ export function createCharacterVisual(
       formKey ? null : e.mainhandItemId,
       weaponOverride,
       formKey ? null : e.offhandItemId,
-      // head cosmetics only apply to the base body, not shapeshift forms
+      // head cosmetics only apply to the base body, not shapeshift forms.
+      // Beard defaults OFF: a character that never picked one renders clean-shaven.
       formKey ? 0 : (e.hairStyle ?? 0),
-      formKey ? true : (e.beard ?? true),
+      formKey ? false : (e.beard ?? false),
       formKey ? undefined : e.hairColor,
       formKey ? undefined : e.faceColor,
       formKey ? 0 : (e.face ?? 0),

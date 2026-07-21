@@ -3511,7 +3511,9 @@
   }
   .head-group-title {
     font-family: var(--font-heading);
-    font-size: 24px;
+    /* Subtitle scale (same heading font + gold): the old 24px competed with the
+       character name and class chips; this reads as a section label instead. */
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;

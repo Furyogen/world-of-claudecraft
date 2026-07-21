@@ -3306,7 +3306,9 @@ export class Renderer {
           break;
         }
         if (warriorCast?.kind === 'gesture') {
-          this.triggerAttack(ev.sourceId, warriorCast.abilityId);
+          const gv = this.views.get(ev.sourceId);
+          const gvis = gv ? this.activeVisual(gv) : null;
+          gvis?.playGesture(warriorCast.abilityId);
           break;
         }
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
@@ -4282,7 +4284,9 @@ export class Renderer {
     this.spawnAoeRing(e.pos.x, e.pos.z, plan.ringRadius, 'physical', plan.color);
     const v = this.views.get(entityId);
     const visual = v ? this.activeVisual(v) : null;
-    if (visual && !visual.isMidOneShot) visual.playEmote(plan.emote, plan.repeats);
+    // Play the shout's dedicated gesture clip (Battlecry) once, not an emote. A
+    // rig without it just shows the shockwave (no pose), per "no clip -> no anim".
+    if (visual && !visual.isMidOneShot && plan.abilityId) visual.playGesture(plan.abilityId);
   }
 
   triggerHit(entityId: number): void {
@@ -5084,11 +5088,10 @@ export class Renderer {
         mageBarrierState,
         dt,
       );
-      const iceBlockActivated = v.iceBlockVisual?.activatedThisFrame === true;
-
       this.updateBaseVisual(e, v);
       if (!v.visual) continue;
-      if (iceBlockActivated) this.activeVisual(v)?.playEmote('wave', 1);
+      // Ice Block shows its ice-shell VFX only; no body animation (instant skill
+      // with no dedicated clip -> no animation, and never an emote).
 
       // off-screen rigs still need their pose/audio updated, but not their draws.
       // Decide visibility now from the real world position; applied at the end so

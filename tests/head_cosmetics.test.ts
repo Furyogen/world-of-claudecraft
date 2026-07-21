@@ -41,6 +41,38 @@ describe('head cosmetics: sim carry', () => {
     expect(sim.player.faceColor).toBeUndefined();
   });
 
+  it('persists the chosen head into CharacterState and reloads it (offline + online path)', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', playerName: 'Aldric' });
+    sim.setPlayerHead(sim.playerId, 3, true, 0x112233, 0x445566, 1);
+    const state = sim.serializeCharacter(sim.playerId);
+    expect(state).not.toBeNull();
+    expect(state?.hairStyle).toBe(3);
+    expect(state?.beard).toBe(true);
+    expect(state?.face).toBe(1);
+    expect(state?.hairColor).toBe(0x112233);
+    expect(state?.faceColor).toBe(0x445566);
+
+    // reload the saved state into a fresh Sim (the server join path)
+    const sim2 = new Sim({ seed: 1, playerClass: 'warrior', playerName: 'x', noPlayer: true });
+    const pid = sim2.addPlayer('warrior', 'Aldric', { state: state ?? undefined });
+    const e = sim2.entities.get(pid);
+    expect(e?.hairStyle).toBe(3);
+    expect(e?.beard).toBe(true);
+    expect(e?.face).toBe(1);
+    expect(e?.hairColor).toBe(0x112233);
+    expect(e?.faceColor).toBe(0x445566);
+  });
+
+  it('a default (unpicked) head persists nothing so old saves load as the model default', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'mage', playerName: 'Plain' });
+    const state = sim.serializeCharacter(sim.playerId);
+    expect(state?.hairStyle).toBeUndefined();
+    expect(state?.beard).toBeUndefined();
+    expect(state?.face).toBeUndefined();
+    expect(state?.hairColor).toBeUndefined();
+    expect(state?.faceColor).toBeUndefined();
+  });
+
   it('clamps hairStyle to a non-negative integer and rejects an unknown player', () => {
     const sim = new Sim({ seed: 1, playerClass: 'warrior', playerName: 'HeadTest' });
     sim.setPlayerHead(sim.playerId, -5, true);
@@ -65,32 +97,48 @@ describe('head cosmetics: sim carry', () => {
 });
 
 describe('head cosmetics: manifest options', () => {
-  it('exposes a male + female face for the warrior only', () => {
-    expect(headOptions('player_warrior')).toEqual({
+  it('exposes the shared male + female head options for every player class', () => {
+    // the shared V02_HEAD_COSMETICS set is grafted onto every class body
+    const expected = {
       faces: [
-        { hairCount: 4, hasBeard: true, hasBald: true }, // male: 3 hairs + bald + beard
+        { hairCount: 5, hasBeard: true, hasBald: true }, // male: 4 hairs + bald + beard
         { hairCount: 3, hasBeard: false, hasBald: false }, // female: 3 hairs, no bald/beard
       ],
       hasHairColor: true,
       hasFaceColor: true,
-    });
-    // classes with no cosmetics descriptor offer no head options
-    expect(headOptions('player_mage')).toBeNull();
-    expect(headOptions('player_paladin')).toBeNull();
-    expect(headOptions('player_druid')).toBeNull();
+    };
+    for (const cls of [
+      'warrior',
+      'paladin',
+      'hunter',
+      'rogue',
+      'priest',
+      'shaman',
+      'mage',
+      'warlock',
+      'druid',
+    ]) {
+      expect(headOptions(`player_${cls}`), `${cls} head options`).toEqual(expected);
+    }
+    // a visual with no cosmetics descriptor offers no head options
+    expect(headOptions('mob_wolf')).toBeNull();
   });
 
-  it('warrior cosmetics: male face (3 hairs + bald + beard) and female face (3 hairs)', () => {
+  it('shared head cosmetics: male face (4 hairs + bald + beard) and female face (3 hairs)', () => {
     const cos = VISUALS.player_warrior.cosmetics;
     expect(cos).toBeDefined();
     const [male, female] = cos?.faces ?? [];
     expect(male.face).toEqual(['Head', 'Head_Brow']);
+    // Hair_04 leads: it is the male default look (index 0, the "1" chip); the
+    // other styles follow and bald stays last.
     expect(male.hair).toEqual([
+      ['Head_Male_Hair_04'],
       ['Head_Male_Hair_01'],
       ['Head_Male_Hair_02'],
       ['Head_Male_Hair_03'],
       [],
     ]);
+    expect(male.hair[0]).toEqual(['Head_Male_Hair_04']); // default = variant 4
     expect(male.hair[male.hair.length - 1]).toEqual([]); // last = bald
     expect(male.beard).toEqual(['Head_Beard']);
     expect(female.face).toEqual(['Head_Female_Head']);
@@ -135,7 +183,7 @@ describe('warrior shield attach', () => {
     const shield = VISUALS.player_warrior.attach?.find((a) => a.url.includes('shield_round'));
     expect(shield).toBeDefined();
     expect(shield?.bone).toBe('handslot.l');
-    expect(shield?.flipY).toBe(true);
+    expect(shield?.flipY).toBe(false);
     expect(shield?.scaleMul).toBe(0.5);
     // seats the shield ON the hand slot (cancels the family grip's +0.38 forward
     // lift) instead of floating it in front of the forearm
@@ -178,11 +226,12 @@ describe('render targeting (source contract)', () => {
     expect(assetsSource).toContain(
       'o.userData.skinnable = !skinNames || skinNames.includes(o.name)',
     );
+    // the skin atlas targets body meshes that are not explicitly non-skinnable
+    // (bodyMesh excludes weapons; skinnable !== false drops the dual-atlas head)
     expect(assetsSource).toContain(
-      'const sk = skinTex && mesh.userData.skinnable ? skinTex : null;',
+      'const skinTarget = mesh.userData.bodyMesh && mesh.userData.skinnable !== false;',
     );
-    expect(assetsSource).toContain(
-      'const em = emisTex && mesh.userData.skinnable ? emisTex : null;',
-    );
+    expect(assetsSource).toContain('const sk = skinTex && skinTarget ? skinTex : null;');
+    expect(assetsSource).toContain('const em = emisTex && skinTarget ? emisTex : null;');
   });
 });

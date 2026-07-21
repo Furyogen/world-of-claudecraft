@@ -101,7 +101,7 @@ const HIT_REACT_COOLDOWN = 0.9;
 // surface glide; clip-less rigs (creatures) get the full procedural prone
 const SWIM_PITCH_CLIP = 0.35;
 const SWIM_PITCH_PROCEDURAL = 1.18;
-const SWIM_RISE = 0.95; // body must break the surface or only the hat floats
+const SWIM_RISE = 0.05; // sit the prone body at the surface (0.45 rode too high, -0.07 too deep)
 const MIXER_DT_CAP = 0.3; // throttled entities never integrate a huge step
 const SPIN_RATE = 14;
 const SPIN_ATTACK_TIMESCALE = 1.6;
@@ -226,6 +226,9 @@ export class CharacterVisual {
   private shadowform = false;
   private moonkin = false;
   private metamorph = false;
+  // Held weapons/shields are hidden while swimming (hands are busy) and shown on
+  // exit; tracked so a weapon swap mid-swim re-applies the hidden state.
+  private swimHidingWeapons = false;
   private bobPhase = Math.random() * Math.PI * 2;
 
   constructor(
@@ -420,6 +423,13 @@ export class CharacterVisual {
         ? SWIM_RISE + Math.sin(performance.now() / 500 + this.bobPhase) * 0.08
         : 0;
 
+    // Hide held weapons/shields while swimming (both hands are busy); show them
+    // again on exit. Edge-triggered on the swim state.
+    if (s.swimming !== this.swimHidingWeapons) {
+      this.swimHidingWeapons = s.swimming;
+      this.setHeldPropsVisible(!s.swimming);
+    }
+
     // distant corpses show the static idle far mesh — tip it over
     if (this.farMesh && this.farMesh.visible) {
       if (s.dead) {
@@ -519,6 +529,22 @@ export class CharacterVisual {
     if (clips.length > 0) {
       this.playOneShot(clips[this.attackIdx++ % clips.length], SPIN_ATTACK_TIMESCALE);
     }
+  }
+
+  /** Play a specific rig clip exactly once (clamped), or NOTHING if this rig has
+   *  no such clip. The primitive behind dedicated ability gestures and shouts: an
+   *  instant skill with no authored clip stays still (never a fallback swing, and
+   *  never an emote: emotes are reserved for actual emoting). */
+  playClipOnce(clip: string): void {
+    if (this.deadLock || !this.action(clip)) return;
+    this.playOneShot(clip, this.def.attackTimeScale ?? 1.3);
+  }
+
+  /** Play the ability's dedicated gesture clip (manifest attackByAbility), or
+   *  nothing when the ability has no mapped clip on this rig. */
+  playGesture(abilityId: string): void {
+    const clip = this.def.clips.attackByAbility?.[abilityId];
+    if (clip) this.playClipOnce(clip);
   }
 
   playHit(): void {
@@ -842,6 +868,8 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
+    // an offhand swap mid-swim rebuilt visible props: keep them hidden if swimming
+    if (this.swimHidingWeapons) this.setHeldPropsVisible(false);
   }
 
   /** Apply or clear a Season 1 Armory weapon-skin cosmetic: the skin's model
@@ -927,6 +955,8 @@ export class CharacterVisual {
     this.applyVisualMaterials();
     this.buildWeaponVfx(payloads);
     this.rebuildWeaponAura();
+    // a swap mid-swim rebuilt visible props: honor the hidden-while-swimming state
+    if (this.swimHidingWeapons) this.setHeldPropsVisible(false);
   }
 
   setWeaponAura(on: boolean): void {
@@ -975,6 +1005,18 @@ export class CharacterVisual {
       (mesh.material as THREE.Material).dispose();
     }
     this.weaponAuraMeshes.length = 0;
+  }
+
+  /** Show/hide every held prop mesh (weapons, shield, their VFX + aura) without
+   *  disturbing the attach graph. Used to clear the hands while swimming. */
+  private setHeldPropsVisible(visible: boolean): void {
+    this.model.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.isMesh && (mesh.userData.weaponMesh || mesh.userData.weaponVfxMesh)) {
+        mesh.visible = visible;
+      }
+    });
+    for (const m of this.weaponAuraMeshes) m.visible = visible;
   }
 
   private weaponSkinVfxSpec() {
@@ -1345,7 +1387,12 @@ export class CharacterVisual {
 
   /** sit-down transitions play once, then hand off to the sit-idle loop */
   private isOnce(a: THREE.AnimationAction): boolean {
-    return this.baseState === 'sit' && a === this.action(this.def.clips.sitDown);
+    if (this.baseState === 'sit') return a === this.action(this.def.clips.sitDown);
+    // The cast and jump poses play ONCE and hold their final frame: a cast (or an
+    // airtime) longer than the clip no longer loops it (onFinished holds, below).
+    if (this.baseState === 'cast') return a === this.action(this.def.clips.cast);
+    if (this.baseState === 'jump') return a === this.action(this.def.clips.jump);
+    return false;
   }
 
   private playOneShot(
@@ -1379,6 +1426,11 @@ export class CharacterVisual {
       this.fadeTo(this.action(this.def.clips.sitIdle) ?? a, 0.25, false);
       return;
     }
+    // Cast and jump poses are LoopOnce: hold the clamped final frame instead of
+    // re-triggering (which would loop). They leave the state via update()'s normal
+    // baseChanged path the moment casting ends / the character lands.
+    if (this.baseState === 'cast' && a === this.action(this.def.clips.cast)) return;
+    if (this.baseState === 'jump' && a === this.action(this.def.clips.jump)) return;
     if (a === this.current) {
       this.currentIsOneShot = false;
       this.currentOneShotIsEmote = false;

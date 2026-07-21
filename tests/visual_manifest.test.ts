@@ -199,6 +199,39 @@ describe('character visual manifest', () => {
       expect(animationNames.size).toBeGreaterThan(0);
 
       const c = visual.clips;
+      // All nine v02 player bodies share ONE canonical clip vocabulary (the
+      // kaykit() base map). Pin it so a future re-bake or manifest edit can't
+      // silently re-cook a base state: jump was briefly stripped (airborne fell
+      // back to idle), which is the class of regression this pin guards. Each
+      // class's own attack/attackByHand/attackByAbility clips are checked for
+      // existence in the GLB below, not pinned here (they legitimately differ).
+      expect({
+        idle: c.idle,
+        walk: c.walk,
+        run: c.run,
+        walkBack: c.walkBack,
+        jump: c.jump,
+        swim: c.swim,
+        sitDown: c.sitDown,
+        sitIdle: c.sitIdle,
+        death: c.death,
+        cast: c.cast,
+        hit: c.hit,
+        stow: c.stow,
+      }).toEqual({
+        idle: 'Idle',
+        walk: 'Walking_A',
+        run: 'Running_A',
+        walkBack: 'Walking_Backwards',
+        jump: 'Jump_Idle',
+        swim: 'Lie_Idle',
+        sitDown: 'Sit_Floor_Down',
+        sitIdle: 'Sit_Floor_Idle',
+        death: 'Death_A',
+        cast: 'Spellcasting',
+        hit: ['Hit_A'],
+        stow: '1H_Melee_Attack_Chop',
+      });
       const required = [
         c.idle,
         c.walk,
@@ -210,6 +243,7 @@ describe('character visual manifest', () => {
         c.swim,
         c.jump,
         c.walkBack,
+        c.stow,
         c.flourish,
         ...c.attack,
         ...(c.hit ?? []),

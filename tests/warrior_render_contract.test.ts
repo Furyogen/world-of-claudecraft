@@ -54,7 +54,7 @@ describe('winning Warrior attack animation routing', () => {
 });
 
 describe('winning Warrior cast VFX routing', () => {
-  it('keeps the authored per-shout colors and one-pump roar plan', () => {
+  it('keeps the authored per-shout colors and plays the dedicated Battlecry clip', () => {
     expect(WARRIOR_SHOUT_COLORS).toEqual({
       battle_shout: 0xff2a1a,
       demoralizing_shout: 0x9a5df0,
@@ -63,16 +63,17 @@ describe('winning Warrior cast VFX routing', () => {
       rallying_cry: 0xffe9a0,
       intimidating_shout: 0x7f8ad0,
     });
+    // Shouts route through the gesture path (dedicated Battlecry clip via
+    // attackByAbility), NOT the cheer emote (emotes are reserved for emoting).
     expect(warriorCastVisualPlan('shout', 'rallying_cry')).toEqual({
       kind: 'shout',
       color: 0xffe9a0,
       ringRadius: 8,
-      emote: 'cheer',
-      repeats: 1,
+      abilityId: 'rallying_cry',
     });
   });
 
-  it('routes weapon aura and defensive flourish to authored clips only', () => {
+  it('routes weapon aura, defensive flourish, and generic gestures to authored clips only', () => {
     expect(warriorCastVisualPlan('weaponAura', 'sanguine_aura')).toEqual({
       kind: 'gesture',
       abilityId: 'sanguine_aura',
@@ -80,6 +81,11 @@ describe('winning Warrior cast VFX routing', () => {
     expect(warriorCastVisualPlan('flourish', 'raised_guard')).toEqual({
       kind: 'gesture',
       abilityId: 'raised_guard',
+    });
+    // The generic 'gesture' cue (any class's dedicated-clip abilities).
+    expect(warriorCastVisualPlan('gesture', 'taunt')).toEqual({
+      kind: 'gesture',
+      abilityId: 'taunt',
     });
     expect(warriorCastVisualPlan('projectile', 'heroic_throw')).toBeNull();
   });

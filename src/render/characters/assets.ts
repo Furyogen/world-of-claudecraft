@@ -590,11 +590,30 @@ function resolvedGltf(url: string): GLTF {
 
 const optimizedSceneCache = new Map<string, THREE.Object3D>();
 
-function optimizedScene(url: string): THREE.Object3D {
+/** Every head-mesh name a cosmetics descriptor toggles or tints by name. These must
+ *  survive the rig merge as their own nodes, or char-select head customization
+ *  (applyCosmetics) can no longer show/hide/tint them. */
+function cosmeticMeshNames(def: VisualDef): Set<string> {
+  const names = new Set<string>();
+  const cos = def.cosmetics;
+  if (!cos) return names;
+  for (const face of cos.faces) {
+    for (const n of face.face) names.add(n);
+    for (const option of face.hair) for (const n of option) names.add(n);
+    for (const n of face.beard ?? []) names.add(n);
+  }
+  for (const n of cos.hairMeshes ?? []) names.add(n);
+  for (const n of cos.faceMeshes ?? []) names.add(n);
+  return names;
+}
+
+// Keyed by url: the exclusion set is stable per url (one class def per model file),
+// so the first build's merge result is safe to share for every later clone.
+function optimizedScene(url: string, exclude: Set<string> = new Set()): THREE.Object3D {
   const hit = optimizedSceneCache.get(url);
   if (hit) return hit;
   const root = cloneSkinned(resolvedGltf(url).scene);
-  mergeSkinnedParts(root);
+  mergeSkinnedParts(root, exclude);
   optimizedSceneCache.set(url, root);
   return root;
 }
@@ -610,7 +629,7 @@ export function assembleModel(
   weaponItemId?: string | null,
   offhandItemId?: string | null,
 ): THREE.Object3D {
-  const root = cloneSkinned(optimizedScene(def.url));
+  const root = cloneSkinned(optimizedScene(def.url, cosmeticMeshNames(def)));
   // tag the character's own meshes (body + accessories share one texture atlas)
   // so a skin override hits them but not the separate weapons attached below.
   // `skinnable` narrows WHICH of those meshes a chroma atlas actually remaps:

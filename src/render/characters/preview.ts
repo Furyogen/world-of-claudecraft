@@ -134,7 +134,7 @@ export class CharacterPreview {
     this.currentSkin = a.skin;
     this.currentFace = a.face ?? 0;
     this.currentHairStyle = a.hairStyle ?? 0;
-    this.currentBeard = a.beard ?? true;
+    this.currentBeard = a.beard ?? false;
     this.currentHairColor = a.hairColor;
     this.currentFaceColor = a.faceColor;
     const sig = appearanceSignature(a);
