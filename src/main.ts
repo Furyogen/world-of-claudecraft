@@ -135,6 +135,7 @@ import {
   markResumeAttempt,
   readPlayMarker,
   refreshPlayMarker,
+  resumeRoute,
   savePlayMarker,
 } from './net/resume_play';
 import { openStripeCheckout } from './net/stripe_checkout';
@@ -8673,13 +8674,23 @@ function wireStartScreens(): void {
         if (marker) clearPlayMarker();
         return;
       }
-      // Count this consumption against the marker's bounded attempt budget (a
-      // completed entry resets it), then route through the normal realm flow:
-      // restoring the marker's realm as the remembered one makes enterRealmFlow
+      // World auto-entry is the recovery for the involuntary mobile WebView
+      // eviction reload; a desktop browser reload lands on character select
+      // instead (the marker stays put and ages out via its freshness bound).
+      // On the world route, count this consumption against the marker's
+      // bounded attempt budget (a completed entry resets it) and let
+      // refreshCharacters consume the pending intent. Either way, restoring
+      // the marker's realm as the remembered one makes enterRealmFlow
       // auto-select it even if the player browsed other realms before the
-      // reload, and refreshCharacters consumes the pending intent.
-      markResumeAttempt();
-      pendingResume = { characterId: resume.characterId, realm: resume.realm };
+      // reload.
+      const route = resumeRoute({
+        nativeApp: NATIVE_APP,
+        mobileTouch: document.body.classList.contains('mobile-touch'),
+      });
+      if (route === 'world') {
+        markResumeAttempt();
+        pendingResume = { characterId: resume.characterId, realm: resume.realm };
+      }
       try {
         localStorage.setItem(LAST_REALM_KEY, resume.realm);
       } catch {
