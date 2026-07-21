@@ -151,7 +151,7 @@ describe('combat-rating tier ladder', () => {
   it('every ilvl-31 heroic boss-set piece carries exactly one rating', async () => {
     const { HEROIC_ITEMS } = await import('../src/sim/content/heroic_loot');
     const pieces = Object.values(HEROIC_ITEMS).filter((item) => itemLevel(item) === 31);
-    expect(pieces).toHaveLength(24);
+    expect(pieces).toHaveLength(28);
     for (const item of pieces) {
       expect(ratingCount(item), item.id).toBe(1);
       expect(ratingValues(item), item.id).toEqual([item.weapon ? 50 : 40]);

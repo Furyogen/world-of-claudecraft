@@ -8,7 +8,7 @@
 // existence predicates over the whole table for the per-band coverage, so
 // future additions grow the table without breaking the pins.
 import { describe, expect, it } from 'vitest';
-import { ITEMS } from '../src/sim/data';
+import { DUNGEONS, ITEMS, MOBS } from '../src/sim/data';
 import { canEquipItem, isShieldItem, weaponArchetypeForItem } from '../src/sim/equipment_rules';
 import { weaponDpsBudget } from '../src/sim/item_budget';
 import {
@@ -55,6 +55,13 @@ const NEW_ITEMS: ReadonlyArray<readonly [string, number]> = [
   // The int/spi shield and the low-level held offhand.
   ['pearlward_aegis', 19],
   ['valefire_lantern', 7],
+  // Endgame leather caster line (instanced sources, ilvl 26 and 31).
+  ['wildgrowth_leggings', 26],
+  ['grovewardens_grips', 26],
+  ['verdant_walkers', 26],
+  ['lunarward_cinch', 31],
+  ['dreamroot_boots', 31],
+  ['stormbark_mantle', 31],
 ];
 
 // The feral two-handed ladder: druid-only weapons with real 2H dps plus
@@ -66,6 +73,7 @@ const FERAL_LADDER: ReadonlyArray<readonly [string, number]> = [
   ['gravewyrm_thornmaul', 23],
   ['nightfangs_greatstaff', 26],
   ['maul_of_the_scourged_wilds', 29],
+  ['wildsoul_maul', 31],
 ];
 
 const ALL_NEW_IDS = [...NEW_ITEMS, ...FERAL_LADDER].map(([id]) => id);
@@ -97,9 +105,9 @@ function authoredCasterPieces(
 }
 
 describe('itemization coverage: every new item is sourced, leveled, and on budget', () => {
-  it('has all 34 new items in the merged table', () => {
-    expect(ALL_NEW_IDS.length).toBe(34);
-    expect(new Set(ALL_NEW_IDS).size).toBe(34);
+  it('has all 41 new items in the merged table', () => {
+    expect(ALL_NEW_IDS.length).toBe(41);
+    expect(new Set(ALL_NEW_IDS).size).toBe(41);
     for (const id of ALL_NEW_IDS) expect(ITEMS[id], id).toBeTruthy();
   });
 
@@ -146,12 +154,32 @@ describe('itemization coverage: the druid caster leather line', () => {
       'thornpeak_wildwraps',
       'cryptbloom_shoulderguards',
       'vestments_of_the_waking_grove',
+      'wildgrowth_leggings',
+      'grovewardens_grips',
+      'verdant_walkers',
+      'lunarward_cinch',
+      'dreamroot_boots',
+      'stormbark_mantle',
     ];
     for (const id of leatherIds) {
       const item = ITEMS[id];
       expect(item.armorType, id).toBe('leather');
       expect(canEquipItem('druid', item), id).toBe(true);
     }
+  });
+
+  it('has an obtainable leather caster rung at item level 26 and 31', () => {
+    const obtainable = Object.values(ITEMS).filter(
+      (item) =>
+        item.kind === 'armor' &&
+        item.armorType === 'leather' &&
+        (item.stats?.int ?? 0) > 0 &&
+        (item.stats?.spi ?? 0) > 0 &&
+        !item.heroicOf &&
+        itemSourceLevel(item.id) !== undefined,
+    );
+    expect(obtainable.some((item) => itemLevel(item) === 26)).toBe(true);
+    expect(obtainable.some((item) => itemLevel(item) === 31)).toBe(true);
   });
 });
 
@@ -189,7 +217,16 @@ describe('itemization coverage: the feral two-handed weapon ladder', () => {
       // lookup returns null and equipping falls through to the literal list.
       expect(weaponArchetypeForItem(item), id).toBeNull();
       expect(canEquipItem('druid', item), `${id} equippable by druid`).toBe(true);
-      for (const denied of ['warrior', 'rogue', 'hunter', 'mage', 'priest', 'shaman'] as const) {
+      for (const denied of [
+        'warrior',
+        'rogue',
+        'hunter',
+        'mage',
+        'priest',
+        'shaman',
+        'paladin',
+        'warlock',
+      ] as const) {
         expect(canEquipItem(denied, item), `${id} denied to ${denied}`).toBe(false);
       }
       // Feral stats: strength and/or agility, with real two-handed dps on the
@@ -204,11 +241,11 @@ describe('itemization coverage: the feral two-handed weapon ladder', () => {
     },
   );
 
-  it('ladder spans leveling through the raid tier (6 rungs, top at item level 26+)', () => {
+  it('ladder spans leveling through the heroic tier (7 rungs, top at item level 31)', () => {
     const ladderLevels = FERAL_LADDER.map(([, ilvl]) => ilvl);
-    expect(ladderLevels).toEqual([8, 13, 17, 23, 26, 29]);
+    expect(ladderLevels).toEqual([8, 13, 17, 23, 26, 29, 31]);
     // The whole table now holds at least the ladder: a druid never again has
-    // fewer than these six two-handed feral options.
+    // fewer than these seven two-handed feral options.
     const druidTwoHanders = Object.values(ITEMS).filter(
       (item) =>
         item.kind === 'weapon' &&
@@ -217,9 +254,9 @@ describe('itemization coverage: the feral two-handed weapon ladder', () => {
         ((item.stats?.str ?? 0) > 0 || (item.stats?.agi ?? 0) > 0) &&
         canEquipItem('druid', item),
     );
-    expect(druidTwoHanders.length).toBeGreaterThanOrEqual(6);
+    expect(druidTwoHanders.length).toBeGreaterThanOrEqual(7);
     const endgame = druidTwoHanders.filter((item) => (itemLevel(item) ?? 0) >= 23);
-    expect(endgame.length, 'feral 2H options at item level 23+').toBeGreaterThanOrEqual(3);
+    expect(endgame.length, 'feral 2H options at item level 23+').toBeGreaterThanOrEqual(4);
   });
 });
 
@@ -241,5 +278,35 @@ describe('itemization coverage: the int/spi shield and the low-level held offhan
       expect(canEquipItem(cls, lantern), cls).toBe(true);
     }
     expect(canEquipItem('warrior', lantern)).toBe(false);
+  });
+});
+
+describe('itemization coverage: heroic variants are only built from heroic-eligible instances', () => {
+  it('every heroic variant has its base in a heroic-eligible mob loot table', () => {
+    const heroicInstanceIds = new Set([
+      'hollow_crypt',
+      'sunken_bastion',
+      'drowned_temple',
+      'gravewyrm_sanctum',
+      'nythraxis_boss_arena',
+    ]);
+    const heroicEligibleMobs = new Set<string>();
+    for (const def of Object.values(DUNGEONS)) {
+      if (!heroicInstanceIds.has(def.id)) continue;
+      for (const spawn of def.spawns) heroicEligibleMobs.add(spawn.mobId);
+    }
+    for (const item of Object.values(ITEMS)) {
+      if (!item.heroicOf) continue;
+      const baseId = item.heroicOf;
+      const hasEligibleSource = Object.values(MOBS).some(
+        (mob) =>
+          heroicEligibleMobs.has(mob.id) &&
+          (mob.loot ?? []).some((entry) => entry.itemId === baseId),
+      );
+      expect(
+        hasEligibleSource,
+        `${item.id} (base ${baseId}) drops in a heroic-eligible instance`,
+      ).toBe(true);
+    }
   });
 });
