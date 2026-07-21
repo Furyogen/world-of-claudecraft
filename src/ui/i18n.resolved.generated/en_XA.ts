@@ -8598,6 +8598,27 @@ export const en_XA: EnTranslations = {
       "pearlward_aegis": {
         "name": "[Þéáŕļŵáŕð Áéĝíš]"
       },
+      "wildgrowth_leggings": {
+        "name": "[Ŵíļðĝŕóŵţĥ Ļéĝĝíñĝš]"
+      },
+      "grovewardens_grips": {
+        "name": "[Ĝŕóʋéŵáŕðéñ'š Ĝŕíþš]"
+      },
+      "verdant_walkers": {
+        "name": "[Ʋéŕðáñţ Ŵáļķéŕš]"
+      },
+      "lunarward_cinch": {
+        "name": "[Ļúñáŕŵáŕð Çíñçĥ]"
+      },
+      "dreamroot_boots": {
+        "name": "[Ðŕéáɱŕóóţ Ɓóóţš]"
+      },
+      "stormbark_mantle": {
+        "name": "[Šţóŕɱƀáŕķ Ɱáñţļé]"
+      },
+      "wildsoul_maul": {
+        "name": "[Ŵíļðšóúļ Ɱáúļ]"
+      },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"
       },

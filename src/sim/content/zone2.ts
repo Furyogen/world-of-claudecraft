@@ -14,6 +14,7 @@ import type {
   ZoneDef,
   ZonePropsDef,
 } from '../types';
+import { FERAL } from './items';
 
 export const DEEPFEN_SHALLOWS_LAKE = { x: -110, z: 310, radius: 35 };
 
@@ -2120,7 +2121,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 35, max: 48, speed: 3.4 },
     stats: { str: 3, agi: 2, sta: 2 },
     sellValue: 420,
-    requiredClass: ['druid'],
+    requiredClass: FERAL,
   },
 };
 

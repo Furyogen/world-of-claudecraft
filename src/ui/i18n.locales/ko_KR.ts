@@ -8397,5 +8397,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.maul_of_the_scourged_wilds.name': '재앙 들판의 철퇴',
   'entities.items.tidehymn_slippers.name': '물결찬가 슬리퍼',
   'entities.items.pearlward_aegis.name': '진주수호 방패',
+  'entities.items.dreamroot_boots.name': '꿈뿌리 장화',
+  'entities.items.grovewardens_grips.name': '숲지기 장갑',
+  'entities.items.lunarward_cinch.name': '달수호 허리띠',
+  'entities.items.stormbark_mantle.name': '폭풍나무 껍질 망토',
+  'entities.items.verdant_walkers.name': '신록의 장화',
+  'entities.items.wildgrowth_leggings.name': '야생성장 다리보호구',
+  'entities.items.wildsoul_maul.name': '야생영혼 철퇴',
   'hudChrome.professions.skillValue': '{skill} / {max}',
 };

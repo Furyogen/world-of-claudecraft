@@ -8598,6 +8598,27 @@ export const ko_KR: EnTranslations = {
       "pearlward_aegis": {
         "name": "진주수호 방패"
       },
+      "wildgrowth_leggings": {
+        "name": "야생성장 다리보호구"
+      },
+      "grovewardens_grips": {
+        "name": "숲지기 장갑"
+      },
+      "verdant_walkers": {
+        "name": "신록의 장화"
+      },
+      "lunarward_cinch": {
+        "name": "달수호 허리띠"
+      },
+      "dreamroot_boots": {
+        "name": "꿈뿌리 장화"
+      },
+      "stormbark_mantle": {
+        "name": "폭풍나무 껍질 망토"
+      },
+      "wildsoul_maul": {
+        "name": "야생영혼 철퇴"
+      },
       "conjured_water4": {
         "name": "창조된 샘물"
       },

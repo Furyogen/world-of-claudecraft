@@ -8012,5 +8012,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.maul_of_the_scourged_wilds.name': '灾野重锤',
   'entities.items.tidehymn_slippers.name': '潮诗便鞋',
   'entities.items.pearlward_aegis.name': '珍珠守护盾',
+  'entities.items.dreamroot_boots.name': '梦根长靴',
+  'entities.items.grovewardens_grips.name': '林地守护者护手',
+  'entities.items.lunarward_cinch.name': '月卫束带',
+  'entities.items.stormbark_mantle.name': '风暴树皮披肩',
+  'entities.items.verdant_walkers.name': '翠绿行者长靴',
+  'entities.items.wildgrowth_leggings.name': '荒野生长护腿',
+  'entities.items.wildsoul_maul.name': '荒野之魂重锤',
   'hudChrome.professions.skillValue': '{skill} / {max}',
 };

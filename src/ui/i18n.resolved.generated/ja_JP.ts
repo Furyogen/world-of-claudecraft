@@ -8598,6 +8598,27 @@ export const ja_JP: EnTranslations = {
       "pearlward_aegis": {
         "name": "真珠守りの聖盾"
       },
+      "wildgrowth_leggings": {
+        "name": "野生の成長のレギンス"
+      },
+      "grovewardens_grips": {
+        "name": "木立の番人の篭手"
+      },
+      "verdant_walkers": {
+        "name": "新緑の歩靴"
+      },
+      "lunarward_cinch": {
+        "name": "月守りの締め帯"
+      },
+      "dreamroot_boots": {
+        "name": "夢根の長靴"
+      },
+      "stormbark_mantle": {
+        "name": "嵐樹皮のマントル"
+      },
+      "wildsoul_maul": {
+        "name": "野生魂の大槌"
+      },
       "conjured_water4": {
         "name": "魔法の湧き水"
       },

@@ -8412,5 +8412,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.maul_of_the_scourged_wilds.name': '災いの荒野の大槌',
   'entities.items.tidehymn_slippers.name': '潮詩の靴',
   'entities.items.pearlward_aegis.name': '真珠守りの聖盾',
+  'entities.items.dreamroot_boots.name': '夢根の長靴',
+  'entities.items.grovewardens_grips.name': '木立の番人の篭手',
+  'entities.items.lunarward_cinch.name': '月守りの締め帯',
+  'entities.items.stormbark_mantle.name': '嵐樹皮のマントル',
+  'entities.items.verdant_walkers.name': '新緑の歩靴',
+  'entities.items.wildgrowth_leggings.name': '野生の成長のレギンス',
+  'entities.items.wildsoul_maul.name': '野生魂の大槌',
   'hudChrome.professions.skillValue': '{skill} / {max}',
 };

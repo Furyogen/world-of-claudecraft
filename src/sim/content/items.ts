@@ -9,10 +9,17 @@ const ROG: PlayerClass[] = ['rogue', 'hunter'];
 // weapon-proficiency groups, so weaponArchetypeForItem returns null and
 // canEquipItem falls through to this literal list (see src/sim/equipment_rules.ts).
 // Bear form swings with the equipped weapon, so these carry real 2H dps + str/agi/sta.
-const FERAL: PlayerClass[] = ['druid'];
+export const FERAL: PlayerClass[] = ['druid'];
 // Every caster class, for held-offhand stat sticks (no armor class / weapon
 // proficiency: the literal requiredClass list is the whole rule for held_offhand).
-const CASTER_ALL: PlayerClass[] = ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'];
+export const CASTER_ALL: PlayerClass[] = [
+  'mage',
+  'priest',
+  'warlock',
+  'shaman',
+  'paladin',
+  'druid',
+];
 
 // ---------------------------------------------------------------------------
 // Items

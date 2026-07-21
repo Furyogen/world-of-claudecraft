@@ -112,6 +112,7 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   fenshadow_maul: 'hammer_d', // feral ladder maul
   gravewyrm_thornmaul: 'hammer_d', // feral ladder maul
   maul_of_the_scourged_wilds: 'hammer_d', // feral ladder, Nythraxis raid rung
+  wildsoul_maul: 'hammer_d', // feral ladder, heroic-only ilvl 31 rung
 
   // ---- axes (axe_a..d + adv axes) --------------------------------------------
   rusty_hatchet: 'axe_a',

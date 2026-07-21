@@ -13,6 +13,7 @@ import type {
   ZoneDef,
   ZonePropsDef,
 } from '../types';
+import { FERAL } from './items';
 
 export const ZONE3_ZONE: ZoneDef = {
   id: 'thornpeak_heights',
@@ -3369,7 +3370,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 40, max: 55, speed: 3.5 },
     stats: { str: 5, agi: 4, sta: 4 },
     sellValue: 1400,
-    requiredClass: ['druid'],
+    requiredClass: FERAL,
   },
   moonbark_vestments: {
     id: 'moonbark_vestments',
@@ -3530,7 +3531,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 48, max: 65, speed: 3.6 },
     stats: { str: 7, agi: 5, sta: 5 },
     sellValue: 3200,
-    requiredClass: ['druid'],
+    requiredClass: FERAL,
   },
   vestments_of_the_waking_grove: {
     id: 'vestments_of_the_waking_grove',
@@ -3559,7 +3560,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 51, max: 69, speed: 3.6 },
     stats: { str: 9, agi: 7, sta: 7 },
     sellValue: 9000,
-    requiredClass: ['druid'],
+    requiredClass: FERAL,
   },
   maul_of_the_scourged_wilds: {
     id: 'maul_of_the_scourged_wilds',
@@ -3580,7 +3581,47 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // direfang_greatblade beside it.
     hitRating: 20,
     sellValue: 14000,
-    requiredClass: ['druid'],
+    requiredClass: FERAL,
+  },
+  // --- Endgame leather caster line (int/spi, druid-only via armorType). These
+  // fill the ilvl-26 dungeon tier on Korzul the Gravewyrm's table so balance
+  // druids have on-weight options in every slot above the level-22 band. The
+  // armorType already gates equips; no requiredClass is needed.
+  wildgrowth_leggings: {
+    id: 'wildgrowth_leggings',
+    name: 'Wildgrowth Leggings',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'legs',
+    quality: 'epic',
+    // Korzul the Gravewyrm (level 20 dungeon final boss) -> item level 26,
+    // legs budget 16.
+    stats: { armor: 112, int: 9, spi: 5, sta: 2 },
+    sellValue: 8000,
+  },
+  grovewardens_grips: {
+    id: 'grovewardens_grips',
+    name: "Grovewarden's Grips",
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'gloves',
+    quality: 'epic',
+    // Korzul the Gravewyrm (level 20 dungeon final boss) -> item level 26,
+    // gloves budget 13.
+    stats: { armor: 88, int: 8, spi: 5 },
+    sellValue: 7500,
+  },
+  verdant_walkers: {
+    id: 'verdant_walkers',
+    name: 'Verdant Walkers',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'feet',
+    quality: 'epic',
+    // Korzul the Gravewyrm (level 20 dungeon final boss) -> item level 26,
+    // feet budget 12.
+    stats: { armor: 82, int: 7, spi: 5 },
+    sellValue: 7200,
   },
 };
 

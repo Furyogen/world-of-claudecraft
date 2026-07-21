@@ -8598,6 +8598,27 @@ export const tr_TR: EnTranslations = {
       "pearlward_aegis": {
         "name": "Pearlward Aegis"
       },
+      "wildgrowth_leggings": {
+        "name": "Wildgrowth Leggings"
+      },
+      "grovewardens_grips": {
+        "name": "Grovewarden's Grips"
+      },
+      "verdant_walkers": {
+        "name": "Verdant Walkers"
+      },
+      "lunarward_cinch": {
+        "name": "Lunarward Cinch"
+      },
+      "dreamroot_boots": {
+        "name": "Dreamroot Boots"
+      },
+      "stormbark_mantle": {
+        "name": "Stormbark Mantle"
+      },
+      "wildsoul_maul": {
+        "name": "Wildsoul Maul"
+      },
       "conjured_water4": {
         "name": "Sihirle Yaratılmış Kaynak Suyu"
       },

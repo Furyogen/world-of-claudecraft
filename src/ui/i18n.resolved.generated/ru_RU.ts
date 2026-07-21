@@ -8598,6 +8598,27 @@ export const ru_RU: EnTranslations = {
       "pearlward_aegis": {
         "name": "Эгида жемчужного стража"
       },
+      "wildgrowth_leggings": {
+        "name": "Поножи дикого роста"
+      },
+      "grovewardens_grips": {
+        "name": "Перчатки стража рощи"
+      },
+      "verdant_walkers": {
+        "name": "Сапоги зеленого странника"
+      },
+      "lunarward_cinch": {
+        "name": "Пояс лунного стража"
+      },
+      "dreamroot_boots": {
+        "name": "Сапоги корня снов"
+      },
+      "stormbark_mantle": {
+        "name": "Мантия штормовой коры"
+      },
+      "wildsoul_maul": {
+        "name": "Молот дикой души"
+      },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
       },

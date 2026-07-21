@@ -8569,5 +8569,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.maul_of_the_scourged_wilds.name': 'Молот опустошенных диких земель',
   'entities.items.tidehymn_slippers.name': 'Туфли приливного гимна',
   'entities.items.pearlward_aegis.name': 'Эгида жемчужного стража',
+  'entities.items.dreamroot_boots.name': 'Сапоги корня снов',
+  'entities.items.grovewardens_grips.name': 'Перчатки стража рощи',
+  'entities.items.lunarward_cinch.name': 'Пояс лунного стража',
+  'entities.items.stormbark_mantle.name': 'Мантия штормовой коры',
+  'entities.items.verdant_walkers.name': 'Сапоги зеленого странника',
+  'entities.items.wildgrowth_leggings.name': 'Поножи дикого роста',
+  'entities.items.wildsoul_maul.name': 'Молот дикой души',
   'hudChrome.professions.skillValue': '{skill} / {max}',
 };

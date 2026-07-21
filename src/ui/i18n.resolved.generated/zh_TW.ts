@@ -8598,6 +8598,27 @@ export const zh_TW: EnTranslations = {
       "pearlward_aegis": {
         "name": "珍珠守護盾"
       },
+      "wildgrowth_leggings": {
+        "name": "荒野生長護腿"
+      },
+      "grovewardens_grips": {
+        "name": "林地守護者護手"
+      },
+      "verdant_walkers": {
+        "name": "翠綠行者長靴"
+      },
+      "lunarward_cinch": {
+        "name": "月衛束帶"
+      },
+      "dreamroot_boots": {
+        "name": "夢根長靴"
+      },
+      "stormbark_mantle": {
+        "name": "風暴樹皮披肩"
+      },
+      "wildsoul_maul": {
+        "name": "荒野之魂重錘"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
