@@ -48,8 +48,10 @@ Each ability in `ability_specs.js` is one JSON object. Key fields:
 - `motifs`: composable set-pieces — `fissure vines chains swarm pillars orbitals
   cross fountain crescents bladestorm implosion barrier gavel claws`; `motifAt`.
 - `impact` overrides: `flipbook ring vRing sparks debris smoke light trail
-  (arc|overhead|low|riposte|x|sweep) blood liteAudio` — **the spec always wins
-  over the archetype's defaults.**
+  (arc|overhead|low|riposte|x|sweep) blood liteAudio sample` — **the spec always
+  wins over the archetype's defaults.** `sample` names a bespoke `sfx_pack.json`
+  one-shot (e.g. `imp_meteor`, `heal_temporal`) tried before the palette
+  identity; a missing take degrades silently to `imp_<palette>` / synthesis.
 - `spirit`: `{ model, path (circle|rise|pounce|lunge|swoop), at
   (caster|target|portal), scale, dur, tint, dim }`.
 - `buff`: `{ style (raise|veil|morph), orbit, shellDur, o:{…DNA} }` + `rim`.
@@ -88,8 +90,16 @@ node scripts/vfx/merge_specs.mjs        # specs/*.json  →  ability_specs.js
 Overlay order (each merges over the last; later wins): `authored_specs` →
 `diversity` → `unveil` → `accent` → `signature` → `round2` → `round3_new`
 (may create) → `round3_spirit_policy` → `round4_semantics` → `round5_buff_slots`
-→ `round5_buff_dna` → `round6_talent_sigs` (may create). `abilities.json` is the
-catalog ground truth.
+→ `round5_buff_dna` → `round6_talent_sigs` (may create) → `round7_v28`
+(may create; the v0.27/v0.28 warrior + mage rework set). `abilities.json` is the
+catalog ground truth, regenerated from a sim checkout with:
+
+```bash
+node scripts/vfx/gen_catalog.mjs --src <path-to-sim-repo> --label <ref-name>
+```
+
+(scope: base kits + spec signatures + pet commands + the chaos_bolt row grant,
+with carryover for legacy showcase entries; Vale Cup sport abilities excluded).
 
 Verification (headless Chrome via puppeteer-core; needs `npm run dev` up):
 
@@ -116,9 +126,12 @@ node scripts/vfx/build_artifact.mjs        # → tmp/vfx/woc_vfx_gallery_artifac
 
 ## Coverage status
 
-Built against an earlier `main`: **193 abilities** covered (base kits + talent
-spec-signatures + the Feed/Abandon pet commands). The game has since grown to
-**308 abilities** (v0.27/v0.28 warrior + mage reworks). The remaining ~53 player
-spells — the mage Temporal/Frost/Fire buildout, the warrior stance/rework kit,
-and Chaos Bolt — are **not yet in the gallery**; see the accompanying handoff
-brief for how to add them.
+Current against `origin/release/v0.28.0`: **243 abilities** covered, every one
+with an authored spec (base kits + talent spec-signatures + the Feed/Abandon
+pet commands + Ruinbolt). The v0.27/v0.28 warrior and mage reworks landed in
+the `round7_v28` overlay: the mage Temporal/Frost/Fire buildout (with a
+chrono-teal tint branding the temporal school), the warrior stance/rework kit,
+Chaos Bolt, and subtle proc-glow auras for the 12 passives. The three ids the
+warrior rework renamed away (`commanding_shout`, `rend`, `ironhold`) are gone
+from the catalog and every overlay; their roles live on in `rallying_cry`,
+`deep_wounds`, and `iron_resolve`/`raised_guard`.

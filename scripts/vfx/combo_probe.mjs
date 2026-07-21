@@ -3,7 +3,7 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
-import { BROWSER_PATH } from './browser_path.mjs';
+import { BROWSER_PATH } from '../browser_path.mjs';
 
 const OUT = 'tmp/vfx';
 const browser = await puppeteer.launch({
@@ -31,7 +31,7 @@ async function waitAbilityImpact(id, minT = 0.15) {
 }
 
 for (const [cls, seq] of [
-  ['warrior', ['charge', 'rend', 'thunder_clap', 'execute']],
+  ['warrior', ['charge', 'red_harvest', 'thunder_clap', 'execute']],
   ['mage', ['frostbolt', 'fireball', 'fire_blast', 'frost_nova']],
 ]) {
   // select class, then enable combo mode (starts the chain from step 1)

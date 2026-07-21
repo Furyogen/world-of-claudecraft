@@ -2862,16 +2862,19 @@ class Sfx {
   }
   beamStop() { if (this.beamH) { this.beamH.stop(0.1); this.beamH = null; } }
   // ---- the 12 palette impact identities -------------------------------------
-  impact(palName, { pan = 0, scale = 1, crit = false, finisher = false, lite = false } = {}) {
+  impact(palName, { pan = 0, scale = 1, crit = false, finisher = false, lite = false, sample = null } = {}) {
     if (!this.on) return;
     const I = Math.min(1.5, scale) * (lite ? 0.6 : 1);
     const d = finisher ? 0.035 : 0; // pre-gap: silence, then the hit
     if (finisher) this.duck(0.45, 0.05); // duck only the pre-gap — the hit itself blooms out of the silence
     // generated-sample path: the recording carries the character; synthesis
     // keeps supplying what recordings can't — sub weight, crit sting, finisher toll
-    if (this.sampleMode && this.samples.has(`imp_${palName}`)) {
+    // a spec-authored bespoke id (impact.sample) wins when the pack carries it;
+    // otherwise the palette identity plays, so a missing take degrades silently
+    const sampleKey = sample && this.samples.has(sample) ? sample : `imp_${palName}`;
+    if (this.sampleMode && this.samples.has(sampleKey)) {
       // full beef: saturation crunch + octave-down body double, scaled by power
-      this.sample(`imp_${palName}`, { pan, gain: Math.min(1.4, 0.5 + 0.5 * I) * (lite ? 0.5 : 1), verb: 0.22, delay: d, beef: lite ? 0.2 : 0.3 + 0.15 * I, subOct: !lite });
+      this.sample(sampleKey, { pan, gain: Math.min(1.4, 0.5 + 0.5 * I) * (lite ? 0.5 : 1), verb: 0.22, delay: d, beef: lite ? 0.2 : 0.3 + 0.15 * I, subOct: !lite });
       if (!lite) {
         this._subScale = (crit || finisher) ? 0.45 : 1;
         this.sub({ from: 120, to: I >= 1.2 ? 26 : 32, dur: 0.45 * (0.7 + 0.3 * I), gain: 0.5 * I, delay: d, pan });
@@ -2954,7 +2957,9 @@ class Sfx {
   }
   ambienceStop() { if (this.amb) { this.amb.stop(0.4); this.amb = null; } }
   gust(pan = 0) { this.noise2({ dur: 1.4, freq: 500, sweep: 1300, gain: 0.06, type: 'bandpass', q: 0.8, attack: 0.5, pan, verb: 0.3 }); }
-  heal(palName, pan = 0) {
+  heal(palName, pan = 0, sample = null) {
+    // spec-authored bespoke heal id first (e.g. the temporal chime), then the school pair
+    if (sample && this.sample(sample, { pan, gain: 0.8, verb: 0.4 })) return;
     if (this.sample(palName === 'nature' ? 'heal_nature' : 'heal_holy', { pan, gain: 0.8, verb: 0.4 })) return;
     const base = palName === 'nature' ? [392, 494, 587, 784] : [523, 659, 784, 1046];
     this.partials({ freqs: base, dur: 1.4, gain: 0.2, stagger: 0.09, pan, verb: 0.55 });
@@ -3198,7 +3203,7 @@ function fallbackSpec(meta) {
 // (the warrior FIGHTS where charge put him), at:'target' detonates centered
 // archetypes ON the victim (the mage's frost_nova freezes the dummy, not air)
 const COMBOS = {
-  warrior: ['charge', { id: 'rend', at: 'melee' }, { id: 'thunder_clap', at: 'melee' }, 'execute'],
+  warrior: ['charge', { id: 'red_harvest', at: 'melee' }, { id: 'thunder_clap', at: 'melee' }, 'execute'],
   mage: ['frostbolt', 'fireball', 'fire_blast', { id: 'frost_nova', at: 'target' }],
   rogue: ['ambush', 'sinister_strike', 'kidney_shot', 'eviscerate'],
   paladin: ['seal_of_righteousness', 'judgement', 'exorcism', 'holy_light'],
@@ -3487,7 +3492,7 @@ function impactStack(pos, o = {}) {
   // spec-sculpted impact profile — the AUTHORED spec always wins over the
   // archetype's defaults (that's the whole point of per-ability identity)
   if (ctx.spec.impact) {
-    const allowed = ['flipbook', 'ring', 'vRing', 'sparks', 'debris', 'smoke', 'light', 'trail', 'blood', 'liteAudio']; // liteAudio: utility casts must not SOUND like cannon fire
+    const allowed = ['flipbook', 'ring', 'vRing', 'sparks', 'debris', 'smoke', 'light', 'trail', 'blood', 'liteAudio', 'sample']; // liteAudio: utility casts must not SOUND like cannon fire; sample: bespoke pack one-shot for marquee spells
     for (const k of allowed) if (ctx.spec.impact[k] !== undefined) o[k] = ctx.spec.impact[k];
   }
   if (o.scorch === undefined && ctx.spec.decal) o.scorch = true; // an authored decal implies ground wear
@@ -3625,7 +3630,7 @@ function impactStack(pos, o = {}) {
     }
   }
   if (o.smoke !== false) spawnSmoke(pos, 5, pal.smoke.getHex());
-  sfx.impact(ctx.palName, { pan: panOf(pos.x), scale: cs, crit: critHit, finisher: critFinisher, lite: o.liteAudio === true && !critFinisher });
+  sfx.impact(ctx.palName, { pan: panOf(pos.x), scale: cs, crit: critHit, finisher: critFinisher, lite: o.liteAudio === true && !critFinisher, sample: o.sample });
 }
 
 function randomOnDummy() {
@@ -4208,7 +4213,7 @@ const ARCHETYPES = {
     impact() {
       impactStack(dummy.hitPos, { scale: 0.6, ring: false, sparks: 18, scorch: false, smoke: false });
       // the DoT holds its look for the duration — and mid-combo it survives the
-      // whole remaining chain (rend still bleeds while execute lands)
+      // whole remaining chain (Red Harvest still bleeds while execute lands)
       let bDur = (ctx.spec.linger ?? this.aftermathDur) - 0.3;
       if (comboOn && comboIx < COMBOS[ctx.cls].length - 1) bDur = Math.max(bDur, 7);
       startBurn(ctx.pal, bDur, ctx.spec.dot?.drip ?? 'fall');
@@ -4254,7 +4259,7 @@ const ARCHETYPES = {
       casterGlowV = 1.6 * ctx.power;
       casterShellMat.uniforms.uColor.value.copy(pal.main);
       screenFlash(0.08);
-      sfx.heal(ctx.palName, panOf(c.x));
+      sfx.heal(ctx.palName, panOf(c.x), ctx.spec.impact?.sample);
     },
     aftermath(p, dt) { standardAftermath(dt, false); },
   },

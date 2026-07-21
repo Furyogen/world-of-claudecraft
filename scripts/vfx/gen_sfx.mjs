@@ -72,6 +72,14 @@ const SHOTLIST = [
   ['spirit_demon', 1.6, 'Small demon imp growling cackle, mischievous evil creature voice, no music'],
   ['spirit_voidwalker', 2.4, 'Deep otherworldly void creature moan, slow ominous ethereal groan, no music'],
   ['spirit_ghost', 2.2, 'Ghostly wail, ethereal mournful spirit moan with reverb, no music'],
+  // ---- v0.28 marquee one-shots (spec impact.sample ids) ----
+  ['imp_meteor', 2.0, 'Colossal meteor strike: a burning boulder screaming down and slamming into earth, deep punchy bass detonation with cracking stone, flying molten debris and a rumbling crater tail, massive cinematic weight, no music'],
+  ['imp_blizzard', 1.8, 'Sudden ice storm burst: howling freezing wind whipping through with dense hail and sleet rattling off the ground, sharp icy gusts over a cold airy roar, no music'],
+  ['imp_frozen_orb', 1.5, 'Deep frozen orb pulse: a resonant icy sub hum bursting outward with crystalline shimmer rings and slow glassy chimes, cold and heavy, no music'],
+  ['imp_dragons_breath', 1.8, 'Dragon breathing fire: a huge roaring cone of flame with a beastly guttural roar underneath, sustained fiery blast with crackling heat wash, cinematic fantasy, no music'],
+  ['imp_chaos', 1.8, 'Chaotic fel-fire blast: a distorted otherworldly explosion, warped screaming fire with a detuned demonic resonance and a deep gritty bass slam, unstable and wrong, dark fantasy, no music'],
+  ['imp_temporal', 1.6, 'Time rewind warp: a reversed airy whoosh sucking inward then resolving into a deep resonant clock-chime toll with soft ticking echoes, mystical and clean, no music'],
+  ['heal_temporal', 2.0, 'Temporal healing chime: a soft reversed shimmer blooming into warm harmonic bells with a gentle clockwork ticking undertone, soothing restorative fantasy magic, no music'],
   // ---- motif foley ----
   ['motif_fissure', 1.8, 'Earth cracking open: deep rocky rumble with stone splitting and falling debris, no music'],
   ['motif_gavel', 1.8, 'Colossal ceremonial hammer slamming stone: crushing deep bass impact with gritty rock crunch and a huge resonant metallic gong ring-out, massive cinematic weight, no music'],

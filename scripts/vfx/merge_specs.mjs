@@ -11,8 +11,8 @@ const catalog = JSON.parse(readFileSync(`${SPECS_DIR}/abilities.json`, 'utf8'));
 // Nested objects merge, scalars replace. round3_new_specs entries may CREATE
 // base specs (the origin/main content drop added 48 abilities the original
 // authoring never saw).
-for (const overlay of ['diversity_patches.json', 'unveil_patches.json', 'accent_patches.json', 'signature_patches.json', 'round2_patches.json', 'round3_new_specs.json', 'round3_spirit_policy.json', 'round4_semantics.json', 'round5_buff_slots.json', 'round5_buff_dna.json', 'round6_talent_sigs.json']) {
-  const mayCreate = overlay === 'round3_new_specs.json' || overlay === 'round6_talent_sigs.json';
+for (const overlay of ['diversity_patches.json', 'unveil_patches.json', 'accent_patches.json', 'signature_patches.json', 'round2_patches.json', 'round3_new_specs.json', 'round3_spirit_policy.json', 'round4_semantics.json', 'round5_buff_slots.json', 'round5_buff_dna.json', 'round6_talent_sigs.json', 'round7_v28.json']) {
+  const mayCreate = overlay === 'round3_new_specs.json' || overlay === 'round6_talent_sigs.json' || overlay === 'round7_v28.json';
   try {
     const patches = JSON.parse(readFileSync(`${SPECS_DIR}/${overlay}`, 'utf8'));
     let n = 0;

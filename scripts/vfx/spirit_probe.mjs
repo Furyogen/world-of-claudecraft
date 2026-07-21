@@ -2,7 +2,7 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
-import { BROWSER_PATH } from './browser_path.mjs';
+import { BROWSER_PATH } from '../browser_path.mjs';
 
 const OUT = 'tmp/vfx';
 const browser = await puppeteer.launch({

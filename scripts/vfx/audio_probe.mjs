@@ -3,7 +3,7 @@
 // WebAudio graph mistakes (bad ramp targets, stopped-node reuse) throw — a
 // clean run across the whole surface is the pass condition.
 import puppeteer from 'puppeteer-core';
-import { BROWSER_PATH } from './browser_path.mjs';
+import { BROWSER_PATH } from '../browser_path.mjs';
 
 const browser = await puppeteer.launch({
   executablePath: BROWSER_PATH,
@@ -60,7 +60,7 @@ await page.evaluate(() => {
 });
 await new Promise((r) => setTimeout(r, 1200));
 await page.evaluate(() => document.getElementById('btnCombo').click());
-for (const id of ['charge', 'rend', 'thunder_clap', 'execute']) {
+for (const id of ['charge', 'red_harvest', 'thunder_clap', 'execute']) {
   await page.waitForFunction(
     (i) => window.__ab.current && window.__ab.current.id === i && window.__ab.state === 'aftermath' && window.__ab.t >= 0.2,
     { timeout: 120000, polling: 100 }, id
