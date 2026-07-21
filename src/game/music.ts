@@ -1666,10 +1666,11 @@ function composeDungeonGravewyrmSanctum(): Theme {
 // root, flat three, four), timpani on one, three, and the and-of-four pickup,
 // and bare horn fifths. Orchestral tension in the classic MMO mold: no drum
 // kit backbeat, no song melody; percussion, brass gestures, and string
-// agitato that sit under gameplay. All written from D so COMBAT_TRANSPOSE can
-// move the active cue onto each zone's tonal center. The alternates are
-// registered as extra themes purely so the render tool can audition them;
-// only the layer named 'combat' ever plays in game.
+// agitato that sit under gameplay. All written from D (the runtime used to
+// transpose the active cue onto each zone's tonal center; the streamed
+// remasters play as recorded). The alternates are registered as extra themes
+// purely so the render tool can audition them; in game, combat now streams
+// one of the two remastered battle tracks (see music_tracks.ts).
 // ---------------------------------------------------------------------------
 
 const COMBAT_CELL = [0, 0, 3, 0, 7, 0, 3, 5];
