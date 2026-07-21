@@ -47,6 +47,9 @@ Each ability in `ability_specs.js` is one JSON object. Key fields:
   (`ascend none orb runes stance vortex weapon`), `linger`, `self`, `decal`.
 - `motifs`: composable set-pieces — `fissure vines chains swarm pillars orbitals
   cross fountain crescents bladestorm implosion barrier gavel claws`; `motifAt`.
+  `motifEvery` (seconds, nova only) loops the motifs through the held linger
+  window so a channeled spin never breaks (Bladestorm); a nova may also carry a
+  `buff` block, same persistence contract as shout.
 - `impact` overrides: `flipbook ring vRing sparks debris smoke light trail
   (arc|overhead|low|riposte|x|sweep) blood liteAudio sample`: **the spec always
   wins over the archetype's defaults.** `sample` names a bespoke `sfx_pack.json`

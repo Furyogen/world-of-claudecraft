@@ -36,9 +36,25 @@
     "windup": 0.5,
     "windupStyle": "vortex",
     "motifs": ["bladestorm"],
+    "motifEvery": 0.45,
     "hot": 0.3,
-    "linger": 3.5,
+    "linger": 4,
     "rim": "#eef2f8",
+    "buff": {
+      "style": "raise",
+      "orbit": "sparks",
+      "shellDur": 2,
+      "o": {
+        "n": 3,
+        "size": 0.5,
+        "tex": "chip",
+        "rate": 4.5,
+        "weave": 0.1,
+        "radius": 1.5,
+        "incline": 0.05,
+        "tickEvery": 0.9
+      }
+    },
     "impact": {
       "trail": "sweep",
       "ring": 2.2,
@@ -49,7 +65,7 @@
       "flipbook": false,
       "light": 1.0
     },
-    "notes": "THE whirl: white-hot steel, the longest-lingering blade vortex in the kit; Bladed Gyre stays the quick instant spin, this one keeps turning"
+    "notes": "THE whirl, and it KEEPS spinning: five huge blade-rays orbit the body at the fastest rate in the game for the whole 4s channel, riding the nova's new buff-orbit contract; nothing like Berserker Stance's three tiny flecks"
   },
   "victory_rush": {
     "_cls": "warrior",

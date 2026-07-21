@@ -4724,7 +4724,9 @@ class Sfx {
   chime() {
     this.heal('holy', 0);
   }
-  buffCast(style, palName, pan = 0) {
+  buffCast(style, palName, pan = 0, sample = null) {
+    // spec-authored bespoke id first (e.g. the Storm Chorus drums), then the style key
+    if (sample && this.sample(sample, { pan, gain: 0.9, verb: 0.25, beef: 0.2 })) return;
     if (
       this.sample(
         style === 'veil' ? 'buff_veil' : style === 'morph' ? 'buff_morph' : 'buff_raise',
@@ -6814,11 +6816,31 @@ const ARCHETYPES = {
         scale: ctx.power * (critHit ? 1.35 : 1),
         crit: critHit,
         finisher: critFinisher,
+        lite: ctx.spec.impact?.liteAudio === true && !critFinisher,
+        sample: ctx.spec.impact?.sample,
       });
       sfx.gust(panOf(c.x)); // the blast wind reaches the mics
+      // a self-centered nova may carry a lasting whirl or mark, same
+      // persistence contract as the shout archetype (Bladestorm keeps spinning)
+      if (ctx.spec.buff?.orbit && ctx.spec.buff.orbit !== 'none') {
+        const dur = Math.max(ctx.spec.linger ?? 0, this.aftermathDur) - 0.1;
+        startBuffOrbit(ctx.spec.buff.orbit, pal, dur, ctx.id, ctx.spec.buff?.o ?? {});
+        ctx.buffHold = dur;
+      }
     },
     aftermath(_p, dt) {
       standardAftermath(dt, true);
+      // motifEvery: a channeled nova may loop its motifs through the held
+      // window so a sustained spin never breaks (Bladestorm re-arms its slash
+      // ribbons every beat; each re-fire brings its foley whoosh with it)
+      if (ctx.spec.motifEvery && stateT < (ctx.buffHold ?? ctx.spec.linger ?? 0)) {
+        ctx.motifClock = (ctx.motifClock ?? 0) + dt;
+        if (ctx.motifClock >= ctx.spec.motifEvery) {
+          ctx.motifClock = 0;
+          runMotifs('release', rig.group.position);
+          runMotifs('impact', rig.group.position);
+        }
+      }
     },
   },
 
@@ -7146,7 +7168,7 @@ const ARCHETYPES = {
       casterGlowV = (ctx.spec.buff?.shellDur ? 2 : 1.3) * ctx.power;
       setRigGlow(); // body rim in the buff's own color, no more debug-capsule pill
       casterShellMat.uniforms.uColor.value.copy(pal.main);
-      sfx.buffCast(style, ctx.palName, panOf(c.x));
+      sfx.buffCast(style, ctx.palName, panOf(c.x), ctx.spec.impact?.sample);
       if (style === 'veil') {
         spawnSmoke(c, 7, pal.smoke.getHex());
         casterGlowV = 0.8;
