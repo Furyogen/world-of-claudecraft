@@ -2784,7 +2784,7 @@
     body:not(.mobile-touch) #charselect-panel.cs-wow {
       --cs-stage-gutter: max(26px, calc((100vw - 1780px) / 2));
       --cs-roster-width: clamp(340px, 28vw, 440px);
-      --cs-details-width: clamp(340px, 35vw, 600px);
+      --cs-details-width: clamp(380px, 30vw, 720px);
       --cs-dock-bottom: clamp(18px, 6.5vh, 96px);
       display: flex;
       flex-direction: column;
@@ -3229,17 +3229,70 @@
        left column of the full-bleed stage, mirroring the roster dock. */
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-panel {
       position: absolute;
-      left: var(--cs-stage-gutter);
+      left: clamp(24px, 2vw, 48px);
       top: 18px;
       bottom: var(--cs-dock-bottom);
       width: var(--cs-details-width);
       height: auto;
-      background: #0d0d16d9;
+      background:
+        linear-gradient(180deg, rgba(255, 209, 0, 0.045), transparent 140px),
+        linear-gradient(180deg, rgba(18, 16, 28, 0.92) 0%, rgba(9, 8, 14, 0.94) 100%);
       border: 1px solid var(--color-border-default);
-      box-shadow: none;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 209, 0, 0.08),
+        0 14px 36px rgba(0, 0, 0, 0.55);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
       border-radius: var(--radius-md);
-      padding: 14px;
+      padding: 18px 20px 14px;
       z-index: 2;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-title {
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      border-bottom: 0;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-title::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dim), rgba(255, 209, 0, 0.06) 72%, transparent);
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed {
+      font-size: 13.5px;
+      line-height: 1.6;
+      padding-right: 6px;
+    }
+    /* The latest-release article blends into the panel (its own card border
+       inside the dock read as a box-in-a-box); the collapsed older rows keep
+       their bordered disclosure look. */
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-item {
+      border: 0;
+      background: transparent;
+      padding: 2px 2px 10px 0;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-item-title {
+      font-size: clamp(17px, 1vw, 20px);
+      color: var(--gold);
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-body h1,
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-body h2,
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-body h3 {
+      font-size: 12.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin: 18px 0 6px;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed .news-body li {
+      margin: 4px 0;
     }
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-feed {
       scrollbar-width: thin;

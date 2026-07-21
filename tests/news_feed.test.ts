@@ -34,6 +34,18 @@ describe('renderReleaseBody', () => {
     const html = renderReleaseBody('[danger](javascript:alert(1))');
     expect(html).not.toContain('<a href');
   });
+
+  it('joins hard-wrapped consecutive lines into one paragraph; a blank line breaks it', () => {
+    // GitHub release notes arrive hard-wrapped near 72 columns; per-line
+    // paragraphs rendered every source wrap as its own one-line paragraph.
+    expect(renderReleaseBody('adds a broad set\nof improvements.\n\nNext paragraph.')).toBe(
+      '<p>adds a broad set of improvements.</p><p>Next paragraph.</p>',
+    );
+  });
+
+  it('a plain line directly after a bullet list closes the list and starts a paragraph', () => {
+    expect(renderReleaseBody('- one\nplain tail')).toBe('<ul><li>one</li></ul><p>plain tail</p>');
+  });
 });
 
 class FakeHost {

@@ -884,7 +884,7 @@ describe('client HTML shell', () => {
   it('keeps the desktop character roster readable inside a centered cinematic stage', () => {
     expect(shellCss).toContain('--cs-stage-gutter: max(26px, calc((100vw - 1780px) / 2));');
     expect(shellCss).toContain('--cs-roster-width: clamp(340px, 28vw, 440px);');
-    expect(shellCss).toContain('--cs-details-width: clamp(340px, 35vw, 600px);');
+    expect(shellCss).toContain('--cs-details-width: clamp(380px, 30vw, 720px);');
     expect(shellCss).toContain(
       '@media (min-width: 861px) {\n    #offline-select.cs-wow,\n    body:not(.mobile-touch) :is(#charselect-panel, #charcreate-panel).cs-wow {',
     );
@@ -898,7 +898,7 @@ describe('client HTML shell', () => {
       'body:not(.mobile-touch) #charselect-panel.cs-wow #char-list .char-name {\n      overflow-wrap: anywhere;',
     );
     expect(shellCss).toContain(
-      'body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-panel {\n      position: absolute;\n      left: var(--cs-stage-gutter);',
+      'body:not(.mobile-touch) #charselect-panel.cs-wow .cs-news-panel {\n      position: absolute;\n      left: clamp(24px, 2vw, 48px);',
     );
     expect(shellCss).toContain(
       'scrollbar-width: thin;\n      scrollbar-color: color-mix(in srgb, var(--scrollbar-thumb) 42%, transparent) transparent;',

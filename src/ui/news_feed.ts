@@ -64,6 +64,10 @@ function escapeHtml(s: string): string {
 // FIRST, so every regex below operates on inert text; the only markup we emit is
 // our own whitelisted tags. Deliberately tiny (no tables/images/blockquotes),
 // enough to make patch notes readable without pulling in a markdown dependency.
+// Consecutive plain lines JOIN into one paragraph (standard Markdown semantics:
+// only a blank line breaks a paragraph). GitHub release notes arrive hard-wrapped
+// near 72 columns, so per-line paragraphs rendered every source wrap as its own
+// choppy one-line paragraph.
 export function renderReleaseBody(md: string): string {
   const inline = (s: string): string =>
     escapeHtml(s)
@@ -77,32 +81,43 @@ export function renderReleaseBody(md: string): string {
       .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
   const out: string[] = [];
   let inList = false;
+  let paragraph: string[] = [];
   const closeList = () => {
     if (inList) {
       out.push('</ul>');
       inList = false;
     }
   };
+  const flushParagraph = () => {
+    if (paragraph.length > 0) {
+      out.push(`<p>${paragraph.join(' ')}</p>`);
+      paragraph = [];
+    }
+  };
   for (const line of md.replace(/\r\n/g, '\n').split('\n')) {
     const heading = /^(#{1,6})\s+(.*)$/.exec(line);
     const bullet = /^\s*[-*]\s+(.*)$/.exec(line);
     if (heading) {
+      flushParagraph();
       closeList();
       const level = Math.min(3, heading[1].length); // collapse h1-h6 -> h1-h3
       out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
     } else if (bullet) {
+      flushParagraph();
       if (!inList) {
         out.push('<ul>');
         inList = true;
       }
       out.push(`<li>${inline(bullet[1])}</li>`);
     } else if (line.trim() === '') {
+      flushParagraph();
       closeList();
     } else {
       closeList();
-      out.push(`<p>${inline(line)}</p>`);
+      paragraph.push(inline(line.trim()));
     }
   }
+  flushParagraph();
   closeList();
   return out.join('');
 }
