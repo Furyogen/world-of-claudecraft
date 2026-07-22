@@ -59,20 +59,27 @@ describe('migration is additive; old tokens read full', () => {
     );
   });
   it('adds the scope column before installing the constraint that references it', () => {
+    const authTokensTable = SCHEMA.indexOf('CREATE TABLE IF NOT EXISTS auth_tokens (');
     const scopeColumn = SCHEMA.indexOf(
       "ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'full'",
     );
     const scopeConstraint = SCHEMA.indexOf('ADD CONSTRAINT auth_tokens_scope_check');
+    expect(authTokensTable).toBeGreaterThanOrEqual(0);
     expect(scopeColumn).toBeGreaterThanOrEqual(0);
     expect(scopeConstraint).toBeGreaterThanOrEqual(0);
+    expect(authTokensTable).toBeLessThan(scopeColumn);
     expect(scopeColumn).toBeLessThan(scopeConstraint);
   });
 });
 
 describe('legacy scope-blind resolver removal', () => {
-  it('strips prose comments without hiding code after a URL-like string', () => {
+  it('strips standalone prose comments without hiding code-like string contents', () => {
     const codeAfterUrl = "const base = 'http://localhost'; accountForToken(token);";
     expect(stripComments(codeAfterUrl)).toContain('accountForToken(token)');
+
+    const codeBetweenBlockMarkers =
+      "const open = '/*'; accountForToken(token); const close = '*/';";
+    expect(stripComments(codeBetweenBlockMarkers)).toContain('accountForToken(token)');
 
     const proseOnly = '// accountForToken was removed\nconst safe = true;';
     expect(stripComments(proseOnly)).not.toContain('accountForToken');
