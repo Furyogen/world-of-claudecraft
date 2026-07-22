@@ -1700,7 +1700,7 @@ export const ko_KR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "[KO] AFK"
     },
     "mobTooltip": {
       "levelFamily": "{level}레벨 {family}",
@@ -2334,7 +2334,7 @@ export const ko_KR: EnTranslations = {
       "enchantedLine": "마법부여됨"
     },
     "itemMenu": {
-      "use": "Use",
+      "use": "[KO] Use",
       "equip": "장착",
       "disenchant": "마력 추출",
       "salvage": "분해",
@@ -5951,7 +5951,7 @@ export const ko_KR: EnTranslations = {
         "combat": "전투 중",
         "dungeon": "던전 안",
         "dead": "죽음",
-        "afk": "Away"
+        "afk": "[KO] Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

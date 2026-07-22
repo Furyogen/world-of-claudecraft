@@ -1700,7 +1700,7 @@ export const zh_CN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "[ZH-CN] AFK"
     },
     "mobTooltip": {
       "levelFamily": "等级 {level} {family}",
@@ -2334,7 +2334,7 @@ export const zh_CN: EnTranslations = {
       "enchantedLine": "已附魔"
     },
     "itemMenu": {
-      "use": "Use",
+      "use": "[ZH-CN] Use",
       "equip": "装备",
       "disenchant": "分解",
       "salvage": "拆解",
@@ -5951,7 +5951,7 @@ export const zh_CN: EnTranslations = {
         "combat": "战斗中",
         "dungeon": "地下城中",
         "dead": "死亡",
-        "afk": "Away"
+        "afk": "[ZH-CN] Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

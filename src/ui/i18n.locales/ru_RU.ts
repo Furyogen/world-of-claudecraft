@@ -8839,4 +8839,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Механик Гиззел',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Механик Гиззел',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Механик Гиззел',
+  'hud.social.status.afk': '[RU] Away',
+  'hudChrome.itemMenu.use': '[RU] Use',
+  'hudChrome.nameplate.afkTag': '[RU] AFK',
 };

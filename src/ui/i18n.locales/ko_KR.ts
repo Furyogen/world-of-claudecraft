@@ -8662,4 +8662,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': '땜장이 기즐',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': '땜장이 기즐',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': '땜장이 기즐',
+  'hud.social.status.afk': '[KO] Away',
+  'hudChrome.itemMenu.use': '[KO] Use',
+  'hudChrome.nameplate.afkTag': '[KO] AFK',
 };

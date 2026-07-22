@@ -8266,4 +8266,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': '吉澤爾修補匠',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': '吉澤爾修補匠',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': '吉澤爾修補匠',
+  'hud.social.status.afk': '[ZH-TW] Away',
+  'hudChrome.itemMenu.use': '[ZH-TW] Use',
+  'hudChrome.nameplate.afkTag': '[ZH-TW] AFK',
 };
