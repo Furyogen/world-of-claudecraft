@@ -8673,9 +8673,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': 'からくり師ギッゼル',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': 'からくり師ギッゼル',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': 'からくり師ギッゼル',
-  'hud.social.status.afk': '退席中',
-  'hudChrome.itemMenu.use': '使用する',
-  'hudChrome.nameplate.afkTag': '退席中',
   // Commissions and the Maker's Bond (Professions 2.0 Phase 14b).
   'hudChrome.crafting.commissionToggle': '受注品として制作',
   'hudChrome.crafting.commissionToggleHint':

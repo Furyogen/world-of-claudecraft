@@ -769,5 +769,4 @@ export const sv_SE: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Återstående tid: {value}',
   'detail.dailyRewardsBanUntil': 'Åtkomsten återkommer: {value}',
   'detail.dailyRewardsPermanent': 'För alltid',
-  'stats.playersCap': '[SV] player cap',
 };

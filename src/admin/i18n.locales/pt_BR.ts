@@ -772,5 +772,4 @@ export const pt_BR: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Tempo restante: {value}',
   'detail.dailyRewardsBanUntil': 'Restauração do acesso: {value}',
   'detail.dailyRewardsPermanent': 'Permanente',
-  'stats.playersCap': '[PT-BR] player cap',
 };

@@ -1700,7 +1700,7 @@ export const zh_TW: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "暫離"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "等級 {level} {family}",
@@ -2339,7 +2339,7 @@ export const zh_TW: EnTranslations = {
       "commissionBound": "委託製品：已綁定給收貨人"
     },
     "itemMenu": {
-      "use": "使用",
+      "use": "Use",
       "equip": "裝備",
       "disenchant": "分解",
       "salvage": "拆解",
@@ -5975,7 +5975,7 @@ export const zh_TW: EnTranslations = {
         "combat": "戰鬥中",
         "dungeon": "地城中",
         "dead": "死亡",
-        "afk": "暫離"
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

@@ -774,5 +774,4 @@ export const vi_VN: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Thời gian còn lại: {value}',
   'detail.dailyRewardsBanUntil': 'Được truy cập lại từ: {value}',
   'detail.dailyRewardsPermanent': 'Vĩnh Viễn',
-  'stats.playersCap': '[VI] player cap',
 };

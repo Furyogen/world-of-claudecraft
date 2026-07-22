@@ -1700,7 +1700,7 @@ export const ja_JP: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "退席中"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "レベル{level} {family}",
@@ -2339,7 +2339,7 @@ export const ja_JP: EnTranslations = {
       "commissionBound": "受注品：受取人にバインド済み"
     },
     "itemMenu": {
-      "use": "使用する",
+      "use": "Use",
       "equip": "装備する",
       "disenchant": "魔力分解",
       "salvage": "解体",
@@ -5975,7 +5975,7 @@ export const ja_JP: EnTranslations = {
         "combat": "戦闘中",
         "dungeon": "ダンジョン内",
         "dead": "死亡",
-        "afk": "退席中"
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

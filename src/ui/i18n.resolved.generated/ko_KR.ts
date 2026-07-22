@@ -1700,7 +1700,7 @@ export const ko_KR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "자리 비움"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{level}레벨 {family}",
@@ -2339,7 +2339,7 @@ export const ko_KR: EnTranslations = {
       "commissionBound": "주문 제작품: 수령인에게 귀속되어 있습니다"
     },
     "itemMenu": {
-      "use": "사용",
+      "use": "Use",
       "equip": "장착",
       "disenchant": "마력 추출",
       "salvage": "분해",
@@ -5975,7 +5975,7 @@ export const ko_KR: EnTranslations = {
         "combat": "전투 중",
         "dungeon": "던전 안",
         "dead": "죽음",
-        "afk": "자리 비움"
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

@@ -776,5 +776,4 @@ export const tr_TR: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Kalan süre: {value}',
   'detail.dailyRewardsBanUntil': 'Erişimin açılacağı zaman: {value}',
   'detail.dailyRewardsPermanent': 'Kalıcı',
-  'stats.playersCap': '[TR] player cap',
 };

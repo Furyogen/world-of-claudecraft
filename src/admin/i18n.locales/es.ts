@@ -780,5 +780,4 @@ export const es: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Tiempo restante: {value}',
   'detail.dailyRewardsBanUntil': 'El acceso se restablece: {value}',
   'detail.dailyRewardsPermanent': 'Permanente',
-  'stats.playersCap': '[ES] player cap',
 };

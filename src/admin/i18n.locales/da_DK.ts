@@ -764,5 +764,4 @@ export const da_DK: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Resterende tid: {value}',
   'detail.dailyRewardsBanUntil': 'Adgangen vender tilbage: {value}',
   'detail.dailyRewardsPermanent': 'Varig',
-  'stats.playersCap': '[DA] player cap',
 };

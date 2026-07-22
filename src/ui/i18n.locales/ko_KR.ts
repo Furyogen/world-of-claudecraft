@@ -8663,9 +8663,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': '땜장이 기즐',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': '땜장이 기즐',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': '땜장이 기즐',
-  'hud.social.status.afk': '자리 비움',
-  'hudChrome.itemMenu.use': '사용',
-  'hudChrome.nameplate.afkTag': '자리 비움',
   // Commissions and the Maker's Bond (Professions 2.0 Phase 14b).
   'hudChrome.crafting.commissionToggle': '주문 제작품으로 제작',
   'hudChrome.crafting.commissionToggleHint': '거래로 처음 받는 캐릭터에게 귀속됩니다.',

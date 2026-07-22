@@ -1700,7 +1700,7 @@ export const ru_RU: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "Отошел"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Уровень {level} {family}",
@@ -2339,7 +2339,7 @@ export const ru_RU: EnTranslations = {
       "commissionBound": "Изделие на заказ: привязано к получателю"
     },
     "itemMenu": {
-      "use": "Использовать",
+      "use": "Use",
       "equip": "Надеть",
       "disenchant": "Распылить",
       "salvage": "Разобрать",
@@ -5975,7 +5975,7 @@ export const ru_RU: EnTranslations = {
         "combat": "В бою",
         "dungeon": "В подземелье",
         "dead": "Мертв",
-        "afk": "Отошел"
+        "afk": "Away"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

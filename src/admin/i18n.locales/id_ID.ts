@@ -769,5 +769,4 @@ export const id_ID: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Waktu tersisa: {value}',
   'detail.dailyRewardsBanUntil': 'Akses dipulihkan: {value}',
   'detail.dailyRewardsPermanent': 'Permanen',
-  'stats.playersCap': '[ID] player cap',
 };

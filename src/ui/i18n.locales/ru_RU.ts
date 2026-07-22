@@ -8840,9 +8840,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Механик Гиззел',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Механик Гиззел',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Механик Гиззел',
-  'hud.social.status.afk': 'Отошел',
-  'hudChrome.itemMenu.use': 'Использовать',
-  'hudChrome.nameplate.afkTag': 'Отошел',
   // Commissions and the Maker's Bond (Professions 2.0 Phase 14b).
   'hudChrome.crafting.commissionToggle': 'Изделие на заказ',
   'hudChrome.crafting.commissionToggleHint':

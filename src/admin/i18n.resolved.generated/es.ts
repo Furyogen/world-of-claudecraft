@@ -46,7 +46,7 @@ export const es: AdminTranslations = {
   "stats.peakOnline": "pico en línea",
   "stats.peakOnlineToday": "pico en línea 24h",
   "stats.peakOnlineAllTime": "pico en línea histórico",
-  "stats.playersCap": "[ES] player cap",
+  "stats.playersCap": "player cap",
   "stats.accounts": "cuentas",
   "stats.characters": "personajes",
   "stats.newAccounts24h": "cuentas nuevas 24h",

@@ -8267,9 +8267,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_engineering_alchemy_3.sender': '吉澤爾修補匠',
   'entities.letters.prof_tier_engineering_alchemy_4.sender': '吉澤爾修補匠',
   'entities.letters.prof_tier_engineering_alchemy_5.sender': '吉澤爾修補匠',
-  'hud.social.status.afk': '暫離',
-  'hudChrome.itemMenu.use': '使用',
-  'hudChrome.nameplate.afkTag': '暫離',
   // Commissions and the Maker's Bond (Professions 2.0 Phase 14b).
   'hudChrome.crafting.commissionToggle': '委託製品',
   'hudChrome.crafting.commissionToggleHint': '將綁定給交易中第一個收到它的角色。',

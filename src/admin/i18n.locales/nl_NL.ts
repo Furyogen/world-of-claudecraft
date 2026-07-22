@@ -775,5 +775,4 @@ export const nl_NL: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Resterende tijd: {value}',
   'detail.dailyRewardsBanUntil': 'Toegang hersteld op: {value}',
   'detail.dailyRewardsPermanent': 'Blijvend',
-  'stats.playersCap': '[NL] player cap',
 };

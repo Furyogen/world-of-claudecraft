@@ -771,5 +771,4 @@ export const ru_RU: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Осталось времени: {value}',
   'detail.dailyRewardsBanUntil': 'Доступ вернётся: {value}',
   'detail.dailyRewardsPermanent': 'Постоянно',
-  'stats.playersCap': '[RU] player cap',
 };
