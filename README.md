@@ -372,10 +372,13 @@ Three things are licensed separately, so it is worth thirty seconds to know whic
 | **Media assets** — models, textures, HDRIs, icons, sounds, fonts (mostly under `public/`) | Per asset, recorded in [CREDITS.md](CREDITS.md) | Mostly yes (most are CC0). **Some are not** — see below. |
 | **Name and branding** — "World of ClaudeCraft", "Levy Street", the logos | Not licensed | No. |
 
-Most bundled assets are CC0 public domain and you can do as you like with them. A few are not, and if you fork this repo they are not yours to pass on:
+**Fork it and host your own world — that works, and the assets are not in your way.** Most of what you see is CC0 public domain (KayKit, Quaternius, Kenney, ambientCG, Poly Haven), and our own generated props, creatures, backdrops and interface sounds ship with the project so a fork runs out of the box. You just can't lift those out and sell them as standalone art.
+
+Four things you would need to remove or replace before redistributing:
 
 - the **CraftPix class ability icons** under `public/ui/skills/` were purchased by Levy Street and **may not be redistributed** — buy your own licence if you want to ship them;
 - the **@jamiecypher sound effects** are CC BY-NC 4.0 — share them non-commercially with credit, but the commercial grant runs to this project only;
+- the **store and prestige art** — Season 1 Armory, the Claudium set, Book of Deeds icons, the elite dragon emblem — is commissioned commercial art and **rights are reserved**;
 - a handful of **community-contributed icons and recordings** are used with permission and need permission to pass on.
 
 [CREDITS.md](CREDITS.md) is the authoritative list, with a redistribution column per asset. Where an asset is listed there, that license controls over the project's MIT license.
