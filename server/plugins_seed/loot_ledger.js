@@ -3,11 +3,11 @@
 // per-hour rates, and keeps the last few loot lines so you always know what
 // that last drop actually was.
 
-var LOOT_LINES = 8;
+const LOOT_LINES = 8;
 
-var panel = woc.ui.panel({ id: 'ledger', title: 'Loot Ledger' });
-var session = null;
-var lootLog = [];
+const panel = woc.ui.panel({ id: 'ledger', title: 'Loot Ledger' });
+let session = null;
+let lootLog = [];
 
 function startSession(snapshot) {
   session = {
@@ -18,33 +18,37 @@ function startSession(snapshot) {
   };
 }
 
-woc.on('xp', function (ev) {
+woc.on('xp', (ev) => {
   if (session) session.xpGained += ev.amount;
 });
 
-woc.on('loot', function (ev) {
-  var line = ev.kind === 'roll' ? ev.itemName : ev.text;
+woc.on('loot', (ev) => {
+  const line = ev.kind === 'roll' ? ev.itemName : ev.text;
   if (!line) return;
   lootLog.unshift(line);
   if (lootLog.length > LOOT_LINES) lootLog.pop();
   render();
 });
 
-woc.on('tick', function (snapshot) {
+woc.on('tick', (snapshot) => {
   if (!session) startSession(snapshot);
   session.lastCopper = snapshot.copper;
   render();
 });
 
 function perHour(amount, sinceMs) {
-  var hours = Math.max(1 / 60, (Date.now() - sinceMs) / 3600000);
+  const hours = Math.max(1 / 60, (Date.now() - sinceMs) / 3600000);
   return Math.round(amount / hours);
 }
 
 function row(label, value) {
   return (
     '<div style="display:flex;justify-content:space-between;gap:10px">' +
-    '<span>' + woc.util.esc(label) + '</span><b>' + value + '</b></div>'
+    '<span>' +
+    woc.util.esc(label) +
+    '</span><b>' +
+    value +
+    '</b></div>'
   );
 }
 
@@ -53,29 +57,29 @@ function render() {
     panel.body.innerHTML = '<div>Warming up...</div>';
     return;
   }
-  var goldDelta = session.lastCopper - session.startCopper;
-  var sign = goldDelta < 0 ? '-' : '+';
-  var html =
+  const goldDelta = session.lastCopper - session.startCopper;
+  const sign = goldDelta < 0 ? '-' : '+';
+  let html =
     row('Gold this session', sign + woc.util.formatMoney(Math.abs(goldDelta))) +
     row('Gold per hour', woc.util.formatMoney(Math.abs(perHour(goldDelta, session.startedAt)))) +
     row('XP this session', woc.util.formatNumber(session.xpGained)) +
     row('XP per hour', woc.util.formatNumber(perHour(session.xpGained, session.startedAt)));
   if (lootLog.length) {
     html += '<hr style="border-color:#3a2f1b"><div><b>Recent loot</b></div>';
-    for (var i = 0; i < lootLog.length; i++) {
-      html += '<div>' + woc.util.esc(lootLog[i]) + '</div>';
+    for (let i = 0; i < lootLog.length; i++) {
+      html += `<div>${woc.util.esc(lootLog[i])}</div>`;
     }
   }
   html +=
     '<div style="margin-top:6px;text-align:right">' +
     '<button type="button" data-reset style="cursor:pointer">Reset</button></div>';
   panel.body.innerHTML = html;
-  var btn = panel.body.querySelector('[data-reset]');
+  const btn = panel.body.querySelector('[data-reset]');
   if (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', () => {
       session = null;
       lootLog = [];
-      var snapshot = woc.player();
+      const snapshot = woc.player();
       if (snapshot) startSession(snapshot);
       render();
     });
