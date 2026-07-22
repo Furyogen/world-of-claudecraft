@@ -4,6 +4,7 @@ import './env';
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { WebSocketServer } from 'ws';
 import { DEEDS } from '../src/sim/content/deeds';
 import {
@@ -3160,14 +3161,19 @@ export async function startServer(): Promise<http.Server> {
   return server;
 }
 
+function isServerEntrypoint(): boolean {
+  if (typeof require !== 'undefined' && require.main === module) return true;
+  const entryArg = process.argv[1];
+  return Boolean(entryArg && import.meta.url === pathToFileURL(entryArg).href);
+}
+
 // Boot only when this module is the process entrypoint, never on a bare import.
-// The server always runs as the esbuild CJS bundle (npm run server / npm run
+// The production path runs as the esbuild CJS bundle (npm run server / npm run
 // realms, then node dist-server/server.cjs), where require.main === module marks
-// the entry. esbuild leaves import.meta empty under the cjs output format, so the
-// CJS entry check is the one that fires in the bundle; a Vitest import() of this
-// module matches neither a defined require nor require.main === module, so the
-// bare import stays inert (no socket bound, no DB connection).
-if (typeof require !== 'undefined' && require.main === module) {
+// the entry. The source entry can also run directly as ESM in local tooling, where
+// import.meta.url matches process.argv[1]. A Vitest import() matches neither path,
+// so the bare import stays inert: no socket bound and no DB connection.
+if (isServerEntrypoint()) {
   startServer().catch((err) => {
     console.error('fatal:', err);
     process.exit(1);
