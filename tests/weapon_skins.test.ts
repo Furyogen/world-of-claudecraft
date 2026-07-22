@@ -139,6 +139,19 @@ describe('weapon type classification', () => {
     }
   });
 
+  it('every dagger-classified weapon carries the dagger gameplay flag', () => {
+    // The reverse of the check above: an item skinned as a dagger must also set
+    // weapon.dagger, the flag Backstab/Ambush (weaponStrike + requiresBehind) gate
+    // on in casting_lifecycle. Without it the item renders as a dagger but the
+    // positional rogue abilities reject it with "You must wield a dagger." This
+    // pins that the two dagger notions never drift apart (regression: mistcallers_fang).
+    for (const id of weaponIds) {
+      if (weaponTypeForItem(id) !== 'dagger') continue;
+      const def = ITEMS[id];
+      expect(def.kind === 'weapon' && def.weapon.dagger === true, id).toBe(true);
+    }
+  });
+
   it('heroic variants resolve through their base row', () => {
     expect(weaponTypeForItem('heroic_fang_of_korzul')).toBe('dagger');
     expect(weaponTypeForItem('heroic_staff_of_velkhar')).toBe('staff');
