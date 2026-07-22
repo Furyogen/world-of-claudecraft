@@ -1775,6 +1775,16 @@ async function startGame(
     input.setAttackMoveEnabled(settings.get('attackMove'));
   }
 
+  // Persist the camera zoom distance so it is remembered next session (issue 1657). Debounced so
+  // a wheel burst or a touch pinch (which fires zoomBy per move frame) writes localStorage once it
+  // settles, not on every delta. The saved value is applied back to Input on boot by the startup
+  // apply-all loop (the 'cameraZoom' case in applySetting).
+  let zoomPersistTimer: ReturnType<typeof setTimeout> | undefined;
+  input.onCameraDistChange = (dist) => {
+    if (zoomPersistTimer !== undefined) clearTimeout(zoomPersistTimer);
+    zoomPersistTimer = setTimeout(() => settings.set('cameraZoom', dist), 400);
+  };
+
   // Engine/version/device are fixed for the session; the renderer's GPU tier is
   // resolved by now (initGfxTier ran during renderer construction). Re-stamp all
   // classes on every call so a manual Esc-menu override repaints cleanly.
@@ -2002,6 +2012,11 @@ async function startGame(
         break;
       case 'cameraFov':
         renderer.setCameraFov(v);
+        break;
+      case 'cameraZoom':
+        // Restore the remembered zoom on boot (via the startup apply-all loop) and on Reset.
+        // Assigning the field does not fire onCameraDistChange, so this never re-persists.
+        input.camDist = v;
         break;
       case 'renderScale':
         renderer.setRenderScale(v);
