@@ -7,6 +7,7 @@
 // verified structurally rather than over a live socket.
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
 // db.ts builds a pg Pool at import; give it a dummy URL (no connection is made
@@ -28,6 +29,46 @@ function serverTypeScriptFiles(dir: string): string[] {
 
 function stripComments(source: string): string {
   return source.replace(/^\s*\/\/.*$/gm, '');
+}
+
+type BearerAccountUse = {
+  kind: 'declaration' | 'call' | 'reference';
+  enclosingIf: string | null;
+};
+
+function bearerAccountUses(source: string): BearerAccountUse[] {
+  const sourceFile = ts.createSourceFile(
+    'resolver-scan.ts',
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  const uses: BearerAccountUse[] = [];
+
+  function enclosingIf(node: ts.Node): string | null {
+    for (let current = node.parent; current; current = current.parent) {
+      if (ts.isIfStatement(current)) return current.expression.getText(sourceFile);
+    }
+    return null;
+  }
+
+  function visit(node: ts.Node): void {
+    if (ts.isIdentifier(node) && node.text === 'bearerAccount') {
+      const parent = node.parent;
+      if (ts.isFunctionDeclaration(parent) && parent.name === node) {
+        uses.push({ kind: 'declaration', enclosingIf: null });
+      } else if (ts.isCallExpression(parent) && parent.expression === node) {
+        uses.push({ kind: 'call', enclosingIf: enclosingIf(parent) });
+      } else {
+        uses.push({ kind: 'reference', enclosingIf: enclosingIf(node) });
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+
+  visit(sourceFile);
+  return uses;
 }
 
 describe('token scope policy', () => {
@@ -95,11 +136,12 @@ describe('legacy scope-blind resolver removal', () => {
 });
 
 describe('scope-blind bearerAccount remains confined to read routes', () => {
-  const READ_ROUTE_ANCHORS = [
-    "if (req.method === 'GET' && url === '/api/realms') {",
-    "if (req.method === 'GET' && url === '/api/search') {",
-    "if (req.method === 'GET' && mapIdMatch) {",
+  const READ_ROUTE_CONDITIONS = [
+    "req.method === 'GET' && url === '/api/realms'",
+    "req.method === 'GET' && url === '/api/search'",
+    "req.method === 'GET' && mapIdMatch",
   ];
+  const READ_ROUTE_ANCHORS = READ_ROUTE_CONDITIONS.map((condition) => `if (${condition}) {`);
 
   it('is called exactly once by each of its three permitted read routes', () => {
     const count = (MAIN.match(/bearerAccount\(req\)/g) ?? []).length;
@@ -115,6 +157,13 @@ describe('scope-blind bearerAccount remains confined to read routes', () => {
     expect(uses).toEqual([
       { kind: 'declaration', enclosingIf: null },
       { kind: 'reference', enclosingIf: null },
+    ]);
+  });
+
+  it('has no aliases and owns each call lexically inside a permitted GET branch', () => {
+    expect(bearerAccountUses(MAIN)).toEqual([
+      { kind: 'declaration', enclosingIf: null },
+      ...READ_ROUTE_CONDITIONS.map((enclosingIf) => ({ kind: 'call', enclosingIf })),
     ]);
   });
 
