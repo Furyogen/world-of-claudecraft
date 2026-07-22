@@ -1700,7 +1700,7 @@ export const zh_TW: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[ZH-TW] AFK"
+      "afkTag": "暫離"
     },
     "mobTooltip": {
       "levelFamily": "等級 {level} {family}",
@@ -1839,6 +1839,7 @@ export const zh_TW: EnTranslations = {
         "legend": "傳奇",
         "shill": "擁護者"
       },
+      "roleTagChatTitle": "已驗證的伺服器身分組: {role}",
       "guildMember": "已驗證成員",
       "notMember": "尚未加入伺服器",
       "joinCta": "加入 Discord",
@@ -2331,10 +2332,14 @@ export const zh_TW: EnTranslations = {
       "makersMark": "製作者：{name}",
       "gatheredBy": "採集者：{name}",
       "masterworkSeal": "傑作",
-      "enchantedLine": "已附魔"
+      "enchantedLine": "已附魔",
+      "commissionToggle": "委託製品",
+      "commissionToggleHint": "將綁定給交易中第一個收到它的角色。",
+      "commissionUnbound": "委託製品：將綁定給第一位收貨人",
+      "commissionBound": "委託製品：已綁定給收貨人"
     },
     "itemMenu": {
-      "use": "[ZH-TW] Use",
+      "use": "使用",
       "equip": "裝備",
       "disenchant": "分解",
       "salvage": "拆解",
@@ -2382,6 +2387,25 @@ export const zh_TW: EnTranslations = {
       "notTaughtHere": "這裡不傳授該配方。",
       "alreadyKnown": "你已經學會了該配方。",
       "outOfRange": "你必須站在對應的工作臺旁才能訓練。"
+    },
+    "unbind": {
+      "title": "解綁：{name}",
+      "close": "關閉解綁",
+      "intro": "大師可以收取費用，解除委託製品的綁定。",
+      "empty": "你沒有已綁定的委託製品。",
+      "rowSub": "解除綁定；該製品會在下次交易時重新綁定。",
+      "unbindAria": "花費{fee}為{name}解綁",
+      "dialogOption": "解綁",
+      "dialogOptionAria": "請{name}為委託製品解綁",
+      "confirmTitle": "解綁委託製品",
+      "confirmBody": "花費{fee}為{name}解綁？",
+      "confirmOk": "解綁",
+      "confirmCancel": "取消",
+      "unbound": "已花費{fee}為{name}解綁。它會在下次交易時重新綁定。",
+      "notEligible": "該物品無法解綁。",
+      "notBound": "該物品未綁定。",
+      "cannotAfford": "你付不起解綁費用。",
+      "outOfRange": "你必須站在對應的工作臺旁才能解綁。"
     },
     "finder": {
       "title": "地城搜尋器",
@@ -5951,7 +5975,7 @@ export const zh_TW: EnTranslations = {
         "combat": "戰鬥中",
         "dungeon": "地城中",
         "dead": "死亡",
-        "afk": "[ZH-TW] Away"
+        "afk": "暫離"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

@@ -1700,7 +1700,7 @@ export const da_DK: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[DA] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Niveau {level} {family}",
@@ -1839,6 +1839,7 @@ export const da_DK: EnTranslations = {
         "legend": "LEGENDE",
         "shill": "FORKÆMPER"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Verificeret medlem",
       "notMember": "Ikke på serveren endnu",
       "joinCta": "Tilslut Discord",
@@ -2331,10 +2332,14 @@ export const da_DK: EnTranslations = {
       "makersMark": "Udformet af {name}",
       "gatheredBy": "[DA] Gathered by {name}",
       "masterworkSeal": "Mesterværk",
-      "enchantedLine": "Fortryllet"
+      "enchantedLine": "Fortryllet",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[DA] Use",
+      "use": "Brug",
       "equip": "[DA] Equip",
       "disenchant": "[DA] Disenchant",
       "salvage": "[DA] Salvage",
@@ -2382,6 +2387,25 @@ export const da_DK: EnTranslations = {
       "notTaughtHere": "Den opskrift er ikke undervist her.",
       "alreadyKnown": "Den opskrift kender du allerede.",
       "outOfRange": "Du skal være på stationen for at træne."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Fangekældersfinder",
@@ -5951,7 +5975,7 @@ export const da_DK: EnTranslations = {
         "combat": "I kamp",
         "dungeon": "I fangekælder",
         "dead": "Død",
-        "afk": "[DA] Away"
+        "afk": "Fraværende"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

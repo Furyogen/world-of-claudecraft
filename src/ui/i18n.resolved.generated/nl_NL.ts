@@ -1700,7 +1700,7 @@ export const nl_NL: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[NL] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Niveau {level} {family}",
@@ -1839,6 +1839,7 @@ export const nl_NL: EnTranslations = {
         "legend": "LEGENDE",
         "shill": "PROMOTOR"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Geverifieerd lid",
       "notMember": "Nog niet in de server",
       "joinCta": "Word lid van de Discord",
@@ -2331,10 +2332,14 @@ export const nl_NL: EnTranslations = {
       "makersMark": "Gemaakt door {name}",
       "gatheredBy": "[NL] Gathered by {name}",
       "masterworkSeal": "Meesterwerk",
-      "enchantedLine": "Betoverd"
+      "enchantedLine": "Betoverd",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[NL] Use",
+      "use": "Gebruiken",
       "equip": "[NL] Equip",
       "disenchant": "[NL] Disenchant",
       "salvage": "[NL] Salvage",
@@ -2382,6 +2387,25 @@ export const nl_NL: EnTranslations = {
       "notTaughtHere": "Dat recept wordt hier niet geleerd.",
       "alreadyKnown": "Dat recept ken je al.",
       "outOfRange": "Je moet bij het werkstation zijn om te trainen."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Kerkerzoekmachine",
@@ -5951,7 +5975,7 @@ export const nl_NL: EnTranslations = {
         "combat": "In gevecht",
         "dungeon": "In kerker",
         "dead": "Dood",
-        "afk": "[NL] Away"
+        "afk": "Afwezig"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

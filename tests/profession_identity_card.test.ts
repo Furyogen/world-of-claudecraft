@@ -86,6 +86,7 @@ describe('profession identity card painter contract', () => {
             difficulty: 'reduced',
             station: null,
             craftable: false,
+            commissionEligible: false,
             comboRequirement: {
               craftA: 'armorcrafting',
               craftB: 'weaponcrafting',
@@ -105,6 +106,8 @@ describe('profession identity card painter contract', () => {
         moneyHtml: vi.fn(() => ''),
         itemTooltip: vi.fn(() => ''),
         attachTooltip: vi.fn(),
+        commissionChecked: () => false,
+        onToggleCommission: vi.fn(),
       },
     );
 
@@ -149,6 +152,7 @@ describe('profession identity card painter contract', () => {
             difficulty: 'full',
             station: { required: true, type: 'toolworks', inRange: false },
             craftable: false,
+            commissionEligible: false,
           },
         ],
       },
@@ -160,6 +164,8 @@ describe('profession identity card painter contract', () => {
         moneyHtml: vi.fn(() => ''),
         itemTooltip: vi.fn(() => ''),
         attachTooltip: vi.fn(),
+        commissionChecked: () => false,
+        onToggleCommission: vi.fn(),
       },
     );
 
@@ -196,6 +202,7 @@ describe('profession identity card painter contract', () => {
             difficulty: 'full',
             station: null,
             craftable: true,
+            commissionEligible: false,
           },
           {
             recipeId: 'known_armor',
@@ -207,6 +214,7 @@ describe('profession identity card painter contract', () => {
             difficulty: 'full',
             station: null,
             craftable: true,
+            commissionEligible: false,
           },
         ],
       },
@@ -218,6 +226,8 @@ describe('profession identity card painter contract', () => {
         moneyHtml: vi.fn(() => ''),
         itemTooltip: vi.fn(() => ''),
         attachTooltip: vi.fn(),
+        commissionChecked: () => false,
+        onToggleCommission: vi.fn(),
       },
       undefined,
       // Only weaponcrafting is hinted; armorcrafting is not in the map.
@@ -277,6 +287,8 @@ describe('crafting window Phase 6 QA pins', () => {
     moneyHtml: vi.fn(() => ''),
     itemTooltip: vi.fn(() => ''),
     attachTooltip: vi.fn(),
+    commissionChecked: () => false,
+    onToggleCommission: vi.fn(),
   });
   const comboRow = (unmetCrafts: string[]) => ({
     recipes: [
@@ -290,6 +302,7 @@ describe('crafting window Phase 6 QA pins', () => {
         difficulty: 'reduced' as const,
         station: null,
         craftable: false,
+        commissionEligible: false,
         comboRequirement: {
           craftA: 'armorcrafting',
           craftB: 'weaponcrafting',
@@ -344,6 +357,7 @@ describe('crafting window Phase 6 QA pins', () => {
             difficulty: 'none' as const,
             station: null,
             craftable: true,
+            commissionEligible: false,
           },
         ],
       },
@@ -380,6 +394,7 @@ describe('crafting window Phase 6 QA pins', () => {
               difficulty,
               station: null,
               craftable: true,
+              commissionEligible: false,
             },
           ],
         },
@@ -412,6 +427,7 @@ describe('crafting window Phase 6 QA pins', () => {
             difficulty: 'full' as const,
             station: { required: true, type: 'forge' as const, inRange: true },
             craftable: true,
+            commissionEligible: false,
           },
         ],
       },
@@ -440,6 +456,7 @@ describe('crafting window Phase 6 QA pins', () => {
             difficulty: 'full' as const,
             station: { required: true, type: 'forge' as const, inRange: false },
             craftable: false,
+            commissionEligible: false,
           },
         ],
       },

@@ -1700,7 +1700,7 @@ export const sv_SE: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[SV] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Nivå {level} {family}",
@@ -1839,6 +1839,7 @@ export const sv_SE: EnTranslations = {
         "legend": "LEGEND",
         "shill": "MARKNADSFÖRARE"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Verifierad medlem",
       "notMember": "Inte med på servern ännu",
       "joinCta": "Gå med i Discord",
@@ -2331,10 +2332,14 @@ export const sv_SE: EnTranslations = {
       "makersMark": "Skapad av {name}",
       "gatheredBy": "[SV] Gathered by {name}",
       "masterworkSeal": "Mästerverk",
-      "enchantedLine": "Förtrollad"
+      "enchantedLine": "Förtrollad",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[SV] Use",
+      "use": "Använd",
       "equip": "[SV] Equip",
       "disenchant": "[SV] Disenchant",
       "salvage": "[SV] Salvage",
@@ -2382,6 +2387,25 @@ export const sv_SE: EnTranslations = {
       "notTaughtHere": "Det receptet lärs inte ut här.",
       "alreadyKnown": "Det receptet känner du redan till.",
       "outOfRange": "Du måste vara på stationen för att träna."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Fängelsehålsletaren",
@@ -5951,7 +5975,7 @@ export const sv_SE: EnTranslations = {
         "combat": "I strid",
         "dungeon": "I fängelsehåla",
         "dead": "Död",
-        "afk": "[SV] Away"
+        "afk": "Frånvarande"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

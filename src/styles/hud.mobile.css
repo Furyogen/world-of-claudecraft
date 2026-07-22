@@ -114,9 +114,6 @@
   body.mobile-touch.game-active #ui {
     z-index: 80;
   }
-  body.mobile-touch.mobile-more-open #mobile-controls {
-    z-index: 140;
-  }
   body.mobile-touch.game-active #ui,
   body.mobile-touch.game-active #nameplates,
   body.mobile-touch.game-active #mobile-controls {
@@ -2473,6 +2470,7 @@
   body.mobile-touch #spellbook,
   body.mobile-touch #vendor-window,
   body.mobile-touch #train-window,
+  body.mobile-touch #unbind-window,
   body.mobile-touch #market-window,
   body.mobile-touch #quest-dialog,
   body.mobile-touch #calendar-window,
@@ -3241,6 +3239,7 @@
      is declared explicitly here regardless so neither group inherits a stale
      value). */
   body.mobile-touch #train-window,
+  body.mobile-touch #unbind-window,
   body.mobile-touch #quest-log-window,
   body.mobile-touch #vendor-window,
   body.mobile-touch #quest-dialog,
@@ -3258,6 +3257,7 @@
      the viewport width. The train window also scrolls internally here: it is a
      standalone centered card (never the vendor's split-screen bags pairing). */
   body.mobile-touch #train-window,
+  body.mobile-touch #unbind-window,
   body.mobile-touch #quest-log-window,
   body.mobile-touch #vendor-window,
   body.mobile-touch #quest-dialog {
@@ -3292,8 +3292,21 @@
       max(10px, env(safe-area-inset-bottom))
     );
   }
-  body.mobile-touch #train-window {
+  body.mobile-touch #train-window,
+  body.mobile-touch #unbind-window {
     overflow-y: auto;
+  }
+  /* Commission opt-in row (Professions 2.0 Phase 14b): the label is the tap
+     target and the desktop 11px/2px-padding footprint sits far under the
+     40x40 touch floor (src/ui/CLAUDE.md), so on touch the whole row grows to
+     the floor and the native checkbox itself gets a finger-sized box. */
+  body.mobile-touch .crafting-commission-row {
+    min-height: 40px;
+    font-size: 13px;
+  }
+  body.mobile-touch .crafting-commission-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
   }
   /* Narrower size group: spellbook rows and the options form controls read fine
      at a tighter width, so these stay a compact centered card rather than

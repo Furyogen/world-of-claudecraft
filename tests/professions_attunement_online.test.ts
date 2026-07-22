@@ -205,7 +205,7 @@ function workOrderMaterial(): { itemId: string; count: number } {
 }
 
 describe('work-order cadence mirror over the live GameServer wire (cprof)', () => {
-  it('an online work-order turn-in blocks the quest and mirrors cadenceBlockedQuests onto the cprof self-delta', () => {
+  it('an online work-order turn-in blocks the quest over cprof, and a lapsed window empties the mirror on a later broadcast', () => {
     const server = new GameServer();
     const fcOwner = fakeWs();
     const so = joinServer(server, fcOwner, 121, 'Worker');
@@ -238,6 +238,30 @@ describe('work-order cadence mirror over the live GameServer wire (cprof)', () =
       .map((m) => m.self!.cprof!);
     expect(cprofs.length).toBeGreaterThan(0);
     expect(cprofs[cprofs.length - 1].cadenceBlockedQuests).toContain(WORK_ORDER);
+
+    // The UNBLOCK arm (blocked -> available over the wire): lapse the window
+    // server-side by rewinding the stored availableAt to the server's CURRENT
+    // tick (isCadenceBlocked is strict-before, so a key is available exactly
+    // AT its availableAt). If the cprof diff failed to re-emit on a set
+    // SHRINK, the stale blocked frame would stay last until relog and only
+    // the blocked half above would keep this suite green.
+    meta.questCadence.set(WORK_ORDER, server.sim.tickCount);
+    expect(server.sim.questState(WORK_ORDER, so.pid)).toBe('available');
+    routeOf(server)(server.sim.tick());
+    (server as unknown as { broadcastSnapshots(): void }).broadcastSnapshots();
+    const after = fcOwner.sent
+      .filter((m) => m.t === 'snap' && m.self?.cprof)
+      .map((m) => m.self!.cprof!);
+    // A NEW cprof frame shipped for the shrink (the delta re-emits, it is not
+    // the old blocked frame still sitting last), and its blocked set no
+    // longer carries the work order.
+    expect(after.length).toBeGreaterThan(cprofs.length);
+    const lapsedFrame = after[after.length - 1];
+    expect(lapsedFrame.cadenceBlockedQuests).not.toContain(WORK_ORDER);
+    // Close the loop client-side: feed the LAST wire frame into the bare
+    // client mirror and the quest reads available again.
+    const client = bareClient({ cadenceBlockedQuests: lapsedFrame.cadenceBlockedQuests });
+    expect(client.questState(WORK_ORDER)).toBe('available');
   });
 });
 

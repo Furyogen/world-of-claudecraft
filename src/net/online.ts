@@ -3111,8 +3111,16 @@ export class ClientWorld implements IWorld {
   harvestNode(nodeId: string): Promise<boolean> {
     return this.cmdWithOutcome({ cmd: 'harvest_node', node: nodeId });
   }
-  craftItem(recipeId: string): void {
-    this.cmd({ cmd: 'craft_item', recipe: recipeId });
+  // `commission` (Professions 2.0 Phase 14b): the boolean Maker's Bond
+  // opt-in, sent ONLY when true so a non-commission craft's wire message
+  // stays byte-identical to the pre-phase form. The server mints the
+  // bindOnTrade arm itself; no payload ever rides the command.
+  craftItem(recipeId: string, commission?: boolean): void {
+    if (commission === true) {
+      this.cmd({ cmd: 'craft_item', recipe: recipeId, commission: true });
+    } else {
+      this.cmd({ cmd: 'craft_item', recipe: recipeId });
+    }
   }
   placeMobileStation(craftId: string): void {
     this.cmd({ cmd: 'place_mobile_station', craft: craftId });
@@ -3135,6 +3143,14 @@ export class ClientWorld implements IWorld {
   }
   salvageItem(itemId: string): void {
     this.cmd({ cmd: 'salvage_item', item: itemId });
+  }
+  // Maker's Bond unbind service (Professions 2.0 Phase 14b): command only,
+  // never predicted. The server re-validates eligibility/bound-ness/station
+  // range/fee in src/sim/professions/commission.ts and answers with the
+  // personal unbindResult event; the cleared payload mirrors back via the
+  // self inv delta.
+  unbindItem(itemId: string): void {
+    this.cmd({ cmd: 'unbind_item', item: itemId });
   }
   sellItem(itemId: string, count?: number): void {
     this.cmd({ cmd: 'sell', item: itemId, count });

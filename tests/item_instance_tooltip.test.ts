@@ -13,11 +13,13 @@ import { ITEMS } from '../src/sim/data';
 import { NODE_MATERIAL_TABLE } from '../src/sim/professions/gathering';
 import {
   instanceBadgeLines,
+  instanceBindingLines,
   instanceBonusStatLines,
   instanceMakersMarkLine,
   isGatheredProvenanceKind,
   itemNumber,
   itemStatName,
+  wornTooltipInstance,
 } from '../src/ui/item_instance_tooltip';
 
 describe('item_instance_tooltip', () => {
@@ -103,6 +105,82 @@ describe('item_instance_tooltip', () => {
     expect(itemNumber(3)).toBe('3');
     expect(itemNumber(2.5, 1)).toBe('2.5');
     expect(itemStatName('weird')).toBe('Weird');
+  });
+});
+
+// The Maker's Bond lines (Professions 2.0 Phase 14b): commission tooltip copy
+// is scoped to the commission-eligible equipment kinds and renders in the def
+// soulbound line's gold. The bound line names NO one (boundTo is an entity
+// id, not a stable cross-session identity), so there is no name arm to pin.
+describe('instanceBindingLines (Phase 14b commission lines)', () => {
+  it('an armed-unbound equipment copy warns it binds to the first recipient', () => {
+    const html = instanceBindingLines({ bindOnTrade: true }, 'weapon');
+    expect(html).toContain('Commission piece: binds to the first recipient');
+    expect(html).toContain('#ffd100');
+  });
+
+  it('a bound equipment copy states the lock (and never the unbound warning)', () => {
+    for (const kind of ['weapon', 'armor', 'held_offhand'] as const) {
+      const html = instanceBindingLines({ bindOnTrade: true, boundTo: 7 }, kind);
+      expect(html, kind).toContain('Commission piece: bound to its recipient');
+      expect(html, kind).not.toContain('binds to the first recipient');
+    }
+  });
+
+  it('a bound copy renders the bound line even if the arm is somehow absent (presence is the lock)', () => {
+    expect(instanceBindingLines({ boundTo: 7 }, 'armor')).toContain(
+      'Commission piece: bound to its recipient',
+    );
+  });
+
+  it('the Phase 13 reagent shape (junk kind) renders NOTHING: reagent tooltips stay line-free', () => {
+    expect(instanceBindingLines({ bindOnTrade: true }, 'junk')).toBe('');
+    expect(instanceBindingLines({ bindOnTrade: true, boundTo: 999 }, 'junk')).toBe('');
+  });
+
+  it('a plain instance, an undefined instance, and an undefined kind all render nothing', () => {
+    expect(instanceBindingLines({ signer: 'Bob' }, 'weapon')).toBe('');
+    expect(instanceBindingLines(undefined, 'weapon')).toBe('');
+    expect(instanceBindingLines({ bindOnTrade: true }, undefined)).toBe('');
+  });
+});
+
+// The worn-slot projection (Phase 14b): the paperdoll renders exactly the
+// public eqi allowlist (signer/enchant/rolled) in BOTH hosts, so the offline
+// full payload can never show the bond lines on worn gear that the online
+// eqi-trimmed mirror lacks. char_window.ts is pinned to route through it.
+describe('wornTooltipInstance (the eqi-mirror worn projection)', () => {
+  it('keeps exactly signer/enchant/rolled and drops the bond and charges fields', () => {
+    expect(
+      wornTooltipInstance({
+        signer: 'Aldric',
+        enchant: 'ench_x',
+        rolled: { masterwork: true, stats: { str: 2 } },
+        bindOnTrade: true,
+        boundTo: 7,
+        charges: { fireball: 2 },
+      }),
+    ).toEqual({
+      signer: 'Aldric',
+      enchant: 'ench_x',
+      rolled: { masterwork: true, stats: { str: 2 } },
+    });
+    expect(wornTooltipInstance(undefined)).toBeUndefined();
+    // A bond-only payload projects to an EMPTY worn payload: no line renders.
+    expect(
+      instanceBindingLines(wornTooltipInstance({ bindOnTrade: true, boundTo: 7 }), 'armor'),
+    ).toBe('');
+  });
+
+  it('char_window routes the paperdoll tooltip through the projection (source pin)', () => {
+    const charWindow = readFileSync(new URL('../src/ui/char_window.ts', import.meta.url), 'utf8');
+    expect(charWindow).toContain('wornTooltipInstance(');
+    // The raw equippedInstances read feeds ONLY the projection, never the
+    // tooltip directly.
+    const site = charWindow.indexOf('equippedInstances?.[slot]');
+    expect(site).toBeGreaterThan(-1);
+    const before = charWindow.slice(Math.max(0, site - 220), site);
+    expect(before).toContain('wornTooltipInstance(');
   });
 });
 

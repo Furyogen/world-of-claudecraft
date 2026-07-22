@@ -1839,6 +1839,7 @@ export const en: EnTranslations = {
         "legend": "LEGEND",
         "shill": "SHILL"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Verified member",
       "notMember": "Not in the server yet",
       "joinCta": "Join the Discord",
@@ -2331,7 +2332,11 @@ export const en: EnTranslations = {
       "makersMark": "Crafted by {name}",
       "gatheredBy": "Gathered by {name}",
       "masterworkSeal": "Masterwork",
-      "enchantedLine": "Enchanted"
+      "enchantedLine": "Enchanted",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
       "use": "Use",
@@ -2382,6 +2387,25 @@ export const en: EnTranslations = {
       "notTaughtHere": "That recipe is not taught here.",
       "alreadyKnown": "You already know that recipe.",
       "outOfRange": "You must be at the station to train."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Dungeon Finder",

@@ -102,6 +102,24 @@ describe('tier-crossing master mail (Professions 2.0 Phase 14)', () => {
     expect(second.booked).toEqual([]);
   });
 
+  it('mails a SECONDARY major crossing too (both majors watched, not just the archetype)', () => {
+    // Every other crossing test raises PRIMARY (activeArchetype), so a
+    // regression that watched only that craft on the mailing path would
+    // stay green; this arm crosses pairedMajor upward and demands its letter.
+    const sim = makeSim();
+    const meta = attunedMeta(sim);
+    meta.craftSkills[PRIMARY] = tierSkill(1);
+    meta.craftSkills[SECONDARY] = tierSkill(1);
+    baselineActivePairTierMail(meta);
+
+    meta.craftSkills[SECONDARY] = tierSkill(2);
+    const { ctx, booked } = recordingCtx();
+    expect(updateTierMailFor(meta, ctx)).toBe(true);
+    expect(booked).toEqual([MASTER_TIER_LETTERS[PAIR][2]]);
+    expect(meta.tierMailSent.get(SECONDARY)).toBe(2);
+    expect(meta.tierMailSent.get(PRIMARY)).toBe(1); // untouched
+  });
+
   it('sends only the top tier letter on a multi-tier jump', () => {
     const sim = makeSim();
     const meta = attunedMeta(sim);
@@ -141,6 +159,61 @@ describe('tier-crossing master mail (Professions 2.0 Phase 14)', () => {
     expect(updateTierMailFor(meta, crossing.ctx)).toBe(false);
     expect(crossing.booked).toEqual([]);
     expect(meta.tierMailSent.get(NON_WAVE_ONE_PRIMARY)).toBe(3);
+  });
+
+  it('acknowledges an over-cap tier beyond the authored 1..5 range without mailing', () => {
+    const sim = makeSim();
+    const meta = attunedMeta(sim);
+    meta.craftSkills[PRIMARY] = tierSkill(5);
+    meta.craftSkills[SECONDARY] = tierSkill(1);
+    baselineActivePairTierMail(meta); // PRIMARY acknowledged at the authored top tier
+    // Decisive precondition: the wave-one letter set really ends at tier 5.
+    expect(MASTER_TIER_LETTERS[PAIR][5]).toBeDefined();
+    expect(MASTER_TIER_LETTERS[PAIR][6]).toBeUndefined();
+
+    // An over-cap skill crossing into tier 6 has no authored letter, so nothing
+    // is booked; the acknowledgement still advances so the same crossing is
+    // never re-evaluated by a later sweep.
+    meta.craftSkills[PRIMARY] = tierSkill(6);
+    const crossing = recordingCtx();
+    expect(updateTierMailFor(meta, crossing.ctx)).toBe(false);
+    expect(crossing.booked).toEqual([]);
+    expect(meta.tierMailSent.get(PRIMARY)).toBe(6);
+
+    const after = recordingCtx();
+    expect(updateTierMailFor(meta, after.ctx)).toBe(false);
+    expect(after.booked).toEqual([]);
+  });
+
+  it('stays quiet through a skill drop and re-cross, then mails only a genuinely new tier', () => {
+    const sim = makeSim();
+    const meta = attunedMeta(sim);
+    meta.craftSkills[PRIMARY] = tierSkill(3);
+    meta.craftSkills[SECONDARY] = tierSkill(1);
+    baselineActivePairTierMail(meta); // PRIMARY acknowledged at tier 3
+
+    // A mastery reset (12c) can lower craft skills: the acknowledgement never
+    // regresses with the skill, so the earlier congratulation stands.
+    meta.craftSkills[PRIMARY] = tierSkill(1);
+    const dropped = recordingCtx();
+    expect(updateTierMailFor(meta, dropped.ctx)).toBe(false);
+    expect(dropped.booked).toEqual([]);
+    expect(meta.tierMailSent.get(PRIMARY)).toBe(3);
+
+    // Re-crossing an already-acknowledged tier delivers nothing: no duplicate
+    // congratulations for ground regained.
+    meta.craftSkills[PRIMARY] = tierSkill(3);
+    const recrossed = recordingCtx();
+    expect(updateTierMailFor(meta, recrossed.ctx)).toBe(false);
+    expect(recrossed.booked).toEqual([]);
+    expect(meta.tierMailSent.get(PRIMARY)).toBe(3);
+
+    // Only a tier never acknowledged before mails: exactly the tier-4 letter.
+    meta.craftSkills[PRIMARY] = tierSkill(4);
+    const fresh = recordingCtx();
+    expect(updateTierMailFor(meta, fresh.ctx)).toBe(true);
+    expect(fresh.booked).toEqual([MASTER_TIER_LETTERS[PAIR][4]]);
+    expect(meta.tierMailSent.get(PRIMARY)).toBe(4);
   });
 
   it('never mails for an unattuned character, a hobby craft, or a dormant craft', () => {

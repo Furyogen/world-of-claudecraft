@@ -5043,6 +5043,31 @@
   .train-row.train-locked:disabled {
     opacity: 0.45;
   }
+
+  /* ---------- Maker's Bond unbind window (Professions 2.0 Phase 14b) ---------- */
+  /* The station master's unbind service: same vendor-family row classes as the
+     train window above; only the intro line lives here, styled from existing
+     tokens (no new tokens, no new hex). */
+  #unbind-window {
+    width: 400px;
+  }
+  .unbind-intro {
+    display: block;
+    padding: 4px 6px 6px;
+  }
+
+  /* Commission opt-in row in the crafting window (Professions 2.0 Phase 14b):
+     a per-recipe label-wrapped checkbox under the Craft button, reusing the
+     combo-note footprint so the recipe card keeps its rhythm. */
+  .crafting-commission-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 6px 4px;
+    font-size: 11px;
+    color: var(--gold);
+    cursor: pointer;
+  }
   .train-row.train-known {
     cursor: default;
   }

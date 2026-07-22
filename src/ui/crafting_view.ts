@@ -16,6 +16,7 @@ import {
   type ComboEligibilityReason,
   comboEligibility,
 } from '../sim/professions/combo_eligibility';
+import { isCommissionEligible } from '../sim/professions/commission';
 import { type StationType, stationsOfType, stationTypeForCraft } from '../sim/professions/stations';
 import { MINIMAL_TIER_MULTIPLIER, REDUCED_TIER_MULTIPLIER } from '../sim/professions/wheel';
 import type { InvSlot, ItemDef } from '../sim/types';
@@ -91,6 +92,13 @@ export interface CraftingRecipeRow {
    *  (for a station-bound recipe) the player is in station range: the "Craft"
    *  action is enabled. The server re-validates every gate on craft. */
   craftable: boolean;
+  /** Commission opt-in visibility (Professions 2.0 Phase 14b): true iff the
+   *  result def is one of the ruled-in equipment kinds (weapon, armor,
+   *  held_offhand; src/sim/professions/commission.ts, the SAME predicate the
+   *  sim's craft resolver honors, so the control can never show where the
+   *  flag would be ignored). The painter renders the per-craft checkbox only
+   *  on these rows; the server re-validates eligibility on craft. */
+  commissionEligible: boolean;
 }
 
 export interface CraftingView {
@@ -201,6 +209,7 @@ export function buildCraftingView(
       skillReq: recipe.skillReq,
       difficulty,
       station,
+      commissionEligible: isCommissionEligible(items[recipe.resultItemId]),
       craftable:
         reagentRows.every((r) => r.satisfied) &&
         eligibility?.ok !== false &&

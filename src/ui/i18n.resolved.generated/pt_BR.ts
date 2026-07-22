@@ -1700,7 +1700,7 @@ export const pt_BR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[PT-BR] AFK"
+      "afkTag": "AUS"
     },
     "mobTooltip": {
       "levelFamily": "{family} de nível {level}",
@@ -1839,6 +1839,7 @@ export const pt_BR: EnTranslations = {
         "legend": "LENDA",
         "shill": "PROPAGANDISTA"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Membro verificado",
       "notMember": "Ainda não está no servidor",
       "joinCta": "Entrar no Discord",
@@ -2331,10 +2332,14 @@ export const pt_BR: EnTranslations = {
       "makersMark": "Feito por {name}",
       "gatheredBy": "[PT-BR] Gathered by {name}",
       "masterworkSeal": "Obra-prima",
-      "enchantedLine": "Encantado"
+      "enchantedLine": "Encantado",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[PT-BR] Use",
+      "use": "Usar",
       "equip": "[PT-BR] Equip",
       "disenchant": "[PT-BR] Disenchant",
       "salvage": "[PT-BR] Salvage",
@@ -2382,6 +2387,25 @@ export const pt_BR: EnTranslations = {
       "notTaughtHere": "Essa receita não é ensinada aqui.",
       "alreadyKnown": "Você já conhece essa receita.",
       "outOfRange": "Você deve estar na estação para treinar."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Localizador de Masmorras",
@@ -5951,7 +5975,7 @@ export const pt_BR: EnTranslations = {
         "combat": "Em combate",
         "dungeon": "Em masmorra",
         "dead": "Morto",
-        "afk": "[PT-BR] Away"
+        "afk": "Ausente"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

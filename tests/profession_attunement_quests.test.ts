@@ -268,7 +268,7 @@ describe('live profession attunement quests', () => {
       attune(sim, SMITH_MASTER, 'q_prof_attune_smith', WEAPON_ARMOR);
       sim.addItem('linen_scrap', 1, pid);
       sim.addItem('spider_leg', 1, pid);
-      sim.craftItem('recipe_minor_healing_potion', pid); // masterwork proc: draws rng
+      sim.craftItem('recipe_minor_healing_potion', false, pid); // masterwork proc: draws rng
       acceptAt(sim, HOBBY_MASTER, HOBBY_QUEST, 'tailoring');
       completeAndTurnInAt(sim, HOBBY_MASTER, HOBBY_QUEST);
       for (let i = 0; i < 20; i++) sim.tick();
@@ -380,6 +380,11 @@ describe.each(MASTERS_WITH_OTHER)(
       attune(sim, other.master, other.attuneQuest, other.pair);
       expect(sim.questState(amendsQuest)).toBe('available');
       expect(sim.questState(attuneQuest)).toBe('done');
+
+      // Mid-quest: the accepted amends reports 'active' (the fifth matrix
+      // identity state), not a silent disappearance.
+      acceptAt(sim, master, amendsQuest, pair);
+      expect(sim.questState(amendsQuest)).toBe('active');
     });
   },
 );
@@ -393,5 +398,82 @@ describe('q_prof_hobby_switch reward shape (Phase 12c)', () => {
     const quest = ZONE1_QUESTS[HOBBY_QUEST];
     expect(quest.xpReward).toBe(0);
     expect(quest.repeatable).toBe(true);
+  });
+});
+
+// Phase 14 QA: one pending identity transition at a time. resolvedCounts is
+// stamped at ACCEPT (finalizeQuestAccept) and turn-in never re-resolves it, so
+// holding two attunePair quests at once lets the second complete at a stale
+// amends cost: new-pair attunes are free and leave switchCount at 0, so a
+// player with three pairs in history can bank both open amends quests at
+// counts [5] and turn the second in after the first return bumped switchCount
+// to 1, dodging the honest 5 + 3 = 8. The shared computeQuestState therefore
+// hides every OTHER attunePair-effect quest while one is active, on both hosts
+// (the online mirror shares the function; the server accept gate rides
+// questState). switchHobby quests and plain quests are outside the gate.
+describe('attunePair quests block concurrent identity transitions (Phase 14 QA)', () => {
+  const APOTHECARY_PAIR = 'alchemy+cooking';
+
+  it('hides other attune quests while one is active, and reopens them on abandon', () => {
+    const sim = makeSim();
+    unlockProfessionQuests(sim);
+
+    acceptAt(sim, SMITH_MASTER, 'q_prof_attune_smith', WEAPON_ARMOR);
+    expect(sim.questState('q_prof_attune_smith')).toBe('active');
+    expect(sim.questState('q_prof_attune_outfitter')).toBe('unavailable');
+    // The gate is identity-scoped: a plain quest (the smith's work order, no
+    // completionEffect) is untouched while the transition is pending.
+    expect(sim.questState('q_prof_workorder_forge')).toBe('available');
+
+    sim.abandonQuest('q_prof_attune_smith');
+    expect(sim.questState('q_prof_attune_outfitter')).toBe('available');
+  });
+
+  it('leaves switchHobby quests outside the gate (attunePair-only scope)', () => {
+    // The work-order control above has NO completionEffect, so it cannot catch
+    // a regression that broadens the gate from attunePair to any effect; the
+    // hobby switch carries the OTHER effect type and must stay offered while
+    // an identity transition is pending.
+    const sim = makeSim();
+    unlockProfessionQuests(sim);
+    attune(sim, SMITH_MASTER, 'q_prof_attune_smith', WEAPON_ARMOR);
+    attune(sim, OUTFITTER_MASTER, 'q_prof_attune_outfitter', LEATHER_TAILOR);
+
+    acceptAt(sim, SMITH_MASTER, 'q_prof_amends_smith', WEAPON_ARMOR);
+    // The gated control: a fresh attunePair quest hides while amends is active.
+    expect(sim.questState('q_prof_attune_apothecary')).toBe('unavailable');
+    // The scope boundary: the switchHobby quest is untouched by the gate.
+    expect(sim.questState(HOBBY_QUEST)).toBe('available');
+  });
+
+  it('refuses a banked second amends so escalation can never be dodged', () => {
+    const sim = makeSim();
+    unlockProfessionQuests(sim);
+
+    // Three pairs in history at switchCount 0: new-pair attunes are free.
+    attune(sim, SMITH_MASTER, 'q_prof_attune_smith', WEAPON_ARMOR);
+    attune(sim, OUTFITTER_MASTER, 'q_prof_attune_outfitter', LEATHER_TAILOR);
+    attune(sim, 'cook_marlow', 'q_prof_attune_apothecary', APOTHECARY_PAIR);
+    expect(sim.archetypeSwitchCount).toBe(0);
+
+    // Both non-active pairs' amends are open at the cheap first-switch cost.
+    expect(sim.questState('q_prof_amends_smith')).toBe('available');
+    expect(sim.questState('q_prof_amends_outfitter')).toBe('available');
+
+    // Accepting one closes the other while the transition is pending, and the
+    // accept path refuses the bank outright.
+    acceptAt(sim, SMITH_MASTER, 'q_prof_amends_smith', WEAPON_ARMOR);
+    expect(sim.questLog.get('q_prof_amends_smith')?.resolvedCounts).toEqual([5]);
+    expect(sim.questState('q_prof_amends_outfitter')).toBe('unavailable');
+    acceptAt(sim, OUTFITTER_MASTER, 'q_prof_amends_outfitter', LEATHER_TAILOR);
+    expect(sim.questLog.has('q_prof_amends_outfitter')).toBe(false);
+
+    // Return to smith: switchCount 1; the outfitter amends reopens and a fresh
+    // accept resolves the ESCALATED count (5 + 3 * 1 = 8), the honest cost.
+    completeAndTurnInAt(sim, SMITH_MASTER, 'q_prof_amends_smith');
+    expect(sim.archetypeSwitchCount).toBe(1);
+    expect(sim.questState('q_prof_amends_outfitter')).toBe('available');
+    acceptAt(sim, OUTFITTER_MASTER, 'q_prof_amends_outfitter', LEATHER_TAILOR);
+    expect(sim.questLog.get('q_prof_amends_outfitter')?.resolvedCounts).toEqual([8]);
   });
 });

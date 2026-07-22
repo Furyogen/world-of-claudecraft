@@ -1700,7 +1700,7 @@ export const pl_PL: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[PL] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "Poziom {level}: {family}",
@@ -1839,6 +1839,7 @@ export const pl_PL: EnTranslations = {
         "legend": "LEGENDA",
         "shill": "GORLIWY ORĘDOWNIK"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Zweryfikowany członek",
       "notMember": "Jeszcze nie na serwerze",
       "joinCta": "Dołącz do Discorda",
@@ -2331,10 +2332,14 @@ export const pl_PL: EnTranslations = {
       "makersMark": "Stworzone przez {name}",
       "gatheredBy": "[PL] Gathered by {name}",
       "masterworkSeal": "Arcydzieło",
-      "enchantedLine": "Zaczarowany"
+      "enchantedLine": "Zaczarowany",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[PL] Use",
+      "use": "Użyj",
       "equip": "[PL] Equip",
       "disenchant": "[PL] Disenchant",
       "salvage": "[PL] Salvage",
@@ -2382,6 +2387,25 @@ export const pl_PL: EnTranslations = {
       "notTaughtHere": "Ten przepis nie jest tutaj nauczany.",
       "alreadyKnown": "Znacie już ten przepis.",
       "outOfRange": "Musisz być na stacji, żeby trenować."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Znajdywacz Lochów",
@@ -5951,7 +5975,7 @@ export const pl_PL: EnTranslations = {
         "combat": "W walce",
         "dungeon": "W lochu",
         "dead": "Martwy",
-        "afk": "[PL] Away"
+        "afk": "Nieobecny"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

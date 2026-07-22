@@ -1700,7 +1700,7 @@ export const ko_KR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[KO] AFK"
+      "afkTag": "자리 비움"
     },
     "mobTooltip": {
       "levelFamily": "{level}레벨 {family}",
@@ -1839,6 +1839,7 @@ export const ko_KR: EnTranslations = {
         "legend": "전설",
         "shill": "홍보대사"
       },
+      "roleTagChatTitle": "인증된 서버 역할: {role}",
       "guildMember": "인증된 멤버",
       "notMember": "아직 서버에 없음",
       "joinCta": "Discord 참여하기",
@@ -2331,10 +2332,14 @@ export const ko_KR: EnTranslations = {
       "makersMark": "제작자: {name}",
       "gatheredBy": "채집자: {name}",
       "masterworkSeal": "걸작",
-      "enchantedLine": "마법부여됨"
+      "enchantedLine": "마법부여됨",
+      "commissionToggle": "주문 제작품으로 제작",
+      "commissionToggleHint": "거래로 처음 받는 캐릭터에게 귀속됩니다.",
+      "commissionUnbound": "주문 제작품: 첫 수령인에게 귀속됩니다",
+      "commissionBound": "주문 제작품: 수령인에게 귀속되어 있습니다"
     },
     "itemMenu": {
-      "use": "[KO] Use",
+      "use": "사용",
       "equip": "장착",
       "disenchant": "마력 추출",
       "salvage": "분해",
@@ -2382,6 +2387,25 @@ export const ko_KR: EnTranslations = {
       "notTaughtHere": "그 제조법은 여기서 가르치지 않습니다.",
       "alreadyKnown": "이미 알고 있는 제조법입니다.",
       "outOfRange": "훈련하려면 작업대 옆에 있어야 합니다."
+    },
+    "unbind": {
+      "title": "귀속 해제: {name}",
+      "close": "귀속 해제 닫기",
+      "intro": "장인은 수수료를 받고 주문 제작품의 귀속을 해제해 줍니다.",
+      "empty": "귀속된 주문 제작품이 없습니다.",
+      "rowSub": "귀속을 해제합니다. 다음 거래에서 다시 귀속됩니다.",
+      "unbindAria": "{fee}(으)로 {name} 귀속 해제",
+      "dialogOption": "귀속 해제",
+      "dialogOptionAria": "{name}에게 주문 제작품 귀속 해제 요청",
+      "confirmTitle": "주문 제작품 귀속 해제",
+      "confirmBody": "{fee}(으)로 {name}의 귀속을 해제하시겠습니까?",
+      "confirmOk": "귀속 해제",
+      "confirmCancel": "취소",
+      "unbound": "{fee}(으)로 {name}의 귀속을 해제했습니다. 다음 거래에서 다시 귀속됩니다.",
+      "notEligible": "그 아이템은 귀속을 해제할 수 없습니다.",
+      "notBound": "그 아이템은 귀속되어 있지 않습니다.",
+      "cannotAfford": "귀속 해제 수수료를 지불할 수 없습니다.",
+      "outOfRange": "귀속을 해제하려면 작업대 옆에 있어야 합니다."
     },
     "finder": {
       "title": "던전 찾기",
@@ -5951,7 +5975,7 @@ export const ko_KR: EnTranslations = {
         "combat": "전투 중",
         "dungeon": "던전 안",
         "dead": "죽음",
-        "afk": "[KO] Away"
+        "afk": "자리 비움"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

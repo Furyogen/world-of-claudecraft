@@ -41,7 +41,7 @@ Update this file at the end of every implementation and QA session. Statuses:
 | 13 QA | Verify enchanting reachable | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
 | 14 | Attunement quests and nudges | complete (PR pending review) | 2026-07-21 | 2026-07-21 |
 | 14 QA | Verify attunement quests and nudges | not started | | |
-| 14b | Commissions and the Maker's Bond | not started | | |
+| 14b | Commissions and the Maker's Bond | complete (PR pending review) | 2026-07-21 | 2026-07-21 |
 | 14b QA | Verify commissions and the Maker's Bond | not started | | |
 | 15 | Deeds, tuning, and polish | not started | | |
 | 15 QA | Final integration QA and packet teardown | not started | | |
@@ -578,11 +578,11 @@ routing, coverage closure), review fixes, screenshots, docs.
 - [x] The crafting-window "learnable at a master" hint (shown exactly when unlearned trainer recipes exist, via the shared viewer predicates)
 
 ### Phase 14b: Commissions and the Maker's Bond
-- [ ] Commission opt-in at craft; the marker rides the instance in both hosts
-- [ ] First trade stamps boundTo; onward trades refused beside the def-level soulbound gate, localized deny id
-- [ ] Master unbind service: resolved fee, replay-safe, signer and masterwork markers survive
-- [ ] The three flagged maintainer decisions implemented exactly as resolved in state.md
-- [ ] Mail/market face-to-face construction pinned against the new marker
+- [x] Commission opt-in at craft; the marker rides the instance in both hosts
+- [x] First trade stamps boundTo; onward trades refused beside the def-level soulbound gate, localized deny id
+- [x] Master unbind service: resolved fee, replay-safe, signer and masterwork markers survive
+- [x] The three flagged maintainer decisions implemented exactly as resolved in state.md
+- [x] Mail/market face-to-face construction pinned against the new marker
 
 ### Phase 15: Deeds, tuning, and polish
 - [ ] Universal profession deeds incl. titles + marquee renown on first attunement and first masterwork, the Specialist deed, and the rare-find deeds (plus the rare fish, verified to celebrate through the Phase 12b bite moment)
@@ -1374,3 +1374,69 @@ in-memory nudge cadence restart reset, and the letterId derivation.
 Deferred: nothing. #1295's arms are complete (issue already closed);
 #2058's quests arm lands here (close by hand at merge if the maintainer
 agrees the stations parent is satisfied by Phases 8+9+14).
+
+Phase 14 QA (2026-07-21): PASS with followups, one real fix. QA diff
+8b7bd4596..3219f69cd (build phase-start to the PR #2280 merge, the
+release/v0.29.0 tip); fix branch fix/professions-2-phase-14-qa. Every
+deliverable and STEP 5 acceptance criterion verified against real code;
+validation rows green (tsc, the content and sim matrix rows, the 2039
+attunement suites, the S3 guard with all four new sim modules plus
+quest_commands.ts on the scan list, i18n completeness, wiki:content and
+i18n:gen freshness, ci:changed, parity goldens unchanged). Fan-out:
+STEP 1 context loader, a 10-agent audit Workflow (correctness, test
+coverage, dead code, plus architecture, cross-platform-sync,
+frontend-seam, migration-safety, privacy-security,
+database-performance, qa-checklist), then 5 parallel test writers; the
+correctness agent walked a live offline Sim through nudge, attune,
+celebration, cheap switch, escalating amends, whitelist rejection, and
+a real repeated work-order turn-in at the exact boundary tick.
+- REAL FIX (sim, test-first): the amends escalation could be dodged by
+  banking. resolvedCounts is stamped at accept and turn-in never
+  re-resolves it, and new-pair attunes are free (switchCount stays 0),
+  so a player with three pairs in history could hold both open amends
+  quests at counts [5] and turn the second in after the first return
+  raised switchCount, paying 5 where a fresh accept resolves 8. The
+  shared computeQuestState now hides every OTHER attunePair-effect
+  quest while one is active (one pending identity transition at a
+  time), on both hosts and the server accept gate alike.
+- Coverage arms closed test-first by the audit: the online cprof
+  UNBLOCK arm (a lapsed window empties cadenceBlockedQuests on a set
+  SHRINK re-emit, end to end into the bareClient mirror), a second full
+  work-order accept-and-turn-in cycle, cadence load-clamp and arm
+  boundaries, the single-cadence-constant catalog pin (a second
+  repeatCadenceTicks value would silently mis-clamp on tick-reset
+  load), tier-mail over-cap and skill-drop re-cross negatives, the
+  above-threshold trend nudge (deliberate lower-bar semantics), the
+  optimistic-state cadence and busy-gate cases, the mid-quest 'active'
+  matrix arm, the HUD render sink for all four text-free events (raw
+  pairId can never leak to chat), and tutorial Esc reachability.
+- Deferred to #2285 (all cosmetic/hygiene): the veteran first-tier
+  tutorial baseline decision, a work-order cooldown legibility line,
+  tier-mail unknown-key load hardening, serialize-time cadence pruning.
+- Verified-not-refixed accepted consequences: zone celebration
+  broadcast noise (the masterworkZone precedent), the in-memory nudge
+  cadence restart reset, the v0.29.0 rollback key-drop caveat, the
+  non-wave-one no-return-path pin, and the ClientWorld no-op legacy
+  members awaiting Phase 15 retirement.
+
+Phase 14b (2026-07-21): built. Phase-start commit 9453ff8d8 (the Phase 14
+QA merge PR #2286, the release/v0.29.0 tip); branch
+feature/professions-2-phase-14b-commissions in a fresh worktree.
+Implemented exactly per the three RESOLVED maintainer decisions
+(character binding, equipment-only opt-in classes, the 2500/10000/40000
+clamp-to-last unbind ladder). The commission marker is the Phase 13
+bindOnTrade arm itself (no parallel field, no persistence change, no
+rollback caveat); the craft command carries only a boolean; the unbind
+service clears boundTo alone so a piece re-binds on its next trade.
+Deliberate calls recorded in state.md New surfaces: the tooltip bound
+line names no one (entity ids are not stable cross-session identities,
+so the phase file's 'Bound to {name}' sketch is unimplementable without
+a parallel name field), the fee clamps to the uncommon rung BELOW the
+ladder too (a free common unbind would leak the sink), unbindResult is
+a HEAVY_SELF_EVENTS member so the in-place payload clear re-diffs the
+self inv mirror, and the unbind service refuses bound Phase 13 reagents
+(unbind_not_eligible) to keep the reagent anti-resale design intact.
+Census moves: commands 163/172, IWORLD_MEMBERS 260 (71/189). Out of
+scope kept out: the ORDER workflow (#1298 stays open), recipient-tied
+materials, market instance carriage, non-commission binding, and the
+pre-existing vendor-sell laundering class. Close #2207 by hand at merge.

@@ -294,6 +294,7 @@ import {
   clampCadenceOnLoad,
   WORK_ORDER_CADENCE_TICKS,
 } from './professions/cadence';
+import { unbindItem as unbindItemImpl } from './professions/commission';
 import {
   type AcquireRecipeResult,
   acquireRecipe as acquireRecipeImpl,
@@ -6923,9 +6924,12 @@ export class Sim {
   // src/sim/professions/crafting.ts, resolved on the deterministic tick the
   // command arrives on, same as harvestNode/buyItem/useItem above. Stashes
   // the outcome on the resolved player's PlayerMeta so the IWorld
-  // lastCraftResult read surface (below) reflects it.
-  craftItem(recipeId: string, pid?: number): void {
-    const result = craftItemImpl(this.ctx, recipeId, pid);
+  // lastCraftResult read surface (below) reflects it. `commission` (Phase
+  // 14b) is the boolean opt-in off the craft command; the resolve honors it
+  // only for eligible equipment outputs and mints the bindOnTrade arm
+  // server-side (professions/commission.ts), never off client data.
+  craftItem(recipeId: string, commission?: boolean, pid?: number): void {
+    const result = craftItemImpl(this.ctx, recipeId, commission === true, pid);
     const meta = this.players.get(pid ?? this.primaryId);
     if (meta) meta.lastCraftResult = result;
     this.emit({
@@ -7003,6 +7007,29 @@ export class Sim {
       recipeId: result.recipeId,
       reason: result.reason,
       pid: r.meta.entityId,
+    });
+  }
+
+  // Maker's Bond unbind command (Professions 2.0 Phase 14b): a thin entry
+  // beside trainRecipe above. professions/commission.ts owns the resolve
+  // (the resolveTrain deny-order doctrine: a duplicate command resolves
+  // unbind_not_bound before any charging arm, so it never re-charges) AND
+  // the mutation (fee charged exactly once, boundTo cleared on exactly one
+  // copy, every other payload marker untouched). The outcome surfaces ONLY
+  // through the personal text-free unbindResult event (the trainRecipe
+  // single-surface doctrine: no ctx.error toast, or the deny would print
+  // twice); the payload change itself converges through the self inventory
+  // mirror in both hosts.
+  unbindItem(itemId: string, pid?: number): void {
+    const result = unbindItemImpl(this.ctx, itemId, pid);
+    const meta = this.players.get(pid ?? this.primaryId);
+    this.emit({
+      type: 'unbindResult',
+      ok: result.ok,
+      itemId: result.itemId,
+      reason: result.reason,
+      fee: result.fee,
+      pid: meta?.entityId,
     });
   }
 

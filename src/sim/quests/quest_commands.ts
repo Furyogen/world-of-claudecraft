@@ -78,6 +78,18 @@ export function computeQuestState(
   ) {
     return 'unavailable';
   }
+  // One pending identity transition at a time: while any attunePair-effect
+  // quest is active, every OTHER attunePair-effect quest is unavailable.
+  // resolvedCounts is stamped at accept and turn-in never re-resolves it, so a
+  // banked second amends would complete at a stale cost after the first return
+  // raised switchCount, dodging the 5 + 3 * switchCount escalation. The gate
+  // lives here so both hosts and the server accept path share it (the quest
+  // already in the log returned 'active' above, so it never gates itself).
+  if (quest.completionEffect?.type === 'attunePair') {
+    for (const activeId of questLog.keys()) {
+      if (QUESTS[activeId]?.completionEffect?.type === 'attunePair') return 'unavailable';
+    }
+  }
   // A repeatable work order inside its cooldown window is unavailable until it
   // lapses (the turn-in armed it; the window is server-authoritative and mirrors
   // to the online client via cprof).

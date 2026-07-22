@@ -159,7 +159,14 @@ export interface IWorldProfessions {
   recipeList: readonly RecipeDef[];
   lastCraftResult: CraftResultView | null;
   lastMasterwork: MasterworkView | null;
-  craftItem(recipeId: string): void;
+  // `commission` (Professions 2.0 Phase 14b): the per-craft Maker's Bond
+  // opt-in. A boolean flag ONLY (the standing wire invariant: no command
+  // ingests a client-supplied ItemInstancePayload; the bindOnTrade arm and
+  // the boundTo stamp are minted server-side). Honored solely for the
+  // ruled-in equipment output kinds (src/sim/professions/commission.ts
+  // isCommissionEligible); silently ignored otherwise. Omitted/false sends
+  // a wire message byte-identical to the pre-phase form.
+  craftItem(recipeId: string, commission?: boolean): void;
   craftingIdentity: CraftingIdentityView;
   // Active archetype identity (#1129). null before the acceptance quest.
   activeArchetype: string | null;
@@ -225,6 +232,17 @@ export interface IWorldProfessions {
   disenchantItem(itemId: string): void;
   applyEnchant(itemId: string, enchantId: string): void;
   salvageItem(itemId: string): void;
+  // Maker's Bond unbind service (Professions 2.0 Phase 14b): clear the
+  // boundTo lock on ONE held bound copy of `itemId`, for the tier-scaled
+  // gold fee, while standing at any static crafting station (every station
+  // master offers the service). Server-authoritative: Sim validates via
+  // src/sim/professions/commission.ts resolveUnbind (eligible equipment
+  // kind, a bound copy held, station range, fee) and charges exactly once
+  // on success; ClientWorld sends the unbind_item command and never decides
+  // the outcome. The result surfaces through the personal text-free
+  // `unbindResult` event; the cleared payload converges via the self
+  // inventory mirror.
+  unbindItem(itemId: string): void;
   // The local viewer's most recent enchanting-action outcomes, mirrored from the
   // pid-scoped disenchantResult/enchantResult/salvageResult event and the
   // denc/ench/salv self-delta (both feed the same field: the event is the

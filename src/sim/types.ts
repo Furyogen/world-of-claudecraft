@@ -3670,6 +3670,27 @@ export type SimEvent = { pid?: number } & (
         | 'train_tier_unmet'
         | 'train_cannot_afford';
     }
+  // Maker's Bond unbind outcome (Professions 2.0 Phase 14b): mirrors
+  // professions/commission.ts UnbindResult so the online client can reflect
+  // the local result of an unbind_item command without deciding it itself.
+  // Personal (emitted with pid = the holder's entity id). Text-free on
+  // purpose (like trainResult above): the client derives the item name from
+  // itemId plus static content and formats `fee` itself, so the event
+  // carries NO display text. `reason` is absent on success AND on a
+  // malformed/unknown item id (the silent-deny arm); `fee` is the copper
+  // charged on ok, or the fee that WOULD apply on a deny (0 for the silent
+  // arm).
+  | {
+      type: 'unbindResult';
+      ok: boolean;
+      itemId: string;
+      reason?:
+        | 'unbind_not_eligible'
+        | 'unbind_not_bound'
+        | 'unbind_out_of_range'
+        | 'unbind_cannot_afford';
+      fee: number;
+    }
   // Masterwork proc (Professions 2.0 Phase 2): a successful craft's single
   // output-side rng draw procced, minting a masterwork instance with baked
   // bonus stats. Personal (emitted with pid = the crafter's entity id, which

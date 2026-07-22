@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { NUDGE_CADENCE_TICKS } from '../src/sim/professions/cadence';
 import { maybeEmitTierTutorial, maybeEmitTrendNudge } from '../src/sim/professions/prof_nudges';
+import { classifyCraftTrend } from '../src/sim/professions/trend';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import type { SimEvent } from '../src/sim/types';
@@ -60,6 +61,20 @@ describe('trend nudge (Professions 2.0 Phase 14)', () => {
     const { ctx, emitted } = nudgeCtx();
     expect(maybeEmitTrendNudge(meta, ctx)).toBe(true);
     expect(emitted).toHaveLength(1);
+  });
+
+  it('also fires ABOVE the Guild letter crossing threshold (deliberate lower-bar semantics)', () => {
+    // The nudge fires for ANY non-null classifyCraftTrend, crossed or not: it is
+    // a hint below AND above the letter threshold, while the Guild letter keeps
+    // its own one-shot crossing semantics. A future !crossed guard here must be
+    // a deliberate re-pin of this contract, not a drive-by tightening.
+    const sim = makeSim();
+    const meta = sim.players.get(sim.playerId)!;
+    meta.craftSkills.weaponcrafting = 60; // score 60 >= 25: the letter threshold is crossed
+    expect(classifyCraftTrend(meta.craftSkills)?.crossed).toBe(true);
+    const { ctx, emitted } = nudgeCtx();
+    expect(maybeEmitTrendNudge(meta, ctx)).toBe(true);
+    expect(emitted).toEqual([{ type: 'profTrendNudge', pid: sim.playerId, pairId: TREND_PAIR }]);
   });
 
   it('does not fire for an attuned character, an amends-history character, or a fresh one', () => {

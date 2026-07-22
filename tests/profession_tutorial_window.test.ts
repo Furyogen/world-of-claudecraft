@@ -55,6 +55,55 @@ describe('renderProfessionTutorial', () => {
   });
 });
 
+// The Esc dispatcher reaches a managed window only through the
+// topmostOpenWindow scan (closeAll -> topmostOpenWindow -> closeManagedWindow),
+// which selects visible '.window.panel' elements by z-order. This pin drives
+// the REAL openProfessionTutorial (painter, z floor, focus trap wiring) and
+// asserts the scan finds the modal and the close case tears it down with the
+// trap released, so the one-shot can never open unreachable by Esc.
+interface EscReachHarness {
+  professionTutorialTrap: { release: (restore?: boolean) => void; focusFirst: () => void } | null;
+  windowZ: number;
+  focusManager: { open: ReturnType<typeof vi.fn> };
+  syncAnyWindowOpenState(): void;
+  hideTooltip(): void;
+  openProfessionTutorial(): void;
+  topmostOpenWindow(): HTMLElement | null;
+  closeManagedWindow(el: HTMLElement): void;
+}
+
+describe('tutorial Esc reachability (openProfessionTutorial -> topmostOpenWindow)', () => {
+  it('the open modal is the topmost scan hit, and the close case releases the trap and removes it', () => {
+    document.body.innerHTML = '';
+    const release = vi.fn();
+    const hud = Object.create(Hud.prototype) as unknown as EscReachHarness;
+    hud.professionTutorialTrap = null;
+    // The window z-band floor; bringWindowToFront increments from here before
+    // the tutorial's own 96 floor wins.
+    hud.windowZ = 50;
+    hud.focusManager = { open: vi.fn(() => ({ release, focusFirst: vi.fn() })) };
+    hud.syncAnyWindowOpenState = vi.fn();
+    hud.hideTooltip = vi.fn();
+
+    hud.openProfessionTutorial();
+    const el = document.getElementById('profession-tutorial');
+    expect(el).not.toBeNull();
+    expect(hud.focusManager.open).toHaveBeenCalledTimes(1);
+
+    // The Esc dispatcher's scan (visible '.window.panel' by z) must surface
+    // the modal, or Esc would close some other window underneath it.
+    const top = hud.topmostOpenWindow();
+    expect(top).toBe(el);
+
+    hud.closeManagedWindow(top as HTMLElement);
+    // No-arg release: restoreFocus defaults true, focus returns to the opener.
+    expect(release).toHaveBeenCalledTimes(1);
+    expect(release).toHaveBeenCalledWith();
+    expect(hud.professionTutorialTrap).toBeNull();
+    expect(document.getElementById('profession-tutorial')).toBeNull();
+  });
+});
+
 describe('tutorial managed-window close (Esc path)', () => {
   it('releases the focus trap (returning focus) and removes the modal, not just hides it', () => {
     document.body.innerHTML = '';

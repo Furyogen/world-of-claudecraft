@@ -1700,7 +1700,7 @@ export const id_ID: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[ID] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{family} Level {level}",
@@ -1839,6 +1839,7 @@ export const id_ID: EnTranslations = {
         "legend": "LEGENDA",
         "shill": "PENDUKUNG"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Anggota terverifikasi",
       "notMember": "Belum berada di server",
       "joinCta": "Gabung Discord",
@@ -2331,10 +2332,14 @@ export const id_ID: EnTranslations = {
       "makersMark": "Dibuat oleh {name}",
       "gatheredBy": "[ID] Gathered by {name}",
       "masterworkSeal": "Karya besar",
-      "enchantedLine": "Terpesona"
+      "enchantedLine": "Terpesona",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[ID] Use",
+      "use": "Gunakan",
       "equip": "[ID] Equip",
       "disenchant": "[ID] Disenchant",
       "salvage": "[ID] Salvage",
@@ -2382,6 +2387,25 @@ export const id_ID: EnTranslations = {
       "notTaughtHere": "Resep itu tidak diajarkan di sini.",
       "alreadyKnown": "Anda sudah tahu resep itu.",
       "outOfRange": "Anda harus berada di stasiun untuk berlatih."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Pencari Dungeon",
@@ -5951,7 +5975,7 @@ export const id_ID: EnTranslations = {
         "combat": "Dalam Pertempuran",
         "dungeon": "Dalam Dungeon",
         "dead": "Tewas",
-        "afk": "[ID] Away"
+        "afk": "Sedang pergi"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

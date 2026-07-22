@@ -61,6 +61,12 @@ export interface CraftingWindowDeps extends PainterHostPresentation {
   hideTooltip(): void;
   onCraft(recipeId: string): void;
   onClose(): void;
+  /** Commission opt-in state (Professions 2.0 Phase 14b), held by the HUD so
+   *  it survives the window's staleness repaints: whether `recipeId` is
+   *  currently opted in, and the toggle callback the per-row checkbox fires.
+   *  The painter renders the control only on commissionEligible rows. */
+  commissionChecked(recipeId: string): boolean;
+  onToggleCommission(recipeId: string, on: boolean): void;
 }
 
 /** Paint the crafting panel from a prepared view. `learnHints` (Phase 14) maps a
@@ -225,6 +231,31 @@ export function renderCraftingWindow(
           `${row.result ? deps.itemTooltip(row.result) : ''}<div class="tt-sub">${esc(t('hudChrome.crafting.reagentsNeeded'))} ${esc(reagentLines)}</div><div class="tt-sub">${esc(skillLine)} ${esc(difficultyLabel)}</div>${row.station ? `<div class="tt-sub">${esc(stationLabel)}${stationOutOfRange ? ` ${esc(stationOutOfRange)}` : ''}</div>` : ''}${comboLine ? `<div class="tt-sub">${esc(comboLine)} ${esc(comboStatus)}</div>` : ''}`,
       );
       item.appendChild(craftBtn);
+      // Commission opt-in (Professions 2.0 Phase 14b): a per-craft checkbox,
+      // off by default, rendered ONLY for the ruled-in equipment output kinds
+      // (crafting_view.ts commissionEligible, the sim's own predicate). A
+      // real <label>-wrapped <input> so the accessible name is free and the
+      // whole line is the tap target; checked state lives with the HUD
+      // (deps.commissionChecked) so a staleness repaint never unticks it.
+      if (row.commissionEligible) {
+        const commissionLabel = document.createElement('label');
+        commissionLabel.className = 'crafting-commission-row';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = deps.commissionChecked(row.recipeId);
+        checkbox.addEventListener('change', () =>
+          deps.onToggleCommission(row.recipeId, checkbox.checked),
+        );
+        commissionLabel.appendChild(checkbox);
+        commissionLabel.appendChild(
+          document.createTextNode(` ${t('hudChrome.crafting.commissionToggle')}`),
+        );
+        deps.attachTooltip(
+          commissionLabel,
+          () => `<div class="tt-sub">${esc(t('hudChrome.crafting.commissionToggleHint'))}</div>`,
+        );
+        item.appendChild(commissionLabel);
+      }
       if (comboLine) {
         // Keep the reason outside the disabled button's whole-element opacity so
         // unattuned/wrong-pair/tier guidance retains readable contrast.

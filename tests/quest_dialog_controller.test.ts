@@ -82,6 +82,8 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
   const openValeCup = vi.fn();
   const openCardDuel = vi.fn();
   const openTrain = vi.fn();
+  const openUnbind = vi.fn();
+  const onOpenChange = vi.fn();
   const controller = new QuestDialogController({
     element,
     document,
@@ -115,6 +117,8 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
     openValeCup,
     openCardDuel,
     openTrain,
+    openUnbind,
+    onOpenChange,
     voice,
   });
   return {
@@ -141,6 +145,8 @@ function harness(entity = npc(10, ordinaryNpcId()), questState = 'available') {
     openValeCup,
     openCardDuel,
     openTrain,
+    openUnbind,
+    onOpenChange,
   };
 }
 
@@ -160,12 +166,19 @@ describe('QuestDialogController', () => {
     expect(test.voice.play).toHaveBeenCalledWith(`greeting__${test.entity.templateId}`);
     expect(test.voice.setDistance).toHaveBeenCalledWith(0);
     expect(test.focusFirst).toHaveBeenCalledTimes(1);
+    expect(test.onOpenChange).toHaveBeenCalledWith(true);
+    expect(test.onOpenChange.mock.invocationCallOrder[0]).toBeLessThan(
+      test.voice.play.mock.invocationCallOrder[0],
+    );
+    expect(test.controller.isOpen).toBe(true);
 
     test.entity.pos.x = 9;
     test.controller.updateProximity();
 
     expect(test.element.style.display).toBe('none');
     expect(test.release).toHaveBeenCalledWith(true);
+    expect(test.onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(test.controller.isOpen).toBe(false);
   });
 
   it('routes bankers and chroniclers through authoritative interaction without gossip', () => {

@@ -1700,7 +1700,7 @@ export const zh_CN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[ZH-CN] AFK"
+      "afkTag": "暂离"
     },
     "mobTooltip": {
       "levelFamily": "等级 {level} {family}",
@@ -1839,6 +1839,7 @@ export const zh_CN: EnTranslations = {
         "legend": "传奇",
         "shill": "布道者"
       },
+      "roleTagChatTitle": "已验证的服务器身份组: {role}",
       "guildMember": "已验证成员",
       "notMember": "尚未加入服务器",
       "joinCta": "加入 Discord",
@@ -2331,10 +2332,14 @@ export const zh_CN: EnTranslations = {
       "makersMark": "制作者：{name}",
       "gatheredBy": "采集者：{name}",
       "masterworkSeal": "杰作",
-      "enchantedLine": "已附魔"
+      "enchantedLine": "已附魔",
+      "commissionToggle": "委托制品",
+      "commissionToggleHint": "将绑定给交易中第一个收到它的角色。",
+      "commissionUnbound": "委托制品：将绑定给第一位收货人",
+      "commissionBound": "委托制品：已绑定给收货人"
     },
     "itemMenu": {
-      "use": "[ZH-CN] Use",
+      "use": "使用",
       "equip": "装备",
       "disenchant": "分解",
       "salvage": "拆解",
@@ -2382,6 +2387,25 @@ export const zh_CN: EnTranslations = {
       "notTaughtHere": "这里不传授该配方。",
       "alreadyKnown": "你已经学会了该配方。",
       "outOfRange": "你必须站在对应的工作台旁才能训练。"
+    },
+    "unbind": {
+      "title": "解绑：{name}",
+      "close": "关闭解绑",
+      "intro": "大师可以收取费用，解除委托制品的绑定。",
+      "empty": "你没有已绑定的委托制品。",
+      "rowSub": "解除绑定；该制品会在下次交易时重新绑定。",
+      "unbindAria": "花费{fee}为{name}解绑",
+      "dialogOption": "解绑",
+      "dialogOptionAria": "请{name}为委托制品解绑",
+      "confirmTitle": "解绑委托制品",
+      "confirmBody": "花费{fee}为{name}解绑？",
+      "confirmOk": "解绑",
+      "confirmCancel": "取消",
+      "unbound": "已花费{fee}为{name}解绑。它会在下次交易时重新绑定。",
+      "notEligible": "该物品无法解绑。",
+      "notBound": "该物品未绑定。",
+      "cannotAfford": "你付不起解绑费用。",
+      "outOfRange": "你必须站在工作台旁才能解绑。"
     },
     "finder": {
       "title": "地下城查找器",
@@ -5951,7 +5975,7 @@ export const zh_CN: EnTranslations = {
         "combat": "战斗中",
         "dungeon": "地下城中",
         "dead": "死亡",
-        "afk": "[ZH-CN] Away"
+        "afk": "暂离"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

@@ -1700,7 +1700,7 @@ export const vi_VN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "[VI] AFK"
+      "afkTag": "AFK"
     },
     "mobTooltip": {
       "levelFamily": "{family} cấp {level}",
@@ -1839,6 +1839,7 @@ export const vi_VN: EnTranslations = {
         "legend": "HUYỀN THOẠI",
         "shill": "QUẢNG BÁ VIÊN"
       },
+      "roleTagChatTitle": "Verified server role: {role}",
       "guildMember": "Thành viên đã xác minh",
       "notMember": "Chưa tham gia máy chủ",
       "joinCta": "Tham gia Discord",
@@ -2331,10 +2332,14 @@ export const vi_VN: EnTranslations = {
       "makersMark": "Được chế tạo bởi {name}",
       "gatheredBy": "[VI] Gathered by {name}",
       "masterworkSeal": "Kiệt tác",
-      "enchantedLine": "mê hoặc"
+      "enchantedLine": "mê hoặc",
+      "commissionToggle": "Commission piece",
+      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
+      "commissionUnbound": "Commission piece: binds to the first recipient",
+      "commissionBound": "Commission piece: bound to its recipient"
     },
     "itemMenu": {
-      "use": "[VI] Use",
+      "use": "Sử dụng",
       "equip": "[VI] Equip",
       "disenchant": "[VI] Disenchant",
       "salvage": "[VI] Salvage",
@@ -2382,6 +2387,25 @@ export const vi_VN: EnTranslations = {
       "notTaughtHere": "Công thức đó không được dạy ở đây.",
       "alreadyKnown": "Bạn đã biết công thức đó rồi.",
       "outOfRange": "Bạn phải ở nhà ga để đào tạo."
+    },
+    "unbind": {
+      "title": "Unbinding: {name}",
+      "close": "Close unbinding",
+      "intro": "The master can release a commission piece from its bond, for a fee.",
+      "empty": "You carry no bound commission pieces.",
+      "rowSub": "Releases the bond; the piece binds again on its next trade.",
+      "unbindAria": "Unbind {name} for {fee}",
+      "dialogOption": "Unbinding",
+      "dialogOptionAria": "Unbind a commission piece with {name}",
+      "confirmTitle": "Unbind Commission Piece",
+      "confirmBody": "Unbind {name} for {fee}?",
+      "confirmOk": "Unbind",
+      "confirmCancel": "Cancel",
+      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
+      "notEligible": "That item cannot be unbound.",
+      "notBound": "That item is not bound.",
+      "cannotAfford": "You cannot afford the unbinding fee.",
+      "outOfRange": "You must be at a crafting station to unbind."
     },
     "finder": {
       "title": "Tìm Hầm Ngục",
@@ -5951,7 +5975,7 @@ export const vi_VN: EnTranslations = {
         "combat": "Đang Chiến Đấu",
         "dungeon": "Trong Hầm Ngục",
         "dead": "Đã Chết",
-        "afk": "[VI] Away"
+        "afk": "Vắng mặt"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { QUESTS } from '../src/sim/data';
 import {
   armCadence,
   cadenceBlockedKeys,
@@ -90,6 +91,46 @@ describe('cadence.ts pure helpers', () => {
     expect(clampCadenceOnLoad(undefined, 0, WORK_ORDER_CADENCE_TICKS).size).toBe(0);
     expect(clampCadenceOnLoad(null, 0, WORK_ORDER_CADENCE_TICKS).size).toBe(0);
   });
+
+  it('clampCadenceOnLoad drops a value exactly at now, keeps one exactly at the cap', () => {
+    // The keep arm is strict (clamped > now): a window lapsing exactly on the load
+    // tick is already available, so keeping it would only delay the shrink-back-to-
+    // empty re-omission from the next save. The cap itself is a legal availableAt.
+    const clamped = clampCadenceOnLoad(
+      { atNow: 100, atCap: 100 + WORK_ORDER_CADENCE_TICKS },
+      100,
+      WORK_ORDER_CADENCE_TICKS,
+    );
+    expect(clamped.has('atNow')).toBe(false);
+    expect(clamped.get('atCap')).toBe(100 + WORK_ORDER_CADENCE_TICKS);
+  });
+
+  it('armCadence clamps a negative window to immediately elapsed and floors a fraction', () => {
+    const map = new Map<string, number>();
+    // A non-positive window must never brick a key: availableAt lands AT now,
+    // which the strict isCadenceBlocked arm treats as already available.
+    armCadence(map, 'neg', 100, -50);
+    expect(map.get('neg')).toBe(100);
+    expect(isCadenceBlocked(map, 'neg', 100)).toBe(false);
+    // Windows are whole ticks: a fractional input floors, never rounds up.
+    armCadence(map, 'frac', 100, 50.9);
+    expect(map.get('frac')).toBe(150);
+  });
+});
+
+describe('work-order cadence catalog pin', () => {
+  it('every quest with a repeatCadenceTicks uses the single WORK_ORDER_CADENCE_TICKS window', () => {
+    // clampCadenceOnLoad clamps EVERY persisted questCadence key against this one
+    // constant (the src/sim/sim.ts load arm), so a quest armed with a second,
+    // different cadence value would silently mis-clamp on a tick-reset load. This
+    // pin turns that future hazard into a loud failure directing the author to
+    // make the load clamp per-key before introducing a second window length.
+    const cadenced = Object.values(QUESTS).filter((q) => q.repeatCadenceTicks !== undefined);
+    expect(cadenced.length).toBeGreaterThan(0); // the six work orders, at minimum
+    for (const quest of cadenced) {
+      expect(quest.repeatCadenceTicks, quest.id).toBe(WORK_ORDER_CADENCE_TICKS);
+    }
+  });
 });
 
 describe('computeQuestState cadence gating', () => {
@@ -112,12 +153,17 @@ describe('work-order turn-in arms the cooldown (Sim, Phase 14)', () => {
   it('turn-in arms the window, blocks re-accept inside it, and reopens after it lapses', () => {
     const sim = makeSim();
     expect(sim.questState(WORK_ORDER)).toBe('available');
+    const meta = sim.players.get(sim.playerId)!;
+    const copperReward = QUESTS[WORK_ORDER].copperReward;
+    expect(copperReward).toBeGreaterThan(0); // a zero reward would make the payout deltas vacuous
+    const copperStart = meta.copper;
 
     turnInWorkOrder(sim);
     // Armed for WORK_ORDER_CADENCE_TICKS from the current tick.
-    const meta = sim.players.get(sim.playerId)!;
     expect(meta.questCadence.get(WORK_ORDER)).toBe(sim.tickCount + WORK_ORDER_CADENCE_TICKS);
     expect(sim.questState(WORK_ORDER)).toBe('unavailable');
+    expect(meta.copper).toBe(copperStart + copperReward);
+    expect(meta.questsDone.has(WORK_ORDER)).toBe(true);
 
     // An immediate re-accept attempt is rejected server-side (questState gates it).
     moveToNpc(sim, FORGE_MASTER);
@@ -127,6 +173,16 @@ describe('work-order turn-in arms the cooldown (Sim, Phase 14)', () => {
     // Simulate the window lapsing (advance the stored availableAt into the past).
     meta.questCadence.set(WORK_ORDER, sim.tickCount);
     expect(sim.questState(WORK_ORDER)).toBe('available');
+
+    // Second FULL cycle after the lapse: 'available' must mean a real re-accept
+    // and re-turn-in land, the reward pays out a second time, and the window
+    // re-arms from the new turn-in tick (not from the first one).
+    const secondTurnInTick = sim.tickCount;
+    turnInWorkOrder(sim);
+    expect(meta.copper).toBe(copperStart + 2 * copperReward);
+    expect(meta.questsDone.has(WORK_ORDER)).toBe(true);
+    expect(meta.questCadence.get(WORK_ORDER)).toBe(secondTurnInTick + WORK_ORDER_CADENCE_TICKS);
+    expect(sim.questState(WORK_ORDER)).toBe('unavailable');
   });
 
   it('an immediate re-turn-in loop is bounded: only the first turn-in lands, then it is blocked', () => {

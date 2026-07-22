@@ -1930,6 +1930,10 @@ export const hudChromeStrings = {
       legend: 'LEGEND',
       shill: 'SHILL',
     },
+    // Chat anti-impersonation disclosure: the hover/aria text on the colored
+    // [Role] tag beside a staff member's chat name (wordy, M16: the five
+    // non-Latin fills land in this same change).
+    roleTagChatTitle: 'Verified server role: {role}',
     guildMember: 'Verified member',
     notMember: 'Not in the server yet',
     joinCta: 'Join the Discord',
@@ -2564,6 +2568,15 @@ export const hudChromeStrings = {
     // Generic enchanted marker: EnchantDef.name has no localized display
     // surface yet, so the tooltip marks the state without naming the enchant.
     enchantedLine: 'Enchanted',
+    // Commissions and the Maker's Bond (Professions 2.0 Phase 14b): the
+    // per-craft opt-in control in the crafting window, and the two tooltip
+    // lines a commissioned copy renders beside the soulbound line. The bound
+    // line deliberately names no one (boundTo is an entity id, not a stable
+    // cross-session identity).
+    commissionToggle: 'Commission piece',
+    commissionToggleHint: 'Binds to the first character to receive it in a trade.',
+    commissionUnbound: 'Commission piece: binds to the first recipient',
+    commissionBound: 'Commission piece: bound to its recipient',
   },
   // Bag-item context menu verbs (Professions 2.0 Phase 13): the row labels for
   // the right-click / touch action menu (bag_item_context_menu.ts). The first
@@ -2641,6 +2654,32 @@ export const hudChromeStrings = {
     notTaughtHere: 'That recipe is not taught here.',
     alreadyKnown: 'You already know that recipe.',
     outOfRange: 'You must be at the station to train.',
+  },
+  // Maker's Bond unbind service window + result lines (Professions 2.0
+  // Phase 14b): the station master's second gossip service beside training.
+  // Item NAMES resolve through entity i18n, never through these keys; the
+  // fee formats via formatMoney.
+  unbind: {
+    title: 'Unbinding: {name}',
+    close: 'Close unbinding',
+    intro: 'The master can release a commission piece from its bond, for a fee.',
+    empty: 'You carry no bound commission pieces.',
+    rowSub: 'Releases the bond; the piece binds again on its next trade.',
+    unbindAria: 'Unbind {name} for {fee}',
+    // The gossip-dialog Unbind option on a station master.
+    dialogOption: 'Unbinding',
+    dialogOptionAria: 'Unbind a commission piece with {name}',
+    confirmTitle: 'Unbind Commission Piece',
+    confirmBody: 'Unbind {name} for {fee}?',
+    confirmOk: 'Unbind',
+    confirmCancel: 'Cancel',
+    // unbindResult chat lines. unbound is the ONE success surface: no toast,
+    // no sound cue (the trainResult single-surface rule).
+    unbound: 'Unbound {name} for {fee}. It will bind again on its next trade.',
+    notEligible: 'That item cannot be unbound.',
+    notBound: 'That item is not bound.',
+    cannotAfford: 'You cannot afford the unbinding fee.',
+    outOfRange: 'You must be at a crafting station to unbind.',
   },
   // Dungeon Finder window (docs/prd/dungeon-finder.md). Dungeon, creature,
   // item, quest, and zone NAMES resolve through tEntity/world_entity_i18n,

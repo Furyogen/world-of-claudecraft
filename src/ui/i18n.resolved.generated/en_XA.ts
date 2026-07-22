@@ -1839,6 +1839,7 @@ export const en_XA: EnTranslations = {
         "legend": "[ĻÉĜÉÑÐ]",
         "shill": "[ŠĤÍĻĻ]"
       },
+      "roleTagChatTitle": "[Ʋéŕíƒíéð šéŕʋéŕ ŕóļé: {role}]",
       "guildMember": "[Ʋéŕíƒíéð ɱéɱƀéŕ]",
       "notMember": "[Ñóţ íñ ţĥé šéŕʋéŕ ýéţ]",
       "joinCta": "[Ĵóíñ ţĥé Ðíšçóŕð]",
@@ -2331,7 +2332,11 @@ export const en_XA: EnTranslations = {
       "makersMark": "[Çŕáƒţéð ƀý {name}]",
       "gatheredBy": "[Ĝáţĥéŕéð ƀý {name}]",
       "masterworkSeal": "[Ɱášţéŕŵóŕķ]",
-      "enchantedLine": "[Éñçĥáñţéð]"
+      "enchantedLine": "[Éñçĥáñţéð]",
+      "commissionToggle": "[Çóɱɱíššíóñ þíéçé]",
+      "commissionToggleHint": "[Ɓíñðš ţó ţĥé ƒíŕšţ çĥáŕáçţéŕ ţó ŕéçéíʋé íţ íñ á ţŕáðé.]",
+      "commissionUnbound": "[Çóɱɱíššíóñ þíéçé: ƀíñðš ţó ţĥé ƒíŕšţ ŕéçíþíéñţ]",
+      "commissionBound": "[Çóɱɱíššíóñ þíéçé: ƀóúñð ţó íţš ŕéçíþíéñţ]"
     },
     "itemMenu": {
       "use": "[Úšé]",
@@ -2382,6 +2387,25 @@ export const en_XA: EnTranslations = {
       "notTaughtHere": "[Ţĥáţ ŕéçíþé íš ñóţ ţáúĝĥţ ĥéŕé.]",
       "alreadyKnown": "[Ýóú áļŕéáðý ķñóŵ ţĥáţ ŕéçíþé.]",
       "outOfRange": "[Ýóú ɱúšţ ƀé áţ ţĥé šţáţíóñ ţó ţŕáíñ.]"
+    },
+    "unbind": {
+      "title": "[Úñƀíñðíñĝ: {name}]",
+      "close": "[Çļóšé úñƀíñðíñĝ]",
+      "intro": "[Ţĥé ɱášţéŕ çáñ ŕéļéášé á çóɱɱíššíóñ þíéçé ƒŕóɱ íţš ƀóñð, ƒóŕ á ƒéé.]",
+      "empty": "[Ýóú çáŕŕý ñó ƀóúñð çóɱɱíššíóñ þíéçéš.]",
+      "rowSub": "[Ŕéļéášéš ţĥé ƀóñð; ţĥé þíéçé ƀíñðš áĝáíñ óñ íţš ñéẋţ ţŕáðé.]",
+      "unbindAria": "[Úñƀíñð {name} ƒóŕ {fee}]",
+      "dialogOption": "[Úñƀíñðíñĝ]",
+      "dialogOptionAria": "[Úñƀíñð á çóɱɱíššíóñ þíéçé ŵíţĥ {name}]",
+      "confirmTitle": "[Úñƀíñð Çóɱɱíššíóñ Þíéçé]",
+      "confirmBody": "[Úñƀíñð {name} ƒóŕ {fee}?]",
+      "confirmOk": "[Úñƀíñð]",
+      "confirmCancel": "[Çáñçéļ]",
+      "unbound": "[Úñƀóúñð {name} ƒóŕ {fee}. Íţ ŵíļļ ƀíñð áĝáíñ óñ íţš ñéẋţ ţŕáðé.]",
+      "notEligible": "[Ţĥáţ íţéɱ çáññóţ ƀé úñƀóúñð.]",
+      "notBound": "[Ţĥáţ íţéɱ íš ñóţ ƀóúñð.]",
+      "cannotAfford": "[Ýóú çáññóţ áƒƒóŕð ţĥé úñƀíñðíñĝ ƒéé.]",
+      "outOfRange": "[Ýóú ɱúšţ ƀé áţ á çŕáƒţíñĝ šţáţíóñ ţó úñƀíñð.]"
     },
     "finder": {
       "title": "[Ðúñĝéóñ Ƒíñðéŕ]",
