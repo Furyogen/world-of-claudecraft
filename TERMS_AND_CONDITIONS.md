@@ -24,7 +24,7 @@ We grant you a limited, personal, non-exclusive, non-transferable, revocable lic
 
 The Game's source code is published in a public repository and is licensed to you under the MIT Licence, the full text of which is in the `LICENSE` file in that repository. Nothing in these Terms limits, reduces, or conditions the rights the MIT Licence grants you in that source code. These Terms govern your use of the hosted Service we operate, which is separate from your rights in the code.
 
-The MIT Licence covers source code only. Art, audio, fonts, and other media assets in the repository are not covered by it. Each of those assets is governed by the licence recorded against it in `CREDITS.md`, and that recorded licence controls over the MIT Licence. Some of them may not be redistributed at all, and some may be redistributed only on non-commercial terms. Read `CREDITS.md` before you redistribute the repository or use any asset from it.
+The MIT Licence covers source code only. Art, audio, fonts, and other media assets in the repository are not covered by it. Each of those assets is governed by the licence recorded against it in `CREDITS.md`, and that recorded licence controls over the MIT Licence. Some of them may not be redistributed at all, and some may be redistributed only on non-commercial terms. A media asset that is not recorded in `CREDITS.md` is not licensed to you either, because that register is still being completed. Read `CREDITS.md` before you redistribute the repository or use any asset from it, and ask us if something is not listed.
 
 The "World of ClaudeCraft" and "Levy Street" names, logos, and branding are not licensed by the MIT Licence or by these Terms.
 
