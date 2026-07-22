@@ -4901,6 +4901,7 @@ export type TranslationKeyFlat =
   | 'hudChrome.auraEffect.spellVuln'
   | 'hudChrome.auraEffect.stealth'
   | 'hudChrome.auraEffect.stun'
+  | 'hudChrome.auraEffect.temporalEcho'
   | 'hudChrome.auraEffect.temporalHourglass'
   | 'hudChrome.auraEffect.thorns'
   | 'hudChrome.auraEffect.tongues'
