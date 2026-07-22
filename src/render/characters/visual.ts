@@ -199,6 +199,7 @@ export class CharacterVisual {
   private shadowProxy: THREE.Mesh | null = null;
   private casters: THREE.Mesh[] = [];
   private originalMaterials = new Map<THREE.Mesh, THREE.Material | THREE.Material[]>();
+  private cosmeticTintMaterials = new Map<THREE.Mesh, THREE.Material>();
   private weaponAuraMeshes: THREE.Mesh[] = [];
   private weaponAuraOn = false;
   private ghostMaterials = new Map<THREE.Material, THREE.Material>();
@@ -208,6 +209,8 @@ export class CharacterVisual {
   private metamorphMaterials = new Map<THREE.Material, THREE.Material>();
 
   private baseState: BaseState = 'idle';
+  private castShouldLoop = false;
+  private castLooping = false;
   private current: THREE.AnimationAction | null = null;
   private currentIsOneShot = false;
   private currentOneShotIsEmote = false;
@@ -240,7 +243,7 @@ export class CharacterVisual {
     weaponOverride: WeaponLayoutOverride | null = null,
     offhandItemId: string | null = null,
     hairStyle = 0,
-    beard = true,
+    beard = false,
     hairColor: number | undefined = undefined,
     faceColor: number | undefined = undefined,
     face = 0,
@@ -382,12 +385,23 @@ export class CharacterVisual {
       const desired = this.desiredBase(s);
       const baseChanged = desired !== this.baseState;
       if (baseChanged) this.baseState = desired;
+      const castLooping = desired === 'cast' && s.channeling === true;
+      this.castShouldLoop = castLooping;
+      const castLoopChanged = desired === 'cast' && castLooping !== this.castLooping;
       if (this.currentOneShotIsEmote && this.shouldInterruptEmote(s)) {
         this.currentIsOneShot = false;
         this.currentOneShotIsEmote = false;
-        this.fadeTo(this.baseAction(), FADE, false);
+        this.fadeTo(this.baseAction(), FADE, false, castLooping);
+        this.castLooping = castLooping;
       } else if (baseChanged && !this.currentIsOneShot) {
-        this.fadeTo(this.baseAction(), FADE, false);
+        this.fadeTo(this.baseAction(), FADE, false, castLooping);
+        this.castLooping = castLooping;
+      } else if (!this.currentIsOneShot && castLoopChanged) {
+        // A channel may begin or end while the cast action remains current.
+        // Switch the loop mode in place so a following hardcast becomes a
+        // clamped one-shot again without resetting the pose.
+        this.fadeTo(this.baseAction(), FADE, false, castLooping);
+        this.castLooping = castLooping;
       }
       // foot-speed matching on locomotion cycles
       if (!this.currentIsOneShot && this.current) {
@@ -498,7 +512,14 @@ export class CharacterVisual {
     this.baseState = 'cast';
     this.currentIsOneShot = false;
     this.currentOneShotIsEmote = false;
-    this.fadeTo(this.action(this.def.clips.cast) ?? this.action(this.def.clips.idle), FADE, false);
+    this.castShouldLoop = true;
+    this.castLooping = true;
+    this.fadeTo(
+      this.action(this.def.clips.cast) ?? this.action(this.def.clips.idle),
+      FADE,
+      false,
+      true,
+    );
   }
 
   playAttack(abilityId?: string): void {
@@ -788,6 +809,11 @@ export class CharacterVisual {
       // swap re-runs applyMaterials (see invalidateCosmeticBase).
       if (mesh.userData.cosmeticBase === undefined) mesh.userData.cosmeticBase = mesh.material;
       const cosmeticBase = mesh.userData.cosmeticBase as THREE.Material;
+      const previous = this.cosmeticTintMaterials.get(mesh);
+      if (previous) {
+        previous.dispose();
+        this.cosmeticTintMaterials.delete(mesh);
+      }
       if (color === undefined) {
         mesh.material = cosmeticBase;
         this.originalMaterials.set(mesh, cosmeticBase);
@@ -798,8 +824,14 @@ export class CharacterVisual {
         (mat as THREE.MeshStandardMaterial).color.setHex(color);
       }
       mesh.material = mat;
+      this.cosmeticTintMaterials.set(mesh, mat);
       this.originalMaterials.set(mesh, mat);
     }
+  }
+
+  private disposeCosmeticTintMaterials(): void {
+    for (const material of this.cosmeticTintMaterials.values()) material.dispose();
+    this.cosmeticTintMaterials.clear();
   }
 
   /** A skin/weapon swap re-runs applyMaterials, which rebuilds every mesh from its
@@ -808,6 +840,7 @@ export class CharacterVisual {
   private invalidateCosmeticBase(): void {
     const cos = this.def.cosmetics;
     if (!cos) return;
+    this.disposeCosmeticTintMaterials();
     for (const name of [...(cos.hairMeshes ?? []), ...(cos.faceMeshes ?? [])]) {
       const mesh = this.model.getObjectByName(name);
       if (mesh) mesh.userData.cosmeticBase = undefined;
@@ -1239,6 +1272,7 @@ export class CharacterVisual {
     this.disposeWeaponAura();
     this.disposeWeaponVfx();
     this.disposeWeaponSkinMaterials();
+    this.disposeCosmeticTintMaterials();
     this.disposeEffectMaterials();
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.model);
@@ -1405,13 +1439,28 @@ export class CharacterVisual {
     return s.moving || s.airborne || s.swimming || s.casting || !!s.spinning || s.sitting || s.dead;
   }
 
-  private fadeTo(next: THREE.AnimationAction | null, fade: number, oneShot: boolean): void {
+  private fadeTo(
+    next: THREE.AnimationAction | null,
+    fade: number,
+    oneShot: boolean,
+    forceLoop = false,
+  ): void {
     if (!next) return;
-    if (next === this.current && !oneShot) return;
+    if (next === this.current && !oneShot) {
+      const loopOnce = !forceLoop && this.isOnce(next);
+      next.setLoop(loopOnce ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
+      next.clampWhenFinished = loopOnce;
+      // A completed, clamped LoopOnce action is paused by Three.js. Promoting
+      // that same clip to a channel must resume mixer integration; setLoop()
+      // alone only changes metadata and leaves the final frame frozen.
+      if (forceLoop) next.paused = false;
+      return;
+    }
     const prev = this.current;
     next.reset();
-    next.setLoop(oneShot || this.isOnce(next) ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
-    next.clampWhenFinished = true;
+    const loopOnce = oneShot || (!forceLoop && this.isOnce(next));
+    next.setLoop(loopOnce ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
+    next.clampWhenFinished = loopOnce;
     next.timeScale = 1;
     if (prev && prev !== next) prev.fadeOut(fade);
     next.fadeIn(fade).play();
@@ -1469,7 +1518,9 @@ export class CharacterVisual {
     if (a === this.current) {
       this.currentIsOneShot = false;
       this.currentOneShotIsEmote = false;
-      this.fadeTo(this.baseAction(), 0.18, false);
+      const castLooping = this.baseState === 'cast' && this.castShouldLoop;
+      this.fadeTo(this.baseAction(), 0.18, false, castLooping);
+      this.castLooping = castLooping;
     }
   }
 

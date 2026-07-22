@@ -11,6 +11,8 @@ export interface PreviewAppearance {
   skin: number;
   skinCatalog: 'class' | 'mech';
   mainhandItemId: string | null;
+  /** The active Armory weapon-skin cosmetic, or null/absent for none. */
+  weaponSkinId?: string | null;
   /** Optional for older character-summary callers; absent renders no offhand. */
   offhandItemId?: string | null;
   /** Cosmetic head look (defaults: face 0, hairStyle 0, beard off, model colours). */
@@ -20,6 +22,16 @@ export interface PreviewAppearance {
   hairColor?: number;
   faceColor?: number;
 }
+
+export const DEFAULT_HEAD_APPEARANCE: Readonly<{
+  face: number;
+  hairStyle: number;
+  beard: boolean;
+}> = Object.freeze({
+  face: 0,
+  hairStyle: 0,
+  beard: false,
+});
 
 /** The model key + held-weapon layout the appearance resolves to. */
 export interface PreviewVisual {
@@ -46,5 +58,8 @@ export function previewAppearanceVisual(a: PreviewAppearance): PreviewVisual {
 /** Stable identity of an appearance, so an async mech re-apply can bail out if a
  *  newer selection superseded it. */
 export function appearanceSignature(a: PreviewAppearance): string {
-  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}|${a.face ?? 0}|${a.hairStyle ?? 0}|${a.beard ?? false}|${a.hairColor ?? ''}|${a.faceColor ?? ''}`;
+  // weaponSkinId is part of the identity: without it, applying or removing an
+  // Armory skin while a preview is mounted elides as "same appearance" and the
+  // stale weapon model survives the repaint.
+  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}|${a.weaponSkinId ?? ''}|${a.face ?? 0}|${a.hairStyle ?? 0}|${a.beard ?? false}|${a.hairColor ?? ''}|${a.faceColor ?? ''}`;
 }

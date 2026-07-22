@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
+import { describe, expect, it, vi } from 'vitest';
 import { VISUALS } from '../src/render/characters/manifest';
+import { CharacterVisual } from '../src/render/characters/visual';
 import { ABILITIES } from '../src/sim/data';
 
 // Abilities that carry a dedicated cast gesture (castFx 'gesture') and the clip
@@ -59,5 +61,40 @@ describe('dedicated ability gesture animations', () => {
         expect(EMOTE_CLIPS.has(clip), `${key} maps an ability to emote clip ${clip}`).toBe(false);
       }
     }
+  });
+
+  it('plays a mapped gesture once and does nothing for missing mappings or clips', () => {
+    const action = {
+      reset: vi.fn(),
+      setLoop: vi.fn(),
+      fadeIn: vi.fn(),
+      fadeOut: vi.fn(),
+      play: vi.fn(),
+      clampWhenFinished: false,
+      timeScale: 1,
+    } as unknown as THREE.AnimationAction;
+    vi.mocked(action.reset).mockReturnValue(action);
+    vi.mocked(action.setLoop).mockReturnValue(action);
+    vi.mocked(action.fadeIn).mockReturnValue(action);
+    vi.mocked(action.fadeOut).mockReturnValue(action);
+    vi.mocked(action.play).mockReturnValue(action);
+
+    const visual = Object.create(CharacterVisual.prototype) as CharacterVisual;
+    const state = visual as unknown as Record<string, unknown>;
+    state.deadLock = false;
+    state.current = null;
+    state.currentIsOneShot = false;
+    state.currentOneShotIsEmote = false;
+    state.def = { clips: { attackByAbility: { taunt: 'Taunt', pummel: 'Missing' } } };
+    state.actions = new Map([['Taunt', action]]);
+
+    visual.playGesture('taunt');
+    expect(action.setLoop).toHaveBeenLastCalledWith(THREE.LoopOnce, 1);
+    expect(action.clampWhenFinished).toBe(true);
+    expect(action.play).toHaveBeenCalledOnce();
+
+    visual.playGesture('unmapped');
+    visual.playGesture('pummel');
+    expect(action.play).toHaveBeenCalledOnce();
   });
 });

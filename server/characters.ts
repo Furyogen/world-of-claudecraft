@@ -43,6 +43,7 @@
 
 import type * as http from 'node:http';
 import { rekeyInstanceSigner } from '../src/sim/character_rename';
+import { resolveActiveWeaponSkin } from '../src/sim/content/weapon_skin_rules';
 import type { CharacterState, HeadAppearance } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
@@ -57,6 +58,7 @@ import {
   lifetimeXpRankForCharacter,
   lifetimeXpStanding,
   listCharacters,
+  loadAccountWeaponSkinLoadout,
   moderationStatusForAccount,
   reclaimDeactivatedName,
   renameCharacter,
@@ -221,6 +223,7 @@ function useRuntime(): CharactersRuntime {
 
 const REAL_CHARACTERS_DB = {
   accountAndScopeForToken,
+  loadAccountWeaponSkinLoadout,
   moderationStatusForAccount,
   listCharacters,
   getCharacter,
@@ -268,30 +271,52 @@ function toSheetRank(rank: { rank: number; total: number } | null): SheetRank | 
 /**
  * The character-list body shared by GET /api/characters and GET /api/me/characters, so
  * both stay byte-identical. `isOnline` comes from the injected runtime (a live-session
- * scan). Mirrors the legacy characterListPayload exactly.
+ * scan). The retained legacy arm (main.ts characterListPayload) DELEGATES here, so the
+ * two dispatch modes share one implementation and cannot diverge in payload shape.
  */
-function buildCharacterList(
+/** One character-list row shared by the RouteDef and retained legacy dispatchers. */
+export function characterListEntry(
+  c: CharacterRow,
+  online: boolean,
+  weaponSkinId: string | null,
+): Record<string, unknown> {
+  const state = c.state;
+  return {
+    id: c.id,
+    name: c.name,
+    class: c.class,
+    level: c.level,
+    skin: state?.skin ?? 0,
+    online,
+    forceRename: c.force_rename,
+    lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
+    playtimeSeconds: Number(c.playtime_seconds ?? 0),
+    skinCatalog: state?.skinCatalog === 'mech' ? 'mech' : 'class',
+    mainhandItemId: state?.equipment?.mainhand ?? null,
+    offhandItemId: state?.equipment?.offhand ?? null,
+    weaponSkinId,
+    ...(state?.face !== undefined ? { face: state.face } : {}),
+    ...(state?.hairStyle !== undefined ? { hairStyle: state.hairStyle } : {}),
+    ...(state?.beard !== undefined ? { beard: state.beard } : {}),
+    ...(state?.hairColor !== undefined ? { hairColor: state.hairColor } : {}),
+    ...(state?.faceColor !== undefined ? { faceColor: state.faceColor } : {}),
+  };
+}
+
+export function buildCharacterList(
   chars: CharacterRow[],
   isOnline: (characterId: number) => boolean,
+  weaponSkinLoadout: Record<string, string>,
 ): unknown {
   return {
     realm: REALM,
-    characters: chars.map((c) => ({
-      id: c.id,
-      name: c.name,
-      class: c.class,
-      level: c.level,
-      skin: c.state?.skin ?? 0,
-      online: isOnline(c.id),
-      forceRename: c.force_rename,
-      lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
-      playtimeSeconds: Number(c.playtime_seconds ?? 0),
-      // Keep the migrated RouteDef byte-identical with the retained legacy arm:
-      // character select renders the same body and held items as the live world.
-      skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
-      mainhandItemId: c.state?.equipment?.mainhand ?? null,
-      offhandItemId: c.state?.equipment?.offhand ?? null,
-    })),
+    characters: chars.map((c) =>
+      characterListEntry(
+        c,
+        isOnline(c.id),
+        resolveActiveWeaponSkin(c.class, c.state?.equipment?.mainhand ?? null, weaponSkinLoadout),
+      ),
+    ),
   };
 }
 
@@ -371,14 +396,16 @@ function requireOwnedCharacter(notFoundBody: Record<string, unknown>): Middlewar
 async function meCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
+  const weaponSkinLoadout = await charactersDb.loadAccountWeaponSkinLoadout(ctxAccountId(ctx));
+  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, weaponSkinLoadout));
 }
 
 /** GET /api/characters: full-session list (byte-identical body to me/characters). */
 async function listCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
+  const weaponSkinLoadout = await charactersDb.loadAccountWeaponSkinLoadout(ctxAccountId(ctx));
+  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, weaponSkinLoadout));
 }
 
 /** POST /api/characters: validate, create the capped character, reclaim a freed name once. */

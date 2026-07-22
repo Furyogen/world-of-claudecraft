@@ -609,7 +609,8 @@ export const tr_TR: EnTranslations = {
         "staff": "Asa",
         "wand": "Değnek",
         "bow": "Yay",
-        "crossbow": "Arbalet"
+        "crossbow": "Arbalet",
+        "polearm": "Uzun saplı silah"
       },
       "badge": {
         "flagship": "Amiral gemisi",
@@ -706,10 +707,10 @@ export const tr_TR: EnTranslations = {
       "expandHint": "Görev takipçisini genişlet"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
-      "chat": "Chat",
-      "combat": "Combat"
+      "general": "Genel",
+      "frames": "Çerçeveler",
+      "chat": "Sohbet",
+      "combat": "Savaş"
     },
     "chatTimestamps": {
       "show": "Sohbet Zaman Damgalarını Göster",
@@ -1037,6 +1038,7 @@ export const tr_TR: EnTranslations = {
       "showWalletOnPlayerCard": "Cüzdanı Oyuncu Kartında Göster",
       "showDevBadges": "Geliştirici Rozetlerini Göster",
       "showOwnNameplate": "Kendi İsim Etiketimi Göster",
+      "showPlayerNameplates": "Oyuncu İsim Etiketlerini Göster",
       "uiScale": "Arayüz Ölçeği",
       "playerFrameScale": "Oyuncu Çerçevesi Ölçeği",
       "targetFrameScale": "Hedef Çerçevesi Ölçeği",
@@ -1184,8 +1186,8 @@ export const tr_TR: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Saldırı",
+      "defense": "Savunma"
     },
     "statInfo": {
       "fromYour": "{value} {stat} değerinden:",
@@ -1445,7 +1447,7 @@ export const tr_TR: EnTranslations = {
     "corpseHarvest": {
       "title": "Toplama",
       "harvestButton": "Topla",
-      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
+      "harvestTooltip": "İşaretlenmiş bileşenleri toplar. Her leş yalnızca bir kez toplanabilir, ilk gelen alır. Yağmayı almaz.",
       "concentrateHint": "Ne kadar az parça seçersen, her biri o kadar yüksek kademede olur.",
       "alreadyHarvested": "Bu leş zaten toplandı.",
       "componentAria": "{component} topla",
@@ -1463,8 +1465,8 @@ export const tr_TR: EnTranslations = {
     "townFocus": {
       "title": "Kasaba Odağı",
       "hint": "Odak puanları her bileşenin temel getirisinin üzerine bir bonus ekler. Odaklanılmayan bileşenler temel düzeyde kalır.",
-      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
-      "townOnlyHint": "Focus can only be changed while you are in town.",
+      "tierHint": "Bir bileşene her {points} puan, hasat kademesini bir adım yükseltir, {steps} adıma kadar; {points} altı puanlar hâlâ verimi artırır.",
+      "townOnlyHint": "Odak yalnızca kasabadayken değiştirilebilir.",
       "budgetLabel": "Kalan puan: {remaining} / {budget}",
       "saveButton": "Odağı Kaydet",
       "notInTownHint": "Odağını ayarlamak için kasabada olmalısın.",
@@ -1523,7 +1525,7 @@ export const tr_TR: EnTranslations = {
       "dragEquipHint": "Kuşanmak için karakterinin üzerine sürükle",
       "dragDestroyHint": "Yok etmek için dünyaya sürükle",
       "reorderNeedsRecent": "Çantalarını yeniden düzenlemek için filtreyi temizle ve Son Eklenen sıralama seçeneğini kullan",
-      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
+      "itemAriaInstanced": "{item}, adet {count}, ustaişareti kopyası",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1689,9 +1691,9 @@ export const tr_TR: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Sandık",
-      "takeLootButton": "Take Loot",
-      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
-      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
+      "takeLootButton": "Yağmayı Al",
+      "takeLootTooltip": "Altınları ve düşen eşyaları alır. Toplama hakkını kullanmaz.",
+      "unifiedPressHint": "Etkileşim tuşu, kasaba odağınızı kullanarak tek tuşla yağmalar ve toplar."
     },
     "spellbook": {
       "addToBarAria": "{name} yeteneğini eylem çubuğuna ekle",
@@ -1700,7 +1702,7 @@ export const tr_TR: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "UZAKTA"
     },
     "mobTooltip": {
       "levelFamily": "Seviye {level} {family}",
@@ -1839,6 +1841,7 @@ export const tr_TR: EnTranslations = {
         "legend": "EFSANE",
         "shill": "SAVUNUCU"
       },
+      "roleTagChatTitle": "Doğrulanmış sunucu rolü: {role}",
       "guildMember": "Onaylı üye",
       "notMember": "Henüz sunucuda değil",
       "joinCta": "Discord'a katıl",
@@ -1963,6 +1966,7 @@ export const tr_TR: EnTranslations = {
       "removeParcelAria": "{item} paketini mektuptan çıkar",
       "parcelQtyDecreaseAria": "Bir adet daha az {item} gönder",
       "parcelQtyIncreaseAria": "Bir adet daha fazla {item} gönder",
+      "parcelQtyAria": "Gönderilecek {item} miktarı",
       "sendButton": "Mektubu Gönder",
       "postageNote": "Posta ücreti: {amount}. Kuzgun yaklaşık {seconds} saniye uçar.",
       "arrivedBanner": "Kuzgun kondu: {name} sana posta gönderdi.",
@@ -2099,43 +2103,43 @@ export const tr_TR: EnTranslations = {
       "blockAction": "Engelle",
       "nowBlocking": "{name} engellendi.",
       "stopBlockingTitle": "{name} engelini kaldır",
-      "onlineHeader": "Online ({n})",
-      "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "onlineHeader": "Çevrimiçi ({n})",
+      "offlineHeader": "Çevrimdışı ({n})",
+      "hideOffline": "Çevrimdışıları gizle",
+      "hideOfflineTitle": "Çevrimdışı lonca üyelerini gizle"
     },
     "gathering": {
       "title": "Toplama",
       "mining": "Madencilik",
       "logging": "Ağaç kesme",
       "herbalism": "Bitkicilik",
-      "fishing": "Fishing",
+      "fishing": "Balıkçılık",
       "notReady": "Bu kaynak noktası senin için henüz yeniden oluşmadı.",
       "gatherLine": "Topladığınız şey: {name}.",
       "gatherLineQty": "Şunu toplarsınız: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Çekiyorsunuz: {name}",
+      "biteLine": "Bir şey yemi aldı!",
+      "gotAwayLine": "Kaçtı gitti.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Maden Damarı",
+        "wood": "Kereste Koruluğu",
+        "herb": "Ot Tarlası"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "{tier}. kademe madenci kazması gerektirir",
+        "logging": "{tier}. kademe odun kesme baltası gerektirir",
+        "herbalism": "{tier}. kademe bitkicilik orakı gerektirir"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Bu damarı işlemek için {tier}. kademe madenci kazmasına ihtiyacınız var.",
+        "logging": "Bu korulugu devirmek için {tier}. kademe odun kesme baltasına ihtiyacınız var.",
+        "herbalism": "Bu tarlayı toplamak için {tier}. kademe bitkicilik orakına ihtiyacınız var."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
-      "downgradeFind": "Bags full: a pristine find slipped away.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "En iyi malzemeleri kurtarmak için {tier}. kademe toplama aracına ihtiyacınız var.",
+      "downgradeMark": "Çantalar dolu: bulgu, toplayıcı işareti olmadan saklandı.",
+      "downgradeFind": "Çantalar dolu: pırıl pırıl bir bulgu kayboldu gitti.",
+      "stateReady": "Hazır",
+      "stateCooldown": "Yeniden Oluşuyor"
     },
     "archetypeTitle": {
       "label": "Unvan",
@@ -2167,47 +2171,47 @@ export const tr_TR: EnTranslations = {
       "leatherworking": "Deri İşleme"
     },
     "enchantName": {
-      "enchant_weapon_might": "Enchant Weapon - Might",
-      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
-      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
-      "enchant_neck_spirit": "Enchant Necklace - Spirit",
-      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
-      "enchant_chest_stamina": "Enchant Chest - Stamina",
-      "enchant_waist_stamina": "Enchant Belt - Stamina",
-      "enchant_legs_stamina": "Enchant Legs - Stamina",
-      "enchant_gloves_agility": "Enchant Gloves - Agility",
-      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
-      "enchant_feet_agility": "Enchant Boots - Agility",
-      "enchant_ring_spirit": "Enchant Ring - Spirit",
-      "enchant_weapon_agility": "Enchant Weapon - Agility",
-      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
-      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
-      "enchant_neck_intellect": "Enchant Necklace - Intellect",
-      "enchant_neck_agility": "Enchant Necklace - Agility",
-      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
-      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
-      "enchant_chest_spirit": "Enchant Chest - Spirit",
-      "enchant_chest_armor": "Enchant Chest - Reinforcement",
-      "enchant_waist_strength": "Enchant Belt - Strength",
-      "enchant_waist_agility": "Enchant Belt - Agility",
-      "enchant_legs_intellect": "Enchant Legs - Intellect",
-      "enchant_gloves_strength": "Enchant Gloves - Strength",
-      "enchant_feet_strength": "Enchant Boots - Strength",
-      "enchant_feet_stamina": "Enchant Boots - Stamina",
-      "enchant_ring_strength": "Enchant Ring - Strength",
-      "enchant_ring_agility": "Enchant Ring - Agility",
-      "enchant_ring_intellect": "Enchant Ring - Intellect",
-      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
-      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
-      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
-      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
-      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
-      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
-      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
-      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
-      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
-      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
-      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+      "enchant_weapon_might": "Silah Büyüsü - Güç",
+      "enchant_weapon_intellect": "Silah Büyüsü - Büyü Gücü",
+      "enchant_helmet_fortitude": "Miğfer Büyüsü - Metanet",
+      "enchant_neck_spirit": "Kolye Büyüsü - Ruh",
+      "enchant_shoulder_agility": "Omuzluk Büyüsü - Çeviklik",
+      "enchant_chest_stamina": "Göğüs Büyüsü - Dayanıklılık",
+      "enchant_waist_stamina": "Kemer Büyüsü - Dayanıklılık",
+      "enchant_legs_stamina": "Bacak Büyüsü - Dayanıklılık",
+      "enchant_gloves_agility": "Eldiven Büyüsü - Çeviklik",
+      "enchant_gloves_intellect": "Eldiven Büyüsü - Büyü Gücü",
+      "enchant_feet_agility": "Bot Büyüsü - Çeviklik",
+      "enchant_ring_spirit": "Yüzük Büyüsü - Ruh",
+      "enchant_weapon_agility": "Silah Büyüsü - Çeviklik",
+      "enchant_helmet_intellect": "Miğfer Büyüsü - Zeka",
+      "enchant_helmet_armor": "Miğfer Büyüsü - Takviye",
+      "enchant_neck_intellect": "Kolye Büyüsü - Zeka",
+      "enchant_neck_agility": "Kolye Büyüsü - Çeviklik",
+      "enchant_shoulder_strength": "Omuzluk Büyüsü - Güç",
+      "enchant_shoulder_intellect": "Omuzluk Büyüsü - Zeka",
+      "enchant_chest_spirit": "Göğüs Büyüsü - Ruh",
+      "enchant_chest_armor": "Göğüs Büyüsü - Takviye",
+      "enchant_waist_strength": "Kemer Büyüsü - Güç",
+      "enchant_waist_agility": "Kemer Büyüsü - Çeviklik",
+      "enchant_legs_intellect": "Bacak Büyüsü - Zeka",
+      "enchant_gloves_strength": "Eldiven Büyüsü - Güç",
+      "enchant_feet_strength": "Bot Büyüsü - Güç",
+      "enchant_feet_stamina": "Bot Büyüsü - Dayanıklılık",
+      "enchant_ring_strength": "Yüzük Büyüsü - Güç",
+      "enchant_ring_agility": "Yüzük Büyüsü - Çeviklik",
+      "enchant_ring_intellect": "Yüzük Büyüsü - Zeka",
+      "enchant_weapon_greater_might": "Silah Büyüsü - Yüksek Güç",
+      "enchant_weapon_greater_spellpower": "Silah Büyüsü - Yüksek Büyü Gücü",
+      "enchant_helmet_greater_fortitude": "Miğfer Büyüsü - Yüksek Metanet",
+      "enchant_chest_greater_stamina": "Göğüs Büyüsü - Yüksek Dayanıklılık",
+      "enchant_legs_greater_stamina": "Bacak Büyüsü - Yüksek Dayanıklılık",
+      "enchant_gloves_greater_agility": "Eldiven Büyüsü - Yüksek Çeviklik",
+      "enchant_weapon_runed_edge": "Silah Büyüsü - Rünlü Ağız",
+      "enchant_weapon_runed_focus": "Silah Büyüsü - Rünlü Odak",
+      "enchant_chest_runeweave": "Göğüs Büyüsü - Rün Dokuma",
+      "enchant_legs_runed_hide": "Bacak Büyüsü - Rünlü Post",
+      "enchant_helmet_runed_links": "Miğfer Büyüsü - Rünlü Halkalar"
     },
     "professions": {
       "title": "Meslekler",
@@ -2228,7 +2232,7 @@ export const tr_TR: EnTranslations = {
       "tierPipAria": "Seviye {tier}",
       "nextUnlockTier": "{points} bir sonraki aşamaya işaret ediyor: şaheser olma ihtimali artıyor",
       "nextUnlockSpecialized": "{points} Uzmanlaşmış'a işaret ediyor: malzeme maliyetlerinde düşüş",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Ustalaşıldı, şimdilik",
       "perkSpecializedLine": "{craft}: Uzmanlaşmış, malzeme maliyetleri -{pct}%",
       "perkSpecializedAt": "{threshold} becerisinde uzmanlaşmıştır",
       "switchCost": "Bir sonraki arketip değişikliği {cost} kefaret puanına mal olur",
@@ -2269,6 +2273,7 @@ export const tr_TR: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Sonuç: {title} unvanı; {majorA} ve {majorB} sınırsız ana dal haline gelir; {hobby} nadir sınırlı hobi olur; diğer tüm zanaat bilgisi korunur ama eylemsizken adi ile sınırlandırılır.",
       "hobbyPreview": "Sonuç: {hobby} nadir sınırlı hobi haline gelir. Her iki ana dal ve korunan tüm beceri değerleri değişmeden kalır.",
+      "attunementReturnCost": "Bu ikiliyi terk ederseniz, geri dönmek {cost} barış tesis görevi gerektirir.",
       "identity": {
         "title": "Zanaat Kimliği",
         "syncing": "Diyardan zanaat kimliğin bekleniyor.",
@@ -2308,48 +2313,64 @@ export const tr_TR: EnTranslations = {
       "skillReqLine": "{craft} {skill} gerektirir",
       "difficultyFull": "Tam beceri kazanımı",
       "difficultyReduced": "Azaltılmış beceri kazanımı",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimum beceri kazanımı",
       "difficultyNone": "Beceri kazanımı yok",
       "stationBadge": "Üretim Tezgâhı",
       "stationOutOfRangeNamed": "Bunu yapmak için {station}'ye gidin.",
+      "learnMoreAtStation": "{master}, {station} içinde size daha fazla {craft} tarifi öğretebilir.",
       "masterworkToast": "Şaheser! {name}",
       "masterworkZoneLine": "{crafter} bir şaheser {name} yarattı!",
       "tierUpToast": "{craft}, {tier} seviyesine yükseldi!",
+      "trendNudge": "Elleriniz {archetype} yönüne eğiliyor. Uyumu {master} ile bekliyor.",
+      "trendNudgeNoMaster": "Elleriniz {archetype} yönüne eğiliyor. Onu benimsemek için bir zanaat ustası arayın.",
+      "attunedZoneLine": "{name}, {archetype} olarak uyumlandı!",
+      "attunedBanner": "Uyumlu: {title}",
+      "tierTutorial": {
+        "title": "İlk Kademenz",
+        "tierCap": "Bir zanaat ilk kademesine {skill} beceride ulaşır ve her kademe yapabileceklerini geliştirir. Ama bir zanaat, yalnızca iki ana dalınızdan biri olduğunda nadir işin ötesine geçer.",
+        "radar": "Meslekleriniz bir tekerlek oluşturur. Bitişik bir çifte uyumlanın ve bu iki zanaat sınırsız ana dal olur; tekerin karşısındaki bir zanaat nadir sınırlı hobi olur ve gerisini dormant bırakır: bilgileri korunur ama yeniden alana kadar sıradan seviyede sınırlı kalır.",
+        "masters": "Kasabalardaki zanaat ustaları uyum görevleri sunar. Hazır olduğunuzda çiftinizi seçmek için birini ziyaret edin. Öğrendiğiniz hiçbir şey asla kaybolmaz.",
+        "dismiss": "Anladım"
+      },
       "makersMark": "{name} tarafından hazırlanmıştır",
-      "gatheredBy": "Gathered by {name}",
+      "gatheredBy": "{name} tarafından toplandı",
       "masterworkSeal": "Şaheser",
-      "enchantedLine": "Büyülü"
+      "enchantedLine": "Büyülü",
+      "commissionToggle": "Sipariş parçası",
+      "commissionToggleHint": "Ticaret yoluyla alan ilk karaktere bağlanır.",
+      "commissionUnbound": "Sipariş parçası: ilk alıcıya bağlanır",
+      "commissionBound": "Sipariş parçası: alıcısına bağlı"
     },
     "itemMenu": {
-      "use": "Use",
-      "equip": "Equip",
-      "disenchant": "Disenchant",
-      "salvage": "Salvage",
-      "applyEnchant": "Apply Enchant"
+      "use": "Kullan",
+      "equip": "Kuşan",
+      "disenchant": "Büyüyü Boz",
+      "salvage": "Kurtar",
+      "applyEnchant": "Büyü Uygula"
     },
     "enchanting": {
-      "disenchantedLine": "You disenchant {item}.",
-      "salvagedLine": "You salvage {item}.",
-      "enchantAppliedLine": "You enchant {item} with {enchant}.",
-      "notHeld": "You do not have that item.",
-      "notDisenchantable": "You cannot disenchant that.",
-      "notSalvageable": "You cannot salvage that.",
-      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
-      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
-      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
-      "enchantWrongSlot": "That enchant cannot be applied to that item.",
-      "enchantUnknown": "That enchant does not exist.",
-      "enchantInsufficient": "You do not have the materials for that enchant.",
-      "disenchantConfirmTitle": "Disenchant {item}?",
-      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
-      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
-      "salvageConfirmTitle": "Salvage {item}?",
-      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
-      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
-      "pickerTitle": "Apply Enchant",
-      "targetTitle": "Choose an item to enchant",
-      "noEnchants": "No enchant uses this reagent.",
-      "noTargets": "No eligible item to enchant."
+      "disenchantedLine": "{item} büyüsünü bozdunuz.",
+      "salvagedLine": "{item} parçaladınız.",
+      "enchantAppliedLine": "{item} üzerine {enchant} büyüsü uyguladınız.",
+      "notHeld": "O eşya elinizde yok.",
+      "notDisenchantable": "Bunun büyüsünü bozamazsınız.",
+      "notSalvageable": "Bunu parçalayamazsınız.",
+      "disenchantThrottled": "Çok hızlı büyü bozuyorsunuz. Bir an bekleyin ve tekrar deneyin.",
+      "salvageThrottled": "Çok hızlı parçalıyorsunuz. Bir an bekleyin ve tekrar deneyin.",
+      "enchantThrottled": "Çok hızlı büyü yapıyorsunuz. Bir an bekleyin ve tekrar deneyin.",
+      "enchantWrongSlot": "Bu büyü o eşyaya uygulanamaz.",
+      "enchantUnknown": "O büyü mevcut değil.",
+      "enchantInsufficient": "O büyü için malzemeniz yok.",
+      "disenchantConfirmTitle": "{item} büyüsü bozulsun mu?",
+      "disenchantConfirmBody": "{item} yok edilir ve arkanik malzeme verir. Bu geri alınamaz.",
+      "disenchantConfirmBodySpecial": "{item}'nin özel bir kopyası (imzalı, şaheser veya büyülü) yok edilir ve arkanik malzeme verir. Bu geri alınamaz.",
+      "salvageConfirmTitle": "{item} parçalansın mı?",
+      "salvageConfirmBody": "{item} yok edilir ve zanaat malzemesi verir. Bu geri alınamaz.",
+      "salvageConfirmBodySpecial": "{item}'nin özel bir kopyası (imzalı, şaheser veya büyülü) yok edilir ve zanaat malzemesi verir. Bu geri alınamaz.",
+      "pickerTitle": "Büyü Uygula",
+      "targetTitle": "Büyülenecek eşya seçin",
+      "noEnchants": "Hiçbir büyü bu malzemeyi kullanmıyor.",
+      "noTargets": "Büyülenecek uygun eşya yok."
     },
     "training": {
       "title": "Eğitim: {name}",
@@ -2369,6 +2390,25 @@ export const tr_TR: EnTranslations = {
       "notTaughtHere": "O tarif burada öğretilmiyor.",
       "alreadyKnown": "Bu tarifi zaten biliyorsunuz.",
       "outOfRange": "Antrenman yapmak için istasyonda olmanız gerekmektedir."
+    },
+    "unbind": {
+      "title": "Bağ Çözme: {name}",
+      "close": "Bağı çözmeyi kapat",
+      "intro": "Usta, sipariş parçasının bağını bir ücret karşılığında çözebilir.",
+      "empty": "Üzerinizde bağlı sipariş parçası yok.",
+      "rowSub": "Bağı çözer; parça bir sonraki takasında yeniden bağlanır.",
+      "unbindAria": "{name} için {fee} karşılığında bağı çöz",
+      "dialogOption": "Bağ Çözme",
+      "dialogOptionAria": "{name} ile bağ çözme işlemi",
+      "confirmTitle": "Sipariş Parçasının Bağını Çöz",
+      "confirmBody": "{name} için {fee} karşılığında bağı çözülsün mü?",
+      "confirmOk": "Bağı Çöz",
+      "confirmCancel": "İptal",
+      "unbound": "{name} için {fee} karşılığında bağ çözüldü. Bir sonraki takasında yeniden bağlanacak.",
+      "notEligible": "O eşyanın bağı çözülemez.",
+      "notBound": "O eşya bağlı değil.",
+      "cannotAfford": "Çözüm ücretini karşılayamazsınız.",
+      "outOfRange": "Bağ çözmek için bir zanaat tezgahında olmanız gerekir."
     },
     "finder": {
       "title": "Zindan Bulucu",
@@ -4216,7 +4256,7 @@ export const tr_TR: EnTranslations = {
   "stats": {
     "title": "Dünya Durumu",
     "accountsCreated": "Oyuncular",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Oluşturulan Karakterler",
     "playersOnline": "Çevrimiçi Oyuncular",
     "realmName": "Dünya Adı"
   },
@@ -5799,7 +5839,7 @@ export const tr_TR: EnTranslations = {
       "tradeTooFar": "Hedef takas için çok uzakta.",
       "tradeExpired": "Takas isteğinin süresi doldu.",
       "tradeFailed": "Takas başarısız: eşyalar ya da para artık mevcut değil.",
-      "tradeBound": "That item is bound and cannot be traded."
+      "tradeBound": "O eşya bağlı ve takas edilemez."
     },
     "logs": {
       "standUp": "Ayağa kalkıyorsun.",
@@ -5948,7 +5988,7 @@ export const tr_TR: EnTranslations = {
         "combat": "Çatışmada",
         "dungeon": "Zindanda",
         "dead": "Ölü",
-        "afk": "Away"
+        "afk": "Uzakta"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -6056,7 +6096,7 @@ export const tr_TR: EnTranslations = {
     },
     "cast": {
       "fishing": "Balık Tutma",
-      "gathering": "Gathering",
+      "gathering": "Toplama",
       "demonHeal": "Şeytan İyileştirmesi",
       "thunzharrStormcall": "Fırtına Çağrısı"
     }
@@ -6195,7 +6235,6 @@ export const tr_TR: EnTranslations = {
       "ifYouEquip": "Bunu kuşanırsan",
       "damageSpeed": "{min} - {max} Hasar Hız {speed}",
       "dps": "(saniyede {dps} hasar)",
-      "dagger": "Hançer",
       "armorStat": "{value} Zırh",
       "stat": "+{value} {stat}",
       "useFood": "Kullanım: {seconds} saniyede {amount} can yeniler. Yerken oturur kalmalısın.",
@@ -8571,142 +8610,142 @@ export const tr_TR: EnTranslations = {
         "name": "Yılan İksiri"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Yosun Derisi Yeleği"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Dikenbocuğu Eldivenleri"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Acemi Zincir Eldivenleri"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Adak Zincir Kemeri"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Dikenkök Asası"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Vadi Ateşi Feneri"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Bataklık Kabuğu Tozlukları"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Çamur Çiçeği Basamakları"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Bataklık Bekçisi Sabatonu"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Bataklık Işığı Zırh Gömleği"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Alacadiken Pelerini"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Bataklık Gölgesi Balyozu"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Vahşi Koruluk Kemeri"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Kayamuhafız Omuzlukları"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Kayadikenin Büyük Asası"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Ay Kabuğu Kıyafetleri"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Zirve Şarkısı Miğferi"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Fırtına Ezgisi Eldivenler"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Kayalıksızı Kemeri"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Fırtınakök Başlığı"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Gök Korumalı Bacak Muhafızları"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Hortlak Adımı Basamakları"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Kırık Diş Eldivenleri"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Kırık Şarkı Pelerini"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Ejdertarikatı Büyü Eldivenleri"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Dikentepe Vahşi Sarmaları"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Fırtına Adağı Zırh Gömleği"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Mezarçiçeği Omuz Korumaları"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Mezarejderi Diken Balyozu"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Uyanık Koruluk Kıyafetleri"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Geceişi'nin Büyük Asası"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Mahvedilmiş Vahşetin Balyozu"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Gelgit İlahisi Terlikleri"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "İnci Korumalı Kalkan"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Vahşi Büyüme Tozlukları"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Koruluk Bekçisinin Eldivenleri"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Yemyeşil Yürüyücüler"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Ay Korumalı Kemer"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Rüyakök Çizmeleri"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Fırtına Kabuğu Pelerini"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Vahşi Ruh Balyozu"
       },
       "resonant_thread": {
-        "name": "Resonant Thread"
+        "name": "Tınıtlı İplik"
       },
       "resonant_hide": {
-        "name": "Resonant Hide"
+        "name": "Tınıtlı Post"
       },
       "resonant_links": {
-        "name": "Resonant Links"
+        "name": "Tınıtlı Halkalar"
       },
       "resonant_steel": {
-        "name": "Resonant Steel"
+        "name": "Tınıtlı Çelik"
       },
       "resonant_timber": {
-        "name": "Resonant Timber"
+        "name": "Tınıtlı Kereste"
       },
       "conjured_water4": {
         "name": "Sihirle Yaratılmış Kaynak Suyu"
@@ -10800,23 +10839,143 @@ export const tr_TR: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Kendinize Ait Bir Zanaat",
-        "text": "Beceri bilgidir, {playerName}, ama uyum bir sözdür. Yöntemlerini ana dal olarak taşıyacağın iki komşu zanaatı seç, ardından Vadi'den kendi ellerinle işlediğin cevheri bana getir.",
-        "completion": "Söz yerini buldu. Bu iki zanaat artık ana dallarındır; karşısındaki bilgi ise hobine dönüşür.",
+      "q_prof_attune_smith": {
+        "title": "Demircinin Sözü",
+        "text": "Çelik gezgin eli bağışlamaz, bu yüzden yemin etmeden açıkça söyleyeyim. Benim fırınıma bağlan ve Silah Yapımı ile Zırh Yapımı iki ana dalin olur, nadir ötesine taşıyabileceğin tek zanaat. Tekerin karşısındaki zanaat hobine dönüşür, nadire kadar çalışır, daha fazla değil. Diğer mesleklerin yanmaz, {playerName}: yalnızca sessizleşir, geri çağırana kadar dormant kalır. Ve çekiç inmeden şunu bil: bu ikiliyi bırakıp başkasına geçersen dürüst emekle geri döneceksin, ilk eve dönüşünde beş düşman, sonra sekiz, sonra on bir, her savrulduğunda daha fazla. Hâlâ burada mısın? O zaman kendi ellerinle Vadi'den işlenmiş üç damar cevher getir, ve sözü verilmiş sayalım.",
+        "completion": "İyi cevher ve işleyecek iyi eller. Silah Yapımı ve Zırh Yapımı artık ustalaşman için senindir. Gerisini kazan.",
         "objectives": {
           "0": {
             "label": "Maden damarı işlendi"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Değişiklikler Yapmak",
-        "text": "O çifti daha önce taşıdın, {playerName}. Geri dönmek yeni bir yemin değil. Vadi yolunu temiz tutmaya yardım et; iş, ellerinin bir zamanlar ne bildiğini hatırlatacak.",
-        "completion": "Eski ritim geri döndü. Eski çiftin bir kez daha etkin.",
+      "q_prof_attune_outfitter": {
+        "title": "Teçhizatçının Ölçüsü",
+        "text": "Tezgahımda biçmeden önce maliyeti ölç, bu benim ilk kuralım. Beni seç ve Deri İşleme ile Terzilik iki ana dalin olur, nadir ötesine taşıyabileceğin ikili; karşılarındaki zanaat hobi olarak yerleşir, nadire dek, orada kalır. Bir kenara koyduğun meslekler çözülmez, {playerName}, yalnızca katlanır, dormant bekler geri alana kadar. Ama emin ol: bu ikiliyi bırakıp geri istersen yol emekle ödenir ve her seferinde uzar, ilk seferinde dört imha, sonra sekiz, sonra on bir, her dönüşte biraz daha. Kararın verdiysen dört ağ ağacı örümceği imha et ve ipliklerini tezgaha getir, çünkü iyi iplik her iyi elbiseye başlar.",
+        "completion": "Düzgün iplik, düzgün el. Deri İşleme ve Terzilik becerina ulaşabileceğin kadar ileri taşıman için senindir. İki kez ölç, seni hayal kırıklığına uğratmaz.",
         "objectives": {
           "0": {
-            "label": "Orman kurdu öldürüldü"
+            "label": "Ağ Ağacı Örümceği imha edildi"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Saklamaya Değer Bir Tarif",
+        "text": "İyi bir yemek iki uyumlu lezzetten oluşur, tıpkı iyi bir zanaat gibi, {playerName}. Benimle otur ve Simya ile Aşçılık iki ana dalin olur, nadirden daha ileri gotürebileceğin ikili; tekerin karşısındaki zanaat ise hobine dönüşür, nadire kadar çıkar, daha fazla değil. Bıraktığın diğer meslekler bozulmaz, yalnızca rafta bekler, hazır, istediğinde geri alırsın. Bu ikiliyi bırakıp başka birine geçersen eve dönmenin bir bedeli var: ilk seferinde beş av, sonra sekiz, sonra on bir, her dönüşte biraz daha ağır. Hâlâ iştahlı mısın? O zaman dört yaban domuzu avla, çünkü değerli bir mutfak iyi etle başlar.",
+        "completion": "Şimdi gerçekten bir başlangıç. Simya ve Aşçılık istediğin kadar yüksek yükseltmen için senindir. Aç geri gel.",
+        "objectives": {
+          "0": {
+            "label": "Yaban Domuzu avlandı"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "Patlayıcı Bir Düzenleme",
+        "text": "Oh, iyi olanı, gürültülü olanı istiyorsun, değil mi? Dinle, dinle, tik eden bir şeye dokunmadan önce: söyle ve Mühendislik ile Simya iki ana dalin olur, nadir ötesi ilerleyebileceğin ikili (işte orada gerçekten EĞLENCELİ oluyor, inan bana). Karşı zanaat cebine girer hobi olarak, nadire kadar, daha fazla değil, somurma. Diğer mesleklerin mi? Gitmedi, {playerName}, sadece uyuyor, istediğinde uyan. Ama (her zaman bir ama vardır, fitili beklet) bu ikiliyi terk edip dönen için emek yığılır: ilk seferinde beş, sonra sekiz, sonra on bir, her soğuk ayakta biraz daha. Evet? EVET? O zaman git bana üç ot tarlası topla, patlayıcı olanları, hangisi diye sorma, yeterince inanırsın hepsi biraz patlayıcıdır.",
+        "completion": "HA. Gerçek reaktifler, ve parmakların hâlâ tamam, güzel, güzel. Mühendislik ve Simya, senindir, git pişman edecek bir şey yap. Haydi git.",
+        "objectives": {
+          "0": {
+            "label": "Ot tarlası toplandı"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Fırına Geri Dön",
+        "text": "Demek fırına geri döndün. Acımadığımı söylesem yalan olur, {playerName}, ama ben adil bir ustayım ve iş de adildir. Geri dönmenin bedelini biliyorsun: emek, ve her savruldukça daha fazlası. Kuzey yolunu taciz eden kurtları bertaraf et; vuruş ritminde, bu çiftin bir zamanlar senden ne istediğini kollarına hatırlatır.",
+        "completion": "Ritim ellerine geri döndü. Silah Yapımı ve Zırh Yapımı yeniden ana daların. Gitme alışkanlığı edinme.",
+        "objectives": {
+          "0": {
+            "label": "Orman Kurdu öldürüldü"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Yeniden Bağlanan İplikler",
+        "text": "Demek tezgahıma döndün sonunda. Kırgınlık beslemem, {playerName}, ama iplik bırakıp giden eli hatırlar ve onu yeniden almak her seferinde daha uzun ölçülür. Batı ormanlarını sıkan ağ ağacı örümceklerini imha et; bu emek, ellerin iyi ipliğe değmeden önce onları yerli yerine oturtur.",
+        "completion": "Yeniden sabit. Deri İşleme ve Terzilik yeniden ellerinde ana dal olarak. Başıboş dolaşmadan önce bu sefer iki kez düşün.",
+        "objectives": {
+          "0": {
+            "label": "Ağ Ağacı Örümceği imha edildi"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Yeniden Ocakta",
+        "text": "Bak bak, kim geldi mutfağıma. Kırgınlık yok, {playerName}, bir mutfağın her zaman yeri vardır, ama bilirsin ki her defasında dışarı çıkıp geri dönersen hesap birikir. Git doğu çayırındaki yaban domuzlarını azalt, çünkü dürüst ter ilk malzemedir ve bu, ellerini işe alıştırır.",
+        "completion": "Eski lezzet geri geldi. Simya ve Aşçılık yeniden ana dalın olarak ocağında. Bu sefer kal bir süre.",
+        "objectives": {
+          "0": {
+            "label": "Yaban Domuzu avlandı"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Defter Büyüyor",
+        "text": "GERİ GELDİN, ha, hep dönerler, gürültülü şeylerin çekiciliği var, değil mi? Sızlanma yok benden, {playerName}, ama defter, ah defter, her defasında büyüyor, her geri dönüşte biraz daha, bu sadece adil. Git kazmadaki tünel sıçanlarını temizle, önce ter sonra kıvılcım, az önce uydurduğum kural bu.",
+        "completion": "İşte bu, ellerindeki kaşıntı geri döndü. Mühendislik ve Simya yeniden ana dalın, hadi git bir patlama yap. Bu sefer kal, tamam mı?",
+        "objectives": {
+          "0": {
+            "label": "Tünel Sıçanı temizlendi"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Fırın İş Siparişi",
+        "text": "Fırın her zaman beslenmek ister, {playerName}. Bana sekiz parça bakır cevheri getir, yük için ödeyeyim. Tören yok, sadece cevher ve altın.",
+        "completion": "İyi ağırlık, cüruf yok. İşte hakkın. Fırın yakında yeniden aç olacak.",
+        "objectives": {
+          "0": {
+            "label": "Bakır Cevheri teslim edildi"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Mutfak İş Siparişi",
+        "text": "Kilerim inceldi, {playerName}, ve ince kilerler somurtkan aşçılar yapar. Bana sekiz parça av eti getir, karşılığı altın olur, artı sonsuz şükranım, değeri az ama tadı daha güzel.",
+        "completion": "İşte dolgun bir kiler. İşte paran. Çantaların yeniden ağırlaşınca geri gel.",
+        "objectives": {
+          "0": {
+            "label": "Av Eti teslim edildi"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Tezgah İş Siparişi",
+        "text": "Tezgah kuruyor ve boş eller gün ışığını boşa harcıyor, {playerName}. Bana altı örümcek ipeği yumağı getir, bakırına kadar sayılan adil bir ücret öderim.",
+        "completion": "İnce ipek, eşit eğrilmiş. Altının, tam ölçüldü. Tezgah sana teşekkür eder, ben de.",
+        "objectives": {
+          "0": {
+            "label": "Örümcek İpeği teslim edildi"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Alet İşleri İş Siparişi",
+        "text": "Sap, tutacak, kundak, moda geçiyor olsa da GEÇMEZ tarzda ahşap tüketiyorum, ahşap sonsuzdur, {playerName}. Bana sekiz demir kabuğu tomruğu taşı, seni öderim, altın, gerçek altın, bir iyilik değil, söz veriyorum, çoğunlukla.",
+        "completion": "Mükemmel, mükemmel, düz tahıl, çürük yok. İşte paranız, bakın, sözümü tutarım (çoğunlukla). Bir ağaca takıldığınızda daha fazlasını getirin.",
+        "objectives": {
+          "0": {
+            "label": "Demir Kabuğu Tomruğu teslim edildi"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Tabakhane İş Siparişi",
+        "text": "Fıçılar boş. Sekiz kaba post getir. Ödeyeceğim.",
+        "completion": "İyi deriler. Adil ödeme. Daha fazlasıyla yeniden gel.",
+        "objectives": {
+          "0": {
+            "label": "Kaba Post teslim edildi"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Eczacı İş Siparişi",
+        "text": "Raflarım altın yaprak istiyor ve piyasanın stoğu, tahmin edilebileceği üzere, katışıktır. Bana altı altın yaprak otu getir, çürümemiş; tam karşılığını alacaksın. Çürük yapraklar reddedilir, bu yüzden çantana dikkat et.",
+        "completion": "Kabul edilir. Etkili, ve doğru şekilde işlenmiş. Ödemen, kuruşu kuruşuna sayıldı. Buna kapılma, bu farklı bir reaktif.",
+        "objectives": {
+          "0": {
+            "label": "Altın Yaprak Otu teslim edildi"
           }
         }
       },
@@ -11122,9 +11281,109 @@ export const tr_TR: EnTranslations = {
         "body": "Esnaf,\n\nZırh Üretimi ve Mühendislik alanındaki çalışmalarınızın Lonca'ya ulaştığı haberi: plakalar perçinlendi ve dişliler doğrulandı, iki zanaat birbirini besliyor. Birlikte çalışan komşu el sanatları, uyumlanmaya hazır bir elin işaretidir. Eastbrook'un zırhçısı Demirci Haldren'i arayın: şimdilik ustalar adına konuşuyor. Kendi ellerinizle zanaatınızı ona kanıtlayın, o da iki dalınızın uyumlu olduğunu görecektir.\n\nSaygılarımızla,\nÜretim Loncası"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Lonca Salonu",
+        "subject": "Zanaatın, artık dürüst",
+        "body": "Lonca üyesi,\n\nLonca, ustalığın yeni bir hesaplamasını benimsedi. Her el tırmanışa yeniden başlar: zanaat becerileriniz ve toplayıcılık yetkinlikleriniz sıfırlandı.\n\nDiğer her şey dokunulmadan sizindir: tarifleriniz, aletleriniz ve malzemeleriniz, bankınız ve altınınız, uyumlarınız ve unvanlarınız, belgeleriniz ve şöhretiniz, görevleriniz ve postanız.\n\nTırmanış artık dürüst. Ucuz iş sizi götürmez. Daha zor tarifler, daha zengin damarlar ve daha derin sular arayın.\n\nSaygılarımızla,\nLonca Salonu"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Dövme Ustası Darva",
+        "subject": "Kayda değer bir kıvılcım",
+        "body": "Fırınıma, ana dallarınızdan birinin sıradan ötesinde olduğu haberi ulaştı. Uzun bir tırmanışın en küçük basamağıdır, ama örsde kazandınız, sormakla değil. Ateşi sıcak tutun."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Dövme Ustası Darva",
+        "subject": "Nadir iş, kazanılmış",
+        "body": "Bir ana dalınızın nadir işe ulaştığını söylüyorlar. Dikkatsiz ellerin devrildiği ve gerçek demircilerin ayakta kaldığı basamak orası. Siz hâlâ ayaktasınız. İyi."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Dövme Ustası Darva",
+        "subject": "Metal artık size cevap veriyor",
+        "body": "Ana dallarınızdan biri nadirden ciddi işe tırmandı. Metal bu seviyede bir ele cevap veriyor, artık onunla savaşmıyor. Övgünün kolunuzu yumuşatmasına izin vermeyin."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Dövme Ustası Darva",
+        "subject": "Merdivenin tepesine yakın",
+        "body": "Ana dallarınızdan biri ustalığın tek basamak altında duruyor. Tanıdığım pek az el bu yüksekliğe ulaştı ve daha azı burada keskinliğini korudu. Tırmanışı bitirin."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Dövme Ustası Darva",
+        "subject": "Ustalık, sonunda",
+        "body": "Ana dallarınızdan biri ustalığa ulaştı, bir elin tırmanabileceği en yüksek yer. Övgüyü serbestçe dağıtmam, bu yüzden bunu bir kez duyun: fırın size gurur duyuyor. Şimdi gidin ateşe yeni bir şey öğretin."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Dokumacı Ottilie",
+        "subject": "Düzgün bir ilk sıra",
+        "body": "Lonca, ana dallarınızdan birinin sıradan ötesine geçtiğini not ediyor. Çok sayıda satırın yalnızca ilkidir, ama düz ve doğru. Bir sonrakini de bu titizlikle ölçün."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Dokumacı Ottilie",
+        "subject": "Nadir iş, iyi ölçülmüş",
+        "body": "Ana dallarınızdan biri nadir işe tırmandı. Dikkatsiz elin her düşen ilmeği gösterdiği yer orası ve sizinkinde görünmüyor. Sessizce memnunum."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Dokumacı Ottilie",
+        "subject": "Desen netleşiyor",
+        "body": "Ana dallarınızdan biri nadirden daha ince işe geçti. Desen, bu seviyedeki bir ele netleşiyor, artık tahmin yok. İki kez ölçmeye devam edin."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Dokumacı Ottilie",
+        "subject": "Tepeden bir sıra",
+        "body": "Ana dallarınızdan biri ustalıktan bir sıra eksik. Son sıra her zaman düz tutulması en zor olanıdır. Şimdi acele etmeyin."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Dokumacı Ottilie",
+        "subject": "Son ilmek",
+        "body": "Ana dallarınızdan biri ustalığa ulaştı. Her şeyi iki kez ölçtüm, her şeyi ölçtüğüm gibi, ve tutuyor. Pek az el son ilmeği bu kadar temiz bağlar. Gururluyum ve bunu hafife söylemiyorum."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Aşçı Marlow",
+        "subject": "Gelecekten bir tat",
+        "body": "Mutfağıma sizin bir ana dalınızın sıradan ötesine geçtiği haberi ulaştı. Bu bir başlangıç tadı, başka bir şey değil, ama umut verici. Kazanı hareket ettirmeye devam edin."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Aşçı Marlow",
+        "subject": "Nadir iş, yanmış kenarsız",
+        "body": "Bir ana dalınızın nadir işe kadar yükseldiğini söylüyorlar. Çoğu aşçının yemeği yaktığı ısı orası, siz yakmadınız. Oturun, ama uzun süre değil."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Aşçı Marlow",
+        "subject": "Şimdi gerçekten pişiriyorsunuz",
+        "body": "Ana dallarınızdan biri nadirden gerçek derinliğe kaynamış. Şimdi, dedikleri gibi, gerçekten pişiriyorsunuz. Cesurca baharatlayın ve tatmaya devam edin."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Aşçı Marlow",
+        "subject": "Ziyafetten bir kademe",
+        "body": "Ana dallarınızdan biri ustalıktan tek bir kademe eksik. Sonuncusu her zaman en zengin ve en kolay abartılanıdır. Kepçede sakin eller."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Aşçı Marlow",
+        "subject": "Ustalık, sıcak servis",
+        "body": "Ana dallarınızdan biri ustalığa ulaştı, tüm kilerın en üst rafı. Herkesi beslerim ama buraya kadar kaynayan pek azı olur. Gerçekten gurur duyuyorum. Şimdi gidin onları sofralarında ağlatacak bir şey pişirin."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Tamirci Gizzel",
+        "subject": "İLK kıvılcım, ha",
+        "body": "Sayılar, ana dallarınızdan birinin sıradan ötesine geçtiğini söylüyor. Küçük patates, minicik ama PATLADı, evet? İlk kıvılcım her zaman en şirindir. Daha fazla kıvılcım. Gidin."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Tamirci Gizzel",
+        "subject": "Nadir, oh, NADİR",
+        "body": "Bir ana dalınızın nadir işe tırmandığını söylüyorlar ve nadir, gerçekten tehlikeli olmaya başladığı yerdir (iyi tür). Çoğu el eğlence başlamadan bırakır. Siz değil. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Tamirci Gizzel",
+        "subject": "Şimdi yüksek sesli oluyor",
+        "body": "Ana dallarınızdan biri nadirden ciddi işe patladı, ah bu YÜKSEK SESLE olmaya başladığı yer. Şimdi durma, her ne olursa olsun, momentum her şeydir, sigorta da."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Tamirci Gizzel",
+        "subject": "Tepeden bir basamak, BİR",
+        "body": "Ana dallarınızdan biri ustalığın TEK basamak altında, bir, tekil, vızıltısını hissediyor musunuz? Son adım en büyük patlamadır. Gözlerinizi kırpmayın."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Tamirci Gizzel",
+        "subject": "USTALIK, kaboom",
+        "body": "Ana dallarınızdan biri ustalığa ulaştı, en TEPE, kaboom, tüm merdiven, bitti. Övgü dağıtmam, fitil dağıtırım, ama işte alın ikisini de: dahisiniz ve hafifçe dehşet vericisiniz. Gidin dağları gerginleştirin."
       }
     },
     "itemSets": {

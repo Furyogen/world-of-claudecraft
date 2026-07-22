@@ -7,8 +7,9 @@ import { logAssetMissOnce } from './asset_miss_log';
 import { mechHeldWeaponOverride, visualKeyFor } from './manifest';
 import { CharacterVisual } from './visual';
 
+export { writeCastingAnimState } from './anim_state';
 export { CharacterPreview } from './preview';
-export type { PreviewAppearance } from './preview_appearance';
+export { DEFAULT_HEAD_APPEARANCE, type PreviewAppearance } from './preview_appearance';
 export type { PreviewFramingName } from './preview_framing';
 export type { AnimState } from './visual';
 export { CharacterVisual, setWeaponVfxViewportHeight } from './visual';

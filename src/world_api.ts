@@ -449,6 +449,11 @@ export const COMMAND_NAMES = [
   'disenchant_item',
   'apply_enchant',
   'salvage_item',
+  // Maker's Bond unbind service (Professions 2.0 Phase 14b): clear the
+  // boundTo trade lock on one held bound commission piece for the
+  // tier-scaled gold fee (Sim.unbindItem via src/sim/professions/
+  // commission.ts).
+  'unbind_item',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch

@@ -170,6 +170,14 @@ export interface CharacterSummary {
   skinCatalog?: 'class' | 'mech';
   mainhandItemId?: string | null;
   offhandItemId?: string | null;
+  /** The account's active Armory weapon skin for this character (server-resolved
+   *  per class + mainhand). Optional for back-compat like the fields above. */
+  weaponSkinId?: string | null;
+  face?: number;
+  hairStyle?: number;
+  beard?: boolean;
+  hairColor?: number;
+  faceColor?: number;
 }
 
 function stringList(value: unknown): string[] {
@@ -1390,6 +1398,7 @@ export class ClientWorld implements IWorld {
     amendsProgress: 0,
     amendsRequired: 0,
     knownRecipes: [],
+    cadenceBlockedQuests: [],
   };
   // Gathering profession proficiency (Mining/Logging/Herbalism, #1119), mirrored
   // from the `gprof` self-wire delta below (the real read surface; see
@@ -1490,6 +1499,10 @@ export class ClientWorld implements IWorld {
   private stableTimerOwnerId: number | undefined;
   private stableCooldownSchedules: Map<string, StableCooldownWire> | undefined = new Map();
   private stableNodeDeadlines: Map<string, number> | undefined = new Map();
+  // abilityId -> [recharge deadline, recharge length] from the `achr` timer wire,
+  // retained like stableCooldownSchedules so the action bar's recharge strip
+  // keeps aging across snapshots that omit the unchanged achr JSON.
+  private stableChargeRecharges: Map<string, readonly [number, number]> | undefined = new Map();
   // entity id -> performance.now() when it first went missing from a snapshot;
   // used for the despawn grace window (anti-flicker), cleared once it returns
   private missingSince = new Map<number, number>();
@@ -2083,6 +2096,7 @@ export class ClientWorld implements IWorld {
       this.stableTimerOwnerId = undefined;
       this.stableCooldownSchedules?.clear();
       this.stableNodeDeadlines?.clear();
+      this.stableChargeRecharges?.clear();
     }
     if (
       mode !== 'stable' ||
@@ -2095,10 +2109,12 @@ export class ClientWorld implements IWorld {
 
     if (this.stableCooldownSchedules === undefined) this.stableCooldownSchedules = new Map();
     if (this.stableNodeDeadlines === undefined) this.stableNodeDeadlines = new Map();
+    if (this.stableChargeRecharges === undefined) this.stableChargeRecharges = new Map();
     if (this.stableTimerOwnerId !== this.playerId) {
       this.stableTimerOwnerId = this.playerId;
       this.stableCooldownSchedules.clear();
       this.stableNodeDeadlines.clear();
+      this.stableChargeRecharges.clear();
       this.nodeCooldowns = new Map();
     }
 
@@ -2123,6 +2139,7 @@ export class ClientWorld implements IWorld {
       // schedules tied to the old clock before decoding it.
       this.stableCooldownSchedules.clear();
       this.stableNodeDeadlines.clear();
+      this.stableChargeRecharges.clear();
     }
     this.stableTimerTime = rawTime;
     this.refreshStableSelfTimers(rawTime);
@@ -2149,6 +2166,23 @@ export class ClientWorld implements IWorld {
         else {
           this.stableNodeDeadlines.delete(nodeId);
           this.nodeCooldowns.delete(nodeId);
+        }
+      }
+    }
+    if (player?.abilityCharges && this.stableChargeRecharges) {
+      // Age the recharge strip between achr rebuilds (the wire only resends on a
+      // charge event). A deadline that passed floors at 0 until the server's
+      // refund event lands with the authoritative new count.
+      for (const [abilityId, [deadline, length]] of this.stableChargeRecharges) {
+        const rec = player.abilityCharges[abilityId];
+        if (!rec) continue;
+        const remaining = stableDeadlineRemaining(deadline, now);
+        if (remaining !== null && remaining > 0) {
+          rec.recharge = remaining;
+          rec.rechargeLength = length;
+        } else {
+          this.stableChargeRecharges.delete(abilityId);
+          rec.recharge = 0;
         }
       }
     }
@@ -2587,8 +2621,10 @@ export class ClientWorld implements IWorld {
         this.nodeCooldowns = new Map(Object.entries(s.ncd).map(([k, v]) => [k, Number(v)]));
       }
       if (s.achg !== undefined) {
-        // Recharge-model live counts (Frost's second Ice Block). Only the count is
-        // displayed; max/recharge are server-side details the mirror zero-fills.
+        // Recharge-model live counts (Frost's second Ice Block). maxCharges stays
+        // a server-side detail the mirror zero-fills (the bar derives the max from
+        // its own known-list rebake); recharge/rechargeLength are filled from the
+        // `achr` companion below when a charge is regenerating.
         e.abilityCharges = {};
         for (const k in s.achg) {
           e.abilityCharges[k] = {
@@ -2597,6 +2633,61 @@ export class ClientWorld implements IWorld {
             recharge: 0,
             rechargeLength: 0,
           };
+        }
+        if (s.achr === undefined && timerWire.mode === 'stable' && timerWire.time !== null) {
+          // achg re-sent without achr (the recharge JSON happened to be
+          // unchanged): the rebuilt zero-filled records re-fill from the
+          // retained deadlines instead of blanking the strip for a snapshot.
+          if (this.stableChargeRecharges) {
+            for (const [abilityId, [deadline, len]] of this.stableChargeRecharges) {
+              const rec = e.abilityCharges[abilityId];
+              if (!rec) continue;
+              const remaining = stableDeadlineRemaining(deadline, timerWire.time);
+              if (remaining !== null && remaining > 0) {
+                rec.recharge = remaining;
+                rec.rechargeLength = len;
+              }
+            }
+          }
+        }
+      }
+      if (s.achr !== undefined && e.abilityCharges) {
+        // The companion recharge timers, driving the action bar's thin recharge
+        // sweep while the pool still holds a use. Stable timer wire sends
+        // [deadline, length] pairs (retained in stableChargeRecharges so
+        // refreshStableSelfTimers keeps aging them across omitted snapshots);
+        // legacy sends raw [remaining, length], resent per snapshot. Decoded
+        // OUTSIDE the achg gate: under a Temporal Hourglass the accelerated
+        // deadline re-ships every tick while the unchanged counts are
+        // delta-omitted, and those re-sent deadlines must land (a nested decode
+        // silently dropped them, freezing the strip at 1x for the window). An id
+        // without a running recharge keeps the 0 fill, and an older server that
+        // never sends achr leaves the strip hidden.
+        const stable = timerWire.mode === 'stable' && timerWire.time !== null;
+        if (stable) {
+          if (this.stableChargeRecharges === undefined) this.stableChargeRecharges = new Map();
+          this.stableChargeRecharges.clear();
+        }
+        for (const k in s.achr) {
+          const rec = e.abilityCharges[k];
+          const pair = s.achr[k] as unknown;
+          if (!rec || !Array.isArray(pair)) continue;
+          // pair[0]'s meaning depends on the wire mode: an absolute sim-time
+          // DEADLINE on the stable wire, raw REMAINING seconds on legacy.
+          const rawPair0 = Number(pair[0]);
+          const len = Number(pair[1]);
+          const remaining =
+            timerWire.mode === 'stable'
+              ? timerWire.time !== null
+                ? stableDeadlineRemaining(rawPair0, timerWire.time)
+                : null
+              : rawPair0;
+          if (remaining !== null && remaining > 0 && len > 0) {
+            rec.recharge = remaining;
+            rec.rechargeLength = len;
+            // Retention stores the DEADLINE form (stable mode only).
+            if (stable) this.stableChargeRecharges?.set(k, [rawPair0, len]);
+          }
         }
       }
       e.gcdRemaining = s.gcd ?? 0;
@@ -2792,6 +2883,11 @@ export class ClientWorld implements IWorld {
           // (its JSON diff fires on the sorted array changing). The ?? []
           // keeps a pre-Phase-9 server's payload loading cleanly.
           knownRecipes: [...(cprof.knownRecipes ?? [])],
+          // Phase 14: the server-computed work-order cooldown set (against ITS
+          // tickCount). questState() feeds it into computeQuestState so a work
+          // order on cooldown shows unavailable on the client too. The ?? []
+          // keeps a pre-Phase-14 server's payload loading cleanly.
+          cadenceBlockedQuests: [...(cprof.cadenceBlockedQuests ?? [])],
         };
         this.activeArchetype = this.craftingIdentity.activeArchetype;
         this.archetypeSwitchCount = this.craftingIdentity.switchCount;
@@ -2869,6 +2965,13 @@ export class ClientWorld implements IWorld {
 
   questState(questId: string): QuestState {
     const identity = this.craftingIdentity;
+    // Phase 14: the server-computed work-order cooldown set rides cprof and gates
+    // computeQuestState here exactly as it does server-side (the offline Sim
+    // re-derives the same set from live PlayerMeta.questCadence).
+    const cadenceBlocked =
+      identity && identity.cadenceBlockedQuests && identity.cadenceBlockedQuests.length > 0
+        ? new Set(identity.cadenceBlockedQuests)
+        : undefined;
     return optimisticQuestState(
       questId,
       this.questLog,
@@ -2888,6 +2991,7 @@ export class ClientWorld implements IWorld {
             amendsProgress: identity.amendsProgress,
           }
         : undefined,
+      cadenceBlocked,
     );
   }
 
@@ -3108,8 +3212,16 @@ export class ClientWorld implements IWorld {
   harvestNode(nodeId: string): Promise<boolean> {
     return this.cmdWithOutcome({ cmd: 'harvest_node', node: nodeId });
   }
-  craftItem(recipeId: string): void {
-    this.cmd({ cmd: 'craft_item', recipe: recipeId });
+  // `commission` (Professions 2.0 Phase 14b): the boolean Maker's Bond
+  // opt-in, sent ONLY when true so a non-commission craft's wire message
+  // stays byte-identical to the pre-phase form. The server mints the
+  // bindOnTrade arm itself; no payload ever rides the command.
+  craftItem(recipeId: string, commission?: boolean): void {
+    if (commission === true) {
+      this.cmd({ cmd: 'craft_item', recipe: recipeId, commission: true });
+    } else {
+      this.cmd({ cmd: 'craft_item', recipe: recipeId });
+    }
   }
   placeMobileStation(craftId: string): void {
     this.cmd({ cmd: 'place_mobile_station', craft: craftId });
@@ -3132,6 +3244,14 @@ export class ClientWorld implements IWorld {
   }
   salvageItem(itemId: string): void {
     this.cmd({ cmd: 'salvage_item', item: itemId });
+  }
+  // Maker's Bond unbind service (Professions 2.0 Phase 14b): command only,
+  // never predicted. The server re-validates eligibility/bound-ness/station
+  // range/fee in src/sim/professions/commission.ts and answers with the
+  // personal unbindResult event; the cleared payload mirrors back via the
+  // self inv delta.
+  unbindItem(itemId: string): void {
+    this.cmd({ cmd: 'unbind_item', item: itemId });
   }
   sellItem(itemId: string, count?: number): void {
     this.cmd({ cmd: 'sell', item: itemId, count });

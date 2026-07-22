@@ -122,6 +122,9 @@ function authedDb(overrides: DbOverrides = {}): void {
   setCharactersDbForTests({
     accountAndScopeForToken: scopeOf('full'),
     moderationStatusForAccount: async () => modStatus(),
+    // The list payload resolves the account's Armory loadout per character;
+    // default to no cosmetics so unrelated tests stay Postgres-free.
+    loadAccountWeaponSkinLoadout: async () => ({}),
     ...overrides,
   });
 }
@@ -320,6 +323,11 @@ describe('character list handlers', () => {
       state: st({
         skin: 3,
         skinCatalog: 'mech',
+        face: 1,
+        hairStyle: 3,
+        beard: true,
+        hairColor: 0x112233,
+        faceColor: 0x445566,
         equipment: { mainhand: 'worn_sword', offhand: 'eastbrook_buckler' },
       }),
       force_rename: false,
@@ -336,7 +344,13 @@ describe('character list handlers', () => {
       last_played: null,
       playtime_seconds: null,
     });
-    setCharactersDbForTests({ listCharacters: async () => [rowA, rowB] });
+    const loadAccountWeaponSkinLoadout = vi.fn(async () => ({ sword: 'ice_fang_sword' }));
+    setCharactersDbForTests({
+      listCharacters: async () => [rowA, rowB],
+      // A sword skin in the account loadout: resolves onto the warrior's held
+      // worn_sword and NOT onto the stateless mage (no mainhand, null skin).
+      loadAccountWeaponSkinLoadout,
+    });
     // Online status comes from the injected runtime: row 1 online, row 2 offline.
     installRuntime({ isCharacterOnline: (id) => id === 1 });
 
@@ -356,6 +370,12 @@ describe('character list handlers', () => {
           skinCatalog: 'mech',
           mainhandItemId: 'worn_sword',
           offhandItemId: 'eastbrook_buckler',
+          weaponSkinId: 'ice_fang_sword',
+          face: 1,
+          hairStyle: 3,
+          beard: true,
+          hairColor: 0x112233,
+          faceColor: 0x445566,
         },
         {
           id: 2,
@@ -370,6 +390,7 @@ describe('character list handlers', () => {
           skinCatalog: 'class',
           mainhandItemId: null,
           offhandItemId: null,
+          weaponSkinId: null,
         },
       ],
     };
@@ -383,6 +404,9 @@ describe('character list handlers', () => {
 
     expect(me.status).toBe(200);
     expect(full.status).toBe(200);
+    expect(loadAccountWeaponSkinLoadout).toHaveBeenCalledTimes(2);
+    expect(loadAccountWeaponSkinLoadout).toHaveBeenNthCalledWith(1, 7);
+    expect(loadAccountWeaponSkinLoadout).toHaveBeenNthCalledWith(2, 7);
     expect(me.body).toEqual(expected);
     // Byte-identical: the two arms share buildCharacterList, so the serialized JSON matches.
     expect(JSON.stringify(me.body)).toBe(JSON.stringify(full.body));

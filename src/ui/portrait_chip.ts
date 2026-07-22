@@ -30,6 +30,29 @@ export function classIconUrl(cls: PlayerClass): string {
   return `${CLASS_ICON_DIR}/${cls}.webp`;
 }
 
+/** Decorate pre-game class chips with their painted class icon once. */
+export function decorateClassChips(root: ParentNode = document): void {
+  root
+    .querySelectorAll<HTMLElement>('#charcreate-panel .mini-class, #offline-select .mini-class')
+    .forEach((chip) => {
+      if (chip.querySelector('.mini-class-portrait')) return;
+      const cls = chip.dataset.class as PlayerClass;
+      const key = chip.dataset.i18n;
+      const label = document.createElement('span');
+      label.className = 'mini-class-label';
+      if (key) label.dataset.i18n = key;
+      label.textContent = (chip.textContent ?? '').trim();
+      chip.removeAttribute('data-i18n');
+      chip.textContent = '';
+      const image = document.createElement('img');
+      image.className = 'mini-class-portrait';
+      image.alt = '';
+      image.src = classIconUrl(cls);
+      chip.append(image, label);
+      chip.classList.add('has-portrait');
+    });
+}
+
 export interface PortraitChipOpts {
   cls: PlayerClass;
   skin?: number;

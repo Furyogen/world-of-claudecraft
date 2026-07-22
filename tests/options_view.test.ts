@@ -279,6 +279,7 @@ const GENERAL_KEYS = [
   'showDailyRewardsChest',
   'showItemLevel',
   'showOwnNameplate',
+  'showPlayerNameplates',
 ];
 const FRAMES_KEYS = [
   'playerFrameScale',
@@ -410,6 +411,23 @@ describe('options_view: interface tab taxonomy', () => {
     for (const tab of INTERFACE_TAB_ORDER) {
       expect(keysOf(interfaceControlsForTab(all, tab))).toEqual(INTERFACE_KEYS_BY_TAB[tab]);
     }
+  });
+
+  it('renders one control per setting in a tab when a duplicate descriptor is present', () => {
+    const all = buildInterfaceControls(makeSource({}, { showAttackButton: true }));
+    const attack = find(all, 'showAttackButton');
+    expect(attack).toBeTruthy();
+    const withDuplicate = attack ? [...all, { ...attack }] : all;
+
+    const combat = interfaceControlsForTab(withDuplicate, 'combat');
+    expect(combat.filter((c) => 'key' in c && c.key === 'showAttackButton')).toHaveLength(1);
+    expect(find(combat, 'showAttackButton')).toMatchObject({
+      category: 'combat',
+      control: 'boolToggle',
+      key: 'showAttackButton',
+      labelKey: 'hudChrome.options.showAttackButton',
+      on: true,
+    });
   });
 
   it('keeps the dependent action-bar toggles together in the combat tab', () => {

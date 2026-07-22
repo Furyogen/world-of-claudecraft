@@ -6,13 +6,19 @@ import { mechAssetsReady, preloadMechAssets } from './assets';
 import type { WeaponLayoutOverride } from './manifest';
 import {
   appearanceSignature,
+  DEFAULT_HEAD_APPEARANCE,
   type PreviewAppearance,
   previewAppearanceVisual,
 } from './preview_appearance';
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
+import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
 
 export type { PreviewAppearance } from './preview_appearance';
+
+export interface CharacterPreviewOptions {
+  constrainedMemory?: boolean;
+}
 
 const PREVIEW_ANIM_STATE = {
   speed: 0,
@@ -37,11 +43,16 @@ export class CharacterPreview {
   private characterGroup: THREE.Group;
   private currentVisual: CharacterVisual | null = null;
   private currentSkin = 0;
-  private currentFace = 0;
-  private currentHairStyle = 0;
-  private currentBeard = true;
+  private currentFace = DEFAULT_HEAD_APPEARANCE.face;
+  private currentHairStyle = DEFAULT_HEAD_APPEARANCE.hairStyle;
+  private currentBeard = DEFAULT_HEAD_APPEARANCE.beard;
   private currentHairColor: number | undefined = undefined;
   private currentFaceColor: number | undefined = undefined;
+  // The active Armory weapon-skin cosmetic, persisted across visual rebuilds
+  // exactly like currentSkin so a class/appearance swap keeps the skinned
+  // weapon (the in-world renderer and the store preview both apply it; the
+  // paperdoll must match or a purchased skin reads as missing).
+  private currentWeaponSkinId: string | null = null;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
   private appearanceSig: string | null = null;
@@ -56,18 +67,23 @@ export class CharacterPreview {
   private isDragging = false;
   private previousMouseX = 0;
 
-  constructor(container: HTMLElement, canvas: HTMLCanvasElement) {
+  constructor(
+    container: HTMLElement,
+    canvas: HTMLCanvasElement,
+    options: CharacterPreviewOptions = {},
+  ) {
     this.container = container;
     this.canvas = canvas;
+    const policy = resolveCharacterPreviewPolicy(options.constrainedMemory === true);
 
     // 1. Initialize WebGLRenderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true,
-      preserveDrawingBuffer: true,
+      antialias: policy.antialias,
+      preserveDrawingBuffer: policy.preserveDrawingBuffer,
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, policy.pixelRatioCap));
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight, false);
     this.renderer.shadowMap.enabled = false; // Preview doesn't need heavy shadows
     // Hand this context back on page teardown (see context_release.ts).
@@ -119,6 +135,9 @@ export class CharacterPreview {
     // A class-driven selection (create/offline picker, or a panel switch) supersedes
     // any pending async mech re-apply, so invalidate the tracked appearance.
     this.appearanceSig = null;
+    // Creation/offline previews are not persisted roster appearances. Do not
+    // carry an Armory skin from the previously selected online character.
+    this.currentWeaponSkinId = null;
     const weapon = weaponItemId !== undefined ? weaponItemId : (CLASSES[cls].startWeapon ?? null);
     const offhand =
       offhandItemId !== undefined ? offhandItemId : (CLASSES[cls].startOffhand ?? null);
@@ -139,6 +158,7 @@ export class CharacterPreview {
     this.currentBeard = a.beard ?? false;
     this.currentHairColor = a.hairColor;
     this.currentFaceColor = a.faceColor;
+    this.currentWeaponSkinId = a.weaponSkinId ?? null;
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
@@ -166,7 +186,7 @@ export class CharacterPreview {
     // Clean up current visual if it exists
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
-      // CharacterVisual dispose only releases mixer listeners
+      this.currentVisual.dispose();
       this.currentVisual = null;
     }
 
@@ -185,6 +205,9 @@ export class CharacterPreview {
         this.currentFace,
       );
       this.characterGroup.add(this.currentVisual.root);
+      // Re-apply the persisted weapon-skin cosmetic to the rebuilt visual (the
+      // constructor attaches the equipped item's own model).
+      if (this.currentWeaponSkinId) this.currentVisual.setWeaponSkin(this.currentWeaponSkinId);
 
       // Reset rotation on a class swap so every new character greets the player
       // FACE-ON (the classic character-screen pose); dragging still spins freely.
@@ -192,6 +215,14 @@ export class CharacterPreview {
     } catch (err) {
       console.error(`Failed to load preview character visual for ${visualKey}:`, err);
     }
+  }
+
+  /** Apply or clear the Armory weapon-skin cosmetic; persists across
+   *  setClass/setVisualKey rebuilds like the body skin. */
+  setWeaponSkin(weaponSkinId: string | null): void {
+    if (this.destroyed) return;
+    this.currentWeaponSkinId = weaponSkinId;
+    this.currentVisual?.setWeaponSkin(weaponSkinId);
   }
 
   /** Swap the previewed skin (alternate body texture); persists across setClass. */
@@ -332,6 +363,18 @@ export class CharacterPreview {
     if (this.destroyed) return;
     this.animationFrameId = requestAnimationFrame(this.animate);
 
+    if (
+      !characterPreviewFrameVisible(
+        this.canvas.isConnected,
+        this.container.clientWidth,
+        this.container.clientHeight,
+      )
+    ) {
+      // Drain the clock while hidden so reopening cannot produce a large animation step.
+      this.clock.getDelta();
+      return;
+    }
+
     const dt = Math.min(this.clock.getDelta(), 0.1); // cap dt to prevent huge jumps
 
     // No idle auto-rotation: the character holds its face-on pose (the classic
@@ -352,10 +395,11 @@ export class CharacterPreview {
    *
    * The live preview canvas is borrowed for one synchronous render: we save the
    * renderer size, camera, and group rotation; frame a tighter portrait at the
-   * requested pixel size; read the pixels (preserveDrawingBuffer makes this
-   * reliable); then restore everything and re-render so the visible preview is
-   * untouched. Because nothing awaits between the off-pose render and the
-   * restore, the browser never paints the intermediate frame.
+   * requested pixel size; read the pixels immediately from that explicit render;
+   * then restore everything and re-render so the visible preview is untouched.
+   * Because nothing awaits between the off-pose render and the restore, the
+   * browser never paints the intermediate frame. This also works with the
+   * constrained transient framebuffer, whose contents need not survive a paint.
    */
   captureCloseup(
     opts: {

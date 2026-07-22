@@ -609,7 +609,8 @@ export const pl_PL: EnTranslations = {
         "staff": "Kostur",
         "wand": "Różdżka",
         "bow": "Ukłon",
-        "crossbow": "Kusza"
+        "crossbow": "Kusza",
+        "polearm": "Broń drzewcowa"
       },
       "badge": {
         "flagship": "Flagowiec",
@@ -706,10 +707,10 @@ export const pl_PL: EnTranslations = {
       "expandHint": "Rozwiń śledzenie zadań"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
-      "chat": "Chat",
-      "combat": "Combat"
+      "general": "Ogólne",
+      "frames": "Ramki",
+      "chat": "Czat",
+      "combat": "Walka"
     },
     "chatTimestamps": {
       "show": "Pokaż znaczniki czasu na czacie",
@@ -1037,6 +1038,7 @@ export const pl_PL: EnTranslations = {
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
       "showDevBadges": "Pokaż odznaki deweloperów",
       "showOwnNameplate": "Pokaż moją plakietkę",
+      "showPlayerNameplates": "Pokaż plakietki graczy",
       "uiScale": "Skala interfejsu",
       "playerFrameScale": "Skala ramki gracza",
       "targetFrameScale": "Skala ramki celu",
@@ -1184,8 +1186,8 @@ export const pl_PL: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Atak",
+      "defense": "Obrona"
     },
     "statInfo": {
       "fromYour": "Z twoich {value} pkt. cechy {stat}:",
@@ -1445,7 +1447,7 @@ export const pl_PL: EnTranslations = {
     "corpseHarvest": {
       "title": "Zbieranie",
       "harvestButton": "Zbierz",
-      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
+      "harvestTooltip": "Zbiera zaznaczone komponenty. Każde zwloki można zebrać raz, pierwszemu podejdzie. Nie zabiera łupów.",
       "concentrateHint": "Im mniej części wybierzesz, tym wyższa jakość każdej z nich.",
       "alreadyHarvested": "Z tego truchła już wszystko zebrano.",
       "componentAria": "Zbierz: {component}",
@@ -1463,8 +1465,8 @@ export const pl_PL: EnTranslations = {
     "townFocus": {
       "title": "Priorytety miasta",
       "hint": "Punkty priorytetu dodają premię ponad bazowy uzysk każdego elementu. Elementy bez priorytetu pozostają na poziomie bazowym.",
-      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
-      "townOnlyHint": "Focus can only be changed while you are in town.",
+      "tierHint": "Każde {points} punktów na komponencie podnosi poziom zbioru o jeden stopień, do {steps} stopni; mniej niż {points} punktów nadal zwiększa uzysk.",
+      "townOnlyHint": "Priorytety można zmieniać tylko w mieście.",
       "budgetLabel": "Pozostałe punkty: {remaining} / {budget}",
       "saveButton": "Zapisz priorytety",
       "notInTownHint": "Musisz być w mieście, aby ustawić priorytety.",
@@ -1523,7 +1525,7 @@ export const pl_PL: EnTranslations = {
       "dragEquipHint": "Przeciągnij na postać, aby założyć",
       "dragDestroyHint": "Przeciągnij poza okno, aby zniszczyć",
       "reorderNeedsRecent": "Wyczyść filtr i posortuj według Ostatnich, aby zmienić kolejność w torbach",
-      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
+      "itemAriaInstanced": "{item}, ilość {count}, oznaczona kopia",
       "filterGroupAria": "Filtruj torby według kategorii",
       "filterAll": "Wszystko",
       "filterWeapon": "Bronie",
@@ -1689,9 +1691,9 @@ export const pl_PL: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Skrzynia",
-      "takeLootButton": "Take Loot",
-      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
-      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
+      "takeLootButton": "Weź łup",
+      "takeLootTooltip": "Bierze monety i wypadłe przedmioty. Nie zużywa zebranych zasobów.",
+      "unifiedPressHint": "Klawisz interakcji bierze łup i zbiera zasoby jednym naciśnięciem, korzystając z priorytetów miasta."
     },
     "spellbook": {
       "addToBarAria": "Dodaj {name} do paska akcji",
@@ -1839,6 +1841,7 @@ export const pl_PL: EnTranslations = {
         "legend": "LEGENDA",
         "shill": "GORLIWY ORĘDOWNIK"
       },
+      "roleTagChatTitle": "Zweryfikowana rola serwera: {role}",
       "guildMember": "Zweryfikowany członek",
       "notMember": "Jeszcze nie na serwerze",
       "joinCta": "Dołącz do Discorda",
@@ -1963,6 +1966,7 @@ export const pl_PL: EnTranslations = {
       "removeParcelAria": "Usuń {item} z listu",
       "parcelQtyDecreaseAria": "Wyślij o jedną sztukę {item} mniej",
       "parcelQtyIncreaseAria": "Wyślij o jedną sztukę {item} więcej",
+      "parcelQtyAria": "Liczba {item} do wysłania",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",
@@ -2101,41 +2105,41 @@ export const pl_PL: EnTranslations = {
       "stopBlockingTitle": "Odblokuj gracza {name}",
       "onlineHeader": "Online ({n})",
       "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "hideOffline": "Ukryj offline",
+      "hideOfflineTitle": "Ukryj offline członków gildii"
     },
     "gathering": {
       "title": "Zbieractwo",
       "mining": "Górnictwo",
       "logging": "Wyrąb",
       "herbalism": "Zielarstwo",
-      "fishing": "Fishing",
+      "fishing": "Wędkarstwo",
       "notReady": "Ten węzeł zasobu jeszcze nie odrósł dla ciebie.",
       "gatherLine": "Zbierasz: {name}.",
       "gatherLineQty": "Zbierasz: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Wyciągasz: {name}",
+      "biteLine": "Coś wzięło przynętę!",
+      "gotAwayLine": "Uciekło.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Żyła rudy",
+        "wood": "Drzewostan",
+        "herb": "Łan ziół"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Wymaga kilofika górniczego {tier} poziomu",
+        "logging": "Wymaga siekiery drwala {tier} poziomu",
+        "herbalism": "Wymaga sierpa zielarskiego {tier} poziomu"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Potrzebujesz kilofika górniczego {tier} poziomu, by zebrać tę żyłę.",
+        "logging": "Potrzebujesz siekiery drwala {tier} poziomu, by ściąć ten drzewostan.",
+        "herbalism": "Potrzebujesz sierpa zielarskiego {tier} poziomu, by zebrać ten łan."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
-      "downgradeFind": "Bags full: a pristine find slipped away.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Potrzebujesz narzędzia zbieracza {tier} poziomu, by odzyskać najlepsze materiały.",
+      "downgradeMark": "Torby pełne: znalezisko zostało schowane bez znaku zbieracza.",
+      "downgradeFind": "Torby pełne: wyjątkowe znalezisko przeszło ci koło nosa.",
+      "stateReady": "Gotowy",
+      "stateCooldown": "Odnawianie się"
     },
     "archetypeTitle": {
       "label": "Tytuł",
@@ -2167,47 +2171,47 @@ export const pl_PL: EnTranslations = {
       "leatherworking": "Garbarstwo"
     },
     "enchantName": {
-      "enchant_weapon_might": "Enchant Weapon - Might",
-      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
-      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
-      "enchant_neck_spirit": "Enchant Necklace - Spirit",
-      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
-      "enchant_chest_stamina": "Enchant Chest - Stamina",
-      "enchant_waist_stamina": "Enchant Belt - Stamina",
-      "enchant_legs_stamina": "Enchant Legs - Stamina",
-      "enchant_gloves_agility": "Enchant Gloves - Agility",
-      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
-      "enchant_feet_agility": "Enchant Boots - Agility",
-      "enchant_ring_spirit": "Enchant Ring - Spirit",
-      "enchant_weapon_agility": "Enchant Weapon - Agility",
-      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
-      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
-      "enchant_neck_intellect": "Enchant Necklace - Intellect",
-      "enchant_neck_agility": "Enchant Necklace - Agility",
-      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
-      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
-      "enchant_chest_spirit": "Enchant Chest - Spirit",
-      "enchant_chest_armor": "Enchant Chest - Reinforcement",
-      "enchant_waist_strength": "Enchant Belt - Strength",
-      "enchant_waist_agility": "Enchant Belt - Agility",
-      "enchant_legs_intellect": "Enchant Legs - Intellect",
-      "enchant_gloves_strength": "Enchant Gloves - Strength",
-      "enchant_feet_strength": "Enchant Boots - Strength",
-      "enchant_feet_stamina": "Enchant Boots - Stamina",
-      "enchant_ring_strength": "Enchant Ring - Strength",
-      "enchant_ring_agility": "Enchant Ring - Agility",
-      "enchant_ring_intellect": "Enchant Ring - Intellect",
-      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
-      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
-      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
-      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
-      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
-      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
-      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
-      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
-      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
-      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
-      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+      "enchant_weapon_might": "Zaklinanie broni - Moc",
+      "enchant_weapon_intellect": "Zaklinanie broni - Moc zaklęć",
+      "enchant_helmet_fortitude": "Zaklinanie hełmu - Krzepkość",
+      "enchant_neck_spirit": "Zaklinanie naszyjnika - Duch",
+      "enchant_shoulder_agility": "Zaklinanie naramienników - Zwinność",
+      "enchant_chest_stamina": "Zaklinanie piersi - Wytrzymałość",
+      "enchant_waist_stamina": "Zaklinanie pasa - Wytrzymałość",
+      "enchant_legs_stamina": "Zaklinanie nóg - Wytrzymałość",
+      "enchant_gloves_agility": "Zaklinanie rękawic - Zwinność",
+      "enchant_gloves_intellect": "Zaklinanie rękawic - Moc zaklęć",
+      "enchant_feet_agility": "Zaklinanie butów - Zwinność",
+      "enchant_ring_spirit": "Zaklinanie pierścienia - Duch",
+      "enchant_weapon_agility": "Zaklinanie broni - Zwinność",
+      "enchant_helmet_intellect": "Zaklinanie hełmu - Intelekt",
+      "enchant_helmet_armor": "Zaklinanie hełmu - Wzmocnienie",
+      "enchant_neck_intellect": "Zaklinanie naszyjnika - Intelekt",
+      "enchant_neck_agility": "Zaklinanie naszyjnika - Zwinność",
+      "enchant_shoulder_strength": "Zaklinanie naramienników - Siła",
+      "enchant_shoulder_intellect": "Zaklinanie naramienników - Intelekt",
+      "enchant_chest_spirit": "Zaklinanie piersi - Duch",
+      "enchant_chest_armor": "Zaklinanie piersi - Wzmocnienie",
+      "enchant_waist_strength": "Zaklinanie pasa - Siła",
+      "enchant_waist_agility": "Zaklinanie pasa - Zwinność",
+      "enchant_legs_intellect": "Zaklinanie nóg - Intelekt",
+      "enchant_gloves_strength": "Zaklinanie rękawic - Siła",
+      "enchant_feet_strength": "Zaklinanie butów - Siła",
+      "enchant_feet_stamina": "Zaklinanie butów - Wytrzymałość",
+      "enchant_ring_strength": "Zaklinanie pierścienia - Siła",
+      "enchant_ring_agility": "Zaklinanie pierścienia - Zwinność",
+      "enchant_ring_intellect": "Zaklinanie pierścienia - Intelekt",
+      "enchant_weapon_greater_might": "Zaklinanie broni - Wielka moc",
+      "enchant_weapon_greater_spellpower": "Zaklinanie broni - Wielka moc zaklęć",
+      "enchant_helmet_greater_fortitude": "Zaklinanie hełmu - Wielka krzepkość",
+      "enchant_chest_greater_stamina": "Zaklinanie piersi - Wielka wytrzymałość",
+      "enchant_legs_greater_stamina": "Zaklinanie nóg - Wielka wytrzymałość",
+      "enchant_gloves_greater_agility": "Zaklinanie rękawic - Wielka zwinność",
+      "enchant_weapon_runed_edge": "Zaklinanie broni - Runowe ostrze",
+      "enchant_weapon_runed_focus": "Zaklinanie broni - Runowy fokus",
+      "enchant_chest_runeweave": "Zaklinanie piersi - Runowy splot",
+      "enchant_legs_runed_hide": "Zaklinanie nóg - Runowa skóra",
+      "enchant_helmet_runed_links": "Zaklinanie hełmu - Runowe ogniwa"
     },
     "professions": {
       "title": "Zawody",
@@ -2228,7 +2232,7 @@ export const pl_PL: EnTranslations = {
       "tierPipAria": "Poziom {tier}",
       "nextUnlockTier": "{points} wskazuje na następny poziom: zwiększają się szanse na arcydzieło",
       "nextUnlockSpecialized": "{points} wskazuje na Specjalistyczne: spadają koszty materiałów",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Opanowane, na razie",
       "perkSpecializedLine": "{craft}: Specjalistyczne, koszty materiałowe -{pct}%",
       "perkSpecializedAt": "Specjalizuje się w umiejętności {threshold}",
       "switchCost": "Następna zmiana archetypu kosztuje {cost} punktów zadośćuczynienia",
@@ -2269,6 +2273,7 @@ export const pl_PL: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Wynik: tytuł {title}; {majorA} i {majorB} stają się nieograniczonymi specjalizacjami; {hobby} staje się hobby z pułapem rzadkości; cała pozostała wiedza zostaje zachowana, lecz jest ograniczona do poziomu pospolitego podczas uśpienia.",
       "hobbyPreview": "Wynik: {hobby} staje się hobby z pułapem rzadkości. Obie specjalizacje i wszystkie zachowane wartości umiejętności pozostają niezmienione.",
+      "attunementReturnCost": "Jeśli opuścisz tę parę, powrót do niej kosztuje {cost} zadań pojednania.",
       "identity": {
         "title": "Tożsamość Rzemieślnicza",
         "syncing": "Oczekiwanie na tożsamość rzemieślniczą ze sfery.",
@@ -2308,48 +2313,64 @@ export const pl_PL: EnTranslations = {
       "skillReqLine": "Wymaga {craft} {skill}",
       "difficultyFull": "Pełny przyrost umiejętności",
       "difficultyReduced": "Zmniejszony przyrost umiejętności",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimalny przyrost umiejętności",
       "difficultyNone": "Żadnego przyrostu umiejętności",
       "stationBadge": "Stanowisko rzemieślnicze",
       "stationOutOfRangeNamed": "Przejdź do {station}, aby to wytworzyć.",
+      "learnMoreAtStation": "{master} przy {station} może nauczyć cię więcej przepisów {craft}.",
       "masterworkToast": "Arcydzieło! {name}",
       "masterworkZoneLine": "{crafter} stworzył arcydzieło {name}!",
       "tierUpToast": "{craft} awansowany na poziom {tier}!",
+      "trendNudge": "Twoje ręce skłaniają się ku {archetype}. Jego dostrojenie czeka u {master}.",
+      "trendNudgeNoMaster": "Twoje ręce skłaniają się ku {archetype}. Poszukaj mistrza rzemiosła, by je podjąć.",
+      "attunedZoneLine": "{name} dostroił się jako {archetype}!",
+      "attunedBanner": "Dostrojony: {title}",
+      "tierTutorial": {
+        "title": "Twój Pierwszy Poziom",
+        "tierCap": "Rzemiosło osiąga swój pierwszy poziom przy umiejętności {skill}, a każdy poziom poprawia to, co może wytworzyć. Ale rzemiosło wspina się poza rzadką pracę tylko wtedy, gdy jest jedną z twoich dwóch specjalizacji.",
+        "radar": "Twoje profesje tworzą koło. Dostrojenie do sąsiadującej pary sprawia, że te dwa rzemiosła stają się nieograniczonymi specjalizacjami, jedno rzemiosło po drugiej stronie koła staje się hobby z pułapem rzadkości, a reszta leży uśpiona: wiedza zachowana, lecz ograniczona do pospolitej, dopóki ponownie jej nie podejmiesz.",
+        "masters": "Mistrzowie rzemiosła w miastach oferują zadania dostrojenia. Odwiedź jednego, by wybrać swoją parę, gdy będziesz gotowy. Niczego, czego się nauczyłeś, nigdy nie tracisz.",
+        "dismiss": "Rozumiem"
+      },
       "makersMark": "Stworzone przez {name}",
-      "gatheredBy": "Gathered by {name}",
+      "gatheredBy": "Zebrane przez {name}",
       "masterworkSeal": "Arcydzieło",
-      "enchantedLine": "Zaczarowany"
+      "enchantedLine": "Zaczarowany",
+      "commissionToggle": "Wyrób na zamówienie",
+      "commissionToggleHint": "Przywiązuje się do pierwszej postaci, która go otrzyma w transakcji.",
+      "commissionUnbound": "Wyrób na zamówienie: przywiązuje się do pierwszego odbiorcy",
+      "commissionBound": "Wyrób na zamówienie: przywiązany do odbiorcy"
     },
     "itemMenu": {
-      "use": "Use",
-      "equip": "Equip",
-      "disenchant": "Disenchant",
-      "salvage": "Salvage",
-      "applyEnchant": "Apply Enchant"
+      "use": "Użyj",
+      "equip": "Załóż",
+      "disenchant": "Rozbroić",
+      "salvage": "Odzyskaj",
+      "applyEnchant": "Zastosuj zaklinanie"
     },
     "enchanting": {
-      "disenchantedLine": "You disenchant {item}.",
-      "salvagedLine": "You salvage {item}.",
-      "enchantAppliedLine": "You enchant {item} with {enchant}.",
-      "notHeld": "You do not have that item.",
-      "notDisenchantable": "You cannot disenchant that.",
-      "notSalvageable": "You cannot salvage that.",
-      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
-      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
-      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
-      "enchantWrongSlot": "That enchant cannot be applied to that item.",
-      "enchantUnknown": "That enchant does not exist.",
-      "enchantInsufficient": "You do not have the materials for that enchant.",
-      "disenchantConfirmTitle": "Disenchant {item}?",
-      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
-      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
-      "salvageConfirmTitle": "Salvage {item}?",
-      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
-      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
-      "pickerTitle": "Apply Enchant",
-      "targetTitle": "Choose an item to enchant",
-      "noEnchants": "No enchant uses this reagent.",
-      "noTargets": "No eligible item to enchant."
+      "disenchantedLine": "Rozbrajasz {item}.",
+      "salvagedLine": "Odzyskujesz {item}.",
+      "enchantAppliedLine": "Zaklinasz {item} za pomocą {enchant}.",
+      "notHeld": "Nie posiadasz tego przedmiotu.",
+      "notDisenchantable": "Nie możesz tego rozbroić.",
+      "notSalvageable": "Nie możesz tego odzyskać.",
+      "disenchantThrottled": "Rozbrajasz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.",
+      "salvageThrottled": "Odzyskujesz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.",
+      "enchantThrottled": "Zaklinasz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.",
+      "enchantWrongSlot": "To zaklinanie nie może być zastosowane do tego przedmiotu.",
+      "enchantUnknown": "To zaklinanie nie istnieje.",
+      "enchantInsufficient": "Nie masz materiałów na to zaklinanie.",
+      "disenchantConfirmTitle": "Rozbroić {item}?",
+      "disenchantConfirmBody": "To niszczy {item} i daje materiały arkaniczne. Nie można tego cofnąć.",
+      "disenchantConfirmBodySpecial": "To niszczy specjalną kopię {item} (podpisaną, mistrzowską lub zaklinowaną) i daje materiały arkaniczne. Nie można tego cofnąć.",
+      "salvageConfirmTitle": "Odzyskać {item}?",
+      "salvageConfirmBody": "To niszczy {item} i daje materiały rzemieślnicze. Nie można tego cofnąć.",
+      "salvageConfirmBodySpecial": "To niszczy specjalną kopię {item} (podpisaną, mistrzowską lub zaklinowaną) i daje materiały rzemieślnicze. Nie można tego cofnąć.",
+      "pickerTitle": "Zastosuj zaklinanie",
+      "targetTitle": "Wybierz przedmiot do zaklinania",
+      "noEnchants": "Brak zaklinania używającego tego składnika.",
+      "noTargets": "Brak kwalifikującego się przedmiotu do zaklinania."
     },
     "training": {
       "title": "Szkolenie: {name}",
@@ -2369,6 +2390,25 @@ export const pl_PL: EnTranslations = {
       "notTaughtHere": "Ten przepis nie jest tutaj nauczany.",
       "alreadyKnown": "Znacie już ten przepis.",
       "outOfRange": "Musisz być na stacji, żeby trenować."
+    },
+    "unbind": {
+      "title": "Odwiązywanie: {name}",
+      "close": "Zamknij odwiązywanie",
+      "intro": "Mistrz może uwolnić wyrób na zamówienie z jego przywiązania, za opłatą.",
+      "empty": "Nie nosisz żadnych przywiązanych wyrobów na zamówienie.",
+      "rowSub": "Uwalnia przywiązanie; wyrób przywiązuje się ponownie przy kolejnej transakcji.",
+      "unbindAria": "Odwiąż {name} za {fee}",
+      "dialogOption": "Odwiązywanie",
+      "dialogOptionAria": "Odwiąż wyrób na zamówienie u {name}",
+      "confirmTitle": "Odwiąż wyrób na zamówienie",
+      "confirmBody": "Odwiązać {name} za {fee}?",
+      "confirmOk": "Odwiąż",
+      "confirmCancel": "Anuluj",
+      "unbound": "Odwiązano {name} za {fee}. Przywiąże się ponownie przy kolejnej transakcji.",
+      "notEligible": "Tego przedmiotu nie można odwiązać.",
+      "notBound": "Ten przedmiot nie jest przywiązany.",
+      "cannotAfford": "Nie stać cię na opłatę za odwiązanie.",
+      "outOfRange": "Musisz być przy stanowisku rzemieślniczym, by odwiązać."
     },
     "finder": {
       "title": "Znajdywacz Lochów",
@@ -4216,7 +4256,7 @@ export const pl_PL: EnTranslations = {
   "stats": {
     "title": "Stan świata",
     "accountsCreated": "Gracze",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Utworzone postacie",
     "playersOnline": "Gracze online",
     "realmName": "Nazwa świata"
   },
@@ -5799,7 +5839,7 @@ export const pl_PL: EnTranslations = {
       "tradeTooFar": "Cel jest zbyt daleko, by handlować.",
       "tradeExpired": "Prośba o wymianę wygasła.",
       "tradeFailed": "Wymiana nieudana: przedmioty lub pieniądze są już niedostępne.",
-      "tradeBound": "That item is bound and cannot be traded."
+      "tradeBound": "Ten przedmiot jest przywiązany i nie można go wymienić."
     },
     "logs": {
       "standUp": "Wstajesz.",
@@ -5948,7 +5988,7 @@ export const pl_PL: EnTranslations = {
         "combat": "W walce",
         "dungeon": "W lochu",
         "dead": "Martwy",
-        "afk": "Away"
+        "afk": "Nieobecny"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -6056,7 +6096,7 @@ export const pl_PL: EnTranslations = {
     },
     "cast": {
       "fishing": "Wędkarstwo",
-      "gathering": "Gathering",
+      "gathering": "Zbieranie",
       "demonHeal": "Demoniczne leczenie",
       "thunzharrStormcall": "Zew burzy"
     }
@@ -6195,7 +6235,6 @@ export const pl_PL: EnTranslations = {
       "ifYouEquip": "Jeśli to założysz",
       "damageSpeed": "{min} - {max} obrażeń Szybkość {speed}",
       "dps": "({dps} obrażeń na sekundę)",
-      "dagger": "Sztylet",
       "armorStat": "{value} pancerza",
       "stat": "+{value} {stat}",
       "useFood": "Użycie: Przywraca {amount} zdrowia w ciągu {seconds} s. Podczas jedzenia musisz pozostać w pozycji siedzącej.",
@@ -8571,142 +8610,142 @@ export const pl_PL: EnTranslations = {
         "name": "Eliksir Węża"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Kaftan z mszystej skóry"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Rękawice Kolczastka"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Kolcze rękawice akolity"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Kolczy pas wotywny"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Kij z cierniowego korzenia"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Latarnia Dolinnego Ognia"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Nogawice Bagiennej Kory"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Buty Moczarorozkwitu"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Sabatony Strażnika Bagnisk"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Kolczuga Bagnistego Blasku"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Peleryna Zmierzczokolca"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Obuch Bagiennego Cienia"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Pas Dzikich Ostępów"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Naramienniki Skalostrażnika"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Wielki kostur Skalokolca"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Szaty Księżycowej Kory"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Hełm Szczytowej Pieśni"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Rękawice Burzowego Śpiewu"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Pas Skalodrapa"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Kaptur Burzowego Korzenia"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Nagolenniki Gromowego Strażnika"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Buty Kroku Zjawy"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Rękawice Odłamkokła"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Peleryna Odłamkowej Pieśni"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Czarodziejskie rękawice kultu żmija"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Dzikie owijki Kolczastego Szczytu"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Kolczuga Burzowego Wotum"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Naramienniki Kryptokwiatu"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Kolczasty obuch grobowego żmija"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Szaty Budzącego się Gaju"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Wielki kostur Nocnego Kła"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Obuch Splądowanych Ostępów"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Trzewiki Hymnu Przypływu"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Egida Perłowego Strażnika"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Nogawice Dzikiego Wzrostu"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Rękawice Strażnika Gaju"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Buty Zielonego Wędrowca"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Pas Księżycowego Strażnika"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Buty Snokorenia"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Peleryna Burzowej Kory"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Obuch Dzikich Dusz"
       },
       "resonant_thread": {
-        "name": "Resonant Thread"
+        "name": "Rezonująca nić"
       },
       "resonant_hide": {
-        "name": "Resonant Hide"
+        "name": "Rezonująca skóra"
       },
       "resonant_links": {
-        "name": "Resonant Links"
+        "name": "Rezonujące ogniwa"
       },
       "resonant_steel": {
-        "name": "Resonant Steel"
+        "name": "Rezonująca stal"
       },
       "resonant_timber": {
-        "name": "Resonant Timber"
+        "name": "Rezonujące drewno"
       },
       "conjured_water4": {
         "name": "Wyczarowana woda źródlana"
@@ -10800,23 +10839,143 @@ export const pl_PL: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Rzemiosło, które możesz nazwać własnym",
-        "text": "Umiejętność to wiedza, {playerName}, lecz dostrojenie to obietnica. Wybierz dwa sąsiadujące rzemiosła, których metody będziesz nosić jako swoje specjalizacje, a potem przynieś mi rudę wydobytą w Dolinie własnymi rękami.",
-        "completion": "Obietnica zostaje dotrzymana. Te dwa rzemiosła stają się teraz twoimi specjalizacjami, a wiedza po przeciwnej stronie kręgu staje się twoim hobby.",
+      "q_prof_attune_smith": {
+        "title": "Obietnica kowala",
+        "text": "Stal nie przebacza błądzącej ręce, więc powiem ci wprost, zanim cokolwiek przysięgniesz. Zwiąż się z moją kuźnią, a Wytwarzanie Broni i Wytwarzanie Pancerzy staną się twoimi dwiema specjalizacjami, jedynymi rzemiosłami, które możesz prowadzić poza rzadką pracę. Rzemiosło po przeciwnej stronie koła od nich usiądzie jako hobby, doprowadzone do rzadkiej i nie dalej. Inne fachy nie spalają się, {playerName}: po prostu milkną, uśpione, dopóki ich nie zawołasz z powrotem. I wiedz to, zanim opuści cię młotek: rzuć tę parę dla innej i będziesz wracał przez uczciwą pracę, pięć pokonanych za pierwszym razem, osiem za kolejnym, jedenaście po tym, więcej z każdym razem. Wciąż tu stoisz? To przynieś mi trzy żyły rudy wydobyte własnoręcznie z Doliny, a uznamy umowę za zawartą.",
+        "completion": "Dobra ruda, i dobre ręce do pracy. Wytwarzanie Broni i Wytwarzanie Pancerzy teraz twoje do opanowania. Zarób resztę.",
         "objectives": {
           "0": {
             "label": "Żyła rudy wydobyta"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Zadośćuczynienie",
-        "text": "Nosiłeś już tę parę, {playerName}. Powrót nie jest nową przysięgą. Pomóż utrzymać drogę w Dolinie w czystości, a praca przypomni twoim rękom, co kiedyś umiały.",
-        "completion": "Dawny rytm powraca. Twoja poprzednia para rzemiosł jest znów aktywna.",
+      "q_prof_attune_outfitter": {
+        "title": "Miara krawca",
+        "text": "Mierz koszt zanim tniesz, to pierwsza zasada przy moim warsztacie. Wybierz mnie, a Garbarstwo i Krawiectwo staną się twoimi dwiema specjalizacjami, parą, którą możesz prowadzić poza rzadką pracę; rzemiosło naprzeciwko nich usiądzie jako hobby, wniesione do rzadkiej i pozostawione tam. Fachy, które odłożysz, nie są rozwiązane, {playerName}, tylko złożone, uśpione dopóki ich nie podejmiesz. Upewnij się jednak: opuść tę parę i chcieć ją z powrotem oznacza płacić pracą, która wydłuża się z każdym razem. Jeśli masz pewność, wybij cztery pająki sieciowe i przynieś ich jedwab do warsztatu, bo dobra nić zaczyna każdą dobrą odzież.",
+        "completion": "Równa nić, równa ręka. Garbarstwo i Krawiectwo twoje, by nieść tak daleko, jak sięga twoja umiejętność. Mierz dwa razy, a nie zawiodą.",
         "objectives": {
           "0": {
-            "label": "Leśny Wilk zabity"
+            "label": "Pająk sieciowy wybity"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Przepis wart zachowania",
+        "text": "Każde dobre danie to dwa smaki, które do siebie pasują, i tak jest z dobrym rzemiosłem, {playerName}. Usiądź ze mną, a Alchemia i Gotowanie stają się twoimi dwiema specjalizacjami: dwiema, które możesz doprowadzić poza rzadką pracę; rzemiosło po przeciwnej stronie koła to twoje hobby, podkręcone do rzadkiej i ani trochę dalej. Reszta twoich fachów czeka w spiżarni, uśpiona, nie zepsuta, gotowa, gdy po nie sięgniesz. Uczciwe ostrzeżenie, dopóki garnek jest zimny: odejść do innej pary i wrócić to trud, który rośnie z każdym razem. Jeśli jesteś gotowy, upoluj mi cztery dzikie dziki, bo kuchnia warta swojej soli zaczyna od dobrego mięsa.",
+        "completion": "No i mamy start z mięsem na kościach. Alchemia i Gotowanie twoje do ugotowania tak wysoko, jak chcesz. Wróć głodny.",
+        "objectives": {
+          "0": {
+            "label": "Dziki dzik upolowany"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "Niestabilny układ",
+        "text": "O, o, chcesz te dobre rzeczy, te głośne, tak? Słuchaj, słuchaj, zanim dotkniesz czegoś tykającego: powiedz słowo, a Inżynieria i Alchemia staną się twoimi dwiema specjalizacjami, jedynymi dwoma, które możesz dociągnąć poza rzadką pracę (tam dopiero robi się ZABAWNIE, zaufaj mi). Rzemiosło naprzeciwko trafia do kieszeni jako hobby, rzadka i nie dalej, nie bądź smutny. Inne fachy? Nie znikają, {playerName}, po prostu drzemią, obudź je kiedy chcesz. Ale (zawsze jest ale, trzymaj lont) rzuć tę parę i wróć później, a kosztuje cię to pot, który się kumuluje. Tak? TAK? To zbierz mi trzy łany ziół, te niestabilne, nie pytaj które, wszystkie są trochę niestabilne, jeśli wierzyć wystarczająco mocno.",
+        "completion": "HA. Odczynniki, prawdziwe, i wszystkie palce wciąż na miejscu, dobrze, dobrze. Inżynieria i Alchemia, twoje, idź zrób coś, czego pożałuje. Dalej.",
+        "objectives": {
+          "0": {
+            "label": "Łan ziół zebrany"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Z powrotem do kuźni",
+        "text": "Wróciłeś do kuźni. Nie udaję, że to nie kole, {playerName}, ale jestem sprawiedliwą ręką i praca jest sprawiedliwa też. Znasz cenę powrotu: praca, i więcej jej za każdym razem, gdy się oddaliłeś. Połóż wilki napadające na drogę północną, a zamach przy tym przypomni twoim ramionom, czego ta para kiedyś od nich wymagała.",
+        "completion": "Rytm wrócił do twoich rąk. Wytwarzanie Broni i Wytwarzanie Pancerzy znowu twoimi specjalizacjami. Nie rób z tego nawyku.",
+        "objectives": {
+          "0": {
+            "label": "Leśny wilk zabity"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Powrót do warsztatu",
+        "text": "Znowu przy moim warsztacie po tym wszystkim. Nie mam urazy, {playerName}, ale nić pamięta rękę, która ją puściła, i koszt jej ponownego podjęcia jest z każdym razem odrobinę wyższy. Wybij pająki sieciowe tłoczące się w zachodnich lasach, a praca ustabilizuje twoje ręce zanim dotkną ponownie dobrego jedwabiu.",
+        "completion": "Znowu ustabilizowany. Garbarstwo i Krawiectwo wracają do twoich rąk jako specjalizacje. Mierz dwa razy nim znowu pójdziesz w świat.",
+        "objectives": {
+          "0": {
+            "label": "Pająk sieciowy wybity"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Z powrotem do pieca",
+        "text": "A, kto tu wraca do mojego garnka. Bez urazy, {playerName}, kuchnia zawsze ma miejsce, ale wiesz, że rachunek rośnie za każdym razem, gdy z niej wychodzisz. Idź przerzedzić dziki dziki na wschodniej łące, bo uczciwy pot jest pierwszym składnikiem i przypomni twoim rękom o pracy.",
+        "completion": "Stary smak powraca. Alchemia i Gotowanie wróciły do twojego pieca jako specjalizacje. Tym razem zostań trochę dłużej.",
+        "objectives": {
+          "0": {
+            "label": "Dziki dzik upolowany"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Ledger rośnie",
+        "text": "Wróciłeś, ha, zawsze wracają, głośne rzeczy mają przyciąganie, tak? Bez dąsania się z mojej strony, {playerName}, ale ledger, o ten ledger, rośnie za każdym razem, gdy uciekasz, coraz więcej przy każdym powrocie, to tylko sprawiedliwe. Idź wyczyść tunelowe szczury z wykopu, najpierw pot, potem iskry, taka jest zasada, którą właśnie wymyśliłem.",
+        "completion": "No i jest ta nerwowość rąk. Inżynieria i Alchemia znowu twoimi specjalizacjami, no dawaj, idź zrób huk. Tym razem zostań, co?",
+        "objectives": {
+          "0": {
+            "label": "Tunelowy szczur wytępiony"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Zamówienie kuźni",
+        "text": "Kuźnia zawsze chce żywienia, {playerName}. Przynieś mi osiem grudek rudy miedzi, a zapłacę ci za dostawę. Bez ceremonii, tylko ruda i monety.",
+        "completion": "Dobra waga, bez żużlu. Oto twoje należne. Kuźnia wkrótce znowu będzie głodna.",
+        "objectives": {
+          "0": {
+            "label": "Ruda miedzi dostarczona"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Zamówienie kuchni",
+        "text": "Moja spiżarnia wygląda skromnie, {playerName}, a skromne spiżarnie robią marudnych kucharzy. Zdobądź mi osiem kawałków mięsa z dziczyzny, a jest w tym moneta dla ciebie, plus moja wieczna wdzięczność, która jest warta mniej, ale smakuje lepiej.",
+        "completion": "No i pełna spiżarnia. Oto twoja zapłata. Wróć, gdy twoje torby będą znowu ciężkie.",
+        "objectives": {
+          "0": {
+            "label": "Mięso z dziczyzny dostarczone"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Zamówienie warsztatu",
+        "text": "Warsztat chodzi na sucho i bezczynne ręce marnują światło dzienne, {playerName}. Przynieś mi sześć moków jedwabiu pająka, a zapłacę ci uczciwie, co do miedzianej.",
+        "completion": "Piękny jedwab, równo przędzony. Twoja moneta, dokładnie odmierzona. Warsztat ci dziękuje, i ja też.",
+        "objectives": {
+          "0": {
+            "label": "Jedwab pająka dostarczony"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Zamówienie narzędziowni",
+        "text": "Trzonki, uchwyty, kolby, zużywam drewno jakby wychodziło z mody, co NIE jest prawdą, drewno jest wieczne, {playerName}. Przywieź mi osiem kłód żelaznej kory własnoręcznie, a zapłacę ci, monety, prawdziwe monety, nie przysługę, obiecuję, przeważnie.",
+        "completion": "Perfekcyjne, perfekcyjne, prosta słoja, bez zgnilizny. Masz tu, twoja moneta, widzisz, dotrzymuję słowa (przeważnie). Przynieś więcej, gdy potkniesz się o drzewo.",
+        "objectives": {
+          "0": {
+            "label": "Kłoda żelaznej kory dostarczona"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Zamówienie garbarni",
+        "text": "Kadzie puste. Przynieś osiem surowych skór. Moneta gdy przyniesiesz.",
+        "completion": "Dobre skóry. Uczciwa zapłata. Wróć, gdy będziesz mieć więcej.",
+        "objectives": {
+          "0": {
+            "label": "Surowa skóra dostarczona"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Zamówienie aptekarskie",
+        "text": "Moje półki wymagają złotego liścia, a zapasy rynkowe są, przewidywalnie, zanieczyszczone. Przynieś mi sześć ziół złotego liścia, nieuszkodzonych, a zostaniesz wynagrodzony dokładnie. Uszkodzone liście zostaną odrzucone, więc pilnuj torby.",
+        "completion": "Akceptowalne. Silne i właściwie zarządzane. Twoja zapłata, co do monety. Niech ci nie uderzą do głowy, to inny odczynnik.",
+        "objectives": {
+          "0": {
+            "label": "Ziele złotego liścia dostarczone"
           }
         }
       },
@@ -11122,9 +11281,109 @@ export const pl_PL: EnTranslations = {
         "body": "Rzemieślnik,\n\nDo Gildii docierają wieści o twojej pracy w zbrojeniówce i inżynierii: płyty są nitowane, koła zębate ustawione, a oba rzemiosła zasilają się nawzajem. Sąsiednie rzemiosła współpracujące wyznaczają rękę gotową do dostrojenia. Odszukaj Kowala Haldrena, płatnerza z Eastbrook: na razie przemawia on w imieniu mistrzów. Udowodnij mu swoje rzemiosło, wykonując pracę własnych rąk, a on zobaczy, że twoje dwie specjalności są zestrojone.\n\nZ wyrazami szacunku,\nGildia Rzemieślnicza"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Gildia",
+        "subject": "Twoje rzemiosło, uczciwe na nowo",
+        "body": "Gildyjny towarzyszu,\n\nGildia przyjęła nowe obliczenie mistrzostwa. Każda ręka wspina się od nowa: twoje umiejętności rzemieślnicze i zbierackie zostały przywrócone do zera.\n\nWszystko inne pozostaje twoje, nienaruszone: przepisy, narzędzia i materiały, skarbiec i złoto, dostrojenia i tytuły, czyny i renoma, zadania i listy.\n\nWspinaczka jest teraz uczciwa. Tania praca cię nie przeniesie. Szukaj trudniejszych przepisów, bogatszych żył i głębszych wód.\n\nZ szacunkiem,\nGildia"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Mistrzyni Kuźni Darva",
+        "subject": "Iskra warta odnotowania",
+        "body": "Wieść dochodzi do mojej kuźni, że jedna z twoich specjalizacji teraz stoi na niespotykany poziomie. To najniższy szczebel na długiej wspinaczce, ale zarobiłeś go przy kowadle, nie przez proszenie. Utrzymuj ogień."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Mistrzyni Kuźni Darva",
+        "subject": "Rzadka praca, i zasłużona",
+        "body": "Mówią mi, że jedna z twoich specjalizacji osiągnęła rzadką pracę. To szczebel, gdzie niechlujne ręce odpadają, a prawdziwi kowale zostają. Wciąż stoisz. Dobrze."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Mistrzyni Kuźni Darva",
+        "subject": "Metal teraz cię słucha",
+        "body": "Jedna z twoich specjalizacji wspiął się poza rzadką pracę ku poważnej robocie. Metal odpowiada takiej ręce, już go nie zwalcza. Nie pozwól, żeby pochwała osłabiła twoje ramię."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Mistrzyni Kuźni Darva",
+        "subject": "Blisko szczytu drabiny",
+        "body": "Jedna z twoich specjalizacji stoi jeden szczebel pod mistrzostwem. Mało rąk, które znam, sięga tej wysokości, a jeszcze mniej utrzymuje tu ostrze. Dokończ wspinaczkę."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Mistrzyni Kuźni Darva",
+        "subject": "Mistrzostwo, nareszcie",
+        "body": "Jedna z twoich specjalizacji osiągnęła mistrzostwo, najwyższy poziom, na jaki ręka może wspiąć. Nie udzielam pochwał swobodnie, więc posłuchaj raz: kuźnia jest z ciebie dumna. Idź teraz nauczyć ogień czegoś nowego."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Tkaczka Ottilie",
+        "subject": "Równy pierwszy rząd",
+        "body": "Gildia odnotowuje, że jedna z twoich specjalizacji osiągnęła niespotykany poziom. To dopiero pierwszy rząd z wielu, ale równy i pewny. Mierz następny równie starannie."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Tkaczka Ottilie",
+        "subject": "Rzadka praca, dobrze zmierzona",
+        "body": "Jedna z twoich specjalizacji wspięła się do rzadkiej pracy. To tam niedbała ręka pokazuje każdy upuszczony ścieg, a twoja nie pokazała. Jestem po cichu zadowolona."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Tkaczka Ottilie",
+        "subject": "Wzorzec staje się jasny",
+        "body": "Jedna z twoich specjalizacji przekroczyła rzadką pracę ku doskonalszej. Wzorzec staje się jasny dla ręki na tym poziomie, żadnych zgadywanek. Mierz dalej dwa razy."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Tkaczka Ottilie",
+        "subject": "Jeden rząd od szczytu",
+        "body": "Jedna z twoich specjalizacji dzieli jeden rząd od mistrzostwa. Ostatni rząd jest zawsze najtrudniejszy do utrzymania równości. Nie spieszcie się teraz."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Tkaczka Ottilie",
+        "subject": "Ostatni ścieg",
+        "body": "Jedna z twoich specjalizacji osiągnęła mistrzostwo. Mierzyłam twoją pracę dwa razy, jak wszystko mierzę, i trzyma. Niewielu rąk wiązało kiedykolwiek ostatni ścieg tak czysto. Jestem dumna i nie mówię tego lekko."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Kucharz Marlow",
+        "subject": "Przedsmak rzeczy, które nadejdą",
+        "body": "Wieść dochodzi do mojej kuchni, że jedna z twoich specjalizacji osiągnęła niespotykany poziom. To tylko przedsmak, nic więcej, ale obiecujący. Nie zatrzymuj garnka."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Kucharz Marlow",
+        "subject": "Rzadka praca, bez przypalonych krawędzi",
+        "body": "Mówią mi, że jedna z twoich specjalizacji dobrnęła do rzadkiej pracy. To temperatura, w której wielu kucharzy przypala danie, a ty tego nie zrobiłeś. Usiądź, ale nie za długo."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Kucharz Marlow",
+        "subject": "Teraz dopiero gotujesz",
+        "body": "Jedna z twoich specjalizacji przebiła się poza rzadką pracę w prawdziwą głębię. Teraz dopiero gotujesz, jak to mówią. Doprawiaj śmiało i ciągle próbuj."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Kucharz Marlow",
+        "subject": "Jeden kurs od uczty",
+        "body": "Jedna z twoich specjalizacji dzieli jeden kurs od mistrzostwa. Ostatni jest zawsze najobfitszy i najłatwiejszy do przelecenia. Spokojne ręce na chochli."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Kucharz Marlow",
+        "subject": "Mistrzostwo, podane na gorąco",
+        "body": "Jedna z twoich specjalizacji osiągnęła mistrzostwo, najwyższą półkę całej spiżarni. Karmię wszystkich, ale niewielu gotuje tyle, żeby tu dotrzeć. Jestem z ciebie naprawdę dumny. Idź teraz i przygotuj coś, co sprawi, że zaszlochają przy stole."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Majster Gizzel",
+        "subject": "PIERWSZA iskra, ha",
+        "body": "Ej, dane mówią, że jedna z twoich specjalizacji osiągnęła niespotykany poziom, małe ziemniaki, maleństwo, ale PYKŁO, tak? Pierwsza iskra jest zawsze najsłodsza. Więcej iskier. Dalej."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Majster Gizzel",
+        "subject": "Rzadkie, oh, RZADKIE",
+        "body": "Mówią mi, że jedna z twoich specjalizacji wspiął się do rzadkiej pracy, a rzadka to tam, gdzie zaczyna być właściwie niebezpiecznie (tego dobrego rodzaju). Większość rąk odpuszcza przed zabawą. Nie ty. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Majster Gizzel",
+        "subject": "Teraz robi się głośno",
+        "body": "Jedna z twoich specjalizacji przebił rzadką pracę w poważne rzeczy, o tak, tu robi się GŁOŚNO. Nie zatrzymuj się teraz, cokolwiek robisz, impet to wszystko, a także lonty."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Majster Gizzel",
+        "subject": "Jeden szczebel, JEDEN, do szczytu",
+        "body": "Jedna z twoich specjalizacji jest JEDEN szczebel pod mistrzostwem, jeden, singularny, czy czujesz, jak brzęczy? Ostatni krok to największy huk. Nie mrugaj."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Majster Gizzel",
+        "subject": "MISTRZOSTWO, kabum",
+        "body": "Jedna z twoich specjalizacji osiągnęła mistrzostwo, sam SZCZYT, kabum, cała drabina, gotowe. Nie rozdaję pochwał, rozdaję lonty, ale masz i jedno, i drugie: jesteś genialny i trochę przerażający. Idź sprawić, żeby góry się denerwowały."
       }
     },
     "itemSets": {

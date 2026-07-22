@@ -30,6 +30,7 @@ import {
 } from '../src/sim/data';
 import { devTierIndexForMergedPrs } from '../src/sim/dev_tier';
 import { parseRelayCommand } from '../src/sim/discord_relay';
+import { specialRoleChatTag } from '../src/sim/discord_roles';
 import {
   isInJailCage,
   JAIL_CENTER,
@@ -568,6 +569,12 @@ const HEAVY_SELF_EVENTS = new Set<string>([
   'summonPet',
   'dismissPet',
   'summonDemon',
+  // Maker's Bond unbind (Professions 2.0 Phase 14b): a successful unbind can
+  // clear boundTo IN PLACE (the single-copy arm emits no loot event), so the
+  // result event itself must re-diff the heavy self keys or the holder's inv
+  // mirror goes stale until the staggered refresh. Also refreshes the purse
+  // for the fee debit.
+  'unbindResult',
 ]);
 
 // How often to re-broadcast online players' $WOC holder-tier flair. Each wallet
@@ -4164,7 +4171,11 @@ export class GameServer {
         );
         break;
       case 'craft_item':
-        if (typeof msg.recipe === 'string') sim.craftItem(msg.recipe, pid);
+        // `commission` (Professions 2.0 Phase 14b): a strict boolean-true
+        // check (the dispatch type-guard rule); anything else reads as false.
+        // The sim honors it only for eligible equipment outputs and mints the
+        // bindOnTrade arm itself, so nothing here trusts client data.
+        if (typeof msg.recipe === 'string') sim.craftItem(msg.recipe, msg.commission === true, pid);
         break;
       // Enchanting profession commands (Professions 2.0 Phase 13): the sim
       // resolvers re-validate ownership/eligibility/throttle (nothing trusted
@@ -4182,6 +4193,15 @@ export class GameServer {
         break;
       case 'salvage_item':
         if (typeof msg.item === 'string') sim.salvageItem(msg.item, pid);
+        break;
+      case 'unbind_item':
+        // Maker's Bond unbind service (Professions 2.0 Phase 14b): the sim
+        // resolver re-validates eligibility/bound-ness/station range/fee
+        // (nothing trusted from the client); the outcome reaches this client
+        // as the pid-scoped text-free unbindResult event, a HEAVY_SELF_EVENTS
+        // member so the cleared payload and the fee debit re-diff the self
+        // inv/purse mirrors on the next snapshot.
+        if (typeof msg.item === 'string') sim.unbindItem(msg.item, pid);
         break;
       case 'place_mobile_station':
         if (typeof msg.craft === 'string') sim.placeMobileStation(msg.craft, pid);
@@ -5614,11 +5634,35 @@ export class GameServer {
         'achg',
         session.timerWireCache.encodeCharges(anchorSession.pid, p.abilityCharges).json,
       );
+      // The companion recharge timers ({abilityId: [deadline, length]}), so the
+      // bar can show the thin recharge sweep while the pool still holds a use
+      // (the empty-pool timer keeps riding `cds` unchanged). Additive key: an
+      // older client simply ignores it.
+      maybeSerialized(
+        'achr',
+        session.timerWireCache.encodeChargeRecharges(
+          anchorSession.pid,
+          p.abilityCharges,
+          this.sim.time,
+        ).json,
+      );
     } else {
       maybe(
         'achg',
         p.abilityCharges
           ? Object.fromEntries(Object.entries(p.abilityCharges).map(([k, v]) => [k, v.charges]))
+          : {},
+      );
+      // Legacy arm: raw remaining seconds ({abilityId: [remaining, length]}),
+      // resent per snapshot like every legacy timer.
+      maybe(
+        'achr',
+        p.abilityCharges
+          ? Object.fromEntries(
+              Object.entries(p.abilityCharges)
+                .filter(([, v]) => v.recharge > 0 && Number.isFinite(v.recharge))
+                .map(([k, v]) => [k, [v.recharge, v.rechargeLength]]),
+            )
           : {},
       );
     }
@@ -6207,7 +6251,19 @@ export class GameServer {
     for (const ev of events) {
       if (ev.type !== 'chat') continue;
       const flair = this.chatFlairForPid(ev.fromPid);
-      if (flair) ev.flair = flair;
+      // The sender's top STAFF Discord role (the anti-impersonation chat tag)
+      // is composed here from the SENDER's entity rather than folded into the
+      // cached session.chatFlair: e.discordRole is written by the bot's
+      // members-meta push on its own cadence, so reading it live at fan-out
+      // cannot go stale. Gated on the catalog's chatTag flag so community
+      // roles (Artist, Content Creator, LEGEND, SHILL) stay nameplate-only
+      // and the chat tag remains a pure authority signal. Allocates only for
+      // staff senders.
+      const role = this.sim.entities.get(ev.fromPid)?.discordRole;
+      // `flair` may be undefined here; spreading undefined is a spec-defined
+      // no-op, so a role-only sender yields a clean { role } object.
+      if (role && specialRoleChatTag(role)) ev.flair = { ...flair, role };
+      else if (flair) ev.flair = flair;
     }
     // ignore list: social invites from blocked senders are resolved once per
     // batch (dropped for every session and declined in the sim), not per

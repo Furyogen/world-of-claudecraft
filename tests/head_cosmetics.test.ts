@@ -14,6 +14,17 @@ const visualSource = readFileSync(
   'utf8',
 ).replace(/\r\n/g, '\n');
 
+function glbNodeNames(url: string): Set<string> {
+  const glb = readFileSync(new URL(`../public/${url.replace(/^\/+/, '')}`, import.meta.url));
+  expect(glb.readUInt32LE(0), `${url} GLB magic`).toBe(0x46546c67);
+  const jsonLength = glb.readUInt32LE(12);
+  expect(glb.readUInt32LE(16), `${url} first chunk`).toBe(0x4e4f534a);
+  const json = JSON.parse(glb.subarray(20, 20 + jsonLength).toString('utf8')) as {
+    nodes?: { name?: string }[];
+  };
+  return new Set(json.nodes?.flatMap((node) => (node.name ? [node.name] : [])) ?? []);
+}
+
 describe('head cosmetics: sim carry', () => {
   it('setPlayerHead stores hairStyle + beard on the entity (offline appearance)', () => {
     const sim = new Sim({ seed: 1, playerClass: 'warrior', playerName: 'HeadTest' });
@@ -71,6 +82,15 @@ describe('head cosmetics: sim carry', () => {
     expect(state?.face).toBeUndefined();
     expect(state?.hairColor).toBeUndefined();
     expect(state?.faceColor).toBeUndefined();
+  });
+
+  it('keeps an explicitly submitted default head sparse', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'mage', playerName: 'Plain' });
+    sim.setPlayerHead(sim.playerId, 0, false, undefined, undefined, 0);
+    const state = sim.serializeCharacter(sim.playerId);
+    expect(state?.hairStyle).toBeUndefined();
+    expect(state?.beard).toBeUndefined();
+    expect(state?.face).toBeUndefined();
   });
 
   it('clamps hairStyle to a non-negative integer and rejects an unknown player', () => {
@@ -162,6 +182,37 @@ describe('head cosmetics: manifest options', () => {
     ]);
     for (const name of headMeshes) expect(skinMeshes.has(name)).toBe(false);
     expect(def.skinMeshNames).toEqual(['Pants', 'Arms', 'Shoulders', 'Torso']);
+  });
+
+  it('every cosmetic mesh referenced by the manifest exists in every player GLB', () => {
+    for (const cls of [
+      'warrior',
+      'paladin',
+      'hunter',
+      'rogue',
+      'priest',
+      'shaman',
+      'mage',
+      'warlock',
+      'druid',
+    ]) {
+      const def = VISUALS[`player_${cls}`];
+      const cosmetics = def.cosmetics;
+      expect(cosmetics, cls).toBeDefined();
+      const referenced = new Set([
+        ...(cosmetics?.hairMeshes ?? []),
+        ...(cosmetics?.faceMeshes ?? []),
+        ...(cosmetics?.faces ?? []).flatMap((face) => [
+          ...face.face,
+          ...face.hair.flat(),
+          ...(face.beard ?? []),
+        ]),
+      ]);
+      const nodes = glbNodeNames(def.url);
+      for (const name of referenced) {
+        expect(nodes.has(name), `${cls} GLB is missing cosmetic node ${name}`).toBe(true);
+      }
+    }
   });
 });
 

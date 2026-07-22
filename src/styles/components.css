@@ -4970,6 +4970,16 @@
   .crafting-station-badge.out-of-range {
     border-style: dashed;
   }
+  /* Phase 14 discoverability: the per-section "learnable at a master" hint,
+     shown under a craft section when the viewer has unlearned trainer recipes
+     for that craft. Muted guidance text, informational only (no tap target),
+     identical on every graphics preset. */
+  .crafting-learn-hint {
+    margin: 2px 0 6px;
+    color: var(--color-text-muted);
+    font-size: 10.5px;
+    line-height: 1.4;
+  }
   .vendor-empty {
     padding: 5px;
     font-size: 11px;
@@ -4981,6 +4991,37 @@
     margin-top: 8px;
     border-top: 1px solid #463a1c;
     padding-top: 6px;
+  }
+
+  /* ---------- profession first-tier tutorial (Phase 14) ---------- */
+  /* The once-ever explainer modal (profession_tutorial_window.ts), reusing the
+     confirm-dialog modal family (.window.panel shell, .cd-body/.cd-actions). A
+     bounded, centered modal; body-appended (see the layout.css --window-scale:1
+     group), and the JS floors its z-index above the mobile sheet (the
+     scoped-popup 96 rule). Sized from existing tokens, no new ones. */
+  #profession-tutorial {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    --window-pad: 14px;
+  }
+  #profession-tutorial .cd-body {
+    padding: 10px 0;
+  }
+  #profession-tutorial .cd-para {
+    margin: 0 0 8px;
+    color: var(--color-text-light);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  #profession-tutorial .cd-para:last-child {
+    margin-bottom: 0;
+  }
+  #profession-tutorial .cd-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
   }
 
   /* ---------- train window ---------- */
@@ -5001,6 +5042,31 @@
      row is informational, never interactive, so it drops the hover affordance. */
   .train-row.train-locked:disabled {
     opacity: 0.45;
+  }
+
+  /* ---------- Maker's Bond unbind window (Professions 2.0 Phase 14b) ---------- */
+  /* The station master's unbind service: same vendor-family row classes as the
+     train window above; only the intro line lives here, styled from existing
+     tokens (no new tokens, no new hex). */
+  #unbind-window {
+    width: 400px;
+  }
+  .unbind-intro {
+    display: block;
+    padding: 4px 6px 6px;
+  }
+
+  /* Commission opt-in row in the crafting window (Professions 2.0 Phase 14b):
+     a per-recipe label-wrapped checkbox under the Craft button, reusing the
+     combo-note footprint so the recipe card keeps its rhythm. */
+  .crafting-commission-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 6px 4px;
+    font-size: 11px;
+    color: var(--gold);
+    cursor: pointer;
   }
   .train-row.train-known {
     cursor: default;
@@ -10582,6 +10648,27 @@
     min-width: 26px;
     text-align: center;
     font-variant-numeric: tabular-nums;
+  }
+  /* The typeable quantity field that replaced the read-only value span: sized
+     to the same slot between the +/- steppers, spinner chrome suppressed (the
+     steppers ARE the spinner). */
+  .mail-parcel-qty-input {
+    width: 40px;
+    padding: 1px 2px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    background: #ffffff10;
+    border: 1px solid #ffffff26;
+    border-radius: 4px;
+    color: var(--color-text);
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .mail-parcel-qty-input::-webkit-outer-spin-button,
+  .mail-parcel-qty-input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
   }
   .mail-parcel-step {
     display: inline-flex;

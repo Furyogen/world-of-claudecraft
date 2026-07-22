@@ -12,13 +12,13 @@ import { describe, expect, it } from 'vitest';
 import { VISUALS } from '../src/render/characters/manifest';
 import { ABILITIES } from '../src/sim/data';
 
-// every v02 class except the warrior (whose flourishes are intentional)
-const CLEANED = [
+// v02 classes with no dedicated per-ability gesture map. Warrior has its original
+// shouts and Rogue has the deliberately authored Kick clip.
+const NO_ABILITY_GESTURES = [
   'player_paladin',
   'player_mage',
   'player_druid',
   'player_priest',
-  'player_rogue',
   'player_warlock',
   'player_shaman',
   'player_hunter',
@@ -35,8 +35,10 @@ const CLEANED_CLASSES = new Set([
   'hunter',
 ]);
 
+const ALLOWED_INSTANT_GESTURES = new Set(['rogue/kick']);
+
 describe('instant abilities play no animation (v02 bodies)', () => {
-  for (const key of CLEANED) {
+  for (const key of NO_ABILITY_GESTURES) {
     it(`${key} has no attackByAbility flourish map`, () => {
       expect(VISUALS[key].clips.attackByAbility).toBeUndefined();
     });
@@ -48,7 +50,8 @@ describe('instant abilities play no animation (v02 bodies)', () => {
       const d = def as { class?: string; castTime?: number; channel?: unknown; castFx?: string };
       if (!d.class || !CLEANED_CLASSES.has(d.class)) continue;
       const instant = (d.castTime ?? 0) === 0 && !d.channel;
-      if (instant && d.castFx) offenders.push(`${d.class}/${id}`);
+      const key = `${d.class}/${id}`;
+      if (instant && d.castFx && !ALLOWED_INSTANT_GESTURES.has(key)) offenders.push(key);
     }
     expect(offenders).toEqual([]);
   });
@@ -57,5 +60,10 @@ describe('instant abilities play no animation (v02 bodies)', () => {
     // anchor so the scoped guard above is not vacuous: the warrior still carries castFx.
     expect(ABILITIES.battle_shout?.castFx).toBe('shout');
     expect(ABILITIES.sanguine_aura?.castFx).toBe('weaponAura');
+  });
+
+  it('leaves the Rogue Kick dedicated gesture intact', () => {
+    expect(ABILITIES.kick?.castFx).toBe('gesture');
+    expect(VISUALS.player_rogue.clips.attackByAbility).toEqual({ kick: '2H_Kick' });
   });
 });

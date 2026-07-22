@@ -22,7 +22,7 @@ describe('winning Warrior attack animation routing', () => {
       twohand: '2H_Melee_Attack_Chop',
       dualwield: 'Dualwield_Melee_Attack_Chop',
     });
-    expect(VISUALS.player_warrior.clips.attackByAbility).toMatchObject({
+    expect(VISUALS.player_warrior.clips.attackByAbility).toEqual({
       mortal_strike: '2H_Melee_Attack_Chop',
       execute: '2H_Melee_Attack_Chop',
       slam: '2H_Melee_Attack_Chop',
@@ -40,6 +40,14 @@ describe('winning Warrior attack animation routing', () => {
       hamstring: '1H_Melee_Attack_Slice_Diagonal',
       sanguine_aura: 'Spellcast_Raise',
       raised_guard: 'Block',
+      taunt: 'Taunt',
+      pummel: '2H_Kick',
+      battle_shout: 'Battlecry',
+      demoralizing_shout: 'Battlecry',
+      emboldening_roar: 'Battlecry',
+      defiant_bellow: 'Battlecry',
+      rallying_cry: 'Battlecry',
+      intimidating_shout: 'Battlecry',
     });
   });
 

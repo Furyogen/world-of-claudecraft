@@ -3,7 +3,11 @@ import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
 import { DEEDS } from '../src/sim/content/deeds';
-import { GUILD_TREND_LETTERS, QUEST_LETTERS } from '../src/sim/content/letters';
+import {
+  GUILD_TREND_LETTERS,
+  MASTER_TIER_LETTERS,
+  QUEST_LETTERS,
+} from '../src/sim/content/letters';
 import {
   ABILITIES,
   CLASSES,
@@ -123,7 +127,10 @@ describe('i18n Localization Key Coverage', () => {
     );
   });
 
-  const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/i;
+  // Case-sensitive on purpose: leftover markers are uppercase by convention,
+  // and the case-insensitive form false-fails ordinary vocabulary in several
+  // locales (Spanish and Portuguese "todo").
+  const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/;
   const shellKeys: TranslationKey[] = [
     'seo.title',
     'seo.description',
@@ -1025,8 +1032,16 @@ describe('i18n Localization Key Coverage', () => {
       Object.keys(DUNGEONS).length * 3 +
       Object.keys(DELVES).length * 3 +
       // Ravenpost authored letters: welcome + Heroic Marks reward + mastery
-      // reset notice + quest letters + Guild trend letters, 3 fields each.
-      (3 + Object.keys(QUEST_LETTERS).length + Object.keys(GUILD_TREND_LETTERS).length) * 3;
+      // reset notice + quest letters + Guild trend letters + master tier
+      // letters (Phase 14, keyed pair -> tier), 3 fields each.
+      (3 +
+        Object.keys(QUEST_LETTERS).length +
+        Object.keys(GUILD_TREND_LETTERS).length +
+        Object.values(MASTER_TIER_LETTERS).reduce(
+          (sum, tiers) => sum + Object.keys(tiers).length,
+          0,
+        )) *
+        3;
     expect(worldEntries).toHaveLength(expectedWorldCount);
 
     for (const lang of supportedLanguages) {
