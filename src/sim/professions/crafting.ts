@@ -125,7 +125,10 @@ export interface CraftResult {
   // was honored, i.e. the output is an eligible equipment kind and every
   // granted copy was minted armed with bindOnTrade (commission.ts). Absent
   // when the flag was not set AND when it was silently ignored for an
-  // ineligible output kind.
+  // ineligible output kind. Sim-internal: this field is NOT projected into
+  // CraftResultView (world_api/professions.ts) or the craftResult SimEvent,
+  // so no UI may consume it (the honored-vs-ignored pins are its consumer);
+  // the player-visible commission fact is the payload's bindOnTrade arm.
   commission?: boolean;
   // Present only when !ok: a stable reason code, not player-facing prose (the
   // caller renders/localizes the denial).

@@ -39,10 +39,10 @@ Update this file at the end of every implementation and QA session. Statuses:
 | 12d QA | Verify provenance and the harvest loop | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
 | 13 | Enchanting reachable | complete (PR #2269 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
 | 13 QA | Verify enchanting reachable | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
-| 14 | Attunement quests and nudges | complete (PR pending review) | 2026-07-21 | 2026-07-21 |
-| 14 QA | Verify attunement quests and nudges | not started | | |
-| 14b | Commissions and the Maker's Bond | complete (PR pending review) | 2026-07-21 | 2026-07-21 |
-| 14b QA | Verify commissions and the Maker's Bond | not started | | |
+| 14 | Attunement quests and nudges | complete (PR #2280 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
+| 14 QA | Verify attunement quests and nudges | complete (PASS with followups, PR #2286 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
+| 14b | Commissions and the Maker's Bond | complete (PR #2293 merged into release/v0.29.0) | 2026-07-21 | 2026-07-21 |
+| 14b QA | Verify commissions and the Maker's Bond | complete (PASS, zero blocking) | 2026-07-21 | 2026-07-21 |
 | 15 | Deeds, tuning, and polish | not started | | |
 | 15 QA | Final integration QA and packet teardown | not started | | |
 
@@ -1440,3 +1440,41 @@ Census moves: commands 163/172, IWORLD_MEMBERS 260 (71/189). Out of
 scope kept out: the ORDER workflow (#1298 stays open), recipient-tied
 materials, market instance carriage, non-commission binding, and the
 pre-existing vendor-sell laundering class. Close #2207 by hand at merge.
+
+Phase 14b QA (2026-07-21): PASS, zero blocking. QA diff
+cb2f026243..065763a02 (the PR #2293 merge's clean phase-only range on
+the release/v0.29.0 tip; the wider phase-start range holds a non-phase
+release sync); fix branch fix/professions-2-phase-14b-qa. Every
+deliverable, STEP 5 acceptance criterion, and the three RESOLVED
+maintainer decisions verified against real code, exactly as recorded
+(character presence-only binding, equipment-only kinds, the
+2500/10000/40000 ladder with both clamps). All validation rows green.
+Fan-out: an 11-agent Workflow (correctness, coverage, dead code, the
+four matrix reviewers, qa-checklist, then two live abuse-probe agents
+and an exclusive mutation pass). Abuse probes ALL PASS, driven for
+real, offline and over a live GameServer: unbind replay (one fee),
+craft-bank-trade, bound equip/use, vendor wash (pre-existing class
+recorded, no NEW hole), trade-back-to-crafter refusal, re-bind after
+unbind, mixed-offer slot accuracy, tampered flags, same-tick stamp
+race (no unbound window), payload smuggling through craft/trade/unbind
+extra fields (all inert), cross-player unbind targeting. Mutation
+pass: 8/8 gate-arm checks red. Fixes landed: the unbindItem fee debit
+moved AFTER the defensive unreachable guard (removes the theoretical
+charge-without-clear failure mode; behavior unchanged); new coverage,
+all mutation-checked where behavioral: bound-holder lifecycle
+(equip/unequip byte-intact round trip red against a boundTo-dropping
+unequip; equipped pieces sit outside the bags-only unbind scan; bank
+round trip; vendor sell allowed), mixed bound+unbound same-itemId
+equipment offer, deny-order discrimination pairs, the exact
+STATION_RADIUS boundary (float-exact, a <= to < regression reds), the
+active-mobile-station exclusion, wire type guards (non-boolean
+commission, smuggled payload fields, non-string unbind ids), a
+tool-kind tamper arm, unbind_window_hud.test.ts source pins (reason-to-
+key pairings, single-surface, the ONE-SHOT craftCommissionOptIn delete,
+clear-on-close, both HTML entries), and the gossip [data-unbind] route.
+Deferred by scope: the vendor buyback-plain wash (pre-existing Phase 13
+class; note the fee ladder now gives it fresh economic value, a Phase
+15 tuning-evidence input); the inline #ffd100 tooltip literal (matches
+the pre-existing masterworkSeal/soulbound convention, family-wide
+cleanup if ever); unbind rides the global command flood throttle
+(deny order makes replay free, accepted).

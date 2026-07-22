@@ -159,11 +159,15 @@ export function unbindItem(ctx: SimContext, itemId: string, pid?: number): Unbin
   const meta = r.meta;
   const result = resolveUnbind(meta, r.e.pos, itemId);
   if (!result.ok) return result;
-  meta.copper -= result.fee;
   const slotIdx = firstBoundSlotIndex(meta, itemId);
   const slot = meta.inventory[slotIdx];
-  const instance = slot.instance;
-  if (instance === undefined) return result; // unreachable: the resolver found it bound
+  const instance = slot?.instance;
+  // Unreachable: the resolver found a bound slot on this same meta within the
+  // same synchronous call. Guarded BEFORE the charge below so that, were a
+  // future refactor ever to let the resolver and the mutation diverge, the
+  // failure mode is a no-op, never a fee charged with nothing cleared.
+  if (instance === undefined) return result;
+  meta.copper -= result.fee;
   if (slot.count === 1) {
     delete instance.boundTo;
   } else {

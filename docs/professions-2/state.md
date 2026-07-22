@@ -1707,6 +1707,26 @@ tables, i18n key namespaces, files created)
   stackSize 1) and addItemInstance has no capacity guard there; the
   commissioned masterwork multi-copy remainder mints unsigned armed
   copies (mirrors the plain remainder; synthetic-recipe tested).
+- Phase 14b QA (2026-07-21, QA diff cb2f026243..065763a02, fix branch
+  fix/professions-2-phase-14b-qa): PASS, zero blocking; every surface
+  above verified holding in code, the three RESOLVED decisions landed
+  exactly, all abuse probes (offline + live wire, incl. same-tick stamp
+  race and payload smuggling) PASS, 8/8 mutation checks red. QA
+  hardening: unbindItem now debits the fee AFTER the defensive
+  unreachable slot guard (no reachable behavior change; a diverging
+  future refactor fails to a no-op instead of a charge-without-clear).
+  QA coverage additions: bound-holder lifecycle pins (equip/unequip
+  byte-intact, mutation-proven; the unbind scan is bags-only so an
+  equipped bound piece resolves unbind_not_bound; bank round trip;
+  vendor sell allowed), mixed bound+unbound same-itemId equipment
+  offer, deny-order discrimination pairs, the exact STATION_RADIUS
+  boundary, the active-mobile-station exclusion, wire type guards,
+  a tool-kind tamper arm, hud source pins (unbind_window_hud.test.ts:
+  the ONE-SHOT craftCommissionOptIn delete is the load-bearing line, a
+  has() regression would arm every later craft), and the gossip
+  [data-unbind] route. The vendor buyback-plain wash stays open by
+  scope; flagged as a Phase 15 tuning-evidence input (the fee ladder
+  gives the zero-cost wash fresh economic value).
 
 ## Tuning targets (placeholders until Phase 15 tunes against live data)
 

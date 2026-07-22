@@ -356,6 +356,31 @@ describe('QuestDialogController', () => {
     expect(plain.element.querySelector('[data-train]')).toBeNull();
   });
 
+  it('a station master offers the Unbind service and routes it to openUnbind (Phase 14b)', () => {
+    // Every station master offers the Maker's Bond unbind service beside
+    // training (the same isStationMasterNpc gate); the click routes the NPC
+    // ENTITY id to deps.openUnbind and releases the dialog.
+    const master = harness(npc(48, STATIONS[0].masterNpcId));
+    master.controller.open(48);
+    const button = master.element.querySelector<HTMLButtonElement>('[data-unbind]');
+    expect(button).not.toBeNull();
+    expect(button?.getAttribute('aria-label')).toBeTruthy();
+    button?.click();
+    expect(master.openUnbind).toHaveBeenCalledWith(48);
+    expect(master.release).toHaveBeenCalledWith(false);
+  });
+
+  it('a non-master NPC renders no Unbind option (Phase 14b)', () => {
+    const masters = new Set(STATIONS.map((station) => station.masterNpcId));
+    const plainId = Object.values(NPCS).find(
+      (definition) => !definition.banker && !masters.has(definition.id),
+    )?.id;
+    if (!plainId) throw new Error('non-master NPC fixture not found');
+    const plain = harness(npc(49, plainId));
+    plain.controller.open(49);
+    expect(plain.element.querySelector('[data-unbind]')).toBeNull();
+  });
+
   it('closes stale gossip when the authoritative NPC disappears', () => {
     const test = harness();
     test.controller.open(test.entity.id);

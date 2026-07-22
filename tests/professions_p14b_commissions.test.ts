@@ -35,7 +35,7 @@ vi.mock('../server/db', () => ({
 
 import { type ClientSession, GameServer } from '../server/game';
 import { ClientWorld } from '../src/net/online';
-import { STATIONS } from '../src/sim/content/professions';
+import { STATION_RADIUS, STATIONS } from '../src/sim/content/professions';
 import { ALL_RECIPES } from '../src/sim/content/recipes';
 import { ITEMS } from '../src/sim/data';
 import {
@@ -51,7 +51,7 @@ import { isAtAnyStation } from '../src/sim/professions/stations';
 import type { ProfessionRecipeRecord } from '../src/sim/professions/types';
 import { Sim } from '../src/sim/sim';
 import * as tradeMod from '../src/sim/social/trade';
-import type { InvSlot, ItemDef, ItemInstancePayload, SimEvent } from '../src/sim/types';
+import type { EquipSlot, InvSlot, ItemDef, ItemInstancePayload, SimEvent } from '../src/sim/types';
 
 const SWORD_RECIPE = 'recipe_eastbrook_arming_sword';
 const SWORD = 'eastbrook_arming_sword'; // weapon, common quality
@@ -330,6 +330,45 @@ describe('commission opt-in at craft time', () => {
       copies += slot.count;
     }
     expect(copies).toBe(2);
+  });
+
+  it('the flag is silently ignored for a TOOL output kind too (synthetic tool recipe)', () => {
+    // The potion arm above proves one ineligible kind; this pins a second,
+    // structurally different one (tool rides the same plain-fungible grant),
+    // comparing the tampered craft byte-for-byte against a plain craft.
+    const QA_TOOL = 'qa_p14b_prospect_pick';
+    (ITEMS as Record<string, ItemDef>)[QA_TOOL] = {
+      id: QA_TOOL,
+      name: 'QA Prospect Pick',
+      kind: 'tool',
+      quality: 'common',
+      sellValue: 1,
+    } as unknown as ItemDef;
+    const recipe = {
+      id: 'qa_recipe_p14b_pick',
+      professionId: recipeOf(SWORD_RECIPE).professionId,
+      resultItemId: QA_TOOL,
+      resultCount: 1,
+      reagents: [{ itemId: 'linen_scrap', count: 1 }],
+      skillReq: 0,
+      level: 1,
+      itemLevelBudget: 1,
+    } as unknown as ProfessionRecipeRecord;
+    const runCraft = (commission: boolean) => {
+      const sim = makeSim();
+      const pid = sim.playerId;
+      sim.addItem('linen_scrap', 1, pid);
+      const result = resolveCraftForRecipe(sim.ctx, pid, recipe, commission);
+      return { result, slots: slotsOf(sim, pid, QA_TOOL) };
+    };
+    const plain = runCraft(false);
+    const tampered = runCraft(true);
+    expect(plain.result.ok).toBe(true);
+    expect(tampered.result.ok).toBe(true);
+    expect(tampered.result.commission).toBeUndefined();
+    expect(tampered.slots).toEqual(plain.slots);
+    expect(tampered.slots).toHaveLength(1);
+    expect(tampered.slots[0].instance).toBeUndefined();
   });
 });
 
@@ -951,5 +990,279 @@ describe('live GameServer: commission craft, bound trade refusal, unbind over th
     expect(results[0].ok).toBe(false);
     expect(results[0].reason).toBe('unbind_out_of_range');
     expect(server.sim.players.get(st.pid)!.copper).toBe(10000);
+  });
+
+  it('wire type guards: non-boolean commission never arms, smuggled payloads are inert, non-string unbind ids drop', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const st = joinServer(server, fc, 804, 'Tamper');
+    placeAt(server, st.pid, { x: 0, z: 150 });
+    for (const reagent of recipeOf(SWORD_RECIPE).reagents) {
+      server.sim.addItem(reagent.itemId, reagent.count * 3, st.pid);
+    }
+
+    // A truthy-but-not-true commission value reads as false at the strict
+    // dispatch guard: both crafts grant the plain pre-phase fungible stack.
+    cmd(server, st, { cmd: 'craft_item', recipe: SWORD_RECIPE, commission: 'true' });
+    cmd(server, st, { cmd: 'craft_item', recipe: SWORD_RECIPE, commission: 1 });
+    routeTick(server);
+    const plain = serverSlots(server, st.pid, SWORD);
+    expect(plain.reduce((n, s) => n + s.count, 0)).toBe(2);
+    for (const slot of plain) expect(slot.instance).toBeUndefined();
+
+    // A genuine opt-in carrying smuggled payload fields mints EXACTLY the
+    // server-built arm: no wire command ingests an ItemInstancePayload.
+    cmd(server, st, {
+      cmd: 'craft_item',
+      recipe: SWORD_RECIPE,
+      commission: true,
+      instance: { boundTo: 999, signer: 'Hax' },
+      payload: { boundTo: 999 },
+      boundTo: 999,
+    });
+    routeTick(server);
+    const armed = serverSlots(server, st.pid, SWORD).filter((s) => s.instance !== undefined);
+    expect(armed).toHaveLength(1);
+    expect(armed[0].instance).toEqual({ bindOnTrade: true });
+
+    // Non-string unbind ids are dropped at the dispatch type guard: no
+    // event, no charge, the bound copy untouched.
+    server.sim.ctx.addItemInstance(SWORD, { bindOnTrade: true, boundTo: st.pid }, st.pid);
+    placeAt(server, st.pid, STATIONS[0].pos);
+    server.sim.players.get(st.pid)!.copper = 10000;
+    const from = fc.sent.length;
+    cmd(server, st, { cmd: 'unbind_item', item: 123 });
+    cmd(server, st, { cmd: 'unbind_item' });
+    routeTick(server);
+    expect(eventsFor(fc.sent, 'unbindResult', from)).toHaveLength(0);
+    expect(server.sim.players.get(st.pid)!.copper).toBe(10000);
+    const stillBound = serverSlots(server, st.pid, SWORD).filter(
+      (s) => s.instance?.boundTo !== undefined,
+    );
+    expect(stillBound).toHaveLength(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 11. The bound holder keeps every non-trade right (binding restricts trade
+//     ONLY: equip, unequip, bank, and vendor all stay open, payload intact).
+// ---------------------------------------------------------------------------
+describe('bound holder lifecycle: every non-trade right survives the bond', () => {
+  // Expectation literals are built FRESH per assertion: addItemInstance can
+  // store the minted payload by reference, so comparing against the same
+  // object we handed it would be a self-comparison a field-dropping mutation
+  // could never red (mutation-checked: an unequip that deletes boundTo must
+  // fail the round-trip pin below).
+  function expectedBound(pid: number): ItemInstancePayload {
+    return { bindOnTrade: true, boundTo: pid, signer: 'Ayla' };
+  }
+
+  function mintBound(sim: Sim, pid: number): void {
+    sim.ctx.addItemInstance(SWORD, { bindOnTrade: true, boundTo: pid, signer: 'Ayla' }, pid);
+  }
+
+  it('equip and unequip round-trip the bound payload byte-intact: unequip is never a free unbind', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    mintBound(sim, pid);
+    sim.equipItem(SWORD, pid);
+    const wornSlot = (Object.entries(meta.equipment).find(([, id]) => id === SWORD) ?? [])[0] as
+      | EquipSlot
+      | undefined;
+    expect(wornSlot, 'the bound sword equipped (binding restricts trade only)').toBeTruthy();
+    expect(slotsOf(sim, pid, SWORD)).toHaveLength(0);
+    expect(meta.equipmentInstance?.[wornSlot!]).toEqual(expectedBound(pid));
+    expect(sim.unequipItem(wornSlot!, pid)).toBe(true);
+    const back = slotsOf(sim, pid, SWORD);
+    expect(back).toHaveLength(1);
+    // Byte-intact: boundTo AND the arm both survive, so unequipping is never
+    // a fee-free unbind and the piece re-refuses its next trade.
+    expect(back[0].instance).toEqual(expectedBound(pid));
+  });
+
+  it('an EQUIPPED bound piece is outside the unbind scan: the service reads bags only', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    mintBound(sim, pid);
+    sim.equipItem(SWORD, pid);
+    setCopper(sim, pid, 50000);
+    const result = resolveUnbind(meta, STATIONS[0].pos, SWORD);
+    expect(result).toMatchObject({ ok: false, reason: 'unbind_not_bound' });
+    expect(copperOf(sim, pid)).toBe(50000);
+  });
+
+  it('a bound piece banks and withdraws byte-intact', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    // Stand on a banker (the pooled-bank gate needs one in reach).
+    const banker = [...sim.entities.values()].find(
+      (e) => e.kind === 'npc' && e.templateId === 'bursar_fernando',
+    );
+    expect(banker, 'the Eastbrook bursar is spawned').toBeTruthy();
+    const p = sim.entities.get(pid)!;
+    p.pos = { ...banker!.pos };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    mintBound(sim, pid);
+    const invIdx = meta.inventory.findIndex((s) => s.itemId === SWORD);
+    sim.bankDeposit(invIdx, 1, pid);
+    expect(slotsOf(sim, pid, SWORD)).toHaveLength(0);
+    const bankIdx = meta.bank.inventory.findIndex((s) => s.itemId === SWORD);
+    expect(bankIdx).toBeGreaterThan(-1);
+    expect(meta.bank.inventory[bankIdx].instance).toEqual(expectedBound(pid));
+    sim.bankWithdraw(bankIdx, 1, pid);
+    const back = slotsOf(sim, pid, SWORD);
+    expect(back).toHaveLength(1);
+    expect(back[0].instance).toEqual(expectedBound(pid));
+  });
+
+  it('vendor sell of a bound piece is allowed: the bond gates trade, never the vendor', () => {
+    // The equipment-kind sibling of the Phase 13 bound-reagent sell pin
+    // (professions_p13_bound_surfaces.test.ts); the buyback-laundering class
+    // stays open in scope elsewhere, this pins only the deliverable: selling
+    // is never refused by the bond.
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const wilkes = [...sim.entities.values()].find((e) => e.templateId === 'trader_wilkes');
+    expect(wilkes, 'Trader Wilkes is spawned').toBeTruthy();
+    const p = sim.entities.get(pid)!;
+    p.pos = { ...wilkes!.pos };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    mintBound(sim, pid);
+    const before = copperOf(sim, pid);
+    sim.sellItem(SWORD, 1, pid);
+    expect(errorTexts(sim.drainEvents())).toHaveLength(0);
+    expect(slotsOf(sim, pid, SWORD)).toHaveLength(0);
+    expect(copperOf(sim, pid)).toBe(before + ITEMS[SWORD].sellValue!);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12. Trade-gate slot accuracy: mixed bound and unbound copies of the SAME
+//     item id (the Phase 3 same-itemId cross-contamination class, now pinned
+//     on a commission equipment kind, not only the Phase 13 reagent).
+// ---------------------------------------------------------------------------
+describe('mixed bound + unbound copies of one equipment itemId trade slot-accurately', () => {
+  it('the offer clamps to the unbound count and completing it moves ONLY the free copy', () => {
+    const { sim, a, b } = makeTradeSim();
+    sim.ctx.addItemInstance(SWORD, { bindOnTrade: true, boundTo: a }, a);
+    sim.addItem(SWORD, 1, a);
+    tradeMod.tradeRequest(sim.ctx, b, a);
+    tradeMod.tradeAccept(sim.ctx, b);
+    sim.drainEvents();
+
+    // Offering BOTH copies is refused down to the one unbound copy.
+    tradeMod.tradeSetOffer(sim.ctx, [{ itemId: SWORD, count: 2 }], 0, a);
+    expect(errorTexts(sim.drainEvents())).toContain(BOUND_DENY);
+
+    tradeMod.tradeSetOffer(sim.ctx, [{ itemId: SWORD, count: 1 }], 0, a);
+    tradeMod.tradeConfirm(sim.ctx, a);
+    tradeMod.tradeConfirm(sim.ctx, b);
+    expect(errorTexts(sim.drainEvents())).toEqual([]);
+
+    // Slot accuracy: the PLAIN copy moved (arriving unbound: nothing armed
+    // it), the bound copy never left the offerer.
+    const received = slotsOf(sim, b, SWORD);
+    expect(received).toHaveLength(1);
+    expect(received[0].instance).toBeUndefined();
+    const kept = slotsOf(sim, a, SWORD);
+    expect(kept).toHaveLength(1);
+    expect(kept[0].instance?.boundTo).toBe(a);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 13. Deny-order discrimination and the station gate's edges (QA arms: the
+//     pairwise orders section 5 leaves open, the exact-radius boundary, and
+//     the mobile-station exclusion).
+// ---------------------------------------------------------------------------
+describe('unbind deny-order discrimination and station-gate edges', () => {
+  it('out_of_range beats cannot_afford when both fail at once', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    sim.ctx.addItemInstance(SWORD, { bindOnTrade: true, boundTo: pid }, pid);
+    standInWilds(sim, pid);
+    setCopper(sim, pid, 0);
+    const result = resolveUnbind(meta, sim.ctx.entities.get(pid)!.pos, SWORD);
+    expect(result).toMatchObject({ ok: false, reason: 'unbind_out_of_range', fee: 2500 });
+  });
+
+  it('not_eligible beats not_bound: an ineligible id with zero bound copies reports eligibility', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    sim.addItem(POTION, 1, pid);
+    setCopper(sim, pid, 50000);
+    const result = resolveUnbind(meta, STATIONS[0].pos, POTION);
+    expect(result).toMatchObject({ ok: false, reason: 'unbind_not_eligible' });
+  });
+
+  it('unbind_not_bound covers the zero-copies-held arm too', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    setCopper(sim, pid, 50000);
+    const result = resolveUnbind(meta, STATIONS[0].pos, SWORD);
+    expect(result).toMatchObject({ ok: false, reason: 'unbind_not_bound' });
+  });
+
+  it('isAtAnyStation includes the EXACT radius boundary and excludes just beyond', () => {
+    // Boundary suites tick AT the boundary: STATION_RADIUS and the forge x
+    // are float-exact integers, so distance == radius lands precisely on the
+    // <= comparison; an off-by-one regression to < reds the first arm.
+    const forge = STATIONS[0];
+    const atEdge = { x: forge.pos.x + STATION_RADIUS, z: forge.pos.z };
+    const strictlyInsideAny = STATIONS.some((st) => {
+      const dx = atEdge.x - st.pos.x;
+      const dz = atEdge.z - st.pos.z;
+      return dx * dx + dz * dz < STATION_RADIUS * STATION_RADIUS;
+    });
+    expect(strictlyInsideAny, 'the edge probe sits on the boundary, not inside a neighbor').toBe(
+      false,
+    );
+    expect(isAtAnyStation(atEdge)).toBe(true);
+
+    const beyond = [
+      { dx: 1, dz: 0 },
+      { dx: -1, dz: 0 },
+      { dx: 0, dz: 1 },
+      { dx: 0, dz: -1 },
+    ]
+      .map((d) => ({
+        x: forge.pos.x + d.dx * (STATION_RADIUS + 0.5),
+        z: forge.pos.z + d.dz * (STATION_RADIUS + 0.5),
+      }))
+      .find((pos) =>
+        STATIONS.every((st) => {
+          const dx = pos.x - st.pos.x;
+          const dz = pos.z - st.pos.z;
+          return dx * dx + dz * dz > STATION_RADIUS * STATION_RADIUS;
+        }),
+      );
+    expect(beyond, 'a just-beyond probe position clear of every station').toBeDefined();
+    expect(isAtAnyStation(beyond!)).toBe(false);
+  });
+
+  it('an ACTIVE mobile station under the player never satisfies the unbind gate', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = sim.players.get(pid)!;
+    const p = sim.ctx.entities.get(pid)!;
+    p.pos.x = 0;
+    p.pos.z = 150;
+    expect(isAtAnyStation(p.pos)).toBe(false);
+    meta.craftSkills.alchemy = 75; // specialized: mobile placement is gated on it
+    setCopper(sim, pid, 50000);
+    sim.placeMobileStation('alchemy', pid);
+    expect(meta.mobileStation?.craftId).toBe('alchemy');
+    sim.ctx.addItemInstance(SWORD, { bindOnTrade: true, boundTo: pid }, pid);
+    const result = resolveUnbind(meta, p.pos, SWORD);
+    expect(result).toMatchObject({ ok: false, reason: 'unbind_out_of_range' });
+    expect(copperOf(sim, pid)).toBe(50000);
   });
 });
