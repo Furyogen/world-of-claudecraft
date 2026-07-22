@@ -1680,6 +1680,7 @@ export class Sim {
       // the same custom world via sim.cfg.world. Undefined for the built-in world.
       world: cfg.world,
       perfLap: cfg.perfLap,
+      idleMobTickRadius: cfg.idleMobTickRadius ?? 0,
     };
     this.rng = new Rng(cfg.seed);
     // Live server opt-in (worldBossAtBoot): the first world-boss rise is due
@@ -4470,6 +4471,7 @@ export class Sim {
 
     for (const e of this.entities.values()) {
       if (e.kind === 'mob') {
+        if (this.shouldSkipIdleMobTick(e)) continue;
         this.updateMob(e);
         // Tag the mob.update lap with the mob so the host can attribute this slice
         // of the phase cost to its zone/group. The sim reads nothing
@@ -4587,6 +4589,22 @@ export class Sim {
     const out = this.events;
     this.events = [];
     return out;
+  }
+
+  private shouldSkipIdleMobTick(mob: Entity): boolean {
+    const radius = this.cfg.idleMobTickRadius;
+    if (radius <= 0) return false;
+    if (mob.dead || mob.ownerId !== null || mob.aiState !== 'idle' || mob.auras.length > 0)
+      return false;
+    const radiusSq = radius * radius;
+    for (const meta of this.players.values()) {
+      const p = this.entities.get(meta.entityId);
+      if (!p) continue;
+      const dx = p.pos.x - mob.pos.x;
+      const dz = p.pos.z - mob.pos.z;
+      if (dx * dx + dz * dz <= radiusSq) return false;
+    }
+    return true;
   }
 
   private updateLootRolls(): void {

@@ -3959,6 +3959,10 @@ export interface SimConfig {
   // omits it. Passing a reference allocates nothing and stays behavior-inert (the
   // host reads it, the sim never does), so the parity/determinism gates are untouched.
   perfLap?: (phase: string, entity?: Entity) => void;
+  // Headless RL host throttle: when positive, idle ownerless mobs farther than this
+  // many world units from every player skip their per-tick idle AI. Offline/server
+  // hosts leave it unset so their world simulation remains fully live.
+  idleMobTickRadius?: number;
   // When true, the Sowfield auto-runs a bot-vs-bot showcase match after a stretch
   // of no queue activity, so a walk-up spectator always has a game to watch (and
   // bet on). Server + offline game enable it; tests/goldens leave it off so the
