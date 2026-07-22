@@ -7052,9 +7052,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': 'この報酬は既に受け取っています。',
   'apiError.discord.swag_tier': 'これを受け取るにはより高いランクが必要です。',
   'apiError.discord.swag_points': 'ポイントが足りません。',
-  'apiError.plugins.invalid_name': 'プラグイン名は3から40文字の英数字、スペース、アポストロフィ、ハイフンで入力してください。',
+  'apiError.plugins.invalid_name':
+    'プラグイン名は3から40文字の英数字、スペース、アポストロフィ、ハイフンで入力してください。',
   'apiError.plugins.name_not_allowed': 'そのプラグイン名は使用できません。',
-  'apiError.plugins.invalid_handle': '作者名は2から24文字の英数字、スペース、アポストロフィ、ハイフンで入力してください。',
+  'apiError.plugins.invalid_handle':
+    '作者名は2から24文字の英数字、スペース、アポストロフィ、ハイフンで入力してください。',
   'apiError.plugins.invalid_summary': '概要は1行で140文字以内にしてください。',
   'apiError.plugins.invalid_description': '説明が長すぎるか、使用できない文字が含まれています。',
   'apiError.plugins.invalid_category': '一覧にあるカテゴリから選んでください。',
@@ -7066,7 +7068,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'apiError.plugins.not_found': 'プラグインが見つかりません。',
   'apiError.plugins.not_listed': 'このプラグインは現在利用できません。',
   'apiError.plugins.not_installed': 'このプラグインはインストールされていません。',
-  'apiError.plugins.slug_unavailable': 'このプラグインのリンク名を確保できませんでした。別の名前を試してください。',
+  'apiError.plugins.slug_unavailable':
+    'このプラグインのリンク名を確保できませんでした。別の名前を試してください。',
   'apiError.plugins.review_invalid': 'そのレビュー操作は無効です。',
   'hudChrome.mailbox.title': 'メールボックス',
   'hudChrome.mailbox.subtitle': 'レイヴンポスト',
@@ -8740,12 +8743,15 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.byAuthor': '作者: {author}',
   'hudChrome.plugins.byTeam': 'World of ClaudeCraft チーム製',
   'hudChrome.plugins.loading': 'プラグインストアを読み込み中...',
-  'hudChrome.plugins.offline': 'オンラインレルムにサインインするとプラグインを閲覧、インストールできます。',
+  'hudChrome.plugins.offline':
+    'オンラインレルムにサインインするとプラグインを閲覧、インストールできます。',
   'hudChrome.plugins.empty': 'まだプラグインがありません。最初の公開者になりましょう。',
   'hudChrome.plugins.filteredOut': '検索に一致するプラグインはありません。',
   'hudChrome.plugins.installedEmpty': 'まだプラグインをインストールしていません。',
-  'hudChrome.plugins.developIntro': 'プラグインはクライアント側のMODです。すべての投稿はストアに掲載される前にチームの審査を受け、更新も再審査されてからプレイヤーに届きます。',
-  'hudChrome.plugins.docsHint': 'API: woc.on(event, handler), イベントは combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, さらに woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage と woc.util フォーマッタ。',
+  'hudChrome.plugins.developIntro':
+    'プラグインはクライアント側のMODです。すべての投稿はストアに掲載される前にチームの審査を受け、更新も再審査されてからプレイヤーに届きます。',
+  'hudChrome.plugins.docsHint':
+    'API: woc.on(event, handler), イベントは combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, さらに woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage と woc.util フォーマッタ。',
   'hudChrome.plugins.formName': 'プラグイン名',
   'hudChrome.plugins.formAuthor': '作者名',
   'hudChrome.plugins.formCategory': 'カテゴリ',

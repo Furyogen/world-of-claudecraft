@@ -15,7 +15,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Pool } from 'pg';
 import { screenPluginSource } from '../server/plugin_screen';
-import { validatePluginSource } from '../server/plugins';
+import { PLUGIN_VERSIONS_KEPT, validatePluginSource } from '../server/plugins';
 import { SEED_PLUGINS } from '../server/plugins_seed/manifest';
 
 try {
@@ -83,12 +83,18 @@ async function main(): Promise<void> {
             [pluginId],
           );
           const liveRow = live.rows[0] as
-            | { version: number; source: string; meta: unknown }
+            | { version: number; source: string; meta: Record<string, unknown> }
             | undefined;
+          // Field-wise comparison, never JSON.stringify on the jsonb value:
+          // Postgres normalizes jsonb key order, so a stringify comparison
+          // would read every unchanged seed as changed and mint a version.
+          const liveMeta = liveRow?.meta ?? {};
           const unchanged =
             liveRow !== undefined &&
             liveRow.source === source &&
-            JSON.stringify(liveRow.meta) === JSON.stringify(meta);
+            (Object.keys(meta) as (keyof typeof meta)[]).every(
+              (key) => liveMeta[key] === meta[key],
+            );
           if (unchanged) {
             console.log(`unchanged ${seed.slug} (v${liveRow.version})`);
           } else {
@@ -108,6 +114,22 @@ async function main(): Promise<void> {
                       updated_at = now()
                 WHERE id = $1`,
               [pluginId, seed.name, seed.summary, seed.description, seed.category],
+            );
+            // Keep seed history bounded like community submissions: prune to
+            // the newest PLUGIN_VERSIONS_KEPT rows, never the row just
+            // inserted (it is the highest approved version).
+            await client.query(
+              `DELETE FROM plugin_versions
+                WHERE plugin_id = $1
+                  AND id NOT IN (
+                    SELECT id FROM plugin_versions WHERE plugin_id = $1
+                     ORDER BY version DESC LIMIT $2
+                  )
+                  AND version <> (
+                    SELECT COALESCE(MAX(version), -1) FROM plugin_versions
+                     WHERE plugin_id = $1 AND status = 'approved'
+                  )`,
+              [pluginId, PLUGIN_VERSIONS_KEPT],
             );
             console.log(`updated ${seed.slug} (v${next.rows[0].version})`);
           }

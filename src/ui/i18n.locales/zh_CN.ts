@@ -8335,8 +8335,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.empty': '还没有已上架的插件。来发布第一个吧。',
   'hudChrome.plugins.filteredOut': '没有符合搜索条件的插件。',
   'hudChrome.plugins.installedEmpty': '你还没有安装任何插件。',
-  'hudChrome.plugins.developIntro': '插件是客户端模组。每次提交都会先经团队审核才会出现在商店中, 更新也会再次审核后才推送给玩家。',
-  'hudChrome.plugins.docsHint': 'API: woc.on(event, handler), 事件包括 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 另有 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 和 woc.util 格式化工具。',
+  'hudChrome.plugins.developIntro':
+    '插件是客户端模组。每次提交都会先经团队审核才会出现在商店中, 更新也会再次审核后才推送给玩家。',
+  'hudChrome.plugins.docsHint':
+    'API: woc.on(event, handler), 事件包括 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 另有 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 和 woc.util 格式化工具。',
   'hudChrome.plugins.formName': '插件名称',
   'hudChrome.plugins.formAuthor': '作者名',
   'hudChrome.plugins.formCategory': '分类',

@@ -7030,11 +7030,14 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': '이미 이 보상을 받았습니다.',
   'apiError.discord.swag_tier': '이 보상을 받으려면 더 높은 등급에 도달하세요.',
   'apiError.discord.swag_points': '포인트가 부족합니다.',
-  'apiError.plugins.invalid_name': '플러그인 이름은 3~40자의 영문, 숫자, 공백, 아포스트로피, 하이픈만 사용할 수 있습니다.',
+  'apiError.plugins.invalid_name':
+    '플러그인 이름은 3~40자의 영문, 숫자, 공백, 아포스트로피, 하이픈만 사용할 수 있습니다.',
   'apiError.plugins.name_not_allowed': '해당 플러그인 이름은 사용할 수 없습니다.',
-  'apiError.plugins.invalid_handle': '제작자 이름은 2~24자의 영문, 숫자, 공백, 아포스트로피, 하이픈만 사용할 수 있습니다.',
+  'apiError.plugins.invalid_handle':
+    '제작자 이름은 2~24자의 영문, 숫자, 공백, 아포스트로피, 하이픈만 사용할 수 있습니다.',
   'apiError.plugins.invalid_summary': '요약은 한 줄, 최대 140자여야 합니다.',
-  'apiError.plugins.invalid_description': '설명이 너무 길거나 지원되지 않는 문자가 포함되어 있습니다.',
+  'apiError.plugins.invalid_description':
+    '설명이 너무 길거나 지원되지 않는 문자가 포함되어 있습니다.',
   'apiError.plugins.invalid_category': '목록에 있는 카테고리 중 하나를 선택하세요.',
   'apiError.plugins.invalid_source': '플러그인 소스가 비어 있습니다.',
   'apiError.plugins.source_too_large': '플러그인 소스가 너무 큽니다.',
@@ -7044,7 +7047,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'apiError.plugins.not_found': '플러그인을 찾을 수 없습니다.',
   'apiError.plugins.not_listed': '이 플러그인은 현재 이용할 수 없습니다.',
   'apiError.plugins.not_installed': '이 플러그인은 설치되어 있지 않습니다.',
-  'apiError.plugins.slug_unavailable': '이 플러그인의 링크 이름을 확보하지 못했습니다. 다른 이름을 시도하세요.',
+  'apiError.plugins.slug_unavailable':
+    '이 플러그인의 링크 이름을 확보하지 못했습니다. 다른 이름을 시도하세요.',
   'apiError.plugins.review_invalid': '해당 검토 작업은 유효하지 않습니다.',
   'hudChrome.mailbox.title': '우편함',
   'hudChrome.mailbox.subtitle': '레이븐포스트',
@@ -8733,8 +8737,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.empty': '아직 등록된 플러그인이 없습니다. 첫 번째로 게시해 보세요.',
   'hudChrome.plugins.filteredOut': '검색과 일치하는 플러그인이 없습니다.',
   'hudChrome.plugins.installedEmpty': '아직 설치한 플러그인이 없습니다.',
-  'hudChrome.plugins.developIntro': '플러그인은 클라이언트 측 모드입니다. 모든 제출물은 상점에 표시되기 전에 팀의 검토를 거치며, 업데이트도 다시 검토된 후 플레이어에게 전달됩니다.',
-  'hudChrome.plugins.docsHint': 'API: woc.on(event, handler), 이벤트는 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 그리고 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 및 woc.util 포매터。',
+  'hudChrome.plugins.developIntro':
+    '플러그인은 클라이언트 측 모드입니다. 모든 제출물은 상점에 표시되기 전에 팀의 검토를 거치며, 업데이트도 다시 검토된 후 플레이어에게 전달됩니다.',
+  'hudChrome.plugins.docsHint':
+    'API: woc.on(event, handler), 이벤트는 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 그리고 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 및 woc.util 포매터。',
   'hudChrome.plugins.formName': '플러그인 이름',
   'hudChrome.plugins.formAuthor': '제작자 이름',
   'hudChrome.plugins.formCategory': '카테고리',

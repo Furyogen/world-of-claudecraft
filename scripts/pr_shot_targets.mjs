@@ -246,12 +246,48 @@ export const TARGETS = [
         if (!hud) return;
         const now = new Date().toISOString();
         const catalog = [
-          ['battle-scribe', 'Battle Scribe', 'A personal damage meter with automatic pull tracking and a best-pull record.', 'combat', 412],
-          ['loot-ledger', 'Loot Ledger', 'Session gold and XP tracker with per-hour rates and a recent-loot list.', 'economy', 371],
-          ['wayfarer-waypoints', 'Wayfarer Waypoints', 'Save named spots and get live distance and direction to each one.', 'tools', 285],
-          ['chat-chimes', 'Chat Chimes', 'A soft chime and toast whenever someone says your name or whispers you.', 'social', 244],
-          ['xp-forecast', 'XP Forecast', 'Rolling XP per hour and a live estimate of the time to your next level.', 'interface', 198],
-          ['adventure-journal', 'Adventure Journal', 'A timestamped session diary of level ups, deeds, quests, deaths, and loot rolls.', 'tools', 153],
+          [
+            'battle-scribe',
+            'Battle Scribe',
+            'A personal damage meter with automatic pull tracking and a best-pull record.',
+            'combat',
+            412,
+          ],
+          [
+            'loot-ledger',
+            'Loot Ledger',
+            'Session gold and XP tracker with per-hour rates and a recent-loot list.',
+            'economy',
+            371,
+          ],
+          [
+            'wayfarer-waypoints',
+            'Wayfarer Waypoints',
+            'Save named spots and get live distance and direction to each one.',
+            'tools',
+            285,
+          ],
+          [
+            'chat-chimes',
+            'Chat Chimes',
+            'A soft chime and toast whenever someone says your name or whispers you.',
+            'social',
+            244,
+          ],
+          [
+            'xp-forecast',
+            'XP Forecast',
+            'Rolling XP per hour and a live estimate of the time to your next level.',
+            'interface',
+            198,
+          ],
+          [
+            'adventure-journal',
+            'Adventure Journal',
+            'A timestamped session diary of level ups, deeds, quests, deaths, and loot rolls.',
+            'tools',
+            153,
+          ],
         ].map(([slug, name, summary, category, installs], i) => ({
           id: i + 1,
           slug,

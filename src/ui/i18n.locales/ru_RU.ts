@@ -7167,11 +7167,14 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': 'Вы уже получили эту награду.',
   'apiError.discord.swag_tier': 'Достигните более высокого ранга, чтобы получить это.',
   'apiError.discord.swag_points': 'Недостаточно очков.',
-  'apiError.plugins.invalid_name': 'Имя плагина: от 3 до 40 букв, цифр, пробелов, апострофов или дефисов.',
+  'apiError.plugins.invalid_name':
+    'Имя плагина: от 3 до 40 букв, цифр, пробелов, апострофов или дефисов.',
   'apiError.plugins.name_not_allowed': 'Это имя плагина недопустимо.',
-  'apiError.plugins.invalid_handle': 'Имя автора: от 2 до 24 букв, цифр, пробелов, апострофов или дефисов.',
+  'apiError.plugins.invalid_handle':
+    'Имя автора: от 2 до 24 букв, цифр, пробелов, апострофов или дефисов.',
   'apiError.plugins.invalid_summary': 'Краткое описание: одна строка длиной до 140 символов.',
-  'apiError.plugins.invalid_description': 'Описание слишком длинное или содержит недопустимые символы.',
+  'apiError.plugins.invalid_description':
+    'Описание слишком длинное или содержит недопустимые символы.',
   'apiError.plugins.invalid_category': 'Выберите одну из перечисленных категорий.',
   'apiError.plugins.invalid_source': 'Исходный код плагина пуст.',
   'apiError.plugins.source_too_large': 'Исходный код плагина слишком большой.',
@@ -7181,7 +7184,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'apiError.plugins.not_found': 'Плагин не найден.',
   'apiError.plugins.not_listed': 'Этот плагин сейчас недоступен.',
   'apiError.plugins.not_installed': 'Этот плагин не установлен.',
-  'apiError.plugins.slug_unavailable': 'Не удалось занять ссылочное имя для плагина. Попробуйте другое название.',
+  'apiError.plugins.slug_unavailable':
+    'Не удалось занять ссылочное имя для плагина. Попробуйте другое название.',
   'apiError.plugins.review_invalid': 'Это действие проверки недопустимо.',
   'hudChrome.mailbox.title': 'Почтовый ящик',
   'hudChrome.mailbox.subtitle': 'Вороновая почта',
@@ -8911,8 +8915,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.empty': 'Плагинов пока нет. Станьте первым автором.',
   'hudChrome.plugins.filteredOut': 'Нет плагинов по вашему запросу.',
   'hudChrome.plugins.installedEmpty': 'Вы еще не установили ни одного плагина.',
-  'hudChrome.plugins.developIntro': 'Плагины - это клиентские моды. Каждая заявка проходит проверку команды перед публикацией, и обновления проверяются заново, прежде чем попасть к игрокам.',
-  'hudChrome.plugins.docsHint': 'API: woc.on(event, handler) с событиями combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, плюс woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage и форматтеры woc.util.',
+  'hudChrome.plugins.developIntro':
+    'Плагины - это клиентские моды. Каждая заявка проходит проверку команды перед публикацией, и обновления проверяются заново, прежде чем попасть к игрокам.',
+  'hudChrome.plugins.docsHint':
+    'API: woc.on(event, handler) с событиями combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, плюс woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage и форматтеры woc.util.',
   'hudChrome.plugins.formName': 'Название плагина',
   'hudChrome.plugins.formAuthor': 'Имя автора',
   'hudChrome.plugins.formCategory': 'Категория',
@@ -8933,6 +8939,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.statusDelisted': 'Снят с каталога',
   'hudChrome.plugins.latestLine': 'Последняя заявка v{version}: {status}',
   'hudChrome.plugins.reviewNote': 'Заметка проверяющего: {note}',
-  'hudChrome.plugins.submitted': 'Отправлено на проверку. Можете продолжать играть, команда скоро посмотрит.',
+  'hudChrome.plugins.submitted':
+    'Отправлено на проверку. Можете продолжать играть, команда скоро посмотрит.',
   'hudChrome.plugins.autoDisabled': '{name}: повторные ошибки, плагин отключен.',
 };

@@ -8336,8 +8336,10 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plugins.empty': '還沒有已上架的外掛。來發布第一個吧。',
   'hudChrome.plugins.filteredOut': '沒有符合搜尋條件的外掛。',
   'hudChrome.plugins.installedEmpty': '你還沒有安裝任何外掛。',
-  'hudChrome.plugins.developIntro': '外掛是客戶端模組。每次提交都會先經團隊審核才會出現在商店中, 更新也會再次審核後才推送給玩家。',
-  'hudChrome.plugins.docsHint': 'API: woc.on(event, handler), 事件包括 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 另有 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 和 woc.util 格式化工具。',
+  'hudChrome.plugins.developIntro':
+    '外掛是客戶端模組。每次提交都會先經團隊審核才會出現在商店中, 更新也會再次審核後才推送給玩家。',
+  'hudChrome.plugins.docsHint':
+    'API: woc.on(event, handler), 事件包括 combat, chat, loot, xp, levelup, quest, death, respawn, deed, tick, 另有 woc.player(), woc.ui.panel(), woc.ui.toast(), woc.ui.sound(), woc.storage 和 woc.util 格式化工具。',
   'hudChrome.plugins.formName': '外掛名稱',
   'hudChrome.plugins.formAuthor': '作者名',
   'hudChrome.plugins.formCategory': '分類',
