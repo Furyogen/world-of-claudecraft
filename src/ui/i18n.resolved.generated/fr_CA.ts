@@ -1019,6 +1019,8 @@ export const fr_CA: EnTranslations = {
       "interfaceModeNote": "Auto choisit les commandes Desktop ou Touch selon votre appareil. Choisissez Desktop pour forcer le clavier et la souris (utile sur une tablette avec clavier), ou Touch pour les commandes à l'écran.",
       "footstepSounds": "Sons de pas",
       "interfaceSounds": "Sons d’interface et retours sonores",
+      "abilityVfx": "Effets visuels des sorts (bêta)",
+      "abilityVfxNote": "Nouveaux effets de sorts cinématiques. Pour l'instant, seul le chaman est couvert ; les autres classes gardent les effets classiques en attendant leur refonte.",
       "clickFeedback": "Repère de clic",
       "lockCursorOnRotate": "Verrouiller le curseur pendant la rotation",
       "keybindHelpLockCursorOnRotate": "Maintient le curseur de la souris dans la fenêtre pendant que vous faites glisser pour faire pivoter la caméra, afin qu'il n'atteigne pas le bord de l'écran et ne passe pas sur un autre moniteur. Désactivez cette option si vous préférez un curseur libre.",

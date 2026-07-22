@@ -8255,4 +8255,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Rzucanie po najechaniu na ramki drużyny',
   'hudChrome.options.showTargetOfTarget': 'Pokaż cel celu',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Cel celu',
+  'hudChrome.options.abilityVfx': 'Efekty wizualne umiejętności (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nowe kinowe efekty zaklęć. Obecnie obejmuje tylko szamana; pozostałe klasy zachowują klasyczne efekty do czasu ich przebudowy.',
 };

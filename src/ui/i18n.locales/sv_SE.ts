@@ -8208,4 +8208,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Kasta via muspekaren på gruppramarna',
   'hudChrome.options.showTargetOfTarget': 'Visa målets mål',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Målets mål',
+  'hudChrome.options.abilityVfx': 'Förmågeeffekter (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nya filmiska besvärjelseeffekter. Täcker för närvarande endast schamanen; övriga klasser behåller de klassiska effekterna tills deras omarbetning släpps.',
 };

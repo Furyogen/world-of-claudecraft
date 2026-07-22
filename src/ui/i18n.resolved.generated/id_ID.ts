@@ -1019,6 +1019,8 @@ export const id_ID: EnTranslations = {
       "interfaceModeNote": "Otomatis memilih kontrol desktop atau sentuh dari perangkat Anda. Pilih Desktop untuk memaksa keyboard dan mouse (berguna pada tablet dengan keyboard), atau Sentuh untuk kontrol di layar.",
       "footstepSounds": "Suara Langkah Kaki",
       "interfaceSounds": "Suara Antarmuka dan Umpan Balik",
+      "abilityVfx": "Efek visual kemampuan (beta)",
+      "abilityVfxNote": "Efek mantra sinematik baru. Saat ini hanya mencakup shaman; kelas lain tetap memakai efek klasik sampai pembaruan mereka rilis.",
       "clickFeedback": "Penanda Klik",
       "lockCursorOnRotate": "Kunci Kursor Saat Memutar",
       "keybindHelpLockCursorOnRotate": "Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.",

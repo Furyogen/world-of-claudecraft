@@ -8085,4 +8085,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': '파티 창에서 마우스오버 시전',
   'hudChrome.options.showTargetOfTarget': '대상의 대상 표시',
   'hudChrome.unitFrame.targetOfTargetLabel': '대상의 대상',
+  'hudChrome.options.abilityVfx': '기술 시각 효과 (베타)',
+  'hudChrome.options.abilityVfxNote': '새로운 시네마틱 주문 효과입니다. 현재는 주술사만 지원하며, 다른 직업은 리워크가 나올 때까지 기존 효과를 유지합니다.',
 };

@@ -8304,4 +8304,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Rapal Saat Menyorot Bingkai Kelompok',
   'hudChrome.options.showTargetOfTarget': 'Tampilkan Sasaran dari Sasaran',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Sasaran dari Sasaran',
+  'hudChrome.options.abilityVfx': 'Efek visual kemampuan (beta)',
+  'hudChrome.options.abilityVfxNote': 'Efek mantra sinematik baru. Saat ini hanya mencakup shaman; kelas lain tetap memakai efek klasik sampai pembaruan mereka rilis.',
 };

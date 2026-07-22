@@ -7717,4 +7717,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': '對隊伍框架滑鼠指向施法',
   'hudChrome.options.showTargetOfTarget': '顯示目標的目標',
   'hudChrome.unitFrame.targetOfTargetLabel': '目標的目標',
+  'hudChrome.options.abilityVfx': '技能視覺特效（測試版）',
+  'hudChrome.options.abilityVfxNote': '全新的電影級法術特效。目前僅涵蓋薩滿，其他職業在重製完成前仍使用經典特效。',
 };

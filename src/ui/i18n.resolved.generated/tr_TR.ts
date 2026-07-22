@@ -1019,6 +1019,8 @@ export const tr_TR: EnTranslations = {
       "interfaceModeNote": "Otomatik, cihazınıza göre masaüstü veya dokunmatik denetimleri seçer. Klavye ve fareyi zorlamak için Masaüstü'nü seçin (klavyeli bir tablette kullanışlıdır) ya da ekran üzeri denetimler için Dokunmatik'i seçin.",
       "footstepSounds": "Ayak Sesleri",
       "interfaceSounds": "Arayüz ve Geri Bildirim Sesleri",
+      "abilityVfx": "Yetenek görsel efektleri (beta)",
+      "abilityVfxNote": "Yeni sinematik büyü efektleri. Şimdilik yalnızca şamanı kapsar; diğer sınıflar yenilenene kadar klasik efektleri kullanır.",
       "clickFeedback": "Tıklama İşareti",
       "lockCursorOnRotate": "Döndürürken İmleci Kilitle",
       "keybindHelpLockCursorOnRotate": "Kamerayı döndürmek için sürüklerken fare imlecini pencerenin içinde tutar, böylece ekran kenarına ulaşamaz veya başka bir monitöre geçemez. Serbest imleç tercih ediyorsanız kapatın.",

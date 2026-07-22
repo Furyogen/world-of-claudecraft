@@ -7716,4 +7716,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': '队伍头像上鼠标悬停施法',
   'hudChrome.options.showTargetOfTarget': '显示目标的目标',
   'hudChrome.unitFrame.targetOfTargetLabel': '目标的目标',
+  'hudChrome.options.abilityVfx': '技能视觉特效（测试版）',
+  'hudChrome.options.abilityVfxNote': '全新的电影级法术特效。目前仅覆盖萨满，其他职业在重制完成前仍使用经典特效。',
 };

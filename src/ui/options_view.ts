@@ -306,6 +306,8 @@ export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv)
   out.push(toggle(s, 'showOverflowXp', 'game.settings.showOverflowXp'));
   if (env.touch) out.push(slider(s, 'touchOpacity', 'hud.options.touchOpacity'));
   out.push(toggle(s, 'weather', 'game.settings.weather'));
+  out.push(boolToggle(s, 'abilityVfx', 'hudChrome.options.abilityVfx'));
+  out.push(note('hudChrome.options.abilityVfxNote'));
   if (env.touch) out.push(slider(s, 'joystickScale', 'hud.options.joystickSize'));
   if (env.touch) out.push(slider(s, 'actionButtonScale', 'hud.options.buttonSize'));
   if (env.touch) out.push(slider(s, 'joystickDeadzone', 'hud.options.joystickDeadzone'));

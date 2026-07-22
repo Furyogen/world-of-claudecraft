@@ -293,6 +293,10 @@ export const BOOL_SETTINGS = {
   // on by default: keep the Daily Rewards chest launcher visible on the HUD. Hiding
   // it only removes the shortcut; rewards, eligibility, and the panel remain available.
   showDailyRewardsChest: { def: true },
+  // off by default: routes covered abilities to the new spec-driven per-ability
+  // VFX renderer (src/render/ability_vfx.ts) instead of the legacy school
+  // particles. Beta — currently the shaman kit; flips live (pure event routing).
+  abilityVfx: { def: false },
   // internal, never shown in the options UI: set true once main.ts has persisted a
   // device-appropriate graphicsPreset on a player's first run (a CONCLUSIVE detection).
   // It gates firstRunGraphicsPreset so a recognized device is classified at most once and

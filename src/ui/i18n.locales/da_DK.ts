@@ -8194,4 +8194,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Museover-kast på grupperammer',
   'hudChrome.options.showTargetOfTarget': 'Vis målets mål',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Målets Mål',
+  'hudChrome.options.abilityVfx': 'Evneeffekter (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nye filmiske besværgelseseffekter. Dækker i øjeblikket kun shamanen; andre klasser beholder de klassiske effekter, indtil deres omarbejdelse udkommer.',
 };

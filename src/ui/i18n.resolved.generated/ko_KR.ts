@@ -1019,6 +1019,8 @@ export const ko_KR: EnTranslations = {
       "interfaceModeNote": "자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.",
       "footstepSounds": "발소리",
       "interfaceSounds": "인터페이스 및 피드백 소리",
+      "abilityVfx": "기술 시각 효과 (베타)",
+      "abilityVfxNote": "새로운 시네마틱 주문 효과입니다. 현재는 주술사만 지원하며, 다른 직업은 리워크가 나올 때까지 기존 효과를 유지합니다.",
       "clickFeedback": "클릭 표시",
       "lockCursorOnRotate": "회전 중 커서 고정",
       "keybindHelpLockCursorOnRotate": "드래그하여 카메라를 회전하는 동안 마우스 커서를 창 안에 유지하여 화면 가장자리에 닿거나 다른 모니터로 이동하지 않도록 합니다. 자유로운 커서를 원하면 끄세요.",

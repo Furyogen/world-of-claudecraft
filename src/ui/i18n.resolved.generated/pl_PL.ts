@@ -1019,6 +1019,8 @@ export const pl_PL: EnTranslations = {
       "interfaceModeNote": "Tryb Auto dobiera sterowanie komputerowe lub dotykowe na podstawie urządzenia. Wybierz Komputer, aby wymusić klawiaturę i mysz (przydatne na tablecie z klawiaturą), lub Dotyk, aby korzystać ze sterowania ekranowego.",
       "footstepSounds": "Dźwięki kroków",
       "interfaceSounds": "Dźwięki interfejsu i reakcji",
+      "abilityVfx": "Efekty wizualne umiejętności (beta)",
+      "abilityVfxNote": "Nowe kinowe efekty zaklęć. Obecnie obejmuje tylko szamana; pozostałe klasy zachowują klasyczne efekty do czasu ich przebudowy.",
       "clickFeedback": "Znacznik kliknięcia",
       "lockCursorOnRotate": "Blokuj kursor podczas obracania",
       "keybindHelpLockCursorOnRotate": "Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.",

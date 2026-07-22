@@ -1019,6 +1019,8 @@ export const cs_CZ: EnTranslations = {
       "interfaceModeNote": "Automatika vybere desktopové nebo dotykové ovládání podle zařízení. Zvol Desktop pro vynucení klávesnice a myši (užitečné na tabletu s klávesnicí), nebo Dotyk pro ovládání na obrazovce.",
       "footstepSounds": "Zvuky kroků",
       "interfaceSounds": "Zvuky rozhraní a odezvy",
+      "abilityVfx": "Vizuální efekty schopností (beta)",
+      "abilityVfxNote": "Nové filmové efekty kouzel. Zatím pokrývá jen šamana; ostatní povolání si ponechají klasické efekty, dokud nevyjde jejich přepracování.",
       "clickFeedback": "Značka kliknutí",
       "lockCursorOnRotate": "Zamknout kurzor při otáčení",
       "keybindHelpLockCursorOnRotate": "Drží kurzor myši uvnitř okna při tažení pro otáčení kamery, takže nemůže dojet k okraji obrazovky ani na jiný monitor. Vypni, pokud chceš volný kurzor.",

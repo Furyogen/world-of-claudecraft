@@ -1019,6 +1019,8 @@ export const zh_CN: EnTranslations = {
       "interfaceModeNote": "自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。",
       "footstepSounds": "脚步声",
       "interfaceSounds": "界面与反馈音效",
+      "abilityVfx": "技能视觉特效（测试版）",
+      "abilityVfxNote": "全新的电影级法术特效。目前仅覆盖萨满，其他职业在重制完成前仍使用经典特效。",
       "clickFeedback": "点击标记",
       "lockCursorOnRotate": "旋转时锁定光标",
       "keybindHelpLockCursorOnRotate": "拖动旋转镜头时将鼠标光标保持在窗口内，使其无法到达屏幕边缘或移动到另一台显示器。如果你喜欢自由光标，请关闭此选项。",

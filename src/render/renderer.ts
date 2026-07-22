@@ -177,6 +177,7 @@ import { ValeCupPracticeSky } from './vale_cup_practice_sky';
 import { buildValeCupStadium, type ValeCupStadiumView } from './vale_cup_stadium';
 import { buildValeCupTeamRings, type ValeCupTeamRingsView } from './vale_cup_team_ring';
 import { SCHOOL_COLORS, Vfx } from './vfx';
+import { AbilityVfx } from './ability_vfx';
 import { ViewCreateRetryGate } from './view_create_retry';
 import { type WarriorCastVisualPlan, warriorCastVisualPlan } from './warrior_cast_fx_core';
 import { RecklessSkullPainter } from './warrior_cast_fx_painter';
@@ -915,6 +916,10 @@ export class Renderer {
   // overhead nameplate renders exactly as other players see it. Initialized from
   // Settings and kept live by main.ts's applySetting dispatcher (mirrors showDevBadges).
   showOwnNameplate = false;
+  // "Ability VFX (beta)" toggle (off by default): routes covered abilities to
+  // the spec-driven AbilityVfx path instead of the legacy Vfx ladder. Pure
+  // event routing, so it flips live. Initialized like showDevBadges.
+  abilityVfxEnabled = false;
   // settings-menu graphics knobs (applied live)
   private renderScale = 1; // user-requested resolution ceiling on top of the device pixel ratio
   private effectiveRenderScale = 1; // runtime value after adaptive backoff
@@ -1052,6 +1057,7 @@ export class Renderer {
   // Flash a pooled talent-moment point light at an entity's feet (see
   // light_pulses.ts); bound once in the constructor over the views map.
   private pulseAt: (id: number, school: string, intensity: number, duration: number) => void;
+  private abilityVfx: AbilityVfx;
   private frozenOrbFx!: FrozenOrbFx;
   private mageGroundFx!: MageGroundFx;
   private ringOfFrostVisuals!: RingOfFrostVisuals;
@@ -1699,6 +1705,21 @@ export class Renderer {
       if (!v) return;
       this.lightPulses.pulse(v.group.position, school, intensity, duration);
     };
+    this.abilityVfx = new AbilityVfx(
+      this.scene,
+      this.camera,
+      (id, frac) => {
+        const v = this.views.get(id);
+        if (!v) return null;
+        const e = this.sim.entities.get(id);
+        const h = v.height * (e?.scale ?? 1) * frac;
+        return new THREE.Vector3(v.group.position.x, v.group.position.y + h, v.group.position.z);
+      },
+      (id) => this.sim.entities.get(id),
+      (x, z) => groundHeight(x, z, this.sim.cfg.seed),
+      this.pulseAt,
+      this.vfx,
+    );
 
     // ambient precipitation: biome-driven snow/rain that rides with the camera
     this.weather = new Weather(this.scene, this.lowGfx);
@@ -1877,6 +1898,7 @@ export class Renderer {
     this.foliage.setGrassQuality(state.levels.grass);
     this.foliage.setModelQuality(state.levels.foliage);
     this.vfx.setQuality(state.levels.vfx);
+    this.abilityVfx.setQuality(state.levels.vfx);
     this.effectivePointLights = Math.max(1, Math.round(GFX.maxPointLights * state.levels.lighting));
     if (Math.abs(previousScale - this.effectiveRenderScale) >= 0.001) this.applyResolution();
   }
@@ -2371,6 +2393,7 @@ export class Renderer {
     );
     this.fish.update(p.pos.x, p.pos.z, dt);
     this.vfx.update(dt);
+    this.abilityVfx.update(dt);
     this.frozenOrbFx.update(dt);
     this.mageGroundFx.update(dt);
     this.ringOfFrostVisuals.sync(this.sim.activeFrostRings);
@@ -2995,6 +3018,9 @@ export class Renderer {
             this.vfx.prewarm(new THREE.Vector3(p.pos.x + dx, p.pos.y + 1, p.pos.z + dz));
             vfxPrewarmBursts++;
           }
+          // spec-driven ability VFX: compile its ring/ribbon/sprite materials
+          // during the same guarded window so the first real cast never hitches
+          this.abilityVfx.prewarm(new THREE.Vector3(p.pos.x, p.pos.y + 1, p.pos.z));
         },
         detail: () => `bursts=${vfxPrewarmBursts}`,
       },
@@ -3145,6 +3171,7 @@ export class Renderer {
       }
     } finally {
       this.vfx.clear();
+      this.abilityVfx.clear();
       if (doorPrewarmGroup) this.scene.remove(doorPrewarmGroup);
       if (interiorPrewarmGroup) this.scene.remove(interiorPrewarmGroup);
       if (entityPrewarmGroup) this.scene.remove(entityPrewarmGroup);
@@ -3283,7 +3310,11 @@ export class Renderer {
           this.triggerAttack(ev.sourceId, warriorCast.abilityId);
           break;
         }
-        if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
+        if (this.abilityVfxEnabled && this.abilityVfx.tryHandleSpellfx(ev)) {
+          // spec-driven path drew this one — skip the legacy particle ladder.
+          // (Animation side-effects above already ran; the mob-throw trigger
+          // below still runs.)
+        } else if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'heavyBolt')
           // Pyroblast's boulder: the same homing comet, doubled up.
           this.vfx.projectile(ev.sourceId, ev.targetId, ev.school, 2);
@@ -3397,10 +3428,21 @@ export class Renderer {
         // spot. A 'nova' aim is the heavier detonation; 'burst' the lighter one.
         // A radius-carrying event also flashes the AoE ring so the blast AREA
         // reads, not just its center.
+        if (this.abilityVfxEnabled && this.abilityVfx.tryHandleSpellfxAt(ev)) break;
         const gy = groundHeight(ev.x, ev.z, this.sim.cfg.seed);
         const at = new THREE.Vector3(ev.x, gy + 0.4, ev.z);
         this.vfx.burst(at, ev.school, ev.fx === 'nova' ? 34 : 22, ev.fx === 'nova' ? 1.4 : 1);
         if (ev.radius) this.spawnAoeRing(ev.x, ev.z, ev.radius, ev.school);
+        break;
+      }
+      case 'castStart': {
+        // Per-ability bookkeeping for the spec-driven VFX path (cheap even when
+        // the toggle is off — the maps stay tiny and self-pruning).
+        this.abilityVfx.onCastStart(ev);
+        break;
+      }
+      case 'castStop': {
+        this.abilityVfx.onCastStop(ev);
         break;
       }
       case 'damage': {
@@ -3435,6 +3477,9 @@ export class Renderer {
         }
         break;
       case 'aura': {
+        // spec-driven slice buffs track the aura's real lifetime (start on
+        // gain, fade on drop) and replace the legacy swirl entirely
+        if (this.abilityVfxEnabled && this.abilityVfx.onAura(ev.targetId, ev.name, ev.gained)) break;
         const tgt = this.sim.entities.get(ev.targetId);
         // Set-proc auras announce themselves with a themed swirl: on the wearer
         // for the self buffs, on the struck mob for the bleeds (so this arm is
@@ -5549,6 +5594,7 @@ export class Renderer {
     this.waterView.update(this.time);
     worldStart = markWorldPhase('water', worldStart);
     this.vfx.update(dt);
+    this.abilityVfx.update(dt);
     this.frozenOrbFx.update(dt);
     this.mageGroundFx.update(dt);
     this.ringOfFrostVisuals.sync(this.sim.activeFrostRings);

@@ -5459,6 +5459,8 @@ export type TranslationKeyFlat =
   | 'hudChrome.nativeUpdate.notNow'
   | 'hudChrome.nativeUpdate.title'
   | 'hudChrome.nativeUpdate.update'
+  | 'hudChrome.options.abilityVfx'
+  | 'hudChrome.options.abilityVfxNote'
   | 'hudChrome.options.aurasOnPlayerFrame'
   | 'hudChrome.options.browserEffects'
   | 'hudChrome.options.browserEffectsAuto'

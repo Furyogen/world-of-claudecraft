@@ -1754,6 +1754,10 @@ async function startGame(
       renderer.showOwnNameplate = settings.set('showOwnNameplate', !!value);
       return;
     }
+    if (key === 'abilityVfx') {
+      renderer.abilityVfxEnabled = settings.set('abilityVfx', !!value);
+      return;
+    }
     if (key === 'invertLookY') {
       input.setInvertLookY(settings.set('invertLookY', !!value));
       return;

@@ -1019,6 +1019,8 @@ export const vi_VN: EnTranslations = {
       "interfaceModeNote": "Tự Động chọn điều khiển máy tính hoặc cảm ứng theo thiết bị của bạn. Chọn Máy Tính để buộc dùng bàn phím và chuột (hữu ích trên máy tính bảng có bàn phím), hoặc Cảm Ứng để dùng các điều khiển trên màn hình.",
       "footstepSounds": "Âm Thanh Bước Chân",
       "interfaceSounds": "Âm Thanh Giao Diện và Phản Hồi",
+      "abilityVfx": "Hiệu ứng kỹ năng (beta)",
+      "abilityVfxNote": "Hiệu ứng phép thuật điện ảnh mới. Hiện chỉ áp dụng cho shaman; các lớp khác giữ hiệu ứng cổ điển cho đến khi bản làm lại ra mắt.",
       "clickFeedback": "Dấu Nhấp Chuột",
       "lockCursorOnRotate": "Khóa Con Trỏ Khi Xoay",
       "keybindHelpLockCursorOnRotate": "Giữ con trỏ chuột bên trong cửa sổ khi bạn kéo để xoay camera, để nó không thể chạm tới mép màn hình hoặc di chuyển sang màn hình khác. Hãy tắt nếu bạn thích con trỏ tự do.",

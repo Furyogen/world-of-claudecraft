@@ -1019,6 +1019,8 @@ export const ja_JP: EnTranslations = {
       "interfaceModeNote": "自動では、デバイスに応じてデスクトップ操作かタッチ操作を選びます。デスクトップを選ぶとキーボードとマウスに固定され（キーボード付きタブレットなどに便利）、タッチを選ぶと画面上の操作になります。",
       "footstepSounds": "足音",
       "interfaceSounds": "インターフェースとフィードバック音",
+      "abilityVfx": "アビリティ視覚効果（ベータ版）",
+      "abilityVfxNote": "新しいシネマティックな呪文エフェクト。現在はシャーマンのみ対応。他のクラスはリワーク完了まで従来のエフェクトのままです。",
       "clickFeedback": "クリックマーカー",
       "lockCursorOnRotate": "回転中はカーソルを固定",
       "keybindHelpLockCursorOnRotate": "ドラッグでカメラを回転させている間、マウスカーソルをウィンドウ内に固定し、画面の端や別のモニターに移動しないようにします。自由なカーソルを好む場合はオフにしてください。",

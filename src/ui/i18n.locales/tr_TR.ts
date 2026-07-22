@@ -8214,4 +8214,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Grup Çerçevelerinde İmleçle Büyü Yapma',
   'hudChrome.options.showTargetOfTarget': 'Hedefin Hedefini Göster',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Hedefin Hedefi',
+  'hudChrome.options.abilityVfx': 'Yetenek görsel efektleri (beta)',
+  'hudChrome.options.abilityVfxNote': 'Yeni sinematik büyü efektleri. Şimdilik yalnızca şamanı kapsar; diğer sınıflar yenilenene kadar klasik efektleri kullanır.',
 };

@@ -1019,6 +1019,8 @@ export const da_DK: EnTranslations = {
       "interfaceModeNote": "Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.",
       "footstepSounds": "Fodtrinslyde",
       "interfaceSounds": "Brugerflade- og feedbacklyde",
+      "abilityVfx": "Evneeffekter (beta)",
+      "abilityVfxNote": "Nye filmiske besværgelseseffekter. Dækker i øjeblikket kun shamanen; andre klasser beholder de klassiske effekter, indtil deres omarbejdelse udkommer.",
       "clickFeedback": "Klikmarkør",
       "lockCursorOnRotate": "Lås markør under drejning",
       "keybindHelpLockCursorOnRotate": "Holder musemarkøren inde i vinduet, mens du trækker for at dreje kameraet, så den ikke kan nå skærmkanten eller flytte til en anden skærm. Slå fra, hvis du foretrækker en fri markør.",

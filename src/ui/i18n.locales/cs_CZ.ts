@@ -8142,4 +8142,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Sesílání najetím myší na rámech skupiny',
   'hudChrome.options.showTargetOfTarget': 'Zobrazit cíl cíle',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Značka tvé značky',
+  'hudChrome.options.abilityVfx': 'Vizuální efekty schopností (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nové filmové efekty kouzel. Zatím pokrývá jen šamana; ostatní povolání si ponechají klasické efekty, dokud nevyjde jejich přepracování.',
 };

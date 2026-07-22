@@ -8316,4 +8316,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Conjuração ao Apontar nos Quadros do Grupo',
   'hudChrome.options.showTargetOfTarget': 'Mostrar Alvo do Alvo',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Alvo do alvo',
+  'hudChrome.options.abilityVfx': 'Efeitos visuais de habilidades (beta)',
+  'hudChrome.options.abilityVfxNote': 'Novos efeitos cinematográficos de feitiços. Por enquanto cobre apenas o xamã; as outras classes mantêm os efeitos clássicos até a chegada da reformulação.',
 };

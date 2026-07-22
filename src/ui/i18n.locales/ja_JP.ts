@@ -8104,4 +8104,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'パーティフレームでマウスオーバーキャスト',
   'hudChrome.options.showTargetOfTarget': 'ターゲットのターゲットを表示',
   'hudChrome.unitFrame.targetOfTargetLabel': 'ターゲットのターゲット',
+  'hudChrome.options.abilityVfx': 'アビリティ視覚効果（ベータ版）',
+  'hudChrome.options.abilityVfxNote': '新しいシネマティックな呪文エフェクト。現在はシャーマンのみ対応。他のクラスはリワーク完了まで従来のエフェクトのままです。',
 };

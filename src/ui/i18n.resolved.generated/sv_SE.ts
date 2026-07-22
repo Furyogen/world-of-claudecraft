@@ -1019,6 +1019,8 @@ export const sv_SE: EnTranslations = {
       "interfaceModeNote": "Auto väljer skrivbords- eller pekkontroller utifrån din enhet. Välj Skrivbord för att tvinga fram tangentbord och mus (användbart på en surfplatta med tangentbord), eller Pek för skärmkontrollerna.",
       "footstepSounds": "Fotstegsljud",
       "interfaceSounds": "Gränssnitts- och responsljud",
+      "abilityVfx": "Förmågeeffekter (beta)",
+      "abilityVfxNote": "Nya filmiska besvärjelseeffekter. Täcker för närvarande endast schamanen; övriga klasser behåller de klassiska effekterna tills deras omarbetning släpps.",
       "clickFeedback": "Klickmarkör",
       "lockCursorOnRotate": "Lås pekare under rotation",
       "keybindHelpLockCursorOnRotate": "Håller muspekaren inuti fönstret medan du drar för att rotera kameran, så att den inte kan nå skärmkanten eller flytta till en annan skärm. Stäng av om du föredrar en fri pekare.",

@@ -8310,4 +8310,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Mouseover-bezwering op groepsframes',
   'hudChrome.options.showTargetOfTarget': 'Doelwit van doelwit tonen',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Doelwit van het doelwit',
+  'hudChrome.options.abilityVfx': 'Vaardigheidseffecten (bèta)',
+  'hudChrome.options.abilityVfxNote': 'Nieuwe filmische spreukeffecten. Dekt momenteel alleen de sjamaan; andere klassen behouden de klassieke effecten tot hun herwerking uitkomt.',
 };

@@ -1019,6 +1019,8 @@ export const nl_NL: EnTranslations = {
       "interfaceModeNote": "Automatisch kiest desktop- of aanraakbesturing op basis van je apparaat. Kies Desktop om toetsenbord en muis af te dwingen (handig op een tablet met toetsenbord), of Aanraking voor de besturing op het scherm.",
       "footstepSounds": "Voetstapgeluiden",
       "interfaceSounds": "Interface- en feedbackgeluiden",
+      "abilityVfx": "Vaardigheidseffecten (bèta)",
+      "abilityVfxNote": "Nieuwe filmische spreukeffecten. Dekt momenteel alleen de sjamaan; andere klassen behouden de klassieke effecten tot hun herwerking uitkomt.",
       "clickFeedback": "Klikmarkering",
       "lockCursorOnRotate": "Aanwijzer vergrendelen tijdens draaien",
       "keybindHelpLockCursorOnRotate": "Houdt de muisaanwijzer binnen het venster terwijl je sleept om de camera te draaien, zodat deze de schermrand niet kan bereiken of naar een ander beeldscherm kan gaan. Schakel uit als je liever een vrije aanwijzer hebt.",

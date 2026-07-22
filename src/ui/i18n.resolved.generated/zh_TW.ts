@@ -1019,6 +1019,8 @@ export const zh_TW: EnTranslations = {
       "interfaceModeNote": "自動會根據你的裝置選擇桌面或觸控操作。選擇桌面可強制使用鍵盤與滑鼠（適合有鍵盤的平板），選擇觸控則使用螢幕上的操作控制項。",
       "footstepSounds": "腳步聲",
       "interfaceSounds": "介面與回饋音效",
+      "abilityVfx": "技能視覺特效（測試版）",
+      "abilityVfxNote": "全新的電影級法術特效。目前僅涵蓋薩滿，其他職業在重製完成前仍使用經典特效。",
       "clickFeedback": "點擊標記",
       "lockCursorOnRotate": "旋轉時鎖定游標",
       "keybindHelpLockCursorOnRotate": "拖曳旋轉鏡頭時將滑鼠游標保持在視窗內，使其無法到達螢幕邊緣或移動到另一台顯示器。若你偏好自由游標，請關閉此選項。",

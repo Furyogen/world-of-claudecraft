@@ -8421,4 +8421,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Incantation au survol sur les cadres de groupe',
   'hudChrome.options.showTargetOfTarget': 'Afficher la cible de la cible',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Cible de la cible',
+  'hudChrome.options.abilityVfx': 'Effets visuels des sorts (bêta)',
+  'hudChrome.options.abilityVfxNote': 'Nouveaux effets de sorts cinématiques. Pour l\'instant, seul le chaman est couvert ; les autres classes gardent les effets classiques en attendant leur refonte.',
 };

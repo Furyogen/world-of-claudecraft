@@ -1019,6 +1019,8 @@ export const es: EnTranslations = {
       "interfaceModeNote": "Auto elige los controles Desktop o Touch según tu dispositivo. Elige Desktop para forzar teclado y ratón (útil en una tableta con teclado), o Touch para los controles en pantalla.",
       "footstepSounds": "Sonidos de pasos",
       "interfaceSounds": "Sonidos de interfaz y respuesta",
+      "abilityVfx": "Efectos visuales de habilidades (beta)",
+      "abilityVfxNote": "Nuevos efectos de hechizos cinematográficos. Por ahora solo el chamán; las demás clases conservan los efectos clásicos hasta que llegue su renovación.",
       "clickFeedback": "Marcador de clic",
       "lockCursorOnRotate": "Bloquear cursor al rotar",
       "keybindHelpLockCursorOnRotate": "Mantiene el cursor del ratón dentro de la ventana mientras arrastras para rotar la cámara, para que no llegue al borde de la pantalla ni pase a otro monitor. Desactívalo si prefieres un cursor libre.",

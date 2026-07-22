@@ -816,6 +816,10 @@ export const hudChromeStrings = {
     // quest, whisper, and the combat miss/dodge/parry beeps; on by default). Off
     // silences just those without touching the SFX volume or the world sounds.
     interfaceSounds: 'Interface and Feedback Sounds',
+    // Beta toggle routing covered abilities to the new spec-driven per-ability
+    // VFX renderer; off by default while the rework rolls out class by class.
+    abilityVfx: 'Ability VFX (Beta)',
+    abilityVfxNote: 'New cinematic spell effects. Currently covers the shaman; other classes keep the classic effects until their rework ships.',
     // Toggle for the OSRS-style click-feedback marker: entity targets and
     // click-to-move destinations (on by default).
     clickFeedback: 'Click Marker',

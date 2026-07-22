@@ -8383,4 +8383,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Mouseover-Wirken auf Gruppenfenstern',
   'hudChrome.options.showTargetOfTarget': 'Ziel des Ziels anzeigen',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Ziel des Ziels',
+  'hudChrome.options.abilityVfx': 'Fähigkeiten-Effekte (Beta)',
+  'hudChrome.options.abilityVfxNote': 'Neue filmreife Zaubereffekte. Derzeit nur für den Schamanen; alle anderen Klassen behalten die klassischen Effekte, bis ihre Überarbeitung erscheint.',
 };

@@ -111,6 +111,8 @@ describe('options_view: graphics dispatch matrix (cluster 3)', () => {
       'fullscreen',
       'showOverflowXp',
       'weather',
+      'abilityVfx',
+      'note:hudChrome.options.abilityVfxNote',
     ]);
   });
 

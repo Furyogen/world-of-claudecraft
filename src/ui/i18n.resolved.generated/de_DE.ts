@@ -1019,6 +1019,8 @@ export const de_DE: EnTranslations = {
       "interfaceModeNote": "Auto wählt je nach Gerät die Desktop- oder Touch-Steuerung. Wähle Desktop, um Tastatur und Maus zu erzwingen (praktisch bei einem Tablet mit Tastatur), oder Touch für die Bildschirmsteuerung.",
       "footstepSounds": "Schrittgeräusche",
       "interfaceSounds": "Interface- und Feedback-Sounds",
+      "abilityVfx": "Fähigkeiten-Effekte (Beta)",
+      "abilityVfxNote": "Neue filmreife Zaubereffekte. Derzeit nur für den Schamanen; alle anderen Klassen behalten die klassischen Effekte, bis ihre Überarbeitung erscheint.",
       "clickFeedback": "Klickmarkierung",
       "lockCursorOnRotate": "Cursor beim Drehen sperren",
       "keybindHelpLockCursorOnRotate": "Hält den Mauszeiger im Fenster, während Ihr zum Drehen der Kamera zieht, damit er nicht den Bildschirmrand erreicht oder auf einen anderen Monitor wandert. Schaltet dies aus, wenn Ihr einen freien Cursor bevorzugt.",

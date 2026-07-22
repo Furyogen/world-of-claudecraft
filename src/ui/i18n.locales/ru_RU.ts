@@ -8250,4 +8250,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Применение по наведению на рамки группы',
   'hudChrome.options.showTargetOfTarget': 'Показывать цель цели',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Цель цели',
+  'hudChrome.options.abilityVfx': 'Визуальные эффекты способностей (бета)',
+  'hudChrome.options.abilityVfxNote': 'Новые кинематографичные эффекты заклинаний. Пока доступно только шаману; остальные классы сохраняют классические эффекты до выхода переработки.',
 };

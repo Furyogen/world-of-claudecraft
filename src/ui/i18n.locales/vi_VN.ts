@@ -8234,4 +8234,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Thi Triển Khi Rê Chuột Trên Khung Tổ Đội',
   'hudChrome.options.showTargetOfTarget': 'Hiện Mục Tiêu Của Mục Tiêu',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Mục Tiêu Của Mục Tiêu',
+  'hudChrome.options.abilityVfx': 'Hiệu ứng kỹ năng (beta)',
+  'hudChrome.options.abilityVfxNote': 'Hiệu ứng phép thuật điện ảnh mới. Hiện chỉ áp dụng cho shaman; các lớp khác giữ hiệu ứng cổ điển cho đến khi bản làm lại ra mắt.',
 };

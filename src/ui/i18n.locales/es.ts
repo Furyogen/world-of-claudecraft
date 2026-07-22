@@ -8369,4 +8369,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Lanzar al pasar el cursor sobre los marcos de grupo',
   'hudChrome.options.showTargetOfTarget': 'Mostrar el objetivo del objetivo',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Objetivo del objetivo',
+  'hudChrome.options.abilityVfx': 'Efectos visuales de habilidades (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nuevos efectos de hechizos cinematográficos. Por ahora solo el chamán; las demás clases conservan los efectos clásicos hasta que llegue su renovación.',
 };

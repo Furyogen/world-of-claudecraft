@@ -8347,4 +8347,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.mouseoverCast': 'Lancio al passaggio del mouse sui riquadri del gruppo',
   'hudChrome.options.showTargetOfTarget': 'Mostra il bersaglio del bersaglio',
   'hudChrome.unitFrame.targetOfTargetLabel': 'Il bersaglio del bersaglio',
+  'hudChrome.options.abilityVfx': 'Effetti visivi delle abilità (beta)',
+  'hudChrome.options.abilityVfxNote': 'Nuovi effetti cinematografici per gli incantesimi. Al momento copre solo lo sciamano; le altre classi mantengono gli effetti classici finché non arriva il loro rinnovo.',
 };
