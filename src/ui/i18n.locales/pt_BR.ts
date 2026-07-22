@@ -8553,14 +8553,14 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.fenshadow_maul.name': '[PT-BR] Fenshadow Maul',
   'entities.items.fenwarden_sabatons.name': '[PT-BR] Fenwarden Sabatons',
   'entities.items.gravewyrm_thornmaul.name': '[PT-BR] Gravewyrm Thornmaul',
-  'entities.items.grovewardens_grips.name': '[PT-BR] Grovewarden\'s Grips',
+  'entities.items.grovewardens_grips.name': "[PT-BR] Grovewarden's Grips",
   'entities.items.lunarward_cinch.name': '[PT-BR] Lunarward Cinch',
   'entities.items.marshlight_hauberk.name': '[PT-BR] Marshlight Hauberk',
   'entities.items.maul_of_the_scourged_wilds.name': '[PT-BR] Maul of the Scourged Wilds',
   'entities.items.mirebloom_treads.name': '[PT-BR] Mirebloom Treads',
   'entities.items.moonbark_vestments.name': '[PT-BR] Moonbark Vestments',
   'entities.items.mosshide_vest.name': '[PT-BR] Mosshide Vest',
-  'entities.items.nightfangs_greatstaff.name': '[PT-BR] Nightfang\'s Greatstaff',
+  'entities.items.nightfangs_greatstaff.name': "[PT-BR] Nightfang's Greatstaff",
   'entities.items.peaksong_helm.name': '[PT-BR] Peaksong Helm',
   'entities.items.pearlward_aegis.name': '[PT-BR] Pearlward Aegis',
   'entities.items.resonant_hide.name': '[PT-BR] Resonant Hide',
@@ -8638,11 +8638,13 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_leatherworking_tailoring_2.body':
     '[PT-BR] A major of yours has climbed to rare work. That is where a careless hand shows every dropped stitch, and yours has not. I am quietly pleased.',
   'entities.letters.prof_tier_leatherworking_tailoring_2.sender': '[PT-BR] Weaver Ottilie',
-  'entities.letters.prof_tier_leatherworking_tailoring_2.subject': '[PT-BR] Rare work, well measured',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.subject':
+    '[PT-BR] Rare work, well measured',
   'entities.letters.prof_tier_leatherworking_tailoring_3.body':
     '[PT-BR] One of your majors has passed rare into finer work. The pattern comes clear to a hand at this level, no more guessing. Keep measuring twice.',
   'entities.letters.prof_tier_leatherworking_tailoring_3.sender': '[PT-BR] Weaver Ottilie',
-  'entities.letters.prof_tier_leatherworking_tailoring_3.subject': '[PT-BR] The pattern comes clear',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.subject':
+    '[PT-BR] The pattern comes clear',
   'entities.letters.prof_tier_leatherworking_tailoring_4.body':
     '[PT-BR] A major of yours sits one row short of mastery. The last row is always the hardest to keep even. Do not rush it now.',
   'entities.letters.prof_tier_leatherworking_tailoring_4.sender': '[PT-BR] Weaver Ottilie',
@@ -8654,19 +8656,23 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.body':
     '[PT-BR] Word reaches my forge that one of your majors now holds at uncommon work. It is the smallest rung on a long climb, but you earned it at the anvil, not by asking. Keep the fire hot.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.sender': '[PT-BR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject': '[PT-BR] A spark worth noting',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject':
+    '[PT-BR] A spark worth noting',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.body':
     '[PT-BR] They tell me a major of yours has reached rare work. That is the rung where sloppy hands fall away and the real smiths are left standing. You are still standing. Good.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.sender': '[PT-BR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject': '[PT-BR] Rare work, and earned',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject':
+    '[PT-BR] Rare work, and earned',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
     '[PT-BR] A major of yours has climbed past rare into serious work. The metal answers a hand like that, no longer fighting it. Do not let the praise soften your arm.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': '[PT-BR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject': '[PT-BR] The metal answers you now',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject':
+    '[PT-BR] The metal answers you now',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
     '[PT-BR] One of your majors stands a single rung below mastery. Few hands I have known reach this height, and fewer keep their edge here. Finish the climb.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': '[PT-BR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': '[PT-BR] Near the top of the ladder',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject':
+    '[PT-BR] Near the top of the ladder',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
     '[PT-BR] A major of yours has reached mastery, the highest a hand can climb. I do not give praise freely, so hear this once: the forge is proud of you. Now go teach the fire something new.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': '[PT-BR] Forgemistress Darva',
@@ -8712,20 +8718,22 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_attune_outfitter.objectives.0.label': '[PT-BR] Webwood Spider culled',
   'entities.quests.q_prof_attune_outfitter.text':
     '[PT-BR] Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, {playerName}, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.',
-  'entities.quests.q_prof_attune_outfitter.title': '[PT-BR] The Outfitter\'s Measure',
+  'entities.quests.q_prof_attune_outfitter.title': "[PT-BR] The Outfitter's Measure",
   'entities.quests.q_prof_attune_smith.completion':
     '[PT-BR] Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.',
   'entities.quests.q_prof_attune_smith.objectives.0.label': '[PT-BR] Ore vein harvested',
   'entities.quests.q_prof_attune_smith.text':
     '[PT-BR] Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, {playerName}: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.',
-  'entities.quests.q_prof_attune_smith.title': '[PT-BR] The Smith\'s Promise',
+  'entities.quests.q_prof_attune_smith.title': "[PT-BR] The Smith's Promise",
   'entities.quests.q_prof_workorder_apothecary.completion':
     '[PT-BR] Acceptable. Potent, and properly handled. Your payment, counted to the coin. Do not let it go to your head, that is a different reagent.',
-  'entities.quests.q_prof_workorder_apothecary.objectives.0.label': '[PT-BR] Goldleaf Herb delivered',
+  'entities.quests.q_prof_workorder_apothecary.objectives.0.label':
+    '[PT-BR] Goldleaf Herb delivered',
   'entities.quests.q_prof_workorder_apothecary.text':
-    '[PT-BR] My shelves require goldleaf, and the market\'s stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.',
+    "[PT-BR] My shelves require goldleaf, and the market's stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.",
   'entities.quests.q_prof_workorder_apothecary.title': '[PT-BR] Apothecary Work Order',
-  'entities.quests.q_prof_workorder_forge.completion': '[PT-BR] Good weight, no slag. Here is your due. The forge will be hungry again soon enough.',
+  'entities.quests.q_prof_workorder_forge.completion':
+    '[PT-BR] Good weight, no slag. Here is your due. The forge will be hungry again soon enough.',
   'entities.quests.q_prof_workorder_forge.objectives.0.label': '[PT-BR] Copper Ore delivered',
   'entities.quests.q_prof_workorder_forge.text':
     '[PT-BR] The forge always wants feeding, {playerName}. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.',
@@ -8742,9 +8750,11 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_workorder_loom.text':
     '[PT-BR] The loom runs dry and idle hands waste daylight, {playerName}. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.',
   'entities.quests.q_prof_workorder_loom.title': '[PT-BR] Loom Work Order',
-  'entities.quests.q_prof_workorder_tannery.completion': '[PT-BR] Good hides. Fair pay. Again when you have more.',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    '[PT-BR] Good hides. Fair pay. Again when you have more.',
   'entities.quests.q_prof_workorder_tannery.objectives.0.label': '[PT-BR] Rough Hide delivered',
-  'entities.quests.q_prof_workorder_tannery.text': '[PT-BR] Vats are empty. Bring eight rough hides. Coin when you do.',
+  'entities.quests.q_prof_workorder_tannery.text':
+    '[PT-BR] Vats are empty. Bring eight rough hides. Coin when you do.',
   'entities.quests.q_prof_workorder_tannery.title': '[PT-BR] Tannery Work Order',
   'entities.quests.q_prof_workorder_toolworks.completion':
     '[PT-BR] Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.',
@@ -8759,10 +8769,12 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     '[PT-BR] Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.',
   'hudChrome.crafting.attunedBanner': '[PT-BR] Attuned: {title}',
   'hudChrome.crafting.attunedZoneLine': '[PT-BR] {name} has attuned as {archetype}!',
-  'hudChrome.crafting.attunementReturnCost': '[PT-BR] If you leave this pair, returning to it later costs {cost} make-amends tasks.',
+  'hudChrome.crafting.attunementReturnCost':
+    '[PT-BR] If you leave this pair, returning to it later costs {cost} make-amends tasks.',
   'hudChrome.crafting.difficultyMinimal': '[PT-BR] Minimal skill gain',
   'hudChrome.crafting.gatheredBy': '[PT-BR] Gathered by {name}',
-  'hudChrome.crafting.learnMoreAtStation': '[PT-BR] {master} at the {station} can teach you more {craft} recipes.',
+  'hudChrome.crafting.learnMoreAtStation':
+    '[PT-BR] {master} at the {station} can teach you more {craft} recipes.',
   'hudChrome.crafting.tierTutorial.dismiss': '[PT-BR] Got it',
   'hudChrome.crafting.tierTutorial.masters':
     '[PT-BR] Craft masters in the towns offer attunement quests. Visit one to choose your pair whenever you are ready. Nothing you have learned is ever lost.',
@@ -8771,8 +8783,10 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.tierTutorial.tierCap':
     '[PT-BR] A craft reaches its first tier at {skill} skill, and each tier improves what it can make. But a craft only climbs past rare work once it is one of your two majors.',
   'hudChrome.crafting.tierTutorial.title': '[PT-BR] Your First Tier',
-  'hudChrome.crafting.trendNudge': '[PT-BR] Your hands are leaning toward the {archetype}. Its attunement waits with {master}.',
-  'hudChrome.crafting.trendNudgeNoMaster': '[PT-BR] Your hands are leaning toward the {archetype}. Seek a craft master to take it up.',
+  'hudChrome.crafting.trendNudge':
+    '[PT-BR] Your hands are leaning toward the {archetype}. Its attunement waits with {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    '[PT-BR] Your hands are leaning toward the {archetype}. Seek a craft master to take it up.',
   'hudChrome.enchantName.enchant_chest_armor': '[PT-BR] Enchant Chest - Reinforcement',
   'hudChrome.enchantName.enchant_chest_greater_stamina': '[PT-BR] Enchant Chest - Greater Stamina',
   'hudChrome.enchantName.enchant_chest_runeweave': '[PT-BR] Enchant Chest - Runeweave',
@@ -8782,12 +8796,14 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchantName.enchant_feet_stamina': '[PT-BR] Enchant Boots - Stamina',
   'hudChrome.enchantName.enchant_feet_strength': '[PT-BR] Enchant Boots - Strength',
   'hudChrome.enchantName.enchant_gloves_agility': '[PT-BR] Enchant Gloves - Agility',
-  'hudChrome.enchantName.enchant_gloves_greater_agility': '[PT-BR] Enchant Gloves - Greater Agility',
+  'hudChrome.enchantName.enchant_gloves_greater_agility':
+    '[PT-BR] Enchant Gloves - Greater Agility',
   'hudChrome.enchantName.enchant_gloves_intellect': '[PT-BR] Enchant Gloves - Spellpower',
   'hudChrome.enchantName.enchant_gloves_strength': '[PT-BR] Enchant Gloves - Strength',
   'hudChrome.enchantName.enchant_helmet_armor': '[PT-BR] Enchant Helmet - Reinforcement',
   'hudChrome.enchantName.enchant_helmet_fortitude': '[PT-BR] Enchant Helmet - Fortitude',
-  'hudChrome.enchantName.enchant_helmet_greater_fortitude': '[PT-BR] Enchant Helmet - Greater Fortitude',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude':
+    '[PT-BR] Enchant Helmet - Greater Fortitude',
   'hudChrome.enchantName.enchant_helmet_intellect': '[PT-BR] Enchant Helmet - Intellect',
   'hudChrome.enchantName.enchant_helmet_runed_links': '[PT-BR] Enchant Helmet - Runed Links',
   'hudChrome.enchantName.enchant_legs_greater_stamina': '[PT-BR] Enchant Legs - Greater Stamina',
@@ -8809,20 +8825,25 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchantName.enchant_waist_strength': '[PT-BR] Enchant Belt - Strength',
   'hudChrome.enchantName.enchant_weapon_agility': '[PT-BR] Enchant Weapon - Agility',
   'hudChrome.enchantName.enchant_weapon_greater_might': '[PT-BR] Enchant Weapon - Greater Might',
-  'hudChrome.enchantName.enchant_weapon_greater_spellpower': '[PT-BR] Enchant Weapon - Greater Spellpower',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower':
+    '[PT-BR] Enchant Weapon - Greater Spellpower',
   'hudChrome.enchantName.enchant_weapon_intellect': '[PT-BR] Enchant Weapon - Spellpower',
   'hudChrome.enchantName.enchant_weapon_might': '[PT-BR] Enchant Weapon - Might',
   'hudChrome.enchantName.enchant_weapon_runed_edge': '[PT-BR] Enchant Weapon - Runed Edge',
   'hudChrome.enchantName.enchant_weapon_runed_focus': '[PT-BR] Enchant Weapon - Runed Focus',
-  'hudChrome.enchanting.disenchantConfirmBody': '[PT-BR] This destroys {item} and yields arcane materials. This cannot be undone.',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    '[PT-BR] This destroys {item} and yields arcane materials. This cannot be undone.',
   'hudChrome.enchanting.disenchantConfirmBodySpecial':
     '[PT-BR] This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.',
   'hudChrome.enchanting.disenchantConfirmTitle': '[PT-BR] Disenchant {item}?',
-  'hudChrome.enchanting.disenchantThrottled': '[PT-BR] You are disenchanting too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.disenchantThrottled':
+    '[PT-BR] You are disenchanting too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.disenchantedLine': '[PT-BR] You disenchant {item}.',
   'hudChrome.enchanting.enchantAppliedLine': '[PT-BR] You enchant {item} with {enchant}.',
-  'hudChrome.enchanting.enchantInsufficient': '[PT-BR] You do not have the materials for that enchant.',
-  'hudChrome.enchanting.enchantThrottled': '[PT-BR] You are enchanting too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.enchantInsufficient':
+    '[PT-BR] You do not have the materials for that enchant.',
+  'hudChrome.enchanting.enchantThrottled':
+    '[PT-BR] You are enchanting too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.enchantUnknown': '[PT-BR] That enchant does not exist.',
   'hudChrome.enchanting.enchantWrongSlot': '[PT-BR] That enchant cannot be applied to that item.',
   'hudChrome.enchanting.noEnchants': '[PT-BR] No enchant uses this reagent.',
@@ -8831,17 +8852,20 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchanting.notHeld': '[PT-BR] You do not have that item.',
   'hudChrome.enchanting.notSalvageable': '[PT-BR] You cannot salvage that.',
   'hudChrome.enchanting.pickerTitle': '[PT-BR] Apply Enchant',
-  'hudChrome.enchanting.salvageConfirmBody': '[PT-BR] This destroys {item} and yields crafting materials. This cannot be undone.',
+  'hudChrome.enchanting.salvageConfirmBody':
+    '[PT-BR] This destroys {item} and yields crafting materials. This cannot be undone.',
   'hudChrome.enchanting.salvageConfirmBodySpecial':
     '[PT-BR] This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.',
   'hudChrome.enchanting.salvageConfirmTitle': '[PT-BR] Salvage {item}?',
-  'hudChrome.enchanting.salvageThrottled': '[PT-BR] You are salvaging too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.salvageThrottled':
+    '[PT-BR] You are salvaging too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.salvagedLine': '[PT-BR] You salvage {item}.',
   'hudChrome.enchanting.targetTitle': '[PT-BR] Choose an item to enchant',
   'hudChrome.gathering.biteLine': '[PT-BR] Something takes the bait!',
   'hudChrome.gathering.catchLine': '[PT-BR] You reel in: {name}',
   'hudChrome.gathering.downgradeFind': '[PT-BR] Bags full: a pristine find slipped away.',
-  'hudChrome.gathering.downgradeMark': '[PT-BR] Bags full: the find was stored without its gatherer\'s mark.',
+  'hudChrome.gathering.downgradeMark':
+    "[PT-BR] Bags full: the find was stored without its gatherer's mark.",
   'hudChrome.gathering.fishing': '[PT-BR] Fishing',
   'hudChrome.gathering.gotAwayLine': '[PT-BR] It got away.',
   'hudChrome.gathering.nodeName.herb': '[PT-BR] Herb Patch',
@@ -8852,10 +8876,14 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.tierRequired.herbalism': '[PT-BR] Requires a tier {tier} herbalism sickle',
   'hudChrome.gathering.tierRequired.logging': '[PT-BR] Requires a tier {tier} logging axe',
   'hudChrome.gathering.tierRequired.mining': '[PT-BR] Requires a tier {tier} mining pick',
-  'hudChrome.gathering.toolTierUnmet.herbalism': '[PT-BR] You need a tier {tier} herbalism sickle to gather this patch.',
-  'hudChrome.gathering.toolTierUnmet.logging': '[PT-BR] You need a tier {tier} logging axe to fell this stand.',
-  'hudChrome.gathering.toolTierUnmet.mining': '[PT-BR] You need a tier {tier} mining pick to harvest this vein.',
-  'hudChrome.gathering.toolTierUnmetCorpse': '[PT-BR] You need a tier {tier} gathering tool to recover the finest materials.',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    '[PT-BR] You need a tier {tier} herbalism sickle to gather this patch.',
+  'hudChrome.gathering.toolTierUnmet.logging':
+    '[PT-BR] You need a tier {tier} logging axe to fell this stand.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    '[PT-BR] You need a tier {tier} mining pick to harvest this vein.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    '[PT-BR] You need a tier {tier} gathering tool to recover the finest materials.',
   'hudChrome.interfaceTabs.chat': '[PT-BR] Chat',
   'hudChrome.interfaceTabs.combat': '[PT-BR] Combat',
   'hudChrome.interfaceTabs.frames': '[PT-BR] Frames',
@@ -8866,8 +8894,10 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.itemMenu.salvage': '[PT-BR] Salvage',
   'hudChrome.itemMenu.use': 'Usar',
   'hudChrome.loot.takeLootButton': '[PT-BR] Take Loot',
-  'hudChrome.loot.takeLootTooltip': '[PT-BR] Takes the coins and dropped items. Does not use up the harvest.',
-  'hudChrome.loot.unifiedPressHint': '[PT-BR] The interact key loots and harvests in one press, using your town focus.',
+  'hudChrome.loot.takeLootTooltip':
+    '[PT-BR] Takes the coins and dropped items. Does not use up the harvest.',
+  'hudChrome.loot.unifiedPressHint':
+    '[PT-BR] The interact key loots and harvests in one press, using your town focus.',
   'hudChrome.nameplate.afkTag': 'AUS',
   'hudChrome.professions.nextUnlockMastered': '[PT-BR] Mastered, for now',
   'hudChrome.social.hideOffline': '[PT-BR] Hide offline',

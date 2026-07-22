@@ -8660,14 +8660,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.fenshadow_maul.name': '[FR] Fenshadow Maul',
   'entities.items.fenwarden_sabatons.name': '[FR] Fenwarden Sabatons',
   'entities.items.gravewyrm_thornmaul.name': '[FR] Gravewyrm Thornmaul',
-  'entities.items.grovewardens_grips.name': '[FR] Grovewarden\'s Grips',
+  'entities.items.grovewardens_grips.name': "[FR] Grovewarden's Grips",
   'entities.items.lunarward_cinch.name': '[FR] Lunarward Cinch',
   'entities.items.marshlight_hauberk.name': '[FR] Marshlight Hauberk',
   'entities.items.maul_of_the_scourged_wilds.name': '[FR] Maul of the Scourged Wilds',
   'entities.items.mirebloom_treads.name': '[FR] Mirebloom Treads',
   'entities.items.moonbark_vestments.name': '[FR] Moonbark Vestments',
   'entities.items.mosshide_vest.name': '[FR] Mosshide Vest',
-  'entities.items.nightfangs_greatstaff.name': '[FR] Nightfang\'s Greatstaff',
+  'entities.items.nightfangs_greatstaff.name': "[FR] Nightfang's Greatstaff",
   'entities.items.peaksong_helm.name': '[FR] Peaksong Helm',
   'entities.items.pearlward_aegis.name': '[FR] Pearlward Aegis',
   'entities.items.resonant_hide.name': '[FR] Resonant Hide',
@@ -8769,11 +8769,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
     '[FR] A major of yours has climbed past rare into serious work. The metal answers a hand like that, no longer fighting it. Do not let the praise soften your arm.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': '[FR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject': '[FR] The metal answers you now',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject':
+    '[FR] The metal answers you now',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
     '[FR] One of your majors stands a single rung below mastery. Few hands I have known reach this height, and fewer keep their edge here. Finish the climb.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': '[FR] Forgemistress Darva',
-  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': '[FR] Near the top of the ladder',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject':
+    '[FR] Near the top of the ladder',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
     '[FR] A major of yours has reached mastery, the highest a hand can climb. I do not give praise freely, so hear this once: the forge is proud of you. Now go teach the fire something new.',
   'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': '[FR] Forgemistress Darva',
@@ -8819,37 +8821,42 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_attune_outfitter.objectives.0.label': '[FR] Webwood Spider culled',
   'entities.quests.q_prof_attune_outfitter.text':
     '[FR] Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, {playerName}, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.',
-  'entities.quests.q_prof_attune_outfitter.title': '[FR] The Outfitter\'s Measure',
+  'entities.quests.q_prof_attune_outfitter.title': "[FR] The Outfitter's Measure",
   'entities.quests.q_prof_attune_smith.completion':
     '[FR] Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.',
   'entities.quests.q_prof_attune_smith.objectives.0.label': '[FR] Ore vein harvested',
   'entities.quests.q_prof_attune_smith.text':
     '[FR] Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, {playerName}: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.',
-  'entities.quests.q_prof_attune_smith.title': '[FR] The Smith\'s Promise',
+  'entities.quests.q_prof_attune_smith.title': "[FR] The Smith's Promise",
   'entities.quests.q_prof_workorder_apothecary.completion':
     '[FR] Acceptable. Potent, and properly handled. Your payment, counted to the coin. Do not let it go to your head, that is a different reagent.',
   'entities.quests.q_prof_workorder_apothecary.objectives.0.label': '[FR] Goldleaf Herb delivered',
   'entities.quests.q_prof_workorder_apothecary.text':
-    '[FR] My shelves require goldleaf, and the market\'s stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.',
+    "[FR] My shelves require goldleaf, and the market's stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.",
   'entities.quests.q_prof_workorder_apothecary.title': '[FR] Apothecary Work Order',
-  'entities.quests.q_prof_workorder_forge.completion': '[FR] Good weight, no slag. Here is your due. The forge will be hungry again soon enough.',
+  'entities.quests.q_prof_workorder_forge.completion':
+    '[FR] Good weight, no slag. Here is your due. The forge will be hungry again soon enough.',
   'entities.quests.q_prof_workorder_forge.objectives.0.label': '[FR] Copper Ore delivered',
   'entities.quests.q_prof_workorder_forge.text':
     '[FR] The forge always wants feeding, {playerName}. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.',
   'entities.quests.q_prof_workorder_forge.title': '[FR] Forge Work Order',
-  'entities.quests.q_prof_workorder_kitchens.completion': '[FR] Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.',
+  'entities.quests.q_prof_workorder_kitchens.completion':
+    '[FR] Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.',
   'entities.quests.q_prof_workorder_kitchens.objectives.0.label': '[FR] Game Meat delivered',
   'entities.quests.q_prof_workorder_kitchens.text':
     '[FR] My larder is looking thin, {playerName}, and thin larders make grumpy cooks. Fetch me eight cuts of game meat and there is coin in it for you, plus my undying gratitude, which is worth less but tastes better.',
   'entities.quests.q_prof_workorder_kitchens.title': '[FR] Kitchens Work Order',
-  'entities.quests.q_prof_workorder_loom.completion': '[FR] Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.',
+  'entities.quests.q_prof_workorder_loom.completion':
+    '[FR] Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.',
   'entities.quests.q_prof_workorder_loom.objectives.0.label': '[FR] Spider Silk delivered',
   'entities.quests.q_prof_workorder_loom.text':
     '[FR] The loom runs dry and idle hands waste daylight, {playerName}. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.',
   'entities.quests.q_prof_workorder_loom.title': '[FR] Loom Work Order',
-  'entities.quests.q_prof_workorder_tannery.completion': '[FR] Good hides. Fair pay. Again when you have more.',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    '[FR] Good hides. Fair pay. Again when you have more.',
   'entities.quests.q_prof_workorder_tannery.objectives.0.label': '[FR] Rough Hide delivered',
-  'entities.quests.q_prof_workorder_tannery.text': '[FR] Vats are empty. Bring eight rough hides. Coin when you do.',
+  'entities.quests.q_prof_workorder_tannery.text':
+    '[FR] Vats are empty. Bring eight rough hides. Coin when you do.',
   'entities.quests.q_prof_workorder_tannery.title': '[FR] Tannery Work Order',
   'entities.quests.q_prof_workorder_toolworks.completion':
     '[FR] Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.',
@@ -8864,10 +8871,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     '[FR] Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.',
   'hudChrome.crafting.attunedBanner': '[FR] Attuned: {title}',
   'hudChrome.crafting.attunedZoneLine': '[FR] {name} has attuned as {archetype}!',
-  'hudChrome.crafting.attunementReturnCost': '[FR] If you leave this pair, returning to it later costs {cost} make-amends tasks.',
+  'hudChrome.crafting.attunementReturnCost':
+    '[FR] If you leave this pair, returning to it later costs {cost} make-amends tasks.',
   'hudChrome.crafting.difficultyMinimal': '[FR] Minimal skill gain',
   'hudChrome.crafting.gatheredBy': '[FR] Gathered by {name}',
-  'hudChrome.crafting.learnMoreAtStation': '[FR] {master} at the {station} can teach you more {craft} recipes.',
+  'hudChrome.crafting.learnMoreAtStation':
+    '[FR] {master} at the {station} can teach you more {craft} recipes.',
   'hudChrome.crafting.tierTutorial.dismiss': '[FR] Got it',
   'hudChrome.crafting.tierTutorial.masters':
     '[FR] Craft masters in the towns offer attunement quests. Visit one to choose your pair whenever you are ready. Nothing you have learned is ever lost.',
@@ -8876,8 +8885,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.tierTutorial.tierCap':
     '[FR] A craft reaches its first tier at {skill} skill, and each tier improves what it can make. But a craft only climbs past rare work once it is one of your two majors.',
   'hudChrome.crafting.tierTutorial.title': '[FR] Your First Tier',
-  'hudChrome.crafting.trendNudge': '[FR] Your hands are leaning toward the {archetype}. Its attunement waits with {master}.',
-  'hudChrome.crafting.trendNudgeNoMaster': '[FR] Your hands are leaning toward the {archetype}. Seek a craft master to take it up.',
+  'hudChrome.crafting.trendNudge':
+    '[FR] Your hands are leaning toward the {archetype}. Its attunement waits with {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    '[FR] Your hands are leaning toward the {archetype}. Seek a craft master to take it up.',
   'hudChrome.enchantName.enchant_chest_armor': '[FR] Enchant Chest - Reinforcement',
   'hudChrome.enchantName.enchant_chest_greater_stamina': '[FR] Enchant Chest - Greater Stamina',
   'hudChrome.enchantName.enchant_chest_runeweave': '[FR] Enchant Chest - Runeweave',
@@ -8892,7 +8903,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchantName.enchant_gloves_strength': '[FR] Enchant Gloves - Strength',
   'hudChrome.enchantName.enchant_helmet_armor': '[FR] Enchant Helmet - Reinforcement',
   'hudChrome.enchantName.enchant_helmet_fortitude': '[FR] Enchant Helmet - Fortitude',
-  'hudChrome.enchantName.enchant_helmet_greater_fortitude': '[FR] Enchant Helmet - Greater Fortitude',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude':
+    '[FR] Enchant Helmet - Greater Fortitude',
   'hudChrome.enchantName.enchant_helmet_intellect': '[FR] Enchant Helmet - Intellect',
   'hudChrome.enchantName.enchant_helmet_runed_links': '[FR] Enchant Helmet - Runed Links',
   'hudChrome.enchantName.enchant_legs_greater_stamina': '[FR] Enchant Legs - Greater Stamina',
@@ -8914,20 +8926,25 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchantName.enchant_waist_strength': '[FR] Enchant Belt - Strength',
   'hudChrome.enchantName.enchant_weapon_agility': '[FR] Enchant Weapon - Agility',
   'hudChrome.enchantName.enchant_weapon_greater_might': '[FR] Enchant Weapon - Greater Might',
-  'hudChrome.enchantName.enchant_weapon_greater_spellpower': '[FR] Enchant Weapon - Greater Spellpower',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower':
+    '[FR] Enchant Weapon - Greater Spellpower',
   'hudChrome.enchantName.enchant_weapon_intellect': '[FR] Enchant Weapon - Spellpower',
   'hudChrome.enchantName.enchant_weapon_might': '[FR] Enchant Weapon - Might',
   'hudChrome.enchantName.enchant_weapon_runed_edge': '[FR] Enchant Weapon - Runed Edge',
   'hudChrome.enchantName.enchant_weapon_runed_focus': '[FR] Enchant Weapon - Runed Focus',
-  'hudChrome.enchanting.disenchantConfirmBody': '[FR] This destroys {item} and yields arcane materials. This cannot be undone.',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    '[FR] This destroys {item} and yields arcane materials. This cannot be undone.',
   'hudChrome.enchanting.disenchantConfirmBodySpecial':
     '[FR] This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.',
   'hudChrome.enchanting.disenchantConfirmTitle': '[FR] Disenchant {item}?',
-  'hudChrome.enchanting.disenchantThrottled': '[FR] You are disenchanting too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.disenchantThrottled':
+    '[FR] You are disenchanting too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.disenchantedLine': '[FR] You disenchant {item}.',
   'hudChrome.enchanting.enchantAppliedLine': '[FR] You enchant {item} with {enchant}.',
-  'hudChrome.enchanting.enchantInsufficient': '[FR] You do not have the materials for that enchant.',
-  'hudChrome.enchanting.enchantThrottled': '[FR] You are enchanting too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.enchantInsufficient':
+    '[FR] You do not have the materials for that enchant.',
+  'hudChrome.enchanting.enchantThrottled':
+    '[FR] You are enchanting too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.enchantUnknown': '[FR] That enchant does not exist.',
   'hudChrome.enchanting.enchantWrongSlot': '[FR] That enchant cannot be applied to that item.',
   'hudChrome.enchanting.noEnchants': '[FR] No enchant uses this reagent.',
@@ -8936,17 +8953,20 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.enchanting.notHeld': '[FR] You do not have that item.',
   'hudChrome.enchanting.notSalvageable': '[FR] You cannot salvage that.',
   'hudChrome.enchanting.pickerTitle': '[FR] Apply Enchant',
-  'hudChrome.enchanting.salvageConfirmBody': '[FR] This destroys {item} and yields crafting materials. This cannot be undone.',
+  'hudChrome.enchanting.salvageConfirmBody':
+    '[FR] This destroys {item} and yields crafting materials. This cannot be undone.',
   'hudChrome.enchanting.salvageConfirmBodySpecial':
     '[FR] This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.',
   'hudChrome.enchanting.salvageConfirmTitle': '[FR] Salvage {item}?',
-  'hudChrome.enchanting.salvageThrottled': '[FR] You are salvaging too quickly. Wait a moment and try again.',
+  'hudChrome.enchanting.salvageThrottled':
+    '[FR] You are salvaging too quickly. Wait a moment and try again.',
   'hudChrome.enchanting.salvagedLine': '[FR] You salvage {item}.',
   'hudChrome.enchanting.targetTitle': '[FR] Choose an item to enchant',
   'hudChrome.gathering.biteLine': '[FR] Something takes the bait!',
   'hudChrome.gathering.catchLine': '[FR] You reel in: {name}',
   'hudChrome.gathering.downgradeFind': '[FR] Bags full: a pristine find slipped away.',
-  'hudChrome.gathering.downgradeMark': '[FR] Bags full: the find was stored without its gatherer\'s mark.',
+  'hudChrome.gathering.downgradeMark':
+    "[FR] Bags full: the find was stored without its gatherer's mark.",
   'hudChrome.gathering.fishing': '[FR] Fishing',
   'hudChrome.gathering.gotAwayLine': '[FR] It got away.',
   'hudChrome.gathering.nodeName.herb': '[FR] Herb Patch',
@@ -8957,10 +8977,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.tierRequired.herbalism': '[FR] Requires a tier {tier} herbalism sickle',
   'hudChrome.gathering.tierRequired.logging': '[FR] Requires a tier {tier} logging axe',
   'hudChrome.gathering.tierRequired.mining': '[FR] Requires a tier {tier} mining pick',
-  'hudChrome.gathering.toolTierUnmet.herbalism': '[FR] You need a tier {tier} herbalism sickle to gather this patch.',
-  'hudChrome.gathering.toolTierUnmet.logging': '[FR] You need a tier {tier} logging axe to fell this stand.',
-  'hudChrome.gathering.toolTierUnmet.mining': '[FR] You need a tier {tier} mining pick to harvest this vein.',
-  'hudChrome.gathering.toolTierUnmetCorpse': '[FR] You need a tier {tier} gathering tool to recover the finest materials.',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    '[FR] You need a tier {tier} herbalism sickle to gather this patch.',
+  'hudChrome.gathering.toolTierUnmet.logging':
+    '[FR] You need a tier {tier} logging axe to fell this stand.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    '[FR] You need a tier {tier} mining pick to harvest this vein.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    '[FR] You need a tier {tier} gathering tool to recover the finest materials.',
   'hudChrome.interfaceTabs.chat': '[FR] Chat',
   'hudChrome.interfaceTabs.combat': '[FR] Combat',
   'hudChrome.interfaceTabs.frames': '[FR] Frames',
@@ -8971,8 +8995,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.itemMenu.salvage': '[FR] Salvage',
   'hudChrome.itemMenu.use': 'Utiliser',
   'hudChrome.loot.takeLootButton': '[FR] Take Loot',
-  'hudChrome.loot.takeLootTooltip': '[FR] Takes the coins and dropped items. Does not use up the harvest.',
-  'hudChrome.loot.unifiedPressHint': '[FR] The interact key loots and harvests in one press, using your town focus.',
+  'hudChrome.loot.takeLootTooltip':
+    '[FR] Takes the coins and dropped items. Does not use up the harvest.',
+  'hudChrome.loot.unifiedPressHint':
+    '[FR] The interact key loots and harvests in one press, using your town focus.',
   'hudChrome.nameplate.afkTag': 'ABS',
   'hudChrome.professions.nextUnlockMastered': '[FR] Mastered, for now',
   'hudChrome.social.hideOffline': '[FR] Hide offline',
