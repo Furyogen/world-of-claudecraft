@@ -1355,7 +1355,7 @@
     background: #14101e;
     border: 1px solid #000;
     outline: 1px solid #3a3148;
-    margin: 0 auto 4px;
+    margin: 4px auto 0;
     position: relative;
     border-radius: 2px;
     overflow: hidden;
@@ -1416,8 +1416,9 @@
     align-items: flex-end;
     gap: 8px;
   }
-  /* xp bar stacks directly on the action bar; the taller side-button
-     column must not push it up (it used to float ~150px above the bar) */
+  /* xp bar sits UNDER the action bar as the stack's last row, pinned to the
+     bottom of the screen; the taller side-button column must not push the
+     stack up (it used to float ~150px above the bar) */
   #actionbar-stack {
     display: flex;
     flex-direction: column;
