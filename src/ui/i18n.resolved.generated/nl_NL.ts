@@ -609,7 +609,8 @@ export const nl_NL: EnTranslations = {
         "staff": "Staf",
         "wand": "Toverstaf",
         "bow": "Boog",
-        "crossbow": "Kruisboog"
+        "crossbow": "Kruisboog",
+        "polearm": "Stangwapen"
       },
       "badge": {
         "flagship": "Vlaggenschip",
@@ -706,10 +707,10 @@ export const nl_NL: EnTranslations = {
       "expandHint": "Queestevolger uitklappen"
     },
     "interfaceTabs": {
-      "general": "General",
+      "general": "Algemeen",
       "frames": "Frames",
       "chat": "Chat",
-      "combat": "Combat"
+      "combat": "Gevecht"
     },
     "chatTimestamps": {
       "show": "Chat-tijdstempels tonen",
@@ -1037,6 +1038,7 @@ export const nl_NL: EnTranslations = {
       "showWalletOnPlayerCard": "Portemonnee tonen op spelerskaart",
       "showDevBadges": "Ontwikkelaarsinsignes tonen",
       "showOwnNameplate": "Mijn naambordje tonen",
+      "showPlayerNameplates": "Spelersnamen Tonen",
       "uiScale": "UI-schaal",
       "playerFrameScale": "Schaal spelerframe",
       "targetFrameScale": "Schaal doelwitframe",
@@ -1184,8 +1186,8 @@ export const nl_NL: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Aanval",
+      "defense": "Verdediging"
     },
     "statInfo": {
       "fromYour": "Van je {value} {stat}:",
@@ -1445,7 +1447,7 @@ export const nl_NL: EnTranslations = {
     "corpseHarvest": {
       "title": "Oogsten",
       "harvestButton": "Oogsten",
-      "harvestButtonTooltip": "Oogsten: verzamel ambachtsmaterialen van dit lijk (vel, hoektand, zijde en vergelijkbare onderdelen), los van de buit. Iedereen kan oogsten, maar elk lijk kan maar door één speler worden geoogst.",
+      "harvestTooltip": "Verzamelt de aangevinkte onderdelen. Elk lijk kan eenmaal worden geoogst, wie het eerst komt. Neemt de buit niet mee.",
       "concentrateHint": "Hoe minder delen je kiest, hoe hoger de kwaliteit van elk deel.",
       "alreadyHarvested": "Dit kadaver is al geoogst.",
       "componentAria": "Oogst {component}",
@@ -1463,6 +1465,8 @@ export const nl_NL: EnTranslations = {
     "townFocus": {
       "title": "Stadsfocus",
       "hint": "Focuspunten geven een bonus bovenop de basisopbrengst van elk onderdeel. Onderdelen zonder focus blijven op het basisniveau.",
+      "tierHint": "Elke {points} punten op een onderdeel verhogen het oogstniveau een stap, maximaal {steps} stappen; minder dan {points} punten boosten nog steeds de opbrengst.",
+      "townOnlyHint": "Focus kan alleen worden gewijzigd terwijl je in de stad bent.",
       "budgetLabel": "Punten over: {remaining} / {budget}",
       "saveButton": "Focus opslaan",
       "notInTownHint": "Je moet in de stad zijn om je focus in te stellen.",
@@ -1521,6 +1525,7 @@ export const nl_NL: EnTranslations = {
       "dragEquipHint": "Sleep naar je personage om uit te rusten",
       "dragDestroyHint": "Sleep naar buiten in de wereld om te vernietigen",
       "reorderNeedsRecent": "Verwijder het filter en sorteer op Recent om je tassen opnieuw te rangschikken",
+      "itemAriaInstanced": "{item}, aantal {count}, door maker gemerkt exemplaar",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -1686,7 +1691,9 @@ export const nl_NL: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kist",
-      "takeAllTooltip": "Alles nemen: verzamel alle munten en voorwerpen in dit buitvenster."
+      "takeLootButton": "Buit Nemen",
+      "takeLootTooltip": "Neemt de munten en gevallen voorwerpen. Verbruikt de oogst niet.",
+      "unifiedPressHint": "De interactietoets berooft en oogst in een keer, op basis van je stadsfocus."
     },
     "spellbook": {
       "addToBarAria": "{name} toevoegen aan actiebalk",
@@ -1834,6 +1841,7 @@ export const nl_NL: EnTranslations = {
         "legend": "LEGENDE",
         "shill": "PROMOTOR"
       },
+      "roleTagChatTitle": "Geverifieerde serverrol: {role}",
       "guildMember": "Geverifieerd lid",
       "notMember": "Nog niet in de server",
       "joinCta": "Word lid van de Discord",
@@ -1958,6 +1966,7 @@ export const nl_NL: EnTranslations = {
       "removeParcelAria": "Verwijder {item} uit de brief",
       "parcelQtyDecreaseAria": "Eén {item} minder versturen",
       "parcelQtyIncreaseAria": "Eén {item} meer versturen",
+      "parcelQtyAria": "Aantal te versturen {item}",
       "sendButton": "Brief versturen",
       "postageNote": "Porto: {amount}. De raaf vliegt ongeveer {seconds}s.",
       "arrivedBanner": "De raaf is geland: post van {name}.",
@@ -2096,39 +2105,41 @@ export const nl_NL: EnTranslations = {
       "stopBlockingTitle": "{name} deblokkeren",
       "onlineHeader": "Online ({n})",
       "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "hideOffline": "Offline verbergen",
+      "hideOfflineTitle": "Offline gildeleden verbergen"
     },
     "gathering": {
       "title": "Verzamelen",
       "mining": "Mijnbouw",
       "logging": "Houtkap",
       "herbalism": "Kruidenkunde",
-      "fishing": "Fishing",
+      "fishing": "Vissen",
       "notReady": "Dit grondstoffenpunt is voor jou nog niet teruggekeerd.",
       "gatherLine": "Jij verzamelt: {name}.",
       "gatherLineQty": "Je verzamelt: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Je trekt in: {name}",
+      "biteLine": "Er hapt iets naar het aas!",
+      "gotAwayLine": "Hij ontsnapte.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Ertsslagader",
+        "wood": "Houtopstand",
+        "herb": "Kruidenveld"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Vereist een rang {tier} mijnhouweel",
+        "logging": "Vereist een rang {tier} kapbijl",
+        "herbalism": "Vereist een rang {tier} kruidenkunde-sikkel"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Je hebt een rang {tier} mijnhouweel nodig om deze ader te oogsten.",
+        "logging": "Je hebt een rang {tier} kapbijl nodig om deze opstand te kappen.",
+        "herbalism": "Je hebt een rang {tier} kruidenkunde-sikkel nodig om dit veld te verzamelen."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Je hebt een rang {tier} verzamelgereedschap nodig om de fijnste materialen te verzamelen.",
+      "downgradeMark": "Tassen vol: de vondst werd opgeslagen zonder verzamelderstempel.",
+      "downgradeFind": "Tassen vol: een ongeschonden vondst glipte weg.",
+      "stateReady": "Gereed",
+      "stateCooldown": "Aan het hergroeien"
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -2159,6 +2170,49 @@ export const nl_NL: EnTranslations = {
       "tailoring": "Kleermaken",
       "leatherworking": "Leerbewerken"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Wapen betoveren - Kracht",
+      "enchant_weapon_intellect": "Wapen betoveren - Spreukkracht",
+      "enchant_helmet_fortitude": "Helm betoveren - Fortitude",
+      "enchant_neck_spirit": "Ketting betoveren - Geest",
+      "enchant_shoulder_agility": "Schouders betoveren - Behendigheid",
+      "enchant_chest_stamina": "Torso betoveren - Uithoudingsvermogen",
+      "enchant_waist_stamina": "Riem betoveren - Uithoudingsvermogen",
+      "enchant_legs_stamina": "Beenstukken betoveren - Uithoudingsvermogen",
+      "enchant_gloves_agility": "Handschoenen betoveren - Behendigheid",
+      "enchant_gloves_intellect": "Handschoenen betoveren - Spreukkracht",
+      "enchant_feet_agility": "Laarzen betoveren - Behendigheid",
+      "enchant_ring_spirit": "Ring betoveren - Geest",
+      "enchant_weapon_agility": "Wapen betoveren - Behendigheid",
+      "enchant_helmet_intellect": "Helm betoveren - Intellect",
+      "enchant_helmet_armor": "Helm betoveren - Versterking",
+      "enchant_neck_intellect": "Ketting betoveren - Intellect",
+      "enchant_neck_agility": "Ketting betoveren - Behendigheid",
+      "enchant_shoulder_strength": "Schouders betoveren - Kracht",
+      "enchant_shoulder_intellect": "Schouders betoveren - Intellect",
+      "enchant_chest_spirit": "Torso betoveren - Geest",
+      "enchant_chest_armor": "Torso betoveren - Versterking",
+      "enchant_waist_strength": "Riem betoveren - Kracht",
+      "enchant_waist_agility": "Riem betoveren - Behendigheid",
+      "enchant_legs_intellect": "Beenstukken betoveren - Intellect",
+      "enchant_gloves_strength": "Handschoenen betoveren - Kracht",
+      "enchant_feet_strength": "Laarzen betoveren - Kracht",
+      "enchant_feet_stamina": "Laarzen betoveren - Uithoudingsvermogen",
+      "enchant_ring_strength": "Ring betoveren - Kracht",
+      "enchant_ring_agility": "Ring betoveren - Behendigheid",
+      "enchant_ring_intellect": "Ring betoveren - Intellect",
+      "enchant_weapon_greater_might": "Wapen betoveren - Grote Kracht",
+      "enchant_weapon_greater_spellpower": "Wapen betoveren - Grote Spreukkracht",
+      "enchant_helmet_greater_fortitude": "Helm betoveren - Grote Fortitude",
+      "enchant_chest_greater_stamina": "Torso betoveren - Groot Uithoudingsvermogen",
+      "enchant_legs_greater_stamina": "Beenstukken betoveren - Groot Uithoudingsvermogen",
+      "enchant_gloves_greater_agility": "Handschoenen betoveren - Grote Behendigheid",
+      "enchant_weapon_runed_edge": "Wapen betoveren - Gerund Snijvlak",
+      "enchant_weapon_runed_focus": "Wapen betoveren - Geruned Focus",
+      "enchant_chest_runeweave": "Torso betoveren - Runeweefsel",
+      "enchant_legs_runed_hide": "Beenstukken betoveren - Gerunede Huid",
+      "enchant_helmet_runed_links": "Helm betoveren - Geruned Maliën"
+    },
     "professions": {
       "title": "Beroepen",
       "close": "Sluit beroepen",
@@ -2178,7 +2232,7 @@ export const nl_NL: EnTranslations = {
       "tierPipAria": "Niveau {tier}",
       "nextUnlockTier": "Nog {points} punten tot het volgende niveau: de kans op meesterwerk stijgt",
       "nextUnlockSpecialized": "Nog {points} punten tot Gespecialiseerd: materiaalkosten dalen",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Gemeesterd, voorlopig",
       "perkSpecializedLine": "{craft}: Gespecialiseerd, materiaalkosten -{pct}%",
       "perkSpecializedAt": "Gespecialiseerd in {threshold} vaardigheid",
       "switchCost": "De volgende archetypewissel kost {cost} boetepunten",
@@ -2219,6 +2273,7 @@ export const nl_NL: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Resultaat: titel {title}; {majorA} en {majorB} worden ongelimiteerde hoofdambachten; {hobby} wordt de zeldzaam-begrensde liefhebberij; alle andere vakkennis wordt behouden maar begrensd op gewoon zolang het slapend is.",
       "hobbyPreview": "Resultaat: {hobby} wordt de zeldzaam-begrensde liefhebberij. Beide hoofdambachten en alle behouden vaardigheidswaarden blijven ongewijzigd.",
+      "attunementReturnCost": "Als je dit paar verlaat, kost terugkeren {cost} boete-opdrachten.",
       "identity": {
         "title": "Ambachtsidentiteit",
         "syncing": "Wachten op je ambachtsidentiteit van het rijk.",
@@ -2258,16 +2313,64 @@ export const nl_NL: EnTranslations = {
       "skillReqLine": "Vereist {craft} {skill}",
       "difficultyFull": "Volledige vaardigheidswinst",
       "difficultyReduced": "Verminderde vaardigheidswinst",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimale vaardigheidswinst",
       "difficultyNone": "Geen vaardigheidswinst",
       "stationBadge": "Station",
       "stationOutOfRangeNamed": "Ga naar {station} om dit te maken.",
+      "learnMoreAtStation": "{master} bij {station} kan je meer {craft}-recepten leren.",
       "masterworkToast": "Meesterwerk! {name}",
       "masterworkZoneLine": "{crafter} heeft het meesterwerk {name} gemaakt!",
       "tierUpToast": "{craft} is doorgegaan naar niveau {tier}!",
+      "trendNudge": "Je handen neigen naar {archetype}. De afstemming wacht bij {master}.",
+      "trendNudgeNoMaster": "Je handen neigen naar {archetype}. Zoek een ambachtsmeester om dit op te pakken.",
+      "attunedZoneLine": "{name} is afgestemd als {archetype}!",
+      "attunedBanner": "Afgestemd: {title}",
+      "tierTutorial": {
+        "title": "Je Eerste Niveau",
+        "tierCap": "Een ambacht bereikt zijn eerste niveau bij {skill} vaardigheid, en elk niveau verbetert wat het kan maken. Maar een ambacht klimt pas voorbij zeldzaam werk als het een van je twee hoofdvakken is.",
+        "radar": "Je beroepen vormen een wiel. Stem af op een naburig paar en die twee ambachten worden onbegrensde hoofdvakken; een ambacht aan de andere kant van het wiel wordt een zeldzaam-begrensde liefhebberij; de rest ligt slapend: hun kennis bewaard, maar begrensd op gewoon totdat je ze weer oppakt.",
+        "masters": "Ambachtsmeesters in de steden bieden afstemmingsopdrachten aan. Bezoek er een om je paar te kiezen wanneer je er klaar voor bent. Niets wat je hebt geleerd gaat ooit verloren.",
+        "dismiss": "Begrepen"
+      },
       "makersMark": "Gemaakt door {name}",
+      "gatheredBy": "Verzameld door {name}",
       "masterworkSeal": "Meesterwerk",
-      "enchantedLine": "Betoverd"
+      "enchantedLine": "Betoverd",
+      "commissionToggle": "Opdrachtsstuk",
+      "commissionToggleHint": "Bindt aan het eerste personage dat het via een ruil ontvangt.",
+      "commissionUnbound": "Opdrachtsstuk: bindt aan de eerste ontvanger",
+      "commissionBound": "Opdrachtstuk: gebonden aan de ontvanger"
+    },
+    "itemMenu": {
+      "use": "Gebruiken",
+      "equip": "Uitrusten",
+      "disenchant": "Onbetoveren",
+      "salvage": "Salvagen",
+      "applyEnchant": "Betovering aanbrengen"
+    },
+    "enchanting": {
+      "disenchantedLine": "Je onbetoverd {item}.",
+      "salvagedLine": "Je salvaged {item}.",
+      "enchantAppliedLine": "Je betoverd {item} met {enchant}.",
+      "notHeld": "Je hebt dat voorwerp niet.",
+      "notDisenchantable": "Je kunt dat niet onbetoveren.",
+      "notSalvageable": "Je kunt dat niet salvagen.",
+      "disenchantThrottled": "Je onbetoverd te snel. Wacht even en probeer het opnieuw.",
+      "salvageThrottled": "Je salvaged te snel. Wacht even en probeer het opnieuw.",
+      "enchantThrottled": "Je betoverd te snel. Wacht even en probeer het opnieuw.",
+      "enchantWrongSlot": "Die betovering kan niet op dat voorwerp worden aangebracht.",
+      "enchantUnknown": "Die betovering bestaat niet.",
+      "enchantInsufficient": "Je hebt de materialen niet voor die betovering.",
+      "disenchantConfirmTitle": "{item} onbetoveren?",
+      "disenchantConfirmBody": "Dit vernietigt {item} en levert arcanematerialen op. Dit kan niet ongedaan worden gemaakt.",
+      "disenchantConfirmBodySpecial": "Dit vernietigt een speciaal exemplaar van {item} (gesigneerd, meesterwerk of betoverd) en levert arcanematerialen op. Dit kan niet ongedaan worden gemaakt.",
+      "salvageConfirmTitle": "{item} salvagen?",
+      "salvageConfirmBody": "Dit vernietigt {item} en levert knutselmaterialen op. Dit kan niet ongedaan worden gemaakt.",
+      "salvageConfirmBodySpecial": "Dit vernietigt een speciaal exemplaar van {item} (gesigneerd, meesterwerk of betoverd) en levert knutselmaterialen op. Dit kan niet ongedaan worden gemaakt.",
+      "pickerTitle": "Betovering aanbrengen",
+      "targetTitle": "Kies een voorwerp om te betoveren",
+      "noEnchants": "Geen betovering gebruikt dit reagens.",
+      "noTargets": "Geen geschikt voorwerp om te betoveren."
     },
     "training": {
       "title": "Opleiding: {name}",
@@ -2287,6 +2390,25 @@ export const nl_NL: EnTranslations = {
       "notTaughtHere": "Dat recept wordt hier niet geleerd.",
       "alreadyKnown": "Dat recept ken je al.",
       "outOfRange": "Je moet bij het werkstation zijn om te trainen."
+    },
+    "unbind": {
+      "title": "Ontbinden: {name}",
+      "close": "Ontbinden sluiten",
+      "intro": "De meester kan een opdrachtsstuk van zijn binding bevrijden, tegen een vergoeding.",
+      "empty": "Je draagt geen gebonden opdrachtsstukken.",
+      "rowSub": "Verwijdert de binding; het stuk bindt opnieuw bij de volgende ruil.",
+      "unbindAria": "{name} ontbinden voor {fee}",
+      "dialogOption": "Ontbinden",
+      "dialogOptionAria": "Een opdrachtsstuk ontbinden bij {name}",
+      "confirmTitle": "Opdrachtsstuk Ontbinden",
+      "confirmBody": "{name} ontbinden voor {fee}?",
+      "confirmOk": "Ontbinden",
+      "confirmCancel": "Annuleren",
+      "unbound": "{name} ontbonden voor {fee}. Het bindt opnieuw bij de volgende ruil.",
+      "notEligible": "Dat voorwerp kan niet worden ontbonden.",
+      "notBound": "Dat voorwerp is niet gebonden.",
+      "cannotAfford": "Je kunt de ontbindingskosten niet betalen.",
+      "outOfRange": "Je moet bij een ambachtsstation zijn om te ontbinden."
     },
     "finder": {
       "title": "Kerkerzoekmachine",
@@ -4134,7 +4256,7 @@ export const nl_NL: EnTranslations = {
   "stats": {
     "title": "Wereldstatus",
     "accountsCreated": "Spelers",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Aangemaakte personages",
     "playersOnline": "Spelers online",
     "realmName": "Wereldnaam"
   },
@@ -5706,7 +5828,8 @@ export const nl_NL: EnTranslations = {
       "tradeInProgress": "Er is al een ruil aan de gang.",
       "tradeTooFar": "Het doelwit is te ver weg om mee te ruilen.",
       "tradeExpired": "Het ruilverzoek is verlopen.",
-      "tradeFailed": "Ruil mislukt: voorwerpen of geld niet langer beschikbaar."
+      "tradeFailed": "Ruil mislukt: voorwerpen of geld niet langer beschikbaar.",
+      "tradeBound": "Dat voorwerp is gebonden en kan niet worden verhandeld."
     },
     "logs": {
       "standUp": "Je staat op.",
@@ -5855,7 +5978,7 @@ export const nl_NL: EnTranslations = {
         "combat": "In gevecht",
         "dungeon": "In kerker",
         "dead": "Dood",
-        "afk": "Away"
+        "afk": "Afwezig"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -5963,7 +6086,7 @@ export const nl_NL: EnTranslations = {
     },
     "cast": {
       "fishing": "Vissen",
-      "gathering": "Gathering",
+      "gathering": "Verzamelen",
       "demonHeal": "Demonengenezing",
       "thunzharrStormcall": "Stormroep"
     }
@@ -6102,7 +6225,6 @@ export const nl_NL: EnTranslations = {
       "ifYouEquip": "Als je dit uitrust",
       "damageSpeed": "{min} - {max} Schade Snelheid {speed}",
       "dps": "({dps} schade per seconde)",
-      "dagger": "Dolk",
       "armorStat": "{value} Pantser",
       "stat": "+{value} {stat}",
       "useFood": "Gebruik: Herstelt {amount} levenskracht over {seconds} sec. Je moet blijven zitten tijdens het eten.",
@@ -8478,127 +8600,142 @@ export const nl_NL: EnTranslations = {
         "name": "Elixer van de slang"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Mosvel-Vest"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Doorneling-Grepen"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Acolietenmaliehandschoenen"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Votieve Maliengordel"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Doornwortelstaf"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Dallicht-Lantaarn"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Moeraskors-Beenstukken"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Drasbloeisels-Treden"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Moeraswacht-Sloffen"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Moeraslicht-Maliënkolder"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Schemeringsdoorn-Mantel"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Moeraschaduw-Knuppel"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Wildwoud-Gordel"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Rotswacht-Schouderplaten"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Rotshoorn-Grootstaf"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Maankors-Gewaad"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Toplied-Helm"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Stormgezang-Handschoenen"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Rotsrover-Riem"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Stormwortel-Kap"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Donderwacht-Beenplaten"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Revenant-Treden"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Scherfklauw-Grepen"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Scherflied-Mantel"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Wurmcultus-Spreukhoudsters"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Doornkam-Wildwindsels"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Stormgelofte-Maliënkolder"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Kryptbloei-Schouderbeschermers"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Grafwurm-Doornknuppel"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Gewaden van het Ontwakende Woud"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Nachttand's Grootstaf"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Knuppel van de Gegeselde Wildernis"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Tijhymne-Sloffen"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Parelwacht-Aegis"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Wildgroei-Beenstukken"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Boshoeder's Grepen"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Groene Wandelaars"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Maanwacht-Gordel"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Droomwortel-Laarzen"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Stormbast-Mantel"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Wildgeest-Knuppel"
+      },
+      "resonant_thread": {
+        "name": "Resonerende Draad"
+      },
+      "resonant_hide": {
+        "name": "Resonerende Huid"
+      },
+      "resonant_links": {
+        "name": "Resonerende Schakels"
+      },
+      "resonant_steel": {
+        "name": "Resonerend Staal"
+      },
+      "resonant_timber": {
+        "name": "Resonerend Hout"
       },
       "conjured_water4": {
         "name": "Getoverd bronwater"
@@ -10692,23 +10829,143 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Een ambacht dat u het uwe kunt noemen",
-        "text": "Vaardigheid is kennis, {playerName}, maar afstemming is een belofte. Kies twee naburige ambachten waarvan je de methoden als je hoofdambachten zult dragen, en breng me dan erts dat je zelf met je eigen handen uit het Dal hebt gewonnen.",
-        "completion": "De belofte staat. Deze twee ambachten zijn nu je hoofdambachten, en de kennis die er tegenover staat wordt je liefhebberij.",
+      "q_prof_attune_smith": {
+        "title": "De Belofte van de Smid",
+        "text": "Staal vergeet geen ronddwalende hand, dus ik zal je recht zeggen voordat je iets zweert. Bind jezelf aan mijn smidse en Wapensmeden en Pantserbouw worden je twee hoofdvakken, de enige ambachten die je voorbij zeldzaam werk mag dragen. Het ambacht er tegenover nestelt zich als je liefhebberij, tot zeldzaam gewerkt en niet verder. Je andere handel verbrandt niet, {playerName}: ze gaan gewoon stil, slapend totdat je ze terughaalt. En weet dit voor de hamer valt: verlaat dit paar voor een ander en je zult terugkeren via eerlijke arbeid: vijf vijanden neergelegd de eerste keer, acht de volgende, elf daarna, meer elke keer dat je afdwaalt. Nog steeds hier? Breng me dan drie ertsslagaders eigenhandig gewonnen uit het Dal, en we noemen de belofte gesloten.",
+        "completion": "Goed erts, en goede handen om het te bewerken. Wapensmeden en Pantserbouw zijn nu van jou om te beheersen. Verdien de rest.",
         "objectives": {
           "0": {
             "label": "Ertsslagader geoogst"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Het goedmaken",
-        "text": "Je hebt dat paar eerder gedragen, {playerName}. Terugkeren is geen nieuwe gelofte. Help de Dalweg vrijhouden, en het werk zal je handen herinneren wat ze ooit kenden.",
-        "completion": "Het oude ritme keert terug. Je vroegere ambachtspaar is opnieuw actief.",
+      "q_prof_attune_outfitter": {
+        "title": "De Maat van de Uitrusting",
+        "text": "Meet de kosten voordat je snijdt, dat is de eerste regel bij mijn weefgetouw. Kies mij en Leerbewerking en Kleermakerij worden je twee hoofdvakken, het paar dat je voorbij zeldzaam werk mag dragen; het ambacht er tegenover nestelt zich als je liefhebberij, tot zeldzaam genomen en daar gelaten. De handel die je opzij zet is niet ontrafeld, {playerName}, alleen opgeborgen, slapend totdat je ze weer oppakt. Wees zeker: mocht je dit paar verlaten en het later terugwillen, de weg naar huis wordt betaald met arbeid die elke keer langer wordt: vijf gemaaid bij eerste keer, dan acht, dan elf, altijd iets meer. Als je besluit genomen is, maai vier webhoutspin nen en breng hun zijde naar het weefgetouw, want goed garen begint elk goed kledingstuk.",
+        "completion": "Gelijkmatige draad, gelijkmatige hand. Leerbewerking en Kleermakerij zijn van jou om zo ver te dragen als je vaardigheid reikt. Meet twee keer en ze zullen je niet teleurstellen.",
+        "objectives": {
+          "0": {
+            "label": "Webhout Spin gevangen"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Een Recept om te Bewaren",
+        "text": "Elk goed gerecht bestaat uit twee smaken die bij elkaar horen, en zo is een goed ambacht ook, {playerName}. Zeg het woord en Alchemie en Koken worden je twee hoofdvakken, de twee die je voorbij zeldzaam werk kunt laten sudderen; het ambacht aan de andere kant van het wiel wordt je liefhebberij, opgewekt tot zeldzaam en niet heter. De rest van je handel blijft in de provisiekast, slapend, niet bedorven, klaar wanneer je ze ophaalt. Eerlijke waarschuwing terwijl de pot nog koud is: dwaal af naar een ander paar en thuiskomen is een karwei dat groeit: vijf beesten de eerste keer, acht de volgende, elf daarna, zwaarder bij elke portie. Nog steeds hongerig? Jacht dan op vier wilde everzwijnen, want een keuken die haar zout waard is begint met goed vlees.",
+        "completion": "Nou, dat is een begin met wat vlees erop. Alchemie en Koken zijn van jou om zo hoog te sudderen als je wilt. Kom terug met honger.",
+        "objectives": {
+          "0": {
+            "label": "Wilde Everzwijn gedood"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "Een Vluchtige Afspraak",
+        "text": "Oh, oh, je wilt het goede spul, het luide spul, toch? Luister, luister, voor je iets aanraakt dat tikt: zeg het woord en Techniek en Alchemie worden je twee hoofdvakken, de enige twee die je voorbij zeldzaam werk mag duwen (daar wordt het PAS LEUK, vertrouw me). Het ambacht aan de overkant gaat als liefhebberij in je zak, zeldzaam en niet verder, niet pruilen. Je andere handel? Niet weg, {playerName}, gewoon slapend, maak ze wakker wanneer je wilt. Maar (er is altijd een maar, houd de lont vast) gooi dit paar weg en kom later terug en het kost je zweet dat zich opstapelt: vijf dingen de eerste keer, acht de volgende, elf daarna, meer, meer, elke keer dat je koude voeten krijgt. Ja? JA? Ga dan drie plukken kruiden voor me plukken, de vluchtige soorten, vraag niet welke, ze zijn allemaal een beetje vluchtig als je er hard genoeg in gelooft.",
+        "completion": "HA. Reagentia, echte, en alle vingers er nog aan, goed, goed. Techniek en Alchemie, van jou, ga iets maken dat er spijt van krijgt. Vooruit.",
+        "objectives": {
+          "0": {
+            "label": "Kruidenveld geoogst"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Terug naar de Smidse",
+        "text": "Dus je bent teruggekeerd naar de smidse. Ik zal niet doen alsof het niet pijn doet, {playerName}, maar ik ben eerlijk en het werk is eerlijk. Je kent de prijs van terugkeren: arbeid, en meer ervan elke keer dat je bent afgedwaald. Drijf de wolven weg die de noordweg lastigvallen, en het zwaaien ervan zal je armen herinneren aan wat dit paar ooit van hen vroeg.",
+        "completion": "Het ritme is terug in je handen. Wapensmeden en Pantserbouw zijn opnieuw je hoofdvakken. Maak er geen gewoonte van te vertrekken.",
         "objectives": {
           "0": {
             "label": "Boswolf gedood"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Draden Hernomen",
+        "text": "Toch terug bij mijn weefgetouw. Ik koester geen wrok, {playerName}, maar de draad herinnert een hand die hem losliet, en de kosten om hem weer op te pakken worden elke keer gemeten aan een langere maat. Maai de webhoutspin nen die het westelijke woud verdringen, en de inspanning zal je handen kalmeren voordat ze goede zijde aanraken.",
+        "completion": "Stabiel weer. Leerbewerking en Kleermakerij keren terug naar je handen als hoofdvakken. Meet twee keer voordat je weer gaat dwalen.",
+        "objectives": {
+          "0": {
+            "label": "Webhout Spin gevangen"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Terug op het Fornuis",
+        "text": "Wel, kijk wie er terug is bij mijn pot. Geen wrok, {playerName}, een keuken heeft altijd ruimte, maar weet dat de rekening langer wordt elke keer dat je weggaat. Ga de wilde everzwijnen in het oostelijke weide uitdunnen, want eerlijk zweet is het eerste ingrediënt, en het zal je handen herinneren aan het werk.",
+        "completion": "Dat is de oude smaak. Alchemie en Koken zijn weer als hoofdvakken op je fornuis. Blijf deze keer wat langer.",
+        "objectives": {
+          "0": {
+            "label": "Wilde Everzwijn gedood"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Het Grootboek Groeit",
+        "text": "Je bent TERUG, ha, ze komen altijd terug, het luide spul trekt je aan, toch? Geen geklaag van mij, {playerName}, maar het grootboek, oh het grootboek, het groeit elke keer dat je wegloopt, meer bij elke terugkeer, dat is enkel eerlijk. Ga de tunnelratten uit de opgravingen voor me wegwerken, zweet eerst, vonken later, dat is de regel die ik net heb bedacht.",
+        "completion": "DAT is het, de kriebels zijn terug in je handen. Techniek en Alchemie, weer als hoofdvakken. Vooruit, ga een knal maken. Probeer deze keer te blijven, hm?",
+        "objectives": {
+          "0": {
+            "label": "Tunnelrat uitgeschakeld"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Smidse Werkopdracht",
+        "text": "De smidse wil altijd gevoed worden, {playerName}. Breng me acht brokken kopererts en ik zal je voor de lading betalen. Geen omhaal, gewoon erts en munten.",
+        "completion": "Goed gewicht, geen slak. Hier is je deel. De smidse heeft binnenkort weer honger.",
+        "objectives": {
+          "0": {
+            "label": "Kopererts afgeleverd"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Keukens Werkopdracht",
+        "text": "Mijn voorraadkast ziet er dun uit, {playerName}, en dunne voorraadkasten maken knorrige koks. Haal me acht sneden wildvlees en er zit een muntstuk in voor je, plus mijn eeuwige dankbaarheid, die minder waard is maar beter smaakt.",
+        "completion": "Nu is dat een volle provisiekast. Hier is je loon. Kom terug als je tassen vol zijn.",
+        "objectives": {
+          "0": {
+            "label": "Wildvlees afgeleverd"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Weefgetouw Werkopdracht",
+        "text": "Het weefgetouw loopt droog en luie handen verspillen daglicht, {playerName}. Breng me zes strengen spinnenzijde en ik betaal je een eerlijk tarief, tot op de koperstuk uitgeteld.",
+        "completion": "Fijne zijde, gelijkmatig gesponnen. Je muntstuk, precies gemeten. Het weefgetouw bedankt je, en ik ook.",
+        "objectives": {
+          "0": {
+            "label": "Spinnenzijde afgeleverd"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Gereedschapswerken Werkopdracht",
+        "text": "Stelen, handgrepen, kolven, ik ga door hout als is het uit de mode aan het gaan, wat het NIET is, hout is eeuwig, {playerName}. Breng me acht ijzerbastbalken en ik betaal je, muntstukken, echte muntstukken, geen gunst, ik beloof het, grotendeels.",
+        "completion": "Perfect, perfect, rechte nerf, geen rot. Hier, je muntstuk, zie je, ik houd mijn woord (grotendeels). Breng meer als je over een boom struikelt.",
+        "objectives": {
+          "0": {
+            "label": "IJzerbastbalk afgeleverd"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Leerlooierij Werkopdracht",
+        "text": "Kuipen zijn leeg. Breng acht ruwe huiden. Muntstuk als je dat doet.",
+        "completion": "Goede huiden. Eerlijk loon. Opnieuw als je er meer hebt.",
+        "objectives": {
+          "0": {
+            "label": "Ruwe Huid afgeleverd"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Apothekers Werkopdracht",
+        "text": "Mijn planken hebben goudblad nodig, en het aanbod op de markt is, voorspelbaar, vervuild. Breng me zes goudblad-kruiden, ongekneusd, en je wordt precies gecompenseerd. Gekneusd blad wordt geweigerd, dus pas op je ransel.",
+        "completion": "Aanvaardbaar. Krachtig en goed behandeld. Je betaling, tot op de muntstuk nauwkeurig. Laat het niet naar je hoofd stijgen, dat is een ander reagens.",
+        "objectives": {
+          "0": {
+            "label": "Goudblad-Kruid afgeleverd"
           }
         }
       },
@@ -11014,9 +11271,109 @@ export const nl_NL: EnTranslations = {
         "body": "Ambachtelijk,\n\nHet bericht bereikt de gilde van jouw werk in pantserbewerking en techniek: platen geklonken en tandwielen uitgelijnd, waarbij de twee ambachten elkaar voeden. Naburige ambachten die samenwerken, markeren een hand die klaar is voor afstemming. Zoek Smid Haldren, de pantsersmid van Eastbrook: hij spreekt voorlopig namens de meesters. Bewijs hem uw vak met uw eigen handen, en hij zal zien dat uw twee hoofdvakken op elkaar zijn afgestemd.\n\nMet achting,\nHet Ambachtsgilde"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Het Gildegebouw",
+        "subject": "Jouw ambacht, eerlijk gemaakt",
+        "body": "Gildgenoot,\n\nHet gilde heeft een nieuwe maatstaf voor meesterschap aangenomen. Elke hand begint de klim opnieuw: je ambachtsvaardigheden en je vergardebekwaamheden zijn op nul gezet.\n\nAl het andere is van jou, onaangeroerd: je recepten, je gereedschap en materialen, je bank en goud, je afstemmingen en titels, je daden en faam, je opdrachten en post.\n\nDe klim is nu eerlijk. Goedkoop werk brengt je niet verder. Zoek moeilijkere recepten, rijkere aders en diepere wateren.\n\nMet achting,\nHet Gildegebouw"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Smeedmeesteres Darva",
+        "subject": "Een vonk de moeite waard",
+        "body": "Het bericht bereikt mijn smidse dat een van je hoofdvakken ongewoon werk bezit. Het is de kleinste sport op een lange klim, maar je hebt hem verdiend aan het aambeeld, niet door ernaar te vragen. Houd het vuur brandend."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Smeedmeesteres Darva",
+        "subject": "Zeldzaam werk, en verdiend",
+        "body": "Ze vertellen me dat een van je hoofdvakken zeldzaam werk heeft bereikt. Dat is de sport waar slordige handen afvallen en de echte smeden overblijven. Jij staat er nog. Goed."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Smeedmeesteres Darva",
+        "subject": "Het metaal gehoorzaamt je nu",
+        "body": "Een van je hoofdvakken is van zeldzaam naar serieus werk gestegen. Het metaal gehoorzaamt een hand als die, vecht er niet meer tegen. Laat de lof je arm niet verzwakken."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Smeedmeesteres Darva",
+        "subject": "Bijna bovenaan de ladder",
+        "body": "Een van je hoofdvakken staat een sport onder meesterschap. Weinig handen die ik heb gekend bereiken deze hoogte, en nog minder houden er hun scherpte. Maak de klim af."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Smeedmeesteres Darva",
+        "subject": "Meesterschap, eindelijk",
+        "body": "Een van je hoofdvakken heeft meesterschap bereikt, het hoogste wat een hand kan bereiken. Ik geef niet vrijelijk lof, dus hoor dit eenmaal: de smidse is trots op je. Ga de vlam nu iets nieuws leren."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Weefster Ottilie",
+        "subject": "Een gelijkmatige eerste rij",
+        "body": "Het gilde noteert dat een van je hoofdvakken ongewoon werk heeft bereikt. Het is slechts de eerste rij van vele, maar hij is gelijkmatig en trouw. Meet de volgende even zorgvuldig."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Weefster Ottilie",
+        "subject": "Zeldzaam werk, goed gemeten",
+        "body": "Een van je hoofdvakken is tot zeldzaam werk gestegen. Dat is waar een onzorgvuldige hand elke gemiste steek laat zien, en die van jou heeft dat niet gedaan. Ik ben stilletjes verheugd."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Weefster Ottilie",
+        "subject": "Het patroon wordt duidelijk",
+        "body": "Een van je hoofdvakken is van zeldzaam naar fijner werk gestegen. Het patroon wordt duidelijk voor een hand op dit niveau, niet meer raden. Blijf twee keer meten."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Weefster Ottilie",
+        "subject": "Een rij van de top",
+        "body": "Een van je hoofdvakken staat een rij onder meesterschap. De laatste rij is altijd het moeilijkst gelijkmatig te houden. Haast je nu niet."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Weefster Ottilie",
+        "subject": "De laatste steek",
+        "body": "Een van je hoofdvakken heeft meesterschap bereikt. Ik heb je werk twee keer gemeten, zoals ik alles meet, en het houdt stand. Weinig handen leggen de laatste steek zo schoon. Ik ben trots, en dat zeg ik niet lichtvaardig."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Kok Marlow",
+        "subject": "Een smaak van wat komen gaat",
+        "body": "Er dringt een bericht mijn keuken in dat een van je hoofdvakken ongewoon werk heeft bereikt. Het is slechts een eerste smaak, niet meer, maar een veelbelovende. Houd de pot in beweging."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Kok Marlow",
+        "subject": "Zeldzaam werk, en geen verbrande randjes",
+        "body": "Ze vertellen me dat een van je hoofdvakken tot zeldzaam werk is gestegen. Dat is de hitte waarbij de meeste koks het gerecht verschroeien, en jij niet. Rust even, maar niet te lang."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Kok Marlow",
+        "subject": "Nu kook je pas echt",
+        "body": "Een van je hoofdvakken is van zeldzaam naar echte diepgang gestegen. Nu kook je pas echt, zoals ze zeggen. Kruid flink en blijf proeven."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Kok Marlow",
+        "subject": "Een gang van het feestmaal",
+        "body": "Een van je hoofdvakken staat op een gang na meesterschap. De laatste gang is altijd de rijkste en het gemakkelijkst om te overdoen. Houd de pollepel rustig."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Kok Marlow",
+        "subject": "Meesterschap, vers opgediend",
+        "body": "Een van je hoofdvakken heeft meesterschap bereikt, de hoogste plank van de hele provisiekast. Ik voed iedereen, maar slechts weinigen koken zich zo hoog op. Trots op je, oprecht. Ga nu iets maken dat hen aan tafel doet huilen."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Knutselaar Gizzel",
+        "subject": "EERSTE vonk, ha",
+        "body": "Oi, de getallen zeggen dat een van je hoofdvakken ongewoon werk heeft bereikt, kleine aardappelen, klein, maar het KNALDE, toch? De eerste vonk is altijd de schattigste. Meer vonken. Ga."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Knutselaar Gizzel",
+        "subject": "Zeldzaam, oh, ZELDZAAM",
+        "body": "Ze vertellen me dat een van je hoofdvakken tot zeldzaam werk is gestegen, en zeldzaam is waar het pas echt gevaarlijk wordt (het goede soort). De meeste handen stoppen voor het leuk wordt. Jij niet. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Knutselaar Gizzel",
+        "subject": "Nu wordt het luid",
+        "body": "Een van je hoofdvakken heeft zeldzaam voorbij geschoten naar het serieuze werk, oh dit is waar het LUID wordt. Stop nu niet, wat je ook doet, momentum is alles, net als lonten."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Knutselaar Gizzel",
+        "subject": "Een sport, EEN, van de top",
+        "body": "Een van je hoofdvakken staat EEN sport onder meesterschap, een, enkelvoud, voel je hem gonzen? De laatste stap is de grootste knal. Niet knipperen."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Knutselaar Gizzel",
+        "subject": "MEESTERSCHAP, kaboom",
+        "body": "Een van je hoofdvakken heeft meesterschap bereikt, de allerHOOGSTE, kaboom, de hele ladder, klaar. Ik deel geen lof uit, ik deel lonten uit, maar hier, neem allebei: je bent briljant en enigszins angstaanjagend. Ga de bergen zenuwachtig maken."
       }
     },
     "itemSets": {

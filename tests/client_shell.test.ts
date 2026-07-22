@@ -1296,11 +1296,15 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain(
       'body.mobile-touch #party-frames {\n    position: fixed;\n    left: max(20px, calc(env(safe-area-inset-left) + 10px));\n    top: calc(max(8px, env(safe-area-inset-top)) + 74px);',
     );
-    // The base below-target offset was nudged +5px (130 -> 135) so the new first-child
-    // collapse chip clears the target frame's bottom edge; a comment now sits between the
-    // selector and the top, so assert the selector and the pinned value independently.
+    // The below-target offset derives from the measured target-stack bottom
+    // (party_below_target_painter.ts writes --party-below-target-bottom); the var
+    // fallback reproduces the old hand-nudged +135px constant (safe-area + 127px
+    // + the 8px gap) until the first measure lands. Biome wraps the long
+    // declaration, so pin against a whitespace-normalized view of the source.
     expect(hudMobileCss).toContain('body.mobile-touch #party-frames.below-target {');
-    expect(hudMobileCss).toContain('top: calc(max(8px, env(safe-area-inset-top)) + 135px);');
+    expect(hudMobileCss.replace(/\s+/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')')).toContain(
+      'top: calc(var(--party-below-target-bottom, calc(max(8px, env(safe-area-inset-top)) + 127px)) + 8px);',
+    );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #party-frames .party-frame {\n    width: calc(112px * var(--mobile-chrome-scale, 1));\n    min-height: 40px;',
     );
@@ -1336,8 +1340,12 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain(
       'body.mobile-touch #target-frame {\n      left: max(6px, env(safe-area-inset-left));\n      top: calc(max(6px, env(safe-area-inset-top)) + 56px);',
     );
-    // Landscape below-target offset likewise nudged +5px (100 -> 105) for the chip.
-    expect(hudMobileCss).toContain('top: calc(max(6px, env(safe-area-inset-top)) + 105px);');
+    // Landscape below-target offset likewise derives from the measured
+    // target-stack bottom; its fallback reproduces the old +105px constant
+    // (whitespace-normalized like the base-tier pin above).
+    expect(hudMobileCss.replace(/\s+/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')')).toContain(
+      'top: calc(var(--party-below-target-bottom, calc(max(6px, env(safe-area-inset-top)) + 97px)) + 8px);',
+    );
     expect(hudMobileCss).not.toContain('body.mobile-touch.mobile-left-handed #xpbar,');
     // The XP fill fraction is mirrored into --xp-fill on BOTH the #xpbar and the
     // #player-frame (the mobile ring around the class circle reads it). The painter
@@ -1574,7 +1582,7 @@ describe('client HTML shell', () => {
 
   it('lays out mobile More tray buttons horizontally', () => {
     expect(html).toContain(
-      '<div id="mobile-extra-controls" class="window panel" role="dialog" aria-modal="true" aria-labelledby="mobile-more-title">',
+      '<div id="mobile-extra-controls" class="window panel" role="dialog" aria-modal="true" aria-labelledby="mobile-more-title" aria-hidden="true">',
     );
     expect(html).toContain('<div class="panel-title">');
     expect(html).toContain(
@@ -1584,6 +1592,11 @@ describe('client HTML shell', () => {
       '<span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
     );
     expect(html).toContain('id="mobile-more-close"');
+    for (const entry of [html, playHtml]) {
+      expect(entry).toMatch(
+        /id="mobile-more"[^>]*aria-controls="mobile-extra-controls"[^>]*aria-expanded="false"/,
+      );
+    }
     expect(html).toContain('<div id="mobile-extra-grid">');
     // Daily Rewards, the Book of Deeds, and Crafting ride the More grid in BOTH
     // entries (play.html historically lags index.html; these pins keep them in
@@ -1593,8 +1606,12 @@ describe('client HTML shell', () => {
       expect(entry).toContain('id="mobile-deeds"');
       expect(entry).toContain('id="mobile-crafting"');
     }
-    expect(hudMobileCss).toContain(
-      'body.mobile-touch.mobile-more-open #mobile-controls {\n    z-index: 140;\n  }',
+    expect(hudMobileCss).not.toContain('body.mobile-touch.mobile-more-open #mobile-controls');
+    expect(html).toContain(
+      '</div>\n    </div>\n  </section>\n      <div id="mobile-extra-controls"',
+    );
+    expect(playHtml).toContain(
+      '</div>\n    </div>\n  </div>\n      <div id="mobile-extra-controls"',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-extra-controls {\n    position: fixed;\n    left: 50%;\n    top: 50%;\n    bottom: auto;\n    --mobile-more-open-transform: translate(-50%, -50%);\n    --mobile-more-closed-transform: translate(-50%, -46%) scale(0.96);\n    transform: var(--mobile-more-closed-transform);',
@@ -1656,8 +1673,27 @@ describe('client HTML shell', () => {
     expect(mobileControlsTs).toContain(
       "const open = !document.body.classList.contains('mobile-more-open');",
     );
-    expect(mobileControlsTs).toContain("this.root?.classList.toggle('expanded', open);");
-    expect(mobileControlsTs).toContain("document.body.classList.toggle('mobile-more-open', open);");
+    expect(mobileControlsTs).toContain("this.root?.classList.add('expanded');");
+    expect(mobileControlsTs).toContain("document.body.classList.add('mobile-more-open');");
+    expect(mainTs).toContain('watchMobileMoreState(document.body, (open) => {');
+    expect(mainTs).toContain('syncCharacterOpenDiagnostics();');
+    expect(mainTs).toContain('syncQuestDialogOpenDiagnostics();');
+    expect(mainTs).toContain(
+      "entryDiagnostics.checkpoint(optionsOpen ? 'settings-open' : 'settings-closed')",
+    );
+    expect(mainTs).toContain(
+      "entryDiagnostics.checkpoint(characterOpen ? 'character-open' : 'character-closed')",
+    );
+    expect(mainTs).toContain('hud.onQuestDialogStateChange = (open) => {');
+    expect(mainTs).toContain(
+      "entryDiagnostics.checkpoint(open ? 'quest-dialog-open' : 'quest-dialog-closed')",
+    );
+    expect(mainTs).toContain('hud.syncMobileMoreDialog(open, open || !hud.isWindowOpen());');
+    expect(mainTs).toContain('input.setAutorun(false);');
+    expect(mainTs).toContain('mobileControls.syncAutorun(false);');
+    expect(mainTs).toContain(
+      "entryDiagnostics.checkpoint(open ? 'mobile-more-open' : 'mobile-more-closed')",
+    );
     expect(mobileControlsTs).toContain("modal.style.left = '50%';");
     expect(mobileControlsTs).toContain("modal.style.top = '50%';");
     expect(mobileControlsTs).toContain("modal.style.transform = 'translate(-50%, -50%)';");
@@ -1672,7 +1708,11 @@ describe('client HTML shell', () => {
     );
     expect(bindButton.indexOf("button.closest('#mobile-extra-controls')")).toBeGreaterThan(-1);
     expect(bindButton.indexOf('this.closeMoreModal();')).toBeLessThan(bindButton.indexOf('cb();'));
+    expect(bindButton.indexOf("document.getElementById('mobile-more')?.focus();")).toBeLessThan(
+      bindButton.indexOf('cb();'),
+    );
     expect(hudTs).toContain(".filter((win) => win.id !== 'mobile-extra-controls')");
+    expect(hudTs).toContain('if (destination) this.focusManager.focusFirst(destination);');
   });
 
   it('keeps the More tray out of the managed-window close path', () => {
@@ -1700,6 +1740,14 @@ describe('client HTML shell', () => {
     expect(closeManaged).toContain(
       "document.getElementById('mobile-more')?.classList.remove('active');",
     );
+  });
+
+  it('treats the aria-modal More tray as movement-blocking while it is open', () => {
+    const modalProbe = hudTs.slice(
+      hudTs.indexOf('isModalOpen(): boolean {'),
+      hudTs.indexOf('promptModalOpen(): boolean {'),
+    );
+    expect(modalProbe).toContain("document.body.classList.contains('mobile-more-open')");
   });
 
   it('replaces the dual mode cards with one Play CTA and a realm selector', () => {

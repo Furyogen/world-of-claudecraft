@@ -609,7 +609,8 @@ export const de_DE: EnTranslations = {
         "staff": "Stab",
         "wand": "Zauberstab",
         "bow": "Bogen",
-        "crossbow": "Armbrust"
+        "crossbow": "Armbrust",
+        "polearm": "Stangenwaffe"
       },
       "badge": {
         "flagship": "Flaggschiff",
@@ -706,10 +707,10 @@ export const de_DE: EnTranslations = {
       "expandHint": "Quests ausklappen"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
+      "general": "Allgemein",
+      "frames": "Rahmen",
       "chat": "Chat",
-      "combat": "Combat"
+      "combat": "Kampf"
     },
     "chatTimestamps": {
       "show": "Chat-Zeitstempel anzeigen",
@@ -1037,6 +1038,7 @@ export const de_DE: EnTranslations = {
       "showWalletOnPlayerCard": "Wallet auf der Spielerkarte anzeigen",
       "showDevBadges": "Entwicklerabzeichen anzeigen",
       "showOwnNameplate": "Eigene Namensplakette anzeigen",
+      "showPlayerNameplates": "Spieler-Namensplaketten anzeigen",
       "uiScale": "UI-Skalierung",
       "playerFrameScale": "Skalierung des Spielerfensters",
       "targetFrameScale": "Skalierung des Zielfensters",
@@ -1184,8 +1186,8 @@ export const de_DE: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Angriff",
+      "defense": "Verteidigung"
     },
     "statInfo": {
       "fromYour": "Von deinen {value} Punkten {stat}:",
@@ -1445,7 +1447,7 @@ export const de_DE: EnTranslations = {
     "corpseHarvest": {
       "title": "Verwerten",
       "harvestButton": "Verwerten",
-      "harvestButtonTooltip": "Verwerten: Sammle Handwerksmaterialien aus diesem Kadaver (Haut, Fangzahn, Seide und ähnliche Komponenten), unabhängig von der Beute. Jeder kann Kadaver verwerten, aber einen bestimmten Kadaver darf nur ein Spieler verwerten.",
+      "harvestTooltip": "Verwirft die markierten Komponenten. Jeder Kadaver kann einmal verwertet werden, wer zuerst kommt. Nimmt nicht die Beute.",
       "concentrateHint": "Je weniger Teile du wählst, desto höher ist die Qualitätsstufe jedes einzelnen Teils.",
       "alreadyHarvested": "Dieser Kadaver wurde bereits verwertet.",
       "componentAria": "{component} verwerten",
@@ -1463,6 +1465,8 @@ export const de_DE: EnTranslations = {
     "townFocus": {
       "title": "Stadtfokus",
       "hint": "Fokuspunkte gewähren einen Bonus auf den Grundertrag jeder Einrichtung. Einrichtungen ohne Fokus bleiben beim Grundertrag.",
+      "tierHint": "Alle {points} Punkte auf einer Komponente erhöhen ihre Sammelstufe um einen Schritt, bis zu {steps} Schritte; weniger als {points} Punkte steigern trotzdem den Ertrag.",
+      "townOnlyHint": "Fokus kann nur geändert werden, während du in der Stadt bist.",
       "budgetLabel": "Verbleibende Punkte: {remaining} / {budget}",
       "saveButton": "Fokus speichern",
       "notInTownHint": "Du musst in der Stadt sein, um deinen Fokus festzulegen.",
@@ -1521,6 +1525,7 @@ export const de_DE: EnTranslations = {
       "dragEquipHint": "Auf deinen Charakter ziehen, um anzulegen",
       "dragDestroyHint": "In die Welt ziehen, um zu vernichten",
       "reorderNeedsRecent": "Filter aufheben und nach Zuletzt sortieren, um deine Taschen neu anzuordnen",
+      "itemAriaInstanced": "{item}, Menge {count}, herstellermarkierte Kopie",
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",
       "filterWeapon": "Waffen",
@@ -1686,7 +1691,9 @@ export const de_DE: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Truhe",
-      "takeAllTooltip": "Alles nehmen: Sammle alle Münzen und Gegenstände in diesem Beutefenster."
+      "takeLootButton": "Beute nehmen",
+      "takeLootTooltip": "Nimmt die Münzen und fallen gelassenen Gegenstände. Nutzt nicht die Verwertung auf.",
+      "unifiedPressHint": "Die Interaktionstaste plündert und verwertet in einem Druck, mit deinem Stadtfokus."
     },
     "spellbook": {
       "addToBarAria": "{name} zur Aktionsleiste hinzufügen",
@@ -1834,6 +1841,7 @@ export const de_DE: EnTranslations = {
         "legend": "LEGENDE",
         "shill": "WERBETROMMEL"
       },
+      "roleTagChatTitle": "Verifizierte Serverrolle: {role}",
       "guildMember": "Verifiziertes Mitglied",
       "notMember": "Noch nicht auf dem Server",
       "joinCta": "Tritt dem Discord bei",
@@ -1958,6 +1966,7 @@ export const de_DE: EnTranslations = {
       "removeParcelAria": "{item} aus dem Brief entfernen",
       "parcelQtyDecreaseAria": "Ein Stück weniger von {item} senden",
       "parcelQtyIncreaseAria": "Ein Stück mehr von {item} senden",
+      "parcelQtyAria": "Anzahl von {item} zum Versenden",
       "sendButton": "Brief senden",
       "postageNote": "Porto: {amount}. Der Rabe ist etwa {seconds}s unterwegs.",
       "arrivedBanner": "Der Rabe ist gelandet: Post von {name}.",
@@ -2096,39 +2105,41 @@ export const de_DE: EnTranslations = {
       "stopBlockingTitle": "{name} nicht mehr blockieren",
       "onlineHeader": "Online ({n})",
       "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "hideOffline": "Offline ausblenden",
+      "hideOfflineTitle": "Offline-Gildenmitglieder ausblenden"
     },
     "gathering": {
       "title": "Sammeln",
       "mining": "Bergbau",
       "logging": "Holzfällen",
       "herbalism": "Kräuterkunde",
-      "fishing": "Fishing",
+      "fishing": "Angeln",
       "notReady": "Dieser Ressourcenknoten ist fur dich noch nicht nachgewachsen.",
       "gatherLine": "Sie sammeln: {name}.",
       "gatherLineQty": "Sie sammeln: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Du holst ein: {name}",
+      "biteLine": "Etwas nimmt den Köder!",
+      "gotAwayLine": "Es ist entkommen.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Erzader",
+        "wood": "Holzstand",
+        "herb": "Kräuterpflanze"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Erfordert eine Bergbau-Spitzhacke der Stufe {tier}",
+        "logging": "Erfordert eine Holzfäller-Axt der Stufe {tier}",
+        "herbalism": "Erfordert eine Kräuterkunde-Sichel der Stufe {tier}"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Du brauchst eine Bergbau-Spitzhacke der Stufe {tier}, um diese Ader abzubauen.",
+        "logging": "Du brauchst eine Holzfäller-Axt der Stufe {tier}, um diesen Stand zu fällen.",
+        "herbalism": "Du brauchst eine Kräuterkunde-Sichel der Stufe {tier}, um diese Pflanze zu sammeln."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Du brauchst ein Sammelwerkzeug der Stufe {tier}, um die feinsten Materialien zu gewinnen.",
+      "downgradeMark": "Taschen voll: der Fund wurde ohne Sammelzeichen gespeichert.",
+      "downgradeFind": "Taschen voll: ein makelloser Fund ist entkommen.",
+      "stateReady": "Bereit",
+      "stateCooldown": "Nachwachsen"
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -2159,6 +2170,49 @@ export const de_DE: EnTranslations = {
       "tailoring": "Schneiderei",
       "leatherworking": "Lederverarbeitung"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Waffe verzaubern - Macht",
+      "enchant_weapon_intellect": "Waffe verzaubern - Zaubermacht",
+      "enchant_helmet_fortitude": "Helm verzaubern - Ausdauerkraft",
+      "enchant_neck_spirit": "Amulett verzaubern - Geist",
+      "enchant_shoulder_agility": "Schultern verzaubern - Beweglichkeit",
+      "enchant_chest_stamina": "Brust verzaubern - Ausdauer",
+      "enchant_waist_stamina": "Gürtel verzaubern - Ausdauer",
+      "enchant_legs_stamina": "Hose verzaubern - Ausdauer",
+      "enchant_gloves_agility": "Handschuhe verzaubern - Beweglichkeit",
+      "enchant_gloves_intellect": "Handschuhe verzaubern - Zaubermacht",
+      "enchant_feet_agility": "Stiefel verzaubern - Beweglichkeit",
+      "enchant_ring_spirit": "Ring verzaubern - Geist",
+      "enchant_weapon_agility": "Waffe verzaubern - Beweglichkeit",
+      "enchant_helmet_intellect": "Helm verzaubern - Intellekt",
+      "enchant_helmet_armor": "Helm verzaubern - Verstärkung",
+      "enchant_neck_intellect": "Amulett verzaubern - Intellekt",
+      "enchant_neck_agility": "Amulett verzaubern - Beweglichkeit",
+      "enchant_shoulder_strength": "Schultern verzaubern - Stärke",
+      "enchant_shoulder_intellect": "Schultern verzaubern - Intellekt",
+      "enchant_chest_spirit": "Brust verzaubern - Geist",
+      "enchant_chest_armor": "Brust verzaubern - Verstärkung",
+      "enchant_waist_strength": "Gürtel verzaubern - Stärke",
+      "enchant_waist_agility": "Gürtel verzaubern - Beweglichkeit",
+      "enchant_legs_intellect": "Hose verzaubern - Intellekt",
+      "enchant_gloves_strength": "Handschuhe verzaubern - Stärke",
+      "enchant_feet_strength": "Stiefel verzaubern - Stärke",
+      "enchant_feet_stamina": "Stiefel verzaubern - Ausdauer",
+      "enchant_ring_strength": "Ring verzaubern - Stärke",
+      "enchant_ring_agility": "Ring verzaubern - Beweglichkeit",
+      "enchant_ring_intellect": "Ring verzaubern - Intellekt",
+      "enchant_weapon_greater_might": "Waffe verzaubern - Große Macht",
+      "enchant_weapon_greater_spellpower": "Waffe verzaubern - Große Zaubermacht",
+      "enchant_helmet_greater_fortitude": "Helm verzaubern - Große Ausdauerkraft",
+      "enchant_chest_greater_stamina": "Brust verzaubern - Große Ausdauer",
+      "enchant_legs_greater_stamina": "Hose verzaubern - Große Ausdauer",
+      "enchant_gloves_greater_agility": "Handschuhe verzaubern - Große Beweglichkeit",
+      "enchant_weapon_runed_edge": "Waffe verzaubern - Runenschneide",
+      "enchant_weapon_runed_focus": "Waffe verzaubern - Runenfokus",
+      "enchant_chest_runeweave": "Brust verzaubern - Runenweberei",
+      "enchant_legs_runed_hide": "Hose verzaubern - Runenfell",
+      "enchant_helmet_runed_links": "Helm verzaubern - Runenkette"
+    },
     "professions": {
       "title": "Berufe",
       "close": "Berufe schließen",
@@ -2178,7 +2232,7 @@ export const de_DE: EnTranslations = {
       "tierPipAria": "Stufe {tier}",
       "nextUnlockTier": "Noch {points} Punkte bis zur nächsten Stufe: Meisterwerkchance steigt",
       "nextUnlockSpecialized": "Noch {points} Punkte bis zur Spezialisierung: Materialkosten sinken",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Gemeistert, vorerst",
       "perkSpecializedLine": "{craft}: Spezialisiert, Materialkosten -{pct}%",
       "perkSpecializedAt": "Spezialisiert auf die Fertigkeit {threshold}",
       "switchCost": "Der nächste Archetypwechsel kostet {cost} Sühnepunkte",
@@ -2219,6 +2273,7 @@ export const de_DE: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Ergebnis: Titel {title}; {majorA} und {majorB} werden zu unbegrenzten Hauptberufen; {hobby} wird zum selten-begrenzten Hobby; alle anderen Fertigkeitskenntnisse bleiben erhalten, sind aber auf Gewöhnlich begrenzt, solange sie inaktiv sind.",
       "hobbyPreview": "Ergebnis: {hobby} wird zum selten-begrenzten Hobby. Beide Hauptberufe und alle beibehaltenen Fertigkeitswerte bleiben unverändert.",
+      "attunementReturnCost": "Wenn du dieses Paar verlässt, kostet die spätere Rückkehr {cost} Sühneaufgaben.",
       "identity": {
         "title": "Handwerksidentität",
         "syncing": "Warte auf deine Handwerksidentität vom Reich.",
@@ -2258,16 +2313,64 @@ export const de_DE: EnTranslations = {
       "skillReqLine": "Erfordert {craft} {skill}",
       "difficultyFull": "Voller Fähigkeitsgewinn",
       "difficultyReduced": "Reduzierter Fähigkeitsgewinn",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimaler Fertigkeitszuwachs",
       "difficultyNone": "Kein Fähigkeitsgewinn",
       "stationBadge": "Station",
       "stationOutOfRangeNamed": "Begib dich zur {station}, um dies herzustellen.",
+      "learnMoreAtStation": "{master} an der {station} kann dir weitere {craft}-Rezepte beibringen.",
       "masterworkToast": "Meisterwerk! {name}",
       "masterworkZoneLine": "{crafter} hat das Meisterwerk {name} hergestellt!",
       "tierUpToast": "{craft} auf Stufe {tier} aufgestiegen!",
+      "trendNudge": "Deine Hände neigen zum {archetype}. Seine Abstimmung wartet bei {master}.",
+      "trendNudgeNoMaster": "Deine Hände neigen zum {archetype}. Suche einen Handwerksmeister, um es aufzunehmen.",
+      "attunedZoneLine": "{name} hat sich als {archetype} abgestimmt!",
+      "attunedBanner": "Abgestimmt: {title}",
+      "tierTutorial": {
+        "title": "Deine erste Stufe",
+        "tierCap": "Ein Handwerk erreicht seine erste Stufe bei {skill} Fertigkeit, und jede Stufe verbessert, was es herstellen kann. Aber ein Handwerk steigt nur über seltene Arbeit hinaus, wenn es einer deiner zwei Hauptberufe ist.",
+        "radar": "Deine Berufe bilden ein Rad. Stimme dich auf ein benachbartes Paar ab und diese zwei Handwerke werden unbegrenzte Hauptberufe, ein Handwerk gegenüber auf dem Rad wird ein auf Selten begrenztes Hobby, und der Rest liegt ruhend: ihr Wissen bewahrt, aber auf Gewöhnlich begrenzt, bis du sie wieder aufnimmst.",
+        "masters": "Handwerksmeister in den Städten bieten Abstimmungsquests an. Besuche einen, um dein Paar zu wählen, wann immer du bereit bist. Nichts, was du gelernt hast, geht je verloren.",
+        "dismiss": "Verstanden"
+      },
       "makersMark": "Hergestellt von {name}",
+      "gatheredBy": "Gesammelt von {name}",
       "masterworkSeal": "Meisterwerk",
-      "enchantedLine": "Verzaubert"
+      "enchantedLine": "Verzaubert",
+      "commissionToggle": "Auftragsarbeit",
+      "commissionToggleHint": "Bindet sich an den ersten Charakter, der es im Handel erhält.",
+      "commissionUnbound": "Auftragsarbeit: bindet sich an den ersten Empfänger",
+      "commissionBound": "Auftragsarbeit: gebunden an den Empfänger"
+    },
+    "itemMenu": {
+      "use": "Verwenden",
+      "equip": "Anlegen",
+      "disenchant": "Entzaubern",
+      "salvage": "Zerlegen",
+      "applyEnchant": "Verzauberung anwenden"
+    },
+    "enchanting": {
+      "disenchantedLine": "Du entzauberst {item}.",
+      "salvagedLine": "Du zerlegst {item}.",
+      "enchantAppliedLine": "Du verzauberst {item} mit {enchant}.",
+      "notHeld": "Du hast diesen Gegenstand nicht.",
+      "notDisenchantable": "Du kannst das nicht entzaubern.",
+      "notSalvageable": "Du kannst das nicht zerlegen.",
+      "disenchantThrottled": "Du entzauberst zu schnell. Warte einen Moment und versuche es erneut.",
+      "salvageThrottled": "Du zerlegst zu schnell. Warte einen Moment und versuche es erneut.",
+      "enchantThrottled": "Du verzauberst zu schnell. Warte einen Moment und versuche es erneut.",
+      "enchantWrongSlot": "Diese Verzauberung kann nicht auf diesen Gegenstand angewendet werden.",
+      "enchantUnknown": "Diese Verzauberung existiert nicht.",
+      "enchantInsufficient": "Du hast nicht die Materialien für diese Verzauberung.",
+      "disenchantConfirmTitle": "{item} entzaubern?",
+      "disenchantConfirmBody": "Dies zerstört {item} und ergibt arkane Materialien. Dies kann nicht rückgängig gemacht werden.",
+      "disenchantConfirmBodySpecial": "Dies zerstört eine besondere Kopie von {item} (signiert, Meisterwerk oder verzaubert) und ergibt arkane Materialien. Dies kann nicht rückgängig gemacht werden.",
+      "salvageConfirmTitle": "{item} zerlegen?",
+      "salvageConfirmBody": "Dies zerstört {item} und ergibt Handwerksmaterialien. Dies kann nicht rückgängig gemacht werden.",
+      "salvageConfirmBodySpecial": "Dies zerstört eine besondere Kopie von {item} (signiert, Meisterwerk oder verzaubert) und ergibt Handwerksmaterialien. Dies kann nicht rückgängig gemacht werden.",
+      "pickerTitle": "Verzauberung anwenden",
+      "targetTitle": "Wähle einen Gegenstand zum Verzaubern",
+      "noEnchants": "Keine Verzauberung verwendet dieses Reagenz.",
+      "noTargets": "Kein geeigneter Gegenstand zum Verzaubern."
     },
     "training": {
       "title": "Ausbildung: {name}",
@@ -2287,6 +2390,25 @@ export const de_DE: EnTranslations = {
       "notTaughtHere": "Dieses Rezept wird hier nicht gelehrt.",
       "alreadyKnown": "Das Rezept kennen Sie bereits.",
       "outOfRange": "Du musst dich an der Handwerksstation befinden, um etwas zu lernen."
+    },
+    "unbind": {
+      "title": "Entbindung: {name}",
+      "close": "Entbindung schließen",
+      "intro": "Der Meister kann eine Auftragsarbeit gegen eine Gebühr aus ihrer Bindung lösen.",
+      "empty": "Du trägst keine gebundenen Auftragsarbeiten.",
+      "rowSub": "Löst die Bindung; das Stück bindet sich beim nächsten Handel erneut.",
+      "unbindAria": "{name} für {fee} entbinden",
+      "dialogOption": "Entbindung",
+      "dialogOptionAria": "Eine Auftragsarbeit mit {name} entbinden",
+      "confirmTitle": "Auftragsarbeit entbinden",
+      "confirmBody": "{name} für {fee} entbinden?",
+      "confirmOk": "Entbinden",
+      "confirmCancel": "Abbrechen",
+      "unbound": "{name} für {fee} entbunden. Es bindet sich beim nächsten Handel erneut.",
+      "notEligible": "Dieser Gegenstand kann nicht entbunden werden.",
+      "notBound": "Dieser Gegenstand ist nicht gebunden.",
+      "cannotAfford": "Du kannst die Entbindungsgebühr nicht bezahlen.",
+      "outOfRange": "Du musst dich an einer Handwerksstation befinden, um zu entbinden."
     },
     "finder": {
       "title": "Instanzfinder",
@@ -4134,7 +4256,7 @@ export const de_DE: EnTranslations = {
   "stats": {
     "title": "Weltstatus",
     "accountsCreated": "Spieler",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Erstellte Charaktere",
     "playersOnline": "Spieler online",
     "realmName": "Weltname"
   },
@@ -5706,7 +5828,8 @@ export const de_DE: EnTranslations = {
       "tradeInProgress": "Es läuft bereits ein Handel.",
       "tradeTooFar": "Das Ziel ist zu weit entfernt zum Handeln.",
       "tradeExpired": "Die Handelsanfrage ist abgelaufen.",
-      "tradeFailed": "Handel fehlgeschlagen: Gegenstände oder Geld sind nicht mehr verfügbar."
+      "tradeFailed": "Handel fehlgeschlagen: Gegenstände oder Geld sind nicht mehr verfügbar.",
+      "tradeBound": "Dieser Gegenstand ist gebunden und kann nicht gehandelt werden."
     },
     "logs": {
       "standUp": "Ihr steht auf.",
@@ -5855,7 +5978,7 @@ export const de_DE: EnTranslations = {
         "combat": "Im Kampf",
         "dungeon": "Im Dungeon",
         "dead": "Tot",
-        "afk": "Away"
+        "afk": "Abwesend"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -5963,7 +6086,7 @@ export const de_DE: EnTranslations = {
     },
     "cast": {
       "fishing": "Angeln",
-      "gathering": "Gathering",
+      "gathering": "Sammeln",
       "demonHeal": "Dämonenheilung",
       "thunzharrStormcall": "Sturmruf"
     }
@@ -6102,7 +6225,6 @@ export const de_DE: EnTranslations = {
       "ifYouEquip": "Wenn Ihr dies anlegt",
       "damageSpeed": "{min} - {max} Schaden Tempo {speed}",
       "dps": "({dps} Schaden pro Sekunde)",
-      "dagger": "Dolch",
       "armorStat": "{value} Rüstung",
       "stat": "+{value} {stat}",
       "useFood": "Benutzen: Stellt über {seconds} Sek. {amount} Gesundheit wieder her. Ihr müsst beim Essen sitzen bleiben.",
@@ -8478,127 +8600,142 @@ export const de_DE: EnTranslations = {
         "name": "Elixier der Schlange"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Moosfell-Weste"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Dörnlinggriffe"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Kettengriffe des Akolythen"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Weih-Kettengürtel"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Dornenwurzel-Stab"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Talfeuer-Laterne"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Moorrinden-Beinkleider"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Moorblüten-Schritte"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Moorwächter-Sabatons"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Sumpflicht-Kettenhemd"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Dornendämmer-Umhang"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Moorschatten-Streitkolben"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Wildhain-Gürtel"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Felswacht-Schultern"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Felsendorn-Großstab"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Mondrinden-Gewänder"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Gipfelgesang-Helm"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Sturmgesang-Handschuhe"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Felspirsch-Gürtel"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Sturmwurzel-Kapuze"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Donnerwacht-Beinschienen"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Geistschritt-Sohlen"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Splitterfang-Griffe"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Splittersang-Umhang"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Wyrmkult-Zaubergriffe"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Dorngipfel-Wildwickel"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Sturmweih-Kettenhemd"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Gruftblüten-Schulterplatten"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Grabwyrm-Dornstreitkolben"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Gewänder des erwachenden Hains"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Nachtfangs Großstab"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Streitkolben der gegeißelten Wildnis"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Fluthymnen-Schuhe"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Perlenwacht-Aegis"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Wildwuchs-Beinkleider"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Griffe des Hainhüters"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Grünende Wanderer"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Mondwacht-Gürtel"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Traumwurzel-Stiefel"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Sturmrinden-Umhang"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Wildseelen-Streitkolben"
+      },
+      "resonant_thread": {
+        "name": "Resonanter Faden"
+      },
+      "resonant_hide": {
+        "name": "Resonantes Fell"
+      },
+      "resonant_links": {
+        "name": "Resonante Kettenglieder"
+      },
+      "resonant_steel": {
+        "name": "Resonanter Stahl"
+      },
+      "resonant_timber": {
+        "name": "Resonantes Holz"
       },
       "conjured_water4": {
         "name": "Herbeigezaubertes Quellwasser"
@@ -10692,23 +10829,143 @@ export const de_DE: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Ein Handwerk, das Sie Ihr Eigen nennen können",
-        "text": "Können ist Wissen, {playerName}, doch Abstimmung ist ein Versprechen. Wähle zwei benachbarte Handwerke, deren Methoden du als deine Hauptberufe trägst, und bring mir dann Erz, das du im Tal mit eigenen Händen bearbeitet hast.",
-        "completion": "Das Versprechen gilt. Diese beiden Handwerke sind nun deine Hauptberufe, und das Wissen auf der anderen Seite wird zu deinem Hobby.",
+      "q_prof_attune_smith": {
+        "title": "Das Versprechen des Schmieds",
+        "text": "Stahl verzeiht keiner wandernden Hand, also sage ich dir offen, bevor du irgendetwas schwörst. Binde dich an meine Schmiede und Waffenherstellung und Rüstungsherstellung werden deine zwei Hauptberufe, die einzigen Handwerke, die du über seltene Arbeit hinaus tragen kannst. Das Handwerk gegenüber von ihnen auf dem Rad setzt sich als dein Hobby fest, bis auf selten gearbeitet und nicht weiter. Deine anderen Gewerbe verbrennen nicht, {playerName}: sie werden nur still, ruhend bis du sie zurückrufst. Und wisse das, bevor der Hammer fällt: Verlasse dieses Paar für ein anderes und du wirst durch ehrliche Arbeit zurückkriechen müssen, fünf Feinde niedergestreckt beim ersten Mal, acht beim nächsten, elf danach, mehr bei jedem Mal, das du abirrst. Stehst du noch hier? Dann bring mir drei Erzadern, aus dem Tal mit deinen eigenen Händen gearbeitet, und wir nennen das Versprechen besiegelt.",
+        "completion": "Gutes Erz und gute Hände, um es zu bearbeiten. Waffenherstellung und Rüstungsherstellung gehören dir jetzt zur Meisterschaft. Verdiene dir den Rest.",
         "objectives": {
           "0": {
             "label": "Erzader abgebaut"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Wiedergutmachung leisten",
-        "text": "Du hast dieses Paar bereits getragen, {playerName}. Zurückzukehren ist kein neues Gelöbnis. Hilf, den Weg durch das Tal freizuhalten, und die Arbeit wird deinen Händen in Erinnerung rufen, was sie einst kannten.",
-        "completion": "Der alte Rhythmus kehrt zurück. Dein früheres Paar ist wieder aktiv.",
+      "q_prof_attune_outfitter": {
+        "title": "Das Maß des Ausrüsters",
+        "text": "Bemiss die Kosten, bevor du schneidest, das ist die erste Regel an meinem Webstuhl. Wähle mich und Lederverarbeitung und Schneiderei werden deine zwei Hauptberufe, das Paar, das du über seltene Arbeit hinaustragen kannst; das ihnen gegenüberliegende Handwerk setzt sich als dein Hobby fest, auf selten gebracht und dort belassen. Die Gewerbe, die du zur Seite legst, werden nicht aufgetrennt, {playerName}, nur gefaltet, ruhend bis du sie wieder aufnimmst. Sei sicher: solltest du dieses Paar verlassen und es später zurückwollen, ist der Heimweg mit Arbeit bezahlt, die sich jedes Mal verlängert: fünf Erlegte beim ersten Mal, dann acht, dann elf, immer etwas mehr. Wenn dein Sinn gemacht ist, leg vier Webholz-Spinnen nieder und bring ihre Seide zum Webstuhl, denn guter Faden beginnt jedes gute Kleidungsstück.",
+        "completion": "Gleichmäßiger Faden, gleichmäßige Hand. Lederverarbeitung und Schneiderei gehören dir, so weit dein Können reicht. Miss zweimal ab, und sie werden dich nicht enttäuschen.",
+        "objectives": {
+          "0": {
+            "label": "Webholz-Spinne erlegt"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Ein Rezept, das sich lohnt",
+        "text": "Jedes gute Gericht besteht aus zwei Geschmacksrichtungen, die zusammenpassen, und so ist es auch mit einem guten Handwerk, {playerName}. Setz dich zu mir und Alchemie und Kochen werden deine zwei Hauptberufe, die zwei, die du über seltene Arbeit hinaus köcheln kannst; das Handwerk auf der gegenüberliegenden Seite des Rades ist dein Hobby, bis auf selten erhitzt und nicht heißer. Der Rest deiner Gewerbe bleibt in der Speisekammer, ruhend, nicht verdorben, bereit, wann immer du sie wieder hervorholst. Klare Warnung, solange der Topf noch kalt ist: Wechselst du zu einem anderen Paar und willst nach Hause, ist der Heimweg eine Mühe, die wächst: fünf Tiere beim ersten Mal, acht beim nächsten, elf danach, schwerer mit jeder Portion. Noch Hunger darauf? Dann jage mir vier Wildschweine, denn eine Küche, die ihr Salz wert ist, beginnt mit gutem Fleisch.",
+        "completion": "Das ist ein Anfang mit Substanz. Alchemie und Kochen gehören dir, um sie so weit zu köcheln, wie du möchtest. Komm hungrig zurück.",
+        "objectives": {
+          "0": {
+            "label": "Wildschwein gejagt"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "Eine brisante Vereinbarung",
+        "text": "Oh, oh, du willst das gute Zeug, das laute Zeug, ja? Hör zu, hör zu, bevor du irgendetwas anfasst, das tickt: Sag das Wort und Ingenieurskunst und Alchemie werden deine zwei Hauptberufe, die einzigen zwei, die du über seltene Arbeit hinaus treiben darfst (da wird es WITZIG, glaub mir). Das gegenüberliegende Handwerk kommt als Hobby in deine Tasche, selten und nicht weiter, nicht schmollen. Deine anderen Gewerbe? Nicht weg, {playerName}, sie schlafen nur, weck sie auf, wann immer du magst. Aber (es gibt immer ein Aber, halte die Zündschnur) lass dieses Paar fallen und watschel später zurück und es kostet dich Schweiß, der sich ansammelt: fünf Sachen beim ersten Mal, acht beim nächsten, elf danach, mehr, mehr, jedes einzelne Mal, wenn du kalte Füße bekommst. Ja? JA? Dann geh und pflücke mir drei Kräuterflecken, die flüchtigen, frag nicht welche, sie sind alle ein bisschen flüchtig, wenn man fest genug glaubt.",
+        "completion": "HA. Reagenzien, echte, und alle Finger noch dran, gut, gut. Ingenieurskunst und Alchemie, dein, geh und mach etwas, das es bereut. Los gehts.",
+        "objectives": {
+          "0": {
+            "label": "Kräuterpflanze geerntet"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Zurück zur Schmiede",
+        "text": "Du bist also zur Schmiede zurückgekehrt. Ich werde nicht so tun, als würde es nicht schmerzen, {playerName}, aber ich bin gerecht und die Arbeit ist es auch. Du kennst den Preis der Rückkehr: Arbeit, und bei jedem Mal mehr, das du ferngeblieben bist. Lege die Wölfe nieder, die die Nordstraße bedrängen, und das Schwingen wird deinen Armen in Erinnerung rufen, was dieses Paar einst von ihnen verlangte.",
+        "completion": "Der Rhythmus ist wieder in deinen Händen. Waffenherstellung und Rüstungsherstellung sind wieder deine Hauptberufe. Mach es dir nicht zur Gewohnheit zu gehen.",
         "objectives": {
           "0": {
             "label": "Waldwolf getötet"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Fäden wiederverknüpft",
+        "text": "Doch wieder an meinem Webstuhl. Ich hege keinen Groll, {playerName}, aber der Faden erinnert sich an eine Hand, die ihn losgelassen hat, und die Kosten, ihn wieder aufzunehmen, werden jedesmal länger bemessen. Lichte die Webholz-Spinnen, die den westlichen Wald bevölkern, und die Mühe wird deine Hände beruhigen, bevor sie wieder gute Seide berühren.",
+        "completion": "Wieder stabil. Lederverarbeitung und Schneiderei kehren als Hauptberufe in deine Hände zurück. Miss zweimal ab, bevor du das nächste Mal wanderst.",
+        "objectives": {
+          "0": {
+            "label": "Webholz-Spinne erlegt"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Zurück am Herd",
+        "text": "Schau an, wer wieder an meinem Herd steht. Keine harten Gefühle, {playerName}, eine Küche hat immer Platz, aber du weißt, dass die Rechnung bei jeder Rückkehr länger wird. Geh, lichte die Wildschweine auf der östlichen Wiese, denn ehrlicher Schweiß ist die erste Zutat, und es wird deinen Händen die Arbeit wieder in Erinnerung rufen.",
+        "completion": "Da ist der alte Geschmack. Alchemie und Kochen sind wieder als Hauptberufe auf deinem Herd. Bleib diesmal eine Weile.",
+        "objectives": {
+          "0": {
+            "label": "Wildschwein gejagt"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Das Hauptbuch wächst",
+        "text": "Du bist ZURÜCK, ha, sie kommen immer zurück, der laute Kram hat eine Anziehungskraft, oder? Kein Schmollen von mir, {playerName}, aber das Hauptbuch, oh das Hauptbuch, es wächst jedes Mal wenn du abhandenkommst, mehr bei jeder Rückkehr, das ist nur fair. Geh und räum die Tunnelratten aus dem Schacht für mich, zuerst schwitzen, dann zündeln, das ist die Regel, die ich gerade erfunden habe.",
+        "completion": "DA ist es, das Kribbeln ist wieder in deinen Händen. Ingenieurskunst und Alchemie, wieder Hauptberufe, los, geh und mach einen Knall. Versuch diesmal zu bleiben, ja?",
+        "objectives": {
+          "0": {
+            "label": "Tunnelratte ausgerottet"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Schmiedeauftrag",
+        "text": "Die Schmiede will immer gefüttert werden, {playerName}. Bring mir acht Brocken Kupfererz und ich werde dich für die Fuhre entlohnen. Kein Tamtam, nur Erz und Münzen.",
+        "completion": "Gutes Gewicht, keine Schlacke. Hier ist dein Anteil. Die Schmiede wird bald wieder hungrig sein.",
+        "objectives": {
+          "0": {
+            "label": "Kupfererz geliefert"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Küchenauftrag",
+        "text": "Meine Vorratskammer sieht mager aus, {playerName}, und magere Vorratskammern machen griesgrämige Köche. Hol mir acht Stücke Wildfleisch und da ist Geld für dich drin, plus meine unsterbliche Dankbarkeit, die weniger wert ist, aber besser schmeckt.",
+        "completion": "Das nenne ich eine volle Speisekammer. Hier ist dein Lohn. Komm wieder, wenn deine Taschen schwer sind.",
+        "objectives": {
+          "0": {
+            "label": "Wildfleisch geliefert"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Webstuhauftrag",
+        "text": "Der Webstuhl läuft leer und untätige Hände verschwenden das Tageslicht, {playerName}. Bring mir sechs Knäuel Spinnenseide und ich zahle dir einen fairen Satz, auf den Kupferpfennig genau.",
+        "completion": "Feine Seide, gleichmäßig gesponnen. Deine Münzen, genau abgemessen. Der Webstuhl dankt dir, und ich auch.",
+        "objectives": {
+          "0": {
+            "label": "Spinnenseide geliefert"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Werkzeugmachereiauftrag",
+        "text": "Schäfte, Griffe, Schäfte, ich verbrauche Holz, als ginge es aus der Mode, was es NICHT tut, Holz ist ewig, {playerName}. Schlepp mir acht Eisenrinden-Stämme und ich zahle dich, Münzen, echte Münzen, kein Gefallen, ich verspreche es, meistens.",
+        "completion": "Perfekt, perfekt, gerade Maserung, keine Fäulnis. Hier, deine Münzen, siehst du, ich halte mein Wort (meistens). Bring mehr, wenn du über einen Baum stolperst.",
+        "objectives": {
+          "0": {
+            "label": "Eisenrinden-Stamm geliefert"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Gerbereiauftrag",
+        "text": "Die Bottiche sind leer. Bring acht Rohhäute. Münzen, wenn du es tust.",
+        "completion": "Gute Häute. Faire Bezahlung. Wieder, wenn du mehr hast.",
+        "objectives": {
+          "0": {
+            "label": "Rohhaut geliefert"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Apothekenauftrag",
+        "text": "Meine Regale benötigen Goldblatt, und der Vorrat des Marktes ist, wie vorhersehbar, verfälscht. Bring mir sechs Goldblatt-Kräuter, unzerquetscht, und du wirst genau entschädigt. Zerquetschte Blätter werden abgelehnt, also achte auf deine Satteltasche.",
+        "completion": "Annehmbar. Wirkungsvoll und ordnungsgemäß behandelt. Deine Bezahlung, auf den Pfennig gezählt. Lass es dir nicht zu Kopf steigen, das ist ein anderes Reagenz.",
+        "objectives": {
+          "0": {
+            "label": "Goldblatt-Kraut geliefert"
           }
         }
       },
@@ -11014,9 +11271,109 @@ export const de_DE: EnTranslations = {
         "body": "Handwerker,\n\nDie Nachricht erreicht die Gilde von eurer Arbeit im Rüstungsbau und im Ingenieurswesen: Platten vernietet und Zahnräder bearbeitet, die beiden Handwerke ergänzen sich gegenseitig. Benachbarte Handwerke, die zusammengearbeitet wurden, kennzeichnen eine Hand, die zur Einstimmung bereit ist. Suchen Sie Schmied Haldren auf, den Rüstungsschmied von Eastbrook: Er spricht vorerst für die Meister. Beweisen Sie ihm Ihr Können mit der Arbeit Ihrer eigenen Hände, und er wird dafür sorgen, dass Ihre beiden Hauptfächer aufeinander abgestimmt sind.\n\nIn gutem Ansehen,\nDie Handwerksgilde"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Die Gildenhalle",
+        "subject": "Dein Handwerk, ehrlich gemacht",
+        "body": "Gildengenosse,\n\nDie Gilde hat eine neue Berechnung der Meisterschaft angenommen. Jede Hand beginnt den Aufstieg von vorn: deine Handwerkskünste und deine Sammelberufe wurden auf null gesetzt.\n\nAlles andere gehört dir, unberührt: deine Rezepte, deine Werkzeuge und Materialien, dein Bank und Gold, deine Abstimmungen und Titel, deine Taten und dein Ansehen, deine Quests und Post.\n\nDer Aufstieg ist jetzt ehrlich. Billige Arbeit trägt dich nicht. Suche nach schwierigeren Rezepten, reichhaltigeren Adern und tieferen Gewässern.\n\nMit Achtung,\nDie Gildenhalle"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Schmiedemeisterin Darva",
+        "subject": "Ein Funken, den es zu bemerken gilt",
+        "body": "Nachricht erreicht meine Schmiede, dass einer eurer Hauptberufe nun ungewöhnliche Arbeit hält. Es ist die kleinste Sprosse einer langen Leiter, aber ihr habt sie am Amboss verdient, nicht durch Bitten. Haltet das Feuer heiß."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Schmiedemeisterin Darva",
+        "subject": "Seltene Arbeit, und verdient",
+        "body": "Man sagt mir, ein Hauptberuf von euch hat seltene Arbeit erreicht. Das ist die Sprosse, wo nachlässige Hände abfallen und die wahren Schmiede stehen bleiben. Ihr steht noch. Gut."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Schmiedemeisterin Darva",
+        "subject": "Das Metall antwortet euch jetzt",
+        "body": "Ein Hauptberuf von euch hat das Seltene überstiegen und ernsthafte Arbeit erreicht. Das Metall antwortet einer solchen Hand, kämpft nicht mehr dagegen an. Lasst das Lob eure Arme nicht weichmachen."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Schmiedemeisterin Darva",
+        "subject": "Nahe der Spitze der Leiter",
+        "body": "Einer eurer Hauptberufe steht eine einzige Sprosse unter der Meisterschaft. Wenige Hände, die ich kenne, erreichen diese Höhe, und noch weniger behalten ihre Schärfe hier. Beendet den Aufstieg."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Schmiedemeisterin Darva",
+        "subject": "Meisterschaft, endlich",
+        "body": "Ein Hauptberuf von euch hat die Meisterschaft erreicht, die höchste Stufe, die eine Hand erklimmen kann. Ich gebe Lob nicht frei, also hört das einmal: Die Schmiede ist stolz auf euch. Geht jetzt und lehrt das Feuer etwas Neues."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Weberin Ottilie",
+        "subject": "Eine gerade erste Reihe",
+        "body": "Die Gilde vermerkt, dass einer eurer Hauptberufe ungewöhnliche Arbeit erreicht hat. Es ist nur die erste Reihe von vielen, aber sie ist gerade und wahrhaftig. Messt die nächste genauso sorgfältig ab."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Weberin Ottilie",
+        "subject": "Seltene Arbeit, gut abgemessen",
+        "body": "Ein Hauptberuf von euch hat sich zu seltener Arbeit hochgearbeitet. Da zeigt eine nachlässige Hand jeden fallen gelassenen Stich, und eure hat es nicht. Ich bin leise zufrieden."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Weberin Ottilie",
+        "subject": "Das Muster tritt klar hervor",
+        "body": "Einer eurer Hauptberufe ist über das Seltene hinaus in feinere Arbeit vorgedrungen. Das Muster tritt einer Hand auf dieser Ebene klar hervor, kein Raten mehr. Bleibt dabei, zweimal abzumessen."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Weberin Ottilie",
+        "subject": "Eine Reihe von der Spitze",
+        "body": "Ein Hauptberuf von euch sitzt eine Reihe unter der Meisterschaft. Die letzte Reihe ist immer am schwersten gerade zu halten. Beeilt euch jetzt nicht."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Weberin Ottilie",
+        "subject": "Der letzte Stich",
+        "body": "Ein Hauptberuf von euch hat die Meisterschaft erreicht. Ich habe eure Arbeit zweimal gemessen, wie ich alles messe, und sie hält stand. Nur wenige Hände setzen den letzten Stich so sauber. Ich bin stolz, und das sage ich nicht leichtfertig."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Koch Marlow",
+        "subject": "Ein Vorgeschmack auf das, was kommt",
+        "body": "Kunde von eurer Küche sagt mir, dass einer eurer Hauptberufe ungewöhnliche Arbeit erreicht hat. Es ist ein erster Vorgeschmack, nicht mehr, aber ein vielversprechender. Haltet den Topf in Bewegung."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Koch Marlow",
+        "subject": "Seltene Arbeit, und keine angebrannten Stellen",
+        "body": "Man sagt mir, ein Hauptberuf von euch hat sich zu seltener Arbeit hochgekocht. Das ist die Hitze, bei der die meisten Köche das Gericht anbrennen lassen, und ihr habt es nicht getan. Setzt euch, aber nicht lang."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Koch Marlow",
+        "subject": "Jetzt kocht ihr",
+        "body": "Einer eurer Hauptberufe hat sich über das Seltene hinaus in echte Tiefe geköchelt. Jetzt kocht ihr, wie man sagt. Würzt mutig und probiert weiter."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Koch Marlow",
+        "subject": "Ein Gang vom Festmahl",
+        "body": "Ein Hauptberuf von euch ist nur noch ein Gang von der Meisterschaft entfernt. Der letzte ist immer der reichhaltigste und am leichtesten zu übertreiben. Ruhige Hände am Schöpflöffel."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Koch Marlow",
+        "subject": "Meisterschaft, heiß serviert",
+        "body": "Ein Hauptberuf von euch hat die Meisterschaft erreicht, das oberste Regal der ganzen Speisekammer. Ich ernähre alle, aber nur wenige kochen sich so weit nach oben. Stolz auf euch, wirklich. Geht jetzt und macht etwas, das sie am Tisch weinen lässt."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Tüftler Gizzel",
+        "subject": "Der ERSTE Funke, ha",
+        "body": "Oi, die Zahlen sagen mir, einer eurer Hauptberufe hat gerade ungewöhnliche Arbeit erreicht, kleine Kartoffeln, winzig, aber es KNALLTE, ja? Der erste Funke ist immer der süßeste. Mehr Funken. Los."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Tüftler Gizzel",
+        "subject": "Selten, oh, SELTEN",
+        "body": "Man sagt mir, ein Hauptberuf von euch ist zu seltener Arbeit aufgestiegen, und dort fängt es an, richtig gefährlich zu werden (die gute Art). Die meisten Hände hören auf, bevor der Spaß beginnt. Ihr nicht. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Tüftler Gizzel",
+        "subject": "Jetzt wird es laut",
+        "body": "Einer eurer Hauptberufe hat das Seltene hinter sich gelassen und ist beim ernsthaften Zeug angelangt, oh, hier wird es LAUT. Hört jetzt nicht auf, was auch immer ihr tut, Schwung ist alles, Zündschnüre auch."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Tüftler Gizzel",
+        "subject": "Eine Sprosse, EINE, von der Spitze",
+        "body": "Ein Hauptberuf von euch ist EINE Sprosse unter der Meisterschaft, eine, einzeln, spürt ihr es summen? Der letzte Schritt ist der größte Knall. Nicht blinzeln."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Tüftler Gizzel",
+        "subject": "MEISTERSCHAFT, kabumm",
+        "body": "Ein Hauptberuf von euch hat die Meisterschaft erreicht, die alleroberste SPITZE, kabumm, die ganze Leiter, erledigt. Ich verteile kein Lob, ich verteile Zündschnüre, aber hier, nehmt beides: ihr seid brilliant und leicht einschüchternd. Geht und macht die Berge nervös."
       }
     },
     "itemSets": {

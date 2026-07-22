@@ -429,6 +429,7 @@ export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl
       boolToggle(s, 'showDailyRewardsChest', 'hudChrome.options.showDailyRewardsChest'),
       boolToggle(s, 'showItemLevel', 'hudChrome.options.showItemLevel'),
       boolToggle(s, 'showOwnNameplate', 'hudChrome.options.showOwnNameplate'),
+      boolToggle(s, 'showPlayerNameplates', 'hudChrome.options.showPlayerNameplates'),
     ]),
     ...tag('frames', [
       slider(s, 'playerFrameScale', 'hudChrome.options.playerFrameScale'),
@@ -490,7 +491,14 @@ export function interfaceControlsForTab(
   controls: OptionsControl[],
   tab: InterfaceTab,
 ): OptionsControl[] {
-  return controls.filter((c) => c.category === tab);
+  const seen = new Set<string>();
+  return controls.filter((c) => {
+    if (c.category !== tab) return false;
+    if (c.control === 'note' || c.control === 'musicToggle') return true;
+    if (seen.has(c.key)) return false;
+    seen.add(c.key);
+    return true;
+  });
 }
 
 // ---------------------------------------------------------------------------

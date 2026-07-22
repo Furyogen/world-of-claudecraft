@@ -609,7 +609,8 @@ export const sv_SE: EnTranslations = {
         "staff": "Stav",
         "wand": "Trollstav",
         "bow": "Båge",
-        "crossbow": "Armborst"
+        "crossbow": "Armborst",
+        "polearm": "Stångvapen"
       },
       "badge": {
         "flagship": "Flaggskepp",
@@ -706,10 +707,10 @@ export const sv_SE: EnTranslations = {
       "expandHint": "Fäll ut uppdragsspåraren"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
-      "chat": "Chat",
-      "combat": "Combat"
+      "general": "Allmänt",
+      "frames": "Ramar",
+      "chat": "Chatt",
+      "combat": "Strid"
     },
     "chatTimestamps": {
       "show": "Visa chattidsstämplar",
@@ -1037,6 +1038,7 @@ export const sv_SE: EnTranslations = {
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
       "showDevBadges": "Visa utvecklarmärken",
       "showOwnNameplate": "Visa min namnskylt",
+      "showPlayerNameplates": "Visa spelares namnskyltar",
       "uiScale": "Gränssnittsskala",
       "playerFrameScale": "Spelarramens skala",
       "targetFrameScale": "Målramens skala",
@@ -1184,8 +1186,8 @@ export const sv_SE: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Anfall",
+      "defense": "Försvar"
     },
     "statInfo": {
       "fromYour": "Från dina {value} {stat}:",
@@ -1445,7 +1447,7 @@ export const sv_SE: EnTranslations = {
     "corpseHarvest": {
       "title": "Skörda",
       "harvestButton": "Skörda",
-      "harvestButtonTooltip": "Skörda: samla hantverksmaterial från liket (skinn, huggtand, silke och liknande delar), separat från dess byte. Vem som helst kan skörda, men varje lik kan bara skördas av en spelare.",
+      "harvestTooltip": "Samlar de markerade komponenterna. Varje kadaver kan skördas en gång, den som är först. Tar inte bytet.",
       "concentrateHint": "Ju färre delar du väljer, desto högre kvalitetsnivå får var och en.",
       "alreadyHarvested": "Det här kadavret har redan skördats.",
       "componentAria": "Skörda {component}",
@@ -1463,6 +1465,8 @@ export const sv_SE: EnTranslations = {
     "townFocus": {
       "title": "Stadsfokus",
       "hint": "Fokuspoäng ger en bonus ovanpå varje komponents grundavkastning. Ofokuserade komponenter stannar på grundnivån.",
+      "tierHint": "Varje {points} poäng på en komponent höjer dess skördnivå ett steg, upp till {steps} steg; färre än {points} poäng ökar fortfarande utbytet.",
+      "townOnlyHint": "Fokus kan bara ändras medan du är i staden.",
       "budgetLabel": "Poäng kvar: {remaining} / {budget}",
       "saveButton": "Spara fokus",
       "notInTownHint": "Du måste vara i staden för att ställa in ditt fokus.",
@@ -1521,6 +1525,7 @@ export const sv_SE: EnTranslations = {
       "dragEquipHint": "Dra till din karaktär för att utrusta",
       "dragDestroyHint": "Dra ut i världen för att förstöra",
       "reorderNeedsRecent": "Rensa filtret och sortera efter Nyliga för att ordna om dina väskor",
+      "itemAriaInstanced": "{item}, antal {count}, tillverkarmärkt kopia",
       "filterGroupAria": "Filtrera väskor efter kategori",
       "filterAll": "Alla",
       "filterWeapon": "Vapen",
@@ -1686,7 +1691,9 @@ export const sv_SE: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kista",
-      "takeAllTooltip": "Ta allt: samla alla mynt och föremål i bytesfönstret."
+      "takeLootButton": "Ta byte",
+      "takeLootTooltip": "Tar mynten och fallna föremål. Använder inte upp skörden.",
+      "unifiedPressHint": "Interagera-tangenten plundrar och skördar i ett tryck, med ditt stadsfokus."
     },
     "spellbook": {
       "addToBarAria": "Lägg till {name} i handlingsfältet",
@@ -1695,7 +1702,7 @@ export const sv_SE: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "BV"
     },
     "mobTooltip": {
       "levelFamily": "Nivå {level} {family}",
@@ -1834,6 +1841,7 @@ export const sv_SE: EnTranslations = {
         "legend": "LEGEND",
         "shill": "MARKNADSFÖRARE"
       },
+      "roleTagChatTitle": "Verifierad serverroll: {role}",
       "guildMember": "Verifierad medlem",
       "notMember": "Inte med på servern ännu",
       "joinCta": "Gå med i Discord",
@@ -1958,6 +1966,7 @@ export const sv_SE: EnTranslations = {
       "removeParcelAria": "Ta bort {item} från brevet",
       "parcelQtyDecreaseAria": "Skicka en {item} mindre",
       "parcelQtyIncreaseAria": "Skicka en till {item}",
+      "parcelQtyAria": "Antal {item} att skicka",
       "sendButton": "Skicka brev",
       "postageNote": "Porto: {amount}. Korpen flyger i ungefär {seconds}s.",
       "arrivedBanner": "Korpen har landat: post från {name}.",
@@ -2094,41 +2103,43 @@ export const sv_SE: EnTranslations = {
       "blockAction": "Blockera",
       "nowBlocking": "{name} blockerad.",
       "stopBlockingTitle": "Avblockera {name}",
-      "onlineHeader": "Online ({n})",
-      "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "onlineHeader": "Anslutna ({n})",
+      "offlineHeader": "Frånkopplade ({n})",
+      "hideOffline": "Dölj frånkopplade",
+      "hideOfflineTitle": "Dölj frånkopplade gillesmedlemmar"
     },
     "gathering": {
       "title": "Insamling",
       "mining": "Gruvdrift",
       "logging": "Skogsavverkning",
       "herbalism": "Örtkunskap",
-      "fishing": "Fishing",
+      "fishing": "Fiske",
       "notReady": "Den här resursnoden har inte återspawnats för dig ännu.",
       "gatherLine": "Du samlar: {name}.",
       "gatherLineQty": "Du samlar in: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Du drar in: {name}",
+      "biteLine": "Något nappar på betet!",
+      "gotAwayLine": "Det kom undan.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Malmåder",
+        "wood": "Timmerbestånd",
+        "herb": "Örtfläck"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Kräver en tier {tier} gruvhacka",
+        "logging": "Kräver en tier {tier} skogsavverkningsyxa",
+        "herbalism": "Kräver en tier {tier} örtinsamlingsskära"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Du behöver en tier {tier} gruvhacka för att bryta den här ådern.",
+        "logging": "Du behöver en tier {tier} skogsavverkningsyxa för att fälla det här beståndet.",
+        "herbalism": "Du behöver en tier {tier} örtinsamlingsskära för att samla den här fläcken."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Du behöver ett tier {tier} insamlingsverktyg för att återvinna de bästa materialen.",
+      "downgradeMark": "Väskorna fulla: fyndet förvarades utan samlarmärke.",
+      "downgradeFind": "Väskorna fulla: ett orört fynd gled undan.",
+      "stateReady": "Redo",
+      "stateCooldown": "Återspawnning"
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -2159,6 +2170,49 @@ export const sv_SE: EnTranslations = {
       "tailoring": "Skrädderi",
       "leatherworking": "Läderhantverkeri"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Förtrollning Vapen - Kraft",
+      "enchant_weapon_intellect": "Förtrollning Vapen - Besvärjelsestyrka",
+      "enchant_helmet_fortitude": "Förtrollning Hjälm - Uthållighet",
+      "enchant_neck_spirit": "Förtrollning Halsband - Ande",
+      "enchant_shoulder_agility": "Förtrollning Axelplåtar - Rörlighet",
+      "enchant_chest_stamina": "Förtrollning Bröst - Uthållighet",
+      "enchant_waist_stamina": "Förtrollning Bälte - Uthållighet",
+      "enchant_legs_stamina": "Förtrollning Ben - Uthållighet",
+      "enchant_gloves_agility": "Förtrollning Handskar - Rörlighet",
+      "enchant_gloves_intellect": "Förtrollning Handskar - Besvärjelsestyrka",
+      "enchant_feet_agility": "Förtrollning Stövlar - Rörlighet",
+      "enchant_ring_spirit": "Förtrollning Ring - Ande",
+      "enchant_weapon_agility": "Förtrollning Vapen - Rörlighet",
+      "enchant_helmet_intellect": "Förtrollning Hjälm - Intelligens",
+      "enchant_helmet_armor": "Förtrollning Hjälm - Förstärkning",
+      "enchant_neck_intellect": "Förtrollning Halsband - Intelligens",
+      "enchant_neck_agility": "Förtrollning Halsband - Rörlighet",
+      "enchant_shoulder_strength": "Förtrollning Axelplåtar - Styrka",
+      "enchant_shoulder_intellect": "Förtrollning Axelplåtar - Intelligens",
+      "enchant_chest_spirit": "Förtrollning Bröst - Ande",
+      "enchant_chest_armor": "Förtrollning Bröst - Förstärkning",
+      "enchant_waist_strength": "Förtrollning Bälte - Styrka",
+      "enchant_waist_agility": "Förtrollning Bälte - Rörlighet",
+      "enchant_legs_intellect": "Förtrollning Ben - Intelligens",
+      "enchant_gloves_strength": "Förtrollning Handskar - Styrka",
+      "enchant_feet_strength": "Förtrollning Stövlar - Styrka",
+      "enchant_feet_stamina": "Förtrollning Stövlar - Uthållighet",
+      "enchant_ring_strength": "Förtrollning Ring - Styrka",
+      "enchant_ring_agility": "Förtrollning Ring - Rörlighet",
+      "enchant_ring_intellect": "Förtrollning Ring - Intelligens",
+      "enchant_weapon_greater_might": "Förtrollning Vapen - Större kraft",
+      "enchant_weapon_greater_spellpower": "Förtrollning Vapen - Större besvärjelsestyrka",
+      "enchant_helmet_greater_fortitude": "Förtrollning Hjälm - Större uthållighet",
+      "enchant_chest_greater_stamina": "Förtrollning Bröst - Större uthållighet",
+      "enchant_legs_greater_stamina": "Förtrollning Ben - Större uthållighet",
+      "enchant_gloves_greater_agility": "Förtrollning Handskar - Större rörlighet",
+      "enchant_weapon_runed_edge": "Förtrollning Vapen - Runristad egg",
+      "enchant_weapon_runed_focus": "Förtrollning Vapen - Runristat fokus",
+      "enchant_chest_runeweave": "Förtrollning Bröst - Runvävnad",
+      "enchant_legs_runed_hide": "Förtrollning Ben - Runhud",
+      "enchant_helmet_runed_links": "Förtrollning Hjälm - Runlänkar"
+    },
     "professions": {
       "title": "Yrken",
       "close": "Stäng yrken",
@@ -2178,7 +2232,7 @@ export const sv_SE: EnTranslations = {
       "tierPipAria": "Nivå {tier}",
       "nextUnlockTier": "{points} poäng till nästa nivå: mästerverksodds förbättras",
       "nextUnlockSpecialized": "{points} poäng till Specialiserad: materialkostnaderna sjunker",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Bemästrat, tills vidare",
       "perkSpecializedLine": "{craft}: Specialiserade, materialkostnader -{pct}%",
       "perkSpecializedAt": "Specialiserad på {threshold} skicklighet",
       "switchCost": "Nästa arketypbyte kostar {cost} botgöringspoäng",
@@ -2219,6 +2273,7 @@ export const sv_SE: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Resultat: titeln {title}; {majorA} och {majorB} blir obegränsade ämnen; {hobby} blir det sällsyntsbegränsade hobbyt; all övrig kunskapsbehållning bibehålls men begränsas till vanlig nivå när den är vilande.",
       "hobbyPreview": "Resultat: {hobby} blir det sällsyntsbegränsade hobbyt. Båda ämnena och alla bibehållna kunskapsvärden förblir oförändrade.",
+      "attunementReturnCost": "Om du lämnar det här paret kostar det {cost} botgöringsuppgifter att återvända till det.",
       "identity": {
         "title": "Hantverksidentitet",
         "syncing": "Väntar på din hantverksidentitet från riket.",
@@ -2258,16 +2313,64 @@ export const sv_SE: EnTranslations = {
       "skillReqLine": "Kräver {craft} {skill}",
       "difficultyFull": "Full skicklighetsvinst",
       "difficultyReduced": "Minskad färdighetsvinst",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimal skicklighetsvinst",
       "difficultyNone": "Ingen färdighetsvinst",
       "stationBadge": "Station",
       "stationOutOfRangeNamed": "Flytta till {station} för att skapa detta.",
+      "learnMoreAtStation": "{master} vid {station} kan lära dig fler {craft}-recept.",
       "masterworkToast": "Mästerverk! {name}",
       "masterworkZoneLine": "{crafter} skapade ett mästerverk {name}!",
       "tierUpToast": "{craft} avancerat till nivå {tier}!",
+      "trendNudge": "Dina händer lutar mot {archetype}. Dess inriktning väntar hos {master}.",
+      "trendNudgeNoMaster": "Dina händer lutar mot {archetype}. Sök en hantverksmästare för att ta det upp.",
+      "attunedZoneLine": "{name} har inriktats som {archetype}!",
+      "attunedBanner": "Inriktad: {title}",
+      "tierTutorial": {
+        "title": "Din första nivå",
+        "tierCap": "Ett hantverk når sin första nivå vid {skill} skicklighet, och varje nivå förbättrar vad det kan tillverka. Men ett hantverk klättrar bara förbi sällsynt arbete när det är ett av dina två ämnen.",
+        "radar": "Dina yrken bildar ett hjul. Inrikta dig på ett angränsande par och de två hantverken blir obegränsade ämnen, ett hantverk tvärsöver hjulet blir en sällsynt-begränsad hobby, och resten ligger vilande: deras kunskap bevarad, men begränsad till vanlig tills du tar upp dem igen.",
+        "masters": "Hantverksmästare i städerna erbjuder inriktningsuppdrag. Besök en för att välja ditt par när du är redo. Ingenting du lärt dig går någonsin förlorat.",
+        "dismiss": "Förstått"
+      },
       "makersMark": "Skapad av {name}",
+      "gatheredBy": "Samlat av {name}",
       "masterworkSeal": "Mästerverk",
-      "enchantedLine": "Förtrollad"
+      "enchantedLine": "Förtrollad",
+      "commissionToggle": "Beställningsstycke",
+      "commissionToggleHint": "Binds till den första karaktären som tar emot det i en handel.",
+      "commissionUnbound": "Beställningsstycke: binds till den första mottagaren",
+      "commissionBound": "Beställningsstycke: bundet till sin mottagare"
+    },
+    "itemMenu": {
+      "use": "Använd",
+      "equip": "Utrusta",
+      "disenchant": "Avförtrylla",
+      "salvage": "Bärga",
+      "applyEnchant": "Applicera förtrollning"
+    },
+    "enchanting": {
+      "disenchantedLine": "Du avförtrollar {item}.",
+      "salvagedLine": "Du bärgar {item}.",
+      "enchantAppliedLine": "Du förtrollar {item} med {enchant}.",
+      "notHeld": "Du har inte det föremålet.",
+      "notDisenchantable": "Du kan inte avförtrylla det.",
+      "notSalvageable": "Du kan inte bärga det.",
+      "disenchantThrottled": "Du avförtrollar för snabbt. Vänta en stund och försök igen.",
+      "salvageThrottled": "Du bärgar för snabbt. Vänta en stund och försök igen.",
+      "enchantThrottled": "Du förtrollar för snabbt. Vänta en stund och försök igen.",
+      "enchantWrongSlot": "Den förtrollningen kan inte appliceras på det föremålet.",
+      "enchantUnknown": "Den förtrollningen finns inte.",
+      "enchantInsufficient": "Du har inte materialet för den förtrollningen.",
+      "disenchantConfirmTitle": "Avförtrylla {item}?",
+      "disenchantConfirmBody": "Detta förstör {item} och ger arkanmaterial. Det kan inte ångras.",
+      "disenchantConfirmBodySpecial": "Detta förstör en särskild kopia av {item} (signerad, mästerverk eller förtrollad) och ger arkanmaterial. Det kan inte ångras.",
+      "salvageConfirmTitle": "Bärga {item}?",
+      "salvageConfirmBody": "Detta förstör {item} och ger hantverksmaterial. Det kan inte ångras.",
+      "salvageConfirmBodySpecial": "Detta förstör en särskild kopia av {item} (signerad, mästerverk eller förtrollad) och ger hantverksmaterial. Det kan inte ångras.",
+      "pickerTitle": "Applicera förtrollning",
+      "targetTitle": "Välj ett föremål att förtrylla",
+      "noEnchants": "Inget förtrollning använder det reagnset.",
+      "noTargets": "Inget behörigt föremål att förtrylla."
     },
     "training": {
       "title": "Utbildning: {name}",
@@ -2287,6 +2390,25 @@ export const sv_SE: EnTranslations = {
       "notTaughtHere": "Det receptet lärs inte ut här.",
       "alreadyKnown": "Det receptet känner du redan till.",
       "outOfRange": "Du måste vara på stationen för att träna."
+    },
+    "unbind": {
+      "title": "Upplösning: {name}",
+      "close": "Stäng upplösning",
+      "intro": "Mästaren kan lösa upp ett beställningsstycke från dess band, mot en avgift.",
+      "empty": "Du bär inga bundna beställningsstycken.",
+      "rowSub": "Löser upp bandet; stycket binds igen vid nästa handel.",
+      "unbindAria": "Lös upp {name} för {fee}",
+      "dialogOption": "Upplösning",
+      "dialogOptionAria": "Lös upp ett beställningsstycke med {name}",
+      "confirmTitle": "Lös upp beställningsstycke",
+      "confirmBody": "Lös upp {name} för {fee}?",
+      "confirmOk": "Lös upp",
+      "confirmCancel": "Avbryt",
+      "unbound": "Löste upp {name} för {fee}. Det binds igen vid nästa handel.",
+      "notEligible": "Det föremålet kan inte lösas upp.",
+      "notBound": "Det föremålet är inte bundet.",
+      "cannotAfford": "Du har inte råd med upplösningsavgiften.",
+      "outOfRange": "Du måste vara vid en hantverksstation för att lösa upp."
     },
     "finder": {
       "title": "Fängelsehålsletaren",
@@ -4134,7 +4256,7 @@ export const sv_SE: EnTranslations = {
   "stats": {
     "title": "Världsstatus",
     "accountsCreated": "Spelare",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Karaktärer skapade",
     "playersOnline": "Spelare online",
     "realmName": "Världens namn"
   },
@@ -5706,7 +5828,8 @@ export const sv_SE: EnTranslations = {
       "tradeInProgress": "En handel pågår redan.",
       "tradeTooFar": "Målet är för långt bort för att handla.",
       "tradeExpired": "Handelsförfrågan har gått ut.",
-      "tradeFailed": "Handeln misslyckades: föremål eller pengar är inte längre tillgängliga."
+      "tradeFailed": "Handeln misslyckades: föremål eller pengar är inte längre tillgängliga.",
+      "tradeBound": "Det föremålet är bundet och kan inte handlas."
     },
     "logs": {
       "standUp": "Du reser dig upp.",
@@ -5855,7 +5978,7 @@ export const sv_SE: EnTranslations = {
         "combat": "I strid",
         "dungeon": "I fängelsehåla",
         "dead": "Död",
-        "afk": "Away"
+        "afk": "Borta"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -5963,7 +6086,7 @@ export const sv_SE: EnTranslations = {
     },
     "cast": {
       "fishing": "Fiske",
-      "gathering": "Gathering",
+      "gathering": "Insamling",
       "demonHeal": "Demonläkning",
       "thunzharrStormcall": "Stormrop"
     }
@@ -6102,7 +6225,6 @@ export const sv_SE: EnTranslations = {
       "ifYouEquip": "Om du utrustar detta",
       "damageSpeed": "{min} - {max} Skada Hastighet {speed}",
       "dps": "({dps} skada per sekund)",
-      "dagger": "Dolk",
       "armorStat": "{value} Rustning",
       "stat": "+{value} {stat}",
       "useFood": "Använd: Återställer {amount} hälsa under {seconds} sek. Du måste förbli sittande medan du äter.",
@@ -8478,127 +8600,142 @@ export const sv_SE: EnTranslations = {
         "name": "Ormens elixir"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Mosshudssväst"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Törnlingshandsskar"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Akolytens kedjegrepphandskar"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Löfteskejdebälte"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Törnerotsstav"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Daleldslykta"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Kärrbarksbyxor"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Kärrblomsterskor"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Kärrväktarens sabatoner"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Träsklysets ringbrynja"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Skymntörnsmantel"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Kärrskuggans stridsklubba"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Vildlundsknippe"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Klippvärnets axelplåtar"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Klipptörnets storstav"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Månbarksklädsel"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Toppångshjälm"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Stormsångpansarhandskar"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Klippsmygarbälte"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Stormrotshuva"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Åskvärnetsbenskydd"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Gengångarstegskor"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Skärvtandsgrepphandskar"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Skärvångmantel"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Lindormskultens besvärjelsegrepphandskar"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Törntoppets vildlindor"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Stormlöftesringbrynja"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Kryptblomstrets axelskydd"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Gravlindormens törnklubba"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Den vaknade lundens klädsel"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Nightfangs storstav"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Gisselmarkens stridsklubba"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Tidvattenshymntofflor"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Pärlvärnets egid"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Vildväxtbyxor"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Lundväktarens handskar"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Grönskande vandrare"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Månvärnsknippe"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Drömrotsstövlar"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Stormbarksmantel"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Vildsjälens stridsklubba"
+      },
+      "resonant_thread": {
+        "name": "Resonant tråd"
+      },
+      "resonant_hide": {
+        "name": "Resonant skinn"
+      },
+      "resonant_links": {
+        "name": "Resonanta länkare"
+      },
+      "resonant_steel": {
+        "name": "Resonant stål"
+      },
+      "resonant_timber": {
+        "name": "Resonant timmer"
       },
       "conjured_water4": {
         "name": "Frambesvärjt källvatten"
@@ -10692,23 +10829,143 @@ export const sv_SE: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Ett hantverk att kalla ditt eget",
-        "text": "Skicklighet är kunskap, {playerName}, men inriktning är ett löfte. Välj två angränsande hantverk vars metoder du vill bära som dina ämnen, och ta sedan med mig malm bearbetad i Dalen med dina egna händer.",
-        "completion": "Löftet håller. Dessa två hantverk är nu dina ämnen, och kunskapen om det motstående hantverket blir ditt hobby.",
+      "q_prof_attune_smith": {
+        "title": "Smedens löfte",
+        "text": "Stål förlåter inte en vandrande hand, så jag berättar rakt ut innan du svär något. Bind dig till min smedja och Vapentillverkning och Rustningssmide blir dina två ämnen, de enda yrken du kan bära förbi sällsynt arbete. Hantverket mittemot på hjulet slår sig ner som din hobby, arbetat till sällsynt och inte längre. Dina andra yrken brinner inte bort, {playerName}: de tystnar helt enkelt, vilande tills du kallar dem tillbaka. Och vet detta innan hammaren faller: lämnar du det här paret för ett annat och du kryper tillbaka genom ärligt arbete, fem fiender nedlagda första gången du kommer hem, åtta nästa, elva efter det, mer varje gång du sticker. Fortfarande stående här? Hämta mig tre malmådror brutna ur dalen med egna händer, och vi kallar löftet ingånget.",
+        "completion": "God malm, och goda händer att arbeta den. Vapentillverkning och Rustningssmide är dina att bemästra nu. Förtjäna resten.",
         "objectives": {
           "0": {
             "label": "Malmåder skördad"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Att göra gott",
-        "text": "Du har burit det paret förut, {playerName}. Att återvända är inget nytt löfte. Hjälp till att hålla Dalsvägen fri, och arbetet ska påminna dina händer om vad de en gång visste.",
-        "completion": "Den gamla rytmen återvänder. Ditt tidigare par är aktivt igen.",
+      "q_prof_attune_outfitter": {
+        "title": "Utrustnarens mått",
+        "text": "Mät kostnaden innan du klipper, det är den första regeln vid min vävstol. Välj mig och Läderbearbetning och Skrädderi blir dina två ämnen, paret du kan bära bortom sällsynt arbete; hantverket mitt emot dem slår sig ner som din hobby, förd till sällsynt och lämnad där. Yrkena du lägger åt sidan är inte upprivna, {playerName}, bara vikta undan, vilande tills du tar upp dem igen. Var säker dock: borde du lämna det här paret och senare vilja ha det tillbaka, är vägen hem betald i arbete som förlängs varje gång, fem dödade vid första tillfället, sedan åtta, sedan elva, alltid lite mer. Om du är besluten, döda fyra spindelvävsedderkoppar och ta med deras silke till vävstolen, för god tråd börjar varje gott plagg.",
+        "completion": "Jämn tråd, jämn hand. Läderbearbetning och Skrädderi är dina att bära så långt din skicklighet når. Mät dubbelt, och de sviker dig inte.",
         "objectives": {
           "0": {
-            "label": "Skogsvarg dödad"
+            "label": "Spindelvävsedderkopp dödad"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Ett recept värt att bevara",
+        "text": "Varje god rätt är två smaker som hör ihop, och detsamma är ett gott hantverk, {playerName}. Sät dig med mig och Alkemi och Matlagning blir dina två ämnen, de två du kan simmra förbi sällsynt arbete; hantverket på andra sidan hjulet är din hobby, kryddad upp till sällsynt och inte hetare. Resten av dina yrken finns i skafferiet, vilande, inte bortskämda, redo när du hämtar dem. En rättvis varning medan grytan fortfarande är kall: sticker du iväg till ett annat par och vill komma hem är det ett slit som växer, fem djur första gången, åtta nästa, elva nästa gång, tyngre med varje hjälpning. Fortfarande hungrig på det? Jaga då fyra vildsvin åt mig, för ett kök värt sitt salt börjar med gott kött.",
+        "completion": "Nu är det en start med lite kött på benen. Alkemi och Matlagning är dina att simmra så högt du vill. Kom tillbaka hungrig.",
+        "objectives": {
+          "0": {
+            "label": "Vildsvin jagat"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "En flyktig uppgörelse",
+        "text": "Åh, åh, du vill ha det goda, det högljudda, ja? Lyssna, lyssna, innan du rör något som tickar: säg ordet och Ingenjörskonst och Alkemi blir dina två ämnen, de enda två du får driva förbi sällsynt arbete (det är där det blir ROLIGT, lita på mig). Hantverket mitt emot hamnar i fickan som hobby, sällsynt och inte längre, gnäll inte. Dina andra yrken? Inte borta, {playerName}, de slumrar bara, väck dem när du vill. Men (det finns alltid ett men, håll stubin) lämnar du det här paret och drar tillbaka senare kostar det svett som staplas, fem saker nedlagda första gången, åtta nästa, elva efter det, mer, mer, varje enda gång du kryper dig kall. Ja? JA? Plocka tre örtfläckar åt mig, de flyktiga, fråga inte vilka, de är alla lite flyktiga om du tror tillräckligt hårt.",
+        "completion": "HA. Reagenser, riktiga sådana, och alla dina fingrar fortfarande fastsatta, bra, bra. Ingenjörskonst och Alkemi, dina, gå och gör något som ångrar det. Ge dig av.",
+        "objectives": {
+          "0": {
+            "label": "Örtfläck skördad"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Tillbaka till smedjan",
+        "text": "Så du har kommit tillbaka till smedjan. Jag låtsas inte att det inte svider, {playerName}, men jag är rättvis och arbetet är rättvist också. Du vet priset för att återvända: arbete, och mer av det varje gång du stuckit iväg. Lägg ner ulvarna som hemsöker norrvägen, och svingen av det påminner dina armar om vad det här paret en gång krävde av dem.",
+        "completion": "Rytmen är tillbaka i dina händer. Vapentillverkning och Rustningssmide är dina ämnen igen. Gör inte en vana av att gå.",
+        "objectives": {
+          "0": {
+            "label": "Skogsulv dräpt"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Trådar åter sammanfogade",
+        "text": "Tillbaka vid min vävstol trots allt. Jag bär inget agg, {playerName}, men tråden minns en hand som lät den gå, och kostnaden att ta upp den igen mäts ut längre varje gång. Döda spindelvävsedderkopparna som tränger sig på västra skogen, och arbetet lugnar dina händer innan de rör god siden igen.",
+        "completion": "Stadigt igen. Läderbearbetning och Skrädderi återvänder till dina händer som ämnen. Mät dubbelt den här gången innan du vandrar.",
+        "objectives": {
+          "0": {
+            "label": "Spindelvävsedderkopp dödad"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Tillbaka på spisen",
+        "text": "Nå, se vem som är tillbaka vid min gryta. Inga hårda känslor, {playerName}, ett kök har alltid plats, men du vet att notan löper längre varje gång du går ut på den. Gå och tunna ut vildsvinsstammen på östängen, för ärlig svett är den första ingrediensen, och det kommer påminna dina händer om arbetet.",
+        "completion": "Där är den gamla smaken. Alkemi och Matlagning är tillbaka på din spis som ämnen. Stanna ett tag den här gången.",
+        "objectives": {
+          "0": {
+            "label": "Vildsvin jagat"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Boken växer",
+        "text": "Du ÅTERVÄNDE, ha, de återvänder alltid, det högljudda har en dragningskraft, eller hur? Inget sura miner från mig, {playerName}, men boken, åh boken, den växer varje gång du sticker iväg, mer för varje återkomst, det är bara rättvist. Gå och röj tunnelråttorna ur grävningen åt mig, svett först, gnistor sedan, det är regeln jag just hittade på.",
+        "completion": "DÄR är det, klian är tillbaka i dina händer. Ingenjörskonst och Alkemi, ämnen igen, sätt igång, gör en smäll. Försök stanna den här gången, va?",
+        "objectives": {
+          "0": {
+            "label": "Tunnelråtta utrotad"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Smedjans arbetsorder",
+        "text": "Smedjan vill alltid ha mat, {playerName}. Ta med mig åtta klumpar kopparmalm och jag ser till att du betalas för lasten. Inga ceremonier, bara malm och mynt.",
+        "completion": "Bra vikt, inget slagg. Här är din betalning. Smedjan blir hungrig igen snart nog.",
+        "objectives": {
+          "0": {
+            "label": "Kopparmalm levererad"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Kökets arbetsorder",
+        "text": "Mitt skafferi ser tunt ut, {playerName}, och tunna skafferier gör griniga kockar. Hämta mig åtta bitar viltkött och det finns mynt i det för dig, plus min oändliga tacksamhet, som är värd mindre men smakar bättre.",
+        "completion": "Nu är det ett fyllt skafferi. Här är din lön. Kom tillbaka när dina väskor är tunga igen.",
+        "objectives": {
+          "0": {
+            "label": "Viltkött levererat"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Vävstolens arbetsorder",
+        "text": "Vävstolen torkar ut och overksamma händer slösar dagsljus, {playerName}. Ta med mig sex nystor spindelsilke och jag betalar dig ett rättvist pris, räknat till kopparmyntet.",
+        "completion": "Fint silke, jämnt spunnet. Ditt mynt, exakt avmätt. Vävstolen tackar dig, och det gör jag också.",
+        "objectives": {
+          "0": {
+            "label": "Spindelsilke levererat"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Verktygsverkstadens arbetsorder",
+        "text": "Skaftstycken, handtag, kolvar, jag går igenom trä som att det håller på att gå ur mode, vilket det INTE gör, trä är evigt, {playerName}. Köra mig åtta järnbarksstockar och jag betalar dig, mynt, riktiga mynt, inte en tjänst, jag lovar, mestadels.",
+        "completion": "Perfekt, perfekt, rak åder, inget röta. Här, ditt mynt, se, jag håller mitt ord (mestadels). Ta med mer när du snubblar över ett träd.",
+        "objectives": {
+          "0": {
+            "label": "Järnbarkstock levererad"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Garveriets arbetsorder",
+        "text": "Karen är tomma. Ta med åtta grova hudar. Mynt när du gör det.",
+        "completion": "Bra hudar. Rättvis betalning. Igen när du har mer.",
+        "objectives": {
+          "0": {
+            "label": "Grovt skinn levererat"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Apothekarens arbetsorder",
+        "text": "Mina hyllor kräver guldblad, och marknadens lager är, förutsägbart, utspätt. Ta med mig sex guldbladörter, oskadade, och du kompenseras exakt. Skadade blad avvisas, se till din väska.",
+        "completion": "Godtagligt. Potent och ordentligt hanterat. Din betalning, räknad till myntet. Låt det inte stiga dig åt huvudet, det är ett annat reagens.",
+        "objectives": {
+          "0": {
+            "label": "Guldbladört levererad"
           }
         }
       },
@@ -11014,9 +11271,109 @@ export const sv_SE: EnTranslations = {
         "body": "Hantverkare,\n\nBud når gillet av ditt arbete i rustningssmide och ingenjörskonst: plåtar nitade och kugghjul satta, de två hantverken matar varandra. Närliggande hantverk som arbetats tillsammans markerar en hand redo för inställning. Sök upp Smed Haldren, rustningsmannen i Eastbrook: han talar för mästarna för tillfället. Bevisa ditt hantverk för honom med arbete av dina egna händer, och han kommer att se dina två huvudyrken anpassade.\n\nI god ställning,\nHantverksgillet"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Gillehuset",
+        "subject": "Ditt hantverk, gjort ärligt",
+        "body": "Gillesmedlem,\n\nGillet har antagit ett nytt sätt att räkna mästerskap. Varje hand börjar klättringen igen: dina hantverksfärdigheter och dina insamlingsskickligheter har återställts till noll.\n\nAllt annat är ditt, orört: dina recept, dina verktyg och material, din bank och ditt guld, dina inriktningar och titlar, dina bedrifter och ryktbarhet, dina uppdrag och din post.\n\nKlättringen är nu uppriktig. Billigt arbete bär dig inte. Sök hårdare recept, rikare malmådror och djupare vatten.\n\nMed respekt,\nGillehuset"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Smedmästarinnan Darva",
+        "subject": "En gnista värd att notera",
+        "body": "Ord når min smedja om att ett av dina ämnen nu håller ovanligt arbete. Det är det lägsta steget på en lång klättring, men du förtjänade det vid städet, inte genom att be om det. Håll elden het."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Smedmästarinnan Darva",
+        "subject": "Sällsynt arbete, och förtjänat",
+        "body": "De berättar att ett av dina ämnen har nått sällsynt arbete. Det är steget där slarviga händer faller bort och de riktiga smederna blir kvar. Du är fortfarande kvar. Bra."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Smedmästarinnan Darva",
+        "subject": "Metallen svarar dig nu",
+        "body": "Ett av dina ämnen har klättrat förbi sällsynt till seriöst arbete. Metallen svarar en hand som den, inte längre motarbetar den. Låt inte berömmet mjuka upp din arm."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Smedmästarinnan Darva",
+        "subject": "Nära toppen av stegen",
+        "body": "Ett av dina ämnen står ett enda steg under mästerskap. Få händer jag känt når den här höjden, och färre håller sin egg här. Slutför klättringen."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Smedmästarinnan Darva",
+        "subject": "Mästerskap, äntligen",
+        "body": "Ett av dina ämnen har nått mästerskap, det högsta en hand kan klättra. Jag ger inte beröm fritt, så hör detta en gång: smedjan är stolt över dig. Gå nu och lär elden något nytt."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Väver Ottilie",
+        "subject": "En jämn första rad",
+        "body": "Gillet noterar att ett av dina ämnen har nått ovanligt arbete. Det är bara den första raden av många, men den är jämn och sann. Mät nästa lika noga."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Väver Ottilie",
+        "subject": "Sällsynt arbete, väl avvägt",
+        "body": "Ett av dina ämnen har klättrat till sällsynt arbete. Det är där en slarvig hand visar varje tappat stygn, och din har inte det. Jag är stilla nöjd."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Väver Ottilie",
+        "subject": "Mönstret framträder",
+        "body": "Ett av dina ämnen har passerat sällsynt till finare arbete. Mönstret framträder klart för en hand på den här nivån, ingen mer gissning. Fortsätt mäta dubbelt."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Väver Ottilie",
+        "subject": "En rad från toppen",
+        "body": "Ett av dina ämnen är en enda rad ifrån mästerskap. Den sista raden är alltid svårast att hålla jämn. Rusa inte nu."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Väver Ottilie",
+        "subject": "Det sista stygnet",
+        "body": "Ett av dina ämnen har nått mästerskap. Jag mätte ditt arbete dubbelt, som jag mäter allt, och det håller. Få händer knyter det sista stygnet så rent. Jag är stolt, och det säger jag inte lätt."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Kocken Marlow",
+        "subject": "En smak av vad som komma skall",
+        "body": "Ord når mitt kök om att ett av dina ämnen har nått ovanligt arbete. Det är bara en första smak, inget mer, men en lovande sådan. Håll grytan i rörelse."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Kocken Marlow",
+        "subject": "Sällsynt arbete, och inga brända kanter",
+        "body": "De berättar att ett av dina ämnen har puttrat upp till sällsynt arbete. Det är den värmen där de flesta kockar bränner rätten, och du gjorde det inte. Sitt, men inte länge."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Kocken Marlow",
+        "subject": "Nu kokar det",
+        "body": "Ett av dina ämnen har bubblar förbi sällsynt till verkligt djup. Nu kokar det, som man säger. Krydda djärvt och fortsätt smaka."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Kocken Marlow",
+        "subject": "En rätt från festmåltiden",
+        "body": "Ett av dina ämnen är en enda rätt ifrån mästerskap. Den sista är alltid den rikaste och lättast att överdriva. Stadiga händer på sleven."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Kocken Marlow",
+        "subject": "Mästerskap, serverat varmt",
+        "body": "Ett av dina ämnen har nått mästerskap, översta hyllan i hela skafferiet. Jag mättar alla, men få kokar sig upp hit. Stolt över dig, på riktigt. Gå nu och gör något som får dem att gråta vid bordet."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Fixare Gizzel",
+        "subject": "FÖRSTA gnistan, ha",
+        "body": "Oj, siffrorna säger att ett av dina ämnen just nått ovanligt arbete, lite potatisskal, litet, men det KNALLADE, eller hur? Den första gnistan är alltid gulligast. Fler gnistor. Sätt igång."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Fixare Gizzel",
+        "subject": "Sällsynt, åh, SÄLLSYNT",
+        "body": "De berättar att ett av dina ämnen klättrat till sällsynt arbete, och sällsynt är där det börjar bli ordentligt farligt (den bra sorten). De flesta händer slutar innan det roliga börjar. Inte du. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Fixare Gizzel",
+        "subject": "Nu blir det högt",
+        "body": "Ett av dina ämnen blåste förbi sällsynt till det seriösa, oh det här är där det blir HÖGT. Stanna inte nu, vad du än gör, fart är allt, likaså stubin."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Fixare Gizzel",
+        "subject": "Ett steg, ETT, från toppen",
+        "body": "Ett av dina ämnen är ETT steg under mästerskap, ett, enstaka, känner du det surra? Det sista steget är den största smällen. Blinka inte."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Fixare Gizzel",
+        "subject": "MÄSTERSKAP, kaboom",
+        "body": "Ett av dina ämnen nådde mästerskap, absoluta TOPPEN, kaboom, hela stegen, klart. Jag delar inte ut beröm, jag delar ut stubiner, men här, ta båda: du är briljant och lite skrämmande. Gå och få bergen att skaka."
       }
     },
     "itemSets": {

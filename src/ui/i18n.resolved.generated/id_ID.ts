@@ -609,7 +609,8 @@ export const id_ID: EnTranslations = {
         "staff": "Tongkat",
         "wand": "Tongkat sihir",
         "bow": "Busur",
-        "crossbow": "Busur silang"
+        "crossbow": "Busur silang",
+        "polearm": "Senjata galah"
       },
       "badge": {
         "flagship": "Unggulan",
@@ -706,10 +707,10 @@ export const id_ID: EnTranslations = {
       "expandHint": "Bentangkan pelacak misi"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
-      "chat": "Chat",
-      "combat": "Combat"
+      "general": "Umum",
+      "frames": "Bingkai",
+      "chat": "Obrolan",
+      "combat": "Pertempuran"
     },
     "chatTimestamps": {
       "show": "Tampilkan Cap Waktu Obrolan",
@@ -1037,6 +1038,7 @@ export const id_ID: EnTranslations = {
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
       "showDevBadges": "Tampilkan Lencana Pengembang",
       "showOwnNameplate": "Tampilkan Papan Namaku",
+      "showPlayerNameplates": "Tampilkan Papan Nama Pemain",
       "uiScale": "Skala UI",
       "playerFrameScale": "Skala Bingkai Pemain",
       "targetFrameScale": "Skala Bingkai Sasaran",
@@ -1184,8 +1186,8 @@ export const id_ID: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Serangan",
+      "defense": "Pertahanan"
     },
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
@@ -1445,7 +1447,7 @@ export const id_ID: EnTranslations = {
     "corpseHarvest": {
       "title": "Panen",
       "harvestButton": "Panen",
-      "harvestButtonTooltip": "Panen: kumpulkan bahan kerajinan dari mayat ini (kulit, taring, sutra, dan komponen serupa), pisahkan dari jarahan apa pun. Siapapun bisa memanen; hanya satu pemain yang dapat memanen mayat tertentu.",
+      "harvestTooltip": "Mengumpulkan komponen yang dicentang. Setiap bangkai hanya bisa dipanen sekali, siapa cepat dia dapat. Tidak mengambil jarahan.",
       "concentrateHint": "Semakin sedikit bagian yang dipilih, semakin tinggi tingkat mutu tiap bagian.",
       "alreadyHarvested": "Bangkai ini sudah dipanen.",
       "componentAria": "Panen {component}",
@@ -1463,6 +1465,8 @@ export const id_ID: EnTranslations = {
     "townFocus": {
       "title": "Fokus Kota",
       "hint": "Poin fokus menambahkan bonus di atas hasil dasar setiap komponen. Komponen tanpa fokus tetap pada hasil dasar.",
+      "tierHint": "Setiap {points} poin pada komponen meningkatkan tingkat panennya satu langkah, hingga {steps} langkah; kurang dari {points} poin tetap meningkatkan hasilnya.",
+      "townOnlyHint": "Fokus hanya bisa diubah saat kamu berada di kota.",
       "budgetLabel": "Sisa poin: {remaining} / {budget}",
       "saveButton": "Simpan Fokus",
       "notInTownHint": "Kamu harus berada di kota untuk mengatur fokusmu.",
@@ -1521,6 +1525,7 @@ export const id_ID: EnTranslations = {
       "dragEquipHint": "Seret ke karaktermu untuk memakai",
       "dragDestroyHint": "Seret ke dunia untuk menghancurkan",
       "reorderNeedsRecent": "Hapus filter dan urutkan berdasarkan Terbaru untuk mengatur ulang tasmu",
+      "itemAriaInstanced": "{item}, jumlah {count}, salinan bermerek pembuat",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1686,7 +1691,9 @@ export const id_ID: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Peti",
-      "takeAllTooltip": "Ambil Semua: kumpulkan setiap koin dan item di jendela jarahan ini."
+      "takeLootButton": "Ambil Jarahan",
+      "takeLootTooltip": "Mengambil koin dan barang yang jatuh. Tidak menggunakan kesempatan panen.",
+      "unifiedPressHint": "Tombol interaksi menjarah dan memanen dalam satu tekanan, menggunakan fokus kotamu."
     },
     "spellbook": {
       "addToBarAria": "Tambahkan {name} ke bilah aksi",
@@ -1834,6 +1841,7 @@ export const id_ID: EnTranslations = {
         "legend": "LEGENDA",
         "shill": "PENDUKUNG"
       },
+      "roleTagChatTitle": "Peran server terverifikasi: {role}",
       "guildMember": "Anggota terverifikasi",
       "notMember": "Belum berada di server",
       "joinCta": "Gabung Discord",
@@ -1958,6 +1966,7 @@ export const id_ID: EnTranslations = {
       "removeParcelAria": "Keluarkan {item} dari surat",
       "parcelQtyDecreaseAria": "Kirim satu {item} lebih sedikit",
       "parcelQtyIncreaseAria": "Kirim satu {item} lebih banyak",
+      "parcelQtyAria": "Jumlah {item} yang akan dikirim",
       "sendButton": "Kirim surat",
       "postageNote": "Perangko: {amount}. Gagak terbang selama sekitar {seconds} detik.",
       "arrivedBanner": "Gagak telah mendarat: surat dari {name}.",
@@ -2094,41 +2103,43 @@ export const id_ID: EnTranslations = {
       "blockAction": "Blokir",
       "nowBlocking": "{name} diblokir.",
       "stopBlockingTitle": "Buka blokir {name}",
-      "onlineHeader": "Online ({n})",
-      "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "onlineHeader": "Daring ({n})",
+      "offlineHeader": "Luring ({n})",
+      "hideOffline": "Sembunyikan yang luring",
+      "hideOfflineTitle": "Sembunyikan anggota serikat yang sedang luring"
     },
     "gathering": {
       "title": "Pengumpulan",
       "mining": "Penambangan",
       "logging": "Penebangan",
       "herbalism": "Herbalisme",
-      "fishing": "Fishing",
+      "fishing": "Memancing",
       "notReady": "Simpul sumber daya ini belum muncul kembali untukmu.",
       "gatherLine": "Anda mengumpulkan: {name}.",
       "gatherLineQty": "Anda mengumpulkan: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Kamu menarik: {name}",
+      "biteLine": "Sesuatu menggigit umpannya!",
+      "gotAwayLine": "Ikannya kabur.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Urat Bijih",
+        "wood": "Rumpun Kayu",
+        "herb": "Petak Herba"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Membutuhkan beliung pertambangan tingkat {tier}",
+        "logging": "Membutuhkan kapak penebangan tingkat {tier}",
+        "herbalism": "Membutuhkan arit herbalisme tingkat {tier}"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Kamu membutuhkan beliung pertambangan tingkat {tier} untuk memanen urat ini.",
+        "logging": "Kamu membutuhkan kapak penebangan tingkat {tier} untuk menebang rumpun ini.",
+        "herbalism": "Kamu membutuhkan arit herbalisme tingkat {tier} untuk mengumpulkan petak ini."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Kamu membutuhkan alat pengumpul tingkat {tier} untuk mendapatkan bahan terbaik.",
+      "downgradeMark": "Tas penuh: temuan disimpan tanpa tanda pengumpulnya.",
+      "downgradeFind": "Tas penuh: temuan murni terlewat.",
+      "stateReady": "Siap",
+      "stateCooldown": "Muncul kembali"
     },
     "archetypeTitle": {
       "label": "Gelar",
@@ -2159,6 +2170,49 @@ export const id_ID: EnTranslations = {
       "tailoring": "Menjahit",
       "leatherworking": "Pengolahan Kulit"
     },
+    "enchantName": {
+      "enchant_weapon_might": "Mantrai Senjata - Kekuatan",
+      "enchant_weapon_intellect": "Mantrai Senjata - Daya Mantra",
+      "enchant_helmet_fortitude": "Mantrai Helm - Keteguhan",
+      "enchant_neck_spirit": "Mantrai Kalung - Roh",
+      "enchant_shoulder_agility": "Mantrai Bahu - Kegesitan",
+      "enchant_chest_stamina": "Mantrai Dada - Stamina",
+      "enchant_waist_stamina": "Mantrai Ikat Pinggang - Stamina",
+      "enchant_legs_stamina": "Mantrai Celana - Stamina",
+      "enchant_gloves_agility": "Mantrai Sarung Tangan - Kegesitan",
+      "enchant_gloves_intellect": "Mantrai Sarung Tangan - Daya Mantra",
+      "enchant_feet_agility": "Mantrai Sepatu Bot - Kegesitan",
+      "enchant_ring_spirit": "Mantrai Cincin - Roh",
+      "enchant_weapon_agility": "Mantrai Senjata - Kegesitan",
+      "enchant_helmet_intellect": "Mantrai Helm - Kecerdasan",
+      "enchant_helmet_armor": "Mantrai Helm - Penguatan",
+      "enchant_neck_intellect": "Mantrai Kalung - Kecerdasan",
+      "enchant_neck_agility": "Mantrai Kalung - Kegesitan",
+      "enchant_shoulder_strength": "Mantrai Bahu - Kekuatan",
+      "enchant_shoulder_intellect": "Mantrai Bahu - Kecerdasan",
+      "enchant_chest_spirit": "Mantrai Dada - Roh",
+      "enchant_chest_armor": "Mantrai Dada - Penguatan",
+      "enchant_waist_strength": "Mantrai Ikat Pinggang - Kekuatan",
+      "enchant_waist_agility": "Mantrai Ikat Pinggang - Kegesitan",
+      "enchant_legs_intellect": "Mantrai Celana - Kecerdasan",
+      "enchant_gloves_strength": "Mantrai Sarung Tangan - Kekuatan",
+      "enchant_feet_strength": "Mantrai Sepatu Bot - Kekuatan",
+      "enchant_feet_stamina": "Mantrai Sepatu Bot - Stamina",
+      "enchant_ring_strength": "Mantrai Cincin - Kekuatan",
+      "enchant_ring_agility": "Mantrai Cincin - Kegesitan",
+      "enchant_ring_intellect": "Mantrai Cincin - Kecerdasan",
+      "enchant_weapon_greater_might": "Mantrai Senjata - Kekuatan Unggul",
+      "enchant_weapon_greater_spellpower": "Mantrai Senjata - Daya Mantra Unggul",
+      "enchant_helmet_greater_fortitude": "Mantrai Helm - Keteguhan Unggul",
+      "enchant_chest_greater_stamina": "Mantrai Dada - Stamina Unggul",
+      "enchant_legs_greater_stamina": "Mantrai Celana - Stamina Unggul",
+      "enchant_gloves_greater_agility": "Mantrai Sarung Tangan - Kegesitan Unggul",
+      "enchant_weapon_runed_edge": "Mantrai Senjata - Tepian Bersura",
+      "enchant_weapon_runed_focus": "Mantrai Senjata - Fokus Bersura",
+      "enchant_chest_runeweave": "Mantrai Dada - Tenun Rune",
+      "enchant_legs_runed_hide": "Mantrai Celana - Kulit Bersura",
+      "enchant_helmet_runed_links": "Mantrai Helm - Kait Bersura"
+    },
     "professions": {
       "title": "Profesi",
       "close": "Tutup profesi",
@@ -2178,7 +2232,7 @@ export const id_ID: EnTranslations = {
       "tierPipAria": "Tingkat {tier}",
       "nextUnlockTier": "{points} menunjuk ke tingkat berikutnya: peluang karya besar meningkat",
       "nextUnlockSpecialized": "{points} menunjuk ke Khusus: biaya material turun",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Dikuasai, untuk saat ini",
       "perkSpecializedLine": "{craft}: Khusus, biaya material -{pct}%",
       "perkSpecializedAt": "Mengkhususkan diri pada keterampilan {threshold}",
       "switchCost": "Peralihan arketipe berikutnya membutuhkan {cost} poin penebusan",
@@ -2219,6 +2273,7 @@ export const id_ID: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Hasil: gelar {title}; {majorA} dan {majorB} menjadi bidang utama tanpa batas; {hobby} menjadi hobi dibatasi langka; semua pengetahuan keahlian lain tetap tersimpan namun dibatasi umum saat tidak aktif.",
       "hobbyPreview": "Hasil: {hobby} menjadi hobi dibatasi langka. Kedua bidang utama dan semua nilai keahlian yang tersimpan tetap tidak berubah.",
+      "attunementReturnCost": "Jika kamu meninggalkan pasangan ini, kembali ke sini nanti membutuhkan {cost} tugas tebus diri.",
       "identity": {
         "title": "Identitas Kerajinan",
         "syncing": "Menunggu identitas kerajinanmu dari realm.",
@@ -2258,16 +2313,64 @@ export const id_ID: EnTranslations = {
       "skillReqLine": "Membutuhkan {craft} {skill}",
       "difficultyFull": "Peningkatan keterampilan penuh",
       "difficultyReduced": "Mengurangi perolehan keterampilan",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Perolehan keterampilan minimal",
       "difficultyNone": "Tidak ada perolehan keterampilan",
       "stationBadge": "Tempat Kerja Kerajinan",
       "stationOutOfRangeNamed": "Pindah ke {station} untuk membuat ini.",
+      "learnMoreAtStation": "{master} di {station} dapat mengajarkan lebih banyak resep {craft} padamu.",
       "masterworkToast": "Karya besar! {name}",
       "masterworkZoneLine": "{crafter} membuat karya besar {name}!",
       "tierUpToast": "{craft} maju ke tingkat {tier}!",
+      "trendNudge": "Tanganmu cenderung ke {archetype}. Penyelarasannya menunggumu dengan {master}.",
+      "trendNudgeNoMaster": "Tanganmu cenderung ke {archetype}. Carilah seorang master kerajinan untuk mengambilnya.",
+      "attunedZoneLine": "{name} telah selaras sebagai {archetype}!",
+      "attunedBanner": "Selaras: {title}",
+      "tierTutorial": {
+        "title": "Tingkat Pertamamu",
+        "tierCap": "Sebuah kerajinan mencapai tingkat pertamanya pada keahlian {skill}, dan setiap tingkat meningkatkan apa yang bisa dibuatnya. Tetapi sebuah kerajinan hanya naik melampaui pekerjaan langka setelah menjadi salah satu dari dua bidang utamamu.",
+        "radar": "Profesimu membentuk sebuah roda. Selaraskan ke pasangan yang berdekatan dan dua kerajinan itu menjadi bidang utama tanpa batas, satu kerajinan di seberang roda menjadi hobi terbatas langka, dan sisanya terbengkalai: pengetahuannya tersimpan, tetapi terbatas di umum sampai kamu mengambilnya kembali.",
+        "masters": "Para master kerajinan di kota menawarkan misi penyelarasan. Kunjungi salah satu untuk memilih pasanganmu kapan pun kamu siap. Tidak ada yang pernah kamu pelajari yang hilang.",
+        "dismiss": "Mengerti"
+      },
       "makersMark": "Dibuat oleh {name}",
+      "gatheredBy": "Dikumpulkan oleh {name}",
       "masterworkSeal": "Karya besar",
-      "enchantedLine": "Terpesona"
+      "enchantedLine": "Terpesona",
+      "commissionToggle": "Karya pesanan",
+      "commissionToggleHint": "Terikat pada karakter pertama yang menerimanya dalam perdagangan.",
+      "commissionUnbound": "Karya pesanan: terikat pada penerima pertama",
+      "commissionBound": "Karya pesanan: terikat pada penerimanya"
+    },
+    "itemMenu": {
+      "use": "Gunakan",
+      "equip": "Pakai",
+      "disenchant": "Hancurkan Pemantraan",
+      "salvage": "Salvasi",
+      "applyEnchant": "Terapkan Mantrai"
+    },
+    "enchanting": {
+      "disenchantedLine": "Kamu menghancurkan pemantraan {item}.",
+      "salvagedLine": "Kamu menyalvasi {item}.",
+      "enchantAppliedLine": "Kamu memantrai {item} dengan {enchant}.",
+      "notHeld": "Kamu tidak memiliki barang itu.",
+      "notDisenchantable": "Kamu tidak bisa menghancurkan pemantraan itu.",
+      "notSalvageable": "Kamu tidak bisa menyalvasi itu.",
+      "disenchantThrottled": "Kamu menghancurkan pemantraan terlalu cepat. Tunggu sebentar dan coba lagi.",
+      "salvageThrottled": "Kamu menyalvasi terlalu cepat. Tunggu sebentar dan coba lagi.",
+      "enchantThrottled": "Kamu memantrai terlalu cepat. Tunggu sebentar dan coba lagi.",
+      "enchantWrongSlot": "Mantrai itu tidak bisa diterapkan pada barang itu.",
+      "enchantUnknown": "Mantrai itu tidak ada.",
+      "enchantInsufficient": "Kamu tidak memiliki bahan untuk mantrai itu.",
+      "disenchantConfirmTitle": "Hancurkan pemantraan {item}?",
+      "disenchantConfirmBody": "Ini menghancurkan {item} dan menghasilkan bahan arkan. Tindakan ini tidak dapat dibatalkan.",
+      "disenchantConfirmBodySpecial": "Ini menghancurkan salinan khusus dari {item} (bertanda tangan, karya besar, atau terpesonan) dan menghasilkan bahan arkan. Tindakan ini tidak dapat dibatalkan.",
+      "salvageConfirmTitle": "Salvasi {item}?",
+      "salvageConfirmBody": "Ini menghancurkan {item} dan menghasilkan bahan kerajinan. Tindakan ini tidak dapat dibatalkan.",
+      "salvageConfirmBodySpecial": "Ini menghancurkan salinan khusus dari {item} (bertanda tangan, karya besar, atau terpesonan) dan menghasilkan bahan kerajinan. Tindakan ini tidak dapat dibatalkan.",
+      "pickerTitle": "Terapkan Mantrai",
+      "targetTitle": "Pilih barang untuk dimantrai",
+      "noEnchants": "Tidak ada mantrai yang menggunakan reagen ini.",
+      "noTargets": "Tidak ada barang yang memenuhi syarat untuk dimantrai."
     },
     "training": {
       "title": "Pelatihan: {name}",
@@ -2287,6 +2390,25 @@ export const id_ID: EnTranslations = {
       "notTaughtHere": "Resep itu tidak diajarkan di sini.",
       "alreadyKnown": "Anda sudah tahu resep itu.",
       "outOfRange": "Anda harus berada di stasiun untuk berlatih."
+    },
+    "unbind": {
+      "title": "Pelepasan Ikat: {name}",
+      "close": "Tutup pelepasan ikat",
+      "intro": "Sang master dapat melepas ikatan karya pesanan dari ikatannya, dengan biaya.",
+      "empty": "Kamu tidak membawa karya pesanan yang terikat.",
+      "rowSub": "Melepas ikatan; karya itu akan terikat kembali saat diperdagangkan berikutnya.",
+      "unbindAria": "Lepas ikat {name} seharga {fee}",
+      "dialogOption": "Pelepasan Ikat",
+      "dialogOptionAria": "Lepas ikat karya pesanan dengan {name}",
+      "confirmTitle": "Lepas Ikat Karya Pesanan",
+      "confirmBody": "Lepas ikatan {name} seharga {fee}?",
+      "confirmOk": "Lepas Ikat",
+      "confirmCancel": "Batal",
+      "unbound": "Melepas ikat {name} seharga {fee}. Itu akan terikat kembali saat diperdagangkan berikutnya.",
+      "notEligible": "Barang itu tidak bisa dilepas ikatnya.",
+      "notBound": "Barang itu tidak terikat.",
+      "cannotAfford": "Kamu tidak mampu membayar biaya pelepasan ikat.",
+      "outOfRange": "Kamu harus berada di stasiun kerajinan untuk melepas ikat."
     },
     "finder": {
       "title": "Pencari Dungeon",
@@ -4134,7 +4256,7 @@ export const id_ID: EnTranslations = {
   "stats": {
     "title": "Status Dunia",
     "accountsCreated": "Pemain",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Karakter Dibuat",
     "playersOnline": "Pemain Online",
     "realmName": "Nama Dunia"
   },
@@ -5706,7 +5828,8 @@ export const id_ID: EnTranslations = {
       "tradeInProgress": "Perdagangan sudah berlangsung.",
       "tradeTooFar": "Sasaran terlalu jauh untuk berdagang.",
       "tradeExpired": "Permintaan perdagangan telah kedaluwarsa.",
-      "tradeFailed": "Perdagangan gagal: barang atau uang sudah tidak tersedia."
+      "tradeFailed": "Perdagangan gagal: barang atau uang sudah tidak tersedia.",
+      "tradeBound": "Barang itu terikat dan tidak dapat diperdagangkan."
     },
     "logs": {
       "standUp": "Kamu berdiri.",
@@ -5855,7 +5978,7 @@ export const id_ID: EnTranslations = {
         "combat": "Dalam Pertempuran",
         "dungeon": "Dalam Dungeon",
         "dead": "Tewas",
-        "afk": "Away"
+        "afk": "Pergi Sebentar"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -5963,7 +6086,7 @@ export const id_ID: EnTranslations = {
     },
     "cast": {
       "fishing": "Memancing",
-      "gathering": "Gathering",
+      "gathering": "Mengumpulkan",
       "demonHeal": "Penyembuhan Iblis",
       "thunzharrStormcall": "Panggilan Badai"
     }
@@ -6102,7 +6225,6 @@ export const id_ID: EnTranslations = {
       "ifYouEquip": "Jika kamu memakai ini",
       "damageSpeed": "{min} - {max} Kerusakan Kecepatan {speed}",
       "dps": "({dps} kerusakan per detik)",
-      "dagger": "Belati",
       "armorStat": "{value} Zirah",
       "stat": "+{value} {stat}",
       "useFood": "Pakai: Memulihkan {amount} nyawa selama {seconds} detik. Harus tetap duduk selama makan.",
@@ -8478,127 +8600,142 @@ export const id_ID: EnTranslations = {
         "name": "Ramuan Ular"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Rompi Kulit Berlumut"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Sarung Tangan Anakan Duri"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Sarung Tangan Rantai Akolit"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Ikat Pinggang Rantai Persembahan"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Tongkat Akar Semak"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Lentera Api Lembah"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Celana Kulit Pohon Rawa"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Tapak Mekar Lumpur"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Sabaton Penjaga Rawa"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Baju Zirah Cahaya Rawa"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Mantel Duri Senja"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Gada Bayangan Rawa"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Sabuk Rumpun Liar"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Pelindung Bahu Penjaga Tebing"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Tongkat Agung Duri Tebing"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Jubah Kulit Pohon Rembulan"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Helm Nyanyian Puncak"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Sarung Tangan Mantra Badai"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Ikat Pinggang Pengendap Tebing"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Tudung Akar Badai"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Pelindung Kaki Penjaga Petir"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Tapak Langkah Arwah"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Sarung Tangan Taring Serpihan"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Mantel Nyanyian Serpihan"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Sarung Tangan Mantra Sekte Wyrm"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Pembalut Liar Puncak Duri"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Baju Zirah Persembahan Badai"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Pelindung Bahu Mekar Kripta"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Gada Duri Wyrm Kubur"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Jubah Rumpun yang Terbangun"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Tongkat Agung Taring Malam"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Gada Belantara yang Dicambuk"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Sandal Himne Pasang"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Perisai Penjaga Mutiara"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Celana Tumbuhan Liar"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Sarung Tangan Penjaga Rumpun"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Sepatu Bot Hijau Subur"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Sabuk Penjaga Rembulan"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Sepatu Bot Akar Mimpi"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Mantel Kulit Pohon Badai"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Gada Jiwa Liar"
+      },
+      "resonant_thread": {
+        "name": "Benang Beresonansi"
+      },
+      "resonant_hide": {
+        "name": "Kulit Beresonansi"
+      },
+      "resonant_links": {
+        "name": "Kait Beresonansi"
+      },
+      "resonant_steel": {
+        "name": "Baja Beresonansi"
+      },
+      "resonant_timber": {
+        "name": "Kayu Beresonansi"
       },
       "conjured_water4": {
         "name": "Air Mata Air Sihir"
@@ -10692,23 +10829,143 @@ export const id_ID: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Sebuah Kerajinan untuk Disebut Milik Anda",
-        "text": "Keahlian adalah pengetahuan, {playerName}, namun penyelarasan adalah sebuah janji. Pilih dua kerajinan bertetangga yang caranya akan kamu emban sebagai bidang utama, lalu bawakan aku bijih yang kamu kerjakan dari Lembah dengan tanganmu sendiri.",
-        "completion": "Janji itu terpenuhi. Kedua kerajinan ini kini menjadi bidang utamamu, dan pengetahuan di hadapannya menjadi hobimu.",
+      "q_prof_attune_smith": {
+        "title": "Janji Sang Pandai Besi",
+        "text": "Baja tidak mengampuni tangan yang mengembara, jadi aku akan berterus terang sebelum kamu bersumpah apa pun. Ikatlah dirimu ke tempaanku dan Pembuatan Senjata serta Pembuatan Zirah menjadi dua bidang utamamu, satu-satunya kerajinan yang bisa kamu bawa melampaui pekerjaan langka. Kerajinan yang berlawanan dengan mereka di roda menetap sebagai hobimu, dikerjakan hingga langka dan tidak lebih jauh. Perdaganganmu yang lain tidak terbakar, {playerName}: mereka hanya hening, terbengkalai sampai kamu memanggilnya kembali. Dan ketahuilah ini sebelum palu jatuh: tinggalkan pasangan ini untuk pasangan lain dan kamu akan merangkak kembali melalui kerja keras yang jujur untuk kembali ke sini, lima musuh yang dikalahkan pertama kali kamu pulang, delapan berikutnya, sebelas setelahnya, makin banyak setiap kali kamu menyimpang. Masih berdiri di sini? Maka bawakan aku tiga urat bijih yang dikerjakan dari Lembah dengan tanganmu sendiri, dan kita sebut janjinya terikat.",
+        "completion": "Bijih yang baik, dan tangan yang baik untuk mengerjakannya. Pembuatan Senjata dan Pembuatan Zirah milikmu untuk dikuasai sekarang. Raih sisanya.",
         "objectives": {
           "0": {
             "label": "Urat bijih dipanen"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Membuat Perubahan",
-        "text": "Kamu pernah membawa pasangan itu sebelumnya, {playerName}. Kembali bukan sumpah baru. Bantu jaga jalan Lembah tetap bersih, dan pekerjaan itu akan mengingatkan tanganmu apa yang pernah mereka ketahui.",
-        "completion": "Irama lama kembali. Pasangan lamamu aktif kembali.",
+      "q_prof_attune_outfitter": {
+        "title": "Ukuran Sang Penjahit",
+        "text": "Ukur biayanya sebelum kamu memotong, itulah aturan pertama di alat tenunku. Pilihlah aku dan Pengolahan Kulit serta Menjahit menjadi dua bidang utamamu, pasangan yang bisa kamu bawa melampaui pekerjaan langka; kerajinan yang berlawanan dengan mereka menetap sebagai hobimu, dibawa ke langka dan dibiarkan di sana. Perdagangan yang kamu sisihkan tidak terurai, {playerName}, hanya terlipat, terbengkalai sampai kamu mengambilnya kembali. Pastilah, meski begitu: jika kamu meninggalkan pasangan ini dan kemudian menginginkannya kembali, jalan pulang dibayar dengan kerja keras yang makin panjang, lima yang dibasmi pertama kalinya, kemudian delapan, kemudian sebelas, selalu sedikit lebih. Jika pikiranmu sudah bulat, basmi empat laba-laba webwood dan bawa sutranya ke alat tenun, karena benang yang baik memulai setiap pakaian yang baik.",
+        "completion": "Benang yang rata, tangan yang rata. Pengolahan Kulit dan Menjahit milikmu untuk dibawa sejauh keahlianmu bisa menjangkau. Ukur dua kali, dan mereka tidak akan mengecewakan.",
+        "objectives": {
+          "0": {
+            "label": "Laba-laba Webwood dibasmi"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "Resep yang Layak Dijaga",
+        "text": "Setiap hidangan yang baik adalah dua cita rasa yang saling melengkapi, begitu pula kerajinan yang baik, {playerName}. Duduk bersamaku dan Alkimia serta Memasak menjadi dua bidang utamamu, dua yang bisa kamu panaskan melampaui pekerjaan langka; kerajinan di sisi berlawanan roda adalah hobimu, dimasak hingga langka dan tidak lebih panas. Perdagangan lainnya tersimpan di gudang bahan, terbengkalai, tidak basi, siap kapan pun kamu mengambilnya kembali. Peringatan adil saat periuk masih dingin: jika kamu pergi ke pasangan lain dan kemudian ingin kembali ke sini, jalan pulang dibayar dengan pekerjaan yang makin berat, lima hewan pertama kalinya, delapan berikutnya, sebelas berikutnya lagi, makin berat setiap kali. Masih lapar? Maka burulah empat babi hutan liar untukku, karena dapur yang layak dimulai dengan daging yang baik.",
+        "completion": "Nah, itulah awal yang berisi. Alkimia dan Memasak milikmu untuk dimasak setinggi yang kamu mau. Kembalilah dalam keadaan lapar.",
+        "objectives": {
+          "0": {
+            "label": "Babi Hutan Liar diburu"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "Pengaturan yang Mudah Meledak",
+        "text": "Oh, oh, kamu mau yang bagus, yang berisik, ya? Dengarkan, dengarkan, sebelum menyentuh apa pun yang berdetak: ucapkan kata dan Rekayasa serta Alkimia menjadi dua bidang utamamu, satu-satunya dua yang bisa kamu dorong melampaui pekerjaan langka (di situlah menjadi MENYENANGKAN, percayalah padaku). Kerajinan yang berlawanan masuk ke sakumu sebagai hobi, langka dan tidak lebih jauh, jangan merajuk. Perdaganganmu yang lain? Tidak hilang, {playerName}, hanya tidur siang, bangunkan kapan pun kamu mau. Tetapi (selalu ada tapi, tahan sekeringnya) buang pasangan ini dan jalan-jalan lalu kembali kemudian dan itu akan menelan keringatmu yang makin menumpuk, lima hal pertama kali, delapan berikutnya, sebelas setelahnya, lebih, lebih, setiap kali kamu jadi penakut. Ya? YA? Maka pergi petikkan aku tiga petak herba, yang mudah meledak, jangan tanya yang mana, semuanya sedikit mudah meledak jika kamu cukup percaya.",
+        "completion": "HA. Reagen, yang asli, dan semua jarimu masih menempel, bagus, bagus. Rekayasa dan Alkimia, milikmu, pergi buat sesuatu yang menyesal ada. Ayo pergi.",
+        "objectives": {
+          "0": {
+            "label": "Petak herba dipanen"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Kembali ke Tempaan",
+        "text": "Jadi kamu sudah kembali ke tempaan. Aku tidak akan pura-pura itu tidak menyakitkan, {playerName}, tetapi aku tangan yang adil dan pekerjaannya pun adil. Kamu tahu harga kembali: kerja keras, dan lebih banyak lagi setiap kali kamu menyimpang. Kalahkan serigala yang mengancam jalan utara, dan ayunannya akan mengingatkan lenganmu akan apa yang pernah dituntut pasangan ini.",
+        "completion": "Ritme kembali ke tanganmu. Pembuatan Senjata dan Pembuatan Zirah adalah bidang utamamu sekali lagi. Jangan biasakan pergi.",
         "objectives": {
           "0": {
             "label": "Serigala Hutan dibunuh"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Benang Disambung Kembali",
+        "text": "Kembali ke alat tenunku setelah semua. Aku tidak dendam, {playerName}, tetapi benang itu mengingat tangan yang melepaskannya, dan biaya mengambilnya kembali diukur lebih panjang setiap kalinya. Basmi laba-laba webwood yang berkerumun di hutan barat, dan pekerjaan itu akan menenangkan tanganmu sebelum menyentuh sutra yang baik lagi.",
+        "completion": "Stabil kembali. Pengolahan Kulit dan Menjahit kembali ke tanganmu sebagai bidang utama. Ukur dua kali kali ini sebelum mengembara.",
+        "objectives": {
+          "0": {
+            "label": "Laba-laba Webwood dibasmi"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Kembali ke Dapur",
+        "text": "Nah, lihat siapa yang kembali ke periukku. Tidak ada dendam, {playerName}, dapur selalu punya tempat, tetapi kamu tahu tagihan makin panjang setiap kali kamu pergi. Pergi kurangi kawanan babi hutan liar di padang timur, karena keringat jujur adalah bahan pertama, dan itu akan mengingatkan tanganmu akan pekerjaan ini.",
+        "completion": "Itulah cita rasa lama. Alkimia dan Memasak kembali ke dapur sebagai bidang utamamu. Tinggallah lebih lama kali ini.",
+        "objectives": {
+          "0": {
+            "label": "Babi Hutan Liar diburu"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Buku Besar Terus Bertambah",
+        "text": "Kamu KEMBALI, ha, mereka selalu kembali, hal-hal berisik itu punya daya tarik tersendiri, ya? Tidak ada cemberut dariku, {playerName}, tetapi buku besar, oh buku besar, terus bertambah setiap kali kamu kabur, lebih banyak setiap kembali, itu saja yang adil. Pergi bersihkan tikus terowongan dari galian untukku, keringat dulu, percikan kemudian, itu aturan yang baru saja kubuat.",
+        "completion": "ITU dia, rasa gatal kembali ke tanganmu. Rekayasa dan Alkimia, bidang utama lagi, ayo, pergi buat sesuatu yang menggelegar. Coba bertahan kali ini, ya?",
+        "objectives": {
+          "0": {
+            "label": "Tikus Terowongan dibasmi"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Pesanan Kerja Tempaan",
+        "text": "Tempaan selalu butuh makanan, {playerName}. Bawakan aku delapan gumpalan bijih tembaga dan aku akan membayarmu untuk angkutannya. Tidak ada upacara, hanya bijih dan koin.",
+        "completion": "Bobot yang baik, tidak ada terak. Ini bayaranmu. Tempaan akan lapar lagi sebentar.",
+        "objectives": {
+          "0": {
+            "label": "Bijih Tembaga dikirim"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Pesanan Kerja Dapur",
+        "text": "Gudang makanku terlihat tipis, {playerName}, dan gudang yang tipis membuat juru masak cemberut. Ambilkan aku delapan potongan daging buruan dan ada koin untukmu, ditambah rasa terima kasihku yang abadi, yang nilainya lebih kecil tetapi rasanya lebih enak.",
+        "completion": "Nah, itulah gudang bahan yang penuh. Ini bayaranmu. Kembalilah saat tasmu berat lagi.",
+        "objectives": {
+          "0": {
+            "label": "Daging Buruan dikirim"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Pesanan Kerja Alat Tenun",
+        "text": "Alat tenun kehabisan bahan dan tangan yang menganggur menyia-nyiakan siang hari, {playerName}. Bawakan aku enam gulungan sutra laba-laba dan aku akan membayarmu dengan tarif yang adil, dihitung hingga tembaga.",
+        "completion": "Sutra halus, dipintal rata. Koinmu, diukur dengan tepat. Alat tenun berterima kasih padamu, dan aku pun demikian.",
+        "objectives": {
+          "0": {
+            "label": "Sutra Laba-laba dikirim"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Pesanan Kerja Bengkel Alat",
+        "text": "Gagang, pegangan, popor, aku menghabiskan kayu seolah sedang ketinggalan mode, yang mana TIDAK, kayu itu abadi, {playerName}. Bawakan aku delapan batang kayu ironbark dan aku akan membayarmu, koin, koin asli, bukan sebuah bantuan, aku janji, kebanyakan.",
+        "completion": "Sempurna, sempurna, serat yang lurus, tidak ada busuk. Ini, koinmu, lihat, aku menepati janji (kebanyakan). Bawa lebih banyak saat kamu tersandung pohon.",
+        "objectives": {
+          "0": {
+            "label": "Batang Kayu Ironbark dikirim"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Pesanan Kerja Penyamakan",
+        "text": "Tangki kosong. Bawa delapan kulit kasar. Koin saat kamu melakukannya.",
+        "completion": "Kulit yang bagus. Bayaran yang adil. Lagi saat kamu punya lebih.",
+        "objectives": {
+          "0": {
+            "label": "Kulit Kasar dikirim"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Pesanan Kerja Apoteker",
+        "text": "Rakku membutuhkan daun emas, dan stok pasar, seperti dugaan, sudah dicampur dengan yang palsu. Bawakan aku enam herba daun emas, tidak memar, dan kamu akan diberi kompensasi yang tepat. Daun yang memar akan ditolak, jadi jaga tasmu.",
+        "completion": "Dapat diterima. Ampuh, dan ditangani dengan benar. Pembayaranmu, dihitung sampai koin terakhir. Jangan sampai naik kepala, itu bahan yang berbeda.",
+        "objectives": {
+          "0": {
+            "label": "Herba Daun Emas dikirim"
           }
         }
       },
@@ -11014,9 +11271,109 @@ export const id_ID: EnTranslations = {
         "body": "Perajin,\n\nKabar sampai ke Persekutuan tentang pekerjaan Anda di bidang Pembuatan Zirah dan Teknik: pelat-pelat dipaku dan roda gigi dipasang, kedua kerajinan itu saling memberi makan. Kerajinan tetangga bekerja sama menandai tangan yang siap untuk penyelarasan. Carilah Pandai Besi Haldren, pembuat zirah di Eastbrook: dia mewakili para master untuk saat ini. Buktikan keahlian Anda kepadanya dengan karya tangan Anda sendiri, dan dia akan melihat dua keahlian utama Anda selaras.\n\nHormat kami,\nPersatuan Perajin"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Balaihall",
+        "subject": "Keahlianmu, kini jujur",
+        "body": "Rekan Serikat,\n\nSerikat telah mengadopsi cara baru dalam mengukur keahlian. Setiap tangan memulai pendakian lagi dari awal: keahlian kerajinan dan kecakapan pengumpulanmu telah diatur kembali ke nol.\n\nSemua yang lain tetap milikmu, tidak tersentuh: resepmu, alat dan bahanmu, bank dan emasmu, atunemen dan gelarmu, perbuatan dan namamu, misi dan suratmu.\n\nPendakian kini jujur. Pekerjaan murahan tidak akan membawamu ke atas. Carilah resep yang lebih sulit, urat yang lebih kaya, dan perairan yang lebih dalam.\n\nHormat kami,\nBalaihall"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Pandai Besi Darva",
+        "subject": "Percikan yang patut dicatat",
+        "body": "Kabar sampai ke tempaan saya bahwa salah satu bidang utamamu kini berada di pekerjaan yang tidak biasa. Ini adalah anak tangga terkecil dalam pendakian panjang, tetapi kamu meraihnya di atas landasan, bukan dengan meminta-minta. Jaga apinya tetap menyala."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Pandai Besi Darva",
+        "subject": "Pekerjaan langka, dan diraih",
+        "body": "Mereka bilang salah satu bidang utamamu telah mencapai pekerjaan langka. Itulah anak tangga di mana tangan-tangan yang ceroboh jatuh dan para pandai besi yang sesungguhnya masih berdiri. Kamu masih berdiri. Bagus."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Pandai Besi Darva",
+        "subject": "Logam kini menjawabmu",
+        "body": "Salah satu bidang utamamu telah naik melampaui yang langka ke pekerjaan serius. Logam merespon tangan seperti itu, tidak lagi melawannya. Jangan biarkan pujian melemahkan lenganmu."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Pandai Besi Darva",
+        "subject": "Dekat puncak tangga",
+        "body": "Salah satu bidang utamamu berdiri satu anak tangga di bawah keahlian penuh. Sedikit tangan yang aku kenal mencapai ketinggian ini, dan lebih sedikit lagi yang mempertahankan ketajamannya di sini. Selesaikan pendakian."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Pandai Besi Darva",
+        "subject": "Keahlian penuh, akhirnya",
+        "body": "Salah satu bidang utamamu telah mencapai keahlian penuh, ketinggian tertinggi yang bisa dicapai seorang tangan. Aku tidak memberikan pujian dengan mudah, jadi dengarkan ini sekali: tempaan bangga padamu. Kini pergi ajarkan api sesuatu yang baru."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Penenun Ottilie",
+        "subject": "Baris pertama yang rata",
+        "body": "Catatan serikat menyatakan salah satu bidang utamamu telah mencapai pekerjaan yang tidak biasa. Ini hanyalah baris pertama dari banyak, tetapi rata dan benar. Ukur baris berikutnya dengan seksama."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Penenun Ottilie",
+        "subject": "Pekerjaan langka, terukur dengan baik",
+        "body": "Salah satu bidang utamamu telah naik ke pekerjaan langka. Di sinilah tangan yang ceroboh menampakkan setiap jahitan yang jatuh, dan tanganmu tidak. Aku diam-diam senang."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Penenun Ottilie",
+        "subject": "Polanya menjadi jelas",
+        "body": "Salah satu bidang utamamu telah melampaui yang langka ke pekerjaan yang lebih halus. Pola menjadi jelas bagi tangan pada tingkat ini, tidak perlu lagi menebak-nebak. Terus ukur dua kali."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Penenun Ottilie",
+        "subject": "Satu baris dari puncak",
+        "body": "Salah satu bidang utamamu satu baris lagi dari keahlian penuh. Baris terakhir selalu yang paling sulit untuk dijaga agar tetap rata. Jangan terburu-buru sekarang."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Penenun Ottilie",
+        "subject": "Jahitan terakhir",
+        "body": "Salah satu bidang utamamu telah mencapai keahlian penuh. Aku mengukur kerjamu dua kali, seperti yang aku ukur segalanya, dan itu bertahan. Sedikit tangan yang pernah mengikat jahitan terakhir serapi ini. Aku bangga, dan aku tidak mengatakannya dengan sembarangan."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Juru Masak Marlow",
+        "subject": "Cicipan hal-hal yang akan datang",
+        "body": "Kabar sampai ke dapur saya bahwa salah satu bidang utamamu telah mencapai pekerjaan yang tidak biasa. Ini hanyalah cicipan pertama, tidak lebih, tetapi menjanjikan. Terus gerakkan periuk."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Juru Masak Marlow",
+        "subject": "Pekerjaan langka, dan tiada bagian yang gosong",
+        "body": "Mereka bilang salah satu bidang utamamu telah mendidih hingga pekerjaan langka. Itulah panas yang membuat kebanyakan juru masak menghanguskan hidangan, dan kamu tidak. Duduk, tapi jangan terlalu lama."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Juru Masak Marlow",
+        "subject": "Kini kamu sedang memasak",
+        "body": "Salah satu bidang utamamu telah mendidih melampaui yang langka ke dalam kedalaman yang sesungguhnya. Kini kamu sedang memasak, begitu kata orang. Beri bumbu dengan berani dan terus mencicipi."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Juru Masak Marlow",
+        "subject": "Satu sajian lagi dari perjamuan",
+        "body": "Salah satu bidang utamamu hanya satu sajian lagi dari keahlian penuh. Yang terakhir selalu yang paling kaya dan paling mudah berlebihan. Tahan tanganmu di atas sendok."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Juru Masak Marlow",
+        "subject": "Keahlian penuh, disajikan panas",
+        "body": "Salah satu bidang utamamu telah mencapai keahlian penuh, rak teratas di seluruh gudang bahan. Aku memberi makan semua orang, tetapi sedikit yang pernah memasak sejauh ini. Bangga padamu, sungguh. Kini pergi buat sesuatu yang membuat mereka menangis di meja makan."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Perajin Gizzel",
+        "subject": "Percikan PERTAMA, haha",
+        "body": "Hei, angka-angka mengatakan salah satu bidang utamamu baru saja mencapai pekerjaan yang tidak biasa, hal kecil, sangat kecil, tetapi MELEDAK, ya? Percikan pertama selalu yang paling menggemaskan. Lebih banyak percikan. Pergi."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Perajin Gizzel",
+        "subject": "Langka, oh, LANGKA",
+        "body": "Mereka bilang salah satu bidang utamamu naik ke pekerjaan langka, dan langka adalah tempat di mana semuanya mulai menjadi benar-benar berbahaya (yang baik). Kebanyakan tangan berhenti sebelum bagian yang menyenangkan. Bukan kamu. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Perajin Gizzel",
+        "subject": "Kini semuanya menjadi keras",
+        "body": "Salah satu bidang utamamu meledak melampaui yang langka ke dalam hal-hal serius, oh ini adalah tempat semuanya menjadi KERAS. Jangan berhenti sekarang, apapun yang kamu lakukan, momentum adalah segalanya, begitu juga dengan sekering."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Perajin Gizzel",
+        "subject": "Satu anak tangga, SATU, dari puncak",
+        "body": "Salah satu bidang utamamu SATU anak tangga lagi dari keahlian penuh, satu, tunggal, apakah kamu merasakannya berdengung? Langkah terakhir adalah ledakan terbesar. Jangan berkedip."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Perajin Gizzel",
+        "subject": "KEAHLIAN PENUH, kaboom",
+        "body": "Salah satu bidang utamamu mencapai keahlian penuh, puncak TERTINGGI, kaboom, seluruh tangga, selesai. Aku tidak membagi-bagikan pujian, aku membagi-bagikan sekering, tetapi ini, terimalah keduanya: kamu luar biasa dan sedikit menakutkan. Pergi buat gunung-gunung itu gugup."
       }
     },
     "itemSets": {
