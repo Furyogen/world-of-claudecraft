@@ -772,4 +772,5 @@ export const ja_JP: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': '残り時間：{value}',
   'detail.dailyRewardsBanUntil': 'アクセス再開：{value}',
   'detail.dailyRewardsPermanent': '無期限',
+  'stats.playersCap': '[JA] player cap',
 };

@@ -766,4 +766,5 @@ export const pl_PL: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Pozostały czas: {value}',
   'detail.dailyRewardsBanUntil': 'Dostęp powróci: {value}',
   'detail.dailyRewardsPermanent': 'Bezterminowo',
+  'stats.playersCap': '[PL] player cap',
 };

@@ -764,4 +764,5 @@ export const ko_KR: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': '남은 시간: {value}',
   'detail.dailyRewardsBanUntil': '일일 보상 이용 권한 복구: {value}',
   'detail.dailyRewardsPermanent': '영구',
+  'stats.playersCap': '[KO] player cap',
 };

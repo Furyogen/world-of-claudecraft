@@ -764,4 +764,5 @@ export const cs_CZ: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': 'Zbývající čas: {value}',
   'detail.dailyRewardsBanUntil': 'Přístup se vrátí: {value}',
   'detail.dailyRewardsPermanent': 'Trvale',
+  'stats.playersCap': '[CS] player cap',
 };

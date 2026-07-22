@@ -468,4 +468,5 @@ export const es_ES: Record<string, string> = {
   'moderationHistoryPage.colTarget': 'Objetivo',
   'moderationHistoryPage.colModerator': 'Moderador',
   'moderationHistoryPage.colReason': 'Motivo',
+  'stats.playersCap': '[ES-ES] player cap',
 };

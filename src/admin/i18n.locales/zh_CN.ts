@@ -757,4 +757,5 @@ export const zh_CN: Record<string, string> = {
   'detail.dailyRewardsBanRemaining': '剩余时间：{value}',
   'detail.dailyRewardsBanUntil': '恢复每日奖励资格：{value}',
   'detail.dailyRewardsPermanent': '永久',
+  'stats.playersCap': '[ZH-CN] player cap',
 };

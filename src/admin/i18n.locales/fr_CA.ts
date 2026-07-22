@@ -465,4 +465,5 @@ export const fr_CA: Record<string, string> = {
   'moderationHistoryPage.colTarget': 'Cible',
   'moderationHistoryPage.colModerator': 'Modérateur',
   'moderationHistoryPage.colReason': 'Motif',
+  'stats.playersCap': '[FR-CA] player cap',
 };
