@@ -106,6 +106,18 @@ describe('scope-blind bearerAccount remains confined to read routes', () => {
     expect(count).toBe(READ_ROUTE_ANCHORS.length);
   });
 
+  it('classifies an indirect alias as an unexpected resolver reference', () => {
+    const uses = bearerAccountUses(`
+      async function bearerAccount(req: unknown): Promise<null> { return null; }
+      const lookup = bearerAccount;
+      await lookup(req);
+    `);
+    expect(uses).toEqual([
+      { kind: 'declaration', enclosingIf: null },
+      { kind: 'reference', enclosingIf: null },
+    ]);
+  });
+
   for (const anchor of READ_ROUTE_ANCHORS) {
     it(`gates: ${anchor}`, () => {
       const idx = MAIN.indexOf(anchor);
