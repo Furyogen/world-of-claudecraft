@@ -1813,6 +1813,16 @@
     width: 34px;
     gap: 4px;
   }
+  /* col-b hugs the screen edge, so its hover flyouts grow leftward ACROSS
+     col-a. The flyout ::before is z-index: -1 (tucked under its own button),
+     which in the shared #side-buttons stacking context also painted it under
+     col-a's buttons, clipping the label. Lift col-b into its own stacking
+     context above col-a: the flyout still paints under its own column's
+     buttons but over the neighbor column's. */
+  #side-buttons-col-b {
+    position: relative;
+    z-index: 1;
+  }
   .micro-btn {
     width: 34px;
     height: 30px;
