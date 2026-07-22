@@ -1514,7 +1514,8 @@ export async function saveToken(
 // Account + scope for a live token. Every caller receives the authority context:
 // read routes may accept both scopes, while mutation and privileged boundaries
 // require exact full scope. Unknown database values fail closed instead of being
-// promoted to full authority.
+// promoted to full authority. Such a historical token also cannot authenticate
+// its own logout; account-level revocation remains available to clear the row.
 export async function accountAndScopeForToken(
   token: string,
 ): Promise<{ accountId: number; scope: TokenScope } | null> {
