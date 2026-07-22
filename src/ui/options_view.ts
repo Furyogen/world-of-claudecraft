@@ -490,7 +490,14 @@ export function interfaceControlsForTab(
   controls: OptionsControl[],
   tab: InterfaceTab,
 ): OptionsControl[] {
-  return controls.filter((c) => c.category === tab);
+  const seen = new Set<string>();
+  return controls.filter((c) => {
+    if (c.category !== tab) return false;
+    if (c.control === 'note' || c.control === 'musicToggle') return true;
+    if (seen.has(c.key)) return false;
+    seen.add(c.key);
+    return true;
+  });
 }
 
 // ---------------------------------------------------------------------------
