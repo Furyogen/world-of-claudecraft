@@ -235,6 +235,14 @@ By contributing code, you agree that your code contributions will be licensed
 under the project's [MIT License](LICENSE), the same license that covers the
 project.
 
+The MIT License means what it says: anyone may use, modify, and redistribute the
+code, commercially or not. Our
+[Terms of Service](https://worldofclaudecraft.com/terms) govern the hosted game
+we operate at worldofclaudecraft.com — accounts, conduct, virtual items — and do
+not restrict the rights the MIT License gives you or anyone else in this code.
+The "World of ClaudeCraft" and "Levy Street" names and branding are not covered
+by the MIT License.
+
 Original creative assets (sound recordings, music, art, and similar authored
 works) are the exception. If you contribute an original asset you created, you
 may instead keep copyright and contribute it under a license of your choice
@@ -250,6 +258,11 @@ may instead keep copyright and contribute it under a license of your choice
 For assets listed in the CREDITS.md table, that recorded license controls over
 the project's default MIT license. Asset contributions without a CREDITS.md
 entry are MIT like everything else.
+
+Record the **Redistribution** column honestly when you add a row. It is what
+tells someone forking this project whether they may pass your asset on, and some
+rows in that table are marked "No — permission required" precisely because they
+may not.
 
 ---
 

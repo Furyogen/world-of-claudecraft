@@ -362,6 +362,22 @@ Contributions of every kind are welcome: code, translations, bug reports, and do
 
 ## License
 
-The code is [MIT licensed](LICENSE), so fork it, remix it, and host your own world.
+**The code is [MIT licensed](LICENSE), so fork it, remix it, and host your own world.** That is the whole point, and nothing else on this page or on our website takes it back.
 
-The bundled third-party art assets (models, textures, HDRIs, fonts) keep their own licenses, mostly CC0 public domain, documented per pack in [CREDITS.md](CREDITS.md). Original sound recordings contributed by individual authors may carry their own terms (see the Audio section of [CREDITS.md](CREDITS.md)) rather than the project's default license.
+Three things are licensed separately, so it is worth thirty seconds to know which is which:
+
+| What | License | Can you redistribute it? |
+|---|---|---|
+| **Source code** — everything in `src/`, `server/`, `headless/`, `python/`, `scripts/`, `tests/` | [MIT](LICENSE) | Yes. Commercially too. |
+| **Media assets** — models, textures, HDRIs, icons, sounds, fonts (mostly under `public/`) | Per asset, recorded in [CREDITS.md](CREDITS.md) | Mostly yes (most are CC0). **Some are not** — see below. |
+| **Name and branding** — "World of ClaudeCraft", "Levy Street", the logos | Not licensed | No. |
+
+Most bundled assets are CC0 public domain and you can do as you like with them. A few are not, and if you fork this repo they are not yours to pass on:
+
+- the **CraftPix class ability icons** under `public/ui/skills/` were purchased by Levy Street and **may not be redistributed** — buy your own licence if you want to ship them;
+- the **@jamiecypher sound effects** are CC BY-NC 4.0 — share them non-commercially with credit, but the commercial grant runs to this project only;
+- a handful of **community-contributed icons and recordings** are used with permission and need permission to pass on.
+
+[CREDITS.md](CREDITS.md) is the authoritative list, with a redistribution column per asset. Where an asset is listed there, that license controls over the project's MIT license.
+
+Our [Terms of Service](https://worldofclaudecraft.com/terms) cover the hosted game that we run at worldofclaudecraft.com — accounts, conduct, virtual items. They do not restrict the rights the MIT License gives you in this source code.
