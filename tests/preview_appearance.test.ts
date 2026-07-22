@@ -29,8 +29,20 @@ vi.mock('../src/render/characters/assets', () => ({
   }),
 }));
 
+const visualDoubles = vi.hoisted(() => ({ built: [] as { setWeaponSkin: unknown }[] }));
+
 vi.mock('../src/render/characters/visual', () => ({
-  CharacterVisual: class {},
+  // A recording double: setVisualKey constructs one per rebuild, so tests can
+  // assert what the REAL rebuild path did to the freshly built visual.
+  CharacterVisual: class {
+    root = {};
+    setWeaponSkin = vi.fn();
+    setSkin = vi.fn();
+    dispose = vi.fn();
+    constructor() {
+      visualDoubles.built.push(this as unknown as { setWeaponSkin: unknown });
+    }
+  },
 }));
 
 const appearance = (over: Partial<PreviewAppearance>): PreviewAppearance => ({
@@ -125,9 +137,35 @@ describe('appearanceSignature', () => {
     expect(appearanceSignature({ ...base, mainhandItemId: 'b' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, offhandItemId: 'b' })).not.toBe(sig);
   });
+
+  it('changes when the Armory weapon skin changes (apply, swap, and remove)', () => {
+    // Without this, applying or removing a purchased skin while a preview is
+    // mounted elides as "same appearance" and the stale weapon model survives.
+    const base = appearance({ cls: 'rogue', skin: 2, mainhandItemId: 'a' });
+    const sig = appearanceSignature(base);
+    const skinned = appearanceSignature({ ...base, weaponSkinId: 'frostbite_dagger' });
+    expect(skinned).not.toBe(sig);
+    expect(appearanceSignature({ ...base, weaponSkinId: 'ashspark_dagger' })).not.toBe(skinned);
+    // absent and explicit-null are the SAME identity (both mean "no skin")
+    expect(appearanceSignature({ ...base, weaponSkinId: null })).toBe(sig);
+  });
 });
 
 describe('CharacterPreview.setAppearance', () => {
+  it('persists the appearance weapon skin so the rebuilt visual re-applies it', () => {
+    const { preview } = barePreview();
+    const state = preview as unknown as Record<string, unknown>;
+    preview.setAppearance(
+      appearance({ cls: 'rogue', mainhandItemId: 'a', weaponSkinId: 'frostbite_dagger' }),
+    );
+    // setVisualKey rebuilds the CharacterVisual and re-applies this field; the
+    // stub harness cannot build a real visual, so pin the persisted state that
+    // drives the re-apply.
+    expect(state.currentWeaponSkinId).toBe('frostbite_dagger');
+    preview.setAppearance(appearance({ cls: 'rogue', mainhandItemId: 'a' }));
+    expect(state.currentWeaponSkinId).toBeNull();
+  });
+
   it('re-applies the current mech appearance once its lazy assets are ready', async () => {
     const { preview, setVisualKey } = barePreview();
     const mech = appearance({
@@ -210,5 +248,44 @@ describe('CharacterPreview visual lifecycle', () => {
     expect(remove).toHaveBeenCalledOnce();
     expect(dispose).toHaveBeenCalledOnce();
     expect(add).toHaveBeenCalledOnce();
+  });
+});
+
+describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () => {
+  function rawPreview(persistedSkin: string | null): CharacterPreview {
+    const preview = Object.create(CharacterPreview.prototype) as CharacterPreview;
+    const state = preview as unknown as Record<string, unknown>;
+    state.destroyed = false;
+    state.currentSkin = 0;
+    state.currentWeaponSkinId = persistedSkin;
+    state.currentVisual = null;
+    state.characterGroup = { add: vi.fn(), remove: vi.fn(), rotation: { y: 1 } };
+    return preview;
+  }
+
+  beforeEach(() => {
+    visualDoubles.built.length = 0;
+  });
+
+  it('re-applies the persisted skin to the freshly BUILT visual, and live changes land', () => {
+    const preview = rawPreview('frostbite_dagger');
+    preview.setVisualKey('player_rogue', 'rusty_dagger', null, 'rusty_dagger');
+    const built = visualDoubles.built.at(-1) as { setWeaponSkin: ReturnType<typeof vi.fn> };
+    expect(built).toBeDefined();
+    // the rebuild path itself re-applied the persisted cosmetic
+    expect(built.setWeaponSkin).toHaveBeenCalledWith('frostbite_dagger');
+    // a later mount with a different skin overrides on the same visual...
+    preview.setWeaponSkin('ashspark_dagger');
+    expect(built.setWeaponSkin).toHaveBeenLastCalledWith('ashspark_dagger');
+    // ...and clearing propagates (detach restores the item's own model)
+    preview.setWeaponSkin(null);
+    expect(built.setWeaponSkin).toHaveBeenLastCalledWith(null);
+  });
+
+  it('leaves the skin path untouched when none is persisted (char-create stays bare)', () => {
+    const preview = rawPreview(null);
+    preview.setVisualKey('player_rogue', 'rusty_dagger', null, null);
+    const built = visualDoubles.built.at(-1) as { setWeaponSkin: ReturnType<typeof vi.fn> };
+    expect(built.setWeaponSkin).not.toHaveBeenCalled();
   });
 });

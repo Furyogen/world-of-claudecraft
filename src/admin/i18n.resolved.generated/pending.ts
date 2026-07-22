@@ -74,8 +74,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "es_ES": [
     "alert.pluginListingFailed",
@@ -141,8 +140,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "fr_FR": [
     "alert.pluginListingFailed",
@@ -208,8 +206,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "fr_CA": [
     "alert.pluginListingFailed",
@@ -275,8 +272,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "en_CA": [],
   "it_IT": [
@@ -343,8 +339,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "de_DE": [
     "alert.pluginListingFailed",
@@ -410,8 +405,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "zh_CN": [
     "alert.pluginListingFailed",
@@ -477,8 +471,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "zh_TW": [
     "alert.pluginListingFailed",
@@ -544,8 +537,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "ko_KR": [
     "alert.pluginListingFailed",
@@ -611,8 +603,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "ja_JP": [
     "alert.pluginListingFailed",
@@ -678,8 +669,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "pt_BR": [
     "alert.pluginListingFailed",
@@ -745,8 +735,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "ru_RU": [
     "alert.pluginListingFailed",
@@ -812,8 +801,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "cs_CZ": [
     "alert.pluginListingFailed",
@@ -879,8 +867,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "nl_NL": [
     "alert.pluginListingFailed",
@@ -946,8 +933,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "pl_PL": [
     "alert.pluginListingFailed",
@@ -1013,8 +999,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "id_ID": [
     "alert.pluginListingFailed",
@@ -1080,8 +1065,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "tr_TR": [
     "alert.pluginListingFailed",
@@ -1147,8 +1131,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "sv_SE": [
     "alert.pluginListingFailed",
@@ -1214,8 +1197,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "vi_VN": [
     "alert.pluginListingFailed",
@@ -1281,8 +1263,7 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ],
   "da_DK": [
     "alert.pluginListingFailed",
@@ -1348,7 +1329,6 @@ export const pending: Record<string, readonly string[]> = {
     "plugins.table.hint",
     "plugins.table.loadFailed",
     "plugins.table.relist",
-    "plugins.table.title",
-    "stats.playersCap"
+    "plugins.table.title"
   ]
 };

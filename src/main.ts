@@ -3557,6 +3557,7 @@ async function startGame(
           controller,
           perf,
           gamepad,
+          music,
           /** Opens the board and drains queued sim events. Do not call sim.lockpickEngage directly offline. */
           lockpickEngage: (objectId: number, ante: number) =>
             hud.submitLockpickEngage(objectId, ante as 1 | 2 | 3),
@@ -5188,6 +5189,7 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,
     offhandItemId: c.offhandItemId ?? null,
+    weaponSkinId: c.weaponSkinId ?? null,
   };
 }
 

@@ -610,7 +610,7 @@ export const da_DK: EnTranslations = {
         "wand": "Tryllestav",
         "bow": "Bue",
         "crossbow": "Armbrøst",
-        "polearm": "Polearm"
+        "polearm": "Stangvåben"
       },
       "badge": {
         "flagship": "Flagskib",
@@ -707,10 +707,10 @@ export const da_DK: EnTranslations = {
       "expandHint": "Fold opgavesporing ud"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
+      "general": "Generelt",
+      "frames": "Rammer",
       "chat": "Chat",
-      "combat": "Combat"
+      "combat": "Kamp"
     },
     "chatTimestamps": {
       "show": "Vis chat-tidsstempler",
@@ -1038,7 +1038,7 @@ export const da_DK: EnTranslations = {
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
       "showDevBadges": "Vis udviklermærker",
       "showOwnNameplate": "Vis mit navneskilt",
-      "showPlayerNameplates": "Show Player Nameplates",
+      "showPlayerNameplates": "Vis spillernavneskilte",
       "uiScale": "UI-skala",
       "playerFrameScale": "Spillerrammens skala",
       "targetFrameScale": "Målrammens skala",
@@ -1186,8 +1186,8 @@ export const da_DK: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Angreb",
+      "defense": "Forsvar"
     },
     "statInfo": {
       "fromYour": "Fra din {value} {stat}:",
@@ -1447,7 +1447,7 @@ export const da_DK: EnTranslations = {
     "corpseHarvest": {
       "title": "Høst",
       "harvestButton": "Høst",
-      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
+      "harvestTooltip": "Indsamler de markerede komponenter. Hvert kadaver kan kun hostes en gang, og det gælder for den første der kommer. Tager ikke byttet.",
       "concentrateHint": "Jo færre dele du vælger, desto højere kvalitetsgrad får hver enkelt.",
       "alreadyHarvested": "Dette kadaver er allerede blevet høstet.",
       "componentAria": "Høst {component}",
@@ -1465,8 +1465,8 @@ export const da_DK: EnTranslations = {
     "townFocus": {
       "title": "Byfokus",
       "hint": "Fokuspoint lægger en bonus oven på hver komponents grundudbytte. Ufokuserede komponenter bliver på grundniveauet.",
-      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
-      "townOnlyHint": "Focus can only be changed while you are in town.",
+      "tierHint": "Hvert {points} point på en komponent løfter dens høstniveau et trin, op til {steps} trin; færre end {points} point øger stadig udbyttet.",
+      "townOnlyHint": "Fokus kan kun ændres, mens du er i byen.",
       "budgetLabel": "Point tilbage: {remaining} / {budget}",
       "saveButton": "Gem fokus",
       "notInTownHint": "Du skal være i byen for at sætte dit fokus.",
@@ -1525,7 +1525,7 @@ export const da_DK: EnTranslations = {
       "dragEquipHint": "Træk hen på din karakter for at udruste",
       "dragDestroyHint": "Træk ud i verden for at ødelægge",
       "reorderNeedsRecent": "Ryd filteret og sortér efter Seneste for at omarrangere dine tasker",
-      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
+      "itemAriaInstanced": "{item}, antal {count}, signeret kopi",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1691,9 +1691,9 @@ export const da_DK: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kiste",
-      "takeLootButton": "Take Loot",
-      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
-      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
+      "takeLootButton": "Tag bytte",
+      "takeLootTooltip": "Tager mønterne og droppede genstande. Bruger ikke høsten op.",
+      "unifiedPressHint": "Interaktionstast plyndrer og høster i ét tryk ved hjælp af dit byfokus."
     },
     "spellbook": {
       "addToBarAria": "Tilføj {name} til handlingslinjen",
@@ -1841,7 +1841,7 @@ export const da_DK: EnTranslations = {
         "legend": "LEGENDE",
         "shill": "FORKÆMPER"
       },
-      "roleTagChatTitle": "Verified server role: {role}",
+      "roleTagChatTitle": "Verificeret serverrolle: {role}",
       "guildMember": "Verificeret medlem",
       "notMember": "Ikke på serveren endnu",
       "joinCta": "Tilslut Discord",
@@ -1966,7 +1966,7 @@ export const da_DK: EnTranslations = {
       "removeParcelAria": "Fjern {item} fra brevet",
       "parcelQtyDecreaseAria": "Send én {item} mindre",
       "parcelQtyIncreaseAria": "Send én {item} mere",
-      "parcelQtyAria": "Quantity of {item} to send",
+      "parcelQtyAria": "Antal {item} der skal sendes",
       "sendButton": "Send brev",
       "postageNote": "Porto: {amount}. Ravnen er undervejs i omtrent {seconds}s.",
       "arrivedBanner": "Ravnen er landet: post fra {name}.",
@@ -2105,41 +2105,41 @@ export const da_DK: EnTranslations = {
       "stopBlockingTitle": "Fjern blokering af {name}",
       "onlineHeader": "Online ({n})",
       "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "hideOffline": "Skjul offline",
+      "hideOfflineTitle": "Skjul offline gildemedlemmer"
     },
     "gathering": {
       "title": "Indsamling",
       "mining": "Minedrift",
       "logging": "Skovhugst",
       "herbalism": "Urtekundskab",
-      "fishing": "Fishing",
+      "fishing": "Fiskeri",
       "notReady": "Denne ressourcekilde er endnu ikke genskabt for dig.",
       "gatherLine": "Du samler: {name}.",
       "gatherLineQty": "Du samler: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Du hiver ind: {name}",
+      "biteLine": "Noget tager madden!",
+      "gotAwayLine": "Det slap væk.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Malmåre",
+        "wood": "Tømmerlund",
+        "herb": "Urteplette"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Kræver en niveau {tier} mineøkse",
+        "logging": "Kræver en niveau {tier} skovhuggeøkse",
+        "herbalism": "Kræver en niveau {tier} urtesegl"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Du har brug for en niveau {tier} mineøkse for at høste denne åre.",
+        "logging": "Du har brug for en niveau {tier} skovhuggeøkse for at fælde denne lund.",
+        "herbalism": "Du har brug for en niveau {tier} urtesegl for at samle denne plette."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
-      "downgradeFind": "Bags full: a pristine find slipped away.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Du har brug for et niveau {tier} indsamlingsværktøj for at genvinde de fineste materialer.",
+      "downgradeMark": "Tasker fyldte: fundet blev gemt uden indsamlerens mærke.",
+      "downgradeFind": "Tasker fyldte: et pristint fund slap væk.",
+      "stateReady": "Klar",
+      "stateCooldown": "Genskabes"
     },
     "archetypeTitle": {
       "label": "Titel",
@@ -2171,47 +2171,47 @@ export const da_DK: EnTranslations = {
       "leatherworking": "Læderhåndværk"
     },
     "enchantName": {
-      "enchant_weapon_might": "Enchant Weapon - Might",
-      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
-      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
-      "enchant_neck_spirit": "Enchant Necklace - Spirit",
-      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
-      "enchant_chest_stamina": "Enchant Chest - Stamina",
-      "enchant_waist_stamina": "Enchant Belt - Stamina",
-      "enchant_legs_stamina": "Enchant Legs - Stamina",
-      "enchant_gloves_agility": "Enchant Gloves - Agility",
-      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
-      "enchant_feet_agility": "Enchant Boots - Agility",
-      "enchant_ring_spirit": "Enchant Ring - Spirit",
-      "enchant_weapon_agility": "Enchant Weapon - Agility",
-      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
-      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
-      "enchant_neck_intellect": "Enchant Necklace - Intellect",
-      "enchant_neck_agility": "Enchant Necklace - Agility",
-      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
-      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
-      "enchant_chest_spirit": "Enchant Chest - Spirit",
-      "enchant_chest_armor": "Enchant Chest - Reinforcement",
-      "enchant_waist_strength": "Enchant Belt - Strength",
-      "enchant_waist_agility": "Enchant Belt - Agility",
-      "enchant_legs_intellect": "Enchant Legs - Intellect",
-      "enchant_gloves_strength": "Enchant Gloves - Strength",
-      "enchant_feet_strength": "Enchant Boots - Strength",
-      "enchant_feet_stamina": "Enchant Boots - Stamina",
-      "enchant_ring_strength": "Enchant Ring - Strength",
-      "enchant_ring_agility": "Enchant Ring - Agility",
-      "enchant_ring_intellect": "Enchant Ring - Intellect",
-      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
-      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
-      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
-      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
-      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
-      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
-      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
-      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
-      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
-      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
-      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+      "enchant_weapon_might": "Fortryl våben - Magt",
+      "enchant_weapon_intellect": "Fortryl våben - Besværgelsesstyrke",
+      "enchant_helmet_fortitude": "Fortryl hjelm - Udholdenhed",
+      "enchant_neck_spirit": "Fortryl halskæde - Ånd",
+      "enchant_shoulder_agility": "Fortryl skuldre - Smidighed",
+      "enchant_chest_stamina": "Fortryl bryst - Udholdenhed",
+      "enchant_waist_stamina": "Fortryl bælte - Udholdenhed",
+      "enchant_legs_stamina": "Fortryl ben - Udholdenhed",
+      "enchant_gloves_agility": "Fortryl handsker - Smidighed",
+      "enchant_gloves_intellect": "Fortryl handsker - Besværgelsesstyrke",
+      "enchant_feet_agility": "Fortryl støvler - Smidighed",
+      "enchant_ring_spirit": "Fortryl ring - Ånd",
+      "enchant_weapon_agility": "Fortryl våben - Smidighed",
+      "enchant_helmet_intellect": "Fortryl hjelm - Intellekt",
+      "enchant_helmet_armor": "Fortryl hjelm - Forstærkning",
+      "enchant_neck_intellect": "Fortryl halskæde - Intellekt",
+      "enchant_neck_agility": "Fortryl halskæde - Smidighed",
+      "enchant_shoulder_strength": "Fortryl skuldre - Styrke",
+      "enchant_shoulder_intellect": "Fortryl skuldre - Intellekt",
+      "enchant_chest_spirit": "Fortryl bryst - Ånd",
+      "enchant_chest_armor": "Fortryl bryst - Forstærkning",
+      "enchant_waist_strength": "Fortryl bælte - Styrke",
+      "enchant_waist_agility": "Fortryl bælte - Smidighed",
+      "enchant_legs_intellect": "Fortryl ben - Intellekt",
+      "enchant_gloves_strength": "Fortryl handsker - Styrke",
+      "enchant_feet_strength": "Fortryl støvler - Styrke",
+      "enchant_feet_stamina": "Fortryl støvler - Udholdenhed",
+      "enchant_ring_strength": "Fortryl ring - Styrke",
+      "enchant_ring_agility": "Fortryl ring - Smidighed",
+      "enchant_ring_intellect": "Fortryl ring - Intellekt",
+      "enchant_weapon_greater_might": "Fortryl våben - Større magt",
+      "enchant_weapon_greater_spellpower": "Fortryl våben - Større besværgelsesstyrke",
+      "enchant_helmet_greater_fortitude": "Fortryl hjelm - Større udholdenhed",
+      "enchant_chest_greater_stamina": "Fortryl bryst - Større udholdenhed",
+      "enchant_legs_greater_stamina": "Fortryl ben - Større udholdenhed",
+      "enchant_gloves_greater_agility": "Fortryl handsker - Større smidighed",
+      "enchant_weapon_runed_edge": "Fortryl våben - Runet æg",
+      "enchant_weapon_runed_focus": "Fortryl våben - Runet fokus",
+      "enchant_chest_runeweave": "Fortryl bryst - Runevæv",
+      "enchant_legs_runed_hide": "Fortryl ben - Runet skind",
+      "enchant_helmet_runed_links": "Fortryl hjelm - Runede kæder"
     },
     "professions": {
       "title": "Erhverv",
@@ -2232,7 +2232,7 @@ export const da_DK: EnTranslations = {
       "tierPipAria": "Niveau {tier}",
       "nextUnlockTier": "{points} point til næste niveau: mesterværk odds forbedres",
       "nextUnlockSpecialized": "{points} point til Specialiseret: materialeomkostningerne falder",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Mestret, for nu",
       "perkSpecializedLine": "{craft}: Specialiseret, materialeomkostninger -{pct}%",
       "perkSpecializedAt": "Specialiseret i {threshold} færdigheder",
       "switchCost": "Næste arketypeskift koster {cost} bodspoint",
@@ -2273,7 +2273,7 @@ export const da_DK: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Resultat: {title}-titel; {majorA} og {majorB} bliver ubegrænsede hovedfag; {hobby} bliver det sjældent-begrænsede hobby; al anden færdighedsviden bevares men begrænses til almindelig, mens den er inaktiv.",
       "hobbyPreview": "Resultat: {hobby} bliver det sjældent-begrænsede hobby. Begge hovedfag og alle bevarede færdigheder forbliver uændrede.",
-      "attunementReturnCost": "If you leave this pair, returning to it later costs {cost} make-amends tasks.",
+      "attunementReturnCost": "Hvis du forlader dette par, koster en tilbagevenden {cost} soningopgaver.",
       "identity": {
         "title": "Håndværksidentitet",
         "syncing": "Venter på din håndværksidentitet fra riget.",
@@ -2313,64 +2313,64 @@ export const da_DK: EnTranslations = {
       "skillReqLine": "Kræver {craft} {skill}",
       "difficultyFull": "Fuld færdighedsforøgelse",
       "difficultyReduced": "Reduceret færdighedsforøgelse",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimal færdighedsgevinst",
       "difficultyNone": "Ingen færdighedsforøgelse",
       "stationBadge": "Station",
       "stationOutOfRangeNamed": "Flyt til {station} for at lave dette.",
-      "learnMoreAtStation": "{master} at the {station} can teach you more {craft} recipes.",
+      "learnMoreAtStation": "{master} ved {station} kan lære dig flere {craft}-opskrifter.",
       "masterworkToast": "Mesterværk! {name}",
       "masterworkZoneLine": "{crafter} lavede et mesterværk {name}!",
       "tierUpToast": "{craft} avanceret til niveau {tier}!",
-      "trendNudge": "Your hands are leaning toward the {archetype}. Its attunement waits with {master}.",
-      "trendNudgeNoMaster": "Your hands are leaning toward the {archetype}. Seek a craft master to take it up.",
-      "attunedZoneLine": "{name} has attuned as {archetype}!",
-      "attunedBanner": "Attuned: {title}",
+      "trendNudge": "Dine hænder læner sig mod {archetype}. Dens indstilling venter hos {master}.",
+      "trendNudgeNoMaster": "Dine hænder læner sig mod {archetype}. Søg en håndværksmester for at tage det op.",
+      "attunedZoneLine": "{name} er indstillet som {archetype}!",
+      "attunedBanner": "Indstillet: {title}",
       "tierTutorial": {
-        "title": "Your First Tier",
-        "tierCap": "A craft reaches its first tier at {skill} skill, and each tier improves what it can make. But a craft only climbs past rare work once it is one of your two majors.",
-        "radar": "Your professions form a wheel. Attune to an adjacent pair and those two crafts become uncapped majors, one craft across the wheel becomes a rare-capped hobby, and the rest lie dormant: their knowledge kept, but capped at common until you take them up again.",
-        "masters": "Craft masters in the towns offer attunement quests. Visit one to choose your pair whenever you are ready. Nothing you have learned is ever lost.",
-        "dismiss": "Got it"
+        "title": "Dit første niveau",
+        "tierCap": "Et håndværk når sit første niveau ved {skill} færdighed, og hvert niveau forbedrer, hvad det kan lave. Men et håndværk kan kun klatre forbi sjældent arbejde, når det er et af dine to hovedfag.",
+        "radar": "Dine erhverv danner et hjul. Indstil dig på et nabobpar, og de to håndværk bliver ubegrænsede hovedfag, et håndværk på den anden side af hjulet bliver et sjældent-begrænset hobby, og resten er inaktive: viden bevaret, men begrænset til almindelig, indtil du tager dem op igen.",
+        "masters": "Håndværksmestre i byerne tilbyder indstillingsquests. Besøg en for at vælge dit par, når du er klar. Intet du har lært, går nogensinde tabt.",
+        "dismiss": "Forstået"
       },
       "makersMark": "Udformet af {name}",
-      "gatheredBy": "Gathered by {name}",
+      "gatheredBy": "Indsamlet af {name}",
       "masterworkSeal": "Mesterværk",
       "enchantedLine": "Fortryllet",
-      "commissionToggle": "Commission piece",
-      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
-      "commissionUnbound": "Commission piece: binds to the first recipient",
-      "commissionBound": "Commission piece: bound to its recipient"
+      "commissionToggle": "Kommissionsstykke",
+      "commissionToggleHint": "Bindes til den første karakter, der modtager det i en handel.",
+      "commissionUnbound": "Kommissionsstykke: bindes til den første modtager",
+      "commissionBound": "Kommissionsstykke: bundet til modtageren"
     },
     "itemMenu": {
-      "use": "Use",
-      "equip": "Equip",
-      "disenchant": "Disenchant",
-      "salvage": "Salvage",
-      "applyEnchant": "Apply Enchant"
+      "use": "Brug",
+      "equip": "Udrust",
+      "disenchant": "Affortrylle",
+      "salvage": "Bjærg",
+      "applyEnchant": "Anvend fortryllelse"
     },
     "enchanting": {
-      "disenchantedLine": "You disenchant {item}.",
-      "salvagedLine": "You salvage {item}.",
-      "enchantAppliedLine": "You enchant {item} with {enchant}.",
-      "notHeld": "You do not have that item.",
-      "notDisenchantable": "You cannot disenchant that.",
-      "notSalvageable": "You cannot salvage that.",
-      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
-      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
-      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
-      "enchantWrongSlot": "That enchant cannot be applied to that item.",
-      "enchantUnknown": "That enchant does not exist.",
-      "enchantInsufficient": "You do not have the materials for that enchant.",
-      "disenchantConfirmTitle": "Disenchant {item}?",
-      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
-      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
-      "salvageConfirmTitle": "Salvage {item}?",
-      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
-      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
-      "pickerTitle": "Apply Enchant",
-      "targetTitle": "Choose an item to enchant",
-      "noEnchants": "No enchant uses this reagent.",
-      "noTargets": "No eligible item to enchant."
+      "disenchantedLine": "Du affortrylles {item}.",
+      "salvagedLine": "Du bjærger {item}.",
+      "enchantAppliedLine": "Du fortrylles {item} med {enchant}.",
+      "notHeld": "Du har ikke den genstand.",
+      "notDisenchantable": "Du kan ikke affortrylle det.",
+      "notSalvageable": "Du kan ikke bjærge det.",
+      "disenchantThrottled": "Du affortrylles for hurtigt. Vent et øjeblik og prøv igen.",
+      "salvageThrottled": "Du bjærger for hurtigt. Vent et øjeblik og prøv igen.",
+      "enchantThrottled": "Du fortrylles for hurtigt. Vent et øjeblik og prøv igen.",
+      "enchantWrongSlot": "Den fortryllelse kan ikke anvendes på den genstand.",
+      "enchantUnknown": "Den fortryllelse eksisterer ikke.",
+      "enchantInsufficient": "Du har ikke materialerne til den fortryllelse.",
+      "disenchantConfirmTitle": "Affortrylle {item}?",
+      "disenchantConfirmBody": "Dette ødelægger {item} og giver arkan materiale. Dette kan ikke fortrydes.",
+      "disenchantConfirmBodySpecial": "Dette ødelægger et særligt eksemplar af {item} (signeret, mesterværk eller fortryllet) og giver arkan materiale. Dette kan ikke fortrydes.",
+      "salvageConfirmTitle": "Bjærg {item}?",
+      "salvageConfirmBody": "Dette ødelægger {item} og giver håndværksmaterialer. Dette kan ikke fortrydes.",
+      "salvageConfirmBodySpecial": "Dette ødelægger et særligt eksemplar af {item} (signeret, mesterværk eller fortryllet) og giver håndværksmaterialer. Dette kan ikke fortrydes.",
+      "pickerTitle": "Anvend fortryllelse",
+      "targetTitle": "Vælg en genstand at fortryle",
+      "noEnchants": "Ingen fortryllelse bruger dette reagens.",
+      "noTargets": "Ingen berettiget genstand at fortryle."
     },
     "training": {
       "title": "Træning: {name}",
@@ -2392,23 +2392,23 @@ export const da_DK: EnTranslations = {
       "outOfRange": "Du skal være på stationen for at træne."
     },
     "unbind": {
-      "title": "Unbinding: {name}",
-      "close": "Close unbinding",
-      "intro": "The master can release a commission piece from its bond, for a fee.",
-      "empty": "You carry no bound commission pieces.",
-      "rowSub": "Releases the bond; the piece binds again on its next trade.",
-      "unbindAria": "Unbind {name} for {fee}",
-      "dialogOption": "Unbinding",
-      "dialogOptionAria": "Unbind a commission piece with {name}",
-      "confirmTitle": "Unbind Commission Piece",
-      "confirmBody": "Unbind {name} for {fee}?",
-      "confirmOk": "Unbind",
-      "confirmCancel": "Cancel",
-      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
-      "notEligible": "That item cannot be unbound.",
-      "notBound": "That item is not bound.",
-      "cannotAfford": "You cannot afford the unbinding fee.",
-      "outOfRange": "You must be at a crafting station to unbind."
+      "title": "Aflæsning: {name}",
+      "close": "Luk aflæsning",
+      "intro": "Mesteren kan frigøre et kommissionsstykke fra dets binding mod et gebyr.",
+      "empty": "Du bærer ingen bundne kommissionsstykker.",
+      "rowSub": "Frigør bindingen; stykket binder igen ved næste handel.",
+      "unbindAria": "Aflæs {name} for {fee}",
+      "dialogOption": "Aflæsning",
+      "dialogOptionAria": "Aflæs et kommissionsstykke med {name}",
+      "confirmTitle": "Aflæs kommissionsstykke",
+      "confirmBody": "Aflæs {name} for {fee}?",
+      "confirmOk": "Aflæs",
+      "confirmCancel": "Annuller",
+      "unbound": "Aflæste {name} for {fee}. Det vil binde igen ved næste handel.",
+      "notEligible": "Den genstand kan ikke aflæses.",
+      "notBound": "Den genstand er ikke bundet.",
+      "cannotAfford": "Du har ikke råd til aflæsningsgebyret.",
+      "outOfRange": "Du skal være ved en håndværksstation for at aflæse."
     },
     "finder": {
       "title": "Fangekældersfinder",
@@ -4326,7 +4326,7 @@ export const da_DK: EnTranslations = {
   "stats": {
     "title": "Verdensstatus",
     "accountsCreated": "Spillere",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Oprettede karakterer",
     "playersOnline": "Spillere online",
     "realmName": "Verdensnavn"
   },
@@ -5899,7 +5899,7 @@ export const da_DK: EnTranslations = {
       "tradeTooFar": "Målet er for langt væk til at handle.",
       "tradeExpired": "Handelsanmodningen er udløbet.",
       "tradeFailed": "Handel mislykkedes: genstande eller penge er ikke længere tilgængelige.",
-      "tradeBound": "That item is bound and cannot be traded."
+      "tradeBound": "Den genstand er bundet og kan ikke handles."
     },
     "logs": {
       "standUp": "Du rejser dig op.",
@@ -6048,7 +6048,7 @@ export const da_DK: EnTranslations = {
         "combat": "I kamp",
         "dungeon": "I fangekælder",
         "dead": "Død",
-        "afk": "Away"
+        "afk": "Borte"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -6156,7 +6156,7 @@ export const da_DK: EnTranslations = {
     },
     "cast": {
       "fishing": "Fiskeri",
-      "gathering": "Gathering",
+      "gathering": "Indsamling",
       "demonHeal": "Dæmonhelbredelse",
       "thunzharrStormcall": "Stormkald"
     }
@@ -8670,142 +8670,142 @@ export const da_DK: EnTranslations = {
         "name": "Slangens eliksir"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Mosskinds-Vest"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Tornling-Greb"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Akolyttens Kædegrebs"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Votiv-Kædebælte"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Tornerodsstaffe"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Dalild Lygte"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Kærbarks-Benklæder"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Sumphavesøvler"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Kærvogter-Jernstøvler"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Sumplys-Brynjetrøje"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Tørntorn-Kappe"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Kærskygge-Hammer"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Vildlund-Livbælte"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Klippevægte Skulderplader"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Klippetoerne Storstav"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Månebark-Klædedragt"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Tindsang-Hjelm"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Stormkaldets Kamphandsker"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Klippeluske-Bælte"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Stormrod-Hætte"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Tordenvogte-Benbeskyttere"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Genganger-Trin-Trædesko"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Skærvhugtand-Greb"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Skærvlyd-Skulderkappe"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Ormekultens Besværgelsesgreb"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Tornspids-Vildvindinger"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Stormoffers Brynjetrøje"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Kryptblomst-Skulderværn"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Gravorm-Tornhammer"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Klædedragt fra den Vagnende Lund"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Nathugtandens Storstav"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Hammer fra de Hærgede Vildmarker"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Tidevandshymne-Tøfler"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Perlevogternes Skjold"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Vildvækst-Benklæder"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Lundevogterens Greb"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Grønne Vandrestøvler"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Månevogter-Livbælte"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Drømmerodsstøvler"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Stormbark-Skulderkappe"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Vildsjæl-Hammer"
       },
       "resonant_thread": {
-        "name": "Resonant Thread"
+        "name": "Resonant Tråd"
       },
       "resonant_hide": {
-        "name": "Resonant Hide"
+        "name": "Resonant Skind"
       },
       "resonant_links": {
-        "name": "Resonant Links"
+        "name": "Resonante Kæder"
       },
       "resonant_steel": {
-        "name": "Resonant Steel"
+        "name": "Resonant Stål"
       },
       "resonant_timber": {
-        "name": "Resonant Timber"
+        "name": "Resonant Tømmer"
       },
       "conjured_water4": {
         "name": "Fremmanet kildevand"
@@ -10900,142 +10900,142 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_prof_attune_smith": {
-        "title": "The Smith's Promise",
-        "text": "Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, {playerName}: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.",
-        "completion": "Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.",
+        "title": "Smedens løfte",
+        "text": "Stål tilgiver ikke en vandrende hånd, så jeg siger dig det ligeud, inden du sværger noget. Bind dig til min smedje, og Våbensmedning og Rustningssmedning bliver dine to hovedfag, de eneste håndværk, du kan bære forbi sjælden arbejde. Håndværket tværs over hjulet fra dem slår sig ned som din hobby, arbejdet til sjælden og ikke videre. Dine andre fag brænder ikke bort, {playerName}: de gør sig bare stille, inaktive, til du kalder dem tilbage. Og ved dette, inden hammeren falder: forlad dette par for et andet, og du vil krybe tilbage gennem ærligt arbejde for at vende tilbage til det, fem fjender nedlagt første gang, otte næste, elleve bagefter, mere, hver gang du strejfer. Stadig her? Bring mig da tre årer af malm bearbejdet fra Dalen med dine egne hænder, og vi kalder løftet afgivet.",
+        "completion": "God malm, og gode hænder til at bearbejde den. Våbensmedning og Rustningssmedning er dine at mestre nu. Tjen resten.",
         "objectives": {
           "0": {
-            "label": "Ore vein harvested"
+            "label": "Malmåre høstet"
           }
         }
       },
       "q_prof_attune_outfitter": {
-        "title": "The Outfitter's Measure",
-        "text": "Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, {playerName}, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.",
-        "completion": "Even thread, even hand. Leatherworking and Tailoring are yours to carry as far as your skill will reach. Measure twice, and they will not fail you.",
+        "title": "Udstyrsmagerens mål",
+        "text": "Mål prisen, inden du klipper, det er den første regel ved min væv. Vælg mig, og Lærbearbejdning og Skrædderkunst bliver dine to hovedfag, det par du kan bære ud over sjælden arbejde; håndværket modsat dem slår sig ned som din hobby, taget til sjælden og ladt der. De fag, du sætter til side, er ikke optrukket, {playerName}, kun lagt sammen, inaktive, til du tager dem op igen. Vær sikker, dog: forlader du dette par og vil have det tilbage senere, er vejen hjem betalt i arbejde, der forlænges hver gang, fem dræbt i første omgang, så otte, så elleve, altid lidt mere. Er dit sind sat, dræb fire nettedskov-edderkopper og bring deres silke til væven, for god tråd starter alle gode klæder.",
+        "completion": "Jævn tråd, jævn hånd. Lærbearbejdning og Skrædderkunst er dine at bære så langt, som din færdighed rækker. Mål to gange, og de vil ikke svigte dig.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Nettedskov-Edderkop dræbt"
           }
         }
       },
       "q_prof_attune_apothecary": {
-        "title": "A Recipe Worth Keeping",
-        "text": "Every good dish is two flavors that belong together, and so is a good craft, {playerName}. Sit with me and Alchemy and Cooking become your two majors, the two you may simmer past rare work; the craft on the far side of the wheel is your hobby, seasoned up to rare and no hotter. The rest of your trades keep in the pantry, dormant, not spoiled, ready whenever you fetch them back. Fair warning while the pot is still cold: wander off to another pair and coming home is a chore that grows, five beasts seen to the first time, eight the next, eleven the time after, heavier with every helping. Still hungry for it? Then hunt me four wild boars, because a kitchen worth its salt starts with good meat.",
-        "completion": "Now that is a start with some meat on it. Alchemy and Cooking are yours to cook as high as you like. Come back hungry.",
+        "title": "En opskrift værd at beholde",
+        "text": "Hvert godt ret er to smagsstoffer, der hører sammen, og det er et godt håndværk også, {playerName}. Sid hos mig, og Alkymi og Madlavning bliver dine to hovedfag, de to du kan simre forbi sjælden arbejde; håndværket på den fjerne side af hjulet er din hobby, krydret op til sjælden og ikke varmere. Resten af dine fag holder sig i spisekammeret, inaktive, ikke fordærvede, klar, når du henter dem tilbage. Retfærdig advarsel mens gryden stadig er kold: strej til et andet par og at komme hjem er et ærinde, der vokser, fem dyr taget i første omgang, otte næste, elleve gangen efter, tungere ved hvert måltid. Stadig sulten efter det? Så jag mig fire vildsvin, for et køkken værd dets salt starter med godt kød.",
+        "completion": "Nu er det en start med kød på. Alkymi og Madlavning er dine at lave så højt, du vil. Kom tilbage sulten.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Vildsvin jagtet"
           }
         }
       },
       "q_prof_attune_bombardier": {
-        "title": "A Volatile Arrangement",
-        "text": "Oh, oh, you want the good stuff, the loud stuff, yes? Listen, listen, before you touch anything that ticks: say the word and Engineering and Alchemy become your two majors, the only two you get to push past rare work (that is where it gets FUN, trust me). The craft opposite goes in your pocket as a hobby, rare and no further, do not pout. Your other trades? Not gone, {playerName}, just napping, dormant, wake them whenever you like. But (there is always a but, hold the fuse) ditch this pair and waddle back later and it costs you sweat that piles up, five things put down the first time, eight the next, eleven after, more, more, every single time you get cold feet. Yes? YES? Then go pick me three patches of herbs, the volatile ones, do not ask which, they are all a little volatile if you believe hard enough.",
-        "completion": "HA. Reagents, real ones, and all your fingers still attached, good, good. Engineering and Alchemy, yours, go make something that regrets it. Off you go.",
+        "title": "En volatil aftale",
+        "text": "Åh, åh, du vil have det gode stof, det støjende stof, ikke? Lyt, lyt, inden du rører ved noget, der tikker: sig bare ordet, og Ingeniørkunst og Alkymi bliver dine to hovedfag, de eneste to, du kan skubbe forbi sjælden arbejde (det er der, det bliver SJOVT, stol på mig). Håndværket modsat går i din lomme som hobby, sjælden og ikke videre, klynk ikke. Dine andre fag? Ikke væk, {playerName}, bare slumrende, vågn dem, når du vil. Men (der er altid et men, hold lunten) forlad dette par og gå tilbage senere, og det koster dig sved, der hober sig, fem ting nedlagt første gang, otte næste, elleve bagefter, mere, mere, hver eneste gang du får kolde fødder. Ja? JA? Gå da pluk mig tre pletter med urter, de volatile, spørg ikke hvilke, de er alle lidt volatile, hvis du tror hårdt nok.",
+        "completion": "HA. Reagenser, rigtige, og alle dine fingre stadig fastgjort, godt, godt. Ingeniørkunst og Alkymi, dine, gå lav noget, der fortryder det. Afsted.",
         "objectives": {
           "0": {
-            "label": "Herb patch harvested"
+            "label": "Urteplette høstet"
           }
         }
       },
       "q_prof_amends_smith": {
-        "title": "Back to the Forge",
-        "text": "So you have come back to the forge. I will not pretend it does not sting, {playerName}, but I am a fair hand and the work is fair too. You know the price of returning: labor, and more of it each time you have strayed. Put down the wolves harrying the north road, and the swing of it will remind your arms what this pair once asked of them.",
-        "completion": "The rhythm is back in your hands. Weaponcrafting and Armorcrafting are your majors once more. Do not make a habit of leaving.",
+        "title": "Tilbage til smedjen",
+        "text": "Så du er kommet tilbage til smedjen. Jeg vil ikke lade som om, det ikke svider, {playerName}, men jeg er en fair hånd og arbejdet er fair også. Du kender prisen for at vende tilbage: arbejde, og mere af det, hver gang du har strejfet. Nedkæmp ulvene, der plager nordvejen, og svinget vil minde dine arme om, hvad dette par engang krævede af dem.",
+        "completion": "Rytmen er tilbage i dine hænder. Våbensmedning og Rustningssmedning er dine hovedfag endnu engang. Gør ikke det til en vane at forlade.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Skovulv slagtet"
           }
         }
       },
       "q_prof_amends_outfitter": {
-        "title": "Threads Rejoined",
-        "text": "Back at my loom after all. I hold no grudge, {playerName}, but the thread remembers a hand that let it go, and the cost of taking it up again is measured out longer each time. Cull the webwood spiders crowding the western woods, and the labor will settle your hands before they touch good silk again.",
-        "completion": "Steady again. Leatherworking and Tailoring return to your hands as majors. Measure twice this time before you wander.",
+        "title": "Tråde genforenet",
+        "text": "Tilbage ved min væv alligevel. Jeg bærer intet nag, {playerName}, men tråden husker en hånd, der slap den, og prisen for at tage den op igen måles ud længere, hver gang. Dræb nettedskov-edderkopperne i den vestlige skov, og arbejdet vil sætte dine hænder til ro, inden de rører god silke igen.",
+        "completion": "Stødig igen. Lærbearbejdning og Skrædderkunst vender tilbage til dine hænder som hovedfag. Mål to gange, inden du vandrer næste gang.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Nettedskov-Edderkop dræbt"
           }
         }
       },
       "q_prof_amends_apothecary": {
-        "title": "Back on the Stove",
-        "text": "Well, look who is back at my pot. No hard feelings, {playerName}, a kitchen always has room, but you know the tab runs longer every time you walk out on it. Go thin the wild boars in the east meadow, because honest sweat is the first ingredient, and it will remind your hands of the work.",
-        "completion": "There is the old flavor. Alchemy and Cooking are back on your stove as majors. Stay a while this time.",
+        "title": "Tilbage på komfuret",
+        "text": "Se hvem der er tilbage ved min gryde. Ingen hårde følelser, {playerName}, et køkken har altid plads, men du ved, at regningen løber højere, hver gang du går. Gå til østmarken og tyn vildsvinene, for ærligt sved er den første ingrediens, og det vil minde dine hænder om arbejdet.",
+        "completion": "Der er den gamle smag. Alkymi og Madlavning er tilbage på dit komfur som hovedfag. Bliv lidt denne gang.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Vildsvin jagtet"
           }
         }
       },
       "q_prof_amends_bombardier": {
-        "title": "The Ledger Grows",
-        "text": "You came BACK, ha, they always come back, the loud stuff has a pull, yes? No sulking from me, {playerName}, but the ledger, oh the ledger, it grows every time you skip out, more each return, that is only fair. Go clear the tunnel rats out of the dig for me, sweat first, sparks later, that is the rule I just made up.",
-        "completion": "THERE it is, the itch is back in your hands. Engineering and Alchemy, majors again, go on, go make a bang. Try to stay put this time, eh?",
+        "title": "Bogen vokser",
+        "text": "Du kom TILBAGE, ha, de kommer altid tilbage, det støjende stof har en tiltrækning, ikke? Ingen sur mine fra mig, {playerName}, men bogen, åh bogen, den vokser, hver gang du stikker af, mere for hver tilbagevenden, det er kun rimeligt. Gå rens tunnelrotterne ud af udgravningen for mig, sved først, gnister bagefter, det er reglen jeg lige fandt på.",
+        "completion": "DER er den, kløen er tilbage i dine hænder. Ingeniørkunst og Alkymi, hovedfag igen, gå nu, gå og lav et brag. Prøv at blive sat denne gang, hvad?",
         "objectives": {
           "0": {
-            "label": "Tunnel Rat exterminated"
+            "label": "Tunnerotte udryddet"
           }
         }
       },
       "q_prof_workorder_forge": {
-        "title": "Forge Work Order",
-        "text": "The forge always wants feeding, {playerName}. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.",
-        "completion": "Good weight, no slag. Here is your due. The forge will be hungry again soon enough.",
+        "title": "Smedje-Arbejdsordre",
+        "text": "Smedjen vil altid have madvarer, {playerName}. Bring mig otte klumper kobbermalm, og jeg sørger for, at du bliver betalt for porten. Ingen ceremonier, bare malm og mønter.",
+        "completion": "Godt vægt, ingen slagge. Her er din betaling. Smedjen vil være sulten igen snart nok.",
         "objectives": {
           "0": {
-            "label": "Copper Ore delivered"
+            "label": "Kobbermalm leveret"
           }
         }
       },
       "q_prof_workorder_kitchens": {
-        "title": "Kitchens Work Order",
-        "text": "My larder is looking thin, {playerName}, and thin larders make grumpy cooks. Fetch me eight cuts of game meat and there is coin in it for you, plus my undying gratitude, which is worth less but tastes better.",
-        "completion": "Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.",
+        "title": "Køkken-Arbejdsordre",
+        "text": "Mit forrådskammer ser tyndt ud, {playerName}, og tynde forrådskamre skaber sure kokke. Hent mig otte udskæringer af vildt kød, og der er mønter i det for dig, plus min evige taknemmelighed, som er mindre værd, men smager bedre.",
+        "completion": "Nu er det et fuldt spisekammer. Her er din løn. Kom tilbage, når dine tasker er tunge igen.",
         "objectives": {
           "0": {
-            "label": "Game Meat delivered"
+            "label": "Vildt kød leveret"
           }
         }
       },
       "q_prof_workorder_loom": {
-        "title": "Loom Work Order",
-        "text": "The loom runs dry and idle hands waste daylight, {playerName}. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.",
-        "completion": "Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.",
+        "title": "Væv-Arbejdsordre",
+        "text": "Væven løber tør, og ledige hænder spilder dagslyset, {playerName}. Bring mig seks nøgler edderkoppesilke, og jeg vil betale dig en rimelig pris, talt til kobber.",
+        "completion": "Fin silke, jævnt spundet. Dine mønter, præcist afmålt. Væven takker dig, og det gør jeg også.",
         "objectives": {
           "0": {
-            "label": "Spider Silk delivered"
+            "label": "Edderkoppesilke leveret"
           }
         }
       },
       "q_prof_workorder_toolworks": {
-        "title": "Toolworks Work Order",
-        "text": "Hafts, handles, stocks, I go through wood like it is going out of style, which it is NOT, wood is eternal, {playerName}. Haul me eight ironbark logs and I will pay you, coin, real coin, not a favor, I promise, mostly.",
-        "completion": "Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.",
+        "title": "Værktøjsværk-Arbejdsordre",
+        "text": "Skafter, håndtag, kolber, jeg bruger træ, som om det er ved at gå af mode, hvilket det IKKE er, træ er evigt, {playerName}. Hæv mig otte jernbark-stammer, og jeg betaler dig, mønter, rigtige mønter, ikke en tjeneste, jeg lover, for det meste.",
+        "completion": "Perfekt, perfekt, lige korn, ingen råd. Her, dine mønter, se, jeg holder mit ord (for det meste). Bring mere, når du snubler over et træ.",
         "objectives": {
           "0": {
-            "label": "Ironbark Log delivered"
+            "label": "Jernbarks-Stamme leveret"
           }
         }
       },
       "q_prof_workorder_tannery": {
-        "title": "Tannery Work Order",
-        "text": "Vats are empty. Bring eight rough hides. Coin when you do.",
-        "completion": "Good hides. Fair pay. Again when you have more.",
+        "title": "Garveri-Arbejdsordre",
+        "text": "Karene er tomme. Bring otte grove skind. Mønter, når du gør det.",
+        "completion": "Gode skind. Retfærdig betaling. Igen, når du har mere.",
         "objectives": {
           "0": {
-            "label": "Rough Hide delivered"
+            "label": "Groft skind leveret"
           }
         }
       },
       "q_prof_workorder_apothecary": {
-        "title": "Apothecary Work Order",
-        "text": "My shelves require goldleaf, and the market's stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.",
-        "completion": "Acceptable. Potent, and properly handled. Your payment, counted to the coin. Do not let it go to your head, that is a different reagent.",
+        "title": "Apotek-Arbejdsordre",
+        "text": "Mine hylder kræver guldblad, og markedets lager er, forudsigeligt, forfalsket. Bring mig seks guldbladsurter, ubeskadigede, og du vil blive præcist kompenseret. Beskadigede blade vil blive afvist, så pas på din taske.",
+        "completion": "Acceptabelt. Potent og korrekt håndteret. Din betaling, talt til mønten. Lad det ikke stige dig til hovedet, det er et andet reagens.",
         "objectives": {
           "0": {
-            "label": "Goldleaf Herb delivered"
+            "label": "Guldbladsurt leveret"
           }
         }
       },
@@ -11341,109 +11341,109 @@ export const da_DK: EnTranslations = {
         "body": "håndværker,\n\nBud når lauget af dit arbejde inden for rustning og teknik: plader nittet og tandhjul justeret, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Laugehallen",
+        "subject": "Dit håndværk, gjort ærligt",
+        "body": "Gildemedlem,\n\nLauget har vedtaget en ny vurdering af mesterskab. Alle hænder begynder klatringen forfra: dine håndværksfærdigheder og dine indsamlingsfærdigheder er sat til nul.\n\nAlt andet er dit, uberørt: dine opskrifter, dine værktøjer og materialer, din bank og dit guld, dine indstillinger og titler, dine bedrifter og hæder, dine quests og post.\n\nKlatringen er ærlig nu. Billigt arbejde vil ikke bære dig. Søg sværere opskrifter, rigere årer og dybere vande.\n\nMed respekt,\nLaugehallen"
       },
       "prof_tier_weaponcrafting_armorcrafting_1": {
-        "sender": "Forgemistress Darva",
-        "subject": "A spark worth noting",
-        "body": "Word reaches my forge that one of your majors now holds at uncommon work. It is the smallest rung on a long climb, but you earned it at the anvil, not by asking. Keep the fire hot."
+        "sender": "Smedemester Darva",
+        "subject": "En gnist værd at bemærke",
+        "body": "Ord når min smedje om, at et af dine hovedfag nu holder ved ualmindeligt arbejde. Det er det mindste trin på en lang klatring, men du tjente det ved ambolt, ikke ved at bede om det. Hold ilden varm."
       },
       "prof_tier_weaponcrafting_armorcrafting_2": {
-        "sender": "Forgemistress Darva",
-        "subject": "Rare work, and earned",
-        "body": "They tell me a major of yours has reached rare work. That is the rung where sloppy hands fall away and the real smiths are left standing. You are still standing. Good."
+        "sender": "Smedemester Darva",
+        "subject": "Sjælden arbejde, og fortjent",
+        "body": "De fortæller mig, at et af dine hovedfag har nået sjælden arbejde. Det er trinnet, hvor sjuskede hænder falder bort, og de rigtige smede er tilbage stående. Du er stadig stående. Godt."
       },
       "prof_tier_weaponcrafting_armorcrafting_3": {
-        "sender": "Forgemistress Darva",
-        "subject": "The metal answers you now",
-        "body": "A major of yours has climbed past rare into serious work. The metal answers a hand like that, no longer fighting it. Do not let the praise soften your arm."
+        "sender": "Smedemester Darva",
+        "subject": "Metallet svarer dig nu",
+        "body": "Et af dine hovedfag er klatret forbi sjælden ind i seriøst arbejde. Metallet svarer en hånd som den, ikke mere modstand. Lad ikke rosen blødgøre din arm."
       },
       "prof_tier_weaponcrafting_armorcrafting_4": {
-        "sender": "Forgemistress Darva",
-        "subject": "Near the top of the ladder",
-        "body": "One of your majors stands a single rung below mastery. Few hands I have known reach this height, and fewer keep their edge here. Finish the climb."
+        "sender": "Smedemester Darva",
+        "subject": "Nær toppen af stigen",
+        "body": "Et af dine hovedfag står et enkelt trin under mesterskab. Få hænder jeg har kendt når denne højde, og endnu færre holder deres kant her. Afslut klatringen."
       },
       "prof_tier_weaponcrafting_armorcrafting_5": {
-        "sender": "Forgemistress Darva",
-        "subject": "Mastery, at last",
-        "body": "A major of yours has reached mastery, the highest a hand can climb. I do not give praise freely, so hear this once: the forge is proud of you. Now go teach the fire something new."
+        "sender": "Smedemester Darva",
+        "subject": "Mesterskab, endelig",
+        "body": "Et af dine hovedfag har nået mesterskab, det højeste en hånd kan klatre. Jeg giver ikke ros frit, så hør dette en gang: smedjen er stolt af dig. Gå nu og lær ilden noget nyt."
       },
       "prof_tier_leatherworking_tailoring_1": {
-        "sender": "Weaver Ottilie",
-        "subject": "An even first row",
-        "body": "The guild notes that one of your majors has reached uncommon work. It is only the first row of many, but it is even and true. Measure the next as carefully."
+        "sender": "Væver Ottilie",
+        "subject": "En jævn første række",
+        "body": "Lauget bemærker, at et af dine hovedfag har nået ualmindeligt arbejde. Det er kun den første række af mange, men den er jævn og sand. Mål den næste ligeså omhyggeligt."
       },
       "prof_tier_leatherworking_tailoring_2": {
-        "sender": "Weaver Ottilie",
-        "subject": "Rare work, well measured",
-        "body": "A major of yours has climbed to rare work. That is where a careless hand shows every dropped stitch, and yours has not. I am quietly pleased."
+        "sender": "Væver Ottilie",
+        "subject": "Sjælden arbejde, velafmålt",
+        "body": "Et af dine hovedfag er klatret til sjælden arbejde. Det er der, en skødesløs hånd viser hvert tabt sting, og din har ikke. Jeg er stille tilfreds."
       },
       "prof_tier_leatherworking_tailoring_3": {
-        "sender": "Weaver Ottilie",
-        "subject": "The pattern comes clear",
-        "body": "One of your majors has passed rare into finer work. The pattern comes clear to a hand at this level, no more guessing. Keep measuring twice."
+        "sender": "Væver Ottilie",
+        "subject": "Mønstret bliver klart",
+        "body": "Et af dine hovedfag har passeret sjælden ind i finere arbejde. Mønstret bliver klart for en hånd på dette niveau, ikke mere gætteri. Bliv ved med at måle to gange."
       },
       "prof_tier_leatherworking_tailoring_4": {
-        "sender": "Weaver Ottilie",
-        "subject": "One row from the top",
-        "body": "A major of yours sits one row short of mastery. The last row is always the hardest to keep even. Do not rush it now."
+        "sender": "Væver Ottilie",
+        "subject": "En række fra toppen",
+        "body": "Et af dine hovedfag sidder en række fra mesterskab. Den sidste række er altid den sværeste at holde jævn. Skynd dig ikke nu."
       },
       "prof_tier_leatherworking_tailoring_5": {
-        "sender": "Weaver Ottilie",
-        "subject": "The last stitch",
-        "body": "A major of yours has reached mastery. I measured your work twice, as I measure everything, and it holds. Few hands ever tie the last stitch this cleanly. I am proud, and I do not say so lightly."
+        "sender": "Væver Ottilie",
+        "subject": "Det sidste sting",
+        "body": "Et af dine hovedfag har nået mesterskab. Jeg målte dit arbejde to gange, som jeg måler alt, og det holder. Få hænder binder det sidste sting så rent. Jeg er stolt, og det siger jeg ikke let."
       },
       "prof_tier_alchemy_cooking_1": {
-        "sender": "Cook Marlow",
-        "subject": "A taste of things to come",
-        "body": "Word drifts back to my kitchen that one of your majors has reached uncommon work. It is a first taste, nothing more, but a promising one. Keep the pot moving."
+        "sender": "Kok Marlow",
+        "subject": "En forsmag på hvad der kommer",
+        "body": "Ord driver tilbage til mit køkken om, at et af dine hovedfag har nået ualmindeligt arbejde. Det er en første smag, intet mere, men en lovende en. Bliv ved med at røre i gryden."
       },
       "prof_tier_alchemy_cooking_2": {
-        "sender": "Cook Marlow",
-        "subject": "Rare work, and no burnt edges",
-        "body": "They tell me a major of yours has simmered up to rare work. That is the heat where most cooks scorch the dish, and you did not. Sit, but not for long."
+        "sender": "Kok Marlow",
+        "subject": "Sjældent arbejde, og ingen brændte kanter",
+        "body": "De fortæller mig, at et af dine hovedfag har simmeret op til sjælden arbejde. Det er den varme, hvor de fleste kokke brænder retten, og det gjorde du ikke. Sæt dig, men ikke for længe."
       },
       "prof_tier_alchemy_cooking_3": {
-        "sender": "Cook Marlow",
-        "subject": "Now you are cooking",
-        "body": "One of your majors has bubbled past rare into real depth. Now you are cooking, as they say. Season boldly and keep tasting."
+        "sender": "Kok Marlow",
+        "subject": "Nu laver du mad",
+        "body": "Et af dine hovedfag har bobler forbi sjælden ind i virkelig dybde. Nu laver du mad, som de siger. Krydr modigt og bliv ved med at smage."
       },
       "prof_tier_alchemy_cooking_4": {
-        "sender": "Cook Marlow",
-        "subject": "One course from the feast",
-        "body": "A major of yours is a single course short of mastery. The last one is always the richest and the easiest to overdo. Steady hands on the ladle."
+        "sender": "Kok Marlow",
+        "subject": "En ret fra festen",
+        "body": "Et af dine hovedfag er en enkelt ret fra mesterskab. Den sidste er altid den rigeste og den nemmeste at overdrive. Stabile hænder på øsen."
       },
       "prof_tier_alchemy_cooking_5": {
-        "sender": "Cook Marlow",
-        "subject": "Mastery, served hot",
-        "body": "A major of yours has reached mastery, the top shelf of the whole pantry. I feed everyone, but few ever cook their way up here. Proud of you, truly. Now go make something that makes them weep at the table."
+        "sender": "Kok Marlow",
+        "subject": "Mesterskab, serveret varmt",
+        "body": "Et af dine hovedfag har nået mesterskab, den øverste hylde i hele spisekammeret. Jeg mader alle, men få koger sig op hertil. Stolt af dig, virkelig. Gå nu og lav noget, der får dem til at græde ved bordet."
       },
       "prof_tier_engineering_alchemy_1": {
-        "sender": "Tinker Gizzel",
-        "subject": "FIRST spark, ha",
-        "body": "Oi, the numbers say one of your majors just hit uncommon work, small potatoes, tiny, but it POPPED, yes? First spark is always the cutest. More sparks. Go."
+        "sender": "Tinker Gizel",
+        "subject": "FØRSTE gnist, ha",
+        "body": "Oi, tallene siger, at et af dine hovedfag lige har ramt ualmindeligt arbejde, lille kartofler, bittesmå, men det POPPEDE, ikke? Første gnist er altid den sødeste. Flere gnister. Afsted."
       },
       "prof_tier_engineering_alchemy_2": {
-        "sender": "Tinker Gizzel",
-        "subject": "Rare, oh, RARE",
-        "body": "They tell me a major of yours climbed to rare work, and rare is where it starts getting properly dangerous (the good kind). Most hands quit before the fun. Not you. HA."
+        "sender": "Tinker Gizel",
+        "subject": "Sjælden, åh, SJÆLDEN",
+        "body": "De fortæller mig, at et af dine hovedfag klatrede til sjælden arbejde, og sjælden er der, hvor det begynder at blive ordentlig farligt (den gode slags). De fleste hænder holder op, inden det bliver sjovt. Ikke dig. HA."
       },
       "prof_tier_engineering_alchemy_3": {
-        "sender": "Tinker Gizzel",
-        "subject": "Now it gets loud",
-        "body": "One of your majors blew past rare into the serious stuff, oh this is where it gets LOUD. Do not stop now, whatever you do, momentum is everything, also fuses."
+        "sender": "Tinker Gizel",
+        "subject": "Nu bliver det højlydt",
+        "body": "Et af dine hovedfag blæste forbi sjælden ind i det seriøse stof, åh her bliver det HØJLYDT. Stop ikke nu, hvad end du gør, momentum er alt, og lunter er det også."
       },
       "prof_tier_engineering_alchemy_4": {
-        "sender": "Tinker Gizzel",
-        "subject": "One rung, ONE, from the top",
-        "body": "A major of yours is ONE rung under mastery, one, singular, do you feel it humming? The last step is the biggest bang. Do not blink."
+        "sender": "Tinker Gizel",
+        "subject": "Et trin, ET, fra toppen",
+        "body": "Et af dine hovedfag er ET trin under mesterskab, et, singulært, kan du mærke det summe? Det sidste trin er det største brag. Blink ikke."
       },
       "prof_tier_engineering_alchemy_5": {
-        "sender": "Tinker Gizzel",
-        "subject": "MASTERY, kaboom",
-        "body": "A major of yours hit mastery, the very TOP, kaboom, the whole ladder, done. I do not hand out praise, I hand out fuses, but here, take both: you are brilliant and slightly terrifying. Go make the mountains nervous."
+        "sender": "Tinker Gizel",
+        "subject": "MESTERSKAB, kaboom",
+        "body": "Et af dine hovedfag ramte mesterskab, det absolutte TOP, kaboom, hele stigen, klaret. Jeg uddeler ikke ros, jeg uddeler lunter, men tag begge her: du er strålende og en smule skræmmende. Gå og gør bjergene nervøse."
       }
     },
     "itemSets": {

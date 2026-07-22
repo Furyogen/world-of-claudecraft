@@ -110,6 +110,91 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.objectives.0.label': 'Veio de minério extraído',
   'entities.quests.q_prof_intro.text':
     'Toda alma em Eastbrook exerce um ofício além da espada, {playerName}. Há veios de minério nas rochas ao redor da Escavação de Cobre, a sudoeste da cidade. Vá bater com uma picareta e trabalhe 5 deles você mesmo; eu saberei a diferença.',
+  'entities.quests.q_prof_amends_apothecary.completion':
+    'O velho sabor voltou. Alquimia e Culinária estão de volta ao seu fogo como principais. Fique um tempo desta vez.',
+  'entities.quests.q_prof_amends_apothecary.objectives.0.label': 'Javali selvagem caçado',
+  'entities.quests.q_prof_amends_apothecary.text':
+    'Veja quem voltou à minha panela. Sem ressentimentos, {playerName}, uma cozinha sempre tem espaço, mas sabe que a conta fica maior cada vez que você vai embora. Vá diminuir os javalis selvagens no prado a leste, porque suor honesto é o primeiro ingrediente, e vai lembrar suas mãos do trabalho.',
+  'entities.quests.q_prof_amends_apothecary.title': 'De Volta ao Fogão',
+  'entities.quests.q_prof_amends_bombardier.completion':
+    'PRONTO, a coceira voltou às suas mãos. Engenharia e Alquimia, principais de novo, vá em frente, vá fazer barulho. Tente ficar desta vez, hem?',
+  'entities.quests.q_prof_amends_bombardier.objectives.0.label': 'Rato de túnel exterminado',
+  'entities.quests.q_prof_amends_bombardier.text':
+    'Você VOLTOU, ha, eles sempre voltam, a coisa barulhenta tem um apelo, sim? Sem birra da minha parte, {playerName}, mas o livro-razão, ah o livro-razão, ele cresce cada vez que você falta, mais a cada retorno, isso é só justo. Vá limpar os ratos de túnel da escavação para mim, suor primeiro, faíscas depois, essa é a regra que acabei de inventar.',
+  'entities.quests.q_prof_amends_bombardier.title': 'O Livro Cresce',
+  'entities.quests.q_prof_amends_outfitter.completion':
+    'Estável de novo. Couraria e Alfaiataria voltam às suas mãos como principais. Meça duas vezes desta vez antes de se afastar.',
+  'entities.quests.q_prof_amends_outfitter.objectives.0.label': 'Aranha da web culpada',
+  'entities.quests.q_prof_amends_outfitter.text':
+    'De volta ao meu tear afinal. Não guardo rancor, {playerName}, mas o fio lembra uma mão que o largou, e o custo de retomá-lo se mede cada vez mais longo. Abata as aranhas da web que lotam os bosques a oeste, e o trabalho vai assentar suas mãos antes de tocarem boa seda de novo.',
+  'entities.quests.q_prof_amends_outfitter.title': 'Fios Reunidos',
+  'entities.quests.q_prof_amends_smith.completion':
+    'O ritmo voltou às suas mãos. Fabricação de Armas e Fabricação de Armaduras são seus principais de novo. Não faça um hábito de partir.',
+  'entities.quests.q_prof_amends_smith.objectives.0.label': 'Lobo da floresta abatido',
+  'entities.quests.q_prof_amends_smith.text':
+    'Então você voltou à forja. Não vou fingir que não dói, {playerName}, mas sou justa e o trabalho também é justo. Você sabe o preço de retornar: labor, e mais a cada vez que se desviou. Abata os lobos que assediam a estrada do norte, e o balanço disso vai lembrar seus braços do que esse par antes exigia deles.',
+  'entities.quests.q_prof_amends_smith.title': 'De Volta à Forja',
+  'entities.quests.q_prof_attune_apothecary.completion':
+    'Isso sim é um começo com substância. Alquimia e Culinária são suas para elevar tão alto quanto quiser. Volte com fome.',
+  'entities.quests.q_prof_attune_apothecary.objectives.0.label': 'Javali selvagem caçado',
+  'entities.quests.q_prof_attune_apothecary.text':
+    'Todo bom prato tem dois sabores que combinam, e assim é um bom ofício, {playerName}. Sente comigo e Alquimia e Culinária tornam-se seus dois principais, os dois que você pode aperfeiçoar além do trabalho raro; o ofício do lado oposto da roda é seu passatempo, temperado até raro e nada mais. O resto de seus ofícios fica na despensa, dormente, não estragado, pronto para quando você for buscá-los. Aviso justo enquanto a panela ainda está fria: se você for embora para outro par e quiser voltar, é uma trabalheira que cresce, cinco feras no começo, oito na próxima, onze na seguinte, mais pesado a cada porção. Ainda com fome? Então caçe quatro javalis selvagens para mim, porque uma cozinha que vale o sal começa com boa carne.',
+  'entities.quests.q_prof_attune_apothecary.title': 'Uma Receita que Vale Guardar',
+  'entities.quests.q_prof_attune_bombardier.completion':
+    'HA. Reagentes de verdade, e todos os seus dedos ainda no lugar, ótimo, ótimo. Engenharia e Alquimia, seus, vá fazer algo que se arrependa. Pode ir.',
+  'entities.quests.q_prof_attune_bombardier.objectives.0.label': 'Canteiro de ervas colhido',
+  'entities.quests.q_prof_attune_bombardier.text':
+    'Oh, oh, você quer as coisas boas, as coisas barulhentas, sim? Escute, escute, antes de tocar em qualquer coisa que tique: diga a palavra e Engenharia e Alquimia tornam-se seus dois principais, os únicos dois que você leva além do trabalho raro (é aí que fica DIVERTIDO, pode acreditar). O ofício oposto vai para o seu bolso como passatempo, raro e nada mais, não fique de bico. Seus outros ofícios? Não foram embora, {playerName}, só cochilando, acorde-os quando quiser. Mas (sempre tem um mas, segure o pavio) abandone este par e arraste de volta depois e vai custar suor que acumula, cinco abatidos da primeira vez, oito na próxima, onze depois, mais, mais, toda vez que bater o pé. Sim? SIM? Então vá colher três canteiros de ervas para mim, as voláteis, não pergunte quais, todas são um pouco voláteis se você acreditar com força suficiente.',
+  'entities.quests.q_prof_attune_bombardier.title': 'Um Arranjo Volátil',
+  'entities.quests.q_prof_attune_outfitter.completion':
+    'Fio firme, mão firme. Couraria e Alfaiataria são seus para levar tão longe quanto sua habilidade alcançar. Meça duas vezes, e não vão te falhar.',
+  'entities.quests.q_prof_attune_outfitter.objectives.0.label': 'Aranha Webwood abatida',
+  'entities.quests.q_prof_attune_outfitter.text':
+    'Meça o custo antes de cortar, essa é a primeira regra no meu tear. Escolha-me e Couraria e Alfaiataria tornam-se seus dois principais, o par que você pode levar além do trabalho raro; o ofício oposto se acomoda como passatempo, levado até raro e deixado lá. Os ofícios que você deixa de lado não se desfazem, {playerName}, apenas ficam dobrados, dormentes até você retomá-los. Mas certifique-se: se você deixar este par e mais tarde quiser voltar, o caminho de volta é pago em labor que se prolonga a cada vez, cinco abatidos no começo, depois oito, depois onze, sempre um pouco mais. Se sua mente está feita, abata quatro aranhas webwood e traga sua seda ao tear, pois bom fio começa toda boa peça.',
+  'entities.quests.q_prof_attune_outfitter.title': 'A Medida do Artesão',
+  'entities.quests.q_prof_attune_smith.completion':
+    'Bom minério, e boas mãos para trabalhá-lo. Fabricação de Armas e Fabricação de Armaduras são seus para dominar agora. Ganhe o resto.',
+  'entities.quests.q_prof_attune_smith.objectives.0.label': 'Veio de minério extraído',
+  'entities.quests.q_prof_attune_smith.text':
+    'O aço não perdoa uma mão errante, então vou ser direta antes de você jurar qualquer coisa. Ligue-se à minha forja e Fabricação de Armas e Fabricação de Armaduras tornam-se seus dois principais, os únicos ofícios que você pode levar além do trabalho raro. O ofício oposto na roda se acomoda como passatempo, trabalhado até raro e nada mais. Seus outros ofícios não somem, {playerName}: eles simplesmente ficam quietos, dormentes até você chamá-los de volta. E saiba disso antes de o martelo cair: deixe este par por outro e terá de rastejar de volta pelo trabalho honesto para retornar, cinco inimigos abatidos da primeira vez que voltar, oito na próxima, onze depois, mais a cada vez que se desviar. Ainda em pé aqui? Então traga-me três veios de minério trabalhados no Vale com suas próprias mãos, e chamaremos a promessa feita.',
+  'entities.quests.q_prof_attune_smith.title': 'A Promessa do Ferreiro',
+  'entities.quests.q_prof_workorder_apothecary.completion':
+    'Aceitável. Potente e bem manuseado. Seu pagamento, contado até o centavo. Não deixe subir à cabeça, esse é um reagente diferente.',
+  'entities.quests.q_prof_workorder_apothecary.objectives.0.label': 'Erva Folha Dourada entregue',
+  'entities.quests.q_prof_workorder_apothecary.text':
+    'Minhas prateleiras precisam de folha dourada, e o estoque do mercado é, previsivelmente, adulterado. Traga-me seis ervas de folha dourada, sem amassados, e você será compensado com precisão. Folhas amassadas serão recusadas, portanto cuide da sua bolsa.',
+  'entities.quests.q_prof_workorder_apothecary.title': 'Ordem de Trabalho do Boticário',
+  'entities.quests.q_prof_workorder_forge.completion':
+    'Bom peso, sem escória. Aqui está o que lhe é devido. A forja terá fome de novo bem em breve.',
+  'entities.quests.q_prof_workorder_forge.objectives.0.label': 'Minério de cobre entregue',
+  'entities.quests.q_prof_workorder_forge.text':
+    'A forja sempre quer ser alimentada, {playerName}. Traga-me oito pedaços de minério de cobre e vejo que você é pago pela carga. Sem cerimônia, só minério e moeda.',
+  'entities.quests.q_prof_workorder_forge.title': 'Ordem de Trabalho da Forja',
+  'entities.quests.q_prof_workorder_kitchens.completion':
+    'Isso sim é uma despensa cheia. Aqui está seu pagamento. Volte quando suas bolsas estiverem pesadas de novo.',
+  'entities.quests.q_prof_workorder_kitchens.objectives.0.label': 'Carne de caça entregue',
+  'entities.quests.q_prof_workorder_kitchens.text':
+    'Minha despensa está ficando vazia, {playerName}, e despensas vazias fazem cozinheiros mal-humorados. Busque-me oito cortes de carne de caça e há moeda nisso para você, além da minha eterna gratidão, que vale menos mas tem gosto melhor.',
+  'entities.quests.q_prof_workorder_kitchens.title': 'Ordem de Trabalho das Cozinhas',
+  'entities.quests.q_prof_workorder_loom.completion':
+    'Seda fina, torcida uniformemente. Sua moeda, medida com exatidão. O tear agradece, e eu também.',
+  'entities.quests.q_prof_workorder_loom.objectives.0.label': 'Seda de aranha entregue',
+  'entities.quests.q_prof_workorder_loom.text':
+    'O tear fica seco e mãos paradas desperdiçam a luz do dia, {playerName}. Traga-me seis meadas de seda de aranha e eu lhe pago um valor justo, contado até o centavo.',
+  'entities.quests.q_prof_workorder_loom.title': 'Ordem de Trabalho do Tear',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    'Boas peles. Pagamento justo. De novo quando tiver mais.',
+  'entities.quests.q_prof_workorder_tannery.objectives.0.label': 'Pele áspera entregue',
+  'entities.quests.q_prof_workorder_tannery.text':
+    'As cubas estão vazias. Traga oito peles ásperas. Moeda quando trouxer.',
+  'entities.quests.q_prof_workorder_tannery.title': 'Ordem de Trabalho do Curtume',
+  'entities.quests.q_prof_workorder_toolworks.completion':
+    'Perfeito, perfeito, veio reto, sem podridão. Aqui, sua moeda, viu, cumpro minha palavra (mais ou menos). Traga mais quando tropeçar numa árvore.',
+  'entities.quests.q_prof_workorder_toolworks.objectives.0.label':
+    'Tora de casca de ferro entregue',
+  'entities.quests.q_prof_workorder_toolworks.text':
+    'Cabos, manoplas, coronhas, consumo madeira como se fosse sair de moda, o que NÃO é o caso, madeira é eterna, {playerName}. Carregue-me oito toras de casca de ferro e eu pago, moeda, moeda de verdade, não um favor, prometo, mais ou menos.',
+  'entities.quests.q_prof_workorder_toolworks.title': 'Ordem de Trabalho da Oficina de Ferramentas',
   'gpuNotice.bodyDesktop':
     'O jogo está funcionando sem aceleração de GPU e ficará lento. Atualize os drivers de placa de vídeo e reinicie o jogo. No Windows, defina o jogo como Alto desempenho em Configurações > Sistema > Vídeo > Gráficos.',
   'gpuNotice.bodyWeb':
@@ -2151,6 +2236,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'nav.donate': 'Doar',
   'stats.title': 'Status do Mundo',
   'stats.accountsCreated': 'Jogadores',
+  'stats.charactersCreated': 'Personagens criados',
   'stats.playersOnline': 'Jogadores online',
   'stats.realmName': 'Nome do mundo',
   'footer.copyright': '2026 World of ClaudeCraft',
@@ -2886,6 +2972,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hud.errors.pendingInvite': '{name} já tem um convite pendente.',
   'hud.errors.invitationExpired': 'O convite expirou.',
   'hud.errors.targetTooFar': 'O alvo está longe demais.',
+  'hud.errors.tradeBound': 'Esse item está vinculado e não pode ser negociado.',
   'hud.errors.duelInProgress': 'Já há um duelo em andamento.',
   'hud.errors.challengeExpired': 'O desafio expirou.',
   'hud.errors.arenaAlreadyInMatch': 'Você já está em uma luta de arena.',
@@ -3008,6 +3095,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hud.social.status.combat': 'Em combate',
   'hud.social.status.dungeon': 'Em masmorra',
   'hud.social.status.dead': 'Morto',
+  'hud.social.status.afk': 'Ausente',
   'hud.social.statusWithZone': '{status} - {zone}',
   'hud.social.ranks.leader': 'Mestre da guilda',
   'hud.social.ranks.officer': 'Oficial',
@@ -3099,6 +3187,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.cast.fishing': 'Pesca',
   'abilityUi.cast.thunzharrStormcall': 'Chamado da Tempestade',
   'abilityUi.cast.demonHeal': 'Cura demoníaca',
+  'abilityUi.cast.gathering': 'Coletando',
   'questUi.tracker.title': 'Missões',
   'questUi.tracker.complete': 'Concluída',
   'questUi.tracker.showOnMap': 'Mostrar {name} no mapa',
@@ -7519,6 +7608,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.petTaunt': 'Mascote: provocar',
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Enviar um {item} a menos',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Enviar um {item} a mais',
+  'hudChrome.mailbox.parcelQtyAria': 'Quantidade de {item} para enviar',
   'hudChrome.readyCheck.notReady': 'Não está pronto',
   'hudChrome.readyCheck.prompt': '{name} iniciou uma verificação de prontidão. Você está pronto?',
   'hudChrome.readyCheck.ready': 'Pronto',
@@ -8016,6 +8106,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Cajado',
   'hudChrome.wocStore.wtype.sword': 'Espada',
   'hudChrome.wocStore.wtype.wand': 'Varinha',
+  'hudChrome.wocStore.wtype.polearm': 'Arma de haste',
   'guide.abilityHook.revenge':
     'Atinge os inimigos à sua frente e pode ficar gratuita após uma esquiva ou aparada.',
   'guide.abilityHook.hamstring': 'Prejudica o movimento de um inimigo para impedir que ele escape.',
@@ -8365,6 +8456,52 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.venom_gland.name': 'Glândula de Veneno',
   'entities.items.venomfire_elixir.name': 'Elixir de Fogo Venenoso',
   'entities.items.whetted_iron_dirk.name': 'Punhal de Ferro Afiado',
+  'entities.items.acolyte_chain_grips.name': 'Manoplas de Malha do Acólito',
+  'entities.items.briarroot_staff.name': 'Cajado de Raiz de Espinheiro',
+  'entities.items.cragprowl_belt.name': 'Cinto Espreitador do Penhasco',
+  'entities.items.cragthorn_greatstaff.name': 'Grande Cajado Espinho do Penhasco',
+  'entities.items.cragward_pauldrons.name': 'Ombreiras da Guarda do Penhasco',
+  'entities.items.cryptbloom_shoulderguards.name': 'Guardas de Ombro Flor da Cripta',
+  'entities.items.dreamroot_boots.name': 'Botas Raiz dos Sonhos',
+  'entities.items.duskthorn_mantle.name': 'Manto Espinho do Crepúsculo',
+  'entities.items.fenbark_leggings.name': 'Perneiras Casca do Pântano',
+  'entities.items.fenshadow_maul.name': 'Martelo da Sombra do Brejo',
+  'entities.items.fenwarden_sabatons.name': 'Sabatões do Guardião do Brejo',
+  'entities.items.gravewyrm_thornmaul.name': 'Martelo Espinhoso do Verme Tumular',
+  'entities.items.grovewardens_grips.name': 'Manoplas do Guardião do Bosque',
+  'entities.items.lunarward_cinch.name': 'Cinto da Guarda Lunar',
+  'entities.items.marshlight_hauberk.name': 'Cota de Malha Luz do Pântano',
+  'entities.items.maul_of_the_scourged_wilds.name': 'Martelo dos Ermos Flagelados',
+  'entities.items.mirebloom_treads.name': 'Passos Flor do Lodaçal',
+  'entities.items.moonbark_vestments.name': 'Vestes Casca da Lua',
+  'entities.items.mosshide_vest.name': 'Colete Pele de Musgo',
+  'entities.items.nightfangs_greatstaff.name': 'Grande Cajado da Presa Noturna',
+  'entities.items.peaksong_helm.name': 'Elmo do Canto do Pico',
+  'entities.items.pearlward_aegis.name': 'Égide da Guarda de Pérola',
+  'entities.items.resonant_hide.name': 'Pele Ressonante',
+  'entities.items.resonant_links.name': 'Elos Ressonantes',
+  'entities.items.resonant_steel.name': 'Aço Ressonante',
+  'entities.items.resonant_thread.name': 'Fio Ressonante',
+  'entities.items.resonant_timber.name': 'Madeira Ressonante',
+  'entities.items.revenantstep_treads.name': 'Passos do Revenante',
+  'entities.items.shardfang_grips.name': 'Manoplas Presa de Estilhaço',
+  'entities.items.shardsong_mantle.name': 'Manto Canto dos Estilhaços',
+  'entities.items.stormbark_mantle.name': 'Manto Casca da Tempestade',
+  'entities.items.stormchant_gauntlets.name': 'Manoplas do Canto da Tempestade',
+  'entities.items.stormroot_cowl.name': 'Capuz Raiz da Tempestade',
+  'entities.items.stormvotive_hauberk.name': 'Cota de Malha Votiva da Tempestade',
+  'entities.items.thornling_grips.name': 'Manoplas do Espinheiro',
+  'entities.items.thornpeak_wildwraps.name': 'Faixas Selvagens do Pico Espinhoso',
+  'entities.items.thunderward_legguards.name': 'Guarda-pernas da Defesa do Trovão',
+  'entities.items.tidehymn_slippers.name': 'Sapatilhas do Hino das Marés',
+  'entities.items.valefire_lantern.name': 'Lanterna do Fogo do Vale',
+  'entities.items.verdant_walkers.name': 'Caminhantes Verdejantes',
+  'entities.items.vestments_of_the_waking_grove.name': 'Vestes do Bosque que Desperta',
+  'entities.items.votive_chain_belt.name': 'Cinto de Malha Votivo',
+  'entities.items.wildgrove_cinch.name': 'Cinto do Bosque Selvagem',
+  'entities.items.wildgrowth_leggings.name': 'Perneiras do Crescimento Selvagem',
+  'entities.items.wildsoul_maul.name': 'Martelo da Alma Selvagem',
+  'entities.items.wyrmcult_spellgrips.name': 'Manoplas de Feitiço do Culto do Verme',
   'entities.letters.guild_trend_alchemy_cooking.body':
     'Artesão,\n\nA notícia chega à Guilda sobre seu trabalho em Alquimia e Culinária: poções fervidas em fogo brando e pratos temperados, os dois ofícios alimentando-se um ao outro. Artesanatos vizinhos trabalhados juntos marcam uma mão pronta para sintonização. Aqueles que vinculam este par ganham com o tempo o nome de Boticário. Procure Ferreiro Haldren, o armeiro de Eastbrook: ele fala pelos mestres por enquanto. Prove a ele seu ofício com o trabalho de suas próprias mãos, e ele verá seus dois ofícios principais em sintonia.\n\nEm situação regular,\nA Guilda de Artesanato',
   'entities.letters.guild_trend_alchemy_cooking.sender': 'A Guilda de Artesanato',
@@ -8414,6 +8551,91 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.sender': 'A Guilda de Artesanato',
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.subject':
     'Seu trabalho em fabricação de armas e armaduras',
+  'entities.letters.mastery_reset_notice.body':
+    'Companheiro de guilda,\n\nA guilda adotou uma nova forma de medir a maestria. Cada mão começa a escalada de novo: suas habilidades de artesanato e suas proficiências de coleta foram zeradas.\n\nTudo o mais é seu, intocado: suas receitas, suas ferramentas e materiais, seu banco e ouro, suas sintonizações e títulos, seus feitos e renome, suas missões e correio.\n\nA escalada é honesta agora. O trabalho fácil não vai te carregar. Busque receitas mais difíceis, veios mais ricos e águas mais fundas.\n\nCom respeito,\nA Casa da Guilda',
+  'entities.letters.mastery_reset_notice.sender': 'A Casa da Guilda',
+  'entities.letters.mastery_reset_notice.subject': 'Seu ofício, feito honesto',
+  'entities.letters.prof_tier_alchemy_cooking_1.body':
+    'A notícia chega à minha cozinha de que um de seus principais atingiu o trabalho incomum. É um primeiro gostinho, nada mais, mas promissor. Mantenha a panela se movendo.',
+  'entities.letters.prof_tier_alchemy_cooking_1.sender': 'Cozinheiro Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_1.subject': 'Um gostinho do que vem por aí',
+  'entities.letters.prof_tier_alchemy_cooking_2.body':
+    'Me dizem que um de seus principais subiu até o trabalho raro. Esse é o calor onde a maioria dos cozinheiros queima o prato, e você não queimou. Sente, mas não por muito tempo.',
+  'entities.letters.prof_tier_alchemy_cooking_2.sender': 'Cozinheiro Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_2.subject': 'Trabalho raro, sem bordas queimadas',
+  'entities.letters.prof_tier_alchemy_cooking_3.body':
+    'Um de seus principais borbulhou além do raro até uma profundidade real. Agora você está cozinhando, como se diz. Tempere com ousadia e continue provando.',
+  'entities.letters.prof_tier_alchemy_cooking_3.sender': 'Cozinheiro Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_3.subject': 'Agora sim você está cozinhando',
+  'entities.letters.prof_tier_alchemy_cooking_4.body':
+    'Um de seus principais está a um único prato da maestria. O último é sempre o mais rico e o mais fácil de exagerar. Mãos firmes na concha.',
+  'entities.letters.prof_tier_alchemy_cooking_4.sender': 'Cozinheiro Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_4.subject': 'Um prato a menos do banquete',
+  'entities.letters.prof_tier_alchemy_cooking_5.body':
+    'Um de seus principais chegou à maestria, a prateleira mais alta da despensa toda. Sirvo a todos, mas poucos cozinham seu caminho até aqui. Orgulhoso de você, de verdade. Agora vá fazer algo que os faça chorar à mesa.',
+  'entities.letters.prof_tier_alchemy_cooking_5.sender': 'Cozinheiro Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_5.subject': 'Maestria, servida quente',
+  'entities.letters.prof_tier_engineering_alchemy_1.body':
+    'Ei, os números dizem que um de seus principais acabou de atingir o trabalho incomum, batata pequena, minúscula, mas ESTOUROU, sim? A primeira faísca é sempre a mais bonita. Mais faíscas. Vai.',
+  'entities.letters.prof_tier_engineering_alchemy_1.sender': 'Engenhoqueiro Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_1.subject': 'PRIMEIRA faísca, ha',
+  'entities.letters.prof_tier_engineering_alchemy_2.body':
+    'Me dizem que um de seus principais subiu ao trabalho raro, e raro é onde começa a ficar devidamente perigoso (do tipo bom). A maioria das mãos desiste antes da diversão. Não você. HA.',
+  'entities.letters.prof_tier_engineering_alchemy_2.sender': 'Engenhoqueiro Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_2.subject': 'Raro, oh, RARO',
+  'entities.letters.prof_tier_engineering_alchemy_3.body':
+    'Um de seus principais explodiu além do raro nas coisas sérias, oh é aqui que fica BARULHENTO. Não pare agora, faça o que fizer, o embalo é tudo, assim como os pavios.',
+  'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Engenhoqueiro Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_3.subject': 'Agora fica barulhento',
+  'entities.letters.prof_tier_engineering_alchemy_4.body':
+    'Um de seus principais está UM degrau abaixo da maestria, um, singular, você sente zumbindo? O último passo é o maior estrondo. Não pisque.',
+  'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Engenhoqueiro Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_4.subject': 'Um degrau, UM, do topo',
+  'entities.letters.prof_tier_engineering_alchemy_5.body':
+    'Um de seus principais atingiu a maestria, o TOPO mesmo, kaboom, a escada toda, feito. Não distribuo elogios, distribuo pavios, mas aqui, pegue os dois: você é brilhante e ligeiramente assustador. Vá deixar as montanhas nervosas.',
+  'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Engenhoqueiro Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_5.subject': 'MAESTRIA, kabum',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.body':
+    'A guilda nota que um de seus principais chegou ao trabalho incomum. E apenas a primeira carreira de muitas, mas está firme e verdadeira. Meça a próxima com o mesmo cuidado.',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.sender': 'Tecelã Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.subject': 'Uma primeira carreira uniforme',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.body':
+    'Um de seus principais subiu ao trabalho raro. É onde uma mão descuidada mostra cada ponto solto, e a sua não mostrou. Estou discretamente satisfeita.',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.sender': 'Tecelã Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.subject': 'Trabalho raro, bem medido',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.body':
+    'Um de seus principais passou do raro para um trabalho mais fino. O padrão fica claro para uma mão nesse nível, sem mais adivinhações. Continue medindo duas vezes.',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.sender': 'Tecelã Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.subject': 'O padrão fica claro',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.body':
+    'Um de seus principais está a uma carreira da maestria. A última carreira é sempre a mais difícil de manter uniforme. Não apresse agora.',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.sender': 'Tecelã Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.subject': 'Uma carreira do topo',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.body':
+    'Um de seus principais chegou à maestria. Medi seu trabalho duas vezes, como meço tudo, e ele se sustenta. Poucas mãos amarram o último ponto tão limpo. Estou orgulhosa, e não digo isso levianamente.',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.sender': 'Tecelã Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.subject': 'O último ponto',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.body':
+    'A notícia chega à minha forja de que um de seus principais agora se sustenta no trabalho incomum. E o menor degrau de uma longa escalada, mas você o ganhou na bigorna, não pedindo. Mantenha o fogo quente.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.sender': 'Forjadora Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject': 'Uma faísca que vale notar',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.body':
+    'Me dizem que um de seus principais chegou ao trabalho raro. E o degrau onde as mãos descuidadas caem e os ferreiros de verdade ficam de pé. Você ainda está de pé. Bom.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.sender': 'Forjadora Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject': 'Trabalho raro, e merecido',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
+    'Um de seus principais subiu além do raro até um trabalho sério. O metal responde a uma mão assim, sem mais brigar com ela. Não deixe o elogio amolecer seu braço.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': 'Forjadora Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject':
+    'O metal responde a você agora',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
+    'Um de seus principais está a um único degrau abaixo da maestria. Poucas mãos que conheci chegam a essa altura, e menos ainda mantêm o fio aqui. Termine a escalada.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': 'Forjadora Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': 'Perto do topo da escada',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
+    'Um de seus principais chegou à maestria, o mais alto que uma mão pode subir. Não dou elogios facilmente, então ouça uma vez: a forja se orgulha de você. Agora vá ensinar algo novo ao fogo.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': 'Forjadora Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.subject': 'Maestria, enfim',
   'entities.npcs.alchemist_verane.greeting':
     'Meça duas vezes e despeje uma vez, {className}. O boticário não tem paciência com reagentes derramados.',
   'entities.npcs.alchemist_verane.name': 'Alquimista Verane',
@@ -8536,4 +8758,171 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.training.tierUnmet': 'Você precisa de {craft} {skill} para aprender essa receita.',
   'hudChrome.training.title': 'Treinamento: {name}',
   'hudChrome.training.trainAria': 'Aprenda {name} para {fee}',
+  'hudChrome.bags.itemAriaInstanced': '{item}, quantidade {count}, cópia marcada pelo criador',
+  'hudChrome.charSheet.defense': 'Defesa',
+  'hudChrome.charSheet.offense': 'Ataque',
+  'hudChrome.corpseHarvest.harvestTooltip':
+    'Coleta os componentes selecionados. Cada cadáver pode ser coletado uma vez, quem chegar primeiro. Não pega o saque.',
+  'hudChrome.crafting.attunedBanner': 'Sintonizado: {title}',
+  'hudChrome.crafting.attunedZoneLine': '{name} se sintonizou como {archetype}!',
+  'hudChrome.crafting.attunementReturnCost': 'Custo de retorno: {cost} reparações',
+  'hudChrome.crafting.commissionBound': 'Peça por encomenda: vinculada ao seu destinatário',
+  'hudChrome.crafting.commissionToggle': 'Peça por encomenda',
+  'hudChrome.crafting.commissionToggleHint':
+    'Vincula ao primeiro personagem que a receber em uma negociação.',
+  'hudChrome.crafting.commissionUnbound': 'Peça por encomenda: vincula ao primeiro destinatário',
+  'hudChrome.crafting.difficultyMinimal': 'Ganho mínimo de habilidade',
+  'hudChrome.crafting.gatheredBy': 'Coletado por {name}',
+  'hudChrome.crafting.learnMoreAtStation':
+    '{master} na {station} pode te ensinar mais receitas de {craft}.',
+  'hudChrome.crafting.tierTutorial.dismiss': 'Entendido',
+  'hudChrome.crafting.tierTutorial.masters':
+    'Mestres de ofício nas cidades oferecem missões de sintonização. Visite um para escolher seu par quando estiver pronto. Nada do que aprendeu é perdido jamais.',
+  'hudChrome.crafting.tierTutorial.radar':
+    'Seus ofícios formam uma roda. Sintonize-se a um par adjacente e esses dois ofícios tornam-se seus principais sem limite, um ofício do outro lado da roda torna-se um passatempo limitado ao raro, e o restante fica dormente: o conhecimento é mantido, mas limitado ao comum até você retomá-los.',
+  'hudChrome.crafting.tierTutorial.tierCap':
+    'Um ofício atinge seu primeiro nível com {skill} de habilidade, e cada nível melhora o que pode criar. Mas um ofício só sobe além do trabalho raro quando é um de seus dois principais.',
+  'hudChrome.crafting.tierTutorial.title': 'Seu Primeiro Nível',
+  'hudChrome.crafting.trendNudge':
+    'Suas mãos estão se inclinando para {archetype}. Sua sintonização aguarda com {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    'Suas mãos estão se inclinando para {archetype}. Procure um mestre de ofício para assumir.',
+  'hudChrome.discord.roleTagChatTitle': 'Cargo verificado do servidor: {role}',
+  'hudChrome.enchantName.enchant_chest_armor': 'Encantar Torso - Reforço',
+  'hudChrome.enchantName.enchant_chest_greater_stamina': 'Encantar Torso - Vigor Superior',
+  'hudChrome.enchantName.enchant_chest_runeweave': 'Encantar Torso - Trama de Runas',
+  'hudChrome.enchantName.enchant_chest_spirit': 'Encantar Torso - Espírito',
+  'hudChrome.enchantName.enchant_chest_stamina': 'Encantar Torso - Vigor',
+  'hudChrome.enchantName.enchant_feet_agility': 'Encantar Botas - Agilidade',
+  'hudChrome.enchantName.enchant_feet_stamina': 'Encantar Botas - Vigor',
+  'hudChrome.enchantName.enchant_feet_strength': 'Encantar Botas - Força',
+  'hudChrome.enchantName.enchant_gloves_agility': 'Encantar Luvas - Agilidade',
+  'hudChrome.enchantName.enchant_gloves_greater_agility': 'Encantar Luvas - Agilidade Superior',
+  'hudChrome.enchantName.enchant_gloves_intellect': 'Encantar Luvas - Poder Mágico',
+  'hudChrome.enchantName.enchant_gloves_strength': 'Encantar Luvas - Força',
+  'hudChrome.enchantName.enchant_helmet_armor': 'Encantar Elmo - Reforço',
+  'hudChrome.enchantName.enchant_helmet_fortitude': 'Encantar Elmo - Fortitude',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude': 'Encantar Elmo - Fortitude Superior',
+  'hudChrome.enchantName.enchant_helmet_intellect': 'Encantar Elmo - Intelecto',
+  'hudChrome.enchantName.enchant_helmet_runed_links': 'Encantar Elmo - Elos Runados',
+  'hudChrome.enchantName.enchant_legs_greater_stamina': 'Encantar Pernas - Vigor Superior',
+  'hudChrome.enchantName.enchant_legs_intellect': 'Encantar Pernas - Intelecto',
+  'hudChrome.enchantName.enchant_legs_runed_hide': 'Encantar Pernas - Couro Runado',
+  'hudChrome.enchantName.enchant_legs_stamina': 'Encantar Pernas - Vigor',
+  'hudChrome.enchantName.enchant_neck_agility': 'Encantar Colar - Agilidade',
+  'hudChrome.enchantName.enchant_neck_intellect': 'Encantar Colar - Intelecto',
+  'hudChrome.enchantName.enchant_neck_spirit': 'Encantar Colar - Espírito',
+  'hudChrome.enchantName.enchant_ring_agility': 'Encantar Anel - Agilidade',
+  'hudChrome.enchantName.enchant_ring_intellect': 'Encantar Anel - Intelecto',
+  'hudChrome.enchantName.enchant_ring_spirit': 'Encantar Anel - Espírito',
+  'hudChrome.enchantName.enchant_ring_strength': 'Encantar Anel - Força',
+  'hudChrome.enchantName.enchant_shoulder_agility': 'Encantar Ombros - Agilidade',
+  'hudChrome.enchantName.enchant_shoulder_intellect': 'Encantar Ombros - Intelecto',
+  'hudChrome.enchantName.enchant_shoulder_strength': 'Encantar Ombros - Força',
+  'hudChrome.enchantName.enchant_waist_agility': 'Encantar Cinto - Agilidade',
+  'hudChrome.enchantName.enchant_waist_stamina': 'Encantar Cinto - Vigor',
+  'hudChrome.enchantName.enchant_waist_strength': 'Encantar Cinto - Força',
+  'hudChrome.enchantName.enchant_weapon_agility': 'Encantar Arma - Agilidade',
+  'hudChrome.enchantName.enchant_weapon_greater_might': 'Encantar Arma - Força Superior',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower':
+    'Encantar Arma - Poder Mágico Superior',
+  'hudChrome.enchantName.enchant_weapon_intellect': 'Encantar Arma - Poder Mágico',
+  'hudChrome.enchantName.enchant_weapon_might': 'Encantar Arma - Força',
+  'hudChrome.enchantName.enchant_weapon_runed_edge': 'Encantar Arma - Fio Runado',
+  'hudChrome.enchantName.enchant_weapon_runed_focus': 'Encantar Arma - Foco Runado',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    'Isso destrói {item} e produz materiais arcanos. Não pode ser desfeito.',
+  'hudChrome.enchanting.disenchantConfirmBodySpecial':
+    'Isso destrói uma cópia especial de {item} (assinada, obra-prima ou encantada) e produz materiais arcanos. Não pode ser desfeito.',
+  'hudChrome.enchanting.disenchantConfirmTitle': 'Desencantar {item}?',
+  'hudChrome.enchanting.disenchantThrottled':
+    'Você está desencantando rápido demais. Espere um momento e tente de novo.',
+  'hudChrome.enchanting.disenchantedLine': 'Você desencanta {item}.',
+  'hudChrome.enchanting.enchantAppliedLine': 'Você encanta {item} com {enchant}.',
+  'hudChrome.enchanting.enchantInsufficient': 'Você não tem os materiais para esse encantamento.',
+  'hudChrome.enchanting.enchantThrottled':
+    'Você está encantando rápido demais. Espere um momento e tente de novo.',
+  'hudChrome.enchanting.enchantUnknown': 'Esse encantamento não existe.',
+  'hudChrome.enchanting.enchantWrongSlot': 'Esse encantamento não pode ser aplicado a esse item.',
+  'hudChrome.enchanting.noEnchants': 'Nenhum encantamento usa esse reagente.',
+  'hudChrome.enchanting.noTargets': 'Nenhum item elegível para encantar.',
+  'hudChrome.enchanting.notDisenchantable': 'Você não pode desencantar isso.',
+  'hudChrome.enchanting.notHeld': 'Você não tem esse item.',
+  'hudChrome.enchanting.notSalvageable': 'Você não pode recuperar isso.',
+  'hudChrome.enchanting.pickerTitle': 'Aplicar Encantamento',
+  'hudChrome.enchanting.salvageConfirmBody':
+    'Isso destrói {item} e produz materiais de artesanato. Não pode ser desfeito.',
+  'hudChrome.enchanting.salvageConfirmBodySpecial':
+    'Isso destrói uma cópia especial de {item} (assinada, obra-prima ou encantada) e produz materiais de artesanato. Não pode ser desfeito.',
+  'hudChrome.enchanting.salvageConfirmTitle': 'Recuperar {item}?',
+  'hudChrome.enchanting.salvageThrottled':
+    'Você está recuperando rápido demais. Espere um momento e tente de novo.',
+  'hudChrome.enchanting.salvagedLine': 'Você recupera {item}.',
+  'hudChrome.enchanting.targetTitle': 'Escolha um item para encantar',
+  'hudChrome.gathering.biteLine': 'Algo morde a isca!',
+  'hudChrome.gathering.catchLine': 'Você recolhe: {name}',
+  'hudChrome.gathering.downgradeFind': 'Bolsas cheias: uma descoberta imaculada escapou.',
+  'hudChrome.gathering.downgradeMark':
+    'Bolsas cheias: a descoberta foi armazenada sem a marca do coletor.',
+  'hudChrome.gathering.fishing': 'Pesca',
+  'hudChrome.gathering.gotAwayLine': 'Ele escapou.',
+  'hudChrome.gathering.nodeName.herb': 'Canteiro de Ervas',
+  'hudChrome.gathering.nodeName.ore': 'Veio de Minério',
+  'hudChrome.gathering.nodeName.wood': 'Arvoredo de Madeira',
+  'hudChrome.gathering.stateCooldown': 'Regenerando',
+  'hudChrome.gathering.stateReady': 'Disponível',
+  'hudChrome.gathering.tierRequired.herbalism': 'Requer uma foice de herborismo de nível {tier}',
+  'hudChrome.gathering.tierRequired.logging': 'Requer um machado de lenharia de nível {tier}',
+  'hudChrome.gathering.tierRequired.mining': 'Requer uma picareta de mineração de nível {tier}',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    'Você precisa de uma foice de herborismo de nível {tier} para colher este canteiro.',
+  'hudChrome.gathering.toolTierUnmet.logging':
+    'Você precisa de um machado de lenharia de nível {tier} para derrubar este arvoredo.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    'Você precisa de uma picareta de mineração de nível {tier} para extrair este veio.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    'Você precisa de uma ferramenta de coleta de nível {tier} para recuperar os melhores materiais.',
+  'hudChrome.interfaceTabs.chat': 'Chat',
+  'hudChrome.interfaceTabs.combat': 'Combate',
+  'hudChrome.interfaceTabs.frames': 'Quadros',
+  'hudChrome.interfaceTabs.general': 'Geral',
+  'hudChrome.itemMenu.applyEnchant': 'Aplicar Encantamento',
+  'hudChrome.itemMenu.disenchant': 'Desencantar',
+  'hudChrome.itemMenu.equip': 'Equipar',
+  'hudChrome.itemMenu.salvage': 'Recuperar',
+  'hudChrome.itemMenu.use': 'Usar',
+  'hudChrome.loot.takeLootButton': 'Pegar Saque',
+  'hudChrome.loot.takeLootTooltip': 'Pega as moedas e os itens largados. Não usa a coleta.',
+  'hudChrome.loot.unifiedPressHint':
+    'A tecla de interação saqueia e coleta em um único clique, usando seu foco da cidade.',
+  'hudChrome.nameplate.afkTag': 'AFK',
+  'hudChrome.options.showPlayerNameplates': 'Mostrar Placas de Nome dos Jogadores',
+  'hudChrome.professions.nextUnlockMastered': 'Dominado, por enquanto',
+  'hudChrome.social.hideOffline': 'Ocultar offline',
+  'hudChrome.social.hideOfflineTitle': 'Ocultar membros da guilda offline',
+  'hudChrome.social.offlineHeader': 'Offline ({n})',
+  'hudChrome.social.onlineHeader': 'Online ({n})',
+  'hudChrome.townFocus.tierHint':
+    'Cada {points} pontos em um componente elevam seu nível de coleta um passo, até {steps} passos; menos de {points} pontos ainda aumentam o rendimento.',
+  'hudChrome.townFocus.townOnlyHint':
+    'O foco só pode ser alterado enquanto você estiver na cidade.',
+  'hudChrome.unbind.cannotAfford': 'Você não pode pagar a taxa de desvincular.',
+  'hudChrome.unbind.close': 'Fechar desvinculação',
+  'hudChrome.unbind.confirmBody': 'Desvincular {name} por {fee}?',
+  'hudChrome.unbind.confirmCancel': 'Cancelar',
+  'hudChrome.unbind.confirmOk': 'Desvincular',
+  'hudChrome.unbind.confirmTitle': 'Desvincular Peça por Encomenda',
+  'hudChrome.unbind.dialogOption': 'Desvinculação',
+  'hudChrome.unbind.dialogOptionAria': 'Desvincular uma peça por encomenda com {name}',
+  'hudChrome.unbind.empty': 'Você não carrega peças por encomenda vinculadas.',
+  'hudChrome.unbind.intro':
+    'O mestre pode liberar uma peça por encomenda de seu vínculo, mediante uma taxa.',
+  'hudChrome.unbind.notBound': 'Esse item não está vinculado.',
+  'hudChrome.unbind.notEligible': 'Esse item não pode ser desvinculado.',
+  'hudChrome.unbind.outOfRange': 'Você deve estar em uma bancada de artesanato para desvincular.',
+  'hudChrome.unbind.rowSub': 'Libera o vínculo; a peça se vincula novamente na próxima negociação.',
+  'hudChrome.unbind.title': 'Desvinculação: {name}',
+  'hudChrome.unbind.unbindAria': 'Desvincular {name} por {fee}',
+  'hudChrome.unbind.unbound':
+    'Desvinculado {name} por {fee}. Ele se vinculará novamente na próxima negociação.',
 };

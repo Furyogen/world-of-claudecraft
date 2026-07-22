@@ -610,7 +610,7 @@ export const cs_CZ: EnTranslations = {
         "wand": "Hůlka",
         "bow": "Luk",
         "crossbow": "Kuše",
-        "polearm": "Polearm"
+        "polearm": "Dřevcová zbraň"
       },
       "badge": {
         "flagship": "Vlajkový",
@@ -707,10 +707,10 @@ export const cs_CZ: EnTranslations = {
       "expandHint": "Rozbalit tracker úkolů"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
+      "general": "Obecné",
+      "frames": "Rámy",
       "chat": "Chat",
-      "combat": "Combat"
+      "combat": "Souboj"
     },
     "chatTimestamps": {
       "show": "Zobrazit časové značky chatu",
@@ -1038,7 +1038,7 @@ export const cs_CZ: EnTranslations = {
       "showWalletOnPlayerCard": "Zobrazit peněženku na kartě hráče",
       "showDevBadges": "Zobrazit vývojářské odznaky",
       "showOwnNameplate": "Zobrazit mou jmenovku",
-      "showPlayerNameplates": "Show Player Nameplates",
+      "showPlayerNameplates": "Zobrazit jmenovky hráčů",
       "uiScale": "Měřítko UI",
       "playerFrameScale": "Měřítko rámu hráče",
       "targetFrameScale": "Měřítko rámu cíle",
@@ -1186,8 +1186,8 @@ export const cs_CZ: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Útok",
+      "defense": "Obrana"
     },
     "statInfo": {
       "fromYour": "Z tvojí hodnoty {value} {stat}:",
@@ -1447,7 +1447,7 @@ export const cs_CZ: EnTranslations = {
     "corpseHarvest": {
       "title": "Sklizeň",
       "harvestButton": "Sklidit",
-      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
+      "harvestTooltip": "Sbírá zaškrtnuté součásti. Každou mrtvolu lze sklidit pouze jednou, kdo dřív přijde. Nepobírá kořist.",
       "concentrateHint": "Méně vybraných komponent dá každé vyšší stupeň.",
       "alreadyHarvested": "Tato mrtvola už byla sklizena.",
       "componentAria": "Sklidit {component}",
@@ -1465,8 +1465,8 @@ export const cs_CZ: EnTranslations = {
     "townFocus": {
       "title": "Zaměření města",
       "hint": "Body zaměření přidávají bonus nad základní výnos každé součásti. Nezaměřené součásti zůstávají na základní hodnotě.",
-      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
-      "townOnlyHint": "Focus can only be changed while you are in town.",
+      "tierHint": "Každých {points} bodů na komponentě zvýší její úroveň sklizně o jeden stupeň, až o {steps} stupňů; méně než {points} bodů přesto zvýší výnos.",
+      "townOnlyHint": "Tato nastavení platí pouze ve vašem domovském městě.",
       "budgetLabel": "Zbývající body: {remaining} / {budget}",
       "saveButton": "Uložit zaměření",
       "notInTownHint": "Zaměření lze nastavit jen ve městě.",
@@ -1525,7 +1525,7 @@ export const cs_CZ: EnTranslations = {
       "dragEquipHint": "Přetáhni na svou postavu a předmět bude vybaven",
       "dragDestroyHint": "Přetáhni do světa a předmět bude zničen",
       "reorderNeedsRecent": "Zruš filtr a seřaď podle Nedávných, chceš-li přeuspořádat batohy",
-      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
+      "itemAriaInstanced": "{item}, množství {count}, kopie s výrobcovou značkou",
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",
       "filterWeapon": "Zbraně",
@@ -1691,9 +1691,9 @@ export const cs_CZ: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Truhla",
-      "takeLootButton": "Take Loot",
-      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
-      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
+      "takeLootButton": "Sebrat kořist",
+      "takeLootTooltip": "Sebrat veškerou kořist",
+      "unifiedPressHint": "Stiskni pro sebrání"
     },
     "spellbook": {
       "addToBarAria": "Přidat {name} na akční lištu",
@@ -1702,7 +1702,7 @@ export const cs_CZ: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "PRYČ"
     },
     "mobTooltip": {
       "levelFamily": "Úroveň {level} {family}",
@@ -1841,7 +1841,7 @@ export const cs_CZ: EnTranslations = {
         "legend": "LEGENDA",
         "shill": "HLASATEL"
       },
-      "roleTagChatTitle": "Verified server role: {role}",
+      "roleTagChatTitle": "Ověřená serverová role: {role}",
       "guildMember": "Ověřený člen",
       "notMember": "Zatím nejsi na serveru",
       "joinCta": "Připojit se na Discord",
@@ -1966,7 +1966,7 @@ export const cs_CZ: EnTranslations = {
       "removeParcelAria": "Odebrat {item} z dopisu",
       "parcelQtyDecreaseAria": "Odeslat o jeden kus {item} méně",
       "parcelQtyIncreaseAria": "Odeslat o jeden kus {item} více",
-      "parcelQtyAria": "Quantity of {item} to send",
+      "parcelQtyAria": "Počet kusů {item} k odeslání",
       "sendButton": "Odeslat dopis",
       "postageNote": "Poštovné: {amount}. Havran poletí asi {seconds} s.",
       "arrivedBanner": "Havran přistál: pošta od {name}.",
@@ -2105,41 +2105,41 @@ export const cs_CZ: EnTranslations = {
       "stopBlockingTitle": "Odblokovat hráče {name}",
       "onlineHeader": "Online ({n})",
       "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "hideOffline": "Skrýt offline",
+      "hideOfflineTitle": "Skrýt offline hráče"
     },
     "gathering": {
       "title": "Sběr",
       "mining": "Těžba",
       "logging": "Dřevorubectví",
       "herbalism": "Bylinkářství",
-      "fishing": "Fishing",
+      "fishing": "Rybaření",
       "notReady": "Tento zdroj pro tebe ještě neobnovil zásoby.",
       "gatherLine": "Shromažďujete: {name}.",
       "gatherLineQty": "Shromažďujete: {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Vytahuješ: {name}",
+      "biteLine": "Něco zabralo!",
+      "gotAwayLine": "Ta ti unikla.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Rudná žíla",
+        "wood": "Kmen stromů",
+        "herb": "Bylinkový porost"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Vyžaduje těžbu úrovně {tier}.",
+        "logging": "Vyžaduje dřevorubectví úrovně {tier}.",
+        "herbalism": "Vyžaduje bylinkářství úrovně {tier}."
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "K vytěžení této žíly potřebuješ krumpáč úrovně {tier}.",
+        "logging": "K pokácení tohoto porostu potřebuješ dřevorubeckou sekeru úrovně {tier}.",
+        "herbalism": "K sesbírání tohoto záhonu potřebuješ bylinkářský srp úrovně {tier}."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
-      "downgradeFind": "Bags full: a pristine find slipped away.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "K získání nejjemnějších materiálů potřebuješ sběračský nástroj úrovně {tier}.",
+      "downgradeMark": "Plné brašny: nález byl uložen bez značky sběrače.",
+      "downgradeFind": "Plné brašny: vzácný nález ti proklouzl.",
+      "stateReady": "Připraveno",
+      "stateCooldown": "Dobíjení"
     },
     "archetypeTitle": {
       "label": "Titul",
@@ -2171,47 +2171,47 @@ export const cs_CZ: EnTranslations = {
       "leatherworking": "Kožedělnictví"
     },
     "enchantName": {
-      "enchant_weapon_might": "Enchant Weapon - Might",
-      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
-      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
-      "enchant_neck_spirit": "Enchant Necklace - Spirit",
-      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
-      "enchant_chest_stamina": "Enchant Chest - Stamina",
-      "enchant_waist_stamina": "Enchant Belt - Stamina",
-      "enchant_legs_stamina": "Enchant Legs - Stamina",
-      "enchant_gloves_agility": "Enchant Gloves - Agility",
-      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
-      "enchant_feet_agility": "Enchant Boots - Agility",
-      "enchant_ring_spirit": "Enchant Ring - Spirit",
-      "enchant_weapon_agility": "Enchant Weapon - Agility",
-      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
-      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
-      "enchant_neck_intellect": "Enchant Necklace - Intellect",
-      "enchant_neck_agility": "Enchant Necklace - Agility",
-      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
-      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
-      "enchant_chest_spirit": "Enchant Chest - Spirit",
-      "enchant_chest_armor": "Enchant Chest - Reinforcement",
-      "enchant_waist_strength": "Enchant Belt - Strength",
-      "enchant_waist_agility": "Enchant Belt - Agility",
-      "enchant_legs_intellect": "Enchant Legs - Intellect",
-      "enchant_gloves_strength": "Enchant Gloves - Strength",
-      "enchant_feet_strength": "Enchant Boots - Strength",
-      "enchant_feet_stamina": "Enchant Boots - Stamina",
-      "enchant_ring_strength": "Enchant Ring - Strength",
-      "enchant_ring_agility": "Enchant Ring - Agility",
-      "enchant_ring_intellect": "Enchant Ring - Intellect",
-      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
-      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
-      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
-      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
-      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
-      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
-      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
-      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
-      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
-      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
-      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+      "enchant_weapon_might": "Okouzlení zbraně - Moc",
+      "enchant_weapon_intellect": "Okouzlení zbraně - Síla kouzel",
+      "enchant_helmet_fortitude": "Okouzlení helmy - Pevnost",
+      "enchant_neck_spirit": "Okouzlení náhrdelníku - Duch",
+      "enchant_shoulder_agility": "Okouzlení nárameníků - Obratnost",
+      "enchant_chest_stamina": "Okouzlení hrudi - Výdrž",
+      "enchant_waist_stamina": "Okouzlení opasku - Výdrž",
+      "enchant_legs_stamina": "Okouzlení nohavic - Výdrž",
+      "enchant_gloves_agility": "Okouzlení rukavic - Obratnost",
+      "enchant_gloves_intellect": "Okouzlení rukavic - Síla kouzel",
+      "enchant_feet_agility": "Okouzlení bot - Obratnost",
+      "enchant_ring_spirit": "Okouzlení prstenu - Duch",
+      "enchant_weapon_agility": "Okouzlení zbraně - Obratnost",
+      "enchant_helmet_intellect": "Okouzlení helmy - Intelekt",
+      "enchant_helmet_armor": "Okouzlení helmy - Posílení",
+      "enchant_neck_intellect": "Okouzlení náhrdelníku - Intelekt",
+      "enchant_neck_agility": "Okouzlení náhrdelníku - Obratnost",
+      "enchant_shoulder_strength": "Okouzlení nárameníků - Síla",
+      "enchant_shoulder_intellect": "Okouzlení nárameníků - Intelekt",
+      "enchant_chest_spirit": "Okouzlení hrudi - Duch",
+      "enchant_chest_armor": "Okouzlení hrudi - Posílení",
+      "enchant_waist_strength": "Okouzlení opasku - Síla",
+      "enchant_waist_agility": "Okouzlení opasku - Obratnost",
+      "enchant_legs_intellect": "Okouzlení nohavic - Intelekt",
+      "enchant_gloves_strength": "Okouzlení rukavic - Síla",
+      "enchant_feet_strength": "Okouzlení bot - Síla",
+      "enchant_feet_stamina": "Okouzlení bot - Výdrž",
+      "enchant_ring_strength": "Okouzlení prstenu - Síla",
+      "enchant_ring_agility": "Okouzlení prstenu - Obratnost",
+      "enchant_ring_intellect": "Okouzlení prstenu - Intelekt",
+      "enchant_weapon_greater_might": "Okouzlení zbraně - Vynikající moc",
+      "enchant_weapon_greater_spellpower": "Okouzlení zbraně - Vynikající síla kouzel",
+      "enchant_helmet_greater_fortitude": "Okouzlení helmy - Vynikající pevnost",
+      "enchant_chest_greater_stamina": "Okouzlení hrudi - Vynikající výdrž",
+      "enchant_legs_greater_stamina": "Okouzlení nohavic - Vynikající výdrž",
+      "enchant_gloves_greater_agility": "Okouzlení rukavic - Vynikající obratnost",
+      "enchant_weapon_runed_edge": "Okouzlení zbraně - Runové ostří",
+      "enchant_weapon_runed_focus": "Okouzlení zbraně - Runové ohnisko",
+      "enchant_chest_runeweave": "Okouzlení hrudi - Runová tkanina",
+      "enchant_legs_runed_hide": "Okouzlení nohavic - Runová kůže",
+      "enchant_helmet_runed_links": "Okouzlení helmy - Runové kroužky"
     },
     "professions": {
       "title": "Profese",
@@ -2232,7 +2232,7 @@ export const cs_CZ: EnTranslations = {
       "tierPipAria": "Úroveň {tier}",
       "nextUnlockTier": "{points} bodů do další úrovně: šance na mistrovské dílo se zvýší",
       "nextUnlockSpecialized": "{points} bodů do specializace: náklady na materiál klesnou",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Tato profese je zvládnuta.",
       "perkSpecializedLine": "{craft}: specializováno, náklady na materiál -{pct} %",
       "perkSpecializedAt": "Specializace při dovednosti {threshold}",
       "switchCost": "Další změna archetypu stojí {cost} bodů nápravy",
@@ -2273,7 +2273,7 @@ export const cs_CZ: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Výsledek: titul {title}; {majorA} a {majorB} se stávají neomezenými hlavními obory; {hobby} se stává koníčkem s omezením na vzácné; veškeré ostatní znalosti řemesla jsou zachovány, ale dočasně omezeny na běžné.",
       "hobbyPreview": "Výsledek: {hobby} se stává koníčkem s omezením na vzácné. Oba hlavní obory a veškeré zachované hodnoty dovedností zůstávají beze změny.",
-      "attunementReturnCost": "If you leave this pair, returning to it later costs {cost} make-amends tasks.",
+      "attunementReturnCost": "Pokud tuto dvojici opustíš, návrat k ní bude stát {cost} úkolů nápravy.",
       "identity": {
         "title": "Řemeslná identita",
         "syncing": "Čeká se na tvou řemeslnou identitu z realmu.",
@@ -2313,64 +2313,64 @@ export const cs_CZ: EnTranslations = {
       "skillReqLine": "Vyžaduje {craft} {skill}",
       "difficultyFull": "Plný zisk dovedností",
       "difficultyReduced": "Snížený zisk dovedností",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Minimální zisk dovednosti",
       "difficultyNone": "Žádný zisk dovedností",
       "stationBadge": "Stanice",
       "stationOutOfRangeNamed": "Chcete-li to vytvořit, přejděte do {station}.",
-      "learnMoreAtStation": "{master} at the {station} can teach you more {craft} recipes.",
+      "learnMoreAtStation": "{master} na {station} tě může naučit více receptů {craft}.",
       "masterworkToast": "Mistrovské dílo! {name}",
       "masterworkZoneLine": "{crafter} vytvořil mistrovské dílo {name}!",
       "tierUpToast": "{craft} postoupilo do úrovně {tier}!",
-      "trendNudge": "Your hands are leaning toward the {archetype}. Its attunement waits with {master}.",
-      "trendNudgeNoMaster": "Your hands are leaning toward the {archetype}. Seek a craft master to take it up.",
-      "attunedZoneLine": "{name} has attuned as {archetype}!",
-      "attunedBanner": "Attuned: {title}",
+      "trendNudge": "Tvoje ruce se klonívají k {archetype}. Jeho nalaďování tě čeká u {master}.",
+      "trendNudgeNoMaster": "Tvoje ruce se klonívají k {archetype}. Vyhledej mistra řemesla a ujmi se ho.",
+      "attunedZoneLine": "{name} se naladit jako {archetype}!",
+      "attunedBanner": "Naladěno: {title}",
       "tierTutorial": {
-        "title": "Your First Tier",
-        "tierCap": "A craft reaches its first tier at {skill} skill, and each tier improves what it can make. But a craft only climbs past rare work once it is one of your two majors.",
-        "radar": "Your professions form a wheel. Attune to an adjacent pair and those two crafts become uncapped majors, one craft across the wheel becomes a rare-capped hobby, and the rest lie dormant: their knowledge kept, but capped at common until you take them up again.",
-        "masters": "Craft masters in the towns offer attunement quests. Visit one to choose your pair whenever you are ready. Nothing you have learned is ever lost.",
-        "dismiss": "Got it"
+        "title": "Tvoje první úroveň",
+        "tierCap": "Řemeslo dosáhne své první úrovně při dovednosti {skill} a každá úroveň zlepšuje, co dokáže vyrábět. Ale řemeslo překoná vzácnou práci jen tehdy, když je jedním z tvých dvou hlavních oborů.",
+        "radar": "Tvoje profese tvoří kolo. Nalaď se na sousední pár a tato dvě řemesla se stanou neomezenými hlavními obory, jedno řemeslo naproti na kole se stane koníčkem omezeným na vzácné, a ostatní leží dočasně neaktivní: jejich znalosti zachovány, ale omezeny na běžné, dokud je znovu nepoužiješ.",
+        "masters": "Mistři řemesel ve městech nabízejí nalaďovací úkoly. Navstiv jednoho a kdykoli budeš připraven(a), zvol si svůj pár. Nic, co ses naučil(a), není nikdy ztraceno.",
+        "dismiss": "Rozumím"
       },
       "makersMark": "Vytvořil {name}",
-      "gatheredBy": "Gathered by {name}",
+      "gatheredBy": "Sesbíráno {name}",
       "masterworkSeal": "Mistrovské dílo",
       "enchantedLine": "Okouzlený",
-      "commissionToggle": "Commission piece",
-      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
-      "commissionUnbound": "Commission piece: binds to the first recipient",
-      "commissionBound": "Commission piece: bound to its recipient"
+      "commissionToggle": "Zakázkový předmět",
+      "commissionToggleHint": "Váže se na první postavu, která ho přijme v obchodu.",
+      "commissionUnbound": "Zakázkový předmět: váže se na prvního příjemce",
+      "commissionBound": "Zakázkový předmět: vázán na příjemce"
     },
     "itemMenu": {
-      "use": "Use",
-      "equip": "Equip",
-      "disenchant": "Disenchant",
-      "salvage": "Salvage",
-      "applyEnchant": "Apply Enchant"
+      "use": "Použít",
+      "equip": "Vybavit",
+      "disenchant": "Rozzačarovat",
+      "salvage": "Rozebrat",
+      "applyEnchant": "Aplikovat okouzlení"
     },
     "enchanting": {
-      "disenchantedLine": "You disenchant {item}.",
-      "salvagedLine": "You salvage {item}.",
-      "enchantAppliedLine": "You enchant {item} with {enchant}.",
-      "notHeld": "You do not have that item.",
-      "notDisenchantable": "You cannot disenchant that.",
-      "notSalvageable": "You cannot salvage that.",
-      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
-      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
-      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
-      "enchantWrongSlot": "That enchant cannot be applied to that item.",
-      "enchantUnknown": "That enchant does not exist.",
-      "enchantInsufficient": "You do not have the materials for that enchant.",
-      "disenchantConfirmTitle": "Disenchant {item}?",
-      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
-      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
-      "salvageConfirmTitle": "Salvage {item}?",
-      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
-      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
-      "pickerTitle": "Apply Enchant",
-      "targetTitle": "Choose an item to enchant",
-      "noEnchants": "No enchant uses this reagent.",
-      "noTargets": "No eligible item to enchant."
+      "disenchantedLine": "Rozzačaruješ {item}.",
+      "salvagedLine": "Rozebereš {item}.",
+      "enchantAppliedLine": "Okouzlíš {item} pomocí {enchant}.",
+      "notHeld": "Tento předmět nemáš.",
+      "notDisenchantable": "Toto nelze rozzačarovat.",
+      "notSalvageable": "Toto nelze rozebrat.",
+      "disenchantThrottled": "Rozzačaruješ příliš rychle. Chvíli počkej a zkus to znovu.",
+      "salvageThrottled": "Rozebíráš příliš rychle. Chvíli počkej a zkus to znovu.",
+      "enchantThrottled": "Okouzluješ příliš rychle. Chvíli počkej a zkus to znovu.",
+      "enchantWrongSlot": "Toto okouzlení nelze aplikovat na tento předmět.",
+      "enchantUnknown": "Toto okouzlení neexistuje.",
+      "enchantInsufficient": "Na toto okouzlení nemáš materiály.",
+      "disenchantConfirmTitle": "Rozzačarovat {item}?",
+      "disenchantConfirmBody": "Tímto se {item} zničí a získáš arcanové materiály. Tuto akci nelze vrátit.",
+      "disenchantConfirmBodySpecial": "Tímto se zvláštní kopie {item} (podepsaná, mistrovská nebo okouzlená) zničí a získáš arcanové materiály. Tuto akci nelze vrátit.",
+      "salvageConfirmTitle": "Rozebrat {item}?",
+      "salvageConfirmBody": "Tímto se {item} zničí a získáš řemeslné materiály. Tuto akci nelze vrátit.",
+      "salvageConfirmBodySpecial": "Tímto se zvláštní kopie {item} (podepsaná, mistrovská nebo okouzlená) zničí a získáš řemeslné materiály. Tuto akci nelze vrátit.",
+      "pickerTitle": "Aplikovat okouzlení",
+      "targetTitle": "Vybrat předmět",
+      "noEnchants": "Žádné okouzlení nepoužívá tuto reagencii.",
+      "noTargets": "Žádný způsobilý předmět k okouzlení."
     },
     "training": {
       "title": "Školení: {name}",
@@ -2392,23 +2392,23 @@ export const cs_CZ: EnTranslations = {
       "outOfRange": "Abys mohl trénovat, musíš být u řemeslné stanice."
     },
     "unbind": {
-      "title": "Unbinding: {name}",
-      "close": "Close unbinding",
-      "intro": "The master can release a commission piece from its bond, for a fee.",
-      "empty": "You carry no bound commission pieces.",
-      "rowSub": "Releases the bond; the piece binds again on its next trade.",
-      "unbindAria": "Unbind {name} for {fee}",
-      "dialogOption": "Unbinding",
-      "dialogOptionAria": "Unbind a commission piece with {name}",
-      "confirmTitle": "Unbind Commission Piece",
-      "confirmBody": "Unbind {name} for {fee}?",
-      "confirmOk": "Unbind",
-      "confirmCancel": "Cancel",
-      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
-      "notEligible": "That item cannot be unbound.",
-      "notBound": "That item is not bound.",
-      "cannotAfford": "You cannot afford the unbinding fee.",
-      "outOfRange": "You must be at a crafting station to unbind."
+      "title": "Odpoutání: {name}",
+      "close": "Zavřít odpoutání",
+      "intro": "Vyber předmět k odpoutání. Každé odpoutání stojí poplatek.",
+      "empty": "Nemáš žádné vázané předměty způsobilé k odpoutání.",
+      "rowSub": "Uvolní pouto; předmět se při příští výměně znovu naváže.",
+      "unbindAria": "Odpoutat {name} za {fee}",
+      "dialogOption": "Odpoutání",
+      "dialogOptionAria": "Otevřít službu odpoutání u {name}",
+      "confirmTitle": "Odpoutat zakázkový předmět",
+      "confirmBody": "Odpoutat {name} za {fee}?",
+      "confirmOk": "Odpoutat",
+      "confirmCancel": "Zrušit",
+      "unbound": "Předmět {name} byl odpoután za {fee}. Při příští výměně se znovu naváže.",
+      "notEligible": "Tento předmět nelze odpoutat.",
+      "notBound": "Tento předmět není vázaný.",
+      "cannotAfford": "Na odpoutání nemáš dostatek prostředků.",
+      "outOfRange": "Pro odpoutání musíš být u příslušného mistra."
     },
     "finder": {
       "title": "Hledač dungeonů",
@@ -4326,7 +4326,7 @@ export const cs_CZ: EnTranslations = {
   "stats": {
     "title": "Stav světa",
     "accountsCreated": "Hráči",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Vytvořené postavy",
     "playersOnline": "Hráči online",
     "realmName": "Název světa"
   },
@@ -5899,7 +5899,7 @@ export const cs_CZ: EnTranslations = {
       "tradeTooFar": "Cíl je příliš daleko pro obchod.",
       "tradeExpired": "Žádost o obchod vypršela.",
       "tradeFailed": "Obchod selhal: předměty nebo peníze už nejsou dostupné.",
-      "tradeBound": "That item is bound and cannot be traded."
+      "tradeBound": "Tento předmět je vázaný a nelze ho vyměnit."
     },
     "logs": {
       "standUp": "Vstáváš.",
@@ -6048,7 +6048,7 @@ export const cs_CZ: EnTranslations = {
         "combat": "V boji",
         "dungeon": "V dungeonu",
         "dead": "Mrtvý",
-        "afk": "Away"
+        "afk": "Pryč"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -6156,7 +6156,7 @@ export const cs_CZ: EnTranslations = {
     },
     "cast": {
       "fishing": "Rybaření",
-      "gathering": "Gathering",
+      "gathering": "Sběr",
       "demonHeal": "Léčení démona",
       "thunzharrStormcall": "Volání bouře"
     }
@@ -8670,142 +8670,142 @@ export const cs_CZ: EnTranslations = {
         "name": "Hadí elixír"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Vesta z mechaté kůže"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Rukavice trníka"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Noviciovy kroužkové rukavice"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Zaslíbený kroužkový opasek"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Hůl z trnového kořene"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Lucerna údolního ohně"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Nohavice z bahenní kůry"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Boty blatního květu"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Sabatony strážce bažin"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Kyrys bažinného světla"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Plášť soumračného trnu"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Palice bahenního stínu"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Opasek divoké hájovny"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Skalní nárameníky strážce"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Velká hůl skalního trnu"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Roucho z měsíční kůry"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Přilba vrcholového zpěvu"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Rukavice bouřného zpěvu"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Opasek skalního plížence"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Kápě bouřného kořene"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Hromové chrániče nohou strážce"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Boty přízračného kroku"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Rukavice střepinového tesáku"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Plášť střepinového zpěvu"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Kouzelné rukavice kultu dračích"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Divoké obvazy z Thornpeak"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Kyrys zasvěcený bouři"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Kryptkvětové chrániče ramen"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Trnová palice Hrobodraka"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Roucha probouzejícího se háje"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Nightfangova velká hůl"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Palice zničené divočiny"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Pantofle přílivového hymnu"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Perleťový ochranný štít"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Nohavice divoké vegetace"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Rukavice strážce háje"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Zelené chůdičky"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Lunární ochranný opasek"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Boty ze snového kořene"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Plášť bouřné kůry"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Palice divoké duše"
       },
       "resonant_thread": {
-        "name": "Resonant Thread"
+        "name": "Rezonující nit"
       },
       "resonant_hide": {
-        "name": "Resonant Hide"
+        "name": "Rezonující kůže"
       },
       "resonant_links": {
-        "name": "Resonant Links"
+        "name": "Rezonující kroužky"
       },
       "resonant_steel": {
-        "name": "Resonant Steel"
+        "name": "Rezonující ocel"
       },
       "resonant_timber": {
-        "name": "Resonant Timber"
+        "name": "Rezonující dřevo"
       },
       "conjured_water4": {
         "name": "Vyčarovaná pramenitá voda"
@@ -10900,142 +10900,142 @@ export const cs_CZ: EnTranslations = {
         }
       },
       "q_prof_attune_smith": {
-        "title": "The Smith's Promise",
-        "text": "Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, {playerName}: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.",
-        "completion": "Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.",
+        "title": "Kovářův slib",
+        "text": "Ocel neodpustí bloudící ruce, takže ti řeknu rovně, než cokoliv přísaháš. Přisluž se k mé kovárně a Kovářství zbraní a Zbrojnictví se stanou tvými dvěma hlavními obory, jedinými řemesly, která smíš nést za vzácnou práci. Řemeslo naproti nim na kole se usadí jako tvůj koníček, pracované do vzácného a ne dál. Tvé ostatní živnosti nezhoří, {playerName}: jen ztiší, dočasně neaktivní, dokud je nepovoláš zpět. A věz toto, než padne kladivo: opusť tento pár pro jiný a vrátíš se k němu jen poctivou prací, pět nepřátel poražených napoprvé, osm podruhé, jedenáct potom, víc pokaždé, když zabloudíš. Stále stojíš zde? Pak mi přines tři žíly rudy vytěžené z Údolí vlastníma rukama, a slíbíme si to.",
+        "completion": "Dobrá ruda a dobré ruce k jejímu zpracování. Kovářství zbraní a Zbrojnictví jsou nyní tvé ke zvládnutí. Zasluž si zbytek.",
         "objectives": {
           "0": {
-            "label": "Ore vein harvested"
+            "label": "Vytěžena rudná žíla"
           }
         }
       },
       "q_prof_attune_outfitter": {
-        "title": "The Outfitter's Measure",
-        "text": "Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, {playerName}, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.",
-        "completion": "Even thread, even hand. Leatherworking and Tailoring are yours to carry as far as your skill will reach. Measure twice, and they will not fail you.",
+        "title": "Výstrojcovo měřítko",
+        "text": "Změř náklady, než stříháš, to je první pravidlo u mého stavu. Zvol mě a Kožedělnictví a Krejčovství se stanou tvými dvěma hlavními obory, dvojicí, kterou smíš nést za vzácnou práci; řemeslo naproti jim se usadí jako tvůj koníček, vedeno do vzácného a tam ponecháno. Živnosti, které odložíš, nejsou rozpáré, {playerName}, jen přeloženy, dočasně neaktivní, dokud si je zase nevezmeš. Přesvědč se ale napřed: kdybys opustil(a) tuto dvojici a chtěl(a) ji zpět, cesta domů je zaplacena prací, která se s každou dobou prodlužuje, pět ulovených napoprvé, pak osm, pak jedenáct, vždy trochu víc. Pokud je tvá mysl rozhodnutá, vyhuň čtyři pavouky lesního pavučníku a přines jejich hedvábí ke stavu, protože dobré vlákno začíná každý dobrý oděv.",
+        "completion": "Rovné vlákno, rovná ruka. Kožedělnictví a Krejčovství jsou tvé, neseš je tak daleko, kam tvá dovednost dosáhne. Měř dvakrát a nezklame tě.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Vyhuben pavouci lesního pavučníku"
           }
         }
       },
       "q_prof_attune_apothecary": {
-        "title": "A Recipe Worth Keeping",
-        "text": "Every good dish is two flavors that belong together, and so is a good craft, {playerName}. Sit with me and Alchemy and Cooking become your two majors, the two you may simmer past rare work; the craft on the far side of the wheel is your hobby, seasoned up to rare and no hotter. The rest of your trades keep in the pantry, dormant, not spoiled, ready whenever you fetch them back. Fair warning while the pot is still cold: wander off to another pair and coming home is a chore that grows, five beasts seen to the first time, eight the next, eleven the time after, heavier with every helping. Still hungry for it? Then hunt me four wild boars, because a kitchen worth its salt starts with good meat.",
-        "completion": "Now that is a start with some meat on it. Alchemy and Cooking are yours to cook as high as you like. Come back hungry.",
+        "title": "Recept, který stojí za uchování",
+        "text": "Každý dobrý pokrm jsou dvě chuti, které k sobě patří, a tak je to i s dobrým řemeslem, {playerName}. Sedni si se mnou a Alchymie a Vaření se stanou tvými dvěma hlavními obory, dvěma, které smíš dusit nad vzácnou prací; řemeslo na vzdálené straně kola je tvůj koníček, dochuťovaný jen do vzácného a ne výš. Zbývající obchody si uchovej ve spíži, dočasně neaktivní, nezkažené, připravené, kdykoli si je vyzvedneš zpět. Férové varování, dokud je hrnec ještě studený: odejdi k jiné dvojici a návrát domů je práce, která roste, pět zvěří ulovených napoprvé, osm podruhé, jedenáct potřetí, těžší s každou porcí. Ještě hlad po tom? Pak mi ulovi čtyři divoké kance, protože kuchyně stojí za svou sůl začíná dobrým masem.",
+        "completion": "To je začátek s masem na kostech. Alchymie a Vaření jsou tvé, vař je tak vysoko, jak si přeješ. Vrať se hladový.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Ulovení divocí kanci"
           }
         }
       },
       "q_prof_attune_bombardier": {
-        "title": "A Volatile Arrangement",
-        "text": "Oh, oh, you want the good stuff, the loud stuff, yes? Listen, listen, before you touch anything that ticks: say the word and Engineering and Alchemy become your two majors, the only two you get to push past rare work (that is where it gets FUN, trust me). The craft opposite goes in your pocket as a hobby, rare and no further, do not pout. Your other trades? Not gone, {playerName}, just napping, dormant, wake them whenever you like. But (there is always a but, hold the fuse) ditch this pair and waddle back later and it costs you sweat that piles up, five things put down the first time, eight the next, eleven after, more, more, every single time you get cold feet. Yes? YES? Then go pick me three patches of herbs, the volatile ones, do not ask which, they are all a little volatile if you believe hard enough.",
-        "completion": "HA. Reagents, real ones, and all your fingers still attached, good, good. Engineering and Alchemy, yours, go make something that regrets it. Off you go.",
+        "title": "Nestálé uspořádání",
+        "text": "Oh, oh, chceš ta dobrá věci, ta hlučná, ano? Poslouchej, poslouchej, než se dotkneš čehokoli, co tiká: řekni slovo a Strojírenství a Alchymie se stanou tvými dvěma hlavními obory, jedinými dvěma, které smíš tlačit za vzácnou práci (tam se to stává ZÁBAVNÝM, věř mi). Řemeslo naproti jde do kapsy jako koníček, vzácné a ne dál, netulte. Tvé ostatní živnosti? Nezmizely, {playerName}, jen dřímají, probuď je kdykoli. Ale (vždy je tu ale, drž pojistku) opusť tento pár a poválej se zpět a bude tě to stát pot, který se hromadí, pět věcí napoprvé, osm podruhé, jedenáct potom, víc, víc, pokaždé, když dostaneš studené nohy. Ano? ANO? Pak jdi mi nasbírat tři záplaty bylin, ty nestálé, neptej se které, všechny jsou trochu nestálé, když dost věříš.",
+        "completion": "HA. Reagencie, skutečné, a všechny tvé prsty stále připevněny, dobře, dobře. Strojírenství a Alchymie, tvé, jdi udělat něco, co toho lituje. Rychle.",
         "objectives": {
           "0": {
-            "label": "Herb patch harvested"
+            "label": "Sklizena bylinkářská záplata"
           }
         }
       },
       "q_prof_amends_smith": {
-        "title": "Back to the Forge",
-        "text": "So you have come back to the forge. I will not pretend it does not sting, {playerName}, but I am a fair hand and the work is fair too. You know the price of returning: labor, and more of it each time you have strayed. Put down the wolves harrying the north road, and the swing of it will remind your arms what this pair once asked of them.",
-        "completion": "The rhythm is back in your hands. Weaponcrafting and Armorcrafting are your majors once more. Do not make a habit of leaving.",
+        "title": "Zpátky do kovárny",
+        "text": "Takže ses vrátil(a) do kovárny. Nebudu předstírat, že to nebolí, {playerName}, ale jsem spravedlivá ruka a práce je také spravedlivá. Víš, jaká je cena návratu: práce, a víc pokaždé, když sis zabloudil. Zahnat vlky obtěžující severní silnici, a jejich pohyb tvým pažím připomene, co tato dvojice od nich kdysi žádala.",
+        "completion": "Rytmus se vrátil do tvých rukou. Kovářství zbraní a Zbrojnictví jsou opět tvé hlavní obory. Nedělejte z odcházení zvyk.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Zabit lesní vlk"
           }
         }
       },
       "q_prof_amends_outfitter": {
-        "title": "Threads Rejoined",
-        "text": "Back at my loom after all. I hold no grudge, {playerName}, but the thread remembers a hand that let it go, and the cost of taking it up again is measured out longer each time. Cull the webwood spiders crowding the western woods, and the labor will settle your hands before they touch good silk again.",
-        "completion": "Steady again. Leatherworking and Tailoring return to your hands as majors. Measure twice this time before you wander.",
+        "title": "Opět spojená vlákna",
+        "text": "Zpátky u mého stavu po všem. Zášť nepěstuji, {playerName}, ale nit si pamatuje ruku, která ji pustila, a cena za nové uchopení se měří delší pokaždé. Vyhub pavouky lesního pavučníku přeplňující západní lesy, a práce ti usadí ruce, než se dotknou dobrého hedvábí.",
+        "completion": "Opět stabilní. Kožedělnictví a Krejčovství se vrací do tvých rukou jako hlavní obory. Tentokrát dvakrát měř, než se zatoulá.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Vyhuben pavouci lesního pavučníku"
           }
         }
       },
       "q_prof_amends_apothecary": {
-        "title": "Back on the Stove",
-        "text": "Well, look who is back at my pot. No hard feelings, {playerName}, a kitchen always has room, but you know the tab runs longer every time you walk out on it. Go thin the wild boars in the east meadow, because honest sweat is the first ingredient, and it will remind your hands of the work.",
-        "completion": "There is the old flavor. Alchemy and Cooking are back on your stove as majors. Stay a while this time.",
+        "title": "Zpátky na sporák",
+        "text": "No, pohleďme, kdo se vrátil k mému hrnci. Nenesu zášť, {playerName}, kuchyně má vždy místo, ale víš, že účet roste pokaždé, když odejdeš. Jdi proredukovat divoké kance na východní louce, protože poctivý pot je první přísada, a to tvým rukám připomene tu práci.",
+        "completion": "Tady je ta stará chuť. Alchymie a Vaření jsou zpět na tvém sporáku jako hlavní obory. Tentokrát zůstaň.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Ulovený divocí kanci"
           }
         }
       },
       "q_prof_amends_bombardier": {
-        "title": "The Ledger Grows",
-        "text": "You came BACK, ha, they always come back, the loud stuff has a pull, yes? No sulking from me, {playerName}, but the ledger, oh the ledger, it grows every time you skip out, more each return, that is only fair. Go clear the tunnel rats out of the dig for me, sweat first, sparks later, that is the rule I just made up.",
-        "completion": "THERE it is, the itch is back in your hands. Engineering and Alchemy, majors again, go on, go make a bang. Try to stay put this time, eh?",
+        "title": "Zápisník roste",
+        "text": "Vrátil(a) ses ZPĚT, ha, vracejí se vždy, hlučné věci mají přitažlivost, ano? Žádné sulení ode mě, {playerName}, ale zápisník, oh ten zápisník, roste pokaždé, když odskočíš, víc při každém návratu, to je jen spravedlivé. Jdi mi vyklidit tunelové krysy z výkopu, pot nejdřív, jiskry pak, to je pravidlo, které jsem právě vymyslel.",
+        "completion": "TAM je to, svědění se vrátilo do tvých rukou. Strojírenství a Alchymie, opět hlavní obory, hurá, jdi udělat rámus. Tentokrát zůstaň, eh?",
         "objectives": {
           "0": {
-            "label": "Tunnel Rat exterminated"
+            "label": "Vyhubení tunelové krysy"
           }
         }
       },
       "q_prof_workorder_forge": {
-        "title": "Forge Work Order",
-        "text": "The forge always wants feeding, {playerName}. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.",
-        "completion": "Good weight, no slag. Here is your due. The forge will be hungry again soon enough.",
+        "title": "Pracovní příkaz kovárny",
+        "text": "Kovárna se vždy musí krmit, {playerName}. Přines mi osm kousků měděné rudy a nechám tě zaplatit za zásilku. Žádné ceremonie, jen ruda a mince.",
+        "completion": "Dobrá váha, bez strusky. Tady je tvůj podíl. Kovárna bude brzy zase hladová.",
         "objectives": {
           "0": {
-            "label": "Copper Ore delivered"
+            "label": "Doručena měděná ruda"
           }
         }
       },
       "q_prof_workorder_kitchens": {
-        "title": "Kitchens Work Order",
-        "text": "My larder is looking thin, {playerName}, and thin larders make grumpy cooks. Fetch me eight cuts of game meat and there is coin in it for you, plus my undying gratitude, which is worth less but tastes better.",
-        "completion": "Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.",
+        "title": "Pracovní příkaz kuchyní",
+        "text": "Moje spíž vypadá chudě, {playerName}, a chudé spíže dělají mrzuté kuchaře. Dones mi osm kusů zvěřinového masa a je v tom pro tebe zlatý, plus mé hluboké uznání, které je méně hodnotné, ale lépe chutná.",
+        "completion": "To je plná spíž. Tady je tvá mzda. Vrať se, až budou tvé tašky opět těžké.",
         "objectives": {
           "0": {
-            "label": "Game Meat delivered"
+            "label": "Doručeno zvěřinové maso"
           }
         }
       },
       "q_prof_workorder_loom": {
-        "title": "Loom Work Order",
-        "text": "The loom runs dry and idle hands waste daylight, {playerName}. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.",
-        "completion": "Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.",
+        "title": "Pracovní příkaz tkalcovny",
+        "text": "Stav je prázdný a zahálčivé ruce mrhají denním světlem, {playerName}. Přines mi šest přadýnek pavoučího hedvábí a zaplatím ti fair sazbu, počítanou do haléře.",
+        "completion": "Jemné hedvábí, rovnoměrně spředené. Tvé mince, přesně odměřeny. Tkalcovský stav ti děkuje, i já.",
         "objectives": {
           "0": {
-            "label": "Spider Silk delivered"
+            "label": "Doručeno pavoučí hedvábí"
           }
         }
       },
       "q_prof_workorder_toolworks": {
-        "title": "Toolworks Work Order",
-        "text": "Hafts, handles, stocks, I go through wood like it is going out of style, which it is NOT, wood is eternal, {playerName}. Haul me eight ironbark logs and I will pay you, coin, real coin, not a favor, I promise, mostly.",
-        "completion": "Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.",
+        "title": "Pracovní příkaz nástrojárny",
+        "text": "Ratišta, rukojeti, pažby, procházím dřevem jako by to šlo z módy, a to NEJDE, dřevo je věčné, {playerName}. Přitáhni mi osm kláden ze železokůry a zaplatím ti, mincemi, skutečnými mincemi, ne laskavostí, slibuji, většinou.",
+        "completion": "Perfektní, perfektní, rovná vlákna, žádná hniloba. Tady, tvé mince, vidíš, slovo dodržuji (většinou). Přines víc, až přes strom zakopneš.",
         "objectives": {
           "0": {
-            "label": "Ironbark Log delivered"
+            "label": "Doručeno poleno ze železokůry"
           }
         }
       },
       "q_prof_workorder_tannery": {
-        "title": "Tannery Work Order",
-        "text": "Vats are empty. Bring eight rough hides. Coin when you do.",
-        "completion": "Good hides. Fair pay. Again when you have more.",
+        "title": "Pracovní příkaz koželužny",
+        "text": "Kádě jsou prázdné. Přines osm hrubých kůží. Mince, až přijdeš.",
+        "completion": "Dobré kůže. Spravedlivá odměna. Znovu, až budeš mít víc.",
         "objectives": {
           "0": {
-            "label": "Rough Hide delivered"
+            "label": "Doručena hrubá kůže"
           }
         }
       },
       "q_prof_workorder_apothecary": {
-        "title": "Apothecary Work Order",
-        "text": "My shelves require goldleaf, and the market's stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.",
-        "completion": "Acceptable. Potent, and properly handled. Your payment, counted to the coin. Do not let it go to your head, that is a different reagent.",
+        "title": "Pracovní příkaz lékárny",
+        "text": "Mé police potřebují zlatolist a zásoby na trhu jsou, jak se dalo čekat, zfalšované. Přines mi šest zlatolistových bylin, nepomačkaných, a budeš přesně odměněn(a). Pomačkané listy budou odmítnuty, takže dávej pozor na svůj vak.",
+        "completion": "Přijatelné. Účinné a správně zacházené. Tvá odměna, do mince přesně spočítána. Nedej si to stoupnout do hlavy, to je jiná reagencie.",
         "objectives": {
           "0": {
-            "label": "Goldleaf Herb delivered"
+            "label": "Doručena bylina Goldleaf"
           }
         }
       },
@@ -11341,109 +11341,109 @@ export const cs_CZ: EnTranslations = {
         "body": "Řemeslníku,\n\nCech se doslechl o tvé práci v zbrojnictví a strojírenství: pláty se nýtovaly a ozubená kola se seřizovala, dvě řemesla se navzájem doplňují. Propojení příbuzných řemesel svědčí o ruce připravené ke sladění. Vyhledej kováře Haldrena, zbrojíře z Eastbrooku: prozatím zastupuje mistry. Dokaž mu své umění dílem vlastních rukou a on zajistí sladění tvých dvou hlavních oborů.\n\nS úctou,\nŘemeslnický cech"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "Cechovní síň",
+        "subject": "Tvé řemeslo, poctivě",
+        "body": "Cechový příteli,\n\nCech přijal nové měřítko mistrovství. Každá ruka začíná výstup znovu: tvé řemeslné dovednosti a sběratelské profese byly vynulovány.\n\nVše ostatní je tvé, nedotčené: tvé recepty, nástroje a materiály, banka a zlato, ladění a tituly, činy a věhlas, úkoly i pošta.\n\nVýstup je nyní poctivý. Levná práce tě nedonese daleko. Hledej náročnější recepty, bohatší žíly a hlubší vody.\n\nS úctou,\nCechovní síň"
       },
       "prof_tier_weaponcrafting_armorcrafting_1": {
-        "sender": "Forgemistress Darva",
-        "subject": "A spark worth noting",
-        "body": "Word reaches my forge that one of your majors now holds at uncommon work. It is the smallest rung on a long climb, but you earned it at the anvil, not by asking. Keep the fire hot."
+        "sender": "Mistryně kovárny Darva",
+        "subject": "Jiskra hodná pozornosti",
+        "body": "Zprávy z mé kovárny mi říkají, že jedna z tvých specializací nyní stojí na neobvyklé práci. Je to nejmenší příčel na dlouhém výstupu, ale vydobyl(a) sis ji u kovadliny, ne prosbou. Udržuj oheň horký."
       },
       "prof_tier_weaponcrafting_armorcrafting_2": {
-        "sender": "Forgemistress Darva",
-        "subject": "Rare work, and earned",
-        "body": "They tell me a major of yours has reached rare work. That is the rung where sloppy hands fall away and the real smiths are left standing. You are still standing. Good."
+        "sender": "Mistryně kovárny Darva",
+        "subject": "Vzácná práce, zasloužená",
+        "body": "Říkají mi, že tvá specializace dosáhla vzácné práce. To je příčel, kde nedbalé ruce odpadají a zůstávají skuteční kováři. Ty stále stojíš. Dobře."
       },
       "prof_tier_weaponcrafting_armorcrafting_3": {
-        "sender": "Forgemistress Darva",
-        "subject": "The metal answers you now",
-        "body": "A major of yours has climbed past rare into serious work. The metal answers a hand like that, no longer fighting it. Do not let the praise soften your arm."
+        "sender": "Mistryně kovárny Darva",
+        "subject": "Kov ti teď odpovídá",
+        "body": "Tvá specializace přelezla vzácnou práci do vážného řemesla. Kov takové ruce odpovídá, už ji nebraní. Nenech chválu změkčit tvé paže."
       },
       "prof_tier_weaponcrafting_armorcrafting_4": {
-        "sender": "Forgemistress Darva",
-        "subject": "Near the top of the ladder",
-        "body": "One of your majors stands a single rung below mastery. Few hands I have known reach this height, and fewer keep their edge here. Finish the climb."
+        "sender": "Mistryně kovárny Darva",
+        "subject": "Blízko vrcholu žebříku",
+        "body": "Jedna z tvých specializací stojí jediný příčel pod mistrovstvím. Málokterá ruka, kterou jsem znala, dosáhla této výše, a ještě méně si zde udrželo svůj ostří. Dokonči výstup."
       },
       "prof_tier_weaponcrafting_armorcrafting_5": {
-        "sender": "Forgemistress Darva",
-        "subject": "Mastery, at last",
-        "body": "A major of yours has reached mastery, the highest a hand can climb. I do not give praise freely, so hear this once: the forge is proud of you. Now go teach the fire something new."
+        "sender": "Mistryně kovárny Darva",
+        "subject": "Mistrovství, konečně",
+        "body": "Tvá specializace dosáhla mistrovství, nejvýše, kam ruka může vyšplhat. Chválu nedávám volně, takže to slyš jednou: kovárna je na tebe hrdá. Teď jdi naučit oheň něco nového."
       },
       "prof_tier_leatherworking_tailoring_1": {
-        "sender": "Weaver Ottilie",
-        "subject": "An even first row",
-        "body": "The guild notes that one of your majors has reached uncommon work. It is only the first row of many, but it is even and true. Measure the next as carefully."
+        "sender": "Tkadlena Ottilie",
+        "subject": "Rovná první řada",
+        "body": "Cech zaznamenal, že jedna z tvých specializací dosáhla neobvyklé práce. Je to jen první řada z mnoha, ale rovná a přesná. Měř tu příští se stejnou pečlivostí."
       },
       "prof_tier_leatherworking_tailoring_2": {
-        "sender": "Weaver Ottilie",
-        "subject": "Rare work, well measured",
-        "body": "A major of yours has climbed to rare work. That is where a careless hand shows every dropped stitch, and yours has not. I am quietly pleased."
+        "sender": "Tkadlena Ottilie",
+        "subject": "Vzácná práce, dobře odměřená",
+        "body": "Tvá specializace vyšplhala k vzácné práci. To je místo, kde nedbalá ruka odhalí každý spuštěný steh, a tvoje to neudělala. Jsem tiše potěšena."
       },
       "prof_tier_leatherworking_tailoring_3": {
-        "sender": "Weaver Ottilie",
-        "subject": "The pattern comes clear",
-        "body": "One of your majors has passed rare into finer work. The pattern comes clear to a hand at this level, no more guessing. Keep measuring twice."
+        "sender": "Tkadlena Ottilie",
+        "subject": "Vzor se vyjeví",
+        "body": "Jedna z tvých specializací přešla vzácnou práci do jemnějšího řemesla. Vzor se vyjeví ruce na této úrovni, žádné hádání. Dál měř dvakrát."
       },
       "prof_tier_leatherworking_tailoring_4": {
-        "sender": "Weaver Ottilie",
-        "subject": "One row from the top",
-        "body": "A major of yours sits one row short of mastery. The last row is always the hardest to keep even. Do not rush it now."
+        "sender": "Tkadlena Ottilie",
+        "subject": "Jedna řada od vrcholu",
+        "body": "Tvé specializaci chybí jedna řada k mistrovství. Ta poslední je vždy nejtěžší udržet rovnou. Nespěchej teď."
       },
       "prof_tier_leatherworking_tailoring_5": {
-        "sender": "Weaver Ottilie",
-        "subject": "The last stitch",
-        "body": "A major of yours has reached mastery. I measured your work twice, as I measure everything, and it holds. Few hands ever tie the last stitch this cleanly. I am proud, and I do not say so lightly."
+        "sender": "Tkadlena Ottilie",
+        "subject": "Poslední steh",
+        "body": "Tvá specializace dosáhla mistrovství. Měřila jsem tvou práci dvakrát, jak měřím vše, a drží. Málokterá ruka zavazuje poslední steh takto čistě. Jsem hrdá, a to neříkám lehkovážně."
       },
       "prof_tier_alchemy_cooking_1": {
-        "sender": "Cook Marlow",
-        "subject": "A taste of things to come",
-        "body": "Word drifts back to my kitchen that one of your majors has reached uncommon work. It is a first taste, nothing more, but a promising one. Keep the pot moving."
+        "sender": "Kuchař Marlow",
+        "subject": "Předzvěst věcí příštích",
+        "body": "Doslechl jsem se ze své kuchyně, že jedna z tvých specializací dosáhla neobvyklé práce. Je to jen první ochutnávka, nic víc, ale slibná. Udržuj hrnec v pohybu."
       },
       "prof_tier_alchemy_cooking_2": {
-        "sender": "Cook Marlow",
-        "subject": "Rare work, and no burnt edges",
-        "body": "They tell me a major of yours has simmered up to rare work. That is the heat where most cooks scorch the dish, and you did not. Sit, but not for long."
+        "sender": "Kuchař Marlow",
+        "subject": "Vzácná práce bez spálených okrajů",
+        "body": "Říkají mi, že tvá specializace se vypracovala k vzácné práci. To je ta teplota, kde většina kuchařů pokrm připálí, a ty jsi to neudělal(a). Sedni si, ale ne nadlouho."
       },
       "prof_tier_alchemy_cooking_3": {
-        "sender": "Cook Marlow",
-        "subject": "Now you are cooking",
-        "body": "One of your majors has bubbled past rare into real depth. Now you are cooking, as they say. Season boldly and keep tasting."
+        "sender": "Kuchař Marlow",
+        "subject": "Teď teprve vaříš",
+        "body": "Jedna z tvých specializací přebublala vzácnou prací do skutečné hloubky. Teď teprve vaříš, jak se říká. Dochuť odvážně a stále ochuzuj."
       },
       "prof_tier_alchemy_cooking_4": {
-        "sender": "Cook Marlow",
-        "subject": "One course from the feast",
-        "body": "A major of yours is a single course short of mastery. The last one is always the richest and the easiest to overdo. Steady hands on the ladle."
+        "sender": "Kuchař Marlow",
+        "subject": "Jeden chod od hostiny",
+        "body": "Tvé specializaci chybí jediný chod k mistrovství. Ten poslední je vždy nejbohatší a nejsnáze přepepřený. Pevné ruce na naběračce."
       },
       "prof_tier_alchemy_cooking_5": {
-        "sender": "Cook Marlow",
-        "subject": "Mastery, served hot",
-        "body": "A major of yours has reached mastery, the top shelf of the whole pantry. I feed everyone, but few ever cook their way up here. Proud of you, truly. Now go make something that makes them weep at the table."
+        "sender": "Kuchař Marlow",
+        "subject": "Mistrovství, podáváno horké",
+        "body": "Tvá specializace dosáhla mistrovství, té nejvyšší police celé spíže. Živím každého, ale jen málokdo se sem provaří. Jsem na tebe skutečně hrdý. Teď jdi a uvař něco, u čeho budou plakat u stolu."
       },
       "prof_tier_engineering_alchemy_1": {
-        "sender": "Tinker Gizzel",
-        "subject": "FIRST spark, ha",
-        "body": "Oi, the numbers say one of your majors just hit uncommon work, small potatoes, tiny, but it POPPED, yes? First spark is always the cutest. More sparks. Go."
+        "sender": "Kutil Gizzel",
+        "subject": "PRVNÍ jiskra, ha",
+        "body": "Oi, čísla říkají, že jedna z tvých specializací právě dosáhla neobvyklé práce, maličkost, drobnost, ale PRASKLO to, ne? První jiskra je vždy ta nejroztomilejší. Více jisker. Jdi."
       },
       "prof_tier_engineering_alchemy_2": {
-        "sender": "Tinker Gizzel",
-        "subject": "Rare, oh, RARE",
-        "body": "They tell me a major of yours climbed to rare work, and rare is where it starts getting properly dangerous (the good kind). Most hands quit before the fun. Not you. HA."
+        "sender": "Kutil Gizzel",
+        "subject": "Vzácné, oh, VZÁCNÉ",
+        "body": "Říkají mi, že tvá specializace vyšplhala k vzácné práci, a vzácná je tam, kde to začíná být pořádně nebezpečné (ten dobrý druh). Většina rukou to vzdá před zábavou. Ne ty. HA."
       },
       "prof_tier_engineering_alchemy_3": {
-        "sender": "Tinker Gizzel",
-        "subject": "Now it gets loud",
-        "body": "One of your majors blew past rare into the serious stuff, oh this is where it gets LOUD. Do not stop now, whatever you do, momentum is everything, also fuses."
+        "sender": "Kutil Gizzel",
+        "subject": "Teď to začíná být hlučné",
+        "body": "Jedna z tvých specializací přeskočila vzácnou práci do vážných věcí, oh tady to začíná být HLASITÉ. Teď nezastavuj, ať se děje cokoliv, hybnost je všechno, a taky pojistky."
       },
       "prof_tier_engineering_alchemy_4": {
-        "sender": "Tinker Gizzel",
-        "subject": "One rung, ONE, from the top",
-        "body": "A major of yours is ONE rung under mastery, one, singular, do you feel it humming? The last step is the biggest bang. Do not blink."
+        "sender": "Kutil Gizzel",
+        "subject": "Jeden příčel, JEDEN, od vrcholu",
+        "body": "Tvé specializaci zbývá JEDEN příčel k mistrovství, jeden, jediný, cítíš to hučení? Poslední krok je největší výbuch. Nemrkej."
       },
       "prof_tier_engineering_alchemy_5": {
-        "sender": "Tinker Gizzel",
-        "subject": "MASTERY, kaboom",
-        "body": "A major of yours hit mastery, the very TOP, kaboom, the whole ladder, done. I do not hand out praise, I hand out fuses, but here, take both: you are brilliant and slightly terrifying. Go make the mountains nervous."
+        "sender": "Kutil Gizzel",
+        "subject": "MISTROVSTVÍ, kabum",
+        "body": "Tvá specializace dosáhla mistrovství, samotného VRCHOLU, kabum, celý žebřík, hotovo. Chválu nerozdávám, rozdávám pojistky, ale tady, vezmi obojí: jsi skvělý(á) a trochu děsivý(á). Jdi znervóznit hory."
       }
     },
     "itemSets": {

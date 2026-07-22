@@ -97,6 +97,92 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.objectives.0.label': 'Żyła rudy wydobyta',
   'entities.quests.q_prof_intro.text':
     'Każda dusza w Eastbrook uprawia jakiś fach oprócz miecza, {playerName}. W skałach wokół Miedzianego Wykopu, na południowym zachodzie od miasta, są żyły rudy. Idź i wydobądź własnoręcznie 5 z nich; poznam różnicę.',
+  'entities.quests.q_prof_amends_apothecary.completion':
+    'Stary smak powraca. Alchemia i Gotowanie wróciły do twojego pieca jako specjalizacje. Tym razem zostań trochę dłużej.',
+  'entities.quests.q_prof_amends_apothecary.objectives.0.label': 'Dziki dzik upolowany',
+  'entities.quests.q_prof_amends_apothecary.text':
+    'A, kto tu wraca do mojego garnka. Bez urazy, {playerName}, kuchnia zawsze ma miejsce, ale wiesz, że rachunek rośnie za każdym razem, gdy z niej wychodzisz. Idź przerzedzić dziki dziki na wschodniej łące, bo uczciwy pot jest pierwszym składnikiem i przypomni twoim rękom o pracy.',
+  'entities.quests.q_prof_amends_apothecary.title': 'Z powrotem do pieca',
+  'entities.quests.q_prof_amends_bombardier.completion':
+    'No i jest ta nerwowość rąk. Inżynieria i Alchemia znowu twoimi specjalizacjami, no dawaj, idź zrób huk. Tym razem zostań, co?',
+  'entities.quests.q_prof_amends_bombardier.objectives.0.label': 'Tunelowy szczur wytępiony',
+  'entities.quests.q_prof_amends_bombardier.text':
+    'Wróciłeś, ha, zawsze wracają, głośne rzeczy mają przyciąganie, tak? Bez dąsania się z mojej strony, {playerName}, ale ledger, o ten ledger, rośnie za każdym razem, gdy uciekasz, coraz więcej przy każdym powrocie, to tylko sprawiedliwe. Idź wyczyść tunelowe szczury z wykopu, najpierw pot, potem iskry, taka jest zasada, którą właśnie wymyśliłem.',
+  'entities.quests.q_prof_amends_bombardier.title': 'Ledger rośnie',
+  'entities.quests.q_prof_amends_outfitter.completion':
+    'Znowu ustabilizowany. Garbarstwo i Krawiectwo wracają do twoich rąk jako specjalizacje. Mierz dwa razy nim znowu pójdziesz w świat.',
+  'entities.quests.q_prof_amends_outfitter.objectives.0.label': 'Pająk sieciowy wybity',
+  'entities.quests.q_prof_amends_outfitter.text':
+    'Znowu przy moim warsztacie po tym wszystkim. Nie mam urazy, {playerName}, ale nić pamięta rękę, która ją puściła, i koszt jej ponownego podjęcia jest z każdym razem odrobinę wyższy. Wybij pająki sieciowe tłoczące się w zachodnich lasach, a praca ustabilizuje twoje ręce zanim dotkną ponownie dobrego jedwabiu.',
+  'entities.quests.q_prof_amends_outfitter.title': 'Powrót do warsztatu',
+  'entities.quests.q_prof_amends_smith.completion':
+    'Rytm wrócił do twoich rąk. Wytwarzanie Broni i Wytwarzanie Pancerzy znowu twoimi specjalizacjami. Nie rób z tego nawyku.',
+  'entities.quests.q_prof_amends_smith.objectives.0.label': 'Leśny wilk zabity',
+  'entities.quests.q_prof_amends_smith.text':
+    'Wróciłeś do kuźni. Nie udaję, że to nie kole, {playerName}, ale jestem sprawiedliwą ręką i praca jest sprawiedliwa też. Znasz cenę powrotu: praca, i więcej jej za każdym razem, gdy się oddaliłeś. Połóż wilki napadające na drogę północną, a zamach przy tym przypomni twoim ramionom, czego ta para kiedyś od nich wymagała.',
+  'entities.quests.q_prof_amends_smith.title': 'Z powrotem do kuźni',
+  'entities.quests.q_prof_attune_apothecary.completion':
+    'No i mamy start z mięsem na kościach. Alchemia i Gotowanie twoje do ugotowania tak wysoko, jak chcesz. Wróć głodny.',
+  'entities.quests.q_prof_attune_apothecary.objectives.0.label': 'Dziki dzik upolowany',
+  'entities.quests.q_prof_attune_apothecary.text':
+    'Każde dobre danie to dwa smaki, które do siebie pasują, i tak jest z dobrym rzemiosłem, {playerName}. Usiądź ze mną, a Alchemia i Gotowanie stają się twoimi dwiema specjalizacjami: dwiema, które możesz doprowadzić poza rzadką pracę; rzemiosło po przeciwnej stronie koła to twoje hobby, podkręcone do rzadkiej i ani trochę dalej. Reszta twoich fachów czeka w spiżarni, uśpiona, nie zepsuta, gotowa, gdy po nie sięgniesz. Uczciwe ostrzeżenie, dopóki garnek jest zimny: odejść do innej pary i wrócić to trud, który rośnie z każdym razem. Jeśli jesteś gotowy, upoluj mi cztery dzikie dziki, bo kuchnia warta swojej soli zaczyna od dobrego mięsa.',
+  'entities.quests.q_prof_attune_apothecary.title': 'Przepis wart zachowania',
+  'entities.quests.q_prof_attune_bombardier.completion':
+    'HA. Odczynniki, prawdziwe, i wszystkie palce wciąż na miejscu, dobrze, dobrze. Inżynieria i Alchemia, twoje, idź zrób coś, czego pożałuje. Dalej.',
+  'entities.quests.q_prof_attune_bombardier.objectives.0.label': 'Łan ziół zebrany',
+  'entities.quests.q_prof_attune_bombardier.text':
+    'O, o, chcesz te dobre rzeczy, te głośne, tak? Słuchaj, słuchaj, zanim dotkniesz czegoś tykającego: powiedz słowo, a Inżynieria i Alchemia staną się twoimi dwiema specjalizacjami, jedynymi dwoma, które możesz dociągnąć poza rzadką pracę (tam dopiero robi się ZABAWNIE, zaufaj mi). Rzemiosło naprzeciwko trafia do kieszeni jako hobby, rzadka i nie dalej, nie bądź smutny. Inne fachy? Nie znikają, {playerName}, po prostu drzemią, obudź je kiedy chcesz. Ale (zawsze jest ale, trzymaj lont) rzuć tę parę i wróć później, a kosztuje cię to pot, który się kumuluje. Tak? TAK? To zbierz mi trzy łany ziół, te niestabilne, nie pytaj które, wszystkie są trochę niestabilne, jeśli wierzyć wystarczająco mocno.',
+  'entities.quests.q_prof_attune_bombardier.title': 'Niestabilny układ',
+  'entities.quests.q_prof_attune_outfitter.completion':
+    'Równa nić, równa ręka. Garbarstwo i Krawiectwo twoje, by nieść tak daleko, jak sięga twoja umiejętność. Mierz dwa razy, a nie zawiodą.',
+  'entities.quests.q_prof_attune_outfitter.objectives.0.label': 'Pająk sieciowy wybity',
+  'entities.quests.q_prof_attune_outfitter.text':
+    'Mierz koszt zanim tniesz, to pierwsza zasada przy moim warsztacie. Wybierz mnie, a Garbarstwo i Krawiectwo staną się twoimi dwiema specjalizacjami, parą, którą możesz prowadzić poza rzadką pracę; rzemiosło naprzeciwko nich usiądzie jako hobby, wniesione do rzadkiej i pozostawione tam. Fachy, które odłożysz, nie są rozwiązane, {playerName}, tylko złożone, uśpione dopóki ich nie podejmiesz. Upewnij się jednak: opuść tę parę i chcieć ją z powrotem oznacza płacić pracą, która wydłuża się z każdym razem. Jeśli masz pewność, wybij cztery pająki sieciowe i przynieś ich jedwab do warsztatu, bo dobra nić zaczyna każdą dobrą odzież.',
+  'entities.quests.q_prof_attune_outfitter.title': 'Miara krawca',
+  'entities.quests.q_prof_attune_smith.completion':
+    'Dobra ruda, i dobre ręce do pracy. Wytwarzanie Broni i Wytwarzanie Pancerzy teraz twoje do opanowania. Zarób resztę.',
+  'entities.quests.q_prof_attune_smith.objectives.0.label': 'Żyła rudy wydobyta',
+  'entities.quests.q_prof_attune_smith.text':
+    'Stal nie przebacza błądzącej ręce, więc powiem ci wprost, zanim cokolwiek przysięgniesz. Zwiąż się z moją kuźnią, a Wytwarzanie Broni i Wytwarzanie Pancerzy staną się twoimi dwiema specjalizacjami, jedynymi rzemiosłami, które możesz prowadzić poza rzadką pracę. Rzemiosło po przeciwnej stronie koła od nich usiądzie jako hobby, doprowadzone do rzadkiej i nie dalej. Inne fachy nie spalają się, {playerName}: po prostu milkną, uśpione, dopóki ich nie zawołasz z powrotem. I wiedz to, zanim opuści cię młotek: rzuć tę parę dla innej i będziesz wracał przez uczciwą pracę, pięć pokonanych za pierwszym razem, osiem za kolejnym, jedenaście po tym, więcej z każdym razem. Wciąż tu stoisz? To przynieś mi trzy żyły rudy wydobyte własnoręcznie z Doliny, a uznamy umowę za zawartą.',
+  'entities.quests.q_prof_attune_smith.title': 'Obietnica kowala',
+  'entities.quests.q_prof_workorder_apothecary.completion':
+    'Akceptowalne. Silne i właściwie zarządzane. Twoja zapłata, co do monety. Niech ci nie uderzą do głowy, to inny odczynnik.',
+  'entities.quests.q_prof_workorder_apothecary.objectives.0.label':
+    'Ziele złotego liścia dostarczone',
+  'entities.quests.q_prof_workorder_apothecary.text':
+    'Moje półki wymagają złotego liścia, a zapasy rynkowe są, przewidywalnie, zanieczyszczone. Przynieś mi sześć ziół złotego liścia, nieuszkodzonych, a zostaniesz wynagrodzony dokładnie. Uszkodzone liście zostaną odrzucone, więc pilnuj torby.',
+  'entities.quests.q_prof_workorder_apothecary.title': 'Zamówienie aptekarskie',
+  'entities.quests.q_prof_workorder_forge.completion':
+    'Dobra waga, bez żużlu. Oto twoje należne. Kuźnia wkrótce znowu będzie głodna.',
+  'entities.quests.q_prof_workorder_forge.objectives.0.label': 'Ruda miedzi dostarczona',
+  'entities.quests.q_prof_workorder_forge.text':
+    'Kuźnia zawsze chce żywienia, {playerName}. Przynieś mi osiem grudek rudy miedzi, a zapłacę ci za dostawę. Bez ceremonii, tylko ruda i monety.',
+  'entities.quests.q_prof_workorder_forge.title': 'Zamówienie kuźni',
+  'entities.quests.q_prof_workorder_kitchens.completion':
+    'No i pełna spiżarnia. Oto twoja zapłata. Wróć, gdy twoje torby będą znowu ciężkie.',
+  'entities.quests.q_prof_workorder_kitchens.objectives.0.label': 'Mięso z dziczyzny dostarczone',
+  'entities.quests.q_prof_workorder_kitchens.text':
+    'Moja spiżarnia wygląda skromnie, {playerName}, a skromne spiżarnie robią marudnych kucharzy. Zdobądź mi osiem kawałków mięsa z dziczyzny, a jest w tym moneta dla ciebie, plus moja wieczna wdzięczność, która jest warta mniej, ale smakuje lepiej.',
+  'entities.quests.q_prof_workorder_kitchens.title': 'Zamówienie kuchni',
+  'entities.quests.q_prof_workorder_loom.completion':
+    'Piękny jedwab, równo przędzony. Twoja moneta, dokładnie odmierzona. Warsztat ci dziękuje, i ja też.',
+  'entities.quests.q_prof_workorder_loom.objectives.0.label': 'Jedwab pająka dostarczony',
+  'entities.quests.q_prof_workorder_loom.text':
+    'Warsztat chodzi na sucho i bezczynne ręce marnują światło dzienne, {playerName}. Przynieś mi sześć moków jedwabiu pająka, a zapłacę ci uczciwie, co do miedzianej.',
+  'entities.quests.q_prof_workorder_loom.title': 'Zamówienie warsztatu',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    'Dobre skóry. Uczciwa zapłata. Wróć, gdy będziesz mieć więcej.',
+  'entities.quests.q_prof_workorder_tannery.objectives.0.label': 'Surowa skóra dostarczona',
+  'entities.quests.q_prof_workorder_tannery.text':
+    'Kadzie puste. Przynieś osiem surowych skór. Moneta gdy przyniesiesz.',
+  'entities.quests.q_prof_workorder_tannery.title': 'Zamówienie garbarni',
+  'entities.quests.q_prof_workorder_toolworks.completion':
+    'Perfekcyjne, perfekcyjne, prosta słoja, bez zgnilizny. Masz tu, twoja moneta, widzisz, dotrzymuję słowa (przeważnie). Przynieś więcej, gdy potkniesz się o drzewo.',
+  'entities.quests.q_prof_workorder_toolworks.objectives.0.label':
+    'Kłoda żelaznej kory dostarczona',
+  'entities.quests.q_prof_workorder_toolworks.text':
+    'Trzonki, uchwyty, kolby, zużywam drewno jakby wychodziło z mody, co NIE jest prawdą, drewno jest wieczne, {playerName}. Przywieź mi osiem kłód żelaznej kory własnoręcznie, a zapłacę ci, monety, prawdziwe monety, nie przysługę, obiecuję, przeważnie.',
+  'entities.quests.q_prof_workorder_toolworks.title': 'Zamówienie narzędziowni',
   'gpuNotice.bodyDesktop':
     'Gra działa bez akceleracji GPU i będzie wolna. Zaktualizuj sterowniki karty graficznej, a następnie zrestartuj grę. W systemie Windows ustaw grę na Wysoką wydajność w Ustawienia > System > Ekran > Grafika.',
   'gpuNotice.bodyWeb':
@@ -160,14 +246,25 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.craftName.leatherworking': 'Garbarstwo',
   'hudChrome.craftName.tailoring': 'Krawiectwo',
   'hudChrome.craftName.weaponcrafting': 'Wytwarzanie Broni',
+  'hudChrome.crafting.attunedBanner': 'Dostrojony: {title}',
+  'hudChrome.crafting.attunedZoneLine': '{name} dostroił się jako {archetype}!',
   'hudChrome.crafting.attunementPreview':
     'Wynik: tytuł {title}; {majorA} i {majorB} stają się nieograniczonymi specjalizacjami; {hobby} staje się hobby z pułapem rzadkości; cała pozostała wiedza zostaje zachowana, lecz jest ograniczona do poziomu pospolitego podczas uśpienia.',
+  'hudChrome.crafting.attunementReturnCost':
+    'Jeśli opuścisz tę parę, powrót do niej kosztuje {cost} zadań pojednania.',
   'hudChrome.crafting.comboMet': 'Gotowe.',
   'hudChrome.crafting.comboNotAttuned': 'Najpierw wybierz parę archetypów.',
   'hudChrome.crafting.comboRequires': 'Dostrojenie: {craftA} + {craftB}, poziom {tier}.',
   'hudChrome.crafting.comboSyncing': 'Sprawdzanie dostrojenia sfery.',
   'hudChrome.crafting.comboTierUnmet': 'Podnieś obie główne specjalizacje do wymaganego poziomu.',
+  'hudChrome.crafting.commissionBound': 'Wyrób na zamówienie: przywiązany do odbiorcy',
+  'hudChrome.crafting.commissionToggle': 'Wyrób na zamówienie',
+  'hudChrome.crafting.commissionToggleHint':
+    'Przywiązuje się do pierwszej postaci, która go otrzyma w transakcji.',
+  'hudChrome.crafting.commissionUnbound':
+    'Wyrób na zamówienie: przywiązuje się do pierwszego odbiorcy',
   'hudChrome.crafting.comboWrongPair': 'Aktywuj dokładnie tę parę, aby to wykonać.',
+  'hudChrome.crafting.difficultyMinimal': 'Minimalny przyrost umiejętności',
   'hudChrome.crafting.hobbyPreview':
     'Wynik: {hobby} staje się hobby z pułapem rzadkości. Obie specjalizacje i wszystkie zachowane wartości umiejętności pozostają niezmienione.',
   'hudChrome.crafting.identity.ceilingCommon': 'Pułap pospolity',
@@ -198,13 +295,29 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Pierwszy poziom: osiągnij umiejętność {skill} w danym rzemiośle. Udane przepisy zwiększają to rzemiosło, nie wymazując wiedzy z innych.',
   'hudChrome.crafting.identity.unattuned':
     'Brak aktywnej pary archetypów. Twoja wiedza jest zachowana, lecz kombinowane przepisy wymagają dostrojonej pary.',
+  'hudChrome.crafting.gatheredBy': 'Zebrane przez {name}',
+  'hudChrome.crafting.learnMoreAtStation':
+    '{master} przy {station} może nauczyć cię więcej przepisów {craft}.',
   'hudChrome.crafting.noProfessionChoice': 'Aktualnie nie ma dostępnego wyboru profesji.',
   'hudChrome.crafting.pairOptionLabel': '{pair} ({craftA} + {craftB})',
   'hudChrome.crafting.professionChoice': 'Wybór profesji',
+  'hudChrome.crafting.tierTutorial.dismiss': 'Rozumiem',
+  'hudChrome.crafting.tierTutorial.masters':
+    'Mistrzowie rzemiosła w miastach oferują zadania dostrojenia. Odwiedź jednego, by wybrać swoją parę, gdy będziesz gotowy. Niczego, czego się nauczyłeś, nigdy nie tracisz.',
+  'hudChrome.crafting.tierTutorial.radar':
+    'Twoje profesje tworzą koło. Dostrojenie do sąsiadującej pary sprawia, że te dwa rzemiosła stają się nieograniczonymi specjalizacjami, jedno rzemiosło po drugiej stronie koła staje się hobby z pułapem rzadkości, a reszta leży uśpiona: wiedza zachowana, lecz ograniczona do pospolitej, dopóki ponownie jej nie podejmiesz.',
+  'hudChrome.crafting.tierTutorial.tierCap':
+    'Rzemiosło osiąga swój pierwszy poziom przy umiejętności {skill}, a każdy poziom poprawia to, co może wytworzyć. Ale rzemiosło wspina się poza rzadką pracę tylko wtedy, gdy jest jedną z twoich dwóch specjalizacji.',
+  'hudChrome.crafting.tierTutorial.title': 'Twój Pierwszy Poziom',
+  'hudChrome.crafting.trendNudge':
+    'Twoje ręce skłaniają się ku {archetype}. Jego dostrojenie czeka u {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    'Twoje ręce skłaniają się ku {archetype}. Poszukaj mistrza rzemiosła, by je podjąć.',
   'hudChrome.deeds.lbScopeNote':
     'Konta sklasyfikowane według łącznej Renomy. Każdy czyn liczy się raz dla wszystkich postaci na koncie.',
   'hudChrome.deeds.lbSelfAccount': 'Twoje konto: miejsce {rank}, top {percent}%, {renown} Renomy',
   'hudChrome.deeds.lbSelfRank': 'Twoje konto: miejsce {rank}, top {percent}%',
+  'hudChrome.nameplate.afkTag': 'AFK',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
   'hudChrome.nameplate.mobLevel': '{level}',
   'hudChrome.specPanel.specUnlockBanner': 'Odblokowano specjalizację!',
@@ -276,6 +389,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Kolejny śmiertelny cios wroga zamiast tego przywraca cię do {pct}% zdrowia',
   'hudChrome.bags.dragDestroyHint': 'Przeciągnij poza okno, aby zniszczyć',
   'hudChrome.bags.dragEquipHint': 'Przeciągnij na postać, aby założyć',
+  'hudChrome.bags.itemAriaInstanced': '{item}, ilość {count}, oznaczona kopia',
   'hudChrome.bags.reorderNeedsRecent':
     'Wyczyść filtr i posortuj według Ostatnich, aby zmienić kolejność w torbach',
   'hudChrome.bags.rightClickDestroy': 'Kliknij prawym przyciskiem, aby zniszczyć',
@@ -294,6 +408,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.legend': 'LEGENDA',
   'hudChrome.discord.roleTag.seniormods': 'Starszy Moderator',
   'hudChrome.discord.roleTag.shill': 'GORLIWY ORĘDOWNIK',
+  'hudChrome.discord.roleTagChatTitle': 'Zweryfikowana rola serwera: {role}',
   'hudChrome.finder.accept': 'Akceptuj',
   'hudChrome.finder.acceptApplicantAria': 'Akceptuj {name}',
   'hudChrome.finder.accepted': '{accepted} z {size} potwierdzonych',
@@ -395,7 +510,30 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.finder.withdraw': 'Wycofaj zgłoszenie',
   'hudChrome.finder.yourListing': 'Twoje ogłoszenie',
   'hudChrome.finder.yourRoles': 'Twoje role',
+  'hudChrome.gathering.biteLine': 'Coś wzięło przynętę!',
+  'hudChrome.gathering.catchLine': 'Wyciągasz: {name}',
+  'hudChrome.gathering.downgradeFind': 'Torby pełne: wyjątkowe znalezisko przeszło ci koło nosa.',
+  'hudChrome.gathering.downgradeMark':
+    'Torby pełne: znalezisko zostało schowane bez znaku zbieracza.',
+  'hudChrome.gathering.fishing': 'Wędkarstwo',
+  'hudChrome.gathering.gotAwayLine': 'Uciekło.',
+  'hudChrome.gathering.nodeName.herb': 'Łan ziół',
+  'hudChrome.gathering.nodeName.ore': 'Żyła rudy',
+  'hudChrome.gathering.nodeName.wood': 'Drzewostan',
   'hudChrome.gathering.notReady': 'Ten węzeł zasobu jeszcze nie odrósł dla ciebie.',
+  'hudChrome.gathering.stateCooldown': 'Odnawianie się',
+  'hudChrome.gathering.stateReady': 'Gotowy',
+  'hudChrome.gathering.tierRequired.herbalism': 'Wymaga sierpa zielarskiego {tier} poziomu',
+  'hudChrome.gathering.tierRequired.logging': 'Wymaga siekiery drwala {tier} poziomu',
+  'hudChrome.gathering.tierRequired.mining': 'Wymaga kilofika górniczego {tier} poziomu',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    'Potrzebujesz sierpa zielarskiego {tier} poziomu, by zebrać ten łan.',
+  'hudChrome.gathering.toolTierUnmet.logging':
+    'Potrzebujesz siekiery drwala {tier} poziomu, by ściąć ten drzewostan.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    'Potrzebujesz kilofika górniczego {tier} poziomu, by zebrać tę żyłę.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    'Potrzebujesz narzędzia zbieracza {tier} poziomu, by odzyskać najlepsze materiały.',
   'hudChrome.keybinds.sheathe': 'Schowaj/Wyciągnij Broń',
   'hudChrome.meters.autoShowHint':
     'Wiersze pojawiają się automatycznie, gdy twoja drużyna zadaje obrażenia lub leczy, a ten segment zamyka się kilka sekund po zakończeniu walki.',
@@ -707,7 +845,10 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.townFocus.increaseAria': 'Zwiększ priorytet: {component}',
   'hudChrome.townFocus.notInTownHint': 'Musisz być w mieście, aby ustawić priorytety.',
   'hudChrome.townFocus.saveButton': 'Zapisz priorytety',
+  'hudChrome.townFocus.tierHint':
+    'Każde {points} punktów na komponencie podnosi poziom zbioru o jeden stopień, do {steps} stopni; mniej niż {points} punktów nadal zwiększa uzysk.',
   'hudChrome.townFocus.title': 'Priorytety miasta',
+  'hudChrome.townFocus.townOnlyHint': 'Priorytety można zmieniać tylko w mieście.',
   'hudChrome.vcup.awayNote':
     'Jeśli obie strony niosą ten sam sztandar, goście grają w odwróconych barwach.',
   'hudChrome.vcup.bannerCountdown': 'Pierwszy gwizdek za {seconds}...',
@@ -854,28 +995,58 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Twoje zaklęcia mają 10% szansy na udzielenie Płomienia Duszy, zwiększającego moc zaklęć o 40 na 10 s.',
   'entities.itemSets.wyrmshadow.bonus4':
     'Twoje krytyczne trafienia bronią mają 50% szansy na udzielenie Pędu Kłów, zwiększającego szybkość ataku o 25% na 8 s.',
+  'entities.items.acolyte_chain_grips.name': 'Kolcze rękawice akolity',
   'entities.items.architects_cornerstone.name': 'Kamień węgielny Architekta',
   'entities.items.bonechill_cord.name': 'Sznur kościstego mrozu',
   'entities.items.bonechill_striders.name': 'Wędrowce kościstego mrozu',
+  'entities.items.briarroot_staff.name': 'Kij z cierniowego korzenia',
   'entities.items.choir_blessed_spaulders.name': 'Naramienniki błogosławione przez chór',
   'entities.items.choirmothers_casque.name': 'Hełm matki chóru',
+  'entities.items.cragprowl_belt.name': 'Pas Skalodrapa',
+  'entities.items.cragthorn_greatstaff.name': 'Wielki kostur Skalokolca',
+  'entities.items.cragward_pauldrons.name': 'Naramienniki Skalostrażnika',
+  'entities.items.cryptbloom_shoulderguards.name': 'Naramienniki Kryptokwiatu',
   'entities.items.cryptplate_helm.name': 'Hełm z kryptowej płyty',
   'entities.items.deathless_greatblade.name': 'Nieśmiertelne wielkie ostrze',
   'entities.items.deathless_warguard_legmail.name': 'Nieśmiertelne nogawice wojennej straży',
+  'entities.items.dreamroot_boots.name': 'Buty Snokorenia',
+  'entities.items.duskthorn_mantle.name': 'Peleryna Zmierzczokolca',
+  'entities.items.fenbark_leggings.name': 'Nogawice Bagiennej Kory',
+  'entities.items.fenshadow_maul.name': 'Obuch Bagiennego Cienia',
+  'entities.items.fenwarden_sabatons.name': 'Sabatony Strażnika Bagnisk',
   'entities.items.gravescale_girdle.name': 'Pas z grobowej łuski',
   'entities.items.gravewyrm_claws.name': 'Szpony grobowego żmija',
   'entities.items.gravewyrm_cleaver.name': 'Tasak grobowego żmija',
+  'entities.items.gravewyrm_thornmaul.name': 'Kolczasty obuch grobowego żmija',
+  'entities.items.grovewardens_grips.name': 'Rękawice Strażnika Gaju',
   'entities.items.heroic_mark.name': 'Znak heroiczny',
   'entities.items.lunar_choir_leggings.name': 'Nogawice księżycowego chóru',
+  'entities.items.lunarward_cinch.name': 'Pas Księżycowego Strażnika',
   'entities.items.lunar_tide_greatstaff.name': 'Wielki kostur księżycowego przypływu',
+  'entities.items.marshlight_hauberk.name': 'Kolczuga Bagnistego Blasku',
+  'entities.items.maul_of_the_scourged_wilds.name': 'Obuch Splądowanych Ostępów',
   'entities.items.medallion_of_endless_profit.name': 'Medalion niekończącego się zysku',
+  'entities.items.mirebloom_treads.name': 'Buty Moczarorozkwitu',
   'entities.items.mistcallers_fang.name': 'Kieł przyzywacza mgły',
   'entities.items.mistforged_pauldrons.name': 'Naramienniki kute we mgle',
+  'entities.items.moonbark_vestments.name': 'Szaty Księżycowej Kory',
+  'entities.items.mosshide_vest.name': 'Kaftan z mszystej skóry',
   'entities.items.morthens_cryptforged_hauberk.name': 'Kryptokuta kolczuga Morthena',
   'entities.items.nielas_coldlight_band.name': 'Obrączka zimnego światła Nieli',
+  'entities.items.nightfangs_greatstaff.name': 'Wielki kostur Nocnego Kła',
   'entities.items.oath_of_the_round_table.name': 'Przysięga Okrągłego Stołu',
+  'entities.items.peaksong_helm.name': 'Hełm Szczytowej Pieśni',
+  'entities.items.pearlward_aegis.name': 'Egida Perłowego Strażnika',
+  'entities.items.resonant_hide.name': 'Rezonująca skóra',
+  'entities.items.resonant_links.name': 'Rezonujące ogniwa',
+  'entities.items.resonant_steel.name': 'Rezonująca stal',
+  'entities.items.resonant_thread.name': 'Rezonująca nić',
+  'entities.items.resonant_timber.name': 'Rezonujące drewno',
+  'entities.items.revenantstep_treads.name': 'Buty Kroku Zjawy',
   'entities.items.sanctum_prowlers_grips.name': 'Rękawice skradacza sanktuarium',
   'entities.items.sash_of_the_sunken_court.name': 'Szarfa zatopionego dworu',
+  'entities.items.shardfang_grips.name': 'Rękawice Odłamkokła',
+  'entities.items.shardsong_mantle.name': 'Peleryna Odłamkowej Pieśni',
   'entities.items.scepter_of_the_deathless_court.name': 'Berło nieśmiertelnego dworu',
   'entities.items.scourgehide_carapace.name': 'Pancerz ze skóry plagi',
   'entities.items.seal_of_the_nine_oaths.name': 'Pieczęć dziewięciu przysiąg',
@@ -884,15 +1055,31 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.items.shroud_of_the_gravewyrm.name': 'Całun grobowego żmija',
   'entities.items.soulforged_warplate.name': 'Bojowa zbroja kuta z duszy',
   'entities.items.soulrend_diadem.name': 'Diadem rozdarcia dusz',
+  'entities.items.stormbark_mantle.name': 'Peleryna Burzowej Kory',
   'entities.items.stormcallers_focus.name': 'Ognisko przyzywacza burz',
+  'entities.items.stormchant_gauntlets.name': 'Rękawice Burzowego Śpiewu',
+  'entities.items.stormroot_cowl.name': 'Kaptur Burzowego Korzenia',
+  'entities.items.stormvotive_hauberk.name': 'Kolczuga Burzowego Wotum',
   'entities.items.sunken_court_mantle.name': 'Peleryna zatopionego dworu',
   'entities.items.sutils_gambit.name': 'Gambit Sutila',
   'entities.items.swiftfang_talisman.name': 'Talizman rączego kła',
+  'entities.items.thornling_grips.name': 'Rękawice Kolczastka',
+  'entities.items.thornpeak_wildwraps.name': 'Dzikie owijki Kolczastego Szczytu',
+  'entities.items.thunderward_legguards.name': 'Nagolenniki Gromowego Strażnika',
   'entities.items.tidebound_spaulders.name': 'Naramienniki spętane przypływem',
   'entities.items.tideguard_faceguard.name': 'Osłona twarzy straży przypływu',
+  'entities.items.tidehymn_slippers.name': 'Trzewiki Hymnu Przypływu',
   'entities.items.tideworn_warboots.name': 'Bojowe buty starte przypływem',
   'entities.items.tidewoven_trousers.name': 'Spodnie tkane przypływem',
+  'entities.items.valefire_lantern.name': 'Latarnia Dolinnego Ognia',
+  'entities.items.verdant_walkers.name': 'Buty Zielonego Wędrowca',
+  'entities.items.vestments_of_the_waking_grove.name': 'Szaty Budzącego się Gaju',
+  'entities.items.votive_chain_belt.name': 'Kolczy pas wotywny',
+  'entities.items.wildgrove_cinch.name': 'Pas Dzikich Ostępów',
+  'entities.items.wildgrowth_leggings.name': 'Nogawice Dzikiego Wzrostu',
+  'entities.items.wildsoul_maul.name': 'Obuch Dzikich Dusz',
   'entities.items.wyrmchoir_handwraps.name': 'Owijki żmijowego chóru',
+  'entities.items.wyrmcult_spellgrips.name': 'Czarodziejskie rękawice kultu żmija',
   'entities.items.yumis_keepsake_locket.name': 'Pamiątkowy medalionik Yumi',
   'entities.items.zense_meridian.name': 'Meridian Zense',
   'entities.items.zyzzs_deathless_signet.name': 'Nieśmiertelny sygnet Zyzza',
@@ -928,6 +1115,15 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Ta instancja ma ustawioną normalną trudność. Użyj opcji Zresetuj wszystkie instancje, aby rozpocząć nowy heroiczny przebieg.',
   'hudChrome.dungeonDifficulty.entryMismatchHeroic':
     'Ta instancja ma ustawioną heroiczną trudność. Użyj opcji Zresetuj wszystkie instancje, aby rozpocząć nowy normalny przebieg.',
+  'hudChrome.interfaceTabs.chat': 'Czat',
+  'hudChrome.interfaceTabs.combat': 'Walka',
+  'hudChrome.interfaceTabs.frames': 'Ramki',
+  'hudChrome.interfaceTabs.general': 'Ogólne',
+  'hudChrome.itemMenu.applyEnchant': 'Zastosuj zaklinanie',
+  'hudChrome.itemMenu.disenchant': 'Rozbroić',
+  'hudChrome.itemMenu.equip': 'Załóż',
+  'hudChrome.itemMenu.salvage': 'Odzyskaj',
+  'hudChrome.itemMenu.use': 'Użyj',
   'hudChrome.itemProc.attackSlow': 'i spowalnia szybkość ataku celu o {pct}% na {duration} s',
   'hudChrome.itemProc.chainArc':
     'razi cel czarem {school} {name} ({damage}), który przeskakuje na {jumps} pobliskich wrogów, zadając malejące obrażenia',
@@ -1620,13 +1816,18 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.playerFrameScale': 'Skala ramki gracza',
   'hudChrome.options.showDailyRewardsChest': 'Pokaż skrzynię codziennych nagród',
   'hudChrome.options.showOwnNameplate': 'Pokaż moją plakietkę',
+  'hudChrome.options.showPlayerNameplates': 'Pokaż plakietki graczy',
   'hudChrome.options.targetFrameScale': 'Skala ramki celu',
   'hudChrome.options.walkByAutoloot': 'Automatyczny łup w przelocie',
   'hudChrome.party.inviteUsage': 'Kogo zaprosić? Użycie: /invite <imię>.',
   'hudChrome.playerFrame.lock': 'Zablokuj ramkę gracza',
   'hudChrome.playerFrame.unlock': 'Przesuń ramkę gracza',
+  'hudChrome.social.hideOffline': 'Ukryj offline',
+  'hudChrome.social.hideOfflineTitle': 'Ukryj offline członków gildii',
   'hudChrome.social.lastSeen': 'Ostatnio widziano: {when}',
   'hudChrome.social.lastSeenNever': 'nigdy',
+  'hudChrome.social.offlineHeader': 'Offline ({n})',
+  'hudChrome.social.onlineHeader': 'Online ({n})',
   'hudChrome.targetFrame.lock': 'Zablokuj ramkę celu',
   'hudChrome.targetFrame.unlock': 'Przesuń ramkę celu',
   'hudChrome.unitFrame.durationUnitDays': 'd',
@@ -1775,6 +1976,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Pole akcji {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Demoniczne leczenie',
   'abilityUi.cast.fishing': 'Wędkarstwo',
+  'abilityUi.cast.gathering': 'Zbieranie',
   'abilityUi.cast.thunzharrStormcall': 'Zew burzy',
   'abilityUi.forms.bear': 'Niedźwiedź',
   'abilityUi.forms.cat': 'Wilk',
@@ -5166,6 +5368,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hud.errors.targetHealthBelow': 'Ta umiejętność wymaga, by cel miał poniżej {percent}% zdrowia.',
   'hud.errors.targetMustDodge': 'Twój cel musi najpierw zrobić unik.',
   'hud.errors.targetTooFar': 'Cel jest zbyt daleko.',
+  'hud.errors.tradeBound': 'Ten przedmiot jest przywiązany i nie można go wymienić.',
   'hud.errors.tooClose': 'Zbyt blisko!',
   'hud.errors.tradeExpired': 'Prośba o wymianę wygasła.',
   'hud.errors.tradeFailed': 'Wymiana nieudana: przedmioty lub pieniądze są już niedostępne.',
@@ -5440,6 +5643,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hud.social.removeFriendTitle': 'Usuń {name} ze znajomych',
   'hud.social.removeGuildTitle': 'Usuń {name} z gildii',
   'hud.social.selfNotice': 'To ty!',
+  'hud.social.status.afk': 'Nieobecny',
   'hud.social.status.combat': 'W walce',
   'hud.social.status.dead': 'Martwy',
   'hud.social.status.dungeon': 'W lochu',
@@ -5636,6 +5840,8 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.castBar.playerAria': 'Twój pasek rzucania',
   'hudChrome.castBar.targetAria': 'Pasek rzucania jednostki',
   'hudChrome.character.modelPreview': 'Podgląd modelu postaci',
+  'hudChrome.charSheet.defense': 'Obrona',
+  'hudChrome.charSheet.offense': 'Atak',
   'hudChrome.chatTimestamps.clock12h': '12-godzinny',
   'hudChrome.chatTimestamps.clock24h': '24-godzinny',
   'hudChrome.chatTimestamps.format': 'Format znacznika czasu',
@@ -5680,6 +5886,8 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.corpseHarvest.concentrateHint':
     'Im mniej części wybierzesz, tym wyższa jakość każdej z nich.',
   'hudChrome.corpseHarvest.harvestButton': 'Zbierz',
+  'hudChrome.corpseHarvest.harvestTooltip':
+    'Zbiera zaznaczone komponenty. Każde zwloki można zebrać raz, pierwszemu podejdzie. Nie zabiera łupów.',
   'hudChrome.corpseHarvest.title': 'Zbieranie',
   'hudChrome.emoteEditor.done': 'Gotowe',
   'hudChrome.emoteEditor.title': 'Emotki',
@@ -5698,6 +5906,77 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.emotes.roar': 'Ryk',
   'hudChrome.emotes.salute': 'Salut',
   'hudChrome.emotes.wave': 'Pomachaj',
+  'hudChrome.enchantName.enchant_chest_armor': 'Zaklinanie piersi - Wzmocnienie',
+  'hudChrome.enchantName.enchant_chest_greater_stamina': 'Zaklinanie piersi - Wielka wytrzymałość',
+  'hudChrome.enchantName.enchant_chest_runeweave': 'Zaklinanie piersi - Runowy splot',
+  'hudChrome.enchantName.enchant_chest_spirit': 'Zaklinanie piersi - Duch',
+  'hudChrome.enchantName.enchant_chest_stamina': 'Zaklinanie piersi - Wytrzymałość',
+  'hudChrome.enchantName.enchant_feet_agility': 'Zaklinanie butów - Zwinność',
+  'hudChrome.enchantName.enchant_feet_stamina': 'Zaklinanie butów - Wytrzymałość',
+  'hudChrome.enchantName.enchant_feet_strength': 'Zaklinanie butów - Siła',
+  'hudChrome.enchantName.enchant_gloves_agility': 'Zaklinanie rękawic - Zwinność',
+  'hudChrome.enchantName.enchant_gloves_greater_agility': 'Zaklinanie rękawic - Wielka zwinność',
+  'hudChrome.enchantName.enchant_gloves_intellect': 'Zaklinanie rękawic - Moc zaklęć',
+  'hudChrome.enchantName.enchant_gloves_strength': 'Zaklinanie rękawic - Siła',
+  'hudChrome.enchantName.enchant_helmet_armor': 'Zaklinanie hełmu - Wzmocnienie',
+  'hudChrome.enchantName.enchant_helmet_fortitude': 'Zaklinanie hełmu - Krzepkość',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude': 'Zaklinanie hełmu - Wielka krzepkość',
+  'hudChrome.enchantName.enchant_helmet_intellect': 'Zaklinanie hełmu - Intelekt',
+  'hudChrome.enchantName.enchant_helmet_runed_links': 'Zaklinanie hełmu - Runowe ogniwa',
+  'hudChrome.enchantName.enchant_legs_greater_stamina': 'Zaklinanie nóg - Wielka wytrzymałość',
+  'hudChrome.enchantName.enchant_legs_intellect': 'Zaklinanie nóg - Intelekt',
+  'hudChrome.enchantName.enchant_legs_runed_hide': 'Zaklinanie nóg - Runowa skóra',
+  'hudChrome.enchantName.enchant_legs_stamina': 'Zaklinanie nóg - Wytrzymałość',
+  'hudChrome.enchantName.enchant_neck_agility': 'Zaklinanie naszyjnika - Zwinność',
+  'hudChrome.enchantName.enchant_neck_intellect': 'Zaklinanie naszyjnika - Intelekt',
+  'hudChrome.enchantName.enchant_neck_spirit': 'Zaklinanie naszyjnika - Duch',
+  'hudChrome.enchantName.enchant_ring_agility': 'Zaklinanie pierścienia - Zwinność',
+  'hudChrome.enchantName.enchant_ring_intellect': 'Zaklinanie pierścienia - Intelekt',
+  'hudChrome.enchantName.enchant_ring_spirit': 'Zaklinanie pierścienia - Duch',
+  'hudChrome.enchantName.enchant_ring_strength': 'Zaklinanie pierścienia - Siła',
+  'hudChrome.enchantName.enchant_shoulder_agility': 'Zaklinanie naramienników - Zwinność',
+  'hudChrome.enchantName.enchant_shoulder_intellect': 'Zaklinanie naramienników - Intelekt',
+  'hudChrome.enchantName.enchant_shoulder_strength': 'Zaklinanie naramienników - Siła',
+  'hudChrome.enchantName.enchant_waist_agility': 'Zaklinanie pasa - Zwinność',
+  'hudChrome.enchantName.enchant_waist_stamina': 'Zaklinanie pasa - Wytrzymałość',
+  'hudChrome.enchantName.enchant_waist_strength': 'Zaklinanie pasa - Siła',
+  'hudChrome.enchantName.enchant_weapon_agility': 'Zaklinanie broni - Zwinność',
+  'hudChrome.enchantName.enchant_weapon_greater_might': 'Zaklinanie broni - Wielka moc',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower': 'Zaklinanie broni - Wielka moc zaklęć',
+  'hudChrome.enchantName.enchant_weapon_intellect': 'Zaklinanie broni - Moc zaklęć',
+  'hudChrome.enchantName.enchant_weapon_might': 'Zaklinanie broni - Moc',
+  'hudChrome.enchantName.enchant_weapon_runed_edge': 'Zaklinanie broni - Runowe ostrze',
+  'hudChrome.enchantName.enchant_weapon_runed_focus': 'Zaklinanie broni - Runowy fokus',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    'To niszczy {item} i daje materiały arkaniczne. Nie można tego cofnąć.',
+  'hudChrome.enchanting.disenchantConfirmBodySpecial':
+    'To niszczy specjalną kopię {item} (podpisaną, mistrzowską lub zaklinowaną) i daje materiały arkaniczne. Nie można tego cofnąć.',
+  'hudChrome.enchanting.disenchantConfirmTitle': 'Rozbroić {item}?',
+  'hudChrome.enchanting.disenchantThrottled':
+    'Rozbrajasz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.',
+  'hudChrome.enchanting.disenchantedLine': 'Rozbrajasz {item}.',
+  'hudChrome.enchanting.enchantAppliedLine': 'Zaklinasz {item} za pomocą {enchant}.',
+  'hudChrome.enchanting.enchantInsufficient': 'Nie masz materiałów na to zaklinanie.',
+  'hudChrome.enchanting.enchantThrottled':
+    'Zaklinasz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.',
+  'hudChrome.enchanting.enchantUnknown': 'To zaklinanie nie istnieje.',
+  'hudChrome.enchanting.enchantWrongSlot':
+    'To zaklinanie nie może być zastosowane do tego przedmiotu.',
+  'hudChrome.enchanting.noEnchants': 'Brak zaklinania używającego tego składnika.',
+  'hudChrome.enchanting.noTargets': 'Brak kwalifikującego się przedmiotu do zaklinania.',
+  'hudChrome.enchanting.notDisenchantable': 'Nie możesz tego rozbroić.',
+  'hudChrome.enchanting.notHeld': 'Nie posiadasz tego przedmiotu.',
+  'hudChrome.enchanting.notSalvageable': 'Nie możesz tego odzyskać.',
+  'hudChrome.enchanting.pickerTitle': 'Zastosuj zaklinanie',
+  'hudChrome.enchanting.salvageConfirmBody':
+    'To niszczy {item} i daje materiały rzemieślnicze. Nie można tego cofnąć.',
+  'hudChrome.enchanting.salvageConfirmBodySpecial':
+    'To niszczy specjalną kopię {item} (podpisaną, mistrzowską lub zaklinowaną) i daje materiały rzemieślnicze. Nie można tego cofnąć.',
+  'hudChrome.enchanting.salvageConfirmTitle': 'Odzyskać {item}?',
+  'hudChrome.enchanting.salvageThrottled':
+    'Odzyskujesz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.',
+  'hudChrome.enchanting.salvagedLine': 'Odzyskujesz {item}.',
+  'hudChrome.enchanting.targetTitle': 'Wybierz przedmiot do zaklinania',
   'hudChrome.keybinds.emoteWheel': 'Koło emotek',
   'hudChrome.keybinds.targetFriendly': 'Obierz najbliższego sojusznika',
   'hudChrome.keybinds.targetFriendlyNext': 'Przełączaj przyjazny cel',
@@ -5706,6 +5985,11 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Przełącz tło o wysokim kontraście: wyłącza ruchomy zwiastun, aby tekst ekranu startowego pozostał czytelny',
   'hudChrome.leaderboard.close': 'Zamknij',
   'hudChrome.loot.chestTitle': 'Skrzynia',
+  'hudChrome.loot.takeLootButton': 'Weź łup',
+  'hudChrome.loot.takeLootTooltip':
+    'Bierze monety i wypadłe przedmioty. Nie zużywa zebranych zasobów.',
+  'hudChrome.loot.unifiedPressHint':
+    'Klawisz interakcji bierze łup i zbiera zasoby jednym naciśnięciem, korzystając z priorytetów miasta.',
   'hudChrome.meters.minutesSeconds': '{m}m {s}s',
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
@@ -6501,6 +6785,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'skinEvent.unequip': 'Zdejmij',
   'skinEvent.unlocked': 'Kosmetyk odblokowany!',
   'stats.accountsCreated': 'Gracze',
+  'stats.charactersCreated': 'Utworzone postacie',
   'stats.playersOnline': 'Gracze online',
   'stats.realmName': 'Nazwa świata',
   'stats.title': 'Stan świata',
@@ -7409,6 +7694,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.petTaunt': 'Zwierzę: Prowokacja',
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Wyślij o jedną sztukę {item} mniej',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Wyślij o jedną sztukę {item} więcej',
+  'hudChrome.mailbox.parcelQtyAria': 'Liczba {item} do wysłania',
   'hudChrome.readyCheck.notReady': 'Brak gotowości',
   'hudChrome.readyCheck.prompt': '{name} rozpoczyna sprawdzenie gotowości. Czy wszystko gotowe?',
   'hudChrome.readyCheck.ready': 'Gotowość',
@@ -7918,6 +8204,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Kostur',
   'hudChrome.wocStore.wtype.sword': 'Miecz',
   'hudChrome.wocStore.wtype.wand': 'Różdżka',
+  'hudChrome.wocStore.wtype.polearm': 'Broń drzewcowa',
   'guide.abilityHook.revenge':
     'Uderza wrogów przed tobą i może stać się darmowa po uniku lub sparowaniu.',
   'guide.abilityHook.hamstring': 'Ogranicza ruch wroga, aby nie mógł uciec.',
@@ -8351,6 +8638,90 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.sender': 'Gildia Rzemieślnicza',
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.subject':
     'Twoja praca w wytwarzaniu broni i opancerzeniu',
+  'entities.letters.mastery_reset_notice.body':
+    'Gildyjny towarzyszu,\n\nGildia przyjęła nowe obliczenie mistrzostwa. Każda ręka wspina się od nowa: twoje umiejętności rzemieślnicze i zbierackie zostały przywrócone do zera.\n\nWszystko inne pozostaje twoje, nienaruszone: przepisy, narzędzia i materiały, skarbiec i złoto, dostrojenia i tytuły, czyny i renoma, zadania i listy.\n\nWspinaczka jest teraz uczciwa. Tania praca cię nie przeniesie. Szukaj trudniejszych przepisów, bogatszych żył i głębszych wód.\n\nZ szacunkiem,\nGildia',
+  'entities.letters.mastery_reset_notice.sender': 'Gildia',
+  'entities.letters.mastery_reset_notice.subject': 'Twoje rzemiosło, uczciwe na nowo',
+  'entities.letters.prof_tier_alchemy_cooking_1.body':
+    'Wieść dochodzi do mojej kuchni, że jedna z twoich specjalizacji osiągnęła niespotykany poziom. To tylko przedsmak, nic więcej, ale obiecujący. Nie zatrzymuj garnka.',
+  'entities.letters.prof_tier_alchemy_cooking_1.sender': 'Kucharz Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_1.subject': 'Przedsmak rzeczy, które nadejdą',
+  'entities.letters.prof_tier_alchemy_cooking_2.body':
+    'Mówią mi, że jedna z twoich specjalizacji dobrnęła do rzadkiej pracy. To temperatura, w której wielu kucharzy przypala danie, a ty tego nie zrobiłeś. Usiądź, ale nie za długo.',
+  'entities.letters.prof_tier_alchemy_cooking_2.sender': 'Kucharz Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_2.subject': 'Rzadka praca, bez przypalonych krawędzi',
+  'entities.letters.prof_tier_alchemy_cooking_3.body':
+    'Jedna z twoich specjalizacji przebiła się poza rzadką pracę w prawdziwą głębię. Teraz dopiero gotujesz, jak to mówią. Doprawiaj śmiało i ciągle próbuj.',
+  'entities.letters.prof_tier_alchemy_cooking_3.sender': 'Kucharz Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_3.subject': 'Teraz dopiero gotujesz',
+  'entities.letters.prof_tier_alchemy_cooking_4.body':
+    'Jedna z twoich specjalizacji dzieli jeden kurs od mistrzostwa. Ostatni jest zawsze najobfitszy i najłatwiejszy do przelecenia. Spokojne ręce na chochli.',
+  'entities.letters.prof_tier_alchemy_cooking_4.sender': 'Kucharz Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_4.subject': 'Jeden kurs od uczty',
+  'entities.letters.prof_tier_alchemy_cooking_5.body':
+    'Jedna z twoich specjalizacji osiągnęła mistrzostwo, najwyższą półkę całej spiżarni. Karmię wszystkich, ale niewielu gotuje tyle, żeby tu dotrzeć. Jestem z ciebie naprawdę dumny. Idź teraz i przygotuj coś, co sprawi, że zaszlochają przy stole.',
+  'entities.letters.prof_tier_alchemy_cooking_5.sender': 'Kucharz Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_5.subject': 'Mistrzostwo, podane na gorąco',
+  'entities.letters.prof_tier_engineering_alchemy_1.body':
+    'Ej, dane mówią, że jedna z twoich specjalizacji osiągnęła niespotykany poziom, małe ziemniaki, maleństwo, ale PYKŁO, tak? Pierwsza iskra jest zawsze najsłodsza. Więcej iskier. Dalej.',
+  'entities.letters.prof_tier_engineering_alchemy_1.sender': 'Majster Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_1.subject': 'PIERWSZA iskra, ha',
+  'entities.letters.prof_tier_engineering_alchemy_2.body':
+    'Mówią mi, że jedna z twoich specjalizacji wspiął się do rzadkiej pracy, a rzadka to tam, gdzie zaczyna być właściwie niebezpiecznie (tego dobrego rodzaju). Większość rąk odpuszcza przed zabawą. Nie ty. HA.',
+  'entities.letters.prof_tier_engineering_alchemy_2.sender': 'Majster Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_2.subject': 'Rzadkie, oh, RZADKIE',
+  'entities.letters.prof_tier_engineering_alchemy_3.body':
+    'Jedna z twoich specjalizacji przebił rzadką pracę w poważne rzeczy, o tak, tu robi się GŁOŚNO. Nie zatrzymuj się teraz, cokolwiek robisz, impet to wszystko, a także lonty.',
+  'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Majster Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_3.subject': 'Teraz robi się głośno',
+  'entities.letters.prof_tier_engineering_alchemy_4.body':
+    'Jedna z twoich specjalizacji jest JEDEN szczebel pod mistrzostwem, jeden, singularny, czy czujesz, jak brzęczy? Ostatni krok to największy huk. Nie mrugaj.',
+  'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Majster Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_4.subject': 'Jeden szczebel, JEDEN, do szczytu',
+  'entities.letters.prof_tier_engineering_alchemy_5.body':
+    'Jedna z twoich specjalizacji osiągnęła mistrzostwo, sam SZCZYT, kabum, cała drabina, gotowe. Nie rozdaję pochwał, rozdaję lonty, ale masz i jedno, i drugie: jesteś genialny i trochę przerażający. Idź sprawić, żeby góry się denerwowały.',
+  'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Majster Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_5.subject': 'MISTRZOSTWO, kabum',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.body':
+    'Gildia odnotowuje, że jedna z twoich specjalizacji osiągnęła niespotykany poziom. To dopiero pierwszy rząd z wielu, ale równy i pewny. Mierz następny równie starannie.',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.sender': 'Tkaczka Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.subject': 'Równy pierwszy rząd',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.body':
+    'Jedna z twoich specjalizacji wspięła się do rzadkiej pracy. To tam niedbała ręka pokazuje każdy upuszczony ścieg, a twoja nie pokazała. Jestem po cichu zadowolona.',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.sender': 'Tkaczka Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.subject': 'Rzadka praca, dobrze zmierzona',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.body':
+    'Jedna z twoich specjalizacji przekroczyła rzadką pracę ku doskonalszej. Wzorzec staje się jasny dla ręki na tym poziomie, żadnych zgadywanek. Mierz dalej dwa razy.',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.sender': 'Tkaczka Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.subject': 'Wzorzec staje się jasny',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.body':
+    'Jedna z twoich specjalizacji dzieli jeden rząd od mistrzostwa. Ostatni rząd jest zawsze najtrudniejszy do utrzymania równości. Nie spieszcie się teraz.',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.sender': 'Tkaczka Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.subject': 'Jeden rząd od szczytu',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.body':
+    'Jedna z twoich specjalizacji osiągnęła mistrzostwo. Mierzyłam twoją pracę dwa razy, jak wszystko mierzę, i trzyma. Niewielu rąk wiązało kiedykolwiek ostatni ścieg tak czysto. Jestem dumna i nie mówię tego lekko.',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.sender': 'Tkaczka Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.subject': 'Ostatni ścieg',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.body':
+    'Wieść dochodzi do mojej kuźni, że jedna z twoich specjalizacji teraz stoi na niespotykany poziomie. To najniższy szczebel na długiej wspinaczce, ale zarobiłeś go przy kowadle, nie przez proszenie. Utrzymuj ogień.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.sender': 'Mistrzyni Kuźni Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject': 'Iskra warta odnotowania',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.body':
+    'Mówią mi, że jedna z twoich specjalizacji osiągnęła rzadką pracę. To szczebel, gdzie niechlujne ręce odpadają, a prawdziwi kowale zostają. Wciąż stoisz. Dobrze.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.sender': 'Mistrzyni Kuźni Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject': 'Rzadka praca, i zasłużona',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
+    'Jedna z twoich specjalizacji wspiął się poza rzadką pracę ku poważnej robocie. Metal odpowiada takiej ręce, już go nie zwalcza. Nie pozwól, żeby pochwała osłabiła twoje ramię.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': 'Mistrzyni Kuźni Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject': 'Metal teraz cię słucha',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
+    'Jedna z twoich specjalizacji stoi jeden szczebel pod mistrzostwem. Mało rąk, które znam, sięga tej wysokości, a jeszcze mniej utrzymuje tu ostrze. Dokończ wspinaczkę.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': 'Mistrzyni Kuźni Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': 'Blisko szczytu drabiny',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
+    'Jedna z twoich specjalizacji osiągnęła mistrzostwo, najwyższy poziom, na jaki ręka może wspiąć. Nie udzielam pochwał swobodnie, więc posłuchaj raz: kuźnia jest z ciebie dumna. Idź teraz nauczyć ogień czegoś nowego.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': 'Mistrzyni Kuźni Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.subject': 'Mistrzostwo, nareszcie',
   'entities.npcs.alchemist_verane.greeting':
     'Odmierz dwa razy i wlej raz, {className}. Aptekarz nie ma cierpliwości do rozlanych odczynników.',
   'entities.npcs.alchemist_verane.name': 'Alchemik Verane',
@@ -8429,6 +8800,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Zajęcie dodatkowe: {craft}',
   'hudChrome.professions.identityHeader': 'Tożsamość',
   'hudChrome.professions.majorsLabel': 'Kierunki: {a} i {b}',
+  'hudChrome.professions.nextUnlockMastered': 'Opanowane, na razie',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} wskazuje na Specjalistyczne: spadają koszty materiałów',
   'hudChrome.professions.nextUnlockTier':
@@ -8474,4 +8846,24 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.training.tierUnmet': 'Aby nauczyć się tego przepisu, potrzebujesz {craft} {skill}.',
   'hudChrome.training.title': 'Szkolenie: {name}',
   'hudChrome.training.trainAria': 'Naucz się {name} dla {fee}',
+  'hudChrome.unbind.cannotAfford': 'Nie stać cię na opłatę za odwiązanie.',
+  'hudChrome.unbind.close': 'Zamknij odwiązywanie',
+  'hudChrome.unbind.confirmBody': 'Odwiązać {name} za {fee}?',
+  'hudChrome.unbind.confirmCancel': 'Anuluj',
+  'hudChrome.unbind.confirmOk': 'Odwiąż',
+  'hudChrome.unbind.confirmTitle': 'Odwiąż wyrób na zamówienie',
+  'hudChrome.unbind.dialogOption': 'Odwiązywanie',
+  'hudChrome.unbind.dialogOptionAria': 'Odwiąż wyrób na zamówienie u {name}',
+  'hudChrome.unbind.empty': 'Nie nosisz żadnych przywiązanych wyrobów na zamówienie.',
+  'hudChrome.unbind.intro':
+    'Mistrz może uwolnić wyrób na zamówienie z jego przywiązania, za opłatą.',
+  'hudChrome.unbind.notBound': 'Ten przedmiot nie jest przywiązany.',
+  'hudChrome.unbind.notEligible': 'Tego przedmiotu nie można odwiązać.',
+  'hudChrome.unbind.outOfRange': 'Musisz być przy stanowisku rzemieślniczym, by odwiązać.',
+  'hudChrome.unbind.rowSub':
+    'Uwalnia przywiązanie; wyrób przywiązuje się ponownie przy kolejnej transakcji.',
+  'hudChrome.unbind.title': 'Odwiązywanie: {name}',
+  'hudChrome.unbind.unbindAria': 'Odwiąż {name} za {fee}',
+  'hudChrome.unbind.unbound':
+    'Odwiązano {name} za {fee}. Przywiąże się ponownie przy kolejnej transakcji.',
 };

@@ -86,6 +86,54 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Zin in een Kaartduel? Beste van drie, de winnaar pakt de praatrechten.',
   'entities.npcs.card_master.name': 'Kaartmeester',
   'entities.npcs.card_master.title': 'Verdeler van het Lot',
+  'entities.quests.q_prof_amends_apothecary.completion':
+    'Dat is de oude smaak. Alchemie en Koken zijn weer als hoofdvakken op je fornuis. Blijf deze keer wat langer.',
+  'entities.quests.q_prof_amends_apothecary.objectives.0.label': 'Wilde Everzwijn gedood',
+  'entities.quests.q_prof_amends_apothecary.text':
+    'Wel, kijk wie er terug is bij mijn pot. Geen wrok, {playerName}, een keuken heeft altijd ruimte, maar weet dat de rekening langer wordt elke keer dat je weggaat. Ga de wilde everzwijnen in het oostelijke weide uitdunnen, want eerlijk zweet is het eerste ingrediënt, en het zal je handen herinneren aan het werk.',
+  'entities.quests.q_prof_amends_apothecary.title': 'Terug op het Fornuis',
+  'entities.quests.q_prof_amends_bombardier.completion':
+    'DAT is het, de kriebels zijn terug in je handen. Techniek en Alchemie, weer als hoofdvakken. Vooruit, ga een knal maken. Probeer deze keer te blijven, hm?',
+  'entities.quests.q_prof_amends_bombardier.objectives.0.label': 'Tunnelrat uitgeschakeld',
+  'entities.quests.q_prof_amends_bombardier.text':
+    'Je bent TERUG, ha, ze komen altijd terug, het luide spul trekt je aan, toch? Geen geklaag van mij, {playerName}, maar het grootboek, oh het grootboek, het groeit elke keer dat je wegloopt, meer bij elke terugkeer, dat is enkel eerlijk. Ga de tunnelratten uit de opgravingen voor me wegwerken, zweet eerst, vonken later, dat is de regel die ik net heb bedacht.',
+  'entities.quests.q_prof_amends_bombardier.title': 'Het Grootboek Groeit',
+  'entities.quests.q_prof_amends_outfitter.completion':
+    'Stabiel weer. Leerbewerking en Kleermakerij keren terug naar je handen als hoofdvakken. Meet twee keer voordat je weer gaat dwalen.',
+  'entities.quests.q_prof_amends_outfitter.objectives.0.label': 'Webhout Spin gevangen',
+  'entities.quests.q_prof_amends_outfitter.text':
+    'Toch terug bij mijn weefgetouw. Ik koester geen wrok, {playerName}, maar de draad herinnert een hand die hem losliet, en de kosten om hem weer op te pakken worden elke keer gemeten aan een langere maat. Maai de webhoutspin nen die het westelijke woud verdringen, en de inspanning zal je handen kalmeren voordat ze goede zijde aanraken.',
+  'entities.quests.q_prof_amends_outfitter.title': 'Draden Hernomen',
+  'entities.quests.q_prof_amends_smith.completion':
+    'Het ritme is terug in je handen. Wapensmeden en Pantserbouw zijn opnieuw je hoofdvakken. Maak er geen gewoonte van te vertrekken.',
+  'entities.quests.q_prof_amends_smith.objectives.0.label': 'Boswolf gedood',
+  'entities.quests.q_prof_amends_smith.text':
+    'Dus je bent teruggekeerd naar de smidse. Ik zal niet doen alsof het niet pijn doet, {playerName}, maar ik ben eerlijk en het werk is eerlijk. Je kent de prijs van terugkeren: arbeid, en meer ervan elke keer dat je bent afgedwaald. Drijf de wolven weg die de noordweg lastigvallen, en het zwaaien ervan zal je armen herinneren aan wat dit paar ooit van hen vroeg.',
+  'entities.quests.q_prof_amends_smith.title': 'Terug naar de Smidse',
+  'entities.quests.q_prof_attune_apothecary.completion':
+    'Nou, dat is een begin met wat vlees erop. Alchemie en Koken zijn van jou om zo hoog te sudderen als je wilt. Kom terug met honger.',
+  'entities.quests.q_prof_attune_apothecary.objectives.0.label': 'Wilde Everzwijn gedood',
+  'entities.quests.q_prof_attune_apothecary.text':
+    'Elk goed gerecht bestaat uit twee smaken die bij elkaar horen, en zo is een goed ambacht ook, {playerName}. Zeg het woord en Alchemie en Koken worden je twee hoofdvakken, de twee die je voorbij zeldzaam werk kunt laten sudderen; het ambacht aan de andere kant van het wiel wordt je liefhebberij, opgewekt tot zeldzaam en niet heter. De rest van je handel blijft in de provisiekast, slapend, niet bedorven, klaar wanneer je ze ophaalt. Eerlijke waarschuwing terwijl de pot nog koud is: dwaal af naar een ander paar en thuiskomen is een karwei dat groeit: vijf beesten de eerste keer, acht de volgende, elf daarna, zwaarder bij elke portie. Nog steeds hongerig? Jacht dan op vier wilde everzwijnen, want een keuken die haar zout waard is begint met goed vlees.',
+  'entities.quests.q_prof_attune_apothecary.title': 'Een Recept om te Bewaren',
+  'entities.quests.q_prof_attune_bombardier.completion':
+    'HA. Reagentia, echte, en alle vingers er nog aan, goed, goed. Techniek en Alchemie, van jou, ga iets maken dat er spijt van krijgt. Vooruit.',
+  'entities.quests.q_prof_attune_bombardier.objectives.0.label': 'Kruidenveld geoogst',
+  'entities.quests.q_prof_attune_bombardier.text':
+    'Oh, oh, je wilt het goede spul, het luide spul, toch? Luister, luister, voor je iets aanraakt dat tikt: zeg het woord en Techniek en Alchemie worden je twee hoofdvakken, de enige twee die je voorbij zeldzaam werk mag duwen (daar wordt het PAS LEUK, vertrouw me). Het ambacht aan de overkant gaat als liefhebberij in je zak, zeldzaam en niet verder, niet pruilen. Je andere handel? Niet weg, {playerName}, gewoon slapend, maak ze wakker wanneer je wilt. Maar (er is altijd een maar, houd de lont vast) gooi dit paar weg en kom later terug en het kost je zweet dat zich opstapelt: vijf dingen de eerste keer, acht de volgende, elf daarna, meer, meer, elke keer dat je koude voeten krijgt. Ja? JA? Ga dan drie plukken kruiden voor me plukken, de vluchtige soorten, vraag niet welke, ze zijn allemaal een beetje vluchtig als je er hard genoeg in gelooft.',
+  'entities.quests.q_prof_attune_bombardier.title': 'Een Vluchtige Afspraak',
+  'entities.quests.q_prof_attune_outfitter.completion':
+    'Gelijkmatige draad, gelijkmatige hand. Leerbewerking en Kleermakerij zijn van jou om zo ver te dragen als je vaardigheid reikt. Meet twee keer en ze zullen je niet teleurstellen.',
+  'entities.quests.q_prof_attune_outfitter.objectives.0.label': 'Webhout Spin gevangen',
+  'entities.quests.q_prof_attune_outfitter.text':
+    'Meet de kosten voordat je snijdt, dat is de eerste regel bij mijn weefgetouw. Kies mij en Leerbewerking en Kleermakerij worden je twee hoofdvakken, het paar dat je voorbij zeldzaam werk mag dragen; het ambacht er tegenover nestelt zich als je liefhebberij, tot zeldzaam genomen en daar gelaten. De handel die je opzij zet is niet ontrafeld, {playerName}, alleen opgeborgen, slapend totdat je ze weer oppakt. Wees zeker: mocht je dit paar verlaten en het later terugwillen, de weg naar huis wordt betaald met arbeid die elke keer langer wordt: vijf gemaaid bij eerste keer, dan acht, dan elf, altijd iets meer. Als je besluit genomen is, maai vier webhoutspin nen en breng hun zijde naar het weefgetouw, want goed garen begint elk goed kledingstuk.',
+  'entities.quests.q_prof_attune_outfitter.title': 'De Maat van de Uitrusting',
+  'entities.quests.q_prof_attune_smith.completion':
+    'Goed erts, en goede handen om het te bewerken. Wapensmeden en Pantserbouw zijn nu van jou om te beheersen. Verdien de rest.',
+  'entities.quests.q_prof_attune_smith.objectives.0.label': 'Ertsslagader geoogst',
+  'entities.quests.q_prof_attune_smith.text':
+    'Staal vergeet geen ronddwalende hand, dus ik zal je recht zeggen voordat je iets zweert. Bind jezelf aan mijn smidse en Wapensmeden en Pantserbouw worden je twee hoofdvakken, de enige ambachten die je voorbij zeldzaam werk mag dragen. Het ambacht er tegenover nestelt zich als je liefhebberij, tot zeldzaam gewerkt en niet verder. Je andere handel verbrandt niet, {playerName}: ze gaan gewoon stil, slapend totdat je ze terughaalt. En weet dit voor de hamer valt: verlaat dit paar voor een ander en je zult terugkeren via eerlijke arbeid: vijf vijanden neergelegd de eerste keer, acht de volgende, elf daarna, meer elke keer dat je afdwaalt. Nog steeds hier? Breng me dan drie ertsslagaders eigenhandig gewonnen uit het Dal, en we noemen de belofte gesloten.',
+  'entities.quests.q_prof_attune_smith.title': 'De Belofte van de Smid',
   'entities.quests.q_prof_hobby_switch.completion':
     'Een lichtere keuze, maar een nuttige. Volg die nieuwsgierigheid zo ver als zeldzaam werk haar draagt.',
   'entities.quests.q_prof_hobby_switch.objectives.0.label': 'Kruidenveld geoogst',
@@ -97,6 +145,42 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.objectives.0.label': 'Ertsslagader geoogst',
   'entities.quests.q_prof_intro.text':
     'Elke ziel in Oostbeekdal beoefent een ambacht naast het zwaard, {playerName}. Er zijn ertsslagaders in de rotsen rond de Kopergat, ten zuidwesten van de stad. Ga zelf een houweel zwaaien en bewerk er 5; ik zie het verschil.',
+  'entities.quests.q_prof_workorder_apothecary.completion':
+    'Aanvaardbaar. Krachtig en goed behandeld. Je betaling, tot op de muntstuk nauwkeurig. Laat het niet naar je hoofd stijgen, dat is een ander reagens.',
+  'entities.quests.q_prof_workorder_apothecary.objectives.0.label': 'Goudblad-Kruid afgeleverd',
+  'entities.quests.q_prof_workorder_apothecary.text':
+    'Mijn planken hebben goudblad nodig, en het aanbod op de markt is, voorspelbaar, vervuild. Breng me zes goudblad-kruiden, ongekneusd, en je wordt precies gecompenseerd. Gekneusd blad wordt geweigerd, dus pas op je ransel.',
+  'entities.quests.q_prof_workorder_apothecary.title': 'Apothekers Werkopdracht',
+  'entities.quests.q_prof_workorder_forge.completion':
+    'Goed gewicht, geen slak. Hier is je deel. De smidse heeft binnenkort weer honger.',
+  'entities.quests.q_prof_workorder_forge.objectives.0.label': 'Kopererts afgeleverd',
+  'entities.quests.q_prof_workorder_forge.text':
+    'De smidse wil altijd gevoed worden, {playerName}. Breng me acht brokken kopererts en ik zal je voor de lading betalen. Geen omhaal, gewoon erts en munten.',
+  'entities.quests.q_prof_workorder_forge.title': 'Smidse Werkopdracht',
+  'entities.quests.q_prof_workorder_kitchens.completion':
+    'Nu is dat een volle provisiekast. Hier is je loon. Kom terug als je tassen vol zijn.',
+  'entities.quests.q_prof_workorder_kitchens.objectives.0.label': 'Wildvlees afgeleverd',
+  'entities.quests.q_prof_workorder_kitchens.text':
+    'Mijn voorraadkast ziet er dun uit, {playerName}, en dunne voorraadkasten maken knorrige koks. Haal me acht sneden wildvlees en er zit een muntstuk in voor je, plus mijn eeuwige dankbaarheid, die minder waard is maar beter smaakt.',
+  'entities.quests.q_prof_workorder_kitchens.title': 'Keukens Werkopdracht',
+  'entities.quests.q_prof_workorder_loom.completion':
+    'Fijne zijde, gelijkmatig gesponnen. Je muntstuk, precies gemeten. Het weefgetouw bedankt je, en ik ook.',
+  'entities.quests.q_prof_workorder_loom.objectives.0.label': 'Spinnenzijde afgeleverd',
+  'entities.quests.q_prof_workorder_loom.text':
+    'Het weefgetouw loopt droog en luie handen verspillen daglicht, {playerName}. Breng me zes strengen spinnenzijde en ik betaal je een eerlijk tarief, tot op de koperstuk uitgeteld.',
+  'entities.quests.q_prof_workorder_loom.title': 'Weefgetouw Werkopdracht',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    'Goede huiden. Eerlijk loon. Opnieuw als je er meer hebt.',
+  'entities.quests.q_prof_workorder_tannery.objectives.0.label': 'Ruwe Huid afgeleverd',
+  'entities.quests.q_prof_workorder_tannery.text':
+    'Kuipen zijn leeg. Breng acht ruwe huiden. Muntstuk als je dat doet.',
+  'entities.quests.q_prof_workorder_tannery.title': 'Leerlooierij Werkopdracht',
+  'entities.quests.q_prof_workorder_toolworks.completion':
+    'Perfect, perfect, rechte nerf, geen rot. Hier, je muntstuk, zie je, ik houd mijn woord (grotendeels). Breng meer als je over een boom struikelt.',
+  'entities.quests.q_prof_workorder_toolworks.objectives.0.label': 'IJzerbastbalk afgeleverd',
+  'entities.quests.q_prof_workorder_toolworks.text':
+    'Stelen, handgrepen, kolven, ik ga door hout als is het uit de mode aan het gaan, wat het NIET is, hout is eeuwig, {playerName}. Breng me acht ijzerbastbalken en ik betaal je, muntstukken, echte muntstukken, geen gunst, ik beloof het, grotendeels.',
+  'entities.quests.q_prof_workorder_toolworks.title': 'Gereedschapswerken Werkopdracht',
   'gpuNotice.bodyDesktop':
     "Het spel draait zonder GPU-versnelling en zal traag zijn. Werk je grafische stuurprogramma's bij en herstart het spel. Stel op Windows ook het spel in op Hoge prestaties via Instellingen, Systeem, Beeldscherm, Afbeeldingen.",
   'gpuNotice.bodyWeb':
@@ -159,14 +243,24 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.craftName.leatherworking': 'Leerbewerken',
   'hudChrome.craftName.tailoring': 'Kleermaken',
   'hudChrome.craftName.weaponcrafting': 'Wapensmeden',
+  'hudChrome.crafting.attunedBanner': 'Afgestemd: {title}',
+  'hudChrome.crafting.attunedZoneLine': '{name} is afgestemd als {archetype}!',
   'hudChrome.crafting.attunementPreview':
     'Resultaat: titel {title}; {majorA} en {majorB} worden ongelimiteerde hoofdambachten; {hobby} wordt de zeldzaam-begrensde liefhebberij; alle andere vakkennis wordt behouden maar begrensd op gewoon zolang het slapend is.',
+  'hudChrome.crafting.attunementReturnCost':
+    'Als je dit paar verlaat, kost terugkeren {cost} boete-opdrachten.',
   'hudChrome.crafting.comboMet': 'Gereed.',
   'hudChrome.crafting.comboNotAttuned': 'Kies eerst een archetype-paar.',
   'hudChrome.crafting.comboRequires': 'Afstemming: {craftA} + {craftB}, rang {tier}.',
   'hudChrome.crafting.comboSyncing': 'Rijksafstemming controleren.',
   'hudChrome.crafting.comboTierUnmet': 'Breng beide hoofdambachten naar de vereiste rang.',
+  'hudChrome.crafting.commissionBound': 'Opdrachtstuk: gebonden aan de ontvanger',
+  'hudChrome.crafting.commissionToggle': 'Opdrachtsstuk',
+  'hudChrome.crafting.commissionToggleHint':
+    'Bindt aan het eerste personage dat het via een ruil ontvangt.',
+  'hudChrome.crafting.commissionUnbound': 'Opdrachtsstuk: bindt aan de eerste ontvanger',
   'hudChrome.crafting.comboWrongPair': 'Activeer precies dit paar om het te maken.',
+  'hudChrome.crafting.gatheredBy': 'Verzameld door {name}',
   'hudChrome.crafting.hobbyPreview':
     'Resultaat: {hobby} wordt de zeldzaam-begrensde liefhebberij. Beide hoofdambachten en alle behouden vaardigheidswaarden blijven ongewijzigd.',
   'hudChrome.crafting.identity.ceilingCommon': 'Gewone begrenzing',
@@ -205,6 +299,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbSelfAccount':
     'Jouw account: rang {rank}, top {percent} procent, {renown} Roem',
   'hudChrome.deeds.lbSelfRank': 'Jouw account: rang {rank}, top {percent} procent',
+  'hudChrome.nameplate.afkTag': 'AFK',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
   'hudChrome.nameplate.mobLevel': '{level}',
   'hudChrome.specPanel.specUnlockBanner': 'Specialisatie Ontgrendeld!',
@@ -274,6 +369,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'De volgende dodelijke vijandelijke treffer herstelt je in plaats daarvan naar {pct}% gezondheid',
   'hudChrome.bags.dragDestroyHint': 'Sleep naar buiten in de wereld om te vernietigen',
   'hudChrome.bags.dragEquipHint': 'Sleep naar je personage om uit te rusten',
+  'hudChrome.bags.itemAriaInstanced': '{item}, aantal {count}, door maker gemerkt exemplaar',
   'hudChrome.bags.reorderNeedsRecent':
     'Verwijder het filter en sorteer op Recent om je tassen opnieuw te rangschikken',
   'hudChrome.bags.rightClickDestroy': 'Klik met rechts om te vernietigen',
@@ -286,12 +382,17 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.cameraPrompt.mouseDesc':
     'Beweeg de muis om de camera te draaien zonder een knop ingedrukt te houden.',
   'hudChrome.cameraPrompt.title': 'Kies je Camera',
+  'hudChrome.charSheet.defense': 'Verdediging',
+  'hudChrome.charSheet.offense': 'Aanval',
+  'hudChrome.corpseHarvest.harvestTooltip':
+    'Verzamelt de aangevinkte onderdelen. Elk lijk kan eenmaal worden geoogst, wie het eerst komt. Neemt de buit niet mee.',
   'hudChrome.discord.link.joinServer': 'Doe gewoon mee met de Discord-server',
   'hudChrome.discord.roleTag.contentcreator': 'Contentmaker',
   'hudChrome.discord.roleTag.juniormods': 'Junior Mod',
   'hudChrome.discord.roleTag.legend': 'LEGENDE',
   'hudChrome.discord.roleTag.seniormods': 'Senior Mod',
   'hudChrome.discord.roleTag.shill': 'PROMOTOR',
+  'hudChrome.discord.roleTagChatTitle': 'Geverifieerde serverrol: {role}',
   'hudChrome.finder.accept': 'Accepteren',
   'hudChrome.finder.acceptApplicantAria': '{name} accepteren',
   'hudChrome.finder.accepted': '{accepted} van {size} bevestigd',
@@ -391,11 +492,44 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.finder.withdraw': 'Aanmelding intrekken',
   'hudChrome.finder.yourListing': 'Jouw vermelding',
   'hudChrome.finder.yourRoles': 'Jouw rollen',
+  'hudChrome.gathering.biteLine': 'Er hapt iets naar het aas!',
+  'hudChrome.gathering.catchLine': 'Je trekt in: {name}',
+  'hudChrome.gathering.downgradeFind': 'Tassen vol: een ongeschonden vondst glipte weg.',
+  'hudChrome.gathering.downgradeMark':
+    'Tassen vol: de vondst werd opgeslagen zonder verzamelderstempel.',
+  'hudChrome.gathering.fishing': 'Vissen',
+  'hudChrome.gathering.gotAwayLine': 'Hij ontsnapte.',
+  'hudChrome.gathering.nodeName.herb': 'Kruidenveld',
+  'hudChrome.gathering.nodeName.ore': 'Ertsslagader',
+  'hudChrome.gathering.nodeName.wood': 'Houtopstand',
   'hudChrome.gathering.notReady': 'Dit grondstoffenpunt is voor jou nog niet teruggekeerd.',
+  'hudChrome.gathering.stateCooldown': 'Aan het hergroeien',
+  'hudChrome.gathering.stateReady': 'Gereed',
+  'hudChrome.gathering.tierRequired.herbalism': 'Vereist een rang {tier} kruidenkunde-sikkel',
+  'hudChrome.gathering.tierRequired.logging': 'Vereist een rang {tier} kapbijl',
+  'hudChrome.gathering.tierRequired.mining': 'Vereist een rang {tier} mijnhouweel',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    'Je hebt een rang {tier} kruidenkunde-sikkel nodig om dit veld te verzamelen.',
+  'hudChrome.gathering.toolTierUnmet.logging':
+    'Je hebt een rang {tier} kapbijl nodig om deze opstand te kappen.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    'Je hebt een rang {tier} mijnhouweel nodig om deze ader te oogsten.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    'Je hebt een rang {tier} verzamelgereedschap nodig om de fijnste materialen te verzamelen.',
+  'hudChrome.interfaceTabs.chat': 'Chat',
+  'hudChrome.interfaceTabs.combat': 'Gevecht',
+  'hudChrome.interfaceTabs.frames': 'Frames',
+  'hudChrome.interfaceTabs.general': 'Algemeen',
+  'hudChrome.itemMenu.applyEnchant': 'Betovering aanbrengen',
+  'hudChrome.itemMenu.disenchant': 'Onbetoveren',
+  'hudChrome.itemMenu.equip': 'Uitrusten',
+  'hudChrome.itemMenu.salvage': 'Salvagen',
+  'hudChrome.itemMenu.use': 'Gebruiken',
   'hudChrome.keybinds.sheathe': 'Wapen Schede In/Uit',
   'hudChrome.meters.autoShowHint':
     'Rijen verschijnen automatisch zodra je groep schade aanricht of geneest, en dit segment sluit een paar seconden na het einde van het gevecht.',
   'hudChrome.options.showAttackButton': 'Aanvalsknop Tonen',
+  'hudChrome.options.showPlayerNameplates': 'Spelersnamen Tonen',
   'hudChrome.petFeed.disabledFullHp': 'Huisdier heeft volledige gezondheid',
   'hudChrome.petFeed.disabledNoFood': 'Geen voedsel in je tassen dat je huisdier kan genezen',
   'hudChrome.plurals.finderPartySize.few': '{count} spelers',
@@ -702,7 +836,11 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.townFocus.increaseAria': 'Vergroot de focus op {component}',
   'hudChrome.townFocus.notInTownHint': 'Je moet in de stad zijn om je focus in te stellen.',
   'hudChrome.townFocus.saveButton': 'Focus opslaan',
+  'hudChrome.townFocus.tierHint':
+    'Elke {points} punten op een onderdeel verhogen het oogstniveau een stap, maximaal {steps} stappen; minder dan {points} punten boosten nog steeds de opbrengst.',
   'hudChrome.townFocus.title': 'Stadsfocus',
+  'hudChrome.townFocus.townOnlyHint':
+    'Focus kan alleen worden gewijzigd terwijl je in de stad bent.',
   'hudChrome.vcup.awayNote':
     'Als beide kanten dezelfde banier voeren, speelt de uitploeg in het omgekeerde kleurenpalet.',
   'hudChrome.vcup.bannerCountdown': 'Aftrap over {seconds}...',
@@ -850,26 +988,54 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec.',
   'entities.itemSets.wyrmshadow.bonus4':
     'Je kritieke wapentreffers hebben 50% kans om Slagtandstorm te verlenen, waardoor je aanvalssnelheid met 25% toeneemt gedurende 8 sec.',
+  'entities.items.acolyte_chain_grips.name': 'Acolietenmaliehandschoenen',
   'entities.items.architects_cornerstone.name': 'De Hoeksteen van de Architect',
   'entities.items.bonechill_cord.name': 'Beenvorst-Koord',
   'entities.items.bonechill_striders.name': 'Beenvorst-Schrijders',
+  'entities.items.briarroot_staff.name': 'Doornwortelstaf',
   'entities.items.choir_blessed_spaulders.name': 'Koorgezegende Schouderplaten',
   'entities.items.choirmothers_casque.name': 'Koormoeders Helm',
+  'entities.items.cragprowl_belt.name': 'Rotsrover-Riem',
+  'entities.items.cragthorn_greatstaff.name': 'Rotshoorn-Grootstaf',
+  'entities.items.cragward_pauldrons.name': 'Rotswacht-Schouderplaten',
+  'entities.items.cryptbloom_shoulderguards.name': 'Kryptbloei-Schouderbeschermers',
   'entities.items.cryptplate_helm.name': 'Kryptplaat-Helm',
   'entities.items.deathless_greatblade.name': 'Doodloos Grootzwaard',
   'entities.items.deathless_warguard_legmail.name': 'Doodloze Krijgswacht-Beenmalie',
+  'entities.items.dreamroot_boots.name': 'Droomwortel-Laarzen',
+  'entities.items.duskthorn_mantle.name': 'Schemeringsdoorn-Mantel',
+  'entities.items.fenbark_leggings.name': 'Moeraskors-Beenstukken',
+  'entities.items.fenshadow_maul.name': 'Moeraschaduw-Knuppel',
+  'entities.items.fenwarden_sabatons.name': 'Moeraswacht-Sloffen',
   'entities.items.gravescale_girdle.name': 'Grafschub-Gordel',
   'entities.items.gravewyrm_claws.name': 'Grafwurm-Klauwen',
   'entities.items.gravewyrm_cleaver.name': 'Grafwurm-Kliever',
+  'entities.items.gravewyrm_thornmaul.name': 'Grafwurm-Doornknuppel',
+  'entities.items.grovewardens_grips.name': "Boshoeder's Grepen",
   'entities.items.heroic_mark.name': 'Heroïsch Merk',
   'entities.items.lunar_choir_leggings.name': 'Maankoor-Beenstukken',
   'entities.items.lunar_tide_greatstaff.name': 'Maantij-Grootstaf',
+  'entities.items.lunarward_cinch.name': 'Maanwacht-Gordel',
+  'entities.items.marshlight_hauberk.name': 'Moeraslicht-Maliënkolder',
+  'entities.items.maul_of_the_scourged_wilds.name': 'Knuppel van de Gegeselde Wildernis',
   'entities.items.medallion_of_endless_profit.name': 'Medaillon van Eindeloze Winst',
+  'entities.items.mirebloom_treads.name': 'Drasbloeisels-Treden',
   'entities.items.mistcallers_fang.name': 'Mistroepers Slagtand',
   'entities.items.mistforged_pauldrons.name': 'Mistgesmede Schouderplaten',
+  'entities.items.moonbark_vestments.name': 'Maankors-Gewaad',
   'entities.items.morthens_cryptforged_hauberk.name': 'Morthens Kryptgesmede Maliënkolder',
+  'entities.items.mosshide_vest.name': 'Mosvel-Vest',
   'entities.items.nielas_coldlight_band.name': "Niela's Koudlicht-Ring",
+  'entities.items.nightfangs_greatstaff.name': "Nachttand's Grootstaf",
   'entities.items.oath_of_the_round_table.name': 'Eed van de Ronde Tafel',
+  'entities.items.peaksong_helm.name': 'Toplied-Helm',
+  'entities.items.pearlward_aegis.name': 'Parelwacht-Aegis',
+  'entities.items.resonant_hide.name': 'Resonerende Huid',
+  'entities.items.resonant_links.name': 'Resonerende Schakels',
+  'entities.items.resonant_steel.name': 'Resonerend Staal',
+  'entities.items.resonant_thread.name': 'Resonerende Draad',
+  'entities.items.resonant_timber.name': 'Resonerend Hout',
+  'entities.items.revenantstep_treads.name': 'Revenant-Treden',
   'entities.items.sanctum_prowlers_grips.name': 'Heiligdomsluiper-Grepen',
   'entities.items.sash_of_the_sunken_court.name': 'Sjerp van het Verzonken Hof',
   'entities.items.scepter_of_the_deathless_court.name': 'Scepter van het Doodloze Hof',
@@ -877,18 +1043,36 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.seal_of_the_nine_oaths.name': 'Zegel van de Negen Eden',
   'entities.items.shadowpulse_handwraps.name': 'Schaduwpuls-Handwindsels',
   'entities.items.shadowpulse_slippers.name': 'Schaduwpuls-Sloffen',
+  'entities.items.shardfang_grips.name': 'Scherfklauw-Grepen',
+  'entities.items.shardsong_mantle.name': 'Scherflied-Mantel',
   'entities.items.shroud_of_the_gravewyrm.name': 'Doodskleed van de Grafwurm',
   'entities.items.soulforged_warplate.name': 'Zielgesmede Krijgsplaat',
   'entities.items.soulrend_diadem.name': 'Zielscheur-Diadeem',
+  'entities.items.stormbark_mantle.name': 'Stormbast-Mantel',
   'entities.items.stormcallers_focus.name': 'Stormroepers Focus',
+  'entities.items.stormchant_gauntlets.name': 'Stormgezang-Handschoenen',
+  'entities.items.stormroot_cowl.name': 'Stormwortel-Kap',
+  'entities.items.stormvotive_hauberk.name': 'Stormgelofte-Maliënkolder',
   'entities.items.sunken_court_mantle.name': 'Mantel van het Verzonken Hof',
   'entities.items.sutils_gambit.name': 'Sutils Gambiet',
   'entities.items.swiftfang_talisman.name': 'Sneltand-Talisman',
+  'entities.items.thornling_grips.name': 'Doorneling-Grepen',
+  'entities.items.thornpeak_wildwraps.name': 'Doornkam-Wildwindsels',
+  'entities.items.thunderward_legguards.name': 'Donderwacht-Beenplaten',
   'entities.items.tidebound_spaulders.name': 'Tijgebonden Schouderplaten',
   'entities.items.tideguard_faceguard.name': 'Tijwacht-Vizier',
+  'entities.items.tidehymn_slippers.name': 'Tijhymne-Sloffen',
   'entities.items.tideworn_warboots.name': 'Tijversleten Krijgslaarzen',
   'entities.items.tidewoven_trousers.name': 'Tijgeweven Broek',
+  'entities.items.valefire_lantern.name': 'Dallicht-Lantaarn',
+  'entities.items.verdant_walkers.name': 'Groene Wandelaars',
+  'entities.items.vestments_of_the_waking_grove.name': 'Gewaden van het Ontwakende Woud',
+  'entities.items.votive_chain_belt.name': 'Votieve Maliengordel',
+  'entities.items.wildgrove_cinch.name': 'Wildwoud-Gordel',
+  'entities.items.wildgrowth_leggings.name': 'Wildgroei-Beenstukken',
+  'entities.items.wildsoul_maul.name': 'Wildgeest-Knuppel',
   'entities.items.wyrmchoir_handwraps.name': 'Wurmkoor-Handwindsels',
+  'entities.items.wyrmcult_spellgrips.name': 'Wurmcultus-Spreukhoudsters',
   'entities.items.yumis_keepsake_locket.name': "Yumi's Aandenken-Medaillon",
   'entities.items.zense_meridian.name': 'Zense-Meridiaan',
   'entities.items.zyzzs_deathless_signet.name': "Zyzz's Doodloze Zegelring",
@@ -925,6 +1109,80 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Deze instantie is ingesteld op de moeilijkheid Normaal. Gebruik Alle instanties resetten om een nieuwe Heroïsche run te starten.',
   'hudChrome.dungeonDifficulty.entryMismatchHeroic':
     'Deze instantie is ingesteld op de moeilijkheid Heroïsch. Gebruik Alle instanties resetten om een nieuwe Normale run te starten.',
+  'hudChrome.enchantName.enchant_chest_armor': 'Torso betoveren - Versterking',
+  'hudChrome.enchantName.enchant_chest_greater_stamina':
+    'Torso betoveren - Groot Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_chest_runeweave': 'Torso betoveren - Runeweefsel',
+  'hudChrome.enchantName.enchant_chest_spirit': 'Torso betoveren - Geest',
+  'hudChrome.enchantName.enchant_chest_stamina': 'Torso betoveren - Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_feet_agility': 'Laarzen betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_feet_stamina': 'Laarzen betoveren - Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_feet_strength': 'Laarzen betoveren - Kracht',
+  'hudChrome.enchantName.enchant_gloves_agility': 'Handschoenen betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_gloves_greater_agility':
+    'Handschoenen betoveren - Grote Behendigheid',
+  'hudChrome.enchantName.enchant_gloves_intellect': 'Handschoenen betoveren - Spreukkracht',
+  'hudChrome.enchantName.enchant_gloves_strength': 'Handschoenen betoveren - Kracht',
+  'hudChrome.enchantName.enchant_helmet_armor': 'Helm betoveren - Versterking',
+  'hudChrome.enchantName.enchant_helmet_fortitude': 'Helm betoveren - Fortitude',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude': 'Helm betoveren - Grote Fortitude',
+  'hudChrome.enchantName.enchant_helmet_intellect': 'Helm betoveren - Intellect',
+  'hudChrome.enchantName.enchant_helmet_runed_links': 'Helm betoveren - Geruned Maliën',
+  'hudChrome.enchantName.enchant_legs_greater_stamina':
+    'Beenstukken betoveren - Groot Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_legs_intellect': 'Beenstukken betoveren - Intellect',
+  'hudChrome.enchantName.enchant_legs_runed_hide': 'Beenstukken betoveren - Gerunede Huid',
+  'hudChrome.enchantName.enchant_legs_stamina': 'Beenstukken betoveren - Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_neck_agility': 'Ketting betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_neck_intellect': 'Ketting betoveren - Intellect',
+  'hudChrome.enchantName.enchant_neck_spirit': 'Ketting betoveren - Geest',
+  'hudChrome.enchantName.enchant_ring_agility': 'Ring betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_ring_intellect': 'Ring betoveren - Intellect',
+  'hudChrome.enchantName.enchant_ring_spirit': 'Ring betoveren - Geest',
+  'hudChrome.enchantName.enchant_ring_strength': 'Ring betoveren - Kracht',
+  'hudChrome.enchantName.enchant_shoulder_agility': 'Schouders betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_shoulder_intellect': 'Schouders betoveren - Intellect',
+  'hudChrome.enchantName.enchant_shoulder_strength': 'Schouders betoveren - Kracht',
+  'hudChrome.enchantName.enchant_waist_agility': 'Riem betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_waist_stamina': 'Riem betoveren - Uithoudingsvermogen',
+  'hudChrome.enchantName.enchant_waist_strength': 'Riem betoveren - Kracht',
+  'hudChrome.enchantName.enchant_weapon_agility': 'Wapen betoveren - Behendigheid',
+  'hudChrome.enchantName.enchant_weapon_greater_might': 'Wapen betoveren - Grote Kracht',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower': 'Wapen betoveren - Grote Spreukkracht',
+  'hudChrome.enchantName.enchant_weapon_intellect': 'Wapen betoveren - Spreukkracht',
+  'hudChrome.enchantName.enchant_weapon_might': 'Wapen betoveren - Kracht',
+  'hudChrome.enchantName.enchant_weapon_runed_edge': 'Wapen betoveren - Gerund Snijvlak',
+  'hudChrome.enchantName.enchant_weapon_runed_focus': 'Wapen betoveren - Geruned Focus',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    'Dit vernietigt {item} en levert arcanematerialen op. Dit kan niet ongedaan worden gemaakt.',
+  'hudChrome.enchanting.disenchantConfirmBodySpecial':
+    'Dit vernietigt een speciaal exemplaar van {item} (gesigneerd, meesterwerk of betoverd) en levert arcanematerialen op. Dit kan niet ongedaan worden gemaakt.',
+  'hudChrome.enchanting.disenchantConfirmTitle': '{item} onbetoveren?',
+  'hudChrome.enchanting.disenchantThrottled':
+    'Je onbetoverd te snel. Wacht even en probeer het opnieuw.',
+  'hudChrome.enchanting.disenchantedLine': 'Je onbetoverd {item}.',
+  'hudChrome.enchanting.enchantAppliedLine': 'Je betoverd {item} met {enchant}.',
+  'hudChrome.enchanting.enchantInsufficient': 'Je hebt de materialen niet voor die betovering.',
+  'hudChrome.enchanting.enchantThrottled':
+    'Je betoverd te snel. Wacht even en probeer het opnieuw.',
+  'hudChrome.enchanting.enchantUnknown': 'Die betovering bestaat niet.',
+  'hudChrome.enchanting.enchantWrongSlot':
+    'Die betovering kan niet op dat voorwerp worden aangebracht.',
+  'hudChrome.enchanting.noEnchants': 'Geen betovering gebruikt dit reagens.',
+  'hudChrome.enchanting.noTargets': 'Geen geschikt voorwerp om te betoveren.',
+  'hudChrome.enchanting.notDisenchantable': 'Je kunt dat niet onbetoveren.',
+  'hudChrome.enchanting.notHeld': 'Je hebt dat voorwerp niet.',
+  'hudChrome.enchanting.notSalvageable': 'Je kunt dat niet salvagen.',
+  'hudChrome.enchanting.pickerTitle': 'Betovering aanbrengen',
+  'hudChrome.enchanting.salvageConfirmBody':
+    'Dit vernietigt {item} en levert knutselmaterialen op. Dit kan niet ongedaan worden gemaakt.',
+  'hudChrome.enchanting.salvageConfirmBodySpecial':
+    'Dit vernietigt een speciaal exemplaar van {item} (gesigneerd, meesterwerk of betoverd) en levert knutselmaterialen op. Dit kan niet ongedaan worden gemaakt.',
+  'hudChrome.enchanting.salvageConfirmTitle': '{item} salvagen?',
+  'hudChrome.enchanting.salvageThrottled':
+    'Je salvaged te snel. Wacht even en probeer het opnieuw.',
+  'hudChrome.enchanting.salvagedLine': 'Je salvaged {item}.',
+  'hudChrome.enchanting.targetTitle': 'Kies een voorwerp om te betoveren',
   'hudChrome.itemProc.attackSlow':
     'en verlaagt de aanvalssnelheid van het doelwit met {pct}% gedurende {duration} sec',
   'hudChrome.itemProc.chainArc':
@@ -1635,8 +1893,12 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.party.inviteUsage': 'Wie wil je uitnodigen? Gebruik: /invite <naam>.',
   'hudChrome.playerFrame.lock': 'Spelerframe vergrendelen',
   'hudChrome.playerFrame.unlock': 'Spelerframe verplaatsen',
+  'hudChrome.social.hideOffline': 'Offline verbergen',
+  'hudChrome.social.hideOfflineTitle': 'Offline gildeleden verbergen',
   'hudChrome.social.lastSeen': 'Laatst gezien: {when}',
   'hudChrome.social.lastSeenNever': 'nooit',
+  'hudChrome.social.offlineHeader': 'Offline ({n})',
+  'hudChrome.social.onlineHeader': 'Online ({n})',
   'hudChrome.targetFrame.lock': 'Doelwitframe vergrendelen',
   'hudChrome.targetFrame.unlock': 'Doelwitframe verplaatsen',
   'hudChrome.unitFrame.durationUnitDays': 'd',
@@ -1791,6 +2053,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Actiesleuf {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Demonengenezing',
   'abilityUi.cast.fishing': 'Vissen',
+  'abilityUi.cast.gathering': 'Verzamelen',
   'abilityUi.cast.thunzharrStormcall': 'Stormroep',
   'abilityUi.forms.bear': 'Beer',
   'abilityUi.forms.cat': 'Wolf',
@@ -5203,6 +5466,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hud.errors.targetMustDodge': 'Je doelwit moet eerst ontwijken.',
   'hud.errors.targetTooFar': 'Het doelwit is te ver weg.',
   'hud.errors.tooClose': 'Te dichtbij!',
+  'hud.errors.tradeBound': 'Dat voorwerp is gebonden en kan niet worden verhandeld.',
   'hud.errors.tradeExpired': 'Het ruilverzoek is verlopen.',
   'hud.errors.tradeFailed': 'Ruil mislukt: voorwerpen of geld niet langer beschikbaar.',
   'hud.errors.tradeInProgress': 'Er is al een ruil aan de gang.',
@@ -5478,6 +5742,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hud.social.removeFriendTitle': '{name} uit vrienden verwijderen',
   'hud.social.removeGuildTitle': '{name} uit gilde verwijderen',
   'hud.social.selfNotice': 'Dat ben jij!',
+  'hud.social.status.afk': 'Afwezig',
   'hud.social.status.combat': 'In gevecht',
   'hud.social.status.dead': 'Dood',
   'hud.social.status.dungeon': 'In kerker',
@@ -5730,6 +5995,11 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Hoog-contrastachtergrond aan/uit: schakelt de bewegende trailer uit zodat de tekst op het startscherm leesbaar blijft',
   'hudChrome.leaderboard.close': 'Sluiten',
   'hudChrome.loot.chestTitle': 'Kist',
+  'hudChrome.loot.takeLootButton': 'Buit Nemen',
+  'hudChrome.loot.takeLootTooltip':
+    'Neemt de munten en gevallen voorwerpen. Verbruikt de oogst niet.',
+  'hudChrome.loot.unifiedPressHint':
+    'De interactietoets berooft en oogst in een keer, op basis van je stadsfocus.',
   'hudChrome.meters.minutesSeconds': '{m}m {s}s',
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
@@ -6528,6 +6798,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'skinEvent.unequip': 'Afleggen',
   'skinEvent.unlocked': 'Cosmetisch item ontgrendeld!',
   'stats.accountsCreated': 'Spelers',
+  'stats.charactersCreated': 'Aangemaakte personages',
   'stats.playersOnline': 'Spelers online',
   'stats.realmName': 'Wereldnaam',
   'stats.title': 'Wereldstatus',
@@ -7452,6 +7723,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.petTaunt': 'Huisdier: Uitdagen',
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Eén {item} minder versturen',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Eén {item} meer versturen',
+  'hudChrome.mailbox.parcelQtyAria': 'Aantal te versturen {item}',
   'hudChrome.readyCheck.notReady': 'Niet gereed',
   'hudChrome.readyCheck.prompt': '{name} heeft een gereedheidscontrole gestart. Ben je gereed?',
   'hudChrome.readyCheck.ready': 'Gereed',
@@ -7964,6 +8236,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Staf',
   'hudChrome.wocStore.wtype.sword': 'Zwaard',
   'hudChrome.wocStore.wtype.wand': 'Toverstaf',
+  'hudChrome.wocStore.wtype.polearm': 'Stangwapen',
   'guide.abilityHook.revenge':
     'Raakt vijanden voor je en kan gratis worden na een ontwijking of parering.',
   'guide.abilityHook.hamstring':
@@ -8406,6 +8679,92 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.sender': 'Het Ambachtsgilde',
   'entities.letters.guild_trend_weaponcrafting_armorcrafting.subject':
     'Jouw werk in wapen- en pantserbouw',
+  'entities.letters.mastery_reset_notice.body':
+    'Gildgenoot,\n\nHet gilde heeft een nieuwe maatstaf voor meesterschap aangenomen. Elke hand begint de klim opnieuw: je ambachtsvaardigheden en je vergardebekwaamheden zijn op nul gezet.\n\nAl het andere is van jou, onaangeroerd: je recepten, je gereedschap en materialen, je bank en goud, je afstemmingen en titels, je daden en faam, je opdrachten en post.\n\nDe klim is nu eerlijk. Goedkoop werk brengt je niet verder. Zoek moeilijkere recepten, rijkere aders en diepere wateren.\n\nMet achting,\nHet Gildegebouw',
+  'entities.letters.mastery_reset_notice.sender': 'Het Gildegebouw',
+  'entities.letters.mastery_reset_notice.subject': 'Jouw ambacht, eerlijk gemaakt',
+  'entities.letters.prof_tier_alchemy_cooking_1.body':
+    'Er dringt een bericht mijn keuken in dat een van je hoofdvakken ongewoon werk heeft bereikt. Het is slechts een eerste smaak, niet meer, maar een veelbelovende. Houd de pot in beweging.',
+  'entities.letters.prof_tier_alchemy_cooking_1.sender': 'Kok Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_1.subject': 'Een smaak van wat komen gaat',
+  'entities.letters.prof_tier_alchemy_cooking_2.body':
+    'Ze vertellen me dat een van je hoofdvakken tot zeldzaam werk is gestegen. Dat is de hitte waarbij de meeste koks het gerecht verschroeien, en jij niet. Rust even, maar niet te lang.',
+  'entities.letters.prof_tier_alchemy_cooking_2.sender': 'Kok Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_2.subject':
+    'Zeldzaam werk, en geen verbrande randjes',
+  'entities.letters.prof_tier_alchemy_cooking_3.body':
+    'Een van je hoofdvakken is van zeldzaam naar echte diepgang gestegen. Nu kook je pas echt, zoals ze zeggen. Kruid flink en blijf proeven.',
+  'entities.letters.prof_tier_alchemy_cooking_3.sender': 'Kok Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_3.subject': 'Nu kook je pas echt',
+  'entities.letters.prof_tier_alchemy_cooking_4.body':
+    'Een van je hoofdvakken staat op een gang na meesterschap. De laatste gang is altijd de rijkste en het gemakkelijkst om te overdoen. Houd de pollepel rustig.',
+  'entities.letters.prof_tier_alchemy_cooking_4.sender': 'Kok Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_4.subject': 'Een gang van het feestmaal',
+  'entities.letters.prof_tier_alchemy_cooking_5.body':
+    'Een van je hoofdvakken heeft meesterschap bereikt, de hoogste plank van de hele provisiekast. Ik voed iedereen, maar slechts weinigen koken zich zo hoog op. Trots op je, oprecht. Ga nu iets maken dat hen aan tafel doet huilen.',
+  'entities.letters.prof_tier_alchemy_cooking_5.sender': 'Kok Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_5.subject': 'Meesterschap, vers opgediend',
+  'entities.letters.prof_tier_engineering_alchemy_1.body':
+    'Oi, de getallen zeggen dat een van je hoofdvakken ongewoon werk heeft bereikt, kleine aardappelen, klein, maar het KNALDE, toch? De eerste vonk is altijd de schattigste. Meer vonken. Ga.',
+  'entities.letters.prof_tier_engineering_alchemy_1.sender': 'Knutselaar Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_1.subject': 'EERSTE vonk, ha',
+  'entities.letters.prof_tier_engineering_alchemy_2.body':
+    'Ze vertellen me dat een van je hoofdvakken tot zeldzaam werk is gestegen, en zeldzaam is waar het pas echt gevaarlijk wordt (het goede soort). De meeste handen stoppen voor het leuk wordt. Jij niet. HA.',
+  'entities.letters.prof_tier_engineering_alchemy_2.sender': 'Knutselaar Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_2.subject': 'Zeldzaam, oh, ZELDZAAM',
+  'entities.letters.prof_tier_engineering_alchemy_3.body':
+    'Een van je hoofdvakken heeft zeldzaam voorbij geschoten naar het serieuze werk, oh dit is waar het LUID wordt. Stop nu niet, wat je ook doet, momentum is alles, net als lonten.',
+  'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Knutselaar Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_3.subject': 'Nu wordt het luid',
+  'entities.letters.prof_tier_engineering_alchemy_4.body':
+    'Een van je hoofdvakken staat EEN sport onder meesterschap, een, enkelvoud, voel je hem gonzen? De laatste stap is de grootste knal. Niet knipperen.',
+  'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Knutselaar Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_4.subject': 'Een sport, EEN, van de top',
+  'entities.letters.prof_tier_engineering_alchemy_5.body':
+    'Een van je hoofdvakken heeft meesterschap bereikt, de allerHOOGSTE, kaboom, de hele ladder, klaar. Ik deel geen lof uit, ik deel lonten uit, maar hier, neem allebei: je bent briljant en enigszins angstaanjagend. Ga de bergen zenuwachtig maken.',
+  'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Knutselaar Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_5.subject': 'MEESTERSCHAP, kaboom',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.body':
+    'Het gilde noteert dat een van je hoofdvakken ongewoon werk heeft bereikt. Het is slechts de eerste rij van vele, maar hij is gelijkmatig en trouw. Meet de volgende even zorgvuldig.',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.sender': 'Weefster Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.subject': 'Een gelijkmatige eerste rij',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.body':
+    'Een van je hoofdvakken is tot zeldzaam werk gestegen. Dat is waar een onzorgvuldige hand elke gemiste steek laat zien, en die van jou heeft dat niet gedaan. Ik ben stilletjes verheugd.',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.sender': 'Weefster Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.subject': 'Zeldzaam werk, goed gemeten',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.body':
+    'Een van je hoofdvakken is van zeldzaam naar fijner werk gestegen. Het patroon wordt duidelijk voor een hand op dit niveau, niet meer raden. Blijf twee keer meten.',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.sender': 'Weefster Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.subject': 'Het patroon wordt duidelijk',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.body':
+    'Een van je hoofdvakken staat een rij onder meesterschap. De laatste rij is altijd het moeilijkst gelijkmatig te houden. Haast je nu niet.',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.sender': 'Weefster Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.subject': 'Een rij van de top',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.body':
+    'Een van je hoofdvakken heeft meesterschap bereikt. Ik heb je werk twee keer gemeten, zoals ik alles meet, en het houdt stand. Weinig handen leggen de laatste steek zo schoon. Ik ben trots, en dat zeg ik niet lichtvaardig.',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.sender': 'Weefster Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.subject': 'De laatste steek',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.body':
+    'Het bericht bereikt mijn smidse dat een van je hoofdvakken ongewoon werk bezit. Het is de kleinste sport op een lange klim, maar je hebt hem verdiend aan het aambeeld, niet door ernaar te vragen. Houd het vuur brandend.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.sender': 'Smeedmeesteres Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject': 'Een vonk de moeite waard',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.body':
+    'Ze vertellen me dat een van je hoofdvakken zeldzaam werk heeft bereikt. Dat is de sport waar slordige handen afvallen en de echte smeden overblijven. Jij staat er nog. Goed.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.sender': 'Smeedmeesteres Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject': 'Zeldzaam werk, en verdiend',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
+    'Een van je hoofdvakken is van zeldzaam naar serieus werk gestegen. Het metaal gehoorzaamt een hand als die, vecht er niet meer tegen. Laat de lof je arm niet verzwakken.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': 'Smeedmeesteres Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject':
+    'Het metaal gehoorzaamt je nu',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
+    'Een van je hoofdvakken staat een sport onder meesterschap. Weinig handen die ik heb gekend bereiken deze hoogte, en nog minder houden er hun scherpte. Maak de klim af.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': 'Smeedmeesteres Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': 'Bijna bovenaan de ladder',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
+    'Een van je hoofdvakken heeft meesterschap bereikt, het hoogste wat een hand kan bereiken. Ik geef niet vrijelijk lof, dus hoor dit eenmaal: de smidse is trots op je. Ga de vlam nu iets nieuws leren.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': 'Smeedmeesteres Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.subject': 'Meesterschap, eindelijk',
   'entities.npcs.alchemist_verane.greeting':
     'Meet twee keer en giet één keer, {className}. De apotheker heeft geen geduld voor gemorste reagentia.',
   'entities.npcs.alchemist_verane.name': 'Alchemist Verane',
@@ -8444,6 +8803,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'heroicShop.buyConfirmTitle': 'Bevestig aankoop',
   'hudChrome.crafting.comboTierUnmetNamed': 'Verhoog {crafts} naar niveau {tier}.',
   'hudChrome.crafting.difficultyFull': 'Volledige vaardigheidswinst',
+  'hudChrome.crafting.difficultyMinimal': 'Minimale vaardigheidswinst',
   'hudChrome.crafting.difficultyNone': 'Geen vaardigheidswinst',
   'hudChrome.crafting.difficultyReduced': 'Verminderde vaardigheidswinst',
   'hudChrome.crafting.enchantedLine': 'Betoverd',
@@ -8459,9 +8819,23 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.stationName.loom': 'Weefgetouw',
   'hudChrome.crafting.stationName.tannery': 'Looierij',
   'hudChrome.crafting.stationName.toolworks': 'Gereedschapswerkplaats',
+  'hudChrome.crafting.learnMoreAtStation':
+    '{master} bij {station} kan je meer {craft}-recepten leren.',
   'hudChrome.crafting.stationOutOfRangeNamed': 'Ga naar {station} om dit te maken.',
   'hudChrome.crafting.stationRequired': 'Je moet bij de {station} zijn om dat te kunnen maken.',
+  'hudChrome.crafting.tierTutorial.dismiss': 'Begrepen',
+  'hudChrome.crafting.tierTutorial.masters':
+    'Ambachtsmeesters in de steden bieden afstemmingsopdrachten aan. Bezoek er een om je paar te kiezen wanneer je er klaar voor bent. Niets wat je hebt geleerd gaat ooit verloren.',
+  'hudChrome.crafting.tierTutorial.radar':
+    'Je beroepen vormen een wiel. Stem af op een naburig paar en die twee ambachten worden onbegrensde hoofdvakken; een ambacht aan de andere kant van het wiel wordt een zeldzaam-begrensde liefhebberij; de rest ligt slapend: hun kennis bewaard, maar begrensd op gewoon totdat je ze weer oppakt.',
+  'hudChrome.crafting.tierTutorial.tierCap':
+    'Een ambacht bereikt zijn eerste niveau bij {skill} vaardigheid, en elk niveau verbetert wat het kan maken. Maar een ambacht klimt pas voorbij zeldzaam werk als het een van je twee hoofdvakken is.',
+  'hudChrome.crafting.tierTutorial.title': 'Je Eerste Niveau',
   'hudChrome.crafting.tierUpToast': '{craft} is doorgegaan naar niveau {tier}!',
+  'hudChrome.crafting.trendNudge':
+    'Je handen neigen naar {archetype}. De afstemming wacht bij {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    'Je handen neigen naar {archetype}. Zoek een ambachtsmeester om dit op te pakken.',
   'hudChrome.death.healerConfirmAccept': 'Breng mij weer tot leven',
   'hudChrome.death.healerConfirmBody':
     'De Bleke Hoeder wekt je hier tot leven, maar de Tol van de Hoeder vermindert al je eigenschappen met 75%, op hogere niveaus tot wel 10 minuten lang. Loop je als geest terug naar je lichaam, dan herleef je zonder straf.',
@@ -8484,6 +8858,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.hobbyLabel': 'Hobby: {craft}',
   'hudChrome.professions.identityHeader': 'Identiteit',
   'hudChrome.professions.majorsLabel': 'Hoofdvakken: {a} en {b}',
+  'hudChrome.professions.nextUnlockMastered': 'Gemeesterd, voorlopig',
   'hudChrome.professions.nextUnlockSpecialized':
     'Nog {points} punten tot Gespecialiseerd: materiaalkosten dalen',
   'hudChrome.professions.nextUnlockTier':
@@ -8527,4 +8902,23 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.training.tierUnmet': 'Je hebt {craft} {skill} nodig om dat recept te leren.',
   'hudChrome.training.title': 'Opleiding: {name}',
   'hudChrome.training.trainAria': 'Leer {name} voor {fee}',
+  'hudChrome.unbind.cannotAfford': 'Je kunt de ontbindingskosten niet betalen.',
+  'hudChrome.unbind.close': 'Ontbinden sluiten',
+  'hudChrome.unbind.confirmBody': '{name} ontbinden voor {fee}?',
+  'hudChrome.unbind.confirmCancel': 'Annuleren',
+  'hudChrome.unbind.confirmOk': 'Ontbinden',
+  'hudChrome.unbind.confirmTitle': 'Opdrachtsstuk Ontbinden',
+  'hudChrome.unbind.dialogOption': 'Ontbinden',
+  'hudChrome.unbind.dialogOptionAria': 'Een opdrachtsstuk ontbinden bij {name}',
+  'hudChrome.unbind.empty': 'Je draagt geen gebonden opdrachtsstukken.',
+  'hudChrome.unbind.intro':
+    'De meester kan een opdrachtsstuk van zijn binding bevrijden, tegen een vergoeding.',
+  'hudChrome.unbind.notBound': 'Dat voorwerp is niet gebonden.',
+  'hudChrome.unbind.notEligible': 'Dat voorwerp kan niet worden ontbonden.',
+  'hudChrome.unbind.outOfRange': 'Je moet bij een ambachtsstation zijn om te ontbinden.',
+  'hudChrome.unbind.rowSub': 'Verwijdert de binding; het stuk bindt opnieuw bij de volgende ruil.',
+  'hudChrome.unbind.title': 'Ontbinden: {name}',
+  'hudChrome.unbind.unbindAria': '{name} ontbinden voor {fee}',
+  'hudChrome.unbind.unbound':
+    '{name} ontbonden voor {fee}. Het bindt opnieuw bij de volgende ruil.',
 };

@@ -206,6 +206,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbSelfAccount':
     'Tài khoản của bạn: hạng {rank}, top {percent} phần trăm, {renown} Danh Vọng',
   'hudChrome.deeds.lbSelfRank': 'Tài khoản của bạn: hạng {rank}, top {percent} phần trăm',
+  'hudChrome.nameplate.afkTag': 'VắngMặt',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
   'hudChrome.nameplate.mobLevel': '{level}',
   'hudChrome.specPanel.specUnlockBanner': 'Chuyên Môn Đã Mở Khóa!',
@@ -277,6 +278,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.dragEquipHint': 'Kéo lên nhân vật để trang bị',
   'hudChrome.bags.reorderNeedsRecent': 'Xóa bộ lọc và sắp xếp theo Gần Đây để sắp xếp lại túi đồ',
   'hudChrome.bags.rightClickDestroy': 'Nhấp chuột phải để hủy bỏ',
+  'hudChrome.charSheet.defense': 'Phòng Thủ',
+  'hudChrome.charSheet.offense': 'Tấn Công',
   'hudChrome.cameraPrompt.changeLater': 'Bạn có thể thay đổi sau trong Esc, Phím Tắt.',
   'hudChrome.cameraPrompt.classicDesc': 'Giữ chuột phải và di chuyển chuột để xoay máy ảnh.',
   'hudChrome.cameraPrompt.classicTitle': 'Máy Ảnh Cổ Điển',
@@ -290,6 +293,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.roleTag.legend': 'HUYỀN THOẠI',
   'hudChrome.discord.roleTag.seniormods': 'Điều Hành Viên Cấp Cao',
   'hudChrome.discord.roleTag.shill': 'QUẢNG BÁ VIÊN',
+  'hudChrome.discord.roleTagChatTitle': 'Vai trò máy chủ đã xác minh: {role}',
   'hudChrome.finder.accept': 'Chấp Nhận',
   'hudChrome.finder.acceptApplicantAria': 'Chấp nhận {name}',
   'hudChrome.finder.accepted': '{accepted} trên {size} đã xác nhận',
@@ -390,6 +394,36 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.finder.yourListing': 'Thông báo của bạn',
   'hudChrome.finder.yourRoles': 'Vai trò của bạn',
   'hudChrome.gathering.notReady': 'Điểm tài nguyên này chưa hồi sinh lại dành cho bạn.',
+  'hudChrome.gathering.biteLine': 'Có thứ gì đó cắn mồi!',
+  'hudChrome.gathering.catchLine': 'Bạn giật cần: {name}',
+  'hudChrome.gathering.downgradeFind': 'Túi đầy: một phát hiện tuyệt vời đã trôi qua.',
+  'hudChrome.gathering.downgradeMark': 'Túi đầy: phát hiện được lưu mà không có dấu thợ thu thập.',
+  'hudChrome.gathering.fishing': 'Câu Cá',
+  'hudChrome.gathering.gotAwayLine': 'Nó thoát mất rồi.',
+  'hudChrome.gathering.nodeName.herb': 'Bụi Thảo Dược',
+  'hudChrome.gathering.nodeName.ore': 'Mạch Quặng',
+  'hudChrome.gathering.nodeName.wood': 'Bãi Gỗ',
+  'hudChrome.gathering.stateCooldown': 'Đang Hồi Sinh',
+  'hudChrome.gathering.stateReady': 'Sẵn Sàng',
+  'hudChrome.gathering.tierRequired.herbalism': 'Yêu cầu liềm hái thảo dược bậc {tier}',
+  'hudChrome.gathering.tierRequired.logging': 'Yêu cầu rìu đốn gỗ bậc {tier}',
+  'hudChrome.gathering.tierRequired.mining': 'Yêu cầu cuốc khai khoáng bậc {tier}',
+  'hudChrome.gathering.toolTierUnmet.herbalism':
+    'Bạn cần liềm hái thảo dược bậc {tier} để thu hoạch bụi này.',
+  'hudChrome.gathering.toolTierUnmet.logging': 'Bạn cần rìu đốn gỗ bậc {tier} để đốn bãi này.',
+  'hudChrome.gathering.toolTierUnmet.mining':
+    'Bạn cần cuốc khai khoáng bậc {tier} để khai thác mạch này.',
+  'hudChrome.gathering.toolTierUnmetCorpse':
+    'Bạn cần công cụ thu thập bậc {tier} để lấy được nguyên liệu tốt nhất.',
+  'hudChrome.interfaceTabs.chat': 'Trò Chuyện',
+  'hudChrome.interfaceTabs.combat': 'Chiến Đấu',
+  'hudChrome.interfaceTabs.frames': 'Khung',
+  'hudChrome.interfaceTabs.general': 'Chung',
+  'hudChrome.itemMenu.applyEnchant': 'Áp Dụng Pháp Khắc',
+  'hudChrome.itemMenu.disenchant': 'Hủy Pháp Khắc',
+  'hudChrome.itemMenu.equip': 'Trang Bị',
+  'hudChrome.itemMenu.salvage': 'Tháo Dỡ',
+  'hudChrome.itemMenu.use': 'Sử Dụng',
   'hudChrome.keybinds.sheathe': 'Tra/Rút Vũ Khí',
   'hudChrome.meters.autoShowHint':
     'Các hàng xuất hiện tự động sau khi nhóm của bạn gây sát thương hoặc hồi máu, và phần này đóng lại vài giây sau khi chiến đấu kết thúc.',
@@ -589,6 +623,90 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Mẹo: bạn có thể đặt lại tài năng bất cứ lúc nào ngoài chiến đấu, nên lựa chọn ban đầu không bao giờ là cái bẫy.',
   'entities.items.chunk_of_ore.name': 'Khối Quặng',
   'entities.quests.q_prof_intro.title': 'Nghề Cho Mọi Đôi Tay',
+  'entities.quests.q_prof_amends_apothecary.completion':
+    'Đây rồi, hương vị quen thuộc. Giả Kim và Nấu Ăn trở lại là chuyên ngành của bạn. Ở lại lâu hơn lần này.',
+  'entities.quests.q_prof_amends_apothecary.objectives.0.label': 'Lợn Rừng Hoang đã săn',
+  'entities.quests.q_prof_amends_apothecary.text':
+    'Ồ, nhìn xem ai trở lại nồi của tôi. Không có gì khó chịu đâu, {playerName}, nhà bếp luôn có chỗ, nhưng bạn biết cái hóa đơn cứ dài thêm mỗi lần bạn bước ra ngoài. Hãy đi tỉa đàn lợn rừng hoang ở đồng cỏ phía đông, vì mồ hôi lao động trung thực là thành phần đầu tiên, và nó sẽ nhắc nhở đôi bàn tay bạn về công việc.',
+  'entities.quests.q_prof_amends_apothecary.title': 'Trở Lại Nồi',
+  'entities.quests.q_prof_amends_bombardier.completion':
+    'ĐÓ RỒI, cơn ngứa ngáy đã trở lại trong tay bạn. Cơ Khí và Giả Kim, lại là chuyên ngành, đi thôi, đi tạo ra tiếng nổ đi. Cố gắng ở lại lần này nhé?',
+  'entities.quests.q_prof_amends_bombardier.objectives.0.label': 'Chuột Đường Hầm đã tiêu diệt',
+  'entities.quests.q_prof_amends_bombardier.text':
+    'Bạn ĐÃ QUAY LẠI, ha, họ luôn quay lại, thứ ồn ào có sức hút, phải không? Không có gì buồn bã từ tôi, {playerName}, nhưng cuốn sổ cái, ôi cuốn sổ cái, nó lớn lên mỗi lần bạn bỏ trốn, nhiều hơn mỗi lần trở về, điều đó chỉ là công bằng. Hãy đi dọn sạch những con chuột đường hầm ra khỏi công trường đào bới cho tôi, mồ hôi trước, tia lửa sau, đó là quy tắc tôi vừa nghĩ ra.',
+  'entities.quests.q_prof_amends_bombardier.title': 'Cuốn Sổ Cái Lớn Dần',
+  'entities.quests.q_prof_amends_outfitter.completion':
+    'Vững tay lại rồi. Thuộc Da và May Vá trở lại tay bạn là chuyên ngành. Hãy đo hai lần trước khi lang thang lần này.',
+  'entities.quests.q_prof_amends_outfitter.objectives.0.label': 'Nhện Gỗ Lưới đã diệt',
+  'entities.quests.q_prof_amends_outfitter.text':
+    'Trở lại khung cửi của tôi rốt cuộc rồi. Tôi không giữ oán giận, {playerName}, nhưng sợi chỉ nhớ một bàn tay đã buông nó, và cái giá để lấy lại ngày càng dài hơn mỗi lần. Hãy tỉa đàn nhện gỗ lưới đang chen chúc ở khu rừng phía tây, và lao động sẽ ổn định đôi tay bạn trước khi chúng chạm lại vào tơ tốt.',
+  'entities.quests.q_prof_amends_outfitter.title': 'Sợi Chỉ Nối Lại',
+  'entities.quests.q_prof_amends_smith.completion':
+    'Nhịp điệu đã trở lại trong tay bạn. Rèn Vũ Khí và Rèn Giáp một lần nữa là chuyên ngành của bạn. Đừng tạo thói quen bỏ đi.',
+  'entities.quests.q_prof_amends_smith.objectives.0.label': 'Sói Rừng đã hạ',
+  'entities.quests.q_prof_amends_smith.text':
+    'Vậy là bạn đã trở lại lò rèn. Tôi sẽ không giả vờ rằng điều đó không đau, {playerName}, nhưng tôi là một bàn tay công bằng và công việc cũng công bằng. Bạn biết cái giá của việc trở lại: lao động, và nhiều hơn mỗi lần bạn đã lang thang. Hãy hạ những con sói đang quấy rối con đường phía bắc, và cú vung đó sẽ nhắc nhở cánh tay bạn về điều mà đôi này từng đòi hỏi.',
+  'entities.quests.q_prof_amends_smith.title': 'Trở Lại Lò Rèn',
+  'entities.quests.q_prof_attune_apothecary.completion':
+    'Đây mới là một khởi đầu có thịt. Giả Kim và Nấu Ăn là của bạn để nấu lên cao bao nhiêu tùy ý. Trở lại khi đói nhé.',
+  'entities.quests.q_prof_attune_apothecary.objectives.0.label': 'Lợn Rừng Hoang đã săn',
+  'entities.quests.q_prof_attune_apothecary.text':
+    'Mọi món ăn ngon đều là hai hương vị thuộc về nhau, và một nghề thủ công tốt cũng vậy, {playerName}. Ngồi với tôi và Giả Kim cùng Nấu Ăn trở thành hai chuyên ngành của bạn, hai nghề bạn có thể simmered vượt qua công việc hiếm; nghề thủ công ở phía bên kia bánh xe là sở thích của bạn, được nêm nếm đến mức hiếm và không hơn. Phần còn lại của các nghề thủ công giữ trong kho lương thực, ngủ yên, không hỏng, sẵn sàng bất cứ khi nào bạn lấy chúng về. Cảnh báo công bằng trong khi nồi còn nguội: lang thang đến đôi khác và việc trở về nhà là một công việc tốn công ngày càng lớn, năm con thú lo liệu lần đầu, tám lần tiếp, mười một lần sau đó, nặng hơn với mỗi phần. Vẫn thèm khát không? Vậy hãy săn cho tôi bốn con lợn rừng hoang, vì một bếp đáng giá muối của nó bắt đầu với thịt tốt.',
+  'entities.quests.q_prof_attune_apothecary.title': 'Một Công Thức Đáng Giữ',
+  'entities.quests.q_prof_attune_bombardier.completion':
+    'HA. Thuốc thử, loại thật, và tất cả ngón tay vẫn nguyên vẹn, tốt, tốt. Cơ Khí và Giả Kim, của bạn rồi, đi tạo ra thứ gì đó để hối hận đi. Đi thôi.',
+  'entities.quests.q_prof_attune_bombardier.objectives.0.label': 'Bụi thảo dược đã thu hoạch',
+  'entities.quests.q_prof_attune_bombardier.text':
+    'Ôi, bạn muốn đồ xịn, đồ ồn ào, phải không? Nghe đây, nghe đây, trước khi bạn chạm vào bất cứ thứ gì kêu tích tắc: nói một câu và Cơ Khí cùng Giả Kim trở thành hai chuyên ngành của bạn, hai cái duy nhất bạn được phép đẩy qua công việc hiếm (đó là nơi nó trở nên VUI, tin tôi đi). Nghề thủ công đối diện được bỏ vào túi như sở thích, hiếm và không xa hơn, đừng cau mày. Các nghề khác của bạn? Không mất đi đâu, {playerName}, chỉ đang ngủ, đánh thức chúng bất cứ khi nào bạn muốn. Nhưng (luôn có một chữ nhưng, giữ ngòi nổ lại) bỏ đôi này và đi lạng thạng rồi quay lại sẽ tốn cho bạn mồ hôi mà cứ chồng chất, năm thứ hạ lần đầu, tám lần sau, mười một lần tiếp theo, nhiều hơn, nhiều hơn, mỗi lần bạn sợ hãi bỏ đi. Được chưa? ĐƯỢC CHƯA? Vậy hãy hái cho tôi ba bụi thảo dược, cái dễ nổ, đừng hỏi loại nào, chúng đều hơi dễ nổ nếu bạn tin đủ.',
+  'entities.quests.q_prof_attune_bombardier.title': 'Một Thỏa Thuận Bốc Lửa',
+  'entities.quests.q_prof_attune_outfitter.completion':
+    'Sợi chỉ đều, bàn tay vững. Thuộc Da và May Vá là của bạn để mang đi xa bao nhiêu tùy kỹ năng. Hãy đo hai lần, và chúng sẽ không phụ lòng bạn.',
+  'entities.quests.q_prof_attune_outfitter.objectives.0.label': 'Nhện Gỗ Lưới đã diệt',
+  'entities.quests.q_prof_attune_outfitter.text':
+    'Hãy đo giá trước khi cắt, đó là quy tắc đầu tiên tại khung cửi của tôi. Chọn tôi và Thuộc Da cùng May Vá trở thành hai chuyên ngành của bạn, đôi bạn có thể mang đi vượt qua công việc hiếm; nghề thủ công đối diện với chúng ổn định thành sở thích của bạn, đưa đến mức hiếm và để lại đó. Các nghề bạn gác lại không bị tháo chỉ, {playerName}, chỉ được gấp lại, ngủ yên cho đến khi bạn lấy chúng ra lần nữa. Hãy chắc chắn: nếu bạn rời đôi này và muốn nó trở lại, con đường về nhà được trả bằng lao động ngày càng dài hơn, năm con đã diệt lần đầu, rồi tám, rồi mười một, luôn thêm một ít. Nếu tâm trí đã quyết, hãy diệt bốn con nhện gỗ lưới và mang tơ của chúng đến khung cửi, vì sợi chỉ tốt bắt đầu mọi bộ quần áo tốt.',
+  'entities.quests.q_prof_attune_outfitter.title': 'Thước Đo của Thợ Trang Bị',
+  'entities.quests.q_prof_attune_smith.completion':
+    'Quặng tốt, và đôi tay tốt để làm việc. Rèn Vũ Khí và Rèn Giáp là của bạn để thành thạo ngay bây giờ. Hãy kiếm lấy phần còn lại.',
+  'entities.quests.q_prof_attune_smith.objectives.0.label': 'Mạch quặng đã khai thác',
+  'entities.quests.q_prof_attune_smith.text':
+    'Thép không tha thứ cho bàn tay lang bạt, vì vậy tôi sẽ nói thẳng trước khi bạn thề bất cứ điều gì. Ràng buộc bản thân với lò rèn của tôi và Rèn Vũ Khí cùng Rèn Giáp trở thành hai chuyên ngành của bạn, hai nghề thủ công duy nhất bạn có thể mang đi vượt qua công việc hiếm. Nghề thủ công đối diện với chúng trên bánh xe ổn định thành sở thích của bạn, được thực hiện đến mức hiếm và không xa hơn. Các nghề khác của bạn không bốc cháy, {playerName}: chúng chỉ lặng im, ngủ yên cho đến khi bạn gọi chúng về. Và hãy biết điều này trước khi búa rơi: rời đôi này lấy đôi khác và bạn sẽ phải bò lại qua lao động trung thực để trở lại với nó, năm kẻ thù hạ lần đầu về nhà, tám lần tiếp, mười một sau đó, nhiều hơn mỗi lần bạn lang thang. Vẫn đứng đây không? Vậy hãy mang cho tôi ba mạch quặng khai thác bằng tay của chính bạn từ Thung Lũng, và chúng ta sẽ gọi lời hứa đã được thực hiện.',
+  'entities.quests.q_prof_attune_smith.title': 'Lời Hứa của Thợ Rèn',
+  'entities.quests.q_prof_workorder_apothecary.completion':
+    'Chấp nhận được. Mạnh mẽ, và được xử lý đúng cách. Tiền công của bạn, đếm đến từng đồng. Đừng để nó lên đầu bạn, đó là một thuốc thử khác.',
+  'entities.quests.q_prof_workorder_apothecary.objectives.0.label': 'Thảo dược Lá Vàng đã giao',
+  'entities.quests.q_prof_workorder_apothecary.text':
+    'Kệ của tôi cần lá vàng, và hàng của chợ, có thể đoán được, là hàng pha tạp. Hãy mang cho tôi sáu cây thảo dược lá vàng, không bị dập nát, và bạn sẽ được bồi thường chính xác. Lá bị dập sẽ bị từ chối, vì vậy hãy cẩn thận túi đựng.',
+  'entities.quests.q_prof_workorder_apothecary.title': 'Đơn Hàng Dược Sĩ',
+  'entities.quests.q_prof_workorder_forge.completion':
+    'Trọng lượng tốt, không có xỉ. Đây là phần thưởng của bạn. Lò rèn sẽ đói lại sớm thôi.',
+  'entities.quests.q_prof_workorder_forge.objectives.0.label': 'Quặng Đồng đã giao',
+  'entities.quests.q_prof_workorder_forge.text':
+    'Lò rèn luôn muốn được nuôi, {playerName}. Hãy mang cho tôi tám cục quặng đồng và tôi sẽ trả tiền cho bạn. Không có nghi lễ gì, chỉ là quặng và tiền vàng.',
+  'entities.quests.q_prof_workorder_forge.title': 'Đơn Hàng Lò Rèn',
+  'entities.quests.q_prof_workorder_kitchens.completion':
+    'Bây giờ đó là một kho lương thực đầy đủ. Đây là tiền công của bạn. Trở lại khi túi nặng lại nhé.',
+  'entities.quests.q_prof_workorder_kitchens.objectives.0.label': 'Thịt Thú Rừng đã giao',
+  'entities.quests.q_prof_workorder_kitchens.text':
+    'Tủ bếp của tôi trông có vẻ mỏng, {playerName}, và tủ bếp mỏng khiến đầu bếp cáu kỉnh. Hãy lấy cho tôi tám miếng thịt thú rừng và có tiền trong đó cho bạn, cộng thêm lòng biết ơn vô tận của tôi, thứ đó ít giá trị hơn nhưng ngon hơn.',
+  'entities.quests.q_prof_workorder_kitchens.title': 'Đơn Hàng Bếp Ăn',
+  'entities.quests.q_prof_workorder_loom.completion':
+    'Tơ tốt, kéo đều. Tiền của bạn, đo chính xác. Khung cửi cảm ơn bạn, và tôi cũng vậy.',
+  'entities.quests.q_prof_workorder_loom.objectives.0.label': 'Tơ Nhện đã giao',
+  'entities.quests.q_prof_workorder_loom.text':
+    'Khung cửi chạy cạn và đôi tay nhàn rỗi lãng phí ánh sáng ban ngày, {playerName}. Hãy mang cho tôi sáu cuộn tơ nhện và tôi sẽ trả cho bạn mức giá công bằng, đếm đến từng đồng.',
+  'entities.quests.q_prof_workorder_loom.title': 'Đơn Hàng Khung Cửi',
+  'entities.quests.q_prof_workorder_tannery.completion':
+    'Da tốt. Trả công xứng đáng. Lại khi bạn có thêm.',
+  'entities.quests.q_prof_workorder_tannery.objectives.0.label': 'Da Thô đã giao',
+  'entities.quests.q_prof_workorder_tannery.text':
+    'Bình xử lý trống. Hãy mang tám tấm da thô. Tiền vàng khi bạn làm.',
+  'entities.quests.q_prof_workorder_tannery.title': 'Đơn Hàng Xưởng Thuộc Da',
+  'entities.quests.q_prof_workorder_toolworks.completion':
+    'Hoàn hảo, hoàn hảo, thớ thẳng, không có mục. Đây, tiền của bạn, xem, tôi giữ lời (phần lớn). Hãy mang thêm khi bạn vấp qua cây.',
+  'entities.quests.q_prof_workorder_toolworks.objectives.0.label': 'Khúc Gỗ Sắt Bì đã giao',
+  'entities.quests.q_prof_workorder_toolworks.text':
+    'Cán, tay cầm, báng súng, tôi tiêu thụ gỗ như thể nó đang lỗi thời, mà nó KHÔNG phải thế, gỗ là vĩnh cửu, {playerName}. Hãy khuân cho tôi tám khúc gỗ sắt bì và tôi sẽ trả tiền cho bạn, tiền vàng, tiền thật, không phải ân huệ, tôi hứa, phần lớn thôi.',
+  'entities.quests.q_prof_workorder_toolworks.title': 'Đơn Hàng Xưởng Công Cụ',
   'hudChrome.auth.appleChoiceExpired':
     'Lần đăng nhập bằng Apple đó đã hết hạn. Vui lòng đăng nhập lại bằng Apple.',
   'hudChrome.auth.appleChoiceIntro':
@@ -607,6 +725,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.keybinds.petTaunt': 'Thú Cưng: Khiêu Khích',
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Gửi bớt một {item}',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Gửi thêm một {item}',
+  'hudChrome.mailbox.parcelQtyAria': 'Số lượng {item} cần gửi',
   'hudChrome.readyCheck.notReady': 'Chưa Sẵn Sàng',
   'hudChrome.readyCheck.prompt': '{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?',
   'hudChrome.readyCheck.ready': 'Sẵn Sàng',
@@ -743,7 +862,11 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.townFocus.increaseAria': 'Tăng trọng tâm cho {component}',
   'hudChrome.townFocus.notInTownHint': 'Bạn phải ở trong thị trấn để đặt trọng tâm.',
   'hudChrome.townFocus.saveButton': 'Lưu Trọng Tâm',
+  'hudChrome.townFocus.tierHint':
+    'Mỗi {points} điểm vào một hạng mục nâng bậc thu hoạch lên một bước, tối đa {steps} bước; ít hơn {points} điểm vẫn tăng sản lượng.',
   'hudChrome.townFocus.title': 'Trọng Tâm Thị Trấn',
+  'hudChrome.townFocus.townOnlyHint':
+    'Trọng tâm chỉ có thể thay đổi khi bạn đang ở trong thị trấn.',
   'hudChrome.vcup.awayNote':
     'Nếu hai bên cùng giương một lá cờ, đội khách sẽ khoác bảng màu đảo ngược.',
   'hudChrome.vcup.bannerCountdown': 'Giao bóng sau {seconds}...',
@@ -1593,6 +1716,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.corpseHarvest.concentrateHint':
     'Chọn càng ít bộ phận, mỗi bộ phận thu được sẽ có bậc chất lượng càng cao.',
   'hudChrome.corpseHarvest.harvestButton': 'Thu Hoạch',
+  'hudChrome.corpseHarvest.harvestTooltip':
+    'Thu thập các bộ phận đã chọn. Mỗi xác chỉ có thể thu hoạch một lần, ai đến trước được trước. Không lấy chiến lợi phẩm.',
   'hudChrome.corpseHarvest.title': 'Thu Hoạch',
   'hudChrome.dailyRewards.disclaimer':
     'Giá WOC có thể biến động nhanh. Chúng tôi khuyên bạn nên giữ nhiều hơn mức tối thiểu 20 USD để những dao động giá thông thường không khóa bạn ở ngoài. Đây không phải lời khuyên tài chính.',
@@ -1611,6 +1736,78 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.death.spiritHealerAlive':
     'Người Canh Giữ Nhợt Nhạt trông nom kẻ chết. Bạn vẫn còn ở giữa cõi sống.',
   'hudChrome.discord.roleTag.admin': 'Quản Trị Viên',
+  'hudChrome.enchantName.enchant_chest_armor': 'Pháp Khắc Giáp Ngực - Gia Cố',
+  'hudChrome.enchantName.enchant_chest_greater_stamina': 'Pháp Khắc Giáp Ngực - Thể Lực Cao Cấp',
+  'hudChrome.enchantName.enchant_chest_runeweave': 'Pháp Khắc Giáp Ngực - Dệt Phù Văn',
+  'hudChrome.enchantName.enchant_chest_spirit': 'Pháp Khắc Giáp Ngực - Tinh Thần',
+  'hudChrome.enchantName.enchant_chest_stamina': 'Pháp Khắc Giáp Ngực - Thể Lực',
+  'hudChrome.enchantName.enchant_feet_agility': 'Pháp Khắc Giày - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_feet_stamina': 'Pháp Khắc Giày - Thể Lực',
+  'hudChrome.enchantName.enchant_feet_strength': 'Pháp Khắc Giày - Sức Mạnh',
+  'hudChrome.enchantName.enchant_gloves_agility': 'Pháp Khắc Găng Tay - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_gloves_greater_agility': 'Pháp Khắc Găng Tay - Nhanh Nhẹn Cao Cấp',
+  'hudChrome.enchantName.enchant_gloves_intellect': 'Pháp Khắc Găng Tay - Sức Mạnh Phép Thuật',
+  'hudChrome.enchantName.enchant_gloves_strength': 'Pháp Khắc Găng Tay - Sức Mạnh',
+  'hudChrome.enchantName.enchant_helmet_armor': 'Pháp Khắc Mũ Giáp - Gia Cố',
+  'hudChrome.enchantName.enchant_helmet_fortitude': 'Pháp Khắc Mũ Giáp - Kiên Cường',
+  'hudChrome.enchantName.enchant_helmet_greater_fortitude':
+    'Pháp Khắc Mũ Giáp - Kiên Cường Cao Cấp',
+  'hudChrome.enchantName.enchant_helmet_intellect': 'Pháp Khắc Mũ Giáp - Trí Tuệ',
+  'hudChrome.enchantName.enchant_helmet_runed_links': 'Pháp Khắc Mũ Giáp - Xích Phù Văn',
+  'hudChrome.enchantName.enchant_legs_greater_stamina': 'Pháp Khắc Giáp Chân - Thể Lực Cao Cấp',
+  'hudChrome.enchantName.enchant_legs_intellect': 'Pháp Khắc Giáp Chân - Trí Tuệ',
+  'hudChrome.enchantName.enchant_legs_runed_hide': 'Pháp Khắc Giáp Chân - Da Phù Văn',
+  'hudChrome.enchantName.enchant_legs_stamina': 'Pháp Khắc Giáp Chân - Thể Lực',
+  'hudChrome.enchantName.enchant_neck_agility': 'Pháp Khắc Vòng Cổ - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_neck_intellect': 'Pháp Khắc Vòng Cổ - Trí Tuệ',
+  'hudChrome.enchantName.enchant_neck_spirit': 'Pháp Khắc Vòng Cổ - Tinh Thần',
+  'hudChrome.enchantName.enchant_ring_agility': 'Pháp Khắc Nhẫn - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_ring_intellect': 'Pháp Khắc Nhẫn - Trí Tuệ',
+  'hudChrome.enchantName.enchant_ring_spirit': 'Pháp Khắc Nhẫn - Tinh Thần',
+  'hudChrome.enchantName.enchant_ring_strength': 'Pháp Khắc Nhẫn - Sức Mạnh',
+  'hudChrome.enchantName.enchant_shoulder_agility': 'Pháp Khắc Giáp Vai - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_shoulder_intellect': 'Pháp Khắc Giáp Vai - Trí Tuệ',
+  'hudChrome.enchantName.enchant_shoulder_strength': 'Pháp Khắc Giáp Vai - Sức Mạnh',
+  'hudChrome.enchantName.enchant_waist_agility': 'Pháp Khắc Thắt Lưng - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_waist_stamina': 'Pháp Khắc Thắt Lưng - Thể Lực',
+  'hudChrome.enchantName.enchant_waist_strength': 'Pháp Khắc Thắt Lưng - Sức Mạnh',
+  'hudChrome.enchantName.enchant_weapon_agility': 'Pháp Khắc Vũ Khí - Nhanh Nhẹn',
+  'hudChrome.enchantName.enchant_weapon_greater_might': 'Pháp Khắc Vũ Khí - Dũng Mãnh Cao Cấp',
+  'hudChrome.enchantName.enchant_weapon_greater_spellpower':
+    'Pháp Khắc Vũ Khí - Sức Mạnh Phép Thuật Cao Cấp',
+  'hudChrome.enchantName.enchant_weapon_intellect': 'Pháp Khắc Vũ Khí - Sức Mạnh Phép Thuật',
+  'hudChrome.enchantName.enchant_weapon_might': 'Pháp Khắc Vũ Khí - Dũng Mãnh',
+  'hudChrome.enchantName.enchant_weapon_runed_edge': 'Pháp Khắc Vũ Khí - Lưỡi Phù Văn',
+  'hudChrome.enchantName.enchant_weapon_runed_focus': 'Pháp Khắc Vũ Khí - Tiêu Điểm Phù Văn',
+  'hudChrome.enchanting.disenchantConfirmBody':
+    'Thao tác này phá hủy {item} và thu được nguyên liệu huyền bí. Không thể hoàn tác.',
+  'hudChrome.enchanting.disenchantConfirmBodySpecial':
+    'Thao tác này phá hủy một bản đặc biệt của {item} (có chữ ký, kiệt tác hoặc đã pháp khắc) và thu được nguyên liệu huyền bí. Không thể hoàn tác.',
+  'hudChrome.enchanting.disenchantConfirmTitle': 'Hủy Pháp Khắc {item}?',
+  'hudChrome.enchanting.disenchantThrottled':
+    'Bạn đang hủy pháp khắc quá nhanh. Hãy đợi một lát rồi thử lại.',
+  'hudChrome.enchanting.disenchantedLine': 'Bạn hủy pháp khắc {item}.',
+  'hudChrome.enchanting.enchantAppliedLine': 'Bạn pháp khắc {item} với {enchant}.',
+  'hudChrome.enchanting.enchantInsufficient': 'Bạn không có đủ nguyên liệu cho phép khắc đó.',
+  'hudChrome.enchanting.enchantThrottled':
+    'Bạn đang pháp khắc quá nhanh. Hãy đợi một lát rồi thử lại.',
+  'hudChrome.enchanting.enchantUnknown': 'Phép khắc đó không tồn tại.',
+  'hudChrome.enchanting.enchantWrongSlot': 'Phép khắc đó không thể áp dụng cho vật phẩm đó.',
+  'hudChrome.enchanting.noEnchants': 'Không có phép khắc nào dùng nguyên liệu này.',
+  'hudChrome.enchanting.noTargets': 'Không có vật phẩm nào hợp lệ để pháp khắc.',
+  'hudChrome.enchanting.notDisenchantable': 'Bạn không thể hủy pháp khắc vật phẩm đó.',
+  'hudChrome.enchanting.notHeld': 'Bạn không có vật phẩm đó.',
+  'hudChrome.enchanting.notSalvageable': 'Bạn không thể tháo dỡ vật phẩm đó.',
+  'hudChrome.enchanting.pickerTitle': 'Áp Dụng Pháp Khắc',
+  'hudChrome.enchanting.salvageConfirmBody':
+    'Thao tác này phá hủy {item} và thu được nguyên liệu chế tác. Không thể hoàn tác.',
+  'hudChrome.enchanting.salvageConfirmBodySpecial':
+    'Thao tác này phá hủy một bản đặc biệt của {item} (có chữ ký, kiệt tác hoặc đã pháp khắc) và thu được nguyên liệu chế tác. Không thể hoàn tác.',
+  'hudChrome.enchanting.salvageConfirmTitle': 'Tháo Dỡ {item}?',
+  'hudChrome.enchanting.salvageThrottled':
+    'Bạn đang tháo dỡ quá nhanh. Hãy đợi một lát rồi thử lại.',
+  'hudChrome.enchanting.salvagedLine': 'Bạn tháo dỡ {item}.',
+  'hudChrome.enchanting.targetTitle': 'Chọn vật phẩm để pháp khắc',
   'hudChrome.frameReset.label': 'Đặt Lại Vị Trí Các Khung',
   'hudChrome.mailbox.arrivedBanner': 'Quạ thư đã đáp xuống: thư từ {name}.',
   'hudChrome.mailbox.arrivedLog': 'Bạn có thư mới từ {name}.',
@@ -1667,11 +1864,16 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.playerFrameScale': 'Tỷ Lệ Khung Người Chơi',
   'hudChrome.options.showDailyRewardsChest': 'Hiện Rương Phần Thưởng Hằng Ngày',
   'hudChrome.options.showOwnNameplate': 'Hiện Bảng Tên Của Tôi',
+  'hudChrome.options.showPlayerNameplates': 'Hiện Bảng Tên Người Chơi',
   'hudChrome.options.targetFrameScale': 'Tỷ Lệ Khung Mục Tiêu',
   'hudChrome.options.walkByAutoloot': 'Tự Nhặt Đồ Khi Đi Ngang',
   'hudChrome.party.inviteUsage': 'Mời ai? Cách dùng: /invite <name>.',
   'hudChrome.playerFrame.lock': 'Khóa khung người chơi',
   'hudChrome.playerFrame.unlock': 'Di chuyển khung người chơi',
+  'hudChrome.social.hideOffline': 'Ẩn ngoại tuyến',
+  'hudChrome.social.hideOfflineTitle': 'Ẩn thành viên bang hội ngoại tuyến',
+  'hudChrome.social.offlineHeader': 'Ngoại Tuyến ({n})',
+  'hudChrome.social.onlineHeader': 'Trực Tuyến ({n})',
   'hudChrome.social.lastSeen': 'Lần cuối trực tuyến: {when}',
   'hudChrome.social.lastSeenNever': 'chưa bao giờ',
   'hudChrome.targetFrame.lock': 'Khóa khung mục tiêu',
@@ -1821,6 +2023,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.itemNoneInBags': 'Không có trong túi',
   'abilityUi.actionBar.slotAria': 'Ô hành động {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Quỷ Trị Liệu',
+  'abilityUi.cast.gathering': 'Thu Thập',
   'abilityUi.cast.fishing': 'Câu Cá',
   'abilityUi.cast.thunzharrStormcall': 'Tiếng Gọi Bão',
   'abilityUi.forms.bear': 'Gấu',
@@ -5225,6 +5428,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hud.errors.targetMustDodge': 'Mục tiêu của bạn phải né được trước đã.',
   'hud.errors.targetTooFar': 'Mục tiêu ở quá xa.',
   'hud.errors.tooClose': 'Quá gần!',
+  'hud.errors.tradeBound': 'Vật phẩm đó đã bị ràng buộc và không thể giao dịch.',
   'hud.errors.tradeExpired': 'Yêu cầu giao dịch đã hết hạn.',
   'hud.errors.tradeFailed': 'Giao dịch thất bại: vật phẩm hoặc tiền không còn khả dụng.',
   'hud.errors.tradeInProgress': 'Một giao dịch đang diễn ra.',
@@ -5498,6 +5702,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hud.social.removeFriendTitle': 'Xóa {name} khỏi danh sách bạn bè',
   'hud.social.removeGuildTitle': 'Loại {name} khỏi bang hội',
   'hud.social.selfNotice': 'Đó là chính bạn!',
+  'hud.social.status.afk': 'Vắng Mặt',
   'hud.social.status.combat': 'Đang Chiến Đấu',
   'hud.social.status.dead': 'Đã Chết',
   'hud.social.status.dungeon': 'Trong Hầm Ngục',
@@ -5669,6 +5874,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.sortName': 'Tên',
   'hudChrome.bags.sortQuality': 'Phẩm chất',
   'hudChrome.bags.sortRecent': 'Gần đây',
+  'hudChrome.bags.itemAriaInstanced': '{item}, số lượng {count}, bản có dấu thợ',
   'hudChrome.bugReport.character': 'Nhân vật',
   'hudChrome.bugReport.describeFirst': 'Vui lòng mô tả lỗi trước khi gửi.',
   'hudChrome.bugReport.description': 'Đã có gì sai sót?',
@@ -5749,6 +5955,11 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Bật/tắt nền tương phản cao: tắt đoạn phim nền chuyển động để chữ trên màn hình bắt đầu vẫn dễ đọc',
   'hudChrome.leaderboard.close': 'Đóng',
   'hudChrome.loot.chestTitle': 'Rương',
+  'hudChrome.loot.takeLootButton': 'Nhặt Chiến Lợi Phẩm',
+  'hudChrome.loot.takeLootTooltip':
+    'Nhặt tiền vàng và vật phẩm rơi ra. Không dùng hết lần thu hoạch.',
+  'hudChrome.loot.unifiedPressHint':
+    'Phím tương tác nhặt đồ và thu hoạch trong một lần nhấn, sử dụng trọng tâm thị trấn của bạn.',
   'hudChrome.meters.minutesSeconds': '{m}p {s}g',
   'hudChrome.meters.perSecond': '{value}/g',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
@@ -6532,6 +6743,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'skinEvent.unequip': 'Tháo Trang Bị',
   'skinEvent.unlocked': 'Đã mở khóa trang phục!',
   'stats.accountsCreated': 'Người Chơi',
+  'stats.charactersCreated': 'Nhân Vật Đã Tạo',
   'stats.playersOnline': 'Người Chơi Trực Tuyến',
   'stats.realmName': 'Tên Thế Giới',
   'stats.title': 'Trạng Thái Thế Giới',
@@ -7896,6 +8108,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Trượng',
   'hudChrome.wocStore.wtype.sword': 'Gươm',
   'hudChrome.wocStore.wtype.wand': 'Đũa phép',
+  'hudChrome.wocStore.wtype.polearm': 'Vũ khí cán dài',
   'guide.abilityHook.revenge':
     'Quét trúng kẻ địch phía trước và có thể không tốn tài nguyên sau khi né hoặc đỡ đòn.',
   'guide.abilityHook.hamstring': 'Cản trở di chuyển của kẻ địch để chúng không thể chạy thoát.',
@@ -8283,6 +8496,138 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.venom_gland.name': 'Tuyến nọc độc',
   'entities.items.venomfire_elixir.name': 'Thuốc độc lửa',
   'entities.items.whetted_iron_dirk.name': 'Dao găm sắt mài sắc',
+  'entities.items.acolyte_chain_grips.name': 'Găng Xích Tu Đồ',
+  'entities.items.briarroot_staff.name': 'Trượng Rễ Gai',
+  'entities.items.cragprowl_belt.name': 'Thắt Lưng Kẻ Rình Sườn Đá',
+  'entities.items.cragthorn_greatstaff.name': 'Đại Trượng Gai Sườn Đá',
+  'entities.items.cragward_pauldrons.name': 'Giáp Vai Vệ Sườn Đá',
+  'entities.items.cryptbloom_shoulderguards.name': 'Giáp Vai Hoa Hầm Mộ',
+  'entities.items.dreamroot_boots.name': 'Giày Rễ Mộng',
+  'entities.items.duskthorn_mantle.name': 'Áo Choàng Gai Hoàng Hôn',
+  'entities.items.fenbark_leggings.name': 'Giáp Chân Vỏ Đầm Lầy',
+  'entities.items.fenshadow_maul.name': 'Búa Bóng Đầm Lầy',
+  'entities.items.fenwarden_sabatons.name': 'Giáp Chân Vệ Đầm Lầy',
+  'entities.items.gravewyrm_thornmaul.name': 'Búa Gai Mộ Long',
+  'entities.items.grovewardens_grips.name': 'Găng Vệ Rừng',
+  'entities.items.lunarward_cinch.name': 'Đai Lưng Vệ Nguyệt',
+  'entities.items.marshlight_hauberk.name': 'Áo Giáp Lưới Ánh Đầm',
+  'entities.items.maul_of_the_scourged_wilds.name': 'Búa của Hoang Dã Bị Tàn Phá',
+  'entities.items.mirebloom_treads.name': 'Giày Hoa Bùn',
+  'entities.items.moonbark_vestments.name': 'Pháp Bào Vỏ Nguyệt',
+  'entities.items.mosshide_vest.name': 'Áo Da Rêu',
+  'entities.items.nightfangs_greatstaff.name': 'Đại Trượng Nanh Đêm',
+  'entities.items.peaksong_helm.name': 'Mũ Khúc Ca Đỉnh Núi',
+  'entities.items.pearlward_aegis.name': 'Khiên Thánh Vệ Ngọc Trai',
+  'entities.items.resonant_hide.name': 'Da Cộng Hưởng',
+  'entities.items.resonant_links.name': 'Xích Cộng Hưởng',
+  'entities.items.resonant_steel.name': 'Thép Cộng Hưởng',
+  'entities.items.resonant_thread.name': 'Sợi Cộng Hưởng',
+  'entities.items.resonant_timber.name': 'Gỗ Cộng Hưởng',
+  'entities.items.revenantstep_treads.name': 'Giày Bước Vong Linh',
+  'entities.items.shardfang_grips.name': 'Găng Nanh Mảnh',
+  'entities.items.shardsong_mantle.name': 'Áo Choàng Vai Khúc Ca Mảnh',
+  'entities.items.stormbark_mantle.name': 'Áo Choàng Vai Vỏ Bão',
+  'entities.items.stormchant_gauntlets.name': 'Bao Tay Khúc Tụng Bão',
+  'entities.items.stormroot_cowl.name': 'Mũ Trùm Rễ Bão',
+  'entities.items.stormvotive_hauberk.name': 'Áo Giáp Lưới Tế Bão',
+  'entities.items.thornling_grips.name': 'Găng Gai Tinh',
+  'entities.items.thornpeak_wildwraps.name': 'Quấn Hoang Dã Đỉnh Gai',
+  'entities.items.thunderward_legguards.name': 'Giáp Chân Vệ Sấm',
+  'entities.items.tidehymn_slippers.name': 'Hài Thánh Ca Triều',
+  'entities.items.valefire_lantern.name': 'Đèn Lồng Lửa Thung Lũng',
+  'entities.items.verdant_walkers.name': 'Giày Cỏ Xanh',
+  'entities.items.vestments_of_the_waking_grove.name': 'Pháp Bào của Rừng Thức Giấc',
+  'entities.items.votive_chain_belt.name': 'Đai Xích Tế Lễ',
+  'entities.items.wildgrove_cinch.name': 'Đai Lưng Rừng Hoang',
+  'entities.items.wildgrowth_leggings.name': 'Giáp Chân Hoang Sinh',
+  'entities.items.wildsoul_maul.name': 'Búa Hồn Hoang',
+  'entities.items.wyrmcult_spellgrips.name': 'Găng Pháp Thuật Tà Long',
+  'entities.letters.mastery_reset_notice.body':
+    'Huynh đệ bang hội,\n\nBang hội đã áp dụng cách tính thành thạo mới. Mọi bàn tay đều bắt đầu leo thang lại từ đầu: kỹ năng nghề thủ công và kỹ năng thu thập của bạn đã được đặt về không.\n\nMọi thứ khác vẫn là của bạn, không bị chạm đến: công thức, dụng cụ và nguyên liệu, ngân hàng và vàng, chứng ngộ và danh hiệu, chiến tích và danh tiếng, nhiệm vụ và thư từ.\n\nCon đường leo thang giờ đây trong sạch. Công việc đơn giản sẽ không đưa bạn lên cao. Hãy tìm kiếm công thức khó hơn, khoáng mạch phong phú hơn, và vùng nước sâu hơn.\n\nTrân trọng,\nHội Trường',
+  'entities.letters.mastery_reset_notice.sender': 'Hội Trường',
+  'entities.letters.mastery_reset_notice.subject': 'Nghề nghiệp của bạn, trung thực trở lại',
+  'entities.letters.prof_tier_alchemy_cooking_1.body':
+    'Tin tức trôi về bếp của tôi rằng một trong những chuyên ngành của bạn đã đạt được công việc bất thường. Đây chỉ là lần nếm thử đầu tiên, không hơn, nhưng là một khởi đầu đầy hứa hẹn. Hãy giữ nồi luôn chuyển động.',
+  'entities.letters.prof_tier_alchemy_cooking_1.sender': 'Nấu Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_1.subject': 'Một hương vị của những điều sắp đến',
+  'entities.letters.prof_tier_alchemy_cooking_2.body':
+    'Họ nói với tôi rằng một chuyên ngành của bạn đã simmered lên đến công việc hiếm. Đó là nhiệt độ mà hầu hết các đầu bếp làm cháy món ăn, và bạn thì không. Ngồi xuống, nhưng đừng lâu.',
+  'entities.letters.prof_tier_alchemy_cooking_2.sender': 'Nấu Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_2.subject': 'Công việc hiếm, không có cạnh cháy',
+  'entities.letters.prof_tier_alchemy_cooking_3.body':
+    'Một trong những chuyên ngành của bạn đã sôi lên qua công việc hiếm vào chiều sâu thực sự. Giờ đây bạn mới thực sự nấu ăn, như người ta nói. Nêm nếm táo bạo và tiếp tục thử.',
+  'entities.letters.prof_tier_alchemy_cooking_3.sender': 'Nấu Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_3.subject': 'Bây giờ bạn mới thực sự nấu ăn',
+  'entities.letters.prof_tier_alchemy_cooking_4.body':
+    'Một chuyên ngành của bạn chỉ còn thiếu một món nữa là đến bậc thành thạo. Món cuối cùng luôn là phong phú nhất và dễ làm quá tay nhất. Hãy giữ tay vững trên muôi.',
+  'entities.letters.prof_tier_alchemy_cooking_4.sender': 'Nấu Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_4.subject': 'Một món nữa là đến bữa tiệc',
+  'entities.letters.prof_tier_alchemy_cooking_5.body':
+    'Một chuyên ngành của bạn đã đạt bậc thành thạo, kệ cao nhất của cả kho lương thực. Tôi nuôi sống mọi người, nhưng ít ai nấu ăn leo được đến đây. Tự hào về bạn, thực sự. Bây giờ hãy đi làm điều gì đó khiến họ phải khóc ở bàn ăn.',
+  'entities.letters.prof_tier_alchemy_cooking_5.sender': 'Nấu Marlow',
+  'entities.letters.prof_tier_alchemy_cooking_5.subject': 'Bậc thành thạo, nóng hổi',
+  'entities.letters.prof_tier_engineering_alchemy_1.body':
+    'Oi, những con số cho thấy một trong những chuyên ngành của bạn vừa đạt công việc bất thường, thứ nhỏ nhoi, bé tí, nhưng nó NỔ, phải không? Tia lửa đầu tiên luôn là đáng yêu nhất. Thêm tia lửa nữa. Đi thôi.',
+  'entities.letters.prof_tier_engineering_alchemy_1.sender': 'Thợ Máy Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_1.subject': 'Tia lửa ĐẦU TIÊN, ha',
+  'entities.letters.prof_tier_engineering_alchemy_2.body':
+    'Họ nói với tôi rằng một chuyên ngành của bạn leo lên công việc hiếm, và công việc hiếm là nơi nó bắt đầu trở nên nguy hiểm đúng nghĩa (loại tốt đó). Hầu hết các bàn tay bỏ cuộc trước khi có được niềm vui. Không phải bạn. HA.',
+  'entities.letters.prof_tier_engineering_alchemy_2.sender': 'Thợ Máy Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_2.subject': 'Hiếm, ôi, HIẾM',
+  'entities.letters.prof_tier_engineering_alchemy_3.body':
+    'Một trong những chuyên ngành của bạn vượt qua công việc hiếm vào đồ nghiêm túc, ôi đây là lúc nó trở nên ÂM VANG. Đừng dừng lại ngay bây giờ, dù bạn làm gì, đà khởi động là tất cả, và cũng là ngòi nổ.',
+  'entities.letters.prof_tier_engineering_alchemy_3.sender': 'Thợ Máy Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_3.subject': 'Giờ nó trở nên ồn ào',
+  'entities.letters.prof_tier_engineering_alchemy_4.body':
+    'Một chuyên ngành của bạn chỉ còn MỘT bậc nữa là đến thành thạo, một, duy nhất, bạn có nghe thấy nó vo ve không? Bước cuối cùng là tiếng nổ lớn nhất. Đừng chớp mắt.',
+  'entities.letters.prof_tier_engineering_alchemy_4.sender': 'Thợ Máy Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_4.subject': 'Một bậc, MỘT, từ đỉnh',
+  'entities.letters.prof_tier_engineering_alchemy_5.body':
+    'Một chuyên ngành của bạn đạt thành thạo, chính ĐỈNH, kaboom, cả thang, xong. Tôi không tặng lời khen, tôi tặng ngòi nổ, nhưng đây, hãy lấy cả hai: bạn thực sự xuất chúng và hơi đáng sợ một chút. Hãy đi làm những ngọn núi lo lắng đi.',
+  'entities.letters.prof_tier_engineering_alchemy_5.sender': 'Thợ Máy Gizzel',
+  'entities.letters.prof_tier_engineering_alchemy_5.subject': 'THÀNH THẠO, kaboom',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.body':
+    'Bang hội ghi nhận rằng một trong những chuyên ngành của bạn đã đạt công việc bất thường. Đây chỉ là hàng đầu tiên trong nhiều hàng, nhưng nó đều và đúng. Hãy đo hàng tiếp theo cẩn thận như vậy.',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.sender': 'Thợ Dệt Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_1.subject': 'Một hàng đầu tiên đều đặn',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.body':
+    'Một chuyên ngành của bạn leo lên công việc hiếm. Đó là nơi một bàn tay bất cẩn để lộ mọi mũi khâu bị đánh rơi, và của bạn thì không. Tôi thầm vui lòng.',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.sender': 'Thợ Dệt Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_2.subject':
+    'Công việc hiếm, đo đạc cẩn thận',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.body':
+    'Một trong những chuyên ngành của bạn đã vượt qua công việc hiếm vào công việc tinh tế hơn. Hoa văn trở nên rõ ràng với bàn tay ở cấp độ này, không còn phải đoán mò nữa. Hãy tiếp tục đo hai lần.',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.sender': 'Thợ Dệt Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_3.subject': 'Hoa văn trở nên rõ ràng',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.body':
+    'Một chuyên ngành của bạn chỉ còn một hàng nữa là đến bậc thành thạo. Hàng cuối cùng luôn khó giữ đều nhất. Đừng vội vàng.',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.sender': 'Thợ Dệt Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_4.subject': 'Một hàng nữa là đến đỉnh',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.body':
+    'Một chuyên ngành của bạn đã đạt bậc thành thạo. Tôi đo công việc của bạn hai lần, như tôi đo mọi thứ, và nó giữ vững. Ít bàn tay nào buộc được mũi khâu cuối cùng gọn gàng đến vậy. Tôi tự hào, và tôi không nói điều đó nhẹ dạ.',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.sender': 'Thợ Dệt Ottilie',
+  'entities.letters.prof_tier_leatherworking_tailoring_5.subject': 'Mũi khâu cuối cùng',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.body':
+    'Tin tức đến lò rèn của tôi rằng một trong những chuyên ngành của bạn hiện đạt công việc bất thường. Đó là bậc thang nhỏ nhất trên một cuộc leo dài, nhưng bạn kiếm được nó tại đe, không phải bằng cách xin xỏ. Hãy giữ lửa nóng.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.sender': 'Nữ Thợ Rèn Trưởng Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_1.subject': 'Một tia lửa đáng ghi nhận',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.body':
+    'Họ nói với tôi rằng một chuyên ngành của bạn đã đạt công việc hiếm. Đó là bậc thang mà những bàn tay cẩu thả bị loại ra và những thợ rèn thực sự còn đứng vững. Bạn vẫn còn đứng vững. Tốt lắm.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.sender': 'Nữ Thợ Rèn Trưởng Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_2.subject':
+    'Công việc hiếm, và xứng đáng',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.body':
+    'Một chuyên ngành của bạn đã leo qua công việc hiếm vào công việc nghiêm túc. Kim loại trả lời một bàn tay như vậy, không còn chống lại nó nữa. Đừng để lời khen làm mềm cánh tay bạn.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.sender': 'Nữ Thợ Rèn Trưởng Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_3.subject': 'Kim loại giờ trả lời bạn',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.body':
+    'Một trong những chuyên ngành của bạn đứng chỉ một bậc dưới thành thạo. Ít bàn tay tôi biết đạt được độ cao này, và càng ít hơn giữ được sắc bén ở đây. Hãy hoàn thành cuộc leo.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.sender': 'Nữ Thợ Rèn Trưởng Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_4.subject': 'Gần đến đỉnh thang',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.body':
+    'Một chuyên ngành của bạn đã đạt bậc thành thạo, độ cao tối đa một bàn tay có thể leo được. Tôi không tặng lời khen một cách dễ dàng, vì vậy hãy nghe một lần này: lò rèn tự hào về bạn. Bây giờ hãy đi dạy ngọn lửa điều gì đó mới.',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.sender': 'Nữ Thợ Rèn Trưởng Darva',
+  'entities.letters.prof_tier_weaponcrafting_armorcrafting_5.subject': 'Thành thạo, cuối cùng',
   'entities.letters.guild_trend_alchemy_cooking.body':
     'nghệ nhân,\n\nTin tức đến với Hiệp hội về công việc của bạn trong Thuật giả kim và Nấu ăn: các món nấu chín và các món ăn được tẩm gia vị, hai nghề thủ công này nuôi dưỡng lẫn nhau. Những nghề thủ công lân cận cùng nhau làm việc đánh dấu một bàn tay sẵn sàng hòa hợp. Những người ràng buộc cặp đôi này sẽ sớm nhận được danh hiệu Dược sĩ. Hãy tìm kiếm Thợ Rèn Haldren, thợ chế tác giáp của Eastbrook: hiện tại anh ấy đang đại diện cho các bậc thầy. Hãy chứng minh kỹ năng của bạn với anh ấy bằng chính tay bạn làm, và anh ấy sẽ thấy hai chuyên ngành của bạn hòa hợp với nhau.\n\nTrân trọng,\nHội chế tạo',
   'entities.letters.guild_trend_alchemy_cooking.sender': 'Hội chế tạo',
@@ -8389,6 +8734,31 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.stationOutOfRangeNamed': 'Di chuyển đến {station} để chế tạo cái này.',
   'hudChrome.crafting.stationRequired': 'Bạn phải có mặt tại {station} để chế tạo món đồ đó.',
   'hudChrome.crafting.tierUpToast': '{craft} đã thăng cấp lên cấp {tier}!',
+  'hudChrome.crafting.attunedBanner': 'Đã Thụ Ngộ: {title}',
+  'hudChrome.crafting.attunedZoneLine': '{name} đã thụ ngộ là {archetype}!',
+  'hudChrome.crafting.attunementReturnCost':
+    'Nếu bạn rời đôi này, việc trở lại sau sẽ tốn {cost} nhiệm vụ chuộc lỗi.',
+  'hudChrome.crafting.commissionBound': 'Đồ ủy thác: đã ràng buộc với người nhận',
+  'hudChrome.crafting.commissionToggle': 'Đồ ủy thác',
+  'hudChrome.crafting.commissionToggleHint':
+    'Ràng buộc với nhân vật đầu tiên nhận nó qua giao dịch.',
+  'hudChrome.crafting.commissionUnbound': 'Đồ ủy thác: ràng buộc với người nhận đầu tiên',
+  'hudChrome.crafting.difficultyMinimal': 'Tăng kỹ năng tối thiểu',
+  'hudChrome.crafting.gatheredBy': 'Thu thập bởi {name}',
+  'hudChrome.crafting.learnMoreAtStation':
+    '{master} tại {station} có thể dạy bạn thêm công thức {craft}.',
+  'hudChrome.crafting.tierTutorial.dismiss': 'Đã hiểu',
+  'hudChrome.crafting.tierTutorial.masters':
+    'Các bậc thầy thủ công trong thị trấn cung cấp nhiệm vụ thụ ngộ. Hãy thăm một người để chọn đôi khi bạn sẵn sàng. Những gì bạn đã học sẽ không bao giờ mất.',
+  'hudChrome.crafting.tierTutorial.radar':
+    'Các nghề thủ công của bạn tạo thành một bánh xe. Hãy thụ ngộ với một đôi lân cận và hai nghề đó trở thành chuyên ngành không giới hạn, một nghề đối diện trên bánh xe trở thành sở thích bị giới hạn ở mức hiếm.',
+  'hudChrome.crafting.tierTutorial.tierCap':
+    'Một nghề thủ công đạt bậc đầu tiên ở kỹ năng {skill}, và mỗi bậc cải thiện những gì nó có thể làm. Nhưng một nghề chỉ vượt qua công việc hiếm khi nó là một trong những chuyên ngành của bạn.',
+  'hudChrome.crafting.tierTutorial.title': 'Bậc Đầu Tiên Của Bạn',
+  'hudChrome.crafting.trendNudge':
+    'Đôi bàn tay của bạn đang nghiêng về {archetype}. Sự thụ ngộ của nó đang chờ với {master}.',
+  'hudChrome.crafting.trendNudgeNoMaster':
+    'Đôi bàn tay của bạn đang nghiêng về {archetype}. Hãy tìm kiếm một bậc thầy thủ công để theo đuổi nó.',
   'hudChrome.death.healerConfirmAccept': 'Hồi sinh tôi',
   'hudChrome.death.healerConfirmBody':
     'Người Canh Giữ Nhợt Nhạt sẽ hồi sinh bạn tại đây, nhưng Cái Giá của Người Canh Giữ sẽ giảm 75% tất cả thuộc tính của bạn trong tối đa 10 phút ở cấp độ cao hơn. Đưa linh hồn của bạn trở lại xác chết sẽ hồi sinh bạn mà không bị phạt.',
@@ -8413,6 +8783,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.professions.majorsLabel': 'Chuyên ngành: {a} và {b}',
   'hudChrome.professions.nextUnlockSpecialized':
     '{points} chỉ vào Chuyên ngành: giảm chi phí nguyên vật liệu',
+  'hudChrome.professions.nextUnlockMastered': 'Đã thành thạo, tạm thời',
   'hudChrome.professions.nextUnlockTier':
     '{points} chỉ ra cấp độ tiếp theo: tỷ lệ thành công được cải thiện',
   'hudChrome.professions.nudgeDormant': 'Kiến thức {craft} của bạn không hoạt động',
@@ -8454,4 +8825,24 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.training.tierUnmet': 'Bạn cần {craft} {skill} để tìm hiểu công thức đó.',
   'hudChrome.training.title': 'Đào tạo: {name}',
   'hudChrome.training.trainAria': 'Tìm hiểu {name} cho {fee}',
+  'hudChrome.unbind.cannotAfford': 'Bạn không đủ tiền để trả phí gỡ ràng buộc.',
+  'hudChrome.unbind.close': 'Đóng gỡ ràng buộc',
+  'hudChrome.unbind.confirmBody': 'Gỡ ràng buộc {name} với phí {fee}?',
+  'hudChrome.unbind.confirmCancel': 'Hủy',
+  'hudChrome.unbind.confirmOk': 'Gỡ Ràng Buộc',
+  'hudChrome.unbind.confirmTitle': 'Gỡ Ràng Buộc Đồ Ủy Thác',
+  'hudChrome.unbind.dialogOption': 'Gỡ ràng buộc',
+  'hudChrome.unbind.dialogOptionAria': 'Gỡ ràng buộc đồ ủy thác với {name}',
+  'hudChrome.unbind.empty': 'Bạn không mang theo đồ ủy thác ràng buộc nào.',
+  'hudChrome.unbind.intro':
+    'Bậc thầy có thể giải phóng đồ ủy thác khỏi ràng buộc của nó, với một khoản phí.',
+  'hudChrome.unbind.notBound': 'Vật phẩm đó không bị ràng buộc.',
+  'hudChrome.unbind.notEligible': 'Vật phẩm đó không thể gỡ ràng buộc.',
+  'hudChrome.unbind.outOfRange': 'Bạn phải ở tại bàn chế tác để gỡ ràng buộc.',
+  'hudChrome.unbind.rowSub':
+    'Giải phóng ràng buộc; đồ sẽ ràng buộc lại trong lần giao dịch tiếp theo.',
+  'hudChrome.unbind.title': 'Gỡ Ràng Buộc: {name}',
+  'hudChrome.unbind.unbindAria': 'Gỡ ràng buộc {name} với phí {fee}',
+  'hudChrome.unbind.unbound':
+    'Đã gỡ ràng buộc {name} với phí {fee}. Nó sẽ ràng buộc lại trong lần giao dịch tiếp theo.',
 };

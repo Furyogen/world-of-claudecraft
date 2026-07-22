@@ -610,7 +610,7 @@ export const fr_FR: EnTranslations = {
         "wand": "Baguette",
         "bow": "Arc",
         "crossbow": "Arbalète",
-        "polearm": "Polearm"
+        "polearm": "Arme d'hast"
       },
       "badge": {
         "flagship": "Produit phare",
@@ -707,9 +707,9 @@ export const fr_FR: EnTranslations = {
       "expandHint": "Développer le suivi des quêtes"
     },
     "interfaceTabs": {
-      "general": "General",
-      "frames": "Frames",
-      "chat": "Chat",
+      "general": "Général",
+      "frames": "Cadres",
+      "chat": "Discussion",
       "combat": "Combat"
     },
     "chatTimestamps": {
@@ -1038,7 +1038,7 @@ export const fr_FR: EnTranslations = {
       "showWalletOnPlayerCard": "Afficher le portefeuille sur la carte de joueur",
       "showDevBadges": "Afficher les badges de développeur",
       "showOwnNameplate": "Afficher ma plaque de nom",
-      "showPlayerNameplates": "Show Player Nameplates",
+      "showPlayerNameplates": "Afficher les plaques de noms des joueurs",
       "uiScale": "Échelle de l’interface",
       "playerFrameScale": "Échelle du cadre du joueur",
       "targetFrameScale": "Échelle du cadre de la cible",
@@ -1186,8 +1186,8 @@ export const fr_FR: EnTranslations = {
       }
     },
     "charSheet": {
-      "offense": "Offense",
-      "defense": "Defense"
+      "offense": "Attaque",
+      "defense": "Défense"
     },
     "statInfo": {
       "fromYour": "Grâce à vos {value} en {stat} :",
@@ -1447,7 +1447,7 @@ export const fr_FR: EnTranslations = {
     "corpseHarvest": {
       "title": "Dépeçage",
       "harvestButton": "Dépecer",
-      "harvestTooltip": "Gathers the checked components. Each corpse can be harvested once, first come. Does not take the loot.",
+      "harvestTooltip": "Récupère les composants cochés. Chaque cadavre ne peut être dépecé qu'une fois, premier arrivé. Ne prend pas le butin.",
       "concentrateHint": "Moins vous choisissez de composants, plus la qualité de chacun est élevée.",
       "alreadyHarvested": "Ce cadavre a déjà été dépecé.",
       "componentAria": "Prélever {component}",
@@ -1465,8 +1465,8 @@ export const fr_FR: EnTranslations = {
     "townFocus": {
       "title": "Priorités de la ville",
       "hint": "Les points de priorité ajoutent un bonus au rendement de base de chaque composante. Les composantes sans priorité restent au rendement de base.",
-      "tierHint": "Every {points} points on a component raise its harvest tier one step, up to {steps} steps; fewer than {points} points still boost the yield.",
-      "townOnlyHint": "Focus can only be changed while you are in town.",
+      "tierHint": "Chaque {points} points sur un composant font monter son palier de récolte d'un cran, jusqu'à {steps} crans ; moins de {points} points boostent quand même le rendement.",
+      "townOnlyHint": "Le focus ne peut être modifié que lorsque vous êtes en ville.",
       "budgetLabel": "Points restants : {remaining} / {budget}",
       "saveButton": "Enregistrer les priorités",
       "notInTownHint": "Vous devez être en ville pour définir vos priorités.",
@@ -1525,7 +1525,7 @@ export const fr_FR: EnTranslations = {
       "dragEquipHint": "Faites glisser sur votre personnage pour équiper",
       "dragDestroyHint": "Faites glisser dans le monde pour détruire",
       "reorderNeedsRecent": "Effacez le filtre et triez par Récents pour réorganiser vos sacs",
-      "itemAriaInstanced": "{item}, quantity {count}, maker-marked copy",
+      "itemAriaInstanced": "{item}, quantité {count}, copie marquée par le fabricant",
       "filterGroupAria": "Filtrer les sacs par catégorie",
       "filterAll": "Tous",
       "filterWeapon": "Armes",
@@ -1691,9 +1691,9 @@ export const fr_FR: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Coffre",
-      "takeLootButton": "Take Loot",
-      "takeLootTooltip": "Takes the coins and dropped items. Does not use up the harvest.",
-      "unifiedPressHint": "The interact key loots and harvests in one press, using your town focus."
+      "takeLootButton": "Prendre le butin",
+      "takeLootTooltip": "Prend les pièces et les objets lâchés. N'utilise pas la récolte.",
+      "unifiedPressHint": "La touche d'interaction pille et récolte en une seule pression, selon votre focus de bourg."
     },
     "spellbook": {
       "addToBarAria": "Ajouter {name} à la barre d'action",
@@ -1841,7 +1841,7 @@ export const fr_FR: EnTranslations = {
         "legend": "LÉGENDE",
         "shill": "COMPLICE"
       },
-      "roleTagChatTitle": "Verified server role: {role}",
+      "roleTagChatTitle": "Rôle de serveur vérifié : {role}",
       "guildMember": "Membre vérifié",
       "notMember": "Pas encore sur le serveur",
       "joinCta": "Rejoindre le Discord",
@@ -1966,7 +1966,7 @@ export const fr_FR: EnTranslations = {
       "removeParcelAria": "Retirer {item} de la lettre",
       "parcelQtyDecreaseAria": "Envoyer un {item} de moins",
       "parcelQtyIncreaseAria": "Envoyer un {item} de plus",
-      "parcelQtyAria": "Quantity of {item} to send",
+      "parcelQtyAria": "Quantité de {item} à envoyer",
       "sendButton": "Envoyer la lettre",
       "postageNote": "Affranchissement : {amount}. Le corbeau vole environ {seconds}s.",
       "arrivedBanner": "Le corbeau s'est posé : du courrier de {name}.",
@@ -2103,43 +2103,43 @@ export const fr_FR: EnTranslations = {
       "blockAction": "Bloquer",
       "nowBlocking": "{name} bloqué.",
       "stopBlockingTitle": "Débloquer {name}",
-      "onlineHeader": "Online ({n})",
-      "offlineHeader": "Offline ({n})",
-      "hideOffline": "Hide offline",
-      "hideOfflineTitle": "Hide offline guild members"
+      "onlineHeader": "En ligne ({n})",
+      "offlineHeader": "Hors ligne ({n})",
+      "hideOffline": "Masquer les hors ligne",
+      "hideOfflineTitle": "Masquer les membres de guilde hors ligne"
     },
     "gathering": {
       "title": "Récolte",
       "mining": "Minage",
       "logging": "Bûcheronnage",
       "herbalism": "Herboristerie",
-      "fishing": "Fishing",
+      "fishing": "Pêche",
       "notReady": "Ce nœud de ressource n'a pas encore réapparu pour vous.",
       "gatherLine": "Vous rassemblez : {name}.",
       "gatherLineQty": "Vous rassemblez : {name} x{qty}.",
-      "catchLine": "You reel in: {name}",
-      "biteLine": "Something takes the bait!",
-      "gotAwayLine": "It got away.",
+      "catchLine": "Vous remontez : {name}",
+      "biteLine": "Quelque chose mord à l'hameçon !",
+      "gotAwayLine": "Il s'est échappé.",
       "nodeName": {
-        "ore": "Ore Vein",
-        "wood": "Timber Stand",
-        "herb": "Herb Patch"
+        "ore": "Filon de minerai",
+        "wood": "Bosquet de bois",
+        "herb": "Parcelle de plantes"
       },
       "tierRequired": {
-        "mining": "Requires a tier {tier} mining pick",
-        "logging": "Requires a tier {tier} logging axe",
-        "herbalism": "Requires a tier {tier} herbalism sickle"
+        "mining": "Requiert un pic de mineur de palier {tier}",
+        "logging": "Requiert une hache de bûcheron de palier {tier}",
+        "herbalism": "Requiert une serpe d'herboristerie de palier {tier}"
       },
       "toolTierUnmet": {
-        "mining": "You need a tier {tier} mining pick to harvest this vein.",
-        "logging": "You need a tier {tier} logging axe to fell this stand.",
-        "herbalism": "You need a tier {tier} herbalism sickle to gather this patch."
+        "mining": "Vous avez besoin d'un pic de mineur de palier {tier} pour exploiter ce filon.",
+        "logging": "Vous avez besoin d'une hache de bûcheron de palier {tier} pour abattre ce bosquet.",
+        "herbalism": "Vous avez besoin d'une serpe d'herboristerie de palier {tier} pour collecter cette parcelle."
       },
-      "toolTierUnmetCorpse": "You need a tier {tier} gathering tool to recover the finest materials.",
-      "downgradeMark": "Bags full: the find was stored without its gatherer's mark.",
-      "downgradeFind": "Bags full: a pristine find slipped away.",
-      "stateReady": "Ready",
-      "stateCooldown": "Respawning"
+      "toolTierUnmetCorpse": "Vous avez besoin d'un outil de collecte de palier {tier} pour récupérer les meilleurs matériaux.",
+      "downgradeMark": "Sacs pleins : la trouvaille a été rangée sans la marque du collecteur.",
+      "downgradeFind": "Sacs pleins : une trouvaille de qualité supérieure vous a échappé.",
+      "stateReady": "Disponible",
+      "stateCooldown": "En repoussement"
     },
     "archetypeTitle": {
       "label": "Titre",
@@ -2171,47 +2171,47 @@ export const fr_FR: EnTranslations = {
       "leatherworking": "Travail du cuir"
     },
     "enchantName": {
-      "enchant_weapon_might": "Enchant Weapon - Might",
-      "enchant_weapon_intellect": "Enchant Weapon - Spellpower",
-      "enchant_helmet_fortitude": "Enchant Helmet - Fortitude",
-      "enchant_neck_spirit": "Enchant Necklace - Spirit",
-      "enchant_shoulder_agility": "Enchant Shoulders - Agility",
-      "enchant_chest_stamina": "Enchant Chest - Stamina",
-      "enchant_waist_stamina": "Enchant Belt - Stamina",
-      "enchant_legs_stamina": "Enchant Legs - Stamina",
-      "enchant_gloves_agility": "Enchant Gloves - Agility",
-      "enchant_gloves_intellect": "Enchant Gloves - Spellpower",
-      "enchant_feet_agility": "Enchant Boots - Agility",
-      "enchant_ring_spirit": "Enchant Ring - Spirit",
-      "enchant_weapon_agility": "Enchant Weapon - Agility",
-      "enchant_helmet_intellect": "Enchant Helmet - Intellect",
-      "enchant_helmet_armor": "Enchant Helmet - Reinforcement",
-      "enchant_neck_intellect": "Enchant Necklace - Intellect",
-      "enchant_neck_agility": "Enchant Necklace - Agility",
-      "enchant_shoulder_strength": "Enchant Shoulders - Strength",
-      "enchant_shoulder_intellect": "Enchant Shoulders - Intellect",
-      "enchant_chest_spirit": "Enchant Chest - Spirit",
-      "enchant_chest_armor": "Enchant Chest - Reinforcement",
-      "enchant_waist_strength": "Enchant Belt - Strength",
-      "enchant_waist_agility": "Enchant Belt - Agility",
-      "enchant_legs_intellect": "Enchant Legs - Intellect",
-      "enchant_gloves_strength": "Enchant Gloves - Strength",
-      "enchant_feet_strength": "Enchant Boots - Strength",
-      "enchant_feet_stamina": "Enchant Boots - Stamina",
-      "enchant_ring_strength": "Enchant Ring - Strength",
-      "enchant_ring_agility": "Enchant Ring - Agility",
-      "enchant_ring_intellect": "Enchant Ring - Intellect",
-      "enchant_weapon_greater_might": "Enchant Weapon - Greater Might",
-      "enchant_weapon_greater_spellpower": "Enchant Weapon - Greater Spellpower",
-      "enchant_helmet_greater_fortitude": "Enchant Helmet - Greater Fortitude",
-      "enchant_chest_greater_stamina": "Enchant Chest - Greater Stamina",
-      "enchant_legs_greater_stamina": "Enchant Legs - Greater Stamina",
-      "enchant_gloves_greater_agility": "Enchant Gloves - Greater Agility",
-      "enchant_weapon_runed_edge": "Enchant Weapon - Runed Edge",
-      "enchant_weapon_runed_focus": "Enchant Weapon - Runed Focus",
-      "enchant_chest_runeweave": "Enchant Chest - Runeweave",
-      "enchant_legs_runed_hide": "Enchant Legs - Runed Hide",
-      "enchant_helmet_runed_links": "Enchant Helmet - Runed Links"
+      "enchant_weapon_might": "Enchantement Arme - Puissance",
+      "enchant_weapon_intellect": "Enchantement Arme - Puissance des sorts",
+      "enchant_helmet_fortitude": "Enchantement Casque - Fortitude",
+      "enchant_neck_spirit": "Enchantement Collier - Esprit",
+      "enchant_shoulder_agility": "Enchantement Épaulières - Agilité",
+      "enchant_chest_stamina": "Enchantement Torse - Endurance",
+      "enchant_waist_stamina": "Enchantement Ceinture - Endurance",
+      "enchant_legs_stamina": "Enchantement Jambières - Endurance",
+      "enchant_gloves_agility": "Enchantement Gants - Agilité",
+      "enchant_gloves_intellect": "Enchantement Gants - Puissance des sorts",
+      "enchant_feet_agility": "Enchantement Bottes - Agilité",
+      "enchant_ring_spirit": "Enchantement Anneau - Esprit",
+      "enchant_weapon_agility": "Enchantement Arme - Agilité",
+      "enchant_helmet_intellect": "Enchantement Casque - Intellect",
+      "enchant_helmet_armor": "Enchantement Casque - Renforcement",
+      "enchant_neck_intellect": "Enchantement Collier - Intellect",
+      "enchant_neck_agility": "Enchantement Collier - Agilité",
+      "enchant_shoulder_strength": "Enchantement Épaulières - Force",
+      "enchant_shoulder_intellect": "Enchantement Épaulières - Intellect",
+      "enchant_chest_spirit": "Enchantement Torse - Esprit",
+      "enchant_chest_armor": "Enchantement Torse - Renforcement",
+      "enchant_waist_strength": "Enchantement Ceinture - Force",
+      "enchant_waist_agility": "Enchantement Ceinture - Agilité",
+      "enchant_legs_intellect": "Enchantement Jambières - Intellect",
+      "enchant_gloves_strength": "Enchantement Gants - Force",
+      "enchant_feet_strength": "Enchantement Bottes - Force",
+      "enchant_feet_stamina": "Enchantement Bottes - Endurance",
+      "enchant_ring_strength": "Enchantement Anneau - Force",
+      "enchant_ring_agility": "Enchantement Anneau - Agilité",
+      "enchant_ring_intellect": "Enchantement Anneau - Intellect",
+      "enchant_weapon_greater_might": "Enchantement Arme - Puissance supérieure",
+      "enchant_weapon_greater_spellpower": "Enchantement Arme - Puissance de sorts supérieure",
+      "enchant_helmet_greater_fortitude": "Enchantement Casque - Fortitude supérieure",
+      "enchant_chest_greater_stamina": "Enchantement Torse - Endurance supérieure",
+      "enchant_legs_greater_stamina": "Enchantement Jambières - Endurance supérieure",
+      "enchant_gloves_greater_agility": "Enchantement Gants - Agilité supérieure",
+      "enchant_weapon_runed_edge": "Enchantement Arme - Tranchant runique",
+      "enchant_weapon_runed_focus": "Enchantement Arme - Concentration runique",
+      "enchant_chest_runeweave": "Enchantement Torse - Rune tissée",
+      "enchant_legs_runed_hide": "Enchantement Jambières - Peau runique",
+      "enchant_helmet_runed_links": "Enchantement Casque - Mailles runiques"
     },
     "professions": {
       "title": "Métiers",
@@ -2232,7 +2232,7 @@ export const fr_FR: EnTranslations = {
       "tierPipAria": "Niveau {tier}",
       "nextUnlockTier": "{points} pointe vers le niveau suivant : les chances de chef-d'œuvre s'améliorent",
       "nextUnlockSpecialized": "{points} points avant la spécialisation : les coûts des matériaux diminuent",
-      "nextUnlockMastered": "Mastered, for now",
+      "nextUnlockMastered": "Maîtrisé, pour l'instant",
       "perkSpecializedLine": "{craft} : coûts de matériaux spécialisés -{pct}%",
       "perkSpecializedAt": "Spécialisé dans la compétence {threshold}",
       "switchCost": "Le prochain changement d’archétype coûte {cost} points d’expiation",
@@ -2273,7 +2273,7 @@ export const fr_FR: EnTranslations = {
       "pairOptionLabel": "{pair} ({craftA} + {craftB})",
       "attunementPreview": "Résultat : titre {title} ; {majorA} et {majorB} deviennent des majeures sans plafond ; {hobby} devient le passe-temps plafonné rare ; toutes les autres connaissances de métier sont conservées mais plafonnées à commun tant qu'elles sont dormantes.",
       "hobbyPreview": "Résultat : {hobby} devient le passe-temps plafonné rare. Les deux majeures et toutes les valeurs de compétences conservées restent inchangées.",
-      "attunementReturnCost": "If you leave this pair, returning to it later costs {cost} make-amends tasks.",
+      "attunementReturnCost": "Si vous quittez cette paire, y revenir plus tard vous coûte {cost} tâches d'amende.",
       "identity": {
         "title": "Identité d'artisan",
         "syncing": "En attente de votre identité d'artisan du royaume.",
@@ -2313,64 +2313,64 @@ export const fr_FR: EnTranslations = {
       "skillReqLine": "Nécessite {craft} {skill}",
       "difficultyFull": "Gain de compétence complet",
       "difficultyReduced": "Gain de compétences réduit",
-      "difficultyMinimal": "Minimal skill gain",
+      "difficultyMinimal": "Gain de compétence minimal",
       "difficultyNone": "Aucun gain de compétence",
       "stationBadge": "Poste",
       "stationOutOfRangeNamed": "Déplacez-vous vers le {station} pour le fabriquer.",
-      "learnMoreAtStation": "{master} at the {station} can teach you more {craft} recipes.",
+      "learnMoreAtStation": "{master} à {station} peut vous enseigner d'autres recettes de {craft}.",
       "masterworkToast": "Chef-d'œuvre ! {name}",
       "masterworkZoneLine": "{crafter} a créé un chef-d'œuvre {name} !",
       "tierUpToast": "{craft} a avancé au niveau {tier} !",
-      "trendNudge": "Your hands are leaning toward the {archetype}. Its attunement waits with {master}.",
-      "trendNudgeNoMaster": "Your hands are leaning toward the {archetype}. Seek a craft master to take it up.",
-      "attunedZoneLine": "{name} has attuned as {archetype}!",
-      "attunedBanner": "Attuned: {title}",
+      "trendNudge": "Vos mains se penchent vers {archetype}. Son harmonisation vous attend avec {master}.",
+      "trendNudgeNoMaster": "Vos mains se penchent vers {archetype}. Cherchez un maître des métiers pour la prendre.",
+      "attunedZoneLine": "{name} s'est harmonisé en tant que {archetype} !",
+      "attunedBanner": "Harmonisé : {title}",
       "tierTutorial": {
-        "title": "Your First Tier",
-        "tierCap": "A craft reaches its first tier at {skill} skill, and each tier improves what it can make. But a craft only climbs past rare work once it is one of your two majors.",
-        "radar": "Your professions form a wheel. Attune to an adjacent pair and those two crafts become uncapped majors, one craft across the wheel becomes a rare-capped hobby, and the rest lie dormant: their knowledge kept, but capped at common until you take them up again.",
-        "masters": "Craft masters in the towns offer attunement quests. Visit one to choose your pair whenever you are ready. Nothing you have learned is ever lost.",
-        "dismiss": "Got it"
+        "title": "Votre premier palier",
+        "tierCap": "Un métier atteint son premier palier à {skill} de compétence, et chaque palier améliore ce qu'il peut produire. Mais un métier ne dépasse le travail rare qu'une fois qu'il est l'une de vos deux majeures.",
+        "radar": "Vos professions forment une roue. Harmonisez-vous à une paire adjacente et ces deux métiers deviennent des majeures sans plafond, le métier opposé sur la roue devient un passe-temps plafonné au rare, et les autres restent dormants : leur savoir conservé, mais plafonné au commun jusqu'à ce que vous les repreniez.",
+        "masters": "Les maîtres des métiers en ville proposent des quêtes d'harmonisation. Rendez-leur visite pour choisir votre paire quand vous êtes prêt. Rien de ce que vous avez appris n'est jamais perdu.",
+        "dismiss": "Compris"
       },
       "makersMark": "Fabriqué par {name}",
-      "gatheredBy": "Gathered by {name}",
+      "gatheredBy": "Collecté par {name}",
       "masterworkSeal": "Chef-d'œuvre",
       "enchantedLine": "Enchanté",
-      "commissionToggle": "Commission piece",
-      "commissionToggleHint": "Binds to the first character to receive it in a trade.",
-      "commissionUnbound": "Commission piece: binds to the first recipient",
-      "commissionBound": "Commission piece: bound to its recipient"
+      "commissionToggle": "Pièce de commande",
+      "commissionToggleHint": "Se lie au premier personnage qui la reçoit lors d'un échange.",
+      "commissionUnbound": "Pièce de commande : se lie au premier destinataire",
+      "commissionBound": "Pièce de commande : liée à son destinataire"
     },
     "itemMenu": {
-      "use": "Use",
-      "equip": "Equip",
-      "disenchant": "Disenchant",
-      "salvage": "Salvage",
-      "applyEnchant": "Apply Enchant"
+      "use": "Utiliser",
+      "equip": "Équiper",
+      "disenchant": "Désenchanter",
+      "salvage": "Récupérer",
+      "applyEnchant": "Appliquer un enchantement"
     },
     "enchanting": {
-      "disenchantedLine": "You disenchant {item}.",
-      "salvagedLine": "You salvage {item}.",
-      "enchantAppliedLine": "You enchant {item} with {enchant}.",
-      "notHeld": "You do not have that item.",
-      "notDisenchantable": "You cannot disenchant that.",
-      "notSalvageable": "You cannot salvage that.",
-      "disenchantThrottled": "You are disenchanting too quickly. Wait a moment and try again.",
-      "salvageThrottled": "You are salvaging too quickly. Wait a moment and try again.",
-      "enchantThrottled": "You are enchanting too quickly. Wait a moment and try again.",
-      "enchantWrongSlot": "That enchant cannot be applied to that item.",
-      "enchantUnknown": "That enchant does not exist.",
-      "enchantInsufficient": "You do not have the materials for that enchant.",
-      "disenchantConfirmTitle": "Disenchant {item}?",
-      "disenchantConfirmBody": "This destroys {item} and yields arcane materials. This cannot be undone.",
-      "disenchantConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields arcane materials. This cannot be undone.",
-      "salvageConfirmTitle": "Salvage {item}?",
-      "salvageConfirmBody": "This destroys {item} and yields crafting materials. This cannot be undone.",
-      "salvageConfirmBodySpecial": "This destroys a special copy of {item} (signed, masterwork, or enchanted) and yields crafting materials. This cannot be undone.",
-      "pickerTitle": "Apply Enchant",
-      "targetTitle": "Choose an item to enchant",
-      "noEnchants": "No enchant uses this reagent.",
-      "noTargets": "No eligible item to enchant."
+      "disenchantedLine": "Vous désenchantez {item}.",
+      "salvagedLine": "Vous récupérez {item}.",
+      "enchantAppliedLine": "Vous enchantez {item} avec {enchant}.",
+      "notHeld": "Vous n'avez pas cet objet.",
+      "notDisenchantable": "Vous ne pouvez pas désenchanter cela.",
+      "notSalvageable": "Vous ne pouvez pas récupérer cela.",
+      "disenchantThrottled": "Vous désenchantez trop vite. Attendez un instant et réessayez.",
+      "salvageThrottled": "Vous récupérez trop vite. Attendez un instant et réessayez.",
+      "enchantThrottled": "Vous enchantez trop vite. Attendez un instant et réessayez.",
+      "enchantWrongSlot": "Cet enchantement ne peut pas être appliqué à cet objet.",
+      "enchantUnknown": "Cet enchantement n'existe pas.",
+      "enchantInsufficient": "Vous n'avez pas les matériaux pour cet enchantement.",
+      "disenchantConfirmTitle": "Désenchanter {item} ?",
+      "disenchantConfirmBody": "Cela détruit {item} et donne des matériaux arcaniques. Cette action est irréversible.",
+      "disenchantConfirmBodySpecial": "Cela détruit une copie spéciale de {item} (signée, de maître ou enchantée) et donne des matériaux arcaniques. Cette action est irréversible.",
+      "salvageConfirmTitle": "Récupérer {item} ?",
+      "salvageConfirmBody": "Cela détruit {item} et donne des matériaux d'artisanat. Cette action est irréversible.",
+      "salvageConfirmBodySpecial": "Cela détruit une copie spéciale de {item} (signée, de maître ou enchantée) et donne des matériaux d'artisanat. Cette action est irréversible.",
+      "pickerTitle": "Appliquer un enchantement",
+      "targetTitle": "Choisissez un objet à enchanter",
+      "noEnchants": "Aucun enchantement n'utilise ce réactif.",
+      "noTargets": "Aucun objet éligible à enchanter."
     },
     "training": {
       "title": "Formation : {name}",
@@ -2392,23 +2392,23 @@ export const fr_FR: EnTranslations = {
       "outOfRange": "Vous devez être à la gare pour vous entraîner."
     },
     "unbind": {
-      "title": "Unbinding: {name}",
-      "close": "Close unbinding",
-      "intro": "The master can release a commission piece from its bond, for a fee.",
-      "empty": "You carry no bound commission pieces.",
-      "rowSub": "Releases the bond; the piece binds again on its next trade.",
-      "unbindAria": "Unbind {name} for {fee}",
-      "dialogOption": "Unbinding",
-      "dialogOptionAria": "Unbind a commission piece with {name}",
-      "confirmTitle": "Unbind Commission Piece",
-      "confirmBody": "Unbind {name} for {fee}?",
-      "confirmOk": "Unbind",
-      "confirmCancel": "Cancel",
-      "unbound": "Unbound {name} for {fee}. It will bind again on its next trade.",
-      "notEligible": "That item cannot be unbound.",
-      "notBound": "That item is not bound.",
-      "cannotAfford": "You cannot afford the unbinding fee.",
-      "outOfRange": "You must be at a crafting station to unbind."
+      "title": "Déliage : {name}",
+      "close": "Fermer le déliage",
+      "intro": "Le maître peut libérer une pièce de commande de son lien, contre une somme.",
+      "empty": "Vous ne portez aucune pièce de commande liée.",
+      "rowSub": "Libère le lien ; la pièce se lie à nouveau lors de son prochain échange.",
+      "unbindAria": "Délier {name} pour {fee}",
+      "dialogOption": "Déliage",
+      "dialogOptionAria": "Délier une pièce de commande avec {name}",
+      "confirmTitle": "Délier la pièce de commande",
+      "confirmBody": "Délier {name} pour {fee} ?",
+      "confirmOk": "Délier",
+      "confirmCancel": "Annuler",
+      "unbound": "{name} délié pour {fee}. Il se liera à nouveau lors de son prochain échange.",
+      "notEligible": "Cet objet ne peut pas être délié.",
+      "notBound": "Cet objet n'est pas lié.",
+      "cannotAfford": "Vous n'avez pas les moyens de payer les frais de déliage.",
+      "outOfRange": "Vous devez être à un établi pour délier."
     },
     "finder": {
       "title": "Chercheur de donjons",
@@ -4326,7 +4326,7 @@ export const fr_FR: EnTranslations = {
   "stats": {
     "title": "Statut du monde",
     "accountsCreated": "Joueurs",
-    "charactersCreated": "Characters Created",
+    "charactersCreated": "Personnages créés",
     "playersOnline": "Joueurs en ligne",
     "realmName": "Nom du monde"
   },
@@ -5899,7 +5899,7 @@ export const fr_FR: EnTranslations = {
       "tradeTooFar": "La cible est trop éloignée pour échanger.",
       "tradeExpired": "La demande d'échange a expiré.",
       "tradeFailed": "Échange échoué : objets ou argent indisponibles.",
-      "tradeBound": "That item is bound and cannot be traded."
+      "tradeBound": "Cet objet est lié et ne peut pas être échangé."
     },
     "logs": {
       "standUp": "Vous vous levez.",
@@ -6048,7 +6048,7 @@ export const fr_FR: EnTranslations = {
         "combat": "En combat",
         "dungeon": "En donjon",
         "dead": "Mort",
-        "afk": "Away"
+        "afk": "Absent"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -6156,7 +6156,7 @@ export const fr_FR: EnTranslations = {
     },
     "cast": {
       "fishing": "Pêche",
-      "gathering": "Gathering",
+      "gathering": "Collecte",
       "demonHeal": "Soin démoniaque",
       "thunzharrStormcall": "Appel de la tempête"
     }
@@ -8670,142 +8670,142 @@ export const fr_FR: EnTranslations = {
         "name": "Élixir du Serpent"
       },
       "mosshide_vest": {
-        "name": "Mosshide Vest"
+        "name": "Gilet en peau moussue"
       },
       "thornling_grips": {
-        "name": "Thornling Grips"
+        "name": "Gantelets épineux"
       },
       "acolyte_chain_grips": {
-        "name": "Acolyte Chain Grips"
+        "name": "Gantelets de mailles de l'acolyte"
       },
       "votive_chain_belt": {
-        "name": "Votive Chain Belt"
+        "name": "Ceinture de mailles votive"
       },
       "briarroot_staff": {
-        "name": "Briarroot Staff"
+        "name": "Bâton de racine épineuse"
       },
       "valefire_lantern": {
-        "name": "Valefire Lantern"
+        "name": "Lanterne de feu du Val"
       },
       "fenbark_leggings": {
-        "name": "Fenbark Leggings"
+        "name": "Jambières en écorce des marais"
       },
       "mirebloom_treads": {
-        "name": "Mirebloom Treads"
+        "name": "Semelles de la fleur des bourbiers"
       },
       "fenwarden_sabatons": {
-        "name": "Fenwarden Sabatons"
+        "name": "Solerets du gardien des marais"
       },
       "marshlight_hauberk": {
-        "name": "Marshlight Hauberk"
+        "name": "Haubert de la lumière des marais"
       },
       "duskthorn_mantle": {
-        "name": "Duskthorn Mantle"
+        "name": "Manteau des épines du crépuscule"
       },
       "fenshadow_maul": {
-        "name": "Fenshadow Maul"
+        "name": "Marteau des ombres des marais"
       },
       "wildgrove_cinch": {
-        "name": "Wildgrove Cinch"
+        "name": "Ceinturon du bosquet sauvage"
       },
       "cragward_pauldrons": {
-        "name": "Cragward Pauldrons"
+        "name": "Épaulières de la garde des rochers"
       },
       "cragthorn_greatstaff": {
-        "name": "Cragthorn Greatstaff"
+        "name": "Grand bâton des épines rocheuses"
       },
       "moonbark_vestments": {
-        "name": "Moonbark Vestments"
+        "name": "Vêtements d'écorce lunaire"
       },
       "peaksong_helm": {
-        "name": "Peaksong Helm"
+        "name": "Heaume du chant des cimes"
       },
       "stormchant_gauntlets": {
-        "name": "Stormchant Gauntlets"
+        "name": "Gantelets du chant de la tempête"
       },
       "cragprowl_belt": {
-        "name": "Cragprowl Belt"
+        "name": "Ceinture du rôdeur des rochers"
       },
       "stormroot_cowl": {
-        "name": "Stormroot Cowl"
+        "name": "Cagoule de la racine de tempête"
       },
       "thunderward_legguards": {
-        "name": "Thunderward Legguards"
+        "name": "Garde-jambes du protecteur du tonnerre"
       },
       "revenantstep_treads": {
-        "name": "Revenantstep Treads"
+        "name": "Semelles du revenant"
       },
       "shardfang_grips": {
-        "name": "Shardfang Grips"
+        "name": "Gantelets Croc-d'éclat"
       },
       "shardsong_mantle": {
-        "name": "Shardsong Mantle"
+        "name": "Manteau du chant des éclats"
       },
       "wyrmcult_spellgrips": {
-        "name": "Wyrmcult Spellgrips"
+        "name": "Gantelets de sorts du culte du wyrm"
       },
       "thornpeak_wildwraps": {
-        "name": "Thornpeak Wildwraps"
+        "name": "Bandelettes sauvages des épines des cimes"
       },
       "stormvotive_hauberk": {
-        "name": "Stormvotive Hauberk"
+        "name": "Haubert votif de la tempête"
       },
       "cryptbloom_shoulderguards": {
-        "name": "Cryptbloom Shoulderguards"
+        "name": "Épaulières Florécrypte"
       },
       "gravewyrm_thornmaul": {
-        "name": "Gravewyrm Thornmaul"
+        "name": "Marteau épineux du Gravewyrm"
       },
       "vestments_of_the_waking_grove": {
-        "name": "Vestments of the Waking Grove"
+        "name": "Vêtements du bosquet éveillé"
       },
       "nightfangs_greatstaff": {
-        "name": "Nightfang's Greatstaff"
+        "name": "Grand bâton de Croc-de-nuit"
       },
       "maul_of_the_scourged_wilds": {
-        "name": "Maul of the Scourged Wilds"
+        "name": "Marteau des terres ravagées"
       },
       "tidehymn_slippers": {
-        "name": "Tidehymn Slippers"
+        "name": "Chaussons du cantique des marées"
       },
       "pearlward_aegis": {
-        "name": "Pearlward Aegis"
+        "name": "Égide du gardien de nacre"
       },
       "wildgrowth_leggings": {
-        "name": "Wildgrowth Leggings"
+        "name": "Jambières de la végétation sauvage"
       },
       "grovewardens_grips": {
-        "name": "Grovewarden's Grips"
+        "name": "Gantelets du gardien du bosquet"
       },
       "verdant_walkers": {
-        "name": "Verdant Walkers"
+        "name": "Marcheurs verdoyants"
       },
       "lunarward_cinch": {
-        "name": "Lunarward Cinch"
+        "name": "Ceinturon du gardien lunaire"
       },
       "dreamroot_boots": {
-        "name": "Dreamroot Boots"
+        "name": "Bottes de racine onirique"
       },
       "stormbark_mantle": {
-        "name": "Stormbark Mantle"
+        "name": "Manteau d'écorce de tempête"
       },
       "wildsoul_maul": {
-        "name": "Wildsoul Maul"
+        "name": "Marteau de l'âme sauvage"
       },
       "resonant_thread": {
-        "name": "Resonant Thread"
+        "name": "Fil résonnant"
       },
       "resonant_hide": {
-        "name": "Resonant Hide"
+        "name": "Peau résonnante"
       },
       "resonant_links": {
-        "name": "Resonant Links"
+        "name": "Mailles résonnantes"
       },
       "resonant_steel": {
-        "name": "Resonant Steel"
+        "name": "Acier résonnant"
       },
       "resonant_timber": {
-        "name": "Resonant Timber"
+        "name": "Bois résonnant"
       },
       "conjured_water4": {
         "name": "Eau de source invoquée"
@@ -10900,142 +10900,142 @@ export const fr_FR: EnTranslations = {
         }
       },
       "q_prof_attune_smith": {
-        "title": "The Smith's Promise",
-        "text": "Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, {playerName}: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.",
-        "completion": "Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.",
+        "title": "La promesse du forgeron",
+        "text": "L'acier ne pardonne pas une main vagabonde, alors je vous le dis clairement avant que vous juriez quoi que ce soit. Liez-vous à ma forge et la Fabrication d'armes et la Fabrication d'armures deviennent vos deux majeures, les seuls métiers que vous pouvez porter au-delà du travail rare. Le métier qui leur est opposé sur la roue s'installe en passe-temps, travaillé jusqu'au rare et pas plus loin. Vos autres savoir-faire ne brûlent pas, {playerName} : ils se taisent simplement, dormants jusqu'à ce que vous les rappeliez. Et sachez-le avant que le marteau tombe : quittez cette paire pour une autre et vous devrez revenir par un dur labeur, cinq ennemis abattus la première fois, huit la suivante, onze après, encore plus à chaque écart. Encore là ? Alors apportez-moi trois filons de minerai travaillés de la Vallée de vos propres mains, et nous appellerons la promesse faite.",
+        "completion": "Du bon minerai, et de bonnes mains pour le travailler. La Fabrication d'armes et la Fabrication d'armures sont vôtres à maîtriser. Gagnez le reste.",
         "objectives": {
           "0": {
-            "label": "Ore vein harvested"
+            "label": "Filons de minerai récoltés"
           }
         }
       },
       "q_prof_attune_outfitter": {
-        "title": "The Outfitter's Measure",
-        "text": "Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, {playerName}, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.",
-        "completion": "Even thread, even hand. Leatherworking and Tailoring are yours to carry as far as your skill will reach. Measure twice, and they will not fail you.",
+        "title": "La mesure de l'équipementier",
+        "text": "Mesurez le coût avant de couper, c'est la première règle à mon métier à tisser. Choisissez-moi et le Travail du cuir et la Couture deviennent vos deux majeures, la paire que vous pouvez porter au-delà du travail rare ; le métier qui leur est opposé s'installe en passe-temps, emmené jusqu'au rare et laissé là. Les savoir-faire que vous mettez de côté ne sont pas défaits, {playerName}, juste pliés, dormants jusqu'à ce que vous les repreniez. Soyez certain cependant : si vous quittez cette paire et la voulez à nouveau plus tard, le chemin du retour se paie en labeur qui s'allonge à chaque fois, cinq abattus au début, puis huit, puis onze, toujours un peu plus. Si votre décision est prise, abattez quatre araignées des bois et apportez leur soie au métier à tisser, car le bon fil commence chaque bon vêtement.",
+        "completion": "Point régulier, main régulière. Le Travail du cuir et la Couture sont vôtres pour les porter aussi loin que votre compétence ira. Mesurez deux fois et ils ne vous trahiront pas.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Araignées des bois abattues"
           }
         }
       },
       "q_prof_attune_apothecary": {
-        "title": "A Recipe Worth Keeping",
-        "text": "Every good dish is two flavors that belong together, and so is a good craft, {playerName}. Sit with me and Alchemy and Cooking become your two majors, the two you may simmer past rare work; the craft on the far side of the wheel is your hobby, seasoned up to rare and no hotter. The rest of your trades keep in the pantry, dormant, not spoiled, ready whenever you fetch them back. Fair warning while the pot is still cold: wander off to another pair and coming home is a chore that grows, five beasts seen to the first time, eight the next, eleven the time after, heavier with every helping. Still hungry for it? Then hunt me four wild boars, because a kitchen worth its salt starts with good meat.",
-        "completion": "Now that is a start with some meat on it. Alchemy and Cooking are yours to cook as high as you like. Come back hungry.",
+        "title": "Une recette qui vaut la peine",
+        "text": "Chaque bon plat mêle deux saveurs qui vont ensemble, et il en va de même pour un bon métier, {playerName}. Asseyez-vous avec moi et l'Alchimie et la Cuisine deviennent vos deux majeures, les deux que vous pouvez faire mijoter au-delà du travail rare ; le métier à l'autre bout de la roue est votre passe-temps, affiné jusqu'au rare et pas plus loin. Le reste de vos savoir-faire reste dans le garde-manger, dormant, non gâté, prêt quand vous les reprenez. Avertissement pendant que la marmite est encore froide : partez pour une autre paire et revenir est une corvée qui grossit, cinq bêtes la première fois, huit la suivante, onze après, plus lourd à chaque service. Encore faim ? Alors chassez-moi quatre sangliers sauvages, car une cuisine qui se respecte commence par de la bonne viande.",
+        "completion": "Voilà un début qui a du fond. L'Alchimie et la Cuisine sont vôtres pour mijoter aussi haut que vous le souhaitez. Revenez l'estomac dans les talons.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Sangliers sauvages chassés"
           }
         }
       },
       "q_prof_attune_bombardier": {
-        "title": "A Volatile Arrangement",
-        "text": "Oh, oh, you want the good stuff, the loud stuff, yes? Listen, listen, before you touch anything that ticks: say the word and Engineering and Alchemy become your two majors, the only two you get to push past rare work (that is where it gets FUN, trust me). The craft opposite goes in your pocket as a hobby, rare and no further, do not pout. Your other trades? Not gone, {playerName}, just napping, dormant, wake them whenever you like. But (there is always a but, hold the fuse) ditch this pair and waddle back later and it costs you sweat that piles up, five things put down the first time, eight the next, eleven after, more, more, every single time you get cold feet. Yes? YES? Then go pick me three patches of herbs, the volatile ones, do not ask which, they are all a little volatile if you believe hard enough.",
-        "completion": "HA. Reagents, real ones, and all your fingers still attached, good, good. Engineering and Alchemy, yours, go make something that regrets it. Off you go.",
+        "title": "Un arrangement volatile",
+        "text": "Oh, oh, vous voulez le truc bien, le truc bruyant, oui ? Écoutez, écoutez, avant de toucher quoi que ce soit qui tic-tac : dites le mot et l'Ingénierie et l'Alchimie deviennent vos deux majeures, les seules deux que vous pouvez pousser au-delà du travail rare (c'est là que c'est AMUSANT, croyez-moi). Le métier opposé va dans votre poche en tant que passe-temps, rare et pas plus loin, ne faites pas la moue. Vos autres savoir-faire ? Pas perdus, {playerName}, juste en sommeil, réveillez-les quand vous voulez. Mais (il y a toujours un mais, tenez la mèche) lâchez cette paire et revenez plus tard et ça vous coûtera de la sueur qui s'accumule, cinq choses la première fois, huit la suivante, onze après, plus, plus, à chaque fois que vous perdez courage. Oui ? OUI ? Alors allez me cueillir trois parcelles de plantes, les volatiles, ne demandez pas lesquelles, elles sont toutes un peu volatiles si on y croit assez fort.",
+        "completion": "HA. Des réactifs, de vrais, et tous vos doigts encore attachés, bien, bien. Ingénierie et Alchimie, à vous, allez faire quelque chose qui le regrettera. Filez.",
         "objectives": {
           "0": {
-            "label": "Herb patch harvested"
+            "label": "Parcelles de plantes récoltées"
           }
         }
       },
       "q_prof_amends_smith": {
-        "title": "Back to the Forge",
-        "text": "So you have come back to the forge. I will not pretend it does not sting, {playerName}, but I am a fair hand and the work is fair too. You know the price of returning: labor, and more of it each time you have strayed. Put down the wolves harrying the north road, and the swing of it will remind your arms what this pair once asked of them.",
-        "completion": "The rhythm is back in your hands. Weaponcrafting and Armorcrafting are your majors once more. Do not make a habit of leaving.",
+        "title": "Retour à la forge",
+        "text": "Vous voilà donc revenu à la forge. Je ne vais pas prétendre que ça ne pique pas, {playerName}, mais je suis juste de main et le travail est juste aussi. Vous connaissez le prix du retour : du labeur, et encore plus à chaque écart. Abattez les loups qui harcèlent la route du nord, et leur swing rappellera à vos bras ce que cette paire exigeait d'eux jadis.",
+        "completion": "Le rythme est de retour dans vos mains. La Fabrication d'armes et la Fabrication d'armures sont de nouveau vos majeures. Ne prenez pas l'habitude de partir.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Loups des forêts tués"
           }
         }
       },
       "q_prof_amends_outfitter": {
-        "title": "Threads Rejoined",
-        "text": "Back at my loom after all. I hold no grudge, {playerName}, but the thread remembers a hand that let it go, and the cost of taking it up again is measured out longer each time. Cull the webwood spiders crowding the western woods, and the labor will settle your hands before they touch good silk again.",
-        "completion": "Steady again. Leatherworking and Tailoring return to your hands as majors. Measure twice this time before you wander.",
+        "title": "Fils rejoints",
+        "text": "De retour à mon métier à tisser, finalement. Je ne vous en veux pas, {playerName}, mais le fil se souvient d'une main qui l'a lâché, et le coût de le reprendre s'allonge chaque fois. Abattez les araignées des bois qui envahissent les forêts de l'ouest, et le labeur apaisera vos mains avant qu'elles touchent de nouveau la bonne soie.",
+        "completion": "Stable de nouveau. Le Travail du cuir et la Couture reviennent entre vos mains en tant que majeures. Mesurez deux fois avant de partir à l'aventure.",
         "objectives": {
           "0": {
-            "label": "Webwood Spider culled"
+            "label": "Araignées des bois abattues"
           }
         }
       },
       "q_prof_amends_apothecary": {
-        "title": "Back on the Stove",
-        "text": "Well, look who is back at my pot. No hard feelings, {playerName}, a kitchen always has room, but you know the tab runs longer every time you walk out on it. Go thin the wild boars in the east meadow, because honest sweat is the first ingredient, and it will remind your hands of the work.",
-        "completion": "There is the old flavor. Alchemy and Cooking are back on your stove as majors. Stay a while this time.",
+        "title": "Retour sur le feu",
+        "text": "Tiens, regardez qui revient à ma marmite. Sans rancune, {playerName}, une cuisine a toujours de la place, mais vous savez que la note s'allonge à chaque fois que vous claquiez la porte. Allez tuer les sangliers sauvages dans la prairie de l'est, car la sueur honnête est le premier ingrédient, et ça rappellera à vos mains ce qu'est le travail.",
+        "completion": "Voilà l'ancienne saveur. L'Alchimie et la Cuisine reviennent dans votre marmite en tant que majeures. Restez un peu cette fois.",
         "objectives": {
           "0": {
-            "label": "Wild Boar hunted"
+            "label": "Sangliers sauvages chassés"
           }
         }
       },
       "q_prof_amends_bombardier": {
-        "title": "The Ledger Grows",
-        "text": "You came BACK, ha, they always come back, the loud stuff has a pull, yes? No sulking from me, {playerName}, but the ledger, oh the ledger, it grows every time you skip out, more each return, that is only fair. Go clear the tunnel rats out of the dig for me, sweat first, sparks later, that is the rule I just made up.",
-        "completion": "THERE it is, the itch is back in your hands. Engineering and Alchemy, majors again, go on, go make a bang. Try to stay put this time, eh?",
+        "title": "Le registre grossit",
+        "text": "Vous êtes REVENU, ha, ils reviennent toujours, le truc bruyant a quelque chose d'attractif, non ? Pas de bouderie de ma part, {playerName}, mais le registre, oh le registre, il grossit à chaque fois que vous fuyez, de plus en plus à chaque retour, c'est seulement juste. Allez nettoyer les rats des tunnels du chantier pour moi, la sueur d'abord, les étincelles ensuite, c'est la règle que je viens d'inventer.",
+        "completion": "VOILA, la démangeaison est de retour dans vos mains. Ingénierie et Alchimie, de nouveau majeures, allez, allez faire du bruit. Essayez de rester cette fois, hein ?",
         "objectives": {
           "0": {
-            "label": "Tunnel Rat exterminated"
+            "label": "Rats des tunnels exterminés"
           }
         }
       },
       "q_prof_workorder_forge": {
-        "title": "Forge Work Order",
-        "text": "The forge always wants feeding, {playerName}. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.",
-        "completion": "Good weight, no slag. Here is your due. The forge will be hungry again soon enough.",
+        "title": "Bon de travail de la forge",
+        "text": "La forge veut toujours être nourrie, {playerName}. Apportez-moi huit morceaux de minerai de cuivre et je vous paierai pour la livraison. Pas de cérémonie, juste du minerai et des pièces.",
+        "completion": "Bon poids, pas de laitier. Voici votre dû. La forge aura bientôt faim de nouveau.",
         "objectives": {
           "0": {
-            "label": "Copper Ore delivered"
+            "label": "Minerai de cuivre livré"
           }
         }
       },
       "q_prof_workorder_kitchens": {
-        "title": "Kitchens Work Order",
-        "text": "My larder is looking thin, {playerName}, and thin larders make grumpy cooks. Fetch me eight cuts of game meat and there is coin in it for you, plus my undying gratitude, which is worth less but tastes better.",
-        "completion": "Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.",
+        "title": "Bon de travail des cuisines",
+        "text": "Mon garde-manger commence à se vider, {playerName}, et les garde-mangers vides rendent les cuisiniers grincheux. Rapportez-moi huit morceaux de viande de gibier et il y a des pièces pour vous, plus ma gratitude éternelle, qui vaut moins mais a meilleur goût.",
+        "completion": "Voilà un garde-manger bien rempli. Voici votre paye. Revenez quand vos sacs sont lourds.",
         "objectives": {
           "0": {
-            "label": "Game Meat delivered"
+            "label": "Viande de gibier livrée"
           }
         }
       },
       "q_prof_workorder_loom": {
-        "title": "Loom Work Order",
-        "text": "The loom runs dry and idle hands waste daylight, {playerName}. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.",
-        "completion": "Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.",
+        "title": "Bon de travail du métier à tisser",
+        "text": "Le métier à tisser se retrouve à sec et les mains oisives gaspillent la lumière du jour, {playerName}. Apportez-moi six écheveaux de soie d'araignée et je vous paierai à un juste tarif, compté jusqu'au cuivre.",
+        "completion": "Belle soie, filée régulièrement. Vos pièces, exactement comptées. Le métier à tisser vous remercie, et moi aussi.",
         "objectives": {
           "0": {
-            "label": "Spider Silk delivered"
+            "label": "Soie d'araignée livrée"
           }
         }
       },
       "q_prof_workorder_toolworks": {
-        "title": "Toolworks Work Order",
-        "text": "Hafts, handles, stocks, I go through wood like it is going out of style, which it is NOT, wood is eternal, {playerName}. Haul me eight ironbark logs and I will pay you, coin, real coin, not a favor, I promise, mostly.",
-        "completion": "Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.",
+        "title": "Bon de travail de l'outillage",
+        "text": "Manches, poignées, crosses, je consomme du bois comme si ça allait se démoter, ce qui n'arrivera PAS, le bois est éternel, {playerName}. Charriez-moi huit grumes de bois de fer et je vous paierai, des pièces, de vraies pièces, pas un service, je le promets, la plupart du temps.",
+        "completion": "Parfait, parfait, grain droit, pas de pourriture. Tenez, vos pièces, voyez, je tiens parole (la plupart du temps). Revenez quand vous trébuchez sur un arbre.",
         "objectives": {
           "0": {
-            "label": "Ironbark Log delivered"
+            "label": "Grume de bois de fer livrée"
           }
         }
       },
       "q_prof_workorder_tannery": {
-        "title": "Tannery Work Order",
-        "text": "Vats are empty. Bring eight rough hides. Coin when you do.",
-        "completion": "Good hides. Fair pay. Again when you have more.",
+        "title": "Bon de travail de la tannerie",
+        "text": "Les cuves sont vides. Apportez huit peaux brutes. Des pièces quand vous le ferez.",
+        "completion": "Bonnes peaux. Paye correcte. Encore quand vous en aurez plus.",
         "objectives": {
           "0": {
-            "label": "Rough Hide delivered"
+            "label": "Peau brute livrée"
           }
         }
       },
       "q_prof_workorder_apothecary": {
-        "title": "Apothecary Work Order",
-        "text": "My shelves require goldleaf, and the market's stock is, predictably, adulterated. Bring me six goldleaf herbs, unbruised, and you will be compensated precisely. Bruised leaves will be declined, so mind your satchel.",
-        "completion": "Acceptable. Potent, and properly handled. Your payment, counted to the coin. Do not let it go to your head, that is a different reagent.",
+        "title": "Bon de travail de l'apothicaire",
+        "text": "Mes étagères ont besoin de feuille-d'or, et le stock du marché est, prévisiblement, adultéré. Apportez-moi six herbes de feuille-d'or, sans meurtrissure, et vous serez compensé précisément. Les feuilles meurtries seront refusées, alors faites attention à votre sacoche.",
+        "completion": "Acceptable. Puissant et bien manipulé. Votre paiement, compté à la pièce. Ne laissez pas ça monter à la tête, c'est un autre réactif.",
         "objectives": {
           "0": {
-            "label": "Goldleaf Herb delivered"
+            "label": "Herbe feuille-d'or livrée"
           }
         }
       },
@@ -11341,109 +11341,109 @@ export const fr_FR: EnTranslations = {
         "body": "Artisan,\n\nLa nouvelle parvient à la Guilde au sujet de votre travail en matière de fabrication d'armures et d'ingénierie : plaques rivetées et engrenages rectifiés, les deux métiers se nourrissant mutuellement. Les métiers voisins travaillés ensemble marquent une main prête à l’harmonisation. Cherchez le Forgeron Haldren, l'armurier d'Eastbrook : il parle pour l'instant au nom des maîtres. Prouvez-lui votre métier avec le travail de vos propres mains, et il verra vos deux spécialisations en harmonie.\n\nEn règle,\nLa guilde des artisans"
       },
       "mastery_reset_notice": {
-        "sender": "The Guildhall",
-        "subject": "Your craft, made honest",
-        "body": "Guildmate,\n\nThe guild has adopted a new reckoning of mastery. Every hand starts the climb again: your craft skills and your gathering proficiencies have been set to zero.\n\nEverything else is yours, untouched: your recipes, your tools and materials, your bank and gold, your attunements and titles, your deeds and renown, your quests and mail.\n\nThe climb is honest now. Cheap work will not carry you. Seek harder recipes, richer veins, and deeper waters.\n\nWith respect,\nThe Guildhall"
+        "sender": "La Salle de la Guilde",
+        "subject": "Votre métier, rendu honnête",
+        "body": "Compagnon de guilde,\n\nLa guilde a adopté un nouveau mode de mesure de la maîtrise. Chaque main reprend l'ascension depuis le début : vos compétences artisanales et vos aptitudes de collecte ont été remises à zéro.\n\nTout le reste vous appartient, intact : vos recettes, vos outils et matériaux, votre banque et votre or, vos harmonisations et vos titres, vos hauts faits et votre renommée, vos quêtes et votre courrier.\n\nL'ascension est maintenant honnête. Le travail bâclé ne vous portera pas. Cherchez des recettes plus exigeantes, des filons plus riches et des eaux plus profondes.\n\nAvec respect,\nLa Salle de la Guilde"
       },
       "prof_tier_weaponcrafting_armorcrafting_1": {
-        "sender": "Forgemistress Darva",
-        "subject": "A spark worth noting",
-        "body": "Word reaches my forge that one of your majors now holds at uncommon work. It is the smallest rung on a long climb, but you earned it at the anvil, not by asking. Keep the fire hot."
+        "sender": "Maîtresse des forges Darva",
+        "subject": "Une étincelle qui mérite attention",
+        "body": "La nouvelle parvient à ma forge : l'une de vos majeures tient maintenant au travail peu commun. C'est le plus petit échelon d'une longue ascension, mais vous l'avez gagné à l'enclume, pas en demandant. Gardez le feu vif."
       },
       "prof_tier_weaponcrafting_armorcrafting_2": {
-        "sender": "Forgemistress Darva",
-        "subject": "Rare work, and earned",
-        "body": "They tell me a major of yours has reached rare work. That is the rung where sloppy hands fall away and the real smiths are left standing. You are still standing. Good."
+        "sender": "Maîtresse des forges Darva",
+        "subject": "Travail rare, et mérité",
+        "body": "On me dit qu'une de vos majeures a atteint le travail rare. C'est l'échelon où les mains négligentes tombent et où les vrais forgerons restent debout. Vous êtes encore debout. Bien."
       },
       "prof_tier_weaponcrafting_armorcrafting_3": {
-        "sender": "Forgemistress Darva",
-        "subject": "The metal answers you now",
-        "body": "A major of yours has climbed past rare into serious work. The metal answers a hand like that, no longer fighting it. Do not let the praise soften your arm."
+        "sender": "Maîtresse des forges Darva",
+        "subject": "Le métal vous répond maintenant",
+        "body": "Une de vos majeures a grimpé au-delà du rare pour entrer dans le travail sérieux. Le métal répond à une main comme la vôtre, il ne lutte plus contre elle. Ne laissez pas l'éloge ramollir votre bras."
       },
       "prof_tier_weaponcrafting_armorcrafting_4": {
-        "sender": "Forgemistress Darva",
-        "subject": "Near the top of the ladder",
-        "body": "One of your majors stands a single rung below mastery. Few hands I have known reach this height, and fewer keep their edge here. Finish the climb."
+        "sender": "Maîtresse des forges Darva",
+        "subject": "Près du sommet de l'échelle",
+        "body": "Une de vos majeures se trouve à un seul échelon de la maîtrise. Peu de mains que j'ai connues atteignent cette hauteur, et encore moins gardent leur tranchant ici. Finissez l'ascension."
       },
       "prof_tier_weaponcrafting_armorcrafting_5": {
-        "sender": "Forgemistress Darva",
-        "subject": "Mastery, at last",
-        "body": "A major of yours has reached mastery, the highest a hand can climb. I do not give praise freely, so hear this once: the forge is proud of you. Now go teach the fire something new."
+        "sender": "Maîtresse des forges Darva",
+        "subject": "La maîtrise, enfin",
+        "body": "Une de vos majeures a atteint la maîtrise, le sommet qu'une main peut gravir. Je ne donne pas ma parole librement, alors entendez-la une fois : la forge est fière de vous. Allez maintenant apprendre quelque chose de nouveau au feu."
       },
       "prof_tier_leatherworking_tailoring_1": {
-        "sender": "Weaver Ottilie",
-        "subject": "An even first row",
-        "body": "The guild notes that one of your majors has reached uncommon work. It is only the first row of many, but it is even and true. Measure the next as carefully."
+        "sender": "Tisserand Ottilie",
+        "subject": "Une première rangée bien droite",
+        "body": "La guilde note qu'une de vos majeures a atteint le travail peu commun. Ce n'est que la première rangée parmi beaucoup, mais elle est régulière et vraie. Mesurez la suivante avec autant de soin."
       },
       "prof_tier_leatherworking_tailoring_2": {
-        "sender": "Weaver Ottilie",
-        "subject": "Rare work, well measured",
-        "body": "A major of yours has climbed to rare work. That is where a careless hand shows every dropped stitch, and yours has not. I am quietly pleased."
+        "sender": "Tisserand Ottilie",
+        "subject": "Travail rare, bien mesuré",
+        "body": "Une de vos majeures a grimpé au travail rare. C'est là qu'une main négligente laisse voir chaque maille lâchée, et la vôtre n'en a pas laissé. Je suis discrètement satisfaite."
       },
       "prof_tier_leatherworking_tailoring_3": {
-        "sender": "Weaver Ottilie",
-        "subject": "The pattern comes clear",
-        "body": "One of your majors has passed rare into finer work. The pattern comes clear to a hand at this level, no more guessing. Keep measuring twice."
+        "sender": "Tisserand Ottilie",
+        "subject": "Le patron devient clair",
+        "body": "Une de vos majeures a dépassé le rare pour atteindre un travail plus raffiné. Le patron devient clair pour une main à ce niveau, plus de tâtonnements. Continuez à mesurer deux fois."
       },
       "prof_tier_leatherworking_tailoring_4": {
-        "sender": "Weaver Ottilie",
-        "subject": "One row from the top",
-        "body": "A major of yours sits one row short of mastery. The last row is always the hardest to keep even. Do not rush it now."
+        "sender": "Tisserand Ottilie",
+        "subject": "Une rangée du sommet",
+        "body": "Une de vos majeures est à une rangée de la maîtrise. La dernière rangée est toujours la plus difficile à garder régulière. Ne la précipitez pas maintenant."
       },
       "prof_tier_leatherworking_tailoring_5": {
-        "sender": "Weaver Ottilie",
-        "subject": "The last stitch",
-        "body": "A major of yours has reached mastery. I measured your work twice, as I measure everything, and it holds. Few hands ever tie the last stitch this cleanly. I am proud, and I do not say so lightly."
+        "sender": "Tisserand Ottilie",
+        "subject": "Le dernier point",
+        "body": "Une de vos majeures a atteint la maîtrise. J'ai mesuré votre travail deux fois, comme je mesure tout, et il tient. Peu de mains tirent jamais le dernier point aussi proprement. Je suis fière, et je ne le dis pas à la légère."
       },
       "prof_tier_alchemy_cooking_1": {
-        "sender": "Cook Marlow",
-        "subject": "A taste of things to come",
-        "body": "Word drifts back to my kitchen that one of your majors has reached uncommon work. It is a first taste, nothing more, but a promising one. Keep the pot moving."
+        "sender": "Cuisinier Marlow",
+        "subject": "Un avant-goût des choses à venir",
+        "body": "La nouvelle parvient à ma cuisine : l'une de vos majeures a atteint le travail peu commun. C'est un avant-goût, rien de plus, mais prometteur. Gardez la marmite en mouvement."
       },
       "prof_tier_alchemy_cooking_2": {
-        "sender": "Cook Marlow",
-        "subject": "Rare work, and no burnt edges",
-        "body": "They tell me a major of yours has simmered up to rare work. That is the heat where most cooks scorch the dish, and you did not. Sit, but not for long."
+        "sender": "Cuisinier Marlow",
+        "subject": "Travail rare, sans les bords brûlés",
+        "body": "On me dit qu'une de vos majeures a mijoté jusqu'au travail rare. C'est la chaleur à laquelle la plupart des cuisiniers brûlent le plat, et vous, non. Asseyez-vous, mais pas longtemps."
       },
       "prof_tier_alchemy_cooking_3": {
-        "sender": "Cook Marlow",
-        "subject": "Now you are cooking",
-        "body": "One of your majors has bubbled past rare into real depth. Now you are cooking, as they say. Season boldly and keep tasting."
+        "sender": "Cuisinier Marlow",
+        "subject": "Maintenant, vous cuisinez",
+        "body": "Une de vos majeures a bouillonné au-delà du rare pour atteindre une vraie profondeur. Maintenant, vous cuisinez, comme on dit. Assaisonnez hardiment et goûtez sans cesse."
       },
       "prof_tier_alchemy_cooking_4": {
-        "sender": "Cook Marlow",
-        "subject": "One course from the feast",
-        "body": "A major of yours is a single course short of mastery. The last one is always the richest and the easiest to overdo. Steady hands on the ladle."
+        "sender": "Cuisinier Marlow",
+        "subject": "Un plat du festin",
+        "body": "Une de vos majeures n'est plus qu'un plat de la maîtrise. Le dernier est toujours le plus riche et le plus facile à rater. Des mains fermes sur la louche."
       },
       "prof_tier_alchemy_cooking_5": {
-        "sender": "Cook Marlow",
-        "subject": "Mastery, served hot",
-        "body": "A major of yours has reached mastery, the top shelf of the whole pantry. I feed everyone, but few ever cook their way up here. Proud of you, truly. Now go make something that makes them weep at the table."
+        "sender": "Cuisinier Marlow",
+        "subject": "La maîtrise, servie chaude",
+        "body": "Une de vos majeures a atteint la maîtrise, le sommet de tout le garde-manger. Je nourris tout le monde, mais peu cuisinent jusqu'ici. Fier de vous, vraiment. Allez maintenant faire quelque chose qui fera pleurer à table."
       },
       "prof_tier_engineering_alchemy_1": {
-        "sender": "Tinker Gizzel",
-        "subject": "FIRST spark, ha",
-        "body": "Oi, the numbers say one of your majors just hit uncommon work, small potatoes, tiny, but it POPPED, yes? First spark is always the cutest. More sparks. Go."
+        "sender": "Bricoleur Gizzel",
+        "subject": "PREMIERE étincelle, ha",
+        "body": "Oi, les chiffres disent qu'une de vos majeures vient de toucher le travail peu commun, une broutille, minuscule, mais ça A CLAQUÉ, non ? La première étincelle est toujours la plus mignonne. Plus d'étincelles. Allez."
       },
       "prof_tier_engineering_alchemy_2": {
-        "sender": "Tinker Gizzel",
+        "sender": "Bricoleur Gizzel",
         "subject": "Rare, oh, RARE",
-        "body": "They tell me a major of yours climbed to rare work, and rare is where it starts getting properly dangerous (the good kind). Most hands quit before the fun. Not you. HA."
+        "body": "On me dit qu'une de vos majeures a grimpé au travail rare, et le rare, c'est là que ça commence à être vraiment dangereux (le bon genre). La plupart abandonnent avant le fun. Pas vous. HA."
       },
       "prof_tier_engineering_alchemy_3": {
-        "sender": "Tinker Gizzel",
-        "subject": "Now it gets loud",
-        "body": "One of your majors blew past rare into the serious stuff, oh this is where it gets LOUD. Do not stop now, whatever you do, momentum is everything, also fuses."
+        "sender": "Bricoleur Gizzel",
+        "subject": "Maintenant ça devient bruyant",
+        "body": "Une de vos majeures a explosé au-delà du rare pour entrer dans le sérieux, oh c'est là que ça devient BRUYANT. N'arrêtez pas maintenant, quoi que vous fassiez, l'élan est tout, les mèches aussi."
       },
       "prof_tier_engineering_alchemy_4": {
-        "sender": "Tinker Gizzel",
-        "subject": "One rung, ONE, from the top",
-        "body": "A major of yours is ONE rung under mastery, one, singular, do you feel it humming? The last step is the biggest bang. Do not blink."
+        "sender": "Bricoleur Gizzel",
+        "subject": "Un échelon, UN, du sommet",
+        "body": "Une de vos majeures est à UN échelon de la maîtrise, un, singulier, vous l'entendez bourdonner ? Le dernier pas est la plus grande explosion. Ne clignez pas des yeux."
       },
       "prof_tier_engineering_alchemy_5": {
-        "sender": "Tinker Gizzel",
-        "subject": "MASTERY, kaboom",
-        "body": "A major of yours hit mastery, the very TOP, kaboom, the whole ladder, done. I do not hand out praise, I hand out fuses, but here, take both: you are brilliant and slightly terrifying. Go make the mountains nervous."
+        "sender": "Bricoleur Gizzel",
+        "subject": "MAITRISE, kaboom",
+        "body": "Une de vos majeures a atteint la maîtrise, tout en HAUT, kaboom, toute l'échelle, terminé. Je ne distribue pas d'éloges, je distribue des mèches, mais tenez, prenez les deux : vous êtes brillant et légèrement terrifiant. Allez rendre les montagnes nerveuses."
       }
     },
     "itemSets": {

@@ -127,7 +127,10 @@ describe('i18n Localization Key Coverage', () => {
     );
   });
 
-  const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/i;
+  // Case-sensitive on purpose: leftover markers are uppercase by convention,
+  // and the case-insensitive form false-fails ordinary vocabulary in several
+  // locales (Spanish and Portuguese "todo").
+  const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/;
   const shellKeys: TranslationKey[] = [
     'seo.title',
     'seo.description',
