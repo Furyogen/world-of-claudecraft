@@ -58,9 +58,26 @@ describe('migration is additive; old tokens read full', () => {
       /CONSTRAINT auth_tokens_scope_check CHECK \(scope IN \('full', 'read'\)\) NOT VALID/,
     );
   });
+  it('adds the scope column before installing the constraint that references it', () => {
+    const scopeColumn = SCHEMA.indexOf(
+      "ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'full'",
+    );
+    const scopeConstraint = SCHEMA.indexOf('ADD CONSTRAINT auth_tokens_scope_check');
+    expect(scopeColumn).toBeGreaterThanOrEqual(0);
+    expect(scopeConstraint).toBeGreaterThanOrEqual(0);
+    expect(scopeColumn).toBeLessThan(scopeConstraint);
+  });
 });
 
 describe('legacy scope-blind resolver removal', () => {
+  it('strips prose comments without hiding code after a URL-like string', () => {
+    const codeAfterUrl = "const base = 'http://localhost'; accountForToken(token);";
+    expect(stripComments(codeAfterUrl)).toContain('accountForToken(token)');
+
+    const proseOnly = '// accountForToken was removed\nconst safe = true;';
+    expect(stripComments(proseOnly)).not.toContain('accountForToken');
+  });
+
   it('has no production reference to the removed accountForToken helper', () => {
     const offenders = serverTypeScriptFiles(SERVER_DIR)
       .filter((file) => /\baccountForToken\b/.test(stripComments(readFileSync(file, 'utf8'))))
@@ -68,6 +85,27 @@ describe('legacy scope-blind resolver removal', () => {
       .sort();
     expect(offenders).toEqual([]);
   });
+});
+
+describe('scope-blind bearerAccount remains confined to read routes', () => {
+  const READ_ROUTE_ANCHORS = [
+    "if (req.method === 'GET' && url === '/api/realms') {",
+    "if (req.method === 'GET' && url === '/api/search') {",
+    "if (req.method === 'GET' && mapIdMatch) {",
+  ];
+
+  it('is called exactly once by each of its three permitted read routes', () => {
+    const count = (MAIN.match(/bearerAccount\(req\)/g) ?? []).length;
+    expect(count).toBe(READ_ROUTE_ANCHORS.length);
+  });
+
+  for (const anchor of READ_ROUTE_ANCHORS) {
+    it(`gates: ${anchor}`, () => {
+      const idx = MAIN.indexOf(anchor);
+      expect(idx, `anchor not found: ${anchor}`).toBeGreaterThanOrEqual(0);
+      expect(MAIN.slice(idx, idx + 500)).toContain('bearerAccount(req)');
+    });
+  }
 });
 
 describe('every mutating / owner-action route funnels through bearerActiveAccount', () => {
