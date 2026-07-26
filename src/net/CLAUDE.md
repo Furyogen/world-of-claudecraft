@@ -29,6 +29,12 @@ tested sibling module here, never as more methods on `online.ts`. Exemplars
   cap; `tests/realm_population.test.ts`).
 - `native_*.ts`: the Capacitor native-app seam (Apple/Discord sign-in, device
   attestation, update check), gated on `NATIVE_APP`; each has a `tests/native_*.test.ts`.
+- `cloud_prefs.ts` / `cloud_prefs_core.ts`: the account preference sync (settings,
+  account-wide keybinds, per-character action bars) against `/api/preferences`.
+  `cloud_prefs_core.ts` is the pure buffer + response normalizer; `cloud_prefs.ts` is the
+  debounced `CloudPrefsSync` + the authed HTTP transport. `main.ts` composes it with the
+  game-side `SyncedStorage` seam (the one wiring that must know both net and game);
+  mobile native apps opt out. Tests: `tests/cloud_prefs.test.ts`, `tests/synced_storage.test.ts`.
 - `wallet.ts`: Wallet-Standard Solana connect in the browser, no `sim/` dependency
   (the account-to-wallet link is verified server-side).
 - `resume_play.ts`: the mobile WebView resume marker (`RESUME_KEY`), stamped while

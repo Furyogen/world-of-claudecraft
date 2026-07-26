@@ -2526,6 +2526,9 @@ export const tr_TR: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Geçersiz girdi."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

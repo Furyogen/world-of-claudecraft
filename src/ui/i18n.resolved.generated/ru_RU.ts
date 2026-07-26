@@ -2526,6 +2526,9 @@ export const ru_RU: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Неверные входные данные."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

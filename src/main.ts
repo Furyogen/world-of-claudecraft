@@ -85,6 +85,7 @@ import {
   spawnCinematicPose,
 } from './game/spawn_cinematic';
 import { safeStartupGraphicsPreset } from './game/startup_graphics_safety';
+import { defaultPrefStorage, type PrefStorage, SyncedStorage } from './game/synced_storage';
 import { resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { currentUtcDay } from './game/utc_day';
 import { voice } from './game/voice';
@@ -95,6 +96,7 @@ import {
   sortCharacters,
 } from './net/char_sort';
 import { charselectPrimaryAction } from './net/charselect_action';
+import { CloudPrefsSync, httpPrefsTransport } from './net/cloud_prefs';
 import { performDesktopWalletHandoff } from './net/desktop_wallet_handoff';
 import {
   desktopWalletManagerAction,
@@ -351,6 +353,46 @@ function localStorageOrNull(): Storage | null {
   } catch {
     return null;
   }
+}
+
+// Build the preference storage the online subsystems (Settings, account-wide
+// Keybinds, per-character ActionBarController) read and write through. Mobile NATIVE
+// apps opt out of cross-device sync (product decision) and keep device-local
+// localStorage; every browser (desktop and mobile web) and the desktop app get a
+// cloud-synced wrapper. This is the one composition that must know BOTH the net sync
+// client and the game storage seam, so it lives here in the wiring firewall rather
+// than a sibling (net cannot import game, and vice versa). Hydration is awaited so
+// the account's saved values are present before any subsystem loads; the transport
+// bounds the read, so a slow realm never blocks world entry.
+async function buildSyncedPrefStorage(
+  token: () => string | null,
+  base: () => string,
+): Promise<PrefStorage> {
+  const inner = defaultPrefStorage();
+  if (isNativeRuntime()) return inner;
+  const sync = new CloudPrefsSync(httpPrefsTransport({ token, base }));
+  // Apply pulled values to the RAW storage (not the synced wrapper) so hydration
+  // never echoes back out as a push.
+  await sync.hydrate((key, value) => {
+    try {
+      inner.setItem(key, JSON.stringify(value));
+    } catch {
+      /* storage unavailable */
+    }
+  });
+  return new SyncedStorage(inner, (key, value) => {
+    if (value === null) {
+      sync.enqueue(key, null);
+      return;
+    }
+    // The subsystems store JSON strings; parse back to the value the server keeps as
+    // JSONB. A synced key is always JSON, so a parse failure is skipped, not synced.
+    try {
+      sync.enqueue(key, JSON.parse(value));
+    } catch {
+      /* not JSON; do not sync */
+    }
+  });
 }
 
 applyNativeDeviceLanguage({
@@ -923,6 +965,7 @@ async function startGame(
   online: ClientWorld | null,
   keybindScope: string,
   playIntro = false,
+  prefStorage: PrefStorage = defaultPrefStorage(),
 ): Promise<void> {
   // Model/texture/HDRI fetches were kicked off at module import; the renderer
   // builds its scene synchronously, so everything must be resolved first.
@@ -976,8 +1019,13 @@ async function startGame(
   const canvas = $('#game-canvas') as unknown as HTMLCanvasElement;
   const nameplates = $('#nameplates') as HTMLDivElement;
 
-  const keybinds = new Keybinds(keybindScope);
-  const settings = new Settings();
+  // Keybinds are ACCOUNT-WIDE online (an empty scope reads/writes the bare
+  // woc_keybinds key the cloud sync mirrors), and stay per-character-class offline
+  // (the keybindScope). Settings are one account-global blob either way. Both
+  // persist through prefStorage: a cloud-synced wrapper online (non-mobile-native),
+  // plain localStorage otherwise.
+  const keybinds = new Keybinds(online ? '' : keybindScope, prefStorage);
+  const settings = new Settings(prefStorage);
   // First-run graphics default: until a device default has been applied (the dedicated
   // graphicsDefaultApplied marker, NOT the graphicsPreset key, which save() def-fills the moment
   // any unrelated setting is stored), probe the device (GPU name, memory, cores, touch) and
@@ -1077,6 +1125,9 @@ async function startGame(
     hud = new Hud(world, renderer, keybinds, {
       dailyRewardsEnabled: !NATIVE_APP,
       devCommandsEnabled: import.meta.env.DEV,
+      // Per-character action bars persist through the same (cloud-synced online)
+      // storage as keybinds/settings, so they follow the account across devices.
+      prefStorage,
     });
     perf.setHud(hud);
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
@@ -4881,6 +4932,16 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     }
   }
   const world = new ClientWorld(api.token!, c.id, c.class, api.base, getClientSeed());
+  // Account preference sync (settings, account-wide keybinds, per-character action
+  // bars). Mobile NATIVE apps opt out per the product decision; every browser
+  // (desktop and mobile web) and the desktop app sync. Pull the account's saved
+  // values into localStorage BEFORE the subsystems read them at startGame, then wrap
+  // the storage so later local changes push back (debounced, best-effort). Hydration
+  // is bounded (the transport aborts a slow read) so it never stalls world entry.
+  const prefStorage = await buildSyncedPrefStorage(
+    () => api.token,
+    () => api.base,
+  );
   // Wire shareable player cards for this online session: publishing uploads the
   // composited PNG to this realm and returns an absolute public page URL, and
   // the referral provider feeds the card footer. Both are cleared on disconnect.
@@ -4914,7 +4975,7 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     welcomeScreen?.hide();
     welcomeScreen?.destroy();
     welcomeScreen = null;
-    void startGame(world, null, world, `char:${c.id}`, true);
+    void startGame(world, null, world, `char:${c.id}`, true, prefStorage);
   };
   if (welcomeRoot) {
     welcomeScreen = mountWelcomeScreen(welcomeRoot, {

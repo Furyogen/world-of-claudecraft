@@ -2526,6 +2526,9 @@ export const cs_CZ: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Neplatný vstup."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

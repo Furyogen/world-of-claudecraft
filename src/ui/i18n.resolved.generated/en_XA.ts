@@ -2526,6 +2526,9 @@ export const en_XA: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "[Íñʋáļíð íñþúţ.]"
+    },
+    "account_prefs": {
+      "invalid_input": "[Íñʋáļíð íñþúţ.]"
     }
   },
   "guide": {

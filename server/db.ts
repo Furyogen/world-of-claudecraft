@@ -9,6 +9,7 @@ import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { sanitizeRemovedZone1Content } from '../src/sim/removed_zone1_content';
 import type { CharacterState, MailSave, MarketSave } from '../src/sim/sim';
 import type { ArenaFormat, PlayerClass } from '../src/sim/types';
+import { ACCOUNT_PREFERENCES_SCHEMA } from './account_prefs_db';
 import { APPLE_AUTH_SCHEMA } from './apple_auth_db';
 import type { BankBonusFacts } from './bank_entitlements';
 import { seedChatFilterDefaults } from './chat_filter_db';
@@ -1032,6 +1033,10 @@ export async function ensureSchema(): Promise<void> {
     // unconditionally (idempotent), like the other schema modules.
     await client.query(MAPS_SCHEMA);
     await client.query(USER_ASSETS_SCHEMA);
+    // Account-scoped client-preference sync bag (settings/keybinds/action bars).
+    // FK-references accounts(id), so it runs after SCHEMA; idempotent like the
+    // other schema modules.
+    await client.query(ACCOUNT_PREFERENCES_SCHEMA);
     // Seed the chat-filter word lists + config on first boot only (idempotent).
     // Runs under the same advisory lock so concurrent realm boots don't race.
     await seedChatFilterDefaults(client);

@@ -2526,6 +2526,9 @@ export const sv_SE: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Ogiltig indata."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

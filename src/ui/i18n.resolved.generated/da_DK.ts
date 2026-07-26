@@ -2526,6 +2526,9 @@ export const da_DK: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Ugyldig indtastning."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

@@ -2526,6 +2526,9 @@ export const vi_VN: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Dữ liệu nhập không hợp lệ."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

@@ -1,6 +1,10 @@
 // Player-adjustable game settings (camera, audio, graphics) surfaced in the
-// Esc options menu. Pure + persisted to localStorage; main.ts applies each
-// value to the live subsystem (Input / GameAudio / MusicDirector / Renderer).
+// Esc options menu. Pure + persisted through an injected PrefStorage (localStorage
+// offline, a cloud-synced wrapper online); main.ts applies each value to the live
+// subsystem (Input / GameAudio / MusicDirector / Renderer). Settings are one
+// account-global blob, so online they sync verbatim across the player's devices.
+
+import { defaultPrefStorage, type PrefStorage } from './synced_storage';
 
 // Camera default is 0.7: the old fixed speed (1.0) was near the top of the
 // reasonable range and drew complaints, so out of the box it's calmer while
@@ -342,14 +346,14 @@ export function clickMoveButtonLabel(value: number): string {
 export class Settings {
   private values: GameSettings;
 
-  constructor() {
+  constructor(private readonly storage: PrefStorage = defaultPrefStorage()) {
     this.values = this.load();
   }
 
   private load(): GameSettings {
     let stored: unknown = null;
     try {
-      stored = JSON.parse(localStorage.getItem(STORE_KEY) ?? 'null');
+      stored = JSON.parse(this.storage.getItem(STORE_KEY) ?? 'null');
     } catch {
       /* corrupt */
     }
@@ -368,7 +372,7 @@ export class Settings {
 
   private save(): void {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify(this.values));
+      this.storage.setItem(STORE_KEY, JSON.stringify(this.values));
     } catch {
       /* storage unavailable */
     }

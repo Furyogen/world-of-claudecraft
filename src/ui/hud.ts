@@ -576,6 +576,10 @@ export interface ClaudiumHooks {
 export interface HudFeatures {
   dailyRewardsEnabled: boolean;
   devCommandsEnabled?: boolean;
+  // Storage the action-bar controller persists its per-character hotbar pages
+  // through. Defaults to raw localStorage; main.ts injects a cloud-synced wrapper
+  // online so action bars follow the account across devices.
+  prefStorage?: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 }
 
 export interface BugReportPayload {
@@ -1403,7 +1407,7 @@ export class Hud {
     this.localIgnoredNames = this.loadLocalIgnoredNames();
     this.meters = new Meters(sim);
     this.actionBarController = new ActionBarController({
-      storage: localStorage,
+      storage: this.features.prefStorage ?? localStorage,
       playerClass: this.sim.cfg.playerClass,
       playerName: this.sim.player.name,
       knownAbilityIds: () => this.sim.known.map((known) => known.def.id),

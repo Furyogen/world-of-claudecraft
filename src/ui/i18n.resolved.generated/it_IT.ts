@@ -2526,6 +2526,9 @@ export const it_IT: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Dati non validi."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

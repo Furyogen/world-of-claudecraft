@@ -12,6 +12,7 @@
 // game menu, so it stays out of the registry and is refused by bind().
 
 import { repairStoredBindings } from './keybinds_repair';
+import { defaultPrefStorage, type PrefStorage } from './synced_storage';
 
 export type BindKind = 'held' | 'edge';
 
@@ -460,10 +461,10 @@ function codeLabel(code: string): string {
 // Read a stored bindings blob, returning a plain object map or null. A missing,
 // corrupt (unparseable), or non-object value (including a JSON array) counts as
 // "no profile"; the caller then falls back to the legacy seed or to defaults.
-function readBindingsBlob(key: string): Record<string, unknown> | null {
+function readBindingsBlob(storage: PrefStorage, key: string): Record<string, unknown> | null {
   let parsed: unknown = null;
   try {
-    parsed = JSON.parse(localStorage.getItem(key) ?? 'null');
+    parsed = JSON.parse(storage.getItem(key) ?? 'null');
   } catch {
     /* corrupt */
   }
@@ -503,7 +504,10 @@ export class Keybinds {
   // per character; an empty scope keeps the bare legacy/global key.
   private readonly storeKey: string;
 
-  constructor(scope = '') {
+  constructor(
+    scope = '',
+    private readonly storage: PrefStorage = defaultPrefStorage(),
+  ) {
     this.storeKey = scope ? `${KEY_PREFIX}:${scope}` : KEY_PREFIX;
     this.load();
   }
@@ -524,9 +528,9 @@ export class Keybinds {
     // missing, corrupt, or malformed scoped value counts as "no profile" and
     // still seeds rather than dropping to bare defaults; the legacy blob is only
     // ever read here, never overwritten.
-    let obj = readBindingsBlob(this.storeKey);
+    let obj = readBindingsBlob(this.storage, this.storeKey);
     if (!obj && this.storeKey !== KEY_PREFIX) {
-      obj = readBindingsBlob(KEY_PREFIX);
+      obj = readBindingsBlob(this.storage, KEY_PREFIX);
     }
     if (!obj) return;
     // One-time, signature-keyed repair of profiles corrupted by reverted layout
@@ -577,7 +581,7 @@ export class Keybinds {
     const obj: Record<string, (string | null)[]> = {};
     for (const [id, codes] of this.map) obj[id] = codes;
     try {
-      localStorage.setItem(this.storeKey, JSON.stringify(obj));
+      this.storage.setItem(this.storeKey, JSON.stringify(obj));
     } catch {
       /* storage unavailable */
     }
