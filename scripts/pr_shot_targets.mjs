@@ -393,6 +393,37 @@ export const TARGETS = [
     },
   },
   {
+    key: 'options-keybinds',
+    label: 'Options: Key Bindings (an account-synced preference surface)',
+    // The account preference sync (settings + account-wide keybinds + per-character
+    // action bars) touches these paths but changes no pixels: this shot documents
+    // the Key Bindings surface whose layout now follows the account across devices.
+    when: ['game/keybinds', 'game/settings', 'game/synced_storage', 'net/cloud_prefs'],
+    variants: [{ key: 'desktop' }, { key: 'mobile', mobile: true }],
+    async capture(page) {
+      // Open the Esc options menu, then route to the Key Bindings sub-view by
+      // clicking its category row (fall back to the root menu if the row moved).
+      await page.evaluate(() => {
+        window.__game?.hud?.toggleOptionsMenu?.();
+      });
+      await wait(500);
+      await page.evaluate(() => {
+        const menu = document.querySelector('#options-menu');
+        if (!menu) return;
+        const row = [...menu.querySelectorAll('button, [role="button"]')].find((n) =>
+          /key\s*bindings/i.test(n.textContent || ''),
+        );
+        if (row) row.click();
+      });
+      await wait(600);
+      const open = await page.evaluate(() => {
+        const w = document.querySelector('#options-menu');
+        return !!w && getComputedStyle(w).display !== 'none';
+      });
+      return open ? { clip: '#options-menu' } : {};
+    },
+  },
+  {
     key: 'social-window',
     label: 'Social window (Friends tab, landscape layout)',
     when: ['ui/social_window'],
