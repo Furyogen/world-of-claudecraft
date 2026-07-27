@@ -1217,6 +1217,7 @@ export const zh_TW: EnTranslations = {
         "spellCritPct": "+{value}% 法術暴擊",
         "healthRegen": "休息時每 5 秒約恢復 {value} 點生命值",
         "manaRegen": "休息時每 5 秒約恢復 {value} 點法力",
+        "manaRegenCombat": "戰鬥中每 5 秒約恢復 {value} 點法力",
         "damageReduction": "對等級 {level} 攻擊者的傷害減免：{value}%",
         "dpsFromAp": "為你的攻擊增加 {value} 點每秒傷害"
       },

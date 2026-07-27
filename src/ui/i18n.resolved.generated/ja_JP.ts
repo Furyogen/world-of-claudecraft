@@ -1217,6 +1217,7 @@ export const ja_JP: EnTranslations = {
         "spellCritPct": "呪文クリティカル +{value}%",
         "healthRegen": "休憩中、5秒ごとに体力が約{value}回復",
         "manaRegen": "休憩中、5秒ごとにマナが約{value}回復",
+        "manaRegenCombat": "戦闘中、5秒ごとにマナが約{value}回復",
         "damageReduction": "レベル{level}の攻撃者に対するダメージ軽減: {value}%",
         "dpsFromAp": "攻撃の秒間ダメージを{value}上昇させます"
       },

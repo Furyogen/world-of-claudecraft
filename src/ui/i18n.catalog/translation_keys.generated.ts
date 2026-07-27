@@ -5904,6 +5904,7 @@ export type TranslationKeyFlat =
   | 'hudChrome.statInfo.effects.dpsFromAp'
   | 'hudChrome.statInfo.effects.healthRegen'
   | 'hudChrome.statInfo.effects.manaRegen'
+  | 'hudChrome.statInfo.effects.manaRegenCombat'
   | 'hudChrome.statInfo.effects.maxHealth'
   | 'hudChrome.statInfo.effects.maxMana'
   | 'hudChrome.statInfo.effects.rangedAttackPower'

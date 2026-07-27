@@ -1217,6 +1217,7 @@ export const tr_TR: EnTranslations = {
         "spellCritPct": "+%{value} Büyü Kritik Vuruşu",
         "healthRegen": "Dinlenirken her 5 saniyede yaklaşık {value} can",
         "manaRegen": "Dinlenirken her 5 saniyede yaklaşık {value} mana",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "{level}. seviye bir saldırgana karşı hasar azaltma: %{value}",
         "dpsFromAp": "Saldırılarına saniye başına {value} hasar ekler"
       },

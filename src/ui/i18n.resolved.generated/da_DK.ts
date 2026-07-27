@@ -1217,6 +1217,7 @@ export const da_DK: EnTranslations = {
         "spellCritPct": "+{value}% Kritisk magisk slag",
         "healthRegen": "Cirka {value} helbred hvert 5. sek. under hvile",
         "manaRegen": "Cirka {value} mana hvert 5. sek. under hvile",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "Skadesreduktion mod en angriber af niveau {level}: {value}%",
         "dpsFromAp": "Tilføjer {value} skade pr. sekund til dine angreb"
       },

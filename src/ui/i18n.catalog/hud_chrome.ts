@@ -1070,7 +1070,7 @@ export const hudChromeStrings = {
       agi: 'Sharpens your reflexes and aim, improving several of your combat stats.',
       sta: 'Toughens your body, raising your maximum health and how quickly you recover health while resting.',
       int: "Expands a spellcaster's mana pool and improves their chance to land a spell critical strike.",
-      spi: "Quickens how fast a spellcaster's mana returns while resting, out of combat.",
+      spi: "Quickens how fast a spellcaster's mana returns. Most of it flows while resting, out of combat, and a portion keeps returning even in combat.",
       armor:
         'Softens incoming physical blows. The reduction is greater against lower-level attackers and is capped at 75%.',
       attackPower: 'Powers your weapon attacks. Every 14 attack power adds 1 damage per second.',
@@ -1102,6 +1102,7 @@ export const hudChromeStrings = {
       spellCritPct: '+{value}% Spell Critical Strike',
       healthRegen: 'About {value} health every 5 sec while resting',
       manaRegen: 'About {value} mana every 5 sec while resting',
+      manaRegenCombat: 'About {value} mana every 5 sec in combat',
       damageReduction: 'Damage reduction against a level {level} attacker: {value}%',
       dpsFromAp: 'Adds {value} damage per second to your attacks',
     },

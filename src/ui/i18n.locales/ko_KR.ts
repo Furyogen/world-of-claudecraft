@@ -857,6 +857,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.effects.spellCritPct': '+{value}% 주문 치명타',
   'hudChrome.statInfo.effects.healthRegen': '휴식 중 5초마다 약 {value} 생명력 회복',
   'hudChrome.statInfo.effects.manaRegen': '휴식 중 5초마다 약 {value} 마나 회복',
+  'hudChrome.statInfo.effects.manaRegenCombat': '전투 중 5초마다 약 {value} 마나 회복',
   'hudChrome.statInfo.effects.damageReduction': '{level} 레벨 공격자에 대한 피해 감소: {value}%',
   'hudChrome.statInfo.effects.dpsFromAp': '공격에 초당 피해 {value} 추가',
   'hudChrome.statInfo.notes.minorForClass': '당신의 직업에는 거의 도움이 되지 않습니다.',

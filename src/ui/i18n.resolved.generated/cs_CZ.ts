@@ -1217,6 +1217,7 @@ export const cs_CZ: EnTranslations = {
         "spellCritPct": "+{value} % kritický zásah kouzlem",
         "healthRegen": "Asi {value} zdraví každých 5 s při odpočinku",
         "manaRegen": "Asi {value} many každých 5 s při odpočinku",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "Redukce poškození proti útočníkovi úrovně {level}: {value} %",
         "dpsFromAp": "Přidává {value} poškození za sekundu k tvým útokům"
       },

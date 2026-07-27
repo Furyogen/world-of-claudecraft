@@ -298,24 +298,31 @@ describe('paladin redesign', () => {
 
 describe('druid Lifesap redesign', () => {
   it('restores 30 resource per classic tick for 10 sec, in combat', () => {
-    const sim = new Sim({ seed: 11, playerClass: 'druid', autoEquip: true });
-    sim.setPlayerLevel(20);
-    expect(sim.applyTalents({ spec: null, rows: { 11: 'dru_r11_innervate' } })).toBe(true);
-    const p = sim.player;
-    p.resource = 0;
-    p.inCombat = true;
-    p.fiveSecondRule = 0; // no baseline mana regen mixes into the assertion
-    sim.castAbility('innervate');
-    sim.tick();
-    expect(p.auras.some((a) => a.kind === 'resource_sap')).toBe(true);
-    for (let i = 0; i < 20 * 11; i++) {
+    // A mana user now also passively regenerates Spirit mana in combat (the mp5
+    // change), so isolate Lifesap's contribution: run the same in-combat window with
+    // and without the sap and difference them.
+    const run = (withSap: boolean): { resource: number; cd: number } => {
+      const sim = new Sim({ seed: 11, playerClass: 'druid', autoEquip: true });
+      sim.setPlayerLevel(20);
+      expect(sim.applyTalents({ spec: null, rows: { 11: 'dru_r11_innervate' } })).toBe(true);
+      const p = sim.player;
+      p.resource = 0;
+      p.inCombat = true;
       p.fiveSecondRule = 0;
+      if (withSap) sim.castAbility('innervate');
       sim.tick();
-    }
-    // five classic 2-sec ticks inside the 10 sec window
-    expect(p.resource).toBe(100);
-    expect(p.auras.some((a) => a.kind === 'resource_sap')).toBe(false); // expired
-    expect(p.cooldowns.get('innervate')).toBeGreaterThan(60);
+      if (withSap) expect(p.auras.some((a) => a.kind === 'resource_sap')).toBe(true);
+      for (let i = 0; i < 20 * 11; i++) {
+        p.fiveSecondRule = 0;
+        sim.tick();
+      }
+      if (withSap) expect(p.auras.some((a) => a.kind === 'resource_sap')).toBe(false); // expired
+      return { resource: p.resource, cd: p.cooldowns.get('innervate') ?? 0 };
+    };
+    const withSap = run(true);
+    // five classic 2-sec ticks inside the 10 sec window: 5 x 20 = 100 from the sap
+    expect(withSap.resource - run(false).resource).toBe(100);
+    expect(withSap.cd).toBeGreaterThan(60);
   });
 
   it('carries across a form shift and fills Rage in Bruin Form', () => {

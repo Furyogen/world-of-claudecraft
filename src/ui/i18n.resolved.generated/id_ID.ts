@@ -1217,6 +1217,7 @@ export const id_ID: EnTranslations = {
         "spellCritPct": "+{value}% Serangan Kritis Mantra",
         "healthRegen": "Sekitar {value} nyawa setiap 5 dtk saat beristirahat",
         "manaRegen": "Sekitar {value} mana setiap 5 dtk saat beristirahat",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "Pengurangan kerusakan terhadap penyerang level {level}: {value}%",
         "dpsFromAp": "Menambah {value} kerusakan per detik pada serangan Anda"
       },

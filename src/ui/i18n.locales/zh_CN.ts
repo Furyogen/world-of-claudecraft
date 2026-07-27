@@ -830,6 +830,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.effects.spellCritPct': '+{value}% 法术暴击',
   'hudChrome.statInfo.effects.healthRegen': '休息时每5秒约恢复 {value} 点生命值',
   'hudChrome.statInfo.effects.manaRegen': '休息时每5秒约恢复 {value} 点法力',
+  'hudChrome.statInfo.effects.manaRegenCombat': '战斗中每5秒约恢复 {value} 点法力',
   'hudChrome.statInfo.effects.damageReduction': '对{level}级攻击者的伤害减免：{value}%',
   'hudChrome.statInfo.effects.dpsFromAp': '为你的攻击增加 {value} 点每秒伤害',
   'hudChrome.statInfo.notes.minorForClass': '对你的职业益处不大。',

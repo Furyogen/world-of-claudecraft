@@ -863,6 +863,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.effects.healthRegen':
     'Около {value} ед. здоровья каждые 5 сек. во время отдыха',
   'hudChrome.statInfo.effects.manaRegen': 'Около {value} ед. маны каждые 5 сек. во время отдыха',
+  'hudChrome.statInfo.effects.manaRegenCombat': 'Около {value} ед. маны каждые 5 сек. в бою',
   'hudChrome.statInfo.effects.damageReduction':
     'Снижение урона от атакующего {level} уровня: {value}%',
   'hudChrome.statInfo.effects.dpsFromAp': 'Добавляет {value} ед. урона в секунду к вашим атакам',

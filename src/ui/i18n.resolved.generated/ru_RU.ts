@@ -1217,6 +1217,7 @@ export const ru_RU: EnTranslations = {
         "spellCritPct": "+{value}% к шансу критического удара заклинанием",
         "healthRegen": "Около {value} ед. здоровья каждые 5 сек. во время отдыха",
         "manaRegen": "Около {value} ед. маны каждые 5 сек. во время отдыха",
+        "manaRegenCombat": "Около {value} ед. маны каждые 5 сек. в бою",
         "damageReduction": "Снижение урона от атакующего {level} уровня: {value}%",
         "dpsFromAp": "Добавляет {value} ед. урона в секунду к вашим атакам"
       },

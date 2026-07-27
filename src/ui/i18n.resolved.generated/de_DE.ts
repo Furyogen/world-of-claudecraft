@@ -1217,6 +1217,7 @@ export const de_DE: EnTranslations = {
         "spellCritPct": "+{value}% kritischer Zaubertreffer",
         "healthRegen": "Etwa {value} Gesundheit alle 5 Sek. beim Ausruhen",
         "manaRegen": "Etwa {value} Mana alle 5 Sek. beim Ausruhen",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "Schadensverringerung gegen einen Angreifer der Stufe {level}: {value}%",
         "dpsFromAp": "Fügt deinen Angriffen {value} Schaden pro Sekunde hinzu"
       },

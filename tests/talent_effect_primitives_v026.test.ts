@@ -333,19 +333,27 @@ describe('Talents V2 stasis and resource-sap primitives', () => {
   });
 
   it('Lifesap ticks the current resource every two seconds and is stilled by hard control', () => {
-    const sim = new Sim({ seed: 10, playerClass: 'druid', autoEquip: true });
-    sim.setPlayerLevel(20);
-    expect(sim.applyTalents({ spec: null, rows: { 11: 'dru_r11_innervate' } })).toBe(true);
-    sim.player.inCombat = true;
-    sim.player.fiveSecondRule = 0;
-    sim.castAbility('innervate');
-    sim.player.resource = 0;
-    step(sim, 40);
-    expect(sim.player.resource).toBe(20);
-
-    sim.player.resource = 0;
-    sim.ctx.applyAura(sim.player, aura(sim.player, 'test_stun', 'stun', 0, 'physical'));
-    step(sim, 40);
-    expect(sim.player.resource).toBe(0);
+    // A mana user now also passively regenerates Spirit mana in combat (the mp5
+    // change), so isolate Lifesap by differencing a with-sap run against a without-sap
+    // run over the same in-combat window. `control` optionally stuns the caster.
+    const sapGain = (control: boolean): number => {
+      const run = (withSap: boolean): number => {
+        const sim = new Sim({ seed: 10, playerClass: 'druid', autoEquip: true });
+        sim.setPlayerLevel(20);
+        expect(sim.applyTalents({ spec: null, rows: { 11: 'dru_r11_innervate' } })).toBe(true);
+        sim.player.inCombat = true;
+        sim.player.fiveSecondRule = 0;
+        if (withSap) sim.castAbility('innervate');
+        sim.player.resource = 0;
+        if (control) {
+          sim.ctx.applyAura(sim.player, aura(sim.player, 'test_stun', 'stun', 0, 'physical'));
+        }
+        step(sim, 40);
+        return sim.player.resource;
+      };
+      return run(true) - run(false);
+    };
+    expect(sapGain(false)).toBe(20); // one sap tick over the classic 2-sec window
+    expect(sapGain(true)).toBe(0); // hard control stills the sap
   });
 });
