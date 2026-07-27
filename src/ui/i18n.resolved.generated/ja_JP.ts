@@ -2528,7 +2528,7 @@ export const ja_JP: EnTranslations = {
       "invalid_input": "入力が無効です。"
     },
     "account_prefs": {
-      "invalid_input": "Invalid input."
+      "invalid_input": "入力が無効です。"
     }
   },
   "guide": {

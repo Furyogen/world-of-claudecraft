@@ -2528,7 +2528,7 @@ export const ko_KR: EnTranslations = {
       "invalid_input": "입력이 올바르지 않습니다."
     },
     "account_prefs": {
-      "invalid_input": "Invalid input."
+      "invalid_input": "입력이 올바르지 않습니다."
     }
   },
   "guide": {

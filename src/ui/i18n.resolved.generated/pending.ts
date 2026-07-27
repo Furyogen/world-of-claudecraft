@@ -28,24 +28,14 @@ export const pending: Record<string, readonly string[]> = {
   "de_DE": [
     "apiError.account_prefs.invalid_input"
   ],
-  "zh_CN": [
-    "apiError.account_prefs.invalid_input"
-  ],
-  "zh_TW": [
-    "apiError.account_prefs.invalid_input"
-  ],
-  "ko_KR": [
-    "apiError.account_prefs.invalid_input"
-  ],
-  "ja_JP": [
-    "apiError.account_prefs.invalid_input"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "apiError.account_prefs.invalid_input"
   ],
-  "ru_RU": [
-    "apiError.account_prefs.invalid_input"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "apiError.account_prefs.invalid_input"
   ],

@@ -2528,7 +2528,7 @@ export const zh_CN: EnTranslations = {
       "invalid_input": "输入无效。"
     },
     "account_prefs": {
-      "invalid_input": "Invalid input."
+      "invalid_input": "输入无效。"
     }
   },
   "guide": {

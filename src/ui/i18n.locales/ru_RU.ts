@@ -8315,6 +8315,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.sortName': 'Имя',
   'hudChrome.partyFrames.sortRole': 'Роль',
   'apiError.welcome.invalid_input': 'Неверные входные данные.',
+  'apiError.account_prefs.invalid_input': 'Неверные входные данные.',
   'welcome.back': 'С возвращением, {name}',
   'welcome.level': 'Уровень {level}',
   'welcome.lastPlayed': 'Последняя игра: {when}',

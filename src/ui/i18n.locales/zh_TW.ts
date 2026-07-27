@@ -7773,6 +7773,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.sortName': '名稱',
   'hudChrome.partyFrames.sortRole': '職責',
   'apiError.welcome.invalid_input': '輸入無效。',
+  'apiError.account_prefs.invalid_input': '輸入無效。',
   'welcome.back': '歡迎回來，{name}',
   'welcome.level': '等級 {level}',
   'welcome.lastPlayed': '上次遊玩：{when}',

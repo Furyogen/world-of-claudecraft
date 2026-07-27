@@ -7772,6 +7772,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.sortName': '名称',
   'hudChrome.partyFrames.sortRole': '职责',
   'apiError.welcome.invalid_input': '输入无效。',
+  'apiError.account_prefs.invalid_input': '输入无效。',
   'welcome.back': '欢迎回来，{name}',
   'welcome.level': '等级 {level}',
   'welcome.lastPlayed': '上次游玩：{when}',
