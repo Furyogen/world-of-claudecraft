@@ -2526,6 +2526,9 @@ export const en: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Invalid input."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

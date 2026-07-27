@@ -8147,6 +8147,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.sortName': '이름',
   'hudChrome.partyFrames.sortRole': '역할',
   'apiError.welcome.invalid_input': '입력이 올바르지 않습니다.',
+  'apiError.account_prefs.invalid_input': '입력이 올바르지 않습니다.',
   'welcome.back': '다시 오신 것을 환영합니다, {name}',
   'welcome.level': '레벨 {level}',
   'welcome.lastPlayed': '마지막 플레이: {when}',

@@ -2526,6 +2526,9 @@ export const zh_TW: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "輸入無效。"
+    },
+    "account_prefs": {
+      "invalid_input": "輸入無效。"
     }
   },
   "guide": {

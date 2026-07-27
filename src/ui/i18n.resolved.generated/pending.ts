@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "es_ES": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "fr_FR": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "fr_CA": [
+    "apiError.account_prefs.invalid_input"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "de_DE": [
+    "apiError.account_prefs.invalid_input"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "apiError.account_prefs.invalid_input"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "nl_NL": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "pl_PL": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "id_ID": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "tr_TR": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "sv_SE": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "vi_VN": [
+    "apiError.account_prefs.invalid_input"
+  ],
+  "da_DK": [
+    "apiError.account_prefs.invalid_input"
+  ]
 };

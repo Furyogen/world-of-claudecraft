@@ -8163,6 +8163,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.partyFrames.sortName': '名前',
   'hudChrome.partyFrames.sortRole': 'ロール',
   'apiError.welcome.invalid_input': '入力が無効です。',
+  'apiError.account_prefs.invalid_input': '入力が無効です。',
   'welcome.back': 'おかえりなさい、{name}さん',
   'welcome.level': 'レベル {level}',
   'welcome.lastPlayed': '最終プレイ：{when}',

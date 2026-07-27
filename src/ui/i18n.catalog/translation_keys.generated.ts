@@ -75,6 +75,7 @@ export type TranslationKeyFlat =
   | 'apiError.account.username_mismatch'
   | 'apiError.account.username_not_allowed'
   | 'apiError.account.username_taken'
+  | 'apiError.account_prefs.invalid_input'
   | 'apiError.auth.current_password_incorrect'
   | 'apiError.auth.forbidden'
   | 'apiError.auth.invalid_credentials'

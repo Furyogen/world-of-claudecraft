@@ -112,6 +112,12 @@ logic module pairs with a `<domain>_db.ts` that owns its SQL).
   backfill lives in `server/market_backfill.ts`, its rollback story in
   `docs/api-pipeline/phase-20-rollback-runbook.md`.
 - **Character names are globally `UNIQUE`** (catch `23505`, return 409 "name taken").
+- **Client preferences (settings, account-wide keybinds, per-character action bars)** are
+  an account-scoped key/value bag in `account_preferences` (`account_prefs_db.ts`
+  `ACCOUNT_PREFERENCES_SCHEMA`), served by `account_prefs.ts` (GET/PUT `/api/preferences`).
+  Values are OPAQUE client UI state, never gameplay: the server caps key/value size
+  (`account_prefs_validate.ts`) and stores the JSON verbatim. Losing a row drops only a
+  cosmetic UI layout, so this bag is deliberately separate from `characters.state`.
 - Leaderboards (`topLifetimeXp`, `topArenaRatings`) sort on JSONB expressions and
   are read through the **in-memory cache in main.ts**, never per-request under load.
 

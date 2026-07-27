@@ -893,6 +893,31 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     limiter: null,
     requireOwnedExpected: null,
   },
+  // Account-preference sync (server/account_prefs.ts): the settings / keybinds /
+  // action-bar bag that follows an account across devices. Registry-only RouteDefs
+  // born after the migration (new-route rule, server/http/CLAUDE.md): no legacy
+  // ladder arm. GET is bearer read-or-full; PUT needs a full (active) token. Both
+  // problem+json, no per-route rate limiter.
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'GET',
+    path: '/api/preferences',
+    handler: 'server/account_prefs.ts getPreferencesHandler (registry-only RouteDef)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.bearer,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'PUT',
+    path: '/api/preferences',
+    handler: 'server/account_prefs.ts putPreferencesHandler (registry-only RouteDef)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.full,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
   // Daily-rewards player family (v0.19.0, server/daily_rewards.ts): served by
   // the handleDailyRewardApi sub-dispatcher behind the main.ts PREFIX arm
   // `url.startsWith('/api/daily-rewards')`, which runs bearerActiveAccount

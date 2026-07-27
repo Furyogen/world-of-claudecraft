@@ -2526,6 +2526,9 @@ export const nl_NL: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Ongeldige invoer."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

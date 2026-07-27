@@ -2526,6 +2526,9 @@ export const pt_BR: EnTranslations = {
     },
     "welcome": {
       "invalid_input": "Entrada inválida."
+    },
+    "account_prefs": {
+      "invalid_input": "Invalid input."
     }
   },
   "guide": {

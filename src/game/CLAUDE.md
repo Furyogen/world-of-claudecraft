@@ -20,7 +20,8 @@ Turns the player's keyboard/mouse/touch/gamepad into **movement intent** +
 | `audio.ts` | `GameAudio` (`audio` singleton): compatibility facade mapping non-positional UI/event methods to typed sampled `sfx.playUi()` cues. |
 | `music.ts` | `MusicDirector` (`music` singleton): procedural zone/combat soundtrack. |
 | `sfx.ts` / `voice.ts` | `sfx` / `voice` singletons: play pre-rendered clips from `public/audio/` (spatial 3D SFX + NPC voice lines) via their `*_manifest.generated.ts`. |
-| `settings.ts` | `Settings`: persisted Esc-menu options. |
+| `settings.ts` | `Settings`: persisted Esc-menu options. Reads/writes through an injected `PrefStorage` (defaults to localStorage). |
+| `synced_storage.ts` | The `PrefStorage` seam: `defaultPrefStorage()` (guarded localStorage), `SyncedStorage` (writes pass through to localStorage AND notify a sink for the account-sync push), and `isSyncedPrefKey` (the allowlist: `woc_settings`, the bare `woc_keybinds`, every `woc_hotbar_` key). `main.ts` wires the online cloud-synced wrapper (`src/net/cloud_prefs.ts`); mobile native apps opt out. |
 | `click_move.ts` / `pointer_pick.ts` / `camera_follow.ts` | pure, DOM-free input/camera math extracted from the render loop so they unit-test in isolation |
 | `camera_driven_facing.ts` / `mouselook_release.ts` / `movement_visual.ts` / `keyboard_turn_facing.ts` / `self_alpha_lead.ts` | pure facing-and-feel math, an interlocking cluster (edit one knowing the others, or the facing-snap bug class returns): `camera_driven_facing` is the single source of truth for "is a camera driving facing this frame"; `mouselook_release` commits the final camera-yaw slice exactly once on the falling edge (the settle-back-snap fix); `movement_visual` is render-only diagonal facing, never gameplay facing; `keyboard_turn_facing` integrates local `TURN_SPEED` turns streamed as the authoritative wire facing (`main.ts` zeroes the turn flags while it owns the channel); `self_alpha_lead` is the echo-driven adaptive self render lead. |
 | `spawn_cinematic.ts` | pure first-spawn camera approach math; start/landing/continuity pinned by `tests/spawn_cinematic.test.ts`. |
@@ -63,12 +64,16 @@ Turns the player's keyboard/mouse/touch/gamepad into **movement intent** +
   exact compiled key set and catalog hash. Invalid or unavailable packs fall
   back as a whole to the generated manifest. One-shots cycle tracks only when a
   source is accepted; loops pin a track until stopped.
-- **Each module owns its `localStorage` key:** keybinds `woc_keybinds` (namespaced
-  per character: `woc_keybinds:char:<id>` online, `woc_keybinds:offline:<class>:<name>`
-  offline, with the bare key kept as a read-only legacy seed for fresh characters),
-  settings `woc_settings`, music on/off `ev_music_on`; `gamepad_bindings.ts` has its
-  own key too. All reads are try/catch-guarded (private mode / corrupt JSON fall
-  back to defaults).
+- **Each module owns its `localStorage` key:** keybinds `woc_keybinds` (ACCOUNT-WIDE
+  online, where `main.ts` constructs `Keybinds` with an empty scope so it reads/writes
+  the bare key that the account sync mirrors; per-character-class
+  `woc_keybinds:offline:<class>:<name>` offline; the per-character `woc_keybinds:char:<id>`
+  scope is legacy and no longer written), settings `woc_settings` (one account-global
+  blob, synced online), action bars `woc_hotbar_*` (per character, synced online),
+  music on/off `ev_music_on`; `gamepad_bindings.ts` has its own key too. All reads are
+  try/catch-guarded (private mode / corrupt JSON fall back to defaults). The online
+  cloud sync (settings + account-wide keybinds + per-character action bars) rides on
+  `synced_storage.ts` + `src/net/cloud_prefs.ts`; mobile native apps opt out.
 - **Keybinds:** `Escape` is reserved (`isReservedCode`) and never bindable, it
   always toggles the game menu. A code lives on at most one action (rebinding
   steals it). Up to 2 codes/action (primary + secondary). The default layout is
