@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "es_ES": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "fr_FR": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "fr_CA": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "de_DE": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "nl_NL": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "pl_PL": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "id_ID": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "tr_TR": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "sv_SE": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "vi_VN": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ],
+  "da_DK": [
+    "hudChrome.statInfo.effects.manaRegenCombat"
+  ]
 };

@@ -29,6 +29,7 @@
 // (enforced by tests/architecture.test.ts).
 
 import { pctValue, recalcPlayerStats } from '../entity';
+import { manaRegenPer2s } from '../mana_regen';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { type Aura, type AuraKind, CAST_COMPLETE_EPS, DT, type Entity } from '../types';
@@ -78,15 +79,17 @@ export function updateRegen(ctx: SimContext, p: Entity, meta: PlayerMeta): void 
     }
   }
   if (p.resourceType === 'mana') {
-    if (p.fiveSecondRule >= 5) {
-      // out-of-combat mana regen: faster than before and scales with spirit
-      // (gear/level) plus a small flat per-level floor so low-spirit casters
-      // still recover at a reasonable pace (#103)
-      const regen =
-        (p.stats.spi / 3 + 4 + Math.floor(p.level / 5)) *
-        (1 + ctx.playerMods(meta).global.manaRegenPct);
-      p.resource = Math.min(p.maxResource, p.resource + Math.round(regen));
-    }
+    // Spirit regen: the FULL amount out of combat (past the five-second rule),
+    // and COMBAT_SPIRIT_REGEN_FRACTION of it while the rule is active, so Spirit
+    // keeps returning mana in combat like WoW's mp5 stat. The out-of-combat
+    // amount is unchanged from the #103 formula (Spirit + flat + per-level floor).
+    const regen = manaRegenPer2s(
+      p.stats.spi,
+      p.level,
+      ctx.playerMods(meta).global.manaRegenPct,
+      p.fiveSecondRule,
+    );
+    p.resource = Math.min(p.maxResource, p.resource + regen);
   } else if (p.resourceType === 'energy') {
     // Feral Instinct (cat form) grants a buff_energyregen aura (value = fraction, 1 = +100%).
     let regen = 20;

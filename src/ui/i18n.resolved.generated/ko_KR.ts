@@ -1217,6 +1217,7 @@ export const ko_KR: EnTranslations = {
         "spellCritPct": "+{value}% 주문 치명타",
         "healthRegen": "휴식 중 5초마다 약 {value} 생명력 회복",
         "manaRegen": "휴식 중 5초마다 약 {value} 마나 회복",
+        "manaRegenCombat": "전투 중 5초마다 약 {value} 마나 회복",
         "damageReduction": "{level} 레벨 공격자에 대한 피해 감소: {value}%",
         "dpsFromAp": "공격에 초당 피해 {value} 추가"
       },

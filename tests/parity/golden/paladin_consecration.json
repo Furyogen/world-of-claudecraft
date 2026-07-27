@@ -148,7 +148,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 417,
-      "state": "865fc49f",
+      "state": "dd32bfe9",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -159,7 +159,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 417,
-      "state": "e65e8568",
+      "state": "47f6f1c6",
       "events": "55404e76",
       "rng": {
         "draws": 80,
@@ -170,7 +170,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 417,
-      "state": "e0bccdd1",
+      "state": "341b1f84",
       "events": "741638a5",
       "rng": {
         "draws": 170,
@@ -181,7 +181,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 417,
-      "state": "2eac5cae",
+      "state": "b55a17c3",
       "events": "c42eb4a4",
       "rng": {
         "draws": 270,
@@ -192,7 +192,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 417,
-      "state": "65fef305",
+      "state": "8890deaf",
       "events": "741638a5",
       "rng": {
         "draws": 387,
@@ -203,7 +203,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 417,
-      "state": "c45f8b62",
+      "state": "8badcb5c",
       "events": "75a4e964",
       "rng": {
         "draws": 501,
@@ -214,7 +214,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 417,
-      "state": "ac1fc848",
+      "state": "391eb076",
       "events": "741638a5",
       "rng": {
         "draws": 627,
@@ -225,7 +225,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 417,
-      "state": "f850615f",
+      "state": "3a41fe2d",
       "events": "2f266e06",
       "rng": {
         "draws": 765,
@@ -236,7 +236,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 417,
-      "state": "d31b799a",
+      "state": "fbb5d924",
       "events": "741638a5",
       "rng": {
         "draws": 931,
@@ -247,7 +247,7 @@
       "tick": 201,
       "time": 10.05,
       "nextId": 417,
-      "state": "4463bbf0",
+      "state": "5a07b512",
       "events": "741638a5",
       "rng": {
         "draws": 932,
@@ -377,7 +377,7 @@
             "z": -1
           },
           "potionCooldownUntil": -1,
-          "resource": 657,
+          "resource": 660,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,

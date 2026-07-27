@@ -1217,6 +1217,7 @@ export const vi_VN: EnTranslations = {
         "spellCritPct": "+{value}% Chí Mạng Phép",
         "healthRegen": "Khoảng {value} máu mỗi 5 giây khi nghỉ ngơi",
         "manaRegen": "Khoảng {value} mana mỗi 5 giây khi nghỉ ngơi",
+        "manaRegenCombat": "About {value} mana every 5 sec in combat",
         "damageReduction": "Giảm sát thương trước kẻ tấn công cấp {level}: {value}%",
         "dpsFromAp": "Thêm {value} sát thương mỗi giây cho các đòn tấn công của bạn"
       },
