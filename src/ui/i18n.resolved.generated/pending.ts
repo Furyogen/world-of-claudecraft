@@ -13,50 +13,74 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "es_ES": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "fr_FR": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "fr_CA": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "en_CA": [],
   "it_IT": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "de_DE": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "zh_CN": [
     "hudChrome.meters.breakdownRow",
@@ -86,9 +110,13 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "ru_RU": [
     "hudChrome.meters.breakdownRow",
@@ -100,64 +128,96 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "nl_NL": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "pl_PL": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "id_ID": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "tr_TR": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "sv_SE": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "vi_VN": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ],
   "da_DK": [
     "hudChrome.meters.breakdownOther",
     "hudChrome.meters.breakdownRow",
     "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.dock",
     "hudChrome.meters.melee",
+    "hudChrome.meters.move",
     "hudChrome.meters.percent",
-    "hudChrome.meters.petAbility"
+    "hudChrome.meters.petAbility",
+    "hudChrome.meters.popOut",
+    "hudChrome.meters.resize"
   ]
 };

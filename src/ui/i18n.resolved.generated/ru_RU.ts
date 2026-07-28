@@ -857,7 +857,11 @@ export const ru_RU: EnTranslations = {
       "breakdownOther": "Прочее ({count})",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "Ближний бой"
+      "melee": "Ближний бой",
+      "move": "Перетащите, чтобы переместить счётчик",
+      "resize": "Перетащите, чтобы изменить размер счётчика",
+      "popOut": "Открыть счётчик в отдельном окне",
+      "dock": "Вернуть счётчик в окно счётчиков"
     },
     "petFeed": {
       "disabledFullHp": "Питомец полностью здоров",

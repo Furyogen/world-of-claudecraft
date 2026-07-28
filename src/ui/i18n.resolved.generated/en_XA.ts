@@ -857,7 +857,11 @@ export const en_XA: EnTranslations = {
       "breakdownOther": "[Óţĥéŕ ({count})]",
       "percent": "[{value}%]",
       "petAbility": "[{pet}: {ability}]",
-      "melee": "[Ɱéļéé]"
+      "melee": "[Ɱéļéé]",
+      "move": "[Ðŕáĝ ţó ɱóʋé ţĥíš ɱéţéŕ]",
+      "resize": "[Ðŕáĝ ţó ŕéšížé ţĥíš ɱéţéŕ]",
+      "popOut": "[Óþéñ ţĥíš ɱéţéŕ íñ íţš óŵñ ŵíñðóŵ]",
+      "dock": "[Ðóçķ ţĥíš ɱéţéŕ ƀáçķ íñţó ţĥé ɱéţéŕš ŵíñðóŵ]"
     },
     "petFeed": {
       "disabledFullHp": "[Þéţ íš áţ ƒúļļ ĥéáļţĥ]",
