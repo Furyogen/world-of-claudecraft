@@ -1500,6 +1500,9 @@ export class Hud {
     this.localIgnoredNames = this.loadLocalIgnoredNames();
     this.meters = new Meters(sim, {
       attachTooltip: (element, html) => this.attachTooltip(element, html),
+      uiScale: getUiScale,
+      isMobileLayout: () => this.isMobileLayout(),
+      storage: localStorage,
     });
     this.actionBarController = new ActionBarController({
       storage: localStorage,

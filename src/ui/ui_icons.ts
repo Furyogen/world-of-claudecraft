@@ -56,6 +56,7 @@ export type UiIconName =
   | 'prev'
   | 'next'
   | 'more'
+  | 'popout'
   | 'meters'
   | 'whisper'
   | 'music'
@@ -152,6 +153,10 @@ const ICONS: Record<UiIconName, string> = {
     '<path d="M200 56h112a16 16 0 0 1 16 16v16h96v40H88V88h96V72a16 16 0 0 1 16-16zm16 32h80V80h-80zM120 152h272l-20 280a32 32 0 0 1-32 30H172a32 32 0 0 1-32-30zm88 48v216h32V200zm64 0v216h32V200z"/>',
   prev: '<path d="M336 96 136 256 336 416Z"/>',
   next: '<path d="M176 96 376 256 176 416Z"/>',
+  // hand-authored: a pane with an arrow leaving its top-right corner, the
+  // classic "open this in its own window" affordance (the meters pop-out).
+  popout:
+    '<path d="M296 64h152v152h-44v-77L281 262l-31-31 123-123h-77zM64 128h160v44H108v232h232V288h44v160H64z"/>',
   more: '<path d="M94 256a34 34 0 1 0 68 0 34 34 0 1 0-68 0M222 256a34 34 0 1 0 68 0 34 34 0 1 0-68 0M350 256a34 34 0 1 0 68 0 34 34 0 1 0-68 0Z"/>',
   meters: '<path d="M84 288h72v152H84zM220 184h72v256h-72zM356 96h72v344h-72z"/>',
   // hand-authored: a unit nameplate — name bar over a health bar, with a

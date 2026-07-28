@@ -878,7 +878,11 @@ export const ja_JP: EnTranslations = {
       "breakdownOther": "その他（{count}）",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "近接攻撃"
+      "melee": "近接攻撃",
+      "move": "ドラッグしてこのメーターを移動",
+      "resize": "ドラッグしてこのメーターの大きさを変更",
+      "popOut": "このメーターを別ウィンドウで開く",
+      "dock": "このメーターをメーターウィンドウに戻す"
     },
     "petFeed": {
       "disabledFullHp": "ペットは満タンの体力です",
