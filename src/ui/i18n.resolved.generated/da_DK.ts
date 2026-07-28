@@ -857,7 +857,11 @@ export const da_DK: EnTranslations = {
       "breakdownOther": "Other ({count})",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "Melee"
+      "melee": "Melee",
+      "move": "Drag to move this meter",
+      "resize": "Drag to resize this meter",
+      "popOut": "Open this meter in its own window",
+      "dock": "Dock this meter back into the meters window"
     },
     "petFeed": {
       "disabledFullHp": "Kæledyret har fuldt helbred",

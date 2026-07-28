@@ -857,7 +857,11 @@ export const ko_KR: EnTranslations = {
       "breakdownOther": "기타 ({count})",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "근접 공격"
+      "melee": "근접 공격",
+      "move": "드래그하여 이 미터를 이동",
+      "resize": "드래그하여 이 미터의 크기 조절",
+      "popOut": "이 미터를 별도 창으로 열기",
+      "dock": "이 미터를 미터 창으로 되돌리기"
     },
     "petFeed": {
       "disabledFullHp": "펫의 체력이 가득 찼습니다",
