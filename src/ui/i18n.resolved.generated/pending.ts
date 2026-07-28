@@ -9,25 +9,155 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "es_ES": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "fr_FR": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "fr_CA": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "de_DE": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "zh_CN": [
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "zh_TW": [
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "ko_KR": [
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "ja_JP": [
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "pt_BR": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "ru_RU": [
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "cs_CZ": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "nl_NL": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "pl_PL": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "id_ID": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "tr_TR": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "sv_SE": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "vi_VN": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ],
+  "da_DK": [
+    "hudChrome.meters.breakdownOther",
+    "hudChrome.meters.breakdownRow",
+    "hudChrome.meters.breakdownSummary",
+    "hudChrome.meters.melee",
+    "hudChrome.meters.percent",
+    "hudChrome.meters.petAbility"
+  ]
 };
