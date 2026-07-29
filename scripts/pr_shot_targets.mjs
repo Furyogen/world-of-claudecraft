@@ -1132,7 +1132,11 @@ export const TARGETS = [
   {
     key: 'meters-interaction',
     label: 'Meters: tab right-click menu, moving a panel, and resizing one',
-    when: ['ui/meters_menu', 'ui/simple_context_menu'],
+    // Two scenes are the menu, but the other three are move and resize, which
+    // live in the frame controller and its geometry core (`ui/meters_frame`
+    // matches both). Gating on the menu modules alone would let a frame-only
+    // change ship without reshooting the drags it changed.
+    when: ['ui/meters_menu', 'ui/simple_context_menu', 'ui/meters_frame'],
     variants: [
       { key: 'menu-separate', charClass: 'warlock', charName: 'Nyxaris', scene: 'separate' },
       { key: 'menu-regroup', charClass: 'warlock', charName: 'Nyxaris', scene: 'regroup' },

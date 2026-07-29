@@ -697,6 +697,8 @@ export class Meters {
   readonly data: MeterData;
   private readonly main: MetersPanel;
   private readonly detached = new Map<DetachableTab, MetersPanel>();
+  /** Detached windows hidden along with the tabbed one, to restore on reopen. */
+  private reopenDetached: DetachableTab[] = [];
 
   constructor(
     private world: IWorld,
@@ -735,7 +737,21 @@ export class Meters {
   }
 
   toggle(): void {
-    this.main.setOpen(!this.main.isOpen);
+    const open = !this.main.isOpen;
+    this.main.setOpen(open);
+    // The keybind clears the whole meters surface, not just the tabbed window: a
+    // separated Threat or Healing window is part of that surface, and leaving two
+    // panels floating over the HUD is not what "close the meters" means. Which
+    // ones were up is remembered so reopening restores that exact arrangement.
+    // The PERSISTED set is deliberately left alone: closing the meters is not the
+    // player docking a meter, so a reload still comes back to their layout.
+    if (open) {
+      for (const tab of this.reopenDetached) this.detached.get(tab)?.setOpen(true);
+      this.reopenDetached = [];
+    } else {
+      this.reopenDetached = DETACHABLE.filter((tab) => this.isDetached(tab));
+      for (const panel of this.detached.values()) panel.setOpen(false);
+    }
   }
 
   get isOpen(): boolean {

@@ -35,7 +35,6 @@ const MARKUP = `
         <button type="button" class="mt-tab" data-tab="heal"></button>
         <button type="button" class="mt-tab" data-tab="threat"></button>
       </span>
-      <button type="button" class="x-btn mt-pop"></button>
       <button type="button" class="mt-prev"></button>
       <button type="button" class="mt-next"></button>
       <button type="button" class="mt-close"></button>
@@ -300,6 +299,88 @@ describe('detachable meter windows', () => {
     const panel = el('meters-window');
     expect(panel.classList.contains('mt-framed')).toBe(false);
     expect(panel.style.left).toBe('');
+  });
+
+  it('opens as a plain block on a mobile layout, even with a saved box', () => {
+    const storage = new FakeStorage();
+    storage.setItem(
+      'woc_meters_frame',
+      JSON.stringify({ left: 100, top: 100, width: 300, height: 200 }),
+    );
+    const { meters, el } = setup(storage, true);
+    meters.toggle();
+    const panel = el('meters-window');
+    // `mt-framed` is what supplies flex-direction: column, and apply() refuses to
+    // write it on a mobile layout. Opening as 'flex' regardless would lay the
+    // title, summary, hint and rows out in a ROW. Reachable rather than
+    // theoretical: mobile-touch toggles at runtime from the touch-controls
+    // setting, so a desktop player who moved a panel then turned touch controls
+    // on lands here.
+    expect(panel.classList.contains('mt-framed')).toBe(false);
+    expect(panel.style.display).toBe('block');
+  });
+
+  it('opens as a flex column on a desktop layout with the same saved box', () => {
+    const storage = new FakeStorage();
+    storage.setItem(
+      'woc_meters_frame',
+      JSON.stringify({ left: 100, top: 100, width: 300, height: 200 }),
+    );
+    const { meters, el } = setup(storage);
+    meters.toggle();
+    const panel = el('meters-window');
+    expect(panel.classList.contains('mt-framed')).toBe(true);
+    expect(panel.style.display).toBe('flex');
+  });
+
+  it('closes the separated windows along with the tabbed one, and brings them back', () => {
+    const { meters, shown, storage } = setup();
+    meters.toggle();
+    meters.popOut('threat');
+    expect(shown('threat-window')).toBe(true);
+
+    // the meters keybind clears the whole surface, not just the tabbed window
+    meters.toggle();
+    expect(shown('meters-window')).toBe(false);
+    expect(shown('threat-window')).toBe(false);
+    // closing is not docking: a reload must still come back to the player's layout
+    expect(storage.getItem('woc_meters_detached')).toBe('threat');
+
+    meters.toggle();
+    expect(shown('meters-window')).toBe(true);
+    expect(shown('threat-window')).toBe(true);
+    // and only what was actually up comes back
+    expect(shown('heal-window')).toBe(false);
+  });
+
+  it('does not resurrect a window the player docked before closing', () => {
+    const { meters, shown } = setup();
+    meters.toggle();
+    meters.popOut('heal');
+    meters.dock('heal');
+    meters.toggle();
+    meters.toggle();
+    expect(shown('heal-window')).toBe(false);
+  });
+
+  it('advertises the move gesture on the handles only, never on the tab buttons', () => {
+    const { el } = setup();
+    const main = el('meters-window');
+    const move = main.querySelector('.panel-title')?.getAttribute('title') ?? '';
+    expect(move).not.toBe('');
+    expect(main.querySelector('.mt-view')?.getAttribute('title')).toBe(move);
+    // A container's title is inherited by every descendant carrying none of its
+    // own, so each tab would otherwise advertise a drag that pressing it does
+    // NOT perform (onMoveStart hands a press on a control back to that control).
+    for (const tab of ['dmg', 'heal', 'threat']) {
+      expect(main.querySelector(`.mt-tab[data-tab="${tab}"]`)?.getAttribute('title')).toBe('');
+    }
+    // The pager and close controls keep the tooltips they set for themselves.
+    for (const control of ['.mt-prev', '.mt-next', '.mt-close']) {
+      const title = main.querySelector(control)?.getAttribute('title') ?? '';
+      expect(title).not.toBe('');
+      expect(title).not.toBe(move);
+    }
   });
 
   it('offers Separate when right-clicking a docked meter tab, and acts on it', () => {

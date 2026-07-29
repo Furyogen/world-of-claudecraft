@@ -65,6 +65,13 @@ type Gesture =
 /** Body class the stylesheet uses to suppress text selection mid-gesture. */
 const DRAGGING_BODY_CLASS = 'meter-frame-dragging';
 
+/**
+ * Interactive descendants of a handle. A pointerdown on one of these is that
+ * control's, never a drag, and the handle's move tooltip must not claim them
+ * either. Stated once so the two rules cannot drift apart.
+ */
+const HANDLE_CONTROL_SELECTOR = 'button, a, input, select, textarea';
+
 export class MeterFrame {
   private geo: MeterFrameGeometry | null = null;
   private gesture: Gesture | null = null;
@@ -92,6 +99,14 @@ export class MeterFrame {
     for (const handle of handles) {
       handle.classList.add('mt-move-handle');
       handle.setAttribute('title', t('hudChrome.meters.move'));
+      // A container's title is inherited by every descendant that has none of
+      // its own, so on the tabbed window "Dmg" / "Heal" / "Threat" would each
+      // advertise a drag that pressing them does NOT perform. An empty title is
+      // what stops that inheritance; controls carrying their own tooltip (the
+      // pager and close buttons, set by MetersPanel before this runs) keep it.
+      for (const control of handle.querySelectorAll<HTMLElement>(HANDLE_CONTROL_SELECTOR)) {
+        if (!control.hasAttribute('title')) control.setAttribute('title', '');
+      }
       handle.addEventListener('pointerdown', (event) => this.onMoveStart(event));
     }
     grip.addEventListener('pointerdown', (event) => this.onResizeStart(event));
@@ -140,9 +155,18 @@ export class MeterFrame {
     if (wasOpen) style.display = 'block';
   }
 
-  /** True once the panel carries a player-chosen box. */
+  /**
+   * True once the panel carries a player-chosen box AND that box is actually in
+   * force. The `blocked()` half is load-bearing: apply() refuses to write on a
+   * mobile layout, so a saved box there never adds `mt-framed` (which is what
+   * supplies `flex-direction: column`). Without the check, MetersPanel.setOpen
+   * would still take its 'flex' branch and lay the title, summary, hint and rows
+   * out in a ROW. Reachable rather than theoretical: `mobile-touch` toggles at
+   * runtime from the touch-controls setting, so a desktop player who moves a
+   * panel and later turns touch controls on lands in it.
+   */
   get isFramed(): boolean {
-    return this.geo !== null;
+    return this.geo !== null && !this.blocked();
   }
 
   private blocked(): boolean {
@@ -163,10 +187,10 @@ export class MeterFrame {
 
   private onMoveStart(event: PointerEvent): void {
     if (this.blocked() || this.gesture || event.button !== 0) return;
-    // A press on a tab, pager, pop-out or close button is that button's, never
-    // a drag: the title bar is both the control strip and the move handle.
+    // A press on a tab, pager or close button is that button's, never a drag:
+    // the title bar is both the control strip and the move handle.
     const target = event.target as HTMLElement | null;
-    if (target?.closest('button, a, input, select, textarea')) return;
+    if (target?.closest(HANDLE_CONTROL_SELECTOR)) return;
     this.ensureGeometry();
     if (!this.geo) return;
     this.gesture = {
