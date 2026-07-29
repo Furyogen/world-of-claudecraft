@@ -5,13 +5,20 @@ import { openSimpleMenu, type SimpleMenuDeps } from '../src/ui/simple_context_me
 function harness(mobile = false) {
   document.body.innerHTML = '<div id="ctx-menu" style="display:none"></div>';
   const root = document.getElementById('ctx-menu') as HTMLElement;
-  const placed: { x: number; y: number; reserveRight: number; reserveBottom: number }[] = [];
+  const placed: {
+    x: number;
+    y: number;
+    reserveRight: number;
+    reserveBottom: number;
+    minLeft: number | undefined;
+    minTop: number | undefined;
+  }[] = [];
   let clamped = 0;
   let bound: ((act: string) => void) | null = null;
   const deps: SimpleMenuDeps = {
     root: () => root,
-    place: (_el, x, y, reserveRight, reserveBottom) =>
-      placed.push({ x, y, reserveRight, reserveBottom }),
+    place: (_el, x, y, reserveRight, reserveBottom, minLeft, minTop) =>
+      placed.push({ x, y, reserveRight, reserveBottom, minLeft, minTop }),
     keepOnScreen: () => {
       clamped++;
     },
@@ -53,6 +60,17 @@ describe('shared simple context menu', () => {
     expect(h.placed[0].x).toBe(640);
     expect(h.placed[0].y).toBe(480);
     expect(h.clamped()).toBe(1);
+  });
+
+  it('pins the seated box off the viewport edges, like the other HUD menus', () => {
+    // Hud.placePopupAt grew minLeft/minTop, and the chat context menu passes
+    // 0 / 8. Forwarding the same values is what keeps this menu's promise that
+    // it clamps exactly like the menus Hud opens; leaving them undefined would
+    // let it sit flush against the top edge when every sibling menu does not.
+    const h = harness();
+    openSimpleMenu([{ act: 'a', label: 'A' }], 12, 0, () => {}, h.deps);
+    expect(h.placed[0].minLeft).toBe(0);
+    expect(h.placed[0].minTop).toBe(8);
   });
 
   it('reserves more height per row on a touch layout, where rows are taller', () => {

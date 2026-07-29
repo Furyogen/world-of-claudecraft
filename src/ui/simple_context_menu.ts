@@ -20,8 +20,21 @@ export interface SimpleMenuItem {
 export interface SimpleMenuDeps {
   /** The shared `#ctx-menu` element. */
   root(): HTMLElement;
-  /** Hud's popup seater (visual-space x/y, author-space reserves). */
-  place(el: HTMLElement, x: number, y: number, reserveRight: number, reserveBottom: number): void;
+  /**
+   * Hud's popup seater (visual-space x/y, author-space reserves). `minLeft` /
+   * `minTop` pin the seated box off the viewport edges; they are forwarded
+   * rather than defaulted so this menu clamps like the other HUD menus that
+   * pass them (the chat context menu uses the same 0 / 8).
+   */
+  place(
+    el: HTMLElement,
+    x: number,
+    y: number,
+    reserveRight: number,
+    reserveBottom: number,
+    minLeft?: number,
+    minTop?: number,
+  ): void;
   /** Hud's post-layout re-clamp. */
   keepOnScreen(el: HTMLElement): void;
   /** Hud's row binder: role/tabindex, click + Enter/Space, close-then-act. */
@@ -34,6 +47,9 @@ const ROW_H_DESKTOP = 28;
 const ROW_H_MOBILE = 44;
 const MENU_CHROME_H = 16;
 const RESERVE_RIGHT = 170;
+/** Edge pins, matching the chat context menu so every HUD menu seats alike. */
+const MIN_LEFT = 0;
+const MIN_TOP = 8;
 
 /**
  * Paint `items` into the shared menu at a viewport point and wire their
@@ -55,7 +71,7 @@ export function openSimpleMenu(
     .join('');
   el.style.display = 'block';
   const rowH = deps.isMobileLayout() ? ROW_H_MOBILE : ROW_H_DESKTOP;
-  deps.place(el, x, y, RESERVE_RIGHT, MENU_CHROME_H + items.length * rowH);
+  deps.place(el, x, y, RESERVE_RIGHT, MENU_CHROME_H + items.length * rowH, MIN_LEFT, MIN_TOP);
   deps.keepOnScreen(el);
   deps.bindActions(onSelect);
 }

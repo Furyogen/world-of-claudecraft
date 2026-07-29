@@ -1600,8 +1600,8 @@ export class Hud {
       openMenu: (items, x, y, onSelect) =>
         openSimpleMenu(items, x, y, onSelect, {
           root: () => $('#ctx-menu'),
-          place: (el, px, py, reserveRight, reserveBottom) =>
-            this.placePopupAt(el, px, py, reserveRight, reserveBottom),
+          place: (el, px, py, reserveRight, reserveBottom, minLeft, minTop) =>
+            this.placePopupAt(el, px, py, reserveRight, reserveBottom, minLeft, minTop),
           keepOnScreen: (el) => this.keepPopupOnScreen(el),
           bindActions: (onActivate) => this.bindContextMenuActions(onActivate),
           isMobileLayout: () => this.isMobileLayout(),
