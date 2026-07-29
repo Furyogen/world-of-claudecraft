@@ -29,7 +29,10 @@ import {
   buildMeterBreakdown,
 } from './meters_breakdown_view';
 import { MeterFrame } from './meters_frame';
+import { METER_FRAME_LIMITS, TABBED_METER_FRAME_LIMITS } from './meters_frame_core';
+import { buildMeterTabMenu, type MeterMenuRow } from './meters_menu_view';
 import { buildMeterRows, type MeterPet, type MeterTab } from './meters_rows_view';
+import type { SimpleMenuItem } from './simple_context_menu';
 
 const ENCOUNTER_END_SECONDS = 5;
 const HISTORY_CAP = 8;
@@ -269,6 +272,13 @@ export interface MetersDeps {
   /** Mobile-touch probe: the stylesheet owns panel placement there. */
   isMobileLayout?: () => boolean;
   storage?: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+  /** Hud's shared right-click menu, injected so meters.ts never imports Hud. */
+  openMenu?: (
+    items: readonly SimpleMenuItem[],
+    x: number,
+    y: number,
+    onSelect: (act: string) => void,
+  ) => void;
 }
 
 /** A live controlled pet, resolved from the world for the threat tab. */
@@ -299,8 +309,10 @@ interface PanelHost {
   attachTooltip(el: HTMLElement, html: () => string): void;
   /** Fired by a detached panel's close button. */
   onDock(tab: DetachableTab): void;
-  /** Fired by the main panel's pop-out button. */
-  onPopOut(tab: DetachableTab): void;
+  /** Whether `tab` currently has its own window. */
+  isDetached(tab: MeterTab): boolean;
+  /** Open the tab's right-click menu at a viewport point. */
+  openTabMenu(rows: MeterMenuRow[], x: number, y: number): void;
 }
 
 export interface PanelSpec {
@@ -351,13 +363,22 @@ export class MetersPanel {
           this.refreshTabs();
           this.render(true);
         });
+        // Right-clicking a tab NAME offers that meter's own window: "Separate"
+        // while it is docked, "Regroup" once it has one. Damage is the home
+        // meter and yields no rows, so its right-click is left alone rather
+        // than opening an inert menu.
+        tabButton.addEventListener('contextmenu', (ev) => {
+          const rows = buildMeterTabMenu({
+            tab,
+            detached: host.isDetached(tab),
+            detachable: DETACHABLE,
+          });
+          if (rows.length === 0) return;
+          ev.preventDefault();
+          ev.stopPropagation();
+          host.openTabMenu(rows, ev.clientX, ev.clientY);
+        });
       }
-      const pop = this.root.querySelector('.mt-pop') as HTMLElement | null;
-      // Damage is the home meter: its tab has nothing to pop out (the button
-      // is disabled there too, this is the belt to that suspenders).
-      pop?.addEventListener('click', () => {
-        if (this.tab !== 'dmg') host.onPopOut(this.tab);
-      });
       this.refreshTabs();
     } else {
       const label = this.root.querySelector('.mt-title-label') as HTMLElement | null;
@@ -386,9 +407,12 @@ export class MetersPanel {
       this.frame = new MeterFrame(
         {
           el: this.root,
-          handle: title,
+          handles: [title, this.titleEl],
           storageKey: spec.frameStorageKey,
           fallbackSize: { w: METERS_DEFAULT_WIDTH, h: METERS_DEFAULT_HEIGHT },
+          // The tabbed window cannot shrink past its own chrome; a detached
+          // window carries far less and may go narrower.
+          limits: spec.lockedTab ? METER_FRAME_LIMITS : TABBED_METER_FRAME_LIMITS,
         },
         {
           document,
@@ -450,9 +474,6 @@ export class MetersPanel {
     this.root.querySelectorAll('.mt-tab').forEach((el) => {
       el.classList.toggle('on', (el as HTMLElement).dataset.tab === this.tab);
     });
-    // Damage stays the home meter, so there is nothing to pop out on that tab.
-    const pop = this.root.querySelector('.mt-pop') as HTMLButtonElement | null;
-    if (pop) pop.disabled = this.tab === 'dmg';
   }
 
   /** Called on the hud frame; repaints at ~4Hz while open. */
@@ -682,7 +703,8 @@ export class Meters {
       petsByOwner: () => this.livePetsByOwner(),
       attachTooltip: (el, html) => deps?.attachTooltip(el, html),
       onDock: (tab) => this.dock(tab),
-      onPopOut: (tab) => this.popOut(tab),
+      isDetached: (tab) => tab !== 'dmg' && this.isDetached(tab),
+      openTabMenu: (rows, x, y) => this.openTabMenu(rows, x, y),
     };
     this.main = new MetersPanel(
       {
@@ -735,6 +757,27 @@ export class Meters {
   /** True while `tab` has its own window open. */
   isDetached(tab: DetachableTab): boolean {
     return this.detached.get(tab)?.isOpen ?? false;
+  }
+
+  /**
+   * Paint a tab's right-click menu through Hud's shared popup box. Localizing
+   * the rows here keeps the pure core (which decides WHICH row) string-free.
+   */
+  private openTabMenu(rows: MeterMenuRow[], x: number, y: number): void {
+    const open = this.deps?.openMenu;
+    if (!open || rows.length === 0) return;
+    const items = rows.map((row) => ({
+      act: row.act,
+      label: t(row.act === 'separate' ? 'hudChrome.meters.separate' : 'hudChrome.meters.regroup', {
+        meter: t(TAB_LABEL_KEY[row.tab]),
+      }),
+    }));
+    open(items, x, y, (act) => {
+      const row = rows.find((candidate) => candidate.act === act);
+      if (!row || row.tab === 'dmg') return;
+      if (row.act === 'separate') this.popOut(row.tab);
+      else this.dock(row.tab);
+    });
   }
 
   /** Return every panel to its stylesheet anchor (the layout reset path). */

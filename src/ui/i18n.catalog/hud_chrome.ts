@@ -614,8 +614,11 @@ export const hudChromeStrings = {
     // for one of their own.
     move: 'Drag to move this meter',
     resize: 'Drag to resize this meter',
-    popOut: 'Open this meter in its own window',
     dock: 'Dock this meter back into the meters window',
+    // Right-click menu on a meter tab's name. {meter} is the meter's own label
+    // ("Healing", "Threat"), so the row reads as the action on that meter.
+    separate: 'Separate {meter}',
+    regroup: 'Regroup {meter}',
   },
   // Pet action bar disabled-state tooltips: the feed/heal-pet button stays
   // visible (never hidden) while it cannot currently be used, so a hunter

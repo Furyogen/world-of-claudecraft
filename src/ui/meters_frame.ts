@@ -28,8 +28,14 @@ import {
 export interface MeterFrameConfig {
   /** The panel being positioned. */
   el: HTMLElement;
-  /** Drag handle; a pointerdown on a button inside it is never a drag. */
-  handle: HTMLElement;
+  /**
+   * Drag handles; a pointerdown on a button inside one is never a drag. The
+   * panel passes BOTH its title bar and its summary line: on the tabbed damage
+   * window the title is three tabs plus three controls, leaving only a sliver
+   * of bare strip to grab, and the summary line under it is a roomy,
+   * non-interactive place to take hold of the panel.
+   */
+  handles: HTMLElement[];
   /** localStorage key the chosen box persists under. */
   storageKey: string;
   /** Size used when the panel is measured while hidden (first open). */
@@ -72,7 +78,7 @@ export class MeterFrame {
   ) {}
 
   init(): void {
-    const { el, handle } = this.cfg;
+    const { el, handles } = this.cfg;
     this.home = { parent: el.parentNode as Node, next: el.nextSibling };
     // The grip is built here rather than in index.html (the chat box does the
     // same) so a detached window's markup stays a plain panel.
@@ -83,9 +89,11 @@ export class MeterFrame {
     el.appendChild(grip);
     this.grip = grip;
 
-    handle.classList.add('mt-move-handle');
-    handle.setAttribute('title', t('hudChrome.meters.move'));
-    handle.addEventListener('pointerdown', (event) => this.onMoveStart(event));
+    for (const handle of handles) {
+      handle.classList.add('mt-move-handle');
+      handle.setAttribute('title', t('hudChrome.meters.move'));
+      handle.addEventListener('pointerdown', (event) => this.onMoveStart(event));
+    }
     grip.addEventListener('pointerdown', (event) => this.onResizeStart(event));
     this.deps.document.addEventListener('pointermove', (event) => this.onPointerMove(event));
     const end = (event: PointerEvent): void => this.onPointerEnd(event);
