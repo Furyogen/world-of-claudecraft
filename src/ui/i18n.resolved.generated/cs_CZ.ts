@@ -906,7 +906,12 @@ export const cs_CZ: EnTranslations = {
       "breakdownOther": "Other ({count})",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "Melee"
+      "melee": "Melee",
+      "move": "Drag to move this meter",
+      "resize": "Drag to resize this meter",
+      "dock": "Dock this meter back into the meters window",
+      "separate": "Separate {meter}",
+      "regroup": "Regroup {meter}"
     },
     "petFeed": {
       "disabledFullHp": "Mazlíček má plné zdraví",

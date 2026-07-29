@@ -906,7 +906,12 @@ export const zh_TW: EnTranslations = {
       "breakdownOther": "其他（{count}）",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "近戰"
+      "melee": "近戰",
+      "move": "拖曳以移動此統計面板",
+      "resize": "拖曳以調整此統計面板大小",
+      "dock": "將此統計停靠回統計視窗",
+      "separate": "分離{meter}",
+      "regroup": "合併{meter}"
     },
     "petFeed": {
       "disabledFullHp": "寵物生命值已滿",

@@ -906,7 +906,12 @@ export const vi_VN: EnTranslations = {
       "breakdownOther": "Other ({count})",
       "percent": "{value}%",
       "petAbility": "{pet}: {ability}",
-      "melee": "Melee"
+      "melee": "Melee",
+      "move": "Drag to move this meter",
+      "resize": "Drag to resize this meter",
+      "dock": "Dock this meter back into the meters window",
+      "separate": "Separate {meter}",
+      "regroup": "Regroup {meter}"
     },
     "petFeed": {
       "disabledFullHp": "Thú cưng đang đầy máu",
