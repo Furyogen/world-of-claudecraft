@@ -860,8 +860,9 @@ export const zh_CN: EnTranslations = {
       "melee": "近战",
       "move": "拖动以移动此统计面板",
       "resize": "拖动以调整此统计面板大小",
-      "popOut": "在独立窗口中打开此统计",
-      "dock": "将此统计停靠回统计窗口"
+      "dock": "将此统计停靠回统计窗口",
+      "separate": "分离{meter}",
+      "regroup": "合并{meter}"
     },
     "petFeed": {
       "disabledFullHp": "宠物生命值已满",

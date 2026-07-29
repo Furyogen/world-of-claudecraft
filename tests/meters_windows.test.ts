@@ -105,11 +105,17 @@ class FakeStorage {
 function setup(storage: FakeStorage = new FakeStorage(), mobile = false) {
   document.body.innerHTML = MARKUP;
   const world = fakeWorld();
+  // Captures whatever the tab right-click asks Hud to paint, plus the callback
+  // that a row activation would fire.
+  const menus: { items: { act: string; label: string }[]; select: (act: string) => void }[] = [];
   const meters = new Meters(world, {
     attachTooltip: () => {},
     uiScale: () => 1,
     isMobileLayout: () => mobile,
     storage,
+    openMenu: (items, _x, _y, onSelect) => {
+      menus.push({ items: [...items], select: onSelect });
+    },
   });
   const el = (id: string) => document.getElementById(id) as HTMLElement;
   // A framed panel is a flex column, an unframed one a block; both are "open".
@@ -118,7 +124,13 @@ function setup(storage: FakeStorage = new FakeStorage(), mobile = false) {
     [...el(id).querySelectorAll<HTMLElement>('.mt-row')].filter(
       (row) => row.style.display !== 'none',
     );
-  return { meters, world, el, shown, rows, storage };
+  const rightClick = (tab: string) => {
+    const button = el('meters-window').querySelector(`.mt-tab[data-tab="${tab}"]`) as HTMLElement;
+    const ev = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+    button.dispatchEvent(ev);
+    return ev;
+  };
+  return { meters, world, el, shown, rows, storage, menus, rightClick };
 }
 
 describe('detachable meter windows', () => {
@@ -136,11 +148,11 @@ describe('detachable meter windows', () => {
     expect(meters.isDetached('threat')).toBe(false);
   });
 
-  it('pops the selected meter into its own window and hands the tabs back to damage', () => {
+  it('separates a meter into its own window and hands the tabs back to damage', () => {
     const { meters, el, shown } = setup();
     meters.toggle();
     (el('meters-window').querySelector('.mt-tab[data-tab="threat"]') as HTMLElement).click();
-    (el('meters-window').querySelector('.mt-pop') as HTMLElement).click();
+    meters.popOut('threat');
 
     expect(shown('threat-window')).toBe(true);
     expect(meters.isDetached('threat')).toBe(true);
@@ -150,16 +162,6 @@ describe('detachable meter windows', () => {
     ).toBe(true);
     // and the damage window itself stays open
     expect(shown('meters-window')).toBe(true);
-  });
-
-  it('refuses to pop out damage: it is the home meter', () => {
-    const { meters, el, shown } = setup();
-    meters.toggle();
-    const pop = el('meters-window').querySelector('.mt-pop') as HTMLButtonElement;
-    expect(pop.disabled).toBe(true);
-    pop.click();
-    expect(shown('heal-window')).toBe(false);
-    expect(shown('threat-window')).toBe(false);
   });
 
   it('docks a detached window back and re-selects that meter in the tabs', () => {
@@ -260,11 +262,14 @@ describe('detachable meter windows', () => {
     expect(panel.style.width).toBe('');
   });
 
-  it('gives every panel a resize grip and makes its title the move handle', () => {
+  it('gives every panel a resize grip and two move handles', () => {
     const { el } = setup();
     for (const id of ['meters-window', 'heal-window', 'threat-window']) {
       expect(el(id).querySelector('.panel-resize-grip')).not.toBeNull();
+      // The title bar, plus the summary line under it: on the tabbed window the
+      // title is packed with tabs and controls, leaving little bare strip.
       expect(el(id).querySelector('.panel-title')?.classList.contains('mt-move-handle')).toBe(true);
+      expect(el(id).querySelector('.mt-view')?.classList.contains('mt-move-handle')).toBe(true);
     }
   });
 
@@ -295,5 +300,58 @@ describe('detachable meter windows', () => {
     const panel = el('meters-window');
     expect(panel.classList.contains('mt-framed')).toBe(false);
     expect(panel.style.left).toBe('');
+  });
+
+  it('offers Separate when right-clicking a docked meter tab, and acts on it', () => {
+    const { meters, menus, rightClick, shown } = setup();
+    meters.toggle();
+
+    const ev = rightClick('threat');
+    expect(ev.defaultPrevented).toBe(true); // the browser menu is suppressed
+    expect(menus).toHaveLength(1);
+    expect(menus[0].items.map((i) => i.act)).toEqual(['separate']);
+    expect(menus[0].items[0].label).toContain('Threat');
+
+    menus[0].select('separate');
+    expect(shown('threat-window')).toBe(true);
+    expect(meters.isDetached('threat')).toBe(true);
+  });
+
+  it('offers Regroup on the same tab once that meter is separated, and docks it', () => {
+    const { meters, menus, rightClick, shown } = setup();
+    meters.toggle();
+    meters.popOut('heal');
+
+    rightClick('heal');
+    expect(menus).toHaveLength(1);
+    expect(menus[0].items.map((i) => i.act)).toEqual(['regroup']);
+    expect(menus[0].items[0].label).toContain('Healing');
+
+    menus[0].select('regroup');
+    expect(shown('heal-window')).toBe(false);
+    expect(meters.isDetached('heal')).toBe(false);
+  });
+
+  it('opens no menu on the damage tab and leaves that right-click alone', () => {
+    const { meters, menus, rightClick } = setup();
+    meters.toggle();
+    const ev = rightClick('dmg');
+    expect(menus).toHaveLength(0);
+    // not preventDefault'd: damage has no action, so the event is not consumed
+    expect(ev.defaultPrevented).toBe(false);
+  });
+
+  it('re-reads the live detached state on every right-click, never a stale menu', () => {
+    const { meters, menus, rightClick } = setup();
+    meters.toggle();
+    rightClick('threat');
+    expect(menus[0].items[0].act).toBe('separate');
+    menus[0].select('separate');
+    // same tab, now separated: the very next open must offer the opposite action
+    rightClick('threat');
+    expect(menus[1].items[0].act).toBe('regroup');
+    menus[1].select('regroup');
+    rightClick('threat');
+    expect(menus[2].items[0].act).toBe('separate');
   });
 });

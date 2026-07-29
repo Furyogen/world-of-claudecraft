@@ -375,6 +375,132 @@ export const TARGETS = [
     },
   },
   {
+    key: 'meters-interaction',
+    label: 'Meters: tab right-click menu, moving a panel, and resizing one',
+    when: ['ui/meters_menu', 'ui/simple_context_menu'],
+    variants: [
+      { key: 'menu-separate', charClass: 'warlock', charName: 'Nyxaris', scene: 'separate' },
+      { key: 'menu-regroup', charClass: 'warlock', charName: 'Nyxaris', scene: 'regroup' },
+      { key: 'move', charClass: 'warlock', charName: 'Nyxaris', scene: 'move' },
+      { key: 'resize-small', charClass: 'warlock', charName: 'Nyxaris', scene: 'resizeSmall' },
+      { key: 'resize-large', charClass: 'warlock', charName: 'Nyxaris', scene: 'resizeLarge' },
+    ],
+    // One scene per thing being shown: the two menu states, a panel moved off
+    // its HUD anchor, and the same panel at two sizes. Every gesture is a REAL
+    // pointer drag or a REAL right-click, so each shot proves the shipped
+    // interaction rather than a style write.
+    async capture(page, variant) {
+      await page.evaluate(() => {
+        const game = window.__game;
+        const sim = game?.sim;
+        const player = sim?.player;
+        if (!sim || !player) return;
+        document.querySelector('#gpu-notice')?.remove();
+        document.querySelector('.camera-prompt-confirm')?.click();
+        let mobId = null;
+        for (const e of sim.entities.values()) {
+          if (e.kind === 'mob' && e.ownerId == null && !e.dead) {
+            mobId = e.id;
+            break;
+          }
+        }
+        const meters = game?.hud?.meters;
+        if (meters === undefined || mobId === null) return;
+        // Variants share one browser, so a previous scene's saved boxes and
+        // popped-out set would leak in. Normalize to the stock layout first.
+        meters.dock?.('heal');
+        meters.dock?.('threat');
+        meters.resetFrames?.();
+        const hit = (amount, ability) =>
+          meters.onEvent({
+            type: 'damage',
+            sourceId: player.id,
+            targetId: mobId,
+            amount,
+            crit: false,
+            school: 'physical',
+            ability,
+            kind: 'hit',
+          });
+        hit(1840, 'Shadow Bolt');
+        hit(910, 'Corruption');
+        hit(470, 'Immolate');
+        const el = document.querySelector('#meters-window');
+        if (el) el.style.display = 'none';
+        game?.hud?.toggleMeters?.();
+        const banner = document.querySelector('#banner');
+        if (banner) banner.style.opacity = '0';
+      });
+      const open = await pollForSize(page, '#meters-window');
+      if (!open) return {};
+      await wait(1000);
+
+      const titleDrag = async (selector, dx, dy) => {
+        const at = await page.evaluate((sel) => {
+          const el = document.querySelector(sel);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }, selector);
+        if (!at) return;
+        await page.mouse.move(at.x, at.y);
+        await page.mouse.down();
+        await page.mouse.move(at.x + dx, at.y + dy, { steps: 14 });
+        await page.mouse.up();
+        await wait(200);
+      };
+      const gripDrag = async (selector, dx, dy) => {
+        const at = await page.evaluate((sel) => {
+          const el = document.querySelector(sel);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: r.right - 6, y: r.bottom - 6 };
+        }, selector);
+        if (!at) return;
+        await page.mouse.move(at.x, at.y);
+        await page.mouse.down();
+        await page.mouse.move(at.x + dx, at.y + dy, { steps: 12 });
+        await page.mouse.up();
+        await wait(200);
+      };
+      const rightClickTab = async (tab) => {
+        const at = await page.evaluate((name) => {
+          const el = document.querySelector(`#meters-window .mt-tab[data-tab="${name}"]`);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }, tab);
+        if (!at) return;
+        await page.mouse.click(at.x, at.y, { button: 'right' });
+        await wait(400);
+      };
+
+      if (variant.scene === 'separate') {
+        // Move the window up first so the menu opens over the world, not off
+        // the bottom edge, then right-click the still-docked Threat tab.
+        await titleDrag('#meters-window .mt-view', -120, -300);
+        await rightClickTab('threat');
+      } else if (variant.scene === 'regroup') {
+        await titleDrag('#meters-window .mt-view', -120, -300);
+        await page.evaluate(() => window.__game?.hud?.meters?.popOut?.('threat'));
+        await wait(500);
+        await rightClickTab('threat');
+      } else if (variant.scene === 'move') {
+        // Straight across the screen: the panel's home is the bottom-right HUD
+        // stack, so landing upper-left is unambiguous.
+        await titleDrag('#meters-window .mt-view', -820, -520);
+      } else if (variant.scene === 'resizeSmall') {
+        await titleDrag('#meters-window .mt-view', -520, -360);
+        await gripDrag('#meters-window', -70, -40);
+      } else if (variant.scene === 'resizeLarge') {
+        await titleDrag('#meters-window .mt-view', -520, -360);
+        await gripDrag('#meters-window', 240, 230);
+      }
+      await wait(500);
+      return {};
+    },
+  },
+  {
     key: 'meters-detached',
     label: 'Damage meters: Threat and Healing popped out into their own movable windows',
     when: ['ui/meters_frame', 'ui/meters_rows', 'meters_frame_core'],

@@ -860,8 +860,9 @@ export const vi_VN: EnTranslations = {
       "melee": "Melee",
       "move": "Drag to move this meter",
       "resize": "Drag to resize this meter",
-      "popOut": "Open this meter in its own window",
-      "dock": "Dock this meter back into the meters window"
+      "dock": "Dock this meter back into the meters window",
+      "separate": "Separate {meter}",
+      "regroup": "Regroup {meter}"
     },
     "petFeed": {
       "disabledFullHp": "Thú cưng đang đầy máu",

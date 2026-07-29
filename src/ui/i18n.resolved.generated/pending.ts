@@ -18,8 +18,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "es_ES": [
     "hudChrome.meters.breakdownOther",
@@ -30,8 +31,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "fr_FR": [
     "hudChrome.meters.breakdownOther",
@@ -42,8 +44,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "fr_CA": [
     "hudChrome.meters.breakdownOther",
@@ -54,8 +57,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "en_CA": [],
   "it_IT": [
@@ -67,8 +71,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "de_DE": [
     "hudChrome.meters.breakdownOther",
@@ -79,8 +84,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "zh_CN": [
     "hudChrome.meters.breakdownRow",
@@ -115,8 +121,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "ru_RU": [
     "hudChrome.meters.breakdownRow",
@@ -133,8 +140,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "nl_NL": [
     "hudChrome.meters.breakdownOther",
@@ -145,8 +153,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "pl_PL": [
     "hudChrome.meters.breakdownOther",
@@ -157,8 +166,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "id_ID": [
     "hudChrome.meters.breakdownOther",
@@ -169,8 +179,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "tr_TR": [
     "hudChrome.meters.breakdownOther",
@@ -181,8 +192,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "sv_SE": [
     "hudChrome.meters.breakdownOther",
@@ -193,8 +205,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "vi_VN": [
     "hudChrome.meters.breakdownOther",
@@ -205,8 +218,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "da_DK": [
     "hudChrome.meters.breakdownOther",
@@ -217,7 +231,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ]
 };

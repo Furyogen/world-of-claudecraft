@@ -7,6 +7,7 @@ import {
   parseMeterFrame,
   placeMeterFrame,
   serializeMeterFrame,
+  TABBED_METER_FRAME_LIMITS,
 } from '../src/ui/meters_frame_core';
 
 const VIEWPORT = { w: 1600, h: 900 };
@@ -95,5 +96,20 @@ describe('meter frame geometry', () => {
     expect(initialMeterFrame({ left: 12, top: 12, width: 200, height: 0 }, fallback)).toEqual(
       fallback,
     );
+  });
+
+  it('holds the tabbed window to a wider floor than a detached one', () => {
+    // Its title carries three tabs plus three controls and wraps below ~238px,
+    // so the tabbed floor is the stock width while a detached panel may shrink
+    // further. A regression that equalized them would silently break the chrome.
+    expect(TABBED_METER_FRAME_LIMITS.minWidth).toBeGreaterThan(METER_FRAME_LIMITS.minWidth);
+    expect(TABBED_METER_FRAME_LIMITS.minWidth).toBeGreaterThanOrEqual(238);
+    const shrunk = clampMeterFrame(geo(100, 100, 10, 10), VIEWPORT, TABBED_METER_FRAME_LIMITS);
+    expect(shrunk.width).toBe(TABBED_METER_FRAME_LIMITS.minWidth);
+    // everything else is shared, so the two only differ where they must
+    expect({ ...TABBED_METER_FRAME_LIMITS, minWidth: 0 }).toEqual({
+      ...METER_FRAME_LIMITS,
+      minWidth: 0,
+    });
   });
 });

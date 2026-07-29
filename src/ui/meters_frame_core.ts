@@ -28,14 +28,26 @@ export interface MeterFrameLimits {
   margin: number;
 }
 
-// Defaults track the stock 240px meter panel while allowing a generous grow
-// range: wide enough for long ability rows, tall enough for a full raid.
+// Defaults for a DETACHED window, whose chrome is one title plus three small
+// controls: it can go usefully narrow. The grow range is generous either way,
+// wide enough for long ability rows and tall enough for a full raid.
 export const METER_FRAME_LIMITS: MeterFrameLimits = {
-  minWidth: 170,
+  minWidth: 180,
   maxWidth: 560,
   minHeight: 90,
   maxHeight: 620,
   margin: 8,
+};
+
+/**
+ * The tabbed window's floor is its stock width, and that is a measurement, not
+ * a taste call: its title carries three tabs plus three controls, which wrap
+ * onto a second line below ~238px. Letting a shrink break the panel's own
+ * chrome is worse than refusing to shrink past where it was designed to sit.
+ */
+export const TABBED_METER_FRAME_LIMITS: MeterFrameLimits = {
+  ...METER_FRAME_LIMITS,
+  minWidth: 240,
 };
 
 function clamp(value: number, lo: number, hi: number): number {
