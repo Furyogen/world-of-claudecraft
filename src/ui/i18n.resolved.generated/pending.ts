@@ -19,8 +19,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "es_ES": [
     "fiesta.augment.cardAria",
@@ -32,8 +33,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "fr_FR": [
     "fiesta.augment.cardAria",
@@ -45,8 +47,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "fr_CA": [
     "fiesta.augment.cardAria",
@@ -58,8 +61,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "en_CA": [],
   "it_IT": [
@@ -72,8 +76,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "de_DE": [
     "fiesta.augment.cardAria",
@@ -85,8 +90,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "zh_CN": [
     "fiesta.augment.cardAria",
@@ -126,8 +132,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "ru_RU": [
     "fiesta.augment.cardAria",
@@ -146,8 +153,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "nl_NL": [
     "fiesta.augment.cardAria",
@@ -159,8 +167,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "pl_PL": [
     "fiesta.augment.cardAria",
@@ -172,8 +181,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "id_ID": [
     "fiesta.augment.cardAria",
@@ -185,8 +195,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "tr_TR": [
     "fiesta.augment.cardAria",
@@ -198,8 +209,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "sv_SE": [
     "fiesta.augment.cardAria",
@@ -211,8 +223,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "vi_VN": [
     "fiesta.augment.cardAria",
@@ -224,8 +237,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ],
   "da_DK": [
     "fiesta.augment.cardAria",
@@ -237,7 +251,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.meters.move",
     "hudChrome.meters.percent",
     "hudChrome.meters.petAbility",
-    "hudChrome.meters.popOut",
-    "hudChrome.meters.resize"
+    "hudChrome.meters.regroup",
+    "hudChrome.meters.resize",
+    "hudChrome.meters.separate"
   ]
 };

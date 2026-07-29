@@ -881,8 +881,9 @@ export const ja_JP: EnTranslations = {
       "melee": "近接攻撃",
       "move": "ドラッグしてこのメーターを移動",
       "resize": "ドラッグしてこのメーターの大きさを変更",
-      "popOut": "このメーターを別ウィンドウで開く",
-      "dock": "このメーターをメーターウィンドウに戻す"
+      "dock": "このメーターをメーターウィンドウに戻す",
+      "separate": "{meter}を分離",
+      "regroup": "{meter}を統合"
     },
     "petFeed": {
       "disabledFullHp": "ペットは満タンの体力です",
