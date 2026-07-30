@@ -16,7 +16,11 @@ import { CLASSES } from '../src/sim/data';
 import type { ResolvedAbility } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import { ACTION_BAR_ABILITY_SLOTS } from '../src/ui/hud/action_bar/action_bar_layout_core';
-import { buildSpellbookView, type SpellbookInput } from '../src/ui/spellbook_view';
+import {
+  buildSpellbookView,
+  type SpellbookInput,
+  trackerEntriesFromKnown,
+} from '../src/ui/spellbook_view';
 
 // A class whose kit has at least two abilities, so we can exercise known/locked.
 const CLASS_ID = Object.values(CLASSES).find((c) => c.abilities.length >= 2)!.id as PlayerClass;
@@ -256,5 +260,151 @@ describe('buildSpellbookView: ClientWorld-vs-Sim parity', () => {
   it('is deterministic: identical inputs produce a deep-equal view', () => {
     const i = input({ known: [known('sim', KIT[0])] });
     expect(buildSpellbookView(i)).toEqual(buildSpellbookView(i));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Skills Manager: the manager-mode row state and the derived tracker entries.
+// The alternate spellbook the "Skills manager" footer button opens shows the SAME
+// spell list plus, on each trackable row, a display toggle and a tracker-type
+// button. These assert the decisions behind those two controls.
+// ---------------------------------------------------------------------------
+
+describe('buildSpellbookView: Skills Manager row state', () => {
+  // The druid pair the owner asked for by name: Wildbloom (a pure HoT) and Lunar
+  // Tempest (a nuke plus a DoT). Both apply an aura, so both are trackable.
+  const DRUID: PlayerClass = 'druid';
+  const druidInput = (over: Partial<SpellbookInput> = {}): SpellbookInput => ({
+    classId: DRUID,
+    abilities: CLASSES[DRUID].abilities,
+    known: [],
+    barAbilityIds: [],
+    hasFreeSlot: true,
+    attackOnBar: true,
+    hasFormBars: true,
+    ...over,
+  });
+  const row = (view: ReturnType<typeof buildSpellbookView>, abilityId: string) =>
+    view.rows.find((r) => r.abilityId === abilityId)!;
+
+  it('defaults to the classic spellbook: manager off, frames locked, nothing tracked', () => {
+    const v = buildSpellbookView(druidInput());
+    expect(v.managerMode).toBe(false);
+    // Omitting `locked` must read as LOCKED, so a frame never loads draggable.
+    expect(v.locked).toBe(true);
+    expect(v.trackedCount).toBe(0);
+  });
+
+  it('passes the manager and lock flags through', () => {
+    const v = buildSpellbookView(druidInput({ managerMode: true, locked: false }));
+    expect(v.managerMode).toBe(true);
+    expect(v.locked).toBe(false);
+  });
+
+  it('marks a LEARNED aura-applying ability trackable and an unlearned one not', () => {
+    const v = buildSpellbookView(
+      druidInput({ known: [known('sim', 'rejuvenation'), known('sim', 'moonfire')] }),
+    );
+    expect(row(v, 'rejuvenation').trackable).toBe(true);
+    expect(row(v, 'moonfire').trackable).toBe(true);
+    // Every OTHER kit row is unlearned here, so none of them offers the controls:
+    // an unlearned ability can never light up a tracker.
+    expect(v.rows.filter((r) => r.known === null).every((r) => r.trackable === false)).toBe(true);
+  });
+
+  it('reflects the stored per-ability selection on the row', () => {
+    const v = buildSpellbookView(
+      druidInput({
+        known: [known('sim', 'rejuvenation'), known('sim', 'moonfire')],
+        tracking: {
+          rejuvenation: { enabled: true, display: 'bar' },
+          moonfire: { enabled: false, display: 'bar' },
+        },
+      }),
+    );
+    expect(row(v, 'rejuvenation')).toMatchObject({ tracked: true, trackDisplay: 'bar' });
+    // Switched off, but the chosen type still rides the row so turning the display
+    // back on restores it rather than snapping to the square default.
+    expect(row(v, 'moonfire')).toMatchObject({ tracked: false, trackDisplay: 'bar' });
+    expect(v.trackedCount).toBe(1);
+  });
+
+  it('never reports an UNLEARNED ability as tracked, even with a stored row', () => {
+    // A selection made at a higher level (or on another character) must not light
+    // up a row the player cannot cast yet.
+    const v = buildSpellbookView(
+      druidInput({ known: [], tracking: { rejuvenation: { enabled: true, display: 'bar' } } }),
+    );
+    expect(row(v, 'rejuvenation').tracked).toBe(false);
+    expect(v.trackedCount).toBe(0);
+  });
+
+  it('leaves the classic row decisions untouched by manager mode', () => {
+    const base = druidInput({
+      known: [known('sim', 'rejuvenation')],
+      barAbilityIds: ['rejuvenation'],
+    });
+    const classic = buildSpellbookView(base);
+    const manager = buildSpellbookView({ ...base, managerMode: true });
+    const decisions = (v: ReturnType<typeof buildSpellbookView>) =>
+      v.rows.map((r) => ({
+        abilityId: r.abilityId,
+        onBar: r.onBar,
+        rank: r.rank,
+        toggleDisabled: r.toggleDisabled,
+        mobilePage: r.mobilePage,
+      }));
+    expect(decisions(manager)).toEqual(decisions(classic));
+  });
+});
+
+describe('trackerEntriesFromKnown', () => {
+  const resolved = (id: string, cooldown = 0) =>
+    ({ def: { id }, cooldown }) as unknown as ResolvedAbility;
+
+  it('emits only enabled, trackable, learned abilities, carrying the resolved cooldown', () => {
+    const entries = trackerEntriesFromKnown(
+      [resolved('rejuvenation'), resolved('moonfire'), resolved('entangling_roots', 8)],
+      {
+        rejuvenation: { enabled: true, display: 'bar' },
+        moonfire: { enabled: true, display: 'square' },
+      },
+    );
+    expect(entries).toEqual([
+      { abilityId: 'rejuvenation', display: 'bar', cooldown: 0 },
+      { abilityId: 'moonfire', display: 'square', cooldown: 0 },
+    ]);
+  });
+
+  it('reads the TALENT-RESOLVED cooldown, not the base table value', () => {
+    // The resolved value is what rides `known`, so a talent that shortens a
+    // cooldown shortens the tracker sweep with no extra plumbing.
+    const [entry] = trackerEntriesFromKnown([resolved('rejuvenation', 4)], {
+      rejuvenation: { enabled: true, display: 'square' },
+    });
+    expect(entry.cooldown).toBe(4);
+  });
+
+  it('emits nothing for a switched-off row or an unknown ability id', () => {
+    expect(
+      trackerEntriesFromKnown([resolved('rejuvenation')], {
+        rejuvenation: { enabled: false, display: 'bar' },
+      }),
+    ).toEqual([]);
+    // An id with no ABILITIES record cannot be trackable, so a stale stored row
+    // (a renamed ability) can never produce a dead frame.
+    expect(
+      trackerEntriesFromKnown([resolved('not_a_real_ability')], {
+        not_a_real_ability: { enabled: true, display: 'bar' },
+      }),
+    ).toEqual([]);
+  });
+
+  it('keeps the learned-ability order, so the HUD order matches the spellbook order', () => {
+    const entries = trackerEntriesFromKnown([resolved('moonfire'), resolved('rejuvenation')], {
+      rejuvenation: { enabled: true, display: 'bar' },
+      moonfire: { enabled: true, display: 'bar' },
+    });
+    expect(entries.map((e) => e.abilityId)).toEqual(['moonfire', 'rejuvenation']);
   });
 });

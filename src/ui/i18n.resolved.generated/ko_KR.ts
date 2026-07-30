@@ -1682,6 +1682,27 @@ export const ko_KR: EnTranslations = {
       "addToBarAria": "{name}을(를) 행동 단축바에 추가",
       "removeFromBarAria": "{name}을(를) 행동 단축바에서 제거"
     },
+    "skillTracker": {
+      "managerButton": "스킬 관리자",
+      "managerButtonOnAria": "스킬 관리자가 켜져 있습니다. 끄면 모든 추적 창과 바가 숨겨집니다.",
+      "managerButtonOffAria": "스킬 관리자가 꺼져 있습니다. 켜면 추적할 주문을 선택할 수 있습니다.",
+      "lockButton": "고정",
+      "lockButtonOnAria": "추적 창이 고정되었습니다. 끌어서 옮기려면 고정을 해제하세요.",
+      "lockButtonOffAria": "추적 창의 고정이 해제되었습니다. 고정하면 위치가 유지됩니다.",
+      "managerHint": "대상에게 추적할 주문을 선택하세요. {count}개 추적 중.",
+      "displayOn": "켜기",
+      "displayOff": "끄기",
+      "displayAria": "{name} 추적",
+      "typeSquare": "사각형",
+      "typeBar": "바",
+      "typeAria": "{name}의 추적 형태: {type}",
+      "tooltipTarget": "대상에게 적용 중",
+      "tooltipSelf": "나에게 적용 중",
+      "tooltipCooldown": "재사용 대기시간",
+      "dragHandle": "끌어서 추적 창 이동",
+      "groupSquares": "주문 추적 아이콘",
+      "groupBars": "주문 추적 바"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"

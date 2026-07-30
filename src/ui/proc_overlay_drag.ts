@@ -49,6 +49,14 @@ export function serializeOverlayAnchor(a: OverlayAnchor): string {
   return JSON.stringify({ fx: a.fx, fy: a.fy });
 }
 
+/** Optional behavior knobs. `isLocked` is the Skills Manager's lock button: while
+ *  it returns true a pointerdown is ignored entirely, so a locked frame cannot be
+ *  nudged by a stray click and never steals the pointer from the world beneath it.
+ *  Omitted (the proc overlay) means always draggable, the original behavior. */
+export interface OverlayDragOptions {
+  isLocked?(): boolean;
+}
+
 /**
  * Make `el` (a fixed-position element centered via left/top) draggable and
  * persistent. The element is expected to be visible only while its proc is
@@ -59,6 +67,7 @@ export function attachOverlayDrag(
   el: HTMLElement,
   storageKey: string,
   defaults: OverlayAnchor,
+  opts?: OverlayDragOptions,
 ): void {
   const apply = (a: OverlayAnchor) => {
     const c = clampOverlayAnchor(
@@ -72,7 +81,13 @@ export function attachOverlayDrag(
     el.style.left = `${(c.fx * 100).toFixed(2)}%`;
     el.style.top = `${(c.fy * 100).toFixed(2)}%`;
   };
-  let anchor = parseOverlayAnchor(localStorage.getItem(storageKey)) ?? defaults;
+  let stored: string | null = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch {
+    /* storage unavailable */
+  }
+  let anchor = parseOverlayAnchor(stored) ?? defaults;
   apply(anchor);
   window.addEventListener('resize', () => apply(anchor));
 
@@ -80,7 +95,7 @@ export function attachOverlayDrag(
   let grabDx = 0; // pointer-to-center offset at grab, in px, kept while dragging
   let grabDy = 0;
   el.addEventListener('pointerdown', (ev) => {
-    if (dragId !== null) return;
+    if (dragId !== null || opts?.isLocked?.()) return;
     dragId = ev.pointerId;
     const r = el.getBoundingClientRect();
     grabDx = ev.clientX - (r.left + r.width / 2);
@@ -102,7 +117,11 @@ export function attachOverlayDrag(
     if (dragId !== ev.pointerId) return;
     dragId = null;
     el.classList.remove('dragging');
-    localStorage.setItem(storageKey, serializeOverlayAnchor(anchor));
+    try {
+      localStorage.setItem(storageKey, serializeOverlayAnchor(anchor));
+    } catch {
+      /* storage unavailable */
+    }
   };
   el.addEventListener('pointerup', drop);
   el.addEventListener('pointercancel', drop);

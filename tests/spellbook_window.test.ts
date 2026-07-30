@@ -67,7 +67,7 @@ describe('spellbook_window: the pinned Attack row', () => {
   it('renders the Attack row first, from the pure view attackOnBar state', () => {
     expect(code).toContain('this.appendAttackRow(list, view.attackOnBar)');
     expect(code.indexOf('this.appendAttackRow(list')).toBeLessThan(
-      code.indexOf('for (const row of view.rows) this.appendRow(list, row)'),
+      code.indexOf('for (const row of view.rows) this.appendRow(list, row, view.managerMode)'),
     );
     expect(code).toContain('attackOnBar: this.deps.attackOnBar()');
   });
@@ -184,5 +184,90 @@ describe('spellbook_window: tooltip/summary reflect talent changes (tooltip pari
     expect(code).toContain(
       'this.deps.world().known.find((k) => k.def.id === known.def.id) ?? known',
     );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Skills Manager: the two footer buttons and the two per-row controls. Source
+// guards in the spirit of the rest of this file (the window builds DOM against
+// index.html, so its wiring is pinned by structure + string, not by rendering).
+// ---------------------------------------------------------------------------
+
+describe('spellbook_window: the Skills Manager footer', () => {
+  it('renders both footer buttons AFTER the spell list, at the window bottom', () => {
+    expect(code).toContain('this.appendFooter(el, view.managerMode, view.locked)');
+    // The footer must come after the rows, so it lands at the bottom of the panel.
+    expect(code.indexOf('for (const row of view.rows)')).toBeLessThan(
+      code.indexOf('this.appendFooter(el'),
+    );
+  });
+
+  it('drives both toggles from the persisted state and writes back through the deps', () => {
+    expect(code).toContain('this.deps.setManagerMode(!this.deps.managerMode())');
+    expect(code).toContain('this.deps.setTrackersLocked(!this.deps.trackersLocked())');
+    // Reads flow into the pure view, so the button pressed states come from one place.
+    expect(code).toContain('managerMode: this.deps.managerMode()');
+    expect(code).toContain('locked: this.deps.trackersLocked()');
+    expect(code).toContain('tracking: this.deps.tracking()');
+  });
+
+  it('states each toggle as an aria-pressed button with a distinct on/off name', () => {
+    expect(code).toContain("btn.setAttribute('aria-pressed', pressed ? 'true' : 'false')");
+    for (const key of [
+      'hudChrome.skillTracker.managerButtonOnAria',
+      'hudChrome.skillTracker.managerButtonOffAria',
+      'hudChrome.skillTracker.lockButtonOnAria',
+      'hudChrome.skillTracker.lockButtonOffAria',
+    ]) {
+      expect(code).toContain(`t('${key}')`);
+    }
+  });
+});
+
+describe('spellbook_window: the Skills Manager row controls', () => {
+  it('appends the display + type controls only in manager mode, and only when trackable', () => {
+    expect(code).toContain(
+      'if (managerMode && row.trackable) this.appendManagerControls(el, row, name)',
+    );
+  });
+
+  it('appends them AFTER the hotbar toggle, so they sit at the row right edge', () => {
+    expect(code.indexOf('el.appendChild(toggle)')).toBeLessThan(
+      code.indexOf('if (managerMode && row.trackable)'),
+    );
+  });
+
+  it('routes the display toggle and the type cycle through the deps', () => {
+    expect(code).toContain('this.deps.setTracked(row.abilityId, !row.tracked)');
+    expect(code).toContain(
+      'this.deps.setTrackDisplay(row.abilityId, nextSkillTrackerDisplay(row.trackDisplay))',
+    );
+  });
+
+  it('renders both controls as localized, accessibly named buttons', () => {
+    // The display toggle is a real aria-pressed toggle (it mirrors an interface
+    // setting); the type button is a cycling button whose name states the value.
+    expect(code).toContain("display.setAttribute('aria-pressed', row.tracked ? 'true' : 'false')");
+    expect(code).toContain("t('hudChrome.skillTracker.displayAria', { name })");
+    expect(code).toContain("t('hudChrome.skillTracker.typeAria'");
+    // The type label resolves through one helper, so pin the two keys it picks
+    // between rather than a t() call shape biome may wrap.
+    expect(code).toContain("'hudChrome.skillTracker.typeBar'");
+    expect(code).toContain("'hudChrome.skillTracker.typeSquare'");
+  });
+
+  it('keeps keyboard focus on the exact control across the click rebuild', () => {
+    // Each click re-renders; without these the focus would fall back to the row.
+    expect(code).toContain('refocus = `[data-track-toggle="${trackToggle}"]`');
+    expect(code).toContain('refocus = `[data-track-type="${trackType}"]`');
+    expect(code).toContain('refocus = `[data-footer-btn="${footerBtn}"]`');
+  });
+
+  it('renders no raw player-facing string: every label goes through t()', () => {
+    // The two glyph-free labels included: a bare 'On' / 'Off' string would be an
+    // untranslatable leak, so they must resolve through the catalog like the rest.
+    expect(code).toContain("'hudChrome.skillTracker.displayOn'");
+    expect(code).toContain("'hudChrome.skillTracker.displayOff'");
+    expect(code).toContain("t('hudChrome.skillTracker.managerHint'");
   });
 });

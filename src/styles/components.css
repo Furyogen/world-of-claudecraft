@@ -1240,6 +1240,82 @@
     padding: 3px 10px;
     white-space: nowrap;
   }
+  /* ---------- spellbook Skills Manager ---------- */
+  /* The bottom-right footer: the "Skills manager" mode toggle and the tracker
+     "Lock" toggle. Sticky at the window's bottom edge (the spellbook root is the
+     scroll container) so both stay reachable however far the spell list runs. */
+  .spellbook-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px 0 2px;
+    /* Opaque, not a fade: the footer sits over the scrolling spell list, and a
+       gradient let row text read through it. */
+    background: var(--panel-edge);
+    box-shadow: 0 -6px 10px var(--panel-edge);
+  }
+  .spellbook-footer .x-btn {
+    min-height: 32px;
+    padding: 4px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .spellbook-footer .x-btn.active {
+    color: var(--gold);
+    border-color: var(--color-border-focus);
+  }
+  /* Manager mode: one row per line so the two extra controls always fit beside the
+     spell text, instead of squeezing the 2-to-3 column grid the classic list uses. */
+  #spellbook.spellbook-manager .spell-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 900px) {
+    body:not(.mobile-touch) #spellbook.spellbook-manager .spell-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .spell-manager-hint {
+    grid-column: 1 / -1;
+    padding: 2px 6px 6px;
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+  .spell-track-controls {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .spell-track-toggle,
+  .spell-track-type {
+    min-width: 44px;
+    min-height: 40px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 3px;
+    background: #ffffff0a;
+    color: var(--color-text-muted);
+    font: 700 11px var(--title-font);
+    cursor: var(--cursor-point);
+  }
+  .spell-track-toggle.on {
+    border-color: var(--color-border-focus);
+    background: var(--color-primary-glow);
+    color: var(--gold);
+  }
+  .spell-track-type:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .spell-track-toggle:focus-visible,
+  .spell-track-type:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
 
   /* ---------- quest log ---------- */
   /* quest log */

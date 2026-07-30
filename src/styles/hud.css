@@ -5177,6 +5177,188 @@
     pointer-events: none;
     filter: drop-shadow(0 2px 14px #000a);
   }
+
+  /* ---------- Skills Manager spell trackers ---------- */
+  /* Two independently movable WeakAuras-style groups the spellbook's manager mode
+     configures (src/ui/skill_tracker_painter.ts): a row of cooldown/proc squares
+     and a stack of duration bars. Each is centred on the left/top the shared
+     overlay-drag family writes as PERCENTAGES (proc_overlay_drag.ts), so a saved
+     spot survives a resize; the translate here is what makes that left/top the
+     element CENTRE, matching the anchor contract. Positioned ABSOLUTE inside #ui
+     (which is itself fixed over the app viewport and carries the UI Scale zoom),
+     so the percentages resolve against the HUD layer and the groups scale with the
+     rest of the HUD instead of floating outside it.
+     Every value below is static look only: nothing here varies with the graphics
+     tier, because a tracker is actionable information (root CLAUDE.md fairness). */
+  .st-group {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    z-index: 12;
+    /* The SHOWN state, deliberately: the painter hides a group by writing
+       display:none through the elided facet and reveals it by writing '' (which
+       reverts to this stylesheet value, the auras_painter convention). A `none`
+       default here would make the reveal a no-op. Before the first paint both
+       groups are empty and their handle is hidden, so this renders nothing. */
+    display: block;
+    /* Locked, a group is pure read-out and must never eat a world click; the
+       unlocked state below re-enables pointer events for the drag. */
+    pointer-events: none;
+  }
+  #skill-tracker-squares .st-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+  #skill-tracker-bars .st-items {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  /* The drag handle is always in the DOM (so an EMPTY group can still be grabbed
+     and parked) but only shows while the frames are unlocked. */
+  .st-group .st-handle {
+    display: none;
+  }
+  .st-group.st-unlocked {
+    pointer-events: auto;
+    cursor: grab;
+    padding: 6px;
+    border: 1px dashed var(--color-tracker-unlocked);
+    border-radius: 4px;
+  }
+  .st-group.st-unlocked.dragging {
+    cursor: grabbing;
+  }
+  .st-group.st-unlocked .st-handle {
+    display: block;
+    min-width: 40px;
+    min-height: 40px;
+    margin: 0 auto 4px;
+    border-radius: 3px;
+    background: var(--color-tracker-track);
+    border: 1px solid var(--color-tracker-border);
+  }
+
+  /* The SQUARE tracker: the ability icon with a sweep that drains bottom-up as the
+     followed duration runs out, plus the countdown over it. --st-fill is the 0..100%
+     of the duration still to run, written by the painter. */
+  .st-square {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid var(--color-tracker-border);
+    background-color: #15151f;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+  }
+  .st-square .st-sweep {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: var(--st-fill, 0%);
+    background: #000000a6;
+    pointer-events: none;
+  }
+  .st-square[data-tone="debuff"] {
+    border-color: var(--color-tracker-debuff);
+  }
+  .st-square[data-tone="buff"] {
+    border-color: var(--color-tracker-buff);
+  }
+  .st-square .st-time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 15px var(--title-font);
+    color: var(--color-text-overlay);
+    text-shadow: 0 0 3px var(--text-outline-color), 0 1px 2px var(--text-outline-color);
+  }
+  .st-square .st-stacks {
+    position: absolute;
+    right: 1px;
+    bottom: 0;
+    font: 700 11px var(--title-font);
+    color: var(--gold);
+    text-shadow: 0 1px 2px var(--text-outline-color);
+  }
+
+  /* The BAR tracker (the WeakAuras progress-bar read the owner referenced): icon,
+     then a track whose fill drains right-to-left with the countdown at its head
+     and the ability name at its tail. */
+  .st-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 3px;
+    width: 240px;
+    height: 26px;
+  }
+  .st-bar .st-bar-icon {
+    width: 26px;
+    flex: none;
+    border-radius: 4px;
+    border: 1px solid var(--color-tracker-border);
+    background-color: #15151f;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .st-bar .st-bar-track {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    border-radius: 3px;
+    border: 1px solid var(--color-tracker-border);
+    background: var(--color-tracker-track);
+    overflow: hidden;
+  }
+  .st-bar .st-bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--st-fill, 0%);
+    background: var(--color-tracker-cooldown);
+  }
+  .st-bar[data-tone="debuff"] .st-bar-fill {
+    background: var(--color-tracker-debuff);
+  }
+  .st-bar[data-tone="buff"] .st-bar-fill {
+    background: var(--color-tracker-buff);
+  }
+  .st-bar .st-bar-time,
+  .st-bar .st-bar-name,
+  .st-bar .st-bar-stacks {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font: 700 12px var(--title-font);
+    color: var(--color-text-overlay);
+    text-shadow: 0 1px 2px var(--text-outline-color);
+    pointer-events: none;
+  }
+  .st-bar .st-bar-time {
+    left: 5px;
+  }
+  .st-bar .st-bar-name {
+    right: 5px;
+    max-width: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    justify-content: flex-end;
+  }
+  .st-bar .st-bar-stacks {
+    left: 44px;
+    color: var(--gold);
+  }
 }
 
 /* ------------------------------------------------------------------------ */

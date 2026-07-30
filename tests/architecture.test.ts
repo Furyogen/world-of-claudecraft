@@ -188,6 +188,8 @@ const UI_PURE_CORES = [
   'src/ui/deeds_leaderboard_view.ts',
   'src/ui/daily_rewards_view.ts',
   'src/ui/deeds_view.ts',
+  'src/ui/skill_tracker_core.ts',
+  'src/ui/skill_tracker_view.ts',
   'src/ui/spellbook_view.ts',
   'src/ui/hud/quest/questlog_view.ts',
   'src/ui/swing_timer.ts',

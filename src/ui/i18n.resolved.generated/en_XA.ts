@@ -1682,6 +1682,27 @@ export const en_XA: EnTranslations = {
       "addToBarAria": "[Áðð {name} ţó áçţíóñ ƀáŕ]",
       "removeFromBarAria": "[Ŕéɱóʋé {name} ƒŕóɱ áçţíóñ ƀáŕ]"
     },
+    "skillTracker": {
+      "managerButton": "[Šķíļļš ɱáñáĝéŕ]",
+      "managerButtonOnAria": "[Šķíļļš ɱáñáĝéŕ óñ. Ţúŕñ íţ óƒƒ ţó ĥíðé éʋéŕý ţŕáçķéŕ ƒŕáɱé áñð ƀáŕ.]",
+      "managerButtonOffAria": "[Šķíļļš ɱáñáĝéŕ óƒƒ. Ţúŕñ íţ óñ ţó çĥóóšé ŵĥíçĥ šþéļļš ţó ţŕáçķ.]",
+      "lockButton": "[Ļóçķ]",
+      "lockButtonOnAria": "[Ţŕáçķéŕ ƒŕáɱéš ļóçķéð. Úñļóçķ ţó ðŕáĝ ţĥéɱ.]",
+      "lockButtonOffAria": "[Ţŕáçķéŕ ƒŕáɱéš úñļóçķéð. Ļóçķ ţó ƒíẋ ţĥéɱ íñ þļáçé.]",
+      "managerHint": "[Çĥóóšé ŵĥíçĥ šþéļļš ţó ţŕáçķ óñ ýóúŕ ţáŕĝéţ. {count} ţŕáçķéð.]",
+      "displayOn": "[Óñ]",
+      "displayOff": "[Óƒƒ]",
+      "displayAria": "[Ţŕáçķ {name}]",
+      "typeSquare": "[Šɋúáŕé]",
+      "typeBar": "[Ɓáŕ]",
+      "typeAria": "[Ţŕáçķéŕ ţýþé ƒóŕ {name}: {type}]",
+      "tooltipTarget": "[Óñ ýóúŕ ţáŕĝéţ]",
+      "tooltipSelf": "[Óñ ýóú]",
+      "tooltipCooldown": "[Çóóļðóŵñ]",
+      "dragHandle": "[Ðŕáĝ ţó ɱóʋé ţĥé ţŕáçķéŕ ƒŕáɱéš]",
+      "groupSquares": "[Šþéļļ ţŕáçķéŕ íçóñš]",
+      "groupBars": "[Šþéļļ ţŕáçķéŕ ƀáŕš]"
+    },
     "nameplate": {
       "mobLevel": "[{level}]",
       "mobEliteLevel": "[{level}+]"

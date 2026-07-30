@@ -297,6 +297,19 @@ export const BOOL_SETTINGS = {
   // on by default: keep the Daily Rewards chest launcher visible on the HUD. Hiding
   // it only removes the shortcut; rewards, eligibility, and the panel remain available.
   showDailyRewardsChest: { def: true },
+  // off by default: the Skills Manager master switch, driven by the spellbook's
+  // bottom-right "Skills manager" button. On, the spellbook renders its alternate
+  // manager rows (a display toggle plus a tracker-type button per trackable spell)
+  // and the HUD paints the tracker frames and bars the player switched on. Off
+  // hides every tracker frame and bar and restores the classic spellbook, without
+  // forgetting the per-spell selection (that lives in its own per-class store, see
+  // src/ui/skill_tracker_core.ts). Purely a display preference: the trackers only
+  // re-present auras and cooldowns the client already receives.
+  skillTrackerEnabled: { def: false },
+  // on by default: the tracker frames load LOCKED, so a stray click can never drag
+  // one out of place. The spellbook's "Lock" button (beside "Skills manager")
+  // flips it, matching the MovableFrame lock convention on the unit frames.
+  skillTrackerLocked: { def: true },
   // internal, never shown in the options UI: set true once main.ts has persisted a
   // device-appropriate graphicsPreset on a player's first run (a CONCLUSIVE detection).
   // It gates firstRunGraphicsPreset so a recognized device is classified at most once and

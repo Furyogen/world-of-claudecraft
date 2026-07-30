@@ -31,6 +31,11 @@ import {
 } from './hud/action_bar/hotbar';
 import { formatNumber, t } from './i18n';
 import { iconDataUrl } from './icons';
+import {
+  nextSkillTrackerDisplay,
+  type SkillTrackerConfig,
+  type SkillTrackerDisplay,
+} from './skill_tracker_core';
 import { buildSpellbookView, type SpellbookRow } from './spellbook_view';
 import { svgIcon } from './ui_icons';
 
@@ -75,6 +80,24 @@ export interface SpellbookWindowDeps {
   resetFormBar(): void;
   setDragAction(action: { type: 'ability'; id: string } | null): void;
   clearActionDropTargets(): void;
+  // --- Skills Manager (the alternate spellbook + the HUD trackers it drives) ---
+  /** Manager mode is on: the spell list also renders each trackable row's display
+   *  toggle and tracker-type button. Persisted by Hud as an Interface setting. */
+  managerMode(): boolean;
+  /** Turn manager mode on/off. Toggling it OFF also hides every tracker frame and
+   *  bar (the Hud stops painting them), which is the master switch the owner
+   *  asked for. */
+  setManagerMode(on: boolean): void;
+  /** Whether the HUD tracker frames are locked in place. */
+  trackersLocked(): boolean;
+  /** Lock (true) or unlock (false) the tracker frames for dragging. */
+  setTrackersLocked(locked: boolean): void;
+  /** The player's stored per-ability tracker selection for the current class. */
+  tracking(): SkillTrackerConfig;
+  /** Turn one ability's tracker display on/off (the manager's first button). */
+  setTracked(abilityId: string, tracked: boolean): void;
+  /** Set one ability's tracker type (the manager's second button). */
+  setTrackDisplay(abilityId: string, display: SkillTrackerDisplay): void;
 }
 
 export class SpellbookWindow {
@@ -151,7 +174,17 @@ export class SpellbookWindow {
     let refocus: string | null = null;
     if (active && root.contains(active)) {
       const id = active.dataset.abilityId;
-      if (id && active.classList.contains('spell-hotbar-toggle'))
+      // The Skills Manager controls are keyed by their own data attributes (not
+      // data-ability-id), so a player toggling a row's display or type with the
+      // keyboard keeps focus on that exact control across the rebuild each click
+      // triggers. Same for the two footer toggles.
+      const trackToggle = active.dataset.trackToggle;
+      const trackType = active.dataset.trackType;
+      const footerBtn = active.dataset.footerBtn;
+      if (trackToggle) refocus = `[data-track-toggle="${trackToggle}"]`;
+      else if (trackType) refocus = `[data-track-type="${trackType}"]`;
+      else if (footerBtn) refocus = `[data-footer-btn="${footerBtn}"]`;
+      else if (id && active.classList.contains('spell-hotbar-toggle'))
         refocus = `.spell-hotbar-toggle[data-ability-id="${id}"]`;
       else if (id && active.classList.contains('spell-row'))
         refocus = `.spell-row[data-ability-id="${id}"]`;
@@ -187,6 +220,9 @@ export class SpellbookWindow {
       hasFormBars: this.deps.hasFormBars(),
       spec: world.talentSpec,
       level: world.player.level,
+      managerMode: this.deps.managerMode(),
+      locked: this.deps.trackersLocked(),
+      tracking: this.deps.tracking(),
     });
     const className = classDisplayName(view.classId);
     markDialogRoot(el, { label: t('abilityUi.spellbook.title') });
@@ -196,18 +232,23 @@ export class SpellbookWindow {
       ? `<button type="button" class="x-btn spellbook-reset" data-reset-bar aria-label="${esc(t('abilityUi.spellbook.resetBarAria'))}">${esc(t('abilityUi.spellbook.resetBar'))}</button>`
       : '';
     el.innerHTML = `<div class="panel-title"><span>${esc(t('abilityUi.spellbook.title'))} <span class="spellbook-class">${esc(t('abilityUi.spellbook.classSubtitle', { className }))}</span></span><div class="panel-title-actions">${resetBtnHtml}<button type="button" class="x-btn" data-close aria-label="${esc(t('abilityUi.spellbook.close'))}">${svgIcon('close')}</button></div></div>`;
+    // Manager mode is a class on the root, so the stylesheet can widen the rows
+    // and reveal the per-row controls without a second render path.
+    el.classList.toggle('spellbook-manager', view.managerMode);
     const list = document.createElement('div');
     list.className = 'spell-list';
     list.setAttribute('role', 'list');
     el.appendChild(list);
+    if (view.managerMode) this.appendManagerHint(list, view.trackedCount);
     this.appendAttackRow(list, view.attackOnBar);
-    for (const row of view.rows) this.appendRow(list, row);
+    for (const row of view.rows) this.appendRow(list, row, view.managerMode);
     if (view.empty) {
       const empty = document.createElement('div');
       empty.className = 'spell-sub';
       empty.textContent = t('abilityUi.spellbook.empty');
       list.appendChild(empty);
     }
+    this.appendFooter(el, view.managerMode, view.locked);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
     const resetBtn = el.querySelector('[data-reset-bar]');
     resetBtn?.addEventListener('pointerdown', (ev) => ev.stopPropagation());
@@ -332,7 +373,141 @@ export class SpellbookWindow {
     list.appendChild(el);
   }
 
-  private appendRow(list: HTMLElement, row: SpellbookRow): void {
+  // The one-line explanation at the top of manager mode: what the two per-row
+  // controls do, plus how many rows are currently switched on. Cold path, rebuilt
+  // with the list.
+  private appendManagerHint(list: HTMLElement, trackedCount: number): void {
+    const hint = document.createElement('div');
+    hint.className = 'spell-manager-hint';
+    hint.textContent = t('hudChrome.skillTracker.managerHint', {
+      count: this.formatAbilityNumber(trackedCount),
+    });
+    list.appendChild(hint);
+  }
+
+  // The bottom-right footer: the "Skills manager" mode toggle and the tracker
+  // "Lock" toggle. Both are aria-pressed toggle buttons (the interface-settings
+  // convention the rest of the HUD uses), and both re-render the window in place
+  // so the row controls and the pressed states never drift from the stored state.
+  private appendFooter(root: HTMLElement, managerMode: boolean, locked: boolean): void {
+    const footer = document.createElement('div');
+    footer.className = 'spellbook-footer';
+    const manager = this.footerButton(
+      'spellbook-manager-btn',
+      t('hudChrome.skillTracker.managerButton'),
+      managerMode
+        ? t('hudChrome.skillTracker.managerButtonOnAria')
+        : t('hudChrome.skillTracker.managerButtonOffAria'),
+      managerMode,
+    );
+    manager.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.deps.setManagerMode(!this.deps.managerMode());
+      audio.click();
+      this.rerenderPreservingView();
+    });
+    const lock = this.footerButton(
+      'spellbook-lock-btn',
+      t('hudChrome.skillTracker.lockButton'),
+      locked
+        ? t('hudChrome.skillTracker.lockButtonOnAria')
+        : t('hudChrome.skillTracker.lockButtonOffAria'),
+      locked,
+    );
+    lock.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.deps.setTrackersLocked(!this.deps.trackersLocked());
+      audio.click();
+      this.rerenderPreservingView();
+    });
+    footer.appendChild(manager);
+    footer.appendChild(lock);
+    root.appendChild(footer);
+  }
+
+  private footerButton(
+    cls: string,
+    label: string,
+    ariaLabel: string,
+    pressed: boolean,
+  ): HTMLButtonElement {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `x-btn ${cls}${pressed ? ' active' : ''}`;
+    btn.dataset.footerBtn = cls;
+    btn.textContent = label;
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    btn.setAttribute('aria-label', ariaLabel);
+    btn.title = ariaLabel;
+    btn.addEventListener('pointerdown', (ev) => ev.stopPropagation());
+    return btn;
+  }
+
+  // The two Skills Manager controls on one trackable row: the display ON/OFF
+  // toggle, then the tracker "type" button that steps square <-> bar. Both mutate
+  // the stored per-class selection through the deps and re-render in place so the
+  // manager hint's count and the HUD trackers follow immediately.
+  private appendManagerControls(el: HTMLElement, row: SpellbookRow, name: string): void {
+    const group = document.createElement('div');
+    group.className = 'spell-track-controls';
+
+    const display = document.createElement('button');
+    display.type = 'button';
+    display.className = `spell-track-toggle${row.tracked ? ' on' : ''}`;
+    display.dataset.trackToggle = row.abilityId;
+    display.textContent = t(
+      row.tracked ? 'hudChrome.skillTracker.displayOn' : 'hudChrome.skillTracker.displayOff',
+    );
+    display.setAttribute('aria-pressed', row.tracked ? 'true' : 'false');
+    display.setAttribute('aria-label', t('hudChrome.skillTracker.displayAria', { name }));
+    display.addEventListener('pointerdown', (ev) => ev.stopPropagation());
+    display.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.deps.setTracked(row.abilityId, !row.tracked);
+      audio.click();
+      this.rerenderPreservingView();
+    });
+
+    const type = document.createElement('button');
+    type.type = 'button';
+    type.className = 'spell-track-type';
+    type.dataset.trackType = row.abilityId;
+    type.dataset.display = row.trackDisplay;
+    type.textContent = this.trackDisplayLabel(row.trackDisplay);
+    type.setAttribute(
+      'aria-label',
+      t('hudChrome.skillTracker.typeAria', {
+        name,
+        type: this.trackDisplayLabel(row.trackDisplay),
+      }),
+    );
+    // The type button only matters once the display is on; keep it visible but
+    // inert otherwise, so the row's layout never shifts as the toggle flips.
+    type.disabled = !row.tracked;
+    type.addEventListener('pointerdown', (ev) => ev.stopPropagation());
+    type.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.deps.setTrackDisplay(row.abilityId, nextSkillTrackerDisplay(row.trackDisplay));
+      audio.click();
+      this.rerenderPreservingView();
+    });
+
+    group.appendChild(display);
+    group.appendChild(type);
+    el.appendChild(group);
+  }
+
+  private trackDisplayLabel(display: SkillTrackerDisplay): string {
+    return t(
+      display === 'bar' ? 'hudChrome.skillTracker.typeBar' : 'hudChrome.skillTracker.typeSquare',
+    );
+  }
+
+  private appendRow(list: HTMLElement, row: SpellbookRow, managerMode: boolean): void {
     const def = ABILITIES[row.abilityId];
     const known = row.known;
     const el = document.createElement('div');
@@ -415,6 +590,11 @@ export class SpellbookWindow {
         this.deps.clearActionDropTargets();
       });
     }
+    // Skills Manager: the display + type controls, appended AFTER the hotbar
+    // toggle so they sit at the row's right edge exactly as the owner asked.
+    // Untrackable rows (unlearned, or an ability with no aura and no cooldown)
+    // get nothing, so the manager never offers a switch that could not light up.
+    if (managerMode && row.trackable) this.appendManagerControls(el, row, name);
     if (known) {
       // Resolve every learned ability LIVE at hover time, including informational
       // passive rows that deliberately have no action-bar controls.

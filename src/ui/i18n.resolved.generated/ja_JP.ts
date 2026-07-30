@@ -1682,6 +1682,27 @@ export const ja_JP: EnTranslations = {
       "addToBarAria": "{name}をアクションバーに追加",
       "removeFromBarAria": "{name}をアクションバーから削除"
     },
+    "skillTracker": {
+      "managerButton": "スキルマネージャー",
+      "managerButtonOnAria": "スキルマネージャーはオンです。オフにするとすべてのトラッカー枠とバーが非表示になります。",
+      "managerButtonOffAria": "スキルマネージャーはオフです。オンにすると追跡する呪文を選べます。",
+      "lockButton": "ロック",
+      "lockButtonOnAria": "トラッカー枠はロック中です。ドラッグするにはロックを解除してください。",
+      "lockButtonOffAria": "トラッカー枠のロックが解除されています。ロックすると位置が固定されます。",
+      "managerHint": "ターゲットで追跡する呪文を選択してください。{count}件を追跡中。",
+      "displayOn": "オン",
+      "displayOff": "オフ",
+      "displayAria": "{name}を追跡",
+      "typeSquare": "四角",
+      "typeBar": "バー",
+      "typeAria": "{name}のトラッカー種類：{type}",
+      "tooltipTarget": "ターゲットに付与中",
+      "tooltipSelf": "自分に付与中",
+      "tooltipCooldown": "クールダウン",
+      "dragHandle": "ドラッグしてトラッカー枠を移動",
+      "groupSquares": "呪文トラッカーのアイコン",
+      "groupBars": "呪文トラッカーのバー"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"

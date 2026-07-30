@@ -106,6 +106,29 @@ export class FakeElement extends EventTarget {
     return this.html;
   }
 
+  /** How many times this element's child list was mutated (append / insert /
+   *  remove). A keyed-pool painter's "a steady-state frame moves no node" claim is
+   *  exactly this counter not advancing, so it needs to be observable. */
+  mutations = 0;
+
+  /** Node-order alias of `children`. The keyed-list reconcile every pooled HUD
+   *  painter uses walks childNodes / firstChild / nextSibling, so the fake exposes
+   *  the same surface (these fakes hold elements only, so the two are the same
+   *  list). */
+  get childNodes(): FakeElement[] {
+    return this.children;
+  }
+
+  get firstChild(): FakeElement | null {
+    return this.children[0] ?? null;
+  }
+
+  get nextSibling(): FakeElement | null {
+    const parent = this.parentElement;
+    if (!parent) return null;
+    return parent.children[parent.children.indexOf(this) + 1] ?? null;
+  }
+
   append(...nodes: FakeElement[]): void {
     for (const node of nodes) this.appendChild(node);
   }
@@ -114,12 +137,28 @@ export class FakeElement extends EventTarget {
     node.parentElement?.removeChild(node);
     node.parentElement = this;
     this.children.push(node);
+    this.mutations++;
+    return node;
+  }
+
+  /** Insert before `ref`, or append when `ref` is null (the DOM contract the
+   *  reconcile relies on). */
+  insertBefore<T extends FakeElement>(node: T, ref: FakeElement | null): T {
+    node.parentElement?.removeChild(node);
+    node.parentElement = this;
+    const index = ref ? this.children.indexOf(ref) : -1;
+    if (index < 0) this.children.push(node);
+    else this.children.splice(index, 0, node);
+    this.mutations++;
     return node;
   }
 
   removeChild<T extends FakeElement>(node: T): T {
     const index = this.children.indexOf(node);
-    if (index >= 0) this.children.splice(index, 1);
+    if (index >= 0) {
+      this.children.splice(index, 1);
+      this.mutations++;
+    }
     node.parentElement = null;
     return node;
   }

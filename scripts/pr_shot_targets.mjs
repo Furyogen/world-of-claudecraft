@@ -870,6 +870,175 @@ export const TARGETS = [
     },
   },
   {
+    key: 'skill-tracker',
+    label: 'Skills Manager: spellbook manager mode + the HUD spell trackers',
+    when: ['skill_tracker', 'spellbook_view', 'spellbook_window'],
+    variants: [
+      { key: 'manager-desktop', charClass: 'druid', charName: 'Leafward', scene: 'manager' },
+      { key: 'hot-desktop', charClass: 'druid', charName: 'Leafward', scene: 'hot' },
+      { key: 'dot-desktop', charClass: 'druid', charName: 'Leafward', scene: 'dot' },
+      {
+        key: 'manager-mobile',
+        charClass: 'druid',
+        charName: 'Leafward',
+        scene: 'manager',
+        mobile: true,
+      },
+      { key: 'hot-mobile', charClass: 'druid', charName: 'Leafward', scene: 'hot', mobile: true },
+    ],
+    // Every scene configures the trackers through the REAL manager controls (the
+    // footer toggle and each row's two buttons), never by poking the stored config,
+    // so a shot doubles as proof that the wiring works end to end. The two combat
+    // scenes then cast the real ability at a real target and shoot the resulting
+    // frames: the druid HoT (Wildbloom / rejuvenation) on a friendly, and the druid
+    // DoT (Lunar Tempest / moonfire) on a hostile, which is what the owner asked to
+    // review before this goes wider.
+    async capture(page, variant) {
+      await page.evaluate(() => {
+        document.querySelector('.camera-prompt-confirm')?.click();
+        document.querySelector('.tut-skip')?.click();
+        document.querySelector('#gpu-notice')?.remove();
+      });
+      await wait(300);
+      // Level 20 puts the whole tracked set in the book: Wildbloom + Lunar Tempest
+      // (level 4) and Barkskin (level 16, a real 60s cooldown for the square).
+      const levelled = await page.evaluate(() => {
+        const sim = window.__game?.sim;
+        if (!sim?.player) return false;
+        sim.setPlayerLevel?.(20, sim.player.id);
+        sim.player.gm = true;
+        sim.player.resource = sim.player.maxResource;
+        return ['rejuvenation', 'moonfire', 'barkskin'].every((id) => !!sim.resolvedAbility?.(id));
+      });
+      if (!levelled) throw new Error('the druid tracked set is not known at level 20');
+
+      // --- configure through the real manager UI ---
+      await page.evaluate(() => window.__game?.hud?.toggleSpellbook?.());
+      if (!(await pollForSize(page, '#spellbook', 20, 250)))
+        throw new Error('spellbook did not open');
+      // Also idempotent: the Skills Manager is a PERSISTED setting, so a later
+      // variant page in the same browser profile finds it already on and a blind
+      // click would switch it back off.
+      const managerOn = await page.evaluate(() => {
+        const btn = document.querySelector('[data-footer-btn="spellbook-manager-btn"]');
+        if (!btn) return false;
+        if (btn.getAttribute('aria-pressed') !== 'true') btn.click();
+        return (
+          document
+            .querySelector('[data-footer-btn="spellbook-manager-btn"]')
+            ?.getAttribute('aria-pressed') === 'true'
+        );
+      });
+      if (!managerOn) throw new Error('the Skills manager footer toggle did not switch on');
+      await wait(300);
+      // IDEMPOTENT by design: the selection persists in localStorage, which the
+      // browser profile shares across every variant page, so each control is
+      // clicked only when it is not already in the wanted state.
+      const configured = await page.evaluate(() => {
+        // Wildbloom and Lunar Tempest as BARS; Barkskin left on the SQUARE default,
+        // so one shot shows both display kinds side by side.
+        const bars = ['rejuvenation', 'moonfire'];
+        const squares = ['barkskin'];
+        const settle = (id, wanted) => {
+          const toggle = document.querySelector(`[data-track-toggle="${id}"]`);
+          if (!toggle) return false;
+          if (toggle.getAttribute('aria-pressed') !== 'true') toggle.click();
+          for (let step = 0; step < 4; step++) {
+            const type = document.querySelector(`[data-track-type="${id}"]`);
+            if (!type || type.dataset.display === wanted) break;
+            type.click();
+          }
+          const type = document.querySelector(`[data-track-type="${id}"]`);
+          return (
+            document.querySelector(`[data-track-toggle="${id}"]`)?.getAttribute('aria-pressed') ===
+              'true' && type?.dataset.display === wanted
+          );
+        };
+        const ok = [
+          ...bars.map((id) => settle(id, 'bar')),
+          ...squares.map((id) => settle(id, 'square')),
+        ];
+        return ok.every(Boolean);
+      });
+      if (!configured) throw new Error('the manager row controls did not switch the trackers on');
+      if (variant.scene === 'manager') {
+        // Keep the alternate spellbook up and put the two druid rows in view.
+        await page.evaluate(() => {
+          document.querySelector('.spell-row[data-ability-id="moonfire"]')?.scrollIntoView({
+            block: 'center',
+          });
+        });
+        await wait(400);
+        return { clip: '#spellbook' };
+      }
+      await page.evaluate(() => window.__game?.hud?.toggleSpellbook?.());
+      await wait(300);
+
+      // --- stage the target and cast the real ability at it ---
+      const wantsFriendly = variant.scene === 'hot';
+      const abilityId = wantsFriendly ? 'rejuvenation' : 'moonfire';
+      const staged = await page.evaluate((friendly) => {
+        const game = window.__game;
+        const sim = game?.sim;
+        const player = sim?.player;
+        if (!sim || !player) return { ok: false, reason: 'offline world is unavailable' };
+        let targetId = null;
+        if (friendly) {
+          targetId = sim.addPlayer('warrior', 'Thornbark');
+        } else {
+          const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead);
+          targetId = mob?.id ?? null;
+        }
+        const other = targetId === null ? null : sim.entities.get(targetId);
+        if (!other) return { ok: false, reason: 'no target entity available' };
+        // Park the target in front of the camera focal point (the player-tooltip
+        // recipe), face it, and select it.
+        other.pos.x = player.pos.x + Math.sin(game.input.camYaw) * 4;
+        other.pos.z = player.pos.z + Math.cos(game.input.camYaw) * 4;
+        other.pos.y = player.pos.y;
+        other.prevPos = { ...other.pos };
+        player.facing = Math.atan2(other.pos.x - player.pos.x, other.pos.z - player.pos.z);
+        sim.targetEntity(targetId);
+        return { ok: true, targetId };
+      }, wantsFriendly);
+      if (!staged.ok) throw new Error(staged.reason);
+      await wait(400);
+      // Barkskin first (its 60s cooldown fills the square), then the tracked
+      // HoT/DoT on the target. Retried: a cast can be refused mid-GCD.
+      let landed = false;
+      for (let attempt = 0; attempt < 12 && !landed; attempt++) {
+        landed = await page.evaluate(
+          (shot) => {
+            const sim = window.__game?.sim;
+            const player = sim?.player;
+            if (!sim || !player) return false;
+            player.resource = player.maxResource;
+            if ((player.cooldowns.get('barkskin') ?? 0) <= 0)
+              sim.castAbility?.('barkskin', player.id);
+            sim.castAbility?.(shot.abilityId, player.id);
+            const target = sim.entities.get(shot.targetId);
+            return !!target?.auras.some((a) => a.id === shot.abilityId && a.sourceId === player.id);
+          },
+          { abilityId, targetId: staged.targetId },
+        );
+        if (!landed) await wait(500);
+      }
+      if (!landed) throw new Error(`${abilityId} never landed on the staged target`);
+      // Let the bar drain a little so the countdown reads mid-flight, like the
+      // WeakAuras reference the owner shared.
+      await wait(1200);
+      const painted = await page.evaluate(() => ({
+        bars: document.querySelectorAll('#skill-tracker-bars .st-bar').length,
+        squares: document.querySelectorAll('#skill-tracker-squares .st-square').length,
+      }));
+      if (painted.bars < 1 || painted.squares < 1)
+        throw new Error(`tracker frames missing: ${JSON.stringify(painted)}`);
+      // Full frame: the trackers matter together with the target frame and the
+      // target's own aura strip they are read against.
+      return {};
+    },
+  },
+  {
     key: 'confirm-gates',
     label: 'Confirm dialogs: spirit-healer revive + marks purchases',
     when: ['ui/hud/delve/delve_board_controller', 'tests/hud_confirm_gates'],

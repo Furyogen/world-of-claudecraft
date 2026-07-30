@@ -1682,6 +1682,27 @@ export const ru_RU: EnTranslations = {
       "addToBarAria": "Добавить {name} на панель действий",
       "removeFromBarAria": "Убрать {name} с панели действий"
     },
+    "skillTracker": {
+      "managerButton": "Диспетчер умений",
+      "managerButtonOnAria": "Диспетчер умений включен. Выключите, чтобы скрыть все рамки и полосы отслеживания.",
+      "managerButtonOffAria": "Диспетчер умений выключен. Включите, чтобы выбрать отслеживаемые заклинания.",
+      "lockButton": "Закрепить",
+      "lockButtonOnAria": "Рамки отслеживания закреплены. Снимите закрепление, чтобы перетащить их.",
+      "lockButtonOffAria": "Рамки отслеживания не закреплены. Закрепите, чтобы зафиксировать их.",
+      "managerHint": "Выберите заклинания для отслеживания на цели. Отслеживается: {count}.",
+      "displayOn": "Вкл",
+      "displayOff": "Выкл",
+      "displayAria": "Отслеживать {name}",
+      "typeSquare": "Квадрат",
+      "typeBar": "Полоса",
+      "typeAria": "Тип отслеживания для {name}: {type}",
+      "tooltipTarget": "На вашей цели",
+      "tooltipSelf": "На вас",
+      "tooltipCooldown": "Восстановление",
+      "dragHandle": "Перетащите, чтобы переместить рамки отслеживания",
+      "groupSquares": "Значки отслеживания заклинаний",
+      "groupBars": "Полосы отслеживания заклинаний"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"

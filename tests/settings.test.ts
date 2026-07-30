@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  BOOL_SETTINGS,
   clickMoveButtonLabel,
   normalizeClickMoveButton,
   SETTING_RANGES,
@@ -321,5 +322,34 @@ describe('click-to-move mouse button setting', () => {
     expect(normalizeClickMoveButton(2)).toBe(2);
     expect(clickMoveButtonLabel(0)).toBe('Left Click');
     expect(clickMoveButtonLabel(2)).toBe('Right Click');
+  });
+});
+
+describe('Skills Manager settings', () => {
+  it('ships the Skills Manager off and the tracker frames locked', () => {
+    // Opt-in by design: a player who never opens the manager sees no change, and a
+    // frame always LOADS locked so a stray click can never drag it (the
+    // MovableFrame convention).
+    expect(BOOL_SETTINGS.skillTrackerEnabled.def).toBe(false);
+    expect(BOOL_SETTINGS.skillTrackerLocked.def).toBe(true);
+  });
+
+  it('persists both toggles and restores them on reload', () => {
+    const s = new Settings();
+    expect(s.get('skillTrackerEnabled')).toBe(false);
+    expect(s.set('skillTrackerEnabled', true)).toBe(true);
+    expect(s.set('skillTrackerLocked', false)).toBe(false);
+    const reloaded = new Settings();
+    expect(reloaded.get('skillTrackerEnabled')).toBe(true);
+    expect(reloaded.get('skillTrackerLocked')).toBe(false);
+  });
+
+  it('restores both to their defaults on Reset to Defaults', () => {
+    const s = new Settings();
+    s.set('skillTrackerEnabled', true);
+    s.set('skillTrackerLocked', false);
+    s.reset();
+    expect(s.get('skillTrackerEnabled')).toBe(false);
+    expect(s.get('skillTrackerLocked')).toBe(true);
   });
 });

@@ -413,6 +413,8 @@ import { restView } from './rest_indicator';
 import { isTalentRowUnlockLevel } from './row_unlock_toast';
 import { localizeServerText } from './server_i18n';
 import { localizeSimAuraName, localizeSimText } from './sim_i18n';
+import { SkillTrackerController } from './skill_tracker_controller';
+import { skillTrackerFractionDigits } from './skill_tracker_view';
 import { SocialWindow } from './social_window';
 import { SpellbookWindow } from './spellbook_window';
 import { stanceBarView, WARRIOR_STANCE_GROUP } from './stance_bar_view';
@@ -3135,6 +3137,42 @@ export class Hud {
     this.writerFacet,
     this.procOverlayEl,
   );
+  // Skills Manager: the WeakAuras-style spell trackers the spellbook's manager
+  // mode configures. Everything (the per-class selection, the two movable groups,
+  // the per-frame view -> painter hand-off) lives in the controller module; Hud
+  // only supplies the DOM roots, the shared writer facet, the two persisted
+  // settings, and the icon + i18n resolvers, then calls update() once per frame.
+  private readonly skillTracker = new SkillTrackerController({
+    squareGroup: () => $('#skill-tracker-squares'),
+    barGroup: () => $('#skill-tracker-bars'),
+    squareItems: () => $('#skill-tracker-squares .st-items'),
+    barItems: () => $('#skill-tracker-bars .st-items'),
+    writers: this.writerFacet,
+    enabled: () => this.optionsHooks?.settings.get('skillTrackerEnabled') ?? false,
+    setEnabled: (on) => this.optionsHooks?.settings.set('skillTrackerEnabled', on),
+    locked: () => this.optionsHooks?.settings.get('skillTrackerLocked') ?? true,
+    setLocked: (locked) => this.optionsHooks?.settings.set('skillTrackerLocked', locked),
+    painterDeps: {
+      resolveIconUrl: (abilityId) => `url(${iconDataUrl('ability', abilityId)})`,
+      renderTooltip: (name, remaining, source) =>
+        `<div class="tt-title">${esc(name)}</div><div class="tt-sub">${esc(
+          t(
+            source === 'target'
+              ? 'hudChrome.skillTracker.tooltipTarget'
+              : source === 'self'
+                ? 'hudChrome.skillTracker.tooltipSelf'
+                : 'hudChrome.skillTracker.tooltipCooldown',
+          ),
+        )}</div><div class="tt-sub">${esc(this.formatTrackerSeconds(remaining))}</div>`,
+      attachTooltip: (el, html) => this.attachTooltip(el, html),
+    },
+    viewDeps: {
+      abilityName: (abilityId) =>
+        ABILITIES[abilityId] ? abilityDisplayName(ABILITIES[abilityId]) : abilityId,
+      formatRemaining: (seconds) => this.formatTrackerSeconds(seconds),
+      formatStacks: (n) => formatNumber(n, { maximumFractionDigits: 0 }),
+    },
+  });
   // One-shot login preview gate for the phoenix (see update()).
   private procOverlayPreviewed = false;
   // The per-frame FCT painter: the pooled-div ring that replaced the per-event
@@ -3944,6 +3982,17 @@ export class Hud {
       this.dragAction = action ? { action, sourceIndex: null } : null;
     },
     clearActionDropTargets: () => this.clearActionDropTargets(),
+    // Skills Manager seams, all forwarded to the controller (which owns the
+    // per-class selection and its persistence).
+    managerMode: () => this.skillTracker.managerMode(),
+    setManagerMode: (on) => this.skillTracker.setManagerMode(on),
+    trackersLocked: () => this.skillTracker.locked(),
+    setTrackersLocked: (locked) => this.skillTracker.setLocked(locked),
+    tracking: () => this.skillTracker.tracking(this.sim.cfg.playerClass),
+    setTracked: (abilityId, tracked) =>
+      this.skillTracker.setTracked(this.sim.cfg.playerClass, abilityId, tracked),
+    setTrackDisplay: (abilityId, display) =>
+      this.skillTracker.setTrackDisplay(this.sim.cfg.playerClass, abilityId, display),
   });
   // Quest-log window painter (questlog_view.ts core + questlog_window.ts painter).
   // It composes the presentation bag (icon/money/tooltip) for the reward row and
@@ -7164,6 +7213,11 @@ export class Hud {
     } else {
       this.procOverlayPainter.paint(procOverlayState(p.auras), combustionOverlayActive(p.auras));
     }
+    // Skills Manager trackers: the squares + bars follow the player's own auras on
+    // the CURRENT TARGET first (a HoT/DoT you are maintaining), then their auras on
+    // you, then the ability's cooldown. The controller no-ops cheaply while the
+    // Skills Manager is off.
+    this.skillTracker.update(this.sim);
 
     // action bar: the slot row, driven by the pure action_bar_view core + the thin
     // ActionBarPainter. Every per-slot icon / cooldown / dimming / count write
@@ -11852,6 +11906,18 @@ export class Hud {
   // refreshes the +/- controls from hud.update() while open.
   toggleSpellbook(): void {
     this.spellbookWindow.toggle();
+  }
+
+  // The Skills Manager tracker countdown, localized through formatNumber like every
+  // other HUD number. The digit count comes from the pure core, so the square, the
+  // bar, and the hover tooltip all read the same way ("6.2" while it matters, "18"
+  // while it does not) and the rule stays unit-testable outside the HUD.
+  private formatTrackerSeconds(seconds: number): string {
+    const digits = skillTrackerFractionDigits(seconds);
+    return formatNumber(seconds, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
   }
 
   // -------------------------------------------------------------------------

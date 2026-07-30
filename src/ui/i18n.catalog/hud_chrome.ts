@@ -1716,6 +1716,34 @@ export const hudChromeStrings = {
     addToBarAria: 'Add {name} to action bar',
     removeFromBarAria: 'Remove {name} from action bar',
   },
+  // Skills Manager: the spellbook's alternate manager mode (a display toggle and
+  // a tracker-type button per spell) plus the HUD tracker frames it drives. Every
+  // wordy value here is filled in the five non-Latin locales in this same change
+  // (M16). {name} is the already localized ability name.
+  skillTracker: {
+    managerButton: 'Skills manager',
+    managerButtonOnAria: 'Skills manager on. Turn it off to hide every tracker frame and bar.',
+    managerButtonOffAria: 'Skills manager off. Turn it on to choose which spells to track.',
+    lockButton: 'Lock',
+    lockButtonOnAria: 'Tracker frames locked. Unlock to drag them.',
+    lockButtonOffAria: 'Tracker frames unlocked. Lock to fix them in place.',
+    managerHint: 'Choose which spells to track on your target. {count} tracked.',
+    displayOn: 'On',
+    displayOff: 'Off',
+    displayAria: 'Track {name}',
+    typeSquare: 'Square',
+    typeBar: 'Bar',
+    typeAria: 'Tracker type for {name}: {type}',
+    // Hover tooltips on a tracker frame. The subtitle names what the frame is
+    // following, so an unfamiliar frame is self-explanatory.
+    tooltipTarget: 'On your target',
+    tooltipSelf: 'On you',
+    tooltipCooldown: 'Cooldown',
+    // The drag handle shown on each tracker group while the frames are unlocked.
+    dragHandle: 'Drag to move the tracker frames',
+    groupSquares: 'Spell tracker icons',
+    groupBars: 'Spell tracker bars',
+  },
   // Live overworld mob nameplate level badge text. Level renders in its own
   // element so con-color styling applies to the badge without recoloring the
   // mob name line.

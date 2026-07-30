@@ -1682,6 +1682,27 @@ export const en_CA: EnTranslations = {
       "addToBarAria": "Add {name} to action bar",
       "removeFromBarAria": "Remove {name} from action bar"
     },
+    "skillTracker": {
+      "managerButton": "Skills manager",
+      "managerButtonOnAria": "Skills manager on. Turn it off to hide every tracker frame and bar.",
+      "managerButtonOffAria": "Skills manager off. Turn it on to choose which spells to track.",
+      "lockButton": "Lock",
+      "lockButtonOnAria": "Tracker frames locked. Unlock to drag them.",
+      "lockButtonOffAria": "Tracker frames unlocked. Lock to fix them in place.",
+      "managerHint": "Choose which spells to track on your target. {count} tracked.",
+      "displayOn": "On",
+      "displayOff": "Off",
+      "displayAria": "Track {name}",
+      "typeSquare": "Square",
+      "typeBar": "Bar",
+      "typeAria": "Tracker type for {name}: {type}",
+      "tooltipTarget": "On your target",
+      "tooltipSelf": "On you",
+      "tooltipCooldown": "Cooldown",
+      "dragHandle": "Drag to move the tracker frames",
+      "groupSquares": "Spell tracker icons",
+      "groupBars": "Spell tracker bars"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"

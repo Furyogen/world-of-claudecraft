@@ -356,6 +356,21 @@ header carries its own contract.
   `talent_i18n.ts` entity-style pattern; per-base-locale release-fill chunks under
   `deed_i18n.locales/` fetched lazily via `DEED_LOCALE_LOADERS`);
   `deeds_leaderboard_view.ts` is the Renown-board tab's pure core.
+- **skill_tracker_core.ts** / **skill_tracker_view.ts** / **skill_tracker_painter.ts**
+  (+ **skill_tracker_controller.ts**): the Skills Manager, the WeakAuras-style per-spell
+  trackers the spellbook's manager mode configures. A four-way split worth copying for any
+  configurable HUD overlay: a COLD config core (the per-class selection plus its
+  localStorage round trip and the `isTrackableAbility` allowlist), a HOT allocation-light
+  view core (which of target-aura / self-aura / cooldown a tracker follows, and its
+  buff/debuff TONE from the shared `sim/aura_classify`), a keyed-pool painter over the
+  elided writers, and a thin controller that composes the three so none of it lands on
+  `hud.ts`. Two contracts are load-bearing: the entry list is rebuilt behind an
+  ALLOCATION-FREE positional freshness walk (the online mirror reassigns `known` every
+  snapshot, so reference identity would rebuild every frame), and the group's stylesheet
+  default is the SHOWN state, because the painter reveals by writing `''` (revert to
+  stylesheet) and hides by writing `'none'`. Frames are movable through the shared
+  `proc_overlay_drag.ts` family behind a lock gate, and nothing here is tiered: a tracker
+  is actionable information (root `CLAUDE.md` graphics fairness).
 - **bank_filter.ts** (with **bank_view.ts** / **bank_window.ts**): the bank search/sort
   preserves live `slotIndex` values verbatim, so a filtered row still names the exact wire
   argument for deposit/withdraw.

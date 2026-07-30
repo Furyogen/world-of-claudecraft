@@ -248,6 +248,13 @@ const HOT_PAINTERS: ReadonlyArray<{
     allow: { '.innerHTML': 1, '.setAttribute': 3, '.removeAttribute': 3 },
     reflowAllow: {},
   },
+  // The Skills Manager tracker pool (squares + bars). Its ONE documented exception
+  // is the single `.classList` in the `div()` builder inside createNode: every
+  // pooled node's child classes are funnelled through that one build-time helper,
+  // so the whole painter holds exactly one raw-write token and every per-frame
+  // write (icon, fill, countdown, name, stacks, source attribute) routes through
+  // the elided facet.
+  { file: 'skill_tracker_painter.ts', allow: { '.classList': 1 }, reflowAllow: {} },
 ];
 
 // The OTHER src/ui/**/*_painter.ts modules, NOT facet-routed, so deliberately not in the

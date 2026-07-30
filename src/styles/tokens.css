@@ -61,6 +61,22 @@
     --color-debuff-nature: #35a835;
     --color-debuff-holy: #d8b56b;
 
+    /* Skills Manager spell trackers (src/ui/skill_tracker_painter.ts drives these
+       through the fill/tone attributes, so the painter carries no raw hex). One
+       fill per TONE, matched to the read it stands for: a debuff or DoT is red, a
+       buff or HoT is green (wherever it sits, so a HoT you keep on your target
+       reads helpful), and a running cooldown is the neutral gold of the rest of
+       the HUD chrome. The tone comes from the sim's one shared aura classifier,
+       so a tracker can never disagree with the aura strip. */
+    --color-tracker-debuff: #c0392b;
+    --color-tracker-buff: #35a835;
+    --color-tracker-cooldown: #7a6a2e;
+    --color-tracker-track: #0c0a08d9;
+    --color-tracker-border: #cc9a3c88;
+    /* The unlocked-group affordance: a dashed outline so an EMPTY tracker group is
+       still visible and grabbable while the frames are unlocked. */
+    --color-tracker-unlocked: #c8a838aa;
+
     --color-bg-dark: #08080d;
     --color-bg-input: #0a0a0f;
     --color-border-default: #4e3d1d;

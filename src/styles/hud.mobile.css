@@ -3642,6 +3642,50 @@
     padding: 0 12px;
     font-size: 14px;
   }
+  /* ---------- Skills Manager (mobile) ---------- */
+  /* Manager mode is a single column on touch like the rest of the list, and the two
+     footer toggles plus the two per-row controls all hold the 40x40px tap floor.
+     The controls are already >=40px tall on desktop; these rules widen them for a
+     thumb and let the footer wrap rather than overflow a narrow portrait width. */
+  body.mobile-touch #spellbook.spellbook-manager .spell-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.mobile-touch #spellbook .spellbook-footer {
+    flex-wrap: wrap;
+  }
+  body.mobile-touch #spellbook .spellbook-footer .x-btn {
+    min-height: 40px;
+    font-size: 14px;
+  }
+  body.mobile-touch #spellbook .spell-track-toggle,
+  body.mobile-touch #spellbook .spell-track-type {
+    min-width: 52px;
+    min-height: 40px;
+    font-size: 12px;
+  }
+  /* The tracker groups themselves: the same movable frames, sized down so a phone
+     screen is not swallowed by a 240px bar stack, and NEVER draggable on touch
+     (the mobile stylesheet owns HUD placement, matching the MovableFrame rule),
+     so the unlocked affordance and its handle stay hidden here. */
+  body.mobile-touch .st-bar {
+    width: min(200px, 56vw);
+    height: 22px;
+  }
+  body.mobile-touch .st-square {
+    width: 34px;
+    height: 34px;
+  }
+  body.mobile-touch .st-square .st-time {
+    font-size: 13px;
+  }
+  body.mobile-touch .st-group.st-unlocked {
+    pointer-events: none;
+    border-color: transparent;
+    padding: 0;
+  }
+  body.mobile-touch .st-group.st-unlocked .st-handle {
+    display: none;
+  }
   /* Touch-only mobile action-ring page label on bar-assigned spellbook rows
      (Phase 4). Small, unobtrusive: it only exists to point a touch player at
      the ring page holding the ability they just added. */

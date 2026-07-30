@@ -29,6 +29,13 @@ import {
   MOBILE_ACTION_PAGE_COUNT,
   sourceSlotsForMobilePage,
 } from './hud/action_bar/mobile_action_page_view';
+import {
+  DEFAULT_SKILL_TRACKER_ENTRY,
+  isTrackableAbility,
+  type SkillTrackerConfig,
+  type SkillTrackerDisplay,
+  skillTrackerEntry,
+} from './skill_tracker_core';
 
 /** One spell row: the class kit entry plus its learned / bar state. */
 export interface SpellbookRow {
@@ -48,6 +55,17 @@ export interface SpellbookRow {
    *  span (slot 0 / the attack toggle or beyond slot 33). Touch-only
    *  presentation; desktop rendering ignores this field. */
   mobilePage: number | null;
+  /** Skills Manager: can this ability drive a HUD tracker at all (it applies a
+   *  followable aura or has a cooldown, AND the player has actually learned it)?
+   *  A row that cannot never renders the two manager controls, so the manager
+   *  offers no switch that could not light up. */
+  trackable: boolean;
+  /** Skills Manager: the player's stored display toggle for this ability. */
+  tracked: boolean;
+  /** Skills Manager: the player's stored tracker type for this ability. Carries a
+   *  meaningful value even while `tracked` is false, so switching the display back
+   *  on restores the type the player picked. */
+  trackDisplay: SkillTrackerDisplay;
 }
 
 /** The full spellbook view-model. */
@@ -63,6 +81,17 @@ export interface SpellbookView {
   rows: SpellbookRow[];
   /** No rows rendered at all (the class kit was empty). */
   empty: boolean;
+  /** Skills Manager mode: the alternate spellbook the "Skills manager" footer
+   *  button opens. Same spell list, plus a display toggle and a tracker-type
+   *  button on each trackable row. */
+  managerMode: boolean;
+  /** Whether the HUD tracker frames are currently locked in place (the "Lock"
+   *  footer button). Purely the button's own pressed state here; the drag gate
+   *  itself lives on the frames. */
+  locked: boolean;
+  /** How many rows currently have their display toggle on, for the manager
+   *  header's count. Derived here so the painter never re-walks the rows. */
+  trackedCount: number;
 }
 
 /** Inputs the painter feeds the builder each render, all IWorld-mirrored. */
@@ -94,6 +123,16 @@ export interface SpellbookInput {
    *  mobilePage: null, so callers that don't care about mobile paging (or run
    *  before this data is wired) see no behavior change. */
   abilityIdByBarSlot?: readonly (string | null)[];
+  /** Skills Manager mode is on (the "Skills manager" footer toggle). Omitted =
+   *  off, the classic spellbook, so every existing caller is unchanged. */
+  managerMode?: boolean;
+  /** The HUD tracker frames are locked (the "Lock" footer toggle). Omitted =
+   *  locked, which is how a frame always loads (a stray drag never moves it,
+   *  matching the MovableFrame convention). */
+  locked?: boolean;
+  /** The player's stored per-ability tracker selection for this class. Omitted =
+   *  nothing tracked. */
+  tracking?: SkillTrackerConfig;
 }
 
 /**
@@ -127,9 +166,16 @@ export function buildSpellbookView(input: SpellbookInput): SpellbookView {
   const learnable = input.abilities.filter(
     (id) => knownIds.has(id) || specCanLearn(id, input.spec, input.level),
   );
+  const tracking = input.tracking ?? {};
+  let trackedCount = 0;
   const rows: SpellbookRow[] = learnable.map((abilityId) => {
     const known = input.known.find((k) => k.def.id === abilityId) ?? null;
     const onBar = known !== null && barIds.has(abilityId);
+    // An UNLEARNED row can never light up a tracker, so it never offers the
+    // manager controls (the same reasoning that greys its hotbar toggle).
+    const trackable = known !== null && isTrackableAbility(ABILITIES[abilityId]);
+    const entry = trackable ? skillTrackerEntry(tracking, abilityId) : DEFAULT_SKILL_TRACKER_ENTRY;
+    if (trackable && entry.enabled) trackedCount++;
     return {
       abilityId,
       known,
@@ -138,6 +184,9 @@ export function buildSpellbookView(input: SpellbookInput): SpellbookView {
       onBar,
       toggleDisabled: known !== null && !onBar && !input.hasFreeSlot,
       mobilePage: onBar ? mobilePageForAbility(abilityId, input.abilityIdByBarSlot) : null,
+      trackable,
+      tracked: trackable && entry.enabled,
+      trackDisplay: entry.display,
     };
   });
   return {
@@ -146,7 +195,41 @@ export function buildSpellbookView(input: SpellbookInput): SpellbookView {
     attackOnBar: input.attackOnBar,
     rows,
     empty: rows.length === 0,
+    managerMode: input.managerMode === true,
+    locked: input.locked !== false,
+    trackedCount,
   };
+}
+
+/**
+ * The tracker entries the HUD should render, in the player's learned-ability
+ * order: every LEARNED, trackable, display-on ability, carrying its chosen type
+ * and its TALENT-RESOLVED cooldown (so a talent that shortens a cooldown shortens
+ * the sweep too).
+ *
+ * Derived from `known` + the config rather than from a built SpellbookView, so the
+ * HUD trackers keep running with the spellbook CLOSED and the Hud never has to
+ * assemble action-bar state just to know what to track. It applies the same
+ * learned + isTrackableAbility gate the manager rows do, so the two surfaces can
+ * never disagree. Returns a fresh array; the Hud rebuilds it only when the config
+ * or the resolved kit actually changes, never per frame.
+ */
+export function trackerEntriesFromKnown(
+  // Structurally narrowed to what this derivation actually reads, so a caller that
+  // holds only the IWorld-mirrored subset (the tracker controller) can pass it
+  // without widening its own world shape to the full ResolvedAbility.
+  known: readonly { def: { id: string }; cooldown: number }[],
+  tracking: SkillTrackerConfig,
+): { abilityId: string; display: SkillTrackerDisplay; cooldown: number }[] {
+  const out: { abilityId: string; display: SkillTrackerDisplay; cooldown: number }[] = [];
+  for (const resolved of known) {
+    const abilityId = resolved.def.id;
+    if (!isTrackableAbility(ABILITIES[abilityId])) continue;
+    const entry = skillTrackerEntry(tracking, abilityId);
+    if (!entry.enabled) continue;
+    out.push({ abilityId, display: entry.display, cooldown: resolved.cooldown });
+  }
+  return out;
 }
 
 /**

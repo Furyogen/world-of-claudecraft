@@ -1682,6 +1682,27 @@ export const zh_CN: EnTranslations = {
       "addToBarAria": "将{name}添加到动作条",
       "removeFromBarAria": "从动作条移除{name}"
     },
+    "skillTracker": {
+      "managerButton": "技能管理器",
+      "managerButtonOnAria": "技能管理器已开启。关闭后将隐藏所有追踪框和条。",
+      "managerButtonOffAria": "技能管理器已关闭。开启后可选择要追踪的法术。",
+      "lockButton": "锁定",
+      "lockButtonOnAria": "追踪框已锁定。解锁后可拖动。",
+      "lockButtonOffAria": "追踪框已解锁。锁定后将固定位置。",
+      "managerHint": "选择要在目标上追踪的法术。已追踪 {count} 个。",
+      "displayOn": "开",
+      "displayOff": "关",
+      "displayAria": "追踪{name}",
+      "typeSquare": "方块",
+      "typeBar": "条",
+      "typeAria": "{name}的追踪样式：{type}",
+      "tooltipTarget": "在你的目标身上",
+      "tooltipSelf": "在你身上",
+      "tooltipCooldown": "冷却",
+      "dragHandle": "拖动以移动追踪框",
+      "groupSquares": "法术追踪图标",
+      "groupBars": "法术追踪条"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"

@@ -1682,6 +1682,27 @@ export const zh_TW: EnTranslations = {
       "addToBarAria": "將 {name} 加入動作列",
       "removeFromBarAria": "將 {name} 從動作列移除"
     },
+    "skillTracker": {
+      "managerButton": "技能管理器",
+      "managerButtonOnAria": "技能管理器已開啟。關閉後將隱藏所有追蹤框和條。",
+      "managerButtonOffAria": "技能管理器已關閉。開啟後可選擇要追蹤的法術。",
+      "lockButton": "鎖定",
+      "lockButtonOnAria": "追蹤框已鎖定。解鎖後可拖曳。",
+      "lockButtonOffAria": "追蹤框已解鎖。鎖定後將固定位置。",
+      "managerHint": "選擇要在目標上追蹤的法術。已追蹤 {count} 個。",
+      "displayOn": "開",
+      "displayOff": "關",
+      "displayAria": "追蹤{name}",
+      "typeSquare": "方塊",
+      "typeBar": "條",
+      "typeAria": "{name}的追蹤樣式：{type}",
+      "tooltipTarget": "在你的目標身上",
+      "tooltipSelf": "在你身上",
+      "tooltipCooldown": "冷卻",
+      "dragHandle": "拖曳以移動追蹤框",
+      "groupSquares": "法術追蹤圖示",
+      "groupBars": "法術追蹤條"
+    },
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+"
