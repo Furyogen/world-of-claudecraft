@@ -874,6 +874,8 @@ export const TARGETS = [
     label: 'Skills Manager: spellbook manager mode + the HUD spell trackers',
     when: ['skill_tracker', 'spellbook_view', 'spellbook_window'],
     variants: [
+      { key: 'before-book-desktop', charClass: 'druid', charName: 'Leafward', scene: 'off-book' },
+      { key: 'before-hud-desktop', charClass: 'druid', charName: 'Leafward', scene: 'off-hud' },
       { key: 'manager-desktop', charClass: 'druid', charName: 'Leafward', scene: 'manager' },
       { key: 'hot-desktop', charClass: 'druid', charName: 'Leafward', scene: 'hot' },
       { key: 'dot-desktop', charClass: 'druid', charName: 'Leafward', scene: 'dot' },
@@ -961,6 +963,26 @@ export const TARGETS = [
         return ok.every(Boolean);
       });
       if (!configured) throw new Error('the manager row controls did not switch the trackers on');
+      // The two BEFORE scenes: everything is configured exactly as the after
+      // shots, then the master switch goes OFF. That is both the reviewer's
+      // before image (what a player sees today) and the proof that switching the
+      // Skills manager off restores the classic spellbook and hides every frame
+      // and bar without forgetting the selection.
+      if (variant.scene === 'off-book' || variant.scene === 'off-hud') {
+        const off = await page.evaluate(() => {
+          const btn = document.querySelector('[data-footer-btn="spellbook-manager-btn"]');
+          if (!btn) return false;
+          if (btn.getAttribute('aria-pressed') === 'true') btn.click();
+          return (
+            document
+              .querySelector('[data-footer-btn="spellbook-manager-btn"]')
+              ?.getAttribute('aria-pressed') === 'false'
+          );
+        });
+        if (!off) throw new Error('the Skills manager footer toggle did not switch off');
+        await wait(300);
+        if (variant.scene === 'off-book') return { clip: '#spellbook' };
+      }
       if (variant.scene === 'manager') {
         // Keep the alternate spellbook up and put the two druid rows in view.
         await page.evaluate(() => {
@@ -975,7 +997,7 @@ export const TARGETS = [
       await wait(300);
 
       // --- stage the target and cast the real ability at it ---
-      const wantsFriendly = variant.scene === 'hot';
+      const wantsFriendly = variant.scene === 'hot' || variant.scene === 'off-hud';
       const abilityId = wantsFriendly ? 'rejuvenation' : 'moonfire';
       const staged = await page.evaluate((friendly) => {
         const game = window.__game;
@@ -986,11 +1008,21 @@ export const TARGETS = [
         if (friendly) {
           targetId = sim.addPlayer('warrior', 'Thornbark');
         } else {
-          const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead);
+          const mob = [...sim.entities.values()].find(
+            (e) => e.kind === 'mob' && !e.dead && e.hostile !== false,
+          );
           targetId = mob?.id ?? null;
         }
         const other = targetId === null ? null : sim.entities.get(targetId);
         if (!other) return { ok: false, reason: 'no target entity available' };
+        if (!friendly) {
+          // A starter-zone wolf dies to a level-20 nuke before its DoT can be read,
+          // and a dead target drops the tracker. Give it enough health to sit
+          // through the shot; this is presentation staging, not a balance claim.
+          other.level = 20;
+          other.maxHp = 100000;
+          other.hp = other.maxHp;
+        }
         // Park the target in front of the camera focal point (the player-tooltip
         // recipe), face it, and select it.
         other.pos.x = player.pos.x + Math.sin(game.input.camYaw) * 4;
@@ -1031,8 +1063,13 @@ export const TARGETS = [
         bars: document.querySelectorAll('#skill-tracker-bars .st-bar').length,
         squares: document.querySelectorAll('#skill-tracker-squares .st-square').length,
       }));
-      if (painted.bars < 1 || painted.squares < 1)
+      if (variant.scene === 'off-hud') {
+        // The master switch is off: the same staged fight must paint NOTHING.
+        if (painted.bars > 0 || painted.squares > 0)
+          throw new Error(`frames still painted with the manager off: ${JSON.stringify(painted)}`);
+      } else if (painted.bars < 1 || painted.squares < 1) {
         throw new Error(`tracker frames missing: ${JSON.stringify(painted)}`);
+      }
       // Full frame: the trackers matter together with the target frame and the
       // target's own aura strip they are read against.
       return {};

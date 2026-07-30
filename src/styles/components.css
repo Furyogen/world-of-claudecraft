@@ -1307,8 +1307,11 @@
     background: var(--color-primary-glow);
     color: var(--gold);
   }
+  /* The type button is inert until the display toggle is on. Dimmed, not hidden,
+     so the row never reflows as the toggle flips; kept above the 0.45 first draft
+     because on the dark panel that read as invisible rather than disabled. */
   .spell-track-type:disabled {
-    opacity: 0.45;
+    opacity: 0.65;
     cursor: default;
   }
   .spell-track-toggle:focus-visible,
