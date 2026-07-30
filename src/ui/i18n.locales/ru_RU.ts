@@ -569,12 +569,17 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.spellbook.addToBarAria': 'Добавить {name} на панель действий',
   'hudChrome.spellbook.removeFromBarAria': 'Убрать {name} с панели действий',
   'hudChrome.skillTracker.managerButton': 'Диспетчер умений',
-  'hudChrome.skillTracker.managerButtonOnAria': 'Диспетчер умений включен. Выключите, чтобы скрыть все рамки и полосы отслеживания.',
-  'hudChrome.skillTracker.managerButtonOffAria': 'Диспетчер умений выключен. Включите, чтобы выбрать отслеживаемые заклинания.',
+  'hudChrome.skillTracker.managerButtonOnAria':
+    'Диспетчер умений включен. Выключите, чтобы скрыть все рамки и полосы отслеживания.',
+  'hudChrome.skillTracker.managerButtonOffAria':
+    'Диспетчер умений выключен. Включите, чтобы выбрать отслеживаемые заклинания.',
   'hudChrome.skillTracker.lockButton': 'Закрепить',
-  'hudChrome.skillTracker.lockButtonOnAria': 'Рамки отслеживания закреплены. Снимите закрепление, чтобы перетащить их.',
-  'hudChrome.skillTracker.lockButtonOffAria': 'Рамки отслеживания не закреплены. Закрепите, чтобы зафиксировать их.',
-  'hudChrome.skillTracker.managerHint': 'Выберите заклинания для отслеживания на цели. Отслеживается: {count}.',
+  'hudChrome.skillTracker.lockButtonOnAria':
+    'Рамки отслеживания закреплены. Снимите закрепление, чтобы перетащить их.',
+  'hudChrome.skillTracker.lockButtonOffAria':
+    'Рамки отслеживания не закреплены. Закрепите, чтобы зафиксировать их.',
+  'hudChrome.skillTracker.managerHint':
+    'Выберите заклинания для отслеживания на цели. Отслеживается: {count}.',
   'hudChrome.skillTracker.displayOn': 'Вкл',
   'hudChrome.skillTracker.displayOff': 'Выкл',
   'hudChrome.skillTracker.displayAria': 'Отслеживать {name}',

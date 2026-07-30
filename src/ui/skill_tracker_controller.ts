@@ -43,9 +43,9 @@ import {
   skillTrackerStorageKey,
 } from './skill_tracker_core';
 import { SkillTrackerPainter, type SkillTrackerPainterDeps } from './skill_tracker_painter';
-import type { SkillTrackerAuraInput } from './skill_tracker_view';
 import {
   createSkillTrackerView,
+  type SkillTrackerAuraInput,
   type SkillTrackerDeps,
   type SkillTrackerEntryInput,
   type SkillTrackerView,

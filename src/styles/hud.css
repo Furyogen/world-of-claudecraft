@@ -5279,7 +5279,9 @@
     justify-content: center;
     font: 700 15px var(--title-font);
     color: var(--color-text-overlay);
-    text-shadow: 0 0 3px var(--text-outline-color), 0 1px 2px var(--text-outline-color);
+    text-shadow:
+      0 0 3px var(--text-outline-color),
+      0 1px 2px var(--text-outline-color);
   }
   .st-square .st-stacks {
     position: absolute;

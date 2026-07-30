@@ -573,11 +573,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.spellbook.addToBarAria': '{name}을(를) 행동 단축바에 추가',
   'hudChrome.spellbook.removeFromBarAria': '{name}을(를) 행동 단축바에서 제거',
   'hudChrome.skillTracker.managerButton': '스킬 관리자',
-  'hudChrome.skillTracker.managerButtonOnAria': '스킬 관리자가 켜져 있습니다. 끄면 모든 추적 창과 바가 숨겨집니다.',
-  'hudChrome.skillTracker.managerButtonOffAria': '스킬 관리자가 꺼져 있습니다. 켜면 추적할 주문을 선택할 수 있습니다.',
+  'hudChrome.skillTracker.managerButtonOnAria':
+    '스킬 관리자가 켜져 있습니다. 끄면 모든 추적 창과 바가 숨겨집니다.',
+  'hudChrome.skillTracker.managerButtonOffAria':
+    '스킬 관리자가 꺼져 있습니다. 켜면 추적할 주문을 선택할 수 있습니다.',
   'hudChrome.skillTracker.lockButton': '고정',
-  'hudChrome.skillTracker.lockButtonOnAria': '추적 창이 고정되었습니다. 끌어서 옮기려면 고정을 해제하세요.',
-  'hudChrome.skillTracker.lockButtonOffAria': '추적 창의 고정이 해제되었습니다. 고정하면 위치가 유지됩니다.',
+  'hudChrome.skillTracker.lockButtonOnAria':
+    '추적 창이 고정되었습니다. 끌어서 옮기려면 고정을 해제하세요.',
+  'hudChrome.skillTracker.lockButtonOffAria':
+    '추적 창의 고정이 해제되었습니다. 고정하면 위치가 유지됩니다.',
   'hudChrome.skillTracker.managerHint': '대상에게 추적할 주문을 선택하세요. {count}개 추적 중.',
   'hudChrome.skillTracker.displayOn': '켜기',
   'hudChrome.skillTracker.displayOff': '끄기',

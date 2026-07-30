@@ -573,12 +573,17 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.spellbook.addToBarAria': '{name}をアクションバーに追加',
   'hudChrome.spellbook.removeFromBarAria': '{name}をアクションバーから削除',
   'hudChrome.skillTracker.managerButton': 'スキルマネージャー',
-  'hudChrome.skillTracker.managerButtonOnAria': 'スキルマネージャーはオンです。オフにするとすべてのトラッカー枠とバーが非表示になります。',
-  'hudChrome.skillTracker.managerButtonOffAria': 'スキルマネージャーはオフです。オンにすると追跡する呪文を選べます。',
+  'hudChrome.skillTracker.managerButtonOnAria':
+    'スキルマネージャーはオンです。オフにするとすべてのトラッカー枠とバーが非表示になります。',
+  'hudChrome.skillTracker.managerButtonOffAria':
+    'スキルマネージャーはオフです。オンにすると追跡する呪文を選べます。',
   'hudChrome.skillTracker.lockButton': 'ロック',
-  'hudChrome.skillTracker.lockButtonOnAria': 'トラッカー枠はロック中です。ドラッグするにはロックを解除してください。',
-  'hudChrome.skillTracker.lockButtonOffAria': 'トラッカー枠のロックが解除されています。ロックすると位置が固定されます。',
-  'hudChrome.skillTracker.managerHint': 'ターゲットで追跡する呪文を選択してください。{count}件を追跡中。',
+  'hudChrome.skillTracker.lockButtonOnAria':
+    'トラッカー枠はロック中です。ドラッグするにはロックを解除してください。',
+  'hudChrome.skillTracker.lockButtonOffAria':
+    'トラッカー枠のロックが解除されています。ロックすると位置が固定されます。',
+  'hudChrome.skillTracker.managerHint':
+    'ターゲットで追跡する呪文を選択してください。{count}件を追跡中。',
   'hudChrome.skillTracker.displayOn': 'オン',
   'hudChrome.skillTracker.displayOff': 'オフ',
   'hudChrome.skillTracker.displayAria': '{name}を追跡',
