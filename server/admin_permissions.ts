@@ -14,6 +14,7 @@ export const ADMIN_PERMISSIONS = [
   'moderation.read',
   'moderation.act',
   'moderation.spectate',
+  'gm.tools',
   'ipblocks.manage',
   'chatfilter.manage',
   'content.moderate',
@@ -29,6 +30,12 @@ export type AdminPermission = (typeof ADMIN_PERMISSIONS)[number];
 // dashboard-grantable role, including the otherwise-everything `admin` role. A
 // test pins that these are reachable ONLY through superadmin.
 export const SUPERADMIN_ONLY_PERMISSIONS: readonly AdminPermission[] = ['staff.manage'];
+
+// The in-game game-master toolkit (/invisible, /freeze, /tpto, /tp, ...). Kept
+// OUT of the moderator bundle on purpose: those commands move players and
+// bodies around the live world rather than applying an account penalty, so they
+// sit with the full admin role, one rung above the day-to-day moderation set.
+export const GM_TOOLS_PERMISSION: AdminPermission = 'gm.tools';
 
 export const ADMIN_ROLES = ['superadmin', 'admin', 'moderator', 'viewer'] as const;
 

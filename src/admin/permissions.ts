@@ -14,6 +14,7 @@ export const ADMIN_PERMISSIONS = [
   'moderation.read',
   'moderation.act',
   'moderation.spectate',
+  'gm.tools',
   'ipblocks.manage',
   'chatfilter.manage',
   'content.moderate',

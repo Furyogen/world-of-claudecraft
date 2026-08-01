@@ -2241,6 +2241,38 @@ const RULES: Rule[] = [
     re: /^You are not visiting jail\.$/,
     build: () => tServer('moderation.jailVisitNotActive'),
   },
+  // Game-master toolkit (server/admin_tools_service.ts). The placeholder-free
+  // notices ('You are already invisible.', ...) ride the auto-built EXACT map, so
+  // only the templated and angle-bracketed ones need a rule here.
+  { re: /^Froze (.+)\.$/, build: (m) => tServer('gm.froze', { name: m[1] }) },
+  { re: /^Unfroze (.+)\.$/, build: (m) => tServer('gm.unfroze', { name: m[1] }) },
+  { re: /^(.+) is already frozen\.$/, build: (m) => tServer('gm.alreadyFrozen', { name: m[1] }) },
+  { re: /^(.+) is not frozen\.$/, build: (m) => tServer('gm.notFrozen', { name: m[1] }) },
+  {
+    re: /^(.+) has no reachable location right now\.$/,
+    build: (m) => tServer('gm.noLocation', { name: m[1] }),
+  },
+  {
+    re: /^(.+) cannot be summoned right now\.$/,
+    build: (m) => tServer('gm.notSummonable', { name: m[1] }),
+  },
+  // The zone form carries its landing coordinates, so it must be tried BEFORE
+  // the bare player form below, which would otherwise swallow it.
+  {
+    re: /^Teleported to (.+) at \((-?\d+), (-?\d+)\)\.$/,
+    build: (m) => tServer('gm.teleportedToZone', { zone: localizeZone(m[1]), x: m[2], z: m[3] }),
+  },
+  {
+    re: /^Teleported to (.+)\.$/,
+    build: (m) => tServer('gm.teleportedToPlayer', { name: m[1] }),
+  },
+  { re: /^Summoned (.+)\.$/, build: (m) => tServer('gm.summoned', { name: m[1] }) },
+  { re: /^(.+) has summoned you\.$/, build: (m) => tServer('gm.summonedBy', { name: m[1] }) },
+  { re: /^Usage: \/freeze "<name>"$/, build: () => tServer('gm.freezeUsage') },
+  { re: /^Usage: \/unfreeze "<name>"$/, build: () => tServer('gm.unfreezeUsage') },
+  { re: /^Usage: \/tpto "<name>"$/, build: () => tServer('gm.tpToUsage') },
+  { re: /^Usage: \/tptome "<name>"$/, build: () => tServer('gm.tpToMeUsage') },
+  { re: /^Usage: \/tp <x>, \[y\], <z>$/, build: () => tServer('gm.tpUsage') },
   // Chat-filter mute notices. The {duration} comes from formatDuration; re-localize it.
   {
     re: /^You are muted and can't chat for another (.+)\.$/,

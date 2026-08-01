@@ -26,6 +26,7 @@
 // sibling targeting module are imported directly (already pure); everything that
 // touches not-yet-extracted Sim state routes through the seam.
 
+import { isAdminCloaked } from '../admin_cloak';
 import { hasUnbreakableMovementLock } from '../combat/cc';
 import { VALE_CUP_BALL_TEMPLATE_ID } from '../content/vale_cup';
 import { YUMI_TEMPLATE_ID } from '../content/yumi';
@@ -332,6 +333,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
           counters.aggroScanPlayerVisits++;
           if (e.dead) return;
+          if (isAdminCloaked(e)) return; // /invisible admins are unaggroable
           const radius = Math.max(
             4,
             Math.min(MAX_AGGRO_RADIUS, template.aggroRadius + (mob.level - e.level) * 1.5),
@@ -353,6 +355,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
         counters.aggroScanPlayerVisits++;
         if (e.dead) return;
+        if (isAdminCloaked(e)) return; // /invisible admins are unaggroable
         if (isTrivialTo(mob, e)) return;
         let radius = Math.max(
           4,

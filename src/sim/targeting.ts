@@ -19,6 +19,7 @@
 // Three/render/ui/game/net, no Math.random/Date.now), so it runs unchanged in Node,
 // the browser, and the headless RL env (enforced by tests/architecture.test.ts).
 
+import { isAdminCloaked } from './admin_cloak';
 import { corpseInteractionAvailability } from './corpse_interaction';
 import { deadTargetSelectable } from './dead_target';
 import type { SimContext } from './sim_context';
@@ -52,6 +53,10 @@ export class Targeting {
     }
     const e = this.ctx.entities.get(id);
     if (!e || (e.dead && !this.deadEntitySelectableFor(e, p.id))) return;
+    // An admin under /invisible is untargetable. Their entity never wires to
+    // another client, so this only catches a stale or forged id, which is
+    // exactly why the refusal belongs server-side rather than in the HUD.
+    if (e.id !== p.id && isAdminCloaked(e)) return;
     p.targetId = id;
     if (!this.ctx.isHostileTo(p, e) || e.dead) p.autoAttack = false;
   }
@@ -137,6 +142,7 @@ export class Targeting {
   private isEnemyTargetCandidate(attacker: Entity, target: Entity): boolean {
     if (attacker.dead) return false;
     if (target.id === attacker.id || target.dead) return false;
+    if (isAdminCloaked(target)) return false;
     if (this.ctx.isHostileTo(attacker, target)) return true;
     if (target.kind === 'mob' && target.ownerId !== null) {
       const owner = this.ctx.entities.get(target.ownerId);
@@ -173,6 +179,7 @@ export class Targeting {
     const out: { e: Entity; d: number }[] = [];
     this.ctx.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
       if (e.id === p.id || e.dead || !this.ctx.isFriendlyTo(p, e)) return;
+      if (isAdminCloaked(e)) return;
       out.push({ e, d: Math.sqrt(d2) });
     });
     return out;

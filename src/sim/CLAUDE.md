@@ -135,7 +135,11 @@ the load-time reissue that keeps one row per id),
 HUD), `resurrection.ts` (sickness rules shared by every death site), and the combat
 leaves `spell_resist.ts`/`ranged_shot.ts`/`aura_stacking.ts`/`aura_cancel.ts`/
 `exclusive_aura.ts`/`form_swing.ts`, `jail.ts` (moderation-jail cage layout, gate
-teleport, visitor spot; the jail SYSTEM logic stays on `Sim`), and
+teleport, visitor spot; the jail SYSTEM logic stays on `Sim`),
+`admin_cloak.ts`/`admin_freeze.ts` (the `/invisible` cloak predicate plus its
+presence-shedding sweep, and the unbreakable Ice Block the `/freeze` GM command
+applies; both server-set only, thin `Sim` delegates in the `setGm`/`setJailed`
+shape), and
 `professions/proficiency_display_heal.ts` (the one-time gathering-proficiency
 display-band heal applied at character load). A leaf is any `src/sim`
 file with no `sim_context` import.

@@ -16,6 +16,8 @@ import type {
   MountRaceView,
   PlayerProfessionsView,
 } from '../world_api';
+import { setAdminCloak as setAdminCloakOn, shedCloakedPresence } from './admin_cloak';
+import { type AdminFreezeState, applyAdminFreeze, clearAdminFreeze } from './admin_freeze';
 import * as bagsMod from './bags';
 import {
   addStacked,
@@ -1474,6 +1476,10 @@ export interface CharacterState {
   // none). Persisted so the penalty cannot be shed by logging out and back in.
   resSickness?: number | null;
   jail?: JailState;
+  // Moderation freeze (the /freeze GM command), JSONB; absent when not frozen,
+  // so every pre-feature save loads exactly as before. Persisted so a frozen
+  // player cannot shed the hold by logging out. See src/sim/admin_freeze.ts.
+  adminFreeze?: AdminFreezeState;
   // Z-key sheathed-weapon toggle (JSONB; written only while sheathed, so pre-feature
   // saves and unsheathed characters stay byte-equal and load with the weapon drawn).
   weaponStowed?: boolean;
@@ -4778,6 +4784,34 @@ export class Sim {
   setJailed(enabled: boolean, pid?: number): void {
     const r = this.resolve(pid);
     if (r) r.e.jailed = enabled;
+  }
+
+  // Admin cloak (/invisible): thin delegate over src/sim/admin_cloak.ts, in the
+  // shape of setGm/setJailed above. Cloaking also sheds the ties the world still
+  // holds to the player (hate tables, selections, aggro locks) so nothing keeps
+  // chasing a target no one can see. Server-side only; the offline Sim never
+  // calls it, so the cloak reads stay dormant branches on every other host.
+  setAdminCloak(enabled: boolean, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    setAdminCloakOn(r.e, enabled);
+    if (!enabled) return;
+    shedCloakedPresence(r.e.id, this.entities.values(), (mob) => this.retargetMob(mob));
+  }
+
+  // Admin freeze (/freeze, /unfreeze): thin delegate over src/sim/admin_freeze.ts.
+  // Returns false when the player was already in the requested state, so the
+  // caller can say so instead of stacking or double-releasing. Freezing also
+  // stops the in-flight cast and held movement input, so the hold is total from
+  // the tick it lands. Server-side only.
+  setAdminFrozen(enabled: boolean, pid?: number): boolean {
+    const r = this.resolve(pid);
+    if (!r) return false;
+    if (!enabled) return clearAdminFreeze(r.e);
+    if (!applyAdminFreeze(r.e, r.e.id)) return false;
+    this.cancelCast(r.e);
+    Object.assign(r.meta.moveInput, emptyMoveInput());
+    return true;
   }
 
   // Dev/test convenience: jump a player to a level (learns abilities, recalcs stats).
