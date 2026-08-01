@@ -314,6 +314,7 @@
     <g id="gl-revive"><path d="M12 4v16M4 12h16" stroke="#7fdc4f" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="8.5" fill="none" stroke="#8a7f5e" stroke-width="1.4"/></g>
     <g id="gl-freeze"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10" stroke="#69ccf0" stroke-width="1.6" stroke-linecap="round"/></g>
     <g id="gl-whois"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#d8c07a" stroke-width="1.7"/><path d="M15.5 15.5L21 21" stroke="#d8c07a" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-gm-body"><path d="M12 3a2.6 2.6 0 110 5.2A2.6 2.6 0 0112 3z" fill="none" stroke="#d8c07a" stroke-width="1.5"/><path d="M7.5 21c0-5.2 2-8.4 4.5-8.4s4.5 3.2 4.5 8.4z" fill="none" stroke="#d8c07a" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 14.5c1.6-1 3.2-1 4.8 0v4.2c-1.6-1-3.2-1-4.8 0z" fill="none" stroke="#7fdc4f" stroke-width="1.3" stroke-linejoin="round"/></g>
     <g id="gl-unmute"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M16.5 9.5a4 4 0 010 5M19 7a7.5 7.5 0 010 10" fill="none" stroke="#7fdc4f" stroke-width="1.6" stroke-linecap="round"/></g>
     <g id="gl-unban"><path d="M8 10V7a4 4 0 017.5-2" fill="none" stroke="#7fdc4f" stroke-width="1.7" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="#d8c07a" stroke-width="1.6"/><path d="M12 13.5v3" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/></g>
     <g id="gl-unstuck"><path d="M12 14V4M8 8l4-4 4 4" fill="none" stroke="#7fdc4f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18h16" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 21.5l1.5-2M11.5 21.5l1.5-2M16.5 21.5l1.5-2" stroke="#8a7f5e" stroke-width="1.4" stroke-linecap="round"/></g>
@@ -367,6 +368,7 @@
       <div><dt>Armor</dt><dd class="none">None</dd></div>
       <div><dt>Weapons</dt><dd class="none">None</dd></div>
       <div><dt>Combat</dt><dd class="none">Does not fight</dd></div>
+      <div><dt>Model</dt><dd>Warlock, in black</dd></div>
     </dl>
   </div>
   <p class="cap" style="margin-top:10px">
@@ -385,7 +387,7 @@
   <div class="world-strip">
     <div>
       <div class="unit-frame">
-        <span class="portrait gm"><svg width="26" height="26" aria-hidden="true"><use href="#gl-whois"/></svg></span>
+        <span class="portrait gm"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><use href="#gl-gm-body"/></svg></span>
         <span class="unit-meta">
           <span class="unit-name">Ashvane <span class="gm-tag">GM</span></span>
           <span class="state-row">
@@ -425,6 +427,39 @@
       </div>
     </div>
   </div>
+
+  <h3>The body: the warlock, in black</h3>
+  <p>
+    The class gets no bespoke model. It reuses the warlock's, which is the right borrow rather than
+    just the cheap one: <code>player_warlock</code> in
+    <code>src/render/characters/manifest.ts</code> is a robed caster carrying an <em>open book</em> in
+    the left hand (<code>spellbook_open.glb</code> on <code>handslot.l</code>). A figure in dark robes
+    holding an open book is already the shape of someone reading the rules at you, which is exactly
+    what this class is. The wand in the right hand is the piece to reconsider, since a Game Master
+    has nothing to cast.
+  </p>
+  <p>
+    Mechanically it is one <code>VISUALS</code> entry, <code>player_gamemaster</code>, taking the
+    warlock's body and clips and swapping its tint (<code>0x8d5fd3</code>, the warlock purple) for
+    the class color.
+  </p>
+  <div class="callout warn">
+    <p style="margin:0">
+      <strong>The trap:</strong> <code>visualKeyFor</code> falls back to <code>player_warrior</code>
+      for any <code>player_&lt;templateId&gt;</code> it does not find. A tenth class with no
+      <code>VISUALS</code> entry does not fail loudly, it silently walks around dressed as a warrior
+      in plate. The entry is not optional polish; without it the feature looks broken in exactly the
+      way nobody files a bug for.
+    </p>
+  </div>
+  <p>
+    One number needs deciding rather than copying. The warlock tints at
+    <code>tintStrength: 0.45</code>, which on a purple reads as a coloured robe. Pure black at 0.45
+    is a dark grey, not black; pushing it toward 1.0 gets a true black silhouette but flattens the
+    robe's folds to nothing under the game's lighting. This is the same tension the HUD has with
+    <code>#000000</code>, and the same answer applies: keep enough material response that the shape
+    survives, and let the rim and the nameplate carry the "pure black" reading.
+  </p>
 
   <h2>3. Spellbook</h2>
   <p class="cap">
@@ -636,6 +671,10 @@
       checks before it reads them; filling them with zeroes and a bare fist is the outcome to
       avoid, because it teaches the rest of the code that a Game Master is a very weak fighter
       rather than not a fighter.</li>
+    <li><code>src/render/characters/manifest.ts</code>: a <code>player_gamemaster</code>
+      <code>VISUALS</code> entry cloning the warlock body with the class color as its tint. Mandatory,
+      not polish: <code>visualKeyFor</code> falls back to <code>player_warrior</code> for an unknown
+      key, so omitting it renders the GM as a warrior with no error anywhere.</li>
     <li><code>src/sim/</code>: one <code>isCombatant</code> predicate the damage, threat, targeting,
       loot, and queue paths each consult, so the non-combatant table above has a single
       implementation instead of seven. This is the part worth getting right, and it belongs behind
