@@ -215,8 +215,30 @@
   .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
   .spell-row.locked .spell-name { color: var(--color-text-muted); }
 
+  /* the target strip that drives which view a row opens */
+  .target-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: #10101a; border: 1px solid #2a2438; border-radius: 6px;
+    padding: 8px 12px; margin: 0 0 14px;
+  }
+  .target-label { font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase; color: var(--color-text-muted); }
+  .target-name { font-family: var(--font-display); font-size: 14px; color: #fff; }
+  .target-name.none { color: #6b6480; font-family: var(--font-ui); font-size: 13px; }
+  .target-hint { font-size: 12px; color: var(--color-text-muted); }
+
   /* the parameter window a command opens */
   .cmd-window { position: sticky; top: 18px; }
+  .confirm-question {
+    font-family: var(--font-display); font-size: 16px; line-height: 1.4; color: #fff;
+    margin: 0 0 10px; padding: 10px 12px; border-radius: 4px;
+    background: var(--gm-black); border: 1px solid var(--gm-rim);
+  }
+  .confirm-question .who { color: var(--gm-rim); }
+  .confirm-question[hidden] { display: none; }
+  .btn.yes { background: var(--gm-black); color: var(--gm-rim); border-color: var(--gm-rim); }
+  .btn.yes:hover { background: #111; color: #fff; }
+  .btn.danger { border-color: #8c3b32; color: #ffb3aa; }
+  .btn.danger:hover { background: #1a0e0d; border-color: var(--color-text-error); color: #fff; }
   .field { margin: 0 0 12px; }
   .field label { display: block; font-size: 12px; letter-spacing: 0.4px; color: var(--color-text-muted); margin-bottom: 4px; }
   .field input, .field textarea, .field select {
@@ -393,8 +415,16 @@
   <p class="cap">
     Same window, same grid, same row shape as the live spellbook (<code>src/ui/spellbook_view.ts</code>
     plus <code>spellbook_window.ts</code>), with the ability rows swapped for command rows and the
-    pinned Attack row dropped. Select a row to open its parameter window.
+    pinned Attack row dropped. What a row opens depends on whether you have a target, exactly like
+    an ordinary ability: <strong>with a target it asks you to confirm, without one it asks who.</strong>
+    Toggle the target below and select a row to see both.
   </p>
+  <div class="target-bar">
+    <span class="target-label">Target</span>
+    <span class="target-name" id="target-name">Thornbeak</span>
+    <button type="button" class="btn" id="target-toggle">Clear target</button>
+    <span class="target-hint" id="target-hint"></span>
+  </div>
   <div class="book-layout">
     <div class="panel">
       <div class="panel-title">
@@ -414,6 +444,7 @@
         <span id="cmd-title">Silence</span>
         <button type="button" class="x-btn" aria-label="Close command window" id="cmd-close">&times;</button>
       </div>
+      <p class="confirm-question" id="cmd-question" hidden></p>
       <p class="cap" id="cmd-desc" style="margin-top:0"></p>
       <form id="cmd-form" novalidate></form>
       <h3 style="margin:6px 0 6px">Command sent</h3>
@@ -495,6 +526,36 @@
       predicate the combat, threat, loot, and queue paths each ask once.</li>
   </ul>
 
+  <h3>Two ways a row opens, decided by the target</h3>
+  <p>
+    A command that acts on a player (any row with a Name field) reads the target the same way an
+    ordinary ability does:
+  </p>
+  <ul>
+    <li><strong>With a target:</strong> the window leads with "Are you sure you want to silence
+      Thornbeak?" and the buttons are Yes and No. The Name field is not rendered at all, because the
+      target already answered it. Rows that still need a duration (Silence, Bind, Sever, Still) keep
+      those fields under the question; everything else is a straight yes or no.</li>
+    <li><strong>With no target:</strong> the window is the plain form, asking who to act on, with
+      Apply and Cancel.</li>
+    <li><strong>Irreversible rows ask either way.</strong> Excommunicate carries a confirm flag, so
+      submitting its untargeted form does not send: it turns into the same question, naming the
+      player just typed. That flag is honored in both paths rather than being copy that promises a
+      confirmation nothing implements.</li>
+  </ul>
+  <p>
+    Rows that name no player (Return, Proclaim) never show the question, since there is nothing for
+    a target to disambiguate.
+  </p>
+  <div class="callout">
+    <p style="margin:0">
+      Still open: Return takes no arguments at all, yet selecting it opens a window whose only content
+      is "This command takes no arguments." A zero-argument row should almost certainly just fire on
+      click like an instant ability, and the window should be reserved for rows that have something
+      to ask.
+    </p>
+  </div>
+
   <h3>Open question: what does the world see</h3>
   <p>
     A Game Master who cannot be attacked and cannot be targeted is close to a ghost, which raises a
@@ -546,6 +607,7 @@
     {
       id: 'mute', cat: 'Discipline', glyph: 'gl-mute', name: 'Silence',
       sub: 'Bar a player from chat for a set duration.',
+      verb: 'silence',
       desc: 'Silences the named character across every chat channel for the given number of minutes. The reason is recorded in the moderation log and shown to the player.',
       perm: 'moderation.act',
       fields: [
@@ -559,6 +621,7 @@
     {
       id: 'kick', cat: 'Discipline', glyph: 'gl-kick', name: 'Banish',
       sub: 'Disconnect a player from the realm.',
+      verb: 'disconnect',
       desc: 'Ends the character session immediately. The account may log back in at once; use Suspend for a timed lockout.',
       perm: 'moderation.act',
       fields: [
@@ -571,6 +634,7 @@
     {
       id: 'kill', cat: 'Discipline', glyph: 'gl-kill', name: 'Word of Ending',
       sub: 'Kill a player outright.',
+      verb: 'strike down',
       desc: 'Sets the named character to zero health at once, bypassing every mitigation path. This is an administrative action, not an attack: it resolves through the moderation path, has no range or line of sight, and never puts the Game Master in combat.',
       perm: 'moderation.act',
       fields: [
@@ -583,6 +647,7 @@
     {
       id: 'forcerename', cat: 'Discipline', glyph: 'gl-rename', name: 'Unname',
       sub: 'Force a character rename at next login.',
+      verb: 'force a rename on',
       desc: 'Flags the character so the next login requires a new name. Used for names that breach the naming policy.',
       perm: 'moderation.act',
       fields: [
@@ -595,6 +660,7 @@
     {
       id: 'suspend', cat: 'Discipline', glyph: 'gl-suspend', name: 'Sever',
       sub: 'Lock an account out for a set duration.',
+      verb: 'suspend',
       desc: 'Suspends the whole account, not just the character, for the given number of minutes. Refused against another staff account.',
       perm: 'moderation.act',
       fields: [
@@ -608,6 +674,7 @@
     {
       id: 'ban', cat: 'Discipline', glyph: 'gl-ban', name: 'Excommunicate',
       sub: 'Permanently close an account.',
+      verb: 'ban',
       desc: 'Permanent account ban. Refused against another staff account, and always confirmed before it is sent.',
       perm: 'moderation.act', confirm: true,
       fields: [
@@ -620,6 +687,7 @@
     {
       id: 'jail', cat: 'Containment', glyph: 'gl-jail', name: 'Bind',
       sub: 'Teleport a player into the jail instance.',
+      verb: 'jail',
       desc: 'Moves the character into the jail instance for a sentence in minutes. There is no indefinite form; the duration is required.',
       perm: 'moderation.act',
       fields: [
@@ -633,6 +701,7 @@
     {
       id: 'unjail', cat: 'Containment', glyph: 'gl-unjail', name: 'Loose',
       sub: 'Release a player from jail, or leave yourself.',
+      verb: 'release',
       desc: 'Releases the named character. Leave the field empty to release yourself, which is how a GM exits their own jail visit.',
       perm: 'moderation.act',
       fields: [
@@ -644,6 +713,7 @@
     {
       id: 'spectate', cat: 'Observation', glyph: 'gl-spectate', name: 'Unseen Eye',
       sub: 'Follow a player invisibly.',
+      verb: 'spectate',
       desc: 'Attaches the camera to the named character. The GM stays invisible and untargetable while spectating.',
       perm: 'moderation.spectate',
       fields: [
@@ -664,6 +734,7 @@
     {
       id: 'whois', cat: 'Observation', glyph: 'gl-whois', name: 'Scry',
       sub: 'Read a player account summary.',
+      verb: 'open the account panel for',
       desc: 'Opens the account panel for the named character: recent sanctions, session history, and linked characters. Read-only.',
       perm: 'accounts.read', locked: true, lockNote: 'Requires accounts.read',
       fields: [
@@ -686,6 +757,7 @@
     {
       id: 'summon', cat: 'World', glyph: 'gl-summon', name: 'Call Forth',
       sub: 'Pull a player to your position.',
+      verb: 'summon',
       desc: 'Teleports the named character to the GM. Used to pull a player out of a stuck position or into a conversation.',
       perm: 'moderation.act', dev: true,
       fields: [
@@ -697,6 +769,7 @@
     {
       id: 'goto', cat: 'World', glyph: 'gl-goto', name: 'Stride',
       sub: 'Teleport yourself to a player or coordinate.',
+      verb: 'teleport to',
       desc: 'Moves the GM to the named character, or to a raw world coordinate when the name is left empty.',
       perm: 'moderation.act', dev: true,
       fields: [
@@ -710,6 +783,7 @@
     {
       id: 'revive', cat: 'World', glyph: 'gl-revive', name: 'Restore',
       sub: 'Resurrect a player at full health.',
+      verb: 'revive',
       desc: 'Revives the named character where they stand, at full health and with no resurrection sickness.',
       perm: 'moderation.act', dev: true,
       fields: [
@@ -721,6 +795,7 @@
     {
       id: 'freeze', cat: 'World', glyph: 'gl-freeze', name: 'Still',
       sub: 'Hold a player in place.',
+      verb: 'freeze',
       desc: 'Freezes the named character until released. Used to stop a player mid-exploit while the log is read.',
       perm: 'moderation.act', dev: true,
       fields: [
@@ -739,6 +814,16 @@
   const previewEl = document.getElementById('cmd-preview');
   const permEl = document.getElementById('cmd-perm');
   const toastEl = document.getElementById('cmd-toast');
+  const questionEl = document.getElementById('cmd-question');
+  const applyBtn = document.getElementById('cmd-apply');
+  const cancelBtn = document.getElementById('cmd-cancel');
+  const targetNameEl = document.getElementById('target-name');
+  const targetToggle = document.getElementById('target-toggle');
+  const targetHintEl = document.getElementById('target-hint');
+  /** The GM's current target, or null when nothing is targeted. */
+  let target = 'Thornbeak';
+  /** Values held awaiting a Yes on an untargeted `confirm` command, else null. */
+  let pending = null;
   let active = COMMANDS[0];
 
   function el(tag, cls, text) {
@@ -747,6 +832,28 @@
     if (text !== undefined) node.textContent = text;
     return node;
   }
+
+  /** Player names are untrusted text; the real HUD escapes them the same way. */
+  function esc(value) {
+    return String(value).replace(/[&<>"']/g, (ch) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+    ));
+  }
+
+  function renderTargetBar() {
+    targetNameEl.textContent = target === null ? 'No target' : target;
+    targetNameEl.classList.toggle('none', target === null);
+    targetToggle.textContent = target === null ? 'Target Thornbeak' : 'Clear target';
+    targetHintEl.textContent = target === null
+      ? 'Without a target a row asks who to act on.'
+      : 'With a target a row asks you to confirm.';
+  }
+
+  targetToggle.addEventListener('click', () => {
+    target = target === null ? 'Thornbeak' : null;
+    renderTargetBar();
+    select(active);
+  });
 
   // One heading plus one real <ul> per category, so the list is a list to a screen
   // reader without a role attribute standing in for the element.
@@ -793,13 +900,49 @@
     }
   }
 
+  // In confirm mode the name is not an input: it is the target, so read it from
+  // state rather than the (absent) field.
   function values() {
     const out = {};
     active.fields.forEach((f) => {
+      if (f.key === 'name' && confirmMode()) {
+        out.name = target;
+        return;
+      }
       const input = formEl.querySelector(`[name="${f.key}"]`);
       out[f.key] = input ? input.value.trim() : '';
     });
     return out;
+  }
+
+  /** A command acts on a player when it carries a `name` field. */
+  function actsOnPlayer(cmd) {
+    return cmd.fields.some((f) => f.key === 'name');
+  }
+
+  /** With a target selected, a player-facing command asks you to confirm, not to type. */
+  function confirmMode() {
+    return target !== null && actsOnPlayer(active);
+  }
+
+  /**
+   * Put the window into (or out of) its "answer a question" chrome. `who` is the
+   * name the question names, or null for the plain form. Shared by the two ways a
+   * confirmation is reached: a targeted command, and a `confirm` command whose
+   * typed form has just been submitted.
+   */
+  function setConfirmChrome(who) {
+    const asking = who !== null;
+    questionEl.hidden = !asking;
+    if (asking) {
+      questionEl.innerHTML =
+        `Are you sure you want to ${esc(active.verb)} <span class="who">${esc(who)}</span>?`;
+    }
+    applyBtn.textContent = asking ? 'Yes' : 'Apply';
+    applyBtn.classList.toggle('yes', asking);
+    applyBtn.classList.toggle('primary', !asking);
+    cancelBtn.textContent = asking ? 'No' : 'Cancel';
+    cancelBtn.classList.toggle('danger', asking);
   }
 
   function refreshPreview() {
@@ -831,13 +974,20 @@
     titleEl.textContent = cmd.name;
     descEl.textContent = cmd.desc;
     permEl.innerHTML = 'Requires <code>' + cmd.perm + '</code>' +
-      (cmd.dev ? ', and the world-command set (dev builds only).' : '.') +
-      (cmd.confirm ? ' Always asks for confirmation.' : '');
+      (cmd.dev ? ', and the world-command set (dev builds only).' : '.');
+    pending = null;
+    const confirming = confirmMode();
+    // With a target, the window leads with the question and the buttons answer it.
+    setConfirmChrome(confirming ? target : null);
     formEl.innerHTML = '';
-    if (!cmd.fields.length) {
-      formEl.appendChild(el('p', 'cap', 'This command takes no arguments.'));
+    // The name field is omitted in confirm mode: the target already answered it.
+    const shown = confirming ? cmd.fields.filter((f) => f.key !== 'name') : cmd.fields;
+    if (!shown.length) {
+      formEl.appendChild(el('p', 'cap', confirming
+        ? 'Nothing else to fill in.'
+        : 'This command takes no arguments.'));
     }
-    cmd.fields.forEach((f) => {
+    shown.forEach((f) => {
       const wrap = el('div', 'field');
       const id = `f-${cmd.id}-${f.key}`;
       const label = el('label', null, f.label + (f.required ? '' : ' (optional)'));
@@ -865,8 +1015,8 @@
     refreshPreview();
   }
 
-  document.getElementById('cmd-apply').addEventListener('click', () => {
-    const v = values();
+  applyBtn.addEventListener('click', () => {
+    const v = pending || values();
     const missing = active.fields.filter((f) => f.required && !v[f.key]);
     if (missing.length) {
       toastEl.hidden = false;
@@ -874,11 +1024,30 @@
       toastEl.textContent = `Fill in ${missing.map((f) => f.label).join(', ')} first.`;
       return;
     }
+    // An irreversible command asks the same question even with no target: the
+    // typed name becomes the one the question names.
+    if (!pending && !confirmMode() && active.confirm) {
+      pending = v;
+      setConfirmChrome(v.name);
+      return;
+    }
+    pending = null;
     toastEl.hidden = false;
     toastEl.style.borderLeftColor = '#1eb838';
     toastEl.textContent = `Sent ${active.build(v)}. ${active.done(v)}`;
   });
-  document.getElementById('cmd-cancel').addEventListener('click', () => { toastEl.hidden = true; });
+  // "No" answers the question rather than half-filling a form, so it drops what was
+  // pending and puts the window back the way the row opened it.
+  cancelBtn.addEventListener('click', () => {
+    const who = pending ? pending.name : (confirmMode() ? target : null);
+    pending = null;
+    if (!confirmMode()) setConfirmChrome(null);
+    toastEl.hidden = false;
+    toastEl.style.borderLeftColor = '#6b6480';
+    toastEl.textContent = who
+      ? `Cancelled. Nothing was sent to ${who}.`
+      : 'Cancelled. Nothing was sent.';
+  });
   document.getElementById('cmd-close').addEventListener('click', () => { toastEl.hidden = true; });
 
   function renderCatalog() {
@@ -907,6 +1076,7 @@
 
   renderList();
   renderCatalog();
+  renderTargetBar();
   select(COMMANDS[0]);
 })();
 </script>
