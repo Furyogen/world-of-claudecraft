@@ -140,8 +140,24 @@
   .bar { display: block; height: 11px; border-radius: 3px; background: #000; border: 1px solid #00000090; margin-top: 5px; overflow: hidden; }
   .bar > i { display: block; height: 100%; }
   .bar.hp > i { width: 100%; background: var(--color-hp); }
-  .bar.authority > i { width: 100%; background: linear-gradient(90deg, #000 0%, #1a1a24 100%); box-shadow: inset 0 0 0 1px #d8c07a55; }
-  .bar-label { display: block; font-size: 10.5px; color: var(--color-text-muted); margin-top: 3px; }
+  .bar-label { display: block; font-size: 10.5px; color: var(--color-text-muted); margin-top: 4px; }
+  /* A non-combatant frame carries state chips where a fighter carries bars. */
+  .state-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+  .state-chip {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    border: 1px solid #3a3348; border-radius: 3px; padding: 2px 6px; color: var(--color-text-muted);
+    background: #0c0c13;
+  }
+  .state-chip.on { border-color: var(--gm-rim); color: var(--gm-rim); background: var(--gm-black); }
+  .bar-slot {
+    display: block; margin-top: 5px; padding: 4px 8px; border-radius: 3px;
+    border: 1px dashed #332d42; color: #6b6480; font-size: 10.5px; letter-spacing: 0.3px;
+  }
+  .detail-strip { display: flex; flex-wrap: wrap; gap: 0 22px; margin: 12px 0 0; font-size: 13px; }
+  .detail-strip div { min-width: 130px; }
+  .detail-strip dt { color: var(--color-text-muted); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .detail-strip dd { margin: 2px 0 0; color: var(--color-text-light); font-family: var(--font-display); font-size: 13.5px; }
+  .detail-strip dd.none { color: #6b6480; font-family: var(--font-ui); }
 
   .chatlog { font-size: 13.5px; line-height: 1.65; }
   .chatlog div { padding: 1px 0; }
@@ -265,10 +281,12 @@
   <span class="badge">Mockup, not implemented</span>
   <h1>Game Master: a staff-only tenth class</h1>
   <p class="lede">
-    A tenth <code>PlayerClass</code> that only an account carrying staff roles can roll. It has no
-    combat kit at all: its spellbook is the moderation command set, and casting an entry opens a
-    parameter window that emits the exact chat command the server already parses today. The class
-    color is pure black, <code>#000000</code>.
+    A tenth <code>PlayerClass</code> that only an account carrying staff roles can roll.
+    <strong>Game Masters are not fighters.</strong> They have no health, no resource, no level, no
+    gear, and no attack: nothing in the combat system can address them, and they cannot address it.
+    Their spellbook is the moderation command set, and casting an entry opens a parameter window
+    that emits the exact chat command the server already parses today. The class color is pure
+    black, <code>#000000</code>.
   </p>
 
   <h2>1. Character creation</h2>
@@ -299,13 +317,26 @@
         </span>
       </div>
     </div>
+    <dl class="detail-strip">
+      <div><dt>Role</dt><dd>Administration</dd></div>
+      <div><dt>Resource</dt><dd class="none">None</dd></div>
+      <div><dt>Armor</dt><dd class="none">None</dd></div>
+      <div><dt>Weapons</dt><dd class="none">None</dd></div>
+      <div><dt>Combat</dt><dd class="none">Does not fight</dd></div>
+    </dl>
   </div>
+  <p class="cap" style="margin-top:10px">
+    Where the other nine classes show stat bars and a starting kit, this one shows nothing to show.
+    The class-details panel deliberately renders the empty state rather than a row of zeroes: a
+    Game Master has no stats, not stats that happen to be zero.
+  </p>
 
   <h2>2. In-world chrome</h2>
   <p class="cap">
     Pure black is the class color everywhere the palette is read: portrait ring, nameplate,
     party frame dot, minimap blip, chat name. On the dark HUD that reads as absence, so every
-    text-bearing surface pairs the black with a thin gold rim (see the contrast note below).
+    text-bearing surface pairs the black with a thin gold rim (see the contrast note below). The
+    unit frame is the first place the non-combatant rule shows up.
   </p>
   <div class="world-strip">
     <div>
@@ -313,17 +344,32 @@
         <span class="portrait gm"><svg width="26" height="26" aria-hidden="true"><use href="#gl-whois"/></svg></span>
         <span class="unit-meta">
           <span class="unit-name">Ashvane <span class="gm-tag">GM</span></span>
-          <span class="bar hp"><i></i></span>
-          <span class="bar authority"><i></i></span>
-          <span class="bar-label">Authority 100 / 100 &middot; invulnerable, level cap</span>
+          <span class="state-row">
+            <span class="state-chip">Non-combatant</span>
+            <span class="state-chip">Untargetable</span>
+            <span class="state-chip on">Visible</span>
+          </span>
+          <span class="bar-slot">No health bar. No resource bar. No level.</span>
+          <span class="bar-label">Presence and spectate state are the only things this frame tracks.</span>
         </span>
       </div>
       <p class="cap" style="margin-top:10px">
-        A GM character reuses the existing <code>Sim.setGm</code> path: invulnerable in
-        <code>src/sim/combat/damage.ts</code>, forced to the level cap on join
-        (<code>server/game.ts</code>). The resource bar is mana under the hood, relabelled
-        Authority and tinted with the class color.
+        The frame keeps the shape every unit frame has, so the HUD needs no special case, but the two
+        bar slots are empty by design. A Game Master has nothing to deplete: the only live state
+        worth a player's or an operator's attention is whether they are currently visible and whether
+        they are spectating someone.
       </p>
+      <p class="cap">
+        For comparison, the frame below is what a fighter shows in the same space.
+      </p>
+      <div class="unit-frame">
+        <span class="portrait" style="--class-color:#c79c6e"></span>
+        <span class="unit-meta">
+          <span class="unit-name">Thornbeak</span>
+          <span class="bar hp"><i></i></span>
+          <span class="bar-label">Level 18 Warrior &middot; 1240 / 1240</span>
+        </span>
+      </div>
     </div>
     <div class="panel">
       <div class="panel-title"><span>Chat</span><span class="sub">General</span></div>
@@ -349,8 +395,9 @@
         <button type="button" class="x-btn" aria-label="Close spellbook">&times;</button>
       </div>
       <p class="book-note">
-        This class has no combat abilities. Every entry is an authority command; casting one opens
-        its parameter window instead of starting a cast bar.
+        This class has no combat abilities and no Attack row. Every entry is an authority command:
+        selecting one opens its parameter window instead of starting a cast bar, and none of them
+        has a range, a cast time, or a cooldown.
       </p>
       <div class="spell-list" id="spell-list" role="list"></div>
     </div>
@@ -386,7 +433,36 @@
   </table>
   </div>
 
-  <h2>5. Notes and open questions</h2>
+  <h2>5. The non-combatant contract</h2>
+  <p class="cap">
+    Game Masters do not fight. That is a hard rule, not a balance choice, so it is worth writing as
+    a list of things the sim must be able to state plainly. Every line below is testable.
+  </p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>Rule</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td>Cannot attack</td><td>No auto-attack, no abilities that deal damage or healing. The spellbook holds commands, so there is nothing to point at a target.</td></tr>
+      <tr><td>Cannot be attacked</td><td>Not a valid target for any hostile ability, player or mob. This is stronger than invulnerability: the target-selection path never offers them, so a player cannot even begin a cast.</td></tr>
+      <tr><td>Generates no threat</td><td>Mobs do not acquire, path to, or leash toward a Game Master. They are not in the aggro system at all.</td></tr>
+      <tr><td>No health, resource, or level</td><td>Nothing to deplete and nothing to grow. No XP, no gear, no talents, no stat block.</td></tr>
+      <tr><td>No loot or credit</td><td>Never rolls on loot, never takes quest or deed credit, never counts toward a group size or a dungeon lockout.</td></tr>
+      <tr><td>Excluded from every ladder</td><td>Not queueable for arena, Fiesta, Yumi, dungeon finder, or battlegrounds, and never appears on a leaderboard.</td></tr>
+      <tr><td>Commands are not spells</td><td>A command has no cast time, no range, no line of sight, and no cooldown. It is rate limited and written to the moderation log, which is a different thing from a resource cost.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <p style="margin:0">
+      Today a staff character is an ordinary combatant with <code>gm</code> set: invulnerable in
+      <code>src/sim/combat/damage.ts</code>, and shoved to the level cap on join in
+      <code>server/game.ts</code> so it is not one-shot. Both of those are patches over the wrong
+      default. If the class is outside combat, invulnerability becomes a consequence rather than the
+      mechanism, and the level-cap shove can go away entirely: there is no level to protect.
+    </p>
+  </div>
+
+  <h2>6. Notes and open questions</h2>
 
   <h3>Contrast: pure black on a dark HUD</h3>
   <div class="callout warn">
@@ -407,7 +483,19 @@
       who acted.</li>
     <li>Reusing the class seam means the spellbook, action bar, keybinds, and macros work with no
       new UI plumbing. A command row drags onto the action bar exactly like an ability.</li>
+    <li>It also gives the non-combatant rule somewhere to live. As a toggle on a Warrior, "does not
+      fight" is a pile of exceptions scattered through the combat code. As a class, it is one
+      predicate the combat, threat, loot, and queue paths each ask once.</li>
   </ul>
+
+  <h3>Open question: what does the world see</h3>
+  <p>
+    A Game Master who cannot be attacked and cannot be targeted is close to a ghost, which raises a
+    question this mockup does not answer: should they be visible by default at all? The frame above
+    shows a Visible chip because the choice belongs to the operator, but the defaults are worth
+    deciding deliberately. Standing visible is a moderation tool in its own right, and standing
+    invisible is the honest state for observation. Spectate already implies the latter.
+  </p>
 
   <h3>What the real implementation touches</h3>
   <ul>
@@ -415,7 +503,17 @@
       whether it joins <code>ALL_CLASSES</code> (it should not, that list drives content tables,
       quest reward maps, and the class-balance suites).</li>
     <li><code>src/sim/content/classes.ts</code>: a <code>ClassDef</code> with an empty
-      <code>abilities</code> array and <code>color: 0x000000</code>.</li>
+      <code>abilities</code> array and <code>color: 0x000000</code>. The shape itself pushes back
+      here, since it requires <code>baseStats</code>, <code>startWeapon</code>, and a
+      <code>resourceType</code> that a non-combatant has no answer for. Either those fields become
+      optional or the class carries an explicit <code>combat: false</code> that every consumer
+      checks before it reads them; filling them with zeroes and a bare fist is the outcome to
+      avoid, because it teaches the rest of the code that a Game Master is a very weak fighter
+      rather than not a fighter.</li>
+    <li><code>src/sim/</code>: one <code>isCombatant</code> predicate the damage, threat, targeting,
+      loot, and queue paths each consult, so the non-combatant table above has a single
+      implementation instead of seven. This is the part worth getting right, and it belongs behind
+      the <code>SimContext</code> seam rather than inside <code>sim.ts</code>.</li>
     <li><code>src/ui/</code>: a pure <code>gm_command_view.ts</code> holding the command catalog and
       argument validation (the <code>DEV_COMMAND_ACTIONS</code> shape in
       <code>src/ui/dev_command_view.ts</code> is the exact precedent), plus a thin
@@ -424,8 +522,10 @@
     <li><code>server/</code>: the create-character route re-checks staff roles; the WS command path
       is unchanged, because the window sends the same chat command a typing GM would.</li>
     <li>Tests: the class-content pins, an <code>IWorld</code> parity update if the window needs a new
-      facet member, and a negative test proving a non-staff account is refused the class at
-      character creation even with a forged request.</li>
+      facet member, a negative test proving a non-staff account is refused the class at character
+      creation even with a forged request, and one test per row of the non-combatant table (a mob
+      that never acquires, a hostile cast that cannot select the target, a kill that yields no
+      loot roll).</li>
   </ul>
 </main>
 
@@ -464,7 +564,7 @@
     {
       id: 'kill', cat: 'Discipline', glyph: 'gl-kill', name: 'Word of Ending',
       sub: 'Kill a player outright.',
-      desc: 'Sets the target to zero health at once, bypassing every mitigation path. Used to break a stuck encounter or an exploit in progress.',
+      desc: 'Sets the named character to zero health at once, bypassing every mitigation path. This is an administrative action, not an attack: it resolves through the moderation path, has no range or line of sight, and never puts the Game Master in combat.',
       perm: 'moderation.act',
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
