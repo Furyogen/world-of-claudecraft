@@ -182,12 +182,28 @@
     padding: 4px 0 4px 10px; margin: 0 0 10px;
   }
   .cat-head {
-    grid-column: 1 / -1; font-family: var(--font-display); font-size: 11.5px; letter-spacing: 1.2px;
-    text-transform: uppercase; color: var(--gold-dim); margin: 12px 0 2px; padding-bottom: 4px;
-    border-bottom: 1px solid #2a2438;
+    font-family: var(--font-display); font-size: 11.5px; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--gold-dim); margin: 14px 0 4px; padding-bottom: 4px;
+    border-bottom: 1px solid #2a2438; font-weight: 400;
   }
-  .cat-head:first-child { margin-top: 0; }
-  .spell-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 2px; }
+  .cat-head:first-of-type { margin-top: 0; }
+  /* A real ul/li list, not a div with role="list". */
+  .spell-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 2px;
+    list-style: none; margin: 0; padding: 0;
+  }
+  .spell-list > li { display: flex; min-width: 0; }
+  /* Declared before the .spell-row.locked descendants below so the cascade reads in
+     ascending specificity order. */
+  .spell-icon {
+    width: 34px; height: 34px; border-radius: 5px; flex: none;
+    background: radial-gradient(circle at 32% 26%, #23232f 0%, #08080c 78%);
+    border: 2px solid var(--gm-rim); display: grid; place-items: center;
+  }
+  .spell-icon svg { width: 22px; height: 22px; }
+  .spell-text { min-width: 0; flex: 1; display: block; }
+  .spell-name { display: block; font-size: 13px; color: #fff; font-family: var(--font-display); }
+  .spell-sub { display: block; font-size: 11px; color: var(--color-text-muted); overflow-wrap: anywhere; }
   .spell-row {
     display: flex; gap: 10px; min-height: 46px; padding: 6px; border-radius: 4px; align-items: center;
     background: none; border: 0; width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer;
@@ -198,15 +214,6 @@
   .spell-row.locked { cursor: not-allowed; }
   .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
   .spell-row.locked .spell-name { color: var(--color-text-muted); }
-  .spell-icon {
-    width: 34px; height: 34px; border-radius: 5px; flex: none;
-    background: radial-gradient(circle at 32% 26%, #23232f 0%, #08080c 78%);
-    border: 2px solid var(--gm-rim); display: grid; place-items: center;
-  }
-  .spell-icon svg { width: 22px; height: 22px; }
-  .spell-text { min-width: 0; flex: 1; display: block; }
-  .spell-name { display: block; font-size: 13px; color: #fff; font-family: var(--font-display); }
-  .spell-sub { display: block; font-size: 11px; color: var(--color-text-muted); overflow-wrap: anywhere; }
 
   /* the parameter window a command opens */
   .cmd-window { position: sticky; top: 18px; }
@@ -252,7 +259,7 @@
   .callout { border-left: 3px solid var(--gold-dim); background: #12121a; padding: 10px 16px; border-radius: 0 6px 6px 0; margin: 16px 0; }
   .callout.warn { border-left-color: var(--color-debuff); }
   .scroll-x { overflow-x: auto; }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none; animation: none; } }
 </style>
 </head>
 <body>
@@ -399,7 +406,7 @@
         selecting one opens its parameter window instead of starting a cast bar, and none of them
         has a range, a cast time, or a cooldown.
       </p>
-      <div class="spell-list" id="spell-list" role="list"></div>
+      <div id="spell-book-body"></div>
     </div>
 
     <div class="panel cmd-window" id="cmd-window">
@@ -530,12 +537,12 @@
 </main>
 
 <script>
-(function () {
+(() => {
   'use strict';
 
   // One catalog entry per spellbook row. `fields` drives both the parameter window
   // and the emitted command string, mirroring the DEV_COMMAND_ACTIONS shape.
-  var COMMANDS = [
+  const COMMANDS = [
     {
       id: 'mute', cat: 'Discipline', glyph: 'gl-mute', name: 'Silence',
       sub: 'Bar a player from chat for a set duration.',
@@ -546,8 +553,8 @@
         { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '30', required: true, hint: '1 to 5256000 (ten years).' },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: 'Spamming trade chat' }
       ],
-      build: function (v) { return '/mute "' + v.name + '" ' + v.minutes + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' has been silenced for ' + v.minutes + ' minutes.'; }
+      build: (v) => `/mute "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been silenced for ${v.minutes} minutes.`
     },
     {
       id: 'kick', cat: 'Discipline', glyph: 'gl-kick', name: 'Banish',
@@ -558,8 +565,8 @@
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
       ],
-      build: function (v) { return '/kick "' + v.name + '"' + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' has been disconnected.'; }
+      build: (v) => `/kick "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been disconnected.`
     },
     {
       id: 'kill', cat: 'Discipline', glyph: 'gl-kill', name: 'Word of Ending',
@@ -570,8 +577,8 @@
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
       ],
-      build: function (v) { return '/kill "' + v.name + '"' + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' has been struck down.'; }
+      build: (v) => `/kill "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been struck down.`
     },
     {
       id: 'forcerename', cat: 'Discipline', glyph: 'gl-rename', name: 'Unname',
@@ -582,8 +589,8 @@
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
       ],
-      build: function (v) { return '/forcerename "' + v.name + '"' + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' must choose a new name at next login.'; }
+      build: (v) => `/forcerename "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} must choose a new name at next login.`
     },
     {
       id: 'suspend', cat: 'Discipline', glyph: 'gl-suspend', name: 'Sever',
@@ -595,8 +602,8 @@
         { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '1440', required: true, hint: '1440 is one day.' },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
       ],
-      build: function (v) { return '/suspend "' + v.name + '" ' + v.minutes + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' is suspended for ' + v.minutes + ' minutes.'; }
+      build: (v) => `/suspend "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} is suspended for ${v.minutes} minutes.`
     },
     {
       id: 'ban', cat: 'Discipline', glyph: 'gl-ban', name: 'Excommunicate',
@@ -607,8 +614,8 @@
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
       ],
-      build: function (v) { return '/ban "' + v.name + '"' + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' has been banned.'; }
+      build: (v) => `/ban "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been banned.`
     },
     {
       id: 'jail', cat: 'Containment', glyph: 'gl-jail', name: 'Bind',
@@ -620,8 +627,8 @@
         { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '60', required: true },
         { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
       ],
-      build: function (v) { return '/jail "' + v.name + '" ' + v.minutes + (v.reason ? ' ' + v.reason : ''); },
-      done: function (v) { return v.name + ' is jailed for ' + v.minutes + ' minutes.'; }
+      build: (v) => `/jail "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} is jailed for ${v.minutes} minutes.`
     },
     {
       id: 'unjail', cat: 'Containment', glyph: 'gl-unjail', name: 'Loose',
@@ -631,8 +638,8 @@
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Leave empty to release yourself', value: '' }
       ],
-      build: function (v) { return v.name ? '/unjail "' + v.name + '"' : '/unjail'; },
-      done: function (v) { return v.name ? v.name + ' has been released.' : 'You have left the jail.'; }
+      build: (v) => v.name ? `/unjail "${v.name}"` : '/unjail',
+      done: (v) => v.name ? `${v.name} has been released.` : 'You have left the jail.'
     },
     {
       id: 'spectate', cat: 'Observation', glyph: 'gl-spectate', name: 'Unseen Eye',
@@ -642,8 +649,8 @@
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
       ],
-      build: function (v) { return '/spectate "' + v.name + '"'; },
-      done: function (v) { return 'Now spectating ' + v.name + '.'; }
+      build: (v) => `/spectate "${v.name}"`,
+      done: (v) => `Now spectating ${v.name}.`
     },
     {
       id: 'unspectate', cat: 'Observation', glyph: 'gl-unspectate', name: 'Return',
@@ -651,8 +658,8 @@
       desc: 'Detaches the camera and restores the GM character at its own position. Takes no arguments.',
       perm: 'moderation.spectate',
       fields: [],
-      build: function () { return '/unspectate'; },
-      done: function () { return 'You have returned to your own body.'; }
+      build: () => '/unspectate',
+      done: () => 'You have returned to your own body.'
     },
     {
       id: 'whois', cat: 'Observation', glyph: 'gl-whois', name: 'Scry',
@@ -662,8 +669,8 @@
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
       ],
-      build: function (v) { return '/whois "' + v.name + '"'; },
-      done: function (v) { return 'Opened the account panel for ' + v.name + '.'; }
+      build: (v) => `/whois "${v.name}"`,
+      done: (v) => `Opened the account panel for ${v.name}.`
     },
     {
       id: 'broadcast', cat: 'Observation', glyph: 'gl-broadcast', name: 'Proclaim',
@@ -673,8 +680,8 @@
       fields: [
         { key: 'text', label: 'Message', kind: 'textarea', placeholder: 'The realm restarts in 10 minutes.', value: '', required: true }
       ],
-      build: function (v) { return '/broadcast ' + v.text; },
-      done: function () { return 'Notice sent to the realm.'; }
+      build: (v) => `/broadcast ${v.text}`,
+      done: () => 'Notice sent to the realm.'
     },
     {
       id: 'summon', cat: 'World', glyph: 'gl-summon', name: 'Call Forth',
@@ -684,8 +691,8 @@
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
       ],
-      build: function (v) { return '/summon "' + v.name + '"'; },
-      done: function (v) { return v.name + ' has been summoned.'; }
+      build: (v) => `/summon "${v.name}"`,
+      done: (v) => `${v.name} has been summoned.`
     },
     {
       id: 'goto', cat: 'World', glyph: 'gl-goto', name: 'Stride',
@@ -697,8 +704,8 @@
         { key: 'x', label: 'X', kind: 'number', value: '', hint: 'Used only when the name is empty.' },
         { key: 'z', label: 'Z', kind: 'number', value: '' }
       ],
-      build: function (v) { return v.name ? '/goto "' + v.name + '"' : '/dev tp ' + (v.x || 0) + ' ' + (v.z || 0); },
-      done: function (v) { return v.name ? 'Teleported to ' + v.name + '.' : 'Teleported to the coordinate.'; }
+      build: (v) => v.name ? `/goto "${v.name}"` : `/dev tp ${v.x || 0} ${v.z || 0}`,
+      done: (v) => v.name ? `Teleported to ${v.name}.` : 'Teleported to the coordinate.'
     },
     {
       id: 'revive', cat: 'World', glyph: 'gl-revive', name: 'Restore',
@@ -708,8 +715,8 @@
       fields: [
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
       ],
-      build: function (v) { return '/revive "' + v.name + '"'; },
-      done: function (v) { return v.name + ' has been restored.'; }
+      build: (v) => `/revive "${v.name}"`,
+      done: (v) => `${v.name} has been restored.`
     },
     {
       id: 'freeze', cat: 'World', glyph: 'gl-freeze', name: 'Still',
@@ -720,72 +727,84 @@
         { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
         { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 600, value: '5', required: true }
       ],
-      build: function (v) { return '/freeze "' + v.name + '" ' + v.minutes; },
-      done: function (v) { return v.name + ' is held for ' + v.minutes + ' minutes.'; }
+      build: (v) => `/freeze "${v.name}" ${v.minutes}`,
+      done: (v) => `${v.name} is held for ${v.minutes} minutes.`
     }
   ];
 
-  var listEl = document.getElementById('spell-list');
-  var titleEl = document.getElementById('cmd-title');
-  var descEl = document.getElementById('cmd-desc');
-  var formEl = document.getElementById('cmd-form');
-  var previewEl = document.getElementById('cmd-preview');
-  var permEl = document.getElementById('cmd-perm');
-  var toastEl = document.getElementById('cmd-toast');
-  var active = COMMANDS[0];
+  const bookEl = document.getElementById('spell-book-body');
+  const titleEl = document.getElementById('cmd-title');
+  const descEl = document.getElementById('cmd-desc');
+  const formEl = document.getElementById('cmd-form');
+  const previewEl = document.getElementById('cmd-preview');
+  const permEl = document.getElementById('cmd-perm');
+  const toastEl = document.getElementById('cmd-toast');
+  let active = COMMANDS[0];
 
   function el(tag, cls, text) {
-    var node = document.createElement(tag);
+    const node = document.createElement(tag);
     if (cls) node.className = cls;
     if (text !== undefined) node.textContent = text;
     return node;
   }
 
+  // One heading plus one real <ul> per category, so the list is a list to a screen
+  // reader without a role attribute standing in for the element.
   function renderList() {
-    var seen = {};
-    COMMANDS.forEach(function (cmd) {
-      if (!seen[cmd.cat]) {
-        seen[cmd.cat] = true;
-        listEl.appendChild(el('div', 'cat-head', cmd.cat));
+    const lists = {};
+    COMMANDS.forEach((cmd) => {
+      if (!lists[cmd.cat]) {
+        const head = el('h4', 'cat-head', cmd.cat);
+        const list = el('ul', 'spell-list');
+        list.setAttribute('aria-labelledby', headingId(cmd.cat));
+        head.id = headingId(cmd.cat);
+        bookEl.appendChild(head);
+        bookEl.appendChild(list);
+        lists[cmd.cat] = list;
       }
-      var row = el('button', 'spell-row' + (cmd.locked ? ' locked' : ''));
+      const row = el('button', `spell-row${cmd.locked ? ' locked' : ''}`);
       row.type = 'button';
-      row.setAttribute('role', 'listitem');
       row.dataset.id = cmd.id;
       row.setAttribute('aria-current', cmd === active ? 'true' : 'false');
 
-      var icon = el('span', 'spell-icon');
-      icon.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#' + cmd.glyph + '"/></svg>';
-      var text = el('span', 'spell-text');
+      const icon = el('span', 'spell-icon');
+      icon.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#${cmd.glyph}"/></svg>`;
+      const text = el('span', 'spell-text');
       text.appendChild(el('span', 'spell-name', cmd.name));
-      var sub = el('span', 'spell-sub', cmd.locked ? cmd.lockNote : cmd.sub);
+      const sub = el('span', 'spell-sub', cmd.locked ? cmd.lockNote : cmd.sub);
       text.appendChild(sub);
       row.appendChild(icon);
       row.appendChild(text);
-      row.addEventListener('click', function () { select(cmd); });
-      listEl.appendChild(row);
+      row.addEventListener('click', () => { select(cmd); });
+      const item = document.createElement('li');
+      item.appendChild(row);
+      lists[cmd.cat].appendChild(item);
     });
   }
 
+  function headingId(category) {
+    return `cat-${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  }
+
   function markActive() {
-    var rows = listEl.querySelectorAll('.spell-row');
-    for (var i = 0; i < rows.length; i++) {
+    const rows = bookEl.querySelectorAll('.spell-row');
+    for (let i = 0; i < rows.length; i++) {
       rows[i].setAttribute('aria-current', rows[i].dataset.id === active.id ? 'true' : 'false');
     }
   }
 
   function values() {
-    var out = {};
-    active.fields.forEach(function (f) {
-      var input = formEl.querySelector('[name="' + f.key + '"]');
+    const out = {};
+    active.fields.forEach((f) => {
+      const input = formEl.querySelector(`[name="${f.key}"]`);
       out[f.key] = input ? input.value.trim() : '';
     });
     return out;
   }
 
   function refreshPreview() {
-    var v = values();
-    var missing = active.fields.filter(function (f) { return f.required && !v[f.key]; });
+    const v = values();
+    const missing = active.fields.filter((f) => f.required && !v[f.key]);
     if (missing.length) {
       previewEl.textContent = active.build(placeholders(v));
       previewEl.style.opacity = '0.5';
@@ -798,9 +817,9 @@
   // Preview with the placeholder standing in for an empty required field, so the
   // grammar is always legible before the operator has typed anything.
   function placeholders(v) {
-    var out = {};
-    active.fields.forEach(function (f) {
-      out[f.key] = v[f.key] || (f.required ? (f.placeholder || ('<' + f.key + '>')) : '');
+    const out = {};
+    active.fields.forEach((f) => {
+      out[f.key] = v[f.key] || (f.required ? (f.placeholder || `<${f.key}>`) : '');
     });
     return out;
   }
@@ -818,13 +837,13 @@
     if (!cmd.fields.length) {
       formEl.appendChild(el('p', 'cap', 'This command takes no arguments.'));
     }
-    cmd.fields.forEach(function (f) {
-      var wrap = el('div', 'field');
-      var id = 'f-' + cmd.id + '-' + f.key;
-      var label = el('label', null, f.label + (f.required ? '' : ' (optional)'));
+    cmd.fields.forEach((f) => {
+      const wrap = el('div', 'field');
+      const id = `f-${cmd.id}-${f.key}`;
+      const label = el('label', null, f.label + (f.required ? '' : ' (optional)'));
       label.setAttribute('for', id);
       wrap.appendChild(label);
-      var input;
+      let input;
       if (f.kind === 'textarea') {
         input = document.createElement('textarea');
         input.rows = 2;
@@ -846,28 +865,28 @@
     refreshPreview();
   }
 
-  document.getElementById('cmd-apply').addEventListener('click', function () {
-    var v = values();
-    var missing = active.fields.filter(function (f) { return f.required && !v[f.key]; });
+  document.getElementById('cmd-apply').addEventListener('click', () => {
+    const v = values();
+    const missing = active.fields.filter((f) => f.required && !v[f.key]);
     if (missing.length) {
       toastEl.hidden = false;
       toastEl.style.borderLeftColor = '#c0392b';
-      toastEl.textContent = 'Fill in ' + missing.map(function (f) { return f.label; }).join(', ') + ' first.';
+      toastEl.textContent = `Fill in ${missing.map((f) => f.label).join(', ')} first.`;
       return;
     }
     toastEl.hidden = false;
     toastEl.style.borderLeftColor = '#1eb838';
-    toastEl.textContent = 'Sent ' + active.build(v) + '. ' + active.done(v);
+    toastEl.textContent = `Sent ${active.build(v)}. ${active.done(v)}`;
   });
-  document.getElementById('cmd-cancel').addEventListener('click', function () { toastEl.hidden = true; });
-  document.getElementById('cmd-close').addEventListener('click', function () { toastEl.hidden = true; });
+  document.getElementById('cmd-cancel').addEventListener('click', () => { toastEl.hidden = true; });
+  document.getElementById('cmd-close').addEventListener('click', () => { toastEl.hidden = true; });
 
   function renderCatalog() {
-    var body = document.getElementById('catalog-body');
-    COMMANDS.forEach(function (cmd) {
-      var tr = document.createElement('tr');
-      var fields = cmd.fields.length
-        ? cmd.fields.map(function (f) { return f.label; }).join(', ')
+    const body = document.getElementById('catalog-body');
+    COMMANDS.forEach((cmd) => {
+      const tr = document.createElement('tr');
+      const fields = cmd.fields.length
+        ? cmd.fields.map((f) => f.label).join(', ')
         : 'none';
       tr.innerHTML =
         '<td><strong>' + cmd.name + '</strong><br><span style="color:#998d6a;font-size:12.5px">' + cmd.sub + '</span></td>' +
@@ -879,9 +898,9 @@
   }
 
   function placeholdersFor(cmd) {
-    var out = {};
-    cmd.fields.forEach(function (f) {
-      out[f.key] = f.required ? '<' + f.key + '>' : '';
+    const out = {};
+    cmd.fields.forEach((f) => {
+      out[f.key] = f.required ? `<${f.key}>` : '';
     });
     return out;
   }
