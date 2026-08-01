@@ -211,6 +211,10 @@
   .spell-row:hover { background: #ffffff0e; }
   .spell-row:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; background: #ffd1001f; }
   .spell-row[aria-current="true"] { background: #ffd1001a; box-shadow: inset 0 0 0 1px #c8a83866; }
+  .instant-chip {
+    flex: none; align-self: center; font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase;
+    color: var(--gm-rim); border: 1px solid #3f3a2a; border-radius: 3px; padding: 1px 5px;
+  }
   .spell-row.locked { cursor: not-allowed; }
   .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
   .spell-row.locked .spell-name { color: var(--color-text-muted); }
@@ -256,6 +260,8 @@
     font: 13px/1.5 "SF Mono", Menlo, Consolas, monospace; color: #e2d9b7; overflow-x: auto; white-space: pre;
   }
   .cmd-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  /* An explicit display beats the UA [hidden] rule, so restate it. */
+  .cmd-actions[hidden] { display: none; }
   .btn {
     min-height: 40px; padding: 0 18px; border-radius: 4px; cursor: pointer;
     font: 14px/1 var(--font-display); letter-spacing: 0.5px;
@@ -433,8 +439,8 @@
       </div>
       <p class="book-note">
         This class has no combat abilities and no Attack row. Every entry is an authority command:
-        selecting one opens its parameter window instead of starting a cast bar, and none of them
-        has a range, a cast time, or a cooldown.
+        selecting one opens its parameter window instead of starting a cast bar, or fires straight
+        away when it has nothing to ask. None of them has a range, a cast time, or a cooldown.
       </p>
       <div id="spell-book-body"></div>
     </div>
@@ -449,7 +455,7 @@
       <form id="cmd-form" novalidate></form>
       <h3 style="margin:6px 0 6px">Command sent</h3>
       <div class="cmd-preview" id="cmd-preview">/mute</div>
-      <div class="cmd-actions">
+      <div class="cmd-actions" id="cmd-actions">
         <button type="button" class="btn primary" id="cmd-apply">Apply</button>
         <button type="button" class="btn" id="cmd-cancel">Cancel</button>
       </div>
@@ -547,14 +553,20 @@
     Rows that name no player (Return, Proclaim) never show the question, since there is nothing for
     a target to disambiguate.
   </p>
-  <div class="callout">
-    <p style="margin:0">
-      Still open: Return takes no arguments at all, yet selecting it opens a window whose only content
-      is "This command takes no arguments." A zero-argument row should almost certainly just fire on
-      click like an instant ability, and the window should be reserved for rows that have something
-      to ask.
-    </p>
-  </div>
+  <h3>Rows with nothing to ask fire on click</h3>
+  <p>
+    A row only opens a window when it has something to ask. Return takes no arguments, names no
+    player, and is not irreversible, so selecting it sends <code>/unspectate</code> immediately, the
+    way an instant ability casts. The panel then reports what was sent instead of offering an Apply
+    button to press on an empty form. Those rows carry an <strong>Instant</strong> chip in the
+    spellbook, so the behavior is legible before the click rather than a surprise after it.
+  </p>
+  <p>
+    The test is deliberately narrow, and all three parts matter: no fields left to fill, no target to
+    confirm against, and no irreversible flag. Unseen Eye takes only a name, so it is instant in
+    neither state: untargeted it asks who, and targeted it asks whether. Excommunicate would still
+    ask even if it were argument-free, because the flag outranks the shortcut.
+  </p>
 
   <h3>Open question: what does the world see</h3>
   <p>
@@ -815,6 +827,7 @@
   const permEl = document.getElementById('cmd-perm');
   const toastEl = document.getElementById('cmd-toast');
   const questionEl = document.getElementById('cmd-question');
+  const actionsEl = document.getElementById('cmd-actions');
   const applyBtn = document.getElementById('cmd-apply');
   const cancelBtn = document.getElementById('cmd-cancel');
   const targetNameEl = document.getElementById('target-name');
@@ -852,7 +865,7 @@
   targetToggle.addEventListener('click', () => {
     target = target === null ? 'Thornbeak' : null;
     renderTargetBar();
-    select(active);
+    select(active, false);
   });
 
   // One heading plus one real <ul> per category, so the list is a list to a screen
@@ -882,7 +895,10 @@
       text.appendChild(sub);
       row.appendChild(icon);
       row.appendChild(text);
-      row.addEventListener('click', () => { select(cmd); });
+      // Structurally argument-free rows are instant whatever the target is, so the
+      // chip is safe to paint once instead of on every target change.
+      if (!cmd.fields.length && !cmd.confirm) row.appendChild(el('span', 'instant-chip', 'Instant'));
+      row.addEventListener('click', () => { select(cmd, true); });
       const item = document.createElement('li');
       item.appendChild(row);
       lists[cmd.cat].appendChild(item);
@@ -925,6 +941,23 @@
     return target !== null && actsOnPlayer(active);
   }
 
+  /** The fields the window would actually render for `cmd` right now. */
+  function shownFields(cmd) {
+    const confirming = target !== null && actsOnPlayer(cmd);
+    return confirming ? cmd.fields.filter((f) => f.key !== 'name') : cmd.fields;
+  }
+
+  /**
+   * A row with nothing to ask fires on click, like an instant ability: no fields to
+   * fill, no target to confirm against, and not flagged irreversible. Opening a
+   * window whose only content is "this takes no arguments" is pure friction.
+   */
+  function isInstant(cmd) {
+    if (cmd.confirm) return false;
+    if (target !== null && actsOnPlayer(cmd)) return false;
+    return shownFields(cmd).length === 0;
+  }
+
   /**
    * Put the window into (or out of) its "answer a question" chrome. `who` is the
    * name the question names, or null for the plain form. Shared by the two ways a
@@ -943,6 +976,24 @@
     applyBtn.classList.toggle('primary', !asking);
     cancelBtn.textContent = asking ? 'No' : 'Cancel';
     cancelBtn.classList.toggle('danger', asking);
+  }
+
+  /**
+   * An instant row has no window to fill in: it ran on click. The panel becomes a
+   * record of what was sent rather than a form, with no Apply or Cancel to press.
+   */
+  function renderInstant(cmd, fired) {
+    actionsEl.hidden = true;
+    setConfirmChrome(null);
+    formEl.innerHTML = '';
+    formEl.appendChild(el('p', 'cap', 'Fires the moment you select it. Nothing to fill in.'));
+    const sent = cmd.build({});
+    previewEl.textContent = sent;
+    previewEl.style.opacity = '1';
+    if (!fired) return;
+    toastEl.hidden = false;
+    toastEl.style.borderLeftColor = '#1eb838';
+    toastEl.textContent = `Sent ${sent}. ${cmd.done({})}`;
   }
 
   function refreshPreview() {
@@ -967,7 +1018,11 @@
     return out;
   }
 
-  function select(cmd) {
+  /**
+   * Selecting a row. `fire` is true only for a real click: an instant row runs there
+   * and then, while a re-render (the target toggle) must never re-fire it.
+   */
+  function select(cmd, fire) {
     active = cmd;
     markActive();
     toastEl.hidden = true;
@@ -976,16 +1031,19 @@
     permEl.innerHTML = 'Requires <code>' + cmd.perm + '</code>' +
       (cmd.dev ? ', and the world-command set (dev builds only).' : '.');
     pending = null;
+    if (isInstant(cmd)) {
+      renderInstant(cmd, fire === true);
+      return;
+    }
+    actionsEl.hidden = false;
     const confirming = confirmMode();
     // With a target, the window leads with the question and the buttons answer it.
     setConfirmChrome(confirming ? target : null);
     formEl.innerHTML = '';
     // The name field is omitted in confirm mode: the target already answered it.
-    const shown = confirming ? cmd.fields.filter((f) => f.key !== 'name') : cmd.fields;
+    const shown = shownFields(cmd);
     if (!shown.length) {
-      formEl.appendChild(el('p', 'cap', confirming
-        ? 'Nothing else to fill in.'
-        : 'This command takes no arguments.'));
+      formEl.appendChild(el('p', 'cap', 'Nothing else to fill in.'));
     }
     shown.forEach((f) => {
       const wrap = el('div', 'field');
@@ -1077,7 +1135,7 @@
   renderList();
   renderCatalog();
   renderTargetBar();
-  select(COMMANDS[0]);
+  select(COMMANDS[0], false);
 })();
 </script>
 </body>
