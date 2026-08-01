@@ -211,10 +211,16 @@
   .spell-row:hover { background: #ffffff0e; }
   .spell-row:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; background: #ffd1001f; }
   .spell-row[aria-current="true"] { background: #ffd1001a; box-shadow: inset 0 0 0 1px #c8a83866; }
-  .instant-chip {
+  .instant-chip, .new-chip {
     flex: none; align-self: center; font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase;
     color: var(--gm-rim); border: 1px solid #3f3a2a; border-radius: 3px; padding: 1px 5px;
   }
+  .new-chip { color: #7fdc4f; border-color: #2f5a25; }
+  .proposed-note {
+    margin: 0 0 10px; padding: 8px 12px; border-radius: 0 4px 4px 0;
+    border-left: 3px solid #7fdc4f; background: #0c1410; font-size: 12.5px; color: #cfe6c8;
+  }
+  .proposed-note[hidden] { display: none; }
   .spell-row.locked { cursor: not-allowed; }
   .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
   .spell-row.locked .spell-name { color: var(--color-text-muted); }
@@ -308,6 +314,9 @@
     <g id="gl-revive"><path d="M12 4v16M4 12h16" stroke="#7fdc4f" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="8.5" fill="none" stroke="#8a7f5e" stroke-width="1.4"/></g>
     <g id="gl-freeze"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10" stroke="#69ccf0" stroke-width="1.6" stroke-linecap="round"/></g>
     <g id="gl-whois"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#d8c07a" stroke-width="1.7"/><path d="M15.5 15.5L21 21" stroke="#d8c07a" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-unmute"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M16.5 9.5a4 4 0 010 5M19 7a7.5 7.5 0 010 10" fill="none" stroke="#7fdc4f" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="gl-unban"><path d="M8 10V7a4 4 0 017.5-2" fill="none" stroke="#7fdc4f" stroke-width="1.7" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="#d8c07a" stroke-width="1.6"/><path d="M12 13.5v3" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/></g>
+    <g id="gl-unstuck"><path d="M12 14V4M8 8l4-4 4 4" fill="none" stroke="#7fdc4f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18h16" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 21.5l1.5-2M11.5 21.5l1.5-2M16.5 21.5l1.5-2" stroke="#8a7f5e" stroke-width="1.4" stroke-linecap="round"/></g>
     <g id="gl-broadcast"><path d="M4 10v4h4l6 4V6l-6 4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M17.5 8.5a5 5 0 010 7M20 6a8.5 8.5 0 010 12" fill="none" stroke="#d8c07a" stroke-width="1.5" stroke-linecap="round"/></g>
   </defs>
 </svg>
@@ -451,6 +460,7 @@
         <button type="button" class="x-btn" aria-label="Close command window" id="cmd-close">&times;</button>
       </div>
       <p class="confirm-question" id="cmd-question" hidden></p>
+      <p class="proposed-note" id="cmd-proposed" hidden></p>
       <p class="cap" id="cmd-desc" style="margin-top:0"></p>
       <form id="cmd-form" novalidate></form>
       <h3 style="margin:6px 0 6px">Command sent</h3>
@@ -466,9 +476,10 @@
 
   <h2>4. Command catalog</h2>
   <p class="cap">
-    Every row maps one-to-one onto a command <code>parseModerationChatCommand</code>
-    (<code>server/moderation_commands.ts</code>) already understands, so the window is a form over
-    the existing grammar and adds no new server authority.
+    Every row except the three marked <strong>New</strong> maps one-to-one onto a command
+    <code>parseModerationChatCommand</code> (<code>server/moderation_commands.ts</code>) already
+    understands, so its window is a form over the existing grammar and adds no new server authority.
+    The three exceptions are itemized under the catalog.
   </p>
   <div class="scroll-x">
   <table>
@@ -476,6 +487,41 @@
     <tbody id="catalog-body"></tbody>
   </table>
   </div>
+
+  <h3>The three new rows, and what each one costs</h3>
+  <p>
+    Reversals matter as much as sanctions: a moderator who can only punish has half a tool. These
+    three are not equal in cost, though, and the difference is worth stating before anyone plans the
+    work.
+  </p>
+  <ul>
+    <li><strong>Restore Voice</strong> and <strong>Absolve</strong> are cheap. The capability already
+      exists, just not from in-game: the admin dashboard has both routes, and the moderation log
+      already speaks their vocabulary (<code>chat_unmute</code> and <code>unban</code> are existing
+      <code>ModerationAction</code> values in <code>server/moderation_db.ts</code>). Adding the rows
+      means a chat-command parse plus a handler that calls the same service the dashboard calls. No
+      new authority, and no new audit shape.</li>
+    <li><strong>Dislodge</strong> is not cheap, and should not be waved through with the other two.
+      Nothing in <code>src/sim/</code> or <code>server/</code> has the concept of being stuck, so the
+      command is the small half; the real work is deciding where a freed player lands. That resolver
+      has to be deterministic and sim-side like everything else in the tick, which rules out
+      "nudge them until they fall out." The nearest graveyard
+      (<code>src/sim/content/graveyards.ts</code>) is the obvious existing anchor, since it is
+      already the authored answer to "where does a player legitimately reappear."</li>
+  </ul>
+  <div class="callout warn">
+    <p style="margin:0">
+      Dislodge is also the row most likely to be abused as a convenience teleport, so it should stay
+      position-only and be logged like a sanction. If it can put a player anywhere chosen, it stops
+      being an unstuck tool and becomes Call Forth with a friendlier name.
+    </p>
+  </div>
+  <p>
+    Absolve is the one row that ignores the target entirely. A banned account cannot be logged in, so
+    there is never a target to read; it always asks for the name, even while you have someone
+    selected. Restore Voice keeps the target flow, since a silenced player is usually standing right
+    there.
+  </p>
 
   <h2>5. The non-combatant contract</h2>
   <p class="cap">
@@ -631,6 +677,20 @@
       done: (v) => `${v.name} has been silenced for ${v.minutes} minutes.`
     },
     {
+      id: 'unmute', cat: 'Discipline', glyph: 'gl-unmute', name: 'Restore Voice',
+      sub: 'Lift a silence before it expires.',
+      verb: 'restore the voice of',
+      proposed: true,
+      desc: 'Clears an active chat silence early. The lift is written to the moderation log beside the silence it reverses, so the record shows both halves.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
+      ],
+      build: (v) => `/unmute "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} can speak again.`
+    },
+    {
       id: 'kick', cat: 'Discipline', glyph: 'gl-kick', name: 'Banish',
       sub: 'Disconnect a player from the realm.',
       verb: 'disconnect',
@@ -695,6 +755,20 @@
       ],
       build: (v) => `/ban "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
       done: (v) => `${v.name} has been banned.`
+    },
+    {
+      id: 'unban', cat: 'Discipline', glyph: 'gl-unban', name: 'Absolve',
+      sub: 'Reinstate a banned account.',
+      verb: 'reinstate',
+      proposed: true, neverTargeted: true,
+      desc: 'Lifts an account ban and lets the account log in again. A banned account cannot be online, so there is never a target to read: this row always asks for the name.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
+      ],
+      build: (v) => `/unban "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been reinstated.`
     },
     {
       id: 'jail', cat: 'Containment', glyph: 'gl-jail', name: 'Bind',
@@ -779,6 +853,19 @@
       done: (v) => `${v.name} has been summoned.`
     },
     {
+      id: 'unstuck', cat: 'World', glyph: 'gl-unstuck', name: 'Dislodge',
+      sub: 'Free a player trapped in the world.',
+      verb: 'free',
+      proposed: true,
+      desc: 'Moves a player who is wedged in terrain or geometry to the nearest safe ground. Position only: it changes nothing else about the character, and it is not a teleport the player can aim.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/unstuck "${v.name}"`,
+      done: (v) => `${v.name} has been moved to safe ground.`
+    },
+    {
       id: 'goto', cat: 'World', glyph: 'gl-goto', name: 'Stride',
       sub: 'Teleport yourself to a player or coordinate.',
       verb: 'teleport to',
@@ -819,6 +906,14 @@
     }
   ];
 
+  // What each new row would actually cost to build. Every other row is a form over a
+  // chat command the server already parses; these three are not, and say so.
+  const PROPOSED_NOTES = {
+    unmute: 'New command. The capability exists (the dashboard chat-unmute route, audited as chat_unmute); this needs the chat-command parse and a handler calling the same service.',
+    unban: 'New command. The capability exists (the dashboard unban route, audited as unban); this needs the chat-command parse and a handler calling the same service.',
+    unstuck: 'New behavior. Nothing in the sim or server has this concept yet, so it needs a deterministic safe-position resolver as well as the command.',
+  };
+
   const bookEl = document.getElementById('spell-book-body');
   const titleEl = document.getElementById('cmd-title');
   const descEl = document.getElementById('cmd-desc');
@@ -827,6 +922,7 @@
   const permEl = document.getElementById('cmd-perm');
   const toastEl = document.getElementById('cmd-toast');
   const questionEl = document.getElementById('cmd-question');
+  const proposedEl = document.getElementById('cmd-proposed');
   const actionsEl = document.getElementById('cmd-actions');
   const applyBtn = document.getElementById('cmd-apply');
   const cancelBtn = document.getElementById('cmd-cancel');
@@ -898,6 +994,9 @@
       // Structurally argument-free rows are instant whatever the target is, so the
       // chip is safe to paint once instead of on every target change.
       if (!cmd.fields.length && !cmd.confirm) row.appendChild(el('span', 'instant-chip', 'Instant'));
+      // The three rows the server has no chat command for yet, marked so the mockup
+      // never implies they already exist.
+      if (cmd.proposed) row.appendChild(el('span', 'new-chip', 'New'));
       row.addEventListener('click', () => { select(cmd, true); });
       const item = document.createElement('li');
       item.appendChild(row);
@@ -931,19 +1030,23 @@
     return out;
   }
 
-  /** A command acts on a player when it carries a `name` field. */
-  function actsOnPlayer(cmd) {
-    return cmd.fields.some((f) => f.key === 'name');
+  /**
+   * A command can be aimed at the target when it carries a `name` field, unless it
+   * acts on someone who cannot be standing in front of you. A banned account is
+   * never online, so Absolve always asks for the name however you got here.
+   */
+  function targetable(cmd) {
+    return !cmd.neverTargeted && cmd.fields.some((f) => f.key === 'name');
   }
 
-  /** With a target selected, a player-facing command asks you to confirm, not to type. */
+  /** With a target selected, a targetable command asks you to confirm, not to type. */
   function confirmMode() {
-    return target !== null && actsOnPlayer(active);
+    return target !== null && targetable(active);
   }
 
   /** The fields the window would actually render for `cmd` right now. */
   function shownFields(cmd) {
-    const confirming = target !== null && actsOnPlayer(cmd);
+    const confirming = target !== null && targetable(cmd);
     return confirming ? cmd.fields.filter((f) => f.key !== 'name') : cmd.fields;
   }
 
@@ -954,7 +1057,7 @@
    */
   function isInstant(cmd) {
     if (cmd.confirm) return false;
-    if (target !== null && actsOnPlayer(cmd)) return false;
+    if (target !== null && targetable(cmd)) return false;
     return shownFields(cmd).length === 0;
   }
 
@@ -1030,6 +1133,8 @@
     descEl.textContent = cmd.desc;
     permEl.innerHTML = 'Requires <code>' + cmd.perm + '</code>' +
       (cmd.dev ? ', and the world-command set (dev builds only).' : '.');
+    proposedEl.hidden = !cmd.proposed;
+    if (cmd.proposed) proposedEl.textContent = PROPOSED_NOTES[cmd.id];
     pending = null;
     if (isInstant(cmd)) {
       renderInstant(cmd, fire === true);
@@ -1116,7 +1221,8 @@
         ? cmd.fields.map((f) => f.label).join(', ')
         : 'none';
       tr.innerHTML =
-        '<td><strong>' + cmd.name + '</strong><br><span style="color:#998d6a;font-size:12.5px">' + cmd.sub + '</span></td>' +
+        '<td><strong>' + cmd.name + '</strong>' + (cmd.proposed ? ' <span class="new-chip">New</span>' : '') +
+        '<br><span style="color:#998d6a;font-size:12.5px">' + cmd.sub + '</span></td>' +
         '<td>' + fields + '</td>' +
         '<td><code>' + cmd.build(placeholdersFor(cmd)).replace(/</g, '&lt;') + '</code></td>' +
         '<td><code>' + cmd.perm + '</code></td>';
