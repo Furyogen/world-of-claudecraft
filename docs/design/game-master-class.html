@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Game Master class (interactive mockup)</title>
+<style>
+  /* Tokens lifted from src/styles/tokens.css so the mockup reads as the real HUD.
+     Cinzel / Alegreya Sans are not embedded here, so the stacks fall through to
+     their shipped serif / sans fallbacks. */
+  :root {
+    --gold: #ffd100;
+    --gold-dim: #c8a838;
+    --border: #6f5a2a;
+    --panel-base: #15151f;
+    --panel-bg: linear-gradient(170deg, #15151ff2 0%, #0b0b12f2 60%, #08080df2 100%);
+    --font-display: "Cinzel", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-ui: "Alegreya Sans", "Segoe UI", system-ui, "Helvetica Neue", sans-serif;
+    --color-bg-dark: #08080d;
+    --color-bg-input: #0a0a0f;
+    --color-border-default: #4e3d1d;
+    --color-border-focus: #c8a838;
+    --color-text-light: #f0ebd8;
+    --color-text-muted: #998d6a;
+    --color-text-error: #ff8f85;
+    --color-hp: #1eb838;
+    --color-mana: #2b7bd4;
+    --color-debuff: #c0392b;
+    /* The class color under test. */
+    --gm-black: #000000;
+    /* Pure black is invisible against the HUD, so every text/edge use of the
+       class color pairs it with this gold rim. See "Contrast" in the notes. */
+    --gm-rim: #d8c07a;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 700px at 50% -10%, #191a24 0%, #0a0a10 55%, #05050a 100%);
+    color: var(--color-text-light);
+    font: 16px/1.55 var(--font-ui);
+  }
+  main { max-width: 1180px; margin: 0 auto; padding: 40px 20px 110px; }
+  h1 { font-family: var(--font-display); font-size: 30px; line-height: 1.15; margin: 0 0 6px; color: #fff; letter-spacing: 0.5px; }
+  h2 {
+    font-family: var(--font-display); font-size: 20px; margin: 54px 0 6px; color: var(--gold);
+    border-bottom: 1px solid #2a2437; padding-bottom: 8px; letter-spacing: 0.4px;
+  }
+  h3 { font-family: var(--font-display); font-size: 15px; margin: 26px 0 8px; color: #fff; }
+  p { max-width: 78ch; }
+  .lede { color: var(--color-text-muted); font-size: 16.5px; max-width: 78ch; }
+  .cap { color: var(--color-text-muted); font-size: 13.5px; margin: 6px 0 16px; max-width: 78ch; }
+  code {
+    background: #0d0d14; border: 1px solid #2c2740; border-radius: 4px; padding: 1px 5px;
+    font: 13.5px/1.4 "SF Mono", Menlo, Consolas, monospace; color: #e2d9b7;
+  }
+  ul { padding-left: 20px; max-width: 78ch; } li { margin: 5px 0; }
+  a { color: var(--gold-dim); }
+
+  .badge {
+    display: inline-block; font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase;
+    border: 1px solid var(--border); border-radius: 999px; padding: 3px 12px; color: var(--color-text-muted);
+  }
+
+  /* ---------- shared panel chrome (mirrors .window.panel) ---------- */
+  .panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 10px 34px #000000a8, inset 0 0 0 1px #ffffff08;
+    padding: 12px;
+  }
+  .panel-title {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin: -12px -12px 10px; padding: 9px 12px;
+    background: var(--panel-base);
+    border-bottom: 1px solid var(--border);
+    border-radius: 6px 6px 0 0;
+    font-family: var(--font-display); font-size: 14px; color: var(--gold); letter-spacing: 0.4px;
+  }
+  .panel-title .sub { color: var(--color-text-muted); font-family: var(--font-ui); font-size: 11px; letter-spacing: 0; }
+  .x-btn {
+    background: #1b1b26; color: var(--color-text-muted); border: 1px solid var(--color-border-default);
+    border-radius: 4px; min-width: 40px; min-height: 40px; font: 16px/1 var(--font-ui); cursor: pointer;
+  }
+  .x-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+  .x-btn:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+  /* ---------- 1. class select ---------- */
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
+  .class-tile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 12px 8px 10px; border-radius: 6px; text-align: center;
+    background: #10101a; border: 1px solid #2a2438; cursor: pointer;
+    font: inherit; color: inherit;
+  }
+  .class-tile:hover { border-color: var(--gold-dim); background: #161622; }
+  .class-tile:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+  .class-swatch {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--c); border: 2px solid #00000080;
+    box-shadow: inset 0 2px 6px #ffffff33, 0 2px 6px #0009;
+  }
+  .class-tile .cname { font-family: var(--font-display); font-size: 12.5px; color: #fff; }
+  /* The staff tile: pure black fill needs the gold rim to be visible at all. */
+  .class-tile.gm { border-color: var(--gm-rim); background: #0b0b11; box-shadow: 0 0 22px #d8c07a26; }
+  .class-tile.gm .class-swatch {
+    background: var(--gm-black);
+    border-color: var(--gm-rim);
+    box-shadow: inset 0 0 0 1px #ffffff1a, 0 0 12px #d8c07a44;
+  }
+  .class-tile.gm .cname { color: var(--gm-rim); }
+  .gate-note {
+    grid-column: 1 / -1; display: flex; gap: 10px; align-items: flex-start;
+    border-left: 3px solid var(--gm-rim); background: #0e0e15; border-radius: 0 6px 6px 0;
+    padding: 10px 14px; font-size: 13.5px; color: var(--color-text-muted);
+  }
+  .gate-note strong { color: var(--color-text-light); font-weight: 600; }
+
+  /* ---------- 2. in-world chrome strip ---------- */
+  .world-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; align-items: start; }
+  .unit-frame {
+    display: flex; gap: 10px; align-items: center; padding: 8px;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 6px;
+  }
+  .portrait {
+    width: 54px; height: 54px; border-radius: 50%; flex: none;
+    background: #0b0b11; border: 2px solid var(--class-color, var(--border));
+    display: grid; place-items: center;
+  }
+  /* Pure black borders vanish, so a class-colored frame gets the gold rim behind it. */
+  .portrait.gm { border-color: var(--gm-black); box-shadow: 0 0 0 1px var(--gm-rim), inset 0 0 14px #000; }
+  .unit-meta { min-width: 0; flex: 1; display: block; }
+  .unit-name { font-family: var(--font-display); font-size: 14px; color: #fff; display: flex; align-items: baseline; gap: 6px; }
+  .gm-tag {
+    font-family: var(--font-ui); font-size: 10.5px; letter-spacing: 0.7px; text-transform: uppercase;
+    background: var(--gm-black); color: var(--gm-rim); border: 1px solid var(--gm-rim);
+    border-radius: 3px; padding: 1px 5px;
+  }
+  .bar { display: block; height: 11px; border-radius: 3px; background: #000; border: 1px solid #00000090; margin-top: 5px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; }
+  .bar.hp > i { width: 100%; background: var(--color-hp); }
+  .bar-label { display: block; font-size: 10.5px; color: var(--color-text-muted); margin-top: 4px; }
+  /* A non-combatant frame carries state chips where a fighter carries bars. */
+  .state-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+  .state-chip {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    border: 1px solid #3a3348; border-radius: 3px; padding: 2px 6px; color: var(--color-text-muted);
+    background: #0c0c13;
+  }
+  .state-chip.on { border-color: var(--gm-rim); color: var(--gm-rim); background: var(--gm-black); }
+  .bar-slot {
+    display: block; margin-top: 5px; padding: 4px 8px; border-radius: 3px;
+    border: 1px dashed #332d42; color: #6b6480; font-size: 10.5px; letter-spacing: 0.3px;
+  }
+  .detail-strip { display: flex; flex-wrap: wrap; gap: 0 22px; margin: 12px 0 0; font-size: 13px; }
+  .detail-strip div { min-width: 130px; }
+  .detail-strip dt { color: var(--color-text-muted); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .detail-strip dd { margin: 2px 0 0; color: var(--color-text-light); font-family: var(--font-display); font-size: 13.5px; }
+  .detail-strip dd.none { color: #6b6480; font-family: var(--font-ui); }
+
+  .chatlog { font-size: 13.5px; line-height: 1.65; }
+  .chatlog div { padding: 1px 0; }
+  .chan { color: #b9b6ff; }
+  .say { color: #f0ebd8; }
+  .sys { color: var(--gold-dim); }
+  .err { color: var(--color-text-error); }
+  /* A pure-black player name over the dark chat panel is unreadable, so the name
+     renders as a black chip with the gold rim instead of black glyphs. */
+  .name-gm {
+    background: var(--gm-black); color: #fff; border: 1px solid var(--gm-rim);
+    border-radius: 3px; padding: 0 5px; font-family: var(--font-display); font-size: 12.5px;
+  }
+  .name-warrior { color: #c79c6e; } .name-mage { color: #69ccf0; }
+
+  /* ---------- 3. spellbook + command window ---------- */
+  .book-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr); gap: 18px; align-items: start; }
+  @media (max-width: 900px) { .book-layout { grid-template-columns: minmax(0, 1fr); } }
+
+  .book-note {
+    font-size: 12.5px; color: var(--color-text-muted); border-left: 2px solid var(--gm-rim);
+    padding: 4px 0 4px 10px; margin: 0 0 10px;
+  }
+  .cat-head {
+    font-family: var(--font-display); font-size: 11.5px; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--gold-dim); margin: 14px 0 4px; padding-bottom: 4px;
+    border-bottom: 1px solid #2a2438; font-weight: 400;
+  }
+  .cat-head:first-of-type { margin-top: 0; }
+  /* A real ul/li list, not a div with role="list". */
+  .spell-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 2px;
+    list-style: none; margin: 0; padding: 0;
+  }
+  .spell-list > li { display: flex; min-width: 0; }
+  /* Declared before the .spell-row.locked descendants below so the cascade reads in
+     ascending specificity order. */
+  .spell-icon {
+    width: 34px; height: 34px; border-radius: 5px; flex: none;
+    background: radial-gradient(circle at 32% 26%, #23232f 0%, #08080c 78%);
+    border: 2px solid var(--gm-rim); display: grid; place-items: center;
+  }
+  .spell-icon svg { width: 22px; height: 22px; }
+  .spell-text { min-width: 0; flex: 1; display: block; }
+  .spell-name { display: block; font-size: 13px; color: #fff; font-family: var(--font-display); }
+  .spell-sub { display: block; font-size: 11px; color: var(--color-text-muted); overflow-wrap: anywhere; }
+  .spell-row {
+    display: flex; gap: 10px; min-height: 46px; padding: 6px; border-radius: 4px; align-items: center;
+    background: none; border: 0; width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer;
+  }
+  .spell-row:hover { background: #ffffff0e; }
+  .spell-row:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; background: #ffd1001f; }
+  .spell-row[aria-current="true"] { background: #ffd1001a; box-shadow: inset 0 0 0 1px #c8a83866; }
+  .instant-chip, .new-chip {
+    flex: none; align-self: center; font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase;
+    color: var(--gm-rim); border: 1px solid #3f3a2a; border-radius: 3px; padding: 1px 5px;
+  }
+  .new-chip { color: #7fdc4f; border-color: #2f5a25; }
+  .proposed-note {
+    margin: 0 0 10px; padding: 8px 12px; border-radius: 0 4px 4px 0;
+    border-left: 3px solid #7fdc4f; background: #0c1410; font-size: 12.5px; color: #cfe6c8;
+  }
+  .proposed-note[hidden] { display: none; }
+  .spell-row.locked { cursor: not-allowed; }
+  .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
+  .spell-row.locked .spell-name { color: var(--color-text-muted); }
+
+  /* the target strip that drives which view a row opens */
+  .target-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: #10101a; border: 1px solid #2a2438; border-radius: 6px;
+    padding: 8px 12px; margin: 0 0 14px;
+  }
+  .target-label { font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase; color: var(--color-text-muted); }
+  .target-name { font-family: var(--font-display); font-size: 14px; color: #fff; }
+  .target-name.none { color: #6b6480; font-family: var(--font-ui); font-size: 13px; }
+  .target-hint { font-size: 12px; color: var(--color-text-muted); }
+
+  /* the parameter window a command opens */
+  .cmd-window { position: sticky; top: 18px; }
+  .confirm-question {
+    font-family: var(--font-display); font-size: 16px; line-height: 1.4; color: #fff;
+    margin: 0 0 10px; padding: 10px 12px; border-radius: 4px;
+    background: var(--gm-black); border: 1px solid var(--gm-rim);
+  }
+  .confirm-question .who { color: var(--gm-rim); }
+  .confirm-question[hidden] { display: none; }
+  .btn.yes { background: var(--gm-black); color: var(--gm-rim); border-color: var(--gm-rim); }
+  .btn.yes:hover { background: #111; color: #fff; }
+  .btn.danger { border-color: #8c3b32; color: #ffb3aa; }
+  .btn.danger:hover { background: #1a0e0d; border-color: var(--color-text-error); color: #fff; }
+  .field { margin: 0 0 12px; }
+  .field label { display: block; font-size: 12px; letter-spacing: 0.4px; color: var(--color-text-muted); margin-bottom: 4px; }
+  .field input, .field textarea, .field select {
+    width: 100%; background: var(--color-bg-input); color: var(--color-text-light);
+    border: 1px solid var(--color-border-default); border-radius: 4px; padding: 9px 10px;
+    /* >=16px is the mobile anti-zoom floor from src/ui/CLAUDE.md. */
+    font: 16px/1.35 var(--font-ui);
+  }
+  .field input:focus-visible, .field textarea:focus-visible {
+    outline: 2px solid var(--color-border-focus); outline-offset: 1px; border-color: var(--gold-dim);
+  }
+  .field .hint { font-size: 11.5px; color: #7d7458; margin-top: 4px; }
+  .cmd-preview {
+    background: #06060b; border: 1px solid #2c2740; border-radius: 4px; padding: 9px 10px;
+    font: 13px/1.5 "SF Mono", Menlo, Consolas, monospace; color: #e2d9b7; overflow-x: auto; white-space: pre;
+  }
+  .cmd-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  /* An explicit display beats the UA [hidden] rule, so restate it. */
+  .cmd-actions[hidden] { display: none; }
+  .btn {
+    min-height: 40px; padding: 0 18px; border-radius: 4px; cursor: pointer;
+    font: 14px/1 var(--font-display); letter-spacing: 0.5px;
+    background: #1b1b26; color: var(--color-text-light); border: 1px solid var(--color-border-default);
+  }
+  .btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .btn:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+  .btn.primary { background: var(--gm-black); color: var(--gm-rim); border-color: var(--gm-rim); }
+  .btn.primary:hover { background: #111; color: #fff; }
+  .perm-line { font-size: 11.5px; color: var(--color-text-muted); margin-top: 12px; }
+  .perm-line code { font-size: 11.5px; }
+  .toast {
+    margin-top: 12px; border-left: 3px solid var(--color-hp); background: #0c1410;
+    padding: 8px 12px; border-radius: 0 4px 4px 0; font-size: 13px; color: #cfe6c8;
+  }
+  .toast[hidden] { display: none; }
+
+  /* ---------- tables / notes ---------- */
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th, td { border: 1px solid #2a2438; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #13131c; color: #fff; font-weight: 600; font-family: var(--font-display); font-size: 13px; }
+  td code { white-space: nowrap; }
+  .callout { border-left: 3px solid var(--gold-dim); background: #12121a; padding: 10px 16px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+  .callout.warn { border-left-color: var(--color-debuff); }
+  .scroll-x { overflow-x: auto; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none; animation: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="gl-mute"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 8l6 8M22 8l-6 8" stroke="#ff8f85" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-kick"><circle cx="9" cy="6" r="2.6" fill="none" stroke="#d8c07a" stroke-width="1.6"/><path d="M9 9v6l-3 5M9 12l4 3 1 5" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linecap="round"/><path d="M17 7l4 4-4 4" fill="none" stroke="#ff8f85" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="gl-kill"><path d="M12 3l7 4v6c0 4-3 7-7 8-4-1-7-4-7-8V7z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 10l6 6M15 10l-6 6" stroke="#ff8f85" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-rename"><path d="M4 17l9-9 3 3-9 9H4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 5l3-2 3 3-2 3z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 21h16" stroke="#8a7f5e" stroke-width="1.4" stroke-linecap="round"/></g>
+    <g id="gl-ban"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#ff8f85" stroke-width="1.8"/><path d="M6.5 6.5l11 11" stroke="#ff8f85" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-suspend"><path d="M7 3h10M7 21h10M8 3c0 4 8 5 8 9s-8 5-8 9" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linecap="round"/><path d="M16 3c0 4-8 5-8 9s8 5 8 9" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="gl-jail"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="#d8c07a" stroke-width="1.6"/><path d="M9 4v16M15 4v16" stroke="#d8c07a" stroke-width="1.5"/></g>
+    <g id="gl-unjail"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="#8a7f5e" stroke-width="1.5"/><path d="M9 4v16" stroke="#8a7f5e" stroke-width="1.4"/><path d="M13 12l3 3 6-6" fill="none" stroke="#7fdc4f" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="gl-spectate"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z" fill="none" stroke="#d8c07a" stroke-width="1.6"/><circle cx="12" cy="12" r="2.8" fill="none" stroke="#d8c07a" stroke-width="1.6"/></g>
+    <g id="gl-unspectate"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z" fill="none" stroke="#8a7f5e" stroke-width="1.5"/><path d="M4 20L20 4" stroke="#d8c07a" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-summon"><path d="M12 20c4-3 7-6 7-9a7 7 0 10-14 0c0 3 3 6 7 9z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 7v6M9 10h6" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/></g>
+    <g id="gl-goto"><path d="M3 11l18-7-7 18-2.5-8z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/></g>
+    <g id="gl-revive"><path d="M12 4v16M4 12h16" stroke="#7fdc4f" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="8.5" fill="none" stroke="#8a7f5e" stroke-width="1.4"/></g>
+    <g id="gl-freeze"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10" stroke="#69ccf0" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="gl-whois"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#d8c07a" stroke-width="1.7"/><path d="M15.5 15.5L21 21" stroke="#d8c07a" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="gl-gm-body"><path d="M12 3a2.6 2.6 0 110 5.2A2.6 2.6 0 0112 3z" fill="none" stroke="#d8c07a" stroke-width="1.5"/><path d="M7.5 21c0-5.2 2-8.4 4.5-8.4s4.5 3.2 4.5 8.4z" fill="none" stroke="#d8c07a" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 14.5c1.6-1 3.2-1 4.8 0v4.2c-1.6-1-3.2-1-4.8 0z" fill="none" stroke="#7fdc4f" stroke-width="1.3" stroke-linejoin="round"/></g>
+    <g id="gl-unmute"><path d="M4 9h4l5-4v14l-5-4H4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M16.5 9.5a4 4 0 010 5M19 7a7.5 7.5 0 010 10" fill="none" stroke="#7fdc4f" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g id="gl-unban"><path d="M8 10V7a4 4 0 017.5-2" fill="none" stroke="#7fdc4f" stroke-width="1.7" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="#d8c07a" stroke-width="1.6"/><path d="M12 13.5v3" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/></g>
+    <g id="gl-unstuck"><path d="M12 14V4M8 8l4-4 4 4" fill="none" stroke="#7fdc4f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18h16" stroke="#d8c07a" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 21.5l1.5-2M11.5 21.5l1.5-2M16.5 21.5l1.5-2" stroke="#8a7f5e" stroke-width="1.4" stroke-linecap="round"/></g>
+    <g id="gl-broadcast"><path d="M4 10v4h4l6 4V6l-6 4z" fill="none" stroke="#d8c07a" stroke-width="1.6" stroke-linejoin="round"/><path d="M17.5 8.5a5 5 0 010 7M20 6a8.5 8.5 0 010 12" fill="none" stroke="#d8c07a" stroke-width="1.5" stroke-linecap="round"/></g>
+  </defs>
+</svg>
+
+<main>
+  <span class="badge">Mockup, not implemented</span>
+  <h1>Game Master: a staff-only tenth class</h1>
+  <p class="lede">
+    A tenth <code>PlayerClass</code> that only an account carrying staff roles can roll.
+    <strong>Game Masters are not fighters.</strong> They have no health, no resource, no level, no
+    gear, and no attack: nothing in the combat system can address them, and they cannot address it.
+    Their spellbook is the moderation command set, and casting an entry opens a parameter window
+    that emits the exact chat command the server already parses today. The class color is pure
+    black, <code>#000000</code>.
+  </p>
+
+  <h2>1. Character creation</h2>
+  <p class="cap">
+    The staff tile appears at the end of the class grid, and only for an account the auth response
+    marks as staff. Everyone else never receives the tile in their payload, so it cannot be
+    revealed by editing the DOM.
+  </p>
+  <div class="panel">
+    <div class="panel-title"><span>Choose a class</span><span class="sub">Account: ashvane, roles: admin</span></div>
+    <div class="class-grid">
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#c79c6e"></span><span class="cname">Warrior</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#f58cba"></span><span class="cname">Paladin</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#abd473"></span><span class="cname">Hunter</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#fff569"></span><span class="cname">Rogue</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#fffff0"></span><span class="cname">Priest</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#0070de"></span><span class="cname">Shaman</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#69ccf0"></span><span class="cname">Mage</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#9482c9"></span><span class="cname">Warlock</span></button>
+      <button type="button" class="class-tile"><span class="class-swatch" style="--c:#ff7d0a"></span><span class="cname">Druid</span></button>
+      <button type="button" class="class-tile gm"><span class="class-swatch"></span><span class="cname">Game Master</span></button>
+      <div class="gate-note">
+        <span>
+          <strong>Game Master</strong> requires an account with <code>is_admin</code> and at least one
+          of <code>moderation.act</code>, <code>moderation.spectate</code>, or
+          <code>content.moderate</code>. The tile is omitted server-side for every other account, and
+          the create-character route re-checks the same roles before it writes the row.
+        </span>
+      </div>
+    </div>
+    <dl class="detail-strip">
+      <div><dt>Role</dt><dd>Administration</dd></div>
+      <div><dt>Resource</dt><dd class="none">None</dd></div>
+      <div><dt>Armor</dt><dd class="none">None</dd></div>
+      <div><dt>Weapons</dt><dd class="none">None</dd></div>
+      <div><dt>Combat</dt><dd class="none">Does not fight</dd></div>
+      <div><dt>Model</dt><dd>Warlock, in black</dd></div>
+    </dl>
+  </div>
+  <p class="cap" style="margin-top:10px">
+    Where the other nine classes show stat bars and a starting kit, this one shows nothing to show.
+    The class-details panel deliberately renders the empty state rather than a row of zeroes: a
+    Game Master has no stats, not stats that happen to be zero.
+  </p>
+
+  <h2>2. In-world chrome</h2>
+  <p class="cap">
+    Pure black is the class color everywhere the palette is read: portrait ring, nameplate,
+    party frame dot, minimap blip, chat name. On the dark HUD that reads as absence, so every
+    text-bearing surface pairs the black with a thin gold rim (see the contrast note below). The
+    unit frame is the first place the non-combatant rule shows up.
+  </p>
+  <div class="world-strip">
+    <div>
+      <div class="unit-frame">
+        <span class="portrait gm"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><use href="#gl-gm-body"/></svg></span>
+        <span class="unit-meta">
+          <span class="unit-name">Ashvane <span class="gm-tag">GM</span></span>
+          <span class="state-row">
+            <span class="state-chip">Non-combatant</span>
+            <span class="state-chip">Untargetable</span>
+            <span class="state-chip on">Visible</span>
+          </span>
+          <span class="bar-slot">No health bar. No resource bar. No level.</span>
+          <span class="bar-label">Presence and spectate state are the only things this frame tracks.</span>
+        </span>
+      </div>
+      <p class="cap" style="margin-top:10px">
+        The frame keeps the shape every unit frame has, so the HUD needs no special case, but the two
+        bar slots are empty by design. A Game Master has nothing to deplete: the only live state
+        worth a player's or an operator's attention is whether they are currently visible and whether
+        they are spectating someone.
+      </p>
+      <p class="cap">
+        For comparison, the frame below is what a fighter shows in the same space.
+      </p>
+      <div class="unit-frame">
+        <span class="portrait" style="--class-color:#c79c6e"></span>
+        <span class="unit-meta">
+          <span class="unit-name">Thornbeak</span>
+          <span class="bar hp"><i></i></span>
+          <span class="bar-label">Level 18 Warrior &middot; 1240 / 1240</span>
+        </span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><span>Chat</span><span class="sub">General</span></div>
+      <div class="chatlog">
+        <div><span class="chan">[General]</span> <span class="name-warrior">Thornbeak</span>: <span class="say">anyone selling copper bars</span></div>
+        <div><span class="chan">[General]</span> <span class="name-mage">Fenwick</span>: <span class="say">check the auction house</span></div>
+        <div><span class="chan">[General]</span> <span class="name-gm">Ashvane</span>: <span class="say">Keep trade chat in trade, please.</span></div>
+        <div class="sys">Thornbeak has been silenced for 30 minutes. Reason: Spamming trade chat.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The body: the warlock, in black</h3>
+  <p>
+    The class gets no bespoke model. It reuses the warlock's, which is the right borrow rather than
+    just the cheap one: <code>player_warlock</code> in
+    <code>src/render/characters/manifest.ts</code> is a robed caster carrying an <em>open book</em> in
+    the left hand (<code>spellbook_open.glb</code> on <code>handslot.l</code>). A figure in dark robes
+    holding an open book is already the shape of someone reading the rules at you, which is exactly
+    what this class is. The wand in the right hand is the piece to reconsider, since a Game Master
+    has nothing to cast.
+  </p>
+  <p>
+    Mechanically it is one <code>VISUALS</code> entry, <code>player_gamemaster</code>, taking the
+    warlock's body and clips and swapping its tint (<code>0x8d5fd3</code>, the warlock purple) for
+    the class color.
+  </p>
+  <div class="callout warn">
+    <p style="margin:0">
+      <strong>The trap:</strong> <code>visualKeyFor</code> falls back to <code>player_warrior</code>
+      for any <code>player_&lt;templateId&gt;</code> it does not find. A tenth class with no
+      <code>VISUALS</code> entry does not fail loudly, it silently walks around dressed as a warrior
+      in plate. The entry is not optional polish; without it the feature looks broken in exactly the
+      way nobody files a bug for.
+    </p>
+  </div>
+  <p>
+    One number needs deciding rather than copying. The warlock tints at
+    <code>tintStrength: 0.45</code>, which on a purple reads as a coloured robe. Pure black at 0.45
+    is a dark grey, not black; pushing it toward 1.0 gets a true black silhouette but flattens the
+    robe's folds to nothing under the game's lighting. This is the same tension the HUD has with
+    <code>#000000</code>, and the same answer applies: keep enough material response that the shape
+    survives, and let the rim and the nameplate carry the "pure black" reading.
+  </p>
+
+  <h2>3. Spellbook</h2>
+  <p class="cap">
+    Same window, same grid, same row shape as the live spellbook (<code>src/ui/spellbook_view.ts</code>
+    plus <code>spellbook_window.ts</code>), with the ability rows swapped for command rows and the
+    pinned Attack row dropped. What a row opens depends on whether you have a target, exactly like
+    an ordinary ability: <strong>with a target it asks you to confirm, without one it asks who.</strong>
+    Toggle the target below and select a row to see both.
+  </p>
+  <div class="target-bar">
+    <span class="target-label">Target</span>
+    <span class="target-name" id="target-name">Thornbeak</span>
+    <button type="button" class="btn" id="target-toggle">Clear target</button>
+    <span class="target-hint" id="target-hint"></span>
+  </div>
+  <div class="book-layout">
+    <div class="panel">
+      <div class="panel-title">
+        <span>Spellbook <span class="sub">Game Master</span></span>
+        <button type="button" class="x-btn" aria-label="Close spellbook">&times;</button>
+      </div>
+      <p class="book-note">
+        This class has no combat abilities and no Attack row. Every entry is an authority command:
+        selecting one opens its parameter window instead of starting a cast bar, or fires straight
+        away when it has nothing to ask. None of them has a range, a cast time, or a cooldown.
+      </p>
+      <div id="spell-book-body"></div>
+    </div>
+
+    <div class="panel cmd-window" id="cmd-window">
+      <div class="panel-title">
+        <span id="cmd-title">Silence</span>
+        <button type="button" class="x-btn" aria-label="Close command window" id="cmd-close">&times;</button>
+      </div>
+      <p class="confirm-question" id="cmd-question" hidden></p>
+      <p class="proposed-note" id="cmd-proposed" hidden></p>
+      <p class="cap" id="cmd-desc" style="margin-top:0"></p>
+      <form id="cmd-form" novalidate></form>
+      <h3 style="margin:6px 0 6px">Command sent</h3>
+      <div class="cmd-preview" id="cmd-preview">/mute</div>
+      <div class="cmd-actions" id="cmd-actions">
+        <button type="button" class="btn primary" id="cmd-apply">Apply</button>
+        <button type="button" class="btn" id="cmd-cancel">Cancel</button>
+      </div>
+      <p class="perm-line" id="cmd-perm"></p>
+      <div class="toast" id="cmd-toast" hidden role="status"></div>
+    </div>
+  </div>
+
+  <h2>4. Command catalog</h2>
+  <p class="cap">
+    Every row except the three marked <strong>New</strong> maps one-to-one onto a command
+    <code>parseModerationChatCommand</code> (<code>server/moderation_commands.ts</code>) already
+    understands, so its window is a form over the existing grammar and adds no new server authority.
+    The three exceptions are itemized under the catalog.
+  </p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>Spellbook row</th><th>Fields</th><th>Emits</th><th>Permission</th></tr></thead>
+    <tbody id="catalog-body"></tbody>
+  </table>
+  </div>
+
+  <h3>The three new rows, and what each one costs</h3>
+  <p>
+    Reversals matter as much as sanctions: a moderator who can only punish has half a tool. These
+    three are not equal in cost, though, and the difference is worth stating before anyone plans the
+    work.
+  </p>
+  <ul>
+    <li><strong>Restore Voice</strong> and <strong>Absolve</strong> are cheap. The capability already
+      exists, just not from in-game: the admin dashboard has both routes, and the moderation log
+      already speaks their vocabulary (<code>chat_unmute</code> and <code>unban</code> are existing
+      <code>ModerationAction</code> values in <code>server/moderation_db.ts</code>). Adding the rows
+      means a chat-command parse plus a handler that calls the same service the dashboard calls. No
+      new authority, and no new audit shape.</li>
+    <li><strong>Dislodge</strong> is not cheap, and should not be waved through with the other two.
+      Nothing in <code>src/sim/</code> or <code>server/</code> has the concept of being stuck, so the
+      command is the small half; the real work is deciding where a freed player lands. That resolver
+      has to be deterministic and sim-side like everything else in the tick, which rules out
+      "nudge them until they fall out." The nearest graveyard
+      (<code>src/sim/content/graveyards.ts</code>) is the obvious existing anchor, since it is
+      already the authored answer to "where does a player legitimately reappear."</li>
+  </ul>
+  <div class="callout warn">
+    <p style="margin:0">
+      Dislodge is also the row most likely to be abused as a convenience teleport, so it should stay
+      position-only and be logged like a sanction. If it can put a player anywhere chosen, it stops
+      being an unstuck tool and becomes Call Forth with a friendlier name.
+    </p>
+  </div>
+  <p>
+    Absolve is the one row that ignores the target entirely. A banned account cannot be logged in, so
+    there is never a target to read; it always asks for the name, even while you have someone
+    selected. Restore Voice keeps the target flow, since a silenced player is usually standing right
+    there.
+  </p>
+
+  <h2>5. The non-combatant contract</h2>
+  <p class="cap">
+    Game Masters do not fight. That is a hard rule, not a balance choice, so it is worth writing as
+    a list of things the sim must be able to state plainly. Every line below is testable.
+  </p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>Rule</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td>Cannot attack</td><td>No auto-attack, no abilities that deal damage or healing. The spellbook holds commands, so there is nothing to point at a target.</td></tr>
+      <tr><td>Cannot be attacked</td><td>Not a valid target for any hostile ability, player or mob. This is stronger than invulnerability: the target-selection path never offers them, so a player cannot even begin a cast.</td></tr>
+      <tr><td>Generates no threat</td><td>Mobs do not acquire, path to, or leash toward a Game Master. They are not in the aggro system at all.</td></tr>
+      <tr><td>No health, resource, or level</td><td>Nothing to deplete and nothing to grow. No XP, no gear, no talents, no stat block.</td></tr>
+      <tr><td>No loot or credit</td><td>Never rolls on loot, never takes quest or deed credit, never counts toward a group size or a dungeon lockout.</td></tr>
+      <tr><td>Excluded from every ladder</td><td>Not queueable for arena, Fiesta, Yumi, dungeon finder, or battlegrounds, and never appears on a leaderboard.</td></tr>
+      <tr><td>Commands are not spells</td><td>A command has no cast time, no range, no line of sight, and no cooldown. It is rate limited and written to the moderation log, which is a different thing from a resource cost.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <p style="margin:0">
+      Today a staff character is an ordinary combatant with <code>gm</code> set: invulnerable in
+      <code>src/sim/combat/damage.ts</code>, and shoved to the level cap on join in
+      <code>server/game.ts</code> so it is not one-shot. Both of those are patches over the wrong
+      default. If the class is outside combat, invulnerability becomes a consequence rather than the
+      mechanism, and the level-cap shove can go away entirely: there is no level to protect.
+    </p>
+  </div>
+
+  <h2>6. Notes and open questions</h2>
+
+  <h3>Contrast: pure black on a dark HUD</h3>
+  <div class="callout warn">
+    <p style="margin:0">
+      <code>#000000</code> against the panel base <code>#15151f</code> is roughly 1.3:1, far under the
+      WCAG 2.2 AA 4.5:1 the HUD chrome contract requires. The mockup keeps the class color exactly
+      <code>#000000</code> for fills (swatch, portrait ring, minimap blip) and pairs it with a
+      <code>#d8c07a</code> rim wherever it carries text or an edge, the same trick Priest
+      (<code>#fffff0</code>) needs in the opposite direction. The alternative, lightening the class
+      color itself, is not on the table: the request pins pure black.
+    </p>
+  </div>
+
+  <h3>Why it is a class and not a toggle</h3>
+  <ul>
+    <li>Staff already have a <code>gm</code> entity flag and an admin dashboard. The class is what
+      makes the authority visible in-world: the black nameplate is a uniform, so players can see
+      who acted.</li>
+    <li>Reusing the class seam means the spellbook, action bar, keybinds, and macros work with no
+      new UI plumbing. A command row drags onto the action bar exactly like an ability.</li>
+    <li>It also gives the non-combatant rule somewhere to live. As a toggle on a Warrior, "does not
+      fight" is a pile of exceptions scattered through the combat code. As a class, it is one
+      predicate the combat, threat, loot, and queue paths each ask once.</li>
+  </ul>
+
+  <h3>Two ways a row opens, decided by the target</h3>
+  <p>
+    A command that acts on a player (any row with a Name field) reads the target the same way an
+    ordinary ability does:
+  </p>
+  <ul>
+    <li><strong>With a target:</strong> the window leads with "Are you sure you want to silence
+      Thornbeak?" and the buttons are Yes and No. The Name field is not rendered at all, because the
+      target already answered it. Rows that still need a duration (Silence, Bind, Sever, Still) keep
+      those fields under the question; everything else is a straight yes or no.</li>
+    <li><strong>With no target:</strong> the window is the plain form, asking who to act on, with
+      Apply and Cancel.</li>
+    <li><strong>Irreversible rows ask either way.</strong> Excommunicate carries a confirm flag, so
+      submitting its untargeted form does not send: it turns into the same question, naming the
+      player just typed. That flag is honored in both paths rather than being copy that promises a
+      confirmation nothing implements.</li>
+  </ul>
+  <p>
+    Rows that name no player (Return, Proclaim) never show the question, since there is nothing for
+    a target to disambiguate.
+  </p>
+  <h3>Rows with nothing to ask fire on click</h3>
+  <p>
+    A row only opens a window when it has something to ask. Return takes no arguments, names no
+    player, and is not irreversible, so selecting it sends <code>/unspectate</code> immediately, the
+    way an instant ability casts. The panel then reports what was sent instead of offering an Apply
+    button to press on an empty form. Those rows carry an <strong>Instant</strong> chip in the
+    spellbook, so the behavior is legible before the click rather than a surprise after it.
+  </p>
+  <p>
+    The test is deliberately narrow, and all three parts matter: no fields left to fill, no target to
+    confirm against, and no irreversible flag. Unseen Eye takes only a name, so it is instant in
+    neither state: untargeted it asks who, and targeted it asks whether. Excommunicate would still
+    ask even if it were argument-free, because the flag outranks the shortcut.
+  </p>
+
+  <h3>Open question: what does the world see</h3>
+  <p>
+    A Game Master who cannot be attacked and cannot be targeted is close to a ghost, which raises a
+    question this mockup does not answer: should they be visible by default at all? The frame above
+    shows a Visible chip because the choice belongs to the operator, but the defaults are worth
+    deciding deliberately. Standing visible is a moderation tool in its own right, and standing
+    invisible is the honest state for observation. Spectate already implies the latter.
+  </p>
+
+  <h3>What the real implementation touches</h3>
+  <ul>
+    <li><code>src/sim/types.ts</code>: a tenth <code>PlayerClass</code> member, plus a decision on
+      whether it joins <code>ALL_CLASSES</code> (it should not, that list drives content tables,
+      quest reward maps, and the class-balance suites).</li>
+    <li><code>src/sim/content/classes.ts</code>: a <code>ClassDef</code> with an empty
+      <code>abilities</code> array and <code>color: 0x000000</code>. The shape itself pushes back
+      here, since it requires <code>baseStats</code>, <code>startWeapon</code>, and a
+      <code>resourceType</code> that a non-combatant has no answer for. Either those fields become
+      optional or the class carries an explicit <code>combat: false</code> that every consumer
+      checks before it reads them; filling them with zeroes and a bare fist is the outcome to
+      avoid, because it teaches the rest of the code that a Game Master is a very weak fighter
+      rather than not a fighter.</li>
+    <li><code>src/render/characters/manifest.ts</code>: a <code>player_gamemaster</code>
+      <code>VISUALS</code> entry cloning the warlock body with the class color as its tint. Mandatory,
+      not polish: <code>visualKeyFor</code> falls back to <code>player_warrior</code> for an unknown
+      key, so omitting it renders the GM as a warrior with no error anywhere.</li>
+    <li><code>src/sim/</code>: one <code>isCombatant</code> predicate the damage, threat, targeting,
+      loot, and queue paths each consult, so the non-combatant table above has a single
+      implementation instead of seven. This is the part worth getting right, and it belongs behind
+      the <code>SimContext</code> seam rather than inside <code>sim.ts</code>.</li>
+    <li><code>src/ui/</code>: a pure <code>gm_command_view.ts</code> holding the command catalog and
+      argument validation (the <code>DEV_COMMAND_ACTIONS</code> shape in
+      <code>src/ui/dev_command_view.ts</code> is the exact precedent), plus a thin
+      <code>gm_command_window.ts</code> painter. The spellbook branches on the class to render
+      command rows.</li>
+    <li><code>server/</code>: the create-character route re-checks staff roles; the WS command path
+      is unchanged, because the window sends the same chat command a typing GM would.</li>
+    <li>Tests: the class-content pins, an <code>IWorld</code> parity update if the window needs a new
+      facet member, a negative test proving a non-staff account is refused the class at character
+      creation even with a forged request, and one test per row of the non-combatant table (a mob
+      that never acquires, a hostile cast that cannot select the target, a kill that yields no
+      loot roll).</li>
+  </ul>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  // One catalog entry per spellbook row. `fields` drives both the parameter window
+  // and the emitted command string, mirroring the DEV_COMMAND_ACTIONS shape.
+  const COMMANDS = [
+    {
+      id: 'mute', cat: 'Discipline', glyph: 'gl-mute', name: 'Silence',
+      sub: 'Bar a player from chat for a set duration.',
+      verb: 'silence',
+      desc: 'Silences the named character across every chat channel for the given number of minutes. The reason is recorded in the moderation log and shown to the player.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: 'Thornbeak', required: true, hint: 'Exact character name. Quoted automatically.' },
+        { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '30', required: true, hint: '1 to 5256000 (ten years).' },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: 'Spamming trade chat' }
+      ],
+      build: (v) => `/mute "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been silenced for ${v.minutes} minutes.`
+    },
+    {
+      id: 'unmute', cat: 'Discipline', glyph: 'gl-unmute', name: 'Restore Voice',
+      sub: 'Lift a silence before it expires.',
+      verb: 'restore the voice of',
+      proposed: true,
+      desc: 'Clears an active chat silence early. The lift is written to the moderation log beside the silence it reverses, so the record shows both halves.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
+      ],
+      build: (v) => `/unmute "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} can speak again.`
+    },
+    {
+      id: 'kick', cat: 'Discipline', glyph: 'gl-kick', name: 'Banish',
+      sub: 'Disconnect a player from the realm.',
+      verb: 'disconnect',
+      desc: 'Ends the character session immediately. The account may log back in at once; use Suspend for a timed lockout.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
+      ],
+      build: (v) => `/kick "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been disconnected.`
+    },
+    {
+      id: 'kill', cat: 'Discipline', glyph: 'gl-kill', name: 'Word of Ending',
+      sub: 'Kill a player outright.',
+      verb: 'strike down',
+      desc: 'Sets the named character to zero health at once, bypassing every mitigation path. This is an administrative action, not an attack: it resolves through the moderation path, has no range or line of sight, and never puts the Game Master in combat.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
+      ],
+      build: (v) => `/kill "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been struck down.`
+    },
+    {
+      id: 'forcerename', cat: 'Discipline', glyph: 'gl-rename', name: 'Unname',
+      sub: 'Force a character rename at next login.',
+      verb: 'force a rename on',
+      desc: 'Flags the character so the next login requires a new name. Used for names that breach the naming policy.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
+      ],
+      build: (v) => `/forcerename "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} must choose a new name at next login.`
+    },
+    {
+      id: 'suspend', cat: 'Discipline', glyph: 'gl-suspend', name: 'Sever',
+      sub: 'Lock an account out for a set duration.',
+      verb: 'suspend',
+      desc: 'Suspends the whole account, not just the character, for the given number of minutes. Refused against another staff account.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '1440', required: true, hint: '1440 is one day.' },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
+      ],
+      build: (v) => `/suspend "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} is suspended for ${v.minutes} minutes.`
+    },
+    {
+      id: 'ban', cat: 'Discipline', glyph: 'gl-ban', name: 'Excommunicate',
+      sub: 'Permanently close an account.',
+      verb: 'ban',
+      desc: 'Permanent account ban. Refused against another staff account, and always confirmed before it is sent.',
+      perm: 'moderation.act', confirm: true,
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'No reason specified', value: '' }
+      ],
+      build: (v) => `/ban "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been banned.`
+    },
+    {
+      id: 'unban', cat: 'Discipline', glyph: 'gl-unban', name: 'Absolve',
+      sub: 'Reinstate a banned account.',
+      verb: 'reinstate',
+      proposed: true, neverTargeted: true,
+      desc: 'Lifts an account ban and lets the account log in again. A banned account cannot be online, so there is never a target to read: this row always asks for the name.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
+      ],
+      build: (v) => `/unban "${v.name}"${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} has been reinstated.`
+    },
+    {
+      id: 'jail', cat: 'Containment', glyph: 'gl-jail', name: 'Bind',
+      sub: 'Teleport a player into the jail instance.',
+      verb: 'jail',
+      desc: 'Moves the character into the jail instance for a sentence in minutes. There is no indefinite form; the duration is required.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 5256000, value: '60', required: true },
+        { key: 'reason', label: 'Reason', kind: 'textarea', placeholder: 'Optional', value: '' }
+      ],
+      build: (v) => `/jail "${v.name}" ${v.minutes}${v.reason ? ` ${v.reason}` : ''}`,
+      done: (v) => `${v.name} is jailed for ${v.minutes} minutes.`
+    },
+    {
+      id: 'unjail', cat: 'Containment', glyph: 'gl-unjail', name: 'Loose',
+      sub: 'Release a player from jail, or leave yourself.',
+      verb: 'release',
+      desc: 'Releases the named character. Leave the field empty to release yourself, which is how a GM exits their own jail visit.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Leave empty to release yourself', value: '' }
+      ],
+      build: (v) => v.name ? `/unjail "${v.name}"` : '/unjail',
+      done: (v) => v.name ? `${v.name} has been released.` : 'You have left the jail.'
+    },
+    {
+      id: 'spectate', cat: 'Observation', glyph: 'gl-spectate', name: 'Unseen Eye',
+      sub: 'Follow a player invisibly.',
+      verb: 'spectate',
+      desc: 'Attaches the camera to the named character. The GM stays invisible and untargetable while spectating.',
+      perm: 'moderation.spectate',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/spectate "${v.name}"`,
+      done: (v) => `Now spectating ${v.name}.`
+    },
+    {
+      id: 'unspectate', cat: 'Observation', glyph: 'gl-unspectate', name: 'Return',
+      sub: 'Stop spectating and return to your body.',
+      desc: 'Detaches the camera and restores the GM character at its own position. Takes no arguments.',
+      perm: 'moderation.spectate',
+      fields: [],
+      build: () => '/unspectate',
+      done: () => 'You have returned to your own body.'
+    },
+    {
+      id: 'whois', cat: 'Observation', glyph: 'gl-whois', name: 'Scry',
+      sub: 'Read a player account summary.',
+      verb: 'open the account panel for',
+      desc: 'Opens the account panel for the named character: recent sanctions, session history, and linked characters. Read-only.',
+      perm: 'accounts.read', locked: true, lockNote: 'Requires accounts.read',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/whois "${v.name}"`,
+      done: (v) => `Opened the account panel for ${v.name}.`
+    },
+    {
+      id: 'broadcast', cat: 'Observation', glyph: 'gl-broadcast', name: 'Proclaim',
+      sub: 'Send a realm-wide notice.',
+      desc: 'Posts a system notice to every connected player on the realm. Rate limited, and logged with the sending account.',
+      perm: 'content.moderate', locked: true, lockNote: 'Requires content.moderate',
+      fields: [
+        { key: 'text', label: 'Message', kind: 'textarea', placeholder: 'The realm restarts in 10 minutes.', value: '', required: true }
+      ],
+      build: (v) => `/broadcast ${v.text}`,
+      done: () => 'Notice sent to the realm.'
+    },
+    {
+      id: 'summon', cat: 'World', glyph: 'gl-summon', name: 'Call Forth',
+      sub: 'Pull a player to your position.',
+      verb: 'summon',
+      desc: 'Teleports the named character to the GM. Used to pull a player out of a stuck position or into a conversation.',
+      perm: 'moderation.act', dev: true,
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/summon "${v.name}"`,
+      done: (v) => `${v.name} has been summoned.`
+    },
+    {
+      id: 'unstuck', cat: 'World', glyph: 'gl-unstuck', name: 'Dislodge',
+      sub: 'Free a player trapped in the world.',
+      verb: 'free',
+      proposed: true,
+      desc: 'Moves a player who is wedged in terrain or geometry to the nearest safe ground. Position only: it changes nothing else about the character, and it is not a teleport the player can aim.',
+      perm: 'moderation.act',
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/unstuck "${v.name}"`,
+      done: (v) => `${v.name} has been moved to safe ground.`
+    },
+    {
+      id: 'goto', cat: 'World', glyph: 'gl-goto', name: 'Stride',
+      sub: 'Teleport yourself to a player or coordinate.',
+      verb: 'teleport to',
+      desc: 'Moves the GM to the named character, or to a raw world coordinate when the name is left empty.',
+      perm: 'moderation.act', dev: true,
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '' },
+        { key: 'x', label: 'X', kind: 'number', value: '', hint: 'Used only when the name is empty.' },
+        { key: 'z', label: 'Z', kind: 'number', value: '' }
+      ],
+      build: (v) => v.name ? `/goto "${v.name}"` : `/dev tp ${v.x || 0} ${v.z || 0}`,
+      done: (v) => v.name ? `Teleported to ${v.name}.` : 'Teleported to the coordinate.'
+    },
+    {
+      id: 'revive', cat: 'World', glyph: 'gl-revive', name: 'Restore',
+      sub: 'Resurrect a player at full health.',
+      verb: 'revive',
+      desc: 'Revives the named character where they stand, at full health and with no resurrection sickness.',
+      perm: 'moderation.act', dev: true,
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true }
+      ],
+      build: (v) => `/revive "${v.name}"`,
+      done: (v) => `${v.name} has been restored.`
+    },
+    {
+      id: 'freeze', cat: 'World', glyph: 'gl-freeze', name: 'Still',
+      sub: 'Hold a player in place.',
+      verb: 'freeze',
+      desc: 'Freezes the named character until released. Used to stop a player mid-exploit while the log is read.',
+      perm: 'moderation.act', dev: true,
+      fields: [
+        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Thornbeak', value: '', required: true },
+        { key: 'minutes', label: 'Minutes', kind: 'number', min: 1, max: 600, value: '5', required: true }
+      ],
+      build: (v) => `/freeze "${v.name}" ${v.minutes}`,
+      done: (v) => `${v.name} is held for ${v.minutes} minutes.`
+    }
+  ];
+
+  // What each new row would actually cost to build. Every other row is a form over a
+  // chat command the server already parses; these three are not, and say so.
+  const PROPOSED_NOTES = {
+    unmute: 'New command. The capability exists (the dashboard chat-unmute route, audited as chat_unmute); this needs the chat-command parse and a handler calling the same service.',
+    unban: 'New command. The capability exists (the dashboard unban route, audited as unban); this needs the chat-command parse and a handler calling the same service.',
+    unstuck: 'New behavior. Nothing in the sim or server has this concept yet, so it needs a deterministic safe-position resolver as well as the command.',
+  };
+
+  const bookEl = document.getElementById('spell-book-body');
+  const titleEl = document.getElementById('cmd-title');
+  const descEl = document.getElementById('cmd-desc');
+  const formEl = document.getElementById('cmd-form');
+  const previewEl = document.getElementById('cmd-preview');
+  const permEl = document.getElementById('cmd-perm');
+  const toastEl = document.getElementById('cmd-toast');
+  const questionEl = document.getElementById('cmd-question');
+  const proposedEl = document.getElementById('cmd-proposed');
+  const actionsEl = document.getElementById('cmd-actions');
+  const applyBtn = document.getElementById('cmd-apply');
+  const cancelBtn = document.getElementById('cmd-cancel');
+  const targetNameEl = document.getElementById('target-name');
+  const targetToggle = document.getElementById('target-toggle');
+  const targetHintEl = document.getElementById('target-hint');
+  /** The GM's current target, or null when nothing is targeted. */
+  let target = 'Thornbeak';
+  /** Values held awaiting a Yes on an untargeted `confirm` command, else null. */
+  let pending = null;
+  let active = COMMANDS[0];
+
+  function el(tag, cls, text) {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  /** Player names are untrusted text; the real HUD escapes them the same way. */
+  function esc(value) {
+    return String(value).replace(/[&<>"']/g, (ch) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+    ));
+  }
+
+  function renderTargetBar() {
+    targetNameEl.textContent = target === null ? 'No target' : target;
+    targetNameEl.classList.toggle('none', target === null);
+    targetToggle.textContent = target === null ? 'Target Thornbeak' : 'Clear target';
+    targetHintEl.textContent = target === null
+      ? 'Without a target a row asks who to act on.'
+      : 'With a target a row asks you to confirm.';
+  }
+
+  targetToggle.addEventListener('click', () => {
+    target = target === null ? 'Thornbeak' : null;
+    renderTargetBar();
+    select(active, false);
+  });
+
+  // One heading plus one real <ul> per category, so the list is a list to a screen
+  // reader without a role attribute standing in for the element.
+  function renderList() {
+    const lists = {};
+    COMMANDS.forEach((cmd) => {
+      if (!lists[cmd.cat]) {
+        const head = el('h4', 'cat-head', cmd.cat);
+        const list = el('ul', 'spell-list');
+        list.setAttribute('aria-labelledby', headingId(cmd.cat));
+        head.id = headingId(cmd.cat);
+        bookEl.appendChild(head);
+        bookEl.appendChild(list);
+        lists[cmd.cat] = list;
+      }
+      const row = el('button', `spell-row${cmd.locked ? ' locked' : ''}`);
+      row.type = 'button';
+      row.dataset.id = cmd.id;
+      row.setAttribute('aria-current', cmd === active ? 'true' : 'false');
+
+      const icon = el('span', 'spell-icon');
+      icon.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#${cmd.glyph}"/></svg>`;
+      const text = el('span', 'spell-text');
+      text.appendChild(el('span', 'spell-name', cmd.name));
+      const sub = el('span', 'spell-sub', cmd.locked ? cmd.lockNote : cmd.sub);
+      text.appendChild(sub);
+      row.appendChild(icon);
+      row.appendChild(text);
+      // Structurally argument-free rows are instant whatever the target is, so the
+      // chip is safe to paint once instead of on every target change.
+      if (!cmd.fields.length && !cmd.confirm) row.appendChild(el('span', 'instant-chip', 'Instant'));
+      // The three rows the server has no chat command for yet, marked so the mockup
+      // never implies they already exist.
+      if (cmd.proposed) row.appendChild(el('span', 'new-chip', 'New'));
+      row.addEventListener('click', () => { select(cmd, true); });
+      const item = document.createElement('li');
+      item.appendChild(row);
+      lists[cmd.cat].appendChild(item);
+    });
+  }
+
+  function headingId(category) {
+    return `cat-${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  }
+
+  function markActive() {
+    const rows = bookEl.querySelectorAll('.spell-row');
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].setAttribute('aria-current', rows[i].dataset.id === active.id ? 'true' : 'false');
+    }
+  }
+
+  // In confirm mode the name is not an input: it is the target, so read it from
+  // state rather than the (absent) field.
+  function values() {
+    const out = {};
+    active.fields.forEach((f) => {
+      if (f.key === 'name' && confirmMode()) {
+        out.name = target;
+        return;
+      }
+      const input = formEl.querySelector(`[name="${f.key}"]`);
+      out[f.key] = input ? input.value.trim() : '';
+    });
+    return out;
+  }
+
+  /**
+   * A command can be aimed at the target when it carries a `name` field, unless it
+   * acts on someone who cannot be standing in front of you. A banned account is
+   * never online, so Absolve always asks for the name however you got here.
+   */
+  function targetable(cmd) {
+    return !cmd.neverTargeted && cmd.fields.some((f) => f.key === 'name');
+  }
+
+  /** With a target selected, a targetable command asks you to confirm, not to type. */
+  function confirmMode() {
+    return target !== null && targetable(active);
+  }
+
+  /** The fields the window would actually render for `cmd` right now. */
+  function shownFields(cmd) {
+    const confirming = target !== null && targetable(cmd);
+    return confirming ? cmd.fields.filter((f) => f.key !== 'name') : cmd.fields;
+  }
+
+  /**
+   * A row with nothing to ask fires on click, like an instant ability: no fields to
+   * fill, no target to confirm against, and not flagged irreversible. Opening a
+   * window whose only content is "this takes no arguments" is pure friction.
+   */
+  function isInstant(cmd) {
+    if (cmd.confirm) return false;
+    if (target !== null && targetable(cmd)) return false;
+    return shownFields(cmd).length === 0;
+  }
+
+  /**
+   * Put the window into (or out of) its "answer a question" chrome. `who` is the
+   * name the question names, or null for the plain form. Shared by the two ways a
+   * confirmation is reached: a targeted command, and a `confirm` command whose
+   * typed form has just been submitted.
+   */
+  function setConfirmChrome(who) {
+    const asking = who !== null;
+    questionEl.hidden = !asking;
+    if (asking) {
+      questionEl.innerHTML =
+        `Are you sure you want to ${esc(active.verb)} <span class="who">${esc(who)}</span>?`;
+    }
+    applyBtn.textContent = asking ? 'Yes' : 'Apply';
+    applyBtn.classList.toggle('yes', asking);
+    applyBtn.classList.toggle('primary', !asking);
+    cancelBtn.textContent = asking ? 'No' : 'Cancel';
+    cancelBtn.classList.toggle('danger', asking);
+  }
+
+  /**
+   * An instant row has no window to fill in: it ran on click. The panel becomes a
+   * record of what was sent rather than a form, with no Apply or Cancel to press.
+   */
+  function renderInstant(cmd, fired) {
+    actionsEl.hidden = true;
+    setConfirmChrome(null);
+    formEl.innerHTML = '';
+    formEl.appendChild(el('p', 'cap', 'Fires the moment you select it. Nothing to fill in.'));
+    const sent = cmd.build({});
+    previewEl.textContent = sent;
+    previewEl.style.opacity = '1';
+    if (!fired) return;
+    toastEl.hidden = false;
+    toastEl.style.borderLeftColor = '#1eb838';
+    toastEl.textContent = `Sent ${sent}. ${cmd.done({})}`;
+  }
+
+  function refreshPreview() {
+    const v = values();
+    const missing = active.fields.filter((f) => f.required && !v[f.key]);
+    if (missing.length) {
+      previewEl.textContent = active.build(placeholders(v));
+      previewEl.style.opacity = '0.5';
+    } else {
+      previewEl.textContent = active.build(v);
+      previewEl.style.opacity = '1';
+    }
+  }
+
+  // Preview with the placeholder standing in for an empty required field, so the
+  // grammar is always legible before the operator has typed anything.
+  function placeholders(v) {
+    const out = {};
+    active.fields.forEach((f) => {
+      out[f.key] = v[f.key] || (f.required ? (f.placeholder || `<${f.key}>`) : '');
+    });
+    return out;
+  }
+
+  /**
+   * Selecting a row. `fire` is true only for a real click: an instant row runs there
+   * and then, while a re-render (the target toggle) must never re-fire it.
+   */
+  function select(cmd, fire) {
+    active = cmd;
+    markActive();
+    toastEl.hidden = true;
+    titleEl.textContent = cmd.name;
+    descEl.textContent = cmd.desc;
+    permEl.innerHTML = 'Requires <code>' + cmd.perm + '</code>' +
+      (cmd.dev ? ', and the world-command set (dev builds only).' : '.');
+    proposedEl.hidden = !cmd.proposed;
+    if (cmd.proposed) proposedEl.textContent = PROPOSED_NOTES[cmd.id];
+    pending = null;
+    if (isInstant(cmd)) {
+      renderInstant(cmd, fire === true);
+      return;
+    }
+    actionsEl.hidden = false;
+    const confirming = confirmMode();
+    // With a target, the window leads with the question and the buttons answer it.
+    setConfirmChrome(confirming ? target : null);
+    formEl.innerHTML = '';
+    // The name field is omitted in confirm mode: the target already answered it.
+    const shown = shownFields(cmd);
+    if (!shown.length) {
+      formEl.appendChild(el('p', 'cap', 'Nothing else to fill in.'));
+    }
+    shown.forEach((f) => {
+      const wrap = el('div', 'field');
+      const id = `f-${cmd.id}-${f.key}`;
+      const label = el('label', null, f.label + (f.required ? '' : ' (optional)'));
+      label.setAttribute('for', id);
+      wrap.appendChild(label);
+      let input;
+      if (f.kind === 'textarea') {
+        input = document.createElement('textarea');
+        input.rows = 2;
+      } else {
+        input = document.createElement('input');
+        input.type = f.kind === 'number' ? 'number' : 'text';
+        if (f.min !== undefined) input.min = String(f.min);
+        if (f.max !== undefined) input.max = String(f.max);
+      }
+      input.id = id;
+      input.name = f.key;
+      input.value = f.value || '';
+      if (f.placeholder) input.placeholder = f.placeholder;
+      input.addEventListener('input', refreshPreview);
+      wrap.appendChild(input);
+      if (f.hint) wrap.appendChild(el('div', 'hint', f.hint));
+      formEl.appendChild(wrap);
+    });
+    refreshPreview();
+  }
+
+  applyBtn.addEventListener('click', () => {
+    const v = pending || values();
+    const missing = active.fields.filter((f) => f.required && !v[f.key]);
+    if (missing.length) {
+      toastEl.hidden = false;
+      toastEl.style.borderLeftColor = '#c0392b';
+      toastEl.textContent = `Fill in ${missing.map((f) => f.label).join(', ')} first.`;
+      return;
+    }
+    // An irreversible command asks the same question even with no target: the
+    // typed name becomes the one the question names.
+    if (!pending && !confirmMode() && active.confirm) {
+      pending = v;
+      setConfirmChrome(v.name);
+      return;
+    }
+    pending = null;
+    toastEl.hidden = false;
+    toastEl.style.borderLeftColor = '#1eb838';
+    toastEl.textContent = `Sent ${active.build(v)}. ${active.done(v)}`;
+  });
+  // "No" answers the question rather than half-filling a form, so it drops what was
+  // pending and puts the window back the way the row opened it.
+  cancelBtn.addEventListener('click', () => {
+    const who = pending ? pending.name : (confirmMode() ? target : null);
+    pending = null;
+    if (!confirmMode()) setConfirmChrome(null);
+    toastEl.hidden = false;
+    toastEl.style.borderLeftColor = '#6b6480';
+    toastEl.textContent = who
+      ? `Cancelled. Nothing was sent to ${who}.`
+      : 'Cancelled. Nothing was sent.';
+  });
+  document.getElementById('cmd-close').addEventListener('click', () => { toastEl.hidden = true; });
+
+  function renderCatalog() {
+    const body = document.getElementById('catalog-body');
+    COMMANDS.forEach((cmd) => {
+      const tr = document.createElement('tr');
+      const fields = cmd.fields.length
+        ? cmd.fields.map((f) => f.label).join(', ')
+        : 'none';
+      tr.innerHTML =
+        '<td><strong>' + cmd.name + '</strong>' + (cmd.proposed ? ' <span class="new-chip">New</span>' : '') +
+        '<br><span style="color:#998d6a;font-size:12.5px">' + cmd.sub + '</span></td>' +
+        '<td>' + fields + '</td>' +
+        '<td><code>' + cmd.build(placeholdersFor(cmd)).replace(/</g, '&lt;') + '</code></td>' +
+        '<td><code>' + cmd.perm + '</code></td>';
+      body.appendChild(tr);
+    });
+  }
+
+  function placeholdersFor(cmd) {
+    const out = {};
+    cmd.fields.forEach((f) => {
+      out[f.key] = f.required ? `<${f.key}>` : '';
+    });
+    return out;
+  }
+
+  renderList();
+  renderCatalog();
+  renderTargetBar();
+  select(COMMANDS[0], false);
+})();
+</script>
+</body>
+</html>
