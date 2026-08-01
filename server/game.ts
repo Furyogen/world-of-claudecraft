@@ -1735,6 +1735,11 @@ export class GameServer {
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
   }
 
+  // Ceiling on an explicit teleport height, in yards above the terrain. A /tp
+  // typo ("1e9" written out) would otherwise park a body so far up that the fall
+  // back down takes minutes; clamping keeps a mistake to a long jump.
+  private static readonly TELEPORT_MAX_HEIGHT = 200;
+
   // `y` is the OPTIONAL explicit height the /tp command may carry. Omitted (every
   // pre-existing caller) or at or below the terrain, the body lands on the
   // ground exactly as before; above it, the body starts airborne there and falls
@@ -1749,7 +1754,9 @@ export class GameServer {
     if (!entity) return;
     const ground = this.sim.groundPos(pos.x, pos.z);
     const airborne = typeof y === 'number' && Number.isFinite(y) && y > ground.y;
-    const dest = airborne ? { x: ground.x, y, z: ground.z } : ground;
+    const dest = airborne
+      ? { x: ground.x, y: Math.min(y, ground.y + GameServer.TELEPORT_MAX_HEIGHT), z: ground.z }
+      : ground;
     entity.pos = dest;
     entity.prevPos = { ...dest };
     entity.vy = 0;
@@ -1946,13 +1953,27 @@ export class GameServer {
     this.sendSystemNotice(target, 'A moderator has unfrozen you.');
   }
 
-  // Where a session's body really is. A spectating or jail-visiting session is
-  // parked away from its real position, so report the saved one: /tpto should
-  // land the admin where the player actually plays, never in spectate limbo.
+  // The overworld footprint, the only place the GM teleports may land a body.
+  // Every instance band (dungeons and delves out past x 99k, the arena, the
+  // rifts, the jail at -12k, and the spectate limbo) sits far outside these
+  // bounds, so one range test separates them all: teleporting into instance
+  // coordinates without instance membership leaves a player standing in a room
+  // that is not theirs, with no door that will let them out.
+  private isOverworldPos(pos: { x: number; z: number }): boolean {
+    if (!Number.isFinite(pos.x) || !Number.isFinite(pos.z)) return false;
+    if (pos.x < WORLD_MIN_X || pos.x > WORLD_MAX_X) return false;
+    return pos.z >= WORLD_MIN_Z && pos.z <= WORLD_MAX_Z;
+  }
+
+  // Where a session's body really is, or null when it is not somewhere another
+  // body may legally join it. A spectating or jail-visiting session is parked
+  // away from its real position, so report the saved one: /tpto should land the
+  // admin where the player actually plays, never in spectate limbo.
   private livePositionFor(session: ClientSession): { x: number; z: number } | null {
     const entity = this.sim.entities.get(session.pid);
     if (!entity) return null;
-    return session.spectating?.savedPos ?? session.jailVisit?.savedPos ?? entity.pos;
+    const pos = session.spectating?.savedPos ?? session.jailVisit?.savedPos ?? entity.pos;
+    return this.isOverworldPos(pos) ? pos : null;
   }
 
   // Move a session's body, ending any parked state first so the teleport is not
@@ -1971,6 +1992,10 @@ export class GameServer {
   }
 
   private teleportSessionToSession(actor: ClientSession, target: ClientSession): boolean {
+    // Both ends again: an admin standing inside an instance must not walk their
+    // body out of it by teleporting, which would leave the instance flag set on
+    // a character standing in the open world.
+    if (!this.livePositionFor(actor)) return false;
     const pos = this.livePositionFor(target);
     if (!pos) return false;
     this.relocateSession(actor, pos);
@@ -1981,6 +2006,9 @@ export class GameServer {
     // A prisoner stays in the cage: the jail enforcement would snap them back
     // next tick anyway, so refuse instead of yo-yoing them across the world.
     if (target.jailed) return false;
+    // Both ends must be overworld: pulling someone OUT of an instance would
+    // leave them flagged as inside it while standing in the open world.
+    if (!this.livePositionFor(target)) return false;
     const pos = this.livePositionFor(actor);
     if (!pos) return false;
     this.relocateSession(target, pos);
@@ -1994,9 +2022,7 @@ export class GameServer {
   // in a room that does not belong to them. Returns the zone landed in, or null
   // when the coordinates fall outside the world.
   private teleportSessionToCoordinates(actor: ClientSession, pos: AdminTeleportPos): string | null {
-    if (!Number.isFinite(pos.x) || !Number.isFinite(pos.z)) return null;
-    if (pos.x < WORLD_MIN_X || pos.x > WORLD_MAX_X) return null;
-    if (pos.z < WORLD_MIN_Z || pos.z > WORLD_MAX_Z) return null;
+    if (!this.isOverworldPos(pos)) return null;
     this.relocateSession(actor, { x: pos.x, z: pos.z }, pos.y);
     return zoneAt(pos.x, pos.z).name;
   }
@@ -3486,8 +3512,11 @@ export class GameServer {
         if (session.adminFreeze) state.adminFreeze = session.adminFreeze;
         else delete state.adminFreeze;
         // A cloaked admin's pet is stowed, exactly like the spectate case above:
-        // save the stowed pet so the cloak does not silently delete it.
-        if (session.cloak) state.pet = session.cloak.stowedPet;
+        // save the stowed pet so the cloak does not silently delete it. Guarded on
+        // the pet, not on the cloak: cloaking while ALREADY spectating stows
+        // nothing (the spectate state holds the real pet), and an unguarded write
+        // would clobber that arm's value with null and lose the pet.
+        if (session.cloak?.stowedPet) state.pet = session.cloak.stowedPet;
         // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
         // is temporarily 20, but serializeCharacter reports the real level — so the
         // character-list/leaderboard `level` column never reflects the temp state.
@@ -7506,6 +7535,10 @@ export class GameServer {
       candidate.blockedIds.has(viewer.characterId)
     )
       return false;
+    // /invisible hides the admin from the roster too, not just from the world:
+    // a cloaked GM standing unseen beside a player must not be given away by
+    // that player's next /who. They still see their own row.
+    if (candidate.cloak && candidate.pid !== viewer.pid) return false;
     return true;
   }
 

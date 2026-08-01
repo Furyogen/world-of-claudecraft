@@ -163,6 +163,21 @@ describe('/invisible and /visible', () => {
     expect(eventTexts(adminWs)).toContain('You are now visible again.');
   });
 
+  it('hides the cloaked admin from another player /who, but not from their own', () => {
+    const { server, admin, adminWs, bob, playerWs } = twoPlayers();
+    command(server, bob, '/who');
+    expect(eventTexts(playerWs).some((text) => text.startsWith('Gm - level'))).toBe(true);
+
+    command(server, admin, '/invisible');
+    playerWs.send.mockClear();
+    command(server, bob, '/who');
+    expect(eventTexts(playerWs).some((text) => text.startsWith('Gm - level'))).toBe(false);
+    expect(eventTexts(playerWs).some((text) => text.startsWith('Bob - level'))).toBe(true);
+    adminWs.send.mockClear();
+    command(server, admin, '/who');
+    expect(eventTexts(adminWs).some((text) => text.startsWith('Gm - level'))).toBe(true);
+  });
+
   it('is not reachable by a moderator who lacks gm.tools', () => {
     const server = new GameServer();
     const ws = fakeWs();
@@ -209,6 +224,35 @@ describe('/freeze and /unfreeze', () => {
     const relogged = joined(relogServer.join(fakeWs(), 2, 102, 'Bob', 'rogue', saved));
     expect(relogged.adminFreeze?.since).toBe(saved.adminFreeze?.since);
     expect(isAdminFrozen(entity(relogServer, relogged.pid))).toBe(true);
+  });
+
+  it('does not let a cloak stow clobber a pet another parked state already holds', async () => {
+    // Cloaking while ALREADY spectating stows nothing (the spectate state owns
+    // the real pet), so the cloak's save arm must not write its null over it.
+    const { server, admin } = twoPlayers();
+    const adminEntity = entity(server, admin.pid);
+    const stowedPet = {
+      templateId: 'forest_wolf',
+      name: 'Fang',
+      level: 5,
+      hp: 40,
+      dead: false,
+    };
+    admin.spectating = {
+      characterId: 999,
+      name: 'Bob',
+      savedPos: { ...adminEntity.pos },
+      priorGm: false,
+      stowedPet,
+    };
+    command(server, admin, '/invisible');
+    expect(admin.cloak?.stowedPet).toBeNull();
+
+    await server.saveCharacter(admin);
+    const saved = vi
+      .mocked(saveCharacterState)
+      .mock.calls.find(([characterId]) => characterId === admin.characterId)?.[2];
+    expect(saved?.pet).toEqual(stowedPet);
   });
 
   it('drops the freeze from the save once released', async () => {
@@ -259,12 +303,57 @@ describe('/tpto, /tptome and /tp', () => {
     );
   });
 
+  it('honours an explicit height but clamps an absurd one', () => {
+    const { server, admin } = twoPlayers();
+    command(server, admin, '/tp -231, 40, 107');
+    const raised = entity(server, admin.pid);
+    const groundY = server.sim.groundPos(-231, 107).y;
+    expect(raised.pos.y).toBe(40);
+    expect(raised.onGround).toBe(false);
+    // A height at or below the terrain just lands on the ground, as every
+    // pre-existing teleport caller does.
+    command(server, admin, '/tp -231, -50, 107');
+    expect(entity(server, admin.pid).pos.y).toBe(groundY);
+    expect(entity(server, admin.pid).onGround).toBe(true);
+    // A typo does not park the body in orbit.
+    command(server, admin, '/tp -231, 1000000000, 107');
+    expect(entity(server, admin.pid).pos.y).toBe(groundY + 200);
+  });
+
   it('refuses coordinates outside the world instead of stranding the admin', () => {
     const { server, admin, adminWs } = twoPlayers();
     const before = { ...entity(server, admin.pid).pos };
     command(server, admin, `/tp ${WORLD_MAX_X + 5000}, 0`);
     expect(entity(server, admin.pid).pos).toEqual(before);
     expect(eventTexts(adminWs)).toContain('Those coordinates are outside the world.');
+  });
+
+  it('refuses to teleport either end into or out of instance space', () => {
+    // Instance coordinates sit far outside the overworld footprint; landing a
+    // body there without instance membership strands it in a room it cannot
+    // leave, so both /tpto and /tptome refuse rather than trying.
+    const { server, admin, adminWs, bob } = twoPlayers();
+    const bobEntity = entity(server, bob.pid);
+    const overworld = { ...bobEntity.pos };
+    bobEntity.pos = { ...bobEntity.pos, x: 100_300 };
+    server.sim.grid.update(bobEntity);
+    server.sim.playerGrid.update(bobEntity);
+
+    const adminBefore = { ...entity(server, admin.pid).pos };
+    command(server, admin, '/tpto "Bob"');
+    expect(entity(server, admin.pid).pos).toEqual(adminBefore);
+    expect(eventTexts(adminWs)).toContain('Bob has no reachable location right now.');
+
+    command(server, admin, '/tptome "Bob"');
+    expect(entity(server, bob.pid).pos.x).toBe(100_300);
+    expect(eventTexts(adminWs)).toContain('Bob cannot be summoned right now.');
+
+    // Back in the overworld the same two commands work again.
+    bobEntity.pos = overworld;
+    server.sim.grid.update(bobEntity);
+    server.sim.playerGrid.update(bobEntity);
+    command(server, admin, '/tpto "Bob"');
+    expect(eventTexts(adminWs)).toContain('Teleported to Bob.');
   });
 
   it('refuses to summon a jailed player', () => {
