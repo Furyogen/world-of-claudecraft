@@ -23,6 +23,7 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
+import { isAdminCloaked } from '../admin_cloak';
 import { computeTalentModifiers } from '../content/talents';
 import { ABILITIES, DELVES, GROUP_XP_BONUS, ITEMS, MOBS } from '../data';
 import * as deedsMod from '../deeds';
@@ -130,6 +131,9 @@ export function dealDamage(
   )
     return 0;
   if (target.gm || target.devGod) return 0; // GMs and /dev god are invulnerable (every damage path funnels here)
+  // An admin under /invisible is unkillable for as long as the cloak is up: they
+  // are not in the world for anyone else, so nothing may resolve against them.
+  if (isAdminCloaked(target)) return 0;
   // Ice Block (Cold Coffin): while encased in stasis the mage is FULLY immune to
   // damage (owner 2026-07-13), so nothing gets through until it is cancelled or
   // expires. Every damage path funnels here, so this covers melee, spells, and DoTs.

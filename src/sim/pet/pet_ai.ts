@@ -30,6 +30,7 @@
 // imported directly (already pure); everything that touches not-yet-extracted Sim
 // state routes through the seam.
 
+import { isAdminCloaked } from '../admin_cloak';
 import { lineOfSightClear } from '../colliders';
 import { MOBS } from '../data';
 import { pctValue } from '../entity';
@@ -435,5 +436,8 @@ export function petPickTarget(ctx: SimContext, pet: Entity, owner: Entity): Enti
 
 function petCanSeeTarget(pet: Entity, target: Entity): boolean {
   if (target.kind !== 'player') return true;
+  // An admin under /invisible is imperceptible to pets too, not just to mobs:
+  // this is the pet-side twin of mobCanSeeTarget (mob/targeting.ts).
+  if (isAdminCloaked(target)) return false;
   return canDetectStealthedTarget(pet, target, PET_ASSIST_RANGE);
 }

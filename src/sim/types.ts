@@ -3386,6 +3386,16 @@ export interface Entity extends ClientMirroredEntityFields {
    *  see isHostileTo). Server-set via setJailed on jail/unjail and at join
    *  restore; never true offline, never user-settable. */
   jailed?: boolean;
+  /** Admin cloak (the /invisible GM command): this player is invisible to every
+   *  other viewer, unselectable, imperceptible to mobs and pets, and immune to
+   *  damage. Server-set via setAdminCloak; never true offline, never persisted,
+   *  never user-settable. See src/sim/admin_cloak.ts. */
+  adminCloak?: boolean;
+  /** Admin freeze (the /freeze GM command): this player is held in an
+   *  unbreakable Ice Block. Server-set via setAdminFrozen and restored from the
+   *  character save at join; never true offline, never user-settable. See
+   *  src/sim/admin_freeze.ts. */
+  adminFrozen?: boolean;
   /** True for a mob spawned BY a delve affix (e.g. Restless Graves' Raised
    *  Bonewalker). Affix re-trigger checks exclude these so an affix-spawned mob's
    *  own death can never re-trigger the same affix (would otherwise chain forever). */

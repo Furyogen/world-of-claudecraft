@@ -19,6 +19,7 @@
 // (enforced by tests/architecture.test.ts). threat.ts/types.ts/data are imported
 // directly (already pure); only `entities` + the Nythraxis helpers route via the seam.
 
+import { isAdminCloaked } from '../admin_cloak';
 import { MOBS } from '../data';
 import { combatProfileForMob } from '../mob_combat';
 import type { SimContext } from '../sim_context';
@@ -41,6 +42,10 @@ const MAX_AGGRO_RADIUS = 20;
 
 function mobCanSeeTarget(ctx: SimContext, mob: Entity, target: Entity): boolean {
   if (target.kind !== 'player') return true;
+  // An admin under /invisible is unaggroable: this is the choke point every hate
+  // table walk and retarget runs through, so cloaking also prunes them out of
+  // the tables a mob already holds.
+  if (isAdminCloaked(target)) return false;
   const template = MOBS[mob.templateId];
   const baseRadius =
     Math.max(

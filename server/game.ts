@@ -8,6 +8,8 @@ import {
   hasStreamerLink,
   wireStreamerLinks,
 } from '../src/sim/account_flair';
+import { isAdminCloaked } from '../src/sim/admin_cloak';
+import type { AdminFreezeState } from '../src/sim/admin_freeze';
 import { verifyChallenge } from '../src/sim/client_challenge';
 import { damageTakenWithin } from '../src/sim/combat/damage_history';
 import { rewindHealAmount } from '../src/sim/combat/rewind';
@@ -25,6 +27,10 @@ import {
   dungeonAt,
   isDelvePos,
   MOBS,
+  WORLD_MAX_X,
+  WORLD_MAX_Z,
+  WORLD_MIN_X,
+  WORLD_MIN_Z,
   ZONES,
   zoneAt,
 } from '../src/sim/data';
@@ -94,7 +100,13 @@ import {
   type VcViewerReadout,
 } from '../src/world_api';
 import { type ActionBarLayout, sanitizeActionBarLayout } from '../src/world_api/action_bar';
+import type { AdminTeleportPos } from './admin_commands';
 import { recordOnlineSample } from './admin_db';
+import {
+  type AdminToolsHost,
+  AdminToolsService,
+  canAttemptAdminToolCommands,
+} from './admin_tools_service';
 import { offensiveName } from './auth';
 import { recordBankOp } from './bank_ledger';
 import type {
@@ -795,6 +807,13 @@ export interface ClientSession {
     stowedPet: PetState | null;
   } | null;
   jailed: JailState | null;
+  // Admin cloak (/invisible). Present only while cloaked; holds the pet stowed
+  // for the duration, so an invisible admin is not given away by a visible pet.
+  // Never persisted: the cloak dies with the session, like spectate.
+  cloak: { stowedPet: PetState | null } | null;
+  // Moderation freeze (/freeze). Persisted with the character (state.adminFreeze)
+  // so the hold survives a relog.
+  adminFreeze: AdminFreezeState | null;
   jailVisit: {
     savedPos: { x: number; y: number; z: number };
     savedFacing: number;
@@ -1354,6 +1373,7 @@ export class GameServer {
   private readonly socialDb = new PgSocialDb(pool);
   readonly social: SocialService;
   private readonly moderation: ModerationService<ClientSession>;
+  private readonly adminTools: AdminToolsService<ClientSession>;
   private wireCache = new Map<number, EntityWireCache>();
   // partyFrameAggroTargets / partyFrameIncomingHeals scan the whole entity set and
   // are GLOBAL (identical for every grouped session), yet partyWire runs once for
@@ -1564,6 +1584,7 @@ export class GameServer {
       suspend: (input) => moderateAccount({ ...input, action: 'suspend' }),
       forceRename: (input) => forceCharacterRename(input),
     });
+    this.adminTools = new AdminToolsService(this.adminToolsHost());
   }
 
   // Returns the number of currently active WS sessions from the given IP.
@@ -1714,14 +1735,32 @@ export class GameServer {
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
   }
 
-  private teleportSessionEntity(session: ClientSession, pos: { x: number; z: number }): void {
+  // Ceiling on an explicit teleport height, in yards above the terrain. A /tp
+  // typo ("1e9" written out) would otherwise park a body so far up that the fall
+  // back down takes minutes; clamping keeps a mistake to a long jump.
+  private static readonly TELEPORT_MAX_HEIGHT = 200;
+
+  // `y` is the OPTIONAL explicit height the /tp command may carry. Omitted (every
+  // pre-existing caller) or at or below the terrain, the body lands on the
+  // ground exactly as before; above it, the body starts airborne there and falls
+  // under normal gravity. fallStartY stays pinned to the ground either way, so a
+  // teleport can never bill the arrival for fall damage.
+  private teleportSessionEntity(
+    session: ClientSession,
+    pos: { x: number; z: number },
+    y?: number | null,
+  ): void {
     const entity = this.sim.entities.get(session.pid);
     if (!entity) return;
     const ground = this.sim.groundPos(pos.x, pos.z);
-    entity.pos = ground;
-    entity.prevPos = { ...ground };
+    const airborne = typeof y === 'number' && Number.isFinite(y) && y > ground.y;
+    const dest = airborne
+      ? { x: ground.x, y: Math.min(y, ground.y + GameServer.TELEPORT_MAX_HEIGHT), z: ground.z }
+      : ground;
+    entity.pos = dest;
+    entity.prevPos = { ...dest };
     entity.vy = 0;
-    entity.onGround = true;
+    entity.onGround = !airborne;
     entity.fallStartY = ground.y;
     this.sim.grid.update(entity);
     this.sim.playerGrid.update(entity);
@@ -1849,6 +1888,143 @@ export class GameServer {
     moderator.lastSent = {};
     moderator.sentEnts.clear();
     if (announce) this.sendSystemNotice(moderator, 'Returned from jail visitor area.');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Game-master toolkit (/invisible, /freeze, /tpto, /tp): the world effects
+  // behind AdminToolsService. The service owns every rule and every notice to
+  // the ACTOR; this half only moves bodies and flips flags, and speaks only to
+  // the affected TARGET.
+  // ---------------------------------------------------------------------------
+
+  private adminToolsHost(): AdminToolsHost<ClientSession> {
+    return {
+      sessionByName: (name) => this.sessionByName(name),
+      notice: (session, text) => this.sendChatNotice(session, text),
+      systemNotice: (session, text) => this.sendSystemNotice(session, text),
+      isCloaked: (session) => session.cloak !== null,
+      setCloak: (session, enabled) => this.setSessionCloak(session, enabled),
+      isFrozen: (session) => session.adminFreeze !== null,
+      freeze: (_actor, target) => this.freezeSession(target),
+      unfreeze: (_actor, target) => this.unfreezeSession(target),
+      teleportToPlayer: (actor, target) => this.teleportSessionToSession(actor, target),
+      summonPlayer: (actor, target) => this.summonSessionToActor(actor, target),
+      teleportToPosition: (actor, pos) => this.teleportSessionToCoordinates(actor, pos),
+    };
+  }
+
+  private setSessionCloak(session: ClientSession, enabled: boolean): void {
+    if (enabled) {
+      if (session.cloak) return;
+      // The pet is stowed for the duration: a visible pet trotting beside an
+      // invisible admin gives the whole thing away.
+      session.cloak = { stowedPet: this.sim.stowPetForSpectate(session.pid) };
+      this.sim.setAdminCloak(true, session.pid);
+    } else {
+      const state = session.cloak;
+      if (!state) return;
+      session.cloak = null;
+      this.sim.setAdminCloak(false, session.pid);
+      this.sim.restorePetAfterSpectate(session.pid, state.stowedPet);
+    }
+    // No sentEnts bookkeeping is owed on either edge: a cloaked entity simply
+    // stops passing canObserveEntity, so it leaves every viewer's `present` set
+    // and the existing prune drops it; uncloaking re-sends full identity because
+    // the prune already forgot it.
+  }
+
+  private freezeSession(target: ClientSession): void {
+    if (!this.sim.setAdminFrozen(true, target.pid)) return;
+    target.adminFreeze = { since: Date.now() };
+    // Same hazard the jail guards against: a match popping later would drop a
+    // frozen statue into someone else's arena or Vale Cup fixture.
+    this.sim.arenaQueueLeave(target.pid);
+    this.sim.vcupQueueLeave(target.pid);
+    this.sim.vcupResolveDesertion(target.pid);
+    this.sim.leaveCardMinigameEntirely(target.pid);
+    // System notice (chat log), not the fading toast: the hold outlives an
+    // alt-tab, so the explanation has to be readable after one.
+    this.sendSystemNotice(target, 'A moderator has frozen you in place.');
+  }
+
+  private unfreezeSession(target: ClientSession): void {
+    if (!this.sim.setAdminFrozen(false, target.pid)) return;
+    target.adminFreeze = null;
+    this.sendSystemNotice(target, 'A moderator has unfrozen you.');
+  }
+
+  // The overworld footprint, the only place the GM teleports may land a body.
+  // Every instance band (dungeons and delves out past x 99k, the arena, the
+  // rifts, the jail at -12k, and the spectate limbo) sits far outside these
+  // bounds, so one range test separates them all: teleporting into instance
+  // coordinates without instance membership leaves a player standing in a room
+  // that is not theirs, with no door that will let them out.
+  private isOverworldPos(pos: { x: number; z: number }): boolean {
+    if (!Number.isFinite(pos.x) || !Number.isFinite(pos.z)) return false;
+    if (pos.x < WORLD_MIN_X || pos.x > WORLD_MAX_X) return false;
+    return pos.z >= WORLD_MIN_Z && pos.z <= WORLD_MAX_Z;
+  }
+
+  // Where a session's body really is, or null when it is not somewhere another
+  // body may legally join it. A spectating or jail-visiting session is parked
+  // away from its real position, so report the saved one: /tpto should land the
+  // admin where the player actually plays, never in spectate limbo.
+  private livePositionFor(session: ClientSession): { x: number; z: number } | null {
+    const entity = this.sim.entities.get(session.pid);
+    if (!entity) return null;
+    const pos = session.spectating?.savedPos ?? session.jailVisit?.savedPos ?? entity.pos;
+    return this.isOverworldPos(pos) ? pos : null;
+  }
+
+  // Move a session's body, ending any parked state first so the teleport is not
+  // undone by the spectate/jail-visit restore. Resets the wire caches because a
+  // long jump invalidates everything the client believes about its surroundings.
+  private relocateSession(
+    session: ClientSession,
+    pos: { x: number; z: number },
+    y?: number | null,
+  ): void {
+    if (session.spectating) this.exitSpectate(session, false);
+    if (session.jailVisit) this.exitJailVisit(session, false);
+    this.teleportSessionEntity(session, pos, y);
+    session.lastSent = {};
+    session.sentEnts.clear();
+  }
+
+  private teleportSessionToSession(actor: ClientSession, target: ClientSession): boolean {
+    // Both ends again: an admin standing inside an instance must not walk their
+    // body out of it by teleporting, which would leave the instance flag set on
+    // a character standing in the open world.
+    if (!this.livePositionFor(actor)) return false;
+    const pos = this.livePositionFor(target);
+    if (!pos) return false;
+    this.relocateSession(actor, pos);
+    return true;
+  }
+
+  private summonSessionToActor(actor: ClientSession, target: ClientSession): boolean {
+    // A prisoner stays in the cage: the jail enforcement would snap them back
+    // next tick anyway, so refuse instead of yo-yoing them across the world.
+    if (target.jailed) return false;
+    // Both ends must be overworld: pulling someone OUT of an instance would
+    // leave them flagged as inside it while standing in the open world.
+    if (!this.livePositionFor(target)) return false;
+    const pos = this.livePositionFor(actor);
+    if (!pos) return false;
+    this.relocateSession(target, pos);
+    this.sendSystemNotice(target, `${actor.name} has summoned you.`);
+    return true;
+  }
+
+  // /tp is deliberately OVERWORLD ONLY. Instance space (dungeons, delves, rifts,
+  // arenas, the jail) is reached by its own entry rules, and dropping a body
+  // into those coordinates with no instance membership produces a player stuck
+  // in a room that does not belong to them. Returns the zone landed in, or null
+  // when the coordinates fall outside the world.
+  private teleportSessionToCoordinates(actor: ClientSession, pos: AdminTeleportPos): string | null {
+    if (!this.isOverworldPos(pos)) return null;
+    this.relocateSession(actor, { x: pos.x, z: pos.z }, pos.y);
+    return zoneAt(pos.x, pos.z).name;
   }
 
   // The instance (dungeon OR delve) an entity is inside, named as its own zone,
@@ -2949,11 +3125,16 @@ export class GameServer {
       pendingDeedRecords: [],
       spectating: null,
       jailed: state?.jail ?? null,
+      cloak: null,
+      adminFreeze: state?.adminFreeze ?? null,
       jailVisit: null,
       // Re-validate the stored layout (untrusted at rest) before it can wire out.
       initialHotbarLayout: sanitizeActionBarLayout(meta.hotbarLayout),
     };
     if (session.jailed) this.teleportJailedSession(session);
+    // A freeze outlives the session that received it: re-encase on join, or a
+    // relog would be the way out of the hold.
+    if (session.adminFreeze) this.sim.setAdminFrozen(true, session.pid);
     this.ipSessionCounts.set(sessionIp, (this.ipSessionCounts.get(sessionIp) ?? 0) + 1);
     this.clients.set(pid, session);
     this.sessionsByCharacterId.set(characterId, session);
@@ -3328,6 +3509,14 @@ export class GameServer {
         } else {
           delete state.jail;
         }
+        if (session.adminFreeze) state.adminFreeze = session.adminFreeze;
+        else delete state.adminFreeze;
+        // A cloaked admin's pet is stowed, exactly like the spectate case above:
+        // save the stowed pet so the cloak does not silently delete it. Guarded on
+        // the pet, not on the cloak: cloaking while ALREADY spectating stows
+        // nothing (the spectate state holds the real pet), and an unguarded write
+        // would clobber that arm's value with null and lose the pet.
+        if (session.cloak?.stowedPet) state.pet = session.cloak.stowedPet;
         // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
         // is temporarily 20, but serializeCharacter reports the real level — so the
         // character-list/leaderboard `level` column never reflects the temp state.
@@ -4201,6 +4390,8 @@ export class GameServer {
       const text = msg.text.trim();
       if (canAttemptModerationCommands(session) && this.moderation.handleChatCommand(session, text))
         return;
+      if (canAttemptAdminToolCommands(session) && this.adminTools.handleChatCommand(session, text))
+        return;
       if (/^\/unstuck\s*$/i.test(text)) {
         this.sendUnstuckBlocked(session, 'spectating');
         return;
@@ -4674,6 +4865,14 @@ export class GameServer {
         if (
           canAttemptModerationCommands(session) &&
           this.moderation.handleChatCommand(session, text)
+        )
+          break;
+        // The GM toolkit sits beside the moderation router and above every
+        // player command, so a staff "/freeze" is always claimed here and can
+        // never be shadowed by (or leak into) ordinary chat.
+        if (
+          canAttemptAdminToolCommands(session) &&
+          this.adminTools.handleChatCommand(session, text)
         )
           break;
         // Recovery is a gameplay command, not broadcast chat. Keep it usable
@@ -5817,6 +6016,12 @@ export class GameServer {
   }
 
   private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
+    // /invisible: the cloaked admin leaves every other viewer's snapshot
+    // entirely, at any range and for every observer. The caller has already
+    // skipped the viewer's own entity, so this never hides an admin from
+    // themselves. Dropping out of `ents`/`keep` is what removes the model
+    // client-side, so no extra despawn message is owed.
+    if (isAdminCloaked(e)) return false;
     if (e.kind !== 'player' || !isStealthed(e)) return true;
     if (this.sim.isHostileTo(viewer, e)) return false;
     const party = this.sim.partyOf(viewer.id);
@@ -7330,6 +7535,10 @@ export class GameServer {
       candidate.blockedIds.has(viewer.characterId)
     )
       return false;
+    // /invisible hides the admin from the roster too, not just from the world:
+    // a cloaked GM standing unseen beside a player must not be given away by
+    // that player's next /who. They still see their own row.
+    if (candidate.cloak && candidate.pid !== viewer.pid) return false;
     return true;
   }
 
