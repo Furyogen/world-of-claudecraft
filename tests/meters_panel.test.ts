@@ -271,6 +271,25 @@ describe('meters panel', () => {
     ]);
   });
 
+  it('paints no split under a Threat bar once the hate table is gone', () => {
+    // The contradiction this exists for: with no live hate table the bar falls
+    // back to the damage dealt to the SUBJECT mob, while the per-ability map is
+    // segment-wide and scoped to no mob, so painting it under the bar would
+    // stack rows that sum to a different number than the bar above them.
+    const { meters, world, visibleRows, splitRows } = setup();
+    meters.onEvent(dmg(1, 51, 300, 'Aimed Shot'));
+    meters.onEvent(dmg(3, 51, 200, 'Claw'));
+    meters.update();
+    (world.entities.get(51) as any).dead = true;
+    (document.querySelector('.mt-tab[data-tab="threat"]') as HTMLElement).click();
+
+    expect(splitRows()).toEqual([]);
+    // and with nothing to open, the bar does not advertise a toggle either
+    const own = visibleRows()[0];
+    expect(own.classList.contains('mt-expandable')).toBe(false);
+    expect(own.getAttribute('aria-expanded')).toBeNull();
+  });
+
   it('hides the pooled bars on an empty segment instead of discarding them', () => {
     const { meters, rowsEl, visibleRows } = setup();
     meters.onEvent(dmg(1, 51, 300, 'Aimed Shot'));

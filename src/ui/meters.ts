@@ -79,24 +79,30 @@ function addBreakdown(
 }
 
 export interface Encounter {
+  /** English name of the beefiest mob fought: the segment's IDENTITY */
   label: string;
+  /** template id behind `label`, so the segment name localizes at render time */
+  labelTemplateId: string | null;
   /** ms epoch of first activity */
   startedAt: number;
   /** seconds of combat (live encounters: now - startedAt) */
   duration: number;
   tallies: Map<number, MemberTally>;
-  /** mob entity id with the most party damage (threat tab subject) */
+  /** mob entity id the Threat tab reports on */
   mainMobId: number | null;
   mainMobName: string;
   /** template id of the threat-subject mob, so its name localizes at render time */
   mainMobTemplateId: string | null;
   /** maxHp of the biggest mob damaged — used to pick the label */
   biggestMobHp: number;
+  /** maxHp of the current threat subject, so a boss still outranks its adds */
+  subjectMaxHp: number;
 }
 
 function newEncounter(now: number): Encounter {
   return {
     label: 'Combat',
+    labelTemplateId: null,
     startedAt: now,
     duration: 0,
     tallies: new Map(),
@@ -104,6 +110,7 @@ function newEncounter(now: number): Encounter {
     mainMobName: '',
     mainMobTemplateId: null,
     biggestMobHp: -1,
+    subjectMaxHp: -1,
   };
 }
 
@@ -206,19 +213,28 @@ export class MeterData {
             t.dmgByMob.set(ev.targetId, (t.dmgByMob.get(ev.targetId) ?? 0) + ev.amount);
           }
         }
-        // Encounter label / threat subject: the beefiest mob the party fought,
-        // EXCEPT that a segment routinely outlives its subject. Kill the pull
-        // and grab the next one (or lose the old one out of the interest-scoped
-        // entity map) and a size-only rule leaves the subject pinned to a
-        // corpse: the Threat tab then has no live hate table, silently falls
-        // back to the damage dealt to that corpse, and reads FROZEN for the
-        // rest of the segment while the party fights something else. Once the
-        // subject is dead or gone, the next mob damaged takes over regardless
-        // of size; while it is alive the beefiest-mob rule is untouched, so a
-        // boss still outranks its adds.
-        if (this.subjectLost(world) || target.maxHp > this.current.biggestMobHp) {
+        // Segment IDENTITY: the beefiest mob the party fought, and nothing
+        // re-points it afterwards. A pull routinely outlives its boss (adds
+        // keep swinging, the party grabs the next group inside the same
+        // segment), so letting a later mob claim the name would file a boss
+        // kill in the history under a trash mob.
+        if (target.maxHp > this.current.biggestMobHp) {
           this.current.biggestMobHp = target.maxHp;
           this.current.label = target.name;
+          this.current.labelTemplateId = target.templateId;
+        }
+        // Threat SUBJECT: tracked SEPARATELY from the identity above, because
+        // the tab needs a mob that is still there. Kill the pull and grab the
+        // next one (or lose the old one out of the interest-scoped entity map)
+        // and a size-only rule leaves the subject pinned to a corpse: the
+        // Threat tab then has no live hate table, silently falls back to the
+        // damage dealt to that corpse, and reads FROZEN for the rest of the
+        // segment while the party fights something else. Once the subject is
+        // dead or gone, the next mob damaged takes over regardless of size;
+        // while it is alive the beefiest-mob rule is untouched, so a boss still
+        // outranks its adds.
+        if (this.subjectLost(world) || target.maxHp > this.current.subjectMaxHp) {
+          this.current.subjectMaxHp = target.maxHp;
           this.current.mainMobName = target.name;
           this.current.mainMobTemplateId = target.templateId;
           this.current.mainMobId = ev.targetId;
@@ -374,7 +390,12 @@ export class MetersPanel {
   private readonly hintEl: HTMLElement;
   private rowPool: MeterRowNodes[] = [];
   private frame: MeterFrame | null = null;
-  /** Explicit expand/collapse choices; anything absent takes the default. */
+  /**
+   * Explicit expand/collapse choices; anything absent takes the default. Keyed
+   * by pid and kept for the panel's LIFETIME on purpose: a player who opened a
+   * raid member's split wants it open on the next pull too, and paging back
+   * through history must not silently re-collapse what they opened.
+   */
   private readonly expandOverride = new Map<number, boolean>();
 
   constructor(
@@ -569,14 +590,19 @@ export class MetersPanel {
     const world = this.host.world;
     const mob = isThreat && enc.mainMobId !== null ? world.entities.get(enc.mainMobId) : null;
     const aggroPid = mob && !mob.dead ? mob.aggroTargetId : null;
-    const mobName = enc.mainMobTemplateId
+    // Two different mobs once a boss dies mid-segment: the segment keeps the
+    // boss's name, the Threat tab follows whatever is still alive.
+    const subjectName = enc.mainMobTemplateId
       ? tEntity({ kind: 'mob', id: enc.mainMobTemplateId, field: 'name' })
       : enc.mainMobName;
+    const segmentName = enc.labelTemplateId
+      ? tEntity({ kind: 'mob', id: enc.labelTemplateId, field: 'name' })
+      : enc.label;
     const encounterLabel =
-      enc.label === 'Combat' || enc.label === 'All (session)' ? viewName : mobName;
+      enc.label === 'Combat' || enc.label === 'All (session)' ? viewName : segmentName;
     this.subEl.textContent = isThreat
       ? enc.mainMobName
-        ? t('hud.meters.target', { name: mobName })
+        ? t('hud.meters.target', { name: subjectName })
         : t('hud.meters.noTargetEngaged')
       : t('hud.meters.segmentSummary', {
           label: encounterLabel,
@@ -601,17 +627,28 @@ export class MetersPanel {
     // the hover tooltip: a pet has no bar of its own, so on the tooltip alone a
     // solo pet class saw one bar with their own name and no trace of the pet.
     const byContributor = isThreat && liveThreat !== null;
+    // On the Threat tab with no live hate table the bar falls back to the
+    // damage dealt to the SUBJECT mob, while the per-ability map is
+    // segment-wide and scoped to no mob at all: painting it under that bar
+    // would stack rows summing to a different number than the bar above them.
+    // So the panel paints no split there, which also leaves those bars
+    // non-expandable. (The hover tooltip keeps its own long-standing fallback,
+    // which relabels itself "Damage" precisely because it reports that other
+    // figure.)
+    const splitInPanel = !isThreat || byContributor;
     const lines = buildMeterList(
       rows.map((row) => ({
         row,
         // buildMeterRows narrows the tally to what the bar model reads; the
         // split needs the per-ability maps, which live on the record itself.
-        entries: this.entriesFor(
-          enc.tallies.get(row.tally.pid),
-          liveThreat,
-          byContributor,
-          petsByOwner ?? EMPTY_PETS,
-        ),
+        entries: splitInPanel
+          ? this.entriesFor(
+              enc.tallies.get(row.tally.pid),
+              liveThreat,
+              byContributor,
+              petsByOwner ?? EMPTY_PETS,
+            )
+          : [],
         expanded: this.isExpanded(row.tally.pid),
       })),
       enc.duration,

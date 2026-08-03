@@ -176,7 +176,26 @@ describe('combat meters', () => {
     m.onEvent(dmg(1, 52, 30), w, party, 2000);
     expect(m.current!.mainMobId).toBe(52);
     expect(m.current!.mainMobName).toBe('Gorrak the Second');
-    expect(m.current!.label).toBe('Gorrak the Second');
+    // ...and the segment keeps the name of the mob it was ABOUT. Re-pointing
+    // the subject must not rename the pull, or a boss kill lands in history
+    // filed under whatever the party swung at next.
+    expect(m.current!.label).toBe('Gorrak');
+  });
+
+  it('keeps the segment named after the boss when it dies and the adds are finished off', () => {
+    const w = fakeWorld();
+    const party = new Set([1, 2]);
+    const m = new MeterData(0);
+    m.onEvent(dmg(1, 51, 40), w, party, 1000); // Gorrak, 400 maxHp
+    expect(m.current!.label).toBe('Gorrak');
+    (w.entities.get(51) as any).dead = true;
+    m.onEvent(dmg(1, 50, 25), w, party, 2000); // Wolf add, 60 maxHp
+    // the Threat tab follows the live add...
+    expect(m.current!.mainMobId).toBe(50);
+    expect(m.current!.mainMobName).toBe('Wolf');
+    // ...while the segment is still the Gorrak pull
+    expect(m.current!.label).toBe('Gorrak');
+    expect(m.current!.biggestMobHp).toBe(400);
   });
 
   it('re-points the threat subject when the pinned mob leaves the world entirely', () => {
