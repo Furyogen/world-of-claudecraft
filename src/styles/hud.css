@@ -2774,6 +2774,17 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
+  /* An UNFRAMED panel is sized by its content, so it has no leftover space to
+     hand the list: cap it instead. Opening a member's split (or a raid-sized
+     roster) must not push the docked panel up through the rest of the
+     bottom-right HUD stack, which is what a purely content-sized list did. Ten
+     20px lines, one line short of the cap so the clipped next row reads as more
+     to scroll. */
+  .mt-panel:not(.mt-framed) .mt-rows {
+    max-height: 190px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
   /* The title bar is the move handle. Buttons inside keep their own cursor and
      their own pointerdown (meters_frame.ts ignores a press that lands on one). */
   .mt-panel .mt-move-handle {

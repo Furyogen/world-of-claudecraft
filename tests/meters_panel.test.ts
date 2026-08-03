@@ -303,6 +303,25 @@ describe('meters panel', () => {
     expect(rowsEl.querySelectorAll('.mt-row')).toHaveLength(1); // pooled, not deleted
   });
 
+  it('keeps the split rows out of the tab order and off the tooltip', () => {
+    // A split row IS the breakdown, so it owes neither a tab stop of its own nor
+    // a re-show of the whole owner tooltip over the top of what it already says.
+    const { meters, lines, tooltipFor } = setup();
+    meters.onEvent(dmg(1, 51, 300, 'Aimed Shot'));
+    meters.onEvent(dmg(3, 51, 200, 'Claw'));
+    meters.update();
+    meters.render(true);
+
+    const [bar, split] = lines();
+    expect(bar.classList.contains('mt-arow')).toBe(false);
+    expect(bar.tabIndex).toBe(0);
+    expect(tooltipFor(bar)).toContain('Aimed Shot');
+    expect(split.classList.contains('mt-arow')).toBe(true);
+    expect(split.tabIndex).toBe(-1);
+    // empty body: the host paints nothing rather than an empty tooltip box
+    expect(tooltipFor(split)).toBe('');
+  });
+
   it('keeps every bar keyboard reachable so the breakdown is not hover-only', () => {
     const { meters, visibleRows } = setup();
     meters.onEvent(dmg(1, 51, 300, 'Aimed Shot'));

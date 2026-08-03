@@ -670,6 +670,10 @@ export class MetersPanel {
         node.kind = 'member';
         node.pid = tally.pid;
         node.name = tally.name;
+        // A bar is the tab stop (it carries the breakdown tooltip and the
+        // toggle); the split rows under it are read-only, so keyboard travel
+        // stays one stop per member instead of one per spell.
+        if (node.el.tabIndex !== 0) node.el.tabIndex = 0;
         node.el.classList.remove('mt-arow');
         node.el.classList.toggle('aggro', hasAggro);
         node.el.classList.toggle('mt-expandable', line.expandable);
@@ -694,6 +698,8 @@ export class MetersPanel {
       node.kind = 'ability';
       node.pid = line.ownerPid;
       node.name = ownerName;
+      // Read-only: out of the tab order, and carrying no tooltip of its own.
+      if (node.el.tabIndex !== -1) node.el.tabIndex = -1;
       node.el.classList.add('mt-arow');
       node.el.classList.remove('aggro', 'mt-expandable', 'mt-open');
       node.el.removeAttribute('role');
@@ -771,7 +777,10 @@ export class MetersPanel {
       const row: MeterRowNodes = { el, fill, label, num, pid: -1, name: '', kind: 'member' };
       this.rowPool.push(row);
       this.rowsEl.appendChild(el);
-      this.host.attachTooltip(el, () => this.breakdownHtml(row));
+      // Member bars only: a split row IS the breakdown, so re-showing the whole
+      // owner tooltip over it would repeat what the row already says. Empty
+      // means "no tooltip" (the host shows nothing rather than an empty box).
+      this.host.attachTooltip(el, () => (row.kind === 'member' ? this.breakdownHtml(row) : ''));
       // Pooled node, so the handler reads the record LIVE: which member this
       // line carries changes every render. Only a bar toggles; a line inside a
       // split is a readout, not a control.
