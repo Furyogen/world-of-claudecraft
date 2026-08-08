@@ -7,6 +7,7 @@ import { DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
 import { NYTHRAXIS_LAYOUT } from '../src/sim/dungeon_layout';
 import { isShieldItem } from '../src/sim/equipment_rules';
 import { expectedStatBudget, itemLevel, primaryStatSum } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { Sim } from '../src/sim/sim';
 import { type Aura, dist2d, type Entity } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
@@ -332,7 +333,7 @@ describe('Nythraxis raid encounter', () => {
     expect(ITEMS.stormcallers_spaulders.requiredClass).toEqual(['shaman']);
   });
 
-  it('drops the offhand-slot and two-hander epics at item level 29 (raid source)', () => {
+  it('drops the offhand-slot and two-hander epics at the normal raid band epic rung', () => {
     const loot = MOBS.nythraxis_scourge_of_thornpeak.loot;
     for (const id of [
       'bonewrought_greatsword',
@@ -342,10 +343,11 @@ describe('Nythraxis raid encounter', () => {
     ]) {
       const item = ITEMS[id];
       expect(item.quality, id).toBe('epic');
-      // Raid source: 20 (boss level) + 6 (epic) + 3 (raid bonus) = item level 29,
-      // with the realized primary stats exactly on that tier's budget (the 2H
-      // weapons carry the doubled TWOHAND_STAT_MULT mainhand budget).
-      expect(itemLevel(item), id).toBe(29);
+      // A 10-player cap-level boss anchors its drops to the 'raid' band, whose epic
+      // rung is item level 25, with the realized primary stats exactly on that
+      // tier's budget (the 2H weapons carry the TWOHAND_STAT_MULT mainhand budget).
+      expect(itemLevel(item), id).toBe(25);
+      expect(itemLevel(item), id).toBe(endgameItemLevel('raid', 'epic'));
       expect(primaryStatSum(item), id).toBe(expectedStatBudget(item));
       expect(
         loot.some((entry) => entry.itemId === id),

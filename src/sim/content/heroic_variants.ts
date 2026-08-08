@@ -1,9 +1,8 @@
 // Heroic upgraded drop variants. When a mob dies in a HEROIC dungeon instance, its
 // normal (base-table) epic and rare drops are swapped for a "Heroic" copy: the same
-// item identity one tier up. Epics read item level 28, rares 25 (see
-// HEROIC_VARIANT_SOURCE_LEVEL in ../item_level), with primary stats rescaled to the
-// matching budget. The swap happens in loot/loot_roll.ts, and only when it is an
-// UPGRADE (raid epics, already item level 29, are left alone).
+// item identity one tier up: a variant reads its tier band's rung for its quality
+// (../item_tier), with primary stats rescaled to the matching budget. The swap
+// happens in loot/loot_roll.ts, and only when it is an UPGRADE.
 //
 // These are real ItemDefs merged into ITEMS (data.ts), so every downstream reader
 // (tooltip, equip, itemScore, the server->client wire) treats a Heroic variant like
@@ -17,12 +16,12 @@ import {
   normalizePrimaryStats,
   PRIMARY_STATS,
   primaryStatBudget,
-  QUALITY_ILVL_BONUS,
   scaleWeaponDamage,
   TWOHAND_DPS_MULT,
   TWOHAND_STAT_MULT,
   weaponDpsBudget,
 } from '../item_budget';
+import { type EndgameTier, endgameItemLevel } from '../item_tier';
 import type { ItemDef, MobTemplate } from '../types';
 import { NYTHRAXIS_RAID_BOSS_ID, NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL } from './heroic_loot';
 
@@ -31,12 +30,12 @@ export function heroicVariantId(baseId: string): string {
   return `heroic_${baseId}`;
 }
 
-// Combat ratings on the Heroic RAID variants (item level 33/37): the dual-rating
-// tier. Unlike the five-man heroic variants (which inherit their base's ratings
-// unchanged, so ilvl-26 dungeon bases with no rating stay rating-free at ilvl 28),
-// a raid variant SCALES its base's primary rating up to the raid allowance AND adds
-// a complementary secondary rating. Two ratings per piece is the raid tier's
-// identity, a step nothing below ilvl 33 has. See docs/prd/combat-ratings-and-jewelry.md.
+// Combat ratings on the Heroic RAID variants: the dual-rating tier. Unlike the
+// five-man heroic variants (which inherit their base's ratings unchanged, so
+// rating-free dungeon bases stay rating-free), a raid variant SCALES its base's
+// primary rating up to the raid allowance AND adds a complementary secondary
+// rating. Two ratings per piece is the top tier's identity, a step no lower tier
+// has. See docs/prd/combat-ratings-and-jewelry.md.
 const RAID_RATING_KEYS = ['hitRating', 'critRating', 'hasteRating'] as const;
 type RatingKey = (typeof RAID_RATING_KEYS)[number];
 const RAID_PRIMARY_ARMOR = 55; // 5.5%
@@ -83,8 +82,12 @@ function applyRaidVariantRatings(variant: ItemDef, base: ItemDef): void {
 }
 
 function makeHeroicVariant(base: ItemDef, sourceLevel = HEROIC_VARIANT_SOURCE_LEVEL): ItemDef {
-  const quality = base.quality ?? 'common';
-  const targetLevel = sourceLevel + (QUALITY_ILVL_BONUS[quality] ?? 0);
+  // The variant's item level comes from the tier band it lands in, matching what
+  // item_level.ts will report for it once the source index is built. Computed here
+  // rather than read back so the stats are already on budget at data-eval time.
+  const tier: EndgameTier =
+    sourceLevel === NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL ? 'heroic_raid' : 'heroic_dungeon';
+  const targetLevel = endgameItemLevel(tier, base.quality);
   const isTwoHand = base.kind === 'weapon' && base.hand === 'twohand';
   const handMultiplier = isTwoHand ? TWOHAND_STAT_MULT : 1;
   // Rounded like expectedStatBudget so variant budgets stay integral under the
@@ -122,7 +125,7 @@ function makeHeroicVariant(base: ItemDef, sourceLevel = HEROIC_VARIANT_SOURCE_LE
       ...scaleWeaponDamage(base.weapon, Math.max(curveDps, baseDps)),
     };
   }
-  // Heroic RAID variants (source level 27 -> item level 33/37) get the dual rating;
+  // Heroic RAID variants (the 'heroic_raid' band) get the dual rating;
   // five-man heroic variants inherit their base's ratings unchanged via the spread.
   if (sourceLevel === NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL) applyRaidVariantRatings(variant, base);
   // The spread widens ItemDef's discriminated union; the transform preserves the

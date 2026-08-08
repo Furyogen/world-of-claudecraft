@@ -14,6 +14,7 @@ import {
   QUALITY_ILVL_BONUS,
   RAID_ILVL_BONUS,
 } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { resolveCraftForRecipe } from '../src/sim/professions/crafting';
 import {
   MASTERWORK_BASE_CHANCE,
@@ -37,6 +38,7 @@ import type { ProfessionRecipeRecord } from '../src/sim/professions/types';
 import type { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 import type { CoreStats } from '../src/sim/types';
+import { MAX_LEVEL } from '../src/sim/types';
 
 const statSum = (stats: Partial<CoreStats> | null | undefined): number => {
   if (!stats) return 0;
@@ -333,11 +335,14 @@ describe('masterwork stays strictly below the raid-loot band (acceptance bound)'
     }
     const band = itemSourceLevel(def.id);
     expect(band, `${recipe.id}: crafted output must have a registered source level`).toBeDefined();
-    const floor = primaryStatBudget(
-      (band ?? 0) + (QUALITY_ILVL_BONUS[bandQuality] ?? 0) + RAID_ILVL_BONUS,
-      bandQuality,
-      def.slot,
-    );
+    // The floor is the RAID drop of the same quality the masterwork lands at. At the
+    // level cap that is the anchored raid band (item_tier.ts); below the cap raid
+    // loot is still derived, so the old source + quality + raid sum stands.
+    const floorLevel =
+      (band ?? 0) >= MAX_LEVEL
+        ? endgameItemLevel('raid', bandQuality)
+        : (band ?? 0) + (QUALITY_ILVL_BONUS[bandQuality] ?? 0) + RAID_ILVL_BONUS;
+    const floor = primaryStatBudget(floorLevel, bandQuality, def.slot);
     return { recipeId: recipe.id, itemId: def.id, total: defSum + bonusSum, floor };
   }
 
@@ -360,15 +365,15 @@ describe('masterwork stays strictly below the raid-loot band (acceptance bound)'
 
   it('pins the concrete numbers for a hub rare-def recipe and a common-band recipe (drift tripwires)', () => {
     // Even if no content change ever crosses the bound, these two literal rows
-    // trip on any budget/tuning drift. wardweave_cowl: rare helmet, band 20,
-    // def sum 11 plus the baked epic-minus-rare delta 2 at level 20, against
-    // raid floor primaryStatBudget(20 + 6 + 3, 'epic', 'helmet') = 17
-    // (margin 4). eastbrook_ritual_vestments: uncommon chest, band 9, def sum
-    // 3 plus delta 2, against primaryStatBudget(9 + 3 + 3, 'rare', 'chest')
-    // = 8 (margin 3).
+    // trip on any budget/tuning drift. wardweave_cowl: rare helmet, band 20 (at the
+    // cap), def sum 11 plus the baked epic-minus-rare delta 2 at level 20, against
+    // the raid band's epic helmet floor of 16 (margin 3).
+    // eastbrook_ritual_vestments: uncommon chest, band 9 (sub-cap, so still the
+    // derived form), def sum 3 plus delta 2, against
+    // primaryStatBudget(9 + 3 + 3, 'rare', 'chest') = 8 (margin 3).
     const cowl = boundRow(recipeById('recipe_wardweave_cowl')!, 1);
     expect(cowl.total).toBe(13);
-    expect(cowl.floor).toBe(17);
+    expect(cowl.floor).toBe(16);
     const vestments = boundRow(recipeById('recipe_eastbrook_ritual_vestments')!, 1);
     expect(vestments.total).toBe(5);
     expect(vestments.floor).toBe(8);

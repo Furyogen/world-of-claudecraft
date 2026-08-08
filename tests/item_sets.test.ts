@@ -289,7 +289,7 @@ describe('recalcPlayerStats applies equipped set bonuses (real raid/dungeon gear
     });
     expect(three.castPushbackReduction).toBe(1);
     expect(three.knockbackResistance).toBe(0);
-    expect(three.stats.int).toBe(base.stats.int + 11 + 8 + 13 + 10);
+    expect(three.stats.int).toBe(base.stats.int + 10 + 7 + 10 + 10);
     expect(three.stats.sta).toBe(base.stats.sta + 10);
   });
 
@@ -301,7 +301,7 @@ describe('recalcPlayerStats applies equipped set bonuses (real raid/dungeon gear
       gloves: 'soulflame_gloves',
     });
     expect(soulflame.castPushbackReduction).toBe(1);
-    expect(soulflame.stats.int).toBe(mageBase.stats.int + 11 + 9 + 8 + 15);
+    expect(soulflame.stats.int).toBe(mageBase.stats.int + 10 + 8 + 7 + 15);
     expect(soulflame.stats.spi).toBe(mageBase.stats.spi + 15);
 
     const shamanBase = statsFor('shaman', 20, {});
@@ -311,7 +311,7 @@ describe('recalcPlayerStats applies equipped set bonuses (real raid/dungeon gear
       gloves: 'stormcallers_handguards',
     });
     expect(stormcallers.castPushbackReduction).toBe(1);
-    expect(stormcallers.stats.int).toBe(shamanBase.stats.int + 10 + 8 + 8 + 15);
+    expect(stormcallers.stats.int).toBe(shamanBase.stats.int + 9 + 7 + 7 + 15);
     expect(stormcallers.stats.spi).toBe(shamanBase.stats.spi + 15);
   });
 });

@@ -372,7 +372,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'shoulder',
     quality: 'rare',
-    stats: { armor: 82, agi: 7, sta: 3 },
+    stats: { armor: 82, agi: 6, sta: 3 },
     sellValue: 410,
   },
   gravewyrm_gauntlets: {
@@ -1138,7 +1138,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'shoulder',
     quality: 'rare',
-    stats: { armor: 78, int: 6, spi: 4 },
+    stats: { armor: 78, int: 5, spi: 4 },
     sellValue: 470,
   },
   // --- Hollow Crypt rewards (rare/blue) ---

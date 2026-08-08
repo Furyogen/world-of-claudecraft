@@ -89,8 +89,8 @@ describe('jewelry equip flow', () => {
     const before = { str: p.stats.str, sta: p.stats.sta };
     sim.addItem('seal_of_the_nine_oaths', 1, pid);
     sim.equipItem('seal_of_the_nine_oaths', pid);
-    expect(p.stats.str).toBe(before.str + 7);
-    expect(p.stats.sta).toBe(before.sta + 4);
+    expect(p.stats.str).toBe(before.str + 8);
+    expect(p.stats.sta).toBe(before.sta + 5);
   });
 
   it('lets any class wear jewelry (no armorType gate)', () => {

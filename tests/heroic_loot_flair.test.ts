@@ -9,6 +9,7 @@ import { ITEMS, MOBS } from '../src/sim/data';
 import { enterDungeon } from '../src/sim/instances/dungeons';
 import { TWOHAND_DPS_MULT, weaponDpsBudget } from '../src/sim/item_budget';
 import { expectedStatBudget, itemLevel, primaryStatSum } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { Sim } from '../src/sim/sim';
 import type { Entity, ItemDef } from '../src/sim/types';
 import { itemDisplayName } from '../src/ui/entity_i18n';
@@ -36,11 +37,8 @@ describe('heroic loot flair: variant generation', () => {
     expect(all.length).toBeGreaterThan(0);
     for (const v of all) {
       expect(['epic', 'rare', 'legendary']).toContain(v.quality);
-      if (raidBases.has(v.heroicOf ?? '')) {
-        expect(itemLevel(v), v.id).toBe(v.quality === 'legendary' ? 37 : 33);
-      } else {
-        expect(itemLevel(v), v.id).toBe(v.quality === 'epic' ? 28 : 25);
-      }
+      const tier = raidBases.has(v.heroicOf ?? '') ? 'heroic_raid' : 'heroic_dungeon';
+      expect(itemLevel(v), v.id).toBe(endgameItemLevel(tier, v.quality));
       // A base item already above the generated budget must retain that extra power.
       expect(primaryStatSum(v)).toBeGreaterThanOrEqual(expectedStatBudget(v) ?? 0);
     }
@@ -76,12 +74,15 @@ describe('heroic loot flair: variant generation', () => {
     });
   });
 
-  it("preserves Moonwrack Robe's 15 primary-stat points in its Heroic variant", () => {
+  it("lifts Moonwrack Robe's 15 primary-stat points to its Heroic tier budget", () => {
+    // The variant takes max(tier budget, base budget): its heroic five-man rare
+    // rung budgets a chest at 16, above the base's authored 15, so it scales up.
+    // The never-downgrade half of that rule is swept above.
     const base = ITEMS.moonshroud_robe;
     const variant = ITEMS[heroicVariantId(base.id)];
     expect({ base: primaryStatSum(base), heroic: primaryStatSum(variant) }).toEqual({
       base: 15,
-      heroic: 15,
+      heroic: 16,
     });
   });
 
@@ -96,14 +97,14 @@ describe('heroic loot flair: variant generation', () => {
     expect(ITEMS[heroicVariantId('boneplate_vest')]).toBeUndefined();
   });
 
-  it('upgrades a Nythraxis raid set piece to its raid-tier heroic variant (33 over 29)', () => {
-    const base = ITEMS.crownforged_dreadhelm; // Nythraxis raid epic, item level 29
-    expect(itemLevel(base)).toBe(29);
+  it('upgrades a Nythraxis raid set piece to its heroic-raid band variant', () => {
+    const base = ITEMS.crownforged_dreadhelm; // normal Nythraxis raid epic
+    expect(itemLevel(base)).toBe(endgameItemLevel('raid', 'epic'));
     const v = ITEMS[heroicVariantId('crownforged_dreadhelm')];
     expect(v).toBeDefined();
-    // The raid boss's set pieces upgrade to the raid tier (33), a genuine upgrade
-    // over the 29 base, so the heroic swap applies rather than skipping.
-    expect(itemLevel(v)).toBe(33);
+    // The raid boss's set pieces upgrade to the heroic raid band, a genuine upgrade
+    // over the normal-raid base, so the heroic swap applies rather than skipping.
+    expect(itemLevel(v)).toBe(endgameItemLevel('heroic_raid', 'epic'));
     expect(itemLevel(v)! > itemLevel(base)!).toBe(true);
   });
 });
@@ -114,29 +115,31 @@ describe('heroic loot flair: weapon dps tracks item level', () => {
     return (w.min + w.max) / 2 / w.speed;
   };
   const FIVEMAN_SET_WEAPONS = ['gravewyrm_cleaver', 'mistcallers_fang', 'lunar_tide_greatstaff'];
-  // The heroic-only Nythraxis raid weapons are one tier up (item level 33).
+  // The heroic-only Nythraxis raid weapons are one tier up (the heroic raid band).
   const RAID_WEAPONS = [
     'scepter_of_the_deathless_court',
     'deathless_greatblade',
     'stormcallers_focus',
   ];
 
-  it('every five-man heroic (item level 31) set weapon sits on the dps curve', () => {
-    const target = weaponDpsBudget(31);
+  it('every five-man heroic set weapon sits on its band dps curve', () => {
+    const fiveManLevel = endgameItemLevel('heroic_dungeon', 'epic');
+    const target = weaponDpsBudget(fiveManLevel);
     for (const id of FIVEMAN_SET_WEAPONS) {
-      expect(itemLevel(ITEMS[id]), id).toBe(31);
+      expect(itemLevel(ITEMS[id]), id).toBe(fiveManLevel);
       expect(Math.abs(dps(id) - target), `${id} dps ${dps(id)}`).toBeLessThan(0.3);
     }
   });
 
-  it('every heroic-only raid weapon (item level 33) sits on the dps curve', () => {
+  it('every heroic-only raid weapon sits on its band dps curve', () => {
+    const raidLevel = endgameItemLevel('heroic_raid', 'epic');
     for (const id of RAID_WEAPONS) {
       const item = ITEMS[id];
-      expect(itemLevel(item), id).toBe(33);
+      expect(itemLevel(item), id).toBe(raidLevel);
       // Two-handers ride the TWOHAND_DPS_MULT premium above the one-hand line
       // (the v0.27.1 stat-for-dps tradeoff).
       const isTwoHand = item.kind === 'weapon' && item.hand === 'twohand';
-      const target = weaponDpsBudget(33) * (isTwoHand ? TWOHAND_DPS_MULT : 1);
+      const target = weaponDpsBudget(raidLevel) * (isTwoHand ? TWOHAND_DPS_MULT : 1);
       expect(Math.abs(dps(id) - target), `${id} dps ${dps(id)}`).toBeLessThan(0.3);
     }
   });

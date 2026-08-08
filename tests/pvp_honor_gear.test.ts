@@ -3,6 +3,7 @@ import {
   FURY_NPC,
   FURY_STOCK,
   WARFARE_ITEMS,
+  WARFARE_SLOT_RATING,
   WARFARE_SOURCE_LEVEL,
 } from '../src/sim/content/pvp_honor';
 import { ITEMS, NPCS } from '../src/sim/data';
@@ -16,8 +17,9 @@ import {
   itemSourceLevel,
   primaryStatSum,
 } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { pvpFractionsFromRatings } from '../src/sim/pvp';
-import { EQUIP_SLOTS, type EquipSlot, type PlayerClass } from '../src/sim/types';
+import { EQUIP_SLOTS, type EquipSlot, type ItemSlot, type PlayerClass } from '../src/sim/types';
 
 const SLOT_PRICES: Record<string, number> = {
   mainhand: 800,
@@ -178,7 +180,7 @@ describe('FURY WARFARE stock', () => {
 });
 
 describe('FURY WARFARE item budgets', () => {
-  it('makes every offer a soulbound, honor-priced item-level-28 epic with full WARFARE', () => {
+  it('makes every offer a soulbound, honor-priced heroic-band epic with full WARFARE', () => {
     for (const id of FURY_STOCK) {
       const item = ITEMS[id];
       const budget = expectedStatBudget(item) ?? 0;
@@ -189,15 +191,21 @@ describe('FURY WARFARE item budgets', () => {
       expect(item.sellValue, id).toBe(0);
       expect(item.buyValue, id).toBeUndefined();
       expect(itemSourceLevel(id), id).toBe(WARFARE_SOURCE_LEVEL);
-      expect(itemLevel(item), id).toBe(28);
+      // Honor gear is the PvP parallel of the heroic five-man tier, so it shares
+      // that band's epic rung while staying deliberately stat-light inside it.
+      expect(itemLevel(item), id).toBe(27);
+      expect(itemLevel(item), id).toBe(endgameItemLevel('heroic_dungeon', 'epic'));
       // WARFARE gear weights its stat budget toward warfare: primary stats are 60%
       // of the slot budget (the rest is expressed as the full WARFARE rating), so a
       // PvP piece is a PvP-first, stat-light kit that never out-stats same-tier PvE
       // gear. Armor mitigation and weapon DPS (the slot's inherent baseline) are kept.
       expect(primaryStatSum(item), id).toBe(Math.round(budget * 0.6));
-      // Every piece's WARFARE ratings still mirror its FULL slot budget (drives 16.8%).
-      expect(item.pvpOffenseRating, id).toBe(budget);
-      expect(item.pvpDefenseRating, id).toBe(budget);
+      // Every piece's WARFARE ratings come from the explicit per-slot allowance,
+      // NOT from the PvE stat budget, so a PvE re-budget cannot move PvP damage.
+      const allowance = WARFARE_SLOT_RATING[item.slot as ItemSlot];
+      expect(allowance, `${id} has a slot allowance`).toBeGreaterThan(0);
+      expect(item.pvpOffenseRating, id).toBe(allowance);
+      expect(item.pvpDefenseRating, id).toBe(allowance);
       expect(item.priceHonor, id).toBe(SLOT_PRICES[item.slot ?? '']);
     }
   });
@@ -221,8 +229,8 @@ describe('FURY WARFARE item budgets', () => {
     }
   });
 
-  it('puts all three weapons on the item-level-28 DPS curve', () => {
-    const target = weaponDpsBudget(28);
+  it('puts all three weapons on their band DPS curve', () => {
+    const target = weaponDpsBudget(endgameItemLevel('heroic_dungeon', 'epic'));
     for (const id of ['final_argument_greatblade', 'first_blood_razor', 'emberglass_warstaff']) {
       const weapon = ITEMS[id].weapon;
       expect(weapon, id).toBeDefined();

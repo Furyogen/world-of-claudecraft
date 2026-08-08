@@ -6,7 +6,7 @@ import type { ItemDef } from '../types';
 // buyHeroicVendorItem (src/sim/instances/heroic_vendor.ts).
 //
 // Item level: the source index (src/sim/item_level.ts) treats this stock as
-// level-20 heroic content, so the epic pieces read item level 26 (20 + the epic
+// heroic five-man content, so the epic pieces read that band's epic rung (the
 // bump) and their stat sums are budget-enforced by tests/item_level.test.ts:
 // ring budget 11 (slot mult 0.6), neck budget 12 (slot mult 0.65).
 //
@@ -37,7 +37,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { str: 7, sta: 4 },
+    stats: { str: 8, sta: 5 },
     hitRating: JEWELRY_RATING, // plate melee: Hit answers the Heroic +3 miss
     sellValue: 4500,
   },
@@ -48,7 +48,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { int: 7, sta: 4 },
+    stats: { int: 8, sta: 5 },
     hitRating: JEWELRY_RATING, // dps caster: Hit answers the Heroic +3 resist
     sellValue: 4500,
   },
@@ -59,7 +59,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { agi: 7, sta: 4 },
+    stats: { agi: 8, sta: 5 },
     critRating: JEWELRY_RATING, // agi dps: crit throughput
     sellValue: 4500,
   },
@@ -70,7 +70,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { sta: 6, str: 5 },
+    stats: { sta: 7, str: 6 },
     hitRating: JEWELRY_RATING, // tank/melee: Hit
     sellValue: 4500,
   },
@@ -81,7 +81,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { spi: 6, int: 5 },
+    stats: { spi: 7, int: 6 },
     hasteRating: JEWELRY_RATING, // healer-leaning: haste
     sellValue: 4500,
   },
@@ -92,7 +92,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { int: 6, spi: 5 },
+    stats: { int: 7, spi: 6 },
     hasteRating: JEWELRY_RATING, // caster/healer: uptime
     sellValue: 4500,
   },
@@ -103,7 +103,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'neck',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { agi: 7, sta: 5 },
+    stats: { agi: 8, sta: 6 },
     hasteRating: JEWELRY_RATING, // agi dps: uptime
     sellValue: 6000,
   },
@@ -114,7 +114,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'neck',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { int: 7, spi: 5 },
+    stats: { int: 8, spi: 6 },
     critRating: JEWELRY_RATING, // caster throughput
     sellValue: 6000,
   },
@@ -125,7 +125,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'neck',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { str: 6, agi: 6 },
+    stats: { str: 7, agi: 7 },
     hitRating: JEWELRY_RATING, // hybrid melee: Hit
     sellValue: 6000,
   },
@@ -136,7 +136,7 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     slot: 'neck',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { str: 7, sta: 5 },
+    stats: { str: 8, sta: 6 },
     critRating: JEWELRY_RATING, // melee throughput
     sellValue: 6000,
   },

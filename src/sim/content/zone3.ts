@@ -2224,9 +2224,9 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   },
   // --- Level-20 endgame loot: Korzul (5-player Gravewyrm Sanctum) and Nythraxis
   // (10-player raid). Every piece below is NORMALIZED to the stat budget its item
-  // level earns (see src/sim/item_level.ts): item level = level 20 + quality bonus,
-  // plus a raid bonus for Nythraxis drops, so the raid set reads a tier above the
-  // dungeon set. Within each (item level, quality, slot) group the primary-stat sum
+  // level earns (see src/sim/item_level.ts). Cap-level content is anchored to its
+  // tier band (src/sim/item_tier.ts): the dungeon drops read the 'dungeon' band and
+  // the Nythraxis drops the 'raid' band above it. Within each (item level, quality, slot) group the primary-stat sum
   // is identical while each piece keeps its own stat identity (plate str/sta, cloth
   // int/spi, leather agi/sta). tests/item_level.test.ts pins data == formula. ---
   boneplate_vest: {
@@ -2465,7 +2465,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'legs',
     quality: 'rare',
-    stats: { armor: 125, sta: 12 },
+    stats: { armor: 125, sta: 11 },
     sellValue: 2200,
   },
   boneguard_breastplate: {
@@ -2485,7 +2485,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'rare',
-    weapon: { min: 27, max: 43, speed: 3.0 },
+    weapon: { min: 31, max: 50, speed: 3.0 },
     stats: { int: 9, spi: 4 },
     sellValue: 2500,
     requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
@@ -2575,7 +2575,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'chest',
     quality: 'epic',
-    stats: { armor: 270, str: 8, sta: 10 },
+    stats: { armor: 270, str: 8, sta: 9 },
     sellValue: 9000,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -2587,7 +2587,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'chest',
     quality: 'epic',
-    stats: { armor: 92, int: 11, spi: 7 },
+    stats: { armor: 92, int: 10, spi: 7 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -2599,7 +2599,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'chest',
     quality: 'epic',
-    stats: { armor: 170, agi: 12, sta: 6 },
+    stats: { armor: 170, agi: 11, sta: 6 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2611,7 +2611,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'legs',
     quality: 'epic',
-    stats: { armor: 240, str: 8, sta: 8 },
+    stats: { armor: 240, str: 8, sta: 7 },
     sellValue: 9000,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -2635,7 +2635,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'feet',
     quality: 'epic',
-    stats: { armor: 80, int: 8, spi: 4 },
+    stats: { armor: 80, int: 7, spi: 4 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -2647,7 +2647,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'legs',
     quality: 'epic',
-    stats: { armor: 86, int: 13, spi: 7 },
+    // An epic from a sub-cap (level-19) source: the derived ladder would put it on
+    // the raid rung it never earned, so itemLevel clamps it to the top of the first
+    // endgame band and it budgets as the dungeon-tier epic it competes with.
+    stats: { armor: 86, int: 10, spi: 5 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -2659,7 +2662,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'feet',
     quality: 'epic',
-    stats: { armor: 145, agi: 7, sta: 5 },
+    stats: { armor: 145, agi: 6, sta: 5 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2671,7 +2674,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'legs',
     quality: 'epic',
-    stats: { armor: 155, agi: 10, sta: 6 },
+    stats: { armor: 155, agi: 9, sta: 6 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2683,12 +2686,12 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    // 2H dps premium: weaponDpsBudget(26) = 14.5 x TWOHAND_DPS_MULT -> 16.7 dps
-    // (this pre-dated the Eastbrook/Highwatch rule and sat on the flat curve).
-    weapon: { min: 33, max: 53, speed: 2.6 },
-    // v0.27.1 re-budget: round(primaryStatBudget(26, epic, mainhand) = 18 x
-    // TWOHAND_STAT_MULT) = 23 points; a 2H's compensation lives on the dps side.
-    stats: { str: 14, sta: 9 },
+    // 2H dps premium: the dungeon band's epic rung on weaponDpsBudget, times
+    // TWOHAND_DPS_MULT.
+    weapon: { min: 32, max: 51, speed: 2.6 },
+    // round(the dungeon band's epic mainhand budget x TWOHAND_STAT_MULT);
+    // a 2H's compensation lives on the dps side.
+    stats: { str: 13, sta: 9 },
     sellValue: 8000,
     requiredClass: ['warrior', 'hunter', 'shaman', 'paladin'],
   },
@@ -2699,7 +2702,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     weapon: { min: 32, max: 52, speed: 3.0 },
-    stats: { int: 12, spi: 6 },
+    stats: { int: 11, spi: 6 },
     sellValue: 8000,
     requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
@@ -2709,8 +2712,8 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'epic',
-    weapon: { min: 19, max: 30, speed: 1.7, dagger: true },
-    stats: { agi: 12, sta: 6 },
+    weapon: { min: 18, max: 29, speed: 1.7, dagger: true },
+    stats: { agi: 11, sta: 6 },
     sellValue: 8000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2726,7 +2729,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 245, str: 7, sta: 8 },
+    stats: { armor: 245, str: 7, sta: 7 },
     sellValue: 9000,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -2738,7 +2741,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 70, int: 9, spi: 5 },
+    stats: { armor: 70, int: 8, spi: 5 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -2750,7 +2753,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'gloves',
     quality: 'epic',
-    stats: { armor: 110, agi: 9, sta: 4 },
+    stats: { armor: 110, agi: 8, sta: 4 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2764,7 +2767,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     armorType: 'mail',
     quality: 'epic',
-    stats: { armor: 180, str: 6, sta: 7 },
+    stats: { armor: 180, str: 6, sta: 6 },
     sellValue: 3600,
     requiredClass: ['warrior', 'paladin'],
     set: 'crownforged', // 3rd Bonewrought piece, unlocks the set's 3-piece bonus
@@ -2776,7 +2779,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     armorType: 'leather',
     quality: 'epic',
-    stats: { armor: 110, agi: 8, sta: 5 },
+    stats: { armor: 110, agi: 7, sta: 5 },
     sellValue: 3600,
     requiredClass: ['rogue', 'hunter', 'druid'],
     set: 'nighttalon', // 3rd Direfang piece, unlocks the set's 3-piece bonus
@@ -2788,7 +2791,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     armorType: 'cloth',
     quality: 'epic',
-    stats: { armor: 60, int: 8, sta: 5 },
+    stats: { armor: 60, int: 7, sta: 5 },
     sellValue: 3600,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
     set: 'soulflame', // 3rd Wraithfire piece, unlocks the set's 3-piece bonus
@@ -2800,7 +2803,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     armorType: 'mail',
     quality: 'epic',
-    stats: { armor: 130, int: 8, sta: 5 },
+    stats: { armor: 130, int: 7, sta: 5 },
     sellValue: 3600,
     requiredClass: ['shaman'],
     set: 'stormcallers', // 3rd Galecall piece, unlocks the set's 3-piece bonus
@@ -2814,7 +2817,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     armorType: 'mail',
     quality: 'epic',
-    stats: { armor: 150, str: 7, sta: 6 },
+    stats: { armor: 150, str: 6, sta: 6 },
     sellValue: 3600,
     requiredClass: ['warrior', 'paladin'],
     set: 'crownforged',
@@ -2826,7 +2829,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     armorType: 'leather',
     quality: 'epic',
-    stats: { armor: 95, agi: 8, sta: 5 },
+    stats: { armor: 95, agi: 7, sta: 5 },
     sellValue: 3600,
     requiredClass: ['rogue', 'hunter', 'druid'],
     set: 'nighttalon',
@@ -2838,7 +2841,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     armorType: 'cloth',
     quality: 'epic',
-    stats: { armor: 50, int: 8, spi: 5 },
+    stats: { armor: 50, int: 7, spi: 5 },
     sellValue: 3600,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
     set: 'soulflame',
@@ -2850,7 +2853,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     armorType: 'mail',
     quality: 'epic',
-    stats: { armor: 110, int: 8, sta: 5 },
+    stats: { armor: 110, int: 7, sta: 5 },
     sellValue: 3600,
     requiredClass: ['shaman'],
     set: 'stormcallers',
@@ -2867,7 +2870,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // wearers lose real value from the swap (bear-form AP scales on agility).
     // Hunters/rogues cannot equip it. Still exactly on the 44-pt legendary
     // mainhand budget.
-    stats: { spi: 17, sta: 13, int: 14 },
+    stats: { spi: 18, sta: 14, int: 15 },
     sellValue: 25000,
     requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
     // Life and decay: a damaging spell may fester a nature DoT (Deathbloom); a heal
@@ -2904,11 +2907,11 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'legendary',
-    weapon: { min: 46, max: 74, speed: 2.8 },
+    weapon: { min: 37, max: 60, speed: 2.8 },
     // Rebalanced into a str/agi/sta hybrid within the fixed 44-pt legendary
     // mainhand budget: 15 agi makes it a viable hunter ranged weapon (ranged AP +
     // crit) while it stays usable by its warrior/paladin owners.
-    stats: { str: 15, agi: 15, sta: 14 },
+    stats: { str: 16, agi: 16, sta: 15 },
     sellValue: 25000,
     requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
     // Thunderfury-style on-hit: a nature arc that blasts the target and chains to
@@ -2936,8 +2939,8 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 310, str: 8, sta: 9 },
-    // ilvl-29 raid seed rating (20 -> 2.0%); the Heroic raid variant scales this up
+    stats: { armor: 310, str: 8, sta: 8 },
+    // raid-band seed rating (20 -> 2.0%); the Heroic raid variant scales this up
     // and adds a complementary secondary (heroic_variants.ts). Off the stat budget.
     hitRating: 20,
     sellValue: 12000,
@@ -2951,7 +2954,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 260, str: 7, sta: 8 },
+    stats: { armor: 260, str: 7, sta: 7 },
     hitRating: 20,
     sellValue: 12000,
     requiredClass: ['warrior', 'paladin'],
@@ -2964,7 +2967,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 190, agi: 10, sta: 7 },
+    stats: { armor: 190, agi: 9, sta: 7 },
     hitRating: 20,
     sellValue: 12000,
     requiredClass: ['rogue', 'hunter', 'druid'],
@@ -2977,7 +2980,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 165, agi: 9, sta: 6 },
+    stats: { armor: 165, agi: 8, sta: 6 },
     hitRating: 20,
     sellValue: 12000,
     requiredClass: ['rogue', 'hunter', 'druid'],
@@ -2990,7 +2993,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 105, int: 11, sta: 6 },
+    stats: { armor: 105, int: 10, sta: 6 },
     hitRating: 20,
     sellValue: 12000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
@@ -3003,7 +3006,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 92, int: 9, sta: 6 },
+    stats: { armor: 92, int: 8, sta: 6 },
     hitRating: 20,
     sellValue: 12000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
@@ -3016,7 +3019,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 225, int: 10, sta: 7 },
+    stats: { armor: 225, int: 9, sta: 7 },
     critRating: 20,
     sellValue: 12000,
     requiredClass: ['shaman'],
@@ -3029,14 +3032,14 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     armorType: 'mail',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 190, int: 8, sta: 7 },
+    stats: { armor: 190, int: 7, sta: 7 },
     critRating: 20,
     sellValue: 12000,
     requiredClass: ['shaman'],
   },
   // --- Nythraxis raid (normal): the missing offhand-slot + two-hander epics.
-  // All four register at item level 29 (source 20 + epic 6 + raid 3), the same
-  // tier as the set pieces above, and carry the ilvl-29 raid seed rating (one
+  // All four anchor to the 'raid' band's epic rung, the same tier as the set pieces
+  // above, and carry the raid seed rating (one
   // rating at 20, off the stat budget, like every set piece). ---
   bonewrought_greatsword: {
     id: 'bonewrought_greatsword',
@@ -3045,13 +3048,12 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    // Two-handers trade stats for a slow, heavy swing: weaponDpsBudget(29) = 15.4
-    // x TWOHAND_DPS_MULT -> 17.65 dps here.
-    weapon: { min: 45, max: 75, speed: 3.4 },
-    // v0.27.1 re-budget: round(primaryStatBudget(29, epic, mainhand) = 20 x
-    // TWOHAND_STAT_MULT) = 26 points (a mainhand + offhand pair at this tier
-    // carries 35, so any dual-wield or shield setup out-stats this).
-    stats: { str: 14, sta: 12 },
+    // Two-handers trade stats for a slow, heavy swing: the raid band's epic rung
+    // on weaponDpsBudget, times TWOHAND_DPS_MULT.
+    weapon: { min: 44, max: 73, speed: 3.4 },
+    // round(the raid band's epic mainhand budget x TWOHAND_STAT_MULT). A mainhand
+    // plus offhand pair at this tier still out-stats it, which is the tradeoff.
+    stats: { str: 13, sta: 12 },
     // Physical melee identity: Hit, like the crownforged pieces.
     hitRating: 20,
     sellValue: 12000,
@@ -3068,10 +3070,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     hand: 'twohand',
     quality: 'epic',
-    // Same 2H rules as the Bonewrought Greatsword: weaponDpsBudget(29) x
+    // Same 2H rules as the Bonewrought Greatsword: the raid band's rung x
     // TWOHAND_DPS_MULT -> 17.67 dps at a faster 3.0 swing, same 26-point budget.
-    weapon: { min: 40, max: 66, speed: 3.0 },
-    stats: { agi: 14, sta: 12 },
+    weapon: { min: 39, max: 64, speed: 3.0 },
+    stats: { agi: 13, sta: 12 },
     // Physical melee identity: Hit, like the nighttalon pieces.
     hitRating: 20,
     sellValue: 12000,
@@ -3088,14 +3090,14 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     shield: true,
     quality: 'epic',
     // Shield armor is ~2x a same-tier epic chest (the common-tier rule:
-    // Wallshield 112 vs chain vest 60): the ilvl-29 epic mail chest
+    // Wallshield 112 vs chain vest 60): the raid-band epic mail chest
     // extrapolates to ~340 (deathlord_warplate 270 at 26, scaled by the 29-tier
     // helm ratio 310/245), so 680 here. blockValue extrapolates the common
     // ladder (buckler 6, Wallshield 14) to the epic tier: 30. Stats are the
-    // exact offhand budget, primaryStatBudget(29, epic, offhand) = 15,
+    // the exact raid-band epic offhand budget,
     // sta-heavy for the tank identity.
     blockValue: 30,
-    stats: { armor: 680, sta: 10, str: 5 },
+    stats: { armor: 680, sta: 9, str: 5 },
     // Physical tank identity: Hit (threat), like the crownforged pieces.
     hitRating: 20,
     sellValue: 12000,
@@ -3108,9 +3110,9 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'offhand',
     quality: 'epic',
     // Held-in-offhand caster stat stick: no weapon damage, stats on the exact
-    // offhand budget, primaryStatBudget(29, epic, offhand) = 15 (the budget
+    // the raid-band epic offhand budget (the budget
     // model's 0.75x mainhand line), int/spi identity with minor sta.
-    stats: { int: 7, spi: 5, sta: 3 },
+    stats: { int: 6, spi: 5, sta: 3 },
     // Healer-inclusive spell throughput: crit like the stormcallers pieces,
     // never Hit (heals are not resisted; the Heartwood healer-facing rule).
     critRating: 20,

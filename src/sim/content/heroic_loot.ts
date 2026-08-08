@@ -1,11 +1,10 @@
 // Heroic-only boss drops: epic gear that ONLY rolls when the final boss of a
 // heroic instance dies (loot/loot_roll.ts appends these entries to the normal
 // table when the mob's claimed instance is heroic, so party need/greed rules
-// apply unchanged). Every piece reads item level 31: the source index
-// (item_level.ts) registers these ids at HEROIC_LOOT_SOURCE_LEVEL 25 (level-20
-// content plus the heroic tier bump) and the epic quality bonus adds 6. Stat
-// sums are exact per the item-level budget (STAT_PER_ILVL x slot mult), pinned
-// by the tests/item_level.test.ts heroic sweep. requiredClass locks follow the
+// apply unchanged). Every piece reads the heroic five-man band's epic rung: the
+// source index (item_level.ts) registers these ids at HEROIC_LOOT_SOURCE_LEVEL 25
+// and anchors them to the 'heroic_dungeon' tier (item_tier.ts). Stat sums are exact
+// per the item-level budget, pinned by the tests/item_level.test.ts heroic sweep. requiredClass locks follow the
 // established archetype groups so every class has a near-complete set to chase.
 //
 // Each final boss drops TWO heroic epics: one from its `_heroic` group and one
@@ -19,26 +18,27 @@
 import type { ItemDef, LootEntry } from '../types';
 
 // Source level the heroic drop table reads as in the item-level index: the
-// dungeons are level-20 content and heroic is the tier above (+5), so the
-// epic pieces land at item level 31 (25 + the epic bump of 6).
+// dungeons are level-20 content and heroic is the tier above. The level itself no
+// longer sets the item level (the 'heroic_dungeon' band does); it still orders the
+// source index and feeds the equip gate.
 export const HEROIC_LOOT_SOURCE_LEVEL = 25;
 
 // The 10-player heroic raid (Heroic Nythraxis) is one tier ABOVE the five-man
-// heroics: its drop table registers at source level 27 so its epics land at item
-// level 33 and its legendaries at 37 (27 + the quality bump). Its heroic set
-// pieces are the same collectible slots as the five-man versions, only rescaled
-// to this raid tier. See buildHeroicVariants + the item-level source index.
+// heroics: its drop table registers at source level 27 and anchors to the
+// 'heroic_raid' band, the top tier of the ladder. Its heroic set pieces are the same
+// collectible slots as the five-man versions, only rescaled to this raid tier. See
+// buildHeroicVariants + the item-level source index.
 export const NYTHRAXIS_RAID_BOSS_ID = 'nythraxis_scourge_of_thornpeak';
 export const NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL = 27;
 
-// Combat-rating allowance for the ilvl-31 five-player heroic set: ONE rating
-// (hit/crit/haste) per piece, the tier's differentiator over ilvl 26/28 gear.
-// The three Heroic Nythraxis weapons below are item level 33 instead and carry the
-// raid tier's 65-point primary plus a 20-point complementary secondary. Ratings are
+// Combat-rating allowance for the five-player heroic set: ONE rating
+// (hit/crit/haste) per piece, the tier's differentiator over normal dungeon gear.
+// The three Heroic Nythraxis weapons below sit in the heroic raid band instead and
+// carry that tier's 65-point primary plus a 20-point complementary secondary. Ratings are
 // off the primary-stat budget (like spellPower), so stat sums stay budget-enforced.
 // Roughly half the set is Hit (the Heroic +3 answer); crit/haste fill throughput by
 // archetype; healer-facing pieces never take Hit (heals are not resisted by level).
-// The ilvl 33/37 raid variants scale these up + add a secondary rating (see
+// The heroic raid variants scale these up + add a secondary rating (see
 // heroic_variants.ts). See docs/prd/combat-ratings-and-jewelry.md.
 const ARMOR_RATING = 40; // 40 rating = 4.0%
 const FIVE_MAN_WEAPON_RATING = 50; // 50 rating = 5.0%
@@ -61,7 +61,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 335, str: 12, sta: 10 },
+    stats: { armor: 335, str: 11, sta: 10 },
     hitRating: ARMOR_RATING,
     sellValue: 14000,
     requiredClass: HEAVY,
@@ -139,8 +139,8 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 22, max: 36, speed: 1.8 },
-    stats: { agi: 13, sta: 9 },
+    weapon: { min: 22, max: 35, speed: 1.8 },
+    stats: { agi: 12, sta: 9 },
     critRating: FIVE_MAN_WEAPON_RATING,
     sellValue: 15000,
     requiredClass: AGILE,
@@ -219,7 +219,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     weapon: { min: 36, max: 60, speed: 3.0 },
-    stats: { int: 13, spi: 9 },
+    stats: { int: 12, spi: 9 },
     hitRating: FIVE_MAN_WEAPON_RATING,
     sellValue: 15000,
     requiredClass: CASTER,
@@ -232,7 +232,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'legs',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 132, agi: 12, sta: 8 },
+    stats: { armor: 132, agi: 11, sta: 8 },
     hitRating: ARMOR_RATING,
     sellValue: 12000,
     requiredClass: AGILE,
@@ -258,7 +258,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'legs',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 72, int: 12, spi: 8 },
+    stats: { armor: 72, int: 11, spi: 8 },
     hitRating: ARMOR_RATING,
     sellValue: 12000,
     requiredClass: CASTER,
@@ -298,7 +298,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     weapon: { min: 31, max: 52, speed: 2.6 },
-    stats: { str: 13, sta: 9 },
+    stats: { str: 12, sta: 9 },
     critRating: FIVE_MAN_WEAPON_RATING,
     sellValue: 15000,
     requiredClass: HEAVY,
@@ -311,7 +311,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 90, int: 12, spi: 10 },
+    stats: { armor: 90, int: 11, spi: 10 },
     critRating: ARMOR_RATING,
     sellValue: 14000,
     requiredClass: CASTER,
@@ -377,7 +377,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     weapon: { min: 29, max: 51, speed: 2.4 },
-    stats: { int: 13, spi: 10 },
+    stats: { int: 14, spi: 10 },
     hasteRating: RAID_WEAPON_PRIMARY_RATING,
     critRating: RAID_SECONDARY_RATING,
     sellValue: 16000,
@@ -391,12 +391,12 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     hand: 'twohand',
     quality: 'epic',
     requiredLevel: 20,
-    // 2H dps premium at the raid tier: weaponDpsBudget(33) = 16.6 x
+    // 2H dps premium at the heroic raid tier: that band's rung x
     // TWOHAND_DPS_MULT -> 19.1 dps.
-    weapon: { min: 52, max: 78, speed: 3.4 },
-    // v0.27.1 re-budget: round(primaryStatBudget(33, epic, mainhand) = 23 x
+    weapon: { min: 53, max: 79, speed: 3.4 },
+    // round(the heroic raid band's epic mainhand budget x
     // TWOHAND_STAT_MULT) = 30 points; the dps premium is the 2H's compensation.
-    stats: { str: 18, sta: 12 },
+    stats: { str: 19, sta: 12 },
     hitRating: RAID_WEAPON_PRIMARY_RATING,
     critRating: RAID_SECONDARY_RATING,
     sellValue: 16000,
@@ -409,8 +409,8 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 31, max: 52, speed: 2.5 },
-    stats: { int: 14, spi: 9 },
+    weapon: { min: 31, max: 53, speed: 2.5 },
+    stats: { int: 15, spi: 9 },
     hasteRating: RAID_WEAPON_PRIMARY_RATING,
     critRating: RAID_SECONDARY_RATING,
     sellValue: 16000,
@@ -516,7 +516,7 @@ export const HEROIC_BOSS_LOOT: Record<string, LootEntry[]> = {
   nythraxis_scourge_of_thornpeak: [
     // The heroic set pieces and legendaries come free from the heroic loot swap:
     // the raid boss's normal set-piece and legendary drops auto-upgrade to their
-    // raid-tier (item level 33/37) heroic variants in a heroic claim
+    // heroic-raid-band heroic variants in a heroic claim
     // (loot/loot_roll.ts + heroic_variants.ts). This table adds only the
     // heroic-ONLY extras the normal table never carries: the three bespoke raid
     // weapons, one of which drops per heroic kill (chances sum to 1.0).

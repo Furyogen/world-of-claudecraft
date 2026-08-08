@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { effectiveSpellHit, spellResistChance } from '../src/sim/combat/spell_resist';
 import { aggregateSetBonuses } from '../src/sim/content/item_sets';
-import { ITEMS } from '../src/sim/data';
+import { ITEMS, MOBS } from '../src/sim/data';
 import { itemLevel } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { Sim } from '../src/sim/sim';
 import type { Entity, ItemDef } from '../src/sim/types';
 import {
@@ -140,17 +141,21 @@ describe('combat ratings', () => {
   });
 });
 
-// The tier ladder is the fix for "ilvl 31 feels the same as 26/28": ratings, not the
-// tiny primary-stat growth, differentiate the tiers. 0 ratings on ilvl-26 dungeon
-// epics -> 1 rating on every ilvl-31 heroic piece -> 2 on the ilvl-33/37 raid variants.
+// The tier ladder is the fix for "the heroic tier feels the same as the dungeon
+// tier": ratings, not the primary-stat growth, differentiate the tiers. 0 ratings on
+// normal dungeon epics -> 1 rating on every heroic boss-set piece -> 2 on the heroic
+// raid variants. Selected by SOURCE (which table a piece comes from), never by a bare
+// item-level literal: the endgame bands (item_tier.ts) put several sources on the same
+// rung, so a literal would silently sweep the wrong set.
 describe('combat-rating tier ladder', () => {
   const ratingValues = (item: ItemDef): number[] =>
     [item.hitRating, item.critRating, item.hasteRating].filter((r): r is number => (r ?? 0) > 0);
   const ratingCount = (item: ItemDef): number => ratingValues(item).length;
 
-  it('every ilvl-31 heroic boss-set piece carries exactly one rating', async () => {
+  it('every heroic boss-set piece carries exactly one rating', async () => {
     const { HEROIC_ITEMS } = await import('../src/sim/content/heroic_loot');
-    const pieces = Object.values(HEROIC_ITEMS).filter((item) => itemLevel(item) === 31);
+    const fiveManLevel = endgameItemLevel('heroic_dungeon', 'epic');
+    const pieces = Object.values(HEROIC_ITEMS).filter((item) => itemLevel(item) === fiveManLevel);
     expect(pieces).toHaveLength(24);
     for (const item of pieces) {
       expect(ratingCount(item), item.id).toBe(1);
@@ -161,52 +166,81 @@ describe('combat-rating tier ladder', () => {
     expect(hitPieces).toBeGreaterThanOrEqual(Math.ceil(pieces.length / 3));
   });
 
-  it('enforces the complete 0 -> 1 -> 2 rating ladder by live item level', async () => {
+  it('enforces the complete 0 -> 1 -> 2 rating ladder across the tier sources', async () => {
     const { HEROIC_VENDOR_ITEMS } = await import('../src/sim/content/heroic_vendor');
+    const { HEROIC_ITEMS } = await import('../src/sim/content/heroic_loot');
     const vendorIds = new Set(Object.keys(HEROIC_VENDOR_ITEMS));
+    const heroicSetIds = new Set(Object.keys(HEROIC_ITEMS));
     const allGear = Object.values(ITEMS).filter(
       (item) => item.slot && itemLevel(item) !== undefined,
     );
+    const raidBases = new Set(
+      (MOBS.nythraxis_scourge_of_thornpeak?.loot ?? []).flatMap((e) =>
+        e.itemId ? [e.itemId] : [],
+      ),
+    );
 
-    const ilvl26 = allGear.filter((item) => itemLevel(item) === 26);
-    for (const item of ilvl26) {
-      if (vendorIds.has(item.id)) {
-        expect(ratingValues(item), item.id).toEqual([25]);
-      } else {
+    // Rung 0: normal five-man dungeon epics carry no combat rating at all.
+    const dungeonEpics = allGear.filter(
+      (item) =>
+        itemLevel(item) === endgameItemLevel('dungeon', 'epic') &&
+        item.quality === 'epic' &&
+        !item.heroicOf,
+    );
+    expect(dungeonEpics.length).toBeGreaterThan(0);
+    for (const item of dungeonEpics) expect(ratingCount(item), item.id).toBe(0);
+
+    // Rung 0: the heroic five-man VARIANTS inherit their base's ratings unchanged, so
+    // a variant of a rating-free dungeon epic stays rating-free.
+    const fiveManVariants = allGear.filter(
+      (item) => item.heroicOf !== undefined && !raidBases.has(item.heroicOf),
+    );
+    expect(fiveManVariants.length).toBeGreaterThan(0);
+    for (const item of fiveManVariants) {
+      expect(itemLevel(item), item.id).toBe(endgameItemLevel('heroic_dungeon', item.quality));
+      if (ratingCount(ITEMS[item.heroicOf as string]) === 0)
         expect(ratingCount(item), item.id).toBe(0);
-      }
     }
+
+    // Rung 1: the marks jewelry, at its own smaller allowance.
     expect([...vendorIds]).toHaveLength(10);
-
-    for (const item of allGear.filter((gear) => itemLevel(gear) === 28)) {
-      expect(ratingCount(item), item.id).toBe(0);
+    for (const id of vendorIds) {
+      const item = ITEMS[id];
+      expect(itemLevel(item), id).toBe(endgameItemLevel('heroic_dungeon', 'epic'));
+      expect(ratingValues(item), id).toEqual([25]);
     }
 
-    // The 8 Nythraxis set pieces plus the 4 offhand-slot / two-hander epics
-    // (bonewrought_greatsword/bulwark, direfang_greatblade, wraithfire_orb).
-    const ilvl29 = allGear.filter((item) => itemLevel(item) === 29);
-    expect(ilvl29).toHaveLength(12);
-    for (const item of ilvl29) expect(ratingValues(item), item.id).toEqual([20]);
+    // Rung 1: the normal Nythraxis raid epics carry the single 20-point seed rating
+    // the heroic raid variants later scale up.
+    const raidEpics = allGear.filter(
+      (item) =>
+        itemLevel(item) === endgameItemLevel('raid', 'epic') &&
+        item.quality === 'epic' &&
+        !item.heroicOf &&
+        !vendorIds.has(item.id) &&
+        !heroicSetIds.has(item.id),
+    );
+    expect(raidEpics).toHaveLength(12);
+    for (const item of raidEpics) expect(ratingValues(item), item.id).toEqual([20]);
 
+    // Rung 2: every heroic Nythraxis piece carries TWO ratings, the tier's identity.
     const directHeroicRaidWeapons = new Set([
       'scepter_of_the_deathless_court',
       'deathless_greatblade',
       'stormcallers_focus',
     ]);
-    const heroicRaidGear = allGear.filter((item) => {
-      const ilvl = itemLevel(item);
-      return (
-        (ilvl === 33 && (item.heroicOf !== undefined || directHeroicRaidWeapons.has(item.id))) ||
-        (ilvl === 37 && item.heroicOf !== undefined)
-      );
-    });
-    // 13 pre-existing pieces plus the 4 generated heroic raid variants of the
-    // new normal-raid epics (greatsword, greatblade, bulwark, orb).
+    const heroicRaidGear = allGear.filter(
+      (item) =>
+        (item.heroicOf !== undefined && raidBases.has(item.heroicOf)) ||
+        directHeroicRaidWeapons.has(item.id),
+    );
     expect(heroicRaidGear).toHaveLength(17);
+    const legendaryLevel = endgameItemLevel('heroic_raid', 'legendary');
     for (const item of heroicRaidGear) {
       const ilvl = itemLevel(item);
-      const expectedPrimary = ilvl === 37 ? 70 : item.weapon ? 65 : 55;
-      const expectedSecondary = ilvl === 37 ? 30 : 20;
+      expect(ilvl, item.id).toBe(endgameItemLevel('heroic_raid', item.quality));
+      const expectedPrimary = ilvl === legendaryLevel ? 70 : item.weapon ? 65 : 55;
+      const expectedSecondary = ilvl === legendaryLevel ? 30 : 20;
       expect(
         ratingValues(item).sort((a, b) => b - a),
         item.id,

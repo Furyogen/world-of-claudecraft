@@ -135,7 +135,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 417,
-      "state": "3906fa74",
+      "state": "9313fea5",
       "events": "7a79aab1",
       "rng": {
         "draws": 3,
@@ -146,7 +146,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 417,
-      "state": "372dc9d8",
+      "state": "5b27b563",
       "events": "fcb0555f",
       "rng": {
         "draws": 3,
@@ -157,7 +157,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 417,
-      "state": "33bd6685",
+      "state": "799e0672",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -168,7 +168,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 417,
-      "state": "3a682310",
+      "state": "5142d2cf",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -179,7 +179,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 417,
-      "state": "0a2494bc",
+      "state": "4e7a3f77",
       "events": "8a539ac9",
       "rng": {
         "draws": 48,
@@ -190,7 +190,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 417,
-      "state": "f021e514",
+      "state": "cdcbed3b",
       "events": "741638a5",
       "rng": {
         "draws": 80,
@@ -201,7 +201,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 417,
-      "state": "99774aed",
+      "state": "a9e0a3a6",
       "events": "741638a5",
       "rng": {
         "draws": 129,
@@ -212,7 +212,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 417,
-      "state": "39e57cfa",
+      "state": "446c62b3",
       "events": "979eb25f",
       "rng": {
         "draws": 179,
@@ -223,8 +223,8 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 417,
-      "state": "b4768b1f",
-      "events": "d00e294a",
+      "state": "51d3b949",
+      "events": "a2a050bd",
       "rng": {
         "draws": 242,
         "digest": "e13bc30a"
@@ -234,7 +234,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 417,
-      "state": "cfddf722",
+      "state": "4b2c471c",
       "events": "741638a5",
       "rng": {
         "draws": 308,
@@ -245,7 +245,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 417,
-      "state": "5d314a63",
+      "state": "df7c5ffd",
       "events": "741638a5",
       "rng": {
         "draws": 356,
@@ -256,7 +256,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 417,
-      "state": "6be9ff34",
+      "state": "6e35964a",
       "events": "741638a5",
       "rng": {
         "draws": 406,
@@ -267,7 +267,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 417,
-      "state": "6be9ff34",
+      "state": "6e35964a",
       "events": "741638a5",
       "rng": {
         "draws": 406,
@@ -290,14 +290,14 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 121,
+            "damageDealt": 120,
             "damageTaken": 106
           },
           "craftSkills": {},
           "craftThrottle": {},
           "deedStats": {
             "counters": {
-              "damageDealt": 121
+              "damageDealt": 120
             },
             "dungeonClears": {},
             "itemsDiscovered": [
@@ -404,7 +404,7 @@
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 50000,
-          "maxResource": 2136,
+          "maxResource": 2106,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -415,18 +415,18 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 2041,
+          "resource": 2011,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 62,
+          "spellPower": 61,
           "stats": {
             "agi": 12,
             "armor": 305,
-            "int": 124,
+            "int": 122,
             "spi": 83,
             "sta": 39,
             "str": 10
@@ -465,7 +465,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 49879,
+          "hp": 49880,
           "id": 416,
           "inCombat": true,
           "kind": "mob",
@@ -498,7 +498,7 @@
           "threat": [
             [
               415,
-              122
+              121
             ]
           ],
           "weapon": {
@@ -513,7 +513,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 417,
-      "state": "6be9ff34",
+      "state": "6e35964a",
       "events": "741638a5",
       "rng": {
         "draws": 406,
@@ -536,14 +536,14 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 121,
+            "damageDealt": 120,
             "damageTaken": 106
           },
           "craftSkills": {},
           "craftThrottle": {},
           "deedStats": {
             "counters": {
-              "damageDealt": 121
+              "damageDealt": 120
             },
             "dungeonClears": {},
             "itemsDiscovered": [
@@ -650,7 +650,7 @@
           "level": 20,
           "lootFfaTimer": "Infinity",
           "maxHp": 50000,
-          "maxResource": 2136,
+          "maxResource": 2106,
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
@@ -661,18 +661,18 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 2041,
+          "resource": 2011,
           "resourceType": "mana",
           "spawnPos": {
             "x": 2,
             "y": 1.5,
             "z": -2
           },
-          "spellPower": 62,
+          "spellPower": 61,
           "stats": {
             "agi": 12,
             "armor": 305,
-            "int": 124,
+            "int": 122,
             "spi": 83,
             "sta": 39,
             "str": 10
@@ -711,7 +711,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 49879,
+          "hp": 49880,
           "id": 416,
           "inCombat": true,
           "kind": "mob",
@@ -744,7 +744,7 @@
           "threat": [
             [
               415,
-              122
+              121
             ]
           ],
           "weapon": {

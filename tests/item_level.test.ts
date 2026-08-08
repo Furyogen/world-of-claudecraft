@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { HEROIC_BOSS_LOOT } from '../src/sim/content/heroic_loot';
 import { ITEMS, MOBS } from '../src/sim/data';
+import { STAT_PER_ILVL, statPointCurve, weaponDpsBudget } from '../src/sim/item_budget';
 import {
   expectedStatBudget,
   itemFromRaid,
@@ -11,9 +12,15 @@ import {
   PRIMARY_STATS,
   primaryStatBudget,
   primaryStatSum,
-  RAID_ILVL_BONUS,
   resetItemLevelCache,
 } from '../src/sim/item_level';
+import {
+  ENDGAME_MAX_ILVL,
+  ENDGAME_MIN_ILVL,
+  type EndgameTier,
+  endgameItemLevel,
+  tierBand,
+} from '../src/sim/item_tier';
 
 // The showcase tiers wired up in src/sim/content/items.ts: two trios, each one
 // piece per archetype, dropping from the same place so they share an item level.
@@ -199,18 +206,24 @@ describe('item level: raid tier', () => {
   });
 
   it('raid loot reads a tier above same-level dungeon loot', () => {
-    // Same source level (20) + same quality (epic), but the raid helmet carries the
-    // raid item-level bonus, so it is exactly RAID_ILVL_BONUS above the dungeon helmet.
+    // Same source level (20) + same quality (epic), but the raid helmet is anchored
+    // to the 'raid' band and the dungeon helmet to the 'dungeon' band, so the raid
+    // piece reads exactly its own tier's epic rung (item_tier.ts) and the dungeon
+    // piece reads the rung below. RAID_ILVL_BONUS no longer applies at the cap: it
+    // only separates raid from dungeon loot for sub-cap sources.
     const raidHelm = itemLevel(ITEMS.crownforged_dreadhelm);
     const dungeonHelm = itemLevel(ITEMS.deathlords_dread_visage);
     expect(itemSourceLevel('crownforged_dreadhelm')).toBe(20);
     expect(itemSourceLevel('deathlords_dread_visage')).toBe(20);
-    expect(raidHelm).not.toBeUndefined();
-    expect(dungeonHelm).not.toBeUndefined();
+    expect(raidHelm).toBe(endgameItemLevel('raid', 'epic'));
+    expect(dungeonHelm).toBe(endgameItemLevel('dungeon', 'epic'));
     if (raidHelm === undefined || dungeonHelm === undefined)
       throw new Error('raid and dungeon helmets should have item levels');
-    expect(raidHelm - dungeonHelm).toBe(RAID_ILVL_BONUS);
-    // ...and therefore a strictly larger stat budget for the same slot.
+    expect(raidHelm).toBeGreaterThan(dungeonHelm);
+    // The dungeon band's top rung stays strictly below the raid band's bottom rung:
+    // no normal-dungeon drop can read above a raid drop whatever its quality.
+    expect(tierBand('dungeon').max).toBeLessThan(tierBand('raid').min);
+    // ...and the raid helmet therefore carries a strictly larger stat budget.
     const raidBudget = expectedStatBudget(ITEMS.crownforged_dreadhelm);
     const dungeonBudget = expectedStatBudget(ITEMS.deathlords_dread_visage);
     expect(raidBudget).not.toBeUndefined();
@@ -221,12 +234,93 @@ describe('item level: raid tier', () => {
   });
 });
 
-describe('item level: heroic boss drops are budget-exact (five-mans 31, raid 33/37)', () => {
+describe('item level: the endgame bands are a strict, gapless ladder', () => {
+  // The whole point of the squish: every cap-level tier owns a contiguous band, the
+  // bands never overlap, and the ladder stays inside a fixed window under the level
+  // cap so a future cap can own its own window. Guards the ORDER, not the literals,
+  // except for the two endpoints that define the window.
+  it('orders the tiers and keeps them inside the endgame window', () => {
+    const order: EndgameTier[] = ['dungeon', 'raid', 'heroic_dungeon', 'heroic_raid'];
+    for (let i = 1; i < order.length; i++) {
+      const below = tierBand(order[i - 1]);
+      const above = tierBand(order[i]);
+      expect(below.min, `${order[i - 1]} band is ordered`).toBeLessThanOrEqual(below.max);
+      expect(below.max, `${order[i - 1]} sits strictly below ${order[i]}`).toBeLessThan(above.min);
+    }
+    expect(tierBand('dungeon').min).toBe(ENDGAME_MIN_ILVL);
+    // Legendaries cap the window, above every tier's epic rung.
+    expect(endgameItemLevel('heroic_raid', 'legendary')).toBe(ENDGAME_MAX_ILVL);
+    expect(endgameItemLevel('raid', 'legendary')).toBeGreaterThan(tierBand('heroic_raid').max);
+  });
+
+  it('reads higher item level as higher stat budget, with one known exception', () => {
+    // A tooltip's item level is only useful if a bigger number means a stronger
+    // piece. It does across the ladder EXCEPT at a tier's sub-epic rung, because
+    // quality is counted twice there: the band rung already encodes quality, and
+    // QUALITY_STAT_MULT then scales the budget again. The live case is the heroic
+    // five-man RARE variants: they read the heroic band (above the normal-dungeon
+    // and normal-raid epics) while budgeting below both.
+    //
+    // This is a design decision, not a bug to paper over: closing it means either
+    // widening the bands or compressing the quality multiplier for cap-level gear,
+    // which re-budgets ~80 shipped items. Pinned here as a tripwire so the exception
+    // cannot silently SPREAD to another rung.
+    const KNOWN_INVERSIONS = new Set(['heroic_dungeon:rare']);
+    const rungs: { tier: EndgameTier; quality: 'uncommon' | 'rare' | 'epic'; level: number }[] = [];
+    for (const tier of ['dungeon', 'raid', 'heroic_dungeon', 'heroic_raid'] as EndgameTier[]) {
+      for (const quality of ['uncommon', 'rare', 'epic'] as const) {
+        rungs.push({ tier, quality, level: endgameItemLevel(tier, quality) });
+      }
+    }
+    rungs.sort((a, b) => a.level - b.level);
+    // Compare on one fixed slot so only the level and quality vary.
+    const budgetOf = (r: (typeof rungs)[number]): number =>
+      primaryStatBudget(r.level, r.quality, 'chest');
+    const found: string[] = [];
+    let best = -1;
+    for (const rung of rungs) {
+      const budget = budgetOf(rung);
+      if (budget < best) found.push(`${rung.tier}:${rung.quality}`);
+      best = Math.max(best, budget);
+    }
+    expect(new Set(found)).toEqual(KNOWN_INVERSIONS);
+  });
+
+  it('keeps every live item level inside the window, so no drop outruns the ladder', () => {
+    for (const item of Object.values(ITEMS)) {
+      const level = itemLevel(item);
+      if (level === undefined) continue;
+      expect(level, `${item.id} item level`).toBeLessThanOrEqual(ENDGAME_MAX_ILVL);
+    }
+  });
+
+  it('anchors the budget curves so nothing below the endgame window moves', () => {
+    // The endgame curve is steeper but CONTINUOUS at the anchor: the two segments
+    // agree there, which is what keeps the whole sub-cap ladder byte-identical.
+    expect(statPointCurve(ENDGAME_MIN_ILVL)).toBeCloseTo(ENDGAME_MIN_ILVL * STAT_PER_ILVL, 10);
+    expect(weaponDpsBudget(ENDGAME_MIN_ILVL)).toBeCloseTo(6.7 + 0.3 * ENDGAME_MIN_ILVL, 10);
+    for (let level = 1; level <= ENDGAME_MIN_ILVL; level++) {
+      expect(statPointCurve(level), `ilvl ${level} stat curve`).toBeCloseTo(
+        level * STAT_PER_ILVL,
+        10,
+      );
+      expect(weaponDpsBudget(level), `ilvl ${level} dps curve`).toBeCloseTo(6.7 + 0.3 * level, 10);
+    }
+    // Above the anchor it is strictly steeper, which is what makes a one-rung tier
+    // step legible instead of rounding away.
+    expect(statPointCurve(ENDGAME_MIN_ILVL + 1) - statPointCurve(ENDGAME_MIN_ILVL)).toBeGreaterThan(
+      STAT_PER_ILVL,
+    );
+  });
+});
+
+describe('item level: heroic boss drops are budget-exact (their tier band)', () => {
   it('every explicit heroic-table drop is at its tier item level with its exact stat budget', () => {
-    // The five-man final bosses register at source level 25 (item level 31). The
-    // 10-player raid boss (Heroic Nythraxis) is one tier above at source level 27:
-    // its explicit table lists only the three heroic-only weapons (item level 33).
-    // See buildSourceIndex + NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL.
+    // The five-man final bosses register at source level 25 and anchor to the
+    // 'heroic_dungeon' band. The 10-player raid boss (Heroic Nythraxis) is the tier
+    // above at source level 27 and anchors to 'heroic_raid': its explicit table
+    // lists only the three heroic-only weapons. See buildSourceIndex +
+    // NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL.
     const raidIds = new Set(
       (HEROIC_BOSS_LOOT.nythraxis_scourge_of_thornpeak ?? []).flatMap((e) =>
         e.itemId ? [e.itemId] : [],
@@ -243,12 +337,15 @@ describe('item level: heroic boss drops are budget-exact (five-mans 31, raid 33/
       expect(item, `${id} is a real item`).toBeTruthy();
       expect(itemSourceLevel(id), `${id} source`).toBe(raid ? 27 : 25);
       expect(item.quality, id).toBe('epic');
-      expect(itemLevel(item), `${id} ilvl`).toBe(raid ? 33 : 31);
+      expect(itemLevel(item), `${id} ilvl`).toBe(
+        endgameItemLevel(raid ? 'heroic_raid' : 'heroic_dungeon', 'epic'),
+      );
+      expect(itemLevel(item), `${id} ilvl literal`).toBe(raid ? 29 : 27);
       expect(primaryStatSum(item), `${id} stat sum == budget`).toBe(expectedStatBudget(item));
     }
   });
 
-  it('the raid boss set pieces and legendaries upgrade to raid-tier heroic variants (33/37)', () => {
+  it('the raid boss set pieces and legendaries upgrade to raid-tier heroic variants (29/31)', () => {
     // These are not listed in the explicit table: they come from the normal-loot
     // heroic swap (heroic_<base>), rescaled to the raid tier (source 27).
     const raidBases = (MOBS.nythraxis_scourge_of_thornpeak?.loot ?? []).flatMap((e: any) =>
@@ -263,11 +360,13 @@ describe('item level: heroic boss drops are budget-exact (five-mans 31, raid 33/
       expect(itemSourceLevel(variant.id), `${variant.id} source`).toBe(27);
       if (variant.quality === 'legendary') {
         legendaries++;
-        expect(itemLevel(variant), `${variant.id} ilvl`).toBe(37);
+        expect(itemLevel(variant), `${variant.id} ilvl`).toBe(31);
+        expect(itemLevel(variant)).toBe(endgameItemLevel('heroic_raid', 'legendary'));
       } else {
         epics++;
         expect(variant.quality, variant.id).toBe('epic');
-        expect(itemLevel(variant), `${variant.id} ilvl`).toBe(33);
+        expect(itemLevel(variant), `${variant.id} ilvl`).toBe(29);
+        expect(itemLevel(variant)).toBe(endgameItemLevel('heroic_raid', 'epic'));
       }
       expect(primaryStatSum(variant), `${variant.id} stat sum == budget`).toBe(
         expectedStatBudget(variant),
@@ -361,10 +460,10 @@ describe('heroic set: class coverage', () => {
 });
 
 describe('item level: crafted gear derives its level from the recipe (content/recipes.ts)', () => {
-  // The three level-20, hub-gated caster pieces (issue #1965 review): budgeted at
-  // ITEM level (recipe level 20 + the rare QUALITY_ILVL_BONUS of 3 = 23), matching
-  // the level-20 rares in the same slots (boundstone_helm, gravewyrm_gauntlets,
-  // gravewyrm_mantle).
+  // The three level-20, hub-gated caster pieces (issue #1965 review): a level-20
+  // recipe is cap-level content, so its output anchors to the 'dungeon' band's rare
+  // rung, matching the level-20 rares in the same slots (boundstone_helm,
+  // gravewyrm_gauntlets, gravewyrm_mantle).
   const CASTER_HUB_IDS = ['wardweave_cowl', 'duskhide_wraps', 'sootscale_mantle'];
   const CASTER_COMMON_IDS = [
     'eastbrook_ritual_vestments',
@@ -379,10 +478,11 @@ describe('item level: crafted gear derives its level from the recipe (content/re
     }
   });
 
-  it('the hub caster pieces land at item level 23 and carry their exact stat budget', () => {
+  it('the hub caster pieces land at the dungeon-tier rare rung with their exact budget', () => {
     for (const id of CASTER_HUB_IDS) {
       const item = ITEMS[id];
-      expect(itemLevel(item), `${id} item level`).toBe(23);
+      expect(itemLevel(item), `${id} item level`).toBe(22);
+      expect(itemLevel(item)).toBe(endgameItemLevel('dungeon', 'rare'));
       const budget = expectedStatBudget(item);
       expect(budget, `${id} has a derivable budget`).not.toBeUndefined();
       expect(primaryStatSum(item), `${id} stat sum == budget`).toBe(budget);

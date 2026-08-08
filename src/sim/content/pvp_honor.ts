@@ -1,25 +1,44 @@
-// WARFARE gear sold by FURY, the Honor Quartermaster. Every item is a
-// level-20 epic sourced at level 22, so the item-level index reads it as item
-// level 28 after the epic +6 quality bump.
+// WARFARE gear sold by FURY, the Honor Quartermaster. Every item is a level-20
+// epic sourced at level 22 and anchored to the heroic five-man band (item_tier.ts):
+// honor is the PvP parallel of that PvE tier, so it reads the same item level.
 //
-// Every piece weights its stat budget toward WARFARE: primary stats are 60% of the
-// slot budget (see item_budget.ts), and the freed budget is expressed as the piece's
-// full WARFARE ratings (which still mirror the FULL slot budget, driving the 16.8%
-// full-set target). Armor mitigation and weapon DPS, the slot's inherent baseline,
-// are kept at the ilvl-28 curve. The net effect: PvP gear is a PvP-first, stat-light
-// kit that never out-stats same-tier PvE gear in PvE (where its WARFARE rating is
-// dead), while still winning in PvP through the WARFARE rating. In particular a PvP
-// ring/amulet never out-stats the ilvl-26 PvE badge jewelry from the Heroic
-// Quartermaster. The budget rule + the badge-comparison guard live in
-// tests/pvp_honor_gear.test.ts.
+// Every piece weights its power toward WARFARE: primary stats are 60% of the slot's
+// PvE stat budget (see item_budget.ts), and the rest of the piece is its WARFARE
+// rating. Armor mitigation and weapon DPS, the slot's inherent baseline, stay on the
+// band's curve. The net effect: PvP gear is a PvP-first, stat-light kit that never
+// out-stats same-tier PvE gear in PvE (where its WARFARE rating is dead), while
+// still winning in PvP through the WARFARE rating. In particular a PvP ring/amulet
+// never out-stats the PvE badge jewelry from the Heroic Quartermaster. The budget
+// rule + the badge-comparison guard live in tests/pvp_honor_gear.test.ts.
 
-import type { ItemDef, NpcDef } from '../types';
+import type { ItemDef, ItemSlot, NpcDef } from '../types';
 
 export const FURY_NPC_ID = 'fury';
 // Reserved so adding FURY does not shift the deterministic nextId sequence used
 // by every existing world spawn and parity replay.
 export const FURY_ENTITY_ID = 1_000_000_001;
 export const WARFARE_SOURCE_LEVEL = 22;
+
+// The WARFARE rating each slot carries. An EXPLICIT allowance, deliberately NOT a
+// function of the PvE stat curve: the load-bearing number is the full-set total (a
+// complete profile reaches 16.8% offense and defense, sized under the 20% cap in
+// pvp/power.ts), so tying it to the PvE budget would let a PvE re-budget silently
+// move PvP damage. The shape still mirrors the slot weighting (chest and mainhand
+// carry the most, rings the least), which is what keeps a slot's PvP value in line
+// with what it gives up in stats. Retune the ladder HERE, and the profile totals in
+// tests/pvp_honor_gear.test.ts move with it.
+export const WARFARE_SLOT_RATING: Partial<Record<ItemSlot, number>> = {
+  mainhand: 20,
+  chest: 20,
+  legs: 18,
+  helmet: 17,
+  shoulder: 15,
+  gloves: 14,
+  waist: 14,
+  feet: 13,
+  neck: 13,
+  ring: 12,
+};
 
 export const WARFARE_ITEMS: Record<string, ItemDef> = {
   // Furyforged Battlegear: Strength and Stamina mail.
@@ -31,7 +50,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'helmet',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 265, str: 4, sta: 6 },
+    stats: { armor: 265, str: 4, sta: 7 },
     pvpOffenseRating: 17,
     pvpDefenseRating: 17,
     priceHonor: 500,
@@ -46,7 +65,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'shoulder',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 220, str: 4, sta: 5 },
+    stats: { armor: 220, str: 4, sta: 6 },
     pvpOffenseRating: 15,
     pvpDefenseRating: 15,
     priceHonor: 400,
@@ -61,7 +80,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 305, str: 5, sta: 7 },
+    stats: { armor: 305, str: 5, sta: 8 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 700,
@@ -76,7 +95,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 200, str: 3, sta: 5 },
+    stats: { armor: 200, str: 3, sta: 6 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 250,
@@ -106,7 +125,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 200, str: 3, sta: 5 },
+    stats: { armor: 200, str: 3, sta: 6 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 300,
@@ -138,7 +157,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'helmet',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 265, int: 5, sta: 3, spi: 2 },
+    stats: { armor: 265, int: 6, sta: 3, spi: 2 },
     pvpOffenseRating: 17,
     pvpDefenseRating: 17,
     priceHonor: 500,
@@ -153,7 +172,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'shoulder',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 220, int: 4, sta: 3, spi: 2 },
+    stats: { armor: 220, int: 5, sta: 3, spi: 2 },
     pvpOffenseRating: 15,
     pvpDefenseRating: 15,
     priceHonor: 400,
@@ -168,7 +187,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 305, int: 6, sta: 4, spi: 2 },
+    stats: { armor: 305, int: 7, sta: 4, spi: 2 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 700,
@@ -183,7 +202,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 200, int: 3, sta: 3, spi: 2 },
+    stats: { armor: 200, int: 3, sta: 4, spi: 2 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 250,
@@ -213,7 +232,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 200, int: 3, sta: 3, spi: 2 },
+    stats: { armor: 200, int: 3, sta: 4, spi: 2 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 300,
@@ -245,7 +264,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'helmet',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 150, agi: 5, sta: 5 },
+    stats: { armor: 150, agi: 6, sta: 5 },
     pvpOffenseRating: 17,
     pvpDefenseRating: 17,
     priceHonor: 500,
@@ -260,7 +279,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'shoulder',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 135, agi: 4, sta: 5 },
+    stats: { armor: 135, agi: 4, sta: 6 },
     pvpOffenseRating: 15,
     pvpDefenseRating: 15,
     priceHonor: 400,
@@ -275,7 +294,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 155, agi: 5, sta: 7 },
+    stats: { armor: 155, agi: 5, sta: 8 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 700,
@@ -290,7 +309,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 90, agi: 3, sta: 5 },
+    stats: { armor: 90, agi: 3, sta: 6 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 250,
@@ -320,7 +339,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 95, agi: 3, sta: 5 },
+    stats: { armor: 95, agi: 3, sta: 6 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 300,
@@ -352,7 +371,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'helmet',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 70, int: 5, sta: 3, spi: 2 },
+    stats: { armor: 70, int: 6, sta: 3, spi: 2 },
     pvpOffenseRating: 17,
     pvpDefenseRating: 17,
     priceHonor: 500,
@@ -367,7 +386,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'shoulder',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 50, int: 4, sta: 3, spi: 2 },
+    stats: { armor: 50, int: 5, sta: 3, spi: 2 },
     pvpOffenseRating: 15,
     pvpDefenseRating: 15,
     priceHonor: 400,
@@ -382,7 +401,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'chest',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 80, int: 6, sta: 4, spi: 2 },
+    stats: { armor: 80, int: 7, sta: 4, spi: 2 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 700,
@@ -397,7 +416,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'waist',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 45, int: 3, sta: 3, spi: 2 },
+    stats: { armor: 45, int: 3, sta: 4, spi: 2 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 250,
@@ -427,7 +446,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'gloves',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { armor: 45, int: 3, sta: 3, spi: 2 },
+    stats: { armor: 45, int: 3, sta: 4, spi: 2 },
     pvpOffenseRating: 14,
     pvpDefenseRating: 14,
     priceHonor: 300,
@@ -502,7 +521,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { str: 3, sta: 4 },
+    stats: { str: 3, sta: 5 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -516,7 +535,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { str: 4, sta: 3 },
+    stats: { str: 5, sta: 3 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -530,7 +549,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { agi: 4, sta: 3 },
+    stats: { agi: 5, sta: 3 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -544,7 +563,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { agi: 3, sta: 4 },
+    stats: { agi: 3, sta: 5 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -558,7 +577,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { int: 4, sta: 2, spi: 1 },
+    stats: { int: 5, sta: 2, spi: 1 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -572,7 +591,7 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'ring',
     quality: 'epic',
     requiredLevel: 20,
-    stats: { int: 3, sta: 2, spi: 2 },
+    stats: { int: 4, sta: 2, spi: 2 },
     pvpOffenseRating: 12,
     pvpDefenseRating: 12,
     priceHonor: 150,
@@ -588,8 +607,8 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 34, max: 50, speed: 2.8 },
-    stats: { str: 5, sta: 7 },
+    weapon: { min: 36, max: 53, speed: 2.8 },
+    stats: { str: 5, sta: 8 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 800,
@@ -604,8 +623,8 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 20, max: 31, speed: 1.7, dagger: true },
-    stats: { agi: 5, sta: 7 },
+    weapon: { min: 21, max: 33, speed: 1.7, dagger: true },
+    stats: { agi: 5, sta: 8 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 800,
@@ -620,8 +639,8 @@ export const WARFARE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     requiredLevel: 20,
-    weapon: { min: 37, max: 54, speed: 3 },
-    stats: { int: 6, sta: 4, spi: 2 },
+    weapon: { min: 39, max: 57, speed: 3 },
+    stats: { int: 7, sta: 4, spi: 2 },
     pvpOffenseRating: 20,
     pvpDefenseRating: 20,
     priceHonor: 800,

@@ -4,6 +4,7 @@
 // item_level.ts (the source-index-aware readouts) and content/heroic_variants.ts
 // (which runs at data-eval time, before item_level finishes initializing) can share
 // this math without an import cycle. item_level.ts re-exports these for back-compat.
+import { ENDGAME_MIN_ILVL } from './item_tier';
 import type { CoreStats, ItemDef, ItemSlot } from './types';
 
 // The five primary attributes an item can carry (armor is handled separately: it
@@ -13,7 +14,10 @@ export type PrimaryStat = (typeof PRIMARY_STATS)[number];
 
 // A rarer item "punches above" the level of the content that drops it. Grounded in
 // the classic convention that a blue from a level-N pull outclasses a green from
-// the same pull; the exact bumps are tuned to this game's level-20 cap.
+// the same pull. SUB-CAP ONLY: this drives the derived LEVELLING ladder. Cap-level
+// gear is anchored to its tier band instead (item_tier.ts), where quality picks a
+// rung inside the tier rather than adding to it, because these bumps span a wider
+// range than the whole endgame window.
 export const QUALITY_ILVL_BONUS: Record<string, number> = {
   poor: 0,
   common: 0,
@@ -60,8 +64,35 @@ export const SLOT_STAT_MULT: Record<ItemSlot, number> = {
   ring2: 0.6,
 };
 
-// Primary-stat points granted per item level at full (rare-mult x chest-mult = 1).
+// Primary-stat points granted per item level at full (rare-mult x chest-mult = 1),
+// while LEVELLING. Item levels below the endgame anchor ride this line straight from
+// the origin, which is what the whole sub-cap ladder was authored against.
 export const STAT_PER_ILVL = 0.7;
+
+// Above the anchor the curve gets steeper. Endgame tiers are only one or two item
+// levels apart (see item_tier.ts), so on the levelling slope a whole tier step would
+// be worth 0.7 stat points before slot weighting: two tiers would round to the same
+// number on half the slots and the ladder would read flat. The endgame slope is what
+// makes a tier step legible, and it is also what lets the endgame occupy a 10-wide
+// band instead of the 17 the additive bumps used to need, at the same absolute power.
+//
+// Fitted, not invented: 1.1 reproduces the pre-squish budgets of the tiers that kept
+// their place in the ladder (a top-tier legendary mainhand lands on 49 either way)
+// while widening the per-tier step. The curve is CONTINUOUS at the anchor, so no
+// sub-cap item moves.
+export const ENDGAME_STAT_PER_ILVL = 1.1;
+
+// The dps counterpart of ENDGAME_STAT_PER_ILVL, fitted the same way against the
+// hand-authored weapon ladder: 0.48/ilvl above the anchor puts a top-tier one-hander
+// back on the 17.8 dps it carried at the old item level 37.
+export const ENDGAME_DPS_PER_ILVL = 0.48;
+
+// Total primary-stat points (before quality/slot weighting) an item level is worth:
+// the levelling line up to the anchor, the endgame line above it.
+export function statPointCurve(level: number): number {
+  if (level <= ENDGAME_MIN_ILVL) return level * STAT_PER_ILVL;
+  return ENDGAME_MIN_ILVL * STAT_PER_ILVL + (level - ENDGAME_MIN_ILVL) * ENDGAME_STAT_PER_ILVL;
+}
 
 // v0.27.1 re-budget: a two-handed weapon differentiates on weapon DPS (see
 // TWOHAND_DPS_MULT below), never on stats. It carries a modest premium over the
@@ -82,22 +113,26 @@ export const TWOHAND_STAT_MULT = 1.3;
 export const TWOHAND_DPS_MULT = 1.15;
 
 // The source level the "Heroic X" upgraded drop variants read as: one heroic tier
-// above the level-20 dungeons, so epics land at item level 28 (22 + the epic bump
-// of 6) and rares at 25 (22 + 3). content/heroic_variants.ts scales each variant's
-// stats to the matching budget; item_level.buildSourceIndex registers every
-// `heroicOf` item at this source level.
+// above the level-20 dungeons. The level orders the source index and feeds the equip
+// gate; the item level itself comes from the 'heroic_dungeon' band (item_tier.ts).
+// content/heroic_variants.ts scales each variant's stats to the matching budget;
+// item_level.buildSourceIndex registers every `heroicOf` item at this source level.
 export const HEROIC_VARIANT_SOURCE_LEVEL = 22;
 
 // Base weapon DPS a weapon of this item level should deal. Weapon damage tracks item
-// level (quality drives the STAT budget instead, see primaryStatBudget). A gentle
-// linear curve FIT to the authored weapon ladder, not invented: the ilvl-20 rares sit
-// near 11 to 11.5, the ilvl-26 dungeon epics near 14 to 15, and this puts ilvl-31 at
-// 16.0, above the item-level-26 epics and below the hand-authored legendaries (item
-// level 33 at 17+). Slope 0.3/ilvl keeps it under that legendary ceiling at the cap.
-// Two-handers ride TWOHAND_DPS_MULT above this line (their side of the stat tradeoff),
-// which puts a top-tier 2H above the one-hand legendary ceiling on raw weapon dps.
+// level (quality drives the STAT budget instead, see primaryStatBudget). A linear
+// curve FIT to the authored weapon ladder, not invented: the ilvl-20 rares sit near
+// 11 to 11.5, and slope 0.3/ilvl carries that line up to the endgame anchor.
+//
+// Above the anchor it steepens to ENDGAME_DPS_PER_ILVL for the same reason the stat
+// curve does: the endgame tiers are one to two item levels apart, so the levelling
+// slope would leave two tiers of weapon indistinguishable. The two segments meet at
+// the anchor, so no sub-cap weapon moves. Two-handers ride TWOHAND_DPS_MULT above
+// this line (their side of the stat tradeoff).
 export function weaponDpsBudget(level: number): number {
-  return 6.7 + 0.3 * level;
+  const anchor = 6.7 + 0.3 * ENDGAME_MIN_ILVL;
+  if (level <= ENDGAME_MIN_ILVL) return 6.7 + 0.3 * level;
+  return anchor + (level - ENDGAME_MIN_ILVL) * ENDGAME_DPS_PER_ILVL;
 }
 
 // Rescale a weapon's min/max damage to hit `dps` at its existing swing speed, keeping
@@ -126,7 +161,7 @@ export function primaryStatBudget(
   if (!slot) return 0;
   const q = QUALITY_STAT_MULT[quality ?? 'common'] ?? 0;
   const s = SLOT_STAT_MULT[slot] ?? 0.7;
-  return Math.max(0, Math.round(level * q * s * STAT_PER_ILVL));
+  return Math.max(0, Math.round(statPointCurve(level) * q * s));
 }
 
 // Redistribute `budget` primary-stat points across whichever attributes the item

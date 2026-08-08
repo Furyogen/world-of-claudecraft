@@ -1,8 +1,12 @@
 # Item level squish: feasibility measurement
 
-Status: investigation only, no gameplay change proposed for merge yet. Every
-number below was measured against the live content tables on `v0.28.0`, not
-estimated. The prototype used to measure the test blast radius was reverted.
+Status: **implemented** (Option C below). This document is the measurement that
+chose the approach; the shipped ladder lives in `src/sim/item_tier.ts` and the
+shipped curves in `src/sim/item_budget.ts`. Every number below was measured
+against the live content tables on `v0.28.0`, not estimated.
+
+The "before" numbers describe the pre-squish ladder. See "What shipped" at the
+end for the delivered result and how it differed from the measurement.
 
 ## The question
 
@@ -241,19 +245,106 @@ new curve, not designing them), and the combat-rating ladder is re-anchored in t
 same change. Estimate: comparable to Option B in mechanical churn, materially
 lower in balance risk.
 
-## Open decisions before implementing
+## What shipped
 
-1. **Where does WARFARE PvP gear land?** It sits at 28 today, level with heroic
-   five-man variants. The target list does not mention PvP. The measurement
-   assumed 26 (level with heroic dungeon entry); `src/sim/content/pvp_honor.ts`
-   documents an explicit intent that PvP jewelry never out-stats the PvE badge
-   jewelry, so this needs a deliberate call.
-2. **Do normal and heroic Nythraxis legendaries share item level 30, or split
-   30/31?** The measurement assumed 30 and 31.
-3. **Is the normal-raid-below-heroic-dungeon ordering intended?** It is what the
-   listed progression says, and it inverts today's ladder.
-4. **Do sub-cap (item level under 21) items move at all?** The measurement left
-   them alone.
-5. **Does the band anchor scale with `MAX_LEVEL`?** If each future cap should own
-   its own item-level window, the bands want to be expressed as offsets from the
-   cap rather than as literals, or the same collision returns at cap 30.
+Option C, with the decisions below taken as stated. The shipped ladder:
+
+| Tier | uncommon / rare | epic | legendary |
+|---|---|---|---|
+| normal five-man dungeons (and the level-20 world, and level-20 recipes) | 21 / 22 | 23 | 30 |
+| normal Nythraxis raid | 24 | 25 | 30 |
+| heroic five-man dungeons (drops, marks jewelry, WARFARE honor gear) | 26 | 27 | 31 |
+| heroic Nythraxis raid | 28 | 29 | 31 |
+
+`src/sim/item_tier.ts` owns the bands; `itemLevel` anchors any cap-level source to
+its tier and leaves sub-cap sources on the derived ladder. `item_budget.ts` carries
+the piecewise curve: the levelling slope (`STAT_PER_ILVL` 0.7, dps 0.3/ilvl) up to
+the anchor at item level 21, then `ENDGAME_STAT_PER_ILVL` 1.1 and
+`ENDGAME_DPS_PER_ILVL` 0.48 above it. The two segments meet at the anchor, so every
+sub-cap item's budget is byte-identical to before.
+
+Measured against the pre-squish tables: 227 items changed item level, the top of the
+ladder fell from 37 to 31, total primary-stat budget across all gear moved +3.5%,
+and 105 authored stat and weapon literals were regenerated onto the new curve. The
+tiers that kept their place in the ladder stayed within a couple of points of their
+old budgets (top-tier legendaries landed exactly on their old 49-point mainhand
+budget); the ones that gained are the tiers the requested progression deliberately
+promoted.
+
+Two things the measurement did not anticipate:
+
+- **A sub-cap source could derive into a tier band it had not earned.** A level-19
+  epic derived to item level 25, landing on the raid rung. `itemLevel` now clamps
+  any derived (sub-cap) level to the top of the first endgame band, so the window
+  above it belongs exclusively to anchored content. One item moved (25 to 23).
+- **WARFARE ratings could not stay tied to the PvE budget.** They were authored as
+  "rating equals the slot's stat budget", so the steeper endgame curve pushed a full
+  honor set from the designed 16.8% to 17.9% against a 20% cap. The allowance is now
+  an explicit per-slot table (`WARFARE_SLOT_RATING`), decoupled from the PvE curve,
+  and the full-set total is unchanged at 16.8%.
+
+## The one thing the bands do not fix: quality is counted twice
+
+Inside a band, the rung already encodes quality (rare takes the low rung, epic the
+high one), but `primaryStatBudget` still multiplies by `QUALITY_STAT_MULT`. A
+sub-epic piece therefore reads a higher item level than the tier below while
+budgeting below it. Measured on a chest, across the live ladder:
+
+| item level | budget | what |
+|---|---|---|
+| 21 | 8.1 | dungeon uncommon (6 items) |
+| 22 | 12.6 | dungeon rare (32 items) |
+| 23 | 16.9 | dungeon epic (21 items) |
+| 25 | 19.1 | raid epic (13 items) |
+| **26** | **16.2** | **heroic dungeon rare variants (48 items)** |
+| 27 | 21.3 | heroic dungeon epic (97 items) |
+| 29 | 23.5 | heroic raid epic (15 items) |
+| 30 / 31 | 46.7 / 48.8 | raid / heroic raid legendaries |
+
+Exactly one rung inverts: the heroic five-man rare variants read 26 while budgeting
+below both the item-level-25 raid epics and the item-level-23 dungeon epics. They
+are still a clear upgrade over their own base (a dungeon rare at 12.6), which is
+what the heroic swap promises, but the tooltip number over-sells them against a
+different item class.
+
+This cannot be fixed inside the requested band widths. With a rare multiplier of
+0.8, a rare sits about five item levels below its tier's epic on the budget curve,
+so it can never share a two-wide band with it and stay power-ordered. The options:
+
+1. **Leave it.** The tooltip prints an item score directly under the item level, so
+   the correct signal is on screen; item level over-ranks one item class.
+2. **Compress the quality multiplier for cap-level gear only** (rare around 0.95).
+   Restores a monotone ladder, but re-budgets roughly 80 shipped items upward and
+   the margin against the raid epics is one tenth of a point, so rounding could flip
+   it per slot.
+3. **Widen the bands** so each tier spans the full rare-to-epic distance, which
+   means giving up the 21-to-31 window this change was asked to produce.
+
+Left as option 1 pending a call, and pinned: `tests/item_level.test.ts` asserts the
+ladder is monotone with this one named exception, so a second inversion reddens.
+
+### Decisions taken
+
+1. **WARFARE PvP gear shares the heroic five-man band** (item level 27), keeping the
+   parity with heroic dungeon epics it had before, and stays stat-light inside it
+   (60% of the slot budget), so the badge-jewelry guard still holds.
+2. **Legendaries split 30 (normal) / 31 (heroic)** and sit in their own band above
+   every tier, since they are the pieces meant to carry an upgrade path later.
+3. **Normal raid sits below heroic dungeons**, as the requested progression states.
+   This inverts the old ladder and is the one deliberate relative-power change.
+4. **Sub-cap items do not move**, guaranteed by the continuity of the curve at the
+   anchor and pinned by a test that sweeps every level up to it.
+5. **The bands are still literals, not offsets from `MAX_LEVEL`.** Open. They now
+   live in one table, so a future cap can either take the next window or re-anchor
+   these, but nothing yet forces that choice.
+
+## Follow-up work this does not cover
+
+- **Legendary upgrading.** "30+, upgradeable" needs an upgrade system, which does
+  not exist anywhere in the codebase yet.
+- **The Forged plan.** `docs/prd/mythic-plus-and-forged.md` specifies Valeforged as
+  "+2 item levels", which against these bands is a full tier jump and needs
+  resizing.
+- **`docs/prd/combat-ratings-and-jewelry.md`** still describes the ladder by its old
+  item-level literals. The rating allowances themselves are unchanged and still
+  attach to the same pieces; only the numbers naming each tier moved.

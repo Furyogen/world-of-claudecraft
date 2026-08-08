@@ -13,6 +13,7 @@ import {
   primaryStatSum,
   TWOHAND_STAT_MULT,
 } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import type { ItemDef, WeaponItemDef } from '../src/sim/types';
 
 function weapon(itemId: string): WeaponItemDef {
@@ -47,26 +48,27 @@ describe('v0.26 two-handed greatblade itemization', () => {
     );
   });
 
-  it('declares the current greatblades two-handed at their v0.27.1 re-budgeted totals', () => {
+  it('declares the current greatblades two-handed at their band-anchored totals', () => {
     const wyrmfang = weapon('wyrmfang_greatblade');
     expect(wyrmfang.hand).toBe('twohand');
-    expect(itemLevel(wyrmfang)).toBe(26);
-    expect(wyrmfang.stats).toMatchObject({ str: 14, sta: 9 });
-    expect(primaryStatSum(wyrmfang)).toBe(23);
-    expect(expectedStatBudget(wyrmfang)).toBe(23);
+    expect(itemLevel(wyrmfang)).toBe(endgameItemLevel('dungeon', 'epic'));
+    expect(wyrmfang.stats).toMatchObject({ str: 13, sta: 9 });
+    expect(primaryStatSum(wyrmfang)).toBe(22);
+    expect(expectedStatBudget(wyrmfang)).toBe(22);
 
     const deathless = weapon('deathless_greatblade');
     expect(deathless.hand).toBe('twohand');
-    expect(itemLevel(deathless)).toBe(33);
-    expect(deathless.stats).toMatchObject({ str: 18, sta: 12 });
-    expect(primaryStatSum(deathless)).toBe(30);
-    expect(expectedStatBudget(deathless)).toBe(30);
+    expect(itemLevel(deathless)).toBe(endgameItemLevel('heroic_raid', 'epic'));
+    expect(deathless.stats).toMatchObject({ str: 19, sta: 12 });
+    expect(primaryStatSum(deathless)).toBe(31);
+    expect(expectedStatBudget(deathless)).toBe(31);
   });
 
   it('applies the two-hand stat premium only to two-handed weapons', () => {
     const wyrmfang = weapon('wyrmfang_greatblade');
-    const oneHandBudget = primaryStatBudget(26, wyrmfang.quality, wyrmfang.slot);
-    expect(oneHandBudget).toBe(18);
+    const wyrmfangLevel = itemLevel(wyrmfang) ?? 0;
+    const oneHandBudget = primaryStatBudget(wyrmfangLevel, wyrmfang.quality, wyrmfang.slot);
+    expect(oneHandBudget).toBe(17);
     expect(expectedStatBudget(wyrmfang)).toBe(Math.round(oneHandBudget * TWOHAND_STAT_MULT));
 
     const oneHand = weapon('kingsbane_last_oath');
@@ -83,9 +85,12 @@ describe('v0.26 two-handed greatblade itemization', () => {
     const variant = weapon('heroic_wyrmfang_greatblade');
     expect(variant.heroicOf).toBe('wyrmfang_greatblade');
     expect(variant.hand).toBe('twohand');
-    expect(itemLevel(variant)).toBe(28);
+    const variantLevel = itemLevel(variant) ?? 0;
+    expect(variantLevel).toBe(endgameItemLevel('heroic_dungeon', 'epic'));
     expect(expectedStatBudget(variant)).toBe(
-      Math.round(primaryStatBudget(28, variant.quality, variant.slot) * TWOHAND_STAT_MULT),
+      Math.round(
+        primaryStatBudget(variantLevel, variant.quality, variant.slot) * TWOHAND_STAT_MULT,
+      ),
     );
     expect(primaryStatSum(variant)).toBe(expectedStatBudget(variant));
   });

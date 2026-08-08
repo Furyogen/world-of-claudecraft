@@ -1,7 +1,16 @@
-// Item level: a single "how powerful is this drop" number derived from WHERE an
-// item comes from (the level of the mob that drops it, or the boss a quest-reward
-// is gated behind) plus a rarity bump, and the stat budget that an item of that
-// level + quality + slot is expected to carry.
+// Item level: a single "how powerful is this drop" number resolved from WHERE an
+// item comes from, and the stat budget that an item of that level + quality + slot
+// is expected to carry.
+//
+// Two regimes, because the source level means different things either side of the
+// level cap:
+//   - BELOW the cap it is DERIVED: the level of the mob that drops it (or the boss a
+//     quest-reward is gated behind) plus a rarity bump. The source level is the
+//     progression axis there, so it is the right thing to read.
+//   - AT the cap every source sits at the same character level, so the derivation
+//     degenerates into a pile of additive bonuses. Cap-level content is ANCHORED to
+//     its tier's band instead (item_tier.ts), which is what keeps the endgame ladder
+//     ordered and inside a fixed window under the cap.
 //
 // This is a pure, host-agnostic leaf (no DOM, no rng, no Sim state): it reads only
 // the static content tables and does arithmetic, so the HUD imports it directly the
@@ -45,7 +54,9 @@ import {
   TWOHAND_DPS_MULT,
   TWOHAND_STAT_MULT,
 } from './item_budget';
+import { type EndgameTier, endgameItemLevel, tierBand } from './item_tier';
 import type { ItemDef } from './types';
+import { MAX_LEVEL } from './types';
 
 export {
   HEROIC_VARIANT_SOURCE_LEVEL,
@@ -62,10 +73,10 @@ export {
 };
 
 // Raid loot is one tier above same-level 5-player dungeon loot: a 10-player raid
-// encounter confers this item-level bonus on top of the mob's character level, so
-// the raid set (Nythraxis) reads as a higher item level than the dungeon set
-// (Korzul) even though both bosses are level 20. RAID_MIN_PLAYERS is the
-// suggestedPlayers threshold that marks a dungeon as a raid.
+// encounter confers this item-level bonus on top of the mob's character level.
+// SUB-CAP ONLY: at the level cap the tier bands (item_tier.ts) separate raid from
+// dungeon loot instead, so this bonus never applies to endgame drops.
+// RAID_MIN_PLAYERS is the suggestedPlayers threshold that marks a dungeon as a raid.
 export const RAID_ILVL_BONUS = 3;
 export const RAID_MIN_PLAYERS = 10;
 
@@ -109,24 +120,38 @@ function isRaidMob(mobId: string): boolean {
 interface ItemSource {
   level: number;
   raid: boolean;
+  // The endgame tier the item belongs to, when its best source is cap-level content.
+  // Set, it anchors the item level to that tier's band (item_tier.ts); unset, the
+  // item is sub-cap levelling gear and keeps the derived source + quality bump.
+  tier?: EndgameTier;
 }
 let sourceIndex: Map<string, ItemSource> | null = null;
 
 function buildSourceIndex(): Map<string, ItemSource> {
   const idx = new Map<string, ItemSource>();
-  const bump = (itemId: string | undefined, level: number | undefined, raid: boolean): void => {
+  const bump = (
+    itemId: string | undefined,
+    level: number | undefined,
+    raid: boolean,
+    tier?: EndgameTier,
+  ): void => {
     if (!itemId || level === undefined) return;
     const prev = idx.get(itemId);
-    // Highest level wins; the raid flag is OR'd so a raid source always counts.
+    // Highest level wins (and brings its own tier with it); the raid flag is OR'd so
+    // a raid source always counts.
     if (prev === undefined || level > prev.level)
-      idx.set(itemId, { level, raid: raid || (prev?.raid ?? false) });
+      idx.set(itemId, { level, raid: raid || (prev?.raid ?? false), tier });
     else if (raid && !prev.raid) idx.set(itemId, { ...prev, raid: true });
   };
   // Mob loot: an item is "current" at the top of the dropping mob's level band.
+  // A cap-level mob is endgame content, so its drops anchor to a tier band: the
+  // 10-player raid to 'raid', everything else (five-man dungeons and the level-20
+  // outdoor world) to 'dungeon'.
   for (const mob of Object.values(MOBS)) {
     if (!mob.loot) continue;
     const raid = isRaidMob(mob.id);
-    for (const entry of mob.loot) bump(entry.itemId, mob.maxLevel, raid);
+    const tier = endgameTierForLevel(mob.maxLevel, raid);
+    for (const entry of mob.loot) bump(entry.itemId, mob.maxLevel, raid, tier);
   }
   // Quest rewards: gated behind the quest's hardest combat source: direct kill
   // objectives, or collected quest items traced back to the mob that drops them.
@@ -150,54 +175,69 @@ function buildSourceIndex(): Map<string, ItemSource> {
     }
     consider(quest.minLevel, false);
     for (const itemId of Object.values(quest.itemRewards))
-      bump(itemId, source?.level, source?.raid ?? false);
+      bump(
+        itemId,
+        source?.level,
+        source?.raid ?? false,
+        endgameTierForLevel(source?.level, source?.raid ?? false),
+      );
   }
   // Heroic Quartermaster stock: the marks-vendor jewelry never drops from a mob,
-  // but it IS level-20 heroic content (Heroic Marks only come from heroic final
-  // bosses), so the stock reads that source level: the epic pieces land at item
-  // level 26 (20 + the epic bump) and get budget-enforced like any drop.
-  for (const offer of HEROIC_VENDOR_STOCK) bump(offer.itemId, HEROIC_VENDOR_SOURCE_LEVEL, false);
-  // FURY's WARFARE stock is level-22 PvP content. The epic quality bump puts
-  // every piece at item level 28, including vendor-only necks and rings.
-  for (const itemId of FURY_STOCK) bump(itemId, WARFARE_SOURCE_LEVEL, false);
-  // Heroic boss drops: level-20 content one tier up (the heroic bump), so the
-  // five-man epic pieces read item level 31 (25 + the epic bump). The 10-player
-  // raid (Heroic Nythraxis) is one tier ABOVE the five-mans: its heroic-only
-  // weapons register at NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL (27) so they land at
-  // item level 33.
+  // but it IS heroic five-man content (Heroic Marks only come from heroic final
+  // bosses), so it anchors to the heroic dungeon tier. The source LEVEL stays at
+  // the level-20 content it is bought from, which is what the equip gate reads
+  // (item_level_req.ts).
+  for (const offer of HEROIC_VENDOR_STOCK)
+    bump(offer.itemId, HEROIC_VENDOR_SOURCE_LEVEL, false, 'heroic_dungeon');
+  // FURY's WARFARE stock is level-22 PvP content, the honor-earned parallel to the
+  // heroic five-man tier, so it shares that band. Its pieces stay deliberately
+  // stat-light within it (see content/pvp_honor.ts).
+  for (const itemId of FURY_STOCK) bump(itemId, WARFARE_SOURCE_LEVEL, false, 'heroic_dungeon');
+  // Heroic boss drops: the heroic five-man tier. The 10-player raid (Heroic
+  // Nythraxis) is the tier ABOVE, so its heroic-only weapons anchor to
+  // 'heroic_raid'. Source levels are unchanged (they still order the index).
   for (const [bossId, entries] of Object.entries(HEROIC_BOSS_LOOT)) {
-    const src =
-      bossId === NYTHRAXIS_RAID_BOSS_ID
-        ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL
-        : HEROIC_LOOT_SOURCE_LEVEL;
+    const raidBoss = bossId === NYTHRAXIS_RAID_BOSS_ID;
+    const src = raidBoss ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL : HEROIC_LOOT_SOURCE_LEVEL;
+    const tier: EndgameTier = raidBoss ? 'heroic_raid' : 'heroic_dungeon';
     for (const entry of entries) {
-      if (entry.itemId) bump(entry.itemId, src, false);
+      if (entry.itemId) bump(entry.itemId, src, false, tier);
     }
   }
   // Heroic upgraded drop variants (content/heroic_variants.ts): the "Heroic X"
-  // copies of base dungeon drops read one tier up (source 22), so their epics land
-  // at item level 28 and rares at 25. Registered here so a variant's tooltip level
-  // and budget derive from the index like any other drop. The exception is the
-  // heroic RAID: the Nythraxis raid boss's own set pieces and legendaries upgrade
-  // to the raid tier (source 27, item level 33/37), anchored on the raid boss's
+  // copies of base dungeon drops anchor to the heroic five-man tier. Registered
+  // here so a variant's tooltip level and budget derive from the index like any
+  // other drop. The exception is the heroic RAID: the Nythraxis raid boss's own set
+  // pieces and legendaries upgrade to 'heroic_raid', anchored on the raid boss's
   // normal loot so the auto-swap in a heroic claim reads the raid tier too.
   const raidBases = new Set(
     (MOBS[NYTHRAXIS_RAID_BOSS_ID]?.loot ?? []).flatMap((e) => (e.itemId ? [e.itemId] : [])),
   );
   for (const item of Object.values(ITEMS)) {
     if (!item.heroicOf) continue;
-    const src = raidBases.has(item.heroicOf)
-      ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL
-      : HEROIC_VARIANT_SOURCE_LEVEL;
-    bump(item.id, src, false);
+    const raidBase = raidBases.has(item.heroicOf);
+    const src = raidBase ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL : HEROIC_VARIANT_SOURCE_LEVEL;
+    bump(item.id, src, false, raidBase ? 'heroic_raid' : 'heroic_dungeon');
   }
   // Crafted gear (content/recipes.ts): a recipe's output is current at the recipe's
   // own level (the level a character can learn/use it, mirroring how a mob's level
   // stands in for its loot). Without this, any crafted item with primary stats has
   // no derivable item level: the budget gates below skip it and the tooltip's item
-  // level/score lines never show. Not a raid source.
-  for (const recipe of ALL_RECIPES) bump(recipe.resultItemId, recipe.level, false);
+  // level/score lines never show. Never a raid source, and a cap-level recipe is
+  // level-20 content, so it anchors to the same band as a level-20 drop.
+  for (const recipe of ALL_RECIPES)
+    bump(recipe.resultItemId, recipe.level, false, endgameTierForLevel(recipe.level, false));
   return idx;
+}
+
+// The endgame tier a plain (non-heroic) source of this character level belongs to,
+// or undefined when the source is below the cap and therefore still on the derived
+// levelling ladder. Heroic sources never come through here: their tier is explicit
+// at the registration site, because "heroic" is a property of the instance, not of
+// any level the content is tuned to.
+function endgameTierForLevel(level: number | undefined, raid: boolean): EndgameTier | undefined {
+  if (level === undefined || level < MAX_LEVEL) return undefined;
+  return raid ? 'raid' : 'dungeon';
 }
 
 function sourceIndexOf(): Map<string, ItemSource> {
@@ -233,9 +273,20 @@ export function itemLevel(item: ItemDef): number | undefined {
   if (!isItemLevelEligible(item)) return undefined;
   const src = sourceIndexOf().get(item.id);
   if (src === undefined) return undefined;
+  // Cap-level content is anchored to its tier's band (item_tier.ts) instead of the
+  // additive derivation, so the endgame ladder stays inside a fixed window under the
+  // level cap and its tiers cannot be reordered by a quality bump.
+  if (src.tier) return endgameItemLevel(src.tier, item.quality);
   const bonus = QUALITY_ILVL_BONUS[item.quality ?? 'common'] ?? 0;
   const raid = src.raid ? RAID_ILVL_BONUS : 0;
-  return Math.max(1, src.level + bonus + raid);
+  const derived = Math.max(1, src.level + bonus + raid);
+  // A sub-cap source can never read above the first endgame tier's band. Without
+  // this a high-quality drop from a near-cap source derives INTO a tier band it did
+  // not earn (a level-19 epic used to land on the raid rung), which is exactly the
+  // band collision the anchored ladder exists to prevent. The clamp only binds for
+  // sources within a quality bump of the cap; the rest of the levelling ladder is
+  // untouched.
+  return Math.min(derived, tierBand('dungeon').max);
 }
 
 // The budget an item is expected to carry given its own source/quality/slot, or

@@ -10,6 +10,7 @@ import { HEROIC_VENDOR_ITEMS, HEROIC_VENDOR_STOCK } from '../src/sim/content/her
 import { ITEMS, NPCS } from '../src/sim/data';
 import { enterDungeon } from '../src/sim/instances/dungeons';
 import { expectedStatBudget, itemLevel, primaryStatSum } from '../src/sim/item_level';
+import { endgameItemLevel } from '../src/sim/item_tier';
 import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 import { buildHeroicVendorView } from '../src/ui/hud/vendor/heroic_vendor_view';
@@ -37,7 +38,7 @@ function errorTexts(sim: AnySim): string[] {
 }
 
 describe('heroic vendor stock: item-level and budget pins', () => {
-  it('every offer is a real epic level-20 jewelry item at item level 26', () => {
+  it('every offer is a real epic level-20 jewelry item in the heroic dungeon band', () => {
     expect(HEROIC_VENDOR_STOCK.length).toBe(10);
     for (const offer of HEROIC_VENDOR_STOCK) {
       const item = ITEMS[offer.itemId];
@@ -46,13 +47,16 @@ describe('heroic vendor stock: item-level and budget pins', () => {
       expect(item.requiredLevel, offer.itemId).toBe(20);
       expect(['ring', 'neck']).toContain(item.slot);
       expect(offer.marks).toBeGreaterThan(0);
-      expect(itemLevel(item), offer.itemId).toBe(26);
+      // Heroic Marks only drop from heroic final bosses, so the stock is heroic
+      // five-man content and anchors to that tier's epic rung.
+      expect(itemLevel(item), offer.itemId).toBe(27);
+      expect(itemLevel(item), offer.itemId).toBe(endgameItemLevel('heroic_dungeon', 'epic'));
     }
   });
 
-  it('pins the ring and neck stat budgets (11 and 12) and every stat sum matches', () => {
-    expect(expectedStatBudget(ITEMS.seal_of_the_nine_oaths)).toBe(11);
-    expect(expectedStatBudget(ITEMS.yumis_keepsake_locket)).toBe(12);
+  it('pins the ring and neck stat budgets (13 and 14) and every stat sum matches', () => {
+    expect(expectedStatBudget(ITEMS.seal_of_the_nine_oaths)).toBe(13);
+    expect(expectedStatBudget(ITEMS.yumis_keepsake_locket)).toBe(14);
     for (const id of Object.keys(HEROIC_VENDOR_ITEMS)) {
       expect(primaryStatSum(ITEMS[id]), id).toBe(expectedStatBudget(ITEMS[id]));
     }
