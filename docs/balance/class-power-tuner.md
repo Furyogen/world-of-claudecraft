@@ -4,7 +4,7 @@
      the dashboard screenshots; regenerate them with the command below rather
      than hand-editing either file. -->
 
-# Class Power Tuner by Furyogen
+# Class Power Tuner by Furyogen (WIP)
 
 An operator-facing balance lever: every aspect of every ability of every class as
 a multiplier slider, plus the auto-attack ("white") swing damage and swing timer
@@ -13,6 +13,16 @@ of every weapon. Saved per realm, applied to the world at the next server restar
 It exists because two of the nine classes have been reworked and now outperform
 the other seven. Closing that gap used to mean editing content source and
 shipping a build; with the tuner it is a slider and a restart.
+
+> **Work in progress.** The tool is complete and the mechanism is stable; what
+> moves under it is the CONTENT. The per-ability tables and screenshots below are
+> a snapshot of the kit as it stands on `release/v0.36.0`, and the class reworks
+> are still arriving one wave at a time. Nothing here needs re-engineering when a
+> wave lands: the catalog is derived from the live content tables, never
+> hand-authored, so a redesigned class shows up with the right sliders on its own.
+> The reference is simply regenerated (one command, at the end of this document)
+> so the tables describe the current kit. Read the mechanism as settled and the
+> numbers as of today.
 
 **Full reference (screenshots, every class/spec ability table, every weapon):**
 `docs/balance/class-power-tuner.pdf`.
