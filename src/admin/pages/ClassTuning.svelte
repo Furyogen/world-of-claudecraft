@@ -4,16 +4,22 @@
   import {
     buildTuningDocument,
     EMPTY_ABILITY_FILTER,
+    EMPTY_WEAPON_FILTER,
     filterAbilities,
+    filterWeapons,
     resetAbility,
     tunedAbilityCount,
+    tunedWeaponCount,
     tuningDocumentKey,
     tuningFormState,
+    weaponHands,
     type AbilityFilter,
-    type TuningFormState,
+    type TuningForm,
+    type WeaponFilter,
   } from '../class_tuning';
   import Badge from '../components/Badge.svelte';
   import ClassTuningAbility from '../components/ClassTuningAbility.svelte';
+  import ClassTuningWeapon from '../components/ClassTuningWeapon.svelte';
   import CollapsiblePanel from '../components/CollapsiblePanel.svelte';
   import PageHeader from '../components/PageHeader.svelte';
   import { fmtDate } from '../format';
@@ -37,10 +43,15 @@
   // implying the change is live.
   let data = $state<ClassTuningResponse | null>(null);
   let failed = $state(false);
-  let form = $state<TuningFormState>({});
+  let form = $state<TuningForm>({ abilities: {}, weapons: {} });
   let savedKey = $state('');
+  // null selects the WEAPONS window, which sits at the end of the class tabs:
+  // auto-attack profiles are shared across classes, so they get their own window
+  // rather than being duplicated into each class's.
   let activeClassId = $state<string | null>(null);
+  let weaponsSelected = $state(false);
   let filters = $state<Record<string, AbilityFilter>>({});
+  let weaponFilter = $state<WeaponFilter>({ ...EMPTY_WEAPON_FILTER });
   let changeNote = $state('');
   let saving = $state(false);
   let savedFlash = $state(false);
@@ -55,8 +66,16 @@
   const visibleAbilities = $derived(
     activeClass === null
       ? []
-      : filterAbilities(activeClass, filters[activeClass.id] ?? EMPTY_ABILITY_FILTER, form),
+      : filterAbilities(
+          activeClass,
+          filters[activeClass.id] ?? EMPTY_ABILITY_FILTER,
+          form.abilities,
+        ),
   );
+  const allWeapons = $derived(data?.catalog.weapons ?? []);
+  const visibleWeapons = $derived(filterWeapons(allWeapons, weaponFilter, form.weapons));
+  const handOptions = $derived(weaponHands(allWeapons));
+  const tunedWeapons = $derived(tunedWeaponCount(form.weapons, allWeapons));
 
   function adopt(response: ClassTuningResponse): void {
     data = response;
@@ -115,20 +134,30 @@
   }
 
   function onResetAbility(abilityId: string): void {
-    resetAbility(form, abilityId);
+    resetAbility(form.abilities, abilityId);
+  }
+
+  function onResetWeapon(weaponId: string): void {
+    resetAbility(form.weapons, weaponId);
   }
 
   function resetEverything(): void {
     if (!data) return;
-    for (const abilityId of Object.keys(form)) resetAbility(form, abilityId);
+    for (const abilityId of Object.keys(form.abilities)) resetAbility(form.abilities, abilityId);
+    for (const weaponId of Object.keys(form.weapons)) resetAbility(form.weapons, weaponId);
   }
 
   function selectClass(classId: string): void {
     activeClassId = classId;
+    weaponsSelected = false;
+  }
+
+  function selectWeapons(): void {
+    weaponsSelected = true;
   }
 
   function tunedInClass(entry: TunerClassInfo): number {
-    return tunedAbilityCount(form, entry);
+    return tunedAbilityCount(form.abilities, entry);
   }
 
   function countChannels(entry: ClassTuningHistoryEntry): number {
@@ -171,7 +200,11 @@
       {t('tuning.neverSaved')}
     {:else}
       {t('tuning.updatedAt', { value: fmtDate(data.updatedAt) })}
-      {t('tuning.summary', { abilities: data.tunedAbilities, channels: data.tunedChannels })}
+      {t('tuning.summary', {
+        abilities: data.tunedAbilities,
+        weapons: data.tunedWeapons,
+        channels: data.tunedChannels,
+      })}
     {/if}
   </p>
 
@@ -181,16 +214,85 @@
       <button
         type="button"
         class="class-tab"
-        class:active={entry.id === activeClassId}
+        class:active={!weaponsSelected && entry.id === activeClassId}
         onclick={() => selectClass(entry.id)}
       >
         {entry.name}
         {#if tuned > 0}<span class="tab-count">{tuned}</span>{/if}
       </button>
     {/each}
+    <button
+      type="button"
+      class="class-tab weapons-tab"
+      class:active={weaponsSelected}
+      onclick={selectWeapons}
+    >
+      {t('tuning.weaponsTab')}
+      {#if tunedWeapons > 0}<span class="tab-count">{tunedWeapons}</span>{/if}
+    </button>
   </nav>
 
-  {#if activeClass}
+  {#if weaponsSelected}
+    <section class="panel class-window">
+      <p class="notice">{t('tuning.weaponsIntro')}</p>
+      <div class="filters">
+        <div class="spec-tabs" role="group" aria-label={t('tuning.allHands')}>
+          <button
+            type="button"
+            class="spec-tab"
+            class:active={weaponFilter.hand === null}
+            onclick={() => {
+              weaponFilter.hand = null;
+            }}
+          >
+            {t('tuning.allHands')}
+          </button>
+          {#each handOptions as hand (hand)}
+            <button
+              type="button"
+              class="spec-tab"
+              class:active={weaponFilter.hand === hand}
+              onclick={() => {
+                weaponFilter.hand = hand;
+              }}
+            >
+              {t(`tuning.hand.${hand}`)}
+            </button>
+          {/each}
+        </div>
+        <div class="filter-controls">
+          <label class="search">
+            <span>{t('tuning.searchLabel')}</span>
+            <input
+              type="search"
+              placeholder={t('tuning.searchPlaceholder')}
+              bind:value={weaponFilter.search}
+            />
+          </label>
+          <label class="only-tuned">
+            <input type="checkbox" bind:checked={weaponFilter.onlyTuned} />
+            <span>{t('tuning.onlyTuned')}</span>
+          </label>
+          <span class="count">{t('tuning.weaponCount', { count: visibleWeapons.length })}</span>
+        </div>
+      </div>
+
+      {#if visibleWeapons.length === 0}
+        <p class="notice">{t('tuning.noWeaponMatches')}</p>
+      {:else}
+        <div class="ability-list">
+          {#each visibleWeapons as weapon (weapon.id)}
+            <ClassTuningWeapon
+              {weapon}
+              readOnly={!canWrite}
+              onReset={onResetWeapon}
+              bind:factors={form.weapons[weapon.id]}
+            />
+          {/each}
+        </div>
+      {/if}
+    </section>
+  {:else if activeClass}
     {@const filter = filters[activeClass.id] ?? EMPTY_ABILITY_FILTER}
     <section class="panel class-window">
       <div class="filters">
@@ -245,7 +347,7 @@
               specs={activeClass.specs}
               readOnly={!canWrite}
               onReset={onResetAbility}
-              bind:factors={form[ability.id]}
+              bind:factors={form.abilities[ability.id]}
             />
           {/each}
         </div>

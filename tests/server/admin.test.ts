@@ -4413,6 +4413,25 @@ describe('R35 restore-item: the defensive invalid_item arm', () => {
 // ---------------------------------------------------------------------------
 describe('class-tuning family', () => {
   const CATALOG = {
+    weapons: [
+      {
+        id: 'worn_sword',
+        name: 'Pitted Shortsword',
+        kind: 'item',
+        hand: 'onehand',
+        dagger: false,
+        min: 2,
+        max: 5,
+        speed: 2,
+        dps: 1.75,
+        channels: [
+          {
+            channel: 'swing_damage',
+            sites: [{ path: 'min', value: 2, kind: 'linear' }],
+          },
+        ],
+      },
+    ],
     classes: [
       {
         id: 'druid',
@@ -4440,14 +4459,19 @@ describe('class-tuning family', () => {
       },
     ],
   };
-  const SAVED = { version: 1, abilities: { thorns: { damage_reflect: 1.5 } } };
+  const SAVED = {
+    version: 1,
+    abilities: { thorns: { damage_reflect: 1.5 } },
+    weapons: { worn_sword: { swing_speed: 1.2 } },
+  };
   const STATE = {
     saved: SAVED,
-    active: { version: 1, abilities: {} },
+    active: { version: 1, abilities: {}, weapons: {} },
     savedAt: '2026-08-01T00:00:00.000Z',
     pendingRestart: true,
     tunedAbilities: 1,
-    tunedChannels: 1,
+    tunedWeapons: 1,
+    tunedChannels: 2,
   };
 
   it('GET /admin/api/class-tuning serves the catalog, the saved document, and the restart state', async () => {
@@ -4465,13 +4489,14 @@ describe('class-tuning family', () => {
       data: {
         catalog: CATALOG,
         document: SAVED,
-        active: { version: 1, abilities: {} },
+        active: { version: 1, abilities: {}, weapons: {} },
         updatedAt: '2026-08-01T00:00:00.000Z',
         // The realm is still running the untuned numbers: the dashboard must be
         // able to say so rather than implying the save was live.
         pendingRestart: true,
         tunedAbilities: 1,
-        tunedChannels: 1,
+        tunedWeapons: 1,
+        tunedChannels: 2,
         noteMaxLength: 500,
       },
       error: null,
@@ -4533,7 +4558,13 @@ describe('class-tuning family', () => {
   });
 
   it('truncates an overlong note rather than refusing the save', async () => {
-    const saveRealmClassTuning = vi.fn(async () => ({ changed: true, state: STATE }));
+    // Typed params so the call-args assertion below can index the note.
+    const saveRealmClassTuning = vi.fn(
+      async (_document: unknown, _accountId: number, _note: string) => ({
+        changed: true,
+        state: STATE,
+      }),
+    );
     authedAdminDb({
       classTuningCatalog: () => CATALOG,
       classTuningState: () => STATE,

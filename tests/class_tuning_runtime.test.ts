@@ -136,7 +136,7 @@ describe('saving', () => {
     // Only the sanitized document reaches Postgres, so a row this process would
     // refuse to apply can never be stored.
     expect(mocks.saveClassTuningChange).toHaveBeenCalledWith(
-      { version: 1, abilities: { thorns: { damage_reflect: 1.5 } } },
+      { version: 1, abilities: { thorns: { damage_reflect: 1.5 } }, weapons: {} },
       7,
       'nerf reflect',
     );

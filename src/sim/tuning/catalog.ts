@@ -15,9 +15,12 @@
 
 import { ABILITIES, CLASSES } from '../content/classes';
 import { rowTreeFor, talentsFor } from '../content/talents';
-import { type AbilityDef, ALL_CLASSES, type PlayerClass } from '../types';
+import { ITEMS } from '../data';
+import { type AbilityDef, ALL_CLASSES, type PlayerClass, type WeaponInfo } from '../types';
 import { abilityTuningKnobs } from './ability_knobs';
 import type { TuningChannel, TuningValueKind } from './channels';
+import { classRangedWeaponId } from './document';
+import { weaponDps, weaponTuningKnobs } from './weapon_knobs';
 
 /** Why a spec can cast this ability. */
 export type TunerAbilitySource =
@@ -70,8 +73,33 @@ export interface TunerClassInfo {
   abilities: TunerAbilityInfo[];
 }
 
+/**
+ * One auto-attack ("white") profile: a carried weapon item, or a class's own
+ * ranged profile (a hunter's Auto Shot, a caster's wand). Both drive the same
+ * swing loop, so both carry the same two channels.
+ */
+export interface TunerWeaponInfo {
+  /** Item id, or `class_<cls>_ranged` for a class ranged profile. */
+  id: string;
+  name: string;
+  kind: 'item' | 'classRanged';
+  /** Set only on a class ranged profile. */
+  class?: PlayerClass;
+  /** 'onehand' | 'twohand' | 'ranged' | 'wand'. */
+  hand: string;
+  dagger: boolean;
+  min: number;
+  max: number;
+  speed: number;
+  /** Average damage per second at the shipped numbers, for the readout. */
+  dps: number;
+  channels: TunerChannelInfo[];
+}
+
 export interface ClassTuningCatalog {
   classes: TunerClassInfo[];
+  /** Every weapon profile whose white damage and swing timer can be tuned. */
+  weapons: TunerWeaponInfo[];
 }
 
 /**
@@ -83,7 +111,61 @@ export interface ClassTuningCatalog {
  * installs the realm's document.
  */
 export function buildClassTuningCatalog(): ClassTuningCatalog {
-  return { classes: ALL_CLASSES.map(buildClassInfo) };
+  return { classes: ALL_CLASSES.map(buildClassInfo), weapons: buildWeaponInfos() };
+}
+
+function buildWeaponInfos(): TunerWeaponInfo[] {
+  const out: TunerWeaponInfo[] = [];
+  for (const item of Object.values(ITEMS)) {
+    const weapon = (item as { weapon?: WeaponInfo }).weapon;
+    if (!weapon) continue;
+    out.push({
+      id: item.id,
+      name: item.name,
+      kind: 'item',
+      hand: (item as { hand?: string }).hand ?? 'onehand',
+      dagger: weapon.dagger === true,
+      min: weapon.min,
+      max: weapon.max,
+      speed: weapon.speed,
+      dps: weaponDps(weapon),
+      channels: weaponChannels(weapon),
+    });
+  }
+  // A class's own ranged profile is kit, not loot: a hunter's Auto Shot and a
+  // caster's wand swing off these numbers with no item involved.
+  for (const cls of ALL_CLASSES) {
+    const ranged = CLASSES[cls].ranged;
+    if (!ranged) continue;
+    out.push({
+      id: classRangedWeaponId(cls),
+      name: `${CLASSES[cls].name} ${ranged.wand ? 'wand' : 'ranged'}`,
+      kind: 'classRanged',
+      class: cls,
+      hand: ranged.wand ? 'wand' : 'ranged',
+      dagger: false,
+      min: ranged.min,
+      max: ranged.max,
+      speed: ranged.speed,
+      dps: weaponDps(ranged),
+      channels: weaponChannels(ranged),
+    });
+  }
+  out.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+  return out;
+}
+
+function weaponChannels(weapon: WeaponInfo): TunerChannelInfo[] {
+  const byChannel = new Map<TuningChannel, TunerChannelInfo>();
+  for (const site of weaponTuningKnobs(weapon)) {
+    let info = byChannel.get(site.channel);
+    if (!info) {
+      info = { channel: site.channel, sites: [] };
+      byChannel.set(site.channel, info);
+    }
+    info.sites.push({ path: site.path, value: site.value, kind: site.kind });
+  }
+  return [...byChannel.values()];
 }
 
 function buildClassInfo(cls: PlayerClass): TunerClassInfo {

@@ -3,26 +3,33 @@
 // Paired module: src/sim/tuning/ (see its index.ts for the feature summary).
 
 import { afterEach, describe, expect, it } from 'vitest';
-import { ABILITIES } from '../src/sim/content/classes';
+import { ABILITIES, CLASSES } from '../src/sim/content/classes';
+import { ITEMS } from '../src/sim/data';
 import { abilityPowerCoeffMult, directHitBonus } from '../src/sim/spell_scaling';
 import {
   abilityTuningChannels,
   abilityTuningKnobs,
   applyAbilityTuning,
   applyClassTuning,
+  applyWeaponTuning,
   clampTuningFactor,
+  classRangedWeaponId,
   classTuningDocumentKey,
   countTunedChannels,
   emptyClassTuningDocument,
   installClassTuning,
   installedTunedAbilityIds,
+  installedTunedWeaponIds,
   isEffectiveTuningSite,
   isNeutralFactor,
+  MIN_SWING_SECONDS,
   sanitizeClassTuningDocument,
   scaleTuningValue,
   TUNING_CHANNELS,
   TUNING_MAX_FACTOR,
   TUNING_MIN_FACTOR,
+  weaponDps,
+  weaponTuningKnobs,
 } from '../src/sim/tuning';
 import type { AbilityDef } from '../src/sim/types';
 
@@ -203,6 +210,92 @@ describe('applying tuning to one ability', () => {
   });
 });
 
+describe('weapon swing knobs', () => {
+  const sword = { min: 2, max: 5, speed: 2 };
+
+  it('exposes exactly the white-damage and swing-timer channels', () => {
+    expect(weaponTuningKnobs(sword).map((knob) => `${knob.channel}:${knob.path}`)).toEqual([
+      'swing_damage:min',
+      'swing_damage:max',
+      'swing_speed:speed',
+    ]);
+  });
+
+  it('scales the damage roll without touching the timer', () => {
+    const tuned = applyWeaponTuning(sword, { swing_damage: 2 });
+    expect(tuned).toEqual({ min: 4, max: 10, speed: 2 });
+    expect(sword).toEqual({ min: 2, max: 5, speed: 2 });
+  });
+
+  it('reads a factor above 1 on the timer as a SLOWER weapon', () => {
+    // The channel is the swing TIMER, so scaling it up must lower dps.
+    const tuned = applyWeaponTuning(sword, { swing_speed: 1.5 });
+    expect(tuned.speed).toBe(3);
+    expect(weaponDps(tuned)).toBeLessThan(weaponDps(sword));
+  });
+
+  it('never produces a swing timer below one sim tick', () => {
+    const tuned = applyWeaponTuning({ min: 2, max: 5, speed: 0.1 }, { swing_speed: 0.1 });
+    expect(tuned.speed).toBeGreaterThanOrEqual(MIN_SWING_SECONDS);
+  });
+
+  it('returns the same profile when nothing moves', () => {
+    expect(applyWeaponTuning(sword, {})).toBe(sword);
+    expect(applyWeaponTuning(sword, { swing_damage: 1, swing_speed: 1 })).toBe(sword);
+    // an ability channel is not a weapon channel
+    expect(applyWeaponTuning(sword, { damage_direct: 2 })).toBe(sword);
+  });
+
+  it('keeps the weapon-type flags a tuned profile still needs', () => {
+    const dagger = { min: 2, max: 4, speed: 1.8, dagger: true };
+    expect(applyWeaponTuning(dagger, { swing_damage: 2 }).dagger).toBe(true);
+  });
+});
+
+describe('installing weapon tuning', () => {
+  it('replaces a carried weapon profile in place and restores it exactly', () => {
+    const shipped = ITEMS.worn_sword.weapon;
+    installClassTuning({ weapons: { worn_sword: { swing_damage: 2, swing_speed: 1.5 } } });
+    expect(ITEMS.worn_sword.weapon).toEqual({ min: 4, max: 10, speed: 3 });
+    expect(installedTunedWeaponIds()).toEqual(['worn_sword']);
+
+    installClassTuning(emptyClassTuningDocument());
+    expect(ITEMS.worn_sword.weapon).toBe(shipped);
+    expect(installedTunedWeaponIds()).toEqual([]);
+  });
+
+  it("tunes a class's own ranged profile (Auto Shot, wands) by its class id", () => {
+    const shipped = CLASSES.hunter.ranged;
+    const id = classRangedWeaponId('hunter');
+    expect(id).toBe('class_hunter_ranged');
+    installClassTuning({ weapons: { [id]: { swing_damage: 0.5 } } });
+    expect(CLASSES.hunter.ranged?.min).toBe(Math.round((shipped?.min ?? 0) * 0.5));
+    // the ranged rider fields survive the tune
+    expect(CLASSES.hunter.ranged?.maxRange).toBe(shipped?.maxRange);
+
+    installClassTuning(emptyClassTuningDocument());
+    expect(CLASSES.hunter.ranged).toBe(shipped);
+  });
+
+  it('tunes abilities and weapons from one document without either leaking', () => {
+    installClassTuning({
+      abilities: { thorns: { damage_reflect: 2 } },
+      weapons: { worn_sword: { swing_damage: 2 } },
+    });
+    expect((ABILITIES.thorns.effects[0] as { value: number }).value).toBe(6);
+    expect(ITEMS.worn_sword.weapon?.min).toBe(4);
+    expect(installedTunedAbilityIds()).toEqual(['thorns']);
+    expect(installedTunedWeaponIds()).toEqual(['worn_sword']);
+  });
+
+  it('ignores a weapon id that no longer exists', () => {
+    expect(() =>
+      installClassTuning({ weapons: { retired_blade: { swing_damage: 2 } } }),
+    ).not.toThrow();
+    expect(installedTunedWeaponIds()).toEqual([]);
+  });
+});
+
 describe('the tuning document', () => {
   it('keeps well-formed rows and drops everything it cannot trust', () => {
     const doc = sanitizeClassTuningDocument({
@@ -242,6 +335,18 @@ describe('the tuning document', () => {
     for (const channel of TUNING_CHANNELS) abilities.probe[channel] = 1.5;
     const doc = sanitizeClassTuningDocument({ abilities });
     expect(Object.keys(doc.abilities.probe).sort()).toEqual([...TUNING_CHANNELS].sort());
+  });
+
+  it('keeps the two scopes separate and tolerates a document with neither', () => {
+    const doc = sanitizeClassTuningDocument({
+      abilities: { thorns: { damage_reflect: 1.5 } },
+      weapons: { worn_sword: { swing_speed: 1.2 }, 'Bad Id!': { swing_damage: 2 } },
+    });
+    expect(doc.abilities).toEqual({ thorns: { damage_reflect: 1.5 } });
+    expect(doc.weapons).toEqual({ worn_sword: { swing_speed: 1.2 } });
+    // A document written before the weapon scope existed still loads.
+    expect(sanitizeClassTuningDocument({ abilities: {} }).weapons).toEqual({});
+    expect(countTunedChannels(doc)).toBe(2);
   });
 });
 

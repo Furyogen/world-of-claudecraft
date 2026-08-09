@@ -32,6 +32,11 @@ export const TUNING_CHANNELS = [
   'range',
   'distance',
   'targets',
+  // Auto-attack ("white") swings. These belong to a WEAPON, not an ability:
+  // the same closed vocabulary covers both scopes so a document, a slider and
+  // an apply step never need to know which one they are looking at.
+  'swing_damage',
+  'swing_speed',
 ] as const;
 
 export type TuningChannel = (typeof TUNING_CHANNELS)[number];

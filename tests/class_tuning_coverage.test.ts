@@ -17,6 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { ABILITIES, CLASSES } from '../src/sim/content/classes';
 import { TALENTS } from '../src/sim/content/talents';
+import { ITEMS } from '../src/sim/data';
 import {
   AURA_VALUE_EFFECTS,
   abilityTuningKnobs,
@@ -232,6 +233,32 @@ describe('the catalog the dashboard renders', () => {
         );
         expect(fromCatalog.length).toBe(fromWalker.length);
       }
+    }
+  });
+
+  it('carries every weapon whose white damage the sim reads', () => {
+    // Every item with a WeaponInfo drives an auto-attack, so every one of them
+    // must be tunable; a weapon missing here is white damage nobody can touch.
+    const listed = new Set(catalog.weapons.map((weapon) => weapon.id));
+    for (const item of Object.values(ITEMS)) {
+      if (!(item as { weapon?: unknown }).weapon) continue;
+      expect(listed.has(item.id), `weapon item ${item.id} is not tunable`).toBe(true);
+    }
+    // ...plus the per-class ranged profiles, which are kit rather than loot.
+    for (const cls of ALL_CLASSES) {
+      if (!CLASSES[cls].ranged) continue;
+      expect(listed.has(`class_${cls}_ranged`), `${cls} ranged profile missing`).toBe(true);
+    }
+    expect(catalog.weapons.length).toBeGreaterThan(100);
+  });
+
+  it('gives every weapon both swing channels and an honest dps readout', () => {
+    for (const weapon of catalog.weapons) {
+      const channels = weapon.channels.map((channel) => channel.channel).sort();
+      expect(channels, weapon.id).toEqual(['swing_damage', 'swing_speed']);
+      expect(weapon.speed).toBeGreaterThan(0);
+      const expected = Math.round(((weapon.min + weapon.max) / 2 / weapon.speed) * 100) / 100;
+      expect(Math.abs(weapon.dps - expected), weapon.id).toBeLessThan(0.02);
     }
   });
 

@@ -59,6 +59,7 @@ export interface ClassTuningState {
   /** True when the saved document differs from the running one: restart pending. */
   pendingRestart: boolean;
   tunedAbilities: number;
+  tunedWeapons: number;
   tunedChannels: number;
 }
 
@@ -70,6 +71,7 @@ export function classTuningState(): ClassTuningState {
     savedAt,
     pendingRestart: classTuningDocumentKey(savedDocument) !== classTuningDocumentKey(active),
     tunedAbilities: Object.keys(savedDocument.abilities).length,
+    tunedWeapons: Object.keys(savedDocument.weapons).length,
     tunedChannels: countTunedChannels(savedDocument),
   };
 }
@@ -98,7 +100,7 @@ export async function installRealmClassTuning(): Promise<ClassTuningState> {
   const state = classTuningState();
   if (state.tunedChannels > 0) {
     console.log(
-      `class power tuning installed: ${state.tunedChannels} channel(s) across ${state.tunedAbilities} ability(ies)`,
+      `class power tuning installed: ${state.tunedChannels} channel(s) across ${state.tunedAbilities} ability(ies) and ${state.tunedWeapons} weapon(s)`,
     );
   }
   return state;

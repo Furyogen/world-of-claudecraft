@@ -36,6 +36,7 @@ export {
   type TunerChannelInfo,
   type TunerClassInfo,
   type TunerSpecInfo,
+  type TunerWeaponInfo,
 } from './catalog';
 export {
   clampTuningFactor,
@@ -55,16 +56,27 @@ export {
   type AbilityTuning,
   CLASS_TUNING_VERSION,
   type ClassTuningDocument,
+  classRangedWeaponId,
   classTuningDocumentKey,
   countTunedChannels,
   emptyClassTuningDocument,
   isEmptyClassTuningDocument,
   MAX_TUNED_ABILITIES,
+  MAX_TUNED_WEAPONS,
   sanitizeClassTuningDocument,
+  type WeaponTuning,
 } from './document';
 export {
   activeClassTuning,
   applyClassTuning,
   installClassTuning,
   installedTunedAbilityIds,
+  installedTunedWeaponIds,
 } from './install';
+export {
+  applyWeaponTuning,
+  MIN_SWING_SECONDS,
+  walkTunedWeapon,
+  weaponDps,
+  weaponTuningKnobs,
+} from './weapon_knobs';
