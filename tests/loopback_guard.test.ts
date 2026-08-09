@@ -151,10 +151,20 @@ describe('assertLoopbackDatabaseUrl', () => {
 const GUARDED_SCRIPTS = [
   'scripts/admin_guild_bank_shot.mjs',
   'scripts/admin_professions_shot.mjs',
+  'scripts/class_tuner_shots.mjs',
   'scripts/load_players.mjs',
   'scripts/load_professions.mjs',
   'scripts/mob_stall_repro.mjs',
 ] as const;
+
+// The URL arm is required of every guarded script. The DATABASE arm is required
+// of exactly those that carry a DATABASE_URL, because asserting it everywhere
+// would leave a script with no database no honest way to pass except by calling
+// the guard on a value it never uses. `class_tuner_shots.mjs` is the first of
+// that second kind: it mints an admin bearer and posts a tuning document over
+// HTTP, and never has a DATABASE_URL to check. The discovery arm below is what
+// keeps this from becoming an escape hatch, since it still fails any script
+// that imports `pg` without being guarded here.
 
 // Full-line // comments are stripped before the scan: this file's own subject
 // matter means the phrase "assertLoopbackUrl" appears in prose inside these
@@ -177,14 +187,22 @@ function scriptSources(dir: string): string[] {
 }
 
 describe('loopback guard call sites', () => {
-  it.each(GUARDED_SCRIPTS)('%s imports the shared guard and calls BOTH arms', (relPath) => {
-    const code = codeWithoutLineComments(relPath);
-    expect(code).toContain("from './lib/loopback_guard.mjs'");
-    // The two call literals are distinct substrings (the import line carries
-    // neither, because it has no open paren), so each proves its own arm.
-    expect(code).toContain('assertLoopbackUrl(');
-    expect(code).toContain('assertLoopbackDatabaseUrl(');
-  });
+  it.each(GUARDED_SCRIPTS)(
+    '%s imports the shared guard and calls every arm it needs',
+    (relPath) => {
+      const code = codeWithoutLineComments(relPath);
+      expect(code).toContain("from './lib/loopback_guard.mjs'");
+      // The call literals are distinct substrings (the import line carries none
+      // of them, because it has no open paren), so each proves its own arm.
+      expect(code).toContain('assertLoopbackUrl(');
+      // Asserted both ways, so a script carrying a DATABASE_URL cannot skip the
+      // arm and one without a DATABASE_URL cannot satisfy the pin by guarding
+      // undefined. Full-line comments are already stripped, so a usage note in
+      // the header does not count as owning one.
+      const ownsDatabaseUrl = code.includes('DATABASE_URL');
+      expect(code.includes('assertLoopbackDatabaseUrl(')).toBe(ownsDatabaseUrl);
+    },
+  );
 
   it('pins the guarded set exhaustively so a new adopter joins the scan', () => {
     const importers = scriptSources(join(ROOT, 'scripts'))
