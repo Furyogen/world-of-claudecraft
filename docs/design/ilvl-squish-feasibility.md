@@ -1,12 +1,11 @@
-# Item level squish: feasibility measurement
+# Item level squish: the feasibility measurement
 
-Status: **implemented** (Option C below). This document is the measurement that
-chose the approach; the shipped ladder lives in `src/sim/item_tier.ts` and the
-shipped curves in `src/sim/item_budget.ts`. Every number below was measured
-against the live content tables on `v0.28.0`, not estimated.
+Status: **historical record.** This is the measurement that chose the design, kept
+for the reasoning and for the numbers on the options that were NOT taken. The living
+reference for the shipped system is `docs/design/item-level-ladder.md`.
 
-The "before" numbers describe the pre-squish ladder. See "What shipped" at the
-end for the delivered result and how it differed from the measurement.
+Every number below was measured against the live content tables on `v0.28.0`, not
+estimated. "Before" describes the pre-squish ladder.
 
 ## The question
 
