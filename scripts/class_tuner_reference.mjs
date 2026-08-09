@@ -118,33 +118,40 @@ function dataUriFor(file) {
 
 /** Every capture in SHOTS_DIR, in filename order, with its documented caption. */
 const SHOT_CAPTIONS = {
-  '01-overview-druid': 'The tuner as an operator opens it: one window per class, Druid selected.',
-  '02-druid-thorns-shipped':
-    'Druid Briarguard at the shipped numbers. Its reflect damage per hit reads 3 / 6 / 9, one value per rank, and its own resource cost, range and buff duration each get a separate slider.',
-  '03-druid-thorns-nerfed':
-    'The same ability with reflect damage pulled to 0.70x. The readout shows the resulting numbers beside the shipped ones, so the cost of the nerf is visible before saving.',
-  '04-druid-moonfire-channels':
-    'A hybrid spell: Moonfire exposes its direct damage, its damage over time, its duration, its spell power scaling, its cost and its range as independent sliders.',
-  '05-warrior-spec-filter':
-    'A class window filtered to one specialization. Every ability that spec can actually cast is listed, including the spec-gated and signature kit.',
-  '06-priest-heal-channels':
-    'A healer class: direct healing, healing over time and absorb shielding are separate channels, so a shield can be trimmed without touching a heal.',
-  '07-mage-overview':
-    'Mage, one of the two reworked classes the tuner exists to rebalance the other seven against.',
-  '08-saved-pending-restart':
+  '01-overview-shaman':
+    'The tuner as an operator opens it: one window per class, plus the Weapons window at the end of the row. Shaman is selected, the first of the three classes queued for redesign.',
+  '02-shaman-spiritmend-chain-heal':
+    'Spiritmend (Restoration) Chain Heal at the shipped numbers. One spell, seven independent sliders: its healing, how many allies it chains to, the chain radius, its cost, cast time, range and spell power scaling.',
+  '03-shaman-chain-heal-tuned':
+    'The same spell with healing pulled to 0.75x and its chain widened to 1.50x. Each aspect moves on its own, so throughput can be traded for reach rather than both moving together.',
+  '04-shaman-thundercall-cinder-jolt':
+    'Thundercall (Elemental) Cinder Jolt. A shock that lands a hit and leaves a burn gets a separate slider for the direct damage and for the damage over time, so the burst and the sustained portion are tuned apart.',
+  '05-shaman-warspirit-spec-filter':
+    'Warspirit (Enhancement), the dual-wield melee spec. The class window filtered to one specialization lists every ability that spec can actually cast, including its spec-gated and signature kit.',
+  '06-hunter-coldsight-long-draw':
+    'Hunter, Coldsight (Marksmanship): Long Draw. A cast ranged shot, with its cast time and its ranged-attack-power scaling as separate levers from its damage.',
+  '07-hunter-rattling-shot':
+    'Rattling Shot. A control shot carries its snare strength and its control duration as their own channels, so the shot can be made to hit harder without also holding a target longer.',
+  '08-hunter-packlord-signature':
+    'Packlord (Beast Mastery) and its signature cooldown, Howling Rage. A spec signature is marked as such and scoped to the one spec that has it.',
+  '09-priest-doctrine-psalm-of-warding':
+    'Priest, Doctrine (Discipline): Psalm of Warding. Absorb shielding is its own channel, separate from healing, so a shield can be trimmed without touching a heal.',
+  '10-priest-vespers-mindfracture':
+    'Vespers (Shadow) Mindfracture, the damage side of the same class. The same six-slider shape a healer card has, pointed at damage instead.',
+  '11-saved-pending-restart':
     'After saving. The badge reports the change as pending a restart rather than implying it is already live, because tuning is installed once per boot.',
-  '09-change-history':
+  '12-change-history':
     'The append-only change history: who saved what, when, and the note they left.',
-  '10-mobile-overview': 'The tuner on a phone viewport.',
-  '11-mobile-ability-card': 'An ability card on a phone: the sliders stack to one column.',
-  '12-weapons-overview':
+  '13-weapons-overview':
     'The Weapons window. Auto-attack ("white") damage and swing timer, per weapon, filterable by weapon type.',
-  '13-weapon-shipped':
+  '14-weapon-shipped':
     'One weapon at its shipped numbers, with its damage range, swing timer and the resulting damage per second.',
-  '14-weapon-tuned':
+  '15-weapon-tuned':
     'The same weapon with swing damage raised and the swing timer slowed. The recomputed damage per second shows the net effect of both sliders together.',
-  '15-weapon-class-ranged':
-    "A class's own ranged profile. A hunter's Auto Shot and a caster's wand swing off these numbers with no item involved, so they are tuned as class kit.",
+  '16-weapon-hunter-ranged':
+    "A class's own ranged profile. A hunter's Auto Shot swings off these numbers with no item involved, so it is tuned as class kit rather than loot.",
+  '17-mobile-overview': 'The tuner on a phone viewport.',
+  '18-mobile-ability-card': 'An ability card on a phone: the sliders stack to one column.',
 };
 
 function shotSection() {
@@ -322,13 +329,14 @@ async function main() {
 
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>World of ClaudeCraft: Class Power Tuner</title>
+<title>Class Power Tuner by Furyogen</title>
 <style>
   @page { size: A4; margin: 14mm 12mm; }
   * { box-sizing: border-box; }
   html, body { max-width: 100%; overflow-x: hidden; }
   body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; font-size: 10pt; line-height: 1.45; margin: 0; }
   h1 { font-size: 26pt; margin: 0 0 4pt; }
+  h1 .by { font-size: 15pt; color: #6b5518; font-style: italic; font-weight: normal; white-space: nowrap; }
   h2 { font-size: 15pt; margin: 20pt 0 6pt; border-bottom: 1.5pt solid #8a6f2d; padding-bottom: 3pt; page-break-after: avoid; }
   h3 { font-size: 11.5pt; margin: 12pt 0 4pt; color: #6b5518; page-break-after: avoid; }
   .sub { color: #555; font-size: 11pt; margin: 0 0 14pt; }
@@ -360,7 +368,7 @@ async function main() {
   .kpi span { font-size: 8pt; color: #555; }
 </style></head><body>
 
-<h1>Class Power Tuner</h1>
+<h1>Class Power Tuner <span class="by">by Furyogen</span></h1>
 <p class="sub">World of ClaudeCraft: operator reference and complete tunable surface.<br>
 Generated ${new Date().toISOString().slice(0, 10)} from the live content tables.</p>
 
@@ -379,16 +387,25 @@ the next server restart.</p>
 <p>It exists because two of the nine classes have been reworked and now outperform the other
 seven. Closing that gap previously meant editing content source and shipping a build; with the
 tuner it is a slider and a restart.</p>
+<p>This edition follows <b>Shaman</b>, <b>Hunter</b> and <b>Priest</b>, the three classes queued
+for redesign next (PR #2218), through the dashboard: they are the ones a tuner will be reaching
+for as those reworks land.</p>
 
 <h2>Who can use it</h2>
-<p>Access is a dedicated staff role, <code>tuner</code>, carrying exactly two permissions:
+<p>A <b>tuner</b> is someone <b>assigned to the role by Levy Street</b>, the project owner. It is
+not something an operator can grant themselves or pick up by holding another staff role: the
+designation is handed out deliberately, to the few people trusted to move class balance, and it
+is revoked the same way.</p>
+<p>Technically it is a dedicated staff role, <code>tuner</code>, carrying exactly two permissions:
 <code>tuning.read</code> (see the sliders and the change history) and <code>tuning.write</code>
 (save a document). The role carries nothing else: an account holding only <code>tuner</code>
 cannot see player accounts, act on players, or read the anti-bot internals, and every other
 admin endpoint answers it with 403. The permission is deliberately kept out of the read-only
 <code>viewer</code> bundle, so the balance surface reaches named people rather than every
 read-only seat.</p>
-<p>Granting it:</p>
+<p>Levy Street assigns it with the grant script (or the Staff page, for an account that already
+holds staff roles). Every save is attributed to the account that made it in the change history
+below, so the trail always names which assigned tuner moved a number and why:</p>
 <p><code>node scripts/grant_admin.mjs &lt;username&gt; --roles tuner</code></p>
 
 <h2>How a change reaches the world</h2>
@@ -427,6 +444,35 @@ can be trusted with fields that are not plain magnitudes:</p>
 </ul>
 <p>A slider that provably cannot change anything (a zero magnitude, a multiplier already at its
 neutral 1) is not rendered, so every control on the page does something.</p>
+
+<h2>The classes this is pointed at next</h2>
+<p>Warrior and Mage were reworked first and pulled ahead of the rest; the tuner exists to close
+that gap without a content release. The next three classes through the same door are
+<b>Shaman</b>, <b>Hunter</b> and <b>Priest</b>, whose v0.29 redesigns are integrated in
+<b>PR #2218</b> on <code>levy-street/world-of-claudecraft</code>, nine specializations in
+total:</p>
+<table class="abilities">
+<thead><tr><th>Class</th><th>Specialization</th><th>The loop the redesign builds</th></tr></thead>
+<tbody>
+<tr><td class="name">Shaman</td><td class="src">Thundercall (Elemental)</td><td>Lightning caster: Fulmination banking, spent by shocks</td></tr>
+<tr><td class="name"></td><td class="src">Warspirit (Enhancement)</td><td>Dual wield: Galeheart echoes and Flow State</td></tr>
+<tr><td class="name"></td><td class="src">Spiritmend (Restoration)</td><td>Healer: Mending Current deposits, consumed by Cascading Mend</td></tr>
+<tr><td class="name">Hunter</td><td class="src">Packlord (Beast Mastery)</td><td>Pet focused: Stampede, with Pack Command resets</td></tr>
+<tr><td class="name"></td><td class="src">Coldsight (Marksmanship)</td><td>Ranged damage on the Cold Read mastery</td></tr>
+<tr><td class="name"></td><td class="src">Fieldcraft (Survival)</td><td>Physical damage, Bloodhook contributions</td></tr>
+<tr><td class="name">Priest</td><td class="src">Doctrine (Discipline)</td><td>Covenant loop, hybrid healing and damage</td></tr>
+<tr><td class="name"></td><td class="src">Benison (Holy)</td><td>Vigil-based healing loop</td></tr>
+<tr><td class="name"></td><td class="src">Vespers (Shadow)</td><td>Effigy loop, damage scaling off it</td></tr>
+</tbody></table>
+<p>The redesigned spec identities above are already live, and the tables at the back of this
+document list every ability each of them can cast today, with the sliders it exposes. What
+PR #2218 still changes is the kit behind those identities, and for Hunter the resource itself:
+mana is replaced by Focus. <b>Neither needs any work in the tuner.</b> The catalog is derived
+from the live content tables and the sliders come from the abilities' own effects, so on the
+boot after that PR lands, the redesigned kit appears here with the right sliders, the Focus
+costs show up on the resource-cost channel, and any retired ability drops out. The only thing
+a rework can require is a row in the classification table, and the guard below is what says so
+out loud.</p>
 
 <h2>Why the coverage stays complete</h2>
 <p>The tuner does not carry a hand-written list of knobs. One traversal of an ability definition
@@ -475,7 +521,7 @@ ${weaponSection(catalog.weapons)}
         displayHeaderFooter: true,
         headerTemplate: '<div></div>',
         footerTemplate:
-          '<div style="width:100%;font-size:8px;color:#888;text-align:center;font-family:Georgia,serif;">World of ClaudeCraft &mdash; Class Power Tuner &mdash; <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+          '<div style="width:100%;font-size:8px;color:#888;text-align:center;font-family:Georgia,serif;">World of ClaudeCraft &mdash; Class Power Tuner by Furyogen &mdash; <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
       });
       const bytes = fs.statSync(PDF_PATH).size;
       console.log(`[ref] ${PDF_PATH} (${(bytes / 1024 / 1024).toFixed(1)} MB)`);
