@@ -2182,6 +2182,7 @@ function classTuningReadBody(db: Pick<AdminDb, 'classTuningCatalog' | 'classTuni
     // dashboard needs to say so rather than implying the change is live.
     pendingRestart: state.pendingRestart,
     tunedAbilities: state.tunedAbilities,
+    tunedWeapons: state.tunedWeapons,
     tunedChannels: state.tunedChannels,
     noteMaxLength: CLASS_TUNING_NOTE_MAX,
   };

@@ -13,15 +13,18 @@
 // before any tick, so every host that installed the same document runs the same
 // world, and a host that installed nothing runs the shipped table byte for byte.
 
-import { ABILITIES } from '../content/classes';
-import type { AbilityDef } from '../types';
+import { ABILITIES, CLASSES, type ClassDef } from '../content/classes';
+import { ITEMS } from '../data';
+import { type AbilityDef, ALL_CLASSES, type PlayerClass, type WeaponInfo } from '../types';
 import { applyAbilityTuning } from './ability_knobs';
 import {
   type AbilityTuning,
   type ClassTuningDocument,
+  classRangedWeaponId,
   emptyClassTuningDocument,
   sanitizeClassTuningDocument,
 } from './document';
+import { applyWeaponTuning } from './weapon_knobs';
 
 /**
  * Pure form: a NEW ability table with the document applied. Abilities the
@@ -41,9 +44,12 @@ export function applyClassTuning(
   return out;
 }
 
-// The shipped defs displaced by the current install, so a re-install starts
-// from the authored table rather than compounding on top of itself.
+// The shipped defs and weapon profiles displaced by the current install, so a
+// re-install starts from the authored tables rather than compounding on top of
+// itself.
 const shippedDefs = new Map<string, AbilityDef>();
+const shippedItemWeapons = new Map<string, WeaponInfo>();
+const shippedClassRanged = new Map<PlayerClass, ClassDef['ranged']>();
 let active: ClassTuningDocument = emptyClassTuningDocument();
 
 /**
@@ -58,6 +64,13 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
 
   for (const [abilityId, shipped] of shippedDefs) ABILITIES[abilityId] = shipped;
   shippedDefs.clear();
+  for (const [itemId, shipped] of shippedItemWeapons) {
+    const item = ITEMS[itemId];
+    if (item) (item as { weapon?: WeaponInfo }).weapon = shipped;
+  }
+  shippedItemWeapons.clear();
+  for (const [cls, shipped] of shippedClassRanged) CLASSES[cls].ranged = shipped;
+  shippedClassRanged.clear();
 
   for (const [abilityId, factors] of Object.entries(doc.abilities)) {
     const shipped = ABILITIES[abilityId];
@@ -68,8 +81,38 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
     ABILITIES[abilityId] = tuned;
   }
 
+  // Auto-attack profiles. A carried weapon is keyed by item id; a class's own
+  // ranged profile (hunter Auto Shot, caster wand) by classRangedWeaponId.
+  for (const [weaponId, factors] of Object.entries(doc.weapons)) {
+    const cls = classForRangedWeaponId(weaponId);
+    if (cls) {
+      const shipped = CLASSES[cls].ranged;
+      if (!shipped) continue;
+      const tuned = applyWeaponTuning(shipped, factors);
+      if (tuned === shipped) continue;
+      shippedClassRanged.set(cls, shipped);
+      CLASSES[cls].ranged = { ...shipped, ...tuned };
+      continue;
+    }
+    const item = ITEMS[weaponId] as { weapon?: WeaponInfo } | undefined;
+    const shipped = item?.weapon;
+    if (!shipped) continue;
+    const tuned = applyWeaponTuning(shipped, factors);
+    if (tuned === shipped) continue;
+    shippedItemWeapons.set(weaponId, shipped);
+    if (item) item.weapon = tuned;
+  }
+
   active = doc;
   return doc;
+}
+
+const RANGED_ID_BY_CLASS = new Map<string, PlayerClass>(
+  ALL_CLASSES.map((cls) => [classRangedWeaponId(cls), cls]),
+);
+
+function classForRangedWeaponId(weaponId: string): PlayerClass | null {
+  return RANGED_ID_BY_CLASS.get(weaponId) ?? null;
 }
 
 /** The document currently installed on this process (empty when untuned). */
@@ -80,4 +123,12 @@ export function activeClassTuning(): ClassTuningDocument {
 /** The ability ids whose defs the current install has replaced. */
 export function installedTunedAbilityIds(): string[] {
   return [...shippedDefs.keys()].sort();
+}
+
+/** The weapon ids (item ids plus class ranged ids) the current install has replaced. */
+export function installedTunedWeaponIds(): string[] {
+  return [
+    ...shippedItemWeapons.keys(),
+    ...[...shippedClassRanged.keys()].map(classRangedWeaponId),
+  ].sort();
 }

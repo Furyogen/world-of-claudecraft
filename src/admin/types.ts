@@ -805,13 +805,30 @@ export interface TunerClassInfo {
   abilities: TunerAbilityInfo[];
 }
 
+/** One auto-attack ("white") profile: a weapon item, or a class's ranged kit. */
+export interface TunerWeaponInfo {
+  id: string;
+  name: string;
+  kind: 'item' | 'classRanged';
+  class?: string;
+  hand: string;
+  dagger: boolean;
+  min: number;
+  max: number;
+  speed: number;
+  dps: number;
+  channels: TunerChannelInfo[];
+}
+
 export interface ClassTuningCatalog {
   classes: TunerClassInfo[];
+  weapons: TunerWeaponInfo[];
 }
 
 export interface ClassTuningDocumentData {
   version: number;
   abilities: Record<string, Record<string, number>>;
+  weapons: Record<string, Record<string, number>>;
 }
 
 export interface ClassTuningResponse {
@@ -824,6 +841,7 @@ export interface ClassTuningResponse {
   /** True when the saved document is not yet the running one: restart pending. */
   pendingRestart: boolean;
   tunedAbilities: number;
+  tunedWeapons: number;
   tunedChannels: number;
   noteMaxLength: number;
   /** Present on a save response: whether the document actually differed. */

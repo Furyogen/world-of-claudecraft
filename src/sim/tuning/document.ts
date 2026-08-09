@@ -19,25 +19,34 @@ import {
 export const CLASS_TUNING_VERSION = 1;
 
 export type AbilityTuning = Partial<Record<TuningChannel, number>>;
+/** Same shape; separate name because the WEAPON scope only ever uses the two swing channels. */
+export type WeaponTuning = Partial<Record<TuningChannel, number>>;
 
 export interface ClassTuningDocument {
   version: number;
   /** ability id -> the channels moved off neutral for it */
   abilities: Record<string, AbilityTuning>;
+  /**
+   * Weapon id -> its auto-attack ("white") channels. Keyed by ITEM id for a
+   * carried weapon, and by `class_<cls>_ranged` for the per-class ranged
+   * profile a hunter's Auto Shot and a caster's wand swing with.
+   */
+  weapons: Record<string, WeaponTuning>;
 }
 
 // Bounds on a stored document. Both are far above any real tuning pass; they
 // exist so a malformed or hostile body cannot grow the realm's JSONB row
 // without limit.
 export const MAX_TUNED_ABILITIES = 2000;
-const ABILITY_ID_PATTERN = /^[a-z0-9_]{1,64}$/;
+export const MAX_TUNED_WEAPONS = 2000;
+const ENTRY_ID_PATTERN = /^[a-z0-9_]{1,64}$/;
 
 export function emptyClassTuningDocument(): ClassTuningDocument {
-  return { version: CLASS_TUNING_VERSION, abilities: {} };
+  return { version: CLASS_TUNING_VERSION, abilities: {}, weapons: {} };
 }
 
 export function isEmptyClassTuningDocument(doc: ClassTuningDocument): boolean {
-  return Object.keys(doc.abilities).length === 0;
+  return Object.keys(doc.abilities).length === 0 && Object.keys(doc.weapons).length === 0;
 }
 
 /**
@@ -57,14 +66,22 @@ export function sanitizeClassTuningDocument(input: unknown): ClassTuningDocument
   const root = asRecord(input);
   if (!root) return doc;
 
-  const abilities = asRecord(root.abilities);
-  if (!abilities) return doc;
+  doc.abilities = sanitizeScope(root.abilities, MAX_TUNED_ABILITIES);
+  doc.weapons = sanitizeScope(root.weapons, MAX_TUNED_WEAPONS);
+  return doc;
+}
+
+/** One scope's id-to-channel map, dropping every row it cannot trust. */
+function sanitizeScope(input: unknown, maxEntries: number): Record<string, AbilityTuning> {
+  const out: Record<string, AbilityTuning> = {};
+  const entries = asRecord(input);
+  if (!entries) return out;
 
   let kept = 0;
-  for (const abilityId of Object.keys(abilities).sort()) {
-    if (kept >= MAX_TUNED_ABILITIES) break;
-    if (!ABILITY_ID_PATTERN.test(abilityId)) continue;
-    const channels = asRecord(abilities[abilityId]);
+  for (const entryId of Object.keys(entries).sort()) {
+    if (kept >= maxEntries) break;
+    if (!ENTRY_ID_PATTERN.test(entryId)) continue;
+    const channels = asRecord(entries[entryId]);
     if (!channels) continue;
 
     const tuning: AbilityTuning = {};
@@ -79,31 +96,45 @@ export function sanitizeClassTuningDocument(input: unknown): ClassTuningDocument
       any = true;
     }
     if (!any) continue;
-    doc.abilities[abilityId] = tuning;
+    out[entryId] = tuning;
     kept++;
   }
-  return doc;
+  return out;
 }
 
 /** Stable serialization, so an unchanged save is detectable as unchanged. */
 export function classTuningDocumentKey(doc: ClassTuningDocument): string {
-  const abilities: Record<string, AbilityTuning> = {};
-  for (const abilityId of Object.keys(doc.abilities).sort()) {
-    const tuning = doc.abilities[abilityId];
+  return JSON.stringify({
+    version: doc.version,
+    abilities: orderedScope(doc.abilities),
+    weapons: orderedScope(doc.weapons),
+  });
+}
+
+function orderedScope(scope: Record<string, AbilityTuning>): Record<string, AbilityTuning> {
+  const out: Record<string, AbilityTuning> = {};
+  for (const entryId of Object.keys(scope).sort()) {
+    const tuning = scope[entryId];
     const ordered: AbilityTuning = {};
     for (const channel of Object.keys(tuning).sort() as TuningChannel[]) {
       ordered[channel] = tuning[channel];
     }
-    abilities[abilityId] = ordered;
+    out[entryId] = ordered;
   }
-  return JSON.stringify({ version: doc.version, abilities });
+  return out;
 }
 
-/** How many individual channel knobs the document moves. */
+/** How many individual channel knobs the document moves, across both scopes. */
 export function countTunedChannels(doc: ClassTuningDocument): number {
   let total = 0;
   for (const tuning of Object.values(doc.abilities)) total += Object.keys(tuning).length;
+  for (const tuning of Object.values(doc.weapons)) total += Object.keys(tuning).length;
   return total;
+}
+
+/** The stable document id for a class's own ranged (Auto Shot / wand) profile. */
+export function classRangedWeaponId(cls: string): string {
+  return `class_${cls}_ranged`;
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
