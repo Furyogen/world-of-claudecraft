@@ -329,7 +329,7 @@ async function main() {
 
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>Class Power Tuner by Furyogen</title>
+<title>Class Power Tuner by Furyogen (WIP)</title>
 <style>
   @page { size: A4; margin: 14mm 12mm; }
   * { box-sizing: border-box; }
@@ -341,6 +341,10 @@ async function main() {
   h3 { font-size: 11.5pt; margin: 12pt 0 4pt; color: #6b5518; page-break-after: avoid; }
   .sub { color: #555; font-size: 11pt; margin: 0 0 14pt; }
   .note { color: #444; font-size: 9pt; margin: 4pt 0 8pt; }
+  h1 .wip-tag { font-size: 11pt; font-weight: bold; color: #6b5518; border: 1.2pt solid #8a6f2d;
+                border-radius: 3pt; padding: 1pt 5pt; vertical-align: middle; letter-spacing: 0.5pt; }
+  .wip { background: #fbf5e2; border-left: 3pt solid #8a6f2d; padding: 6pt 9pt; margin: 10pt 0;
+         font-size: 9.2pt; color: #3a3227; page-break-inside: avoid; }
   .role { color: #777; font-weight: normal; font-size: 9pt; }
   table.abilities { width: 100%; border-collapse: collapse; margin-bottom: 8pt; font-size: 8.4pt; }
   table.abilities th { background: #efe9d8; border: 0.5pt solid #c9bd9a; padding: 3pt 4pt; text-align: left; font-size: 8.4pt; }
@@ -368,7 +372,7 @@ async function main() {
   .kpi span { font-size: 8pt; color: #555; }
 </style></head><body>
 
-<h1>Class Power Tuner <span class="by">by Furyogen</span></h1>
+<h1>Class Power Tuner <span class="by">by Furyogen</span> <span class="wip-tag">WIP</span></h1>
 <p class="sub">World of ClaudeCraft: operator reference and complete tunable surface.<br>
 Generated ${new Date().toISOString().slice(0, 10)} from the live content tables.</p>
 
@@ -390,6 +394,13 @@ tuner it is a slider and a restart.</p>
 <p>This edition follows <b>Shaman</b>, <b>Hunter</b> and <b>Priest</b>, the three classes queued
 for redesign next (PR #2218), through the dashboard: they are the ones a tuner will be reaching
 for as those reworks land.</p>
+<p class="wip"><b>Work in progress.</b> The tool is complete and the mechanism below is stable;
+what moves under it is the CONTENT. The tables at the back and the screenshots are a snapshot of
+the kit on <code>release/v0.36.0</code>, and the class reworks are still arriving one wave at a
+time. No re-engineering is needed when a wave lands: the catalog is derived from the live content
+tables, never hand-authored, so a redesigned class appears with the right sliders on its own and
+this document is simply regenerated. Read the mechanism as settled and the numbers as of
+today.</p>
 
 <h2>Who can use it</h2>
 <p>A <b>tuner</b> is someone <b>assigned to the role by Levy Street</b>, the project owner. It is
@@ -521,7 +532,7 @@ ${weaponSection(catalog.weapons)}
         displayHeaderFooter: true,
         headerTemplate: '<div></div>',
         footerTemplate:
-          '<div style="width:100%;font-size:8px;color:#888;text-align:center;font-family:Georgia,serif;">World of ClaudeCraft &mdash; Class Power Tuner by Furyogen &mdash; <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+          '<div style="width:100%;font-size:8px;color:#888;text-align:center;font-family:Georgia,serif;">World of ClaudeCraft &mdash; Class Power Tuner by Furyogen (WIP) &mdash; <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
       });
       const bytes = fs.statSync(PDF_PATH).size;
       console.log(`[ref] ${PDF_PATH} (${(bytes / 1024 / 1024).toFixed(1)} MB)`);
