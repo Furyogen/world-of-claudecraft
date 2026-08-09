@@ -49,6 +49,7 @@ import { emptyCraftSkills } from '../sim/professions/wheel';
 import type { ResolvedAbility } from '../sim/sim';
 import { parseTalentAllocation } from '../sim/talent_allocation_input';
 import { repairTalentLoadouts } from '../sim/talent_loadouts';
+import { installClassTuning } from '../sim/tuning';
 import {
   type Aura,
   cloneItemInstancePayload,
@@ -2298,6 +2299,12 @@ export class ClientWorld implements IWorld {
       this.ownPlayerId = msg.pid;
       this.cfg.seed = msg.seed;
       if (typeof msg.realm === 'string') this.realm = msg.realm;
+      // The realm's class power tuning (src/sim/tuning/). Installed before any
+      // known-ability list or tooltip is computed, so the client's cooldowns,
+      // costs and damage readouts describe the numbers this server actually
+      // resolves. Absent or empty on an untuned realm, which restores the
+      // shipped table; sanitizing happens inside installClassTuning.
+      installClassTuning(msg.classTuning);
       if (Array.isArray(msg.softWords)) {
         this.profanityWords = msg.softWords.filter(
           (w: unknown): w is string => typeof w === 'string',
