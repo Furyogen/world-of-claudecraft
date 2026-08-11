@@ -54,6 +54,8 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
     min: linear('damage_direct'),
     max: linear('damage_direct'),
     vsRootedMult: deviation('damage_direct'),
+    restoreMana: linear('resource_gain'),
+    selfHealDamageFrac: fraction('heal_direct'),
   },
   finisherDamage: {
     base: linear('damage_finisher'),
@@ -81,6 +83,15 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   dot: {
     total: linear('damage_dot'),
     perCombo: linear('damage_dot'),
+    // Classic finisher bleeds author their combo scaling twice over: one shape
+    // buys bigger ticks (baseTotal + perComboTotal at a fixed duration), the
+    // other buys a longer bleed (baseDuration + perComboDuration). Each half
+    // moves with the channel its own number feeds, so a damage nerf lands on
+    // the totals and a duration nerf on the durations.
+    baseTotal: linear('damage_dot'),
+    perComboTotal: linear('damage_dot'),
+    baseDuration: linear('duration_effect'),
+    perComboDuration: linear('duration_effect'),
     duration: linear('duration_effect'),
     leechPct: fraction('heal_direct'),
     directPct: fraction('damage_direct'),
@@ -97,6 +108,8 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
 
   // --- area damage ----------------------------------------------------------
   aoeDamage: {
+    // a frontal cone's half-angle: the same shape lever empoweredCone.angle is
+    frontalHalfAngle: linear('radius'),
     min: linear('damage_aoe'),
     max: linear('damage_aoe'),
     radius: linear('radius'),
@@ -122,6 +135,7 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
     igniteFrac: fraction('damage_dot'),
     slowMult: deviation('effect_magnitude'),
     slowDuration: linear('duration_control'),
+    devotionOnFirstHit: linear('resource_gain'),
   },
   frozenOrb: {
     min: linear('damage_aoe'),
@@ -147,7 +161,12 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   },
 
   // --- healing, absorbs, resurrection ---------------------------------------
-  heal: { min: linear('heal_direct'), max: linear('heal_direct') },
+  heal: {
+    min: linear('heal_direct'),
+    max: linear('heal_direct'),
+    // a heal authored as a share of the CASTER's pool instead of a roll
+    casterMaxHpPct: fraction('heal_direct'),
+  },
   aoeHeal: {
     min: linear('heal_direct'),
     max: linear('heal_direct'),
@@ -163,7 +182,11 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   hot: { total: linear('heal_hot'), duration: linear('duration_effect') },
   selfHealPctMax: { pct: fraction('heal_direct') },
   selfHotPctMax: { pct: fraction('heal_hot'), duration: linear('duration_effect') },
-  absorb: { amount: linear('absorb'), duration: linear('duration_effect') },
+  absorb: {
+    amount: linear('absorb'),
+    duration: linear('duration_effect'),
+    casterMaxHpPct: fraction('absorb'),
+  },
   aoeAllyAbsorb: {
     amount: linear('absorb'),
     duration: linear('duration_effect'),
@@ -263,8 +286,20 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
     duration: linear('duration_effect'),
     charges: linear('targets'),
     internalCooldown: linear('cooldown'),
+    // the running upkeep and the floor it shuts off at
+    healthDrainPctMax: fraction('resource_cost'),
+    disableBelowHpPct: fraction('effect_magnitude'),
+    // Secondary aura payloads. Unlike `value`, these are not routed by aura
+    // kind (they carry a different meaning per kind: a judgement's min/max, an
+    // aftereffect's damage reduction, a form's second and third bonus), so they
+    // take the generic magnitude channel rather than a guessed one.
+    value2: linear('effect_magnitude'),
+    value3: linear('effect_magnitude'),
   },
-  buffTarget: { duration: linear('duration_effect') },
+  buffTarget: {
+    duration: linear('duration_effect'),
+    value2: linear('effect_magnitude'),
+  },
   petBuff: { duration: linear('duration_effect') },
   applyDebuff: { duration: linear('duration_control') },
   debuffTargetSource: { duration: linear('duration_control') },
@@ -333,7 +368,197 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   gainResource: { amount: linear('resource_gain') },
   lifeTap: { hp: linear('resource_cost'), mana: linear('resource_gain') },
   selfDamagePctMax: { pct: fraction('resource_cost') },
+  selfDamagePctCurrent: { pct: fraction('resource_cost') },
+  selfAbsorbPctMax: { pct: fraction('absorb'), duration: linear('duration_effect') },
   blinkForward: { distance: linear('distance') },
+
+  // --- hunter kits (Fieldcraft / Packlord / Coldsight) ---------------------
+  // These resolve their own numbers rather than going through spell_scaling's
+  // powerScale, so each carries its own Ranged Attack Power coefficient. That
+  // coefficient IS the ability's power scaling, so it takes the spell_power
+  // channel here instead of the def-level powerCoeffMult knob (which never
+  // reaches these effects, so nothing double-scales).
+  hunterBloodhook: {
+    bleedTotal: linear('damage_dot'),
+    bleedDuration: linear('duration_effect'),
+    rangedPowerCoeff: multiplier('spell_power'),
+    damageMult: multiplier('damage_direct'),
+  },
+  hunterShrapnel: {
+    primaryMin: linear('damage_direct'),
+    primaryMax: linear('damage_direct'),
+    splashMin: linear('damage_aoe'),
+    splashMax: linear('damage_aoe'),
+    radius: linear('radius'),
+    maxTargets: linear('targets'),
+    spreadTotal: linear('damage_dot'),
+    spreadDuration: linear('duration_effect'),
+    damageMult: multiplier('damage_direct'),
+  },
+  hunterStampede: {
+    beasts: linear('targets'),
+    duration: linear('duration_effect'),
+    // A summoned beast's swing timer is a real output lever (its total is
+    // duration / interval x hit, not a fixed authored total), so unlike a DoT
+    // cadence field it belongs on the swing channel rather than untuned.
+    attackInterval: linear('swing_speed'),
+    min: linear('damage_direct'),
+    max: linear('damage_direct'),
+    rangedPowerCoeff: multiplier('spell_power'),
+  },
+  packCommand: {
+    min: linear('damage_direct'),
+    max: linear('damage_direct'),
+    focus: linear('resource_gain'),
+    ferocityDuration: linear('duration_effect'),
+  },
+  unleashBeast: {
+    primaryMin: linear('damage_direct'),
+    primaryMax: linear('damage_direct'),
+    clapMin: linear('damage_aoe'),
+    clapMax: linear('damage_aoe'),
+    // the share secondary targets take of the clap, authored above 1
+    secondaryClapMult: multiplier('damage_aoe'),
+    radius: linear('radius'),
+    frenzyDuration: linear('duration_effect'),
+  },
+  hunterPackRally: { duration: linear('duration_effect'), radius: linear('radius') },
+  hunterTrailbreak: { distance: linear('distance') },
+  howlingRage: { duration: linear('duration_effect') },
+  frostjawTrap: {
+    radius: linear('radius'),
+    armTime: linear('duration_effect'),
+    lifetime: linear('duration_effect'),
+    rootDuration: linear('duration_control'),
+    slowMult: deviation('effect_magnitude'),
+    slowDuration: linear('duration_control'),
+  },
+
+  // --- druid engine payoffs -------------------------------------------------
+  druidMarrowbreakGuard: {
+    // the health fraction the guard triggers under: the same kind of window
+    // lever as an execute's requiresTargetHpBelow, so it is tunable
+    belowFrac: fraction('effect_magnitude'),
+    absorbPctMaxHp: fraction('absorb'),
+    rage: linear('resource_gain'),
+  },
+  druidOverbloom: { harvestPct: fraction('heal_direct') },
+
+  // --- paladin kit ----------------------------------------------------------
+  // Aegis is a HEALING cooldown: its ticks and its finale both run through
+  // applyHeal, so they take the healing channels rather than damage ones.
+  paladinAegis: {
+    radius: linear('radius'),
+    tickMin: linear('heal_hot'),
+    tickMax: linear('heal_hot'),
+    finalMin: linear('heal_direct'),
+    finalMax: linear('heal_direct'),
+    damageReduction: fraction('effect_magnitude'),
+    speedMult: deviation('effect_magnitude'),
+    speedDuration: linear('duration_effect'),
+  },
+  sunGodVerdict: {
+    duration: linear('duration_effect'),
+    charges: linear('targets'),
+    singleTargetMin: linear('damage_direct'),
+    singleTargetMax: linear('damage_direct'),
+    areaMin: linear('damage_aoe'),
+    areaMax: linear('damage_aoe'),
+    areaRadius: linear('radius'),
+    areaSoftCap: linear('targets'),
+    stunDuration: linear('duration_control'),
+  },
+  valkyrsCalling: {
+    min: linear('damage_aoe'),
+    max: linear('damage_aoe'),
+    radius: linear('radius'),
+    softCap: linear('targets'),
+  },
+  veilboundMarch: {
+    duration: linear('duration_effect'),
+    speedMult: deviation('effect_magnitude'),
+    armorPct: fraction('effect_magnitude'),
+  },
+  duskfireClaim: { duration: linear('duration_effect') },
+  grantDevotion: { amount: linear('resource_gain') },
+
+  // --- warlock: necromancy --------------------------------------------------
+  armyOfDead: { duration: linear('duration_effect') },
+  commandUndead: {
+    duration: linear('duration_effect'),
+    dmgPct: fraction('effect_magnitude'),
+    hastePct: fraction('effect_magnitude'),
+  },
+  empowerUndeadArmy: {
+    duration: linear('duration_effect'),
+    dmgPct: fraction('effect_magnitude'),
+    hastePct: fraction('effect_magnitude'),
+  },
+  sacrificeUndead: { healPctMax: fraction('heal_direct') },
+  summonPyreColossus: { duration: linear('duration_effect') },
+  summonSoulwell: { duration: linear('duration_effect') },
+  gainSoulFragments: { amount: linear('resource_gain') },
+  necromancyOssuaryMark: {
+    duration: linear('duration_effect'),
+    storedDamagePct: fraction('effect_magnitude'),
+    soulLanceBonusPct: fraction('effect_magnitude'),
+    deathRadius: linear('radius'),
+  },
+  warlockUmbralAnchor: {
+    duration: linear('duration_effect'),
+    maxRange: linear('range'),
+  },
+  ruinousBrand: { duration: linear('duration_effect'), charges: linear('targets') },
+
+  // --- warlock: affliction (Doom is a resource meter, so it moves on the
+  // resource channels rather than effect_magnitude) --------------------------
+  afflictionCoven: {
+    duration: linear('duration_effect'),
+    radius: linear('radius'),
+    maxSecondary: linear('targets'),
+  },
+  afflictionCruelPact: {
+    // paid in the caster's own health, refunded as mana and Doom
+    healthPct: fraction('resource_cost'),
+    manaPctMax: fraction('resource_gain'),
+    doom: linear('resource_gain'),
+  },
+  afflictionJudgment: {
+    duration: linear('duration_effect'),
+    doom: linear('resource_gain'),
+    refund: linear('resource_gain'),
+  },
+  afflictionLitany: {
+    duration: linear('duration_effect'),
+    radius: linear('radius'),
+    maxTargets: linear('targets'),
+    damage: linear('damage_aoe'),
+  },
+  afflictionPossession: {
+    // taking an enemy over is control, not a buff window
+    duration: linear('duration_control'),
+    doom: linear('resource_gain'),
+  },
+  afflictionVicarious: {
+    duration: linear('duration_effect'),
+    maxDoom: linear('resource_gain'),
+  },
+  afflictionViolence: {
+    duration: linear('duration_effect'),
+    charges: linear('targets'),
+    doomPerProc: linear('resource_gain'),
+    damage: linear('damage_direct'),
+  },
+
+  // --- shared utility -------------------------------------------------------
+  threatPulse: { amount: linear('threat'), radius: linear('radius') },
+  pullTarget: {
+    stopDistance: linear('distance'),
+    travelSpeed: linear('effect_magnitude'),
+    slowMult: deviation('effect_magnitude'),
+    slowDuration: linear('duration_control'),
+    maxTargets: linear('targets'),
+  },
 
   // --- Vale Cup boarball moves (no damage, but still authored magnitudes) ---
   ballKick: { power: linear('distance'), loft: linear('distance') },
@@ -419,8 +644,11 @@ export const UNTUNED_EFFECT_FIELDS: ReadonlySet<string> = new Set<string>([
   'groundAoE.interval',
   'frozenOrb.interval',
   'selfHotPctMax.interval',
+  'hunterBloodhook.bleedInterval',
+  'hunterShrapnel.spreadInterval',
   // the def-level spell_power channel owns power scaling for the whole ability
   'absorb.spellPowerCoeff',
+  'directDamage.spellPowerCoeff',
   // crit-behavior switch expressed as a level, not a magnitude
   'empoweredCone.guaranteedCritLevel',
 ]);
@@ -433,6 +661,10 @@ export const UNTUNED_DEF_FIELDS: ReadonlySet<string> = new Set<string>([
   'empowerStages',
   'excludeSpecsAtLevel',
   'requiresAuraStacks',
+  // the stack threshold an action-replacement rule arms at: a gate on WHICH
+  // ability a button resolves to, not how strong either one is
+  'actionReplacement.minStacks',
+  'actionReplacement[].minStacks',
   'channel.ticks',
   'color',
 ]);

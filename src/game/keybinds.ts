@@ -154,6 +154,16 @@ export const BIND_ACTIONS: BindAction[] = [
     defaults: ['Tab'],
   },
   {
+    // The backward half of the Tab cycle. Edge actions match the FULL chord
+    // (input.ts), so Shift+Tab is a distinct binding from Tab and neither
+    // shadows the other.
+    id: 'targetPrev',
+    label: 'Cycle Target Backward',
+    category: 'Targeting',
+    kind: 'edge',
+    defaults: ['Shift+Tab'],
+  },
+  {
     id: 'targetFriendly',
     label: 'Target Nearest Friendly',
     category: 'Targeting',
@@ -304,6 +314,15 @@ export const BIND_ACTIONS: BindAction[] = [
     category: 'Interface',
     kind: 'edge',
     defaults: ['Shift+KeyP'],
+  },
+  // The Reliquary parks on Shift+X: bare KeyX is the emote wheel; Shift+X was
+  // free and sits beside Deeds (Shift+Z) on the shifted letter row.
+  {
+    id: 'reliquary',
+    label: 'The Reliquary',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['Shift+KeyX'],
   },
   {
     id: 'chat',

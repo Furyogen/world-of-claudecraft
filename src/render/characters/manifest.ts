@@ -24,6 +24,8 @@ export interface ClipMap {
   attack: string[];
   /** Optional per-ability swing or cast-gesture override. */
   attackByAbility?: Record<string, string>;
+  /** Playback rate for authored per-ability clips that must keep exact timing. */
+  attackTimeScaleByAbility?: Record<string, number>;
   /** Optional weapon-style override for plain auto attacks. */
   attackByHand?: { twohand?: string; dualwield?: string };
   death: string;
@@ -174,7 +176,7 @@ const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   run: 'Running_A',
   walkBack: 'Walking_Backwards',
   attack,
-  hit: ['Hit_A'],
+  hit: ['Hit_A', 'Hit_B_Stagger'],
   death: 'Death_A',
   cast: 'Spellcasting',
   sitDown: 'Sit_Floor_Down',
@@ -394,6 +396,20 @@ const MURLOC_BIPED14: ClipMap = {
   attack: ['Murloc_Attack'],
 };
 
+// The warlock demon pet family's own attack (scripts/build_demon_anims.mjs,
+// issue #2889 round 2): BIPED14's Punch/Weapon attack is shared by
+// reference across 6 unrelated families (mob_bear, mob_yeti, mob_murloc,
+// mob_troll, mob_demon, mob_demonalt). This "nod-and-slash" clip is baked
+// off demonalt.glb's own donor poses (Weapon's swing blended through the
+// currently unused Yes clip's downward nod), so only mob_demon and
+// mob_demonalt get it: they already share the same base rig and
+// tint-only differentiation, so sharing the new attack too is consistent
+// with how the rest of that pairing works.
+const DEMON_BIPED14: ClipMap = {
+  ...BIPED14,
+  attack: ['Demon_Attack'],
+};
+
 // The bear family's own attack (scripts/build_bear_anims.mjs, issue #2889
 // round 2): BIPED14's Punch/Weapon attack is shared by reference across 6
 // unrelated families (mob_bear, mob_yeti, mob_murloc, mob_troll, mob_demon,
@@ -440,6 +456,29 @@ const WILDHEART_HEXCALLER: ClipMap = {
   cast: 'Wildheart_Hexcaller_Attack',
 };
 
+// Zulgar, Voice of the Basin's own attack/cast (scripts/build_wildheart_high_priest_anims.mjs,
+// issue #2889 round 2): TRIPO_BIPED_FULL_RIG's Attack and Cast are shared by reference
+// across all 5 Wildheart Basin mobs. This clip is baked off wildheart_high_priest.glb's
+// own donor poses (a climactic Cast hold into Jump's own pose repurposed as a downward
+// slam/roar release), so only mob_wildheart_high_priest gets it; the other 4 Wildheart
+// mobs are untouched. Wired into both attack and cast; deliberately the longest and most
+// dramatic of the five, befitting the dungeon boss.
+const WILDHEART_HIGH_PRIEST: ClipMap = {
+  ...TRIPO_BIPED_FULL_RIG,
+  attack: ['Wildheart_High_Priest_Attack'],
+  cast: 'Wildheart_High_Priest_Attack',
+};
+
+// The Bloodmane Ravager's own attack (scripts/build_wildheart_ravager_anims.mjs, issue
+// #2889 round 2): TRIPO_BIPED_FULL_RIG's Attack is shared by reference across all 5
+// Wildheart Basin mobs. This clip is baked off wildheart_ravager.glb's own donor poses
+// (a heavier two-beat re-timing of its own Attack and Hit clips), so only
+// mob_wildheart_ravager gets it; the other 4 Wildheart mobs are untouched.
+const WILDHEART_RAVAGER: ClipMap = {
+  ...TRIPO_BIPED_FULL_RIG,
+  attack: ['Wildheart_Ravager_Attack'],
+};
+
 // 2023 enemy rig (goblin/giant)
 const ENEMY7: ClipMap = {
   idle: 'Idle',
@@ -460,6 +499,17 @@ const ENEMY7: ClipMap = {
 const KOBOLD_ENEMY7: ClipMap = {
   ...ENEMY7,
   attack: ['Kobold_Pounce'],
+};
+
+// Grix the Tunnelking's drop authors Idle/Walk/Run/Attack/Death and NO hit
+// reaction, so his hit slot is the shared HitRecieve_Heavy alone rather than
+// ENEMY7's ['HitRecieve', 'HitRecieve_Heavy']. Naming a clip his GLB does not
+// carry is not a soft failure: tests/character_clipmaps.test.ts gates every
+// ClipMap name against the clips actually shipped. He is a one-off rare, so this
+// is his own constant rather than a widened ENEMY7, which mob_ogre also reads.
+const GRIX: ClipMap = {
+  ...ENEMY7,
+  hit: ['HitRecieve_Heavy'],
 };
 
 // floating/flying rigs (goleling/dragon) — hover instead of walking
@@ -519,6 +569,18 @@ const NIGHTKIN_FLOATING: ClipMap = {
 const GLUB_FLOATING: ClipMap = {
   ...FLOATING,
   attack: ['Glub_Attack'],
+};
+
+// The dragonkin family's own attack (scripts/build_dragonkin_anims.mjs, issue
+// #2889): the same FLOATING constant migrated mob_elemental gets its second
+// migration here, still shared by reference across the remaining 8 unrelated
+// families. This clip is baked off dragonevolved.glb's own donor poses (its
+// Headbutt ram plus its own unused No/Yes gesture pair, the same spare-clip
+// shape the elemental script found on golelingevolved.glb), so only
+// mob_dragonkin gets it; every other FLOATING family stays untouched.
+const DRAGONKIN_FLOATING: ClipMap = {
+  ...FLOATING,
+  attack: ['Dragonkin_Attack'],
 };
 
 // The flying demon family's own attack (scripts/build_demon_flying_anims.mjs,
@@ -642,6 +704,7 @@ const PLAYERS = 'models/chars/players';
 /** Modular part library (one GLB, every part), see modular.ts. */
 const MODULAR = 'models/chars/modular';
 const ENEMIES = 'models/chars/enemies';
+const FORMS = 'models/chars/forms';
 const CREATURES = 'models/creatures';
 const WEAPONS = 'models/weapons';
 const MOUNTS_DIR = 'models/mounts';
@@ -926,14 +989,14 @@ export const VISUALS: Record<string, VisualDef> = {
   // -- player classes ------------------------------------------------------
   player_warrior: swims({
     url: `${PLAYERS}/knight.glb`,
-    height: HUMANOID_H,
     // Every clip knight.glb ships is already wired somewhere in this block
     // (idle/walk/attack/hit/emotes account for the full shipped library, no
     // spare donor pose), so Heroic Leap (issue #2889 batch, verified against
     // the warrior's real kit in src/sim/content/classes.ts, not assumed) is
     // authored by pose-sample-and-blend (scripts/build_warrior_ability_anims.mjs)
     // instead of pointed at an unused clip.
-    animUrls: [`${PLAYERS}/warrior_ability_anims.glb`],
+    animUrls: [`${PLAYERS}/knight_hit_variety_anims.glb`, `${PLAYERS}/warrior_ability_anims.glb`],
+    height: HUMANOID_H,
     clips: {
       ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
       attackByHand: {
@@ -1018,18 +1081,17 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: {
       ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
       attackByHand: { twohand: '2H_Melee_Attack_Chop' },
-      // Ability-specific clips (scripts/build_paladin_ability_anims.mjs,
-      // issue #2889 follow-up batch): the paladin had zero attackByAbility
-      // overrides across its kit, so every ability played the same melee
-      // chop. Almost the whole kit shares school: 'holy' (classes.ts), so
-      // school cannot differentiate anything the way it did for the mage:
-      // mapped instead by the ability's EFFECT TYPE (judgement, groundAoE,
+      // Ability-specific clips: the composed union of the overhaul's
+      // Dawnreaver entries (final_edict/sunward_disc/bastion_sweep) and the
+      // #2889 follow-up batch mapped by the ability's EFFECT TYPE (groundAoE,
       // stun, absorb/defensive selfBuff, buffTarget/aura selfBuff, heal).
-      // Not every ability in the kit is listed: this is a representative
-      // slice, not exhaustive coverage (seal_of_righteousness, exorcism,
-      // holy_taunt, and rebuke keep the default chop until a later batch).
+      // The batch's judgement row is dropped: the overhaul retired that id
+      // (final_edict is its successor and carries the Verdict clip). Not
+      // every ability is listed; unlisted ids keep the default chop.
       attackByAbility: {
-        judgement: 'Cast_Verdict',
+        final_edict: 'Paladin_Templars_Verdict_1H',
+        sunward_disc: 'Spellcast_Raise',
+        bastion_sweep: 'Paladin_Bastion_Sweep',
         consecration: 'Cast_Consecrate',
         hammer_of_justice: 'Cast_HammerBash',
         divine_protection: 'Cast_Ward',
@@ -1042,10 +1104,11 @@ export const VISUALS: Record<string, VisualDef> = {
         flash_of_light: 'Cast_HolyMend',
         lay_on_hands: 'Cast_HolyMend',
       },
+      attackTimeScaleByAbility: { final_edict: 1, sunward_disc: 1.8, bastion_sweep: 1 },
     },
     // Ability-specific clips (scripts/build_paladin_ability_anims.mjs): a
     // mesh-free clip donor GLB baked off this rig's own poses.
-    animUrls: [`${PLAYERS}/paladin_ability_anims.glb`],
+    animUrls: [`${PLAYERS}/paladin_hit_variety_anims.glb`, `${PLAYERS}/paladin_ability_anims.glb`],
     // dedicated paladin model (helmeted variant) — ships its own Cape + Helmet
     // meshes and texture, so no show-list/tint. Shield + paladin hammer arrive
     // in the weapons pass; the gripped axe holds the slot until then.
@@ -1096,11 +1159,12 @@ export const VISUALS: Record<string, VisualDef> = {
     // shoulder-aim (visual.ts weaponSkinAttackClips). The cast-time hold pose
     // (bow_hold_anim.glb) and the ability-specific attack clips
     // (scripts/build_hunter_ability_anims.mjs) ride the same mesh-free donor
-    // GLB mechanism, appended alongside: all three GLBs' clips load together.
+    // GLB mechanism, appended alongside: all GLBs' clips load together.
     animUrls: [
       `${PLAYERS}/bow_anims.glb`,
       `${PLAYERS}/bow_hold_anim.glb`,
       `${PLAYERS}/hunter_ability_anims.glb`,
+      `${PLAYERS}/ranger_hit_variety_anims.glb`,
     ],
     // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
     // a separate chest attachment
@@ -1161,7 +1225,7 @@ export const VISUALS: Record<string, VisualDef> = {
       },
     },
     // Ability-specific attack clips (scripts/build_rogue_ability_anims.mjs).
-    animUrls: [`${PLAYERS}/rogue_ability_anims.glb`],
+    animUrls: [`${PLAYERS}/rogue_hit_variety_anims.glb`, `${PLAYERS}/rogue_ability_anims.glb`],
     show: ['Rogue_Cape'],
     attach: [
       { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.r' },
@@ -1172,6 +1236,7 @@ export const VISUALS: Record<string, VisualDef> = {
   }),
   player_priest: swims({
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: {
       ...kaykit(['2H_Melee_Attack_Chop']),
@@ -1254,7 +1319,10 @@ export const VISUALS: Record<string, VisualDef> = {
     },
     // Ability-specific spellcast clips (scripts/build_shaman_ability_anims.mjs):
     // a mesh-free clip donor GLB baked off this rig's own spellcasting poses.
-    animUrls: [`${PLAYERS}/shaman_ability_anims.glb`],
+    // The hit-variety donor (scripts/build_hit_variety_anims.mjs, second
+    // KayKit hit-reaction clip, issue #2889 area B) ships alongside it on the
+    // same rig, so both donors are listed here.
+    animUrls: [`${PLAYERS}/barbarian_hit_variety_anims.glb`, `${PLAYERS}/shaman_ability_anims.glb`],
     show: ['Barbarian_BearHat'], // v2 barbarian renamed Hat→BearHat and dropped the round shield mesh
     attach: [
       { url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' },
@@ -1317,7 +1385,7 @@ export const VISUALS: Record<string, VisualDef> = {
     },
     // Ability-specific spellcast clips (scripts/build_mage_ability_anims.mjs):
     // a mesh-free clip donor GLB baked off this rig's own spellcasting poses.
-    animUrls: [`${PLAYERS}/mage_ability_anims.glb`],
+    animUrls: [`${PLAYERS}/mage_ability_anims.glb`, `${PLAYERS}/mage_hit_variety_anims.glb`],
     // The hat and cape render regardless of this list: the current mage.glb
     // rigs every accessory as a SkinnedMesh, and the show allowlist
     // (assets.ts) only hides non-skinned nodes. The hatted silhouette is the
@@ -1364,7 +1432,7 @@ export const VISUALS: Record<string, VisualDef> = {
     // poses, but its OWN clip names and timing, not a reuse of the mage's
     // mage_ability_anims.glb (the two GLBs are wired onto different
     // VisualDefs and never load together).
-    animUrls: [`${PLAYERS}/warlock_ability_anims.glb`],
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`, `${PLAYERS}/warlock_ability_anims.glb`],
     show: [],
     attach: [
       { url: `${WEAPONS}/wand.glb`, bone: 'handslot.r' },
@@ -1384,7 +1452,39 @@ export const VISUALS: Record<string, VisualDef> = {
   player_druid: swims({
     url: `${PLAYERS}/druid.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['2H_Melee_Attack_Chop']),
+    clips: {
+      ...kaykit(['2H_Melee_Attack_Chop']),
+      // Ability-specific spellcasts (scripts/build_druid_ability_anims.mjs,
+      // issue #2889): the druid's caster kit had zero attackByAbility
+      // overrides, so every nature/arcane spell played the same staff chop.
+      // Scope is the caster side only, bear/cat/travel forms already have
+      // their own dedicated ClipMap constants and are untouched here. Mapped
+      // primarily by school (src/sim/content/classes.ts), the same signal
+      // batch 1 used for the mage; named exceptions cover heal, root/CC, and
+      // channel roles, since the nature school alone spans very different
+      // actions. Not every ability in the kit is listed: shapeshift and
+      // melee-form abilities keep their own clips, and this is a
+      // representative slice of the caster kit, not exhaustive coverage.
+      attackByAbility: {
+        wrath: 'Cast_Nature',
+        faerie_fire: 'Cast_Nature',
+        thorns: 'Cast_Nature',
+        mark_of_the_wild: 'Cast_Nature',
+        insect_swarm: 'Cast_Nature',
+        moonfire: 'Cast_Starfall',
+        starfire: 'Cast_Starfall',
+        healing_touch: 'Cast_Nurture',
+        regrowth: 'Cast_Nurture',
+        rejuvenation: 'Cast_Nurture',
+        entangling_roots: 'Cast_Roots',
+        hibernate: 'Cast_Roots',
+        hurricane: 'Cast_Storm',
+      },
+    },
+    // Ability-specific spellcast clips (scripts/build_druid_ability_anims.mjs):
+    // a mesh-free clip donor GLB baked off this rig's own spellcasting poses,
+    // alongside the hit-variety donor.
+    animUrls: [`${PLAYERS}/druid_hit_variety_anims.glb`, `${PLAYERS}/druid_ability_anims.glb`],
     // dedicated druid model (own texture, ships a Backpack mesh)
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
@@ -1405,7 +1505,10 @@ export const VISUALS: Record<string, VisualDef> = {
     // that can display a bow skin, and Bow_Draw_Shot targets the same KayKit
     // Rig_Medium bones this model uses. Without it a displayed bow falls back to
     // the melee chop (skin_attack.ts pickSkinAttackClips).
-    animUrls: [`${PLAYERS}/bow_anims.glb`],
+    animUrls: [
+      `${PLAYERS}/Mech/characters/CombatMech_hit_variety_anims.glb`,
+      `${PLAYERS}/bow_anims.glb`,
+    ],
     // Class-agnostic cosmetic body, but it still holds the wearer's equipped
     // mainhand: the shared handslot.r bone carries the grip (the mech reuses the
     // exact KayKit rig), so weaponSlots swaps attach[0] to the equipped weapon's
@@ -1434,6 +1537,26 @@ export const VISUALS: Record<string, VisualDef> = {
     walkRef: 1.6,
     runRef: 5.4,
     attackTimeScale: 1,
+  },
+  form_metamorph: {
+    url: `${FORMS}/metamorphosis.glb`,
+    height: 2.55,
+    // Generated Lich rig. Tripo bipeds face +X, while character visuals face
+    // +Z at world facing 0. Jump is intentionally absent: the generic biped
+    // jump distorted this winged silhouette, so airborne frames use Idle plus
+    // the controlled procedural wing pose in CharacterVisual.
+    yaw: -Math.PI / 2,
+    attackTimeScale: 6,
+    deathTimeScale: 3,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      cast: 'Cast',
+    },
   },
   // Druid Wolf Form AND shaman Shadewolf (ghost_wolf renders this visual with
   // the ghost material on top). Same custom baked wolf as the world wolves;
@@ -1810,6 +1933,69 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.04,
   },
+  // The authored kobold body (the Kolbolds v02 artist drop, combined by
+  // tmp/kobold_build.mjs). Zone 1's Deeprock Diggers and their Tunnelking ONLY:
+  // the `burrower` family default deliberately stays mob_kobold (goblin.glb),
+  // because the other ten burrowers on it are sprites, gnomes and wretches that
+  // would every one of them read as a giant rat.
+  //
+  // `clips` is plain ENEMY7: the GLB carries Idle/Walk/Run/Attack/HitRecieve/
+  // Death, so this needs neither the KOBOLD_ENEMY7 attack override nor
+  // kobold_ability_anims.glb. That donor is deliberately NOT in animUrls, and
+  // this is the trap worth naming: prepareVisual fills its clip map from the
+  // base GLB and THEN lets every animUrls entry overwrite BY NAME, so listing it
+  // would silently replace this model's authored Attack with the synthesized
+  // Kobold_Pounce baked off goblin.glb's poses. goblin_hit_variety_anims.glb
+  // still rides along, for HitRecieve_Heavy, which no kobold drop authors.
+  //
+  // walkRef/runRef are MEASURED off the clips themselves
+  // (tmp/kobold_gait_measure.mjs) at tunnel_rat's 0.85 template scale, the
+  // dominant population by 14 spawns to 1: natural 1.23 and 2.51 yd/s on the v02
+  // body. Left on the 2.2/7 defaults, a 7 yd/s chase runs the cycle at 1.0x and
+  // the planted foot trails the body 2.8x; measured, the run pushes to its 1.6
+  // clamp and the walk lands near an exact foot match. Re-measure on any new
+  // drop: v01's cycles gave 1.31/2.22, and its Walk was 1.00s against v02's 1.13s.
+  mob_kobold_digger: {
+    url: `${CREATURES}/kobold.glb`,
+    height: 2.1,
+    animUrls: [`${CREATURES}/goblin_hit_variety_anims.glb`],
+    clips: ENEMY7,
+    walkRef: 1.23,
+    runRef: 2.51,
+    // Light wash, for grubjaw's reason above: the drop ships an authored brown
+    // hide, and the goblin body's 0.2 (sized to keep a GREEN skin readable) only
+    // muddies it.
+    tint: 'entity',
+    tintStrength: 0.12,
+  },
+  // Grix the Tunnelking: his own body at last. He was the clearest case of the
+  // gap this batch closes, a rare ELITE rendering identically to the level-4
+  // Deeprock Diggers he summons, with only the rare/elite nameplate frame to
+  // tell a player which one was the boss.
+  //
+  // The GLB carries a bone-parented PROP: his shovel is a child of
+  // mixamorigRightHand, not a skinned part, so it rides the hand through every
+  // clip with no track of its own. That also means two materials (body, shovel),
+  // each with its own basecolor, which is why tmp/grix_build.mjs supplies them
+  // per material instead of through the single-texture path the kobolds use.
+  //
+  // No `tint`, deliberately, even though his template DOES carry a colour
+  // (0xb9770e in zone1.ts). On the shared goblin/kobold bodies the entity tint is
+  // what separates one template from the next; Grix is a one-off with authored
+  // art (crown, robes, the shovel) and washing an amber over it only muddies it.
+  // His template colour still earns its keep elsewhere: the minimap/nameplate
+  // surfaces read it. Same reasoning as mob_water_elemental's untinted body.
+  //
+  // walkRef/runRef MEASURED (tmp/grix_gait_measure.mjs) at his template scale of
+  // 1.0: natural 1.23 and 2.31 yd/s against a 7 yd/s chase.
+  mob_grix: {
+    url: `${CREATURES}/grix.glb`,
+    height: 2.1,
+    animUrls: [`${CREATURES}/goblin_hit_variety_anims.glb`],
+    clips: GRIX,
+    walkRef: 1.23,
+    runRef: 2.31,
+  },
   mob_troll: {
     url: `${CREATURES}/orc.glb`,
     height: 2.4,
@@ -1849,10 +2035,15 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   mob_wildheart_ravager: {
     url: `${CREATURES}/wildheart_ravager.glb`,
-    animUrls: [`${CREATURES}/wildheart_ravager_hit_variety_anims.glb`],
+    // Wildheart_Ravager_Attack clip donor (scripts/build_wildheart_ravager_anims.mjs):
+    // mesh-free, baked off this same rig's own poses.
+    animUrls: [
+      `${CREATURES}/wildheart_ravager_hit_variety_anims.glb`,
+      `${CREATURES}/wildheart_ravager_ability_anims.glb`,
+    ],
     height: 2.7,
     yaw: -Math.PI / 2,
-    clips: TRIPO_BIPED_FULL_RIG,
+    clips: WILDHEART_RAVAGER,
     tint: 'entity',
     tintStrength: 0.04,
   },
@@ -1881,10 +2072,16 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   mob_wildheart_high_priest: {
     url: `${CREATURES}/wildheart_high_priest.glb`,
-    animUrls: [`${CREATURES}/wildheart_high_priest_hit_variety_anims.glb`],
+    // Wildheart_High_Priest_Attack clip donor
+    // (scripts/build_wildheart_high_priest_anims.mjs): mesh-free, baked off this same
+    // rig's own poses.
+    animUrls: [
+      `${CREATURES}/wildheart_high_priest_hit_variety_anims.glb`,
+      `${CREATURES}/wildheart_high_priest_ability_anims.glb`,
+    ],
     height: 3.2,
     yaw: -Math.PI / 2,
-    clips: TRIPO_BIPED_FULL_RIG,
+    clips: WILDHEART_HIGH_PRIEST,
     tint: 'entity',
     tintStrength: 0.03,
   },
@@ -1906,13 +2103,35 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: WATER_ELEMENTAL,
     attackTimeScale: 1.1,
   },
+  mob_gravewing: {
+    url: `${CREATURES}/gravewing.glb`,
+    height: 2.4,
+    // Tripo's rig faces +X; character visuals face +Z at world facing 0.
+    yaw: -Math.PI / 2,
+    // The source Attack clip is 6.625s. Gravewing swings every 1.8s, or about
+    // 1.29s with both Necromancy haste buffs, so play it in 1.10s and return
+    // to locomotion before another swing can restart the full-body one-shot.
+    attackTimeScale: 6,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      jump: 'Jump',
+    },
+  },
   mob_dragonkin: {
     url: `${CREATURES}/dragonevolved.glb`,
     height: 2.4,
     hover: 0.25,
     // light tint only — heavy washes crush the wyrm to black under the green
     // sanctum torchlight
-    clips: FLOATING,
+    clips: DRAGONKIN_FLOATING,
+    // Dragonkin_Attack clip donor (scripts/build_dragonkin_anims.mjs):
+    // mesh-free, baked off this same rig's own poses.
+    animUrls: [`${CREATURES}/dragonkin_ability_anims.glb`],
     tint: 'entity',
     tintStrength: 0.2,
   },
@@ -2016,13 +2235,75 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.15,
   },
-  // warlock demon pets (emberkin/gloomshade) — one biped rig, the entity colour and
-  // the mob template's scale tell the little orange emberkin from the bulky gloomshade
+  // Dedicated Destruction summons generated through the creature pipeline.
+  // Their authored fel textures stay untinted. The manifest height combines
+  // with each MobTemplate scale to render Emberkin at 1.15 units, Gloomshade
+  // at 3.0 units, and the Pyre Colossus at 4.25 units.
+  mob_emberkin: {
+    url: `${CREATURES}/emberkin.glb`,
+    height: 2.1,
+    yaw: -Math.PI / 2,
+    attackTimeScale: 6,
+    deathTimeScale: 3,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      cast: 'Cast',
+      jump: 'Jump',
+      attackByAbility: { emberkin_felbolt: 'Cast' },
+    },
+  },
+  mob_gloomshade: {
+    url: `${CREATURES}/gloomshade_abyssal_guardian.glb`,
+    height: 2.6,
+    yaw: -Math.PI / 2,
+    attackTimeScale: 6,
+    deathTimeScale: 3,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      cast: 'Cast',
+      jump: 'Jump',
+      attackByAbility: { gloomshade_abyssal_chain: 'Cast' },
+    },
+  },
+  mob_pyre_colossus: {
+    url: `${CREATURES}/pyre_colossus.glb`,
+    height: 2.5,
+    yaw: -Math.PI / 2,
+    attackTimeScale: 6,
+    deathTimeScale: 3,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      cast: 'Cast',
+      jump: 'Jump',
+    },
+  },
+  // Shared fallback rig for the remaining warlock demons. The entity colour
+  // and the mob template's scale distinguish their silhouettes.
   mob_demon: {
     url: `${CREATURES}/demonalt.glb`,
-    animUrls: [`${CREATURES}/demonalt_hit_variety_anims.glb`],
     height: 1.8,
-    clips: BIPED14,
+    clips: DEMON_BIPED14,
+    // Demon_Attack clip donor (scripts/build_demon_anims.mjs): mesh-free,
+    // baked off this same rig's own poses. Shared with mob_demonalt below.
+    animUrls: [
+      `${CREATURES}/demonalt_hit_variety_anims.glb`,
+      `${CREATURES}/demon_ability_anims.glb`,
+    ],
     tint: 'entity',
     tintStrength: 0.5,
   },
@@ -2147,18 +2428,20 @@ export const VISUALS: Record<string, VisualDef> = {
     // Treant_Attack clip donor (scripts/build_treant_anims.mjs): mesh-free,
     // baked off this same rig's own poses. Loads alongside the yeti's
     // hit-variety donor GLB; both are mesh-free so their clips just merge in.
-    animUrls: [
-      `${CREATURES}/yeti_hit_variety_anims.glb`,
-      `${CREATURES}/treant_ability_anims.glb`,
-    ],
+    animUrls: [`${CREATURES}/yeti_hit_variety_anims.glb`, `${CREATURES}/treant_ability_anims.glb`],
     tint: 'entity',
     tintStrength: 0.72, // the white pelt needs a heavy wash to read as moss
   },
   mob_demonalt: {
     url: `${CREATURES}/demonalt.glb`,
-    animUrls: [`${CREATURES}/demonalt_hit_variety_anims.glb`],
     height: 2.1,
-    clips: BIPED14,
+    clips: DEMON_BIPED14,
+    // Demon_Attack clip donor (scripts/build_demon_anims.mjs): mesh-free,
+    // baked off this same rig's own poses. Shared with mob_demon above.
+    animUrls: [
+      `${CREATURES}/demonalt_hit_variety_anims.glb`,
+      `${CREATURES}/demon_ability_anims.glb`,
+    ],
     tint: 'entity',
     tintStrength: 0.35,
   },
@@ -2167,6 +2450,7 @@ export const VISUALS: Record<string, VisualDef> = {
   delve_skel_wraith: {
     // Ledger Wraith: pale skeleton, no weapon, stronger wash reads as near-transparent
     url: `${ENEMIES}/skeleton_minion.glb`,
+    animUrls: [`${ENEMIES}/skeleton_minion_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity',
@@ -2175,6 +2459,7 @@ export const VISUALS: Record<string, VisualDef> = {
   delve_skel_ringer: {
     // Funeral Ringer: skeleton rogue rig, cloth-brown tint at mid strength
     url: `${ENEMIES}/skeleton_rogue.glb`,
+    animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [{ url: `${WEAPONS}/skeleton_axe.glb`, bone: 'handslot.r' }],
@@ -2184,6 +2469,7 @@ export const VISUALS: Record<string, VisualDef> = {
   delve_mob_acolyte: {
     // Gravecall Acolyte: hooded mage with hat + staff, deep dark-brown saturation
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: ['Mage_Hat'],
@@ -2194,6 +2480,7 @@ export const VISUALS: Record<string, VisualDef> = {
   delve_skel_effigy: {
     // Saintless Effigy: armoured skeleton, high stone-pale wash, reads as carved stone
     url: `${ENEMIES}/skeleton_warrior.glb`,
+    animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -2206,6 +2493,7 @@ export const VISUALS: Record<string, VisualDef> = {
   delve_skel_varric: {
     // Deacon Varric: boss mage rig with Taunt flourish on pull
     url: `${ENEMIES}/skeleton_mage.glb`,
+    animUrls: [`${ENEMIES}/skeleton_mage_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'),
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
@@ -2216,6 +2504,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // -- undead (KayKit skeletons, shared 41-joint rig) ------------------------
   skel_minion: {
     url: `${ENEMIES}/skeleton_minion.glb`,
+    animUrls: [`${ENEMIES}/skeleton_minion_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity',
@@ -2223,6 +2512,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   skel_warrior: {
     url: `${ENEMIES}/skeleton_warrior.glb`,
+    animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity',
@@ -2230,6 +2520,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   skel_rogue: {
     url: `${ENEMIES}/skeleton_rogue.glb`,
+    animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity',
@@ -2237,6 +2528,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   skel_mage: {
     url: `${ENEMIES}/skeleton_mage.glb`,
+    animUrls: [`${ENEMIES}/skeleton_mage_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
@@ -2253,13 +2545,17 @@ export const VISUALS: Record<string, VisualDef> = {
     // override only attack, so skel_mage/delve_skel_varric/rift_ritualist stay
     // on the shared swing.
     clips: { ...skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'), attack: ['SkelBoss_Attack'] },
-    animUrls: [`${ENEMIES}/skelboss_ability_anims.glb`],
+    animUrls: [
+      `${ENEMIES}/skeleton_mage_hit_variety_anims.glb`,
+      `${ENEMIES}/skelboss_ability_anims.glb`,
+    ],
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
     tint: 'entity',
     tintStrength: 0.25,
   },
   skel_necromancer: {
     url: `${ENEMIES}/necromancer.glb`,
+    animUrls: [`${ENEMIES}/necromancer_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
     tint: 'entity',
@@ -2270,6 +2566,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // bone-white, which reads as a snowdrift under the citadel's blood-red grade).
   rift_ritualist: {
     url: `${ENEMIES}/necromancer.glb`,
+    animUrls: [`${ENEMIES}/necromancer_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
     tint: 'entity',
@@ -2301,6 +2598,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // -- humanoid mobs (KayKit adventurers) ------------------------------------
   mob_bandit: {
     url: `${PLAYERS}/rogue_hooded.glb`,
+    animUrls: [`${PLAYERS}/rogue_hooded_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop', 'Dualwield_Melee_Attack_Chop']),
     // v2 rogue_hooded ships the hood/mask/cape as its default look (no show
@@ -2316,6 +2614,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   mob_dark_caster: {
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: ['Mage_Hat'],
@@ -2325,6 +2624,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   mob_bruiser: {
     url: `${PLAYERS}/barbarian.glb`,
+    animUrls: [`${PLAYERS}/barbarian_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: ['Barbarian_BearHat'], // v2 barbarian: Hat→BearHat, no Cape, weapon now attached
@@ -2336,6 +2636,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // -- NPCs ------------------------------------------------------------------
   npc_knight: {
     url: `${PLAYERS}/knight.glb`,
+    animUrls: [`${PLAYERS}/knight_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
     show: ['Knight_Helmet', 'Knight_Cape'],
@@ -2343,6 +2644,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   npc_mage: {
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: [],
@@ -2355,6 +2657,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // other npc_mage uses the new KayKit full-pack model from #396.
   npc_aldric: {
     url: `${PLAYERS}/mage_classic.glb`,
+    animUrls: [`${PLAYERS}/mage_classic_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: ['2H_Staff'],
@@ -2363,6 +2666,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   npc_smith: {
     url: `${PLAYERS}/barbarian.glb`,
+    animUrls: [`${PLAYERS}/barbarian_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
     show: [],
@@ -2370,6 +2674,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   npc_scout: {
     url: `${PLAYERS}/rogue.glb`,
+    animUrls: [`${PLAYERS}/rogue_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
     show: ['Rogue_Cape'],
@@ -2377,6 +2682,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   npc_villager: {
     url: `${PLAYERS}/rogue.glb`,
+    animUrls: [`${PLAYERS}/rogue_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
     show: [],
@@ -2385,6 +2691,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   npc_villager_robed: {
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: [],
@@ -2396,6 +2703,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // the gold NpcDef color would wash the repaint back toward the villager look.
   npc_fernando: {
     url: `${PLAYERS}/rogue.glb`,
+    animUrls: [`${PLAYERS}/rogue_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
     show: [],
@@ -2406,6 +2714,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // rogue. Ships its accessories (helm/cape/shield) by default (no show filter).
   npc_reliquary_keeper: {
     url: `${PLAYERS}/paladin.glb`,
+    animUrls: [`${PLAYERS}/paladin_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
   },
@@ -2416,6 +2725,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // Spellcasting channel. Fixed staff (no weaponSlots: NPC gear never changes).
   npc_edda_reedhand: {
     url: `${PLAYERS}/druid.glb`,
+    animUrls: [`${PLAYERS}/druid_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
@@ -2427,6 +2737,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // one def per chronicler with its own url.
   npc_chronicler: {
     url: `${PLAYERS}/mage.glb`,
+    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: ['Mage_Hat'],
@@ -2542,6 +2853,15 @@ const MOB_KEYS: Record<string, string> = {
   dragonkin_egg: 'mob_dragon_egg',
   // Grubjaw the Glutton: his own body now, not the shared troll stand-in.
   grubjaw: 'mob_grubjaw',
+  // Eastbrook Vale's kobolds: the authored rat body, not the goblin stand-in
+  // the `burrower` family still falls back to. Scoped to the two zone-1
+  // templates on purpose (see mob_kobold_digger): the family also carries the
+  // hedge gnome and the willow/fen/harvest sprites, and repointing the family
+  // would turn all of them into rats. Zone 3's deeprock_kobold and the Ironvein
+  // pair are the natural next adopters, but they are a separate call.
+  tunnel_rat: 'mob_kobold_digger',
+  // Grix has his own body now (mob_grix), so he no longer shares the Diggers'.
+  grix_the_tunnelking: 'mob_grix',
   // Ambient Highwatch stable horse: the Valorsteed mount model (mob_stable_horse
   // above) so it renders as an animated horse, not a humanoid.
   stable_horse: 'mob_stable_horse',
@@ -2552,12 +2872,19 @@ const MOB_KEYS: Record<string, string> = {
   // (docs/prd/protect-yumi-assets.md item 1, delivered).
   yumi_cat: 'mob_yumi_cat',
   training_dummy: 'mob_training_dummy',
-  emberkin: 'mob_demon',
+  emberkin: 'mob_emberkin',
+  gloomshade: 'mob_gloomshade',
+  pyre_colossus: 'mob_pyre_colossus',
   water_elemental: 'mob_water_elemental',
-  gloomshade: 'mob_demon',
-  duskborn: 'mob_demon',
   warlock_imp: 'mob_demon_flying',
   warlock_voidwalker: 'mob_demonalt',
+  guardian_tithefiend: 'mob_demonalt',
+  // Packlord Stampede guardians are transient local templates, not MOBS rows.
+  // Give the three summoned beasts distinct existing bodies instead of the
+  // generic humanoid bandit fallback.
+  guardian_stampede_0: 'greyjaw',
+  guardian_stampede_1: 'mob_boar',
+  guardian_stampede_2: 'mob_raptor',
   wild_boar: 'mob_boar',
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
@@ -2605,6 +2932,10 @@ const MOB_KEYS: Record<string, string> = {
   nythraxis_heroic_warrior_add: 'skel_warrior',
   nythraxis_heroic_priest_add: 'skel_necromancer',
   nythraxis_heroic_rogue_add: 'skel_rogue',
+  graveguard: 'skel_warrior',
+  necromancy_skeletal_warrior: 'skel_minion',
+  necromancy_bone_mage: 'skel_mage',
+  necromancy_gravewing: 'mob_gravewing',
   brother_aldric_raid: 'npc_aldric',
   hollow_acolyte: 'skel_mage',
   sexton_marrow: 'skel_mage',

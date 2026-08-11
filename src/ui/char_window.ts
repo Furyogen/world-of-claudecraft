@@ -28,6 +28,7 @@ import { markDialogRoot } from './dialog_root';
 import { classDisplayName, itemDisplayName } from './entity_i18n';
 import { dropRequiredLevel, paperdollDropAction } from './equip_drop_core';
 import { esc } from './esc';
+import { focusedWithin, restoreFirstEnabled } from './focus_restore';
 import { gatheringProfessionNameKey } from './gathering_profession_name';
 import { buildGatheringProficiencyRows } from './gathering_view';
 import { formatNumber, type TranslationKey, t, tPlural } from './i18n';
@@ -156,6 +157,8 @@ export interface CharWindowDeps extends PainterHostPresentation {
   openPrestige(): void;
   /** Open the Book of Deeds (the active-title line's button). */
   openDeeds(): void;
+  /** Open The Reliquary (the sheet completion line's button). */
+  openReliquary(): void;
   /** The shared in-flight bag-item drag (published by the bags grid). The paperdoll
    *  sockets read it during dragover, where the DataTransfer payload is unreadable. */
   dragState: ItemDragState;
@@ -215,6 +218,20 @@ export class CharWindow {
 
   render(): void {
     const el = this.deps.root();
+    // The 2 Hz staleness latch (Hud.refreshCharSheetIfChanged) makes mid-focus
+    // rebuilds ROUTINE: a loot, a deed earn, or a mount gain repaints the open
+    // sheet within 500 ms, and the innerHTML wipe below would park a keyboard
+    // user's focus on <body> (the FocusManager trap is focus-inside-only, so
+    // the next Tab would target the world, not the dialog). Carry it the way
+    // the profession sibling on the same band does: the same control by its
+    // static data-act identity, else Close, and deliberately no rung in
+    // between. Close's accidental Enter SPENDS nothing (it just shuts the
+    // sheet, a free reopen), which is what makes it the safe landing; every
+    // sheet control that triggers a repaint carries a data-act so the
+    // fallback stays the exception.
+    const focusedControl = focusedWithin(el);
+    const focusedAct = focusedControl?.dataset.act ?? null;
+    const hadFocus = focusedControl !== null;
     const world = this.deps.world();
     const p = world.player;
     const className = classDisplayName(world.cfg.playerClass);
@@ -266,6 +283,10 @@ export class CharWindow {
       audio.click();
       this.deps.openDeeds();
     });
+    el.querySelector('[data-act="open-reliquary"]')?.addEventListener('click', () => {
+      audio.click();
+      this.deps.openReliquary();
+    });
     el.querySelector('[data-act="share-card"]')?.addEventListener('click', () => {
       audio.click();
       this.deps.openPlayerCard();
@@ -307,6 +328,17 @@ export class CharWindow {
     this.deps.renderPreview();
     this.deps.renderSkinPicker();
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
+    if (hadFocus) {
+      // Matched by comparison over the repainted controls, not by building an
+      // attribute selector out of the captured value (the professions rule:
+      // a comparison cannot throw or escape its quotes).
+      const sameAct = focusedAct
+        ? [...el.querySelectorAll<HTMLElement>('[data-act]')].find(
+            (control) => control.dataset.act === focusedAct,
+          )
+        : undefined;
+      restoreFirstEnabled([sameAct, el.querySelector<HTMLElement>('[data-close]')]);
+    }
   }
 
   // The "Gathering" section (issue 1124): one row per gathering profession, showing
@@ -388,6 +420,10 @@ export class CharWindow {
       const eye = document.createElement('button');
       eye.type = 'button';
       eye.className = 'equip-helm-eye';
+      // data-act is the focus-carry identity: the helm toggle repaints the
+      // sheet synchronously, and without it the ladder below would land a
+      // repeated press on Close instead of the eye.
+      eye.dataset.act = 'toggle-helm';
       eye.innerHTML = svgIcon(hidden ? 'eye-off' : 'eye');
       eye.setAttribute('aria-label', t(labelKey));
       eye.setAttribute('aria-pressed', hidden ? 'true' : 'false');
@@ -453,7 +489,12 @@ export class CharWindow {
    *  here). The refusals are pre-empted client-side with the sim's OWN wording
    *  (tSim), so no doomed command is sent and the toast reads identically to the
    *  authoritative one the server would emit; the sim re-validates regardless. */
-  dropOnEquipSlot(itemId: string, slot: EquipSlot): void {
+  /** `target` names WHICH bag copy was dragged. Without it the equip command
+   *  falls back to the newest matching copy, which is the wrong copy whenever the
+   *  player holds a plain duplicate of an enchanted piece. The bags window has the
+   *  index (it owns the drag source), so it is threaded through rather than
+   *  re-derived here, where the live slot object is no longer in hand. */
+  dropOnEquipSlot(itemId: string, slot: EquipSlot, target?: { slotIndex: number }): void {
     const item = ITEMS[itemId];
     if (!item) return;
     const world = this.deps.world();
@@ -484,7 +525,7 @@ export class CharWindow {
         this.deps.showError(tSim('error.uniqueEquipped'));
         return;
       case 'equip':
-        world.equipItemToSlot(itemId, slot);
+        world.equipItemToSlot(itemId, slot, target);
         audio.click();
         this.deps.hideTooltip();
         this.deps.renderBags();
@@ -546,7 +587,15 @@ export class CharWindow {
       e.preventDefault();
       this.deps.dragState.end();
       this.markDropTargets(null);
-      this.dropOnEquipSlot(drag.itemId, slot);
+      // The desktop drop carries the drag's bag index the same way the touch path
+      // does; without it the most ordinary equip gesture fell back to the guess.
+      // `drag.index` is already null for a sorted or filtered grid, which names no
+      // position, so that case correctly sends no selection.
+      this.dropOnEquipSlot(
+        drag.itemId,
+        slot,
+        drag.index !== null && drag.index >= 0 ? { slotIndex: drag.index } : undefined,
+      );
     });
   }
 

@@ -86,6 +86,18 @@ export function walkTunedAbility(def: AbilityDef, visit: TunedSiteVisitor): Abil
       def.requiresTargetHpBelow,
     );
   }
+  // The strict execute threshold is the same window lever under another name.
+  if (def.executeThreshold !== undefined) {
+    out.executeThreshold = take(FRACTION_MAGNITUDE, 'executeThreshold', def.executeThreshold);
+  }
+  // Secondary resource meters an ability bills alongside its `cost`: the Ruin
+  // meter and Soul Fragments. They spend like a cost, so they move with one.
+  if (def.ruinCost !== undefined) {
+    out.ruinCost = take(LINEAR_COST, 'ruinCost', def.ruinCost);
+  }
+  if (def.soulFragmentCost !== undefined) {
+    out.soulFragmentCost = take(LINEAR_COST, 'soulFragmentCost', def.soulFragmentCost);
+  }
   if (def.channel) {
     const duration = take(LINEAR_CAST, 'channel.duration', def.channel.duration);
     if (duration !== def.channel.duration) out.channel = { ...def.channel, duration };

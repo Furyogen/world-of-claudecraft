@@ -2,21 +2,24 @@ import type * as http from 'node:http';
 import { verifyLoginTwoFactor } from './account';
 import { parseAdminAccountSort } from './admin_accounts_sort';
 import {
+  ACTIVITY_WINDOW_DAYS,
+  classDistribution,
+  levelDistribution,
+  registrationsByDay,
+  sessionsByDay,
+} from './admin_activity_cache';
+import {
   accountDetail,
   associationsForIp,
   characterProfessionsRow,
-  classDistribution,
   clientPerfRaw,
   clientPerfSummary,
   dailyRewardPointEvents,
-  levelDistribution,
   listAccounts,
   listCharacters,
   listModerationActions,
   listSharedIps,
   onlineHistory,
-  registrationsByDay,
-  sessionsByDay,
 } from './admin_db';
 import type { AdminGuildBankView } from './admin_guild_bank_view';
 import {
@@ -123,7 +126,6 @@ import {
   ignoreReport,
   liftAccountChatMute,
   moderateAccount,
-  moderationQueue,
   moderationReportsForAccount,
   muteAccountChat,
   reactivateAccountAudited,
@@ -135,6 +137,7 @@ import {
   setDailyRewardsBan,
   setDailyRewardsIpBan,
 } from './moderation_db';
+import { readModerationQueue } from './moderation_queue_cache';
 import { providerUsageSnapshot } from './provider_usage';
 import { authThrottled, clearAuthFailures, rateLimited, recordAuthFailure } from './ratelimit';
 import { REALM } from './realm';
@@ -181,7 +184,6 @@ const ADMIN_LOGIN_TOO_MANY_FAILED_ATTEMPTS =
 const ADMIN_LOGIN_INVALID_TWO_FACTOR_CODE = 'invalid authentication code';
 const MAX_PAGE_LIMIT = 200;
 const DEFAULT_PAGE_LIMIT = 25;
-const ACTIVITY_WINDOW_DAYS = 30;
 const ANTIBOT_CONFIG_NOTE_MAX = 500;
 const UNSTUCK_DEFAULT_DAYS = 30;
 const UNSTUCK_DEFAULT_LIMIT = 50;
@@ -1517,7 +1519,7 @@ export async function handleAdminApi(
       });
     }
     if (path === '/admin/api/moderation/queue') {
-      return ok(res, { rows: await moderationQueue(game.liveAccountIds()) });
+      return ok(res, { rows: await readModerationQueue(game.liveAccountIds()) });
     }
     if (path === '/admin/api/moderation/history') {
       const { page, limit } = parsePageParams(url.searchParams);
@@ -1823,6 +1825,9 @@ function makeRealAdminDb() {
     accountDetail,
     associationsForIp,
     characterProfessionsRow,
+    // Cache-backed (the shared admin activity bundle; both dispatch arms read
+    // it): a setAdminDbForTests override still replaces these members outright,
+    // which bypasses the cache and keeps existing fakes exact.
     classDistribution,
     clientPerfRaw,
     clientPerfSummary,
@@ -1868,7 +1873,10 @@ function makeRealAdminDb() {
     ignoreReport,
     liftAccountChatMute,
     moderateAccount,
-    moderationQueue,
+    // Cache-backed (the shared moderation queue memo; both dispatch arms read
+    // it and it is bust-wired by moderation_db.ts's setOnModerationQueueChanged
+    // hook): a setAdminDbForTests override still replaces this member outright.
+    moderationQueue: readModerationQueue,
     moderationReportsForAccount,
     muteAccountChat,
     accountAndScopeForToken,
