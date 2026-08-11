@@ -16,7 +16,7 @@ shipping a build; with the tuner it is a slider and a restart.
 
 > **Work in progress.** The tool is complete and the mechanism is stable; what
 > moves under it is the CONTENT. The per-ability tables and screenshots below are
-> a snapshot of the kit as it stands on `release/v0.36.0`, and the class reworks
+> a snapshot of the kit as it stands on `release/v0.37.0`, and the class reworks
 > are still arriving one wave at a time. Nothing here needs re-engineering when a
 > wave lands: the catalog is derived from the live content tables, never
 > hand-authored, so a redesigned class shows up with the right sliders on its own.
@@ -57,12 +57,11 @@ number and why.
 node scripts/grant_admin.mjs <username> --roles tuner
 ```
 
-## The classes this is pointed at next
+## The classes this has been pointed at
 
-Warrior and Mage were reworked first. The next three through the same door are
-**Shaman**, **Hunter** and **Priest**, whose v0.29 redesigns are integrated in
-[PR #2218](https://github.com/levy-street/world-of-claudecraft/pull/2218), nine
-specializations in total:
+Warrior and Mage were reworked first. The next three through the same door were
+**Shaman**, **Hunter** and **Priest**, and their redesigns have now LANDED on this
+base, nine specializations in total:
 
 | Class | Specialization | The loop the redesign builds |
 |---|---|---|
@@ -76,15 +75,20 @@ specializations in total:
 | | Benison (Holy) | Vigil-based healing loop |
 | | Vespers (Shadow) | Effigy loop, damage scaling off it |
 
-Those spec identities are already live on `release/v0.36.0`, so the tuner lists
-their current kit today. What PR #2218 still changes is the kit behind them, and
-for Hunter the resource itself (mana becomes Focus). **Neither needs work here:**
-the catalog is derived from the live content tables and the sliders come from the
-abilities' own effects, so on the boot after that PR lands the redesigned kit
-appears with the right sliders, the Focus costs land on the resource-cost channel,
-and retired abilities drop out. The only thing a rework can require is a row in
-the classification table, and `tests/class_tuning_coverage.test.ts` is what says
-so out loud.
+That wave is the worked example for everything above. **The dashboard, server and
+wire needed no work at all:** the catalog is derived from the live content tables
+and the sliders come from the abilities' own effects, so the redesigned kit
+appeared with the right sliders on its own, Hunter's mana-to-Focus switch landed
+on the resource-cost channel by itself, and the retired abilities are simply
+absent.
+
+The one thing a rework CAN require is a row in the classification table, and
+`tests/class_tuning_coverage.test.ts` is what says so out loud. Merging this
+release turned it red naming 140 unclassified numbers across the paladin kit, the
+warlock necromancy and affliction sets, the redesigned hunter kit and the druid
+engine payoffs, and the fix was one row each in
+`src/sim/tuning/ability_fields.ts`, plus three def-level resource meters the
+walker had to reach. Expect exactly that shape of work when the next wave lands.
 
 ## How a change reaches the world
 

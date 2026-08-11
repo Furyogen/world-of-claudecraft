@@ -165,10 +165,9 @@ async function main() {
   const page = await browser.newPage();
 
   try {
-    // The capture follows the THREE CLASSES QUEUED FOR REDESIGN (Shaman, Hunter,
-    // Priest; levy-street/world-of-claudecraft PR #2218), because they are the
-    // ones a tuner will be reaching for next. Their redesigned spec identities
-    // are already live on this base; the kit behind them is what #2218 changes.
+    // The capture follows the THREE REDESIGNED CLASSES (Shaman, Hunter, Priest),
+    // whose owned-classes redesign has landed on this base, so every card below
+    // is the redesigned kit rather than the one it replaced.
 
     // 1. The page as an operator first sees it, opened on Shaman.
     await openTuner(page, token, DESKTOP);
@@ -176,13 +175,14 @@ async function main() {
     await shoot(page, '01-overview-shaman');
 
     // 2. Spiritmend (Restoration): the healer loop the redesign rebuilds.
-    //    Chain Heal is the richest single card in the class, seven channels.
+    //    Cascading Mend, the spec signature, is the richest single card in the
+    //    class.
     console.log(`[spec] shaman spec tab: ${await selectSpec(page, 3)}`);
-    await search(page, 'chain heal');
-    await shoot(page, '02-shaman-spiritmend-chain-heal');
+    await search(page, 'cascading mend');
+    await shoot(page, '02-shaman-spiritmend-cascading-mend');
     await moveSlider(page, 'chain_heal', 'heal_direct', 0.75);
     await moveSlider(page, 'chain_heal', 'targets', 1.5);
-    await shoot(page, '03-shaman-chain-heal-tuned');
+    await shoot(page, '03-shaman-cascading-mend-tuned');
 
     // 3. Thundercall (Elemental): a shock that carries a direct hit AND a DoT,
     //    each on its own slider.
@@ -230,7 +230,7 @@ async function main() {
         window.HTMLInputElement.prototype,
         'value',
       ).set;
-      setter.call(note, 'Trim Spiritmend Chain Heal by 25%, widen its chain (capture)');
+      setter.call(note, 'Trim Spiritmend Cascading Mend by 25%, widen its chain (capture)');
       note.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await sleep(200);
@@ -242,7 +242,7 @@ async function main() {
     });
     await sleep(1500);
     await selectClass(page, 'Shaman');
-    await search(page, 'chain heal');
+    await search(page, 'cascading mend');
     await shoot(page, '11-saved-pending-restart');
 
     // 11. The change history, expanded.

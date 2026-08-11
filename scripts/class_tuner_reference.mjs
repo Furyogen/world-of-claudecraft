@@ -119,10 +119,10 @@ function dataUriFor(file) {
 /** Every capture in SHOTS_DIR, in filename order, with its documented caption. */
 const SHOT_CAPTIONS = {
   '01-overview-shaman':
-    'The tuner as an operator opens it: one window per class, plus the Weapons window at the end of the row. Shaman is selected, the first of the three classes queued for redesign.',
-  '02-shaman-spiritmend-chain-heal':
-    'Spiritmend (Restoration) Chain Heal at the shipped numbers. One spell, seven independent sliders: its healing, how many allies it chains to, the chain radius, its cost, cast time, range and spell power scaling.',
-  '03-shaman-chain-heal-tuned':
+    'The tuner as an operator opens it: one window per class, plus the Weapons window at the end of the row. Shaman is selected, the first of the three redesigned classes.',
+  '02-shaman-spiritmend-cascading-mend':
+    'Spiritmend (Restoration) Cascading Mend, the spec signature, at the shipped numbers. One spell, seven independent sliders: its healing, how many allies it chains to, the chain radius, its cost, cast time, range and spell power scaling.',
+  '03-shaman-cascading-mend-tuned':
     'The same spell with healing pulled to 0.75x and its chain widened to 1.50x. Each aspect moves on its own, so throughput can be traded for reach rather than both moving together.',
   '04-shaman-thundercall-cinder-jolt':
     'Thundercall (Elemental) Cinder Jolt. A shock that lands a hit and leaves a burn gets a separate slider for the direct damage and for the damage over time, so the burst and the sustained portion are tuned apart.',
@@ -391,12 +391,12 @@ the next server restart.</p>
 <p>It exists because two of the nine classes have been reworked and now outperform the other
 seven. Closing that gap previously meant editing content source and shipping a build; with the
 tuner it is a slider and a restart.</p>
-<p>This edition follows <b>Shaman</b>, <b>Hunter</b> and <b>Priest</b>, the three classes queued
-for redesign next (PR #2218), through the dashboard: they are the ones a tuner will be reaching
-for as those reworks land.</p>
+<p>This edition follows <b>Shaman</b>, <b>Hunter</b> and <b>Priest</b> through the dashboard.
+Their owned-classes redesign has landed on this base, so every screenshot and every number in
+the tables at the back is the redesigned kit rather than the one it replaced.</p>
 <p class="wip"><b>Work in progress.</b> The tool is complete and the mechanism below is stable;
 what moves under it is the CONTENT. The tables at the back and the screenshots are a snapshot of
-the kit on <code>release/v0.36.0</code>, and the class reworks are still arriving one wave at a
+the kit on <code>release/v0.37.0</code>, and the class reworks are still arriving one wave at a
 time. No re-engineering is needed when a wave lands: the catalog is derived from the live content
 tables, never hand-authored, so a redesigned class appears with the right sliders on its own and
 this document is simply regenerated. Read the mechanism as settled and the numbers as of
