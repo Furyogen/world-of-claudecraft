@@ -1384,8 +1384,7 @@ export async function handleAdminApi(
 
     // Class power tuner save (legacy twin of classTuningSaveHandler).
     if (req.method === 'POST' && path === '/admin/api/class-tuning') {
-      const body = await readBody(req);
-      const outcome = await classTuningSaveOutcome(body, accountId);
+      const outcome = await readClassTuningBody(req, accountId);
       return outcome.ok ? ok(res, outcome.body) : fail(res, outcome.status, outcome.message);
     }
 
@@ -2261,6 +2260,38 @@ function classTuningGetBody(): ReturnType<typeof classTuningReadBody> {
   return classTuningReadBody(adminDb());
 }
 
+type ClassTuningSaveResponse =
+  | { ok: true; body: Record<string, unknown> }
+  | { ok: false; status: number; message: string };
+
+/**
+ * The tuner's own JSON body cap, well above the 64 KiB default.
+ *
+ * A fully moved document is one row per touched channel, so it grows with the
+ * ability table: the shipped kit already serializes to roughly 50 KB with every
+ * slider off neutral, which is inside the default cap but has no headroom for
+ * the next wave of class reworks. Read at this cap, an oversize body answers 413
+ * with a message the operator can act on rather than a generic 500.
+ */
+export const CLASS_TUNING_BODY_MAX_BYTES = 512 * 1024;
+
+/** Read the tuner's body at its own cap, mapping an oversize one to 413. */
+async function readClassTuningBody(
+  req: http.IncomingMessage,
+  accountId: number,
+): Promise<ClassTuningSaveResponse> {
+  let body: Record<string, unknown>;
+  try {
+    body = await readBody(req, CLASS_TUNING_BODY_MAX_BYTES);
+  } catch (err) {
+    if (err instanceof Error && err.message === 'body too large') {
+      return { ok: false, status: 413, message: 'tuning document too large' };
+    }
+    return { ok: false, status: 400, message: 'a document object is required' };
+  }
+  return classTuningSaveOutcome(body, accountId);
+}
+
 /**
  * POST /admin/api/class-tuning: validate, persist and audit a tuning document.
  *
@@ -2271,9 +2302,7 @@ function classTuningGetBody(): ReturnType<typeof classTuningReadBody> {
 async function classTuningSaveOutcome(
   body: Record<string, unknown>,
   accountId: number,
-): Promise<
-  { ok: true; body: Record<string, unknown> } | { ok: false; status: number; message: string }
-> {
+): Promise<ClassTuningSaveResponse> {
   const document = body.document;
   if (typeof document !== 'object' || document === null || Array.isArray(document)) {
     return { ok: false, status: 400, message: 'a document object is required' };
@@ -2293,8 +2322,7 @@ async function classTuningHistoryHandler(ctx: Ctx): Promise<void> {
 }
 
 async function classTuningSaveHandler(ctx: Ctx): Promise<void> {
-  const body = await readBody(ctx.req);
-  const outcome = await classTuningSaveOutcome(body, adminIdentityOf(ctx).accountId);
+  const outcome = await readClassTuningBody(ctx.req, adminIdentityOf(ctx).accountId);
   return outcome.ok ? ok(ctx.res, outcome.body) : fail(ctx.res, outcome.status, outcome.message);
 }
 

@@ -14,6 +14,7 @@ import {
   buildTuningDocument,
   channelPreview,
   clampFactor,
+  documentChannelCount,
   EMPTY_ABILITY_FILTER,
   EMPTY_WEAPON_FILTER,
   factorDeltaPercent,
@@ -284,6 +285,44 @@ describe('counting and resetting', () => {
   });
 });
 
+// The change history renders a stored document, not the live form, so it counts
+// BOTH scopes: an abilities-only count reports a weapons-only change as "0
+// sliders", which reads as an empty audit row.
+describe('counting a stored document for the history readout', () => {
+  it('counts both scopes', () => {
+    expect(
+      documentChannelCount({
+        version: 1,
+        abilities: { thorns: { damage_reflect: 1.5, resource_cost: 0.5 } },
+        weapons: { worn_sword: { swing_damage: 0.8 } },
+      }),
+    ).toBe(3);
+  });
+
+  it('counts a weapons-only change', () => {
+    expect(
+      documentChannelCount({
+        version: 1,
+        abilities: {},
+        weapons: { worn_sword: { swing_damage: 0.8, swing_speed: 1.2 } },
+      }),
+    ).toBe(2);
+  });
+
+  it('counts an abilities-only change', () => {
+    expect(documentChannelCount({ version: 1, abilities: { thorns: { damage_reflect: 2 } } })).toBe(
+      1,
+    );
+  });
+
+  it('reads a row it cannot make sense of as zero rather than throwing', () => {
+    expect(documentChannelCount(null)).toBe(0);
+    expect(documentChannelCount({})).toBe(0);
+    expect(documentChannelCount({ abilities: [], weapons: 'nonsense' })).toBe(0);
+    expect(documentChannelCount({ abilities: { thorns: 4 } })).toBe(0);
+  });
+});
+
 describe('filtering a class window', () => {
   const form = abilityForm();
 
@@ -349,6 +388,26 @@ describe('the before/after readout', () => {
       2,
     );
     expect(preview.base).toEqual([5, 7]);
+  });
+
+  // Two sites can carry the same base on one channel with DIFFERENT kinds (a
+  // linear bonus of 1 and a multiplier of 1). They answer the same factor with
+  // different numbers, so deduping on the value alone would preview one of them
+  // with the other's arithmetic.
+  it('keeps two sites with the same base but different kinds apart', () => {
+    const preview = channelPreview(
+      {
+        channel: 'spell_power',
+        sites: [
+          { path: 'weaponStrike.bonus', value: 1, kind: 'linear' },
+          { path: 'weaponMult', value: 1, kind: 'multiplier' },
+        ],
+      },
+      1.5,
+    );
+    expect(preview.base).toEqual([1, 1]);
+    expect(preview.tuned).toEqual([2, 1.5]);
+    expect(preview.unchanged).toBe(false);
   });
 
   it('renders the factor as a signed percentage', () => {

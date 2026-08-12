@@ -171,6 +171,58 @@ describe('saveClassTuningChange', () => {
     ]);
   });
 
+  it('treats a document with both scopes empty as empty, however it is spelled', async () => {
+    const { query } = fakeClient(async () => ({ rows: [] }));
+    await expect(
+      saveClassTuningChange({ version: 1, abilities: {}, weapons: {} }, 7, ''),
+    ).resolves.toEqual({ changed: false, updatedAt: null });
+    expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
+      'BEGIN',
+      'SELECT',
+      'COMMIT',
+    ]);
+  });
+
+  // The emptiness question is asked of the WHOLE document. An abilities-only
+  // check would drop this save on a realm that has never been tuned (the state
+  // the Weapons window ships into) while the dashboard still reported it saved.
+  it('writes a first row for a WEAPONS-only document', async () => {
+    const weaponsOnly = {
+      version: 1,
+      abilities: {},
+      weapons: { worn_sword: { swing_damage: 0.8 } },
+    };
+    const { query } = fakeClient(async (sql) => {
+      if (sql.includes('SELECT data')) return { rows: [] };
+      if (sql.includes('RETURNING updated_at')) {
+        return { rows: [{ updated_at: '2026-08-01T00:00:01.000Z' }] };
+      }
+      return { rows: [] };
+    });
+
+    await expect(saveClassTuningChange(weaponsOnly, 7, 'slow the starter sword')).resolves.toEqual({
+      changed: true,
+      updatedAt: '2026-08-01T00:00:01.000Z',
+    });
+    expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
+      'BEGIN',
+      'SELECT',
+      'INSERT',
+      'INSERT',
+      'COMMIT',
+    ]);
+    const audit = query.mock.calls.find(([sql]) =>
+      String(sql).includes('INSERT INTO class_tuning_changes'),
+    );
+    expect(audit?.[1]).toEqual([
+      'test-realm',
+      7,
+      JSON.stringify({}),
+      JSON.stringify(weaponsOnly),
+      'slow the starter sword',
+    ]);
+  });
+
   it('rolls back and rethrows when the audit insert fails', async () => {
     const { query, release } = fakeClient(async (sql) => {
       if (sql.includes('SELECT data')) {

@@ -41,6 +41,17 @@ export const MAX_TUNED_ABILITIES = 2000;
 export const MAX_TUNED_WEAPONS = 2000;
 const ENTRY_ID_PATTERN = /^[a-z0-9_]{1,64}$/;
 
+/**
+ * Whether an ability or weapon id can be STORED in a document at all.
+ *
+ * Exported because it is a real constraint on content, not just on input: an id
+ * this rejects would get a slider in the catalog that could never persist, so
+ * the coverage guard walks every live id through it.
+ */
+export function isTunableEntryId(entryId: string): boolean {
+  return ENTRY_ID_PATTERN.test(entryId);
+}
+
 export function emptyClassTuningDocument(): ClassTuningDocument {
   return { version: CLASS_TUNING_VERSION, abilities: {}, weapons: {} };
 }
@@ -80,7 +91,7 @@ function sanitizeScope(input: unknown, maxEntries: number): Record<string, Abili
   let kept = 0;
   for (const entryId of Object.keys(entries).sort()) {
     if (kept >= maxEntries) break;
-    if (!ENTRY_ID_PATTERN.test(entryId)) continue;
+    if (!isTunableEntryId(entryId)) continue;
     const channels = asRecord(entries[entryId]);
     if (!channels) continue;
 

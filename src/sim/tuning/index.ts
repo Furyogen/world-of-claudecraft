@@ -61,6 +61,7 @@ export {
   countTunedChannels,
   emptyClassTuningDocument,
   isEmptyClassTuningDocument,
+  isTunableEntryId,
   MAX_TUNED_ABILITIES,
   MAX_TUNED_WEAPONS,
   sanitizeClassTuningDocument,
@@ -72,6 +73,7 @@ export {
   installClassTuning,
   installedTunedAbilityIds,
   installedTunedWeaponIds,
+  uninstallClassTuning,
 } from './install';
 export {
   applyWeaponTuning,

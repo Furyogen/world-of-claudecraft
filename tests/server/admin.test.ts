@@ -34,6 +34,7 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   type AdminRuntime,
+  CLASS_TUNING_BODY_MAX_BYTES,
   configureAdminGuildBoardCacheBust,
   configureAdminPlayersCap,
   configureAdminRuntime,
@@ -4568,6 +4569,54 @@ describe('class-tuning family', () => {
         error: 'a document object is required',
       });
     }
+    expect(saveRealmClassTuning).not.toHaveBeenCalled();
+  });
+
+  // A fully moved document is one row per touched channel, so it grows with the
+  // ability table and is already about 50 KB against the shipped kit: the 64 KiB
+  // JSON default has no headroom for the next wave of reworks.
+  it('accepts a document far larger than the default JSON body cap', async () => {
+    const saveRealmClassTuning = vi.fn(async () => ({ changed: true, state: STATE }));
+    authedAdminDb({
+      classTuningCatalog: () => CATALOG,
+      classTuningState: () => STATE,
+      saveRealmClassTuning,
+    });
+    installAdminRuntime();
+    // ~100 KB of document: over the 64 KiB default, under the tuner's own cap.
+    const abilities: Record<string, Record<string, number>> = {};
+    for (let i = 0; i < 2000; i++) abilities[`ability_number_${i}`] = { damage_direct: 1.25 };
+    const document = { version: 1, abilities, weapons: {} };
+    expect(JSON.stringify(document).length).toBeGreaterThan(64 * 1024);
+    expect(JSON.stringify(document).length).toBeLessThan(CLASS_TUNING_BODY_MAX_BYTES);
+
+    const r = await runRoute('POST', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+      body: { document, note: '' },
+    });
+    expect(r.status).toBe(200);
+    expect(saveRealmClassTuning).toHaveBeenCalledOnce();
+  });
+
+  // Past the cap the operator gets a 413 they can act on, not the generic 500 an
+  // escaping readBody rejection would produce.
+  it('413s a document past the cap instead of failing as an internal error', async () => {
+    const saveRealmClassTuning = vi.fn(async () => ({ changed: true, state: STATE }));
+    authedAdminDb({ saveRealmClassTuning });
+    installAdminRuntime();
+    const oversize = `{"document":{"abilities":{},"weapons":{}},"note":"${'x'.repeat(
+      CLASS_TUNING_BODY_MAX_BYTES + 1024,
+    )}"}`;
+    const r = await runRoute('POST', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+      body: oversize,
+    });
+    expect(r.status).toBe(413);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'tuning document too large',
+    });
     expect(saveRealmClassTuning).not.toHaveBeenCalled();
   });
 

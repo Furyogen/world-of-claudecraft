@@ -9,6 +9,7 @@ import { abilityPowerCoeffMult, directHitBonus } from '../src/sim/spell_scaling'
 import {
   abilityTuningChannels,
   abilityTuningKnobs,
+  activeClassTuning,
   applyAbilityTuning,
   applyClassTuning,
   applyWeaponTuning,
@@ -28,6 +29,7 @@ import {
   TUNING_CHANNELS,
   TUNING_MAX_FACTOR,
   TUNING_MIN_FACTOR,
+  uninstallClassTuning,
   weaponDps,
   weaponTuningKnobs,
 } from '../src/sim/tuning';
@@ -96,6 +98,33 @@ describe('tuning channel math', () => {
     expect(isEffectiveTuningSite(1, 'deviation')).toBe(false);
     expect(isEffectiveTuningSite(1, 'linear')).toBe(true);
     expect(isEffectiveTuningSite(0.5, 'deviation')).toBe(true);
+  });
+
+  // A count field that rounds to 0 is not a smaller number, it is a different
+  // rule: `softCap` and `maxTargets` are read as `eff.x && ...` in
+  // combat/effect_dispatch.ts, so 0 means "no limit at all" and a nerf slider
+  // would land as an uncapped buff. Only a base of zero may come out as zero.
+  it('never rounds a nonzero whole number down to zero', () => {
+    expect(scaleTuningValue(4, TUNING_MIN_FACTOR, 'linear')).toBe(1);
+    expect(scaleTuningValue(3, 0.1, 'linear')).toBe(1);
+    expect(scaleTuningValue(2, 0.2, 'linear')).toBe(1);
+    expect(scaleTuningValue(1, TUNING_MIN_FACTOR, 'linear')).toBe(1);
+    // sign is kept, so a negative modifier cannot flip to no modifier
+    expect(scaleTuningValue(-3, 0.1, 'linear')).toBe(-1);
+    // a zero base is genuinely inert and stays zero
+    expect(scaleTuningValue(0, TUNING_MIN_FACTOR, 'linear')).toBe(0);
+    // the floor binds only where rounding would reach zero
+    expect(scaleTuningValue(20, 0.1, 'linear')).toBe(2);
+    // and it is a WHOLE-number rule: a fractional base still scales freely
+    expect(scaleTuningValue(0.4, 0.1, 'linear')).toBe(0.04);
+  });
+
+  // Every count field on the `targets` channel shares one slider, so the floor
+  // has to hold for the smallest authored count any of them ships.
+  it('keeps every targets-channel count at one or more at the slider floor', () => {
+    for (const base of [1, 2, 3, 4, 5, 8]) {
+      expect(scaleTuningValue(base, TUNING_MIN_FACTOR, 'linear')).toBeGreaterThanOrEqual(1);
+    }
   });
 });
 
@@ -293,6 +322,48 @@ describe('installing weapon tuning', () => {
       installClassTuning({ weapons: { retired_blade: { swing_damage: 2 } } }),
     ).not.toThrow();
     expect(installedTunedWeaponIds()).toEqual([]);
+  });
+
+  // The tuned ranged profile is assigned straight onto the class, so the walker's
+  // clone is what must carry the range band and the wand flag: nothing spreads
+  // the shipped profile back over it.
+  it('carries every rider field of a class ranged profile through the tune', () => {
+    const shipped = CLASSES.mage.ranged;
+    installClassTuning({ weapons: { class_mage_ranged: { swing_speed: 1.5 } } });
+    const tuned = CLASSES.mage.ranged;
+    expect(tuned?.speed).not.toBe(shipped?.speed);
+    expect(tuned?.min).toBe(shipped?.min);
+    expect(tuned?.maxRange).toBe(shipped?.maxRange);
+    expect(tuned?.minRange).toBe(shipped?.minRange);
+    expect(tuned?.wand).toBe(shipped?.wand);
+  });
+});
+
+// The client installs at every `hello` and must hand the tables back when the
+// session ends: they are process-wide, so a tab that leaves a tuned realm would
+// otherwise keep its numbers for whatever runs next.
+describe('uninstalling on the client', () => {
+  it('restores the shipped tables exactly', () => {
+    const shippedDef = ABILITIES.thorns;
+    const shippedWeapon = ITEMS.worn_sword.weapon;
+    installClassTuning({
+      abilities: { thorns: { damage_reflect: 2 } },
+      weapons: { worn_sword: { swing_damage: 2 } },
+    });
+    expect(ABILITIES.thorns).not.toBe(shippedDef);
+
+    uninstallClassTuning();
+    expect(ABILITIES.thorns).toBe(shippedDef);
+    expect(ITEMS.worn_sword.weapon).toBe(shippedWeapon);
+    expect(installedTunedAbilityIds()).toEqual([]);
+    expect(installedTunedWeaponIds()).toEqual([]);
+    expect(activeClassTuning()).toEqual(emptyClassTuningDocument());
+  });
+
+  it('is safe to call on a process that never installed anything', () => {
+    const shipped = ABILITIES.thorns;
+    expect(() => uninstallClassTuning()).not.toThrow();
+    expect(ABILITIES.thorns).toBe(shipped);
   });
 });
 

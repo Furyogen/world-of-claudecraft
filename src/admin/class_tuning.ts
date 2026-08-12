@@ -59,7 +59,11 @@ export function scaleTunedValue(base: number, factor: number, kind: TuningValueK
   const scaled = base * factor;
   if (kind === 'fraction') return roundTo(Math.min(1, Math.max(0, scaled)), 4);
   if (kind === 'multiplier') return roundTo(scaled, 4);
-  return Number.isInteger(base) ? Math.round(scaled) : roundTo(scaled, 4);
+  if (!Number.isInteger(base)) return roundTo(scaled, 4);
+  // The sim's NON_ZERO_INTEGER_FLOOR: a nonzero whole number keeps its sign and
+  // at least one unit, because several live count fields read 0 as "no limit".
+  const rounded = Math.round(scaled);
+  return rounded === 0 ? Math.sign(base) : rounded;
 }
 
 export function clampFactor(value: number): number {
@@ -167,6 +171,34 @@ export function tunedWeaponCount(
   return weapons.filter((weapon) => tunedChannelCount(form, weapon.id) > 0).length;
 }
 
+/**
+ * How many channels a STORED document moves, across BOTH scopes. Mirrors the
+ * sim's `countTunedChannels` for the history readout, which reads rows written
+ * by older builds and so cannot assume any shape: every level is checked rather
+ * than trusted. Counting only `abilities` here would report a weapons-only
+ * change as "0 channels".
+ */
+export function documentChannelCount(document: unknown): number {
+  const root = asRecord(document);
+  if (!root) return 0;
+  let total = 0;
+  for (const scope of ['abilities', 'weapons'] as const) {
+    const entries = asRecord(root[scope]);
+    if (!entries) continue;
+    for (const row of Object.values(entries)) {
+      const channels = asRecord(row);
+      if (channels) total += Object.keys(channels).length;
+    }
+  }
+  return total;
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
 export interface AbilityFilter {
   /** A spec id, or null for every spec in the class. */
   spec: string | null;
@@ -198,7 +230,14 @@ export function filterAbilities(
   });
 }
 
-/** Reset every channel of one ability or weapon back to the shipped numbers. */
+/**
+ * Reset every channel of one ability or weapon back to the shipped numbers.
+ *
+ * Mutates the row IN PLACE rather than returning a new form. That is deliberate
+ * and the one place this module does it: the caller holds a Svelte 5 `$state`
+ * proxy that the sliders are bound into, so an in-place write is what re-renders
+ * them; replacing the object would detach those bindings.
+ */
 export function resetAbility(form: TuningFormState, entryId: string): void {
   const row = form[entryId];
   if (!row) return;
@@ -290,10 +329,14 @@ export function channelPreview(
 ): ChannelPreview {
   const base: number[] = [];
   const tuned: number[] = [];
-  const seen = new Set<number>();
+  // Deduped on the value AND its kind: the same base responds differently to the
+  // same factor per kind (a `linear` 1 becomes 1.5 where a `deviation` 1 stays
+  // 1), so collapsing them would preview one site with another's arithmetic.
+  const seen = new Set<string>();
   for (const site of channel.sites) {
-    if (seen.has(site.value)) continue;
-    seen.add(site.value);
+    const seenKey = `${site.kind}:${site.value}`;
+    if (seen.has(seenKey)) continue;
+    seen.add(seenKey);
     if (base.length >= maxValues) break;
     base.push(site.value);
     tuned.push(scaleTunedValue(site.value, factor, site.kind));

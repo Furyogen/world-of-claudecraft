@@ -63,7 +63,7 @@ import {
 import type { ResolvedAbility } from '../sim/sim';
 import { parseTalentAllocation } from '../sim/talent_allocation_input';
 import { repairTalentLoadouts } from '../sim/talent_loadouts';
-import { installClassTuning } from '../sim/tuning';
+import { installClassTuning, uninstallClassTuning } from '../sim/tuning';
 import {
   type Aura,
   cloneItemInstancePayload,
@@ -2132,6 +2132,12 @@ export class ClientWorld implements IWorld {
     // lost to a deliberate logout within the debounce window.
     this.flushActionBarLayoutSave();
     this.sessionEnded = true;
+    // Hand the realm's class tuning back: the ability table is process-wide, so
+    // without this a tab that leaves a tuned realm keeps its numbers for
+    // anything that runs without a later `hello`. Deliberately NOT on a
+    // transient socket close, where the auto-reconnect re-installs the same
+    // document from the next hello frame.
+    uninstallClassTuning();
     this.failPendingCommandOutcomes();
     clearInterval(this.sendTimer);
     if (this.reconnectTimer !== undefined) clearTimeout(this.reconnectTimer);

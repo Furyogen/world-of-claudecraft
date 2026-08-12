@@ -8,6 +8,7 @@
 // lives in the sim (`sanitizeClassTuningDocument`); this file is the only place
 // this feature's SQL runs (server/CLAUDE.md: SQL lives only in db.ts and *_db.ts).
 
+import { isEmptyClassTuningDocument, sanitizeClassTuningDocument } from '../src/sim/tuning';
 import { pool } from './db';
 import { REALM } from './realm';
 
@@ -99,7 +100,12 @@ export async function saveClassTuningChange(
     }
     // A first save of an EMPTY document is also a no-op: there is nothing to
     // record, and writing the row would claim the realm had been tuned.
-    if (!row && Object.keys(documentObject(data.abilities)).length === 0) {
+    //
+    // "Empty" is asked of the WHOLE document, through the sim's own predicate,
+    // never of one scope: a weapons-only first save is a real change, and an
+    // ability-shaped check would discard it while the dashboard still reported
+    // it as saved and pending a restart.
+    if (!row && isEmptyClassTuningDocument(sanitizeClassTuningDocument(data))) {
       await client.query('COMMIT');
       return { changed: false, updatedAt: null };
     }

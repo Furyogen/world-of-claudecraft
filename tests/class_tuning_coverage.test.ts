@@ -23,6 +23,7 @@ import {
   abilityTuningKnobs,
   buildClassTuningCatalog,
   EFFECT_TUNED_FIELDS,
+  isTunableEntryId,
   MARKER_AURA_KINDS,
   MULTIPLIER_AURA_KINDS,
   REFLECT_AURA_KINDS,
@@ -263,6 +264,29 @@ describe('the catalog the dashboard renders', () => {
       const expected = Math.round(((weapon.min + weapon.max) / 2 / weapon.speed) * 100) / 100;
       expect(Math.abs(weapon.dps - expected), weapon.id).toBeLessThan(0.02);
     }
+  });
+
+  // The sanitizer drops any entry id it cannot trust, silently and by design (a
+  // rotted document must never keep a realm from booting). That makes the id
+  // pattern a real constraint on CONTENT: an ability or item whose id it rejects
+  // would get a slider in the catalog that could never be saved. Pin it here so
+  // the rejection surfaces as a red guard rather than a knob that does nothing.
+  it('gives every tunable entry an id a document can actually store', () => {
+    for (const classInfo of catalog.classes) {
+      for (const ability of classInfo.abilities) {
+        expect(isTunableEntryId(ability.id), `ability id ${ability.id} cannot be stored`).toBe(
+          true,
+        );
+      }
+    }
+    for (const weapon of catalog.weapons) {
+      expect(isTunableEntryId(weapon.id), `weapon id ${weapon.id} cannot be stored`).toBe(true);
+    }
+    // and the pin is decisive: an id shaped like the ones that would break it
+    // really is rejected.
+    expect(isTunableEntryId('worn-sword')).toBe(false);
+    expect(isTunableEntryId('Worn_Sword')).toBe(false);
+    expect(isTunableEntryId('a'.repeat(65))).toBe(false);
   });
 
   it('leaves sliders off the passives whose power lives in talent modifiers', () => {

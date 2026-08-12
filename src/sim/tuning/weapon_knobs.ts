@@ -35,8 +35,13 @@ const SWING_SPEED: { channel: TuningChannel; kind: 'linear' } = {
  * Visit the tunable numbers of one weapon profile. The visitor may return a
  * replacement; returning nothing leaves the number alone. Never mutates: an
  * untouched weapon comes back by reference.
+ *
+ * Generic in the profile type so a class's `ranged` (a `WeaponInfo` plus its
+ * range band and wand flag) comes back as itself rather than being widened: the
+ * clone already carries those extra fields, and the caller can assign the result
+ * straight back without re-spreading the shipped profile over it.
  */
-export function walkTunedWeapon(weapon: WeaponInfo, visit: TunedSiteVisitor): WeaponInfo {
+export function walkTunedWeapon<T extends WeaponInfo>(weapon: T, visit: TunedSiteVisitor): T {
   let changed = false;
   const take = (
     spec: { channel: TuningChannel; kind: 'linear' },
@@ -49,7 +54,7 @@ export function walkTunedWeapon(weapon: WeaponInfo, visit: TunedSiteVisitor): We
     return next;
   };
 
-  const out: WeaponInfo = { ...weapon };
+  const out: T = { ...weapon };
   out.min = take(SWING_DAMAGE, 'min', weapon.min);
   out.max = take(SWING_DAMAGE, 'max', weapon.max);
   out.speed = take(SWING_SPEED, 'speed', weapon.speed);
@@ -77,10 +82,10 @@ export function weaponTuningKnobs(
 }
 
 /** The tuned clone of one weapon profile for its per-channel factors. */
-export function applyWeaponTuning(
-  weapon: WeaponInfo,
+export function applyWeaponTuning<T extends WeaponInfo>(
+  weapon: T,
   factors: Readonly<Partial<Record<TuningChannel, number>>>,
-): WeaponInfo {
+): T {
   return walkTunedWeapon(weapon, (site) => {
     const factor = factors[site.channel];
     if (factor === undefined || factor === 1) return;

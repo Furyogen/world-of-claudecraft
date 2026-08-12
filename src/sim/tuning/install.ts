@@ -91,7 +91,9 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
       const tuned = applyWeaponTuning(shipped, factors);
       if (tuned === shipped) continue;
       shippedClassRanged.set(cls, shipped);
-      CLASSES[cls].ranged = { ...shipped, ...tuned };
+      // applyWeaponTuning already returns a full clone of the shipped profile,
+      // so assign it directly (same as the item arm below).
+      CLASSES[cls].ranged = tuned;
       continue;
     }
     const item = ITEMS[weaponId] as { weapon?: WeaponInfo } | undefined;
@@ -105,6 +107,19 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
 
   active = doc;
   return doc;
+}
+
+/**
+ * Drop this process's install, restoring the shipped tables exactly.
+ *
+ * The client counterpart to the `hello` install: the tables are process-wide
+ * module state, so a tab that leaves a tuned realm must not keep that realm's
+ * numbers for whatever runs next (an offline world, a different realm reached
+ * without another `hello`). The server never calls this: it installs once at
+ * boot and lives on that document until it restarts.
+ */
+export function uninstallClassTuning(): void {
+  installClassTuning(null);
 }
 
 const RANGED_ID_BY_CLASS = new Map<string, PlayerClass>(

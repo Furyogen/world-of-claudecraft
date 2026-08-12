@@ -119,6 +119,8 @@ export function isEffectiveTuningSite(base: number, kind: TuningValueKind): bool
  * resource costs and stack counts are integers in this engine and reading a
  * fractional one back would be a new bug class); a base that was already
  * fractional keeps four decimals.
+ *
+ * A whole base never rounds THROUGH zero: see `NON_ZERO_INTEGER_FLOOR`.
  */
 export function scaleTuningValue(base: number, factor: number, kind: TuningValueKind): number {
   if (!Number.isFinite(base)) return base;
@@ -126,5 +128,15 @@ export function scaleTuningValue(base: number, factor: number, kind: TuningValue
   const scaled = base * factor;
   if (kind === 'fraction') return roundTo(Math.min(1, Math.max(0, scaled)), FLOAT_DECIMALS);
   if (kind === 'multiplier') return roundTo(scaled, FLOAT_DECIMALS);
-  return Number.isInteger(base) ? Math.round(scaled) : roundTo(scaled, FLOAT_DECIMALS);
+  if (!Number.isInteger(base)) return roundTo(scaled, FLOAT_DECIMALS);
+  const rounded = Math.round(scaled);
+  // NON_ZERO_INTEGER_FLOOR. A nonzero whole number keeps its sign and at least
+  // one unit, however far the slider is pulled down. Several live count fields
+  // read 0 as "no limit at all" rather than "zero of them" (`softCap` and
+  // `maxTargets` in combat/effect_dispatch.ts are both `eff.x && ...` guards),
+  // so a `targets` slider at the 0.1x floor over a small authored count would
+  // silently turn a nerf into a buff. This is the mirror of
+  // `isEffectiveTuningSite`: only a base of zero is inert, so only a base of
+  // zero may come out of here as zero.
+  return rounded === 0 ? Math.sign(base) : rounded;
 }
