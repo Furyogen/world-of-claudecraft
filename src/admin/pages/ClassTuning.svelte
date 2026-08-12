@@ -3,6 +3,7 @@
   import { apiGet, apiPost } from '../api';
   import {
     buildTuningDocument,
+    documentChannelCount,
     EMPTY_ABILITY_FILTER,
     EMPTY_WEAPON_FILTER,
     filterAbilities,
@@ -21,6 +22,7 @@
   import ClassTuningAbility from '../components/ClassTuningAbility.svelte';
   import ClassTuningWeapon from '../components/ClassTuningWeapon.svelte';
   import CollapsiblePanel from '../components/CollapsiblePanel.svelte';
+  import ConfirmDialog from '../components/ConfirmDialog.svelte';
   import PageHeader from '../components/PageHeader.svelte';
   import { fmtDate } from '../format';
   import { localizeAdminError, t } from '../i18n';
@@ -57,8 +59,13 @@
   let savedFlash = $state(false);
   let historyEntries = $state<ClassTuningHistoryEntry[]>([]);
   let historyFailed = $state(false);
+  let resetPending = $state(false);
 
   const canWrite = $derived(auth.can('tuning.write'));
+  // Sliders lock while a save is in flight. `adopt()` replaces the whole form
+  // with the server's response, so an edit made during the POST would be
+  // silently thrown away the moment it landed.
+  const editable = $derived(canWrite && !saving);
   const activeClass = $derived<TunerClassInfo | null>(
     data?.catalog.classes.find((entry) => entry.id === activeClassId) ?? null,
   );
@@ -76,6 +83,13 @@
   const visibleWeapons = $derived(filterWeapons(allWeapons, weaponFilter, form.weapons));
   const handOptions = $derived(weaponHands(allWeapons));
   const tunedWeapons = $derived(tunedWeaponCount(form.weapons, allWeapons));
+  // The LIVE form counts (what a reset would discard), not the saved ones.
+  const tunedAbilities = $derived(
+    (data?.catalog.classes ?? []).reduce(
+      (total, entry) => total + tunedAbilityCount(form.abilities, entry),
+      0,
+    ),
+  );
 
   function adopt(response: ClassTuningResponse): void {
     data = response;
@@ -141,7 +155,10 @@
     resetAbility(form.weapons, weaponId);
   }
 
+  // Resetting everything discards every slider on the realm in one click, so it
+  // asks first (ConfirmDialog, the same family the moderation actions use).
   function resetEverything(): void {
+    resetPending = false;
     if (!data) return;
     for (const abilityId of Object.keys(form.abilities)) resetAbility(form.abilities, abilityId);
     for (const weaponId of Object.keys(form.weapons)) resetAbility(form.weapons, weaponId);
@@ -161,13 +178,7 @@
   }
 
   function countChannels(entry: ClassTuningHistoryEntry): number {
-    const abilities = entry.afterData?.abilities;
-    if (typeof abilities !== 'object' || abilities === null) return 0;
-    let total = 0;
-    for (const row of Object.values(abilities as Record<string, unknown>)) {
-      if (typeof row === 'object' && row !== null) total += Object.keys(row).length;
-    }
-    return total;
+    return documentChannelCount(entry.afterData);
   }
 
   onMount(() => {
@@ -215,6 +226,7 @@
         type="button"
         class="class-tab"
         class:active={!weaponsSelected && entry.id === activeClassId}
+        aria-pressed={!weaponsSelected && entry.id === activeClassId}
         onclick={() => selectClass(entry.id)}
       >
         {entry.name}
@@ -225,6 +237,7 @@
       type="button"
       class="class-tab weapons-tab"
       class:active={weaponsSelected}
+      aria-pressed={weaponsSelected}
       onclick={selectWeapons}
     >
       {t('tuning.weaponsTab')}
@@ -241,6 +254,7 @@
             type="button"
             class="spec-tab"
             class:active={weaponFilter.hand === null}
+            aria-pressed={weaponFilter.hand === null}
             onclick={() => {
               weaponFilter.hand = null;
             }}
@@ -252,6 +266,7 @@
               type="button"
               class="spec-tab"
               class:active={weaponFilter.hand === hand}
+              aria-pressed={weaponFilter.hand === hand}
               onclick={() => {
                 weaponFilter.hand = hand;
               }}
@@ -284,7 +299,7 @@
           {#each visibleWeapons as weapon (weapon.id)}
             <ClassTuningWeapon
               {weapon}
-              readOnly={!canWrite}
+              readOnly={!editable}
               onReset={onResetWeapon}
               bind:factors={form.weapons[weapon.id]}
             />
@@ -301,6 +316,7 @@
             type="button"
             class="spec-tab"
             class:active={filter.spec === null}
+            aria-pressed={filter.spec === null}
             onclick={() => {
               filters[activeClass.id].spec = null;
             }}
@@ -312,6 +328,7 @@
               type="button"
               class="spec-tab"
               class:active={filter.spec === spec.id}
+              aria-pressed={filter.spec === spec.id}
               onclick={() => {
                 filters[activeClass.id].spec = spec.id;
               }}
@@ -345,7 +362,7 @@
             <ClassTuningAbility
               {ability}
               specs={activeClass.specs}
-              readOnly={!canWrite}
+              readOnly={!editable}
               onReset={onResetAbility}
               bind:factors={form.abilities[ability.id]}
             />
@@ -363,19 +380,45 @@
         maxlength={data.noteMaxLength}
         placeholder={t('tuning.notePlaceholder')}
         bind:value={changeNote}
-        disabled={!canWrite}
+        disabled={!editable}
       />
     </label>
     <div class="buttons">
       {#if dirty}<span class="unsaved">{t('tuning.unsaved')}</span>{/if}
       {#if savedFlash}<span class="saved">{t('tuning.saved')}</span>{/if}
-      <button type="button" onclick={resetEverything} disabled={!canWrite || saving}>
+      <button
+        type="button"
+        onclick={() => {
+          resetPending = true;
+        }}
+        disabled={!editable}
+      >
         {t('tuning.resetAll')}
       </button>
       <button type="button" class="primary" onclick={save} disabled={!canWrite || saving}>
         {saving ? t('tuning.saving') : t('tuning.save')}
       </button>
     </div>
+    {#if resetPending}
+      <ConfirmDialog
+        title={t('tuning.resetAllConfirm')}
+        rows={[
+          {
+            label: t('tuning.resetAllRow'),
+            value: t('tuning.resetAllRowValue', {
+              abilities: tunedAbilities,
+              weapons: tunedWeapons,
+            }),
+          },
+        ]}
+        danger
+        confirmLabel={t('tuning.resetAllConfirmLabel')}
+        onConfirm={resetEverything}
+        onCancel={() => {
+          resetPending = false;
+        }}
+      />
+    {/if}
   </section>
 
   <CollapsiblePanel title={t('tuning.historyTitle')} count={historyEntries.length}>
