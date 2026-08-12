@@ -9,25 +9,85 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "es_ES": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "fr_FR": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "fr_CA": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "de_DE": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "nl_NL": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "pl_PL": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "id_ID": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "tr_TR": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "sv_SE": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "vi_VN": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ],
+  "da_DK": [
+    "hudChrome.chatQuota.limitReached",
+    "hudChrome.chatQuota.pending",
+    "hudChrome.chatQuota.unavailable"
+  ]
 };
