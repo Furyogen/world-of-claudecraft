@@ -52,6 +52,14 @@ endpoint answers it 403. `tuning.read` is deliberately kept out of the read-only
 `viewer` bundle, so the balance surface reaches assigned people rather than every
 read-only seat.
 
+`admin` and `superadmin` also hold both permissions, because `admin` is the
+legacy full-admin bundle (every tool the old `is_admin` flag conferred, minus
+staff-role management) rather than a designation of its own. That is deliberate:
+tuning is reversible, boot-scoped and attributed in the change history, so it is
+not in the superadmin-only class that `guildbank.purge` is in. What `tuner` adds
+is the ability to hand someone the balance surface WITHOUT handing them the rest
+of the dashboard.
+
 Levy Street assigns it with the grant script (or the Staff page, for an account
 that already holds staff roles). Every save is attributed to the account that made
 it in the change history, so the trail always names which assigned tuner moved a
@@ -145,6 +153,12 @@ naming it. The fix is one row in `EFFECT_TUNED_FIELDS`
 - `fraction` for a normalized 0..1 share, clamped to at most the whole
 - `multiplier` for a plain rate whose neutral is 1 and which must not snap to a
   whole number (a weapon-damage multiplier, the spell power coefficient)
+
+A `linear` field whose authored value is a whole number stays whole, and a
+nonzero one never scales to zero however far the slider is pulled down: several
+count fields (`softCap`, `maxTargets`) read 0 as "no limit at all" rather than
+"none", so a rounded-away count would land as a buff. Only a base of zero, which
+no slider can move anyway, comes out as zero.
 
 A field that is genuinely not a power lever (tick cadence, an identity flag) goes
 in `UNTUNED_EFFECT_FIELDS` or `UNTUNED_DEF_FIELDS` with the reasoning at the row.
