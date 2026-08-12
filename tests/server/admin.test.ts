@@ -2473,7 +2473,7 @@ describe('staff identity + role management (release v0.22.0)', () => {
       success: true,
       data: {
         rows: [{ accountId: 1, username: 'op', roles: ['admin'] }],
-        assignableRoles: ['admin', 'moderator', 'viewer'],
+        assignableRoles: ['admin', 'tuner', 'moderator', 'viewer'],
       },
       error: null,
     });
@@ -4403,5 +4403,178 @@ describe('R35 restore-item: the defensive invalid_item arm', () => {
     });
     expect(r.status).toBe(400);
     expect(r.body).toEqual({ success: false, data: null, error: 'unknown item id' });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Class Power Tuner (Balance > Class Power). The catalog the dashboard renders
+// is server data derived from the live content tables, and a save persists +
+// audits WITHOUT touching the running world (tuning installs once per boot).
+// ---------------------------------------------------------------------------
+describe('class-tuning family', () => {
+  const CATALOG = {
+    weapons: [
+      {
+        id: 'worn_sword',
+        name: 'Pitted Shortsword',
+        kind: 'item',
+        hand: 'onehand',
+        dagger: false,
+        min: 2,
+        max: 5,
+        speed: 2,
+        dps: 1.75,
+        channels: [
+          {
+            channel: 'swing_damage',
+            sites: [{ path: 'min', value: 2, kind: 'linear' }],
+          },
+        ],
+      },
+    ],
+    classes: [
+      {
+        id: 'druid',
+        name: 'Druid',
+        specs: [{ id: 'feral', name: 'Feral', role: 'dps' }],
+        abilities: [
+          {
+            id: 'thorns',
+            name: 'Briarguard',
+            class: 'druid',
+            school: 'nature',
+            learnLevel: 6,
+            specs: ['feral'],
+            source: 'base',
+            passive: false,
+            ranks: 3,
+            channels: [
+              {
+                channel: 'damage_reflect',
+                sites: [{ path: 'effects[0].buffTarget.value', value: 3, kind: 'linear' }],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+  const SAVED = {
+    version: 1,
+    abilities: { thorns: { damage_reflect: 1.5 } },
+    weapons: { worn_sword: { swing_speed: 1.2 } },
+  };
+  const STATE = {
+    saved: SAVED,
+    active: { version: 1, abilities: {}, weapons: {} },
+    savedAt: '2026-08-01T00:00:00.000Z',
+    pendingRestart: true,
+    tunedAbilities: 1,
+    tunedWeapons: 1,
+    tunedChannels: 2,
+  };
+
+  it('GET /admin/api/class-tuning serves the catalog, the saved document, and the restart state', async () => {
+    authedAdminDb({
+      classTuningCatalog: () => CATALOG,
+      classTuningState: () => STATE,
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: {
+        catalog: CATALOG,
+        document: SAVED,
+        active: { version: 1, abilities: {}, weapons: {} },
+        updatedAt: '2026-08-01T00:00:00.000Z',
+        // The realm is still running the untuned numbers: the dashboard must be
+        // able to say so rather than implying the save was live.
+        pendingRestart: true,
+        tunedAbilities: 1,
+        tunedWeapons: 1,
+        tunedChannels: 2,
+        noteMaxLength: 500,
+      },
+      error: null,
+    });
+  });
+
+  it('GET /admin/api/class-tuning/history returns the audit entries', async () => {
+    authedAdminDb({ classTuningHistory: async () => [{ id: 7, note: 'nerf reflect' }] });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/class-tuning/history', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: { entries: [{ id: 7, note: 'nerf reflect' }] },
+      error: null,
+    });
+  });
+
+  it('POST /admin/api/class-tuning persists the document with the operator and note', async () => {
+    const saveRealmClassTuning = vi.fn(async () => ({ changed: true, state: STATE }));
+    authedAdminDb({
+      classTuningCatalog: () => CATALOG,
+      classTuningState: () => STATE,
+      saveRealmClassTuning,
+    });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+      body: { document: SAVED, note: 'nerf druid reflect' },
+    });
+    expect(r.status).toBe(200);
+    expect((r.body as { data: { changed: boolean } }).data.changed).toBe(true);
+    expect(saveRealmClassTuning).toHaveBeenCalledWith(
+      SAVED,
+      ADMIN_ACCOUNT_ID,
+      'nerf druid reflect',
+    );
+  });
+
+  it('400s a body whose document is not an object, without writing anything', async () => {
+    const saveRealmClassTuning = vi.fn(async () => ({ changed: false, state: STATE }));
+    authedAdminDb({ saveRealmClassTuning });
+    installAdminRuntime();
+    for (const document of [undefined, [1, 2], 'x', null]) {
+      const r = await runRoute('POST', '/admin/api/class-tuning', {
+        headers: { authorization: BEARER },
+        body: { document },
+      });
+      expect(r.status).toBe(400);
+      expect(r.body).toEqual({
+        success: false,
+        data: null,
+        error: 'a document object is required',
+      });
+    }
+    expect(saveRealmClassTuning).not.toHaveBeenCalled();
+  });
+
+  it('truncates an overlong note rather than refusing the save', async () => {
+    // Typed params so the call-args assertion below can index the note.
+    const saveRealmClassTuning = vi.fn(
+      async (_document: unknown, _accountId: number, _note: string) => ({
+        changed: true,
+        state: STATE,
+      }),
+    );
+    authedAdminDb({
+      classTuningCatalog: () => CATALOG,
+      classTuningState: () => STATE,
+      saveRealmClassTuning,
+    });
+    installAdminRuntime();
+    await runRoute('POST', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+      body: { document: SAVED, note: 'x'.repeat(900) },
+    });
+    expect(saveRealmClassTuning.mock.calls[0][2]).toHaveLength(500);
   });
 });

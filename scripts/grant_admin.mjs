@@ -28,7 +28,7 @@ try {
 
 // Keep in sync with ADMIN_ROLES in server/admin_permissions.ts (this script is
 // plain Node and never imports TS sources; see scripts/CLAUDE.md).
-const KNOWN_ROLES = ['superadmin', 'admin', 'moderator', 'viewer'];
+const KNOWN_ROLES = ['superadmin', 'admin', 'tuner', 'moderator', 'viewer'];
 
 const args = process.argv.slice(2);
 const username = args[0];
