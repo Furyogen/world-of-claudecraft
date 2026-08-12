@@ -1,10 +1,11 @@
-<!-- Living operator + maintainer doc for the Class Power Tuner. The generated
-     companions beside it (class-power-tuner.pdf / .html) carry the SAME prose
-     plus the complete per-class, per-spec ability tables, the weapon table, and
-     the dashboard screenshots; regenerate them with the command below rather
-     than hand-editing either file. -->
+<!-- Living operator + maintainer doc for the Class Power Tuner. This markdown
+     file is the committed reference. The full rendering (the same prose plus the
+     complete per-class, per-spec ability tables, the weapon table, and the
+     dashboard screenshots) is a build artifact: generate it on demand with the
+     command at the end of this document. It is deliberately not committed, since
+     it runs to megabytes and is reproducible from the live content tables. -->
 
-# Class Power Tuner by Furyogen (WIP)
+# Class Power Tuner by Furyogen
 
 An operator-facing balance lever: every aspect of every ability of every class as
 a multiplier slider, plus the auto-attack ("white") swing damage and swing timer
@@ -14,9 +15,10 @@ It exists because two of the nine classes have been reworked and now outperform
 the other seven. Closing that gap used to mean editing content source and
 shipping a build; with the tuner it is a slider and a restart.
 
-> **Work in progress.** The tool is complete and the mechanism is stable; what
-> moves under it is the CONTENT. The per-ability tables and screenshots below are
-> a snapshot of the kit as it stands on `release/v0.37.0`, and the class reworks
+> **On the numbers below.** The tool is complete and the mechanism is settled;
+> what moves under it is the CONTENT. The per-ability tables and screenshots
+> below are a snapshot of the kit as it stands on `release/v0.37.0`, and the
+> class reworks
 > are still arriving one wave at a time. Nothing here needs re-engineering when a
 > wave lands: the catalog is derived from the live content tables, never
 > hand-authored, so a redesigned class shows up with the right sliders on its own.
@@ -25,7 +27,9 @@ shipping a build; with the tuner it is a slider and a restart.
 > numbers as of today.
 
 **Full reference (screenshots, every class/spec ability table, every weapon):**
-`docs/balance/class-power-tuner.pdf`.
+generated on demand, see "Regenerating the reference" at the end of this
+document. It is not committed: it is derived from the live content tables and
+runs to megabytes.
 
 ## Who can use it
 
