@@ -33,10 +33,7 @@ vi.mock('../src/sim/tuning', async (importOriginal) => {
   };
 });
 
-import {
-  installRealmClassTuning,
-  resetClassTuningRuntimeForTests,
-} from '../server/class_tuning';
+import { installRealmClassTuning, resetClassTuningRuntimeForTests } from '../server/class_tuning';
 import { ABILITIES } from '../src/sim/content/classes';
 // straight from the leaf modules, past the mocked barrel, so cleanup uses the
 // REAL install
