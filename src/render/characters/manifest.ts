@@ -1604,8 +1604,16 @@ export const VISUALS: Record<string, VisualDef> = {
   // 2.6 humanoid) so it reads as a boulder you perch on, not a mountain.
   mount_pet_boulder: {
     url: `${MOUNTS_DIR}/pet_boulder.glb`,
-    height: 1.5,
+    height: 1.7,
     clips: MOUNT_RIGGED,
+    // The one TINTED mount, and deliberately so: the shipped prop carries the
+    // outdoor dirt/grass palette every other world rock uses, which reads as
+    // pale sandstone under a saddle. Pull it hard toward cold grey stone, the
+    // same recolor door_portal.ts applies when it dresses this mesh as the
+    // rift boulder, so the mount and the puzzle rock are recognisably the
+    // same object.
+    tint: 0x6f6d69,
+    tintStrength: 0.82,
     lazyPreload: true,
   },
   mount_grag_bear: {
