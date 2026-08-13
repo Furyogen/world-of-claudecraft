@@ -82,7 +82,7 @@
         <Badge variant="neutral">{specName(specId)}</Badge>
       {/each}
       {#if tunedCount > 0}
-        <Badge variant="warn">{t('tuning.abilityCount', { count: tunedCount })}</Badge>
+        <Badge variant="warn">{t('tuning.channelCount', { count: tunedCount })}</Badge>
         <button type="button" class="reset" onclick={() => onReset(ability.id)} disabled={readOnly}>
           {t('tuning.resetAbility')}
         </button>

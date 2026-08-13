@@ -106,6 +106,30 @@ describe('the boot install', () => {
     expect(state.pendingRestart).toBe(false);
     expect(ABILITIES.thorns).toBe(shipped);
   });
+
+  it("boots cleanly when the stored row carries a 'constructor' ability id", async () => {
+    // The round-two CRITICAL on PR #3337: ABILITIES['constructor'] answers the
+    // inherited Object function through the prototype chain, so before the
+    // reserved-id gate this row passed the shipped-def check and threw inside
+    // the walker at EVERY restart until the row was hand-edited out.
+    mocks.loadClassTuning.mockResolvedValue({
+      data: {
+        version: 1,
+        abilities: { constructor: { cooldown: 1.5 }, thorns: { damage_reflect: 2 } },
+        weapons: { constructor: { swing_damage: 2 } },
+      },
+      updatedAt: '2026-08-01T00:00:00.000Z',
+      updatedBy: 7,
+    });
+    const state = await installRealmClassTuning();
+    expect(state.pendingRestart).toBe(false);
+    // the reserved row is gone, the legitimate one still installed (hasOwn,
+    // because `.constructor` on a plain object answers the inherited function)
+    expect(Object.hasOwn(state.saved.abilities, 'constructor')).toBe(false);
+    expect(state.tunedAbilities).toBe(1);
+    expect(state.tunedWeapons).toBe(0);
+    expect((ABILITIES.thorns.effects[0] as { value: number }).value).toBe(6);
+  });
 });
 
 describe('saving', () => {

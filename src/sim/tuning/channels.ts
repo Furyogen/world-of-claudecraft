@@ -47,6 +47,30 @@ export function isTuningChannel(value: unknown): value is TuningChannel {
   return typeof value === 'string' && CHANNEL_SET.has(value);
 }
 
+// Channels denominated in SECONDS. A linear time value keeps fractional
+// precision even when its authored base is a whole number: a 2s cast at 0.75x
+// must become 1.5s rather than snap back to 2s (a slider that provably does
+// nothing across half its range reads as broken), and a 2s swing timer at 0.7x
+// must not round DOWN to 1s, which would double the hit rate on a slider
+// labelled "-30%". The engine runs on fractional seconds everywhere (DT ticks),
+// so nothing downstream needs whole numbers here.
+export const TIME_TUNING_CHANNELS: ReadonlySet<TuningChannel> = new Set<TuningChannel>([
+  'cast_time',
+  'cooldown',
+  'duration_effect',
+  'duration_control',
+  'swing_speed',
+]);
+
+// The only channels the WEAPON scope ever applies: the weapon walker
+// (weapon_knobs.ts) visits exactly min/max/speed. The sanitizer holds weapon
+// rows to this subset so a hand-written document cannot store the other
+// channels as inert rows that inflate the tuned counts while moving nothing.
+export const WEAPON_TUNING_CHANNELS: ReadonlySet<TuningChannel> = new Set<TuningChannel>([
+  'swing_damage',
+  'swing_speed',
+]);
+
 // How a raw authored number responds to a slider factor.
 //   linear    the number IS the magnitude (damage, cost, seconds, yards): scale it.
 //   deviation the number is a multiplier whose NEUTRAL point is 1 (a snare's 0.5
@@ -117,17 +141,32 @@ export function isEffectiveTuningSite(base: number, kind: TuningValueKind): bool
  *
  * A `linear` value whose base is a whole number stays whole (damage rolls,
  * resource costs and stack counts are integers in this engine and reading a
- * fractional one back would be a new bug class); a base that was already
- * fractional keeps four decimals.
+ * fractional one back would be a new bug class), EXCEPT on a time channel
+ * (`TIME_TUNING_CHANNELS`), where seconds keep their precision; a base that
+ * was already fractional keeps four decimals.
  *
  * A whole base never rounds THROUGH zero: see `NON_ZERO_INTEGER_FLOOR`.
  */
-export function scaleTuningValue(base: number, factor: number, kind: TuningValueKind): number {
+export function scaleTuningValue(
+  base: number,
+  factor: number,
+  kind: TuningValueKind,
+  channel?: TuningChannel,
+): number {
   if (!Number.isFinite(base)) return base;
-  if (kind === 'deviation') return roundTo(1 + (base - 1) * factor, FLOAT_DECIMALS);
+  // A deviation multiplier never crosses zero. Live slows author `mult: 0.5`,
+  // so an unclamped 3.0x factor would mint a NEGATIVE movement multiplier
+  // (mobs pathing backwards, a negative 1/mult escape window). Zero is the
+  // hard floor: the strongest a snare can be tuned is a full stop.
+  if (kind === 'deviation') {
+    return roundTo(Math.max(0, 1 + (base - 1) * factor), FLOAT_DECIMALS);
+  }
   const scaled = base * factor;
   if (kind === 'fraction') return roundTo(Math.min(1, Math.max(0, scaled)), FLOAT_DECIMALS);
   if (kind === 'multiplier') return roundTo(scaled, FLOAT_DECIMALS);
+  if (channel !== undefined && TIME_TUNING_CHANNELS.has(channel)) {
+    return roundTo(scaled, FLOAT_DECIMALS);
+  }
   if (!Number.isInteger(base)) return roundTo(scaled, FLOAT_DECIMALS);
   const rounded = Math.round(scaled);
   // NON_ZERO_INTEGER_FLOOR. A nonzero whole number keeps its sign and at least

@@ -89,7 +89,7 @@ export function applyWeaponTuning<T extends WeaponInfo>(
   return walkTunedWeapon(weapon, (site) => {
     const factor = factors[site.channel];
     if (factor === undefined || factor === 1) return;
-    return scaleTuningValue(site.value, factor, site.kind);
+    return scaleTuningValue(site.value, factor, site.kind, site.channel);
   });
 }
 

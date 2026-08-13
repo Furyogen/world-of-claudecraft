@@ -4518,8 +4518,9 @@ describe('class-tuning family', () => {
     });
   });
 
-  it('GET /admin/api/class-tuning/history returns the audit entries', async () => {
-    authedAdminDb({ classTuningHistory: async () => [{ id: 7, note: 'nerf reflect' }] });
+  it('GET /admin/api/class-tuning/history returns the newest page with its size', async () => {
+    const classTuningHistory = vi.fn(async () => [{ id: 7, note: 'nerf reflect' }]);
+    authedAdminDb({ classTuningHistory });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/class-tuning/history', {
       headers: { authorization: BEARER },
@@ -4527,9 +4528,29 @@ describe('class-tuning family', () => {
     expect(r.status).toBe(200);
     expect(r.body).toEqual({
       success: true,
-      data: { entries: [{ id: 7, note: 'nerf reflect' }] },
+      data: { entries: [{ id: 7, note: 'nerf reflect' }], pageSize: 50 },
       error: null,
     });
+    expect(classTuningHistory).toHaveBeenCalledWith(50, undefined);
+  });
+
+  it('GET /admin/api/class-tuning/history?before= pages past the newest rows', async () => {
+    const classTuningHistory = vi.fn(async () => [{ id: 6, note: 'older' }]);
+    authedAdminDb({ classTuningHistory });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/class-tuning/history', {
+      url: '/admin/api/class-tuning/history?before=7',
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(classTuningHistory).toHaveBeenCalledWith(50, 7);
+    // junk cursors read as the first page, never an error or an empty walk
+    classTuningHistory.mockClear();
+    await runRoute('GET', '/admin/api/class-tuning/history', {
+      url: '/admin/api/class-tuning/history?before=junk',
+      headers: { authorization: BEARER },
+    });
+    expect(classTuningHistory).toHaveBeenCalledWith(50, undefined);
   });
 
   it('POST /admin/api/class-tuning persists the document with the operator and note', async () => {
@@ -4616,6 +4637,26 @@ describe('class-tuning family', () => {
       success: false,
       data: null,
       error: 'tuning document too large',
+    });
+    expect(saveRealmClassTuning).not.toHaveBeenCalled();
+  });
+
+  // Malformed JSON is operator input trouble (a truncated POST, a buggy
+  // client), so it answers its OWN 400 rather than the misleading "a document
+  // object is required" that blames a well-formed body's shape.
+  it('400s malformed JSON with its own error, without writing anything', async () => {
+    const saveRealmClassTuning = vi.fn(async () => ({ changed: true, state: STATE }));
+    authedAdminDb({ saveRealmClassTuning });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/class-tuning', {
+      headers: { authorization: BEARER },
+      body: '{"document":{"abilities":',
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'invalid JSON in the tuning request',
     });
     expect(saveRealmClassTuning).not.toHaveBeenCalled();
   });

@@ -23,13 +23,16 @@ import {
   installedTunedWeaponIds,
   isEffectiveTuningSite,
   isNeutralFactor,
+  isTunableEntryId,
   MIN_SWING_SECONDS,
   sanitizeClassTuningDocument,
   scaleTuningValue,
+  TIME_TUNING_CHANNELS,
   TUNING_CHANNELS,
   TUNING_MAX_FACTOR,
   TUNING_MIN_FACTOR,
   uninstallClassTuning,
+  WEAPON_TUNING_CHANNELS,
   weaponDps,
   weaponTuningKnobs,
 } from '../src/sim/tuning';
@@ -124,6 +127,32 @@ describe('tuning channel math', () => {
   it('keeps every targets-channel count at one or more at the slider floor', () => {
     for (const base of [1, 2, 3, 4, 5, 8]) {
       expect(scaleTuningValue(base, TUNING_MIN_FACTOR, 'linear')).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  // Live slows author `mult: 0.5`, so factor 2.0 lands exactly on the boundary
+  // and 3.0 crosses it. An unclamped deviation would mint a NEGATIVE movement
+  // multiplier: mobs pathing backwards, and a negative 1/mult escape window.
+  it('floors a deviation at zero, so a tuned snare can stop but never reverse', () => {
+    expect(scaleTuningValue(0.5, 2, 'deviation')).toBe(0);
+    expect(scaleTuningValue(0.5, 3, 'deviation')).toBe(0);
+    expect(scaleTuningValue(0.5, 1.9, 'deviation')).toBeCloseTo(0.05, 10);
+    // above-1 multipliers are unaffected by the floor
+    expect(scaleTuningValue(2, 3, 'deviation')).toBe(4);
+  });
+
+  // Seconds keep their precision: a whole-number time base must not make half
+  // the slider a silent no-op (2s at 0.75 stayed 2s), and never round DOWN
+  // through a nerf (a 2s swing at 0.7 snapping to 1s doubles the hit rate).
+  it('exempts time channels from the whole-number snap', () => {
+    expect(scaleTuningValue(2, 0.75, 'linear', 'cast_time')).toBe(1.5);
+    expect(scaleTuningValue(2, 0.7, 'linear', 'swing_speed')).toBe(1.4);
+    expect(scaleTuningValue(2, 1.24, 'linear', 'cast_time')).toBe(2.48);
+    expect(scaleTuningValue(8, 0.9, 'linear', 'cooldown')).toBe(7.2);
+    // a non-time channel keeps the integer rule
+    expect(scaleTuningValue(2, 0.7, 'linear', 'targets')).toBe(1);
+    for (const channel of TIME_TUNING_CHANNELS) {
+      expect(scaleTuningValue(2, 0.75, 'linear', channel), channel).toBe(1.5);
     }
   });
 });
@@ -476,5 +505,160 @@ describe('installing onto the shared ability table', () => {
     installClassTuning(emptyClassTuningDocument());
     installClassTuning(doc);
     expect(JSON.stringify(ABILITIES.moonfire)).toBe(first);
+  });
+});
+
+// A plain-object table answers 'constructor' TRUTHY through the prototype
+// chain, so a stored row keyed on a reserved id would pass the `if (!shipped)`
+// guard, hand the walker the Object function, and throw at EVERY boot until
+// someone hand-edited the row out of Postgres. Reviewed as the round-two
+// CRITICAL on PR #3337; all three layers below close it independently.
+describe('reserved entry ids (the constructor boot brick)', () => {
+  const RESERVED = ['constructor', '__proto__', 'prototype'];
+
+  it('rejects every reserved id at the id gate', () => {
+    for (const id of RESERVED) {
+      expect(isTunableEntryId(id), id).toBe(false);
+    }
+    // and the pattern itself still admits ordinary ids
+    expect(isTunableEntryId('constructor_probe')).toBe(true);
+  });
+
+  it('sanitizes reserved ids out of both scopes', () => {
+    const doc = sanitizeClassTuningDocument({
+      abilities: {
+        constructor: { cooldown: 1.5 },
+        prototype: { cooldown: 1.5 },
+        thorns: { damage_reflect: 1.5 },
+      },
+      weapons: { constructor: { swing_damage: 2 }, worn_sword: { swing_damage: 2 } },
+    });
+    expect(Object.keys(doc.abilities)).toEqual(['thorns']);
+    expect(Object.keys(doc.weapons)).toEqual(['worn_sword']);
+    // __proto__ cannot even be written into a literal test fixture without
+    // hitting the prototype setter, which is exactly why it is reserved too.
+    const proto = sanitizeClassTuningDocument(
+      JSON.parse('{"abilities":{"__proto__":{"cooldown":1.5}}}'),
+    );
+    expect(Object.keys(proto.abilities)).toEqual([]);
+  });
+
+  it('applies a hand-built document with a reserved id without touching the table', () => {
+    // Bypasses the sanitizer on purpose: this pins the Object.hasOwn guard in
+    // the apply path itself, the defense that holds even for a row stored by
+    // an older build.
+    const doc = {
+      version: 1,
+      abilities: { constructor: { cooldown: 1.5 } },
+      weapons: {},
+    };
+    expect(() => applyClassTuning(ABILITIES, doc)).not.toThrow();
+    const tuned = applyClassTuning(ABILITIES, doc);
+    expect(Object.hasOwn(tuned, 'constructor')).toBe(false);
+  });
+
+  it('installs a document carrying reserved ids in both scopes as a no-op', () => {
+    expect(() =>
+      installClassTuning({
+        abilities: { constructor: { cooldown: 1.5 } },
+        weapons: { constructor: { swing_damage: 2 }, prototype: { swing_speed: 2 } },
+      }),
+    ).not.toThrow();
+    expect(installedTunedAbilityIds()).toEqual([]);
+    expect(installedTunedWeaponIds()).toEqual([]);
+  });
+});
+
+describe('the weapon scope stores only the swing channels', () => {
+  it('drops the 22 non-swing channels a hand-written document smuggles in', () => {
+    const weapons: Record<string, Record<string, number>> = { worn_sword: {} };
+    for (const channel of TUNING_CHANNELS) weapons.worn_sword[channel] = 1.5;
+    const doc = sanitizeClassTuningDocument({ abilities: {}, weapons });
+    expect(Object.keys(doc.weapons.worn_sword).sort()).toEqual([...WEAPON_TUNING_CHANNELS].sort());
+    // the ability scope keeps the full vocabulary
+    const abilities: Record<string, Record<string, number>> = { probe: {} };
+    for (const channel of TUNING_CHANNELS) abilities.probe[channel] = 1.5;
+    const full = sanitizeClassTuningDocument({ abilities });
+    expect(Object.keys(full.abilities.probe).sort()).toEqual([...TUNING_CHANNELS].sort());
+  });
+});
+
+describe('percent-point aura payloads scale as points, not 0..1 shares', () => {
+  it("keeps Veilbound March's +30% armor linear under any factor", () => {
+    const shipped = ABILITIES.veilbound_march;
+    const buffed = applyAbilityTuning(shipped, { effect_magnitude: 1.1 });
+    const march = buffed.effects.find((eff) => eff.type === 'veilboundMarch') as {
+      armorPct: number;
+      speedMult: number;
+    };
+    // 30 x 1.1 = 33 percent points; the old fraction rule clamped this to 1,
+    // collapsing +30% armor to +1% the moment any factor moved it.
+    expect(march.armorPct).toBe(33);
+    // speedMult (1.4) still moves as a deviation on the same slider
+    expect(march.speedMult).toBeCloseTo(1.44, 10);
+  });
+
+  it("keeps Trueshot Aura's +10% Attack Power linear under any factor", () => {
+    const shipped = ABILITIES.trueshot_aura;
+    const buffed = applyAbilityTuning(shipped, { effect_magnitude: 1.1 });
+    const aura = buffed.effects.find((eff) => eff.type === 'aoeAllyAttackPower') as {
+      apPct: number;
+    };
+    expect(aura.apPct).toBe(11);
+  });
+});
+
+describe('stealth is a movement multiplier, not a plain magnitude', () => {
+  it('moves the sneak-walk speed by its deviation from 1', () => {
+    const probe = def({
+      effects: [{ type: 'selfBuff', kind: 'stealth', value: 0.5, duration: 3600 }],
+    });
+    // nerf slider (0.1x) relaxes the walk toward full speed...
+    const relaxed = applyAbilityTuning(probe, { effect_magnitude: 0.1 });
+    expect((relaxed.effects[0] as { value: number }).value).toBe(0.95);
+    // ...and a buff slider (1.2x) slows it harder, never speeds it up
+    const harder = applyAbilityTuning(probe, { effect_magnitude: 1.2 });
+    expect((harder.effects[0] as { value: number }).value).toBe(0.4);
+  });
+});
+
+describe("Aegis of the First Dawn's spell power knob", () => {
+  it('offers the spell_power channel (its SP riders dominate at endgame)', () => {
+    expect(abilityTuningChannels(ABILITIES.aegis_first_dawn)).toContain('spell_power');
+  });
+
+  it('moves the coefficient the aegis module reads through abilityPowerCoeffMult', () => {
+    const tuned = applyAbilityTuning(ABILITIES.aegis_first_dawn, { spell_power: 1.5 });
+    expect(abilityPowerCoeffMult(tuned)).toBe(1.5);
+    expect(abilityPowerCoeffMult(ABILITIES.aegis_first_dawn)).toBe(1);
+  });
+});
+
+describe('time channels through the walker', () => {
+  it('scales a whole-number cast time fractionally', () => {
+    const probe = def({ castTime: 2 });
+    const tuned = applyAbilityTuning(probe, { cast_time: 0.75 });
+    expect(tuned.castTime).toBe(1.5);
+  });
+
+  it("scales stampede's summoned-beast swing timer without the integer snap", () => {
+    const probe = def({
+      effects: [
+        {
+          type: 'hunterStampede',
+          beasts: 3,
+          duration: 12,
+          attackInterval: 2,
+          min: 10,
+          max: 14,
+          rangedPowerCoeff: 0.2,
+        },
+      ],
+    });
+    const tuned = applyAbilityTuning(probe, { swing_speed: 0.7 });
+    const stampede = tuned.effects[0] as { attackInterval: number; beasts: number };
+    // 1.4s, NOT the 1s snap that doubled the hit rate on a "-30%" slider
+    expect(stampede.attackInterval).toBe(1.4);
+    expect(stampede.beasts).toBe(3);
   });
 });

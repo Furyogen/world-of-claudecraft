@@ -83,6 +83,14 @@ export async function saveClassTuningChange(
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    // Serialize saves per realm BEFORE the row exists: FOR UPDATE matches zero
+    // rows on a realm's FIRST save, so two concurrent first saves would both
+    // read "no row" and append two `{} -> X` audit rows. Transaction-scoped, so
+    // COMMIT and ROLLBACK both release it.
+    await client.query('SELECT pg_advisory_xact_lock(hashtext($1), hashtext($2))', [
+      'class_tuning_config',
+      REALM,
+    ]);
     const current = await client.query(
       `SELECT data, updated_at, data = $2::jsonb AS unchanged
        FROM class_tuning_config
@@ -135,8 +143,23 @@ export async function saveClassTuningChange(
   }
 }
 
-export async function listClassTuningHistory(limit = 50): Promise<ClassTuningHistoryEntry[]> {
+/** The page the dashboard reads per request; also the default LIMIT below. */
+export const CLASS_TUNING_HISTORY_PAGE = 50;
+
+/**
+ * The newest history rows, keyset-paged: pass the smallest `id` of the page in
+ * hand as `beforeId` to read the next-older page. `id` is BIGSERIAL, so it
+ * orders with the insert sequence and never needs an OFFSET walk.
+ */
+export async function listClassTuningHistory(
+  limit = CLASS_TUNING_HISTORY_PAGE,
+  beforeId?: number,
+): Promise<ClassTuningHistoryEntry[]> {
   const boundedLimit = Number.isFinite(limit) ? Math.max(1, Math.min(100, Math.trunc(limit))) : 50;
+  const before =
+    typeof beforeId === 'number' && Number.isFinite(beforeId) && beforeId > 0
+      ? Math.trunc(beforeId)
+      : null;
   const res = await pool.query(
     `SELECT
        h.id,
@@ -148,10 +171,10 @@ export async function listClassTuningHistory(limit = 50): Promise<ClassTuningHis
        a.username AS admin_username
      FROM class_tuning_changes h
      LEFT JOIN accounts a ON a.id = h.admin_account_id
-     WHERE h.realm = $1
+     WHERE h.realm = $1${before === null ? '' : ' AND h.id < $3'}
      ORDER BY h.created_at DESC, h.id DESC
      LIMIT $2`,
-    [REALM, boundedLimit],
+    before === null ? [REALM, boundedLimit] : [REALM, boundedLimit, before],
   );
   return res.rows.map((row) => ({
     id: Number(row.id),

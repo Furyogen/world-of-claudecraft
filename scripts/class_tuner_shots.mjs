@@ -26,8 +26,15 @@ import { assertLoopbackUrl } from './lib/loopback_guard.mjs';
 const GAME_URL = process.env.GAME_URL ?? 'http://127.0.0.1:5195';
 const SERVER_URL = process.env.SERVER_URL ?? 'http://127.0.0.1:8791';
 const ADMIN_USER = process.env.ADMIN_USER ?? 'balancelead';
-const ADMIN_PASS = process.env.ADMIN_PASS ?? '';
+const ADMIN_PASS = process.env.ADMIN_PASS;
 const OUT = process.env.SHOTS_DIR ?? 'docs/screenshots/class-power-tuner';
+
+// Fail before any browser or network work: a defaulted empty password only
+// surfaces minutes later as a confusing login failure.
+if (!ADMIN_PASS) {
+  console.error('ADMIN_PASS is required (the admin account password for ADMIN_USER)');
+  process.exit(1);
+}
 
 // This script mints an admin bearer into localStorage on GAME_URL and posts a
 // tuning document, so both targets must be loopback (the mob_stall_repro.mjs
@@ -275,10 +282,11 @@ async function main() {
     await shoot(page, '17-mobile-overview');
     await search(page, 'psalm');
     await shoot(page, '18-mobile-ability-card');
-
-    // Leave the realm as we found it.
-    await resetTuning(token);
   } finally {
+    // Leave the realm as we found it even when a capture step throws: the
+    // tour SAVES a real document mid-run, and an early exit would otherwise
+    // strand it as the realm's pending tuning.
+    await resetTuning(token).catch((err) => console.error('capture reset failed:', err));
     await browser.close();
   }
 }

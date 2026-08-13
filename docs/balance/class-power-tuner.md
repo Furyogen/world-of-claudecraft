@@ -5,7 +5,7 @@
      command at the end of this document. It is deliberately not committed, since
      it runs to megabytes and is reproducible from the live content tables. -->
 
-# Class Power Tuner by Furyogen
+# Class Power Tuner
 
 An operator-facing balance lever: every aspect of every ability of every class as
 a multiplier slider, plus the auto-attack ("white") swing damage and swing timer
@@ -161,10 +161,30 @@ count fields (`softCap`, `maxTargets`) read 0 as "no limit at all" rather than
 no slider can move anyway, comes out as zero.
 
 A field that is genuinely not a power lever (tick cadence, an identity flag) goes
-in `UNTUNED_EFFECT_FIELDS` or `UNTUNED_DEF_FIELDS` with the reasoning at the row.
-A new aura KIND whose `value` is a multiplier around 1 must join
-`MULTIPLIER_AURA_KINDS`, and a marker aura must join `MARKER_AURA_KINDS`; a guard
-case fails on a live aura value that looks like an undeclared multiplier.
+in `UNTUNED_EFFECT_FIELDS`, `UNTUNED_DEF_FIELDS`, or `UNTUNED_RANK_FIELDS` (for a
+numeric field on `AbilityRank` itself) with the reasoning at the row.
+A new aura KIND must be declared in exactly one of the four kind sets: a
+multiplier around 1 joins `MULTIPLIER_AURA_KINDS`, a marker joins
+`MARKER_AURA_KINDS`, reflect damage joins `REFLECT_AURA_KINDS`, and a plain
+magnitude joins `MAGNITUDE_AURA_KINDS` (the declared linear default). The guard
+fails on an undeclared kind and on a live aura value that looks like an
+undeclared multiplier, on either side of 1.
+
+### What the coverage guard does NOT see
+
+Two scope limits, so the "fails on any unaccounted numeric field" claim stays
+honest:
+
+- **Time channels aside, the guard covers ability CONTENT only.** Magnitudes
+  carried by talents (a choice row's `addEffects` payloads, and the runtime
+  modifiers `applyTalentMods` applies after tuning) are outside the walk on
+  purpose: the tuner moves the authored ability tables, and talents are a
+  different lever. A rework that shifts power into talent payloads shifts it
+  out of the tuner's reach; weigh that when choosing where a number lives.
+- **The classification table cannot tell which effect types read Spell or
+  Attack Power.** A bespoke combat module that adds its own power rider must
+  join `POWER_SCALED_EFFECTS` in `ability_knobs.ts` by hand (paladinAegis is
+  the standing example), or its ability never gets a spell_power slider.
 
 A new channel is a wider change: add it to `TUNING_CHANNELS`, add its
 `tuning.channel.<id>` English label in `src/admin/i18n.en.ts`, and regenerate
@@ -176,7 +196,7 @@ channel.
 | Test | What it holds |
 |---|---|
 | `tests/class_tuning.test.ts` | Channel math, the ability and weapon walkers, the document, install/restore |
-| `tests/class_tuning_coverage.test.ts` | Every numeric ability field is classified; every class, spec, ability and weapon is present |
+| `tests/class_tuning_coverage.test.ts` | Every numeric ability field (def, effect and rank level) is classified; every aura kind is declared in exactly one kind set; every fraction base is a real 0..1 share; every class, spec, ability and weapon is present |
 | `tests/class_tuning_db.test.ts` | Additive idempotent DDL, the atomic save-plus-audit, unchanged-is-a-no-op |
 | `tests/class_tuning_runtime.test.ts` | The shipped-baseline snapshot, the boot install, the pending-restart state |
 | `tests/admin/class_tuning.test.ts` | The view model, and the local value math pinned equal to the sim's |

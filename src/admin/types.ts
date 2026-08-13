@@ -866,4 +866,6 @@ export interface ClassTuningHistoryEntry {
 
 export interface ClassTuningHistory {
   entries: ClassTuningHistoryEntry[];
+  /** The server's page LIMIT: a response with exactly this many rows may have older ones. */
+  pageSize: number;
 }

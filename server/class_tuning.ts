@@ -24,6 +24,7 @@ import {
   emptyClassTuningDocument,
   installClassTuning,
   sanitizeClassTuningDocument,
+  uninstallClassTuning,
 } from '../src/sim/tuning';
 import {
   type ClassTuningHistoryEntry,
@@ -96,7 +97,17 @@ export async function installRealmClassTuning(): Promise<ClassTuningState> {
     savedDocument = emptyClassTuningDocument();
     savedAt = null;
   }
-  installClassTuning(savedDocument);
+  // The install shares the load's fail-open rule: a document the walker cannot
+  // apply must not keep the realm from booting, on THIS restart or any later
+  // one (the row persists, so a throw here would red every boot until someone
+  // hand-edited Postgres). Restore the shipped tables and boot untuned; the
+  // saved document stays as loaded, so pendingRestart reports the drift.
+  try {
+    installClassTuning(savedDocument);
+  } catch (err) {
+    console.error('failed to install class tuning; booting on the shipped numbers:', err);
+    uninstallClassTuning();
+  }
   const state = classTuningState();
   if (state.tunedChannels > 0) {
     console.log(
@@ -134,8 +145,11 @@ export async function saveRealmClassTuning(
   return { changed: result.changed, state: classTuningState() };
 }
 
-export function classTuningHistory(limit?: number): Promise<ClassTuningHistoryEntry[]> {
-  return listClassTuningHistory(limit);
+export function classTuningHistory(
+  limit?: number,
+  beforeId?: number,
+): Promise<ClassTuningHistoryEntry[]> {
+  return listClassTuningHistory(limit, beforeId);
 }
 
 /** Test seam: forget the memoized catalog and the loaded document. */

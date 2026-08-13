@@ -24,12 +24,14 @@ import {
   buildClassTuningCatalog,
   EFFECT_TUNED_FIELDS,
   isTunableEntryId,
+  MAGNITUDE_AURA_KINDS,
   MARKER_AURA_KINDS,
   MULTIPLIER_AURA_KINDS,
   REFLECT_AURA_KINDS,
   TUNING_CHANNELS,
   UNTUNED_DEF_FIELDS,
   UNTUNED_EFFECT_FIELDS,
+  UNTUNED_RANK_FIELDS,
 } from '../src/sim/tuning';
 import { type AbilityDef, type AbilityEffect, ALL_CLASSES } from '../src/sim/types';
 
@@ -109,7 +111,12 @@ describe('every numeric ability field is classified', () => {
     expect([...unclassified].sort()).toEqual([]);
   });
 
-  it('decides the semantics of every aura kind a live ability applies', () => {
+  it('declares the semantics of every aura kind a live ability applies', () => {
+    // Every live kind must be DECLARED in exactly one of the four sets. The
+    // linear default in auraValueFieldSpec still exists as a runtime fallback,
+    // but a kind reaching it undeclared fails here: the previous version of
+    // this case ended its chain with Number.isFinite over an already-checked
+    // number, which could only ever fail on NaN, i.e. never.
     const undecided = new Set<string>();
     for (const def of allDefs) {
       for (const effect of allEffects(def)) {
@@ -121,18 +128,64 @@ describe('every numeric ability field is classified', () => {
           MARKER_AURA_KINDS.has(kind) ||
           MULTIPLIER_AURA_KINDS.has(kind) ||
           REFLECT_AURA_KINDS.has(kind) ||
-          // the documented default: a plain magnitude on the effect_magnitude channel
-          Number.isFinite(record.value);
+          MAGNITUDE_AURA_KINDS.has(kind);
         if (!decided) undecided.add(kind);
       }
     }
     expect([...undecided].sort()).toEqual([]);
   });
 
+  it('keeps the four aura-kind sets disjoint', () => {
+    const sets: [string, ReadonlySet<string>][] = [
+      ['marker', MARKER_AURA_KINDS],
+      ['multiplier', MULTIPLIER_AURA_KINDS],
+      ['reflect', REFLECT_AURA_KINDS],
+      ['magnitude', MAGNITUDE_AURA_KINDS],
+    ];
+    for (let a = 0; a < sets.length; a++) {
+      for (let b = a + 1; b < sets.length; b++) {
+        const overlap = [...sets[a][1]].filter((kind) => sets[b][1].has(kind));
+        expect(overlap, `${sets[a][0]} overlaps ${sets[b][0]}`).toEqual([]);
+      }
+    }
+  });
+
   it('never routes a multiplier aura through the plain-magnitude default', () => {
     // A multiplier around 1 scaled as a plain magnitude is the classic way this
-    // table goes wrong (a 1.4 speed aura becomes 2.1 instead of 1.56), so pin
-    // that no live aura value looks like a multiplier without being declared one.
+    // table goes wrong: a 1.4 speed aura would become 2.1 instead of 1.56, and
+    // a 0.5 stealth walk would become 0.05 at the slider floor instead of 0.95.
+    // Both sides of 1 are suspicious; a share-shaped magnitude that legitimately
+    // sits in the band is excused BY NAME below, with the reasoning at the row,
+    // so a new sub-1 multiplier kind fails until somebody decides it. (The
+    // previous version only looked above 1 and was structurally blind to
+    // stealth's 0.5.)
+    const EXCUSED_BAND_MAGNITUDES: ReadonlySet<string> = new Set<string>([
+      // 0..1 SHARES consumed as fractions added onto a rate, never multiplied
+      // in as a factor around 1. Consumption sites verified per row.
+      'bleed_vuln', // bleedAmp += pctValue(value), auras.ts
+      'buff_avatar', // damageDone += value, combat/damage.ts
+      'buff_spelldmg', // spell damage share
+      'die_by_sword', // bonusDodge += value / reduction += value
+      'guardian_ward', // maxHp * value death-save restore
+      'mortal_wound', // heal mult *= 1 - value, combat/heal.ts
+      'overload', // amp = 1 + value, casting_lifecycle.ts
+      'power_echo', // echo repeats the resolved amount at this share
+      'sacred_form', // bonus += value, paladin_support.ts
+      'shield_wall', // reduction share; paladinAegis damageReduction too
+      'vuln_source', // amount *= 1 + sum(value), combat/damage.ts
+      // additive chance/percentage shares from the stat and damage passes
+      // (entity.ts recalcPlayerStats, combat/damage.ts): 0.2 block chance,
+      // 0.15 dodge, a 0.2 damage-reduction share, never factors around 1
+      'buff_block',
+      'buff_dmg_done',
+      'buff_dodge',
+      'buff_dr',
+      'buff_dr_phys',
+      'buff_heal_done',
+      'buff_healing_done',
+      'buff_reckless',
+      'buff_spellhaste', // the share variant; buff_spellhaste_mult is the multiplier one
+    ]);
     const suspicious = new Set<string>();
     for (const def of allDefs) {
       for (const effect of allEffects(def)) {
@@ -143,11 +196,53 @@ describe('every numeric ability field is classified', () => {
         if (typeof kind !== 'string' || typeof value !== 'number') continue;
         if (MARKER_AURA_KINDS.has(kind) || MULTIPLIER_AURA_KINDS.has(kind)) continue;
         if (REFLECT_AURA_KINDS.has(kind)) continue;
-        // a movement/haste/form multiplier is authored just above 1
-        if (value > 1 && value < 2 && !Number.isInteger(value)) suspicious.add(`${kind}=${value}`);
+        if (EXCUSED_BAND_MAGNITUDES.has(kind)) continue;
+        // a movement/haste/form multiplier is authored near 1 on either side
+        if (value > 0 && value < 2 && value !== 1 && !Number.isInteger(value)) {
+          suspicious.add(`${kind}=${value}`);
+        }
       }
     }
     expect([...suspicious].sort()).toEqual([]);
+  });
+
+  it('classifies every fraction-kind base as a real 0..1 share', () => {
+    // fraction output clamps to [0, 1], so a percent-POINT base (armorPct: 30)
+    // classified as a fraction collapses to 1 the moment any factor moves it:
+    // exactly how veilboundMarch's +30% armor became +1% and Trueshot Aura's
+    // +10% AP became +1%. A fraction row whose live base exceeds 1 is always
+    // that same misclassification, so fail on it here.
+    const offenders: string[] = [];
+    for (const def of allDefs) {
+      for (const site of abilityTuningKnobs(def, { includeInert: true })) {
+        if (site.kind !== 'fraction') continue;
+        if (site.value < 0 || site.value > 1) {
+          offenders.push(`${def.id}.${site.path}=${site.value}`);
+        }
+      }
+    }
+    expect(offenders.sort()).toEqual([]);
+  });
+
+  it('classifies every numeric field on every live rank', () => {
+    // The walker reaches a rank's cost, castTime and threatFlat (plus its
+    // effects, covered by the effect case above). Everything else numeric on an
+    // AbilityRank must be excused in UNTUNED_RANK_FIELDS, or a rework could add
+    // a sim-reachable rank number that is invisible to this guard and untunable.
+    const walked = new Set(['cost', 'castTime', 'threatFlat']);
+    const unclassified = new Set<string>();
+    for (const def of allDefs) {
+      for (const rank of def.ranks ?? []) {
+        for (const [key, value] of Object.entries(rank)) {
+          if (key === 'effects') continue;
+          for (const path of numericPaths(value, key)) {
+            if (walked.has(path) || UNTUNED_RANK_FIELDS.has(path)) continue;
+            unclassified.add(path);
+          }
+        }
+      }
+    }
+    expect([...unclassified].sort()).toEqual([]);
   });
 });
 

@@ -193,7 +193,7 @@ export function applyAbilityTuning(
   return walkTunedAbility(def, (site) => {
     const factor = factors[site.channel];
     if (factor === undefined || factor === 1) return;
-    return scaleTuningValue(site.value, factor, site.kind);
+    return scaleTuningValue(site.value, factor, site.kind, site.channel);
   });
 }
 
@@ -212,6 +212,14 @@ const MULTIPLIER_SPELL_POWER: TunedFieldSpec = { channel: 'spell_power', kind: '
 
 // Effect types whose resolved amount picks up a Spell Power / Attack Power
 // rider (sim/spell_scaling.ts). Only these make the spell_power knob meaningful.
+//
+// A BESPOKE combat module that reads power through its own math must join this
+// set explicitly, or its ability never gets a spell_power slider and the rider
+// that dominates at endgame stays untunable: the coverage guard cannot see
+// which effect types read power, so this list is the one place that knows.
+// paladinAegis is the standing example: paladin_aegis.ts adds SP riders to both
+// its ticks (channelTickBonus) and its finale (directHealBonus), and both honor
+// the powerCoeffMult knob through abilityPowerCoeffMult.
 const POWER_SCALED_EFFECTS: ReadonlySet<string> = new Set<string>([
   'directDamage',
   'aoeDamage',
@@ -229,6 +237,7 @@ const POWER_SCALED_EFFECTS: ReadonlySet<string> = new Set<string>([
   'aoeAllyAbsorb',
   'massTemporalEcho',
   'consumeAura',
+  'paladinAegis',
 ]);
 
 function abilityScalesWithPower(def: AbilityDef): boolean {

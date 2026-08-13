@@ -316,7 +316,11 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   },
   aoeAllyAttackPower: {
     amount: linear('effect_magnitude'),
-    apPct: fraction('effect_magnitude'),
+    // Integer percent POINTS (Trueshot Aura ships 10 = +10%), consumed as
+    // value / 100 by the buff_ap_pct stat pass, so it scales linearly. NOT a
+    // 0..1 share: `fraction` would clamp the points to 1, collapsing the buff
+    // to +1% the moment any factor moved it.
+    apPct: linear('effect_magnitude'),
     duration: linear('duration_effect'),
     radius: linear('radius'),
   },
@@ -477,7 +481,10 @@ export const EFFECT_TUNED_FIELDS: Readonly<Record<string, TunedFieldTable>> = {
   veilboundMarch: {
     duration: linear('duration_effect'),
     speedMult: deviation('effect_magnitude'),
-    armorPct: fraction('effect_magnitude'),
+    // Integer percent POINTS (ships 30 = +30% armor), consumed as value / 100
+    // by the buff_armor_pct stat pass: linear, same reasoning as
+    // aoeAllyAttackPower.apPct above.
+    armorPct: linear('effect_magnitude'),
   },
   duskfireClaim: { duration: linear('duration_effect') },
   grantDevotion: { amount: linear('resource_gain') },
@@ -589,6 +596,13 @@ export const MARKER_AURA_KINDS: ReadonlySet<string> = new Set<string>([
   'stasis',
   'sweeping_strikes',
   'overpower_charge',
+  // presence-only kinds: no consumer reads their `value`, so a slider over it
+  // would be a control that provably does nothing
+  'buff_aura_mastery',
+  'form_lich',
+  'hunter_bloodtrail',
+  'hunter_cold_focus',
+  'ice_floes',
 ]);
 
 // Aura kinds whose `value` is a multiplier around 1 (a 1.4 speed aura is +40%,
@@ -607,12 +621,66 @@ export const MULTIPLIER_AURA_KINDS: ReadonlySet<string> = new Set<string>([
   'form_fireball',
   'form_travel',
   'righteous_fury',
+  // stealth's value is the sneak-walk movement multiplier (0.5 = half speed),
+  // consumed by the same Math.min the slow auras feed (player_motion.ts), so
+  // the slider moves its deviation from 1 like every other slow.
+  'stealth',
 ]);
 
 // Aura kinds whose `value` IS damage the wearer deals back per hit. The tuner
 // gives these their own channel so a druid's Briarguard reads as "reflect
 // damage per hit" rather than a generic aura magnitude.
 export const REFLECT_AURA_KINDS: ReadonlySet<string> = new Set<string>(['thorns']);
+
+// Aura kinds whose `value` is a PLAIN MAGNITUDE (a flat stat amount, a 0..1
+// share, integer percent points): the linear default is the DECIDED semantics
+// for them, declared here rather than assumed. Every aura kind a live ability
+// applies must appear in exactly one of the four sets; the coverage guard
+// (tests/class_tuning_coverage.test.ts) fails on an undeclared kind, so a new
+// aura cannot silently fall through to linear without anyone deciding whether
+// its value is really a magnitude and not a multiplier around 1.
+export const MAGNITUDE_AURA_KINDS: ReadonlySet<string> = new Set<string>([
+  // flat stat amounts and percent-point buffs (the stat pass divides the
+  // percent-point kinds by 100)
+  'buff_ap',
+  'buff_ap_pct',
+  'buff_armor',
+  'buff_armor_pct',
+  'buff_block',
+  'buff_crit',
+  'buff_dodge',
+  'buff_int_pct',
+  'buff_spelldmg',
+  'buff_spellpower',
+  'buff_sta',
+  'buff_sta_pct',
+  'buff_stats_pct',
+  // 0..1 shares added onto a rate or a pool fraction
+  'bleed_vuln', // pctValue share added to bleed tick amp
+  'buff_avatar', // damageDone share in dealDamage
+  'buff_dmg_done',
+  'buff_dr',
+  'buff_dr_phys',
+  'buff_heal_done',
+  'buff_healing_done',
+  'buff_mana_grace',
+  'buff_reckless',
+  'buff_spellhaste',
+  'die_by_sword', // dodge share plus damage-reduction share
+  'guardian_ward', // maxHp share restored on the death-save trigger
+  'mortal_wound', // healing-taken reduction share (mult *= 1 - value)
+  'overload', // next-cast amp share (amp = 1 + value)
+  'power_echo', // echoed-damage share of the resolved amount
+  'sacred_form', // healing-bonus share (bonus += value)
+  'shield_wall', // damage-reduction share (paladinAegis stamps its
+  // damageReduction fraction here too)
+  'vuln_source', // per-source damage-taken share (1 + sum)
+  // flat amounts outside the stat pass
+  'form_shadow', // shadow-damage percent POINTS (1 + value / 100)
+  'heal_echo', // flat heal repaid when the wearer drops low
+  'paladin_debt_of_light', // flat soak cap the answer is bounded by
+  'resource_sap', // flat resource restored per tick
+]);
 
 /**
  * The spec for an aura-carrying effect's `value` field, or null when the aura
@@ -668,3 +736,10 @@ export const UNTUNED_DEF_FIELDS: ReadonlySet<string> = new Set<string>([
   'channel.ticks',
   'color',
 ]);
+
+// RANK-level numeric fields the walker deliberately leaves alone (it reaches a
+// rank's cost, castTime and threatFlat, plus everything inside its effects).
+// These two are progression identity, not power: which rank this is and the
+// level it is learned at. A NEW numeric field on AbilityRank outside this set
+// and the walked trio fails the coverage guard until somebody classifies it.
+export const UNTUNED_RANK_FIELDS: ReadonlySet<string> = new Set<string>(['rank', 'level']);

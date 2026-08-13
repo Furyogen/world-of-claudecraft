@@ -92,6 +92,7 @@ import {
   classTuningState,
   saveRealmClassTuning,
 } from './class_tuning';
+import { CLASS_TUNING_HISTORY_PAGE } from './class_tuning_db';
 import { cleanContentModerationReason } from './content_moderation_db';
 import { currentDailyRewardDay } from './daily_rewards';
 import {
@@ -1459,7 +1460,7 @@ export async function handleAdminApi(
       return ok(res, classTuningGetBody());
     }
     if (path === '/admin/api/class-tuning/history') {
-      return ok(res, { entries: await classTuningHistory() });
+      return ok(res, await classTuningHistoryBody(url.searchParams));
     }
     if (path === '/admin/api/suspicious-players') {
       return ok(res, { players: game.suspiciousPlayers() });
@@ -2287,7 +2288,14 @@ async function readClassTuningBody(
     if (err instanceof Error && err.message === 'body too large') {
       return { ok: false, status: 413, message: 'tuning document too large' };
     }
-    return { ok: false, status: 400, message: 'a document object is required' };
+    // readBody's parse arm rejects with 'bad json' (malformed JSON, or a
+    // non-object like an array). Anything else is stream trouble, transport
+    // rather than operator input, so it answers 500, not a misleading 400
+    // that blames the document.
+    if (err instanceof Error && err.message === 'bad json') {
+      return { ok: false, status: 400, message: 'invalid JSON in the tuning request' };
+    }
+    return { ok: false, status: 500, message: 'failed to read the tuning request' };
   }
   return classTuningSaveOutcome(body, accountId);
 }
@@ -2317,8 +2325,25 @@ async function classTuningGetHandler(ctx: Ctx): Promise<void> {
   ok(ctx.res, classTuningGetBody());
 }
 
+/**
+ * Shared history read for both dispatch arms: the newest page, or the page
+ * older than `?before=<id>` (keyset on the audit row id, so the dashboard can
+ * walk past the first page instead of the trail ending at 50 rows).
+ * `pageSize` rides along so the client can tell a full page from the end of
+ * the trail without hardcoding the server's LIMIT.
+ */
+async function classTuningHistoryBody(searchParams: URLSearchParams) {
+  const raw = searchParams.get('before');
+  const parsed = raw === null ? Number.NaN : Number(raw);
+  const before = Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+  return {
+    entries: await adminDb().classTuningHistory(CLASS_TUNING_HISTORY_PAGE, before),
+    pageSize: CLASS_TUNING_HISTORY_PAGE,
+  };
+}
+
 async function classTuningHistoryHandler(ctx: Ctx): Promise<void> {
-  ok(ctx.res, { entries: await adminDb().classTuningHistory() });
+  ok(ctx.res, await classTuningHistoryBody(ctx.url.searchParams));
 }
 
 async function classTuningSaveHandler(ctx: Ctx): Promise<void> {

@@ -25,6 +25,19 @@ export const TUNING_FACTOR_STEP = 0.01;
 export const TUNING_NEUTRAL_FACTOR = 1;
 
 /**
+ * Mirror of the sim's TIME_TUNING_CHANNELS (channels.ts): seconds keep their
+ * precision even from a whole-number base, so the preview must not snap a 2s
+ * cast at 0.75x back to 2s when the world will run it at 1.5s.
+ */
+export const TIME_TUNING_CHANNELS: ReadonlySet<string> = new Set<string>([
+  'cast_time',
+  'cooldown',
+  'duration_effect',
+  'duration_control',
+  'swing_speed',
+]);
+
+/**
  * entry id -> channel -> factor, for ONE scope. Every channel the entry exposes
  * is present, at 1 when untouched.
  */
@@ -53,12 +66,21 @@ function roundTo(value: number, decimals: number): number {
 }
 
 /** Mirror of the sim's `scaleTuningValue`. Keep the two byte-equivalent. */
-export function scaleTunedValue(base: number, factor: number, kind: TuningValueKind): number {
+export function scaleTunedValue(
+  base: number,
+  factor: number,
+  kind: TuningValueKind,
+  channel?: string,
+): number {
   if (!Number.isFinite(base)) return base;
-  if (kind === 'deviation') return roundTo(1 + (base - 1) * factor, 4);
+  // The sim's zero floor on a deviation: a snare multiplier can be tuned to a
+  // full stop but never negative.
+  if (kind === 'deviation') return roundTo(Math.max(0, 1 + (base - 1) * factor), 4);
   const scaled = base * factor;
   if (kind === 'fraction') return roundTo(Math.min(1, Math.max(0, scaled)), 4);
   if (kind === 'multiplier') return roundTo(scaled, 4);
+  // The sim's time-channel exemption: seconds never snap to whole numbers.
+  if (channel !== undefined && TIME_TUNING_CHANNELS.has(channel)) return roundTo(scaled, 4);
   if (!Number.isInteger(base)) return roundTo(scaled, 4);
   // The sim's NON_ZERO_INTEGER_FLOOR: a nonzero whole number keeps its sign and
   // at least one unit, because several live count fields read 0 as "no limit".
@@ -295,9 +317,12 @@ export function weaponPreview(
 ): WeaponPreview {
   const damage = factors?.swing_damage ?? TUNING_NEUTRAL_FACTOR;
   const speedFactor = factors?.swing_speed ?? TUNING_NEUTRAL_FACTOR;
-  const min = scaleTunedValue(weapon.min, damage, 'linear');
-  const max = scaleTunedValue(weapon.max, damage, 'linear');
-  const speed = Math.max(MIN_SWING_SECONDS, scaleTunedValue(weapon.speed, speedFactor, 'linear'));
+  const min = scaleTunedValue(weapon.min, damage, 'linear', 'swing_damage');
+  const max = scaleTunedValue(weapon.max, damage, 'linear', 'swing_damage');
+  const speed = Math.max(
+    MIN_SWING_SECONDS,
+    scaleTunedValue(weapon.speed, speedFactor, 'linear', 'swing_speed'),
+  );
   const dps = speed > 0 ? Math.round(((min + max) / 2 / speed + Number.EPSILON) * 100) / 100 : 0;
   return {
     min,
@@ -339,7 +364,7 @@ export function channelPreview(
     seen.add(seenKey);
     if (base.length >= maxValues) break;
     base.push(site.value);
-    tuned.push(scaleTunedValue(site.value, factor, site.kind));
+    tuned.push(scaleTunedValue(site.value, factor, site.kind, channel.channel));
   }
   return { base, tuned, unchanged: base.every((value, index) => value === tuned[index]) };
 }

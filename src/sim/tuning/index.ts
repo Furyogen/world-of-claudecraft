@@ -12,6 +12,7 @@ export {
   AURA_VALUE_EFFECTS,
   auraValueFieldSpec,
   EFFECT_TUNED_FIELDS,
+  MAGNITUDE_AURA_KINDS,
   MARKER_AURA_KINDS,
   MULTIPLIER_AURA_KINDS,
   REFLECT_AURA_KINDS,
@@ -19,6 +20,7 @@ export {
   type TunedFieldTable,
   UNTUNED_DEF_FIELDS,
   UNTUNED_EFFECT_FIELDS,
+  UNTUNED_RANK_FIELDS,
 } from './ability_fields';
 export {
   abilityTuningChannels,
@@ -44,6 +46,7 @@ export {
   isNeutralFactor,
   isTuningChannel,
   scaleTuningValue,
+  TIME_TUNING_CHANNELS,
   TUNING_CHANNELS,
   TUNING_FACTOR_STEP,
   TUNING_MAX_FACTOR,
@@ -51,6 +54,7 @@ export {
   TUNING_NEUTRAL_FACTOR,
   type TuningChannel,
   type TuningValueKind,
+  WEAPON_TUNING_CHANNELS,
 } from './channels';
 export {
   type AbilityTuning,

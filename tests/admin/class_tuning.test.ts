@@ -24,8 +24,11 @@ import {
   MIN_SWING_SECONDS,
   resetAbility,
   scaleTunedValue,
+  TIME_TUNING_CHANNELS,
+  TUNING_FACTOR_STEP,
   TUNING_MAX_FACTOR,
   TUNING_MIN_FACTOR,
+  TUNING_NEUTRAL_FACTOR,
   tunedAbilityCount,
   tunedChannelCount,
   tunedWeaponCount,
@@ -36,8 +39,21 @@ import {
 } from '../../src/admin/class_tuning';
 import { en as adminEn } from '../../src/admin/i18n.en';
 import type { ClassTuningCatalog, TunerClassInfo, TunerWeaponInfo } from '../../src/admin/types';
-import { buildClassTuningCatalog, TUNING_CHANNELS } from '../../src/sim/tuning';
 import {
+  buildClassTuningCatalog,
+  MIN_SWING_SECONDS as SIM_MIN_SWING_SECONDS,
+  applyWeaponTuning as simApplyWeaponTuning,
+  weaponDps as simWeaponDps,
+  TUNING_CHANNELS,
+} from '../../src/sim/tuning';
+import {
+  TIME_TUNING_CHANNELS as SIM_TIME_TUNING_CHANNELS,
+  TUNING_FACTOR_STEP as SIM_TUNING_FACTOR_STEP,
+  TUNING_MAX_FACTOR as SIM_TUNING_MAX_FACTOR,
+  TUNING_MIN_FACTOR as SIM_TUNING_MIN_FACTOR,
+  TUNING_NEUTRAL_FACTOR as SIM_TUNING_NEUTRAL_FACTOR,
+  clampTuningFactor as simClampTuningFactor,
+  isNeutralFactor as simIsNeutralFactor,
   scaleTuningValue as simScaleTuningValue,
   type TuningValueKind,
 } from '../../src/sim/tuning/channels';
@@ -491,11 +507,19 @@ describe('the weapon swing readout', () => {
 });
 
 // The dashboard cannot import src/sim, so its copy of the value math would be
-// free to drift. Pin it instead, the way permissions.ts is pinned.
+// free to drift. Pin it instead, the way permissions.ts is pinned. The pin
+// covers EVERYTHING the page duplicates: the scale function (with and without
+// a channel), the clamp, the neutral test, the slider constants, the swing
+// floor, the time-channel set, and the whole weapon preview. A drift in any of
+// them silently rewrites stored factors on the next unrelated save (the form
+// clamps on load and savedKey is computed from the clamped form).
 describe('the local value math mirrors the sim', () => {
   const kinds: TuningValueKind[] = ['linear', 'deviation', 'fraction', 'multiplier'];
-  const bases = [0, 0.25, 0.5, 1, 1.4, 2, 3, 9, 12.5, 100, 168, -20];
-  const factors = [0.1, 0.5, 0.75, 1, 1.25, 1.5, 2, 3];
+  // -3 at 0.1 exercises the sign-preserving arm of the integer floor
+  // (round(-0.3) is -0, so the result must be -1, not 0); -20 alone never
+  // reached it. 0.5 at 2 and 3 crosses the deviation zero floor.
+  const bases = [0, 0.25, 0.5, 1, 1.4, 2, 3, 9, 12.5, 100, 168, -3, -20];
+  const factors = [0.1, 0.5, 0.7, 0.75, 1, 1.25, 1.5, 2, 3];
 
   it('agrees on every kind, base and factor', () => {
     for (const kind of kinds) {
@@ -504,6 +528,88 @@ describe('the local value math mirrors the sim', () => {
           expect(scaleTunedValue(base, factor, kind), `${kind} base=${base} factor=${factor}`).toBe(
             simScaleTuningValue(base, factor, kind),
           );
+        }
+      }
+    }
+  });
+
+  it('agrees on every channel too, time channels included', () => {
+    for (const channel of TUNING_CHANNELS) {
+      for (const base of bases) {
+        for (const factor of factors) {
+          expect(
+            scaleTunedValue(base, factor, 'linear', channel),
+            `linear ${channel} base=${base} factor=${factor}`,
+          ).toBe(simScaleTuningValue(base, factor, 'linear', channel));
+        }
+      }
+    }
+  });
+
+  it('preserves the sign of a small negative whole base at the slider floor', () => {
+    expect(scaleTunedValue(-3, 0.1, 'linear')).toBe(-1);
+    expect(simScaleTuningValue(-3, 0.1, 'linear')).toBe(-1);
+  });
+
+  it('mirrors the slider constants and the swing floor', () => {
+    expect(TUNING_MIN_FACTOR).toBe(SIM_TUNING_MIN_FACTOR);
+    expect(TUNING_MAX_FACTOR).toBe(SIM_TUNING_MAX_FACTOR);
+    expect(TUNING_FACTOR_STEP).toBe(SIM_TUNING_FACTOR_STEP);
+    expect(TUNING_NEUTRAL_FACTOR).toBe(SIM_TUNING_NEUTRAL_FACTOR);
+    expect(MIN_SWING_SECONDS).toBe(SIM_MIN_SWING_SECONDS);
+    expect([...TIME_TUNING_CHANNELS].sort()).toEqual([...SIM_TIME_TUNING_CHANNELS].sort());
+  });
+
+  it('mirrors the factor clamp over the numeric domain', () => {
+    const values = [
+      Number.NaN,
+      Number.POSITIVE_INFINITY,
+      Number.NEGATIVE_INFINITY,
+      -5,
+      0,
+      0.001,
+      0.1,
+      0.999,
+      1,
+      1.005,
+      1.5,
+      2.999,
+      3,
+      99,
+    ];
+    for (const value of values) {
+      expect(clampFactor(value), `clamp ${value}`).toBe(simClampTuningFactor(value));
+    }
+  });
+
+  it('mirrors the neutral test around the half-step boundary', () => {
+    for (const value of [0.99, 0.995, 0.996, 1, 1.004, 1.005, 1.01, 1.2]) {
+      expect(isNeutral(value), `neutral ${value}`).toBe(simIsNeutralFactor(value));
+    }
+  });
+
+  it('previews a weapon exactly as the sim would tune it', () => {
+    const profiles = [
+      { min: 2, max: 5, speed: 2 },
+      { min: 4, max: 8, speed: 2.5 },
+      { min: 37, max: 61, speed: 3.4 },
+    ];
+    for (const profile of profiles) {
+      for (const damage of factors) {
+        for (const speed of factors) {
+          const tuned = simApplyWeaponTuning(profile, {
+            swing_damage: damage,
+            swing_speed: speed,
+          });
+          const preview = weaponPreview(
+            { ...WEAPONS[0], ...profile, dps: simWeaponDps(profile) },
+            { swing_damage: damage, swing_speed: speed },
+          );
+          const label = `weapon ${JSON.stringify(profile)} dmg=${damage} spd=${speed}`;
+          expect(preview.min, label).toBe(tuned.min);
+          expect(preview.max, label).toBe(tuned.max);
+          expect(preview.speed, label).toBe(tuned.speed);
+          expect(preview.dps, label).toBe(simWeaponDps(tuned));
         }
       }
     }
@@ -538,6 +644,17 @@ describe('every vocabulary value has an admin label', () => {
     for (const source of sources) {
       const key = keys[source];
       expect(key, `no label key for source ${source}`).toBeTruthy();
+      expect(adminEn[key as keyof typeof adminEn], key).toBeTruthy();
+    }
+  });
+
+  it('labels every weapon hand the catalog can emit', () => {
+    // The weapon cards and the hand filter both build `tuning.hand.${hand}`
+    // dynamically, the same literal-scan blind spot as the channels above.
+    const hands = new Set(buildClassTuningCatalog().weapons.map((weapon) => weapon.hand));
+    expect(hands.size).toBeGreaterThan(1);
+    for (const hand of hands) {
+      const key = `tuning.hand.${hand}`;
       expect(adminEn[key as keyof typeof adminEn], key).toBeTruthy();
     }
   });

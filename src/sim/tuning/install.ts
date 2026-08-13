@@ -37,7 +37,11 @@ export function applyClassTuning(
 ): Record<string, AbilityDef> {
   const out: Record<string, AbilityDef> = { ...abilities };
   for (const [abilityId, factors] of Object.entries(doc.abilities)) {
-    const base = abilities[abilityId];
+    // Own keys only: the tables are plain objects, so a bare `abilities[id]`
+    // would answer an id like 'constructor' TRUTHY through the prototype chain
+    // and hand the walker an Object function instead of a def. The sanitizer
+    // rejects those ids, but a lookup this cheap does not get to rely on it.
+    const base = Object.hasOwn(abilities, abilityId) ? abilities[abilityId] : undefined;
     if (!base) continue;
     out[abilityId] = applyAbilityTuning(base, factors as AbilityTuning);
   }
@@ -73,7 +77,8 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
   shippedClassRanged.clear();
 
   for (const [abilityId, factors] of Object.entries(doc.abilities)) {
-    const shipped = ABILITIES[abilityId];
+    // Object.hasOwn for the same reason as applyClassTuning above.
+    const shipped = Object.hasOwn(ABILITIES, abilityId) ? ABILITIES[abilityId] : undefined;
     if (!shipped) continue;
     const tuned = applyAbilityTuning(shipped, factors);
     if (tuned === shipped) continue;
@@ -96,7 +101,9 @@ export function installClassTuning(input: unknown): ClassTuningDocument {
       CLASSES[cls].ranged = tuned;
       continue;
     }
-    const item = ITEMS[weaponId] as { weapon?: WeaponInfo } | undefined;
+    const item = Object.hasOwn(ITEMS, weaponId)
+      ? (ITEMS[weaponId] as { weapon?: WeaponInfo })
+      : undefined;
     const shipped = item?.weapon;
     if (!shipped) continue;
     const tuned = applyWeaponTuning(shipped, factors);

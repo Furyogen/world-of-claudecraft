@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { apiGet, apiPost } from '../api';
   import {
     buildTuningDocument,
@@ -57,9 +57,17 @@
   let changeNote = $state('');
   let saving = $state(false);
   let savedFlash = $state(false);
+  let savedFlashTimer: ReturnType<typeof setTimeout> | undefined;
   let historyEntries = $state<ClassTuningHistoryEntry[]>([]);
   let historyFailed = $state(false);
+  let historyPageSize = $state(0);
+  let historyLoadingMore = $state(false);
+  // True while the LAST history fetch returned a full page: older rows may
+  // exist, so the "load older" button shows.
+  let historyMayHaveMore = $state(false);
   let resetPending = $state(false);
+
+  const SAVED_FLASH_MS = 2500;
 
   const canWrite = $derived(auth.can('tuning.write'));
   // Sliders lock while a save is in flight. `adopt()` replaces the whole form
@@ -114,15 +122,50 @@
     try {
       const history = await apiGet<ClassTuningHistoryData>('/admin/api/class-tuning/history');
       historyEntries = history.entries;
+      historyPageSize = history.pageSize;
+      historyMayHaveMore = history.pageSize > 0 && history.entries.length >= history.pageSize;
       historyFailed = false;
     } catch (err) {
       if (!auth.handleAuthFailure(err)) historyFailed = true;
     }
   }
 
+  // Keyset paging on the audit row id: append the page older than the last row
+  // in hand. The trail is append-only, so pages never shift under the walk.
+  async function loadOlderHistory(): Promise<void> {
+    const last = historyEntries[historyEntries.length - 1];
+    if (!last || historyLoadingMore) return;
+    historyLoadingMore = true;
+    try {
+      const history = await apiGet<ClassTuningHistoryData>(
+        `/admin/api/class-tuning/history?before=${last.id}`,
+      );
+      historyEntries = [...historyEntries, ...history.entries];
+      historyMayHaveMore = historyPageSize > 0 && history.entries.length >= historyPageSize;
+      historyFailed = false;
+    } catch (err) {
+      if (!auth.handleAuthFailure(err)) historyFailed = true;
+    } finally {
+      historyLoadingMore = false;
+    }
+  }
+
+  function flashSaved(): void {
+    // One timer at a time: rapid saves must not stack timeouts whose earliest
+    // firing cuts the newest flash short (or fires after the page is gone).
+    clearTimeout(savedFlashTimer);
+    savedFlash = true;
+    savedFlashTimer = setTimeout(() => {
+      savedFlash = false;
+    }, SAVED_FLASH_MS);
+  }
+
   async function save(): Promise<void> {
     if (!data || saving) return;
     saving = true;
+    // A reset confirmed mid-save would be silently undone when adopt() replaces
+    // the form with the server's response; close the pending dialog instead.
+    resetPending = false;
     try {
       adopt(
         await apiPost<ClassTuningResponse>('/admin/api/class-tuning', {
@@ -132,10 +175,7 @@
       );
       changeNote = '';
       await refreshHistory();
-      savedFlash = true;
-      setTimeout(() => {
-        savedFlash = false;
-      }, 2500);
+      flashSaved();
     } catch (err) {
       if (!auth.handleAuthFailure(err)) {
         window.alert(
@@ -159,7 +199,9 @@
   // asks first (ConfirmDialog, the same family the moderation actions use).
   function resetEverything(): void {
     resetPending = false;
-    if (!data) return;
+    // Guarded against a save in flight (belt to save()'s dialog-closing brace):
+    // adopt() would silently revert the reset when the POST landed.
+    if (!data || saving) return;
     for (const abilityId of Object.keys(form.abilities)) resetAbility(form.abilities, abilityId);
     for (const weaponId of Object.keys(form.weapons)) resetAbility(form.weapons, weaponId);
   }
@@ -184,6 +226,10 @@
   onMount(() => {
     void refresh();
     void refreshHistory();
+  });
+
+  onDestroy(() => {
+    clearTimeout(savedFlashTimer);
   });
 </script>
 
@@ -432,7 +478,9 @@
           <li>
             <span class="history-when">{fmtDate(entry.createdAt)}</span>
             <span class="history-who">
-              {t('tuning.historyBy', { name: entry.adminUsername ?? '' })}
+              {entry.adminUsername === null
+                ? t('tuning.historyByDeleted')
+                : t('tuning.historyBy', { name: entry.adminUsername })}
             </span>
             <span class="history-count">
               {t('tuning.historyChannels', { count: countChannels(entry) })}
@@ -441,6 +489,16 @@
           </li>
         {/each}
       </ul>
+      {#if historyMayHaveMore}
+        <button
+          type="button"
+          class="history-more"
+          onclick={loadOlderHistory}
+          disabled={historyLoadingMore}
+        >
+          {t('tuning.historyMore')}
+        </button>
+      {/if}
     {/if}
   </CollapsiblePanel>
 {/if}
@@ -593,6 +651,10 @@
   .history-note {
     color: var(--text);
     flex-basis: 100%;
+  }
+
+  .history-more {
+    margin-top: 8px;
   }
 
   @media (max-width: 600px) {

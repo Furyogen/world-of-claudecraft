@@ -14,6 +14,7 @@ import {
   isNeutralFactor,
   isTuningChannel,
   type TuningChannel,
+  WEAPON_TUNING_CHANNELS,
 } from './channels';
 
 export const CLASS_TUNING_VERSION = 1;
@@ -41,6 +42,18 @@ export const MAX_TUNED_ABILITIES = 2000;
 export const MAX_TUNED_WEAPONS = 2000;
 const ENTRY_ID_PATTERN = /^[a-z0-9_]{1,64}$/;
 
+// Ids that collide with Object.prototype members. The content tables are plain
+// objects, so a lookup like `ABILITIES['constructor']` answers TRUTHY through
+// the prototype chain: a stored row keyed on one would read as "shipped" at
+// install time and then detonate inside the walker at every boot until someone
+// hand-edited the database row. The install path also guards its lookups with
+// Object.hasOwn, but a document must never be able to store one at all.
+const RESERVED_ENTRY_IDS: ReadonlySet<string> = new Set<string>([
+  'constructor',
+  '__proto__',
+  'prototype',
+]);
+
 /**
  * Whether an ability or weapon id can be STORED in a document at all.
  *
@@ -49,7 +62,7 @@ const ENTRY_ID_PATTERN = /^[a-z0-9_]{1,64}$/;
  * the coverage guard walks every live id through it.
  */
 export function isTunableEntryId(entryId: string): boolean {
-  return ENTRY_ID_PATTERN.test(entryId);
+  return ENTRY_ID_PATTERN.test(entryId) && !RESERVED_ENTRY_IDS.has(entryId);
 }
 
 export function emptyClassTuningDocument(): ClassTuningDocument {
@@ -78,12 +91,19 @@ export function sanitizeClassTuningDocument(input: unknown): ClassTuningDocument
   if (!root) return doc;
 
   doc.abilities = sanitizeScope(root.abilities, MAX_TUNED_ABILITIES);
-  doc.weapons = sanitizeScope(root.weapons, MAX_TUNED_WEAPONS);
+  // The weapon walker applies exactly the two swing channels, so the weapon
+  // scope stores nothing else: any other channel on a weapon row would be an
+  // inert factor that inflates the tuned counts while moving nothing.
+  doc.weapons = sanitizeScope(root.weapons, MAX_TUNED_WEAPONS, WEAPON_TUNING_CHANNELS);
   return doc;
 }
 
 /** One scope's id-to-channel map, dropping every row it cannot trust. */
-function sanitizeScope(input: unknown, maxEntries: number): Record<string, AbilityTuning> {
+function sanitizeScope(
+  input: unknown,
+  maxEntries: number,
+  allowedChannels?: ReadonlySet<TuningChannel>,
+): Record<string, AbilityTuning> {
   const out: Record<string, AbilityTuning> = {};
   const entries = asRecord(input);
   if (!entries) return out;
@@ -99,6 +119,7 @@ function sanitizeScope(input: unknown, maxEntries: number): Record<string, Abili
     let any = false;
     for (const channel of Object.keys(channels).sort()) {
       if (!isTuningChannel(channel)) continue;
+      if (allowedChannels !== undefined && !allowedChannels.has(channel)) continue;
       const raw = channels[channel];
       if (typeof raw !== 'number' && typeof raw !== 'string') continue;
       const factor = clampTuningFactor(raw);

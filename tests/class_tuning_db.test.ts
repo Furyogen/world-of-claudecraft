@@ -101,8 +101,10 @@ describe('saveClassTuningChange', () => {
       updatedAt: '2026-08-01T00:00:01.000Z',
     });
 
+    // the second SELECT is the advisory realm lock (its own case below)
     expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
       'BEGIN',
+      'SELECT',
       'SELECT',
       'INSERT',
       'INSERT',
@@ -136,6 +138,27 @@ describe('saveClassTuningChange', () => {
     expect(query).toHaveBeenCalled();
   });
 
+  it('serializes even the FIRST save behind a realm advisory lock', async () => {
+    // FOR UPDATE matches zero rows before the realm's row exists, so without
+    // this lock two concurrent first saves would both read "no row" and append
+    // two `{} -> X` audit rows.
+    const { query } = fakeClient(async (sql) => {
+      if (sql.includes('SELECT data')) return { rows: [] };
+      if (sql.includes('RETURNING updated_at')) {
+        return { rows: [{ updated_at: '2026-08-01T00:00:01.000Z' }] };
+      }
+      return { rows: [] };
+    });
+    await saveClassTuningChange(DOC, 7, '');
+    const calls = query.mock.calls.map(([sql]) => String(sql));
+    const lockIndex = calls.findIndex((sql) => sql.includes('pg_advisory_xact_lock'));
+    const readIndex = calls.findIndex((sql) => sql.includes('SELECT data'));
+    expect(lockIndex).toBeGreaterThan(calls.indexOf('BEGIN'));
+    expect(lockIndex).toBeLessThan(readIndex);
+    // keyed on the table plus the realm, so realms never serialize each other
+    expect(query.mock.calls[lockIndex][1]).toEqual(['class_tuning_config', 'test-realm']);
+  });
+
   it('records nothing when the document is unchanged', async () => {
     const { query } = fakeClient(async (sql) => {
       if (sql.includes('SELECT data')) {
@@ -153,6 +176,7 @@ describe('saveClassTuningChange', () => {
     expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
       'BEGIN',
       'SELECT',
+      'SELECT',
       'COMMIT',
     ]);
   });
@@ -167,6 +191,7 @@ describe('saveClassTuningChange', () => {
     expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
       'BEGIN',
       'SELECT',
+      'SELECT',
       'COMMIT',
     ]);
   });
@@ -178,6 +203,7 @@ describe('saveClassTuningChange', () => {
     ).resolves.toEqual({ changed: false, updatedAt: null });
     expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
       'BEGIN',
+      'SELECT',
       'SELECT',
       'COMMIT',
     ]);
@@ -206,6 +232,7 @@ describe('saveClassTuningChange', () => {
     });
     expect(query.mock.calls.map(([sql]) => String(sql).trim().split(/\s+/)[0])).toEqual([
       'BEGIN',
+      'SELECT',
       'SELECT',
       'INSERT',
       'INSERT',
@@ -253,6 +280,26 @@ describe('listClassTuningHistory', () => {
     mocks.poolQuery.mockClear();
     await listClassTuningHistory(Number.NaN);
     expect(mocks.poolQuery.mock.calls[0][1]).toEqual(['test-realm', 50]);
+  });
+
+  it('pages past the newest rows on a keyset, never an OFFSET walk', async () => {
+    mocks.poolQuery.mockResolvedValue({ rows: [] });
+    await listClassTuningHistory(50, 1234);
+    const [sql, params] = mocks.poolQuery.mock.calls[0];
+    expect(String(sql)).toContain('AND h.id < $3');
+    expect(String(sql)).not.toContain('OFFSET');
+    expect(params).toEqual(['test-realm', 50, 1234]);
+  });
+
+  it('ignores a junk beforeId rather than emptying the page', async () => {
+    mocks.poolQuery.mockResolvedValue({ rows: [] });
+    for (const junk of [0, -3, Number.NaN, Number.POSITIVE_INFINITY]) {
+      mocks.poolQuery.mockClear();
+      await listClassTuningHistory(50, junk);
+      const [sql, params] = mocks.poolQuery.mock.calls[0];
+      expect(String(sql), String(junk)).not.toContain('h.id <');
+      expect(params, String(junk)).toEqual(['test-realm', 50]);
+    }
   });
 
   it('normalizes every row, including a deleted operator', async () => {

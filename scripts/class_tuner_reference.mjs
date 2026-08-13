@@ -32,14 +32,7 @@ function loadCatalog() {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'woc-tuner-ref-'));
   const entry = path.join(tmp, 'entry.mjs');
   const bundle = path.join(tmp, 'bundle.mjs');
-  fs.writeFileSync(
-    entry,
-    [
-      "export { buildClassTuningCatalog } from '../../src/sim/tuning/catalog';",
-      "export { TUNING_CHANNELS } from '../../src/sim/tuning/channels';",
-    ].join('\n'),
-  );
-  // The entry sits in a temp dir, so point esbuild's resolver back at the repo.
+  // The entry sits in a temp dir, so import by absolute repo path.
   fs.writeFileSync(
     entry,
     [
