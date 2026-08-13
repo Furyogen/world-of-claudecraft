@@ -1053,6 +1053,7 @@ export const en: EnTranslations = {
       "rarity_epic": "Epic",
       "spec_speed": "+{pct}% extra mobility",
       "name_valorsteed": "Valorsteed",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Goliath Grag-Bear",
       "name_stalkglider_snail": "Moss-Shell Stalk-Glider",
       "name_aether_hover_cycle": "Aether-Jouster Hover-Cycle",
@@ -1062,6 +1063,7 @@ export const en: EnTranslations = {
       "name_terrorspark_groundshaker": "Terrorspark Groundshaker",
       "name_drakemaw_raptor": "Drakemaw Raptor",
       "desc_valorsteed": "A hardy, sure-footed steed that provides enhanced travel speed.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "A hardy, sure-footed bear that provides enhanced travel speed.",
       "desc_stalkglider_snail": "A hearty, slow-burning snail that provides enhanced travel speed.",
       "desc_aether_hover_cycle": "A powerful magitech bike designed for swift, low-hovering combat traversal.",
@@ -12193,6 +12195,9 @@ export const en: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Reins of the Drakemaw Raptor"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Rimefang"

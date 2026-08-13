@@ -1053,6 +1053,7 @@ export const id_ID: EnTranslations = {
       "rarity_epic": "Epik",
       "spec_speed": "+{pct}% mobilitas ekstra",
       "name_valorsteed": "Valorsteed",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Grag-Bear Raksasa",
       "name_stalkglider_snail": "Stalk-Glider Cangkang Lumut",
       "name_aether_hover_cycle": "Sepeda Melayang Aether-Jouster",
@@ -1062,6 +1063,7 @@ export const id_ID: EnTranslations = {
       "name_terrorspark_groundshaker": "Percik Teror, Pengguncang Bumi",
       "name_drakemaw_raptor": "Raptor Drakemaw",
       "desc_valorsteed": "Kuda tunggangan tangguh berpijakan mantap yang memberikan kecepatan perjalanan tambahan.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "Beruang tangguh berpijakan mantap yang memberikan kecepatan perjalanan tambahan.",
       "desc_stalkglider_snail": "Siput ulet berenergi tahan lama yang memberikan kecepatan perjalanan tambahan.",
       "desc_aether_hover_cycle": "Sepeda magiteknologi bertenaga besar yang dirancang untuk pergerakan tempur cepat dan melayang rendah.",
@@ -12193,6 +12195,9 @@ export const id_ID: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Tali Kekang Raptor Drakemaw"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Taring Beku"

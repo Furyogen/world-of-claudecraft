@@ -1053,6 +1053,7 @@ export const ru_RU: EnTranslations = {
       "rarity_epic": "Эпический",
       "spec_speed": "+{pct}% к скорости передвижения",
       "name_valorsteed": "Доблестный скакун",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Голиаф Граг-медведь",
       "name_stalkglider_snail": "Мохопанцирный скользень",
       "name_aether_hover_cycle": "Эфирный ховерцикл турнирного бойца",
@@ -1062,6 +1063,7 @@ export const ru_RU: EnTranslations = {
       "name_terrorspark_groundshaker": "Страхоискр, сотрясатель земли",
       "name_drakemaw_raptor": "Раптор Дрейкмо",
       "desc_valorsteed": "Выносливый и твердо стоящий на ногах скакун, повышающий скорость передвижения.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "Выносливый и твердо стоящий на лапах медведь, повышающий скорость передвижения.",
       "desc_stalkglider_snail": "Стойкая неторопливая улитка, повышающая скорость передвижения.",
       "desc_aether_hover_cycle": "Мощный магитех-байк для быстрых боевых рейдов на бреющем ходу.",
@@ -12193,6 +12195,9 @@ export const ru_RU: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Поводья раптора Дрейкмо"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Инеевый клык"

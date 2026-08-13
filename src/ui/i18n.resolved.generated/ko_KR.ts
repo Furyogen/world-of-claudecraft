@@ -1053,6 +1053,7 @@ export const ko_KR: EnTranslations = {
       "rarity_epic": "서사",
       "spec_speed": "+{pct}% 추가 기동력",
       "name_valorsteed": "발러스티드",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "골리앗 그라그곰",
       "name_stalkglider_snail": "이끼껍질 활공달팽이",
       "name_aether_hover_cycle": "에테르 기사 호버사이클",
@@ -1062,6 +1063,7 @@ export const ko_KR: EnTranslations = {
       "name_terrorspark_groundshaker": "대지를 뒤흔드는 테러스파크",
       "name_drakemaw_raptor": "화산구 랩터",
       "desc_valorsteed": "여행 속도를 높여 주는 튼튼하고 발이 안정된 군마입니다.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "여행 속도를 높여 주는 튼튼하고 발이 안정된 곰입니다.",
       "desc_stalkglider_snail": "여행 속도를 높여 주는 끈질기고 느긋한 달팽이입니다.",
       "desc_aether_hover_cycle": "낮게 떠서 빠르게 전장을 가로지르도록 설계된 강력한 마도 바이크입니다.",
@@ -12193,6 +12195,9 @@ export const ko_KR: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "화산구 랩터의 고삐"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "서리엄니"

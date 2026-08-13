@@ -166,6 +166,30 @@ describe('procedural bob math', () => {
     expect(mountBobY(spec, 0.7, true)).toBe(0);
   });
 
+  it('the pet boulder is a static rock whose hop bob IS its locomotion', () => {
+    const spec = MOUNT_VISUAL_SPECS.pet_boulder;
+    const def = VISUALS.mount_pet_boulder;
+    // The GLB is a shipped prop mesh with no animation track at all, so
+    // `rigged` must stay false: flipping it on would silently ask the visual
+    // for Walk/Run clips the asset does not have and freeze the mount.
+    expect(spec).toMatchObject({
+      visualKey: 'mount_pet_boulder',
+      rigged: false,
+      seatFwd: 0,
+      fx: null,
+      bobShape: 'hop',
+      bobIdle: false,
+    });
+    expect(spec.bobAmp).toBeGreaterThan(0);
+    // Moving, it lurches; standing still, it is a rock and does not move at all.
+    const quarter = 0.25 / spec.bobHz;
+    expect(mountBobY(spec, quarter, true)).toBeCloseTo(spec.bobAmp, 5);
+    expect(mountBobY(spec, quarter, false)).toBe(0);
+    // The rider perches ON the rock: seated below the crown, above the ground.
+    expect(spec.seat).toBeGreaterThan(0.5);
+    expect(spec.seat).toBeLessThan(def.height);
+  });
+
   it('the snail glides flat (no bob at all)', () => {
     const spec = MOUNT_VISUAL_SPECS.stalkglider_snail;
     expect(mountBobY(spec, 0.5, true)).toBe(0);

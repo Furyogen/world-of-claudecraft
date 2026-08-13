@@ -1053,6 +1053,7 @@ export const da_DK: EnTranslations = {
       "rarity_epic": "Episk",
       "spec_speed": "+{pct}% ekstra mobilitet",
       "name_valorsteed": "Modganger",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Goliat Grag-Bjørn",
       "name_stalkglider_snail": "Mosskal-Snigeglider",
       "name_aether_hover_cycle": "Æter-Dystridder Svævecykel",
@@ -1062,6 +1063,7 @@ export const da_DK: EnTranslations = {
       "name_terrorspark_groundshaker": "Skrækgnist, jordrysteren",
       "name_drakemaw_raptor": "Dragegabets Raptor",
       "desc_valorsteed": "En hårdfør, sikker ganger, der giver øget rejsehastighed.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "En hårdfør, sikker bjørn, der giver øget rejsehastighed.",
       "desc_stalkglider_snail": "En robust, langsomt forbrændende snegl, der giver øget rejsehastighed.",
       "desc_aether_hover_cycle": "En kraftfuld magitek-cykel designet til hurtig, lavtsvævende forflytning i kamp.",
@@ -12193,6 +12195,9 @@ export const da_DK: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Tøjler til Dragegabets Raptor"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Rimhugtand"

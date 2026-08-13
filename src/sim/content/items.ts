@@ -386,6 +386,20 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 0,
     buyValue: 100_000, // 10 gold in copper
   },
+  // The joke mount reins (Rollo the Pet Boulder). No acquisition path yet
+  // (owner call), so nothing vendors, drops, or quests it today; it is a
+  // catalog + visual entry the same way the Drakemaw Raptor reins is. Player
+  // reins rules still apply in full: unbound, no vendor sell, no discard.
+  reins_pet_boulder: {
+    id: 'reins_pet_boulder',
+    name: 'Reins of the Pet Boulder',
+    kind: 'mount',
+    mount: 'pet_boulder',
+    quality: 'common',
+    noVendorSell: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
   // Collectible mount (Morthen the Gravecaller, The Hollow Crypt). Owning the
   // reins item IS owning the mount (src/sim/mounts.ts mountOwned); it stays
   // valid from the bank too, and it transfers like any other unbound item.

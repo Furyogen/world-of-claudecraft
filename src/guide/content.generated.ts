@@ -6448,6 +6448,10 @@ export const GUIDE_RELIQUARY: GuideReliquaryPage[] = [
       },
       {
         "kind": "mount",
+        "name": "Rollo the Pet Boulder"
+      },
+      {
+        "kind": "mount",
         "name": "Sky-Reach Stormfeather"
       },
       {

@@ -64,6 +64,7 @@ await page.evaluate(() => {
   sim.setPlayerLevel(20, sim.playerId);
   for (const id of [
     'reins_valorsteed',
+    'reins_pet_boulder',
     'reins_grag_bear',
     'reins_stalkglider_snail',
     'reins_aether_hover_cycle',

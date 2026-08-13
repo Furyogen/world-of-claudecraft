@@ -1053,6 +1053,7 @@ export const ja_JP: EnTranslations = {
       "rarity_epic": "エピック",
       "spec_speed": "+{pct}% 移動力上昇",
       "name_valorsteed": "ヴァロースティード",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "ゴリアテ・グラグベア",
       "name_stalkglider_snail": "モスシェル・ストークグライダー",
       "name_aether_hover_cycle": "エーテルジャウスター・ホバーサイクル",
@@ -1062,6 +1063,7 @@ export const ja_JP: EnTranslations = {
       "name_terrorspark_groundshaker": "地揺らしのテラースパーク",
       "name_drakemaw_raptor": "火口のラプトル",
       "desc_valorsteed": "頑健で足取り確かな駿馬。移動速度を高める。",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "頑健で足取り確かな熊。移動速度を高める。",
       "desc_stalkglider_snail": "粘り強くゆっくり燃えるカタツムリ。移動速度を高める。",
       "desc_aether_hover_cycle": "低空ホバーで戦場を駆け抜けるために設計された強力な魔導バイク。",
@@ -12193,6 +12195,9 @@ export const ja_JP: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "火口のラプトルの手綱"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "霜牙"

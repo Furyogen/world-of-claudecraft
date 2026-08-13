@@ -1053,6 +1053,7 @@ export const vi_VN: EnTranslations = {
       "rarity_epic": "Sử Thi",
       "spec_speed": "+{pct}% tốc độ di chuyển",
       "name_valorsteed": "Valorsteed",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Gấu Grag Khổng Lồ",
       "name_stalkglider_snail": "Ốc Sên Lượn Vỏ Rêu",
       "name_aether_hover_cycle": "Xe Lượn Đấu Sĩ Ê-te",
@@ -1062,6 +1063,7 @@ export const vi_VN: EnTranslations = {
       "name_terrorspark_groundshaker": "Tia Kinh Hoàng, Kẻ Rung Chuyển Mặt Đất",
       "name_drakemaw_raptor": "Cuồng Long Drakemaw",
       "desc_valorsteed": "Một con chiến mã khỏe mạnh, bước chân vững chãi, giúp tăng tốc độ di chuyển.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "Một chú gấu khỏe mạnh, bước chân vững chãi, giúp tăng tốc độ di chuyển.",
       "desc_stalkglider_snail": "Một chú ốc sên bền bỉ, dẻo dai, giúp tăng tốc độ di chuyển.",
       "desc_aether_hover_cycle": "Một cỗ xe phép thuật cơ khí mạnh mẽ, được thiết kế để di chuyển nhanh và lướt sát mặt đất trong chiến đấu.",
@@ -12193,6 +12195,9 @@ export const vi_VN: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Dây Cương Cuồng Long Drakemaw"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Nanh Băng Giá"

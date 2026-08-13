@@ -2381,6 +2381,17 @@
       }
     ]
   },
+  "mount_run_pet_boulder": {
+    "ceilingDb": 5.6,
+    "tracks": [
+      {
+        "filename": "mount_run_pet_boulder.mp3",
+        "sha256": "3c31cf72c8511936ad3acd85eec934c65c0d693cd2a5356c9fe920f2a724a5e8",
+        "size": 21986,
+        "peakDb": -6.6
+      }
+    ]
+  },
   "mount_run_shadowjump_toad": {
     "ceilingDb": 5.3,
     "tracks": [

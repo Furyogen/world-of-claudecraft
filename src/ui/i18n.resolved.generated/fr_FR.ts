@@ -1053,6 +1053,7 @@ export const fr_FR: EnTranslations = {
       "rarity_epic": "Épique",
       "spec_speed": "+{pct}% de mobilité supplémentaire",
       "name_valorsteed": "Destrier de Bravoure",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Ours-Grag Goliath",
       "name_stalkglider_snail": "Glisseur à Coquille Moussue",
       "name_aether_hover_cycle": "Aérocycle du Jouteur d’Éther",
@@ -1062,6 +1063,7 @@ export const fr_FR: EnTranslations = {
       "name_terrorspark_groundshaker": "Terrétincelle, l’Ébranleur de sol",
       "name_drakemaw_raptor": "Raptor du Drakemaw",
       "desc_valorsteed": "Un destrier robuste au pied sûr qui accroît la vitesse de déplacement.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "Un ours robuste au pied sûr qui accroît la vitesse de déplacement.",
       "desc_stalkglider_snail": "Un escargot vaillant à combustion lente qui accroît la vitesse de déplacement.",
       "desc_aether_hover_cycle": "Une puissante moto magitech conçue pour des déplacements de combat rapides en vol rasant.",
@@ -12193,6 +12195,9 @@ export const fr_FR: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Rênes du Raptor du Drakemaw"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Croc de givre"

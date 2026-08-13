@@ -1053,6 +1053,7 @@ export const zh_TW: EnTranslations = {
       "rarity_epic": "史詩",
       "spec_speed": "+{pct}% 額外移動力",
       "name_valorsteed": "英勇戰馬",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "歌利亞格拉格巨熊",
       "name_stalkglider_snail": "苔殼滑行蝸牛",
       "name_aether_hover_cycle": "乙太騎士懸浮機車",
@@ -1062,6 +1063,7 @@ export const zh_TW: EnTranslations = {
       "name_terrorspark_groundshaker": "驚雷撼地者",
       "name_drakemaw_raptor": "龍喉迅猛龍",
       "desc_valorsteed": "一匹堅韌穩健的駿馬，可提升旅行速度。",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "一頭堅韌穩健的巨熊，可提升旅行速度。",
       "desc_stalkglider_snail": "一隻堅毅耐久的蝸牛，可提升旅行速度。",
       "desc_aether_hover_cycle": "一輛強大的魔導機車，專為快速貼地懸浮的戰鬥穿行而設計。",
@@ -12193,6 +12195,9 @@ export const zh_TW: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "龍喉迅猛龍的韁繩"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "霜牙"

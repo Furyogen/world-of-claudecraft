@@ -57,6 +57,10 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // origin and lower than the old Tripo build, so the rider shifts toward the
   // neck and drops a touch
   valorsteed: spec('mount_valorsteed', 2.4, true, undefined, 0.15),
+  // The pet boulder is a STATIC rock (no clips at all), so the hop bob IS its
+  // locomotion: it lurches forward the way it does when a player shoves it onto
+  // a rift socket, and sits dead still the moment you stop.
+  pet_boulder: spec('mount_pet_boulder', 1.32, false, { amp: 0.18, hz: 1.6, shape: 'hop' }),
   grag_bear: spec('mount_grag_bear', 3.35, true, undefined, -0.8),
   stalkglider_snail: spec('mount_stalkglider_snail', 2.65, false, undefined, -0.3, 'slime'),
   aether_hover_cycle: spec(

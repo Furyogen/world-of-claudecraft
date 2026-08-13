@@ -1053,6 +1053,7 @@ export const es_ES: EnTranslations = {
       "rarity_epic": "Épica",
       "spec_speed": "+{pct}% de movilidad adicional",
       "name_valorsteed": "Corcel del Valor",
+      "name_pet_boulder": "Rollo the Pet Boulder",
       "name_grag_bear": "Oso Grag Goliat",
       "name_stalkglider_snail": "Deslizador de Caparazón Musgoso",
       "name_aether_hover_cycle": "Aerocicleta Justadora del Éter",
@@ -1062,6 +1063,7 @@ export const es_ES: EnTranslations = {
       "name_terrorspark_groundshaker": "Aterrachispa, Sacudetierras",
       "name_drakemaw_raptor": "Raptor de Drakemaw",
       "desc_valorsteed": "Un corcel resistente y de paso firme que aumenta la velocidad de viaje.",
+      "desc_pet_boulder": "A rift push-puzzle boulder that grew attached to whoever kept shoving it onto its socket. It does not walk, gallop, or roll. It grinds along beneath you at exactly the pace of a rented horse, and it is never in a hurry.",
       "desc_grag_bear": "Un oso resistente y de paso firme que aumenta la velocidad de viaje.",
       "desc_stalkglider_snail": "Un caracol recio y de combustión lenta que aumenta la velocidad de viaje.",
       "desc_aether_hover_cycle": "Una potente moto magitecnológica diseñada para desplazamientos de combate veloces a baja altura.",
@@ -12193,6 +12195,9 @@ export const es_ES: EnTranslations = {
       },
       "reins_drakemaw_raptor": {
         "name": "Riendas del Raptor de Drakemaw"
+      },
+      "reins_pet_boulder": {
+        "name": "Reins of the Pet Boulder"
       },
       "rimefang": {
         "name": "Colmillo de Escarcha"

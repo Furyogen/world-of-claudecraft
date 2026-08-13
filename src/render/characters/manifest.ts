@@ -1596,6 +1596,18 @@ export const VISUALS: Record<string, VisualDef> = {
     runRef: 12,
     lazyPreload: true,
   },
+  // The joke mount: the rift push-puzzle rock (public/models/props/rock_large_f.glb,
+  // the same craggy mesh door_portal.ts dresses as rift_boulder) shipped under the
+  // mounts dir so the catalog url convention holds. A STATIC prop like the snail:
+  // zero animations and no skin, so it renders its rest pose and the hop bob in
+  // mount_visuals.ts carries the motion. Deliberately squat (1.5 tall against the
+  // 2.6 humanoid) so it reads as a boulder you perch on, not a mountain.
+  mount_pet_boulder: {
+    url: `${MOUNTS_DIR}/pet_boulder.glb`,
+    height: 1.5,
+    clips: MOUNT_RIGGED,
+    lazyPreload: true,
+  },
   mount_grag_bear: {
     url: `${MOUNTS_DIR}/grag_bear.glb`,
     height: 4.0,
