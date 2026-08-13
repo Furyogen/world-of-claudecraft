@@ -3844,7 +3844,7 @@ describe('R35 professions inspector (GET /admin/api/characters/:id/professions)'
       params: { id: '5' },
     });
     expect(r.status).toBe(200);
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     expect(characterProfessionsRow).toHaveBeenCalledWith(5, true); // offline: fetch the blob
     expect(sheet.name).toBe('Aldric');
     expect(sheet.live).toBe(false);
@@ -3899,7 +3899,7 @@ describe('R35 professions inspector (GET /admin/api/characters/:id/professions)'
       params: { id: '5' },
     });
     expect(r.status).toBe(200);
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     expect(sheet.live).toBe(true);
     expect(sheet.updatedAt).toBeNull(); // a live snapshot is "now"
     expect(sheet.gathering).toContainEqual({ professionId: 'mining', proficiency: 43.5 });
@@ -3919,7 +3919,7 @@ describe('R35 professions inspector (GET /admin/api/characters/:id/professions)'
       headers: { authorization: BEARER },
       params: { id: '5' },
     });
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     expect(sheet.gathering).toContainEqual({ professionId: 'herbalism', proficiency: 7 });
   });
 
@@ -4203,7 +4203,7 @@ describe('R35 professions inspector: fix-round edge pins', () => {
       params: { id: '5' },
     });
     expect(r.status).toBe(200);
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     expect(sheet.gathering).toContainEqual({ professionId: 'mining', proficiency: 0 });
     expect(sheet.slots).toEqual([]);
     expect(sheet.nodeTimers).toEqual([]);
@@ -4251,7 +4251,7 @@ describe('R35 professions inspector: fix-round edge pins', () => {
       headers: { authorization: BEARER },
       params: { id: '5' },
     });
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     // The one-shot load migrations have not run: the operator is warned.
     expect(sheet.preMigration).toBe(true);
     // The load-side clamp: never display a wait the game would not honor
@@ -4298,7 +4298,7 @@ describe('R35 professions inspector: fix-round edge pins', () => {
       headers: { authorization: BEARER },
       params: { id: '5' },
     });
-    const sheet = (r.body as { data: Record<string, any> }).data;
+    const sheet = (r.body as { data: Record<string, unknown> }).data;
     expect(sheet.live).toBe(true);
     expect(sheet.preMigration).toBe(false);
   });
