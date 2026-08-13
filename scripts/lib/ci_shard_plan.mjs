@@ -71,9 +71,14 @@ export const CI_GUARD_PREFIXES = Object.freeze(['tests/parity/']);
  * single multi-minute file stops setting the slowest shard's wall clock.
  * Membership is measured, not automated: a file joins when it costs more than
  * the 90 second threshold inside a full-mode CI shard, and the next-longest
- * file stays sharded (2026-08-06 full-mode run: these four measured 249.5 s,
- * 143.9 s, 142.3 s, and 94.7 s in-shard; the next longest,
- * tests/corpse_harvest_sim.test.ts at 69.8 s, stays). Membership is also
+ * file stays sharded (2026-08-06 full-mode run: the then-four members
+ * measured 249.5 s, 143.9 s, 142.3 s, and 94.7 s in-shard; the next longest,
+ * tests/corpse_harvest_sim.test.ts at 69.8 s, stays). One decided exception
+ * to the per-file rule: the owned-class balance family split 2026-08-13 is
+ * lane-owned as a UNIT, split pieces included, so the diet flag registry
+ * (every WOC_FULL_BALANCE_SWEEP reader must be lane-owned) and the family's
+ * lane accounting stay in one place; measured per-file lane durations for
+ * the whole family are in the split PR (#3370). Membership is also
  * one-directional by nature: nothing automatic promotes a newly slowed suite
  * into this list, so when a shard's wall clock grows, remeasure from the
  * shard logs and re-decide the list (the committed contract and the audit
@@ -83,9 +88,21 @@ export const CI_GUARD_PREFIXES = Object.freeze(['tests/parity/']);
  * whole suite in their 8 shards, so the post-merge backstop is untouched.
  */
 export const CI_LONG_SUITES = Object.freeze([
-  'tests/audit_conservation_property.test.ts',
-  'tests/battleground.test.ts',
-  'tests/chronomancy_balance.test.ts',
+  // 2026-08-13 remeasure (run 31732244215, both lanes fully loaded; figures
+  // are IN-LANE and stay far under 90 even at the recorded 1.6x runner
+  // ratio): battleground (14.4 s) and audit_conservation_property (55.1 s)
+  // left for the shard pool. Eviction safety is structural, not
+  // classification-dependent: lane membership only changes WHERE a file runs,
+  // never WHETHER (a floor member like battleground rides the selective floor
+  // leg instead of the lane; a graph member like audit_conservation runs via
+  // the unfiltered related leg either way). The chronomancy
+  // suite split three ways and only its balance-targets file stays lane-listed
+  // (the heal-parity and Cascada pieces shard, like the warlock sustain
+  // suite's per-spec pieces, both pending a per-piece in-shard measurement).
+  // druid_balance_probe stays WHOLE: its cost is one matrix test whose
+  // bestDruidBuilds assertions are an argmax across capstones, so a
+  // per-capstone split would weaken the winner selection it pins.
+  'tests/chronomancy_balance_targets.test.ts',
   // The five-class-overhauls balance harnesses (review 3050): the owned-class
   // matrices grew to 8 specs and the raid loop to ~510s, pushing shards 1 and
   // 4 past the then-20-minute pr-gate shard budget; they are exactly what this
@@ -96,37 +113,51 @@ export const CI_LONG_SUITES = Object.freeze([
   'tests/eastbrook_gameplay_integration.test.ts',
   'tests/hunter_dps_balance.test.ts',
   'tests/nythraxis_matrix.test.ts',
-  'tests/owned_class_balance_harness.test.ts',
-  'tests/owned_class_raid_balance_harness.test.ts',
+  // The owned-class harness pair was split into single-responsibility files
+  // (2026-08-13) so no lane or shard chain carries a 13-minute single file:
+  // the level-20 harness measured 788 to 842 s as ONE file and pinned a
+  // whole worker wherever it ran. Every split file stays lane-owned; the
+  // duration ledger for the halves below is in the split-change PR.
+  'tests/owned_class_balance_dps_metrics.test.ts',
+  'tests/owned_class_balance_dps_probes.test.ts',
+  'tests/owned_class_balance_druid_bands.test.ts',
+  'tests/owned_class_balance_groveheart.test.ts',
+  'tests/owned_class_balance_healer_contract.test.ts',
+  'tests/owned_class_balance_healer_probes.test.ts',
+  'tests/owned_class_balance_role_bands.test.ts',
+  'tests/owned_class_raid_armor_avoidance.test.ts',
+  'tests/owned_class_raid_sustain_bands.test.ts',
 ]);
 
 /**
  * The two parallel lane jobs ("PR gate (long sims A)" / "PR gate (long sims
  * B)" in ci.yml): a literal partition of CI_LONG_SUITES, so the pair's wall
  * clock is roughly half of the single-job lane's. Halves are balanced by
- * MEASURED post-diet suite duration, not file count: half A is the level-20
- * owned-class harness (the single longest suite) plus the shortest members,
- * half B carries everything else (the balance is recorded in the lane-diet
- * PR and re-derived from the lane job logs whenever a member's cost moves).
- * The shard legs keep excluding the full CI_LONG_SUITES union, so the a/b
- * assignment can rebalance freely without touching the shard side.
- * tests/ci_shard_plan.test.ts pins the halves as an exact partition of
- * CI_LONG_SUITES.
+ * MEASURED post-diet suite duration, not file count (re-balanced 2026-08-13
+ * from the per-file durations in the harness-split PR after the owned-class
+ * pair became nine single-responsibility files; re-derive from the lane job
+ * logs whenever a member's cost moves). The shard legs keep excluding the
+ * full CI_LONG_SUITES union, so the a/b assignment can rebalance freely
+ * without touching the shard side. tests/ci_shard_plan.test.ts pins the
+ * halves as an exact partition of CI_LONG_SUITES.
  */
+const CI_LONG_SUITE_HALF_A = Object.freeze([
+  'tests/nythraxis_matrix.test.ts',
+  'tests/owned_class_balance_dps_metrics.test.ts',
+  'tests/owned_class_balance_dps_probes.test.ts',
+  'tests/owned_class_balance_druid_bands.test.ts',
+  'tests/owned_class_balance_healer_probes.test.ts',
+  'tests/owned_class_balance_role_bands.test.ts',
+  'tests/owned_class_raid_armor_avoidance.test.ts',
+]);
+
+// Half b is DERIVED (the union minus half a), so a lane file excluded from
+// every shard but owned by no lane is structurally impossible, not merely
+// pinned; tests/ci_shard_plan.test.ts still pins b's exact contents so the
+// derived assignment stays a conscious decision.
 export const CI_LONG_SUITE_HALVES = Object.freeze({
-  a: Object.freeze([
-    'tests/battleground.test.ts',
-    'tests/chronomancy_balance.test.ts',
-    'tests/owned_class_balance_harness.test.ts',
-  ]),
-  b: Object.freeze([
-    'tests/audit_conservation_property.test.ts',
-    'tests/druid_balance_probe.test.ts',
-    'tests/eastbrook_gameplay_integration.test.ts',
-    'tests/hunter_dps_balance.test.ts',
-    'tests/nythraxis_matrix.test.ts',
-    'tests/owned_class_raid_balance_harness.test.ts',
-  ]),
+  a: CI_LONG_SUITE_HALF_A,
+  b: Object.freeze(CI_LONG_SUITES.filter((f) => !CI_LONG_SUITE_HALF_A.includes(f))),
 });
 
 /**

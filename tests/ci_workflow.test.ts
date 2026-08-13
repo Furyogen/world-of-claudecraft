@@ -862,7 +862,10 @@ describe('CI workflow parity', () => {
       // runner from bound-killing the merge queue, so both halves take the
       // same slow-runner sizing METHOD as release-gate (the same formula over
       // their own healthy job wall, which lands on 30, not on its 35).
-      // Evidence on the ci.yml bound.
+      // Evidence on the ci.yml bound. (The harness pair was split into the
+      // owned_class_balance_* / owned_class_raid_* files on 2026-08-13; the
+      // figures stay as the measured record, and the bounds re-derive from
+      // fresh walls in a follow-up change.)
       ['pr-long-sims-a', 30],
       ['pr-long-sims-b', 30],
       ['browser-gate', 10],

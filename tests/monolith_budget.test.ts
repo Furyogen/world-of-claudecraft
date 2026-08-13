@@ -38,7 +38,7 @@ interface MonolithRow {
 const MONOLITHS: MonolithRow[] = [
   {
     file: 'src/ui/hud.ts',
-    ceiling: 19600,
+    ceiling: 19490,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {

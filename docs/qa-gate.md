@@ -206,7 +206,10 @@ the long-sims lane files (below); in selective mode, the always-run floor plus
 
 **The long-sims lanes** (Phase 4; split in two by the lane-diet PR). The
 `CI_LONG_SUITES` files (`scripts/lib/ci_shard_plan.mjs`: the suites measured over 90
-seconds inside a full-mode shard, the chronomancy balance sweep among them) run in the
+seconds inside a full-mode shard, the chronomancy balance sweep among them, plus the
+owned-class balance family, which is lane-owned as a unit since its 2026-08-13 split
+so the diet-flag registry and its lane accounting stay in one place; the measured
+per-file lane duration ledgers live in the lane-split PR bodies, #3370 first) run in the
 dedicated `PR gate (long sims A)` / `PR gate (long sims B)` job pair
 (`node scripts/ci_shard_test.mjs --lane=long-sims-a` / `--lane=long-sims-b`, one
 `CI_LONG_SUITE_HALVES` half each), and every shard leg excludes the whole union, so a

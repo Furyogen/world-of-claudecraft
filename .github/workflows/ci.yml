@@ -616,7 +616,7 @@ jobs:
   # two parallel jobs by the lane-diet PR). The pair runs the CI_LONG_SUITES
   # files (scripts/lib/ci_shard_plan.mjs) that every pr-gate shard leg
   # excludes, one CI_LONG_SUITE_HALVES half per job, so the lane's wall clock
-  # is the slower half instead of the whole nine-suite list. Same event
+  # is the slower half instead of the whole list. Same event
   # routing and code path filter as pr-gate, so each job reports (or
   # docs-only-skips) on every pull_request AND merge_group run, which is the
   # bar docs/merge-queue.md sets for a REQUIRED check; both jobs are required
@@ -656,6 +656,13 @@ jobs:
     # 842s slow). Those three samples are not controlled against each other,
     # so read them as runner-to-runner variance dominating, not as a proof
     # about contention.
+    #
+    # 2026-08-13: the owned-class harness pair was split into the
+    # owned_class_balance_* / owned_class_raid_* single-responsibility files
+    # and the halves were re-balanced, so no lane chain carries that single
+    # 13-minute file any more. The figures above stay as the measured record;
+    # 30 predates the split and re-derives from fresh measured JOB walls in a
+    # follow-up change.
     #
     # 30 applies the same arithmetic as release-gate's bound: healthy JOB wall
     # times the 1.60 fast-to-slow runner ratio measured at b160a1ba18
@@ -889,13 +896,17 @@ jobs:
     #
     # 20 was sized from a 14.63 minute healthy worst case (run 31117143257).
     # That premise died on 2026-08-11 at b160a1ba18, where shard 1 drew FOUR
-    # of the nine long suites (owned_class_balance_harness, nythraxis_matrix,
+    # of the then-nine long suites (owned_class_balance_harness, nythraxis_matrix,
     # hunter_dps_balance, and druid_balance_probe) and was bound-killed four
     # times (run 31443047694 attempts 1 through 3, run 31443040285 attempt 1)
     # while attempt 2 of that same push run passed the identical scope in 16
     # minutes. Same commit, same warm transform cache: the differentiator was
     # runner speed, with owned_class_balance_harness measured at 527s on the
-    # fast runner and 842s on the slow one, a ratio of 1.60.
+    # fast runner and 842s on the slow one, a ratio of 1.60. (2026-08-13:
+    # that harness pair has since been split into the owned_class_balance_* /
+    # owned_class_raid_* files, so one shard draw can no longer carry a
+    # 13-minute single file; the figures stay as the record behind the 1.60
+    # ratio.)
     #
     # Sizing, stated as the arithmetic rather than a feel. Every figure below
     # is a JOB wall, which is what timeout-minutes actually polices: setup
