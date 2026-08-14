@@ -333,7 +333,7 @@ describe('item-art consistency accepted-art provenance', () => {
       },
       {
         path: `${evidenceDir}/final-item-art-audit-verdict.json`,
-        acceptedSha256: '2c00e12de47663fc684482cbddb703909f021daeef8a3c5ca60cbdbed6e5b763',
+        acceptedSha256: '6d774f2c30e70b18fb421ec1a019194365dfdcd8591fa1edb6b222854cab597e',
         acceptedBytes: 108_300,
       },
     ]);
@@ -451,7 +451,7 @@ describe('item-art consistency accepted-art provenance', () => {
     const verdictBytes = readFileSync(path.join(repoRoot, verdictPath));
     expect(verdictBytes.length).toBe(108_300);
     expect(sha256(verdictBytes)).toBe(
-      '2c00e12de47663fc684482cbddb703909f021daeef8a3c5ca60cbdbed6e5b763',
+      '6d774f2c30e70b18fb421ec1a019194365dfdcd8591fa1edb6b222854cab597e',
     );
     const verdict = JSON.parse(verdictBytes.toString('utf8')) as FinalAuditVerdict;
 
@@ -562,7 +562,7 @@ describe('item-art consistency accepted-art provenance', () => {
 
     expect(verdict.evidence.catalog).toEqual({
       path: 'tmp/imagegen/item-art-consistency/final-audit/catalog.json',
-      sha256: 'e6fe38fa7f6ed02d6517a4cd041edfad51c5ce6c30ad66da51231bccc9e34c67',
+      sha256: 'bf87b85b2985b421bf301fc8f7ce4505745fcb0fd58bd8c4c02b5de2c8c79613',
       bytes: 452_856,
     });
     expect(verdict.evidence.rendererFingerprint).toBe(
@@ -616,7 +616,7 @@ describe('item-art consistency accepted-art provenance', () => {
       sheetSetDigest.update(`${sheet.path}\0${sheet.sha256}\0${sheet.bytes}\n`);
     }
     expect(verdict.evidence.sheetSetSha256).toBe(
-      '3bf90d2a136b171f75f95e062865e18f95b6a380ccbfbf0e62f8e9fb1450d193',
+      '0b3abdf6f2ba00649a30798ef8fd8768d5a05d249066d821d873b5b6fea5c5bc',
     );
     expect(sheetSetDigest.digest('hex')).toBe(verdict.evidence.sheetSetSha256);
 
@@ -626,7 +626,7 @@ describe('item-art consistency accepted-art provenance', () => {
       shippingCatalogDigest.update(`${id}\0${sha256(bytes)}\0${bytes.length}\n`);
     }
     expect(verdict.evidence.shippingCatalogSha256).toBe(
-      'ad406c9e7cbece7c13e8ab681aee4917b22f2d34096530d6c2f5c509bf69e957',
+      '13711e916b7c30b99ee6ef09bc16f06de9e7712e3ff2b8e2b5f5b761ec98f357',
     );
     expect(shippingCatalogDigest.digest('hex')).toBe(verdict.evidence.shippingCatalogSha256);
   });

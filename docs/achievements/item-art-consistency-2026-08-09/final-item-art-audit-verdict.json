@@ -1359,7 +1359,7 @@
   "evidence": {
     "catalog": {
       "path": "tmp/imagegen/item-art-consistency/final-audit/catalog.json",
-      "sha256": "e6fe38fa7f6ed02d6517a4cd041edfad51c5ce6c30ad66da51231bccc9e34c67",
+      "sha256": "bf87b85b2985b421bf301fc8f7ce4505745fcb0fd58bd8c4c02b5de2c8c79613",
       "bytes": 452856
     },
     "rendererFingerprint": "fd92c41a206cd55b05a1de94c4789f6eb6ca4200d063f4bbd284c21ae03b6082",
@@ -1374,7 +1374,7 @@
       "small-multiview": 26,
       "identity": 26
     },
-    "sheetSetSha256": "3bf90d2a136b171f75f95e062865e18f95b6a380ccbfbf0e62f8e9fb1450d193",
+    "sheetSetSha256": "0b3abdf6f2ba00649a30798ef8fd8768d5a05d249066d821d873b5b6fea5c5bc",
     "sheets": [
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/armor-chest--p01--128-color.png",
@@ -2530,64 +2530,64 @@
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--128-color.png",
-        "sha256": "d03f06f600c8bfccf82dfc5ecf9eb823b886aeb5bc3ed43aa2143db0ea46ce88",
-        "bytes": 394609,
+        "sha256": "e9608a91dadbe15cf9ec255e1903e9beb286bf231e6bb3bb21a483e1cfbfe653",
+        "bytes": 399538,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--40-color.png",
-        "sha256": "a5ebc719422a43bb58688592f1109002dbaaa9a42113c8045cd12d8e6b027e80",
-        "bytes": 69205,
+        "sha256": "e6dfee91f7f5f1afc628e3ffeeccfda1b037b86ce2deb85c3e535789264750d9",
+        "bytes": 70346,
         "width": 1600,
         "height": 288,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--28-color.png",
-        "sha256": "5e0fd77b9369a22cde096b83e9e7bcb4086cc9a089ad1f9c9a627a455a0294bc",
-        "bytes": 47074,
+        "sha256": "626af755fb00d5498c2eb2195f04708a879ebe1e9cbbd35fc77e7b318871a6f1",
+        "bytes": 47595,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--22-color.png",
-        "sha256": "763e35412e3eac06e9c2ce94a13fd9e4bf24bf240924d16f414c706a4a2d4424",
-        "bytes": 36684,
+        "sha256": "607bdd640c8ba3a123e5b6e7595e33d7f48e7b4c3ef72b0de4b3afc74788d434",
+        "bytes": 36960,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--28-grayscale.png",
-        "sha256": "10e286fd115a27ee34292e782b701635d8363c7b92ab6fdafc391bcee1882537",
-        "bytes": 35692,
+        "sha256": "c34742f4eda4d353ea7c6f0a1fb6908da29cde59bf56e8c3c16ba5b81a10c6da",
+        "bytes": 35769,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--64-circle.png",
-        "sha256": "ea8640e4871ee98f442c29e92fdcb80623f5cc9005e2e8847a78d8e0cfe056d1",
-        "bytes": 121176,
+        "sha256": "688994ffbb374299b7e341dfc38c54b73499ffafff49bd9bddedc5a6b57be6eb",
+        "bytes": 122799,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--small-multiview.png",
-        "sha256": "a07f3f73ed620baf45956682ce4c58cf4ba3dfe8d9ec3f28f05a39aeda1e961e",
-        "bytes": 221010,
+        "sha256": "a6dd10ea4174e2bed07cc03d27f5d5dee58d1d963f26f25bb5d66b4ae0228b80",
+        "bytes": 224524,
         "width": 1800,
         "height": 480,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--identity.png",
-        "sha256": "ae67ff4cb112dfb60009103e8a3ff211552d20019c4fe5a1ec477ef81610c22f",
-        "bytes": 410588,
+        "sha256": "ad409b5a7c4ba4c38f8f5b28009ea2816462e84d51285ac0fdd7f3b782b129be",
+        "bytes": 415306,
         "width": 1800,
         "height": 452,
         "format": "png"
@@ -3041,6 +3041,6 @@
         "format": "png"
       }
     ],
-    "shippingCatalogSha256": "ad406c9e7cbece7c13e8ab681aee4917b22f2d34096530d6c2f5c509bf69e957"
+    "shippingCatalogSha256": "13711e916b7c30b99ee6ef09bc16f06de9e7712e3ff2b8e2b5f5b761ec98f357"
   }
 }
