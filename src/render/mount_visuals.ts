@@ -60,10 +60,10 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // The pet boulder is a STATIC rock (no clips at all), so the hop bob IS its
   // locomotion: it lurches forward the way it does when a player shoves it onto
   // a rift socket, and sits dead still the moment you stop.
-  pet_rock: spec('mount_pet_rock', 1.62, false, { amp: 0.18, hz: 1.6, shape: 'hop' }),
+  pet_rock: spec('mount_pet_rock', 1.13, false, { amp: 0.18, hz: 1.6, shape: 'hop' }),
   // Socketed and lit: it stops grinding and floats, so the epic reads as the
   // charged state of the common rather than a different rock.
-  shiny_pet_rock: spec('mount_shiny_pet_rock', 1.62, false, {
+  shiny_pet_rock: spec('mount_shiny_pet_rock', 1.13, false, {
     amp: 0.1,
     hz: 0.9,
     idle: true,

@@ -1600,11 +1600,11 @@ export const VISUALS: Record<string, VisualDef> = {
   // the same craggy mesh door_portal.ts dresses as rift_boulder) shipped under the
   // mounts dir so the catalog url convention holds. A STATIC prop like the snail:
   // zero animations and no skin, so it renders its rest pose and the hop bob in
-  // mount_visuals.ts carries the motion. Deliberately squat (1.5 tall against the
-  // 2.6 humanoid) so it reads as a boulder you perch on, not a mountain.
+  // mount_visuals.ts carries the motion. Deliberately squat (1.19 tall against the
+  // 2.6 humanoid) so it reads as a rock you perch on, not a mountain.
   mount_pet_rock: {
     url: `${MOUNTS_DIR}/pet_rock.glb`,
-    height: 1.7,
+    height: 1.19,
     clips: MOUNT_RIGGED,
     // The one TINTED mount, and deliberately so: the shipped prop carries the
     // outdoor dirt/grass palette every other world rock uses, which reads as
@@ -1622,7 +1622,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // two states rather than two different rocks.
   mount_shiny_pet_rock: {
     url: `${MOUNTS_DIR}/shiny_pet_rock.glb`,
-    height: 1.7,
+    height: 1.19,
     clips: MOUNT_RIGGED,
     tint: 0xd8a24a,
     tintStrength: 0.8,
