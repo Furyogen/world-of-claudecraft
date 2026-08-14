@@ -57,6 +57,25 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // origin and lower than the old Tripo build, so the rider shifts toward the
   // neck and drops a touch
   valorsteed: spec('mount_valorsteed', 2.4, true, undefined, 0.15),
+  // The three junk mounts (log, barrel, cart) are all CLIPLESS Tripo props:
+  // zero animations, so the bob below IS their locomotion, the same way the
+  // snail and the hover cycle work. Each bob is tuned to what the object would
+  // actually do rather than to a shared number: the log and the barrel roll, so
+  // they hop at roughly a revolution's cadence, and the cart rattles faster and
+  // shallower on its four small wheels. None of them bob at rest (no idle):
+  // parked junk sits dead still, which is what sells the gag when a player
+  // dismounts beside it.
+  rolling_log: spec('mount_rolling_log', 1.3, false, { amp: 0.08, hz: 2.2, shape: 'hop' }),
+  tavern_barrel: spec('mount_tavern_barrel', 1.42, false, { amp: 0.09, hz: 2, shape: 'hop' }),
+  // The one mount the rider sits INSIDE rather than on: the seat drops to the
+  // tub floor rather than the model top, and shifts back off the lantern post.
+  runaway_mine_cart: spec(
+    'mount_runaway_mine_cart',
+    1.15,
+    false,
+    { amp: 0.06, hz: 3, shape: 'hop' },
+    -0.1,
+  ),
   grag_bear: spec('mount_grag_bear', 3.35, true, undefined, -0.8),
   stalkglider_snail: spec('mount_stalkglider_snail', 2.65, false, undefined, -0.3, 'slime'),
   aether_hover_cycle: spec(

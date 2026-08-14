@@ -65,6 +65,9 @@ await page.evaluate(() => {
   for (const id of [
     'reins_valorsteed',
     'reins_grag_bear',
+    'reins_rolling_log',
+    'reins_tavern_barrel',
+    'reins_runaway_mine_cart',
     'reins_stalkglider_snail',
     'reins_aether_hover_cycle',
     'reins_shadowjump_toad',
