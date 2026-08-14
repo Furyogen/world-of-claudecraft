@@ -146,7 +146,7 @@ interface AttributionTargetFixture {
 // imports. Both parents move renderer.ts, so the rendererIntegration leaf
 // mints a value matching neither parent. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'decde6de14371817605eb651a7f0450148057e922e1ff81e7169521591704ecd';
+  '6853b1b704d3403dcec610238282b41dbf8095eb8793b7f9111e660c462d3ca0';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [
