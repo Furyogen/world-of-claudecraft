@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AnimState, BaseState } from '../src/render/characters/anim_state';
 import { desiredBaseState, locomotionTimeScale } from '../src/render/characters/anim_state';
-import { applyStandingRider } from '../src/render/mount_ride_view';
+import { applyStandingRider, STANDING_WALK_MIN_SPEED } from '../src/render/mount_ride_view';
 import {
   advanceRoll,
   ROLL_FORWARD,
@@ -128,5 +128,32 @@ describe('a standing rider actually plays a BACKWARDS walk', () => {
     // A seated rider never reaches applyStandingRider, and their state picks
     // the sit loop that reads as riding.
     expect(baseState({ sitting: true, moving: true })).toBe('sit');
+  });
+});
+
+describe('a parked rolling mount stands its rider still', () => {
+  it('does not backpedal a rider on a motionless log', () => {
+    // The gag needs the log to be ROLLING. Walking on the spot beside a parked
+    // one reads as a bug, and it is the same reason these mounts carry no idle
+    // bob: parked junk sits dead still.
+    const st = { ...IDLE } as AnimState;
+    expect(applyStandingRider(st, 0)).toBe(false);
+    expect(st.moving).toBe(false);
+    expect(st.backwards).toBe(false);
+    expect(desiredBaseState(st, true)).toBe('idle');
+  });
+
+  it('ignores the residual speed left on the frame a key is released', () => {
+    const st = { ...IDLE } as AnimState;
+    expect(applyStandingRider(st, STANDING_WALK_MIN_SPEED)).toBe(false);
+    expect(st.moving).toBe(false);
+  });
+
+  it('still walks the moment the mount actually rolls', () => {
+    const st = { ...IDLE } as AnimState;
+    expect(applyStandingRider(st, STANDING_WALK_MIN_SPEED + 0.01)).toBe(true);
+    expect(st.moving).toBe(true);
+    expect(st.backwards).toBe(true);
+    expect(desiredBaseState(st, true)).toBe('walkBack');
   });
 });

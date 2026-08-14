@@ -104,6 +104,11 @@ export function driveMountRide(
   return roll;
 }
 
+/** Below this ground speed a rolling mount is treated as parked and its rider
+ *  stands still. Deliberately not zero: the sim leaves a hair of residual speed
+ *  on the frame a player releases their key. */
+export const STANDING_WALK_MIN_SPEED = 0.05;
+
 /** The rider's animation inputs, narrowed to what a standing rider overrides. */
 export interface RiderAnimInputs {
   speed: number;
@@ -124,11 +129,17 @@ export interface RiderAnimInputs {
  *    adding a dispatch, so `backwards` picks the walkBack clip where one
  *    exists and reverseBackpedal negates the walk timeScale where it does not
  *    (src/render/characters/anim_state.ts). */
-export function applyStandingRider(st: RiderAnimInputs, bodySpeed: number): void {
+export function applyStandingRider(st: RiderAnimInputs, bodySpeed: number): boolean {
+  // A PARKED mount is not rolling, so its rider has nothing to walk against and
+  // simply stands there. Forcing the walk here would backpedal them on the spot
+  // beside a motionless log, which reads as a bug rather than a joke (and it is
+  // the same reason the bob in mount_visuals.ts carries no idle for these).
+  if (bodySpeed <= STANDING_WALK_MIN_SPEED) return false;
   st.speed = topSurfaceSpeed(bodySpeed);
   st.moving = true;
   st.running = false;
   st.backwards = true;
+  return true;
 }
 
 /** Copy the rider's locomotion inputs onto the mount's own anim scratch.
