@@ -54,9 +54,12 @@ export function emitMountFx(
       sink.mountRiftGlow(at, dt, moving);
       return;
     default: {
-      // A new fx kind must add its case above; this makes that a compile error.
+      // A new fx kind must add its case above: this assignment makes that a
+      // compile error rather than a mount that silently renders nothing.
+      // Assigned and dropped, never returned, because the function is void.
       const unreachable: never = spec.fx;
-      return unreachable;
+      void unreachable;
+      return;
     }
   }
 }
