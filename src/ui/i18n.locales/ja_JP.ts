@@ -8265,6 +8265,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.riding_training.name': '騎乗訓練',
   'entities.items.reins_valorsteed.name': 'ヴァロースティードの手綱',
   'entities.items.reins_pet_rock.name': 'ペットロックの手綱',
+  'entities.items.reins_shiny_pet_rock.name': 'ぴかぴかペットロックの手綱',
   'entities.items.reins_stalkglider_snail.name': 'モスシェル・ストークグライダーの手綱',
   'entities.items.reins_aether_hover_cycle.name': '起動キー：エーテルジャウスター・ホバーサイクル',
   'entities.items.reins_shadowjump_toad.name': '影跳びのカマカゲの手綱',
@@ -9468,6 +9469,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.spec_speed': '+{pct}% 移動力上昇',
   'hudChrome.mounts.name_valorsteed': 'ヴァロースティード',
   'hudChrome.mounts.name_pet_rock': 'ペットロック',
+  'hudChrome.mounts.name_shiny_pet_rock': 'ぴかぴかペットロック',
   'hudChrome.mounts.name_grag_bear': 'ゴリアテ・グラグベア',
   'hudChrome.mounts.name_stalkglider_snail': 'モスシェル・ストークグライダー',
   'hudChrome.mounts.name_aether_hover_cycle': 'エーテルジャウスター・ホバーサイクル',
@@ -9482,6 +9484,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.desc_grag_bear': '頑健で足取り確かな熊。移動速度を高める。',
   'hudChrome.mounts.desc_pet_rock':
     'リフトの押し込みパズルの岩。何度も押してくれた者に懐き、借り馬とまったく同じ速さで、あなたを乗せてゴリゴリと進む。',
+  'hudChrome.mounts.desc_shiny_pet_rock':
+    '同じ岩。ようやく台座にはまり、自ら開いたリフトの光で金色に輝き、それ以来まったく鼻高々である。',
   'hudChrome.mounts.desc_stalkglider_snail': '粘り強くゆっくり燃えるカタツムリ。移動速度を高める。',
   'hudChrome.mounts.desc_aether_hover_cycle':
     '低空ホバーで戦場を駆け抜けるために設計された強力な魔導バイク。',

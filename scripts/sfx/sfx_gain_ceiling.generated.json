@@ -2403,6 +2403,17 @@
       }
     ]
   },
+  "mount_run_shiny_pet_rock": {
+    "ceilingDb": 6.9,
+    "tracks": [
+      {
+        "filename": "mount_run_shiny_pet_rock.mp3",
+        "sha256": "643d0c909bbeca576c12afa92f98de0b055210f15ceb15ce28b83bce8eac1c47",
+        "size": 21986,
+        "peakDb": -7.9
+      }
+    ]
+  },
   "mount_run_stalkglider_snail": {
     "ceilingDb": 5.3,
     "tracks": [

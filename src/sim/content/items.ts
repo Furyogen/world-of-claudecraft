@@ -400,6 +400,19 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     noDiscard: true,
     sellValue: 0,
   },
+  // The socketed twin of the Pet Rock reins. Epic quality to match its card;
+  // no acquisition path yet either, so it ships alongside its common sibling
+  // as a catalog and visual entry only.
+  reins_shiny_pet_rock: {
+    id: 'reins_shiny_pet_rock',
+    name: 'Reins of the Shiny Pet Rock',
+    kind: 'mount',
+    mount: 'shiny_pet_rock',
+    quality: 'epic',
+    noVendorSell: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
   // Collectible mount (Morthen the Gravecaller, The Hollow Crypt). Owning the
   // reins item IS owning the mount (src/sim/mounts.ts mountOwned); it stays
   // valid from the bank too, and it transfers like any other unbound item.

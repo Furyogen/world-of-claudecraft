@@ -5126,6 +5126,7 @@ export const ITEM_IMAGE_IDS = new Set<string>([
   // follows docs/design/item-icon-art-style.md and wins over iconDataUrl's procedural recipe.
   'reins_valorsteed',
   'reins_pet_rock',
+  'reins_shiny_pet_rock',
   'reins_grag_bear',
   'reins_stalkglider_snail',
   'reins_aether_hover_cycle',

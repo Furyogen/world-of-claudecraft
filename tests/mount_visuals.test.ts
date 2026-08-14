@@ -190,6 +190,27 @@ describe('procedural bob math', () => {
     expect(spec.seat).toBeLessThan(def.height);
   });
 
+  it('the socketed rock floats where its common twin grinds', () => {
+    const base = MOUNT_VISUAL_SPECS.pet_rock;
+    const shiny = MOUNT_VISUAL_SPECS.shiny_pet_rock;
+    // Same rock, same seat: the epic must not drift into a different mount.
+    expect(shiny.seat).toBe(base.seat);
+    expect(shiny.rigged).toBe(false);
+    // ...but the motion is the whole visual tell, so the two must NOT match.
+    expect(base.bobShape).toBe('hop');
+    expect(shiny.bobShape).toBe('hover');
+    expect(shiny.bobIdle).toBe(true);
+    expect(base.bobIdle).toBe(false);
+    // Socketed and charged, it hovers even standing still; the common does not.
+    expect(mountBobY(shiny, 0.4, false)).not.toBe(0);
+    expect(mountBobY(base, 0.4, false)).toBe(0);
+    // A hover swings both ways; a hop never goes below the rest pose.
+    const quarter = 0.25 / shiny.bobHz;
+    expect(mountBobY(shiny, quarter, true)).toBeCloseTo(shiny.bobAmp, 5);
+    expect(mountBobY(shiny, 3 * quarter, true)).toBeCloseTo(-shiny.bobAmp, 5);
+    expect(mountBobY(base, 3 * (0.25 / base.bobHz), true)).toBeGreaterThanOrEqual(0);
+  });
+
   it('the snail glides flat (no bob at all)', () => {
     const spec = MOUNT_VISUAL_SPECS.stalkglider_snail;
     expect(mountBobY(spec, 0.5, true)).toBe(0);

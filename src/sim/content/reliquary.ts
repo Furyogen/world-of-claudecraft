@@ -267,6 +267,7 @@ export const RELIQUARY_HORIZON_MOUNTS = [
   'aether_hover_cycle',
   'thunderstrut_gobbler',
   'drakemaw_raptor',
+  'shiny_pet_rock',
   'terrorspark_groundshaker',
 ] as const;
 

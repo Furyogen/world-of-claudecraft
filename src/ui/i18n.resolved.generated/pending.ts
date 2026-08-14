@@ -11,34 +11,52 @@
 export const pending: Record<string, readonly string[]> = {
   "es": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "es_ES": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "fr_FR": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "fr_CA": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "en_CA": [],
   "it_IT": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "de_DE": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "zh_CN": [],
   "zh_TW": [],
@@ -46,48 +64,75 @@ export const pending: Record<string, readonly string[]> = {
   "ja_JP": [],
   "pt_BR": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "ru_RU": [],
   "cs_CZ": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "nl_NL": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "pl_PL": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "id_ID": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "tr_TR": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "sv_SE": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "vi_VN": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ],
   "da_DK": [
     "entities.items.reins_pet_rock.name",
+    "entities.items.reins_shiny_pet_rock.name",
     "hudChrome.mounts.desc_pet_rock",
-    "hudChrome.mounts.name_pet_rock"
+    "hudChrome.mounts.desc_shiny_pet_rock",
+    "hudChrome.mounts.name_pet_rock",
+    "hudChrome.mounts.name_shiny_pet_rock"
   ]
 };

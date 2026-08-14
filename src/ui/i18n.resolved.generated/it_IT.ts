@@ -1054,6 +1054,7 @@ export const it_IT: EnTranslations = {
       "spec_speed": "+{pct}% di mobilità extra",
       "name_valorsteed": "Destriero del Valore",
       "name_pet_rock": "Pet Rock",
+      "name_shiny_pet_rock": "Shiny Pet Rock",
       "name_grag_bear": "Orso Grag Golia",
       "name_stalkglider_snail": "Aliante dal Guscio Muschioso",
       "name_aether_hover_cycle": "Aerociclo del Giostratore d’Etere",
@@ -1064,6 +1065,7 @@ export const it_IT: EnTranslations = {
       "name_drakemaw_raptor": "Raptor di Drakemaw",
       "desc_valorsteed": "Un destriero robusto e dal passo sicuro che aumenta la velocità di viaggio.",
       "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_shiny_pet_rock": "The same rock, socketed at last and lit gold by the rift it opened, and insufferably pleased about it ever since.",
       "desc_grag_bear": "Un orso robusto e dal passo sicuro che aumenta la velocità di viaggio.",
       "desc_stalkglider_snail": "Una lumaca tenace e a combustione lenta che aumenta la velocità di viaggio.",
       "desc_aether_hover_cycle": "Una potente moto magitech pensata per spostamenti da combattimento rapidi e radenti.",
@@ -12198,6 +12200,9 @@ export const it_IT: EnTranslations = {
       },
       "reins_pet_rock": {
         "name": "Reins of the Pet Rock"
+      },
+      "reins_shiny_pet_rock": {
+        "name": "Reins of the Shiny Pet Rock"
       },
       "rimefang": {
         "name": "Zanna di Brina"

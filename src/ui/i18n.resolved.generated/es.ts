@@ -1054,6 +1054,7 @@ export const es: EnTranslations = {
       "spec_speed": "+{pct}% de movilidad adicional",
       "name_valorsteed": "Corcel del Valor",
       "name_pet_rock": "Pet Rock",
+      "name_shiny_pet_rock": "Shiny Pet Rock",
       "name_grag_bear": "Oso Grag Goliat",
       "name_stalkglider_snail": "Deslizador de Caparazón Musgoso",
       "name_aether_hover_cycle": "Aerocicleta Justadora del Éter",
@@ -1064,6 +1065,7 @@ export const es: EnTranslations = {
       "name_drakemaw_raptor": "Raptor de Drakemaw",
       "desc_valorsteed": "Un corcel resistente y de paso firme que aumenta la velocidad de viaje.",
       "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_shiny_pet_rock": "The same rock, socketed at last and lit gold by the rift it opened, and insufferably pleased about it ever since.",
       "desc_grag_bear": "Un oso resistente y de paso firme que aumenta la velocidad de viaje.",
       "desc_stalkglider_snail": "Un caracol recio y de combustión lenta que aumenta la velocidad de viaje.",
       "desc_aether_hover_cycle": "Una potente moto magitecnológica diseñada para desplazamientos de combate veloces a baja altura.",
@@ -12198,6 +12200,9 @@ export const es: EnTranslations = {
       },
       "reins_pet_rock": {
         "name": "Reins of the Pet Rock"
+      },
+      "reins_shiny_pet_rock": {
+        "name": "Reins of the Shiny Pet Rock"
       },
       "rimefang": {
         "name": "Colmillo de Escarcha"

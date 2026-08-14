@@ -1054,6 +1054,7 @@ export const id_ID: EnTranslations = {
       "spec_speed": "+{pct}% mobilitas ekstra",
       "name_valorsteed": "Valorsteed",
       "name_pet_rock": "Pet Rock",
+      "name_shiny_pet_rock": "Shiny Pet Rock",
       "name_grag_bear": "Grag-Bear Raksasa",
       "name_stalkglider_snail": "Stalk-Glider Cangkang Lumut",
       "name_aether_hover_cycle": "Sepeda Melayang Aether-Jouster",
@@ -1064,6 +1065,7 @@ export const id_ID: EnTranslations = {
       "name_drakemaw_raptor": "Raptor Drakemaw",
       "desc_valorsteed": "Kuda tunggangan tangguh berpijakan mantap yang memberikan kecepatan perjalanan tambahan.",
       "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_shiny_pet_rock": "The same rock, socketed at last and lit gold by the rift it opened, and insufferably pleased about it ever since.",
       "desc_grag_bear": "Beruang tangguh berpijakan mantap yang memberikan kecepatan perjalanan tambahan.",
       "desc_stalkglider_snail": "Siput ulet berenergi tahan lama yang memberikan kecepatan perjalanan tambahan.",
       "desc_aether_hover_cycle": "Sepeda magiteknologi bertenaga besar yang dirancang untuk pergerakan tempur cepat dan melayang rendah.",
@@ -12198,6 +12200,9 @@ export const id_ID: EnTranslations = {
       },
       "reins_pet_rock": {
         "name": "Reins of the Pet Rock"
+      },
+      "reins_shiny_pet_rock": {
+        "name": "Reins of the Shiny Pet Rock"
       },
       "rimefang": {
         "name": "Taring Beku"

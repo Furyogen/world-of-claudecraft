@@ -816,6 +816,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/mounts/grag_bear.glb": "/media/models/mounts/grag_bear.767ddb38445d.glb",
   "models/mounts/pet_rock.glb": "/media/models/mounts/pet_rock.0b65e6ff6061.glb",
   "models/mounts/shadowjump_toad.glb": "/media/models/mounts/shadowjump_toad.2811f4fadfda.glb",
+  "models/mounts/shiny_pet_rock.glb": "/media/models/mounts/shiny_pet_rock.0b65e6ff6061.glb",
   "models/mounts/stalkglider_snail.glb": "/media/models/mounts/stalkglider_snail.418aa794d44f.glb",
   "models/mounts/stormfeather_griffin.glb": "/media/models/mounts/stormfeather_griffin.32a487152ca2.glb",
   "models/mounts/terrorspark_groundshaker.glb": "/media/models/mounts/terrorspark_groundshaker.fa6e26c7965a.glb",

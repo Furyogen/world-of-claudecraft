@@ -1616,6 +1616,18 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.82,
     lazyPreload: true,
   },
+  // The socketed twin. Same mesh, warm gold instead of cold grey: these are the
+  // exact colours door_portal.ts gives rift_boulder_placed (0x8a7550 stone under
+  // 0xffc24a veins), so the mount and the lit puzzle rock stay the same object in
+  // two states rather than two different rocks.
+  mount_shiny_pet_rock: {
+    url: `${MOUNTS_DIR}/shiny_pet_rock.glb`,
+    height: 1.7,
+    clips: MOUNT_RIGGED,
+    tint: 0xd8a24a,
+    tintStrength: 0.8,
+    lazyPreload: true,
+  },
   mount_grag_bear: {
     url: `${MOUNTS_DIR}/grag_bear.glb`,
     height: 4.0,

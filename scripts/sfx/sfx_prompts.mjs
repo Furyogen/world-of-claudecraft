@@ -107,6 +107,12 @@ export const SFX = [
     custom: true,
   },
   {
+    // The socketed twin: the same grind pitched up and ringing, so the epic
+    // reads as the charged version of the common by ear as well as by eye.
+    key: 'mount_run_shiny_pet_rock',
+    custom: true,
+  },
+  {
     key: 'mount_run_stalkglider_snail',
     custom: true,
   },

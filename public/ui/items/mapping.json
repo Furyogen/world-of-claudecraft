@@ -244,6 +244,14 @@
    "license": "World of ClaudeCraft original art (project-owned, created for this game)"
   },
   {
+   "itemId": "reins_shiny_pet_rock",
+   "name": "Reins of the Shiny Pet Rock",
+   "sourcePack": "woc_mount_reins_art",
+   "sourceFile": "rock-mount/masters/reins_shiny_pet_rock.png (accepted v1)",
+   "confidence": "high",
+   "license": "World of ClaudeCraft original art (project-owned, created for this game)"
+  },
+  {
    "itemId": "resonant_hide",
    "name": "Resonant Hide",
    "sourcePack": "woc_professions_art",

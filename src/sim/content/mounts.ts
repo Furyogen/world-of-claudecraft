@@ -14,6 +14,7 @@
 export type MountKey =
   | 'grag_bear'
   | 'pet_rock'
+  | 'shiny_pet_rock'
   | 'stalkglider_snail'
   | 'valorsteed'
   | 'aether_hover_cycle'
@@ -103,6 +104,16 @@ export const MOUNTS: Record<MountKey, MountDef> = {
   thunderstrut_gobbler: {
     key: 'thunderstrut_gobbler',
     name: 'Thunderstrut the Grand Gobbler',
+    rarity: 'epic',
+    moveSpeedPct: 0.8,
+  },
+  // The Pet Rock socketed: the same boulder after it has been shoved onto
+  // its pad and the rift has lit it up, so it rides the epic tier at 80%
+  // like every other epic. The gag is that the ONLY difference between the
+  // common and the epic is that this one has been put where it belongs.
+  shiny_pet_rock: {
+    key: 'shiny_pet_rock',
+    name: 'Shiny Pet Rock',
     rarity: 'epic',
     moveSpeedPct: 0.8,
   },

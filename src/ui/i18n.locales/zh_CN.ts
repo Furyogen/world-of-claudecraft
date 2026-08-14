@@ -7909,6 +7909,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.riding_training.name': '骑术训练',
   'entities.items.reins_valorsteed.name': '英勇战马的缰绳',
   'entities.items.reins_pet_rock.name': '宠物石头的缰绳',
+  'entities.items.reins_shiny_pet_rock.name': '闪亮宠物石头的缰绳',
   'entities.items.reins_stalkglider_snail.name': '苔壳滑行蜗牛的缰绳',
   'entities.items.reins_aether_hover_cycle.name': '点火钥匙：以太骑士悬浮机车',
   'entities.items.reins_shadowjump_toad.name': '影跃蟾蜍卡玛影的缰绳',
@@ -9057,6 +9058,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.spec_speed': '+{pct}%额外移动力',
   'hudChrome.mounts.name_valorsteed': '英勇战马',
   'hudChrome.mounts.name_pet_rock': '宠物石头',
+  'hudChrome.mounts.name_shiny_pet_rock': '闪亮宠物石头',
   'hudChrome.mounts.name_grag_bear': '歌利亚格拉格巨熊',
   'hudChrome.mounts.name_stalkglider_snail': '苔壳滑行蜗牛',
   'hudChrome.mounts.name_aether_hover_cycle': '以太骑士悬浮机车',
@@ -9071,6 +9073,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.desc_grag_bear': '一头坚韧稳健的巨熊，可提升旅行速度。',
   'hudChrome.mounts.desc_pet_rock':
     '一块裂隙推石谜题中的石头，对反复推动它的人生出了感情，如今载着你缓缓碾行，速度恰好与租来的马相同。',
+  'hudChrome.mounts.desc_shiny_pet_rock':
+    '同一块石头，终于嵌进了凹槽，被它开启的裂隙照成金色，从此得意得让人受不了。',
   'hudChrome.mounts.desc_stalkglider_snail': '一只坚毅耐久的蜗牛，可提升旅行速度。',
   'hudChrome.mounts.desc_aether_hover_cycle':
     '一辆强大的魔导机车，专为快速贴地悬浮的战斗穿行而设计。',

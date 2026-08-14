@@ -1054,6 +1054,7 @@ export const vi_VN: EnTranslations = {
       "spec_speed": "+{pct}% tốc độ di chuyển",
       "name_valorsteed": "Valorsteed",
       "name_pet_rock": "Pet Rock",
+      "name_shiny_pet_rock": "Shiny Pet Rock",
       "name_grag_bear": "Gấu Grag Khổng Lồ",
       "name_stalkglider_snail": "Ốc Sên Lượn Vỏ Rêu",
       "name_aether_hover_cycle": "Xe Lượn Đấu Sĩ Ê-te",
@@ -1064,6 +1065,7 @@ export const vi_VN: EnTranslations = {
       "name_drakemaw_raptor": "Cuồng Long Drakemaw",
       "desc_valorsteed": "Một con chiến mã khỏe mạnh, bước chân vững chãi, giúp tăng tốc độ di chuyển.",
       "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_shiny_pet_rock": "The same rock, socketed at last and lit gold by the rift it opened, and insufferably pleased about it ever since.",
       "desc_grag_bear": "Một chú gấu khỏe mạnh, bước chân vững chãi, giúp tăng tốc độ di chuyển.",
       "desc_stalkglider_snail": "Một chú ốc sên bền bỉ, dẻo dai, giúp tăng tốc độ di chuyển.",
       "desc_aether_hover_cycle": "Một cỗ xe phép thuật cơ khí mạnh mẽ, được thiết kế để di chuyển nhanh và lướt sát mặt đất trong chiến đấu.",
@@ -12198,6 +12200,9 @@ export const vi_VN: EnTranslations = {
       },
       "reins_pet_rock": {
         "name": "Reins of the Pet Rock"
+      },
+      "reins_shiny_pet_rock": {
+        "name": "Reins of the Shiny Pet Rock"
       },
       "rimefang": {
         "name": "Nanh Băng Giá"
