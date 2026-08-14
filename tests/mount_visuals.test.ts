@@ -166,7 +166,7 @@ describe('procedural bob math', () => {
     expect(mountBobY(spec, 0.7, true)).toBe(0);
   });
 
-  it('the pet boulder is a static rock whose hop bob IS its locomotion', () => {
+  it('the pet rock is a static rock whose hop bob IS its locomotion', () => {
     const spec = MOUNT_VISUAL_SPECS.pet_rock;
     const def = VISUALS.mount_pet_rock;
     // The GLB is a shipped prop mesh with no animation track at all, so
@@ -176,7 +176,8 @@ describe('procedural bob math', () => {
       visualKey: 'mount_pet_rock',
       rigged: false,
       seatFwd: 0,
-      fx: null,
+      // Grit, not null: the grind is what the effect exists to show.
+      fx: 'grit',
       bobShape: 'hop',
       bobIdle: false,
     });
