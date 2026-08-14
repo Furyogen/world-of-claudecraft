@@ -1053,7 +1053,7 @@ export const nl_NL: EnTranslations = {
       "rarity_epic": "Episch",
       "spec_speed": "+{pct}% extra mobiliteit",
       "name_valorsteed": "Moedros",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Goliath Grag-Beer",
       "name_stalkglider_snail": "Mosschelp-Sluipglijder",
       "name_aether_hover_cycle": "Aether-Duellist Zweefmotor",
@@ -1063,7 +1063,7 @@ export const nl_NL: EnTranslations = {
       "name_terrorspark_groundshaker": "Schrikvonk, de Grondschudder",
       "name_drakemaw_raptor": "Drakenmuil-Raptor",
       "desc_valorsteed": "Een sterk, standvastig strijdros dat extra reissnelheid geeft.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Een sterke, standvastige beer die extra reissnelheid geeft.",
       "desc_stalkglider_snail": "Een taaie, langzaam brandende slak die extra reissnelheid geeft.",
       "desc_aether_hover_cycle": "Een krachtige magitech-motor, ontworpen voor snelle, laag zwevende verplaatsing tijdens gevechten.",
@@ -12196,8 +12196,8 @@ export const nl_NL: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Teugels van de Drakenmuil-Raptor"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Rijptand"

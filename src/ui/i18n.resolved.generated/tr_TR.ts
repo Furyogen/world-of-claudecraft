@@ -1053,7 +1053,7 @@ export const tr_TR: EnTranslations = {
       "rarity_epic": "Epik",
       "spec_speed": "+%{pct} ekstra hareket kabiliyeti",
       "name_valorsteed": "Yiğit Küheylan",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Golyat Grag-Ayı",
       "name_stalkglider_snail": "Yosun Kabuklu Süzülgen",
       "name_aether_hover_cycle": "Aether Turnuva Motosikleti",
@@ -1063,7 +1063,7 @@ export const tr_TR: EnTranslations = {
       "name_terrorspark_groundshaker": "Dehşetkıvılcım, Yer Sarsan",
       "name_drakemaw_raptor": "Ejder Ağzı Raptoru",
       "desc_valorsteed": "Gelişmiş seyahat hızı sağlayan, dayanıklı ve sağlam adımlı bir küheylan.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Gelişmiş seyahat hızı sağlayan, dayanıklı ve sağlam adımlı bir ayı.",
       "desc_stalkglider_snail": "Gelişmiş seyahat hızı sağlayan, dayanıklı ve yavaş yanan bir salyangoz.",
       "desc_aether_hover_cycle": "Savaşta hızlı, alçaktan süzülerek hareket etmek için tasarlanmış güçlü bir büyü-teknoloji motosikleti.",
@@ -12196,8 +12196,8 @@ export const tr_TR: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Ejder Ağzı Raptoru'nun Dizginleri"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Kırağı Dişi"

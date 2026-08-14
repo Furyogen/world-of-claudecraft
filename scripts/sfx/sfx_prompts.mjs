@@ -103,7 +103,7 @@ export const SFX = [
     // The rock mount: a per-stride grind of stone dragging over stone,
     // derived from the rift boulder's own roll take so the mount sounds
     // like the puzzle boulder it is.
-    key: 'mount_run_pet_boulder',
+    key: 'mount_run_pet_rock',
     custom: true,
   },
   {

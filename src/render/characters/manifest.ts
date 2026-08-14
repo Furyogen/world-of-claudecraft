@@ -1602,8 +1602,8 @@ export const VISUALS: Record<string, VisualDef> = {
   // zero animations and no skin, so it renders its rest pose and the hop bob in
   // mount_visuals.ts carries the motion. Deliberately squat (1.5 tall against the
   // 2.6 humanoid) so it reads as a boulder you perch on, not a mountain.
-  mount_pet_boulder: {
-    url: `${MOUNTS_DIR}/pet_boulder.glb`,
+  mount_pet_rock: {
+    url: `${MOUNTS_DIR}/pet_rock.glb`,
     height: 1.7,
     clips: MOUNT_RIGGED,
     // The one TINTED mount, and deliberately so: the shipped prop carries the

@@ -386,15 +386,15 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 0,
     buyValue: 100_000, // 10 gold in copper
   },
-  // The joke mount reins (Rollo the Pet Boulder). No acquisition path yet
+  // The joke mount reins (the Pet Rock). No acquisition path yet
   // (owner call), so nothing vendors, drops, or quests it today; it is a
   // catalog + visual entry the same way the Drakemaw Raptor reins is. Player
   // reins rules still apply in full: unbound, no vendor sell, no discard.
-  reins_pet_boulder: {
-    id: 'reins_pet_boulder',
-    name: 'Reins of the Pet Boulder',
+  reins_pet_rock: {
+    id: 'reins_pet_rock',
+    name: 'Reins of the Pet Rock',
     kind: 'mount',
-    mount: 'pet_boulder',
+    mount: 'pet_rock',
     quality: 'common',
     noVendorSell: true,
     noDiscard: true,

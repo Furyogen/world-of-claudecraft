@@ -1053,7 +1053,7 @@ export const pl_PL: EnTranslations = {
       "rarity_epic": "Epicki",
       "spec_speed": "+{pct}% dodatkowej mobilności",
       "name_valorsteed": "Rumak Męstwa",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Goliat Niedźwiedź Grag",
       "name_stalkglider_snail": "Omszałoskorupny Ślizgacz",
       "name_aether_hover_cycle": "Eteryczny Motocykl Turniejowca",
@@ -1063,7 +1063,7 @@ export const pl_PL: EnTranslations = {
       "name_terrorspark_groundshaker": "Groziskra, Wstrząsacz Ziemi",
       "name_drakemaw_raptor": "Raptor Smoczej Paszczy",
       "desc_valorsteed": "Wytrzymały, pewny kroku rumak, który zapewnia zwiększoną prędkość podróżowania.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Wytrzymały, pewny kroku niedźwiedź, który zapewnia zwiększoną prędkość podróżowania.",
       "desc_stalkglider_snail": "Krzepki, powoli, lecz niezmordowanie pełznący ślimak, który zapewnia zwiększoną prędkość podróżowania.",
       "desc_aether_hover_cycle": "Potężny magitechniczny motocykl zaprojektowany do szybkiego, nisko unoszącego się przemieszczania w walce.",
@@ -12196,8 +12196,8 @@ export const pl_PL: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Wodze Raptora Smoczej Paszczy"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Szronowy Kieł"

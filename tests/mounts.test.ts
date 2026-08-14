@@ -118,7 +118,7 @@ describe('mount catalog', () => {
     expect(spec('valorsteed')).toEqual(['common', 0.6]);
     // The rock joke mount is the horse's card exactly: a gag must not be a
     // power choice, so it re-uses the common tier's 60% rather than a new number.
-    expect(spec('pet_boulder')).toEqual(['common', 0.6]);
+    expect(spec('pet_rock')).toEqual(['common', 0.6]);
     expect(spec('stormfeather_griffin')).toEqual(['uncommon', 0.7]);
     expect(spec('shadowjump_toad')).toEqual(['uncommon', 0.7]);
     expect(spec('grag_bear')).toEqual(['rare', 0.75]);
@@ -246,12 +246,12 @@ describe('mount reins items (the collection: owning the item is owning the mount
     // acquisition path at all. Listed EXPLICITLY so a sourceless mount is a
     // decision and never an accident: when the world boss lands, delete the entry
     // and the rarity-derived rule below takes back over.
-    // reins_pet_boulder joins it for a different reason: the rock mount ships as a
+    // reins_pet_rock joins it for a different reason: the rock mount ships as a
     // catalog and visual entry only, so it too must name no door until one is
     // authored. It is COMMON, which is why the sourceless arm below is hoisted out
     // of the epic branch: a rarity with no drop tier at all must still be provably
     // sourceless rather than fall through to the rate rules.
-    const NO_SOURCE_YET: readonly string[] = ['reins_drakemaw_raptor', 'reins_pet_boulder'];
+    const NO_SOURCE_YET: readonly string[] = ['reins_drakemaw_raptor', 'reins_pet_rock'];
     const FIVE_MAN_SOURCES: Record<string, readonly string[]> = {
       reins_stormfeather_griffin: ['morthen'],
       reins_shadowjump_toad: ['vael_the_mistcaller'],

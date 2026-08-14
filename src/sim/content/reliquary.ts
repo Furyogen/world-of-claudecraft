@@ -259,7 +259,7 @@ function titles(...ids: readonly string[]): ReliquaryRelicDef[] {
 // seams (ownedMounts, accountCosmetics.weaponSkinIds, deedsEarned).
 export const RELIQUARY_HORIZON_MOUNTS = [
   'valorsteed',
-  'pet_boulder',
+  'pet_rock',
   'stormfeather_griffin',
   'shadowjump_toad',
   'grag_bear',
@@ -283,9 +283,9 @@ export const RELIQUARY_HORIZON_MOUNTS = [
 // def in content/zone3.ts), so a quest hint there would name a door that hands
 // out nothing.
 //
-// drakemaw_raptor, pet_boulder and terrorspark_groundshaker are absent, and
+// drakemaw_raptor, pet_rock and terrorspark_groundshaker are absent, and
 // that absence IS the answer: no live table awards any of them
-// (drakemaw_raptor and pet_boulder have no acquisition path,
+// (drakemaw_raptor and pet_rock have no acquisition path,
 // terrorspark_groundshaker is dev-grant only). They are the catalog's three
 // SOURCE_PENDING_RULING mounts; masterwork:engineering on the professions
 // shelf is the fourth pending slot (QA ruling 2026-08-07).
@@ -1311,7 +1311,7 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
     // HEROIC_BOSS_LOOT bosses AND from their Rift rank's ladder, the two epic
     // reins are Rift-only, and valorsteed is Marla's counter. The page-wide
     // pending ruling that used to cover them all is executed; the three that
-    // remain (drakemaw_raptor, pet_boulder, terrorspark_groundshaker) are
+    // remain (drakemaw_raptor, pet_rock, terrorspark_groundshaker) are
     // content gaps, not vocabulary gaps, and stay hand-listed in
     // SOURCE_PENDING_RULING.
     relics: mounts(...mountEntries(RELIQUARY_HORIZON_MOUNTS)),

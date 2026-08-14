@@ -355,7 +355,7 @@ describe('Reliquary Conqueror catalog structure', () => {
     // 242 + 16 + 29 + 47 + 3 = 337, plus the three daggers the v0.36.0 release
     // merge added to live content (rimefang on the Rift page, duskwhisper on
     // Wildheart Basin, boneglass_shiv on Spoils): 340, plus the rock joke mount
-    // (pet_boulder) on horizons_mounts: 341. Catalog growth reverts
+    // (pet_rock) on horizons_mounts: 341. Catalog growth reverts
     // page completion for finished players, per docs/design/reliquary.md.
     // The two excludeFromCompletion pages add
     // slots and 0 to BOTH pairs: the Vault of Ages contributes four retired
@@ -2375,10 +2375,10 @@ const SOURCE_PENDING_RULING: Readonly<Record<string, readonly string[]>> = {
   // slot stays listed and sourceless until the mount gets a route.
   // terrorspark_groundshaker: dev-grant only, deliberately absent from vendors,
   // quests, mob loot, heroic loot, and the rift reins pools.
-  // pet_boulder: the rock joke mount ships as a catalog and visual entry only
+  // pet_rock: the rock joke mount ships as a catalog and visual entry only
   // (owner call, this change): no vendor, drop, quest, or rift pool awards its
   // reins, so there is no door to name until one is authored.
-  horizons_mounts: ['drakemaw_raptor', 'pet_boulder', 'terrorspark_groundshaker'],
+  horizons_mounts: ['drakemaw_raptor', 'pet_rock', 'terrorspark_groundshaker'],
   // masterwork:engineering: unearnable, QA ruling 2026-08-07. Every live
   // engineering recipe produces a slotless, statless tool, masterworkBonusStats
   // returns null for all of them, so the masterwork proc can never fire and
@@ -3344,7 +3344,7 @@ describe('Reliquary source hint coverage', () => {
     ]);
     expect(SOURCE_PENDING_RULING.horizons_mounts).toEqual([
       'drakemaw_raptor',
-      'pet_boulder',
+      'pet_rock',
       'terrorspark_groundshaker',
     ]);
     // masterwork:engineering pended by the QA ruling 2026-08-07: no

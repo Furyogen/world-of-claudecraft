@@ -1053,7 +1053,7 @@ export const pt_BR: EnTranslations = {
       "rarity_epic": "Épica",
       "spec_speed": "+{pct}% de mobilidade extra",
       "name_valorsteed": "Corcel do Valor",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Urso Grag Golias",
       "name_stalkglider_snail": "Planador de Casco Musgoso",
       "name_aether_hover_cycle": "Aerociclo do Justador do Éter",
@@ -1063,7 +1063,7 @@ export const pt_BR: EnTranslations = {
       "name_terrorspark_groundshaker": "Faíscaterror, Abala-Terra",
       "name_drakemaw_raptor": "Raptor de Drakemaw",
       "desc_valorsteed": "Um corcel resistente e de passo firme que aumenta a velocidade de viagem.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Um urso resistente e de passo firme que aumenta a velocidade de viagem.",
       "desc_stalkglider_snail": "Um caracol valente e de queima lenta que aumenta a velocidade de viagem.",
       "desc_aether_hover_cycle": "Uma poderosa moto magitec projetada para travessias de combate rápidas e rente ao chão.",
@@ -12196,8 +12196,8 @@ export const pt_BR: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Rédeas do Raptor de Drakemaw"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Presa de Geada"

@@ -13,7 +13,7 @@
 
 export type MountKey =
   | 'grag_bear'
-  | 'pet_boulder'
+  | 'pet_rock'
   | 'stalkglider_snail'
   | 'valorsteed'
   | 'aether_hover_cycle'
@@ -52,14 +52,14 @@ export const MOUNTS: Record<MountKey, MountDef> = {
     rarity: 'common',
     moveSpeedPct: 0.6,
   },
-  // The joke mount, and the second common: a rift push-puzzle boulder that
+  // The joke mount, and the second common: a rift push-puzzle rock that
   // followed its shover home. Deliberately the horse-tier 60%, so the gag
   // costs nothing in power (the rarity/speed tiering above still holds): it
   // is the stablemaster horse's numbers wearing a rock. No acquisition path
   // yet (owner call), like the Drakemaw Raptor.
-  pet_boulder: {
-    key: 'pet_boulder',
-    name: 'Rollo the Pet Boulder',
+  pet_rock: {
+    key: 'pet_rock',
+    name: 'Pet Rock',
     rarity: 'common',
     moveSpeedPct: 0.6,
   },

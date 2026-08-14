@@ -6448,7 +6448,7 @@ export const GUIDE_RELIQUARY: GuideReliquaryPage[] = [
       },
       {
         "kind": "mount",
-        "name": "Rollo the Pet Boulder"
+        "name": "Pet Rock"
       },
       {
         "kind": "mount",

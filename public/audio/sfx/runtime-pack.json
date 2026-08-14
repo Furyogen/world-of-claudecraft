@@ -1,8 +1,8 @@
 {
   "format": "woc-sfx-runtime-pack",
   "version": 1,
-  "bundleId": "309911fbe585a7fe9732a5f530f5240229e9bb063e5b660822408a3cfdd54f02",
-  "catalogHash": "4c92a3312cd1969fc3ff92c2fb7820b38ef9588da259410998afe2256c484635",
+  "bundleId": "ed0e6409d215a26f8cf1a70c389d9036044822df0a35af493bdd384db6ad478a",
+  "catalogHash": "e24977eca4f72ff5f3689e1e7903b0f50d18815300c098c80f1a65db985c0535",
   "clips": {
     "amb_birds": {
       "variants": [
@@ -2890,11 +2890,11 @@
       "gain": 1,
       "playbackRate": 1
     },
-    "mount_run_pet_boulder": {
+    "mount_run_pet_rock": {
       "variants": [
         {
           "id": "main",
-          "url": "/audio/sfx/mount_run_pet_boulder.mp3?v=3c31cf72c851",
+          "url": "/audio/sfx/mount_run_pet_rock.mp3?v=3c31cf72c851",
           "bytes": 21986,
           "sha256": "3c31cf72c8511936ad3acd85eec934c65c0d693cd2a5356c9fe920f2a724a5e8"
         }

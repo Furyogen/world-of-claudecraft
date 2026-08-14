@@ -1053,7 +1053,7 @@ export const de_DE: EnTranslations = {
       "rarity_epic": "Episch",
       "spec_speed": "+{pct}% zusätzliche Mobilität",
       "name_valorsteed": "Valorross",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Goliath-Gragbär",
       "name_stalkglider_snail": "Moosschalen-Stielgleiter",
       "name_aether_hover_cycle": "Ätherlanzen-Schwebrad",
@@ -1063,7 +1063,7 @@ export const de_DE: EnTranslations = {
       "name_terrorspark_groundshaker": "Schreckfunke, der Bodenerschütterer",
       "name_drakemaw_raptor": "Drakenrachen-Raptor",
       "desc_valorsteed": "Ein robustes, trittsicheres Ross, das die Reisegeschwindigkeit erhöht.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Ein robuster, trittsicherer Bär, der die Reisegeschwindigkeit erhöht.",
       "desc_stalkglider_snail": "Eine herzhafte, ausdauernde Schnecke, die die Reisegeschwindigkeit erhöht.",
       "desc_aether_hover_cycle": "Ein mächtiges Magitech-Rad für schnelles, bodennah schwebendes Kampfmanövrieren.",
@@ -12196,8 +12196,8 @@ export const de_DE: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Zügel des Drakenrachen-Raptors"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Reiffang"

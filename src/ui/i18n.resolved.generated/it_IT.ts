@@ -1053,7 +1053,7 @@ export const it_IT: EnTranslations = {
       "rarity_epic": "Epica",
       "spec_speed": "+{pct}% di mobilità extra",
       "name_valorsteed": "Destriero del Valore",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Orso Grag Golia",
       "name_stalkglider_snail": "Aliante dal Guscio Muschioso",
       "name_aether_hover_cycle": "Aerociclo del Giostratore d’Etere",
@@ -1063,7 +1063,7 @@ export const it_IT: EnTranslations = {
       "name_terrorspark_groundshaker": "Terrorscintilla, Scuoteterra",
       "name_drakemaw_raptor": "Raptor di Drakemaw",
       "desc_valorsteed": "Un destriero robusto e dal passo sicuro che aumenta la velocità di viaggio.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "Un orso robusto e dal passo sicuro che aumenta la velocità di viaggio.",
       "desc_stalkglider_snail": "Una lumaca tenace e a combustione lenta che aumenta la velocità di viaggio.",
       "desc_aether_hover_cycle": "Una potente moto magitech pensata per spostamenti da combattimento rapidi e radenti.",
@@ -12196,8 +12196,8 @@ export const it_IT: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Redini del Raptor di Drakemaw"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Zanna di Brina"

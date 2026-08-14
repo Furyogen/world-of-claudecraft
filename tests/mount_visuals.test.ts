@@ -167,13 +167,13 @@ describe('procedural bob math', () => {
   });
 
   it('the pet boulder is a static rock whose hop bob IS its locomotion', () => {
-    const spec = MOUNT_VISUAL_SPECS.pet_boulder;
-    const def = VISUALS.mount_pet_boulder;
+    const spec = MOUNT_VISUAL_SPECS.pet_rock;
+    const def = VISUALS.mount_pet_rock;
     // The GLB is a shipped prop mesh with no animation track at all, so
     // `rigged` must stay false: flipping it on would silently ask the visual
     // for Walk/Run clips the asset does not have and freeze the mount.
     expect(spec).toMatchObject({
-      visualKey: 'mount_pet_boulder',
+      visualKey: 'mount_pet_rock',
       rigged: false,
       seatFwd: 0,
       fx: null,

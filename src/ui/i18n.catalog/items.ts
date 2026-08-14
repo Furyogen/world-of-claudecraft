@@ -2423,7 +2423,7 @@ const ITEM_ENTITY_IDS = [
   'artisans_eye',
   'reins_terrorspark_groundshaker',
   'reins_drakemaw_raptor',
-  'reins_pet_boulder',
+  'reins_pet_rock',
   'rimefang',
   'marrowpoint',
   'duskwhisper',
@@ -2543,8 +2543,8 @@ const APPENDED_ITEM_NAMES: Partial<Record<ItemEntityId, string>> = {
   murloc_hut: 'Mudfin Hut',
   // Dragonkin brood rebuild (PR #2811), same English-appended treatment.
   reins_drakemaw_raptor: 'Reins of the Drakemaw Raptor',
-  // The rock mount joke (Rollo the Pet Boulder); English-appended like the rest.
-  reins_pet_boulder: 'Reins of the Pet Boulder',
+  // The rock mount joke (the Pet Rock); English-appended like the rest.
+  reins_pet_rock: 'Reins of the Pet Rock',
   restless_skull: 'Restless Skull',
   vanguard_bone: 'Vanguard Bone',
   // Hunter quivers, the class's first held-offhand ladder; same English-appended

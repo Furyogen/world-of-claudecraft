@@ -1053,7 +1053,7 @@ export const sv_SE: EnTranslations = {
       "rarity_epic": "Episk",
       "spec_speed": "+{pct}% extra rörlighet",
       "name_valorsteed": "Tapperhetshästen",
-      "name_pet_boulder": "Rollo the Pet Boulder",
+      "name_pet_rock": "Pet Rock",
       "name_grag_bear": "Goliat Grag-björnen",
       "name_stalkglider_snail": "Mosskal-stjälkglidaren",
       "name_aether_hover_cycle": "Etertornerarens svävcykel",
@@ -1063,7 +1063,7 @@ export const sv_SE: EnTranslations = {
       "name_terrorspark_groundshaker": "Skräckgnista, markskakaren",
       "name_drakemaw_raptor": "Drakgapsraptor",
       "desc_valorsteed": "En uthållig, säkerfotad stridshäst som ger ökad reshastighet.",
-      "desc_pet_boulder": "A rift push-puzzle boulder that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
+      "desc_pet_rock": "A rift push-puzzle rock that grew fond of whoever kept shoving it, grinding along beneath you at exactly the pace of a rented horse.",
       "desc_grag_bear": "En uthållig, säkerfotad björn som ger ökad reshastighet.",
       "desc_stalkglider_snail": "En robust, långsamt brinnande snigel som ger ökad reshastighet.",
       "desc_aether_hover_cycle": "En kraftfull magitech-cykel designad för snabb, lågsvävande förflyttning i strid.",
@@ -12196,8 +12196,8 @@ export const sv_SE: EnTranslations = {
       "reins_drakemaw_raptor": {
         "name": "Tyglar till Drakgapsraptorn"
       },
-      "reins_pet_boulder": {
-        "name": "Reins of the Pet Boulder"
+      "reins_pet_rock": {
+        "name": "Reins of the Pet Rock"
       },
       "rimefang": {
         "name": "Rimtand"
