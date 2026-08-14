@@ -1053,9 +1053,9 @@ export const zh_CN: EnTranslations = {
       "rarity_epic": "史诗",
       "spec_speed": "+{pct}%额外移动力",
       "name_valorsteed": "英勇战马",
-      "name_rolling_log": "Ol' Rollin' Log",
-      "name_tavern_barrel": "Barrel of Laughs",
-      "name_runaway_mine_cart": "Runaway Mine Cart",
+      "name_rolling_log": "滚滚老圆木",
+      "name_tavern_barrel": "欢乐酒桶",
+      "name_runaway_mine_cart": "脱缰矿车",
       "name_grag_bear": "歌利亚格拉格巨熊",
       "name_stalkglider_snail": "苔壳滑行蜗牛",
       "name_aether_hover_cycle": "以太骑士悬浮机车",
@@ -1065,9 +1065,9 @@ export const zh_CN: EnTranslations = {
       "name_terrorspark_groundshaker": "惊雷撼地者",
       "name_drakemaw_raptor": "龙喉迅猛龙",
       "desc_valorsteed": "一匹坚韧稳健的骏马，可提升旅行速度。",
-      "desc_rolling_log": "A fallen trunk with a saddle roped to it, which rolls downhill with you aboard and calls that transport.",
-      "desc_tavern_barrel": "An emptied keg that never made it back to the cellar, and has decided its second career is carrying you.",
-      "desc_runaway_mine_cart": "An ore cart with no rails, no brakes, and no memory of the mine it escaped, still going anyway.",
+      "desc_rolling_log": "一截倒下的树干，用绳子绑上了马鞍。它载着你一路滚下山坡，还把这称作交通工具。",
+      "desc_tavern_barrel": "一个再没能回到酒窖的空酒桶，它已经认定自己的第二份职业就是驮着你。",
+      "desc_runaway_mine_cart": "一辆没有轨道、没有刹车的矿车，早已不记得自己逃出的是哪座矿井，却依然一路狂奔。",
       "desc_grag_bear": "一头坚韧稳健的巨熊，可提升旅行速度。",
       "desc_stalkglider_snail": "一只坚毅耐久的蜗牛，可提升旅行速度。",
       "desc_aether_hover_cycle": "一辆强大的魔导机车，专为快速贴地悬浮的战斗穿行而设计。",
@@ -12329,13 +12329,13 @@ export const zh_CN: EnTranslations = {
         "name": "龙喉迅猛龙的缰绳"
       },
       "reins_rolling_log": {
-        "name": "Reins of the Ol' Rollin' Log"
+        "name": "滚滚老圆木的缰绳"
       },
       "reins_tavern_barrel": {
-        "name": "Reins of the Barrel of Laughs"
+        "name": "欢乐酒桶的缰绳"
       },
       "reins_runaway_mine_cart": {
-        "name": "Reins of the Runaway Mine Cart"
+        "name": "脱缰矿车的缰绳"
       },
       "rimefang": {
         "name": "霜牙"

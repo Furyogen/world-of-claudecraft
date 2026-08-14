@@ -76,50 +76,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.name_runaway_mine_cart",
     "hudChrome.mounts.name_tavern_barrel"
   ],
-  "zh_CN": [
-    "entities.items.reins_rolling_log.name",
-    "entities.items.reins_runaway_mine_cart.name",
-    "entities.items.reins_tavern_barrel.name",
-    "hudChrome.mounts.desc_rolling_log",
-    "hudChrome.mounts.desc_runaway_mine_cart",
-    "hudChrome.mounts.desc_tavern_barrel",
-    "hudChrome.mounts.name_rolling_log",
-    "hudChrome.mounts.name_runaway_mine_cart",
-    "hudChrome.mounts.name_tavern_barrel"
-  ],
-  "zh_TW": [
-    "entities.items.reins_rolling_log.name",
-    "entities.items.reins_runaway_mine_cart.name",
-    "entities.items.reins_tavern_barrel.name",
-    "hudChrome.mounts.desc_rolling_log",
-    "hudChrome.mounts.desc_runaway_mine_cart",
-    "hudChrome.mounts.desc_tavern_barrel",
-    "hudChrome.mounts.name_rolling_log",
-    "hudChrome.mounts.name_runaway_mine_cart",
-    "hudChrome.mounts.name_tavern_barrel"
-  ],
-  "ko_KR": [
-    "entities.items.reins_rolling_log.name",
-    "entities.items.reins_runaway_mine_cart.name",
-    "entities.items.reins_tavern_barrel.name",
-    "hudChrome.mounts.desc_rolling_log",
-    "hudChrome.mounts.desc_runaway_mine_cart",
-    "hudChrome.mounts.desc_tavern_barrel",
-    "hudChrome.mounts.name_rolling_log",
-    "hudChrome.mounts.name_runaway_mine_cart",
-    "hudChrome.mounts.name_tavern_barrel"
-  ],
-  "ja_JP": [
-    "entities.items.reins_rolling_log.name",
-    "entities.items.reins_runaway_mine_cart.name",
-    "entities.items.reins_tavern_barrel.name",
-    "hudChrome.mounts.desc_rolling_log",
-    "hudChrome.mounts.desc_runaway_mine_cart",
-    "hudChrome.mounts.desc_tavern_barrel",
-    "hudChrome.mounts.name_rolling_log",
-    "hudChrome.mounts.name_runaway_mine_cart",
-    "hudChrome.mounts.name_tavern_barrel"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.items.reins_rolling_log.name",
     "entities.items.reins_runaway_mine_cart.name",
@@ -131,17 +91,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.name_runaway_mine_cart",
     "hudChrome.mounts.name_tavern_barrel"
   ],
-  "ru_RU": [
-    "entities.items.reins_rolling_log.name",
-    "entities.items.reins_runaway_mine_cart.name",
-    "entities.items.reins_tavern_barrel.name",
-    "hudChrome.mounts.desc_rolling_log",
-    "hudChrome.mounts.desc_runaway_mine_cart",
-    "hudChrome.mounts.desc_tavern_barrel",
-    "hudChrome.mounts.name_rolling_log",
-    "hudChrome.mounts.name_runaway_mine_cart",
-    "hudChrome.mounts.name_tavern_barrel"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.items.reins_rolling_log.name",
     "entities.items.reins_runaway_mine_cart.name",
