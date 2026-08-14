@@ -19,6 +19,11 @@ export const ADMIN_ROUTE_PERMISSIONS: readonly AdminRouteRule[] = [
   { method: 'GET', pattern: '/admin/api/me', permission: 'any' },
 
   { method: 'GET', pattern: '/admin/api/overview', permission: 'analytics.read' },
+  // The ad-spend ledger (server/ad_spend.ts): read beside the dashboards,
+  // writes behind the dedicated manage grant.
+  { method: 'GET', pattern: '/admin/api/ad-spend', permission: 'analytics.read' },
+  { method: 'POST', pattern: '/admin/api/ad-spend', permission: 'analytics.manage' },
+  { method: 'POST', pattern: '/admin/api/ad-spend/delete', permission: 'analytics.manage' },
   { method: 'GET', pattern: '/admin/api/provider-usage', permission: 'ops_usage.read' },
   { method: 'GET', pattern: '/admin/api/online', permission: 'accounts.read' },
   { method: 'GET', pattern: '/admin/api/online-history', permission: 'analytics.read' },

@@ -724,10 +724,22 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // with the release branch's organized renderer imports. Both parents move
 // renderer.ts, so the rendererIntegration leaf mints a value matching neither
 // parent. No capture was retaken.
+// Re-minted after the point-light adoption seam moved the fire-light budget
+// pass out of renderer.ts into fire_light_registry.ts. renderer.ts is a
+// provenance input, so the composite moves and the swept evidence bytes follow.
+// No capture was retaken.
+// Re-minted again for the review fixes on the same PR (stranded-light reparent
+// extracted, pooled budget-pass descriptor): renderer.ts bytes only, so the
+// composite follows it and the swept evidence bytes follow the composite. No
+// capture was retaken.
+// Re-minted for the merge of release/v0.38.0 into the night-lighting branch:
+// both parents move renderer.ts, so the composite mints a value matching neither
+// parent and this metadata authority sha follows the swept bytes. No capture was
+// retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  '01544558132b7a560aff6d8813284653b3e5c1050cc67d6b05204435508d6483';
+  '4f01dd094fbbb9cf66798c6f36aae8bb319b963567c3ab35747ea8e041f09ae7';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  '6853b1b704d3403dcec610238282b41dbf8095eb8793b7f9111e660c462d3ca0';
+  'dbe72efd55ba53ddf7a409f4cfa805aa8d6ac28bae677250c2781fcf89cf6d60';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -1632,6 +1644,10 @@ describe('Eastbrook polish performance and contact evidence', () => {
     // the first-order composite follows both parents' renderer.ts and
     // prewarm_policy.ts inputs, then this second-order performance seal follows
     // the swept evidence bytes. No capture was retaken.
+    // Re-minted after the point-light adoption seam moved the fire-light budget
+    // pass out of renderer.ts: the first-order composite follows renderer.ts,
+    // then this second-order seal follows the swept evidence bytes. No capture
+    // was retaken.
     // Re-pinned for the merge of release/v0.36.0 (post PR 3220/3221) into the
     // KTX2 mip-release branch: the first-order composite follows both parents'
     // renderer.ts inputs, then this second-order performance seal follows the
@@ -1688,10 +1704,14 @@ describe('Eastbrook polish performance and contact evidence', () => {
     // composite follows the merged renderer.ts bytes, then this second-order
     // performance seal follows the swept evidence bytes. No capture was
     // retaken.
+    // Re-minted for the merge of release/v0.38.0 into the night-lighting branch:
+    // both parents move renderer.ts, so the first-order composite mints anew and
+    // this second-order seal follows the swept evidence bytes. No capture was
+    // retaken.
     expect(
       fingerprint.digest('hex'),
       `the second-order performance digest moved; if every input moved legitimately, re-mint with: ${REMINT_COMMAND} (it recomputes this literal LAST, from the swept files)`,
-    ).toBe('beee201da8ad26fb3d698434462c158d85928594e974170c8b07fe6a960250cc');
+    ).toBe('f163f6f91cc36740237d1c46bc34cd4940d944bdd93ac5561ee644858d4354ca');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

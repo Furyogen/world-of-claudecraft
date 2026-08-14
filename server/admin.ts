@@ -2002,7 +2002,10 @@ export function resetAdminDbForTests(): void {
 // The admin-auth gate reads its two db functions (accountAndScopeForToken and
 // adminRolesForAccount) off the active bundle, so a setAdminDbForTests fake drives
 // it too. AdminDb is a superset of AdminAuthDb, so the getter is assignable.
-const requireAdmin = createRequireAdmin((): AdminAuthDb => adminDb());
+// Exported so sibling admin-surface domain modules (server/ad_spend.ts) mount
+// the SAME gate over the SAME seam, keeping the scope sweep and the
+// setAdminDbForTests injection authoritative for every admin route.
+export const requireAdmin = createRequireAdmin((): AdminAuthDb => adminDb());
 
 /**
  * The four moderation actions the enum route accepts. The central permission gate

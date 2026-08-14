@@ -1,7 +1,10 @@
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { isCodePath } from '../scripts/lib/ci_change_classify.mjs';
-import { CI_LONG_SUITE_HALVES } from '../scripts/lib/ci_shard_plan.mjs';
+import { CI_LONG_SUITE_HALVES, resolveWorkerCount } from '../scripts/lib/ci_shard_plan.mjs';
 import { decideTestMode } from '../scripts/lib/ci_test_select.mjs';
 import {
   GENERATED_I18N_ARTIFACT_FILES,
@@ -9,6 +12,7 @@ import {
   isGeneratedI18nArtifactPath,
 } from '../scripts/lib/gate_select_plan.mjs';
 import { buildFullGateSteps, I18N_ARTIFACTS } from '../scripts/lib/gate_steps.mjs';
+import { expectScansOnlyThroughSharedWalkers } from './helpers/scan_guard_self_audit';
 
 const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
 const detectEntry = readFileSync(
@@ -16,6 +20,25 @@ const detectEntry = readFileSync(
   'utf8',
 );
 const ciShardEntry = readFileSync(new URL('../scripts/ci_shard_test.mjs', import.meta.url), 'utf8');
+// Comment-stripped (same idiom as gateCode below): a source-text pin on the
+// entry must not stay green when the pinned call survives only in a comment.
+const ciShardEntryCode = ciShardEntry
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/(^|[^:])\/\/.*$/gm, '$1');
+const ciShardPlanSource = readFileSync(
+  new URL('../scripts/lib/ci_shard_plan.mjs', import.meta.url),
+  'utf8',
+);
+// Stripped for the formula weld: the module's docblocks discuss the default
+// in prose, and a weld a comment can satisfy is not a weld.
+const ciShardPlanCode = ciShardPlanSource
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/(^|[^:])\/\/.*$/gm, '$1');
+// ci.yml with full-line YAML comments removed: the worker-trial pins below
+// count KEY occurrences, and a doc comment quoting the env line must neither
+// satisfy a count nor turn it red.
+const workflowCode = workflow.replace(/^[ \t]*#.*$/gm, '');
+const turboJson = readFileSync(new URL('../turbo.json', import.meta.url), 'utf8');
 const packageJson = JSON.parse(
   readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
 ) as { packageManager?: string };
@@ -201,6 +224,137 @@ function jobSource(name: string): string {
 }
 
 describe('CI workflow parity', () => {
+  it('sparse-checkout on the test jobs covers every referenced screenshot subtree', () => {
+    // The five sparse test-job checkouts (pr-gate, both long-sims lanes,
+    // release-gate, release-i18n) exclude docs/screenshots DIRECTORIES
+    // (794 MB of committed PR evidence; the measured 11m21s checkout
+    // pathology scales with the blob payload) except every subtree the repo
+    // actually references. The coupling corpus is EVERY tracked
+    // reference-carrying file outside docs/screenshots, enumerated from the
+    // git index rather than a curated root list: a test-literal-only
+    // coupling shipped and missed two acceptance manifests on its first CI
+    // run, and a curated four-root walk is the same failure shape one level
+    // up (a reference from a root nobody curated in stays invisible).
+    // Existence comes from the GIT INDEX, not the working tree: under the
+    // very cone this verifies, an excluded directory does not exist on disk.
+    const SPARSE_CONE = [
+      '          sparse-checkout: |',
+      '            /*',
+      '            !/docs/screenshots/*/',
+      '            /docs/screenshots/admin-guild-bank-panel/',
+      '            /docs/screenshots/class-skin-color-wash/',
+      '            /docs/screenshots/eastbrook-grand-armoury/',
+      '            /docs/screenshots/eastbrook-vale-rebuild/',
+      '            /docs/screenshots/far-foliage-impostors/',
+      '            /docs/screenshots/fenbridge-rebuild/',
+      '            /docs/screenshots/guild-bank-member-readonly/',
+      '            /docs/screenshots/guild-bank-tab/',
+      '            /docs/screenshots/guild-social-v1/',
+      '            /docs/screenshots/item-art-consistency-2026-08-09/',
+      '            /docs/screenshots/mobile-mount-quick-summon/',
+      '            /docs/screenshots/placeholder-art-completion-2026-08-09/',
+      '            /docs/screenshots/prof-tool-effects/',
+      '            /docs/screenshots/r35-admin-professions-inspector/',
+      '            /docs/screenshots/raw-fish-cooking-reagents/',
+      '            /docs/screenshots/release-v036-skill-normalization-2026-08-10/',
+      '            /docs/screenshots/rift-floor-timer-hud/',
+      '            /docs/screenshots/wiki-v036-refresh/',
+      '            /docs/screenshots/wiki-v036-round2/',
+      '            /docs/screenshots/wildheart/',
+      '            /docs/screenshots/wildheart_hit_stagger/',
+      '          sparse-checkout-cone-mode: false',
+    ].join('\n');
+    // Job-anchored, not a bare workflow-wide count: each sparse job carries
+    // the block exactly once, the full-tree jobs carry it never (their
+    // freshness diffs, builds, and the browser suite read wider), and the
+    // workflow-wide total closes the no-sixth-copy direction.
+    for (const job of [
+      'pr-gate',
+      'pr-long-sims-a',
+      'pr-long-sims-b',
+      'release-gate',
+      'release-i18n',
+    ]) {
+      expect(jobSource(job).split(SPARSE_CONE), job).toHaveLength(2);
+    }
+    for (const job of ['pr-checks', 'browser-gate', 'release-checks', 'release-version-gate']) {
+      expect(jobSource(job).includes(SPARSE_CONE), job).toBe(false);
+    }
+    expect(workflow.split(SPARSE_CONE)).toHaveLength(6);
+    const coneDirs = new Set<string>(
+      [...SPARSE_CONE.matchAll(/\/docs\/screenshots\/([A-Za-z0-9._-]+)\//g)].map((m) => m[1]),
+    );
+    const repoRootUrl = new URL('..', import.meta.url);
+    const indexDirs = new Set<string>();
+    {
+      const ls = spawnSync('git', ['ls-files', 'docs/screenshots'], {
+        cwd: fileURLToPath(repoRootUrl),
+        encoding: 'utf8',
+      });
+      expect(ls.status).toBe(0);
+      for (const line of ls.stdout.split('\n')) {
+        const match = line.match(/^docs\/screenshots\/([A-Za-z0-9._-]+)\//);
+        if (match) indexDirs.add(match[1]);
+      }
+      // Vacuity floor near the real count (166 subtrees on 2026-08-14).
+      expect(indexDirs.size).toBeGreaterThanOrEqual(160);
+    }
+    // The guard's own file is excluded from the corpus: its SPARSE_CONE
+    // literal above names every cone subtree, so counting it would satisfy
+    // the coupling even over an otherwise empty corpus (the
+    // release_i18n_tier_coverage SELF idiom).
+    const SELF = 'tests/ci_workflow.test.ts';
+    const REFERENCE_EXTENSIONS = [
+      '.ts',
+      '.mts',
+      '.cts',
+      '.tsx',
+      '.mjs',
+      '.cjs',
+      '.js',
+      '.json',
+      '.md',
+    ];
+    const referenced = new Set<string>();
+    {
+      const ls = spawnSync('git', ['ls-files', '-z'], {
+        cwd: fileURLToPath(repoRootUrl),
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024,
+      });
+      expect(ls.status).toBe(0);
+      const corpus = ls.stdout
+        .split('\0')
+        .filter(
+          (file) =>
+            file.length > 0 &&
+            file !== SELF &&
+            !file.startsWith('docs/screenshots/') &&
+            REFERENCE_EXTENSIONS.some((ext) => file.endsWith(ext)),
+        );
+      // Vacuity floor near the real count (about 6,600 tracked
+      // reference-carrying files on 2026-08-14): an emptied enumeration
+      // cannot green the coupling by scanning nothing.
+      expect(corpus.length).toBeGreaterThanOrEqual(6_000);
+      for (const file of corpus) {
+        const source = readFileSync(join(fileURLToPath(repoRootUrl), file), 'utf8');
+        for (const match of source.matchAll(/docs\/screenshots\/([A-Za-z0-9._-]+)/g)) {
+          if (indexDirs.has(match[1])) referenced.add(match[1]);
+        }
+      }
+    }
+    // SET EQUALITY, both directions in one assertion: a referenced subtree
+    // missing from the cone is the missing-evidence-in-a-shard failure, and
+    // a cone entry nothing references anymore is dead weight that must leave
+    // (a one-way floor with slack would let a quietly narrowed corpus drop
+    // entries and stay green).
+    expect([...referenced].sort()).toEqual([...coneDirs].sort());
+  });
+
+  it('performs no hand-rolled directory reads (the corpus is the git index)', () => {
+    expectScansOnlyThroughSharedWalkers(import.meta.url, []);
+  });
+
   it('installs with pnpm frozen-lockfile and pins the packageManager version', () => {
     // Full migration: no npm ci install path, cache and install are pnpm-only,
     // and every pnpm/action-setup version matches package.json packageManager so
@@ -479,8 +633,11 @@ describe('CI workflow parity', () => {
     expect(prGate).not.toMatch(/needs:\s*\[?[^\n]*pr-long-sims/);
     expect(prChecks).not.toMatch(/needs:\s*\[?[^\n]*pr-long-sims/);
     // Phase 2: pr-gate's test step runs through the selection-aware shard
-    // runner; the runner itself spawns `npm test` (pretest preserved), which
-    // tests/ci_shard_plan.test.ts pins behaviorally.
+    // runner; the entry regenerates the generated artifacts once per job
+    // before its legs (the merged selective leg is a bare vitest-related
+    // invocation with no npm lifecycle), which tests/ci_leg_runner.test.ts
+    // pins at the source level and tests/gate_artifact_skip.test.ts drives
+    // arm by arm.
     expect(prGate).toContain('run: node scripts/ci_shard_test.mjs');
     expect(prGate).not.toContain('run: npm test');
     expect(prChecks).not.toContain('run: npm test');
@@ -862,7 +1019,10 @@ describe('CI workflow parity', () => {
       // runner from bound-killing the merge queue, so both halves take the
       // same slow-runner sizing METHOD as release-gate (the same formula over
       // their own healthy job wall, which lands on 30, not on its 35).
-      // Evidence on the ci.yml bound.
+      // Evidence on the ci.yml bound. (The harness pair was split into the
+      // owned_class_balance_* / owned_class_raid_* files on 2026-08-13; the
+      // figures stay as the measured record, and the bounds re-derive from
+      // fresh walls in a follow-up change.)
       ['pr-long-sims-a', 30],
       ['pr-long-sims-b', 30],
       ['browser-gate', 10],
@@ -975,10 +1135,10 @@ describe('CI workflow parity', () => {
     // Both test jobs fan the ONE suite across the same N-shard matrix.
     // release-gate keeps the raw `npm test -- --shard` run line (selection
     // never touches a release ref); pr-gate runs the same suite through the
-    // selection-aware shard runner, which spawns `npm test` itself so pretest
-    // still regenerates the i18n artifacts in every shard (the S3 guard, guide
-    // freshness, and the git-subprocess suites need them regardless of which
-    // shard they hash into). Never a bare vitest invocation in the workflow.
+    // selection-aware shard runner, whose entry regenerates the i18n
+    // artifacts once per job before any leg (the S3 guard, guide freshness,
+    // and the git-subprocess suites need them regardless of which shard they
+    // hash into). Never a bare vitest invocation in the workflow YAML.
     // fail-fast stays off so shards pass or fail independently and a red run
     // always reports the whole suite.
     const halfCoreCap =
@@ -1016,6 +1176,30 @@ describe('CI workflow parity', () => {
     // Exactly three entry invocations: the shard matrix and the two long-sims
     // lane halves.
     expect(workflow.match(/run: node scripts\/ci_shard_test\.mjs/g)).toHaveLength(3);
+    // WOC_TEST_WORKERS must not be set ANYWHERE in the workflow: both
+    // alternatives to the half-cores default were measured and regressed
+    // (4 workers, run 31107474546; 3 workers, run 31771637461, three
+    // unrelated default-timeout blowouts for about a minute of wall), so a
+    // reappearing override means someone re-trialing without a new ruling.
+    // Counted as the BARE key on the comment-stripped workflow, which
+    // catches every YAML value form (same-line, next-line, block scalar)
+    // while a doc comment naming the knob stays legal.
+    expect(workflowCode).not.toContain('WOC_TEST_WORKERS');
+    // The knob's declaration must not silently vanish while the entry reads
+    // it, for two mechanisms: biome's suspicious/noUndeclaredEnvVars warns
+    // on any process.env read absent from turbo.json, and turbo's strict
+    // env sandbox strips undeclared variables from task environments (the
+    // turbo-run paths would silently default). Both entries live in the
+    // pass-through list, never a hashed input: neither can change task
+    // outcomes.
+    expect(turboJson).toContain('"WOC_TEST_WORKERS"');
+    expect(turboJson).toContain('"GITHUB_ACTIONS"');
+    // The per-test budgets and the half-cores ruling are calibrated on the
+    // documented 4-vCPU public runner; pin the assumption so a runner move
+    // re-opens the worker decision instead of inheriting it.
+    for (const job of ['pr-gate', 'pr-long-sims-a', 'pr-long-sims-b']) {
+      expect(jobSource(job), job).toContain('runs-on: ubuntu-latest');
+    }
     // Each lane job mirrors the shard step's hardened relay (env block, never
     // run-line interpolation) and runs the entry in its lane-half mode:
     // unsharded, no matrix, two jobs that between them own the
@@ -1078,15 +1262,32 @@ describe('CI workflow parity', () => {
       expect(job).not.toContain('--exclude');
     }
     // The half-cores worker bound moved from pr-gate's run line into the shard
-    // runner. Derive the expected expression FROM halfCoreCap (the release-gate
-    // pin) so the two forms cannot drift apart: same formula, minus the shell
-    // wrapper and with the runner's `os` import in place of require().
+    // runner, and from there into resolveWorkerCount (the WOC_TEST_WORKERS
+    // trial knob's validated resolver). Derive the expected expression FROM
+    // halfCoreCap (the release-gate pin) so the forms cannot drift apart:
+    // same formula, minus the shell wrapper and with the runner's `os` import
+    // in place of require().
     const capExpression = halfCoreCap
       .replace(/^--maxWorkers="\$\(node -p '/, '')
       .replace(/'\)"$/, '')
       .replace('require("node:os")', 'os');
     expect(capExpression).toBe('Math.max(1, Math.floor(os.availableParallelism() / 2))');
-    expect(ciShardEntry).toContain(capExpression);
+    // The weld's consumer: the formula's new home is resolveWorkerCount's
+    // fallback, so the DERIVED expression (cores in place of the os call)
+    // must appear in the plan module. Without this line capExpression is
+    // inert and both sides of the loop below are test-file literals, which
+    // is drift, not a weld.
+    expect(ciShardPlanCode).toContain(capExpression.replace('os.availableParallelism()', 'cores'));
+    // Behavioral weld, second layer: the resolver's default must compute the
+    // SAME value as release-gate's inline formula (sampled core counts, not
+    // an exhaustive proof), and the entry must wire the resolver to the real
+    // inputs (comment-stripped source, so a commented-out call fails).
+    for (const cores of [1, 2, 3, 4, 8]) {
+      expect(resolveWorkerCount({ cores }).workers).toBe(Math.max(1, Math.floor(cores / 2)));
+    }
+    expect(ciShardEntryCode).toContain('resolveWorkerCount({');
+    expect(ciShardEntryCode).toContain('cores: os.availableParallelism()');
+    expect(ciShardEntryCode).toContain('envValue: process.env.WOC_TEST_WORKERS');
     // Legacy N=4 run lines must not remain once SHARD_N has moved on.
     // String(SHARD_N) comparison avoids tsc folding a constant always-true arm.
     if (String(SHARD_N) !== '4') {

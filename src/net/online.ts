@@ -103,6 +103,7 @@ import {
   type CardMinigameInfo,
   type CharacterProfile,
   type CharacterSearchResult,
+  type CivicServicePlacement,
   type ClientCommand,
   type CraftingIdentityView,
   type CraftResultView,
@@ -167,6 +168,10 @@ import type {
 } from '../world_api/professions';
 import { normalizeAccountCosmetics } from './account_cosmetics_wire';
 import { computeBackoffDelay } from './backoff';
+import {
+  type CivicServicePlacementsReader,
+  createCivicServicePlacementsReader,
+} from './civic_service_placements';
 import { decodeGuildBankLogFrame, GUILD_BANK_LOG_TTL_MS } from './guild_bank_log_wire';
 import { INPUT_SEND_TIMER_INTERVAL_MS, inputFlushGateOpen } from './input_send_cadence';
 import { createNativeAttestationProof } from './native_attestation';
@@ -467,6 +472,15 @@ export class Api {
     turnstileToken = '',
     ref = '',
     nativeAttestation: unknown = undefined,
+    // UA analytics extras, all optional: the first-touch attribution payload
+    // (src/attribution.ts), the marketing opt-in checkbox state, and the
+    // player's selected language. The server validates every field
+    // (server/signup_attribution.ts) and none can fail registration.
+    extras: {
+      attribution?: Record<string, string> | null;
+      marketingOptIn?: boolean;
+      locale?: string;
+    } = {},
   ): Promise<{ accountId?: number }> {
     const data = await this.post('/api/register', {
       username,
@@ -475,6 +489,9 @@ export class Api {
       turnstileToken,
       ref,
       nativeAttestation,
+      attribution: extras.attribution ?? undefined,
+      marketingOptIn: extras.marketingOptIn === true ? true : undefined,
+      locale: extras.locale,
     });
     this.token = data.token;
     this.username = data.username;
@@ -1767,6 +1784,17 @@ export class ClientWorld implements IWorld {
   // field is needed for authored station markers.
   get stationPlacements() {
     return getActiveWorldContent().services?.stations ?? [];
+  }
+  // Lazy holder, never a field initializer: bareClient creates ClientWorld via
+  // Object.create(ClientWorld.prototype), so constructor field initialization is skipped.
+  private civicServicePlacementsReader?: CivicServicePlacementsReader;
+  /** Static civic anchors from the active bundled world. Rebuild only when the
+   * editor swaps content, never on the map's redraw cadence. */
+  get civicServicePlacements(): readonly CivicServicePlacement[] {
+    if (this.civicServicePlacementsReader === undefined) {
+      this.civicServicePlacementsReader = createCivicServicePlacementsReader();
+    }
+    return this.civicServicePlacementsReader();
   }
   // Craft-result surface (#1127), mirrored from the server's `craftResult`
   // event (applyEvent below). Null until this session's first craft attempt.

@@ -467,8 +467,9 @@
         <button class="map-zoom-btn" id="map-zoom-in" data-i18n-title="hud.core.zoomIn" data-i18n-aria="hud.core.zoomIn" title="Zoom in" aria-label="Zoom in">+</button>
         <button class="map-zoom-btn" id="map-zoom-out" data-i18n-title="hud.core.zoomOut" data-i18n-aria="hud.core.zoomOut" title="Zoom out" aria-label="Zoom out">&minus;</button>
       </div>
-      <canvas id="map-canvas" width="560" height="560" role="img" data-i18n-aria="hud.core.mapCanvasLabel" aria-label="Map"></canvas>
+      <canvas id="map-canvas" width="560" height="560" role="img" aria-describedby="map-summary map-marker-summary" data-i18n-aria="hud.core.mapCanvasLabel" aria-label="Map"></canvas>
       <span id="map-summary" class="visually-hidden" role="status" aria-live="polite"></span>
+      <span id="map-marker-summary" class="visually-hidden"></span>
     </div>
     <div id="arena-window" class="window panel"></div>
     <div id="dungeon-finder-window" class="window panel"></div>
@@ -775,6 +776,15 @@
               autocomplete="email"
               aria-describedby="login-email-error"
             />
+          </div>
+
+          <!-- Marketing opt-in, register mode only (setAuthMode toggles it).
+               Unchecked by default: consent is explicit, never pre-ticked. -->
+          <div class="auth-field auth-optin" id="login-marketing-field" hidden>
+            <label class="auth-optin-label">
+              <input id="login-marketing" name="marketingOptIn" type="checkbox" />
+              <span data-i18n="auth.marketingOptIn">Email me game news and updates (optional)</span>
+            </label>
           </div>
 
           <!-- Cloudflare Turnstile widget mounts here when configured (src/main.ts). -->
