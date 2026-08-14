@@ -2466,7 +2466,8 @@ export const es: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "AFK"
+      "afkTag": "AFK",
+      "cheaterTag": "< Cheater >"
     },
     "mobTooltip": {
       "levelFamily": "Nivel {level} {family}",
@@ -3938,6 +3939,12 @@ export const es: EnTranslations = {
       "genesis_token_claimed": "Ese Seeker Genesis Token ya se ha reclamado.",
       "entitlement_required": "Se requiere un derecho de acceso Seeker verificado.",
       "current_ownership_required": "Se requiere ser el propietario actual del Seeker Genesis Token."
+    },
+    "cheater_mark": {
+      "admin_target": "Operator accounts cannot be marked.",
+      "reason_required": "A reason is required.",
+      "invalid_duration": "Enter a mark duration of at least one second.",
+      "not_marked": "That account is not marked."
     }
   },
   "guide": {

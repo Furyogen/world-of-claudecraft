@@ -159,6 +159,23 @@ export const ADMIN_ROUTE_PERMISSIONS: readonly AdminRouteRule[] = [
     pattern: /^\/admin\/api\/moderation\/accounts\/(\d+)\/chat-mute$/,
     permission: 'moderation.act',
   },
+  // The Cheater mark (src/sim/moderation/): a punitive, publicly visible tag, so
+  // it sits with the other moderation actions. It is cosmetic-only by
+  // construction, which is exactly why it does not earn a permission of its own:
+  // marking changes no stat and destroys no property, unlike the guild bank purge.
+  // Both arms are here because a registry-only route has no legacy ladder arm for
+  // tests/admin_routes.test.ts to scan, so a missing row would only surface as a
+  // fail-closed 404 (the central gate) at runtime.
+  {
+    method: 'POST',
+    pattern: /^\/admin\/api\/moderation\/accounts\/(\d+)\/cheater-mark$/,
+    permission: 'moderation.act',
+  },
+  {
+    method: 'POST',
+    pattern: /^\/admin\/api\/moderation\/accounts\/(\d+)\/lift-cheater-mark$/,
+    permission: 'moderation.act',
+  },
   {
     method: 'POST',
     pattern: /^\/admin\/api\/moderation\/accounts\/(\d+)\/daily-rewards-(ban|unban)$/,

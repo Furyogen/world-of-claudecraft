@@ -2466,7 +2466,8 @@ export const zh_CN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "暂离"
+      "afkTag": "暂离",
+      "cheaterTag": "< 作弊者 >"
     },
     "mobTooltip": {
       "levelFamily": "等级 {level} {family}",
@@ -3938,6 +3939,12 @@ export const zh_CN: EnTranslations = {
       "genesis_token_claimed": "该 Seeker Genesis Token 已被领取。",
       "entitlement_required": "需要已验证的 Seeker 权益。",
       "current_ownership_required": "需要当前持有 Seeker Genesis Token。"
+    },
+    "cheater_mark": {
+      "admin_target": "管理员账号无法被标记。",
+      "reason_required": "必须填写原因。",
+      "invalid_duration": "标记时长至少需为 1 秒。",
+      "not_marked": "该账号未被标记。"
     }
   },
   "guide": {

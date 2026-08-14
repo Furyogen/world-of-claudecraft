@@ -43,6 +43,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
   'hudChrome.nameplate.mobLevel': '{level}',
   'hudChrome.nameplate.afkTag': 'AFK',
+  'hudChrome.nameplate.cheaterTag': '< Читер >',
   'hudChrome.discord.roleTag.legend': 'ЛЕГЕНДА',
   'hudChrome.discord.roleTag.shill': 'ГЛАШАТАЙ',
   'guide.profPages.gainFmt': '{reduced} / {minimal} / {zero}',
@@ -8587,6 +8588,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'apiError.seeker.genesis_token_claimed': 'Этот Seeker Genesis Token уже был зарегистрирован.',
   'apiError.seeker.entitlement_required': 'Требуются подтвержденные права Seeker.',
   'apiError.seeker.current_ownership_required': 'Требуется текущее владение Seeker Genesis Token.',
+  'apiError.cheater_mark.admin_target': 'Учетные записи операторов нельзя отметить.',
+  'apiError.cheater_mark.reason_required': 'Необходимо указать причину.',
+  'apiError.cheater_mark.invalid_duration': 'Укажите длительность отметки не менее одной секунды.',
+  'apiError.cheater_mark.not_marked': 'Эта учетная запись не отмечена.',
   'apiError.steam.invalid_ticket':
     'Steam не смог подтвердить этот запрос на привязку. Повторите попытку из настольного приложения.',
   'apiError.steam.banned': 'Этот аккаунт Steam нельзя привязать.',

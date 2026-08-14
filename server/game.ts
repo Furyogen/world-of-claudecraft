@@ -162,6 +162,11 @@ import {
 import { applyChatStrike, loadChatFilterState, recordChatViolation } from './chat_filter_db';
 import { ChatLogger } from './chat_log';
 import {
+  applyCheaterMarkLive as applyCheaterMarkLiveRuntime,
+  persistCheaterMark,
+  refreshCheaterMark,
+} from './cheater_mark_runtime';
+import {
   type CosmeticOpGuardState,
   consumeCosmeticOpToken,
   createCosmeticOpGuard,
@@ -956,6 +961,11 @@ export interface ClientSession {
   // stored link through `new URL()`, and the chat path would otherwise pay that on
   // EVERY line a streamer sends, to every channel.
   chatFlair: ChatSenderFlair | undefined;
+  // Latch: this session has worn a Cheater mark at some point. It gates the
+  // per-save write-back, so an unmarked account (nearly all of them) never pays
+  // a write, and it stays TRUE through the save that finally zeroes the row so
+  // the last write is not skipped by the aura already having expired.
+  cheaterMarked: boolean;
   characterId: number;
   pid: number; // player entity id in the sim
   name: string;
@@ -3192,6 +3202,12 @@ export class GameServer {
     }
   }
 
+  /** Push a Cheater mark change onto every live session of that account
+   *  (server/cheater_mark_runtime.ts owns the behavior and its contract). */
+  applyCheaterMarkLive(accountId: number, seconds: number): void {
+    applyCheaterMarkLiveRuntime(this.clients.values(), this.sim, accountId, seconds);
+  }
+
   /** Apply a committed cross-process policy notification to live sessions. */
   applyGeneralChatRateLimitLive(accountId: number, rateLimit: GeneralChatRateLimit | null): void {
     this.generalChatRateLimitLiveState.policyChanged(accountId, rateLimit);
@@ -3858,6 +3874,9 @@ export class GameServer {
       // ordinary player) keeps these empty values and never touches the wire.
       accountFlair: EMPTY_ACCOUNT_FLAIR,
       chatFlair: undefined,
+      // Latched by the join restore / a live apply, never seeded true here: the
+      // account row has not been read yet at this point.
+      cheaterMarked: false,
       characterId,
       pid,
       name,
@@ -4054,6 +4073,17 @@ export class GameServer {
     void this.refreshAccountFlair(session).catch((err) =>
       console.error('account flair refresh failed:', err),
     );
+    // Restore any live Cheater mark, same best-effort contract: a failed read
+    // must never block joining the world. Failing OPEN (joining untagged) is the
+    // deliberate choice over failing closed, because the alternative is locking a
+    // player out of a game they paid for over a cosmetic sanction; the budget is
+    // not burned while the tag is absent, so a missed restore delays the sanction
+    // rather than cancelling it.
+    void refreshCheaterMark(
+      session,
+      this.sim,
+      () => this.clients.get(session.pid) === session,
+    ).catch((err) => console.error('cheater mark refresh failed:', err));
     // Stamp the Curator standing off the just-loaded meta so an inspect landing
     // before the first 60s cycle already reads the true rank. Synchronous (pure
     // CPU), so the try/catch is what keeps the same "a flair stamp must never
@@ -4423,6 +4453,15 @@ export class GameServer {
       if (session.escrowQuarantined) return false;
       const state = this.sim.serializeCharacter(session.pid);
       const e = this.sim.entities.get(session.pid);
+      // Persist the Cheater mark's remaining budget. It rides its own write and
+      // NOT the character blob because the mark is ACCOUNT state: folding it into
+      // one character's save would let an alt's stale snapshot resurrect a budget
+      // another character already burned down.
+      //
+      // The live aura is the ONLY sim source of truth, because the aura is what
+      // ticks (see src/sim/moderation/CLAUDE.md). Its absence means the sanction
+      // is served, and burn(0) is what clears the account row.
+      void persistCheaterMark(session, e?.auras);
       // Captured at serialize time: only unlocks already inside THIS blob may
       // publish when it lands. An unlock granted while the write is in flight
       // stays pending for the save queued behind it, so the character_deeds

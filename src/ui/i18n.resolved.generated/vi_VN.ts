@@ -2466,7 +2466,8 @@ export const vi_VN: EnTranslations = {
     "nameplate": {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
-      "afkTag": "VắngMặt"
+      "afkTag": "VắngMặt",
+      "cheaterTag": "< Cheater >"
     },
     "mobTooltip": {
       "levelFamily": "{family} cấp {level}",
@@ -3938,6 +3939,12 @@ export const vi_VN: EnTranslations = {
       "genesis_token_claimed": "Seeker Genesis Token đó đã được nhận rồi.",
       "entitlement_required": "Cần có quyền lợi Seeker đã được xác minh.",
       "current_ownership_required": "Bạn phải đang sở hữu Seeker Genesis Token."
+    },
+    "cheater_mark": {
+      "admin_target": "Operator accounts cannot be marked.",
+      "reason_required": "A reason is required.",
+      "invalid_duration": "Enter a mark duration of at least one second.",
+      "not_marked": "That account is not marked."
     }
   },
   "guide": {

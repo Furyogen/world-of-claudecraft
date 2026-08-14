@@ -2979,6 +2979,12 @@ export class ClientWorld implements IWorld {
         // is authoritative and complete (the server re-sends one whenever flair
         // changes), so this both sets and CLEARS.
         if (e.kind === 'player') this.rememberFlair(e.name, e.aiAccount, streamerLinks);
+        // Operator-applied Cheater tag (src/sim/moderation/). A bare flag: the wire
+        // carries no budget, because only the wearer needs the countdown and the
+        // wearer already has it on the mark's own aura. Written as a strict boolean
+        // like aiAccount above so an identity record WITHOUT `chm` clears a mirror
+        // whose sanction was just lifted, matching Sim.setCheaterMark's own write.
+        e.cheaterMark = w.chm === 1;
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
         e.dungeonId = w.dgn ?? null;

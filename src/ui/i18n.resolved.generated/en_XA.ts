@@ -2466,7 +2466,8 @@ export const en_XA: EnTranslations = {
     "nameplate": {
       "mobLevel": "[{level}]",
       "mobEliteLevel": "[{level}+]",
-      "afkTag": "[ÁƑĶ]"
+      "afkTag": "[ÁƑĶ]",
+      "cheaterTag": "[< Çĥéáţéŕ >]"
     },
     "mobTooltip": {
       "levelFamily": "[Ļéʋéļ {level} {family}]",
@@ -3938,6 +3939,12 @@ export const en_XA: EnTranslations = {
       "genesis_token_claimed": "[Ţĥáţ Šééķéŕ Ĝéñéšíš Ţóķéñ ĥáš áļŕéáðý ƀééñ çļáíɱéð.]",
       "entitlement_required": "[Ʋéŕíƒíéð Šééķéŕ éñţíţļéɱéñţ íš ŕéɋúíŕéð.]",
       "current_ownership_required": "[Çúŕŕéñţ Šééķéŕ Ĝéñéšíš Ţóķéñ óŵñéŕšĥíþ íš ŕéɋúíŕéð.]"
+    },
+    "cheater_mark": {
+      "admin_target": "[Óþéŕáţóŕ áççóúñţš çáññóţ ƀé ɱáŕķéð.]",
+      "reason_required": "[Á ŕéášóñ íš ŕéɋúíŕéð.]",
+      "invalid_duration": "[Éñţéŕ á ɱáŕķ ðúŕáţíóñ óƒ áţ ļéášţ óñé šéçóñð.]",
+      "not_marked": "[Ţĥáţ áççóúñţ íš ñóţ ɱáŕķéð.]"
     }
   },
   "guide": {

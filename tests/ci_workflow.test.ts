@@ -241,6 +241,7 @@ describe('CI workflow parity', () => {
       '          sparse-checkout: |',
       '            /*',
       '            !/docs/screenshots/*/',
+      '            /docs/screenshots/admin-cheater-mark/',
       '            /docs/screenshots/admin-guild-bank-panel/',
       '            /docs/screenshots/class-skin-color-wash/',
       '            /docs/screenshots/eastbrook-grand-armoury/',
@@ -988,43 +989,32 @@ describe('CI workflow parity', () => {
     // in shape rather than lifted from the checkout-stall replay directly, so
     // every job in this file carries a conscious timeout-minutes value.
     const bounds = [
-      // pr-gate's 20 was sized when two 24 hour replays found zero healthy
-      // jobs over it. Sim-deep selective PRs broke that zero: their runs
-      // stack the expensive sim suites on top of the always-run
-      // blind/partial floor, and the sha1-contiguous packs can
-      // concentrate several in one shard (PR #3342's
-      // shard 1 bound-killed at a 20.25 minute wall on two attempts with a
-      // healthy 19 minute test step still running; fix/item-provenance-
-      // boundaries died the same way at 20.08). 40 is release-gate's
-      // slow-runner sizing METHOD over this workload's projected healthy
-      // wall; derivation and run evidence on the ci.yml bound.
-      ['pr-gate', 40],
+      // pr-gate: 37 is the 2026-08-14 re-derivation from the worst healthy
+      // SELECTIVE shard wall (16.55 minutes, run 31765273776; selective and
+      // full mode share this one bound and selective is the expensive one,
+      // x 1.60 slow-runner ratio x 1.37 margin = 36.3). The 20-then-40
+      // history, the full-mode measurement trap (a ci.yml-touching PR
+      // always widens to full, so a bounds PR cannot observe selective
+      // walls), and the derivation live on the ci.yml bound.
+      ['pr-gate', 37],
       // release-gate is the one shard matrix that keeps its CI_LONG_SUITES
       // files in-shard (pr-gate hands them to the lanes), so a single shard
       // can draw four of them at once and the bound has to cover a slow
       // runner rather than the healthy median. 20 was sized from a 14.63
       // minute healthy worst case and was bound-killing shard 1 by 2026-08-11
-      // at b160a1ba18; 35 is the 16 minute healthy wall scaled by the 1.60
-      // fast-to-slow runner ratio measured there, at the same 1.37x margin.
-      // The ci.yml comment carries the run ids, the per-suite measurements,
-      // and why the killed attempt's file count must not be extrapolated.
-      ['release-gate', 35],
-      // The single-job lane's bound reached 60 after run 31290316610 measured
-      // ~4400s aggregate suite time on a slow-quartile runner. The lane-diet
-      // PR cut the aggregate several-fold and split the lane in two and sized
-      // 20 from a local-measured projection of under 10 minutes per half.
-      // Run 31450179645 falsified that projection on a healthy CI runner
-      // (lane A 13.73 minutes, lane B 12.55, owned_class_balance_harness
-      // alone 739268ms in-lane), leaving these REQUIRED checks about one slow
-      // runner from bound-killing the merge queue, so both halves take the
-      // same slow-runner sizing METHOD as release-gate (the same formula over
-      // their own healthy job wall, which lands on 30, not on its 35).
-      // Evidence on the ci.yml bound. (The harness pair was split into the
-      // owned_class_balance_* / owned_class_raid_* files on 2026-08-13; the
-      // figures stay as the measured record, and the bounds re-derive from
-      // fresh walls in a follow-up change.)
-      ['pr-long-sims-a', 30],
-      ['pr-long-sims-b', 30],
+      // at b160a1ba18; 36 is the 2026-08-14 re-derivation from the measured
+      // post-split release-push worst (16.43 minutes, checkout-stall walls
+      // excluded) at the same 1.60 ratio and 1.37 margin; evidence on the
+      // ci.yml bound.
+      ['release-gate', 36],
+      // The lanes: 28 is the 2026-08-14 re-derivation from post-rebalance
+      // healthy walls (worst lane 12.5 minutes, same formula as pr-gate).
+      // The 60-to-20-to-30 history, including the falsified under-10
+      // projection that bans sizing these from estimates, lives on the
+      // ci.yml bound. Both halves share one bound so the a/b assignment can
+      // rebalance without re-sizing.
+      ['pr-long-sims-a', 28],
+      ['pr-long-sims-b', 28],
       ['browser-gate', 10],
       // 8 is a measured decision like the rest (healthy worst 4.42 min, all
       // observed stalls over 8), so it is pinned exactly here beside the
@@ -1065,6 +1055,13 @@ describe('CI workflow parity', () => {
       const next = rest.search(/\n {2}[A-Za-z][A-Za-z0-9_-]*:[ \t]*(?:#[^\n]*)?\n/);
       return next === -1 ? rest : rest.slice(0, next);
     };
+    // Positive control for the two step-bound regexes below: they are
+    // negative pins on tokens ci.yml never carries, so prove on a synthetic
+    // span that each shape would actually match before trusting the
+    // absences.
+    const stepBoundSample = '\n        timeout-minutes: 5\n      - timeout-minutes: 5\n';
+    expect(stepBoundSample).toMatch(/\n {8}timeout-minutes:/);
+    expect(stepBoundSample).toMatch(/\n {6}- timeout-minutes:/);
     for (const [name, minutes] of bounds) {
       const span = jobSpan(name);
       const jobLevel = span.match(/^ {4}timeout-minutes: \d+$/gm) ?? [];
@@ -1100,6 +1097,48 @@ describe('CI workflow parity', () => {
     // The routing is the entry's operational point: a timeout kill goes to
     // a rerun, never straight to a code investigation.
     expect(mergeQueueTriage).toContain('re-run the failed jobs and re-queue');
+    // The doc's critical-path arithmetic is WELDED to the table, both
+    // numbers derived rather than hard-coded: this is the second edit to
+    // that sentence in one program, and an unwelded number drifts. The
+    // required set matches the doc's own required-checks list; the changes
+    // bound is the serial prefix (every test job needs it).
+    const requiredJobs = [
+      'pr-gate',
+      'pr-long-sims-a',
+      'pr-long-sims-b',
+      'pr-checks',
+      'lint',
+      'browser-gate',
+    ];
+    const boundOf = (job: string) => bounds.find(([name]) => name === job)?.[1] ?? Number.NaN;
+    const largestRequired = Math.max(...requiredJobs.map(boundOf));
+    const changesBound = boundOf('changes');
+    // EXACTLY ONE occurrence of each welded shape, matched over the whole
+    // doc: a "historical note" decoy carrying the old numbers above the
+    // live sentence would otherwise satisfy a first-match weld while the
+    // live sentence drifts (adversarially demonstrated in review).
+    const pathMatches = [
+      ...mergeQueueTriage.matchAll(/(\d+) \+ (\d+) \(the `changes` bound plus/g),
+    ];
+    expect(pathMatches, 'exactly one critical-path sentence in docs/merge-queue.md').toHaveLength(
+      1,
+    );
+    expect(Number(pathMatches[0][1])).toBe(changesBound);
+    expect(Number(pathMatches[0][2])).toBe(largestRequired);
+    // \s+ because the doc hard-wraps near 72 columns and the wrap point
+    // moves as the number's width changes; the trailing "minute" anchors
+    // the ceiling's end so a 900 cannot satisfy the 90.
+    const sumMatches = [
+      ...mergeQueueTriage.matchAll(
+        /critical path of (\d+)\s+minutes\s+against\s+a\s+(\d+)\s+minute/g,
+      ),
+    ];
+    expect(sumMatches, 'exactly one critical-path sum in docs/merge-queue.md').toHaveLength(1);
+    expect(Number(sumMatches[0][1])).toBe(changesBound + largestRequired);
+    expect(Number(sumMatches[0][2])).toBe(90);
+    // The doc's stated invariant, executable: the required critical path
+    // must stay comfortably under the queue's 90 minute response ceiling.
+    expect(changesBound + largestRequired).toBeLessThan(90);
   });
 
   it('aborts dead checkout transfers workflow-wide instead of riding a job bound', () => {

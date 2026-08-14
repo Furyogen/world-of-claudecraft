@@ -10,6 +10,10 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -28,9 +32,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "es_ES": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -49,9 +58,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "fr_FR": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -70,9 +84,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "fr_CA": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -91,10 +110,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "en_CA": [],
   "it_IT": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -113,9 +137,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "de_DE": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -134,13 +163,18 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -159,10 +193,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "ru_RU": [],
   "cs_CZ": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -181,9 +220,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "nl_NL": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -202,9 +246,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "pl_PL": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -223,9 +272,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "id_ID": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -244,9 +298,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "tr_TR": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -265,9 +324,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "sv_SE": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -286,9 +350,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "vi_VN": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -307,9 +376,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ],
   "da_DK": [
+    "apiError.cheater_mark.admin_target",
+    "apiError.cheater_mark.invalid_duration",
+    "apiError.cheater_mark.not_marked",
+    "apiError.cheater_mark.reason_required",
     "auth.copyCode",
     "auth.designCode",
     "auth.designCodeCopied",
@@ -328,6 +402,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_pet_rock",
     "hudChrome.mounts.desc_shiny_pet_rock",
     "hudChrome.mounts.name_pet_rock",
-    "hudChrome.mounts.name_shiny_pet_rock"
+    "hudChrome.mounts.name_shiny_pet_rock",
+    "hudChrome.nameplate.cheaterTag"
   ]
 };

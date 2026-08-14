@@ -43,6 +43,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
   'hudChrome.nameplate.mobLevel': '{level}',
   'hudChrome.nameplate.afkTag': '자리비움',
+  'hudChrome.nameplate.cheaterTag': '< 부정행위자 >',
   'hudChrome.discord.roleTag.legend': '전설',
   'hudChrome.discord.roleTag.shill': '홍보대사',
   'guide.profPages.gainFmt': '{reduced} / {minimal} / {zero}',
@@ -8438,6 +8439,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'apiError.seeker.genesis_token_claimed': '해당 Seeker Genesis Token은 이미 등록되었습니다.',
   'apiError.seeker.entitlement_required': '인증된 Seeker 자격이 필요합니다.',
   'apiError.seeker.current_ownership_required': '현재 Seeker Genesis Token을 보유해야 합니다.',
+  'apiError.cheater_mark.admin_target': '운영자 계정에는 표식을 부여할 수 없습니다.',
+  'apiError.cheater_mark.reason_required': '사유를 입력해야 합니다.',
+  'apiError.cheater_mark.invalid_duration': '표식 기간은 최소 1초 이상이어야 합니다.',
+  'apiError.cheater_mark.not_marked': '해당 계정에는 표식이 없습니다.',
   'apiError.steam.invalid_ticket':
     'Steam이 이 연동 요청을 확인하지 못했습니다. 데스크톱 앱에서 다시 시도해 주세요.',
   'apiError.steam.banned': '해당 Steam 계정은 연동할 수 없습니다.',
