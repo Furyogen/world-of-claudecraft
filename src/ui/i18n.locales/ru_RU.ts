@@ -8379,6 +8379,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.reins_grag_bear.name': 'Поводья Голиафа Граг-медведя',
   'entities.items.riding_training.name': 'Обучение верховой езде',
   'entities.items.reins_valorsteed.name': 'Поводья Доблестного скакуна',
+  'entities.items.reins_pet_boulder.name': 'Поводья ручного валуна',
   'entities.items.reins_stalkglider_snail.name': 'Поводья мохопанцирного скользня',
   'entities.items.reins_aether_hover_cycle.name':
     'Ключ зажигания: эфирный ховерцикл турнирного бойца',
@@ -9608,6 +9609,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.rarity_epic': 'Эпический',
   'hudChrome.mounts.spec_speed': '+{pct}% к скорости передвижения',
   'hudChrome.mounts.name_valorsteed': 'Доблестный скакун',
+  'hudChrome.mounts.name_pet_boulder': 'Ролло, ручной валун',
   'hudChrome.mounts.name_grag_bear': 'Голиаф Граг-медведь',
   'hudChrome.mounts.name_stalkglider_snail': 'Мохопанцирный скользень',
   'hudChrome.mounts.name_aether_hover_cycle': 'Эфирный ховерцикл турнирного бойца',
@@ -9619,6 +9621,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mounts.name_terrorspark_groundshaker': 'Страхоискр, сотрясатель земли',
   'hudChrome.mounts.desc_valorsteed':
     'Выносливый и твердо стоящий на ногах скакун, повышающий скорость передвижения.',
+  'hudChrome.mounts.desc_pet_boulder':
+    'Валун из рифтовой головоломки, привязавшийся к тому, кто без конца толкал его на плиту, и везущий вас ровно с прытью наемной лошади.',
   'hudChrome.mounts.desc_grag_bear':
     'Выносливый и твердо стоящий на лапах медведь, повышающий скорость передвижения.',
   'hudChrome.mounts.desc_stalkglider_snail':
