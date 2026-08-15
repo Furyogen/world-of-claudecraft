@@ -4,6 +4,7 @@
 // and respawns on its own short timer if somehow felled.
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_WORLD } from '../src/sim/data';
+import { HEAL_PRACTICE_WOUND_FRACTION } from '../src/sim/mob/dummy_idle_hp';
 import { Sim } from '../src/sim/sim';
 import type { WorldContent } from '../src/sim/types';
 import { type Entity, PLAYER_INTEREST_DROP_RADIUS } from '../src/sim/types';
@@ -309,11 +310,38 @@ describe('Highwatch training dummy', () => {
       for (let i = 0; i < 20 * 3; i++) sim.tick();
     }
 
-    expect(d.hp).toBe(d.maxHp);
     expect(d.dead).toBe(false);
     expect(d.inCombat).toBe(false);
     expect(d.threat.size).toBe(0);
     expect(priest.inCombat).toBe(false);
     expect(priest.autoAttack).toBe(false);
+  });
+
+  // A friendly practice dummy re-opens its wound once topped off, so a healer
+  // always has something to heal instead of parking the target at full health
+  // and measuring nothing but overheal (mob/dummy_idle_hp.ts). The hostile
+  // dummies keep healing to full, which the reset case above pins.
+  it('re-opens the friendly dummy back to half health once it is topped off', () => {
+    const sim = makeWorld();
+    const d = healingDummyOf(sim);
+    const wounded = Math.floor(d.maxHp * HEAL_PRACTICE_WOUND_FRACTION);
+
+    // It starts full, and the first idle tick past the reset window re-wounds it.
+    expect(d.hp).toBe(d.maxHp);
+    for (let i = 0; i < 20 * 6; i++) sim.tick();
+    expect(d.hp).toBe(wounded);
+
+    // A partial heal is left exactly where the healer put it: the re-wound fires
+    // only on reaching full, never mid-rotation.
+    d.hp = wounded + 100;
+    for (let i = 0; i < 20 * 6; i++) sim.tick();
+    expect(d.hp).toBe(wounded + 100);
+
+    // Top it off and it re-opens, ready for the next cast.
+    d.hp = d.maxHp;
+    sim.tick();
+    expect(d.hp).toBe(wounded);
+    expect(d.dead).toBe(false);
+    expect(d.inCombat).toBe(false);
   });
 });

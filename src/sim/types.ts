@@ -1533,6 +1533,11 @@ export interface MobTemplate {
   // combat and heals to full a few seconds after the last hit. Guarded in
   // enterCombat (sim.ts) and updateMob (mob/locomotion.ts).
   dummy?: boolean;
+  // A practice dummy that stands on the FRIENDLY side: never attackable, target
+  // it and heal it. Stamped onto the spawn by createMob (entity.ts) as
+  // hostile = false plus Entity.friendlyPracticeTarget, so every spawn path (the
+  // camp loop, the dev healer dummy) agrees. Only meaningful alongside `dummy`.
+  friendlyPractice?: boolean;
   // Take PASSIVE idle draws off the shared world stream (Entity.offStreamRng).
   // CampDef.offStream covers a wholly new camp; this covers a template that
   // REPLACED shipped content in an existing camp slot, where the spawn draws
@@ -4576,7 +4581,10 @@ export interface Entity extends ClientMirroredEntityFields {
   profilerInvulnerable?: boolean;
   /** Owner of a mob created by /dev spawn. Server-private and never persisted. */
   devSpawnOwnerId?: number;
-  /** Dev/test healer target: friendly-selectable inert dummy instance. */
+  /** Healer target: friendly-selectable inert dummy instance. Stamped by createMob
+   *  from MobTemplate.friendlyPractice (the permanent Highwatch row) and set directly
+   *  by the dev healer dummy. Also drives the re-wound idle in mob/dummy_idle_hp.ts,
+   *  so a topped-off healing dummy re-opens instead of parking at full. */
   friendlyPracticeTarget?: boolean;
   /** Moderation-jailed player: prisoners are mutually hostile (the jail brawl,
    *  see isHostileTo). Server-set via setJailed on jail/unjail and at join

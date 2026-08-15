@@ -9,25 +9,105 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "es_ES": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "fr_FR": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "fr_CA": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "de_DE": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "zh_CN": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "zh_TW": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "ko_KR": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "ja_JP": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "pt_BR": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "ru_RU": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "cs_CZ": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "nl_NL": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "pl_PL": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "id_ID": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "tr_TR": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "sv_SE": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "vi_VN": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ],
+  "da_DK": [
+    "entities.mobs.friendly_player_dummy.name",
+    "entities.mobs.heroic_boss_dummy.name",
+    "entities.mobs.normal_boss_dummy.name"
+  ]
 };

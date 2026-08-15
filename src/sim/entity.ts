@@ -802,6 +802,14 @@ export function createMob(id: number, template: MobTemplate, level: number, pos:
   // path: the camp loop, a brood egg hatching a whelp at runtime, a dev spawn. Draws
   // no rng itself, so no spawn's draw position moves.
   if (template.offStreamIdle) e.offStreamRng = true;
+  // A friendly practice dummy stands on the player's side of every hostility
+  // check: stamped here rather than at each spawn site so the camp loop, the dev
+  // healer dummy, and any future spawner all agree. Draws no rng, so no spawn's
+  // draw position moves.
+  if (template.friendlyPractice) {
+    e.hostile = false;
+    e.friendlyPracticeTarget = true;
+  }
   return e;
 }
 

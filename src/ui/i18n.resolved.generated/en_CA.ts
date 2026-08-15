@@ -13223,6 +13223,15 @@ export const en_CA: EnTranslations = {
       "training_dummy": {
         "name": "Training Dummy"
       },
+      "friendly_player_dummy": {
+        "name": "Friendly Player Dummy"
+      },
+      "normal_boss_dummy": {
+        "name": "Normal Boss Dummy"
+      },
+      "heroic_boss_dummy": {
+        "name": "Heroic Boss Dummy"
+      },
       "ridge_stalker": {
         "name": "Ridge Stalker"
       },

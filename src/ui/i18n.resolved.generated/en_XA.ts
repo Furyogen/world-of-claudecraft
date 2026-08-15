@@ -13223,6 +13223,15 @@ export const en_XA: EnTranslations = {
       "training_dummy": {
         "name": "[Ţŕáíñíñĝ Ðúɱɱý]"
       },
+      "friendly_player_dummy": {
+        "name": "[Ƒŕíéñðļý Þļáýéŕ Ðúɱɱý]"
+      },
+      "normal_boss_dummy": {
+        "name": "[Ñóŕɱáļ Ɓóšš Ðúɱɱý]"
+      },
+      "heroic_boss_dummy": {
+        "name": "[Ĥéŕóíç Ɓóšš Ðúɱɱý]"
+      },
       "ridge_stalker": {
         "name": "[Ŕíðĝé Šţáļķéŕ]"
       },

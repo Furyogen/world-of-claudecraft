@@ -84,6 +84,7 @@ import {
 } from './charge';
 import { updateMobCombatProfile } from './combat_profile';
 import { applyBroodBurn } from './dragonkin_brood';
+import { dummyIdleHp } from './dummy_idle_hp';
 import { idleRng, wanderPause } from './idle_rng';
 import {
   claimMechanicSpacing,
@@ -202,20 +203,25 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   mob.combatTimer += DT;
 
   if (MOBS[mob.templateId]?.dummy) {
-    // Training dummy: stays hostile/attackable so it counts for damage and shows on
-    // the meters, but is otherwise inert (never aggros, moves, or fights back). It
-    // drops combat and heals to full a few seconds after the last hit, so the player
-    // leaves combat while the meter retains the finished encounter's DPS.
+    // Practice dummy: stays attackable so it counts for damage and shows on the
+    // meters, but is otherwise inert (never aggros, moves, or fights back). It
+    // drops combat and settles its health a few seconds after the last hit, so the
+    // player leaves combat while the meter retains the finished encounter's DPS.
+    // What it settles ON is dummyIdleHp's call: a hostile dummy heals to full, a
+    // friendly healing dummy re-opens its wound once topped off.
+    const friendly = mob.friendlyPracticeTarget === true;
     if (mob.combatTimer >= DUMMY_RESET_SECONDS) {
       mob.inCombat = false;
-      mob.hp = mob.maxHp;
+      mob.hp = dummyIdleHp(mob.hp, mob.maxHp, friendly);
       mob.aiState = 'idle';
       mob.aggroTargetId = null;
       mob.forcedTargetId = null;
       mob.forcedTargetTimer = 0;
       clearThreat(mob);
     } else {
-      mob.inCombat = true;
+      // A friendly dummy is never in hostile combat: nothing can attack it, so the
+      // only thing that touches its combat timer is a heal landing on it.
+      mob.inCombat = !friendly;
     }
     return;
   }

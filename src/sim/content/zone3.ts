@@ -102,6 +102,116 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     dummy: true,
     respawnSeconds: 10,
   },
+  // ---------------------------------------------------------------------------
+  // The rest of the Highwatch practice row (see HIGHWATCH_PRACTICE_ROW below for
+  // the placement). The Training Dummy above answers "what is my clean,
+  // unmitigated output"; these three answer the questions a raider actually
+  // brings to a dummy, which all turn on what the target puts in the way:
+  //
+  //   - a boss's ARMOR and LEVEL, which is what separates a rotation's paper DPS
+  //     from what it does to Nythraxis (armor = round(armorPerLevel * (level-1))
+  //     in createMob, and the level gap drives the hit table);
+  //   - the same again at heroic, where the boss is two levels higher and wears
+  //     20% more armor;
+  //   - and, for a healer, a friendly target with a real level-20 pool to fill.
+  //
+  // All three are `dummy: true`, so they inherit the Training Dummy's fixture
+  // behavior exactly: never aggro, never move, never fight back, cannot be
+  // pulled off their marker (combat/pull_eligibility.ts), no drops, and back on
+  // their feet 10s after a death. They also keep the Training Dummy's model and
+  // scale, recolored through the shared `tint: 'entity'` visual, so the row
+  // reads as one family of dummies rather than four different props.
+  friendly_player_dummy: {
+    id: 'friendly_player_dummy',
+    name: 'Friendly Player Dummy',
+    minLevel: 20,
+    maxLevel: 20,
+    family: 'humanoid',
+    // A stand-in for the level-20 player a healer actually heals, so heal sizes
+    // read as real percentages of a real pool instead of as fractions of a
+    // 999999 slab. Both numbers below are the level-20 best-in-slot TANK
+    // (warrior, prot spec, the deterministic epic set dev/bis_gear.ts picks):
+    // 2302 health and 3354 armor. They are literals because a MobTemplate is
+    // data, but they are not invented: tests/target_dummies.test.ts recomputes
+    // both from bestEpicGearFor + recalcPlayerStats and fails if the item
+    // tables drift away from them.
+    hpBase: 2302,
+    hpPerLevel: 0,
+    dmgBase: 0,
+    dmgPerLevel: 0,
+    attackSpeed: 2.0,
+    // 3354 armor at level 20: createMob multiplies by (level - 1).
+    armorPerLevel: 3354 / 19,
+    moveSpeed: 0,
+    aggroRadius: 0,
+    loot: [],
+    scale: 1.4,
+    color: 0x74c476,
+    dummy: true,
+    friendlyPractice: true,
+    respawnSeconds: 10,
+  },
+  // Nythraxis, Scourge of Thornpeak on normal, standing still: the raid boss's
+  // level, elite/boss classification, CC and snare immunity, and above all its
+  // armor (armorPerLevel 42, so 798 at level 20), reskinned onto the dummy.
+  // Health is the dummy's near-immortal slab rather than the boss's real pool,
+  // because a parse that ends when the target dies is a kill timer, not a
+  // rotation measurement; the boss's own numbers are pinned against MOBS in
+  // tests/target_dummies.test.ts so a Nythraxis retune cannot silently
+  // desynchronize this one.
+  normal_boss_dummy: {
+    id: 'normal_boss_dummy',
+    name: 'Normal Boss Dummy',
+    minLevel: 20,
+    maxLevel: 20,
+    family: 'undead',
+    elite: true,
+    boss: true,
+    ccImmune: true,
+    slowImmune: true,
+    hpBase: 999999,
+    hpPerLevel: 0,
+    dmgBase: 0,
+    dmgPerLevel: 0,
+    attackSpeed: 2.6,
+    armorPerLevel: 42,
+    moveSpeed: 0,
+    aggroRadius: 0,
+    loot: [],
+    scale: 1.4,
+    color: 0x7d5fa8,
+    dummy: true,
+    respawnSeconds: 10,
+  },
+  // The same boss on heroic. A heroic spawn is level 22 and its armor rides
+  // HEROIC_DUNGEON_TUNING.nythraxis_boss_arena.armorMultiplier (1.2), which
+  // instances/difficulty.ts applies to armorPerLevel: 42 * 1.2 = 50.4, so
+  // 1058 armor at level 22. The two-level gap is deliberate too, since it is
+  // half of what a heroic target does to the hit table.
+  heroic_boss_dummy: {
+    id: 'heroic_boss_dummy',
+    name: 'Heroic Boss Dummy',
+    minLevel: 22,
+    maxLevel: 22,
+    family: 'undead',
+    elite: true,
+    boss: true,
+    ccImmune: true,
+    slowImmune: true,
+    hpBase: 999999,
+    hpPerLevel: 0,
+    dmgBase: 0,
+    dmgPerLevel: 0,
+    attackSpeed: 2.6,
+    armorPerLevel: 42 * 1.2,
+    moveSpeed: 0,
+    aggroRadius: 0,
+    loot: [],
+    scale: 1.4,
+    color: 0xb0413a,
+    dummy: true,
+    respawnSeconds: 10,
+  },
   ridge_stalker: {
     id: 'ridge_stalker',
     name: 'Ridge Stalker',
@@ -2198,6 +2308,10 @@ export const ZONE3_QUEST_ORDER = [
 
 export const ZONE3_CAMPS: CampDef[] = [
   // Training dummy: a single fixed practice target on the hill above Highwatch.
+  // It is the second post in HIGHWATCH_PRACTICE_ROW below; this entry stays put
+  // (and stays here, at its original index) so its spot and its entity id do not
+  // move, and the three new posts append at the very end of the merged CAMPS
+  // array instead.
   { mobId: 'training_dummy', center: { x: -40, z: 648 }, radius: 0, count: 1 },
   // Ridge stalkers: the ridge flanking the road from the pass
   { mobId: 'ridge_stalker', center: { x: -50, z: 590 }, radius: 22, count: 7 },
@@ -2248,6 +2362,27 @@ export const ZONE3_CAMPS: CampDef[] = [
   { mobId: STABLE_HORSE_TEMPLATE_ID, center: { x: 390, z: 594 }, radius: 0, count: 1 },
   { mobId: STABLE_HORSE_TEMPLATE_ID, center: { x: 404, z: 598 }, radius: 0, count: 1 },
   { mobId: STABLE_HORSE_TEMPLATE_ID, center: { x: 418, z: 602 }, radius: 0, count: 1 },
+];
+
+// The Highwatch practice row: the three simulation dummies that stand beside the
+// original Training Dummy on the hill above Highwatch, west to east, 2 yd apart:
+//
+//   x = -42  Friendly Player Dummy   (heal it: a level-20 best-in-slot pool)
+//   x = -40  Training Dummy          (the original, in ZONE3_CAMPS above)
+//   x = -38  Normal Boss Dummy       (Nythraxis' level and armor)
+//   x = -36  Heroic Boss Dummy       (the same boss at heroic: level 22, +20% armor)
+//
+// A SEPARATE export, spread LAST into the merged CAMPS array in data.ts, for the
+// append-last rule documented there: camps spawn in array order and consume
+// entity ids in that order, so seating these mid-array would shift every later
+// camp's ids. (A `dummy` template spawns through the rng-free branch of the camp
+// loop, so no world-gen DRAW moves either way; the id order is the part that
+// still cares.) radius 0, count 1: each post spawns exactly on its marker with
+// no scatter.
+export const ZONE3_PRACTICE_DUMMY_CAMPS: CampDef[] = [
+  { mobId: 'friendly_player_dummy', center: { x: -42, z: 648 }, radius: 0, count: 1 },
+  { mobId: 'normal_boss_dummy', center: { x: -38, z: 648 }, radius: 0, count: 1 },
+  { mobId: 'heroic_boss_dummy', center: { x: -36, z: 648 }, radius: 0, count: 1 },
 ];
 
 export const ZONE3_OBJECTS: GroundObjectDef[] = [

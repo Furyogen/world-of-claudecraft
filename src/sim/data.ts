@@ -262,6 +262,7 @@ import {
   ZONE3_MOBS,
   ZONE3_NPCS,
   ZONE3_OBJECTS,
+  ZONE3_PRACTICE_DUMMY_CAMPS,
   ZONE3_PROPS,
   ZONE3_QUEST_ORDER,
   ZONE3_QUESTS,
@@ -503,6 +504,12 @@ export const CAMPS: CampDef[] = [
   // The Drakelands dragonkin brood belt (v0.35 rework) arrived after the
   // knights: same append-last rule, so every camp above keeps its draws.
   ...DRAKELANDS_BROOD_CAMPS,
+  // The three simulation dummies joining the Highwatch practice row. Same
+  // append-last rule: a `dummy` template spawns through the camp loop's rng-free
+  // branch so no world-gen draw moves wherever it sits, but the loop still
+  // consumes entity ids in array order, and appending is what keeps every camp
+  // above holding the id it already had.
+  ...ZONE3_PRACTICE_DUMMY_CAMPS,
 ];
 
 // Escort quest runs (src/sim/escort.ts): defs authored per realm, merged here

@@ -156,6 +156,11 @@ describe('content referential integrity', () => {
     // like the other fixtures, not a v0.32.0-style empty-loot regression.
     const LOOTLESS_FIXTURES = new Set([
       'training_dummy',
+      // The rest of the Highwatch practice row: the same fixture as the Training
+      // Dummy above, so lootless for the same reason (you never really fell one).
+      'friendly_player_dummy',
+      'normal_boss_dummy',
+      'heroic_boss_dummy',
       'stable_horse',
       'gilded_stag',
       'spider_egg',
