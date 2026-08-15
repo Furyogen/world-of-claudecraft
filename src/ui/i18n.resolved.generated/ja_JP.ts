@@ -13224,13 +13224,13 @@ export const ja_JP: EnTranslations = {
         "name": "訓練用ダミー"
       },
       "friendly_player_dummy": {
-        "name": "Friendly Player Dummy"
+        "name": "味方プレイヤーダミー"
       },
       "normal_boss_dummy": {
-        "name": "Normal Boss Dummy"
+        "name": "ノーマルボスダミー"
       },
       "heroic_boss_dummy": {
-        "name": "Heroic Boss Dummy"
+        "name": "ヒロイックボスダミー"
       },
       "ridge_stalker": {
         "name": "尾根の追跡者"

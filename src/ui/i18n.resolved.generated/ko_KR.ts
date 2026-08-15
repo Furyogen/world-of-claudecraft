@@ -13224,13 +13224,13 @@ export const ko_KR: EnTranslations = {
         "name": "훈련용 허수아비"
       },
       "friendly_player_dummy": {
-        "name": "Friendly Player Dummy"
+        "name": "아군 플레이어 허수아비"
       },
       "normal_boss_dummy": {
-        "name": "Normal Boss Dummy"
+        "name": "일반 우두머리 허수아비"
       },
       "heroic_boss_dummy": {
-        "name": "Heroic Boss Dummy"
+        "name": "영웅 우두머리 허수아비"
       },
       "ridge_stalker": {
         "name": "산등성이 추적자"

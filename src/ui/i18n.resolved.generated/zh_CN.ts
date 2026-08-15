@@ -13224,13 +13224,13 @@ export const zh_CN: EnTranslations = {
         "name": "训练假人"
       },
       "friendly_player_dummy": {
-        "name": "Friendly Player Dummy"
+        "name": "友方玩家假人"
       },
       "normal_boss_dummy": {
-        "name": "Normal Boss Dummy"
+        "name": "普通首领假人"
       },
       "heroic_boss_dummy": {
-        "name": "Heroic Boss Dummy"
+        "name": "英雄首领假人"
       },
       "ridge_stalker": {
         "name": "山脊潜猎者"

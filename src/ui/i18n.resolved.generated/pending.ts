@@ -40,36 +40,16 @@ export const pending: Record<string, readonly string[]> = {
     "entities.mobs.heroic_boss_dummy.name",
     "entities.mobs.normal_boss_dummy.name"
   ],
-  "zh_CN": [
-    "entities.mobs.friendly_player_dummy.name",
-    "entities.mobs.heroic_boss_dummy.name",
-    "entities.mobs.normal_boss_dummy.name"
-  ],
-  "zh_TW": [
-    "entities.mobs.friendly_player_dummy.name",
-    "entities.mobs.heroic_boss_dummy.name",
-    "entities.mobs.normal_boss_dummy.name"
-  ],
-  "ko_KR": [
-    "entities.mobs.friendly_player_dummy.name",
-    "entities.mobs.heroic_boss_dummy.name",
-    "entities.mobs.normal_boss_dummy.name"
-  ],
-  "ja_JP": [
-    "entities.mobs.friendly_player_dummy.name",
-    "entities.mobs.heroic_boss_dummy.name",
-    "entities.mobs.normal_boss_dummy.name"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.mobs.friendly_player_dummy.name",
     "entities.mobs.heroic_boss_dummy.name",
     "entities.mobs.normal_boss_dummy.name"
   ],
-  "ru_RU": [
-    "entities.mobs.friendly_player_dummy.name",
-    "entities.mobs.heroic_boss_dummy.name",
-    "entities.mobs.normal_boss_dummy.name"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.mobs.friendly_player_dummy.name",
     "entities.mobs.heroic_boss_dummy.name",
