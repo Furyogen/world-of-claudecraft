@@ -1371,6 +1371,10 @@ export const cs_CZ: EnTranslations = {
       "showWalletOnCharacterScreen": "Zobrazit peněženku na obrazovce postavy",
       "showWalletOnPlayerCard": "Zobrazit peněženku na kartě hráče",
       "showPlaytime": "Zobrazit odehraný čas na obrazovce postavy",
+      "forceHighPerfGpu": "Používat samostatnou herní grafickou kartu",
+      "forceHighPerfGpuNote": "Ve výchozím nastavení zapnuto: desktopová aplikace požádá tento počítač o jeho samostatnou herní grafickou kartu. Toto vypni, pokud se hra nespustí, otevře se s černou obrazovkou, nebo displej notebooku zhasne. Projeví se až při příštím spuštění hry.",
+      "discordPresence": "Rozšířená aktivita Discordu",
+      "discordPresenceNote": "Zobrazuje zónu, ve které se nacházíš, a jak dlouho hraješ tuto relaci, jako tvou aktivitu na Discordu, a obojí vidí kdokoli, kdo vidí tvůj profil na Discordu. Sdílí se jen název zóny, čas tvé relace a název hry, nikdy tvoje postava, tvůj účet nebo s kým hraješ. Vyžaduje spuštěnou aplikaci Discord na tomto počítači.",
       "showDevBadges": "Zobrazit vývojářské odznaky",
       "showOwnNameplate": "Zobrazit mou jmenovku",
       "showPlayerNameplates": "Zobrazit jmenovky hráčů",
@@ -1743,6 +1747,7 @@ export const cs_CZ: EnTranslations = {
       "notEnoughHonor": "Nemáš dost cti.",
       "reasons": {
         "arenaWin": "Vítězství v aréně",
+        "arenaComplete": "Odehrán souboj v aréně",
         "fiestaKill": "Vyřazení ve Fiestě",
         "fiestaComplete": "Dokončení Fiesty",
         "fiestaWin": "Vítězství ve Fiestě",
@@ -1849,6 +1854,7 @@ export const cs_CZ: EnTranslations = {
       "joinChannels": "Tip: napiš /join world nebo /join lfg a chatuj s hráči napříč světem."
     },
     "itemHeroicTag": "[HRDINSKÉ]",
+    "itemHeroicLabel": "Hrdinský",
     "itemSoulbound": "Vázáno na duši",
     "itemUniqueEquipped": "Jedinečně nositelné",
     "itemSet": {
@@ -2467,7 +2473,7 @@ export const cs_CZ: EnTranslations = {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
       "afkTag": "PRYČ",
-      "cheaterTag": "< Cheater >"
+      "cheaterTag": "< Podvodník >"
     },
     "mobTooltip": {
       "levelFamily": "Úroveň {level} {family}",
@@ -3941,10 +3947,10 @@ export const cs_CZ: EnTranslations = {
       "current_ownership_required": "Je vyžadováno aktuální vlastnictví Seeker Genesis Token."
     },
     "cheater_mark": {
-      "admin_target": "Operator accounts cannot be marked.",
-      "reason_required": "A reason is required.",
-      "invalid_duration": "Enter a mark duration of at least one second.",
-      "not_marked": "That account is not marked."
+      "admin_target": "Účty operátorů nelze označit.",
+      "reason_required": "Je nutné uvést důvod.",
+      "invalid_duration": "Zadejte dobu označení alespoň jednu sekundu.",
+      "not_marked": "Tento účet není označen."
     }
   },
   "guide": {
@@ -6662,19 +6668,19 @@ export const cs_CZ: EnTranslations = {
     "style": "Styl",
     "resetLook": "Resetovat vzhled",
     "resetShort": "Resetovat",
-    "shareTab": "Share",
-    "designCode": "Design code",
-    "designCodeHint": "Copy this code to save or share this look. Paste a code here and import it to load one.",
-    "copyCode": "Copy code",
-    "importCode": "Import",
-    "designCodeCopied": "Design code copied.",
-    "designCodeCopyManual": "Automatic copy is blocked here. The code is selected, copy it with your keyboard.",
-    "designCodeImported": "Design imported.",
-    "designCodeImportedPartial": "Design imported. Values this version does not know were skipped.",
-    "designCodeErrEmpty": "Paste a design code first.",
-    "designCodeErrHeader": "That does not look like a design code.",
-    "designCodeErrVersion": "That design code comes from a newer game version.",
-    "designCodeErrMalformed": "That design code is damaged. Copy the whole code and try again.",
+    "shareTab": "Sdílet",
+    "designCode": "Kód vzhledu",
+    "designCodeHint": "Zkopírujte tento kód, chcete-li vzhled uložit nebo sdílet. Vložte sem kód a importujte jej, abyste vzhled načetli.",
+    "copyCode": "Kopírovat kód",
+    "importCode": "Importovat",
+    "designCodeCopied": "Kód vzhledu byl zkopírován.",
+    "designCodeCopyManual": "Automatické kopírování je zde zablokováno. Kód je vybraný, zkopírujte jej pomocí klávesnice.",
+    "designCodeImported": "Vzhled byl importován.",
+    "designCodeImportedPartial": "Vzhled byl importován. Hodnoty, které tato verze nezná, byly přeskočeny.",
+    "designCodeErrEmpty": "Nejprve vložte kód vzhledu.",
+    "designCodeErrHeader": "Toto nevypadá jako kód vzhledu.",
+    "designCodeErrVersion": "Tento kód vzhledu pochází z novější verze hry.",
+    "designCodeErrMalformed": "Tento kód vzhledu je poškozený. Zkopírujte celý kód a zkuste to znovu.",
     "browFlat": "Rovné",
     "browArched": "Klenuté",
     "browThin": "Tenké",
@@ -7791,7 +7797,15 @@ export const cs_CZ: EnTranslations = {
       "readyBody": "Nainstaluje se při ukončení, nebo restartuj hned.",
       "restart": "Restartovat hned",
       "later": "Později",
-      "dismiss": "Zavřít"
+      "dismiss": "Zavřít",
+      "whatsNew": "Zobrazit změny v prohlížeči"
+    },
+    "notify": {
+      "updateReadyTitle": "Aktualizace {version} je připravena",
+      "updateReadyTitleNoVersion": "Aktualizace je připravena",
+      "updateReadyBody": "Restartuj World of ClaudeCraft, aby se aktualizace použila.",
+      "partyInviteTitle": "Pozvánka do skupiny",
+      "partyInviteBody": "{name} tě pozval(a) do skupiny."
     },
     "crash": {
       "title": "World of ClaudeCraft",
@@ -7803,6 +7817,7 @@ export const cs_CZ: EnTranslations = {
   },
   "gpuNotice": {
     "bodyDesktop": "Hra běží bez grafické akcelerace a bude pomalá. Aktualizuj ovladače grafiky a restartuj hru. Ve Windows nastav hru na Vysoký výkon v Nastavení, Systém, Displej, Grafika.",
+    "bodyDiscreteInactive": "Hra nepoužívá samostatnou (herní) grafickou kartu a místo toho běží na úsporné grafické kartě, takže výkon utrpí. Aktualizuj ovladače grafiky a restartuj hru. Ve Windows navíc nastav hru na Vysoký výkon v Nastavení, Systém, Displej, Grafika.",
     "bodyWeb": "Hra běží bez grafické akcelerace a bude pomalá. Povol hardwarovou akceleraci v nastavení prohlížeče, aktualizuj ovladače grafiky a restartuj prohlížeč.",
     "hybridBodyWindows": "Tato relace se vykresluje na integrované (úsporné) grafické kartě. Pokud má tento počítač i samostatnou herní grafickou kartu, nastav prohlížeč na Vysoký výkon v Nastavení, Systém, Displej, Grafika, a pak ho restartuj. Desktopová aplikace vybere samostatnou grafickou kartu automaticky.",
     "hybridBodyLinux": "Tato relace se vykresluje na integrované (úsporné) grafické kartě. Pokud má tento počítač i samostatnou herní grafickou kartu, tvůj prohlížeč nebo grafický ovladač může mít vlastní nastavení výběru GPU, případně tvoje distribuce může nabízet nástroj pro přepínání grafiky (například PRIME nebo optimus-manager). Desktopová aplikace vybere samostatnou grafickou kartu automaticky.",
@@ -8170,6 +8185,9 @@ export const cs_CZ: EnTranslations = {
       "graphicsReloadNote": "Kvalita grafiky a detail terénu se použijí po obnovení.",
       "reloadNow": "Obnovit hned",
       "fullscreen": "Celá obrazovka",
+      "displayMode": "Režim zobrazení",
+      "displayModeBorderless": "Celá obrazovka bez okrajů",
+      "displayModeWindowed": "Okno",
       "touchLookSpeed": "Rychlost dotykového pohledu",
       "joystickSize": "Velikost joysticku",
       "buttonSize": "Velikost tlačítek",
@@ -9049,6 +9067,7 @@ export const cs_CZ: EnTranslations = {
       "filterSort": "Řazení",
       "sortName": "Název (A-Z)",
       "sortPriceAsc": "Cena: od nejnižší po nejvyšší",
+      "collapseLowest": "Pouze nejnižší cena",
       "weaponSword": "Meče",
       "weaponDagger": "Dýky",
       "weaponStaff": "Hole",
@@ -9079,6 +9098,8 @@ export const cs_CZ: EnTranslations = {
       "quantity": "Množství",
       "quantityOf": "z {count}",
       "priceEach": "Cena za kus",
+      "lowestPriceLabel": "Současná nejnižší nabídková cena",
+      "lowestPriceNone": "Pro tento předmět zatím nejsou žádné aktivní nabídky.",
       "listButton": "Nabídnout na Světovém trhu",
       "minPriceError": "Zadej cenu alespoň 1 měď.",
       "collectEmpty": "Nic nečeká. Tady si vyzvedneš výnosy z prodeje a vypršelé nabídky.",
@@ -9506,6 +9527,7 @@ export const cs_CZ: EnTranslations = {
       "cheap_shot": {
         "name": "Rána do břicha",
         "description": "Zasáhni cíl za {damage} poškození a omrač ho na 4 s. Musíš být v skrytí. Udělí 2 combo body.",
+        "descriptionNoStealth": "Zasáhni cíl za {damage} poškození a omrač ho na 4 s. Udělí 2 combo body.",
         "specNote_subtlety": "Použití ze Závoje šera přidá 1 Šero (max 3). Při 3 Šeru ji můžeš použít BEZ skrytí: takové použití nic nestojí, spotřebuje všechna 3 Šera a spustí Stínový závoj na 6 s."
       },
       "sap": {
@@ -9718,7 +9740,7 @@ export const cs_CZ: EnTranslations = {
       },
       "righteous_fury": {
         "name": "Hořící přísaha",
-        "description": "Pasivně zvyšuje hrozbu vytvářenou tvým svatým poškozením o 60 %. Pouze Strážce víry."
+        "description": "Pasivně zvyšuje hrozbu vytvářenou tvým svatým poškozením o 30 %. Pouze Strážce víry."
       },
       "retribution_aura": {
         "name": "Aura odplaty",
@@ -9834,7 +9856,7 @@ export const cs_CZ: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Zbraň spoutaná kamenem",
-        "description": "Prosytí tvou zbraň na 30 min. Každý úder způsobí {damage} dodatečného poškození. Válečný duch navíc získá 30 % zbroje, utrpí o 10 % nižší poškození a vytváří dvojnásobnou hrozbu. Zemní otřes donutí svůj cíl útočit na tebe po 3 s a Hromová ochrana udělí 10 % snížení poškození na 3 s."
+        "description": "Prosytí tvou zbraň na 30 min. Každý úder způsobí {damage} dodatečného poškození. Válečný duch navíc získá 40 % zbroje a 20 % výdrže, utrpí o 15 % nižší poškození a je odolný vůči kritickým zásahům od nestvůr a vytváří 2,75násobnou hrozbu. Zemní otřes donutí svůj cíl útočit na tebe po 3 s a Hromová ochrana udělí 10 % snížení poškození na 3 s."
       },
       "healing_wave": {
         "name": "Léčivé vody",
@@ -10013,7 +10035,7 @@ export const cs_CZ: EnTranslations = {
       },
       "bear_form": {
         "name": "Medvědí podoba",
-        "description": "Proměníš se v medvěda: zbroj +130 %, výrazně zvýšená síla útoku, tvoje útoky budují vztek a vytvářejí o 30 % více hrozby. Sesláním znovu se vrátíš do podoby sesilatele."
+        "description": "Proměníš se v medvěda: zbroj +110 %, maximální zdraví +30 %, výrazně zvýšená síla útoku, tvoje útoky budují vztek a vytvářejí o 30 % více hrozby. Sesláním znovu se vrátíš do podoby sesilatele."
       },
       "maul": {
         "name": "Drcení kostí",
@@ -10023,6 +10045,10 @@ export const cs_CZ: EnTranslations = {
       "growl": {
         "name": "Hrozba",
         "description": "Zavrčí na cíl: tvoje hrozba se zvýší na úroveň jeho nejnenáviděnějšího nepřítele a cíl je donucen tě 3 s útočit. Pouze v medvědí podobě."
+      },
+      "challenging_roar": {
+        "name": "Zlověstný řev",
+        "description": "Zlověstný řev: každý nepřítel do 10 yardů je vyprovokován, jeho hrozba vůči tobě se zvýší na úroveň jeho nejnenáviděnějšího nepřítele a je nucen na tebe 3 s útočit. Pouze v medvědí podobě."
       },
       "cat_form": {
         "name": "Vlčí podoba",

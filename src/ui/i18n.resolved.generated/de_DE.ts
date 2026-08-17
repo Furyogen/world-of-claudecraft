@@ -1371,6 +1371,10 @@ export const de_DE: EnTranslations = {
       "showWalletOnCharacterScreen": "Wallet auf dem Charakterbildschirm anzeigen",
       "showWalletOnPlayerCard": "Wallet auf der Spielerkarte anzeigen",
       "showPlaytime": "Spielzeit auf dem Charakterbildschirm anzeigen",
+      "forceHighPerfGpu": "Dedizierte Gaming-GPU verwenden",
+      "forceHighPerfGpuNote": "Standardmäßig aktiviert: Die Desktop-App fordert von diesem Computer die dedizierte Gaming-GPU an. Schalte dies aus, wenn das Spiel nicht startet, nur einen schwarzen Bildschirm zeigt oder das Laptop-Display schwarz bleibt. Wird erst beim nächsten Spielstart wirksam.",
+      "discordPresence": "Discord-Aktivitätsanzeige",
+      "discordPresenceNote": "Zeigt die Zone, in der du dich befindest, und wie lange du diese Sitzung schon spielst, als deine Discord-Aktivität an, und jeder, der dein Discord-Profil sehen kann, kann beides sehen. Geteilt werden nur der Zonenname, deine Sitzungszeit und das Spiel, niemals dein Charakter, dein Konto oder mit wem du spielst. Erfordert, dass die Discord-App auf diesem Computer läuft.",
       "showDevBadges": "Entwicklerabzeichen anzeigen",
       "showOwnNameplate": "Eigene Namensplakette anzeigen",
       "showPlayerNameplates": "Spieler-Namensplaketten anzeigen",
@@ -1743,6 +1747,7 @@ export const de_DE: EnTranslations = {
       "notEnoughHonor": "Nicht genug Ehre.",
       "reasons": {
         "arenaWin": "Arenasieg",
+        "arenaComplete": "Arenakampf ausgetragen",
         "fiestaKill": "Fiesta-Ausschaltung",
         "fiestaComplete": "Fiesta abgeschlossen",
         "fiestaWin": "Fiesta-Sieg",
@@ -1849,6 +1854,7 @@ export const de_DE: EnTranslations = {
       "joinChannels": "Tipp: Gebt /join world oder /join lfg ein, um mit Spielern in der ganzen Welt zu chatten."
     },
     "itemHeroicTag": "[HEROISCH]",
+    "itemHeroicLabel": "Heroisch",
     "itemSoulbound": "Seelengebunden",
     "itemUniqueEquipped": "Einzigartig (ausgerüstet)",
     "itemSet": {
@@ -2467,7 +2473,7 @@ export const de_DE: EnTranslations = {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
       "afkTag": "AFK",
-      "cheaterTag": "< Cheater >"
+      "cheaterTag": "< Schummler >"
     },
     "mobTooltip": {
       "levelFamily": "Stufe {level} {family}",
@@ -3941,10 +3947,10 @@ export const de_DE: EnTranslations = {
       "current_ownership_required": "Der Seeker Genesis Token muss sich aktuell in deinem Besitz befinden."
     },
     "cheater_mark": {
-      "admin_target": "Operator accounts cannot be marked.",
-      "reason_required": "A reason is required.",
-      "invalid_duration": "Enter a mark duration of at least one second.",
-      "not_marked": "That account is not marked."
+      "admin_target": "Operatorkonten können nicht markiert werden.",
+      "reason_required": "Ein Grund ist erforderlich.",
+      "invalid_duration": "Gib eine Markierungsdauer von mindestens einer Sekunde ein.",
+      "not_marked": "Dieses Konto ist nicht markiert."
     }
   },
   "guide": {
@@ -6662,19 +6668,19 @@ export const de_DE: EnTranslations = {
     "style": "Stil",
     "resetLook": "Aussehen zurücksetzen",
     "resetShort": "Zurücksetzen",
-    "shareTab": "Share",
-    "designCode": "Design code",
-    "designCodeHint": "Copy this code to save or share this look. Paste a code here and import it to load one.",
-    "copyCode": "Copy code",
-    "importCode": "Import",
-    "designCodeCopied": "Design code copied.",
-    "designCodeCopyManual": "Automatic copy is blocked here. The code is selected, copy it with your keyboard.",
-    "designCodeImported": "Design imported.",
-    "designCodeImportedPartial": "Design imported. Values this version does not know were skipped.",
-    "designCodeErrEmpty": "Paste a design code first.",
-    "designCodeErrHeader": "That does not look like a design code.",
-    "designCodeErrVersion": "That design code comes from a newer game version.",
-    "designCodeErrMalformed": "That design code is damaged. Copy the whole code and try again.",
+    "shareTab": "Teilen",
+    "designCode": "Aussehenscode",
+    "designCodeHint": "Kopiere diesen Code, um dieses Aussehen zu speichern oder zu teilen. Füge hier einen Code ein und importiere ihn, um das Aussehen zu laden.",
+    "copyCode": "Code kopieren",
+    "importCode": "Importieren",
+    "designCodeCopied": "Aussehenscode kopiert.",
+    "designCodeCopyManual": "Automatisches Kopieren ist hier gesperrt. Der Code ist ausgewählt; kopiere ihn mit der Tastatur.",
+    "designCodeImported": "Aussehen importiert.",
+    "designCodeImportedPartial": "Aussehen importiert. Werte, die diese Version nicht kennt, wurden übersprungen.",
+    "designCodeErrEmpty": "Füge zuerst einen Aussehenscode ein.",
+    "designCodeErrHeader": "Das sieht nicht wie ein Aussehenscode aus.",
+    "designCodeErrVersion": "Dieser Aussehenscode stammt aus einer neueren Spielversion.",
+    "designCodeErrMalformed": "Dieser Aussehenscode ist beschädigt. Kopiere den vollständigen Code und versuche es erneut.",
     "browFlat": "Flach",
     "browArched": "Gebogen",
     "browThin": "Dünn",
@@ -7791,7 +7797,15 @@ export const de_DE: EnTranslations = {
       "readyBody": "Es wird beim Beenden installiert, oder starte jetzt neu.",
       "restart": "Jetzt neu starten",
       "later": "Später",
-      "dismiss": "Schließen"
+      "dismiss": "Schließen",
+      "whatsNew": "Änderungen im Browser ansehen"
+    },
+    "notify": {
+      "updateReadyTitle": "Update {version} ist bereit",
+      "updateReadyTitleNoVersion": "Update ist bereit",
+      "updateReadyBody": "Starte World of ClaudeCraft neu, um das Update zu übernehmen.",
+      "partyInviteTitle": "Gruppeneinladung",
+      "partyInviteBody": "{name} hat dich zu einer Gruppe eingeladen."
     },
     "crash": {
       "title": "World of ClaudeCraft",
@@ -7803,6 +7817,7 @@ export const de_DE: EnTranslations = {
   },
   "gpuNotice": {
     "bodyDesktop": "Das Spiel läuft ohne GPU-Beschleunigung und wird langsam sein. Aktualisiere deine Grafiktreiber und starte das Spiel neu. Unter Windows stelle das Spiel außerdem unter Einstellungen > System > Anzeige > Grafik auf Hohe Leistung ein.",
+    "bodyDiscreteInactive": "Das Spiel nutzt nicht die dedizierte (Gaming-)GPU und läuft stattdessen auf der stromsparenden GPU, sodass die Leistung darunter leidet. Aktualisiere deine Grafiktreiber und starte das Spiel neu. Unter Windows stelle das Spiel außerdem unter Einstellungen > System > Anzeige > Grafik auf Hohe Leistung ein.",
     "bodyWeb": "Das Spiel läuft ohne GPU-Beschleunigung und wird langsam sein. Aktiviere die Hardwarebeschleunigung in deinen Browsereinstellungen, aktualisiere deine Grafiktreiber und starte deinen Browser neu.",
     "hybridBodyWindows": "Diese Sitzung wird auf der integrierten (stromsparenden) GPU gerendert. Falls dieser Computer auch eine dedizierte Gaming-GPU besitzt, stelle deinen Browser unter Einstellungen > System > Anzeige > Grafik auf Hohe Leistung ein und starte ihn anschließend neu. Die Desktop-App wählt die dedizierte GPU automatisch aus.",
     "hybridBodyLinux": "Diese Sitzung wird auf der integrierten (stromsparenden) GPU gerendert. Falls dieser Computer auch eine dedizierte Gaming-GPU besitzt, bieten dein Browser oder Grafiktreiber möglicherweise eine eigene GPU-Auswahl an, oder deine Distribution stellt ein Tool zum Wechseln der GPU bereit (etwa PRIME oder optimus-manager). Die Desktop-App wählt die dedizierte GPU automatisch aus.",
@@ -8170,6 +8185,9 @@ export const de_DE: EnTranslations = {
       "graphicsReloadNote": "Grafikqualität und Geländedetail werden nach dem Neuladen angewendet.",
       "reloadNow": "Jetzt neu laden",
       "fullscreen": "Vollbild",
+      "displayMode": "Anzeigemodus",
+      "displayModeBorderless": "Randloses Vollbild",
+      "displayModeWindowed": "Fenstermodus",
       "touchLookSpeed": "Touch-Kamerageschwindigkeit",
       "joystickSize": "Joystick-Größe",
       "buttonSize": "Schaltflächengröße",
@@ -9049,6 +9067,7 @@ export const de_DE: EnTranslations = {
       "filterSort": "Sortieren",
       "sortName": "Name (A-Z)",
       "sortPriceAsc": "Preis: niedrig bis hoch",
+      "collapseLowest": "Nur den niedrigsten Preis anzeigen",
       "weaponSword": "Schwerter",
       "weaponDagger": "Dolche",
       "weaponStaff": "Stäbe",
@@ -9079,6 +9098,8 @@ export const de_DE: EnTranslations = {
       "quantity": "Menge",
       "quantityOf": "von {count}",
       "priceEach": "Preis je Stück",
+      "lowestPriceLabel": "Aktuell niedrigster Angebotspreis",
+      "lowestPriceNone": "Für diesen Gegenstand gibt es noch keine aktiven Angebote.",
       "listButton": "Auf dem Weltmarkt einstellen",
       "minPriceError": "Nennt einen Preis von mindestens 1 Kupfer.",
       "collectEmpty": "Nichts wartet. Verkaufserlöse und abgelaufene Angebote werden hier abgeholt.",
@@ -9506,6 +9527,7 @@ export const de_DE: EnTranslations = {
       "cheap_shot": {
         "name": "Magenhieb",
         "description": "Trefft das Ziel für {damage} Schaden und betäubt es 4 Sek. lang. Erfordert Verstohlenheit. Gewährt 2 Combopunkte.",
+        "descriptionNoStealth": "Trefft das Ziel für {damage} Schaden und betäubt es 4 Sek. lang. Gewährt 2 Combopunkte.",
         "specNote_subtlety": "Aus Duskveil eingesetzt fügt dies 1 Dämmer hinzu (max. 3). Bei 3 Dämmer könnt Ihr es OHNE Verstohlenheit einsetzen: Dieser Einsatz kostet nichts, verbraucht alle 3 Dämmer und startet den 6 Sek. langen Schattenschleier."
       },
       "sap": {
@@ -9718,7 +9740,7 @@ export const de_DE: EnTranslations = {
       },
       "righteous_fury": {
         "name": "Brennender Eid",
-        "description": "Erhöht passiv die durch euren Heiligschaden erzeugte Bedrohung um 60%. Nur für Glaubenswächter."
+        "description": "Erhöht passiv die durch euren Heiligschaden erzeugte Bedrohung um 30%. Nur für Glaubenswächter."
       },
       "retribution_aura": {
         "name": "Aura der Vergeltung",
@@ -9834,7 +9856,7 @@ export const de_DE: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Stonebound-Waffe",
-        "description": "Erfüllt eure Waffe 30 Min. lang. Jeder Schlag verursacht {damage} zusätzlichen Schaden. Verstärkung gewinnt zudem 30% Rüstung, erleidet 10% weniger Schaden und erzeugt doppelt so viel Bedrohung. Erdstoß zwingt sein Ziel, euch 3 Sek. lang anzugreifen, und Donnerschild gewährt 3 Sek. lang 10% Schadensminderung."
+        "description": "Erfüllt eure Waffe 30 Min. lang. Jeder Schlag verursacht {damage} zusätzlichen Schaden. Verstärkung gewinnt zudem 40% Rüstung und 20% Ausdauer, erleidet 15% weniger Schaden und ist immun gegen kritische Treffer von Kreaturen und erzeugt das 2,75-Fache an Bedrohung. Erdstoß zwingt sein Ziel, euch 3 Sek. lang anzugreifen, und Donnerschild gewährt 3 Sek. lang 10% Schadensminderung."
       },
       "healing_wave": {
         "name": "Heilende Wasser",
@@ -10013,7 +10035,7 @@ export const de_DE: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruin-Gestalt",
-        "description": "Verwandelt euch in einen Bären: Rüstung +130%, stark erhöhte Angriffskraft, eure Angriffe erzeugen Wut und 30% mehr Bedrohung. Erneut wirken, um zur Zauberergestalt zurückzukehren."
+        "description": "Verwandelt euch in einen Bären: Rüstung +110%, maximale Gesundheit +30%, stark erhöhte Angriffskraft, eure Angriffe erzeugen Wut und 30% mehr Bedrohung. Erneut wirken, um zur Zauberergestalt zurückzukehren."
       },
       "maul": {
         "name": "Knochenmalmer",
@@ -10023,6 +10045,10 @@ export const de_DE: EnTranslations = {
       "growl": {
         "name": "Bedrohen",
         "description": "Knurrt das Ziel an: Eure Bedrohung steigt auf die seines meistgehassten Gegners und es wird 3 Sek. lang gezwungen, euch anzugreifen. Nur in Bruin Form."
+      },
+      "challenging_roar": {
+        "name": "Unheilvolles Gebrüll",
+        "description": "Ein unheilvolles Gebrüll: Jeder Gegner im Umkreis von 10 m wird verspottet, seine Bedrohung Euch gegenüber steigt auf die seines meistgehassten Gegners, und er wird 3 Sek. lang gezwungen, Euch anzugreifen. Nur in Bruin Form."
       },
       "cat_form": {
         "name": "Wolfsgestalt",

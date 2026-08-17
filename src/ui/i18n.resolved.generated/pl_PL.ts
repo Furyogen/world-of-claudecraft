@@ -1371,6 +1371,10 @@ export const pl_PL: EnTranslations = {
       "showWalletOnCharacterScreen": "Pokaż sakiewkę na ekranie postaci",
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
       "showPlaytime": "Pokaż czas gry na ekranie postaci",
+      "forceHighPerfGpu": "Użyj dedykowanej karty graficznej do gier",
+      "forceHighPerfGpuNote": "Domyślnie włączone: aplikacja desktopowa prosi ten komputer o użycie dedykowanej karty graficznej do gier. Wyłącz tę opcję, jeśli gra się nie uruchamia, otwiera się na czarnym ekranie lub ekran laptopa gaśnie. Zmiana zacznie obowiązywać przy następnym uruchomieniu gry.",
+      "discordPresence": "Rozbudowana obecność w Discordzie",
+      "discordPresenceNote": "Pokazuje jako twoją aktywność na Discordzie strefę, w której się znajdujesz, oraz czas trwania tej sesji gry, a każdy, kto widzi twój profil Discord, może zobaczyć oba te elementy. Udostępniane są wyłącznie nazwa strefy, czas sesji i nazwa gry, nigdy twoja postać, konto ani osoby, z którymi grasz. Wymaga uruchomionej aplikacji Discord na tym komputerze.",
       "showDevBadges": "Pokaż odznaki deweloperów",
       "showOwnNameplate": "Pokaż moją plakietkę",
       "showPlayerNameplates": "Pokaż plakietki graczy",
@@ -1743,6 +1747,7 @@ export const pl_PL: EnTranslations = {
       "notEnoughHonor": "Za mało Honoru.",
       "reasons": {
         "arenaWin": "Zwycięstwo na arenie",
+        "arenaComplete": "Stoczono pojedynek na arenie",
         "fiestaKill": "Upadek Fiesty",
         "fiestaComplete": "Fiesta zakończona",
         "fiestaWin": "Zwycięstwo Fiesty",
@@ -1849,6 +1854,7 @@ export const pl_PL: EnTranslations = {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
     "itemHeroicTag": "[HEROICZNY]",
+    "itemHeroicLabel": "Heroiczny",
     "itemSoulbound": "Związany z duszą",
     "itemUniqueEquipped": "Unikatowo zakładany",
     "itemSet": {
@@ -2467,7 +2473,7 @@ export const pl_PL: EnTranslations = {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
       "afkTag": "AFK",
-      "cheaterTag": "< Cheater >"
+      "cheaterTag": "< Oszust >"
     },
     "mobTooltip": {
       "levelFamily": "Poziom {level}: {family}",
@@ -3941,10 +3947,10 @@ export const pl_PL: EnTranslations = {
       "current_ownership_required": "Musisz obecnie posiadać Seeker Genesis Token."
     },
     "cheater_mark": {
-      "admin_target": "Operator accounts cannot be marked.",
-      "reason_required": "A reason is required.",
-      "invalid_duration": "Enter a mark duration of at least one second.",
-      "not_marked": "That account is not marked."
+      "admin_target": "Kont operatorów nie można oznaczać.",
+      "reason_required": "Wymagane jest podanie powodu.",
+      "invalid_duration": "Podaj czas trwania oznaczenia wynoszący co najmniej jedną sekundę.",
+      "not_marked": "To konto nie jest oznaczone."
     }
   },
   "guide": {
@@ -6662,19 +6668,19 @@ export const pl_PL: EnTranslations = {
     "style": "Styl",
     "resetLook": "Resetuj wygląd",
     "resetShort": "Resetuj",
-    "shareTab": "Share",
-    "designCode": "Design code",
-    "designCodeHint": "Copy this code to save or share this look. Paste a code here and import it to load one.",
-    "copyCode": "Copy code",
-    "importCode": "Import",
-    "designCodeCopied": "Design code copied.",
-    "designCodeCopyManual": "Automatic copy is blocked here. The code is selected, copy it with your keyboard.",
-    "designCodeImported": "Design imported.",
-    "designCodeImportedPartial": "Design imported. Values this version does not know were skipped.",
-    "designCodeErrEmpty": "Paste a design code first.",
-    "designCodeErrHeader": "That does not look like a design code.",
-    "designCodeErrVersion": "That design code comes from a newer game version.",
-    "designCodeErrMalformed": "That design code is damaged. Copy the whole code and try again.",
+    "shareTab": "Udostępnij",
+    "designCode": "Kod wyglądu",
+    "designCodeHint": "Skopiuj ten kod, aby zapisać lub udostępnić ten wygląd. Wklej tutaj kod i zaimportuj go, aby wczytać wygląd.",
+    "copyCode": "Kopiuj kod",
+    "importCode": "Importuj",
+    "designCodeCopied": "Kod wyglądu skopiowany.",
+    "designCodeCopyManual": "Automatyczne kopiowanie jest tutaj zablokowane. Kod jest zaznaczony; skopiuj go za pomocą klawiatury.",
+    "designCodeImported": "Wygląd zaimportowany.",
+    "designCodeImportedPartial": "Wygląd zaimportowany. Wartości nieznane tej wersji zostały pominięte.",
+    "designCodeErrEmpty": "Najpierw wklej kod wyglądu.",
+    "designCodeErrHeader": "To nie wygląda na kod wyglądu.",
+    "designCodeErrVersion": "Ten kod wyglądu pochodzi z nowszej wersji gry.",
+    "designCodeErrMalformed": "Ten kod wyglądu jest uszkodzony. Skopiuj cały kod i spróbuj ponownie.",
     "browFlat": "Płaskie",
     "browArched": "Łukowate",
     "browThin": "Cienkie",
@@ -7791,7 +7797,15 @@ export const pl_PL: EnTranslations = {
       "readyBody": "Zainstaluje się przy zamknięciu lub uruchom ponownie teraz.",
       "restart": "Uruchom ponownie teraz",
       "later": "Później",
-      "dismiss": "Zamknij"
+      "dismiss": "Zamknij",
+      "whatsNew": "Zobacz w przeglądarce, co się zmieniło."
+    },
+    "notify": {
+      "updateReadyTitle": "Aktualizacja {version} jest gotowa",
+      "updateReadyTitleNoVersion": "Aktualizacja jest gotowa",
+      "updateReadyBody": "Uruchom ponownie World of ClaudeCraft, aby zastosować aktualizację.",
+      "partyInviteTitle": "Zaproszenie do drużyny",
+      "partyInviteBody": "{name} zaprasza cię do swojej drużyny."
     },
     "crash": {
       "title": "World of ClaudeCraft",
@@ -7803,6 +7817,7 @@ export const pl_PL: EnTranslations = {
   },
   "gpuNotice": {
     "bodyDesktop": "Gra działa bez akceleracji GPU i będzie wolna. Zaktualizuj sterowniki karty graficznej, a następnie zrestartuj grę. W systemie Windows ustaw grę na Wysoką wydajność w Ustawienia > System > Ekran > Grafika.",
+    "bodyDiscreteInactive": "Gra nie korzysta z dedykowanej karty graficznej (do gier) i zamiast tego działa na oszczędnej karcie graficznej, przez co wydajność ucierpi. Zaktualizuj sterowniki karty graficznej, a następnie zrestartuj grę. W systemie Windows ustaw także grę na Wysoką wydajność w Ustawienia > System > Ekran > Grafika.",
     "bodyWeb": "Gra działa bez akceleracji GPU i będzie wolna. Włącz akcelerację sprzętową w ustawieniach przeglądarki, zaktualizuj sterowniki karty graficznej, a następnie zrestartuj przeglądarkę.",
     "hybridBodyWindows": "Ta sesja jest renderowana na zintegrowanej (oszczędnej) karcie graficznej. Jeśli ten komputer ma także dedykowaną kartę graficzną do gier, ustaw w przeglądarce Wysoką wydajność w Ustawienia > System > Ekran > Grafika, a następnie ją zrestartuj. Aplikacja desktopowa wybiera dedykowaną kartę automatycznie.",
     "hybridBodyLinux": "Ta sesja jest renderowana na zintegrowanej (oszczędnej) karcie graficznej. Jeśli ten komputer ma także dedykowaną kartę graficzną do gier, twoja przeglądarka lub sterownik graficzny mogą udostępniać własne ustawienie wyboru GPU, albo twoja dystrybucja może oferować narzędzie do przełączania GPU (takie jak PRIME lub optimus-manager). Aplikacja desktopowa wybiera dedykowaną kartę automatycznie.",
@@ -8170,6 +8185,9 @@ export const pl_PL: EnTranslations = {
       "graphicsReloadNote": "Jakość grafiki i szczegółowość terenu zastosują się po ponownym wczytaniu.",
       "reloadNow": "Wczytaj ponownie teraz",
       "fullscreen": "Pełny ekran",
+      "displayMode": "Tryb wyświetlania",
+      "displayModeBorderless": "Pełny ekran bez obramowania",
+      "displayModeWindowed": "Okno",
       "touchLookSpeed": "Prędkość rozglądania dotykiem",
       "joystickSize": "Rozmiar joysticka",
       "buttonSize": "Rozmiar przycisków",
@@ -9049,6 +9067,7 @@ export const pl_PL: EnTranslations = {
       "filterSort": "Sortuj",
       "sortName": "Nazwa (A-Z)",
       "sortPriceAsc": "Cena: od najniższej do najwyższej",
+      "collapseLowest": "Tylko najniższa cena",
       "weaponSword": "Miecze",
       "weaponDagger": "Sztylety",
       "weaponStaff": "Kostury",
@@ -9079,6 +9098,8 @@ export const pl_PL: EnTranslations = {
       "quantity": "Ilość",
       "quantityOf": "z {count}",
       "priceEach": "Cena za sztukę",
+      "lowestPriceLabel": "Obecnie najniższa cena wystawienia",
+      "lowestPriceNone": "Nie ma jeszcze aktywnych ofert tego przedmiotu.",
       "listButton": "Wystaw na Rynku Świata",
       "minPriceError": "Podaj cenę co najmniej 1 miedziaka.",
       "collectEmpty": "Nic nie czeka. Dochód ze sprzedaży i wygasłe oferty zbierają się tutaj.",
@@ -9506,6 +9527,7 @@ export const pl_PL: EnTranslations = {
       "cheap_shot": {
         "name": "Cios w brzuch",
         "description": "Uderz cel za {damage} obrażeń, ogłuszając go na 4 sekundy. Musisz być w ukryciu. Przyznaje 2 punkty combo.",
+        "descriptionNoStealth": "Uderz cel za {damage} obrażeń, ogłuszając go na 4 sekundy. Przyznaje 2 punkty combo.",
         "specNote_subtlety": "Użyte z Zasłony zmierzchu dodaje 1 Mrok (maks. 3). Przy 3 Mroku możesz użyć tej zdolności BEZ ukrycia: takie użycie nic nie kosztuje, zużywa cały Mrok i rozpoczyna 6-sekundową Zasłonę Cieni."
       },
       "sap": {
@@ -9718,7 +9740,7 @@ export const pl_PL: EnTranslations = {
       },
       "righteous_fury": {
         "name": "Płonąca przysięga",
-        "description": "Pasywnie zwiększa zagrożenie generowane przez twoje obrażenia święte o 60%. Tylko Strażnik wiary."
+        "description": "Pasywnie zwiększa zagrożenie generowane przez twoje obrażenia święte o 30%. Tylko Strażnik wiary."
       },
       "retribution_aura": {
         "name": "Aura odpłaty",
@@ -9834,7 +9856,7 @@ export const pl_PL: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Oręż kamiennych okowów",
-        "description": "Nasyca twoją broń na 30 min. Każdy cios zadaje {damage} dodatkowych obrażeń. Wzmocnienie żywiołów zyskuje ponadto 30% pancerza, otrzymuje o 10% mniej obrażeń i generuje dwukrotnie większe zagrożenie. Ziemny wstrząs zmusza swój cel do atakowania ciebie przez 3 s, a Osłona gromu daje 10% redukcji obrażeń na 3 s."
+        "description": "Nasyca twoją broń na 30 min. Każdy cios zadaje {damage} dodatkowych obrażeń. Wzmocnienie żywiołów zyskuje ponadto 40% pancerza i 20% wytrzymałości, otrzymuje o 15% mniej obrażeń i jest odporny na trafienia krytyczne od stworzeń i generuje 2,75 razy większe zagrożenie. Ziemny wstrząs zmusza swój cel do atakowania ciebie przez 3 s, a Osłona gromu daje 10% redukcji obrażeń na 3 s."
       },
       "healing_wave": {
         "name": "Kojące wody",
@@ -10013,7 +10035,7 @@ export const pl_PL: EnTranslations = {
       },
       "bear_form": {
         "name": "Postać Bruina",
-        "description": "Zmień postać w niedźwiedzia: pancerz +130%, znacznie zwiększona moc ataku, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
+        "description": "Zmień postać w niedźwiedzia: pancerz +110%, maksymalne zdrowie +30%, znacznie zwiększona moc ataku, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
       },
       "maul": {
         "name": "Kruszenie kości",
@@ -10023,6 +10045,10 @@ export const pl_PL: EnTranslations = {
       "growl": {
         "name": "Groźba",
         "description": "Warczy na cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci Bruina."
+      },
+      "challenging_roar": {
+        "name": "Złowieszczy ryk",
+        "description": "Złowieszczy ryk: każdy wróg w promieniu 10 jardów zostaje sprowokowany, a jego zagrożenie wobec ciebie wzrasta do poziomu jego najbardziej znienawidzonego wroga, przez co zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci Bruina."
       },
       "cat_form": {
         "name": "Postać wilka",

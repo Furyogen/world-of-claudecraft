@@ -1521,6 +1521,10 @@ export interface PlayerMeta {
   // so the player can page through and filter the WHOLE market a window at a time.
   // Never persisted, resets on login.
   marketQuery: MarketQuery;
+  // Session-only: the item id the Sell tab wants a current-lowest-listing-price
+  // reference for (issue #3043), or null when nothing is staged. Never
+  // persisted, resets on login, same as marketQuery.
+  sellPriceItemId: string | null;
   // Flat per-craft skill tracking (#1126): one independent, additive-only skill
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
   // in CharacterState.
@@ -3025,6 +3029,7 @@ export class Sim {
       // on load too, since savedState carries no mobile-station field.
       mobileStation: null,
       marketQuery: defaultMarketQuery(),
+      sellPriceItemId: null,
       mailWelcomed: false,
       guildLetterSent: false,
       questCadence: new Map(),
@@ -4041,6 +4046,13 @@ export class Sim {
             honorArenaDaily: {
               date: meta.honorArenaDaily.date,
               winsByOpponent: { ...meta.honorArenaDaily.winsByOpponent },
+              // Optional ranked-loss DR window, on the same absent-when-empty
+              // rule as the battleground one below: a day with no paying loss
+              // writes nothing, so pre-loss-award saves stay byte-equal.
+              ...(meta.honorArenaDaily.lossesByOpponent &&
+              Object.keys(meta.honorArenaDaily.lossesByOpponent).length > 0
+                ? { lossesByOpponent: { ...meta.honorArenaDaily.lossesByOpponent } }
+                : {}),
               fiestaCompletionsByOpponent: {
                 ...meta.honorArenaDaily.fiestaCompletionsByOpponent,
               },
@@ -11252,6 +11264,10 @@ export class Sim {
     this.market.marketSearch(query, pid);
   }
 
+  marketSellPriceCheck(itemId: string | null, pid?: number): void {
+    this.market.marketSellPriceCheck(itemId, pid);
+  }
+
   marketList(itemId: string, count: number, price: number, pid?: number): void {
     this.market.marketList(itemId, count, price, pid);
   }
@@ -11861,10 +11877,6 @@ export class Sim {
 
   private grantDelveClearTo(run: DelveRun, delve: DelveDef, meta: PlayerMeta, pid: number): void {
     runsMod.grantDelveClearTo(this.ctx, run, delve, meta, pid);
-  }
-
-  private grantDelveRewards(run: DelveRun): void {
-    runsMod.grantDelveRewards(this.ctx, run);
   }
 
   private openDelveSurfaceExit(run: DelveRun): void {

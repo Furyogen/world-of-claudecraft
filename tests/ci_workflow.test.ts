@@ -9,10 +9,17 @@ import { decideTestMode } from '../scripts/lib/ci_test_select.mjs';
 import {
   GENERATED_I18N_ARTIFACT_FILES,
   GENERATED_I18N_ARTIFACT_PREFIXES,
+  GENERATED_MANIFEST_ARTIFACT_FILES,
   isGeneratedI18nArtifactPath,
+  isGeneratedManifestArtifactPath,
 } from '../scripts/lib/gate_select_plan.mjs';
-import { buildFullGateSteps, I18N_ARTIFACTS } from '../scripts/lib/gate_steps.mjs';
+import {
+  buildFullGateSteps,
+  I18N_ARTIFACTS,
+  MANIFEST_ARTIFACTS,
+} from '../scripts/lib/gate_steps.mjs';
 import { expectScansOnlyThroughSharedWalkers } from './helpers/scan_guard_self_audit';
+import { stripComments } from './helpers/strip_comments';
 
 const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
 const detectEntry = readFileSync(
@@ -22,18 +29,14 @@ const detectEntry = readFileSync(
 const ciShardEntry = readFileSync(new URL('../scripts/ci_shard_test.mjs', import.meta.url), 'utf8');
 // Comment-stripped (same idiom as gateCode below): a source-text pin on the
 // entry must not stay green when the pinned call survives only in a comment.
-const ciShardEntryCode = ciShardEntry
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/(^|[^:])\/\/.*$/gm, '$1');
+const ciShardEntryCode = stripComments(ciShardEntry);
 const ciShardPlanSource = readFileSync(
   new URL('../scripts/lib/ci_shard_plan.mjs', import.meta.url),
   'utf8',
 );
 // Stripped for the formula weld: the module's docblocks discuss the default
 // in prose, and a weld a comment can satisfy is not a weld.
-const ciShardPlanCode = ciShardPlanSource
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/(^|[^:])\/\/.*$/gm, '$1');
+const ciShardPlanCode = stripComments(ciShardPlanSource);
 // ci.yml with full-line YAML comments removed: the worker-trial pins below
 // count KEY occurrences, and a doc comment quoting the env line must neither
 // satisfy a count nor turn it red.
@@ -47,13 +50,15 @@ const preflightCode = readFileSync(
   new URL('../scripts/lib/gate_preflight.mjs', import.meta.url),
   'utf8',
 );
-// gate.mjs with its comments removed, BOTH kinds. A raw-substring pin on a step
-// is not a pin at all: commenting the step out leaves the substring in the file,
+// gate.mjs with its comments removed, BOTH kinds, via the shared single-pass
+// helper (tests/helpers/strip_comments.ts). A raw-substring pin on a step is
+// not a pin at all: commenting the step out leaves the substring in the file,
 // so the assertion stays green while the local gate quietly stops running it.
-// Block comments are stripped first (a `/* ... */` wrapper defeats a line-comment
-// strip just as well), then line comments, leaving anything after `://` alone so
-// a URL inside a string cannot be truncated.
-const gateCode = gate.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+// The single pass consumes each comment exactly once, so a `/* ... */` wrapper
+// cannot defeat the line strip AND a bare /* inside a line comment cannot open
+// a phantom block that swallows the gate's own pin surface; `://` URLs stay
+// intact.
+const gateCode = stripComments(gate);
 // Shared step list (Phase 8): gate.mjs delegates here; pins below use both.
 const gateSteps = buildFullGateSteps(8);
 const viteConfig = readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8');
@@ -97,6 +102,7 @@ const CHECK_RUN_STEPS = [
   'run: npm run security:gate',
   TYPECHECK_BUILDS_TURBO_RUN,
   'run: npm run wiki:content && npm run build:bundle\n',
+  'run: git ls-files --error-unmatch -- src/game/sfx_manifest.generated.ts',
 ] as const;
 
 // Exact job-level if line for both release jobs. toContain alone would allow a
@@ -119,7 +125,7 @@ const PR_TIER_EVENT_FRAGMENT =
 // classifier's fail-closed doctrine; under the merge queue a skipped required
 // check reads satisfied, so failing toward SKIP would be the wrong direction.
 // (Covers green-but-empty output only: a FAILED changes job skips dependents
-// via needs regardless, which requiring "Detect code path changes" closes.)
+// via needs regardless, which requiring "Classify changes" closes.)
 const PR_TIER_IF_LINE = `    if: (${PR_TIER_EVENT_FRAGMENT}) && needs.changes.outputs.code != 'false'`;
 
 // pr-gate alone splits those two arms across levels (the docs-only matrix
@@ -243,26 +249,18 @@ describe('CI workflow parity', () => {
       '            !/docs/screenshots/*/',
       '            /docs/screenshots/admin-cheater-mark/',
       '            /docs/screenshots/admin-guild-bank-panel/',
-      '            /docs/screenshots/class-skin-color-wash/',
       '            /docs/screenshots/eastbrook-grand-armoury/',
       '            /docs/screenshots/eastbrook-vale-rebuild/',
       '            /docs/screenshots/far-foliage-impostors/',
       '            /docs/screenshots/fenbridge-rebuild/',
-      '            /docs/screenshots/guild-bank-member-readonly/',
       '            /docs/screenshots/guild-bank-tab/',
       '            /docs/screenshots/guild-social-v1/',
       '            /docs/screenshots/item-art-consistency-2026-08-09/',
-      '            /docs/screenshots/mobile-mount-quick-summon/',
+      '            /docs/screenshots/market-house-redesign/',
       '            /docs/screenshots/placeholder-art-completion-2026-08-09/',
-      '            /docs/screenshots/prof-tool-effects/',
       '            /docs/screenshots/r35-admin-professions-inspector/',
-      '            /docs/screenshots/raw-fish-cooking-reagents/',
       '            /docs/screenshots/release-v036-skill-normalization-2026-08-10/',
-      '            /docs/screenshots/rift-floor-timer-hud/',
-      '            /docs/screenshots/wiki-v036-refresh/',
-      '            /docs/screenshots/wiki-v036-round2/',
       '            /docs/screenshots/wildheart/',
-      '            /docs/screenshots/wildheart_hit_stagger/',
       '          sparse-checkout-cone-mode: false',
     ].join('\n');
     // Job-anchored, not a bare workflow-wide count: each sparse job carries
@@ -524,7 +522,7 @@ describe('CI workflow parity', () => {
       const job = jobSource(jobName);
       // Anchored to the src/ prefix so a future unrelated `git diff
       // --exit-code` step added above this one cannot re-point the pin.
-      const m = job.match(/run: git diff --exit-code -- (src\/[^\n]+)/);
+      const m = job.match(/\n {8}run: git diff --exit-code -- (src\/[^\n]+)/);
       expect(m, `${jobName} must carry the freshness diff step`).not.toBeNull();
       const freshnessPaths = (m as RegExpMatchArray)[1].trim().split(/\s+/).sort();
       expect(classifierPaths).toEqual(freshnessPaths);
@@ -549,6 +547,80 @@ describe('CI workflow parity', () => {
       true,
     );
     expect(isGeneratedI18nArtifactPath('src/guide/content.generated.ts')).toBe(false);
+  });
+
+  it('pins the inert generated-manifest classifier to exactly the freshness-diffed paths', () => {
+    // The second freshness-guarded family holds the same weld family as the
+    // i18n arm above, with one deliberate asymmetry: the freshness DIFF set
+    // (MANIFEST_ARTIFACTS) is a strict SUPERSET of the classifier family.
+    // The SFX generator writes two more tracked files (the runtime pack and
+    // the gain-ceiling cache) that are fs-read data, never graph nodes:
+    // diffing them prevents the local gate from silently healing them
+    // mid-run while CI reads stale committed copies; feeding them to
+    // `related` would select nothing. Both lists are pinned to literals (the
+    // family-growth mitigation: a fourth path moved in lockstep through
+    // every derived side would otherwise stay green), the classifier family
+    // must be contained in the diff set, and BOTH check jobs' argv must
+    // equal the diff set exactly.
+    expect([...GENERATED_MANIFEST_ARTIFACT_FILES].sort()).toEqual([
+      'src/game/sfx_manifest.generated.ts',
+      'src/guide/content.generated.ts',
+      'src/render/assets/manifest.generated.ts',
+    ]);
+    expect([...MANIFEST_ARTIFACTS].sort()).toEqual(
+      [
+        'src/game/sfx_manifest.generated.ts',
+        'src/guide/content.generated.ts',
+        'src/render/assets/manifest.generated.ts',
+        'public/audio/sfx/runtime-pack.json',
+        'scripts/sfx/sfx_gain_ceiling.generated.json',
+      ].sort(),
+    );
+    for (const member of GENERATED_MANIFEST_ARTIFACT_FILES) {
+      expect(MANIFEST_ARTIFACTS, 'every classifier path must be freshness-diffed').toContain(
+        member,
+      );
+    }
+    for (const member of MANIFEST_ARTIFACTS) {
+      expect(isCodePath(member), `${member} must route through the manifest check jobs`).toBe(true);
+    }
+    for (const jobName of ['pr-checks', 'release-checks']) {
+      const job = jobSource(jobName);
+      // The actual run line must first prove every output remains tracked,
+      // then diff the exact same set. Regeneration can recreate a committed
+      // deletion as an untracked file, which `git diff` alone ignores. The
+      // `\n {8}run: ` anchor means a YAML-commented-out command cannot pass.
+      const manifestGuard = job.match(
+        /\n {8}run: git ls-files --error-unmatch -- (src\/[^&\n]+) && git diff --exit-code -- (src\/[^\n]+)/,
+      );
+      expect(
+        manifestGuard,
+        `${jobName} must carry the manifest trackedness and diff guard`,
+      ).toBeTruthy();
+      const trackedPaths = (manifestGuard as RegExpMatchArray)[1].trim().split(/\s+/).sort();
+      const freshnessPaths = (manifestGuard as RegExpMatchArray)[2].trim().split(/\s+/).sort();
+      expect(trackedPaths).toEqual([...MANIFEST_ARTIFACTS].sort());
+      expect(freshnessPaths).toEqual([...MANIFEST_ARTIFACTS].sort());
+      // Regenerate BEFORE diff, inside the same job: the client build
+      // (wiki:content writes the guide content, build:bundle's pregen writes
+      // the SFX and media manifests) must precede the diff, or the diff
+      // proves nothing about this tree's sources.
+      const buildIdx = job.indexOf('run: npm run wiki:content && npm run build:bundle\n');
+      expect(buildIdx).toBeGreaterThan(0);
+      expect(buildIdx).toBeLessThan(job.indexOf((manifestGuard as RegExpMatchArray)[0]));
+    }
+    // Nightly coverage is transitive: release-checks carries the diff (welded
+    // here) and tests/nightly_workflow.test.ts pins nightly's run-line
+    // sequence equal to release-checks', so nightly cannot quietly drop it.
+    // The predicate agrees with the pinned path classes on both sides, and
+    // any OTHER .generated path keeps the widen-to-full behavior.
+    for (const p of GENERATED_MANIFEST_ARTIFACT_FILES) {
+      expect(isGeneratedManifestArtifactPath(p), p).toBe(true);
+    }
+    expect(isGeneratedManifestArtifactPath('src/ui/icons.generated.ts')).toBe(false);
+    expect(
+      isGeneratedManifestArtifactPath('src/ui/i18n.catalog/translation_keys.generated.ts'),
+    ).toBe(false);
   });
 
   it('runs the release tier against a release-to-main pull request merge result', () => {
@@ -661,7 +733,7 @@ describe('CI workflow parity', () => {
     // ...and a structural count, the same backstop release-gate has: an added
     // or removed pr-checks step must consciously update this test rather than
     // slipping in beside the by-name pins above.
-    expect(prChecks.match(/\n {6}- name: /g)).toHaveLength(11);
+    expect(prChecks.match(/\n {6}- name: /g)).toHaveLength(12);
     // pr-checks is unsharded, so NO step in it may carry a condition: an
     // `if: matrix.shard == 1` copy-pasted here is never true and would disable
     // that step outright.
@@ -690,11 +762,11 @@ describe('CI workflow parity', () => {
       expect(releaseGate).not.toContain(step);
     }
     // Named-step count: checkout, setup-pnpm, setup-node, pnpm install, plus
-    // seven check steps (i18n gen/summary/freshness, malware, tsc cache, the
-    // combined typecheck + env/server/bot builds turbo call, client build).
-    // An accidental extra step on the checks job would otherwise stay green.
-    expect(releaseChecks.match(/\n {6}- name: /g)).toHaveLength(11);
-    expect(jobSource('pr-checks').match(/\n {6}- name: /g)).toHaveLength(11);
+    // eight check steps (i18n gen/summary/freshness, malware, tsc cache, the
+    // combined typecheck + env/server/bot builds turbo call, client build,
+    // manifest freshness). An accidental extra step would otherwise stay green.
+    expect(releaseChecks.match(/\n {6}- name: /g)).toHaveLength(12);
+    expect(jobSource('pr-checks').match(/\n {6}- name: /g)).toHaveLength(12);
     // tsc incremental cache (#2758) must land on both check jobs, never on a
     // matrixed test job (would N-way cache thrash or reintroduce shard-1 gates).
     for (const job of [releaseChecks, jobSource('pr-checks')]) {
@@ -922,13 +994,13 @@ describe('CI workflow parity', () => {
     // each name exactly.
     const mergeQueueDoc = readFileSync(new URL('../docs/merge-queue.md', import.meta.url), 'utf8');
     const requiredCheckNames = [
-      'Detect code path changes',
-      'PR gate (English-only legal)',
-      'PR gate (long sims A)',
-      'PR gate (long sims B)',
-      'PR checks (freshness, typecheck, builds)',
-      'Format + lint (Biome, changed files)',
-      'Browser regressions (Chromium)',
+      'Classify changes',
+      'PR tests',
+      'PR long sims A',
+      'PR long sims B',
+      'PR checks',
+      'Lint (changed files)',
+      'Browser tests',
     ] as const;
     for (const name of requiredCheckNames) {
       // Anchored to the job-level name: line (4-space indent), so a
@@ -950,13 +1022,13 @@ describe('CI workflow parity', () => {
     expect(neverSectionEnd).toBeGreaterThan(neverIdx);
     const neverSection = mergeQueueDoc.slice(neverIdx, neverSectionEnd);
     const docRequiredNameForms = [
-      '`Detect code path changes`',
-      `\`PR gate (English-only legal) (1)\` through \`(${SHARD_N})\``,
-      '`PR gate (long sims A)`',
-      '`PR gate (long sims B)`',
-      '`PR checks (freshness, typecheck, builds)`',
-      '`Format + lint (Biome, changed files)`',
-      '`Browser regressions (Chromium)`',
+      '`Classify changes`',
+      `\`PR tests (1)\` through \`(${SHARD_N})\``,
+      '`PR long sims A`',
+      '`PR long sims B`',
+      '`PR checks`',
+      '`Lint (changed files)`',
+      '`Browser tests`',
     ] as const;
     for (const form of docRequiredNameForms) {
       expect(requiredHalf).toContain(form);
@@ -1559,20 +1631,27 @@ describe('CI workflow parity', () => {
     expect(workflow).not.toContain('secrets["');
   });
 
-  it('keeps D11 path-matrix tooling available but unwired after two MISS approaches', () => {
-    // Both LPT and stripe greened with completeness but D11 MISS (ratios 1.59 /
-    // 1.64). Sequencer stays in-tree for a future measured-weight attempt; CI
-    // must not re-wire it without a green D11 probe. Default --shard is back.
-    expect(viteConfig).not.toContain('sequencer: BalancedSequencer');
-    expect(viteConfig).not.toContain("from './scripts/ci_balanced_sequencer.mjs'");
+  it('wires the measured-weight balanced sequencer with its guards intact', () => {
+    // History: LPT and stripe both greened with completeness but MISSED the
+    // D11 bar on STATIC weights (ratios 1.59 / 1.64) and stayed unwired.
+    // Re-wired 2026-08-14 over MEASURED durations (the harvested table in
+    // scripts/ci_shard_weights.generated.json); the review round proved the
+    // measured-scale fallback is load-bearing (raw heuristic units made the
+    // packing worse than contiguous). The wiring itself is behaviorally
+    // pinned in tests/ci_shard_partition.test.ts; this end keeps the
+    // integrity guards welded to it.
+    expect(viteConfig).toContain('sequencer: BalancedSequencer');
+    expect(viteConfig).toContain("from './scripts/ci_balanced_sequencer.mjs'");
     expect(balancedSequencer).toContain('extends BaseSequencer');
     expect(balancedSequencer).toContain('partitionForCi');
-    expect(shardPartition).toContain('export function partitionByStripe');
+    expect(balancedSequencer).toContain('assertPartitionCompleteness');
     expect(shardPartition).toContain('export function partitionByLpt');
     expect(shardPartition).toContain('export function weightForTestFile');
+    expect(shardPartition).toContain('MEASURED_FALLBACK_MS');
     expect(shardPartition).not.toContain("from 'vitest");
-    expect(workflow).toContain('ci_balanced_sequencer.mjs');
-    // Integrity guard kept even with default packs.
+    // An empty pack must stay red, and the workflow's design notes must keep
+    // naming the sequencer so the next reader finds the mechanism.
     expect(viteConfig).toContain('passWithNoTests: false');
+    expect(workflow).toContain('ci_balanced_sequencer.mjs');
   });
 });

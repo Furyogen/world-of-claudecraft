@@ -155,8 +155,34 @@ interface AttributionTargetFixture {
 // both parents move renderer.ts (the release's point-light seam, this branch's
 // moon-phase grade threading), so the merged tree mints a value matching
 // neither parent. No capture was retaken.
+// Re-minted for PR #3339's healGlowAt view-eviction fix on the newer release
+// renderer. The rendererIntegration leaf moves; no capture was retaken.
+// Re-minted for PR #3344 after removing the unused Eastbrook civic-beacon
+// preload test hook. The civicShader leaf moves; no capture was retaken.
+// Re-minted after applying the PR #3339 review repair atop PR #3344. The
+// rendererIntegration and civicShader leaves both survive; no capture was retaken.
+// Re-minted for final PR #3345 integration. The reviewed offscreen-heal
+// renderer bytes remain while the new lockfile and accepted GLBs join the
+// provenance inputs. No capture was retaken.
+// Re-minted after extracting entity-view policy from renderer.ts to satisfy
+// the release monolith ratchet. Behavior is unchanged; no capture was retaken.
+// Re-minted again after making that extracted policy an explicit provenance
+// leaf. The evidence now follows policy-only changes; no capture was retaken.
+// Re-minted for the merge of release/v0.38.0 into the Armory warming branch:
+// both parents move renderer.ts, so the merged tree mints a value matching
+// neither parent. No capture was retaken.
+// Re-minted for the quest-collectable spawn gate: this branch's renderer.ts
+// edits (the view gate call sites and the ground-object pool key move) shift
+// the runtimeRender.renderer leaf, the only leaf that moved. No Eastbrook
+// input, geometry value, or capture moved.
+// Re-minted for the merge of PR #3359's quest-collectable spawn gate with the
+// release branch's extracted entity-view policy. Both renderer.ts and the
+// entityViewPolicy leaf are provenance inputs; no capture was retaken.
+// Re-minted for the review fixes on this branch (Soul Rend warms every rig a
+// live body can take, plus the lazy form-visual fold): renderer.ts moves
+// again, so the composite follows its bytes. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'dbe72efd55ba53ddf7a409f4cfa805aa8d6ac28bae677250c2781fcf89cf6d60';
+  '6058df21f7ccecff73cefad0b935c7d7ddfe1c6f251f28d1b2ca2603e561527e';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [
@@ -449,7 +475,7 @@ describe('Eastbrook polish capture contract', () => {
       createHash('sha256')
         .update(await readFile(new URL(relativePath, repoRoot)))
         .digest('hex');
-    const provenance = deriveEastbrookPolishCompositeProvenance({
+    const provenanceInputs = {
       townAssetSourceFingerprint: townFingerprint.eastbrookTownSourceFingerprint(),
       authoritativeLayoutSha256: await fileSha256(
         EASTBROOK_POLISH_PROVENANCE_INPUTS.authoritativeLayout,
@@ -463,6 +489,7 @@ describe('Eastbrook polish capture contract', () => {
       rendererIntegrationSha256: await fileSha256(
         EASTBROOK_POLISH_PROVENANCE_INPUTS.rendererIntegration,
       ),
+      entityViewPolicySha256: await fileSha256(EASTBROOK_POLISH_PROVENANCE_INPUTS.entityViewPolicy),
       viewPriorityPolicySha256: await fileSha256(
         EASTBROOK_POLISH_PROVENANCE_INPUTS.viewPriorityPolicy,
       ),
@@ -470,7 +497,14 @@ describe('Eastbrook polish capture contract', () => {
       mailboxGlbSha256: await fileSha256(EASTBROOK_POLISH_PROVENANCE_INPUTS.mailboxGlb),
       noticeboardSourceFingerprint: noticeboardFingerprint.eastbrookNoticeboardSourceFingerprint(),
       noticeboardGlbSha256: await fileSha256(EASTBROOK_POLISH_PROVENANCE_INPUTS.noticeboardGlb),
+    };
+    const provenance = deriveEastbrookPolishCompositeProvenance(provenanceInputs);
+    const policyOnlyChange = deriveEastbrookPolishCompositeProvenance({
+      ...provenanceInputs,
+      entityViewPolicySha256: '0'.repeat(64),
     });
+    expect(policyOnlyChange.fingerprint).not.toBe(provenance.fingerprint);
+    expect(policyOnlyChange.components.runtimeRender.entityViewPolicy.sha256).toBe('0'.repeat(64));
     // On a mismatch the diagnostics module names the moved leaf against the
     // committed evidence seal, reports whether any fingerprinted input is
     // dirty vs HEAD (the stale-mint hazard: the 2026-08-05 craft-cast pin
@@ -512,6 +546,10 @@ describe('Eastbrook polish capture contract', () => {
           sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
         },
         runtimeRender: {
+          entityViewPolicy: {
+            path: 'src/render/entity_view_policy_core.ts',
+            sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+          },
           viewPriorityPolicy: {
             path: 'src/render/prewarm_policy.ts',
             sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
@@ -1352,6 +1390,7 @@ describe('Eastbrook polish capture contract', () => {
       'npcFacings:',
       'polishProvenance',
       'deriveEastbrookPolishCompositeProvenance({',
+      'EASTBROOK_POLISH_PROVENANCE_INPUTS.entityViewPolicy',
       'TOWN_CONTRACT',
     ]) {
       expect(source, call).toContain(call);

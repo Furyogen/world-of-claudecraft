@@ -1371,6 +1371,10 @@ export const vi_VN: EnTranslations = {
       "showWalletOnCharacterScreen": "Hiện Ví Tiền Ở Màn Hình Nhân Vật",
       "showWalletOnPlayerCard": "Hiện Ví Tiền Trên Thẻ Người Chơi",
       "showPlaytime": "Hiện Thời Gian Chơi Ở Màn Hình Nhân Vật",
+      "forceHighPerfGpu": "Dùng Card Đồ Họa Chơi Game",
+      "forceHighPerfGpuNote": "Mặc định bật: ứng dụng máy tính yêu cầu máy này dùng card đồ họa chơi game của nó. Hãy tắt tùy chọn này nếu trò chơi không khởi động được, mở ra màn hình đen, hoặc màn hình laptop bị tối đen. Có hiệu lực vào lần khởi động trò chơi tiếp theo.",
+      "discordPresence": "Hoạt Động Discord",
+      "discordPresenceNote": "Hiển thị vùng bạn đang ở và thời gian bạn đã chơi trong phiên chơi này dưới dạng hoạt động Discord của bạn, và bất kỳ ai xem được hồ sơ Discord của bạn đều thấy được cả hai. Chỉ tên vùng, thời gian phiên chơi của bạn, và tên trò chơi được chia sẻ, không bao giờ là nhân vật, tài khoản, hay những ai bạn đang chơi cùng. Cần ứng dụng Discord đang chạy trên máy tính này.",
       "showDevBadges": "Hiện Huy Hiệu Nhà Phát Triển",
       "showOwnNameplate": "Hiện Bảng Tên Của Tôi",
       "showPlayerNameplates": "Hiện Bảng Tên Người Chơi",
@@ -1743,6 +1747,7 @@ export const vi_VN: EnTranslations = {
       "notEnoughHonor": "Không đủ danh dự.",
       "reasons": {
         "arenaWin": "Chiến thắng đấu trường",
+        "arenaComplete": "Đã đấu trận đấu trường",
         "fiestaKill": "Hạ gục trong Fiesta",
         "fiestaComplete": "Fiesta đã hoàn thành",
         "fiestaWin": "Chiến thắng Fiesta",
@@ -1849,6 +1854,7 @@ export const vi_VN: EnTranslations = {
       "joinChannels": "Mẹo: gõ /join world hoặc /join lfg để trò chuyện với người chơi khắp thế giới."
     },
     "itemHeroicTag": "[ANH HÙNG]",
+    "itemHeroicLabel": "Anh Hùng",
     "itemSoulbound": "Ràng Buộc Linh Hồn",
     "itemUniqueEquipped": "Độc Nhất Khi Trang Bị",
     "itemSet": {
@@ -2467,7 +2473,7 @@ export const vi_VN: EnTranslations = {
       "mobLevel": "{level}",
       "mobEliteLevel": "{level}+",
       "afkTag": "VắngMặt",
-      "cheaterTag": "< Cheater >"
+      "cheaterTag": "< Kẻ Gian Lận >"
     },
     "mobTooltip": {
       "levelFamily": "{family} cấp {level}",
@@ -3941,10 +3947,10 @@ export const vi_VN: EnTranslations = {
       "current_ownership_required": "Bạn phải đang sở hữu Seeker Genesis Token."
     },
     "cheater_mark": {
-      "admin_target": "Operator accounts cannot be marked.",
-      "reason_required": "A reason is required.",
-      "invalid_duration": "Enter a mark duration of at least one second.",
-      "not_marked": "That account is not marked."
+      "admin_target": "Không thể đánh dấu tài khoản điều hành.",
+      "reason_required": "Bắt buộc phải nhập lý do.",
+      "invalid_duration": "Nhập thời hạn đánh dấu ít nhất một giây.",
+      "not_marked": "Tài khoản đó chưa bị đánh dấu."
     }
   },
   "guide": {
@@ -6662,19 +6668,19 @@ export const vi_VN: EnTranslations = {
     "style": "Kiểu Dáng",
     "resetLook": "Đặt Lại Diện Mạo",
     "resetShort": "Đặt Lại",
-    "shareTab": "Share",
-    "designCode": "Design code",
-    "designCodeHint": "Copy this code to save or share this look. Paste a code here and import it to load one.",
-    "copyCode": "Copy code",
-    "importCode": "Import",
-    "designCodeCopied": "Design code copied.",
-    "designCodeCopyManual": "Automatic copy is blocked here. The code is selected, copy it with your keyboard.",
-    "designCodeImported": "Design imported.",
-    "designCodeImportedPartial": "Design imported. Values this version does not know were skipped.",
-    "designCodeErrEmpty": "Paste a design code first.",
-    "designCodeErrHeader": "That does not look like a design code.",
-    "designCodeErrVersion": "That design code comes from a newer game version.",
-    "designCodeErrMalformed": "That design code is damaged. Copy the whole code and try again.",
+    "shareTab": "Chia sẻ",
+    "designCode": "Mã ngoại hình",
+    "designCodeHint": "Sao chép mã này để lưu hoặc chia sẻ ngoại hình. Dán mã vào đây rồi nhập để tải ngoại hình.",
+    "copyCode": "Sao chép mã",
+    "importCode": "Nhập",
+    "designCodeCopied": "Đã sao chép mã ngoại hình.",
+    "designCodeCopyManual": "Tính năng tự động sao chép bị chặn tại đây. Mã đã được chọn; hãy dùng bàn phím để sao chép.",
+    "designCodeImported": "Đã nhập ngoại hình.",
+    "designCodeImportedPartial": "Đã nhập ngoại hình. Những giá trị mà phiên bản này không nhận diện được đã bị bỏ qua.",
+    "designCodeErrEmpty": "Trước tiên, hãy dán mã ngoại hình.",
+    "designCodeErrHeader": "Nội dung đó không giống mã ngoại hình.",
+    "designCodeErrVersion": "Mã ngoại hình đó đến từ phiên bản trò chơi mới hơn.",
+    "designCodeErrMalformed": "Mã ngoại hình đó bị hỏng. Hãy sao chép toàn bộ mã rồi thử lại.",
     "browFlat": "Thẳng",
     "browArched": "Cong",
     "browThin": "Mảnh",
@@ -7791,7 +7797,15 @@ export const vi_VN: EnTranslations = {
       "readyBody": "Sẽ tự cài khi bạn thoát, hoặc khởi động lại ngay.",
       "restart": "Khởi động lại ngay",
       "later": "Để sau",
-      "dismiss": "Bỏ Qua"
+      "dismiss": "Bỏ Qua",
+      "whatsNew": "Xem những gì đã thay đổi trong trình duyệt của bạn"
+    },
+    "notify": {
+      "updateReadyTitle": "Bản cập nhật {version} đã sẵn sàng",
+      "updateReadyTitleNoVersion": "Bản cập nhật đã sẵn sàng",
+      "updateReadyBody": "Khởi động lại World of ClaudeCraft để áp dụng bản cập nhật.",
+      "partyInviteTitle": "Lời mời tổ đội",
+      "partyInviteBody": "{name} đã mời bạn gia nhập tổ đội của họ."
     },
     "crash": {
       "title": "World of ClaudeCraft",
@@ -7803,6 +7817,7 @@ export const vi_VN: EnTranslations = {
   },
   "gpuNotice": {
     "bodyDesktop": "Trò chơi đang chạy mà không có tăng tốc GPU và sẽ chậm. Hãy cập nhật trình điều khiển đồ họa, sau đó khởi động lại trò chơi. Trên Windows, hãy đặt trò chơi thành Hiệu suất cao trong Cài đặt > Hệ thống > Màn hình > Đồ họa.",
+    "bodyDiscreteInactive": "Trò chơi hiện không dùng card đồ họa chơi game mà đang chạy trên GPU tích hợp (tiết kiệm điện), nên hiệu năng sẽ giảm sút. Hãy cập nhật trình điều khiển đồ họa, sau đó khởi động lại trò chơi. Trên Windows, cũng hãy đặt trò chơi thành Hiệu suất cao trong Cài đặt > Hệ thống > Màn hình > Đồ họa.",
     "bodyWeb": "Trò chơi đang chạy mà không có tăng tốc GPU và sẽ chậm. Hãy bật tăng tốc phần cứng trong cài đặt trình duyệt, cập nhật trình điều khiển đồ họa, sau đó khởi động lại trình duyệt.",
     "hybridBodyWindows": "Phiên chơi này đang hiển thị trên GPU tích hợp (tiết kiệm điện). Nếu máy tính này còn có card đồ họa chơi game, hãy đặt trình duyệt thành Hiệu năng cao trong Cài đặt > Hệ thống > Màn hình > Đồ họa, rồi khởi động lại trình duyệt. Ứng dụng máy tính tự động chọn card đồ họa chơi game.",
     "hybridBodyLinux": "Phiên chơi này đang hiển thị trên GPU tích hợp (tiết kiệm điện). Nếu máy tính này còn có card đồ họa chơi game, trình duyệt hoặc trình điều khiển đồ họa của bạn có thể có tùy chọn chọn GPU riêng, hoặc bản phân phối Linux của bạn có thể cung cấp công cụ chuyển GPU (như PRIME hoặc optimus-manager). Ứng dụng máy tính tự động chọn card đồ họa chơi game.",
@@ -8170,6 +8185,9 @@ export const vi_VN: EnTranslations = {
       "graphicsReloadNote": "Chất Lượng Đồ Họa và Chi Tiết Địa Hình áp dụng sau khi tải lại.",
       "reloadNow": "Tải Lại Ngay",
       "fullscreen": "Toàn Màn Hình",
+      "displayMode": "Chế Độ Hiển Thị",
+      "displayModeBorderless": "Toàn Màn Hình Không Viền",
+      "displayModeWindowed": "Cửa Sổ",
       "touchLookSpeed": "Tốc Độ Nhìn Cảm Ứng",
       "joystickSize": "Kích Thước Cần Điều Khiển",
       "buttonSize": "Kích thước nút",
@@ -9049,6 +9067,7 @@ export const vi_VN: EnTranslations = {
       "filterSort": "Sắp xếp",
       "sortName": "Tên (A-Z)",
       "sortPriceAsc": "Giá: thấp đến cao",
+      "collapseLowest": "Chỉ giá thấp nhất",
       "weaponSword": "Kiếm",
       "weaponDagger": "Dao Găm",
       "weaponStaff": "Trượng",
@@ -9079,6 +9098,8 @@ export const vi_VN: EnTranslations = {
       "quantity": "Số lượng",
       "quantityOf": "trong {count}",
       "priceEach": "Giá mỗi món",
+      "lowestPriceLabel": "Giá đăng bán thấp nhất hiện tại",
+      "lowestPriceNone": "Hiện chưa có tin đăng bán nào cho vật phẩm này.",
       "listButton": "Rao bán trên Chợ Thế Giới",
       "minPriceError": "Hãy đặt giá ít nhất 1 đồng.",
       "collectEmpty": "Không có gì đang chờ. Tiền bán và mặt hàng hết hạn sẽ được thu về tại đây.",
@@ -9506,6 +9527,7 @@ export const vi_VN: EnTranslations = {
       "cheap_shot": {
         "name": "Thụi Bụng",
         "description": "Đánh mục tiêu gây {damage} sát thương, làm choáng nó trong 4 giây. Phải đang ẩn thân. Nhận 2 điểm liên hoàn.",
+        "descriptionNoStealth": "Đánh mục tiêu gây {damage} sát thương, làm choáng nó trong 4 giây. Nhận 2 điểm liên hoàn.",
         "specNote_subtlety": "Dùng từ Màn Chạng Vạng sẽ thêm 1 U Ám (tối đa 3). Ở 3 U Ám, bạn có thể dùng đòn này MÀ KHÔNG CẦN ẩn thân: lần dùng đó không tốn gì, tiêu hết 3 U Ám, và kích hoạt Màn Bóng Tối 6 giây."
       },
       "sap": {
@@ -9718,7 +9740,7 @@ export const vi_VN: EnTranslations = {
       },
       "righteous_fury": {
         "name": "Lời Thề Rực Cháy",
-        "description": "Bị động tăng 60% mối đe dọa do sát thương Thần Thánh của bạn tạo ra. Chỉ dành cho Hộ vệ đức tin."
+        "description": "Bị động tăng 30% mối đe dọa do sát thương Thần Thánh của bạn tạo ra. Chỉ dành cho Hộ vệ đức tin."
       },
       "retribution_aura": {
         "name": "Hào Quang Báo Đền",
@@ -9834,7 +9856,7 @@ export const vi_VN: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Vũ Khí Khắc Đá",
-        "description": "Thấm vào vũ khí của bạn trong 30 phút. Mỗi cú vung gây thêm {damage} sát thương. Tăng Cường còn nhận thêm 30% giáp, chịu ít hơn 10% sát thương và tạo ra gấp đôi mối đe dọa. Địa Giật buộc mục tiêu của nó tấn công bạn trong 3 giây, còn Bùa Hộ Sấm Sét ban 10% giảm sát thương trong 3 giây."
+        "description": "Thấm vào vũ khí của bạn trong 30 phút. Mỗi cú vung gây thêm {damage} sát thương. Tăng Cường còn nhận thêm 40% giáp và 20% Thể Lực, chịu ít hơn 15% sát thương và miễn nhiễm với đòn chí mạng từ quái vật và tạo ra gấp 2,75 lần mối đe dọa. Địa Giật buộc mục tiêu của nó tấn công bạn trong 3 giây, còn Bùa Hộ Sấm Sét ban 10% giảm sát thương trong 3 giây."
       },
       "healing_wave": {
         "name": "Dòng Nước Hàn Gắn",
@@ -10013,7 +10035,7 @@ export const vi_VN: EnTranslations = {
       },
       "bear_form": {
         "name": "Hình Bruin",
-        "description": "Biến hình thành gấu: giáp +130%, sức mạnh tấn công tăng mạnh, các đòn đánh của ngươi tích nộ khí và tạo thêm 30% đe dọa. Niệm lại để trở về hình pháp sư."
+        "description": "Biến hình thành gấu: giáp +110%, máu tối đa +30%, sức mạnh tấn công tăng mạnh, các đòn đánh của ngươi tích nộ khí và tạo thêm 30% đe dọa. Niệm lại để trở về hình pháp sư."
       },
       "maul": {
         "name": "Nghiền Xương",
@@ -10023,6 +10045,10 @@ export const vi_VN: EnTranslations = {
       "growl": {
         "name": "Hăm Dọa",
         "description": "Gầm gừ với mục tiêu: mối đe dọa của bạn tăng lên ngang bằng kẻ địch mà nó căm ghét nhất và nó bị buộc phải tấn công bạn trong 3 giây. Chỉ dùng được ở Bruin Form."
+      },
+      "challenging_roar": {
+        "name": "Tiếng Gầm Hiểm Độc",
+        "description": "Một tiếng gầm hiểm độc: mọi kẻ địch trong vòng 10 thước bị khiêu khích, mối đe dọa của chúng đối với bạn tăng lên ngang bằng kẻ địch mà chúng căm ghét nhất, và chúng bị buộc phải tấn công bạn trong 3 giây. Chỉ dùng được ở Bruin Form."
       },
       "cat_form": {
         "name": "Hình Sói",

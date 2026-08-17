@@ -271,10 +271,24 @@ describe('buildShardPlan: fail-closed fallbacks', () => {
         changedPaths: ['src/ui/i18n.resolved.generated/da_DK.ts'],
         exists: (p: string) => p !== 'src/ui/i18n.resolved.generated/da_DK.ts',
       },
+      'generated i18n artifact(s) missing from the tree',
     ],
-  ])('%s falls back to the full leg', (_label, overrides) => {
+    [
+      // Same doctrine, second freshness-guarded family. The reason substring
+      // proves THIS family's guard fired: with the family emptied the path
+      // would fall back through broadConfigs instead and this row would pass
+      // for the wrong reason (audit finding).
+      'generated manifest artifact missing from the tree',
+      {
+        changedPaths: ['src/game/sfx_manifest.generated.ts'],
+        exists: (p: string) => p !== 'src/game/sfx_manifest.generated.ts',
+      },
+      'generated manifest artifact(s) missing from the tree',
+    ],
+  ])('%s falls back to the full leg', (_label, overrides, reasonContains?: string) => {
     const plan = buildShardPlan({ ...BASE, ...overrides });
     expect(plan.mode).toBe('full');
+    if (reasonContains) expect(plan.reason).toContain(reasonContains);
     expect(plan.legs).toEqual([
       {
         name: 'npm test (full suite, shard 3/8)',
@@ -299,6 +313,20 @@ describe('buildShardPlan: fail-closed fallbacks', () => {
     expect(related?.args).toContain('src/ui/unit_portrait.ts');
     expect(related?.args).toContain('src/ui/i18n.resolved.generated/da_DK.ts');
     expect(plan.relatedCount).toBe(2);
+  });
+
+  it('keeps a PRESENT generated manifest artifact selective and IN the related leg', () => {
+    // Second freshness-guarded family, same graph-node rationale: manifest
+    // consumer suites hang off the artifact side of the import graph.
+    const plan = buildShardPlan({
+      ...BASE,
+      changedPaths: ['src/render/assets/manifest.generated.ts'],
+    });
+    expect(plan.mode).toBe('selective');
+    const related = plan.legs.find((l) => l.args.includes('related'));
+    expect(related).toBeDefined();
+    expect(related?.args).toContain('src/render/assets/manifest.generated.ts');
+    expect(plan.relatedCount).toBe(1);
   });
 
   it('truncates the missing-artifact fallback reason past three entries', () => {
@@ -1079,9 +1107,7 @@ describe('ci_shard_test.mjs entry (subprocess, --plan-only)', () => {
     });
     expect(run.exitCode).toBe(0);
     for (const f of CI_LONG_SUITES) expect(run.log).toContain(`--exclude=${f}`);
-    expect(run.log).toContain(
-      'owned by the "PR gate (long sims A)" and "PR gate (long sims B)" jobs',
-    );
+    expect(run.log).toContain('owned by the "PR long sims A" and "PR long sims B" jobs');
   });
 
   it('plans the full suite when the mode env is missing (fail closed)', async () => {
