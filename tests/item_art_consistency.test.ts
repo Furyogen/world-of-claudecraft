@@ -333,8 +333,8 @@ describe('item-art consistency accepted-art provenance', () => {
       },
       {
         path: `${evidenceDir}/final-item-art-audit-verdict.json`,
-        acceptedSha256: '15fb0e4708f32e2bfb2e2931964c8979edf9e946916537d49554798b4a424395',
-        acceptedBytes: 109291,
+        acceptedSha256: 'd5951985b795b6776b2a1a492eb22b3b9cffed0bbe6f570e0bbab9cc2a723d1e',
+        acceptedBytes: 110_387,
       },
     ]);
     for (const evidence of [...value.sourceEvidence, ...value.generationReports]) {
@@ -449,9 +449,9 @@ describe('item-art consistency accepted-art provenance', () => {
     expect(readme).toContain('node scripts/item_art_audit.mjs\n');
     expect(readme).toContain('node scripts/item_art_audit.mjs --refresh-verdict');
     const verdictBytes = readFileSync(path.join(repoRoot, verdictPath));
-    expect(verdictBytes.length).toBe(109291);
+    expect(verdictBytes.length).toBe(110_387);
     expect(sha256(verdictBytes)).toBe(
-      '15fb0e4708f32e2bfb2e2931964c8979edf9e946916537d49554798b4a424395',
+      'd5951985b795b6776b2a1a492eb22b3b9cffed0bbe6f570e0bbab9cc2a723d1e',
     );
     const verdict = JSON.parse(verdictBytes.toString('utf8')) as FinalAuditVerdict;
 
@@ -522,7 +522,7 @@ describe('item-art consistency accepted-art provenance', () => {
       rejectCount: 0,
       reject: [],
       summary:
-        'All 824 shipping item-art files pass the visual contract: 817 reviewed in the 2026-08-09 campaign (documented retries included), the five class-overhaul integration additions owner-reviewed and passed on 2026-08-10, and the two rock-mount reins icons reviewed on 2026-08-14 (machine checks only; see the incrementalReviews note for the open style-contract gap).',
+        'All 824 shipping item-art files pass the visual contract: 817 reviewed in the 2026-08-09 campaign (documented retries included), the five class-overhaul integration additions owner-reviewed and passed on 2026-08-10, and the two rock-mount reins icons repainted through the asset pipeline and reviewed on 2026-08-17.',
     });
     expect(verdict.visualVerdict.passIds).toEqual(currentIds);
     expect(verdict.nonVisualContentWatch).toEqual([
@@ -562,7 +562,7 @@ describe('item-art consistency accepted-art provenance', () => {
 
     expect(verdict.evidence.catalog).toEqual({
       path: 'tmp/imagegen/item-art-consistency/final-audit/catalog.json',
-      sha256: 'b980466ebe9b0fb77f88193b9901a8d6e3c7897451d0a388f0b911fd10e8a22d',
+      sha256: '3beec568a3ca6299d0abce95913a2c18408f07c34824fe79eb8fd1cde5ebcfc8',
       bytes: 452_303,
     });
     expect(verdict.evidence.rendererFingerprint).toBe(
@@ -616,7 +616,7 @@ describe('item-art consistency accepted-art provenance', () => {
       sheetSetDigest.update(`${sheet.path}\0${sheet.sha256}\0${sheet.bytes}\n`);
     }
     expect(verdict.evidence.sheetSetSha256).toBe(
-      '83391728cf92547c232cc930eebf7b99612f017045259cd298a9652522653fd3',
+      'e55b40a5beb1b6da43d225098b7298c28908124b69707749cd27e02c97aaf821',
     );
     expect(sheetSetDigest.digest('hex')).toBe(verdict.evidence.sheetSetSha256);
 
@@ -626,7 +626,7 @@ describe('item-art consistency accepted-art provenance', () => {
       shippingCatalogDigest.update(`${id}\0${sha256(bytes)}\0${bytes.length}\n`);
     }
     expect(verdict.evidence.shippingCatalogSha256).toBe(
-      '110d77389caf4a6d1923cb2c97d1076a9144c0bd1c5f59135ef07d96b80d846f',
+      '0b74c2ca4ccba7cd54b6213b0acc3bf277881b10acd48e959a2c4dd8126384cf',
     );
     expect(shippingCatalogDigest.digest('hex')).toBe(verdict.evidence.shippingCatalogSha256);
   });

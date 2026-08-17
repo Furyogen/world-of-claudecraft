@@ -342,6 +342,20 @@
           "public/ui/items/mapping.json entries: reins_shiny_pet_rock"
         ],
         "note": "The Pet Rock and Shiny Pet Rock mount reins icons. Both pass every MACHINE check (opaque, 128x128, within the byte budget, unique hash) and were reviewed for subject identity and small-size readability at 128/40/28/22, 28-grayscale and the 64px circular crop. Both are vector-authored originals rather than painted art, so neither fully satisfies the woc-item-icon-v1 STYLE contract (docs/design/item-icon-art-style.md): against the painted reins_* family they read flat. This is a KNOWN, deliberately unresolved gap recorded here rather than hidden, on the same footing as the reins_grimtusk_boar gap; repainting is a scoped follow-up. Added 2026-08-14; the prior 822 files stand unchanged."
+      },
+      {
+        "reviewedAt": "2026-08-17",
+        "branch": "feature/rock-mount",
+        "reviewer": "contributor",
+        "addedIds": [
+          "reins_pet_rock",
+          "reins_shiny_pet_rock"
+        ],
+        "provenance": [
+          "public/ui/items/mapping.json entries: reins_pet_rock",
+          "public/ui/items/mapping.json entries: reins_shiny_pet_rock"
+        ],
+        "note": "Correction of the 2026-08-14 entry above, which recorded both rock-mount reins icons as a known woc-item-icon-v1 STYLE gap: they were vector-authored and read flat against the painted reins_* family. Both are now painted art generated through scripts/asset_pipeline (Tripo text-to-image), normalized to a 1024 square opaque master and shipped through the standard converter, so the style gap recorded on 2026-08-14 is CLOSED rather than merely restated. The mount GLBs behind them were likewise replaced with purpose-built generated models instead of the re-dressed scenery rock. Machine checks and the 128/40/28/22, 28-grayscale and 64-circle readability review re-run and passed 2026-08-17; the other 822 files stand unchanged."
       }
     ]
   },
@@ -1215,7 +1229,7 @@
     "watch": [],
     "rejectCount": 0,
     "reject": [],
-    "summary": "All 824 shipping item-art files pass the visual contract: 817 reviewed in the 2026-08-09 campaign (documented retries included), the five class-overhaul integration additions owner-reviewed and passed on 2026-08-10, and the two rock-mount reins icons reviewed on 2026-08-14 (machine checks only; see the incrementalReviews note for the open style-contract gap)."
+    "summary": "All 824 shipping item-art files pass the visual contract: 817 reviewed in the 2026-08-09 campaign (documented retries included), the five class-overhaul integration additions owner-reviewed and passed on 2026-08-10, and the two rock-mount reins icons repainted through the asset pipeline and reviewed on 2026-08-17."
   },
   "nonVisualContentWatch": [
     {
@@ -1372,7 +1386,7 @@
   "evidence": {
     "catalog": {
       "path": "tmp/imagegen/item-art-consistency/final-audit/catalog.json",
-      "sha256": "b980466ebe9b0fb77f88193b9901a8d6e3c7897451d0a388f0b911fd10e8a22d",
+      "sha256": "3beec568a3ca6299d0abce95913a2c18408f07c34824fe79eb8fd1cde5ebcfc8",
       "bytes": 452303
     },
     "rendererFingerprint": "fd92c41a206cd55b05a1de94c4789f6eb6ca4200d063f4bbd284c21ae03b6082",
@@ -1387,7 +1401,7 @@
       "small-multiview": 26,
       "identity": 26
     },
-    "sheetSetSha256": "83391728cf92547c232cc930eebf7b99612f017045259cd298a9652522653fd3",
+    "sheetSetSha256": "e55b40a5beb1b6da43d225098b7298c28908124b69707749cd27e02c97aaf821",
     "sheets": [
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/armor-chest--p01--128-color.png",
@@ -2543,64 +2557,64 @@
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--128-color.png",
-        "sha256": "7acc3952621c3cdd8379ca40ec6ff985bdd5311bdd7cb3cc7707cabe1b9d9c00",
-        "bytes": 362267,
+        "sha256": "e1a31daf7e574ade4374d34b75ea36bf0b2e988e6138da4513f7d2a8cafaed63",
+        "bytes": 365126,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--40-color.png",
-        "sha256": "8e8db293107352a9d5536300751914a5168670b4bbcb695279eaa32cb15c60a7",
-        "bytes": 66319,
+        "sha256": "552ece1ff61e1ca066c86769134a7892c0e045c537d5c47da4ae9cc68a336c9a",
+        "bytes": 66070,
         "width": 1600,
         "height": 288,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--28-color.png",
-        "sha256": "9173f4a6ad10578b6d4be1a75d36379c6708c94ab3350b06d9fedc1b805db97d",
-        "bytes": 45244,
+        "sha256": "e1ec1ed63ec33d227baa0d2066bb179a978b3f67135215ed758b683e85c8325e",
+        "bytes": 45072,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--22-color.png",
-        "sha256": "a312b7a9493131b1c4212ea3aab499193c76a5df5322efabf4fbcbac3b3c5f14",
-        "bytes": 35376,
+        "sha256": "4378a0f3a9a31fd44a64956206818050fe873b0177958dbca8cf3c3f135ad54e",
+        "bytes": 35149,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--28-grayscale.png",
-        "sha256": "55e5d409c606204b154f319d17cb1c139fed10aa9de57a9880ca9ff22598d8be",
-        "bytes": 33668,
+        "sha256": "512f63ccf7c6ac57d7794634cf32077a0092d23c0a84f19f08de3ead0614e751",
+        "bytes": 33532,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--64-circle.png",
-        "sha256": "771227df89b13b0e45d77c7c26c7902def5d7cb4a5d6e0a856a10f1cbf58cd80",
-        "bytes": 113213,
+        "sha256": "eeb5f09f4d978fcc1581f9a4e9c0d8e19267aac8afccea5e6bdcf2e00dd29dc0",
+        "bytes": 113671,
         "width": 1600,
         "height": 376,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--small-multiview.png",
-        "sha256": "883aae6a6b7228dcb964e02b8236cdbccf79c7fb243fdd43aec17a64ba1cf393",
-        "bytes": 209591,
+        "sha256": "6707cebc8b159a9eb260d04781d54d009d4561fd0488c2d103c1c63e9369f243",
+        "bytes": 209024,
         "width": 1800,
         "height": 480,
         "format": "png"
       },
       {
         "path": "tmp/imagegen/item-art-consistency/final-audit/sheets/mount--p01--identity.png",
-        "sha256": "916b418ccbb6674f436ce47b381294f65205f37f4a23d43514207b3731b5dbbe",
-        "bytes": 376450,
+        "sha256": "6bd6078b6bb66ab0123434211e5b143d7e6234ffddadc09eb5c15f45a90179f5",
+        "bytes": 379399,
         "width": 1800,
         "height": 452,
         "format": "png"
@@ -3054,6 +3068,6 @@
         "format": "png"
       }
     ],
-    "shippingCatalogSha256": "110d77389caf4a6d1923cb2c97d1076a9144c0bd1c5f59135ef07d96b80d846f"
+    "shippingCatalogSha256": "0b74c2ca4ccba7cd54b6213b0acc3bf277881b10acd48e959a2c4dd8126384cf"
   }
 }

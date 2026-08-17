@@ -1622,36 +1622,28 @@ export const VISUALS: Record<string, VisualDef> = {
     runRef: 12,
     lazyPreload: true,
   },
-  // The joke mount: the rift push-puzzle rock (public/models/props/rock_large_f.glb,
-  // the same craggy mesh door_portal.ts dresses as rift_boulder) shipped under the
-  // mounts dir so the catalog url convention holds. A STATIC prop like the snail:
-  // zero animations and no skin, so it renders its rest pose and the hop bob in
-  // mount_visuals.ts carries the motion. Deliberately squat (1.19 tall against the
-  // 2.6 humanoid) so it reads as a rock you perch on, not a mountain.
+  // The joke mount: a purpose-built saddled boulder generated through the asset
+  // pipeline (scripts/asset_pipeline, Tripo image-to-model), not a re-dressed
+  // scenery rock. It ships baked granite and leather textures, so like every
+  // other mount it takes NO tint. A STATIC prop like the snail: zero animations
+  // and no skin, so it renders its rest pose and the hop bob in mount_visuals.ts
+  // carries the motion. Deliberately squat (1.19 tall against the 2.6 humanoid)
+  // so it reads as a rock you perch on, not a mountain.
   mount_pet_rock: {
     url: `${MOUNTS_DIR}/pet_rock.glb`,
-    height: 1.19,
+    height: 1.9,
     clips: MOUNT_RIGGED,
-    // The one TINTED mount, and deliberately so: the shipped prop carries the
-    // outdoor dirt/grass palette every other world rock uses, which reads as
-    // pale sandstone under a saddle. Pull it hard toward cold grey stone, the
-    // same recolor door_portal.ts applies when it dresses this mesh as the
-    // rift boulder, so the mount and the puzzle rock are recognisably the
-    // same object.
-    tint: 0x6f6d69,
-    tintStrength: 0.82,
     lazyPreload: true,
   },
-  // The socketed twin. Same mesh, warm gold instead of cold grey: these are the
-  // exact colours door_portal.ts gives rift_boulder_placed (0x8a7550 stone under
-  // 0xffc24a veins), so the mount and the lit puzzle rock stay the same object in
-  // two states rather than two different rocks.
+  // The socketed twin, generated from the same concept lineage as the dormant
+  // rock so the pair reads as one object in two states. Its molten rune veins are
+  // BAKED into the texture rather than faked with a tint, which is what lets the
+  // epic read as genuinely charged instead of recoloured; a tint here would only
+  // muddy them, so it takes none either.
   mount_shiny_pet_rock: {
     url: `${MOUNTS_DIR}/shiny_pet_rock.glb`,
-    height: 1.19,
+    height: 1.9,
     clips: MOUNT_RIGGED,
-    tint: 0xd8a24a,
-    tintStrength: 0.8,
     lazyPreload: true,
   },
   mount_grag_bear: {
