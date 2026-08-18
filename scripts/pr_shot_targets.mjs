@@ -5188,16 +5188,15 @@ export const TARGETS = [
   },
   {
     // A druid in Bruin Form who casts a healing or damaging spell now leaves the
-    // form and casts it, instead of being refused. Both halves are visual and
-    // neither fits in one frame with the other, so this shoots the sequence: the
-    // slot painting live while the body is still a bear, then the same button
-    // pressed, with the druid back in caster form and the cast running.
+    // form and casts it, instead of being refused. One frame per platform, taken
+    // right after the press, which is the moment carrying the whole change:
+    // before, a bear with a refusal in the log; after, the druid back in caster
+    // form with Wildmend on the cast bar.
     //
-    // Every frame is full-HUD rather than clipped to the bar, because the body
-    // swapping out of the form IS half of what changed; a bar crop would show the
-    // slot and hide the shapeshift. Driven through the real action-bar buttons,
-    // never sim.castAbility, so the shot is evidence about the bound press a
-    // player makes.
+    // Full-HUD rather than clipped to the bar, because the body swapping out of
+    // the form IS the change; a bar crop would hide it. Driven through the real
+    // action-bar button, never sim.castAbility, so the frame is evidence about
+    // the press a player actually makes.
     key: 'druid-form-autoshift',
     label: 'Druid auto-shift: a heal cast in Bruin Form leaves the form and casts',
     when: [
@@ -5206,23 +5205,16 @@ export const TARGETS = [
       'ui/hud/action_bar/action_bar_view.ts',
     ],
     variants: [
-      { key: 'desktop-in-form', charClass: 'druid', charName: 'Ursa', beforeLoad: lowGraphicsSeed },
+      { key: 'desktop', charClass: 'druid', charName: 'Ursa', beforeLoad: lowGraphicsSeed },
       {
-        key: 'desktop-cast',
-        charClass: 'druid',
-        charName: 'Ursa',
-        cast: true,
-        beforeLoad: lowGraphicsSeed,
-      },
-      {
-        key: 'mobile-in-form',
+        key: 'mobile',
         charClass: 'druid',
         charName: 'Ursa',
         mobile: true,
         beforeLoad: lowGraphicsSeed,
       },
     ],
-    async capture(page, variant) {
+    async capture(page) {
       await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 90000 });
       await dismissEntryOverlays(page);
       // Level 20 reaches Bruin Form (8) with Wildmend (1) long since learned.
@@ -5230,8 +5222,8 @@ export const TARGETS = [
         const sim = window.__game?.sim;
         const hud = window.__game?.hud;
         sim?.setPlayerLevel?.(20);
+        // Already on a stock druid bar; kept so a reseeded default cannot break this.
         hud?.addAbilityToHotbar?.('bear_form');
-        hud?.addAbilityToHotbar?.('healing_touch');
       });
       await wait(800);
       // Levelling fires a run of deed/zone banners across the scene; they are
@@ -5242,23 +5234,65 @@ export const TARGETS = [
           if (el) el.style.display = 'none';
         }
       });
+      // Both bar families, because the mobile ring paints its own slot elements
+      // while sharing the desktop bar's view core (the usable state under test is
+      // computed once for both). Clicks the real button rather than calling
+      // sim.castAbility, so the frame is evidence about the press a player makes.
       const press = async (label) => {
-        const hit = await page.evaluate((name) => {
-          const buttons = [...document.querySelectorAll('.action-btn')];
-          const btn = buttons.find((b) => (b.getAttribute('aria-label') ?? '').includes(name));
-          if (!btn) return false;
-          btn.click();
-          return true;
+        // WAIT for the slot rather than sleeping at it: under SwiftShader on a
+        // loaded host the bar can still be seeding when a fixed delay expires,
+        // and the press then lands on nothing.
+        await page
+          .waitForFunction(
+            (name) =>
+              [...document.querySelectorAll('.action-btn, .mobile-action-slot')].some((b) =>
+                (b.getAttribute('aria-label') ?? '').includes(name),
+              ),
+            { timeout: 60000 },
+            label,
+          )
+          .catch(() => {
+            throw new Error(`${label} never reached the action bar`);
+          });
+        await page.evaluate((name) => {
+          const buttons = [...document.querySelectorAll('.action-btn, .mobile-action-slot')];
+          buttons.find((b) => (b.getAttribute('aria-label') ?? '').includes(name))?.click();
         }, label);
-        if (!hit) throw new Error(`${label} never reached the action bar`);
       };
       await press('Bruin Form');
-      // Past the shift's own global cooldown, so the next press is the feature
-      // under test rather than a swallowed early press.
-      await wait(2200);
-      if (!variant?.cast) return { clip: '#ui' };
+      // Wait for the SIM's global cooldown to clear, never a wall-clock sleep: the
+      // offline world ticks on requestAnimationFrame, which headless SwiftShader
+      // throttles hard, so seconds of real time can be a fraction of a second of
+      // sim time. A press inside the GCD is refused SILENTLY (the classic
+      // behavior), which reads exactly like a broken feature in a screenshot.
+      await page.waitForFunction(() => (window.__game?.sim?.player?.gcdRemaining ?? 1) <= 0, {
+        timeout: 60000,
+      });
+      // Entering a form SWAPS the bar to that form's own page, which is seeded
+      // with the Bruin kit and carries no caster spell. Putting Wildmend on the
+      // bear page is exactly the setup this feature is for, and it is what the
+      // frame needs to show: the heal sitting on the form bar, painted live.
+      await page.evaluate(() => window.__game?.hud?.addAbilityToHotbar?.('healing_touch'));
+      await wait(900);
       await press('Wildmend');
-      await wait(700);
+      // Hold until the press has RESOLVED one way or the other, for the same
+      // throttling reason: either the cast started (the shift went through) or the
+      // client put up a refusal. Accepting both is deliberate, so this one recipe
+      // also produces the BEFORE frame when it is run against a base checkout,
+      // where the same press is refused with "You can't do that while
+      // shapeshifted." Waiting only for the cast would simply time out there and
+      // yield no before/after pair at all.
+      await page
+        .waitForFunction(
+          () =>
+            window.__game?.sim?.player?.castingAbility === 'healing_touch' ||
+            (document.querySelector('#error-msg')?.textContent ?? '').trim().length > 0,
+          { timeout: 60000 },
+        )
+        .catch(() => {
+          throw new Error('the Wildmend press never resolved into a cast or a refusal');
+        });
+      await wait(400);
       return { clip: '#ui' };
     },
   },
