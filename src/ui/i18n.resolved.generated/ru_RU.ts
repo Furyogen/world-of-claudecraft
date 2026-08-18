@@ -1008,7 +1008,7 @@ export const ru_RU: EnTranslations = {
       "name_thunderstrut_gobbler": "Громоступ, великий индюк",
       "name_terrorspark_groundshaker": "Страхоискр, сотрясатель земли",
       "name_drakemaw_raptor": "Раптор Дрейкмо",
-      "name_weirdo_cream_truck": "Weirdo Cream Truck",
+      "name_weirdo_cream_truck": "Фургон «Чудо-крем»",
       "desc_valorsteed": "Выносливый и твердо стоящий на ногах скакун, повышающий скорость передвижения.",
       "desc_grag_bear": "Выносливый и твердо стоящий на лапах медведь, повышающий скорость передвижения.",
       "desc_stalkglider_snail": "Стойкая неторопливая улитка, повышающая скорость передвижения.",
@@ -1018,7 +1018,7 @@ export const ru_RU: EnTranslations = {
       "desc_thunderstrut_gobbler": "Исполинский индюк, рожденный бурей: он важно спускается с Пробуждающегося пика, распустив хвост, словно грозовой фронт.",
       "desc_terrorspark_groundshaker": "Компактная бронированная машина с тяжёлыми гусеницами, крупнокалиберной пушкой и седлом для бесстрашных пилотов.",
       "desc_drakemaw_raptor": "Приученный к седлу выводковый раптор из кальдеры Дрейкмо: сплошные жилы и бег, и от него всё ещё едва пахнет пеплом.",
-      "desc_weirdo_cream_truck": "A battered ice cream van with an open cab, a cone bolted to the roof, and a chime that plays whenever it leaves the ground."
+      "desc_weirdo_cream_truck": "Побитый фургон с мороженым: открытая кабина, рожок на крыше и колокольчик, который играет всякий раз, когда фургон отрывается от земли."
     },
     "mountTraining": {
       "mountPrompt": "Нажми {key}, чтобы оседлать учебного Доблестного скакуна.",
@@ -10573,7 +10573,7 @@ export const ru_RU: EnTranslations = {
         "name": "Ключ зажигания Страхоискра"
       },
       "reins_weirdo_cream_truck": {
-        "name": "Ignition Key: Weirdo Cream Truck"
+        "name": "Ключ зажигания фургона «Чудо-крем»"
       },
       "reins_drakemaw_raptor": {
         "name": "Поводья раптора Дрейкмо"

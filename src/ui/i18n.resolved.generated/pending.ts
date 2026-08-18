@@ -40,36 +40,16 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_weirdo_cream_truck",
     "hudChrome.mounts.name_weirdo_cream_truck"
   ],
-  "zh_CN": [
-    "entities.items.reins_weirdo_cream_truck.name",
-    "hudChrome.mounts.desc_weirdo_cream_truck",
-    "hudChrome.mounts.name_weirdo_cream_truck"
-  ],
-  "zh_TW": [
-    "entities.items.reins_weirdo_cream_truck.name",
-    "hudChrome.mounts.desc_weirdo_cream_truck",
-    "hudChrome.mounts.name_weirdo_cream_truck"
-  ],
-  "ko_KR": [
-    "entities.items.reins_weirdo_cream_truck.name",
-    "hudChrome.mounts.desc_weirdo_cream_truck",
-    "hudChrome.mounts.name_weirdo_cream_truck"
-  ],
-  "ja_JP": [
-    "entities.items.reins_weirdo_cream_truck.name",
-    "hudChrome.mounts.desc_weirdo_cream_truck",
-    "hudChrome.mounts.name_weirdo_cream_truck"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.items.reins_weirdo_cream_truck.name",
     "hudChrome.mounts.desc_weirdo_cream_truck",
     "hudChrome.mounts.name_weirdo_cream_truck"
   ],
-  "ru_RU": [
-    "entities.items.reins_weirdo_cream_truck.name",
-    "hudChrome.mounts.desc_weirdo_cream_truck",
-    "hudChrome.mounts.name_weirdo_cream_truck"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.items.reins_weirdo_cream_truck.name",
     "hudChrome.mounts.desc_weirdo_cream_truck",

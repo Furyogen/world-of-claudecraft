@@ -114,6 +114,14 @@ beforeEach(() => {
   for (const [index, mountKey] of MOUNT_KEYS.entries()) {
     buffers.set(`mount_run_${mountKey}`, { duration: 0.5 + index / 100 });
   }
+  // Vehicle mounts carry an engine chug (and a chime) instead of a stride cue,
+  // so the loop above never reaches them. Primed by the same live clip table the
+  // runtime guards on, so a cue that stops shipping fails here rather than
+  // silently priming a key that no longer exists.
+  for (const key of Object.keys(SFX_CLIPS)) {
+    if (key.startsWith('mount_engine_')) buffers.set(key, { duration: 0.34 });
+    if (key.startsWith('mount_chime_')) buffers.set(key, { duration: 5 });
+  }
   buffers.set('foot_wood', WOOD_BUFFER);
 });
 
