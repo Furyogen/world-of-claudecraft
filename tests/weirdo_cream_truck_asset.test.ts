@@ -81,8 +81,10 @@ describe('Weirdo Cream truck asset pipeline', () => {
     // re-exporting fails here rather than shipping a stale model.
     expect(truckSourceFingerprint(REPO_ROOT)).toBe(SOURCE_FINGERPRINT);
     const root = (await readAsset()).getRoot();
-    expect(root.getExtras()?.sourceFingerprint).toBe(SOURCE_FINGERPRINT);
-    expect(root.getAsset().extras?.sourceFingerprint).toBe(SOURCE_FINGERPRINT);
+    const documentExtras = root.getExtras() as { sourceFingerprint?: string };
+    const assetExtras = root.getAsset().extras as { sourceFingerprint?: string } | undefined;
+    expect(documentExtras.sourceFingerprint).toBe(SOURCE_FINGERPRINT);
+    expect(assetExtras?.sourceFingerprint).toBe(SOURCE_FINGERPRINT);
   });
 
   it('is registered in the media manifest and the character visuals', () => {
