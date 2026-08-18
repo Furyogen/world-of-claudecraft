@@ -156,6 +156,23 @@ describe('druid auto-shift in the sim', () => {
     });
   }
 
+  it('shifts out for a CHANNELLED heal, which commits down a different branch', () => {
+    // Galeheart is a channel, and channels commit through their own arm of
+    // castAbility, separate from the cast-time and instant paths. The shift is
+    // performed above all three, so this pins that the branch is covered too.
+    const { sim, pid, p } = druidWorld();
+    shiftInto(sim, pid, 'bear_form');
+
+    sim.castAbility('hurricane', pid);
+    const events = sim.tick();
+
+    expect(errorTexts(events)).toEqual([]);
+    expect(formKinds(p)).toEqual([]);
+    expect(p.resourceType).toBe('mana');
+    expect(p.channeling).toBe(true);
+    expect(p.castingAbility).toBe('hurricane');
+  });
+
   it('still refuses a utility cast with the shapeshift message', () => {
     const { sim, pid, p } = druidWorld();
     shiftInto(sim, pid, 'bear_form');
