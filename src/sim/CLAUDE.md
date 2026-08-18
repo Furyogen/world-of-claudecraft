@@ -70,7 +70,7 @@ plausibly covers means the table needs a new row in the same change.
 | `combat/damage.ts` | `dealDamage`, `handleDeath`, `grantXp` (+ lifetime-XP; milestone unlocks absorbed into `deeds.ts`) |
 | `combat/heal.ts` | `applyHeal`, healing threat/taken-mult, hex/crit-vuln mults, heal-absorb |
 | `combat/auras.ts` + `combat/cc.ts` | per-tick auras/regen/timers, NPC aura cleanse; CC predicates (stun/root/silence/disarm/lockout/blind/tongues) |
-| `combat/casting_lifecycle.ts` | `updateCasting`, `castAbility(BySlot)`, `cancelCast`, `pushbackCast`, GCD/cost/cooldown |
+| `combat/casting_lifecycle.ts` | `updateCasting`, `castAbility(BySlot)`, `cancelCast`, `pushbackCast`, GCD/cost/cooldown. Druid auto-shift rides two siblings: the pure decision `combat/form_autoshift.ts` (which form aura a healing or damaging cast should drop; also imported by the action bar's usable-state core, so bar and cast gate cannot disagree) and the executor `combat/form_exit.ts` (`leaveFormAura`: drop the aura, announce it, re-derive stats, billing no cost, cooldown, or GCD) |
 | `combat/effect_dispatch.ts` | `runEffects` (the per-effect switch) |
 | `combat/auto_attack.ts` | start/stop/update auto-attack, `meleeSwing`, `rangedSwing` |
 | `combat/equip_procs.ts` + `combat/set_procs.ts` | legendary weapon on-action procs; item-set bonus procs |
