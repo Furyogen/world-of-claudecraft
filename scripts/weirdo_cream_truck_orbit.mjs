@@ -42,6 +42,9 @@ const browser = await puppeteer.launch({
     '--use-angle=swiftshader',
     '--enable-unsafe-swiftshader',
     '--force-device-scale-factor=1',
+    // Required wherever this runs as root (CI containers, the cloud session
+    // box); Chromium refuses to start otherwise.
+    '--no-sandbox',
   ],
   defaultViewport: { width: 1280, height: 720, deviceScaleFactor: 2 },
 });
