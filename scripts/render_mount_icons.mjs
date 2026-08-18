@@ -77,15 +77,10 @@ const JOBS = [
     id: 'reins_terrorspark_groundshaker',
     cfg: { headFwd: 0.1, headUp: 0, fill: 1.18, yaw: 0.68, pitch: 0.24 },
   },
-  {
-    // A van has no head to frame, so anchor on the body centre and pull the fill
-    // wide: what has to read at bag-icon size is the silhouette (boxy shell, the
-    // roof cone) plus the flank signage, not a close-up of any one panel. The
-    // yaw shows the nose and one signed flank together.
-    file: 'weirdo_cream_truck.glb',
-    id: 'reins_weirdo_cream_truck',
-    cfg: { headFwd: 0.15, headUp: 0.12, fill: 1.32, yaw: 0.72, pitch: 0.2 },
-  },
+  // The Weirdo Cream truck is deliberately ABSENT from this list: a van has no
+  // head to frame and the whole vehicle reads as a grey lump at 128px, so its
+  // icon is the driver's portrait instead, rendered from the signage atlas by
+  // scripts/render_weirdo_cream_truck_icon.mjs.
   {
     // The raptor carries its head high and well forward on a long neck, above a
     // saddle set back over the hips: anchor forward and high, and look slightly
