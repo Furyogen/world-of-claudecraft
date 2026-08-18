@@ -47,7 +47,10 @@ const browser = await puppeteer.launch({
     // box); Chromium refuses to start otherwise.
     '--no-sandbox',
   ],
-  defaultViewport: { width: 1280, height: 720, deviceScaleFactor: 2 },
+  // deviceScaleFactor 1 on purpose: at 2 the compositor is asked for
+  // 2560x1440 per frame, which SwiftShader could not deliver and CDP
+  // answered with 'Unable to capture screenshot'.
+  defaultViewport: { width: 1280, height: 720, deviceScaleFactor: 1 },
 });
 const page = await browser.newPage();
 page.on('pageerror', (error) => console.log('PAGEERROR:', error.message));
@@ -112,9 +115,10 @@ await page.evaluate(() => {
   const ui = document.querySelector('#ui');
   if (ui) ui.style.display = 'none';
   // The headless run has no GPU, so the client shows a software-rendering
-  // warning toast; it is not part of the asset.
-  for (const node of document.querySelectorAll('.gpu-warning, .toast, .notice-banner')) {
-    node.style.display = 'none';
+  // warning with its own Dismiss button. Click it rather than guessing at a
+  // class name (the first pass guessed three and matched none).
+  for (const button of document.querySelectorAll('button')) {
+    if (/dismiss/i.test(button.textContent || '')) button.click();
   }
 });
 await sleep(1200);
@@ -129,7 +133,11 @@ for (let frame = 0; frame < FRAMES; frame++) {
       // POSITIVE looks DOWN here (src/game/input.ts: camPitch is positive
       // looking down, default 0.32). A negative value aims at empty sky, which
       // is what turned the first capture into 120 grey frames.
-      input.camPitch = 0.24;
+      input.camPitch = 0.22;
+      // The truck is 4.9 long and 3.7 tall with the rider above that, so the
+      // default chase distance crops it. 10 frames the whole vehicle plus the
+      // driver (clamped 3..22 in input.ts).
+      input.camDist = 10;
     }
   }, yaw);
   if (frame % JUMP_EVERY === 0) {
@@ -137,10 +145,16 @@ for (let frame = 0; frame < FRAMES; frame++) {
     await sleep(60);
     await page.keyboard.up('Space');
   }
-  await sleep(45);
-  await page.screenshot({
-    path: path.join(FRAME_DIR, `f${String(frame).padStart(4, '0')}.png`),
-  });
+  await sleep(120);
+  const framePath = path.join(FRAME_DIR, `f${String(frame).padStart(4, '0')}.png`);
+  // One retry: under load the compositor occasionally cannot produce a frame in
+  // time, and losing the whole capture to a single refusal is not worth it.
+  try {
+    await page.screenshot({ path: framePath });
+  } catch {
+    await sleep(1000);
+    await page.screenshot({ path: framePath });
+  }
 }
 await browser.close();
 console.log('frames captured, encoding...');
