@@ -292,6 +292,12 @@ import { buildMailboxPillar } from './mailbox';
 import { buildMobNightGlow, type MobNightGlowView } from './mob_night_glow';
 import { buildMotes, type MotesView } from './motes';
 import { MountBeacon } from './mount_beacon';
+import {
+  createMountEngineState,
+  type MountEngineState,
+  mountTopSpeed,
+  stepMountEngine,
+} from './mount_engine_core';
 import { mountBobY, mountVisualSpec } from './mount_visuals';
 import { NameplatePainter } from './nameplate_painter';
 import {
@@ -1043,6 +1049,9 @@ export interface EntityView {
   // spatial-audio state: distance travelled since the last footfall, and edge
   // latches for jump/land/water-entry detection.
   stepAccum: number;
+  // Vehicle-mount engine cadence. Null until this body is seen on a mount that
+  // actually has an engine cue, so gait mounts carry no extra per-view state.
+  mountEngine: MountEngineState | null;
   waterContactSeen: boolean;
   waterContactActive: boolean;
   waterContactX: number;
@@ -7362,6 +7371,7 @@ export class Renderer {
       loco: newLocoTrack(),
       locoState: newLocoState(),
       stepAccum: 0,
+      mountEngine: null,
       waterContactSeen: false,
       waterContactActive: false,
       waterContactX: e.pos.x,
@@ -9891,8 +9901,12 @@ export class Renderer {
       const sink = this.audioSink;
       if (sink && d2 < SFX_MOVE_RANGE_SQ) {
         // jump / land / water-entry edges
-        if (airborne && !v.wasAirborne && !visuallyDead) sink.movement('jump', ax, ay, az, isSelf);
-        else if (!airborne && v.wasAirborne && !visuallyDead) {
+        if (airborne && !v.wasAirborne && !visuallyDead) {
+          sink.movement('jump', ax, ay, az, isSelf);
+          // A vehicle mount with a chime sounds it on the way up. No-op for
+          // every mount without one, which is all of them but the truck.
+          if (logicallyMounted) sink.mountChime(ax, ay, az, e.mountKey, isSelf);
+        } else if (!airborne && v.wasAirborne && !visuallyDead) {
           // A flight that ends by catching a ledge is not a fall, and the
           // heavy landing thud on one reads as a bug: you hopped onto a rock
           // mid-arc and the game played a crash. Anything softer than a plain
@@ -9932,6 +9946,25 @@ export class Renderer {
           } else {
             v.stepAccum = MOUNT_STRIDE_RUN * 0.6;
           }
+        }
+        // The engine of a VEHICLE mount, driven every frame rather than per
+        // stride: it idles at a standstill and revs unloaded in mid-air, so it
+        // deliberately sits outside the stride chain above. sink.mountEngine
+        // no-ops for a mount with no engine cue, so a gait mount pays only this
+        // branch. State is allocated on first use for the same reason.
+        if (logicallyMounted && !visuallyDead) {
+          v.mountEngine ??= createMountEngineState();
+          const engine = stepMountEngine(v.mountEngine, {
+            speed: loco.speed,
+            topSpeed: mountTopSpeed(e.mountKey),
+            airborne,
+            dt,
+          });
+          for (let fired = 0; fired < engine.chugs; fired++) {
+            sink.mountEngine(ax, ay, az, e.mountKey, engine.rate, engine.gain, isSelf);
+          }
+        } else if (v.mountEngine) {
+          v.mountEngine = null;
         } else if (moving && !airborne) {
           v.stepAccum += loco.speed * dt;
           const stride = loco.speed >= FOOT_RUN_SPEED ? FOOT_STRIDE_RUN : FOOT_STRIDE_WALK;

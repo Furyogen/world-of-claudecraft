@@ -414,6 +414,20 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     noDiscard: true,
     sellValue: 0,
   },
+  // Developer-only, on the same terms as the Groundshaker's key above: absent
+  // from vendors, quests, creature loot, heroic loot, and Rift pools, granted
+  // with /dev give ignition_key_weirdo_cream_truck, and soulbound so a dev
+  // grant cannot leak into the economy.
+  ignition_key_weirdo_cream_truck: {
+    id: 'ignition_key_weirdo_cream_truck',
+    name: 'Ignition Key: Weirdo Cream Truck',
+    kind: 'mount',
+    mount: 'weirdo_cream_truck',
+    quality: 'epic',
+    soulbound: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
   mistveil_cord: {
     id: 'mistveil_cord',
     name: 'Mistveil Cord',
