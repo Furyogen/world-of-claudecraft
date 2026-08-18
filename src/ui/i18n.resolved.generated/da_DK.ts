@@ -10572,7 +10572,7 @@ export const da_DK: EnTranslations = {
       "reins_terrorspark_groundshaker": {
         "name": "Tændingsnøgle: Skrækgnist, jordrysteren"
       },
-      "ignition_key_weirdo_cream_truck": {
+      "reins_weirdo_cream_truck": {
         "name": "Ignition Key: Weirdo Cream Truck"
       },
       "reins_drakemaw_raptor": {

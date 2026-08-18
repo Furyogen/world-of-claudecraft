@@ -1481,6 +1481,14 @@
       "license": "World of ClaudeCraft original art (project-owned render of a project-owned procedural mount model)"
     },
     {
+      "itemId": "reins_weirdo_cream_truck",
+      "name": "Ignition Key: Weirdo Cream Truck",
+      "sourcePack": "woc_mount_models",
+      "sourceFile": "weirdo_cream_truck.glb",
+      "confidence": "high",
+      "license": "World of ClaudeCraft original art (project-owned render of a project-owned procedural mount model)"
+    },
+    {
       "itemId": "reins_thunderstrut_gobbler",
       "name": "Reins of Thunderstrut the Grand Gobbler",
       "sourcePack": "woc_mount_models",

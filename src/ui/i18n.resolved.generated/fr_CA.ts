@@ -10572,7 +10572,7 @@ export const fr_CA: EnTranslations = {
       "reins_terrorspark_groundshaker": {
         "name": "Clé de contact : Terrétincelle, l’Ébranleur de sol"
       },
-      "ignition_key_weirdo_cream_truck": {
+      "reins_weirdo_cream_truck": {
         "name": "Ignition Key: Weirdo Cream Truck"
       },
       "reins_drakemaw_raptor": {

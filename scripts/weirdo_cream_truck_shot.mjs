@@ -53,7 +53,7 @@ await sleep(400);
 await page.evaluate(() => {
   const sim = window.__game.sim;
   sim.setPlayerLevel(20, sim.playerId);
-  sim.addItem('ignition_key_weirdo_cream_truck', 1);
+  sim.addItem('reins_weirdo_cream_truck', 1);
   sim.selectMount('weirdo_cream_truck');
 });
 await sleep(400);

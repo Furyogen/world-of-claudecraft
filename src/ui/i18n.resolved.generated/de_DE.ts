@@ -10572,7 +10572,7 @@ export const de_DE: EnTranslations = {
       "reins_terrorspark_groundshaker": {
         "name": "Zündschlüssel: Schreckfunke, der Bodenerschütterer"
       },
-      "ignition_key_weirdo_cream_truck": {
+      "reins_weirdo_cream_truck": {
         "name": "Ignition Key: Weirdo Cream Truck"
       },
       "reins_drakemaw_raptor": {

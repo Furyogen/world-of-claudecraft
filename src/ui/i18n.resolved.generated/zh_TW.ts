@@ -10572,7 +10572,7 @@ export const zh_TW: EnTranslations = {
       "reins_terrorspark_groundshaker": {
         "name": "驚雷撼地者點火鑰匙"
       },
-      "ignition_key_weirdo_cream_truck": {
+      "reins_weirdo_cream_truck": {
         "name": "Ignition Key: Weirdo Cream Truck"
       },
       "reins_drakemaw_raptor": {

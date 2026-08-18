@@ -10572,7 +10572,7 @@ export const en_XA: EnTranslations = {
       "reins_terrorspark_groundshaker": {
         "name": "[Íĝñíţíóñ Ķéý: Ţéŕŕóŕšþáŕķ Ĝŕóúñðšĥáķéŕ]"
       },
-      "ignition_key_weirdo_cream_truck": {
+      "reins_weirdo_cream_truck": {
         "name": "[Íĝñíţíóñ Ķéý: Ŵéíŕðó Çŕéáɱ Ţŕúçķ]"
       },
       "reins_drakemaw_raptor": {

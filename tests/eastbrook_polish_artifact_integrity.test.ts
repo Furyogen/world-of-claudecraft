@@ -666,9 +666,9 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // follows the anchor seam, the weapon-skin fade and the census tag. No capture
 // was retaken; every measured value is adopted verbatim.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  '4b18490d8689cb59b0e9d69c424dc5644f1d62169585afab3de1c0f11e1c5d35';
+  'ec1f9f81238bfb5b44bf011c10d3f9cf6119ba702504ad1eec48ed5b043b4dd4';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  'de0f1454a0d7b6599d8a7f536042c577659fb6726d1131125503bf8dc0a27fd7';
+  '5d137f6930797607a481598e9f51709fd31a677ba15d7aa3a7e4f01c60e1c776';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -1561,7 +1561,7 @@ describe('Eastbrook polish performance and contact evidence', () => {
     expect(
       fingerprint.digest('hex'),
       `the second-order performance digest moved; if every input moved legitimately, re-mint with: ${REMINT_COMMAND} (it recomputes this literal LAST, from the swept files)`,
-    ).toBe('751280aa6d8c9c0ce6b8324245f44e53aba31b6c4bdc19fecf27458592aa1743');
+    ).toBe('c1a44a276966f5e8f9f7a3e39e0a400b147bebbb0bcff92005a42007b5d3e64b');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {
