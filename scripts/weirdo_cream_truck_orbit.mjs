@@ -17,6 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
 import { BROWSER_PATH } from './browser_path.mjs';
+import { dismissEntryOverlays, enterOfflineGame } from './enter_offline_game.mjs';
 import { FFMPEG_PATH } from './sfx/ffmpeg_paths.mjs';
 
 const BASE = process.env.GAME_URL ?? 'http://localhost:5173';
@@ -51,32 +52,21 @@ const browser = await puppeteer.launch({
 const page = await browser.newPage();
 page.on('pageerror', (error) => console.log('PAGEERROR:', error.message));
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const jsClick = (selector) =>
-  page.evaluate((value) => {
-    const element = document.querySelector(value);
-    if (!element) throw new Error(`missing ${value}`);
-    element.click();
-  }, selector);
 
 await page.goto(URL, { waitUntil: 'load', timeout: 240_000 });
-await page.waitForSelector('#btn-offline', { timeout: 240_000 });
-await sleep(400);
-await jsClick('#btn-offline');
-await sleep(300);
-await page.type('#char-name', 'Luffy');
-await jsClick('#offline-select .mini-class[data-class="warrior"]');
-await jsClick('#btn-start-offline');
-// Generous on purpose: under software rendering (and any CPU contention) world
-// entry is minutes, and a tight bound here just fails the capture at the boot.
-await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 300_000 });
-await sleep(2500);
-await page.evaluate(() => {
-  const button = [...document.querySelectorAll('button')].find((candidate) =>
-    /skip tutorial/i.test(candidate.textContent || ''),
-  );
-  button?.click();
+// Use the shared entry rather than hand-driving the pre-game UI: it dismisses
+// the three overlays that must never appear in a capture (intro logo, tutorial,
+// and the camera-mode prompt). Hand-rolling this is exactly how the first pass
+// ended up with the camera prompt sitting in the middle of all 120 frames.
+// The timeouts are wide because software rendering makes world entry minutes.
+await enterOfflineGame(page, {
+  charClass: 'warrior',
+  charName: 'Luffy',
+  settleMs: 4000,
+  gameBootTimeoutMs: 300_000,
+  selectorTimeoutMs: 180_000,
 });
-await sleep(500);
+await dismissEntryOverlays(page);
 
 await page.evaluate(() => {
   const sim = window.__game.sim;
@@ -120,6 +110,11 @@ await sleep(1500);
 await page.evaluate(() => {
   const ui = document.querySelector('#ui');
   if (ui) ui.style.display = 'none';
+  // The headless run has no GPU, so the client shows a software-rendering
+  // warning toast; it is not part of the asset.
+  for (const node of document.querySelectorAll('.gpu-warning, .toast, .notice-banner')) {
+    node.style.display = 'none';
+  }
 });
 await sleep(1200);
 
@@ -130,8 +125,10 @@ for (let frame = 0; frame < FRAMES; frame++) {
     const input = window.__game.input;
     if (input) {
       input.camYaw = y;
-      // A slight downward look keeps the whole vehicle plus the rider framed.
-      input.camPitch = -0.16;
+      // POSITIVE looks DOWN here (src/game/input.ts: camPitch is positive
+      // looking down, default 0.32). A negative value aims at empty sky, which
+      // is what turned the first capture into 120 grey frames.
+      input.camPitch = 0.24;
     }
   }, yaw);
   if (frame % JUMP_EVERY === 0) {
