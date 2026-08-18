@@ -58,15 +58,17 @@ const jsClick = (selector) =>
     element.click();
   }, selector);
 
-await page.goto(URL, { waitUntil: 'load', timeout: 120_000 });
-await page.waitForSelector('#btn-offline', { timeout: 120_000 });
+await page.goto(URL, { waitUntil: 'load', timeout: 240_000 });
+await page.waitForSelector('#btn-offline', { timeout: 240_000 });
 await sleep(400);
 await jsClick('#btn-offline');
 await sleep(300);
 await page.type('#char-name', 'Luffy');
 await jsClick('#offline-select .mini-class[data-class="warrior"]');
 await jsClick('#btn-start-offline');
-await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 60_000 });
+// Generous on purpose: under software rendering (and any CPU contention) world
+// entry is minutes, and a tight bound here just fails the capture at the boot.
+await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 300_000 });
 await sleep(2500);
 await page.evaluate(() => {
   const button = [...document.querySelectorAll('button')].find((candidate) =>
@@ -91,11 +93,11 @@ await page.waitForFunction(
     }
     return sim.player.mountKey === 'weirdo_cream_truck';
   },
-  { timeout: 20_000, polling: 250 },
+  { timeout: 60_000, polling: 250 },
 );
 await page.waitForFunction(
   () => !!window.__game.renderer?.views?.get(window.__game.sim.playerId)?.mountVisual,
-  { timeout: 40_000, polling: 300 },
+  { timeout: 120_000, polling: 300 },
 );
 // Hide the HUD: this is an asset showcase, not a UI shot.
 await page.evaluate(() => {
