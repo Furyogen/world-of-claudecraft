@@ -49,3 +49,19 @@ export function advanceRoll(current: number, distance: number, radius: number): 
 export function topSurfaceSpeed(bodySpeed: number): number {
   return 2 * bodySpeed;
 }
+
+/** Offset that keeps a rolling cylinder's contact patch ON THE GROUND.
+ *
+ *  The asset pipeline normalizes every prop with its origin at the BASE (y=0),
+ *  but a cylinder turns about its AXLE, which sits a radius up. Rotating the
+ *  body about the base instead swings it bodily through the floor and back out
+ *  in a circle, once per revolution.
+ *
+ *  Rotating about the origin sends the axle point (0, r, 0) to
+ *  (0, r*cos, r*sin); putting it back where it belongs is the correction
+ *  returned here, and the result is a body that pivots on its axle and rides
+ *  on its rim like a real wheel. */
+export function rollPivotOffset(roll: number, radius: number): { y: number; z: number } {
+  if (!(radius > 0) || !Number.isFinite(roll)) return { y: 0, z: 0 };
+  return { y: radius * (1 - Math.cos(roll)), z: -radius * Math.sin(roll) };
+}

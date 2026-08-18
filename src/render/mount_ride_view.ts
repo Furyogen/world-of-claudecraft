@@ -7,7 +7,7 @@
 // the work (three object3d writes and two emitter calls); the arithmetic they
 // depend on is pure and unit-tested next door in mount_roll_core.ts.
 
-import { advanceRoll, topSurfaceSpeed } from './mount_roll_core';
+import { advanceRoll, rollPivotOffset, topSurfaceSpeed } from './mount_roll_core';
 import type { MountVisualSpec } from './mount_visuals';
 import { mountBobY } from './mount_visuals';
 
@@ -52,7 +52,7 @@ interface Vec3Like {
   z: number;
 }
 interface MountVisualLike {
-  root: { position: { y: number }; rotation: { x: number } };
+  root: { position: { y: number; z: number }; rotation: { x: number } };
   update(dt: number, anim: MountAnimInputs, animate: boolean): void;
   advanceOffscreen(dt: number): void;
 }
@@ -93,6 +93,12 @@ export function driveMountRide(
   if (spec.rollRadius > 0) {
     roll = advanceRoll(roll, frame.bodySpeed * frame.dt, spec.rollRadius);
     mountVisual.root.rotation.x = roll;
+    // Pivot on the AXLE, not the model origin. Props are normalized with their
+    // origin at the base, so rotating about it swings the body through the
+    // floor in a circle once per turn (rollPivotOffset owns the correction).
+    const pivot = rollPivotOffset(roll, spec.rollRadius);
+    mountVisual.root.position.y += pivot.y;
+    mountVisual.root.position.z = pivot.z;
   }
   // Ambient mount particles: the snail paints its slime path while gliding,
   // the hover cycle streams aether exhaust off its tail.

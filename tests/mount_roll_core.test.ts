@@ -6,6 +6,7 @@ import {
   advanceRoll,
   ROLL_FORWARD,
   rollDelta,
+  rollPivotOffset,
   topSurfaceSpeed,
 } from '../src/render/mount_roll_core';
 
@@ -155,5 +156,38 @@ describe('a parked rolling mount stands its rider still', () => {
     expect(st.moving).toBe(true);
     expect(st.backwards).toBe(true);
     expect(desiredBaseState(st, true)).toBe('walkBack');
+  });
+});
+
+describe('a rolling cylinder pivots on its axle, not its base', () => {
+  // The asset pipeline puts a prop's origin at its BASE. Turning the body about
+  // that point swings it through the floor in a circle once per revolution.
+  const AXLE = (roll: number, r: number) => {
+    const o = rollPivotOffset(roll, r);
+    return { y: r * Math.cos(roll) + o.y, z: r * Math.sin(roll) + o.z };
+  };
+
+  it('holds the axle perfectly still through a whole revolution', () => {
+    for (const r of [0.75, 1.2]) {
+      for (let i = 0; i <= 16; i++) {
+        const roll = (i / 16) * Math.PI * 2;
+        const axle = AXLE(roll, r);
+        expect(axle.y, `axle height at ${roll.toFixed(2)} r=${r}`).toBeCloseTo(r, 10);
+        expect(axle.z, `axle drift at ${roll.toFixed(2)} r=${r}`).toBeCloseTo(0, 10);
+      }
+    }
+  });
+
+  it('never lets the body dip below the ground', () => {
+    const r = 0.75;
+    for (let i = 0; i <= 32; i++) {
+      const axle = AXLE((i / 32) * Math.PI * 2, r);
+      expect(axle.y - r).toBeGreaterThanOrEqual(-1e-9);
+    }
+  });
+
+  it('is a no-op for a mount that does not roll', () => {
+    expect(rollPivotOffset(1.2, 0)).toEqual({ y: 0, z: 0 });
+    expect(rollPivotOffset(Number.NaN, 1)).toEqual({ y: 0, z: 0 });
   });
 });
