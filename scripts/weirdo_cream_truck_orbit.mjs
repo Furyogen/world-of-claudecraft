@@ -82,23 +82,40 @@ await page.evaluate(() => {
   const sim = window.__game.sim;
   sim.setPlayerLevel(20, sim.playerId);
   sim.addItem('reins_weirdo_cream_truck', 1);
-  sim.selectMount('weirdo_cream_truck');
+  // Riding is gated on the skill Marla sells for 80g; grant it on the meta
+  // rather than walking the capture to the stables and through a purchase.
+  const meta = sim.meta(sim.playerId);
+  if (meta) meta.ridingTrained = true;
 });
-await sleep(400);
-await page.waitForFunction(
-  () => {
-    const sim = window.__game.sim;
-    if (!sim.player.mountKey) {
-      window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyZ', key: 'z', bubbles: true }));
-    }
-    return sim.player.mountKey === 'weirdo_cream_truck';
-  },
-  { timeout: 60_000, polling: 250 },
-);
+await sleep(500);
+
+// Riding is an ITEM USE. This build deliberately has no selected mount and no
+// picker (see src/world_api/mounts.ts): using the reins routes through
+// summonMountItem and starts the summon channel, which takes a few seconds to
+// land. Retry the use rather than poll it, so one refused attempt (a stray
+// combat flag, a not-yet-settled spawn) does not burn the whole window.
+let mounted = false;
+for (let attempt = 0; attempt < 10 && !mounted; attempt++) {
+  await page.evaluate(() => window.__game.sim.useItem('reins_weirdo_cream_truck'));
+  try {
+    await page.waitForFunction(() => window.__game.sim.player.mountKey === 'weirdo_cream_truck', {
+      timeout: 8000,
+      polling: 250,
+    });
+    mounted = true;
+  } catch {
+    // fall through and try again
+  }
+}
+if (!mounted) throw new Error('could not summon the Weirdo Cream truck');
+
+// The mount GLB is lazyPreload: wait for the visual, not a fixed nap.
 await page.waitForFunction(
   () => !!window.__game.renderer?.views?.get(window.__game.sim.playerId)?.mountVisual,
   { timeout: 120_000, polling: 300 },
 );
+await sleep(1500);
+
 // Hide the HUD: this is an asset showcase, not a UI shot.
 await page.evaluate(() => {
   const ui = document.querySelector('#ui');
