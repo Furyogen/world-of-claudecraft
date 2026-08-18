@@ -81,23 +81,24 @@ await sleep(500);
 
 // Riding is an ITEM USE. This build deliberately has no selected mount and no
 // picker (see src/world_api/mounts.ts): using the reins routes through
-// summonMountItem and starts the summon channel, which takes a few seconds to
-// land. Retry the use rather than poll it, so one refused attempt (a stray
-// combat flag, a not-yet-settled spawn) does not burn the whole window.
-let mounted = false;
-for (let attempt = 0; attempt < 10 && !mounted; attempt++) {
-  await page.evaluate(() => window.__game.sim.useItem('reins_weirdo_cream_truck'));
-  try {
-    await page.waitForFunction(() => window.__game.sim.player.mountKey === 'weirdo_cream_truck', {
-      timeout: 8000,
-      polling: 250,
-    });
-    mounted = true;
-  } catch {
-    // fall through and try again
-  }
-}
-if (!mounted) throw new Error('could not summon the Weirdo Cream truck');
+// summonMountItem, which starts a 1.5 SIM-second summon cast.
+//
+// That cast is why this wait is minutes rather than seconds. The sim advances
+// with the render loop, so under software rendering the world runs roughly
+// twenty times slower than wall clock: a 1.5s cast measured 0.5s of progress
+// over 12s of real time. Re-issuing the use while a cast is in flight is
+// swallowed by design (summonMountItem returns early), so only issue one when
+// nothing is pending, which also self-corrects a click refused outright.
+await page.waitForFunction(
+  () => {
+    const sim = window.__game.sim;
+    const self = sim.entities.get(sim.playerId);
+    if (self?.mountKey === 'weirdo_cream_truck') return true;
+    if (!((self?.mountCastRemaining ?? 0) > 0)) sim.useItem('reins_weirdo_cream_truck');
+    return false;
+  },
+  { timeout: 300_000, polling: 1000 },
+);
 
 // The mount GLB is lazyPreload: wait for the visual, not a fixed nap.
 await page.waitForFunction(
