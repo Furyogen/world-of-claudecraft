@@ -5187,6 +5187,82 @@ export const TARGETS = [
     },
   },
   {
+    // A druid in Bruin Form who casts a healing or damaging spell now leaves the
+    // form and casts it, instead of being refused. Both halves are visual and
+    // neither fits in one frame with the other, so this shoots the sequence: the
+    // slot painting live while the body is still a bear, then the same button
+    // pressed, with the druid back in caster form and the cast running.
+    //
+    // Every frame is full-HUD rather than clipped to the bar, because the body
+    // swapping out of the form IS half of what changed; a bar crop would show the
+    // slot and hide the shapeshift. Driven through the real action-bar buttons,
+    // never sim.castAbility, so the shot is evidence about the bound press a
+    // player makes.
+    key: 'druid-form-autoshift',
+    label: 'Druid auto-shift: a heal cast in Bruin Form leaves the form and casts',
+    when: [
+      'sim/combat/form_autoshift',
+      'sim/combat/form_exit',
+      'ui/hud/action_bar/action_bar_view.ts',
+    ],
+    variants: [
+      { key: 'desktop-in-form', charClass: 'druid', charName: 'Ursa', beforeLoad: lowGraphicsSeed },
+      {
+        key: 'desktop-cast',
+        charClass: 'druid',
+        charName: 'Ursa',
+        cast: true,
+        beforeLoad: lowGraphicsSeed,
+      },
+      {
+        key: 'mobile-in-form',
+        charClass: 'druid',
+        charName: 'Ursa',
+        mobile: true,
+        beforeLoad: lowGraphicsSeed,
+      },
+    ],
+    async capture(page, variant) {
+      await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 90000 });
+      await dismissEntryOverlays(page);
+      // Level 20 reaches Bruin Form (8) with Wildmend (1) long since learned.
+      await page.evaluate(() => {
+        const sim = window.__game?.sim;
+        const hud = window.__game?.hud;
+        sim?.setPlayerLevel?.(20);
+        hud?.addAbilityToHotbar?.('bear_form');
+        hud?.addAbilityToHotbar?.('healing_touch');
+      });
+      await wait(800);
+      // Levelling fires a run of deed/zone banners across the scene; they are
+      // unrelated to this change and would only sit on top of it.
+      await page.evaluate(() => {
+        for (const sel of ['#banner', '#quest-banner', '#subzone-banner']) {
+          const el = document.querySelector(sel);
+          if (el) el.style.display = 'none';
+        }
+      });
+      const press = async (label) => {
+        const hit = await page.evaluate((name) => {
+          const buttons = [...document.querySelectorAll('.action-btn')];
+          const btn = buttons.find((b) => (b.getAttribute('aria-label') ?? '').includes(name));
+          if (!btn) return false;
+          btn.click();
+          return true;
+        }, label);
+        if (!hit) throw new Error(`${label} never reached the action bar`);
+      };
+      await press('Bruin Form');
+      // Past the shift's own global cooldown, so the next press is the feature
+      // under test rather than a swallowed early press.
+      await wait(2200);
+      if (!variant?.cast) return { clip: '#ui' };
+      await press('Wildmend');
+      await wait(700);
+      return { clip: '#ui' };
+    },
+  },
+  {
     // Cheap Trick (rogue row 11) retires Gut Punch's stealth requirement. The
     // bar's usable gate and the tooltip's requirement line both read the
     // RESOLVED ability, so this shoots the talented rogue standing in the open,
