@@ -9009,6 +9009,7 @@ export class GameServer {
     maybe('hrat', p.hasteRating);
     maybe('hirat', p.hitRating);
     maybe('ddiff', this.sim.dungeonDifficulty(anchorSession.pid));
+    maybe('smana', Math.round(p.savedMana)); // druid parked mana; see combat/form_autoshift
     // The viewer's OWN authored look. It cannot come from the entity list (the
     // broadcast loop skips `e.id === anchorEntity.id`), and it is exactly what
     // `maybeRaw` is for: heavy, already serialized once (appearanceWireJson),

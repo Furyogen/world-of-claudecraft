@@ -127,7 +127,13 @@ import {
   iceFloesAuraForAbility,
   nextCastCheapMultiplier,
 } from './empower_next';
-import { isActionLockingFormAuraKind, isResourceShiftFormAuraKind } from './forms';
+import { autoShiftFormAura } from './form_autoshift';
+import { leaveFormAura } from './form_exit';
+import {
+  isActionLockingFormAuraKind,
+  isFormToggleAbility,
+  isResourceShiftFormAuraKind,
+} from './forms';
 import {
   applyBrainFreezeOverride,
   brainFreezeBypassesCooldown,
@@ -209,10 +215,6 @@ export const COLOSSAL_MIGHT_COOLDOWNS = new Set([
   'mortal_strike',
   'shield_slam',
 ]);
-
-function isFormToggle(ability: AbilityDef): boolean {
-  return ability.effects.some((e) => e.type === 'selfBuff' && isFormAuraKind(e.kind));
-}
 
 // Forms, stances and stealth are toggles: re-casting cancels the aura, and
 // cancelling is never gated by cost or cooldown (the cooldown gates re-entry).
@@ -987,6 +989,17 @@ export function castAbility(
     ctx.error(p.id, afflictionError);
     return;
   }
+  // Druid quality of life: a healing or damaging cast pressed from Bruin, Wolf, or
+  // Fleet Form shifts the druid out on its own instead of being refused. Decided
+  // HERE, above the affordability gate, because those forms park the mana pool in
+  // savedMana and run the live bar on rage/energy: the cast has to be billed
+  // against the pool it will actually spend from, or a full-mana druid is told
+  // "Not enough rage!" for a heal they can plainly afford.
+  //
+  // The shift itself is performed far below, at the commit point, once every
+  // remaining gate (target, range, line of sight, facing) has passed, so a refused
+  // cast never costs the druid its form. Null for everyone else.
+  const autoShiftAura = autoShiftFormAura(p.auras, ability, res.effects);
   // shifting out of a form is free; shifting across forms bills the parked
   // mana (the live bar is rage/energy in a form) — see spendAbilityCost
   const canCastFree = res.cost > 0 && hasFreeCostFor(p, ability.id);
@@ -1008,11 +1021,19 @@ export function castAbility(
     cheapMultiplier === null ? res.cost : Math.ceil(res.cost * cheapMultiplier);
   const shamanAdjustedCost = shamanManaCost(ctx, p, discountedCost);
   const payableCost =
-    p.resourceType === 'mana'
+    p.resourceType === 'mana' || autoShiftAura
       ? Math.ceil(shamanAdjustedCost * paladinManaCostMultiplier(p))
       : shamanAdjustedCost;
+  // An auto-shifting cast bills the pool the shift is about to hand back. Bruin and
+  // Wolf Form swap the live bar to rage/energy and park the mana in savedMana, so
+  // the bill reads the parked pool; Fleet Form action-locks WITHOUT touching the
+  // bar (recalcPlayerStats only re-bars bear/cat), so its mana is still live and
+  // the ordinary read is already right. Asking whether mana is the live bar is
+  // what tells the two apart.
+  const autoShiftFromParkedMana = autoShiftAura !== null && p.resourceType !== 'mana';
+  const payableFrom = autoShiftFromParkedMana ? p.savedMana : p.resource;
   if (
-    p.resource < payableCost &&
+    payableFrom < payableCost &&
     (!canCastFree || stormcastArmedForAbility) &&
     !freeBySolarReprisal &&
     !togglingOff &&
@@ -1020,13 +1041,18 @@ export function castAbility(
   ) {
     ctx.error(
       p.id,
-      p.resourceType === 'rage'
-        ? 'Not enough rage!'
-        : p.resourceType === 'energy'
-          ? 'Not enough energy!'
-          : p.resourceType === 'focus'
-            ? 'Not enough Focus!'
-            : 'Not enough mana!',
+      // A cast billed against the parked pool names mana even though the live bar
+      // is still the form's rage/energy; every other caster keeps the existing
+      // chain untouched.
+      autoShiftFromParkedMana
+        ? 'Not enough mana!'
+        : p.resourceType === 'rage'
+          ? 'Not enough rage!'
+          : p.resourceType === 'energy'
+            ? 'Not enough energy!'
+            : p.resourceType === 'focus'
+              ? 'Not enough Focus!'
+              : 'Not enough mana!',
     );
     return;
   }
@@ -1101,7 +1127,7 @@ export function castAbility(
       ctx.error(p.id, `You must be in ${ability.requiresForm === 'bear' ? 'Bruin' : 'Wolf'} Form.`);
       return;
     }
-  } else if (form && !isFormToggle(ability) && !ability.usableInForm) {
+  } else if (form && !isFormToggleAbility(ability) && !ability.usableInForm && !autoShiftAura) {
     ctx.error(p.id, "You can't do that while shapeshifted.");
     return;
   }
@@ -1466,6 +1492,16 @@ export function castAbility(
   if (ability.id !== 'ghost_wolf' && p.auras.some((a) => a.id === 'ghost_wolf')) {
     ctx.breakGhostWolf(p);
   }
+  // The druid auto-shift decided above (autoShiftFormAura) is PERFORMED here, in the
+  // commit block beside the other states a committed cast leaves (sitting, stowed
+  // weapon, Ghost Wolf, a mount): every gate has passed, so the form is only ever
+  // spent on a cast that actually goes out.
+  //
+  // Deliberately NOT a cast of the form ability: dropping the aura directly is what
+  // keeps the shift free of a global cooldown of its own, so an instant like Lunar
+  // Tempest fires the same tick it is pressed. The spell still bills its own GCD
+  // below, and shifting back INTO a form is an ordinary cast that pays one.
+  if (autoShiftAura) leaveFormAura(ctx, p, meta, autoShiftAura);
   // Auto-dismount when the player is mounted or mid-summon-channel and casts any ability.
   if (p.mountKey !== '') forceDismount(ctx, p);
   if (p.mountCastKey !== '') {
@@ -1687,7 +1723,7 @@ export function spendResource(p: Entity, cost: number): void {
 /** Is this cast a form toggle while already shapeshifted? 'off' = leaving
  *  the form (free, classic), 'cross' = bear<->cat (costs the parked mana). */
 function formShiftKind(p: Entity, ability: AbilityDef): 'off' | 'cross' | null {
-  if (!isFormToggle(ability)) return null;
+  if (!isFormToggleAbility(ability)) return null;
   if (p.auras.some((a) => a.id === ability.id)) return 'off';
   if (p.auras.some((a) => isFormAuraKind(a.kind))) return 'cross';
   return null;

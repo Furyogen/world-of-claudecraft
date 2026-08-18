@@ -3346,6 +3346,15 @@ export class ClientWorld implements IWorld {
       e.resourceType = s.rtype;
       // delta fields: the server omits them while unchanged, so only the
       // snapshots that carry them rebuild the local structures
+      // Mana parked while a druid is in Bruin or Wolf Form: those forms swap the live
+      // bar to rage/energy and stow the real pool, so it is 0 for everyone else and
+      // only moves on a shift. That is why the server ships it as a diffed extra
+      // (`smana` in selfWireJson) rather than on the per-tick base record, and why
+      // an absent field here means unchanged rather than zero. The action bar needs
+      // it to bill an auto-shifting heal or nuke against the pool the shift hands
+      // back (src/sim/combat/form_autoshift.ts); without it the online bar paints
+      // those spells unusable while the server casts them happily.
+      if (s.smana !== undefined) e.savedMana = Number(s.smana) || 0;
       // corpse position while a ghost (null once resurrected). Delta-guarded: kept
       // unchanged when the server omits it; drives the corpse marker + resurrect button.
       if (s.corpse !== undefined) e.corpsePos = s.corpse ?? null;

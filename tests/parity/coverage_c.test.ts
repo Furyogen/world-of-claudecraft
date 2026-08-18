@@ -121,10 +121,24 @@ describe('coverage: each scenario fires its subsystem', () => {
     expect(warlockMob?.auras?.some((a: Ev) => a.kind === 'incapacitate')).toBe(true);
     // warlock summon_imp: a pet now belongs to the warlock (summonDemon -> summonPet).
     expect(ents.some((e) => e.ownerId === rec.notes.warlockId)).toBe(true);
-    // druid form switch: the LAST form (cat) is active and bear was stripped.
+    // druid forms: Bruin went on, the Wolf switch stripped it (the exclusive-form
+    // arm this scenario exists to cover), and then the trailing Wildbloom shifted
+    // the druid back to caster form on its own, because a healing or damaging cast
+    // in an action-locking form now leaves the form instead of being refused
+    // (src/sim/combat/form_autoshift.ts). Pinned on the ORDERED aura stream rather
+    // than the end state alone: both forms must be seen going on and coming off, so
+    // the exclusive strip cannot hide behind the auto-shift. The HoT assertion is
+    // what makes this scenario's claimed "-> hot" step real; until the auto-shift
+    // landed, that cast was refused and no HoT was ever applied.
     const druid = ents.find((e) => e.id === rec.notes.druidId);
-    expect(druid?.auras?.some((a: Ev) => a.kind === 'form_cat')).toBe(true);
+    const druidAuraEvents = ev.filter((e) => e.type === 'aura' && e.targetId === rec.notes.druidId);
+    const formTrace = (name: string) =>
+      druidAuraEvents.filter((e) => e.name === name).map((e) => e.gained);
+    expect(formTrace('Bruin Form')).toEqual([true, false]);
+    expect(formTrace('Wolf Form')).toEqual([true, false]);
     expect(druid?.auras?.some((a: Ev) => a.kind === 'form_bear')).toBe(false);
+    expect(druid?.auras?.some((a: Ev) => a.kind === 'form_cat')).toBe(false);
+    expect(druid?.auras?.some((a: Ev) => a.kind === 'hot')).toBe(true);
   });
 
   it('hit_rating_heroic pair: gear changes the threshold, never the RNG draw order', () => {

@@ -31,6 +31,7 @@ import {
   freeCostAuraActive,
   nextCastCheapMultiplierFromAuras,
 } from '../../../sim/combat/empower_next';
+import { autoShiftFormAura } from '../../../sim/combat/form_autoshift';
 import { frostProcGlowActive } from '../../../sim/combat/frost_mage';
 import { packlordActionGlowActive } from '../../../sim/combat/hunter_packlord';
 import {
@@ -54,12 +55,14 @@ import { thundercallPayoffGlowActive } from '../../../sim/combat/shaman_thunderc
 import { isAscensionEmpoweredAbility } from '../../../sim/paladin_devotion';
 import {
   type AbilityDef,
+  type AbilityEffect,
   type AuraKind,
   dist2d,
   GCD,
   type ItemDef,
   MELEE_RANGE,
   POTION_COOLDOWN,
+  type ResourceType,
   type Vec3,
 } from '../../../sim/types';
 import type { InterpolationValues, TranslationKey } from '../../i18n';
@@ -121,6 +124,11 @@ export interface ActionBarAbility {
    *  read by the sim's cast gate; the bar must read it too or the talent's one
    *  button paints unusable while the cast it refuses to advertise succeeds. */
   ignoreStealthRequirement?: boolean;
+  /** The RANK-RESOLVED effects, the same list the sim's cast gate reads. Drives the
+   *  druid auto-shift question below; both worlds already carry it on `known`.
+   *  Optional so a hand-built fixture need not restate it; absent reads as no
+   *  effects, which classifies as no auto-shift. */
+  effects?: readonly AbilityEffect[];
 }
 
 /** The aura fields the bar reads to derive proc glows and next-cast empowerment. */
@@ -184,6 +192,14 @@ export interface ActionBarPlayerInput {
   autoAttack: boolean;
   dead: boolean;
   resource: number;
+  /** The LIVE bar's type. Null for a class with no bar. Read together with
+   *  savedMana to bill a druid auto-shift cast against the right pool. */
+  resourceType?: ResourceType | null;
+  /** Mana parked while shifted into Bruin or Wolf Form, which those forms swap off
+   *  the live bar (0 whenever mana IS the live bar). Both worlds mirror it: offline
+   *  from the sim entity, online from the `smana` self-wire field. Absent on a
+   *  fixture that never shapeshifts, which reads as no parked pool. */
+  savedMana?: number;
   cooldowns: { get(id: string): number | undefined };
   gcdRemaining: number;
   /** Shared combat-potion cooldown, remaining seconds (0 when ready). Painted as a
@@ -643,8 +659,19 @@ export function createActionBarView(
           dominionReady =
             dominionSummonBlockFromMask(dominionComposition, dominionTemplateId) === null;
         }
+        // Druid auto-shift (sim/combat/form_autoshift): a healing or damaging cast
+        // pressed in Bruin or Wolf Form is billed against the mana those forms park
+        // in savedMana, not the rage/energy on the live bar. Without this the bar
+        // paints a plainly affordable heal unusable while the cast it refuses to
+        // advertise succeeds. Fleet Form keeps mana live, so the ordinary read
+        // already covers it; the same predicate the cast gate calls decides.
+        const payableFrom =
+          player.resourceType !== 'mana' &&
+          autoShiftFormAura(player.auras, def, ability.effects ?? []) !== null
+            ? (player.savedMana ?? 0)
+            : player.resource;
         slot.usable =
-          (!(player.resource < payableCost) || freeByProc || freeBySolarReprisal) &&
+          (!(payableFrom < payableCost) || freeByProc || freeBySolarReprisal) &&
           (def.ruinCost ?? 0) <= ruin &&
           soulFragments >= (def.soulFragmentCost ?? 0) &&
           ascensionReady &&
