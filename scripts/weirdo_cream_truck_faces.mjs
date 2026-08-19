@@ -71,18 +71,26 @@ await page.waitForFunction(
   { timeout: 120_000, polling: 300 },
 );
 
-// Pin the cycle to noon. /daynight is a client dev command handled off the chat
-// input (src/main.ts), so drive the real input rather than reaching for the
-// module function, which is a closure and not exposed.
-await page.evaluate(() => {
+// Pin the cycle to noon. /daynight is a client dev command handled by a keydown
+// listener ON the chat input (src/main.ts), so the event has to be dispatched at
+// that element: pressing Enter through the keyboard API needs the textarea
+// focused, and focusing it while the chat is closed silently does nothing, which
+// left the first attempt still shooting at dusk.
+const dayNight = await page.evaluate(async () => {
   const input = document.querySelector('#chat-input');
-  if (!input) return;
-  input.style.display = 'block';
-  input.focus();
+  if (!input) return 'no chat input';
   input.value = '/daynight noon';
-  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', bubbles: true, cancelable: true }),
+  );
+  await new Promise((resolve) => setTimeout(resolve, 1200));
+  // The handler logs a confirmation line; that is the only readable proof it ran.
+  return /time of day set to/i.test(document.body.textContent || '') ? 'ok' : 'not applied';
 });
-await page.keyboard.press('Enter');
+console.log(`daynight noon: ${dayNight}`);
+if (dayNight !== 'ok') {
+  console.warn('WARNING: the noon override did not apply; these shots are NOT daytime.');
+}
 await sleep(2500);
 
 await page.evaluate(() => {
@@ -98,11 +106,11 @@ await sleep(1500);
 // run rear, flank, front, flank. `dist` is pulled in for the hero so the cab
 // reads at three-quarters.
 const SHOTS = [
-  { name: 'rear-portrait', yaw: 0, pitch: 0.2, dist: 9 },
-  { name: 'flank-left', yaw: Math.PI / 2, pitch: 0.18, dist: 9 },
-  { name: 'front-badge', yaw: Math.PI, pitch: 0.18, dist: 9 },
-  { name: 'flank-right', yaw: (3 * Math.PI) / 2, pitch: 0.18, dist: 9 },
-  { name: 'hero-three-quarter', yaw: Math.PI * 1.28, pitch: 0.24, dist: 8 },
+  { name: 'rear-portrait', yaw: 0, pitch: 0.16, dist: 6.5 },
+  { name: 'flank-left', yaw: Math.PI / 2, pitch: 0.14, dist: 6.5 },
+  { name: 'front-badge', yaw: Math.PI, pitch: 0.14, dist: 6.5 },
+  { name: 'flank-right', yaw: (3 * Math.PI) / 2, pitch: 0.14, dist: 6.5 },
+  { name: 'hero-three-quarter', yaw: Math.PI * 1.28, pitch: 0.2, dist: 6 },
 ];
 
 for (const shot of SHOTS) {
