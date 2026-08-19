@@ -1665,6 +1665,16 @@ describe('fishing over the live server (pin 8)', () => {
     // exists by design (the player-visible half is the "No fish are biting."
     // log line), but the event still rides the same personal routing, and
     // this is the one arm of the four that had no online pin.
+    //
+    // Deliberately long walker, so it carries its own explicit budget (the
+    // convention vite.config.ts names next to the 20 s default). The empty
+    // hook is a 10 percent row in the band 0 Eastbrook table and the seed
+    // puts the first one 54 sessions in, each session riding the live server
+    // loop until the routed bite lands. That is roughly 3,500 authoritative
+    // world ticks, about 19.5 s on a warm dev box, which brushed the shared
+    // default and flipped on scheduling luck under parallel CI load. Nothing
+    // here asserts a duration; the budget just stops a slow runner from
+    // reading as a failure.
     const { server, fcA, fcB, sa, angler } = setupAngler();
     let empty = false;
     for (let session = 0; session < 100 && !empty; session++) {
@@ -1687,7 +1697,7 @@ describe('fishing over the live server (pin 8)', () => {
       server.sim.tick();
     }
     expect(empty).toBe(true);
-  });
+  }, 60_000);
 
   it('a pre-bite re-press over the live server reels in early: personal fishingEarlyReel, no busy error, recast allowed', () => {
     const { server, fcA, fcB, sa, angler } = setupAngler();
