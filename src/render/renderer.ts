@@ -356,12 +356,7 @@ import { buildMailboxPillar } from './mailbox';
 import { buildMobNightGlow, type MobNightGlowView } from './mob_night_glow';
 import { buildMotes, type MotesView } from './motes';
 import { MountBeacon } from './mount_beacon';
-import {
-  createMountChugState,
-  type MountChugState,
-  mountTopSpeed,
-  stepMountChug,
-} from './mount_chug_core';
+import { driveMountChug, type MountChugState } from './mount_chug_driver';
 import {
   mountPrewarmKeys,
   stageMountPrewarmVisual,
@@ -1135,11 +1130,7 @@ export interface EntityView {
   // latches for jump/land/water-entry detection.
   stepAccum: number;
   lichHeartbeatAt: number;
-  // Vehicle-mount chug cadence. Null until this body is seen on a mount
-  // that actually has a chug cue, so gait mounts carry no extra per-view
-  // state. Distinct from the windup/loop/winddown engine state, which
-  // sfx.ts owns per entity id rather than per view.
-  mountChug: MountChugState | null;
+  mountChug: MountChugState | null; // vehicle-mount chug (mount_chug_driver.ts)
   waterContactSeen: boolean;
   waterContactActive: boolean;
   waterContactX: number;
@@ -11820,27 +11811,19 @@ export class Renderer {
           // lands promptly rather than after a full stride of travel.
           v.stepAccum = FOOT_STRIDE_WALK * 0.6;
         }
-        // The chug of a VEHICLE mount, driven every frame rather than per
-        // stride: it idles at a standstill and revs unloaded in mid-air, so it
-        // deliberately sits outside the stride ladder above, and outside the
-        // engine take-set branches inside it, which are a different mount
-        // shape. sink.mountChug no-ops for a mount with no chug cue, so a gait
-        // mount pays only this branch. State is allocated on first use for the
-        // same reason.
-        if (logicallyMounted && !visuallyDead) {
-          v.mountChug ??= createMountChugState();
-          const chug = stepMountChug(v.mountChug, {
-            speed: loco.speed,
-            topSpeed: mountTopSpeed(e.mountKey),
-            airborne,
-            dt,
-          });
-          for (let fired = 0; fired < chug.chugs; fired++) {
-            sink.mountChug(ax, ay, az, e.mountKey, chug.rate, chug.gain, isSelf);
-          }
-        } else if (v.mountChug) {
-          v.mountChug = null;
-        }
+        // A vehicle mount's engine, outside the stride ladder above by design.
+        v.mountChug = driveMountChug(sink, {
+          state: v.mountChug,
+          mountKey: e.mountKey,
+          speed: loco.speed,
+          airborne,
+          dt,
+          x: ax,
+          y: ay,
+          z: az,
+          self: isSelf,
+          active: logicallyMounted && !visuallyDead,
+        });
       } else if (sink && logicallyMounted) {
         // Every other cue in the block above is a one-shot; an engine
         // mount's loop is not, and this gate (SFX_MOVE_RANGE_SQ, 42yd) sits

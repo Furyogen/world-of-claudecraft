@@ -26,6 +26,9 @@ const OUTPUT = join(REPO_ROOT, 'public/ui/items/reins_weirdo_cream_truck.webp');
 const ICON_SIZE = 128;
 /** Supersample factor for the circular mask, so the badge rim stays smooth. */
 const SUPERSAMPLE = 4;
+/** The near-black plate the other item icons already sit on, sampled from them,
+ *  so the flattened corners match the family instead of inventing a colour. */
+const ICON_BACKDROP = { r: 12, g: 12, b: 12 };
 
 const atlas = await buildDecalAtlas();
 const region = DECAL_REGIONS.portrait;
@@ -34,8 +37,12 @@ const top = Math.round(region.v0 * atlas.size);
 const width = Math.round((region.u1 - region.u0) * atlas.size);
 const height = Math.round((region.v1 - region.v0) * atlas.size);
 
-// Alpha mask: keep the badge plate, drop the square corners, so the icon sits on
-// the bag grid as a round token like every other art-backed item.
+// Alpha mask: keep the badge plate and cut the square corners, so the icon reads
+// as a round token. The corners are then FLATTENED onto the same near-black
+// plate the rest of the item art carries rather than left transparent: every
+// shipping item icon is fully opaque, and tests/item_art_consistency.test.ts
+// fails any icon that is not (a transparent corner reads as a hole against the
+// bag grid's own background).
 const masked = ICON_SIZE * SUPERSAMPLE;
 const mask = Buffer.alloc(masked * masked);
 const radius = masked / 2;
@@ -63,7 +70,8 @@ const supersampled = await sharp(atlas.pixels, {
 // ...stage two resolves it down, which is what antialiases the rim.
 const icon = await sharp(supersampled)
   .resize(ICON_SIZE, ICON_SIZE, { kernel: sharp.kernel.lanczos3 })
-  .webp({ quality: 92, effort: 6, alphaQuality: 100 })
+  .flatten({ background: ICON_BACKDROP })
+  .webp({ quality: 92, effort: 6 })
   .toBuffer();
 
 mkdirSync(dirname(OUTPUT), { recursive: true });
