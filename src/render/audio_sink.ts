@@ -65,6 +65,22 @@ export interface SpatialAudioSink {
   ): void;
   /** One custom running stride for a mounted entity. */
   mountRun(x: number, y: number, z: number, mountKey: string, self: boolean): void;
+  /** One cylinder firing on a VEHICLE mount's engine. Distinct from mountRun
+   *  because an engine is not a gait: the renderer drives the cadence, pitch,
+   *  and level off ground speed (src/render/mount_engine_core.ts) rather than
+   *  off a stride accumulator, so an idling truck still putts and a moving one
+   *  revs. No-op for a mount with no engine clip, which is every gait mount. */
+  mountEngine(
+    x: number,
+    y: number,
+    z: number,
+    mountKey: string,
+    rate: number,
+    gain: number,
+    self: boolean,
+  ): void;
+  /** A mount's signature chime, fired on a jump. No-op without a chime clip. */
+  mountChime(x: number, y: number, z: number, mountKey: string, self: boolean): void;
   /** A discrete movement event (jump / land / water entry / swim stroke). */
   movement(
     kind: 'jump' | 'land' | 'splash' | 'swim',

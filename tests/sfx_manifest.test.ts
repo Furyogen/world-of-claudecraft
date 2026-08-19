@@ -162,9 +162,9 @@ describe('buildManifest', () => {
     expect(manifest).toContain('cast_lightning_bolt');
   });
 
-  it('keeps the release catalog, all 9 mount cues, and all 63 UI cues in one 246-key inventory', () => {
+  it('keeps the release catalog, all 11 mount cues, and all 63 UI cues in one 248-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
-    expect(keys.size).toBe(246);
+    expect(keys.size).toBe(248);
     expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(63);
     expect(keys.has('ui_craft_cast')).toBe(true);
     for (const key of [
@@ -187,6 +187,12 @@ describe('buildManifest', () => {
       'mount_run_terrorspark_groundshaker',
       // the Drakemaw Raptor, the ninth mount cue (the brood rework's legendary)
       'mount_run_drakemaw_raptor',
+      // The Weirdo Cream truck is a VEHICLE: no gait, so no stride cue. It ships
+      // an engine chug the renderer retriggers off ground speed, plus the roof
+      // chime its jump fires. That is why the mount cue count runs ahead of the
+      // mount count.
+      'mount_engine_weirdo_cream_truck',
+      'mount_chime_weirdo_cream_truck',
       'fear_shout',
       'fear',
       'ice_block',
@@ -225,7 +231,8 @@ describe('buildManifest', () => {
     // purely filesystem-discovered.
     const mobFamilyKeys = [...keys].filter((key) => key.startsWith('mob_'));
     expect(mobFamilyKeys).toHaveLength(65); // 13 families x 5 actions
-    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(246);
+    // 248 since the Weirdo Cream truck added its engine chug and roof chime.
+    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(248);
   });
 });
 
