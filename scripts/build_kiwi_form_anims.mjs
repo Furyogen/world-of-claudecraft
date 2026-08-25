@@ -104,7 +104,13 @@ const qMul = (a, b) => [
   a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2],
 ];
 const qConj = (q) => [-q[0], -q[1], -q[2], q[3]];
-const qAboutZ = (angle) => [0, 0, Math.sin(angle / 2), Math.cos(angle / 2)];
+const AXIS_X = [1, 0, 0];
+const AXIS_Y = [0, 1, 0];
+const AXIS_Z = [0, 0, 1];
+const qAbout = (axis, angle) => {
+  const s = Math.sin(angle / 2);
+  return [axis[0] * s, axis[1] * s, axis[2] * s, Math.cos(angle / 2)];
+};
 
 /** World-space orientation of a bone under the given pose (rotation only: the
  *  bill angle does not depend on any bone offset). */
@@ -132,6 +138,17 @@ function billPitchDeg(pose) {
   return (Math.asin(vy / len) * 180) / Math.PI;
 }
 
+/** Give `bone` an extra rotation of `angle` about a WORLD axis, leaving its
+ *  parents where they are. Bone-local axes are permuted differently per limb on
+ *  this rig, so world axes are the only frame in which "swing the wing outward"
+ *  stays one readable number. Children inherit it, so a chain is applied top
+ *  down and the amounts accumulate down the limb. */
+function worldRotate(pose, bone, axis, angle) {
+  const parent = worldQuat(pose, parentOf.get(bone));
+  const local = pose.get(bone + '|rotation') ?? restRotation.get(bone);
+  pose.set(bone + '|rotation', qMul(qMul(qConj(parent), qMul(qAbout(axis, angle), parent)), local));
+}
+
 /** Rotate the neck chain until the bill sits at `targetDeg`. Composing world
  *  rotations onto a chain is not linear, so this converges rather than solving
  *  in one step; a few passes land well inside a tenth of a degree. */
@@ -140,11 +157,7 @@ function aimBill(pose, targetDeg) {
     const error = targetDeg - billPitchDeg(pose);
     if (Math.abs(error) < 0.05) break;
     const share = (error * Math.PI) / 180 / NECK.length;
-    for (const bone of NECK) {
-      const parent = worldQuat(pose, parentOf.get(bone));
-      const local = pose.get(bone + '|rotation') ?? restRotation.get(bone);
-      pose.set(bone + '|rotation', qMul(qMul(qConj(parent), qMul(qAboutZ(share), parent)), local));
-    }
+    for (const bone of NECK) worldRotate(pose, bone, AXIS_Z, share);
   }
   return pose;
 }
@@ -257,58 +270,100 @@ const FLAT = Math.PI / 2;
 // half-inside it (the spine axis ends up in the ground plane otherwise).
 const REST_LIFT = 0.16;
 
-function quatMul(a, b) {
-  const [ax, ay, az, aw] = a;
-  const [bx, by, bz, bw] = b;
-  return [
-    aw * bx + ax * bw + ay * bz - az * by,
-    aw * by - ax * bz + ay * bw + az * bx,
-    aw * bz + ax * by - ay * bx + az * bw,
-    aw * bw - ax * bx - ay * by - az * bz,
-  ];
-}
-
 /** Root pose at fall angle `theta` (radians about world Z). */
 function toppled(theta) {
-  const half = theta / 2;
-  const worldSpin = [0, 0, Math.sin(half), Math.cos(half)];
   const lift = (Math.min(Math.abs(theta), FLAT) / FLAT) * REST_LIFT;
   return {
-    rot: quatMul(worldSpin, restRootRot),
+    rot: qMul(qAbout(AXIS_Z, theta), restRootRot),
     pos: [restRootPos[0], restRootPos[1] + lift, restRootPos[2]],
   };
 }
 
-/** A timeline row holding the standing pose everywhere but the root, which is
- *  driven to `theta`. */
-function fallRow(time, theta) {
+// Once the body is over, the world axes read straight off the corpse: +X runs
+// from head to feet, +Y is up off the ground, and +Z is the kiwi's right (every
+// L_ bone sits at negative Z, every R_ bone at positive). That is what makes
+// these readable as one number each, and why they are applied in WORLD space on
+// top of the topple instead of as local bone tweaks.
+//
+// The wings and legs end up pointing along +X, the axis of the fall itself, so
+// nothing about world X can move them: they splay about world Y. The knees and
+// feet fold in the plane the body fell through, which is world Z. The head is
+// the exception: the topple leaves the bill pointing straight up, so rolling
+// about world X is exactly what drops it onto its side.
+// Slightly different left and right so the corpse does not settle into a
+// symmetrical mannequin.
+const LIMP = [
+  // Wings fall open off the chest.
+  { bone: 'L_Clavicle', axis: AXIS_Y, angle: 0.2 },
+  { bone: 'L_Upperarm', axis: AXIS_Y, angle: 0.62 },
+  { bone: 'L_Forearm', axis: AXIS_Y, angle: 0.45 },
+  { bone: 'R_Clavicle', axis: AXIS_Y, angle: -0.18 },
+  { bone: 'R_Upperarm', axis: AXIS_Y, angle: -0.58 },
+  { bone: 'R_Forearm', axis: AXIS_Y, angle: -0.42 },
+  // Legs fall APART and flat. An earlier pass folded the knees about world Z
+  // instead, which lifts the shins toward the sky: legs in the air is a funny
+  // silhouette but it is a held pose, the opposite of limp. The knees keep only
+  // enough bend to stop the legs reading as a plank.
+  { bone: 'L_Thigh', axis: AXIS_Y, angle: 0.58 },
+  { bone: 'R_Thigh', axis: AXIS_Y, angle: -0.52 },
+  { bone: 'L_Calf', axis: AXIS_Y, angle: 0.26 },
+  { bone: 'R_Calf', axis: AXIS_Y, angle: -0.22 },
+  { bone: 'L_Calf', axis: AXIS_Z, angle: 0.12 },
+  { bone: 'R_Calf', axis: AXIS_Z, angle: 0.09 },
+  // Toes give up last.
+  { bone: 'L_Foot', axis: AXIS_Z, angle: -0.7 },
+  { bone: 'R_Foot', axis: AXIS_Z, angle: -0.62 },
+  // The topple leaves the bill pointing straight up. This rolls the whole neck
+  // until it drops onto its side, which is the whole reason the roll is about
+  // world X rather than anything bone-local.
+  { bone: 'NeckTwist01', axis: AXIS_X, angle: 0.32 },
+  { bone: 'NeckTwist02', axis: AXIS_X, angle: 0.44 },
+  { bone: 'Head', axis: AXIS_X, angle: 0.7 },
+];
+
+/** The whole body at fall angle `theta`, with the limbs `limp` of the way from
+ *  held to slack (0 while it is still standing up on its own). */
+function deathPose(theta, limp) {
+  const pose = new Map(P_stand);
   const { rot, pos } = toppled(theta);
-  return [
-    time,
-    (key) => {
-      if (key === ROOT_ROT) return rot;
-      if (key === ROOT_POS) return pos;
-      return poseValue(P_stand, key, P_all);
-    },
-  ];
+  pose.set(ROOT_ROT, rot);
+  pose.set(ROOT_POS, pos);
+  if (limp > 0) {
+    for (const { bone, axis, angle } of LIMP) worldRotate(pose, bone, axis, angle * limp);
+  }
+  return pose;
 }
+
+function fallRow(time, theta, limp) {
+  const pose = deathPose(theta, limp);
+  return [time, (key) => poseValue(pose, key, P_all)];
+}
+
+// The limbs let go partway through the fall rather than on impact: a body that
+// stays rigid until it lands and only then goes slack reads as two events, not
+// one death. Eased out so the slack arrives early and then just settles.
+const LIMP_FROM = 0.7;
+const LIMP_TO = 1.75;
+const limpAt = (time) =>
+  easeOutCubic(Math.min(1, Math.max(0, (time - LIMP_FROM) / (LIMP_TO - LIMP_FROM))));
+const beat = (time, theta) => fallRow(time, theta, limpAt(time));
 
 // Beat by beat: stand, teeter FORWARD (the comic anticipation), then go over
 // backwards under gravity, bounce once off the ground, settle flat. Two seconds
 // end to end.
-const death = [fallRow(0, 0), fallRow(0.16, -0.1), fallRow(0.34, -0.13)];
+const death = [beat(0, 0), beat(0.16, -0.1), beat(0.34, -0.13)];
 const TIP_FROM = 0.34;
 const TIP_TO = 1.3;
 for (let s = 1; s <= 12; s++) {
   const f = s / 12;
   // Gravity accelerates: ease IN, so the topple starts as a slow tilt and
   // arrives fast. easeInOutQuad would slow it back down right at the impact.
-  death.push(fallRow(TIP_FROM + (TIP_TO - TIP_FROM) * f, -0.13 + (FLAT + 0.13) * f ** 2.1));
+  death.push(beat(TIP_FROM + (TIP_TO - TIP_FROM) * f, -0.13 + (FLAT + 0.13) * f ** 2.1));
 }
-death.push(fallRow(1.42, FLAT - 0.1)); // the bounce off the ground
-death.push(fallRow(1.56, FLAT + 0.012));
-death.push(fallRow(1.72, FLAT - 0.03));
-death.push(fallRow(2.0, FLAT));
+death.push(beat(1.42, FLAT - 0.1)); // the bounce off the ground
+death.push(beat(1.56, FLAT + 0.012));
+death.push(beat(1.72, FLAT - 0.03));
+death.push(beat(2.0, FLAT));
 
 const { animation: deathClip } = bakeClip(doc, {
   clipName: 'Kiwi_Death',
