@@ -1,10 +1,16 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { MEDIA_ASSETS } from '../src/render/assets/manifest.generated';
 import { catBody } from '../src/render/characters/form_visual_selection_core';
 import { VISUALS } from '../src/render/characters/manifest';
+import { CAT_FORM_SWING_SPEED } from '../src/sim/combat/form_swing';
 import { ABILITIES } from '../src/sim/content/classes';
+
+interface GlbAnimation {
+  name?: string;
+  samplers?: { input: number }[];
+}
 
 const publicPath = (url: string): string =>
   fileURLToPath(new URL(`../public/${url.replace(/^\//, '')}`, import.meta.url));
@@ -84,5 +90,79 @@ describe('Kiwi Form ability copy', () => {
   it('does not rename the shaman Shadewolf along with it', () => {
     expect(ABILITIES.ghost_wolf.name).toBe('Shadewolf');
     expect(ABILITIES.ghost_wolf.class).toBe('shaman');
+  });
+});
+
+// The rig arrived from the asset pipeline with a generic `preset:biped:slash`
+// retarget: a 6.6-second arm swing on a body with no arms, which only read as an
+// attack because the VisualDef played it at 6.6x. scripts/build_kiwi_peck_anim.mjs
+// authors a real peck off the rig's own donor poses; these pin that wiring.
+describe('Kiwi Form peck clip', () => {
+  const ANIMS_URL = 'models/creatures/kiwi_form_anims.glb';
+
+  /** Clip names out of a GLB's JSON chunk, dependency-free (the pattern
+   *  tests/character_clipmaps.test.ts uses, so the gate cannot be fooled by
+   *  whatever the runtime loader stack does). */
+  function glbClips(url: string): { names: string[]; meshes: number; durations: number[] } {
+    const buf = readFileSync(publicPath(url));
+    expect(buf.readUInt32LE(0), `${url} magic`).toBe(0x46546c67);
+    let offset = 12;
+    while (offset + 8 <= buf.length) {
+      const length = buf.readUInt32LE(offset);
+      if (buf.readUInt32LE(offset + 4) === 0x4e4f534a) {
+        const json = JSON.parse(buf.toString('utf8', offset + 8, offset + 8 + length));
+        const accessors = json.accessors ?? [];
+        const durations = (json.animations ?? []).map((a: GlbAnimation) =>
+          Math.max(...(a.samplers ?? []).map((s) => accessors[s.input]?.max?.[0] ?? 0), 0),
+        );
+        return {
+          names: (json.animations ?? []).map((a: GlbAnimation) => a.name ?? ''),
+          meshes: (json.meshes ?? []).length,
+          durations,
+        };
+      }
+      offset += 8 + length + ((4 - (length % 4)) % 4);
+    }
+    throw new Error(`${url} has no JSON chunk`);
+  }
+
+  it('ships the authored peck as a mesh-free clip donor', () => {
+    const glb = glbClips(ANIMS_URL);
+    expect(glb.names).toEqual(['Kiwi_Peck', 'Kiwi_Death']);
+    // A clip donor that drags the mesh along would double-draw the body.
+    expect(glb.meshes).toBe(0);
+  });
+
+  it('composes the donor onto the form rig and plays the peck as the attack', () => {
+    expect(VISUALS.form_kiwi?.animUrls).toContain(ANIMS_URL);
+    expect(VISUALS.form_kiwi?.clips.attack).toEqual(['Kiwi_Peck']);
+    // The generic slash is still IN the base GLB; the point is that nothing plays it.
+    expect(VISUALS.form_kiwi?.clips.attack).not.toContain('Attack');
+  });
+
+  it('authors the peck to the feral swing cadence instead of speeding a preset up', () => {
+    const glb = glbClips(ANIMS_URL);
+    const duration = glb.durations[glb.names.indexOf('Kiwi_Peck')];
+    // One peck per swing: it has to finish inside the fixed cadence, and it must
+    // not be the 6.625s generic retarget wearing a new name.
+    expect(duration).toBeGreaterThan(0.5);
+    expect(duration).toBeLessThanOrEqual(CAT_FORM_SWING_SPEED);
+    // With an authored clip the 6.6x speed-up is no longer load-bearing.
+    expect(VISUALS.form_kiwi?.attackTimeScale).toBe(1);
+  });
+});
+
+// The shipped Death was preset:biped:defeat_02, which on this rig never falls:
+// its hand spread and head height sit at their idle values for the whole 8.5s,
+// so the kiwi just stood there. The authored replacement topples it.
+describe('Kiwi Form death fall', () => {
+  it('plays the authored fall, not the preset that never falls', () => {
+    expect(VISUALS.form_kiwi?.clips.death).toBe('Kiwi_Death');
+    expect(VISUALS.form_kiwi?.clips.death).not.toBe('Death');
+  });
+
+  it('is authored at real time, so nothing has to speed it up', () => {
+    // The old preset needed 3x to look like anything; the fall is timed already.
+    expect(VISUALS.form_kiwi?.deathTimeScale).toBe(1);
   });
 });

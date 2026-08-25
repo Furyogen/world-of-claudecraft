@@ -443,6 +443,14 @@ const TRIPO_BIPED_FULL_RIG: ClipMap = {
 const KIWI_FORM: ClipMap = {
   ...TRIPO_BIPED_FULL_RIG,
   hit: ['Hit'],
+  // Two of this rig's generic Tripo presets do not survive contact with a bird,
+  // so the form plays authored replacements (scripts/build_kiwi_form_anims.mjs).
+  // Attack was `preset:biped:slash`, an arm swing on a body with no arms; the
+  // peck drives the bill forward instead. Death was `preset:biped:defeat_02`,
+  // which on this rig never falls at all (hand spread and head height sit at
+  // their idle values for the whole 8.5s); the kiwi now topples onto its back.
+  attack: ['Kiwi_Peck'],
+  death: 'Kiwi_Death',
 };
 
 // The Vineclaw Stalker's own attack (scripts/build_wildheart_stalker_anims.mjs, issue
@@ -1623,15 +1631,19 @@ export const VISUALS: Record<string, VisualDef> = {
   // ships its own brown plumage and has no world mob to be confused with.
   form_kiwi: {
     url: `${CREATURES}/kiwi_form.glb`,
+    // Mesh-free clip donor: the authored peck and death, composed onto the base
+    // rig at load the same way bow_anims.glb rides the hunter.
+    animUrls: [`${CREATURES}/kiwi_form_anims.glb`],
     height: 1.5,
     // Tripo bipeds face +X; character visuals face +Z at world facing 0.
     yaw: -Math.PI / 2,
     clips: KIWI_FORM,
-    // The retargeted presets are authored slow. 6.6 lands the 6.625s Attack on
-    // the fixed 1.0s feral swing cadence (CAT_FORM_SWING_SPEED in sim/combat/form_swing.ts);
-    // 3 matches the death timing every other pipeline biped uses.
-    attackTimeScale: 6.6,
-    deathTimeScale: 3,
+    // Both authored clips run at real time: the peck is 0.95s against the fixed
+    // 1.0s feral swing cadence (CAT_FORM_SWING_SPEED in sim/combat/form_swing.ts)
+    // and the fall is 2s from upright to flat. Neither needs the speed-up the
+    // generic presets took to read at all (the slash played at 6.6x).
+    attackTimeScale: 1,
+    deathTimeScale: 1,
   },
   // Druid Travel Form: a daft chicken-cow hybrid (custom GLB). No tint: its
   // authored cow-spots/comb/beak colours carry the look.
