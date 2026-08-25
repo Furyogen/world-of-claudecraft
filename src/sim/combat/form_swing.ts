@@ -21,7 +21,7 @@ import type { Entity, PlayerClass, WeaponInfo } from '../types';
 // still swings at it.
 export const ROGUE_BASE_SWING_SPEED: number = ITEMS[CLASSES.rogue.startWeapon].weapon?.speed ?? 1.8;
 
-// The classic fast feral paw cadence (seconds). Kiwi Form used to borrow the
+// The classic fast feral cadence (seconds). Kiwi Form used to borrow the
 // rogue baseline (1.8s) while rolling the carried weapon's full authored
 // min..max every swing, which inflated slow big-roll weapons and made the
 // feral feel sluggish; the classic cat cadence is a fixed fast 1.0s.
@@ -64,7 +64,7 @@ export function baseSwingSpeed(e: Entity): number {
 }
 
 // Kiwi Form auto-attacks rescale the carried weapon's per-swing roll to the
-// fixed paw cadence, the same shape as the instant normalization below: the
+// fixed feral cadence, the same shape as the instant normalization below: the
 // roll times CAT_FORM_SWING_SPEED over speed reads as the weapon's authored
 // dps delivered at the cat cadence, so a slow big-roll weapon cannot inflate
 // the fast swings and white DPS is weapon-speed independent.

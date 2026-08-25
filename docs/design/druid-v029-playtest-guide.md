@@ -49,7 +49,7 @@ the AoE chain healers over long pressure windows is a flagged PBE question.
 
 The attacking-live-mob profile (which equips the shared agility dev best-in-slot,
 so it verifies the rotation fires, not the caster-gear DPS the matrix measures)
-produced 3,232 Moonwing damage with 5 chosen payoffs, 5,044 Wolf damage with 10
+produced 3,232 Moonwing damage with 5 chosen payoffs, 5,044 Kiwi damage with 10
 payoffs, and 2,192 Bruin damage with three Marrowbreaks under Craven Roar upkeep.
 Bruin took 139 incoming damage and built 5,741.4 threat during the 30-second
 profile. This is the tank-behavior check, not a claim that Bruin should match a

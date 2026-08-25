@@ -4,7 +4,7 @@
 //
 // This is the classic-era `autoUnshift` behavior, and it is deliberately narrow:
 //
-//   scope      Only the three DRUID forms that lock the caster kit (Bruin, Wolf,
+//   scope      Only the three DRUID forms that lock the caster kit (Bruin, Kiwi,
 //              Fleet: the isResourceShiftFormAuraKind set). The mage Ember Form
 //              (form_fireball) is authored as a hard "cannot attack or cast"
 //              transform and keeps its refusal.

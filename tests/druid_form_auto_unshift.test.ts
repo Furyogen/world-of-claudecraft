@@ -1,5 +1,5 @@
 // Auto-unshift: a druid who presses a healing or damaging spell while wearing
-// Bruin, Wolf, or Fleet Form leaves the form and casts, instead of eating
+// Bruin, Kiwi, or Fleet Form leaves the form and casts, instead of eating
 // "You can't do that while shapeshifted."
 //
 // The behavior spans three seams, so the cases below pin all three: the cast
