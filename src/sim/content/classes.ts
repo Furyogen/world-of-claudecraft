@@ -6435,7 +6435,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   cat_form: {
     id: 'cat_form',
     tooltipOmitEffectLines: true,
-    name: 'Wolf Form',
+    name: 'Kiwi Form',
     class: 'druid',
     learnLevel: 5,
     cost: 30,
@@ -6446,7 +6446,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_cat', value: 0.71, duration: 3600 }],
     description:
-      'Shapeshift into a wolf: agility rises with your level, attack power +8 plus 2 per level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
+      'Shapeshift into a kiwi: agility rises with your level, attack power +8 plus 2 per level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
   },
   prowl: {
     id: 'prowl',
@@ -6465,7 +6465,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // 0.95: stealth at near-full speed is the feral scouting identity; the
     // rogue Duskveil family deliberately keeps its slower 0.5 crawl.
     effects: [{ type: 'selfBuff', kind: 'stealth', value: 0.95, duration: 3600 }],
-    description: 'Enter stealth while in Wolf Form, moving 5% slower. Cannot be used in combat.',
+    description: 'Enter stealth while in Kiwi Form, moving 5% slower. Cannot be used in combat.',
   },
   rake: {
     id: 'rake',
@@ -6496,7 +6496,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      'Flense the enemy for weapon damage plus $d and cause bleeding damage over 18 sec. Awards 1 combo point. Wolf Form only.',
+      'Flense the enemy for weapon damage plus $d and cause bleeding damage over 18 sec. Awards 1 combo point. Kiwi Form only.',
     specNotes: {
       feral: 'Each hit that lands adds 1 Old Blood (max 3).',
     },
@@ -6516,7 +6516,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresForm: 'cat',
     effects: [{ type: 'weaponStrike', bonus: 25 }],
     ranks: [{ rank: 2, level: 18, cost: 45, effects: [{ type: 'weaponStrike', bonus: 55 }] }],
-    description: 'Claw the enemy for weapon damage plus $d. Awards 1 combo point. Wolf Form only.',
+    description: 'Claw the enemy for weapon damage plus $d. Awards 1 combo point. Kiwi Form only.',
     specNotes: {
       feral: 'Each hit that lands adds 1 Old Blood (max 3).',
     },
@@ -6538,7 +6538,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresForm: 'cat',
     effects: [{ type: 'finisherDamage', base: 45, perCombo: 39, variance: 8 }],
     actionReplacement: { abilityId: 'redharvest', auraKind: 'old_blood', minStacks: 3 },
-    description: 'Finishing move that causes $d. Wolf Form only.',
+    description: 'Finishing move that causes $d. Kiwi Form only.',
     specNotes: {
       feral:
         'Each hit that lands adds 1 Old Blood; at 3 Old Blood this button becomes Redharvest, which spends the Old Blood for a stronger strike that also instantly deals all the damage your Flense and Bloodrift would still have dealt, and restores energy.',
@@ -6609,7 +6609,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'nature',
     requiresTarget: false,
     offGcd: true,
-    // A tank cooldown, so it must fire mid-fight in Bruin Form (or Wolf Form)
+    // A tank cooldown, so it must fire mid-fight in Bruin Form (or Kiwi Form)
     // like Primal Reflexes/Primal Surge below, not just pre-cast in caster form.
     usableInForm: true,
     effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 150, duration: 15 }],
@@ -6749,7 +6749,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     offGcd: true,
     requiresForm: 'cat',
     effects: [{ type: 'selfBuff', kind: 'buff_speed', value: 1.5, duration: 15 }],
-    description: 'Sprint forward, increasing movement speed by 50% for 15 sec. Wolf Form only.',
+    description: 'Sprint forward, increasing movement speed by 50% for 15 sec. Kiwi Form only.',
   },
   pounce: {
     id: 'pounce',
@@ -6769,7 +6769,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresStealth: true,
     effects: [{ type: 'stun', duration: 2 }],
     description:
-      'A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Wolf Form only.',
+      'A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Kiwi Form only.',
   },
   insect_swarm: {
     id: 'insect_swarm',
@@ -6788,7 +6788,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   tigers_fury: {
     id: 'tigers_fury',
     tooltipOmitEffectLines: true,
-    name: 'Wolfsblood',
+    name: 'Kiwiblood',
     class: 'druid',
     learnLevel: 20,
     // Free with a 30 energy surge: the classic-era fix for a cooldown top
@@ -6807,7 +6807,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'selfBuff', kind: 'buff_ap', value: 40, duration: 6 },
       { type: 'gainResource', amount: 30 },
     ],
-    description: 'Surges 30 energy and increases attack power by $b for $t sec. Wolf Form only.',
+    description: 'Surges 30 energy and increases attack power by $b for $t sec. Kiwi Form only.',
   },
   rip: {
     id: 'rip',
@@ -6826,7 +6826,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'dot', total: 156, duration: 24, interval: 2, baseTotal: 36, perComboTotal: 24 },
     ],
     description:
-      'Finishing move that makes the target bleed every 2 sec for 24 sec: 36 damage plus 24 per combo point spent (5 combo points: $d total). Wolf Form only.',
+      'Finishing move that makes the target bleed every 2 sec for 24 sec: 36 damage plus 24 per combo point spent (5 combo points: $d total). Kiwi Form only.',
     specNotes: {
       feral: 'The landed hit adds 1 Old Blood (max 3).',
     },
@@ -7707,7 +7707,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     usableInForm: true,
     effects: [{ type: 'feralCharge' }],
     description:
-      'Unleash a primal surge. In Wolf Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)',
+      'Unleash a primal surge. In Kiwi Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)',
   },
   swiftmend: {
     id: 'swiftmend',

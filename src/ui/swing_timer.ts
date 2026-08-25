@@ -66,7 +66,7 @@ export function swingTimerState(
   const swingTimer = player.swingTimer;
   // Recover the full interval on the reset edge (timer jumped up): the freshly
   // reset timer IS the interval, so trust it outright. The equipped weapon's
-  // speed must not floor it (Wolf Form swings a fixed 1.0s on a slow staff, and
+  // speed must not floor it (Kiwi Form swings a fixed 1.0s on a slow staff, and
   // haste shortens any swing below the weapon speed). On first show mid-swing
   // the true interval is unknown, so max(timer, weapon speed) stays the best
   // guess until the first edge corrects it; otherwise carry the previous

@@ -171,6 +171,7 @@ import {
 } from './characters/assets';
 import {
   activeCharacterFormVisual,
+  catSlotVisualKey,
   characterFormMaskForAura,
   characterFormReadyMask,
   characterFormShadowPlan,
@@ -4780,7 +4781,13 @@ export class Renderer {
   private createCharacterVisualWithRetry(
     e: Entity,
     slot: string,
-    formKey?: 'form_sheep' | 'form_bear' | 'form_cat' | 'form_travel' | 'form_metamorph',
+    formKey?:
+      | 'form_sheep'
+      | 'form_bear'
+      | 'form_cat'
+      | 'form_kiwi'
+      | 'form_travel'
+      | 'form_metamorph',
     opts?: AssembleOptions,
   ): CharacterVisual | null {
     const now = performance.now();
@@ -4810,7 +4817,13 @@ export class Renderer {
   private buildFormVisual(
     e: Entity,
     v: EntityView,
-    formKey: 'form_sheep' | 'form_bear' | 'form_cat' | 'form_travel' | 'form_metamorph',
+    formKey:
+      | 'form_sheep'
+      | 'form_bear'
+      | 'form_cat'
+      | 'form_kiwi'
+      | 'form_travel'
+      | 'form_metamorph',
     slot: 'sheepVisual' | 'bearVisual' | 'catVisual' | 'travelVisual' | 'metamorphVisual',
     gateCompile: boolean,
   ): void {
@@ -10944,7 +10957,11 @@ export class Renderer {
       // (build, compile gate and encounter prewarm all live in buildFormVisual)
       if (polyed && !v.sheepVisual) this.buildFormVisual(e, v, 'form_sheep', 'sheepVisual', true);
       if (bear && !v.bearVisual) this.buildFormVisual(e, v, 'form_bear', 'bearVisual', true);
-      if (cat && !v.catVisual) this.buildFormVisual(e, v, 'form_cat', 'catVisual', true);
+      // One slot, two bodies (catSlotVisualKey): the druid feral form wears the
+      // kiwi, the shaman's Shadewolf keeps the wolf.
+      if (cat && !v.catVisual) {
+        this.buildFormVisual(e, v, catSlotVisualKey(ghostWolf), 'catVisual', true);
+      }
       if (travel && !v.travelVisual) {
         this.buildFormVisual(e, v, 'form_travel', 'travelVisual', true);
       }

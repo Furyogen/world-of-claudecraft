@@ -1590,7 +1590,7 @@ describe('druid forms', () => {
     sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
     sim.castAbility('claw');
     const events = sim.tick();
-    expect(events.some((e) => e.type === 'error' && /Wolf Form/.test(e.text))).toBe(true);
+    expect(events.some((e) => e.type === 'error' && /Kiwi Form/.test(e.text))).toBe(true);
     sim.castAbility('cat_form');
     sim.tick();
     let guard = 0;
@@ -1657,7 +1657,7 @@ describe('druid forms', () => {
     sim.player.resource = 100;
     sim.castAbility('claw');
     events = sim.tick();
-    expect(events.some((e) => e.type === 'error' && /Wolf Form/.test(e.text))).toBe(true);
+    expect(events.some((e) => e.type === 'error' && /Kiwi Form/.test(e.text))).toBe(true);
   });
 
   it('bear form learns demoralizing roar at level 10 and lowers nearby mob attack power', () => {

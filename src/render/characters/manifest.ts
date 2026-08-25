@@ -438,6 +438,13 @@ const TRIPO_BIPED_FULL_RIG: ClipMap = {
   jump: 'Jump',
 };
 
+// Druid Kiwi Form (kiwi_form.glb). The same Tripo biped vocabulary, minus the
+// Hit_Stagger variant: this rig's retarget baked the single Hit take only.
+const KIWI_FORM: ClipMap = {
+  ...TRIPO_BIPED_FULL_RIG,
+  hit: ['Hit'],
+};
+
 // The Vineclaw Stalker's own attack (scripts/build_wildheart_stalker_anims.mjs, issue
 // #2889 round 2): TRIPO_BIPED_FULL_RIG's Attack is shared by reference across all 5
 // Wildheart Basin mobs. This clip is baked off wildheart_stalker.glb's own donor poses
@@ -1599,15 +1606,32 @@ export const VISUALS: Record<string, VisualDef> = {
       cast: 'Cast',
     },
   },
-  // Druid Wolf Form AND shaman Shadewolf (ghost_wolf renders this visual with
-  // the ghost material on top). Same custom baked wolf as the world wolves;
-  // the tawny tint keeps the druid form readable against grey pack wolves.
+  // Shaman Shadewolf (ghost_wolf renders this visual with the ghost material on
+  // top). Same custom baked wolf as the world wolves; the tawny tint keeps it
+  // readable against grey pack wolves. The druid feral form shared this def
+  // until it became a kiwi (form_kiwi below); the key still reads form_cat
+  // because the sim's shapeshift aura kind is a closed wire union.
   form_cat: {
     url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
     clips: WOLF_BAKED,
     tint: 0xd08b45,
     tintStrength: 0.35,
+  },
+  // Druid Kiwi Form: the feral body, a chunky flightless kiwi generated through
+  // the asset pipeline (biped rig). No tint, unlike the wolf it replaced: it
+  // ships its own brown plumage and has no world mob to be confused with.
+  form_kiwi: {
+    url: `${CREATURES}/kiwi_form.glb`,
+    height: 1.5,
+    // Tripo bipeds face +X; character visuals face +Z at world facing 0.
+    yaw: -Math.PI / 2,
+    clips: KIWI_FORM,
+    // The retargeted presets are authored slow. 6.6 lands the 6.625s Attack on
+    // the fixed 1.0s feral swing cadence (CAT_FORM_SWING_SPEED in sim/combat/form_swing.ts);
+    // 3 matches the death timing every other pipeline biped uses.
+    attackTimeScale: 6.6,
+    deathTimeScale: 3,
   },
   // Druid Travel Form: a daft chicken-cow hybrid (custom GLB). No tint: its
   // authored cow-spots/comb/beak colours carry the look.

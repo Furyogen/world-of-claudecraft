@@ -311,7 +311,7 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
     }
     maybeProcBattleTrance(ctx, p, meta, connected);
     maybeProcSuddenDeath(ctx, p, meta, connected);
-    // Wolf Form swings at the fixed fast cat cadence, not the carried weapon's
+    // Kiwi Form swings at the fixed fast cat cadence, not the carried weapon's
     // speed (see combat/form_swing.ts); everyone else uses their weapon speed.
     // Melee haste (item sets + Enrage + haste buffs) lives in the ONE additive
     // bucket inside swingIntervalMult (v0.27.1); only the stance-mastery auto
@@ -587,7 +587,7 @@ export function meleeSwing(
   let dmg =
     (ctx.rng.range(weapon.min, weapon.max) * weaponRollMult +
       // Normalize the attack-power contribution to the SAME cadence the swing
-      // fires at: Wolf Form swings at the fixed cat speed (baseSwingSpeed), so
+      // fires at: Kiwi Form swings at the fixed cat speed (baseSwingSpeed), so
       // its AP-per-swing must use that speed too, not the slow staff's, or
       // feral would double-dip (fast swings AND heavy slow-weapon AP weighting).
       (ctx.effectiveAttackPower(attacker) / 14) * apSwingSpeed) *

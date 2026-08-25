@@ -69,6 +69,16 @@ export function characterFormMaskForAura(aura: AuraIdentity): number {
   return 0;
 }
 
+/** The 'cat' slot carries two different BODIES. The druid feral form wears the
+ *  kiwi (form_kiwi); the shaman's Shadewolf keeps the wolf rig the feral form used
+ *  to share (form_cat). The two markers belong to different classes and never
+ *  coexist on one entity, so the ghost-wolf marker decides the whole thing.
+ *  Callers pass the marker the slot was requested WITH, never a stale one: the
+ *  slot is built once per entity and the visual key is fixed at build time. */
+export function catSlotVisualKey(ghostWolf: boolean): 'form_cat' | 'form_kiwi' {
+  return ghostWolf ? 'form_cat' : 'form_kiwi';
+}
+
 export function requestedCharacterForm(mask: number): CharacterFormVisual {
   if (mask & CHARACTER_FORM_FLAG.sheep) return 'sheep';
   if (mask & CHARACTER_FORM_FLAG.bear) return 'bear';

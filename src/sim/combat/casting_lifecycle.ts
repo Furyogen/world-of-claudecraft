@@ -1139,7 +1139,7 @@ export function castAbility(
   if (ability.requiresForm) {
     const need = ability.requiresForm === 'bear' ? 'form_bear' : 'form_cat';
     if (!form || form.kind !== need) {
-      ctx.error(p.id, `You must be in ${ability.requiresForm === 'bear' ? 'Bruin' : 'Wolf'} Form.`);
+      ctx.error(p.id, `You must be in ${ability.requiresForm === 'bear' ? 'Bruin' : 'Kiwi'} Form.`);
       return;
     }
   } else if (form && !isFormToggle(ability) && !ability.usableInForm) {
