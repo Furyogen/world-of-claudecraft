@@ -3,8 +3,8 @@
 Status: proposal. Not implemented. Written against `release/v0.37.0` (package version 0.36.0).
 
 Scope: the Hexcraft (Affliction) Warlock's ability to survive and threaten a Warrior in
-1v1 PvP. Necromancy and Ruination are out of scope by the reporter's own framing and are
-touched only where a change is shared across all three specializations.
+1v1 PvP, plus a separate section on how much of it carries to Ruination (Destruction).
+Necromancy is out of scope.
 
 Everything below cites the shipped content records so a reader can check it:
 `src/sim/content/classes.ts`, `src/sim/content/choice_rows_classic.ts`,
@@ -239,12 +239,16 @@ the sequence which survives and the sequence which threatens stop being mutually
 Following the change protocol in `docs/design/spell-balance-framework.md`.
 
 1. **Add the fixture first and show it failing.** New
-   `tests/warlock_pvp_pressure.test.ts`: a level 20 Hexcraft Warlock in the WARFARE
-   Cinderweave kit against a level 20 Fury Warrior in the Furyforged kit, fixed seed, fixed
-   talent rows on both sides. Record ticks to first Sentence, Condemnation at 3, 5 and 10
-   sec, self-inflicted health as a fraction of maximum over the window, and time to death.
-   Pin the pre-change numbers.
-2. **Change one source of power at a time**, in the order P3, P2, P4, P1, re-running the
+   `tests/warlock_pvp_pressure.test.ts`: a level 20 Warlock in the WARFARE Cinderweave kit
+   against a level 20 Fury Warrior in the Furyforged kit, fixed seed, fixed talent rows on
+   both sides. Two arms, because the two specializations fail differently:
+   - **Hexcraft arm:** ticks to first Sentence, Condemnation at 3, 5 and 10 sec,
+     self-inflicted health as a fraction of maximum over the window, time to death.
+   - **Ruination arm:** ticks to first Ruinbolt, Wrack at 3, 5 and 10 sec, casts started
+     versus casts completed (the interruption and pushback measure that P6 targets), and
+     time to death.
+   Pin the pre-change numbers for both.
+2. **Change one source of power at a time**, in the order P3, P2, P4, P1, P6, re-running the
    fixture between each so the attribution is per-change rather than per-pass.
 3. **Re-run the three required profiles** (sustained 180 sec single target, burst 60 sec
    single target, area 60 sec five targets) for all three Warlock specializations and show
@@ -268,14 +272,136 @@ Following the change protocol in `docs/design/spell-balance-framework.md`.
 | P4's knockback disrupts a tank's threat cone in PvE by scattering mobs | Precedent: Typhoon ships with exactly this property. The 45 sec cooldown is more than twice Typhoon's, and the ability is self-targeted so it fires only when the Warlock is already in melee |
 | P2 raises Hexcraft PvE uptime on movement-heavy encounters | Bounded to 2 casts per 25 sec and paid for laterally: taking it gives up Blacktide and Sacrilegious March. Profile 1 in the validation plan measures it |
 | P1 makes Cruel Pact spammable enough to trivialize Condemnation generation | The 20 sec cooldown and the at-or-below-20%-health lockout are unchanged; only the price moves |
-| Four changes at once make attribution impossible | Step 2 of the validation plan lands them one at a time against the same fixture |
+| P6 makes an instant generator available often enough to devalue the hard cast entirely | It is gated on actually spending the spender (0.4 of the pool), capped at 2 charges in a 30 sec window, and it replaces the mana refund rather than adding to it |
+| P6 changes a shared row, so it moves Necromancy too, which nobody has profiled here | Step 3 already re-runs the three profiles for all three specializations. Necromancy gets the same cadence benefit and no damage change |
+| Five changes at once make attribution impossible | Step 2 of the validation plan lands them one at a time against the same fixture |
+
+## Does this apply to Ruination (Destruction)?
+
+Partly, and not for the reasons that drive the Hexcraft case. Two of the four proposals are
+shared-tree and carry over unchanged. The two that do the most work for Hexcraft are
+Affliction-gated and do nothing for Ruination, which does not have the problem they solve.
+Ruination has a narrower problem of its own, and it needs a fifth change.
+
+### What Ruination does not share
+
+**It is not billed in health.** Cruel Pact carries `specs: ['affliction']`. Ruination's
+resource button is Hard Bargain, which is mana sustain rather than burst entry, and its
+defensive cooldown, Cinderhide, costs nothing at all: instant, free, 25% damage reduction
+for 10 sec. Finding 1 of this document simply does not describe Ruination.
+
+**Its resource floor is not the problem.** Wrack runs 0 to 5. Gloom Bolt and Conflagrate
+each generate 1, and `RUIN_OUT_OF_COMBAT_CAP` regenerates Wrack out of combat to a cap of 3,
+so a Ruination Warlock **opens a fight with 3 of the 5 already banked**. Ruinbolt costs 3.
+The spender is available on the first global cooldown, which is the opposite of Hexcraft's
+situation.
+
+**It has real instant damage.** With Burning Pact already on the target, Conflagrate is
+instant, holds 2 charges, and hits for 118 to 140 each, so 236 to 280 damage lands in two
+global cooldowns with no cast bar at all. Ruinous Brand then copies 50% of resolved direct
+damage for 15 sec. Hexcraft has nothing comparable.
+
+### What Ruination does share, and where it is worse
+
+**The stand-still problem, in a heavier form.** Ruination's generator is Gloom Bolt at rank 4:
+a 3.0 sec base cast, 2.91 sec after the destruction baseline's `castPct: -0.03`. That is the
+longest cast in the Warlock kit. Hexcraft's Needle is 1.5 sec, or 1.0 sec under Possess the
+Evil Eye.
+
+| Spec | Generator cast | Sustained loop to one spender | Longest single exposure |
+|---|---:|---|---:|
+| Hexcraft | 1.5 sec (1.0 under Possession) | 8 Needles for 50 Condemnation, 12.0 sec | 1.5 sec |
+| Ruination | 2.91 sec | 3 Gloom Bolts plus Ruinbolt, about 11.2 sec | **2.91 sec** |
+
+Against Jawcrack (interrupt, 4 sec school lockout, 10 sec cooldown) a 2.91 sec cast is the
+most interruptible action in the game. Ruination's one structural defence here is that its
+kit is split across two schools, Shadow (Gloom Bolt, Duskfire) and Fire (Burning Pact,
+Conflagrate, Ruinbolt, Rain of Fire), so a single school lockout never shuts off the whole
+kit. Hexcraft, being almost entirely Shadow, has no such split.
+
+**No mobile casting at all.** Hexcraft at least has Possess the Evil Eye, which makes Consume
+channelable while moving for 15 sec on a 45 sec cooldown. Ruination has no equivalent on any
+ability. Row 5 is its only possible source, and none of the three current options provides it.
+
+**The same row 8 forced choice**, the same absent peel, and the same Ashen Focus problem in
+row 17. Ashen Focus is in fact worse for Ruination: it is the largest absolute gain in the
+class (2.91 sec down to 2.33 sec) and it resets on any movement over 0.001 yd, so the spec
+with the longest casts is the one most strongly rewarded for standing still.
+
+**A stronger defensive cooldown on a much rarer clock.** Cinderhide is 25% for 10 sec on a
+**120 sec** cooldown. Vicarious Suffering is 20% for 8 sec on 30 sec. Over a battleground,
+Ruination is covered for roughly one engagement in four.
+
+**A dead execute.** Duskfire has `executeThreshold: 0.2` and is refused above 20% target
+health. In a matchup the Warlock is losing, the opponent rarely reaches 20%, so a slot on the
+bar is inert for the whole fight.
+
+### Verdict on each proposal
+
+| Proposal | Applies to Ruination | Why |
+|---|---|---|
+| P1, Blood Credit halves Cruel Pact | **No** | Cruel Pact is Affliction-gated, and mana is not the constraint in a short fight |
+| P2, row 5 cast-while-moving | **Yes, and it matters more** | Shared tree, and Ruination has no mobile casting from any source. Two mobile casts of a 2.91 sec Gloom Bolt is a larger concession than two mobile Needles |
+| P3, Evil Eye slows its bearer | **No** | Affliction-only mechanic |
+| P4, Sanguine Covenant knockback | **Yes, in full** | Shared tree, row 11, and Ruination wants the peel for the same reason |
+
+### P6: Shadow Credit grants an instant generator, not a free one
+
+This is the Ruination-facing change, and it repairs row 14 for all three specializations at
+once.
+
+Row 14 is the resource-behavior row, and today **all three of its options are mana economy**:
+Deepened Hex (generator costs 25% less), Blood Credit (more mana per health), and Shadow
+Credit. Shadow Credit's aura kind is `next_cast_free` (`grantShadowCredit` in
+`src/sim/combat/warlock_talents.ts`), so spending Wrack refunds the mana on the next
+generator and nothing else. Under melee pressure mana is never what kills a Warlock, so the
+entire row is inert in the matchup this document is about.
+
+> **Shadow Credit:** Each time you spend at least 40% of your specialization resource, your
+> next generator is **instant**. Spending at least 80% at once grants 2. Separate triggers
+> can accumulate up to 2 charges.
+
+One-word change at the aura kind: `next_cast_free` becomes `next_cast_instant`. Both kinds
+already ship and are already consumed by the same `empower_next` matcher, so the charges, the
+30 sec window, and the `SHADOW_CREDIT_GENERATORS` filter are all unchanged. The option id
+`wlk_r14_shadow_mastery` is preserved.
+
+What it buys: Ruinbolt spends 3 of 5 Wrack, a fraction of 0.6, which grants 1 charge. So
+every Ruinbolt hands Ruination one instant 2.91 sec Gloom Bolt. Hexcraft gets the same
+benefit through Sentence, and Necromancy through its own spender. This is squarely inside
+row 14's stated rule, "changes cadence or reliability, never resource plus damage": it moves
+cadence and adds no damage.
+
+Row 14 then reads as three genuinely different jobs: mana (Deepened Hex), health price
+(Blood Credit, per P1), and cadence (Shadow Credit).
+
+### Alternative considered and not proposed
+
+Letting Desolation shorten Gloom Bolt as well as Ruinbolt (`destructionCastTimeMult` only
+tests `chaos_bolt` today) would cut the generator to 2.04 sec after each Conflagrate. It is a
+smaller change than P6 and it is Ruination-only, but it deepens the spec's dependence on
+Burning Pact being up, which is already the gate on its whole instant package. P6 is the
+better lever because it fixes a dead row rather than adding a fourth conditional to a
+conditional chain.
+
+### Evidence caveat for this section
+
+The Parses service reports winrates per class, not per specialization, so there is **no
+Ruination-specific winrate** to cite and I am not going to imply one. The census spec split
+(2026-08-24) is Affliction 152, Necromancy 143, Ruination 135, which is close to even and
+shows no abandonment signal. The one suggestive number is progression depth: peak vlevel
+reaches 52 on Affliction and 50 on Fury Warrior, but only 32 on Ruination. That is a single
+player at each peak and prestige-adjusted, so treat it as a hint worth measuring, not as
+evidence. The fixture in the validation plan should be run for Ruination as its own arm.
 
 ## Appendix: the reporter's five asks, mapped
 
+Hexcraft unless noted.
+
 | Ask | Answered by | Fully or partly |
 |---|---|---|
-| Cast while moving | P2 (Grave Rhythm) | Partly: 2 casts per 25 sec, not unconditional |
+| Cast while moving | P2 (Grave Rhythm), plus P6 for the instant generator | Partly: 2 casts per 25 sec, not unconditional. Both apply to Ruination |
 | Mobility, a blink or similar | Not proposed | Umbral Anchor stays the Warlock's answer. A blink would duplicate the Mage's identity; P4 provides the distance instead |
 | Slow enemies | P3 (Evil Eye), and row 8's Leaden Hex is unchanged | Fully, at a deliberately low value |
-| Resources without sacrificing health | P1 (Blood Credit) | Partly: halved, not removed. The pact costing health is the specialization's identity |
-| Knock the Warrior back several meters | P4 (Sanguine Covenant) | Fully: 6 yd plus a 50% slow for 4 sec |
+| Resources without sacrificing health | P1 (Blood Credit) | Partly: halved, not removed. The pact costing health is the specialization's identity. Not applicable to Ruination, which is not billed in health |
+| Knock the Warrior back several meters | P4 (Sanguine Covenant) | Fully: 6 yd plus a 50% slow for 4 sec. Applies to Ruination unchanged |
