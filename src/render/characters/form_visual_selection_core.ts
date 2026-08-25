@@ -15,6 +15,18 @@ export const CHARACTER_FORM_READY = {
   metamorph: 1 << 4,
 } as const;
 
+/** The visual keys a form slot can build. Named once here rather than spelled
+ *  out at each call site, so adding a body does not thread a six-arm union
+ *  through the renderer coordinator. Distinct from CharacterFormVisual below,
+ *  which is the SLOT (the cat slot builds either form_cat or form_kiwi). */
+export type CharacterFormVisualKey =
+  | 'form_sheep'
+  | 'form_bear'
+  | 'form_cat'
+  | 'form_kiwi'
+  | 'form_travel'
+  | 'form_metamorph';
+
 export type CharacterFormVisual =
   | 'base'
   | 'sheep'
@@ -75,7 +87,7 @@ export function characterFormMaskForAura(aura: AuraIdentity): number {
  *  coexist on one entity, so the ghost-wolf marker decides the whole thing.
  *  Callers pass the marker the slot was requested WITH, never a stale one: the
  *  slot is built once per entity and the visual key is fixed at build time. */
-export function catSlotVisualKey(ghostWolf: boolean): 'form_cat' | 'form_kiwi' {
+export function catBody(ghostWolf: boolean): 'form_cat' | 'form_kiwi' {
   return ghostWolf ? 'form_cat' : 'form_kiwi';
 }
 

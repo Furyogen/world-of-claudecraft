@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { MEDIA_ASSETS } from '../src/render/assets/manifest.generated';
-import { catSlotVisualKey } from '../src/render/characters/form_visual_selection_core';
+import { catBody } from '../src/render/characters/form_visual_selection_core';
 import { VISUALS } from '../src/render/characters/manifest';
 import { ABILITIES } from '../src/sim/content/classes';
 
@@ -46,8 +46,8 @@ describe('Druid Kiwi Form body', () => {
 
 describe('cat slot body selection', () => {
   it('gives the druid feral form the kiwi and the Shadewolf the wolf', () => {
-    expect(catSlotVisualKey(false)).toBe('form_kiwi');
-    expect(catSlotVisualKey(true)).toBe('form_cat');
+    expect(catBody(false)).toBe('form_kiwi');
+    expect(catBody(true)).toBe('form_cat');
   });
 });
 
