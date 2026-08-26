@@ -110,7 +110,11 @@ export const MOUNTS: Record<MountKey, MountDef> = {
   // the ladder would be pay-to-win rather than cosmetic.
   seeker_board: {
     key: 'seeker_board',
-    name: 'Seeker Seeker',
+    // Neutral: tests/architecture.test.ts forbids the brand in every src/sim
+    // file, and the WIKI generator reads this raw name straight onto a public
+    // page, so it cannot be a placeholder. In-game surfaces resolve through
+    // MOUNT_NAME_KEYS, where the brand lives.
+    name: 'Seeker Board',
     rarity: 'epic',
     moveSpeedPct: 0.8,
   },

@@ -1360,7 +1360,7 @@ export const ru_RU: EnTranslations = {
       "desc_thunderstrut_gobbler": "Исполинский индюк, рожденный бурей: он важно спускается с Пробуждающегося пика, распустив хвост, словно грозовой фронт.",
       "desc_terrorspark_groundshaker": "Компактная бронированная машина с тяжёлыми гусеницами, крупнокалиберной пушкой и седлом для бесстрашных пилотов.",
       "desc_drakemaw_raptor": "Приученный к седлу выводковый раптор из кальдеры Дрейкмо: сплошные жилы и бег, и от него всё ещё едва пахнет пеплом.",
-      "desc_seeker_board": "A Seeker handset rebuilt as a hover board, riding a cushion of its own exhaust on a ribbon of light."
+      "desc_seeker_board": "Смартфон Seeker, переделанный в ховерборд: скользит на подушке собственных выхлопов, оставляя ленту света."
     },
     "mountTraining": {
       "mountPrompt": "Нажми {key}, чтобы оседлать учебного Доблестного скакуна.",
@@ -13651,7 +13651,7 @@ export const ru_RU: EnTranslations = {
         "name": "Поводья Громоступа, великого индюка"
       },
       "reins_seeker_board": {
-        "name": "Genesis Key: Solana Seeker"
+        "name": "Ключ Генезиса: Solana Seeker"
       }
     },
     "mobs": {

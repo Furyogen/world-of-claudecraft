@@ -2376,6 +2376,15 @@ const SOURCE_PENDING_RULING: Readonly<Record<string, readonly string[]>> = {
   // seeker_board: promotional, claimed against a Solana Mobile Seeker
   // Genesis Token (issue #3628). The claim flow is separate work, so no
   // in-game table awards it and there is no door to name here yet.
+  // seeker_board: promotional, claimed against a Seeker Genesis Token (issue
+  // #3628). The claim flow is separate work, so no in-game table awards it and
+  // there is no door to name here yet.
+  //
+  // CURATOR NOTE: this is the THIRD permanently unearnable slot on the
+  // horizons_mounts shelf, so the pinned "full" pair below is now three above
+  // what any player can actually reach. Not a defect (Curator ranks are
+  // thresholds, not completion), but the gap is deliberate and worth stating
+  // before a fourth one makes it look like drift.
   horizons_mounts: ['drakemaw_raptor', 'terrorspark_groundshaker', 'seeker_board'],
   // masterwork:engineering: unearnable, QA ruling 2026-08-07. Every live
   // engineering recipe produces a slotless, statless tool, masterworkBonusStats

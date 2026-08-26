@@ -40,36 +40,16 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
-  "zh_CN": [
-    "entities.items.reins_seeker_board.name",
-    "hudChrome.mounts.desc_seeker_board",
-    "hudChrome.mounts.name_seeker_board"
-  ],
-  "zh_TW": [
-    "entities.items.reins_seeker_board.name",
-    "hudChrome.mounts.desc_seeker_board",
-    "hudChrome.mounts.name_seeker_board"
-  ],
-  "ko_KR": [
-    "entities.items.reins_seeker_board.name",
-    "hudChrome.mounts.desc_seeker_board",
-    "hudChrome.mounts.name_seeker_board"
-  ],
-  "ja_JP": [
-    "entities.items.reins_seeker_board.name",
-    "hudChrome.mounts.desc_seeker_board",
-    "hudChrome.mounts.name_seeker_board"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
-  "ru_RU": [
-    "entities.items.reins_seeker_board.name",
-    "hudChrome.mounts.desc_seeker_board",
-    "hudChrome.mounts.name_seeker_board"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",

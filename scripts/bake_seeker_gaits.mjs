@@ -25,6 +25,7 @@
 //
 //   node scripts/bake_seeker_gaits.mjs --in <src.glb> --out <dst.glb>
 
+import { dedup, prune, resample } from '@gltf-transform/functions';
 import { createGlbIO, indexClip, poseValue, samplePose } from './anim/pose_blend.mjs';
 
 const RATE = 30; // keys per second for the authored clips
@@ -195,6 +196,13 @@ function bake(name, seconds, poseAt) {
         if (!v) throw new Error(`no value for ${key} at frame ${i}`);
         for (let c = 0; c < size; c++) out[i * size + c] = v[c];
       }
+      // A channel that never leaves the bone's REST value is pure cost: the
+      // mixer evaluates every channel per visible rider per frame, and the
+      // node already holds that transform. Only skip when it matches rest,
+      // never merely because it is constant, or a bone posed once and held
+      // would snap back.
+      const rest = REST.get(key);
+      if (rest && isConstant(out, size) && matches(out, rest, size)) continue;
       const output = doc
         .createAccessor(`${name}_${bone}_${path}`)
         .setArray(out)
@@ -226,11 +234,57 @@ function bake(name, seconds, poseAt) {
   );
 }
 
+const EPS = 1e-6;
+/** Every frame of a channel equal to its first. */
+function isConstant(out, size) {
+  for (let i = size; i < out.length; i++) {
+    if (Math.abs(out[i] - out[i % size]) > EPS) return false;
+  }
+  return true;
+}
+/** A channel's (constant) value equal to the bone's rest transform. */
+function matches(out, rest, size) {
+  for (let c = 0; c < size; c++) {
+    if (Math.abs(out[c] - rest[c]) > EPS) return false;
+  }
+  return true;
+}
+
+/** Total animation keys and channels, so the optimiser has a stated effect
+ *  rather than an assumed one. */
+function countKeys(r) {
+  let keys = 0;
+  let channels = 0;
+  for (const anim of r.listAnimations()) {
+    channels += anim.listChannels().length;
+    for (const sampler of anim.listSamplers()) {
+      keys += sampler.getInput()?.getCount() ?? 0;
+    }
+  }
+  return { keys, channels };
+}
+
 for (const existing of root.listAnimations()) {
   if (existing.getName() === 'Run' || existing.getName() === 'Death') existing.dispose();
 }
 bake('Run', walkDur, runPose);
 bake('Death', DEATH_SECONDS, deathPose);
+
+// Optimise before writing. The bake authors one LINEAR sampler per bone per
+// path at RATE for every channel the source drives, which is honest but very
+// wasteful: most tracks never change (Run and Walk move ten of forty-eight),
+// and the mixer evaluates every track per visible rider per frame.
+//
+// resample collapses runs of equal keys, prune drops the tracks that are
+// constant outright, dedup shares what repeats. Same lane the rigged-model
+// assembler uses (scripts/asset_pipeline/lib/glb.mjs): no meshopt, no
+// simplify, no join, because those are for statics and would fight the skin.
+const before = countKeys(root);
+await doc.transform(resample(), prune(), dedup());
+const after = countKeys(root);
+console.log(
+  `keys ${before.keys} -> ${after.keys} across ${before.channels} -> ${after.channels} channels`,
+);
 
 await io.write(dst, doc);
 console.log(`wrote ${dst}`);

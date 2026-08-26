@@ -1360,7 +1360,7 @@ export const zh_CN: EnTranslations = {
       "desc_thunderstrut_gobbler": "一只风暴所生的庞然大火鸡，从觉醒之峰昂首阔步而下，尾羽如雷云般展开。",
       "desc_terrorspark_groundshaker": "一台紧凑的装甲机械，配备重型履带、大口径火炮，以及为无畏驾驶员打造的鞍座。",
       "desc_drakemaw_raptor": "来自龙喉火山口的驯服巢生迅猛龙，浑身筋肉、疾若奔雷，身上仍带着淡淡的灰烬气味。",
-      "desc_seeker_board": "A Seeker handset rebuilt as a hover board, riding a cushion of its own exhaust on a ribbon of light."
+      "desc_seeker_board": "一部改装成悬浮滑板的 Seeker 手机，乘着自身尾焰的气垫，拖出一道光带。"
     },
     "mountTraining": {
       "mountPrompt": "按 {key} 键骑上训练用英勇战马。",
@@ -13651,7 +13651,7 @@ export const zh_CN: EnTranslations = {
         "name": "雷霆阔步大火鸡的缰绳"
       },
       "reins_seeker_board": {
-        "name": "Genesis Key: Solana Seeker"
+        "name": "创世钥匙：Solana Seeker"
       }
     },
     "mobs": {

@@ -327,14 +327,18 @@ describe('mount reins items (the collection: owning the item is owning the mount
     }
   });
 
-  it('keeps the tank developer-only and absent from every normal acquisition table', () => {
-    const itemId = 'reins_terrorspark_groundshaker';
+  // Every reins that content awards through NO table has to be absent from all
+  // of them, not just the tank: items.ts makes that claim for each one, and
+  // before this the vendor / delve / market / quest half only ran for the tank.
+  const SOURCELESS = [
+    'reins_terrorspark_groundshaker',
+    'reins_drakemaw_raptor',
+    'reins_seeker_board',
+  ];
+  it.each(SOURCELESS)('keeps %s absent from every normal acquisition table', (itemId) => {
     const item = ITEMS[itemId] as MountItemDef;
     expect(item).toMatchObject({
       kind: 'mount',
-      mount: 'terrorspark_groundshaker',
-      quality: 'epic',
-      soulbound: true,
       noDiscard: true,
       sellValue: 0,
     });

@@ -1360,7 +1360,7 @@ export const ko_KR: EnTranslations = {
       "desc_thunderstrut_gobbler": "깨어나는 봉우리에서 꼬리깃을 뇌운처럼 펼친 채 활보하며 내려오는, 폭풍이 낳은 거대한 칠면조입니다.",
       "desc_terrorspark_groundshaker": "묵직한 궤도와 대구경 포, 겁 없는 조종사를 위한 안장을 갖춘 소형 장갑 기계입니다.",
       "desc_drakemaw_raptor": "화산구 칼데라에서 길들여진 둥지 태생 랩터. 온몸이 힘줄과 질주로 이루어졌으며, 아직도 희미한 재 냄새가 난다.",
-      "desc_seeker_board": "A Seeker handset rebuilt as a hover board, riding a cushion of its own exhaust on a ribbon of light."
+      "desc_seeker_board": "호버보드로 개조된 Seeker 단말기. 자체 배기의 쿠션을 타고 빛의 띠를 남기며 나아간다."
     },
     "mountTraining": {
       "mountPrompt": "{key} 키를 눌러 훈련용 발러스티드에 탑승한다.",
@@ -13651,7 +13651,7 @@ export const ko_KR: EnTranslations = {
         "name": "천둥활보 대왕 칠면조의 고삐"
       },
       "reins_seeker_board": {
-        "name": "Genesis Key: Solana Seeker"
+        "name": "제네시스 키: Solana Seeker"
       }
     },
     "mobs": {

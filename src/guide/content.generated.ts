@@ -6547,7 +6547,7 @@ export const GUIDE_RELIQUARY: GuideReliquaryPage[] = [
       },
       {
         "kind": "mount",
-        "name": "Seeker Seeker"
+        "name": "Seeker Board"
       }
     ]
   },

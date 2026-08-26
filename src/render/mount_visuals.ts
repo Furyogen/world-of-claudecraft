@@ -107,6 +107,24 @@ export function mountVisualSpec(mountKey: string): MountVisualSpec | null {
   return mountKey in MOUNTS ? MOUNT_VISUAL_SPECS[mountKey as MountKey] : null;
 }
 
+/** The two pose holds a mount imposes on its rider, decided from the mount
+ *  alone.
+ *
+ *  Pure on purpose: the renderer needs none of its own state to answer this
+ *  (the lift is already resolved), and keeping it here means the headline
+ *  behaviour has a test that does not have to drive a renderer.
+ *
+ *  `holdCast` is deliberately NOT the same thing as casting: see
+ *  AnimState.poseHoldCast for what reusing that flag costs. */
+export function riderPoseFlags(
+  mountKey: string,
+  riderMounted: boolean,
+): { holdCast: boolean; holdSit: boolean } {
+  if (!riderMounted) return { holdCast: false, holdSit: false };
+  const pose = mountRidePose(mountKey);
+  return { holdCast: pose === 'channel', holdSit: pose === 'sit' };
+}
+
 /** How a rider is posed on this mount. Unknown or dismounted reads as `sit`,
  *  which is what every mount but the board does. */
 export function mountRidePose(mountKey: string): 'sit' | 'stand' | 'channel' {
