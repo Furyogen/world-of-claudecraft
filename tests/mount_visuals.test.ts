@@ -46,10 +46,14 @@ describe('mount visual specs cover the sim catalog', () => {
       const def = VISUALS[spec.visualKey];
       expect(spec.seat, `${key} seat`).toBeGreaterThan(0.5);
       if (STAND_ON.has(key)) {
+        // A standing rider is lifted by their FEET, so the seat has to land on
+        // the deck crown itself: above it and they hover, below and they sink
+        // through the board.
         const crown = (def.hover ?? 0) + def.height;
-        expect(spec.seat, `${key} seat below its deck`).toBeGreaterThan(crown);
-        expect(spec.seat, `${key} rider floating off its deck`).toBeLessThan(crown + 0.45);
+        expect(spec.stand, `${key} must be flagged stand`).toBe(true);
+        expect(Math.abs(spec.seat - crown), `${key} feet off its deck`).toBeLessThan(0.08);
       } else {
+        expect(spec.stand, `${key} must stay a seated mount`).toBe(false);
         expect(spec.seat, `${key} seat above its own crown`).toBeLessThan(def.height);
       }
     }

@@ -31,6 +31,13 @@ export interface MountVisualSpec {
   /** Ambient particle effect the renderer emits for this mount: the snail's
    *  slime path while moving, the hover cycle's aether exhaust. */
   fx: 'slime' | 'exhaust' | null;
+  /** The rider STANDS on this mount instead of sitting in a saddle. Every
+   *  animal and vehicle here is sat on, so the renderer holds a mounted rider
+   *  in the seated pose; a board is ridden upright, and forcing the sit loop
+   *  on one puts the player cross-legged on a hover deck. When this is set,
+   *  `seat` is the DECK TOP rather than a saddle height, because the lift has
+   *  to land the feet rather than the hips. */
+  stand: boolean;
 }
 
 const spec = (
@@ -40,6 +47,7 @@ const spec = (
   bob?: { amp: number; hz: number; idle?: boolean; shape?: 'hover' | 'hop' },
   seatFwd = 0,
   fx: 'slime' | 'exhaust' | null = null,
+  stand = false,
 ): MountVisualSpec => ({
   visualKey,
   seat,
@@ -50,6 +58,7 @@ const spec = (
   bobIdle: bob?.idle ?? false,
   bobShape: bob?.shape ?? 'hop',
   fx,
+  stand,
 });
 
 export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
@@ -59,12 +68,12 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   valorsteed: spec('mount_valorsteed', 2.4, true, undefined, 0.15),
   grag_bear: spec('mount_grag_bear', 3.35, true, undefined, -0.8),
   stalkglider_snail: spec('mount_stalkglider_snail', 2.65, false, undefined, -0.3, 'slime'),
-  // Seat is the deck top: hover (0.35) plus the rig's own Seat bone at
-  // 0.331 scaled by 0.39/0.19, so the rider sits ON the board rather than
-  // inside it. No procedural bob and no exhaust fx: unlike the clipless
-  // hover cycle this rig is animated, and it ships its own trail and
-  // exhaust-cloud meshes, so both would double up.
-  seeker_board: spec('mount_seeker_board', 1.03, true),
+  // Ridden STANDING, so `seat` is the deck top rather than a saddle height:
+  // hover (0.35) plus the deck itself (0.39), which is where the feet land.
+  // No procedural bob and no exhaust fx: unlike the clipless hover cycle this
+  // rig is animated, and it ships its own trail and exhaust-cloud meshes, so
+  // both would double up.
+  seeker_board: spec('mount_seeker_board', 0.74, true, undefined, 0, null, true),
   aether_hover_cycle: spec(
     'mount_aether_hover_cycle',
     2.1,
@@ -92,6 +101,11 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
 /** Spec for an entity's active mountKey, or null when dismounted/unknown. */
 export function mountVisualSpec(mountKey: string): MountVisualSpec | null {
   return mountKey in MOUNTS ? MOUNT_VISUAL_SPECS[mountKey as MountKey] : null;
+}
+
+/** Whether the rider stands on this mount rather than sitting in a saddle. */
+export function mountRiderStands(mountKey: string): boolean {
+  return mountVisualSpec(mountKey)?.stand === true;
 }
 
 /** World-unit rider lift for the active mountKey ('' or unknown: 0). */

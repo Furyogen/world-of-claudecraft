@@ -409,7 +409,7 @@ import {
   stageMountPrewarmVisual,
   stageResidentMountPrewarmVisual,
 } from './mount_prewarm';
-import { mountBobY, mountVisualSpec } from './mount_visuals';
+import { mountBobY, mountRiderStands, mountVisualSpec } from './mount_visuals';
 import { NameplatePainter } from './nameplate_painter';
 import {
   isProjectedNameplateAnchorVisible,
@@ -11319,9 +11319,13 @@ export class Renderer {
       // A mounted rider holds the seated pose (the sit loop reads as riding);
       // swim/cast still outrank it in desiredBaseState, so mounted casting
       // and swimming animate normally.
+      // A board is ridden upright: holding the sit loop on one would put the
+      // player cross-legged on a hover deck. Only the lift and the airborne
+      // hold above are shared; the pose is not.
+      const riderStands = riderMounted && mountRiderStands(e.mountKey);
       st.sitting =
         e.kind === 'player' &&
-        (e.sitting || e.eating !== null || e.drinking !== null || riderMounted);
+        (e.sitting || e.eating !== null || e.drinking !== null || (riderMounted && !riderStands));
       // Ice slide: the sim glides the player at speed but they should read as
       // FROZEN (gliding stiff on the ice), not sprinting. Suppress locomotion +
       // airborne so the state machine holds the static idle pose while they slide.
