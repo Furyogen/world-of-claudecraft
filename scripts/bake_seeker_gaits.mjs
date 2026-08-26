@@ -18,15 +18,19 @@
 // The difference is that this rig's authored clips are good, so only the gaps
 // are filled.
 //
+// The INPUT is the supplied source art (reins_solana_seeker.glb), which is not
+// committed: raw packs never are, per the note at the foot of CREDITS.md. Only
+// the baked result under public/models/mounts/ ships. Point --in at the source
+// when the art is revised; the output path is the shipped asset.
+//
 //   node scripts/bake_seeker_gaits.mjs --in <src.glb> --out <dst.glb>
 
 import { createGlbIO, indexClip, poseValue, samplePose } from './anim/pose_blend.mjs';
 
 const RATE = 30; // keys per second for the authored clips
 
-// The board reads as one flexing plank from tail to nose; the trail is a chain
-// of five bones behind it, and the cloud is the exhaust puff under the deck.
-const BOARD = ['Board_Tail', 'Board_MidBack', 'Board_MidFront', 'Board_Nose'];
+// The trail is a chain of five bones behind the deck; the cloud is the exhaust
+// puff under it. Both are scaled rather than posed, so thrust reads as volume.
 const TRAIL = ['Trail_1', 'Trail_2', 'Trail_3', 'Trail_4', 'Trail_5'];
 const CLOUD = ['Cloud_Tail', 'Cloud_MidBack', 'Cloud_MidFront', 'Cloud_Nose'];
 
@@ -71,7 +75,7 @@ const nodeByName = new Map(root.listNodes().map((n) => [n.getName(), n]));
 
 const have = root.listAnimations().map((a) => a.getName());
 for (const need of ['Idle', 'Walk']) {
-  if (!have.includes(need)) throw new Error('source is missing the ' + need + ' clip');
+  if (!have.includes(need)) throw new Error(`source is missing the ${need} clip`);
 }
 
 const walkIdx = indexClip(root, 'Walk');
@@ -106,19 +110,19 @@ const DECK_Y = 0.15;
 
 /** Post-multiply a local rotation onto whatever the pose already holds. */
 function addPitch(pose, bone, angle) {
-  const key = bone + '|rotation';
+  const key = `${bone}|rotation`;
   const cur = poseValue(pose, key, REST) ?? [0, 0, 0, 1];
   pose.set(key, qMul(cur, qAbout(Z, angle)));
 }
 
 function scaleBone(pose, bone, factor) {
-  const key = bone + '|scale';
+  const key = `${bone}|scale`;
   const cur = poseValue(pose, key, REST) ?? [1, 1, 1];
   pose.set(key, [cur[0] * factor, cur[1] * factor, cur[2] * factor]);
 }
 
 function shiftY(pose, bone, dy) {
-  const key = bone + '|translation';
+  const key = `${bone}|translation`;
   const cur = poseValue(pose, key, REST) ?? [0, 0, 0];
   pose.set(key, [cur[0], cur[1] + dy, cur[2]]);
 }
@@ -134,7 +138,9 @@ function runPose(t) {
   // rather than rigid. Small, because these are separate planks.
   addPitch(pose, 'Board_Nose', -0.05);
   addPitch(pose, 'Board_Tail', 0.04);
-  TRAIL.forEach((bone, i) => scaleBone(pose, bone, 1.15 + 0.09 * i));
+  TRAIL.forEach((bone, i) => {
+    scaleBone(pose, bone, 1.15 + 0.09 * i);
+  });
   for (const bone of CLOUD) scaleBone(pose, bone, 1.18);
   return pose;
 }
@@ -166,7 +172,7 @@ function bake(name, seconds, poseAt) {
   const times = [];
   for (let i = 0; i <= frames; i++) times.push((i / frames) * seconds);
   const input = doc
-    .createAccessor(name + '_time')
+    .createAccessor(`${name}_time`)
     .setArray(new Float32Array(times))
     .setType('SCALAR');
 
@@ -181,16 +187,16 @@ function bake(name, seconds, poseAt) {
   const poses = times.map((t) => poseAt(t / seconds));
   for (const [bone, paths] of byBone) {
     for (const path of paths) {
-      const key = bone + '|' + path;
+      const key = `${bone}|${path}`;
       const size = path === 'rotation' ? 4 : 3;
       const out = new Float32Array(poses.length * size);
       for (let i = 0; i < poses.length; i++) {
         const v = poseValue(poses[i], key, REST);
-        if (!v) throw new Error('no value for ' + key + ' at frame ' + i);
+        if (!v) throw new Error(`no value for ${key} at frame ${i}`);
         for (let c = 0; c < size; c++) out[i * size + c] = v[c];
       }
       const output = doc
-        .createAccessor(name + '_' + bone + '_' + path)
+        .createAccessor(`${name}_${bone}_${path}`)
         .setArray(out)
         .setType(path === 'rotation' ? 'VEC4' : 'VEC3');
       const sampler = doc
@@ -227,7 +233,7 @@ bake('Run', walkDur, runPose);
 bake('Death', DEATH_SECONDS, deathPose);
 
 await io.write(dst, doc);
-console.log('wrote ' + dst);
+console.log(`wrote ${dst}`);
 console.log(
   'clips: ' +
     root

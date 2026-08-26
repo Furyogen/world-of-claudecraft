@@ -34,9 +34,9 @@ try {
   for (const [key, render] of Object.entries(TAKES)) {
     const buf = normalise(render());
     const duration = buf.length / RATE;
-    const source = path.join(scratch, key + '.wav');
+    const source = path.join(scratch, `${key}.wav`);
     writeFileSync(source, wav32(buf));
-    const outputFile = path.join(OUT_DIR, key + '.mp3');
+    const outputFile = path.join(OUT_DIR, `${key}.mp3`);
     conformSfxAudio({
       inputFile: source,
       outputFile,
@@ -45,7 +45,7 @@ try {
       // Mono: these are positional, spatialised at the mount's position.
       channels: 1,
     });
-    console.log(key.padEnd(34) + duration.toFixed(2) + 's -> ' + outputFile);
+    console.log(`${key.padEnd(34)}${duration.toFixed(2)}s -> ${outputFile}`);
   }
 } finally {
   rmSync(scratch, { recursive: true, force: true });

@@ -365,8 +365,8 @@ if (isMain) {
   mkdirSync(dir, { recursive: true });
   for (const [key, render] of Object.entries(TAKES)) {
     const buf = normalise(render());
-    const file = path.join(dir, key + '.wav');
+    const file = path.join(dir, `${key}.wav`);
     writeFileSync(file, wav32(buf));
-    console.log(key.padEnd(34) + (buf.length / RATE).toFixed(2) + 's  -> ' + file);
+    console.log(`${key.padEnd(34)}${(buf.length / RATE).toFixed(2)}s  -> ${file}`);
   }
 }
