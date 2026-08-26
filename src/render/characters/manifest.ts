@@ -1667,6 +1667,12 @@ export const VISUALS: Record<string, VisualDef> = {
     url: `${MOUNTS_DIR}/seeker_board.glb`,
     height: 0.39,
     hover: 0.35,
+    // The board points down +X (its deck bones run x -0.45 to +0.45 with the
+    // trail behind at -1.1) while visuals face +Z at world facing 0, so it
+    // needs the quarter turn the Tripo rigs take. Every other mount was
+    // authored facing +Z already and sets no yaw; without this one the rider
+    // travels sideways on a board pointing across the direction of travel.
+    yaw: -Math.PI / 2,
     clips: MOUNT_SEEKER,
     lazyPreload: true,
   },

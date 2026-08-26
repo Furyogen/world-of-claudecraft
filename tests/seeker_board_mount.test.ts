@@ -75,6 +75,9 @@ describe('Solana Seeker mount wiring', () => {
     const block = src.slice(start, src.indexOf('  },', start));
     expect(block).toContain('seeker_board.glb');
     expect(block).toContain('clips: MOUNT_SEEKER');
+    // The rig points down +X while visuals face +Z, so the quarter turn is
+    // load-bearing: without it the board travels sideways under the rider.
+    expect(block).toContain('yaw: -Math.PI / 2');
     // normScale is def.height / the model's Y extent, and this deck is 0.19
     // tall. A height in the 2-3 range like the other mounts would scale it past
     // 20 yards long, so an unexplained bump here is a real defect.
