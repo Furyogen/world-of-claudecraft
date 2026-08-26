@@ -409,7 +409,7 @@ import {
   stageMountPrewarmVisual,
   stageResidentMountPrewarmVisual,
 } from './mount_prewarm';
-import { mountBobY, mountRiderStands, mountVisualSpec } from './mount_visuals';
+import { mountBobY, mountRidePose, mountVisualSpec } from './mount_visuals';
 import { NameplatePainter } from './nameplate_painter';
 import {
   isProjectedNameplateAnchorVisible,
@@ -11303,7 +11303,12 @@ export class Renderer {
       st.backwards = loco.backwards;
       st.reverseBackpedal = ghostWolf;
       st.dead = visuallyDead;
-      st.casting = characterCasting;
+      // A board rider channels for the whole ride: `cast` outranks both the
+      // seated loop and locomotion in desiredBaseState, so this holds at speed
+      // as well as at rest. A real cast resolves to the same clip, so nothing
+      // is lost by forcing it.
+      const ridePose = v.mountLift > 0 ? mountRidePose(e.mountKey) : 'sit';
+      st.casting = characterCasting || (e.kind === 'player' && ridePose === 'channel');
       // Which ability, so the pose layer can tell a drawn shot from a pet
       // utility cast (tame_beast is a 6s cast; a bow must not sit aimed for it).
       st.castingAbility = characterCasting ? (e.castingAbility ?? null) : null;
@@ -11322,10 +11327,12 @@ export class Renderer {
       // A board is ridden upright: holding the sit loop on one would put the
       // player cross-legged on a hover deck. Only the lift and the airborne
       // hold above are shared; the pose is not.
-      const riderStands = riderMounted && mountRiderStands(e.mountKey);
       st.sitting =
         e.kind === 'player' &&
-        (e.sitting || e.eating !== null || e.drinking !== null || (riderMounted && !riderStands));
+        (e.sitting ||
+          e.eating !== null ||
+          e.drinking !== null ||
+          (riderMounted && ridePose === 'sit'));
       // Ice slide: the sim glides the player at speed but they should read as
       // FROZEN (gliding stiff on the ice), not sprinting. Suppress locomotion +
       // airborne so the state machine holds the static idle pose while they slide.

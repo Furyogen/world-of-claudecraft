@@ -31,13 +31,17 @@ export interface MountVisualSpec {
   /** Ambient particle effect the renderer emits for this mount: the snail's
    *  slime path while moving, the hover cycle's aether exhaust. */
   fx: 'slime' | 'exhaust' | null;
-  /** The rider STANDS on this mount instead of sitting in a saddle. Every
-   *  animal and vehicle here is sat on, so the renderer holds a mounted rider
-   *  in the seated pose; a board is ridden upright, and forcing the sit loop
-   *  on one puts the player cross-legged on a hover deck. When this is set,
-   *  `seat` is the DECK TOP rather than a saddle height, because the lift has
-   *  to land the feet rather than the hips. */
-  stand: boolean;
+  /** How the rider is posed while mounted.
+   *
+   *  Every animal and vehicle here is sat on, so `sit` is the default and the
+   *  renderer holds a mounted rider in the seated loop. A board is ridden
+   *  upright: `stand` leaves the rider in their ordinary states, and
+   *  `channel` locks them into the cast loop, which outranks locomotion in
+   *  desiredBaseState and so holds for the whole ride.
+   *
+   *  For anything other than `sit`, `seat` is the DECK TOP rather than a
+   *  saddle height, because the lift has to land the feet, not the hips. */
+  ridePose: 'sit' | 'stand' | 'channel';
 }
 
 const spec = (
@@ -47,7 +51,7 @@ const spec = (
   bob?: { amp: number; hz: number; idle?: boolean; shape?: 'hover' | 'hop' },
   seatFwd = 0,
   fx: 'slime' | 'exhaust' | null = null,
-  stand = false,
+  ridePose: 'sit' | 'stand' | 'channel' = 'sit',
 ): MountVisualSpec => ({
   visualKey,
   seat,
@@ -58,7 +62,7 @@ const spec = (
   bobIdle: bob?.idle ?? false,
   bobShape: bob?.shape ?? 'hop',
   fx,
-  stand,
+  ridePose,
 });
 
 export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
@@ -73,7 +77,7 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // No procedural bob and no exhaust fx: unlike the clipless hover cycle this
   // rig is animated, and it ships its own trail and exhaust-cloud meshes, so
   // both would double up.
-  seeker_board: spec('mount_seeker_board', 0.74, true, undefined, 0, null, true),
+  seeker_board: spec('mount_seeker_board', 0.74, true, undefined, 0, null, 'channel'),
   aether_hover_cycle: spec(
     'mount_aether_hover_cycle',
     2.1,
@@ -103,9 +107,10 @@ export function mountVisualSpec(mountKey: string): MountVisualSpec | null {
   return mountKey in MOUNTS ? MOUNT_VISUAL_SPECS[mountKey as MountKey] : null;
 }
 
-/** Whether the rider stands on this mount rather than sitting in a saddle. */
-export function mountRiderStands(mountKey: string): boolean {
-  return mountVisualSpec(mountKey)?.stand === true;
+/** How a rider is posed on this mount. Unknown or dismounted reads as `sit`,
+ *  which is what every mount but the board does. */
+export function mountRidePose(mountKey: string): 'sit' | 'stand' | 'channel' {
+  return mountVisualSpec(mountKey)?.ridePose ?? 'sit';
 }
 
 /** World-unit rider lift for the active mountKey ('' or unknown: 0). */

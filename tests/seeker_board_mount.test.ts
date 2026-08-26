@@ -98,6 +98,31 @@ describe('Solana Seeker mount wiring', () => {
   });
 });
 
+describe('Seeker board rider pose', () => {
+  it('channels for the whole ride, not just at rest', () => {
+    // `cast` outranks both the seated loop and locomotion in
+    // desiredBaseState, so a channel pose holds at speed as well as standing
+    // still. That ordering is what makes a permanent channel possible at all.
+    const src = readFileSync(join(ROOT, 'src/render/characters/anim_state.ts'), 'utf8');
+    const order = src.slice(src.indexOf('export function desiredBaseState('));
+    const cast = order.indexOf("return 'cast'");
+    const sit = order.indexOf("return 'sit'");
+    expect(cast).toBeGreaterThan(-1);
+    expect(sit).toBeGreaterThan(-1);
+    expect(cast, 'cast must outrank sit').toBeLessThan(sit);
+  });
+
+  it('puts only this mount in the channel pose', () => {
+    const src = readFileSync(join(ROOT, 'src/render/mount_visuals.ts'), 'utf8');
+    expect(src).toContain("'channel'");
+    // Every other mount keeps the seated saddle pose; pinned in
+    // tests/mount_visuals.test.ts against the whole catalog.
+    const line = src.split(String.fromCharCode(10)).find((l) => l.includes('seeker_board: spec('));
+    expect(line, 'seeker_board spec').toBeTruthy();
+    expect(line).toContain("'channel'");
+  });
+});
+
 describe('Solana Seeker engine audio', () => {
   // mountEngine derives mount_run_<key>{_start,,_stop} and treats a mount as an
   // engine mount only when all three resolve, so a missing take degrades to
