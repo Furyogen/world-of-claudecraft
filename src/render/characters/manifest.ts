@@ -1663,8 +1663,8 @@ export const VISUALS: Record<string, VisualDef> = {
   // would scale it 12x and ship a 21-yard surfboard; 0.39 puts the deck at a
   // rideable 3.6 yards long. `hover` floats it off the ground, since a board
   // resting in the dirt is not hovering.
-  mount_solana_seeker: {
-    url: `${MOUNTS_DIR}/solana_seeker.glb`,
+  mount_seeker_board: {
+    url: `${MOUNTS_DIR}/seeker_board.glb`,
     height: 0.39,
     hover: 0.35,
     clips: MOUNT_SEEKER,

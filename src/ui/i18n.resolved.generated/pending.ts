@@ -10,84 +10,84 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "es_ES": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "fr_FR": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "fr_CA": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "en_CA": [],
   "it_IT": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "de_DE": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "zh_CN": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "zh_TW": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "ko_KR": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "ja_JP": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "pt_BR": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "ru_RU": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "cs_CZ": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "nl_NL": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "pl_PL": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "id_ID": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "tr_TR": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "sv_SE": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "vi_VN": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ],
   "da_DK": [
-    "hudChrome.mounts.desc_solana_seeker",
-    "hudChrome.mounts.name_solana_seeker"
+    "hudChrome.mounts.desc_seeker_board",
+    "hudChrome.mounts.name_seeker_board"
   ]
 };

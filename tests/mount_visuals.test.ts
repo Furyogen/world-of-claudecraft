@@ -40,7 +40,7 @@ describe('mount visual specs cover the sim catalog', () => {
     // scales to a 21-yard surfboard. Its seat therefore sits ABOVE the deck by
     // construction, and the meaningful bound is that it rests just on top of
     // the board rather than floating clear of it.
-    const STAND_ON = new Set(['solana_seeker']);
+    const STAND_ON = new Set(['seeker_board']);
     for (const key of MOUNT_KEYS) {
       const spec = MOUNT_VISUAL_SPECS[key];
       const def = VISUALS[spec.visualKey];

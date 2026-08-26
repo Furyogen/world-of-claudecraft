@@ -404,18 +404,18 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   // /dev give reins_terrorspark_groundshaker while the feature remains under development.
   // Unlike the player reins it STAYS soulbound: it has no acquisition path, so
   // tradability would turn a dev grant into an economy leak.
-  // Promotional mount for Solana Mobile Seeker Genesis Token holders
+  // Promotional mount for Seeker Genesis Token holders
   // (issue #3628). Soulbound and non-discardable by design: the issue
   // requires one mount per Genesis Token, permanently bound, never sold,
   // traded or transferred, and soulbound is exactly that guarantee at the
   // item layer. Like the tank it has NO in-game acquisition path yet, so it
   // is absent from vendors, quests, creature loot, heroic loot and rift
   // pools; the claim flow that grants it is separate work.
-  reins_solana_seeker: {
-    id: 'reins_solana_seeker',
-    name: 'Genesis Key: Solana Seeker',
+  reins_seeker_board: {
+    id: 'reins_seeker_board',
+    name: 'Genesis Key: Seeker Seeker',
     kind: 'mount',
-    mount: 'solana_seeker',
+    mount: 'seeker_board',
     quality: 'epic',
     soulbound: true,
     noDiscard: true,

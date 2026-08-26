@@ -1350,7 +1350,7 @@ export const sv_SE: EnTranslations = {
       "name_thunderstrut_gobbler": "Åskstoltsern, Den stora kalkonen",
       "name_terrorspark_groundshaker": "Skräckgnista, markskakaren",
       "name_drakemaw_raptor": "Drakgapsraptor",
-      "name_solana_seeker": "Solana Seeker",
+      "name_seeker_board": "Solana Seeker",
       "desc_valorsteed": "En uthållig, säkerfotad stridshäst som ger ökad reshastighet.",
       "desc_grag_bear": "En uthållig, säkerfotad björn som ger ökad reshastighet.",
       "desc_stalkglider_snail": "En robust, långsamt brinnande snigel som ger ökad reshastighet.",
@@ -1360,7 +1360,7 @@ export const sv_SE: EnTranslations = {
       "desc_thunderstrut_gobbler": "En kolossal stormkläckt kalkon som stoltserar ner från Den vaknande toppen, med stjärten spretande som ett åskmoln.",
       "desc_terrorspark_groundshaker": "En kompakt bepansrad maskin med tunga larvband, en grovkalibrig kanon och en sadel byggd för orädda förare.",
       "desc_drakemaw_raptor": "En sadeltämjd kullraptor från Drakgapets kaldera, ren sena och sprint, som fortfarande doftar svagt av aska.",
-      "desc_solana_seeker": "A Seeker handset rebuilt as a hover board, riding a cushion of its own exhaust on a ribbon of light."
+      "desc_seeker_board": "A Seeker handset rebuilt as a hover board, riding a cushion of its own exhaust on a ribbon of light."
     },
     "mountTraining": {
       "mountPrompt": "Tryck på {key} för att sitta upp på övnings-Tapperhetshästen.",

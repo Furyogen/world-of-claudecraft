@@ -144,23 +144,23 @@ export const SFX = [
   },
   // The Solana Seeker board (issue #3628). Synthesised rather than recorded
   // or generated: an ion drive has no real-world donor, and
-  // scripts/sfx/synth_solana_seeker.mjs re-renders all three takes
+  // scripts/sfx/synth_seeker_board.mjs re-renders all three takes
   // deterministically whenever the mix needs a nudge. Same windup/loop/
   // winddown shape the Groundshaker uses, which is all mountEngine needs to
   // treat a mount as an engine mount.
   {
-    key: 'mount_run_solana_seeker_start',
+    key: 'mount_run_seeker_board_start',
     custom: true,
   },
   {
     // The sustain take, driven through Sfx.loop() by mountEngine rather than
     // playAt, so the manifest flag has to say loop as well.
-    key: 'mount_run_solana_seeker',
+    key: 'mount_run_seeker_board',
     custom: true,
     loop: true,
   },
   {
-    key: 'mount_run_solana_seeker_stop',
+    key: 'mount_run_seeker_board_stop',
     custom: true,
   },
   {

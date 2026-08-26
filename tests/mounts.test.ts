@@ -176,7 +176,7 @@ describe('mount reins items (the collection: owning the item is owning the mount
       expect(items).toHaveLength(1);
       const item = items[0];
       expect(mountItemId(key)).toBe(item.id);
-      if (key === 'terrorspark_groundshaker' || key === 'solana_seeker') {
+      if (key === 'terrorspark_groundshaker' || key === 'seeker_board') {
         // The developer-only tank stays soulbound: it has no player acquisition
         // path, and tradability would turn a dev grant into a leak vector.
         //
@@ -249,11 +249,11 @@ describe('mount reins items (the collection: owning the item is owning the mount
     // acquisition path at all. Listed EXPLICITLY so a sourceless mount is a
     // decision and never an accident: when the world boss lands, delete the entry
     // and the rarity-derived rule below takes back over.
-    // reins_solana_seeker is sourceless for a different reason than the
+    // reins_seeker_board is sourceless for a different reason than the
     // raptor: it is claimed against a Solana Mobile Seeker Genesis Token
     // (issue #3628), so its route is an external claim flow rather than any
     // in-game table. Until that flow lands it must appear on NO table at all.
-    const NO_SOURCE_YET: readonly string[] = ['reins_drakemaw_raptor', 'reins_solana_seeker'];
+    const NO_SOURCE_YET: readonly string[] = ['reins_drakemaw_raptor', 'reins_seeker_board'];
     const FIVE_MAN_SOURCES: Record<string, readonly string[]> = {
       reins_stormfeather_griffin: ['morthen'],
       reins_shadowjump_toad: ['vael_the_mistcaller'],

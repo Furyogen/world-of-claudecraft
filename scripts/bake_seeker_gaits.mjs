@@ -18,7 +18,7 @@
 // The difference is that this rig's authored clips are good, so only the gaps
 // are filled.
 //
-// The INPUT is the supplied source art (reins_solana_seeker.glb), which is not
+// The INPUT is the supplied source art (reins_seeker_board.glb), which is not
 // committed: raw packs never are, per the note at the foot of CREDITS.md. Only
 // the baked result under public/models/mounts/ ships. Point --in at the source
 // when the art is revised; the output path is the shipped asset.
@@ -67,7 +67,7 @@ const CRAFT = 'Hover';
 
 const io = createGlbIO();
 const src = arg('--in', 'tmp/seeker_src.glb');
-const dst = arg('--out', 'public/models/mounts/solana_seeker.glb');
+const dst = arg('--out', 'public/models/mounts/seeker_board.glb');
 
 const doc = await io.read(src);
 const root = doc.getRoot();

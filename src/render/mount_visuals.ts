@@ -64,7 +64,7 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // inside it. No procedural bob and no exhaust fx: unlike the clipless
   // hover cycle this rig is animated, and it ships its own trail and
   // exhaust-cloud meshes, so both would double up.
-  solana_seeker: spec('mount_solana_seeker', 1.03, true),
+  seeker_board: spec('mount_seeker_board', 1.03, true),
   aether_hover_cycle: spec(
     'mount_aether_hover_cycle',
     2.1,

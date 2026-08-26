@@ -10,7 +10,7 @@
 // already uses (see mountEngine in src/game/sfx.ts): a start take, a sustain
 // take driven through Sfx.loop(), and a stop take.
 //
-//   node scripts/sfx/synth_solana_seeker.mjs [--out <dir>]
+//   node scripts/sfx/synth_seeker_board.mjs [--out <dir>]
 //
 // Writes 32-bit float WAV at 44.1k mono. Encoding, loudness and bitrate are the
 // conform path's job (scripts/sfx/conform_audio.mjs), not this script's.
@@ -353,9 +353,9 @@ export function wav32(buf) {
 }
 
 export const TAKES = {
-  mount_run_solana_seeker_start: renderStart,
-  mount_run_solana_seeker: renderLoop,
-  mount_run_solana_seeker_stop: renderStop,
+  mount_run_seeker_board_start: renderStart,
+  mount_run_seeker_board: renderLoop,
+  mount_run_seeker_board_stop: renderStop,
 };
 
 const isMain = process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1]));

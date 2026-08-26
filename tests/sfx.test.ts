@@ -263,7 +263,7 @@ describe('mount running audio', () => {
     // suite below): it is genuinely driven through Sfx.loop() at runtime, so
     // its manifest entry correctly carries loop: true, unlike every other
     // mount's plain per-stride gait clip.
-    const ENGINE_LOOP_MOUNTS = new Set(['terrorspark_groundshaker', 'solana_seeker']);
+    const ENGINE_LOOP_MOUNTS = new Set(['terrorspark_groundshaker', 'seeker_board']);
     for (const mountKey of MOUNT_KEYS) {
       const entry = SFX_CLIPS[`mount_run_${mountKey}`];
       expect(entry).toMatchObject({
@@ -283,7 +283,7 @@ describe('mount running audio', () => {
     terrorspark_groundshaker: ['_start', '_stop'],
     // The Solana Seeker board is the second engine mount: an ion drive spins
     // up, sustains and spins down exactly like the tank does.
-    solana_seeker: ['_start', '_stop'],
+    seeker_board: ['_start', '_stop'],
   };
 
   it('ships one non-empty MP3 asset for every catalog mount and no orphan mount clips', () => {

@@ -2373,10 +2373,10 @@ const SOURCE_PENDING_RULING: Readonly<Record<string, readonly string[]>> = {
   // slot stays listed and sourceless until the mount gets a route.
   // terrorspark_groundshaker: dev-grant only, deliberately absent from vendors,
   // quests, mob loot, heroic loot, and the rift reins pools.
-  // solana_seeker: promotional, claimed against a Solana Mobile Seeker
+  // seeker_board: promotional, claimed against a Solana Mobile Seeker
   // Genesis Token (issue #3628). The claim flow is separate work, so no
   // in-game table awards it and there is no door to name here yet.
-  horizons_mounts: ['drakemaw_raptor', 'terrorspark_groundshaker', 'solana_seeker'],
+  horizons_mounts: ['drakemaw_raptor', 'terrorspark_groundshaker', 'seeker_board'],
   // masterwork:engineering: unearnable, QA ruling 2026-08-07. Every live
   // engineering recipe produces a slotless, statless tool, masterworkBonusStats
   // returns null for all of them, so the masterwork proc can never fire and
@@ -3342,7 +3342,7 @@ describe('Reliquary source hint coverage', () => {
     expect(SOURCE_PENDING_RULING.horizons_mounts).toEqual([
       'drakemaw_raptor',
       'terrorspark_groundshaker',
-      'solana_seeker',
+      'seeker_board',
     ]);
     // masterwork:engineering pended by the QA ruling 2026-08-07: no
     // engineering recipe can proc a masterwork (see the gear-capability pin),

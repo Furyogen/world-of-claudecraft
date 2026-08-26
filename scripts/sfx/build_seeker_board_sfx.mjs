@@ -3,9 +3,9 @@
 // loudness, bitrate, sample rate and channel contract rather than whatever the
 // synth happened to produce.
 //
-//   node scripts/sfx/build_solana_seeker_sfx.mjs
+//   node scripts/sfx/build_seeker_board_sfx.mjs
 //
-// Writes public/audio/sfx/mount_run_solana_seeker{,_start,_stop}.mp3.
+// Writes public/audio/sfx/mount_run_seeker_board{,_start,_stop}.mp3.
 // Run `npm run sfx:manifest` afterwards to refresh the manifest and runtime pack.
 
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -13,7 +13,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { conformSfxAudio } from './conform_audio.mjs';
 import { FFMPEG_PATH } from './ffmpeg_paths.mjs';
-import { RATE, TAKES, wav32 } from './synth_solana_seeker.mjs';
+import { RATE, TAKES, wav32 } from './synth_seeker_board.mjs';
 
 const OUT_DIR = path.join(process.cwd(), 'public/audio/sfx');
 const ffmpegPath = FFMPEG_PATH;

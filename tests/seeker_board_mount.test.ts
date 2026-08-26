@@ -10,7 +10,7 @@ import { MOUNTS } from '../src/sim/content/mounts';
 // than loudly: a ClipMap naming a clip the GLB does not carry freezes the mount
 // on its bind pose, and a missing engine take leaves it mute instead of erroring.
 const ROOT = join(__dirname, '..');
-const GLB = 'public/models/mounts/solana_seeker.glb';
+const GLB = 'public/models/mounts/seeker_board.glb';
 
 function glbJson(rel: string): { animations?: { name?: string }[]; nodes?: { name?: string }[] } {
   const b = readFileSync(join(ROOT, rel));
@@ -46,9 +46,9 @@ describe('Solana Seeker mount asset', () => {
 
 describe('Solana Seeker mount wiring', () => {
   it('registers in the sim catalog at the collectible tier', () => {
-    const def = MOUNTS.solana_seeker;
+    const def = MOUNTS.seeker_board;
     expect(def).toBeDefined();
-    expect(def.key).toBe('solana_seeker');
+    expect(def.key).toBe('seeker_board');
     // Speed is the only stat a mount grants, so a promotional mount must not
     // out-run the ladder: it sits at the epic tier with the other collectibles.
     expect(def.rarity).toBe('epic');
@@ -58,10 +58,11 @@ describe('Solana Seeker mount wiring', () => {
   it('binds the reins so the reward cannot reach a secondary market', () => {
     // Issue #3628: one mount per Genesis Token, permanently bound to the
     // claiming account, never sold, traded or transferred.
-    const item = BASE_ITEMS.reins_solana_seeker;
+    const item = BASE_ITEMS.reins_seeker_board;
     expect(item).toBeDefined();
     expect(item.kind).toBe('mount');
-    expect(item.mount).toBe('solana_seeker');
+    if (item.kind !== 'mount') throw new Error('not a mount item');
+    expect(item.mount).toBe('seeker_board');
     expect(item.soulbound).toBe(true);
     expect(item.noDiscard).toBe(true);
     expect(item.sellValue).toBe(0);
@@ -69,10 +70,10 @@ describe('Solana Seeker mount wiring', () => {
 
   it('points the visual at the board and sizes it as a height, not a length', () => {
     const src = readFileSync(join(ROOT, 'src/render/characters/manifest.ts'), 'utf8');
-    const start = src.indexOf('  mount_solana_seeker: {');
-    expect(start, 'mount_solana_seeker VisualDef').toBeGreaterThan(-1);
+    const start = src.indexOf('  mount_seeker_board: {');
+    expect(start, 'mount_seeker_board VisualDef').toBeGreaterThan(-1);
     const block = src.slice(start, src.indexOf('  },', start));
-    expect(block).toContain('solana_seeker.glb');
+    expect(block).toContain('seeker_board.glb');
     expect(block).toContain('clips: MOUNT_SEEKER');
     // normScale is def.height / the model's Y extent, and this deck is 0.19
     // tall. A height in the 2-3 range like the other mounts would scale it past
@@ -100,15 +101,15 @@ describe('Solana Seeker engine audio', () => {
   // silence rather than to an error.
   it('ships the full windup, sustain and winddown set', () => {
     for (const suffix of ['_start', '', '_stop']) {
-      const key = `mount_run_solana_seeker${suffix}`;
+      const key = `mount_run_seeker_board${suffix}`;
       expect(SFX_CLIPS[key as keyof typeof SFX_CLIPS], key).toBeDefined();
     }
   });
 
   it('marks only the sustain take as looping, and all three as positional', () => {
-    const start = SFX_CLIPS.mount_run_solana_seeker_start;
-    const loop = SFX_CLIPS.mount_run_solana_seeker;
-    const stop = SFX_CLIPS.mount_run_solana_seeker_stop;
+    const start = SFX_CLIPS.mount_run_seeker_board_start;
+    const loop = SFX_CLIPS.mount_run_seeker_board;
+    const stop = SFX_CLIPS.mount_run_seeker_board_stop;
     expect(loop.loop).toBe(true);
     expect(start.loop).toBeFalsy();
     expect(stop.loop).toBeFalsy();
@@ -117,7 +118,7 @@ describe('Solana Seeker engine audio', () => {
 
   it('ships a non-empty asset for each take', () => {
     for (const suffix of ['_start', '', '_stop']) {
-      const file = join(ROOT, `public/audio/sfx/mount_run_solana_seeker${suffix}.mp3`);
+      const file = join(ROOT, `public/audio/sfx/mount_run_seeker_board${suffix}.mp3`);
       expect(existsSync(file), file).toBe(true);
       expect(statSync(file).size).toBeGreaterThan(2000);
     }
