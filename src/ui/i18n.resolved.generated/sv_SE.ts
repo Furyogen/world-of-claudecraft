@@ -13649,6 +13649,9 @@ export const sv_SE: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Tyglar till Åskstoltseraren, den stora kalkonen"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

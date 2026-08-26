@@ -13649,6 +13649,9 @@ export const vi_VN: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Dây cương Gà Tây Chúa Sải Bước Sấm"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

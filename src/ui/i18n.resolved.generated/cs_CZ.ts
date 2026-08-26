@@ -13649,6 +13649,9 @@ export const cs_CZ: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Otěže Hromokroka, velkého krocana"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

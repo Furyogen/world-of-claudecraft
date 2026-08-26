@@ -13649,6 +13649,9 @@ export const id_ID: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Tali Kekang Kalkun Agung Penderap Guntur"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

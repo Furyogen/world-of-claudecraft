@@ -13649,6 +13649,9 @@ export const zh_TW: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "雷霆闊步大火雞的韁繩"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

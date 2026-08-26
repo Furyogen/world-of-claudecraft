@@ -13649,6 +13649,9 @@ export const ja_JP: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "大七面鳥サンダーストラットの手綱"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

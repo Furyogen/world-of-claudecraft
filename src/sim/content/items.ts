@@ -413,7 +413,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   // pools; the claim flow that grants it is separate work.
   reins_seeker_board: {
     id: 'reins_seeker_board',
-    name: 'Genesis Key: Seeker Seeker',
+    name: 'Genesis Key: Seeker Board',
     kind: 'mount',
     mount: 'seeker_board',
     quality: 'epic',

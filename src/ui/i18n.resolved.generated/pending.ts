@@ -10,83 +10,103 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "es_ES": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "fr_FR": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "fr_CA": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "de_DE": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "zh_CN": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "zh_TW": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "ko_KR": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "ja_JP": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "pt_BR": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "ru_RU": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "cs_CZ": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "nl_NL": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "pl_PL": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "id_ID": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "tr_TR": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "sv_SE": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "vi_VN": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ],
   "da_DK": [
+    "entities.items.reins_seeker_board.name",
     "hudChrome.mounts.desc_seeker_board",
     "hudChrome.mounts.name_seeker_board"
   ]

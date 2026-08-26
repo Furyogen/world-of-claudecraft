@@ -13649,6 +13649,9 @@ export const en: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Reins of Thunderstrut the Grand Gobbler"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

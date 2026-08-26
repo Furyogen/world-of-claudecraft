@@ -13649,6 +13649,9 @@ export const pt_BR: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Rédeas de Pavoneia-Trovões, o Grande Peru"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

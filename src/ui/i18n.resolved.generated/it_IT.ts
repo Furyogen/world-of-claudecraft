@@ -13649,6 +13649,9 @@ export const it_IT: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Redini di Passotuono, il Gran Tacchino"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

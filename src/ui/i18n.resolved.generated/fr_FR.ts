@@ -13649,6 +13649,9 @@ export const fr_FR: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Rênes de Pavane-Tonnerre, le Grand Dindon"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

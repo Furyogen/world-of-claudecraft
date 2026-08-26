@@ -13649,6 +13649,9 @@ export const pl_PL: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Wodze Gromostępa, Wielkiego Indora"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

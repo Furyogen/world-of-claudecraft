@@ -13649,6 +13649,9 @@ export const de_DE: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Zügel von Donnerstolz, dem Großen Puter"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

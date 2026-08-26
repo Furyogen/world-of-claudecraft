@@ -13649,6 +13649,9 @@ export const es: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Riendas de Pavoneatruenos, el Gran Pavo"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

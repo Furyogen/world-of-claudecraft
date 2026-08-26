@@ -13649,6 +13649,9 @@ export const en_XA: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "[Ŕéíñš óƒ Ţĥúñðéŕšţŕúţ ţĥé Ĝŕáñð Ĝóƀƀļéŕ]"
+      },
+      "reins_seeker_board": {
+        "name": "[Ĝéñéšíš Ķéý: Šóļáñá Šééķéŕ]"
       }
     },
     "mobs": {

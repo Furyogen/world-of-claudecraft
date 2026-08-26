@@ -13649,6 +13649,9 @@ export const ko_KR: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "천둥활보 대왕 칠면조의 고삐"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

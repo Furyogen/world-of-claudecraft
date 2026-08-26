@@ -13649,6 +13649,9 @@ export const nl_NL: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Teugels van Donderpronker, de Grote Kalkoen"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

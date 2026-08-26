@@ -13649,6 +13649,9 @@ export const ru_RU: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Поводья Громоступа, великого индюка"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

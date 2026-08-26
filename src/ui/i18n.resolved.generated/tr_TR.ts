@@ -13649,6 +13649,9 @@ export const tr_TR: EnTranslations = {
       },
       "reins_thunderstrut_gobbler": {
         "name": "Yıldırım Adımlı Büyük Hindinin Dizginleri"
+      },
+      "reins_seeker_board": {
+        "name": "Genesis Key: Solana Seeker"
       }
     },
     "mobs": {

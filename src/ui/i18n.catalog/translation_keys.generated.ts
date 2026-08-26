@@ -2700,6 +2700,7 @@ export type TranslationKeyFlat =
   | 'entities.items.reins_aether_hover_cycle.name'
   | 'entities.items.reins_drakemaw_raptor.name'
   | 'entities.items.reins_grag_bear.name'
+  | 'entities.items.reins_seeker_board.name'
   | 'entities.items.reins_shadowjump_toad.name'
   | 'entities.items.reins_stalkglider_snail.name'
   | 'entities.items.reins_stormfeather_griffin.name'
