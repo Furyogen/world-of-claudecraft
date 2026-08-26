@@ -20,6 +20,7 @@ export type MountKey =
   | 'stormfeather_griffin'
   | 'thunderstrut_gobbler'
   | 'drakemaw_raptor'
+  | 'solana_seeker'
   | 'terrorspark_groundshaker';
 
 export type MountRarity = 'common' | 'uncommon' | 'rare' | 'epic';
@@ -100,6 +101,16 @@ export const MOUNTS: Record<MountKey, MountDef> = {
   drakemaw_raptor: {
     key: 'drakemaw_raptor',
     name: 'Drakemaw Raptor',
+    rarity: 'epic',
+    moveSpeedPct: 0.8,
+  },
+  // Promotional mount for Solana Mobile Seeker Genesis Token holders
+  // (issue #3628). It sits at the epic tier like the other collectibles:
+  // speed is the only stat a mount grants, so a promotional mount that beat
+  // the ladder would be pay-to-win rather than cosmetic.
+  solana_seeker: {
+    key: 'solana_seeker',
+    name: 'Solana Seeker',
     rarity: 'epic',
     moveSpeedPct: 0.8,
   },

@@ -59,6 +59,12 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   valorsteed: spec('mount_valorsteed', 2.4, true, undefined, 0.15),
   grag_bear: spec('mount_grag_bear', 3.35, true, undefined, -0.8),
   stalkglider_snail: spec('mount_stalkglider_snail', 2.65, false, undefined, -0.3, 'slime'),
+  // Seat is the deck top: hover (0.35) plus the rig's own Seat bone at
+  // 0.331 scaled by 0.39/0.19, so the rider sits ON the board rather than
+  // inside it. No procedural bob and no exhaust fx: unlike the clipless
+  // hover cycle this rig is animated, and it ships its own trail and
+  // exhaust-cloud meshes, so both would double up.
+  solana_seeker: spec('mount_solana_seeker', 1.03, true),
   aether_hover_cycle: spec(
     'mount_aether_hover_cycle',
     2.1,

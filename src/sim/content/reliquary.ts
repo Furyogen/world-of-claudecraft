@@ -267,6 +267,7 @@ export const RELIQUARY_HORIZON_MOUNTS = [
   'thunderstrut_gobbler',
   'drakemaw_raptor',
   'terrorspark_groundshaker',
+  'solana_seeker',
 ] as const;
 
 // Per-mount sources. A mount is owned through its reins ItemDef (kind 'mount',

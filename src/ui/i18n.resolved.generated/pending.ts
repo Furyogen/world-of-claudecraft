@@ -9,25 +9,85 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "es_ES": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "fr_FR": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "fr_CA": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "de_DE": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "zh_CN": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "zh_TW": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "ko_KR": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "ja_JP": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "pt_BR": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "ru_RU": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "cs_CZ": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "nl_NL": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "pl_PL": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "id_ID": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "tr_TR": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "sv_SE": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "vi_VN": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ],
+  "da_DK": [
+    "hudChrome.mounts.desc_solana_seeker",
+    "hudChrome.mounts.name_solana_seeker"
+  ]
 };
