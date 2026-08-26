@@ -102,3 +102,47 @@ describe('druid Kauriki tank form', () => {
     expect(src).not.toContain("'Kauriki_Cast'");
   });
 });
+
+// The cast apparition rises a moment BEFORE the caster's own body morphs, so a
+// spirit that disagrees with the form reads as the wrong spell entirely.
+describe('druid tank cast apparition', () => {
+  const specLine = (id: string): string => {
+    const src = readFileSync(join(ROOT, 'src/render/ability_vfx_full_specs.ts'), 'utf8');
+    const line = src.split('\n').find((l) => l.startsWith(`  ${id}: `));
+    if (!line) throw new Error('no spec for ' + id);
+    return line;
+  };
+
+  it('registers the Kauriki as its own spirit species', () => {
+    const src = readFileSync(join(ROOT, 'src/render/ability_vfx/spirits.ts'), 'utf8');
+    expect(src).toContain("kauriki: 'models/creatures/kauriki_form.glb',");
+    // Height and tempo are keyed by species; a missing entry silently falls back
+    // and the apparition comes out the wrong size or speed.
+    expect(src).toMatch(/kauriki: 2\.5,/);
+    expect(src).toMatch(/kauriki: 0\.85,/);
+  });
+
+  it('conjures the Kauriki for both tank abilities', () => {
+    for (const id of ['bear_form', 'bear_charge']) {
+      expect(specLine(id), id).toContain('"model":"kauriki"');
+      expect(specLine(id), id).not.toContain('"model":"bear"');
+      // The bear tint is a brown pelt read; this form is white.
+      expect(specLine(id), id).not.toContain('"tint":"#b97a45"');
+    }
+  });
+
+  it('leaves moonkin_form on the bear silhouette it deliberately borrows', () => {
+    expect(specLine('moonkin_form')).toContain('"model":"bear"');
+    const src = readFileSync(join(ROOT, 'src/render/ability_vfx/spirits.ts'), 'utf8');
+    expect(src).toContain("bear: 'models/creatures/bear_form.glb',");
+  });
+
+  it('ships the clips the spirit puppet looks for by name', () => {
+    // The puppet resolves Idle/Run/Attack off the BODY glb, not the clip donor,
+    // so the retargeted preset names have to survive in kauriki_form.glb.
+    const names = (glbJson(BODY).animations ?? []).map((a) => a.name);
+    for (const clip of ['Idle', 'Run', 'Attack']) {
+      expect(names, clip).toContain(clip);
+    }
+  });
+});
