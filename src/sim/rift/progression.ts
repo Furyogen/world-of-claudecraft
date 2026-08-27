@@ -235,6 +235,7 @@ export const RIFT_BLUE_MOUNT_CHANCE = 0.001; // 0.1%, the heroic five-man blue r
 export const RIFT_EPIC_MOUNT_REINS = [
   'reins_aether_hover_cycle',
   'reins_thunderstrut_gobbler',
+  'reins_riftbound_boulder',
 ] as const;
 export const RIFT_EPIC_MOUNT_CHANCE = 0.003; // 0.3% per S clear
 

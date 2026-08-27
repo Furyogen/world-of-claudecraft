@@ -354,15 +354,16 @@ describe('Reliquary Conqueror catalog structure', () => {
     // honor pieces and the 3 fishing additions (the koi and both rods):
     // 242 + 16 + 29 + 47 + 3 = 337, plus the three daggers the v0.36.0 release
     // merge added to live content (rimefang on the Rift page, duskwhisper on
-    // Wildheart Basin, boneglass_shiv on Spoils): 340. Catalog growth reverts
-    // page completion for finished players, per docs/design/reliquary.md.
+    // Wildheart Basin, boneglass_shiv on Spoils): 340, plus the Riftbound
+    // Boulder slot on the mounts shelf: 341. Catalog growth reverts page
+    // completion for finished players, per docs/design/reliquary.md.
     // The two excludeFromCompletion pages add
     // slots and 0 to BOTH pairs: the Vault of Ages contributes four retired
     // slots and horizons_riftbound the three class-personal Riftbound bands,
     // and the flag keeps each whole page out of owned AND total (the dedicated
     // vault and riftbound pins in this file and tests/reliquary_state.test.ts
     // hold both sides), so neither page moves these two literals.
-    expect(full).toEqual({ owned: 340, total: 340 });
+    expect(full).toEqual({ owned: 341, total: 341 });
     const character = catalogCharacterCompletion({
       itemsDiscovered: allOwned,
       marks: allOwned,
@@ -373,7 +374,7 @@ describe('Reliquary Conqueror catalog structure', () => {
     // pair above, including the three release-merged daggers; marks are
     // character-scoped, so this trails the overview by the 29 account-scoped
     // weapon skins).
-    expect(character).toEqual({ owned: 311, total: 311 });
+    expect(character).toEqual({ owned: 312, total: 312 });
   });
 
   it('pins the final measured catalog shape: total slots and distinct marks', () => {
@@ -383,7 +384,8 @@ describe('Reliquary Conqueror catalog structure', () => {
     // catalog by 4, and the measured value wins), and the seven Phase 21
     // pages add 123 slots (16 Rift + 19 slain marks + 31 Spoils + 47
     // Warfare + 3 fishing + 4 retired vault + 3 Riftbound bands): 372, plus the
-    // three daggers the v0.36.0 release merge added to live content: 375 total.
+    // three daggers the v0.36.0 release merge added to live content: 375, plus
+    // the Riftbound Boulder slot on the mounts shelf: 376 total.
     // Slots, not unique relics: the two Spoils set repeats count again here,
     // and the seven excludeFromCompletion slots (four vault, three bands)
     // count here while adding zero to every completion pair, which is why this
@@ -394,7 +396,7 @@ describe('Reliquary Conqueror catalog structure', () => {
     expect(
       slots,
       `slot total moved; per page: ${RELIQUARY_PAGES.map((p) => `${p.id}=${p.relics.length}`).join(', ')}`,
-    ).toBe(375);
+    ).toBe(376);
     // Distinct mark ids: the 10 shipped before Phase 21 plus the 19
     // rare-slain proofs of conquerors_rares_of_the_realm.
     expect(
@@ -3261,12 +3263,14 @@ describe('Reliquary source hint coverage', () => {
     }
     expect([...actuallyUnhinted].sort()).toEqual([...PENDING_KEYS].sort());
     // Vacuity floor: this suite is worth nothing if almost everything is
-    // excluded. Literal: tighten as rulings land. 368 = 375 slots minus the
+    // excluded. Literal: tighten as rulings land. 369 = 376 slots minus the
     // four retired vault slots minus the two gap mounts minus the pended
     // masterwork:engineering. It tracks the slot total, so it moved with the
-    // three daggers the v0.36.0 release merge added, keeping the original slack.
+    // three daggers the v0.36.0 release merge added and again with the
+    // Riftbound Boulder, keeping the original slack. The boulder is NOT a new
+    // gap mount: it drops from Rift S clears, so it lands on the hinted side.
     const hinted = RELIC_SLOTS.length - retiredSlots - actuallyUnhinted.size;
-    expect(hinted).toBeGreaterThanOrEqual(368);
+    expect(hinted).toBeGreaterThanOrEqual(369);
     // The retired arm stays snug too: exactly the vault's four slots today.
     expect(retiredSlots).toBe(4);
   });

@@ -404,12 +404,13 @@ import { collectObjectTextures } from './material_texture_slots';
 import { buildMobNightGlow, type MobNightGlowView } from './mob_night_glow';
 import { buildMotes, type MotesView } from './motes';
 import { MountBeacon } from './mount_beacon';
+import { updateMountPresentation } from './mount_presentation';
 import {
   mountPrewarmKeys,
   stageMountPrewarmVisual,
   stageResidentMountPrewarmVisual,
 } from './mount_prewarm';
-import { mountBobY, mountVisualSpec } from './mount_visuals';
+import { mountVisualSpec, riderPoseFlags } from './mount_visuals';
 import { NameplatePainter } from './nameplate_painter';
 import {
   isProjectedNameplateAnchorVisible,
@@ -1083,6 +1084,10 @@ export interface EntityView {
   /** world-unit rider saddle lift while mounted (0 dismounted); the nameplate,
    *  chat-bubble, and sloppy-pick overhead anchors add it (scaled by e.scale) */
   mountLift: number;
+  /** Accumulated roll of a ROLLING mount (radians, wrapped). Kept per view
+   *  because it integrates travel: it is the one thing about this mount that
+   *  cannot be recomputed from the current frame alone. */
+  mountRoll: number;
   metamorphVisual: CharacterVisual | null; // Necromancy Lich Form, built lazily
   fireballTravelVisual: FireballTravelVisual | null; // Mage travel form, built lazily
   iceBlockVisual: IceBlockVisual | null; // Ice Block shell, built lazily on first stasis
@@ -8485,6 +8490,7 @@ export class Renderer {
       mountVisual: null,
       mountVisualKey: '',
       mountLift: 0,
+      mountRoll: 0,
       metamorphVisual: null,
       fireballTravelVisual: null,
       iceBlockVisual: null,
@@ -11316,12 +11322,12 @@ export class Renderer {
       st.swimPitch = v.swimPitch;
       st.wading = wading;
       if (isSelf) this.selfSubmerged = submerged && !visuallyDead;
-      // A mounted rider holds the seated pose (the sit loop reads as riding);
-      // swim/cast still outrank it in desiredBaseState, so mounted casting
-      // and swimming animate normally.
-      st.sitting =
-        e.kind === 'player' &&
-        (e.sitting || e.eating !== null || e.drinking !== null || riderMounted);
+      // Seated in a saddle, or treading the boulder: mount_visuals.riderPoseFlags.
+      const resting =
+        e.kind === 'player' && (e.sitting || e.eating !== null || e.drinking !== null);
+      const pose = riderPoseFlags(e.mountKey, riderMounted, resting);
+      st.sitting = pose.sitting;
+      if (pose.treading) st.backwards = true;
       // Ice slide: the sim glides the player at speed but they should read as
       // FROZEN (gliding stiff on the ice), not sprinting. Suppress locomotion +
       // airborne so the state machine holds the static idle pose while they slide.
@@ -11617,34 +11623,23 @@ export class Renderer {
       // skin VFX point light on it) is rebuilt inside update(), not at the diff.
       if (v.visual.consumeWeaponGraphDirty()) this.reconcileViewLights(v);
 
-      // The mount animates from the same locomotion inputs as its rider: the
-      // rigged quadrupeds run their baked gait clips (a live Idle loop while
-      // standing, Walk/Run on the move, scripts/bake_mount_gaits.mjs), and
-      // the clipless mounts bob procedurally (the hover cycle floats, the
-      // griffin canters, the snail glides flat). `airborne` here is the real
-      // flag, not the rider's suppressed one: the mount carries the jump.
+      // The mount step: its own animation off the rider's locomotion, the bob,
+      // the roll, and its ambient particles (src/render/mount_presentation.ts).
       if (v.mountVisual && mountSpec && mountShown) {
-        const mst = this.mountAnimScratch;
-        mst.speed = st.speed;
-        mst.moving = st.moving;
-        mst.running = st.running;
-        mst.airborne = airborne;
-        mst.backwards = st.backwards;
-        mst.swimming = st.swimming;
         if (runCharacterPresentation) {
-          v.mountVisual.update(dt, mst, animate);
-          // the rider floats WITH the procedural bob (the hover cycle's idle
-          // float), not just the mount body
-          const bob = mountBobY(mountSpec, this.time, moving);
-          v.mountVisual.root.position.y = bob;
-          v.visual.root.position.y = v.mountLift + bob;
-          // ambient mount particles: the snail paints its slime path while
-          // gliding, the hover cycle streams aether exhaust off its tail
-          if (mountSpec.fx === 'slime') {
-            if (moving) this.vfx.mountSlimeTrail(v.group.position, dt);
-          } else if (mountSpec.fx === 'exhaust') {
-            this.vfx.mountExhaust(v.group.position, facing, dt, moving);
-          }
+          updateMountPresentation(v, st, this.mountAnimScratch, this.vfx, {
+            mount: v.mountVisual,
+            riderVisual: v.visual,
+            spec: mountSpec,
+            dt,
+            timeSec: this.time,
+            animate,
+            moving,
+            airborne,
+            facing,
+            stepX: vx,
+            stepZ: vz,
+          });
         } else {
           v.mountVisual.advanceOffscreen(dt);
         }

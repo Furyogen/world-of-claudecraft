@@ -1,8 +1,8 @@
 {
   "format": "woc-sfx-runtime-pack",
   "version": 1,
-  "bundleId": "75161a3d97b57b528d1f944c8dc76785862414b34f39fc57458bd20d92839943",
-  "catalogHash": "9a31e1e35398a332b675f1ecf36e40f0dc1ba69f58328d4f34e5d094bec9c93f",
+  "bundleId": "d1a1e0039abfca87e8c86e20cd1e898ce762bcf8c70e6482c3406d538c1cf2d2",
+  "catalogHash": "de8087450ad82c081013a11a2b3ccfdc14442249c892fd1259d1b03a2ec61893",
   "clips": {
     "amb_birds": {
       "variants": [
@@ -2885,6 +2885,18 @@
           "url": "/audio/sfx/mount_run_grag_bear.mp3?v=eba127f1f821",
           "bytes": 18224,
           "sha256": "eba127f1f8219e5d6a7512c4797735399e154e9f129bfc8c67a187941cb59fe7"
+        }
+      ],
+      "gain": 1,
+      "playbackRate": 1
+    },
+    "mount_run_riftbound_boulder": {
+      "variants": [
+        {
+          "id": "main",
+          "url": "/audio/sfx/mount_run_riftbound_boulder.mp3?v=951ca0d3bf67",
+          "bytes": 16344,
+          "sha256": "951ca0d3bf670761b141bf5fb8beb329b3314460f8433d12f19c747f64a6c29b"
         }
       ],
       "gain": 1,

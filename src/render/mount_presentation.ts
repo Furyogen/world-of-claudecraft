@@ -1,0 +1,111 @@
+// The per-frame mount step, split out of renderer.ts: drive the mount's own
+// animation from its RIDER's locomotion, apply the procedural bob and (for a
+// rolling mount) the roll, keep the rider planted on top of it, and emit the
+// mount's ambient particles.
+//
+// This is a sibling module rather than a method on the renderer because none of
+// it needs the renderer's private scene graph: it reads one view, one spec, and
+// this frame's motion, and writes back through the narrow interfaces below. The
+// math it leans on is already pure and Node-tested in mount_visuals.ts
+// (mountBobY, mountRollStep, advanceRollAngle); this file is the thin consumer
+// that puts those numbers onto the objects.
+
+import type * as THREE from 'three';
+import type { AnimState } from './characters/anim_state';
+import type { CharacterVisual } from './characters/visual';
+import { advanceRollAngle, type MountVisualSpec, mountBobY, mountRollStep } from './mount_visuals';
+
+/** The per-view state this step reads and advances. The live mount arrives
+ *  through MountFrameInputs instead, already narrowed by the caller: a view
+ *  whose mountVisual is still null has no mount step to run at all. */
+export interface MountPresentationView {
+  group: THREE.Object3D;
+  /** World-unit rider lift onto the mount (0 when the mount is hidden). */
+  mountLift: number;
+  /** Accumulated roll of a ROLLING mount, in radians. Advanced here. */
+  mountRoll: number;
+}
+
+/** The particle sinks a mount can drive (the renderer's vfx layer). */
+export interface MountPresentationFx {
+  mountSlimeTrail(position: THREE.Vector3, dt: number): void;
+  mountExhaust(position: THREE.Vector3, facing: number, dt: number, moving: boolean): void;
+}
+
+export interface MountFrameInputs {
+  /** The built, shown mount visual. */
+  mount: CharacterVisual;
+  /** The rider on it. Narrowed by the caller for the same reason as mount. */
+  riderVisual: CharacterVisual;
+  spec: MountVisualSpec;
+  dt: number;
+  /** Renderer clock, for the procedural bob's phase. */
+  timeSec: number;
+  /** Whether clips advance this frame (the renderer's animation gate). */
+  animate: boolean;
+  moving: boolean;
+  /** The REAL airborne flag, not the rider's suppressed one: the mount carries
+   *  the jump while its rider holds their seat. */
+  airborne: boolean;
+  facing: number;
+  /** This frame's displayed horizontal displacement in world units, which is
+   *  the arc length the contact patch actually swept. */
+  stepX: number;
+  stepZ: number;
+}
+
+/**
+ * Advance one mounted rider's presentation by a frame.
+ *
+ * `scratch` is the caller's reusable AnimState (one per renderer, not per view)
+ * so a crowd of riders costs no allocations.
+ */
+export function updateMountPresentation(
+  view: MountPresentationView,
+  rider: AnimState,
+  scratch: AnimState,
+  fx: MountPresentationFx,
+  input: MountFrameInputs,
+): void {
+  // The mount animates from the same locomotion inputs as its rider: the rigged
+  // quadrupeds run their baked gait clips (a live Idle loop while standing,
+  // Walk/Run on the move, scripts/bake_mount_gaits.mjs), and the clipless mounts
+  // bob procedurally (the hover cycle floats, the griffin canters, the snail
+  // glides flat, the boulder rolls).
+  scratch.speed = rider.speed;
+  scratch.moving = rider.moving;
+  scratch.running = rider.running;
+  scratch.airborne = input.airborne;
+  scratch.backwards = rider.backwards;
+  scratch.swimming = rider.swimming;
+  input.mount.update(input.dt, scratch, input.animate);
+
+  // The rider floats WITH the procedural bob (the hover cycle's idle float),
+  // not just the mount body.
+  const bob = mountBobY(input.spec, input.timeSec, input.moving);
+
+  // A rolling mount spins about its own centre, which is why its GLB is authored
+  // origin-centred (manifest hover -0.8) and lifted back to the ground by exactly
+  // its radius here. Spin comes from this frame's travel, never from a hand-set
+  // rate: omega = v / r is what makes the stone bite the ground instead of
+  // skating over it.
+  if (input.spec.rollRadius > 0) {
+    const forward = input.stepX * Math.sin(input.facing) + input.stepZ * Math.cos(input.facing);
+    // Facing h points at (sin h, cos h), so the rider's right is (-cos h, sin h).
+    // Only the magnitude reaches mountRollStep, but a lateral term that did not
+    // match the convention would be a trap for whoever needs the signed value.
+    const lateral = input.stepZ * Math.sin(input.facing) - input.stepX * Math.cos(input.facing);
+    view.mountRoll = advanceRollAngle(view.mountRoll, mountRollStep(input.spec, forward, lateral));
+    input.mount.root.rotation.x = view.mountRoll;
+  }
+  input.mount.root.position.y = bob + input.spec.rollRadius;
+  input.riderVisual.root.position.y = view.mountLift + bob;
+
+  // Ambient mount particles: the snail paints its slime path while gliding, the
+  // hover cycle streams aether exhaust off its tail.
+  if (input.spec.fx === 'slime') {
+    if (input.moving) fx.mountSlimeTrail(view.group.position, input.dt);
+  } else if (input.spec.fx === 'exhaust') {
+    fx.mountExhaust(view.group.position, input.facing, input.dt, input.moving);
+  }
+}

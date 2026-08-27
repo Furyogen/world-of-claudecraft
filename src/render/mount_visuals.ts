@@ -8,6 +8,13 @@
 import type { MountKey } from '../sim/content/mounts';
 import { MOUNTS } from '../sim/content/mounts';
 
+/** How a mount poses its rider. Every saddle mount seats them ('sit'); the
+ *  Riftbound Boulder has no saddle, so its rider stands on the crown and TREADS
+ *  it backward, which is what rolls the stone forward. */
+export type MountRidePose = 'sit' | 'tread';
+
+const TAU = Math.PI * 2;
+
 export interface MountVisualSpec {
   /** VISUALS key (src/render/characters/manifest.ts, lazyPreload). */
   visualKey: string;
@@ -31,6 +38,15 @@ export interface MountVisualSpec {
   /** Ambient particle effect the renderer emits for this mount: the snail's
    *  slime path while moving, the hover cycle's aether exhaust. */
   fx: 'slime' | 'exhaust' | null;
+  /** How the rider is posed while riding this mount. */
+  ridePose: MountRidePose;
+  /** World-unit radius of a mount that ROLLS instead of walking (0 = it does
+   *  not roll). One number doing two jobs, because physically it IS one number:
+   *  it lifts the sphere's centre off the ground, and it turns travel into spin
+   *  at omega = v / r. Keeping them the same field is what makes a mismatch
+   *  impossible; a stone that skated instead of biting would read as cheap even
+   *  to a player who could not say why. */
+  rollRadius: number;
 }
 
 const spec = (
@@ -40,6 +56,7 @@ const spec = (
   bob?: { amp: number; hz: number; idle?: boolean; shape?: 'hover' | 'hop' },
   seatFwd = 0,
   fx: 'slime' | 'exhaust' | null = null,
+  ride?: { pose?: MountRidePose; rollRadius?: number },
 ): MountVisualSpec => ({
   visualKey,
   seat,
@@ -50,6 +67,8 @@ const spec = (
   bobIdle: bob?.idle ?? false,
   bobShape: bob?.shape ?? 'hop',
   fx,
+  ridePose: ride?.pose ?? 'sit',
+  rollRadius: ride?.rollRadius ?? 0,
 });
 
 export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
@@ -81,6 +100,14 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // The Drakemaw Raptor: authored saddle sits over the hips behind the neck
   // spines (hence the slight rear shift), gait-rigged Walk/Run cycles.
   drakemaw_raptor: spec('mount_drakemaw_raptor', 2.35, true, undefined, -0.1),
+  // The Riftbound Boulder: a Rift hazard stopped mid-charge and bound. Clipless
+  // like the snail, but it neither walks nor bobs: it ROLLS, at the rate its own
+  // travel demands. The rider stands on the crown at 2 * rollRadius (feet on top
+  // of the stone) and treads it backward, which is what drives it forward.
+  riftbound_boulder: spec('mount_riftbound_boulder', 1.6, false, undefined, 0, null, {
+    pose: 'tread',
+    rollRadius: 0.8,
+  }),
 };
 
 /** Spec for an entity's active mountKey, or null when dismounted/unknown. */
@@ -99,4 +126,63 @@ export function mountBobY(spec: MountVisualSpec, timeSec: number, moving: boolea
   if (!moving && !spec.bobIdle) return 0;
   const wave = Math.sin(timeSec * Math.PI * 2 * spec.bobHz);
   return (spec.bobShape === 'hover' ? wave : Math.abs(wave)) * spec.bobAmp;
+}
+
+/**
+ * The base-pose flags a rider's mount imposes.
+ *
+ * Every saddle mount holds the seated pose (the sit loop reads as riding);
+ * swim and cast still outrank it in desiredBaseState, so mounted casting and
+ * swimming animate normally. The Riftbound Boulder is the exception: it has no
+ * saddle, so its rider keeps their feet and TREADS the crown backward, which is
+ * what rolls the stone forward. That reuses the rig's own backpedal cycle,
+ * rate-matched to travel by locomotionTimeScale like any other walk, rather
+ * than authoring a clip, and it rides the same pose seam rather than a second
+ * one.
+ *
+ * `riderMounted` is the DISPLAYED state (the mount is built and shown), not the
+ * logical one, so a rider whose mount has not finished loading keeps their own
+ * locomotion instead of treading thin air. `resting` is the rider's own
+ * sitting/eating/drinking, which seats them with or without a mount.
+ */
+export function riderPoseFlags(
+  mountKey: string,
+  riderMounted: boolean,
+  resting: boolean,
+): { sitting: boolean; treading: boolean } {
+  const pose = riderMounted ? (mountVisualSpec(mountKey)?.ridePose ?? null) : null;
+  return { sitting: resting || pose === 'sit', treading: pose === 'tread' };
+}
+
+/**
+ * Radians a rolling mount turns over one frame of ground travel.
+ *
+ * The forward and lateral arguments are this frame's DISPLACEMENT in the
+ * mount's own frame (world units), not velocities: displacement is the arc
+ * length the contact patch actually swept, which is exactly what omega = v / r
+ * integrates to, and taking it straight from displayed position means the spin
+ * can never disagree with the travel it is drawn against.
+ *
+ * The stone always spins about its forward axis, even under a pure strafe. A
+ * sphere strafing sideways would physically roll about a different axis, but
+ * the rate is what sells the weight: rolling at the right rate about the wrong
+ * axis reads as a stone crabbing, while holding still reads as a stone skating,
+ * and the second is the failure this whole coupling exists to prevent.
+ */
+export function mountRollStep(
+  spec: MountVisualSpec,
+  forwardStep: number,
+  lateralStep: number,
+): number {
+  if (spec.rollRadius <= 0) return 0;
+  const distance = Math.hypot(forwardStep, lateralStep);
+  return ((forwardStep < 0 ? -distance : distance) / spec.rollRadius) % TAU;
+}
+
+/** Accumulate a roll step, wrapped into [0, TAU). Wrapping is not cosmetic: an
+ *  unwrapped angle loses float precision over a long ride and the stone starts
+ *  to judder. */
+export function advanceRollAngle(angle: number, step: number): number {
+  const next = (angle + step) % TAU;
+  return next < 0 ? next + TAU : next;
 }

@@ -181,7 +181,11 @@ const MONOLITHS: MonolithRow[] = [
     // ceiling is the exact merged count.
     // Re-pinned to the integration merge of the latest v0.40.0 (the touch UI
     // rework); exact merged count.
-    ceiling: 13329,
+    // Ratcheted 13329 -> 13322 by the Riftbound Boulder branch: the whole
+    // per-frame mount step moved to src/render/mount_presentation.ts and the
+    // rider pose decision to mount_visuals.riderPoseFlags, so the rolling
+    // mount landed BELOW the file it was added to rather than above it.
+    ceiling: 13322,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {

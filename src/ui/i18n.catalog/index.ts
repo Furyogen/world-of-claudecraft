@@ -1691,6 +1691,7 @@ export const en = {
       reins_shadowjump_toad: { name: 'Reins of Kama-Kage the Shadow-Jump Toad' },
       reins_stormfeather_griffin: { name: 'Reins of the Sky-Reach Stormfeather' },
       reins_thunderstrut_gobbler: { name: 'Reins of Thunderstrut the Grand Gobbler' },
+      reins_riftbound_boulder: { name: 'Bindstone of the Riftbound Boulder' },
     },
     itemSets: itemSetEntityText,
     mobs: {
