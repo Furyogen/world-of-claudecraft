@@ -298,8 +298,12 @@ describe('Realm Builder monument pick volume', () => {
 
   it('is what renderer.ts routes the monument to, ahead of the generic loot arm', () => {
     const source = readFileSync(path.join(__dirname, '..', 'src/render/renderer.ts'), 'utf8');
+    // The LITERAL, like the noticeboard arm beside it: importing the constant
+    // pushed this condition past 80 columns, and the wrap broke both this scan
+    // and the file's monolith ceiling. realm_builder_monument.test.ts pins the
+    // literal to REALM_BUILDER_MONUMENT_TEMPLATE_ID so they cannot drift.
     const monumentArm = source.indexOf(
-      "e.kind === 'object' && e.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID",
+      "e.kind === 'object' && e.templateId === 'realm_builder_monument'",
     );
     const genericArm = source.indexOf("} else if (e.kind === 'object') {");
     expect(monumentArm).toBeGreaterThan(-1);
