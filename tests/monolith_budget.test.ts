@@ -142,6 +142,10 @@ const MONOLITHS: MonolithRow[] = [
     // pure core interface_unlock_menu_core.ts. What remains on coordinator
     // state (dimension-mode mover wiring, the edit-preview painter closure,
     // the player-frame bar lock) is the live-hooks half. Exact merged count.
+    // Up 18489 -> 18495 for the Realm Builder monument's honour-roll card.
+    // The card is its own module (src/ui/realm_builder_popup.ts); what is left
+    // here is the six lines that cannot live anywhere else — the import, the
+    // field, its relocalize() call, and the three-line event arm.
     ceiling: 19002,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
@@ -198,7 +202,13 @@ const MONOLITHS: MonolithRow[] = [
     // ceiling is the exact merged count.
     // Re-pinned to the integration merge of the latest v0.40.0 (the touch UI
     // rework); exact merged count.
-    ceiling: 13329,
+    // Up 13329 -> 13345 for the Realm Builder monument. Its art and effects
+    // are src/render/realm_builder_monument_fx.ts and the town view; what is
+    // left here is two imports, the one-line setRealmBuilderHonouree
+    // delegation, and the entity arm that returns the monument's pick volume
+    // (without that arm the generic ground-object branch stands a loot prop
+    // inside the plinth).
+    ceiling: 13345,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {
@@ -247,7 +257,10 @@ const MONOLITHS: MonolithRow[] = [
     // Plus 7 at the v0.39.3 main back-merge: the Double Honor port grew the
     // sim arm on main while the release pin sat at zero slack (the known
     // both-arms compound). Exact merged count, zero slack.
-    ceiling: 12538,
+    // Up 12538 -> 12540 for the Realm Builder monument's static service. The
+    // spawn itself is src/sim/realm_builder_monument_spawn.ts; the residue here
+    // is one import and one call.
+    ceiling: 12540,
     seam: 'a sim system module behind SimContext (src/sim/CLAUDE.md)',
   },
   {
@@ -276,6 +289,9 @@ const MONOLITHS: MonolithRow[] = [
     // the player-frame bar lock) predate this ratchet; folding them behind a
     // src/game/ settings-application seam is flagged follow-up work. Exact
     // merged count.
+    // Up 11526 -> 11528 for the Realm Builder roll's boot load. The fetch and
+    // its not-awaited rationale are src/game/realm_builder_boot.ts; the residue
+    // here is one import and one call.
     ceiling: 11629,
     seam: 'a src/game/ or src/ui/ sibling module; main.ts is a firewall, not a home',
   },

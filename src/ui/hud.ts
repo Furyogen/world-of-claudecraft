@@ -12563,8 +12563,6 @@ export class Hud {
           }
           break;
         case 'realmBuilder':
-          // Inspecting the Eastbrook Vale monument opens its honour roll.
-          // Names travel on the event so the card is identical on every host.
           this.realmBuilderPopup.show(ev.current, ev.past);
           break;
         case 'mailArrived': {

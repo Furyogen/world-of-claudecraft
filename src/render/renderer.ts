@@ -1672,11 +1672,7 @@ export class Renderer {
   private foliageRevealGate: RevealGateCore | null = null;
   private eastbrookTownView!: EastbrookTownView;
 
-  /**
-   * Re-bake the Realm Builder monument's projected name. Called when the
-   * realm's honour roll lands, which online is usually after the town has
-   * already been built (src/net/realm_builder_roll.ts).
-   */
+  /** Re-bake the monument's projected name (src/game/realm_builder_boot.ts). */
   setRealmBuilderHonouree(name: string): void {
     this.eastbrookTownView?.setRealmBuilderHonouree(name);
   }
@@ -8289,10 +8285,7 @@ export class Renderer {
       height = built.height;
       objectMesh = body;
     } else if (e.kind === 'object' && e.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID) {
-      // The statue is drawn by the town's merged batch, so its inspect entity
-      // contributes an invisible pick volume and nothing else. Without this arm
-      // it falls to the generic ground-object branch below, which stands a
-      // quest-pickup prop and a loot sparkle inside the plinth.
+      // Art lives in the town view: this entity is a pick volume only.
       const built = buildRealmBuilderMonumentPickBody();
       body = built.group;
       height = built.height;

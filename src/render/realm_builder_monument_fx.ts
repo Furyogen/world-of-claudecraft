@@ -205,7 +205,7 @@ const BEAM_FRAGMENT = /* glsl */ `
     float motion = 1.0 - uReducedMotion;
     // Brightest at the plate, gone by the time it reaches the name: a shaft of
     // light has no visible end, it just stops being dense enough to see.
-    float fall = pow(1.0 - vUv.y, 1.7);
+    float fall = pow(1.0 - clamp(vUv.y, 0.0, 1.0), 1.7);
     // Fade the silhouette edges so the cone never shows a hard rim.
     float edge = sin(vUv.x * 3.14159265);
     float ripple = 0.78 + 0.22 * sin(vUv.y * 24.0 - uTime * 3.1 * motion);
@@ -252,8 +252,8 @@ const HALO_FRAGMENT = /* glsl */ `
     float d = length(vCorner);
     if (d > 1.0) discard;
     float core = smoothstep(1.0, 0.0, d);
-    float a = pow(core, 2.4) * 0.72 * vPulse;
-    gl_FragColor = vec4(mix(uEdge, uCore, pow(core, 3.0)), a);
+    float a = pow(max(core, 0.0), 2.4) * 0.72 * vPulse;
+    gl_FragColor = vec4(mix(uEdge, uCore, pow(max(core, 0.0), 3.0)), a);
   }
 `;
 
@@ -273,7 +273,7 @@ const EMBER_VERTEX = /* glsl */ `
     float life = fract(aSeed.z + uTime * rate * motion / uCycle);
     // Slowing as it cools, and wandering wider as it slows: an ember off a
     // wick, the opposite of the flame's taper below it.
-    float climb = pow(life, 0.72);
+    float climb = pow(max(life, 0.0), 0.72);
     float ang = aSeed.x * TAU + sin(uTime * 1.3 * motion + aSeed.z * TAU) * 0.9;
     float r = uRadius * (0.2 + 0.8 * aSeed.y) * (0.35 + 0.9 * climb);
     vec3 p = position + vec3(cos(ang) * r, climb * uRise, sin(ang) * r);

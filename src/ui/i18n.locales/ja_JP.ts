@@ -13839,4 +13839,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.nightshade_coating.name': 'ナス科毒の塗布',
   'entities.abilities.nightshade_coating.description':
     '対象をナス科毒で覆い、{damage}の自然ダメージを与え、12秒間受ける回復量を25%低下させます。',
+  'hudChrome.realmBuilder.title': '今月の王国建設者',
+  'hudChrome.realmBuilder.currentLabel': '今月の受賞者',
+  'hudChrome.realmBuilder.placeholderHint': 'この銘板は最初の名前を待っています。',
+  'hudChrome.realmBuilder.pastTitle': 'これまでの受賞者',
+  'hudChrome.realmBuilder.pastEmpty': 'まだ名前が刻まれていません。',
+  'hudChrome.realmBuilder.close': '閉じる',
+  'worldContent.realmBuilderMonumentName': '王国建設者の記念碑',
 };

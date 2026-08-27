@@ -14018,4 +14018,11 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.nightshade_coating.name': 'Покрытие паслёном',
   'entities.abilities.nightshade_coating.description':
     'Покрывает цель паслёном, нанося {damage} ед. урона от сил природы и снижая получаемое ею исцеление на 25% на 12 сек.',
+  'hudChrome.realmBuilder.title': 'Зодчий месяца',
+  'hudChrome.realmBuilder.currentLabel': 'Отмечен в этом месяце',
+  'hudChrome.realmBuilder.placeholderHint': 'Эта табличка ждёт своего первого имени.',
+  'hudChrome.realmBuilder.pastTitle': 'Прежние зодчие',
+  'hudChrome.realmBuilder.pastEmpty': 'В списке пока нет имён.',
+  'hudChrome.realmBuilder.close': 'Закрыть',
+  'worldContent.realmBuilderMonumentName': 'Памятник зодчим королевства',
 };

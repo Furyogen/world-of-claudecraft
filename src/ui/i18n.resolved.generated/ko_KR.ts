@@ -3068,12 +3068,12 @@ export const ko_KR: EnTranslations = {
       "close": "닫기"
     },
     "realmBuilder": {
-      "title": "Realm Builder of the Month",
-      "currentLabel": "Honoured this month",
-      "placeholderHint": "This plate is waiting for its first name.",
-      "pastTitle": "Past honourees",
-      "pastEmpty": "No names on the roll yet.",
-      "close": "Close"
+      "title": "이달의 왕국 건설자",
+      "currentLabel": "이달의 수상자",
+      "placeholderHint": "이 명판은 첫 번째 이름을 기다리고 있습니다.",
+      "pastTitle": "역대 수상자",
+      "pastEmpty": "아직 명단에 이름이 없습니다.",
+      "close": "닫기"
     },
     "bank": {
       "title": "은행",
@@ -17937,6 +17937,6 @@ export const ko_KR: EnTranslations = {
     "delveRiteShrineSkullInteract": "해골 제단: F를 눌러 만지기",
     "mailboxName": "우편함",
     "noticeboardName": "게시판",
-    "realmBuilderMonumentName": "Realm Builder Monument"
+    "realmBuilderMonumentName": "왕국 건설자 기념비"
   }
 };

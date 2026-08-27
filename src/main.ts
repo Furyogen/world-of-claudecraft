@@ -3,7 +3,6 @@
 // styles both game entries; admin/guide use their own entries and inline CSS.
 import './styles/index.css';
 import { captureFirstTouch, registerAttributionPayload } from './attribution';
-import { apiUrl } from './client_origin';
 import { markEntryTightMode } from './device_memory_hint';
 import { startDiscordLogin } from './discord_login_start';
 import {
@@ -158,6 +157,7 @@ import { initPerfNudge } from './game/perf_nudge';
 import { startPerfReporter } from './game/perf_reporter';
 import { kickCharacterPreloadStream, runPostEntryWarmups } from './game/post_entry_warmups_core';
 import { newPresentationGateInput, presentationGate } from './game/presentation_gate';
+import { startRealmBuilderRollLoad } from './game/realm_builder_boot';
 import { adaptiveSelfAlphaLead } from './game/self_alpha_lead';
 import { SelfMotionFrameBuffer } from './game/self_motion_frame_buffer';
 import {
@@ -237,7 +237,6 @@ import {
   NATIVE_APP,
 } from './net/online';
 import { installOtaUpdateGate } from './net/ota_update_gate';
-import { loadRealmBuilderRoll } from './net/realm_builder_roll';
 import { realmPopulation } from './net/realm_population';
 import { RECONNECT_CONFLICT_ERROR } from './net/reconnect_policy';
 import {
@@ -1645,14 +1644,7 @@ async function startGame(
     entryDiagnostics.markStable('[entry-guard] world entry stable; runtime probe armed');
   }, ENTRY_PROBE_STABLE_MS);
 
-  // The realm's Realm Builder of the Month roll. Deliberately NOT awaited: the
-  // plaque catching up a moment late is nothing, and a slow or missing endpoint
-  // must never hold a player out of the world. It re-bakes the projection
-  // itself, so it works whether it lands before or after the town is built.
-  void loadRealmBuilderRoll(apiUrl('/api/realm-builder')).then((name) => {
-    if (name) renderer.setRealmBuilderHonouree(name);
-  });
-
+  startRealmBuilderRollLoad(renderer);
   const chatInput = $('#chat-input') as unknown as HTMLTextAreaElement;
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
   // Grow the chat bar to fit what it is displaying (typed text, or the

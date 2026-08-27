@@ -13838,4 +13838,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.nightshade_coating.name': '가지독 코팅',
   'entities.abilities.nightshade_coating.description':
     '대상을 가지독으로 뒤덮어 {damage}의 자연 피해를 주고 12초 동안 받는 치유 효과를 25% 감소시킵니다.',
+  'hudChrome.realmBuilder.title': '이달의 왕국 건설자',
+  'hudChrome.realmBuilder.currentLabel': '이달의 수상자',
+  'hudChrome.realmBuilder.placeholderHint': '이 명판은 첫 번째 이름을 기다리고 있습니다.',
+  'hudChrome.realmBuilder.pastTitle': '역대 수상자',
+  'hudChrome.realmBuilder.pastEmpty': '아직 명단에 이름이 없습니다.',
+  'hudChrome.realmBuilder.close': '닫기',
+  'worldContent.realmBuilderMonumentName': '왕국 건설자 기념비',
 };

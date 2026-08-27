@@ -1035,9 +1035,9 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // centrepiece changed asset, subject and shader cache key, and every
 // fingerprinted input carries this base's bytes. No capture was retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  '9eb09539b561af4423ad40e6a1028733fd2e62de6e310b78a15caadac8e2320a';
+  'a8651679af7fc1edefd1e53ccb33c1a4cbec71d6dae6ed2d2c1b26b4776d6780';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  '6b47a6e002deb72ed7b8a26d61137f3a962ff00f2f4802cafe5acea59c5f159b';
+  '537dae6f84caff93db0eac07ae7d445ac62d392f3cfaecc5af6f89ab40fc6589';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2197,7 +2197,7 @@ describe('Eastbrook polish performance and contact evidence', () => {
       // first-order composite follows the renderer, town and civicShader leaves,
       // then this second-order seal follows the swept evidence bytes. No capture
       // was retaken.
-    ).toBe('5a26fd3a26ff92eab7c3f9905837324d0ae30d64c30869f7e79de736f50d4b33');
+    ).toBe('a666f07c8ec18331ac2de5b793c356d919bc5e43f8b009a4461630a25b184286');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

@@ -3068,12 +3068,12 @@ export const ja_JP: EnTranslations = {
       "close": "閉じる"
     },
     "realmBuilder": {
-      "title": "Realm Builder of the Month",
-      "currentLabel": "Honoured this month",
-      "placeholderHint": "This plate is waiting for its first name.",
-      "pastTitle": "Past honourees",
-      "pastEmpty": "No names on the roll yet.",
-      "close": "Close"
+      "title": "今月の王国建設者",
+      "currentLabel": "今月の受賞者",
+      "placeholderHint": "この銘板は最初の名前を待っています。",
+      "pastTitle": "これまでの受賞者",
+      "pastEmpty": "まだ名前が刻まれていません。",
+      "close": "閉じる"
     },
     "bank": {
       "title": "銀行",
@@ -17937,6 +17937,6 @@ export const ja_JP: EnTranslations = {
     "delveRiteShrineSkullInteract": "髑髏の祠：Fで触れる",
     "mailboxName": "メールボックス",
     "noticeboardName": "掲示板",
-    "realmBuilderMonumentName": "Realm Builder Monument"
+    "realmBuilderMonumentName": "王国建設者の記念碑"
   }
 };

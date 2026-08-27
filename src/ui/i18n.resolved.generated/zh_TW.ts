@@ -3068,12 +3068,12 @@ export const zh_TW: EnTranslations = {
       "close": "關閉"
     },
     "realmBuilder": {
-      "title": "Realm Builder of the Month",
-      "currentLabel": "Honoured this month",
-      "placeholderHint": "This plate is waiting for its first name.",
-      "pastTitle": "Past honourees",
-      "pastEmpty": "No names on the roll yet.",
-      "close": "Close"
+      "title": "本月王國建造者",
+      "currentLabel": "本月榮譽獲得者",
+      "placeholderHint": "這塊銘牌還在等待它的第一個名字。",
+      "pastTitle": "歷屆榮譽獲得者",
+      "pastEmpty": "榮譽榜上還沒有名字。",
+      "close": "關閉"
     },
     "bank": {
       "title": "銀行",
@@ -17937,6 +17937,6 @@ export const zh_TW: EnTranslations = {
     "delveRiteShrineSkullInteract": "骷髏神龕：按 F 觸碰",
     "mailboxName": "郵箱",
     "noticeboardName": "告示板",
-    "realmBuilderMonumentName": "Realm Builder Monument"
+    "realmBuilderMonumentName": "王國建造者紀念碑"
   }
 };

@@ -13556,4 +13556,11 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.nightshade_coating.name': '夜影塗層',
   'entities.abilities.nightshade_coating.description':
     '用夜影覆蓋目標，造成 {damage} 點自然傷害，並使其受到的治療降低 25%，持續 12 秒。',
+  'hudChrome.realmBuilder.title': '本月王國建造者',
+  'hudChrome.realmBuilder.currentLabel': '本月榮譽獲得者',
+  'hudChrome.realmBuilder.placeholderHint': '這塊銘牌還在等待它的第一個名字。',
+  'hudChrome.realmBuilder.pastTitle': '歷屆榮譽獲得者',
+  'hudChrome.realmBuilder.pastEmpty': '榮譽榜上還沒有名字。',
+  'hudChrome.realmBuilder.close': '關閉',
+  'worldContent.realmBuilderMonumentName': '王國建造者紀念碑',
 };

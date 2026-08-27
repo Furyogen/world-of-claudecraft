@@ -3068,12 +3068,12 @@ export const ru_RU: EnTranslations = {
       "close": "Закрыть"
     },
     "realmBuilder": {
-      "title": "Realm Builder of the Month",
-      "currentLabel": "Honoured this month",
-      "placeholderHint": "This plate is waiting for its first name.",
-      "pastTitle": "Past honourees",
-      "pastEmpty": "No names on the roll yet.",
-      "close": "Close"
+      "title": "Зодчий месяца",
+      "currentLabel": "Отмечен в этом месяце",
+      "placeholderHint": "Эта табличка ждёт своего первого имени.",
+      "pastTitle": "Прежние зодчие",
+      "pastEmpty": "В списке пока нет имён.",
+      "close": "Закрыть"
     },
     "bank": {
       "title": "Банк",
@@ -17937,6 +17937,6 @@ export const ru_RU: EnTranslations = {
     "delveRiteShrineSkullInteract": "Святилище черепа: нажмите F, чтобы коснуться",
     "mailboxName": "Почтовый ящик",
     "noticeboardName": "Доска объявлений",
-    "realmBuilderMonumentName": "Realm Builder Monument"
+    "realmBuilderMonumentName": "Памятник зодчим королевства"
   }
 };
