@@ -3067,6 +3067,14 @@ export const sv_SE: EnTranslations = {
       "popupTitle": "Gillesskylt",
       "close": "Stäng"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Bank",
       "subtitle": "Förgyllda kassakistan",
@@ -17928,6 +17936,7 @@ export const sv_SE: EnTranslations = {
     "delveRiteShrineReedInteract": "Vasshelgedom: Tryck på F för att röra vid den",
     "delveRiteShrineSkullInteract": "Skallhelgedom: Tryck på F för att röra vid den",
     "mailboxName": "Brevlåda",
-    "noticeboardName": "Anslagstavla"
+    "noticeboardName": "Anslagstavla",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

@@ -1025,10 +1025,19 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
+// Re-minted for the Realm Builder monument (round 7): the civic centrepiece
+// changed asset, subject and shader cache key, so every provenance block was
+// swept onto the new fingerprinted inputs. No capture was retaken.
+// Re-minted again for round 8, the admin-dashboard wiring: the monument now
+// takes its honouree from the realm's own records, which moved the
+// rendererIntegration, town and civicShader leaves. No capture was retaken.
+// Re-minted for the Realm Builder monument, ported onto main: the civic
+// centrepiece changed asset, subject and shader cache key, and every
+// fingerprinted input carries this base's bytes. No capture was retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  'b7f20268e9d15b01de7034b18d451f23367b13576506daae0f486b086554df42';
+  '9eb09539b561af4423ad40e6a1028733fd2e62de6e310b78a15caadac8e2320a';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  'b4f994b0a5d52ffce488667a7768739838207796dc4eaa331ebd980ab3fe8ba4';
+  '6b47a6e002deb72ed7b8a26d61137f3a962ff00f2f4802cafe5acea59c5f159b';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2175,10 +2184,20 @@ describe('Eastbrook polish performance and contact evidence', () => {
     // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
     // both sides): same order, the composite first, then this seal. No capture
     // was retaken.
+    // Re-minted for the Realm Builder monument (round 7): the civic
+    // centrepiece changed asset, subject and shader cache key, so the
+    // first-order composite follows eastbrook_layout.ts, eastbrook_town.ts,
+    // eastbrook_civic_beacon.ts and the capture contract, then this
+    // second-order seal follows the swept evidence bytes. No capture was
+    // retaken.
     expect(
       fingerprint.digest('hex'),
       `the second-order performance digest moved; if every input moved legitimately, re-mint with: ${REMINT_COMMAND} (it recomputes this literal LAST, from the swept files)`,
-    ).toBe('5bae1eefcdba32613ca7fe8ac5db78be891da7b08a56b66c2085e816c903f31f');
+      // Re-minted again for round 8, the monument's admin-dashboard wiring: the
+      // first-order composite follows the renderer, town and civicShader leaves,
+      // then this second-order seal follows the swept evidence bytes. No capture
+      // was retaken.
+    ).toBe('5a26fd3a26ff92eab7c3f9905837324d0ae30d64c30869f7e79de736f50d4b33');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

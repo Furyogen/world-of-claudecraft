@@ -3067,6 +3067,14 @@ export const de_DE: EnTranslations = {
       "popupTitle": "Gilden-Wegweiser",
       "close": "Schließen"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Bank",
       "subtitle": "Die Vergoldete Schatulle",
@@ -17928,6 +17936,7 @@ export const de_DE: EnTranslations = {
     "delveRiteShrineReedInteract": "Schilfschrein: Drücke F, um ihn zu berühren",
     "delveRiteShrineSkullInteract": "Schädelschrein: Drücke F, um ihn zu berühren",
     "mailboxName": "Briefkasten",
-    "noticeboardName": "Anschlagtafel"
+    "noticeboardName": "Anschlagtafel",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

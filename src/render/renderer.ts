@@ -40,7 +40,13 @@ import {
 import type { DelveModuleId } from '../sim/delve_layout';
 import { generateRiftFloor, riftLiftAt } from '../sim/rift/rift_gen';
 import type { BiomeId, ZoneDef } from '../sim/types';
-import { ALL_CLASSES, type Entity, isMechWearer, type SimEvent } from '../sim/types';
+import {
+  ALL_CLASSES,
+  type Entity,
+  isMechWearer,
+  REALM_BUILDER_MONUMENT_TEMPLATE_ID,
+  type SimEvent,
+} from '../sim/types';
 import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import type { ChatBubbleStyle } from '../ui/chat_bubble_style';
 import { tEntity } from '../ui/entity_i18n';
@@ -553,6 +559,7 @@ import { makeQuestObjectGate, type QuestObjectGateOptions } from './quest_object
 import { buildGroundQuestObject } from './quest_objects';
 import { RaceLine } from './race_line';
 import { isOwnedPetHostile } from './reaction';
+import { buildRealmBuilderMonumentPickBody } from './realm_builder_monument_fx';
 import { buildRealmFlora, type RealmFloraView } from './realm_flora';
 import {
   RenderBudgetGovernor,
@@ -1664,6 +1671,15 @@ export class Renderer {
   /** The foliage bucket reveal gate (armed at world entry, like the bands). */
   private foliageRevealGate: RevealGateCore | null = null;
   private eastbrookTownView!: EastbrookTownView;
+
+  /**
+   * Re-bake the Realm Builder monument's projected name. Called when the
+   * realm's honour roll lands, which online is usually after the town has
+   * already been built (src/net/realm_builder_roll.ts).
+   */
+  setRealmBuilderHonouree(name: string): void {
+    this.eastbrookTownView?.setRealmBuilderHonouree(name);
+  }
   private fenbridgeTownView!: FenbridgeTownView;
   private hollowGates!: HollowGatesView;
   private lightRank: RankedPointLight[] = [];
@@ -8269,6 +8285,15 @@ export class Renderer {
       // The civic board is itself the readable interaction landmark. Keep the
       // complete GLB on every tier and avoid the generic loot sparkle.
       const built = buildEastbrookNoticeboard();
+      body = built.group;
+      height = built.height;
+      objectMesh = body;
+    } else if (e.kind === 'object' && e.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID) {
+      // The statue is drawn by the town's merged batch, so its inspect entity
+      // contributes an invisible pick volume and nothing else. Without this arm
+      // it falls to the generic ground-object branch below, which stands a
+      // quest-pickup prop and a loot sparkle inside the plinth.
+      const built = buildRealmBuilderMonumentPickBody();
       body = built.group;
       height = built.height;
       objectMesh = body;

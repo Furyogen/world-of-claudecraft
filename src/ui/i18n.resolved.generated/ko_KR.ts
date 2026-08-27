@@ -3067,6 +3067,14 @@ export const ko_KR: EnTranslations = {
       "popupTitle": "길드 게시 기둥",
       "close": "닫기"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "은행",
       "subtitle": "도금 금고",
@@ -17928,6 +17936,7 @@ export const ko_KR: EnTranslations = {
     "delveRiteShrineReedInteract": "갈대 제단: F를 눌러 만지기",
     "delveRiteShrineSkullInteract": "해골 제단: F를 눌러 만지기",
     "mailboxName": "우편함",
-    "noticeboardName": "게시판"
+    "noticeboardName": "게시판",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

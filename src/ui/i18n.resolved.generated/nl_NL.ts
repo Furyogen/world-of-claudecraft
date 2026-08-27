@@ -3067,6 +3067,14 @@ export const nl_NL: EnTranslations = {
       "popupTitle": "Gildebord",
       "close": "Sluiten"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Bank",
       "subtitle": "De Vergulde Geldkist",
@@ -17928,6 +17936,7 @@ export const nl_NL: EnTranslations = {
     "delveRiteShrineReedInteract": "Rietschrijn: druk op F om het aan te raken",
     "delveRiteShrineSkullInteract": "Schedelschrijn: druk op F om het aan te raken",
     "mailboxName": "Brievenbus",
-    "noticeboardName": "Mededelingenbord"
+    "noticeboardName": "Mededelingenbord",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

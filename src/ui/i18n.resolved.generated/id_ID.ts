@@ -3067,6 +3067,14 @@ export const id_ID: EnTranslations = {
       "popupTitle": "Papan Petunjuk Guild",
       "close": "Tutup"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Bank",
       "subtitle": "Brankas Bersepuh Emas",
@@ -17928,6 +17936,7 @@ export const id_ID: EnTranslations = {
     "delveRiteShrineReedInteract": "Altar Buluh: Tekan F untuk menyentuhnya",
     "delveRiteShrineSkullInteract": "Altar Tengkorak: Tekan F untuk menyentuhnya",
     "mailboxName": "Kotak Surat",
-    "noticeboardName": "Papan Pengumuman"
+    "noticeboardName": "Papan Pengumuman",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

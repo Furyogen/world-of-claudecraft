@@ -3067,6 +3067,14 @@ export const vi_VN: EnTranslations = {
       "popupTitle": "Bảng Thông Báo Bang Hội",
       "close": "Đóng"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Ngân Hàng",
       "subtitle": "Két Sắt Mạ Vàng",
@@ -17928,6 +17936,7 @@ export const vi_VN: EnTranslations = {
     "delveRiteShrineReedInteract": "Miếu Lau Sậy: Nhấn F để chạm vào",
     "delveRiteShrineSkullInteract": "Miếu Đầu Lâu: Nhấn F để chạm vào",
     "mailboxName": "Hòm Thư",
-    "noticeboardName": "Bảng Thông Báo"
+    "noticeboardName": "Bảng Thông Báo",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

@@ -3067,6 +3067,14 @@ export const tr_TR: EnTranslations = {
       "popupTitle": "Lonca Tabelası",
       "close": "Kapat"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Banka",
       "subtitle": "Yaldızlı Kasa",
@@ -17928,6 +17936,7 @@ export const tr_TR: EnTranslations = {
     "delveRiteShrineReedInteract": "Saz Sunağı: Dokunmak için F'ye bas",
     "delveRiteShrineSkullInteract": "Kafatası Sunağı: Dokunmak için F'ye bas",
     "mailboxName": "Posta Kutusu",
-    "noticeboardName": "İlan Tahtası"
+    "noticeboardName": "İlan Tahtası",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

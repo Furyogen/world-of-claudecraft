@@ -1,0 +1,290 @@
+// The Realm Builder of the Month endpoints (server/realm_builder.ts): the
+// shared admin auth gate, the four handlers through the routes table with the
+// data seam faked (no Postgres), the validation surface of realm_builder_db's
+// input checks, and the one thing that makes this feature more than CRUD:
+// every write RE-PUBLISHES the roll into the sim, so a player standing at the
+// plaque sees the new name without a reload.
+//
+// Real modules, no db module mock: nothing here is allowed to reach the pg pool
+// (the ownership_coverage idiom).
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { resetAdminDbForTests, setAdminDbForTests } from '../../server/admin';
+import {
+  PUBLIC_READ_MAX_PER_MINUTE,
+  publicReadRateLimited,
+  resetPublicReadRateLimits,
+} from '../../server/ratelimit';
+import {
+  publishRealmBuilderRoll,
+  resetRealmBuilderDbForTests,
+  routes,
+  setRealmBuilderDbForTests,
+} from '../../server/realm_builder';
+import {
+  deleteRealmBuilder,
+  REALM_BUILDER_MAX_NAME_LENGTH,
+  REALM_BUILDER_MAX_NOTE_LENGTH,
+  type RealmBuilderRow,
+  upsertRealmBuilder,
+} from '../../server/realm_builder_db';
+import {
+  currentRealmBuilder,
+  pastRealmBuilders,
+  REALM_BUILDER_PLACEHOLDER_NAME,
+  resetRealmBuilderRoll,
+} from '../../src/sim/content/realm_builders';
+import { fakeCtx, makeReq } from './helpers';
+
+const ADMIN_TOKEN = 'a'.repeat(64);
+
+function handlerFor(method: string, path: string) {
+  const route = routes.find((r) => r.method === method && r.path === path);
+  if (!route) throw new Error(`route not found: ${method} ${path}`);
+  return route;
+}
+
+async function runRoute(
+  method: 'GET' | 'POST',
+  path: string,
+  opts: { body?: unknown; token?: string } = {},
+): Promise<{ status: number; body: unknown }> {
+  const route = handlerFor(method, path);
+  const ctx = fakeCtx({
+    method,
+    url: path,
+    body: opts.body,
+    headers: {
+      authorization: `Bearer ${opts.token ?? ADMIN_TOKEN}`,
+      'content-type': 'application/json',
+    },
+  });
+  const chain = [...(route.middleware ?? [])];
+  let i = 0;
+  const next = async (): Promise<void> => {
+    const mw = chain[i++];
+    if (mw) await mw(ctx, next);
+    else await route.handler(ctx);
+  };
+  await next();
+  const res = ctx.res as unknown as {
+    statusCode: number;
+    body?: unknown;
+    payload?: unknown;
+    written?: string;
+  };
+  const raw = res.written ?? res.payload ?? res.body;
+  return { status: res.statusCode, body: typeof raw === 'string' ? JSON.parse(raw) : raw };
+}
+
+const august: RealmBuilderRow = {
+  year: 2026,
+  month: 8,
+  name: 'Wren Ashdown',
+  note: 'rebuilt the harbour',
+  updatedAt: '2026-08-14T00:00:00.000Z',
+};
+const july: RealmBuilderRow = {
+  year: 2026,
+  month: 7,
+  name: 'Marek Fell',
+  note: '',
+  updatedAt: '2026-07-02T00:00:00.000Z',
+};
+
+let stored: RealmBuilderRow[] = [];
+
+beforeEach(() => {
+  stored = [august, july];
+  setAdminDbForTests({
+    accountAndScopeForToken: async (token: string) =>
+      token === ADMIN_TOKEN ? { accountId: 7, scope: 'full' as const } : null,
+    adminRolesForAccount: async () => ({ username: 'ops', roles: ['admin'] }),
+  });
+  setRealmBuilderDbForTests({
+    listRealmBuilders: async () => stored,
+    upsertRealmBuilder: async (input) => {
+      const row: RealmBuilderRow = {
+        year: input.year,
+        month: input.month,
+        name: input.name,
+        note: input.note ?? '',
+        updatedAt: '2026-09-01T00:00:00.000Z',
+      };
+      stored = [row, ...stored.filter((r) => r.year !== row.year || r.month !== row.month)];
+      return row;
+    },
+    deleteRealmBuilder: async (year, month) => {
+      const before = stored.length;
+      stored = stored.filter((r) => r.year !== year || r.month !== month);
+      return stored.length < before;
+    },
+  });
+});
+
+afterEach(() => {
+  resetRealmBuilderDbForTests();
+  resetAdminDbForTests();
+  resetRealmBuilderRoll();
+  resetPublicReadRateLimits();
+});
+
+describe('auth gate', () => {
+  it('rejects an unknown bearer with the admin 401 envelope', async () => {
+    const out = await runRoute('GET', '/admin/api/realm-builders', { token: 'f'.repeat(64) });
+    expect(out.status).toBe(401);
+    expect(out.body).toMatchObject({ success: false, error: 'admin authentication required' });
+  });
+
+  it('rejects a staff account without content.moderate on every arm', async () => {
+    setAdminDbForTests({
+      accountAndScopeForToken: async (token: string) =>
+        token === ADMIN_TOKEN ? { accountId: 7, scope: 'full' as const } : null,
+      adminRolesForAccount: async () => ({ username: 'viewer', roles: ['viewer'] }),
+    });
+    // Read is gated too: the roll is not secret, but the dashboard page is
+    // behind one grant and the endpoints behind it must agree.
+    expect((await runRoute('GET', '/admin/api/realm-builders')).status).toBe(403);
+    const write = await runRoute('POST', '/admin/api/realm-builders', {
+      body: { year: 2026, month: 9, name: 'Nobody' },
+    });
+    expect(write.status).toBe(403);
+    const remove = await runRoute('POST', '/admin/api/realm-builders/delete', {
+      body: { year: 2026, month: 7 },
+    });
+    expect(remove.status).toBe(403);
+  });
+
+  it('leaves the public read open, because the game itself calls it', async () => {
+    const route = handlerFor('GET', '/api/realm-builder');
+    expect(route.surface).toBe('api');
+    // No auth middleware at all: an unauthenticated browser boots the world.
+    expect(route.middleware ?? []).toHaveLength(0);
+    const out = await runRoute('GET', '/api/realm-builder', { token: 'f'.repeat(64) });
+    expect(out.status).toBe(200);
+    expect(out.body).toMatchObject({ entries: [august, july] });
+  });
+});
+
+describe('the public read takes the shared per-IP budget', () => {
+  it('answers 429 { error } once the budget is spent, BEFORE touching the db', async () => {
+    // Anonymous and db-backed, like the deed rarity aggregate and the guild
+    // roster. Every client asks once while the world loads; nothing legitimate
+    // polls it, so an exhausted budget is abuse and must not reach Postgres.
+    const read = vi.fn(async () => stored);
+    setRealmBuilderDbForTests({ listRealmBuilders: read });
+    for (let i = 0; i < PUBLIC_READ_MAX_PER_MINUTE + 1; i++) {
+      publicReadRateLimited(makeReq({ method: 'GET', url: '/api/realm-builder' }));
+    }
+    const out = await runRoute('GET', '/api/realm-builder');
+    expect(out.status).toBe(429);
+    expect(out.body).toEqual({ error: 'rate limited' });
+    expect(read).not.toHaveBeenCalled();
+  });
+});
+
+describe('publishing to the live world', () => {
+  it('hands the roll to the sim, newest first, on boot', async () => {
+    expect(currentRealmBuilder().name).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+    await publishRealmBuilderRoll();
+    expect(currentRealmBuilder()).toEqual({ year: 2026, month: 8, name: 'Wren Ashdown' });
+    expect(pastRealmBuilders()).toEqual([{ year: 2026, month: 7, name: 'Marek Fell' }]);
+  });
+
+  it('republishes on save, so the plaque does not wait for a restart', async () => {
+    await publishRealmBuilderRoll();
+    const out = await runRoute('POST', '/admin/api/realm-builders', {
+      body: { year: 2026, month: 9, name: 'Isolde Vane', note: 'the lantern walk' },
+    });
+    expect(out.status).toBe(200);
+    // The name a player would see, without anyone reloading anything.
+    expect(currentRealmBuilder().name).toBe('Isolde Vane');
+    expect(pastRealmBuilders().map((h) => h.name)).toEqual(['Wren Ashdown', 'Marek Fell']);
+  });
+
+  it('republishes on delete too', async () => {
+    await publishRealmBuilderRoll();
+    const out = await runRoute('POST', '/admin/api/realm-builders/delete', {
+      body: { year: 2026, month: 8 },
+    });
+    expect(out.status).toBe(200);
+    expect(out.body).toMatchObject({ success: true, data: { deleted: true } });
+    expect(currentRealmBuilder().name).toBe('Marek Fell');
+  });
+
+  it('lets a read failure reach its caller, without wiping the roll', async () => {
+    await publishRealmBuilderRoll();
+    setRealmBuilderDbForTests({
+      listRealmBuilders: async () => {
+        throw new Error('pool timeout');
+      },
+    });
+    // main.ts catches this and boots anyway: one cosmetic name is not worth a
+    // realm's boot. What must NOT happen is the failure blanking a good roll.
+    await expect(publishRealmBuilderRoll()).rejects.toThrow('pool timeout');
+    expect(currentRealmBuilder().name).toBe('Wren Ashdown');
+  });
+
+  it('falls back to the shipped placeholder when the realm has named nobody', async () => {
+    stored = [];
+    await publishRealmBuilderRoll();
+    // An empty table is not an error: it is a plaque waiting for its first name.
+    expect(currentRealmBuilder().name).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+    expect(pastRealmBuilders()).toEqual([]);
+  });
+});
+
+describe('input validation', () => {
+  const reject = async (body: unknown): Promise<number> =>
+    (await runRoute('POST', '/admin/api/realm-builders', { body })).status;
+
+  it('refuses a bad month, year or name with a 400 rather than a 500', async () => {
+    // The db seam is faked here, so these are the handler's own TypeError arm
+    // exercised through realm_builder_db's real validators below.
+    setRealmBuilderDbForTests({
+      upsertRealmBuilder: async (input) => {
+        // Route through the REAL validators by calling them with a fake pool.
+        const pool = { query: async () => ({ rows: [{ ...input, note: '', updated_at: 0 }] }) };
+        return upsertRealmBuilder(pool as never, 'test', input);
+      },
+    });
+    expect(await reject({ year: 2026, month: 13, name: 'x' })).toBe(400);
+    expect(await reject({ year: 1900, month: 1, name: 'x' })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: '   ' })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: 'x'.repeat(200) })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: 'x', note: 'y'.repeat(400) })).toBe(400);
+  });
+
+  it('trims a name but never escapes it', async () => {
+    const pool = {
+      query: async (_sql: string, params: unknown[]) => ({
+        rows: [
+          { year: params[1], month: params[2], name: params[3], note: params[4], updated_at: 0 },
+        ],
+      }),
+    };
+    // An honouree's name is a community member's own name and splices verbatim,
+    // exactly like a player name: every surface writes it as text. Mangling it
+    // here would mean an operator seeing their entry come back wrong.
+    const row = await upsertRealmBuilder(pool as never, 'test', {
+      year: 2026,
+      month: 9,
+      name: "  Ada O'Hare-Vance <the Third>  ",
+    });
+    expect(row.name).toBe("Ada O'Hare-Vance <the Third>");
+  });
+
+  it('answers whether a delete actually removed anything', async () => {
+    const pool = { query: async () => ({ rowCount: 0 }) };
+    expect(await deleteRealmBuilder(pool as never, 'test', 2026, 5)).toBe(false);
+    const hit = { query: async () => ({ rowCount: 1 }) };
+    expect(await deleteRealmBuilder(hit as never, 'test', 2026, 5)).toBe(true);
+    await expect(deleteRealmBuilder(hit as never, 'test', 2026, 0)).rejects.toThrow(TypeError);
+  });
+
+  it('keeps its length caps where the dashboard can mirror them', () => {
+    expect(REALM_BUILDER_MAX_NAME_LENGTH).toBeGreaterThan(0);
+    expect(REALM_BUILDER_MAX_NOTE_LENGTH).toBeGreaterThan(REALM_BUILDER_MAX_NAME_LENGTH);
+  });
+});

@@ -3,6 +3,7 @@
 // styles both game entries; admin/guide use their own entries and inline CSS.
 import './styles/index.css';
 import { captureFirstTouch, registerAttributionPayload } from './attribution';
+import { apiUrl } from './client_origin';
 import { markEntryTightMode } from './device_memory_hint';
 import { startDiscordLogin } from './discord_login_start';
 import {
@@ -236,6 +237,7 @@ import {
   NATIVE_APP,
 } from './net/online';
 import { installOtaUpdateGate } from './net/ota_update_gate';
+import { loadRealmBuilderRoll } from './net/realm_builder_roll';
 import { realmPopulation } from './net/realm_population';
 import { RECONNECT_CONFLICT_ERROR } from './net/reconnect_policy';
 import {
@@ -1642,6 +1644,14 @@ async function startGame(
   window.setTimeout(() => {
     entryDiagnostics.markStable('[entry-guard] world entry stable; runtime probe armed');
   }, ENTRY_PROBE_STABLE_MS);
+
+  // The realm's Realm Builder of the Month roll. Deliberately NOT awaited: the
+  // plaque catching up a moment late is nothing, and a slow or missing endpoint
+  // must never hold a player out of the world. It re-bakes the projection
+  // itself, so it works whether it lands before or after the town is built.
+  void loadRealmBuilderRoll(apiUrl('/api/realm-builder')).then((name) => {
+    if (name) renderer.setRealmBuilderHonouree(name);
+  });
 
   const chatInput = $('#chat-input') as unknown as HTMLTextAreaElement;
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;

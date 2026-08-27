@@ -323,8 +323,16 @@ interface AttributionTargetFixture {
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
+// Re-minted for the Realm Builder monument (round 7): the civic centrepiece
+// changed asset, subject and shader cache key. No capture was retaken.
+// Re-minted again for round 8, the admin-dashboard wiring: the monument now
+// takes its honouree from the realm's own records, which moved the
+// rendererIntegration, town and civicShader leaves. No capture was retaken.
+// Re-minted for the Realm Builder monument, ported onto main: the civic
+// centrepiece changed asset, subject and shader cache key, and every
+// fingerprinted input carries this base's bytes. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'b4f994b0a5d52ffce488667a7768739838207796dc4eaa331ebd980ab3fe8ba4';
+  '6b47a6e002deb72ed7b8a26d61137f3a962ff00f2f4802cafe5acea59c5f159b';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [
@@ -475,7 +483,7 @@ describe('Eastbrook polish capture contract', () => {
       'apothecary_lin',
       'mailbox_eastbrook',
       'eastbrook_noticeboard',
-      'eastbrook_civic_well_beacon',
+      'eastbrook_realm_builder_monument',
       'chronicler_saul',
       'fury',
     ]);
@@ -729,7 +737,10 @@ describe('Eastbrook polish capture contract', () => {
       },
       'chapel-and-weaving': {
         camera: { x: 26, y: 12, z: -100 },
-        target: { x: -13, y: 3, z: -100 },
+        // Round 8: the aim was the middle of the square, which the doubled
+        // Realm Builder monument now occupies, so it moved a yard past the
+        // plinth's west face. Same establishing shot, statue as its backdrop.
+        target: { x: -10.5, y: 3, z: -100 },
       },
       'toolworks-service-perimeter': {
         camera: { x: -11, y: 7, z: -120 },
@@ -975,9 +986,12 @@ describe('Eastbrook polish capture contract', () => {
       EASTBROOK_LAYOUT.services.noticeboard.id,
       EASTBROOK_LAYOUT.services.noticeboard.frontStandingPoint,
     );
-    subjectPoints.set(EASTBROOK_LAYOUT.civic.wellBeacon.id, {
-      x: EASTBROOK_LAYOUT.civic.wellBeacon.position.x,
-      z: EASTBROOK_LAYOUT.civic.wellBeacon.position.z - 2,
+    // Off-axis on purpose (see capture_contract.mjs, civic-motion): the middle
+    // of the square is the statue and due south of it is a bench, so the aim
+    // sits on the southwest diagonal, outside the plinth.
+    subjectPoints.set(EASTBROOK_LAYOUT.civic.monument.id, {
+      x: EASTBROOK_LAYOUT.civic.monument.position.x + 2.7,
+      z: EASTBROOK_LAYOUT.civic.monument.position.z - 3.2,
     });
     for (const npc of EASTBROOK_LAYOUT.services.npcs) {
       subjectPoints.set(npc.id, npc.position);

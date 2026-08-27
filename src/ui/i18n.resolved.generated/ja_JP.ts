@@ -3067,6 +3067,14 @@ export const ja_JP: EnTranslations = {
       "popupTitle": "ギルドの掲示柱",
       "close": "閉じる"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "銀行",
       "subtitle": "金張りの金庫",
@@ -17928,6 +17936,7 @@ export const ja_JP: EnTranslations = {
     "delveRiteShrineReedInteract": "葦の祠：Fで触れる",
     "delveRiteShrineSkullInteract": "髑髏の祠：Fで触れる",
     "mailboxName": "メールボックス",
-    "noticeboardName": "掲示板"
+    "noticeboardName": "掲示板",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

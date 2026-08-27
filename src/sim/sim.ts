@@ -234,6 +234,7 @@ import { CASCADE_SCENARIO } from './dev/cascade_playtest';
 import { despawnMobsForDev } from './dev_commands';
 import { projectOutsideDungeonDoors } from './dungeon_door_clearance';
 import { arenaMapForSlot } from './dungeon_layout';
+import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import * as nythraxis from './encounters/nythraxis';
 // A3: ARENA_SPAWNS_A_2v2/B_2v2 (read only by the moved fiestaRevive) now live with
 // social/fiesta.ts. The dungeon-wall consts (DUNGEON_WALL_HW/X) are now read only by
@@ -2704,6 +2705,32 @@ export class Sim {
       board.facing = boardDef.rotation;
       board.prevFacing = boardDef.rotation;
       this.addEntity(board);
+    }
+
+    // The Realm Builder monument is a singleton static service, so it is
+    // recognised by templateId rather than through a def list. It self-gates on
+    // its own art: custom_world_props.ts strips the authored-town records from
+    // a custom world, and a click target standing where no statue was drawn is
+    // worse than no target at all. The reserved high-range id consumes neither
+    // nextId nor rng, so every later entity id and deterministic draw is
+    // untouched by adding it (the noticeboard rule above).
+    const monumentDef = EASTBROOK_LAYOUT.civic.monument;
+    if (this.worldContent.props.wells.some((well) => well.id === monumentDef.id)) {
+      if (this.entities.has(monumentDef.entityId)) {
+        throw new Error(`Duplicate static service entity id: ${monumentDef.entityId}`);
+      }
+      const monument = createGroundObject(
+        monumentDef.entityId,
+        '',
+        monumentDef.name,
+        this.groundPos(monumentDef.position.x, monumentDef.position.z),
+      );
+      monument.templateId = monumentDef.templateId;
+      monument.objectItemId = null;
+      monument.lootable = true;
+      monument.facing = monumentDef.rotation;
+      monument.prevFacing = monumentDef.rotation;
+      this.addEntity(monument);
     }
 
     if (cfg.noPlayer && this.devCommands) this.spawnHealerPracticeDummy();

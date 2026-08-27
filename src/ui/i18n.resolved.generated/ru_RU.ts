@@ -3067,6 +3067,14 @@ export const ru_RU: EnTranslations = {
       "popupTitle": "Гильдейский столб",
       "close": "Закрыть"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Банк",
       "subtitle": "Золочёный сундук",
@@ -17928,6 +17936,7 @@ export const ru_RU: EnTranslations = {
     "delveRiteShrineReedInteract": "Святилище тростника: нажмите F, чтобы коснуться",
     "delveRiteShrineSkullInteract": "Святилище черепа: нажмите F, чтобы коснуться",
     "mailboxName": "Почтовый ящик",
-    "noticeboardName": "Доска объявлений"
+    "noticeboardName": "Доска объявлений",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

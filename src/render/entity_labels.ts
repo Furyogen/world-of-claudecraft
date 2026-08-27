@@ -4,7 +4,7 @@
 // both the renderer and the NameplatePainter can share objectDisplayName without
 // a renderer <-> painter import cycle.
 
-import type { Entity } from '../sim/types';
+import { type Entity, REALM_BUILDER_MONUMENT_TEMPLATE_ID } from '../sim/types';
 import { dungeonDisplayName, tEntity } from '../ui/entity_i18n';
 import { t } from '../ui/i18n';
 
@@ -22,6 +22,9 @@ export function objectDisplayName(entity: Entity): string {
   }
   if (entity.templateId === 'noticeboard_eastbrook') {
     return t('worldContent.noticeboardName');
+  }
+  if (entity.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID) {
+    return t('worldContent.realmBuilderMonumentName');
   }
   if (entity.templateId === 'soulwell') {
     return tEntity({ kind: 'ability', id: 'soulwell', field: 'name' });

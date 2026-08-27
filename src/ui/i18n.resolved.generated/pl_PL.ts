@@ -3067,6 +3067,14 @@ export const pl_PL: EnTranslations = {
       "popupTitle": "Tablica gildii",
       "close": "Zamknij"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Bank",
       "subtitle": "Złocona Szkatuła",
@@ -17928,6 +17936,7 @@ export const pl_PL: EnTranslations = {
     "delveRiteShrineReedInteract": "Kapliczka Trzciny: Naciśnij F, aby jej dotknąć",
     "delveRiteShrineSkullInteract": "Kapliczka Czaszki: Naciśnij F, aby jej dotknąć",
     "mailboxName": "Skrzynka pocztowa",
-    "noticeboardName": "Tablica ogłoszeń"
+    "noticeboardName": "Tablica ogłoszeń",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

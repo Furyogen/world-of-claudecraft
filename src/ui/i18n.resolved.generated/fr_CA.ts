@@ -3067,6 +3067,14 @@ export const fr_CA: EnTranslations = {
       "popupTitle": "Panneau de guilde",
       "close": "Fermer"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Banque",
       "subtitle": "Le Coffre doré",
@@ -17928,6 +17936,7 @@ export const fr_CA: EnTranslations = {
     "delveRiteShrineReedInteract": "Autel du roseau : appuyez sur F pour le toucher",
     "delveRiteShrineSkullInteract": "Autel du crâne : appuyez sur F pour le toucher",
     "mailboxName": "Boîte aux lettres",
-    "noticeboardName": "Panneau d'affichage"
+    "noticeboardName": "Panneau d'affichage",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

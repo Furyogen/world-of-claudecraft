@@ -3067,6 +3067,14 @@ export const cs_CZ: EnTranslations = {
       "popupTitle": "Cechovní vývěska",
       "close": "Zavřít"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Banka",
       "subtitle": "Pozlacená truhlice",
@@ -17928,6 +17936,7 @@ export const cs_CZ: EnTranslations = {
     "delveRiteShrineReedInteract": "Rákosová svatyně: stiskni F a dotkni se jí",
     "delveRiteShrineSkullInteract": "Lebková svatyně: stiskni F a dotkni se jí",
     "mailboxName": "Poštovní schránka",
-    "noticeboardName": "Vývěska"
+    "noticeboardName": "Vývěska",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };
