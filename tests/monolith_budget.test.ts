@@ -202,13 +202,16 @@ const MONOLITHS: MonolithRow[] = [
     // ceiling is the exact merged count.
     // Re-pinned to the integration merge of the latest v0.40.0 (the touch UI
     // rework); exact merged count.
-    // Up 13329 -> 13345 for the Realm Builder monument. Its art and effects
+    // Up 13329 -> 13339 for the Realm Builder monument. Its art and effects
     // are src/render/realm_builder_monument_fx.ts and the town view; what is
-    // left here is two imports, the one-line setRealmBuilderHonouree
+    // left here is one import, the one-line setRealmBuilderHonouree
     // delegation, and the entity arm that returns the monument's pick volume
     // (without that arm the generic ground-object branch stands a loot prop
-    // inside the plinth).
-    ceiling: 13345,
+    // inside the plinth). The arm matches on the template-id LITERAL like the
+    // noticeboard arm beside it: importing the constant would expand a
+    // one-line import into six. tests/realm_builder_monument.test.ts pins the
+    // literal to the constant.
+    ceiling: 13339,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {

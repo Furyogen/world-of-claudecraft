@@ -164,6 +164,15 @@ describe('the Realm Builder monument as a static world service', () => {
     ]);
   });
 
+  it("pins the renderer arm's template-id literal to the constant", () => {
+    // renderer.ts matches on the LITERAL, exactly like the noticeboard arm
+    // beside it, so that importing the constant does not expand a one-line
+    // import into six and push the file over its monolith ceiling. That trade
+    // is only safe while the literal and the constant agree, so pin them.
+    const source = readFileSync(path.join(__dirname, '..', 'src/render/renderer.ts'), 'utf8');
+    expect(source).toContain(`e.templateId === '${REALM_BUILDER_MONUMENT_TEMPLATE_ID}'`);
+  });
+
   it('spawns on the reserved id without touching the allocator or the rng', () => {
     const withoutMonument: WorldContent = {
       ...BUILTIN_WORLD,

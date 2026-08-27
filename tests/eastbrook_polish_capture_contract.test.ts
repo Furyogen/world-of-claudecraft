@@ -332,7 +332,7 @@ interface AttributionTargetFixture {
 // centrepiece changed asset, subject and shader cache key, and every
 // fingerprinted input carries this base's bytes. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  '537dae6f84caff93db0eac07ae7d445ac62d392f3cfaecc5af6f89ab40fc6589';
+  '4b635d9e3ce4a5119f54d6a139b80f962ff9dc2f7ceead6255846bb5a7ef8c0b';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

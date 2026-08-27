@@ -40,13 +40,7 @@ import {
 import type { DelveModuleId } from '../sim/delve_layout';
 import { generateRiftFloor, riftLiftAt } from '../sim/rift/rift_gen';
 import type { BiomeId, ZoneDef } from '../sim/types';
-import {
-  ALL_CLASSES,
-  type Entity,
-  isMechWearer,
-  REALM_BUILDER_MONUMENT_TEMPLATE_ID,
-  type SimEvent,
-} from '../sim/types';
+import { ALL_CLASSES, type Entity, isMechWearer, type SimEvent } from '../sim/types';
 import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import type { ChatBubbleStyle } from '../ui/chat_bubble_style';
 import { tEntity } from '../ui/entity_i18n';
@@ -8284,7 +8278,7 @@ export class Renderer {
       body = built.group;
       height = built.height;
       objectMesh = body;
-    } else if (e.kind === 'object' && e.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID) {
+    } else if (e.kind === 'object' && e.templateId === 'realm_builder_monument') {
       // Art lives in the town view: this entity is a pick volume only.
       const built = buildRealmBuilderMonumentPickBody();
       body = built.group;
