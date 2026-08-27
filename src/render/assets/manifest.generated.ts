@@ -898,7 +898,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/props/eastbrook_inn.glb": "/media/models/props/eastbrook_inn.b3d6e06f33a0.glb",
   "models/props/eastbrook_market_stall.glb": "/media/models/props/eastbrook_market_stall.c988463f4a22.glb",
   "models/props/eastbrook_noticeboard.glb": "/media/models/props/eastbrook_noticeboard.0ee3864748a9.glb",
-  "models/props/eastbrook_realm_builder_monument.glb": "/media/models/props/eastbrook_realm_builder_monument.2a9e0f3fb76c.glb",
+  "models/props/eastbrook_realm_builder_monument.glb": "/media/models/props/eastbrook_realm_builder_monument.ed78a1eb3127.glb",
   "models/props/eastbrook_smithy.glb": "/media/models/props/eastbrook_smithy.c34124073e1a.glb",
   "models/props/eastbrook_toolworks.glb": "/media/models/props/eastbrook_toolworks.7d97dca4495a.glb",
   "models/props/eastbrook_wall_wing.glb": "/media/models/props/eastbrook_wall_wing.740136a29c6a.glb",
