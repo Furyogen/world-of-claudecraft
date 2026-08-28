@@ -1701,6 +1701,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'wallet.browser.title': '連接 Solana 錢包',
   'wallet.browser.linkBody': '在此瀏覽器中選擇錢包擴充功能。簽署驗證訊息後返回桌面應用程式。',
   'wallet.browser.paymentBody': '選擇已連結至帳號的錢包，並在此瀏覽器中核准交易。',
+  'wallet.browser.stepUpBody': '選擇已連結至帳號的錢包，並簽署 $WOC 交易所的授權訊息。簽署免費，不會轉移任何資金。',
   'wallet.browser.extensionHelp':
     '找不到相容的錢包擴充功能。請安裝或解鎖 Phantom、Solflare 或其他 Solana 瀏覽器錢包，然後再試一次。',
   'wallet.browser.safety': 'World of ClaudeCraft 絕不會要求復原短語或私鑰。',
@@ -8526,8 +8527,10 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocMarket.loadFailed': '無法連接交易所，請稍後再試。',
   'hudChrome.wocMarket.disabledRealm': '本伺服器未開放 $WOC 交易所。',
   'hudChrome.wocMarket.pausedBanner': '交易已暫停。拍賣倒數照常進行；新的掛單、出價、報價和付款需等交易恢復後再進行，已送出的付款仍會照常結算。',
-  'hudChrome.wocMarket.walletBanner': '綁定並驗證錢包後即可在交易所出價、購買或出售。',
-  'hudChrome.wocMarket.walletBannerCta': '連接錢包',
+  'hudChrome.wocMarket.walletLinkedDisconnected':
+    '您的公開地址已連結。需要使用 $WOC 付款時，請重新連接該錢包應用程式。',
+  'hudChrome.wocMarket.walletLinkedConnected': '已連結的錢包應用程式已連接，可用於 $WOC 付款。',
+  'hudChrome.wocMarket.walletUsdUnknown': '未知',
   'hudChrome.wocMarket.rateNote': '匯率：截至 {time}，約每美元 {tokens} $WOC。',
   'hudChrome.wocMarket.estimateNote': '{usd} 按目前匯率約合 {tokens} $WOC。',
   'hudChrome.wocMarket.browseEmpty': '目前沒有掛單，稍後再來看看。',

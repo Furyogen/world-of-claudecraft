@@ -5565,7 +5565,8 @@ export const hudChromeStrings = {
     minLevelNote: 'Requires level {level}',
   },
   // The $WOC Exchange window (docs/prd/woc/marketplace.md): USD-denominated
-  // auctions settled in $WOC, browser-web only, config-gated server-side.
+  // auctions settled in $WOC, browser web + website desktop only,
+  // config-gated server-side.
   // Every USD amount renders through formatNumber currency options and every
   // timestamp through formatDateTime (UTC plus local, per the PRD); the
   // window never composes numbers into these strings by concatenation.
@@ -5603,11 +5604,11 @@ export const hudChromeStrings = {
     // already sent is not health-gated and still settles.
     pausedBanner:
       'Trading is paused. Auctions keep counting down; new listings, bids, offers, and payments wait until trading resumes, and a payment already sent still settles.',
-    walletBanner: 'Link and verify a wallet to bid, buy, or sell on the Exchange.',
-    // The banner's own shortcut into the shared wallet connect flow (the
-    // woc:wallet-verify event the store and daily rewards buttons dispatch),
-    // so an unlinked player is never told to link with nowhere to do it.
-    walletBannerCta: 'Connect wallet',
+    walletLinkedDisconnected:
+      'Your public address is linked. Reconnect that wallet app when you want to pay with $WOC.',
+    walletLinkedConnected: 'Your linked wallet app is connected and ready for $WOC purchases.',
+    walletUsdBalance: '{amount} USD',
+    walletUsdUnknown: 'Unknown',
     // The rate is per ONE dollar, said outright: 'per USD' read as a unit
     // label and players asked per how many.
     rateNote: 'Rate: about {tokens} $WOC per $1.00 USD as of {time}.',
