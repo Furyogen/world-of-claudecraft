@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AnimState, BaseState } from '../src/render/characters/anim_state';
 import { desiredBaseState, locomotionTimeScale } from '../src/render/characters/anim_state';
+import type { LocoState } from '../src/render/locomotion';
 import { applyStandingRider, STANDING_WALK_MIN_SPEED } from '../src/render/mount_ride_view';
 import {
   advanceRoll,
@@ -87,6 +88,16 @@ describe('rolling-mount motion math', () => {
   });
 });
 
+/** A locomotion readout for travel at `speed` u/s: negative backpedals. The
+ *  helpers take the state whole, because the magnitude alone is what let the
+ *  roll and the rider's feet disagree (tests/mount_ride_direction.test.ts). */
+const travelling = (speed: number): LocoState => ({
+  speed: Math.abs(speed),
+  moving: Math.abs(speed) > 0,
+  backwards: speed < 0,
+  running: false,
+});
+
 describe('a standing rider actually plays a BACKWARDS walk', () => {
   // The point of applyStandingRider is not the flag, it is the clip the engine
   // then picks. These assert against the engine's own selector rather than
@@ -97,7 +108,7 @@ describe('a standing rider actually plays a BACKWARDS walk', () => {
 
   it('selects walkBack, not a forward walk, once applyStandingRider has run', () => {
     const st = { ...IDLE } as AnimState;
-    applyStandingRider(st, 7);
+    applyStandingRider(st, travelling(7));
     expect(st.backwards).toBe(true);
     expect(st.moving).toBe(true);
     // running would pick the run clip, which has no backwards variant
@@ -107,7 +118,7 @@ describe('a standing rider actually plays a BACKWARDS walk', () => {
 
   it('walks the rider against the SURFACE speed, not the body speed', () => {
     const st = { ...IDLE } as AnimState;
-    applyStandingRider(st, 7);
+    applyStandingRider(st, travelling(7));
     // 2x body speed: matching body speed would slip the feet on a log whose
     // top travels twice as fast as the mount does over the ground.
     expect(st.speed).toBe(14);
@@ -116,7 +127,7 @@ describe('a standing rider actually plays a BACKWARDS walk', () => {
 
   it('is a real backwards clip, never a reversed forward one', () => {
     const st = { ...IDLE } as AnimState;
-    applyStandingRider(st, 7);
+    applyStandingRider(st, travelling(7));
     // reverseBackpedal is the ghost-wolf trick (play walk at negative
     // timeScale). The player rig has a genuine Walking_Backwards, so the
     // standing rider must NOT take that path: a reversed forward walk reads
@@ -138,7 +149,7 @@ describe('a parked rolling mount stands its rider still', () => {
     // one reads as a bug, and it is the same reason these mounts carry no idle
     // bob: parked junk sits dead still.
     const st = { ...IDLE } as AnimState;
-    expect(applyStandingRider(st, 0)).toBe(false);
+    expect(applyStandingRider(st, travelling(0))).toBe(false);
     expect(st.moving).toBe(false);
     expect(st.backwards).toBe(false);
     expect(desiredBaseState(st, true)).toBe('idle');
@@ -146,13 +157,13 @@ describe('a parked rolling mount stands its rider still', () => {
 
   it('ignores the residual speed left on the frame a key is released', () => {
     const st = { ...IDLE } as AnimState;
-    expect(applyStandingRider(st, STANDING_WALK_MIN_SPEED)).toBe(false);
+    expect(applyStandingRider(st, travelling(STANDING_WALK_MIN_SPEED))).toBe(false);
     expect(st.moving).toBe(false);
   });
 
   it('still walks the moment the mount actually rolls', () => {
     const st = { ...IDLE } as AnimState;
-    expect(applyStandingRider(st, STANDING_WALK_MIN_SPEED + 0.01)).toBe(true);
+    expect(applyStandingRider(st, travelling(STANDING_WALK_MIN_SPEED + 0.01))).toBe(true);
     expect(st.moving).toBe(true);
     expect(st.backwards).toBe(true);
     expect(desiredBaseState(st, true)).toBe('walkBack');

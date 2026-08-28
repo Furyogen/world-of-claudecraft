@@ -11727,7 +11727,7 @@ export class Renderer {
       st.sitting =
         e.kind === 'player' &&
         (e.sitting || e.eating !== null || e.drinking !== null || riderSeated);
-      if (riderStanding && !visuallyDead) applyStandingRider(st, loco.speed);
+      if (riderStanding && !visuallyDead) applyStandingRider(st, loco);
       // Ice slide: the sim glides the player at speed but they should read as
       // FROZEN (gliding stiff on the ice), not sprinting. Suppress locomotion +
       // airborne so the state machine holds the static idle pose while they slide.
@@ -12034,8 +12034,7 @@ export class Renderer {
         v.mountRoll = driveMountRide(mountSpec, mst, v, this.vfx, {
           dt,
           time: this.time,
-          moving,
-          bodySpeed: loco.speed,
+          loco,
           facing,
           present: runCharacterPresentation,
           animate,

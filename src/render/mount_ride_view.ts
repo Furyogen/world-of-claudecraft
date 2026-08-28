@@ -7,6 +7,7 @@
 // the work (three object3d writes and two emitter calls); the arithmetic they
 // depend on is pure and unit-tested next door in mount_roll_core.ts.
 
+import type { LocoState } from './locomotion';
 import { advanceRoll, rollPivotOffset, topSurfaceSpeed } from './mount_roll_core';
 import type { MountVisualSpec } from './mount_visuals';
 import { mountBobY } from './mount_visuals';
@@ -32,17 +33,35 @@ export interface MountRideView {
   group: { position: Vec3Like };
 }
 
-/** Per-frame scalars. `bodySpeed` is deliberately separate from `anim.speed`:
- *  a standing rider's stride runs at the TOP-SURFACE speed (twice body speed),
- *  and rolling from that would spin the mount at twice the ground it covers. */
+/** Per-frame inputs. The rider's locomotion state is passed WHOLE rather than
+ *  as a bare speed, and deliberately so: `LocoState.speed` is a magnitude with
+ *  the travel direction split off into `backwards`, so a consumer handed only
+ *  the magnitude rolls a reversing mount forward. `signedTravelSpeed` joins the
+ *  two back together, once, here.
+ *
+ *  It is also kept separate from `anim.speed`: a standing rider's stride runs at
+ *  the TOP-SURFACE speed (twice body speed), and rolling from that would spin
+ *  the mount at twice the ground it covers. */
 export interface MountRideFrame {
   dt: number;
   time: number;
-  moving: boolean;
-  bodySpeed: number;
+  loco: Readonly<LocoState>;
   facing: number;
   present: boolean;
   animate: boolean;
+}
+
+/** Ground speed with the SIGN of travel restored: negative while backpedalling.
+ *
+ *  The locomotion track reports a positive magnitude plus a latched `backwards`
+ *  flag, which is what a gait pick wants (a clip plays at a rate, not at a
+ *  direction) but never what an INTEGRATOR wants. Both mount consumers here
+ *  integrate travel (the roll accumulates it, the rider's stride is posed
+ *  against it), so both take the signed value and stay in agreement: the flag
+ *  and the sign come from the same latch, so the roll can never disagree with
+ *  the gait, not even during the direction latch's confirm window. */
+export function signedTravelSpeed(loco: Readonly<LocoState>): number {
+  return loco.backwards ? -loco.speed : loco.speed;
 }
 
 /** Minimal shapes so this module never imports the renderer or Three. */
@@ -81,17 +100,20 @@ export function driveMountRide(
     mountVisual.advanceOffscreen(frame.dt);
     return view.mountRoll;
   }
+  const moving = frame.loco.moving;
   mountVisual.update(frame.dt, anim, frame.animate);
   // The rider floats WITH the procedural bob (the hover cycle's idle float),
   // not just the mount body.
-  const bob = mountBobY(spec, frame.time, frame.moving);
+  const bob = mountBobY(spec, frame.time, moving);
   mountVisual.root.position.y = bob;
   if (view.visual) view.visual.root.position.y = view.mountLift + bob;
   // Cylinder mounts (the log, the barrel) turn about their local X axis, which
   // lies ACROSS travel, at omega = v / r so the contact patch stays still.
   let roll = view.mountRoll;
   if (spec.rollRadius > 0) {
-    roll = advanceRoll(roll, frame.bodySpeed * frame.dt, spec.rollRadius);
+    // SIGNED distance: a player backing up rolls the barrel back the way it
+    // came instead of driving it forward out from under them.
+    roll = advanceRoll(roll, signedTravelSpeed(frame.loco) * frame.dt, spec.rollRadius);
     mountVisual.root.rotation.x = roll;
     // Pivot on the AXLE, not the model origin. Props are normalized with their
     // origin at the base, so rotating about it swings the body through the
@@ -103,9 +125,9 @@ export function driveMountRide(
   // Ambient mount particles: the snail paints its slime path while gliding,
   // the hover cycle streams aether exhaust off its tail.
   if (spec.fx === 'slime') {
-    if (frame.moving) fxSink.mountSlimeTrail(view.group.position, frame.dt);
+    if (moving) fxSink.mountSlimeTrail(view.group.position, frame.dt);
   } else if (spec.fx === 'exhaust') {
-    fxSink.mountExhaust(view.group.position, frame.facing, frame.dt, frame.moving);
+    fxSink.mountExhaust(view.group.position, frame.facing, frame.dt, moving);
   }
   return roll;
 }
@@ -127,24 +149,36 @@ export interface RiderAnimInputs {
  *
  *  The surface under them travels forward at twice body speed
  *  (mount_roll_core.topSurfaceSpeed), so they backpedal against it to hold
- *  station, which is the joke. Two details matter:
+ *  station, which is the joke. Three details matter:
  *
  *  - the stride runs against the SURFACE, not the body: matching body speed
  *    leaves the feet visibly slipping on a log turning twice as fast;
+ *  - the stride DIRECTION is the mount's, mirrored. Reverse travel rolls the
+ *    barrel back the way it came, so its crown carries the rider backwards and
+ *    they hold station by striding FORWARD. Hard-coding the backwards walk
+ *    instead pointed the feet against the direction actually travelled the
+ *    moment a player held their back key;
  *  - it rides the animation state machine's own `backwards` seam rather than
  *    adding a dispatch, so `backwards` picks the walkBack clip where one
  *    exists and reverseBackpedal negates the walk timeScale where it does not
- *    (src/render/characters/anim_state.ts). */
-export function applyStandingRider(st: RiderAnimInputs, bodySpeed: number): boolean {
+ *    (src/render/characters/anim_state.ts).
+ *
+ *  Takes the locomotion state whole, and reads the same signed speed the roll
+ *  does, so the gait and the mount under it cannot drift apart. */
+export function applyStandingRider(st: RiderAnimInputs, loco: Readonly<LocoState>): boolean {
+  const bodySpeed = signedTravelSpeed(loco);
   // A PARKED mount is not rolling, so its rider has nothing to walk against and
   // simply stands there. Forcing the walk here would backpedal them on the spot
   // beside a motionless log, which reads as a bug rather than a joke (and it is
   // the same reason the bob in mount_visuals.ts carries no idle for these).
-  if (bodySpeed <= STANDING_WALK_MIN_SPEED) return false;
-  st.speed = topSurfaceSpeed(bodySpeed);
+  // The threshold is on the MAGNITUDE: a mount rolling backwards is rolling.
+  if (Math.abs(bodySpeed) <= STANDING_WALK_MIN_SPEED) return false;
+  // `speed` is a stride RATE, so it stays a magnitude; only the flag carries
+  // the direction.
+  st.speed = topSurfaceSpeed(Math.abs(bodySpeed));
   st.moving = true;
   st.running = false;
-  st.backwards = true;
+  st.backwards = bodySpeed > 0;
   return true;
 }
 

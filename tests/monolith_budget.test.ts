@@ -76,7 +76,11 @@ const MONOLITHS: MonolithRow[] = [
     // copy, bob, roll, ambient fx) moved out to src/render/mount_ride_view.ts,
     // so the rolling barrel paid for its own new logic by extraction rather
     // than by raising the bar. 13754 upstream, 13747 here.
-    ceiling: 13747,
+    // Lowered once more, 13747 -> 13746: the reverse-travel fix hands
+    // driveMountRide the locomotion state whole instead of a magnitude plus a
+    // separately-passed `moving`, which retires a line at the call site. Exact
+    // count, as ever: any further growth reds again.
+    ceiling: 13746,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {

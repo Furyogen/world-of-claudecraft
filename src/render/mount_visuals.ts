@@ -39,7 +39,9 @@ export interface MountVisualSpec {
   /** How the RIDER is posed. 'seated' is every ordinary mount (the sit loop
    *  reads as riding). 'standing' is the rolling junk mounts: the rider stands
    *  on top and walks BACKWARDS against the surface, which at 2x body speed is
-   *  exactly what holds them in place on a log rolling forward. */
+   *  exactly what holds them in place on a log rolling forward. Reverse travel
+   *  mirrors the whole picture, roll and gait together
+   *  (mount_ride_view.signedTravelSpeed). */
   ridePose: 'seated' | 'standing';
 }
 
