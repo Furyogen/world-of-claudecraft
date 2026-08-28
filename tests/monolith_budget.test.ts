@@ -142,11 +142,11 @@ const MONOLITHS: MonolithRow[] = [
     // pure core interface_unlock_menu_core.ts. What remains on coordinator
     // state (dimension-mode mover wiring, the edit-preview painter closure,
     // the player-frame bar lock) is the live-hooks half. Exact merged count.
-    // Up 18489 -> 18495 for the Realm Builder monument's honour-roll card.
+    // Up 19002 -> 19008 for the Realm Builder monument's honour-roll card.
     // The card is its own module (src/ui/realm_builder_popup.ts); what is left
     // here is the six lines that cannot live anywhere else — the import, the
     // field, its relocalize() call, and the three-line event arm.
-    ceiling: 19002,
+    ceiling: 19008,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {
@@ -292,10 +292,10 @@ const MONOLITHS: MonolithRow[] = [
     // the player-frame bar lock) predate this ratchet; folding them behind a
     // src/game/ settings-application seam is flagged follow-up work. Exact
     // merged count.
-    // Up 11526 -> 11528 for the Realm Builder roll's boot load. The fetch and
+    // Up 11629 -> 11631 for the Realm Builder roll's boot load. The fetch and
     // its not-awaited rationale are src/game/realm_builder_boot.ts; the residue
     // here is one import and one call.
-    ceiling: 11629,
+    ceiling: 11631,
     seam: 'a src/game/ or src/ui/ sibling module; main.ts is a firewall, not a home',
   },
   {

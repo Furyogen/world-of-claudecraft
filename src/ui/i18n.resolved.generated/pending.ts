@@ -56,6 +56,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -75,7 +81,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "es_ES": [
     "hudChrome.actionBar.conflictAccept",
@@ -124,6 +131,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -143,7 +156,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "fr_FR": [
     "hudChrome.actionBar.conflictAccept",
@@ -192,6 +206,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -211,7 +231,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "fr_CA": [
     "hudChrome.actionBar.conflictAccept",
@@ -260,6 +281,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -279,7 +306,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "en_CA": [],
   "it_IT": [
@@ -329,6 +357,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -348,7 +382,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "de_DE": [
     "hudChrome.actionBar.conflictAccept",
@@ -397,6 +432,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -416,7 +457,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "zh_CN": [
     "hudChrome.interfaceUnlock.frameNames.chat",
@@ -497,6 +539,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -516,7 +564,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "ru_RU": [
     "hudChrome.interfaceUnlock.frameNames.chat",
@@ -573,6 +622,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -592,7 +647,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "nl_NL": [
     "hudChrome.actionBar.conflictAccept",
@@ -641,6 +697,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -660,7 +722,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "pl_PL": [
     "hudChrome.actionBar.conflictAccept",
@@ -709,6 +772,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -728,7 +797,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "id_ID": [
     "hudChrome.actionBar.conflictAccept",
@@ -777,6 +847,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -796,7 +872,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "tr_TR": [
     "hudChrome.actionBar.conflictAccept",
@@ -845,6 +922,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -864,7 +947,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "sv_SE": [
     "hudChrome.actionBar.conflictAccept",
@@ -913,6 +997,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -932,7 +1022,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "vi_VN": [
     "hudChrome.actionBar.conflictAccept",
@@ -981,6 +1072,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -1000,7 +1097,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ],
   "da_DK": [
     "hudChrome.actionBar.conflictAccept",
@@ -1049,6 +1147,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.interfaceUnlock.unlockFrame",
     "hudChrome.options.combineActionBars",
     "hudChrome.partyFrames.optionsSection",
+    "hudChrome.realmBuilder.close",
+    "hudChrome.realmBuilder.currentLabel",
+    "hudChrome.realmBuilder.pastEmpty",
+    "hudChrome.realmBuilder.pastTitle",
+    "hudChrome.realmBuilder.placeholderHint",
+    "hudChrome.realmBuilder.title",
     "hudChrome.steam.wishlist",
     "hudChrome.steam.wishlistAria",
     "hudChrome.steam.wishlistShort",
@@ -1068,6 +1172,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.wocMarket.walletLinkedDisconnected",
     "hudChrome.wocMarket.walletUsdBalance",
     "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "wallet.browser.stepUpBody",
+    "worldContent.realmBuilderMonumentName"
   ]
 };
