@@ -1,10 +1,17 @@
 // Render 3D face/front icons for the rideable mounts, for use as the 2D bag/tooltip
 // icons on their reins items (and the mount-picker cards). Mirrors the headless-Chrome +
-// swiftshader harness of scripts/render_weapon_icons.mjs and the transparent-WebP + blank
-// alpha check of scripts/wiki/render_model_stills.mjs, but frames a front three-quarter
+// swiftshader harness of scripts/render_weapon_icons.mjs and the blank alpha check of
+// scripts/wiki/render_model_stills.mjs, but frames a front three-quarter
 // close-up of each mount's head from its own bounding box (see scripts/mount_icon_entry.js
-// for the framing rule). Output: public/ui/items/reins_<mount>.webp (128px, transparent),
+// for the framing rule). Output: public/ui/items/reins_<mount>.webp (128px, OPAQUE),
 // wired into ITEM_IMAGE_IDS in src/ui/icons.ts and gated by tests/item_icons.test.ts.
+//
+// The transparent render is composited over the item-icon vignette before it is
+// written, because the shipping item catalog is opaque by contract
+// (docs/design/item-icon-art-style.md, "opaque dark painted ground"), and
+// tests/item_art_consistency.test.ts fails any icon that carries a non-opaque
+// alpha byte. scripts/render_island_item_icons.mjs finishes its render-sourced
+// icons the same way.
 //
 // Self-contained (no dev server): the GLB bytes are passed to the page as base64, like the
 // weapon renderer. Run: `node scripts/render_mount_icons.mjs` (ONLY=valorsteed,grag_bear to
@@ -35,10 +42,14 @@ const JOBS = [
     // The board has no head to anchor on and is nearly flat, so the framing
     // rules the animal rigs use do not apply: look DOWN at the deck (a large
     // pitch) so the icon reads as the Seeker face rather than a dark edge, and
-    // fill hard because the silhouette is a thin slab.
+    // frame off a large sphere because the silhouette is a thin slab. `fill`
+    // frames a sphere of that many model heights, so a bigger number pulls the
+    // camera BACK: 9.3 lands the whole deck inside the square at the 68 to 76
+    // percent subject coverage the style contract asks for, where the earlier
+    // 5.6 ran the nose and tail off both edges.
     file: 'seeker_board.glb',
     id: 'reins_seeker_board',
-    cfg: { headFwd: 0.0, headUp: 0.0, fill: 5.6, yaw: 0.62, pitch: 0.8 },
+    cfg: { headFwd: 0.0, headUp: 0.0, fill: 9.3, yaw: 0.62, pitch: 0.8 },
   },
   {
     file: 'valorsteed.glb',
@@ -95,6 +106,11 @@ const JOBS = [
     cfg: { headFwd: 0.95, headUp: 0.82, fill: 0.55, yaw: 0.52, pitch: 0.14 },
   },
 ];
+
+// The item-icon painted ground: a soft radial glow over near-black, byte-for-byte
+// the vignette scripts/render_island_item_icons.mjs composites its prop renders
+// over, so every render-sourced icon shares one backdrop.
+const VIGNETTE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${OUT_PX}" height="${OUT_PX}"><defs><radialGradient id="g" cx="50%" cy="42%" r="62%"><stop offset="0%" stop-color="#3a3527"/><stop offset="55%" stop-color="#211d15"/><stop offset="100%" stop-color="#0d0b08"/></radialGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`;
 
 const only = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : null;
 
@@ -159,14 +175,18 @@ for (const job of JOBS) {
     if (!alpha || alpha.max < 8) {
       throw new Error(`blank render (alpha max ${alpha ? alpha.max : 'none'})`);
     }
-    const webp = await sharp(png)
+    const subject = await sharp(png)
       .resize(OUT_PX, OUT_PX, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toBuffer();
+    const webp = await sharp(Buffer.from(VIGNETTE_SVG))
+      .composite([{ input: subject }])
       .webp({ quality: 90, alphaQuality: 100, effort: 6 })
       .toBuffer();
     writeFileSync(path.join(outDir, `${job.id}.webp`), webp);
     if (debugDir) {
-      const previewPng = await sharp(png)
-        .resize(OUT_PX, OUT_PX, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      const previewPng = await sharp(Buffer.from(VIGNETTE_SVG))
+        .composite([{ input: subject }])
         .png()
         .toBuffer();
       writeFileSync(path.join(debugDir, `${job.id}.png`), previewPng);
