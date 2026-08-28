@@ -323,8 +323,11 @@ interface AttributionTargetFixture {
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
+// Re-minted for the Solana Seeker mount branch: the mount's ride-pose split
+// moved renderer.ts, which is a runtimeRender provenance leaf. No capture was
+// retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'b4f994b0a5d52ffce488667a7768739838207796dc4eaa331ebd980ab3fe8ba4';
+  'a6b97863901dcd83f58b42d56b4054ff89404450d254431bf26e811c5ace0cb9';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [
