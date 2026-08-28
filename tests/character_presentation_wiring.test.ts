@@ -2,6 +2,14 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const renderer = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
+// The ridden-mount per-frame drive lives here now (extracted from renderer.ts,
+// which is at its monolith ceiling), so the mount half of these pins reads the
+// module that actually owns the behaviour rather than the coordinator that
+// calls it.
+const mountRideView = readFileSync(
+  new URL('../src/render/mount_ride_view.ts', import.meta.url),
+  'utf8',
+);
 const characterVisual = readFileSync(
   new URL('../src/render/characters/visual.ts', import.meta.url),
   'utf8',
@@ -29,7 +37,11 @@ describe('character presentation sleep wiring', () => {
     expect(renderer).toContain(
       'if (runCharacterPresentation) {\n        v.visual.updateWeaponVfx(dt, weaponVfxShedScale(d2, this.appliedBudgetLevels?.vfx ?? 1));\n      }',
     );
-    expect(renderer).toContain('v.mountVisual.advanceOffscreen(dt);');
+    // A hidden mount rig still only advances its clocks. The call moved into
+    // driveMountRide, so it is pinned there, together with the renderer's hand
+    // -off of the same presentation flag every other rig here is gated on.
+    expect(mountRideView).toContain('mountVisual.advanceOffscreen(frame.dt);');
+    expect(renderer).toContain('present: runCharacterPresentation,');
   });
 
   it('ticks deferred weapon stow transitions while a rig is off screen', () => {
@@ -57,10 +69,21 @@ describe('character presentation sleep wiring', () => {
     expect(mountStart).toBeGreaterThan(-1);
     expect(abilityStart).toBeGreaterThan(mountStart);
 
+    // The mount block is a thin consumer now: the renderer hands the drive its
+    // emitter sink and the presentation flag, and the GATE is the early return
+    // inside the drive. Both halves are pinned, so neither the hand-off nor the
+    // gate can be dropped without this going red.
     const mountBlock = renderer.slice(mountStart, abilityStart);
-    expect(mountBlock).toContain('if (runCharacterPresentation) {');
-    expect(mountBlock).toContain('this.vfx.mountSlimeTrail');
-    expect(mountBlock).toContain('this.vfx.mountExhaust');
+    expect(mountBlock).toContain('driveMountRide(mountSpec, mst, v, this.vfx, {');
+    expect(mountBlock).toContain('present: runCharacterPresentation,');
+
+    const offscreenAt = mountRideView.indexOf('if (!frame.present) {');
+    expect(offscreenAt).toBeGreaterThan(-1);
+    expect(mountRideView.slice(offscreenAt)).toContain('return view.mountRoll;');
+    // Both emitters sit PAST that return, which is what keeps an unseen mount
+    // from painting slime or streaming exhaust at nobody.
+    expect(mountRideView.indexOf('fxSink.mountSlimeTrail')).toBeGreaterThan(offscreenAt);
+    expect(mountRideView.indexOf('fxSink.mountExhaust')).toBeGreaterThan(offscreenAt);
     expect(renderer.slice(abilityStart)).toContain(
       'this.abilityVfx.syncEntity(e, runCharacterPresentation);',
     );
