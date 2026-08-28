@@ -192,11 +192,17 @@ const MONOLITHS: MonolithRow[] = [
     // ceiling is the exact merged count.
     // Re-pinned to the integration merge of the latest v0.40.0 (the touch UI
     // rework); exact merged count.
-    // Ratcheted 13329 -> 13322 by the Riftbound Boulder branch: the whole
+    // Ratcheted 13329 -> 13327 by the Riftbound Boulder branch: the whole
     // per-frame mount step moved to src/render/mount_presentation.ts and the
     // rider pose decision to mount_visuals.riderPoseFlags, so the rolling
-    // mount landed BELOW the file it was added to rather than above it.
-    ceiling: 13322,
+    // mount landed below the file it was added to rather than above it. The
+    // extraction alone reached 13322; review then put lines back for the
+    // caller-owned frame scratch, the resting-lift seed, and the two gate
+    // decisions standing the rider up forces (water contact and the mounted
+    // emote arm). All of those have to sit on the coordinator, because that is
+    // where the per-view state and the gates they touch already live. Still
+    // below the 13329 this branch inherited.
+    ceiling: 13338,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {

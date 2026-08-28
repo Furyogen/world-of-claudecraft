@@ -54,6 +54,26 @@ export interface MountFrameInputs {
   stepZ: number;
 }
 
+/** A zeroed inputs record for the caller to own and refill each frame. The
+ *  shape lives here, next to the interface it has to satisfy, so a new field
+ *  cannot be added to MountFrameInputs and silently left unseeded by the one
+ *  caller that allocates it. */
+export function createMountFrameScratch(): MountFrameInputs {
+  return {
+    mount: null as unknown as CharacterVisual,
+    riderVisual: null as unknown as CharacterVisual,
+    spec: null as unknown as MountVisualSpec,
+    dt: 0,
+    timeSec: 0,
+    animate: false,
+    moving: false,
+    airborne: false,
+    facing: 0,
+    stepX: 0,
+    stepZ: 0,
+  };
+}
+
 /**
  * Advance one mounted rider's presentation by a frame.
  *
@@ -76,7 +96,11 @@ export function updateMountPresentation(
   scratch.moving = rider.moving;
   scratch.running = rider.running;
   scratch.airborne = input.airborne;
-  scratch.backwards = rider.backwards;
+  // A treading rider is forced backwards by the renderer (riderPoseFlags), and
+  // that flag is about the RIDER pose, not the mount. Passing it through would
+  // tell a rolling mount to play its own backpedal clip while it rolls forward.
+  // Clipless rollers cannot show it today, but the trap should not be left set.
+  scratch.backwards = rider.backwards && input.spec.rollRadius <= 0;
   scratch.swimming = rider.swimming;
   input.mount.update(input.dt, scratch, input.animate);
 

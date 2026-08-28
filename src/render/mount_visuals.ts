@@ -144,14 +144,28 @@ export function mountBobY(spec: MountVisualSpec, timeSec: number, moving: boolea
  * logical one, so a rider whose mount has not finished loading keeps their own
  * locomotion instead of treading thin air. `resting` is the rider's own
  * sitting/eating/drinking, which seats them with or without a mount.
+ *
+ * `mayEmote` exists because standing a rider up has consequences beyond the
+ * pose. The overhead-emote gate keys off the seated flag, so a treading rider
+ * would inherit the ability to emote while mounted purely as a side effect.
+ * That is wanted (a standing rider CAN wave, and the emote composes correctly
+ * on an upright body), but only while the mount is STOPPED, and the rule is
+ * stated here rather than left to the emote gate happening to test !moving:
+ * this is where the boulder is decided, so this is where its rule belongs.
  */
 export function riderPoseFlags(
   mountKey: string,
   riderMounted: boolean,
   resting: boolean,
-): { sitting: boolean; treading: boolean } {
+  moving = false,
+): { sitting: boolean; treading: boolean; mayEmote: boolean } {
   const pose = riderMounted ? (mountVisualSpec(mountKey)?.ridePose ?? null) : null;
-  return { sitting: resting || pose === 'sit', treading: pose === 'tread' };
+  const treading = pose === 'tread';
+  return {
+    sitting: resting || pose === 'sit',
+    treading,
+    mayEmote: treading && !resting && !moving,
+  };
 }
 
 /**

@@ -240,11 +240,17 @@ describe('rider pose flags', () => {
     expect(riderPoseFlags('riftbound_boulder', false, false)).toEqual({
       sitting: false,
       treading: false,
+      mayEmote: false,
     });
-    expect(riderPoseFlags('', true, false)).toEqual({ sitting: false, treading: false });
+    expect(riderPoseFlags('', true, false)).toEqual({
+      sitting: false,
+      treading: false,
+      mayEmote: false,
+    });
     expect(riderPoseFlags('not_a_mount', true, false)).toEqual({
       sitting: false,
       treading: false,
+      mayEmote: false,
     });
   });
 
@@ -252,14 +258,40 @@ describe('rider pose flags', () => {
     expect(riderPoseFlags('valorsteed', true, false)).toEqual({
       sitting: true,
       treading: false,
+      mayEmote: false,
     });
     expect(riderPoseFlags('terrorspark_groundshaker', true, false)).toEqual({
       sitting: true,
       treading: false,
+      mayEmote: false,
     });
     expect(riderPoseFlags('riftbound_boulder', true, false)).toEqual({
       sitting: false,
       treading: true,
+      mayEmote: true,
+    });
+  });
+
+  it('lets a treading rider emote, but only while the stone is stopped', () => {
+    // Standing a rider up opens the overhead-emote gate as a side effect. That
+    // is wanted for an upright body, and deliberately limited to stopped: the
+    // rule lives here rather than in the emote gate own !moving term.
+    expect(riderPoseFlags('riftbound_boulder', true, false, false).mayEmote).toBe(true);
+    expect(riderPoseFlags('riftbound_boulder', true, false, true).mayEmote).toBe(false);
+  });
+
+  it('never lets a seated or unmounted rider emote through the mount path', () => {
+    // Every saddle mount, and a rider on foot: the mounted branch must not hand
+    // out the capability to anyone whose body is not actually standing on a mount.
+    expect(riderPoseFlags('valorsteed', true, false, false).mayEmote).toBe(false);
+    expect(riderPoseFlags('terrorspark_groundshaker', true, false, false).mayEmote).toBe(false);
+    expect(riderPoseFlags('', false, false, false).mayEmote).toBe(false);
+    // Sitting down ON the stone (eating, drinking) seats the body, so the
+    // standing-emote permission goes away with the standing pose.
+    expect(riderPoseFlags('riftbound_boulder', true, true, false)).toEqual({
+      sitting: true,
+      treading: true,
+      mayEmote: false,
     });
   });
 
@@ -270,6 +302,7 @@ describe('rider pose flags', () => {
     expect(riderPoseFlags('riftbound_boulder', true, true)).toEqual({
       sitting: true,
       treading: true,
+      mayEmote: false,
     });
   });
 });

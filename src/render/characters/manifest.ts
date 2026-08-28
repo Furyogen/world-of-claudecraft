@@ -1702,25 +1702,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // the saddle and lurched it every stride; the baker authors rotation-only
   // keys plus a root Y bob, so that cannot recur. walkRef is MEASURED off the
   // baked clip (tmp/dragonkin_gait_measure.mjs): walk 3.02 yd/s.
-  // The Riftbound Boulder. Clipless (no rig, no clips, no textures: 930 flat
-  // triangles and vertex colors, authored by
-  // scripts/assets/riftbound_boulder/), because its motion is not a gait. The
-  // renderer ROLLS it, at the rate its own travel demands.
-  //
-  // height + hover are a matched pair, not two independent knobs. The exporter
-  // guarantees the authored stone is exactly 2.0 tall and origin-centred, so
-  // height 1.6 scales it to a 0.8-yard radius and hover -0.8 slides the mesh
-  // back down until the model's centre sits ON the visual root's origin. That
-  // is what lets the renderer spin the stone in place by rotating the root
-  // instead of swinging it around its own contact point, and it is why
-  // mount_visuals' rollRadius (0.8) has to stay half of this height.
-  mount_riftbound_boulder: {
-    url: `${MOUNTS_DIR}/riftbound_boulder.glb`,
-    height: 1.6,
-    hover: -0.8,
-    clips: MOUNT_RIGGED,
-    lazyPreload: true,
-  },
+
   mount_drakemaw_raptor: {
     url: `${MOUNTS_DIR}/drakemaw_raptor.glb`,
     height: 3.4,
@@ -1738,6 +1720,25 @@ export const VISUALS: Record<string, VisualDef> = {
     // inside what the other baked mounts already ship (grag_bear's 3.58 yd/s
     // natural against the same 12.6 leaves it sliding over half its travel).
     runRef: 12.6,
+    lazyPreload: true,
+  },
+  // The Riftbound Boulder. Clipless (no rig, no clips, no textures: 930 flat
+  // triangles and vertex colors, authored by
+  // scripts/assets/riftbound_boulder/), because its motion is not a gait. The
+  // renderer ROLLS it, at the rate its own travel demands.
+  //
+  // height + hover are a matched pair, not two independent knobs. The exporter
+  // guarantees the authored stone is exactly 2.0 tall and origin-centred, so
+  // height 1.6 scales it to a 0.8-yard radius and hover -0.8 slides the mesh
+  // back down until the model's centre sits ON the visual root's origin. That
+  // is what lets the renderer spin the stone in place by rotating the root
+  // instead of swinging it around its own contact point, and it is why
+  // mount_visuals' rollRadius (0.8) has to stay half of this height.
+  mount_riftbound_boulder: {
+    url: `${MOUNTS_DIR}/riftbound_boulder.glb`,
+    height: 1.6,
+    hover: -0.8,
+    clips: MOUNT_RIGGED,
     lazyPreload: true,
   },
 

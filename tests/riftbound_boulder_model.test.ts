@@ -16,19 +16,39 @@
 // through gltf-transform, because the shipping pass quantizes positions and the
 // raw accessor min/max are lattice integers rather than yards.
 
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { getBounds, NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { boulderSourceFingerprint } from '../scripts/assets/riftbound_boulder/source_fingerprint.mjs';
+import {
+  BOULDER_SOURCE_FILES,
+  boulderSourceFingerprint,
+} from '../scripts/assets/riftbound_boulder/source_fingerprint.mjs';
+import { MEDIA_ASSETS } from '../src/render/assets/manifest.generated';
 
 const repoRoot = path.resolve(__dirname, '..');
 const glbPath = path.join(repoRoot, 'public/models/mounts/riftbound_boulder.glb');
 
+// Sealed literals, mirroring tests/terrorspark_groundshaker_asset.test.ts. A
+// fingerprint that only ever checks itself against its own live inputs is
+// auto-healing: drop a file from the seal list, re-run the exporter, and the
+// seal is weaker with nothing a reviewer would see move. Pinning the list AND
+// the hex AND the shipped bytes means any of those three moving is visible in
+// the diff.
+const EXPECTED_SOURCE_FINGERPRINT =
+  'ee590f1a6b2de558973941679de79f940558e7cc79788140792a6b2448f31114';
+const EXPECTED_ASSET_SHA256 = '254abf3f495d2412d845597a169eaed4d0279aff158023f07967d01e2ab7b1fc';
+/** Stone plus seams. The byte ceiling cannot catch a geometry blow-up on its
+ *  own: the shipped GLB is 28 KB against a 96 KiB gate, so the triangle count
+ *  could roughly triple before bytes complained. */
+const TRIANGLE_CEILING = 1200;
+
 interface GlbJson {
   asset: { extras?: Record<string, unknown> };
+  accessors: { count: number }[];
   extras?: Record<string, unknown>;
   meshes: { name?: string; primitives: { attributes: Record<string, number> }[] }[];
   materials?: { name?: string }[];
@@ -53,6 +73,7 @@ let bounds: { min: number[]; max: number[] };
 
 describe('Riftbound Boulder mount GLB', () => {
   const glb = readGlbJson(glbPath);
+  const accessorCounts = glb.accessors.map((accessor) => accessor.count);
 
   beforeAll(async () => {
     await MeshoptDecoder.ready;
@@ -107,11 +128,62 @@ describe('Riftbound Boulder mount GLB', () => {
     expect(readFileSync(glbPath).byteLength).toBeLessThan(96 * 1024);
   });
 
-  it('is not stale: the stamped fingerprint matches its live sources', () => {
+  it('seals the deterministic source inventory and the optimizer specification', () => {
+    // The list itself is pinned: a file silently dropped from the seal narrows
+    // what staleness can be detected, and without this it would narrow quietly.
+    expect(BOULDER_SOURCE_FILES).toEqual([
+      'scripts/assets/riftbound_boulder/model.js',
+      'scripts/assets/riftbound_boulder/export_entry.js',
+      'scripts/assets/riftbound_boulder/export_riftbound_boulder.mjs',
+      'scripts/assets/riftbound_boulder/source_fingerprint.mjs',
+      'scripts/assets/specs/riftbound_boulder.json',
+      'scripts/assets/build_assets.mjs',
+      'pnpm-lock.yaml',
+    ]);
+    expect(boulderSourceFingerprint(repoRoot)).toBe(EXPECTED_SOURCE_FINGERPRINT);
+    expect(
+      JSON.parse(
+        readFileSync(path.join(repoRoot, 'scripts/assets/specs/riftbound_boulder.json'), 'utf8'),
+      ),
+    ).toEqual({
+      items: [
+        {
+          src: 'tmp/asset_src/riftbound_boulder/riftbound_boulder-final.glb',
+          out: 'models/mounts/riftbound_boulder.glb',
+          type: 'static',
+          keepExtras: true,
+        },
+      ],
+    });
+  });
+
+  it('is not stale: the stamped fingerprint matches its live sources and bytes', () => {
     const stamped = glb.asset.extras?.sourceFingerprint ?? glb.extras?.sourceFingerprint;
     expect(
       stamped,
       'committed GLB is stale; re-run node scripts/assets/riftbound_boulder/export_riftbound_boulder.mjs',
     ).toBe(boulderSourceFingerprint(repoRoot));
+    expect(stamped).toBe(EXPECTED_SOURCE_FINGERPRINT);
+
+    // The shipped bytes themselves, which also cross-checks the media manifest:
+    // the digest the client fetches by is derived from these same bytes.
+    const sha256 = createHash('sha256').update(readFileSync(glbPath)).digest('hex');
+    expect(sha256).toBe(EXPECTED_ASSET_SHA256);
+    expect(MEDIA_ASSETS['models/mounts/riftbound_boulder.glb']).toBe(
+      `/media/models/mounts/riftbound_boulder.${sha256.slice(0, 12)}.glb`,
+    );
+  });
+
+  it('stays within its triangle budget, which the byte gate cannot enforce', () => {
+    let triangles = 0;
+    for (const mesh of glb.meshes) {
+      for (const primitive of mesh.primitives) {
+        const attribute = primitive.attributes.POSITION;
+        expect(typeof attribute, 'POSITION accessor index').toBe('number');
+        triangles += accessorCounts[attribute] / 3;
+      }
+    }
+    expect(triangles).toBeGreaterThan(0);
+    expect(triangles).toBeLessThan(TRIANGLE_CEILING);
   });
 });

@@ -52,6 +52,10 @@ const sourceFingerprint = boulderSourceFingerprint(ROOT);
 
 /** An untextured, unrigged stone has no excuse to be large. */
 const SHIPPING_BYTE_CEILING = 96 * 1024;
+/** The byte gate cannot police geometry on its own: the stone ships at 28 KB
+ *  against that 96 KiB ceiling, so the triangle count could roughly triple
+ *  before bytes complained. Gate the count directly. */
+const TRIANGLE_CEILING = 1200;
 /** Authored extent: exactly 2.0 tall, centred on the origin (see the header). */
 const EXTENT_TOLERANCE = 1e-3;
 const CENTER_TOLERANCE = 1e-3;
@@ -125,6 +129,10 @@ function verifyContract(stats, optimized) {
     );
   }
   assertCondition(stats.meshes >= 1, 'expected at least the stone mesh');
+  assertCondition(
+    stats.triangles < TRIANGLE_CEILING,
+    `triangle budget: ${stats.triangles} exceeds ${TRIANGLE_CEILING}`,
+  );
   assertCondition(
     stats.materials.includes('riftbound_stone') && stats.materials.includes('riftbound_vein'),
     `expected the stone and vein materials, got ${stats.materials.join(', ')}`,
