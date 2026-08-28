@@ -186,6 +186,15 @@ describe('mount reins items (the collection: owning the item is owning the mount
         // the promotional reward cannot become a secondary-market asset.
         // soulbound IS that guarantee at the item layer.
         expect(item.soulbound).toBe(true);
+        if (key === 'seeker_board') {
+          // soulbound alone does NOT close the $WOC Exchange: it tolerates
+          // soulbound for the mount category, so the two flags that category
+          // does honour carry the "never sold, traded or transferred" half of
+          // issue #3628 and belong in this per-mount sweep rather than only in
+          // tests/exchange_eligibility.test.ts, which owns the lock behavior.
+          expect(item.noMarketList).toBe(true);
+          expect(item.noVendorSell).toBe(true);
+        }
       } else {
         // Player reins are NOT soulbound: they trade, mail, list, and store in
         // the guild bank like any other item (the transfer describe below).
