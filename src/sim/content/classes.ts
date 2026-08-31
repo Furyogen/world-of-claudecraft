@@ -3358,9 +3358,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'nature',
     requiresTarget: false,
-    effects: [{ type: 'imbue', bonus: 8, duration: 1800 }],
+    effects: [{ type: 'imbue', bonus: 14, duration: 1800 }],
     description:
-      'Coats your weapon for 30 min, causing each of your melee swings to deal 8 additional Nature damage.',
+      'Coats your weapon for 30 min, causing each of your melee swings to deal $d additional Nature damage.',
   },
   deadly_poison: {
     id: 'deadly_poison',
@@ -3373,17 +3373,31 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'nature',
     requiresTarget: false,
-    effects: [{ type: 'imbue', bonus: 14, duration: 1800 }],
+    // The DoT poison, and the reason it is not just a bigger Adder's Bite: the
+    // coat itself adds no flat swing damage (bonus 0), it festers a stacking
+    // Nature DoT on whatever it strikes. Every landed swing adds a stack (cap 5)
+    // and refreshes the 12 sec timer, so per-tick damage climbs 4 -> 20 the
+    // longer you stay on one target. Classic Deadly Poison, on the same
+    // stacking-DoT shape the mob `stackPoison` mechanic already uses.
+    effects: [
+      {
+        type: 'imbue',
+        bonus: 0,
+        duration: 1800,
+        coat: { rider: 'stackDot', perTick: 4, maxStacks: 5, duration: 12, interval: 2 },
+      },
+    ],
     description:
-      'Coats your weapon for 30 min, causing each of your melee swings to deal 14 additional Nature damage.',
+      'Coats your weapon for 30 min. Each of your melee swings festers the target for 4 Nature damage every 2 sec over 12 sec, and adds a stack, up to 5. At 5 stacks each tick deals 20.',
   },
-  // The two utility poisons. Both are STRIKE poisons in the Leaden Venom
-  // (crippling_poison) mould rather than weapon coats: same class, cost, school,
-  // melee range, and the same small 3 to 5 Nature hit that carries the strike
-  // into combat and gives the debuff something to ride in on. Only the rider
-  // differs, so no new balance number is invented beyond the two the design
-  // asked for (5% armor, 25% healing taken, 12 sec each, matching Leaden
-  // Venom's 12 sec snare).
+  // The two utility poisons. Both are weapon COATS, in the Adder's Bite mould
+  // rather than the Leaden Venom one: same class, cost, school, and 30 min
+  // duration as the damage poisons, cast on yourself, and every landed melee
+  // swing lands the rider on whatever you struck. They shipped as 40-energy
+  // targeted nukes by mistake (issue #3774), which is not what a coating is.
+  // Only the rider differs between them, so no new balance number is invented
+  // beyond the two the design asked for (5% armor, 25% healing taken, 12 sec
+  // each, matching Leaden Venom's 12 sec snare).
   melting_acid: {
     id: 'melting_acid',
     name: 'Melting Acid',
@@ -3394,13 +3408,17 @@ export const ABILITIES: Record<string, AbilityDef> = {
     cooldown: 0,
     range: 0,
     school: 'nature',
-    requiresTarget: true,
+    requiresTarget: false,
     effects: [
-      { type: 'directDamage', min: 3, max: 5 },
-      { type: 'buffTarget', kind: 'melting_acid', value: 0.05, duration: 12 },
+      {
+        type: 'imbue',
+        bonus: 0,
+        duration: 1800,
+        coat: { rider: 'debuff', kind: 'melting_acid', value: 0.05, duration: 12 },
+      },
     ],
     description:
-      'Splashes the target with a caustic poison, dealing $d Nature damage and reducing its armor by 5% for 12 sec.',
+      'Coats your weapon for 30 min. Each of your melee swings splashes the target with caustic acid, reducing its armor by 5% for 12 sec.',
   },
   nightshade_coating: {
     id: 'nightshade_coating',
@@ -3412,17 +3430,21 @@ export const ABILITIES: Record<string, AbilityDef> = {
     cooldown: 0,
     range: 0,
     school: 'nature',
-    requiresTarget: true,
+    requiresTarget: false,
     effects: [
-      { type: 'directDamage', min: 3, max: 5 },
       // Reuses the existing healing-taken debuff kind (combat/heal.ts folds
-      // every mortal_wound aura in). Its aura id is the ability id (the first
-      // buffTarget of a def), so it never evicts a warrior's Maiming Strike
-      // debuff or vice versa.
-      { type: 'buffTarget', kind: 'mortal_wound', value: 0.25, duration: 12 },
+      // every mortal_wound aura in). The rider borrows the coat's aura id (the
+      // ability id), so it never evicts a warrior's Maiming Strike debuff or
+      // vice versa.
+      {
+        type: 'imbue',
+        bonus: 0,
+        duration: 1800,
+        coat: { rider: 'debuff', kind: 'mortal_wound', value: 0.25, duration: 12 },
+      },
     ],
     description:
-      'Coats the target in nightshade, dealing $d Nature damage and reducing the healing it receives by 25% for 12 sec.',
+      'Coats your weapon for 30 min. Each of your melee swings coats the target in nightshade, reducing the healing it receives by 25% for 12 sec.',
   },
   blind: {
     id: 'blind',

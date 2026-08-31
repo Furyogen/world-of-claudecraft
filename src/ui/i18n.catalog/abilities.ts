@@ -1053,12 +1053,12 @@ const classAbilityNamesEn = {
       [
         'melting_acid',
         'Melting Acid',
-        'Splashes the target with a caustic poison, dealing {damage} Nature damage and reducing its armor by 5% for 12 sec.',
+        'Coats your weapon for 30 min. Each of your melee swings splashes the target with caustic acid, reducing its armor by 5% for 12 sec.',
       ],
       [
         'nightshade_coating',
         'Nightshade Coating',
-        'Coats the target in nightshade, dealing {damage} Nature damage and reducing the healing it receives by 25% for 12 sec.',
+        'Coats your weapon for 30 min. Each of your melee swings coats the target in nightshade, reducing the healing it receives by 25% for 12 sec.',
       ],
       [
         'expose_armor',
@@ -1078,12 +1078,12 @@ const classAbilityNamesEn = {
       [
         'instant_poison',
         "Adder's Bite",
-        'Coats your weapon for 30 min, causing each of your melee swings to deal 8 additional Nature damage.',
+        'Coats your weapon for 30 min, causing each of your melee swings to deal {damage} additional Nature damage.',
       ],
       [
         'deadly_poison',
         'Festering Venom',
-        'Coats your weapon for 30 min, causing each of your melee swings to deal 14 additional Nature damage.',
+        'Coats your weapon for 30 min. Each of your melee swings festers the target for 4 Nature damage every 2 sec over 12 sec, and adds a stack, up to 5. At 5 stacks each tick deals 20.',
       ],
       [
         'blind',

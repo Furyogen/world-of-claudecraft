@@ -10391,11 +10391,11 @@ export const de_DE: EnTranslations = {
       },
       "melting_acid": {
         "name": "Schmelzende Säure",
-        "description": "Bespritzt das Ziel mit einem ätzenden Gift, das {damage} Naturschaden verursacht und seine Rüstung 12 Sek. lang um 5 % verringert."
+        "description": "Überzieht eure Waffe 30 Min. lang. Jeder eurer Nahkampfschwünge bespritzt das Ziel mit ätzender Säure und verringert seine Rüstung 12 Sek. lang um 5 %."
       },
       "nightshade_coating": {
         "name": "Nachtschattenbeschichtung",
-        "description": "Hüllt das Ziel in Nachtschatten, verursacht {damage} Naturschaden und verringert die erhaltene Heilung 12 Sek. lang um 25 %."
+        "description": "Überzieht eure Waffe 30 Min. lang. Jeder eurer Nahkampfschwünge hüllt das Ziel in Nachtschatten und verringert die erhaltene Heilung 12 Sek. lang um 25 %."
       },
       "expose_armor": {
         "name": "Rüstungsbruch",
@@ -10411,11 +10411,11 @@ export const de_DE: EnTranslations = {
       },
       "instant_poison": {
         "name": "Natternbiss",
-        "description": "Überzieht eure Waffe 30 Min. lang, sodass jeder eurer Nahkampfschwünge 8 zusätzlichen Naturschaden verursacht."
+        "description": "Überzieht eure Waffe 30 Min. lang, sodass jeder eurer Nahkampfschwünge {damage} zusätzlichen Naturschaden verursacht."
       },
       "deadly_poison": {
         "name": "Eiterndes Gift",
-        "description": "Überzieht eure Waffe 30 Min. lang, sodass jeder eurer Nahkampfschwünge 14 zusätzlichen Naturschaden verursacht."
+        "description": "Überzieht eure Waffe 30 Min. lang. Jeder eurer Nahkampfschwünge lässt das Ziel eitern und verursacht 12 Sek. lang alle 2 Sek. 4 Naturschaden, und fügt eine Stufe hinzu, bis zu 5. Bei 5 Stufen verursacht jeder Tick 20."
       },
       "blind": {
         "name": "Dreckwurf",
