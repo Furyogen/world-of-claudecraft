@@ -4831,7 +4831,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Rusza naprzód susem, zwiększając prędkość ruchu o 50% na 15 sek. Tylko w postaci wilka.',
   'entities.abilities.dash.name': 'Sus',
   'entities.abilities.deadly_poison.description':
-    'Pokrywa twój oręż na 30 min. Każde uderzenie wręcz jątrzy cel, zadając 4 obrażenia natury co 2 sek. przez 12 sek. i dodając jedną warstwę, do 5. Przy 5 warstwach każdy tik zadaje 20.',
+    'Pokrywa twój oręż na 30 min. Każde uderzenie wręcz dodaje celowi warstwę trucizny, do 5, i odnawia czas trwania 12 sek. Każda warstwa zadaje {damage} obrażeń natury co 2 sek.',
   'entities.abilities.deadly_poison.name': 'Jątrzący jad',
   'entities.abilities.defensive_stance.description':
     'Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę.',

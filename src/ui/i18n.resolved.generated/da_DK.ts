@@ -10415,7 +10415,7 @@ export const da_DK: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Betændt Gift",
-        "description": "Smører dit våben i 30 min. Hvert af dine nærkampshug forpester målet med 4 naturskade hvert 2. sek. i 12 sek. og tilføjer et lag, op til 5. Ved 5 lag volder hvert tik 20."
+        "description": "Smører dit våben i 30 min. Hvert af dine nærkampshug lægger et lag gift på målet, op til 5, og fornyer varigheden på 12 sek. Hvert lag volder {damage} naturskade hvert 2. sek."
       },
       "blind": {
         "name": "Jordkast",

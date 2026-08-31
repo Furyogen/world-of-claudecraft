@@ -121,6 +121,19 @@ function applyDebuffCoat(
   });
 }
 
+/** The coat the WEARER's talents actually grant, falling back to the authored
+ *  one. Knifework's Redhanded raises poison damage, and that has to reach the
+ *  rider, or the passive silently pays nothing on the poison whose damage IS
+ *  the rider. Gated behind the cheap `poisonCoatFor` map lookup at the call
+ *  site, so the resolve runs only for someone actually wearing a coat. */
+function resolvedCoat(ctx: SimContext, wearer: Entity, abilityId: string): PoisonCoat | null {
+  if (wearer.kind !== 'player') return poisonCoatFor(abilityId);
+  for (const eff of ctx.resolvedAbility(abilityId, wearer.id)?.effects ?? []) {
+    if (eff.type === 'imbue' && eff.coat !== undefined) return eff.coat;
+  }
+  return poisonCoatFor(abilityId);
+}
+
 /** Land every worn weapon coat on the struck target. Called from the LANDED
  *  arm of the shared melee swing (auto attacks and weapon-strike abilities
  *  alike), so a miss, dodge or parry carries no poison. Draws no rng: a coat
@@ -129,7 +142,8 @@ export function applyPoisonCoats(ctx: SimContext, attacker: Entity, target: Enti
   if (target.dead) return;
   for (const aura of attacker.auras) {
     if (aura.kind !== 'imbue') continue;
-    const coat = poisonCoatFor(aura.id);
+    if (poisonCoatFor(aura.id) === null) continue;
+    const coat = resolvedCoat(ctx, attacker, aura.id);
     if (coat === null) continue;
     if (coat.rider === 'stackDot') applyStackDotCoat(ctx, attacker, target, aura, coat);
     else applyDebuffCoat(ctx, attacker, target, aura, coat);

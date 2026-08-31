@@ -10415,7 +10415,7 @@ export const sv_SE: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Varande gift",
-        "description": "Bestryker ditt vapen i 30 min. Vart och ett av dina närstridshugg får målet att bulna för 4 naturskada varannan sekund i 12 sekunder och lägger till en stapling, upp till 5. Vid 5 staplingar vållar varje tick 20."
+        "description": "Bestryker ditt vapen i 30 min. Vart och ett av dina närstridshugg lägger till en giftstapling på målet, upp till 5, och förnyar varaktigheten på 12 sekunder. Varje stapling vållar {damage} naturskada varannan sekund."
       },
       "blind": {
         "name": "Gruskast",

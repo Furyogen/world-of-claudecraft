@@ -10415,7 +10415,7 @@ export const en: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Festering Venom",
-        "description": "Coats your weapon for 30 min. Each of your melee swings festers the target for 4 Nature damage every 2 sec over 12 sec, and adds a stack, up to 5. At 5 stacks each tick deals 20."
+        "description": "Coats your weapon for 30 min. Each of your melee swings adds a stack of venom to the target, up to 5, and refreshes the 12 sec duration. Each stack deals {damage} Nature damage every 2 sec."
       },
       "blind": {
         "name": "Dirt Toss",

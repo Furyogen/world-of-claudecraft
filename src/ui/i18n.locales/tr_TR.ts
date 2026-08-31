@@ -4785,7 +4785,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'İleri atılarak hareket hızını 15 saniye boyunca %50 artırır. Yalnızca Kurt Formu.',
   'entities.abilities.dash.name': 'Atılma',
   'entities.abilities.deadly_poison.description':
-    'Silahını 30 dakika boyunca kaplar. Her yakın dövüş vuruşun hedefi çürütür, 12 saniye boyunca 2 saniyede bir 4 Doğa hasarı verir ve bir kat ekler, en fazla 5. 5 katta her vuruş 20 hasar verir.',
+    'Silahını 30 dakika boyunca kaplar. Her yakın dövüş vuruşun hedefe bir zehir katı ekler, en fazla 5, ve 12 saniyelik süreyi yeniler. Her kat 2 saniyede bir {damage} Doğa hasarı verir.',
   'entities.abilities.deadly_poison.name': 'İrinli Zehir',
   'entities.abilities.defensive_stance.description':
     'Savunma amaçlı bir dövüş duruşu: %30 daha fazla tehdit üretirsin ama %10 daha az hasar verir ve alırsın. Duruştan çıkmak için tekrar kullan.',

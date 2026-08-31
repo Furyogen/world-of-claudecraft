@@ -6232,7 +6232,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Ricopre la tua arma per 30 min, facendo sì che ognuno dei tuoi attacchi in mischia infligga {damage} danni della Natura aggiuntivi.',
   'entities.abilities.deadly_poison.name': 'Veleno Putrescente',
   'entities.abilities.deadly_poison.description':
-    'Ricopre la tua arma per 30 min. Ognuno dei tuoi attacchi in mischia infetta il bersaglio infliggendo 4 danni da natura ogni 2 sec per 12 sec, e aggiunge una carica, fino a 5. Con 5 cariche ogni impulso infligge 20.',
+    'Ricopre la tua arma per 30 min. Ognuno dei tuoi attacchi in mischia aggiunge una carica di veleno al bersaglio, fino a 5, e rinnova la durata di 12 sec. Ogni carica infligge {damage} danni da natura ogni 2 sec.',
   'entities.abilities.blind.name': 'Lancio di Terra',
   'entities.abilities.blind.description':
     "Acceca il bersaglio, facendolo vagare disorientato per 8 sec. Qualsiasi danno interrompe l'effetto.",

@@ -10415,7 +10415,7 @@ export const nl_NL: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Etterend Gif",
-        "description": "Bestrijkt je wapen gedurende 30 min. Elke slag van wapen laat het doelwit etteren voor 4 natuurschade elke 2 seconden gedurende 12 seconden, en voegt een stapeling toe, tot 5. Bij 5 stapelingen brengt elke tik 20 toe."
+        "description": "Bestrijkt je wapen gedurende 30 min. Elke slag van wapen voegt een gifstapeling toe aan het doelwit, tot 5, en vernieuwt de duur van 12 seconden. Elke stapeling richt elke 2 seconden {damage} natuurschade aan."
       },
       "blind": {
         "name": "Zandworp",

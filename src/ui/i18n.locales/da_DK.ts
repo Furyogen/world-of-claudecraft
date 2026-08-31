@@ -4665,7 +4665,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Spurt fremad og øg bevægelseshastigheden med 50% i 15 sek. Kun i Ulveform.',
   'entities.abilities.dash.name': 'Ræs',
   'entities.abilities.deadly_poison.description':
-    'Smører dit våben i 30 min. Hvert af dine nærkampshug forpester målet med 4 naturskade hvert 2. sek. i 12 sek. og tilføjer et lag, op til 5. Ved 5 lag volder hvert tik 20.',
+    'Smører dit våben i 30 min. Hvert af dine nærkampshug lægger et lag gift på målet, op til 5, og fornyer varigheden på 12 sek. Hvert lag volder {damage} naturskade hvert 2. sek.',
   'entities.abilities.deadly_poison.name': 'Betændt Gift',
   'entities.abilities.defensive_stance.description':
     'En defensiv kampstilling: du skaber 30% mere trussel, men volder og modtager 10% mindre skade. Aktivér igen for at forlade stillingen.',

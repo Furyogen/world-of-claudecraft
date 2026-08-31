@@ -7112,7 +7112,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Vyrazíš vpřed a zvýšíš rychlost pohybu o 50 % na 15 s. Pouze ve vlčí podobě.',
   'entities.abilities.dash.name': 'Úprk',
   'entities.abilities.deadly_poison.description':
-    'Potře zbraň na 30 min. Každý tvůj úder na blízko rozhlodá cíl a způsobí 4 poškození přírody každé 2 sekundy po dobu 12 sekund, a přidá vrstvu, až do 5. Při 5 vrstvách způsobí každý tik 20.',
+    'Potře zbraň na 30 min. Každý tvůj úder na blízko přidá cíli vrstvu jedu, až do 5, a obnoví trvání 12 sekund. Každá vrstva způsobí {damage} poškození přírody každé 2 sekundy.',
   'entities.abilities.deadly_poison.name': 'Hnisavý jed',
   'entities.abilities.defensive_stance.description':
     'Obranný bojový postoj: vytváříš o 30 % více hrozby, ale způsobuješ i utrpíš o 10 % méně poškození. Sesláním znovu postoj opustíš.',

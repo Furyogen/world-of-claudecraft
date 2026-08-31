@@ -10415,7 +10415,7 @@ export const pt_BR: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Veneno Purulento",
-        "description": "Reveste sua arma por 30 min. Cada um de seus golpes corpo a corpo infecciona o alvo, causando 4 de dano de Natureza a cada 2 s por 12 s, e adiciona um acúmulo, até 5. Com 5 acúmulos cada pulso causa 20."
+        "description": "Reveste sua arma por 30 min. Cada um de seus golpes corpo a corpo adiciona um acúmulo de veneno ao alvo, até 5, e renova a duração de 12 s. Cada acúmulo causa {damage} de dano de Natureza a cada 2 s."
       },
       "blind": {
         "name": "Punhado de Terra",

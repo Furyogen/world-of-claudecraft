@@ -4910,7 +4910,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Spurt vooruit en verhoogt de bewegingssnelheid met 50% gedurende 15 sec. Alleen in Wolfsgedaante.',
   'entities.abilities.dash.name': 'Spurt',
   'entities.abilities.deadly_poison.description':
-    'Bestrijkt je wapen gedurende 30 min. Elke slag van wapen laat het doelwit etteren voor 4 natuurschade elke 2 seconden gedurende 12 seconden, en voegt een stapeling toe, tot 5. Bij 5 stapelingen brengt elke tik 20 toe.',
+    'Bestrijkt je wapen gedurende 30 min. Elke slag van wapen voegt een gifstapeling toe aan het doelwit, tot 5, en vernieuwt de duur van 12 seconden. Elke stapeling richt elke 2 seconden {damage} natuurschade aan.',
   'entities.abilities.deadly_poison.name': 'Etterend Gif',
   'entities.abilities.defensive_stance.description':
     'Een verdedigende gevechtshouding: je genereert 30% meer dreiging, maar brengt 10% minder schade toe en incasseert 10% minder. Activeer opnieuw om de houding te verlaten.',

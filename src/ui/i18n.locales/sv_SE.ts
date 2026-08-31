@@ -4658,7 +4658,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Spurta framåt och öka förflyttningshastigheten med 50 % i 15 sek. Endast i vargform.',
   'entities.abilities.dash.name': 'Rusa',
   'entities.abilities.deadly_poison.description':
-    'Bestryker ditt vapen i 30 min. Vart och ett av dina närstridshugg får målet att bulna för 4 naturskada varannan sekund i 12 sekunder och lägger till en stapling, upp till 5. Vid 5 staplingar vållar varje tick 20.',
+    'Bestryker ditt vapen i 30 min. Vart och ett av dina närstridshugg lägger till en giftstapling på målet, upp till 5, och förnyar varaktigheten på 12 sekunder. Varje stapling vållar {damage} naturskada varannan sekund.',
   'entities.abilities.deadly_poison.name': 'Varande gift',
   'entities.abilities.defensive_stance.description':
     'En defensiv stridsställning: du genererar 30 % mer hot men vållar och tar 10 % mindre skada. Kasta igen för att lämna ställningen.',

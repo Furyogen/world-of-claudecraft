@@ -10415,7 +10415,7 @@ export const tr_TR: EnTranslations = {
       },
       "deadly_poison": {
         "name": "İrinli Zehir",
-        "description": "Silahını 30 dakika boyunca kaplar. Her yakın dövüş vuruşun hedefi çürütür, 12 saniye boyunca 2 saniyede bir 4 Doğa hasarı verir ve bir kat ekler, en fazla 5. 5 katta her vuruş 20 hasar verir."
+        "description": "Silahını 30 dakika boyunca kaplar. Her yakın dövüş vuruşun hedefe bir zehir katı ekler, en fazla 5, ve 12 saniyelik süreyi yeniler. Her kat 2 saniyede bir {damage} Doğa hasarı verir."
       },
       "blind": {
         "name": "Toprak Fırlatma",

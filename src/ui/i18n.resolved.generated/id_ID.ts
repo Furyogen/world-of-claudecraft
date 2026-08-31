@@ -10415,7 +10415,7 @@ export const id_ID: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Bisa Membusuk",
-        "description": "Melapisi senjatamu selama 30 menit. Setiap ayunan jarak dekatmu membusukkan target sebesar 4 Kerusakan alam setiap 2 detik selama 12 detik, dan menambah satu tumpukan, hingga 5. Pada 5 tumpukan setiap denyut memberi 20."
+        "description": "Melapisi senjatamu selama 30 menit. Setiap ayunan jarak dekatmu menambah satu tumpukan racun pada target, hingga 5, dan menyegarkan durasi 12 detik. Setiap tumpukan memberi {damage} Kerusakan alam setiap 2 detik."
       },
       "blind": {
         "name": "Lemparan Tanah",

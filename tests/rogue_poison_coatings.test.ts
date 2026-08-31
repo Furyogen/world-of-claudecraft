@@ -230,6 +230,19 @@ describe('Festering Venom', () => {
     expect(dotOf(mob, 'deadly_poison', rogue.id)).toBeUndefined();
   });
 
+  it("Knifework's Redhanded raises the rider, not just the flat coats", () => {
+    // Redhanded promises "your poison damage by 10%". Festering Venom's damage
+    // IS its rider now, so the passive has to reach the DoT or it silently pays
+    // nothing on the one poison that is pure poison damage.
+    const { sim, rogue, mob } = poisonRig();
+    expect(sim.setSpec('assassination')).toBe(true);
+    coat(sim, rogue, 'deadly_poison');
+    for (let i = 0; i < 40; i++) swing(sim, rogue, mob);
+    // 4 x 1.1 = 4.4 per stack, rounded ONCE at 5 stacks: 22, not the base 20.
+    expect(dotOf(mob, 'deadly_poison', rogue.id)?.stacks).toBe(5);
+    expect(dotOf(mob, 'deadly_poison', rogue.id)?.value).toBe(22);
+  });
+
   it('two rogues each ramp their own stack of the same poison', () => {
     const { sim, rogue, mob } = poisonRig();
     coat(sim, rogue, 'deadly_poison');

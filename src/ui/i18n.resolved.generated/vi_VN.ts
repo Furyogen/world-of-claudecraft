@@ -10415,7 +10415,7 @@ export const vi_VN: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Nọc Độc Ung Mủ",
-        "description": "Bôi lên vũ khí trong 30 phút. Mỗi đòn cận chiến làm mục tiêu mưng mủ, gây 4 sát thương tự nhiên mỗi 2 giây trong 12 giây, và cộng thêm một lớp, tối đa 5. Ở 5 lớp, mỗi nhịp gây 20."
+        "description": "Bôi lên vũ khí trong 30 phút. Mỗi đòn cận chiến cộng thêm một lớp độc lên mục tiêu, tối đa 5, và làm mới thời lượng 12 giây. Mỗi lớp gây {damage} sát thương tự nhiên mỗi 2 giây."
       },
       "blind": {
         "name": "Hất Cát",

@@ -3262,7 +3262,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '30분 동안 무기에 독을 발라 근접 공격마다 {damage}의 추가 자연 피해를 입힙니다.',
   'entities.abilities.deadly_poison.name': '곪는 독',
   'entities.abilities.deadly_poison.description':
-    '30분 동안 무기에 독을 바릅니다. 근접 공격마다 대상을 곪게 하여 12초 동안 2초마다 4의 자연 피해를 주고 중첩을 1 추가하며, 최대 5중첩입니다. 5중첩에서는 매 초당 피해가 20이 됩니다.',
+    '30분 동안 무기에 독을 바릅니다. 근접 공격마다 대상에게 독 중첩을 1 추가하고(최대 5) 지속시간 12초를 갱신합니다. 중첩 1당 2초마다 {damage}의 자연 피해를 입힙니다.',
   'entities.abilities.blind.name': '흙 뿌리기',
   'entities.abilities.blind.description':
     '대상의 눈을 멀게 해 8초 동안 방향을 잃고 헤매게 만듭니다. 피해를 받으면 효과가 해제됩니다.',

@@ -10415,7 +10415,7 @@ export const cs_CZ: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Hnisavý jed",
-        "description": "Potře zbraň na 30 min. Každý tvůj úder na blízko rozhlodá cíl a způsobí 4 poškození přírody každé 2 sekundy po dobu 12 sekund, a přidá vrstvu, až do 5. Při 5 vrstvách způsobí každý tik 20."
+        "description": "Potře zbraň na 30 min. Každý tvůj úder na blízko přidá cíli vrstvu jedu, až do 5, a obnoví trvání 12 sekund. Každá vrstva způsobí {damage} poškození přírody každé 2 sekundy."
       },
       "blind": {
         "name": "Hození hlíny",

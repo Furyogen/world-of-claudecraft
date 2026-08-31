@@ -3159,7 +3159,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '为你的武器淬毒，持续 30 分钟，使你的每次近战攻击额外造成 {damage} 点自然伤害。',
   'entities.abilities.deadly_poison.name': '溃烂毒液',
   'entities.abilities.deadly_poison.description':
-    '为你的武器淬毒，持续 30 分钟。你的每次近战攻击都会侵蚀目标，在 12 秒内每 2 秒造成 4 点自然伤害，并叠加 1 层，最多 5 层。5 层时每次跳动造成 20 点伤害。',
+    '为你的武器淬毒，持续 30 分钟。你的每次近战攻击都会为目标叠加 1 层毒素，最多 5 层，并刷新 12 秒的持续时间。每层每 2 秒造成 {damage} 点自然伤害。',
   'entities.abilities.blind.name': '扬尘',
   'entities.abilities.blind.description':
     '使目标失明，导致其神志不清地四处游荡，持续 8 秒。任何伤害都会打破效果。',

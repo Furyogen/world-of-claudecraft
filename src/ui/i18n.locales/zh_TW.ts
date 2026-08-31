@@ -3161,7 +3161,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '在你的武器上塗抹毒藥，持續 30 分鐘，使你的每次近戰揮擊額外造成 {damage} 點自然傷害。',
   'entities.abilities.deadly_poison.name': '潰爛之毒',
   'entities.abilities.deadly_poison.description':
-    '在你的武器上塗抹毒藥，持續 30 分鐘。你的每次近戰揮擊都會侵蝕目標，在 12 秒內每 2 秒造成 4 點自然傷害，並疊加 1 層，最多 5 層。5 層時每次跳動造成 20 點傷害。',
+    '在你的武器上塗抹毒藥，持續 30 分鐘。你的每次近戰揮擊都會為目標疊加 1 層毒素，最多 5 層，並刷新 12 秒的持續時間。每層每 2 秒造成 {damage} 點自然傷害。',
   'entities.abilities.blind.name': '揚塵',
   'entities.abilities.blind.description':
     '使目標目盲，迷茫地四處遊蕩，持續 8 秒。任何傷害都會破除此效果。',

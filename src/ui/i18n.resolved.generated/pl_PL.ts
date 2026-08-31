@@ -10415,7 +10415,7 @@ export const pl_PL: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Jątrzący jad",
-        "description": "Pokrywa twój oręż na 30 min. Każde uderzenie wręcz jątrzy cel, zadając 4 obrażenia natury co 2 sek. przez 12 sek. i dodając jedną warstwę, do 5. Przy 5 warstwach każdy tik zadaje 20."
+        "description": "Pokrywa twój oręż na 30 min. Każde uderzenie wręcz dodaje celowi warstwę trucizny, do 5, i odnawia czas trwania 12 sek. Każda warstwa zadaje {damage} obrażeń natury co 2 sek."
       },
       "blind": {
         "name": "Rzut piaskiem",

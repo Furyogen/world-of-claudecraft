@@ -10415,7 +10415,7 @@ export const it_IT: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Veleno Putrescente",
-        "description": "Ricopre la tua arma per 30 min. Ognuno dei tuoi attacchi in mischia infetta il bersaglio infliggendo 4 danni da natura ogni 2 sec per 12 sec, e aggiunge una carica, fino a 5. Con 5 cariche ogni impulso infligge 20."
+        "description": "Ricopre la tua arma per 30 min. Ognuno dei tuoi attacchi in mischia aggiunge una carica di veleno al bersaglio, fino a 5, e rinnova la durata di 12 sec. Ogni carica infligge {damage} danni da natura ogni 2 sec."
       },
       "blind": {
         "name": "Lancio di Terra",

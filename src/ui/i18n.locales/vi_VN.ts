@@ -4746,7 +4746,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Lao về phía trước, tăng tốc độ di chuyển 50% trong 15 giây. Chỉ dùng được ở Hình Sói.',
   'entities.abilities.dash.name': 'Lao Nhanh',
   'entities.abilities.deadly_poison.description':
-    'Bôi lên vũ khí trong 30 phút. Mỗi đòn cận chiến làm mục tiêu mưng mủ, gây 4 sát thương tự nhiên mỗi 2 giây trong 12 giây, và cộng thêm một lớp, tối đa 5. Ở 5 lớp, mỗi nhịp gây 20.',
+    'Bôi lên vũ khí trong 30 phút. Mỗi đòn cận chiến cộng thêm một lớp độc lên mục tiêu, tối đa 5, và làm mới thời lượng 12 giây. Mỗi lớp gây {damage} sát thương tự nhiên mỗi 2 giây.',
   'entities.abilities.deadly_poison.name': 'Nọc Độc Ung Mủ',
   'entities.abilities.defensive_stance.description':
     'Thế đứng phòng thủ: bạn tạo ra nhiều hơn 30% mối đe dọa nhưng gây và nhận ít hơn 10% sát thương. Thi triển lại để rời khỏi thế đứng.',

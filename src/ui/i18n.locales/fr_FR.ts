@@ -6723,7 +6723,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Enduit votre arme pendant 30 min, chacune de vos attaques en mêlée infligeant {damage} dégâts de Nature supplémentaires.',
   'entities.abilities.deadly_poison.name': 'Venin purulent',
   'entities.abilities.deadly_poison.description':
-    'Enduit votre arme pendant 30 min. Chacune de vos attaques en mêlée infecte la cible, lui infligeant 4 dégâts de Nature toutes les 2 s pendant 12 s, et ajoute un cumul, jusqu\'à 5. À 5 cumuls, chaque battement inflige 20.',
+    'Enduit votre arme pendant 30 min. Chacune de vos attaques en mêlée ajoute un cumul de venin sur la cible, jusqu\'à 5, et rafraîchit la durée de 12 s. Chaque cumul inflige {damage} dégâts de Nature toutes les 2 s.',
   'entities.abilities.blind.name': 'Jet de terre',
   'entities.abilities.blind.description':
     "Aveugle la cible, la faisant errer désorientée pendant 8 s. Le moindre dégât rompt l'effet.",

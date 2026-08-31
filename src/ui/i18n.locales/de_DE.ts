@@ -6261,7 +6261,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Überzieht eure Waffe 30 Min. lang, sodass jeder eurer Nahkampfschwünge {damage} zusätzlichen Naturschaden verursacht.',
   'entities.abilities.deadly_poison.name': 'Eiterndes Gift',
   'entities.abilities.deadly_poison.description':
-    'Überzieht eure Waffe 30 Min. lang. Jeder eurer Nahkampfschwünge lässt das Ziel eitern und verursacht 12 Sek. lang alle 2 Sek. 4 Naturschaden, und fügt eine Stufe hinzu, bis zu 5. Bei 5 Stufen verursacht jeder Tick 20.',
+    'Überzieht eure Waffe 30 Min. lang. Jeder eurer Nahkampfschwünge fügt dem Ziel eine Giftstufe hinzu, bis zu 5, und erneuert die Dauer von 12 Sek. Jede Stufe verursacht alle 2 Sek. {damage} Naturschaden.',
   'entities.abilities.blind.name': 'Dreckwurf',
   'entities.abilities.blind.description':
     'Blendet das Ziel, sodass es 8 Sek. lang desorientiert umherirrt. Jeder Schaden bricht den Effekt.',

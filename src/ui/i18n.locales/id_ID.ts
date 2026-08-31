@@ -4807,7 +4807,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Melesat ke depan, meningkatkan kecepatan gerak sebesar 50% selama 15 detik. Hanya dalam Wujud Serigala.',
   'entities.abilities.dash.name': 'Lesatan',
   'entities.abilities.deadly_poison.description':
-    'Melapisi senjatamu selama 30 menit. Setiap ayunan jarak dekatmu membusukkan target sebesar 4 Kerusakan alam setiap 2 detik selama 12 detik, dan menambah satu tumpukan, hingga 5. Pada 5 tumpukan setiap denyut memberi 20.',
+    'Melapisi senjatamu selama 30 menit. Setiap ayunan jarak dekatmu menambah satu tumpukan racun pada target, hingga 5, dan menyegarkan durasi 12 detik. Setiap tumpukan memberi {damage} Kerusakan alam setiap 2 detik.',
   'entities.abilities.deadly_poison.name': 'Bisa Membusuk',
   'entities.abilities.defensive_stance.description':
     'Kuda-kuda tempur bertahan: kamu menghasilkan 30% lebih banyak ancaman tetapi memberi dan menerima 10% lebih sedikit kerusakan. Rapal lagi untuk meninggalkan kuda-kuda ini.',

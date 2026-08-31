@@ -10415,7 +10415,7 @@ export const es: EnTranslations = {
       },
       "deadly_poison": {
         "name": "Veneno Purulento",
-        "description": "Recubre tu arma durante 30 min. Cada uno de tus golpes cuerpo a cuerpo infecta al objetivo, infligiéndole 4 de daño de Naturaleza cada 2 s durante 12 s, y añade una acumulación, hasta 5. Con 5 acumulaciones cada pulso inflige 20."
+        "description": "Recubre tu arma durante 30 min. Cada uno de tus golpes cuerpo a cuerpo añade una acumulación de veneno al objetivo, hasta 5, y renueva la duración de 12 s. Cada acumulación inflige {damage} de daño de Naturaleza cada 2 s."
       },
       "blind": {
         "name": "Puñado de Tierra",

@@ -3288,7 +3288,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '武器に30分間毒を塗り、近接攻撃ごとに{damage}の追加自然ダメージを与えます。',
   'entities.abilities.deadly_poison.name': '腐敗の毒',
   'entities.abilities.deadly_poison.description':
-    '武器に30分間毒を塗り、近接攻撃ごとに対象を蝕み、12秒間にわたり2秒ごとに4の自然ダメージを与え、スタックを1つ追加します（最大5）。5スタックでは1回のティックが20のダメージを与えます。',
+    '武器に30分間毒を塗ります。近接攻撃ごとに対象へ毒のスタックを1つ追加し（最大5）、持続時間12秒を更新します。1スタックにつき2秒ごとに{damage}の自然ダメージを与えます。',
   'entities.abilities.blind.name': '砂かけ',
   'entities.abilities.blind.description':
     '対象を盲目にし、8秒間混乱してさまよわせます。ダメージを受けると効果が切れます。',
