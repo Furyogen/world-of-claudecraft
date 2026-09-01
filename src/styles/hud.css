@@ -1376,6 +1376,36 @@
   #totarget-frame .level-chip {
     display: none;
   }
+  /* Moved by the interface editor: makeUiRootDetacher re-homes the mini onto #ui,
+     so every `#target-frame > #totarget-frame` rule above stops matching and the
+     frame positions off its own saved left/top instead (the shared
+     .hud-frame-detached block below owns position/margin/z-index). Three things
+     the anchored rules used to supply are restated here.
+     (1) The mini zoom moves onto the CHILDREN, never the frame itself, exactly
+         as the player and target frames do it: zoom on a positioned frame also
+         multiplies its used left/top and breaks the MovableFrame drag math.
+     (2) The portrait-left order, which the LATER #target-frame .portrait-wrap /
+         .uf-bars mirror rules would otherwise win on source order; the extra
+         class here outranks them at any position in the sheet.
+     (3) --uf-bar-height, which the mini inherited from #target-frame and no
+         longer does, so its bar keeps tracking the Target Frame Height setting. */
+  #totarget-frame.hud-frame-detached {
+    --uf-bar-height: var(--target-frame-height, 15px);
+  }
+  #totarget-frame.hud-frame-detached > :not(.tf-move-btn) {
+    zoom: calc(0.74 * var(--target-frame-scale, 1));
+  }
+  #totarget-frame.hud-frame-detached .portrait-wrap {
+    order: 1;
+  }
+  #totarget-frame.hud-frame-detached .uf-bars {
+    order: 2;
+    width: 132px;
+    margin-left: -16px;
+    margin-right: 0;
+    border-radius: 11px 6px 6px 11px;
+    padding: 4px 8px 4px 22px;
+  }
   /* Movable unit frames: the small corner toggle (built by MovableFrame in
      movable_frame.ts) that unlocks
      the frame for dragging and locks it back. Sits just outside the top-right
@@ -1524,6 +1554,7 @@
   #actionbar2.hud-frame-detached,
   #actionbar3.hud-frame-detached,
   #pet-frame.hud-frame-detached,
+  #totarget-frame.hud-frame-detached,
   #stancebar.hud-frame-detached,
   #xpbar.hud-frame-detached,
   #buff-bar.hud-frame-detached,
@@ -1700,6 +1731,7 @@
      player has switched OFF stays hidden while editing, and the options note
      points at the plus/minus buttons for turning more on. */
   body.interface-unlocked #target-frame.tf-unlocked,
+  body.interface-unlocked #totarget-frame.tf-unlocked,
   body.interface-unlocked #pet-frame.tf-unlocked,
   body.interface-unlocked #stancebar.tf-unlocked {
     display: flex !important;
