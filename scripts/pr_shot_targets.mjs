@@ -9398,26 +9398,28 @@ export const TARGETS = [
       // overhangs the portrait side, so the mini takes the widened boss gap.
       { key: 'desktop-boss', charClass: 'warrior', charName: 'Marksman', boss: true },
       { key: 'mobile', charClass: 'mage', charName: 'Marksman', mobile: true },
-      // The mini as the interface editor now sees it. The global unlock lists it
-      // as an arrangeable frame (its own corner button and name chip), and the
-      // seeded box replays the real parse-and-apply path a returning player hits.
-      // It proves BOTH halves of the move: the re-home onto #ui and the
-      // .hud-frame-detached rules that restate the mini zoom, the portrait-left
-      // order and the bar-height var it stops inheriting from #target-frame.
-      // Docked, the mini is anchored beside the target frame and cannot land here.
-      {
-        key: 'desktop-arranged',
-        charClass: 'warrior',
-        charName: 'Marksman',
-        arranged: true,
-        beforeLoad: async (page) => {
-          await page.evaluateOnNewDocument(
-            `try { localStorage.setItem('woc_hud_frame_totarget', JSON.stringify({ left: 620, top: 150, scale: 1 })); } catch {}`,
-          );
-        },
-      },
+      // The mini as the interface editor now sees it, moved by a REAL pointer drag
+      // (see the capture below) rather than a seeded localStorage box: the drag
+      // runs MovableFrame end to end and proves BOTH halves of the move, the
+      // re-home onto #ui and the .hud-frame-detached rules that restate the mini
+      // zoom, the portrait-left order and the bar-height var it stops inheriting
+      // from #target-frame. Docked, the mini is anchored beside the target frame
+      // and cannot land anywhere else at all.
+      { key: 'desktop-arranged', charClass: 'warrior', charName: 'Marksman', arranged: true },
     ],
     async capture(page, variant) {
+      // The spawn greeting (Ferryman Odo) is a #tutorial-greeting MODAL that
+      // dismissEntryOverlays does not cover. It sits over the middle of every frame
+      // shot and, worse, swallows the pointer events an arrange-mode drag needs, so
+      // clear it (and any leftover entry chrome) before anything else runs.
+      await page.evaluate(() => {
+        document.querySelector('#tutorial-greeting [data-close]')?.click();
+        document.querySelector('#tutorial-greeting [data-skip]')?.click();
+        document.querySelector('button.tut-skip')?.click();
+        document.querySelector('.camera-prompt-confirm')?.click();
+        document.querySelector('#gpu-notice')?.remove();
+      });
+      await wait(400);
       await page.evaluate(
         ({ withParty, asBoss }) => {
           const game = window.__game;
@@ -9507,7 +9509,35 @@ export const TARGETS = [
       }
       // The global toggle, not the target frame's own button: the mini has no
       // corner button of its own while locked, so this is its only route loose.
-      if (variant.arranged) await unlockInterfaceThroughTheOption(page);
+      // Then DRAG it with real pointer events, the same gesture a player makes,
+      // so the shot is evidence that MovableFrame actually moves this frame
+      // rather than that a seeded localStorage box parses.
+      if (variant.arranged) {
+        // The public seam the "Unlock interface" option row itself calls, NOT
+        // unlockInterfaceThroughTheOption: that helper drives hud.toggleOptionsMenu,
+        // a TOGGLE, and this capture's staging leaves it out of phase, so it closed
+        // the menu instead of opening it and the interface stayed LOCKED. The drag
+        // below then fell through to the world and click-to-move walked the player
+        // across the shot. The option row is covered by interface-unlock-option.
+        await page.evaluate(() => window.__game?.hud?.toggleInterfaceUnlock?.());
+        await wait(500);
+        const grab = await page.evaluate(() => {
+          const el = document.getElementById('totarget-frame');
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          // The frame BODY, clear of the corner move button and the SE grip, which
+          // own their own gestures (MovableFrame skips a drag started on a button).
+          return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) };
+        });
+        if (grab) {
+          await page.mouse.move(grab.x, grab.y);
+          await page.mouse.down();
+          // Stepped, because MovableFrame positions from pointermove deltas and a
+          // single jump would leave the drag untested at every intermediate point.
+          await page.mouse.move(grab.x + 300, grab.y + 250, { steps: 12 });
+          await page.mouse.up();
+        }
+      }
       await wait(600);
       return {};
     },

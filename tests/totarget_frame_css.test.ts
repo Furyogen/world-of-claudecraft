@@ -151,3 +151,26 @@ describe('target-of-target frame: the moved (detached) arm', () => {
     );
   });
 });
+
+// The mini is the ONE governed frame nested inside another one, so the two rules
+// that assume governed frames are siblings both had to learn about it. Caught by
+// re-shooting the arrange-mode screenshot: the frame showed its name chip but no
+// drag ever started, and the press fell through to the world.
+describe('target-of-target frame: reachable while the interface is unlocked', () => {
+  it('is carved out of the unlocked-frame pointer-inert rule', () => {
+    // body.interface-unlocked .tf-unlocked :not(...) is a DESCENDANT selector and
+    // #target-frame is itself governed, so the mini matched it and became
+    // pointer-events: none !important, the one arrangeable frame nothing could grab.
+    expect(hudCss).toContain(
+      'body.interface-unlocked .tf-unlocked :not(.tf-move-btn):not(.mf-resize-grip):not(#totarget-frame) { pointer-events: none !important; }',
+    );
+  });
+
+  it("leaves the mini's own CONTENTS inert, so a grab anywhere on it drags the mini", () => {
+    // Only the frame itself is carved out: its portrait and bars still match the
+    // rule through it, which is what makes the whole mini one drag handle rather
+    // than a portrait that swallows the press.
+    expect(hudCss).not.toContain(':not(#totarget-frame *)');
+    expect(hudCss).not.toContain('#totarget-frame :not(.tf-move-btn) { pointer-events: auto');
+  });
+});

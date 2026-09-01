@@ -1810,8 +1810,17 @@
      themselves with their own id-specific rules (the daily rewards chest's
      pointer-events, the target debuff strip) and each would otherwise stay
      clickable inside an "inert" frame. The frame's own chrome, the move button
-     and the resize grip, is carved back out. */
-  body.interface-unlocked .tf-unlocked :not(.tf-move-btn):not(.mf-resize-grip) {
+     and the resize grip, is carved back out.
+     So is #totarget-frame, the one governed frame that is itself a DESCENDANT of
+     another one: the mini lives inside #target-frame until it is moved, so this
+     rule reached it and made it pointer-inert, leaving it the only arrangeable
+     frame a player could never actually grab (its name chip appeared, its drag
+     never started, and the press fell through to the world). Only the mini
+     ITSELF is carved out; its own contents still match through it, so a grab
+     anywhere on it starts the mini's drag rather than pressing its portrait. */
+  body.interface-unlocked
+    .tf-unlocked
+    :not(.tf-move-btn):not(.mf-resize-grip):not(#totarget-frame) {
     pointer-events: none !important;
   }
   /* While unlocked each aura row keeps a graspable minimum box (the dashed
