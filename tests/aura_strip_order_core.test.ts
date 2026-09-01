@@ -1,4 +1,4 @@
-// Urgency banding for the player's aura strips (src/ui/aura_strip_order.ts).
+// Urgency banding for the player's aura strips (src/ui/aura_strip_order_core.ts).
 // Pure, so this drives the resolver directly; the ordering it produces once the view
 // fills its slot pool from it is covered in tests/auras_view.test.ts.
 
