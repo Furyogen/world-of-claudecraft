@@ -365,7 +365,7 @@ async function populateBuffBar(page) {
         id,
         name: `Audit Vigor ${i + 1}`,
         kind: 'buff_ap',
-        // Staggered well apart so the strip's urgency banding (aura_strip_order.ts)
+        // Staggered well apart so the strip's urgency banding (aura_strip_order_core.ts)
         // spreads them across bands rather than piling every marker into one, which
         // keeps the sweep representative of a real strip's row shape.
         remaining: 30 + i * 240,
