@@ -1384,9 +1384,13 @@
      (1) The mini zoom moves onto the CHILDREN, never the frame itself, exactly
          as the player and target frames do it: zoom on a positioned frame also
          multiplies its used left/top and breaks the MovableFrame drag math.
-     (2) The portrait-left order, which the LATER #target-frame .portrait-wrap /
-         .uf-bars mirror rules would otherwise win on source order; the extra
-         class here outranks them at any position in the sheet.
+     (2) The portrait-left order, stated again from scratch. NOT a specificity
+         win over the LATER #target-frame .portrait-wrap / .uf-bars mirror rules:
+         the re-home leaves those descendant selectors no ancestor to match, so
+         they and the docked rule above drop out TOGETHER and nothing is left to
+         contest. The class is what selects the detached state, not what outranks
+         anything (it does also cover the degenerate case where the class is set
+         but the re-home found no #ui to move into).
      (3) --uf-bar-height, which the mini inherited from #target-frame and no
          longer does, so its bar keeps tracking the Target Frame Height setting. */
   #totarget-frame.hud-frame-detached {

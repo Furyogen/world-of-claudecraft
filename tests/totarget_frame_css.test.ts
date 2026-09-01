@@ -126,10 +126,12 @@ describe('target-of-target frame: the moved (detached) arm', () => {
     expect(detached).toContain('--uf-bar-height: var(--target-frame-height, 15px);');
   });
 
-  it('keeps portrait-left, at a specificity the mirror rules cannot beat', () => {
-    // #totarget-frame.hud-frame-detached .portrait-wrap is (1,2,0), so it outranks
-    // the LATER #target-frame .portrait-wrap / .uf-bars mirror rules at (1,1,0) no
-    // matter where either sits in the sheet.
+  it('restates portrait-left, which the re-home leaves nothing else to supply', () => {
+    // Deliberately NOT a specificity story (PR review caught the earlier wording):
+    // makeUiRootDetacher re-parents the frame onto #ui, so the docked rule and the
+    // LATER #target-frame .portrait-wrap / .uf-bars mirror rules are ALL descendant
+    // selectors with no ancestor left to match. They drop out together, nothing
+    // contests anything, and the order has to be declared again from scratch.
     expect(rule(hudCss, '#totarget-frame.hud-frame-detached .portrait-wrap')).toContain(
       'order: 1;',
     );
