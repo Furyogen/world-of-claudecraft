@@ -56,6 +56,7 @@ describe('wireEntity aura serialization', () => {
     expect(w).not.toHaveProperty('src');
     expect(w).not.toHaveProperty('ub');
     expect(w).not.toHaveProperty('und');
+    expect(w).not.toHaveProperty('eo');
     expect(w).not.toHaveProperty('bt');
   });
 
@@ -74,6 +75,7 @@ describe('wireEntity aura serialization', () => {
         sourceId: 7,
         unbreakableControl: true,
         undispellable: true,
+        encounterOwned: true,
         breakThreshold: 25,
       }),
     ];
@@ -95,6 +97,7 @@ describe('wireEntity aura serialization', () => {
       src: 7,
       ub: 1,
       und: 1,
+      eo: 1,
       bt: 1,
     });
     expect(Object.keys(w)).toEqual([
@@ -113,6 +116,7 @@ describe('wireEntity aura serialization', () => {
       'src',
       'ub',
       'und',
+      'eo',
       'bt',
     ]);
   });

@@ -29,6 +29,7 @@ interface StableAuraRecord {
   empowerAbilities: readonly string[] | undefined;
   sourceId: number;
   unbreakableControl: boolean;
+  encounterOwned: boolean;
   undispellable: boolean;
   // Presence of a break threshold (Lingering Dread), never the live soak value
   // - that decrements per hit and would churn this cache (see WireAura.bt below).
@@ -57,6 +58,7 @@ interface StableAuraWire {
   src?: number;
   ub?: 1;
   und?: 1;
+  eo?: 1;
   bt?: 1;
 }
 
@@ -111,6 +113,7 @@ function auraMatches(
     sameStringList(record.empowerAbilities, aura.empowerAbilities) &&
     record.sourceId === aura.sourceId &&
     record.unbreakableControl === (aura.unbreakableControl === true) &&
+    record.encounterOwned === (aura.encounterOwned === true) &&
     record.undispellable === (aura.undispellable === true) &&
     record.breakArmed === (aura.breakThreshold !== undefined) &&
     record.paused === wirePaused &&
@@ -136,6 +139,7 @@ function auraRecord(aura: Aura, simTime: number, paused: boolean): StableAuraRec
     empowerAbilities: aura.empowerAbilities ? [...aura.empowerAbilities] : undefined,
     sourceId: aura.sourceId,
     unbreakableControl: aura.unbreakableControl === true,
+    encounterOwned: aura.encounterOwned === true,
     undispellable: aura.undispellable === true,
     breakArmed: aura.breakThreshold !== undefined,
     paused: wirePaused,
@@ -165,6 +169,7 @@ function auraWire(record: StableAuraRecord): StableAuraWire {
   if (record.sourceId) wire.src = record.sourceId;
   if (record.unbreakableControl) wire.ub = 1;
   if (record.undispellable) wire.und = 1;
+  if (record.encounterOwned) wire.eo = 1;
   if (record.breakArmed) wire.bt = 1;
   return wire;
 }
@@ -484,6 +489,14 @@ export interface WireAura {
   // the buff bar never offers a right-click cancel the server would refuse. Omitted for
   // ordinary auras, and an old server's omission decodes to undefined, as before.
   und?: 1;
+  // Encounter-owned marker: the encounter script owns this aura's release, so no
+  // player counter sheds it. Presence only, and it rides for the same reason und
+  // does: the client's dispellable highlight answers to the SAME predicate the
+  // server's dispel executor uses (sim/aura_classify isDispellableAura), and this
+  // flag is the one input to it that had no wire representation, so without it
+  // every encounter-owned raid debuff read as curable online. Omitted for ordinary
+  // auras; an old server's omission decodes to undefined, the pre-existing answer.
+  eo?: 1;
   // Break-threshold ARMED marker (Lingering Dread's soak-before-snap fear):
   // presence only, never the live soak value - the number decrements per hit
   // and would churn the stable aura cache, while the client (the victim-worn
@@ -547,6 +560,14 @@ export function wireAura(a: Aura): WireAura {
   if (a.sourceId) w.src = a.sourceId;
   if (a.unbreakableControl) w.ub = 1;
   if (a.undispellable) w.und = 1;
+  // Encounter-owned: the script owns this aura's release, so no player counter can
+  // shed it. Rides the wire for the same reason ub/und do: the client's dispel
+  // affordance (auras_view, the dispellable highlight) answers to the SAME predicate
+  // the server's dispel executor does (sim/aura_classify isDispellableAura), and
+  // without this flag every encounter-owned raid debuff would read as curable online
+  // while the server refused the dispel. Assigned after und to match the declared
+  // WireAura field order, which tests/wire_aura.test.ts pins as wire bytes.
+  if (a.encounterOwned) w.eo = 1;
   if (a.breakThreshold !== undefined) w.bt = 1;
   return w;
 }

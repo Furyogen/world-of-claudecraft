@@ -106,6 +106,26 @@ describe('StableAuraWireCache', () => {
     expect(JSON.parse(ordinaryWire.json)[0]).not.toHaveProperty('und');
   });
 
+  it('serializes encounter-owned auras and rebuilds when that ownership changes', () => {
+    // The client's dispellable highlight answers to the same isDispellableAura the
+    // server's dispel executor does, and encounterOwned is the one input to it that
+    // had no wire representation: without this field every encounter-owned raid
+    // debuff would read as curable online while the server refused the dispel.
+    const cache = new StableAuraWireCache();
+    const active = aura('soul_rend', 12);
+    active.encounterOwned = true;
+
+    const ownedWire = cache.encode([active], 0, false);
+    expect(JSON.parse(ownedWire.json)[0]).toMatchObject({ eo: 1 });
+
+    active.encounterOwned = undefined;
+    const ordinaryWire = cache.encode([active], 0, false);
+    // The stability record must SEE the change, or a mid-fight release would keep
+    // serving the stale "encounter owns this" answer from the cache.
+    expect(ordinaryWire.revision).toBe(ownedWire.revision + 1);
+    expect(JSON.parse(ordinaryWire.json)[0]).not.toHaveProperty('eo');
+  });
+
   it('rebuilds for every wire-visible mutation and explicit empty removal', () => {
     const cache = new StableAuraWireCache();
     const first = aura('first', 10);

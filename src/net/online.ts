@@ -263,6 +263,7 @@ interface ClientWireAura {
   src?: number;
   ub?: 1;
   und?: 1;
+  eo?: 1;
   bt?: 1;
 }
 
@@ -3285,6 +3286,12 @@ export class ClientWorld extends ReconWireState implements IWorld {
             // Presence-only mirror of the undispellable marker, so the client's
             // isPlayerRemovableAura answers exactly as the server's does.
             rec.undispellable = a.und === 1 ? true : undefined;
+            // Presence-only mirror of the encounter-owned marker, so the client's
+            // isDispellableAura (the dispellable highlight on the aura rows) refuses
+            // exactly what the server's dispel executor refuses. An old server omits
+            // it, which degrades to "not encounter-owned": the same answer the client
+            // gave before this field existed, never a new false refusal.
+            rec.encounterOwned = a.eo === 1 ? true : undefined;
             // Presence-only mirror of the break-threshold armed marker (the
             // server emits bt = 1 when breakThreshold is defined): the one
             // client reader is the Lingering Dread victim-band alias, which
@@ -3312,6 +3319,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
             empowerAbilities: a.emp,
             unbreakableControl: a.ub === 1 ? true : undefined,
             undispellable: a.und === 1 ? true : undefined,
+            encounterOwned: a.eo === 1 ? true : undefined,
             breakThreshold: a.bt === 1 ? 1 : undefined,
           }));
         }
