@@ -165,7 +165,12 @@ import { resolveHudAuraIconId, resolveHudAuraIconUrl } from './aura_icon_runtime
 import { AuraOverlayController } from './aura_overlay_controller';
 import { renderAuraTooltipBodyHtml } from './aura_tooltip';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
-import { type AurasDeps, auraCancelNeedsConfirm, createAurasView } from './auras_view';
+import {
+  type AuraSortMode,
+  type AurasDeps,
+  auraCancelNeedsConfirm,
+  createAurasView,
+} from './auras_view';
 import { attachAvatarFallback } from './avatar_fallback';
 import { BagItemActionMenu, CTX_MENU_PICKER_CLASS } from './bag_item_action_menu';
 import { bagSlotsLineKey, bagsWindowShown } from './bags_view';
@@ -4179,6 +4184,14 @@ export class Hud {
   // which owns its stock aura placement) restores the classic two-row corner;
   // the aura painters' element refs are live nodes, so they survive the moves.
   private aurasOnPlayerFrame = false;
+  // The live aura sort mode for BOTH player rows, driven by the auraSortMode setting
+  // (main.ts). Held as the AuraSortMode name rather than the numeric setting so the
+  // views never re-map it per frame.
+  private auraSortMode: AuraSortMode = 'applied';
+
+  setAuraSortMode(mode: AuraSortMode): void {
+    this.auraSortMode = mode;
+  }
   private buffBarHome: { parent: ParentNode; next: Node | null } | null = null;
 
   setAurasOnPlayerFrame(on: boolean): void {
@@ -4956,8 +4969,17 @@ export class Hud {
   };
   // Player auras split across two rows (classic layout): buffs in #buff-bar, debuffs in
   // #debuff-bar, so a fresh debuff is never buried under a wall of long-lived buffs.
-  private readonly buffBarView = createAurasView('buffs', this.aurasViewDeps);
-  private readonly debuffBarView = createAurasView('debuffs', this.aurasViewDeps);
+  // Both player rows read the live sort setting (Interface > Frames > Sort Buffs and
+  // Debuffs). Passed as a FUNCTION, so changing the setting applies on the next frame
+  // without rebuilding either view or its slot pool. The default is 'applied', which
+  // leaves the shipped order exactly as the low-tier overflow cap's priority rule was
+  // tuned against (aura_overflow_priority, PR #3668).
+  private readonly buffBarView = createAurasView('buffs', this.aurasViewDeps, {
+    sortMode: () => this.auraSortMode,
+  });
+  private readonly debuffBarView = createAurasView('debuffs', this.aurasViewDeps, {
+    sortMode: () => this.auraSortMode,
+  });
   // The target strip shows EVERY aura (classic target-frame behavior): a friendly
   // target's buffs (the shield you just cast on an ally) alongside its debuffs, and
   // an enemy's buffs (a mob's frenzy) alongside the DoTs you keep on it. The element

@@ -768,6 +768,105 @@ const fakePadAxesSeed = async (page) => {
 
 export const TARGETS = [
   {
+    key: 'aura-bars',
+    label: 'Player buff and debuff rows: one flow column, sort modes, dispellable square',
+    // Aura-specific modules only. Deliberately NOT src/styles/hud.css, which nearly
+    // every HUD change touches and which would fire this recipe for unrelated work.
+    when: ['ui/auras_view.ts', 'ui/auras_painter.ts', 'ui/aura_overflow_priority.ts'],
+    variants: [
+      // Desktop carries the busy case: enough buffs to wrap, so the debuff row's
+      // position is visibly a function of the buff rows rather than a fixed pin, and
+      // the duration labels have their own lane. alwaysShowAllBuffs is a real player
+      // setting (Interface > Frames), not a graphics override: it lifts the LOW
+      // preset's buff-icon cap so the wrap is visible while the rig keeps the lowest
+      // preset the standing capture rule requires.
+      { key: 'desktop', charClass: 'paladin', charName: 'Auralyn', buffs: 14, debuffs: 4 },
+      // The headline defect is mobile: at six buffs the second buff row used to land
+      // on the debuff row and the two painted over each other.
+      {
+        key: 'mobile',
+        charClass: 'paladin',
+        charName: 'Auralyn',
+        mobile: true,
+        buffs: 6,
+        debuffs: 3,
+      },
+    ],
+    async capture(page, variant) {
+      await dismissEntryOverlays(page);
+      await awaitWorldPainted(page);
+      const staged = await page.evaluate((shot) => {
+        const game = window.__game;
+        const sim = game?.sim;
+        const me = sim?.player;
+        if (!game || !sim || !me) return { ok: false, reason: 'offline world is unavailable' };
+        // Lift the low preset's buff cap so a wrapping row is actually visible. This is
+        // the shipped Always Show All Buffs setting, not a capture-only hack.
+        game.hud.setAlwaysShowAllBuffs?.(true);
+        // A representative raid-buffed load: long upkeep buffs, one short cooldown, and
+        // a mix of dispellable (magic school) and undispellable (physical) debuffs, so
+        // the yellow square marks some icons and not others.
+        const BUFFS = [
+          ['buff_ap', 'Battle Shout', 'physical', 1800],
+          ['buff_int', 'Arcane Intellect', 'arcane', 3600],
+          ['buff_armor', 'Thorns', 'nature', 1800],
+          ['buff_spellpower', 'Blessing of Kings', 'holy', 3600],
+          ['buff_haste', 'Trueshot Aura', 'physical', 1800],
+          ['buff_agi', 'Mark of the Wild', 'nature', 3600],
+          ['buff_dodge', 'Fortitude', 'holy', 1800],
+          ['buff_healing_done', 'Blessing of Wisdom', 'holy', 3600],
+          ['buff_spellpower', 'Arcane Brilliance', 'arcane', 1800],
+          ['buff_armor', 'Stoneskin', 'nature', 900],
+          ['buff_ap', 'Strength of Earth', 'nature', 600],
+          ['buff_int', 'Focus Magic', 'arcane', 600],
+          ['buff_dr_phys', 'Raised Guard', 'physical', 6],
+          ['buff_speed', 'Sprint', 'physical', 15],
+        ];
+        const DEBUFFS = [
+          ['dot', 'Curse of Agony', 'shadow', 22],
+          ['dot', 'Rend', 'physical', 12],
+          ['dot', 'Immolate', 'fire', 8],
+          ['dot', 'Frostbite', 'frost', 5],
+        ];
+        me.auras.length = 0;
+        for (let i = 0; i < shot.buffs; i++) {
+          const [kind, name, school, dur] = BUFFS[i % BUFFS.length];
+          me.auras.push({
+            id: `shot_buff_${i}`,
+            name,
+            kind,
+            remaining: dur,
+            duration: dur,
+            value: 10,
+            sourceId: me.id,
+            school,
+          });
+        }
+        for (let i = 0; i < shot.debuffs; i++) {
+          const [kind, name, school, dur] = DEBUFFS[i % DEBUFFS.length];
+          me.auras.push({
+            id: `shot_debuff_${i}`,
+            name,
+            kind,
+            remaining: dur,
+            duration: dur,
+            value: 5,
+            sourceId: 0,
+            school,
+          });
+        }
+        return { ok: true, auras: me.auras.length };
+      }, variant);
+      if (!staged.ok) throw new Error(staged.reason);
+      await wait(600);
+      // Full frame, and NO selector clip on purpose: the point of the shot is where the
+      // two rows sit relative to each other and to the minimap, which a clip to either
+      // row would crop away. It also keeps the before/after pair directly comparable,
+      // since the "before" tree has no #aura-bars element to clip to at all.
+      return {};
+    },
+  },
+  {
     key: 'ravenrift',
     label:
       'Thornhollow Fields 5v5 battleground: field, gatehouse, carry, queue window, mobile scoreboard',

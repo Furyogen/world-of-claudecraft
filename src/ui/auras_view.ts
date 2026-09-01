@@ -30,6 +30,7 @@
 import {
   isDebuffDisplayAura as classifyDebuffDisplayAura,
   DEBUFF_AURA_KINDS,
+  isDispellableAura,
 } from '../sim/aura_classify';
 import { isCancelableAura } from '../sim/combat/aura_cancel';
 import { isPersistentEngineAura } from '../sim/persistent_aura';
@@ -166,6 +167,18 @@ export interface AuraInput {
   // sicknesses). Also mirrored over the wire (terse `und`), so the cancel affordance
   // cannot offer what the sim's cancel path would refuse.
   undispellable?: true;
+  // The third arm of the same rule, and the one the dispellable highlight needs: an
+  // encounter script owns this aura's release. Mirrored over the wire (terse `eo`, added
+  // with this reader); an old server omits it and the mirror decodes undefined, which
+  // reads as "not encounter-owned" -- the same answer the client gave before the field
+  // existed, so the highlight degrades toward the previous behavior, never toward a new
+  // false claim.
+  encounterOwned?: true;
+  // A permanent aura (no countdown, never expires). Already mirrored over the wire
+  // (terse `perm`, decoded in src/net/online.ts); isDispellableAura refuses a permanent
+  // outright, so it rides for that reader too. Declared `boolean` (not `true`) to stay
+  // structurally assignable from the sim's own Aura, which callers pass here directly.
+  permanent?: boolean;
 }
 
 /** The entity fields the core reads: just its aura list. */
@@ -263,6 +276,15 @@ export interface AuraSlotState {
    *  (`isShortDurationBuff`, `aura_overflow_priority.ts`): a long-lived stat buff
    *  sheds before a short, actively-timed one. */
   shortDuration: boolean;
+  /** Whether a dispel could actually strip this aura, by the SAME predicate the sim's
+   *  dispel executor and its requiresDispellable cast gate answer to
+   *  (`isDispellableAura`), with the polarity this row implies: on the player's BUFF row
+   *  an enemy purge strips a benefit (offensive), on the player's DEBUFF row an ally's
+   *  cure strips a harmful effect (friendly). Drives the highlight only; it never changes
+   *  what the icon means, and it is derived rather than styled per school so the marker
+   *  can never claim a dispel the server would refuse. Always false on the modes that do
+   *  not ask for it. */
+  dispellable: boolean;
 }
 
 /** The whole strip's derived state: the reused slot pool plus the active count. Both
@@ -349,6 +371,74 @@ export function isShortDurationBuff(duration: number | undefined): boolean {
   return duration !== undefined && duration > 0 && duration <= SHORT_BUFF_PRIORITY_SEC;
 }
 
+/** How a player aura row is ordered. `applied` is sim-application order, the stock
+ *  classic behavior and the DEFAULT: the low graphics tier's buff cap reads the buff
+ *  row's order through its own priority rule (`aura_overflow_priority.ts`
+ *  selectShedSlots, which keeps a short actively-timed buff over a long stat buff,
+ *  PR #3668), so the shipped order stays exactly what that rule was tuned against and
+ *  a sort is something the player opts into. `length` and `type` are the two WoW-style
+ *  sorts. */
+export type AuraSortMode = 'applied' | 'length' | 'type';
+
+/** Map the numeric `auraSortMode` setting onto the mode name. Lives here, beside the
+ *  type it produces, rather than in the settings module or main.ts: the ladder's meaning
+ *  is this core's, and main.ts is a firewall rather than a home for it. Anything outside
+ *  the ladder falls back to 'applied', so a corrupt or future stored value degrades to
+ *  the stock order instead of an undefined sort. Pure; exported for tests. */
+export function auraSortModeFromSetting(value: number): AuraSortMode {
+  if (value === 1) return 'length';
+  if (value === 2) return 'type';
+  return 'applied';
+}
+
+/** The ORDER the `type` sort groups by. Coarse on purpose: a row is scanned, not read,
+ *  so the grouping has to be legible at a glance rather than exhaustive. Debuffs lead
+ *  (the actionable half), dispellable ones ahead of the rest within that, then timed
+ *  buffs, then permanents. A TOGGLE (a stance, a form, stealth) gets no band of its own:
+ *  the sim backs each with a long FINITE duration rather than a permanent flag, so it
+ *  rides the ordinary band and its long remaining already carries it to that band's end,
+ *  which is where it belongs. */
+function auraTypeRank(a: AuraInput, debuff: boolean, dispellable: boolean): number {
+  if (debuff) return dispellable ? 0 : 1;
+  if (!Number.isFinite(a.remaining) || a.permanent === true) return 4;
+  return dispellable ? 2 : 3;
+}
+
+/** Order two auras by TIME REMAINING, soonest to fall off first. A non-finite remaining
+ *  (a permanent, or a toggle, which shows no countdown at all) is never urgent and
+ *  always sorts last. Ties break by aura id, so the order is TOTAL: the same aura set
+ *  derives the same order on every host and every frame, which is what stops icons from
+ *  trading places as unrelated auras come and go.
+ *
+ *  PARITY: reads only `remaining` and `id`, which the offline Sim aura and the online
+ *  ClientWorld mirror carry identically, so both worlds sort the same. Pure; exported
+ *  for tests. */
+export function compareAuraLength(a: AuraInput, b: AuraInput): number {
+  const aFinite = Number.isFinite(a.remaining);
+  const bFinite = Number.isFinite(b.remaining);
+  if (aFinite !== bFinite) return aFinite ? -1 : 1;
+  if (aFinite && a.remaining !== b.remaining) return a.remaining - b.remaining;
+  if (a.id === b.id) return 0;
+  return a.id < b.id ? -1 : 1;
+}
+
+/** Order two auras by TYPE band first (`auraTypeRank`), then by time remaining inside a
+ *  band, so a group stays internally stable and the bands themselves never move. Takes
+ *  the already-derived debuff/dispellable answers rather than recomputing them, so the
+ *  sort can never disagree with what the row actually renders. Pure; exported for
+ *  tests. */
+export function compareAuraType(
+  a: AuraInput,
+  aDebuff: boolean,
+  aDispellable: boolean,
+  b: AuraInput,
+  bDebuff: boolean,
+  bDispellable: boolean,
+): number {
+  const rank = auraTypeRank(a, aDebuff, aDispellable) - auraTypeRank(b, bDebuff, bDispellable);
+  return rank !== 0 ? rank : compareAuraLength(a, b);
+}
+
 function makeSlotState(): AuraSlotState {
   return {
     key: '',
@@ -368,6 +458,7 @@ function makeSlotState(): AuraSlotState {
     toggle: false,
     alwaysRender: false,
     shortDuration: false,
+    dispellable: false,
   };
 }
 
@@ -384,6 +475,22 @@ function makeSlotState(): AuraSlotState {
  * SAME aura list (own, then the rest): no sort, no per-frame allocation, and the
  * relative order within each group stays the sim-application order.
  *
+ * opts.sortMode (the two PLAYER rows): 'applied' keeps sim-application order, the stock
+ * classic behavior and the default; 'length' orders soonest-to-expire first
+ * (compareAuraLength); 'type' groups by band and then by remaining (compareAuraType), so
+ * the actionable debuffs lead and the permanents park at the end. Read as
+ * a FUNCTION, so the live setting applies on the next frame without rebuilding the view.
+ * The sort runs over a REUSED scratch buffer, so a steady-state frame still allocates
+ * nothing, and it orders the INPUT rather than the slot pool, keeping the pool and its
+ * parallel effectHtmlCache positionally aligned exactly as on the unsorted path.
+ *
+ * The buff row's DEFAULT stays 'applied' on purpose: the low graphics tier's overflow cap
+ * reads that row through its own priority rule (aura_overflow_priority selectShedSlots,
+ * which keeps a short actively-timed buff over a long stat buff, PR #3668). That rule
+ * picks its buckets order-independently, so a sort only re-breaks ties WITHIN a bucket
+ * and can never demote a short buff, but leaving the shipped order untouched keeps the
+ * tuned behavior exactly as it was for anyone who does not opt in.
+ *
  * opts.effectHtmlCacheVersion enables per-slot tooltip HTML caching. The version
  * must change whenever localized output can change; descriptor inputs are compared
  * directly, so countdown-only ticks keep the cached HTML allocation-free.
@@ -391,13 +498,60 @@ function makeSlotState(): AuraSlotState {
 export function createAurasView(
   mode: AuraMode,
   deps: AurasDeps,
-  opts?: { ownFirst?: boolean; effectHtmlCacheVersion?: () => unknown },
+  opts?: {
+    ownFirst?: boolean;
+    sortMode?: () => AuraSortMode;
+    effectHtmlCacheVersion?: () => unknown;
+  },
 ): AurasView {
   const slots: AuraSlotState[] = [];
   const effectHtmlCache: Array<AuraEffectHtmlCache | undefined> = [];
   const state: AurasState = { slots, count: 0 };
   const ownFirst = opts?.ownFirst === true;
+  const sortMode = opts?.sortMode;
+  // Reused ordering scratch for the sorted modes (grown, never shrunk), so the sort
+  // costs no per-frame allocation. Only [0, sortedCount) is meaningful. The parallel
+  // arrays carry the derived debuff/dispellable answers the `type` comparator needs, so
+  // it never recomputes them and can never disagree with what the row renders.
+  const sorted: AuraInput[] = [];
+  const sortedDebuff: boolean[] = [];
+  const sortedDispellable: boolean[] = [];
   const effectHtmlCacheVersion = opts?.effectHtmlCacheVersion;
+  // The dispel polarity this row implies, resolved once per view rather than per aura.
+  // On the player's BUFF row the threat is an ENEMY purge stripping a benefit
+  // (offensive); on the player's DEBUFF row it is an ALLY's cure stripping a harmful
+  // effect (friendly). A mixed row ('all': the target strip, the party mini-strips) asks
+  // neither question, because a single icon there can be either polarity and the marker
+  // would have to guess; those rows derive `dispellable: false` and render no highlight.
+  const dispelPolarity: boolean | null =
+    mode === 'buffs' ? true : mode === 'debuffs' ? false : null;
+  // ONE reused probe object, so the per-aura dispel check stays allocation-free on this
+  // per-frame path (the reused-reference budget the whole core is written to).
+  // isDispellableAura takes a REQUIRED school because the sim's own Aura always carries
+  // one; the online mirror omits 'physical' on the wire, so the same default slot.school
+  // applies is applied here, and a Sim-shaped aura and a ClientWorld mirror answer alike.
+  const dispelProbe: {
+    kind: AuraKind;
+    value: number;
+    school: AuraSchool;
+    id?: string;
+    unbreakableControl?: true;
+    encounterOwned?: true;
+    undispellable?: true;
+    permanent?: boolean;
+  } = { kind: 'dot', value: 0, school: 'physical' };
+  const dispellableOf = (a: AuraInput): boolean => {
+    if (dispelPolarity === null) return false;
+    dispelProbe.kind = a.kind;
+    dispelProbe.value = a.value;
+    dispelProbe.school = a.school ?? 'physical';
+    dispelProbe.id = a.id;
+    dispelProbe.unbreakableControl = a.unbreakableControl;
+    dispelProbe.encounterOwned = a.encounterOwned;
+    dispelProbe.undispellable = a.undispellable;
+    dispelProbe.permanent = a.permanent;
+    return isDispellableAura(dispelProbe, dispelPolarity);
+  };
 
   return {
     tick(entity: AurasEntityInput): AurasState {
@@ -462,6 +616,7 @@ export function createAurasView(
         // server would refuse: the encounter-control and undispellable arms ride
         // the wire (ub / und) for exactly this reader.
         slot.cancelable = mode === 'buffs' && isCancelableAura(a);
+        slot.dispellable = dispellableOf(a);
         const cachedEffect = effectHtmlCache[count];
         if (
           !effectHtmlCacheVersion ||
@@ -514,6 +669,52 @@ export function createAurasView(
       if (ownFirst) {
         for (const a of entity.auras) if (deps.isOwn(a)) fill(a, true);
         for (const a of entity.auras) if (!deps.isOwn(a)) fill(a, false);
+      } else if (sortMode !== undefined && sortMode() !== 'applied') {
+        // Order the INPUT, then fill: the slot pool and its parallel effectHtmlCache stay
+        // positionally aligned exactly as on the unsorted path. Binary-insertion into the
+        // reused scratch keeps a steady-state frame allocation-free and suits the
+        // near-sorted list this sees frame to frame (every remaining ticks down together,
+        // so the order rarely actually moves).
+        const byType = sortMode() === 'type';
+        let sortedCount = 0;
+        for (const a of entity.auras) {
+          const debuff = isAuraDebuff(a);
+          const dispellable = dispellableOf(a);
+          let lo = 0;
+          let hi = sortedCount;
+          while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            const cmp = byType
+              ? compareAuraType(
+                  sorted[mid],
+                  sortedDebuff[mid],
+                  sortedDispellable[mid],
+                  a,
+                  debuff,
+                  dispellable,
+                )
+              : compareAuraLength(sorted[mid], a);
+            if (cmp <= 0) lo = mid + 1;
+            else hi = mid;
+          }
+          if (sortedCount >= sorted.length) {
+            sorted.push(a);
+            sortedDebuff.push(debuff);
+            sortedDispellable.push(dispellable);
+          }
+          for (let i = sortedCount; i > lo; i--) {
+            sorted[i] = sorted[i - 1];
+            sortedDebuff[i] = sortedDebuff[i - 1];
+            sortedDispellable[i] = sortedDispellable[i - 1];
+          }
+          sorted[lo] = a;
+          sortedDebuff[lo] = debuff;
+          sortedDispellable[lo] = dispellable;
+          sortedCount++;
+        }
+        for (let i = 0; i < sortedCount; i++) fill(sorted[i], false);
+        // Drop the references so a departed aura is not retained by the scratch.
+        for (let i = 0; i < sortedCount; i++) sorted[i] = undefined as unknown as AuraInput;
       } else {
         for (const a of entity.auras) fill(a, false);
       }

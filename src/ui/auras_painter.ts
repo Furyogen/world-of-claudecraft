@@ -55,6 +55,11 @@ const OWN_CLASS = 'own';
 // brightness fallback under prefers-reduced-motion. Toggled per frame so a
 // recycled node never keeps a stale blink.
 const EXPIRING_CLASS = 'expiring';
+// Marks an aura a dispel could actually strip (auras_view `dispellable`, derived from
+// the sim's own isDispellableAura so the marker can never claim a dispel the server
+// would refuse). The stylesheet draws the square; the class is toggled per frame so a
+// recycled node never keeps a stale claim.
+const DISPELLABLE_CLASS = 'dispellable';
 // Carries the debuff's magic school so the stylesheet tints the border per school
 // (WoW-style poison/magic/curse reads); '' on a buff, so no school selector matches.
 const SCHOOL_ATTR = 'data-school';
@@ -275,6 +280,7 @@ export class AurasPainter {
       this.writers.toggleClass(rec.el, CANCELABLE_CLASS, rec.cancelable);
       this.writers.toggleClass(rec.el, OWN_CLASS, s.own);
       this.writers.toggleClass(rec.el, EXPIRING_CLASS, s.expiring);
+      this.writers.toggleClass(rec.el, DISPELLABLE_CLASS, s.dispellable);
       this.writers.setText(rec.dur, s.durationText);
       const hasStacks = s.stacksText !== '';
       this.writers.setDisplay(rec.stacks, hasStacks ? STACKS_SHOWN : STACKS_HIDDEN);

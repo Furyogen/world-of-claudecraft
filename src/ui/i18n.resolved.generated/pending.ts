@@ -9,25 +9,125 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "es_ES": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "fr_FR": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "fr_CA": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "de_DE": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "zh_CN": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "zh_TW": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "ko_KR": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "ja_JP": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "pt_BR": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "ru_RU": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "cs_CZ": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "nl_NL": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "pl_PL": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "id_ID": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "tr_TR": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "sv_SE": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "vi_VN": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ],
+  "da_DK": [
+    "hudChrome.options.auraSortApplied",
+    "hudChrome.options.auraSortLength",
+    "hudChrome.options.auraSortMode",
+    "hudChrome.options.auraSortType"
+  ]
 };

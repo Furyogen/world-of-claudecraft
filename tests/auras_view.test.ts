@@ -12,9 +12,13 @@ import {
   type AuraMode,
   type AurasDeps,
   type AurasEntityInput,
+  type AurasView,
   auraCancelNeedsConfirm,
+  auraSortModeFromSetting,
   CARRIED_FLAG_AURA_ID,
   compactAuraDuration,
+  compareAuraLength,
+  compareAuraType,
   createAurasView,
   DEBUFF_AURA_KINDS,
   EXPIRING_BLINK_FRAC,
@@ -881,5 +885,257 @@ describe('hud.ts: the buff-bar cancel routes a flag drop through the touch confi
     const gate = handler.indexOf('auraCancelNeedsConfirm');
     const instant = handler.lastIndexOf('this.sim.cancelAura(auraId);');
     expect(instant).toBeGreaterThan(gate);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The player rows' sort modes (settings.auraSortMode -> AuraSortMode) and the
+// dispellable marker. Both are scoped to the two PLAYER rows: the buff row's shipped
+// order is what the low-tier overflow cap's priority rule was tuned against
+// (aura_overflow_priority, PR #3668), so 'applied' stays the default.
+// ---------------------------------------------------------------------------
+describe('auraSortModeFromSetting: the numeric ladder', () => {
+  it('maps the three authored values onto their modes', () => {
+    expect(auraSortModeFromSetting(0)).toBe('applied');
+    expect(auraSortModeFromSetting(1)).toBe('length');
+    expect(auraSortModeFromSetting(2)).toBe('type');
+  });
+
+  it('degrades anything off the ladder to the stock order, never an undefined sort', () => {
+    for (const off of [-1, 3, 99, Number.NaN, 1.5]) {
+      expect(auraSortModeFromSetting(off), `value ${off}`).toBe('applied');
+    }
+  });
+});
+
+describe('compareAuraLength: soonest to fall off leads', () => {
+  it('orders by remaining ascending', () => {
+    const soon = aura({ id: 'a', remaining: 3 });
+    const later = aura({ id: 'b', remaining: 30 });
+    expect(compareAuraLength(soon, later)).toBeLessThan(0);
+    expect(compareAuraLength(later, soon)).toBeGreaterThan(0);
+  });
+
+  it('sorts a non-finite remaining LAST, whichever side it is passed on', () => {
+    const permanent = aura({ id: 'a', remaining: Number.POSITIVE_INFINITY });
+    const timed = aura({ id: 'b', remaining: 900 });
+    expect(compareAuraLength(permanent, timed)).toBeGreaterThan(0);
+    expect(compareAuraLength(timed, permanent)).toBeLessThan(0);
+    // Two permanents fall through to the id tiebreak rather than computing
+    // Infinity - Infinity, which is NaN and would make the sort incoherent.
+    const other = aura({ id: 'c', remaining: Number.POSITIVE_INFINITY });
+    expect(compareAuraLength(permanent, other)).toBeLessThan(0);
+    expect(compareAuraLength(other, permanent)).toBeGreaterThan(0);
+  });
+
+  it('breaks an exact tie by aura id, so the order is total and reproducible', () => {
+    const a = aura({ id: 'alpha', remaining: 5 });
+    const b = aura({ id: 'beta', remaining: 5 });
+    expect(compareAuraLength(a, b)).toBeLessThan(0);
+    expect(compareAuraLength(b, a)).toBeGreaterThan(0);
+    expect(compareAuraLength(a, aura({ id: 'alpha', remaining: 5 }))).toBe(0);
+  });
+});
+
+describe('compareAuraType: bands first, then remaining inside a band', () => {
+  const at = (id: string, remaining: number) => aura({ id, remaining });
+
+  it('ranks dispellable debuff, debuff, dispellable buff, buff, permanent', () => {
+    const rank = (debuff: boolean, dispellable: boolean) => {
+      const probe = at('probe', 10);
+      // Compared against a plain timed buff, so the sign reports the band order.
+      return compareAuraType(probe, debuff, dispellable, at('probe', 10), false, false);
+    };
+    expect(rank(true, true)).toBeLessThan(0);
+    expect(rank(true, false)).toBeLessThan(0);
+    expect(rank(false, true)).toBeLessThan(0);
+    expect(rank(false, false)).toBe(0);
+  });
+
+  it('parks a permanent behind every timed aura of the same polarity', () => {
+    const permanent = aura({ id: 'p', remaining: Number.POSITIVE_INFINITY });
+    const timed = at('t', 3600);
+    expect(compareAuraType(permanent, false, false, timed, false, false)).toBeGreaterThan(0);
+  });
+
+  it('falls back to remaining inside one band', () => {
+    expect(compareAuraType(at('a', 5), true, false, at('b', 20), true, false)).toBeLessThan(0);
+    expect(compareAuraType(at('a', 50), true, false, at('b', 20), true, false)).toBeGreaterThan(0);
+  });
+});
+
+describe("createAurasView: the player rows' sort modes", () => {
+  const dot = (id: string, remaining: number, school: AuraInput['school'] = 'shadow'): AuraInput =>
+    aura({ id, kind: 'dot', remaining, school });
+
+  const keysOf = (view: AurasView, auras: AuraInput[]): string[] => {
+    const state = view.tick(entity(auras));
+    return state.slots.slice(0, state.count).map((slot) => slot.key);
+  };
+
+  it("'applied' leaves both rows in sim-application order (the shipped default)", () => {
+    for (const mode of ['buffs', 'debuffs'] as const) {
+      const view = createAurasView(mode, deps(), { sortMode: () => 'applied' });
+      const auras =
+        mode === 'buffs'
+          ? [
+              aura({ id: 'long', kind: 'buff_ap', value: 5, remaining: 1800 }),
+              aura({ id: 'short', kind: 'buff_ap', value: 5, remaining: 6 }),
+            ]
+          : [dot('curse', 30), dot('rend', 12)];
+      const expected = mode === 'buffs' ? ['long', 'short'] : ['curse', 'rend'];
+      expect(keysOf(view, auras), mode).toEqual(expected);
+    }
+  });
+
+  it("a view with NO sortMode is byte-identical to 'applied'", () => {
+    const auras = [dot('curse', 30), dot('rend', 12), dot('shock', 3)];
+    const bare = createAurasView('debuffs', deps());
+    const applied = createAurasView('debuffs', deps(), { sortMode: () => 'applied' });
+    expect(keysOf(bare, auras)).toEqual(keysOf(applied, auras));
+  });
+
+  it("'length' leads with the aura nearest to expiring, whatever the application order", () => {
+    const view = createAurasView('debuffs', deps(), { sortMode: () => 'length' });
+    expect(keysOf(view, [dot('curse', 30), dot('rend', 12), dot('immolate', 4)])).toEqual([
+      'immolate',
+      'rend',
+      'curse',
+    ]);
+  });
+
+  it("'length' holds an icon in place while an unrelated aura comes and goes", () => {
+    const view = createAurasView('debuffs', deps(), { sortMode: () => 'length' });
+    const rend = dot('rend', 12);
+    const curse = dot('curse', 30);
+    expect(keysOf(view, [rend, curse])).toEqual(['rend', 'curse']);
+    expect(keysOf(view, [rend, curse, dot('shock', 3)])).toEqual(['shock', 'rend', 'curse']);
+    expect(keysOf(view, [rend, curse])).toEqual(['rend', 'curse']);
+  });
+
+  it("'length' derives the SAME order from a shuffled input", () => {
+    const view = createAurasView('debuffs', deps(), { sortMode: () => 'length' });
+    const set = [dot('a', 9), dot('b', 2), dot('c', 21), dot('d', 14)];
+    const expected = ['b', 'a', 'd', 'c'];
+    expect(keysOf(view, set)).toEqual(expected);
+    expect(keysOf(view, [...set].reverse())).toEqual(expected);
+    expect(keysOf(view, [set[2], set[0], set[3], set[1]])).toEqual(expected);
+  });
+
+  it("'type' leads with the DISPELLABLE debuffs, then the rest, each by remaining", () => {
+    const view = createAurasView('debuffs', deps(), { sortMode: () => 'type' });
+    // Physical never dispels; shadow does. Applied worst-order on purpose.
+    const auras = [
+      dot('physical_long', 40, 'physical'),
+      dot('magic_long', 35),
+      dot('physical_short', 5, 'physical'),
+      dot('magic_short', 8),
+    ];
+    expect(keysOf(view, auras)).toEqual([
+      'magic_short',
+      'magic_long',
+      'physical_short',
+      'physical_long',
+    ]);
+  });
+
+  it('reads the sort mode LIVE, so changing the setting applies without a rebuild', () => {
+    let mode: 'applied' | 'length' = 'applied';
+    const view = createAurasView('debuffs', deps(), { sortMode: () => mode });
+    const auras = [dot('curse', 30), dot('rend', 12)];
+    expect(keysOf(view, auras)).toEqual(['curse', 'rend']);
+    mode = 'length';
+    expect(keysOf(view, auras)).toEqual(['rend', 'curse']);
+    mode = 'applied';
+    expect(keysOf(view, auras)).toEqual(['curse', 'rend']);
+  });
+
+  it('still applies the mode filter under a sort', () => {
+    const view = createAurasView('debuffs', deps(), { sortMode: () => 'length' });
+    const auras = [
+      aura({ id: 'blessing', kind: 'buff_ap', value: 50, remaining: 1800 }),
+      aura({ id: 'sap', kind: 'buff_int', value: -20, remaining: 8 }),
+      dot('rend', 12),
+    ];
+    expect(keysOf(view, auras)).toEqual(['sap', 'rend']);
+  });
+
+  it('sorts allocation-free across frames (the reused scratch never churns)', () => {
+    for (const sort of ['length', 'type'] as const) {
+      const view = createAurasView('debuffs', deps(), { sortMode: () => sort });
+      const auras = [dot('a', 9), dot('b', 2), dot('c', 21), dot('d', 14)];
+      const tick = () => view.tick(entity(auras));
+      tick();
+      expect(() => assertAllocationStable(tick), sort).not.toThrow();
+      expect(() => assertAllocationStable(() => tick().slots), sort).not.toThrow();
+    }
+  });
+});
+
+describe('createAurasView: the dispellable marker', () => {
+  const dot = (id: string, school: AuraInput['school'], over: Partial<AuraInput> = {}): AuraInput =>
+    aura({ id, kind: 'dot', remaining: 12, school, ...over });
+
+  const slotFor = (mode: AuraMode, a: AuraInput) => {
+    const state = createAurasView(mode, deps()).tick(entity([a]));
+    expect(state.count, `${mode} row rendered ${a.id}`).toBe(1);
+    return state.slots[0];
+  };
+
+  it('marks a magic debuff on the player debuff row (an ally can cure it)', () => {
+    expect(slotFor('debuffs', dot('curse', 'shadow')).dispellable).toBe(true);
+  });
+
+  it('never marks a PHYSICAL debuff, which no dispel removes', () => {
+    expect(slotFor('debuffs', dot('rend', 'physical')).dispellable).toBe(false);
+  });
+
+  it('marks a magic BUFF on the player buff row (an enemy can purge it)', () => {
+    const blessing = aura({
+      id: 'blessing',
+      kind: 'buff_ap',
+      value: 50,
+      remaining: 600,
+      school: 'holy',
+    });
+    expect(slotFor('buffs', blessing).dispellable).toBe(true);
+  });
+
+  it('refuses every aura the sim refuses: encounter-owned, undispellable, permanent', () => {
+    // Each of these is the ONLY thing separating the aura from the dispellable
+    // magic debuff asserted above, so each assertion isolates one refusal arm.
+    expect(
+      slotFor('debuffs', dot('mechanic', 'shadow', { encounterOwned: true })).dispellable,
+    ).toBe(false);
+    expect(slotFor('debuffs', dot('sickness', 'shadow', { undispellable: true })).dispellable).toBe(
+      false,
+    );
+    expect(
+      slotFor('debuffs', dot('control', 'shadow', { unbreakableControl: true })).dispellable,
+    ).toBe(false);
+    expect(slotFor('debuffs', dot('forever', 'shadow', { permanent: true })).dispellable).toBe(
+      false,
+    );
+  });
+
+  it('a MIXED row asks neither polarity, so it marks nothing', () => {
+    // 'all' (the target strip, the party mini-strips) can hold either polarity in one
+    // row, so a single marker there would have to guess which dispel it means.
+    const state = createAurasView('all', deps()).tick(
+      entity([dot('curse', 'shadow'), aura({ id: 'blessing', kind: 'buff_ap', value: 5 })]),
+    );
+    expect(state.count).toBe(2);
+    for (let i = 0; i < state.count; i++) expect(state.slots[i].dispellable).toBe(false);
+  });
+
+  it('PARITY: a Sim-shaped aura and a leaner ClientWorld mirror derive the same answer', () => {
+    // The wire omits school when physical and sends encounterOwned only as `eo`.
+    // A mirror that omits school must read as physical (never dispellable), and a
+    // mirror carrying the school must agree with the Sim-shaped aura.
+    const simShaped = dot('curse', 'shadow');
+    const mirror: AuraInput = { id: 'curse', name: 'curse', kind: 'dot', remaining: 12, value: 1 };
+    expect(slotFor('debuffs', simShaped).dispellable).toBe(true);
+    expect(slotFor('debuffs', mirror).dispellable).toBe(false);
+    expect(slotFor('debuffs', { ...mirror, school: 'shadow' }).dispellable).toBe(true);
   });
 });

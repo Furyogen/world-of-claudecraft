@@ -3575,15 +3575,15 @@
   body.mobile-touch #raid-boss-guide-window .rbg-ability-detail p {
     font-size: 10px;
   }
-  body.mobile-touch #buff-bar {
-    right: max(10px, env(safe-area-inset-right));
-    top: max(140px, env(safe-area-inset-top));
-    max-width: calc(180px * var(--mobile-chrome-scale, 1));
-  }
-  body.mobile-touch #debuff-bar {
+  /* One anchor for both rows now (#aura-bars flows the debuff row under whatever
+     the buff rows actually took). The old pair pinned buffs at 140px and debuffs
+     at 140+36px, one row pitch apart: at six buffs the second buff row landed on
+     the debuff row and the two painted over each other. Aligned to the minimap's
+     right edge, which is where the debuff row already sat. */
+  body.mobile-touch #aura-bars {
     right: max(20px, calc(env(safe-area-inset-right) + 10px));
-    top: calc(max(140px, env(safe-area-inset-top)) + 36px);
-    max-width: calc(180px * var(--mobile-chrome-scale, 1));
+    top: max(140px, env(safe-area-inset-top));
+    --aura-per-row: 5;
   }
   body.mobile-touch #minimap-wrap {
     right: max(20px, calc(env(safe-area-inset-right) + 10px));
@@ -7861,17 +7861,13 @@
     body.mobile-touch #party-frames .party-frame .bar {
       height: 4px;
     }
-    body.mobile-touch #buff-bar {
+    /* Small phones: the old pins were 8px and 8+32px, and 32px is EXACTLY one row
+       pitch (28px icon + 4px gap), so the second buff row landed precisely on the
+       debuff row. One flow column, one transform. */
+    body.mobile-touch #aura-bars {
       right: calc(98px + env(safe-area-inset-right));
       top: max(8px, env(safe-area-inset-top));
-      max-width: 160px;
-      transform: scale(calc(0.85 * var(--mobile-chrome-scale, 1)));
-      transform-origin: right top;
-    }
-    body.mobile-touch #debuff-bar {
-      right: calc(98px + env(safe-area-inset-right));
-      top: calc(max(8px, env(safe-area-inset-top)) + 32px);
-      max-width: 160px;
+      --aura-per-row: 5;
       transform: scale(calc(0.85 * var(--mobile-chrome-scale, 1)));
       transform-origin: right top;
     }

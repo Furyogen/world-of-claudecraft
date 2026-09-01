@@ -139,7 +139,7 @@ const INDEX_SECTIONS = [
   'chat bubbles (/say, /yell)',
   'new-adventurer tutorial',
   'unit frames',
-  'buff bar',
+  'aura bars',
   'cast bar',
   'bottom cluster',
   'chat frame',

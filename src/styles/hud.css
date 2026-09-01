@@ -2871,36 +2871,82 @@
     }
   }
 
-  /* ---------- buff bar ---------- */
-  #buff-bar {
+  /* ---------- aura bars ---------- */
+  /* The player's two aura rows share ONE flow column, WoW-style: the debuff row
+     anchors to however many buff rows actually rendered
+     (BuffFrame_UpdateAllBuffAnchors), instead of each row carrying its own fixed
+     `top`. Two independent pins cannot know each other's height, so any buff
+     count that wrapped past the debuff row's pin painted the two on top of each
+     other; on the mobile breakpoints that happened at six buffs. Flowing them
+     removes the overlap by construction, and closes the dead gap the fixed pin
+     left at ordinary buff counts. */
+  #aura-bars {
     position: absolute;
     right: 196px;
     top: 14px;
     display: flex;
+    flex-direction: column;
+    /* Rows hug the minimap-side anchor, so a short row stays right-aligned under
+       a full one whichever way the direction vars below run. */
+    align-items: flex-end;
+    /* The row lane below carries the duration labels; see --aura-row-gap. */
+    gap: var(--aura-row-gap);
+    pointer-events: none;
+  }
+  /* Icon geometry, named once so the row width is a COUNT of icons rather than a
+     pixel cap. A pixel cap silently re-wraps whenever the surrounding scale moves
+     (the mobile chrome scale did exactly that), which changes how many icons a row
+     holds and therefore where every icon sits. */
+  #aura-bars {
+    --aura-size: 28px;
+    --aura-gap: 4px;
+    /* Each icon's duration label hangs 13px BELOW it (.buff .dur), outside the
+       icon box. A bare 4px row gap therefore let every label overlap the icons of
+       the row beneath it by 9px. The row lane is the gap plus that overhang. */
+    --aura-row-gap: 17px;
+    --aura-per-row: 10;
+  }
+  #buff-bar,
+  #debuff-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aura-row-gap) var(--aura-gap);
+    pointer-events: auto;
+  }
+  #buff-bar {
     /* Icon flow rides the buffsLeftToRight setting (Frames Settings menu):
        stock row-reverse grows right-to-left from the minimap-side anchor;
        main.ts flips the var to `row` for left-to-right reading. */
     flex-direction: var(--buff-bar-direction, row-reverse);
-    flex-wrap: wrap;
-    gap: 4px;
-    max-width: 320px;
-    pointer-events: auto;
   }
-  /* Debuffs sit in their own row well beneath the buff row (classic layout),
-     level with the minimap's lower edge (the mail badge), so a wrapping wall of
-     raid buffs and their duration labels never crowds the debuff row. */
   #debuff-bar {
-    position: absolute;
-    right: 196px;
-    top: 172px;
-    display: flex;
     /* The debuff row's twin of the #buff-bar direction var above
        (debuffsLeftToRight). */
     flex-direction: var(--debuff-bar-direction, row-reverse);
-    flex-wrap: wrap;
-    gap: 4px;
-    max-width: 320px;
-    pointer-events: auto;
+  }
+  /* The row width is a COUNT of icons, scoped to the rows still sitting in the
+     flow column. Interface-unlock box-resizes a row by writing an inline width
+     and, in the same pass, detaches it onto #ui (movable_frame applyPos), so a
+     player-sized row is no longer a child here and its width is never clamped by
+     this cap. */
+  #aura-bars > #buff-bar {
+    max-width: calc(var(--aura-per-row) * (var(--aura-size) + var(--aura-gap)) - var(--aura-gap));
+  }
+  #aura-bars > #debuff-bar {
+    max-width: calc(
+      var(--aura-per-row) *
+      (var(--aura-debuff-size, 32px) + var(--aura-gap)) -
+      var(--aura-gap)
+    );
+  }
+  /* An empty row must not open a column gap above the row that follows it.
+     :empty is exact here: the aura painter appends and removes real element
+     children and leaves no whitespace text node behind. Scoped to the flow
+     column so a detached row (which the unlock preview fills with a sample
+     child anyway) is never hidden out from under the player positioning it. */
+  #aura-bars > #buff-bar:empty,
+  #aura-bars > #debuff-bar:empty {
+    display: none;
   }
   /* Buffs on the Player Frame (aurasOnPlayerFrame): hud.ts reparents the BUFF
      row into #player-frame, where it inherits its position and children-zoom
@@ -2908,6 +2954,8 @@
      below); moved (pf-detached), it sits BELOW it, reading like the target
      frame's debuff strip. The row runs left-to-right from the frame's left edge. */
   #player-frame > #buff-bar {
+    /* Reparented out of #aura-bars, so it positions itself again here. */
+    position: absolute;
     right: auto;
     left: 0;
     top: auto;
@@ -2919,11 +2967,19 @@
     bottom: auto;
     top: calc(100% + 8px);
   }
-  /* With the buff row anchored to the frame, the player's own debuffs slide up
-     beside the minimap into the vacated top spot (classic WoW's debuff corner),
-     keeping the right-to-left stacking and wrapping downward from there. */
-  body.auras-on-frame #debuff-bar {
-    top: 14px;
+  /* With the buff row anchored to the frame, the player's own debuffs occupy the
+     vacated top spot (classic WoW's debuff corner) on their own: the buff row is
+     reparented out of #aura-bars, so the debuff row is the only child left and
+     already sits at the column's top. No rule needed.
+
+     The player debuff row renders LARGER than the buff row, matching WoW's
+     DEBUFF_ACTUAL_SIZE: the harmful half of the display is the actionable half.
+     Scoped to #debuff-bar so the party/raid mini-strips (.pfm-auras, 16px and
+     12px) and the target strip keep their own sizing. Adds prominence only, never
+     removes information, so no graphics tier sheds it. */
+  #debuff-bar .buff.debuff {
+    width: var(--aura-debuff-size, 32px);
+    height: var(--aura-debuff-size, 32px);
   }
   /* Party member mini aura strip: overlay the compact icons so gaining or losing
      an aura never changes frame height or shifts the surrounding raid grid. */
@@ -3043,6 +3099,25 @@
     font: 700 12px var(--body-font);
     color: var(--color-text-muted);
     border-style: dashed;
+  }
+  /* An aura a dispel could actually strip, marked with a yellow square so it reads at a
+     glance on a crowded row: on the player's DEBUFF row that means an ally can cure it,
+     on the BUFF row that an enemy can purge it. The claim comes from the sim's own
+     isDispellableAura (auras_view `dispellable`), never from the school tint, so the
+     marker and the server's dispel executor can never disagree.
+
+     Drawn as an OUTLINE, outside the border box, so it neither replaces the school tint
+     the icon's meaning depends on nor changes the icon's layout size. Extra information
+     only, never less, so no graphics tier sheds it (gameplay-neutral-graphics invariant). */
+  .buff.dispellable {
+    outline: 2px solid var(--color-dispellable);
+    outline-offset: 1px;
+  }
+  /* Keep the square legible against the gold cancel-hover cue, which shares the warm end
+     of the palette: on hover the cancelable border goes gold, so the square brightens
+     rather than blending into it. */
+  .buff.dispellable.cancelable:hover {
+    outline-color: var(--color-dispellable-strong);
   }
   /* The player's own cancelable buffs: right-click to drop, with a hover cue. */
   .buff.cancelable {

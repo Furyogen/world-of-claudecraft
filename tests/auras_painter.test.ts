@@ -163,6 +163,7 @@ function slot(over: Partial<AuraSlotState> & { key: string }): AuraSlotState {
     toggle: false,
     alwaysRender: false,
     shortDuration: false,
+    dispellable: false,
     ...over,
   };
 }
@@ -350,6 +351,23 @@ describe('AurasPainter: keyed pool over the elided writers', () => {
     expect(has('setText', (c) => c.args[0] === '3')).toBe(true);
     // stacks badge shown via setDisplay('').
     expect(has('setDisplay', (c) => c.args[0] === '')).toBe(true);
+  });
+
+  it('routes the dispellable square through toggleClass, and clears it on recycle', () => {
+    // The yellow square is a CLASS the stylesheet draws, never an inline colour, and
+    // it is toggled every frame so a pooled node recycled from a dispellable aura to
+    // an ordinary one cannot keep claiming a dispel that would be refused.
+    painter.paint(state([slot({ key: 'a', dispellable: true })]));
+    expect(
+      calls.some((c) => c.m === 'toggleClass' && c.args[0] === 'dispellable' && c.args[1] === true),
+    ).toBe(true);
+    calls.length = 0;
+    painter.paint(state([slot({ key: 'b', dispellable: false })]));
+    expect(
+      calls.some(
+        (c) => c.m === 'toggleClass' && c.args[0] === 'dispellable' && c.args[1] === false,
+      ),
+    ).toBe(true);
   });
 
   it('clears the expiring blink through the elided writer when an aura is refreshed', () => {

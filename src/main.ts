@@ -406,6 +406,7 @@ import {
   relocalizeAppearancePanels,
 } from './ui/appearance_panel_locale';
 import { setThornhollowPrewarmHooks } from './ui/arena_window';
+import { auraSortModeFromSetting } from './ui/auras_view';
 import {
   handleKeyboardActivation,
   syncInputAriaState,
@@ -2817,6 +2818,9 @@ async function startGame(
         break;
       case 'aurasOnPlayerFrame':
         hud.setAurasOnPlayerFrame(!!v);
+        break;
+      case 'auraSortMode':
+        hud.setAuraSortMode(auraSortModeFromSetting(Number(v)));
         break;
       case 'alwaysShowAllBuffs':
         hud.setAlwaysShowAllBuffs(!!v);

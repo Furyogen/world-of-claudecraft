@@ -124,6 +124,13 @@
     --color-debuff-shadow: #9b59d0;
     --color-debuff-nature: #35a835;
     --color-debuff-holy: #d8b56b;
+    /* The dispellable marker (a yellow square around an aura a dispel can strip,
+       .buff.dispellable). Deliberately NOT one of the school tints above: it answers a
+       different question (can this be removed) and has to stay distinguishable from
+       every one of them, holy's warm gold included, which is why it sits at full
+       saturation rather than the muted end the school tints use. */
+    --color-dispellable: #ffd21a;
+    --color-dispellable-strong: #fff27a;
     --color-aura-rpg-gold: #ffe14d;
     --color-aura-rpg-violet: #bd63ff;
     --color-aura-rpg-electric: #3dc7ff;

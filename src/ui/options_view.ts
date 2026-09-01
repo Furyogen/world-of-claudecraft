@@ -398,6 +398,15 @@ const ambientOcclusionOptions: ChoiceOption[] = [
   { value: 0.5, labelKey: 'hudChrome.options.gfxHalf' },
   { value: 1, labelKey: 'hud.options.surfaceDetailFull' },
 ];
+// How the player's own buff/debuff rows are ordered (settings.auraSortMode). The
+// values are the AuraSortMode ladder in src/ui/auras_view.ts: as applied, by time
+// remaining, by type.
+const auraSortOptions: ChoiceOption[] = [
+  { value: 0, labelKey: 'hudChrome.options.auraSortApplied' },
+  { value: 1, labelKey: 'hudChrome.options.auraSortLength' },
+  { value: 2, labelKey: 'hudChrome.options.auraSortType' },
+];
+
 // The two-step Low/High ladder (Character Detail's distant-rig animation
 // band, Dynamic Lights' point-light pool).
 const lowHighOptions: ChoiceOption[] = [
@@ -746,6 +755,7 @@ export function buildInterfaceControls(
       boolToggle(s, 'partyFrameShowSelf', 'hudChrome.partyFrames.showSelf'),
       boolToggle(s, 'aurasOnPlayerFrame', 'hudChrome.options.aurasOnPlayerFrame'),
       boolToggle(s, 'alwaysShowAllBuffs', 'hudChrome.options.alwaysShowAllBuffs'),
+      choice(s, 'auraSortMode', 'hudChrome.options.auraSortMode', auraSortOptions),
       boolToggle(s, 'showTargetOfTarget', 'hudChrome.options.showTargetOfTarget'),
       boolToggle(s, 'showTargetSwingTimer', 'hudChrome.options.showTargetSwingTimer'),
       boolToggle(s, 'showPetFrame', 'hudChrome.options.showPetFrame'),

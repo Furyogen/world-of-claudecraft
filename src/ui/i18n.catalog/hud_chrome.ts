@@ -1899,6 +1899,11 @@ export const hudChromeStrings = {
     // every active buff always renders, at the cap's per-frame cost (wordy,
     // M16: the five non-Latin fills land in this same change).
     alwaysShowAllBuffs: 'Always Show All Buffs',
+    // Interface panel choice: how the player's own buff and debuff rows are ordered.
+    auraSortMode: 'Sort Buffs and Debuffs',
+    auraSortApplied: 'As Applied',
+    auraSortLength: 'By Time Remaining',
+    auraSortType: 'By Type',
     highContrastBackground: 'High-Contrast Background',
     // Interface panel toggle: also engage auto-attack when using an offensive
     // ability, so white swings start without a separate Attack press (on by default).

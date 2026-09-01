@@ -43,6 +43,18 @@ export const SETTING_RANGES = {
   // in gfx.ts settingsFor. Backward compatible by construction: a stored 0
   // still means Low and a stored 1 still means High.
   terrainDetail: { min: 0, max: 2, def: 1 },
+  // How the player's own buff and debuff rows are ordered: 0 = as applied (the stock
+  // classic order and the DEFAULT), 1 = by time remaining, 2 = by type. Numeric because
+  // the options panel's choice control is numeric; src/ui/auras_view.ts owns the
+  // AuraSortMode names these map to.
+  //
+  // The default is deliberately "as applied": the low graphics preset's buff-icon cap
+  // reads the buff row through its own priority rule (aura_overflow_priority.ts, PR
+  // #3668, which keeps a short actively-timed buff over a long stat buff). That rule
+  // picks its buckets order-independently, so a sort can only re-break ties inside a
+  // bucket and can never demote a short buff, but leaving the shipped order untouched
+  // keeps the tuned behavior byte-identical for anyone who does not opt in.
+  auraSortMode: { min: 0, max: 2, def: 0 },
   foliageDensity: { min: 0, max: 2, def: 1 },
   effectsQuality: { min: 0, max: 1, def: 1 },
   // Capped at High (the 4096 map): the retired Insane rung's 8192x8192 shadow

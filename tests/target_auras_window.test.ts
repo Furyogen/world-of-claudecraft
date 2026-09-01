@@ -54,6 +54,7 @@ function auraState(): AurasState {
         toggle: false,
         alwaysRender: false,
         shortDuration: false,
+        dispellable: false,
       },
       {
         key: 'fortitude',
@@ -73,6 +74,7 @@ function auraState(): AurasState {
         toggle: false,
         alwaysRender: false,
         shortDuration: false,
+        dispellable: false,
       },
     ],
   };

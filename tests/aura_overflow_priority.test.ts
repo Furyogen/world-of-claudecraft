@@ -18,6 +18,7 @@ function slot(over: Partial<AuraSlotState> & { key: string }): AuraSlotState {
     toggle: false,
     alwaysRender: false,
     shortDuration: false,
+    dispellable: false,
     ...over,
   };
 }
