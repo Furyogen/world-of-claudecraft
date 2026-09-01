@@ -9398,6 +9398,24 @@ export const TARGETS = [
       // overhangs the portrait side, so the mini takes the widened boss gap.
       { key: 'desktop-boss', charClass: 'warrior', charName: 'Marksman', boss: true },
       { key: 'mobile', charClass: 'mage', charName: 'Marksman', mobile: true },
+      // The mini as the interface editor now sees it. The global unlock lists it
+      // as an arrangeable frame (its own corner button and name chip), and the
+      // seeded box replays the real parse-and-apply path a returning player hits.
+      // It proves BOTH halves of the move: the re-home onto #ui and the
+      // .hud-frame-detached rules that restate the mini zoom, the portrait-left
+      // order and the bar-height var it stops inheriting from #target-frame.
+      // Docked, the mini is anchored beside the target frame and cannot land here.
+      {
+        key: 'desktop-arranged',
+        charClass: 'warrior',
+        charName: 'Marksman',
+        arranged: true,
+        beforeLoad: async (page) => {
+          await page.evaluateOnNewDocument(
+            `try { localStorage.setItem('woc_hud_frame_totarget', JSON.stringify({ left: 620, top: 150, scale: 1 })); } catch {}`,
+          );
+        },
+      },
     ],
     async capture(page, variant) {
       await page.evaluate(
@@ -9487,6 +9505,9 @@ export const TARGETS = [
       if (variant.unlockFrame) {
         await page.evaluate(() => document.querySelector('#target-frame > .tf-move-btn')?.click());
       }
+      // The global toggle, not the target frame's own button: the mini has no
+      // corner button of its own while locked, so this is its only route loose.
+      if (variant.arranged) await unlockInterfaceThroughTheOption(page);
       await wait(600);
       return {};
     },
