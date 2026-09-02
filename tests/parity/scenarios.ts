@@ -5086,7 +5086,7 @@ function druidEngines(): Scenario {
     coverage: [
       'class:druid (Moongrove, Wildfang, Groveheart)',
       'Moontide and Sunwake action replacements with Moonlash and Sunlance phase flips',
-      'Old Blood landed-strike bank across Wolf and Bruin with both payoffs',
+      'Old Blood landed-strike bank across Kiwi and Bruin with both payoffs',
       'Verdance completed-HoT bank and Overbloom harvest',
     ],
     build: () => new Sim({ seed: 2930, playerClass: 'druid', noPlayer: true, autoEquip: true }),

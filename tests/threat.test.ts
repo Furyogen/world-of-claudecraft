@@ -1484,7 +1484,7 @@ describe('hunter pets', () => {
 });
 
 describe('druid forms', () => {
-  it('wolf form runs on energy, bear on rage, and mana is restored on shift-out', () => {
+  it('kiwi form runs on energy, bear on rage, and mana is restored on shift-out', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(12);
     const manaBefore = sim.player.resource;
@@ -1528,7 +1528,7 @@ describe('druid forms', () => {
     expect(sim.player.attackPower).toBeGreaterThan(apBefore + 15);
   });
 
-  it('wolf form raises attack power', () => {
+  it('kiwi form raises attack power', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(20);
     sim.tick();
@@ -1580,7 +1580,7 @@ describe('druid forms', () => {
     expect(wolf.auras.some((a) => a.kind === 'stun')).toBe(true);
   });
 
-  it('claw needs wolf form, builds combo points, and ferocious bite spends them', () => {
+  it('claw needs kiwi form, builds combo points, and ferocious bite spends them', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(14);
     const wolf = nearestMob(sim, 'forest_wolf');
@@ -1630,7 +1630,7 @@ describe('druid forms', () => {
     expect(events.some((e) => e.type === 'error' && /shapeshifted/.test(e.text))).toBe(true);
   });
 
-  it('bear and wolf forms can only use their own form kits', () => {
+  it('bear and kiwi forms can only use their own form kits', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(14);
     const wolf = nearestMob(sim, 'forest_wolf');
@@ -1678,7 +1678,7 @@ describe('druid forms', () => {
     expect(wolf.threat.get(sim.playerId)).toBeGreaterThan(0);
   });
 
-  it('wolf form gains agility/AP and can build with Flense outside stealth', () => {
+  it('kiwi form gains agility/AP and can build with Flense outside stealth', () => {
     const sim = makeSim('druid');
     sim.setPlayerLevel(12);
     expect(sim.known.map((k) => k.def.id)).toEqual(

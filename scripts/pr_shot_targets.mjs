@@ -10232,7 +10232,7 @@ export const TARGETS = [
     when: ['src/ui/swing_timer', 'src/sim/combat/form_swing'],
     variants: [
       {
-        key: 'wolf-form-desktop',
+        key: 'kiwi-form-desktop',
         charClass: 'druid',
         charName: 'Pawsteps',
         beforeLoad: lowGraphicsSeed,
