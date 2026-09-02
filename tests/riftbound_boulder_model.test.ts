@@ -39,8 +39,8 @@ const glbPath = path.join(repoRoot, 'public/models/mounts/riftbound_boulder.glb'
 // the hex AND the shipped bytes means any of those three moving is visible in
 // the diff.
 const EXPECTED_SOURCE_FINGERPRINT =
-  'ee590f1a6b2de558973941679de79f940558e7cc79788140792a6b2448f31114';
-const EXPECTED_ASSET_SHA256 = '254abf3f495d2412d845597a169eaed4d0279aff158023f07967d01e2ab7b1fc';
+  '6e2c8aeb9f6452a284046fcd88e2971c12011431f3f1e3e6c394130f3ba11966';
+const EXPECTED_ASSET_SHA256 = 'd06f95fbd0fd2e9ad9d00e912b5ad07d0b97c772bc466b06693ec595e4082160';
 /** Stone plus seams. The byte ceiling cannot catch a geometry blow-up on its
  *  own: the shipped GLB is 28 KB against a 96 KiB gate, so the triangle count
  *  could roughly triple before bytes complained. */
