@@ -296,9 +296,10 @@ const STATIC_PROP: ClipMap = {
 };
 
 // Custom baked wolf rig (wolf_basic/greyjaw, Dog_Animation donor skeleton): the
-// animal() core plus the donor's Sit/Fall clips so player wolf forms sit and
-// jump properly, and a Walk swim base (a paddling gait at the gentle clip
-// pitch beats the steep no-clip procedural prone on a quadruped).
+// animal() core plus the donor's Sit/Fall clips so the one player wolf form on
+// this rig (the shaman's Ghost Wolf) sits and jumps properly, and a Walk swim
+// base (a paddling gait at the gentle clip pitch beats the steep no-clip
+// procedural prone on a quadruped).
 const WOLF_BAKED: ClipMap = {
   ...animal(['Attack']),
   sitIdle: 'Sit',

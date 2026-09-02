@@ -3,7 +3,7 @@
 // player still has.
 //
 // A druid in Kiwi Form (internally the `form_cat` shapeshift aura) fights with
-// claws, not the staff/mace it carries, so its auto-attack cadence must NOT come
+// talons, not the staff/mace it carries, so its auto-attack cadence must NOT come
 // from the equipped weapon. Classic feral cat forms swing at a fixed fast 1.0s
 // paw speed; the auto path pairs that cadence with a weapon-roll rescale
 // (catAutoWeaponRollMult) so white DPS tracks the weapon's AUTHORED dps.
