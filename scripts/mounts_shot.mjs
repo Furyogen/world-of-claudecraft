@@ -73,6 +73,7 @@ await page.evaluate(() => {
     'reins_drakemaw_raptor',
     'reins_riftbound_boulder',
     'reins_terrorspark_groundshaker',
+    'reins_rickshaw_mount',
   ])
     sim.addItem(id, 1);
 });

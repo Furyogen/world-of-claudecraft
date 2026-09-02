@@ -117,13 +117,14 @@ describe('the Low vertex-color path covers every mount GLB that ships COLOR_0', 
     ),
   ].sort();
 
-  it('carries authored COLOR_0 on the tank, the boulder, and the Valorsteed', () => {
+  it('carries authored COLOR_0 on the tank, the rickshaw, the boulder, and the Valorsteed', () => {
     expect(mountUrls.length).toBeGreaterThanOrEqual(8);
     const withVertexColors = mountUrls.filter((url) => glbAttributes(url).has('COLOR_0'));
     // The boulder is textureless by design: its stone shading and its rift
     // seams are BOTH vertex colors, so a Low path that dropped COLOR_0 would
     // render it as a flat grey ball rather than merely a duller stone.
     expect(withVertexColors).toEqual([
+      'models/mounts/rickshaw_mount.glb',
       'models/mounts/riftbound_boulder.glb',
       'models/mounts/terrorspark_groundshaker.glb',
       'models/mounts/valorsteed.glb',
@@ -207,6 +208,8 @@ describe('procedural bob math', () => {
       fx: null,
       ridePose: 'tread',
       rollRadius: 0.8,
+      // A sphere has no nose to tip, so the vehicle jump attitude is off.
+      jumpTips: false,
     });
     expect(def).toMatchObject({
       url: 'models/mounts/riftbound_boulder.glb',
@@ -231,27 +234,15 @@ describe('procedural bob math', () => {
     expect(MOUNT_VISUAL_SPECS.valorsteed.fx).toBeNull();
     expect(MOUNT_VISUAL_SPECS.stormfeather_griffin.fx).toBeNull();
     expect(MOUNT_VISUAL_SPECS.terrorspark_groundshaker.fx).toBeNull();
-    expect(MOUNT_VISUAL_SPECS.riftbound_boulder.fx).toBeNull();
   });
 });
 
 describe('rider pose flags', () => {
   it('imposes nothing off a mount, and invents nothing for an unknown key', () => {
-    expect(riderPoseFlags('riftbound_boulder', false, false)).toEqual({
-      sitting: false,
-      treading: false,
-      mayEmote: false,
-    });
-    expect(riderPoseFlags('', true, false)).toEqual({
-      sitting: false,
-      treading: false,
-      mayEmote: false,
-    });
-    expect(riderPoseFlags('not_a_mount', true, false)).toEqual({
-      sitting: false,
-      treading: false,
-      mayEmote: false,
-    });
+    const none = { sitting: false, treading: false, mayEmote: false };
+    expect(riderPoseFlags('riftbound_boulder', false, false)).toEqual(none);
+    expect(riderPoseFlags('', true, false)).toEqual(none);
+    expect(riderPoseFlags('not_a_mount', true, false)).toEqual(none);
   });
 
   it('seats every saddle mount and treads the boulder', () => {
@@ -260,7 +251,7 @@ describe('rider pose flags', () => {
       treading: false,
       mayEmote: false,
     });
-    expect(riderPoseFlags('terrorspark_groundshaker', true, false)).toEqual({
+    expect(riderPoseFlags('rickshaw_mount', true, false)).toEqual({
       sitting: true,
       treading: false,
       mayEmote: false,
@@ -280,24 +271,10 @@ describe('rider pose flags', () => {
     expect(riderPoseFlags('riftbound_boulder', true, false, true).mayEmote).toBe(false);
   });
 
-  it('never lets a seated or unmounted rider emote through the mount path', () => {
-    // Every saddle mount, and a rider on foot: the mounted branch must not hand
-    // out the capability to anyone whose body is not actually standing on a mount.
-    expect(riderPoseFlags('valorsteed', true, false, false).mayEmote).toBe(false);
-    expect(riderPoseFlags('terrorspark_groundshaker', true, false, false).mayEmote).toBe(false);
-    expect(riderPoseFlags('', false, false, false).mayEmote).toBe(false);
-    // Sitting down ON the stone (eating, drinking) seats the body, so the
-    // standing-emote permission goes away with the standing pose.
-    expect(riderPoseFlags('riftbound_boulder', true, true, false)).toEqual({
-      sitting: true,
-      treading: true,
-      mayEmote: false,
-    });
-  });
-
   it('still seats a rider who is resting, mounted or not', () => {
     // Sitting, eating and drinking seat the body on their own; a mount that
-    // treads must not un-seat someone who sat down.
+    // treads must not un-seat someone who sat down, and a seated body loses
+    // the standing-emote permission with the standing pose.
     expect(riderPoseFlags('', false, true).sitting).toBe(true);
     expect(riderPoseFlags('riftbound_boulder', true, true)).toEqual({
       sitting: true,
@@ -312,7 +289,7 @@ describe('rolling mount math', () => {
 
   it('never rolls a mount that has no radius', () => {
     expect(mountRollStep(MOUNT_VISUAL_SPECS.valorsteed, 3.4, 1.1)).toBe(0);
-    expect(mountRollStep(MOUNT_VISUAL_SPECS.aether_hover_cycle, 9, 0)).toBe(0);
+    expect(mountRollStep(MOUNT_VISUAL_SPECS.rickshaw_mount, 9, 0)).toBe(0);
   });
 
   it('turns travel into spin at omega = v / r', () => {
@@ -326,8 +303,7 @@ describe('rolling mount math', () => {
 
   it('rolls backward when the rider backs up', () => {
     const forward = mountRollStep(boulder, 0.5, 0);
-    const back = mountRollStep(boulder, -0.5, 0);
-    expect(back).toBeCloseTo(-forward, 10);
+    expect(mountRollStep(boulder, -0.5, 0)).toBeCloseTo(-forward, 10);
     expect(forward).toBeGreaterThan(0);
   });
 

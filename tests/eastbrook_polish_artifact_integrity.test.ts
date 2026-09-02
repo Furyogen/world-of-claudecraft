@@ -1025,10 +1025,19 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
+// Re-minted for the Ignivar raid consolidation (the v0.41.0 base merge plus
+// the renderer extraction round moved the renderer integration leaf). No
+// capture was retaken.
+// Re-minted for PR #3740's forge-lift room (the lift room render hookup and
+// door-portal arm moved the renderer integration leaf). No capture was
+// retaken.
+// Re-minted for the Drakelands entrance merge into the raid branch (PRs 3689
+// plus 3734: both arms had re-minted, the merged renderer and evidence inputs
+// land together). No capture was retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  'b3eeace08ecd3c6a42d8f39dbd3c8de32d80a5eb979b4524fe9252c769f16544';
+  '4782f21acbd0440411d73f72d2983886df7656a7d081a50802ba74e5437c0a65';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  'f0ab3e3d22dcc136033c5e72b81f4a4fc46d40fe6ac7140298bda08ba65b7b7a';
+  'f2238feaf437259252c81993c3084b30865ccfbcd51c66baeb88fbf75865366b';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2175,10 +2184,16 @@ describe('Eastbrook polish performance and contact evidence', () => {
     // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
     // both sides): same order, the composite first, then this seal. No capture
     // was retaken.
+    // Re-minted for PR #3740's forge-lift room: the first-order composite
+    // follows the lift room's renderer.ts hookup, then this second-order
+    // performance seal follows the swept evidence bytes. No capture was
+    // retaken.
     expect(
       fingerprint.digest('hex'),
       `the second-order performance digest moved; if every input moved legitimately, re-mint with: ${REMINT_COMMAND} (it recomputes this literal LAST, from the swept files)`,
-    ).toBe('c66ee3dd4130274de1ba467b26019129a2d796b01d62df6c1850f0d1721f0340');
+      // Re-minted for the Drakelands entrance merge into the raid branch: the
+      // composite first, then this seal. No capture was retaken.
+    ).toBe('0638c9fca46abfb4406d5b0f74f5a98d659350b10d2708c136d474a6c2acf823');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

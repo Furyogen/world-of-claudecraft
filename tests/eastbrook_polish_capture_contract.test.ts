@@ -323,8 +323,33 @@ interface AttributionTargetFixture {
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
+// Re-minted for the entry-horizon scenery cull (renderer.ts hands the four
+// reveal-gated painters the horizon-capped cull far at both frame sites): the
+// renderer integration leaf moved. No capture was retaken.
+// Re-minted for the battleground field-stream compile gate (renderer.ts
+// injects the gate at the buildBattleground site; renderer.ts is a
+// provenance input). No capture was retaken.
+// Re-minted for the v0.41.0 sync merge into the entry-fade-gate branch (the
+// compile-gate batch landed on the release arm; renderer inputs moved on
+// both sides). No capture was retaken.
+// Re-minted for the sixth v0.41.0 sync merge into the ground-aim branch: the
+// merged renderer.ts carries the entry-fade arm's scenery cull beside this
+// branch's aim blocked pass-through, so the composite matches neither parent.
+// No capture was retaken.
+// Re-minted after the Forgefather strike-route call-site swap in renderer.ts
+// (routeVarkhulForgeHammer replaced the bare forge-hammer dispatch) moved the
+// runtimeRender.renderer leaf. No capture was retaken.
+// Re-minted for the raid encounter tuning PR's nameplate direct-click pick
+// integration in renderer.ts: the runtimeRender.renderer leaf moved. No
+// capture was retaken.
+// Re-minted for PR #3740's forge-lift room (the lift room render hookup and
+// door-portal arm moved the renderer integration leaf). No capture was
+// retaken.
+// Re-minted for the Drakelands entrance merge into the raid branch (PRs 3689
+// plus 3734: both arms had re-minted, the merged renderer and evidence inputs
+// land together). No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'f0ab3e3d22dcc136033c5e72b81f4a4fc46d40fe6ac7140298bda08ba65b7b7a';
+  'f2238feaf437259252c81993c3084b30865ccfbcd51c66baeb88fbf75865366b';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

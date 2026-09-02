@@ -18,6 +18,7 @@ import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AnimState } from '../src/render/characters/anim_state';
 import {
+  fillMountAnimState,
   type MountFrameInputs,
   type MountPresentationFx,
   type MountPresentationView,
@@ -71,6 +72,7 @@ beforeEach(() => {
     group: { position: { x: 1, y: 2, z: 3 } },
     mountLift: BOULDER.seat,
     mountRoll: 0,
+    mountJumpPitch: 0,
   } as unknown as MountPresentationView;
   fx = { mountSlimeTrail: vi.fn(), mountExhaust: vi.fn() } as unknown as typeof fx;
 });
@@ -88,10 +90,25 @@ function run(over: Partial<MountFrameInputs> = {}, rider: AnimState = fakeState(
     facing: 0,
     stepX: 0,
     stepZ: 0,
+    verticalVelocity: 0,
     ...over,
   };
-  updateMountPresentation(view, rider, fakeState(), fx, input);
+  const scratch = fakeState();
+  fillMountAnimState(scratch, rider, input.spec, input.airborne);
+  updateMountPresentation(view, scratch, fx, input);
   return input;
+}
+
+/** Fill then step, the way the renderer does either side of its gate. */
+function fillMountAnimStateAndStep(
+  v: MountPresentationView,
+  rider: AnimState,
+  scratch: AnimState,
+  sinks: MountPresentationFx,
+  input: MountFrameInputs,
+): void {
+  fillMountAnimState(scratch, rider, input.spec, input.airborne);
+  updateMountPresentation(v, scratch, sinks, input);
 }
 
 describe('rolling mount wiring', () => {
@@ -173,7 +190,7 @@ describe('mount animation inputs and particles', () => {
   it('drives the mount clips from the RIDER locomotion, but the real airborne flag', () => {
     const rider = fakeState({ speed: 7, moving: true, running: true, swimming: true });
     const scratch = fakeState();
-    updateMountPresentation(view, rider, scratch, fx, {
+    fillMountAnimStateAndStep(view, rider, scratch, fx, {
       mount: mount as never,
       riderVisual: riderVisual as never,
       spec: BOULDER,
@@ -187,6 +204,7 @@ describe('mount animation inputs and particles', () => {
       facing: 0,
       stepX: 0,
       stepZ: 0,
+      verticalVelocity: 0,
     });
     expect(scratch.speed).toBe(7);
     expect(scratch.running).toBe(true);
@@ -202,7 +220,7 @@ describe('mount animation inputs and particles', () => {
     // would play its backpedal cycle while rolling FORWARD.
     const rider = fakeState({ moving: true, backwards: true });
     const scratch = fakeState();
-    updateMountPresentation(view, rider, scratch, fx, {
+    fillMountAnimStateAndStep(view, rider, scratch, fx, {
       mount: mount as never,
       riderVisual: riderVisual as never,
       spec: BOULDER,
@@ -214,13 +232,14 @@ describe('mount animation inputs and particles', () => {
       facing: 0,
       stepX: 0,
       stepZ: 0,
+      verticalVelocity: 0,
     });
     expect(scratch.backwards).toBe(false);
 
     // A rider genuinely backpedalling a SADDLE mount still passes it through.
     view.mountLift = HORSE.seat;
     const saddleScratch = fakeState();
-    updateMountPresentation(view, rider, saddleScratch, fx, {
+    fillMountAnimStateAndStep(view, rider, saddleScratch, fx, {
       mount: mount as never,
       riderVisual: riderVisual as never,
       spec: HORSE,
@@ -232,6 +251,7 @@ describe('mount animation inputs and particles', () => {
       facing: 0,
       stepX: 0,
       stepZ: 0,
+      verticalVelocity: 0,
     });
     expect(saddleScratch.backwards).toBe(true);
   });

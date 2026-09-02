@@ -21,6 +21,7 @@ export const MOUNT_NAME_KEYS: Record<string, TranslationKey> = {
   drakemaw_raptor: 'hudChrome.mounts.name_drakemaw_raptor',
   riftbound_boulder: 'hudChrome.mounts.name_riftbound_boulder',
   terrorspark_groundshaker: 'hudChrome.mounts.name_terrorspark_groundshaker',
+  rickshaw_mount: 'hudChrome.mounts.name_rickshaw_mount',
 };
 
 export const MOUNT_DESC_KEYS: Record<string, TranslationKey> = {
@@ -34,6 +35,7 @@ export const MOUNT_DESC_KEYS: Record<string, TranslationKey> = {
   drakemaw_raptor: 'hudChrome.mounts.desc_drakemaw_raptor',
   riftbound_boulder: 'hudChrome.mounts.desc_riftbound_boulder',
   terrorspark_groundshaker: 'hudChrome.mounts.desc_terrorspark_groundshaker',
+  rickshaw_mount: 'hudChrome.mounts.desc_rickshaw_mount',
 };
 
 /** The localized mount name, falling back to the catalog's English label and

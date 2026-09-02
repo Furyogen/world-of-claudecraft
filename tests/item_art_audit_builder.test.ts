@@ -17,6 +17,7 @@ import {
   renderItemArtAuditPreview,
   updateItemArtAuditVerdict,
 } from '../scripts/lib/item_art_audit.mjs';
+import { ITEMS } from '../src/sim/data';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const temporaryRoots: string[] = [];
@@ -746,11 +747,9 @@ describe('item-art audit builder', () => {
     expect(help).toContain('--refresh-verdict');
     expect(help).toContain('tmp/imagegen/item-art-consistency/final-audit');
 
-    // Moved by the Passing Stone icon (the death lesson's rite marker,
-    // rendered from its own shipped world model). `verdict: null` below is
-    // unchanged and is the point: the committed reviewed verdict covers the
-    // art as of its own review, and a newly added icon is deliberately NOT
-    // folded into it. It awaits an owner visual review of its own.
+    // The current digest includes the Passing Stone addition and the seven reviewed painted bag
+    // replacements. `verdict: null` is the point: verify-only validates the live catalog without
+    // rewriting the committed visual verdict.
     const verified = JSON.parse(
       execFileSync(process.execPath, ['scripts/item_art_audit.mjs', '--verify-only'], {
         cwd: repoRoot,
@@ -760,20 +759,20 @@ describe('item-art audit builder', () => {
     ) as Record<string, unknown>;
     expect(verified).toMatchObject({
       catalogPath: 'tmp/imagegen/item-art-consistency/final-audit/catalog.json',
-      catalogSha256: 'dd63ab4b65fd1e0ad91fc0fae34575628d8306f9d479ab9aada8e25df0fb004a',
-      catalogBytes: 455347,
-      rendererFingerprint: 'fd92c41a206cd55b05a1de94c4789f6eb6ca4200d063f4bbd284c21ae03b6082',
-      catalogCount: 830,
-      liveItemCount: 845,
+      catalogSha256: 'bcfccbe150272f49a91574934e584f61ab402c3ea420088432322b991d9e8bc7',
+      catalogBytes: 568230,
+      rendererFingerprint: 'd80ff4868f979e1717e106c889b7d6505841caf8d4cf887776ecb60848b1b2b7',
+      catalogCount: 1042,
+      liveItemCount: 1057,
       generatedHeroicDefinitions: 64,
       heroicDefinitionsWithOwnWebp: 48,
       heroicWeaponArtAliases: 16,
       groupCount: 22,
-      sheetPageCount: 26,
-      sheetCount: 208,
-      sheetModeCounts: Object.fromEntries(ITEM_ART_AUDIT_MODES.map((mode) => [mode, 26])),
+      sheetPageCount: 27,
+      sheetCount: 216,
+      sheetModeCounts: Object.fromEntries(ITEM_ART_AUDIT_MODES.map((mode) => [mode, 27])),
       sheetSetSha256: null,
-      shippingCatalogSha256: 'df9d5b62bf1891a7e3ba3cd53291e69d955a59cd3e5faa96842aa0336988b4f6',
+      shippingCatalogSha256: '0cedaccb5706931546f42b328cea877aaa518decadb30cb5d2c6b651c74bf565',
       machineChecksPassed: true,
       verdict: null,
     });

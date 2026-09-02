@@ -1,10 +1,12 @@
 // The $WOC Exchange attach composition (src/game/woc_market_wiring.ts): the
-// distribution-aware shell gate (browser web plus the website-distributed
-// desktop shell, everything else fail-closed), the live wiring of every hook,
-// and the main.ts firewall (main.ts carries one call, never the client
-// construction or the hook object). A gate that quietly attached inside a
-// store shell would ship the exchange to the platforms whose terms of
-// service forbid it (issue #3692).
+// distribution-aware shell gate (browser web, verified Seeker Solana-store
+// Android, plus the website-distributed desktop shell; everything else
+// fail-closed), the live wiring of every hook, the wrapped-shell browser
+// hand-off notice, and the main.ts firewall (main.ts carries one call, never
+// the client construction or the hook object). A gate that quietly attached
+// inside a forbidden store shell would ship the exchange to platforms whose
+// terms of service forbid it, while a denied desktop shell that stayed silent
+// instead of revealing the hand-off notice would look like a bug.
 import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { wocExchangeSupported } from '../electron/desktop_config.cjs';
@@ -14,6 +16,15 @@ import { stripComments } from './helpers/strip_comments';
 // default-argument arm proves it reads them (a hardcoded { false, false }
 // default would attach here and fail the pin below).
 vi.mock('../src/client_origin', () => ({ NATIVE_APP: true, DESKTOP_APP: false }));
+vi.mock('../src/net/native_solana_mobile', () => ({
+  nativeSolanaMobileBridge: {
+    solanaMobileCapabilities: async () => ({
+      distribution: 'solana-dapp-store',
+      device: 'seeker',
+      mwaAvailable: true,
+    }),
+  },
+}));
 
 type ClientCfg = { token(): string | null; base?: string };
 const constructed: { cfg: ClientCfg }[] = [];
@@ -30,6 +41,7 @@ import {
   type WocMarketShell,
   type WocMarketWiringDeps,
   wocMarketAttachAllowed,
+  wocMarketBrowserHandoffAllowed,
 } from '../src/game/woc_market_wiring';
 import type { WocMarketHooks } from '../src/ui/woc_market_window';
 
@@ -41,6 +53,21 @@ function desktopShell(supported: boolean): WocMarketShell {
     nativeApp: false,
     desktopApp: true,
     bridge: { wocExchangeSupported: async () => supported },
+  };
+}
+
+function nativeShell(
+  distribution: 'solana-dapp-store' | 'google-play' | 'unknown',
+  device: 'seeker' | 'other' | 'unknown',
+  mwaAvailable: boolean,
+): WocMarketShell {
+  return {
+    nativeApp: true,
+    desktopApp: false,
+    bridge: null,
+    mobileBridge: {
+      solanaMobileCapabilities: async () => ({ distribution, device, mwaAvailable }),
+    },
   };
 }
 
@@ -63,6 +90,7 @@ function stampedDesktopShell(distribution: string): WocMarketShell {
 
 function makeDeps() {
   const attached: WocMarketHooks[] = [];
+  let browserOnlyNotices = 0;
   const api = { token: 'tok-1' as string | null, base: 'https://api.example.test' };
   const online = { characterId: 41 };
   let linked: string | null = null;
@@ -83,6 +111,9 @@ function makeDeps() {
     hud: {
       attachWocMarket: (hooks: WocMarketHooks) => {
         attached.push(hooks);
+      },
+      attachWocMarketBrowserOnlyNotice: () => {
+        browserOnlyNotices++;
       },
     },
     api,
@@ -108,6 +139,7 @@ function makeDeps() {
     signCalls,
     messageSignCalls,
     loads: () => loads,
+    browserOnlyNotices: () => browserOnlyNotices,
   };
 }
 
@@ -133,15 +165,62 @@ describe('woc_market_wiring: the distribution-aware shell gate', () => {
     expect(probes).toBe(0);
   });
 
-  it('refuses Capacitor native even when a bridge would answer true', async () => {
+  it('offers the browser hand-off on the wrapped DESKTOP shell only, never native', () => {
+    // Capacitor native (even alongside a desktop flag) gets neither the real
+    // Exchange nor the hand-off launcher: steering a mobile-app-store build
+    // to an external real-money marketplace is the anti-steering shape those
+    // stores restrict (docs/prd/woc/marketplace.md "Platforms, realms,
+    // configuration"), and that has not had its own counsel review.
+    expect(wocMarketBrowserHandoffAllowed(WEB)).toBe(false);
+    expect(
+      wocMarketBrowserHandoffAllowed({ nativeApp: true, desktopApp: false, bridge: null }),
+    ).toBe(false);
+    expect(
+      wocMarketBrowserHandoffAllowed({ nativeApp: false, desktopApp: true, bridge: null }),
+    ).toBe(true);
+    expect(
+      wocMarketBrowserHandoffAllowed({ nativeApp: true, desktopApp: true, bridge: null }),
+    ).toBe(false);
+  });
+
+  it('allows only a Seeker running the Solana dApp Store Android build', async () => {
+    await expect(
+      wocMarketAttachAllowed(nativeShell('solana-dapp-store', 'seeker', true)),
+    ).resolves.toBe(true);
+    for (const shell of [
+      nativeShell('google-play', 'seeker', true),
+      nativeShell('solana-dapp-store', 'other', true),
+      nativeShell('solana-dapp-store', 'seeker', false),
+      nativeShell('unknown', 'unknown', false),
+    ]) {
+      await expect(wocMarketAttachAllowed(shell)).resolves.toBe(false);
+    }
+  });
+
+  it('ignores the desktop bridge on Capacitor native builds', async () => {
     const shell: WocMarketShell = {
       nativeApp: true,
       desktopApp: false,
       bridge: { wocExchangeSupported: async () => true },
     };
     await expect(wocMarketAttachAllowed(shell)).resolves.toBe(false);
+  });
+
+  it('fails closed for iOS or a native capability probe failure', async () => {
     await expect(
-      wocMarketAttachAllowed({ nativeApp: true, desktopApp: true, bridge: null }),
+      wocMarketAttachAllowed({ nativeApp: true, desktopApp: false, bridge: null }),
+    ).resolves.toBe(false);
+    await expect(
+      wocMarketAttachAllowed({
+        nativeApp: true,
+        desktopApp: false,
+        bridge: null,
+        mobileBridge: {
+          solanaMobileCapabilities: async () => {
+            throw new Error('native bridge unavailable');
+          },
+        },
+      }),
     ).resolves.toBe(false);
   });
 
@@ -224,12 +303,38 @@ describe('woc_market_wiring: the distribution-aware shell gate', () => {
     }
   });
 
+  it('reveals the browser hand-off launcher for a denied desktop shell only', async () => {
+    const desktopOnly = makeDeps();
+    await attachWocMarketExchange(desktopOnly.deps, {
+      nativeApp: false,
+      desktopApp: true,
+      bridge: null,
+    });
+    // A wrapped-DESKTOP-shell player sees WHY the icon is there instead of it
+    // simply being absent (src/ui/woc_market_link.ts).
+    expect(desktopOnly.browserOnlyNotices()).toBe(1);
+
+    for (const shell of [
+      { nativeApp: true, desktopApp: false, bridge: null },
+      { nativeApp: true, desktopApp: true, bridge: null },
+    ]) {
+      const nativeRig = makeDeps();
+      await attachWocMarketExchange(nativeRig.deps, shell);
+      // Capacitor native stays exactly as silent as before this fix: no
+      // launcher, no explanation, no hand-off.
+      expect(nativeRig.browserOnlyNotices()).toBe(0);
+    }
+  });
+
   it('reads the live shell constants when no shell is injected', async () => {
-    // client_origin is mocked NATIVE_APP=true above: the default arm must
-    // refuse, proving the default is wired to the constants.
+    // client_origin is mocked NATIVE_APP=true and the native bridge is a
+    // verified Seeker above: the default arm must attach, proving production
+    // wires both live inputs rather than only supporting injected test shells.
     const rig = makeDeps();
-    await expect(attachWocMarketExchange(rig.deps)).resolves.toBe(false);
-    expect(rig.attached).toEqual([]);
+    await expect(attachWocMarketExchange(rig.deps)).resolves.toBe(true);
+    expect(rig.attached.length).toBe(1);
+    expect(constructed.length).toBe(1);
+    expect(rig.browserOnlyNotices()).toBe(0);
   });
 });
 
@@ -243,6 +348,8 @@ describe('woc_market_wiring: the hook composition on allowed shells', () => {
     expect(await attachWocMarketExchange(rig.deps, WEB)).toBe(true);
     expect(rig.attached.length).toBe(1);
     expect(constructed.length).toBe(1);
+    // The browser build gets the real Exchange, never the browser-hand-off notice.
+    expect(rig.browserOnlyNotices()).toBe(0);
     expect(rig.attached[0].client).toBe(constructed[0]);
     // The token is a getter over the live session (a re-login swaps it), the
     // base is captured once, the same as the inline wiring it replaced.

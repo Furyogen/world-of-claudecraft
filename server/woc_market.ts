@@ -20,7 +20,6 @@ import { ITEMS } from '../src/sim/data';
 import { exchangeBrowseCategory, exchangeBrowseSubcategory } from '../src/sim/exchange_eligibility';
 import type { ExtractRef, ExtractRefusal } from '../src/sim/inventory_extract';
 import { itemCopyPin } from '../src/sim/item_copy_ref';
-import type { CharacterState } from '../src/sim/sim';
 import type { InvSlot, ItemInstancePayload } from '../src/sim/types';
 import { throwProvedRollback } from './pg_rollback_proof';
 import {
@@ -28,6 +27,7 @@ import {
   SWEEP_BATCH,
   WOC_MARKET_ME_READOUT_DEADLINE_MS,
 } from './woc_market_budgets';
+import type { CharacterSaveArgs } from './woc_market_character_save';
 import { createWocMarketDeliveryArms, type WocMarketDeliveryArms } from './woc_market_delivery';
 import {
   registerWocQuoteHandoff,
@@ -43,8 +43,14 @@ import type {
 } from './woc_market_economy_types';
 import { pruneWocLocalLedgers, wocBackedOffIds, wocParkRow } from './woc_market_local_ledgers';
 import type { WocStuckCustodyClasses } from './woc_market_monitor_types';
+import type * as WocOps from './woc_market_ops';
 import type { WocMarketReadCache } from './woc_market_read_cache';
 import { WOC_MARKET_BROWSE_CACHE_MAX_PAGE } from './woc_market_read_cache';
+import {
+  resolveReviewSettlement,
+  type WocReviewResolution,
+  type WocReviewVerdict,
+} from './woc_market_review_resolution';
 import {
   adoptableBondCents,
   antiSnipeExtendedEndMs,
@@ -341,12 +347,7 @@ export interface WocSellerHistoryReadout {
   profile: WocSellerProfile | null;
 }
 
-export interface CharacterSaveArgs {
-  characterId: number;
-  level: number;
-  state: CharacterState;
-  leaseNonce: string | undefined;
-}
+export type { CharacterSaveArgs } from './woc_market_character_save';
 
 export interface WocMarketDb {
   // Listing custody edge: character UPDATE (the bags just lost the copy) and
@@ -563,12 +564,12 @@ export interface WocMarketDb {
   markCustodyRefBooked(custodyRef: string): Promise<void>;
   opsListings(q: {
     realm: string;
-    status: 'active' | 'ending' | 'settling' | 'closed' | 'all';
+    status: WocOps.WocOpsListingStatus;
     fromMs: number;
     toMs: number;
     page: number;
     pageSize: number;
-  }): Promise<{ rows: WocListingRow[]; hasMore: boolean }>;
+  }): Promise<{ rows: WocOps.WocOpsListingRow[]; hasMore: boolean }>;
   opsP2pTrades(q: {
     realm: string;
     status: WocDirectedOfferStatus | 'all';
@@ -576,7 +577,7 @@ export interface WocMarketDb {
     toMs: number;
     page: number;
     pageSize: number;
-  }): Promise<{ rows: WocOpsP2pTradeRow[]; hasMore: boolean }>;
+  }): Promise<{ rows: WocOps.WocOpsP2pTradeRow[]; hasMore: boolean }>;
   /** The claim row for a ref (booked flag plus rail intents), or null when
    *  no claim exists. What the resume paths consult when a claim is not fresh:
    *  booked means done; a grant intent parks; a mail intent may resume only
@@ -817,6 +818,16 @@ export interface WocMarketDb {
     to: WocSettlementState,
     failReason?: string,
   ): Promise<boolean>;
+  /** The parked-review operator arm's realm-scoped pair (the arm must not
+   *  rule another realm's row; see woc_market_review_resolution.ts). */
+  transitionSettlementInRealm(
+    realm: string,
+    id: number,
+    from: WocSettlementState[],
+    to: WocSettlementState,
+    failReason?: string,
+  ): Promise<boolean>;
+  settlementStateInRealm(realm: string, id: number): Promise<{ state: WocSettlementState } | null>;
   confirmingSettlements(realm: string, limit: number): Promise<WocSettlementRow[]>;
   /** confirmed -> delivering (SKIP LOCKED claim). */
   claimDeliverableSettlements(realm: string, limit: number): Promise<WocSettlementRow[]>;
@@ -992,11 +1003,9 @@ export interface WocMarketCustody {
   /** Hand a held copy straight to a live buyer's bags. Returns the save the
    *  caller must persist before treating the delivery as done. */
   grantCopy(accountId: number, characterId: number, slot: InvSlot): WocCustodyGrant;
-  /** Re-serialize a live session WITHOUT granting anything: the resume path
-   *  for a direct hand-off whose atomic save threw mid-flight. The bags in
-   *  the returned save already hold the earlier grant (same live session), so
-   *  persisting it retries the delivery without minting a second copy. */
+  /** Re-serialize after an ambiguous hand-off; retrying the held grant cannot mint. */
   snapshotCopy(accountId: number, characterId: number): WocCustodyGrant;
+  acknowledgeCharacterSave?(save: CharacterSaveArgs): void;
   /** The delivered-save FIFO entry (the write-path rider closed the
    *  commitGrant carve-out): run `persist` with a snapshot serialized INSIDE
    *  the character's save-FIFO slot, so the grant's blob orders against the
@@ -1173,12 +1182,6 @@ export { BOND_PAYOUT_BUDGET_MS, WOC_MARKET_ME_READOUT_DEADLINE_MS } from './woc_
 /** Per-arm counts for one sweep pass, so a wedged marketplace is visible: a
  *  silent idle pass and a permanently starved backlog look identical without
  *  it. An arm returning a FULL batch is the "backlog is not draining" signal. */
-/** A directed offer plus the outcome it reached, for the operator p2p view. */
-export interface WocOpsP2pTradeRow extends WocDirectedOfferRow {
-  settledAmountBase: string | null;
-  txSignature: string | null;
-}
-
 // The sweep's pass-accounting vocabulary lives in woc_market_sweep_types.ts
 // (the ratchet's leaf-types pattern); the trio keeps this import path.
 export type {
@@ -1772,6 +1775,7 @@ export class WocMarketService {
           this.deps.custody.restoreCopy(extract.pid, args.characterId, extract.extracted);
           return { refusal: inserted.reason };
         }
+        this.deps.custody.acknowledgeCharacterSave?.(extract.save);
         return { id: inserted.id };
       },
     );
@@ -2289,12 +2293,12 @@ export class WocMarketService {
    * dashboard cannot ask one realm's process about another's.
    */
   async opsListings(q: {
-    status: 'active' | 'ending' | 'settling' | 'closed' | 'all';
+    status: WocOps.WocOpsListingStatus;
     fromMs: number;
     toMs: number;
     page: number;
     pageSize: number;
-  }): Promise<{ rows: WocListingRow[]; hasMore: boolean }> {
+  }): Promise<{ rows: WocOps.WocOpsListingRow[]; hasMore: boolean }> {
     return this.deps.db.opsListings({ ...q, realm: this.cfg.realm });
   }
 
@@ -2304,7 +2308,7 @@ export class WocMarketService {
     toMs: number;
     page: number;
     pageSize: number;
-  }): Promise<{ rows: WocOpsP2pTradeRow[]; hasMore: boolean }> {
+  }): Promise<{ rows: WocOps.WocOpsP2pTradeRow[]; hasMore: boolean }> {
     return this.deps.db.opsP2pTrades({ ...q, realm: this.cfg.realm });
   }
 
@@ -3039,6 +3043,18 @@ export class WocMarketService {
     return { ok: true };
   }
 
+  async adminResolveReviewSettlement(
+    id: number,
+    verdict: WocReviewVerdict,
+  ): Promise<WocReviewResolution | Refused> {
+    // Kill-switch gated like its three write siblings; semantics live in
+    // woc_market_review_resolution.ts. The buyer's cached myActivity readout
+    // deliberately rides the TTL here (the sweep-transition ruling in
+    // woc_market_read_cache.ts): do not import the routes runtime to bust it.
+    if (!this.cfg.enabled) return refuse('disabled');
+    return resolveReviewSettlement(this.deps.db, this.cfg.realm, id, verdict);
+  }
+
   // -------------------------------------------------------------------------
   // The sweep pass (called by woc_market_sweep.ts on its own clock)
   // -------------------------------------------------------------------------
@@ -3613,9 +3629,9 @@ export class WocMarketService {
    *  set, still OPEN (the listing cannot re-auction), surfaced by the stuck
    *  readout. The operator resolution arms are review -> confirmed (payment
    *  verified on chain: delivery resumes) and review -> failed (verified
-   *  unpaid: the ordinary overdue default pass takes it from there); NO
-   *  in-repo route drives them yet, the arms arrive with the service-side
-   *  release tooling. Runs BEFORE the poll arm in the pass, so a row
+   *  unpaid: the ordinary overdue default pass takes it from there), driven
+   *  by POST /internal/woc-market/settlements/:id/resolve through the
+   *  realm-scoped CAS. Runs BEFORE the poll arm in the pass, so a row
    *  whose economy recovered exactly at the bound parks rather than
    *  resolves: deliberate (six hours of polls already failed) and
    *  operator-recoverable. */

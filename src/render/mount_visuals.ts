@@ -16,6 +16,10 @@ export type MountRidePose = 'sit' | 'tread';
 const TAU = Math.PI * 2;
 
 export interface MountVisualSpec {
+  /** Tip nose-up on a jump and right itself before landing (see
+   *  mount_jump_attitude). Vehicles only: a creature's legs already absorb a
+   *  launch, and pitching one reads as a bug. */
+  jumpTips: boolean;
   /** VISUALS key (src/render/characters/manifest.ts, lazyPreload). */
   visualKey: string;
   /** World-unit rider lift onto the saddle at e.scale = 1. */
@@ -56,6 +60,7 @@ const spec = (
   bob?: { amp: number; hz: number; idle?: boolean; shape?: 'hover' | 'hop' },
   seatFwd = 0,
   fx: 'slime' | 'exhaust' | null = null,
+  jumpTips = false,
   ride?: { pose?: MountRidePose; rollRadius?: number },
 ): MountVisualSpec => ({
   visualKey,
@@ -67,6 +72,7 @@ const spec = (
   bobIdle: bob?.idle ?? false,
   bobShape: bob?.shape ?? 'hop',
   fx,
+  jumpTips,
   ridePose: ride?.pose ?? 'sit',
   rollRadius: ride?.rollRadius ?? 0,
 });
@@ -100,11 +106,44 @@ export const MOUNT_VISUAL_SPECS: Record<MountKey, MountVisualSpec> = {
   // The Drakemaw Raptor: authored saddle sits over the hips behind the neck
   // spines (hence the slight rear shift), gait-rigged Walk/Run cycles.
   drakemaw_raptor: spec('mount_drakemaw_raptor', 2.35, true, undefined, -0.1),
+  // Bonebound Rickshaw: ships no baked clips (its wheels roll procedurally from
+  // rickshaw_mount.ts's spinMountWheels), so the body gets a light procedural jostle
+  // instead of a gait cycle. seat/seatFwd are the authored bench-seat socket
+  // at the cart's own RICKSHAW_SCALE (2.0).
+  // 2026-08-09: this `seat` value (1.94) was stale, still reflecting the
+  // ORIGINAL pre-cushion socket (local Y 0.97), never updated when the socket
+  // itself moved to local Y 1.12 for the tufted seat cushion (see
+  // model.js's RICKSHAW_SOCKET_DEFINITIONS, "raised from v1's 0.97 to sit on
+  // top of the new seat cushion"). A live look confirmed exactly this: rider
+  // sitting low enough to clip into the cushion. Corrected to 1.12 * 2 = 2.24
+  // to match the socket that's actually been shipping.
+  // `rigged` stays false rather than true, even though this mount is now
+  // procedurally animated (the wheels) rather than fully static, so it still
+  // gets the procedural bob other clipless mounts get. What the flag buys
+  // elsewhere is the convention that a rigged mount's clips carry ALL its
+  // motion, and this one cannot follow that: the renderer applies the
+  // procedural bob to the rider and, because the puller rig is parented
+  // inside the mount, to the puller too. Baking a body bob into clips would
+  // bob the cart WITHOUT the puller, swinging the shaft harness collar +-0.05
+  // against a belt overlap with only 0.034 of margin, and the harness would
+  // visibly come off his waist every cycle.
+  // jumpTips: a two-wheeled cart with no suspension and no legs. It tips
+  // nose-up off a jump and rights itself before landing; the puller rides that
+  // rotation with it, keeping the shafts in its hands.
+  rickshaw_mount: spec(
+    'mount_rickshaw_mount',
+    2.24,
+    false,
+    { amp: 0.05, hz: 2.4 },
+    -0.3,
+    null,
+    true,
+  ),
   // The Riftbound Boulder: a Rift hazard stopped mid-charge and bound. Clipless
   // like the snail, but it neither walks nor bobs: it ROLLS, at the rate its own
   // travel demands. The rider stands on the crown at 2 * rollRadius (feet on top
   // of the stone) and treads it backward, which is what drives it forward.
-  riftbound_boulder: spec('mount_riftbound_boulder', 1.6, false, undefined, 0, null, {
+  riftbound_boulder: spec('mount_riftbound_boulder', 1.6, false, undefined, 0, null, false, {
     pose: 'tread',
     rollRadius: 0.8,
   }),

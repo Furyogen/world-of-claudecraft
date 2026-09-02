@@ -13,7 +13,8 @@
 import type * as THREE from 'three';
 import type { AnimState } from './characters/anim_state';
 import type { CharacterVisual } from './characters/visual';
-import { advanceRollAngle, type MountVisualSpec, mountBobY, mountRollStep } from './mount_visuals';
+import { applyMountJumpAttitude } from './mount_jump_attitude';
+import { advanceRollAngle, type MountVisualSpec, mountRollStep } from './mount_visuals';
 
 /** The per-view state this step reads and advances. The live mount arrives
  *  through MountFrameInputs instead, already narrowed by the caller: a view
@@ -24,6 +25,8 @@ export interface MountPresentationView {
   mountLift: number;
   /** Accumulated roll of a ROLLING mount, in radians. Advanced here. */
   mountRoll: number;
+  /** Damped jump attitude, owned by mount_jump_attitude. */
+  mountJumpPitch: number;
 }
 
 /** The particle sinks a mount can drive (the renderer's vfx layer). */
@@ -52,6 +55,8 @@ export interface MountFrameInputs {
    *  the arc length the contact patch actually swept. */
   stepX: number;
   stepZ: number;
+  /** Displayed vertical speed, for the jump attitude. */
+  verticalVelocity: number;
 }
 
 /** A zeroed inputs record for the caller to own and refill each frame. The
@@ -71,48 +76,62 @@ export function createMountFrameScratch(): MountFrameInputs {
     facing: 0,
     stepX: 0,
     stepZ: 0,
+    verticalVelocity: 0,
   };
+}
+
+/**
+ * Fill the mount's own animation inputs from its RIDER's locomotion.
+ *
+ * Separate from the step below because BOTH arms of the presentation gate read
+ * the result: the gated arm drives the mount's clips with it, and the rickshaw
+ * puller reads it on-screen or off. Filling it inside the gated arm would hand
+ * the off-screen puller whatever the last drawn rider happened to leave behind.
+ *
+ * The rigged quadrupeds run their baked gait clips (a live Idle loop while
+ * standing, Walk/Run on the move, scripts/bake_mount_gaits.mjs); the clipless
+ * mounts bob procedurally (the hover cycle floats, the griffin canters, the
+ * snail glides flat, the boulder rolls).
+ *
+ * `airborne` is the REAL flag, not the rider's suppressed one: the mount
+ * carries the jump while its rider holds their seat.
+ */
+export function fillMountAnimState(
+  scratch: AnimState,
+  rider: AnimState,
+  spec: MountVisualSpec,
+  airborne: boolean,
+): void {
+  scratch.speed = rider.speed;
+  scratch.moving = rider.moving;
+  scratch.running = rider.running;
+  scratch.airborne = airborne;
+  // A treading rider is forced backwards by the renderer (riderPoseFlags), and
+  // that flag is about the RIDER pose, not the mount. Passing it through would
+  // tell a rolling mount to play its own backpedal clip while it rolls forward.
+  // Clipless rollers cannot show it today, but the trap should not be left set.
+  scratch.backwards = rider.backwards && spec.rollRadius <= 0;
+  scratch.swimming = rider.swimming;
 }
 
 /**
  * Advance one mounted rider's presentation by a frame.
  *
- * `scratch` is the caller's reusable AnimState (one per renderer, not per view)
- * so a crowd of riders costs no allocations.
+ * `scratch` is the caller-owned AnimState fillMountAnimState just wrote (one
+ * per renderer, not per view), so a crowd of riders costs no allocations.
  */
 export function updateMountPresentation(
   view: MountPresentationView,
-  rider: AnimState,
   scratch: AnimState,
   fx: MountPresentationFx,
   input: MountFrameInputs,
 ): void {
-  // The mount animates from the same locomotion inputs as its rider: the rigged
-  // quadrupeds run their baked gait clips (a live Idle loop while standing,
-  // Walk/Run on the move, scripts/bake_mount_gaits.mjs), and the clipless mounts
-  // bob procedurally (the hover cycle floats, the griffin canters, the snail
-  // glides flat, the boulder rolls).
-  scratch.speed = rider.speed;
-  scratch.moving = rider.moving;
-  scratch.running = rider.running;
-  scratch.airborne = input.airborne;
-  // A treading rider is forced backwards by the renderer (riderPoseFlags), and
-  // that flag is about the RIDER pose, not the mount. Passing it through would
-  // tell a rolling mount to play its own backpedal clip while it rolls forward.
-  // Clipless rollers cannot show it today, but the trap should not be left set.
-  scratch.backwards = rider.backwards && input.spec.rollRadius <= 0;
-  scratch.swimming = rider.swimming;
   input.mount.update(input.dt, scratch, input.animate);
-
-  // The rider floats WITH the procedural bob (the hover cycle's idle float),
-  // not just the mount body.
-  const bob = mountBobY(input.spec, input.timeSec, input.moving);
 
   // A rolling mount spins about its own centre, which is why its GLB is authored
   // origin-centred (manifest hover -0.8) and lifted back to the ground by exactly
-  // its radius here. Spin comes from this frame's travel, never from a hand-set
-  // rate: omega = v / r is what makes the stone bite the ground instead of
-  // skating over it.
+  // its radius. Spin comes from this frame's travel, never from a hand-set rate:
+  // omega = v / r is what makes the stone bite the ground instead of skating.
   if (input.spec.rollRadius > 0) {
     const forward = input.stepX * Math.sin(input.facing) + input.stepZ * Math.cos(input.facing);
     // Facing h points at (sin h, cos h), so the rider's right is (-cos h, sin h).
@@ -120,10 +139,24 @@ export function updateMountPresentation(
     // match the convention would be a trap for whoever needs the signed value.
     const lateral = input.stepZ * Math.sin(input.facing) - input.stepX * Math.cos(input.facing);
     view.mountRoll = advanceRollAngle(view.mountRoll, mountRollStep(input.spec, forward, lateral));
-    input.mount.root.rotation.x = view.mountRoll;
   }
-  input.mount.root.position.y = bob + input.spec.rollRadius;
-  input.riderVisual.root.position.y = view.mountLift + bob;
+
+  // ONE writer owns the mount root transform. The bob, the ground lift, the
+  // jump pitch and the rider seat all land in mount_jump_attitude, with the
+  // roll composed onto the same axis as the pitch; a second writer here would
+  // simply clobber whichever ran first.
+  applyMountJumpAttitude(
+    view,
+    input.mount.root,
+    input.riderVisual.root,
+    input.spec,
+    input.timeSec,
+    input.moving,
+    input.airborne,
+    input.verticalVelocity,
+    input.dt,
+    view.mountRoll,
+  );
 
   // Ambient mount particles: the snail paints its slime path while gliding, the
   // hover cycle streams aether exhaust off its tail.

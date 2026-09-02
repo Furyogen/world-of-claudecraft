@@ -12,167 +12,82 @@ export const pending: Record<string, readonly string[]> = {
   "es": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "es_ES": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "fr_FR": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "fr_CA": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "en_CA": [],
   "it_IT": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "de_DE": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
-  "zh_CN": [
-    "hudChrome.wocMarket.walletUsdBalance"
-  ],
-  "zh_TW": [
-    "hudChrome.wocMarket.walletUsdBalance"
-  ],
-  "ko_KR": [
-    "hudChrome.wocMarket.walletUsdBalance"
-  ],
-  "ja_JP": [
-    "hudChrome.wocMarket.walletUsdBalance"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
-  "ru_RU": [
-    "hudChrome.wocMarket.walletUsdBalance"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "nl_NL": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "pl_PL": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "id_ID": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "tr_TR": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "sv_SE": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "vi_VN": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ],
   "da_DK": [
     "entities.items.reins_riftbound_boulder.name",
     "hudChrome.mounts.desc_riftbound_boulder",
-    "hudChrome.mounts.name_riftbound_boulder",
-    "hudChrome.wocMarket.walletLinkedConnected",
-    "hudChrome.wocMarket.walletLinkedDisconnected",
-    "hudChrome.wocMarket.walletUsdBalance",
-    "hudChrome.wocMarket.walletUsdUnknown",
-    "wallet.browser.stepUpBody"
+    "hudChrome.mounts.name_riftbound_boulder"
   ]
 };
