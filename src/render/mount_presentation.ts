@@ -23,7 +23,8 @@ export interface MountPresentationView {
   group: THREE.Object3D;
   /** World-unit rider lift onto the mount (0 when the mount is hidden). */
   mountLift: number;
-  /** Accumulated roll of a ROLLING mount, in radians. Advanced here. */
+  /** Accumulated roll of a ROLLING mount, in radians. Advanced here, and
+   *  cleared here the moment the view carries a mount that does not roll. */
   mountRoll: number;
   /** Damped jump attitude, owned by mount_jump_attitude. */
   mountJumpPitch: number;
@@ -139,6 +140,13 @@ export function updateMountPresentation(
     // match the convention would be a trap for whoever needs the signed value.
     const lateral = input.stepZ * Math.sin(input.facing) - input.stepX * Math.cos(input.facing);
     view.mountRoll = advanceRollAngle(view.mountRoll, mountRollStep(input.spec, forward, lateral));
+  } else {
+    // The VIEW outlives the mount. Swapping the boulder for a saddle mount
+    // rebuilds mountVisual but keeps this view, and the accumulated roll is
+    // composed onto EVERY mount's pitch axis below, so without this reset the
+    // stone's last spin becomes a permanent pitch on the next mount: a mount
+    // that does not tip has no path that ever relaxes it back to zero.
+    view.mountRoll = 0;
   }
 
   // ONE writer owns the mount root transform. The bob, the ground lift, the

@@ -177,6 +177,23 @@ describe('non-rolling mounts are untouched by the roll path', () => {
     expect(riderVisual.root.position.y).toBeCloseTo(HORSE.seat, 10);
   });
 
+  it('clears a leftover roll when the same view swaps to a saddle mount', () => {
+    // The view outlives the mount: mountVisual is rebuilt on a mount swap
+    // (mountVisualKey mismatch) but the view, and its mountRoll, survive. The
+    // roll is composed onto every mount's pitch axis, so a stale value becomes
+    // a permanent pitch on a mount whose jumpTips is false and which therefore
+    // has no path that relaxes it. Start from a rolled stone, not from zero,
+    // which is exactly what the neighbouring saddle test cannot see.
+    run({ stepZ: 1 });
+    expect(view.mountRoll, 'the boulder rolled first').toBeCloseTo(1 / BOULDER.rollRadius, 10);
+
+    view.mountLift = HORSE.seat;
+    run({ spec: HORSE, stepX: 3, stepZ: 3 });
+    expect(view.mountRoll).toBe(0);
+    expect(mount.root.rotation.x, 'no inherited pitch on the saddle mount').toBe(0);
+    expect(mount.root.position.y).toBe(0);
+  });
+
   it('still bobs the hover cycle, and floats its rider with it', () => {
     view.mountLift = HOVER.seat;
     // Quarter of a 1.1 Hz cycle: the sine peaks at the full amplitude.
