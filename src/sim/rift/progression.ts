@@ -250,7 +250,7 @@ export const RIFT_EPIC_MOUNT_REINS = [
 ] as const;
 export const RIFT_EPIC_MOUNT_CHANCE = 0.003; // 0.3% per S clear, split evenly
 /** The per-mount share the pool is tuned to: one entry out of the pool, at the
- *  pool's own gate. Kept as a named constant so the intended rate is a fact in',
+ *  pool's own gate. Kept as a named constant so the intended rate is a fact in
  *  the content rather than an arithmetic accident of the array length. */
 export const RIFT_EPIC_MOUNT_CHANCE_PER_MOUNT =
   RIFT_EPIC_MOUNT_CHANCE / RIFT_EPIC_MOUNT_REINS.length;

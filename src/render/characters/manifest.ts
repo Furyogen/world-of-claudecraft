@@ -1959,7 +1959,6 @@ export const VISUALS: Record<string, VisualDef> = {
   // the saddle and lurched it every stride; the baker authors rotation-only
   // keys plus a root Y bob, so that cannot recur. walkRef is MEASURED off the
   // baked clip (tmp/dragonkin_gait_measure.mjs): walk 3.02 yd/s.
-
   mount_drakemaw_raptor: {
     url: `${MOUNTS_DIR}/drakemaw_raptor.glb`,
     height: 3.4,
