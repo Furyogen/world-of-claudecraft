@@ -42,6 +42,7 @@ import {
 } from './nameplate_canvas';
 import { COMBO_PIP_MAX } from './nameplate_combo';
 import { declutterNameplatesInPlace, type NameplateAnchor } from './nameplate_declutter';
+import { nameplateDotScale as nameplateDotScaleSetting } from './nameplate_dot_scale';
 import {
   clampNameplateDotScale,
   type NameplateDotAura,
@@ -143,8 +144,9 @@ export interface NameplatePainterDeps {
   showPlayerNameplates: () => boolean;
   /** The nameplate dot row's SIZE, with 0 meaning off: the showNameplateDots
    *  toggle and the nameplateDotScale slider fold into this one number at the
-   *  settings site. A player preference, never a graphics tier. */
-  nameplateDotScale: () => number;
+   *  settings site. A player preference, never a graphics tier. Defaults to the
+   *  live setting (nameplate_dot_scale.ts); injectable so a test can drive it. */
+  nameplateDotScale?: () => number;
   isHostilePlayer: (e: Entity) => boolean;
 }
 
@@ -202,7 +204,7 @@ export class NameplatePainter {
     this.showDevBadges = deps.showDevBadges;
     this.showOwnNameplate = deps.showOwnNameplate;
     this.showPlayerNameplates = deps.showPlayerNameplates;
-    this.nameplateDotScale = deps.nameplateDotScale;
+    this.nameplateDotScale = deps.nameplateDotScale ?? nameplateDotScaleSetting;
     this.isHostilePlayer = deps.isHostilePlayer;
     this.surface = new NameplateCanvasSurface(deps.layer);
   }

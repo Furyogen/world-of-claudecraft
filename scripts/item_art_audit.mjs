@@ -104,11 +104,13 @@ const build = await buildItemArtAudit({
     // non-weapon Crucible pieces; the art-pending ledger is now empty).
     // + the OSSBrain v0.41 batch's own painted piece, carried through the
     // base merge alongside the release-side Crucible waves.
-    catalogCount: 1041,
+    // + the two developer mount reins icons (Lanternback Troll, Chimeglass
+    // Tortoise) that joined at the release/v0.42.0 sync of PR #3439.
+    catalogCount: 1043,
     // 844 + the 201 Crucible raid loot definitions (192 of them art-pending)
     // + the base's 2 Varkhul legendary definitions, + the release sync's 7
-    // bank-storage painted bags.
-    liveItemCount: 1056,
+    // bank-storage painted bags, + the two developer mount reins.
+    liveItemCount: 1058,
     generatedHeroicDefinitions: 64,
     heroicDefinitionsWithOwnWebp: 48,
     heroicWeaponArtAliases: 16,

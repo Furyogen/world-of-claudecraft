@@ -164,7 +164,12 @@ describe('buildManifest', () => {
     expect(manifest).toContain('cast_lightning_bolt');
   });
 
-  it('keeps the release catalog, all 13 mount cues, and all 62 UI cues in one 268-key inventory', () => {
+  // 13 mount cues across the 12 catalog mounts, not one per mount: the
+  // rickshaw carries a summon and a loop cue and no stride, while the
+  // Lanternback Troll and the Chimeglass Tortoise deliberately have no stride
+  // cue at all and borrow the player's surface footfall instead (see
+  // Sfx.mountRun's fallback branch, and the coverage tests in sfx.test.ts).
+  it('keeps the release catalog, 13 mount cues, and all 62 UI cues in one 268-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
     // 268 = the release catalog plus the two gendered player-voice keys from
     // PR #2320 and the rickshaw mount's summon/loop cues.

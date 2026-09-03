@@ -356,7 +356,14 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned at the PR 3685 base sync (release v0.41.0 through the raid
     // branch): both arms edited the renderer and the union lands at the count
     // below. Measured on the merged tree. Exact merged count, zero headroom.
-    ceiling: 13249,
+    // Re-pinned at the release/v0.42.0 sync of the Chimeglass Tortoise PR
+    // (#3439, carrying the Lanternback Troll of #3399): the rideable-mount
+    // lifecycle (build, live swap, teardown, rider seating, carried lamps
+    // and glows, the summon/dismount FX) moved to src/render/mount_lifecycle.ts,
+    // and the release arm's rickshaw hooks moved with it, so the merged file
+    // lands below both prior pins. Measured on the merged tree. Exact merged
+    // count, zero headroom.
+    ceiling: 13214,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
   {

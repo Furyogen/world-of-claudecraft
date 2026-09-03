@@ -10,7 +10,12 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -19,7 +24,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "es_ES": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -28,7 +38,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "fr_FR": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -37,7 +52,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "fr_CA": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -47,7 +67,12 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -56,7 +81,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "de_DE": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -77,7 +107,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.row"
   ],
   "pt_BR": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -89,7 +124,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.row"
   ],
   "cs_CZ": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -98,7 +138,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "nl_NL": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -107,7 +152,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "pl_PL": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -116,7 +166,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "id_ID": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -125,7 +180,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "tr_TR": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -134,7 +194,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "sv_SE": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -143,7 +208,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "vi_VN": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
@@ -152,7 +222,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.targetDots.title"
   ],
   "da_DK": [
+    "entities.items.reins_chimeglass_tortoise.name",
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.mounts.desc_chimeglass_tortoise",
+    "hudChrome.mounts.desc_lanternback_troll",
+    "hudChrome.mounts.name_chimeglass_tortoise",
+    "hudChrome.mounts.name_lanternback_troll",
     "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
