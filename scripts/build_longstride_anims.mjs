@@ -113,6 +113,30 @@ function pitchX(angle) {
   return [Math.sin(h), 0, 0, Math.cos(h)];
 }
 
+/** Quaternion for `angle` radians about the Z axis. */
+function rollZ(angle) {
+  const h = angle / 2;
+  return [0, 0, Math.sin(h), Math.cos(h)];
+}
+
+/** Hamilton product, a then b applied in b's frame (b * a). */
+function qmul(b, a) {
+  return [
+    b[3] * a[0] + b[0] * a[3] + b[1] * a[2] - b[2] * a[1],
+    b[3] * a[1] - b[0] * a[2] + b[1] * a[3] + b[2] * a[0],
+    b[3] * a[2] + b[0] * a[1] - b[1] * a[0] + b[2] * a[3],
+    b[3] * a[3] - b[0] * a[0] - b[1] * a[1] - b[2] * a[2],
+  ];
+}
+
+/** The root's rest rotation with `angle` of topple COMPOSED onto it, in the
+ *  root's parent (model) frame. Writing the topple absolutely would throw the
+ *  rig's own facing away: Root's rest is a 120 degree rotation, not identity,
+ *  so an absolute write lays the bird flat on frame 0 before it has fallen. */
+function rootTopple(angle) {
+  return qmul(rollZ(angle), REST.get('Root') ?? IDENTITY);
+}
+
 /** The neck pose for a given forward pitch, in radians, split down the chain.
  *  A bird levelling its neck bends it along its whole length rather than
  *  hinging at one joint, and the head then counter-rotates so the bill finishes
@@ -302,7 +326,7 @@ function toppleRows() {
     [1.4, 0.75, 0.85], // the fall
     [2.0, 1, 1.0], // flat, neck slack
   ]) {
-    stops.push([t, new Map([...upperPose(pitch), ['Root|rotation', pitchX(TOPPLE * frac)]])]);
+    stops.push([t, new Map([...upperPose(pitch), ['Root|rotation', rootTopple(TOPPLE * frac)]])]);
   }
   return keyframed(stops, easeInOutQuad);
 }
