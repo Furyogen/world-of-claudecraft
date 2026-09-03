@@ -292,8 +292,10 @@ export class NameplateCanvasSurface {
     forcedColors: () => this.forcedColorsActive(),
     roundedRect,
     drawImage: (url, x, y, size) => this.drawImage(url, x, y, size, false),
-    drawText: (ctx, text, x, y, style, fill) =>
-      this.text.draw(ctx, text, x, y, this.configureTextStyle(this.dotTimeStyle, fill)),
+    drawText: (ctx, text, x, y, font, fill) => {
+      this.dotTimeStyle.font = font;
+      this.text.draw(ctx, text, x, y, this.configureTextStyle(this.dotTimeStyle, fill));
+    },
   };
   private readonly emoteStyle: TextSpriteStyle = { ...EMOTE_STYLE };
   private width = 0;
@@ -378,7 +380,7 @@ export class NameplateCanvasSurface {
     // tracks and the cast bar keeps its anchor, while the plate grows upward.
     // drawEmote below mirrors this exact step, or the emote bubble drifts.
     if (state.dots.count > 0) {
-      y -= nameplateDotRowHeight(state.dots.count);
+      y -= nameplateDotRowHeight(state.dots.count, state.dots.scale);
       this.drawDots(state, screenX, y);
     }
     if (state.guild) {
@@ -468,7 +470,7 @@ export class NameplateCanvasSurface {
     if (state.castVisible) y -= 10;
     if (state.hpVisible) y -= 7;
     // Mirrors drawBase's dot row exactly (same core, same count).
-    if (state.dots.count > 0) y -= nameplateDotRowHeight(state.dots.count);
+    if (state.dots.count > 0) y -= nameplateDotRowHeight(state.dots.count, state.dots.scale);
     if (state.guild) y -= state.currentTarget ? 14 : 12;
     if (state.title) y -= NAMEPLATE_HERALDRY_TITLE_STEP;
     y -= this.heraldryLift(state);

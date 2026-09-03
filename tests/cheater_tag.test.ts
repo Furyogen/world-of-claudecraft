@@ -175,7 +175,7 @@ function nameplateHarness(targets: Entity[]): NameplatePainter {
     showDevBadges: () => true,
     showOwnNameplate: () => false,
     showPlayerNameplates: () => true,
-    showNameplateDots: () => false,
+    nameplateDotScale: () => 0,
     isHostilePlayer: () => false,
   });
 }

@@ -11,6 +11,7 @@
 export const pending: Record<string, readonly string[]> = {
   "es": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -19,6 +20,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "es_ES": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -27,6 +29,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "fr_FR": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -35,6 +38,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "fr_CA": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -44,6 +48,7 @@ export const pending: Record<string, readonly string[]> = {
   "en_CA": [],
   "it_IT": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -52,6 +57,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "de_DE": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -72,6 +78,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "pt_BR": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -83,6 +90,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "cs_CZ": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -91,6 +99,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "nl_NL": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -99,6 +108,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "pl_PL": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -107,6 +117,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "id_ID": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -115,6 +126,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "tr_TR": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -123,6 +135,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "sv_SE": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -131,6 +144,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "vi_VN": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",
@@ -139,6 +153,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "da_DK": [
     "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.nameplateDotScale",
     "hudChrome.options.showNameplateDots",
     "hudChrome.options.showTargetDots",
     "hudChrome.targetDots.overflow",

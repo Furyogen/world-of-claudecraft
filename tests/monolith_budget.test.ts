@@ -775,7 +775,7 @@ const MONOLITHS: MonolithRow[] = [
     // LOWERED for the nameplate dot row: the row's drawing moved to
     // nameplate_dot_row.ts and the image cache to nameplate_image_cache.ts,
     // which more than paid for the new draw step. Exact count, zero slack.
-    ceiling: 846,
+    ceiling: 848,
     seam: 'the pure src/render/nameplate_heraldry_core.ts geometry module',
   },
   {

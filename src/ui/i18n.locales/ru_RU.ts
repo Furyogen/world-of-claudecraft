@@ -11170,6 +11170,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showPetFrame': 'Показывать вашего питомца',
   'hudChrome.options.stickyTarget': 'Сохранять цель при клике по земле',
   'hudChrome.options.showNameplateDots': 'Показывать мои эффекты на полосах имён',
+  'hudChrome.options.nameplateDotScale': 'Размер эффектов на полосах имён',
   'hudChrome.options.showTargetDots': 'Показывать эффекты на целях',
   'hudChrome.targetDots.title': 'Эффекты на целях',
   'hudChrome.targetDots.overflow': 'ещё {count}, не показаны',

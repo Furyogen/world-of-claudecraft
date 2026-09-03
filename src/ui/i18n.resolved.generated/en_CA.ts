@@ -1595,6 +1595,7 @@ export const en_CA: EnTranslations = {
       "showTargetSwingTimer": "Show Target Swing Timer",
       "showPetFrame": "Show Your Pet",
       "showNameplateDots": "Show My Dots on Nameplates",
+      "nameplateDotScale": "Nameplate Dot Size",
       "showTargetDots": "Show Target Dots",
       "waterRipples": "Water Ripples (Wakes)",
       "showAttackButton": "Show Attack Button",

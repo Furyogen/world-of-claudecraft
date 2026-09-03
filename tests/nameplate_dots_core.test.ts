@@ -10,8 +10,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  clampNameplateDotScale,
   NAMEPLATE_DOT_CAP,
   NAMEPLATE_DOT_GAP,
+  NAMEPLATE_DOT_SCALE_MAX,
+  NAMEPLATE_DOT_SCALE_MIN,
   NAMEPLATE_DOT_SIZE,
   type NameplateDotAura,
   nameplateDotRowHeight,
@@ -224,5 +227,48 @@ describe('nameplate dot row geometry', () => {
     // The reason the cap is what it is: a wider row stops reading as part of the
     // plate. NAMEPLATE_BASE_WIDTH is 80 (nameplate_pick_core).
     expect(nameplateDotRowWidth(NAMEPLATE_DOT_CAP)).toBeLessThan(80);
+  });
+});
+
+describe('nameplate dot scale', () => {
+  it('clamps to the slider bounds and survives a corrupt stored value', () => {
+    expect(clampNameplateDotScale(2)).toBe(2);
+    expect(clampNameplateDotScale(0.2)).toBe(NAMEPLATE_DOT_SCALE_MIN);
+    expect(clampNameplateDotScale(99)).toBe(NAMEPLATE_DOT_SCALE_MAX);
+    // Every NON-FINITE value reads as the minimum, Infinity included: a garbage
+    // stored value must fall back to the smallest row, never the largest.
+    expect(clampNameplateDotScale(Number.NaN)).toBe(NAMEPLATE_DOT_SCALE_MIN);
+    expect(clampNameplateDotScale(Number.POSITIVE_INFINITY)).toBe(NAMEPLATE_DOT_SCALE_MIN);
+    expect(clampNameplateDotScale(Number.NEGATIVE_INFINITY)).toBe(NAMEPLATE_DOT_SCALE_MIN);
+  });
+
+  it('grows the row in both axes with the scale', () => {
+    const height = nameplateDotRowHeight(3, 1);
+    const width = nameplateDotRowWidth(3, 1);
+    expect(nameplateDotRowHeight(3, 2)).toBeCloseTo(height * 2, 5);
+    expect(nameplateDotRowWidth(3, 2)).toBeCloseTo(width * 2, 5);
+  });
+
+  it('scales the height the two draw walks reserve by the SAME rule as the width', () => {
+    // drawBase subtracts this height and drawEmote mirrors it; a width that grew
+    // without the height would push the icons through the name row above.
+    for (const scale of [1, 1.5, 3]) {
+      expect(nameplateDotRowHeight(2, scale) / nameplateDotRowHeight(2, 1)).toBeCloseTo(scale, 5);
+      expect(nameplateDotRowWidth(2, scale) / nameplateDotRowWidth(2, 1)).toBeCloseTo(scale, 5);
+    }
+  });
+
+  it('costs no height at any scale when the row is empty', () => {
+    expect(nameplateDotRowHeight(0, 3)).toBe(0);
+    expect(nameplateDotRowWidth(0, 3)).toBe(0);
+  });
+
+  it('clamps an out-of-range scale at the geometry too, not only at the setting', () => {
+    expect(nameplateDotRowWidth(2, 99)).toBe(nameplateDotRowWidth(2, NAMEPLATE_DOT_SCALE_MAX));
+    expect(nameplateDotRowHeight(2, 0)).toBe(nameplateDotRowHeight(2, NAMEPLATE_DOT_SCALE_MIN));
+  });
+
+  it('defaults a fresh plan to the minimum scale', () => {
+    expect(newNameplateDotsPlan().scale).toBe(NAMEPLATE_DOT_SCALE_MIN);
   });
 });

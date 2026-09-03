@@ -1595,6 +1595,7 @@ export const en_XA: EnTranslations = {
       "showTargetSwingTimer": "[Šĥóŵ Ţáŕĝéţ Šŵíñĝ Ţíɱéŕ]",
       "showPetFrame": "[Šĥóŵ Ýóúŕ Þéţ]",
       "showNameplateDots": "[Šĥóŵ Ɱý Ðóţš óñ Ñáɱéþļáţéš]",
+      "nameplateDotScale": "[Ñáɱéþļáţé Ðóţ Šížé]",
       "showTargetDots": "[Šĥóŵ Ţáŕĝéţ Ðóţš]",
       "waterRipples": "[Ŵáţéŕ Ŕíþþļéš (Ŵáķéš)]",
       "showAttackButton": "[Šĥóŵ Áţţáçķ Ɓúţţóñ]",

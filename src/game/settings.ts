@@ -153,6 +153,13 @@ export const SETTING_RANGES = {
   // Scales floating combat text (the damage/heal numbers over units). Bigger
   // for readability on a TV; smaller to declutter a busy fight.
   fctScale: { min: 0.7, max: 1.8, def: 1 },
+  // How large the nameplate dot row draws, 100% to 300% of the plate-native
+  // size. Plate space is small and the row's countdown is a number a player
+  // reads mid-fight, so 100% is deliberately the FLOOR rather than the middle:
+  // the slider only ever makes it bigger. Defaults to 150% because the native
+  // size measured too small to read at a glance (owner feedback). The renderer
+  // sees this multiplied by the showNameplateDots toggle, so 0 means off.
+  nameplateDotScale: { min: 1, max: 3, def: 1.5 },
   // Fades the HUD panels & windows as a whole; lets players see more of the
   // world behind their frames without hiding them entirely.
   hudOpacity: { min: 0.5, max: 1, def: 1 },
@@ -647,6 +654,16 @@ export class Settings {
 
   all(): GameSettings {
     return { ...this.values };
+  }
+
+  /**
+   * The nameplate dot row's drawn SIZE for the renderer: the scale slider gated
+   * by the show toggle, so 0 means "draw no row at all". The two settings fold
+   * here rather than at each of main.ts's three apply sites, so the toggle and
+   * the slider can never disagree about whether the row is on.
+   */
+  nameplateDotRenderScale(): number {
+    return this.values.showNameplateDots ? this.values.nameplateDotScale : 0;
   }
 
   /** Validate every value, apply the whole patch, then persist the settings blob once. */

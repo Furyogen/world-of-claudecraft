@@ -8,6 +8,7 @@
 
 import type { TextSpriteStyle } from '../ui/text_sprite_cache';
 import {
+  clampNameplateDotScale,
   NAMEPLATE_DOT_GAP,
   NAMEPLATE_DOT_SIZE,
   NAMEPLATE_DOT_TIMER_STEP,
@@ -15,14 +16,25 @@ import {
   nameplateDotRowWidth,
 } from './nameplate_dots_core';
 
-/** The dot-row countdown. Small, heavy and stroked so a one-decimal number stays
- *  readable against grass, stone or a lit VFX. */
+/** The dot-row countdown at 100%. Small, heavy and stroked so a one-decimal
+ *  number stays readable against grass, stone or a lit VFX; the scale slider
+ *  grows the px size with the icons (NAMEPLATE_DOT_TIME_PX). */
 export const NAMEPLATE_DOT_TIME_STYLE: TextSpriteStyle = {
   font: '700 7px Arial, sans-serif',
   fill: '#eeeeee',
   stroke: '#000',
   lineWidth: 1.5,
 };
+/** The countdown's px size at 100%; the row scales it with everything else so a
+ *  bigger icon never keeps a 7px number pinned under it. */
+export const NAMEPLATE_DOT_TIME_PX = 7;
+
+/** The countdown's font at `scale`. The sprite cache keys on this STRING, so a
+ *  new size simply mints its own sprites instead of returning the old size's. */
+export function nameplateDotTimeFont(scale: number): string {
+  if (scale === 1) return NAMEPLATE_DOT_TIME_STYLE.font;
+  return `700 ${Math.round(NAMEPLATE_DOT_TIME_PX * scale * 10) / 10}px Arial, sans-serif`;
+}
 
 // The countdown turns amber in an aura's final seconds, the one colour change in
 // the row. It is REDUNDANT with the number itself shrinking toward zero, so a
@@ -62,12 +74,14 @@ export interface NameplateDotRowHost {
     r: number,
   ): void;
   drawImage(url: string, x: number, y: number, size: number): void;
+  /** `font` is the scaled countdown font (nameplateDotTimeFont); the host stamps
+   *  it onto its own reused style before drawing. */
   drawText(
     ctx: CanvasRenderingContext2D,
     text: string,
     x: number,
     y: number,
-    style: TextSpriteStyle,
+    font: string,
     fill: string,
   ): void;
 }
@@ -84,18 +98,25 @@ export function drawNameplateDotRow(
   host: NameplateDotRowHost,
 ): void {
   const forced = host.forcedColors();
-  let x = centerX - nameplateDotRowWidth(plan.count) / 2;
+  // ONE multiplier for the whole row: the icon edge, the gap, the countdown step
+  // and its px size all scale together, so the row keeps its proportions at 300%
+  // and the height the draw walks reserved still fits it exactly.
+  const scale = clampNameplateDotScale(plan.scale);
+  const size = NAMEPLATE_DOT_SIZE * scale;
+  const gap = NAMEPLATE_DOT_GAP * scale;
+  const radius = TILE_RADIUS * scale;
+  let x = centerX - nameplateDotRowWidth(plan.count, scale) / 2;
   for (let i = 0; i < plan.count; i++) {
     const slot = plan.slots[i];
-    host.roundedRect(ctx, x, topY, NAMEPLATE_DOT_SIZE, NAMEPLATE_DOT_SIZE, TILE_RADIUS);
+    host.roundedRect(ctx, x, topY, size, size, radius);
     ctx.fillStyle = forced ? 'Canvas' : TILE_FILL;
     ctx.fill();
 
     if (slot.iconUrl) {
       ctx.save();
-      host.roundedRect(ctx, x, topY, NAMEPLATE_DOT_SIZE, NAMEPLATE_DOT_SIZE, TILE_RADIUS);
+      host.roundedRect(ctx, x, topY, size, size, radius);
       ctx.clip();
-      host.drawImage(slot.iconUrl, x, topY, NAMEPLATE_DOT_SIZE);
+      host.drawImage(slot.iconUrl, x, topY, size);
       ctx.restore();
     }
 
@@ -122,15 +143,8 @@ export function drawNameplateDotRow(
       ctx.restore();
     }
 
-    host.roundedRect(
-      ctx,
-      x + 0.5,
-      topY + 0.5,
-      NAMEPLATE_DOT_SIZE - 1,
-      NAMEPLATE_DOT_SIZE - 1,
-      TILE_RADIUS,
-    );
-    ctx.lineWidth = 1.4;
+    host.roundedRect(ctx, x + 0.5, topY + 0.5, size - 1, size - 1, radius);
+    ctx.lineWidth = 1.4 * scale;
     ctx.strokeStyle = forced ? 'CanvasText' : (SCHOOL_TINTS[slot.school] ?? SCHOOL_DEFAULT_TINT);
     ctx.stroke();
 
@@ -138,12 +152,12 @@ export function drawNameplateDotRow(
       host.drawText(
         ctx,
         slot.timeText,
-        x + NAMEPLATE_DOT_SIZE / 2,
-        topY + NAMEPLATE_DOT_SIZE + NAMEPLATE_DOT_TIMER_STEP - 1,
-        NAMEPLATE_DOT_TIME_STYLE,
+        x + size / 2,
+        topY + size + (NAMEPLATE_DOT_TIMER_STEP - 1) * scale,
+        nameplateDotTimeFont(scale),
         slot.remaining <= TIME_EXPIRING_SEC ? TIME_EXPIRING_FILL : NAMEPLATE_DOT_TIME_STYLE.fill,
       );
     }
-    x += NAMEPLATE_DOT_SIZE + NAMEPLATE_DOT_GAP;
+    x += size + gap;
   }
 }

@@ -130,7 +130,7 @@ function harness(targets: Entity[]) {
     showDevBadges: () => true,
     showOwnNameplate: () => false,
     showPlayerNameplates: () => true,
-    showNameplateDots: () => false,
+    nameplateDotScale: () => 0,
     isHostilePlayer: () => false,
   });
   return { painter, setShowNameplates: (value: boolean) => (showNameplates = value) };

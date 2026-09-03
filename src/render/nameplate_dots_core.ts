@@ -36,6 +36,21 @@ export const NAMEPLATE_DOT_ROW_PAD = 3;
  *  refresh actually needs; above it, whole seconds. */
 export const NAMEPLATE_DOT_DECIMAL_BELOW_SEC = 10;
 
+/** The nameplateDotScale slider's bounds. 100% is the plate-native size the row
+ *  shipped at; 300% is as large as the row can grow before four icons are wider
+ *  than a boss plate and the row stops reading as part of it. Clamped HERE, not
+ *  at the setting, so a hand-edited or corrupt stored value can never paint a
+ *  row across the screen. */
+export const NAMEPLATE_DOT_SCALE_MIN = 1;
+export const NAMEPLATE_DOT_SCALE_MAX = 3;
+
+/** The stored slider value, clamped and made finite. A non-number reads as the
+ *  minimum rather than as "off": the row's visibility is the setting's job. */
+export function clampNameplateDotScale(scale: number): number {
+  if (!Number.isFinite(scale)) return NAMEPLATE_DOT_SCALE_MIN;
+  return Math.min(NAMEPLATE_DOT_SCALE_MAX, Math.max(NAMEPLATE_DOT_SCALE_MIN, scale));
+}
+
 /** The aura fields this core reads: a structural subset of the sim `Aura` that
  *  both worlds mirror. */
 export interface NameplateDotAura {
@@ -75,10 +90,14 @@ export interface NameplateDotSlot {
 export interface NameplateDotsPlan {
   slots: NameplateDotSlot[];
   count: number;
+  /** PAINTER-WRITTEN: the clamped nameplateDotScale, the one multiplier both
+   *  draw walks and the row's own drawing read, so the plate's height and its
+   *  icons can never disagree about how big the row is. */
+  scale: number;
 }
 
 export function newNameplateDotsPlan(): NameplateDotsPlan {
-  return { slots: [], count: 0 };
+  return { slots: [], count: 0, scale: NAMEPLATE_DOT_SCALE_MIN };
 }
 
 function newSlot(): NameplateDotSlot {
@@ -152,16 +171,21 @@ export function nameplateDotsInto(
   return out;
 }
 
-/** Height in plate units the dot row adds to the plate, 0 when it is empty.
- *  The painter's draw walk and drawEmote's anchor walk BOTH consume this, so the
- *  emote bubble can never drift away from the plate it belongs to. */
-export function nameplateDotRowHeight(count: number): number {
+/** Height in plate units the dot row adds to the plate at `scale`, 0 when it is
+ *  empty. The painter's draw walk and drawEmote's anchor walk BOTH consume this,
+ *  so the emote bubble can never drift away from the plate it belongs to. */
+export function nameplateDotRowHeight(count: number, scale = NAMEPLATE_DOT_SCALE_MIN): number {
   if (count <= 0) return 0;
-  return NAMEPLATE_DOT_SIZE + NAMEPLATE_DOT_TIMER_STEP + NAMEPLATE_DOT_ROW_PAD;
+  return (
+    (NAMEPLATE_DOT_SIZE + NAMEPLATE_DOT_TIMER_STEP + NAMEPLATE_DOT_ROW_PAD) *
+    clampNameplateDotScale(scale)
+  );
 }
 
-/** Total width of `count` icons plus their gaps, in plate units. */
-export function nameplateDotRowWidth(count: number): number {
+/** Total width of `count` icons plus their gaps at `scale`, in plate units. */
+export function nameplateDotRowWidth(count: number, scale = NAMEPLATE_DOT_SCALE_MIN): number {
   if (count <= 0) return 0;
-  return count * NAMEPLATE_DOT_SIZE + (count - 1) * NAMEPLATE_DOT_GAP;
+  return (
+    (count * NAMEPLATE_DOT_SIZE + (count - 1) * NAMEPLATE_DOT_GAP) * clampNameplateDotScale(scale)
+  );
 }

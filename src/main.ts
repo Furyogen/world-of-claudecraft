@@ -1556,7 +1556,7 @@ async function startGame(
     renderer.showDevBadges = settings.get('showDevBadges');
     renderer.showOwnNameplate = settings.get('showOwnNameplate');
     renderer.showPlayerNameplates = settings.get('showPlayerNameplates');
-    renderer.showNameplateDots = settings.get('showNameplateDots');
+    renderer.nameplateDotScale = settings.nameplateDotRenderScale();
     renderer.setWaterRipples(settings.get('waterRipples'));
     // Dev-only: ?targetcone=1 draws the Tab-target front cone on the ground in
     // front of the player, for tuning the targeting angle/radius (tab_target.ts).
@@ -2661,7 +2661,13 @@ async function startGame(
       return;
     }
     if (key === 'showNameplateDots') {
-      renderer.showNameplateDots = settings.set('showNameplateDots', !!value);
+      settings.set('showNameplateDots', !!value);
+      renderer.nameplateDotScale = settings.nameplateDotRenderScale();
+      return;
+    }
+    if (key === 'nameplateDotScale') {
+      settings.set('nameplateDotScale', Number(value));
+      renderer.nameplateDotScale = settings.nameplateDotRenderScale();
       return;
     }
     if (key === 'invertLookY') {
@@ -2895,7 +2901,7 @@ async function startGame(
     next.showDevBadges = settings.get('showDevBadges');
     next.showOwnNameplate = settings.get('showOwnNameplate');
     next.showPlayerNameplates = settings.get('showPlayerNameplates');
-    next.showNameplateDots = settings.get('showNameplateDots');
+    next.nameplateDotScale = settings.nameplateDotRenderScale();
     next.reduceMotionSetting = settings.get('reduceMotion');
     next.setBrightness(settings.get('brightness'));
     next.setCameraFov(settings.get('cameraFov'));

@@ -1595,6 +1595,7 @@ export const ru_RU: EnTranslations = {
       "showTargetSwingTimer": "Показывать таймер замаха цели",
       "showPetFrame": "Показывать вашего питомца",
       "showNameplateDots": "Показывать мои эффекты на полосах имён",
+      "nameplateDotScale": "Размер эффектов на полосах имён",
       "showTargetDots": "Показывать эффекты на целях",
       "waterRipples": "Рябь на воде (кильватер)",
       "showAttackButton": "Показывать кнопку атаки",

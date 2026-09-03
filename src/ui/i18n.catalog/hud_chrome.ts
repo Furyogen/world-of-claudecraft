@@ -1983,6 +1983,10 @@ export const hudChromeStrings = {
     // that tracks them across every enemy at once. Wordy (M16): the five
     // non-Latin fills land in this same change.
     showNameplateDots: 'Show My Dots on Nameplates',
+    // The slider under that toggle: how large the nameplate dot row draws, 100%
+    // (plate-native) to 300%. Wordy (M16): the five non-Latin fills land in this
+    // same change.
+    nameplateDotScale: 'Nameplate Dot Size',
     showTargetDots: 'Show Target Dots',
     // Graphics-panel opt-in (default off) for the interactive wake/ripple
     // simulation on water surfaces; bubbles and splash particles do not key

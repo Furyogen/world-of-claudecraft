@@ -1595,6 +1595,7 @@ export const ko_KR: EnTranslations = {
       "showTargetSwingTimer": "대상의 공격 타이머 표시",
       "showPetFrame": "내 펫 표시",
       "showNameplateDots": "이름표에 내 디버프 표시",
+      "nameplateDotScale": "이름표 디버프 아이콘 크기",
       "showTargetDots": "대상 디버프 목록 표시",
       "waterRipples": "수면 물결 (물살)",
       "showAttackButton": "공격 버튼 표시",

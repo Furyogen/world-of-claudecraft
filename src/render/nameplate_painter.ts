@@ -42,7 +42,11 @@ import {
 } from './nameplate_canvas';
 import { COMBO_PIP_MAX } from './nameplate_combo';
 import { declutterNameplatesInPlace, type NameplateAnchor } from './nameplate_declutter';
-import { type NameplateDotAura, nameplateDotsInto } from './nameplate_dots_core';
+import {
+  clampNameplateDotScale,
+  type NameplateDotAura,
+  nameplateDotsInto,
+} from './nameplate_dots_core';
 import { nameplateHeraldryLift } from './nameplate_heraldry_core';
 import { type NameplatePickCandidate, pickNameplateHealthBarAt } from './nameplate_pick_core';
 import {
@@ -128,9 +132,10 @@ export interface NameplatePainterDeps {
   showDevBadges: () => boolean;
   showOwnNameplate: () => boolean;
   showPlayerNameplates: () => boolean;
-  /** The showNameplateDots setting: draw the local player's OWN debuffs as an
-   *  icon row on an enemy plate. A player preference, never a graphics tier. */
-  showNameplateDots: () => boolean;
+  /** The nameplate dot row's SIZE, with 0 meaning off: the showNameplateDots
+   *  toggle and the nameplateDotScale slider fold into this one number at the
+   *  settings site. A player preference, never a graphics tier. */
+  nameplateDotScale: () => number;
   isHostilePlayer: (e: Entity) => boolean;
 }
 
@@ -144,7 +149,7 @@ export class NameplatePainter {
   private readonly showDevBadges: () => boolean;
   private readonly showOwnNameplate: () => boolean;
   private readonly showPlayerNameplates: () => boolean;
-  private readonly showNameplateDots: () => boolean;
+  private readonly nameplateDotScale: () => number;
   private readonly isHostilePlayer: (e: Entity) => boolean;
   private readonly surface: NameplateCanvasSurface;
   private readonly states = new Map<number, NameplateCanvasState>();
@@ -188,7 +193,7 @@ export class NameplatePainter {
     this.showDevBadges = deps.showDevBadges;
     this.showOwnNameplate = deps.showOwnNameplate;
     this.showPlayerNameplates = deps.showPlayerNameplates;
-    this.showNameplateDots = deps.showNameplateDots;
+    this.nameplateDotScale = deps.nameplateDotScale;
     this.isHostilePlayer = deps.isHostilePlayer;
     this.surface = new NameplateCanvasSurface(deps.layer);
   }
@@ -337,10 +342,12 @@ export class NameplatePainter {
    * Blackrot, with no ability or class list anywhere on the path.
    */
   private resolveDots(state: NameplateCanvasState, entity: Entity, player: Entity): void {
-    if (!this.showNameplateDots() || entity.kind !== 'mob' || entity.dead) {
+    const scale = this.nameplateDotScale();
+    if (scale <= 0 || entity.kind !== 'mob' || entity.dead) {
       state.dots.count = 0;
       return;
     }
+    state.dots.scale = clampNameplateDotScale(scale);
     const dots = nameplateDotsInto(
       state.dots,
       entity.auras,

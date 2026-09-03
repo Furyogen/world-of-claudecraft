@@ -1595,6 +1595,7 @@ export const ja_JP: EnTranslations = {
       "showTargetSwingTimer": "ターゲットの攻撃タイマーを表示",
       "showPetFrame": "自分のペットを表示",
       "showNameplateDots": "ネームプレートに自分のデバフを表示",
+      "nameplateDotScale": "ネームプレートのデバフ表示サイズ",
       "showTargetDots": "ターゲットデバフ一覧を表示",
       "waterRipples": "水面の波紋（航跡）",
       "showAttackButton": "攻撃ボタンを表示",

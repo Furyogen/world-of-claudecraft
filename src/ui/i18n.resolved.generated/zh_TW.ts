@@ -1595,6 +1595,7 @@ export const zh_TW: EnTranslations = {
       "showTargetSwingTimer": "顯示目標的揮砍計時器",
       "showPetFrame": "顯示你的寵物",
       "showNameplateDots": "在名條上顯示我的減益",
+      "nameplateDotScale": "名條減益圖示大小",
       "showTargetDots": "顯示目標減益追蹤",
       "waterRipples": "水面漣漪（尾波）",
       "showAttackButton": "顯示攻擊按鈕",

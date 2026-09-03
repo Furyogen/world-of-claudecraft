@@ -10468,6 +10468,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showPetFrame': '显示你的宠物',
   'hudChrome.options.stickyTarget': '点击地面时保留目标',
   'hudChrome.options.showNameplateDots': '在姓名板上显示我的减益',
+  'hudChrome.options.nameplateDotScale': '姓名板减益图标大小',
   'hudChrome.options.showTargetDots': '显示目标减益追踪',
   'hudChrome.targetDots.title': '目标减益',
   'hudChrome.targetDots.overflow': '还有 {count} 个未显示',
