@@ -3166,8 +3166,9 @@
     position: relative;
     display: block;
     padding: 0 5px;
-    line-height: 18px;
-    font: 600 11px var(--body-font);
+    /* Line height rides INSIDE the font shorthand: declared separately above it
+       the shorthand resets it to normal, which un-centred the label in its bar. */
+    font: 600 11px / 18px var(--body-font);
     color: #fff;
     text-shadow: 1px 1px 1px #000;
     white-space: nowrap;

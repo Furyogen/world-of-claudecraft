@@ -102,7 +102,6 @@ import { TIER_SKILL_STEP, tierForSkill } from '../sim/professions/wheel';
 import { questObjectivesForMob } from '../sim/quest_targets';
 import type { ResolvedAbility } from '../sim/sim';
 import {
-  type AbilityDef,
   type AuraKind,
   type CalendarResultCode,
   CONSUME_DURATION,
@@ -366,10 +365,6 @@ import {
   shouldShowHealLanding,
 } from './heal_landing_feedback_core';
 import { honorFloatText } from './honor_float_view';
-import {
-  type AbilityRequirementResolve,
-  abilityRequirementKeys,
-} from './hud/action_bar/ability_requirement_keys';
 import {
   type ActionBarBindState,
   actionBarBindEnter,
