@@ -126,8 +126,14 @@ describe('target dots against the live sim', () => {
     castUntilApplied(sim, 'corruption', mob.id);
     const refreshed = tickView(view, sim);
     expect(refreshed.count).toBe(1);
+    // Not merely "went up": a refresh restores the FULL duration, and the test
+    // already knows what that was, so assert the row returns to it rather than
+    // to any larger number. A partial restore would slip past a bare increase.
     expect(refreshed.rows[0].remaining).toBeGreaterThan(drainedRemaining);
+    expect(refreshed.rows[0].remaining).toBeGreaterThan(fullDuration - 1.5);
+    expect(refreshed.rows[0].remaining).toBeLessThanOrEqual(fullDuration + 0.001);
     expect(refreshed.rows[0].fraction).toBeGreaterThan(drainedFraction);
+    expect(refreshed.rows[0].fraction).toBeGreaterThan(0.9);
   });
 
   it('keeps every existing row live when a second dot is applied', () => {

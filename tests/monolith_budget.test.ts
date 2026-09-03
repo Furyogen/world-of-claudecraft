@@ -278,7 +278,7 @@ const MONOLITHS: MonolithRow[] = [
     // abilityRequirementLines (pure i18n mappers with no Hud state) moved out to
     // ability_tooltip_lines.ts, which more than paid for the wiring. Exact
     // count, zero slack.
-    ceiling: 18874,
+    ceiling: 18879,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {

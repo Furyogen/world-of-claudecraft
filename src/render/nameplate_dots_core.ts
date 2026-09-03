@@ -17,10 +17,12 @@
 import { isDebuffAura } from '../sim/aura_classify';
 import type { AuraKind } from '../sim/types';
 
-/** Icons the row will draw at most. Four 13px icons plus their gaps are 58px
- *  wide against an 80px base plate: still narrower than the health bar, so the
- *  row reads as part of the plate. A fifth overflows a normal plate, and the
- *  target frame strip remains the complete list. */
+/** Icons the row will draw at most. At 100% four 13px icons plus their gaps are
+ *  58 units wide against an 80-unit base plate, so the row still reads as part
+ *  of the plate; a fifth overflows it. The SIZE SLIDER deliberately breaks that
+ *  containment (58 units becomes 174 at 300%), which is the player's choice to
+ *  make: past 100% the row is wider than the plate and is meant to be. The
+ *  target frame strip remains the complete list either way. */
 export const NAMEPLATE_DOT_CAP = 4;
 
 /** Icon edge and inter-icon gap, in plate units (the canvas surface's own
@@ -84,6 +86,10 @@ export interface NameplateDotSlot {
   iconUrl: string;
   /** PAINTER-WRITTEN: the localized countdown, '' while unresolved. */
   timeText: string;
+  /** PAINTER-WRITTEN: the quantized remaining value `timeText` was formatted
+   *  from, so the painter can skip re-formatting a number that has not moved at
+   *  the precision it draws. NaN while unresolved. */
+  timeValue: number;
 }
 
 /** Slots plus the count actually filled. Owned and reused by the painter. */
@@ -109,6 +115,7 @@ function newSlot(): NameplateDotSlot {
     decimals: 0,
     iconUrl: '',
     timeText: '',
+    timeValue: Number.NaN,
   };
 }
 
@@ -155,10 +162,15 @@ export function nameplateDotsInto(
     if (best === null) break;
     const slot = out.slots[written] ?? newSlot();
     out.slots[written] = slot;
-    // Recycling a slot onto a different aura invalidates the painter-resolved
-    // artwork, so the painter re-resolves instead of drawing the previous aura's
-    // icon (the pooled-record staleness trap auras_painter documents).
-    if (slot.iconKey !== best.id) slot.iconUrl = '';
+    // Recycling a slot onto a different aura invalidates BOTH painter-resolved
+    // fields, so the painter re-resolves instead of drawing the previous aura's
+    // icon or its countdown (the pooled-record staleness trap auras_painter
+    // documents).
+    if (slot.iconKey !== best.id) {
+      slot.iconUrl = '';
+      slot.timeText = '';
+      slot.timeValue = Number.NaN;
+    }
     slot.iconKey = best.id;
     slot.school = best.school ?? '';
     slot.fraction = remainingFraction(best);

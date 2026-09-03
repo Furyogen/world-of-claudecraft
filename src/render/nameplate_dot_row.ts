@@ -46,7 +46,7 @@ const TIME_EXPIRING_SEC = 4;
 // Magic-school tints for the icon border, byte-identical to the --color-debuff-*
 // tokens the DOM aura strips use (src/styles/tokens.css), so one school reads the
 // same on a nameplate, on the target frame and in the Target dots frame.
-const SCHOOL_TINTS: Readonly<Record<string, string>> = {
+export const NAMEPLATE_DOT_SCHOOL_TINTS: Readonly<Record<string, string>> = {
   fire: '#e8722a',
   frost: '#4aa3df',
   arcane: '#3f8cff',
@@ -55,7 +55,7 @@ const SCHOOL_TINTS: Readonly<Record<string, string>> = {
   holy: '#d8b56b',
   physical: '#c0392b',
 };
-const SCHOOL_DEFAULT_TINT = '#c0392b';
+export const NAMEPLATE_DOT_SCHOOL_DEFAULT_TINT = '#c0392b';
 const TILE_FILL = '#0e1118';
 const SWIPE_FILL = 'rgba(4, 6, 10, 0.62)';
 const TILE_RADIUS = 2;
@@ -121,22 +121,18 @@ export function drawNameplateDotRow(
     }
 
     // Cooldown swipe: the SPENT part of the duration darkens clockwise from
-    // twelve, so how much is left reads without parsing the number.
+    // twelve, so how much is left reads without parsing the number. Every term
+    // here is the SCALED one: a raw-size clip or radius darkens only the
+    // top-left of a grown icon, which is a wrong cue at every scale above 100%.
     if (slot.fraction < 1) {
       ctx.save();
-      host.roundedRect(ctx, x, topY, NAMEPLATE_DOT_SIZE, NAMEPLATE_DOT_SIZE, TILE_RADIUS);
+      host.roundedRect(ctx, x, topY, size, size, radius);
       ctx.clip();
-      const cx = x + NAMEPLATE_DOT_SIZE / 2;
-      const cy = topY + NAMEPLATE_DOT_SIZE / 2;
+      const cx = x + size / 2;
+      const cy = topY + size / 2;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
-      ctx.arc(
-        cx,
-        cy,
-        NAMEPLATE_DOT_SIZE,
-        -Math.PI / 2 + Math.PI * 2 * slot.fraction,
-        Math.PI * 1.5,
-      );
+      ctx.arc(cx, cy, size, -Math.PI / 2 + Math.PI * 2 * slot.fraction, Math.PI * 1.5);
       ctx.closePath();
       ctx.fillStyle = forced ? 'Canvas' : SWIPE_FILL;
       ctx.fill();
@@ -145,7 +141,9 @@ export function drawNameplateDotRow(
 
     host.roundedRect(ctx, x + 0.5, topY + 0.5, size - 1, size - 1, radius);
     ctx.lineWidth = 1.4 * scale;
-    ctx.strokeStyle = forced ? 'CanvasText' : (SCHOOL_TINTS[slot.school] ?? SCHOOL_DEFAULT_TINT);
+    ctx.strokeStyle = forced
+      ? 'CanvasText'
+      : (NAMEPLATE_DOT_SCHOOL_TINTS[slot.school] ?? NAMEPLATE_DOT_SCHOOL_DEFAULT_TINT);
     ctx.stroke();
 
     if (slot.timeText) {

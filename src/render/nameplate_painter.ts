@@ -45,6 +45,7 @@ import { declutterNameplatesInPlace, type NameplateAnchor } from './nameplate_de
 import {
   clampNameplateDotScale,
   type NameplateDotAura,
+  nameplateDotRowHeight,
   nameplateDotsInto,
 } from './nameplate_dots_core';
 import { nameplateHeraldryLift } from './nameplate_heraldry_core';
@@ -58,6 +59,14 @@ import { FRIENDLY, isFriendlyPet, mobNameColor } from './reaction';
 import type { EntityView } from './renderer';
 
 const NAMEPLATE_LEVEL_NUMBER_OPTIONS = { maximumFractionDigits: 0 } as const;
+// The dot countdown's two shapes, hoisted for the same reason the level options
+// above are: this runs per dot per plate per FRAME, and numberFormatFor keys its
+// cache on JSON.stringify(options), so a fresh literal here is an allocation
+// plus a stringify on the hot path. Indexed by the core's decimals field.
+const NAMEPLATE_DOT_NUMBER_OPTIONS = [
+  { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+  { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+] as const;
 const HOLDER_BADGE_URLS = new Map<number, string>();
 const DEV_BADGE_URLS = new Map<number, string>();
 
@@ -271,7 +280,15 @@ export class NameplatePainter {
       }
 
       const anchor = this.anchorScratch[this.anchorCount];
-      const extraLift = nameplateHeraldryLift(state.border);
+      // Every pixel this plate paints ABOVE its name row, which is what decides
+      // the declutter envelope: the deed heraldry's seal and ribbon, plus the
+      // dot row, which sits under the name row and therefore pushes the name row
+      // and everything above it up by its own height. drawEmote already mirrors
+      // that step; without this the anchor did not, so two dotted plates in a
+      // crowd overlapped without being nudged apart.
+      const extraLift =
+        nameplateHeraldryLift(state.border) +
+        nameplateDotRowHeight(state.dots.count, state.dots.scale);
       if (anchor) {
         anchor.id = id;
         anchor.sx = screenX;
@@ -362,10 +379,15 @@ export class NameplatePainter {
         const source = entity.auras.find((aura) => aura.id === slot.iconKey);
         slot.iconUrl = nameplateDotIconUrl(slot.iconKey, source?.kind ?? '');
       }
-      slot.timeText = formatNumber(slot.remaining, {
-        minimumFractionDigits: slot.decimals,
-        maximumFractionDigits: slot.decimals,
-      });
+      // Re-format only when the number actually moves at the drawn precision:
+      // above ten seconds that is once a second rather than once a frame, and
+      // the cached text is what the draw path reads either way.
+      const quantized =
+        slot.decimals === 1 ? Math.round(slot.remaining * 10) / 10 : Math.ceil(slot.remaining);
+      if (slot.timeText === '' || quantized !== slot.timeValue) {
+        slot.timeValue = quantized;
+        slot.timeText = formatNumber(quantized, NAMEPLATE_DOT_NUMBER_OPTIONS[slot.decimals]);
+      }
     }
   }
 

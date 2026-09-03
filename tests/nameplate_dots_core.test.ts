@@ -7,7 +7,15 @@
 // the artwork invalidation on a recycled slot, and the height contract that
 // drawBase and drawEmote both consume.
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+
+import {
+  NAMEPLATE_DOT_SCHOOL_DEFAULT_TINT,
+  NAMEPLATE_DOT_SCHOOL_TINTS,
+} from '../src/render/nameplate_dot_row';
 
 import {
   clampNameplateDotScale,
@@ -270,5 +278,49 @@ describe('nameplate dot scale', () => {
 
   it('defaults a fresh plan to the minimum scale', () => {
     expect(newNameplateDotsPlan().scale).toBe(NAMEPLATE_DOT_SCALE_MIN);
+  });
+});
+
+describe('nameplate dot row artwork', () => {
+  // The plate row is canvas, so it cannot read a CSS custom property: it
+  // re-declares the school hexes as literals. That is a real duplication, and
+  // this is what keeps it honest. A tokens.css recolour without the matching
+  // edit here would otherwise desync the plate row from the DOM aura strips and
+  // the Target dots frame, all of which are meant to read as one school.
+  const TOKENS_CSS = readFileSync(
+    join(fileURLToPath(new URL('..', import.meta.url)), 'src/styles/tokens.css'),
+    'utf8',
+  );
+
+  function tokenHex(name: string): string {
+    const match = TOKENS_CSS.match(
+      new RegExp(`--color-debuff-${name}:[ ]*(#[0-9a-fA-F]{3,8})[ ]*;`),
+    );
+    if (!match) throw new Error(`--color-debuff-${name} is not declared in tokens.css`);
+    return match[1].toLowerCase();
+  }
+
+  it('tints each school with the same hex the CSS tokens ship', () => {
+    for (const school of ['fire', 'frost', 'arcane', 'shadow', 'nature', 'holy'] as const) {
+      expect(NAMEPLATE_DOT_SCHOOL_TINTS[school]).toBe(tokenHex(school));
+    }
+  });
+
+  it('falls back to the base debuff token for physical and for an unknown school', () => {
+    const base = (TOKENS_CSS.match(/--color-debuff:\s*(#[0-9a-fA-F]{3,8})\s*;/) ?? [])[1];
+    expect(base).toBeDefined();
+    expect(NAMEPLATE_DOT_SCHOOL_TINTS.physical).toBe((base as string).toLowerCase());
+    expect(NAMEPLATE_DOT_SCHOOL_DEFAULT_TINT).toBe((base as string).toLowerCase());
+  });
+
+  it('covers every school the DOM strips tint, and no more', () => {
+    // Drift in either direction is a desync: a school the strips tint and the
+    // plate does not falls back to red, and one only the plate knows is dead.
+    const cssSchools = [...TOKENS_CSS.matchAll(/--color-debuff-([a-z]+):/g)]
+      .map((m) => m[1])
+      .sort();
+    expect(Object.keys(NAMEPLATE_DOT_SCHOOL_TINTS).sort()).toEqual(
+      [...cssSchools, 'physical'].sort(),
+    );
   });
 });

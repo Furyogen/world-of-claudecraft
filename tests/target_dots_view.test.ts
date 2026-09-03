@@ -7,9 +7,11 @@
 // overflow count, duplicate keying, and the off switch.
 
 import { describe, expect, it } from 'vitest';
+import { BOOL_SETTINGS, SETTING_RANGES, Settings } from '../src/game/settings';
 import type { AuraKind } from '../src/sim/types';
 import {
   createTargetDotsView,
+  TARGET_DOTS_DECIMAL_BELOW_SEC,
   TARGET_DOTS_ROW_CAP,
   type TargetDotsAuraInput,
   type TargetDotsEntityInput,
@@ -272,5 +274,52 @@ describe('createTargetDotsView', () => {
     const second = view.tick({ entities, targetId: null, enabled: true });
     expect(second.rows[0]).toBe(row);
     expect(second).toBe(first);
+  });
+});
+
+describe('target dots settings surface', () => {
+  it('pins the decimal threshold to ten seconds, on both sides of it', () => {
+    // The constant is exported but the fixtures above straddle it widely, so any
+    // threshold between them would pass. These two bracket it exactly.
+    const view = makeView();
+    const state = view.tick({
+      entities: [
+        mob(1, 'Dummy', [
+          aura({ id: 'a_under', remaining: TARGET_DOTS_DECIMAL_BELOW_SEC - 0.01 }),
+          aura({ id: 'b_at', remaining: TARGET_DOTS_DECIMAL_BELOW_SEC }),
+        ]),
+      ],
+      targetId: null,
+      enabled: true,
+    });
+    expect(TARGET_DOTS_DECIMAL_BELOW_SEC).toBe(10);
+    expect(state.rows[0].decimals).toBe(1);
+    expect(state.rows[1].decimals).toBe(0);
+  });
+
+  it('ships both surfaces on, at the size the slider defaults to', () => {
+    expect(SETTING_RANGES.nameplateDotScale).toEqual({ min: 1, max: 3, def: 1.5 });
+    expect(BOOL_SETTINGS.showTargetDots.def).toBe(true);
+    expect(BOOL_SETTINGS.showNameplateDots.def).toBe(true);
+  });
+
+  it('folds the toggle and the slider into one renderer number, 0 meaning off', () => {
+    const settings = new Settings();
+    expect(settings.nameplateDotRenderScale()).toBe(1.5);
+    settings.set('nameplateDotScale', 3);
+    expect(settings.nameplateDotRenderScale()).toBe(3);
+    // The toggle wins over any slider value: off is off.
+    settings.set('showNameplateDots', false);
+    expect(settings.nameplateDotRenderScale()).toBe(0);
+    settings.set('showNameplateDots', true);
+    expect(settings.nameplateDotRenderScale()).toBe(3);
+  });
+
+  it('clamps a stored scale outside the slider range', () => {
+    const settings = new Settings();
+    settings.set('nameplateDotScale', 99);
+    expect(settings.nameplateDotRenderScale()).toBe(3);
+    settings.set('nameplateDotScale', 0.1);
+    expect(settings.nameplateDotRenderScale()).toBe(1);
   });
 });

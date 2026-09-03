@@ -15,7 +15,13 @@ export interface NameplateAnchor {
   id: number;
   sx: number;
   sy: number;
-  /** Extra pixels painted above the name row. Zero for borderless plates. */
+  /**
+   * Extra pixels this plate paints ABOVE its name row, and therefore how much
+   * further its envelope reaches than a bare label's. Two sources add into it:
+   * the deed heraldry's seal and ribbon, and the player's own dot row (which
+   * draws under the name row and so lifts everything above it). Zero for a
+   * borderless plate with no dots.
+   */
   extraLift?: number;
 }
 
@@ -152,6 +158,9 @@ function lastAnchorInCell(slot: number): number {
   return spatialOrder[cellSortedEnd[slot] - 1];
 }
 
+/** Does this plate reach past the bare-label envelope? True for deed heraldry
+ *  AND for a plate carrying the player's own dot row; the wider envelope below
+ *  is the same one either way. */
 function hasHeraldry(anchor: NameplateAnchor): boolean {
   return (anchor.extraLift ?? 0) > 0;
 }

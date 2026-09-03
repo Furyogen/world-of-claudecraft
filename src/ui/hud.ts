@@ -6936,6 +6936,11 @@ export class Hud {
 
   private refreshLocalizedDynamicUi(): void {
     this.doomMeter.relocalize();
+    // The Target dots frame's accessible name is written once in its painter's
+    // constructor, so it is the one string in that frame a runtime language
+    // switch would otherwise leave in the previous locale (the row text itself
+    // re-resolves every frame through t()).
+    this.targetDotsPainter.relocalize();
     // The chat box's geometry chrome (move/resize labels, the arrange-mode
     // name chip) is written once at init, so the switch must rewrite it.
     this.chatGeometry.relocalize();

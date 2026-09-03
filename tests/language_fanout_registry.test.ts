@@ -117,6 +117,9 @@ const FANOUT_ARMS: readonly string[] = [
   'this.interfaceUnlock.relocalize|',
   'this.targetAurasWindow.relocalize|',
   'this.doomMeter.relocalize|',
+  // The Target dots frame: only its aria-label is constructor-written, so this
+  // arm is what keeps that one string from sticking in the previous locale.
+  'this.targetDotsPainter.relocalize|',
   // The chat box's geometry chrome (the tab strip's move label, the resize
   // grip's name, the arrange-mode name chip, the mobile handle) is written
   // once at init by ChatGeometryController; its relocalize() rewrites them.
