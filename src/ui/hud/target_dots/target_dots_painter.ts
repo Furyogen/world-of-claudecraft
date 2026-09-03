@@ -54,6 +54,8 @@ interface RowEls {
   stacks: HTMLElement;
   /** Last painted icon key, so the background is resolved only on a change. */
   iconKey: string;
+  /** The row key this node currently carries, '' while parked. */
+  key: string;
 }
 
 export class TargetDotsPainter {
@@ -82,6 +84,7 @@ export class TargetDotsPainter {
         time: row.querySelector('.td-time') as HTMLElement,
         stacks: row.querySelector('.td-stacks') as HTMLElement,
         iconKey: '',
+        key: '',
       });
     }
     this.overflowEl = this.root.querySelector('.td-overflow') as HTMLElement;
@@ -106,10 +109,23 @@ export class TargetDotsPainter {
     for (let i = 0; i < this.rows.length; i++) {
       const els = this.rows[i];
       if (i >= state.count) {
+        // Park the node AND clear the key it was carrying, so the next row to
+        // take this slot is treated as a recycle rather than as the same row.
+        els.key = '';
         w.setDisplay(els.row, HIDDEN);
         continue;
       }
       const model = state.rows[i];
+      // A node that is now showing a DIFFERENT row is recycled: drop every
+      // per-row cache it holds before repainting it. Keying the caches to the
+      // row rather than to the slot index is what keeps a refreshed or newly
+      // applied dot from inheriting the previous occupant's artwork, which is
+      // the pooled-node staleness trap auras_painter.ts documents.
+      const recycled = els.key !== model.key;
+      if (recycled) {
+        els.key = model.key;
+        els.iconKey = '';
+      }
       w.setDisplay(els.row, SHOWN_FLEX);
       if (els.iconKey !== model.iconKey) {
         els.iconKey = model.iconKey;
