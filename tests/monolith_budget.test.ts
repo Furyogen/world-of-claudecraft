@@ -273,7 +273,12 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned to the exact merged count of the OSSBrain v0.41.0 base
     // merge: both parents had already ratcheted for their own work, so
     // the composite is the honest size. Exact count, zero slack.
-    ceiling: 18905,
+    // LOWERED for the Target dots frame: the tracker's own view + painter live
+    // in src/ui/hud/target_dots/, and describeAbilitySummary +
+    // abilityRequirementLines (pure i18n mappers with no Hud state) moved out to
+    // ability_tooltip_lines.ts, which more than paid for the wiring. Exact
+    // count, zero slack.
+    ceiling: 18879,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {
@@ -767,7 +772,10 @@ const MONOLITHS: MonolithRow[] = [
     // (+70, one line under the old pin on its own tree) and this branch's
     // pledge nameplate line (+13) compound in the merged file. Exact count,
     // zero slack.
-    ceiling: 864,
+    // LOWERED for the nameplate dot row: the row's drawing moved to
+    // nameplate_dot_row.ts and the image cache to nameplate_image_cache.ts,
+    // which more than paid for the new draw step. Exact count, zero slack.
+    ceiling: 846,
     seam: 'the pure src/render/nameplate_heraldry_core.ts geometry module',
   },
   {

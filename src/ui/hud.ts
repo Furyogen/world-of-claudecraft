@@ -153,6 +153,7 @@ import {
   formatAbilityNumber,
 } from './ability_description';
 import { abilityDisplayName, abilityDisplayNameFromSource } from './ability_display_name';
+import { abilityRequirementLines, describeAbilitySummary } from './ability_tooltip_lines';
 import { ArenaWindow } from './arena_window';
 import { auraDisplayNameForHud, auraDisplayNameFromSource } from './aura_display_name';
 import {
@@ -518,6 +519,7 @@ import { RiftMapPainter } from './hud/rift';
 import { RiftFloorTrackerController } from './hud/rift/rift_floor_tracker_controller';
 import { StanceBarController } from './hud/stance';
 import { closeOpenTouchMenu } from './hud/tap_menu';
+import { createTargetDotsView, type TargetDotsInput, TargetDotsPainter } from './hud/target_dots';
 import { dismissBuyQuantityPrompts } from './hud/vendor/buy_quantity_prompt_window';
 import { buildCrucibleVendorView } from './hud/vendor/crucible_vendor_view';
 import { renderCrucibleVendorWindow } from './hud/vendor/crucible_vendor_window';
@@ -1148,10 +1150,6 @@ const RAID_MARKER_LABEL_KEYS = [
   'hud.markers.names.cross',
   'hud.markers.names.skull',
 ] as const satisfies readonly TranslationKey[];
-const FORM_LABEL_KEYS: Record<'bear' | 'cat', TranslationKey> = {
-  bear: 'abilityUi.forms.bear',
-  cat: 'abilityUi.forms.cat',
-};
 const PET_MODE_LABEL_KEYS: Record<PetMode, TranslationKey> = {
   passive: 'hud.pet.passive',
   defensive: 'hud.pet.defensive',
@@ -1541,6 +1539,7 @@ export class Hud {
   private targetResEl = $('#tf-res');
   private targetResTextEl = $('#tf-res-text');
   private targetDebuffsEl = $('#tf-debuffs');
+  private targetDotsEl = $('#target-dots');
   // Target of Target (showTargetOfTarget option): element refs for the #totarget-frame
   // mini-frame, resolved ONCE like the target refs above (never per-frame queried). The
   // frame is a THIRD instance of the unit_frame family (totFramePainter below).
@@ -4042,6 +4041,13 @@ export class Hud {
       const cls = this.sim.cfg.playerClass;
       return cls === 'warrior' || cls === 'paladin';
     }
+    // The Target dots tracker answers "possible", not "visible", like the unit
+    // frames: every class applies debuffs, so unlocking always shows its
+    // placeholder even though the frame itself is hidden whenever no dots are
+    // out. Its own setting is what genuinely removes it.
+    if (id === 'targetDots') {
+      return (this.optionsHooks?.settings.get('showTargetDots') ?? true) === true;
+    }
     return true;
   }
 
@@ -5025,6 +5031,38 @@ export class Hud {
     this.aurasPainterDeps,
     document,
   );
+  // Target dots (#target-dots): the multi-target tracker for every debuff the
+  // LOCAL player has out. The selection core is class-agnostic (ownership plus
+  // isDebuffAura), so it needs no class knowledge here; the Hud supplies only the
+  // ownership predicate it already shares with the target strip, and the
+  // localization callbacks the core must not make itself.
+  private readonly targetDotsView = createTargetDotsView({
+    isOwn: (a) => a.sourceId !== undefined && a.sourceId !== 0 && a.sourceId === this.sim.playerId,
+    auraName: (a) =>
+      auraDisplayNameForHud(a.name, ABILITIES[a.id] ? abilityDisplayName(ABILITIES[a.id]) : null),
+    targetName: (e) => entityDisplayName(e as unknown as Entity),
+    iconKey: (a) => resolveHudAuraIconId(a),
+  });
+  private readonly targetDotsPainter = new TargetDotsPainter({
+    root: () => this.targetDotsEl,
+    writers: this.writerFacet,
+    iconBackground: resolveHudAuraIconUrl,
+    rowLabel: (aura, target) => t('hudChrome.targetDots.row', { aura, target }),
+    frameLabel: () => t('hudChrome.targetDots.title'),
+    overflowLabel: (count) =>
+      t('hudChrome.targetDots.overflow', {
+        count: formatNumber(count, { maximumFractionDigits: 0 }),
+      }),
+    secondsSuffix: () => t('hudChrome.unitFrame.durationUnitSeconds'),
+  });
+  // REUSED input container for the tracker's per-frame tick (the allocation-light
+  // contract the durationUnits() dep already follows): the fields are rewritten
+  // each frame, the object never is.
+  private readonly targetDotsInput: TargetDotsInput = {
+    entities: [],
+    targetId: null,
+    enabled: true,
+  };
   // Overworld minimap canvas painter (the delve branch stays with delvePainter). Owns
   // the marker core; redraws from the fastHud (~10Hz) band. classCss colors the party
   // discs/arrows; zoneDisplayName localizes the '#zone-label' it writes via setText.
@@ -9087,6 +9125,18 @@ export class Hud {
     // paint call for why).
     this.buffBarPainter.paint(this.buffBarView.tick(p));
     this.debuffBarPainter.paint(this.debuffBarView.tick(p));
+
+    // Target dots: the multi-target tracker for the debuffs the LOCAL player has
+    // out, across every enemy in interest range. Same band as the aura strips
+    // (its countdowns are what a refresh is timed against) and, for the same
+    // reason as the strips above, NEVER tier-gated: the showTargetDots setting is
+    // the only switch. The core returns an empty state when it is off, which the
+    // painter renders as a hidden frame.
+    this.targetDotsInput.entities = sim.entities.values();
+    this.targetDotsInput.targetId = p.targetId;
+    this.targetDotsInput.enabled =
+      (this.optionsHooks?.settings.get('showTargetDots') ?? true) === true;
+    this.targetDotsPainter.update(this.targetDotsView.tick(this.targetDotsInput));
 
     // target frame: the SECOND instance of the unit_frame family. The shared
     // frame (display/name/level/hp/absorb/portrait gate) goes through the family
@@ -18810,87 +18860,11 @@ export class Hud {
   }
 }
 
-function describeAbilitySummary(
-  known: ResolvedAbility,
-  resourceType: ResourceType | null,
-  spellHaste = 0,
-): string {
-  const parts: string[] = [];
-  if (known.cost > 0) {
-    parts.push(
-      t('abilityUi.tooltip.cost', {
-        cost: formatAbilityNumber(known.cost),
-        resource: resourceDisplayName(resourceType),
-      }),
-    );
-  }
-  if ((known.def.ruinCost ?? 0) > 0) {
-    parts.push(
-      t('abilityUi.tooltip.ruinCost', {
-        cost: formatAbilityNumber(known.def.ruinCost ?? 0),
-      }),
-    );
-  }
-  parts.push(abilityCastLine(known, spellHaste));
-  // Resolved cooldown (after talent cooldown modifiers), not the base def cooldown.
-  if (known.cooldown > 0) {
-    parts.push(
-      t('abilityUi.tooltip.cooldownSeconds', {
-        seconds: formatAbilityNumber(known.cooldown),
-      }),
-    );
-  }
-  return parts.join(' · ');
-}
+// describeAbilitySummary and abilityRequirementLines moved to
+// ./ability_tooltip_lines (pure i18n mappers, no Hud state); the re-export keeps
+// abilityRequirementLines on this module's published surface for its callers.
+export { abilityRequirementLines } from './ability_tooltip_lines';
 
-// Thin i18n mapper over the pure resolver (ability_requirement_keys.ts), which
-// owns the truth table incl. the Skulduggery-only stealth-bypass line.
-export function abilityRequirementLines(
-  def: AbilityDef,
-  spec?: string | null,
-  resolved?: AbilityRequirementResolve,
-): string[] {
-  return abilityRequirementKeys(def, spec, resolved).map((req) => {
-    switch (req.key) {
-      case 'requiresForm':
-        if (req.form) {
-          return t('abilityUi.tooltip.requiresForm', { form: t(FORM_LABEL_KEYS[req.form]) });
-        }
-        return t('abilityUi.tooltip.selfOnly');
-      case 'requiresStealth':
-        return t('abilityUi.tooltip.requiresStealth');
-      case 'requiresStealthSkulduggery':
-        return t('abilityUi.tooltip.requiresStealthSkulduggery');
-      case 'requiresCombo':
-        return t('abilityUi.tooltip.requiresCombo');
-      case 'requiresDodge':
-        return t('abilityUi.tooltip.requiresDodge');
-      case 'requiresOutOfCombat':
-        return t('abilityUi.tooltip.requiresOutOfCombat');
-      case 'requiresTargetHealthBelow':
-        if (req.percent !== undefined) {
-          return t('abilityUi.tooltip.requiresTargetHealthBelow', {
-            percent: formatAbilityNumber(req.percent),
-          });
-        }
-        return t('abilityUi.tooltip.selfOnly');
-      case 'onNextSwing':
-        return t('abilityUi.tooltip.onNextSwing');
-      case 'offGlobalCooldown':
-        return t('abilityUi.tooltip.offGlobalCooldown');
-      case 'friendlyTarget':
-        return t('abilityUi.tooltip.friendlyTarget');
-      case 'enemyTarget':
-        return t('abilityUi.tooltip.enemyTarget');
-      case 'anyTarget':
-        return t('abilityUi.tooltip.anyTarget');
-      case 'selfOnly':
-        return t('abilityUi.tooltip.selfOnly');
-      default:
-        return t('abilityUi.tooltip.selfOnly');
-    }
-  });
-}
 // A 2D canvas context is non-null for any attached canvas in this app; centralize
 // the assertion so the call sites do not each carry a non-null bang. Throws (a
 // dev-surfaced failure, never reached in practice) rather than asserting.

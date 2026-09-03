@@ -1304,6 +1304,11 @@ export const it_IT: EnTranslations = {
       "separate": "Separa {meter}",
       "regroup": "Raggruppa {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Aure del bersaglio",
       "keybindLabel": "Potenziamenti e indebolimenti del bersaglio",
@@ -1589,6 +1594,8 @@ export const it_IT: EnTranslations = {
       "showTargetOfTarget": "Mostra il bersaglio del bersaglio",
       "showTargetSwingTimer": "Mostra timer degli attacchi del bersaglio",
       "showPetFrame": "Mostra il tuo famiglio",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Increspature dell'acqua (scie)",
       "showAttackButton": "Mostra Pulsante Attacco",
       "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere",
@@ -2976,7 +2983,8 @@ export const it_IT: EnTranslations = {
         "playerFrame": "Giocatore",
         "targetFrame": "Bersaglio",
         "partyFrames": "Gruppo",
-        "swingBar": "Attacco automatico"
+        "swingBar": "Attacco automatico",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Impostazioni riquadri",
       "framesMenuTitle": "Mostra o nascondi i singoli riquadri. Un riquadro deselezionato resta nascosto finché non lo riselezioni o ripristini i valori predefiniti.",

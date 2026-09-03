@@ -534,6 +534,7 @@ const UI_PURE_CORES = [
   'src/ui/trade_woc_view.ts',
   'src/ui/hud/rift/rift_floor_tracker_view.ts',
   'src/ui/hud/woc_trade/woc_trade_offer_view.ts',
+  'src/ui/hud/target_dots/target_dots_view.ts',
   'src/ui/safe_local_storage.ts',
 ].map((rel) => join(repoRoot, rel));
 
@@ -682,6 +683,7 @@ const RENDER_PURE_CORES = [
   'src/render/nameplate_view.ts',
   'src/render/nameplate_pick_core.ts',
   'src/render/nameplate_heraldry_core.ts',
+  'src/render/nameplate_dots_core.ts',
   'src/render/net_interp_core.ts',
   'src/render/paladin_ascension_core.ts',
   'src/render/paladin_sun_verdict_core.ts',

@@ -1304,6 +1304,11 @@ export const cs_CZ: EnTranslations = {
       "separate": "Oddělit {meter}",
       "regroup": "Znovu seskupit {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Aury cíle",
       "keybindLabel": "Buffy a debuffy cíle",
@@ -1589,6 +1594,8 @@ export const cs_CZ: EnTranslations = {
       "showTargetOfTarget": "Zobrazit cíl cíle",
       "showTargetSwingTimer": "Zobrazit časovač švihu cíle",
       "showPetFrame": "Zobrazit tvého mazlíčka",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Vlnky na vodě (brázdy)",
       "showAttackButton": "Zobrazit tlačítko útoku",
       "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
@@ -2976,7 +2983,8 @@ export const cs_CZ: EnTranslations = {
         "playerFrame": "Hráč",
         "targetFrame": "Cíl",
         "partyFrames": "Skupina",
-        "swingBar": "Automatický útok"
+        "swingBar": "Automatický útok",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Nastavení rámečků",
       "framesMenuTitle": "Zobraz nebo skryj jednotlivé rámečky. Nezaškrtnutý rámeček zůstane skrytý, dokud ho znovu nezaškrtneš nebo neobnovíš výchozí nastavení.",

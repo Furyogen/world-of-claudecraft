@@ -387,6 +387,18 @@ export const BOOL_SETTINGS = {
   // decluttering crowded hubs on short mobile viewports. Purely a local display
   // preference; mob nameplates and unit frames are unaffected.
   showPlayerNameplates: { def: true },
+  // on by default: draw the LOCAL player's own debuffs as a small icon row on an
+  // enemy's overhead nameplate, between the name row and the health bar, each with
+  // a cooldown swipe and a countdown. Only YOUR debuffs, on mobs only; the group's
+  // stay on the target frame strip, which is the clutter this row exists to avoid.
+  // Class-agnostic (ownership plus isDebuffAura, never an ability list) and never
+  // graphics-tier gated: these are timers a player acts on.
+  showNameplateDots: { def: true },
+  // on by default: the Target dots frame (#target-dots), the multi-target tracker
+  // listing every debuff YOU have out across every enemy in interest range, one
+  // bar row each with a live countdown. Hidden entirely while you have no dots
+  // out, so the default costs a player who never uses it nothing.
+  showTargetDots: { def: true },
   // off by default: invert the vertical axis of mouselook (push mouse forward
   // to look down), the classic flight-sim preference.
   invertLookY: { def: false },

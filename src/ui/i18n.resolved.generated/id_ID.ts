@@ -1304,6 +1304,11 @@ export const id_ID: EnTranslations = {
       "separate": "Pisahkan {meter}",
       "regroup": "Gabungkan kembali {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Aura Target",
       "keybindLabel": "Buff dan Debuff Target",
@@ -1589,6 +1594,8 @@ export const id_ID: EnTranslations = {
       "showTargetOfTarget": "Tampilkan Sasaran dari Sasaran",
       "showTargetSwingTimer": "Tampilkan pengatur waktu ayunan target",
       "showPetFrame": "Tampilkan Peliharaan Anda",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Riak Air (Ombak Jejak)",
       "showAttackButton": "Tampilkan Tombol Serang",
       "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
@@ -2976,7 +2983,8 @@ export const id_ID: EnTranslations = {
         "playerFrame": "Pemain",
         "targetFrame": "Target",
         "partyFrames": "Party",
-        "swingBar": "Serangan Otomatis"
+        "swingBar": "Serangan Otomatis",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Pengaturan Bingkai",
       "framesMenuTitle": "Tampilkan atau sembunyikan bingkai satu per satu. Bingkai yang tidak dicentang tetap tersembunyi sampai kamu mencentangnya lagi atau mengatur ulang ke bawaan.",

@@ -1304,6 +1304,11 @@ export const pl_PL: EnTranslations = {
       "separate": "Odłącz {meter}",
       "regroup": "Zgrupuj {meter} ponownie"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Aury celu",
       "keybindLabel": "Wzmocnienia i osłabienia celu",
@@ -1589,6 +1594,8 @@ export const pl_PL: EnTranslations = {
       "showTargetOfTarget": "Pokaż cel celu",
       "showTargetSwingTimer": "Pokaż licznik zamachu celu",
       "showPetFrame": "Pokaż swoje zwierzę",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Zmarszczki na wodzie (kilwater)",
       "showAttackButton": "Pokaż Przycisk Ataku",
       "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
@@ -2976,7 +2983,8 @@ export const pl_PL: EnTranslations = {
         "playerFrame": "Gracz",
         "targetFrame": "Cel",
         "partyFrames": "Drużyna",
-        "swingBar": "Automatyczny atak"
+        "swingBar": "Automatyczny atak",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Ustawienia ramek",
       "framesMenuTitle": "Pokazuj lub ukrywaj poszczególne ramki. Odznaczona ramka pozostaje ukryta, dopóki jej ponownie nie zaznaczysz albo nie przywrócisz ustawień domyślnych.",

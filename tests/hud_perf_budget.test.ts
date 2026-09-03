@@ -562,6 +562,16 @@ const HOT_PAINTERS: ReadonlyArray<ScannedPainter> = [
   { file: 'hud/quest/quest_strip_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'hud/cross_hotbar/cross_hotbar_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'hud/warlock/doom_meter_painter.ts', allow: {}, reflowAllow: {} },
+  // target_dots is the tracker-painter contract on the same budget as the deed
+  // and reliquary strips: ONE constructor innerHTML write for the whole row pool,
+  // the frame's role + aria-label set once in that same constructor, and every
+  // per-frame write (fill width, school attr, label, countdown, stacks, the
+  // on-target and expiring classes) facet-routed.
+  {
+    file: 'hud/target_dots/target_dots_painter.ts',
+    allow: { '.innerHTML': 1, '.setAttribute': 2 },
+    reflowAllow: {},
+  },
   { file: 'party_frames_painter.ts', allow: {}, reflowAllow: {} },
   // party_below_target measures the target frame, its #tf-debuffs strip, the
   // party container, and (on mobile) the rows wrapper + move zone (five rect

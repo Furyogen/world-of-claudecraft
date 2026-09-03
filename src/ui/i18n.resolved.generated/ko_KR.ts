@@ -1304,6 +1304,11 @@ export const ko_KR: EnTranslations = {
       "separate": "{meter} 분리",
       "regroup": "{meter} 통합"
     },
+    "targetDots": {
+      "title": "대상 디버프",
+      "row": "{aura} on {target}",
+      "overflow": "{count}개 더 있음, 표시되지 않음"
+    },
     "targetAuras": {
       "title": "대상 오라",
       "keybindLabel": "대상 강화 및 약화 효과",
@@ -1589,6 +1594,8 @@ export const ko_KR: EnTranslations = {
       "showTargetOfTarget": "대상의 대상 표시",
       "showTargetSwingTimer": "대상의 공격 타이머 표시",
       "showPetFrame": "내 펫 표시",
+      "showNameplateDots": "이름표에 내 디버프 표시",
+      "showTargetDots": "대상 디버프 목록 표시",
       "waterRipples": "수면 물결 (물살)",
       "showAttackButton": "공격 버튼 표시",
       "showDailyRewardsChest": "일일 보상 보물상자 표시",
@@ -2976,7 +2983,8 @@ export const ko_KR: EnTranslations = {
         "playerFrame": "플레이어",
         "targetFrame": "대상",
         "partyFrames": "파티",
-        "swingBar": "자동 공격"
+        "swingBar": "자동 공격",
+        "targetDots": "대상 디버프"
       },
       "framesMenu": "프레임 설정",
       "framesMenuTitle": "각 프레임을 표시하거나 숨깁니다. 선택을 해제한 프레임은 다시 선택하거나 기본값으로 초기화할 때까지 숨겨진 상태로 유지됩니다.",

@@ -1304,6 +1304,11 @@ export const fr_FR: EnTranslations = {
       "separate": "Séparer {meter}",
       "regroup": "Regrouper {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Auras de la cible",
       "keybindLabel": "Améliorations et affaiblissements de la cible",
@@ -1589,6 +1594,8 @@ export const fr_FR: EnTranslations = {
       "showTargetOfTarget": "Afficher la cible de la cible",
       "showTargetSwingTimer": "Afficher le minuteur d'attaque de la cible",
       "showPetFrame": "Afficher votre familier",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Ondulations de l'eau (sillages)",
       "showAttackButton": "Afficher le bouton d'attaque",
       "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
@@ -2976,7 +2983,8 @@ export const fr_FR: EnTranslations = {
         "playerFrame": "Joueur",
         "targetFrame": "Cible",
         "partyFrames": "Groupe",
-        "swingBar": "Attaque automatique"
+        "swingBar": "Attaque automatique",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Paramètres des cadres",
       "framesMenuTitle": "Affiche ou masque chaque cadre individuellement. Un cadre décoché reste masqué jusqu'à ce que vous le recochiez ou que vous rétablissiez les valeurs par défaut.",

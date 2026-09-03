@@ -1304,6 +1304,11 @@ export const pt_BR: EnTranslations = {
       "separate": "Separar {meter}",
       "regroup": "Reagrupar {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Auras do alvo",
       "keybindLabel": "Benefícios e penalidades do alvo",
@@ -1589,6 +1594,8 @@ export const pt_BR: EnTranslations = {
       "showTargetOfTarget": "Mostrar Alvo do Alvo",
       "showTargetSwingTimer": "Mostrar temporizador de ataque do alvo",
       "showPetFrame": "Mostrar seu mascote",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Ondulações na água (esteiras)",
       "showAttackButton": "Exibir Botão de Ataque",
       "showDailyRewardsChest": "Mostrar Baú de Recompensas Diárias",
@@ -2976,7 +2983,8 @@ export const pt_BR: EnTranslations = {
         "playerFrame": "Jogador",
         "targetFrame": "Alvo",
         "partyFrames": "Grupo",
-        "swingBar": "Ataque Automático"
+        "swingBar": "Ataque Automático",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Configurações de Quadros",
       "framesMenuTitle": "Mostre ou oculte quadros individuais. Um quadro desmarcado permanece oculto até que você o marque novamente ou redefina para o padrão.",

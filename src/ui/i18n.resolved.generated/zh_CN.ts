@@ -1304,6 +1304,11 @@ export const zh_CN: EnTranslations = {
       "separate": "分离{meter}",
       "regroup": "合并{meter}"
     },
+    "targetDots": {
+      "title": "目标减益",
+      "row": "{aura} on {target}",
+      "overflow": "还有 {count} 个未显示"
+    },
     "targetAuras": {
       "title": "目标光环",
       "keybindLabel": "目标增益和减益效果",
@@ -1589,6 +1594,8 @@ export const zh_CN: EnTranslations = {
       "showTargetOfTarget": "显示目标的目标",
       "showTargetSwingTimer": "显示目标的挥击计时器",
       "showPetFrame": "显示你的宠物",
+      "showNameplateDots": "在姓名板上显示我的减益",
+      "showTargetDots": "显示目标减益追踪",
       "waterRipples": "水面涟漪（尾波）",
       "showAttackButton": "显示攻击按钮",
       "showDailyRewardsChest": "显示每日奖励宝箱",
@@ -2976,7 +2983,8 @@ export const zh_CN: EnTranslations = {
         "playerFrame": "玩家",
         "targetFrame": "目标",
         "partyFrames": "队伍",
-        "swingBar": "自动攻击"
+        "swingBar": "自动攻击",
+        "targetDots": "目标减益"
       },
       "framesMenu": "框体设置",
       "framesMenuTitle": "显示或隐藏各个框体。取消勾选的框体会一直隐藏，直到你重新勾选或恢复默认设置。",

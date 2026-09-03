@@ -9,25 +9,140 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "es_ES": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "fr_FR": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "fr_CA": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "de_DE": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "zh_CN": [
+    "hudChrome.targetDots.row"
+  ],
+  "zh_TW": [
+    "hudChrome.targetDots.row"
+  ],
+  "ko_KR": [
+    "hudChrome.targetDots.row"
+  ],
+  "ja_JP": [
+    "hudChrome.targetDots.row"
+  ],
+  "pt_BR": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "ru_RU": [
+    "hudChrome.targetDots.row"
+  ],
+  "cs_CZ": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "nl_NL": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "pl_PL": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "id_ID": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "tr_TR": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "sv_SE": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "vi_VN": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ],
+  "da_DK": [
+    "hudChrome.interfaceUnlock.frameNames.targetDots",
+    "hudChrome.options.showNameplateDots",
+    "hudChrome.options.showTargetDots",
+    "hudChrome.targetDots.overflow",
+    "hudChrome.targetDots.row",
+    "hudChrome.targetDots.title"
+  ]
 };

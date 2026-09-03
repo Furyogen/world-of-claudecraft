@@ -1460,6 +1460,20 @@ export const hudChromeStrings = {
     separate: 'Separate {meter}',
     regroup: 'Regroup {meter}',
   },
+  // The Target dots frame (#target-dots): the multi-target tracker for every
+  // debuff the local player has out, one bar row each. All wordy (M16): the five
+  // non-Latin fills land in this same change.
+  targetDots: {
+    // Accessible name of the frame itself (role="group").
+    title: 'Target Dots',
+    // One row: {aura} is the debuff you cast, {target} the enemy carrying it.
+    // The order puts the ability first because that is what a player scans for;
+    // a locale that needs the reverse order swaps the placeholders here.
+    row: '{aura} on {target}',
+    // Shown when more of your dots are running than the row cap can list. The
+    // target frame strip remains the complete list, which the note names.
+    overflow: '{count} more not shown',
+  },
   targetAuras: {
     title: 'Target Auras',
     keybindLabel: 'Target Buffs and Debuffs',
@@ -1963,6 +1977,13 @@ export const hudChromeStrings = {
     // frame's own accessible name (unitFrame.petLabel) so the value stays NON-WORDY
     // for the M16 guard.
     showPetFrame: 'Show Your Pet',
+    // Interface > Combat toggles (both on by default) for the two dot-tracking
+    // surfaces. Both show only the LOCAL player's OWN debuffs, on every class:
+    // the icon row on an enemy's nameplate, and the standalone Target dots frame
+    // that tracks them across every enemy at once. Wordy (M16): the five
+    // non-Latin fills land in this same change.
+    showNameplateDots: 'Show My Dots on Nameplates',
+    showTargetDots: 'Show Target Dots',
     // Graphics-panel opt-in (default off) for the interactive wake/ripple
     // simulation on water surfaces; bubbles and splash particles do not key
     // off it. It sits in the Display card beside Weather because it costs
@@ -3950,6 +3971,10 @@ export const hudChromeStrings = {
       // The auto-attack swing timer (#swingbar), hidden outside combat like
       // the cast bar, so its chip is what names the placeholder.
       swingBar: 'Auto Attack',
+      // The multi-target dot tracker (#target-dots), hidden while the player has
+      // no debuffs out, so its chip is what names the placeholder. Wordy (M16):
+      // the five non-Latin fills land in this same change.
+      targetDots: 'Target Dots',
     },
     // The frames settings dropdown beside the floating Lock Interface button:
     // a show/hide sub-menu plus the frame-behavior toggles that used to live

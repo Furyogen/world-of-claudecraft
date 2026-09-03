@@ -13,6 +13,7 @@ import {
 } from '../sim/quests/quest_marker_kind';
 import { type Entity, GATHER_CAST_ID } from '../sim/types';
 import { abilityDisplayNameFromSource } from '../ui/ability_display_name';
+import { resolveHudAuraIconId } from '../ui/aura_icon_runtime';
 import { cheaterTagLabel } from '../ui/cheater_tag';
 import { deedBorderSlug } from '../ui/deed_border_view';
 import { deedTitleText } from '../ui/deed_i18n';
@@ -21,7 +22,12 @@ import { discordRoleTagLabel } from '../ui/discord_role_tag';
 import { tEntity } from '../ui/entity_i18n';
 import { holderTierBadgeDataUrl, holderTierByIndex } from '../ui/holder_tier';
 import { formatNumber, getI18nRevision, t } from '../ui/i18n';
-import { raidMarkerDataUrl } from '../ui/icons';
+import {
+  auraImageUrl,
+  cachedProceduralIconDataUrl,
+  proceduralIconDataUrl,
+  raidMarkerDataUrl,
+} from '../ui/icons';
 import { localizeSimAuraName } from '../ui/sim_i18n';
 import { type IWorld, OVERHEAD_EMOTES } from '../world_api';
 
@@ -36,6 +42,7 @@ import {
 } from './nameplate_canvas';
 import { COMBO_PIP_MAX } from './nameplate_combo';
 import { declutterNameplatesInPlace, type NameplateAnchor } from './nameplate_declutter';
+import { type NameplateDotAura, nameplateDotsInto } from './nameplate_dots_core';
 import { nameplateHeraldryLift } from './nameplate_heraldry_core';
 import { type NameplatePickCandidate, pickNameplateHealthBarAt } from './nameplate_pick_core';
 import {
@@ -51,6 +58,25 @@ const HOLDER_BADGE_URLS = new Map<number, string>();
 const DEV_BADGE_URLS = new Map<number, string>();
 
 const emoteIconUrl = (id: string): string => `/ui/emotes/emote-${id}.png`;
+
+// Nameplate dot artwork, keyed by the aura id. Static art wins; otherwise the
+// procedural icon, taken from the shared cache when it is already warm and minted
+// on demand (which warms it) when it is not. Resolved only when a slot's icon key
+// changes, so the per-frame path is a Map hit.
+const DOT_ICON_URLS = new Map<string, string>();
+const NAMEPLATE_DOT_ICON_PX = 32;
+
+function nameplateDotIconUrl(auraId: string, auraKind: string): string {
+  const cached = DOT_ICON_URLS.get(auraId);
+  if (cached !== undefined) return cached;
+  const iconId = resolveHudAuraIconId({ id: auraId, kind: auraKind });
+  const url =
+    auraImageUrl(iconId) ??
+    cachedProceduralIconDataUrl('aura', iconId, NAMEPLATE_DOT_ICON_PX) ??
+    proceduralIconDataUrl('aura', iconId, NAMEPLATE_DOT_ICON_PX);
+  DOT_ICON_URLS.set(auraId, url);
+  return url;
+}
 
 function holderBadgeUrl(index: number): string {
   const cached = HOLDER_BADGE_URLS.get(index);
@@ -102,6 +128,9 @@ export interface NameplatePainterDeps {
   showDevBadges: () => boolean;
   showOwnNameplate: () => boolean;
   showPlayerNameplates: () => boolean;
+  /** The showNameplateDots setting: draw the local player's OWN debuffs as an
+   *  icon row on an enemy plate. A player preference, never a graphics tier. */
+  showNameplateDots: () => boolean;
   isHostilePlayer: (e: Entity) => boolean;
 }
 
@@ -115,6 +144,7 @@ export class NameplatePainter {
   private readonly showDevBadges: () => boolean;
   private readonly showOwnNameplate: () => boolean;
   private readonly showPlayerNameplates: () => boolean;
+  private readonly showNameplateDots: () => boolean;
   private readonly isHostilePlayer: (e: Entity) => boolean;
   private readonly surface: NameplateCanvasSurface;
   private readonly states = new Map<number, NameplateCanvasState>();
@@ -158,6 +188,7 @@ export class NameplatePainter {
     this.showDevBadges = deps.showDevBadges;
     this.showOwnNameplate = deps.showOwnNameplate;
     this.showPlayerNameplates = deps.showPlayerNameplates;
+    this.showNameplateDots = deps.showNameplateDots;
     this.isHostilePlayer = deps.isHostilePlayer;
     this.surface = new NameplateCanvasSurface(deps.layer);
   }
@@ -295,6 +326,42 @@ export class NameplatePainter {
     this.surface.dispose();
   }
 
+  /**
+   * The local player's own debuffs on this entity, refreshed EVERY frame: the
+   * countdown and the cooldown swipe are the whole point, so they cannot ride the
+   * throttled content pass. Only living mobs carry the row (a debuff on a player
+   * belongs to the unit frames, and a corpse's dots are already gone).
+   *
+   * Class-agnostic: nameplateDotsInto selects on ownership plus isDebuffAura, so a
+   * rogue's poisons and a druid's Lunar Tempest land here exactly like a warlock's
+   * Blackrot, with no ability or class list anywhere on the path.
+   */
+  private resolveDots(state: NameplateCanvasState, entity: Entity, player: Entity): void {
+    if (!this.showNameplateDots() || entity.kind !== 'mob' || entity.dead) {
+      state.dots.count = 0;
+      return;
+    }
+    const dots = nameplateDotsInto(
+      state.dots,
+      entity.auras,
+      // The offline Sim and a current server both stamp the caster; an older
+      // mirror sends 0, which matches no player id and is therefore never "own",
+      // the same rule the aura strips already follow.
+      (aura: NameplateDotAura) => aura.sourceId !== undefined && aura.sourceId === player.id,
+    );
+    for (let i = 0; i < dots.count; i++) {
+      const slot = dots.slots[i];
+      if (!slot.iconUrl) {
+        const source = entity.auras.find((aura) => aura.id === slot.iconKey);
+        slot.iconUrl = nameplateDotIconUrl(slot.iconKey, source?.kind ?? '');
+      }
+      slot.timeText = formatNumber(slot.remaining, {
+        minimumFractionDigits: slot.decimals,
+        maximumFractionDigits: slot.decimals,
+      });
+    }
+  }
+
   private updateDynamicState(
     state: NameplateCanvasState,
     entity: Entity,
@@ -313,6 +380,7 @@ export class NameplatePainter {
     state.threat = plan.threat;
     state.comboPips = Math.max(0, Math.min(COMBO_PIP_MAX, plan.comboPips));
     state.hpFill = entity.hp / Math.max(1, entity.maxHp);
+    this.resolveDots(state, entity, player);
 
     const cast = castBarState(entity);
     state.castVisible = cast.visible;

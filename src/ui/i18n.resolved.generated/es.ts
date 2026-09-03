@@ -1304,6 +1304,11 @@ export const es: EnTranslations = {
       "separate": "Separar {meter}",
       "regroup": "Reagrupar {meter}"
     },
+    "targetDots": {
+      "title": "Target Dots",
+      "row": "{aura} on {target}",
+      "overflow": "{count} more not shown"
+    },
     "targetAuras": {
       "title": "Auras del objetivo",
       "keybindLabel": "Beneficios y perjuicios del objetivo",
@@ -1589,6 +1594,8 @@ export const es: EnTranslations = {
       "showTargetOfTarget": "Mostrar el objetivo del objetivo",
       "showTargetSwingTimer": "Mostrar temporizador de golpe del objetivo",
       "showPetFrame": "Mostrar tu mascota",
+      "showNameplateDots": "Show My Dots on Nameplates",
+      "showTargetDots": "Show Target Dots",
       "waterRipples": "Ondas en el agua (estelas)",
       "showAttackButton": "Mostrar boton de ataque",
       "showDailyRewardsChest": "Mostrar cofre de recompensas diarias",
@@ -2976,7 +2983,8 @@ export const es: EnTranslations = {
         "playerFrame": "Jugador",
         "targetFrame": "Objetivo",
         "partyFrames": "Grupo",
-        "swingBar": "Ataque automático"
+        "swingBar": "Ataque automático",
+        "targetDots": "Target Dots"
       },
       "framesMenu": "Ajustes de marcos",
       "framesMenuTitle": "Muestra u oculta marcos individuales. Un marco sin marcar permanece oculto hasta que vuelvas a marcarlo o restablezcas los valores predeterminados.",

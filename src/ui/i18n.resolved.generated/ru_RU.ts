@@ -1304,6 +1304,11 @@ export const ru_RU: EnTranslations = {
       "separate": "Отделить: {meter}",
       "regroup": "Вернуть: {meter}"
     },
+    "targetDots": {
+      "title": "Эффекты на целях",
+      "row": "{aura} on {target}",
+      "overflow": "ещё {count}, не показаны"
+    },
     "targetAuras": {
       "title": "Ауры цели",
       "keybindLabel": "Усиления и ослабления цели",
@@ -1589,6 +1594,8 @@ export const ru_RU: EnTranslations = {
       "showTargetOfTarget": "Показывать цель цели",
       "showTargetSwingTimer": "Показывать таймер замаха цели",
       "showPetFrame": "Показывать вашего питомца",
+      "showNameplateDots": "Показывать мои эффекты на полосах имён",
+      "showTargetDots": "Показывать эффекты на целях",
       "waterRipples": "Рябь на воде (кильватер)",
       "showAttackButton": "Показывать кнопку атаки",
       "showDailyRewardsChest": "Показывать сундук ежедневных наград",
@@ -2976,7 +2983,8 @@ export const ru_RU: EnTranslations = {
         "playerFrame": "Игрок",
         "targetFrame": "Цель",
         "partyFrames": "Группа",
-        "swingBar": "Автоатака"
+        "swingBar": "Автоатака",
+        "targetDots": "Эффекты на целях"
       },
       "framesMenu": "Настройки фреймов",
       "framesMenuTitle": "Показать или скрыть отдельные фреймы. Снятый флажок скрывает фрейм, пока вы не включите его снова или не сбросите настройки.",

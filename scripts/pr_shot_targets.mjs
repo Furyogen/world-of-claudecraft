@@ -766,7 +766,215 @@ const fakePadAxesSeed = async (page) => {
   );
 };
 
+// The shared entry sweep plus the two overlays it does not own: the tutorial
+// island's single-button greeting note (#tutorial-greeting, the `Understood`
+// button) and the software-rendering notice, both of which land on their own
+// schedule after entry and sit exactly where an in-world HUD shot needs to look.
+// Swept rather than clicked once, for the same reason the skill-milestone recipe
+// sweeps: one pass catches whichever overlay happens to be up at that instant.
+async function sweepOverlays(page, passes = 8) {
+  for (let i = 0; i < passes; i++) {
+    await dismissEntryOverlays(page);
+    await page
+      .evaluate(() => {
+        const visible = (el) => !!el && getComputedStyle(el).display !== 'none' && !el.hidden;
+        const greeting = document.getElementById('tutorial-greeting');
+        if (visible(greeting)) greeting.querySelector('[data-close], [data-skip]')?.click();
+        for (const id of ['gpu-notice', 'perf-nudge']) {
+          const notice = document.getElementById(id);
+          if (!visible(notice)) continue;
+          notice.querySelector('button')?.click();
+          notice.hidden = true;
+          notice.style.display = 'none';
+        }
+      })
+      .catch(() => {});
+    await wait(250);
+  }
+}
+
+// Both dot surfaces ON, stated explicitly rather than left to the default: the
+// harness profile's localStorage outlives page.close, so the "-off" variant
+// below would otherwise leak its false into the very next shot (the same leak
+// the themed variants seed against).
+const dotsOnSeed = async (page) => {
+  await lowGraphicsSeed(page);
+  await page.evaluateOnNewDocument(
+    `try { const k = 'woc_settings'; const s = JSON.parse(localStorage.getItem(k) || '{}'); s.showTargetDots = true; s.showNameplateDots = true; localStorage.setItem(k, JSON.stringify(s)); } catch {}`,
+  );
+};
+
+// The BEFORE frames for the dot surfaces: both settings off is byte-identical
+// to the base build (resolveDots and the tracker's core each return before
+// drawing anything), so it is the honest before without a branch flip and
+// without the stale-bundle trap a flip carries.
+const dotsOffSeed = async (page) => {
+  await lowGraphicsSeed(page);
+  await page.evaluateOnNewDocument(
+    `try { const k = 'woc_settings'; const s = JSON.parse(localStorage.getItem(k) || '{}'); s.showTargetDots = false; s.showNameplateDots = false; localStorage.setItem(k, JSON.stringify(s)); } catch {}`,
+  );
+};
+
 export const TARGETS = [
+  {
+    key: 'target-dots',
+    label: 'Target dots: the player-only tracker frame and the nameplate dot row',
+    when: [
+      'ui/hud/target_dots/',
+      'render/nameplate_dots_core.ts',
+      'render/nameplate_dot_row.ts',
+      'render/nameplate_canvas.ts',
+    ],
+    // The practice row is the honest stage for a MULTI-target tracker: three
+    // hostile dummies six yards apart, side by side from the Highwatch walk-up,
+    // so one frame carries three plates and the tracker's own rows at once.
+    variants: [
+      { key: 'desktop-off', charClass: 'warlock', charName: 'Nyrra', beforeLoad: dotsOffSeed },
+      { key: 'desktop', charClass: 'warlock', charName: 'Nyrra', beforeLoad: dotsOnSeed },
+      {
+        key: 'mobile-off',
+        mobile: true,
+        charClass: 'warlock',
+        charName: 'Nyrra',
+        beforeLoad: dotsOffSeed,
+      },
+      {
+        key: 'mobile',
+        mobile: true,
+        charClass: 'warlock',
+        charName: 'Nyrra',
+        beforeLoad: dotsOnSeed,
+      },
+    ],
+    async capture(page) {
+      // The entry banners, the tutorial prompt and the first NPC greeting each
+      // arrive on their own schedule, so sweep the dismissals rather than
+      // clicking once: any one of them left open covers the tracker's corner.
+      await sweepOverlays(page, 10);
+
+      const staged = await page.evaluate(() => {
+        const game = window.__game;
+        const sim = game?.sim;
+        const player = sim?.player;
+        if (!game || !sim || !player) return { ok: false, reason: 'offline world is unavailable' };
+        sim.setPlayerLevel?.(20, player.id);
+        // The practice row, not the nearest wild pack. Dummies never move, never
+        // fight back and never die, so a rotation cast across three of them still
+        // finds all three standing on their marks when the shot is taken; wild
+        // mobs aggro, close on the player, and (at level 20 against the starting
+        // zone) die to the first Burning Pact, which leaves nothing to track.
+        const dummyIds = new Set(['training_dummy', 'normal_boss_dummy', 'heroic_boss_dummy']);
+        const dummies = [...sim.entities.values()].filter(
+          (e) => e.kind === 'mob' && !e.dead && dummyIds.has(e.templateId),
+        );
+        if (dummies.length < 2) return { ok: false, reason: 'the practice row is unavailable' };
+        // The row runs along z, ascending; a player arrives on the plus-x side.
+        dummies.sort((a, b) => a.pos.z - b.pos.z);
+        const mid = dummies[Math.floor(dummies.length / 2)];
+        player.pos.x = mid.pos.x + 9;
+        player.pos.y = mid.pos.y;
+        // Off the middle dummy's own axis: the row's one authored campfire sits
+        // in FRONT of that dummy, which is exactly where a plus-x stand lands,
+        // and it blocks line of sight to it ("Line of sight." in chat).
+        player.pos.z = mid.pos.z + 4.5;
+        player.prevPos = { ...player.pos };
+        // Face down minus x, straight into the row, and swing the chase camera
+        // onto the same heading so every plate is in frame.
+        player.facing = -Math.PI / 2;
+        game.input.camYaw = player.facing;
+        game.input.camDist = 7;
+        sim.rebucket?.(player);
+        return { ok: true, ids: dummies.map((d) => d.id) };
+      });
+      if (!staged.ok) return { skip: staged.reason };
+
+      // Crossing the world raises the streaming veil and, behind it, a fresh
+      // round of zone banners.
+      await wait(1500);
+      await awaitWorldPainted(page);
+      await sweepOverlays(page, 8);
+
+      // Cast for real, through the same action-bar click a player uses: the
+      // house rule for aura evidence is never to inject an aura or call
+      // castAbility from the harness. Both dots on all three dummies, so the
+      // frame shows a genuine multi-target spread with a real caster id on every
+      // aura. Deliberately the two the BASE warlock knows (Blackrot and Hex of
+      // Anguish): Burning Pact is Destruction-only, so an unspecced level 20
+      // never learns it and every click on it is silently refused.
+      const plan = [
+        { index: 0, abilityId: 'corruption' },
+        { index: 0, abilityId: 'curse_of_agony' },
+        { index: 1, abilityId: 'corruption' },
+        { index: 1, abilityId: 'curse_of_agony' },
+        { index: 2, abilityId: 'corruption' },
+        { index: 2, abilityId: 'curse_of_agony' },
+      ];
+      for (const step of plan) {
+        const mobId = staged.ids[step.index];
+        if (mobId === undefined) continue;
+        const clicked = await page.evaluate(
+          ({ mobId, abilityId }) => {
+            const game = window.__game;
+            const player = game?.sim?.player;
+            const button = document.querySelector('.action-btn[data-hotbar-slot="1"]');
+            if (!game || !player || !button) return false;
+            game.sim.targetEntity(mobId, player.id);
+            player.resource = player.maxResource;
+            game.hud.hotbarActions[0] = { type: 'ability', id: abilityId };
+            game.hud.saveSlotMap?.();
+            button.click();
+            return true;
+          },
+          { mobId, abilityId: step.abilityId },
+        );
+        if (!clicked) return { skip: 'primary action slot 1 is unavailable' };
+        let landed = false;
+        for (let poll = 0; poll < 30 && !landed; poll++) {
+          await wait(200);
+          landed = await page.evaluate(
+            ({ mobId, abilityId }) => {
+              const sim = window.__game?.sim;
+              const mob = sim?.entities.get(mobId);
+              return !!mob?.auras.some(
+                (a) => a.id.startsWith(abilityId) && a.sourceId === sim.player.id,
+              );
+            },
+            { mobId, abilityId: step.abilityId },
+          );
+        }
+        // Let the global cooldown clear before the next click, or that click is
+        // simply refused and the next poll burns its whole budget waiting for an
+        // aura that was never cast.
+        await wait(1700);
+      }
+
+      // The dummies never moved, so nothing needs re-placing: only re-aim the
+      // camera (a cast can swing it) and end on the FIRST dummy, so the
+      // tracker's current-target rows lead the list and carry their gold rule
+      // while the target frame strip below shows the same dots the classic way.
+      await page.evaluate((ids) => {
+        const game = window.__game;
+        const sim = game?.sim;
+        const player = sim?.player;
+        if (!game || !sim || !player) return;
+        player.facing = -Math.PI / 2;
+        game.input.camYaw = player.facing;
+        game.input.camDist = 7;
+        sim.targetEntity(ids[0], player.id);
+      }, staged.ids);
+      await sweepOverlays(page, 4);
+      // Wait out any cast still in flight LAST, so no half-full cast bar rides
+      // the frame.
+      await page
+        .waitForFunction(() => !window.__game?.sim?.player?.castingAbility, {
+          timeout: 20000,
+          polling: 250,
+        })
+        .catch(() => {});
+      await wait(900);
+      return {};
+    },
+  },
   {
     key: 'ravenrift',
     label:
