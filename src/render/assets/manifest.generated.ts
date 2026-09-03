@@ -408,7 +408,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/creatures/kobold_ability_anims.glb": "/media/models/creatures/kobold_ability_anims.f2d51c66b479.glb",
   "models/creatures/leaping_fish.glb": "/media/models/creatures/leaping_fish.3df008156018.glb",
   "models/creatures/longstride.glb": "/media/models/creatures/longstride.c7311a79df05.glb",
-  "models/creatures/longstride_anims.glb": "/media/models/creatures/longstride_anims.5f1a70a9d5df.glb",
+  "models/creatures/longstride_anims.glb": "/media/models/creatures/longstride_anims.b597cce17270.glb",
   "models/creatures/mech.glb": "/media/models/creatures/mech.9b80ce7abed4.glb",
   "models/creatures/murloc_ability_anims.glb": "/media/models/creatures/murloc_ability_anims.71d64c63e2ca.glb",
   "models/creatures/mushroom_pixie.glb": "/media/models/creatures/mushroom_pixie.8186e2c99bf3.glb",
