@@ -350,8 +350,12 @@ interface AttributionTargetFixture {
 // land together). No capture was retaken.
 // Re-minted at the release/v0.42.0 sync of PR #3439: renderer.ts moved for the
 // mount lifecycle seam (mount_lifecycle.ts) and the rickshaw hooks it absorbed.
+// Re-minted for the Cluckwork Mech Bird store mount (PR #3464) on top of the
+// v0.42.0 mount-lifecycle move: the renderer's stride accumulator moved to
+// src/render/stride_audio_core.ts and the mounted audio branch gained the
+// idle-hum poll. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  'bf62cd1db6c39c23a6b8f6f3cf2cf31ae09bbcd16d1e27232f36eafad49e9215';
+  '87d8b0efb81ca5d41f5a57f7fd9654739ba16b59f9f8de4cda6a39031b5e8806';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [
