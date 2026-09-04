@@ -91,9 +91,15 @@ describe('RealmBuilderPopup', () => {
     // one-shot read at boot. Presenting through both is what lets a
     // mid-session save reach the statue without a reconnect.
     const statue = { setRealmBuilderHonouree: vi.fn() };
+    const show = vi.spyOn(popup, 'show');
     presentRealmBuilder(popup, statue, CURRENT, PAST);
     expect(statue.setRealmBuilderHonouree).toHaveBeenCalledWith('Isolde Vane');
     expect(document.querySelector('.rb-name')?.textContent).toBe('Isolde Vane');
+    // Statue BEFORE card: the plate is the thing a player is looking at when
+    // they click, so it must not lag the card by a frame.
+    expect(statue.setRealmBuilderHonouree.mock.invocationCallOrder[0]).toBeLessThan(
+      show.mock.invocationCallOrder[0],
+    );
 
     await ensureLocaleLoaded('ja_JP');
     setLanguage('ja_JP');
@@ -101,6 +107,29 @@ describe('RealmBuilderPopup', () => {
     expect(statue.setRealmBuilderHonouree).toHaveBeenLastCalledWith(
       t('hudChrome.realmBuilder.placeholderName'),
     );
+  });
+
+  it('re-bakes the plate on a language switch, card open or not', async () => {
+    const statue = { setRealmBuilderHonouree: vi.fn() };
+    presentRealmBuilder(popup, statue, PLACEHOLDER, []);
+    expect(statue.setRealmBuilderHonouree).toHaveBeenLastCalledWith(REALM_BUILDER_PLACEHOLDER_NAME);
+
+    // The card is closed, the plate is still standing: it follows the language.
+    popup.hide();
+    await ensureLocaleLoaded('ja_JP');
+    setLanguage('ja_JP');
+    popup.relocalize();
+    expect(statue.setRealmBuilderHonouree).toHaveBeenLastCalledWith(
+      t('hudChrome.realmBuilder.placeholderName'),
+    );
+    expect(document.querySelector('.rb-popup')).toBeNull();
+
+    // With the card open, both repaint.
+    presentRealmBuilder(popup, statue, PLACEHOLDER, []);
+    setLanguage('en');
+    popup.relocalize();
+    expect(statue.setRealmBuilderHonouree).toHaveBeenLastCalledWith(REALM_BUILDER_PLACEHOLDER_NAME);
+    expect(document.querySelector('.rb-name')?.textContent).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
   });
 
   it('shows an empty-roll line rather than a bare gap before the first honouree', () => {

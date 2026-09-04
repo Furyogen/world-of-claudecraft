@@ -41,6 +41,7 @@ export function presentRealmBuilder(
   current: RealmBuilderHonour,
   past: readonly RealmBuilderHonour[],
 ): void {
+  popup.attachStatue(statue);
   statue.setRealmBuilderHonouree(displayRealmBuilderName(current));
   popup.show(current, past);
 }
@@ -58,6 +59,13 @@ export class RealmBuilderPopup {
   private root: HTMLElement | null = null;
   private current: RealmBuilderHonour | null = null;
   private past: readonly RealmBuilderHonour[] = [];
+  /** The plate presentRealmBuilder last routed through, so a language switch
+   *  can re-bake it (the placeholder is localized text) without a re-inspect. */
+  private statue: RealmBuilderStatue | null = null;
+
+  attachStatue(statue: RealmBuilderStatue): void {
+    this.statue = statue;
+  }
 
   show(current: RealmBuilderHonour, past: readonly RealmBuilderHonour[]): void {
     this.current = current;
@@ -145,8 +153,13 @@ export class RealmBuilderPopup {
   }
 
   /** Re-localize after an in-game language switch (the Hud's
-   *  woc:languagechange fan-out): repaint the open card's chrome strings. */
+   *  woc:languagechange fan-out): re-bake the plate it last presented (only
+   *  the placeholder actually moves; a real name is a no-op re-bake), then
+   *  repaint the open card's chrome strings. */
   relocalize(): void {
+    if (this.current && this.statue) {
+      this.statue.setRealmBuilderHonouree(displayRealmBuilderName(this.current));
+    }
     if (this.root && this.current) this.show(this.current, this.past);
   }
 }

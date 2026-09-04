@@ -25,13 +25,15 @@ import {
 } from '../src/sim/content/realm_builders';
 import { ZONE1_PROPS } from '../src/sim/content/zone1';
 import { clonePropsWithoutEastbrookLayout } from '../src/sim/custom_world_props';
-import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
+import { BUILTIN_WORLD, QUEST_ORDER, setActiveWorldContent } from '../src/sim/data';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
+import { encodeObs, obsSize } from '../src/sim/obs';
 import { Sim } from '../src/sim/sim';
 import {
   type Entity,
   emptyZoneProps,
   INTERACT_RANGE,
+  REALM_BUILDER_MONUMENT_INTERACT_RADIUS,
   REALM_BUILDER_MONUMENT_TEMPLATE_ID,
   STATIC_WORLD_SERVICE_ENTITY_ID_MIN,
   type WorldContent,
@@ -62,6 +64,38 @@ function standAt(sim: Sim, pid: number, point: { x: number; z: number }): Entity
 /** A reading spot on the front plate's side, just outside the cylinder. */
 function frontReadingSpot(): { x: number; z: number } {
   return { x: MONUMENT.position.x - (MONUMENT.radius + 0.6), z: MONUMENT.position.z };
+}
+
+/** A spot `distance` yards west of the monument's centre, the front plate's side. */
+function westOfMonument(distance: number): { x: number; z: number } {
+  return { x: MONUMENT.position.x - distance, z: MONUMENT.position.z };
+}
+
+/** A spot `distance` yards from the monument's centre along the line to the mailbox. */
+function towardMailbox(distance: number): { x: number; z: number } {
+  const mailbox = EASTBROOK_LAYOUT.services.mailbox.position;
+  const dx = mailbox.x - MONUMENT.position.x;
+  const dz = mailbox.z - MONUMENT.position.z;
+  const span = Math.hypot(dx, dz);
+  return {
+    x: MONUMENT.position.x + (dx / span) * distance,
+    z: MONUMENT.position.z + (dz / span) * distance,
+  };
+}
+
+function mailboxEntity(sim: Sim): Entity {
+  const mailbox = EASTBROOK_LAYOUT.services.mailbox.position;
+  const entity = [...sim.entities.values()].find(
+    (candidate) =>
+      candidate.templateId === 'mailbox' &&
+      Math.hypot(candidate.pos.x - mailbox.x, candidate.pos.z - mailbox.z) < 0.01,
+  );
+  if (!entity) throw new Error('missing Eastbrook mailbox entity');
+  return entity;
+}
+
+function eventTypes(sim: Sim): string[] {
+  return sim.drainEvents().map((event) => event.type);
 }
 
 function customWorld(): WorldContent {
@@ -261,14 +295,18 @@ describe('the Realm Builder monument as a static world service', () => {
   });
 
   it('keeps the plates readable from outside the cylinder', () => {
-    // The interaction has no radius of its own, so the reading spot has to fall
-    // inside the default range measured from the monument's CENTRE, not its
-    // face. This is the check that would catch a future scale-up silently
-    // pushing players out of their own inspect range.
+    // The monument's catchment is measured from its CENTRE, not its face, so
+    // the reading spot has to fall inside it. This is the check that would
+    // catch a future scale-up silently pushing players out of their own
+    // inspect range, or the catchment shrinking under the collider.
     const spot = frontReadingSpot();
     const distance = Math.hypot(spot.x - MONUMENT.position.x, spot.z - MONUMENT.position.z);
     expect(distance).toBeGreaterThan(MONUMENT.radius);
-    expect(distance).toBeLessThan(INTERACT_RANGE);
+    expect(distance).toBeLessThan(REALM_BUILDER_MONUMENT_INTERACT_RADIUS);
+    // Tighter than the default: the whole point of the catchment is that the
+    // monument never competes at the mailbox's range.
+    expect(REALM_BUILDER_MONUMENT_INTERACT_RADIUS).toBeLessThan(INTERACT_RANGE);
+    expect(REALM_BUILDER_MONUMENT_INTERACT_RADIUS).toBeGreaterThan(MONUMENT.radius);
   });
 });
 
@@ -315,6 +353,80 @@ describe('inspecting the Realm Builder monument', () => {
     sim.drainEvents();
     expect(sim.pickUpObject(monument.id, pid)).toBe(false);
     expect(sim.drainEvents().some((event) => event.type === 'realmBuilder')).toBe(false);
+  });
+
+  it('is picked by the interact key only inside its own catchment', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Reader');
+    const monument = monumentEntity(sim);
+    const inside = REALM_BUILDER_MONUMENT_INTERACT_RADIUS - 0.05;
+    const outside = REALM_BUILDER_MONUMENT_INTERACT_RADIUS + 0.05;
+
+    // Just inside 4 yd on the plate's side: the proximity press reads the roll.
+    standAt(sim, pid, westOfMonument(inside));
+    sim.drainEvents();
+    sim.interact(pid);
+    expect(eventTypes(sim)).toContain('realmBuilder');
+
+    // Just outside: still well inside the default 5 yd, and NOT picked. The
+    // monument is a permanent object in the middle of the square, so without
+    // its own catchment it would win this band from everything around it.
+    standAt(sim, pid, westOfMonument(outside));
+    sim.interact(pid);
+    expect(eventTypes(sim)).not.toContain('realmBuilder');
+
+    // The direct path refuses at the same line, with the sim's usual message.
+    standAt(sim, pid, westOfMonument(4.5));
+    expect(sim.pickUpObject(monument.id, pid)).toBe(false);
+    expect(eventTypes(sim)).not.toContain('realmBuilder');
+  });
+
+  it('never takes the interact key from the mailbox 6.21 yd away', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Reader');
+    const mailbox = mailboxEntity(sim);
+    const span = Math.hypot(
+      mailbox.pos.x - MONUMENT.position.x,
+      mailbox.pos.z - MONUMENT.position.z,
+    );
+    expect(span).toBeCloseTo(6.21, 2);
+
+    // Pressed against the plinth on the mailbox's side, still inside the
+    // monument's catchment: the mailbox is nearer and nearest wins.
+    standAt(sim, pid, towardMailbox(MONUMENT.radius + 0.2));
+    sim.drainEvents();
+    sim.interact(pid);
+    const types = eventTypes(sim);
+    expect(types).toContain('mailbox');
+    expect(types).not.toContain('realmBuilder');
+
+    // At the mailbox's own posting spot the monument is out of its catchment
+    // entirely, so it is not even a candidate.
+    standAt(sim, pid, EASTBROOK_LAYOUT.services.mailbox.frontStandingPoint);
+    sim.interact(pid);
+    const posting = eventTypes(sim);
+    expect(posting).toContain('mailbox');
+    expect(posting).not.toContain('realmBuilder');
+  });
+
+  it('never fills the RL observation object slot', () => {
+    // An honour roll is nothing an agent can gain from, and as a permanent
+    // object in the square it would otherwise shadow the mailbox in the slot.
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior' });
+    standAt(sim, sim.playerId, frontReadingSpot());
+    const obs = encodeObs(sim);
+    expect(obs).toHaveLength(obsSize());
+    // The nearest-interactable block (5 values) sits before the quests (2 per
+    // quest) and the 3-value tail: [present, distance, sin, cos, type].
+    const slotStart = obsSize() - 3 - QUEST_ORDER.length * 2 - 5;
+    const [present, distance, , , type] = obs.slice(slotStart, slotStart + 5);
+    const spot = frontReadingSpot();
+    const toMonument = Math.hypot(spot.x - MONUMENT.position.x, spot.z - MONUMENT.position.z);
+    // Either nothing is encoded, or whatever is encoded is not an object at
+    // the monument's distance (0.66 is the object type; distance is /40).
+    const encodedMonument =
+      present === 1 && type === 0.66 && Math.abs(distance * 40 - toMonument) < 0.01;
+    expect(encodedMonument).toBe(false);
   });
 
   it('labels the statue with a localized name, not the layout English', () => {

@@ -2,10 +2,10 @@
   "__provenance": {
     "run": "32621561241",
     "harvested": "2026-08-23",
-    "files": 3274,
+    "files": 3275,
     "mergedLocal": "2026-09-04",
     "mergedFiles": 251,
-    "note": "release/v0.42.0 sync of PR #3695 (Realm Builder of the Month monument) 2026-09-04: 7 new test files carry locally measured durations (single vitest run, jest-json start/end per file, skipped floor 100ms); 1 row(s) pruned for files absent from the merged tree (tests/eastbrook_civic_beacon.test.ts). Prior note: release/v0.42.0 sync of PR #3439 (Chimeglass Tortoise + Lanternback Troll + the bag-row Space guard) 2026-09-03: 6 new test files carry locally measured durations (single vitest run, jest-json start/end per file, skipped floor 100ms); 0 rows pruned for files absent from the merged tree. v0.41.0 base sync into the ignivar raid branch 2026-08-30: union of both arms' tables (release harvest wins shared rows, raid rows keep their locally measured durations), pruned to files present in the merged tree. Prior note: v0.41.0 sync into the ignivar raid consolidation: release CI harvest kept for shared files; the raid-branch and post-harvest test files carry locally measured durations (full vitest run of the absent files, jest-json start/end per file, skipped floor 100ms) 2026-08-26 prune: dropped 26 rows whose test file no longer exists in the tree. The 192 mergedLocal rows are LOCAL-scale durations (CI runs ~1.6x slower per ci_shard_plan.mjs); three of them exceed the 90s long-lane threshold locally (varkhul_forge_encounter, ignivar_encounter, nameplate_pledge) and CI_LONG_SUITES membership is deliberately deferred until a full-mode CI shard log provides in-shard numbers."
+    "note": "PR #3695 round-3 review fixes 2026-09-04: 1 new test file (tests/realm_builder_name.test.ts) carries a locally measured duration (single vitest run, jest-json start/end, rounded up for the ja_JP locale load). Prior note: release/v0.42.0 sync of PR #3695 (Realm Builder of the Month monument) 2026-09-04: 7 new test files carry locally measured durations (single vitest run, jest-json start/end per file, skipped floor 100ms); 1 row(s) pruned for files absent from the merged tree (tests/eastbrook_civic_beacon.test.ts). Prior note: release/v0.42.0 sync of PR #3439 (Chimeglass Tortoise + Lanternback Troll + the bag-row Space guard) 2026-09-03: 6 new test files carry locally measured durations (single vitest run, jest-json start/end per file, skipped floor 100ms); 0 rows pruned for files absent from the merged tree. v0.41.0 base sync into the ignivar raid branch 2026-08-30: union of both arms' tables (release harvest wins shared rows, raid rows keep their locally measured durations), pruned to files present in the merged tree. Prior note: v0.41.0 sync into the ignivar raid consolidation: release CI harvest kept for shared files; the raid-branch and post-harvest test files carry locally measured durations (full vitest run of the absent files, jest-json start/end per file, skipped floor 100ms) 2026-08-26 prune: dropped 26 rows whose test file no longer exists in the tree. The 192 mergedLocal rows are LOCAL-scale durations (CI runs ~1.6x slower per ci_shard_plan.mjs); three of them exceed the 90s long-lane threshold locally (varkhul_forge_encounter, ignivar_encounter, nameplate_pledge) and CI_LONG_SUITES membership is deliberately deferred until a full-mode CI shard log provides in-shard numbers."
   },
   "tests/abilities_command.test.ts": 2582,
   "tests/ability_audio_defers_to_recordings.test.ts": 141,
@@ -2316,6 +2316,7 @@
   "tests/realm_builder_monument.test.ts": 1693,
   "tests/realm_builder_monument_fx.test.ts": 223,
   "tests/realm_builder_monument_fx_core.test.ts": 14,
+  "tests/realm_builder_name.test.ts": 12,
   "tests/realm_builder_popup.test.ts": 39,
   "tests/realm_builder_roll_fetch.test.ts": 9,
   "tests/realm_population.test.ts": 8,

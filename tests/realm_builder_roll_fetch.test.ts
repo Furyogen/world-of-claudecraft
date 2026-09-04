@@ -8,6 +8,7 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { startRealmBuilderRollLoad } from '../src/game/realm_builder_boot';
 import { loadRealmBuilderRoll } from '../src/net/realm_builder_roll';
 import {
   currentRealmBuilder,
@@ -94,6 +95,31 @@ describe('loadRealmBuilderRoll', () => {
       })),
     );
     await expect(loadRealmBuilderRoll(URL)).resolves.toBeNull();
+  });
+
+  it('is never started for an offline world, and re-bakes the plate online', async () => {
+    const fetchSpy = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ entries: [{ year: 2026, month: 9, name: 'Isolde Vane' }] }),
+    }));
+    vi.stubGlobal('fetch', fetchSpy);
+    const sink = { setRealmBuilderHonouree: vi.fn() };
+
+    // The offline entry passes null: the shipped placeholder is its roll, and
+    // a realm's names must not be pulled into a world they do not belong to.
+    startRealmBuilderRollLoad(sink, null);
+    await Promise.resolve();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(sink.setRealmBuilderHonouree).not.toHaveBeenCalled();
+    expect(currentRealmBuilder().name).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+
+    // Online: one read, and the current name reaches the plate.
+    startRealmBuilderRollLoad(sink, {});
+    await vi.waitFor(() =>
+      expect(sink.setRealmBuilderHonouree).toHaveBeenCalledWith('Isolde Vane'),
+    );
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
   it('does not overwrite a good roll with a later failed read', async () => {

@@ -7151,9 +7151,13 @@ export const REALM_BUILDER_MONUMENT_TEMPLATE_ID = 'realm_builder_monument' as co
 /**
  * How close (yards, from the statue's centre) a player must stand for the
  * monument to be the object an interact press picks. Its collider keeps the
- * player 3.19 yd out, so this is arm's reach from the plinth, and well short
- * of the halfway point to the Ravenpost mailbox 6.21 yd away: the monument
- * never outranks the mailbox for a player who walked up to post a letter.
+ * player 3.19 yd out, so the live band is 3.19 to 4 yd: arm's reach from the
+ * plinth. The Ravenpost mailbox stands 6.21 yd from the centre and its posting
+ * spot about 7 yd, so a player who walked up to post a letter is outside this
+ * band, and one pressed against the plinth on the mailbox's side is nearer
+ * the mailbox anyway: nearest wins, and the monument never takes the press
+ * from it. The client sizes its click range from the same constant
+ * (src/game/interactions.ts objectInteractionRange).
  */
 export const REALM_BUILDER_MONUMENT_INTERACT_RADIUS = 4;
 

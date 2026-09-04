@@ -204,6 +204,28 @@ describe('auth gate', () => {
       vi.useRealTimers();
     }
   });
+
+  it('collapses concurrent cold reads into one query (single flight)', async () => {
+    // The property the cache is there for: a cold-start burst of world loads
+    // racing the same miss shares ONE refresh rather than each reaching
+    // Postgres. Two reads started before either resolves, one query.
+    let release: (() => void) | null = null;
+    const read = vi.fn(
+      () =>
+        new Promise<RealmBuilderRow[]>((resolve) => {
+          release = () => resolve(stored);
+        }),
+    );
+    setRealmBuilderDbForTests({ listRealmBuilders: read });
+    const first = runRoute('GET', '/api/realm-builder');
+    const second = runRoute('GET', '/api/realm-builder');
+    await vi.waitFor(() => expect(release).not.toBeNull());
+    (release as unknown as () => void)();
+    const [a, b] = await Promise.all([first, second]);
+    expect(read).toHaveBeenCalledTimes(1);
+    expect(a.status).toBe(200);
+    expect(b.body).toEqual(a.body);
+  });
 });
 
 describe('the public read takes the shared per-IP budget', () => {
@@ -298,6 +320,35 @@ describe('input validation', () => {
     expect(await reject({ year: 2026, month: 1, name: 'Wren\u0000Ashdown' })).toBe(400);
     expect(await reject({ year: 2026, month: 1, name: 'Wren\u202eAshdown' })).toBe(400);
     expect(await reject({ year: 2026, month: 1, name: 'Wren\nAshdown' })).toBe(400);
+    // The zero-width set can mint a name that renders empty or as a look-alike
+    // of an existing honouree.
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\u200bAshdown' })).toBe(400);
+    // (A LEADING BOM is whitespace to trim() and goes quietly; only one
+    // inside the name is a refusal.)
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\ufeffAshdown' })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\u2060Ashdown' })).toBe(400);
+  });
+
+  it('accepts a name in any script, accents and all', async () => {
+    // The refusal above is narrow on purpose: a name is a name. This guards
+    // against a later tightening of NAME_FORBIDDEN sweeping real people out.
+    const pool = {
+      query: async (_sql: string, params: unknown[]) => ({
+        rows: [
+          { year: params[1], month: params[2], name: params[3], note: params[4], updated_at: 0 },
+        ],
+      }),
+    };
+    for (const name of [
+      'Zoë Ní Bhriain',
+      'Søren Ærø',
+      '王小明',
+      'Ελένη Παπαδοπούλου',
+      'Đặng Thị Lan',
+    ]) {
+      const row = await upsertRealmBuilder(pool as never, 'test', { year: 2026, month: 9, name });
+      expect(row.name).toBe(name);
+    }
   });
 
   it('trims a name but never escapes it', async () => {
