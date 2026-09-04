@@ -14338,6 +14338,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'crucibleShop.balanceEntry': '{name} x{count}',
   'hudChrome.realmBuilder.title': '本月王國建造者',
   'hudChrome.realmBuilder.currentLabel': '本月榮譽獲得者',
+  'hudChrome.realmBuilder.placeholderName': '你的名字',
   'hudChrome.realmBuilder.placeholderHint': '這塊銘牌還在等待它的第一個名字。',
   'hudChrome.realmBuilder.pastTitle': '歷屆榮譽獲得者',
   'hudChrome.realmBuilder.pastEmpty': '榮譽榜上還沒有名字。',

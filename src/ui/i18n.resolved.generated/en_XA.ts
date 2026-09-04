@@ -3305,6 +3305,7 @@ export const en_XA: EnTranslations = {
     "realmBuilder": {
       "title": "[Ŕéáļɱ Ɓúíļðéŕ óƒ ţĥé Ɱóñţĥ]",
       "currentLabel": "[Ĥóñóúŕéð ţĥíš ɱóñţĥ]",
+      "placeholderName": "[Ýóúŕ Ñáɱé Ĥéŕé]",
       "placeholderHint": "[Ţĥíš þļáţé íš ŵáíţíñĝ ƒóŕ íţš ƒíŕšţ ñáɱé.]",
       "pastTitle": "[Þášţ ĥóñóúŕééš]",
       "pastEmpty": "[Ñó ñáɱéš óñ ţĥé ŕóļļ ýéţ.]",

@@ -2416,7 +2416,7 @@ export class Sim {
       this.addEntity(board);
     }
 
-    spawnRealmBuilderMonument(this, this.worldContent.props);
+    spawnRealmBuilderMonument(this.ctx, this.worldContent.props);
     if (cfg.noPlayer && this.devCommands) this.spawnHealerPracticeDummy();
 
     if (!cfg.noPlayer) {

@@ -3305,6 +3305,7 @@ export const zh_TW: EnTranslations = {
     "realmBuilder": {
       "title": "本月王國建造者",
       "currentLabel": "本月榮譽獲得者",
+      "placeholderName": "你的名字",
       "placeholderHint": "這塊銘牌還在等待它的第一個名字。",
       "pastTitle": "歷屆榮譽獲得者",
       "pastEmpty": "榮譽榜上還沒有名字。",

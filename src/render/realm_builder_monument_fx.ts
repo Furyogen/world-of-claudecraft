@@ -23,6 +23,7 @@
 import * as THREE from 'three';
 import { currentRealmBuilder } from '../sim/content/realm_builders';
 import { EASTBROOK_LAYOUT } from '../sim/eastbrook_layout';
+import { displayRealmBuilderName } from '../ui/realm_builder_name';
 import { loadTexture } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { GFX, gfxTierAtLeast, sharedUniforms } from './gfx';
@@ -386,6 +387,7 @@ interface MonumentImpostor {
 }
 
 const IMPOSTOR_VERTEX = /* glsl */ `
+  #include <fog_pars_vertex>
   uniform vec2 uCell;
   uniform vec2 uCellSize;
   varying vec2 vUv;
@@ -400,11 +402,19 @@ const IMPOSTOR_VERTEX = /* glsl */ `
       position.y,
       flat.z * position.x
     );
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(world, 1.0);
+    vec4 mvPosition = modelViewMatrix * vec4(world, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+    #include <fog_vertex>
   }
 `;
 
+// The atlas is sRGB-tagged, so the sample is linear like every lit surface,
+// and the tail is the one MeshStandardMaterial ends with (tonemapping,
+// colorspace, fog): a card that skipped it would stand un-fogged and
+// un-toned at the fog wall while every building around it fades, and would
+// shift colour against the body on the frame the two swap.
 const IMPOSTOR_FRAGMENT = /* glsl */ `
+  #include <fog_pars_fragment>
   uniform sampler2D uAtlas;
   varying vec2 vUv;
   void main() {
@@ -413,6 +423,9 @@ const IMPOSTOR_FRAGMENT = /* glsl */ `
     // the town like the solid it stands in for, and a blended quad does not.
     if (texel.a < 0.5) discard;
     gl_FragColor = vec4(texel.rgb, 1.0);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
+    #include <fog_fragment>
   }
 `;
 
@@ -432,7 +445,12 @@ function buildImpostor(placement: MonumentPlacement): MonumentImpostor | null {
   const material = new THREE.ShaderMaterial({
     vertexShader: IMPOSTOR_VERTEX,
     fragmentShader: IMPOSTOR_FRAGMENT,
+    // Scene fog reaches a ShaderMaterial only when asked for, and only through
+    // these uniforms (foliage_impostor.ts gets both from MeshStandardMaterial).
+    // Cloned rather than merged so uCell stays the caller's own Vector2.
+    fog: true,
     uniforms: {
+      ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog),
       uAtlas: { value: impostorTexture },
       uCell: uvOffset,
       uCellSize: {
@@ -682,12 +700,14 @@ function additive(
 /**
  * Build the monument's projections and lantern light.
  *
- * `honoureeName` defaults to the live roll, and is a parameter only so a test
- * can drive a long name through the panel's shrink-to-fit path.
+ * `honoureeName` defaults to the live roll (through the same localizing
+ * helper the card uses, so an unclaimed plate reads the same in both), and is
+ * a parameter only so a test can drive a long name through the panel's
+ * shrink-to-fit path.
  */
 export function buildRealmBuilderMonumentFx(
   placement: MonumentPlacement,
-  initialHonoureeName: string = currentRealmBuilder().name,
+  initialHonoureeName: string = displayRealmBuilderName(currentRealmBuilder()),
 ): RealmBuilderMonumentFx {
   let honoureeName = initialHonoureeName;
   const group = new THREE.Group();

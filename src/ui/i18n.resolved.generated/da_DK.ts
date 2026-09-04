@@ -3305,6 +3305,7 @@ export const da_DK: EnTranslations = {
     "realmBuilder": {
       "title": "Realm Builder of the Month",
       "currentLabel": "Honoured this month",
+      "placeholderName": "Your Name Here",
       "placeholderHint": "This plate is waiting for its first name.",
       "pastTitle": "Past honourees",
       "pastEmpty": "No names on the roll yet.",

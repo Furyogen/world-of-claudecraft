@@ -4393,6 +4393,9 @@ export const hudChromeStrings = {
   realmBuilder: {
     title: 'Realm Builder of the Month',
     currentLabel: 'Honoured this month',
+    // The unclaimed plate's stand-in name (src/sim/content/realm_builders.ts
+    // ships the English constant; every surface substitutes this key for it).
+    placeholderName: 'Your Name Here',
     // Shown only while the plate still carries the unclaimed placeholder name,
     // so nobody reads the placeholder as a real award.
     placeholderHint: 'This plate is waiting for its first name.',

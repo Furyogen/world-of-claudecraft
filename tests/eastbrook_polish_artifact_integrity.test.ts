@@ -1044,12 +1044,15 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // base merge: the civic centrepiece changed asset, subject and shader cache
 // key, so every provenance block was swept onto the merged fingerprinted
 // inputs. No capture was retaken.
+// Re-minted for the PR #3695 review fixes: the impostor fragment's fog and
+// tone-mapping tail moved realm_builder_monument_fx.ts. No capture was retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  '08fbcbb27faede02bb26f181f359e07f2e45c7cc5a572d3c98c602f91a9c6688';
+  'aae303c8be1af767739709f2749a17c0e111cdf570280c166ef59466401ba34e';
 // Re-minted at the release/v0.42.0 sync of PR #3439: renderer.ts moved for the
 // mount lifecycle seam (mount_lifecycle.ts) and the rickshaw hooks it absorbed.
+// Re-minted again for the PR #3695 review fixes (the impostor fragment tail).
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  '814326b1828389b47e0b512044d6852c46148b2bb4ba1b310e87331f088894ca';
+  '85392484fb6509a37aa445bcc5bd5ebba58819939847318ccf288b048341b708';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2209,7 +2212,11 @@ describe('Eastbrook polish performance and contact evidence', () => {
       // release/v0.42.0 base merge: the first-order composite follows the
       // renderer, town and civicShader leaves, then this second-order seal
       // follows the swept evidence bytes. No capture was retaken.
-    ).toBe('4c159d680a312b16beb71bc2ecfd8e45f5ff0b8495cfb7f5cd213d18ff52d253');
+      // Re-minted for the PR #3695 review fixes: the impostor fragment's fog
+      // and tone-mapping tail moved realm_builder_monument_fx.ts, the composite
+      // followed it, then this seal followed the swept bytes. No capture was
+      // retaken.
+    ).toBe('c5c6bdac1fc2fe0c2848300d5ca6deec0c52793b376fce1c3609ca1a39f6f754');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

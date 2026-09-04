@@ -7148,6 +7148,14 @@ export interface MailboxDef {
 // it needs a templateId rather than a def list: interaction.ts recognises the
 // entity by this id and the client sizes its click range from it.
 export const REALM_BUILDER_MONUMENT_TEMPLATE_ID = 'realm_builder_monument' as const;
+/**
+ * How close (yards, from the statue's centre) a player must stand for the
+ * monument to be the object an interact press picks. Its collider keeps the
+ * player 3.19 yd out, so this is arm's reach from the plinth, and well short
+ * of the halfway point to the Ravenpost mailbox 6.21 yd away: the monument
+ * never outranks the mailbox for a player who walked up to post a letter.
+ */
+export const REALM_BUILDER_MONUMENT_INTERACT_RADIUS = 4;
 
 // Noticeboards currently have one complete cross-platform implementation. Keep
 // the world-content shape closed over that renderer/collider contract instead

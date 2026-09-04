@@ -14641,6 +14641,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'crucibleShop.balanceEntry': '{name} x{count}',
   'hudChrome.realmBuilder.title': '今月の王国建設者',
   'hudChrome.realmBuilder.currentLabel': '今月の受賞者',
+  'hudChrome.realmBuilder.placeholderName': 'あなたの名前',
   'hudChrome.realmBuilder.placeholderHint': 'この銘板は最初の名前を待っています。',
   'hudChrome.realmBuilder.pastTitle': 'これまでの受賞者',
   'hudChrome.realmBuilder.pastEmpty': 'まだ名前が刻まれていません。',

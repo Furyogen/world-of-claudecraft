@@ -14849,6 +14849,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'crucibleShop.balanceEntry': '{name} x{count}',
   'hudChrome.realmBuilder.title': 'Зодчий месяца',
   'hudChrome.realmBuilder.currentLabel': 'Отмечен в этом месяце',
+  'hudChrome.realmBuilder.placeholderName': 'Ваше имя',
   'hudChrome.realmBuilder.placeholderHint': 'Эта табличка ждёт своего первого имени.',
   'hudChrome.realmBuilder.pastTitle': 'Прежние зодчие',
   'hudChrome.realmBuilder.pastEmpty': 'В списке пока нет имён.',

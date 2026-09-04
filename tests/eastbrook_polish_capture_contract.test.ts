@@ -359,8 +359,11 @@ interface AttributionTargetFixture {
 // key on top of the mount-lifecycle and occluder-fade moves already sealed
 // above, so every fingerprinted input carries the merged bytes. No capture
 // was retaken.
+// Re-minted for the PR #3695 review fixes: the monument's impostor fragment
+// gained the fog, tonemapping and colourspace tail, moving
+// realm_builder_monument_fx.ts. No capture was retaken.
 const PINNED_POLISH_COMPOSITE_FINGERPRINT =
-  '814326b1828389b47e0b512044d6852c46148b2bb4ba1b310e87331f088894ca';
+  '85392484fb6509a37aa445bcc5bd5ebba58819939847318ccf288b048341b708';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

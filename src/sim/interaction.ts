@@ -84,6 +84,7 @@ import {
   INTERACT_RANGE,
   type InvSlot,
   OBJECT_RESPAWN,
+  REALM_BUILDER_MONUMENT_INTERACT_RADIUS,
   REALM_BUILDER_MONUMENT_TEMPLATE_ID,
 } from './types';
 import { markWorldBossLooted } from './world_boss';
@@ -783,6 +784,10 @@ export function pickUpObject(
   // payload: both are read, never taken.
   if (!noticeboardDef && !isRealmBuilderMonument && !obj.objectItemId) return false;
   const interactionRange = noticeboardDef?.interactionRadius ?? INTERACT_RANGE;
+  if (isRealmBuilderMonument && dist2d(p.pos, obj.pos) > REALM_BUILDER_MONUMENT_INTERACT_RADIUS) {
+    ctx.error(meta.entityId, 'Too far away.');
+    return false;
+  }
   if (dist2d(p.pos, obj.pos) > interactionRange) {
     ctx.error(meta.entityId, 'Too far away.');
     return false;
@@ -1023,7 +1028,15 @@ export function interact(
       // world (the client withholds its view entirely), so the interact key must
       // not select it either: picking it would refuse below, and worse, a shiny
       // nobody can see would outrank a visible NPC or node standing further away.
-      !isQuestGatedGroundObjectHidden(e, r.meta.questLog)
+      !isQuestGatedGroundObjectHidden(e, r.meta.questLog) &&
+      // The monument is a permanent lootable object in the middle of the
+      // square, so it competes in this slot with the mailbox 6.21 yd away:
+      // its own catchment keeps it out of the race unless the player is at
+      // the plinth.
+      !(
+        e.templateId === REALM_BUILDER_MONUMENT_TEMPLATE_ID &&
+        d2 > REALM_BUILDER_MONUMENT_INTERACT_RADIUS ** 2
+      )
     ) {
       const noticeboardDef = noticeboardDefByEntityId(noticeboardDefinitions, e.id);
       if (!noticeboardDef || d2 <= noticeboardDef.interactionRadius ** 2) {

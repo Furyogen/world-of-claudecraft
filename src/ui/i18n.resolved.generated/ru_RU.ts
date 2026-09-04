@@ -3305,6 +3305,7 @@ export const ru_RU: EnTranslations = {
     "realmBuilder": {
       "title": "Зодчий месяца",
       "currentLabel": "Отмечен в этом месяце",
+      "placeholderName": "Ваше имя",
       "placeholderHint": "Эта табличка ждёт своего первого имени.",
       "pastTitle": "Прежние зодчие",
       "pastEmpty": "В списке пока нет имён.",

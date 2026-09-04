@@ -34,6 +34,9 @@ export interface RealmBuilderHonour {
  */
 export const REALM_BUILDER_PLACEHOLDER_NAME = 'Your Name Here';
 
+// The month pair here is inert: every surface checks isPlaceholderRealmBuilder
+// before formatting a month, so the unclaimed plate never dates an award nobody
+// has won. It is a valid month only so the shape stays one shape.
 const PLACEHOLDER_HONOUR: RealmBuilderHonour = {
   year: 2026,
   month: 8,

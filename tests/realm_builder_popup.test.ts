@@ -1,17 +1,24 @@
 // @vitest-environment happy-dom
 //
-// The Realm Builder honour roll card. Two rules carry most of its weight:
+// The Realm Builder honour roll card. Three rules carry most of its weight:
 // honouree names splice VERBATIM (they are world data, like player names and
-// the signpost's guild names), and the month is formatted through Intl so it
-// reads in the player's own language rather than being stored as English.
+// the signpost's guild names), the month is formatted through Intl so it
+// reads in the player's own language rather than being stored as English, and
+// the shipped placeholder is chrome, not a name, so it localizes and carries
+// no month.
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RealmBuilderHonour } from '../src/sim/content/realm_builders';
 import { REALM_BUILDER_PLACEHOLDER_NAME } from '../src/sim/content/realm_builders';
-import { setLanguage, t } from '../src/ui/i18n';
-import { RealmBuilderPopup } from '../src/ui/realm_builder_popup';
+import { ensureLocaleLoaded, setLanguage, t } from '../src/ui/i18n';
+import { presentRealmBuilder, RealmBuilderPopup } from '../src/ui/realm_builder_popup';
 
 const CURRENT: RealmBuilderHonour = {
+  year: 2026,
+  month: 8,
+  name: 'Isolde Vane',
+};
+const PLACEHOLDER: RealmBuilderHonour = {
   year: 2026,
   month: 8,
   name: REALM_BUILDER_PLACEHOLDER_NAME,
@@ -39,7 +46,7 @@ describe('RealmBuilderPopup', () => {
   it('leads with the current honouree and their month', () => {
     popup.show(CURRENT, []);
 
-    expect(document.querySelector('.rb-name')?.textContent).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+    expect(document.querySelector('.rb-name')?.textContent).toBe('Isolde Vane');
     expect(document.querySelector('.rb-month')?.textContent).toBe('August 2026');
     expect(document.querySelector('.tut-title')?.textContent).toBe(
       t('hudChrome.realmBuilder.title'),
@@ -50,13 +57,50 @@ describe('RealmBuilderPopup', () => {
   });
 
   it('says the plate is unclaimed only while it carries the placeholder', () => {
-    popup.show(CURRENT, []);
+    popup.show(PLACEHOLDER, []);
     expect(document.querySelector('.rb-hint')?.textContent).toBe(
       t('hudChrome.realmBuilder.placeholderHint'),
     );
+    // The placeholder is not an award: no month, or the card would date a
+    // prize nobody has won.
+    expect(document.querySelector('.rb-month')).toBeNull();
 
-    popup.show({ year: 2026, month: 8, name: 'Wren Ashdown' }, []);
+    popup.show(CURRENT, []);
     expect(document.querySelector('.rb-hint')).toBeNull();
+    expect(document.querySelector('.rb-month')).not.toBeNull();
+  });
+
+  it('localizes the placeholder, and only the placeholder', async () => {
+    // LOADED, not merely selected: setLanguage alone leaves t() on the English
+    // fallback table, and the two strings would compare equal proving nothing.
+    await ensureLocaleLoaded('ja_JP');
+    setLanguage('ja_JP');
+    popup.show(PLACEHOLDER, []);
+    const localized = t('hudChrome.realmBuilder.placeholderName');
+    expect(localized).not.toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+    expect(document.querySelector('.rb-name')?.textContent).toBe(localized);
+
+    // A real name is world data and never passes through t().
+    popup.show(CURRENT, []);
+    expect(document.querySelector('.rb-name')?.textContent).toBe('Isolde Vane');
+  });
+
+  it('presents the roll to the statue as well as the card', async () => {
+    // The sim's inspect event is the authoritative roll online (the server
+    // republishes on every dashboard write); the plate was baked from a
+    // one-shot read at boot. Presenting through both is what lets a
+    // mid-session save reach the statue without a reconnect.
+    const statue = { setRealmBuilderHonouree: vi.fn() };
+    presentRealmBuilder(popup, statue, CURRENT, PAST);
+    expect(statue.setRealmBuilderHonouree).toHaveBeenCalledWith('Isolde Vane');
+    expect(document.querySelector('.rb-name')?.textContent).toBe('Isolde Vane');
+
+    await ensureLocaleLoaded('ja_JP');
+    setLanguage('ja_JP');
+    presentRealmBuilder(popup, statue, PLACEHOLDER, []);
+    expect(statue.setRealmBuilderHonouree).toHaveBeenLastCalledWith(
+      t('hudChrome.realmBuilder.placeholderName'),
+    );
   });
 
   it('shows an empty-roll line rather than a bare gap before the first honouree', () => {
@@ -91,7 +135,7 @@ describe('RealmBuilderPopup', () => {
     expect(document.querySelector('.rb-month')?.textContent).not.toBe('August 2026');
     expect(document.querySelector('.rb-month')?.textContent).toMatch(/2026/);
     // ...the honouree name never does.
-    expect(document.querySelector('.rb-name')?.textContent).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
+    expect(document.querySelector('.rb-name')?.textContent).toBe('Isolde Vane');
     expect([...document.querySelectorAll('.rb-item-name')].map((node) => node.textContent)).toEqual(
       ['Wren Ashdown', '<script>Marek</script>'],
     );

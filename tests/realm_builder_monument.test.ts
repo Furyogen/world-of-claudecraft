@@ -87,8 +87,8 @@ describe('the Realm Builder honour roll', () => {
     const current = currentRealmBuilder();
     expect(current.name).toBe(REALM_BUILDER_PLACEHOLDER_NAME);
     expect(isPlaceholderRealmBuilder(current)).toBe(true);
-    // A real calendar month, so the card's Intl formatting has something to
-    // format and the first hand-announced honouree only changes the name.
+    // A valid calendar month, so the honour keeps one shape; the card never
+    // prints it for the placeholder (tests/realm_builder_popup.test.ts).
     expect(current.month).toBeGreaterThanOrEqual(1);
     expect(current.month).toBeLessThanOrEqual(12);
     expect(Number.isInteger(current.year)).toBe(true);

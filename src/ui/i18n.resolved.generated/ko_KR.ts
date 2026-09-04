@@ -3305,6 +3305,7 @@ export const ko_KR: EnTranslations = {
     "realmBuilder": {
       "title": "이달의 왕국 건설자",
       "currentLabel": "이달의 수상자",
+      "placeholderName": "당신의 이름",
       "placeholderHint": "이 명판은 첫 번째 이름을 기다리고 있습니다.",
       "pastTitle": "역대 수상자",
       "pastEmpty": "아직 명단에 이름이 없습니다.",

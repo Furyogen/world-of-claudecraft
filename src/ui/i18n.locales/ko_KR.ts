@@ -14646,6 +14646,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'crucibleShop.balanceEntry': '{name} x{count}',
   'hudChrome.realmBuilder.title': '이달의 왕국 건설자',
   'hudChrome.realmBuilder.currentLabel': '이달의 수상자',
+  'hudChrome.realmBuilder.placeholderName': '당신의 이름',
   'hudChrome.realmBuilder.placeholderHint': '이 명판은 첫 번째 이름을 기다리고 있습니다.',
   'hudChrome.realmBuilder.pastTitle': '역대 수상자',
   'hudChrome.realmBuilder.pastEmpty': '아직 명단에 이름이 없습니다.',

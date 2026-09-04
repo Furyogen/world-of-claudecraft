@@ -1,7 +1,7 @@
 // The client's read of the realm's honour roll (src/net/realm_builder_roll.ts).
 //
 // This runs on the world-load path of every online client, so the property that
-// actually matters is not "it parses json" — it is that NOTHING it can hit
+// actually matters is not "it parses json": it is that NOTHING it can hit
 // keeps a player out of the world. A realm with no honourees, a realm running
 // an older server without the endpoint, a 500, a network drop, garbage in the
 // body: all five leave the shipped placeholder standing and return null.

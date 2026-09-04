@@ -14,10 +14,36 @@
 // recipe instead of widening this.
 //
 // Honouree names are world data and splice verbatim, like player names and the
-// signpost's guild names: only the chrome and the month localize.
+// signpost's guild names: only the chrome, the month and the unclaimed plate's
+// placeholder (src/ui/realm_builder_name.ts) localize.
 
 import { isPlaceholderRealmBuilder, type RealmBuilderHonour } from '../sim/content/realm_builders';
 import { formatDateTime, t } from './i18n';
+import { displayRealmBuilderName } from './realm_builder_name';
+
+/** The half of the renderer this card's event also has to reach. */
+export interface RealmBuilderStatue {
+  setRealmBuilderHonouree(name: string): void;
+}
+
+/**
+ * Present the roll the sim just emitted: the card, AND the statue's plate.
+ *
+ * Online the sim's event is the authoritative roll (the server republishes on
+ * every dashboard write), while the plate was baked from a one-shot read at
+ * boot. Routing the event through the plate too is what makes an operator's
+ * mid-session save reach the statue and not only the card; the re-bake is a
+ * no-op when the name has not changed.
+ */
+export function presentRealmBuilder(
+  popup: RealmBuilderPopup,
+  statue: RealmBuilderStatue,
+  current: RealmBuilderHonour,
+  past: readonly RealmBuilderHonour[],
+): void {
+  statue.setRealmBuilderHonouree(displayRealmBuilderName(current));
+  popup.show(current, past);
+}
 
 /** "August 2026" in the reader's own language, from the honour's number pair. */
 function honourMonthLabel(honour: RealmBuilderHonour): string {
@@ -56,11 +82,16 @@ export class RealmBuilderPopup {
     currentLabel.textContent = t('hudChrome.realmBuilder.currentLabel');
     const currentName = document.createElement('div');
     currentName.className = 'rb-name';
-    currentName.textContent = current.name;
-    const currentMonth = document.createElement('div');
-    currentMonth.className = 'rb-month';
-    currentMonth.textContent = honourMonthLabel(current);
-    currentBlock.append(currentLabel, currentName, currentMonth);
+    currentName.textContent = displayRealmBuilderName(current);
+    currentBlock.append(currentLabel, currentName);
+    // The placeholder is not an award, so it carries no month: printing one
+    // would date a prize nobody has won yet.
+    if (!isPlaceholderRealmBuilder(current)) {
+      const currentMonth = document.createElement('div');
+      currentMonth.className = 'rb-month';
+      currentMonth.textContent = honourMonthLabel(current);
+      currentBlock.appendChild(currentMonth);
+    }
     if (isPlaceholderRealmBuilder(current)) {
       const hint = document.createElement('div');
       hint.className = 'rb-hint';

@@ -10545,6 +10545,7 @@ export type TranslationKeyFlat =
   | 'hudChrome.realmBuilder.pastEmpty'
   | 'hudChrome.realmBuilder.pastTitle'
   | 'hudChrome.realmBuilder.placeholderHint'
+  | 'hudChrome.realmBuilder.placeholderName'
   | 'hudChrome.realmBuilder.title'
   | 'hudChrome.reliquary.accountScopeBadge'
   | 'hudChrome.reliquary.accountScopeNote'

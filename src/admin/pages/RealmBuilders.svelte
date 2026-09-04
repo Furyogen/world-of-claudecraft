@@ -233,7 +233,7 @@
   .rb-current-name {
     font-size: 1.6rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--gold);
   }
   .rb-current-month {
     color: var(--text-dim);
@@ -251,6 +251,6 @@
     margin-top: 0.75rem;
   }
   .rb-problem {
-    color: var(--danger);
+    color: var(--color-danger);
   }
 </style>

@@ -7,6 +7,10 @@
 // is nothing; a slow or missing endpoint holding a player at the loading screen
 // is not. Everything downstream fails quiet, so there is no error path to
 // handle here either.
+//
+// ONLINE ONLY. main.ts gates the call on its online world: an offline browser
+// world is the shipped placeholder's home (src/net/realm_builder_roll.ts), and
+// must not pull a realm's roll into sim content it does not belong to.
 
 import { apiUrl } from '../client_origin';
 import { loadRealmBuilderRoll } from '../net/realm_builder_roll';

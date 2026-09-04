@@ -268,19 +268,31 @@ export interface MonumentLodPlan {
   readonly effects: boolean;
 }
 
+// The three plans, built once: monumentLodPlan runs every frame from two
+// callers (the body's setLod and the effects' update), and a per-frame object
+// would be the only allocation on the monument's steady-state path.
+const LOD_FULL: MonumentLodPlan = Object.freeze({ body: true, impostor: false, effects: true });
+const LOD_BODY_ONLY: MonumentLodPlan = Object.freeze({
+  body: true,
+  impostor: false,
+  effects: false,
+});
+const LOD_IMPOSTOR: MonumentLodPlan = Object.freeze({
+  body: false,
+  impostor: true,
+  effects: false,
+});
+
 /**
  * What to draw at `distance` yards from the monument.
  *
  * Body and impostor are exclusive by construction: exactly one of them is true
- * at every distance, so a caller cannot draw both or neither.
+ * at every distance, so a caller cannot draw both or neither. Answers one of
+ * three shared frozen plans, never a fresh object.
  */
 export function monumentLodPlan(distance: number): MonumentLodPlan {
-  const impostor = distance >= MONUMENT_IMPOSTOR_RANGE;
-  return {
-    body: !impostor,
-    impostor,
-    effects: distance < MONUMENT_EFFECTS_RANGE,
-  };
+  if (distance >= MONUMENT_IMPOSTOR_RANGE) return LOD_IMPOSTOR;
+  return distance < MONUMENT_EFFECTS_RANGE ? LOD_FULL : LOD_BODY_ONLY;
 }
 
 /**

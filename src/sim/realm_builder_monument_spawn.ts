@@ -17,14 +17,8 @@
 
 import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import { createGroundObject } from './entity';
-import type { Entity, Vec3, ZonePropsDef } from './types';
-
-/** The slice of the sim this spawn needs: no more of it is in scope here. */
-export interface RealmBuilderMonumentSpawnHost {
-  readonly entities: ReadonlyMap<number, Entity>;
-  groundPos(x: number, z: number): Vec3;
-  addEntity(entity: Entity): void;
-}
+import type { SimContext } from './sim_context';
+import type { ZonePropsDef } from './types';
 
 /**
  * Spawn the monument's inspect entity, if this world is one that drew it.
@@ -33,24 +27,24 @@ export interface RealmBuilderMonumentSpawnHost {
  * same slot, which is a content bug rather than anything a player can cause.
  */
 export function spawnRealmBuilderMonument(
-  host: RealmBuilderMonumentSpawnHost,
+  ctx: SimContext,
   props: Pick<ZonePropsDef, 'wells'>,
 ): void {
   const def = EASTBROOK_LAYOUT.civic.monument;
   if (!props.wells.some((well) => well.id === def.id)) return;
-  if (host.entities.has(def.entityId)) {
+  if (ctx.entities.has(def.entityId)) {
     throw new Error(`Duplicate static service entity id: ${def.entityId}`);
   }
   const monument = createGroundObject(
     def.entityId,
     '',
     def.name,
-    host.groundPos(def.position.x, def.position.z),
+    ctx.groundPos(def.position.x, def.position.z),
   );
   monument.templateId = def.templateId;
   monument.objectItemId = null;
   monument.lootable = true;
   monument.facing = def.rotation;
   monument.prevFacing = def.rotation;
-  host.addEntity(monument);
+  ctx.addEntity(monument);
 }

@@ -16,7 +16,9 @@ import {
   publicReadRateLimited,
   resetPublicReadRateLimits,
 } from '../../server/ratelimit';
+import { REALM } from '../../server/realm';
 import {
+  PUBLIC_ROLL_TTL_MS,
   publishRealmBuilderRoll,
   resetRealmBuilderDbForTests,
   routes,
@@ -163,7 +165,44 @@ describe('auth gate', () => {
     expect(route.middleware ?? []).toHaveLength(0);
     const out = await runRoute('GET', '/api/realm-builder', { token: 'f'.repeat(64) });
     expect(out.status).toBe(200);
-    expect(out.body).toMatchObject({ entries: [august, july] });
+    // EXACT shape: the calendar month and the name, nothing else. `note` is
+    // an operator's remark for the dashboard and `updatedAt` is audit; neither
+    // belongs on an anonymous endpoint, and toMatchObject would let them leak.
+    expect(out.body).toEqual({
+      realm: REALM,
+      entries: [
+        { year: 2026, month: 8, name: 'Wren Ashdown' },
+        { year: 2026, month: 7, name: 'Marek Fell' },
+      ],
+    });
+  });
+
+  it('serves the public read from a cache, busted by every write', async () => {
+    vi.useFakeTimers();
+    try {
+      const read = vi.fn(async () => stored);
+      setRealmBuilderDbForTests({ listRealmBuilders: read });
+      // The answer is viewer-identical, so a cold-start burst of world loads
+      // is one query, not one per player.
+      await runRoute('GET', '/api/realm-builder');
+      await runRoute('GET', '/api/realm-builder');
+      expect(read).toHaveBeenCalledTimes(1);
+      // A write must reach the next reader immediately (the plaque's promise
+      // that no client waits for a restart, or for a TTL).
+      const save = await runRoute('POST', '/admin/api/realm-builders', {
+        body: { year: 2026, month: 9, name: 'Isolde Vane' },
+      });
+      expect(save.status).toBe(200);
+      const after = await runRoute('GET', '/api/realm-builder');
+      expect((after.body as { entries: { name: string }[] }).entries[0].name).toBe('Isolde Vane');
+      // And the TTL alone refreshes it, for a row a PEER process wrote.
+      const calls = read.mock.calls.length;
+      vi.advanceTimersByTime(PUBLIC_ROLL_TTL_MS + 1);
+      await runRoute('GET', '/api/realm-builder');
+      expect(read.mock.calls.length).toBe(calls + 1);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 
@@ -254,6 +293,11 @@ describe('input validation', () => {
     expect(await reject({ year: 2026, month: 1, name: '   ' })).toBe(400);
     expect(await reject({ year: 2026, month: 1, name: 'x'.repeat(200) })).toBe(400);
     expect(await reject({ year: 2026, month: 1, name: 'x', note: 'y'.repeat(400) })).toBe(400);
+    // Control and bidi-override characters are not part of anybody's name;
+    // they are how a name is made to render as something else on the plate.
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\u0000Ashdown' })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\u202eAshdown' })).toBe(400);
+    expect(await reject({ year: 2026, month: 1, name: 'Wren\nAshdown' })).toBe(400);
   });
 
   it('trims a name but never escapes it', async () => {

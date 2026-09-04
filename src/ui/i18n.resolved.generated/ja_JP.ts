@@ -3305,6 +3305,7 @@ export const ja_JP: EnTranslations = {
     "realmBuilder": {
       "title": "今月の王国建設者",
       "currentLabel": "今月の受賞者",
+      "placeholderName": "あなたの名前",
       "placeholderHint": "この銘板は最初の名前を待っています。",
       "pastTitle": "これまでの受賞者",
       "pastEmpty": "まだ名前が刻まれていません。",

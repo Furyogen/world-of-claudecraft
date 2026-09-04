@@ -71,18 +71,31 @@ function validMonth(value: unknown): number {
 }
 
 /**
+ * Characters no name is made of: C0/C1 controls (a newline would break the
+ * plate's one-line bake), and the Unicode bidi embedding/override/isolate
+ * marks, which exist to make text render in an order other than the one it
+ * is stored in. Rejected, not stripped: an operator should see the refusal.
+ */
+// biome-ignore lint/suspicious/noControlCharactersInRegex: matching controls is the point
+const NAME_FORBIDDEN = /[\u0000-\u001f\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
+
+/**
  * An honouree's name.
  *
- * Trimmed and length-capped, and NOTHING else: this is a community member's
- * own name and it splices verbatim wherever it is shown, exactly like a player
- * name. Every surface that renders it writes it as text (the card sets
- * textContent, the monument bakes it into a canvas), so escaping here would
- * only mean an operator seeing their own entry come back mangled.
+ * Trimmed, length-capped and checked for the characters above, and NOTHING
+ * else: this is a community member's own name and it splices verbatim
+ * wherever it is shown, exactly like a player name. Every surface that renders
+ * it writes it as text (the card sets textContent, the monument bakes it into
+ * a canvas), so escaping here would only mean an operator seeing their own
+ * entry come back mangled.
  */
 function validName(value: unknown): string {
   const name = typeof value === 'string' ? value.trim() : '';
   if (name.length === 0 || name.length > REALM_BUILDER_MAX_NAME_LENGTH) {
     throw new TypeError('name must be a non-empty string');
+  }
+  if (NAME_FORBIDDEN.test(name)) {
+    throw new TypeError('name contains control or bidi characters');
   }
   return name;
 }

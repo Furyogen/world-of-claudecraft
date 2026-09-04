@@ -466,6 +466,37 @@ describe('Realm Builder monument distance LOD', () => {
     expect(impostor.castShadow).toBe(false);
   });
 
+  it('fogs and tone-maps the billboard like the solid it stands in for', () => {
+    useTier('high');
+    restores.push(
+      realmBuilderMonumentPreloadInternalsForTest.setImpostorTexture(new THREE.Texture()),
+    );
+    const body = buildRealmBuilderMonumentBody(fakeSource(), livePlacement());
+    const impostor = meshNamed(body.group, 'Impostor') as THREE.Mesh;
+    const material = impostor.material as THREE.ShaderMaterial;
+    // A ShaderMaterial gets scene fog only when it asks, and only through the
+    // fog uniforms; without both, the card stands un-fogged at the fog wall
+    // while every building around it fades (foliage_impostor.ts fogs too).
+    expect(material.fog).toBe(true);
+    expect(material.uniforms.fogColor).toBeDefined();
+    expect(material.uniforms.fogNear).toBeDefined();
+    expect(material.uniforms.fogFar).toBeDefined();
+    expect(material.vertexShader).toContain('#include <fog_pars_vertex>');
+    expect(material.vertexShader).toContain('#include <fog_vertex>');
+    // The tail MeshStandardMaterial ends with, in its order: tone-map,
+    // then colourspace, then fog. Skipping any of them colour-shifts the
+    // billboard against the body on the frame the two swap.
+    const fragment = material.fragmentShader;
+    const tone = fragment.indexOf('#include <tonemapping_fragment>');
+    const colour = fragment.indexOf('#include <colorspace_fragment>');
+    const fog = fragment.indexOf('#include <fog_fragment>');
+    expect(tone).toBeGreaterThan(fragment.indexOf('gl_FragColor ='));
+    expect(colour).toBeGreaterThan(tone);
+    expect(fog).toBeGreaterThan(colour);
+    // And the caller's cell offset is still the caller's own object.
+    expect(material.uniforms.uCell.value).toBeInstanceOf(THREE.Vector2);
+  });
+
   it('never swaps at all when the atlas has not loaded', () => {
     useTier('high');
     restores.push(realmBuilderMonumentPreloadInternalsForTest.setImpostorTexture(null));
