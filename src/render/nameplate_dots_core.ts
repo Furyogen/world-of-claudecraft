@@ -81,6 +81,10 @@ export interface NameplateDotSlot {
   /** Fraction of the full duration still to run, 0..1, for the cooldown swipe. */
   fraction: number;
   remaining: number;
+  /** The aura's full duration, so the row can share isAuraExpiring with the aura
+   *  strips instead of inventing a flat threshold. 0 for a permanent aura, which
+   *  that rule reads as never expiring. */
+  duration: number;
   decimals: 0 | 1;
   /** PAINTER-WRITTEN: artwork resolved from `iconKey`, '' while unresolved. */
   iconUrl: string;
@@ -112,6 +116,7 @@ function newSlot(): NameplateDotSlot {
     school: '',
     fraction: 1,
     remaining: 0,
+    duration: 0,
     decimals: 0,
     iconUrl: '',
     timeText: '',
@@ -175,6 +180,7 @@ export function nameplateDotsInto(
     slot.school = best.school ?? '';
     slot.fraction = remainingFraction(best);
     slot.remaining = Math.max(0, best.remaining);
+    slot.duration = best.permanent === true ? 0 : (best.duration ?? 0);
     slot.decimals = slot.remaining < NAMEPLATE_DOT_DECIMAL_BELOW_SEC ? 1 : 0;
     previousId = best.id;
     written++;

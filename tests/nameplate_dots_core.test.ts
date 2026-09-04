@@ -20,6 +20,7 @@ import {
 import {
   clampNameplateDotScale,
   NAMEPLATE_DOT_CAP,
+  NAMEPLATE_DOT_DECIMAL_BELOW_SEC,
   NAMEPLATE_DOT_GAP,
   NAMEPLATE_DOT_SCALE_MAX,
   NAMEPLATE_DOT_SCALE_MIN,
@@ -163,10 +164,16 @@ describe('nameplateDotsInto', () => {
     expect(plan.slots[1].fraction).toBe(1);
   });
 
-  it('asks for a decimal only under the ten-second mark', () => {
+  it('asks for a decimal only under the ten-second mark, bracketed at exactly ten', () => {
+    // 9.4 and 12 would pass for any threshold between them; these two straddle
+    // the constant itself, the shape tests/target_dots_view.test.ts uses.
+    expect(NAMEPLATE_DOT_DECIMAL_BELOW_SEC).toBe(10);
     const plan = nameplateDotsInto(
       newNameplateDotsPlan(),
-      [aura({ id: 'a_soon', remaining: 9.4 }), aura({ id: 'b_later', remaining: 12 })],
+      [
+        aura({ id: 'a_under', remaining: NAMEPLATE_DOT_DECIMAL_BELOW_SEC - 0.01 }),
+        aura({ id: 'b_at', remaining: NAMEPLATE_DOT_DECIMAL_BELOW_SEC }),
+      ],
       isMine,
     );
     expect(plan.slots[0].decimals).toBe(1);
@@ -179,9 +186,16 @@ describe('nameplateDotsInto', () => {
     const plan = newNameplateDotsPlan();
     nameplateDotsInto(plan, [aura({ id: 'corruption' })], isMine);
     plan.slots[0].iconUrl = 'data:corruption';
+    plan.slots[0].timeText = '12';
+    plan.slots[0].timeValue = 12;
     nameplateDotsInto(plan, [aura({ id: 'immolate' })], isMine);
     expect(plan.slots[0].iconKey).toBe('immolate');
+    // BOTH painter-written fields, not just the artwork: the countdown text is
+    // cached against timeValue, so leaving it would print the previous aura's
+    // seconds until its own number happened to move.
     expect(plan.slots[0].iconUrl).toBe('');
+    expect(plan.slots[0].timeText).toBe('');
+    expect(plan.slots[0].timeValue).toBeNaN();
   });
 
   it('keeps painter-resolved artwork when the same aura stays in its slot', () => {

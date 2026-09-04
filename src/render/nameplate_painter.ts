@@ -3,6 +3,7 @@
 // projection, decluttering, text/image caches, and the single canvas surface.
 
 import * as THREE from 'three';
+import { isOwnAura } from '../sim/aura_classify';
 import { ABILITIES, MOBS, QUESTS } from '../sim/data';
 import { specialRoleColor } from '../sim/discord_roles';
 import { isQuestGatedEntityHidden } from '../sim/quest_gated_entity';
@@ -30,7 +31,6 @@ import {
 } from '../ui/icons';
 import { localizeSimAuraName } from '../ui/sim_i18n';
 import { type IWorld, OVERHEAD_EMOTES } from '../world_api';
-
 import { castBarState } from './cast_bar';
 import { anyCharacterRigDrawing, entityHasNoBody } from './entity_gate_stand_in_core';
 import { mobDisplayName, npcDisplayName, objectDisplayName } from './entity_labels';
@@ -167,6 +167,9 @@ export class NameplatePainter {
   private readonly tmpV = new THREE.Vector3();
   private readonly tmpV2 = new THREE.Vector3();
   private readonly plan: NameplatePlan = newNameplatePlan();
+  // The bound ownership predicate and the id it was bound for (see resolveDots).
+  private dotsOwnerId = -1;
+  private dotsIsOwn: (aura: NameplateDotAura) => boolean = () => false;
   private readonly anchorScratch: Array<NameplateAnchor & NameplatePickCandidate> = [];
   private anchorCount = 0;
   private i18nRevision = -1;
@@ -367,14 +370,16 @@ export class NameplatePainter {
       return;
     }
     state.dots.scale = clampNameplateDotScale(scale);
-    const dots = nameplateDotsInto(
-      state.dots,
-      entity.auras,
-      // The offline Sim and a current server both stamp the caster; an older
-      // mirror sends 0, which matches no player id and is therefore never "own",
-      // the same rule the aura strips already follow.
-      (aura: NameplateDotAura) => aura.sourceId !== undefined && aura.sourceId === player.id,
-    );
+    // The ownership predicate is bound ONCE per pass, not minted per plate: this
+    // runs for every plate on screen every frame. isOwnAura is the shared rule
+    // (src/sim/aura_classify.ts) the aura strips use, so the plate row cannot
+    // drift from them the way this call site had already drifted by dropping the
+    // zero guard.
+    if (this.dotsOwnerId !== player.id) {
+      this.dotsOwnerId = player.id;
+      this.dotsIsOwn = (aura: NameplateDotAura) => isOwnAura(aura, player.id);
+    }
+    const dots = nameplateDotsInto(state.dots, entity.auras, this.dotsIsOwn);
     for (let i = 0; i < dots.count; i++) {
       const slot = dots.slots[i];
       if (!slot.iconUrl) {

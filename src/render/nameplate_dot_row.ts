@@ -6,6 +6,7 @@
 // The row's geometry and its slot records come from the pure
 // nameplate_dots_core.ts; nothing is decided here.
 
+import { isAuraExpiring } from '../ui/auras_view';
 import type { TextSpriteStyle } from '../ui/text_sprite_cache';
 import {
   clampNameplateDotScale,
@@ -40,8 +41,13 @@ export function nameplateDotTimeFont(scale: number): string {
 // the row. It is REDUNDANT with the number itself shrinking toward zero, so a
 // player who cannot separate the two colours loses nothing (and forced-colors
 // collapses both to CanvasText, which is why the number is the real cue).
+//
+// It uses the SAME rule as every other aura surface (isAuraExpiring: the last ten
+// seconds, but never before 30% of the duration has run down) rather than a flat
+// threshold of its own. A flat four seconds meant a long dot blinked on the
+// Target dots frame while its plate icon was still white, which is the same aura
+// disagreeing with itself across two surfaces.
 const TIME_EXPIRING_FILL = '#ffcf40';
-const TIME_EXPIRING_SEC = 4;
 
 // Magic-school tints for the icon border, byte-identical to the --color-debuff-*
 // tokens the DOM aura strips use (src/styles/tokens.css), so one school reads the
@@ -153,7 +159,9 @@ export function drawNameplateDotRow(
         x + size / 2,
         topY + size + (NAMEPLATE_DOT_TIMER_STEP - 1) * scale,
         nameplateDotTimeFont(scale),
-        slot.remaining <= TIME_EXPIRING_SEC ? TIME_EXPIRING_FILL : NAMEPLATE_DOT_TIME_STYLE.fill,
+        isAuraExpiring(slot.remaining, slot.duration)
+          ? TIME_EXPIRING_FILL
+          : NAMEPLATE_DOT_TIME_STYLE.fill,
       );
     }
     x += size + gap;

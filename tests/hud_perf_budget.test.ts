@@ -98,6 +98,7 @@ import {
   type ActionBarWorldInput,
   createActionBarView,
 } from '../src/ui/hud/action_bar/action_bar_view';
+import { createTargetDotsView } from '../src/ui/hud/target_dots';
 import { makeWriterFacet, type PainterHostWriters } from '../src/ui/painter_host';
 import type { SwingTimerState } from '../src/ui/swing_timer';
 import { SwingTimerPainter } from '../src/ui/swing_timer_painter';
@@ -2874,6 +2875,43 @@ describe('hud_perf_budget ARM 2: per-frame allocation budget (Node, npm test)', 
       }).not.toThrow();
     });
   }
+
+  // target_dots_view sits in the same band as auras_view above and makes the
+  // same reuse claim, so it is held to the same probe rather than to a
+  // hand-rolled identity assertion in its own suite.
+  it('target_dots_view reuses its state container and row array every tick', () => {
+    const view = createTargetDotsView({
+      isOwn: () => true,
+      auraName: (a) => a.id,
+      targetName: (e) => e.name,
+      iconKey: (a) => a.id,
+    });
+    const entities = [
+      {
+        id: 1,
+        kind: 'mob',
+        name: 'Dummy',
+        dead: false,
+        auras: [
+          {
+            id: 'corruption',
+            name: 'Blackrot',
+            kind: 'dot' as const,
+            value: 6,
+            remaining: 12,
+            duration: 18,
+            sourceId: 4,
+            school: 'shadow',
+          },
+        ],
+      },
+    ];
+    const tick = () => view.tick({ entities, targetId: 1, enabled: true });
+    expect(() => {
+      assertAllocationStable(tick, 64, 'target_dots_view container');
+      assertAllocationStable(() => tick().rows, 64, 'target_dots_view rows');
+    }).not.toThrow();
+  });
 });
 
 // --------------------------------------------------------------------------

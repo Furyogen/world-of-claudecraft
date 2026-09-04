@@ -49,6 +49,7 @@ import {
   normalizeStreamerLink,
   type StreamerLinks,
 } from '../sim/account_flair';
+import { isOwnAura } from '../sim/aura_classify';
 import { bagPools } from '../sim/bags';
 import { resolveActionReplacement } from '../sim/combat/action_replacement';
 import { resolveColdsightAbilityForSpec } from '../sim/combat/hunter_coldsight';
@@ -4938,7 +4939,7 @@ export class Hud {
     // Own-aura check for the target strip's ownFirst prominence: a missing/zero
     // sourceId (an old server's mirror) is never own, so the strip degrades to
     // the un-prioritized layout instead of misattributing another caster's dot.
-    isOwn: (a) => a.sourceId !== undefined && a.sourceId !== 0 && a.sourceId === this.sim.playerId,
+    isOwn: (a) => isOwnAura(a, this.sim.playerId),
   };
   private readonly aurasPainterDeps: AurasPainterDeps = {
     resolveIconUrl: resolveHudAuraIconUrl,
@@ -5031,11 +5032,11 @@ export class Hud {
   // isDebuffAura), so it needs no class knowledge here; the Hud supplies only the
   // ownership predicate it already shares with the target strip, and the
   // localization callbacks the core must not make itself.
-  private readonly targetDotsView = createTargetDotsView({
-    isOwn: (a) => a.sourceId !== undefined && a.sourceId !== 0 && a.sourceId === this.sim.playerId,
+  private readonly targetDotsView = createTargetDotsView<Entity>({
+    isOwn: (a) => isOwnAura(a, this.sim.playerId),
     auraName: (a) =>
       auraDisplayNameForHud(a.name, ABILITIES[a.id] ? abilityDisplayName(ABILITIES[a.id]) : null),
-    targetName: (e) => entityDisplayName(e as unknown as Entity),
+    targetName: (e) => entityDisplayName(e),
     iconKey: (a) => resolveHudAuraIconId(a),
   });
   private readonly targetDotsPainter = new TargetDotsPainter({
@@ -5053,7 +5054,7 @@ export class Hud {
   // REUSED input container for the tracker's per-frame tick (the allocation-light
   // contract the durationUnits() dep already follows): the fields are rewritten
   // each frame, the object never is.
-  private readonly targetDotsInput: TargetDotsInput = {
+  private readonly targetDotsInput: TargetDotsInput<Entity> = {
     entities: [],
     targetId: null,
     enabled: true,
@@ -18861,9 +18862,8 @@ export class Hud {
 }
 
 // describeAbilitySummary and abilityRequirementLines moved to
-// ./ability_tooltip_lines (pure i18n mappers, no Hud state); the re-export keeps
-// abilityRequirementLines on this module's published surface for its callers.
-export { abilityRequirementLines } from './ability_tooltip_lines';
+// ./ability_tooltip_lines (pure i18n mappers with no Hud state). Deliberately NOT
+// re-exported: nothing imports either of them from here.
 
 // A 2D canvas context is non-null for any attached canvas in this app; centralize
 // the assertion so the call sites do not each carry a non-null bang. Throws (a

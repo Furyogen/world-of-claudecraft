@@ -96,20 +96,23 @@ export interface TargetDotsState {
   overflow: number;
 }
 
-export interface TargetDotsDeps {
+export interface TargetDotsDeps<TEntity extends TargetDotsEntityInput = TargetDotsEntityInput> {
   /** Did the LOCAL player cast this aura? Injected so the frame shares the host's
    *  one ownership predicate with the target strip rather than re-deriving it. */
   isOwn(aura: TargetDotsAuraInput): boolean;
   /** Localized aura name. */
   auraName(aura: TargetDotsAuraInput): string;
-  /** Localized enemy name. */
-  targetName(entity: TargetDotsEntityInput): string;
+  /** Localized enemy name. Typed on the HOST's entity rather than this core's
+   *  narrower structural subset: the one real consumer resolves names from the
+   *  sim Entity, and narrowing here only bought a double cast at the call site.
+   *  The core still reads nothing but the subset above. */
+  targetName(entity: TEntity): string;
   /** Artwork identity for this aura. */
   iconKey(aura: TargetDotsAuraInput): string;
 }
 
-export interface TargetDotsInput {
-  entities: Iterable<TargetDotsEntityInput>;
+export interface TargetDotsInput<TEntity extends TargetDotsEntityInput = TargetDotsEntityInput> {
+  entities: Iterable<TEntity>;
   /** The player's current target id, or null. Its rows lead the list. */
   targetId: number | null;
   /** The showTargetDots setting. False empties the state without scanning. */
@@ -118,8 +121,8 @@ export interface TargetDotsInput {
   cap?: number;
 }
 
-export interface TargetDotsViewCore {
-  tick(input: TargetDotsInput): TargetDotsState;
+export interface TargetDotsViewCore<TEntity extends TargetDotsEntityInput = TargetDotsEntityInput> {
+  tick(input: TargetDotsInput<TEntity>): TargetDotsState;
 }
 
 /** Is this entity something the player can have a debuff out on? Players are
@@ -160,20 +163,22 @@ function remainingFraction(aura: TargetDotsAuraInput): number {
  * the returned state and its rows are the SAME objects every tick: read them
  * before the next call, never retain them.
  */
-export function createTargetDotsView(deps: TargetDotsDeps): TargetDotsViewCore {
+export function createTargetDotsView<TEntity extends TargetDotsEntityInput>(
+  deps: TargetDotsDeps<TEntity>,
+): TargetDotsViewCore<TEntity> {
   const rows: TargetDotRow[] = [];
   const state: TargetDotsState = { rows, count: 0, overflow: 0 };
   // Scratch for the two-pass gather (current target first, then the rest). Both
   // hold entity references only, and both keep their high-water capacity.
-  const primary: TargetDotsEntityInput[] = [];
-  const others: TargetDotsEntityInput[] = [];
+  const primary: TEntity[] = [];
+  const others: TEntity[] = [];
   // Qualifying auras of ONE entity, refilled and sorted in place per entity so
   // the per-frame path never mints a filtered array.
   const auraScratch: TargetDotsAuraInput[] = [];
 
   const writeRow = (
     index: number,
-    entity: TargetDotsEntityInput,
+    entity: TEntity,
     aura: TargetDotsAuraInput,
     onCurrentTarget: boolean,
     occurrence: number,

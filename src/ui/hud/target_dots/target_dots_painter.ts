@@ -28,6 +28,15 @@ const HIDDEN = 'none';
 const SHOWN = '';
 const SHOWN_FLEX = 'flex';
 
+// The countdown's two shapes, hoisted: this runs per row per FRAME, and
+// numberFormatFor keys its cache on JSON.stringify(options), so a fresh literal
+// per row is an allocation plus a stringify on the hot path. Indexed by the
+// core's decimals field, the same pair nameplate_painter.ts hoists.
+const NUMBER_OPTIONS = [
+  { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+  { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+] as const;
+
 export interface TargetDotsPainterDeps {
   /** The #target-dots container (Hud owns the id). */
   root(): HTMLElement;
@@ -49,19 +58,28 @@ interface RowEls {
   row: HTMLElement;
   icon: HTMLElement;
   fill: HTMLElement;
-  label: HTMLElement;
+  labelEl: HTMLElement;
   time: HTMLElement;
   stacks: HTMLElement;
   /** Last painted icon key, so the background is resolved only on a change. */
   iconKey: string;
   /** The row key this node currently carries, '' while parked. */
   key: string;
+  /** The composed "<aura> on <target>" label, cached because it is a pure
+   *  function of the row: re-resolving a t() interpolation per row per frame
+   *  builds a params object and re-walks the catalog for a string that cannot
+   *  have changed (src/ui/CLAUDE.md: elide the upstream resolve, not only the
+   *  write). Dropped with the rest on a recycle and on a language switch. */
+  label: string;
 }
 
 export class TargetDotsPainter {
   private readonly root: HTMLElement;
   private readonly rows: RowEls[] = [];
   private readonly overflowEl: HTMLElement;
+  // Resolved once rather than per row per frame; relocalize() refreshes it, the
+  // same shape the aura strips use for their duration units.
+  private secondsSuffix: string;
 
   constructor(private readonly deps: TargetDotsPainterDeps) {
     this.root = deps.root();
@@ -80,11 +98,12 @@ export class TargetDotsPainter {
         row,
         icon: row.querySelector('.td-icon') as HTMLElement,
         fill: row.querySelector('.td-fill') as HTMLElement,
-        label: row.querySelector('.td-label') as HTMLElement,
+        labelEl: row.querySelector('.td-label') as HTMLElement,
         time: row.querySelector('.td-time') as HTMLElement,
         stacks: row.querySelector('.td-stacks') as HTMLElement,
         iconKey: '',
         key: '',
+        label: '',
       });
     }
     this.overflowEl = this.root.querySelector('.td-overflow') as HTMLElement;
@@ -93,11 +112,17 @@ export class TargetDotsPainter {
     // every tick. The countdown text is the reason polite would be wrong here.
     this.root.setAttribute('role', 'group');
     this.root.setAttribute('aria-label', deps.frameLabel());
+    this.secondsSuffix = deps.secondsSuffix();
   }
 
-  /** Re-resolve the frame's localized accessible name (language switch). */
+  /** Re-resolve everything this painter resolved ONCE and then cached: the
+   *  frame's accessible name, the seconds suffix, and every row's composed
+   *  label. Without this a language switch would leave all three in the previous
+   *  locale, which is exactly what caching them buys and owes. */
   relocalize(): void {
     this.deps.writers.setAttr(this.root, 'aria-label', this.deps.frameLabel());
+    this.secondsSuffix = this.deps.secondsSuffix();
+    for (const els of this.rows) els.label = '';
   }
 
   update(state: TargetDotsState): void {
@@ -125,6 +150,7 @@ export class TargetDotsPainter {
       if (recycled) {
         els.key = model.key;
         els.iconKey = '';
+        els.label = '';
       }
       w.setDisplay(els.row, SHOWN_FLEX);
       if (els.iconKey !== model.iconKey) {
@@ -133,13 +159,11 @@ export class TargetDotsPainter {
       }
       w.setWidth(els.fill, `${Math.round(model.fraction * 1000) / 10}%`);
       w.setAttr(els.fill, SCHOOL_ATTR, model.school || null);
-      w.setText(els.label, this.deps.rowLabel(model.auraName, model.targetName));
+      if (els.label === '') els.label = this.deps.rowLabel(model.auraName, model.targetName);
+      w.setText(els.labelEl, els.label);
       w.setText(
         els.time,
-        `${formatNumber(model.remaining, {
-          minimumFractionDigits: model.decimals,
-          maximumFractionDigits: model.decimals,
-        })}${this.deps.secondsSuffix()}`,
+        `${formatNumber(model.remaining, NUMBER_OPTIONS[model.decimals])}${this.secondsSuffix}`,
       );
       w.setDisplay(els.stacks, model.stacks > 0 ? SHOWN : HIDDEN);
       if (model.stacks > 0) w.setText(els.stacks, formatNumber(model.stacks));

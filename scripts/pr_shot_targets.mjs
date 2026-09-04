@@ -819,6 +819,11 @@ export const TARGETS = [
   {
     key: 'target-dots',
     label: 'Target dots: the player-only tracker frame and the nameplate dot row',
+    // Committed frames live in docs/screenshots/target-dots/ (before- and after-
+    // desktop/mobile). Named here because this entry is what produces them, the
+    // way wildheart_shots.mjs and admin_professions_shot.mjs each name their own
+    // output subtree, and because the CI sparse-checkout cone is pinned as a set
+    // equality against the subtrees the tree actually references.
     when: [
       'ui/hud/target_dots/',
       'render/nameplate_dots_core.ts',

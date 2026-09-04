@@ -17,6 +17,7 @@
 
 import { describe, expect, it } from 'vitest';
 
+import { isOwnAura } from '../src/sim/aura_classify';
 import { Sim } from '../src/sim/sim';
 import { createTargetDotsView, type TargetDotsInput } from '../src/ui/hud/target_dots';
 
@@ -78,9 +79,11 @@ function castUntilApplied(sim: Sim, abilityId: string, mobId: number): void {
   throw new Error(`${abilityId} never landed`);
 }
 
-function makeView() {
+function makeView(playerId: number) {
   return createTargetDotsView({
-    isOwn: (a) => a.sourceId !== undefined && a.sourceId !== 0,
+    // The SHIPPING predicate, not a looser stand-in: an integration test that
+    // accepts any caster would pass even if the frame stopped filtering.
+    isOwn: (a) => isOwnAura(a, playerId),
     auraName: (a) => a.name,
     targetName: (e) => e.name,
     iconKey: (a) => a.id,
@@ -105,7 +108,7 @@ describe('target dots against the live sim', () => {
     const mob = engageNearestMob(sim);
     castUntilApplied(sim, 'corruption', mob.id);
 
-    const view = makeView();
+    const view = makeView(sim.playerId);
     const before = tickView(view, sim);
     expect(before.count).toBe(1);
     // Snapshot, never hold: the row is a pooled record the next tick rewrites.
@@ -140,7 +143,7 @@ describe('target dots against the live sim', () => {
     const sim = makeSim();
     const mob = engageNearestMob(sim);
     castUntilApplied(sim, 'corruption', mob.id);
-    const view = makeView();
+    const view = makeView(sim.playerId);
 
     for (let i = 0; i < 20 * 3; i++) sim.tick();
     const one = tickView(view, sim);
@@ -174,7 +177,7 @@ describe('target dots against the live sim', () => {
     const sim = makeSim();
     const mob = engageNearestMob(sim);
     castUntilApplied(sim, 'corruption', mob.id);
-    const view = makeView();
+    const view = makeView(sim.playerId);
     expect(tickView(view, sim).count).toBe(1);
     for (let i = 0; i < 20 * 40; i++) sim.tick();
     expect(tickView(view, sim).count).toBe(0);
