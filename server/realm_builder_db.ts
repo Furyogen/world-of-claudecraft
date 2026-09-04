@@ -72,16 +72,22 @@ function validMonth(value: unknown): number {
 
 /**
  * Characters no name is made of: C0/C1 controls (a newline would break the
- * plate's one-line bake), the Unicode bidi embedding/override/isolate marks,
- * which exist to make text render in an order other than the one it is
- * stored in, and the zero-width set (ZWSP, ZWNJ, ZWJ, word joiner, BOM),
- * which can mint a name that renders empty or as a look-alike of an existing
- * honouree. Rejected, not stripped: an operator should see the refusal.
- * Accents, ligatures and every script are fine: this is a name.
+ * plate's one-line bake), the Unicode bidi marks (LRM/RLM and the
+ * embedding/override/isolate set), which exist to make text render in an
+ * order other than the one it is stored in, and the invisible fillers that
+ * can mint a name rendering empty or as a look-alike of an existing honouree:
+ * ZWSP (U+200B), the word joiner (U+2060) and the BOM (U+FEFF).
+ *
+ * NOT the zero-width NON-joiner (U+200C) or joiner (U+200D): those are
+ * ordinary orthography. Persian and Urdu write ZWNJ inside words (a Persian
+ * honouree's own name can carry one), and Sinhala, Malayalam, Tamil and
+ * Kannada use ZWJ for conjunct forms. Rejected, not stripped: an operator
+ * should see the refusal. Accents, ligatures and every script are fine: this
+ * is a name.
  */
 const NAME_FORBIDDEN =
   // biome-ignore lint/suspicious/noControlCharactersInRegex: matching controls is the point
-  /[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/;
+  /[\u0000-\u001f\u007f-\u009f\u200b\u200e\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/;
 
 /**
  * An honouree's name.

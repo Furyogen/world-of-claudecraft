@@ -345,9 +345,45 @@ describe('input validation', () => {
       '王小明',
       'Ελένη Παπαδοπούλου',
       'Đặng Thị Lan',
+      // ZWNJ is orthography in Persian (and Urdu): this is Ali-Reza written
+      // the way its bearer writes it, not a trick. The joiner (U+200D) is the
+      // same story for Sinhala, Malayalam, Tamil and Kannada conjuncts.
+      'علی\u200cرضا',
+      'ශ්\u200dරී ලංකා',
     ]) {
       const row = await upsertRealmBuilder(pool as never, 'test', { year: 2026, month: 9, name });
       expect(row.name).toBe(name);
+    }
+  });
+
+  it('echoes a non-Latin name through the route, body parsing and envelope included', async () => {
+    // The validator accepting a name is not the same as the name surviving
+    // the request: this drives the REAL validators through the route, so the
+    // body decode and the success envelope are on the hook too.
+    setRealmBuilderDbForTests({
+      upsertRealmBuilder: async (input) => {
+        const pool = {
+          query: async (_sql: string, params: unknown[]) => ({
+            rows: [
+              {
+                year: params[1],
+                month: params[2],
+                name: params[3],
+                note: params[4],
+                updated_at: 0,
+              },
+            ],
+          }),
+        };
+        return upsertRealmBuilder(pool as never, 'test', input);
+      },
+    });
+    for (const name of ['王小明', 'علی\u200cرضا']) {
+      const out = await runRoute('POST', '/admin/api/realm-builders', {
+        body: { year: 2026, month: 10, name },
+      });
+      expect(out.status).toBe(200);
+      expect(out.body).toMatchObject({ success: true, data: { row: { name } } });
     }
   });
 
