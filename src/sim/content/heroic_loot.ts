@@ -16,7 +16,8 @@
 // (elemental/resto shaman, holy paladin) and str plate get real coverage rather
 // than a single token piece.
 
-import type { ItemDef, LootEntry } from '../types';
+import { VARKHUL_BOSS_ID } from '../ignivar_raid_ids';
+import { IGNIVAR_BOSS_ID, type ItemDef, type LootEntry } from '../types';
 import { FERAL } from './items';
 
 // Source level the heroic drop table reads as in the item-level index: the
@@ -75,7 +76,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     stats: { armor: 335, str: 12, sta: 10 },
-    hitRating: ARMOR_RATING,
+    critRating: ARMOR_RATING,
     sellValue: 14000,
     requiredClass: HEAVY,
   },
@@ -298,7 +299,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     stats: { armor: 212, str: 8, sta: 6 },
-    hitRating: ARMOR_RATING,
+    critRating: ARMOR_RATING,
     sellValue: 9500,
     requiredClass: HEAVY,
   },
@@ -364,7 +365,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     stats: { armor: 224, str: 9, sta: 6 },
-    hitRating: ARMOR_RATING,
+    critRating: ARMOR_RATING,
     sellValue: 9500,
     requiredClass: HEAVY,
   },
@@ -527,7 +528,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     requiredLevel: 20,
     stats: { armor: 315, str: 11, sta: 9 },
-    hitRating: ARMOR_RATING,
+    critRating: ARMOR_RATING,
     sellValue: 12000,
     requiredClass: HEAVY,
   },
@@ -754,5 +755,44 @@ export const HEROIC_BOSS_LOOT: Record<string, LootEntry[]> = {
     // five-man uncommon paths; every heroic raider has a path to each.
     { itemId: 'reins_stormfeather_griffin', chance: HEROIC_GREEN_MOUNT_CHANCE },
     { itemId: 'reins_shadowjump_toad', chance: HEROIC_GREEN_MOUNT_CHANCE },
+  ],
+  // ============== Crucible of the Last Spring (Heroic-only appends) ==============
+  // The Ignivar raid has NO heroic item-level layer (docs/prd/ignivar-raid-loot.md):
+  // a Heroic kill pays the SAME count as Normal (one item per five raiders, so
+  // two on the 10-player raid) at the same ilvl 35, and differs only in WHICH
+  // items it can drop. Each boss's Normal-only off-set slot (LootEntry.normalOnly
+  // in dungeons.ts) is skipped on a heroic claim and this ONE exclusive group
+  // pays in its place: the Robe sigil that finishes the 5-piece, the marquee
+  // weapons, and (Varkhul) the shields. The ids register at
+  // IGNIVAR_RAID_LOOT_SOURCE_LEVEL in item_level.ts, which out-ranks this table's
+  // default source. Re-cut 2026-09-02 from the launch appends (one robe group
+  // plus one weapon group per boss, plus Varkhul's shield group); from here the
+  // partition is APPEND-only, never reorder.
+  [IGNIVAR_BOSS_ID]: [
+    // Robes 0.50 / marquee weapons 0.50; Anvil 0.34 / Ember 0.33 / Tempest 0.33.
+    { itemId: 'sigil_anvil_chest', chance: 0.17, rollGroup: 'ignivar_h_exclusive' },
+    { itemId: 'sigil_ember_chest', chance: 0.17, rollGroup: 'ignivar_h_exclusive' },
+    { itemId: 'sigil_tempest_chest', chance: 0.16, rollGroup: 'ignivar_h_exclusive' },
+    // Three weapons, not four: the Emberflight Longbow was pulled from the
+    // tier (bows wait for the hunter ranged-slot rework; maintainer decision
+    // 2026-08-28), and the hunter ranged marquee returns with that rework.
+    { itemId: 'forgefathers_warhammer', chance: 0.17, rollGroup: 'ignivar_h_exclusive' },
+    { itemId: 'anvilguard_blade', chance: 0.17, rollGroup: 'ignivar_h_exclusive' },
+    { itemId: 'springtouched_crozier', chance: 0.16, rollGroup: 'ignivar_h_exclusive' },
+  ],
+  [VARKHUL_BOSS_ID]: [
+    // Robes 0.35 / shields 0.30 / marquee weapons 0.35. Emberward keeps its
+    // ABSOLUTE 3 percent per heroic kill inside the shield share (the two epic
+    // shields split the remaining 0.27 evenly), so the legendary's odds did not
+    // move with the re-cut and the group still adds no extra heroic rng draw.
+    { itemId: 'sigil_anvil_chest', chance: 0.12, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'sigil_ember_chest', chance: 0.12, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'sigil_tempest_chest', chance: 0.11, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'bulwark_of_the_inner_crucible', chance: 0.135, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'ember_wardens_barrier', chance: 0.135, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'varkhul_emberward', chance: 0.03, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'heart_of_the_end_greatblade', chance: 0.12, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'forgefire_spire', chance: 0.12, rollGroup: 'varkhul_h_exclusive' },
+    { itemId: 'staff_of_the_last_spring', chance: 0.11, rollGroup: 'varkhul_h_exclusive' },
   ],
 };

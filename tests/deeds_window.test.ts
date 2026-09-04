@@ -553,15 +553,21 @@ describe('hud wiring', () => {
   });
 
   it('shows the active title and earned border badges on the character sheet', () => {
-    expect(hud).toContain("t('hudChrome.deeds.charTitleLabel')");
-    expect(hud).toContain('data-act="open-deeds"');
-    expect(hud).toMatch(/class="ms-badge ms-deed-border\$\{worn \? ' ms-active' : ''\}"/);
-    expect(hud).toMatch(/reward\?\.kind === 'border' && sim\.deedsEarned\.has\(id\)/);
+    // The progression block moved from hud.ts into the pure view module
+    // (character_progression_view.ts, the monolith-ratchet payment); the pin
+    // follows the code.
+    const progressionView = read('../src/ui/character_progression_view.ts');
+    expect(progressionView).toContain("t('hudChrome.deeds.charTitleLabel')");
+    expect(progressionView).toContain('data-act="open-deeds"');
+    expect(progressionView).toMatch(
+      /class="ms-badge ms-deed-border\$\{worn \? ' ms-active' : ''\}"/,
+    );
+    expect(progressionView).toMatch(/reward\?\.kind === 'border' && sim\.deedsEarned\.has\(id\)/);
     // The WORN badge is state, not decoration: it is picked by comparing deed
     // ids against the facet read, and it says so in its own LABEL rather than
     // leaning on the ms-active colour alone (WCAG 1.4.1).
-    expect(hud).toContain('const worn = id === sim.activeBorder;');
-    expect(hud).toContain("t('hudChrome.deeds.charBorderWorn', { name })");
+    expect(progressionView).toContain('const worn = id === sim.activeBorder;');
+    expect(progressionView).toContain("t('hudChrome.deeds.charBorderWorn', { name })");
   });
 
   it('renders the inspected player title from the entity wire field', () => {
@@ -1115,6 +1121,8 @@ describe('chrome keys and CSS floors', () => {
 });
 
 describe('non-modal Enter/Space activation guard (WCAG 2.1.1)', () => {
+  const buttonEl = (): HTMLElement => document.createElement('button');
+
   it('adds the Book of Deeds window to the guard array, keeping the shared guard body', () => {
     // The Book is a non-modal overlay, so canUseGameKeys() stays true while a
     // Book button has focus: without the guard, Space jumps the character and
@@ -1144,7 +1152,13 @@ describe('non-modal Enter/Space activation guard (WCAG 2.1.1)', () => {
     // Bound the slice at the function's closing brace so the negative below never
     // polices whatever follows the guard in the module.
     const guardBody = guardSrc.slice(bodyStart, guardSrc.indexOf('\n}\n', bodyStart) + 3);
-    expect(guardBody).toContain("tagName !== 'BUTTON'");
+    // The decision itself is the pure src/ui/panel_key_guard.ts rule (only a
+    // focused BUTTON, only Enter/Space, and the one bag item row Space must
+    // pass through to reach the jump); the guard body delegates to it.
+    expect(guardBody).toContain('panelKeyGuardStops(');
+    const rule = stripLineComments(read('../src/ui/panel_key_guard.ts'));
+    expect(rule).toContain("tagName !== 'BUTTON'");
+    expect(rule).not.toContain('preventDefault');
     expect(guardBody).toContain('ke.stopPropagation()');
     expect(guardBody).not.toContain('preventDefault');
   });

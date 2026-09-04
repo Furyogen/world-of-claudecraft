@@ -85,13 +85,6 @@ not change the exit code), so the shipped world clips, which predate the mono
 policy, do not break the gate before the one-time re-process. Pass
 `npm run sfx:check -- --strict` to promote them to failures, and
 `npm run sfx:conform` (`--fix`) to conform loudness and downmix in a single pass.
-The 8 `player_hurt_female_1..5` / `player_death_female_1..3` clips under
-`public/audio/sfx/` are an intentional, temporary exception to the naming rule:
-they are staged ahead of the player-gender model swap (no `PlayerMeta` gender
-field exists yet to key playback on), so `--strict` currently flags all 8 as
-"not a catalog key, numbered variant, or mob subfamily file". That is expected
-noise, not a regression, until the swap lands and wires them under a real key.
-
 A third advisory category flags a `custom: true` key whose measured LUFS lands
 suspiciously close to the generated-content target (`TARGET_LUFS`, -14): the
 fingerprint of a key that was loudness-targeted before `custom: true` was set on
@@ -136,9 +129,12 @@ which already computes interpolated position, `loco.speed/moving`, `swimming`,
   dock decks→wood → dungeon→stone → snow if weather is snowing. Suppressed while airborne /
   swimming / dead and gated by `d2 < SFX_RANGE_SQ`.
 - **Mount running:** the same distance accumulator fires a mount-specific
-  `sink.mountRun(x,y,z, mountKey, self)` gait beat while a grounded mount runs.
-  Mount walking stays quiet. These cues use the normal SFX mix and remain audible
-  when the optional on-foot footstep setting is disabled.
+  `sink.mountRun(x,y,z, mountKey, surface, self)` gait beat while a grounded mount
+  runs. Mount walking stays quiet. These cues use the normal SFX mix and remain
+  audible when the optional on-foot footstep setting is disabled. A mount with no
+  `mount_run_<key>` in the catalog (the Lanternback Troll and the Chimeglass
+  Tortoise) falls back to the plain `foot_<surface>` cue at running-step gain and
+  pitch: hence the `surface` argument, which the custom-cue branch ignores.
 - **Jump / land / splash / swim:** per-view edge detection on `airborne` and
   `swimming` transitions fires `sink.movement('jump'|'land'|'splash'|'swim', …)`.
 - **Listener:** after the camera is positioned (~L1583), `sink.setListener(camPos,
@@ -204,6 +200,10 @@ until that loop stops.
 | `mount_run_stormfeather_griffin` | 0.51 | large wing rush and hard talon contact |
 | `mount_run_thunderstrut_gobbler` | 0.40 | higher feather rush and quick claw contact |
 | `mount_run_terrorspark_groundshaker` | 0.55 | compact tread clatter with a low mechanical drive pulse |
+| `mount_run_mech_bird` | 0.68 | servo footsteps assembled 1-2-1 per stride (scripts/gen_mech_bird_sfx.mjs) |
+| `mount_idle_mech_bird` | 10 | standstill powered-on servo hum loop (Sfx.mountIdle) |
+| `mount_jump_mech_bird` | 0.67 | launch servo burst, replaces move_jump while riding (Sfx.movement mount arm) |
+| `mount_land_mech_bird` | 0.67 | landing clank, replaces move_land while riding |
 | `move_jump` | 0.5 | quick light gear/leather exertion and fabric rustle, a person leaping up |
 | `move_land` | 0.6 | a person landing from a jump, boots thud with armor and gear settle |
 | `move_splash` | 0.8 | a body plunging into water, big splash |
@@ -231,6 +231,15 @@ until that loop stops.
 | `combat_crit` | 0.6 | a brutal devastating critical strike, heavy bone-crunching impact with a sharp ring |
 | `player_hurt` | 0.6 | a human warrior grunting in sudden pain from a hit |
 | `player_death` | 1.2 | a human warrior's final pained death cry collapsing to the ground |
+| `player_hurt_female` | 0.6 | the same grunt, female voice |
+| `player_death_female` | 1.3 | the same death cry, female voice |
+
+The two `_female` keys are selected per character by `playerVoiceCue`
+(`src/ui/combat_sfx.ts`) from the modular creator's authored gender, which rides
+the entity identity wire as `modularAppearance`. Only an explicit
+`gender: 'female'` diverts; a male look, a character authored before the creator
+shipped, and an unreadable appearance all keep the base key, and a female cue
+that is not buffered yet falls back to the base key rather than to silence.
 
 ### Spell casts (spatial, looping while channeling)
 | key | dur | loop | prompt summary |

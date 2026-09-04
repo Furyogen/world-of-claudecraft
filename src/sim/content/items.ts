@@ -399,6 +399,21 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     noDiscard: true,
     sellValue: 0,
   },
+  // The store mount (content/store_mounts.ts): granted by a verified Claudium
+  // spend, never sold for copper and never dropped. SOULBOUND like the dev tank:
+  // a real-money grant that could trade hands would be an economy leak, and a
+  // lost paid mount is a support ticket. No buyValue: Claudium is not copper.
+  reins_mech_bird: {
+    id: 'reins_mech_bird',
+    name: 'Ignition Key: Cluckwork Mech Bird',
+    kind: 'mount',
+    mount: 'mech_bird',
+    quality: 'rare',
+    soulbound: true,
+    noVendorSell: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
   // Developer-only mount. It is intentionally absent from vendors, quests,
   // creature loot, heroic loot, and Rift reward pools. Use /dev mounts or
   // /dev give reins_terrorspark_groundshaker while the feature remains under development.
@@ -409,6 +424,46 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     name: 'Ignition Key: Terrorspark Groundshaker',
     kind: 'mount',
     mount: 'terrorspark_groundshaker',
+    quality: 'epic',
+    soulbound: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
+  // Developer-only mount, on the same terms as the tank above (DEVELOPER_MOUNTS
+  // in content/mounts.ts): no vendor, quest, creature, heroic, or Rift source,
+  // and soulbound so a dev grant cannot be traded into the economy. Use
+  // /dev mounts or /dev give reins_lanternback_troll.
+  reins_lanternback_troll: {
+    id: 'reins_lanternback_troll',
+    name: "Lamplighter's Yoke: Grumbol",
+    kind: 'mount',
+    mount: 'lanternback_troll',
+    quality: 'epic',
+    soulbound: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
+  // Developer-only on the same terms (DEVELOPER_MOUNTS in content/mounts.ts):
+  // no vendor, quest, creature, heroic or Rift source, soulbound so a dev grant
+  // cannot be traded in. Use /dev mounts or /dev give reins_chimeglass_tortoise.
+  reins_chimeglass_tortoise: {
+    id: 'reins_chimeglass_tortoise',
+    name: "Roadwarden's Bellstrap: Tolliver",
+    kind: 'mount',
+    mount: 'chimeglass_tortoise',
+    quality: 'epic',
+    soulbound: true,
+    noDiscard: true,
+    sellValue: 0,
+  },
+  // Developer-only, same treatment as the tank above: no acquisition path, so
+  // it stays soulbound rather than tradable. Use /dev give reins_rickshaw_mount
+  // while the feature remains under development.
+  reins_rickshaw_mount: {
+    id: 'reins_rickshaw_mount',
+    name: 'Bound Reins: Bonebound Rickshaw',
+    kind: 'mount',
+    mount: 'rickshaw_mount',
     quality: 'epic',
     soulbound: true,
     noDiscard: true,
@@ -479,8 +534,15 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // --- bags (kind:'bag', equip into one of the 4 bag sockets for +bagSlots
   // pooled inventory capacity; the 16-slot backpack is implicit). Tiered by
-  // quality: common bags are vendor goods, uncommon drops from beasts, rare
-  // and epic from dungeon bosses. See src/sim/bags.ts for the capacity rules. ---
+  // quality: common bags are vendor goods, uncommon drop from beasts, rare
+  // and epic come from dungeon bosses and world drops, and the materials-only
+  // satchels (materialsOnly: true, feeding the second pool; see their own
+  // section below) run a parallel ladder. Two deliberate tiering calls, not
+  // drift: the 16-slot rare wayfarers_backpack out-slots the 14-slot epic
+  // mistcallers_duffel, the classic-era rare-large-bag shape, kept
+  // intentionally alongside the epic; and sellValue follows QUALITY tier,
+  // not slot count, so the epic duffel vendors above the larger rare, also
+  // intentional. See src/sim/bags.ts for the capacity rules. ---
   linen_pouch: {
     id: 'linen_pouch',
     name: 'Linen Pouch',
@@ -522,6 +584,47 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     bagSlots: 14,
     sellValue: 9000,
+  },
+  // The one rare world-drop bag, and the joint-largest general bag at 16 slots
+  // (the crafted Resonantweave Bag is the deterministic route to the same
+  // ceiling). Drop-only, so no buyValue and no market seed row: it stays
+  // player-listed the way every other drop does.
+  wayfarers_backpack: {
+    id: 'wayfarers_backpack',
+    name: "Wayfarer's Backpack",
+    kind: 'bag',
+    quality: 'rare',
+    bagSlots: 16,
+    sellValue: 3800,
+  },
+  // --- materials-only satchels (materialsOnly: true). Their bagSlots feed the
+  // second, materials-only pool instead of the general one, so the capacity
+  // they add is usable only by items in the derived material taxonomy. The
+  // trade is the point: more total room, but the extra room is specialized.
+  // See src/sim/bag_pools.ts for the pool arithmetic. ---
+  // The entry rung, and the only materials satchel a vendor stocks. Priced
+  // under the general 8-slot Traveler's Knapsack (2000) because it carries
+  // strictly less: same slot count, restricted contents.
+  burlap_reagent_pouch: {
+    id: 'burlap_reagent_pouch',
+    name: 'Burlap Reagent Pouch',
+    kind: 'bag',
+    quality: 'common',
+    bagSlots: 8,
+    materialsOnly: true,
+    sellValue: 250,
+    buyValue: 1000,
+  },
+  // The dungeon rung: Grand Necromancer Velkhar's hoard in the Gravewyrm
+  // Sanctum. Same drop shape as the Gravewoven Bag on Morthen.
+  necromancers_reagent_satchel: {
+    id: 'necromancers_reagent_satchel',
+    name: "Necromancer's Reagent Satchel",
+    kind: 'bag',
+    quality: 'rare',
+    bagSlots: 20,
+    materialsOnly: true,
+    sellValue: 4200,
   },
   // --- food & drink (vendor, fished, conjured; see also zone2.ts/zone3.ts and
   // profession_items.ts for the higher zone-bracket and crafted-cooking tiers).

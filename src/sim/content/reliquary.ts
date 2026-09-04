@@ -263,10 +263,14 @@ export const RELIQUARY_HORIZON_MOUNTS = [
   'shadowjump_toad',
   'grag_bear',
   'stalkglider_snail',
+  'mech_bird',
   'aether_hover_cycle',
   'thunderstrut_gobbler',
   'drakemaw_raptor',
+  'lanternback_troll',
+  'chimeglass_tortoise',
   'terrorspark_groundshaker',
+  'rickshaw_mount',
 ] as const;
 
 // Per-mount sources. A mount is owned through its reins ItemDef (kind 'mount',
@@ -282,11 +286,12 @@ export const RELIQUARY_HORIZON_MOUNTS = [
 // def in content/zone3.ts), so a quest hint there would name a door that hands
 // out nothing.
 //
-// drakemaw_raptor and terrorspark_groundshaker are absent, and that absence IS
-// the answer: no live table awards either (drakemaw_raptor has no acquisition
-// path, terrorspark_groundshaker is dev-grant only). They are the catalog's
-// two SOURCE_PENDING_RULING mounts; masterwork:engineering on the professions
-// shelf is the third pending slot (QA ruling 2026-08-07).
+// drakemaw_raptor, lanternback_troll, chimeglass_tortoise,
+// terrorspark_groundshaker and rickshaw_mount are absent, and that absence IS
+// the answer: no live table awards any of them (drakemaw_raptor has no
+// acquisition path; the other four are DEVELOPER_MOUNTS, dev-grant only). They
+// are the catalog's five SOURCE_PENDING_RULING mounts; masterwork:engineering
+// on the professions shelf is the sixth pending slot (QA ruling 2026-08-07).
 //
 // Keys are typed against the live mount ladder so a misspelled or renamed key
 // fails tsc at the authoring site instead of falling through to the pending
@@ -322,6 +327,9 @@ const MOUNT_SOURCES: Readonly<
   ],
   aether_hover_cycle: fromRift('S'),
   thunderstrut_gobbler: fromRift('S'),
+  // The store mount: sold for Claudium (content/store_mounts.ts). The 'store'
+  // kind is the whole answer, the same one door the Armory skins point at.
+  mech_bird: fromStore(),
 };
 
 /** Mount slots carrying their MOUNT_SOURCES hints, with RELIQUARY_HORIZON_MOUNTS
@@ -424,6 +432,10 @@ export const RELIQUARY_HORIZON_TITLES = [
   'col_reliquary_illum_nythraxis_heroic',
   'col_reliquary_illum_thunzharr',
   'col_reliquary_illum_gravewyrm_heroic',
+  // The Crucible raid's flawless title (the obligations closeout,
+  // docs/prd/ignivar-raid-loot.md): every non-hidden title deed pages here
+  // per the locked titles-page rule.
+  'dgn_varkhul_flawless',
 ] as const;
 
 // Profession lifetime mark ids (Phase 7). Prefer existing visited namespaces
@@ -706,6 +718,24 @@ export const RELIQUARY_HEROIC_GEAR = {
     'deathless_greatblade',
     'scepter_of_the_deathless_court',
     'stormcallers_focus',
+  ],
+  // Crucible of the Last Spring: the heroic-only weapon and shield appends.
+  // The sigil redemption tokens that share both bosses' heroic tables are
+  // NOT catalogued (kind 'tool'): they are per-slot redemption currency the
+  // Crucible Quartermaster consumes, not unique spoils, the same carve-out
+  // the delve pages apply to Marks-counter tools and heroic_mark itself.
+  ignivar_herald_of_the_last_flame: [
+    'forgefathers_warhammer',
+    'anvilguard_blade',
+    'springtouched_crozier',
+  ],
+  varkhul_forgefather_of_the_last_flame: [
+    'bulwark_of_the_inner_crucible',
+    'ember_wardens_barrier',
+    'varkhul_emberward',
+    'heart_of_the_end_greatblade',
+    'forgefire_spire',
+    'staff_of_the_last_spring',
   ],
 } as const;
 
@@ -1002,6 +1032,9 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
       ['gravewyrm_stalkers_treads', fromBoss('grand_necromancer_velkhar')],
       ['deathlord_legguards', fromBoss('grand_necromancer_velkhar')],
       ['necromancers_soulsteps', fromBoss('grand_necromancer_velkhar')],
+      // The dungeon rung of the materials-satchel ladder (bank-storage):
+      // velkhar_bonus 0.2, Velkhar's table only, so one door is the truth.
+      ['necromancers_reagent_satchel', fromBoss('grand_necromancer_velkhar')],
       ['wyrmshadow_legguards', fromBoss('grand_necromancer_velkhar')],
       // Korzul final
       ['wyrmfang_greatblade', fromBoss('korzul_the_gravewyrm')],
@@ -1227,7 +1260,7 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
       // masterwork:engineering stays a BARE entry (no hint): no engineering
       // recipe can proc a masterwork (see the masterworkByCraft comment), so
       // a profession hint here would name a door that awards nothing. The
-      // slot rides SOURCE_PENDING_RULING with the two gap mounts; the
+      // slot rides SOURCE_PENDING_RULING with the five gap mounts; the
       // gear-capability pin in tests/reliquary_content.test.ts derives the
       // eligible set from masterworkBonusStats and reds if either side moves.
       ...RELIQUARY_PROFESSION_MARKS.masterworkByCraft.map((markId) =>
@@ -1304,13 +1337,13 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
     name: 'Mounts',
     desc: 'Rideable mounts from the stable, heroic reins, Rift epics, and rarer saddles. Ownership follows the live reins seam (bags and bank).',
     clearSource: { kind: 'none' },
-    // Seven of the nine mounts name every door that awards their reins (see
+    // Seven of the twelve mounts name every door that awards their reins (see
     // MOUNT_SOURCES above): the four heroic reins each drop from two or three
     // HEROIC_BOSS_LOOT bosses AND from their Rift rank's ladder, the two epic
     // reins are Rift-only, and valorsteed is Marla's counter. The page-wide
-    // pending ruling that used to cover all nine is executed; the two that
-    // remain (drakemaw_raptor, terrorspark_groundshaker) are content gaps, not
-    // vocabulary gaps, and stay hand-listed in SOURCE_PENDING_RULING.
+    // pending ruling that used to cover all nine is executed; the three that
+    // remain (drakemaw_raptor and the four DEVELOPER_MOUNTS) are content gaps,
+    // not vocabulary gaps, and stay hand-listed in SOURCE_PENDING_RULING.
     relics: mounts(...mountEntries(RELIQUARY_HORIZON_MOUNTS)),
   },
   {
@@ -1453,6 +1486,16 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
       ['crag_warden_cudgel', [fromBoss('brutok_skullsmasher'), fromZone('thornpeak_heights')]],
       ['skullsplitter_dirk', [fromBoss('brutok_skullsmasher'), fromZone('thornpeak_heights')]],
       ['stormroot_cowl', [fromBoss('brutok_skullsmasher'), fromZone('thornpeak_heights')]],
+      // The rare world-drop bag (bank-storage): Brutok's elevated row is the
+      // only rare-template carrier (the ordinary-mob world-drop rows are not
+      // in the slain walk), so the hint names him alone. The bag also drops
+      // off ordinary mobs in Mirefen Marsh (zone2's fen_troll) and Thornpeak,
+      // but the zone arm pins exactly ONE zone beside the boss hints and
+      // walks every hinted boss's camps against it (zoneHintShapeOk refuses
+      // a second zone, and Brutok camps in Thornpeak), so mirefen_marsh
+      // cannot be hinted; those farm rows are the acknowledged dominated
+      // routes in tests/reliquary_content.test.ts.
+      ['wayfarers_backpack', [fromBoss('brutok_skullsmasher'), fromZone('thornpeak_heights')]],
       // Voskar the Emberwing (Thornpeak Heights)
       ['emberwing_legguards', [fromBoss('voskar_emberwing'), fromZone('thornpeak_heights')]],
       ['emberfang_warblade', [fromBoss('voskar_emberwing'), fromZone('thornpeak_heights')]],
@@ -1535,6 +1578,98 @@ export const RELIQUARY_PAGES: readonly ReliquaryPageDef[] = freezePageTable([
     relics: items(
       ...RIFT_GEAR_ITEM_IDS.map((id) => [id, fromActivity('rift_first_clear')] as const),
     ),
+  },
+
+  // ---- Crucible of the Last Spring (the Ignivar raid, per boss room) ----
+  // Each raid room is its own dungeon id with its own clear record, so the
+  // raid pages come per boss, the conquerors_nythraxis shape. The sigil
+  // redemption tokens on both bosses' tables are deliberately NOT catalogued
+  // (kind 'tool', redemption currency, see RELIQUARY_HEROIC_GEAR above); the
+  // vendor-redeemed tier pieces are not catalogued either: beyond being a
+  // chosen purchase, paging all 145 would grow the relic catalog by roughly
+  // half against the design doc's deliberate-authoring bound on catalog
+  // growth and the measured autosave cost per catalogued id; if the sets
+  // earn a prestige surface it should be an authored per-lineage page shape
+  // (the honor-stock precedent), a curator decision recorded for the
+  // maintainer. Emberward is catalogued on Varkhul's heroic page because its
+  // 3 percent roll is heroic-only. Forgebreaker remains absent while its
+  // crafting route is pending; an unearnable slot must never sit on a
+  // conquerors page because it would dead-end col_reliquary_conquerors.
+  {
+    id: 'conquerors_ignivar',
+    shelf: 'conquerors',
+    name: 'Crucible of the Last Spring',
+    desc: 'Epic spoils claimed from Ignivar, Herald of the Last Flame.',
+    clearSource: { kind: 'dungeon', dungeonId: 'ignivar_raid_arena', difficulty: 'normal' },
+    // The arena's one boss drops every relic on the page.
+    sourceDefault: fromBoss('ignivar_herald_of_the_last_flame'),
+    relics: items(
+      'cinderfang_kris',
+      'slagrender_cleaver',
+      'wand_of_quenched_sparks',
+      'pendant_of_the_first_tempering',
+      'ignivars_ember_choker',
+      'locket_of_the_last_flame',
+      'heartspring_amulet',
+      'cord_of_the_last_flame',
+      'springbinder_sash',
+      'cinderbark_cinch',
+      'slagstalker_belt',
+      'moonscorch_waistwrap',
+      'grovetender_belt',
+      'forgewall_girdle',
+      'warforged_waistguard',
+      'stormkindled_chain',
+      'tidebinder_links',
+    ),
+  },
+  {
+    id: 'conquerors_ignivar_heroic',
+    shelf: 'conquerors',
+    name: 'Heroic Crucible of the Last Spring',
+    desc: 'Heroic-only weapons from Ignivar, Herald of the Last Flame.',
+    clearSource: { kind: 'dungeon', dungeonId: 'ignivar_raid_arena', difficulty: 'heroic' },
+    sourceDefault: fromBoss('ignivar_herald_of_the_last_flame'),
+    relics: items(...RELIQUARY_HEROIC_GEAR.ignivar_herald_of_the_last_flame),
+  },
+  {
+    id: 'conquerors_varkhul',
+    shelf: 'conquerors',
+    name: 'The Inner Crucible',
+    desc: 'Epic spoils claimed from Varkhul, Forgefather of the Last Flame.',
+    clearSource: { kind: 'dungeon', dungeonId: 'ignivar_inner_crucible', difficulty: 'normal' },
+    // The wing's one boss drops every normal relic on the page. Emberward is
+    // heroic-only and lives on the heroic page below. Forgebreaker is not
+    // paged while its crafting route is pending; a relic row requires a live
+    // source, so it pages with its recipe chain.
+    sourceDefault: fromBoss('varkhul_forgefather_of_the_last_flame'),
+    relics: items(
+      'orb_of_the_last_spring',
+      'cinder_of_the_first_design',
+      'seal_of_the_forgewall',
+      'band_of_marked_strikes',
+      'circle_of_cinders',
+      'loop_of_quiet_springs',
+      'cindersoaked_slippers',
+      'steps_of_quiet_water',
+      'ashenbark_treads',
+      'ashrunner_boots',
+      'scorchgrove_striders',
+      'dewfall_moccasins',
+      'anvilstance_sabatons',
+      'furnace_march_greaves',
+      'thundershock_treads',
+      'springwarden_sabatons',
+    ),
+  },
+  {
+    id: 'conquerors_varkhul_heroic',
+    shelf: 'conquerors',
+    name: 'Heroic Inner Crucible',
+    desc: 'Heroic-only shields and weapons from Varkhul, Forgefather of the Last Flame.',
+    clearSource: { kind: 'dungeon', dungeonId: 'ignivar_inner_crucible', difficulty: 'heroic' },
+    sourceDefault: fromBoss('varkhul_forgefather_of_the_last_flame'),
+    relics: items(...RELIQUARY_HEROIC_GEAR.varkhul_forgefather_of_the_last_flame),
   },
 ]);
 

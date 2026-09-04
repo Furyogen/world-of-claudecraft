@@ -164,13 +164,27 @@ describe('buildManifest', () => {
     expect(manifest).toContain('cast_lightning_bolt');
   });
 
-  it('keeps the release catalog, all 9 mount cues, and all 62 UI cues in one 264-key inventory', () => {
+  // 17 mount cues across the 13 catalog mounts, not one per mount: the
+  // rickshaw carries a summon and a loop cue and no stride, while the
+  // Lanternback Troll and the Chimeglass Tortoise deliberately have no stride
+  // cue at all and borrow the player's surface footfall instead (see
+  // Sfx.mountRun's fallback branch, and the coverage tests in sfx.test.ts).
+  it('keeps the release catalog, 17 mount cues, and all 62 UI cues in one 272-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
-    expect(keys.size).toBe(264);
+    // 268 = the release catalog plus the two gendered player-voice keys from
+    // PR #2320 and the rickshaw mount's summon/loop cues.
+    // 272 = the 268 above plus the Mech Bird's run/idle/jump/land take set.
+    expect(keys.size).toBe(272);
     expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(62);
     expect(keys.has('ui_craft_cast')).toBe(true);
     for (const key of [
       'cast_lightning_bolt',
+      // the Mech Bird, the store mount: the 1-2-1 gait beat plus the game's
+      // first standstill idle hum and mount-specific jump/land takes
+      'mount_run_mech_bird',
+      'mount_idle_mech_bird',
+      'mount_jump_mech_bird',
+      'mount_land_mech_bird',
       'mob_mudfin_attack',
       'mob_burrower_attack',
       'mob_reptile_attack',
@@ -244,7 +258,7 @@ describe('buildManifest', () => {
     // purely filesystem-discovered.
     const mobFamilyKeys = [...keys].filter((key) => key.startsWith('mob_'));
     expect(mobFamilyKeys).toHaveLength(65); // 13 families x 5 actions
-    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(264);
+    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(272);
   });
 });
 
@@ -471,5 +485,51 @@ describe('meteor/flamestrike asset binding', () => {
   it('binds the "meteor" and "flamestrike" manifest keys to the right file each', () => {
     expect(SFX_CLIPS.meteor.url.split('?')[0]).toBe('/audio/sfx/meteor.mp3');
     expect(SFX_CLIPS.flamestrike.url.split('?')[0]).toBe('/audio/sfx/flamestrike.mp3');
+  });
+});
+
+// The build step's ORDER, which is load-bearing rather than cosmetic.
+//
+// writeSfxManifest validates every custom key's resolved gain (category
+// baseline + keyTrimDb) against the per-key ceiling in
+// sfx_gain_ceiling.generated.json, and throws when the resolved value exceeds
+// it. writeSfxGainCeilings is what puts a key INTO that file, measured from the
+// audio. Running the manifest first therefore means a newly-added custom key
+// carrying a positive trim can never bootstrap: its ceiling does not exist yet,
+// so it defaults to 0dB, the bounds check throws, and the manifest is left
+// stale on disk.
+//
+// That failure mode is quiet in the worst way. The command exits non-zero, but
+// if the stale manifest is committed anyway the missing key is simply absent
+// from SFX_CLIPS, so the cue never loads and the game plays silence with
+// nothing red anywhere. Two shipped cues were lost to exactly this: a mount's
+// summon call and a mount's three reverse takes, both present on disk and
+// reachable in code.
+//
+// Ceilings depend only on the catalog and the audio files, never on the
+// manifest, so generating them first is safe as well as correct.
+describe('build_sfx_manifest.mjs step order', () => {
+  const entryScript = readFileSync(
+    path.join(fileURLToPath(new URL('..', import.meta.url)), 'scripts/build_sfx_manifest.mjs'),
+    'utf8',
+  );
+
+  it('writes the gain ceilings before loading the manifest that validates against them', () => {
+    expect(entryScript).not.toMatch(
+      /import\s+\{[^}]*\bwriteSfxManifest\b[^}]*\}\s+from\s+['"]\.\/sfx\/manifest\.mjs['"]/,
+    );
+    const ceilingsAt = entryScript.indexOf('writeSfxGainCeilings(');
+    const manifestImportAt = entryScript.indexOf("await import('./sfx/manifest.mjs')");
+    const manifestWriteAt = entryScript.indexOf('writeSfxManifest(');
+    expect(ceilingsAt).toBeGreaterThan(-1);
+    expect(manifestImportAt).toBeGreaterThan(-1);
+    expect(manifestWriteAt).toBeGreaterThan(-1);
+    expect(
+      ceilingsAt,
+      'writeSfxGainCeilings must run BEFORE manifest.mjs is imported: importing the ' +
+        'manifest evaluates playback_profile.mjs and reads the generated ceiling file, ' +
+        'so a new custom key with a positive trim cannot bootstrap if the import happens first',
+    ).toBeLessThan(manifestImportAt);
+    expect(manifestImportAt).toBeLessThan(manifestWriteAt);
   });
 });

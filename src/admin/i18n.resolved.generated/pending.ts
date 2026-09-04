@@ -47,9 +47,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "es_ES": [
     "nav.realmBuilders",
@@ -88,9 +86,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "fr_FR": [
     "nav.realmBuilders",
@@ -129,9 +125,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "fr_CA": [
     "nav.realmBuilders",
@@ -170,9 +164,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "en_CA": [],
   "it_IT": [
@@ -212,9 +204,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "de_DE": [
     "nav.realmBuilders",
@@ -253,9 +243,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "zh_CN": [
     "nav.realmBuilders",
@@ -294,9 +282,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "zh_TW": [
     "nav.realmBuilders",
@@ -335,9 +321,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "ko_KR": [
     "nav.realmBuilders",
@@ -376,9 +360,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "ja_JP": [
     "nav.realmBuilders",
@@ -417,9 +399,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "pt_BR": [
     "nav.realmBuilders",
@@ -458,9 +438,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "ru_RU": [
     "nav.realmBuilders",
@@ -499,9 +477,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "cs_CZ": [
     "nav.realmBuilders",
@@ -540,9 +516,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "nl_NL": [
     "nav.realmBuilders",
@@ -581,9 +555,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "pl_PL": [
     "nav.realmBuilders",
@@ -622,9 +594,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "id_ID": [
     "nav.realmBuilders",
@@ -663,9 +633,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "tr_TR": [
     "nav.realmBuilders",
@@ -704,9 +672,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "sv_SE": [
     "nav.realmBuilders",
@@ -745,9 +711,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "vi_VN": [
     "nav.realmBuilders",
@@ -786,9 +750,7 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ],
   "da_DK": [
     "nav.realmBuilders",
@@ -827,8 +789,6 @@ export const pending: Record<string, readonly string[]> = {
     "realmBuilders.saveFailed",
     "realmBuilders.saveNew",
     "realmBuilders.useNextMonth",
-    "realmBuilders.yearLabel",
-    "usage.metric.walletHandoffAuthorizationEvicted",
-    "usage.metric.walletHandoffCreateRejected"
+    "realmBuilders.yearLabel"
   ]
 };

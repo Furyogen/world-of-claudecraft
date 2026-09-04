@@ -133,8 +133,9 @@ export const ENTITY_GATE_STAND_INS: readonly EntityGateStandIn[] = [
   {
     gate: 'gateViewOnCompile',
     file: 'src/render/renderer.ts',
-    callSite: 'view.compileReady = this.gateViewOnCompile(view, group, requiredForEntry);',
-    hides: 'the arriving entity whole 3D group, for EVERY non-self view, objects included',
+    callSite: 'view.compileReady = this.gateViewOnCompile(',
+    hides:
+      'the arriving entity whole 3D group, for EVERY non-self view, objects included (for the Ignivar boss, once its rig exists, only that cosmetic rig hides: the group stays visible so the floor telegraphs keep drawing)',
     standIn:
       'the nameplate, forced on by entityHasNoBody: while the gate holds, the plate ignores both nameplate toggles, the 55 yd nameplate range and the plateless-object rule (nameplate_view.ts), so a gated ground-loot pile, chest or quest object is represented too, out to the view-create radius of about 80 yd. It stays hidden only where no body is being hidden from the player: a looted corpse, the deliberately label-less sealed crypt door and the Vale Cup ball',
   },
@@ -164,8 +165,11 @@ export const ENTITY_GATE_STAND_INS: readonly EntityGateStandIn[] = [
   {
     gate: 'gateSwapFlagOnCompile',
     file: 'src/render/renderer.ts',
-    callSite: 'this.gateSwapFlagOnCompile(v.mountVisual.root, () => {',
-    hides: 'a newly summoned mount',
+    // The gate is invoked from mount_lifecycle.ts syncMountVisual through the
+    // renderer's one MountViewHost; this is the host arm that reaches the
+    // wrapper, so it is the call site the scan sees.
+    callSite: 'gateSwapFlagOnCompile: (root, done) => this.gateSwapFlagOnCompile(root, done),',
+    hides: 'a newly summoned mount (mount_lifecycle.ts syncMountVisual, via the MountViewHost)',
     standIn: 'the rider, who keeps drawing on foot at seat lift 0',
   },
   {

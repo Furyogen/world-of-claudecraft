@@ -1025,19 +1025,31 @@ const ACCEPTED_POLISH_V2_METADATA_PATH = path.join(REPO_ROOT, POLISH_SEAL_PATH);
 // Re-minted for the v0.40.0 sync merge into the guild pledge branch (the
 // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
 // both sides). No capture was retaken.
-// Re-minted for the Realm Builder monument (round 7): the civic centrepiece
-// changed asset, subject and shader cache key, so every provenance block was
-// swept onto the new fingerprinted inputs. No capture was retaken.
-// Re-minted again for round 8, the admin-dashboard wiring: the monument now
-// takes its honouree from the realm's own records, which moved the
-// rendererIntegration, town and civicShader leaves. No capture was retaken.
-// Re-minted for the Realm Builder monument, ported onto main: the civic
-// centrepiece changed asset, subject and shader cache key, and every
-// fingerprinted input carries this base's bytes. No capture was retaken.
+// Re-minted for the Ignivar raid consolidation (the v0.41.0 base merge plus
+// the renderer extraction round moved the renderer integration leaf). No
+// capture was retaken.
+// Re-minted for PR #3740's forge-lift room (the lift room render hookup and
+// door-portal arm moved the renderer integration leaf). No capture was
+// retaken.
+// Re-minted for the Drakelands entrance merge into the raid branch (PRs 3689
+// plus 3734: both arms had re-minted, the merged renderer and evidence inputs
+// land together). No capture was retaken.
+// Re-minted at the release/v0.42.0 sync of PR #3439: renderer.ts moved for the
+// mount lifecycle seam (mount_lifecycle.ts) and the rickshaw hooks it absorbed.
+// Re-minted for the Cluckwork Mech Bird store mount (PR #3464) on top of the
+// v0.42.0 mount-lifecycle move: the renderer's stride accumulator moved to
+// src/render/stride_audio_core.ts and the mounted audio branch gained the
+// idle-hum poll. No capture was retaken.
+// Re-minted for the Realm Builder monument (PR #3695) at its release/v0.42.0
+// base merge: the civic centrepiece changed asset, subject and shader cache
+// key, so every provenance block was swept onto the merged fingerprinted
+// inputs. No capture was retaken.
 const ACCEPTED_POLISH_V2_METADATA_SHA256 =
-  '2ab798c630a8621557f592c846a258eaf29bbcc4955fa62d20ff7943057add39';
+  '08fbcbb27faede02bb26f181f359e07f2e45c7cc5a572d3c98c602f91a9c6688';
+// Re-minted at the release/v0.42.0 sync of PR #3439: renderer.ts moved for the
+// mount lifecycle seam (mount_lifecycle.ts) and the rickshaw hooks it absorbed.
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
-  '4b635d9e3ce4a5119f54d6a139b80f962ff9dc2f7ceead6255846bb5a7ef8c0b';
+  '814326b1828389b47e0b512044d6852c46148b2bb4ba1b310e87331f088894ca';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2184,20 +2196,20 @@ describe('Eastbrook polish performance and contact evidence', () => {
     // OSSBrain v0.40 batch landed on the release arm; renderer inputs moved on
     // both sides): same order, the composite first, then this seal. No capture
     // was retaken.
-    // Re-minted for the Realm Builder monument (round 7): the civic
-    // centrepiece changed asset, subject and shader cache key, so the
-    // first-order composite follows eastbrook_layout.ts, eastbrook_town.ts,
-    // eastbrook_civic_beacon.ts and the capture contract, then this
-    // second-order seal follows the swept evidence bytes. No capture was
+    // Re-minted for PR #3740's forge-lift room: the first-order composite
+    // follows the lift room's renderer.ts hookup, then this second-order
+    // performance seal follows the swept evidence bytes. No capture was
     // retaken.
     expect(
       fingerprint.digest('hex'),
       `the second-order performance digest moved; if every input moved legitimately, re-mint with: ${REMINT_COMMAND} (it recomputes this literal LAST, from the swept files)`,
-      // Re-minted again for round 8, the monument's admin-dashboard wiring: the
-      // first-order composite follows the renderer, town and civicShader leaves,
-      // then this second-order seal follows the swept evidence bytes. No capture
-      // was retaken.
-    ).toBe('a5024fb86c833c648d8ccd41946abccab090ba492b13005eadbe0b57a482c280');
+      // Re-minted for the Drakelands entrance merge into the raid branch: the
+      // composite first, then this seal. No capture was retaken.
+      // Re-minted for the Realm Builder monument (PR #3695) at its
+      // release/v0.42.0 base merge: the first-order composite follows the
+      // renderer, town and civicShader leaves, then this second-order seal
+      // follows the swept evidence bytes. No capture was retaken.
+    ).toBe('4c159d680a312b16beb71bc2ecfd8e45f5ff0b8495cfb7f5cd213d18ff52d253');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {
