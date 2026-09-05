@@ -3311,6 +3311,15 @@ export const es_ES: EnTranslations = {
       "popupTitle": "Cartel de la hermandad",
       "close": "Cerrar"
     },
+    "realmBuilder": {
+      "title": "Realm Builder of the Month",
+      "currentLabel": "Honoured this month",
+      "placeholderName": "Your Name Here",
+      "placeholderHint": "This plate is waiting for its first name.",
+      "pastTitle": "Past honourees",
+      "pastEmpty": "No names on the roll yet.",
+      "close": "Close"
+    },
     "bank": {
       "title": "Banco",
       "subtitle": "El Arca Dorada",
@@ -19151,6 +19160,7 @@ export const es_ES: EnTranslations = {
     "delveRiteShrineReedInteract": "Santuario del Junco: pulsa F para tocarlo",
     "delveRiteShrineSkullInteract": "Santuario de la Calavera: pulsa F para tocarlo",
     "mailboxName": "Buzón",
-    "noticeboardName": "Tablón de anuncios"
+    "noticeboardName": "Tablón de anuncios",
+    "realmBuilderMonumentName": "Realm Builder Monument"
   }
 };

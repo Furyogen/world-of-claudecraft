@@ -276,9 +276,14 @@ const MONOLITHS: MonolithRow[] = [
     // LOWERED for the Target dots frame: the tracker's own view + painter live
     // in src/ui/hud/target_dots/, and describeAbilitySummary +
     // abilityRequirementLines (pure i18n mappers with no Hud state) moved out to
-    // ability_tooltip_lines.ts, which more than paid for the wiring. Exact
-    // count, zero slack.
-    ceiling: 18879,
+    // ability_tooltip_lines.ts, which more than paid for the wiring (18905 ->
+    // 18879 on its own tree).
+    // The Realm Builder monument's honour-roll card (PR #3695) adds six lines
+    // here that cannot live anywhere else: the import, the field, its
+    // relocalize() call, and the three-line event arm (the card itself is
+    // src/ui/realm_builder_popup.ts). Re-measured on the merged tree: 18879
+    // plus those six. Exact merged count, zero slack; maintainer-review item.
+    ceiling: 18885,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {
@@ -363,6 +368,12 @@ const MONOLITHS: MonolithRow[] = [
     // and the release arm's rickshaw hooks moved with it, so the merged file
     // lands below both prior pins. Measured on the merged tree. Exact merged
     // count, zero headroom.
+    // The Realm Builder monument (PR #3695) adds 12 lines here: one import,
+    // the one-line setRealmBuilderHonouree delegation, and the entity arm
+    // that returns the monument's pick volume (matched on the template-id
+    // literal like the noticeboard arm beside it; tests/realm_builder_monument
+    // pins the literal to the constant). They land exactly on the pin above,
+    // so the ceiling does not move but the slack is now zero.
     ceiling: 13214,
     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
   },
@@ -702,7 +713,13 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned to the exact merged count of the OSSBrain v0.41.0 base
     // merge: both parents had already ratcheted for their own work, so
     // the composite is the honest size. Exact count, zero slack.
-    ceiling: 5145,
+    // Up 5145 -> 5151 for the Realm Builder of the Month roll (PR #3695, at
+    // its release/v0.42.0 base merge): the table and its SQL live in
+    // server/realm_builder_db.ts; the residue here is the schema import and
+    // the one ensureSchema() apply line with its ordering note, the same
+    // shape every other domain *_SCHEMA takes. Exact merged count, zero
+    // slack; maintainer-review item.
+    ceiling: 5151,
     seam: 'a domain <domain>_db.ts module with its own *_SCHEMA (server/CLAUDE.md)',
   },
   {
