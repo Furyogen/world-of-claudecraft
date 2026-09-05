@@ -248,6 +248,32 @@ describe('the dot row in the declutter anchor', () => {
     expect(atThree).toBeCloseTo(atOne * 3, 5);
   });
 
+  it.each([
+    ['the 150% default', 1.5, 34.5],
+    ['the 300% maximum', 3, 69],
+  ])('declutters two dotted plates at one anchor by the whole row at %s', (_label, scale, lift) => {
+    // Both enemies stand on the same spot, so they project to one anchor. The
+    // painter hands the row height to the declutter pass through extraLift;
+    // this pins that the pass actually SPENDS it: the pair's pitch is the bare
+    // 20px plus the row, not the 28px heraldry pitch (PR 3853 review).
+    const bare = harness([entity(7), entity(8)]);
+    bare.painter.update(true);
+    const [bareA, bareB] = liveAnchors(bare.painter);
+    expect(Math.abs(bareA.sy - bareB.sy)).toBe(20);
+
+    const dots = harness([dotted(7), dotted(8)], scale);
+    dots.painter.update(true);
+    const anchors = liveAnchors(dots.painter);
+
+    expect(anchors).toHaveLength(2);
+    expect(nameplateDotRowHeight(1, scale)).toBe(lift);
+    expect(Math.abs(anchors[0].sy - anchors[1].sy)).toBeCloseTo(20 + lift, 5);
+    // and picking still resolves at the post-declutter coordinates it draws at
+    for (const anchor of anchors) {
+      expect(dots.painter.pickEntityAt(...healthPoint(anchor))).toBe(anchor.id);
+    }
+  });
+
   it('leaves the anchor unlifted for a plate with no dots of YOURS on it', () => {
     const foreign = entity(7);
     foreign.auras = [
