@@ -1,3 +1,4 @@
+import { AURA_CUE_NONE, sanitizeAuraCueId } from '../game/aura_cue_catalog';
 import type { AuraOverlayProcId, MageProcId, WarriorProcId } from './aura_overlay_view';
 import { auraOverlayDefaultMeta } from './aura_overlay_view';
 import { sanitizeWatchedIds } from './aura_watchlist_core';
@@ -17,6 +18,12 @@ export interface AuraOverlayConfig {
   groundScale: number;
   groundOrder: number;
   color: string;
+  /** The alert sound this proc plays when it fires, or AURA_CUE_NONE for silence
+   *  (the default: nobody gets a new noise without asking for it). */
+  soundId: string;
+  /** Per-proc playback gain, 0.1 to 1. Only reachable once a cue is chosen, and
+   *  multiplied by the player's master SFX volume like every other cue. */
+  soundVolume: number;
 }
 
 export type AuraOverlayPatch = Partial<AuraOverlayConfig>;
@@ -193,6 +200,8 @@ export function defaultAuraOverlayConfig(id: AuraOverlayProcId): AuraOverlayConf
     groundScale: 1,
     groundOrder: defaultGroundOrder(id),
     color: layout.color,
+    soundId: AURA_CUE_NONE,
+    soundVolume: 0.7,
   };
 }
 
@@ -227,6 +236,8 @@ export function sanitizeAuraOverlayConfig(id: AuraOverlayProcId, raw: unknown): 
     groundScale: numberIn(value.groundScale, 0.65, 1.6, fallback.groundScale),
     groundOrder: Math.round(numberIn(value.groundOrder, 0, 100, fallback.groundOrder)),
     color: colorOr(value.color, fallback.color),
+    soundId: sanitizeAuraCueId(value.soundId),
+    soundVolume: numberIn(value.soundVolume, 0.1, 1, fallback.soundVolume),
   };
 }
 

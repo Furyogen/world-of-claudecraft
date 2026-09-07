@@ -50,6 +50,7 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         nudge,
         watchOptions: () => [],
         setWatched: vi.fn(),
+        previewCue: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -127,6 +128,7 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         nudge: vi.fn(),
         watchOptions: () => [],
         setWatched: vi.fn(),
+        previewCue: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -165,6 +167,7 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         nudge: vi.fn(),
         watchOptions: () => [],
         setWatched: vi.fn(),
+        previewCue: vi.fn(),
         setAll,
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -230,6 +233,7 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         },
         watchOptions: () => [],
         setWatched: vi.fn(),
+        previewCue: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -317,6 +321,7 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         nudge,
         watchOptions: () => [],
         setWatched: vi.fn(),
+        previewCue: vi.fn(),
         setAll: vi.fn(),
         beginPlacement,
         endPlacement,
@@ -541,6 +546,7 @@ describe('AuraOverlaySettingsPanel watchlist picker', () => {
         nudge: vi.fn(),
         watchOptions,
         setWatched,
+        previewCue: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -609,5 +615,107 @@ describe('AuraOverlaySettingsPanel watchlist picker', () => {
       'No supported proc is available for this character.',
     );
     expect(root.querySelectorAll('.aura-settings-card')).toHaveLength(0);
+  });
+});
+
+describe('AuraOverlaySettingsPanel alert sound controls', () => {
+  const renderCard = (config: Partial<ReturnType<typeof defaultAuraOverlayConfig>> = {}) => {
+    let current = { ...defaultAuraOverlayConfig('revenge_free'), ...config };
+    const previewCue = vi.fn();
+    const patch = vi.fn((_id: string, p: Record<string, unknown>) => {
+      current = { ...current, ...p };
+    });
+    const panel = new AuraOverlaySettingsPanel({
+      click: vi.fn(),
+      openFocusTrap,
+      auras: {
+        playerClass: () => 'warrior',
+        defs: () => [revenge],
+        get: () => current,
+        getLayout: () => ({ crescentBlockScale: 1, groundRingBlockScale: 1 }),
+        patchLayout: vi.fn(),
+        patch,
+        reset: vi.fn(),
+        nudge: vi.fn(),
+        watchOptions: () => [],
+        setWatched: vi.fn(),
+        previewCue,
+        setAll: vi.fn(),
+        beginPlacement: vi.fn(),
+        endPlacement: vi.fn(),
+        setPlacement: vi.fn(),
+        onPositionChange: () => vi.fn(),
+        onPlacementChange: () => vi.fn(),
+      },
+    });
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    panel.render(root);
+    return {
+      root,
+      previewCue,
+      patch,
+      get current() {
+        return current;
+      },
+    };
+  };
+
+  it('offers silence plus all twenty cues, defaulting to silence', () => {
+    const { root } = renderCard();
+    const select = root.querySelector<HTMLSelectElement>('.aura-sound-select');
+    expect(select?.options).toHaveLength(21);
+    expect(select?.options[0].value).toBe('none');
+    expect(select?.options[0].textContent).toBe('No sound');
+    expect(select?.value).toBe('none');
+    expect(
+      Array.from(select?.options ?? [])
+        .slice(1)
+        .map((o) => o.textContent),
+    ).toContain('Cat Meow');
+  });
+
+  it('hides the volume slider and preview until a cue is chosen', () => {
+    // A silent proc shows ONE control, not three dead ones.
+    const silent = renderCard();
+    expect(silent.root.querySelector('.aura-sound-volume')).toBeNull();
+    expect(silent.root.querySelector('.aura-sound-preview')).toBeNull();
+    expect(silent.root.querySelector('.aura-sound-hint')).toBeNull();
+
+    const loud = renderCard({ soundId: 'ui_aura_car_klaxon' });
+    expect(loud.root.querySelector('.aura-sound-volume')).not.toBeNull();
+    expect(loud.root.querySelector('.aura-sound-preview')).not.toBeNull();
+    // The hint is what tells a player the sound can REPLACE the overlay.
+    expect(loud.root.querySelector('.aura-sound-hint')?.textContent).toContain('sound alone');
+  });
+
+  it('stores the pick and auditions it, so the player chooses by ear', () => {
+    const card = renderCard();
+    const select = card.root.querySelector<HTMLSelectElement>('.aura-sound-select');
+    if (!select) throw new Error('no cue select');
+    select.value = 'ui_aura_wolf_howl';
+    select.dispatchEvent(new Event('change'));
+
+    expect(card.patch).toHaveBeenCalledWith('revenge_free', { soundId: 'ui_aura_wolf_howl' });
+    expect(card.previewCue).toHaveBeenCalledWith('ui_aura_wolf_howl', 0.7);
+  });
+
+  it('does not audition a switch back to silence', () => {
+    const card = renderCard({ soundId: 'ui_aura_wolf_howl' });
+    const select = card.root.querySelector<HTMLSelectElement>('.aura-sound-select');
+    if (!select) throw new Error('no cue select');
+    select.value = 'none';
+    select.dispatchEvent(new Event('change'));
+
+    expect(card.patch).toHaveBeenCalledWith('revenge_free', { soundId: 'none' });
+    expect(card.previewCue).not.toHaveBeenCalled();
+  });
+
+  it('previews at the proc own volume and names the cue for a screen reader', () => {
+    const card = renderCard({ soundId: 'ui_aura_glass_ping', soundVolume: 0.35 });
+    const preview = card.root.querySelector<HTMLButtonElement>('.aura-sound-preview');
+    expect(preview?.getAttribute('aria-label')).toBe('Preview the Glass Ping alert sound');
+    preview?.click();
+    expect(card.previewCue).toHaveBeenCalledWith('ui_aura_glass_ping', 0.35);
   });
 });

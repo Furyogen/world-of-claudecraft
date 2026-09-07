@@ -1007,3 +1007,100 @@ describe('AuraOverlayController watchlist', () => {
     );
   });
 });
+
+describe('AuraOverlayController alert cues', () => {
+  const warriorKnown = (): ResolvedAbility[] =>
+    ['revenge', 'recklessness'].map((id) => ({ def: ABILITIES[id] }) as ResolvedAbility);
+  const setup = () => {
+    const played: Array<[string, number]> = [];
+    const controller = new AuraOverlayController({
+      doc: document,
+      writers,
+      playerClass: 'warrior',
+      playerName: 'Raido',
+      known: warriorKnown,
+      iconUrl: (id) => `/icons/${id}.png`,
+      playCue: (cueId, volume) => played.push([cueId, volume]),
+    });
+    return { controller, played };
+  };
+  const revengeUp = [{ id: 'revenge', kind: 'revenge_free' } as never];
+
+  it('stays silent by default, however often a proc fires', () => {
+    const { controller, played } = setup();
+    controller.paint([]);
+    controller.paint(revengeUp);
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect(played).toEqual([]);
+  });
+
+  it('plays the chosen cue once on the RISING edge, not every frame it stays up', () => {
+    const { controller, played } = setup();
+    controller.patch('revenge_free', { soundId: 'ui_aura_hard_bell', soundVolume: 0.4 });
+    controller.paint([]);
+    controller.paint(revengeUp);
+    controller.paint(revengeUp);
+    controller.paint(revengeUp);
+    expect(played).toEqual([['ui_aura_hard_bell', 0.4]]);
+
+    // It re-announces only after the aura actually falls off and returns.
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect(played).toHaveLength(2);
+  });
+
+  it('never announces an aura that was ALREADY up on the first frame', () => {
+    // Logging in with a buff running, or picking a spell whose aura is live, is
+    // not a proc: the first paint records state and says nothing.
+    const { controller, played } = setup();
+    controller.patch('revenge_free', { soundId: 'ui_aura_hard_bell' });
+    controller.paint(revengeUp);
+    expect(played).toEqual([]);
+    controller.paint(revengeUp);
+    expect(played).toEqual([]);
+  });
+
+  it('sounds a proc whose visual overlay is switched off, the sound-instead-of-aura case', () => {
+    const { controller, played } = setup();
+    controller.patch('revenge_free', { soundId: 'ui_aura_cat_meow', enabled: false });
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect(played).toEqual([['ui_aura_cat_meow', 0.7]]);
+  });
+
+  it('keeps each proc on its own cue and its own edge', () => {
+    const { controller, played } = setup();
+    controller.setWatched('watch:recklessness', true);
+    controller.patch('revenge_free', { soundId: 'ui_aura_hard_bell' });
+    controller.patch('watch:recklessness', { soundId: 'ui_aura_wolf_howl' });
+    controller.paint([]);
+    controller.paint([{ id: 'recklessness', kind: 'buff_reckless' } as never]);
+    expect(played).toEqual([['ui_aura_wolf_howl', 0.7]]);
+    controller.paint([
+      { id: 'recklessness', kind: 'buff_reckless' } as never,
+      { id: 'revenge', kind: 'revenge_free' } as never,
+    ]);
+    // Recklessness was already up, so only the newly risen proc speaks.
+    expect(played).toEqual([
+      ['ui_aura_wolf_howl', 0.7],
+      ['ui_aura_hard_bell', 0.7],
+    ]);
+  });
+
+  it('carries the chosen cue and volume across a session', () => {
+    setup().controller.patch('revenge_free', {
+      soundId: 'ui_aura_temple_gong',
+      soundVolume: 0.25,
+    });
+    document.body.replaceChildren();
+    const { controller, played } = setup();
+    expect(controller.get('revenge_free')).toMatchObject({
+      soundId: 'ui_aura_temple_gong',
+      soundVolume: 0.25,
+    });
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect(played).toEqual([['ui_aura_temple_gong', 0.25]]);
+  });
+});

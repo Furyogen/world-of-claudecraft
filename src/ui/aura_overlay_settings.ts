@@ -1,3 +1,4 @@
+import { AURA_CUE_NONE, AURA_CUES } from '../game/aura_cue_catalog';
 import { ABILITIES } from '../sim/content/classes';
 import type { PlayerClass } from '../sim/types';
 import { abilityDisplayName } from './ability_display_name';
@@ -29,6 +30,9 @@ export interface AuraOverlayHooks {
    *  authored proc, flagged with whether the player watches it. */
   watchOptions(): readonly AuraWatchOption[];
   setWatched(id: AuraOverlayProcId, on: boolean): void;
+  /** Audition one cue at the volume the proc is configured for, so the player can
+   *  choose by ear instead of by name. */
+  previewCue(cueId: string, volume: number): void;
   reset(id: AuraOverlayProcId): void;
   nudge(id: AuraOverlayProcId, part: AuraOverlayPart, deltaX: number, deltaY: number): void;
   setAll(enabled: boolean): void;
@@ -350,6 +354,7 @@ export class AuraOverlaySettingsPanel {
       step: 0.05,
       format: percent,
     });
+    this.buildSoundControls(card, def, refresh);
     const reset = document.createElement('button');
     reset.type = 'button';
     reset.className = 'btn aura-reset-btn';
@@ -361,6 +366,83 @@ export class AuraOverlaySettingsPanel {
       refresh([`aura-reset:${def.id}`]);
     });
     card.appendChild(reset);
+  }
+
+  /**
+   * The per-proc alert sound: a cue picker, a preview button, and a volume slider.
+   * The slider and the preview only exist once a cue is chosen, so a proc with no
+   * sound shows one control rather than three dead ones.
+   */
+  private buildSoundControls(
+    card: HTMLElement,
+    def: AuraOverlayProcDef,
+    refresh: (focusKeys?: readonly string[]) => void,
+  ): void {
+    const hooks = this.host.auras;
+    const current = hooks.get(def.id);
+    const row = document.createElement('div');
+    row.className = 'set-row aura-sound-row';
+    const name = document.createElement('span');
+    name.className = 'set-name';
+    name.textContent = t('hudChrome.auraOverlay.sound');
+    const select = document.createElement('select');
+    select.className = 'hud-select aura-sound-select';
+    const silence = document.createElement('option');
+    silence.value = AURA_CUE_NONE;
+    silence.textContent = t('hudChrome.auraOverlay.soundNone');
+    select.appendChild(silence);
+    for (const cue of AURA_CUES) {
+      const option = document.createElement('option');
+      option.value = cue.id;
+      option.textContent = t(cue.labelKey);
+      select.appendChild(option);
+    }
+    select.value = current.soundId;
+    select.setAttribute('aria-label', t('hudChrome.auraOverlay.sound'));
+    select.addEventListener('change', () => {
+      this.host.click();
+      const soundId = select.value;
+      hooks.patch(def.id, { soundId });
+      // Audition on pick: choosing by name alone is guesswork across twenty cues.
+      if (soundId !== AURA_CUE_NONE) hooks.previewCue(soundId, hooks.get(def.id).soundVolume);
+      refresh([`aura-sound:${def.id}`]);
+    });
+    row.append(name, select);
+    card.appendChild(row);
+    if (current.soundId === AURA_CUE_NONE) return;
+
+    const hint = document.createElement('div');
+    hint.className = 'set-note aura-sound-hint';
+    hint.textContent = t('hudChrome.auraOverlay.soundHint');
+    card.appendChild(hint);
+    const volume = sliderControl({
+      parent: card,
+      label: t('hudChrome.auraOverlay.soundVolume'),
+      get: () => hooks.get(def.id).soundVolume,
+      set: (soundVolume) => hooks.patch(def.id, { soundVolume }),
+      min: 0.1,
+      max: 1,
+      step: 0.05,
+      format: percent,
+    });
+    volume.row.classList.add('aura-sound-volume');
+    const preview = document.createElement('button');
+    preview.type = 'button';
+    preview.className = 'btn aura-sound-preview';
+    preview.dataset.focusKey = `aura-sound:${def.id}`;
+    preview.textContent = t('hudChrome.auraOverlay.soundPreview');
+    const cueName = AURA_CUES.find((cue) => cue.id === current.soundId);
+    preview.setAttribute(
+      'aria-label',
+      t('hudChrome.auraOverlay.soundPreviewAria', {
+        sound: cueName ? t(cueName.labelKey) : current.soundId,
+      }),
+    );
+    preview.addEventListener('click', () => {
+      const config = hooks.get(def.id);
+      hooks.previewCue(config.soundId, config.soundVolume);
+    });
+    card.appendChild(preview);
   }
 
   private openPlacement(

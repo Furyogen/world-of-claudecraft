@@ -12717,6 +12717,23 @@
   .aura-settings-chip.aura-overlay-victory {
     --aura-color: var(--color-aura-rpg-gold);
   }
+  .aura-sound-row {
+    align-items: center;
+    gap: 8px;
+  }
+  .aura-sound-select {
+    flex: 1;
+    min-width: 0;
+    min-height: 40px;
+  }
+  .aura-sound-hint {
+    margin: 6px 0 2px;
+  }
+  .aura-sound-preview {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 6px;
+  }
   .aura-position-label {
     margin-top: 8px;
     color: var(--color-text-light);

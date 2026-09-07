@@ -4035,6 +4035,16 @@ export const TARGETS = [
         chips[2]?.click();
       });
       await wait(250);
+      // Give the first picked spell an alert sound, so the frame shows the cue
+      // picker with its volume slider and preview revealed (they only exist once
+      // a cue is chosen).
+      await page.evaluate(() => {
+        const select = document.querySelector('.aura-sound-select');
+        if (!(select instanceof HTMLSelectElement)) return;
+        select.value = 'ui_aura_cat_meow';
+        select.dispatchEvent(new Event('change'));
+      });
+      await wait(250);
       return { clip: '#options-menu' };
     },
   },

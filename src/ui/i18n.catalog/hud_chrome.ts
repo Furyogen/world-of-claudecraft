@@ -1523,6 +1523,38 @@ export const hudChromeStrings = {
     watchlistWatch: 'Watch {spell}',
     watchlistUnwatch: 'Stop watching {spell}',
     watchlistCount: '{count} watched',
+    // Sound cues attachable to any proc (src/game/aura_cue_catalog.ts). Named for
+    // what the player hears, not for the class or proc, since any cue can go on
+    // any spell.
+    sound: 'Alert Sound',
+    soundNone: 'No sound',
+    soundVolume: 'Sound Volume',
+    soundPreview: 'Play',
+    soundPreviewAria: 'Preview the {sound} alert sound',
+    soundHint:
+      'A sound plays each time this spell procs. Turn the icon, crescents and ground ring off to have the sound alone announce it.',
+    cues: {
+      softChime: 'Soft Chime',
+      musicBox: 'Music Box',
+      glassPing: 'Glass Ping',
+      waterDrop: 'Water Drop',
+      bubblePop: 'Bubble Pop',
+      hardBell: 'Hard Bell',
+      templeGong: 'Temple Gong',
+      anvilStrike: 'Anvil Strike',
+      coinDrop: 'Coin Drop',
+      swordDraw: 'Sword Draw',
+      blaringHorn: 'Blaring Horn',
+      carKlaxon: 'Car Klaxon',
+      sonarPing: 'Sonar Ping',
+      electricZap: 'Electric Zap',
+      catMeow: 'Cat Meow',
+      owlHoot: 'Owl Hoot',
+      wolfHowl: 'Wolf Howl',
+      frogCroak: 'Frog Croak',
+      windWhoosh: 'Wind Whoosh',
+      steamHiss: 'Steam Hiss',
+    },
     procs: {
       revenge: 'Revenge!',
       battleTrance: 'Battle Trance',

@@ -1,3 +1,4 @@
+import { AURA_CUE_NONE } from '../game/aura_cue_catalog';
 import type { TalentAllocation } from '../sim/content/talents';
 import type { ResolvedAbility } from '../sim/sim';
 import type { Aura, PlayerClass } from '../sim/types';
@@ -57,6 +58,9 @@ export interface AuraOverlayControllerDeps {
   talents?(): TalentAllocation;
   iconUrl(abilityId: string): string;
   paintGroundRings?(rings: readonly AuraGroundRingState[]): void;
+  /** Play one alert cue at this gain. Injected so the controller stays testable
+   *  without an AudioContext; the Hud wires it to the shared sfx engine. */
+  playCue?(cueId: string, volume: number): void;
 }
 
 export class AuraOverlayController {
@@ -85,6 +89,11 @@ export class AuraOverlayController {
     (id: AuraOverlayProcId, part: AuraOverlayPart) => void
   >();
   private placement: { id: AuraOverlayProcId; part: AuraOverlayPart } | null = null;
+  // Last painted active state per proc, for the RISING EDGE the alert cue fires
+  // on. A proc absent from this map has never been painted, so its first frame
+  // only RECORDS: logging in with a buff already up, or picking a spell whose
+  // aura is live, is not a proc and must not announce itself.
+  private readonly cueActive = new Map<AuraOverlayProcId, boolean>();
   private previewGroundRings = false;
   private readonly counterfangAura: AuraOverlayPaintAura = {
     id: 'counterfang_window',
@@ -438,6 +447,7 @@ export class AuraOverlayController {
       this.counterfangAura.remaining = Math.min(COUNTERFANG_WINDOW_DURATION, counterfangRemaining);
     }
     this.painter.paint(auras, supplementalAuras);
+    this.fireCues(auras, supplementalAuras);
     if (!this.deps.paintGroundRings) return;
     const scale = this.layout.groundRingBlockScale;
     let changed = this.groundRingStates.length !== this.orderedGroundDefs.length;
@@ -471,6 +481,26 @@ export class AuraOverlayController {
     if (!this.groundRingsInitialized || changed) {
       this.groundRingsInitialized = true;
       this.deps.paintGroundRings(this.groundRingStates);
+    }
+  }
+
+  /**
+   * Announce every proc that just came up. The cue is INDEPENDENT of the visual
+   * toggles by design: setting a sound and switching Show Aura off is how a player
+   * asks for the sound INSTEAD of the overlay, which is the whole point of the
+   * feature. Silence stays the default, so a player who picks nothing hears nothing.
+   */
+  private fireCues(auras: readonly Aura[], supplemental: readonly AuraOverlayPaintAura[]): void {
+    const play = this.deps.playCue;
+    for (const def of this.currentDefs) {
+      const active =
+        auraOverlayProcIsActive(def, auras) || auraOverlayProcIsActive(def, supplemental);
+      const previous = this.cueActive.get(def.id);
+      this.cueActive.set(def.id, active);
+      if (!play || !active || previous !== false) continue;
+      const config = this.config(def.id);
+      if (config.soundId === AURA_CUE_NONE) continue;
+      play(config.soundId, config.soundVolume);
     }
   }
 
