@@ -32,6 +32,7 @@
 import {
   isDebuffDisplayAura as classifyDebuffDisplayAura,
   DEBUFF_AURA_KINDS,
+  isToggleAura as isToggleAuraShared,
 } from '../sim/aura_classify';
 import { isCancelableAura } from '../sim/combat/aura_cancel';
 import { isColdsightInternalMarkerAuraId } from '../sim/combat/hunter_coldsight_read';
@@ -49,18 +50,6 @@ export { DEBUFF_AURA_KINDS };
 // neither do we, even though the sim backs each with a long finite duration
 // (3600s). Every other aura shows a compact WoW-style remaining label (20s /
 // 5m / 1h / 2d) via compactAuraDuration below.
-const TOGGLE_KINDS: ReadonlySet<AuraKind> = new Set([
-  'stealth',
-  'form_bear',
-  'form_cat',
-  'form_moonkin',
-  'form_shadow',
-  'form_travel',
-  'form_fireball',
-  'battle_stance',
-  'berserker_stance',
-  'defensive_stance',
-]);
 /** Thornhollow Fields' carried-flag buff (src/sim/social/battleground.ts
  *  `CARRIED_FLAG_AURA_ID`, named here as a literal the same way icons.ts names
  *  the rune ids). Exported because the buff bar's cancel affordance has to
@@ -87,11 +76,6 @@ const TOGGLE_IDS: ReadonlySet<string> = new Set([
 // the one player who needs it. Hiding it is hiding an action, which the
 // gameplay-neutral-graphics invariant forbids (docs/design/graphics-settings-fairness.md).
 const NEVER_SHED_IDS: ReadonlySet<string> = new Set([CARRIED_FLAG_AURA_ID]);
-// The inverse override: an aura that rides a TOGGLE_KIND but is a genuine timed
-// buff worth a countdown. Greater Invisibility reuses the rogue-stealth machinery
-// for its vanish (kind 'stealth' with full move speed), but it is a fixed 20s
-// buff, not a toggle, so it must show its remaining time like any other buff.
-const TIMED_IDS: ReadonlySet<string> = new Set(['greater_invisibility']);
 
 /** Whether this aura reads as a MODE rather than a timed effect (a stance, a druid
  *  form, stealth, Ghost Wolf, the carried flag). Named because two callers need the
@@ -99,10 +83,7 @@ const TIMED_IDS: ReadonlySet<string> = new Set(['greater_invisibility']);
  *  ordered strip sorts by (`auraUrgencyBucket`). Keeping it one function is what stops
  *  the strip from banding an aura as a mode while still printing a countdown under it. */
 function isToggleAura(a: AuraInput): boolean {
-  return (
-    (TOGGLE_KINDS.has(a.kind) || TOGGLE_IDS.has(a.id) || isPersistentEngineAura(a.id)) &&
-    !TIMED_IDS.has(a.id)
-  );
+  return isToggleAuraShared(a.kind, a.id);
 }
 
 /** Whether cancelling this aura performs a GAMEPLAY action rather than merely

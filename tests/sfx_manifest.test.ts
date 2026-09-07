@@ -169,13 +169,15 @@ describe('buildManifest', () => {
   // Lanternback Troll and the Chimeglass Tortoise deliberately have no stride
   // cue at all and borrow the player's surface footfall instead (see
   // Sfx.mountRun's fallback branch, and the coverage tests in sfx.test.ts).
-  it('keeps the release catalog, 17 mount cues, and all 62 UI cues in one 272-key inventory', () => {
+  it('keeps the release catalog, 17 mount cues, and all 82 UI cues in one 292-key inventory', () => {
     const keys = new Set(SFX.map((entry) => entry.key));
     // 268 = the release catalog plus the two gendered player-voice keys from
     // PR #2320 and the rickshaw mount's summon/loop cues.
     // 272 = the 268 above plus the Mech Bird's run/idle/jump/land take set.
-    expect(keys.size).toBe(272);
-    expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(62);
+    // 292 = the 272 above plus the 20 player-selectable aura proc alerts.
+    expect(keys.size).toBe(292);
+    expect([...keys].filter((key) => key.startsWith('ui_aura_'))).toHaveLength(20);
+    expect([...keys].filter((key) => key.startsWith('ui_'))).toHaveLength(82);
     expect(keys.has('ui_craft_cast')).toBe(true);
     for (const key of [
       'cast_lightning_bolt',
@@ -258,7 +260,7 @@ describe('buildManifest', () => {
     // purely filesystem-discovered.
     const mobFamilyKeys = [...keys].filter((key) => key.startsWith('mob_'));
     expect(mobFamilyKeys).toHaveLength(65); // 13 families x 5 actions
-    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(272);
+    expect(SFX_FIXED_CATALOG_KEYS).toHaveLength(292);
   });
 });
 

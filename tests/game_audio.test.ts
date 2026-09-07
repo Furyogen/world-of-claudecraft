@@ -289,7 +289,7 @@ describe('sampled GameAudio facade', () => {
 });
 
 describe('deterministic UI SFX catalog', () => {
-  it('adds 15 unique UI cues to the authoritative studio inventory', () => {
+  it('adds 35 unique UI cues to the authoritative studio inventory', () => {
     // 13 pre-12b cues plus the Phase 12b gathering-rhythm placeholder
     // (ui_gather_cast) plus the Craft Cast System Phase 6 craft-family
     // cast-start placeholder (ui_craft_cast). ui_gather_strike/rare and
@@ -299,7 +299,9 @@ describe('deterministic UI SFX catalog', () => {
     const keys = UI_SFX_CATALOG.map((cue: { key: string }) => cue.key);
     const fullCatalogKeys = new Set(SFX.map((cue: { key: string }) => cue.key));
 
-    expect(keys).toHaveLength(15);
+    expect(keys).toHaveLength(35);
+    // The 20 player-selectable aura proc alerts (src/game/aura_cue_catalog.ts).
+    expect(keys.filter((key: string) => key.startsWith('ui_aura_'))).toHaveLength(20);
     expect(keys).toContain('ui_craft_cast');
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys.every((key: string) => key.startsWith('ui_'))).toBe(true);

@@ -7311,6 +7311,78 @@ export const TARGETS = [
     },
   },
   {
+    // The Auras panel, where the Watched Spells picker lets a player put an
+    // aura overlay on any known spell that buffs them, on top of the curated
+    // class procs. Polls the proc GRID rather than the picker itself, so the
+    // same target also captures the BEFORE frame on a base commit that has no
+    // picker at all.
+    key: 'aura-watchlist',
+    label: 'Auras options: the Watched Spells picker above the proc cards',
+    when: [
+      'ui/aura_watchlist_core',
+      'ui/aura_overlay_settings',
+      'ui/aura_overlay_controller',
+      'ui/aura_overlay_config',
+    ],
+    variants: [
+      // Warrior is the class with the richest AUTHORED proc list, so its frame
+      // shows the picker sitting on top of curated cards.
+      { key: 'warrior-desktop', charClass: 'warrior', charName: 'Thorgar' },
+      // Shaman is the case that motivated the feature: exactly ONE authored proc,
+      // so before the picker its Auras panel was nearly empty.
+      { key: 'shaman-desktop', charClass: 'shaman', charName: 'Stormcaller' },
+      { key: 'shaman-mobile', charClass: 'shaman', charName: 'Stormcaller', mobile: true },
+    ],
+    async capture(page) {
+      await page.evaluate(() => {
+        const sim = window.__game?.sim;
+        const hud = window.__game?.hud;
+        if (!sim || !hud) return;
+        // A level-1 spellbook holds almost nothing to watch. setPlayerLevel is the
+        // sim's own dev/test level jump: it re-learns the abilities and recalcs
+        // stats, so the picker derives from a REAL level-60 spellbook. Setting
+        // entity.level directly is not enough, since meta.known is a stored field
+        // the level-up path recomputes.
+        sim.setPlayerLevel?.(60);
+        const win = document.querySelector('#options-menu');
+        if (win && getComputedStyle(win).display !== 'none') hud.toggleOptionsMenu();
+        hud.toggleOptionsMenu();
+        // Offline has no Report a Bug row, so Auras is the fifth button.
+        const buttons = Array.from(document.querySelectorAll('#options-menu .opt-btn'));
+        buttons[4]?.click();
+      });
+      // Poll the panel INTRO, not the proc grid: a class with no authored proc
+      // (Shaman, the case this feature exists for) renders no grid at all, and a
+      // base commit with no picker renders only the intro. The intro is the one
+      // node present in every arm, so one target covers before and after.
+      const open = await pollForSize(page, '#options-menu .aura-settings-intro');
+      if (!open) return {};
+      // Pick two spells, so the frame shows both chip states and the cards the
+      // picks add. Driving the real chip click, not the controller hook.
+      await page.evaluate(() => {
+        const chips = Array.from(document.querySelectorAll('.aura-watch-chip'));
+        chips[0]?.click();
+      });
+      await wait(150);
+      await page.evaluate(() => {
+        const chips = Array.from(document.querySelectorAll('.aura-watch-chip'));
+        chips[2]?.click();
+      });
+      await wait(250);
+      // Give the first picked spell an alert sound, so the frame shows the cue
+      // picker with its volume slider and preview revealed (they only exist once
+      // a cue is chosen).
+      await page.evaluate(() => {
+        const select = document.querySelector('.aura-sound-select');
+        if (!(select instanceof HTMLSelectElement)) return;
+        select.value = 'ui_aura_cat_meow';
+        select.dispatchEvent(new Event('change'));
+      });
+      await wait(250);
+      return { clip: '#options-menu' };
+    },
+  },
+  {
     // The Key Bindings panel with the per-slot action-bar rows replaced by a
     // single "Edit action bar keys" entry (issue #1238).
     key: 'actionbar-keybind-menu-entry',
