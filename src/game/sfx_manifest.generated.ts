@@ -4838,7 +4838,7 @@ export const SFX_CLIPS =
     ]
   },
   "ui_aura_frog_croak": {
-    "url": "/audio/sfx/ui_aura_frog_croak.mp3?v=873551d56999",
+    "url": "/audio/sfx/ui_aura_frog_croak.mp3?v=84713a4f7898",
     "loop": false,
     "category": "ui",
     "preload": "startup",
@@ -4846,13 +4846,13 @@ export const SFX_CLIPS =
     "gain": 1,
     "playbackRate": 1,
     "bytes": 28255,
-    "hash": "873551d56999",
+    "hash": "84713a4f7898",
     "variants": [
       {
         "id": "main",
-        "url": "/audio/sfx/ui_aura_frog_croak.mp3?v=873551d56999",
+        "url": "/audio/sfx/ui_aura_frog_croak.mp3?v=84713a4f7898",
         "bytes": 28255,
-        "sha256": "873551d56999c002eeaaf9ab97f81bec59363e0afaeeadb92f6957c43377cdb8"
+        "sha256": "84713a4f7898639365daae41d3e8dc4f052ec031b8b3feee258f3341294b2c22"
       }
     ]
   },
@@ -4914,7 +4914,7 @@ export const SFX_CLIPS =
     ]
   },
   "ui_aura_owl_hoot": {
-    "url": "/audio/sfx/ui_aura_owl_hoot.mp3?v=abb10427673d",
+    "url": "/audio/sfx/ui_aura_owl_hoot.mp3?v=105e71c6762c",
     "loop": false,
     "category": "ui",
     "preload": "startup",
@@ -4922,13 +4922,13 @@ export const SFX_CLIPS =
     "gain": 1,
     "playbackRate": 1,
     "bytes": 37659,
-    "hash": "abb10427673d",
+    "hash": "105e71c6762c",
     "variants": [
       {
         "id": "main",
-        "url": "/audio/sfx/ui_aura_owl_hoot.mp3?v=abb10427673d",
+        "url": "/audio/sfx/ui_aura_owl_hoot.mp3?v=105e71c6762c",
         "bytes": 37659,
-        "sha256": "abb10427673dfc48e4e8bd314bea7f3dee505eb257d51def4632f00bdce30acb"
+        "sha256": "105e71c6762c8314a0f4f4964c50d9ef6cb3202a00fa230092aac11d457bee90"
       }
     ]
   },
@@ -5009,7 +5009,7 @@ export const SFX_CLIPS =
     ]
   },
   "ui_aura_temple_gong": {
-    "url": "/audio/sfx/ui_aura_temple_gong.mp3?v=eba821e657a0",
+    "url": "/audio/sfx/ui_aura_temple_gong.mp3?v=ad3754adda22",
     "loop": false,
     "category": "ui",
     "preload": "startup",
@@ -5017,13 +5017,13 @@ export const SFX_CLIPS =
     "gain": 1,
     "playbackRate": 1,
     "bytes": 49571,
-    "hash": "eba821e657a0",
+    "hash": "ad3754adda22",
     "variants": [
       {
         "id": "main",
-        "url": "/audio/sfx/ui_aura_temple_gong.mp3?v=eba821e657a0",
+        "url": "/audio/sfx/ui_aura_temple_gong.mp3?v=ad3754adda22",
         "bytes": 49571,
-        "sha256": "eba821e657a0c3a00ddaf28fe455702a6d92c2b0871fbd749a19f367c5e439d9"
+        "sha256": "ad3754adda228b4b5962d21c52f5c826d1993f097d2e52840494b389a014cefd"
       }
     ]
   },

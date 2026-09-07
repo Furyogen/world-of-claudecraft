@@ -65,6 +65,49 @@ describe('aura cue audio assets', () => {
     expect(specs).toHaveLength(20);
   });
 
+  it('keeps every cue audible on a laptop or phone speaker', () => {
+    // The lesson from Temple Gong, which shipped inaudible. It was authored from
+    // 98/146/233 Hz partials: faithful to a real gong, and useless in practice,
+    // because small speakers have almost no output below ~200 Hz. It lost 14 dB
+    // through a 200 Hz high-pass and read as silence, while the per-band check
+    // that was supposed to verify it reported "low-dominant" and called that
+    // correct. Low-dominant and audible are different claims.
+    //
+    // Guard at the AUTHORING layer, where the mistake was made: at least half of
+    // every cue's authored energy must sit above the small-speaker knee. The old
+    // gong scores 0.18 here, so this fails on exactly the shape that shipped.
+    const SMALL_SPEAKER_HZ = 200;
+    for (const spec of UI_SFX_SPECS as {
+      key: string;
+      layers: {
+        kind: string;
+        gain: number;
+        duration: number;
+        frequency?: number;
+        endFrequency?: number;
+        highpass?: number;
+        lowpass?: number;
+      }[];
+    }[]) {
+      if (!spec.key.startsWith('ui_aura_')) continue;
+      let total = 0;
+      let above = 0;
+      for (const layer of spec.layers) {
+        const energy = layer.gain * layer.duration;
+        total += energy;
+        const centre =
+          layer.kind === 'tone'
+            ? Math.max(layer.frequency ?? 0, layer.endFrequency ?? layer.frequency ?? 0)
+            : (layer.highpass ?? (layer.lowpass ? layer.lowpass / 2 : 2000));
+        if (centre >= SMALL_SPEAKER_HZ) above += energy;
+      }
+      expect(
+        above / total,
+        `${spec.key} is too bass-heavy to hear on a small speaker`,
+      ).toBeGreaterThanOrEqual(0.5);
+    }
+  });
+
   it('holds every cue to the 1 to 2 second band the palette promises', () => {
     for (const spec of specs) {
       expect(spec.duration, `${spec.key} duration`).toBeGreaterThanOrEqual(1);

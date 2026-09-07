@@ -252,12 +252,24 @@ export const UI_SFX_SPECS = [
     tone(400, 1.35, 0.55, 0.09, { wave: 'saw', endFrequency: 300 }),
     tone(860, 0.5, 0.9, 0.03, { wave: 'triangle', endFrequency: 800 }),
   ]),
-  cue('ui_aura_temple_gong', 2.0, 'Deep temple gong bloom with a long dark tail.', [
-    noise('brown', 0, 0.1, 0.12, { lowpass: 900 }),
-    tone(98, 0, 1.9, 0.16),
-    tone(146, 0, 1.6, 0.1),
-    tone(233, 0, 1.1, 0.06),
-    tone(311, 0, 0.7, 0.03),
+  // Built around its UPPER partials, not its fundamental. The first version put
+  // nearly all its energy at 98 to 233 Hz, which is faithful to a big gong and
+  // useless in practice: laptop and phone speakers have almost no output down
+  // there, so it lost 14 dB through a 200 Hz high-pass and read as silent. Real
+  // tam-tams are heard through a dense inharmonic cluster in the 300 Hz to
+  // 1.5 kHz range anyway; the low partials are kept for weight on real speakers
+  // but no longer carry the sound. The slight downward chirps are the pitch droop
+  // a struck gong has as it decays.
+  cue('ui_aura_temple_gong', 2.0, 'Deep temple gong bloom with a long shimmering tail.', [
+    noise('white', 0, 0.06, 0.1, { highpass: 700, lowpass: 5000 }),
+    noise('brown', 0, 0.12, 0.08, { lowpass: 900 }),
+    tone(110, 0, 1.9, 0.09),
+    tone(262, 0, 1.8, 0.11, { endFrequency: 256 }),
+    tone(415, 0, 1.7, 0.13, { endFrequency: 405 }),
+    tone(622, 0, 1.5, 0.11, { endFrequency: 607 }),
+    tone(831, 0, 1.2, 0.08, { endFrequency: 812 }),
+    tone(1100, 0, 0.9, 0.05, { endFrequency: 1075 }),
+    tone(1480, 0, 0.6, 0.03),
   ]),
   cue('ui_aura_coin_drop', 1.2, 'Small coins landing on stone, bright metallic ticks.', [
     tone(2637, 0, 0.28, 0.11),
@@ -291,11 +303,16 @@ export const UI_SFX_SPECS = [
     tone(2600, 0.25, 0.85, 0.07, { endFrequency: 2400 }),
     tone(3900, 0.25, 0.5, 0.03),
   ]),
+  // Same lesson as the gong, less severely: the croak leaned on 150 to 165 Hz and
+  // lost 7 dB through the small-speaker high-pass. The upper voice is now the
+  // louder of the pair, which is also closer to how a real croak reads.
   cue('ui_aura_frog_croak', 1.1, 'Low burbling frog croak, two short ribbits.', [
-    tone(165, 0, 0.22, 0.15, { wave: 'square', endFrequency: 130 }),
-    tone(247, 0, 0.2, 0.07, { wave: 'square', endFrequency: 200 }),
-    tone(150, 0.38, 0.3, 0.14, { wave: 'square', endFrequency: 120 }),
-    tone(225, 0.38, 0.28, 0.06, { wave: 'square', endFrequency: 185 }),
+    tone(165, 0, 0.22, 0.11, { wave: 'square', endFrequency: 130 }),
+    tone(330, 0, 0.2, 0.13, { wave: 'square', endFrequency: 260 }),
+    tone(495, 0, 0.18, 0.05, { wave: 'triangle', endFrequency: 390 }),
+    tone(150, 0.38, 0.3, 0.1, { wave: 'square', endFrequency: 120 }),
+    tone(300, 0.38, 0.28, 0.12, { wave: 'square', endFrequency: 240 }),
+    tone(450, 0.38, 0.24, 0.05, { wave: 'triangle', endFrequency: 360 }),
   ]),
   cue('ui_aura_sonar_ping', 2.0, 'Submarine sonar ping with two fading echoes.', [
     tone(1046, 0, 0.35, 0.15),
