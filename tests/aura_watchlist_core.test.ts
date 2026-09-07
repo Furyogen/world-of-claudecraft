@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { isToggleAura } from '../src/sim/aura_classify';
 import { ABILITIES } from '../src/sim/content/classes';
 import type { AbilityDef, AbilityEffect } from '../src/sim/types';
 import type { AuraOverlayProcDef } from '../src/ui/aura_overlay_view';
@@ -121,6 +122,60 @@ describe('abilitySelfAuraSignature', () => {
       [],
     );
     expect(options.map((o) => o.abilityId)).toEqual(['recklessness']);
+  });
+
+  it('derives every OTHER effect family that parks an aura on the caster', () => {
+    // Found by auditing the shipped kit against effect_dispatch: these were real
+    // procs the picker silently omitted, so "any spell that buffs you" was untrue
+    // until they were added. Ids and kinds are the ones the sim actually applies.
+    expect(abilitySelfAuraSignature(ABILITIES.slice_and_dice)).toEqual({
+      auraKind: 'buff_haste',
+      auraId: 'slice_and_dice',
+    });
+    expect(abilitySelfAuraSignature(ABILITIES.iron_resolve)).toEqual({
+      auraKind: 'absorb',
+      auraId: 'iron_resolve',
+    });
+    expect(abilitySelfAuraSignature(ABILITIES.greater_invisibility)).toEqual({
+      auraKind: 'stealth',
+      auraId: 'greater_invisibility',
+    });
+    expect(abilitySelfAuraSignature(ABILITIES.sanguine_aura)).toEqual({
+      auraKind: 'sanguine',
+      auraId: 'sanguine_aura',
+    });
+    // The enrage proc rides a FIXED aura id, not the ability's.
+    expect(abilitySelfAuraSignature(ABILITIES.bloodthirst)).toEqual({
+      auraKind: 'enrage',
+      auraId: 'fury_enrage',
+    });
+  });
+
+  it('leaves no shipped self-aura ability underivable except deliberate toggles', () => {
+    // The completeness claim, checked against the whole shipped kit rather than a
+    // handful of examples: every ability carrying an effect family that parks an
+    // aura on its caster must yield a signature, unless it is a toggle.
+    const SELF_AURA_EFFECTS = new Set([
+      'selfBuff',
+      'absorb',
+      'imbue',
+      'finisherHaste',
+      'absorbSpentResource',
+      'greaterInvisibility',
+      'partyMeleeBuff',
+      'enrageChance',
+    ]);
+    const underivable: string[] = [];
+    for (const ability of Object.values(ABILITIES)) {
+      if (!ability.effects.some((effect) => SELF_AURA_EFFECTS.has(effect.type))) continue;
+      if (abilitySelfAuraSignature(ability)) continue;
+      const toggle = ability.effects.some(
+        (effect) =>
+          effect.type === 'selfBuff' && isToggleAura(effect.kind, effect.auraId ?? ability.id),
+      );
+      if (!toggle) underivable.push(ability.id);
+    }
+    expect(underivable).toEqual([]);
   });
 
   it('reports nothing for an ability that parks no aura on the caster', () => {

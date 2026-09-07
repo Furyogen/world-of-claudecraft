@@ -69,6 +69,13 @@ export type WatchableAbilityDef = Pick<AbilityDef, 'id' | 'effects'>;
  * a proc in the first place, and the overlay prints a countdown from the aura's
  * remaining time, which for a toggle is 3600s of scaffolding the buff bar
  * deliberately never shows: watching one put a ticking "3,599" on screen.
+ *
+ * The families below the first three were added after an audit found real procs
+ * the picker was silently omitting: Slice and Dice (finisherHaste) is a rogue
+ * staple, and Greater Invisibility never appeared at all because its aura comes
+ * from its own effect type rather than a selfBuff. The rule the audit settled on
+ * is the one this function now implements: EVERY effect family that parks an aura
+ * on the caster is derivable, and the only omissions are deliberate (toggles).
  */
 export function abilitySelfAuraSignature(def: WatchableAbilityDef): AuraWatchSignature | null {
   for (const effect of def.effects) {
@@ -82,6 +89,31 @@ export function abilitySelfAuraSignature(def: WatchableAbilityDef): AuraWatchSig
     }
     if (effect.type === 'imbue') {
       return { auraKind: 'imbue', auraId: def.id };
+    }
+    // Slice and Dice: a self haste buff riding the ability id.
+    if (effect.type === 'finisherHaste') {
+      return { auraKind: 'buff_haste', auraId: def.id };
+    }
+    // Iron Resolve: the spend-all shield, a second absorb path.
+    if (effect.type === 'absorbSpentResource') {
+      return { auraKind: 'absorb', auraId: def.id };
+    }
+    // Greater Invisibility: rides the stealth KIND but is a fixed timed buff, and
+    // has its own effect type rather than a selfBuff, so it reached neither arm
+    // above. isToggleAura's timed-id override is what keeps it watchable.
+    if (effect.type === 'greaterInvisibility') {
+      return isToggleAura('stealth', def.id) ? null : { auraKind: 'stealth', auraId: def.id };
+    }
+    // Sanguine Aura: a party melee buff the caster also carries.
+    if (effect.type === 'partyMeleeBuff') {
+      return { auraKind: 'sanguine', auraId: def.id };
+    }
+    // Bloodthirst / Red Harvest: the enrage PROC, on its own fixed aura id rather
+    // than the ability's. Warrior already authors an id-less `enrage` def, which
+    // swallows this by kind, so today it is filtered as covered rather than
+    // offered twice; deriving it keeps the rule complete for any future class.
+    if (effect.type === 'enrageChance') {
+      return { auraKind: 'enrage', auraId: 'fury_enrage' };
     }
   }
   return null;
