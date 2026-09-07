@@ -2174,6 +2174,7 @@ export class Hud {
       talents: () => this.sim.talents,
       iconUrl: (abilityId) => iconDataUrl('ability', abilityId),
       paintGroundRings: (rings) => this.renderer.setPlayerAuraRings(rings),
+      playCue: (cueId, volume) => audio.auraCue(cueId, volume),
     });
     this.farmPressAffordance = new FarmPressAffordanceController({
       root: $('#interact-affordance'),
@@ -5726,6 +5727,9 @@ export class Hud {
       patch: (id, patch) => this.auraOverlayController.patch(id, patch),
       getLayout: () => this.auraOverlayController.getLayout(),
       patchLayout: (patch) => this.auraOverlayController.patchLayout(patch),
+      watchOptions: () => this.auraOverlayController.watchOptions(),
+      setWatched: (id, on) => this.auraOverlayController.setWatched(id, on),
+      previewCue: (cueId, volume) => audio.auraCue(cueId, volume),
       reset: (id) => this.auraOverlayController.reset(id),
       nudge: (id, part, deltaX, deltaY) =>
         this.auraOverlayController.nudge(id, part, deltaX, deltaY),

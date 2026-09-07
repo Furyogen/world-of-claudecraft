@@ -210,6 +210,7 @@ describe('live graphics profile architecture', () => {
 // repo-relative for the failure messages.
 const UI_PURE_CORES = [
   'src/ui/ability_tooltip_lines.ts',
+  'src/ui/aura_watchlist_core.ts',
   'src/ui/collection_actions_core.ts',
   'src/ui/hud/cosmetics/cosmetics_cards_view.ts',
   'src/ui/hud/cosmetics/cosmetics_view.ts',
