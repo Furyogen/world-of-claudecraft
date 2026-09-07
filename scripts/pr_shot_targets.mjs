@@ -8509,6 +8509,15 @@ export const TARGETS = [
         select.dispatchEvent(new Event('change'));
       });
       await wait(250);
+      // Choosing a cue grows the card, which scrolls the Watched Spells chip row
+      // out of frame: the picker IS the feature, so pin the panel back to the top
+      // before the shutter.
+      await page.evaluate(() => {
+        for (const el of document.querySelectorAll('#options-menu, #options-menu *')) {
+          if (el instanceof HTMLElement && el.scrollTop > 0) el.scrollTop = 0;
+        }
+      });
+      await wait(200);
       return { clip: '#options-menu' };
     },
   },
