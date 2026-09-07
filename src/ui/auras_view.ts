@@ -31,6 +31,7 @@ import {
   isDebuffAura as classifyDebuffAura,
   DEBUFF_AURA_KINDS,
   isPlayerRemovableAura,
+  isToggleAura,
 } from '../sim/aura_classify';
 import type { AuraKind } from '../sim/types';
 import type { AuraSchool } from './aura_effect';
@@ -44,32 +45,15 @@ export { DEBUFF_AURA_KINDS };
 // Wolf) read as MODES, not timed effects: WoW shows no countdown under them, so
 // neither do we, even though the sim backs each with a long finite duration
 // (3600s). Every other aura shows a compact WoW-style remaining label (20s /
-// 5m / 1h / 2d) via compactAuraDuration below.
-const TOGGLE_KINDS: ReadonlySet<AuraKind> = new Set([
-  'stealth',
-  'form_bear',
-  'form_cat',
-  'form_moonkin',
-  'form_shadow',
-  'form_travel',
-  'form_fireball',
-  'battle_stance',
-  'berserker_stance',
-  'defensive_stance',
-]);
+// 5m / 1h / 2d) via compactAuraDuration below. The classification itself lives in
+// the shared sim leaf (isToggleAura), so the buff bar and the aura overlay cannot
+// disagree about which auras have a meaningful countdown.
 /** Thornhollow Fields' carried-flag buff (src/sim/social/battleground.ts
  *  `CARRIED_FLAG_AURA_ID`, named here as a literal the same way icons.ts names
  *  the rune ids). Exported because the buff bar's cancel affordance has to
  *  recognize it: cancelling THIS buff is a gameplay action (it drops the flag),
- *  not a cosmetic un-buff. */
+ *  not a cosmetic un-buff. It is also one of the shared TOGGLE_AURA_IDS. */
 export const CARRIED_FLAG_AURA_ID = 'bg_carried_flag';
-// Ghost Wolf toggles too, but its aura rides the generic buff_speed kind (which
-// Sprint also uses, 15s and very much worth a countdown), so it hides by id.
-// The carried-flag buff is a MODE for the same reason: you have the flag until
-// you do not, and the sim only backs it with a longer-than-any-match duration so
-// nothing can expire it out from under the carry. A countdown under either would
-// be a lie the player reads as "this is about to leave me".
-const TOGGLE_IDS: ReadonlySet<string> = new Set(['ghost_wolf', CARRIED_FLAG_AURA_ID]);
 // Auras the low graphics tier's buff cap may NEVER shed (auras_painter.ts).
 // The cap's fairness rule is "spend the budget on buffs, a debuff always
 // renders", which rests on buffs being cosmetic. That is false for an aura whose
@@ -79,11 +63,6 @@ const TOGGLE_IDS: ReadonlySet<string> = new Set(['ghost_wolf', CARRIED_FLAG_AURA
 // the one player who needs it. Hiding it is hiding an action, which the
 // gameplay-neutral-graphics invariant forbids (docs/design/graphics-settings-fairness.md).
 const NEVER_SHED_IDS: ReadonlySet<string> = new Set([CARRIED_FLAG_AURA_ID]);
-// The inverse override: an aura that rides a TOGGLE_KIND but is a genuine timed
-// buff worth a countdown. Greater Invisibility reuses the rogue-stealth machinery
-// for its vanish (kind 'stealth' with full move speed), but it is a fixed 20s
-// buff, not a toggle, so it must show its remaining time like any other buff.
-const TIMED_IDS: ReadonlySet<string> = new Set(['greater_invisibility']);
 
 /** Whether cancelling this aura performs a GAMEPLAY action rather than merely
  *  dropping a buff, so a touch host must confirm it before it fires. Today that
@@ -390,7 +369,7 @@ export function createAurasView(
         slot.iconKey = deps.iconId(a);
         slot.isDebuff = debuff;
         slot.school = debuff ? (a.school ?? 'physical') : '';
-        const toggle = (TOGGLE_KINDS.has(a.kind) || TOGGLE_IDS.has(a.id)) && !TIMED_IDS.has(a.id);
+        const toggle = isToggleAura(a.kind, a.id);
         slot.durationText = toggle ? '' : compactAuraDuration(a.remaining, units);
         // Toggles show no countdown, so they never blink either.
         slot.expiring = !toggle && isAuraExpiring(a.remaining, a.duration);

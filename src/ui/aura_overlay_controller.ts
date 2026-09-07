@@ -9,6 +9,7 @@ import {
   type AuraOverlayPatch,
   auraOverlayVisualSlot,
   genericIconPosX,
+  genericPaletteColor,
 } from './aura_overlay_config';
 import {
   type AuraOverlayPaintAura,
@@ -519,6 +520,7 @@ export class AuraOverlayController {
       enabled: true,
       groundOrder: order,
       iconPosX: genericIconPosX(order),
+      color: genericPaletteColor(this.deps.playerClass, order),
     });
     const target = this.targetById.get(id);
     if (target) this.apply(id, target.el, cfg);

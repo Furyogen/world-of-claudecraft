@@ -919,6 +919,9 @@ describe('AuraOverlayController watchlist', () => {
     // Every watched proc shares one generic default, so an unspread pick would
     // stack all three icons on the same spot.
     expect(new Set(picked.map((cfg) => cfg.iconPosX)).size).toBe(3);
+    // Same reason for color: four identical gold rings cannot be told apart, which
+    // is the whole point of watching several spells at once.
+    expect(new Set(picked.map((cfg) => cfg.color)).size).toBe(3);
   });
 
   it('lights the watched frame on the aura the sim actually applies, and only that one', () => {

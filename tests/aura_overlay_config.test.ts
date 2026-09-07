@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   AuraOverlayConfigStore,
   defaultAuraOverlayConfig,
+  genericPaletteColor,
   sanitizeAuraOverlayConfig,
 } from '../src/ui/aura_overlay_config';
 
@@ -303,5 +304,28 @@ describe('AuraOverlayConfigStore watchlist', () => {
     expect(store.has('__watched')).toBe(false);
     expect(store.has('__layout')).toBe(false);
     expect(store.has('__layoutVersion')).toBe(false);
+  });
+});
+
+describe('genericPaletteColor', () => {
+  it('walks the class palette so consecutive watched spells differ', () => {
+    const shaman = [0, 1, 2, 3].map((slot) => genericPaletteColor('shaman', slot));
+    expect(new Set(shaman).size).toBe(4);
+    expect(shaman[0]).toBe('#22d3ee');
+  });
+
+  it('gives Warrior and Mage a rotating fallback, since neither has a generic row', () => {
+    // Both carry bespoke per-proc tables instead, so an unhandled lookup used to
+    // collapse every watched spell on those classes onto one gold.
+    for (const playerClass of ['warrior', 'mage']) {
+      const colors = [0, 1, 2, 3].map((slot) => genericPaletteColor(playerClass, slot));
+      expect(new Set(colors).size).toBe(4);
+    }
+  });
+
+  it('wraps past the end of a palette and survives a junk slot', () => {
+    expect(genericPaletteColor('shaman', 7)).toBe(genericPaletteColor('shaman', 0));
+    expect(genericPaletteColor('shaman', -3)).toBe(genericPaletteColor('shaman', 0));
+    expect(genericPaletteColor('shaman', Number.NaN)).toBe(genericPaletteColor('shaman', 0));
   });
 });

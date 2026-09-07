@@ -16,6 +16,7 @@
 // trip are the load-bearing rules and are unit-tested directly. The controller
 // owns persistence and the panel owns the picker.
 
+import { isToggleAura } from '../sim/aura_classify';
 import type { AbilityDef, PlayerClass } from '../sim/types';
 import type { AuraOverlayProcDef, AuraOverlayProcId } from './aura_overlay_view';
 
@@ -63,11 +64,17 @@ export type WatchableAbilityDef = Pick<AbilityDef, 'id' | 'effects'>;
  * Only the first matching family is reported: an ability that both buffs and
  * shields is watched through its primary self-buff, which is the aura the player
  * reads as "it procced".
+ *
+ * A TOGGLE aura (a stance, a form, stealth, Ghost Wolf) reports nothing. It is not
+ * a proc in the first place, and the overlay prints a countdown from the aura's
+ * remaining time, which for a toggle is 3600s of scaffolding the buff bar
+ * deliberately never shows: watching one put a ticking "3,599" on screen.
  */
 export function abilitySelfAuraSignature(def: WatchableAbilityDef): AuraWatchSignature | null {
   for (const effect of def.effects) {
     if (effect.type === 'selfBuff') {
-      return { auraKind: effect.kind, auraId: effect.auraId ?? def.id };
+      const auraId = effect.auraId ?? def.id;
+      return isToggleAura(effect.kind, auraId) ? null : { auraKind: effect.kind, auraId };
     }
     if (effect.type === 'absorb') {
       const stasis = def.effects.some((e) => e.type === 'selfBuff' && e.kind === 'stasis');

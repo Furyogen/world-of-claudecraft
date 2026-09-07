@@ -73,6 +73,47 @@ export function isDispellableAura(
   return offensive ? !harmful : harmful;
 }
 
+// Auras that read as a MODE rather than a timed effect: the forms, the stances,
+// stealth, Ghost Wolf, and the battleground carried-flag buff. The sim backs each
+// with a long finite duration (3600s, or a whole match) that is SCAFFOLDING, not
+// information, so no surface may print a countdown for one: the buff bar suppresses
+// its remaining-time label and the aura overlay suppresses its timer ring.
+//
+// This lives here, beside the debuff classifier, for the same stated reason: one
+// classifier so the surfaces cannot drift. They did drift once already, which is how
+// a watched Battle Stance came to show a 3,599 countdown on the overlay while the
+// buff bar showed none for the same aura.
+export const TOGGLE_AURA_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
+  'stealth',
+  'form_bear',
+  'form_cat',
+  'form_moonkin',
+  'form_shadow',
+  'form_travel',
+  'form_fireball',
+  'battle_stance',
+  'berserker_stance',
+  'defensive_stance',
+]);
+
+// Ghost Wolf toggles too, but its aura rides the generic buff_speed kind (which
+// Sprint also uses, 15s and very much worth a countdown), so it toggles by id. The
+// carried-flag buff is a MODE for the same reason: you have the flag until you do
+// not, and its duration only outlasts any match so nothing can expire it out from
+// under the carry.
+export const TOGGLE_AURA_IDS: ReadonlySet<string> = new Set(['ghost_wolf', 'bg_carried_flag']);
+
+// The inverse override: an aura that rides a TOGGLE kind but is a genuine timed buff
+// worth a countdown. Greater Invisibility reuses the rogue-stealth machinery for its
+// vanish (kind 'stealth' with full move speed) but is a fixed 20s buff.
+export const TIMED_AURA_IDS: ReadonlySet<string> = new Set(['greater_invisibility']);
+
+/** Whether this aura reads as a MODE rather than a timed effect, so no surface
+ *  prints a remaining time for it. */
+export function isToggleAura(kind: AuraKind, id: string): boolean {
+  return (TOGGLE_AURA_KINDS.has(kind) || TOGGLE_AURA_IDS.has(id)) && !TIMED_AURA_IDS.has(id);
+}
+
 const PARTY_FRAME_HELPFUL_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
   'temporal_echo',
   'hot',

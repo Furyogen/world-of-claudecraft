@@ -90,6 +90,39 @@ describe('abilitySelfAuraSignature', () => {
     ).toEqual({ auraKind: 'imbue', auraId: 'rockbiter' });
   });
 
+  it('reports nothing for a TOGGLE, whose 3600s duration is scaffolding not a countdown', () => {
+    // The overlay prints a countdown from the aura's remaining time. A stance or a
+    // form is backed by a 3600s duration the buff bar deliberately never shows, so
+    // watching one would put a ticking "3,599" on screen. Same classifier the buff
+    // bar uses, so the two surfaces cannot drift.
+    expect(abilitySelfAuraSignature(ABILITIES.battle_stance)).toBeNull();
+    expect(abilitySelfAuraSignature(ABILITIES.defensive_stance)).toBeNull();
+    expect(abilitySelfAuraSignature(ABILITIES.ghost_wolf)).toBeNull();
+    expect(
+      abilitySelfAuraSignature(
+        def('cat_form', [{ type: 'selfBuff', kind: 'form_cat', value: 1, duration: 3600 }]),
+      ),
+    ).toBeNull();
+    // Greater Invisibility rides the stealth kind but is a real 20s buff, so it
+    // stays watchable: the timed-id override survives the move to the sim leaf.
+    expect(
+      abilitySelfAuraSignature(
+        def('greater_invisibility', [
+          { type: 'selfBuff', kind: 'stealth', value: 1, duration: 20 },
+        ]),
+      ),
+    ).toEqual({ auraKind: 'stealth', auraId: 'greater_invisibility' });
+  });
+
+  it('keeps a toggle out of the picker rows entirely', () => {
+    const options = auraWatchOptions(
+      knownOf(ABILITIES.battle_stance, ABILITIES.recklessness),
+      [],
+      [],
+    );
+    expect(options.map((o) => o.abilityId)).toEqual(['recklessness']);
+  });
+
   it('reports nothing for an ability that parks no aura on the caster', () => {
     expect(
       abilitySelfAuraSignature(def('sinister_strike', [{ type: 'weaponStrike', bonus: 40 }])),

@@ -113,6 +113,20 @@ const GENERIC_PALETTES: Readonly<Record<string, readonly string[]>> = {
   druid: ['#22c55e', '#f59e0b', '#60a5fa', '#16a34a', '#84cc16', '#a78bfa', '#eab308'],
 };
 
+// Warrior and Mage carry bespoke per-proc tables above instead of a GENERIC_PALETTES
+// row, so a watchlist proc on those classes has no palette to index. Rotate the same
+// hues their authored tables already use, rather than collapsing every watched spell
+// on those two classes onto one gold.
+const FALLBACK_PALETTE: readonly string[] = [
+  '#ffe14d',
+  '#3dc7ff',
+  '#bd63ff',
+  '#ff4b2b',
+  '#59d8ff',
+  '#8b5cf6',
+  '#d946ef',
+];
+
 function genericDefaultLayout(id: AuraOverlayProcId): AuraOverlayDefaultLayout {
   const meta = auraOverlayDefaultMeta(id);
   if (!meta) return { arcsScale: 1, color: '#ffe14d' };
@@ -131,6 +145,16 @@ function defaultLayout(id: AuraOverlayProcId): AuraOverlayDefaultLayout {
  *  Exported so a freshly picked watchlist spell can be parked on the next FREE
  *  slot instead of stacking on top of the one before it (every watched proc
  *  resolves to the same generic default otherwise). */
+/** The class palette an authored proc with no bespoke color falls into, indexed by
+ *  slot. Exported for the same reason as genericIconPosX: every watchlist proc
+ *  otherwise resolves to ONE fallback gold, so a player watching four spells gets
+ *  four identical rings and cannot tell at a glance which one lit. */
+export function genericPaletteColor(playerClass: string, slot: number): string {
+  const palette = GENERIC_PALETTES[playerClass] ?? FALLBACK_PALETTE;
+  const safe = Number.isFinite(slot) ? Math.max(0, Math.round(slot)) : 0;
+  return palette[safe % palette.length];
+}
+
 export function genericIconPosX(slot: number): number {
   const safe = Number.isFinite(slot) ? Math.max(0, Math.round(slot)) : 0;
   return GENERIC_ICON_X[safe % GENERIC_ICON_X.length];
