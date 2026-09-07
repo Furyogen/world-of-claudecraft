@@ -1482,6 +1482,12 @@ export const ko_KR: EnTranslations = {
       "spellOrder": "주문 순서",
       "reset": "위치 초기화",
       "spellPosition": "주문 순서 {position} / {count}",
+      "watchlist": "감시할 주문",
+      "watchlistHint": "자신에게 효과를 거는 주문을 선택하면 해당 주문 전용 오라가 생깁니다. 선택한 주문은 아래에 전용 카드가 생겨 아이콘, 색상, 위치, 지면 고리를 따로 설정할 수 있습니다.",
+      "watchlistEmpty": "주문서에 자신에게 효과를 거는 다른 주문이 없습니다.",
+      "watchlistWatch": "{spell} 감시",
+      "watchlistUnwatch": "{spell} 감시 해제",
+      "watchlistCount": "{count}개 감시 중",
       "procs": {
         "revenge": "복수!",
         "battleTrance": "전투 명상",

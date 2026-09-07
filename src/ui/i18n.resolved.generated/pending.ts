@@ -9,25 +9,130 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "es_ES": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "fr_FR": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "fr_CA": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "de_DE": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "nl_NL": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "pl_PL": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "id_ID": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "tr_TR": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "sv_SE": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "vi_VN": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ],
+  "da_DK": [
+    "hudChrome.auraOverlay.watchlist",
+    "hudChrome.auraOverlay.watchlistCount",
+    "hudChrome.auraOverlay.watchlistEmpty",
+    "hudChrome.auraOverlay.watchlistHint",
+    "hudChrome.auraOverlay.watchlistUnwatch",
+    "hudChrome.auraOverlay.watchlistWatch"
+  ]
 };

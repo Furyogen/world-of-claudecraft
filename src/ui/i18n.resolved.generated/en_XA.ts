@@ -1482,6 +1482,12 @@ export const en_XA: EnTranslations = {
       "spellOrder": "[Šþéļļ Óŕðéŕ]",
       "reset": "[Ŕéšéţ Þóšíţíóñ]",
       "spellPosition": "[Šþéļļ óŕðéŕ {position} / {count}]",
+      "watchlist": "[Ŵáţçĥéð Šþéļļš]",
+      "watchlistHint": "[Þíçķ áñý šþéļļ ţĥáţ ƀúƒƒš ýóú ţó ĝíʋé íţ íţš óŵñ áúŕá. Þíçķéð šþéļļš ĝéţ á ƒúļļ çáŕð ƀéļóŵ, ŵíţĥ ţĥéíŕ óŵñ íçóñ, çóļóŕ, þóšíţíóñ áñð ĝŕóúñð ŕíñĝ.]",
+      "watchlistEmpty": "[Ñó óţĥéŕ šþéļļ íñ ýóúŕ šþéļļƀóóķ þúţš á ƀúƒƒ óñ ýóú.]",
+      "watchlistWatch": "[Ŵáţçĥ {spell}]",
+      "watchlistUnwatch": "[Šţóþ ŵáţçĥíñĝ {spell}]",
+      "watchlistCount": "[{count} ŵáţçĥéð]",
       "procs": {
         "revenge": "[Ŕéʋéñĝé!]",
         "battleTrance": "[Ɓáţţļé Ţŕáñçé]",

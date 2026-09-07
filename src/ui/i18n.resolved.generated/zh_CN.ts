@@ -1482,6 +1482,12 @@ export const zh_CN: EnTranslations = {
       "spellOrder": "法术顺序",
       "reset": "重置位置",
       "spellPosition": "法术顺序 {position} / {count}",
+      "watchlist": "监视的法术",
+      "watchlistHint": "选择任何会为你附加增益的法术，为它启用专属光环。选中的法术会在下方获得完整卡片，拥有各自的图标、颜色、位置和地面圆环。",
+      "watchlistEmpty": "你的法术书中没有其他会为你附加增益的法术。",
+      "watchlistWatch": "监视{spell}",
+      "watchlistUnwatch": "停止监视{spell}",
+      "watchlistCount": "已监视 {count} 个",
       "procs": {
         "revenge": "复仇！",
         "battleTrance": "战斗冥想",

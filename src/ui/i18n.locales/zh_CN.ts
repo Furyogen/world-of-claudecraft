@@ -10754,6 +10754,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraOverlay.spellOrder': '法术顺序',
   'hudChrome.auraOverlay.reset': '重置位置',
   'hudChrome.auraOverlay.spellPosition': '法术顺序 {position} / {count}',
+  'hudChrome.auraOverlay.watchlist': '监视的法术',
+  'hudChrome.auraOverlay.watchlistHint':
+    '选择任何会为你附加增益的法术，为它启用专属光环。选中的法术会在下方获得完整卡片，拥有各自的图标、颜色、位置和地面圆环。',
+  'hudChrome.auraOverlay.watchlistEmpty': '你的法术书中没有其他会为你附加增益的法术。',
+  'hudChrome.auraOverlay.watchlistWatch': '监视{spell}',
+  'hudChrome.auraOverlay.watchlistUnwatch': '停止监视{spell}',
+  'hudChrome.auraOverlay.watchlistCount': '已监视 {count} 个',
   'hudChrome.auraOverlay.procs.revenge': '复仇！',
   'hudChrome.auraOverlay.procs.battleTrance': '战斗冥想',
   'hudChrome.auraOverlay.procs.overpowerCharge': '赤手充能',

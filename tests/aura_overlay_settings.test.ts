@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { defaultAuraOverlayConfig } from '../src/ui/aura_overlay_config';
 import { AuraOverlaySettingsPanel } from '../src/ui/aura_overlay_settings';
 import type { AuraOverlayProcDef } from '../src/ui/aura_overlay_view';
+import type { AuraWatchOption } from '../src/ui/aura_watchlist_core';
 import { FocusManager } from '../src/ui/focus_manager';
 
 const revenge: AuraOverlayProcDef = {
@@ -47,6 +48,8 @@ describe('AuraOverlaySettingsPanel position controls', () => {
           config = { ...config, ...defaultAuraOverlayConfig(id) };
         },
         nudge,
+        watchOptions: () => [],
+        setWatched: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -122,6 +125,8 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         },
         reset: vi.fn(),
         nudge: vi.fn(),
+        watchOptions: () => [],
+        setWatched: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -158,6 +163,8 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         },
         reset: vi.fn(),
         nudge: vi.fn(),
+        watchOptions: () => [],
+        setWatched: vi.fn(),
         setAll,
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -221,6 +228,8 @@ describe('AuraOverlaySettingsPanel position controls', () => {
             groundOrder: 0,
           });
         },
+        watchOptions: () => [],
+        setWatched: vi.fn(),
         setAll: vi.fn(),
         beginPlacement: vi.fn(),
         endPlacement: vi.fn(),
@@ -306,6 +315,8 @@ describe('AuraOverlaySettingsPanel position controls', () => {
         },
         reset,
         nudge,
+        watchOptions: () => [],
+        setWatched: vi.fn(),
         setAll: vi.fn(),
         beginPlacement,
         endPlacement,
@@ -500,5 +511,103 @@ describe('AuraOverlaySettingsPanel position controls', () => {
     expect(document.activeElement).toBe(refreshedSetup);
     await new Promise((resolve) => window.setTimeout(resolve, 0));
     expect(document.activeElement).toBe(refreshedSetup);
+  });
+});
+
+describe('AuraOverlaySettingsPanel watchlist picker', () => {
+  const option = (abilityId: string, watched: boolean): AuraWatchOption => ({
+    procId: `watch:${abilityId}`,
+    abilityId,
+    auraKind: 'buff_reckless',
+    auraId: abilityId,
+    watched,
+  });
+  const renderPanel = (
+    watchOptions: () => AuraWatchOption[],
+    defs: AuraOverlayProcDef[] = [revenge],
+    setWatched = vi.fn(),
+  ): { root: HTMLElement; setWatched: ReturnType<typeof vi.fn> } => {
+    const panel = new AuraOverlaySettingsPanel({
+      click: vi.fn(),
+      openFocusTrap,
+      auras: {
+        playerClass: () => 'warrior',
+        defs: () => defs,
+        get: () => defaultAuraOverlayConfig('revenge_free'),
+        getLayout: () => ({ crescentBlockScale: 1, groundRingBlockScale: 1 }),
+        patchLayout: vi.fn(),
+        patch: vi.fn(),
+        reset: vi.fn(),
+        nudge: vi.fn(),
+        watchOptions,
+        setWatched,
+        setAll: vi.fn(),
+        beginPlacement: vi.fn(),
+        endPlacement: vi.fn(),
+        setPlacement: vi.fn(),
+        onPositionChange: () => vi.fn(),
+        onPlacementChange: () => vi.fn(),
+      },
+    });
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    panel.render(root);
+    return { root, setWatched };
+  };
+
+  it('renders a labelled chip per offered spell with its picked state pressed', () => {
+    const { root } = renderPanel(() => [option('recklessness', false), option('avatar', true)]);
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('.aura-watch-chip'));
+    expect(chips.map((chip) => chip.dataset.focusKey)).toEqual(
+      ['watch:recklessness', 'watch:avatar'].map((id) => `aura-watch:${id}`),
+    );
+    expect(chips.map((chip) => chip.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
+    expect(chips[0].querySelector('span')?.textContent).toBe('Recklessness');
+    expect(chips[0].getAttribute('aria-label')).toBe('Watch Recklessness');
+    expect(chips[1].getAttribute('aria-label')).toBe('Stop watching Avatar');
+    expect(root.querySelector('.aura-watch-count')?.textContent).toBe('1 watched');
+    expect(root.querySelector('.aura-watch-section strong')?.textContent).toBe('Watched Spells');
+  });
+
+  it('toggles the picked state through the hook, repaints it, and keeps focus on the chip', () => {
+    // A LIVE list, so the assertions below prove the picker re-reads the hook on
+    // its rebuild rather than re-rendering the state it started with.
+    let options = [option('recklessness', false)];
+    const setWatched = vi.fn((id: string, on: boolean) => {
+      options = [option(id.slice('watch:'.length), on)];
+    });
+    const { root } = renderPanel(() => options, [revenge], setWatched);
+    root.querySelector<HTMLButtonElement>('.aura-watch-chip')?.click();
+
+    expect(setWatched.mock.calls).toEqual([['watch:recklessness', true]]);
+    const chip = root.querySelector<HTMLButtonElement>('.aura-watch-chip');
+    expect(chip?.getAttribute('aria-pressed')).toBe('true');
+    expect(chip?.getAttribute('aria-label')).toBe('Stop watching Recklessness');
+    expect(root.querySelector('.aura-watch-count')?.textContent).toBe('1 watched');
+    // The rebuild replaces the chip node, so focus has to be carried across it.
+    expect(document.activeElement).toBe(chip);
+
+    chip?.click();
+    expect(setWatched.mock.calls[1]).toEqual(['watch:recklessness', false]);
+    expect(root.querySelector('.aura-watch-chip')?.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('says so instead of rendering an empty list when nothing else is offerable', () => {
+    const { root } = renderPanel(() => []);
+    expect(root.querySelectorAll('.aura-watch-chip')).toHaveLength(0);
+    expect(root.querySelector('.aura-watch-empty')?.textContent).toBe(
+      'No other spell in your spellbook puts a buff on you.',
+    );
+  });
+
+  it('keeps the picker reachable for a character with no authored proc at all', () => {
+    const { root } = renderPanel(() => [option('recklessness', false)], []);
+    // The old dead end returned before any picker existed, locking such a
+    // character out of the whole feature.
+    expect(root.querySelectorAll('.aura-watch-chip')).toHaveLength(1);
+    expect(root.querySelector('.set-note:not(.aura-watch-hint)')?.textContent).toBe(
+      'No supported proc is available for this character.',
+    );
+    expect(root.querySelectorAll('.aura-settings-card')).toHaveLength(0);
   });
 });

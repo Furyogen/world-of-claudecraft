@@ -9,6 +9,7 @@ import type {
 } from './aura_overlay_config';
 import type { AuraOverlayPart } from './aura_overlay_controller';
 import type { AuraOverlayProcDef, AuraOverlayProcId } from './aura_overlay_view';
+import type { AuraWatchOption } from './aura_watchlist_core';
 import { classDisplayName } from './entity_i18n';
 import type { FocusTrapHandle } from './focus_manager';
 import { restoreFirstEnabled } from './focus_restore';
@@ -24,6 +25,10 @@ export interface AuraOverlayHooks {
   patch(id: AuraOverlayProcId, patch: AuraOverlayPatch): void;
   getLayout(): AuraOverlayLayoutConfig;
   patchLayout(patch: AuraOverlayLayoutPatch): void;
+  /** Every known spell that parks an aura on the player and is not already an
+   *  authored proc, flagged with whether the player watches it. */
+  watchOptions(): readonly AuraWatchOption[];
+  setWatched(id: AuraOverlayProcId, on: boolean): void;
   reset(id: AuraOverlayProcId): void;
   nudge(id: AuraOverlayProcId, part: AuraOverlayPart, deltaX: number, deltaY: number): void;
   setAll(enabled: boolean): void;
@@ -44,13 +49,17 @@ export interface AuraOverlaySettingsHost {
 
 const percent = (value: number): string =>
   formatNumber(value, { style: 'percent', maximumFractionDigits: 0 });
+const count = (value: number): string => formatNumber(value, { maximumFractionDigits: 0 });
+function abilityIdDisplayName(abilityId: string): string {
+  const ability = ABILITIES[abilityId];
+  return ability ? abilityDisplayName(ability) : abilityId;
+}
 function procDisplayName(def: AuraOverlayProcDef): string {
   if (def.labelKey) return t(def.labelKey);
   if (def.talentChoice) {
     return tTalent({ kind: 'talentChoice', choice: def.talentChoice, field: 'name' });
   }
-  const ability = ABILITIES[def.iconAbilityId];
-  return ability ? abilityDisplayName(ability) : def.iconAbilityId;
+  return abilityIdDisplayName(def.iconAbilityId);
 }
 
 export class AuraOverlaySettingsPanel {
@@ -77,6 +86,18 @@ export class AuraOverlaySettingsPanel {
     parent.appendChild(intro);
 
     const defs = hooks.defs();
+    const refresh = (focusKeys: readonly string[] = []): void => {
+      this.render(parent);
+      const controls = Array.from(parent.querySelectorAll<HTMLButtonElement>('[data-focus-key]'));
+      restoreFirstEnabled(
+        focusKeys.map((key) => controls.find((control) => control.dataset.focusKey === key)),
+      );
+    };
+    // The watchlist picker stays available even for a character with no authored
+    // proc: picking a spell here is exactly how such a character gets any aura at
+    // all, so the old "no supported proc" dead end would lock them out of the
+    // whole feature.
+    this.buildWatchlist(parent, refresh);
     if (defs.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'set-note';
@@ -85,13 +106,6 @@ export class AuraOverlaySettingsPanel {
       return;
     }
 
-    const refresh = (focusKeys: readonly string[] = []): void => {
-      this.render(parent);
-      const controls = Array.from(parent.querySelectorAll<HTMLButtonElement>('[data-focus-key]'));
-      restoreFirstEnabled(
-        focusKeys.map((key) => controls.find((control) => control.dataset.focusKey === key)),
-      );
-    };
     const actions = document.createElement('div');
     actions.className = 'aura-bulk-actions';
     const allOn = document.createElement('button');
@@ -132,6 +146,73 @@ export class AuraOverlaySettingsPanel {
     for (const { def } of orderedDefs) {
       this.buildProcCard(grid, def, positionById.get(def.id) ?? 1, defs.length, refresh);
     }
+  }
+
+  /** The watchlist picker: one toggle chip per known spell that buffs the player
+   *  and has no authored proc of its own. Picking one adds a full proc card to the
+   *  grid below, so the customization surface is identical to a curated proc. */
+  private buildWatchlist(
+    parent: HTMLElement,
+    refresh: (focusKeys?: readonly string[]) => void,
+  ): void {
+    const hooks = this.host.auras;
+    const options = hooks.watchOptions();
+    const section = document.createElement('div');
+    section.className = 'aura-watch-section';
+    const head = document.createElement('div');
+    head.className = 'aura-watch-head';
+    const title = document.createElement('strong');
+    title.textContent = t('hudChrome.auraOverlay.watchlist');
+    const tally = document.createElement('span');
+    tally.className = 'aura-watch-count';
+    tally.textContent = t('hudChrome.auraOverlay.watchlistCount', {
+      count: count(options.reduce((total, option) => total + (option.watched ? 1 : 0), 0)),
+    });
+    head.append(title, tally);
+    const hint = document.createElement('div');
+    hint.className = 'set-note aura-watch-hint';
+    hint.textContent = t('hudChrome.auraOverlay.watchlistHint');
+    section.append(head, hint);
+    if (options.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'set-note aura-watch-empty';
+      empty.textContent = t('hudChrome.auraOverlay.watchlistEmpty');
+      section.appendChild(empty);
+      parent.appendChild(section);
+      return;
+    }
+    const list = document.createElement('div');
+    list.className = 'aura-watch-list';
+    for (const option of options) {
+      const spell = abilityIdDisplayName(option.abilityId);
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'btn aura-watch-chip';
+      chip.dataset.focusKey = `aura-watch:${option.procId}`;
+      chip.setAttribute('aria-pressed', String(option.watched));
+      const action = t(
+        option.watched
+          ? 'hudChrome.auraOverlay.watchlistUnwatch'
+          : 'hudChrome.auraOverlay.watchlistWatch',
+        { spell },
+      );
+      chip.setAttribute('aria-label', action);
+      chip.title = action;
+      const icon = document.createElement('img');
+      icon.src = iconDataUrl('ability', option.abilityId);
+      icon.alt = '';
+      const label = document.createElement('span');
+      label.textContent = spell;
+      chip.append(icon, label);
+      chip.addEventListener('click', () => {
+        this.host.click();
+        hooks.setWatched(option.procId, !option.watched);
+        refresh([`aura-watch:${option.procId}`]);
+      });
+      list.appendChild(chip);
+    }
+    section.appendChild(list);
+    parent.appendChild(section);
   }
 
   private buildProcCard(

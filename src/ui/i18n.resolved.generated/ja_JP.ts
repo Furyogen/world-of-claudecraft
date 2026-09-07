@@ -1482,6 +1482,12 @@ export const ja_JP: EnTranslations = {
       "spellOrder": "スペル順",
       "reset": "位置をリセット",
       "spellPosition": "スペル順 {position} / {count}",
+      "watchlist": "監視するスペル",
+      "watchlistHint": "自分にバフを付与するスペルを選ぶと、そのスペル専用のオーラが有効になります。選んだスペルは下に専用カードが表示され、アイコン、色、位置、グラウンドリングを個別に設定できます。",
+      "watchlistEmpty": "スペルブックに、自分にバフを付与するスペルは他にありません。",
+      "watchlistWatch": "{spell}を監視",
+      "watchlistUnwatch": "{spell}の監視を解除",
+      "watchlistCount": "{count}件を監視中",
       "procs": {
         "revenge": "リベンジ！",
         "battleTrance": "バトルトランス",

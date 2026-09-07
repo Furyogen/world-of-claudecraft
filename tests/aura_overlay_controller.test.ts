@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ABILITIES } from '../src/sim/content/classes';
 import type { TalentAllocation } from '../src/sim/content/talents';
 import type { ResolvedAbility } from '../src/sim/sim';
 import { AuraOverlayConfigStore, defaultAuraOverlayConfig } from '../src/ui/aura_overlay_config';
-import { AuraOverlayController } from '../src/ui/aura_overlay_controller';
+import { type AuraGroundRingState, AuraOverlayController } from '../src/ui/aura_overlay_controller';
 import type { PainterHostWriters } from '../src/ui/painter_host';
 
 beforeEach(() => {
@@ -11,8 +12,11 @@ beforeEach(() => {
   localStorage.clear();
 });
 
+// A known ability with no effects: enough for every AUTHORED proc def (which keys
+// off ability ids), and deliberately not watchlist-eligible. The watchlist suite
+// below builds its own defs with real selfBuff/absorb/imbue effects.
 const known = (...ids: string[]): ResolvedAbility[] =>
-  ids.map((id) => ({ def: { id } }) as ResolvedAbility);
+  ids.map((id) => ({ def: { id, effects: [] } }) as unknown as ResolvedAbility);
 
 const writers = {
   toggleClass: (el: HTMLElement, cls: string, on: boolean) => el.classList.toggle(cls, on),
@@ -833,5 +837,170 @@ describe('AuraOverlayController setup preview', () => {
     controller.nudge('raised_guard', 'ground', 1, 0);
     expect(controller.get('revenge_free')).toEqual(beforeLeftBoundary);
     expect(controller.get('raised_guard')).toEqual(beforeRightBoundary);
+  });
+});
+
+describe('AuraOverlayController watchlist', () => {
+  // Real shipped defs, so the derived aura signature is the one the sim applies.
+  const warriorKnown = (): ResolvedAbility[] =>
+    ['revenge', 'recklessness', 'raised_guard', 'sinister_strike'].map(
+      (id) => ({ def: ABILITIES[id] }) as ResolvedAbility,
+    );
+  const makeController = (): AuraOverlayController =>
+    new AuraOverlayController({
+      doc: document,
+      writers,
+      playerClass: 'warrior',
+      playerName: 'Raido',
+      known: warriorKnown,
+      iconUrl: (id) => `/icons/${id}.png`,
+    });
+  const frameIds = (): (string | undefined)[] =>
+    Array.from(document.querySelectorAll<HTMLElement>('.aura-overlay-frame'))
+      .filter((frame) => !frame.classList.contains('loadout-hidden'))
+      .map((frame) => frame.dataset.proc);
+
+  it('offers only the self-aura spells an authored proc does not already cover', () => {
+    const controller = makeController();
+    // recklessness buffs the caster and has no authored proc, so it is offered.
+    // raised_guard also buffs the caster but IS authored (revenge/raised_guard
+    // defs), and sinister_strike parks nothing, so neither is offered.
+    expect(controller.watchOptions().map((option) => option.abilityId)).toEqual(['recklessness']);
+    expect(controller.watchOptions()[0]).toMatchObject({
+      procId: 'watch:recklessness',
+      auraKind: 'buff_reckless',
+      auraId: 'recklessness',
+      watched: false,
+    });
+    expect(frameIds()).toEqual(['revenge_free', 'raised_guard']);
+  });
+
+  it('picking a spell adds an enabled frame ordered after every authored proc', () => {
+    const controller = makeController();
+    controller.setWatched('watch:recklessness', true);
+
+    expect(controller.watchOptions()[0].watched).toBe(true);
+    expect(controller.defs().map((def) => def.id)).toEqual([
+      'revenge_free',
+      'raised_guard',
+      'watch:recklessness',
+    ]);
+    expect(frameIds()).toContain('watch:recklessness');
+    // Picking IS the request to see it, so the overlay comes on...
+    expect(controller.get('watch:recklessness').enabled).toBe(true);
+    // ...and lands last in the spell order instead of on top of an authored proc.
+    const orders = controller.defs().map((def) => controller.get(def.id).groundOrder);
+    expect(orders[2]).toBeGreaterThan(Math.max(orders[0], orders[1]));
+    const frame = document.querySelector<HTMLElement>('[data-proc="watch:recklessness"]');
+    expect(frame?.classList.contains('aura-overlay-warrior')).toBe(true);
+    expect(frame?.querySelector('img')?.getAttribute('src')).toBe('/icons/recklessness.png');
+  });
+
+  it('parks a second picked spell on its own order slot and icon position', () => {
+    const controller = new AuraOverlayController({
+      doc: document,
+      writers,
+      playerClass: 'warrior',
+      playerName: 'Raido',
+      known: () =>
+        ['recklessness', 'avatar', 'die_by_sword'].map(
+          (id) => ({ def: ABILITIES[id] }) as ResolvedAbility,
+        ),
+      iconUrl: (id) => `/icons/${id}.png`,
+    });
+    controller.setWatched('watch:recklessness', true);
+    controller.setWatched('watch:avatar', true);
+    controller.setWatched('watch:die_by_sword', true);
+
+    const picked = ['watch:recklessness', 'watch:avatar', 'watch:die_by_sword'].map((id) =>
+      controller.get(id),
+    );
+    expect(picked.map((cfg) => cfg.groundOrder)).toEqual([0, 1, 2]);
+    // Every watched proc shares one generic default, so an unspread pick would
+    // stack all three icons on the same spot.
+    expect(new Set(picked.map((cfg) => cfg.iconPosX)).size).toBe(3);
+  });
+
+  it('lights the watched frame on the aura the sim actually applies, and only that one', () => {
+    const controller = makeController();
+    controller.setWatched('watch:recklessness', true);
+    const frame = () => document.querySelector<HTMLElement>('[data-proc="watch:recklessness"]');
+
+    controller.paint([{ id: 'recklessness', kind: 'buff_ap' } as never]);
+    expect(frame()?.classList.contains('active')).toBe(false);
+    controller.paint([{ id: 'other', kind: 'buff_reckless' } as never]);
+    expect(frame()?.classList.contains('active')).toBe(false);
+    controller.paint([{ id: 'recklessness', kind: 'buff_reckless' } as never]);
+    expect(frame()?.classList.contains('active')).toBe(true);
+  });
+
+  it('unpicking hides the frame but keeps the tuning for the next time', () => {
+    const controller = makeController();
+    controller.setWatched('watch:recklessness', true);
+    controller.patch('watch:recklessness', { color: '#123456', scale: 1.2 });
+
+    controller.setWatched('watch:recklessness', false);
+    expect(controller.defs().map((def) => def.id)).toEqual(['revenge_free', 'raised_guard']);
+    expect(frameIds()).not.toContain('watch:recklessness');
+    expect(
+      document
+        .querySelector('[data-proc="watch:recklessness"]')
+        ?.classList.contains('loadout-hidden'),
+    ).toBe(true);
+
+    controller.setWatched('watch:recklessness', true);
+    expect(controller.get('watch:recklessness')).toMatchObject({
+      color: '#123456',
+      scale: 1.2,
+      enabled: true,
+    });
+    expect(frameIds()).toContain('watch:recklessness');
+  });
+
+  it('restores the picked spells for the same character on the next session', () => {
+    makeController().setWatched('watch:recklessness', true);
+    document.body.replaceChildren();
+
+    const reloaded = makeController();
+    expect(reloaded.defs().map((def) => def.id)).toContain('watch:recklessness');
+    expect(reloaded.watchOptions()[0].watched).toBe(true);
+    expect(frameIds()).toContain('watch:recklessness');
+  });
+
+  it('ignores a redundant toggle and never writes a duplicate', () => {
+    const controller = makeController();
+    controller.setWatched('watch:recklessness', true);
+    controller.patch('watch:recklessness', { enabled: false });
+    controller.setWatched('watch:recklessness', true);
+
+    // Already watched: the call is a no-op, so it does not silently re-enable an
+    // overlay the player deliberately switched off from its own card.
+    expect(controller.get('watch:recklessness').enabled).toBe(false);
+    expect(controller.defs().filter((def) => def.id === 'watch:recklessness')).toHaveLength(1);
+    controller.setWatched('watch:recklessness', false);
+    controller.setWatched('watch:recklessness', false);
+    expect(controller.defs().map((def) => def.id)).toEqual(['revenge_free', 'raised_guard']);
+  });
+
+  it('drives the ground ring for a watched spell like any authored proc', () => {
+    const rings: AuraGroundRingState[][] = [];
+    const controller = new AuraOverlayController({
+      doc: document,
+      writers,
+      playerClass: 'warrior',
+      playerName: 'Raido',
+      known: warriorKnown,
+      iconUrl: (id) => `/icons/${id}.png`,
+      paintGroundRings: (next) => rings.push(next.map((ring) => ({ ...ring }))),
+    });
+    controller.setWatched('watch:recklessness', true);
+
+    controller.paint([{ id: 'recklessness', kind: 'buff_reckless' } as never]);
+    const last = rings[rings.length - 1];
+    expect(last.find((ring) => ring.id === 'watch:recklessness')?.visible).toBe(true);
+    controller.paint([]);
+    expect(rings[rings.length - 1].find((ring) => ring.id === 'watch:recklessness')?.visible).toBe(
+      false,
+    );
   });
 });

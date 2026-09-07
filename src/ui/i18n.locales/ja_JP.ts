@@ -11262,6 +11262,14 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraOverlay.spellOrder': 'スペル順',
   'hudChrome.auraOverlay.reset': '位置をリセット',
   'hudChrome.auraOverlay.spellPosition': 'スペル順 {position} / {count}',
+  'hudChrome.auraOverlay.watchlist': '監視するスペル',
+  'hudChrome.auraOverlay.watchlistHint':
+    '自分にバフを付与するスペルを選ぶと、そのスペル専用のオーラが有効になります。選んだスペルは下に専用カードが表示され、アイコン、色、位置、グラウンドリングを個別に設定できます。',
+  'hudChrome.auraOverlay.watchlistEmpty':
+    'スペルブックに、自分にバフを付与するスペルは他にありません。',
+  'hudChrome.auraOverlay.watchlistWatch': '{spell}を監視',
+  'hudChrome.auraOverlay.watchlistUnwatch': '{spell}の監視を解除',
+  'hudChrome.auraOverlay.watchlistCount': '{count}件を監視中',
   'hudChrome.auraOverlay.procs.revenge': 'リベンジ！',
   'hudChrome.auraOverlay.procs.battleTrance': 'バトルトランス',
   'hudChrome.auraOverlay.procs.overpowerCharge': 'レッドハンドエンパワー',

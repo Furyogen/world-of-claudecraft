@@ -254,3 +254,54 @@ describe('aura overlay config', () => {
     });
   });
 });
+
+describe('AuraOverlayConfigStore watchlist', () => {
+  it('persists the picked spells and reads them back on the next session', () => {
+    const store = new AuraOverlayConfigStore('warrior:Raido');
+    expect(store.getWatched()).toEqual([]);
+
+    store.setWatched(['watch:recklessness', 'watch:die_by_sword']);
+
+    expect(new AuraOverlayConfigStore('warrior:Raido').getWatched()).toEqual([
+      'watch:recklessness',
+      'watch:die_by_sword',
+    ]);
+  });
+
+  it('scopes the watchlist per character, like every other aura setting', () => {
+    new AuraOverlayConfigStore('warrior:Raido').setWatched(['watch:recklessness']);
+    expect(new AuraOverlayConfigStore('warrior:Other').getWatched()).toEqual([]);
+  });
+
+  it('keeps the watchlist through a per-proc write and vice versa', () => {
+    const store = new AuraOverlayConfigStore('warrior:Raido');
+    store.setWatched(['watch:recklessness']);
+    store.patch('watch:recklessness', { color: '#123456' });
+    store.patchLayout({ crescentBlockScale: 1.2 });
+
+    const reloaded = new AuraOverlayConfigStore('warrior:Raido');
+    expect(reloaded.getWatched()).toEqual(['watch:recklessness']);
+    expect(reloaded.get('watch:recklessness').color).toBe('#123456');
+    expect(reloaded.getLayout().crescentBlockScale).toBe(1.2);
+  });
+
+  it('drops junk out of a corrupted watchlist instead of failing the boot', () => {
+    localStorage.setItem(
+      'woc_aura_overlays:warrior:Raido',
+      JSON.stringify({ __layoutVersion: 8, __watched: ['watch:a', 'revenge_free', 3, 'watch:a'] }),
+    );
+    expect(new AuraOverlayConfigStore('warrior:Raido').getWatched()).toEqual(['watch:a']);
+  });
+
+  it('reports a saved config apart from a defaulted one, and never for a reserved key', () => {
+    const store = new AuraOverlayConfigStore('warrior:Raido');
+    expect(store.has('watch:recklessness')).toBe(false);
+    store.patch('watch:recklessness', { enabled: true });
+    expect(store.has('watch:recklessness')).toBe(true);
+    store.setWatched(['watch:recklessness']);
+    store.patchLayout({ crescentBlockScale: 1.2 });
+    expect(store.has('__watched')).toBe(false);
+    expect(store.has('__layout')).toBe(false);
+    expect(store.has('__layoutVersion')).toBe(false);
+  });
+});

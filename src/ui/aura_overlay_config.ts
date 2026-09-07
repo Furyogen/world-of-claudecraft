@@ -1,5 +1,6 @@
 import type { AuraOverlayProcId, MageProcId, WarriorProcId } from './aura_overlay_view';
 import { auraOverlayDefaultMeta } from './aura_overlay_view';
+import { sanitizeWatchedIds } from './aura_watchlist_core';
 
 export interface AuraOverlayConfig {
   enabled: boolean;
@@ -126,13 +127,21 @@ function defaultLayout(id: AuraOverlayProcId): AuraOverlayDefaultLayout {
   return ALL_DEFAULT_LAYOUT[id] ?? genericDefaultLayout(id);
 }
 
+/** The spread of default icon X positions a proc with no authored slot falls into.
+ *  Exported so a freshly picked watchlist spell can be parked on the next FREE
+ *  slot instead of stacking on top of the one before it (every watched proc
+ *  resolves to the same generic default otherwise). */
+export function genericIconPosX(slot: number): number {
+  const safe = Number.isFinite(slot) ? Math.max(0, Math.round(slot)) : 0;
+  return GENERIC_ICON_X[safe % GENERIC_ICON_X.length];
+}
+
 function defaultIconX(id: AuraOverlayProcId): number {
   const warriorX = WARRIOR_ICON_X[id as WarriorProcId];
   if (warriorX !== undefined) return warriorX;
   const mageX = MAGE_ICON_X[id as MageProcId];
   if (mageX !== undefined) return mageX;
-  const slot = auraOverlayDefaultMeta(id)?.slot ?? 3;
-  return GENERIC_ICON_X[Math.min(GENERIC_ICON_X.length - 1, Math.max(0, slot))];
+  return genericIconPosX(auraOverlayDefaultMeta(id)?.slot ?? 3);
 }
 
 function defaultGroundOrder(id: AuraOverlayProcId): number {
@@ -198,10 +207,19 @@ export function sanitizeAuraOverlayConfig(id: AuraOverlayProcId, raw: unknown): 
 }
 
 type StoredConfigs = {
-  [id: string]: AuraOverlayConfig | AuraOverlayLayoutConfig | number | undefined;
+  [id: string]: AuraOverlayConfig | AuraOverlayLayoutConfig | string[] | number | undefined;
   __layoutVersion?: number;
   __layout?: AuraOverlayLayoutConfig;
+  // The player-chosen extra spells to put aura vision on (aura_watchlist_core).
+  // Additive on purpose: a store written before the watchlist shipped simply has
+  // no key here and reads back as an empty list, so no LAYOUT_VERSION bump (which
+  // would wipe every placement the player already tuned).
+  __watched?: string[];
 };
+
+// Reserved keys in the stored map, so a proc-id lookup can never mistake one of
+// them for a saved per-proc config.
+const RESERVED_KEYS: ReadonlySet<string> = new Set(['__layoutVersion', '__layout', '__watched']);
 
 export class AuraOverlayConfigStore {
   private readonly key: string;
@@ -244,6 +262,26 @@ export class AuraOverlayConfigStore {
 
   get(id: AuraOverlayProcId): AuraOverlayConfig {
     return sanitizeAuraOverlayConfig(id, this.configs[id]);
+  }
+
+  /** Whether this proc has a SAVED config, as opposed to reading back defaults.
+   *  The watchlist uses it to seed a freshly picked spell (enabled, ordered last)
+   *  exactly once, and never to re-seed one the player has already tuned. */
+  has(id: AuraOverlayProcId): boolean {
+    return !RESERVED_KEYS.has(id) && this.configs[id] !== undefined;
+  }
+
+  /** The persisted watchlist (proc ids), sanitized. */
+  getWatched(): string[] {
+    return sanitizeWatchedIds(this.configs.__watched);
+  }
+
+  /** Replace the persisted watchlist. */
+  setWatched(ids: readonly string[]): string[] {
+    const next = sanitizeWatchedIds(ids);
+    this.configs = { ...this.configs, __watched: next };
+    this.save();
+    return [...next];
   }
 
   getLayout(): AuraOverlayLayoutConfig {

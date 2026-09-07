@@ -1514,6 +1514,15 @@ export const hudChromeStrings = {
     spellOrder: 'Spell Order',
     reset: 'Reset Position',
     spellPosition: 'Spell order {position} / {count}',
+    // The watchlist picker: any known spell that puts a buff on you can be given
+    // its own aura vision, on top of the curated class procs above.
+    watchlist: 'Watched Spells',
+    watchlistHint:
+      'Pick any spell that buffs you to give it its own aura. Picked spells get a full card below, with their own icon, color, position and ground ring.',
+    watchlistEmpty: 'No other spell in your spellbook puts a buff on you.',
+    watchlistWatch: 'Watch {spell}',
+    watchlistUnwatch: 'Stop watching {spell}',
+    watchlistCount: '{count} watched',
     procs: {
       revenge: 'Revenge!',
       battleTrance: 'Battle Trance',

@@ -11251,6 +11251,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraOverlay.spellOrder': '주문 순서',
   'hudChrome.auraOverlay.reset': '위치 초기화',
   'hudChrome.auraOverlay.spellPosition': '주문 순서 {position} / {count}',
+  'hudChrome.auraOverlay.watchlist': '감시할 주문',
+  'hudChrome.auraOverlay.watchlistHint':
+    '자신에게 효과를 거는 주문을 선택하면 해당 주문 전용 오라가 생깁니다. 선택한 주문은 아래에 전용 카드가 생겨 아이콘, 색상, 위치, 지면 고리를 따로 설정할 수 있습니다.',
+  'hudChrome.auraOverlay.watchlistEmpty': '주문서에 자신에게 효과를 거는 다른 주문이 없습니다.',
+  'hudChrome.auraOverlay.watchlistWatch': '{spell} 감시',
+  'hudChrome.auraOverlay.watchlistUnwatch': '{spell} 감시 해제',
+  'hudChrome.auraOverlay.watchlistCount': '{count}개 감시 중',
   'hudChrome.auraOverlay.procs.revenge': '복수!',
   'hudChrome.auraOverlay.procs.battleTrance': '전투 명상',
   'hudChrome.auraOverlay.procs.overpowerCharge': '적수 강화',

@@ -203,6 +203,7 @@ describe('live graphics profile architecture', () => {
 // repo-relative for the failure messages.
 const UI_PURE_CORES = [
   'src/ui/aura_overlay_view.ts',
+  'src/ui/aura_watchlist_core.ts',
   'src/ui/banner_queue.ts',
   'src/ui/item_kind_label.ts',
   'src/ui/proc_overlay_view.ts',
