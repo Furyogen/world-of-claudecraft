@@ -1983,6 +1983,18 @@ export const ko_KR: EnTranslations = {
       "soundPreview": "재생",
       "soundPreviewAria": "{sound} 알림음 미리 듣기",
       "soundHint": "이 주문이 발동할 때마다 소리가 재생됩니다. 아이콘, 초승달, 지면 고리를 끄면 소리만으로 알려줍니다.",
+      "readyGlow": "단축바 강조",
+      "readyGlowHint": "이 주문의 효과가 지속되는 동안 액션 바에서 강조합니다.",
+      "reticleTick": "조준선 눈금",
+      "reticleTickHint": "화면 중앙 근처에 눈금을 추가하고, 이 주문이 발동하면 켜집니다.",
+      "haptic": "진동",
+      "hapticNone": "끄기",
+      "hapticHint": "연결된 컨트롤러나 휴대폰을 진동시킵니다. 진동 기능이 없는 기기에서는 무시됩니다.",
+      "haptics": {
+        "tap": "탭",
+        "double": "더블",
+        "long": "롱"
+      },
       "cues": {
         "softChime": "부드러운 차임",
         "musicBox": "오르골",

@@ -1,4 +1,5 @@
 import { AURA_CUE_NONE } from '../game/aura_cue_catalog';
+import type { HapticShape } from '../game/haptic_pulse_core';
 import type { TalentAllocation } from '../sim/content/talents';
 import type { ResolvedAbility } from '../sim/sim';
 import type { Aura, PlayerClass } from '../sim/types';
@@ -30,6 +31,8 @@ import {
   watchedAuraProcDefs,
 } from './aura_watchlist_core';
 import type { PainterHostWriters } from './painter_host';
+import { createReadyGlowPlan, type ReadyGlowSignal } from './proc_ready_glow_core';
+import { createReticleTicksView, type ReticleTickInput } from './reticle_ticks_core';
 
 const clampPosition = (value: number): number =>
   Math.round(Math.min(1, Math.max(0, value)) * 10_000) / 10_000;
@@ -58,9 +61,13 @@ export interface AuraOverlayControllerDeps {
   talents?(): TalentAllocation;
   iconUrl(abilityId: string): string;
   paintGroundRings?(rings: readonly AuraGroundRingState[]): void;
+  /** Paint the reticle tick ring. Injected like paintGroundRings. */
+  paintReticleTicks?(state: { slots: readonly unknown[]; count: number }): void;
   /** Play one alert cue at this gain. Injected so the controller stays testable
    *  without an AudioContext; the Hud wires it to the shared sfx engine. */
   playCue?(cueId: string, volume: number): void;
+  /** Fire one rumble/vibration pulse. Injected for the same reason as playCue. */
+  playHaptic?(shape: HapticShape): void;
 }
 
 export class AuraOverlayController {
@@ -94,6 +101,13 @@ export class AuraOverlayController {
   // only RECORDS: logging in with a buff already up, or picking a spell whose
   // aura is live, is not a proc and must not announce itself.
   private readonly cueActive = new Map<AuraOverlayProcId, boolean>();
+  // Per-frame scratch for the two ALWAYS-ON channels (hotbar glow, reticle ticks).
+  // Both are rebuilt in place each paint so a steady frame allocates nothing.
+  private readonly glowSignals: ReadyGlowSignal[] = [];
+  private readonly tickInputs: ReticleTickInput[] = [];
+  private readonly readyGlowPlan = createReadyGlowPlan();
+  private readonly reticleTicks = createReticleTicksView();
+  private glowIds: ReadonlySet<string> = new Set();
   private previewGroundRings = false;
   private readonly counterfangAura: AuraOverlayPaintAura = {
     id: 'counterfang_window',
@@ -492,16 +506,43 @@ export class AuraOverlayController {
    */
   private fireCues(auras: readonly Aura[], supplemental: readonly AuraOverlayPaintAura[]): void {
     const play = this.deps.playCue;
+    const haptic = this.deps.playHaptic;
+    let index = 0;
     for (const def of this.currentDefs) {
       const active =
         auraOverlayProcIsActive(def, auras) || auraOverlayProcIsActive(def, supplemental);
       const previous = this.cueActive.get(def.id);
       this.cueActive.set(def.id, active);
-      if (!play || !active || previous !== false) continue;
       const config = this.config(def.id);
-      if (config.soundId === AURA_CUE_NONE) continue;
-      play(config.soundId, config.soundVolume);
+      // Always-on channels: rebuilt every frame from the live active state.
+      if (index >= this.glowSignals.length) {
+        this.glowSignals.push({ abilityId: '', active: false, enabled: false });
+        this.tickInputs.push({ id: '', color: '', active: false, enabled: false });
+      }
+      const glow = this.glowSignals[index];
+      glow.abilityId = def.iconAbilityId;
+      glow.active = active;
+      glow.enabled = config.showReadyGlow;
+      const tick = this.tickInputs[index];
+      tick.id = def.id;
+      tick.color = config.color;
+      tick.active = active;
+      tick.enabled = config.showReticleTick;
+      index++;
+      // Edge-triggered channels below this line.
+      if (!active || previous !== false) continue;
+      if (play && config.soundId !== AURA_CUE_NONE) play(config.soundId, config.soundVolume);
+      if (haptic && config.haptic !== 'none') haptic(config.haptic);
     }
+    this.glowSignals.length = index;
+    this.tickInputs.length = index;
+    this.glowIds = this.readyGlowPlan.tick(this.glowSignals);
+    this.deps.paintReticleTicks?.(this.reticleTicks.tick(this.tickInputs));
+  }
+
+  /** Ability ids whose hotbar button a watched proc is lighting this frame. */
+  readyGlowAbilityIds(): ReadonlySet<string> {
+    return this.glowIds;
   }
 
   defs(): readonly AuraOverlayProcDef[] {

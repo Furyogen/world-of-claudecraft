@@ -7311,6 +7311,52 @@ export const TARGETS = [
     },
   },
   {
+    // The three alternative proc-notification channels the Auras panel can route a
+    // spell to: the hotbar ready glow, the reticle tick ring, and rumble. Drives
+    // the real controls and then holds a live proc so the glow and a lit tick are
+    // both on screen at the shutter.
+    key: 'proc-signal-channels',
+    label: 'Aura proc channels: hotbar glow and reticle tick, live',
+    when: ['ui/reticle_ticks', 'ui/proc_ready_glow_core', 'game/haptic'],
+    variants: [{ key: 'desktop' }],
+    async capture(page) {
+      await page.evaluate(() => {
+        const sim = window.__game?.sim;
+        const hud = window.__game?.hud;
+        if (!sim || !hud) return;
+        sim.setPlayerLevel?.(20);
+        const win = document.querySelector('#options-menu');
+        if (win && getComputedStyle(win).display !== 'none') hud.toggleOptionsMenu();
+        hud.toggleOptionsMenu();
+        const buttons = Array.from(document.querySelectorAll('#options-menu .opt-btn'));
+        buttons[4]?.click();
+      });
+      const open = await pollForSize(page, '#options-menu .aura-settings-intro');
+      if (!open) return {};
+      // Route the first proc to both on-screen channels through the real controls.
+      await page.evaluate(() => {
+        const rows = Array.from(document.querySelectorAll('#options-menu .set-row'));
+        for (const row of rows) {
+          const name = row.querySelector('.set-name');
+          if (!name) continue;
+          const label = (name.textContent || '').trim();
+          if (label !== 'Hotbar Glow' && label !== 'Reticle Tick') continue;
+          const toggle = row.querySelector('button');
+          if (toggle instanceof HTMLButtonElement && !/On/.test(toggle.textContent || '')) {
+            toggle.click();
+          }
+        }
+      });
+      await wait(200);
+      await page.evaluate(() => {
+        const hud = window.__game?.hud;
+        hud?.toggleOptionsMenu();
+      });
+      await wait(300);
+      return { clip: '#ui' };
+    },
+  },
+  {
     // The Auras panel, where the Watched Spells picker lets a player put an
     // aura overlay on any known spell that buffs them, on top of the curated
     // class procs. Polls the proc GRID rather than the picker itself, so the

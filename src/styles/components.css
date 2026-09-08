@@ -14941,6 +14941,47 @@
   .aura-bulk-actions .btn {
     flex: 1;
   }
+  /* Reticle tick ring: one mark per proc routed to the screen-centre channel.
+     Pointer-events none throughout, so it can never eat a click on the world. */
+  #reticle-ticks {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .reticle-tick {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 12px;
+    margin: 0 0 0 -1.5px;
+    border-radius: 2px;
+    background: var(--color-text-muted);
+    opacity: 0;
+    transform-origin: 50% var(--tick-radius, 96px);
+    rotate: var(--tick-angle, 0deg);
+    translate: 0 calc(-1 * var(--tick-radius, 96px));
+    transition:
+      opacity 120ms linear,
+      background-color 120ms linear;
+  }
+  .reticle-tick.present {
+    opacity: 0.42;
+  }
+  .reticle-tick.lit {
+    opacity: 1;
+    background: var(--tick-color, var(--color-aura-rpg-gold));
+    box-shadow: 0 0 8px var(--tick-color, var(--color-aura-rpg-gold));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reticle-tick {
+      transition: none;
+    }
+  }
   /* Watchlist picker: pick any known self-buff spell to give it its own aura. */
   .aura-watch-section {
     margin-bottom: 14px;
@@ -15055,6 +15096,15 @@
   }
   .aura-settings-chip.aura-overlay-victory {
     --aura-color: var(--color-aura-rpg-gold);
+  }
+  .aura-haptic-row {
+    align-items: center;
+    gap: 8px;
+  }
+  .aura-haptic-select {
+    flex: 1;
+    min-width: 0;
+    min-height: 40px;
   }
   .aura-sound-row {
     align-items: center;
