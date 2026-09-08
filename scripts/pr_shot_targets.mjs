@@ -7348,12 +7348,17 @@ export const TARGETS = [
         }
       });
       await wait(200);
+      // Keep the panel open and framed on the three new rows: the controls ARE
+      // the change, and the lit tick is 3px wide at rest, so a world shot shows
+      // a reviewer nothing.
       await page.evaluate(() => {
-        const hud = window.__game?.hud;
-        hud?.toggleOptionsMenu();
+        const row = Array.from(document.querySelectorAll('#options-menu .set-row')).find(
+          (r) => (r.querySelector('.set-name')?.textContent || '').trim() === 'Hotbar Glow',
+        );
+        row?.scrollIntoView({ block: 'center' });
       });
       await wait(300);
-      return { clip: '#ui' };
+      return { clip: '#options-menu' };
     },
   },
   {
