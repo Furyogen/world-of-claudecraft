@@ -2055,6 +2055,18 @@ export const zh_CN: EnTranslations = {
       "soundPreview": "试听",
       "soundPreviewAria": "试听“{sound}”提示音",
       "soundHint": "此法术每次触发时都会播放该声音。关闭图标、弧形和地面圆环，即可只用声音提示。",
+      "readyGlow": "快捷栏高亮",
+      "readyGlowHint": "当该法术的增益生效时，在动作条上高亮显示它。",
+      "reticleTick": "准星刻度",
+      "reticleTickHint": "在屏幕中央附近添加一个标记，该法术触发时会亮起。",
+      "haptic": "震动",
+      "hapticNone": "关闭",
+      "hapticHint": "震动已连接的手柄或你的手机。设备没有震动功能时将被忽略。",
+      "haptics": {
+        "tap": "轻触",
+        "double": "双击",
+        "long": "长震"
+      },
       "cues": {
         "softChime": "轻柔铃声",
         "musicBox": "八音盒",

@@ -2055,6 +2055,18 @@ export const ja_JP: EnTranslations = {
       "soundPreview": "再生",
       "soundPreviewAria": "「{sound}」の通知音を試聴",
       "soundHint": "このスペルが発動するたびに音が鳴ります。アイコン、クレセント、グラウンドリングをオフにすると、音だけで知らせます。",
+      "readyGlow": "ホットバーの発光",
+      "readyGlowHint": "このスペルのバフが有効な間、アクションバー上で光らせます。",
+      "reticleTick": "レティクルの目盛り",
+      "reticleTickHint": "画面中央付近に目盛りを追加し、このスペルが発動すると点灯します。",
+      "haptic": "振動",
+      "hapticNone": "オフ",
+      "hapticHint": "接続中のコントローラーやスマートフォンを振動させます。振動機能のない端末では無視されます。",
+      "haptics": {
+        "tap": "タップ",
+        "double": "ダブル",
+        "long": "ロング"
+      },
       "cues": {
         "softChime": "やわらかいチャイム",
         "musicBox": "オルゴール",

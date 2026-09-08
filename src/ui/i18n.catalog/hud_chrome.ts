@@ -2598,6 +2598,21 @@ export const hudChromeStrings = {
     soundPreviewAria: 'Preview the {sound} alert sound',
     soundHint:
       'A sound plays each time this spell procs. Turn the icon, crescents and ground ring off to have the sound alone announce it.',
+    // The alternative notification channels a proc can be routed to, alongside or
+    // instead of the on-screen aura.
+    readyGlow: 'Hotbar Glow',
+    readyGlowHint: 'Lights this spell on your action bar while its buff is up.',
+    reticleTick: 'Reticle Tick',
+    reticleTickHint: 'Adds a mark near the centre of the screen that lights when this spell procs.',
+    haptic: 'Rumble',
+    hapticNone: 'Off',
+    hapticHint:
+      'Vibrates a connected controller, or your phone. Ignored where the device has no haptics.',
+    haptics: {
+      tap: 'Tap',
+      double: 'Double',
+      long: 'Long',
+    },
     cues: {
       softChime: 'Soft Chime',
       musicBox: 'Music Box',

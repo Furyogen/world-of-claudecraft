@@ -1,4 +1,5 @@
 import { AURA_CUE_NONE, AURA_CUES } from '../game/aura_cue_catalog';
+import { HAPTIC_SHAPES } from '../game/haptic_pulse_core';
 import { ABILITIES } from '../sim/content/classes';
 import type { PlayerClass } from '../sim/types';
 import { abilityDisplayName } from './ability_display_name';
@@ -354,6 +355,7 @@ export class AuraOverlaySettingsPanel {
       step: 0.05,
       format: percent,
     });
+    this.buildChannelControls(card, def);
     this.buildSoundControls(card, def, refresh);
     const reset = document.createElement('button');
     reset.type = 'button';
@@ -366,6 +368,59 @@ export class AuraOverlaySettingsPanel {
       refresh([`aura-reset:${def.id}`]);
     });
     card.appendChild(reset);
+  }
+
+  /**
+   * The alternative notification channels: hotbar glow, reticle tick, and rumble.
+   * Each is independent of the visual overlay and of the others, so a player can
+   * route a proc to any combination, or to one of these INSTEAD of the on-screen
+   * aura by switching Show Aura off.
+   */
+  private buildChannelControls(card: HTMLElement, def: AuraOverlayProcDef): void {
+    const hooks = this.host.auras;
+    toggleControl({
+      parent: card,
+      label: t('hudChrome.auraOverlay.readyGlow'),
+      get: () => hooks.get(def.id).showReadyGlow,
+      set: (showReadyGlow) => hooks.patch(def.id, { showReadyGlow }),
+      onLabel: t('hud.options.on'),
+      offLabel: t('hud.options.off'),
+      onActivate: () => this.host.click(),
+    });
+    toggleControl({
+      parent: card,
+      label: t('hudChrome.auraOverlay.reticleTick'),
+      get: () => hooks.get(def.id).showReticleTick,
+      set: (showReticleTick) => hooks.patch(def.id, { showReticleTick }),
+      onLabel: t('hud.options.on'),
+      offLabel: t('hud.options.off'),
+      onActivate: () => this.host.click(),
+    });
+    const row = document.createElement('div');
+    row.className = 'set-row aura-haptic-row';
+    const name = document.createElement('span');
+    name.className = 'set-name';
+    name.textContent = t('hudChrome.auraOverlay.haptic');
+    const select = document.createElement('select');
+    select.className = 'hud-select aura-haptic-select';
+    select.setAttribute('aria-label', t('hudChrome.auraOverlay.haptic'));
+    const off = document.createElement('option');
+    off.value = 'none';
+    off.textContent = t('hudChrome.auraOverlay.hapticNone');
+    select.appendChild(off);
+    for (const shape of HAPTIC_SHAPES) {
+      const option = document.createElement('option');
+      option.value = shape;
+      option.textContent = t(`hudChrome.auraOverlay.haptics.${shape}` as never);
+      select.appendChild(option);
+    }
+    select.value = hooks.get(def.id).haptic;
+    select.addEventListener('change', () => {
+      this.host.click();
+      hooks.patch(def.id, { haptic: select.value as 'none' });
+    });
+    row.append(name, select);
+    card.appendChild(row);
   }
 
   /**

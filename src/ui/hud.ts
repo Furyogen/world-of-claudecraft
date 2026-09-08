@@ -8,6 +8,7 @@ import { syncDeathControllerHints } from '../game/death_controller_hint';
 import { farmPressTarget } from '../game/farm_press_target_core';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { GraphicsSettingsSnapshot } from '../game/graphics_rebuild_core';
+import { playAuraHaptic } from '../game/haptics';
 import { InstanceMusicController, type InstanceMusicDecision } from '../game/instance_music';
 import { bindActionLabel, type Keybinds, keyCapLabel } from '../game/keybinds';
 import { trackMetaPixel } from '../game/meta_pixel';
@@ -827,6 +828,8 @@ import {
   MOTD_RESULT_FALLBACK_KEY,
   MOTD_RESULT_KEYS,
 } from './result_code_keys';
+import type { ReticleTicksState } from './reticle_ticks_core';
+import { ReticleTicksPainter } from './reticle_ticks_painter';
 import { itemLevelReadout, riftBandTooltipLines, riftGemTooltipLines } from './rift_band_tooltip';
 import { isTalentRowUnlockLevel } from './row_unlock_toast';
 import { localizeServerText } from './server_i18n';
@@ -2166,6 +2169,9 @@ export class Hud {
       clearMemo: () => this.mapMarkerTooltipContent.clearMemo(),
     });
     this.mapMarkerArt.preload();
+    const reticleRoot = ReticleTicksPainter.buildRoot();
+    document.body.appendChild(reticleRoot);
+    this.reticleTicks = new ReticleTicksPainter(this.writerFacet, reticleRoot);
     this.auraOverlayController = new AuraOverlayController({
       writers: this.writerFacet,
       playerClass: this.sim.cfg.playerClass,
@@ -2175,6 +2181,8 @@ export class Hud {
       iconUrl: (abilityId) => iconDataUrl('ability', abilityId),
       paintGroundRings: (rings) => this.renderer.setPlayerAuraRings(rings),
       playCue: (cueId, volume) => audio.auraCue(cueId, volume),
+      playHaptic: (shape) => playAuraHaptic(shape),
+      paintReticleTicks: (state) => this.reticleTicks.paint(state as unknown as ReticleTicksState),
     });
     this.farmPressAffordance = new FarmPressAffordanceController({
       root: $('#interact-affordance'),
@@ -4651,6 +4659,7 @@ export class Hud {
   // state on the hot path. Options > Auras owns preview and placement mode.
   private readonly auraOverlayController: AuraOverlayController;
   private readonly farmPressAffordance: FarmPressAffordanceController;
+  private readonly reticleTicks: ReticleTicksPainter;
   // One-shot login preview gate for the phoenix (see update()).
   private procOverlayPreviewed = false;
   // Last spec the proc frame's name chip resolved under (see update()).
@@ -8076,6 +8085,7 @@ export class Hud {
         itemName: itemDisplayName,
         slotLabel: (i) => formatAbilityNumber(i + 1),
         formatCount: (n) => formatNumber(n, { maximumFractionDigits: 0 }),
+        watchedGlowAbilityIds: () => this.auraOverlayController.readyGlowAbilityIds(),
       },
     );
     this.actionBarPainter = new ActionBarPainter(

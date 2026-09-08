@@ -1111,3 +1111,104 @@ describe('AuraOverlayController alert cues', () => {
     expect(played).toEqual([['ui_aura_temple_gong', 0.25]]);
   });
 });
+
+describe('AuraOverlayController proc signal channels', () => {
+  const warriorKnown = (): ResolvedAbility[] =>
+    ['revenge', 'recklessness'].map((id) => ({ def: ABILITIES[id] }) as ResolvedAbility);
+  const setup = () => {
+    const haptics: string[] = [];
+    const ticks: Array<{ id: string; active: boolean; angleDeg: number }[]> = [];
+    const controller = new AuraOverlayController({
+      doc: document,
+      writers,
+      playerClass: 'warrior',
+      playerName: 'Raido',
+      known: warriorKnown,
+      iconUrl: (id) => `/icons/${id}.png`,
+      playHaptic: (shape) => haptics.push(shape),
+      paintReticleTicks: (state) => {
+        const slots = state.slots as { id: string; active: boolean; angleDeg: number }[];
+        ticks.push(slots.slice(0, state.count).map((s) => ({ ...s })));
+      },
+    });
+    return { controller, haptics, ticks };
+  };
+  const revengeUp = [{ id: 'revenge', kind: 'revenge_free' } as never];
+
+  it('lights no hotbar button until the player opts the proc into that channel', () => {
+    const { controller } = setup();
+    controller.paint(revengeUp);
+    expect([...controller.readyGlowAbilityIds()]).toEqual([]);
+    controller.patch('revenge_free', { showReadyGlow: true });
+    controller.paint(revengeUp);
+    expect([...controller.readyGlowAbilityIds()]).toEqual(['revenge']);
+  });
+
+  it('drops the glow as soon as the aura falls off', () => {
+    const { controller } = setup();
+    controller.patch('revenge_free', { showReadyGlow: true });
+    controller.paint(revengeUp);
+    expect([...controller.readyGlowAbilityIds()]).toEqual(['revenge']);
+    controller.paint([]);
+    expect([...controller.readyGlowAbilityIds()]).toEqual([]);
+  });
+
+  it('gives a reticle slot only to procs routed there, and keeps its angle steady', () => {
+    const { controller, ticks } = setup();
+    controller.setWatched('watch:recklessness', true);
+    controller.patch('revenge_free', { showReticleTick: true });
+    controller.patch('watch:recklessness', { showReticleTick: true });
+    controller.paint([]);
+    const resting = ticks[ticks.length - 1];
+    expect(resting.map((t) => t.id)).toEqual(['revenge_free', 'watch:recklessness']);
+    expect(resting.every((t) => !t.active)).toBe(true);
+
+    controller.paint(revengeUp);
+    const lit = ticks[ticks.length - 1];
+    expect(lit.map((t) => t.active)).toEqual([true, false]);
+    // The angles must not move when a neighbour fires.
+    expect(lit.map((t) => t.angleDeg)).toEqual(resting.map((t) => t.angleDeg));
+  });
+
+  it('pulses on the rising edge only, and only for the chosen shape', () => {
+    const { controller, haptics } = setup();
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect(haptics).toEqual([]);
+
+    controller.patch('revenge_free', { haptic: 'double' });
+    controller.paint([]);
+    controller.paint(revengeUp);
+    controller.paint(revengeUp);
+    expect(haptics).toEqual(['double']);
+  });
+
+  it('keeps the three channels independent of the visual overlay and of each other', () => {
+    const { controller, haptics } = setup();
+    // Show Aura off, every alternative channel on: the whole point of the feature.
+    controller.patch('revenge_free', {
+      enabled: false,
+      showReadyGlow: true,
+      showReticleTick: true,
+      haptic: 'tap',
+    });
+    controller.paint([]);
+    controller.paint(revengeUp);
+    expect([...controller.readyGlowAbilityIds()]).toEqual(['revenge']);
+    expect(haptics).toEqual(['tap']);
+  });
+
+  it('carries every channel choice across a session', () => {
+    setup().controller.patch('revenge_free', {
+      showReadyGlow: true,
+      showReticleTick: true,
+      haptic: 'long',
+    });
+    document.body.replaceChildren();
+    expect(setup().controller.get('revenge_free')).toMatchObject({
+      showReadyGlow: true,
+      showReticleTick: true,
+      haptic: 'long',
+    });
+  });
+});

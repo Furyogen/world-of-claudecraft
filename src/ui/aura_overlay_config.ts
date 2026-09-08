@@ -1,4 +1,5 @@
 import { AURA_CUE_NONE, sanitizeAuraCueId } from '../game/aura_cue_catalog';
+import { type HapticShape, sanitizeHapticShape } from '../game/haptic_pulse_core';
 import type { AuraOverlayProcId, MageProcId, WarriorProcId } from './aura_overlay_view';
 import { auraOverlayDefaultMeta } from './aura_overlay_view';
 import { sanitizeWatchedIds } from './aura_watchlist_core';
@@ -24,6 +25,13 @@ export interface AuraOverlayConfig {
   /** Per-proc playback gain, 0.1 to 1. Only reachable once a cue is chosen, and
    *  multiplied by the player's master SFX volume like every other cue. */
   soundVolume: number;
+  /** Light this spell's hotbar button while its aura is up. Additive only: it can
+   *  never suppress the action bar's own authored proc glow. */
+  showReadyGlow: boolean;
+  /** Give this spell a slot on the reticle tick ring at screen centre. */
+  showReticleTick: boolean;
+  /** Rumble or vibrate when this spell procs. 'none' is off. */
+  haptic: HapticShape | 'none';
 }
 
 export type AuraOverlayPatch = Partial<AuraOverlayConfig>;
@@ -202,6 +210,9 @@ export function defaultAuraOverlayConfig(id: AuraOverlayProcId): AuraOverlayConf
     color: layout.color,
     soundId: AURA_CUE_NONE,
     soundVolume: 0.7,
+    showReadyGlow: false,
+    showReticleTick: false,
+    haptic: 'none',
   };
 }
 
@@ -238,6 +249,14 @@ export function sanitizeAuraOverlayConfig(id: AuraOverlayProcId, raw: unknown): 
     color: colorOr(value.color, fallback.color),
     soundId: sanitizeAuraCueId(value.soundId),
     soundVolume: numberIn(value.soundVolume, 0.1, 1, fallback.soundVolume),
+    showReadyGlow: boolOr(value.showReadyGlow, fallback.showReadyGlow),
+    showReticleTick: boolOr(value.showReticleTick, fallback.showReticleTick),
+    // 'none' is the stored off state and is NOT a shape, so it has to survive the
+    // shape sanitizer rather than being coerced to the default tap.
+    haptic:
+      value.haptic === 'none' || value.haptic === undefined
+        ? 'none'
+        : sanitizeHapticShape(value.haptic),
   };
 }
 
