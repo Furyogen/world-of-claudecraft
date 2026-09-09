@@ -8540,15 +8540,25 @@ export const TARGETS = [
       if (!open) return {};
       // Pick two spells, so the frame shows both chip states and the cards the
       // picks add. Driving the real chip click, not the controller hook.
-      await page.evaluate(() => {
-        const chips = Array.from(document.querySelectorAll('.aura-watch-chip'));
-        chips[0]?.click();
-      });
+      //
+      // Drive to a TARGET STATE rather than blind-toggling. The watchlist is
+      // persisted per character (localStorage, key woc_aura_overlays:<class>:<name>),
+      // so the shaman-desktop variant's pick is still stored when shaman-mobile
+      // runs against the same browser profile: a bare click there UNWATCHES it and
+      // the second frame silently reads "0 watched" with no cards, which is a lie
+      // about the feature rather than a fact about it. aria-pressed carries the
+      // real state, so only click a chip that is not already pressed. Each call
+      // re-reads the list because picking re-renders it.
+      const watchChip = (index) =>
+        page.evaluate((i) => {
+          const chip = Array.from(document.querySelectorAll('.aura-watch-chip'))[i];
+          if (chip instanceof HTMLButtonElement && chip.getAttribute('aria-pressed') !== 'true') {
+            chip.click();
+          }
+        }, index);
+      await watchChip(0);
       await wait(150);
-      await page.evaluate(() => {
-        const chips = Array.from(document.querySelectorAll('.aura-watch-chip'));
-        chips[2]?.click();
-      });
+      await watchChip(2);
       await wait(250);
       // Give the first picked spell an alert sound, so the frame shows the cue
       // picker with its volume slider and preview revealed (they only exist once
