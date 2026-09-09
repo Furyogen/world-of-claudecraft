@@ -2394,6 +2394,11 @@ const UI_DOM_MODULES = [
   'src/ui/mobile_frame_long_press.ts',
   'src/ui/account_portal_dom.ts',
   'src/ui/appearance_customizer.ts',
+  // Owns browser state on purpose: it mints the reticle tick ring's root and
+  // mounts it, which is exactly the work it exists to keep out of hud.ts. The
+  // RULES it wires up are all in the pure cores (reticle_ticks_core,
+  // proc_ready_glow_core, haptic_pulse_core, aura_watchlist_core).
+  'src/ui/aura_overlay_wiring.ts',
   'src/ui/arena_window.ts',
   'src/ui/armory_inspect.ts',
   'src/ui/bag_item_action_menu.ts',
