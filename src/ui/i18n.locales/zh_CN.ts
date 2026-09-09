@@ -13089,8 +13089,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraOverlay.haptics.tap': '轻触',
   'hudChrome.auraOverlay.haptics.double': '双击',
   'hudChrome.auraOverlay.haptics.long': '长震',
-  'hudChrome.auraOverlay.watchlistHint': '选择任何会为你附加增益的法术，为它启用专属光环。选中的法术会在下方获得完整卡片，拥有各自的图标、颜色、位置和地面圆环。',
-  'hudChrome.auraOverlay.soundHint': '此法术每次触发时都会播放该声音。关闭图标、弧形和地面圆环，即可只用声音提示。',
+  'hudChrome.auraOverlay.watchlistHint':
+    '选择任何会为你附加增益的法术，为它启用专属光环。选中的法术会在下方获得完整卡片，拥有各自的图标、颜色、位置和地面圆环。',
+  'hudChrome.auraOverlay.soundHint':
+    '此法术每次触发时都会播放该声音。关闭图标、弧形和地面圆环，即可只用声音提示。',
   'hudChrome.auraOverlay.watchlist': '监视的法术',
   'hudChrome.auraOverlay.watchlistEmpty': '你的法术书中没有其他会为你附加增益的法术。',
   'hudChrome.auraOverlay.watchlistWatch': '监视{spell}',

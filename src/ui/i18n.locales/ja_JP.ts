@@ -13739,18 +13739,24 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraOverlay.reset': '位置をリセット',
   'hudChrome.auraOverlay.spellPosition': 'スペル順 {position} / {count}',
   'hudChrome.auraOverlay.readyGlow': 'ホットバーの発光',
-  'hudChrome.auraOverlay.readyGlowHint': 'このスペルのバフが有効な間、アクションバー上で光らせます。',
+  'hudChrome.auraOverlay.readyGlowHint':
+    'このスペルのバフが有効な間、アクションバー上で光らせます。',
   'hudChrome.auraOverlay.reticleTick': 'レティクルの目盛り',
-  'hudChrome.auraOverlay.reticleTickHint': '画面中央付近に目盛りを追加し、このスペルが発動すると点灯します。',
+  'hudChrome.auraOverlay.reticleTickHint':
+    '画面中央付近に目盛りを追加し、このスペルが発動すると点灯します。',
   'hudChrome.auraOverlay.haptic': '振動',
   'hudChrome.auraOverlay.hapticNone': 'オフ',
-  'hudChrome.auraOverlay.hapticHint': '接続中のコントローラーやスマートフォンを振動させます。振動機能のない端末では無視されます。',
+  'hudChrome.auraOverlay.hapticHint':
+    '接続中のコントローラーやスマートフォンを振動させます。振動機能のない端末では無視されます。',
   'hudChrome.auraOverlay.haptics.tap': 'タップ',
   'hudChrome.auraOverlay.haptics.double': 'ダブル',
   'hudChrome.auraOverlay.haptics.long': 'ロング',
-  'hudChrome.auraOverlay.watchlistHint': '自分にバフを付与するスペルを選ぶと、そのスペル専用のオーラが有効になります。選んだスペルは下に専用カードが表示され、アイコン、色、位置、グラウンドリングを個別に設定できます。',
-  'hudChrome.auraOverlay.watchlistEmpty': 'スペルブックに、自分にバフを付与するスペルは他にありません。',
-  'hudChrome.auraOverlay.soundHint': 'このスペルが発動するたびに音が鳴ります。アイコン、クレセント、グラウンドリングをオフにすると、音だけで知らせます。',
+  'hudChrome.auraOverlay.watchlistHint':
+    '自分にバフを付与するスペルを選ぶと、そのスペル専用のオーラが有効になります。選んだスペルは下に専用カードが表示され、アイコン、色、位置、グラウンドリングを個別に設定できます。',
+  'hudChrome.auraOverlay.watchlistEmpty':
+    'スペルブックに、自分にバフを付与するスペルは他にありません。',
+  'hudChrome.auraOverlay.soundHint':
+    'このスペルが発動するたびに音が鳴ります。アイコン、クレセント、グラウンドリングをオフにすると、音だけで知らせます。',
   'hudChrome.auraOverlay.watchlist': '監視するスペル',
   'hudChrome.auraOverlay.watchlistWatch': '{spell}を監視',
   'hudChrome.auraOverlay.watchlistUnwatch': '{spell}の監視を解除',
