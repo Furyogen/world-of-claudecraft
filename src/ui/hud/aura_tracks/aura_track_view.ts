@@ -182,6 +182,14 @@ export function createAuraTrackView<TEntity extends AuraTrackEntityInput>(
       if (!deps.isOwn(aura)) continue;
       const entry = auraTrackEntry(aura.id);
       if (!entry) continue;
+      // One id, two opposite meanings: Hourglass of Suspension lands its friendly
+      // stasis and its enemy stun under the same `temporal_hourglass` id, and the
+      // ally scan below walks every unit in interest scope, mobs included. Where
+      // the catalog says the kind is what tells them apart, an aura that does not
+      // carry that kind is not this row. A kindless aura is dropped rather than
+      // guessed at: both worlds put `kind` on an aura (the server sends it in the
+      // snapshot), so its absence means the row cannot be shown to be helpful.
+      if (entry.requiresKind !== undefined && aura.kind !== entry.requiresKind) continue;
       if (!descriptor.accepts(entry, onSelf)) continue;
       if (aura.remaining <= 0 && aura.permanent !== true) continue;
       scratch.push(aura);

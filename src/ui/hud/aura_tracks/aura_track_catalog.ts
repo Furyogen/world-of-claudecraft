@@ -64,6 +64,13 @@ export interface AuraTrackEntry {
   /** The ability's cooldown in seconds, 0 for none. Separates the emergency
    *  buttons from the rotational mitigation (see DEFENSIVE_COOLDOWN_SEC). */
   cooldown: number;
+  /** Set ONLY when one aura id carries two opposite meanings and the live kind
+   *  is what tells them apart, in which case a live aura matches this row only
+   *  when its kind is this one. Hourglass of Suspension is the case that forced
+   *  it: its friendly stasis and its enemy stun are both `temporal_hourglass`
+   *  (src/sim/combat/temporal_hourglass.ts), and the ally scan walks mobs too,
+   *  so an id-only match would list a suspended enemy as a buff on an ally. */
+  requiresKind?: string;
 }
 
 /** Nothing longer than this is a maintained effect; see the header. */
@@ -184,6 +191,34 @@ const FORCED: ReadonlyMap<string, AuraTrackCategory> = new Map([
   ['greater_invisibility', 'utility'],
 ]);
 
+/**
+ * Bespoke effect TYPES whose helpful aura the kind sets cannot see, because the
+ * content models them as their own effect shape carrying no `kind` at all.
+ * Keyed by effect type rather than by ability id so the derivation still holds:
+ * a second spell built on the same effect joins its track for free, and the aura
+ * id still comes from `auraIdOf` rather than being assumed to be the ability id.
+ *
+ * `kind` is the kind the SIM applies, not a restatement of the category, so the
+ * shared toggle classifier is asked the same question a live aura would produce
+ * and the row can be matched on kind where an id is ambiguous (`requiresKind`).
+ *
+ * `massTemporalEcho` (Temporal Cascade) IS DELIBERATELY ABSENT. Its cast applies
+ * a `temporal_echo` aura (combat/chronomancy.ts placeGroupEcho) rather than one
+ * of its own, so the Temporal Echo row below already covers it; a row keyed
+ * `temporal_cascade` would match no live aura in the game.
+ */
+const BESPOKE_EFFECT_AURAS: ReadonlyMap<string, { category: AuraTrackCategory; kind: AuraKind }> =
+  new Map([
+    // The Chronomancer's mark on an ally: it converts the caster's Arcane damage
+    // into healing on the marked unit, which is a maintained heal in everything
+    // but name, so it reads with the HoTs.
+    ['temporalEcho', { category: 'hot', kind: 'temporal_echo' as AuraKind }],
+    // Hourglass of Suspension's friendly half. `stasis` is already the guard kind
+    // that carries Ice Block, so the beneficial arm belongs with the mitigation;
+    // the enemy arm shares the id and is excluded by `requiresKind`.
+    ['temporalHourglass', { category: 'guard', kind: 'stasis' as AuraKind }],
+  ]);
+
 /** The loose view of an authored effect this module reads. */
 type EffectRecord = {
   type?: unknown;
@@ -251,7 +286,8 @@ function buildCatalog(): ReadonlyMap<string, AuraTrackEntry> {
         const auraId = auraIdOf(def, eff, type, buffTargetIndex);
         if (type === 'buffTarget') buffTargetIndex++;
         if (EXCLUDED_IDS.has(auraId) || out.has(auraId)) continue;
-        const category = categoryOf(type, kind);
+        const bespoke = BESPOKE_EFFECT_AURAS.get(type);
+        const category = bespoke ? bespoke.category : categoryOf(type, kind);
         if (!category) continue;
         const duration = Number(eff.duration ?? 0);
         if (duration <= 0) continue;
@@ -259,7 +295,7 @@ function buildCatalog(): ReadonlyMap<string, AuraTrackEntry> {
         // takes and the pass it gets through the ceiling come from the same
         // answer, so a catalog mode is always drawn as a mode and never as a
         // timer the strips would suppress.
-        const auraKind = kind || category;
+        const auraKind = bespoke ? bespoke.kind : kind || category;
         const mode = isToggleAuraKind(auraId, auraKind as AuraKind);
         if (!mode && duration > AURA_TRACK_DURATION_CEILING_SEC) continue;
         out.set(auraId, {
@@ -270,6 +306,7 @@ function buildCatalog(): ReadonlyMap<string, AuraTrackEntry> {
           category,
           shape: mode ? 'mode' : category === 'absorb' ? 'points' : 'timer',
           cooldown,
+          requiresKind: bespoke?.kind,
         });
       }
     }

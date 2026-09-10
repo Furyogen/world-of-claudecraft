@@ -148,6 +148,13 @@ describe('aura track catalog: what it derives', () => {
       ['blade_flurry', 'power'],
       ['icy_veins', 'power'],
       ['recklessness', 'power'],
+      // The Chronomancy support kit. All three model their helpful aura with a
+      // BESPOKE EFFECT TYPE and no `kind`, so every kind set missed them and the
+      // player saw no row for the three spells the spec is built around. Temporal
+      // Cascade is deliberately absent: the aura it applies IS a `temporal_echo`
+      // (chronomancy.ts placeGroupEcho), so the echo row above is its row too.
+      ['temporal_echo', 'hot'],
+      ['temporal_hourglass', 'guard'],
     ];
     for (const [id, category] of expected) {
       const entry = auraTrackEntry(id);
@@ -196,6 +203,11 @@ describe('aura track catalog: what it derives', () => {
       ['paladin', null, 'avenging_wrath', ['avenging_wrath', 'avenging_wrath_buff_healing_done']],
       ['priest', null, 'power_word_shield', ['power_word_shield']],
       ['druid', null, 'barkskin', ['barkskin']],
+      // The Chronomancy mark, whose helpful aura is a bespoke effect type with no
+      // `kind`. The five casts above are all kind-driven or auraId-driven, so none
+      // of them exercised that arm and the whole support kit went missing from the
+      // tracks without a single assertion noticing.
+      ['mage', 'arcane', 'temporal_echo', ['temporal_echo']],
     ];
     for (const [playerClass, spec, abilityId, expectedIds] of casts) {
       const sim = new Sim({ seed: 7, playerClass, autoEquip: true, world: EMPTY_TEST_WORLD });
