@@ -69,6 +69,56 @@ function keys(state: { rows: Array<{ key: string }>; count: number }): string[] 
 }
 
 describe('aura track view: what it selects', () => {
+  it('shows the Chronomancy support auras on the player and on an ally', () => {
+    // The reported bug: all three Chronomancy support spells were missing from
+    // both protective tracks because none of them reached the catalog at all.
+    // Temporal Cascade places a `temporal_echo` aura (chronomancy.ts
+    // placeGroupEcho), so the echo id covers the cascade case too.
+    const self = createAuraTrackView(track('self'), deps());
+    const selfState = self.tick(
+      input({
+        player: unit(PLAYER_ID, [
+          aura('temporal_echo', { kind: 'temporal_echo' }),
+          aura('temporal_hourglass', { kind: 'stasis', remaining: 4, duration: 5 }),
+        ]),
+      }),
+    );
+    expect(keys(selfState)).toEqual([
+      `${PLAYER_ID}:temporal_echo`,
+      `${PLAYER_ID}:temporal_hourglass`,
+    ]);
+
+    const friendly = createAuraTrackView(track('friendly'), deps());
+    const friendlyState = friendly.tick(
+      input({
+        player: unit(PLAYER_ID, []),
+        allies: [
+          unit(42, [
+            aura('temporal_echo', { kind: 'temporal_echo' }),
+            aura('temporal_hourglass', { kind: 'stasis', remaining: 4, duration: 5 }),
+          ]),
+        ],
+      }),
+    );
+    expect(keys(friendlyState)).toEqual(['42:temporal_echo', '42:temporal_hourglass']);
+  });
+
+  it('keeps the hostile Hourglass suspension out of the ally track', () => {
+    // Hourglass of Suspension applies its ENEMY stun under the SAME aura id as
+    // its friendly stasis (temporal_hourglass.ts applyHostileSuspension), and the
+    // ally scan walks every unit in interest scope, mobs included. Keyed by id
+    // alone, a suspended mob would be listed as a buff the player is maintaining
+    // on an ally. The kind is the only thing that separates the two.
+    const view = createAuraTrackView(track('friendly'), deps());
+    const state = view.tick(
+      input({
+        player: unit(PLAYER_ID, []),
+        allies: [unit(99, [aura('temporal_hourglass', { kind: 'incapacitate' })])],
+      }),
+    );
+    expect(keys(state)).toEqual([]);
+  });
+
   it('takes only auras the local player cast', () => {
     const view = createAuraTrackView(track('self'), deps());
     const state = view.tick(
