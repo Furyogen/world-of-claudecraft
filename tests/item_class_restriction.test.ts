@@ -7,7 +7,13 @@ import { requiredClassesForTooltip } from '../src/ui/item_class_restriction';
 
 // Bug #1893: a druid was blocked from equipping "Fang of Korzul" (a rogue/hunter
 // dagger) and a player was blocked from "Deathlord Warplate" (warrior/paladin/
-// shaman mail) with no in-game explanation. Both items resolve to a recognized
+// shaman mail) with no in-game explanation.
+//
+// The dagger half of that report was later answered at the source: druids now
+// hold the dagger proficiency (DAGGER_WEAPON_CLASSES, src/sim/equipment_rules.ts),
+// so Fang of Korzul admits them. The TOOLTIP rule this suite exists for is
+// unchanged and still covered below, now by a class the group really does
+// exclude (a warrior), which is the case that would regress. Both items resolve to a recognized
 // weapon-proficiency archetype / armor-weight group (equipment_rules.ts), and the
 // tooltip used to hide the explicit "Requires: <classes>" line whenever that
 // happened, on the mistaken assumption that the armor-weight badge or the archetype
@@ -15,11 +21,14 @@ import { requiredClassesForTooltip } from '../src/ui/item_class_restriction';
 // classes (and weapons have no equivalent badge at all), so the line must always
 // render when the item carries a class restriction.
 describe('requiredClassesForTooltip', () => {
-  it('names the classes for a rogue/hunter-only weapon (Fang of Korzul)', () => {
+  it('names the classes for a dagger, and still blocks a class outside the group', () => {
     const item = ITEMS.fang_of_korzul;
     expect(item).toBeDefined();
-    expect(canEquipItem('druid', item)).toBe(false);
-    expect(requiredClassesForTooltip(item)).toEqual(['rogue', 'hunter']);
+    // Druids hold the dagger proficiency now; a warrior never did.
+    expect(canEquipItem('druid', item)).toBe(true);
+    expect(canEquipItem('warrior', item)).toBe(false);
+    // The line must still render, and must name the whole group.
+    expect(requiredClassesForTooltip(item)).toEqual(['rogue', 'hunter', 'druid']);
   });
 
   it('does not advertise Rogue for a future two-handed weapon', () => {

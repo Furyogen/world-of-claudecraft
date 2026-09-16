@@ -16,6 +16,7 @@
 // (elemental/resto shaman, holy paladin) and str plate get real coverage rather
 // than a single token piece.
 
+import { DAGGER_WEAPON_CLASSES } from '../equipment_rules';
 import type { ItemDef, LootEntry } from '../types';
 import { FERAL } from './items';
 
@@ -153,7 +154,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     stats: { agi: 13, sta: 9 },
     critRating: FIVE_MAN_WEAPON_RATING,
     sellValue: 15000,
-    requiredClass: AGILE,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   tidebound_spaulders: {
     id: 'tidebound_spaulders',

@@ -3,6 +3,7 @@
 // trolls dig into barrow-mounds, and Vael the Fogbinder waits in the
 // Sunken Bastion.
 
+import { DAGGER_WEAPON_CLASSES } from '../equipment_rules';
 import {
   FENBRIDGE_LAYOUT,
   FENBRIDGE_NPC_PLACEMENTS_BY_ID,
@@ -1714,7 +1715,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 7, max: 12, speed: 1.7, dagger: true },
     stats: { agi: 4 },
     sellValue: 300,
-    requiredClass: ROG,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   drownedguard_breastplate: {
     id: 'drownedguard_breastplate',
@@ -1813,7 +1814,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 8, max: 14, speed: 1.7, dagger: true },
     stats: { agi: 5, sta: 2 },
     sellValue: 480,
-    requiredClass: ROG,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   mirejaw_scale_vest: {
     id: 'mirejaw_scale_vest',
@@ -1847,7 +1848,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 10, max: 17, speed: 1.7, dagger: true },
     stats: { agi: 6, sta: 3 },
     sellValue: 1400,
-    requiredClass: ROG,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   drowned_tide_scepter: {
     id: 'drowned_tide_scepter',
@@ -1891,7 +1892,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 10, max: 16, speed: 1.7, dagger: true },
     stats: { agi: 6, sta: 3 },
     sellValue: 1400,
-    requiredClass: ROG,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   mirejaw_oracle_staff: {
     id: 'mirejaw_oracle_staff',
@@ -1936,7 +1937,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 9, max: 15, speed: 1.7, dagger: true },
     stats: { agi: 5, sta: 2 },
     sellValue: 1200,
-    requiredClass: ROG,
+    requiredClass: DAGGER_WEAPON_CLASSES,
   },
   knight_commanders_greaves: {
     id: 'knight_commanders_greaves',
