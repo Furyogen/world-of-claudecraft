@@ -1201,7 +1201,7 @@ const classAbilityNamesEn = {
       [
         'bear_form',
         'Bruin Form',
-        'Shapeshift into a bear: armor +130%, greatly increased attack power, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
+        'Shapeshift into a bear: armor +130%, greatly increased attack power that scales from Agility, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
       ],
       [
         'maul',
@@ -1216,7 +1216,7 @@ const classAbilityNamesEn = {
       [
         'cat_form',
         'Wolf Form',
-        'Shapeshift into a wolf: attack power rises with your level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
+        'Shapeshift into a wolf: your attack power scales from Agility and rises with your level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
       ],
       [
         'claw',

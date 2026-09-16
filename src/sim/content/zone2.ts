@@ -2258,7 +2258,7 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     // TWOHAND_STAT_MULT) = 7, dps on the weaponDpsBudget(13) x TWOHAND_DPS_MULT
     // curve (~12.19 at speed 3.4).
     weapon: { min: 35, max: 48, speed: 3.4 },
-    stats: { str: 3, agi: 2, sta: 2 },
+    stats: { agi: 5, sta: 2 },
     sellValue: 420,
     requiredClass: FERAL,
   },

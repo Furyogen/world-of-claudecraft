@@ -3732,7 +3732,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // 13, dps on the weaponDpsBudget(17) x TWOHAND_DPS_MULT curve (~13.57 at
     // speed 3.5).
     weapon: { min: 40, max: 55, speed: 3.5 },
-    stats: { str: 5, agi: 4, sta: 4 },
+    stats: { agi: 9, sta: 4 },
     sellValue: 1400,
     requiredClass: FERAL,
   },
@@ -3893,7 +3893,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // 17, dps on the weaponDpsBudget(23) x TWOHAND_DPS_MULT curve (~15.64 at
     // speed 3.6).
     weapon: { min: 48, max: 65, speed: 3.6 },
-    stats: { str: 7, agi: 5, sta: 5 },
+    stats: { agi: 12, sta: 5 },
     sellValue: 3200,
     requiredClass: FERAL,
   },
@@ -3922,7 +3922,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // TWOHAND_STAT_MULT) = 23 (the wyrmfang_greatblade total), dps on the
     // weaponDpsBudget(26) x TWOHAND_DPS_MULT curve (~16.68 at speed 3.6).
     weapon: { min: 51, max: 69, speed: 3.6 },
-    stats: { str: 9, agi: 7, sta: 7 },
+    stats: { agi: 16, sta: 7 },
     sellValue: 9000,
     requiredClass: FERAL,
   },
@@ -3939,7 +3939,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     // TWOHAND_DPS_MULT curve (~17.71 at speed 3.7). The top rung of the feral
     // ladder, beside the direfang_greatblade on the same boss.
     weapon: { min: 56, max: 75, speed: 3.7 },
-    stats: { str: 10, agi: 8, sta: 8 },
+    stats: { agi: 18, sta: 8 },
     // Every item-level-29 raid epic carries exactly one rating at 20 (the tier
     // ladder pin in tests/combat_rating.test.ts); the maul takes Hit like the
     // direfang_greatblade beside it.

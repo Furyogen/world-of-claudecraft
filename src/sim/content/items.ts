@@ -1718,7 +1718,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     // TWOHAND_STAT_MULT) = 4, dps on the weaponDpsBudget(8) x TWOHAND_DPS_MULT
     // curve (~10.47 at speed 3.3).
     weapon: { min: 29, max: 40, speed: 3.3 },
-    stats: { str: 2, sta: 2 },
+    stats: { agi: 2, sta: 2 },
     sellValue: 320,
     requiredClass: FERAL,
   },

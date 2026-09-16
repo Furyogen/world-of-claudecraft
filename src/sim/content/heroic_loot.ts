@@ -432,7 +432,7 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     // Item level 31 heroic-only feral two-hander: 2H dps on the weaponDpsBudget(31)
     // x TWOHAND_DPS_MULT curve (~18.4 at speed 3.6), stat budget 29.
     weapon: { min: 55, max: 78, speed: 3.6 },
-    stats: { str: 13, agi: 9, sta: 7 },
+    stats: { agi: 22, sta: 7 },
     hitRating: FIVE_MAN_WEAPON_RATING,
     sellValue: 15000,
     requiredClass: FERAL,

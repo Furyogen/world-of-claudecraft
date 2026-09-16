@@ -8440,7 +8440,7 @@ export const en: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruin Form",
-        "description": "Shapeshift into a bear: armor +130%, greatly increased attack power, your attacks build rage and generate 30% more threat. Cast again to return to caster form."
+        "description": "Shapeshift into a bear: armor +130%, greatly increased attack power that scales from Agility, your attacks build rage and generate 30% more threat. Cast again to return to caster form."
       },
       "maul": {
         "name": "Bonecrush",
@@ -8452,7 +8452,7 @@ export const en: EnTranslations = {
       },
       "cat_form": {
         "name": "Wolf Form",
-        "description": "Shapeshift into a wolf: attack power rises with your level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form."
+        "description": "Shapeshift into a wolf: your attack power scales from Agility and rises with your level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form."
       },
       "claw": {
         "name": "Claw",

@@ -4541,7 +4541,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_bear', value: 0.65, duration: 3600 }],
     description:
-      'Shapeshift into a bear: armor +130%, greatly increased attack power, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
+      'Shapeshift into a bear: armor +130%, greatly increased attack power that scales from Agility, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
   },
   bear_charge: {
     id: 'bear_charge',
@@ -4643,7 +4643,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_cat', value: 0.71, duration: 3600 }],
     description:
-      'Shapeshift into a wolf: agility rises with your level, attack power +8 plus 2 per level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
+      'Shapeshift into a wolf: your attack power scales from Agility, agility rises with your level, attack power +8 plus 2 per level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
   },
   prowl: {
     id: 'prowl',
