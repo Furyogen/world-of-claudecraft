@@ -308,6 +308,60 @@ describe('the feral conversion composes correctly with attack-power modifiers', 
   });
 });
 
+describe('the default-kit consequence, pinned so it is not a surprise', () => {
+  // The coefficient is calibrated on the GEARED level-20 reference kit, where a
+  // bear lands within 1% of its pre-change attack power. On the auto-equipped
+  // DEFAULT kit the Strength-to-Agility ratio is different, so the same
+  // coefficient lands a bear LOWER. That is the kit-dependence stated above,
+  // showing up where a leveling feral actually lives, and it is a real cost of
+  // this change rather than a rounding artifact: pin the direction and the
+  // rough size so a reviewer sees it and a later retune cannot erase it
+  // silently. Measured against release/v0.43.0: bear 134 -> 126 at level 20.
+  const geared = (level: number, form: 'form_cat' | 'form_bear') => {
+    const sim = new Sim({ seed: 11, playerClass: 'druid', autoEquip: true });
+    sim.setPlayerLevel(level);
+    const player = sim.player;
+    const meta = sim.meta(player.id);
+    if (!meta) throw new Error('missing druid metadata');
+    player.auras.length = 0;
+    player.auras.push({
+      id: form,
+      name: form,
+      kind: form,
+      remaining: 3600,
+      duration: 3600,
+      value: 1,
+      sourceId: player.id,
+      school: 'physical',
+    });
+    recalcPlayerStats(player, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
+    return player.attackPower;
+  };
+
+  it('lifts Wolf Form on the default kit at every level', () => {
+    for (const level of [1, 5, 10, 15, 20]) {
+      expect(geared(level, 'form_cat'), `level ${level}`).toBeGreaterThan(0);
+    }
+    // The gap widens with level because the default kit's Agility does.
+    expect(geared(20, 'form_cat')).toBeGreaterThan(geared(15, 'form_cat'));
+  });
+
+  it('costs Bruin Form attack power on the default kit, by about 6% at 20', () => {
+    // Pre-change values, written as literals so this fails if the module and
+    // entity.ts ever drift together back toward the old conversion.
+    const before = { 1: 68, 5: 82, 10: 99, 15: 117, 20: 134 } as const;
+    for (const level of [1, 5, 10, 15, 20] as const) {
+      const after = geared(level, 'form_bear');
+      expect(after, `level ${level} should be below the pre-change value`).toBeLessThan(
+        before[level],
+      );
+      // Bounded: a cut deeper than 15% would be a retune, not this tradeoff.
+      expect((before[level] - after) / before[level], `level ${level}`).toBeLessThan(0.15);
+    }
+    expect(geared(20, 'form_bear')).toBe(126);
+  });
+});
+
 describe("Bruin Form's Agility bridge does not double-count", () => {
   // The retune this change had to make: the old 1.5 bridge existed BECAUSE the
   // druid had no Agility conversion. Left alone alongside the new conversion it
