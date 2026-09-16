@@ -11,7 +11,6 @@
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_WORLD, ITEMS } from '../src/sim/data';
 import { recalcPlayerStats } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import {
   BEAR_FORM_AGI_AP_PER_POINT,
   bearFormBonusAp,
@@ -22,6 +21,7 @@ import {
   meleeApFromAttributes,
   meleeApWeights,
 } from '../src/sim/melee_ap';
+import { Sim } from '../src/sim/sim';
 import { ALL_CLASSES, type AuraKind, type PlayerClass, type WorldContent } from '../src/sim/types';
 import { agiMeleeApPerPoint, strApPerPoint } from '../src/ui/stat_tooltip';
 
