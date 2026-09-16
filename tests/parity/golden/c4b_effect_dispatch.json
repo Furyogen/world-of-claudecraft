@@ -6644,7 +6644,7 @@
       "tick": 133,
       "time": 6.65,
       "nextId": 977,
-      "state": "685be4eb",
+      "state": "f7ff93c6",
       "events": "da52a003",
       "rng": {
         "draws": 861,
@@ -7428,7 +7428,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 116,
+          "attackPower": 126,
           "auras": [
             {
               "duration": 3600,
@@ -7954,7 +7954,7 @@
       "tick": 133,
       "time": 6.65,
       "nextId": 977,
-      "state": "685be4eb",
+      "state": "f7ff93c6",
       "events": "741638a5",
       "rng": {
         "draws": 861,
@@ -8738,7 +8738,7 @@
         },
         {
           "aiState": "idle",
-          "attackPower": 116,
+          "attackPower": 126,
           "auras": [
             {
               "duration": 3600,
