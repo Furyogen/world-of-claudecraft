@@ -12,8 +12,8 @@
 // recalcPlayerStats output so the numbers cannot silently drift.
 
 import { CLASSES } from '../sim/data';
-import { catFormAgiBonus, isFeralApForm, meleeApWeights } from '../sim/melee_ap';
 import { COMBAT_SPIRIT_REGEN_FRACTION, spiritRegenPer2s } from '../sim/mana_regen';
+import { catFormAgiBonus, isFeralApForm, meleeApWeights } from '../sim/melee_ap';
 import {
   type AuraKind,
   armorReduction,

@@ -52,7 +52,11 @@ const AP_TEST_WORLD: WorldContent = {
 
 // Forms are a 3600s toggle aura on the player (mirrors tests/form_swing.ts).
 function giveForm(sim: Sim, pid: number, kind: AuraKind, name: string): void {
-  sim.entities.get(pid)!.auras.push({
+  const ent = sim.entities.get(pid);
+  // Assert rather than optional-chain: a missing entity means the fixture is
+  // broken, and silently skipping the push would make every form case vacuous.
+  if (!ent) throw new Error(`no entity ${pid}`);
+  ent.auras.push({
     id: name.toLowerCase().replace(/\s+/g, '_'),
     name,
     kind,
