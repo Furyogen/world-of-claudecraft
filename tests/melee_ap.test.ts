@@ -216,6 +216,45 @@ describe('the character sheet reads the same conversion as the sim', () => {
   });
 });
 
+describe('nothing outside a feral form moved', () => {
+  // The regression proof for the whole change. Deliberately restates the
+  // PRE-CHANGE conversion as a literal expression instead of calling
+  // meleeApWeights, so it still fails if melee_ap.ts and entity.ts ever drift
+  // together (the constant-self-comparison trap a shared helper invites).
+  function apBeforeThisChange(cls: PlayerClass, str: number, agi: number): number {
+    if (cls === 'warrior' || cls === 'paladin' || cls === 'shaman' || cls === 'druid') {
+      return str * 2;
+    }
+    if (cls === 'rogue' || cls === 'hunter') return str + agi;
+    return str;
+  }
+
+  for (const cls of ALL_CLASSES) {
+    it(`${cls} out of form converts exactly as it did before`, () => {
+      for (const level of [1, 10, 20]) {
+        const sim = playerAt(cls, level);
+        const p = sim.player;
+        recalcPlayerStats(p, cls, {}, undefined, {});
+        expect(p.attackPower, `${cls} at level ${level}`).toBe(
+          apBeforeThisChange(cls, p.stats.str, p.stats.agi),
+        );
+      }
+    });
+  }
+
+  it('Travel Form and Moonwing Form are NOT feral and keep the caster line', () => {
+    // Only the two MELEE shapeshifts moved. A druid that shifts to run or to
+    // cast is still a caster-form druid for attack-power purposes.
+    for (const kind of ['form_travel', 'form_moonkin'] as const) {
+      const sim = playerAt('druid', 20);
+      const p = sim.player;
+      giveForm(sim, p.id, kind, kind);
+      recalcPlayerStats(p, 'druid', {}, undefined, {});
+      expect(p.attackPower, kind).toBe(apBeforeThisChange('druid', p.stats.str, p.stats.agi));
+    }
+  });
+});
+
 describe('feral gear carries Agility, not Strength', () => {
   // The other half of the fix: the druid-only two-handers were the feral
   // druid's ONLY Strength source, so leaving them on Strength after moving the
