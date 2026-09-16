@@ -167,10 +167,6 @@ export interface StatTooltipInput {
   /** Active auras contributing stats, for the per-buff source lines (HUD maps
    *  from the player's live auras, resolving each name). */
   buffs?: BuffStatSource[];
-  /** True while a druid holds a Wolf Form / Bruin Form aura, which switches its
-   *  melee attack-power conversion to the rogue line (src/sim/melee_ap.ts). The
-   *  HUD resolves it from the player's live auras; every other class ignores it. */
-  feralForm?: boolean;
 }
 
 // --- coefficients, mirroring src/sim/entity.ts recalcPlayerStats ------------
@@ -253,7 +249,7 @@ export function restingManaPer5s(spi: number, level: number): number {
  *  read the final entity values, so they stay correct under buffs. */
 export function buildStatTooltip(stat: StatId, input: StatTooltipInput): StatTooltipModel {
   const { cls, stats, level } = input;
-  const feralForm = resolveFeralForm(input);
+  const feralForm = resolveFeralForm(input.buffs ?? []);
   const mana = isManaClass(cls);
   const effects: StatEffect[] = [];
   let minorForClass = false;
@@ -426,12 +422,15 @@ function gearTotal(gear: GearStatSource[], key: keyof CoreStats | 'spellPower'):
 }
 
 /** Whether the character is in a druid feral form, which switches the melee
- *  attack-power conversion to the rogue line (src/sim/melee_ap.ts). Prefers the
- *  explicit `feralForm` input and otherwise reads the live aura list the HUD
- *  already passes, so both entry points agree without the caller doing the work. */
-function resolveFeralForm(input: StatTooltipInput): boolean {
-  if (input.feralForm !== undefined) return input.feralForm;
-  return (input.buffs ?? []).some((b) => isFeralApForm(b.kind));
+ *  attack-power conversion to the rogue line (src/sim/melee_ap.ts).
+ *
+ *  Read from the live aura list rather than taken as a separate input, on
+ *  purpose: the armor line below already resolves Cat Form from `buffs` the
+ *  same way, and a second, optional way to say the same thing is a second way
+ *  for the two lines to disagree. `buffs` is what the HUD passes
+ *  (src/ui/hud.ts maps every `p.auras` entry into it). */
+function resolveFeralForm(buffs: BuffStatSource[]): boolean {
+  return buffs.some((b) => isFeralApForm(b.kind));
 }
 
 /** Per-buff source lines for the auras whose kind feeds `key`, each with its
@@ -451,7 +450,7 @@ export function buildStatSources(stat: StatId, input: StatTooltipInput): StatSou
   const { cls, stats, level } = input;
   const gear = input.gear ?? [];
   const buffs = input.buffs ?? [];
-  const feralForm = resolveFeralForm(input);
+  const feralForm = resolveFeralForm(buffs);
   const sources: StatSource[] = [];
 
   // Append the reconciling remainder (label it talents/effects) unless it rounds

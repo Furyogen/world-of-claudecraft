@@ -5,14 +5,25 @@
 // Strength, so its whole armor set contributed zero attack power. Wolf Form and
 // Bruin Form now convert on the rogue line (str + agi) instead.
 //
-// Every numeric claim below is reconciled against the ONE place the sim derives
-// stats (recalcPlayerStats), never against the module's own constants, so the pin
-// fails if either side drifts.
+// Every behavioral claim is driven through the ONE place the sim derives stats
+// (recalcPlayerStats). Two kinds of assertion appear below, and they prove
+// different things:
+//   - LITERAL pins (the agility-probe deltas, the pre-change conversion written
+//     out by hand) are independent of melee_ap.ts and catch the two modules
+//     drifting TOGETHER.
+//   - The "reconciles with the module" pins compare recalcPlayerStats against
+//     the same helpers entity.ts calls, so they do NOT catch a shared drift;
+//     what they pin is the COMPOSITION ORDER inside recalcPlayerStats (the form
+//     agility bonus landing before the conversion, the flat bonus after).
+// Mutation-checked: reverting the class gate, the form predicate, the bear
+// coefficient, entity.ts's feral argument, or the cat-form agility bump each
+// turns this file red.
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_WORLD, ITEMS } from '../src/sim/data';
+import { BUILTIN_WORLD, CLASSES, ITEMS } from '../src/sim/data';
 import { recalcPlayerStats } from '../src/sim/entity';
 import {
   BEAR_FORM_AGI_AP_PER_POINT,
+  BEAR_FORM_FLAT_AP,
   bearFormBonusAp,
   catFormAgiBonus,
   catFormBonusAp,
@@ -180,25 +191,76 @@ describe("Bruin Form's Agility bridge does not double-count", () => {
   });
 
   it('preserves a geared Bruin Form total: re-sourced to Agility, not buffed', () => {
-    // The level-20 best-in-slot feral set this change was measured against: the
-    // highest-Agility leather piece in each armor slot plus the best two-hander.
-    // Both the FORMULA and the GEAR moved, so the honest comparison runs each
-    // side with its own, and that is what these two lines are.
-    const BASE_STR = 34; // level-20 druid class base
-    const BASE_AGI = 34;
-    const ARMOR_AGI = 75; // the seven best-Agility leather pieces, no weapon
-    // Before: the armor set, plus wildsoul_maul's 13 Strength / 9 Agility.
-    const beforeStr = BASE_STR + 13;
-    const beforeAgi = BASE_AGI + ARMOR_AGI + 9;
-    const before = beforeStr * 2 + 15 + Math.round(beforeAgi * 1.5);
-    // After: the same set, with the two-hander's Strength folded into Agility.
-    const afterStr = BASE_STR;
-    const afterAgi = BASE_AGI + ARMOR_AGI + 22;
-    const after =
-      meleeApFromAttributes('druid', true, afterStr, afterAgi) + bearFormBonusAp(afterAgi);
+    // The justification for 0.8, derived from the CONTENT TREE rather than
+    // hand-entered arithmetic, so it re-derives (and can fail) after a druid
+    // base-stat or leather-budget rebalance instead of freezing a stale claim.
+    const def = CLASSES.druid;
+    const lvl = 20;
+    const baseStr = def.baseStats.str + def.statsPerLevel.str * (lvl - 1);
+    const baseAgi = def.baseStats.agi + def.statsPerLevel.agi * (lvl - 1);
 
-    expect(before).toBe(286);
+    // The best-Agility leather piece in each armor slot: the set a level-20
+    // feral actually chases, read live from ITEMS.
+    const bestPerSlot = new Map<string, number>();
+    for (const item of Object.values(ITEMS)) {
+      if (item.kind !== 'armor' || item.armorType !== 'leather') continue;
+      const agi = item.stats?.agi ?? 0;
+      bestPerSlot.set(item.slot, Math.max(bestPerSlot.get(item.slot) ?? 0, agi));
+    }
+    const armorAgi = [...bestPerSlot.values()].reduce((a, b) => a + b, 0);
+    expect(armorAgi, 'the leather ladder should still carry real Agility').toBeGreaterThan(50);
+
+    // The top feral two-hander, before and after its Strength was folded in.
+    const maul = ITEMS.wildsoul_maul;
+    const weaponAgiAfter = maul.stats?.agi ?? 0;
+    const weaponPoints = weaponAgiAfter; // the fold was point-for-point
+    const weaponStrBefore = 13;
+    const weaponAgiBefore = weaponPoints - weaponStrBefore;
+
+    // Both the FORMULA and the GEAR moved, so each side runs with its own.
+    const before =
+      (baseStr + weaponStrBefore) * 2 +
+      BEAR_FORM_FLAT_AP +
+      Math.round((baseAgi + armorAgi + weaponAgiBefore) * 1.5);
+    const afterAgi = baseAgi + armorAgi + weaponAgiAfter;
+    const after =
+      meleeApFromAttributes('druid', true, baseStr, afterAgi) + bearFormBonusAp(afterAgi);
+
     expect(Math.abs(after - before) / before).toBeLessThan(0.02);
+  });
+
+  it('0.8 is the only coefficient that holds that total, to one decimal', () => {
+    // The band above is satisfied by a RANGE of coefficients, so pin the choice
+    // directly: sweep every 0.1 step and assert the shipped value is the one
+    // that lands closest to the pre-change total. This fails on 0.7 or 0.9.
+    const def = CLASSES.druid;
+    const lvl = 20;
+    const baseStr = def.baseStats.str + def.statsPerLevel.str * (lvl - 1);
+    const baseAgi = def.baseStats.agi + def.statsPerLevel.agi * (lvl - 1);
+    const bestPerSlot = new Map<string, number>();
+    for (const item of Object.values(ITEMS)) {
+      if (item.kind !== 'armor' || item.armorType !== 'leather') continue;
+      bestPerSlot.set(item.slot, Math.max(bestPerSlot.get(item.slot) ?? 0, item.stats?.agi ?? 0));
+    }
+    const armorAgi = [...bestPerSlot.values()].reduce((a, b) => a + b, 0);
+    const weaponPoints = ITEMS.wildsoul_maul.stats?.agi ?? 0;
+    const before =
+      (baseStr + 13) * 2 +
+      BEAR_FORM_FLAT_AP +
+      Math.round((baseAgi + armorAgi + weaponPoints - 13) * 1.5);
+    const afterAgi = baseAgi + armorAgi + weaponPoints;
+    const flat = meleeApFromAttributes('druid', true, baseStr, afterAgi) + BEAR_FORM_FLAT_AP;
+
+    let best = 0;
+    let bestErr = Number.POSITIVE_INFINITY;
+    for (let c = 1; c <= 20; c++) {
+      const err = Math.abs(flat + Math.round(afterAgi * (c / 10)) - before);
+      if (err < bestErr) {
+        bestErr = err;
+        best = c / 10;
+      }
+    }
+    expect(best).toBe(BEAR_FORM_AGI_AP_PER_POINT);
   });
 });
 
@@ -279,9 +341,37 @@ describe('feral gear carries Agility, not Strength', () => {
     });
   }
 
-  it('leaves no druid-equippable Strength on the feral ladder', () => {
-    for (const id of FERAL_TWO_HANDERS) {
-      expect(ITEMS[id].stats?.str ?? 0).toBe(0);
+  it('no leather piece carries Strength, the premise the whole change rests on', () => {
+    // The scan the fix is predicated on, run over the LIVE table rather than a
+    // hand-list: leather is the feral druid's armor class, so a Strength leather
+    // piece would be attack power the conversion silently halves. If one is ever
+    // authored, this is the test that should stop it.
+    const offenders: string[] = [];
+    let leatherSeen = 0;
+    for (const [id, item] of Object.entries(ITEMS)) {
+      if (item.kind !== 'armor' || item.armorType !== 'leather') continue;
+      leatherSeen++;
+      if ((item.stats?.str ?? 0) > 0) offenders.push(id);
+    }
+    expect(leatherSeen, 'the leather ladder should not have vanished').toBeGreaterThan(50);
+    expect(offenders).toEqual([]);
+  });
+
+  it('documents the Strength a feral druid can still reach, so the nerf is deliberate', () => {
+    // Class-NEUTRAL items (jewelry, cloth, generic one-handers) are shared with
+    // the Strength classes, so this change deliberately did NOT convert them: a
+    // feral druid that wears one now gets 1 attack power per Strength instead of
+    // 2. That is a known, accepted consequence rather than an oversight, and
+    // this pin makes the set visible so it is re-decided rather than forgotten.
+    const stillStrength = Object.entries(ITEMS)
+      .filter(([, i]) => (i.stats?.str ?? 0) > 0 && i.armorType !== 'leather')
+      .filter(([, i]) => !i.requiredClass || i.requiredClass.includes('druid'))
+      .map(([id]) => id);
+    // None of them is druid-ONLY: every remaining Strength item a druid can wear
+    // is shared content, which is exactly why it was left alone.
+    for (const id of stillStrength) {
+      const req = ITEMS[id].requiredClass;
+      expect(req, `${id} is druid-only and should have been converted`).not.toEqual(['druid']);
     }
   });
 });

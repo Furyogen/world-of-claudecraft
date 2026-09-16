@@ -84,9 +84,15 @@ export const BEAR_FORM_FLAT_AP = 15;
  *  class can actually wear instead of on innate Strength. */
 export const BEAR_FORM_AGI_AP_PER_POINT = 0.8;
 
-/** Bruin Form's attack-power bonus for a given (fully summed) Agility. */
+/** Bruin Form's attack-power bonus for a given (fully summed) Agility.
+ *
+ *  `agi` is expected already floored at 0, which `recalcPlayerStats` does one
+ *  step before it reaches here. Deliberately no clamp of its own: this is a
+ *  move of the expression that used to sit inline in entity.ts, and adding
+ *  defensive handling for a case the one caller cannot produce would make the
+ *  extraction a rewrite and imply negatives are handled somewhere. */
 export function bearFormBonusAp(agi: number): number {
-  return BEAR_FORM_FLAT_AP + Math.round(Math.max(0, agi) * BEAR_FORM_AGI_AP_PER_POINT);
+  return BEAR_FORM_FLAT_AP + Math.round(agi * BEAR_FORM_AGI_AP_PER_POINT);
 }
 
 /** Wolf Form's attack-power bonus: flat and level-scaled, never stat-scaled
