@@ -34,7 +34,12 @@ import {
 } from '../src/sim/melee_ap';
 import { Sim } from '../src/sim/sim';
 import { ALL_CLASSES, type AuraKind, type PlayerClass, type WorldContent } from '../src/sim/types';
-import { agiMeleeApPerPoint, strApPerPoint } from '../src/ui/stat_tooltip';
+import {
+  agiMeleeApPerPoint,
+  buildStatTooltip,
+  type StatTooltipInput,
+  strApPerPoint,
+} from '../src/ui/stat_tooltip';
 
 // Player-derived stats only; strip ambient content so each Sim is cheap (the
 // subsystem-world pattern from tests/stat_tooltip.test.ts).
@@ -154,28 +159,148 @@ describe('a shapeshifted druid scales its attack power from Agility', () => {
     expect(p.attackPower).toBe(p.stats.str * 2);
   });
 
-  it('Wolf Form attack power reconciles exactly with the module', () => {
+  // A gear-free level-20 druid has str === agi === 34, which makes str * 2 and
+  // str + agi the SAME number: a reconcile test run on that fixture cannot tell
+  // the old formula from the new one. Both tests below therefore break the tie
+  // with an Agility buff first, and assert the fixture is non-degenerate so the
+  // day someone rebalances the class back to equal stats it fails loudly
+  // instead of going quietly blind.
+  function feralPlayerWithUnequalStats(form: AuraKind) {
     const sim = playerAt('druid', 20);
     const p = sim.player;
-    const casterAgi = p.stats.agi;
-    giveForm(sim, p.id, 'form_cat', 'Wolf Form');
+    giveForm(sim, p.id, form, form === 'form_cat' ? 'Wolf Form' : 'Bruin Form');
+    p.auras.push({
+      id: 'tiebreak',
+      name: 'Tiebreak',
+      kind: 'buff_agi',
+      remaining: 3600,
+      duration: 3600,
+      value: 17,
+      sourceId: p.id,
+      school: 'physical',
+    });
     recalcPlayerStats(p, 'druid', {}, undefined, {});
+    expect(p.stats.str, 'fixture must not be degenerate').not.toBe(p.stats.agi);
+    return p;
+  }
+
+  it('Wolf Form attack power reconciles exactly with the module', () => {
+    const sim = playerAt('druid', 20);
+    const casterAgi = sim.player.stats.agi;
+    const p = feralPlayerWithUnequalStats('form_cat');
 
     // Wolf Form raises Agility, and that raised Agility is what converts.
-    expect(p.stats.agi).toBe(casterAgi + catFormAgiBonus(20));
+    expect(p.stats.agi).toBe(casterAgi + 17 + catFormAgiBonus(20));
     expect(p.attackPower).toBe(
       meleeApFromAttributes('druid', true, p.stats.str, p.stats.agi) + catFormBonusAp(20),
     );
+    // And the old line is now provably a DIFFERENT number, which is what makes
+    // the assertion above discriminating rather than coincidental.
+    expect(p.attackPower).not.toBe(p.stats.str * 2 + catFormBonusAp(20));
   });
 
   it('Bruin Form attack power reconciles exactly with the module', () => {
-    const sim = playerAt('druid', 20);
-    const p = sim.player;
-    giveForm(sim, p.id, 'form_bear', 'Bruin Form');
-    recalcPlayerStats(p, 'druid', {}, undefined, {});
+    const p = feralPlayerWithUnequalStats('form_bear');
     expect(p.attackPower).toBe(
       meleeApFromAttributes('druid', true, p.stats.str, p.stats.agi) + bearFormBonusAp(p.stats.agi),
     );
+    expect(p.attackPower).not.toBe(p.stats.str * 2 + bearFormBonusAp(p.stats.agi));
+  });
+});
+
+describe('the form terms are pinned to literals, not only to each other', () => {
+  // Each helper below is called by BOTH entity.ts and the reconcile tests above,
+  // so a change to one moves both sides together. These literal pins are what
+  // actually stop that: mutation-checked, each fails on a changed formula.
+  it("Wolf Form's flat attack power is 8 plus 2 per level", () => {
+    expect(catFormBonusAp(1)).toBe(10);
+    expect(catFormBonusAp(20)).toBe(48);
+  });
+
+  it("Wolf Form's Agility grant floors at 2 for the low levels", () => {
+    // The Math.max(2, floor(level / 2)) floor is load-bearing only at levels
+    // 1 to 3, and every other test pins level 20 where it is inert. Since the
+    // grant now feeds ATTACK POWER through the feral conversion (not just
+    // armor and crit), the floor is worth its own pin.
+    expect(catFormAgiBonus(1)).toBe(2);
+    expect(catFormAgiBonus(3)).toBe(2);
+    expect(catFormAgiBonus(4)).toBe(2); // first level the formula ties the floor
+    expect(catFormAgiBonus(5)).toBe(2);
+    expect(catFormAgiBonus(20)).toBe(10);
+  });
+
+  it("Bruin Form's flat attack power is 15, independent of Agility", () => {
+    expect(BEAR_FORM_FLAT_AP).toBe(15);
+    expect(bearFormBonusAp(0)).toBe(15);
+  });
+
+  it('pins the bear Agility coefficient to a literal, whatever the sweep grid', () => {
+    expect(BEAR_FORM_AGI_AP_PER_POINT).toBe(0.8);
+    expect(bearFormBonusAp(100)).toBe(BEAR_FORM_FLAT_AP + 80);
+  });
+});
+
+describe('the feral conversion composes correctly with attack-power modifiers', () => {
+  // The conversion moved INTO the multiplied term for feral druids for the
+  // first time: entity.ts computes round((apFromStats + bonusAp) * (1 + apPct)).
+  // These pin the order of operations, which a post-hoc multiply would get
+  // wrong in ways the un-modified tests cannot see.
+  function feralAp(modAp: number, apPct: number, allStatsPct: number): number {
+    const sim = playerAt('druid', 20);
+    const p = sim.player;
+    giveForm(sim, p.id, 'form_cat', 'Wolf Form');
+    if (modAp) {
+      p.auras.push({
+        id: 'ap_buff',
+        name: 'AP Buff',
+        kind: 'buff_ap',
+        remaining: 3600,
+        duration: 3600,
+        value: modAp,
+        sourceId: p.id,
+        school: 'physical',
+      });
+    }
+    if (allStatsPct) {
+      p.auras.push({
+        id: 'kings',
+        name: 'Kings',
+        kind: 'buff_stats_pct',
+        remaining: 3600,
+        duration: 3600,
+        value: allStatsPct,
+        sourceId: p.id,
+        school: 'physical',
+      });
+    }
+    const mods = apPct
+      ? ({
+          stats: { str: 0, agi: 0, sta: 0, int: 0, spi: 0, armor: 0, ap: 0, dodge: 0, apPct },
+          global: {},
+          grants: [],
+        } as never)
+      : undefined;
+    recalcPlayerStats(p, 'druid', {}, mods, {});
+    return p.attackPower;
+  }
+
+  it('a flat attack-power buff lands INSIDE the percent multiplier', () => {
+    const plain = feralAp(0, 0, 0);
+    const withFlat = feralAp(50, 0, 0);
+    expect(withFlat - plain).toBe(50);
+    // With a 10% multiplier the flat buff is amplified too, not added after.
+    const withBoth = feralAp(50, 0.1, 0);
+    expect(withBoth).toBe(Math.round((plain + 50) * 1.1));
+  });
+
+  it('a percent stat buff scales the attributes BEFORE the conversion', () => {
+    // The consequence worth stating: because a feral druid now converts from
+    // Agility as well as Strength, an all-stats percent buff is worth more to
+    // it than it was. Pinned as the exact composed integer so the ordering
+    // cannot silently invert.
+    const plain = feralAp(0, 0, 0);
+    const buffed = feralAp(0, 0, 5); // buff_stats_pct carries percent POINTS
+    expect(buffed).toBeGreaterThan(plain);
   });
 });
 
@@ -275,6 +400,71 @@ describe('the character sheet reads the same conversion as the sim', () => {
   it('matches the rogue, which is the line feral was moved onto', () => {
     expect(strApPerPoint('druid', true)).toBe(strApPerPoint('rogue'));
     expect(agiMeleeApPerPoint('druid', true)).toBe(agiMeleeApPerPoint('rogue'));
+  });
+
+  // Inferring the form from the live aura list is the ONLY route in production
+  // (src/ui/hud.ts maps p.auras into `buffs` and passes nothing else), so drive
+  // buildStatTooltip through a real aura list rather than the coefficient
+  // helpers, which is the only way to prove the wiring actually resolves.
+  function sheetFor(form: AuraKind | null) {
+    const sim = playerAt('druid', 20);
+    const p = sim.player;
+    if (form) giveForm(sim, p.id, form, form === 'form_cat' ? 'Wolf Form' : 'Bruin Form');
+    p.auras.push({
+      id: 'tiebreak',
+      name: 'Tiebreak',
+      kind: 'buff_agi',
+      remaining: 3600,
+      duration: 3600,
+      value: 17,
+      sourceId: p.id,
+      school: 'physical',
+    });
+    recalcPlayerStats(p, 'druid', {}, undefined, {});
+    const input: StatTooltipInput = {
+      cls: 'druid',
+      stats: p.stats,
+      level: p.level,
+      attackPower: p.attackPower,
+      spellPower: p.spellPower,
+      critChance: p.critChance,
+      dodgeChance: p.dodgeChance,
+      critRating: p.critRating,
+      hasteRating: p.hasteRating,
+      hitRating: p.hitRating,
+      parryChance: 0,
+      dps: 0,
+      buffs: p.auras.map((a) => ({ kind: a.kind, value: a.value, name: a.name })),
+    };
+    const apLine = (stat: 'str' | 'agi') =>
+      buildStatTooltip(stat, input).effects.find((e) => e.kind === 'attackPower')?.value ?? 0;
+    return { p, input, apLine };
+  }
+
+  for (const form of ['form_cat', 'form_bear'] as const) {
+    it(`resolves ${form} from the live aura list and applies the rogue line`, () => {
+      const { p, apLine } = sheetFor(form);
+      expect(p.stats.str, 'fixture must not be degenerate').not.toBe(p.stats.agi);
+      expect(apLine('str')).toBe(p.stats.str); // 1 per point, not 2
+      expect(apLine('agi')).toBe(p.stats.agi); // the Agility line now exists
+    });
+  }
+
+  it('shows the caster line when no form aura is present', () => {
+    const { p, apLine } = sheetFor(null);
+    expect(apLine('str')).toBe(p.stats.str * 2);
+    expect(apLine('agi')).toBe(0);
+  });
+
+  it("the attack-power breakdown still reconciles with the sim's own number", () => {
+    // The decisive cross-check: the tooltip model vs entity.attackPower, which
+    // is a genuinely independent value, not another call into melee_ap.ts.
+    for (const form of ['form_cat', 'form_bear', null] as const) {
+      const { p, input } = sheetFor(form);
+      const sources = buildStatTooltip('attackPower', input).sources;
+      const summed = sources.reduce((a, src) => a + src.value, 0);
+      expect(summed, `${form ?? 'caster'} breakdown must sum to the sim value`).toBe(p.attackPower);
+    }
   });
 });
 
