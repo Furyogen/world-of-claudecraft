@@ -83,13 +83,20 @@ export const BEAR_FORM_FLAT_AP = 15;
  *  the old 1.5 coefficient would double-count it and hand the TANK form 2.5
  *  attack power per Agility against Wolf Form's 1.0.
  *
- *  Retuned to 0.8, calibrated on the AGILITY leather line, which is the line
- *  this change re-points feral at: a level-20 best-in-slot Agility-geared bear
- *  lands within about 1% of its pre-change attack power (pinned in
- *  tests/melee_ap.test.ts). A bear still wearing the druid-only STRENGTH leather
- *  comes out roughly a third lower, and no coefficient recovers that, because
- *  devaluing the Strength line is what this change does on purpose. */
-export const BEAR_FORM_AGI_AP_PER_POINT = 0.8;
+ *  DERIVED, not picked. Holding Bruin Form's attack power unchanged means
+ *  solving `str + agi + C*agi == 2*str + 1.5*agi`, i.e. `C = str/agi + 0.5`.
+ *  That value depends on the gear's Strength-to-Agility MIX, so no single
+ *  coefficient is neutral for every kit; it is calibrated here on the pinned
+ *  level-20 reference loadout in tests/druid_balance_probe.ts, which is the
+ *  balance contract the probes measure (bear-form str 83, agi 107, giving
+ *  C = 1.276). Rounded to the clean quarter 1.25, a reference-geared bear lands
+ *  at 373 attack power against 376 before the change, inside 1%.
+ *
+ *  The consequence to be honest about: a bear in the druid-only STRENGTH
+ *  leather has a higher str/agi ratio, so it still comes out lower, and one
+ *  wearing pure Agility leather comes out higher. That spread is the
+ *  devaluation this change makes on purpose, not a tuning miss. */
+export const BEAR_FORM_AGI_AP_PER_POINT = 1.25;
 
 /** Bruin Form's attack-power bonus for a given (fully summed) Agility.
  *

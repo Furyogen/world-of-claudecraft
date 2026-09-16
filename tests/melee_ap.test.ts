@@ -239,8 +239,8 @@ describe('the form terms are pinned to literals, not only to each other', () => 
   });
 
   it('pins the bear Agility coefficient to a literal, whatever the sweep grid', () => {
-    expect(BEAR_FORM_AGI_AP_PER_POINT).toBe(0.8);
-    expect(bearFormBonusAp(100)).toBe(BEAR_FORM_FLAT_AP + 80);
+    expect(BEAR_FORM_AGI_AP_PER_POINT).toBe(1.25);
+    expect(bearFormBonusAp(100)).toBe(BEAR_FORM_FLAT_AP + 125);
   });
 });
 
@@ -311,85 +311,133 @@ describe('the feral conversion composes correctly with attack-power modifiers', 
 describe("Bruin Form's Agility bridge does not double-count", () => {
   // The retune this change had to make: the old 1.5 bridge existed BECAUSE the
   // druid had no Agility conversion. Left alone alongside the new conversion it
-  // would hand the TANK form 2.5 attack power per Agility against Wolf Form's
-  // 1.0. Pinned as a relationship, not a magic number.
-  it('keeps the bridge below the Wolf Form total per point of Agility', () => {
+  // would hand Bruin Form 2.5 attack power per Agility.
+  //
+  // The reference this block calibrates against is the PINNED level-20 feral
+  // loadout from tests/druid_balance_probe.ts, not a best-Agility kit. That
+  // matters: the pinned kit is MIXED (Bramblehide Strength helm and boots plus
+  // Strength jewelry over the Ashveil Agility set), and the neutral coefficient
+  // solves to str/agi + 0.5, so it moves with the kit's ratio. Calibrating on a
+  // pure-Agility kit gives 0.8 and cuts a reference-geared bear by 15%, which
+  // is exactly what the balance probes caught.
+  // The pinned level-20 feral loadout, slot for slot, mirroring the identity pin
+  // in tests/druid_balance_probe.ts. Kept as an explicit map rather than a list
+  // of ids because two of the pieces are rings.
+  const REFERENCE_FERAL_SLOTS: Record<string, string> = {
+    mainhand: 'wand_of_quenched_sparks',
+    helmet: 'heroic_bramblehide_crown',
+    neck: 'ignivars_ember_choker',
+    shoulder: 'ashveil_shoulder',
+    chest: 'ashveil_chest',
+    waist: 'cinderbark_cinch',
+    legs: 'ashveil_legs',
+    gloves: 'ashveil_gloves',
+    feet: 'heroic_bramblehide_treads',
+    ring1: 'band_of_marked_strikes',
+    ring2: 'seal_of_the_forgewall',
+  };
+  const bearAura = (sourceId: number) => ({
+    id: 'form_bear',
+    name: 'Bruin Form',
+    kind: 'form_bear' as const,
+    remaining: 3600,
+    duration: 3600,
+    value: 1,
+    sourceId,
+    school: 'physical' as const,
+  });
+
+  // Read the attributes off a REAL Sim wearing that kit, never re-derived from
+  // CLASSES + ITEMS by hand: the kit carries an Ashveil set bonus (+10 Strength
+  // at this piece count), so a hand sum reads 73 Strength where the sim reads
+  // 83, and calibrating on the hand sum misses the coefficient by a quarter.
+  // recalcPlayerStats stays the one source of truth for what a druid's
+  // attributes ARE; this block only decides what to do with them.
+  function referenceBearAttributes(): { str: number; agi: number } {
+    const sim = new Sim({ seed: 29_904, playerClass: 'druid', autoEquip: true });
+    sim.setPlayerLevel(20);
+    expect(sim.applyTalents({ spec: 'feral', rows: {} })).toBe(true);
+    const player = sim.player;
+    const meta = sim.meta(player.id);
+    expect(meta).toBeDefined();
+    if (!meta) throw new Error('missing druid metadata');
+
+    const equipment = meta.equipment as Record<string, string>;
+    for (const slot of Object.keys(equipment)) delete equipment[slot];
+    for (const [slot, id] of Object.entries(REFERENCE_FERAL_SLOTS)) {
+      expect(ITEMS[id], `reference kit item ${id} must still exist`).toBeDefined();
+      equipment[slot] = id;
+    }
+
+    player.auras.length = 0;
+    player.auras.push(bearAura(player.id));
+    recalcPlayerStats(player, meta.cls, equipment, meta.talentMods, meta.equipmentInstance);
+    return { str: player.stats.str, agi: player.stats.agi };
+  }
+
+  it('states the marginal Agility rate honestly, tank form included', () => {
+    // 1.0 from the conversion plus the bridge. This is ABOVE Wolf Form's 1.0
+    // per point, and that is not an oversight: holding Bruin Form's total power
+    // steady while its Strength conversion is halved (2/point to 1/point) is
+    // only payable out of Agility, so the tank form's MARGINAL Agility value
+    // has to rise. Reviewers who object to that are objecting to the trade this
+    // PR makes, which is the intended conversation, so pin it in the open
+    // rather than hiding it behind a "below Wolf Form" inequality that the old
+    // 0.8 satisfied only by cutting bear's power.
     const perAgiInBear = meleeApWeights('druid', true).agi + BEAR_FORM_AGI_AP_PER_POINT;
-    expect(perAgiInBear).toBeLessThan(2);
-    expect(BEAR_FORM_AGI_AP_PER_POINT).toBeLessThan(1.5);
+    expect(perAgiInBear).toBe(2.25);
+    expect(perAgiInBear).toBeGreaterThan(meleeApWeights('druid', true).agi);
+    // Still strictly below the 2.5 the un-retuned 1.5 bridge would have given.
+    expect(perAgiInBear).toBeLessThan(1 + 1.5);
   });
 
-  it('preserves a geared Bruin Form total: re-sourced to Agility, not buffed', () => {
-    // The justification for 0.8, derived from the CONTENT TREE rather than
-    // hand-entered arithmetic, so it re-derives (and can fail) after a druid
-    // base-stat or leather-budget rebalance instead of freezing a stale claim.
-    const def = CLASSES.druid;
-    const lvl = 20;
-    const baseStr = def.baseStats.str + def.statsPerLevel.str * (lvl - 1);
-    const baseAgi = def.baseStats.agi + def.statsPerLevel.agi * (lvl - 1);
+  it('preserves a reference-geared Bruin Form total: re-sourced, not buffed', () => {
+    const { str, agi } = referenceBearAttributes();
+    expect(agi, 'the reference kit should still carry real Agility').toBeGreaterThan(50);
+    expect(str, 'and real Strength, which is what makes it a MIXED kit').toBeGreaterThan(50);
 
-    // The best-Agility leather piece in each armor slot: the set a level-20
-    // feral actually chases, read live from ITEMS.
-    const bestPerSlot = new Map<string, number>();
-    for (const item of Object.values(ITEMS)) {
-      if (item.kind !== 'armor' || item.armorType !== 'leather') continue;
-      const agi = item.stats?.agi ?? 0;
-      bestPerSlot.set(item.slot, Math.max(bestPerSlot.get(item.slot) ?? 0, agi));
-    }
-    const armorAgi = [...bestPerSlot.values()].reduce((a, b) => a + b, 0);
-    expect(armorAgi, 'the leather ladder should still carry real Agility').toBeGreaterThan(50);
+    const before = str * 2 + BEAR_FORM_FLAT_AP + Math.round(agi * 1.5);
+    const after = meleeApFromAttributes('druid', true, str, agi) + bearFormBonusAp(agi);
 
-    // The top feral two-hander, before and after its Strength was folded in.
-    const maul = ITEMS.wildsoul_maul;
-    const weaponAgiAfter = maul.stats?.agi ?? 0;
-    const weaponPoints = weaponAgiAfter; // the fold was point-for-point
-    const weaponStrBefore = 13;
-    const weaponAgiBefore = weaponPoints - weaponStrBefore;
-
-    // Both the FORMULA and the GEAR moved, so each side runs with its own.
-    const before =
-      (baseStr + weaponStrBefore) * 2 +
-      BEAR_FORM_FLAT_AP +
-      Math.round((baseAgi + armorAgi + weaponAgiBefore) * 1.5);
-    const afterAgi = baseAgi + armorAgi + weaponAgiAfter;
-    const after =
-      meleeApFromAttributes('druid', true, baseStr, afterAgi) + bearFormBonusAp(afterAgi);
-
-    expect(Math.abs(after - before) / before).toBeLessThan(0.02);
+    expect(Math.abs(after - before) / before).toBeLessThan(0.01);
   });
 
-  it('0.8 is the only coefficient that holds that total, to one decimal', () => {
+  it('1.25 is the closest quarter-step coefficient to that total', () => {
     // The band above is satisfied by a RANGE of coefficients, so pin the choice
-    // directly: sweep every 0.1 step and assert the shipped value is the one
-    // that lands closest to the pre-change total. This fails on 0.7 or 0.9.
-    const def = CLASSES.druid;
-    const lvl = 20;
-    const baseStr = def.baseStats.str + def.statsPerLevel.str * (lvl - 1);
-    const baseAgi = def.baseStats.agi + def.statsPerLevel.agi * (lvl - 1);
-    const bestPerSlot = new Map<string, number>();
-    for (const item of Object.values(ITEMS)) {
-      if (item.kind !== 'armor' || item.armorType !== 'leather') continue;
-      bestPerSlot.set(item.slot, Math.max(bestPerSlot.get(item.slot) ?? 0, item.stats?.agi ?? 0));
-    }
-    const armorAgi = [...bestPerSlot.values()].reduce((a, b) => a + b, 0);
-    const weaponPoints = ITEMS.wildsoul_maul.stats?.agi ?? 0;
-    const before =
-      (baseStr + 13) * 2 +
-      BEAR_FORM_FLAT_AP +
-      Math.round((baseAgi + armorAgi + weaponPoints - 13) * 1.5);
-    const afterAgi = baseAgi + armorAgi + weaponPoints;
-    const flat = meleeApFromAttributes('druid', true, baseStr, afterAgi) + BEAR_FORM_FLAT_AP;
+    // directly: sweep every 0.25 step and assert the shipped value lands
+    // closest to the pre-change total. This fails on 1.0 or 1.5.
+    const { str, agi } = referenceBearAttributes();
+    const before = str * 2 + BEAR_FORM_FLAT_AP + Math.round(agi * 1.5);
+    const flat = meleeApFromAttributes('druid', true, str, agi) + BEAR_FORM_FLAT_AP;
 
     let best = 0;
     let bestErr = Number.POSITIVE_INFINITY;
-    for (let c = 1; c <= 20; c++) {
-      const err = Math.abs(flat + Math.round(afterAgi * (c / 10)) - before);
+    for (let step = 1; step <= 12; step++) {
+      const c = step / 4;
+      const err = Math.abs(flat + Math.round(agi * c) - before);
       if (err < bestErr) {
         bestErr = err;
-        best = c / 10;
+        best = c;
       }
     }
     expect(best).toBe(BEAR_FORM_AGI_AP_PER_POINT);
+  });
+
+  it('shows the coefficient is kit-dependent, which is the tradeoff to review', () => {
+    // The closed-form neutral point is C = str/agi + 0.5. A Strength-heavy kit
+    // therefore wants a HIGHER coefficient than a pure-Agility one, so no single
+    // shipped value is neutral everywhere. Pin the spread so the PR's claim is
+    // checkable rather than asserted.
+    const neutral = (str: number, agi: number) => str / agi + 0.5;
+    const { str, agi } = referenceBearAttributes();
+    const mixed = neutral(str, agi);
+    const agiHeavy = neutral(str, agi * 2);
+    const strHeavy = neutral(str * 2, agi);
+
+    expect(agiHeavy).toBeLessThan(mixed);
+    expect(strHeavy).toBeGreaterThan(mixed);
+    // The shipped value sits on the mixed reference kit, by construction.
+    expect(Math.abs(mixed - BEAR_FORM_AGI_AP_PER_POINT)).toBeLessThan(0.05);
   });
 });
 
