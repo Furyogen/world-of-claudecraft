@@ -12183,7 +12183,7 @@ export const en: EnTranslations = {
       },
       "barkskin": {
         "name": "Oakhide",
-        "description": "Your skin hardens like bark, increasing armor by 25% for 15 sec."
+        "description": "Your skin hardens like bark, increasing armor by 20% for 15 sec."
       },
       "sacred_bulwark": {
         "name": "Sacred Bulwark",

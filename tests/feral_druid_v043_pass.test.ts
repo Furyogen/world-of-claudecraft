@@ -583,13 +583,13 @@ describe('6. Oakhide grants a percentage of armor, not a flat amount', () => {
     expect(buff.type).toBe('selfBuff');
     if (buff.type !== 'selfBuff') throw new Error('unreachable');
     expect(buff.kind).toBe('buff_armor_pct');
-    expect(buff.value).toBe(25);
+    expect(buff.value).toBe(20);
     expect(buff.duration).toBe(15);
     // The flat arm is gone: nothing here still adds a constant.
     expect(effects.some((e) => e.type === 'selfBuff' && e.kind === 'buff_armor')).toBe(false);
   });
 
-  it('raises armor by 25% of what the druid actually has', () => {
+  it('raises armor by 20% of what the druid actually has', () => {
     const { sim, player } = rig('feral');
     const before = player.stats.armor;
     expect(before).toBeGreaterThan(0);
@@ -598,7 +598,7 @@ describe('6. Oakhide grants a percentage of armor, not a flat amount', () => {
     for (let tick = 0; tick < 3; tick++) sim.tick();
 
     expect(player.auras.some((a) => a.kind === 'buff_armor_pct')).toBe(true);
-    expect(player.stats.armor).toBe(Math.round(before * 1.25));
+    expect(player.stats.armor).toBe(Math.round(before * 1.2));
   });
 
   it('scales with the form multiplier, which a flat buff could not do', () => {
@@ -620,8 +620,8 @@ describe('6. Oakhide grants a percentage of armor, not a flat amount', () => {
 
     expect(bearGain).toBeGreaterThan(casterGain);
     // Both are the same 25% of their own pool.
-    expect(bearGain).toBe(Math.round(bearBase * 1.25) - bearBase);
-    expect(casterGain).toBe(Math.round(casterBase * 1.25) - casterBase);
+    expect(bearGain).toBe(Math.round(bearBase * 1.2) - bearBase);
+    expect(casterGain).toBe(Math.round(casterBase * 1.2) - casterBase);
   });
 
   it('falls off cleanly, restoring the original armor', () => {
@@ -749,7 +749,9 @@ describe("8. Gripping Roots rides the Nature's Boon window", () => {
     expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
   });
 
-  it('the 10 sec window outlives its 1.5 sec cast, which bills at completion', () => {
+  it('is authored with a cast time that the armed window removes', () => {
+    // The authored bar stays 1.5 sec: the window makes it instant at cast time
+    // (combat/casting_lifecycle.ts), it does not retune the ability.
     expect(ABILITIES.entangling_roots.castTime).toBe(1.5);
     expect(NATURES_BOON_DURATION).toBeGreaterThan(ABILITIES.entangling_roots.castTime);
   });
@@ -849,5 +851,79 @@ describe('10. The action bar shows a golden rim while the window is armed', () =
     expect(css).toMatch(/forced-colors: active\)[\s\S]*?\.action-btn\.natures-boon/);
     const tokens = readFileSync('src/styles/tokens.css', 'utf8');
     expect(tokens).toContain('--glow-action-natures-boon:');
+  });
+});
+
+describe('11. The window makes its spell instant, and the rushes are off the GCD', () => {
+  it('Gripping Roots goes off on the press while armed, with no cast bar', () => {
+    const { sim, player } = rig('feral');
+    player.auras.push(formAura(player, 'form_cat'));
+    const mob = spawnMob(sim, 6);
+    armBoon(sim);
+
+    sim.castAbility('entangling_roots');
+    // No cast bar was ever raised: that is what instant means here, and a 1.5
+    // sec authored cast could not satisfy it.
+    expect(player.castingAbility).toBeNull();
+    // Well inside the 1.5 sec (30 ticks) the authored bar would have taken.
+    for (let tick = 0; tick < 10; tick++) sim.tick();
+
+    expect(mob.auras.some((a) => a.kind === 'root')).toBe(true);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+  });
+
+  it('still raises a real cast bar with no window armed', () => {
+    const { sim, player } = rig('feral');
+    const mob = spawnMob(sim, 6);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+
+    sim.castAbility('entangling_roots');
+    sim.tick();
+
+    // The authored 1.5 sec bar is running, and nothing has landed yet.
+    expect(player.castingAbility).toBe('entangling_roots');
+    expect(mob.auras.some((a) => a.kind === 'root')).toBe(false);
+  });
+
+  it('Lunge and Bruin Rush are both off the global cooldown', () => {
+    expect(ABILITIES.lunge.offGcd).toBe(true);
+    expect(ABILITIES.bear_charge.offGcd).toBe(true);
+    // Stalk deliberately stays ON the GCD: it is an opener, not a gap closer.
+    expect(ABILITIES.prowl.offGcd).toBeUndefined();
+  });
+
+  it('a Lunge leaves the GCD clear, so a strike can follow immediately', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    const mob = spawnMob(sim, 10);
+    player.resource = player.maxResource;
+    expect(player.gcdRemaining).toBe(0);
+
+    sim.castAbility('pounce');
+    for (let tick = 0; tick < 40; tick++) sim.tick();
+
+    // The gap closer ran without arming the global cooldown.
+    expect(player.gcdRemaining).toBe(0);
+    // And the follow-up strike lands rather than being swallowed by a GCD.
+    player.resource = player.maxResource;
+    const hpBefore = mob.hp;
+    sim.castAbility('claw');
+    for (let tick = 0; tick < 6; tick++) sim.tick();
+    expect(mob.hp).toBeLessThan(hpBefore);
+  });
+
+  it('Oakhide Reflex lands on exactly 30% armor', () => {
+    // The row 8 talent reads "50% more armor"; 20 base is chosen so that is 30.
+    const { sim, player } = rig('feral');
+    expect(sim.applyTalents({ spec: 'feral', rows: { 8: 'dru_r8_typhoon' } })).toBe(true);
+    player.resource = player.maxResource;
+    const before = player.stats.armor;
+
+    sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) sim.tick();
+
+    const buff = player.auras.find((a) => a.kind === 'buff_armor_pct');
+    expect(buff?.value).toBe(30);
+    expect(player.stats.armor).toBe(Math.round(before * 1.3));
   });
 });

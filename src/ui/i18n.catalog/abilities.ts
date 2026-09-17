@@ -1232,7 +1232,7 @@ const classAbilityNamesEn = {
         'Heals a friendly target for {damage} and an additional amount over 21 sec.',
         { restoration: 'Planting a NEW bloom adds 1 Verdance (max 5).' },
       ],
-      ['barkskin', 'Oakhide', 'Your skin hardens like bark, increasing armor by 25% for 15 sec.'],
+      ['barkskin', 'Oakhide', 'Your skin hardens like bark, increasing armor by 20% for 15 sec.'],
       // Tank defensive cooldowns (paladin / druid), one distinct mechanic each.
       [
         'sacred_bulwark',

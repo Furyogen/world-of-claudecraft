@@ -44,10 +44,12 @@ export const NATURES_BOON_DURATION = 10;
 
 /** The three spells the window pays for: Wildbloom (`rejuvenation`), Lunar
  *  Tempest (`moonfire`) and Gripping Roots (`entangling_roots`). All are armed
- *  together; the first one cast wins. Gripping Roots is the one with a cast
- *  time (1.5 sec), which the 10 sec window comfortably outlives: a timed cast
- *  bills at COMPLETION (applyAbility re-resolves it), so the charge has to
- *  survive the cast, and it does. */
+ *  together; the first one cast wins. Gripping Roots is the only one with an
+ *  authored cast time (1.5 sec), and an armed window makes it INSTANT as well
+ *  as free (the castTime fold in combat/casting_lifecycle.ts), so all three go
+ *  off on the press. That also keeps the charge and the cast atomic: an instant
+ *  bills at cast time, so there is no 1.5 sec bar for an interrupt to spend the
+ *  window on. */
 // Aura.empowerAbilities is a MUTABLE string[] that applyAura stores by
 // reference, so every armed window gets its own copy. Handing out this module
 // constant instead would share one array across every player and every Sim in

@@ -1752,8 +1752,16 @@ export function castAbility(
   ) {
     consumedInstantAura = consumeNextCastInstantAura(ctx, p, ability.id);
   }
+  // An armed Nature's Boon window makes its spell instant as well as free, so
+  // Gripping Roots (the only one of the three with a cast time) goes off on the
+  // press. Folded in HERE rather than as a second next_cast_instant aura: one
+  // window is one charge, and routing it through the instant branch is what
+  // lets the free cost be consumed atomically with the cast instead of at a
+  // completion that a 1.5 sec bar could be interrupted before reaching.
   const instantBaseCastTime =
-    consumedInstantAura !== null ? 0 : res.castTime * shamanCastTimeMultiplier(p, ability.id);
+    consumedInstantAura !== null || naturesBoonArmedFor(p.auras, ability.id)
+      ? 0
+      : res.castTime * shamanCastTimeMultiplier(p, ability.id);
   const castTime =
     afflictionAdjustedCastTime(p, ability.id, instantBaseCastTime) *
     destructionCastTimeMult(p, ability.id) *

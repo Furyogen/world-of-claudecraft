@@ -6736,12 +6736,12 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // tank's Oakhide scales with the armor it actually has instead of decaying
     // into noise as gear grows. The flat arm was worth about 4% of a geared
     // bear pool.
-    effects: [{ type: 'selfBuff', kind: 'buff_armor_pct', value: 25, duration: 15 }],
+    effects: [{ type: 'selfBuff', kind: 'buff_armor_pct', value: 20, duration: 15 }],
     // Literal, not the $b resolved-value placeholder: introducing a token into
     // this row breaks the en-vs-locale interpolation-parity guard
     // (tests/i18n_completeness.test.ts) for all 20 overlays, whose translations
     // carry no token. Same shape the flat 150 shipped with.
-    description: 'Your skin hardens like bark, increasing armor by 25% for 15 sec.',
+    description: 'Your skin hardens like bark, increasing armor by 20% for 15 sec.',
   },
   // Druid tank cooldown: a dodge-based defensive (distinct from Oakhide's armor
   // boost). Usable while shapeshifted so a bear tank pops it mid-fight; buff_dodge
@@ -6920,6 +6920,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: true,
     awardsCombo: 1,
+    // Off the global cooldown, like Bruin Rush: a gap closer that ate a GCD on
+    // arrival left the druid standing in melee unable to strike for the rest of
+    // it, which is the opposite of what a gap closer is for. The 12 sec
+    // cooldown is what paces it, not the GCD.
+    offGcd: true,
     // No form requirement since v0.43: Lunge is pressable from ANY form and
     // from caster form, and shifts the druid into Cat Form on the way in
     // (combat/druid_form_entry.ts). Entering Cat Form hands over a full 100
