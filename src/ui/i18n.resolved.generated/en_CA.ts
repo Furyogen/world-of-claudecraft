@@ -12183,7 +12183,7 @@ export const en_CA: EnTranslations = {
       },
       "barkskin": {
         "name": "Oakhide",
-        "description": "Your skin hardens like bark, increasing armor by 150 for 15 sec."
+        "description": "Your skin hardens like bark, increasing armor by 25% for 15 sec."
       },
       "sacred_bulwark": {
         "name": "Sacred Bulwark",
@@ -12228,7 +12228,7 @@ export const en_CA: EnTranslations = {
       },
       "lunge": {
         "name": "Lunge",
-        "description": "Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Cat Form only."
+        "description": "Shift into Cat Form if you are not already, then lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form."
       },
       "hamstring_bite": {
         "name": "Takedown",
@@ -12946,7 +12946,7 @@ export const en_CA: EnTranslations = {
       },
       "bear_charge": {
         "name": "Bruin Rush",
-        "description": "Rush an enemy, generating 9 rage and stunning it for 1 sec. For 3 sec afterwards, or until you leave combat, Cat Form is free and Pins that target (the one you Rushed), slowing it by 50% for 4 sec. 8-25 yd range. Bruin Form only."
+        "description": "Shift into Bruin Form if you are not already, then rush an enemy, generating 9 rage and stunning it for 1 sec. For 3 sec afterwards, or until you leave combat, Cat Form is free and Pins that target (the one you Rushed), slowing it by 50% for 4 sec. 8-25 yd range. Usable in any form."
       },
       "demoralizing_roar": {
         "name": "Craven Roar",

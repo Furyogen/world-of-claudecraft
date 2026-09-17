@@ -11,6 +11,11 @@ import {
   OLD_BLOOD_STAGES,
 } from '../src/sim/combat/druid_engines';
 import {
+  applyDruidFormEntry,
+  druidFormEntryOwed,
+  druidFormEntryTarget,
+} from '../src/sim/combat/druid_form_entry';
+import {
   NATURES_BOON_ABILITIES,
   NATURES_BOON_CHANCE,
   NATURES_BOON_DURATION,
@@ -18,7 +23,6 @@ import {
   naturesBoonArmedFor,
   naturesBoonOnAutoAttack,
 } from '../src/sim/combat/druid_natures_boon';
-import { applyStalkCatShift, STALK_ID, stalkNeedsCatShift } from '../src/sim/combat/druid_stalk';
 import { FERAL_MELEE_REACH_BONUS, feralMeleeReachBonus } from '../src/sim/combat/feral_reach';
 import { willAutoUnshift } from '../src/sim/combat/form_auto_unshift';
 import { formRequirementMet, requiredForms } from '../src/sim/combat/form_requirement';
@@ -469,14 +473,14 @@ describe('5. Stalk enters Cat Form from anywhere', () => {
 
   it('knows when a shift is owed', () => {
     const druid = { cls: 'druid' as const };
-    expect(stalkNeedsCatShift(druid, [], STALK_ID)).toBe(true);
-    expect(stalkNeedsCatShift(druid, [{ kind: 'form_bear' }], STALK_ID)).toBe(true);
-    expect(stalkNeedsCatShift(druid, [{ kind: 'form_travel' }], STALK_ID)).toBe(true);
+    expect(druidFormEntryOwed(druid, [], 'prowl')).toBe(true);
+    expect(druidFormEntryOwed(druid, [{ kind: 'form_bear' }], 'prowl')).toBe(true);
+    expect(druidFormEntryOwed(druid, [{ kind: 'form_travel' }], 'prowl')).toBe(true);
     // Already a cat: nothing owed.
-    expect(stalkNeedsCatShift(druid, [{ kind: 'form_cat' }], STALK_ID)).toBe(false);
+    expect(druidFormEntryOwed(druid, [{ kind: 'form_cat' }], 'prowl')).toBe(false);
     // Another class's button of the same id, and the druid's other buttons.
-    expect(stalkNeedsCatShift({ cls: 'rogue' }, [], STALK_ID)).toBe(false);
-    expect(stalkNeedsCatShift(druid, [], 'claw')).toBe(false);
+    expect(druidFormEntryOwed({ cls: 'rogue' }, [], 'prowl')).toBe(false);
+    expect(druidFormEntryOwed(druid, [], 'claw')).toBe(false);
   });
 
   it('shifts a caster-form druid into Cat Form and stealths, in one press', () => {
@@ -515,7 +519,9 @@ describe('5. Stalk enters Cat Form from anywhere', () => {
     const before = player.auras.find((a) => a.kind === 'form_cat');
     expect(before).toBeDefined();
 
-    expect(applyStalkCatShift(rawCtx(sim), player, rawCtx(sim).players.get(player.id))).toBe(false);
+    expect(
+      applyDruidFormEntry(rawCtx(sim), player, rawCtx(sim).players.get(player.id), 'prowl'),
+    ).toBe(false);
     expect(player.auras.filter((a) => a.kind === 'form_cat')).toHaveLength(1);
     expect(player.auras.find((a) => a.kind === 'form_cat')).toBe(before);
   });
@@ -555,5 +561,158 @@ describe("Nature's Boon rolls on auto-attacks only", () => {
       player.autoAttack = false;
     }
     expect(armed()).toBe(false);
+  });
+});
+
+describe('6. Oakhide grants a percentage of armor, not a flat amount', () => {
+  it('is authored as percentage points, not a flat buff', () => {
+    const effects = ABILITIES.barkskin.effects;
+    expect(effects).toHaveLength(1);
+    const buff = effects[0];
+    expect(buff.type).toBe('selfBuff');
+    if (buff.type !== 'selfBuff') throw new Error('unreachable');
+    expect(buff.kind).toBe('buff_armor_pct');
+    expect(buff.value).toBe(25);
+    expect(buff.duration).toBe(15);
+    // The flat arm is gone: nothing here still adds a constant.
+    expect(effects.some((e) => e.type === 'selfBuff' && e.kind === 'buff_armor')).toBe(false);
+  });
+
+  it('raises armor by 25% of what the druid actually has', () => {
+    const { sim, player } = rig('feral');
+    const before = player.stats.armor;
+    expect(before).toBeGreaterThan(0);
+
+    sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'buff_armor_pct')).toBe(true);
+    expect(player.stats.armor).toBe(Math.round(before * 1.25));
+  });
+
+  it('scales with the form multiplier, which a flat buff could not do', () => {
+    // The whole point of the change: the same button is worth more to a bear,
+    // because Bruin Form multiplies the armor the percentage then reads.
+    const caster = rig('feral');
+    const casterBase = caster.player.stats.armor;
+    caster.sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) caster.sim.tick();
+    const casterGain = caster.player.stats.armor - casterBase;
+
+    const bear = rig('feral');
+    shiftInto(bear.sim, 'bear_form');
+    const bearBase = bear.player.stats.armor;
+    expect(bearBase).toBeGreaterThan(casterBase);
+    bear.sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) bear.sim.tick();
+    const bearGain = bear.player.stats.armor - bearBase;
+
+    expect(bearGain).toBeGreaterThan(casterGain);
+    // Both are the same 25% of their own pool.
+    expect(bearGain).toBe(Math.round(bearBase * 1.25) - bearBase);
+    expect(casterGain).toBe(Math.round(casterBase * 1.25) - casterBase);
+  });
+
+  it('falls off cleanly, restoring the original armor', () => {
+    const { sim, player } = rig('feral');
+    const before = player.stats.armor;
+    sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) sim.tick();
+    expect(player.stats.armor).toBeGreaterThan(before);
+
+    // 15 sec at 20 Hz, plus slack for the expiry tick.
+    for (let tick = 0; tick < 320; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'buff_armor_pct')).toBe(false);
+    expect(player.stats.armor).toBe(before);
+  });
+});
+
+describe('7. Bruin Rush and Lunge enter their form on use', () => {
+  it('declares all three form-entry buttons and no form requirement on any', () => {
+    expect(druidFormEntryTarget('prowl')).toBe('cat');
+    expect(druidFormEntryTarget('lunge')).toBe('cat');
+    expect(druidFormEntryTarget('bear_charge')).toBe('bear');
+    expect(druidFormEntryTarget('claw')).toBeNull();
+    for (const id of ['prowl', 'lunge', 'bear_charge']) {
+      expect(requiredForms(ABILITIES[id])).toEqual([]);
+      expect(ABILITIES[id].usableInForm).toBe(true);
+    }
+  });
+
+  it('Bruin Rush shifts a caster-form druid into Bruin Form', () => {
+    const { sim, player } = rig('feral');
+    const mob = spawnMob(sim, 14);
+    expect(player.auras.some((a) => a.kind.startsWith('form_'))).toBe(false);
+
+    sim.castAbility('bear_charge');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_bear')).toBe(true);
+    expect(player.auras.find((a) => a.kind === 'form_bear')?.id).toBe('bear_form');
+    expect(player.resourceType).toBe('rage');
+    expect(mob.id).toBeGreaterThan(0);
+  });
+
+  it('Bruin Rush swaps Cat Form for Bruin Form rather than stacking', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    spawnMob(sim, 14);
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+
+    sim.castAbility('bear_charge');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(false);
+    expect(player.auras.filter((a) => a.kind === 'form_bear')).toHaveLength(1);
+  });
+
+  it('Lunge shifts a caster-form druid into Cat Form and closes the gap', () => {
+    // Lunge is reached through the Slinkstrike button, which action-replaces
+    // to it whenever the druid is NOT stealthed (combat/action_replacement.ts),
+    // so the real press is 'pounce' and the resolved id is 'lunge'.
+    const { sim, player } = rig('feral');
+    const mob = spawnMob(sim, 10);
+    const distBefore = Math.abs(mob.pos.z - player.pos.z);
+
+    sim.castAbility('pounce');
+    for (let tick = 0; tick < 60; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+    expect(player.resourceType).toBe('energy');
+    // It actually cut the distance.
+    expect(Math.abs(mob.pos.z - player.pos.z)).toBeLessThan(distBefore);
+  });
+
+  it('Lunge from Bruin Form is not refused for rage it will never be billed', () => {
+    // The bar swaps on the shift: entering Cat hands over a full 100 energy,
+    // so the 40 Lunge costs is payable even starting from 0 rage in Bruin.
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'bear_form');
+    spawnMob(sim, 10);
+    player.resource = 0;
+    expect(player.resourceType).toBe('rage');
+
+    sim.castAbility('pounce');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+    expect(player.resourceType).toBe('energy');
+    // Billed once, against the energy the shift provided.
+    expect(player.resource).toBe(60);
+  });
+
+  it('a Lunge pressed already in Cat Form keeps the ordinary energy check', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    spawnMob(sim, 10);
+    player.resource = 5;
+
+    sim.castAbility('pounce');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    // No shift was owed, so the press is refused for energy as it always was.
+    expect(player.resource).toBe(5);
+    expect(player.cooldowns.has('lunge')).toBe(false);
   });
 });

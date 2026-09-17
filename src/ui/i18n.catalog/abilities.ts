@@ -1232,7 +1232,7 @@ const classAbilityNamesEn = {
         'Heals a friendly target for {damage} and an additional amount over 21 sec.',
         { restoration: 'Planting a NEW bloom adds 1 Verdance (max 5).' },
       ],
-      ['barkskin', 'Oakhide', 'Your skin hardens like bark, increasing armor by 150 for 15 sec.'],
+      ['barkskin', 'Oakhide', 'Your skin hardens like bark, increasing armor by 25% for 15 sec.'],
       // Tank defensive cooldowns (paladin / druid), one distinct mechanic each.
       [
         'sacred_bulwark',
@@ -1279,7 +1279,7 @@ const classAbilityNamesEn = {
       [
         'lunge',
         'Lunge',
-        'Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Cat Form only.',
+        'Shift into Cat Form if you are not already, then lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form.',
       ],
       [
         'hamstring_bite',

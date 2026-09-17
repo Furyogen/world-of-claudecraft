@@ -130,8 +130,8 @@ import {
   spendRuin,
 } from './destruction';
 import { extendOwnedDot } from './dot_mutation';
+import { applyDruidFormEntry, druidFormEntryOwed } from './druid_form_entry';
 import { naturesBoonArmedFor } from './druid_natures_boon';
-import { applyStalkCatShift, STALK_ID } from './druid_stalk';
 import {
   consumeAuraKind,
   consumeFreeCostFor,
@@ -1217,11 +1217,19 @@ export function castAbility(
     : p.resourceType === 'mana'
       ? Math.ceil(shamanAdjustedCost * paladinManaCostMultiplier(p))
       : shamanAdjustedCost;
+  // A form-entry press (Lunge from Bruin Form) is billed AFTER its shift, so
+  // the live bar here is not the one that pays: entering Cat hands over a full
+  // 100 energy, which always covers Lunge's 40. Weighing it against the rage or
+  // mana it happens to be standing in would refuse a press that is payable.
+  // Only exempt when a shift is actually owed, so a Lunge pressed already in
+  // Cat Form keeps the ordinary energy check.
+  const entersFormOnCast = druidFormEntryOwed(meta, p.auras, ability.id);
   if (
     castingPool < payableCost &&
     (!canCastFree || stormcastArmedForAbility) &&
     !freeBySolarReprisal &&
     !togglingOff &&
+    !entersFormOnCast &&
     !formShiftKind(p, ability)
   ) {
     ctx.error(
@@ -1786,12 +1794,13 @@ export function castAbility(
   // the same press and pays from the restored mana pool. Shifting back IN stays a
   // normal ability and bills both.
   if (autoUnshift) applyAutoUnshift(ctx, p, meta, ability);
-  // Stalk shifts the druid into Cat Form on the way into stealth (v0.43,
-  // combat/druid_stalk.ts). Placed HERE for the same reason as the
-  // auto-unshift above: every refusal has cleared, so the form change can no
-  // longer be spent on a press that never happens. It runs BEFORE the stealth
-  // effect resolves below, so the aura lands on a cat, not on a bear.
-  if (ability.id === STALK_ID) applyStalkCatShift(ctx, p, meta);
+  // The form-entry buttons (Stalk, Lunge, Bruin Rush) put the druid in their
+  // form on the way in (v0.43, combat/druid_form_entry.ts). Placed HERE for the
+  // same reason as the auto-unshift above: every refusal has cleared, so the
+  // form change can no longer be spent on a press that never happens. It runs
+  // BEFORE this cast's own effects resolve, so the stealth lands on a cat and
+  // the rush leaves as a bear.
+  applyDruidFormEntry(ctx, p, meta, ability.id);
   // Auto-dismount when the player is mounted or mid-summon-channel and casts any ability.
   if (p.mountKey !== '') forceDismount(ctx, p);
   if (p.mountCastKey !== '') {
