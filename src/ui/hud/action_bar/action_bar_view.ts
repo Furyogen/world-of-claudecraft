@@ -27,6 +27,7 @@
 import { afflictionPossessionEmpowers } from '../../../sim/combat/affliction';
 import { aetherDartsProcGlowActive } from '../../../sim/combat/chronomancy';
 import { destructionProcGlowActive, ruinAmountFromAuras } from '../../../sim/combat/destruction';
+import { naturesBoonArmedFor } from '../../../sim/combat/druid_natures_boon';
 import {
   freeCostAuraActive,
   nextCastCheapMultiplierFromAuras,
@@ -313,6 +314,11 @@ export interface ActionBarSlotState {
    *  NEVER shed by a graphics tier. */
   procGlow: boolean;
   empowered: boolean;
+  /** An armed Nature's Boon window names this ability (sim/combat/
+   *  druid_natures_boon.ts): the slot wears a golden rim so the three spells
+   *  the window pays for are readable at a glance. Actionable information, so
+   *  it is never gated by a graphics tier. */
+  naturesBoonGlow: boolean;
   /** This ability will consume one Ascension charge if used now. Kept
    *  separate from generic empowerment so the painter can show an explicit
    *  cost marker instead of relying on glow alone. */
@@ -359,6 +365,7 @@ export function makeSlotState(): ActionBarSlotState {
     aiming: false,
     procGlow: false,
     empowered: false,
+    naturesBoonGlow: false,
     ascensionSpender: false,
     ascensionCostLabel: '',
     fateConsumeReady: false,
@@ -509,6 +516,7 @@ export function createActionBarView(
           slot.queued = player.autoAttack;
           slot.procGlow = false;
           slot.empowered = false;
+          slot.naturesBoonGlow = false;
           slot.ascensionSpender = false;
           slot.ascensionCostLabel = '';
           slot.fateConsumeReady = false;
@@ -542,6 +550,7 @@ export function createActionBarView(
           slot.queued = false;
           slot.procGlow = false;
           slot.empowered = false;
+          slot.naturesBoonGlow = false;
           slot.ascensionSpender = false;
           slot.ascensionCostLabel = '';
           slot.fateConsumeReady = false;
@@ -581,6 +590,7 @@ export function createActionBarView(
           slot.queued = false;
           slot.procGlow = false;
           slot.empowered = false;
+          slot.naturesBoonGlow = false;
           slot.ascensionSpender = false;
           slot.ascensionCostLabel = '';
           slot.fateConsumeReady = false;
@@ -619,6 +629,7 @@ export function createActionBarView(
           slot.queued = false;
           slot.procGlow = false;
           slot.empowered = false;
+          slot.naturesBoonGlow = false;
           slot.ascensionSpender = false;
           slot.ascensionCostLabel = '';
           slot.fateConsumeReady = false;
@@ -803,6 +814,7 @@ export function createActionBarView(
           priestActionGlowActive(player.auras ?? [], def.id) ||
           sunVerdictAbilityGlowActive(target?.auras, player.id, def.id) ||
           (def.id === 'divine_ascension' && ascensionReady);
+        slot.naturesBoonGlow = naturesBoonArmedFor(player.auras, def.id);
         slot.empowered =
           reflectionReady ||
           hasEmpoweringAura(player.auras, ability) ||

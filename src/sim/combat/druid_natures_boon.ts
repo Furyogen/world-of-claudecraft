@@ -19,10 +19,17 @@
 //          Fleet, Moonwing, or caster form and the druid keeps the form it is
 //          standing in. That is the whole point of the passive.
 //
+// MELEE auto-attacks only. A wand (or a hunter's Auto Shot) resolves through
+// rangedSwing's own projectile callback in combat/auto_attack.ts and never
+// reaches the meleeSwing shell this hook hangs off, so a caster-form druid
+// plinking with a wand can never arm the window. That is a property of where
+// the hook sits rather than a check inside it, so it is pinned by a test
+// rather than restated here as a guard that could never fire.
+//
 // Determinism: the 10% roll is drawn ONLY after the feral-druid gate has
 // passed, so a non-feral player's rng stream stays byte-identical (the
 // Cinderbark 2pc precedent in druid_engines.ts). It is one draw per landed
-// auto-attack, never per ability swing.
+// MELEE auto-attack, never per ability swing and never per wand bolt.
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
 
@@ -35,14 +42,22 @@ export const NATURES_BOON_CHANCE = 0.1;
 /** How long the armed window lasts, in seconds. */
 export const NATURES_BOON_DURATION = 10;
 
-/** The two spells the window pays for: Wildbloom (`rejuvenation`) and Lunar
- *  Tempest (`moonfire`). Both are armed together; the first one cast wins. */
+/** The three spells the window pays for: Wildbloom (`rejuvenation`), Lunar
+ *  Tempest (`moonfire`) and Gripping Roots (`entangling_roots`). All are armed
+ *  together; the first one cast wins. Gripping Roots is the one with a cast
+ *  time (1.5 sec), which the 10 sec window comfortably outlives: a timed cast
+ *  bills at COMPLETION (applyAbility re-resolves it), so the charge has to
+ *  survive the cast, and it does. */
 // Aura.empowerAbilities is a MUTABLE string[] that applyAura stores by
 // reference, so every armed window gets its own copy. Handing out this module
 // constant instead would share one array across every player and every Sim in
 // the process, which is exactly the module-holds-state trap src/sim/CLAUDE.md
 // warns about.
-export const NATURES_BOON_ABILITIES: readonly string[] = ['rejuvenation', 'moonfire'];
+export const NATURES_BOON_ABILITIES: readonly string[] = [
+  'rejuvenation',
+  'moonfire',
+  'entangling_roots',
+];
 function boonAbilityList(): string[] {
   return [...NATURES_BOON_ABILITIES];
 }

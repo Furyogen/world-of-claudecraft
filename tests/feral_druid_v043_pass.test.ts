@@ -4,6 +4,7 @@
 //   3. Nature's Boon: a landed autoattack has a 10% chance to arm one free
 //      Wildbloom OR Lunar Tempest for 10 sec, castable without leaving form
 //   4. Savage Mending is a Bruin AND Cat button
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   druidEngineOnLandedStrike,
@@ -35,6 +36,7 @@ import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
 import type { Aura, Entity } from '../src/sim/types';
 import { IGNIVAR_BOSS_ID, MELEE_RANGE } from '../src/sim/types';
+import { makeSlotState } from '../src/ui/hud/action_bar/action_bar_view';
 
 type Spec = 'balance' | 'feral' | 'restoration';
 
@@ -257,7 +259,11 @@ describe("3. Nature's Boon", () => {
   it('arms both spells at once for ten seconds', () => {
     expect(NATURES_BOON_CHANCE).toBe(0.1);
     expect(NATURES_BOON_DURATION).toBe(10);
-    expect([...NATURES_BOON_ABILITIES].sort()).toEqual(['moonfire', 'rejuvenation']);
+    expect([...NATURES_BOON_ABILITIES].sort()).toEqual([
+      'entangling_roots',
+      'moonfire',
+      'rejuvenation',
+    ]);
   });
 
   it('recognizes an armed window for either spell and nothing else', () => {
@@ -265,11 +271,12 @@ describe("3. Nature's Boon", () => {
       {
         id: NATURES_BOON_ID,
         kind: 'next_cast_free',
-        empowerAbilities: ['rejuvenation', 'moonfire'],
+        empowerAbilities: [...NATURES_BOON_ABILITIES],
       },
     ];
     expect(naturesBoonArmedFor(armed, 'rejuvenation')).toBe(true);
     expect(naturesBoonArmedFor(armed, 'moonfire')).toBe(true);
+    expect(naturesBoonArmedFor(armed, 'entangling_roots')).toBe(true);
     expect(naturesBoonArmedFor(armed, 'wrath')).toBe(false);
     expect(naturesBoonArmedFor(armed, 'claw')).toBe(false);
     expect(naturesBoonArmedFor(armed, undefined)).toBe(false);
@@ -326,7 +333,11 @@ describe("3. Nature's Boon", () => {
     expect(window?.kind).toBe('next_cast_free');
     expect(window?.duration).toBe(NATURES_BOON_DURATION);
     expect(window?.remaining).toBe(NATURES_BOON_DURATION);
-    expect([...(window?.empowerAbilities ?? [])].sort()).toEqual(['moonfire', 'rejuvenation']);
+    expect([...(window?.empowerAbilities ?? [])].sort()).toEqual([
+      'entangling_roots',
+      'moonfire',
+      'rejuvenation',
+    ]);
   });
 
   it('keeps the druid in form: an armed window never auto-unshifts', () => {
@@ -714,5 +725,129 @@ describe('7. Bruin Rush and Lunge enter their form on use', () => {
     // No shift was owed, so the press is refused for energy as it always was.
     expect(player.resource).toBe(5);
     expect(player.cooldowns.has('lunge')).toBe(false);
+  });
+});
+
+describe("8. Gripping Roots rides the Nature's Boon window", () => {
+  it('casts from Cat Form for free without leaving the form', () => {
+    const { sim, player } = rig('feral');
+    player.auras.push(formAura(player, 'form_cat'));
+    // 6 yd: far enough to be a real ranged cast, near enough that the test
+    // world's terrain does not break line of sight at completion.
+    const mob = spawnMob(sim, 6);
+    armBoon(sim);
+    const energyBefore = player.resource;
+
+    sim.castAbility('entangling_roots');
+    // 1.5 sec of cast time at 20 Hz, plus slack for the completion tick.
+    for (let tick = 0; tick < 60; tick++) sim.tick();
+
+    expect(mob.auras.some((a) => a.kind === 'root')).toBe(true);
+    // Free, and still a cat.
+    expect(player.resource).toBe(energyBefore);
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+  });
+
+  it('the 10 sec window outlives its 1.5 sec cast, which bills at completion', () => {
+    expect(ABILITIES.entangling_roots.castTime).toBe(1.5);
+    expect(NATURES_BOON_DURATION).toBeGreaterThan(ABILITIES.entangling_roots.castTime);
+  });
+
+  it('is refused from Cat Form with no window armed, as before', () => {
+    const { sim, player } = rig('feral');
+    player.auras.push(formAura(player, 'form_cat'));
+    const mob = spawnMob(sim, 6);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+
+    sim.castAbility('entangling_roots');
+    for (let tick = 0; tick < 60; tick++) sim.tick();
+
+    expect(mob.auras.some((a) => a.kind === 'root')).toBe(false);
+    // A root is neither healing nor damaging, so it never auto-unshifted
+    // either: the druid is refused and stays a cat.
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+  });
+});
+
+describe("9. Nature's Boon never procs from a wand", () => {
+  it('a wand bolt resolves outside the shell the proc hangs off', () => {
+    // rangedSwing (combat/auto_attack.ts) resolves its hit inside its own
+    // projectile callback and never calls meleeSwing, which is where
+    // naturesBoonOnAutoAttack is invoked. This pins that separation: if a
+    // future refactor routes ranged autos through the melee shell, a
+    // caster-form druid would start arming the window by plinking, and this
+    // test is what says no.
+    const source = readFileSync('src/sim/combat/auto_attack.ts', 'utf8');
+    const rangedStart = source.indexOf('export function rangedSwing(');
+    const meleeStart = source.indexOf('export function meleeSwing(');
+    expect(rangedStart).toBeGreaterThan(-1);
+    expect(meleeStart).toBeGreaterThan(rangedStart);
+    const rangedBody = source.slice(rangedStart, meleeStart);
+    expect(rangedBody).not.toContain('naturesBoonOnAutoAttack');
+    expect(rangedBody).not.toContain('meleeSwing(');
+    // And the hook itself is inside the melee shell, gated on autoAttack.
+    const meleeBody = source.slice(meleeStart);
+    expect(meleeBody).toContain('if (opts.autoAttack) naturesBoonOnAutoAttack(ctx, attacker);');
+  });
+
+  it('a druid wanding a target arms nothing and draws no proc rng', () => {
+    const { sim, player } = rig('feral');
+    const mob = spawnMob(sim, 20);
+    // Caster form, ranged auto profile: the wand path, not the melee path.
+    expect(player.auras.some((a) => a.kind.startsWith('form_'))).toBe(false);
+    sim.startAutoAttack(player.id);
+
+    for (let tick = 0; tick < 400; tick++) sim.tick();
+
+    expect(mob.hp).toBeLessThan(mob.maxHp);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+  });
+});
+
+describe('10. The action bar shows a golden rim while the window is armed', () => {
+  it('lights exactly the three spells the window pays for, and nothing else', () => {
+    const armed = [
+      {
+        id: NATURES_BOON_ID,
+        kind: 'next_cast_free',
+        empowerAbilities: [...NATURES_BOON_ABILITIES],
+      },
+    ];
+    // The view sets slot.naturesBoonGlow from this same predicate, so pinning
+    // it here pins which slots wear the rim.
+    for (const id of NATURES_BOON_ABILITIES) {
+      expect(naturesBoonArmedFor(armed, id)).toBe(true);
+    }
+    for (const id of ['claw', 'maul', 'wrath', 'healing_touch', 'prowl']) {
+      expect(naturesBoonArmedFor(armed, id)).toBe(false);
+    }
+    // No window, no rim.
+    for (const id of NATURES_BOON_ABILITIES) {
+      expect(naturesBoonArmedFor([], id)).toBe(false);
+    }
+  });
+
+  it('carries the flag through the slot state and the painter class', () => {
+    const slot = makeSlotState();
+    // Every slot starts dark, so a stale rim cannot survive a slot reuse.
+    expect(slot.naturesBoonGlow).toBe(false);
+    // The painter maps the flag to its own class name.
+    const painterSource = readFileSync('src/ui/hud/action_bar/action_bar_painter.ts', 'utf8');
+    expect(painterSource).toContain("const CLASS_NATURES_BOON = 'natures-boon';");
+    expect(painterSource).toContain('toggleClass(el.btn, CLASS_NATURES_BOON, s.naturesBoonGlow)');
+  });
+
+  it('styles the rim as actionable info: gold, and never tier-gated', () => {
+    const css = readFileSync('src/styles/hud.css', 'utf8');
+    expect(css).toContain('.action-btn.natures-boon {');
+    expect(css).toContain('border-color: var(--gold);');
+    // Reduced motion drops the pulse but keeps the rim (both repo arms).
+    expect(css).toMatch(/prefers-reduced-motion: reduce\)[\s\S]*?\.action-btn\.natures-boon/);
+    expect(css).toMatch(/body\.reduce-motion \.action-btn\.natures-boon/);
+    // Forced colors gets a non-colour cue.
+    expect(css).toMatch(/forced-colors: active\)[\s\S]*?\.action-btn\.natures-boon/);
+    const tokens = readFileSync('src/styles/tokens.css', 'utf8');
+    expect(tokens).toContain('--glow-action-natures-boon:');
   });
 });
