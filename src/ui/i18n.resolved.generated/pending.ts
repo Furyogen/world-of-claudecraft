@@ -9,25 +9,85 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "es_ES": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "fr_FR": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "fr_CA": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "de_DE": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "zh_CN": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "zh_TW": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "ko_KR": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "ja_JP": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "pt_BR": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "ru_RU": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "cs_CZ": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "nl_NL": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "pl_PL": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "id_ID": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "tr_TR": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "sv_SE": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "vi_VN": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ],
+  "da_DK": [
+    "abilityUi.forms.bearOrCat",
+    "hud.errors.bearOrCat"
+  ]
 };

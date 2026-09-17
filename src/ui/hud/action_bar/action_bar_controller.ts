@@ -1,3 +1,4 @@
+import { abilityBelongsToForm, hasFormRequirement } from '../../../sim/combat/form_requirement';
 import { classTalentChoiceAbilityGroups } from '../../../sim/content/talents';
 import { ABILITIES, ITEMS } from '../../../sim/data';
 import type { PlayerClass } from '../../../sim/types';
@@ -593,10 +594,11 @@ export class ActionBarController {
     // Passives never castable: keep them off every seeded/form kit bar too.
     if (!this.isAbilityPlacementAllowed(id)) return false;
     if (this.isStealthForm(form)) return false;
+    const def = ABILITIES[id];
     if (form === 'bear' || form === 'cat') {
-      return ABILITIES[id]?.requiresForm === form || FORM_TOGGLE_IDS.has(id);
+      return (def !== undefined && abilityBelongsToForm(def, form)) || FORM_TOGGLE_IDS.has(id);
     }
-    return !ABILITIES[id]?.requiresForm;
+    return def === undefined || !hasFormRequirement(def);
   }
 
   private isFormKitBar(form: HotbarForm = this.activeFormState): boolean {

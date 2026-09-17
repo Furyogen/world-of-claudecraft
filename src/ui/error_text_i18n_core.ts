@@ -183,10 +183,18 @@ export function localizeErrorText(text: string, deps: ErrorTextLockoutDeps): str
   const key = exact[text];
   if (key) return t(key);
 
-  let match = /^You must be in (Bruin|Cat) Form\.$/.exec(text);
+  // The three shapes combat/form_requirement.ts formRequirementLabel emits:
+  // one form, or the Bruin-and-Cat pair that Savage Mending shares.
+  let match = /^You must be in (Bruin or Cat|Bruin|Cat) Form\.$/.exec(text);
   if (match)
     return t('hud.errors.requiresForm', {
-      form: t(match[1] === 'Bruin' ? 'hud.errors.bear' : 'hud.errors.cat'),
+      form: t(
+        match[1] === 'Bruin'
+          ? 'hud.errors.bear'
+          : match[1] === 'Cat'
+            ? 'hud.errors.cat'
+            : 'hud.errors.bearOrCat',
+      ),
     });
   match = /^You can't do that in (Bruin|Cat|Fleet) Form\.$/.exec(text);
   if (match)

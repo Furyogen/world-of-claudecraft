@@ -6882,7 +6882,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // pounce id; Lunge is never learned as a second action.
     actionReplacement: { abilityId: 'lunge', absentAuraKind: 'stealth' },
     description:
-      'A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Cat Form only. Out of stealth this button is Lunge.',
+      'A stealth opener that stuns the target for 2 sec. Awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3). Cat Form only. Out of stealth this button is Lunge.',
   },
   lunge: {
     id: 'lunge',
@@ -6906,7 +6906,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // the cooldown back. LUNGE_WEAPON_MULT there owns the 60.
     effects: [{ type: 'charge' }],
     description:
-      'Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage and awards 1 combo point; a lunge cut short refunds its cooldown. Cat Form only.',
+      'Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Cat Form only.',
   },
   hamstring_bite: {
     id: 'hamstring_bite',

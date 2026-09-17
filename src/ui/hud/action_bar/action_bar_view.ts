@@ -31,6 +31,7 @@ import {
   freeCostAuraActive,
   nextCastCheapMultiplierFromAuras,
 } from '../../../sim/combat/empower_next';
+import type { MeleeReachActor } from '../../../sim/combat/feral_reach';
 import { willAutoUnshift } from '../../../sim/combat/form_auto_unshift';
 import { frostProcGlowActive } from '../../../sim/combat/frost_mage';
 import { packlordActionGlowActive } from '../../../sim/combat/hunter_packlord';
@@ -61,6 +62,7 @@ import {
   dist2d,
   GCD,
   type ItemDef,
+  type PlayerClass,
   POTION_COOLDOWN,
   type ResourceType,
   type Vec3,
@@ -270,6 +272,10 @@ export interface ActionBarWorldInput {
   stealthed: boolean;
   /** Committed Paladin spec: the redesigned bar swaps a slot per spec. */
   paladinSpec?: string | null;
+  /** The player's class. Paired with `paladinSpec` it answers the attacker half
+   *  of the melee-reach question (sim/combat/feral_reach.ts), so the bar's
+   *  out-of-range tint agrees with the server's range gate for a feral druid. */
+  playerClass?: PlayerClass | null;
   /** Fate Threads attached to this Warlock's primary Evil Eye, 0 to 3. */
   fateThreads?: number;
   entities: Iterable<OwnedDominionServant>;
@@ -439,6 +445,13 @@ export function createActionBarView(
     tick(world: ActionBarWorldInput): ActionBarState {
       const { player, target } = world;
       const tgtDist = target !== null && !target.dead ? dist2d(player.pos, target.pos) : null;
+      // The attacker half of every range question below. Built once per tick
+      // and handed to effectivePlayerAttackRange so the bar's out-of-range
+      // tint answers exactly what the server's range gate will.
+      const reachActor: MeleeReachActor = {
+        cls: world.playerClass ?? null,
+        spec: world.paladinSpec ?? null,
+      };
       const ruin = ruinAmountFromAuras(player.auras);
       let dominionComposition: number | null = null;
       let soulFragments = 0;
@@ -490,7 +503,9 @@ export function createActionBarView(
           slot.rechargePercent = 0;
           slot.usable = true;
           slot.outOfRange =
-            tgtDist !== null && target !== null && tgtDist > effectivePlayerAttackRange(target, 0);
+            tgtDist !== null &&
+            target !== null &&
+            tgtDist > effectivePlayerAttackRange(target, 0, reachActor);
           slot.queued = player.autoAttack;
           slot.procGlow = false;
           slot.empowered = false;
@@ -752,7 +767,7 @@ export function createActionBarView(
           def.requiresTarget &&
           tgtDist !== null &&
           target !== null &&
-          (tgtDist > effectivePlayerAttackRange(target, def.range) ||
+          (tgtDist > effectivePlayerAttackRange(target, def.range, reachActor) ||
             (def.minRange !== undefined && tgtDist < def.minRange));
         slot.queued = player.queuedOnSwing === def.id;
         // Spec resources/procs share pure sim predicates so the bar and combat

@@ -10495,6 +10495,7 @@ export const en_CA: EnTranslations = {
       "cantInForm": "You can't do that in {form} Form.",
       "bear": "Bruin",
       "cat": "Cat",
+      "bearOrCat": "Bruin or Cat",
       "travel": "Fleet",
       "shapeshifted": "You cannot do that while shapeshifted.",
       "stealthed": "You must be stealthed.",
@@ -10826,7 +10827,8 @@ export const en_CA: EnTranslations = {
     },
     "forms": {
       "bear": "Bruin",
-      "cat": "Cat"
+      "cat": "Cat",
+      "bearOrCat": "Bruin or Cat"
     },
     "cast": {
       "fishing": "Fishing",
@@ -12222,11 +12224,11 @@ export const en_CA: EnTranslations = {
       },
       "pounce": {
         "name": "Slinkstrike",
-        "description": "A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Cat Form only. Out of stealth this button is Lunge."
+        "description": "A stealth opener that stuns the target for 2 sec. Awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3). Cat Form only. Out of stealth this button is Lunge."
       },
       "lunge": {
         "name": "Lunge",
-        "description": "Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage and awards 1 combo point; a lunge cut short refunds its cooldown. Cat Form only."
+        "description": "Lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Cat Form only."
       },
       "hamstring_bite": {
         "name": "Takedown",
@@ -12715,7 +12717,7 @@ export const en_CA: EnTranslations = {
       },
       "frenzied_regeneration": {
         "name": "Savage Mending",
-        "description": "Restores 40% of your maximum health over 10 sec. Bruin Form only."
+        "description": "Restores 40% of your maximum health over 10 sec. Bruin or Cat Form only."
       },
       "frost_trap": {
         "name": "Rime Snare",
