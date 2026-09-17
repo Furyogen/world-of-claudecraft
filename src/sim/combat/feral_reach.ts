@@ -27,7 +27,7 @@ export interface MeleeReachActor {
 }
 
 /** Is this attacker a committed feral druid? */
-export function isFeralDruid(actor: MeleeReachActor | null | undefined): boolean {
+function isFeralDruid(actor: MeleeReachActor | null | undefined): boolean {
   return actor?.cls === 'druid' && actor.spec === 'feral';
 }
 

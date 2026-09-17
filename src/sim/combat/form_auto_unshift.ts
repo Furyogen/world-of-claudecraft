@@ -31,6 +31,7 @@ import type { SimContext } from '../sim_context';
 import type { AbilityDef, AbilityEffect, Aura, Entity } from '../types';
 import { isFormAuraKind } from '../types';
 import { naturesBoonArmedFor } from './druid_natures_boon';
+import { hasFormRequirement } from './form_requirement';
 import { isResourceShiftFormAuraKind } from './forms';
 
 type EffectType = AbilityEffect['type'];
@@ -85,7 +86,7 @@ export function willAutoUnshift(
   auras: readonly (Pick<Aura, 'kind'> & { id?: string; empowerAbilities?: readonly string[] })[],
   def: AbilityDef,
 ): boolean {
-  if (def.requiresForm !== undefined || def.usableInForm || isFormToggleAbility(def)) return false;
+  if (hasFormRequirement(def) || def.usableInForm || isFormToggleAbility(def)) return false;
   if (!auras.some((a) => isResourceShiftFormAuraKind(a.kind))) return false;
   // An armed Nature's Boon window casts its spell FROM the form: the whole
   // point of the passive is that the druid does not leave Cat or Bruin to

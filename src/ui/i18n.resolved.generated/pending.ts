@@ -34,30 +34,15 @@ export const pending: Record<string, readonly string[]> = {
     "abilityUi.forms.bearOrCat",
     "hud.errors.bearOrCat"
   ],
-  "zh_CN": [
-    "abilityUi.forms.bearOrCat",
-    "hud.errors.bearOrCat"
-  ],
-  "zh_TW": [
-    "abilityUi.forms.bearOrCat",
-    "hud.errors.bearOrCat"
-  ],
-  "ko_KR": [
-    "abilityUi.forms.bearOrCat",
-    "hud.errors.bearOrCat"
-  ],
-  "ja_JP": [
-    "abilityUi.forms.bearOrCat",
-    "hud.errors.bearOrCat"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "abilityUi.forms.bearOrCat",
     "hud.errors.bearOrCat"
   ],
-  "ru_RU": [
-    "abilityUi.forms.bearOrCat",
-    "hud.errors.bearOrCat"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "abilityUi.forms.bearOrCat",
     "hud.errors.bearOrCat"

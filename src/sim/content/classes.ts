@@ -6566,13 +6566,20 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'physical',
     requiresTarget: false,
-    requiresForm: 'cat',
+    // No form requirement since v0.43: Stalk is pressable from ANY form and
+    // from caster form, and shifts the druid into Cat Form on the way in
+    // (combat/druid_stalk.ts). usableInForm keeps the shapeshift lock from
+    // refusing the press while wearing Bruin, Fleet or Moonwing, and keeps the
+    // auto-unshift rule from stripping the form instead. It stays ON the
+    // global cooldown (no offGcd), so the shift costs a GCD like any shift.
+    usableInForm: true,
     requiresOutOfCombat: true,
     // 1.0: feral stealth moves at full speed (Wildfang kit pass 2; it was a
     // 0.95 near-full crawl before), the feral scouting identity. The rogue
     // Duskveil family deliberately keeps its slower 0.5 crawl.
     effects: [{ type: 'selfBuff', kind: 'stealth', value: 1.0, duration: 3600 }],
-    description: 'Enter stealth while in Cat Form. Cannot be used in combat.',
+    description:
+      'Shift into Cat Form if you are not already, and enter stealth. Usable in any form. Cannot be used in combat.',
   },
   rake: {
     id: 'rake',

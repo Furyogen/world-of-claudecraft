@@ -131,6 +131,7 @@ import {
 } from './destruction';
 import { extendOwnedDot } from './dot_mutation';
 import { naturesBoonArmedFor } from './druid_natures_boon';
+import { applyStalkCatShift, STALK_ID } from './druid_stalk';
 import {
   consumeAuraKind,
   consumeFreeCostFor,
@@ -1785,6 +1786,12 @@ export function castAbility(
   // the same press and pays from the restored mana pool. Shifting back IN stays a
   // normal ability and bills both.
   if (autoUnshift) applyAutoUnshift(ctx, p, meta, ability);
+  // Stalk shifts the druid into Cat Form on the way into stealth (v0.43,
+  // combat/druid_stalk.ts). Placed HERE for the same reason as the
+  // auto-unshift above: every refusal has cleared, so the form change can no
+  // longer be spent on a press that never happens. It runs BEFORE the stealth
+  // effect resolves below, so the aura lands on a cat, not on a bear.
+  if (ability.id === STALK_ID) applyStalkCatShift(ctx, p, meta);
   // Auto-dismount when the player is mounted or mid-summon-channel and casts any ability.
   if (p.mountKey !== '') forceDismount(ctx, p);
   if (p.mountCastKey !== '') {

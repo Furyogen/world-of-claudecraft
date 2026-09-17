@@ -183,8 +183,10 @@ export function localizeErrorText(text: string, deps: ErrorTextLockoutDeps): str
   const key = exact[text];
   if (key) return t(key);
 
-  // The three shapes combat/form_requirement.ts formRequirementLabel emits:
-  // one form, or the Bruin-and-Cat pair that Savage Mending shares.
+  // The three shapes the cast gate's refusal ladder emits (castAbility in
+  // sim/combat/casting_lifecycle.ts): one form, or the Bruin-and-Cat pair that
+  // Savage Mending shares. Keep this vocabulary byte-identical to those
+  // literals.
   let match = /^You must be in (Bruin or Cat|Bruin|Cat) Form\.$/.exec(text);
   if (match)
     return t('hud.errors.requiresForm', {

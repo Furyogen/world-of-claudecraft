@@ -10495,7 +10495,7 @@ export const ja_JP: EnTranslations = {
       "cantInForm": "{form}フォーム中は実行できません。",
       "bear": "ブルーイン",
       "cat": "猫",
-      "bearOrCat": "Bruin or Cat",
+      "bearOrCat": "ブルーインまたは猫",
       "travel": "フリート",
       "shapeshifted": "変身中は実行できません。",
       "stealthed": "ステルス状態である必要があります。",
@@ -10828,7 +10828,7 @@ export const ja_JP: EnTranslations = {
     "forms": {
       "bear": "熊",
       "cat": "猫",
-      "bearOrCat": "Bruin or Cat"
+      "bearOrCat": "熊または猫"
     },
     "cast": {
       "fishing": "釣り",

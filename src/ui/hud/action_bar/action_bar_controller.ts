@@ -1,3 +1,4 @@
+import { NATURES_BOON_ABILITIES } from '../../../sim/combat/druid_natures_boon';
 import { abilityBelongsToForm, hasFormRequirement } from '../../../sim/combat/form_requirement';
 import { classTalentChoiceAbilityGroups } from '../../../sim/content/talents';
 import { ABILITIES, ITEMS } from '../../../sim/data';
@@ -49,6 +50,16 @@ export { ACTION_BAR_ABILITY_SLOTS } from './action_bar_layout_core';
 export type HotbarForm = 'normal' | 'bear' | 'cat' | 'cat_stealth' | 'stealth';
 
 const FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form', 'travel_form']);
+// Buttons that seed onto EVERY form kit bar:
+//   - the three form toggles,
+//   - Stalk, which since v0.43 enters Cat Form from any form and so is
+//     reachable (and wanted) on the Bruin bar too, even though it is not a
+//     toggle,
+//   - the two spells an armed Nature's Boon pays for (sim/combat/
+//     druid_natures_boon.ts). The window's whole point is that they are
+//     castable without leaving the form, which is unreachable on a default
+//     bar if the form kit never seeds a button for them.
+const FORM_BAR_ALWAYS_IDS = new Set([...FORM_TOGGLE_IDS, 'prowl', ...NATURES_BOON_ABILITIES]);
 
 export interface ActionBarControllerDeps {
   storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
@@ -596,7 +607,7 @@ export class ActionBarController {
     if (this.isStealthForm(form)) return false;
     const def = ABILITIES[id];
     if (form === 'bear' || form === 'cat') {
-      return (def !== undefined && abilityBelongsToForm(def, form)) || FORM_TOGGLE_IDS.has(id);
+      return (def !== undefined && abilityBelongsToForm(def, form)) || FORM_BAR_ALWAYS_IDS.has(id);
     }
     return def === undefined || !hasFormRequirement(def);
   }

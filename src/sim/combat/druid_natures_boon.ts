@@ -37,10 +37,15 @@ export const NATURES_BOON_DURATION = 10;
 
 /** The two spells the window pays for: Wildbloom (`rejuvenation`) and Lunar
  *  Tempest (`moonfire`). Both are armed together; the first one cast wins. */
-// Held once as a mutable array because Aura.empowerAbilities is mutable, and
-// exported readonly so no consumer can edit the shared list.
-const NATURES_BOON_ABILITY_LIST: string[] = ['rejuvenation', 'moonfire'];
-export const NATURES_BOON_ABILITIES: readonly string[] = NATURES_BOON_ABILITY_LIST;
+// Aura.empowerAbilities is a MUTABLE string[] that applyAura stores by
+// reference, so every armed window gets its own copy. Handing out this module
+// constant instead would share one array across every player and every Sim in
+// the process, which is exactly the module-holds-state trap src/sim/CLAUDE.md
+// warns about.
+export const NATURES_BOON_ABILITIES: readonly string[] = ['rejuvenation', 'moonfire'];
+function boonAbilityList(): string[] {
+  return [...NATURES_BOON_ABILITIES];
+}
 
 /** Structural, so both a sim Aura and the action bar's mirrored aura fit. */
 interface BoonAura {
@@ -85,7 +90,7 @@ function armNaturesBoon(ctx: SimContext, player: Entity): void {
     existing.kind = 'next_cast_free';
     existing.remaining = NATURES_BOON_DURATION;
     existing.duration = NATURES_BOON_DURATION;
-    existing.empowerAbilities = NATURES_BOON_ABILITY_LIST;
+    existing.empowerAbilities = boonAbilityList();
     return;
   }
   ctx.applyAura(player, {
@@ -97,7 +102,7 @@ function armNaturesBoon(ctx: SimContext, player: Entity): void {
     value: 0,
     sourceId: player.id,
     school: 'nature',
-    empowerAbilities: NATURES_BOON_ABILITY_LIST,
+    empowerAbilities: boonAbilityList(),
   });
   ctx.emit({
     type: 'spellfx',

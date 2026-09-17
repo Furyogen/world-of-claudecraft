@@ -18,6 +18,7 @@ import {
   naturesBoonArmedFor,
   naturesBoonOnAutoAttack,
 } from '../src/sim/combat/druid_natures_boon';
+import { applyStalkCatShift, STALK_ID, stalkNeedsCatShift } from '../src/sim/combat/druid_stalk';
 import { FERAL_MELEE_REACH_BONUS, feralMeleeReachBonus } from '../src/sim/combat/feral_reach';
 import { willAutoUnshift } from '../src/sim/combat/form_auto_unshift';
 import { formRequirementMet, requiredForms } from '../src/sim/combat/form_requirement';
@@ -450,5 +451,109 @@ describe('4. Savage Mending is a Bruin and Cat button', () => {
 
     expect(player.auras.some((entry) => entry.id === 'frenzied_regeneration')).toBe(false);
     expect(player.cooldowns.has('frenzied_regeneration')).toBe(false);
+  });
+});
+
+describe('5. Stalk enters Cat Form from anywhere', () => {
+  it('no longer requires Cat Form and stays on the global cooldown', () => {
+    const stalk = ABILITIES.prowl;
+    expect(requiredForms(stalk)).toEqual([]);
+    // usableInForm is what keeps the shapeshift lock from refusing the press
+    // while wearing Bruin, Fleet or Moonwing.
+    expect(stalk.usableInForm).toBe(true);
+    // The press costs a GCD: offGcd is absent, which is what "on the GCD" means
+    // for every other ability in the table.
+    expect(stalk.offGcd).toBeUndefined();
+    expect(stalk.requiresOutOfCombat).toBe(true);
+  });
+
+  it('knows when a shift is owed', () => {
+    const druid = { cls: 'druid' as const };
+    expect(stalkNeedsCatShift(druid, [], STALK_ID)).toBe(true);
+    expect(stalkNeedsCatShift(druid, [{ kind: 'form_bear' }], STALK_ID)).toBe(true);
+    expect(stalkNeedsCatShift(druid, [{ kind: 'form_travel' }], STALK_ID)).toBe(true);
+    // Already a cat: nothing owed.
+    expect(stalkNeedsCatShift(druid, [{ kind: 'form_cat' }], STALK_ID)).toBe(false);
+    // Another class's button of the same id, and the druid's other buttons.
+    expect(stalkNeedsCatShift({ cls: 'rogue' }, [], STALK_ID)).toBe(false);
+    expect(stalkNeedsCatShift(druid, [], 'claw')).toBe(false);
+  });
+
+  it('shifts a caster-form druid into Cat Form and stealths, in one press', () => {
+    const { sim, player } = rig('feral');
+    expect(player.auras.some((a) => a.kind.startsWith('form_'))).toBe(false);
+
+    sim.castAbility('prowl');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
+    expect(player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+    expect(player.stealthed).toBe(true);
+    // The form aura carries the CAT FORM id, not Stalk's, so the Cat Form
+    // button's own toggle-off can still find and clear it.
+    expect(player.auras.find((a) => a.kind === 'form_cat')?.id).toBe('cat_form');
+  });
+
+  it('swaps Bruin Form for Cat Form rather than stacking them', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'bear_form');
+    expect(player.auras.some((a) => a.kind === 'form_bear')).toBe(true);
+
+    sim.castAbility('prowl');
+    for (let tick = 0; tick < 5; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'form_bear')).toBe(false);
+    expect(player.auras.filter((a) => a.kind === 'form_cat')).toHaveLength(1);
+    expect(player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+    // Cat Form runs on Energy, so the shift really re-pooled the bar.
+    expect(player.resourceType).toBe('energy');
+  });
+
+  it('leaves an existing Cat Form exactly as it was', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    const before = player.auras.find((a) => a.kind === 'form_cat');
+    expect(before).toBeDefined();
+
+    expect(applyStalkCatShift(rawCtx(sim), player, rawCtx(sim).players.get(player.id))).toBe(false);
+    expect(player.auras.filter((a) => a.kind === 'form_cat')).toHaveLength(1);
+    expect(player.auras.find((a) => a.kind === 'form_cat')).toBe(before);
+  });
+
+  it('is still refused in combat', () => {
+    const { sim, player } = rig('feral');
+    const mob = spawnMob(sim, 3);
+    sim.castAbility('cat_form');
+    for (let tick = 0; tick < 40; tick++) sim.tick();
+    player.resource = player.maxResource;
+    sim.castAbility('claw');
+    for (let tick = 0; tick < 6; tick++) sim.tick();
+    expect(player.inCombat).toBe(true);
+    expect(mob.hp).toBeLessThan(mob.maxHp);
+
+    sim.castAbility('prowl');
+    sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'stealth')).toBe(false);
+  });
+});
+
+describe("Nature's Boon rolls on auto-attacks only", () => {
+  it('costs no extra rng draw on an ability swing', () => {
+    // The opts.autoAttack gate in combat/auto_attack.ts is the one thing that
+    // keeps every weaponStrike ability from rolling the 10%: Claw resolves
+    // through the SAME meleeSwing shell that arms the passive.
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    spawnMob(sim, 2);
+    const armed = () => player.auras.some((a) => a.id === NATURES_BOON_ID);
+
+    for (let cast = 0; cast < 40; cast++) {
+      player.resource = player.maxResource;
+      sim.castAbility('claw');
+      for (let tick = 0; tick < 4; tick++) sim.tick();
+      player.autoAttack = false;
+    }
+    expect(armed()).toBe(false);
   });
 });

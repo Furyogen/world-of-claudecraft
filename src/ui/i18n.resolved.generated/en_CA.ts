@@ -12954,7 +12954,7 @@ export const en_CA: EnTranslations = {
       },
       "prowl": {
         "name": "Stalk",
-        "description": "Enter stealth while in Cat Form. Cannot be used in combat."
+        "description": "Shift into Cat Form if you are not already, and enter stealth. Usable in any form. Cannot be used in combat."
       },
       "rake": {
         "name": "Flense",

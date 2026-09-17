@@ -10,13 +10,14 @@
 //
 // Pure: no SimContext, no DOM, plain aura kinds in and booleans out, so a
 // Vitest can drive it directly and the online client can ask the same question.
-import type { AbilityDef } from '../types';
+import type { AbilityDef, AuraKind } from '../types';
 
 /** The two action-locking druid forms an ability can be authored against. */
 export type DruidCombatForm = 'bear' | 'cat';
 
-/** The form aura each requirement names. */
-export const FORM_AURA_KIND: Record<DruidCombatForm, string> = {
+/** The form aura each requirement names. Kept local and typed against the
+ *  canonical AuraKind union in ../types, never a second string table. */
+const FORM_AURA_KIND: Record<DruidCombatForm, AuraKind> = {
   bear: 'form_bear',
   cat: 'form_cat',
 };
@@ -46,7 +47,7 @@ export function abilityBelongsToForm(def: FormRequirement, form: DruidCombatForm
 /** Does the wearer of `auras` satisfy this ability's form requirement? An
  *  ability with no requirement is trivially satisfied. */
 export function formRequirementMet(
-  auras: readonly Pick<{ kind: string }, 'kind'>[],
+  auras: readonly { kind: string }[],
   def: FormRequirement,
 ): boolean {
   const forms = requiredForms(def);
