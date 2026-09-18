@@ -131,7 +131,7 @@ import {
 } from './destruction';
 import { extendOwnedDot } from './dot_mutation';
 import { applyDruidFormEntry, druidFormEntryOwed } from './druid_form_entry';
-import { naturesBoonArmedFor } from './druid_natures_boon';
+import { naturesBoonArmedFor, naturesBoonPowerFor } from './druid_natures_boon';
 import {
   consumeAuraKind,
   consumeFreeCostFor,
@@ -1752,16 +1752,8 @@ export function castAbility(
   ) {
     consumedInstantAura = consumeNextCastInstantAura(ctx, p, ability.id);
   }
-  // An armed Nature's Boon window makes its spell instant as well as free, so
-  // Gripping Roots (the only one of the three with a cast time) goes off on the
-  // press. Folded in HERE rather than as a second next_cast_instant aura: one
-  // window is one charge, and routing it through the instant branch is what
-  // lets the free cost be consumed atomically with the cast instead of at a
-  // completion that a 1.5 sec bar could be interrupted before reaching.
   const instantBaseCastTime =
-    consumedInstantAura !== null || naturesBoonArmedFor(p.auras, ability.id)
-      ? 0
-      : res.castTime * shamanCastTimeMultiplier(p, ability.id);
+    consumedInstantAura !== null ? 0 : res.castTime * shamanCastTimeMultiplier(p, ability.id);
   const castTime =
     afflictionAdjustedCastTime(p, ability.id, instantBaseCastTime) *
     destructionCastTimeMult(p, ability.id) *
@@ -1850,6 +1842,10 @@ export function castAbility(
     return;
   }
   p.castTargetId = target?.id ?? null;
+  // Nature's Boon makes its spell 25% stronger. Scaled on a COPY here, BEFORE
+  // the block below spends the window: the instant arm consumes the aura and
+  // only then calls applyAbility, so a multiplier read any later is always 1.
+  res = scaleNaturesBoonPower(p, res);
   // A free cast is consumed where the cost is actually billed: here for channels
   // and instants (this tick resolves them via the local `res`), but for cast-time
   // spells the bill lands in applyAbility at completion, which RE-RESOLVES the
@@ -2148,6 +2144,24 @@ function overflowingPowerCdr(ctx: SimContext, p: Entity, meta: PlayerMeta, cost:
 // the output amp; the bill rides the cost amp). The original resolved struct
 // is never mutated. Draws no rng.
 const OVERLOAD_COST_MULT = 1.5;
+
+/** Scale a Nature's Boon cast's magnitudes by its power multiplier, returning a
+ *  NEW resolved ability: the base content arrays are shared module data and must
+ *  never be mutated (the consumeOverload rule, right below). Returns `res`
+ *  untouched when no window covers this cast, so nothing else moves. */
+function scaleNaturesBoonPower(p: Entity, res: ResolvedAbility): ResolvedAbility {
+  const amp = naturesBoonPowerFor(p.auras, res.def.id);
+  if (amp === 1) return res;
+  const effects = res.effects.map((eff) => {
+    const scaled: Record<string, unknown> = { ...eff };
+    for (const key of ['min', 'max', 'amount', 'total', 'value'] as const) {
+      const v = scaled[key];
+      if (typeof v === 'number' && v > 0) scaled[key] = Math.round(v * amp);
+    }
+    return scaled as AbilityEffect;
+  });
+  return { ...res, effects };
+}
 
 function consumeOverload(ctx: SimContext, p: Entity, res: ResolvedAbility): ResolvedAbility {
   if (res.def.school === 'physical' || res.cost <= 0) return res;

@@ -6915,7 +6915,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     cost: 40,
     castTime: 0,
     cooldown: 12,
-    range: 12,
+    // 25 yd since v0.43, matching Bruin Rush's outer reach. minRange stays 0,
+    // so unlike Bruin Rush (which needs 8 yd of runway) Lunge is pressable at
+    // any distance inside its range.
+    range: 25,
     minRange: 0,
     school: 'physical',
     requiresTarget: true,
@@ -6936,7 +6939,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // the cooldown back. LUNGE_WEAPON_MULT there owns the 60.
     effects: [{ type: 'charge' }],
     description:
-      'Shift into Cat Form if you are not already, then lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form.',
+      'Shift into Cat Form if you are not already, then lunge at an enemy up to 25 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form.',
   },
   hamstring_bite: {
     id: 'hamstring_bite',

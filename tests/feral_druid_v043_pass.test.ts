@@ -2,7 +2,7 @@
 //   1. every melee attack a feral druid makes reaches 1 yd further
 //   2. Slinkstrike and Lunge each bank 1 Old Blood (cap 3)
 //   3. Nature's Boon: a landed autoattack has a 10% chance to arm one free
-//      Wildbloom OR Lunar Tempest for 10 sec, castable without leaving form
+//      Wildbloom (any form) OR Oakhide (Bruin only) for 10 sec, 25% stronger
 //   4. Savage Mending is a Bruin AND Cat button
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -21,7 +21,9 @@ import {
   NATURES_BOON_CHANCE,
   NATURES_BOON_DURATION,
   NATURES_BOON_ID,
+  NATURES_BOON_POWER,
   naturesBoonArmedFor,
+  naturesBoonFormAllows,
   naturesBoonOnAutoAttack,
 } from '../src/sim/combat/druid_natures_boon';
 import { FERAL_MELEE_REACH_BONUS, feralMeleeReachBonus } from '../src/sim/combat/feral_reach';
@@ -165,7 +167,7 @@ describe('1. Wildfang reach: +1 yd on melee attacks', () => {
   });
 
   it('leaves every non-melee range alone, Lunge and Slinkstrike included', () => {
-    expect(ABILITIES.lunge.range).toBe(12);
+    expect(ABILITIES.lunge.range).toBe(25);
     expect(ABILITIES.pounce.range).toBe(8);
     expect(feralMeleeReachBonus(FERAL, ABILITIES.lunge.range)).toBe(0);
     expect(feralMeleeReachBonus(FERAL, ABILITIES.pounce.range)).toBe(0);
@@ -257,13 +259,11 @@ describe('2. Slinkstrike and Lunge bank Old Blood', () => {
 
 describe("3. Nature's Boon", () => {
   it('arms both spells at once for ten seconds', () => {
-    expect(NATURES_BOON_CHANCE).toBe(0.1);
+    // About one proc per 15 sec at Cat Form's fixed 1.0 sec swing.
+    expect(NATURES_BOON_CHANCE).toBeCloseTo(1 / 15, 10);
     expect(NATURES_BOON_DURATION).toBe(10);
-    expect([...NATURES_BOON_ABILITIES].sort()).toEqual([
-      'entangling_roots',
-      'moonfire',
-      'rejuvenation',
-    ]);
+    expect(NATURES_BOON_POWER).toBe(1.25);
+    expect([...NATURES_BOON_ABILITIES].sort()).toEqual(['barkskin', 'rejuvenation']);
   });
 
   it('recognizes an armed window for either spell and nothing else', () => {
@@ -275,8 +275,11 @@ describe("3. Nature's Boon", () => {
       },
     ];
     expect(naturesBoonArmedFor(armed, 'rejuvenation')).toBe(true);
-    expect(naturesBoonArmedFor(armed, 'moonfire')).toBe(true);
-    expect(naturesBoonArmedFor(armed, 'entangling_roots')).toBe(true);
+    // Oakhide is bear-only, and this list carries no form aura.
+    expect(naturesBoonArmedFor(armed, 'barkskin')).toBe(false);
+    expect(naturesBoonArmedFor([...armed, { kind: 'form_bear' }], 'barkskin')).toBe(true);
+    expect(naturesBoonArmedFor(armed, 'moonfire')).toBe(false);
+    expect(naturesBoonArmedFor(armed, 'entangling_roots')).toBe(false);
     expect(naturesBoonArmedFor(armed, 'wrath')).toBe(false);
     expect(naturesBoonArmedFor(armed, 'claw')).toBe(false);
     expect(naturesBoonArmedFor(armed, undefined)).toBe(false);
@@ -333,11 +336,7 @@ describe("3. Nature's Boon", () => {
     expect(window?.kind).toBe('next_cast_free');
     expect(window?.duration).toBe(NATURES_BOON_DURATION);
     expect(window?.remaining).toBe(NATURES_BOON_DURATION);
-    expect([...(window?.empowerAbilities ?? [])].sort()).toEqual([
-      'entangling_roots',
-      'moonfire',
-      'rejuvenation',
-    ]);
+    expect([...(window?.empowerAbilities ?? [])].sort()).toEqual(['barkskin', 'rejuvenation']);
   });
 
   it('keeps the druid in form: an armed window never auto-unshifts', () => {
@@ -350,11 +349,12 @@ describe("3. Nature's Boon", () => {
       {
         kind: 'next_cast_free',
         id: NATURES_BOON_ID,
-        empowerAbilities: ['rejuvenation', 'moonfire'],
+        empowerAbilities: [...NATURES_BOON_ABILITIES],
       },
     ] as Parameters<typeof willAutoUnshift>[0];
     expect(willAutoUnshift(armedBear, ABILITIES.rejuvenation)).toBe(false);
-    expect(willAutoUnshift(armedBear, ABILITIES.moonfire)).toBe(false);
+    // Lunar Tempest left the window, so it unshifts as it always did.
+    expect(willAutoUnshift(armedBear, ABILITIES.moonfire)).toBe(true);
     // A spell the window does not name still unshifts.
     expect(willAutoUnshift(armedBear, ABILITIES.wrath)).toBe(true);
   });
@@ -376,22 +376,6 @@ describe("3. Nature's Boon", () => {
     expect(player.resource).toBe(energyBefore);
     expect(player.auras.some((entry) => entry.kind === 'form_cat')).toBe(true);
     // One window, one cast.
-    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
-  });
-
-  it('casts Lunar Tempest from Cat Form on the same window', () => {
-    const { sim, player } = rig('feral');
-    player.auras.push(formAura(player, 'form_cat'));
-    const mob = spawnMob(sim, 10);
-    armBoon(sim);
-    expect(aura(player, NATURES_BOON_ID)).toBeDefined();
-    const hpBefore = mob.hp;
-
-    sim.castAbility('moonfire');
-    for (let tick = 0; tick < 40; tick++) sim.tick();
-
-    expect(mob.hp).toBeLessThan(hpBefore);
-    expect(player.auras.some((entry) => entry.kind === 'form_cat')).toBe(true);
     expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
   });
 
@@ -728,50 +712,6 @@ describe('7. Bruin Rush and Lunge enter their form on use', () => {
   });
 });
 
-describe("8. Gripping Roots rides the Nature's Boon window", () => {
-  it('casts from Cat Form for free without leaving the form', () => {
-    const { sim, player } = rig('feral');
-    player.auras.push(formAura(player, 'form_cat'));
-    // 6 yd: far enough to be a real ranged cast, near enough that the test
-    // world's terrain does not break line of sight at completion.
-    const mob = spawnMob(sim, 6);
-    armBoon(sim);
-    const energyBefore = player.resource;
-
-    sim.castAbility('entangling_roots');
-    // 1.5 sec of cast time at 20 Hz, plus slack for the completion tick.
-    for (let tick = 0; tick < 60; tick++) sim.tick();
-
-    expect(mob.auras.some((a) => a.kind === 'root')).toBe(true);
-    // Free, and still a cat.
-    expect(player.resource).toBe(energyBefore);
-    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
-    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
-  });
-
-  it('is authored with a cast time that the armed window removes', () => {
-    // The authored bar stays 1.5 sec: the window makes it instant at cast time
-    // (combat/casting_lifecycle.ts), it does not retune the ability.
-    expect(ABILITIES.entangling_roots.castTime).toBe(1.5);
-    expect(NATURES_BOON_DURATION).toBeGreaterThan(ABILITIES.entangling_roots.castTime);
-  });
-
-  it('is refused from Cat Form with no window armed, as before', () => {
-    const { sim, player } = rig('feral');
-    player.auras.push(formAura(player, 'form_cat'));
-    const mob = spawnMob(sim, 6);
-    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
-
-    sim.castAbility('entangling_roots');
-    for (let tick = 0; tick < 60; tick++) sim.tick();
-
-    expect(mob.auras.some((a) => a.kind === 'root')).toBe(false);
-    // A root is neither healing nor damaging, so it never auto-unshifted
-    // either: the druid is refused and stays a cat.
-    expect(player.auras.some((a) => a.kind === 'form_cat')).toBe(true);
-  });
-});
-
 describe("9. Nature's Boon never procs from a wand", () => {
   it('a wand bolt resolves outside the shell the proc hangs off', () => {
     // rangedSwing (combat/auto_attack.ts) resolves its hit inside its own
@@ -808,7 +748,7 @@ describe("9. Nature's Boon never procs from a wand", () => {
 });
 
 describe('10. The action bar shows a golden rim while the window is armed', () => {
-  it('lights exactly the three spells the window pays for, and nothing else', () => {
+  it('lights exactly the spells the window pays for, and nothing else', () => {
     const armed = [
       {
         id: NATURES_BOON_ID,
@@ -817,10 +757,14 @@ describe('10. The action bar shows a golden rim while the window is armed', () =
       },
     ];
     // The view sets slot.naturesBoonGlow from this same predicate, so pinning
-    // it here pins which slots wear the rim.
+    // it here pins which slots wear the rim. Oakhide is bear-scoped, so the
+    // bar lights it in Bruin Form and nowhere else.
+    const armedBear = [...armed, { kind: 'form_bear' }];
     for (const id of NATURES_BOON_ABILITIES) {
-      expect(naturesBoonArmedFor(armed, id)).toBe(true);
+      expect(naturesBoonArmedFor(armedBear, id)).toBe(true);
     }
+    expect(naturesBoonArmedFor(armed, 'rejuvenation')).toBe(true);
+    expect(naturesBoonArmedFor(armed, 'barkskin')).toBe(false);
     for (const id of ['claw', 'maul', 'wrath', 'healing_touch', 'prowl']) {
       expect(naturesBoonArmedFor(armed, id)).toBe(false);
     }
@@ -854,37 +798,7 @@ describe('10. The action bar shows a golden rim while the window is armed', () =
   });
 });
 
-describe('11. The window makes its spell instant, and the rushes are off the GCD', () => {
-  it('Gripping Roots goes off on the press while armed, with no cast bar', () => {
-    const { sim, player } = rig('feral');
-    player.auras.push(formAura(player, 'form_cat'));
-    const mob = spawnMob(sim, 6);
-    armBoon(sim);
-
-    sim.castAbility('entangling_roots');
-    // No cast bar was ever raised: that is what instant means here, and a 1.5
-    // sec authored cast could not satisfy it.
-    expect(player.castingAbility).toBeNull();
-    // Well inside the 1.5 sec (30 ticks) the authored bar would have taken.
-    for (let tick = 0; tick < 10; tick++) sim.tick();
-
-    expect(mob.auras.some((a) => a.kind === 'root')).toBe(true);
-    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
-  });
-
-  it('still raises a real cast bar with no window armed', () => {
-    const { sim, player } = rig('feral');
-    const mob = spawnMob(sim, 6);
-    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
-
-    sim.castAbility('entangling_roots');
-    sim.tick();
-
-    // The authored 1.5 sec bar is running, and nothing has landed yet.
-    expect(player.castingAbility).toBe('entangling_roots');
-    expect(mob.auras.some((a) => a.kind === 'root')).toBe(false);
-  });
-
+describe('11. The rushes are off the GCD', () => {
   it('Lunge and Bruin Rush are both off the global cooldown', () => {
     expect(ABILITIES.lunge.offGcd).toBe(true);
     expect(ABILITIES.bear_charge.offGcd).toBe(true);
@@ -925,5 +839,94 @@ describe('11. The window makes its spell instant, and the rushes are off the GCD
     const buff = player.auras.find((a) => a.kind === 'buff_armor_pct');
     expect(buff?.value).toBe(30);
     expect(player.stats.armor).toBe(Math.round(before * 1.3));
+  });
+});
+
+describe('12. Oakhide rides the window, in Bruin Form only', () => {
+  it('is armed only while the druid is a bear', () => {
+    const boon = {
+      id: NATURES_BOON_ID,
+      kind: 'next_cast_free',
+      empowerAbilities: [...NATURES_BOON_ABILITIES],
+    };
+    expect(naturesBoonFormAllows([], 'rejuvenation')).toBe(true);
+    expect(naturesBoonFormAllows([], 'barkskin')).toBe(false);
+    expect(naturesBoonFormAllows([{ kind: 'form_cat' }], 'barkskin')).toBe(false);
+    expect(naturesBoonFormAllows([{ kind: 'form_bear' }], 'barkskin')).toBe(true);
+    // The bar's rim reads the same predicate, so Oakhide glows in Bruin alone.
+    expect(naturesBoonArmedFor([boon, { kind: 'form_cat' }], 'barkskin')).toBe(false);
+    expect(naturesBoonArmedFor([boon, { kind: 'form_bear' }], 'barkskin')).toBe(true);
+    // Wildbloom is form-free either way.
+    expect(naturesBoonArmedFor([boon, { kind: 'form_cat' }], 'rejuvenation')).toBe(true);
+  });
+
+  it('pays for a free Oakhide in Bruin Form', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'bear_form');
+    armBoon(sim);
+    player.resource = player.maxResource;
+    const rageBefore = player.resource;
+
+    sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) sim.tick();
+
+    expect(player.auras.some((a) => a.kind === 'buff_armor_pct')).toBe(true);
+    expect(player.resource).toBe(rageBefore);
+    expect(aura(player, NATURES_BOON_ID)).toBeUndefined();
+  });
+
+  it('never pays for Oakhide out of Bruin Form, and never spends the window', () => {
+    const { sim, player } = rig('feral');
+    shiftInto(sim, 'cat_form');
+    armBoon(sim);
+    player.resource = player.maxResource;
+    const energyBefore = player.resource;
+
+    sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) sim.tick();
+
+    // Oakhide still goes off (it is usableInForm), but it pays its own cost...
+    expect(player.auras.some((a) => a.kind === 'buff_armor_pct')).toBe(true);
+    expect(player.resource).toBeLessThan(energyBefore);
+    // ...and the window survives for the Wildbloom it is meant for.
+    expect(aura(player, NATURES_BOON_ID)).toBeDefined();
+  });
+});
+
+describe('13. An armed window makes its spell 25% stronger', () => {
+  it('scales Wildbloom by a quarter', () => {
+    const plain = rig('feral');
+    plain.player.resource = plain.player.maxResource;
+    plain.sim.castAbility('rejuvenation');
+    plain.sim.tick();
+    const plainTick = plain.player.auras.find((a) => a.id === 'rejuvenation')?.value ?? 0;
+    expect(plainTick).toBeGreaterThan(0);
+
+    const boon = rig('feral');
+    armBoon(boon.sim);
+    boon.player.resource = boon.player.maxResource;
+    boon.sim.castAbility('rejuvenation');
+    boon.sim.tick();
+    const boonTick = boon.player.auras.find((a) => a.id === 'rejuvenation')?.value ?? 0;
+
+    expect(boonTick).toBeGreaterThan(plainTick);
+    expect(boonTick / plainTick).toBeCloseTo(NATURES_BOON_POWER, 1);
+  });
+
+  it('scales Oakhide in Bruin Form, and leaves an unempowered one alone', () => {
+    const plain = rig('feral');
+    shiftInto(plain.sim, 'bear_form');
+    plain.sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) plain.sim.tick();
+    const plainPct = plain.player.auras.find((a) => a.kind === 'buff_armor_pct')?.value;
+    expect(plainPct).toBe(20);
+
+    const boon = rig('feral');
+    shiftInto(boon.sim, 'bear_form');
+    armBoon(boon.sim);
+    boon.sim.castAbility('barkskin');
+    for (let tick = 0; tick < 3; tick++) boon.sim.tick();
+    const boonPct = boon.player.auras.find((a) => a.kind === 'buff_armor_pct')?.value;
+    expect(boonPct).toBe(25);
   });
 });

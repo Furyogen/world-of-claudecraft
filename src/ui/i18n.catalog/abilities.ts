@@ -1279,7 +1279,7 @@ const classAbilityNamesEn = {
       [
         'lunge',
         'Lunge',
-        'Shift into Cat Form if you are not already, then lunge at an enemy up to 12 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form.',
+        'Shift into Cat Form if you are not already, then lunge at an enemy up to 25 yd away. On arrival, deals 60% weapon damage, awards 1 combo point and, as Wildfang, adds 1 Old Blood (max 3); a lunge cut short refunds its cooldown. Usable in any form.',
       ],
       [
         'hamstring_bite',

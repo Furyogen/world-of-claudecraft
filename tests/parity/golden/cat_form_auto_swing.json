@@ -304,8 +304,8 @@
       "tick": 130,
       "time": 6.5,
       "nextId": 1010,
-      "state": "0e999969",
-      "events": "be5ce269",
+      "state": "27a8ddac",
+      "events": "dd62c00f",
       "rng": {
         "draws": 872,
         "digest": "53bd0f68"
@@ -315,7 +315,7 @@
       "tick": 135,
       "time": 6.75,
       "nextId": 1010,
-      "state": "cc481b8f",
+      "state": "6a10cfe4",
       "events": "787ea7b3",
       "rng": {
         "draws": 923,
@@ -326,7 +326,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 1010,
-      "state": "d698b2d8",
+      "state": "3a9d3a1e",
       "events": "741638a5",
       "rng": {
         "draws": 991,
@@ -337,7 +337,7 @@
       "tick": 145,
       "time": 7.25,
       "nextId": 1010,
-      "state": "ebbf9e10",
+      "state": "c5331214",
       "events": "741638a5",
       "rng": {
         "draws": 1054,
@@ -348,7 +348,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 1010,
-      "state": "296835e5",
+      "state": "b462851f",
       "events": "741638a5",
       "rng": {
         "draws": 1103,
@@ -359,7 +359,7 @@
       "tick": 155,
       "time": 7.75,
       "nextId": 1010,
-      "state": "d39c252e",
+      "state": "840c5a14",
       "events": "a66bd1e7",
       "rng": {
         "draws": 1170,
@@ -370,7 +370,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 1010,
-      "state": "652ed611",
+      "state": "3719fe76",
       "events": "741638a5",
       "rng": {
         "draws": 1238,
@@ -381,7 +381,7 @@
       "tick": 165,
       "time": 8.25,
       "nextId": 1010,
-      "state": "18712529",
+      "state": "dbe2b576",
       "events": "741638a5",
       "rng": {
         "draws": 1279,
@@ -392,7 +392,7 @@
       "tick": 170,
       "time": 8.5,
       "nextId": 1010,
-      "state": "bf6d18c2",
+      "state": "869ae00b",
       "events": "741638a5",
       "rng": {
         "draws": 1344,
@@ -403,7 +403,7 @@
       "tick": 170,
       "time": 8.5,
       "nextId": 1010,
-      "state": "bf6d18c2",
+      "state": "869ae00b",
       "events": "741638a5",
       "rng": {
         "draws": 1344,
@@ -722,20 +722,6 @@
               "school": "physical",
               "sourceId": 1007,
               "value": 0.65
-            },
-            {
-              "duration": 10,
-              "empowerAbilities": [
-                "rejuvenation",
-                "moonfire",
-                "entangling_roots"
-              ],
-              "id": "natures_boon",
-              "kind": "next_cast_free",
-              "name": "Nature's Boon",
-              "remaining": 7.9,
-              "school": "nature",
-              "sourceId": 1007
             }
           ],
           "autoAttack": true,
@@ -903,7 +889,7 @@
       "tick": 175,
       "time": 8.75,
       "nextId": 1010,
-      "state": "aef707c7",
+      "state": "ae5ec26c",
       "events": "741638a5",
       "rng": {
         "draws": 1402,
@@ -914,7 +900,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 1010,
-      "state": "143c1698",
+      "state": "9877eea2",
       "events": "741638a5",
       "rng": {
         "draws": 1479,
@@ -925,7 +911,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 1010,
-      "state": "143c1698",
+      "state": "9877eea2",
       "events": "741638a5",
       "rng": {
         "draws": 1479,
@@ -1242,20 +1228,6 @@
               "school": "physical",
               "sourceId": 1007,
               "value": 0.65
-            },
-            {
-              "duration": 10,
-              "empowerAbilities": [
-                "rejuvenation",
-                "moonfire",
-                "entangling_roots"
-              ],
-              "id": "natures_boon",
-              "kind": "next_cast_free",
-              "name": "Nature's Boon",
-              "remaining": 7.4,
-              "school": "nature",
-              "sourceId": 1007
             }
           ],
           "combatTimer": 2.6,

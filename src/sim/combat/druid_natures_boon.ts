@@ -38,28 +38,36 @@ export const NATURES_BOON_ID = 'natures_boon';
  *  matcher, like every other sim-emitted aura name. */
 export const NATURES_BOON_NAME = "Nature's Boon";
 /** Per landed auto-attack. */
-export const NATURES_BOON_CHANCE = 0.1;
+// Tuned to land a proc roughly every 15 sec. Cat Form swings at a fixed 1.0 sec
+// (combat/form_swing.ts CAT_FORM_SWING_SPEED), so one landed auto-attack per
+// second makes 1-in-15 the rate that reads as "about every 15 seconds". Bruin
+// Form swings on the equipped weapon's slower speed, so a bear procs it
+// correspondingly less often; the chance is per SWING, not per second.
+export const NATURES_BOON_CHANCE = 1 / 15;
+/** An armed window also makes its spell 25% stronger. */
+export const NATURES_BOON_POWER = 1.25;
 /** How long the armed window lasts, in seconds. */
 export const NATURES_BOON_DURATION = 10;
 
-/** The three spells the window pays for: Wildbloom (`rejuvenation`), Lunar
- *  Tempest (`moonfire`) and Gripping Roots (`entangling_roots`). All are armed
- *  together; the first one cast wins. Gripping Roots is the only one with an
- *  authored cast time (1.5 sec), and an armed window makes it INSTANT as well
- *  as free (the castTime fold in combat/casting_lifecycle.ts), so all three go
- *  off on the press. That also keeps the charge and the cast atomic: an instant
- *  bills at cast time, so there is no 1.5 sec bar for an interrupt to spend the
- *  window on. */
+/** The spells the window pays for: Wildbloom (`rejuvenation`) in any form, and
+ *  Oakhide (`barkskin`) in Bruin Form only. Both are armed together and the
+ *  first one cast wins, so the window is a choice between a heal and a
+ *  mitigation cooldown rather than a free nuke. Both are authored instant, so
+ *  nothing here has to touch cast time. */
 // Aura.empowerAbilities is a MUTABLE string[] that applyAura stores by
 // reference, so every armed window gets its own copy. Handing out this module
 // constant instead would share one array across every player and every Sim in
 // the process, which is exactly the module-holds-state trap src/sim/CLAUDE.md
 // warns about.
-export const NATURES_BOON_ABILITIES: readonly string[] = [
-  'rejuvenation',
-  'moonfire',
-  'entangling_roots',
-];
+export const NATURES_BOON_ABILITIES: readonly string[] = ['rejuvenation', 'barkskin'];
+
+/** Members the window only pays for while the druid is a bear. Oakhide is a
+ *  Bruin mitigation cooldown, so a free one out of Bruin Form would be a free
+ *  caster-form armor buff instead of the tank payoff it is meant to be. The
+ *  action bar asks the same predicate, so the golden rim on Oakhide appears in
+ *  Bruin Form and nowhere else. */
+const NATURES_BOON_BEAR_ONLY: ReadonlySet<string> = new Set(['barkskin']);
+const BEAR_FORM_KIND = 'form_bear';
 function boonAbilityList(): string[] {
   return [...NATURES_BOON_ABILITIES];
 }
@@ -71,6 +79,26 @@ interface BoonAura {
   empowerAbilities?: readonly string[];
 }
 
+/** Does the druid's current form allow the window to pay for this ability?
+ *  True for every member but the bear-only ones, which need Bruin Form. The
+ *  cast gate, the free-cost tail and the action bar's rim all ask this, so a
+ *  caster-form Oakhide is refused the window in all three at once. */
+export function naturesBoonFormAllows(
+  auras: readonly { kind: string }[],
+  abilityId: string,
+): boolean {
+  if (!NATURES_BOON_BEAR_ONLY.has(abilityId)) return true;
+  return auras.some((aura) => aura.kind === BEAR_FORM_KIND);
+}
+
+/** The multiplier an armed window puts on its spell's magnitudes, applied to a
+ *  COPY of the resolved ability before its effects resolve (the consumeOverload
+ *  shape in combat/casting_lifecycle.ts). 1 when no window covers this cast, so
+ *  an ordinary Wildbloom or Oakhide is untouched. */
+export function naturesBoonPowerFor(auras: readonly BoonAura[], abilityId: string): number {
+  return naturesBoonArmedFor(auras, abilityId) ? NATURES_BOON_POWER : 1;
+}
+
 /** Is a Nature's Boon window armed for this exact ability right now? The one
  *  question the cast gate and the auto-unshift rule ask, so neither can
  *  disagree with what the consume funnel will actually accept. */
@@ -79,6 +107,7 @@ export function naturesBoonArmedFor(
   abilityId: string | undefined,
 ): boolean {
   if (abilityId === undefined || !NATURES_BOON_ABILITIES.includes(abilityId)) return false;
+  if (!naturesBoonFormAllows(auras, abilityId)) return false;
   return auras.some(
     (aura) =>
       aura.id === NATURES_BOON_ID &&
