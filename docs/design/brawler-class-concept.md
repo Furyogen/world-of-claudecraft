@@ -45,7 +45,7 @@ it ships.
 
 ### Grit (resource)
 
-Grit runs on the warrior's classic rage conversion (damage dealt and damage
+Grit is one shared resource name across all three specs. It runs on the warrior's classic rage conversion (damage dealt and damage
 taken both turn into resource, and it decays out of combat) under the Brawler's
 own label. The engine is reused, not rewritten. Each spec changes one input:
 
@@ -69,7 +69,8 @@ A Lockdown is a grapple:
 - **One at a time.** The Brawler can hold one Lockdown at a time.
 - **Early ends.** It breaks early if the Brawler is stunned, feared, knocked
   back or killed. The Brawler can also end it deliberately with a finisher.
-- **Control rules.** In PvP it shares the root diminishing-returns category.
+- **Control rules.** In PvP it shares the root diminishing-returns category,
+  with the same duration as in PvE.
 - **Root-immune targets (bosses):** the Crush still ticks, but only the Brawler
   is rooted. Against a boss a Lockdown is a pure damage-over-time that costs
   your own mobility, a clear risk tradeoff.
@@ -103,14 +104,19 @@ You deal 1 percent more damage for every 1 percent of health you are missing.
 At 90 percent health that is +10 percent, and at 50 percent it is +50 percent,
 matching the brief.
 
-Two budget rules keep it honest:
+Three rules keep it honest:
 
 1. **Base damage is tuned below the peer median.** A Bareknuckle at full health
    is the weakest melee in the game; the fight-average (health dipping and
    recovering) is what must land inside the power ceiling.
-2. **Proposed cap: +70 percent (at 30 percent health).** Below 30 percent the
-   bonus stops growing, so there is no reward for hovering at 1 hp. The cap is
-   the spec's balance knob; the open question is below.
+2. **Cap: +85 percent, reached at 15 percent health.** The bonus grows linearly
+   down to 15 percent health and stops there, so there is no extra reward for
+   hovering at 1 hp.
+3. **The bonus falls slowly when you are healed.** It rises instantly as you
+   lose health, but when a heal (yours or a healer's) raises your health, the
+   bonus drops toward its new value gradually (starting point: 5 percentage
+   points per second, to be measured). Healers keep you alive without
+   instantly erasing the damage you paid for in blood.
 
 Mobile readability: the player-frame health bar tints as the bonus grows, and
 the tooltip shows the live percentage.
@@ -181,7 +187,7 @@ other tanks, not just the mean.
 The fantasy: the trainer who sprints into the fight, cracks a shoulder back into
 place and screams you to your feet. Heals are acupressure, so they need touch:
 **every heal has a 5 yd range**. The Cornerman has to physically run to whoever
-needs help.
+needs help. All heals, including Crack It Back, share the 5 yd range.
 
 ### The heal contract
 
@@ -199,8 +205,8 @@ needs help.
 |---|---|---|
 | **Pressure Point** | Big heal | 2 sec cast, 5 yd. The strongest single heal in the game. |
 | **Knead** | Heal over time | 5 yd, 12 sec. Lets you leave to run to the next ally. |
-| **Crack It Back** | Instant heal | Medium heal that also removes one slow or root. |
-| **Huddle** | Stacked heal | Heals the target plus each ally within 4 yd of them; the heal splits, so it is weaker per person than Pressure Point. The only multi-target heal. |
+| **Crack It Back** | Instant heal | 5 yd. Medium heal that also removes one slow or root. |
+| **Huddle** | Stacked heal | 5 yd. Heals the target plus each ally within 4 yd of them; the heal splits, so it is weaker per person than Pressure Point. The only multi-target heal. |
 | **Sprint to the Corner** | Mobility | Dash to a friendly target (25 yd). Mandatory for a melee-range healer. |
 | **Smelling Salts** | Dispel | Removes a stun or sleep from an ally. |
 | **Towel In** | Emergency | Target ally takes 60 percent less damage for 4 sec. Cooldown 3 min. |
@@ -243,9 +249,13 @@ option must be live for all three specs at unlock):
 - **Agility parry:** extends the defender hit table beside
   `warrior_hit_table.ts`.
 - **Last Legs:** one pure damage modifier with its own unit test.
-- **Grit:** reuses the rage engine with a class label. If a distinct resource
-  id is needed, it is a new `resourceType` member, implemented in BOTH the
-  offline `Sim` and `ClientWorld`, with the parity pin updated.
+- **Grit:** reuses the rage engine with one shared class label for all three
+  specs. If a distinct resource id is needed, it is a new `resourceType`
+  member, implemented in BOTH the offline `Sim` and `ClientWorld`, with the
+  parity pin updated.
+- **Last Legs decay:** the bonus tracks a smoothed health value that follows
+  health down instantly and up at the decay rate, stepped on the 20 Hz tick
+  so it stays deterministic.
 - **Same-change obligations:** i18n English keys (plus the five M16 non-Latin
   fills for wordy names), guide regeneration (`npm run wiki:content`), Book of
   Deeds records where applicable, and class icons plus spell icons.
@@ -256,17 +266,14 @@ option must be live for all three specs at unlock):
   close-strike restriction during a Lockdown must be readable on a small
   screen (greyed kicks).
 
-## Open questions
+## Decisions
 
-1. **The Last Legs cap:** is +70 percent at 30 percent health right, or should
-   it be linear all the way (up to +90 percent at 10 percent health, as in the
-   brief)?
-2. **Healing into Last Legs:** healers erase the Bareknuckle's bonus. Should
-   incoming heals be treated normally (the tradeoff is the point), or should
-   the bonus decay slowly instead of dropping instantly?
-3. **Lockdown in PvP:** a mutual root is a 1v1 duel lock. Should PvP Lockdowns
-   be shorter (for example 4 sec)?
-4. **Cornerman heal range:** is 5 yd right, or should Pressure Point alone be
-   5 yd with the rest at 10 yd?
-5. **Grit label:** one shared resource name for all three specs, or a renamed
-   bar per spec?
+Settled with the owner:
+
+1. **Last Legs cap:** linear down to 15 percent health, for a maximum of +85
+   percent damage.
+2. **Healing into Last Legs:** the bonus decays slowly after a heal instead of
+   dropping instantly.
+3. **Lockdown in PvP:** same duration as in PvE, not shortened.
+4. **Cornerman heal range:** every heal is 5 yd.
+5. **Grit:** one shared resource name for all three specs.
