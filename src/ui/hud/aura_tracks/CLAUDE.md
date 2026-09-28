@@ -44,6 +44,16 @@ classifiers rather than each keeping a list.
   member, so only the caster's copy takes a row. Prefer this table to `FORCED`,
   which skips the ceiling and the mode test and reads the ability's first effect
   for its metadata.
+- **A heal over time the SIM applies is admitted by its LIVE kind.** Some HoTs
+  come from a sim module, not from any ability effect, so the ABILITIES
+  derivation cannot see them: Spiritcall's Mending Current
+  (`shaman_mending_current`, stored by Mending Waters and Tidecall) was missing
+  from My Buffs on Allies that way, beside Steady Hands, Echoing Elements, the
+  Benison set mend and Second Verse (whose ids carry the cast tick).
+  `auraTrackEntryForAura` falls back to one shared `hot` entry when an own aura
+  has no catalog row but LANDED as `hot` with a live duration within the ceiling;
+  a catalog row always wins, so it only adds rows. The view calls it, never the
+  bare id lookup. Every other kind still needs the derivation or a table row.
 - **Keys are the ids the SIM applies, not ability ids.** An effect can name its
   own `auraId` (Raised Guard lands as `raised_guard_dr`, Hallowed Wall's shield
   as `holy_shield_absorb`), a second self-buff is kind-suffixed, an absorb beside

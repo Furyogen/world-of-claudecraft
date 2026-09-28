@@ -9,6 +9,8 @@
 // host's isOwn predicate says the local player cast it, the catalog places it in
 // a category this track accepts, and the aura is not HARMFUL. No class list and
 // no ability list: a heal added to any class joins its track the day it exists.
+// A heal over time a sim module applies outside any ability effect (Spiritcall's
+// Mending Current) is admitted by its live `hot` kind; see auraTrackEntryForAura.
 //
 // The polarity check is not belt-and-braces. The catalog is keyed by aura id
 // alone, and one id can carry both polarities: Hourglass of Suspension applies
@@ -30,7 +32,7 @@
 import { isDebuffDisplayAura } from '../../../sim/aura_classify';
 import type { AuraKind } from '../../../sim/types';
 import { isAuraExpiring } from '../../auras_view';
-import { auraTrackEntry } from './aura_track_catalog';
+import { auraTrackEntryForAura } from './aura_track_catalog';
 import type { AuraTrackDescriptor } from './aura_track_descriptors';
 
 /** Rows one track paints at most. Past this a bar stops being glanceable and
@@ -191,7 +193,7 @@ export function createAuraTrackView<TEntity extends AuraTrackEntityInput>(
     scratch.length = 0;
     for (const aura of entity.auras) {
       if (!deps.isOwn(aura)) continue;
-      const entry = auraTrackEntry(aura.id);
+      const entry = auraTrackEntryForAura(aura);
       if (!entry) continue;
       if (!descriptor.accepts(entry, onSelf)) continue;
       if (aura.remaining <= 0 && aura.permanent !== true) continue;

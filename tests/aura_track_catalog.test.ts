@@ -17,6 +17,8 @@
 // naming them is worth the maintenance.
 
 import { describe, expect, it } from 'vitest';
+import { BENISON_4PC_MEND_AURA_ID } from '../src/sim/combat/priest/benison';
+import { MENDING_CURRENT_ID } from '../src/sim/combat/shaman_spiritmend';
 import { ABILITIES, MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
@@ -28,7 +30,9 @@ import {
   type AuraTrackCategory,
   type AuraTrackEntry,
   auraTrackEntry,
+  auraTrackEntryForAura,
   DEFENSIVE_COOLDOWN_SEC,
+  LIVE_HOT_FALLBACK_ID,
 } from '../src/ui/hud/aura_tracks/aura_track_catalog';
 import { AURA_TRACKS } from '../src/ui/hud/aura_tracks/aura_track_descriptors';
 import { createAuraTrackView } from '../src/ui/hud/aura_tracks/aura_track_view';
@@ -588,6 +592,116 @@ describe('aura track catalog: what it derives', () => {
       );
     }
     expect(state.overflow, 'a four-ally party should not overflow the track').toBe(0);
+  });
+
+  it("shows Spiritcall's Mending Current on the ally it was stored on, and on yourself", () => {
+    // THE PLAYER REPORT. Mending Waters and Tidecall store part of the heal as a
+    // 12 sec `shaman_mending_current` HoT (combat/shaman_spiritmend.ts). No ability
+    // effect applies that aura, so the ABILITIES derivation never saw it and the
+    // shaman's own maintained heal was missing from My Buffs on Allies. It must
+    // paint through the REAL selection core over the REAL post-cast entities, on
+    // the ally (Friendly) and, cast on yourself, on you (Self).
+    const friendly = AURA_TRACKS.find((t) => t.id === 'friendly');
+    const self = AURA_TRACKS.find((t) => t.id === 'self');
+    expect(friendly && self).toBeDefined();
+    if (!friendly || !self) return;
+    expect(auraTrackEntry(MENDING_CURRENT_ID), 'this pin assumes no catalog row').toBeUndefined();
+    const rowsOf = (track: (typeof AURA_TRACKS)[number], sim: Sim): string[] => {
+      const view = createAuraTrackView(track, {
+        isOwn: (a) => a.sourceId === sim.player.id,
+        isMode: () => false,
+        auraName: (a) => a.name,
+        unitName: (e) => e.name,
+        iconKey: (a) => a.id,
+      });
+      const state = view.tick({
+        player: sim.player,
+        allies: sim.entities.values(),
+        enabled: true,
+        includeModes: true,
+      });
+      return state.rows.slice(0, state.count).map((r) => r.key);
+    };
+    for (const onAlly of [true, false]) {
+      const sim = new Sim({
+        seed: 5,
+        playerClass: 'shaman',
+        autoEquip: true,
+        world: EMPTY_TEST_WORLD,
+      });
+      sim.setPlayerLevel(20);
+      expect(sim.setSpec('restoration'), 'shaman could not pick Spiritcall').toBe(true);
+      const player = sim.player;
+      player.resource = player.maxResource;
+      const allyId = sim.addPlayer('warrior', 'Ally');
+      const ally = sim.entities.get(allyId);
+      if (!ally) throw new Error('the ally never joined the world');
+      ally.pos = { ...player.pos };
+      ally.pos.x += 2;
+      ally.prevPos = { ...ally.pos };
+      const target = onAlly ? ally : player;
+      target.hp = Math.round(target.maxHp * 0.3);
+      sim.targetEntity(target.id);
+      sim.castAbility('healing_wave');
+      for (let i = 0; i < 60; i++) sim.tick();
+      const live = target.auras.find(
+        (a) => a.id === MENDING_CURRENT_ID && a.sourceId === player.id,
+      );
+      expect(live, `Mending Waters stored no Mending Current (onAlly=${onAlly})`).toBeDefined();
+      const key = `${target.id}:${MENDING_CURRENT_ID}`;
+      if (onAlly) {
+        expect(rowsOf(friendly, sim), 'Mending Current is missing from Friendly').toContain(key);
+        expect(rowsOf(self, sim)).not.toContain(key);
+      } else {
+        expect(rowsOf(self, sim), 'Mending Current on you is missing from Self').toContain(key);
+        expect(rowsOf(friendly, sim)).not.toContain(key);
+      }
+    }
+  });
+
+  it('tracks every own heal over time by its LIVE kind, whatever sim module applied it', () => {
+    // The sim applies several HoTs from outside any ability effect (Mending
+    // Current, Steady Hands, Echoing Elements, the Benison set mend, Second
+    // Verse, whose ids carry the cast tick so no id table could list them). The
+    // live `hot` kind is what they share, so it is what admits them.
+    const sampleIds = [
+      MENDING_CURRENT_ID,
+      'steady_hands_hot',
+      'shaman_echoing_elements_heal',
+      BENISON_4PC_MEND_AURA_ID,
+      'priest_second_verse_scouring_mercy_1234',
+    ];
+    const friendly = AURA_TRACKS.find((t) => t.id === 'friendly');
+    const selfTrack = AURA_TRACKS.find((t) => t.id === 'self');
+    if (!friendly || !selfTrack) throw new Error('missing track');
+    for (const id of sampleIds) {
+      const entry = auraTrackEntryForAura({ id, kind: 'hot', duration: 12 });
+      expect(entry, `${id} is a live HoT and must be tracked`).toBeDefined();
+      if (!entry) continue;
+      expect(entry.category).toBe('hot');
+      expect(entry.shape).toBe('timer');
+      expect(friendly.accepts(entry, false), `${id} must reach Friendly on an ally`).toBe(true);
+      expect(selfTrack.accepts(entry, true), `${id} must reach Self on you`).toBe(true);
+    }
+    // The same live kind is not enough on its own: past the ceiling, permanent,
+    // or with no duration it stays out, exactly like a derived row.
+    const base = { id: 'some_sim_hot', kind: 'hot' };
+    expect(
+      auraTrackEntryForAura({ ...base, duration: AURA_TRACK_DURATION_CEILING_SEC + 1 }),
+    ).toBeUndefined();
+    expect(auraTrackEntryForAura({ ...base, duration: 12, permanent: true })).toBeUndefined();
+    expect(auraTrackEntryForAura({ ...base, duration: 0 })).toBeUndefined();
+    expect(auraTrackEntryForAura(base)).toBeUndefined();
+    // Any other unknown kind stays out: the fallback is for heals only.
+    expect(auraTrackEntryForAura({ id: 'some_sim_buff', kind: 'buff_ap', duration: 10 })).toBe(
+      undefined,
+    );
+    // A catalog row always wins, so the fallback never reclassifies one.
+    for (const entry of AURA_TRACK_CATALOG.values()) {
+      expect(auraTrackEntryForAura({ id: entry.id, kind: 'hot', duration: 5 })).toBe(entry);
+    }
+    // A live HoT is never keyed by the fallback id itself.
+    expect(auraTrackEntry(LIVE_HOT_FALLBACK_ID)).toBeUndefined();
   });
 
   it('honours its by-id exclusions, each of which has a live ability behind it', () => {

@@ -383,3 +383,49 @@ export const AURA_TRACK_CATALOG: ReadonlyMap<string, AuraTrackEntry> = buildCata
 export function auraTrackEntry(auraId: string): AuraTrackEntry | undefined {
   return AURA_TRACK_CATALOG.get(auraId);
 }
+
+/** The id the live-kind HoT fallback reports. No real aura carries it, so no
+ *  catalog row can collide with it. */
+export const LIVE_HOT_FALLBACK_ID = '*live_hot';
+
+// THE LIVE-KIND HOT FALLBACK. Several heals over time are applied by a sim
+// module rather than by any ability effect, so the ABILITIES derivation above
+// can never see them. Spiritcall's Mending Current is the one a player reported:
+// Mending Waters and Tidecall store part of their heal as a 12 sec
+// `shaman_mending_current` HoT on the ally (combat/shaman_spiritmend.ts), and the
+// shaman's own maintained heal was missing from My Buffs on Allies. The same hole
+// held Steady Hands (paladin), Echoing Elements (shaman), the Benison set mend and
+// Second Verse (priest), whose ids even carry the cast tick, so no id table could
+// ever list them. The aura's LIVE kind is the one fact every one of them shares
+// and both worlds mirror (src/net/aura_wire_decode.ts), so an own aura that lands
+// as `hot` is a HoT row whatever applied it. The duration ceiling still holds,
+// read from the live aura, and a catalog row always wins, so this adds rows and
+// never reclassifies one. One shared entry, so the frame path allocates nothing.
+const LIVE_HOT_FALLBACK: AuraTrackEntry = Object.freeze({
+  id: LIVE_HOT_FALLBACK_ID,
+  abilityId: LIVE_HOT_FALLBACK_ID,
+  kind: 'hot',
+  duration: AURA_TRACK_DURATION_CEILING_SEC,
+  category: 'hot',
+  shape: 'timer',
+  cooldown: 0,
+});
+
+/**
+ * The entry for a LIVE aura: its catalog row, else the HoT fallback when the
+ * aura landed as a `hot` of at most the duration ceiling. Undefined when
+ * nothing tracks it.
+ */
+export function auraTrackEntryForAura(aura: {
+  id: string;
+  kind?: string;
+  duration?: number;
+  permanent?: boolean;
+}): AuraTrackEntry | undefined {
+  const entry = AURA_TRACK_CATALOG.get(aura.id);
+  if (entry !== undefined) return entry;
+  if (aura.kind !== 'hot' || aura.permanent === true) return undefined;
+  const duration = aura.duration ?? 0;
+  if (!(duration > 0) || duration > AURA_TRACK_DURATION_CEILING_SEC) return undefined;
+  return LIVE_HOT_FALLBACK;
+}
