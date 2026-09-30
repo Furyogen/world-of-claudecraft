@@ -10123,7 +10123,14 @@ export const de_DE: EnTranslations = {
     "redesignHint": "Diese Figur stammt aus der Zeit vor dem neuen Charaktereditor. Ihr habt eine kostenlose Umgestaltung; sie wird beim Speichern verbraucht.",
     "redesignTitle": "{name} umgestalten",
     "redesignSave": "Neues Aussehen speichern",
-    "redesignCancel": "Aktuelles Aussehen behalten"
+    "redesignCancel": "Aktuelles Aussehen behalten",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Charakter löschen",

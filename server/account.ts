@@ -73,6 +73,7 @@ import { ctxAccountId } from './http/context';
 import type { Ctx, Middleware, RouteDef } from './http/types';
 import { json, moderationErrorBody, readBody } from './http_util';
 import { clearAuthFailures, rateLimited, recordAuthFailure } from './ratelimit';
+import { adminRolesForAccount } from './staff_db';
 import {
   generateRecoveryCodes,
   generateSecret,
@@ -122,6 +123,10 @@ export async function handleAccountWhoami(
   if (!acct) return json(res, 404, { error: 'account not found', code: 'account.not_found' });
   const characterCount = await characterCountForAccount(accountId);
   const twoFactorEnabled = await accountTwoFactorEnabled(accountId);
+  // Staff by the exact predicate the WS handshake uses (server/ws_auth.ts), so
+  // the character-select screen offers the incognito login choice
+  // (server/incognito.ts) to exactly the accounts the server will honor it for.
+  const admin = (await adminRolesForAccount(accountId)) !== null;
   return json(res, 200, {
     username: acct.username,
     email: acct.email ?? '',
@@ -136,6 +141,7 @@ export async function handleAccountWhoami(
     // owner-chosen password (see handleAccountSetInitialPassword below): the
     // client uses this to show "Set a Password" instead of "Change Password".
     passwordSet: acct.password_set,
+    admin,
   });
 }
 

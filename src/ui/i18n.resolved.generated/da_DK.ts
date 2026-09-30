@@ -10123,7 +10123,14 @@ export const da_DK: EnTranslations = {
     "redesignHint": "Denne figur blev skabt før den nye figureditor. Du har ét gratis omdesign; det bruges, når du gemmer.",
     "redesignTitle": "Omdesign {name}",
     "redesignSave": "Gem nyt udseende",
-    "redesignCancel": "Behold nuværende udseende"
+    "redesignCancel": "Behold nuværende udseende",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Slet Karakter",

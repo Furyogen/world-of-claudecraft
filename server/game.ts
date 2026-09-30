@@ -6,7 +6,6 @@ import {
   type ChatSenderFlair,
   EMPTY_ACCOUNT_FLAIR,
   hasStreamerLink,
-  wireStreamerLinks,
 } from '../src/sim/account_flair';
 import type { AccountLedger } from '../src/sim/account_ledger';
 import { verifyChallenge } from '../src/sim/client_challenge';
@@ -30,7 +29,6 @@ import {
   MOBS,
   zoneAt,
 } from '../src/sim/data';
-import { devTierIndexForMergedPrs } from '../src/sim/dev_tier';
 import { parseRelayCommand } from '../src/sim/discord_relay';
 import type { GuildBankOpDelta } from '../src/sim/guild_bank';
 import { parseItemCopyAnchor } from '../src/sim/item_copy_anchor';
@@ -177,7 +175,6 @@ import {
   pushMuteChange,
   pushStrikesChange,
 } from './chat_mod_live';
-import { chatSenderFlair } from './chat_sender_flair';
 import {
   applyCheaterMarkLive as applyCheaterMarkLiveRuntime,
   persistCheaterMark,
@@ -234,8 +231,8 @@ import {
   recordDeedUnlocks,
 } from './deeds_records';
 import { appendBookOfDeedsWire } from './deeds_wire';
-import { enqueueActivity } from './discord_activity';
-import { discordFlairForAccount, grantRewardPoints } from './discord_db';
+import { enqueueActivity, setActivityRedactor } from './discord_activity';
+import { grantRewardPoints } from './discord_db';
 import { enqueueLinkChange } from './discord_link_changes';
 import { observeQueuePops, queuedPidsOf, queuePopDepsFor } from './discord_queue_pops';
 import { enqueueRelay } from './discord_relay';
@@ -272,8 +269,6 @@ import {
   resolveGeneralChatAdmission,
 } from './general_chat_quota';
 import { consumeGeneralChatQuota, type GeneralChatRateLimit } from './general_chat_quota_db';
-import { mergedPrsForLogin } from './github_contributors';
-import { githubForAccount } from './github_db';
 import { groundTelegraphWireJson, groundTelegraphWorld } from './ground_telegraph_wire';
 import { forEachGuarded, runGuarded } from './guarded_iter';
 import { handleGuildBankEscrowRefusal as handleEscrowRefusal } from './guild_bank_escrow_refusal';
@@ -313,6 +308,16 @@ import { guildRosterTransport } from './guild_roster_transport';
 import { HEAVY_SELF_EVENTS, heavySelfMarkOnAccept, heavySelfMarkOnReceipt } from './heavy_self';
 import { type HotbarLayoutState, HotbarLayoutStore, hotbarLayoutState } from './hotbar_layout';
 import { gameMetricsCounters, type WsDropCause } from './http/game_signals';
+import {
+  applyAccountFlairLive,
+  applyIncognitoOnResume,
+  type IdentityFlairHost,
+  refreshAllIdentityFlair,
+  refreshDevBadge,
+  refreshDiscordFlair,
+  refreshHolderTier,
+} from './identity_flair';
+import { redactIncognitoActivity, relayCharacterIdentity } from './incognito';
 import { foldReceivedInputSeq } from './input_seq';
 import { buildSharedInterestCandidates } from './interest_candidates';
 import {
@@ -465,7 +470,6 @@ import {
   whoChatLines,
   whoFrame,
 } from './who_roster';
-import { holderInfoForPubkey } from './woc_balance';
 import type { CharacterSaveArgs } from './woc_market';
 import { isBackpressureExceeded } from './ws_backpressure';
 
@@ -1135,6 +1139,10 @@ export interface ClientSession extends MovementInputSessionState, HotbarLayoutSt
   fbc: string;
   sourceUrl: string;
   isAdmin: boolean;
+  // Staff incognito login mode (server/incognito.ts): the wallet, Discord, and
+  // identity flair stay HIDDEN from other players (the integrations keep
+  // working). Only ever true for staff.
+  incognito: boolean;
   // Expanded admin permissions, snapshotted at join like isAdmin (a role change
   // applies at the next login). Gates the in-game moderation commands.
   adminPermissions: ReadonlySet<string>;
@@ -1816,6 +1824,10 @@ export class GameServer {
     private readonly backgroundDbGate?: BackgroundDbGate,
   ) {
     attachDetectorFlagHost(this.botDetector);
+    // Discord cards keep an incognito staff character's post but not its name.
+    setActivityRedactor((item) =>
+      redactIncognitoActivity(item, (n) => this.sessionByName(n)?.incognito === true),
+    );
     this.generalChatQuota = new GeneralChatQuotaCoordinator({
       consume: consumeGeneralChatQuota,
       maxInFlight: generalChatQuotaMaxInFlight,
@@ -2931,71 +2943,21 @@ export class GameServer {
     }
   }
 
-  // Refresh one player's linked-Discord flair (status tier + PFP + nickname +
-  // member-since + staff role) for nearby players' nameplates / inspect cards.
-  private async refreshDiscordFlair(session: ClientSession): Promise<void> {
-    const flair = await discordFlairForAccount(pool, session.accountId);
-    if (this.clients.get(session.pid) !== session) return;
-    const e = this.sim.entities.get(session.pid);
-    if (!e) return;
-    const tier = flair?.tier ?? 0;
-    const avatar = flair?.avatarUrl ?? undefined;
-    const name = flair?.name ?? undefined;
-    const joined = flair?.joinedAtMs ?? undefined;
-    const role = flair?.role ?? undefined;
-    if (
-      e.discordTier !== tier ||
-      e.discordAvatar !== avatar ||
-      e.discordName !== name ||
-      e.discordJoined !== joined ||
-      e.discordRole !== role
-    ) {
-      // identity diff re-broadcasts the linked-Discord flair to nearby players
-      e.discordTier = tier;
-      e.discordAvatar = avatar;
-      e.discordName = name;
-      e.discordJoined = joined;
-      e.discordRole = role;
-    }
-  }
+  // Identity flair refreshers (server/identity_flair.ts); delegates keep the names
+  // the periodic cycle and the tests call.
+  private readonly flairHost: IdentityFlairHost = {
+    isLive: (s) => this.clients.get(s.pid) === s,
+    entity: (pid) => this.sim.entities.get(pid),
+    holderTierPinned: (pid) => this.devTierPids.has(pid),
+  };
+  private refreshDiscordFlair = (s: ClientSession) => refreshDiscordFlair(this.flairHost, s);
+  private refreshHolderTier = (s: ClientSession) => refreshHolderTier(this.flairHost, s);
+  private refreshDevBadge = (s: ClientSession) => refreshDevBadge(this.flairHost, s);
 
-  // Load one player's operator-set account flair (AI mark + streamer links) and
-  // stamp it on their entity + session. Best-effort and guarded against the player
-  // leaving mid-fetch, exactly like the Discord/holder/dev flair refreshes above.
-  private async refreshAccountFlair(session: ClientSession): Promise<void> {
-    const flair = await loadAccountFlair(session.accountId);
-    if (this.clients.get(session.pid) !== session) return;
-    this.stampAccountFlair(session, flair);
-  }
-
-  /**
-   * Apply an account's flair to one live session: the entity fields the wire encodes
-   * (the identity diff re-broadcasts them to nearby players on the next snapshot) and
-   * the session copy the chat fan-out reads. `streamerLinks` is set through
-   * wireStreamerLinks, so the entity never carries links for an account whose
-   * streamer flag is off.
-   */
-  private stampAccountFlair(session: ClientSession, flair: AccountFlair): void {
-    session.accountFlair = flair;
-    // Derived once, here, and read straight off the session by every chat fan-out.
-    session.chatFlair = chatSenderFlair(flair);
-    const e = this.sim.entities.get(session.pid);
-    if (!e) return;
-    e.aiAccount = flair.ai ? true : undefined;
-    e.streamerLinks = wireStreamerLinks(flair);
-  }
-
-  /**
-   * Push an operator's account-flair edit onto every live session of that account, so
-   * the AI mark and the streamer links change with no reconnect. Injected into the
-   * admin routes via configureAdminRuntime (server/admin.ts); a no-op when the
-   * account is offline (the next join loads the new row anyway).
-   */
+  /** Push an operator's account-flair edit onto every live session of that account
+   *  (via configureAdminRuntime, server/admin.ts); incognito sessions are skipped. */
   applyAccountFlairLive(accountId: number, flair: AccountFlair): void {
-    for (const live of this.clients.values()) {
-      if (live.accountId !== accountId) continue;
-      this.stampAccountFlair(live, flair);
-    }
+    applyAccountFlairLive(this.flairHost, this.clients.values(), accountId, flair);
   }
 
   /** Push a Cheater mark change onto every live session of that account
@@ -3077,69 +3039,18 @@ export class GameServer {
       label: command.label,
       color: command.color,
       accountId: session.accountId,
-      characterName: session.name,
       level: e?.level ?? 1,
       className: cls,
       realm: REALM,
       zone,
       message,
-      profileUrl: REALM_PUBLIC_ORIGIN
-        ? `${REALM_PUBLIC_ORIGIN}/c/${encodeURIComponent(session.name)}`
-        : null,
+      // An incognito poster's Discord post never names the character.
+      ...relayCharacterIdentity(
+        session,
+        REALM_PUBLIC_ORIGIN ? `${REALM_PUBLIC_ORIGIN}/c/${encodeURIComponent(session.name)}` : null,
+      ),
     });
     return true;
-  }
-
-  // Update one player's holder-tier flair from their linked wallet's $WOC
-  // balance. Best-effort and guarded against the player leaving mid-fetch.
-  private async refreshHolderTier(session: ClientSession): Promise<void> {
-    if (this.devTierPids.has(session.pid)) return; // dev override pinned this pid
-    const wallet = await walletForAccount(session.accountId);
-    const { tier, balance } = wallet
-      ? await holderInfoForPubkey(wallet.pubkey)
-      : { tier: 0, balance: 0 };
-    // The player may have left during the await; only apply if still the live
-    // session for this pid.
-    if (this.clients.get(session.pid) !== session) return;
-    const e = this.sim.entities.get(session.pid);
-    if (e && ((e.holderTier ?? 0) !== tier || (e.holderBalance ?? 0) !== balance)) {
-      e.holderTier = tier; // identity diff re-broadcasts it to nearby players
-      e.holderBalance = balance;
-      console.log(`[woc] ${session.name} holder tier → ${tier} (${balance} $WOC)`);
-    }
-  }
-
-  // Update one player's developer-badge flair from their linked GitHub login and
-  // the cached repo merged-PR stats. Best-effort and guarded against the player
-  // leaving mid-fetch. Only an actual contributor (tier > 0, so >= 1 merged PR)
-  // carries the flair on the wire; a linked non-contributor reads as no badge.
-  private async refreshDevBadge(session: ClientSession): Promise<void> {
-    const link = await githubForAccount(pool, session.accountId);
-    const login = link?.github_login ?? null;
-    const mergedPrs = login ? await mergedPrsForLogin(login) : 0;
-    const tier = devTierIndexForMergedPrs(mergedPrs);
-    // The player may have left during the await; only apply if still the live
-    // session for this pid.
-    if (this.clients.get(session.pid) !== session) return;
-    const e = this.sim.entities.get(session.pid);
-    if (!e) return;
-    const githubLogin = tier > 0 ? (login ?? undefined) : undefined;
-    const devMergedPrs = tier > 0 ? mergedPrs : undefined;
-    if (
-      (e.devTier ?? 0) !== tier ||
-      (e.devMergedPrs ?? 0) !== (devMergedPrs ?? 0) ||
-      e.githubLogin !== githubLogin
-    ) {
-      // identity diff re-broadcasts the developer-badge flair to nearby players
-      e.devTier = tier;
-      e.devMergedPrs = devMergedPrs;
-      e.githubLogin = githubLogin;
-      if (tier > 0) {
-        console.log(
-          `[dev] ${session.name} dev tier → ${tier} (${mergedPrs} merged PRs, @${login})`,
-        );
-      }
-    }
   }
 
   // Update one player's Curator standing (rank + completion pair) for the
@@ -3315,6 +3226,7 @@ export class GameServer {
         timerWireVersion?: 1 | StableTimerWireVersion;
         petSpecialWireVersion?: 0 | PetSpecialWireVersion;
         movementWireVersion?: 1 | 2;
+        incognito?: boolean;
         generalChatRateLimit?: GeneralChatRateLimit | null;
         // Server-recomputed bank bonus slots (ws_auth.ts, fresh-join arm) stamped into
         // the character state via addPlayer. Absent on a resume and for callers that
@@ -3552,6 +3464,8 @@ export class GameServer {
       fbc: meta.fbc ?? '',
       sourceUrl: meta.sourceUrl ?? '',
       isAdmin: meta.isAdmin ?? false,
+      // Staff-only twice over: ws_auth negotiates it, and join re-checks.
+      incognito: meta.incognito === true && meta.isAdmin === true,
       // Permissions come only from the explicit set main.ts computes from the
       // account's roles; no is_admin fallback (fail closed, matching
       // staff_db.effectiveAdminRoles). A staff member with zero permissions has
@@ -3666,24 +3580,8 @@ export class GameServer {
     // the first guild stamp retro-credits an existing member's soc_guild_joined
     // silently instead of firing the live banner.
     void this.initSocial(session, true);
-    // Stamp the $WOC holder-tier flair (best-effort: a balance read must never
-    // affect joining the world).
-    void this.refreshHolderTier(session).catch((err) =>
-      console.error('holder-tier refresh failed:', err),
-    );
-    void this.refreshDiscordFlair(session).catch((err) =>
-      console.error('discord flair refresh failed:', err),
-    );
-    // Stamp the developer-badge flair from the linked GitHub login (best-effort:
-    // a contributor-stats read must never affect joining the world).
-    void this.refreshDevBadge(session).catch((err) =>
-      console.error('dev badge refresh failed:', err),
-    );
-    // Stamp the operator-set account flair (AI mark + streamer links), same
-    // best-effort contract: a flair read must never affect joining the world.
-    void this.refreshAccountFlair(session).catch((err) =>
-      console.error('account flair refresh failed:', err),
-    );
+    // Stamp the identity flair (skipped whole for an incognito staff session).
+    if (!session.incognito) refreshAllIdentityFlair(this.flairHost, session);
     // Restore any live Cheater mark, same best-effort contract: a failed read
     // must never block joining the world. Failing OPEN (joining untagged) is the
     // deliberate choice over failing closed, because the alternative is locking a
@@ -3740,6 +3638,7 @@ export class GameServer {
     this.generalChatQuota.policyChanged(session.accountId);
     session.isAdmin = meta.isAdmin ?? false;
     session.adminPermissions = new Set(meta.adminPermissions ?? []);
+    applyIncognitoOnResume(this.flairHost, session, meta.incognito === true && session.isAdmin);
     // Re-validate the freshly-read layout (untrusted at rest), same as a fresh
     // join. Without this, a mid-session save that already landed durably would
     // be clobbered by the stale join-time snapshot once lastSent resets below

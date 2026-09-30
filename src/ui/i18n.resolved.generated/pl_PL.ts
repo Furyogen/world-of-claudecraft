@@ -10123,7 +10123,14 @@ export const pl_PL: EnTranslations = {
     "redesignHint": "Ta postać powstała przed nowym kreatorem postaci. Masz jedno darmowe przeprojektowanie; zostanie użyte przy zapisie.",
     "redesignTitle": "Przeprojektuj postać {name}",
     "redesignSave": "Zapisz nowy wygląd",
-    "redesignCancel": "Zachowaj obecny wygląd"
+    "redesignCancel": "Zachowaj obecny wygląd",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Usuń postać",

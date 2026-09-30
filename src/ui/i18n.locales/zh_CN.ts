@@ -2398,6 +2398,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'character.redesignTitle': '重新设计{name}',
   'character.redesignSave': '保存新外观',
   'character.redesignCancel': '保留当前外观',
+  'character.loginMode.label': '登录模式',
+  'character.loginMode.normal': '普通',
+  'character.loginMode.incognito': '隐身',
+  'character.loginMode.normalHint': '你的钱包、Discord 和员工标识照常显示。',
+  'character.loginMode.incognitoHint':
+    '你将以普通玩家身份出现：钱包、Discord 和标识（开发者、员工标签）均被隐藏。',
   'character.rename': '改名',
   'character.newNamePlaceholder': '新角色名称',
   'character.tabCharacters': '角色',

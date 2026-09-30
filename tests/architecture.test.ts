@@ -222,6 +222,7 @@ const UI_PURE_CORES = [
   // The one clamp and disabled rule the source picker's row steppers and the
   // bank quantity prompt share (quantity_stepper.ts is their DOM consumer).
   'src/ui/quantity_step_core.ts',
+  'src/ui/login_mode_view.ts',
   'src/ui/party_pids_core.ts',
   // The one face-button tone rule, shared by the interact prompt and the pad
   // hint strip so a printed glyph and its colour can never disagree.
@@ -2508,6 +2509,12 @@ const UI_DOM_MODULES = [
   'src/ui/options_frame_settings.ts',
   // Wires registered HUD roots to persistent movers and their live DOM homes.
   'src/ui/hud_frame_registry.ts',
+  // Paints the staff login mode choice on char select and remembers the pick in
+  // localStorage; the rules are login_mode_view.ts.
+  'src/ui/login_mode_choice.ts',
+  // The desktop char-select Enter World button painter (moved from main.ts);
+  // the action it paints is the pure src/net/charselect_action.ts core.
+  'src/ui/charselect_enter_button.ts',
   // Mints the shared unit and bag-stack step buttons around a number input and
   // writes the input on a press; the rules are quantity_step_core.ts.
   'src/ui/quantity_stepper.ts',

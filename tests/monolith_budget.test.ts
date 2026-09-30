@@ -1360,7 +1360,10 @@ const MONOLITHS: MonolithRow[] = [
     // (src/ui/charselect_hints.ts), which skips activations from inside the
     // lockout disclosure instead of stopping propagation there.
     // Frame layout extraction: bank the reduced coordinator size.
-    ceiling: 11260,
+    // Down 11260 -> 11244: the char-select Enter World painter moved to
+    // src/ui/charselect_enter_button.ts, paying for the staff login mode wiring
+    // (src/ui/login_mode_choice.ts). Exact count, zero slack.
+    ceiling: 11244,
     seam: 'a src/game/ or src/ui/ sibling module; main.ts is a firewall, not a home',
   },
   {
@@ -1592,7 +1595,10 @@ const MONOLITHS: MonolithRow[] = [
     // quest/death record arms of the event drain moved to
     // server/event_record_observers.ts (which also hosts the new craftRoll
     // arm), so the audit landed as a net shrink. Exact count, zero slack.
-    ceiling: 9965,
+    // Down 9965 -> 9864: the identity-flair refreshers (holder tier, Discord,
+    // dev badge, account flair) moved to server/identity_flair.ts with the staff
+    // incognito login mode and its Discord-post name redaction. Exact count.
+    ceiling: 9864,
     seam: 'a sibling server module; see the hot-path seams in server/CLAUDE.md',
   },
   {

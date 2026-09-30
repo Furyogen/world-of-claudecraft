@@ -5,10 +5,22 @@ import {
 } from '../world_api';
 import { STABLE_TIMER_WIRE_VERSION } from './snapshot_timer_wire';
 
+/** Open the world session on a just-opened socket: send the auth frame. */
+export function sendWorldAuth(
+  ws: { send(data: string): void },
+  token: string,
+  characterId: number,
+  clientSeed: string,
+  incognito: boolean,
+): void {
+  ws.send(JSON.stringify(buildWebSocketAuthMessage(token, characterId, clientSeed, incognito)));
+}
+
 export function buildWebSocketAuthMessage(
   token: string,
   characterId: number,
   clientSeed = '',
+  incognito = false,
 ): {
   t: typeof ONLINE_WORLD_AUTH_TYPE;
   token: string;
@@ -18,6 +30,7 @@ export function buildWebSocketAuthMessage(
   timerWire: typeof STABLE_TIMER_WIRE_VERSION;
   petSpecialWire: typeof PET_SPECIAL_WIRE_VERSION;
   movementWire: 2;
+  incognito?: true;
 } {
   return {
     t: ONLINE_WORLD_AUTH_TYPE,
@@ -32,5 +45,9 @@ export function buildWebSocketAuthMessage(
     timerWire: STABLE_TIMER_WIRE_VERSION,
     petSpecialWire: PET_SPECIAL_WIRE_VERSION,
     movementWire: 2,
+    // The staff incognito login choice (server/incognito.ts). Sent only when
+    // chosen, so a normal-mode frame stays byte-identical; the server honors
+    // it for staff accounts alone.
+    ...(incognito ? { incognito: true as const } : {}),
   };
 }

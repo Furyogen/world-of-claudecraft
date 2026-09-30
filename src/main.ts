@@ -453,6 +453,7 @@ import { assembleBugReportMeta } from './ui/bug_report';
 import { cameraPromptOpen, dismissCameraPrompt } from './ui/camera_prompt';
 import { deleteCharButtonHtml, normalizeDeleteConfirmation } from './ui/char_delete_button';
 import { resetComposedRows, trackComposedChipRow } from './ui/charselect_composed_refresh';
+import { paintCharselectEnterButton } from './ui/charselect_enter_button';
 import { charselectHintsHtml, wireCharselectRow } from './ui/charselect_hints';
 import { loadCharselectNews } from './ui/charselect_news';
 import { CharselectRedesignEditor } from './ui/charselect_redesign';
@@ -525,6 +526,7 @@ import {
 } from './ui/loading_slow_hint';
 import { createLoadingTipRotation, type LoadingTipRotation } from './ui/loading_tips';
 import { CONTENT_LOCALE_CHANNEL_ENSURERS } from './ui/locale_channels';
+import { createLoginModeChoice } from './ui/login_mode_choice';
 import { installMapMarkerPaletteLifecycle } from './ui/map_marker_palette_lifecycle';
 import { applyMinimapOrnamentVars } from './ui/minimap_gilded_ornament';
 import { showMobileWalletLauncher } from './ui/mobile_wallet_launcher';
@@ -635,6 +637,7 @@ let pendingDeleteCharacter: CharacterSummary | null = null;
 // instead of a per-row one; it acts on whichever character is selected. Mobile
 // and narrow layouts keep the per-row buttons and never read this.
 let charselectSelected: CharacterSummary | null = null;
+const loginMode = createLoginModeChoice(document.getElementById('charselect-login-mode')); // staff
 // One-shot: set by the boot resume path to the character (and the realm it was
 // playing on) to auto-enter, then consumed by refreshCharacters once its list
 // has loaded (mobile WebView-reload resume; see src/net/resume_play.ts).
@@ -6610,8 +6613,12 @@ async function refreshCharacters(): Promise<void> {
   // A redesign in progress is a draft against the OLD roster; discard it
   // (nothing was saved) rather than let it edit a row that may be gone.
   redesignEditor.close(false);
-  syncCharselectEnterButton();
+  paintCharselectEnterButton(charselectPrimaryAction(charselectSelected));
   setCharselectPreviewName('');
+  void api.getAccount().then(
+    (a) => loginMode.setAdmin(a.admin === true),
+    () => loginMode.setAdmin(false),
+  );
   try {
     const chars = sortCharacters(await api.characters(), charSortMode);
     // Warm the lazy Combat Mech cosmetic assets so selecting an event-skin
@@ -6742,7 +6749,7 @@ async function refreshCharacters(): Promise<void> {
         // authored modular look.
         showCharselectCharacter(c);
         charselectSelected = c;
-        syncCharselectEnterButton();
+        paintCharselectEnterButton(charselectPrimaryAction(charselectSelected));
         setCharselectPreviewName(c.name);
       };
 
@@ -6861,30 +6868,6 @@ function setCharselectPreviewName(name: string): void {
   if (el) el.textContent = name;
 }
 
-// Reflect the selected character's primary action on the desktop shared Enter
-// World button: Enter World for a ready character, Take Over for one online
-// elsewhere, and disabled (with a hint) while a forced rename is pending. A
-// no-op when the button is absent (mobile/narrow layouts use per-row buttons).
-function syncCharselectEnterButton(): void {
-  const btn = document.getElementById('btn-charselect-enter') as HTMLButtonElement | null;
-  if (!btn) return;
-  const action = charselectPrimaryAction(charselectSelected);
-  btn.disabled = action.kind === 'disabled';
-  // Drive BOTH the i18n key and the rendered text/title, so a later language
-  // switch (translatePage re-applies every [data-i18n]/[data-i18n-title]) rerenders
-  // the current dynamic state instead of clobbering it back to the static "Enter
-  // World". Same approach as applyServerMode.
-  btn.setAttribute('data-i18n', action.labelKey);
-  btn.textContent = t(action.labelKey);
-  if (action.titleKey) {
-    btn.setAttribute('data-i18n-title', action.titleKey);
-    btn.title = t(action.titleKey);
-  } else {
-    btn.removeAttribute('data-i18n-title');
-    btn.removeAttribute('title');
-  }
-}
-
 async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Promise<void> {
   stopShaderWarmup();
   try {
@@ -6907,6 +6890,7 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   loadPhaseStart('entry');
   loadPhaseStart('realm-connect');
   const world = new ClientWorld(api.token, c.id, c.class, api.base, getClientSeed());
+  world.incognito = loginMode.incognito(); // read by the auth frame once the socket opens
   // Wire shareable player cards for this online session: publishing uploads the
   // composited PNG to this realm and returns an absolute public page URL, and
   // the referral provider feeds the card footer. Both are cleared on disconnect.

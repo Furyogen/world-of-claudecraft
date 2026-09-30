@@ -10123,7 +10123,14 @@ export const pt_BR: EnTranslations = {
     "redesignHint": "Este personagem é anterior ao novo criador de personagens. Você tem um redesenho gratuito; ele é usado ao salvar.",
     "redesignTitle": "Redesenhar {name}",
     "redesignSave": "Salvar novo visual",
-    "redesignCancel": "Manter visual atual"
+    "redesignCancel": "Manter visual atual",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Excluir personagem",

@@ -10123,7 +10123,14 @@ export const vi_VN: EnTranslations = {
     "redesignHint": "Nhân vật này có trước trình tạo nhân vật mới. Bạn có một lần thiết kế lại miễn phí; nó được dùng khi bạn lưu.",
     "redesignTitle": "Thiết Kế Lại {name}",
     "redesignSave": "Lưu Diện Mạo Mới",
-    "redesignCancel": "Giữ Diện Mạo Hiện Tại"
+    "redesignCancel": "Giữ Diện Mạo Hiện Tại",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Xóa Nhân Vật",

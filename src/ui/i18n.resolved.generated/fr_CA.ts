@@ -10123,7 +10123,14 @@ export const fr_CA: EnTranslations = {
     "redesignHint": "Ce personnage est antérieur au nouveau créateur de personnage. Vous disposez d’un remodelage gratuit ; il est utilisé lors de la sauvegarde.",
     "redesignTitle": "Remodeler {name}",
     "redesignSave": "Enregistrer la nouvelle apparence",
-    "redesignCancel": "Conserver l’apparence actuelle"
+    "redesignCancel": "Conserver l’apparence actuelle",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Supprimer le personnage",

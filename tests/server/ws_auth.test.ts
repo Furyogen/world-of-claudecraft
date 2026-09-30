@@ -529,6 +529,32 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
   });
 });
 
+describe('createWsAuth: staff incognito login mode (server/incognito.ts)', () => {
+  async function metaFor(frame: Record<string, unknown>, staff: boolean) {
+    const t = setup();
+    if (staff)
+      t.deps.adminRolesForAccount = vi.fn(async () => ({ username: 'Op', roles: ['admin'] }));
+    await createWsAuth(t.deps).authenticateWebSocket(asWs(t.ws), authRaw(frame), t.req);
+    expect(t.game.join).toHaveBeenCalledTimes(1);
+    return joinedMeta(t.game);
+  }
+
+  it('passes incognito into the join meta for a staff account that asked', async () => {
+    expect(await metaFor({ incognito: true }, true)).toMatchObject({ incognito: true });
+  });
+
+  it('refuses it for a non-staff account that asked (a forged frame is inert)', async () => {
+    expect(await metaFor({ incognito: true }, false)).toMatchObject({ incognito: false });
+  });
+
+  it('refuses a coercible non-boolean from staff, and defaults to normal when absent', async () => {
+    for (const coercible of ['true', 1, { valueOf: () => true }]) {
+      expect(await metaFor({ incognito: coercible }, true)).toMatchObject({ incognito: false });
+    }
+    expect(await metaFor({}, true)).toMatchObject({ incognito: false });
+  });
+});
+
 describe('createWsAuth: timer-wire capability negotiation', () => {
   it('passes only the exact optional v3 capability into the recipient session meta', async () => {
     const capable = setup();
