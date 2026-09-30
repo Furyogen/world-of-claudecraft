@@ -319,6 +319,7 @@ import {
   moderationErrorBody,
   readBody,
 } from './http_util';
+import { incognitoAccountIdsOf, setIncognitoAccountsProbe } from './incognito';
 import {
   configureInternalRuntime,
   configureInternalWocMarketOps,
@@ -614,6 +615,11 @@ configurePaidGuildCreateBackgroundGate((signal) => majorBackgroundDbGate.acquire
 // tables) composes under the same realm background gate, so concurrent deletes
 // of ledger-heavy characters can never hold most of the pool at once.
 configureCharacterDeleteBackgroundGate((signal) => majorBackgroundDbGate.acquire(signal));
+// The Discord member sync withholds the character of an account playing
+// incognito (server/incognito.ts); the flex reads see the live sessions here.
+setIncognitoAccountsProbe(() =>
+  gameInstance ? incognitoAccountIdsOf(gameInstance.clients.values()) : new Set(),
+);
 function liveGame(): GameServer {
   // LISTEN uses its own dedicated connection and quota consumes use their own
   // max-two pool. The coordinator cap equals that pool exactly, so it creates

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { QueuedActivity } from '../../server/discord_activity';
 import {
+  hideIncognitoFlexCharacter,
   type IdentityFlairFields,
   INCOGNITO_DISCORD_NAME,
+  incognitoAccountIdsOf,
   negotiateIncognito,
   redactIncognitoActivity,
   relayCharacterIdentity,
@@ -118,5 +120,25 @@ describe('the Discord side: posts go out, the character name does not', () => {
       characterName: 'Staffer',
       profileUrl: 'u',
     });
+  });
+});
+
+describe('the member-sync probe helpers', () => {
+  it('collects the accounts of incognito sessions only', () => {
+    const ids = incognitoAccountIdsOf([
+      { accountId: 1, incognito: true },
+      { accountId: 2, incognito: false },
+      { accountId: 1, incognito: false },
+    ]);
+    expect([...ids]).toEqual([1]);
+  });
+
+  it('withholds the flex character for an incognito account and leaves others as-is', () => {
+    const flex = { found: true, character: { name: 'Hero' } };
+    expect(hideIncognitoFlexCharacter(flex, 7, new Set([7]))).toEqual({
+      found: true,
+      character: null,
+    });
+    expect(hideIncognitoFlexCharacter(flex, 8, new Set([7]))).toBe(flex);
   });
 });

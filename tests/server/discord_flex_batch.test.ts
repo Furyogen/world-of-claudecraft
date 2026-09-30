@@ -55,6 +55,7 @@ import {
   discordForAccount,
   loadRewardState,
 } from '../../server/discord_db';
+import { setIncognitoAccountsProbe } from '../../server/incognito';
 
 /**
  * One batched-read row, minted FRESH per call. The mapping stores nothing by
@@ -252,5 +253,44 @@ describe('discordFlexForAccounts', () => {
     expect(single.found).toBe(true);
     expect(single.statusTier).toBe(4);
     expect(single.character?.name).toBe('Hero');
+  });
+});
+
+describe('staff incognito: the member sync carries no character (server/incognito.ts)', () => {
+  afterEach(() => setIncognitoAccountsProbe(() => new Set()));
+
+  it('withholds the character of an account with a live incognito session, batch path', async () => {
+    setIncognitoAccountsProbe(() => new Set([7]));
+    vi.mocked(discordFlexRowsForDiscordIds).mockResolvedValue([
+      flexRow(),
+      flexRow({ discord_user_id: 'du2', account_id: 8, character_name: 'Other' }),
+    ]);
+    const out = await discordFlexForAccounts(['du1', 'du2']);
+    const byId = new Map(out.map((e) => [e.discord_user_id, e]));
+    expect(byId.get('du1')?.character).toBeNull();
+    expect(JSON.stringify(byId.get('du1'))).not.toContain('Hero');
+    // The rest of the entry (link, tier, points) still syncs.
+    expect(byId.get('du1')).toMatchObject({ linked: true, username: 'coolguy', points: 1500 });
+    // Another account in the same batch is untouched.
+    expect(byId.get('du2')?.character?.name).toBe('Other');
+  });
+
+  it('withholds it on the per-id path too, and restores it once the session is gone', async () => {
+    vi.mocked(highestCharacterForAccount).mockResolvedValue({
+      id: 1,
+      account_id: 7,
+      name: 'Hero',
+      class: 'warrior',
+      level: 40,
+      state: null,
+      is_gm: false,
+      force_rename: false,
+    } as never);
+    vi.mocked(loadRewardState).mockResolvedValue({ points: 1, lifetimePoints: 1 });
+    vi.mocked(discordForAccount).mockResolvedValue(null);
+    setIncognitoAccountsProbe(() => new Set([7]));
+    expect((await discordFlexForAccount(7)).character).toBeNull();
+    setIncognitoAccountsProbe(() => new Set());
+    expect((await discordFlexForAccount(7)).character?.name).toBe('Hero');
   });
 });

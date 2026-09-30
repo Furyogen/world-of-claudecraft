@@ -118,3 +118,43 @@ export function relayCharacterIdentity(
     ? { characterName: INCOGNITO_DISCORD_NAME, profileUrl: null }
     : { characterName: session.name, profileUrl };
 }
+
+// ── Discord member sync: no character while the account plays incognito ──────
+// The bot's member sync reads the account's top character (level + class) into
+// the member's Discord nickname. While the account has a live incognito session
+// that read carries NO character, so the nickname stays frozen at what it last
+// showed rather than tracking the incognito character's progress (stripping it
+// instead would itself announce "incognito now"). The flex read is REST-side,
+// so the live session set reaches it through a probe the composition root
+// installs over the GameServer's sessions (server/main.ts).
+let incognitoAccountsProbe: () => ReadonlySet<number> = () => new Set();
+
+/** Install the live-incognito-accounts probe (server/main.ts). */
+export function setIncognitoAccountsProbe(probe: () => ReadonlySet<number>): void {
+  incognitoAccountsProbe = probe;
+}
+
+/** The accounts with a live incognito session in this realm process, read once
+ *  per flex request (a batch shares one read). */
+export function incognitoAccountIds(): ReadonlySet<number> {
+  return incognitoAccountsProbe();
+}
+
+/** One pass over the live sessions: the accounts any incognito session belongs to. */
+export function incognitoAccountIdsOf(
+  sessions: Iterable<{ accountId: number; incognito: boolean }>,
+): Set<number> {
+  const out = new Set<number>();
+  for (const s of sessions) if (s.incognito) out.add(s.accountId);
+  return out;
+}
+
+/** The flex payload with its character withheld while the account is incognito;
+ *  the same object otherwise. */
+export function hideIncognitoFlexCharacter<T extends { character: unknown }>(
+  flex: T,
+  accountId: number,
+  incognito: ReadonlySet<number>,
+): T {
+  return incognito.has(accountId) ? { ...flex, character: null } : flex;
+}
