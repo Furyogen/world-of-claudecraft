@@ -179,6 +179,27 @@ describe('handleAccountWhoami', () => {
     await handleAccountWhoami(res, 1);
     expect(parse(res).data.passwordSet).toBe(true);
   });
+  // The staff flag gates the incognito login choice at char select; it uses the
+  // WS handshake's own predicate (is_admin AND at least one role).
+  it('reports admin:false for an ordinary account', async () => {
+    const res = makeRes();
+    await handleAccountWhoami(res, 1);
+    expect(parse(res).data.admin).toBe(false);
+  });
+  it('reports admin:true for a staff account with a role', async () => {
+    accountRow.is_admin = true;
+    accountRow.admin_roles = ['moderator'];
+    const res = makeRes();
+    await handleAccountWhoami(res, 1);
+    expect(parse(res).data.admin).toBe(true);
+  });
+  it('reports admin:false for is_admin with no roles (fail closed, like the handshake)', async () => {
+    accountRow.is_admin = true;
+    accountRow.admin_roles = [];
+    const res = makeRes();
+    await handleAccountWhoami(res, 1);
+    expect(parse(res).data.admin).toBe(false);
+  });
 });
 
 describe('handleAccountSetInitialEmail (mandatory recovery-email backfill)', () => {

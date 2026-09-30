@@ -136,6 +136,17 @@ export function releaseDedupeKey(key: string, claimedAt: number): void {
   recentKeys.set(key, claimedAt - DEDUPE_TTL_MS + RELEASE_RETRY_BACKOFF_MS);
 }
 
+// The one outward rewrite every card passes through on its way into the queue,
+// installed by the GameServer: staff incognito sessions keep their cards but
+// lose the character name (server/incognito.ts redactIncognitoActivity). Null
+// (the default, and every unit test that installs none) queues cards as given.
+let redactActivity: ((item: QueuedActivity) => QueuedActivity) | null = null;
+
+/** Install (or clear, with null) the card rewrite applied at enqueue. */
+export function setActivityRedactor(fn: ((item: QueuedActivity) => QueuedActivity) | null): void {
+  redactActivity = fn;
+}
+
 /**
  * Enqueue an activity for the bot to post. When dedupeKey is given and was seen
  * within the TTL, the item is dropped (so one moment yields one card). `now` is
@@ -143,7 +154,7 @@ export function releaseDedupeKey(key: string, claimedAt: number): void {
  */
 export function enqueueActivity(item: QueuedActivity, dedupeKey: string | null, now: number): void {
   if (dedupeKey && !claimDedupeKey(dedupeKey, now)) return;
-  QUEUE.push(item);
+  QUEUE.push(redactActivity ? redactActivity(item) : item);
   if (QUEUE.length > MAX_QUEUE) QUEUE.splice(0, QUEUE.length - MAX_QUEUE);
 }
 

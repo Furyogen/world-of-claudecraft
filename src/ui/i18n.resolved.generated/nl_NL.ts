@@ -11249,7 +11249,14 @@ export const nl_NL: EnTranslations = {
     "redesignHint": "Dit personage stamt van vóór de nieuwe personagemaker. Je hebt één gratis herontwerp; het wordt gebruikt zodra je opslaat.",
     "redesignTitle": "{name} herontwerpen",
     "redesignSave": "Nieuw uiterlijk opslaan",
-    "redesignCancel": "Huidig uiterlijk behouden"
+    "redesignCancel": "Huidig uiterlijk behouden",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Personage verwijderen",

@@ -9,25 +9,115 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "es_ES": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "fr_FR": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "fr_CA": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "de_DE": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "nl_NL": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "pl_PL": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "id_ID": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "tr_TR": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "sv_SE": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "vi_VN": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ],
+  "da_DK": [
+    "character.loginMode.incognito",
+    "character.loginMode.incognitoHint",
+    "character.loginMode.label",
+    "character.loginMode.normal",
+    "character.loginMode.normalHint"
+  ]
 };

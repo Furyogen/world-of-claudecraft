@@ -11249,7 +11249,14 @@ export const ja_JP: EnTranslations = {
     "redesignHint": "このキャラクターは新しいキャラクターエディター以前に作成されました。無料の再デザインが1回できます。保存すると消費されます。",
     "redesignTitle": "{name}を再デザイン",
     "redesignSave": "新しい外見を保存",
-    "redesignCancel": "現在の外見を保持"
+    "redesignCancel": "現在の外見を保持",
+    "loginMode": {
+      "label": "ログインモード",
+      "normal": "通常",
+      "incognito": "シークレット",
+      "normalHint": "ウォレット、Discord、スタッフ表示は通常どおり表示されます。",
+      "incognitoHint": "一般プレイヤーとして表示されます：ウォレット、Discord、表示（開発者・スタッフタグ）は非表示になります。"
+    }
   },
   "deleteCharacter": {
     "title": "キャラクターを削除",

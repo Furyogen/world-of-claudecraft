@@ -11249,7 +11249,14 @@ export const zh_TW: EnTranslations = {
     "redesignHint": "此角色建立於新角色編輯器之前。你有一次免費重新設計的機會，儲存時即會消耗。",
     "redesignTitle": "重新設計{name}",
     "redesignSave": "儲存新外觀",
-    "redesignCancel": "保留目前外觀"
+    "redesignCancel": "保留目前外觀",
+    "loginMode": {
+      "label": "登入模式",
+      "normal": "一般",
+      "incognito": "隱身",
+      "normalHint": "你的錢包、Discord 和員工標識照常顯示。",
+      "incognitoHint": "你將以一般玩家身分出現：錢包、Discord 和標識（開發者、員工標籤）皆被隱藏。"
+    }
   },
   "deleteCharacter": {
     "title": "刪除角色",

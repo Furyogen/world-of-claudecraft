@@ -90,6 +90,7 @@ import {
 } from './http/middleware/bearer_active_guard';
 import type { Ctx, Middleware, Next, RouteDef } from './http/types';
 import { isUniqueViolation, json, moderationErrorBody } from './http_util';
+import { hideIncognitoFlexCharacter, incognitoAccountIds } from './incognito';
 import { verifyNativeAttestation } from './native_attestation';
 import {
   consumeNativeDiscordHandoff,
@@ -1055,7 +1056,7 @@ export async function discordFlexForAccount(accountId: number): Promise<DiscordF
   ]);
   const statusTier = link ? discordStatusIndexForPoints(reward.lifetimePoints) : 0;
   const origin = REALM_PUBLIC_ORIGIN || '';
-  return {
+  const flex: DiscordFlex = {
     found: ch !== null,
     username: link?.discord_username ?? null,
     statusTier,
@@ -1069,6 +1070,8 @@ export async function discordFlexForAccount(accountId: number): Promise<DiscordF
         }
       : null,
   };
+  // A staff incognito session keeps its character out of the member sync.
+  return hideIncognitoFlexCharacter(flex, accountId, incognitoAccountIds());
 }
 
 /** One entry of a batched flex read: the single-flex payload plus its Discord id. */
@@ -1107,9 +1110,10 @@ export async function discordFlexForAccounts(
   if (discordUserIds.length === 0) return [];
   const rows = await discordFlexRowsForDiscordIds(pool, discordUserIds, REALM);
   const origin = REALM_PUBLIC_ORIGIN || '';
+  const incognito = incognitoAccountIds(); // one read for the whole batch
   return rows.map((row) => {
     const name = row.character_name;
-    return {
+    const entry: DiscordFlexBatchEntry = {
       discord_user_id: row.discord_user_id,
       linked: true as const,
       found: name !== null,
@@ -1128,6 +1132,8 @@ export async function discordFlexForAccounts(
             }
           : null,
     };
+    // A staff incognito session keeps its character out of the member sync.
+    return hideIncognitoFlexCharacter(entry, row.account_id, incognito);
   });
 }
 

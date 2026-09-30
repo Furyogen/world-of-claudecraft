@@ -40,6 +40,8 @@ export interface AccountInfo {
   // False for an account provisioned by Apple or Discord sign-in that never got
   // a real, owner-chosen password (see setInitialPassword below).
   passwordSet: boolean;
+  // True for a staff account: gates the incognito login choice at char select.
+  admin?: boolean;
 }
 
 export interface SeekerEntitlementStatus {

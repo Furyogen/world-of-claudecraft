@@ -267,7 +267,7 @@ import { applyFerryWire, applyTransportSnapshot, clientFerryView } from './trans
 import { vaultWithdrawPayload } from './vault_snapshot_wire';
 import { optimisticWeaponSkinChange } from './weapon_skin_optimistic';
 import { whoRosterFromFrame } from './who_frame_wire';
-import { buildWebSocketAuthMessage } from './world_auth_message';
+import { sendWorldAuth } from './world_auth_message';
 import { WorldInteractionRequests } from './world_interaction_requests';
 
 export { buildWebSocketAuthMessage } from './world_auth_message';
@@ -1724,6 +1724,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
   private spectateExitPending = false;
   private dungeonEntrySeq: number | null = null;
   private pendingDungeonEntryFacing: number | null = null;
+  incognito = false; // staff login mode, set before the socket opens (server/incognito.ts)
 
   constructor(token: string, characterId: number, cls: PlayerClass, base = '', clientSeed = '') {
     super();
@@ -1852,9 +1853,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
       : buildWebSocketUrl(location.protocol, location.host);
     this.ws = new WebSocket(wsUrl);
     this.ws.onopen = () => {
-      this.ws.send(
-        JSON.stringify(buildWebSocketAuthMessage(this.token, this.characterId, this.clientSeed)),
-      );
+      sendWorldAuth(this.ws, this.token, this.characterId, this.clientSeed, this.incognito);
     };
     this.ws.onmessage = (ev) => this.onMessage(String(ev.data));
     this.ws.onclose = () => this.socketClosed();

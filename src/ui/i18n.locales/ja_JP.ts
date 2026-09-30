@@ -3736,6 +3736,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'character.redesignTitle': '{name}を再デザイン',
   'character.redesignSave': '新しい外見を保存',
   'character.redesignCancel': '現在の外見を保持',
+  'character.loginMode.label': 'ログインモード',
+  'character.loginMode.normal': '通常',
+  'character.loginMode.incognito': 'シークレット',
+  'character.loginMode.normalHint': 'ウォレット、Discord、スタッフ表示は通常どおり表示されます。',
+  'character.loginMode.incognitoHint':
+    '一般プレイヤーとして表示されます：ウォレット、Discord、表示（開発者・スタッフタグ）は非表示になります。',
   'character.rename': '名前変更',
   'character.newNamePlaceholder': '新しいキャラクター名',
   'character.tabCharacters': 'キャラクター',

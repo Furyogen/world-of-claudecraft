@@ -241,6 +241,7 @@ export function bareClient(pid: number, overrides: BareClientOverrides = {}): Cl
   c.pendingSpectateFacing = null;
   c.dungeonEntrySeq = null;
   c.pendingDungeonEntryFacing = null;
+  c.incognito = false;
   c.lootRollPrompts = [];
   c.lootRollGroup = [];
   c.masterLootPrompts = [];

@@ -1431,7 +1431,10 @@ const MONOLITHS: MonolithRow[] = [
     // Colorblind Mode's interface body-class extraction also composes with
     // those release-line extractions. Release reconciliation: measured merged
     // tree at 11140 lines, preserving both extraction sets.
-    ceiling: 11140,
+    // Down to 10949 (upstream file 10965): the char-select Enter World painter
+    // moved to src/ui/charselect_enter_button.ts, paying for the staff login
+    // mode wiring (src/ui/login_mode_choice.ts). Exact count, zero slack.
+    ceiling: 10949,
     seam: 'a src/game/ or src/ui/ sibling module; main.ts is a firewall, not a home',
   },
   {
@@ -1689,7 +1692,10 @@ const MONOLITHS: MonolithRow[] = [
     // (Reuben's call): both parent pins for the record, the release 9827 and the
     // branch 9965; the two sides' additions compose to 9840 by wc -l on the merged
     // tree (after biome). Exact count, zero slack.
-    ceiling: 9840,
+    // Down 9840 -> 9751: the identity-flair refreshers (holder tier, Discord,
+    // dev badge, account flair) moved to server/identity_flair.ts with the staff
+    // incognito login mode. Exact count, zero slack.
+    ceiling: 9751,
     seam: 'a sibling server module; see the hot-path seams in server/CLAUDE.md',
   },
   {
@@ -1868,7 +1874,9 @@ const MONOLITHS: MonolithRow[] = [
     // (Reuben's call): both parent pins for the record, the release 5354 and the
     // branch 5426; the two sides' additions compose to 5356 by wc -l on the merged
     // tree (after biome). Exact count, zero slack.
-    ceiling: 5356,
+    // Down 5356 -> 5355: the world auth send moved to world_auth_message.ts
+    // (sendWorldAuth) with the staff incognito flag. Exact count, zero slack.
+    ceiling: 5355,
     seam: 'a src/net sibling module (the refactor/net-online split is the template)',
   },
   {

@@ -11249,7 +11249,14 @@ export const en: EnTranslations = {
     "redesignHint": "This character predates the new character creator. You get one free redesign; it is used when you save.",
     "redesignTitle": "Redesign {name}",
     "redesignSave": "Save New Look",
-    "redesignCancel": "Keep Current Look"
+    "redesignCancel": "Keep Current Look",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Delete Character",

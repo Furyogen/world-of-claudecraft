@@ -11249,7 +11249,14 @@ export const cs_CZ: EnTranslations = {
     "redesignHint": "Tato postava vznikla před novým editorem postav. Máte jedno bezplatné přetvoření; použije se při uložení.",
     "redesignTitle": "Přetvořit postavu {name}",
     "redesignSave": "Uložit nový vzhled",
-    "redesignCancel": "Ponechat současný vzhled"
+    "redesignCancel": "Ponechat současný vzhled",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Smazat postavu",

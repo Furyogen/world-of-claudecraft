@@ -34,6 +34,7 @@ import type {
   TokenScope,
 } from './db';
 import type { GameServer } from './game';
+import { negotiateIncognito } from './incognito';
 import { noteClientFrame } from './keepalive_sweep';
 import { negotiateMovementWireVersion } from './movement_wire_version';
 import { kickStoragePurchaseRecovery } from './storage_purchases';
@@ -376,6 +377,9 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
         accountLedger,
         isAdmin,
         adminPermissions,
+        // Staff-only login choice (server/incognito.ts): a non-staff or
+        // malformed request joins in normal mode.
+        incognito: negotiateIncognito(msg.incognito, isAdmin),
         clientSeed,
         dungeonEntryFacingWireVersion,
         timerWireVersion,

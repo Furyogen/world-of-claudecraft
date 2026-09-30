@@ -11249,7 +11249,14 @@ export const sv_SE: EnTranslations = {
     "redesignHint": "Den här rollfiguren skapades före den nya figurskaparen. Du har en gratis omformning; den används när du sparar.",
     "redesignTitle": "Omforma {name}",
     "redesignSave": "Spara nytt utseende",
-    "redesignCancel": "Behåll nuvarande utseende"
+    "redesignCancel": "Behåll nuvarande utseende",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Radera karaktär",

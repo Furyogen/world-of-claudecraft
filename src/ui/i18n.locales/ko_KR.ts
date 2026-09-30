@@ -3708,6 +3708,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'character.redesignTitle': '{name} 재디자인',
   'character.redesignSave': '새 외형 저장',
   'character.redesignCancel': '현재 외형 유지',
+  'character.loginMode.label': '로그인 모드',
+  'character.loginMode.normal': '일반',
+  'character.loginMode.incognito': '시크릿',
+  'character.loginMode.normalHint': '지갑, Discord, 스태프 표식이 평소처럼 표시됩니다.',
+  'character.loginMode.incognitoHint':
+    '일반 플레이어로 표시됩니다: 지갑, Discord, 표식(개발자, 스태프 태그)이 숨겨집니다.',
   'character.rename': '이름 변경',
   'character.newNamePlaceholder': '새 캐릭터 이름',
   'character.tabCharacters': '캐릭터',

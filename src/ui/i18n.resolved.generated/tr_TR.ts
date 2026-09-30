@@ -11249,7 +11249,14 @@ export const tr_TR: EnTranslations = {
     "redesignHint": "Bu karakter yeni karakter oluşturucudan önce yaratıldı. Bir ücretsiz yeniden tasarım hakkınız var; kaydettiğinizde kullanılır.",
     "redesignTitle": "{name} karakterini yeniden tasarla",
     "redesignSave": "Yeni Görünümü Kaydet",
-    "redesignCancel": "Mevcut Görünümü Koru"
+    "redesignCancel": "Mevcut Görünümü Koru",
+    "loginMode": {
+      "label": "Login mode",
+      "normal": "Normal",
+      "incognito": "Incognito",
+      "normalHint": "Your wallet, Discord, and staff flair show as usual.",
+      "incognitoHint": "You appear as an ordinary player: wallet, Discord, and flair (dev, staff tags) are hidden."
+    }
   },
   "deleteCharacter": {
     "title": "Karakteri Sil",
