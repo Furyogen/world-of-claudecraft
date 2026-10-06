@@ -1,4 +1,5 @@
 import { resetCraftedCollectionState } from './combat/crafted_collection_effects';
+import { SPOREMENDER_ARMOR_MULT } from './combat/druid_sporemender';
 import { BATTLE_STANCE, buildStanceAura } from './combat/warrior_stances';
 import { crucibleCollectionFamilyForSet } from './content/crucible_collections';
 import type { TalentModifiers } from './content/talents';
@@ -412,6 +413,7 @@ export function recalcPlayerStats(
   let bearForm = false;
   let catForm = false;
   let moonkinForm = false;
+  let sporemenderForm = false;
   let scaleMul = 1; // Fiesta buff_scale: body-size multiplier (>1 also adds hp)
   let flatAuraArmor = 0;
   // Percent raid buffs (Mark of the Wild / Arcane Intellect / Power Word: Fortitude /
@@ -483,6 +485,9 @@ export function recalcPlayerStats(
       bonusSp += a.value;
       moonkinForm = true;
     }
+    // Sporemender Form: Groveheart's caster form (+20% healing done rides
+    // combat/druid_sporemender.ts at heal resolution; the armor folds below).
+    else if (a.kind === 'form_sporemender') sporemenderForm = true;
   }
   // Talent passive stat modifiers (flat additions + a stamina percent before the
   // HP derivation below). AP/armor/maxHp percents are applied at their own steps.
@@ -540,6 +545,8 @@ export function recalcPlayerStats(
   // Moonkin Form: a hardy caster form that adds 50% armor (its +20% spell damage rides a
   // separate buff_spelldmg aura the form applies).
   if (moonkinForm) s.armor = Math.round(s.armor * 1.5);
+  // Sporemender Form: the same hardy-caster 50% armor as Moonwing.
+  if (sporemenderForm) s.armor = Math.round(s.armor * SPOREMENDER_ARMOR_MULT);
   // Protection's Vanguard: bonus armor from Strength, added (on the fully-summed
   // Strength) before the armor multiplier so armorPct amplifies it too.
   if (mods?.stats.armorFromStrPct) s.armor += Math.round(s.str * mods.stats.armorFromStrPct);

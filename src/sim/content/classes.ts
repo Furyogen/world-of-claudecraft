@@ -568,7 +568,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startChest: 'footpad_jerkin',
     startItems: START_RATIONS_MANA,
     // The same fixed class wand the other casters carry, in the druid's nature
-    // school. Form-aware: available only in caster form and Moonwing Form; the
+    // school. Form-aware: available only in caster, Moonwing and Sporemender Form; the
     // bear/cat/travel shapeshifts fight with claws (see combat/form_swing.ts
     // rangedAutoProfile, which the auto-attack loop resolves through).
     ranged: {
@@ -621,6 +621,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
       'primal_reflexes',
       'wildwake',
       'grove_awakening',
+      'sporemender_form',
     ],
     color: 0xff8c1a,
   },
@@ -7958,6 +7959,28 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'selfBuff', kind: 'form_moonkin', value: 0, duration: 3600 }],
     description:
       'Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Balance signature)',
+  },
+  // Groveheart's caster form, the healer twin of Moonwing Form: spec-gated to
+  // Restoration through `specs`, a toggle like every form, and it keeps the
+  // whole spellbook and the mana bar. The +20% healing done and the +50% armor
+  // read the form aura live (combat/druid_sporemender.ts, entity.ts); Loping
+  // Stride rides the druid FORM_ABILITY_IDS set (combat/druid_engines.ts).
+  sporemender_form: {
+    id: 'sporemender_form',
+    tooltipOmitEffectLines: true,
+    name: 'Sporemender Form',
+    class: 'druid',
+    specs: ['restoration'],
+    learnLevel: 10,
+    cost: 55,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'form_sporemender', value: 0, duration: 3600 }],
+    description:
+      'Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 50%. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart)',
   },
   feral_charge: {
     id: 'feral_charge',

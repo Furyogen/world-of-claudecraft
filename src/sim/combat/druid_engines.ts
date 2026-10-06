@@ -136,7 +136,13 @@ export function bruinRushMakesCatFormFree(
 }
 
 const ENGINE_AURA_IDS = new Set([MOONTIDE_ID, OLD_BLOOD_ID, VERDANCE_ID, BRUIN_RUSH_WINDOW_ID]);
-const FORM_ABILITY_IDS = new Set(['bear_form', 'cat_form', 'travel_form', 'moonkin_form']);
+const FORM_ABILITY_IDS = new Set([
+  'bear_form',
+  'cat_form',
+  'travel_form',
+  'moonkin_form',
+  'sporemender_form',
+]);
 const MOONTIDE_BUILDER_IDS = new Set(['wrath', 'starfire', 'moonseed']);
 // Every landed feral strike that banks one Old Blood. Slinkstrike ('pounce')
 // and Lunge joined the list in the v0.43 feral pass: the stealth opener banks
