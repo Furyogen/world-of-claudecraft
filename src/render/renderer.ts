@@ -190,6 +190,7 @@ import {
 import { damageEventStartsAttackAnimation } from './characters/damage_attack_animation';
 import {
   activeCharacterFormVisual,
+  type CharacterFormKey,
   characterFormMaskForAura,
   characterFormReadyMask,
   characterFormShadowPlan,
@@ -197,6 +198,14 @@ import {
   requestedCharacterForm,
   resolvedCharacterForm,
 } from './characters/form_visual_selection_core';
+import {
+  disposeFormRigs,
+  FORM_VISUAL_SLOT_FOR_KEY,
+  setFormRigsFar,
+  setFormRigsProxyShadow,
+  setFormRigsShadow,
+  visibleFormRig,
+} from './characters/form_visual_slots_core';
 import { visualKeyFor, weaponSkinModelUrl } from './characters/manifest';
 import { modularLookChanged } from './characters/player_look_core';
 import { PooledVisualLifecycle } from './characters/pooled_visual_lifecycle';
@@ -1144,6 +1153,7 @@ export interface EntityView extends RickshawMountViewState {
   /** Display-only jump attitude; see mount_jump_attitude. */
   mountJumpPitch: number;
   metamorphVisual: CharacterVisual | null; // Necromancy Lich Form, built lazily
+  sporemenderVisual: CharacterVisual | null; // druid Sporemender Form, built lazily
   fireballTravelVisual: FireballTravelVisual | null; // Mage travel form, built lazily
   iceBlockVisual: IceBlockVisual | null; // Ice Block shell, built lazily on first stasis
   temporalHourglassVisual: TemporalHourglassVisual | null;
@@ -4804,7 +4814,7 @@ export class Renderer {
   private createCharacterVisualWithRetry(
     e: Entity,
     slot: string,
-    formKey?: 'form_sheep' | 'form_bear' | 'form_cat' | 'form_travel' | 'form_metamorph',
+    formKey?: CharacterFormKey,
     opts?: AssembleOptions,
   ): CharacterVisual | null {
     const now = performance.now();
@@ -4837,13 +4847,12 @@ export class Renderer {
   private buildFormVisual(
     e: Entity,
     v: EntityView,
-    formKey: 'form_sheep' | 'form_bear' | 'form_cat' | 'form_travel' | 'form_metamorph',
-    slot: 'sheepVisual' | 'bearVisual' | 'catVisual' | 'travelVisual' | 'metamorphVisual',
+    formKey: CharacterFormKey,
     gateCompile: boolean,
   ): void {
     const built = this.createCharacterVisualWithRetry(e, formKey, formKey);
     if (!built) return;
-    v[slot] = built;
+    v[FORM_VISUAL_SLOT_FOR_KEY[formKey]] = built;
     v.group.add(built.root); // group.scale already carries e.scale
     // The encounter mark lands on whichever body is ACTIVE, and a form rig keys
     // its own Soul Rend programs (other meshes, other skinning): it cannot
@@ -8166,6 +8175,7 @@ export class Renderer {
       mountJumpPitch: 0,
       riderAnchor,
       metamorphVisual: null,
+      sporemenderVisual: null,
       fireballTravelVisual: null,
       iceBlockVisual: null,
       temporalHourglassVisual: null,
@@ -8461,12 +8471,7 @@ export class Renderer {
 
   /** The visual the player currently sees (form swaps hide the base rig). */
   private activeVisual(v: EntityView): CharacterVisual | null {
-    if (v.sheepVisual?.root.visible) return v.sheepVisual;
-    if (v.bearVisual?.root.visible) return v.bearVisual;
-    if (v.catVisual?.root.visible) return v.catVisual;
-    if (v.travelVisual?.root.visible) return v.travelVisual;
-    if (v.metamorphVisual?.root.visible) return v.metamorphVisual;
-    return v.visual;
+    return visibleFormRig(v) ?? v.visual;
   }
 
   private updateBaseVisual(e: Entity, v: EntityView): void {
@@ -9654,12 +9659,8 @@ export class Renderer {
       // survive interest churn, dispose only per-instance mixer bindings.
       if (!terminal && v.visualPoolKey) this.pooledVisuals.store(v.visualPoolKey, v.visual);
       else v.visual.dispose();
-      v.sheepVisual?.dispose();
-      v.bearVisual?.dispose();
-      v.catVisual?.dispose();
-      v.travelVisual?.dispose();
+      disposeFormRigs(v);
       disposeMountView(v);
-      v.metamorphVisual?.dispose();
       v.fireballTravelVisual?.dispose();
     } else {
       if (!terminal && v.objectPoolKey && v.objectMesh instanceof THREE.Group) {
@@ -10020,6 +10021,7 @@ export class Renderer {
       const travel = requestedForm === 'travel';
       const fireballForm = requestedForm === 'fireball';
       const metamorphForm = requestedForm === 'metamorph';
+      const sporemenderForm = requestedForm === 'sporemender';
       const _stealthed = hasStealth;
       const hasSoulRend = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SOUL_REND);
       const hasRecklessness = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_RECKLESSNESS);
@@ -10110,17 +10112,14 @@ export class Renderer {
               !travel &&
               !v.mountVisual &&
               !fireballForm &&
-              !metamorphForm,
+              !metamorphForm &&
+              !sporemenderForm,
           );
           // sheep/forms keep articulated shadows through the whole proxy band:
           // a frozen humanoid proxy silhouette would be wrong under a form
           const wantFormShadow = wantShadow || inProxyBand;
-          v.sheepVisual?.setShadow(wantFormShadow);
-          v.bearVisual?.setShadow(wantFormShadow);
-          v.catVisual?.setShadow(wantFormShadow);
-          v.travelVisual?.setShadow(wantFormShadow);
+          setFormRigsShadow(v, wantFormShadow);
           v.mountVisual?.setShadow(wantFormShadow);
-          v.metamorphVisual?.setShadow(wantFormShadow);
           if (wantShadow !== v.shadowOn) {
             v.shadowOn = wantShadow;
             for (const caster of v.objectCasters) (caster as THREE.Mesh).castShadow = wantShadow;
@@ -10540,14 +10539,13 @@ export class Renderer {
 
       // lazy form visuals, swapped by visibility like the old sheep/bear rigs
       // (build, compile gate and encounter prewarm all live in buildFormVisual)
-      if (polyed && !v.sheepVisual) this.buildFormVisual(e, v, 'form_sheep', 'sheepVisual', true);
-      if (bear && !v.bearVisual) this.buildFormVisual(e, v, 'form_bear', 'bearVisual', true);
-      if (cat && !v.catVisual) this.buildFormVisual(e, v, 'form_cat', 'catVisual', true);
-      if (travel && !v.travelVisual) {
-        this.buildFormVisual(e, v, 'form_travel', 'travelVisual', true);
-      }
-      if (metamorphForm && !v.metamorphVisual) {
-        this.buildFormVisual(e, v, 'form_metamorph', 'metamorphVisual', false);
+      if (polyed && !v.sheepVisual) this.buildFormVisual(e, v, 'form_sheep', true);
+      if (bear && !v.bearVisual) this.buildFormVisual(e, v, 'form_bear', true);
+      if (cat && !v.catVisual) this.buildFormVisual(e, v, 'form_cat', true);
+      if (travel && !v.travelVisual) this.buildFormVisual(e, v, 'form_travel', true);
+      if (metamorphForm && !v.metamorphVisual) this.buildFormVisual(e, v, 'form_metamorph', false);
+      if (sporemenderForm && !v.sporemenderVisual) {
+        this.buildFormVisual(e, v, 'form_sporemender', true);
       }
       // A form rig that is still linking is NOT ready: the mask holds the
       // resolved form at 'base', so the BODY stands in and a polymorphed target
@@ -10559,6 +10557,7 @@ export class Renderer {
         v.catVisual,
         v.travelVisual,
         v.metamorphVisual,
+        v.sporemenderVisual,
         v.formCompilePending,
       );
       const resolvedForm = resolvedCharacterForm(requestedForm, formReadyMask);
@@ -10597,6 +10596,7 @@ export class Renderer {
         v.catVisual,
         v.travelVisual,
         v.metamorphVisual,
+        v.sporemenderVisual,
       );
       if (!e.templateId.startsWith('vision_')) {
         active.clickProxy.userData.entityId = e.id;
@@ -10653,11 +10653,7 @@ export class Renderer {
       }
       // distant rigs swap to the single-draw baked idle-pose mesh
       v.visual.setFar(v.isFar && active === v.visual && resolvedForm !== 'fireball');
-      v.sheepVisual?.setFar(v.isFar && active === v.sheepVisual);
-      v.bearVisual?.setFar(v.isFar && active === v.bearVisual);
-      v.catVisual?.setFar(v.isFar && active === v.catVisual);
-      v.travelVisual?.setFar(v.isFar && active === v.travelVisual);
-      v.metamorphVisual?.setFar(v.isFar && active === v.metamorphVisual);
+      setFormRigsFar(v, active, v.isFar);
       const shadowPlan = characterFormShadowPlan(resolvedForm, {
         isSelf,
         nearShadow: wantShadow,
@@ -10666,11 +10662,7 @@ export class Renderer {
       });
       active.setShadow(shadowPlan.activeArticulated);
       v.visual.setProxyShadow(shadowPlan.baseProxy);
-      v.sheepVisual?.setProxyShadow(shadowPlan.formProxy && active === v.sheepVisual);
-      v.bearVisual?.setProxyShadow(shadowPlan.formProxy && active === v.bearVisual);
-      v.catVisual?.setProxyShadow(shadowPlan.formProxy && active === v.catVisual);
-      v.travelVisual?.setProxyShadow(shadowPlan.formProxy && active === v.travelVisual);
-      v.metamorphVisual?.setProxyShadow(shadowPlan.formProxy && active === v.metamorphVisual);
+      setFormRigsProxyShadow(v, active, shadowPlan.formProxy);
 
       // animation state machine inputs, derived from render-space motion with
       // hysteresis so a one-frame speed dip can't reset the walk clip.

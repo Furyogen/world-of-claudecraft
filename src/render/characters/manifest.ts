@@ -2142,6 +2142,29 @@ export const VISUALS: Record<string, VisualDef> = {
     attackTimeScale: 1,
     deathTimeScale: 1,
   },
+  // Druid Sporemender Form (Groveheart): a Tripo-rigged chibi mushroom healer
+  // with a fused glowing staff (asset pipeline creature lane). Same rig family
+  // as the Lich form above: Tripo bipeds face +X, and its slash/defeat clips
+  // run long, so the attack and death time scales match that rig, and Jump is
+  // left out the same way (airborne frames hold Idle). No tint: the generated
+  // atlas carries the green cap and cream robe.
+  form_sporemender: {
+    url: `${CREATURES}/sporemender_form.glb`,
+    height: 2.3,
+    yaw: -Math.PI / 2,
+    authoredAtlas: true,
+    attackTimeScale: 6,
+    deathTimeScale: 3,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['Hit'],
+      death: 'Death',
+      cast: 'Cast',
+    },
+  },
   // Shaman Shadewolf retains the original wolf, tint and ghost-material overlay.
   form_ghost_wolf: {
     url: `${CREATURES}/wolf_basic.glb`,
