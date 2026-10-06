@@ -14882,7 +14882,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.classPage.formName.form_sporemender': 'スポアメンダーフォーム',
   'guide.classPage.formsHeading': '変身',
   'guide.classPage.formsMoonwing':
-    '均衡（ムーングローブ）のドルイドは、もう一つの姿、ムーンウィングフォームを得ます。均衡型のドルイドが戦うための術者の姿です。獣の姿でありながら呪文を保てる唯一の形であり、ワンドもこの姿か、通常の術者の姿でしか使えません。',
+    '均衡（ムーングローブ）のドルイドは、もう一つの姿、ムーンウィングフォームを得ます。均衡型のドルイドが戦うための術者の姿です。回復特性のスポアメンダーフォームと同じく呪文をそのまま使え、ワンドはこの二つの姿か、通常の術者の姿でしか使えません。',
   'guide.classPage.formsWolfEngage':
     '狼はブルーインラッシュで戦いを開き、すぐにウルフフォームへ変身して対象を押さえ込み、ステルスでないときはランジで距離を詰め、テイクダウンで敵を足止めする。',
   'guide.classPage.formsAutoUnshift':

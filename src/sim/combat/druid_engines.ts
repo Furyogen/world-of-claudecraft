@@ -277,7 +277,8 @@ function inMoonwing(player: Entity): boolean {
 
 // Strip every breakable root and slow the player wears (an aura stamped
 // unbreakableControl stays). Fleet Form runs this on every cast, baseline;
-// the other three forms run it only with Wildshift selected. Draws no rng.
+// the other forms (Cat, Bruin, Moonwing, Sporemender) run it only with
+// Wildshift selected. Draws no rng.
 // A form button reaches this hook in BOTH directions of the shift: the
 // toggle-off press that returns to caster form runs the same
 // casting_lifecycle path as the shift in, so a druid rooted while in Fleet
@@ -304,8 +305,8 @@ export function druidEngineOnCast(
 
   if (FORM_ABILITY_IDS.has(abilityId)) {
     // Fleet Form breaks control on its own (the classic travel-form escape:
-    // 30 mana, no cooldown, and no abilities while shifted). Cat, Bruin, and
-    // Moonwing keep the Wildshift gate, which is what makes the row 5 pick
+    // 30 mana, no cooldown, and no abilities while shifted). Cat, Bruin,
+    // Moonwing and Sporemender keep the Wildshift gate, which is what makes the row 5 pick
     // the in-combat option: break the root without leaving your damage form.
     if (abilityId === 'travel_form' || selectedRow(ctx, player, DRUID_TALENT_IDS.wildshift)) {
       breakMovementControl(ctx, player);
