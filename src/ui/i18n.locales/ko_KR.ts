@@ -11844,6 +11844,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.models.formBear': '큰곰 변신',
   'guide.models.formCat': '표범 변신',
   'guide.models.formTravel': '쾌속 형태',
+  'guide.models.formSporemender': '포자치유사 변신',
   'guide.models.groupForms': '드루이드 변신',
   'guide.nav.sidebarLabel': '가이드 주제',
   'guide.professions.craftHowTitle': '제작 창',
@@ -14845,8 +14846,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '근접 피해를 맡는 형태입니다. 도적처럼 기력과 연계 점수를 쓰고, 위협 수준은 훨씬 적게 쌓습니다.',
   'guide.classPage.formLine.form_travel':
     '이동을 위한 형태입니다. 땅 위를 훨씬 빠르게 달리지만, 형태를 풀기 전까지는 다른 능력을 쓸 수 없습니다.',
+  'guide.classPage.formLine.form_sporemender':
+    '회복 드루이드의 치유 형태입니다. 더 단단한 가죽과 더 강한 치유를 지니며, 모든 주문과 마나를 그대로 사용합니다.',
   'guide.classPage.formName.form_bear': '큰곰 변신',
   'guide.classPage.formName.form_travel': '쾌속 형태',
+  'guide.classPage.formName.form_sporemender': '포자치유사 변신',
   'guide.classPage.formsHeading': '변신',
   'guide.classPage.formsMoonwing':
     '조화 전문화 드루이드는 형태를 하나 더 얻습니다. 조화 드루이드가 싸울 때 쓰는 시전자 형태인 달빛야수 변신입니다. 주문을 그대로 쓸 수 있는 유일한 동물 형태이며, 마법봉은 이 형태나 평범한 시전자 모습에서만 쓸 수 있습니다.',
@@ -15724,6 +15728,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '악마 형상: 몸집이 {pct}% 커지며 다른 보너스는 별도 강화 효과로 표시됩니다',
   'hudChrome.auraEffect.formMoonkin':
     '달날개 변신: 주문 공격력이 {pct}%, 방어도가 {armorPct}% 증가합니다',
+  'hudChrome.auraEffect.formSporemender':
+    '포자치유사 변신: 주는 치유량이 {pct}%, 방어도가 {armorPct}% 증가합니다',
   'hudChrome.auraEffect.formShadow': '어스름장막 변신: 암흑 피해가 {pct}% 증가합니다',
   'hudChrome.auraEffect.freeExecute': '다음 적용 가능한 처형 기술이 자원을 소모하지 않습니다',
   'hudChrome.auraEffect.funeralHarvestLock': '장례 수확이 아직 다음 영혼 조각을 생성할 수 없습니다',
@@ -17255,6 +17261,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.grove_awakening.description':
     '파티 또는 공격대에서 40야드 내 시야가 닿는 쓰러진 모든 구성원을 당신 곁으로 불러 생명력과 마나 30%로 되살립니다. 전투 중에는 시전할 수 없습니다. (회복)',
   'entities.abilities.grove_awakening.name': '숲의 각성',
+  'entities.abilities.sporemender_form.name': '포자치유사 변신',
+  'entities.abilities.sporemender_form.description':
+    "포자치유사로 변신해 주는 치유량이 20%, 방어도가 50% 증가합니다. 형상을 되돌릴 때까지 지속됩니다. 어떤 형상으로 변신하든 짧은 이동 속도 증가 효과인 '성큼걸음'을 얻습니다. 다시 시전하면 일반 형상으로 돌아옵니다. (회복)",
   'entities.abilities.prayer_of_returning.description':
     '파티 또는 공격대에서 40야드 내 시야가 닿는 쓰러진 모든 구성원을 당신 곁으로 불러 생명력과 마나 30%로 되살립니다. 전투 중에는 시전할 수 없습니다. (신성 및 수양)',
   'entities.abilities.prayer_of_returning.name': '귀환의 기도',

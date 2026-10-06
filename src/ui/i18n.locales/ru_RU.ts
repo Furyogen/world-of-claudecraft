@@ -12020,6 +12020,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.models.formBear': 'Облик бурого',
   'guide.models.formCat': 'Облик кота',
   'guide.models.formTravel': 'Форма скорохода',
+  'guide.models.formSporemender': 'Облик спороцелителя',
   'guide.models.groupForms': 'Облики друида',
   'guide.nav.sidebarLabel': 'Разделы руководства',
   'guide.professions.craftHowTitle': 'Окно ремесла',
@@ -15075,8 +15076,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Облик ближнего боя: энергия и приёмы серии, как у разбойника, и куда меньше угрозы.',
   'guide.classPage.formLine.form_travel':
     'Дорожный облик: по земле вы двигаетесь куда быстрее, но других способностей нет, пока не выйдете из него.',
+  'guide.classPage.formLine.form_sporemender': 'Целительный облик Исцеления: прочная шкура и более сильное исцеление, а все заклинания и мана остаются при вас.',
   'guide.classPage.formName.form_bear': 'Облик бурого',
   'guide.classPage.formName.form_travel': 'Форма скорохода',
+  'guide.classPage.formName.form_sporemender': 'Облик спороцелителя',
   'guide.classPage.formsHeading': 'Смена облика',
   'guide.classPage.formsMoonwing':
     'Друид ветки Баланса получает ещё один облик, Облик лунного совуха — облик заклинателя, в котором такой друид и сражается. Это единственный звериный облик, что сохраняет ваши заклинания, а ваш жезл работает лишь в нём или в обычном облике заклинателя.',
@@ -15961,6 +15964,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Облик демона: размер тела увеличен на {pct}%; прочие бонусы показаны отдельными эффектами',
   'hudChrome.auraEffect.formMoonkin':
     'Облик лунного крыла: урон заклинаний повышен на {pct}%, а броня на {armorPct}%',
+  'hudChrome.auraEffect.formSporemender': 'Облик спороцелителя: исходящее исцеление повышено на {pct}%, а броня на {armorPct}%',
   'hudChrome.auraEffect.formShadow': 'Сумрачный облик: урон от темной магии повышен на {pct}%',
   'hudChrome.auraEffect.freeExecute': 'Следующее подходящее добивающее умение не требует ресурсов',
   'hudChrome.auraEffect.funeralHarvestLock':
@@ -17515,6 +17519,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.grove_awakening.description':
     'Призывает всех погибших участников группы или рейда в пределах 40 м и в поле зрения к вам и возвращает их к жизни с 30% здоровья и маны. Нельзя применять в бою. (Исцеление)',
   'entities.abilities.grove_awakening.name': 'Пробуждение рощи',
+  'entities.abilities.sporemender_form.name': 'Облик спороцелителя',
+  'entities.abilities.sporemender_form.description': 'Вы принимаете Облик спороцелителя: исходящее исцеление повышается на 20%, а броня на 50%. Действует, пока вы не смените облик. Смена облика также даёт эффект «Стремительная поступь», краткий всплеск скорости передвижения. Примените снова, чтобы вернуться в обычный облик. (Исцеление)',
   'entities.abilities.prayer_of_returning.description':
     'Призывает всех погибших участников группы или рейда в пределах 40 м и в поле зрения к вам и возвращает их к жизни с 30% здоровья и маны. Нельзя применять в бою. (Свет и Послушание)',
   'entities.abilities.prayer_of_returning.name': 'Молитва возвращения',

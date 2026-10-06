@@ -3420,6 +3420,7 @@ export const vi_VN: EnTranslations = {
       "formTravel": "Fleet Form: tốc độ di chuyển tăng {pct}%.",
       "formFireball": "Ember Form: tốc độ di chuyển tăng {pct}%; tấn công và thi triển phép bị vô hiệu hóa",
       "formMoonkin": "Dạng Cú Mặt Trăng: sát thương phép tăng {pct}% và giáp tăng {armorPct}%",
+      "formSporemender": "Sporemender Form: healing done increased by {pct}% and armor increased by {armorPct}%",
       "formShadow": "Hình Gloamveil: sát thương Bóng Tối tăng {pct}%",
       "resourceCount": "{value} trên {max}",
       "formLich": "Thương Linh Hồn cũng đánh trúng thêm tối đa {targets} kẻ địch gần đó với {pct}% sát thương",
@@ -6886,13 +6887,15 @@ export const vi_VN: EnTranslations = {
       "formLine": {
         "form_bear": "Dạng gánh chịu đòn: một lớp da dày, dùng Nộ Khí thay vì Mana, và tạo thêm đe dọa để kẻ địch luôn nhắm vào bạn.",
         "form_cat": "Dạng sát thương cận chiến: dùng Năng Lượng và điểm tổ hợp giống Đạo Tặc, và tạo ra ít đe dọa hơn nhiều.",
-        "form_travel": "Dạng di chuyển: nhanh hơn hẳn trên mặt đất, nhưng không dùng được kỹ năng nào khác cho đến khi bạn thoát dạng."
+        "form_travel": "Dạng di chuyển: nhanh hơn hẳn trên mặt đất, nhưng không dùng được kỹ năng nào khác cho đến khi bạn thoát dạng.",
+        "form_sporemender": "The Groveheart healing shape: a hardier hide and stronger healing, and it keeps every spell and your mana."
       },
       "mageEleSummon": "Một phép Băng Giá triệu gọi nguyên tố về bên bạn và tung nó vào mục tiêu của bạn.",
       "formName": {
         "form_bear": "Hình Bruin",
         "form_cat": "Hình Mèo",
-        "form_travel": "Hình Thần Tốc"
+        "form_travel": "Hình Thần Tốc",
+        "form_sporemender": "Sporemender Form"
       }
     },
     "classHook": {
@@ -7538,6 +7541,7 @@ export const vi_VN: EnTranslations = {
       "formBear": "Bruin Form",
       "formCat": "Hình Mèo",
       "formTravel": "Fleet Form",
+      "formSporemender": "Sporemender Form",
       "groupCreatures": "Sinh vật",
       "groupPets": "Quỷ của Thuật Sĩ Hắc Ám",
       "pickerLabel": "Chọn một mô hình để xem",
@@ -12681,6 +12685,10 @@ export const vi_VN: EnTranslations = {
       "grove_awakening": {
         "name": "Thức Tỉnh Khu Rừng",
         "description": "Gọi mọi thành viên đã ngã xuống trong nhóm hoặc đội của bạn, trong phạm vi 40 mét và trong tầm nhìn thẳng của bạn, trở lại sự sống bên cạnh bạn với 30% máu và mana. Không thể niệm khi đang chiến đấu. (Groveheart)"
+      },
+      "sporemender_form": {
+        "name": "Sporemender Form",
+        "description": "Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 50%. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart)"
       },
       "overbloom": {
         "name": "Mãn Khai",

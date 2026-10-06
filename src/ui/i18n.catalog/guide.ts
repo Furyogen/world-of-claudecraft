@@ -1371,6 +1371,8 @@ export const guideStrings = {
         'The melee damage shape: energy and combo points, like a rogue, and much less threat.',
       form_travel:
         'The travelling shape: far quicker across the ground, but no other abilities until you shift out.',
+      form_sporemender:
+        'The Groveheart healing shape: a hardier hide and stronger healing, and it keeps every spell and your mana.',
     },
     // The summon spell's own kit line. Water Jet is the PET's pet-bar command, not this
     // spell, so it renders as a paragraph under the row instead of as this line.
@@ -1383,6 +1385,7 @@ export const guideStrings = {
       form_bear: 'Bruin Form',
       form_cat: 'Cat Form',
       form_travel: 'Fleet Form',
+      form_sporemender: 'Sporemender Form',
     },
   },
   // Deprecated: short fantasy hooks. The class index and class page now use the canonical
@@ -2486,6 +2489,7 @@ export const guideStrings = {
     formBear: 'Bruin Form',
     formCat: 'Cat Form',
     formTravel: 'Fleet Form',
+    formSporemender: 'Sporemender Form',
     groupCreatures: 'Creatures',
     groupPets: 'Warlock Demons',
     pickerLabel: 'Choose a model to view',

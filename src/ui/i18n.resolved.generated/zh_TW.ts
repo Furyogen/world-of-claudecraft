@@ -3420,6 +3420,7 @@ export const zh_TW: EnTranslations = {
       "formTravel": "迅捷形態：移動速度提高 {pct}%",
       "formFireball": "火球形態：移動速度提高 {pct}%；無法攻擊或施法",
       "formMoonkin": "月翼形態：法術傷害提高 {pct}%，護甲提高 {armorPct}%",
+      "formSporemender": "孢癒者形態：造成的治療提高 {pct}%，護甲提高 {armorPct}%",
       "formShadow": "幽幕形態：暗影傷害提高 {pct}%",
       "resourceCount": "{value}/{max}",
       "formLich": "靈魂長槍還會對附近最多 {targets} 個敵人造成 {pct}% 傷害",
@@ -6886,13 +6887,15 @@ export const zh_TW: EnTranslations = {
       "formLine": {
         "form_bear": "坦克型態：厚實的皮毛、以怒氣取代法力，還有額外威脅值，好讓敵人繼續朝你揮拳。",
         "form_cat": "近戰輸出型態：像盜賊那樣使用能量與連擊點，威脅值則低上許多。",
-        "form_travel": "趕路型態：在地面上快得多，但在你變回來之前無法使用其他技能。"
+        "form_travel": "趕路型態：在地面上快得多，但在你變回來之前無法使用其他技能。",
+        "form_sporemender": "恢復德魯伊的治療型態：外皮更堅韌、治療更強，並保留你的所有法術與法力。"
       },
       "mageEleSummon": "一道冰霜法術，將水元素召喚到你身旁，並讓牠撲向你的目標。",
       "formName": {
         "form_bear": "巨熊形態",
         "form_cat": "貓形態",
-        "form_travel": "迅捷形態"
+        "form_travel": "迅捷形態",
+        "form_sporemender": "孢癒者形態"
       }
     },
     "classHook": {
@@ -7538,6 +7541,7 @@ export const zh_TW: EnTranslations = {
       "formBear": "巨熊形態",
       "formCat": "貓形態",
       "formTravel": "迅捷形態",
+      "formSporemender": "孢癒者形態",
       "groupCreatures": "生物",
       "groupPets": "術士惡魔",
       "pickerLabel": "選擇要檢視的模型",
@@ -12681,6 +12685,10 @@ export const zh_TW: EnTranslations = {
       "grove_awakening": {
         "name": "林地覺醒",
         "description": "呼喚隊伍或團隊中 40 碼內且在你視線內的所有陣亡成員回到你身邊復活，並恢復30%生命值和法力值。戰鬥中無法施放。（恢復）"
+      },
+      "sporemender_form": {
+        "name": "孢癒者形態",
+        "description": "變形為孢癒者，使你造成的治療提高20%，護甲提高50%。持續到你切換形態為止。變形為任何形態時都會獲得「輕捷步伐」，短暫提升移動速度。再次施放可返回普通形態。（恢復）"
       },
       "overbloom": {
         "name": "盛放",

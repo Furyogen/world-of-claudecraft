@@ -3420,6 +3420,7 @@ export const ko_KR: EnTranslations = {
       "formTravel": "쾌속 형태: 이동 속도가 {pct}% 증가합니다",
       "formFireball": "화염구 형상: 이동 속도 {pct}% 증가, 공격 및 주문 사용 불가",
       "formMoonkin": "달날개 변신: 주문 공격력이 {pct}%, 방어도가 {armorPct}% 증가합니다",
+      "formSporemender": "포자치유사 변신: 주는 치유량이 {pct}%, 방어도가 {armorPct}% 증가합니다",
       "formShadow": "어스름장막 변신: 암흑 피해가 {pct}% 증가합니다",
       "resourceCount": "{value}/{max}",
       "formLich": "영혼 창이 주변 최대 {targets}명에게도 {pct}% 피해를 줍니다",
@@ -6886,13 +6887,15 @@ export const ko_KR: EnTranslations = {
       "formLine": {
         "form_bear": "방어를 맡는 형태입니다. 두꺼운 가죽을 두르고, 마나 대신 분노를 쓰며, 위협 수준을 더 쌓아 적이 계속 당신을 때리게 합니다.",
         "form_cat": "근접 피해를 맡는 형태입니다. 도적처럼 기력과 연계 점수를 쓰고, 위협 수준은 훨씬 적게 쌓습니다.",
-        "form_travel": "이동을 위한 형태입니다. 땅 위를 훨씬 빠르게 달리지만, 형태를 풀기 전까지는 다른 능력을 쓸 수 없습니다."
+        "form_travel": "이동을 위한 형태입니다. 땅 위를 훨씬 빠르게 달리지만, 형태를 풀기 전까지는 다른 능력을 쓸 수 없습니다.",
+        "form_sporemender": "회복 드루이드의 치유 형태입니다. 더 단단한 가죽과 더 강한 치유를 지니며, 모든 주문과 마나를 그대로 사용합니다."
       },
       "mageEleSummon": "정령을 곁으로 불러내 대상에게 달려들게 하는 냉기 주문입니다.",
       "formName": {
         "form_bear": "큰곰 변신",
         "form_cat": "표범 변신",
-        "form_travel": "쾌속 형태"
+        "form_travel": "쾌속 형태",
+        "form_sporemender": "포자치유사 변신"
       }
     },
     "classHook": {
@@ -7538,6 +7541,7 @@ export const ko_KR: EnTranslations = {
       "formBear": "큰곰 변신",
       "formCat": "표범 변신",
       "formTravel": "쾌속 형태",
+      "formSporemender": "포자치유사 변신",
       "groupCreatures": "생명체",
       "groupPets": "흑마법사 악마",
       "pickerLabel": "볼 모델을 고르세요",
@@ -12681,6 +12685,10 @@ export const ko_KR: EnTranslations = {
       "grove_awakening": {
         "name": "숲의 각성",
         "description": "파티 또는 공격대에서 40야드 내 시야가 닿는 쓰러진 모든 구성원을 당신 곁으로 불러 생명력과 마나 30%로 되살립니다. 전투 중에는 시전할 수 없습니다. (회복)"
+      },
+      "sporemender_form": {
+        "name": "포자치유사 변신",
+        "description": "포자치유사로 변신해 주는 치유량이 20%, 방어도가 50% 증가합니다. 형상을 되돌릴 때까지 지속됩니다. 어떤 형상으로 변신하든 짧은 이동 속도 증가 효과인 '성큼걸음'을 얻습니다. 다시 시전하면 일반 형상으로 돌아옵니다. (회복)"
       },
       "overbloom": {
         "name": "만개",

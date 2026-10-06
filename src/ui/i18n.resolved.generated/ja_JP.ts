@@ -3420,6 +3420,7 @@ export const ja_JP: EnTranslations = {
       "formTravel": "フリートフォーム: 移動速度が{pct}%上昇",
       "formFireball": "火球形態：移動速度が{pct}%上昇、攻撃と呪文は使用不可",
       "formMoonkin": "ムーンウィング形態：呪文ダメージが{pct}%、アーマーが{armorPct}%増加する",
+      "formSporemender": "スポアメンダーフォーム：与える回復量が{pct}%、アーマーが{armorPct}%増加する",
       "formShadow": "グロームヴェイル形態：影ダメージが{pct}%増加する",
       "resourceCount": "{value}/{max}",
       "formLich": "ソウル・ランスが近くの最大{targets}体にも{pct}%のダメージを与える",
@@ -6886,13 +6887,15 @@ export const ja_JP: EnTranslations = {
       "formLine": {
         "form_bear": "タンクの姿です。分厚い毛皮をまとい、マナの代わりにレイジを使い、追加の脅威で敵の矛先を自分に引きつけ続けます。",
         "form_cat": "近接ダメージの姿です。ローグと同じくエナジーとコンボポイントで戦い、脅威ははるかに低く抑えられます。",
-        "form_travel": "移動のための姿です。地上をはるかに速く駆けられますが、変身を解くまで他のアビリティは使えません。"
+        "form_travel": "移動のための姿です。地上をはるかに速く駆けられますが、変身を解くまで他のアビリティは使えません。",
+        "form_sporemender": "回復特性の癒しの姿です。より頑丈な外皮と強い回復を備え、すべての呪文とマナをそのまま使えます。"
       },
       "mageEleSummon": "エレメンタルを傍らに呼び出し、あなたの標的に差し向けるフロストの呪文です。",
       "formName": {
         "form_bear": "ブルーインフォーム",
         "form_cat": "キャットフォーム",
-        "form_travel": "フリートフォーム"
+        "form_travel": "フリートフォーム",
+        "form_sporemender": "スポアメンダーフォーム"
       }
     },
     "classHook": {
@@ -7538,6 +7541,7 @@ export const ja_JP: EnTranslations = {
       "formBear": "ブルーインフォーム",
       "formCat": "キャットフォーム",
       "formTravel": "フリートフォーム",
+      "formSporemender": "スポアメンダーフォーム",
       "groupCreatures": "クリーチャー",
       "groupPets": "ウォーロックのデーモン",
       "pickerLabel": "表示するモデルを選択",
@@ -12681,6 +12685,10 @@ export const ja_JP: EnTranslations = {
       "grove_awakening": {
         "name": "樹林の覚醒",
         "description": "グループまたはレイドの、40ヤード以内で視線の通る倒れたメンバー全員をあなたのそばに呼び戻し、体力とマナが30%の状態で蘇生する。戦闘中は詠唱できない。（回復）"
+      },
+      "sporemender_form": {
+        "name": "スポアメンダーフォーム",
+        "description": "スポアメンダーになり、与える回復量が20%、アーマーが50%増加します。姿を戻すまで持続します。どの姿に変身しても、移動速度が短時間上昇する『軽快な足取り』を得ます。再び唱えると通常形態に戻ります。（回復）"
       },
       "overbloom": {
         "name": "満開",

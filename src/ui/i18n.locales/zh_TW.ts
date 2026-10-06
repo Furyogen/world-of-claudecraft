@@ -11287,6 +11287,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.models.formBear': '巨熊形態',
   'guide.models.formCat': '貓形態',
   'guide.models.formTravel': '迅捷形態',
+  'guide.models.formSporemender': '孢癒者形態',
   'guide.models.groupForms': '德魯伊形態',
   'guide.nav.sidebarLabel': '指南主題',
   'guide.professions.craftHowTitle': '製作視窗',
@@ -14172,8 +14173,11 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '近戰輸出型態：像盜賊那樣使用能量與連擊點，威脅值則低上許多。',
   'guide.classPage.formLine.form_travel':
     '趕路型態：在地面上快得多，但在你變回來之前無法使用其他技能。',
+  'guide.classPage.formLine.form_sporemender':
+    '恢復德魯伊的治療型態：外皮更堅韌、治療更強，並保留你的所有法術與法力。',
   'guide.classPage.formName.form_bear': '巨熊形態',
   'guide.classPage.formName.form_travel': '迅捷形態',
+  'guide.classPage.formName.form_sporemender': '孢癒者形態',
   'guide.classPage.formsHeading': '變形',
   'guide.classPage.formsMoonwing':
     '平衡專精的德魯伊會多獲得一種形態：梟獸形態，那是平衡德魯伊作戰時所處的施法形態。它是唯一保留你法術的動物形態，而你的魔杖也只有在它或你平常的施法形態下才能使用。',
@@ -15005,6 +15009,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.formLich': '靈魂長槍還會對附近最多 {targets} 個敵人造成 {pct}% 傷害',
   'hudChrome.auraEffect.formMetamorph': '惡魔形態：體型增大 {pct}%；其他加成由獨立增益提供',
   'hudChrome.auraEffect.formMoonkin': '月翼形態：法術傷害提高 {pct}%，護甲提高 {armorPct}%',
+  'hudChrome.auraEffect.formSporemender': '孢癒者形態：造成的治療提高 {pct}%，護甲提高 {armorPct}%',
   'hudChrome.auraEffect.formShadow': '幽幕形態：暗影傷害提高 {pct}%',
   'hudChrome.auraEffect.freeExecute': '下一個符合條件的斬殺技能不消耗資源',
   'hudChrome.auraEffect.funeralHarvestLock': '葬禮收割暫時無法再次產生靈魂碎片',
@@ -16438,6 +16443,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.grove_awakening.description':
     '呼喚隊伍或團隊中 40 碼內且在你視線內的所有陣亡成員回到你身邊復活，並恢復30%生命值和法力值。戰鬥中無法施放。（恢復）',
   'entities.abilities.grove_awakening.name': '林地覺醒',
+  'entities.abilities.sporemender_form.name': '孢癒者形態',
+  'entities.abilities.sporemender_form.description':
+    '變形為孢癒者，使你造成的治療提高20%，護甲提高50%。持續到你切換形態為止。變形為任何形態時都會獲得「輕捷步伐」，短暫提升移動速度。再次施放可返回普通形態。（恢復）',
   'entities.abilities.prayer_of_returning.description':
     '呼喚隊伍或團隊中 40 碼內且在你視線內的所有陣亡成員回到你身邊復活，並恢復30%生命值和法力值。戰鬥中無法施放。（聖光與戒律）',
   'entities.abilities.prayer_of_returning.name': '歸返祈禱',

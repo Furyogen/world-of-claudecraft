@@ -11878,6 +11878,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.models.formBear': 'ブルーインフォーム',
   'guide.models.formCat': 'キャットフォーム',
   'guide.models.formTravel': 'フリートフォーム',
+  'guide.models.formSporemender': 'スポアメンダーフォーム',
   'guide.models.groupForms': 'ドルイドの変身形態',
   'guide.nav.sidebarLabel': 'ガイドの項目',
   'guide.professions.craftHowTitle': '製作ウィンドウ',
@@ -14874,8 +14875,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '近接ダメージの姿です。ローグと同じくエナジーとコンボポイントで戦い、脅威ははるかに低く抑えられます。',
   'guide.classPage.formLine.form_travel':
     '移動のための姿です。地上をはるかに速く駆けられますが、変身を解くまで他のアビリティは使えません。',
+  'guide.classPage.formLine.form_sporemender':
+    '回復特性の癒しの姿です。より頑丈な外皮と強い回復を備え、すべての呪文とマナをそのまま使えます。',
   'guide.classPage.formName.form_bear': 'ブルーインフォーム',
   'guide.classPage.formName.form_travel': 'フリートフォーム',
+  'guide.classPage.formName.form_sporemender': 'スポアメンダーフォーム',
   'guide.classPage.formsHeading': '変身',
   'guide.classPage.formsMoonwing':
     '均衡（ムーングローブ）のドルイドは、もう一つの姿、ムーンウィングフォームを得ます。均衡型のドルイドが戦うための術者の姿です。獣の姿でありながら呪文を保てる唯一の形であり、ワンドもこの姿か、通常の術者の姿でしか使えません。',
@@ -15764,6 +15768,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '悪魔形態：体格が{pct}%大きくなる。ほかのボーナスは別のバフで表示される',
   'hudChrome.auraEffect.formMoonkin':
     'ムーンウィング形態：呪文ダメージが{pct}%、アーマーが{armorPct}%増加する',
+  'hudChrome.auraEffect.formSporemender':
+    'スポアメンダーフォーム：与える回復量が{pct}%、アーマーが{armorPct}%増加する',
   'hudChrome.auraEffect.formShadow': 'グロームヴェイル形態：影ダメージが{pct}%増加する',
   'hudChrome.auraEffect.freeExecute': '次の対象となる処刑アビリティはコストを消費しない',
   'hudChrome.auraEffect.funeralHarvestLock':
@@ -17298,6 +17304,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.grove_awakening.description':
     'グループまたはレイドの、40ヤード以内で視線の通る倒れたメンバー全員をあなたのそばに呼び戻し、体力とマナが30%の状態で蘇生する。戦闘中は詠唱できない。（回復）',
   'entities.abilities.grove_awakening.name': '樹林の覚醒',
+  'entities.abilities.sporemender_form.name': 'スポアメンダーフォーム',
+  'entities.abilities.sporemender_form.description':
+    'スポアメンダーになり、与える回復量が20%、アーマーが50%増加します。姿を戻すまで持続します。どの姿に変身しても、移動速度が短時間上昇する『軽快な足取り』を得ます。再び唱えると通常形態に戻ります。（回復）',
   'entities.abilities.prayer_of_returning.description':
     'グループまたはレイドの、40ヤード以内で視線の通る倒れたメンバー全員をあなたのそばに呼び戻し、体力とマナが30%の状態で蘇生する。戦闘中は詠唱できない。（聖なる・ディシプリン）',
   'entities.abilities.prayer_of_returning.name': '帰還の祈り',
