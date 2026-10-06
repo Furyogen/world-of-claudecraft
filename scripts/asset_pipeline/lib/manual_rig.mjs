@@ -365,7 +365,16 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
   });
 
   // --- Rebuild the reference doc: drop its meshes, add the new skinned body -
-  for (const node of root.listNodes()) if (node.getMesh()) node.setMesh(null);
+  // The reference's skinned part nodes (Knight_ArmLeft, ...) go too, not just
+  // their meshes: an emptied node keeps its skin reference, so the output would
+  // ship one dead skin per reference part, and any later pass that prunes them
+  // (the KTX2 texture conversion) trips its structural-invariant check.
+  for (const node of root.listNodes()) {
+    if (!node.getMesh()) continue;
+    node.setMesh(null);
+    if (node.listChildren().length === 0) node.dispose();
+    else node.setSkin(null);
+  }
   for (const mesh of root.listMeshes()) mesh.dispose();
 
   const buffer = root.listBuffers()[0];

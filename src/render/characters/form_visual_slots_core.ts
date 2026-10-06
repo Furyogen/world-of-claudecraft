@@ -10,8 +10,6 @@
 // Three-free and allocation-free (RENDER_PURE_CORES, tests/architecture.test.ts):
 // the rig surface is structural, so a Vitest drives it with stubs. Every helper
 // is a plain indexed loop, safe for the per-entity per-frame path.
-import type { CharacterFormKey } from './form_visual_selection_core';
-
 export const FORM_VISUAL_SLOTS = [
   'sheepVisual',
   'bearVisual',
@@ -22,16 +20,6 @@ export const FORM_VISUAL_SLOTS = [
 ] as const;
 
 export type FormVisualSlot = (typeof FORM_VISUAL_SLOTS)[number];
-
-/** Which view slot each form asset key builds into. */
-export const FORM_VISUAL_SLOT_FOR_KEY: Readonly<Record<CharacterFormKey, FormVisualSlot>> = {
-  form_sheep: 'sheepVisual',
-  form_bear: 'bearVisual',
-  form_cat: 'catVisual',
-  form_travel: 'travelVisual',
-  form_metamorph: 'metamorphVisual',
-  form_sporemender: 'sporemenderVisual',
-};
 
 /** The rig surface the per-frame passes touch. */
 export interface FormSlotRig {

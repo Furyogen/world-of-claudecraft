@@ -200,7 +200,7 @@ import {
 } from './characters/form_visual_selection_core';
 import {
   disposeFormRigs,
-  FORM_VISUAL_SLOT_FOR_KEY,
+  type FormVisualSlot,
   setFormRigsFar,
   setFormRigsProxyShadow,
   setFormRigsShadow,
@@ -4848,11 +4848,12 @@ export class Renderer {
     e: Entity,
     v: EntityView,
     formKey: CharacterFormKey,
+    slot: FormVisualSlot,
     gateCompile: boolean,
   ): void {
     const built = this.createCharacterVisualWithRetry(e, formKey, formKey);
     if (!built) return;
-    v[FORM_VISUAL_SLOT_FOR_KEY[formKey]] = built;
+    v[slot] = built;
     v.group.add(built.root); // group.scale already carries e.scale
     // The encounter mark lands on whichever body is ACTIVE, and a form rig keys
     // its own Soul Rend programs (other meshes, other skinning): it cannot
@@ -10539,13 +10540,17 @@ export class Renderer {
 
       // lazy form visuals, swapped by visibility like the old sheep/bear rigs
       // (build, compile gate and encounter prewarm all live in buildFormVisual)
-      if (polyed && !v.sheepVisual) this.buildFormVisual(e, v, 'form_sheep', true);
-      if (bear && !v.bearVisual) this.buildFormVisual(e, v, 'form_bear', true);
-      if (cat && !v.catVisual) this.buildFormVisual(e, v, 'form_cat', true);
-      if (travel && !v.travelVisual) this.buildFormVisual(e, v, 'form_travel', true);
-      if (metamorphForm && !v.metamorphVisual) this.buildFormVisual(e, v, 'form_metamorph', false);
+      if (polyed && !v.sheepVisual) this.buildFormVisual(e, v, 'form_sheep', 'sheepVisual', true);
+      if (bear && !v.bearVisual) this.buildFormVisual(e, v, 'form_bear', 'bearVisual', true);
+      if (cat && !v.catVisual) this.buildFormVisual(e, v, 'form_cat', 'catVisual', true);
+      if (travel && !v.travelVisual) {
+        this.buildFormVisual(e, v, 'form_travel', 'travelVisual', true);
+      }
+      if (metamorphForm && !v.metamorphVisual) {
+        this.buildFormVisual(e, v, 'form_metamorph', 'metamorphVisual', false);
+      }
       if (sporemenderForm && !v.sporemenderVisual) {
-        this.buildFormVisual(e, v, 'form_sporemender', true);
+        this.buildFormVisual(e, v, 'form_sporemender', 'sporemenderVisual', true);
       }
       // A form rig that is still linking is NOT ready: the mask holds the
       // resolved form at 'base', so the BODY stands in and a polymorphed target

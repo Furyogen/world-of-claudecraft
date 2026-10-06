@@ -6,7 +6,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   disposeFormRigs,
-  FORM_VISUAL_SLOT_FOR_KEY,
   FORM_VISUAL_SLOTS,
   type FormSlotRig,
   type FormVisualSlots,
@@ -59,7 +58,7 @@ function allSlots(): FormVisualSlots<StubRig> {
 }
 
 describe('form visual slots', () => {
-  it('names every lazy form rig, and maps each form asset key to its slot', () => {
+  it('names every lazy form rig', () => {
     expect([...FORM_VISUAL_SLOTS]).toEqual([
       'sheepVisual',
       'bearVisual',
@@ -68,14 +67,6 @@ describe('form visual slots', () => {
       'metamorphVisual',
       'sporemenderVisual',
     ]);
-    expect(FORM_VISUAL_SLOT_FOR_KEY).toEqual({
-      form_sheep: 'sheepVisual',
-      form_bear: 'bearVisual',
-      form_cat: 'catVisual',
-      form_travel: 'travelVisual',
-      form_metamorph: 'metamorphVisual',
-      form_sporemender: 'sporemenderVisual',
-    });
   });
 
   it('sets the articulated shadow on every built rig and skips empty slots', () => {

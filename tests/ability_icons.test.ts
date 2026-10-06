@@ -126,12 +126,13 @@ describe('ability icons', () => {
     const ids = abilityRecipeIds();
     expect(ids).toEqual([...new Set(ids)].sort((left, right) => left.localeCompare(right)));
     // 464: 450 plus the fourteen Nythraxis Raid Boss Guide mechanic recipes;
-    // 469: plus the Wildfang kit pass 2 glyphs (lunge, hamstring_bite).
-    expect(ids).toHaveLength(472);
+    // 469: plus the Wildfang kit pass 2 glyphs (lunge, hamstring_bite);
+    // 473: plus Groveheart's Sporemender Form (sporemender_form).
+    expect(ids).toHaveLength(473);
     for (const id of ids) expect(hasExplicitAbilityIcon(id), id).toBe(true);
 
     const identity = ids.map((id) => ({ id, recipe: abilityIconRecipe(id) }));
     const hash = createHash('sha256').update(stableSerialize(identity)).digest('hex');
-    expect(hash).toBe('fbdfd02233ef1cde9f4b30deec22096742e68a5a3c7636656b52345222c1f2aa');
+    expect(hash).toBe('f302c52fcb4361f7b8adf7dc86642a87e295d50ba3fd3d8f789cc7334533458f');
   });
 });

@@ -2,7 +2,7 @@
   "__provenance": {
     "run": "34168361798",
     "harvested": "2026-09-08",
-    "files": 4077,
+    "files": 4079,
     "harvestedFiles": 3948,
     "carried": {
       "tests/action_bar_spectate.test.ts": {
@@ -123,6 +123,17 @@
           9
         ]
       },
+      "tests/druid_sporemender.test.ts": {
+        "ms": 2123,
+        "method": "local-median",
+        "measured": "2026-10-06",
+        "reason": "Sporemender Form adds these two suites; measured locally while the next green full CI harvest is pending.",
+        "runs": [
+          2146,
+          2086,
+          2123
+        ]
+      },
       "tests/fct_stage_core.test.ts": {
         "ms": 15,
         "method": "local-median",
@@ -148,6 +159,17 @@
         "reason": "New frame layout suites measured locally pending the next full CI harvest",
         "runs": [
           11
+        ]
+      },
+      "tests/form_visual_slots_core.test.ts": {
+        "ms": 12,
+        "method": "local-median",
+        "measured": "2026-10-06",
+        "reason": "Sporemender Form adds these two suites; measured locally while the next green full CI harvest is pending.",
+        "runs": [
+          8,
+          12,
+          15
         ]
       },
       "tests/frame_menus.test.ts": {
@@ -2184,6 +2206,7 @@
   "tests/druid_form_auto_unshift.test.ts": 6736,
   "tests/druid_form_auto_unshift_online.test.ts": 2907,
   "tests/druid_spell_pack.test.ts": 6662,
+  "tests/druid_sporemender.test.ts": 2123,
   "tests/druid_wand.test.ts": 3533,
   "tests/duel.test.ts": 2700,
   "tests/duel_aftermath.test.ts": 4451,
@@ -2486,6 +2509,7 @@
   "tests/form_draft.test.ts": 64,
   "tests/form_swing.test.ts": 5170,
   "tests/form_visual_selection_core.test.ts": 12,
+  "tests/form_visual_slots_core.test.ts": 12,
   "tests/frame_menus.test.ts": 120,
   "tests/frame_pos_reset.test.ts": 13,
   "tests/frame_present.test.ts": 10,
