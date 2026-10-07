@@ -191,8 +191,10 @@ silhouette (a mushroom cap, a big helm) whose rim overhangs the shoulders picks 
 weight and bends with every swing: `--rigid-head-from <frac>` binds every vertex above
 that fraction of the fitted height to the head joint outright (blended over
 `--rigid-head-blend`, default 0.03, below it); set it at the chin line (the Sporemender
-Form cap shipped at 0.45). Tripo's own auto-rig shreds such a cap outright, so this lane
-is the fix for it. Run `qa --job` after, like every lane.
+Form cap shipped at 0.43 with a 0.02 blend, the scarf line: the KayKit shoulders
+sit at face height on a short-torso chibi, so a cut at the chin let them shear
+the face). Tripo's own auto-rig shreds such a cap outright, so this lane is the
+fix for it. Run `qa --job` after, like every lane.
 
 ## Fit Studio (designer anchors for modular hair + piercings)
 ```
