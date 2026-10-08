@@ -7960,11 +7960,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     description:
       'Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Balance signature)',
   },
-  // Groveheart's caster form, the healer twin of Moonwing Form: spec-gated to
-  // Restoration through `specs`, a toggle like every form, and it keeps the
-  // whole spellbook and the mana bar. The +20% healing done and the +50% armor
-  // read the form aura live (combat/druid_sporemender.ts, entity.ts); Loping
-  // Stride rides the druid FORM_ABILITY_IDS set (combat/druid_engines.ts).
+  // Groveheart's caster form, the healer twin of Moonwing Form: a Groveheart
+  // signature beside Fleetmend (granted on the spec pick, talents_classic.ts),
+  // still spec-gated to Restoration through `specs`, a toggle like every form,
+  // and it keeps the whole spellbook and the mana bar. The +20% healing done,
+  // the +40% armor and the 20% slower pace read the form aura live
+  // (combat/druid_sporemender.ts, entity.ts, player_motion.ts); Loping Stride
+  // rides the druid FORM_ABILITY_IDS set (combat/druid_engines.ts).
   sporemender_form: {
     id: 'sporemender_form',
     tooltipOmitEffectLines: true,
@@ -7980,7 +7982,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_sporemender', value: 0, duration: 3600 }],
     description:
-      'Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 50%. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart)',
+      'Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 40%, but reducing your movement speed by 20%. All of your caster-form spells stay usable. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart signature)',
   },
   feral_charge: {
     id: 'feral_charge',

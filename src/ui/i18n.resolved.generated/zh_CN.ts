@@ -3420,7 +3420,7 @@ export const zh_CN: EnTranslations = {
       "formTravel": "迅捷形态：移动速度提高 {pct}%",
       "formFireball": "火球形态：移动速度提高 {pct}%；无法攻击或施法",
       "formMoonkin": "月翼形态：法术伤害提高 {pct}%，护甲提高 {armorPct}%",
-      "formSporemender": "孢愈者形态：造成的治疗提高 {pct}%，护甲提高 {armorPct}%",
+      "formSporemender": "孢愈者形态：造成的治疗提高 {pct}%，护甲提高 {armorPct}%，移动速度降低 {slowPct}%",
       "formShadow": "幽幕形态：暗影伤害提高 {pct}%",
       "resourceCount": "{value}/{max}",
       "formLich": "灵魂长枪还会对附近最多 {targets} 个敌人造成 {pct}% 伤害",
@@ -6888,7 +6888,7 @@ export const zh_CN: EnTranslations = {
         "form_bear": "坦克形态：厚实的兽皮，以怒气取代法力，还有额外的威胁值，让敌人始终朝你挥拳。",
         "form_cat": "近战输出形态：像盗贼一样使用能量与连击点，威胁值也低得多。",
         "form_travel": "赶路形态：在地面上快得多，但在你变回原形之前无法使用其他技能。",
-        "form_sporemender": "恢复德鲁伊的治疗形态：外皮更坚韧，治疗更强，并保留你的所有法术和法力值。"
+        "form_sporemender": "恢复德鲁伊的治疗形态：外皮更坚韧，治疗更强但步伐更慢，并保留你的所有法术和法力值。"
       },
       "mageEleSummon": "一个冰霜法术，把水元素召唤到你身边，并让它扑向你的目标。",
       "formName": {
@@ -12688,7 +12688,7 @@ export const zh_CN: EnTranslations = {
       },
       "sporemender_form": {
         "name": "孢愈者形态",
-        "description": "变形为孢愈者，使你造成的治疗提高20%，护甲提高50%。持续到你切换形态为止。变形进入任意形态都会获得大步疾驰，带来短暂的移动速度提升。再次施放可返回普通形态。（恢复）"
+        "description": "变形为孢愈者，使你造成的治疗提高20%，护甲提高40%，但移动速度降低20%。你在普通形态下的所有法术仍可施放。持续到你切换形态为止。变形进入任意形态都会获得大步疾驰，带来短暂的移动速度提升。再次施放可返回普通形态。（恢复标志技能）"
       },
       "overbloom": {
         "name": "盛放",

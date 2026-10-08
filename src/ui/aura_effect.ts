@@ -33,6 +33,7 @@ import {
 import {
   SPOREMENDER_ARMOR_MULT,
   SPOREMENDER_HEALING_DONE_PCT,
+  SPOREMENDER_MOVE_SPEED_MULT,
 } from '../sim/combat/druid_sporemender';
 import {
   COLDSIGHT_READ_AURA_ID,
@@ -687,6 +688,7 @@ export function auraEffectDescriptor(a: AuraEffectInput): AuraEffectDescriptor |
         nums: {
           pct: Math.round(SPOREMENDER_HEALING_DONE_PCT * 100),
           armorPct: Math.round((SPOREMENDER_ARMOR_MULT - 1) * 100),
+          slowPct: Math.round((1 - SPOREMENDER_MOVE_SPEED_MULT) * 100),
         },
       };
     case 'form_shadow':

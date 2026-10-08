@@ -1372,7 +1372,7 @@ export const guideStrings = {
       form_travel:
         'The travelling shape: far quicker across the ground, but no other abilities until you shift out.',
       form_sporemender:
-        'The Groveheart healing shape: a hardier hide and stronger healing, and it keeps every spell and your mana.',
+        'The Groveheart healing shape: a hardier hide and stronger healing at a slower walk, and it keeps every spell and your mana.',
     },
     // The summon spell's own kit line. Water Jet is the PET's pet-bar command, not this
     // spell, so it renders as a paragraph under the row instead of as this line.

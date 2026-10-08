@@ -17,6 +17,7 @@ function spec(
   masteryName: string,
   masteryDescription: string,
   effect: TalentEffect,
+  extraSignatures?: readonly string[],
 ): SpecDef {
   return {
     id,
@@ -26,6 +27,7 @@ function spec(
     icon,
     description,
     signature,
+    ...(extraSignatures ? { extraSignatures } : {}),
     mastery: { name: masteryName, description: masteryDescription, effect },
   };
 }
@@ -413,6 +415,9 @@ const DRUID_SPECS: SpecDef[] = [
     "Grove's Gift",
     'Your heal-over-time effects heal 25% more.',
     { global: { hotHealPct: 0.25 } },
+    // Groveheart's form signature beside Fleetmend, the Moonwing of the healer
+    // spec (combat/druid_sporemender.ts).
+    ['sporemender_form'],
   ),
 ];
 

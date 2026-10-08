@@ -545,7 +545,7 @@ export function recalcPlayerStats(
   // Moonkin Form: a hardy caster form that adds 50% armor (its +20% spell damage rides a
   // separate buff_spelldmg aura the form applies).
   if (moonkinForm) s.armor = Math.round(s.armor * 1.5);
-  // Sporemender Form: the same hardy-caster 50% armor as Moonwing.
+  // Sporemender Form: a hardy healer form that adds 40% armor.
   if (sporemenderForm) s.armor = Math.round(s.armor * SPOREMENDER_ARMOR_MULT);
   // Protection's Vanguard: bonus armor from Strength, added (on the fully-summed
   // Strength) before the armor multiplier so armorPct amplifies it too.

@@ -488,10 +488,10 @@ describe('auraEffectDescriptor', () => {
     });
   });
 
-  it('describes both Sporemender Form bonuses from the sim constants', () => {
+  it('describes both Sporemender Form bonuses and its slower pace from the sim constants', () => {
     expect(desc({ kind: 'form_sporemender', value: 0 })).toEqual({
       key: 'hudChrome.auraEffect.formSporemender',
-      nums: { pct: 20, armorPct: 50 },
+      nums: { pct: 20, armorPct: 40, slowPct: 20 },
     });
   });
 

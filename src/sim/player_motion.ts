@@ -20,6 +20,7 @@
 import { isInstancedRegion, MANTLE_REACH, slopeGlueHeight } from './colliders';
 import { abilityCastSurvivesMovement, movementInputWouldMove } from './combat/cast_move_gate';
 import { isRooted, isStunned } from './combat/cc';
+import { SPOREMENDER_FORM_KIND, SPOREMENDER_MOVE_SPEED_MULT } from './combat/druid_sporemender';
 import { isVeilboundMarchActive } from './combat/paladin_veilbound_state';
 import { mountMoveSpeedPct } from './content/mounts';
 import { guardAndReportPose } from './finite_pose_guard';
@@ -224,7 +225,8 @@ export function moveSpeedMult(e: Entity, extraSpeedPct = 0): number {
   // cannot be slowed): short-circuit the aura scan with the ghost-run multiplier.
   if (e.ghost) return GHOST_RUN_MULT;
   let slow = 1,
-    speed = 1;
+    speed = 1,
+    formPace = 1;
   const slowImmune =
     isVeilboundMarchActive(e) || e.auras.some((aura) => aura.kind === 'slow_immunity');
   for (const a of e.auras) {
@@ -238,6 +240,10 @@ export function moveSpeedMult(e: Entity, extraSpeedPct = 0): number {
     // Druid Cat Form: +15% passive move speed. form_cat's value is the threat
     // multiplier, not a speed, so the constant is what rides the max.
     if (a.kind === 'form_cat') speed = Math.max(speed, CAT_FORM_MOVE_MULT);
+    // Groveheart's Sporemender Form walks 20% slower. A form penalty, not a
+    // snare: slow immunity never lifts it, and it scales the final speed so a
+    // Loping Stride burst or a slow still applies on top of the slower pace.
+    if (a.kind === SPOREMENDER_FORM_KIND) formPace = SPOREMENDER_MOVE_SPEED_MULT;
   }
   // Mounted travel: the active ground mount rides the entity mirror (mountKey,
   // synced over the wire like skin), so the online self-extrapolator predicts
@@ -246,7 +252,7 @@ export function moveSpeedMult(e: Entity, extraSpeedPct = 0): number {
   if (e.mountKey) speed += mountMoveSpeedPct(e.mountKey);
   // Fiesta move-speed augments (only ever non-zero inside a Fiesta bout).
   if (extraSpeedPct) speed += extraSpeedPct;
-  return slow * speed;
+  return slow * speed * formPace;
 }
 
 // Fiesta "Moon Boots" power-up: a buff_jump aura multiplies jump height.

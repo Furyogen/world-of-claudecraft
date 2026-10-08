@@ -339,7 +339,17 @@ export interface SpecDef {
   icon: string;
   description: string;
   signature: string;
+  /** Further signature abilities granted on the spec pick beside `signature`
+   *  (Groveheart carries Sporemender Form next to Fleetmend). `signature` stays
+   *  the spec's primary identity: its icon fallback and the first name its
+   *  tooltip lists. Read every signature through `specSignatureIds`. */
+  extraSignatures?: readonly string[];
   mastery: { name: string; description: string; effect: TalentEffect };
+}
+
+/** Every signature ability a spec grants on selection, primary first. */
+export function specSignatureIds(spec: Pick<SpecDef, 'signature' | 'extraSignatures'>): string[] {
+  return spec.extraSignatures ? [spec.signature, ...spec.extraSignatures] : [spec.signature];
 }
 
 export interface ClassTalents {
@@ -470,6 +480,10 @@ export function validateTalentTree(talents: ClassTalents): string[] {
       errors.push(`spec "${spec.id}" belongs to ${spec.class}, expected ${talents.class}`);
     }
     if (!spec.signature) errors.push(`spec "${spec.id}" has no signature ability`);
+    const signatures = specSignatureIds(spec);
+    if (signatures.some((id) => !id) || new Set(signatures).size !== signatures.length) {
+      errors.push(`spec "${spec.id}" has a blank or repeated signature ability`);
+    }
     if (!spec.mastery?.effect) errors.push(`spec "${spec.id}" has no mastery effect`);
   }
   return errors;
@@ -884,7 +898,7 @@ export function computeTalentModifiers(
   if (spec) {
     modifiers.spec = spec.id;
     modifiers.role = spec.role;
-    modifiers.grants.push({ ability: spec.signature, rank: 1 });
+    for (const ability of specSignatureIds(spec)) modifiers.grants.push({ ability, rank: 1 });
     accumulateTalentEffect(modifiers, spec.mastery.effect, Math.min(1, Math.max(0, level) / 20));
     accumulateTalentEffect(modifiers, specBaselineFor(cls, spec.id));
   }
