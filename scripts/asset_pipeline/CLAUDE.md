@@ -190,11 +190,12 @@ review the clip previews for weight bleed on outlier silhouettes. An oversized h
 silhouette (a mushroom cap, a big helm) whose rim overhangs the shoulders picks up arm
 weight and bends with every swing: `--rigid-head-from <frac>` binds every vertex above
 that fraction of the fitted height to the head joint outright (blended over
-`--rigid-head-blend`, default 0.03, below it); set it at the chin line (the Sporemender
-Form cap shipped at 0.43 with a 0.02 blend, the scarf line: the KayKit shoulders
-sit at face height on a short-torso chibi, so a cut at the chin let them shear
-the face). Tripo's own auto-rig shreds such a cap outright, so this lane is the
-fix for it. Run `qa --job` after, like every lane.
+`--rigid-head-blend`, default 0.03, below it); set it at the chin line, or at the
+scarf line on a short-torso chibi, where the KayKit shoulders sit at face height and
+a cut at the chin lets them shear the face. A very short torso is a poor fit for
+this lane altogether: the borrowed shoulder pivot sits far above the real shoulder,
+so relaxed poses fold the arms into the body. Sporemender Form hit exactly that and
+shipped on Tripo's own fitted rig instead. Run `qa --job` after, like every lane.
 
 ## Fit Studio (designer anchors for modular hair + piercings)
 ```

@@ -20293,7 +20293,8 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   "form_sporemender": {
     "url": "models/creatures/sporemender_form.glb",
     "idle": "Idle",
-    "height": 2.3
+    "height": 2.6,
+    "yaw": -1.5707963267948966
   },
   "mob_emberkin": {
     "url": "models/creatures/emberkin.glb",
