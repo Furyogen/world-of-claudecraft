@@ -22,6 +22,11 @@ import { moveSpeedMult } from '../src/sim/player_motion';
 import { Sim } from '../src/sim/sim';
 import type { Aura, Entity, SimEvent } from '../src/sim/types';
 import { isFormAuraKind, MAX_LEVEL } from '../src/sim/types';
+import { SPEC_CARD_INFO } from '../src/ui/class_details_data';
+import { tEntity } from '../src/ui/entity_i18n';
+import { cooldownClassAbilityIds } from '../src/ui/hud/cooldown_manager/cooldown_manager_catalog';
+import { ensureLocaleLoaded, setLanguage } from '../src/ui/i18n';
+import { tTalent } from '../src/ui/talent_i18n';
 import { EMPTY_TEST_WORLD } from './sim_shared';
 
 function druid(spec: 'balance' | 'feral' | 'restoration', seed = 4410) {
@@ -90,6 +95,37 @@ describe('Sporemender Form: definition and spec gate', () => {
     expect(sim.setSpec('restoration')).toBe(true);
     expect(knownIds(sim)).toEqual(expect.arrayContaining(['swiftmend', 'sporemender_form']));
     expect(ABILITIES.sporemender_form.description).toContain('(Groveheart signature)');
+  });
+
+  it('shows both Groveheart signatures on the talent spec page', async () => {
+    const groveheart = TALENTS.druid.specs.find((spec) => spec.id === 'restoration');
+    if (!groveheart) throw new Error('missing Groveheart spec');
+    try {
+      await ensureLocaleLoaded('en');
+      setLanguage('en');
+      expect(tTalent({ kind: 'talentSpec', spec: groveheart, field: 'description' })).toContain(
+        'Signatures: Fleetmend and Sporemender Form.',
+      );
+      // A one-signature spec keeps its singular line byte for byte.
+      const moongrove = TALENTS.druid.specs.find((spec) => spec.id === 'balance');
+      if (!moongrove) throw new Error('missing Moongrove spec');
+      expect(tTalent({ kind: 'talentSpec', spec: moongrove, field: 'description' })).toMatch(
+        / Signature: Moonwing Form\.$/,
+      );
+      // The generated locales list both localized names too.
+      await ensureLocaleLoaded('zh_CN');
+      setLanguage('zh_CN');
+      const zh = tTalent({ kind: 'talentSpec', spec: groveheart, field: 'description' });
+      for (const id of ['swiftmend', 'sporemender_form']) {
+        expect(zh).toContain(tEntity({ kind: 'ability', id, field: 'name' }));
+      }
+    } finally {
+      setLanguage('en');
+    }
+    // The spec card shows it as an example tile, and the cooldown manager
+    // offers it like every other signature.
+    expect(SPEC_CARD_INFO.druid.restoration.examples).toContain('sporemender_form');
+    expect(cooldownClassAbilityIds('druid')).toContain('sporemender_form');
   });
 
   it('respeccing away from Groveheart strips the worn form', () => {
