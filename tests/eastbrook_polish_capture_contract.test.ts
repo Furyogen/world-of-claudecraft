@@ -690,7 +690,8 @@ const PINNED_POLISH_COMPOSITE_FINGERPRINT =
   // leaves) matches neither parent. No capture was retaken.
   // Re-minted for the devalue audit floor: pnpm-lock.yaml moved (devalue 5.8.1 to 5.9.4), no renderer input changed. No capture was retaken.
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
-  '5cedc82bb1eb821d513d218051ee82f554429a61db87f3c524a8ae735301e4ac';
+  // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
+  '58342bd2e378d2a71085637ce30f22ce3585970ba8a8ee900d702825ca51c0b5';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

@@ -1384,7 +1384,8 @@ const ACCEPTED_POLISH_V2_METADATA_SHA256 =
   // leaves) matches neither parent. No capture was retaken.
   // Re-minted for the devalue audit floor: pnpm-lock.yaml moved (devalue 5.8.1 to 5.9.4), no renderer input changed. No capture was retaken.
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
-  '84d6cf327db61046dcb59c96ed31d41e723551f70c53849f8947bd694f5c861d';
+  // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
+  'bcb4393ee1286491050658b1e3be3fb21f73296aab4c3ddff081b19fb37a7efe';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
   // Re-minted for the Frame Rate Limit: the renderer leaf gained the chosen-cadence feeds (frame load readings, governor signals). No capture was retaken.
   // Re-minted for the Eastbrook handoff merge with release/v0.43.0: the merged renderer leaf and the moved NPC layout match neither parent. No capture was retaken.
@@ -1397,7 +1398,8 @@ const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
   // leaves) matches neither parent. No capture was retaken.
   // Re-minted for the devalue audit floor: pnpm-lock.yaml moved (devalue 5.8.1 to 5.9.4), no renderer input changed. No capture was retaken.
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
-  '5cedc82bb1eb821d513d218051ee82f554429a61db87f3c524a8ae735301e4ac';
+  // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
+  '58342bd2e378d2a71085637ce30f22ce3585970ba8a8ee900d702825ca51c0b5';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2776,7 +2778,9 @@ describe('Eastbrook polish performance and contact evidence', () => {
       // capture was retaken.
       // Sporemender Form: recomputed LAST again over the re-swept evidence. No
       // capture was retaken.
-    ).toBe('3ea4c27e0dd7c199e23410317a16d4a076572c79d6a5b0ea5413afd59cdd62f6');
+      // Sporemender spores: recomputed LAST again over the re-swept evidence. No
+      // capture was retaken.
+    ).toBe('c1bf5792e1f9b0da7f10f0a4059ef63565a455bea2c8ba8096844768a0d5c64b');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {
