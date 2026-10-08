@@ -481,8 +481,8 @@ export function validateTalentTree(talents: ClassTalents): string[] {
     }
     if (!spec.signature) errors.push(`spec "${spec.id}" has no signature ability`);
     const signatures = specSignatureIds(spec);
-    if (signatures.some((id) => !id) || new Set(signatures).size !== signatures.length) {
-      errors.push(`spec "${spec.id}" has a blank or repeated signature ability`);
+    if (spec.extraSignatures?.some((id) => !id) || new Set(signatures).size !== signatures.length) {
+      errors.push(`spec "${spec.id}" has a blank or repeated extra signature ability`);
     }
     if (!spec.mastery?.effect) errors.push(`spec "${spec.id}" has no mastery effect`);
   }

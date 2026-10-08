@@ -95,6 +95,13 @@ describe('Sporemender Form: definition and spec gate', () => {
     expect(sim.setSpec('restoration')).toBe(true);
     expect(knownIds(sim)).toEqual(expect.arrayContaining(['swiftmend', 'sporemender_form']));
     expect(ABILITIES.sporemender_form.description).toContain('(Groveheart signature)');
+    // The tooltip's numbers are the live constants, not free-standing copy.
+    const pct = (fraction: number): string => `${Math.round(fraction * 100)}%`;
+    const tooltip = ABILITIES.sporemender_form.description;
+    expect(tooltip).toContain(`healing done by ${pct(SPOREMENDER_HEALING_DONE_PCT)}`);
+    expect(tooltip).toContain(`armor by ${pct(SPOREMENDER_ARMOR_MULT - 1)}`);
+    expect(tooltip).toContain(`movement speed by ${pct(1 - SPOREMENDER_MOVE_SPEED_MULT)}`);
+    expect(tooltip).toContain('All of your caster-form spells stay usable.');
   });
 
   it('shows both Groveheart signatures on the talent spec page', async () => {

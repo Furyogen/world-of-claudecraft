@@ -692,7 +692,8 @@ const PINNED_POLISH_COMPOSITE_FINGERPRINT =
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
   // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
   // Re-minted for the Sporemender rework: the renderer leaf moved the spores onto a character-effect flag (form or Wildbloom HoT). No capture was retaken.
-  'a72a13d1cbe6e43b99ba0357d3517bb5efb5e886393036cef5756cfe3a759a84';
+  // Re-minted for the spore drift split: the renderer leaf picks the form or the sparser HoT drift through characterSporeAura. No capture was retaken.
+  'ac6ad89f898446350680c6eb35708a0bf3b097dd33902ff7780c3f00d1004d60';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

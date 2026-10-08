@@ -443,7 +443,8 @@ export type AuraKind =
   | 'form_fireball'
   | 'form_moonkin'
   // Groveheart's Sporemender Form: a caster form that keeps the full kit and
-  // mana bar (+20% healing done, +50% armor; combat/druid_sporemender.ts).
+  // mana bar (+20% healing done, +40% armor, 20% slower movement;
+  // combat/druid_sporemender.ts).
   | 'form_sporemender'
   | 'form_shadow'
   // Necromancy secondary resource and signature transformation.

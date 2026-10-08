@@ -145,7 +145,7 @@ import {
   addCharacterEffectAura,
   CHARACTER_EFFECT_RECKLESSNESS,
   CHARACTER_EFFECT_SOUL_REND,
-  CHARACTER_EFFECT_SPORES,
+  characterSporeAura,
   hasCharacterEffect,
 } from './character_effects_core';
 import {
@@ -10026,7 +10026,7 @@ export class Renderer {
       const sporemenderForm = requestedForm === 'sporemender';
       const hasSoulRend = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SOUL_REND);
       const hasRecklessness = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_RECKLESSNESS);
-      const hasSpores = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SPORES);
+      const spores = characterSporeAura(characterEffects, this.reducedMotion());
       const displayScale = e.scale;
       if (displayScale !== v.liveScale) {
         v.liveScale = displayScale;
@@ -11315,7 +11315,7 @@ export class Renderer {
             this.vfx.lichAura(e.id, dt, soulFragments);
           } else if (hasMoonkin) this.vfx.formAura(e.id, 'moonkin', dt);
           else if (hasShadowform) this.vfx.formAura(e.id, 'shadowform', dt);
-          if (hasSpores) this.vfx.formAura(e.id, 'sporemender', dt);
+          if (spores) this.vfx.formAura(e.id, spores, dt);
           // orange worn-gear motes: STATIC-preset-gated sheddable prestige
           if (e.kind === 'player' && gfxTierAtLeast(GFX.effectsTier, 'medium')) {
             if (v.legendaryRegaliaRef !== e.equippedInstances) {

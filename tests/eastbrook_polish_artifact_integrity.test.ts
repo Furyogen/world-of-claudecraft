@@ -1386,7 +1386,8 @@ const ACCEPTED_POLISH_V2_METADATA_SHA256 =
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
   // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
   // Re-minted for the Sporemender rework: the renderer leaf moved the spores onto a character-effect flag (form or Wildbloom HoT). No capture was retaken.
-  '47fdbddeebee5d56e73b20ae4dcc3768585a3ed4f31a853ac9f538bbb9c83e46';
+  // Re-minted for the spore drift split: the renderer leaf picks the form or the sparser HoT drift through characterSporeAura. No capture was retaken.
+  'fe4097b5c7f47a073a0a723f74adc03a317056882e943517f81d3d9996fbb06a';
 const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
   // Re-minted for the Frame Rate Limit: the renderer leaf gained the chosen-cadence feeds (frame load readings, governor signals). No capture was retaken.
   // Re-minted for the Eastbrook handoff merge with release/v0.43.0: the merged renderer leaf and the moved NPC layout match neither parent. No capture was retaken.
@@ -1401,7 +1402,8 @@ const ACCEPTED_POLISH_V2_COMPOSITE_PROVENANCE =
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
   // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
   // Re-minted for the Sporemender rework: the renderer leaf moved the spores onto a character-effect flag (form or Wildbloom HoT). No capture was retaken.
-  'a72a13d1cbe6e43b99ba0357d3517bb5efb5e886393036cef5756cfe3a759a84';
+  // Re-minted for the spore drift split: the renderer leaf picks the form or the sparser HoT drift through characterSporeAura. No capture was retaken.
+  'ac6ad89f898446350680c6eb35708a0bf3b097dd33902ff7780c3f00d1004d60';
 const ACCEPTED_POLISH_V2_METADATA = readJsonFile<CaptureMetadata>(ACCEPTED_POLISH_V2_METADATA_PATH);
 const ACCEPTED_POLISH_V2_PROVENANCE = ACCEPTED_POLISH_V2_METADATA.polishProvenance;
 const ACCEPTED_POLISH_V2_TOWN_CONTRACT = ACCEPTED_POLISH_V2_METADATA.records[0]?.townContract;
@@ -2784,7 +2786,9 @@ describe('Eastbrook polish performance and contact evidence', () => {
       // capture was retaken.
       // Sporemender rework: recomputed LAST again over the re-swept evidence. No
       // capture was retaken.
-    ).toBe('1d862e03929b0442934a1c63be406682a8b0866f7b702dec922e339652e06fb5');
+      // Spore drift split: recomputed LAST again over the re-swept evidence. No
+      // capture was retaken.
+    ).toBe('4cad101295d3451dbe2ceaff165a8437495603ac37d0dbdf73c0174f88128efb');
   });
 
   it('binds every historical after record to its accepted source and asset provenance', () => {

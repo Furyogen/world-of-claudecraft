@@ -46,6 +46,55 @@ describe('Wildbloom is renamed Sporemending (display-only)', () => {
     expect(JSON.stringify(en)).not.toContain('Wildbloom');
   });
 
+  it('no locale overlay or talent override still carries an old translated name', () => {
+    // The Latin rows were stripped to pending for the release fill; a bad merge
+    // must not bring the old translation of the spell back. These are the exact
+    // former names (whole phrases, so unrelated words sharing a stem pass).
+    const oldLatin = [
+      'Wildbloom',
+      'Wildblüte',
+      'Floración Silvestre',
+      'Floraison sauvage',
+      'Fioritura Selvaggia',
+      'Florescer Selvagem',
+      'Divoký květ',
+      'Wildbloei',
+      'Dziki rozkwit',
+      'Mekar Liar',
+      'Yaban Çiçeği',
+      'Vildblomning',
+      'Vildblomst',
+      'Hoa Nở Hoang Dã',
+    ];
+    const read = (rel: string): string =>
+      readFileSync(new URL(`../src/ui/${rel}`, import.meta.url), 'utf8');
+    const sources = [
+      'talent_i18n.row_description_overrides.ts',
+      ...[
+        'cs_CZ',
+        'da_DK',
+        'de_DE',
+        'es',
+        'es_ES',
+        'fr_FR',
+        'id_ID',
+        'it_IT',
+        'nl_NL',
+        'pl_PL',
+        'pt_BR',
+        'sv_SE',
+        'tr_TR',
+        'vi_VN',
+      ].map((lang) => `i18n.locales/${lang}.ts`),
+    ];
+    for (const rel of sources) {
+      const text = read(rel);
+      for (const old of [...oldLatin, ...OLD_NON_LATIN]) {
+        expect(text.includes(old), `${rel} still names ${old}`).toBe(false);
+      }
+    }
+  });
+
   it.each(Object.entries(NON_LATIN_FILLS))(
     '%s carries a real fill of the new name',
     (lang, name) => {
