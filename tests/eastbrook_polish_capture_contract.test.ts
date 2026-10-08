@@ -691,7 +691,8 @@ const PINNED_POLISH_COMPOSITE_FINGERPRINT =
   // Re-minted for the devalue audit floor: pnpm-lock.yaml moved (devalue 5.8.1 to 5.9.4), no renderer input changed. No capture was retaken.
   // Re-minted for Sporemender Form: the renderer leaf gained the Sporemender form-rig slot and the form-slot loops. No capture was retaken.
   // Re-minted for the Sporemender spores: the renderer leaf gained the Sporemender particle-aura call. No capture was retaken.
-  '58342bd2e378d2a71085637ce30f22ce3585970ba8a8ee900d702825ca51c0b5';
+  // Re-minted for the Sporemender rework: the renderer leaf moved the spores onto a character-effect flag (form or Wildbloom HoT). No capture was retaken.
+  'a72a13d1cbe6e43b99ba0357d3517bb5efb5e886393036cef5756cfe3a759a84';
 
 function validPolishAttributionTargets(): AttributionTargetFixture[] {
   return [

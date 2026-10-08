@@ -145,6 +145,7 @@ import {
   addCharacterEffectAura,
   CHARACTER_EFFECT_RECKLESSNESS,
   CHARACTER_EFFECT_SOUL_REND,
+  CHARACTER_EFFECT_SPORES,
   hasCharacterEffect,
 } from './character_effects_core';
 import {
@@ -10023,9 +10024,9 @@ export class Renderer {
       const fireballForm = requestedForm === 'fireball';
       const metamorphForm = requestedForm === 'metamorph';
       const sporemenderForm = requestedForm === 'sporemender';
-      const _stealthed = hasStealth;
       const hasSoulRend = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SOUL_REND);
       const hasRecklessness = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_RECKLESSNESS);
+      const hasSpores = hasCharacterEffect(characterEffects, CHARACTER_EFFECT_SPORES);
       const displayScale = e.scale;
       if (displayScale !== v.liveScale) {
         v.liveScale = displayScale;
@@ -11307,15 +11308,14 @@ export class Renderer {
             this.recklessSkulls.spawn(v.riderAnchor, active.height * e.scale);
           }
         }
-        // Shapeshift-form particle auras (metamorph fire, moonkin stars, shadowform
-        // gloom, Sporemender spores); never on a corpse, whose auras drop late.
+        // Particle auras (forms, healing spores); never on a corpse, whose auras drop late.
         if (!e.dead) {
           if (hasLegacyMetamorphAura) this.vfx.formAura(e.id, 'metamorph', dt);
           else if (hasLichAura && !this.reducedMotion()) {
             this.vfx.lichAura(e.id, dt, soulFragments);
           } else if (hasMoonkin) this.vfx.formAura(e.id, 'moonkin', dt);
           else if (hasShadowform) this.vfx.formAura(e.id, 'shadowform', dt);
-          else if (sporemenderForm) this.vfx.formAura(e.id, 'sporemender', dt);
+          if (hasSpores) this.vfx.formAura(e.id, 'sporemender', dt);
           // orange worn-gear motes: STATIC-preset-gated sheddable prestige
           if (e.kind === 'player' && gfxTierAtLeast(GFX.effectsTier, 'medium')) {
             if (v.legendaryRegaliaRef !== e.equippedInstances) {
