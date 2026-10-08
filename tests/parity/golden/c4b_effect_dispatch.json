@@ -8830,8 +8830,8 @@
       "tick": 135,
       "time": 6.75,
       "nextId": 1020,
-      "state": "b0c0127a",
-      "events": "2ce1839a",
+      "state": "63100450",
+      "events": "3e774aaa",
       "rng": {
         "draws": 894,
         "digest": "56ec9ce1"
@@ -9763,7 +9763,7 @@
               "duration": 12,
               "id": "rejuvenation",
               "kind": "hot",
-              "name": "Wildbloom",
+              "name": "Sporemending",
               "remaining": 12,
               "school": "nature",
               "sourceId": 1010,
@@ -10280,7 +10280,7 @@
       "tick": 135,
       "time": 6.75,
       "nextId": 1020,
-      "state": "b0c0127a",
+      "state": "63100450",
       "events": "741638a5",
       "rng": {
         "draws": 894,
@@ -11213,7 +11213,7 @@
               "duration": 12,
               "id": "rejuvenation",
               "kind": "hot",
-              "name": "Wildbloom",
+              "name": "Sporemending",
               "remaining": 12,
               "school": "nature",
               "sourceId": 1010,

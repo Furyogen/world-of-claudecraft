@@ -402,7 +402,7 @@ describe('character visual effects', () => {
       { id: 'sporemender_form', kind: 'form_sporemender' },
       [false, false, false, true],
     ],
-    ['Wildbloom HoT spores', { id: 'rejuvenation', kind: 'hot' }, [false, false, false, true]],
+    ['Sporemending HoT spores', { id: 'rejuvenation', kind: 'hot' }, [false, false, false, true]],
   ] as const)(
     'keeps the %s flag independent from every other character effect',
     (_, aura, expected) => {
@@ -416,9 +416,9 @@ describe('character visual effects', () => {
     },
   );
 
-  it('grows spores only from the Wildbloom heal-over-time, never another HoT or id', () => {
+  it('grows spores only from the Sporemending heal-over-time, never another HoT or id', () => {
     // Another druid HoT (Second Bloom / Regrowth's tail) and a non-HoT aura that
-    // happens to carry the rejuvenation id stay bare: the motif is Wildbloom's.
+    // happens to carry the rejuvenation id stay bare: the motif is Sporemending's.
     expect(characterEffectFlags([{ id: 'regrowth', kind: 'hot' }])).toBe(0);
     expect(characterEffectFlags([{ id: 'lifebloom', kind: 'hot' }])).toBe(0);
     expect(characterEffectFlags([{ id: 'rejuvenation', kind: 'buff_spirit' }])).toBe(0);

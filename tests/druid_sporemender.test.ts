@@ -44,7 +44,7 @@ function wearsForm(entity: Entity): boolean {
 function hot(sourceId: number, value: number): Aura {
   return {
     id: 'rejuvenation',
-    name: 'Wildbloom',
+    name: 'Sporemending',
     kind: 'hot',
     remaining: 12,
     duration: 12,

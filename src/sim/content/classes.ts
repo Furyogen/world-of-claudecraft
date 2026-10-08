@@ -6386,7 +6386,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   rejuvenation: {
     id: 'rejuvenation',
-    name: 'Wildbloom',
+    name: 'Sporemending',
     class: 'druid',
     learnLevel: 3,
     cost: 25,
@@ -8016,7 +8016,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'consumeAura', auraKind: 'hot', heal: { min: 105, max: 125 } }],
     actionReplacement: { abilityId: 'overbloom', auraKind: 'verdance', minStacks: 5 },
     description:
-      'Consumes a heal-over-time effect on a friendly target to heal them for $d. Wildbloom and Second Bloom plantings add Verdance; at 5 Verdance this button becomes Overbloom, which instantly heals every ally carrying your heal-over-time effects for 60% of what those effects had left. (Groveheart signature)',
+      'Consumes a heal-over-time effect on a friendly target to heal them for $d. Sporemending and Second Bloom plantings add Verdance; at 5 Verdance this button becomes Overbloom, which instantly heals every ally carrying your heal-over-time effects for 60% of what those effects had left. (Groveheart signature)',
   },
   moonlash: {
     id: 'moonlash',
@@ -8162,7 +8162,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // harvestPct, see abilityBuffValue): Grovespring 4pc wearers read 75
     // there, everyone else the base 60.
     description:
-      'Spends your 5 Verdance: every ally carrying your heal-over-time effects is instantly healed for $b% of the healing those effects had left, the effects are removed, and the target gets a fresh Wildbloom.',
+      'Spends your 5 Verdance: every ally carrying your heal-over-time effects is instantly healed for $b% of the healing those effects had left, the effects are removed, and the target gets a fresh Sporemending.',
   },
 
   // Groveheart resurrection parity: the combat single revive and the

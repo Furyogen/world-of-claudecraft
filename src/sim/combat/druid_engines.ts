@@ -492,7 +492,7 @@ function remainingTicks(aura: Aura): number {
     : 0;
 }
 
-function replantWildbloom(ctx: SimContext, player: Entity, target: Entity): void {
+function replantSporemending(ctx: SimContext, player: Entity, target: Entity): void {
   const resolved = ctx.resolvedAbility('rejuvenation', player.id);
   const hot = resolved?.effects.find((effect) => effect.type === 'hot');
   if (!resolved || !hot || hot.type !== 'hot') return;
@@ -603,10 +603,10 @@ export function resolveDruidOverbloom(
       false,
     );
   }
-  replantWildbloom(ctx, player, castTarget);
+  replantSporemending(ctx, player, castTarget);
   if (druidSeedspreadSelected(ctx, player)) {
     for (const ally of harvested.values()) {
-      if (ally.id !== castTarget.id) replantWildbloom(ctx, player, ally);
+      if (ally.id !== castTarget.id) replantSporemending(ctx, player, ally);
     }
   }
   if (selectedRow(ctx, player, DRUID_TALENT_IDS.naturesFury)) {

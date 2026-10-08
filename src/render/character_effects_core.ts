@@ -7,7 +7,7 @@ export const CHARACTER_EFFECT_RECKLESSNESS = 1 << 2;
  *  (plays its death clip and holds the last frame) until the aura clears. */
 export const CHARACTER_EFFECT_IMPALED = 1 << 3;
 /** Rising spores: worn by a druid in Sporemender Form AND by anyone carrying
- *  the Wildbloom (`rejuvenation`) heal-over-time, so the healed target reads
+ *  the Sporemending (`rejuvenation`) heal-over-time, so the healed target reads
  *  the same mushroom-druid motif as the healer. Cosmetic only. */
 export const CHARACTER_EFFECT_SPORES = 1 << 4;
 

@@ -4,7 +4,7 @@
 // chance to arm one free spell for 10 seconds, which at Cat Form's fixed 1.0
 // sec swing reads as about one proc every 15 seconds. The armed window covers
 // BOTH members at once and the player chooses which to spend it on: whichever
-// of Wildbloom or Oakhide is cast first consumes it, and the other reverts.
+// of Sporemending or Oakhide is cast first consumes it, and the other reverts.
 //
 // Two things make the window worth having in a form, and both are deliberate:
 //
@@ -50,7 +50,7 @@ export const NATURES_BOON_POWER = 1.25;
 /** How long the armed window lasts, in seconds. */
 export const NATURES_BOON_DURATION = 10;
 
-/** The spells the window pays for: Wildbloom (`rejuvenation`) in any form, and
+/** The spells the window pays for: Sporemending (`rejuvenation`) in any form, and
  *  Oakhide (`barkskin`) in Bruin Form only. Both are armed together and the
  *  first one cast wins, so the window is a choice between a heal and a
  *  mitigation cooldown rather than a free nuke. Both are authored instant, so
@@ -100,7 +100,7 @@ export function naturesBoonFormAllows(
 /** The multiplier an armed window puts on its spell's magnitudes, applied to a
  *  COPY of the resolved ability before its effects resolve (the consumeOverload
  *  shape in combat/casting_lifecycle.ts). 1 when no window covers this cast, so
- *  an ordinary Wildbloom or Oakhide is untouched. */
+ *  an ordinary Sporemending or Oakhide is untouched. */
 export function naturesBoonPowerFor(auras: readonly BoonAura[], abilityId: string): number {
   return naturesBoonArmedFor(auras, abilityId) ? NATURES_BOON_POWER : 1;
 }

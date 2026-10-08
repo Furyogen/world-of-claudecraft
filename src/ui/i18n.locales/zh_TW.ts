@@ -3753,7 +3753,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.moonfire.name': '月光風暴',
   'entities.abilities.moonfire.description':
     '以月火灼燒敵人，造成 {damage} 點秘法傷害，並附加持續傷害。',
-  'entities.abilities.rejuvenation.name': '野性綻放',
+  'entities.abilities.rejuvenation.name': '孢癒術',
   'entities.abilities.rejuvenation.description': '在 12 秒內為目標恢復 {damage} 點生命值。',
   'entities.abilities.thorns.name': '荊棘守衛',
   'entities.abilities.thorns.description': '目標身上長出荊棘：近戰攻擊者受到 {buff} 點自然傷害。',
@@ -3935,7 +3935,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '釋放一股原始湧動。貓形態下，能量恢復速度提高100%，持續10秒。巨熊形態下，立即產生50點怒氣。（野性專精招牌）',
   'entities.abilities.swiftmend.name': '迅癒',
   'entities.abilities.swiftmend.description':
-    '消耗友方目標身上的一個持續治療效果，治療其 {damage} 點生命。野性綻放與再度綻放的播撒會累加青翠；在 5 層青翠時，此按鈕會變為盛放，立即為每一位帶有你持續治療效果的盟友治療這些效果所剩餘量的 60%。（恢復標誌技能）',
+    '消耗友方目標身上的一個持續治療效果，治療其 {damage} 點生命。孢癒術與再度綻放的播撒會累加青翠；在 5 層青翠時，此按鈕會變為盛放，立即為每一位帶有你持續治療效果的盟友治療這些效果所剩餘量的 60%。（恢復標誌技能）',
   'entities.abilities.crusader_strike.name': '十字軍聖擊',
   'entities.abilities.crusader_strike.description':
     '打擊目標，造成武器傷害外加 {damage} 點神聖傷害。（聖騎士天賦）',
@@ -8587,7 +8587,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.cinderbark.bonus4': '碎髓造成的傷害提高 30%，且其緊急護盾不再取代這次打擊。',
   'entities.itemSets.grovespring.name': '林泉法衣',
   'entities.itemSets.grovespring.bonus2':
-    '迅癒優先消耗你自己的野性綻放或再度綻放，治療效果提高 25%。受到傷害不再延遲你的施法。',
+    '迅癒優先消耗你自己的孢癒術或再度綻放，治療效果提高 25%。受到傷害不再延遲你的施法。',
   'entities.itemSets.grovespring.bonus4': '盛放收割你剩餘治療效果的 75%，隨後累積 1 層繁茂。',
   'entities.items.lastflame_core.name': '末焰之核',
   'entities.itemSets.slagbreaker.name': '碎渣戰甲',
@@ -13921,7 +13921,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '為敵人標記15秒，儲存你與你的亡靈所造成傷害的20%。再次施放可將其引爆。若被標記的敵人死亡，印記會在6碼內爆炸，並產生1枚靈魂碎片。',
   'entities.abilities.ossuary_mark.name': '骸骨印記',
   'entities.abilities.overbloom.description':
-    '消耗5層繁茂。收割你在所有盟友身上的持續治療，以其剩餘治療量的{buff}%立即治療，移除這些效果，並在目標身上種下一次新的野性綻放。',
+    '消耗5層繁茂。收割你在所有盟友身上的持續治療，以其剩餘治療量的{buff}%立即治療，移除這些效果，並在目標身上種下一次新的孢癒術。',
   'entities.abilities.overbloom.name': '盛放',
   'entities.abilities.pack_command.description':
     '命令你的活體寵物發動攻擊。命中後產生 20 點集中值和一層獸群兇性。',
@@ -15071,7 +15071,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.venomRitual':
     '毒祭：第{stacks}/{max}層。怯懦突刺、邪惡揮斬與毒鏢各累積1層。達到{max}層時，入土長眠變為蝕毒撕裂',
   'hudChrome.auraEffect.verdance':
-    '繁茂：第{stacks}/{max}層。每種下一個全新的野性綻放或再度綻放累積1層。達到{max}層時，迅癒變為盛放',
+    '繁茂：第{stacks}/{max}層。每種下一個全新的孢癒術或再度綻放累積1層。達到{max}層時，迅癒變為盛放',
   'hudChrome.auraEffect.warlockAnchor': '在 {range} 碼內再次施放可返回此處並消耗錨點',
   'hudChrome.auraEffect.wintersChill': '剩餘 {charges} 層：符合條件的法術視此目標為凍結狀態',
   'hudChrome.paladin.ascensionLastAnnouncement': '昇華的最後一次充能',

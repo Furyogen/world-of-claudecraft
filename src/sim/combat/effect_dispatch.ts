@@ -385,7 +385,7 @@ function consumeMatchingAura(
 ): number {
   if (!target) return -1;
   // Grovespring 2pc: Swiftmend (the only hot-kind consumer) prefers the
-  // caster's OWN Wildbloom or Second Bloom, so a wearer stops eating another
+  // caster's OWN Sporemending or Second Bloom, so a wearer stops eating another
   // healer's HoT while their own is up. With none of their own present the
   // base pick below still applies (the set doc's explicit fallback: a paid
   // cast must never turn into a silent no-heal). Selection only; draws no

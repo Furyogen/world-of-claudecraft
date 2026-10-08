@@ -1334,7 +1334,7 @@ export function castAbility(
     // An armed Nature's Boon window is a form exemption for exactly the two
     // spells it names (combat/druid_natures_boon.ts). Checked here rather than
     // folded into usableInForm because it is aura state, not a property of the
-    // button: with no window armed, Wildbloom refuses and auto-unshifts exactly
+    // button: with no window armed, Sporemending refuses and auto-unshifts exactly
     // as it always has (Oakhide is usableInForm and never reaches this arm).
     !naturesBoonArmedFor(p.auras, ability.id)
   ) {

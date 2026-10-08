@@ -1958,7 +1958,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "rejuvenation",
-        "name": "Wildbloom"
+        "name": "Sporemending"
       }
     ],
     "abilities": [
@@ -1984,7 +1984,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "rejuvenation",
-        "name": "Wildbloom"
+        "name": "Sporemending"
       },
       {
         "id": "thorns",
