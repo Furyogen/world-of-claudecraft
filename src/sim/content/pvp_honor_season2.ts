@@ -2907,6 +2907,7 @@ export const SEASON2_ITEMS: Record<string, ItemDef> = {
     requiredLevel: 20,
     weapon: { min: 47, max: 71, speed: 3 },
     stats: { int: 23, sta: 11, spi: 7 },
+    healPower: 1,
     pvpOffenseRating: 73,
     pvpDefenseRating: 112,
     priceHonor: 1800,
