@@ -3615,6 +3615,7 @@ export const ru_RU: EnTranslations = {
       "dragEquipHint": "Перетащите на персонажа, чтобы надеть",
       "dragDestroyHint": "Перетащите в мир, чтобы уничтожить",
       "reorderNeedsRecent": "Сбросьте фильтр и выберите сортировку «Недавние», чтобы менять порядок в сумках",
+      "reorderLocked": "Locked items stay in their bag slot. Unlock it to move it.",
       "itemAriaInstanced": "{item}, количество {count}, копия с клеймом мастера",
       "itemAriaEnchanted": "{item}, количество {count}, зачарованный экземпляр",
       "itemAriaBound": "{item}, количество {count}, привязанный экземпляр",

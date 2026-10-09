@@ -212,6 +212,7 @@ describe('i18n whole-catalog completeness', () => {
     const isReleaseLinePendingNonLatin = (key: string) =>
       [
         'hudChrome.framePresets.',
+        'hudChrome.bags.reorderLocked',
         'hudChrome.frameMenus.',
         'hudChrome.focusTargets.',
         'hudChrome.meters.',
