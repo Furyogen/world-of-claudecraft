@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "es_ES": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "fr_FR": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "fr_CA": [
+    "hudChrome.nameplate.bountyTag"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "de_DE": [
+    "hudChrome.nameplate.bountyTag"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.nameplate.bountyTag"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "nl_NL": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "pl_PL": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "id_ID": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "tr_TR": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "sv_SE": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "vi_VN": [
+    "hudChrome.nameplate.bountyTag"
+  ],
+  "da_DK": [
+    "hudChrome.nameplate.bountyTag"
+  ]
 };

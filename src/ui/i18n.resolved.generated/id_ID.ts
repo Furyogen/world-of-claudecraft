@@ -4188,6 +4188,7 @@ export const id_ID: EnTranslations = {
       "mobEliteLevel": "{level}+",
       "afkTag": "AFK",
       "pvpTag": "PvP",
+      "bountyTag": "Bounty",
       "cheaterTag": "< Pemain Curang >",
       "pledgeTag": "Ikrar {guild}",
       "npcRoleTag": "<{role}>",

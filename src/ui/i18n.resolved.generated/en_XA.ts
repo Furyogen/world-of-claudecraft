@@ -4188,6 +4188,7 @@ export const en_XA: EnTranslations = {
       "mobEliteLevel": "[{level}+]",
       "afkTag": "[ÁƑĶ]",
       "pvpTag": "[ÞʋÞ]",
+      "bountyTag": "[Ɓóúñţý]",
       "cheaterTag": "[< Çĥéáţéŕ >]",
       "pledgeTag": "[Þļéðĝé óƒ {guild}]",
       "npcRoleTag": "[<{role}>]",
