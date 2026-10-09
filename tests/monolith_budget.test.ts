@@ -1150,7 +1150,10 @@ const MONOLITHS: MonolithRow[] = [
     // and projection helpers moved to dedicated siblings, composed with the
     // release extractions above. Exact merged count, zero slack.
     // Frame layout restore extraction: bank the reduced coordinator size.
-    ceiling: 11746,
+    // Down 11746 -> 11744 with buff persistence: the sickness save fields moved
+    // into src/sim/aura_persist.ts's auraSaveFragment beside the new buff list,
+    // so the two save-time aura reads share one module. Exact count, zero slack.
+    ceiling: 11744,
     seam: 'a sim system module behind SimContext (src/sim/CLAUDE.md)',
   },
   {
