@@ -28,24 +28,14 @@ export const pending: Record<string, readonly string[]> = {
   "de_DE": [
     "hudChrome.bags.reorderLocked"
   ],
-  "zh_CN": [
-    "hudChrome.bags.reorderLocked"
-  ],
-  "zh_TW": [
-    "hudChrome.bags.reorderLocked"
-  ],
-  "ko_KR": [
-    "hudChrome.bags.reorderLocked"
-  ],
-  "ja_JP": [
-    "hudChrome.bags.reorderLocked"
-  ],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
   "pt_BR": [
     "hudChrome.bags.reorderLocked"
   ],
-  "ru_RU": [
-    "hudChrome.bags.reorderLocked"
-  ],
+  "ru_RU": [],
   "cs_CZ": [
     "hudChrome.bags.reorderLocked"
   ],
