@@ -16,8 +16,10 @@
 //    `aoeAllyAttackPower` effect lasting at least MIN_PERSISTED_BUFF_SECONDS
 //    whose kind is a plain stat buff (PERSISTED_BUFF_KINDS). That is the
 //    maintenance kit (Litany of Resolve, Aether Insight, Wildward, Battle
-//    Shout, the blessings and devotions, Thorns, the armor self-buffs, the
-//    aspects that ride a stat) and nothing that carries hidden state elsewhere.
+//    Shout, the blessings, Thorns, the armor self-buffs, the aspects that ride
+//    a stat), not the five-minute group bursts.
+// Every consumable kind passes the same PERSISTED_BUFF_KINDS filter, so a
+// future elixir of a coupled kind cannot slip in unreviewed.
 // Deliberately NOT persisted: forms, stances, stealth, and every other toggle
 // (the whole ability is skipped when it carries a toggle self-buff, so a
 // form's companion stat aura can never outlive the form), debuffs (a buff kind
@@ -32,18 +34,23 @@
 // back UNATTRIBUTED (RESTORED_AURA_SOURCE_ID); aura_stacking.ts lets any
 // same-id application replace an unattributed copy, so a relog can never
 // leave room for the same buff to stack twice once the caster recasts it.
+// CASTER-BOUND auras are the exception: a paladin devotion lives exactly as
+// long as its paladin keeps it (every teardown in combat/paladin_support.ts
+// keys on the caster's id), so an unattributed copy could never be torn down.
+// A devotion therefore persists only when the wearer is its own paladin.
 //
 // INSTANCED MATCHES are a parenthesis for buffs (resurrection.ts, the clean
 // slate): nothing carried in rides through, and nothing gained inside comes
 // back out. A save taken while the character stands in an arena-family,
-// Protect Yumi, or Thornhollow Fields band, or during a Fiesta bout (which
-// already persists the pre-bout snapshot), therefore writes no buffs.
+// Protect Yumi, or Thornhollow Fields band, or during a Fiesta bout (whose
+// seat already wiped every buff to the clean slate), therefore writes none.
 //
 // Pure leaf (no SimContext, no rng, no clock): a Vitest drives it directly.
 
 import { TOGGLE_AURA_IDS, TOGGLE_AURA_KINDS } from './aura_classify';
 import { buffTargetAuraId, selfBuffAuraId } from './combat/aura_ids';
 import { RESTORED_AURA_SOURCE_ID } from './combat/aura_stacking';
+import { PALADIN_DEVOTION_ABILITY_IDS } from './combat/paladin_support';
 import { ABILITIES, ITEMS, isArenaPos, isBgPos, isYumiMazePos } from './data';
 import { RESURRECTION_SICKNESS_ID, UNSTUCK_SICKNESS_ID } from './resurrection';
 import type { AbilityEffect, Aura, AuraKind, Entity } from './types';
@@ -99,9 +106,14 @@ export const PERSISTED_BUFF_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
   'thorns',
 ]);
 
-/** Ability buffs shorter than this are combat procs and cooldowns, not the
- *  maintenance buffs a relog should keep. */
-export const MIN_PERSISTED_BUFF_SECONDS = 60;
+/** Ability buffs shorter than this (ten minutes: Thorns and Lightning Shield
+ *  are the shortest maintenance buffs) are combat procs, cooldowns, and group
+ *  bursts, not the maintenance buffs a relog should keep. */
+export const MIN_PERSISTED_BUFF_SECONDS = 600;
+
+/** Auras bound to their caster's live state (see the header): persisted only
+ *  when the wearer cast them. */
+export const CASTER_BOUND_AURA_IDS: ReadonlySet<string> = PALADIN_DEVOTION_ABILITY_IDS;
 
 /** Bounds on what one save writes and one load trusts: no live character
  *  carries anywhere near this many maintenance buffs, and no authored buff
@@ -159,8 +171,13 @@ function addAbilityEffects(
 export function buildPersistedAuraAllowlist(): ReadonlyMap<string, ReadonlySet<AuraKind>> {
   const out = new Map<string, Set<AuraKind>>();
   for (const item of Object.values(ITEMS)) {
-    if ('wellFed' in item && item.wellFed) addAllowed(out, WELL_FED_AURA_ID, item.wellFed.kind);
-    if (item.elixir) addAllowed(out, `elixir_${item.elixir.kind}`, item.elixir.kind);
+    const wellFed = 'wellFed' in item ? item.wellFed : undefined;
+    if (wellFed && PERSISTED_BUFF_KINDS.has(wellFed.kind)) {
+      addAllowed(out, WELL_FED_AURA_ID, wellFed.kind);
+    }
+    if (item.elixir && PERSISTED_BUFF_KINDS.has(item.elixir.kind)) {
+      addAllowed(out, `elixir_${item.elixir.kind}`, item.elixir.kind);
+    }
   }
   for (const ability of Object.values(ABILITIES)) {
     addAbilityEffects(out, ability.id, ability.effects);
@@ -205,6 +222,7 @@ export function serializePersistedAuras(
   for (const a of auras) {
     if (out.length >= MAX_PERSISTED_AURAS) break;
     if (!isPersistableAura(a)) continue;
+    if (CASTER_BOUND_AURA_IDS.has(a.id) && a.sourceId !== wearerId) continue;
     const remaining = round2(a.remaining);
     if (!(remaining > 0)) continue;
     out.push({
@@ -264,8 +282,10 @@ const SCHOOLS: ReadonlySet<string> = new Set([
 /** Rebuild saved buffs into live auras for the wearer's new entity id. Every
  *  record is re-validated rather than trusted: an id or kind the shipped
  *  content no longer mints drops (a retired buff self-heals out of the save),
- *  as does any non-finite or non-positive time or value; durations clamp to
- *  MAX_PERSISTED_AURA_SECONDS and the remaining to its duration. */
+ *  as does a caster-bound aura the wearer did not cast, and any non-finite or
+ *  non-positive time or value; durations clamp to MAX_PERSISTED_AURA_SECONDS
+ *  and the remaining to its duration. A repeated id from one source keeps the
+ *  later copy. */
 export function restorePersistedAuras(saved: unknown, wearerId: number): Aura[] {
   if (!Array.isArray(saved)) return [];
   const out: Aura[] = [];
@@ -276,11 +296,18 @@ export function restorePersistedAuras(saved: unknown, wearerId: number): Aura[] 
       continue;
     }
     if (PERSISTED_AURA_ALLOWLIST.get(s.id)?.has(s.kind) !== true) continue;
+    if (CASTER_BOUND_AURA_IDS.has(s.id) && s.self !== true) continue;
     if (!finitePositive(s.value) || !finitePositive(s.remaining)) continue;
     if (!finitePositive(s.duration) || typeof s.school !== 'string' || !SCHOOLS.has(s.school)) {
       continue;
     }
     const duration = Math.min(s.duration, MAX_PERSISTED_AURA_SECONDS);
+    const sourceId = s.self === true ? wearerId : RESTORED_AURA_SOURCE_ID;
+    // A live list never holds two same-id copies from one source (applyAura
+    // replaces them), so a save that does was not written by this code: keep
+    // the later copy, as a re-application would.
+    const dupe = out.findIndex((a) => a.id === s.id && a.sourceId === sourceId);
+    if (dupe >= 0) out.splice(dupe, 1);
     out.push({
       id: s.id,
       name: s.name,
@@ -296,7 +323,7 @@ export function restorePersistedAuras(saved: unknown, wearerId: number): Aura[] 
       ...(finite(s.icdMax) ? { icdMax: s.icdMax } : {}),
       ...(finite(s.tickInterval) ? { tickInterval: s.tickInterval } : {}),
       ...(finite(s.tickTimer) ? { tickTimer: s.tickTimer } : {}),
-      sourceId: s.self === true ? wearerId : RESTORED_AURA_SOURCE_ID,
+      sourceId,
       school: s.school,
       ...(s.flask === true ? { flask: true as const } : {}),
       ...(s.undispellable === true ? { undispellable: true as const } : {}),
