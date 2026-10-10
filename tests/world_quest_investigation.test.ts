@@ -149,6 +149,24 @@ describe('A Borrowed Face', () => {
     expect(sim.worldQuestLog.has(ID)).toBe(false);
   });
 
+  it('puts a rider own mount away and hears the accusation instead of ignoring it', () => {
+    const sim = setup();
+    investigate(sim);
+    sim.player.mountKey = 'valorsteed';
+    accuse(sim);
+    expect(sim.player.mountKey).toBe('');
+    const mob = sim.entities.get(sim.worldQuestLog.get(ID)!.investigation!.mobId!)!;
+    expect(mob.templateId).toBe(INVESTIGATION_MOB_ID);
+  });
+
+  it('keeps a rider mounted when the accusation is refused', () => {
+    const sim = setup();
+    sim.player.mountKey = 'valorsteed';
+    accuse(sim);
+    expect(sim.worldQuestLog.get(ID)?.investigation?.mobId).toBeUndefined();
+    expect(sim.player.mountKey).toBe('valorsteed');
+  });
+
   it('keeps clues after wrong accusations and prevents duplicate summons even after movement', () => {
     const sim = setup();
     investigate(sim);
