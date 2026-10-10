@@ -1357,9 +1357,6 @@ export interface PlayerMeta extends worldQuestState.WorldQuestPlayerState {
   // persisted: src/sim/mount_race.ts owns the rules. Strictly per-player, so
   // simultaneous racers never share or contend on anything.
   mountRace?: MountRaceSession | null;
-  // Where the body really stands while a server-side /spectate parks the entity
-  // in limbo, so presence systems (the hill) still count it. Session-only.
-  spectateAnchor?: { x: number; z: number } | null;
   vehicle?: VehicleSession | null;
   vehicleRetryAtTick?: number;
   // Optional QoL preference (issue #1358): when true, every target-switch

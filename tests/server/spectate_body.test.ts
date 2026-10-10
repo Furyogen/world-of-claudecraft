@@ -37,66 +37,98 @@ vi.mock('../../server/db', () => ({
 import { describe, expect, it, vi } from 'vitest';
 import { type ClientSession, GameServer } from '../../server/game';
 import { HILL_ACCRUAL_SECONDS, spawnHillNow } from '../../src/sim/pvp';
-import { DT } from '../../src/sim/types';
+import { DT, emptyMoveInput } from '../../src/sim/types';
 import { fakeWs, joinServer } from '../helpers/bare_client';
 
-// server/spectate_body.ts: /spectate parks the moderator's body in limbo, and
-// the sim must still know where that body really stands. Regression: an admin
-// holding the King of the Hill who opened /spectate on another player stopped
-// earning Honor, because the hill's presence pass read the limbo position.
+// server/spectate_body.ts: /spectate moves only the camera. The moderator's
+// body stays where it stands, keeps its own GM flag (none for an ordinary
+// admin), and so stays in the world: counted on the King of the Hill and open
+// to attack. Regression: the body used to be parked in a far-off limbo (and
+// made GM), so an admin holding the hill dropped off it the moment they
+// opened /spectate on another player.
 
 interface SpectateArms {
   enterSpectate(moderator: ClientSession, target: ClientSession): void;
   exitSpectate(moderator: ClientSession, announce?: boolean): void;
+  jailSession(moderator: ClientSession, target: ClientSession, minutes: number): void;
 }
 
 function tickSeconds(server: GameServer, seconds: number): void {
   for (let i = 0; i < Math.round(seconds / DT); i++) server.sim.tick();
 }
 
-describe('/spectate keeps the moderator where their body stands', () => {
-  it('a hill holder who spectates another player keeps the hill and its Honor', () => {
-    const server = new GameServer();
-    const moderator = joinServer(server, fakeWs(), 701, 'Hill Warden');
-    const target = joinServer(server, fakeWs(), 702, 'Far Wanderer');
-    const arms = server as unknown as SpectateArms;
+function rig() {
+  const server = new GameServer();
+  const moderator = joinServer(server, fakeWs(), 701, 'Hill Warden');
+  const target = joinServer(server, fakeWs(), 702, 'Far Wanderer');
+  const body = server.sim.entities.get(moderator.pid);
+  if (!body) throw new Error('moderator entity missing');
+  return { server, moderator, target, body, arms: server as unknown as SpectateArms };
+}
+
+describe('/spectate leaves the moderator body in the world', () => {
+  it('a hill holder who spectates another player keeps the hill and earns its Honor', () => {
+    const { server, moderator, target, body, arms } = rig();
     const hill = spawnHillNow(server.sim.ctx, 'drakelands');
     if (!hill) throw new Error('no hill spot');
-    const body = server.sim.entities.get(moderator.pid)!;
     body.pos = server.sim.groundPos(hill.x, hill.z);
     body.prevPos = { ...body.pos };
+    body.gm = false;
+    // Attackable means the zone's mobs may well attack it: a pool deep enough to
+    // outlast the minute keeps this case about presence, not survival.
+    body.maxHp = 1e9;
+    body.hp = 1e9;
     hill.holder = `solo:${moderator.pid}`;
+    const spot = { ...body.pos };
 
     arms.enterSpectate(moderator, target);
-    expect(Math.hypot(body.pos.x - hill.x, body.pos.z - hill.z)).toBeGreaterThan(1000);
-    expect(server.sim.meta(moderator.pid)!.spectateAnchor).toEqual({ x: hill.x, z: hill.z });
+    expect(body.pos).toEqual(spot);
+    expect(body.gm).toBe(false);
 
     const honorBefore = server.sim.meta(moderator.pid)!.honor;
     tickSeconds(server, HILL_ACCRUAL_SECONDS + 2);
     expect(hill.insideKeys.get(moderator.pid)).toBe(`solo:${moderator.pid}`);
     expect(hill.holder).toBe(`solo:${moderator.pid}`);
     expect(server.sim.meta(moderator.pid)!.honor).toBeGreaterThan(honorBefore);
-
-    arms.exitSpectate(moderator, false);
-    expect(server.sim.meta(moderator.pid)!.spectateAnchor).toBeNull();
-    expect(body.pos.x).toBeCloseTo(hill.x);
-    expect(body.pos.z).toBeCloseTo(hill.z);
   });
 
-  it('retargeting keeps the anchor at the first saved spot, not the limbo', () => {
-    const server = new GameServer();
-    const moderator = joinServer(server, fakeWs(), 711, 'Hill Keeper');
-    const first = joinServer(server, fakeWs(), 712, 'First Watched');
-    const second = joinServer(server, fakeWs(), 713, 'Second Watched');
-    const arms = server as unknown as SpectateArms;
-    const body = server.sim.entities.get(moderator.pid)!;
-    const home = { x: body.pos.x, z: body.pos.z };
+  it('a spectating admin without GM can still be hurt', () => {
+    const { server, moderator, target, body, arms } = rig();
+    body.gm = false;
+    arms.enterSpectate(moderator, target);
+    const hp = body.hp;
+    server.sim.dealDamage(null, body, 10, false, 'physical', null, 'hit', true);
+    expect(body.hp).toBe(hp - 10);
+  });
 
-    arms.enterSpectate(moderator, first);
+  it('entry idles the body; retargeting and exit never move it', () => {
+    const { server, moderator, target, body, arms } = rig();
+    const second = joinServer(server, fakeWs(), 703, 'Second Watched');
+    const meta = server.sim.meta(moderator.pid)!;
+    body.autoAttack = true;
+    meta.moveInput.forward = true;
+    const home = { ...body.pos };
+
+    arms.enterSpectate(moderator, target);
+    expect(body.autoAttack).toBe(false);
+    expect(meta.moveInput).toEqual(emptyMoveInput());
     arms.enterSpectate(moderator, second);
-    expect(server.sim.meta(moderator.pid)!.spectateAnchor).toEqual(home);
+    expect(moderator.spectating?.characterId).toBe(second.characterId);
+    expect(body.pos).toEqual(home);
     arms.exitSpectate(moderator, false);
-    expect(server.sim.meta(moderator.pid)!.spectateAnchor).toBeNull();
-    expect({ x: body.pos.x, z: body.pos.z }).toEqual(home);
+    expect(moderator.spectating).toBeNull();
+    expect(body.pos).toEqual(home);
+  });
+
+  it('a moderator jailed while spectating is still in the cage after /unspectate', () => {
+    const { server, moderator, target, body, arms } = rig();
+    const outside = { ...body.pos };
+    arms.enterSpectate(moderator, target);
+    arms.jailSession(target, moderator, 10);
+    const cell = { ...body.pos };
+    expect(cell).not.toEqual(outside);
+    arms.exitSpectate(moderator, false);
+    expect(body.pos).toEqual(cell);
+    expect(moderator.jailed).not.toBeNull();
   });
 });

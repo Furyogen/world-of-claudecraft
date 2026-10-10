@@ -1689,10 +1689,11 @@ const MONOLITHS: MonolithRow[] = [
     // (Reuben's call): both parent pins for the record, the release 9827 and the
     // branch 9965; the two sides' additions compose to 9840 by wc -l on the merged
     // tree (after biome). Exact count, zero slack.
-    // LOWERED 9840 -> 9833: the /spectate body move (limbo park and return,
-    // grid re-bucket, profession teardown, now also the hill presence anchor)
-    // moved to server/spectate_body.ts. Exact count, zero slack.
-    ceiling: 9833,
+    // LOWERED 9840 -> 9800: /spectate stopped parking the moderator's body in
+    // limbo (the camera moves, the body stays in the world), which retired the
+    // saved position, GM toggle and pet stow; the entry idle moved to
+    // server/spectate_body.ts. Exact count, zero slack.
+    ceiling: 9800,
     seam: 'a sibling server module; see the hot-path seams in server/CLAUDE.md',
   },
   {
