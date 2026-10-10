@@ -1689,7 +1689,10 @@ const MONOLITHS: MonolithRow[] = [
     // (Reuben's call): both parent pins for the record, the release 9827 and the
     // branch 9965; the two sides' additions compose to 9840 by wc -l on the merged
     // tree (after biome). Exact count, zero slack.
-    ceiling: 9840,
+    // LOWERED 9840 -> 9833: the /spectate body move (limbo park and return,
+    // grid re-bucket, profession teardown, now also the hill presence anchor)
+    // moved to server/spectate_body.ts. Exact count, zero slack.
+    ceiling: 9833,
     seam: 'a sibling server module; see the hot-path seams in server/CLAUDE.md',
   },
   {

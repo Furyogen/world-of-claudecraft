@@ -39,8 +39,9 @@
 
 import { zoneContaining } from '../data';
 import { Rng } from '../rng';
+import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
-import type { ZoneDef } from '../types';
+import type { Entity, ZoneDef } from '../types';
 import {
   HILL_ACCRUAL_SECONDS,
   HILL_CAPTURE_SECONDS,
@@ -376,6 +377,13 @@ function updateSchedule(ctx: SimContext): void {
   state.plan = null;
 }
 
+/** Where a player stands for the hill: their body, or, while a server-side
+ *  /spectate has parked the entity in limbo, the spot it was parked from (the
+ *  moderator never left the hill, only their camera did). */
+function presencePos(meta: PlayerMeta | undefined, e: Entity): { x: number; z: number } {
+  return meta?.spectateAnchor ?? e.pos;
+}
+
 /** The presence pass: who stands inside, by party. The dead and raid members
  *  are not counted. */
 function countInside(ctx: SimContext, hill: ActiveHill): void {
@@ -383,7 +391,9 @@ function countInside(ctx: SimContext, hill: ActiveHill): void {
   hill.insideKeys.clear();
   for (const meta of ctx.players.values()) {
     const e = ctx.entities.get(meta.entityId);
-    if (!e || e.dead || !hillContains(hill, e.pos.x, e.pos.z)) continue;
+    if (!e || e.dead) continue;
+    const pos = presencePos(meta, e);
+    if (!hillContains(hill, pos.x, pos.z)) continue;
     const party = ctx.partyOf(e.id);
     if (hillStanding(party) !== 'counted') continue;
     const key = hillGroupKey(e.id, party);
@@ -491,7 +501,8 @@ export function hillInfoFor(
   const key = standing === 'counted' ? hillGroupKey(pid, party) : null;
   const side = (group: string | null): 'none' | 'you' | 'other' =>
     group === null ? 'none' : group === key ? 'you' : 'other';
-  const inZone = zoneContaining(e.pos.x, e.pos.z)?.id === hill.zoneId;
+  const pos = presencePos(ctx.players.get(pid), e);
+  const inZone = zoneContaining(pos.x, pos.z)?.id === hill.zoneId;
   const minutesLeft = hillMinutesUntil(
     hill.phase === 'warning' ? hill.risesAt : hill.closesAt,
     ctx.time,
@@ -520,7 +531,7 @@ export function hillInfoFor(
   }
   return {
     ...base,
-    inside: hillContains(hill, e.pos.x, e.pos.z),
+    inside: hillContains(hill, pos.x, pos.z),
     holderCount: hill.holder === null ? 0 : (hill.counts.get(hill.holder) ?? 0),
     yourCount: key === null ? 0 : (hill.counts.get(key) ?? 0),
     challenger: side(hill.challenger),

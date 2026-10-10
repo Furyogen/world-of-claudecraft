@@ -446,6 +446,7 @@ import {
 import type { Presence, PresenceStatus, SocialActor, SocialTransport } from './social';
 import { guildStampRankOf, SocialService } from './social';
 import { PgSocialDb } from './social_db';
+import { moveSpectatorBody } from './spectate_body';
 import { reconcileOnLogin as reconcileSteamOnLogin } from './steam/mirror';
 import {
   type StorageAppliedEffectDraft,
@@ -2023,11 +2024,7 @@ export class GameServer {
       const priorGm = !!moderatorEntity.gm;
       const stowedPet = this.sim.stowPetForSpectate(moderator.pid);
       const limbo = this.sim.groundPos(SPECTATE_LIMBO_X, SPECTATE_LIMBO_Z);
-      cancelProfessionSessionOnDisplacement(this.sim.ctx, moderatorEntity);
-      moderatorEntity.pos = limbo;
-      moderatorEntity.prevPos = { ...limbo };
-      this.sim.grid.update(moderatorEntity);
-      this.sim.playerGrid.update(moderatorEntity);
+      moveSpectatorBody(this.sim, moderatorEntity, limbo, savedPos);
       this.sim.setGm(moderator.pid);
       const meta = this.sim.meta(moderator.pid);
       if (meta) Object.assign(meta.moveInput, emptyMoveInput());
@@ -2073,11 +2070,7 @@ export class GameServer {
     }
     const moderatorEntity = this.sim.entities.get(moderator.pid);
     if (moderatorEntity) {
-      cancelProfessionSessionOnDisplacement(this.sim.ctx, moderatorEntity);
-      moderatorEntity.pos = { ...state.savedPos };
-      moderatorEntity.prevPos = { ...state.savedPos };
-      this.sim.grid.update(moderatorEntity);
-      this.sim.playerGrid.update(moderatorEntity);
+      moveSpectatorBody(this.sim, moderatorEntity, state.savedPos, null);
       this.sim.setGm(moderator.pid, state.priorGm);
       this.sim.restorePetAfterSpectate(moderator.pid, state.stowedPet);
     }

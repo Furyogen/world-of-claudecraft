@@ -601,6 +601,33 @@ describe('the Honor trickle', () => {
     expect(sim.hillState.active!.accrual.size).toBeLessThanOrEqual(2);
     expect(sim.meta(a)!.honor).toBe(2); // the one minute banked before the capture paid
   });
+  it('a holder whose body a /spectate parked in limbo still holds and earns, at the spot it left', () => {
+    // The server's /spectate moves the moderator's entity to a far-off limbo
+    // and records where the body really stands (PlayerMeta.spectateAnchor):
+    // the hill counts the anchor, so watching another player never drops the
+    // moderator off a hill they are standing on.
+    const { sim, pids } = hillWorld(['Aleph']);
+    const [a] = pids;
+    inside(sim, a);
+    tickSeconds(sim, HILL_CAPTURE_SECONDS + 1);
+    const hill = sim.hillState.active!;
+    expect(hill.holder).toBe(`solo:${a}`);
+    const spot = { x: ent(sim, a).pos.x, z: ent(sim, a).pos.z };
+    place(sim, a, -10_000, -10_000);
+    sim.meta(a)!.spectateAnchor = spot;
+    sim.events = [];
+    let seen = tickSeconds(sim, HILL_ACCRUAL_SECONDS + 1);
+    expect(hill.insideKeys.get(a)).toBe(`solo:${a}`);
+    expect(hill.holder).toBe(`solo:${a}`);
+    expect(honorEvents(seen, a)).toHaveLength(1);
+    expect(sim.hillInfoFor(a)).toMatchObject({ inZone: true, inside: true, holderCount: 1 });
+    // Without the anchor the parked body is far outside: no presence, no pay.
+    sim.meta(a)!.spectateAnchor = null;
+    seen = tickSeconds(sim, HILL_ACCRUAL_SECONDS + 1);
+    expect(hill.insideKeys.has(a)).toBe(false);
+    expect(honorEvents(seen, a)).toEqual([]);
+    expect(sim.hillInfoFor(a)).toMatchObject({ inZone: false, inside: false });
+  });
 });
 
 describe('the readout and the chat arms', () => {
