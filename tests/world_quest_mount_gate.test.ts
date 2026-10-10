@@ -64,18 +64,31 @@ describe('world quest instructor mount gate', () => {
   });
 
   it.each([
-    ['glider', '/dev glider', GLIDER_NPC_ID, (p: WorldQuestProgress) => p.glider?.phase],
-    ['forge', '/dev forge', FORGE_NPC_ID, (p: WorldQuestProgress) => p.forging?.phase],
-    ['wisp maze', '/dev wisps', WISP_MAZE_NPC_ID, (p: WorldQuestProgress) => p.wispMaze?.phase],
+    [
+      'glider',
+      '/dev glider',
+      GLIDER_NPC_ID,
+      'countdown',
+      (p: WorldQuestProgress) => p.glider?.phase,
+    ],
+    ['forge', '/dev forge', FORGE_NPC_ID, 'countdown', (p: WorldQuestProgress) => p.forging?.phase],
+    [
+      'wisp maze',
+      '/dev wisps',
+      WISP_MAZE_NPC_ID,
+      'countdown',
+      (p: WorldQuestProgress) => p.wispMaze?.phase,
+    ],
     [
       'calligraphy',
       '/dev calligraphy',
       WORLD_QUEST_CALLIGRAPHY_NPC_IDS.calligraphy_instructor,
+      'preview',
       (p: WorldQuestProgress) => p.tracing?.phase,
     ],
   ] as const)(
     'starts the %s activity for a rider and puts the mount away',
-    (_l, cmd, npcId, phase) => {
+    (_l, cmd, npcId, start, phase) => {
       const sim = new Sim({ seed: WORLD_SEED, playerClass: 'warrior', devCommands: true });
       sim.resetDay = '2026-09-06';
       sim.chat(cmd);
@@ -83,11 +96,13 @@ describe('world quest instructor mount gate', () => {
       const npc = sim.entities.get(npcId)!;
       sim.player.pos = sim.groundPos(npc.pos.x + 1.5, npc.pos.z);
       sim.player.prevPos = { ...sim.player.pos };
+      // Nothing is running before the talk, so the phase below is the talk's own start.
+      expect([...sim.worldQuestLog.values()].map(phase).filter(Boolean)).toEqual([]);
       sim.player.mountKey = 'valorsteed';
       sim.player.targetId = npcId;
       sim.interact();
       expect(sim.player.mountKey).toBe('');
-      expect([...sim.worldQuestLog.values()].map(phase).filter(Boolean)).toHaveLength(1);
+      expect([...sim.worldQuestLog.values()].map(phase).filter(Boolean)).toEqual([start]);
     },
   );
 });
