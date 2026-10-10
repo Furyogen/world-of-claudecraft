@@ -3350,6 +3350,8 @@ export const hudChromeStrings = {
       worldKill: 'world kill',
       worldAssist: 'world kill assisted',
       hillHold: 'holding the hill',
+      // The day's Honor world quests (src/sim/world_quest_honor_slots.ts).
+      worldQuest: 'world quest',
     },
     // Short labels for the floating text over your own character. Kept apart from
     // `reasons` above, which are mid-sentence fragments for the chat line.

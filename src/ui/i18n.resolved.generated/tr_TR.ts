@@ -2774,7 +2774,8 @@ export const tr_TR: EnTranslations = {
         "battlegroundAssist": "öldürücü darbeye yardım edildi",
         "worldKill": "dünya öldürme",
         "worldAssist": "dünya öldürme desteklemek",
-        "hillHold": "tepenin üstünde durmak"
+        "hillHold": "tepenin üstünde durmak",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Öldürme",

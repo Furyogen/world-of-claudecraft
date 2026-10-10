@@ -2774,7 +2774,8 @@ export const ko_KR: EnTranslations = {
         "battlegroundAssist": "처치 도움",
         "worldKill": "월드 처치",
         "worldAssist": "월드 처치 도움",
-        "hillHold": "언덕 점거"
+        "hillHold": "언덕 점거",
+        "worldQuest": "전역 퀘스트"
       },
       "floatReasons": {
         "kill": "처치",

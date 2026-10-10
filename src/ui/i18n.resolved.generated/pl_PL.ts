@@ -2774,7 +2774,8 @@ export const pl_PL: EnTranslations = {
         "battlegroundAssist": "Asysta przy ciosie kończącym",
         "worldKill": "zabój światowy",
         "worldAssist": "asystowanie przy zabiciu światowym",
-        "hillHold": "utrzymywanie wzgórza"
+        "hillHold": "utrzymywanie wzgórza",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Zabójstwo",

@@ -2774,7 +2774,8 @@ export const sv_SE: EnTranslations = {
         "battlegroundAssist": "assisterat dödande slag",
         "worldKill": "världsdödande",
         "worldAssist": "världsdodade assisterad",
-        "hillHold": "håller berget"
+        "hillHold": "håller berget",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Dråp",

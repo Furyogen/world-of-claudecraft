@@ -2774,7 +2774,8 @@ export const vi_VN: EnTranslations = {
         "battlegroundAssist": "hỗ trợ đòn hạ gục",
         "worldKill": "tiêu diệt thế giới",
         "worldAssist": "hỗ trợ tiêu diệt thế giới",
-        "hillHold": "giữ đồi"
+        "hillHold": "giữ đồi",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Hạ Gục",

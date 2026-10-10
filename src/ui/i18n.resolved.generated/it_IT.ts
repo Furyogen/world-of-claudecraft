@@ -2774,7 +2774,8 @@ export const it_IT: EnTranslations = {
         "battlegroundAssist": "assistenza al colpo di grazia",
         "worldKill": "uccisione in PvP Mondiale",
         "worldAssist": "assistenza a un'uccisione in PvP Mondiale",
-        "hillHold": "controllo della collina"
+        "hillHold": "controllo della collina",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Uccisione",

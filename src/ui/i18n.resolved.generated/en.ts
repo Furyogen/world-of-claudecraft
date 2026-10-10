@@ -2774,7 +2774,8 @@ export const en: EnTranslations = {
         "battlegroundAssist": "killing blow assisted",
         "worldKill": "world kill",
         "worldAssist": "world kill assisted",
-        "hillHold": "holding the hill"
+        "hillHold": "holding the hill",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Kill",

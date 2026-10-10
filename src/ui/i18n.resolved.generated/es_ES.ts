@@ -2774,7 +2774,8 @@ export const es_ES: EnTranslations = {
         "battlegroundAssist": "golpe de gracia asistido",
         "worldKill": "muerte en el mundo abierto",
         "worldAssist": "muerte en el mundo abierto asistida",
-        "hillHold": "manteniendo la colina"
+        "hillHold": "manteniendo la colina",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Baja",

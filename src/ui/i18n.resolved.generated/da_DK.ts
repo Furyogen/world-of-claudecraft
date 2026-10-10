@@ -2774,7 +2774,8 @@ export const da_DK: EnTranslations = {
         "battlegroundAssist": "medvirket til dræbende slag",
         "worldKill": "verden drab",
         "worldAssist": "verden drab assisteret",
-        "hillHold": "holder højen"
+        "hillHold": "holder højen",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Drab",

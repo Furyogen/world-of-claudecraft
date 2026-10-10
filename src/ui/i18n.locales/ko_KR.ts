@@ -767,6 +767,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.warfare.reasons.hillHold': '언덕 점거',
   'hudChrome.warfare.reasons.worldAssist': '월드 처치 도움',
   'hudChrome.warfare.reasons.worldKill': '월드 처치',
+  'hudChrome.warfare.reasons.worldQuest': '전역 퀘스트',
   'hudChrome.warfareShop.groupEntry': '워페어 시즌 1',
   'hudChrome.warfareShop.groupSeason2': '워페어 시즌 2: 선봉대',
   'hudChrome.worldPvp.aidLine':

@@ -2774,7 +2774,8 @@ export const id_ID: EnTranslations = {
         "battlegroundAssist": "Bantuan pukulan pamungkas",
         "worldKill": "pembunuhan dunia",
         "worldAssist": "membantu pembunuhan dunia",
-        "hillHold": "memegang bukit"
+        "hillHold": "memegang bukit",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Bunuh",

@@ -2774,7 +2774,8 @@ export const nl_NL: EnTranslations = {
         "battlegroundAssist": "hulp bij een fatale klap",
         "worldKill": "wereldkill",
         "worldAssist": "wereldkill geassisteerd",
-        "hillHold": "heuvelbeheersing"
+        "hillHold": "heuvelbeheersing",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Kill",

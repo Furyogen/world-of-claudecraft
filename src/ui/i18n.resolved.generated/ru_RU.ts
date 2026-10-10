@@ -2774,7 +2774,8 @@ export const ru_RU: EnTranslations = {
         "battlegroundAssist": "Помощь в убийстве",
         "worldKill": "Мировое убийство",
         "worldAssist": "Помощь в мировом убийстве",
-        "hillHold": "Удержание холма"
+        "hillHold": "Удержание холма",
+        "worldQuest": "локальное задание"
       },
       "floatReasons": {
         "kill": "Убийство",

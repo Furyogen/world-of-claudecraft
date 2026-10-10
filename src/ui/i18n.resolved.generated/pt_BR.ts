@@ -2774,7 +2774,8 @@ export const pt_BR: EnTranslations = {
         "battlegroundAssist": "assistência em abate",
         "worldKill": "abate no mundo aberto",
         "worldAssist": "assistência em abate no mundo aberto",
-        "hillHold": "segurando a colina"
+        "hillHold": "segurando a colina",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Abate",

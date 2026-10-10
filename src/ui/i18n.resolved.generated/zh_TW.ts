@@ -2774,7 +2774,8 @@ export const zh_TW: EnTranslations = {
         "battlegroundAssist": "助攻擊殺",
         "worldKill": "世界擊殺",
         "worldAssist": "世界擊殺助攻",
-        "hillHold": "佔據山丘"
+        "hillHold": "佔據山丘",
+        "worldQuest": "世界任務"
       },
       "floatReasons": {
         "kill": "擊殺",

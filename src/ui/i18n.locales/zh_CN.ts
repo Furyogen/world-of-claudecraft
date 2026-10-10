@@ -746,6 +746,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.warfare.reasons.hillHold': '占据山丘',
   'hudChrome.warfare.reasons.worldAssist': '世界击杀助攻',
   'hudChrome.warfare.reasons.worldKill': '世界击杀',
+  'hudChrome.warfare.reasons.worldQuest': '世界任务',
   'hudChrome.warfareShop.groupEntry': '战争赛季 1',
   'hudChrome.warfareShop.groupSeason2': '战争赛季 2：先锋',
   'hudChrome.worldPvp.aidLine':

@@ -771,6 +771,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.warfare.reasons.hillHold': '丘の保持',
   'hudChrome.warfare.reasons.worldAssist': 'ワールドPvP撃破のアシスト',
   'hudChrome.warfare.reasons.worldKill': 'ワールドPvP撃破',
+  'hudChrome.warfare.reasons.worldQuest': 'ワールドクエスト',
   'hudChrome.warfareShop.groupEntry': 'ウォーフェア シーズン1',
   'hudChrome.warfareShop.groupSeason2': 'ウォーフェア シーズン2：ヴァンガード',
   'hudChrome.worldPvp.aidLine':

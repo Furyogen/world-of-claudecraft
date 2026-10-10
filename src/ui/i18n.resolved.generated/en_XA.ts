@@ -2774,7 +2774,8 @@ export const en_XA: EnTranslations = {
         "battlegroundAssist": "[ķíļļíñĝ ƀļóŵ áššíšţéð]",
         "worldKill": "[ŵóŕļð ķíļļ]",
         "worldAssist": "[ŵóŕļð ķíļļ áššíšţéð]",
-        "hillHold": "[ĥóļðíñĝ ţĥé ĥíļļ]"
+        "hillHold": "[ĥóļðíñĝ ţĥé ĥíļļ]",
+        "worldQuest": "[ŵóŕļð ɋúéšţ]"
       },
       "floatReasons": {
         "kill": "[Ķíļļ]",

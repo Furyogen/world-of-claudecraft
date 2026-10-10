@@ -2774,7 +2774,8 @@ export const cs_CZ: EnTranslations = {
         "battlegroundAssist": "asistence u zabití",
         "worldKill": "světové zabití",
         "worldAssist": "asistence u světového zabití",
-        "hillHold": "držení kopce"
+        "hillHold": "držení kopce",
+        "worldQuest": "world quest"
       },
       "floatReasons": {
         "kill": "Zabití",
