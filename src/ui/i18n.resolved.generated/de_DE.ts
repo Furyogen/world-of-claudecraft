@@ -2899,7 +2899,7 @@ export const de_DE: EnTranslations = {
       "delveMark": "Tiefgang-Marke",
       "wocToken": "WoC-Token",
       "heroicMarkNote": "Heroische Dungeons . beim heroischen Quartiermeister ausgeben",
-      "honorNote": "Schlachtfelder und die Arena",
+      "honorNote": "Schlachtfelder, die Arena und Weltquests",
       "delveMarkNote": "Abgeschlossene Tiefgänge",
       "wocTokenNote": "Guthaben der verknüpften Wallet",
       "walletNotLinked": "Keine Wallet verknüpft",

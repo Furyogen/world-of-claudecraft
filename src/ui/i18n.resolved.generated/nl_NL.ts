@@ -2899,7 +2899,7 @@ export const nl_NL: EnTranslations = {
       "delveMark": "Delve-embleem",
       "wocToken": "WoC-token",
       "heroicMarkNote": "Heroïsche kerkers . besteed bij de heroïsche kwartiermeester",
-      "honorNote": "Slagvelden en de arena",
+      "honorNote": "Slagvelden, de arena en wereldquests",
       "delveMarkNote": "Delves voltooid",
       "wocTokenNote": "Gekoppeld portefeuillesaldo",
       "walletNotLinked": "Geen portefeuille gekoppeld",

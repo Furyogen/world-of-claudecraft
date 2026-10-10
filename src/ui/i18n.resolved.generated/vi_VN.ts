@@ -2899,7 +2899,7 @@ export const vi_VN: EnTranslations = {
       "delveMark": "Dấu Khai Quật",
       "wocToken": "Token WoC",
       "heroicMarkNote": "Hầm Ngục Anh Hùng - tiêu tại quản lý hậu cần Anh Hùng",
-      "honorNote": "Chiến Trường và Đấu Trường",
+      "honorNote": "Chiến Trường, Đấu Trường và Nhiệm Vụ Thế Giới",
       "delveMarkNote": "Các khai quật đã hoàn thành",
       "wocTokenNote": "Số dư ví được liên kết",
       "walletNotLinked": "Không có ví nào được liên kết",

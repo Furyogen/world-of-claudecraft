@@ -2899,7 +2899,7 @@ export const sv_SE: EnTranslations = {
       "delveMark": "Delve-märke",
       "wocToken": "WoC-token",
       "heroicMarkNote": "Heroiska dungeons . spenderas på heroisk kvartermästare",
-      "honorNote": "Slagfält och arena",
+      "honorNote": "Slagfält, arena och världsuppdrag",
       "delveMarkNote": "Genomförda grottvandringar",
       "wocTokenNote": "Kopplat plånbokssaldo",
       "walletNotLinked": "Ingen ansluten plånbok",

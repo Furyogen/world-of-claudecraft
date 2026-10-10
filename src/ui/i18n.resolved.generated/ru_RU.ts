@@ -2899,7 +2899,7 @@ export const ru_RU: EnTranslations = {
       "delveMark": "Знак вылазки",
       "wocToken": "Токен WoC",
       "heroicMarkNote": "Героические подземелья . тратится у героического интенданта",
-      "honorNote": "Поля боя и арена",
+      "honorNote": "Поля боя, арена и локальные задания",
       "delveMarkNote": "Пройденные вылазки",
       "wocTokenNote": "Баланс привязанного кошелька",
       "walletNotLinked": "Кошелёк не привязан",

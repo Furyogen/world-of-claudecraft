@@ -2899,7 +2899,7 @@ export const it_IT: EnTranslations = {
       "delveMark": "Marchio dell'Incursione",
       "wocToken": "WoC Token",
       "heroicMarkNote": "Dungeon eroici . spendi dal quartiermastro eroico",
-      "honorNote": "Campi di battaglia e arena",
+      "honorNote": "Campi di battaglia, arena e missioni mondiali",
       "delveMarkNote": "Incursioni completate",
       "wocTokenNote": "Saldo del portafoglio collegato",
       "walletNotLinked": "Nessun portafoglio collegato",

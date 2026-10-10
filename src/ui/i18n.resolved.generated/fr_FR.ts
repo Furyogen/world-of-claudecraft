@@ -2899,7 +2899,7 @@ export const fr_FR: EnTranslations = {
       "delveMark": "Marque de plongée",
       "wocToken": "Jeton WoC",
       "heroicMarkNote": "Donjons héroïques . à dépenser auprès de l'intendant héroïque",
-      "honorNote": "Champs de bataille et arène",
+      "honorNote": "Champs de bataille, arène et quêtes mondiales",
       "delveMarkNote": "Plongées terminées",
       "wocTokenNote": "Solde du portefeuille lié",
       "walletNotLinked": "Aucun portefeuille lié",

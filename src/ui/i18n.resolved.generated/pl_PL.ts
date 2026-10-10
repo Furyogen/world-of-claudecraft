@@ -2899,7 +2899,7 @@ export const pl_PL: EnTranslations = {
       "delveMark": "Znak Wyprawy",
       "wocToken": "Token WoC",
       "heroicMarkNote": "Lochowiska heroiczne. Wydaj w kwatermistrzu heroicznym",
-      "honorNote": "Pola Bitwy i Arena",
+      "honorNote": "Pola Bitwy, Arena i zadania światowe",
       "delveMarkNote": "Ukończone wyprawy",
       "wocTokenNote": "Saldo połączonego portfela",
       "walletNotLinked": "Brak połączonego portfela",

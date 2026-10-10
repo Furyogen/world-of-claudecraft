@@ -2899,7 +2899,7 @@ export const da_DK: EnTranslations = {
       "delveMark": "Dykkermærke",
       "wocToken": "WoC-mønt",
       "heroicMarkNote": "Heroiske fangehuse, brug hos den heroiske kvartermester",
-      "honorNote": "Slagmarker og arenaen",
+      "honorNote": "Slagmarker, arenaen og verdensopgaver",
       "delveMarkNote": "Dykninger afsluttet",
       "wocTokenNote": "Knyttet pungs saldo",
       "walletNotLinked": "Ingen pung knyttet",

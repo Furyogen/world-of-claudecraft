@@ -17678,7 +17678,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.currencies.delveMark': '探險印記',
   'hudChrome.currencies.wocToken': 'WoC 代幣',
   'hudChrome.currencies.heroicMarkNote': '英雄地下城 . 在英雄軍需官處兌換',
-  'hudChrome.currencies.honorNote': '戰場與競技場',
+  'hudChrome.currencies.honorNote': '戰場、競技場與世界任務',
   'hudChrome.currencies.delveMarkNote': '已完成的探險',
   'hudChrome.currencies.wocTokenNote': '已連結錢包的餘額',
   'hudChrome.currencies.walletNotLinked': '未連結錢包',

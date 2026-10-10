@@ -2899,7 +2899,7 @@ export const pt_BR: EnTranslations = {
       "delveMark": "Marca de Incursão",
       "wocToken": "WoC Token",
       "heroicMarkNote": "Masmorras heroicas. Use com o intendente heroico",
-      "honorNote": "Campos de batalha e arena",
+      "honorNote": "Campos de batalha, arena e missões de mundo",
       "delveMarkNote": "Incursões concluídas",
       "wocTokenNote": "Saldo da carteira vinculada",
       "walletNotLinked": "Nenhuma carteira vinculada",
