@@ -12398,6 +12398,7 @@ export const id_ID: EnTranslations = {
       "cat": {
         "bodyType": "Body Type",
         "skinTone": "Skin Tone",
+        "race": "Race",
         "face": "Face",
         "eyesBrows": "Eyes and Brows",
         "eyeColor": "Eye Color",
@@ -12422,6 +12423,10 @@ export const id_ID: EnTranslations = {
         "browHeight": "Brow Height",
         "chinWidth": "Chin Width",
         "bodyScale": "Body Size"
+      },
+      "race": {
+        "human": "Human",
+        "dwarf": "Dwarf"
       },
       "bodyGlyph": {
         "a": "A",

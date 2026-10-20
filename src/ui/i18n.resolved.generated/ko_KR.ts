@@ -12398,6 +12398,7 @@ export const ko_KR: EnTranslations = {
       "cat": {
         "bodyType": "Body Type",
         "skinTone": "Skin Tone",
+        "race": "종족",
         "face": "Face",
         "eyesBrows": "눈과 눈썹",
         "eyeColor": "눈 색깔",
@@ -12422,6 +12423,10 @@ export const ko_KR: EnTranslations = {
         "browHeight": "눈썹 높이",
         "chinWidth": "턱 너비",
         "bodyScale": "Body Size"
+      },
+      "race": {
+        "human": "인간",
+        "dwarf": "드워프"
       },
       "bodyGlyph": {
         "a": "A",

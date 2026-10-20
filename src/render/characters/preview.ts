@@ -28,7 +28,7 @@ import {
   type ModularAppearance,
   type ModularLook,
   modularBuildSignature,
-  wocBodyScaleOf,
+  wocDrawScaleOf,
 } from './modular';
 import {
   appearanceSignature,
@@ -380,7 +380,7 @@ export class CharacterPreview {
     const visual = this.currentVisual;
     if (!visual) return;
     visual.setWocHeadLook(this.wocHeadApp, hold);
-    if (visual.setBodyScale(wocBodyScaleOf(this.wocHeadApp))) {
+    if (visual.setBodyScale(wocDrawScaleOf(this.wocHeadApp))) {
       this.focusHeadFor = null;
       this.closeupCache.clear();
     }

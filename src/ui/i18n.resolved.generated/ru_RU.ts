@@ -12398,6 +12398,7 @@ export const ru_RU: EnTranslations = {
       "cat": {
         "bodyType": "Body Type",
         "skinTone": "Skin Tone",
+        "race": "Раса",
         "face": "Face",
         "eyesBrows": "Глаза и брови",
         "eyeColor": "Цвет глаз",
@@ -12422,6 +12423,10 @@ export const ru_RU: EnTranslations = {
         "browHeight": "Высота бровей",
         "chinWidth": "Ширина подбородка",
         "bodyScale": "Body Size"
+      },
+      "race": {
+        "human": "Человек",
+        "dwarf": "Дворф"
       },
       "bodyGlyph": {
         "a": "A",

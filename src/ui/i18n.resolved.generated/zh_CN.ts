@@ -12398,6 +12398,7 @@ export const zh_CN: EnTranslations = {
       "cat": {
         "bodyType": "Body Type",
         "skinTone": "Skin Tone",
+        "race": "种族",
         "face": "Face",
         "eyesBrows": "眼睛与眉毛",
         "eyeColor": "瞳色",
@@ -12422,6 +12423,10 @@ export const zh_CN: EnTranslations = {
         "browHeight": "眉毛高度",
         "chinWidth": "下巴宽度",
         "bodyScale": "Body Size"
+      },
+      "race": {
+        "human": "人类",
+        "dwarf": "矮人"
       },
       "bodyGlyph": {
         "a": "A",
