@@ -1,0 +1,1418 @@
+From 3e50e4b0bb7330772c1c5c7f62ee12ee794cf6fc Mon Sep 17 00:00:00 2001
+From: Furyogen <fury@worldofclaudecraft.com>
+Date: Thu, 22 Oct 2026 08:48:00 +0000
+Subject: [PATCH 1/2] feat(render): opt-in first-person camera at the closest
+ zoom
+
+A new Interface option, firstPersonMode, puts the camera at the
+player's eyes when zoomed all the way in: Show Body hides only the head
+(its hair, face and helm collapse with the head bone) and No Body hides
+the whole model. Off is the default and keeps the chase camera exactly.
+The camera's audio-listener block moved to camera_audio_listener.ts to
+pay for the hook, and the renderer ceiling comes down with it.
+---
+ src/game/camera_view_settings.ts              |  19 ++-
+ src/game/settings.ts                          |   5 +
+ src/render/camera_audio_listener.ts           |  57 ++++++++
+ src/render/characters/visual.ts               |  22 +++
+ src/render/first_person_camera.ts             |  83 +++++++++++
+ src/render/first_person_core.ts               | 131 ++++++++++++++++++
+ src/render/renderer.ts                        |  44 +++---
+ src/ui/i18n.catalog/hud_chrome.ts             |   8 ++
+ .../translation_keys.generated.ts             |   4 +
+ src/ui/i18n.locales/ja_JP.ts                  |   1 +
+ src/ui/i18n.locales/ko_KR.ts                  |   1 +
+ src/ui/i18n.locales/ru_RU.ts                  |   1 +
+ src/ui/i18n.locales/zh_CN.ts                  |   1 +
+ src/ui/i18n.locales/zh_TW.ts                  |   1 +
+ src/ui/i18n.resolved.generated/cs_CZ.ts       |   4 +
+ src/ui/i18n.resolved.generated/da_DK.ts       |   4 +
+ src/ui/i18n.resolved.generated/de_DE.ts       |   4 +
+ src/ui/i18n.resolved.generated/en.ts          |   4 +
+ src/ui/i18n.resolved.generated/en_CA.ts       |   4 +
+ src/ui/i18n.resolved.generated/en_XA.ts       |   4 +
+ src/ui/i18n.resolved.generated/es.ts          |   4 +
+ src/ui/i18n.resolved.generated/es_ES.ts       |   4 +
+ src/ui/i18n.resolved.generated/fr_CA.ts       |   4 +
+ src/ui/i18n.resolved.generated/fr_FR.ts       |   4 +
+ src/ui/i18n.resolved.generated/id_ID.ts       |   4 +
+ src/ui/i18n.resolved.generated/it_IT.ts       |   4 +
+ src/ui/i18n.resolved.generated/ja_JP.ts       |   4 +
+ src/ui/i18n.resolved.generated/ko_KR.ts       |   4 +
+ src/ui/i18n.resolved.generated/nl_NL.ts       |   4 +
+ src/ui/i18n.resolved.generated/pending.ts     |  75 ++++++++++
+ src/ui/i18n.resolved.generated/pl_PL.ts       |   4 +
+ src/ui/i18n.resolved.generated/pt_BR.ts       |   4 +
+ src/ui/i18n.resolved.generated/ru_RU.ts       |   4 +
+ src/ui/i18n.resolved.generated/sv_SE.ts       |   4 +
+ src/ui/i18n.resolved.generated/tr_TR.ts       |   4 +
+ src/ui/i18n.resolved.generated/vi_VN.ts       |   4 +
+ src/ui/i18n.resolved.generated/zh_CN.ts       |   4 +
+ src/ui/i18n.resolved.generated/zh_TW.ts       |   4 +
+ src/ui/options_view.ts                        |   7 +
+ tests/architecture.test.ts                    |   1 +
+ tests/camera_view_settings.test.ts            |  20 ++-
+ tests/first_person_core.test.ts               |  84 +++++++++++
+ tests/monolith_budget.test.ts                 |   5 +-
+ tests/options_view.test.ts                    |  21 +++
+ 44 files changed, 651 insertions(+), 32 deletions(-)
+ create mode 100644 src/render/camera_audio_listener.ts
+ create mode 100644 src/render/first_person_camera.ts
+ create mode 100644 src/render/first_person_core.ts
+ create mode 100644 tests/first_person_core.test.ts
+
+diff --git a/src/game/camera_view_settings.ts b/src/game/camera_view_settings.ts
+index 992cd8f0..e73b33ec 100644
+--- a/src/game/camera_view_settings.ts
++++ b/src/game/camera_view_settings.ts
+@@ -1,5 +1,5 @@
+-// The renderer-side camera VIEW settings (field of view and the Action Cam),
+-// applied from the settings store. Render modules never read the store, so
++// The renderer-side camera VIEW settings (field of view, the Action Cam and
++// first person), applied from the settings store. Render modules never read the store, so
+ // main.ts pushes these through here: once per changed key from its settings
+ // router, and all at once onto a freshly rebuilt renderer.
+ 
+@@ -9,11 +9,17 @@ import { type GameSettings, SETTING_RANGES } from './settings';
+ export interface CameraViewRenderer {
+   setCameraFov(deg: number): void;
+   readonly actionCam: { set(enabled: boolean, side: ActionCamSide): void };
++  readonly firstPerson: { setMode(mode: number): void };
+ }
+ 
+ export interface CameraViewSettingsStore {
+-  get<K extends 'cameraFov' | 'actionCam' | 'actionCamShoulder'>(key: K): GameSettings[K];
+-  set(key: 'cameraFov' | 'actionCamShoulder' | 'cameraZoom', value: number): number;
++  get<K extends 'cameraFov' | 'actionCam' | 'actionCamShoulder' | 'firstPersonMode'>(
++    key: K,
++  ): GameSettings[K];
++  set(
++    key: 'cameraFov' | 'actionCamShoulder' | 'cameraZoom' | 'firstPersonMode',
++    value: number,
++  ): number;
+   set(key: 'actionCam', value: boolean): boolean;
+ }
+ 
+@@ -57,6 +63,7 @@ export function applyCameraViewSettings(
+ ): void {
+   renderer.setCameraFov(store.get('cameraFov'));
+   pushActionCam(renderer, store);
++  renderer.firstPerson.setMode(store.get('firstPersonMode'));
+ }
+ 
+ /**
+@@ -74,6 +81,10 @@ export function applyCameraViewSetting(
+     renderer.setCameraFov(store.set('cameraFov', Number(value)));
+     return true;
+   }
++  if (key === 'firstPersonMode') {
++    renderer.firstPerson.setMode(store.set('firstPersonMode', Number(value)));
++    return true;
++  }
+   if (key === 'actionCam' || key === 'actionCamShoulder') {
+     if (key === 'actionCam') {
+       const on = store.set('actionCam', !!value);
+diff --git a/src/game/settings.ts b/src/game/settings.ts
+index 11ff2b38..43d850c4 100644
+--- a/src/game/settings.ts
++++ b/src/game/settings.ts
+@@ -109,6 +109,11 @@ export const SETTING_RANGES = {
+   // distance. Set by the wheel/pinch zoom (persisted debounced from main.ts), applied back
+   // to Input on boot via the startup apply-all loop and on Reset (issue 1657).
+   cameraZoom: { min: 3, max: 22, def: 12 },
++  // First person at the closest zoom (render/first_person_core.ts): 0 off (the
++  // shipped chase camera), 1 first person showing the body below the head, 2
++  // first person with the whole model hidden. Display-only framing; the closest
++  // zoom stays third person unless the player opts in.
++  firstPersonMode: { min: 0, max: 2, def: 0 },
+   renderScale: { min: 0.5, max: 1, def: 1 },
+   fullscreen: { min: 0, max: 1, def: 1 },
+   // Desktop-shell window mode: 1 = borderless fullscreen (what the shell opens
+diff --git a/src/render/camera_audio_listener.ts b/src/render/camera_audio_listener.ts
+new file mode 100644
+index 00000000..3a0752d9
+--- /dev/null
++++ b/src/render/camera_audio_listener.ts
+@@ -0,0 +1,57 @@
++// The spatial-audio half of the renderer's per-frame camera update: seat the
++// listener at the camera facing the eye point, then feed the ambience state
++// (biome, dungeon, precipitation, water, point sources) from that eye.
++// Extracted from renderer.ts updateCamera unchanged so the camera code could
++// take the first-person hook without growing the coordinator.
++
++import type * as THREE from 'three';
++import type { Entity } from '../sim/types';
++import { type createAmbienceState, sampleAmbienceInto } from './ambience_state_core';
++import type { AmbientPointSource, SpatialAudioSink } from './audio_sink';
++import type { DynamicEntityAmbienceSources } from './dynamic_entity_ambience';
++
++/** The renderer members this reads. They are private on Renderer, so the call
++ *  site passes `this` untyped (the vehicle_camera_core.ts host shape). */
++interface CameraAudioHost {
++  audioSink: SpatialAudioSink | null;
++  camera: THREE.Camera;
++  ambience: ReturnType<typeof createAmbienceState>;
++  weatherOn: boolean;
++  sim: {
++    cfg: { seed: number };
++    player: { pos: { x: number } };
++    entities: ReadonlyMap<number, Entity>;
++    entityRosterVersion: number;
++  };
++  riftAmbience: DynamicEntityAmbienceSources;
++  riftAmbienceScratch: AmbientPointSource[];
++  ambientPointSources: readonly AmbientPointSource[];
++  ambientPointsMergedScratch: AmbientPointSource[];
++}
++
++/** Listener at the camera, facing `eye` (the avatar eye), plus ambience. */
++export function updateCameraAudioListener(host: object, eye: THREE.Vector3): void {
++  const h = host as CameraAudioHost;
++  const sink = h.audioSink;
++  if (!sink) return;
++  const cpx = h.camera.position.x,
++    cpy = h.camera.position.y,
++    cpz = h.camera.position.z;
++  const fx = eye.x - cpx,
++    fy = eye.y - cpy,
++    fz = eye.z - cpz;
++  const fl = Math.hypot(fx, fy, fz) || 1;
++  sink.setListener(cpx, cpy, cpz, fx / fl, fy / fl, fz / fl);
++  const amb = sampleAmbienceInto(h.ambience, eye.x, eye.z, h.sim.cfg.seed, h.weatherOn);
++  h.riftAmbience.collect(h.sim, h.sim.player.pos.x, h.riftAmbienceScratch);
++  // Early-out: no live rift ambience this frame, so skip building the
++  // merged array entirely and hand the static set straight through.
++  let points: readonly AmbientPointSource[] = h.ambientPointSources;
++  if (h.riftAmbienceScratch.length > 0) {
++    h.ambientPointsMergedScratch.length = 0;
++    for (const p of h.ambientPointSources) h.ambientPointsMergedScratch.push(p);
++    for (const p of h.riftAmbienceScratch) h.ambientPointsMergedScratch.push(p);
++    points = h.ambientPointsMergedScratch;
++  }
++  sink.ambience(amb.biome, amb.inDungeon, amb.precip, amb.nearWater, 0, points, eye);
++}
+diff --git a/src/render/characters/visual.ts b/src/render/characters/visual.ts
+index 35a0738d..4d42368a 100644
+--- a/src/render/characters/visual.ts
++++ b/src/render/characters/visual.ts
+@@ -335,6 +335,9 @@ const CLIMB_ARM_ROLL_RAD = 0.45;
+ const CLIMB_ELBOW_RAD = 0.55;
+ /** Chin up at the lip while the hands fly to it: the eyes lead the grab. */
+ const CLIMB_HEAD_TILT_RAD = -0.35;
++// First-person head hide: near zero rather than zero, so no skinned normal
++// built from the collapsed bone divides by zero.
++const HEAD_HIDDEN_SCALE = 1e-4;
+ /** The off hand plants this far (in phase) behind the lead hand. */
+ const CLIMB_ARM_LEAD = 0.05;
+ const CLIMB_LEG_BONES = ['upperlegl', 'upperlegr'] as const;
+@@ -5151,6 +5154,25 @@ export class CharacterVisual {
+     return scan;
+   }
+ 
++  /**
++   * The first-person camera's head hide (render/first_person_camera.ts):
++   * collapse the `head` bone so the head, its hair, face parts and a worn
++   * helm (all skinned to or parented under it) stop drawing while the body
++   * below keeps rendering. Called every frame while hidden, after the mixer,
++   * because a clip that keys the bone's scale would restore it.
++   */
++  setHeadHidden(hidden: boolean): void {
++    if (!hidden && !this.headHidden) return;
++    this.firstPersonHeadBone ??= this.model.getObjectByName('head') ?? null;
++    const head = this.firstPersonHeadBone;
++    this.headHidden = hidden;
++    if (!head) return;
++    head.scale.setScalar(hidden ? HEAD_HIDDEN_SCALE : 1);
++    this.skeletonUpdates.markPoseChanged();
++  }
++  private headHidden = false;
++  private firstPersonHeadBone: THREE.Object3D | null | undefined;
++
+   /** Measured requests vs actual palette rebuilds for browser-side accounting. */
+   skeletonUpdateStats(): SkeletonUpdateStats {
+     return this.skeletonUpdates.stats();
+diff --git a/src/render/first_person_camera.ts b/src/render/first_person_camera.ts
+new file mode 100644
+index 00000000..47bdbe07
+--- /dev/null
++++ b/src/render/first_person_camera.ts
+@@ -0,0 +1,83 @@
++// The first-person camera's thin consumer over first_person_core.ts. The
++// renderer calls place() once per frame, AFTER the chase camera has placed
++// itself and after the entity loop has set the local view's visibility, so
++// first person only overrides the finished chase pose and never fights it:
++// leaving first person needs no restore beyond the head bone, because the
++// next frame's chase camera and entity loop rewrite everything else.
++
++import type * as THREE from 'three';
++import type { CharacterVisual } from './characters';
++import {
++  createFirstPersonPose,
++  FIRST_PERSON_FALLBACK_EYE,
++  type FirstPersonMode,
++  firstPersonActive,
++  firstPersonEyeHeight,
++  firstPersonHiding,
++  firstPersonModeFromSetting,
++  firstPersonPoseInto,
++} from './first_person_core';
++import { lookAtFrozen } from './static_matrix';
++
++/** The slice of the renderer's EntityView the rig reads. */
++export interface FirstPersonSelfView {
++  group: THREE.Object3D;
++  visual: CharacterVisual | null;
++  height: number;
++  mountLift: number;
++  liveScale: number;
++}
++
++export class FirstPersonRig {
++  private mode: FirstPersonMode = 0;
++  private headHiddenOn: CharacterVisual | null = null;
++  private readonly pose = createFirstPersonPose();
++
++  /** The firstPersonMode setting (0 off, 1 body, 2 no body). */
++  setMode(value: number): void {
++    this.mode = firstPersonModeFromSetting(value);
++  }
++
++  /**
++   * Take the camera over when first person is engaged. `selfPos` is the
++   * fallback foot point before the local view exists; `yaw` and `pitch` are
++   * the chase camera's. Returns true when first person placed the camera.
++   */
++  place(
++    camera: THREE.PerspectiveCamera,
++    lookAt: THREE.Vector3,
++    self: FirstPersonSelfView | undefined,
++    selfPos: THREE.Vector3,
++    yaw: number,
++    pitch: number,
++    camDist: number,
++    blocked: boolean,
++  ): boolean {
++    const active = firstPersonActive({ mode: this.mode, camDist, blocked });
++    const hiding = firstPersonHiding(this.mode, active);
++    this.syncHead(hiding.head && !hiding.body ? (self?.visual ?? null) : null);
++    if (!active) return false;
++    // The entity loop shows the local view every frame, so this hide lasts
++    // exactly one frame and leaving first person restores it on its own.
++    if (hiding.body && self) self.group.visible = false;
++    const foot = self ? self.group.position : selfPos;
++    const eye = self
++      ? firstPersonEyeHeight(self.height, self.mountLift, self.liveScale)
++      : FIRST_PERSON_FALLBACK_EYE;
++    const p = firstPersonPoseInto(this.pose, foot.x, foot.y, foot.z, yaw, pitch, eye);
++    camera.position.set(p.x, p.y, p.z);
++    lookAt.set(p.lookX, p.lookY, p.lookZ);
++    lookAtFrozen(camera, lookAt);
++    return true;
++  }
++
++  /** Collapse the head on `target` (null: no head hidden), restoring any
++   *  other visual it was hidden on (a skin swap rebuilds the visual). */
++  private syncHead(target: CharacterVisual | null): void {
++    if (this.headHiddenOn && this.headHiddenOn !== target) this.headHiddenOn.setHeadHidden(false);
++    // Every frame while hidden: a clip that keys the head's scale would
++    // otherwise restore it on its next mixer update.
++    target?.setHeadHidden(true);
++    this.headHiddenOn = target;
++  }
++}
+diff --git a/src/render/first_person_core.ts b/src/render/first_person_core.ts
+new file mode 100644
+index 00000000..2b8a0efd
+--- /dev/null
++++ b/src/render/first_person_core.ts
+@@ -0,0 +1,131 @@
++// Pure decisions for the opt-in first-person camera (the firstPersonMode
++// setting): whether first person is engaged this frame, which parts of the
++// local player's own model hide, and where the eye sits and looks. Three-,
++// DOM- and i18n-free so a plain Vitest drives it (tests/first_person_core.test.ts);
++// first_person_camera.ts is the thin consumer the renderer calls.
++//
++// First person engages only at the CLOSEST zoom, so the mouse wheel is the
++// switch: scroll all the way in to enter it, scroll out one notch to leave.
++// Display-only: the sim never sees the camera, so it changes nothing a player
++// reacts to beyond the framing itself.
++
++/** 0 off (the shipped chase camera), 1 first person showing the body below the
++ *  head, 2 first person with the whole model hidden. */
++export type FirstPersonMode = 0 | 1 | 2;
++
++export const FIRST_PERSON_OFF: FirstPersonMode = 0;
++export const FIRST_PERSON_BODY: FirstPersonMode = 1;
++export const FIRST_PERSON_NO_BODY: FirstPersonMode = 2;
++
++/** The closest zoom the wheel reaches (SETTING_RANGES.cameraZoom.min, pinned
++ *  equal by the test): first person engages at or inside it. */
++export const FIRST_PERSON_ENGAGE_DIST = 3;
++
++/** Eye height as a fraction of the model's unscaled height. */
++export const FIRST_PERSON_EYE_FRACTION = 0.92;
++
++/** Yards the eye sits ahead of the head pivot, so the near plane clears the
++ *  collar and shoulders the body mode keeps drawing. */
++export const FIRST_PERSON_FORWARD = 0.14;
++
++/** The chase camera's pitch rests looking down at the avatar (positive is
++ *  down); first person subtracts this so the resting view looks near level
++ *  while a look down still reaches the player's own legs. */
++export const FIRST_PERSON_PITCH_BIAS = 0.2;
++
++/** Distance of the look target ahead of the eye. Short on purpose: the
++ *  occluder fade and the audio listener read this point as the avatar eye, so
++ *  a short segment keeps walls ahead of the player solid. */
++export const FIRST_PERSON_LOOK_DIST = 0.5;
++
++/** Eye height used before the local model has been built. */
++export const FIRST_PERSON_FALLBACK_EYE = 1.7;
++
++/** Clamp a stored setting value to a mode (anything unknown is off). */
++export function firstPersonModeFromSetting(value: number): FirstPersonMode {
++  if (!Number.isFinite(value)) return FIRST_PERSON_OFF;
++  const rounded = Math.round(value);
++  return rounded === 1 || rounded === 2 ? rounded : FIRST_PERSON_OFF;
++}
++
++export interface FirstPersonGate {
++  mode: FirstPersonMode;
++  /** The player's requested zoom (Input.camDist mirrored on the renderer). */
++  camDist: number;
++  /** A dead body, a directed camera move or a vehicle seat keep the chase
++   *  camera: each one frames something the player must see from outside. */
++  blocked: boolean;
++}
++
++/** True when first person owns the camera this frame. */
++export function firstPersonActive(gate: FirstPersonGate): boolean {
++  return (
++    gate.mode !== FIRST_PERSON_OFF &&
++    !gate.blocked &&
++    gate.camDist <= FIRST_PERSON_ENGAGE_DIST + 1e-3
++  );
++}
++
++export interface FirstPersonHiding {
++  readonly head: boolean;
++  readonly body: boolean;
++}
++
++const SHOW_ALL: FirstPersonHiding = Object.freeze({ head: false, body: false });
++const HIDE_HEAD: FirstPersonHiding = Object.freeze({ head: true, body: false });
++const HIDE_ALL: FirstPersonHiding = Object.freeze({ head: true, body: true });
++
++/** Which parts of the local model hide. Reused frozen records, no per-frame
++ *  allocation. Outside first person nothing hides, whatever the mode. */
++export function firstPersonHiding(mode: FirstPersonMode, active: boolean): FirstPersonHiding {
++  if (!active || mode === FIRST_PERSON_OFF) return SHOW_ALL;
++  return mode === FIRST_PERSON_BODY ? HIDE_HEAD : HIDE_ALL;
++}
++
++/** World eye height above the feet for a view of the given unscaled height,
++ *  saddle lift and entity scale. */
++export function firstPersonEyeHeight(height: number, mountLift: number, scale: number): number {
++  if (!(height > 0)) return FIRST_PERSON_FALLBACK_EYE;
++  const s = scale > 0 ? scale : 1;
++  return (height * FIRST_PERSON_EYE_FRACTION + Math.max(0, mountLift)) * s;
++}
++
++export interface FirstPersonPose {
++  x: number;
++  y: number;
++  z: number;
++  lookX: number;
++  lookY: number;
++  lookZ: number;
++}
++
++export function createFirstPersonPose(): FirstPersonPose {
++  return { x: 0, y: 0, z: 0, lookX: 0, lookY: 0, lookZ: 1 };
++}
++
++/**
++ * The eye and its look target for feet at (footX, footY, footZ), the camera
++ * yaw (the chase camera's: 0 looks down +z) and its pitch (positive looks
++ * down). Fills and returns `out`.
++ */
++export function firstPersonPoseInto(
++  out: FirstPersonPose,
++  footX: number,
++  footY: number,
++  footZ: number,
++  yaw: number,
++  camPitch: number,
++  eyeHeight: number,
++): FirstPersonPose {
++  const sinYaw = Math.sin(yaw);
++  const cosYaw = Math.cos(yaw);
++  const pitch = camPitch - FIRST_PERSON_PITCH_BIAS;
++  const level = Math.cos(pitch);
++  out.x = footX + sinYaw * FIRST_PERSON_FORWARD;
++  out.y = footY + eyeHeight;
++  out.z = footZ + cosYaw * FIRST_PERSON_FORWARD;
++  out.lookX = out.x + sinYaw * level * FIRST_PERSON_LOOK_DIST;
++  out.lookY = out.y - Math.sin(pitch) * FIRST_PERSON_LOOK_DIST;
++  out.lookZ = out.z + cosYaw * level * FIRST_PERSON_LOOK_DIST;
++  return out;
++}
+diff --git a/src/render/renderer.ts b/src/render/renderer.ts
+index 8b4e6f7e..f0a6bf55 100644
+--- a/src/render/renderer.ts
++++ b/src/render/renderer.ts
+@@ -63,7 +63,7 @@ import { ABILITY_VFX_SPECS } from './ability_vfx_specs';
+ import { AbyssalRiftFx } from './abyssal_rift_fx';
+ import { ActionCamRig } from './action_cam_core';
+ import { type AmberFeaturesView, buildAmberFeatures } from './amber_features';
+-import { createAmbienceState, sampleAmbienceInto } from './ambience_state_core';
++import { createAmbienceState } from './ambience_state_core';
+ import { isVisuallyDead } from './anim_state';
+ import { AOE_RING_LIFETIME } from './aoe_ring';
+ import { buildAoeRingMesh } from './aoe_ring_mesh';
+@@ -116,6 +116,7 @@ import { createBuildLedger } from './build_ledger_core';
+ import { BuildRetryGate } from './build_retry_gate';
+ import { setBuildSpanSink } from './build_spans';
+ import { BurningPactMarkers } from './burning_pact_markers';
++import { updateCameraAudioListener } from './camera_audio_listener';
+ import { createCameraBoom, stepCameraBoom } from './camera_boom_core';
+ import {
+   cancelCameraDirective,
+@@ -389,6 +390,7 @@ import {
+   runFireLightBudgetPass,
+ } from './fire_light_registry';
+ import { type FireballTravelVisual, syncFireballTravelVisual } from './fireball_travel_visual';
++import { FirstPersonRig } from './first_person_camera';
+ import { buildFish, type FishView } from './fish';
+ import { FishingBobberVisual } from './fishing_bobber';
+ import { applyFloorVfxLayer } from './floor_vfx_layer';
+@@ -1455,6 +1457,7 @@ export class Renderer {
+   private readonly camDirector = createCameraDirector();
+   private readonly vehicleCamera = createVehicleCamera();
+   readonly actionCam = new ActionCamRig(); // opt-in over-the-shoulder shift + stride bob
++  readonly firstPerson = new FirstPersonRig(); // opt-in first person, fully zoomed in
+   private readonly ambience = createAmbienceState();
+   private baseFov = CAMERA_BASE_FOV; // setCameraFov's value; camera.fov is overwritten below each frame
+   // Player-pose mirror from last frame: any change while a directive runs is
+@@ -12286,32 +12289,21 @@ export class Renderer {
+     // Later readers (occluder fades, ambience) want the AVATAR eye, not the
+     // Action Cam aim: a wall hiding the player must still fade.
+     this.cameraLookAt.set(px - shoulder.x, eyeY + shoulder.drop, pz - shoulder.z);
+-    const eye = this.cameraLookAt;
+-
++    // Opt-in first person (first_person_camera.ts) overrides the finished pose
++    // fully zoomed in; a dead body, a directed move or a vehicle keep the chase.
++    const fpBlocked = p.dead || this.camDirector.kind !== null || !!this.sim.vehicleSession;
++    this.firstPerson.place(
++      this.camera,
++      this.cameraLookAt,
++      this.views.get(p.id),
++      selfPos,
++      pose.yaw,
++      pose.pitch,
++      this.camDist,
++      fpBlocked,
++    );
+     // Spatial-audio listener (at the camera, facing the player) + ambience state.
+-    const sink = this.audioSink;
+-    if (sink) {
+-      const cpx = this.camera.position.x,
+-        cpy = this.camera.position.y,
+-        cpz = this.camera.position.z;
+-      const fx = eye.x - cpx,
+-        fy = eye.y - cpy,
+-        fz = eye.z - cpz;
+-      const fl = Math.hypot(fx, fy, fz) || 1;
+-      sink.setListener(cpx, cpy, cpz, fx / fl, fy / fl, fz / fl);
+-      const amb = sampleAmbienceInto(this.ambience, eye.x, eye.z, seed, this.weatherOn);
+-      this.riftAmbience.collect(this.sim, this.sim.player.pos.x, this.riftAmbienceScratch);
+-      // Early-out: no live rift ambience this frame, so skip building the
+-      // merged array entirely and hand the static set straight through.
+-      let points: readonly AmbientPointSource[] = this.ambientPointSources;
+-      if (this.riftAmbienceScratch.length > 0) {
+-        this.ambientPointsMergedScratch.length = 0;
+-        for (const p of this.ambientPointSources) this.ambientPointsMergedScratch.push(p);
+-        for (const p of this.riftAmbienceScratch) this.ambientPointsMergedScratch.push(p);
+-        points = this.ambientPointsMergedScratch;
+-      }
+-      sink.ambience(amb.biome, amb.inDungeon, amb.precip, amb.nearWater, 0, points, eye);
+-    }
++    updateCameraAudioListener(this, this.cameraLookAt);
+   }
+ 
+   // Hang a speech bubble over an entity's head; it follows the entity and
+diff --git a/src/ui/i18n.catalog/hud_chrome.ts b/src/ui/i18n.catalog/hud_chrome.ts
+index 4190ae08..71b6b137 100644
+--- a/src/ui/i18n.catalog/hud_chrome.ts
++++ b/src/ui/i18n.catalog/hud_chrome.ts
+@@ -2905,6 +2905,14 @@ export const hudChromeStrings = {
+     actionCamShoulderLeft: 'Left {pct}',
+     actionCamShoulderRight: 'Right {pct}',
+     actionCamShoulderCenter: 'Center',
++    // Interface panel picker for the opt-in first-person camera, which takes
++    // over only at the closest zoom (scroll all the way in). The three choices:
++    // off, first person that still shows your body below the head, and first
++    // person with your character hidden entirely.
++    firstPersonMode: 'First Person (Fully Zoomed In)',
++    firstPersonOff: 'Off',
++    firstPersonBody: 'Show Body',
++    firstPersonNoBody: 'No Body',
+     // Interface panel toggle for the fixed Attack button in the first action-bar
+     // slot (on by default). Off frees that slot for a normal action (drag one in;
+     // its key then casts it). Right-clicking the Attack button flips this off too.
+diff --git a/src/ui/i18n.catalog/translation_keys.generated.ts b/src/ui/i18n.catalog/translation_keys.generated.ts
+index 8fe8ec38..96d4160e 100644
+--- a/src/ui/i18n.catalog/translation_keys.generated.ts
++++ b/src/ui/i18n.catalog/translation_keys.generated.ts
+@@ -15949,6 +15949,10 @@ export type TranslationKeyFlat =
+   | 'hudChrome.options.confirmVendorSellNote'
+   | 'hudChrome.options.discordPresence'
+   | 'hudChrome.options.discordPresenceNote'
++  | 'hudChrome.options.firstPersonBody'
++  | 'hudChrome.options.firstPersonMode'
++  | 'hudChrome.options.firstPersonNoBody'
++  | 'hudChrome.options.firstPersonOff'
+   | 'hudChrome.options.footstepSounds'
+   | 'hudChrome.options.forceHighPerfGpu'
+   | 'hudChrome.options.forceHighPerfGpuNote'
+diff --git a/src/ui/i18n.locales/ja_JP.ts b/src/ui/i18n.locales/ja_JP.ts
+index 648bff64..53417ce9 100644
+--- a/src/ui/i18n.locales/ja_JP.ts
++++ b/src/ui/i18n.locales/ja_JP.ts
+@@ -16661,6 +16661,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
+   'hudChrome.options.actionCamShoulderLeft': '左 {pct}',
+   'hudChrome.options.actionCamShoulderRight': '右 {pct}',
+   'hudChrome.options.actionCamShoulderCenter': '中央',
++  'hudChrome.options.firstPersonMode': '一人称視点（最大ズーム時）',
+   'hudChrome.breath.label': '息',
+   'hudChrome.breath.drowning': '溺れています！',
+   'abilityUi.resources.devotion': '献身',
+diff --git a/src/ui/i18n.locales/ko_KR.ts b/src/ui/i18n.locales/ko_KR.ts
+index 9f1ab47a..eb8e3029 100644
+--- a/src/ui/i18n.locales/ko_KR.ts
++++ b/src/ui/i18n.locales/ko_KR.ts
+@@ -16618,6 +16618,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
+   'hudChrome.options.actionCamShoulderLeft': '왼쪽 {pct}',
+   'hudChrome.options.actionCamShoulderRight': '오른쪽 {pct}',
+   'hudChrome.options.actionCamShoulderCenter': '중앙',
++  'hudChrome.options.firstPersonMode': '1인칭 시점 (최대 확대 시)',
+   'hudChrome.breath.label': '숨',
+   'hudChrome.breath.drowning': '익사 중!',
+   'abilityUi.resources.devotion': '헌신',
+diff --git a/src/ui/i18n.locales/ru_RU.ts b/src/ui/i18n.locales/ru_RU.ts
+index 6552a847..cbcf81f2 100644
+--- a/src/ui/i18n.locales/ru_RU.ts
++++ b/src/ui/i18n.locales/ru_RU.ts
+@@ -16949,6 +16949,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
+   'hudChrome.options.actionCamShoulderLeft': 'Слева {pct}',
+   'hudChrome.options.actionCamShoulderRight': 'Справа {pct}',
+   'hudChrome.options.actionCamShoulderCenter': 'По центру',
++  'hudChrome.options.firstPersonMode': 'Вид от первого лица (при максимальном приближении)',
+   'hudChrome.breath.label': 'Дыхание',
+   'hudChrome.breath.drowning': 'Вы тонете!',
+   'abilityUi.resources.devotion': 'Преданность',
+diff --git a/src/ui/i18n.locales/zh_CN.ts b/src/ui/i18n.locales/zh_CN.ts
+index 9aca41b7..723441b6 100644
+--- a/src/ui/i18n.locales/zh_CN.ts
++++ b/src/ui/i18n.locales/zh_CN.ts
+@@ -15900,6 +15900,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
+   'hudChrome.options.actionCamShoulderLeft': '左 {pct}',
+   'hudChrome.options.actionCamShoulderRight': '右 {pct}',
+   'hudChrome.options.actionCamShoulderCenter': '居中',
++  'hudChrome.options.firstPersonMode': '第一人称（完全拉近时）',
+   'hudChrome.breath.label': '呼吸',
+   'hudChrome.breath.drowning': '溺水！',
+   'abilityUi.resources.devotion': '虔诚',
+diff --git a/src/ui/i18n.locales/zh_TW.ts b/src/ui/i18n.locales/zh_TW.ts
+index 09784d83..5730a19c 100644
+--- a/src/ui/i18n.locales/zh_TW.ts
++++ b/src/ui/i18n.locales/zh_TW.ts
+@@ -15904,6 +15904,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
+   'hudChrome.options.actionCamShoulderLeft': '左 {pct}',
+   'hudChrome.options.actionCamShoulderRight': '右 {pct}',
+   'hudChrome.options.actionCamShoulderCenter': '置中',
++  'hudChrome.options.firstPersonMode': '第一人稱（完全拉近時）',
+   'hudChrome.breath.label': '呼吸',
+   'hudChrome.breath.drowning': '溺水！',
+   'abilityUi.resources.devotion': '虔誠',
+diff --git a/src/ui/i18n.resolved.generated/cs_CZ.ts b/src/ui/i18n.resolved.generated/cs_CZ.ts
+index 00eb3eaa..4147cb8d 100644
+--- a/src/ui/i18n.resolved.generated/cs_CZ.ts
++++ b/src/ui/i18n.resolved.generated/cs_CZ.ts
+@@ -2503,6 +2503,10 @@ export const cs_CZ: EnTranslations = {
+       "actionCamShoulderLeft": "Vlevo {pct}",
+       "actionCamShoulderRight": "Vpravo {pct}",
+       "actionCamShoulderCenter": "Uprostřed",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Zobrazit tlačítko útoku",
+       "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
+       "mobileCameraJoystick": "Joystick kamery",
+diff --git a/src/ui/i18n.resolved.generated/da_DK.ts b/src/ui/i18n.resolved.generated/da_DK.ts
+index 57670334..7bc9794c 100644
+--- a/src/ui/i18n.resolved.generated/da_DK.ts
++++ b/src/ui/i18n.resolved.generated/da_DK.ts
+@@ -2503,6 +2503,10 @@ export const da_DK: EnTranslations = {
+       "actionCamShoulderLeft": "Venstre {pct}",
+       "actionCamShoulderRight": "Højre {pct}",
+       "actionCamShoulderCenter": "Midte",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Vis angrebsknap",
+       "showDailyRewardsChest": "Vis kisten med daglige belønninger",
+       "mobileCameraJoystick": "Kamera joystick",
+diff --git a/src/ui/i18n.resolved.generated/de_DE.ts b/src/ui/i18n.resolved.generated/de_DE.ts
+index 9db246bb..771842c5 100644
+--- a/src/ui/i18n.resolved.generated/de_DE.ts
++++ b/src/ui/i18n.resolved.generated/de_DE.ts
+@@ -2503,6 +2503,10 @@ export const de_DE: EnTranslations = {
+       "actionCamShoulderLeft": "Links {pct}",
+       "actionCamShoulderRight": "Rechts {pct}",
+       "actionCamShoulderCenter": "Mitte",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Angriffs-Schaltflache anzeigen",
+       "showDailyRewardsChest": "Truhe der täglichen Belohnungen anzeigen",
+       "mobileCameraJoystick": "Kamera-Joystick",
+diff --git a/src/ui/i18n.resolved.generated/en.ts b/src/ui/i18n.resolved.generated/en.ts
+index 469aa509..9ab1ffaf 100644
+--- a/src/ui/i18n.resolved.generated/en.ts
++++ b/src/ui/i18n.resolved.generated/en.ts
+@@ -2503,6 +2503,10 @@ export const en: EnTranslations = {
+       "actionCamShoulderLeft": "Left {pct}",
+       "actionCamShoulderRight": "Right {pct}",
+       "actionCamShoulderCenter": "Center",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Show Attack Button",
+       "showDailyRewardsChest": "Show Daily Rewards Chest",
+       "mobileCameraJoystick": "Camera joystick",
+diff --git a/src/ui/i18n.resolved.generated/en_CA.ts b/src/ui/i18n.resolved.generated/en_CA.ts
+index 6a058d87..68892c46 100644
+--- a/src/ui/i18n.resolved.generated/en_CA.ts
++++ b/src/ui/i18n.resolved.generated/en_CA.ts
+@@ -2503,6 +2503,10 @@ export const en_CA: EnTranslations = {
+       "actionCamShoulderLeft": "Left {pct}",
+       "actionCamShoulderRight": "Right {pct}",
+       "actionCamShoulderCenter": "Center",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Show Attack Button",
+       "showDailyRewardsChest": "Show Daily Rewards Chest",
+       "mobileCameraJoystick": "Camera joystick",
+diff --git a/src/ui/i18n.resolved.generated/en_XA.ts b/src/ui/i18n.resolved.generated/en_XA.ts
+index f6683182..02c41644 100644
+--- a/src/ui/i18n.resolved.generated/en_XA.ts
++++ b/src/ui/i18n.resolved.generated/en_XA.ts
+@@ -2503,6 +2503,10 @@ export const en_XA: EnTranslations = {
+       "actionCamShoulderLeft": "[Ļéƒţ {pct}]",
+       "actionCamShoulderRight": "[Ŕíĝĥţ {pct}]",
+       "actionCamShoulderCenter": "[Çéñţéŕ]",
++      "firstPersonMode": "[Ƒíŕšţ Þéŕšóñ (Ƒúļļý Žóóɱéð Íñ)]",
++      "firstPersonOff": "[Óƒƒ]",
++      "firstPersonBody": "[Šĥóŵ Ɓóðý]",
++      "firstPersonNoBody": "[Ñó Ɓóðý]",
+       "showAttackButton": "[Šĥóŵ Áţţáçķ Ɓúţţóñ]",
+       "showDailyRewardsChest": "[Šĥóŵ Ðáíļý Ŕéŵáŕðš Çĥéšţ]",
+       "mobileCameraJoystick": "[Çáɱéŕá ĵóýšţíçķ]",
+diff --git a/src/ui/i18n.resolved.generated/es.ts b/src/ui/i18n.resolved.generated/es.ts
+index 439a0040..bcc4f45c 100644
+--- a/src/ui/i18n.resolved.generated/es.ts
++++ b/src/ui/i18n.resolved.generated/es.ts
+@@ -2503,6 +2503,10 @@ export const es: EnTranslations = {
+       "actionCamShoulderLeft": "Izquierda {pct}",
+       "actionCamShoulderRight": "Derecha {pct}",
+       "actionCamShoulderCenter": "Centro",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Mostrar boton de ataque",
+       "showDailyRewardsChest": "Mostrar cofre de recompensas diarias",
+       "mobileCameraJoystick": "Palanca de mando de la cámara",
+diff --git a/src/ui/i18n.resolved.generated/es_ES.ts b/src/ui/i18n.resolved.generated/es_ES.ts
+index 22812614..69e1f8f3 100644
+--- a/src/ui/i18n.resolved.generated/es_ES.ts
++++ b/src/ui/i18n.resolved.generated/es_ES.ts
+@@ -2503,6 +2503,10 @@ export const es_ES: EnTranslations = {
+       "actionCamShoulderLeft": "Izquierda {pct}",
+       "actionCamShoulderRight": "Derecha {pct}",
+       "actionCamShoulderCenter": "Centro",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Mostrar boton de ataque",
+       "showDailyRewardsChest": "Mostrar cofre de recompensas diarias",
+       "mobileCameraJoystick": "Palanca de mando de la cámara",
+diff --git a/src/ui/i18n.resolved.generated/fr_CA.ts b/src/ui/i18n.resolved.generated/fr_CA.ts
+index b666a285..42953445 100644
+--- a/src/ui/i18n.resolved.generated/fr_CA.ts
++++ b/src/ui/i18n.resolved.generated/fr_CA.ts
+@@ -2503,6 +2503,10 @@ export const fr_CA: EnTranslations = {
+       "actionCamShoulderLeft": "Gauche {pct}",
+       "actionCamShoulderRight": "Droite {pct}",
+       "actionCamShoulderCenter": "Centre",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Afficher le bouton d'attaque",
+       "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
+       "mobileCameraJoystick": "Manette de caméra",
+diff --git a/src/ui/i18n.resolved.generated/fr_FR.ts b/src/ui/i18n.resolved.generated/fr_FR.ts
+index 6c6de31e..838b707a 100644
+--- a/src/ui/i18n.resolved.generated/fr_FR.ts
++++ b/src/ui/i18n.resolved.generated/fr_FR.ts
+@@ -2503,6 +2503,10 @@ export const fr_FR: EnTranslations = {
+       "actionCamShoulderLeft": "Gauche {pct}",
+       "actionCamShoulderRight": "Droite {pct}",
+       "actionCamShoulderCenter": "Centre",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Afficher le bouton d'attaque",
+       "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
+       "mobileCameraJoystick": "Manette de caméra",
+diff --git a/src/ui/i18n.resolved.generated/id_ID.ts b/src/ui/i18n.resolved.generated/id_ID.ts
+index 03c71094..21f68b87 100644
+--- a/src/ui/i18n.resolved.generated/id_ID.ts
++++ b/src/ui/i18n.resolved.generated/id_ID.ts
+@@ -2503,6 +2503,10 @@ export const id_ID: EnTranslations = {
+       "actionCamShoulderLeft": "Kiri {pct}",
+       "actionCamShoulderRight": "Kanan {pct}",
+       "actionCamShoulderCenter": "Tengah",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Tampilkan Tombol Serang",
+       "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
+       "mobileCameraJoystick": "Joystick kamera",
+diff --git a/src/ui/i18n.resolved.generated/it_IT.ts b/src/ui/i18n.resolved.generated/it_IT.ts
+index 2c36c01a..2581a782 100644
+--- a/src/ui/i18n.resolved.generated/it_IT.ts
++++ b/src/ui/i18n.resolved.generated/it_IT.ts
+@@ -2503,6 +2503,10 @@ export const it_IT: EnTranslations = {
+       "actionCamShoulderLeft": "Sinistra {pct}",
+       "actionCamShoulderRight": "Destra {pct}",
+       "actionCamShoulderCenter": "Centro",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Mostra Pulsante Attacco",
+       "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere",
+       "mobileCameraJoystick": "Joystick della fotocamera",
+diff --git a/src/ui/i18n.resolved.generated/ja_JP.ts b/src/ui/i18n.resolved.generated/ja_JP.ts
+index 0e3fef5c..784ad51d 100644
+--- a/src/ui/i18n.resolved.generated/ja_JP.ts
++++ b/src/ui/i18n.resolved.generated/ja_JP.ts
+@@ -2503,6 +2503,10 @@ export const ja_JP: EnTranslations = {
+       "actionCamShoulderLeft": "左 {pct}",
+       "actionCamShoulderRight": "右 {pct}",
+       "actionCamShoulderCenter": "中央",
++      "firstPersonMode": "一人称視点（最大ズーム時）",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "攻撃ボタンを表示",
+       "showDailyRewardsChest": "デイリー報酬の宝箱を表示",
+       "mobileCameraJoystick": "カメラスティック",
+diff --git a/src/ui/i18n.resolved.generated/ko_KR.ts b/src/ui/i18n.resolved.generated/ko_KR.ts
+index d3044d68..85aaa365 100644
+--- a/src/ui/i18n.resolved.generated/ko_KR.ts
++++ b/src/ui/i18n.resolved.generated/ko_KR.ts
+@@ -2503,6 +2503,10 @@ export const ko_KR: EnTranslations = {
+       "actionCamShoulderLeft": "왼쪽 {pct}",
+       "actionCamShoulderRight": "오른쪽 {pct}",
+       "actionCamShoulderCenter": "중앙",
++      "firstPersonMode": "1인칭 시점 (최대 확대 시)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "공격 버튼 표시",
+       "showDailyRewardsChest": "일일 보상 보물상자 표시",
+       "mobileCameraJoystick": "카메라 조이스틱",
+diff --git a/src/ui/i18n.resolved.generated/nl_NL.ts b/src/ui/i18n.resolved.generated/nl_NL.ts
+index e84353b9..1babb0cf 100644
+--- a/src/ui/i18n.resolved.generated/nl_NL.ts
++++ b/src/ui/i18n.resolved.generated/nl_NL.ts
+@@ -2503,6 +2503,10 @@ export const nl_NL: EnTranslations = {
+       "actionCamShoulderLeft": "Links {pct}",
+       "actionCamShoulderRight": "Rechts {pct}",
+       "actionCamShoulderCenter": "Midden",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Aanvalsknop Tonen",
+       "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
+       "mobileCameraJoystick": "Camerajoystick",
+diff --git a/src/ui/i18n.resolved.generated/pending.ts b/src/ui/i18n.resolved.generated/pending.ts
+index d6ebdffc..2ea46421 100644
+--- a/src/ui/i18n.resolved.generated/pending.ts
++++ b/src/ui/i18n.resolved.generated/pending.ts
+@@ -3779,6 +3779,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -7847,6 +7851,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -11915,6 +11923,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -15983,6 +15995,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -20052,6 +20068,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -24120,6 +24140,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -25978,6 +26002,9 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.collections.detail.vendorLabel",
+     "hudChrome.collections.tabs.sets",
+     "hudChrome.dungeonTracker.heroicTitle",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.raidBossGuide.damageRange",
+     "hudChrome.raidBossGuide.dungeonSubtitle",
+     "hudChrome.shardpike.blindBanner",
+@@ -27547,6 +27574,9 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.collections.detail.vendorLabel",
+     "hudChrome.collections.tabs.sets",
+     "hudChrome.dungeonTracker.heroicTitle",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.raidBossGuide.damageRange",
+     "hudChrome.raidBossGuide.dungeonSubtitle",
+     "hudChrome.shardpike.blindBanner",
+@@ -29116,6 +29146,9 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.collections.detail.vendorLabel",
+     "hudChrome.collections.tabs.sets",
+     "hudChrome.dungeonTracker.heroicTitle",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.raidBossGuide.damageRange",
+     "hudChrome.raidBossGuide.dungeonSubtitle",
+     "hudChrome.shardpike.blindBanner",
+@@ -30685,6 +30718,9 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.collections.detail.vendorLabel",
+     "hudChrome.collections.tabs.sets",
+     "hudChrome.dungeonTracker.heroicTitle",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.raidBossGuide.damageRange",
+     "hudChrome.raidBossGuide.dungeonSubtitle",
+     "hudChrome.shardpike.blindBanner",
+@@ -34464,6 +34500,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -36322,6 +36362,9 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.collections.detail.vendorLabel",
+     "hudChrome.collections.tabs.sets",
+     "hudChrome.dungeonTracker.heroicTitle",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.raidBossGuide.damageRange",
+     "hudChrome.raidBossGuide.dungeonSubtitle",
+     "hudChrome.shardpike.blindBanner",
+@@ -40101,6 +40144,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -44169,6 +44216,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -48237,6 +48288,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -52305,6 +52360,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -56373,6 +56432,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -60441,6 +60504,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -64509,6 +64576,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+@@ -68577,6 +68648,10 @@ export const pending: Record<string, readonly string[]> = {
+     "hudChrome.mounts.name_referral_raptor",
+     "hudChrome.mounts.name_referral_tank",
+     "hudChrome.nameplate.npcRole.innkeeper",
++    "hudChrome.options.firstPersonBody",
++    "hudChrome.options.firstPersonMode",
++    "hudChrome.options.firstPersonNoBody",
++    "hudChrome.options.firstPersonOff",
+     "hudChrome.options.showDungeonHints",
+     "hudChrome.options.showDungeonHintsNote",
+     "hudChrome.options.showPetNames",
+diff --git a/src/ui/i18n.resolved.generated/pl_PL.ts b/src/ui/i18n.resolved.generated/pl_PL.ts
+index 164552ff..6e24d612 100644
+--- a/src/ui/i18n.resolved.generated/pl_PL.ts
++++ b/src/ui/i18n.resolved.generated/pl_PL.ts
+@@ -2503,6 +2503,10 @@ export const pl_PL: EnTranslations = {
+       "actionCamShoulderLeft": "Lewo {pct}",
+       "actionCamShoulderRight": "Prawo {pct}",
+       "actionCamShoulderCenter": "Środek",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Pokaż Przycisk Ataku",
+       "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
+       "mobileCameraJoystick": "Joystick aparatu",
+diff --git a/src/ui/i18n.resolved.generated/pt_BR.ts b/src/ui/i18n.resolved.generated/pt_BR.ts
+index 88c0ea7d..c2ead7f0 100644
+--- a/src/ui/i18n.resolved.generated/pt_BR.ts
++++ b/src/ui/i18n.resolved.generated/pt_BR.ts
+@@ -2503,6 +2503,10 @@ export const pt_BR: EnTranslations = {
+       "actionCamShoulderLeft": "Esquerda {pct}",
+       "actionCamShoulderRight": "Direita {pct}",
+       "actionCamShoulderCenter": "Centro",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Exibir Botão de Ataque",
+       "showDailyRewardsChest": "Mostrar Baú de Recompensas Diárias",
+       "mobileCameraJoystick": "Joystick da câmera",
+diff --git a/src/ui/i18n.resolved.generated/ru_RU.ts b/src/ui/i18n.resolved.generated/ru_RU.ts
+index dc993be8..613c61f8 100644
+--- a/src/ui/i18n.resolved.generated/ru_RU.ts
++++ b/src/ui/i18n.resolved.generated/ru_RU.ts
+@@ -2503,6 +2503,10 @@ export const ru_RU: EnTranslations = {
+       "actionCamShoulderLeft": "Слева {pct}",
+       "actionCamShoulderRight": "Справа {pct}",
+       "actionCamShoulderCenter": "По центру",
++      "firstPersonMode": "Вид от первого лица (при максимальном приближении)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Показывать кнопку атаки",
+       "showDailyRewardsChest": "Показывать сундук ежедневных наград",
+       "mobileCameraJoystick": "Джойстик камеры",
+diff --git a/src/ui/i18n.resolved.generated/sv_SE.ts b/src/ui/i18n.resolved.generated/sv_SE.ts
+index 371e7a47..aa615e30 100644
+--- a/src/ui/i18n.resolved.generated/sv_SE.ts
++++ b/src/ui/i18n.resolved.generated/sv_SE.ts
+@@ -2503,6 +2503,10 @@ export const sv_SE: EnTranslations = {
+       "actionCamShoulderLeft": "Vänster {pct}",
+       "actionCamShoulderRight": "Höger {pct}",
+       "actionCamShoulderCenter": "Centrum",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Visa attackknapp",
+       "showDailyRewardsChest": "Visa kistan för dagliga belöningar",
+       "mobileCameraJoystick": "Kamera joystick",
+diff --git a/src/ui/i18n.resolved.generated/tr_TR.ts b/src/ui/i18n.resolved.generated/tr_TR.ts
+index 748df171..4b5d9efc 100644
+--- a/src/ui/i18n.resolved.generated/tr_TR.ts
++++ b/src/ui/i18n.resolved.generated/tr_TR.ts
+@@ -2503,6 +2503,10 @@ export const tr_TR: EnTranslations = {
+       "actionCamShoulderLeft": "Sol {pct}",
+       "actionCamShoulderRight": "Sağ {pct}",
+       "actionCamShoulderCenter": "Ortada",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Saldırı Düğmesini Göster",
+       "showDailyRewardsChest": "Günlük Ödül Sandığını Göster",
+       "mobileCameraJoystick": "Kamera joystick'i",
+diff --git a/src/ui/i18n.resolved.generated/vi_VN.ts b/src/ui/i18n.resolved.generated/vi_VN.ts
+index 3bbaed28..0b8405ef 100644
+--- a/src/ui/i18n.resolved.generated/vi_VN.ts
++++ b/src/ui/i18n.resolved.generated/vi_VN.ts
+@@ -2503,6 +2503,10 @@ export const vi_VN: EnTranslations = {
+       "actionCamShoulderLeft": "Trái {pct}",
+       "actionCamShoulderRight": "Phải {pct}",
+       "actionCamShoulderCenter": "Giữa",
++      "firstPersonMode": "First Person (Fully Zoomed In)",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "Hiển Thị Nút Tấn Công",
+       "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày",
+       "mobileCameraJoystick": "Cần điều khiển máy ảnh",
+diff --git a/src/ui/i18n.resolved.generated/zh_CN.ts b/src/ui/i18n.resolved.generated/zh_CN.ts
+index bbe50b4a..c73d9b58 100644
+--- a/src/ui/i18n.resolved.generated/zh_CN.ts
++++ b/src/ui/i18n.resolved.generated/zh_CN.ts
+@@ -2503,6 +2503,10 @@ export const zh_CN: EnTranslations = {
+       "actionCamShoulderLeft": "左 {pct}",
+       "actionCamShoulderRight": "右 {pct}",
+       "actionCamShoulderCenter": "居中",
++      "firstPersonMode": "第一人称（完全拉近时）",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "显示攻击按钮",
+       "showDailyRewardsChest": "显示每日奖励宝箱",
+       "mobileCameraJoystick": "摄像机摇杆",
+diff --git a/src/ui/i18n.resolved.generated/zh_TW.ts b/src/ui/i18n.resolved.generated/zh_TW.ts
+index 06715a20..c0100e7e 100644
+--- a/src/ui/i18n.resolved.generated/zh_TW.ts
++++ b/src/ui/i18n.resolved.generated/zh_TW.ts
+@@ -2503,6 +2503,10 @@ export const zh_TW: EnTranslations = {
+       "actionCamShoulderLeft": "左 {pct}",
+       "actionCamShoulderRight": "右 {pct}",
+       "actionCamShoulderCenter": "置中",
++      "firstPersonMode": "第一人稱（完全拉近時）",
++      "firstPersonOff": "Off",
++      "firstPersonBody": "Show Body",
++      "firstPersonNoBody": "No Body",
+       "showAttackButton": "顯示攻擊按鈕",
+       "showDailyRewardsChest": "顯示每日獎勵寶箱",
+       "mobileCameraJoystick": "攝影機搖桿",
+diff --git a/src/ui/options_view.ts b/src/ui/options_view.ts
+index 54e70772..229e9ebc 100644
+--- a/src/ui/options_view.ts
++++ b/src/ui/options_view.ts
+@@ -985,6 +985,13 @@ export function buildInterfaceControls(
+     // Camera comfort (mouse-look direction), so it sits with the comfort
+     // toggles rather than the Combat tab's attack/action-bar cluster.
+     boolToggle(s, 'invertLookY', 'hud.options.invertLookY'),
++    // First person at the closest zoom: off, with the body below the head, or
++    // with no body at all (render/first_person_core.ts).
++    choice(s, 'firstPersonMode', 'hudChrome.options.firstPersonMode', [
++      { value: 0, labelKey: 'hudChrome.options.firstPersonOff' },
++      { value: 1, labelKey: 'hudChrome.options.firstPersonBody' },
++      { value: 2, labelKey: 'hudChrome.options.firstPersonNoBody' },
++    ]),
+     boolToggle(s, 'landingHighContrast', 'hudChrome.options.highContrastBackground'),
+     boolToggle(s, 'showDevBadges', 'hudChrome.options.showDevBadges'),
+     boolToggle(s, 'showWalletOnCharacterScreen', 'hudChrome.options.showWalletOnCharacterScreen'),
+diff --git a/tests/architecture.test.ts b/tests/architecture.test.ts
+index 233a7e19..61dc3dfd 100644
+--- a/tests/architecture.test.ts
++++ b/tests/architecture.test.ts
+@@ -1240,6 +1240,7 @@ const RENDER_PURE_CORES = [
+   'src/render/program_variant_settle_core.ts',
+   'src/render/camera_director_core.ts',
+   'src/render/vehicle_camera_core.ts',
++  'src/render/first_person_core.ts',
+   'src/render/camera_feel_core.ts',
+   'src/render/cast_bar.ts',
+   'src/render/character_effects_core.ts',
+diff --git a/tests/camera_view_settings.test.ts b/tests/camera_view_settings.test.ts
+index e2d86393..6235d22e 100644
+--- a/tests/camera_view_settings.test.ts
++++ b/tests/camera_view_settings.test.ts
+@@ -9,11 +9,16 @@ import { Settings } from '../src/game/settings';
+ import type { ActionCamSide } from '../src/render/action_cam_core';
+ 
+ function fakeRenderer() {
+-  const calls: { fov: number[]; action: Array<[boolean, ActionCamSide]> } = { fov: [], action: [] };
++  const calls: { fov: number[]; action: Array<[boolean, ActionCamSide]>; firstPerson: number[] } = {
++    fov: [],
++    action: [],
++    firstPerson: [],
++  };
+   return {
+     calls,
+     setCameraFov: (deg: number) => calls.fov.push(deg),
+     actionCam: { set: (on: boolean, side: ActionCamSide) => calls.action.push([on, side]) },
++    firstPerson: { setMode: (mode: number) => calls.firstPerson.push(mode) },
+   };
+ }
+ 
+@@ -35,6 +40,19 @@ describe('camera_view_settings', () => {
+     applyCameraViewSettings(r, settings);
+     expect(r.calls.fov).toEqual([72]);
+     expect(r.calls.action).toEqual([[true, -1]]);
++    expect(r.calls.firstPerson).toEqual([0]);
++  });
++
++  it('persists and pushes the first-person mode, clamped to its range', () => {
++    const settings = new Settings();
++    const r = fakeRenderer();
++    expect(applyCameraViewSetting(r, settings, 'firstPersonMode', 2)).toBe(true);
++    expect(settings.get('firstPersonMode')).toBe(2);
++    expect(r.calls.firstPerson).toEqual([2]);
++    expect(applyCameraViewSetting(r, settings, 'firstPersonMode', 9)).toBe(true);
++    expect(settings.get('firstPersonMode')).toBe(2);
++    expect(applyCameraViewSetting(r, settings, 'firstPersonMode', 1)).toBe(true);
++    expect(r.calls.firstPerson.at(-1)).toBe(1);
+   });
+ 
+   it('persists and pushes the Action Cam keys, keeping the other half', () => {
+diff --git a/tests/first_person_core.test.ts b/tests/first_person_core.test.ts
+new file mode 100644
+index 00000000..611e9894
+--- /dev/null
++++ b/tests/first_person_core.test.ts
+@@ -0,0 +1,84 @@
++import { describe, expect, it } from 'vitest';
++import { SETTING_RANGES } from '../src/game/settings';
++import {
++  createFirstPersonPose,
++  FIRST_PERSON_BODY,
++  FIRST_PERSON_ENGAGE_DIST,
++  FIRST_PERSON_EYE_FRACTION,
++  FIRST_PERSON_FALLBACK_EYE,
++  FIRST_PERSON_FORWARD,
++  FIRST_PERSON_LOOK_DIST,
++  FIRST_PERSON_NO_BODY,
++  FIRST_PERSON_OFF,
++  FIRST_PERSON_PITCH_BIAS,
++  firstPersonActive,
++  firstPersonEyeHeight,
++  firstPersonHiding,
++  firstPersonModeFromSetting,
++  firstPersonPoseInto,
++} from '../src/render/first_person_core';
++
++describe('first_person_core', () => {
++  it('engages at the closest zoom the wheel reaches, and only there', () => {
++    expect(FIRST_PERSON_ENGAGE_DIST).toBe(SETTING_RANGES.cameraZoom.min);
++    const at = (mode: 0 | 1 | 2, camDist: number, blocked = false) =>
++      firstPersonActive({ mode, camDist, blocked });
++    expect(at(FIRST_PERSON_BODY, SETTING_RANGES.cameraZoom.min)).toBe(true);
++    expect(at(FIRST_PERSON_NO_BODY, SETTING_RANGES.cameraZoom.min)).toBe(true);
++    // One wheel notch out is third person again.
++    expect(at(FIRST_PERSON_BODY, SETTING_RANGES.cameraZoom.min + 0.5)).toBe(false);
++    expect(at(FIRST_PERSON_BODY, SETTING_RANGES.cameraZoom.def)).toBe(false);
++  });
++
++  it('off (the default) never engages, and a blocked frame keeps the chase camera', () => {
++    expect(SETTING_RANGES.firstPersonMode.def).toBe(FIRST_PERSON_OFF);
++    expect(firstPersonActive({ mode: FIRST_PERSON_OFF, camDist: 3, blocked: false })).toBe(false);
++    expect(firstPersonActive({ mode: FIRST_PERSON_BODY, camDist: 3, blocked: true })).toBe(false);
++  });
++
++  it('clamps the stored setting to a mode', () => {
++    expect(firstPersonModeFromSetting(0)).toBe(FIRST_PERSON_OFF);
++    expect(firstPersonModeFromSetting(1)).toBe(FIRST_PERSON_BODY);
++    expect(firstPersonModeFromSetting(2)).toBe(FIRST_PERSON_NO_BODY);
++    expect(firstPersonModeFromSetting(1.4)).toBe(FIRST_PERSON_BODY);
++    expect(firstPersonModeFromSetting(7)).toBe(FIRST_PERSON_OFF);
++    expect(firstPersonModeFromSetting(-1)).toBe(FIRST_PERSON_OFF);
++    expect(firstPersonModeFromSetting(Number.NaN)).toBe(FIRST_PERSON_OFF);
++  });
++
++  it('hides the head for the body mode and everything for the no-body mode', () => {
++    expect(firstPersonHiding(FIRST_PERSON_BODY, true)).toEqual({ head: true, body: false });
++    expect(firstPersonHiding(FIRST_PERSON_NO_BODY, true)).toEqual({ head: true, body: true });
++    // Outside first person nothing hides, whatever the mode.
++    for (const mode of [FIRST_PERSON_OFF, FIRST_PERSON_BODY, FIRST_PERSON_NO_BODY] as const)
++      expect(firstPersonHiding(mode, false)).toEqual({ head: false, body: false });
++    // Reused records: no per-frame allocation.
++    expect(firstPersonHiding(FIRST_PERSON_BODY, true)).toBe(firstPersonHiding(1, true));
++  });
++
++  it('seats the eye on the model, with the saddle lift and the entity scale', () => {
++    expect(firstPersonEyeHeight(2, 0, 1)).toBeCloseTo(2 * FIRST_PERSON_EYE_FRACTION);
++    expect(firstPersonEyeHeight(2, 1, 1)).toBeCloseTo(2 * FIRST_PERSON_EYE_FRACTION + 1);
++    expect(firstPersonEyeHeight(2, 0, 1.5)).toBeCloseTo(3 * FIRST_PERSON_EYE_FRACTION);
++    expect(firstPersonEyeHeight(0, 0, 1)).toBe(FIRST_PERSON_FALLBACK_EYE);
++  });
++
++  it('places the eye ahead of the head and looks along the camera yaw', () => {
++    const pose = createFirstPersonPose();
++    // yaw 0 faces +z; the resting pitch minus the bias looks level.
++    const out = firstPersonPoseInto(pose, 10, 5, 20, 0, FIRST_PERSON_PITCH_BIAS, 1.8);
++    expect(out).toBe(pose);
++    expect(out.x).toBeCloseTo(10);
++    expect(out.y).toBeCloseTo(6.8);
++    expect(out.z).toBeCloseTo(20 + FIRST_PERSON_FORWARD);
++    expect(out.lookX).toBeCloseTo(10);
++    expect(out.lookY).toBeCloseTo(6.8);
++    expect(out.lookZ).toBeCloseTo(out.z + FIRST_PERSON_LOOK_DIST);
++    // Turned to +x and pitched down: the look target drops below the eye.
++    firstPersonPoseInto(pose, 0, 0, 0, Math.PI / 2, 1, 1.8);
++    expect(pose.x).toBeCloseTo(FIRST_PERSON_FORWARD);
++    expect(pose.lookX).toBeGreaterThan(pose.x);
++    expect(pose.lookY).toBeLessThan(pose.y);
++    expect(pose.lookZ).toBeCloseTo(pose.z);
++  });
++});
+diff --git a/tests/monolith_budget.test.ts b/tests/monolith_budget.test.ts
+index de91470a..e5650334 100644
+--- a/tests/monolith_budget.test.ts
++++ b/tests/monolith_budget.test.ts
+@@ -1045,7 +1045,10 @@ const MONOLITHS: MonolithRow[] = [
+     // LOWERED 12405 -> 12400 with the torched mudfin hut fire: the burn cue's two
+     // inline bursts moved into hut_fire_fx.ts (the particle cloud owns and ticks it),
+     // leaving a one-line hand-off plus the light-pool hook. Same headroom as before.
+-    ceiling: 12400,
++    // LOWERED 12400 -> 12392 when the camera's spatial-audio block moved to
++    // src/render/camera_audio_listener.ts, which also paid for the first-person
++    // hook (src/render/first_person_camera.ts). Same headroom as before.
++    ceiling: 12392,
+     seam: 'a new src/render/<thing>.ts module the renderer calls (src/render/CLAUDE.md)',
+   },
+   {
+diff --git a/tests/options_view.test.ts b/tests/options_view.test.ts
+index c056efc0..b27d27a6 100644
+--- a/tests/options_view.test.ts
++++ b/tests/options_view.test.ts
+@@ -868,6 +868,7 @@ const GENERAL_KEYS = [
+   'colorblindMode',
+   'reduceMotion',
+   'invertLookY',
++  'firstPersonMode',
+   'landingHighContrast',
+   'showDevBadges',
+   'showWalletOnCharacterScreen',
+@@ -1691,3 +1692,23 @@ describe('options_view: the desktop display-mode picker replaces the fullscreen
+     }
+   });
+ });
++
++describe('options_view: first-person camera row', () => {
++  it('offers off, show body and no body in the General tab, reading the stored mode', () => {
++    const all = buildInterfaceControls(makeSource({ firstPersonMode: 2 }));
++    const row = all.find((c) => 'key' in c && c.key === 'firstPersonMode');
++    expect(row).toMatchObject({
++      control: 'choice',
++      category: 'general',
++      labelKey: 'hudChrome.options.firstPersonMode',
++      current: 2,
++    });
++    if (row?.control !== 'choice') throw new Error('no first-person row');
++    expect(row.options).toEqual([
++      { value: 0, labelKey: 'hudChrome.options.firstPersonOff' },
++      { value: 1, labelKey: 'hudChrome.options.firstPersonBody' },
++      { value: 2, labelKey: 'hudChrome.options.firstPersonNoBody' },
++    ]);
++    expect(SETTING_RANGES.firstPersonMode).toEqual({ min: 0, max: 2, def: 0 });
++  });
++});
+-- 
+2.43.0
+
