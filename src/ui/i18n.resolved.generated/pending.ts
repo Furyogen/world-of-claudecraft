@@ -9,25 +9,120 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "es_ES": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "fr_FR": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "fr_CA": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "de_DE": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "zh_CN": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "zh_TW": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "ko_KR": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "ja_JP": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "pt_BR": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "ru_RU": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "cs_CZ": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "nl_NL": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "pl_PL": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "id_ID": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "tr_TR": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "sv_SE": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "vi_VN": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ],
+  "da_DK": [
+    "hudChrome.options.firstPersonBody",
+    "hudChrome.options.firstPersonMode",
+    "hudChrome.options.firstPersonNoBody",
+    "hudChrome.options.firstPersonOff"
+  ]
 };
