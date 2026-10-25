@@ -28,7 +28,7 @@ import {
 } from '../game/ui_tier_knobs';
 import { voice, voiceDistanceGain } from '../game/voice';
 import type { ClaudiumStoreItem } from '../net/economy_sdk';
-import { castBarState, consumeBarState, mountSummonBarState } from '../render/cast_bar';
+import { castBarState, consumeBarState, mountSummonBarStateFor } from '../render/cast_bar';
 import {
   CharacterPreview,
   modularKeyFor,
@@ -9178,7 +9178,7 @@ export class Hud {
     ) {
       playerCast.visible = false;
     }
-    const playerMountSummon = mountSummonBarState(p.mountCastRemaining, p.mountCastKey);
+    const playerMountSummon = mountSummonBarStateFor(p);
     const playerConsume = consumeBarState(p.eating, p.drinking);
     let playerCastInput = this.playerCastBarInput;
     if (playerCastInput) {

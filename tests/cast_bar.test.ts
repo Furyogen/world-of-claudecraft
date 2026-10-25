@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { castBarState, consumeBarState, mountSummonBarState } from '../src/render/cast_bar';
+import {
+  castBarState,
+  consumeBarState,
+  mountSummonBarState,
+  mountSummonBarStateFor,
+} from '../src/render/cast_bar';
 import { MOUNT_SUMMON_SECONDS } from '../src/sim/mounts';
 import { CONSUME_DURATION, type Consuming, type Entity } from '../src/sim/types';
 
@@ -243,6 +248,35 @@ describe('mount summon bar', () => {
   it('carries the correct mountKey for the painter to localize', () => {
     const epic = mountSummonBarState(1.0, 'thunderstrut_gobbler');
     expect(epic.mountKey).toBe('thunderstrut_gobbler');
+  });
+
+  // A worn mount skin is what the rider will see, so the summon line names the
+  // skin (Bonebound Rickshaw), never the reins being clicked (Valorsteed).
+  it('names the worn mount skin instead of the ridden mount', () => {
+    const s = mountSummonBarState(1.0, 'valorsteed', 'rickshaw_mount');
+    expect(s.visible).toBe(true);
+    expect(s.mountKey).toBe('rickshaw_mount');
+  });
+
+  it('keeps the mount key when no skin, or an unknown one, is worn', () => {
+    expect(mountSummonBarState(1.0, 'valorsteed', null).mountKey).toBe('valorsteed');
+    expect(mountSummonBarState(1.0, 'valorsteed', 'rallycart_rxt').mountKey).toBe('valorsteed');
+  });
+
+  it('stays hidden during a dismount channel whatever skin is worn', () => {
+    expect(mountSummonBarState(0.5, '', 'rickshaw_mount').visible).toBe(false);
+  });
+
+  // The HUD reads the bar straight off the player entity: the worn skin must
+  // ride along, or the summon line falls back to the reins' own mount.
+  it('reads the worn skin off the entity (the HUD player bar)', () => {
+    const rider = { mountCastRemaining: 1.0, mountCastKey: 'valorsteed', mountSkinId: null };
+    expect(mountSummonBarStateFor(rider).mountKey).toBe('valorsteed');
+    const skinned = { ...rider, mountSkinId: 'rickshaw_mount' };
+    expect(mountSummonBarStateFor(skinned)).toEqual(
+      mountSummonBarState(1.0, 'valorsteed', 'rickshaw_mount'),
+    );
+    expect(mountSummonBarStateFor(skinned).mountKey).toBe('rickshaw_mount');
   });
 });
 
