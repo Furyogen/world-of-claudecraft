@@ -26,7 +26,7 @@
 
 import { MOUNT_RACE_START_PLATFORM, STABLE_PADDOCK, TRAINING_MOUNT_KEY } from './content/mounts';
 import { QUESTS } from './data';
-import { forceDismount, forceTrainingMount } from './mounts';
+import { forceDismount, forceTrainingMount, grantRidingSkill } from './mounts';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import {
@@ -120,8 +120,8 @@ export function learnRiding(ctx: SimContext, npcId: number, pid?: number): void 
     return;
   }
   meta.copper -= RIDING_SKILL_FEE_COPPER;
-  meta.ridingTrained = true;
   ctx.notice(meta.entityId, NOTICE_RIDING_LEARNED);
+  grantRidingSkill(ctx, meta, true);
 }
 
 /** Whether this player still needs to clear the course for the accepted riding

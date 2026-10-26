@@ -537,7 +537,10 @@ const MONOLITHS: MonolithRow[] = [
     // (Reuben's call): both parent pins for the record, the release 18081 and the
     // branch 18235; the two sides' additions compose to 18093 by wc -l on the merged
     // tree (after biome). Exact count, zero slack.
-    ceiling: 18093,
+    // Lowered with the Summon Mount spell: the action-bar world-input refresh
+    // (a field-by-field copy for the first frame and every later one) moved to
+    // src/ui/hud/action_bar/action_bar_world_input.ts. wc -l after biome.
+    ceiling: 18077,
     seam: 'pure view core + thin painter on PainterHost (src/ui/CLAUDE.md)',
   },
   {

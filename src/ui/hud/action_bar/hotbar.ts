@@ -367,17 +367,33 @@ export function shouldSeedFormBar(
 // on the bar. Computed from the loadout's `alloc` directly rather than the live
 // `known` list, since switchTalentLoadout's server round trip has not necessarily
 // resolved yet when the client applies the bar.
+// `ridingTrained` keeps Summon Mount (the riding skill's spell) known across the
+// switch: riding is character state, never part of a talent loadout.
 export function loadoutKnownAbilityIds(
   cls: PlayerClass,
   alloc: TalentAllocation,
   level: number,
+  ridingTrained = false,
 ): Set<string> {
   const mods = computeTalentModifiers(cls, alloc, level);
   return new Set(
-    abilitiesKnownAt(cls, level, mods)
+    abilitiesKnownAt(cls, level, mods, undefined, ridingTrained)
       .filter((known) => isAbilityActionBarEligible(known.def))
       .map((known) => known.def.id),
   );
+}
+
+/** loadoutKnownAbilityIds for the live world's class, level and riding skill. */
+export function loadoutKnownAbilityIdsFor(
+  world: {
+    readonly cfg: { readonly playerClass: PlayerClass };
+    readonly player: { readonly level: number };
+    ridingTrained(): boolean;
+  },
+  alloc: TalentAllocation,
+): Set<string> {
+  const { playerClass } = world.cfg;
+  return loadoutKnownAbilityIds(playerClass, alloc, world.player.level, world.ridingTrained());
 }
 
 function normalizeLoadoutBarSlots(

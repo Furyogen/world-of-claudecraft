@@ -32,6 +32,7 @@
 // in this file.
 
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MOUNT_SPELL_ID } from '../src/sim/content/mount_spell';
 import type { ResolvedAbility } from '../src/sim/sim';
 import { tEntity } from '../src/ui/entity_i18n';
 import type { HotbarAction } from '../src/ui/hud/action_bar/hotbar';
@@ -869,5 +870,52 @@ describe('spellbook: a language switch repaints through relocalize(), not throug
     setLanguage(OTHER);
     h.win.relocalize();
     expect(h.root.innerHTML, 'relocalize painted a closed spellbook').toBe('');
+  });
+});
+
+// Summon Mount (the riding skill's spell) leads the book, and its icon follows
+// the worn mount skin, which the Cosmetics window can change while the book is
+// open: the per-frame band rewrites that one icon, never the whole list.
+describe('the Summon Mount row', () => {
+  function mountHarness() {
+    const h = harness();
+    const look = { skin: null as string | null };
+    h.state.known = [...h.state.known, resolved(MOUNT_SPELL_ID)];
+    const base = h.deps.world;
+    h.deps.world = () =>
+      ({
+        ...(base() as object),
+        player: { level: 60, mountSkinId: look.skin },
+        ownedMounts: () => ['valorsteed'],
+      }) as never;
+    open(h);
+    const icon = () =>
+      h.root.querySelector<HTMLElement>(`[data-ability-id="${MOUNT_SPELL_ID}"] .spell-icon`);
+    return { h, look, icon };
+  }
+
+  it('is the first row of the book, above Attack', () => {
+    const { h } = mountHarness();
+    const first = h.root.querySelector<HTMLElement>('.spell-row');
+    expect(first?.dataset.abilityId).toBe(MOUNT_SPELL_ID);
+  });
+
+  it('repaints only its icon when the worn skin changes while open', () => {
+    const { h, look, icon } = mountHarness();
+    const before = icon();
+    expect(before?.style.backgroundImage).not.toContain('rickshaw_mount');
+    look.skin = 'rickshaw_mount';
+    const watch = watchDom();
+    h.win.tickOpen();
+    watch.stop();
+    // The same node (no list rebuild), now drawing the skin's art.
+    expect(icon()).toBe(before);
+    expect(icon()?.style.backgroundImage).toContain('rickshaw_mount');
+    expect(watch.queries, 'the skin check re-queried the DOM').toEqual([]);
+    // Settled: the next unchanged frame writes nothing.
+    const settled = watchDom();
+    h.win.tickOpen();
+    settled.stop();
+    expect(settled.writes).toEqual([]);
   });
 });

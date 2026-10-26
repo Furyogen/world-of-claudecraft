@@ -13052,6 +13052,10 @@ export const fr_CA: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "summon_mount": {
+        "name": "Summon Mount",
+        "description": "Summon your fastest mount after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground."
+      },
       "sport_kick": {
         "name": "Coup de pied",
         "description": "Poussez le ballon au sol vers le point visé."

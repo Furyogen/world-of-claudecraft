@@ -2137,6 +2137,8 @@ export type TranslationKeyFlat =
   | 'entities.abilities.summon_imp.name'
   | 'entities.abilities.summon_infernal.description'
   | 'entities.abilities.summon_infernal.name'
+  | 'entities.abilities.summon_mount.description'
+  | 'entities.abilities.summon_mount.name'
   | 'entities.abilities.summon_succubus.description'
   | 'entities.abilities.summon_succubus.name'
   | 'entities.abilities.summon_tithefiend.description'

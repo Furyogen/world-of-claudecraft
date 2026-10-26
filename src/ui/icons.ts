@@ -2562,6 +2562,7 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   ),
   earthquake: r('earth', 'earthBrown', ['sunburst'], ['crack']),
   attack: r('steel', 'steel', ['sword'], ['motion']),
+  summon_mount: r('leather', 'earthBrown', ['paw', { p: 'boot', ...BR }], ['motion']),
   // Ignivar and Varkhul encounter-journal icons. These ids are UI-owned rather
   // than cast ids so related fire mechanics remain visually distinct at a glance.
   raid_ignivar_forge_strike: r('fire', 'ember', ['mace', { p: 'flame', ...BR }], ['glow']),
@@ -4447,6 +4448,9 @@ const WARLOCK_TALENT_IMAGE_IDS = new Set<string>([
   'wlk_r20_curse_mastery',
 ]);
 export const ABILITY_IMAGE_IDS = new Set<string>([
+  // The riding skill's Summon Mount (class 'general'): its painting is the
+  // default mount's reins art; the bar and spellbook draw the rider's own look.
+  'summon_mount',
   // paladin (original project art for the overhaul and talent abilities, plus
   // the existing CraftPix premium "RPG Paladin skill icons" base set)
   'divine_ascension',

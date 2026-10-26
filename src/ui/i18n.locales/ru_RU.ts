@@ -927,6 +927,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lightning_overload.name': 'Дуговая перегрузка',
   'entities.abilities.lightning_overload.description':
     'Пассивно: Дуговая стрела и Разветвленная молния с вероятностью 20% вызывают Перегрузку, поражая первую цель повторно на 50% нанесённого урона и даруя 1 Гром. (Стихии)',
+  'entities.abilities.summon_mount.description':
+    'Через 1,5 сек. призывает ваше самое быстрое ездовое животное в выбранном вами облике. Примените снова верхом, чтобы спешиться. Нельзя использовать в бою или на поле боя.',
+  'entities.abilities.summon_mount.name': 'Призыв транспорта',
   'entities.abilities.thunderstorm.name': 'Раскол бури',
   'entities.abilities.thunderstorm.description':
     'Призывает раскат грома, нанося {damage} урона от природы врагам в пределах 10 м и замедляя их на 50% на 5 сек. Восстанавливает 8% от максимального запаса маны. Урон растёт с силой заклинаний. (Стихии)',

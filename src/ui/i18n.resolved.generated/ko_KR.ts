@@ -13052,6 +13052,10 @@ export const ko_KR: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "summon_mount": {
+        "name": "탈것 소환",
+        "description": "1.5초 후 가장 빠른 탈것을 소환하며, 선택한 탈것 스킨으로 표시됩니다. 탈것을 탄 상태에서 다시 사용하면 내립니다. 전투 중이나 전장에서는 사용할 수 없습니다."
+      },
       "sport_kick": {
         "name": "킥",
         "description": "조준 지점을 향해 공을 땅볼로 차 보냅니다."

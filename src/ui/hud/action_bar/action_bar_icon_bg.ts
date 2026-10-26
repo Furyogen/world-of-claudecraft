@@ -5,6 +5,8 @@
 // coordinator's state), so the Hud passes it through as a bare function.
 
 import { iconDataUrl } from '../../icons';
+import { mountSpellIconUrl } from '../../mount_spell_icon';
+import { MOUNT_SPELL_ICON_PREFIX } from '../../mount_spell_icon_core';
 import {
   ABILITY_ICON_PREFIX,
   ATTACK_ICON_KEY,
@@ -15,6 +17,9 @@ import {
 export function actionBarIconBg(iconKey: string): string {
   if (iconKey === EMPTY_ICON_KEY) return '';
   if (iconKey === ATTACK_ICON_KEY) return `url(${iconDataUrl('ability', 'attack')})`;
+  if (iconKey.startsWith(MOUNT_SPELL_ICON_PREFIX)) {
+    return `url(${mountSpellIconUrl(iconKey.slice(MOUNT_SPELL_ICON_PREFIX.length))})`;
+  }
   if (iconKey.startsWith(ITEM_ICON_PREFIX)) {
     return `url(${iconDataUrl('item', iconKey.slice(ITEM_ICON_PREFIX.length))})`;
   }

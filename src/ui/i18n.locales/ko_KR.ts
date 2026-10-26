@@ -900,6 +900,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lightning_overload.description':
     '지속 효과: 전격 화살과 갈래 번개는 20% 확률로 과부하가 발동하여 첫 번째 대상에게 입힌 피해의 50%만큼 다시 적중시키고 천둥을 1 얻습니다. (천둥소환)',
   'entities.abilities.lightning_overload.name': 'Arc Overload',
+  'entities.abilities.summon_mount.description':
+    '1.5초 후 가장 빠른 탈것을 소환하며, 선택한 탈것 스킨으로 표시됩니다. 탈것을 탄 상태에서 다시 사용하면 내립니다. 전투 중이나 전장에서는 사용할 수 없습니다.',
+  'entities.abilities.summon_mount.name': '탈것 소환',
   'entities.abilities.thunderstorm.description':
     '천둥벼락을 내리쳐 10야드 이내의 모든 적에게 {damage}의 자연 피해를 입히고 5초 동안 이동 속도를 50% 감소시킵니다. 최대 마나의 8%를 회복합니다. 피해량은 주문력에 따라 증가합니다. (천둥소환)',
   'entities.abilities.thunderstorm.name': 'Stormbreak',

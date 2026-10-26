@@ -5685,7 +5685,8 @@ export class Sim {
     // shared known-list builder, so ClientWorld's recomputed list matches.)
     // questsDone gates quest-earned abilities (paladin recall_the_fallen); it is
     // restored before this runs at load, so a returning character keeps them.
-    meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods, meta.questsDone);
+    const riding = meta.ridingTrained === true; // the riding skill teaches Summon Mount
+    meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods, meta.questsDone, riding);
     if (announce) {
       for (const k of meta.known) {
         const prev = before.get(k.def.id);

@@ -111,7 +111,7 @@ export function offensiveAbilityBonus(
   ability: Pick<AbilityDef, 'class' | 'school' | 'scalesWith'>,
   mods: Pick<TalentModifiers, 'spec'>,
 ): number {
-  if (!mods.spec) return 0;
+  if (!mods.spec || ability.class === 'general') return 0;
   const tuning = OFFENSIVE_SPEC_TUNING[ability.class]?.[mods.spec];
   if (!tuning) return 0;
   const bonus = isPhysicalBucketAbility(ability) ? tuning.physical : tuning.spell;

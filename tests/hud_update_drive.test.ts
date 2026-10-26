@@ -784,13 +784,6 @@ const HUD_UPDATE_DRIVES: readonly DriveRow[] = [
     why: 'selects the active source page for the touch action ring; no DOM write',
   },
   {
-    call: 'this.groundAim.activeSlot',
-    band: 'frame',
-    gate: 'actionBarWorld',
-    surface: 'none',
-    why: 'stamps the armed ground-aim slot into the bar world snapshot so the owning button paints its aiming accent; no DOM write of its own',
-  },
-  {
     call: 'this.mobileActionRingPainter.paint',
     band: 'frame',
     gate: 'this.isMobileLayout() && this.mobileActionRingView && this.mobileActionRingPainter',
@@ -1872,7 +1865,10 @@ describe('Hud.update() drives exactly the registered set, on the registered band
       // surface (51 / 96 measured on the merged tree). The release's Eastbrook
       // ferry countdown panel (hud ferryHud) is one more chrome surface at the
       // fourth release/v0.44.0 base merge (97 measured on the merged tree).
-    ).toEqual({ window: 51, chrome: 97, none: 18 });
+      // none 18 -> 17: the Summon Mount spell's action-bar world-input refresh
+      // moved to action_bar_world_input.ts, taking the ground-aim slot read
+      // (registered as drives-nothing) into a plain argument the walker skips.
+    ).toEqual({ window: 51, chrome: 97, none: 17 });
     const windows = HUD_UPDATE_DRIVES.filter((r) => r.surface === 'window');
     expect(windows.map((r) => r.call)).toContain('this.spellbookWindow.tickOpen');
     expect(windows.map((r) => r.call)).toContain('this.refreshOpenTownFocusIfChanged');

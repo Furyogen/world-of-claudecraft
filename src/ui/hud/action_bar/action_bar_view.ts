@@ -72,6 +72,7 @@ import { flowStateDiscountedCost } from '../../../sim/combat/shaman_talents';
 import { thundercallPayoffGlowActive } from '../../../sim/combat/shaman_thundercall';
 import { leavingRestrictedToggle } from '../../../sim/combat/toggle_buff';
 import { getItemCooldownDuration } from '../../../sim/content/item_cooldowns';
+import { MOUNT_SPELL_ID } from '../../../sim/content/mount_spell';
 import { countRawInSlots } from '../../../sim/item_lock';
 import { isAscensionEmpoweredAbility } from '../../../sim/paladin_devotion';
 import {
@@ -330,6 +331,10 @@ export interface ActionBarWorldInput {
   entities: Iterable<OwnedDominionServant>;
   /** Source action-bar slot that owns the active ground aim, or null. */
   activeAimSlot: number | null;
+  /** The Summon Mount slot's icon key (mount_spell_icon_core.ts), carrying the
+   *  worn skin or summoned mount so the slot repaints when the look changes.
+   *  Absent before Riding is learned, when the generic ability icon stands in. */
+  mountSpellIconKey?: string;
 }
 
 /** One slot's derived state. All fields are mutated IN PLACE each tick; the object
@@ -547,6 +552,13 @@ export function secondaryRequirementsMet(
   return true;
 }
 
+/** An ability slot's icon key: the plain ability icon, except Summon Mount,
+ *  whose icon follows the rider's look (ActionBarWorldInput.mountSpellIconKey). */
+function abilityIconKey(abilityId: string, world: ActionBarWorldInput): string {
+  if (abilityId === MOUNT_SPELL_ID && world.mountSpellIconKey) return world.mountSpellIconKey;
+  return `${ABILITY_ICON_PREFIX}${abilityId}`;
+}
+
 /**
  * Build an action-bar view bound to one descriptor. The per-slot state array is
  * preallocated once here; tick() mutates it in place and returns the SAME references
@@ -749,7 +761,7 @@ export function createActionBarView(
           slot.kind = 'ability';
           slot.abilityId = ability.def.id;
           slot.itemId = null;
-          slot.iconKey = `${ABILITY_ICON_PREFIX}${ability.def.id}`;
+          slot.iconKey = abilityIconKey(ability.def.id, world);
           slot.cooldownRemaining = 0;
           slot.cooldownTotal = 0;
           slot.cooldownPercent = 0;
@@ -791,7 +803,7 @@ export function createActionBarView(
         slot.kind = 'ability';
         slot.abilityId = def.id;
         slot.itemId = null;
-        slot.iconKey = `${ABILITY_ICON_PREFIX}${def.id}`;
+        slot.iconKey = abilityIconKey(def.id, world);
         slot.cooldownRemaining = cd;
         slot.cooldownTotal = denom;
         slot.cooldownPercent =

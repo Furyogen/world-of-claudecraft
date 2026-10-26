@@ -871,6 +871,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lightning_overload.description':
     '被动：电弧箭和叉状闪电有20%几率触发超载，对其首个目标再次造成50%的已造成伤害，并获得1点雷霆。（唤雷）',
   'entities.abilities.lightning_overload.name': '电弧超载',
+  'entities.abilities.summon_mount.description':
+    '1.5 秒后召唤你最快的坐骑，并显示你选择的坐骑皮肤。骑乘时再次使用即可下坐骑。战斗中或战场内无法使用。',
+  'entities.abilities.summon_mount.name': '召唤坐骑',
   'entities.abilities.thunderstorm.description':
     '召唤雷鸣霹雳，对10码内的敌人造成{damage}点自然伤害，并使其减速50%，持续5秒。恢复你8%的最大法力值。伤害随法术强度提升。（唤雷）',
   'entities.abilities.thunderstorm.name': '碎风暴',

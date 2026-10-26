@@ -22,6 +22,7 @@
 // from mobile_action_page_view.ts and this module only looks up which page's
 // slot set contains the row's barSlot.
 
+import { MOUNT_SPELL_ID } from '../sim/content/mount_spell';
 import { ABILITIES } from '../sim/data';
 import type { ResolvedAbility } from '../sim/sim';
 import type { PlayerClass } from '../sim/types';
@@ -60,6 +61,9 @@ export interface SpellbookView {
    *  option). Attack is not an ability, so it rides the view beside `rows`
    *  instead of forging a fake ResolvedAbility row. */
   attackOnBar: boolean;
+  /** Rows pinned ABOVE the Attack row, first in the book: Summon Mount, once
+   *  Riding is learned (it sits in no class kit, so it arrives as a known extra). */
+  leadRows: SpellbookRow[];
   rows: SpellbookRow[];
   /** No rows rendered at all (the class kit was empty). */
   empty: boolean;
@@ -150,7 +154,8 @@ export function buildSpellbookView(input: SpellbookInput): SpellbookView {
     classId: input.classId,
     hasFormBars: input.hasFormBars,
     attackOnBar: input.attackOnBar,
-    rows,
+    leadRows: rows.filter((row) => row.abilityId === MOUNT_SPELL_ID),
+    rows: rows.filter((row) => row.abilityId !== MOUNT_SPELL_ID),
     empty: rows.length === 0,
   };
 }

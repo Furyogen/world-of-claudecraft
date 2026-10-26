@@ -1,0 +1,18 @@
+{
+  "class": "general",
+  "license": "World of ClaudeCraft project-generated art, project asset, rights reserved",
+  "iconSize": 128,
+  "sourcePacks": [
+    "public/ui/items (the Valorsteed reins painting, reused as the default Summon Mount look)"
+  ],
+  "runtimeDir": "public/ui/skills/general",
+  "abilities": [
+    {
+      "abilityId": "summon_mount",
+      "sourcePack": "public/ui/items",
+      "sourceFile": "public/ui/items/reins_valorsteed.webp",
+      "output": "summon_mount.webp",
+      "note": "Byte copy of the default mount's reins art: the spell's icon is the default look until a skin is worn or a faster mount is owned (src/ui/mount_spell_icon_core.ts)."
+    }
+  ]
+}

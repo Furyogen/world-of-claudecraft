@@ -12,6 +12,7 @@
 // markup + drag/tooltip wiring is covered by the spellbook_window.ts source guard.
 
 import { describe, expect, it } from 'vitest';
+import { MOUNT_SPELL_ID } from '../src/sim/content/mount_spell';
 import { ABILITIES, CLASSES } from '../src/sim/data';
 import type { ResolvedAbility } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
@@ -255,5 +256,29 @@ describe('buildSpellbookView: ClientWorld-vs-Sim parity', () => {
   it('is deterministic: identical inputs produce a deep-equal view', () => {
     const i = input({ known: [known('sim', KIT[0])] });
     expect(buildSpellbookView(i)).toEqual(buildSpellbookView(i));
+  });
+});
+
+// Summon Mount (the riding skill's spell) is in no class kit; the painter hands
+// it in as a known extra after the kit, and the view pins it ABOVE everything,
+// the Attack row included (leadRows render before appendAttackRow).
+describe('buildSpellbookView: Summon Mount leads the book', () => {
+  it('moves the known Summon Mount row out of the kit list into leadRows', () => {
+    const v = buildSpellbookView(
+      input({
+        abilities: [...FULL_KIT, MOUNT_SPELL_ID],
+        known: [known('client', KIT[0]), known('client', MOUNT_SPELL_ID)],
+        barAbilityIds: [MOUNT_SPELL_ID],
+      }),
+    );
+    expect(v.leadRows.map((r) => r.abilityId)).toEqual([MOUNT_SPELL_ID]);
+    expect(v.leadRows[0].onBar).toBe(true);
+    expect(v.rows.map((r) => r.abilityId)).toEqual([...KIT]);
+  });
+
+  it('has no lead row before Riding is learned', () => {
+    const v = buildSpellbookView(input({ known: [known('client', KIT[0])] }));
+    expect(v.leadRows).toEqual([]);
+    expect(v.rows.map((r) => r.abilityId)).toEqual([...KIT]);
   });
 });

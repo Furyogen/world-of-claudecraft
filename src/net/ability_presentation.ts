@@ -18,6 +18,8 @@ interface PresentationState {
   activeLoadout: number;
   equipment: Partial<Record<EquipSlot, string>>;
   questsDone: Set<string>;
+  /** The mirrored riding skill, which teaches Summon Mount (abilitiesKnownAt). */
+  ridingTrained(): boolean;
 }
 interface TalentWire {
   alloc?: unknown;
@@ -53,6 +55,6 @@ export function buildClientAbilityPresentation(
     loadouts,
     activeLoadout,
     mods,
-    known: abilitiesKnownAt(cls, level, mods, current.questsDone),
+    known: abilitiesKnownAt(cls, level, mods, current.questsDone, current.ridingTrained()),
   };
 }

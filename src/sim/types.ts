@@ -3727,7 +3727,7 @@ export interface ActionReplacementRule {
 export interface AbilityDef {
   id: string;
   name: string;
-  class: PlayerClass;
+  class: PlayerClass | 'general';
   cost: number; // rage/mana/energy (rank 1; ranks may override)
   // Destruction-only secondary-resource spend. Mana remains the primary cost;
   // the cast lifecycle validates and spends this deterministic 0..5 meter too.

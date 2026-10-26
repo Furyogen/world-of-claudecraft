@@ -33,6 +33,7 @@ import {
   setBonusFlag,
   WILDFANG_2PC_REDHARVEST_ENERGY_MULT,
 } from './ignivar_set_bonuses';
+import { MOUNT_SPELL_ABILITIES, MOUNT_SPELL_ID } from './mount_spell';
 import { PALADIN_CORE_ABILITIES } from './paladin_core_abilities';
 import { PRIEST_ABILITIES } from './priest';
 import { MENDING_WATERS_MANA_COST, TIDECALL_MANA_COST } from './shaman_tuning';
@@ -8706,6 +8707,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // and become known only through the selected row's `grant` effect.
   ...TALENT_ABILITIES_V2,
   ...PRIEST_ABILITIES,
+  ...MOUNT_SPELL_ABILITIES,
 
   // The Vale Cup sport kit (class-agnostic; docs/prd/vale-cup.md). Merged here
   // so every ABILITIES consumer (casting, icons, hotbar validation, tooltips)
@@ -9046,7 +9048,8 @@ function scaleEffect(
 // melee/spell/heal mults apply to every ability of the right school; per-ability
 // mods stack on top and also tune cost / cast time / cooldown.
 export function applyTalentMods(entry: KnownAbility, mods: TalentModifiers): void {
-  entry.outputScaling = buildAbilityOutputScaling(entry.def, entry.def.class, mods);
+  const cls = entry.def.class === 'general' ? null : entry.def.class;
+  entry.outputScaling = buildAbilityOutputScaling(entry.def, cls, mods);
   const am = mods.abilities[entry.def.id];
   if (entry.def.id === 'temporal_echo') {
     entry.echoConvertSingle = mods.selected[setBonusFlag('chronoweave', 2)]
@@ -9227,6 +9230,7 @@ export function abilitiesKnownAt(
   level: number,
   mods?: TalentModifiers,
   questsDone?: ReadonlySet<string>,
+  ridingTrained = false,
 ): KnownAbility[] {
   const out: KnownAbility[] = [];
   const baseIds = CLASSES[cls].abilities;
@@ -9234,6 +9238,10 @@ export function abilitiesKnownAt(
   const grantIds = new Set<string>();
   for (const g of mods?.grants ?? []) grantIds.add(g.ability);
   for (const g of mods?.grants ?? []) if (!ids.includes(g.ability)) ids.push(g.ability);
+  // The riding skill teaches Summon Mount, outside every class kit (a grant, so
+  // no level or spec gate applies). Appended last: known order is the RL action
+  // slot order, and a trained rider must not shift the class kit's slots.
+  if (ridingTrained) ids.push(MOUNT_SPELL_ID);
 
   for (const id of ids) {
     const def = ABILITIES[id];
