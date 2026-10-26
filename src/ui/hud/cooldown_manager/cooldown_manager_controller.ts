@@ -97,6 +97,8 @@ export const COOLDOWN_WORLD_FIELDS = [
   // The worn trinket (PR 4173's trinket slot): its action-bar state is per
   // frame like the aim slot, so the manager's own view mirrors it too.
   'wornTrinketId',
+  // The Summon Mount icon key: a worn-skin change must repaint the tracked icon.
+  'mountSpellIconKey',
 ] as const satisfies readonly Exclude<keyof ActionBarWorldInput, 'entities'>[];
 
 function copyWorldField<K extends keyof ActionBarWorldInput>(

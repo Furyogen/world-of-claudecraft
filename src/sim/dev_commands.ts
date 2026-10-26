@@ -33,7 +33,7 @@ import {
 } from './ignivar_dev_raid';
 import { IGNIVAR_FORGE_APPROACH_ID, IGNIVAR_RAID_ARENA_ID } from './ignivar_raid_ids';
 import { enterDungeon, instanceInfoAt } from './instances/dungeons';
-import { mountItemId, mountOwned } from './mounts';
+import { grantRidingSkill, mountItemId, mountOwned } from './mounts';
 import { MOUNT_TRAIN_MIN_LEVEL } from './mounts_training';
 import {
   isNythraxisDevMechanic,
@@ -568,7 +568,7 @@ export function handleDevChat(
       const maxGate = 20;
       const leveled = entity.level < maxGate;
       if (leveled) ctx.setPlayerLevel(maxGate, pid);
-      meta.ridingTrained = true;
+      grantRidingSkill(ctx, meta, true);
       let granted = 0;
       for (const key of MOUNT_KEYS) {
         if (mountOwned(meta, key)) continue;

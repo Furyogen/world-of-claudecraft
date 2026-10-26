@@ -34,10 +34,11 @@ import { BENISON_WHISPER_AURA_ID } from './priest/benison_dawnweave';
 import { isDispellableAura } from '../aura_classify';
 import { nearestAttackerId } from '../auto_acquire_target';
 import { completeAlliedHearthstoneCast } from '../content/faction_rewards';
+import { MOUNT_SPELL_ID } from '../content/mount_spell';
 import { ITEMS, isDelvePos, MOBS, zoneAt } from '../data';
 import { recalcPlayerStats } from '../entity';
 import { instanceInfoAt } from '../instances/dungeons';
-import { forceDismount } from '../mounts';
+import { castMountSpell, forceDismount } from '../mounts';
 import { canActivateDivineAscension, hasDevotion, spendDevotion } from '../paladin_devotion';
 import { scalePrimaryHealing } from '../primary_healing';
 import {
@@ -1057,6 +1058,13 @@ export function castAbility(
     return;
   }
   meta.lastActiveTick = ctx.tickCount; // a cast attempt is a deliberate action
+  // Summon Mount is a reins click, not a spell: the mount system owns every
+  // gate, the channel and the dismount (mounts.ts castMountSpell). Handing it
+  // over here keeps the cast path's own rules (GCD, dismount-on-cast) off it.
+  if (res.def.id === MOUNT_SPELL_ID) {
+    castMountSpell(ctx, p.id);
+    return;
+  }
   const ability = res.def;
   if (cancelRecedingShell(ctx, p, meta, ability.id)) return;
   if (ability.devotionCost && !hasDevotion(p, ability.devotionCost)) {

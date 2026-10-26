@@ -10764,7 +10764,7 @@ export function grantAbilityValues(id: string): InterpolationValues {
 
 function grantResourceName(id: string): string | null {
   const cls = ABILITIES[id]?.class;
-  const resource = cls ? CLASSES[cls]?.resourceType : null;
+  const resource = cls && cls !== 'general' ? CLASSES[cls]?.resourceType : null;
   if (resource === 'mana') return t('abilityUi.resources.mana');
   if (resource === 'rage') return t('abilityUi.resources.rage');
   if (resource === 'energy') return t('abilityUi.resources.energy');

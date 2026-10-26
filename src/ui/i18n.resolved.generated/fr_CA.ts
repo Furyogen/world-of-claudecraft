@@ -13052,6 +13052,10 @@ export const fr_CA: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "summon_mount": {
+        "name": "Summon Mount",
+        "description": "Summon your Valorsteed after 1.5 sec, wearing your chosen mount look. Without a Valorsteed, summons the fastest mount whose reins you carry. Use again while riding to dismount. Cannot be used in combat or in a battleground."
+      },
       "sport_kick": {
         "name": "Coup de pied",
         "description": "Poussez le ballon au sol vers le point visé."

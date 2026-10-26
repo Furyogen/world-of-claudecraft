@@ -203,7 +203,13 @@ export function fiestaApplyAugments(meta: PlayerMeta, e: Entity): void {
     if (s.scorePerKill) sp.scorePerKill = (sp.scorePerKill ?? 0) + s.scorePerKill;
   }
   meta.fiestaSpecial = sp;
-  meta.known = abilitiesKnownAt(meta.cls, e.level, meta.fiestaMods);
+  meta.known = abilitiesKnownAt(
+    meta.cls,
+    e.level,
+    meta.fiestaMods,
+    undefined,
+    meta.ridingTrained === true,
+  );
   const frac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
   recalcPlayerStats(e, meta.cls, meta.equipment, meta.fiestaMods, meta.equipmentInstance);
   e.hp = e.dead ? 0 : Math.max(1, Math.round(e.maxHp * frac));
@@ -222,7 +228,13 @@ export function clearFiestaAugments(meta: PlayerMeta, e: Entity): void {
   meta.fiestaAugments = [];
   meta.fiestaMods = null;
   meta.fiestaSpecial = {};
-  meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
+  meta.known = abilitiesKnownAt(
+    meta.cls,
+    e.level,
+    meta.talentMods,
+    undefined,
+    meta.ridingTrained === true,
+  );
   recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }
 
@@ -237,7 +249,13 @@ export function fiestaStandardize(ctx: SimContext, meta: PlayerMeta, e: Entity):
   // enters equal; the player's real allocation returns with fiestaRestoreChar.
   meta.talents = defaultBuild(meta.cls, FIESTA_STANDARD_LEVEL);
   meta.talentMods = computeCharacterModifiers(meta.cls, meta.talents, e.level, meta.equipment);
-  meta.known = abilitiesKnownAt(meta.cls, e.level, ctx.playerMods(meta));
+  meta.known = abilitiesKnownAt(
+    meta.cls,
+    e.level,
+    ctx.playerMods(meta),
+    undefined,
+    meta.ridingTrained === true,
+  );
   meta.wireRev++; // talents/loadouts swapped for the bout, refresh the wire promptly
   recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
 }
@@ -251,7 +269,13 @@ export function fiestaRestoreChar(meta: PlayerMeta, e: Entity): void {
   meta.talents = snap.talents;
   meta.talentMods = computeCharacterModifiers(meta.cls, meta.talents, e.level, meta.equipment);
   meta.fiestaRestore = null;
-  meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
+  meta.known = abilitiesKnownAt(
+    meta.cls,
+    e.level,
+    meta.talentMods,
+    undefined,
+    meta.ridingTrained === true,
+  );
   meta.wireRev++; // real talents restored, refresh the wire promptly
   recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }

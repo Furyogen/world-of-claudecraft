@@ -32,6 +32,7 @@ import { normalizeMountSkinId } from './content/mount_skins';
 import { MOUNT_KEYS, type MountKey, mountDef, TRAINING_MOUNT_KEY } from './content/mounts';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
+import { mountSpellMountKey } from './mount_spell';
 import { onShipDeck } from './ship_deck_presence';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
@@ -312,6 +313,42 @@ export function summonMountItem(ctx: SimContext, pid: number, key: string): bool
   e.mountCastRemaining = MOUNT_SUMMON_SECONDS;
   e.mountCastKey = def.key;
   return true;
+}
+
+/** Teach the riding skill, and with it the Summon Mount spell: the ONE writer of
+ *  `meta.ridingTrained = true` outside the save load, so the known list can never
+ *  miss the grant. `announce` emits the usual "learned a new ability" line. */
+export function grantRidingSkill(ctx: SimContext, meta: PlayerMeta, announce: boolean): void {
+  meta.ridingTrained = true;
+  ctx.refreshKnownAbilities(meta, announce);
+}
+
+/** The Summon Mount spell (content/mount_spell.ts), handed here by castAbility
+ *  before any cast-path rule runs. Riding: dismount, like clicking the reins you
+ *  ride. Otherwise summon mountSpellMountKey's pick (the Valorsteed when owned,
+ *  else the fastest reins in the bags, then the bank) through summonMountItem, so
+ *  every reins gate (riding skill, combat, battleground, ship, freight) answers
+ *  exactly as it does for a reins click. Owning no mount says so. */
+export function castMountSpell(ctx: SimContext, pid: number): boolean {
+  const meta = ctx.players.get(pid);
+  const e = ctx.entities.get(pid);
+  if (!meta || !e) return false;
+  // useItem's own busy gate, ahead of the reins: a fishing or gathering cast
+  // refuses the press whether it would summon or dismount.
+  if (isNonSpellCast(e.castingAbility)) {
+    ctx.error(pid, 'You are busy.');
+    return false;
+  }
+  if (e.mountKey) {
+    forceDismount(ctx, e);
+    return true;
+  }
+  const key = mountSpellMountKey(meta.inventory, () => ownedMounts(meta));
+  if (!key) {
+    ctx.error(pid, "You don't have a mount yet.");
+    return false;
+  }
+  return summonMountItem(ctx, pid, key);
 }
 
 /** The Mount/Dismount keybind. It has exactly two jobs now that reins are items:

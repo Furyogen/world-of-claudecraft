@@ -8,6 +8,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { RAID_BOSS_PLAYER_MELEE_RANGE } from '../src/sim/combat/player_attack_reach';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
+import { MOUNT_SPELL_ID } from '../src/sim/content/mount_spell';
 import { computeTalentModifiers } from '../src/sim/content/talents';
 import { ABILITIES } from '../src/sim/data';
 import { VARKHUL_BOSS_ID } from '../src/sim/ignivar_raid_ids';
@@ -1980,5 +1981,27 @@ describe("actionBarView: Nature's Boon is form-scoped in every highlight", () =>
     ).slots;
     expect(slots[0].empowered).toBe(true);
     expect(slots[0].naturesBoonGlow).toBe(false);
+  });
+});
+
+// Summon Mount's slot icon follows the rider's look: the HUD hands the
+// look-carrying key in on the shared world input (action_bar_world_input.ts),
+// so a skin change moves the key and the painter repaints by itself.
+describe('actionBarView: Summon Mount icon', () => {
+  it('uses the world input look key for the Summon Mount slot only', () => {
+    const view = createActionBarView(
+      descriptor(
+        slot(1, { ability: ability(MOUNT_SPELL_ID, { offGcd: true, cooldown: 0 }) }),
+        slot(2, { ability: ability('fireball') }),
+      ),
+      fakeDeps(),
+    );
+    const w = { ...world(), mountSpellIconKey: 'mountspell:rickshaw_mount' };
+    expect(view.tick(w).slots.map((s) => s.iconKey)).toEqual([
+      'mountspell:rickshaw_mount',
+      'ability:fireball',
+    ]);
+    // Before Riding is learned there is no look key: the plain ability icon.
+    expect(view.tick(world()).slots[0].iconKey).toBe(`ability:${MOUNT_SPELL_ID}`);
   });
 });

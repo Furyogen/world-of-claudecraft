@@ -477,6 +477,8 @@ const UI_PURE_CORES = [
   // armory_card_view twin for the account-mount SKUs.
   'src/ui/store_mount_card_view.ts',
   'src/ui/mount_inspect_view.ts',
+  // What the Summon Mount spell's icon shows (worn skin, else the summoned mount).
+  'src/ui/mount_spell_icon_core.ts',
   'src/ui/daily_rewards_reason_view.ts',
   // The daily-rewards spin wheel's markup and its landing geometry (Bank Storage
   // phase 17). The overlay ELEMENT lives in the thin painter beside it.

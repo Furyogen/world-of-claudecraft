@@ -13052,6 +13052,10 @@ export const zh_CN: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "summon_mount": {
+        "name": "召唤坐骑",
+        "description": "1.5 秒后召唤你的英勇战马，并显示你选择的坐骑皮肤。没有英勇战马时，召唤你携带缰绳中最快的坐骑。骑乘时再次使用即可下坐骑。战斗中或战场内无法使用。"
+      },
       "sport_kick": {
         "name": "踢球",
         "description": "沿地面把球踢向瞄准点。"

@@ -46,6 +46,7 @@ import {
   weaponHand,
 } from '../src/sim/equipment_rules';
 import { meetsLevelRequirement } from '../src/sim/item_level_req';
+import { grantRidingSkill } from '../src/sim/mounts';
 import { type CharacterState, Sim } from '../src/sim/sim';
 import type { EquipSlot, ItemDef, PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
@@ -796,7 +797,7 @@ export function applyBoostKitToPlayer(sim: Sim, pid: number): boolean {
   }
   // Riding: the mounts overhaul gates every mount on the trained skill; a
   // boost tester never grinds the 80g fee.
-  meta.ridingTrained = true;
+  grantRidingSkill(sim.ctx, meta, false);
   meta.pbeBoostKit = BOOST_KIT_VERSION;
   return true;
 }

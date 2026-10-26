@@ -79,7 +79,9 @@ describe('damage-over-time final ticks', () => {
       noPlayer: true,
       world: DOT_TEST_WORLD,
     });
-    const sourceId = sim.addPlayer(entry.ability.class, 'Dotter');
+    // A class-neutral ability (the riding skill's Summon Mount) borrows a class.
+    const cls = entry.ability.class === 'general' ? 'warrior' : entry.ability.class;
+    const sourceId = sim.addPlayer(cls, 'Dotter');
     const targetId = sim.addPlayer('warrior', 'Target');
     const source = sim.entities.get(sourceId)!;
     const target = sim.entities.get(targetId)!;

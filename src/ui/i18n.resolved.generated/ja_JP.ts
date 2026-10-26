@@ -13052,6 +13052,10 @@ export const ja_JP: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "summon_mount": {
+        "name": "マウント召喚",
+        "description": "1.5秒後にヴァロースティードを呼び出し、選んだマウントスキンで表示します。ヴァロースティードがない場合は、手綱を持っている中で最も速いマウントを呼び出します。騎乗中にもう一度使うと降ります。戦闘中や戦場では使用できません。"
+      },
       "sport_kick": {
         "name": "キック",
         "description": "狙った地点へボールをグラウンダーで蹴り出す。"

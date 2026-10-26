@@ -5,6 +5,7 @@
 // i18n. Fishing shows a constant full waiting bar (the bite is signaled by
 // the bobber + cue, never by the bar); the gather cast fills like any
 // hardcast and its label rides `label` + castDisplayName.
+import { mountPresentationKey } from '../sim/content/mount_skins';
 import { MOUNT_SUMMON_SECONDS } from '../sim/mounts';
 import { CONSUME_DURATION, type Consuming, type Entity, FISHING_CAST_ID } from '../sim/types';
 
@@ -81,7 +82,9 @@ export interface MountSummonBarState {
   visible: boolean;
   /** 0..1 fraction; 1.0 at cast start, draining to 0 on completion. */
   fill: number;
-  /** The mount key being summoned (e.g. 'valorsteed'), for the painter to localize. */
+  /** What the summon PRESENTS as (mountPresentationKey): the worn skin's id
+   *  (e.g. 'rickshaw_mount') or the summoned mount's key (e.g. 'valorsteed'),
+   *  for the painter to localize. */
   mountKey: string;
   /** Seconds remaining, for the timer text. */
   remaining: number;
@@ -96,10 +99,12 @@ const MOUNT_SUMMON_HIDDEN: MountSummonBarState = {
 
 /** Derive the player's mount summon bar state from the entity's mountCastRemaining
  *  and mountCastKey. Shown when mountCastKey is non-empty (summon in progress);
- *  hidden during a dismount channel (mountCastKey === ''). */
+ *  hidden during a dismount channel (mountCastKey === ''). A worn mount skin
+ *  names the bar, the same look the summon resolves to on screen. */
 export function mountSummonBarState(
   mountCastRemaining: number,
   mountCastKey: string,
+  mountSkinId?: string | null,
 ): MountSummonBarState {
   // mountCastKey is '' during a dismount channel; only show the summon bar during
   // an actual summon (key is the target mount's key).
@@ -107,9 +112,16 @@ export function mountSummonBarState(
   return {
     visible: true,
     fill: Math.max(0, Math.min(1, mountCastRemaining / MOUNT_SUMMON_SECONDS)),
-    mountKey: mountCastKey,
+    mountKey: mountPresentationKey(mountCastKey, mountSkinId),
     remaining: mountCastRemaining,
   };
+}
+
+/** mountSummonBarState over an entity's own summon fields and worn skin. */
+export function mountSummonBarStateFor(
+  e: Pick<Entity, 'mountCastRemaining' | 'mountCastKey' | 'mountSkinId'>,
+): MountSummonBarState {
+  return mountSummonBarState(e.mountCastRemaining, e.mountCastKey, e.mountSkinId);
 }
 
 /**

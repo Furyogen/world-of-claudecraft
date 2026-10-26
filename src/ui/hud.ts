@@ -28,7 +28,7 @@ import {
 } from '../game/ui_tier_knobs';
 import { voice, voiceDistanceGain } from '../game/voice';
 import type { ClaudiumStoreItem } from '../net/economy_sdk';
-import { castBarState, consumeBarState, mountSummonBarState } from '../render/cast_bar';
+import { castBarState, consumeBarState, mountSummonBarStateFor } from '../render/cast_bar';
 import {
   CharacterPreview,
   modularKeyFor,
@@ -363,6 +363,7 @@ import {
   createActionBarView,
 } from './hud/action_bar/action_bar_view';
 import type { ActionBarVisibility } from './hud/action_bar/action_bar_visibility_core';
+import { syncActionBarWorldInput } from './hud/action_bar/action_bar_world_input';
 import {
   confirmPendingAutoAttackEngage,
   deferAutoAttackUntilCastEnd,
@@ -396,7 +397,7 @@ import {
   freedAttackSlotDisplayAbility,
   type HotbarAction,
   isAbilityActionBarEligible,
-  loadoutKnownAbilityIds,
+  loadoutKnownAbilityIdsFor,
   placeAbilityOnSlot,
   placeItemOnSlot,
   readHotbarDragData,
@@ -9178,7 +9179,7 @@ export class Hud {
     ) {
       playerCast.visible = false;
     }
-    const playerMountSummon = mountSummonBarState(p.mountCastRemaining, p.mountCastKey);
+    const playerMountSummon = mountSummonBarStateFor(p);
     const playerConsume = consumeBarState(p.eating, p.drinking);
     let playerCastInput = this.playerCastBarInput;
     if (playerCastInput) {
@@ -9275,33 +9276,16 @@ export class Hud {
     // this stays correct on both hosts. Shared by every action-bar-family view
     // below (desktop bar, mobile ring, consumables quick bar).
     const stealthed = playerStealthed(p.auras);
-    let actionBarWorld = this.actionBarWorldInput;
-    if (actionBarWorld) {
-      actionBarWorld.player = p;
-      actionBarWorld.target = target ?? null;
-      actionBarWorld.inventory = sim.inventory;
-      actionBarWorld.wornTrinketId = sim.equipment.trinket;
-      actionBarWorld.stealthed = stealthed;
-      actionBarWorld.paladinSpec = sim.talentSpec;
-      actionBarWorld.playerClass = sim.cfg.playerClass;
-      actionBarWorld.fateThreads = fateThreads;
-      actionBarWorld.entities = sim.entities.values();
-      actionBarWorld.activeAimSlot = this.groundAim.activeSlot();
-    } else {
-      actionBarWorld = {
-        player: p,
-        target: target ?? null,
-        inventory: sim.inventory,
-        wornTrinketId: sim.equipment.trinket,
-        stealthed,
-        paladinSpec: sim.talentSpec,
-        playerClass: sim.cfg.playerClass,
-        fateThreads,
-        entities: sim.entities.values(),
-        activeAimSlot: this.groundAim.activeSlot(),
-      };
-      this.actionBarWorldInput = actionBarWorld;
-    }
+    const actionBarWorld = syncActionBarWorldInput(
+      this.actionBarWorldInput,
+      sim,
+      p,
+      target ?? null,
+      stealthed,
+      fateThreads,
+      this.groundAim.activeSlot(),
+    );
+    this.actionBarWorldInput = actionBarWorld;
     this.cooldownManager.paint(actionBarWorld);
     this.renderPetBar(pet);
     this.renderStanceBar();
@@ -16951,7 +16935,7 @@ export class Hud {
   // runs (see the talentsWindow dropdown handler, which calls switchLoadout and
   // applyLoadoutBar back to back).
   private applyLoadoutBar(bar: (string | null)[], alloc: TalentAllocation): void {
-    const known = loadoutKnownAbilityIds(this.sim.cfg.playerClass, alloc, this.sim.player.level);
+    const known = loadoutKnownAbilityIdsFor(this.sim, alloc);
     this.actionBarController.replaceActionsForLoadout(
       applyLoadoutBarActions(this.hotbarActions, bar, Hud.BAR_ABILITY_SLOTS, (id) => known.has(id)),
       known,

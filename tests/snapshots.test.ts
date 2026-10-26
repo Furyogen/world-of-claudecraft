@@ -61,13 +61,14 @@ import { EMPTY_MST_CRAFTS } from '../src/net/crafting_wire';
 import { ClientWorld } from '../src/net/online';
 import { mechHeldWeaponOverride, visualKeyFor } from '../src/render/characters/manifest';
 import { legendaryRegaliaActive } from '../src/render/legendary_regalia_core';
+import { mountVisualSpecFor } from '../src/render/mount_visuals';
 import {
   emptyPriestMarkerState,
   priestMarkerStateForAuras,
 } from '../src/sim/combat/priest/presentation';
 import { CLUE_HUNTS } from '../src/sim/content/clue_hunts';
 import { FARM_PATCHES } from '../src/sim/content/farm_patches';
-import { RETIRED_MOUNT_SKIN_IDS } from '../src/sim/content/mount_skins';
+import { mountPresentationKey, RETIRED_MOUNT_SKIN_IDS } from '../src/sim/content/mount_skins';
 import { MOUNT_RACE_START_PLATFORM, type MountKey } from '../src/sim/content/mounts';
 import { CRAFT_RING, STATION_RADIUS } from '../src/sim/content/professions';
 import { COMBO_RECIPES } from '../src/sim/content/recipes';
@@ -10218,6 +10219,73 @@ describe('mount skin identity round trip', () => {
       expect(server.sim.meta(wearer.pid)?.mountSkinId ?? null).toBeNull();
     },
   );
+  // The worn skin is a LOOK over whatever mount is ridden: using reins from the
+  // bag (the bag click's own frame, with its slot index) must never replace it,
+  // not on the first summon, a mount-to-mount swap, a dismount and re-summon,
+  // or a relog. Pinned on the rider's OWN client (the self record) and on a
+  // viewer's, and through the renderer's one look resolver.
+  it('keeps the worn skin when reins are used from the bag', () => {
+    const server = new GameServer();
+    const selfFc = fakeWs();
+    const viewerFc = fakeWs();
+    const wearer = joinServer(server, selfFc, 1, 'Skinned');
+    const observer = joinServer(server, viewerFc, 2, 'Observer');
+    wearer.accountCosmetics.mountSkinIds = ['rickshaw_mount'];
+    const meta = server.sim.meta(wearer.pid)!;
+    meta.ridingTrained = true;
+    server.sim.addItem('reins_valorsteed', 1, wearer.pid);
+    server.sim.addItem('reins_grag_bear', 1, wearer.pid);
+    const self = bareClient(wearer.pid);
+    const viewer = bareClient(observer.pid);
+    const step = (ticks = 1) => {
+      for (let i = 0; i < ticks; i++) {
+        server.sim.tick();
+        broadcast(server);
+        (self as unknown as SnapshotApplier).applySnapshot(lastSnap(selfFc.sent));
+        (viewer as unknown as SnapshotApplier).applySnapshot(lastSnap(viewerFc.sent));
+      }
+    };
+    const useBagReins = (item: string) => {
+      const slot = meta.inventory.findIndex((s) => s.itemId === item);
+      server.handleMessage(wearer, JSON.stringify({ t: 'cmd', cmd: 'use', item, slot }));
+    };
+    const looks = () => {
+      const mine = self.entities.get(wearer.pid)!;
+      const seen = viewer.entities.get(wearer.pid)!;
+      return {
+        mount: mine.mountKey,
+        selfLook: mountPresentationKey(mine.mountKey, mine.mountSkinId),
+        viewerLook: mountPresentationKey(seen.mountKey, seen.mountSkinId),
+        model: mountVisualSpecFor(mine.mountKey, mine.mountSkinId)?.visualKey,
+      };
+    };
+    step();
+    server.handleMessage(
+      wearer,
+      JSON.stringify({ t: 'cmd', cmd: 'change_mount_skin', skin: 'rickshaw_mount' }),
+    );
+    step();
+    useBagReins('reins_valorsteed');
+    step(40);
+    expect(looks()).toEqual({
+      mount: 'valorsteed',
+      selfLook: 'rickshaw_mount',
+      viewerLook: 'rickshaw_mount',
+      model: 'mount_rickshaw_mount',
+    });
+    useBagReins('reins_grag_bear'); // an instant mount-to-mount swap
+    step();
+    expect(looks()).toMatchObject({ mount: 'grag_bear', selfLook: 'rickshaw_mount' });
+    useBagReins('reins_grag_bear'); // the ridden reins again: dismount
+    step();
+    expect(looks().mount).toBe('');
+    useBagReins('reins_valorsteed');
+    step(40);
+    expect(looks()).toMatchObject({ mount: 'valorsteed', viewerLook: 'rickshaw_mount' });
+    // The worn skin rides the character save, so a relog keeps it too.
+    const saved = server.sim.serializeCharacter(wearer.pid)!;
+    expect(saved.mountSkinId).toBe('rickshaw_mount');
+  });
   it('shares the identity-update rate limit with other cosmetics', () => {
     const now = vi.spyOn(Date, 'now').mockReturnValue(1_700_000_000_000);
     try {
