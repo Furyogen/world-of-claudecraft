@@ -23,6 +23,6 @@ export const MOUNT_SPELL_ABILITIES: Record<string, AbilityDef> = {
     offGcd: true,
     effects: [],
     description:
-      'Summon the fastest mount whose reins are in your bags after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
+      'Summon your Valorsteed after 1.5 sec, wearing your chosen mount look. Without a Valorsteed, summons the fastest mount whose reins you carry. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
   },
 };

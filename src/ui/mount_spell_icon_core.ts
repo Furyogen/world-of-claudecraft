@@ -1,7 +1,7 @@
 // What the Summon Mount spell's icon shows (src/sim/content/mount_spell.ts):
 // the worn mount skin when the rider wears one, else the mount a press will
-// summon (src/sim/mount_spell.ts mountSpellMountKey: the fastest reins in the
-// bags, else in the bank), else the default mount for a rider who owns none.
+// summon (src/sim/mount_spell.ts mountSpellMountKey: the Valorsteed when owned,
+// else the fastest reins in the bags, then the bank), else the default mount.
 // The result is a mount PRESENTATION key (mountPresentationKey: a skin id or a
 // mount key), the same key the model, sound, and cast bar resolve, so the icon
 // never disagrees with what appears.

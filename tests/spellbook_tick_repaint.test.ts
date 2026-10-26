@@ -890,7 +890,7 @@ describe('the Summon Mount row', () => {
         ...(base() as object),
         player: { level: 60, mountSkinId: look.skin },
         inventory: look.bags,
-        ownedMounts: () => ['valorsteed'],
+        ownedMounts: () => look.bags.map((slot) => slot.itemId.replace('reins_', '')),
       }) as never;
     open(h);
     const icon = () =>
@@ -923,7 +923,7 @@ describe('the Summon Mount row', () => {
     expect(settled.writes).toEqual([]);
   });
 
-  it('follows the mount in the bags when no skin is worn', () => {
+  it('follows the mount in the bags for a rider without a Valorsteed', () => {
     const { h, look, icon } = mountHarness();
     const before = icon();
     // iconDataUrl is stubbed in this file, so item art cannot be told apart by

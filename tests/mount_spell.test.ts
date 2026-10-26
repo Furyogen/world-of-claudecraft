@@ -55,10 +55,20 @@ const reins = (...keys: string[]) => keys.map((key) => ({ itemId: `reins_${key}`
 const none = () => [] as MountKey[];
 
 describe('mountSpellMountKey', () => {
-  it('picks the fastest mount whose reins are in the bags', () => {
-    expect(mountSpellMountKey(reins('valorsteed', 'grag_bear', 'stormfeather_griffin'), none)).toBe(
-      'grag_bear',
+  it('defaults to the Valorsteed whenever it is owned, even beside faster mounts', () => {
+    expect(mountSpellMountKey(reins('grag_bear', 'valorsteed', 'aether_hover_cycle'), none)).toBe(
+      'valorsteed',
     );
+  });
+
+  it('defaults to a BANKED Valorsteed over faster mounts in the bags', () => {
+    const owned = (): MountKey[] => ['valorsteed', 'grag_bear'];
+    expect(mountSpellMountKey(reins('grag_bear'), owned)).toBe('valorsteed');
+  });
+
+  it('without a Valorsteed, picks the fastest mount whose reins are in the bags', () => {
+    const owned = (): MountKey[] => ['stormfeather_griffin', 'grag_bear', 'aether_hover_cycle'];
+    expect(mountSpellMountKey(reins('stormfeather_griffin', 'grag_bear'), owned)).toBe('grag_bear');
   });
 
   it('keeps the earlier catalog mount on a speed tie, whatever the bag order', () => {
@@ -68,13 +78,8 @@ describe('mountSpellMountKey', () => {
     );
   });
 
-  it('prefers the bags: a faster BANKED mount does not replace the bagged one', () => {
-    const owned = (): MountKey[] => ['valorsteed', 'aether_hover_cycle'];
-    expect(mountSpellMountKey(reins('valorsteed'), owned)).toBe('valorsteed');
-  });
-
   it('falls back to the fastest banked mount only when the bags hold none', () => {
-    const owned = (): MountKey[] => ['valorsteed', 'grag_bear'];
+    const owned = (): MountKey[] => ['stormfeather_griffin', 'grag_bear'];
     expect(mountSpellMountKey([{ itemId: 'rough_stone' }], owned)).toBe('grag_bear');
   });
 
@@ -179,27 +184,36 @@ describe('Summon Mount is taught by the riding skill', () => {
 });
 
 describe('casting Summon Mount', () => {
-  it('summons the fastest owned mount through the reins channel, with no GCD', () => {
+  it('summons the Valorsteed by default through the reins channel, with no GCD', () => {
     const sim = makeWorld();
     const pid = join(sim);
     sim.addItem('reins_valorsteed', 1, pid);
     sim.addItem('reins_grag_bear', 1, pid);
     const e = sim.entities.get(pid)!;
     sim.castAbility(MOUNT_SPELL_ID, pid);
-    expect(e.mountCastKey).toBe('grag_bear');
+    expect(e.mountCastKey).toBe('valorsteed');
     expect(e.mountCastRemaining).toBeCloseTo(MOUNT_SUMMON_SECONDS);
     expect(e.gcdRemaining).toBe(0);
     finishSummon(sim, pid);
-    expect(e.mountKey).toBe('grag_bear');
+    expect(e.mountKey).toBe('valorsteed');
   });
 
-  it('summons the bagged mount over a faster banked one', () => {
+  it('summons a banked Valorsteed too (banked reins still own the mount)', () => {
     const sim = makeWorld();
     const pid = join(sim);
-    sim.addItem('reins_valorsteed', 1, pid);
-    sim.players.get(pid)!.bank.inventory.push({ itemId: 'reins_grag_bear', count: 1 });
+    sim.addItem('reins_grag_bear', 1, pid);
+    sim.players.get(pid)!.bank.inventory.push({ itemId: 'reins_valorsteed', count: 1 });
     sim.castAbility(MOUNT_SPELL_ID, pid);
     expect(sim.entities.get(pid)!.mountCastKey).toBe('valorsteed');
+  });
+
+  it('without a Valorsteed, summons the fastest mount in the bags', () => {
+    const sim = makeWorld();
+    const pid = join(sim);
+    sim.addItem('reins_stormfeather_griffin', 1, pid);
+    sim.addItem('reins_grag_bear', 1, pid);
+    sim.castAbility(MOUNT_SPELL_ID, pid);
+    expect(sim.entities.get(pid)!.mountCastKey).toBe('grag_bear');
   });
 
   it('falls back to banked reins when the bags hold none', () => {

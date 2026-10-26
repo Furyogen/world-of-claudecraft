@@ -867,7 +867,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '被動：電弧箭與叉狀閃電有 20% 機率觸發 Arc Overload，再次擊中其首個目標，造成 50% 的傷害，並獲得 1 點雷霆。（雷霆召喚）',
   'entities.abilities.lightning_overload.name': 'Arc Overload',
   'entities.abilities.summon_mount.description':
-    '1.5 秒後召喚背包中韁繩對應的最快坐騎，並顯示你選擇的坐騎造型。騎乘時再次使用即可下坐騎。戰鬥中或戰場內無法使用。',
+    '1.5 秒後召喚你的英勇戰馬，並顯示你選擇的坐騎造型。沒有英勇戰馬時，召喚你攜帶韁繩中最快的坐騎。騎乘時再次使用即可下坐騎。戰鬥中或戰場內無法使用。',
   'entities.abilities.summon_mount.name': '召喚坐騎',
   'entities.abilities.thunderstorm.description':
     '喚下一記雷鳴，對 10 碼內的敵人造成 {damage} 點自然傷害，並使其減速 50%，持續 5 秒。恢復你最大法力值的 8%。傷害隨法術強度提升。（雷霆召喚）',

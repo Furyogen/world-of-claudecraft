@@ -1,12 +1,14 @@
-// Which mount the Summon Mount spell rides: the fastest mount whose reins are in
-// the player's BAGS (the reins a bag click would use), the earlier catalog entry
-// winning a speed tie; only when the bags hold none, the fastest banked one (a
-// banked reins still owns its mount, src/sim/mounts.ts mountOwned). A pure leaf
-// shared by the sim cast (mounts.ts castMountSpell) and the client icon
-// (src/ui/mount_spell_icon_core.ts), so the spell's icon always shows the mount
-// a press will summon. The bag scan allocates nothing: the HUD runs it per frame.
+// Which mount the Summon Mount spell rides. The default mount (DEFAULT_MOUNT,
+// the Valorsteed: the first mount anyone can buy) whenever the player owns it,
+// its reins in bags or bank; a worn mount skin only changes how it LOOKS
+// (content/mount_skins.ts). A rider who never bought it gets the fastest mount
+// whose reins are in the bags, else the fastest banked one, the earlier catalog
+// entry winning a speed tie. A pure leaf shared by the sim cast
+// (mounts.ts castMountSpell) and the client icon (src/ui/mount_spell_icon_core.ts),
+// so the spell's icon always shows the mount a press will summon. The bag scan
+// allocates nothing: the HUD runs it per frame.
 
-import { MOUNT_KEYS, MOUNTS, type MountKey } from './content/mounts';
+import { DEFAULT_MOUNT, MOUNT_KEYS, MOUNTS, type MountKey } from './content/mounts';
 import { ITEMS } from './data';
 
 const CATALOG_ORDER = new Map<MountKey, number>(MOUNT_KEYS.map((key, i) => [key, i]));
@@ -26,17 +28,22 @@ function faster(best: MountKey | null, key: MountKey): MountKey {
 
 /** The mount a Summon Mount press summons, or null when nothing is owned.
  *  `bags` is the player's bag inventory; `owned` (bags + bank, ownedMounts) is
- *  read only when the bags hold no reins. */
+ *  read only when the bags hold no default-mount reins. */
 export function mountSpellMountKey(
   bags: readonly { itemId: string }[],
   owned: () => readonly MountKey[],
 ): MountKey | null {
-  let best: MountKey | null = null;
+  let bagged: MountKey | null = null;
   for (const slot of bags) {
     const def = ITEMS[slot.itemId];
-    if (def?.kind === 'mount' && isMountKey(def.mount)) best = faster(best, def.mount);
+    if (def?.kind !== 'mount' || !isMountKey(def.mount)) continue;
+    if (def.mount === DEFAULT_MOUNT) return DEFAULT_MOUNT;
+    bagged = faster(bagged, def.mount);
   }
-  if (best !== null) return best;
-  for (const key of owned()) if (isMountKey(key)) best = faster(best, key);
-  return best;
+  const all = owned();
+  if (all.includes(DEFAULT_MOUNT)) return DEFAULT_MOUNT;
+  if (bagged !== null) return bagged;
+  let banked: MountKey | null = null;
+  for (const key of all) if (isMountKey(key)) banked = faster(banked, key);
+  return banked;
 }

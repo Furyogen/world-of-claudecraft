@@ -325,8 +325,8 @@ export function grantRidingSkill(ctx: SimContext, meta: PlayerMeta, announce: bo
 
 /** The Summon Mount spell (content/mount_spell.ts), handed here by castAbility
  *  before any cast-path rule runs. Riding: dismount, like clicking the reins you
- *  ride. Otherwise summon mountSpellMountKey's pick (the fastest reins in the
- *  bags, else in the bank) through summonMountItem, so
+ *  ride. Otherwise summon mountSpellMountKey's pick (the Valorsteed when owned,
+ *  else the fastest reins in the bags, then the bank) through summonMountItem, so
  *  every reins gate (riding skill, combat, battleground, ship, freight) answers
  *  exactly as it does for a reins click. Owning no mount says so. */
 export function castMountSpell(ctx: SimContext, pid: number): boolean {

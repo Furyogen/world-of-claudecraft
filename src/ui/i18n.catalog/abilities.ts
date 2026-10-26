@@ -136,7 +136,7 @@ const classAbilityNamesEn = {
       [
         'summon_mount',
         'Summon Mount',
-        'Summon the fastest mount whose reins are in your bags after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
+        'Summon your Valorsteed after 1.5 sec, wearing your chosen mount look. Without a Valorsteed, summons the fastest mount whose reins you carry. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
       ],
       // The Vale Cup sport kit (docs/prd/vale-cup.md).
       ['sport_kick', 'Kick', 'Knock the ball along the ground toward the aim point.'],

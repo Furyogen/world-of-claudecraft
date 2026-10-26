@@ -904,7 +904,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'パッシブ：電弧の矢とスカイブランチには20%の確率でオーバーロードする効果があり、最初の対象に与えたダメージの50%で再度攻撃し、雷鳴を1得ます。（サンダーコール）',
   'entities.abilities.lightning_overload.name': '電弧のオーバーロード',
   'entities.abilities.summon_mount.description':
-    '1.5秒後にバッグ内の手綱のうち最も速いマウントを呼び出し、選んだマウントスキンで表示します。騎乗中にもう一度使うと降ります。戦闘中や戦場では使用できません。',
+    '1.5秒後にヴァロースティードを呼び出し、選んだマウントスキンで表示します。ヴァロースティードがない場合は、手綱を持っている中で最も速いマウントを呼び出します。騎乗中にもう一度使うと降ります。戦闘中や戦場では使用できません。',
   'entities.abilities.summon_mount.name': 'マウント召喚',
   'entities.abilities.thunderstorm.description':
     '雷鳴を呼び下ろし、10ヤード以内の敵に{damage}の自然ダメージを与え、5秒間50%減速させます。最大マナの8%を回復します。ダメージは呪文威力とともに上がります。（サンダーコール）',

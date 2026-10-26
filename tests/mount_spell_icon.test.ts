@@ -13,7 +13,8 @@ import {
 import type { IWorld } from '../src/world_api';
 
 // The Summon Mount icon: the worn mount skin, else the mount a press summons
-// (the fastest owned), else the default mount for a rider who owns none.
+// (the Valorsteed when owned, else the fastest bagged then banked mount), else
+// the Valorsteed for a rider who owns none.
 
 const reins = (...keys: string[]) => keys.map((key) => ({ itemId: `reins_${key}` }));
 const none = () => [] as MountKey[];
@@ -25,9 +26,13 @@ describe('mountSpellLook', () => {
     );
   });
 
-  it('shows the mount in the bags when no skin is worn', () => {
+  it('shows the Valorsteed when no skin is worn and it is owned', () => {
     expect(mountSpellLook(null, reins('valorsteed'), none)).toBe('valorsteed');
-    expect(mountSpellLook(null, reins('valorsteed', 'grag_bear'), none)).toBe('grag_bear');
+    expect(mountSpellLook(null, reins('grag_bear', 'valorsteed'), none)).toBe('valorsteed');
+  });
+
+  it('shows the mount in the bags for a rider without a Valorsteed', () => {
+    expect(mountSpellLook(null, reins('grag_bear'), () => ['grag_bear'])).toBe('grag_bear');
   });
 
   it('falls back to a banked mount, then the default mount when nothing is owned', () => {

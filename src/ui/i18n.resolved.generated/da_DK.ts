@@ -13054,7 +13054,7 @@ export const da_DK: EnTranslations = {
     "abilities": {
       "summon_mount": {
         "name": "Summon Mount",
-        "description": "Summon the fastest mount whose reins are in your bags after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground."
+        "description": "Summon your Valorsteed after 1.5 sec, wearing your chosen mount look. Without a Valorsteed, summons the fastest mount whose reins you carry. Use again while riding to dismount. Cannot be used in combat or in a battleground."
       },
       "sport_kick": {
         "name": "Spark",

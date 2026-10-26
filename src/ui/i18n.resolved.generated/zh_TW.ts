@@ -13054,7 +13054,7 @@ export const zh_TW: EnTranslations = {
     "abilities": {
       "summon_mount": {
         "name": "召喚坐騎",
-        "description": "1.5 秒後召喚背包中韁繩對應的最快坐騎，並顯示你選擇的坐騎造型。騎乘時再次使用即可下坐騎。戰鬥中或戰場內無法使用。"
+        "description": "1.5 秒後召喚你的英勇戰馬，並顯示你選擇的坐騎造型。沒有英勇戰馬時，召喚你攜帶韁繩中最快的坐騎。騎乘時再次使用即可下坐騎。戰鬥中或戰場內無法使用。"
       },
       "sport_kick": {
         "name": "踢球",
