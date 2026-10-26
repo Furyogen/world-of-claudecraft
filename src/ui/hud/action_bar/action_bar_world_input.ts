@@ -4,36 +4,26 @@
 // object. Extracted from hud.ts, which kept a field-by-field copy of the same
 // assignments for the first frame and every later one.
 
-import type { MountKey } from '../../../sim/content/mounts';
 import type { Entity } from '../../../sim/types';
 import type { IWorld } from '../../../world_api';
-import { mountSpellIconKey } from '../../mount_spell_icon_core';
+import { mountSpellIconKey, mountSpellLook } from '../../mount_spell_icon_core';
 import type { ActionBarTargetInput, ActionBarWorldInput } from './action_bar_view';
 
-// The Summon Mount icon key, rebuilt only when the worn skin or the owned-mount
-// list changes. The list is compared by CONTENT: the online mirror keeps one
-// array per snapshot, but the offline Sim mints a fresh one per read, and an
-// identity check would rebuild the key string on every frame there. A pure
-// function memo, so sharing it across HUD instances changes no answer.
-let lastSkin: string | null | undefined;
-const lastOwned: MountKey[] = [];
+// The Summon Mount icon key, rebuilt only when the look it draws changes. The
+// look itself is computed per frame without allocating (a bag scan and a
+// presentation-key pick, mount_spell_icon_core.ts), so an unchanged frame
+// returns the same key string. A pure function memo: sharing it across HUD
+// instances changes no answer.
+let lastLook: string | undefined;
 let lastKey: string | undefined;
-
-function sameMounts(a: readonly MountKey[], b: readonly MountKey[]): boolean {
-  if (a.length !== b.length) return false;
-  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
-  return true;
-}
 
 function mountSpellKey(world: IWorld): string | undefined {
   if (!world.ridingTrained()) return undefined;
-  const skin = world.player.mountSkinId;
-  const owned = world.ownedMounts();
-  if (lastKey !== undefined && skin === lastSkin && sameMounts(owned, lastOwned)) return lastKey;
-  lastKey = mountSpellIconKey(skin, owned);
-  lastSkin = skin;
-  lastOwned.length = 0;
-  lastOwned.push(...owned);
+  const look = mountSpellLook(world.player.mountSkinId, world.inventory, () => world.ownedMounts());
+  if (look !== lastLook || lastKey === undefined) {
+    lastLook = look;
+    lastKey = mountSpellIconKey(look);
+  }
   return lastKey;
 }
 

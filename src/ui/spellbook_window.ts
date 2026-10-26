@@ -178,10 +178,10 @@ export class SpellbookWindow {
   // them, because it only hides the root (the nodes stay attached and correct, and
   // re-opening re-renders anyway).
   private attackToggle: HTMLButtonElement | null = null;
-  // The Summon Mount row's icon and the worn skin it was painted for
+  // The Summon Mount row's icon and the look it was painted for
   // (refreshMountIconIfChanged); collected at build like the toggles.
   private mountIcon: HTMLElement | null = null;
-  private mountIconSkin: string | null = null;
+  private mountIconLook = '';
   private readonly rowToggles: RowToggle[] = [];
   // The action-bar state those toggles were painted from. Everything the refresh
   // writes is a function of exactly these three, so an unchanged frame has nothing
@@ -297,18 +297,17 @@ export class SpellbookWindow {
     this.refreshMountIconIfChanged();
   }
 
-  // Summon Mount's icon follows the worn mount skin, which the Cosmetics window
-  // can change while the book stays open. One field compare per frame, and only
-  // while that row exists; a changed skin rewrites just the icon. (A reins
-  // change resolves on the next rebuild: rare, and the look it moves is the
-  // fallback one shown only while no skin is worn.)
+  // Summon Mount's icon follows the rider's look: the worn mount skin (which the
+  // Cosmetics window can change while the book stays open), else the mount whose
+  // reins the bags hold. One allocation-free look compare per frame, and only
+  // while that row exists; a changed look rewrites just the icon.
   private refreshMountIconIfChanged(): void {
     const icon = this.mountIcon;
     if (!icon) return;
-    const skin = this.deps.world().player.mountSkinId ?? null;
-    if (skin === this.mountIconSkin) return;
-    this.mountIconSkin = skin;
-    icon.style.backgroundImage = `url(${this.rowIconUrl(MOUNT_SPELL_ID)})`;
+    const look = this.mountLook();
+    if (look === this.mountIconLook) return;
+    this.mountIconLook = look;
+    icon.style.backgroundImage = `url(${mountSpellIconUrl(look)})`;
   }
 
   /**
@@ -689,7 +688,7 @@ export class SpellbookWindow {
         <div class="spell-sub">${locked ? esc(t('abilityUi.spellbook.trainableAtLevel', { level: learnLevel })) : esc(summary)}</div></div>`;
     if (row.abilityId === MOUNT_SPELL_ID) {
       this.mountIcon = el.querySelector<HTMLElement>('.spell-icon');
-      this.mountIconSkin = this.deps.world().player.mountSkinId ?? null;
+      this.mountIconLook = this.mountLook();
     }
     if (known && isAbilityActionBarEligible(def)) {
       const toggle = document.createElement('button');
@@ -808,8 +807,12 @@ export class SpellbookWindow {
   // press summons); every other row draws its own ability icon.
   private rowIconUrl(abilityId: string): string {
     if (abilityId !== MOUNT_SPELL_ID) return iconDataUrl('ability', abilityId);
+    return mountSpellIconUrl(this.mountLook());
+  }
+
+  private mountLook(): string {
     const world = this.deps.world();
-    return mountSpellIconUrl(mountSpellLook(world.player.mountSkinId, world.ownedMounts()));
+    return mountSpellLook(world.player.mountSkinId, world.inventory, () => world.ownedMounts());
   }
 
   private abilityName(def: AbilityDef): string {

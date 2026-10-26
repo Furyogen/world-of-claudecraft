@@ -13054,7 +13054,7 @@ export const zh_CN: EnTranslations = {
     "abilities": {
       "summon_mount": {
         "name": "召唤坐骑",
-        "description": "1.5 秒后召唤你最快的坐骑，并显示你选择的坐骑皮肤。骑乘时再次使用即可下坐骑。战斗中或战场内无法使用。"
+        "description": "1.5 秒后召唤背包中缰绳对应的最快坐骑，并显示你选择的坐骑皮肤。骑乘时再次使用即可下坐骑。战斗中或战场内无法使用。"
       },
       "sport_kick": {
         "name": "踢球",

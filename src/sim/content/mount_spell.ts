@@ -23,6 +23,6 @@ export const MOUNT_SPELL_ABILITIES: Record<string, AbilityDef> = {
     offGcd: true,
     effects: [],
     description:
-      'Summon your fastest mount after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
+      'Summon the fastest mount whose reins are in your bags after 1.5 sec, wearing your chosen mount look. Use again while riding to dismount. Cannot be used in combat or in a battleground.',
   },
 };

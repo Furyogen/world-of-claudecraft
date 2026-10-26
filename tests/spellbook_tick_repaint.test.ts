@@ -879,13 +879,17 @@ describe('spellbook: a language switch repaints through relocalize(), not throug
 describe('the Summon Mount row', () => {
   function mountHarness() {
     const h = harness();
-    const look = { skin: null as string | null };
+    const look = {
+      skin: null as string | null,
+      bags: [{ itemId: 'reins_valorsteed', count: 1 }],
+    };
     h.state.known = [...h.state.known, resolved(MOUNT_SPELL_ID)];
     const base = h.deps.world;
     h.deps.world = () =>
       ({
         ...(base() as object),
         player: { level: 60, mountSkinId: look.skin },
+        inventory: look.bags,
         ownedMounts: () => ['valorsteed'],
       }) as never;
     open(h);
@@ -917,5 +921,23 @@ describe('the Summon Mount row', () => {
     h.win.tickOpen();
     settled.stop();
     expect(settled.writes).toEqual([]);
+  });
+
+  it('follows the mount in the bags when no skin is worn', () => {
+    const { h, look, icon } = mountHarness();
+    const before = icon();
+    // iconDataUrl is stubbed in this file, so item art cannot be told apart by
+    // URL: what is pinned is that the bag change repaints the icon in place
+    // (and that an unchanged frame does not).
+    const idle = watchDom();
+    h.win.tickOpen();
+    idle.stop();
+    expect(idle.writes).toEqual([]);
+    look.bags = [{ itemId: 'reins_grag_bear', count: 1 }];
+    const watch = watchDom();
+    h.win.tickOpen();
+    watch.stop();
+    expect(icon()).toBe(before);
+    expect(watch.writes.length, 'the bag change did not repaint the icon').toBeGreaterThan(0);
   });
 });

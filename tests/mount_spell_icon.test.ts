@@ -15,22 +15,29 @@ import type { IWorld } from '../src/world_api';
 // The Summon Mount icon: the worn mount skin, else the mount a press summons
 // (the fastest owned), else the default mount for a rider who owns none.
 
+const reins = (...keys: string[]) => keys.map((key) => ({ itemId: `reins_${key}` }));
+const none = () => [] as MountKey[];
+
 describe('mountSpellLook', () => {
   it('shows the worn skin over whatever mount the press summons', () => {
-    expect(mountSpellLook('rickshaw_mount', ['valorsteed', 'grag_bear'])).toBe('rickshaw_mount');
+    expect(mountSpellLook('rickshaw_mount', reins('valorsteed', 'grag_bear'), none)).toBe(
+      'rickshaw_mount',
+    );
   });
 
-  it('shows the mount the press summons when no skin is worn', () => {
-    expect(mountSpellLook(null, ['valorsteed', 'grag_bear'])).toBe('grag_bear');
+  it('shows the mount in the bags when no skin is worn', () => {
+    expect(mountSpellLook(null, reins('valorsteed'), none)).toBe('valorsteed');
+    expect(mountSpellLook(null, reins('valorsteed', 'grag_bear'), none)).toBe('grag_bear');
   });
 
-  it('falls back to the default mount when nothing is owned', () => {
-    expect(mountSpellLook(null, [])).toBe('valorsteed');
-    expect(mountSpellLook('rickshaw_mount', [])).toBe('rickshaw_mount');
+  it('falls back to a banked mount, then the default mount when nothing is owned', () => {
+    expect(mountSpellLook(null, [], () => ['grag_bear'])).toBe('grag_bear');
+    expect(mountSpellLook(null, [], none)).toBe('valorsteed');
+    expect(mountSpellLook('rickshaw_mount', [], none)).toBe('rickshaw_mount');
   });
 
   it('ignores a retired or unknown skin id, like the mount model does', () => {
-    expect(mountSpellLook('rallycart_rxt', ['valorsteed'])).toBe('valorsteed');
+    expect(mountSpellLook('rallycart_rxt', reins('grag_bear'), none)).toBe('grag_bear');
   });
 });
 
@@ -45,7 +52,7 @@ describe('mount spell icon resolution', () => {
   });
 
   it('resolves the action-bar look key to that art', () => {
-    expect(actionBarIconBg(mountSpellIconKey('rickshaw_mount', []))).toBe(
+    expect(actionBarIconBg(mountSpellIconKey('rickshaw_mount'))).toBe(
       'url(/ui/store/mount_skins/rickshaw_mount.webp)',
     );
     expect(actionBarIconBg(`${MOUNT_SPELL_ICON_PREFIX}valorsteed`)).toBe(
@@ -59,7 +66,7 @@ describe('syncActionBarWorldInput', () => {
     const player = { id: 1, mountSkinId: state.skin, auras: [] };
     return {
       player,
-      inventory: [],
+      inventory: state.owned.map((key) => ({ itemId: `reins_${key}`, count: 1 })),
       equipment: { trinket: null },
       talentSpec: null,
       cfg: { playerClass: 'warrior' },

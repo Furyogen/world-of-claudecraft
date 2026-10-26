@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildClientAbilityPresentation } from '../src/net/ability_presentation';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
 import { MOUNT_SPELL_ID } from '../src/sim/content/mount_spell';
+import type { MountKey } from '../src/sim/content/mounts';
 import { emptyAllocation } from '../src/sim/content/talents';
 import { ABILITIES } from '../src/sim/data';
 import { mountSpellMountKey } from '../src/sim/mount_spell';
@@ -50,22 +51,35 @@ function errorTexts(events: SimEvent[]): string[] {
     .map((e) => e.text);
 }
 
+const reins = (...keys: string[]) => keys.map((key) => ({ itemId: `reins_${key}` }));
+const none = () => [] as MountKey[];
+
 describe('mountSpellMountKey', () => {
-  it('picks the fastest owned mount', () => {
-    expect(mountSpellMountKey(['valorsteed', 'grag_bear', 'stormfeather_griffin'])).toBe(
+  it('picks the fastest mount whose reins are in the bags', () => {
+    expect(mountSpellMountKey(reins('valorsteed', 'grag_bear', 'stormfeather_griffin'), none)).toBe(
       'grag_bear',
     );
   });
 
-  it('keeps the earlier catalog mount on a speed tie', () => {
-    // Both run at 0.7: the catalog order (ownedMounts' order) decides.
-    expect(mountSpellMountKey(['stormfeather_griffin', 'shadowjump_toad'])).toBe(
+  it('keeps the earlier catalog mount on a speed tie, whatever the bag order', () => {
+    // Both run at 0.7: the catalog order decides, not the slot order.
+    expect(mountSpellMountKey(reins('shadowjump_toad', 'stormfeather_griffin'), none)).toBe(
       'stormfeather_griffin',
     );
   });
 
-  it('is null when nothing is owned', () => {
-    expect(mountSpellMountKey([])).toBeNull();
+  it('prefers the bags: a faster BANKED mount does not replace the bagged one', () => {
+    const owned = (): MountKey[] => ['valorsteed', 'aether_hover_cycle'];
+    expect(mountSpellMountKey(reins('valorsteed'), owned)).toBe('valorsteed');
+  });
+
+  it('falls back to the fastest banked mount only when the bags hold none', () => {
+    const owned = (): MountKey[] => ['valorsteed', 'grag_bear'];
+    expect(mountSpellMountKey([{ itemId: 'rough_stone' }], owned)).toBe('grag_bear');
+  });
+
+  it('is null when nothing is owned, and ignores non-mount bag items', () => {
+    expect(mountSpellMountKey([{ itemId: 'rough_stone' }], none)).toBeNull();
   });
 });
 
@@ -179,7 +193,16 @@ describe('casting Summon Mount', () => {
     expect(e.mountKey).toBe('grag_bear');
   });
 
-  it('counts banked reins as owned, like the reins themselves', () => {
+  it('summons the bagged mount over a faster banked one', () => {
+    const sim = makeWorld();
+    const pid = join(sim);
+    sim.addItem('reins_valorsteed', 1, pid);
+    sim.players.get(pid)!.bank.inventory.push({ itemId: 'reins_grag_bear', count: 1 });
+    sim.castAbility(MOUNT_SPELL_ID, pid);
+    expect(sim.entities.get(pid)!.mountCastKey).toBe('valorsteed');
+  });
+
+  it('falls back to banked reins when the bags hold none', () => {
     const sim = makeWorld();
     const pid = join(sim);
     sim.players.get(pid)!.bank.inventory.push({ itemId: 'reins_grag_bear', count: 1 });

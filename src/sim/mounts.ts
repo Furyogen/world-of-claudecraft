@@ -325,7 +325,8 @@ export function grantRidingSkill(ctx: SimContext, meta: PlayerMeta, announce: bo
 
 /** The Summon Mount spell (content/mount_spell.ts), handed here by castAbility
  *  before any cast-path rule runs. Riding: dismount, like clicking the reins you
- *  ride. Otherwise summon mountSpellMountKey's pick through summonMountItem, so
+ *  ride. Otherwise summon mountSpellMountKey's pick (the fastest reins in the
+ *  bags, else in the bank) through summonMountItem, so
  *  every reins gate (riding skill, combat, battleground, ship, freight) answers
  *  exactly as it does for a reins click. Owning no mount says so. */
 export function castMountSpell(ctx: SimContext, pid: number): boolean {
@@ -342,7 +343,7 @@ export function castMountSpell(ctx: SimContext, pid: number): boolean {
     forceDismount(ctx, e);
     return true;
   }
-  const key = mountSpellMountKey(ownedMounts(meta));
+  const key = mountSpellMountKey(meta.inventory, () => ownedMounts(meta));
   if (!key) {
     ctx.error(pid, "You don't have a mount yet.");
     return false;
