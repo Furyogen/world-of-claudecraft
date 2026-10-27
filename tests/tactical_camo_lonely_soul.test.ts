@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { TACTICAL_CAMO_ID } from '../src/sim/combat/hunter_lonely_soul';
+import {
+  TACTICAL_CAMO_ID,
+  TACTICAL_CAMO_PET_CHECK_TICKS,
+} from '../src/sim/combat/hunter_lonely_soul';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
 import { computeTalentModifiers, emptyAllocation } from '../src/sim/content/talents';
 import { MOBS } from '../src/sim/data';
@@ -96,13 +99,13 @@ describe('Tactical Camo needs no pet', () => {
     expect(camo(sim)).toBe(true);
   });
 
-  it('ends the moment a living pet appears', () => {
+  it('ends within a second of a living pet appearing without a cast', () => {
     const sim = hunter('survival', LONELY_SOUL);
     sim.castAbility(TACTICAL_CAMO_ID);
     sim.tick();
     expect(camo(sim)).toBe(true);
     addPet(sim); // a pet returning without a cast (a revive in place, a match return)
-    sim.tick();
+    for (let i = 0; i < TACTICAL_CAMO_PET_CHECK_TICKS; i++) sim.tick();
     expect(camo(sim)).toBe(false);
     expect(sim.player.stealthed).toBe(false);
   });

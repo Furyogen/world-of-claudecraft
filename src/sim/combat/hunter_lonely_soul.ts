@@ -38,11 +38,18 @@ export function lonelySoulDamageMult(ctx: SimContext, source: Entity): number {
 
 export const TACTICAL_CAMO_ID = 'tactical_camo';
 
+/** Ticks between two pet checks for a camouflaged hunter (once a second). */
+export const TACTICAL_CAMO_PET_CHECK_TICKS = 20;
+
 /** Tactical Camo is the petless hunter's stealth: a living pet ends it. Summoning
  *  or reviving one is an ability use and already breaks it; this catches a pet
- *  that comes back without a cast. Cheap: bails on the cached stealth flag. */
+ *  that comes back without a cast (a revive in place, a match return). petOf
+ *  walks the roster and, with no pet out, walks all of it, so the check runs
+ *  once a second per hunter (staggered by id), not every tick; it bails on the
+ *  cached stealth flag first. */
 export function tacticalCamoPetTick(ctx: SimContext, hunter: Entity): void {
   if (!hunter.stealthed) return;
+  if ((ctx.tickCount + hunter.id) % TACTICAL_CAMO_PET_CHECK_TICKS !== 0) return;
   if (!hunter.auras.some((a) => a.id === TACTICAL_CAMO_ID && a.kind === 'stealth')) return;
   if (ctx.petOf(hunter.id)) ctx.breakStealth(hunter);
 }
