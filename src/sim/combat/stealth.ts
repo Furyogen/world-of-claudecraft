@@ -1,5 +1,5 @@
 import type { SimContext } from '../sim_context';
-import { hostileCanSeeStealthed, PVP_STEALTH_DETECTION_HYSTERESIS } from '../threat';
+import { hostileCanSeeStealthed, isFeigningDeath } from '../threat';
 import type { Entity } from '../types';
 
 // When a player slips into stealth (Rogue Duskveil/Smokestep, Druid Stalk, Mage
@@ -87,5 +87,8 @@ function canStillSee(
   const locked = ctx.entities.get(lockedId);
   if (!locked || locked.kind !== 'player' || !locked.auras.some((a) => a.kind === 'stealth'))
     return false;
-  return hostileCanSeeStealthed(observer, locked, PVP_STEALTH_DETECTION_HYSTERESIS);
+  // Play Dead clears locks through this sweep before its own aura lands; a
+  // feigning hunter is never kept, camouflaged or not.
+  if (isFeigningDeath(locked)) return false;
+  return hostileCanSeeStealthed(observer, locked, true);
 }

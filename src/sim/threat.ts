@@ -112,11 +112,14 @@ export function canDetectStealthedTarget(
 // stays a true escape: nothing sees through it.
 export const PVP_STEALTH_DETECTION_BASE = 20;
 export const PVP_STEALTH_DETECTION_REAR_MULT = 0.5;
-// Once an enemy has spotted a stealther, the reveal holds this many extra
-// yards, so a rogue on the edge does not flicker in and out of view. The
-// server applies it to an entity the viewer already has; the sim's own gates
-// (casting, auto-attack, pet sight) always allow it, so they never refuse an
-// action against a target the client is legitimately still shown.
+// SPOTTING and KEEPING differ. Spotting a stealther needs the arc rule above
+// (full radius in front, halved behind). Once spotted ("held"), the reveal
+// keeps the FRONT radius whatever the arc, plus this many extra yards, so a
+// rogue on the edge, or an observer turning on the spot, never flickers in and
+// out of view. The server holds an entity the viewer already has; the sim's own
+// gates (casting, auto-attack, pet sight, the stealth-entry drop) always use
+// the held radius, so they never refuse an action against a target the client
+// is legitimately still shown.
 export const PVP_STEALTH_DETECTION_HYSTERESIS = 1;
 
 /** True when `target` stands in `observer`'s front half (the 180 degree arc
@@ -127,12 +130,15 @@ export function inFrontHalf(observer: Entity, target: Entity): boolean {
   return Math.sin(observer.facing) * dx + Math.cos(observer.facing) * dz >= 0;
 }
 
-/** The radius inside which a hostile observer spots a stealthed player. */
-export function pvpStealthDetectionRadius(observer: Entity, target: Entity): number {
-  const base = inFrontHalf(observer, target)
-    ? PVP_STEALTH_DETECTION_BASE
-    : PVP_STEALTH_DETECTION_BASE * PVP_STEALTH_DETECTION_REAR_MULT;
-  return stealthDetectionRadius(observer, target, base);
+/** The radius inside which a hostile observer spots (or, `held`, keeps) a
+ *  stealthed player. */
+export function pvpStealthDetectionRadius(observer: Entity, target: Entity, held = false): number {
+  const base =
+    held || inFrontHalf(observer, target)
+      ? PVP_STEALTH_DETECTION_BASE
+      : PVP_STEALTH_DETECTION_BASE * PVP_STEALTH_DETECTION_REAR_MULT;
+  const radius = stealthDetectionRadius(observer, target, base);
+  return held ? radius + PVP_STEALTH_DETECTION_HYSTERESIS : radius;
 }
 
 // Greater Invisibility reads "Vanish for 20 sec" and already drops every lock
@@ -145,11 +151,11 @@ export function hasPvpEscapeStealth(target: Entity): boolean {
 }
 
 /** Distance half of the PvP rule, for a target already known to be stealthed
- *  (the server keys on the cached Entity.stealthed flag). `slack` widens the
- *  radius (the reveal hysteresis). Pure: no clock, no rng. */
-export function withinPvpStealthDetection(observer: Entity, target: Entity, slack = 0): boolean {
+ *  (the server keys on the cached Entity.stealthed flag). `held` is the keep
+ *  rule (see PVP_STEALTH_DETECTION_HYSTERESIS). Pure: no clock, no rng. */
+export function withinPvpStealthDetection(observer: Entity, target: Entity, held = false): boolean {
   if (hasPvpEscapeStealth(target)) return false;
-  const r = pvpStealthDetectionRadius(observer, target) + slack;
+  const r = pvpStealthDetectionRadius(observer, target, held);
   const dx = target.pos.x - observer.pos.x;
   const dz = target.pos.z - observer.pos.z;
   return dx * dx + dz * dz <= r * r;
@@ -158,19 +164,16 @@ export function withinPvpStealthDetection(observer: Entity, target: Entity, slac
 /** Can a HOSTILE observer (an enemy player or pet) perceive `target`? Anything
  *  that is not a stealthed player is always visible; Vanish and Greater
  *  Invisibility never are. Pure: no clock, no rng. */
-export function hostileCanSeeStealthed(observer: Entity, target: Entity, slack = 0): boolean {
+export function hostileCanSeeStealthed(observer: Entity, target: Entity, held = false): boolean {
   if (target.kind !== 'player' || !target.auras.some((a) => a.kind === 'stealth')) return true;
-  return withinPvpStealthDetection(observer, target, slack);
+  return withinPvpStealthDetection(observer, target, held);
 }
 
 /** The sim's own gate for a hostile action (cast, channel, auto-attack) against
  *  `target`: Vanish hides any target, and a stealthed player is hidden once it
- *  is beyond the observer's detection radius plus the reveal hysteresis. */
+ *  is beyond the observer's held detection radius. */
 export function hiddenFromHostile(observer: Entity, target: Entity): boolean {
-  return (
-    hasEscapeStealth(target) ||
-    !hostileCanSeeStealthed(observer, target, PVP_STEALTH_DETECTION_HYSTERESIS)
-  );
+  return hasEscapeStealth(target) || !hostileCanSeeStealthed(observer, target, true);
 }
 
 // What a PET perceives. A feigning hunter is never seen. A stealthed player is
@@ -181,7 +184,7 @@ export function petCanSeeStealthedTarget(target: Entity, pet?: Entity): boolean 
   if (target.auras.some((a) => a.kind === 'feign_death')) return false;
   if (!target.auras.some((a) => a.kind === 'stealth')) return true;
   if (!pet) return false;
-  return hostileCanSeeStealthed(pet, target, PVP_STEALTH_DETECTION_HYSTERESIS);
+  return hostileCanSeeStealthed(pet, target, true);
 }
 
 export function addThreat(mob: Entity, sourceId: number, amount: number): void {

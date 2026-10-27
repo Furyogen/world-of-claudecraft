@@ -108,9 +108,20 @@ describe('PvP detection radius', () => {
     expect(hostileCanSeeStealthed(foe, rogue)).toBe(true);
     placeFrom(rogue, foe, 0, -2.6);
     expect(hostileCanSeeStealthed(foe, rogue)).toBe(false);
-    // The hysteresis slack widens it.
+    // Once held, the front radius plus the hysteresis applies.
+    expect(PVP_STEALTH_DETECTION_HYSTERESIS).toBe(1);
     placeFrom(rogue, foe, 0, 5.5);
-    expect(hostileCanSeeStealthed(foe, rogue, PVP_STEALTH_DETECTION_HYSTERESIS)).toBe(true);
+    expect(hostileCanSeeStealthed(foe, rogue, true)).toBe(true);
+  });
+
+  it('keeps a held stealther through a turn: the held radius ignores the arc', () => {
+    const { rogue, foe } = duel();
+    hide(rogue);
+    placeFrom(rogue, foe, 0, -4); // behind, past the 2.5 yd rear radius
+    expect(hostileCanSeeStealthed(foe, rogue)).toBe(false); // cannot SPOT it
+    expect(hostileCanSeeStealthed(foe, rogue, true)).toBe(true); // but KEEPS it
+    placeFrom(rogue, foe, 0, -6.5);
+    expect(hostileCanSeeStealthed(foe, rogue, true)).toBe(false);
   });
 
   it('never sees through Vanish or Greater Invisibility, always sees the unstealthed', () => {
@@ -146,6 +157,14 @@ describe('server snapshot filter', () => {
     expect(canObserveEntity(sim, foe, rogue, d2(foe, rogue), true)).toBe(true);
     placeFrom(rogue, foe, 0, 6.5);
     expect(canObserveEntity(sim, foe, rogue, d2(foe, rogue), true)).toBe(false);
+  });
+
+  it('keeps shipping a known stealther the viewer turns away from', () => {
+    const { sim, rogue, foe } = duel();
+    hide(rogue);
+    placeFrom(rogue, foe, 0, -4); // behind the viewer
+    expect(canObserveEntity(sim, foe, rogue, d2(foe, rogue), false)).toBe(false);
+    expect(canObserveEntity(sim, foe, rogue, d2(foe, rogue), true)).toBe(true);
   });
 
   it('never ships a Vanished enemy, even point blank', () => {
@@ -201,6 +220,16 @@ describe('entering stealth drops only the enemies that lose sight', () => {
     dropTargetsOnStealth(sim.ctx, rogue);
     expect(foe.targetId).toBe(rogue.id);
     placeFrom(rogue, foe, 0, 15);
+    dropTargetsOnStealth(sim.ctx, rogue);
+    expect(foe.targetId).toBe(null);
+  });
+
+  it('never keeps a lock on a feigning stealther, however close', () => {
+    const { sim, rogue, foe } = duel();
+    placeFrom(rogue, foe, 0, 1);
+    foe.targetId = rogue.id;
+    hide(rogue);
+    rogue.auras.push({ ...stealthAura('play_dead'), kind: 'feign_death' });
     dropTargetsOnStealth(sim.ctx, rogue);
     expect(foe.targetId).toBe(null);
   });
