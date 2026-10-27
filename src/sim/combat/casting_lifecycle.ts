@@ -61,7 +61,7 @@ import type { SimContext } from '../sim_context';
 import { primaryHealingMultiplier } from '../spec_output_tuning';
 import { abilityScalingPower, channelTickBonus } from '../spell_scaling';
 import { resolveTalentHitMult } from '../talent_hit_mult';
-import { hasEscapeStealth } from '../threat';
+import { hiddenFromHostile } from '../threat';
 import type { AbilityDef, AbilityEffect, Aura, Entity, Vec3 } from '../types';
 import {
   ALLIED_HEARTHSTONE_CAST_ID,
@@ -1574,10 +1574,11 @@ export function castAbility(
       !target ||
       target.dead ||
       (!ctx.isHostileTo(p, target) && !ctx.isFriendlyTo(p, target)) ||
-      // Vanish (hasEscapeStealth) makes a HOSTILE target fully undetectable
-      // (issue #2426); a friendly cast (self/party heal) is unaffected, since
-      // allies can always perceive a stealthed party member.
-      (ctx.isHostileTo(p, target) && hasEscapeStealth(target))
+      // Vanish makes a HOSTILE target fully undetectable (issue #2426), and a
+      // stealthed enemy player is unseen beyond the caster's detection radius
+      // (hiddenFromHostile); a friendly cast (self/party heal) is unaffected,
+      // since allies can always perceive a stealthed party member.
+      (ctx.isHostileTo(p, target) && hiddenFromHostile(p, target))
     ) {
       ctx.error(p.id, 'You have no target.', target?.dead ? 'target_dead' : undefined);
       return;
@@ -1605,10 +1606,11 @@ export function castAbility(
         if (target) p.targetId = target.id;
       }
     }
-    // Vanish (hasEscapeStealth) makes the target fully undetectable, same gate
-    // the mob AI already applies (mob/targeting.ts): a hostile cast against it
-    // is refused exactly like an out-of-range or dead target (issue #2426).
-    if (!target || target.dead || !ctx.isHostileTo(p, target) || hasEscapeStealth(target)) {
+    // Vanish, or a stealthed enemy player beyond the caster's detection radius
+    // (hiddenFromHostile), hides the target, the same gate the mob AI already
+    // applies (mob/targeting.ts): a hostile cast against it is refused exactly
+    // like an out-of-range or dead target (issue #2426).
+    if (!target || target.dead || !ctx.isHostileTo(p, target) || hiddenFromHostile(p, target)) {
       ctx.error(p.id, 'You have no target.', target?.dead ? 'target_dead' : undefined);
       return;
     }
@@ -2579,9 +2581,10 @@ function applyChannelTick(
   }
 
   const target = p.castTargetId !== null ? ctx.entities.get(p.castTargetId) : null;
-  // A channel whose target vanishes mid-cast (Vanish, hasEscapeStealth) stops
-  // ticking on it, same as an out-of-range or dead target (issue #2426).
-  if (!target || target.dead || !ctx.isHostileTo(p, target) || hasEscapeStealth(target)) {
+  // A channel whose target vanishes mid-cast (Vanish, or a stealther slipping
+  // out of detection: hiddenFromHostile) stops ticking on it, same as an
+  // out-of-range or dead target (issue #2426).
+  if (!target || target.dead || !ctx.isHostileTo(p, target) || hiddenFromHostile(p, target)) {
     cancelCast(ctx, p);
     return;
   }
@@ -2928,7 +2931,7 @@ function applyAbility(
       !target ||
       target.dead ||
       (!ctx.isHostileTo(p, target) && !ctx.isFriendlyTo(p, target)) ||
-      (ctx.isHostileTo(p, target) && hasEscapeStealth(target))
+      (ctx.isHostileTo(p, target) && hiddenFromHostile(p, target))
     ) {
       ctx.error(p.id, 'You have no target.');
       return;
@@ -2945,7 +2948,7 @@ function applyAbility(
     }
   } else if (ability.requiresTarget) {
     target = castTarget !== null ? (ctx.entities.get(castTarget) ?? null) : null;
-    if (!target || target.dead || !ctx.isHostileTo(p, target) || hasEscapeStealth(target)) {
+    if (!target || target.dead || !ctx.isHostileTo(p, target) || hiddenFromHostile(p, target)) {
       ctx.error(p.id, 'You have no target.');
       return;
     }

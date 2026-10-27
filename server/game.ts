@@ -7927,9 +7927,9 @@ export class GameServer {
           // cutoff, so their counts are larger than an open-world viewer's.
           if (this.perfDetailActive) this.bcVisits++;
           if (e.id === anchorEntity.id) continue;
-          if (!this.canObserveEntity(anchorEntity, e, d2)) continue;
-          questSnap.collectPublicTraceCandidate(publicTracePids, e, d2, publicTraceCandidates);
           const known = session.sentEnts.get(e.id);
+          if (!this.canObserveEntity(anchorEntity, e, d2, known !== undefined)) continue;
+          questSnap.collectPublicTraceCandidate(publicTracePids, e, d2, publicTraceCandidates);
           // the viewer's current target stays in interest to the widest drop
           // radius so its unit frame doesn't vanish mid-chase
           const limitSq =
@@ -8035,9 +8035,9 @@ export class GameServer {
     return match.teams[1].includes(viewer.id) ? match.teams[1] : match.teams[0];
   }
 
-  private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
+  private canObserveEntity(viewer: Entity, e: Entity, d2: number, known = false): boolean {
     if (gmHiddenFrom(this.sim.entities, viewer, e)) return false; // /visible off, corpse too
-    return canObserveEntity(this.sim, viewer, e, d2);
+    return canObserveEntity(this.sim, viewer, e, d2, known);
   }
 
   private entityWireCacheFor(e: Entity): EntityWireCache {
