@@ -3,7 +3,10 @@
 // share (petDmgSharePct, folded in combat/damage.ts) redirects 30% of damage
 // taken, never taking the pet below 20% health. Without a living pet, the
 // hunter deals 10% more damage (break-even with the pet for Fieldcraft and
-// Marksmanship, so neither choice outdamages the other). Pure reads over ctx, draws no rng.
+// Marksmanship, so neither choice outdamages the other). The row also grants
+// Tactical Camo to every hunter spec; the cast itself is refused while a pet
+// lives (requiresNoPet) and tacticalCamoPetTick below ends it if one appears.
+// Pure reads over ctx, draws no rng.
 
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
@@ -31,4 +34,15 @@ export function lonelySoulDamageMult(ctx: SimContext, source: Entity): number {
   if (!hasLonelySoul(ctx, source)) return 1;
   const pet = ctx.petOf(source.id);
   return pet && !pet.dead ? 1 : 1 + LONELY_SOUL_NO_PET_DAMAGE_PCT;
+}
+
+export const TACTICAL_CAMO_ID = 'tactical_camo';
+
+/** Tactical Camo is the petless hunter's stealth: a living pet ends it. Summoning
+ *  or reviving one is an ability use and already breaks it; this catches a pet
+ *  that comes back without a cast. Cheap: bails on the cached stealth flag. */
+export function tacticalCamoPetTick(ctx: SimContext, hunter: Entity): void {
+  if (!hunter.stealthed) return;
+  if (!hunter.auras.some((a) => a.id === TACTICAL_CAMO_ID && a.kind === 'stealth')) return;
+  if (ctx.petOf(hunter.id)) ctx.breakStealth(hunter);
 }

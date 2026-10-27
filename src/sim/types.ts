@@ -4590,6 +4590,9 @@ export interface AbilityDef {
   exclusiveGroup?: string;
   requiresStealth?: boolean; // ambush
   requiresOutOfCombat?: boolean; // stealth
+  // Refused while the caster has a living pet out (Tactical Camo, the Lonely
+  // Soul stealth): the cast reports "You already have a pet."
+  requiresNoPet?: boolean;
   // The ability cannot be activated while physically inside a claimed dungeon or
   // raid instance. Toggle buffs may still be cancelled there to avoid trapping the
   // player in an action-locking form.

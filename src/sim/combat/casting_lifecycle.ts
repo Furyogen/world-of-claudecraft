@@ -393,7 +393,7 @@ function hasAbilityCharge(
   return !!state && state.charges > 0;
 }
 
-type ActiveCastRestriction = 'combat' | 'instance';
+type ActiveCastRestriction = 'combat' | 'instance' | 'pet';
 
 function activeCastRestriction(
   ctx: SimContext,
@@ -406,6 +406,7 @@ function activeCastRestriction(
   if (ability.requiresOutsideInstance && instanceInfoAt(ctx, player.pos)) {
     return 'instance';
   }
+  if (ability.requiresNoPet && ctx.petOf(player.id)) return 'pet';
   return null;
 }
 
@@ -416,6 +417,8 @@ function emitActiveCastRestrictionError(
 ): void {
   if (restriction === 'combat') {
     ctx.error(playerId, "You can't do that while in combat.");
+  } else if (restriction === 'pet') {
+    ctx.error(playerId, 'You already have a pet.');
   } else {
     ctx.error(playerId, 'Leave the dungeon first.');
   }
