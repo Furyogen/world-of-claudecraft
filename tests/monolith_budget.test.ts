@@ -1318,7 +1318,10 @@ const MONOLITHS: MonolithRow[] = [
     // riding progression lives in riding_training.ts. wc -l on the merged tree.
     // 11485 after the courier full-bank sync (PR 4598). wc -l.
     // 11490 with the difficulty menu fix (PR 4625) merged ahead of its landing. wc -l.
-    ceiling: 11410,
+    // LOWERED 11410 -> 11401 by the Stealth Rework footprints: breakStealth moved to
+    // src/sim/combat/stealth.ts (the stealth module's own seam), paying for the
+    // stealthFootprints IWorld getter. wc -l, exact count.
+    ceiling: 11401,
     seam: 'a sim system module behind SimContext (src/sim/CLAUDE.md)',
   },
   {

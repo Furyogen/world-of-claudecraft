@@ -485,6 +485,7 @@ export type {
   HillStandingInfo,
   SkullBagAction,
   SkullBagInfo,
+  VisibleFootprint,
   WorldPvpInfo,
   WorldPvpRewardPause,
   WorldPvpZone,

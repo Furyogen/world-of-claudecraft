@@ -9,6 +9,7 @@ import { IslandGuidance } from './island_guidance';
 import { MountBeacon } from './mount_beacon';
 import { RaceLine } from './race_line';
 import { ShadowInfiltrationVisual } from './shadow_infiltration_visual';
+import { StealthFootprintVisual } from './stealth_footprint_visual';
 import { WispMazeVisual } from './wisp_maze_visual';
 import { WorldQuestTraceVisual } from './world_quest_trace_visual';
 
@@ -22,6 +23,7 @@ export class WorldGuidance {
   private readonly glider: GliderCourseVisual;
   private readonly shadow: ShadowInfiltrationVisual;
   private readonly wispMaze: WispMazeVisual;
+  private readonly footprints: StealthFootprintVisual;
 
   constructor(
     scene: THREE.Object3D,
@@ -74,7 +76,15 @@ export class WorldGuidance {
       groundAt,
       compileGate && ((root) => compileGate(root, true)),
     );
+    // Enemy stealthers' lagged footprints (Stealth Rework): actionable on every
+    // tier, so gated before first paint like the other actionable guidance.
+    this.footprints = new StealthFootprintVisual(
+      scene,
+      groundAt,
+      compileGate && ((root) => compileGate(root, true)),
+    );
     this.readyForEntry = Promise.all([
+      this.footprints.readyForEntry,
       this.wispMaze.readyForEntry,
       this.shadow.readyForEntry,
       this.trace.readyForEntry,
@@ -108,6 +118,7 @@ export class WorldGuidance {
     this.glider.update(world, renderedSelf?.group);
     this.shadow.update(world);
     this.wispMaze.update(world, reducedMotion);
+    this.footprints.update(world.stealthFootprints);
   }
 
   dispose(): void {
@@ -116,5 +127,6 @@ export class WorldGuidance {
     this.glider.dispose();
     this.shadow.dispose();
     this.wispMaze.dispose();
+    this.footprints.dispose();
   }
 }

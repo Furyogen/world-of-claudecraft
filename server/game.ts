@@ -496,6 +496,7 @@ import { PgSocialDb } from './social_db';
 import { broadcastSocialPositions } from './social_positions';
 import { idleSpectatorBody } from './spectate_body';
 import { pgStaffWatchlist } from './staff_watchlist_db';
+import { StealthFootprintWire } from './stealth_footprint_wire';
 import { reconcileOnLogin as reconcileSteamOnLogin } from './steam/mirror';
 import {
   type StorageAppliedEffectDraft,
@@ -7896,6 +7897,7 @@ export class GameServer {
     const queryLimitSq = INTEREST_QUERY_RADIUS * INTEREST_QUERY_RADIUS;
     const bgQueryLimitSq = BG_MATCH_DROP_RADIUS * BG_MATCH_DROP_RADIUS;
     const publicTracePids = questSnap.activePublicWorldQuestTracePids(this.sim);
+    const footprints = new StealthFootprintWire(this.sim).beginBroadcast(); // usually no sources
 
     // Build each session's snapshot from its shared candidate list, still guarded
     // per session so one throw cannot starve the rest.
@@ -8000,7 +8002,7 @@ export class GameServer {
             : '';
         this.sendRaw(
           session,
-          `${head}${timerWireJson}${petSpecialWireJson},"self":${selfJson},"ents":[${ents.join(',')}]${telegraphJson}${keepJson}${questSnap.nearbyQuestTraceWireJson(this.sim, anchorEntity.id, publicTraceCandidates)}}`,
+          `${head}${timerWireJson}${petSpecialWireJson},"self":${selfJson},"ents":[${ents.join(',')}]${telegraphJson}${keepJson}${questSnap.nearbyQuestTraceWireJson(this.sim, anchorEntity.id, publicTraceCandidates)}${footprints.suffixFor(anchorEntity, session.lastSent)}}`,
         );
         if (session.needsVarkhulPortalReplay) {
           session.needsVarkhulPortalReplay = false;
