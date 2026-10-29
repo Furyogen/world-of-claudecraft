@@ -181,6 +181,7 @@ import { fallDamageKeepsStealth } from './stealth_fall';
 import { onDamageTaken, onShieldConsumed, onSpellCrit, resetProcState } from './talent_procs';
 import { onTrinketDamage } from './trinkets';
 import { emitRainOfFireStop } from './warlock_meteor_events';
+import { witchlightSpellDamageMult } from './witchlight';
 
 // How long a slain mob's corpse persists (seconds) before it is cleared. Sole user
 // is handleDeath, so the constant lives here with the death-domain code.
@@ -436,6 +437,15 @@ export function dealDamage(
       if (a.kind === 'spellvuln') amp += a.value;
     }
     if (amp > 0) amount = Math.round(amount * (1 + amp));
+  }
+
+  // Witchlight: a spell landing on a Witchlit target deals the extra damage a
+  // 10% armor cut would give a physical hit (combat/witchlight.ts). Ranged
+  // physical hits take that cut at their own armor step instead, and melee is
+  // never touched, so it stacks with Sunder Armor rather than overlapping it.
+  if (!resolvedHpLoss && amount > 0 && source && school !== 'physical') {
+    const witchlight = witchlightSpellDamageMult(source.level, target);
+    if (witchlight !== 1) amount = Math.round(amount * witchlight);
   }
 
   // Curse of frailty: a cursed victim takes more damage from every source. The
