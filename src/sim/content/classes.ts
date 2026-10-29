@@ -7121,7 +7121,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     effects: [{ type: 'faerieFire', duration: 40 }],
     description:
-      'Mark the target for 40 sec. Ranged weapon attacks treat its armor as $d% lower, and spells against it gain the same damage increase that cut gives a ranged attack. Melee attacks are not affected, so it stacks with Sunder Armor.',
+      'Mark the target for 40 sec. Ranged weapon attacks treat its armor as $d% lower, and spells against it gain the same damage increase that cut gives a ranged attack. Melee attacks are not affected, so it stacks with Armor Shear.',
   },
   hibernate: {
     id: 'hibernate',

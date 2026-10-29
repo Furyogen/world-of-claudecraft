@@ -187,7 +187,7 @@ describe('witchlight through the real combat paths', () => {
   );
 
   it(
-    'stacks with Sunder Armor on Auto Shot',
+    'stacks with Armor Shear on Auto Shot',
     () => {
       const sundered = autoAttackDamage('hunter', 15, [sunderAura(5)]);
       const both = autoAttackDamage('hunter', 15, [sunderAura(5), witchlightAura()]);
@@ -311,6 +311,6 @@ describe('witchlight tooltip', () => {
     if (!res) throw new Error('druid does not know Witchlight at the level cap');
     expect(abilityEffectText(res)).toBe(String(FAERIE_FIRE_ARMOR_PCT * 100));
     expect(res.def.description).toContain('$d% lower');
-    expect(res.def.description).toContain('stacks with Sunder Armor');
+    expect(res.def.description).toContain('stacks with Armor Shear');
   });
 });

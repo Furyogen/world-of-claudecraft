@@ -18469,7 +18469,7 @@ export const en: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Witchlight",
-        "description": "Mark the target for 40 sec. Ranged weapon attacks treat its armor as {damage}% lower, and spells against it gain the same damage increase that cut gives a ranged attack. Melee attacks are not affected, so it stacks with Sunder Armor."
+        "description": "Mark the target for 40 sec. Ranged weapon attacks treat its armor as {damage}% lower, and spells against it gain the same damage increase that cut gives a ranged attack. Melee attacks are not affected, so it stacks with Armor Shear."
       },
       "hibernate": {
         "name": "Slumber",
