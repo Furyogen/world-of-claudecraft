@@ -352,7 +352,7 @@ describe('percent armor debuffs (Sunder / Faerie Fire / corrode)', () => {
       school: 'nature',
     });
     expect((sim as any).effectiveArmor(mob)).toBe(500 * (1 - 2 * SUNDER_ARMOR_PCT_PER_STACK));
-    expect(rangedArmorOf(mob)).toBeCloseTo(
+    expect(rangedArmorOf(sim.ctx, mob)).toBeCloseTo(
       500 * (1 - 2 * SUNDER_ARMOR_PCT_PER_STACK) * (1 - FAERIE_FIRE_ARMOR_PCT),
       9,
     );

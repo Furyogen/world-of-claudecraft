@@ -181,7 +181,7 @@ import { fallDamageKeepsStealth } from './stealth_fall';
 import { onDamageTaken, onShieldConsumed, onSpellCrit, resetProcState } from './talent_procs';
 import { onTrinketDamage } from './trinkets';
 import { emitRainOfFireStop } from './warlock_meteor_events';
-import { witchlightSpellDamageMult } from './witchlight';
+import { witchlightArmorlessDamageMult } from './witchlight';
 
 // How long a slain mob's corpse persists (seconds) before it is cleared. Sole user
 // is handleDeath, so the constant lives here with the death-domain code.
@@ -443,8 +443,9 @@ export function dealDamage(
   // 10% armor cut would give a physical hit (combat/witchlight.ts). Ranged
   // physical hits take that cut at their own armor step instead, and melee is
   // never touched, so it stacks with Sunder Armor rather than overlapping it.
-  if (!resolvedHpLoss && amount > 0 && source && school !== 'physical') {
-    const witchlight = witchlightSpellDamageMult(source.level, target);
+  // Self-inflicted damage (Life Tap and similar) is not an attack and is skipped.
+  if (!resolvedHpLoss && amount > 0 && source && source !== target && school !== 'physical') {
+    const witchlight = witchlightArmorlessDamageMult(source.level, target);
     if (witchlight !== 1) amount = Math.round(amount * witchlight);
   }
 

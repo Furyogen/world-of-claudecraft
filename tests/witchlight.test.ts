@@ -10,10 +10,11 @@ import {
   isRangedPhysicalAbility,
   physicalHitArmor,
   rangedArmorOf,
-  witchlightSpellDamageMult,
+  witchlightArmorlessDamageMult,
 } from '../src/sim/combat/witchlight';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
 import { ABILITIES, MOBS } from '../src/sim/data';
+import { effectiveArmorOf } from '../src/sim/effective_stats';
 import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
 import {
@@ -118,16 +119,20 @@ function autoAttackDamage(
 describe('witchlight armor views', () => {
   const mob = (auras: Aura[]) =>
     ({ kind: 'mob', stats: { armor: 1000 }, auras }) as unknown as Entity;
+  // The shared armor read Sim binds as ctx.effectiveArmor.
+  const ctx = { effectiveArmor: effectiveArmorOf };
 
   it('cuts ranged armor by the Witchlight percent and leaves it alone otherwise', () => {
     expect(hasWitchlight(mob([]))).toBe(false);
-    expect(rangedArmorOf(mob([]))).toBe(1000);
-    expect(rangedArmorOf(mob([witchlightAura()]))).toBeCloseTo(1000 * (1 - FAERIE_FIRE_ARMOR_PCT));
+    expect(rangedArmorOf(ctx, mob([]))).toBe(1000);
+    expect(rangedArmorOf(ctx, mob([witchlightAura()]))).toBeCloseTo(
+      1000 * (1 - FAERIE_FIRE_ARMOR_PCT),
+    );
   });
 
   it('stacks on top of Sunder Armor for ranged hits instead of max-combining', () => {
     const both = mob([sunderAura(5), witchlightAura()]);
-    expect(rangedArmorOf(both)).toBeCloseTo(1000 * 0.9 * (1 - FAERIE_FIRE_ARMOR_PCT), 9);
+    expect(rangedArmorOf(ctx, both)).toBeCloseTo(1000 * 0.9 * (1 - FAERIE_FIRE_ARMOR_PCT), 9);
   });
 
   it('classifies only physical Ranged Attack Power shots fired from range as ranged', () => {
@@ -151,13 +156,13 @@ describe('witchlight armor views', () => {
     expect(physicalHitArmor(sim.ctx, target, ABILITIES.sinister_strike)).toBe(MOB_ARMOR);
   });
 
-  it('gives spells the ratio a 10% base-armor cut makes, and nothing without the debuff', () => {
+  it('gives armorless hits the ratio a 10% base-armor cut makes, and nothing without it', () => {
     const target = mob([witchlightAura()]);
-    expect(witchlightSpellDamageMult(20, target)).toBeCloseTo(cutMult(1000, 20), 12);
-    expect(witchlightSpellDamageMult(20, target)).toBeGreaterThan(1);
-    expect(witchlightSpellDamageMult(20, mob([]))).toBe(1);
+    expect(witchlightArmorlessDamageMult(20, target)).toBeCloseTo(cutMult(1000, 20), 12);
+    expect(witchlightArmorlessDamageMult(20, target)).toBeGreaterThan(1);
+    expect(witchlightArmorlessDamageMult(20, mob([]))).toBe(1);
     const unarmored = { kind: 'mob', stats: { armor: 0 }, auras: [witchlightAura()] };
-    expect(witchlightSpellDamageMult(20, unarmored as unknown as Entity)).toBe(1);
+    expect(witchlightArmorlessDamageMult(20, unarmored as unknown as Entity)).toBe(1);
   });
 });
 
@@ -166,7 +171,7 @@ const LONG = 90_000;
 
 describe('witchlight through the real combat paths', () => {
   it(
-    'raises Auto Shot damage by the ranged armor cut',
+    'raises Auto Shot damage by the ranged armor cut (sanity arm, no Sunder)',
     () => {
       const plain = autoAttackDamage('hunter', 15, []);
       const lit = autoAttackDamage('hunter', 15, [witchlightAura()]);
@@ -224,6 +229,80 @@ describe('witchlight through the real combat paths', () => {
     expect(loss(other, 'fire')).toBe(Math.round(plainFire * cutMult(MOB_ARMOR, MAX_LEVEL)));
     expect(loss(other, 'physical')).toBe(loss(mob, 'physical'));
   });
+
+  it('raises spell damage on a Witchlit player but never self-inflicted damage', () => {
+    const { sim, p } = rig('mage', 13, 15);
+    const victimId = sim.addPlayer('warrior', 'Victim', { autoEquip: true });
+    sim.setPlayerLevel(MAX_LEVEL, victimId);
+    const victim = sim.entities.get(victimId)!;
+    victim.maxHp = victim.hp = 1_000_000_000;
+    const armor = victim.stats.armor;
+    expect(armor).toBeGreaterThan(0);
+    const loss = (source: Entity) => {
+      const before = victim.hp;
+      (sim as any).dealDamage(source, victim, 1000, false, 'shadow', 'Test Bolt', 'hit');
+      return before - victim.hp;
+    };
+    const plain = loss(p);
+    const selfPlain = loss(victim);
+    victim.auras.push(witchlightAura());
+    expect(loss(p)).toBe(Math.round(plain * cutMult(armor, p.level)));
+    expect(loss(victim)).toBe(selfPlain);
+  });
+});
+
+// One cast of a Hunter ability against a target that already carries a full
+// Sunder Armor stack, returning the damage that ability's own events dealt. The
+// Sunder baseline is what makes these decisive: under the old max-combine rule
+// Witchlight added nothing on top of 5 stacks, so an unconverted call site
+// leaves the two arms equal.
+function hunterAbilityDamage(abilityId: string, spec: string, witchlight: boolean): number {
+  const { sim, pid, p, mob } = rig('hunter', 5150, 15);
+  expect(sim.setSpec(spec, pid)).toBe(true);
+  const debuffs = [sunderAura(5), ...(witchlight ? [witchlightAura()] : [])];
+  const label = ABILITIES[abilityId].name;
+  let total = 0;
+  let cast = false;
+  for (let t = 0; t < 20 * 8; t++) {
+    p.hp = p.maxHp;
+    p.resource = p.maxResource;
+    p.facing = angleTo(p.pos, mob.pos);
+    p.targetId = mob.id;
+    mob.auras = mob.auras.filter((a) => !debuffs.some((d) => d.id === a.id));
+    mob.auras.push(...debuffs.map((d) => ({ ...d })));
+    if (!cast && t === 2) {
+      sim.castAbility(abilityId, pid, { x: mob.pos.x, z: mob.pos.z });
+      cast = true;
+    }
+    for (const ev of sim.tick()) {
+      if (ev.type === 'damage' && ev.sourceId === pid && ev.targetId === mob.id) {
+        if (ev.ability === label) total += ev.amount;
+      }
+    }
+    mob.hp = mob.maxHp;
+  }
+  return total;
+}
+
+describe('witchlight on Hunter ability paths, stacked on Sunder Armor', () => {
+  // [ability id, a spec that knows it, the code path it exercises]. No Hunter
+  // spec learns a ranged aoeDamage or chainDamage shot today, so those
+  // converted arms only route through physicalHitArmor's shared-armor branch.
+  const CASES: [string, string, string][] = [
+    ['aimed_shot', 'marksmanship', 'effect_dispatch directDamage'],
+    ['volley', 'marksmanship', 'hunter_ground_zone armored pulse'],
+    ['rapid_fire', 'marksmanship', 'casting_lifecycle armorless channel bolt'],
+  ];
+  it.each(CASES)(
+    '%s (%s) deals more with Witchlight on top of Sunder (%s)',
+    (abilityId, spec) => {
+      const sundered = hunterAbilityDamage(abilityId, spec, false);
+      const both = hunterAbilityDamage(abilityId, spec, true);
+      expect(sundered).toBeGreaterThan(0);
+      expect(both).toBeGreaterThan(sundered);
+    },
+    LONG,
+  );
 });
 
 describe('witchlight tooltip', () => {

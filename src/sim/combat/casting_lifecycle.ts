@@ -275,7 +275,11 @@ import {
 } from './warlock_talents';
 import { hasUmbralAnchor, UMBRAL_ANCHOR_ID, umbralAnchorCastError } from './warlock_utility';
 import { castRedHarvest } from './warrior_harvest';
-import { physicalHitArmor } from './witchlight';
+import {
+  isRangedPhysicalAbility,
+  physicalHitArmor,
+  witchlightArmorlessDamageMult,
+} from './witchlight';
 
 export const COLOSSAL_MIGHT_COOLDOWNS = new Set([
   'recklessness',
@@ -2628,6 +2632,10 @@ function applyChannelTick(
         const crit = ctx.rng.chance(consumeNextAttackCrit(ctx, src) ? 1 : ctx.spellCrit(src));
         let dmg = ctx.rng.range(eff.min, eff.max) + channelSp + surgeBonus;
         dmg *= spellDamageMultFromAuras(src);
+        // A ranged physical channel bolt (Fevered Draw) has no armor step, so
+        // Witchlight reaches it through the armorless multiplier spells get in
+        // dealDamage (which skips physical hits).
+        if (isRangedPhysicalAbility(res.def)) dmg *= witchlightArmorlessDamageMult(src.level, tgt);
         if (res.def.id === 'arcane_missiles' && perfectMomentActive(src)) {
           dmg *= PERFECT_MOMENT_DARTS_DAMAGE_MULT;
         }

@@ -4410,7 +4410,7 @@ export type AbilityEffect =
       /** Classic Expose Armor: stacks applied = combo points spent. */
       perCombo?: boolean;
     }
-  | { type: 'faerieFire'; duration: number } // fixed-percent armor reduction (AuraKind 'faerie_fire')
+  | { type: 'faerieFire'; duration: number } // Witchlight: ranged + spell armor cut (AuraKind 'faerie_fire', combat/witchlight.ts)
   | { type: 'absorbSpentResource'; mult: number; duration: number }
   | { type: 'aoeTaunt'; radius: number }
   | { type: 'taunt' } // taunt/growl: match top threat and force-attack the caster

@@ -498,7 +498,7 @@ export function rangedSwing(
     if (crit) dmg *= 2 + atk.critDmgPhysBonus;
     // wand bolts are magic — armor doesn't apply; physical auto shot is mitigated
     // by the ranged armor view, which Witchlight lowers (combat/witchlight.ts)
-    if (!ranged.wand) dmg *= 1 - armorReduction(rangedArmorOf(tgt), atk.level);
+    if (!ranged.wand) dmg *= 1 - armorReduction(rangedArmorOf(ctx, tgt), atk.level);
     ctx.dealDamage(
       atk,
       tgt,
