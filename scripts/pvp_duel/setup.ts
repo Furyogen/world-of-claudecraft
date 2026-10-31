@@ -112,7 +112,7 @@ export function applySeason2PushbackImmunity(
 ): void {
   const set = SEASON2_SETS.find((s) => s.cls === build.cls && s.spec === build.spec);
   const worn = new Set(Object.values(kit));
-  if (!set || !set.itemIds.every((id) => worn.has(id))) return;
+  if (!set?.itemIds.every((id) => worn.has(id))) return;
   const meta = sim.players.get(pid);
   const e = sim.entities.get(pid);
   if (!meta || !e) return;
