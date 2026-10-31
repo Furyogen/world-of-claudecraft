@@ -428,4 +428,11 @@ export function entryWaistFeet(
 
 export const PVP_TRINKET = 'medallion_of_defiance';
 
+/** Owner rule for v0.46: a full Season 2 kit makes its wearer immune to spell
+ *  pushback. release/v0.45.0 does not ship it (docs/design/warfare-season-2.md
+ *  still reads "no spell-pushback immunity on any honor set"), so the harness
+ *  models it: see setup.ts applySeason2PushbackImmunity. Flip to false to
+ *  measure the v0.45.0 rules instead. */
+export const SEASON2_PUSHBACK_IMMUNITY = true;
+
 export type Kit = Partial<Record<EquipSlot, string>>;

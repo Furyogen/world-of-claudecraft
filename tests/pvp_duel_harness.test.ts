@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { SPEC_AI } from '../scripts/pvp_duel/ai';
 import { BUILDS } from '../scripts/pvp_duel/builds';
 import { duelSeed, runDuel, specKey } from '../scripts/pvp_duel/duel';
-import { buildKit, createDuelSim } from '../scripts/pvp_duel/setup';
+import { buildKit, createDuelSim, DUEL_FIELD, spawnDuelist } from '../scripts/pvp_duel/setup';
 import { SEASON2_SETS } from '../src/sim/content/pvp_honor_season2';
 import { classSpecs, validateAllocation } from '../src/sim/content/talents';
 import { ABILITIES, ITEMS } from '../src/sim/data';
@@ -52,6 +52,21 @@ describe('pvp duel harness builds', () => {
 });
 
 describe('pvp duel harness run', () => {
+  it('models full Season 2 kits as immune to spell pushback', () => {
+    const sim = createDuelSim(1);
+    for (const key of ['shaman/elemental', 'warrior/arms']) {
+      const build = BUILDS.find((b) => specKey(b) === key);
+      if (!build) throw new Error(`missing ${key}`);
+      const d = spawnDuelist(sim, build, 'Probe', DUEL_FIELD.x, DUEL_FIELD.z);
+      const e = sim.entities.get(d.pid);
+      expect(e?.castPushbackReduction, key).toBe(1);
+      // A later stat recalc (an aura landing mid-fight) must keep it.
+      if (e) sim.ctx.recalcPlayer(e);
+      expect(e?.castPushbackReduction, key).toBe(1);
+      sim.removePlayer(d.pid);
+    }
+  }, 120_000);
+
   it('replays a duel identically from its seed', () => {
     const arms = BUILDS.find((b) => specKey(b) === 'warrior/arms');
     const frost = BUILDS.find((b) => specKey(b) === 'mage/frost');

@@ -8,7 +8,14 @@ import { ITEMS } from '../../src/sim/data';
 import { parseBisGearFor } from '../../src/sim/dev/parse_bis_loadouts';
 import { Sim } from '../../src/sim/sim';
 import { ALL_EQUIP_SLOTS, type Entity, type EquipSlot } from '../../src/sim/types';
-import { entryWaistFeet, JEWELRY, type Kit, PVP_TRINKET, type SpecBuild } from './builds';
+import {
+  entryWaistFeet,
+  JEWELRY,
+  type Kit,
+  PVP_TRINKET,
+  SEASON2_PUSHBACK_IMMUNITY,
+  type SpecBuild,
+} from './builds';
 
 /** A flat, open patch of the overworld with clear sight lines (the balance
  *  probes' PROBE_OPEN_FIELD anchor, scripts/probe_anchor.ts). */
@@ -84,10 +91,36 @@ export function spawnDuelist(
   }
   const kit = equipKit(sim, pid, buildKit(build));
   const e = sim.entities.get(pid) as Entity;
+  if (SEASON2_PUSHBACK_IMMUNITY) applySeason2PushbackImmunity(sim, pid, build, kit);
   place(sim, e, x, z);
   e.hp = e.maxHp;
   e.resource = e.resourceType === 'rage' ? 0 : e.maxResource;
   return { pid, build, kit };
+}
+
+/** Model the v0.46 Season 2 pushback immunity (builds.ts
+ *  SEASON2_PUSHBACK_IMMUNITY) through the engine's own pushback channel: the
+ *  talent-seam `global.castPushbackReduction` that recalcPlayerStats
+ *  max-combines with the item-set value. Living on the player's modifiers, it
+ *  survives every mid-fight stat recalc, and pushbackCast reads it as full
+ *  immunity at 1. Applied only when all five Season 2 pieces are worn. */
+export function applySeason2PushbackImmunity(
+  sim: Sim,
+  pid: number,
+  build: SpecBuild,
+  kit: Kit,
+): void {
+  const set = SEASON2_SETS.find((s) => s.cls === build.cls && s.spec === build.spec);
+  const worn = new Set(Object.values(kit));
+  if (!set || !set.itemIds.every((id) => worn.has(id))) return;
+  const meta = sim.players.get(pid);
+  const e = sim.entities.get(pid);
+  if (!meta || !e) return;
+  meta.talentMods = {
+    ...meta.talentMods,
+    global: { ...meta.talentMods.global, castPushbackReduction: 1 },
+  };
+  sim.ctx.recalcPlayer(e);
 }
 
 export function place(sim: Sim, e: Entity, x: number, z: number): void {
