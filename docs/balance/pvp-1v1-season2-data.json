@@ -1,0 +1,6545 @@
+{
+  "duels": 7290,
+  "errors": 0,
+  "gamesPerPair": 20,
+  "ranking": [
+    {
+      "spec": "paladin/retribution",
+      "label": "Retribution Paladin",
+      "score": 0.9615384615384616,
+      "tier": "S",
+      "vs": {
+        "melee": 0.9275,
+        "ranged": 1,
+        "caster": 1,
+        "healer": 0.9541666666666666
+      },
+      "games": 520,
+      "timeouts": 14,
+      "seconds": 24161.799999999977,
+      "dealt": 2750927,
+      "taken": 804476,
+      "ccSuffered": 1731.100000000002,
+      "ccInflicted": 1728.0500000000075,
+      "trinket": 137,
+      "winSeconds": 18221.74999999997,
+      "wins": 493
+    },
+    {
+      "spec": "paladin/protection",
+      "label": "Protection Paladin",
+      "score": 0.9375,
+      "tier": "S",
+      "vs": {
+        "melee": 0.9724999999999999,
+        "ranged": 0.975,
+        "caster": 1,
+        "healer": 0.7833333333333333
+      },
+      "games": 520,
+      "timeouts": 31,
+      "seconds": 43254.24999999997,
+      "dealt": 2675212,
+      "taken": 470919,
+      "ccSuffered": 2803.7500000000023,
+      "ccInflicted": 1444.6999999999998,
+      "trinket": 249,
+      "winSeconds": 33827.699999999975,
+      "wins": 472
+    },
+    {
+      "spec": "paladin/holy",
+      "label": "Holy Paladin",
+      "score": 0.9298076923076923,
+      "tier": "S",
+      "vs": {
+        "melee": 0.884090909090909,
+        "ranged": 1,
+        "caster": 0.99375,
+        "healer": 0.9
+      },
+      "games": 520,
+      "timeouts": 51,
+      "seconds": 59261.65000000003,
+      "dealt": 2833826,
+      "taken": 3818593,
+      "ccSuffered": 1969.8500000000026,
+      "ccInflicted": 372.65000000000055,
+      "trinket": 191,
+      "winSeconds": 44914.50000000001,
+      "wins": 458
+    },
+    {
+      "spec": "warrior/fury",
+      "label": "Fury Warrior",
+      "score": 0.8557692307692307,
+      "tier": "S",
+      "vs": {
+        "melee": 0.795,
+        "ranged": 1,
+        "caster": 0.95,
+        "healer": 0.7833333333333333
+      },
+      "games": 520,
+      "timeouts": 2,
+      "seconds": 34593.349999999984,
+      "dealt": 2450544,
+      "taken": 1423609,
+      "ccSuffered": 1584.15,
+      "ccInflicted": 3395.600000000001,
+      "trinket": 185,
+      "winSeconds": 27826.399999999998,
+      "wins": 444
+    },
+    {
+      "spec": "druid/feral",
+      "label": "Feral Druid",
+      "score": 0.7653846153846153,
+      "tier": "S",
+      "vs": {
+        "melee": 0.705,
+        "ranged": 0.85,
+        "caster": 0.8875000000000001,
+        "healer": 0.6749999999999999
+      },
+      "games": 520,
+      "timeouts": 8,
+      "seconds": 35770.80000000003,
+      "dealt": 2292339,
+      "taken": 1823132,
+      "ccSuffered": 2222.250000000003,
+      "ccInflicted": 842.1500000000053,
+      "trinket": 252,
+      "winSeconds": 25927.350000000017,
+      "wins": 394
+    },
+    {
+      "spec": "shaman/restoration",
+      "label": "Restoration Shaman",
+      "score": 0.7375,
+      "tier": "S",
+      "vs": {
+        "melee": 0.7363636363636363,
+        "ranged": 0.95,
+        "caster": 0.7687499999999999,
+        "healer": 0.6050000000000001
+      },
+      "games": 520,
+      "timeouts": 181,
+      "seconds": 95358.05,
+      "dealt": 2461190,
+      "taken": 4796199,
+      "ccSuffered": 2236.250000000002,
+      "ccInflicted": 0,
+      "trinket": 177,
+      "winSeconds": 47273.40000000003,
+      "wins": 293
+    },
+    {
+      "spec": "hunter/marksmanship",
+      "label": "Marksmanship Hunter",
+      "score": 0.6461538461538462,
+      "tier": "A",
+      "vs": {
+        "melee": 0.40454545454545454,
+        "ranged": 1,
+        "caster": 0.925,
+        "healer": 0.6583333333333333
+      },
+      "games": 520,
+      "timeouts": 2,
+      "seconds": 40715.60000000002,
+      "dealt": 2600338,
+      "taken": 1446717,
+      "ccSuffered": 1791.6000000000017,
+      "ccInflicted": 0,
+      "trinket": 164,
+      "winSeconds": 23540.550000000014,
+      "wins": 335
+    },
+    {
+      "spec": "druid/balance",
+      "label": "Balance Druid",
+      "score": 0.5971153846153846,
+      "tier": "A",
+      "vs": {
+        "melee": 0.6318181818181818,
+        "ranged": 0.75,
+        "caster": 0.3607142857142857,
+        "healer": 0.7583333333333333
+      },
+      "games": 520,
+      "timeouts": 23,
+      "seconds": 47005.09999999997,
+      "dealt": 2278435,
+      "taken": 2792039,
+      "ccSuffered": 1574.4000000000033,
+      "ccInflicted": 0,
+      "trinket": 146,
+      "winSeconds": 28774.899999999998,
+      "wins": 299
+    },
+    {
+      "spec": "priest/discipline",
+      "label": "Discipline Priest",
+      "score": 0.5961538461538461,
+      "tier": "A",
+      "vs": {
+        "melee": 0.6272727272727272,
+        "ranged": 0.475,
+        "caster": 0.6625,
+        "healer": 0.47000000000000003
+      },
+      "games": 520,
+      "timeouts": 94,
+      "seconds": 68836.65000000001,
+      "dealt": 2254957,
+      "taken": 2793968,
+      "ccSuffered": 2064.599999999999,
+      "ccInflicted": 919.7499999999997,
+      "trinket": 158,
+      "winSeconds": 24290.15,
+      "wins": 263
+    },
+    {
+      "spec": "warrior/arms",
+      "label": "Arms Warrior",
+      "score": 0.5711538461538461,
+      "tier": "A",
+      "vs": {
+        "melee": 0.37500000000000006,
+        "ranged": 0.47500000000000003,
+        "caster": 0.8625,
+        "healer": 0.5416666666666666
+      },
+      "games": 520,
+      "timeouts": 0,
+      "seconds": 31271.299999999977,
+      "dealt": 1861472,
+      "taken": 1328195,
+      "ccSuffered": 1082.2,
+      "ccInflicted": 4044.599999999996,
+      "trinket": 193,
+      "winSeconds": 17171.449999999983,
+      "wins": 297
+    },
+    {
+      "spec": "hunter/beast_mastery",
+      "label": "Beast Mastery Hunter",
+      "score": 0.5442307692307692,
+      "tier": "B",
+      "vs": {
+        "melee": 0.5045454545454545,
+        "ranged": 0,
+        "caster": 0.675,
+        "healer": 0.5333333333333333
+      },
+      "games": 520,
+      "timeouts": 2,
+      "seconds": 43251.14999999997,
+      "dealt": 2316826,
+      "taken": 1673616,
+      "ccSuffered": 1620.3499999999997,
+      "ccInflicted": 0,
+      "trinket": 183,
+      "winSeconds": 21909.049999999992,
+      "wins": 282
+    },
+    {
+      "spec": "priest/shadow",
+      "label": "Shadow Priest",
+      "score": 0.5394230769230769,
+      "tier": "B",
+      "vs": {
+        "melee": 0.4863636363636364,
+        "ranged": 0.4,
+        "caster": 0.6035714285714285,
+        "healer": 0.6083333333333333
+      },
+      "games": 520,
+      "timeouts": 31,
+      "seconds": 52698.39999999999,
+      "dealt": 2485264,
+      "taken": 2020164,
+      "ccSuffered": 1629.050000000002,
+      "ccInflicted": 741.8000000000004,
+      "trinket": 129,
+      "winSeconds": 24661.35000000002,
+      "wins": 265
+    },
+    {
+      "spec": "hunter/survival",
+      "label": "Survival Hunter",
+      "score": 0.5288461538461539,
+      "tier": "B",
+      "vs": {
+        "melee": 0.16499999999999998,
+        "ranged": 0.95,
+        "caster": 0.89375,
+        "healer": 0.5083333333333333
+      },
+      "games": 520,
+      "timeouts": 4,
+      "seconds": 34363.15000000002,
+      "dealt": 1889726,
+      "taken": 1459972,
+      "ccSuffered": 2196.299999999998,
+      "ccInflicted": 0,
+      "trinket": 252,
+      "winSeconds": 14891.149999999996,
+      "wins": 273
+    },
+    {
+      "spec": "warrior/prot",
+      "label": "Protection Warrior",
+      "score": 0.5221153846153845,
+      "tier": "B",
+      "vs": {
+        "melee": 0.5349999999999999,
+        "ranged": 0.725,
+        "caster": 0.675,
+        "healer": 0.22916666666666666
+      },
+      "games": 520,
+      "timeouts": 17,
+      "seconds": 59077.25000000005,
+      "dealt": 1709965,
+      "taken": 2007123,
+      "ccSuffered": 1469.1499999999987,
+      "ccInflicted": 12892.55,
+      "trinket": 297,
+      "winSeconds": 27899.35000000002,
+      "wins": 263
+    },
+    {
+      "spec": "rogue/assassination",
+      "label": "Assassination Rogue",
+      "score": 0.43461538461538457,
+      "tier": "C",
+      "vs": {
+        "melee": 0.33,
+        "ranged": 0,
+        "caster": 0.76875,
+        "healer": 0.30833333333333335
+      },
+      "games": 520,
+      "timeouts": 0,
+      "seconds": 35704.09999999996,
+      "dealt": 1804149,
+      "taken": 1303969,
+      "ccSuffered": 1360.2000000000005,
+      "ccInflicted": 5615.99999999999,
+      "trinket": 263,
+      "winSeconds": 15147.450000000006,
+      "wins": 226
+    },
+    {
+      "spec": "warlock/destruction",
+      "label": "Destruction Warlock",
+      "score": 0.3798076923076923,
+      "tier": "C",
+      "vs": {
+        "melee": 0.045454545454545456,
+        "ranged": 0.025,
+        "caster": 0.8928571428571429,
+        "healer": 0.5125000000000001
+      },
+      "games": 520,
+      "timeouts": 3,
+      "seconds": 25506.70000000001,
+      "dealt": 2315278,
+      "taken": 1221725,
+      "ccSuffered": 978.4000000000013,
+      "ccInflicted": 450.5000000000003,
+      "trinket": 84,
+      "winSeconds": 8178.799999999998,
+      "wins": 196
+    },
+    {
+      "spec": "warlock/demonology",
+      "label": "Demonology Warlock",
+      "score": 0.37884615384615383,
+      "tier": "C",
+      "vs": {
+        "melee": 0.05909090909090909,
+        "ranged": 0.4,
+        "caster": 0.7214285714285714,
+        "healer": 0.5583333333333333
+      },
+      "games": 520,
+      "timeouts": 2,
+      "seconds": 34491.55000000002,
+      "dealt": 2114282,
+      "taken": 1317795,
+      "ccSuffered": 1468.9500000000035,
+      "ccInflicted": 984.7500000000006,
+      "trinket": 124,
+      "winSeconds": 13298.450000000015,
+      "wins": 196
+    },
+    {
+      "spec": "shaman/enhancement",
+      "label": "Enhancement Shaman",
+      "score": 0.3788461538461538,
+      "tier": "C",
+      "vs": {
+        "melee": 0.24,
+        "ranged": 0.025,
+        "caster": 0.68125,
+        "healer": 0.325
+      },
+      "games": 520,
+      "timeouts": 0,
+      "seconds": 30634.099999999984,
+      "dealt": 1785583,
+      "taken": 1472834,
+      "ccSuffered": 1998.350000000004,
+      "ccInflicted": 0,
+      "trinket": 232,
+      "winSeconds": 12444.749999999993,
+      "wins": 197
+    },
+    {
+      "spec": "rogue/combat",
+      "label": "Combat Rogue",
+      "score": 0.33076923076923076,
+      "tier": "D",
+      "vs": {
+        "melee": 0.195,
+        "ranged": 0,
+        "caster": 0.65625,
+        "healer": 0.2333333333333333
+      },
+      "games": 520,
+      "timeouts": 0,
+      "seconds": 35585.45,
+      "dealt": 1644208,
+      "taken": 1405802,
+      "ccSuffered": 1337.5499999999988,
+      "ccInflicted": 4882.199999999989,
+      "trinket": 251,
+      "winSeconds": 12161.200000000003,
+      "wins": 172
+    },
+    {
+      "spec": "rogue/subtlety",
+      "label": "Subtlety Rogue",
+      "score": 0.3269230769230769,
+      "tier": "D",
+      "vs": {
+        "melee": 0.26,
+        "ranged": 0,
+        "caster": 0.66875,
+        "healer": 0.09166666666666667
+      },
+      "games": 520,
+      "timeouts": 0,
+      "seconds": 35933.64999999997,
+      "dealt": 1613628,
+      "taken": 1380319,
+      "ccSuffered": 1294.5000000000007,
+      "ccInflicted": 5399.949999999986,
+      "trinket": 278,
+      "winSeconds": 10857.300000000003,
+      "wins": 170
+    },
+    {
+      "spec": "shaman/elemental",
+      "label": "Elemental Shaman",
+      "score": 0.3240384615384615,
+      "tier": "D",
+      "vs": {
+        "melee": 0.08636363636363636,
+        "ranged": 0,
+        "caster": 0.5,
+        "healer": 0.6625
+      },
+      "games": 520,
+      "timeouts": 11,
+      "seconds": 38642.14999999998,
+      "dealt": 2039459,
+      "taken": 1970687,
+      "ccSuffered": 1117.9500000000025,
+      "ccInflicted": 0,
+      "trinket": 81,
+      "winSeconds": 15667.700000000004,
+      "wins": 163
+    },
+    {
+      "spec": "mage/arcane",
+      "label": "Arcane Mage",
+      "score": 0.2548076923076923,
+      "tier": "D",
+      "vs": {
+        "melee": 0.3545454545454545,
+        "ranged": 0,
+        "caster": 0.18125,
+        "healer": 0.255
+      },
+      "games": 520,
+      "timeouts": 57,
+      "seconds": 66294.34999999999,
+      "dealt": 1524576,
+      "taken": 3075030,
+      "ccSuffered": 2750.2499999999964,
+      "ccInflicted": 758.1999999999996,
+      "trinket": 176,
+      "winSeconds": 11131.249999999995,
+      "wins": 104
+    },
+    {
+      "spec": "warlock/affliction",
+      "label": "Affliction Warlock",
+      "score": 0.23942307692307688,
+      "tier": "D",
+      "vs": {
+        "melee": 0.02727272727272727,
+        "ranged": 0.025,
+        "caster": 0.5071428571428572,
+        "healer": 0.3875
+      },
+      "games": 520,
+      "timeouts": 15,
+      "seconds": 25733.54999999996,
+      "dealt": 1564436,
+      "taken": 1758215,
+      "ccSuffered": 925.9999999999998,
+      "ccInflicted": 862.5000000000005,
+      "trinket": 58,
+      "winSeconds": 5955.600000000001,
+      "wins": 117
+    },
+    {
+      "spec": "druid/restoration",
+      "label": "Restoration Druid",
+      "score": 0.22403846153846155,
+      "tier": "D",
+      "vs": {
+        "melee": 0.3090909090909091,
+        "ranged": 0,
+        "caster": 0.075,
+        "healer": 0.36500000000000005
+      },
+      "games": 520,
+      "timeouts": 73,
+      "seconds": 63262.149999999994,
+      "dealt": 1138627,
+      "taken": 4383731,
+      "ccSuffered": 2193.5,
+      "ccInflicted": 0,
+      "trinket": 139,
+      "winSeconds": 11228.000000000002,
+      "wins": 80
+    },
+    {
+      "spec": "mage/frost",
+      "label": "Frost Mage",
+      "score": 0.17307692307692307,
+      "tier": "D",
+      "vs": {
+        "melee": 0.01363636363636364,
+        "ranged": 0,
+        "caster": 0.1285714285714286,
+        "healer": 0.5750000000000001
+      },
+      "games": 520,
+      "timeouts": 20,
+      "seconds": 43684.65000000003,
+      "dealt": 1846563,
+      "taken": 1608730,
+      "ccSuffered": 1280.5500000000004,
+      "ccInflicted": 95.24999999999991,
+      "trinket": 126,
+      "winSeconds": 11292.699999999993,
+      "wins": 80
+    },
+    {
+      "spec": "mage/fire",
+      "label": "Fire Mage",
+      "score": 0.1663461538461538,
+      "tier": "D",
+      "vs": {
+        "melee": 0.07272727272727272,
+        "ranged": 0,
+        "caster": 0.2857142857142857,
+        "healer": 0.25416666666666665
+      },
+      "games": 520,
+      "timeouts": 17,
+      "seconds": 38151.30000000001,
+      "dealt": 1798317,
+      "taken": 1627446,
+      "ccSuffered": 1404.9500000000023,
+      "ccInflicted": 174.60000000000008,
+      "trinket": 99,
+      "winSeconds": 5296.450000000003,
+      "wins": 78
+    },
+    {
+      "spec": "priest/holy",
+      "label": "Holy Priest",
+      "score": 0.15576923076923077,
+      "tier": "D",
+      "vs": {
+        "melee": 0.125,
+        "ranged": 0,
+        "caster": 0.08125,
+        "healer": 0.40499999999999997
+      },
+      "games": 520,
+      "timeouts": 100,
+      "seconds": 75830.2,
+      "dealt": 1350024,
+      "taken": 4215146,
+      "ccSuffered": 2563.0499999999993,
+      "ccInflicted": 1043.3999999999994,
+      "trinket": 160,
+      "winSeconds": 4787.5,
+      "wins": 31
+    }
+  ],
+  "classes": [
+    {
+      "cls": "paladin",
+      "v": 0.942948717948718,
+      "best": "paladin/retribution",
+      "worst": "paladin/holy"
+    },
+    {
+      "cls": "warrior",
+      "v": 0.6496794871794871,
+      "best": "warrior/fury",
+      "worst": "warrior/prot"
+    },
+    {
+      "cls": "hunter",
+      "v": 0.5730769230769232,
+      "best": "hunter/marksmanship",
+      "worst": "hunter/survival"
+    },
+    {
+      "cls": "druid",
+      "v": 0.5288461538461539,
+      "best": "druid/feral",
+      "worst": "druid/restoration"
+    },
+    {
+      "cls": "shaman",
+      "v": 0.48012820512820514,
+      "best": "shaman/restoration",
+      "worst": "shaman/elemental"
+    },
+    {
+      "cls": "priest",
+      "v": 0.430448717948718,
+      "best": "priest/discipline",
+      "worst": "priest/holy"
+    },
+    {
+      "cls": "rogue",
+      "v": 0.3641025641025641,
+      "best": "rogue/assassination",
+      "worst": "rogue/subtlety"
+    },
+    {
+      "cls": "warlock",
+      "v": 0.3326923076923077,
+      "best": "warlock/destruction",
+      "worst": "warlock/affliction"
+    },
+    {
+      "cls": "mage",
+      "v": 0.19807692307692304,
+      "best": "mage/arcane",
+      "worst": "mage/fire"
+    }
+  ],
+  "matrix": {
+    "warrior/arms": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1055.1000000000001
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 954.3499999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1943.9
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1500.3500000000004
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 814.2000000000002
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 433.3999999999999
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1500.7
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 1549.9
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1171.05
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 935.4000000000001
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 997.2999999999998
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 961.7499999999999
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1613.5
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2083.45
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1325.3500000000001
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 664.6999999999999
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 789.85
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 2172.3500000000004
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2348.85
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 731.5000000000001
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1162.7
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 590.7
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 846.6
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 582.7
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1273.65
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 918.3
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1404.8000000000002
+      }
+    },
+    "warrior/fury": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 954.3499999999999
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1733.4000000000003
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3274.8500000000004
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2850.75
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1465.6499999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 686.3000000000002
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1445.8000000000002
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1341.3
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1218.8000000000002
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 955.9999999999999
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 925.2500000000001
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1015.5
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2576.55
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1738.4000000000003
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 767.6999999999999
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 510.70000000000005
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 686.5500000000001
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 14,
+        "wins": 13,
+        "losses": 5,
+        "draws": 2,
+        "seconds": 2603.75
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2250.0499999999997
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 588.1
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 902.8499999999999
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 416.75
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 652.2499999999999
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 458.5499999999999
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 1905.05
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1226.55
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1175
+      }
+    },
+    "warrior/prot": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1943.9
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3274.8500000000004
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1686.1
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1616.2
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 883.6999999999999
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 2874.3500000000004
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 3213.4
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3235.650000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2039.7
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2058.7999999999997
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2050.2
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2496.3499999999995
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 4.5,
+        "wins": 1,
+        "losses": 12,
+        "draws": 7,
+        "seconds": 4102.35
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2045.3499999999997
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 1544.8
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 1742.8999999999999
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 2,
+        "wins": 0,
+        "losses": 16,
+        "draws": 4,
+        "seconds": 2588.4500000000003
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 12,
+        "wins": 9,
+        "losses": 5,
+        "draws": 6,
+        "seconds": 3377.5499999999997
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 2117.25
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 2241.1
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1095.7499999999998
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2066.65
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1123.8999999999999
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1901.05
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2212.7
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 3544.249999999999
+      }
+    },
+    "paladin/holy": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1500.3500000000004
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2850.75
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1686.1
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 4.5,
+        "wins": 0,
+        "losses": 11,
+        "draws": 9,
+        "seconds": 4267.150000000001
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1656.4499999999996
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1648.2
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1045.5
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1199.75
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1109.8999999999999
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1026.35
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3164.5000000000005
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2775.15
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2784
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2748.4
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 975.65
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1990.0500000000004
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2000.8499999999997
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1819.3499999999997
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1561.25
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2219.9
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1792.45
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 4012.0500000000006
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1244.9999999999998
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2582.5500000000006
+      }
+    },
+    "paladin/protection": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 814.2000000000002
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1465.6499999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1616.2
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 14.5,
+        "wins": 12,
+        "losses": 3,
+        "draws": 5,
+        "seconds": 3984.3999999999996
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1703.6999999999998
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1432.9
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1007.6000000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 905.6999999999999
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 988.4999999999999
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 948.85
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2827.25
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2487.4999999999995
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1812.0000000000002
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 941.6500000000002
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 717.8500000000001
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 7,
+        "losses": 7,
+        "draws": 6,
+        "seconds": 3094.95
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 2705.0499999999993
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1005.8999999999999
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1301.8500000000001
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 649.1499999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1067.1
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 754.25
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2022.8999999999999
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1153.6000000000001
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1045.5500000000002
+      }
+    },
+    "paladin/retribution": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 433.3999999999999
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 686.3000000000002
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 883.6999999999999
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 15.5,
+        "wins": 11,
+        "losses": 0,
+        "draws": 9,
+        "seconds": 4267.150000000001
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 5.5,
+        "wins": 3,
+        "losses": 12,
+        "draws": 5,
+        "seconds": 3984.3999999999996
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 604.9
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1009.4499999999997
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 637.35
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 483.95
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 526.4
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 495.20000000000005
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 554.5
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1992.4499999999998
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 634.35
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 514.9499999999999
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 455.70000000000005
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 334.65
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1665.9500000000003
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 975.05
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 526.9000000000001
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 548.9
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 210.64999999999998
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 422.74999999999994
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 296.84999999999997
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 662.1999999999999
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 590.9000000000001
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 367.75000000000006
+      }
+    },
+    "hunter/beast_mastery": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1500.7
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1445.8000000000002
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 2874.3500000000004
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1656.4499999999996
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1703.6999999999998
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1009.4499999999997
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1334.9000000000003
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 992.4
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1257.5000000000002
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1367.5
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1408.1499999999999
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1375.8999999999999
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 2282.65
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2288.8
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 1624.6999999999998
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 770.15
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1416.6499999999999
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 3998.7499999999995
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2656.1500000000005
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 918.2
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 980.9
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 646.6999999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 1198.6000000000001
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 696.2
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2014.4500000000003
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 1813.9999999999998
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3352.35
+      }
+    },
+    "hunter/marksmanship": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 1549.9
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1341.3
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 3213.4
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1648.2
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1432.9
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 637.35
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 992.4
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 971.4000000000003
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1325.3999999999999
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1590.7999999999997
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1571.4
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1542.45
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 2424.4
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1982.3999999999999
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1363.8
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 563.9
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1420.45
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 3959.6500000000005
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2277.6499999999996
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 574.75
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 721.0999999999999
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 537.3500000000001
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 834.3499999999999
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 598.15
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 2409.0499999999997
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1471.8
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2731.3
+      }
+    },
+    "hunter/survival": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1171.05
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1218.8000000000002
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3235.650000000001
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1045.5
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1007.6000000000001
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 483.95
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1257.5000000000002
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1325.3999999999999
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1261.0000000000002
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1454.6
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 1521.45
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 1549.1
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1907.1000000000004
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2177.0499999999997
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1540.1000000000001
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 602.9000000000001
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 787.15
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 3,
+        "wins": 1,
+        "losses": 15,
+        "draws": 4,
+        "seconds": 3226.0500000000006
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 1910.8999999999999
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 887.9499999999999
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 942.05
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 682.95
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1075.8500000000001
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 741.1500000000001
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 755.5999999999999
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1176.1499999999999
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 679.6000000000001
+      }
+    },
+    "rogue/assassination": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 935.4000000000001
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 955.9999999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2039.7
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1199.75
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 905.6999999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 526.4
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1367.5
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1590.7999999999997
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1454.6
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 849.6999999999998
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 941.35
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 903.5999999999999
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1867.8500000000001
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2707.0499999999997
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 1583.0000000000002
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1054.6
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 882.15
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2430.2000000000003
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 2990.8500000000004
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1157.75
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1481.0999999999997
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 688.7
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1007.35
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 811.8500000000001
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1106.7
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 852.8
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 2261.35
+      }
+    },
+    "rogue/combat": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 997.2999999999998
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 925.2500000000001
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2058.7999999999997
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1109.8999999999999
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 988.4999999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 495.20000000000005
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1408.1499999999999
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1571.4
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 1521.45
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 941.35
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 921.5
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 926.5499999999997
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1719.5500000000002
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2896.7500000000005
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1237.6000000000001
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1287.1499999999999
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 901.6000000000003
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 2329.0500000000006
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 2368.4
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1320.3000000000002
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1607.75
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 778.65
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 1151.3
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 885.95
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1014.35
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 874.85
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 2268.35
+      }
+    },
+    "rogue/subtlety": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 961.7499999999999
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1015.5
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2050.2
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1026.35
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 948.85
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 554.5
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1375.8999999999999
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1542.45
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 1549.1
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 903.5999999999999
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 926.5499999999997
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1002.6000000000003
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1638.1
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 2904.0499999999993
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1267.5000000000005
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1321.6499999999999
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 931
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2587.25
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 2607.5000000000005
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 1306.35
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1636.1
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 768.9
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1148.3500000000001
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 843.65
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1112.3
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 865.05
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 2141.15
+      }
+    },
+    "priest/discipline": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1613.5
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2576.55
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2496.3499999999995
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3164.5000000000005
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2827.25
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1992.4499999999998
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 2282.65
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 2424.4
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1907.1000000000004
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1867.8500000000001
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1719.5500000000002
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1638.1
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 3,
+        "wins": 0,
+        "losses": 14,
+        "draws": 6,
+        "seconds": 3705.75
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1452.05
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 17,
+        "wins": 14,
+        "losses": 0,
+        "draws": 6,
+        "seconds": 3177.7999999999997
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 19.5,
+        "wins": 19,
+        "losses": 0,
+        "draws": 1,
+        "seconds": 2104.7
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1956.9000000000003
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 19.5,
+        "wins": 19,
+        "losses": 0,
+        "draws": 1,
+        "seconds": 1462.3500000000001
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 2338.0499999999997
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1486.85
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3068.1499999999996
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 2373.8
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      }
+    },
+    "priest/holy": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2083.45
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1738.4000000000003
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 15.5,
+        "wins": 12,
+        "losses": 1,
+        "draws": 7,
+        "seconds": 4102.35
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2775.15
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2487.4999999999995
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 634.35
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2288.8
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1982.3999999999999
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2177.0499999999997
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2707.0499999999997
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2896.7500000000005
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 2904.0499999999993
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 3346.1500000000005
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2967.3499999999995
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2154.35
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 10.5,
+        "wins": 1,
+        "losses": 0,
+        "draws": 19,
+        "seconds": 4699.75
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 10,
+        "wins": 4,
+        "losses": 4,
+        "draws": 12,
+        "seconds": 4179.9
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3352.4999999999995
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 2455.85
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2743.1500000000005
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1993.3500000000004
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2703.4
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2057.15
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      }
+    },
+    "priest/shadow": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1325.3500000000001
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 767.6999999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2045.3499999999997
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2784
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1812.0000000000002
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 514.9499999999999
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 1624.6999999999998
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1363.8
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1540.1000000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 1583.0000000000002
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1237.6000000000001
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1267.5000000000005
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 3346.1500000000005
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 10,
+        "wins": 5,
+        "losses": 5,
+        "draws": 10,
+        "seconds": 4004.2
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 3087.7
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 1080.6999999999998
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 4,
+        "wins": 0,
+        "losses": 12,
+        "draws": 8,
+        "seconds": 4633.849999999999
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1961.2499999999998
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 1478.7999999999997
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1456.4500000000003
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1081.7999999999997
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1783.9999999999998
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 1225.15
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 2.5,
+        "wins": 2,
+        "losses": 17,
+        "draws": 1,
+        "seconds": 3553.3499999999995
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1879.3999999999999
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3463.75
+      }
+    },
+    "shaman/elemental": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 664.6999999999999
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 510.70000000000005
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 1544.8
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2748.4
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 941.6500000000002
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 455.70000000000005
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 770.15
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 563.9
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 602.9000000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1054.6
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1287.1499999999999
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1321.6499999999999
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 17,
+        "wins": 14,
+        "losses": 0,
+        "draws": 6,
+        "seconds": 3705.75
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2967.3499999999995
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 3087.7
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1675.1
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 1411.3
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 2.5,
+        "wins": 0,
+        "losses": 15,
+        "draws": 5,
+        "seconds": 4495
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2352.3999999999996
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 1291.5999999999997
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1219.05
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 737.9
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 462.29999999999995
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 440.75
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 865.4499999999999
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 1259.2000000000003
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1880.1000000000001
+      }
+    },
+    "shaman/enhancement": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 789.85
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 686.5500000000001
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 1742.8999999999999
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 975.65
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 717.8500000000001
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 334.65
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1416.6499999999999
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1420.45
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 787.15
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 882.15
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 901.6000000000003
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 931
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1452.05
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2154.35
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 1080.6999999999998
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 1411.3
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 656.6999999999999
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2213.6
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 2006.9
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 1011.25
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1307.2
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 776.4499999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 988.7499999999998
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 735.85
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1135.65
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 735.1999999999999
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 2038.3999999999996
+      }
+    },
+    "shaman/restoration": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 2172.3500000000004
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 6,
+        "wins": 5,
+        "losses": 13,
+        "draws": 2,
+        "seconds": 2603.75
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 18,
+        "wins": 16,
+        "losses": 0,
+        "draws": 4,
+        "seconds": 2588.4500000000003
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 10,
+        "wins": 7,
+        "losses": 7,
+        "draws": 6,
+        "seconds": 3094.95
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1665.9500000000003
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 3998.7499999999995
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 3959.6500000000005
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 17,
+        "wins": 15,
+        "losses": 1,
+        "draws": 4,
+        "seconds": 3226.0500000000006
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2430.2000000000003
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 2329.0500000000006
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2587.25
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 16,
+        "wins": 12,
+        "losses": 0,
+        "draws": 8,
+        "seconds": 4633.849999999999
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 17.5,
+        "wins": 15,
+        "losses": 0,
+        "draws": 5,
+        "seconds": 4495
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2213.6
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 16.5,
+        "wins": 13,
+        "losses": 0,
+        "draws": 7,
+        "seconds": 4208.8
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 4353.45
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 13,
+        "wins": 6,
+        "losses": 0,
+        "draws": 14,
+        "seconds": 4478.35
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 19,
+        "wins": 18,
+        "losses": 0,
+        "draws": 2,
+        "seconds": 4082.65
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 18.5,
+        "wins": 17,
+        "losses": 0,
+        "draws": 3,
+        "seconds": 4466.1
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 16,
+        "wins": 12,
+        "losses": 0,
+        "draws": 8,
+        "seconds": 3184.05
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 14,
+        "wins": 8,
+        "losses": 0,
+        "draws": 12,
+        "seconds": 4585.799999999999
+      }
+    },
+    "mage/arcane": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2348.85
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2250.0499999999997
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 8,
+        "wins": 5,
+        "losses": 9,
+        "draws": 6,
+        "seconds": 3377.5499999999997
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1990.0500000000004
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 2705.0499999999993
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 975.05
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2656.1500000000005
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2277.6499999999996
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 1910.8999999999999
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 2990.8500000000004
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 17,
+        "wins": 17,
+        "losses": 3,
+        "draws": 0,
+        "seconds": 2368.4
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 2607.5000000000005
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 3,
+        "wins": 0,
+        "losses": 14,
+        "draws": 6,
+        "seconds": 3177.7999999999997
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 9.5,
+        "wins": 0,
+        "losses": 1,
+        "draws": 19,
+        "seconds": 4699.75
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1961.2499999999998
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2352.3999999999996
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 2006.9
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 3.5,
+        "wins": 0,
+        "losses": 13,
+        "draws": 7,
+        "seconds": 4208.8
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 10,
+        "wins": 1,
+        "losses": 1,
+        "draws": 18,
+        "seconds": 4783.8
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 2474.2
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 2956.0000000000005
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1415.8999999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2471.1500000000005
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1519.25
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1967.4999999999995
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1857.7
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 9.5,
+        "wins": 0,
+        "losses": 1,
+        "draws": 19,
+        "seconds": 4767.7
+      }
+    },
+    "mage/fire": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 731.5000000000001
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 588.1
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 2117.25
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2000.8499999999997
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1005.8999999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 526.9000000000001
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 918.2
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 574.75
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 887.9499999999999
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1157.75
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1320.3000000000002
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 1306.35
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0.5,
+        "wins": 0,
+        "losses": 19,
+        "draws": 1,
+        "seconds": 2104.7
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 4,
+        "losses": 4,
+        "draws": 12,
+        "seconds": 4179.9
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 1478.7999999999997
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 1291.5999999999997
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1011.25
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 4353.45
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 2474.2
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1401.6999999999996
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1289.9499999999998
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 7,
+        "wins": 7,
+        "losses": 13,
+        "draws": 0,
+        "seconds": 755.25
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 919.0500000000001
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 510.09999999999997
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 985.55
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 767.2500000000001
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 8,
+        "wins": 7,
+        "losses": 11,
+        "draws": 2,
+        "seconds": 2894.4499999999994
+      }
+    },
+    "mage/frost": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1162.7
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 902.8499999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 2241.1
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1819.3499999999997
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1301.8500000000001
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 548.9
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 980.9
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 721.0999999999999
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 942.05
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1481.0999999999997
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1607.75
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1636.1
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1956.9000000000003
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3352.4999999999995
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1456.4500000000003
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1219.05
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1307.2
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 2956.0000000000005
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1289.9499999999998
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1541.7
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 1113.6999999999998
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1178.8500000000001
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 778.15
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1993.2499999999998
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1308.9
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3628.000000000001
+      }
+    },
+    "warlock/affliction": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 590.7
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 416.75
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1095.7499999999998
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1561.25
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 649.1499999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 210.64999999999998
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 646.6999999999999
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 537.3500000000001
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 682.95
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 688.7
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 778.65
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 768.9
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0.5,
+        "wins": 0,
+        "losses": 19,
+        "draws": 1,
+        "seconds": 1462.3500000000001
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 2455.85
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1081.7999999999997
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 737.9
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 776.4499999999999
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 7,
+        "wins": 0,
+        "losses": 6,
+        "draws": 14,
+        "seconds": 4478.35
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1415.8999999999999
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 755.25
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 1113.6999999999998
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 817.5000000000001
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 492.75000000000006
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 433.6
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 344.74999999999994
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 692.6999999999999
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 864.6999999999999
+      }
+    },
+    "warlock/demonology": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 846.6
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 652.2499999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2066.65
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2219.9
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1067.1
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 422.74999999999994
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 1198.6000000000001
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 834.3499999999999
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1075.8500000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 1007.35
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 5,
+        "wins": 5,
+        "losses": 15,
+        "draws": 0,
+        "seconds": 1151.3
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 1148.3500000000001
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 6,
+        "wins": 6,
+        "losses": 14,
+        "draws": 0,
+        "seconds": 2338.0499999999997
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2743.1500000000005
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1783.9999999999998
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 462.29999999999995
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 3,
+        "wins": 3,
+        "losses": 17,
+        "draws": 0,
+        "seconds": 988.7499999999998
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 4082.65
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2471.1500000000005
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 919.0500000000001
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1178.8500000000001
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 12,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "seconds": 492.75000000000006
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 947.6999999999999
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 633.75
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 617.2
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 823.0499999999997
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1265.8000000000002
+      }
+    },
+    "warlock/destruction": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 582.7
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 458.5499999999999
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1123.8999999999999
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1792.45
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 754.25
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 296.84999999999997
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 696.2
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 598.15
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 741.1500000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 2,
+        "wins": 2,
+        "losses": 18,
+        "draws": 0,
+        "seconds": 811.8500000000001
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 885.95
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 4,
+        "wins": 4,
+        "losses": 16,
+        "draws": 0,
+        "seconds": 843.65
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1486.85
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1993.3500000000004
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 1225.15
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 440.75
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 735.85
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 1.5,
+        "wins": 0,
+        "losses": 17,
+        "draws": 3,
+        "seconds": 4466.1
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1519.25
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 510.09999999999997
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 778.15
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 433.6
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 633.75
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 541.1
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 452.75000000000006
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 734.2499999999999
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 511.1499999999999
+      }
+    },
+    "druid/balance": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1273.65
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 1905.05
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1901.05
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 1,
+        "wins": 0,
+        "losses": 18,
+        "draws": 2,
+        "seconds": 4012.0500000000006
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2022.8999999999999
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 662.1999999999999
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2014.4500000000003
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 2409.0499999999997
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 755.5999999999999
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1106.7
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1014.35
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1112.3
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 3068.1499999999996
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2703.4
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 17.5,
+        "wins": 17,
+        "losses": 2,
+        "draws": 1,
+        "seconds": 3553.3499999999995
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 865.4499999999999
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1135.65
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1967.4999999999995
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 14,
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "seconds": 985.55
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1993.2499999999998
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 344.74999999999994
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 617.2
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 452.75000000000006
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 10,
+        "wins": 8,
+        "losses": 8,
+        "draws": 4,
+        "seconds": 3573.2
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 1908.4499999999998
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2420.3
+      }
+    },
+    "druid/feral": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 918.3
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1226.55
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2212.7
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1244.9999999999998
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1153.6000000000001
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 590.9000000000001
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 15,
+        "wins": 15,
+        "losses": 5,
+        "draws": 0,
+        "seconds": 1813.9999999999998
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1471.8
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1176.1499999999999
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 852.8
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 874.85
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 865.05
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 2373.8
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 2057.15
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 18,
+        "wins": 18,
+        "losses": 2,
+        "draws": 0,
+        "seconds": 1879.3999999999999
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 1259.2000000000003
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 735.1999999999999
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 4,
+        "wins": 0,
+        "losses": 12,
+        "draws": 8,
+        "seconds": 3184.05
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1857.7
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 767.2500000000001
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 1308.9
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 692.6999999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 823.0499999999997
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 20,
+        "wins": 20,
+        "losses": 0,
+        "draws": 0,
+        "seconds": 734.2499999999999
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 9,
+        "wins": 9,
+        "losses": 11,
+        "draws": 0,
+        "seconds": 1908.4499999999998
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 10,
+        "wins": 10,
+        "losses": 10,
+        "draws": 0,
+        "seconds": 1153.4000000000003
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 1788.0000000000002
+      }
+    },
+    "druid/restoration": {
+      "warrior/arms": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1404.8000000000002
+      },
+      "warrior/fury": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1175
+      },
+      "warrior/prot": {
+        "games": 20,
+        "score": 11,
+        "wins": 11,
+        "losses": 9,
+        "draws": 0,
+        "seconds": 3544.249999999999
+      },
+      "paladin/holy": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2582.5500000000006
+      },
+      "paladin/protection": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1045.5500000000002
+      },
+      "paladin/retribution": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 367.75000000000006
+      },
+      "hunter/beast_mastery": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3352.35
+      },
+      "hunter/marksmanship": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2731.3
+      },
+      "hunter/survival": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 679.6000000000001
+      },
+      "rogue/assassination": {
+        "games": 20,
+        "score": 13,
+        "wins": 13,
+        "losses": 7,
+        "draws": 0,
+        "seconds": 2261.35
+      },
+      "rogue/combat": {
+        "games": 20,
+        "score": 16,
+        "wins": 16,
+        "losses": 4,
+        "draws": 0,
+        "seconds": 2268.35
+      },
+      "rogue/subtlety": {
+        "games": 20,
+        "score": 19,
+        "wins": 19,
+        "losses": 1,
+        "draws": 0,
+        "seconds": 2141.15
+      },
+      "priest/discipline": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/holy": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      },
+      "priest/shadow": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3463.75
+      },
+      "shaman/elemental": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1880.1000000000001
+      },
+      "shaman/enhancement": {
+        "games": 20,
+        "score": 8,
+        "wins": 8,
+        "losses": 12,
+        "draws": 0,
+        "seconds": 2038.3999999999996
+      },
+      "shaman/restoration": {
+        "games": 20,
+        "score": 6,
+        "wins": 0,
+        "losses": 8,
+        "draws": 12,
+        "seconds": 4585.799999999999
+      },
+      "mage/arcane": {
+        "games": 20,
+        "score": 10.5,
+        "wins": 1,
+        "losses": 0,
+        "draws": 19,
+        "seconds": 4767.7
+      },
+      "mage/fire": {
+        "games": 20,
+        "score": 12,
+        "wins": 11,
+        "losses": 7,
+        "draws": 2,
+        "seconds": 2894.4499999999994
+      },
+      "mage/frost": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 3628.000000000001
+      },
+      "warlock/affliction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 864.6999999999999
+      },
+      "warlock/demonology": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 1265.8000000000002
+      },
+      "warlock/destruction": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 511.1499999999999
+      },
+      "druid/balance": {
+        "games": 20,
+        "score": 0,
+        "wins": 0,
+        "losses": 20,
+        "draws": 0,
+        "seconds": 2420.3
+      },
+      "druid/feral": {
+        "games": 20,
+        "score": 1,
+        "wins": 1,
+        "losses": 19,
+        "draws": 0,
+        "seconds": 1788.0000000000002
+      },
+      "druid/restoration": {
+        "games": 20,
+        "score": 10,
+        "wins": 0,
+        "losses": 0,
+        "draws": 20,
+        "seconds": 4800
+      }
+    }
+  }
+}
