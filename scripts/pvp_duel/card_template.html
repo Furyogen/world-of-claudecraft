@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Season 2 Duel Rankings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a scoreboard read top to bottom. Verdict first (tiers), then the
+   evidence (ranking bars, the matchup grid), then the per-spec drill-down, then
+   what is broken and how the numbers were made. */
+:root {
+  color-scheme: light;
+  --bg: #f4f4f1;
+  --surface: #fcfcfb;
+  --ink: #141413;
+  --ink-2: #52514e;
+  --muted: #84827c;
+  --line: #e1e0d9;
+  --accent: #9a6b14;
+  --bar: #2a78d6;
+  --ref: #c3c2b7;
+  --chip: #ecebe6;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --tier-s: #184f95;
+  --tier-a: #2a78d6;
+  --tier-b: #5598e7;
+  --tier-c: #86b6ef;
+  --tier-d: #b7d3f6;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f0f0e;
+    --surface: #1a1a19;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #8f8d86;
+    --line: #2c2c2a;
+    --accent: #d9a548;
+    --bar: #3987e5;
+    --ref: #4a4a46;
+    --chip: #262624;
+    --tier-s: #6da7ec;
+    --tier-a: #3987e5;
+    --tier-b: #256abf;
+    --tier-c: #1c5cab;
+    --tier-d: #184f95;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f0f0e;
+  --surface: #1a1a19;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --muted: #8f8d86;
+  --line: #2c2c2a;
+  --accent: #d9a548;
+  --bar: #3987e5;
+  --ref: #4a4a46;
+  --chip: #262624;
+  --tier-s: #6da7ec;
+  --tier-a: #3987e5;
+  --tier-b: #256abf;
+  --tier-c: #1c5cab;
+  --tier-d: #184f95;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 var(--body);
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 32px 20px 64px; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: 0.01em; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: 44px; }
+h2 { font-size: 26px; }
+h3 { font-size: 19px; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.ink2 { color: var(--ink-2); }
+.num { font-variant-numeric: tabular-nums; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+.section-head p { max-width: 70ch; }
+
+/* Header */
+.head { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-size: 14px; }
+.lede { font-size: 17px; color: var(--ink-2); max-width: 75ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.fact { background: var(--chip); border-radius: 999px; padding: 4px 12px; font-size: 13px; color: var(--ink-2); }
+.fact b { color: var(--ink); font-weight: 600; }
+
+/* Headline tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 2px; }
+.tile .k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.tile .v { font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1.1; }
+.tile .s { font-size: 13px; color: var(--ink-2); }
+
+/* Tiers */
+.tiers { display: grid; gap: 10px; }
+.tier-row { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; }
+.tier-badge {
+  font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1;
+  border-radius: 8px; display: grid; place-items: center; height: 46px; color: #fff;
+}
+.tier-badge small { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; opacity: 0.9; }
+.t-S { background: var(--tier-s); }
+.t-A { background: var(--tier-a); }
+.t-B { background: var(--tier-b); }
+.t-C { background: var(--tier-c); color: #0b0b0b; }
+.t-D { background: var(--tier-d); color: #0b0b0b; }
+:root[data-theme="dark"] .t-C, :root[data-theme="dark"] .t-D { color: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .t-C, :root:not([data-theme="light"]) .t-D { color: #fff; } }
+.tier-specs { display: flex; flex-wrap: wrap; gap: 8px; }
+.spec-chip {
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+  border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 14px; cursor: pointer;
+  display: inline-flex; gap: 8px; align-items: baseline;
+}
+.spec-chip:hover { border-color: var(--muted); }
+.spec-chip:focus-visible, .rank-row:focus-visible, select:focus-visible, button:focus-visible, .hm-label:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.spec-chip .pc { color: var(--ink-2); font-variant-numeric: tabular-nums; font-size: 13px; }
+
+/* Two-column area */
+.cols { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+
+/* Ranking bars */
+.ranking { display: grid; gap: 2px; }
+.rank-row {
+  display: grid; grid-template-columns: 26px minmax(120px, 190px) 34px 1fr 44px;
+  align-items: center; gap: 10px; padding: 4px 6px; border-radius: 6px; cursor: pointer;
+}
+.rank-row:hover, .rank-row.sel { background: var(--chip); }
+.rank-row .r { color: var(--muted); font-size: 13px; text-align: right; }
+.rank-row .n { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-tier { font-family: var(--display); font-weight: 700; font-size: 14px; border-radius: 5px; text-align: center; color: #fff; padding: 1px 0; }
+.track { position: relative; height: 12px; }
+.track .fill { position: absolute; left: 0; top: 1px; height: 10px; background: var(--bar); border-radius: 0 4px 4px 0; }
+.track .ref { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--ref); }
+.rank-row .v { font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; }
+.axis { display: grid; grid-template-columns: 26px minmax(120px, 190px) 34px 1fr 44px; gap: 10px; padding: 0 6px; font-size: 11px; color: var(--muted); }
+.axis .ticks { position: relative; height: 14px; }
+.axis .ticks span { position: absolute; transform: translateX(-50%); }
+@media (max-width: 520px) {
+  .rank-row, .axis { grid-template-columns: 22px minmax(90px, 1fr) 28px 1fr 38px; gap: 6px; }
+}
+
+/* Class bars */
+.classes { display: grid; gap: 10px; }
+.class-row { display: grid; gap: 4px; }
+.class-row .top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.class-row .sub { font-size: 12px; color: var(--muted); }
+
+/* Heatmap */
+.hm-scroll { overflow-x: auto; padding-bottom: 6px; margin: 0; }
+.hm { display: grid; gap: 2px; width: max-content; }
+.hm-corner { font-size: 11px; color: var(--muted); align-self: end; padding: 0 6px 4px 0; text-align: right; }
+.hm-col {
+  writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; color: var(--ink-2);
+  white-space: nowrap; text-align: left; padding: 4px 0; justify-self: center;
+}
+.hm-label { font-size: 12px; color: var(--ink-2); white-space: nowrap; text-align: right; padding-right: 6px; cursor: pointer; background: none; border: 0; font-family: inherit; }
+.hm-label:hover { color: var(--ink); }
+.hm-cell { width: 26px; height: 22px; border-radius: 3px; font-size: 10px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.hm-cell.mirror { background: var(--chip); }
+.hm-cell.cross { outline: 1px solid var(--ink); outline-offset: -1px; }
+.hm-label.cross, .hm-col.cross { color: var(--ink); font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 13px; color: var(--ink-2); }
+.legend .ramp { width: 340px; max-width: 100%; height: 10px; border-radius: 4px; }
+.legend .ends { display: flex; justify-content: space-between; width: 340px; max-width: 100%; font-size: 11px; color: var(--muted); }
+.toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+
+/* Explorer */
+.explorer-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+select {
+  font: inherit; font-size: 15px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+}
+.ex-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 20px; }
+@media (max-width: 800px) { .ex-grid { grid-template-columns: 1fr; } }
+.statlist { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.stat { background: var(--bg); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.stat .k { font-size: 12px; color: var(--muted); }
+.stat .v { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.arch { display: grid; gap: 8px; }
+.arch-row { display: grid; grid-template-columns: 70px 1fr 40px; gap: 10px; align-items: center; font-size: 13px; }
+.mu-list { display: grid; gap: 3px; max-height: 560px; overflow-y: auto; padding-right: 4px; }
+.mu-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 40px 66px; gap: 10px; align-items: center; font-size: 13px; padding: 3px 4px; border-radius: 4px; }
+.mu-row:hover { background: var(--chip); }
+.mu-row .wld { color: var(--muted); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.dv-track { position: relative; height: 10px; background: var(--chip); border-radius: 3px; }
+.dv-track .mid { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--ref); }
+.dv-track .bar { position: absolute; top: 0; height: 10px; border-radius: 3px; }
+
+/* Findings */
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+.finding { border: 1px solid var(--line); border-left: 4px solid var(--sev); border-radius: 8px; padding: 14px 16px; display: grid; gap: 8px; background: var(--bg); }
+.sev { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+.sev svg { flex: none; }
+.finding p { font-size: 14px; color: var(--ink-2); }
+.finding code, .method code { font-size: 12.5px; background: var(--chip); padding: 1px 5px; border-radius: 4px; }
+
+/* Counters table */
+.ctable-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.num { white-space: nowrap; }
+
+/* Method */
+.method { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 24px; }
+.method div { display: grid; gap: 4px; }
+.method p, .method li { font-size: 14px; color: var(--ink-2); }
+.method ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+/* Tooltip */
+#tip {
+  position: fixed; z-index: 10; pointer-events: none; display: none;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 12px; font-size: 13px; box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  max-width: 280px; line-height: 1.45;
+}
+#tip b { font-weight: 600; }
+#tip .row { display: flex; justify-content: space-between; gap: 16px; font-variant-numeric: tabular-nums; }
+#tip .row span:first-child { color: var(--ink-2); }
+@media (prefers-reduced-motion: no-preference) {
+  .rank-row, .spec-chip, .mu-row { transition: background-color 120ms ease, border-color 120ms ease; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <div class="eyebrow">World of ClaudeCraft · Warfare Season 2 · 1v1 duels</div>
+    <h1>Season 2 Duel Rankings</h1>
+    <p class="lede" id="lede"></p>
+    <div class="facts" id="facts"></div>
+  </header>
+
+  <section class="tiles" id="tiles" aria-label="Headline results"></section>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>Tier list</h2>
+      <p class="muted">Score is the mean win rate against the other 26 specs. S 65% and up, A 55 to 65, B 45 to 55, C 35 to 45, D under 35. Click a spec for its matchups.</p>
+    </div>
+    <div class="tiers" id="tiers"></div>
+  </section>
+
+  <div class="cols">
+    <section class="card">
+      <div class="section-head">
+        <h2>Spec ranking</h2>
+        <p class="muted">The line marks 50%. Hover for the archetype split.</p>
+      </div>
+      <div>
+        <div class="axis" aria-hidden="true"><span></span><span></span><span></span><div class="ticks" id="ticks"></div><span></span></div>
+        <div class="ranking" id="ranking"></div>
+      </div>
+    </section>
+    <div style="display:grid; gap:20px; min-width:0;">
+      <section class="card">
+        <h2>Class ranking</h2>
+        <div class="classes" id="classes"></div>
+      </section>
+      <section class="card">
+        <h2>By archetype</h2>
+        <p class="muted" style="font-size:13px;">Each spec's mean score against all melee, ranged, caster and healer opponents. The best and worst spec against each opponent group:</p>
+        <div id="archsum" style="display:grid; gap:10px;"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>Every matchup</h2>
+      <p class="muted">Row spec's win rate against the column spec, 20 duels per cell, both seat orders pooled, draws count half. Ordered by rank. Hover a cell, click a row name to open it below.</p>
+    </div>
+    <div class="legend">
+      <div>
+        <div class="ramp" id="ramp"></div>
+        <div class="ends"><span>0% row loses all</span><span>50%</span><span>100% row wins all</span></div>
+      </div>
+      <label class="toggle"><input type="checkbox" id="shownums"> Show numbers</label>
+    </div>
+    <figure class="hm-scroll" aria-label="Matchup matrix; the spec explorer below is its table view"><div class="hm" id="hm"></div></figure>
+  </section>
+
+  <section class="card" id="explore">
+    <div class="section-head">
+      <h2>Spec explorer</h2>
+      <p class="muted">Every opponent for one spec, best to worst: the table view of the grid above.</p>
+    </div>
+    <div class="explorer-top">
+      <label for="specsel" class="muted">Spec</label>
+      <select id="specsel"></select>
+      <span id="extier"></span>
+    </div>
+    <div class="ex-grid">
+      <div style="display:grid; gap:16px; align-content:start;">
+        <div class="statlist" id="exstats"></div>
+        <div>
+          <h3 style="margin-bottom:8px;">Against each archetype</h3>
+          <div class="arch" id="exarch"></div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:6px;">Read</h3>
+          <p class="ink2" id="exread" style="font-size:14px;"></p>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px;">All 26 opponents <span class="muted" style="font-family:var(--body); font-size:13px; font-weight:400;">win, loss, draw</span></h3>
+        <div class="mu-list" id="exlist"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>Who counters who</h2>
+      <p class="muted">Each spec's three hardest and three easiest pairings, its own score in brackets.</p>
+    </div>
+    <div class="ctable-wrap"><table id="ctable"><thead><tr><th>#</th><th>Spec</th><th>Countered by</th><th>Counters</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>Weaknesses found</h2>
+      <p class="muted">What the duel logs surfaced, balance first, then engine and security.</p>
+    </div>
+    <div class="findings" id="findings"></div>
+  </section>
+
+  <section class="card">
+    <h2>How it was run</h2>
+    <div class="method" id="method"></div>
+  </section>
+
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = /*DATA*/null;
+
+const $ = (s) => document.querySelector(s);
+const pct = (v) => `${Math.round(v * 100)}%`;
+const byKey = new Map(D.specs.map((s) => [s.key, s]));
+const el = (tag, attrs = {}, html = '') => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'style') e.style.cssText = v;
+    else e.setAttribute(k, v);
+  }
+  if (html) e.innerHTML = html;
+  return e;
+};
+
+// ---- diverging color (OKLab interpolation between three stops) ----
+function srgbToLin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }
+function linToSrgb(c) { const v = c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055; return Math.round(Math.max(0, Math.min(1, v)) * 255); }
+function hexToLab(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = srgbToLin(n >> 16 & 255), g = srgbToLin(n >> 8 & 255), b = srgbToLin(n & 255);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+function labToHex([L, A, B]) {
+  const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3;
+  const m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3;
+  const s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+  const r = linToSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s);
+  const g = linToSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s);
+  const b = linToSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s);
+  return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+}
+const STOPS = {
+  light: { lo: '#b8302f', mid: '#f0efec', hi: '#184f95' },
+  dark: { lo: '#e66767', mid: '#383835', hi: '#6da7ec' },
+};
+function isDark() {
+  const t = document.documentElement.getAttribute('data-theme');
+  if (t) return t === 'dark';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function divColor(v) {
+  const s = isDark() ? STOPS.dark : STOPS.light;
+  const [a, b, t] = v < 0.5 ? [s.lo, s.mid, v / 0.5] : [s.mid, s.hi, (v - 0.5) / 0.5];
+  const A = hexToLab(a), B = hexToLab(b);
+  return labToHex(A.map((x, i) => x + (B[i] - x) * t));
+}
+function inkOn(hex) {
+  const [L] = hexToLab(hex);
+  return L > 0.62 ? '#0b0b0b' : '#ffffff';
+}
+
+// ---- tooltip ----
+const tip = $('#tip');
+function showTip(html, ev) {
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  moveTip(ev);
+}
+function moveTip(ev) {
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + w > innerWidth - 8) x = ev.clientX - w - pad;
+  if (y + h > innerHeight - 8) y = ev.clientY - h - pad;
+  tip.style.left = `${Math.max(8, x)}px`;
+  tip.style.top = `${Math.max(8, y)}px`;
+}
+function hideTip() { tip.style.display = 'none'; }
+const rowHtml = (k, v) => `<div class="row"><span>${k}</span><span>${v}</span></div>`;
+
+// ---- header ----
+$('#lede').textContent = D.meta.lede;
+for (const f of D.meta.facts) $('#facts').append(el('span', { class: 'fact' }, f));
+for (const t of D.meta.tiles) $('#tiles').append(el('div', { class: 'tile' }, `<span class="k">${t.k}</span><span class="v">${t.v}</span><span class="s">${t.s}</span>`));
+
+// ---- tiers ----
+for (const t of ['S', 'A', 'B', 'C', 'D']) {
+  const specs = D.specs.filter((s) => s.tier === t);
+  const row = el('div', { class: 'tier-row' });
+  row.append(el('div', { class: `tier-badge t-${t}`, 'aria-label': `Tier ${t}` }, `<div>${t}<small>${specs.length} specs</small></div>`));
+  const wrap = el('div', { class: 'tier-specs' });
+  for (const s of specs) {
+    const b = el('button', { class: 'spec-chip', type: 'button' }, `${s.label}<span class="pc">${pct(s.score)}</span>`);
+    b.addEventListener('click', () => openSpec(s.key, true));
+    wrap.append(b);
+  }
+  row.append(wrap);
+  $('#tiers').append(row);
+}
+
+// ---- ranking ----
+for (const v of [0, 25, 50, 75, 100]) $('#ticks').append(el('span', { style: `left:${v}%` }, `${v}%`));
+D.specs.forEach((s, i) => {
+  const r = el('div', { class: 'rank-row', tabindex: '0', 'data-key': s.key, role: 'button', 'aria-label': `${s.label}, rank ${i + 1}, ${pct(s.score)}, tier ${s.tier}` });
+  r.innerHTML = `<span class="r num">${i + 1}</span><span class="n">${s.label}</span><span class="mini-tier t-${s.tier}">${s.tier}</span><div class="track"><div class="fill" style="width:${(s.score * 100).toFixed(1)}%"></div><div class="ref"></div></div><span class="v">${pct(s.score)}</span>`;
+  const tipHtml = `<b>${s.label}</b> · tier ${s.tier}<br>` +
+    rowHtml('Score', pct(s.score)) + rowHtml('vs melee', pct(s.vs.melee)) + rowHtml('vs ranged', pct(s.vs.ranged)) +
+    rowHtml('vs caster', pct(s.vs.caster)) + rowHtml('vs healer', pct(s.vs.healer)) +
+    rowHtml('Damage dealt / sec', s.dps.toFixed(1)) + rowHtml('Damage taken / sec', s.dtps.toFixed(1)) +
+    rowHtml('Avg duel', `${Math.round(s.len)} s`) + rowHtml('Draw rate', pct(s.draw));
+  r.addEventListener('mouseenter', (e) => showTip(tipHtml, e));
+  r.addEventListener('mousemove', moveTip);
+  r.addEventListener('mouseleave', hideTip);
+  r.addEventListener('click', () => openSpec(s.key, true));
+  r.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpec(s.key, true); } });
+  $('#ranking').append(r);
+});
+
+// ---- classes ----
+for (const c of D.classes) {
+  const row = el('div', { class: 'class-row' });
+  row.innerHTML = `<div class="top"><span>${c.label}</span><span class="num">${pct(c.score)}</span></div>
+    <div class="track"><div class="fill" style="width:${(c.score * 100).toFixed(1)}%"></div><div class="ref"></div></div>
+    <div class="sub">Best ${byKey.get(c.best).label} ${pct(byKey.get(c.best).score)} · worst ${byKey.get(c.worst).label} ${pct(byKey.get(c.worst).score)}</div>`;
+  $('#classes').append(row);
+}
+
+// ---- archetype summary ----
+const archNames = { melee: 'Against melee', ranged: 'Against ranged', caster: 'Against casters', healer: 'Against healers' };
+for (const a of ['melee', 'ranged', 'caster', 'healer']) {
+  const sorted = [...D.specs].sort((x, y) => y.vs[a] - x.vs[a]);
+  const best = sorted[0], worst = sorted[sorted.length - 1];
+  $('#archsum').append(el('div', { style: 'display:grid; gap:2px; font-size:14px;' },
+    `<span class="muted" style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em;">${archNames[a]} (${D.archCounts[a]} specs)</span>
+     <span>Best <b>${best.label}</b> <span class="num ink2">${pct(best.vs[a])}</span></span>
+     <span>Worst <b>${worst.label}</b> <span class="num ink2">${pct(worst.vs[a])}</span></span>`));
+}
+
+// ---- heatmap ----
+const hm = $('#hm');
+const n = D.specs.length;
+hm.style.gridTemplateColumns = `auto repeat(${n}, 26px)`;
+hm.append(el('div', { class: 'hm-corner' }, 'row vs column'));
+const colEls = [];
+for (const s of D.specs) { const c = el('div', { class: 'hm-col' }, s.short); colEls.push(c); hm.append(c); }
+const rowEls = [];
+const cells = [];
+D.specs.forEach((rs, ri) => {
+  const lab = el('button', { class: 'hm-label', type: 'button' }, rs.short);
+  lab.addEventListener('click', () => openSpec(rs.key, true));
+  rowEls.push(lab);
+  hm.append(lab);
+  D.specs.forEach((cs, ci) => {
+    const cell = el('div', { class: 'hm-cell' });
+    if (ri === ci) {
+      cell.classList.add('mirror');
+    } else {
+      const m = D.m[rs.key][cs.key];
+      cell.dataset.v = m[0];
+      cell.addEventListener('mouseenter', (e) => {
+        for (const c of cells) c.classList.remove('cross');
+        rowEls.forEach((x, i) => { x.classList.toggle('cross', i === ri); });
+        colEls.forEach((x, i) => { x.classList.toggle('cross', i === ci); });
+        cell.classList.add('cross');
+        showTip(`<b>${rs.label}</b> vs <b>${cs.label}</b><br>` + rowHtml('Row wins', pct(m[0])) +
+          rowHtml('Won / lost / drawn', `${m[1]} / ${m[2]} / ${m[3]}`) + rowHtml('Avg duel', `${Math.round(m[4])} s`), e);
+      });
+      cell.addEventListener('mousemove', moveTip);
+      cell.addEventListener('mouseleave', () => { cell.classList.remove('cross'); for (const x of rowEls) x.classList.remove('cross'); for (const x of colEls) x.classList.remove('cross'); hideTip(); });
+    }
+    cells.push(cell);
+    hm.append(cell);
+  });
+});
+function paintHeatmap() {
+  const nums = $('#shownums').checked;
+  for (const c of cells) {
+    if (c.classList.contains('mirror')) { c.textContent = nums ? '-' : ''; continue; }
+    const v = Number(c.dataset.v);
+    const col = divColor(v);
+    c.style.background = col;
+    c.style.color = inkOn(col);
+    c.textContent = nums ? Math.round(v * 100) : '';
+  }
+  const stops = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1].map((v) => `${divColor(v)} ${v * 100}%`).join(', ');
+  $('#ramp').style.background = `linear-gradient(90deg, ${stops})`;
+}
+$('#shownums').addEventListener('change', paintHeatmap);
+paintHeatmap();
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { paintHeatmap(); openSpec($('#specsel').value, false); });
+new MutationObserver(() => { paintHeatmap(); openSpec($('#specsel').value, false); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+// ---- explorer ----
+const sel = $('#specsel');
+for (const s of D.specs) sel.append(el('option', { value: s.key }, `${s.label} (${pct(s.score)})`));
+sel.addEventListener('change', () => openSpec(sel.value, false));
+function openSpec(key, scroll) {
+  const s = byKey.get(key);
+  if (!s) return;
+  sel.value = key;
+  for (const r of document.querySelectorAll('.rank-row')) r.classList.toggle('sel', r.dataset.key === key);
+  $('#extier').innerHTML = `<span class="mini-tier t-${s.tier}" style="display:inline-block; padding:2px 10px;">Tier ${s.tier}</span> <span class="muted">rank ${D.specs.indexOf(s) + 1} of ${D.specs.length}</span>`;
+  const stats = [
+    ['Score', pct(s.score)], ['Damage dealt / sec', s.dps.toFixed(1)], ['Damage taken / sec', s.dtps.toFixed(1)],
+    ['Avg duel', `${Math.round(s.len)} s`], ['Avg winning duel', s.winTime ? `${Math.round(s.winTime)} s` : '-'],
+    ['Draw rate', pct(s.draw)], ['CC suffered / duel', `${s.cc.toFixed(1)} s`], ['CC inflicted / duel', `${s.ccOut.toFixed(1)} s`],
+  ];
+  $('#exstats').innerHTML = stats.map(([k, v]) => `<div class="stat"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+  $('#exarch').innerHTML = ['melee', 'ranged', 'caster', 'healer'].map((a) => {
+    const v = s.vs[a];
+    return `<div class="arch-row"><span class="ink2">${a[0].toUpperCase() + a.slice(1)}</span><div class="track"><div class="fill" style="width:${(v * 100).toFixed(1)}%"></div><div class="ref"></div></div><span class="num" style="text-align:right;">${pct(v)}</span></div>`;
+  }).join('');
+  const opp = D.specs.filter((o) => o.key !== key).map((o) => ({ o, m: D.m[key][o.key] })).sort((x, y) => y.m[0] - x.m[0]);
+  $('#exlist').innerHTML = opp.map(({ o, m }) => {
+    const v = m[0];
+    const col = divColor(v);
+    const left = v >= 0.5 ? 50 : v * 100;
+    const width = Math.abs(v - 0.5) * 100;
+    return `<div class="mu-row"><span>${o.label}</span><div class="dv-track"><div class="bar" style="left:${left}%; width:${Math.max(width, 0.8)}%; background:${col};"></div><div class="mid"></div></div><span class="num" style="text-align:right;">${pct(v)}</span><span class="wld">${m[1]}-${m[2]}-${m[3]}</span></div>`;
+  }).join('');
+  const hard = opp.filter((x) => x.m[0] >= 0.85).length;
+  const lost = opp.filter((x) => x.m[0] <= 0.15).length;
+  const even = opp.filter((x) => x.m[0] > 0.4 && x.m[0] < 0.6).length;
+  $('#exread').textContent = `${s.label} wins 85% or more against ${hard} of 26 specs, wins 15% or less against ${lost}, and has ${even} close pairings (40 to 60%). Hardest: ${opp.slice(-3).reverse().map((x) => `${x.o.label} ${pct(x.m[0])}`).join(', ')}. Easiest: ${opp.slice(0, 3).map((x) => `${x.o.label} ${pct(x.m[0])}`).join(', ')}.`;
+  if (scroll) $('#explore').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+}
+openSpec(D.specs[0].key, false);
+
+// ---- counters table ----
+const tb = $('#ctable tbody');
+D.specs.forEach((s, i) => {
+  const opp = D.specs.filter((o) => o.key !== s.key).map((o) => ({ o, v: D.m[s.key][o.key][0] }));
+  const worst = [...opp].sort((a, b) => a.v - b.v).slice(0, 3);
+  const best = [...opp].sort((a, b) => b.v - a.v).slice(0, 3);
+  const fmt = (xs) => xs.map((x) => `${x.o.short} <span class="muted num">(${pct(x.v)})</span>`).join(', ');
+  tb.append(el('tr', {}, `<td class="num muted">${i + 1}</td><td>${s.label}</td><td>${fmt(worst)}</td><td>${fmt(best)}</td>`));
+});
+
+// ---- findings ----
+const ICON = {
+  critical: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1 15 14H1Z" fill="var(--critical)"/><path d="M8 6v4M8 11.6v.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  serious: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="var(--serious)"/><path d="M8 4.5v4.2M8 11v.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  warning: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="3" fill="var(--warning)"/><path d="M8 4.5v4.2M8 11v.4" stroke="#0b0b0b" stroke-width="1.8" stroke-linecap="round"/></svg>',
+};
+for (const f of D.findings) {
+  const card = el('article', { class: 'finding', style: `--sev: var(--${f.sev})` });
+  card.innerHTML = `<span class="sev">${ICON[f.sev]}${f.tag}</span><h3>${f.title}</h3><p>${f.body}</p>`;
+  $('#findings').append(card);
+}
+
+// ---- method ----
+for (const m of D.method) $('#method').append(el('div', {}, `<h3>${m.h}</h3>${m.html}`));
+</script>
+</body>
+</html>
