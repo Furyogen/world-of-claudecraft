@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { boulderScale, flightProgress } from './ability_vfx/magma_boulder_core';
 import { loadTexture, releaseTexture } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { tagCastVfxEngine } from './cast_vfx_family';
@@ -320,6 +321,30 @@ interface Projectile {
   // trail and impact flash; mechanics and speed are untouched.
   scale?: number;
   onImpact?: (position: THREE.Vector3) => void;
+  // Called when the projectile is dropped WITHOUT arriving (target gone, ttl
+  // spent), so an owner riding it (the Arc Bolt leader) can stand down.
+  onLost?: () => void;
+  // Lightning head drawn as a small hot tip instead of the zig-zag streak: the
+  // stepped leader (ability_vfx/stepped_leader.ts) draws the channel itself.
+  tip?: boolean;
+  // The Magma Burst head (a molten halo the boulder mesh rides,
+  // ability_vfx/magma_boulders.ts).
+  orb?: boolean;
+  // The head's distance to its target at launch: it grows with its flight.
+  startDist?: number;
+}
+
+/** Options for the molten projectile the Magma Burst boulder rides. */
+export type MoltenOrbProjectileOpts = Omit<LightningProjectileOpts, 'tip'>;
+
+/** Options for a lightning projectile whose flight another effect rides. */
+export interface LightningProjectileOpts {
+  /** Draw only a small hot tip; the rider draws the bolt body. */
+  tip?: boolean;
+  /** Arrival at the target (the impact point is a scratch vector: copy it). */
+  onImpact?: (position: THREE.Vector3) => void;
+  /** Dropped without arriving. */
+  onLost?: () => void;
 }
 
 interface BubbleBeam {
@@ -722,7 +747,9 @@ export class Vfx {
 
   clear(): void {
     if (this.disposed) return;
-    this.projectiles.length = 0;
+    // A rider (the Arc Bolt leader) must hear that its projectile is gone.
+    const dropped = this.projectiles.splice(0);
+    for (const pr of dropped) pr.onLost?.();
     this.pendingBursts.length = 0;
     this.paladinSpellFx.clear();
     for (let i = this.bubbleBeams.length - 1; i >= 0; i--) this.removeBubbleBeam(i);
@@ -1176,27 +1203,72 @@ export class Vfx {
   // it arrives, no flash-then-wait), but its flying head renders as a short jagged
   // blue-white electric streak instead of a round glowing comet (the shape is
   // drawn in the projectile update loop). Original procedural effect (no assets).
-  lightningProjectile(sourceId: number, targetId: number, color?: number): void {
+  // Returns the projectile's LIVE head position (moved in place every frame
+  // until it lands), or null when the caster has no anchor.
+  lightningProjectile(
+    sourceId: number,
+    targetId: number,
+    color?: number,
+    opts?: LightningProjectileOpts,
+  ): THREE.Vector3 | null {
     const from = this.anchor(sourceId, 0.62);
-    if (!from) return;
+    if (!from) return null;
     // A color override tints the bolt per ability: the head stays pushed toward
     // white so it still reads as a hot electric core.
     const head =
       color === undefined
         ? new THREE.Color(0xeaf6ff)
         : new THREE.Color(color).lerp(new THREE.Color(0xffffff), 0.6);
+    const pos = from.clone();
     this.projectiles.push({
-      pos: from.clone(),
+      pos,
       targetId,
       color: new THREE.Color(color ?? 0x66b8ff).multiplyScalar(hdr(1.7)), // electric blue (impact tint)
       coreColor: head.multiplyScalar(hdr(3.0)), // hot white-blue head
-      trailColor: new THREE.Color(color ?? 0x3f9bff).multiplyScalar(hdr(1.9)), // crackle
+      // crackle; a tipped head wears the stepped leader's violet plasma corona
+      trailColor: new THREE.Color(opts?.tip ? 0xa56cff : (color ?? 0x3f9bff)).multiplyScalar(
+        hdr(1.9),
+      ),
       speed: 26,
       ttl: 3,
       coreSprite: SPR.glowCore,
       trailSprite: SPR.sparkle,
       lightning: true,
+      tip: opts?.tip,
+      onImpact: opts?.onImpact,
+      onLost: opts?.onLost,
     });
+    return pos;
+  }
+
+  // Magma Burst's flying head: a molten halo the cracking boulder rides
+  // (ability_vfx/magma_boulders.ts). Same homing, speed and arrival burst as
+  // every projectile; returns the LIVE head position, or null when the caster
+  // has no anchor.
+  moltenOrbProjectile(
+    sourceId: number,
+    targetId: number,
+    color?: number,
+    opts?: MoltenOrbProjectileOpts,
+  ): THREE.Vector3 | null {
+    const from = this.anchor(sourceId, 0.62);
+    if (!from) return null;
+    const pos = from.clone();
+    this.projectiles.push({
+      pos,
+      targetId,
+      color: new THREE.Color(color ?? 0xff7a1a).multiplyScalar(hdr(1.7)), // impact burst tint
+      coreColor: new THREE.Color(0xfff2c0).multiplyScalar(hdr(3.0)), // white-hot core
+      trailColor: new THREE.Color(color ?? 0xff7a1a).multiplyScalar(hdr(1.9)), // molten halo
+      speed: 26,
+      ttl: 3,
+      coreSprite: SPR.glowCore,
+      trailSprite: SPR.sparkle,
+      orb: true,
+      onImpact: opts?.onImpact,
+      onLost: opts?.onLost,
+    });
+    return pos;
   }
 
   // A talent proc arming: a tight ascending double-helix of bright motes around
@@ -2660,6 +2732,7 @@ export class Vfx {
       const target = this.anchor(pr.targetId, 0.5, this.homingScratch);
       if (!target || pr.ttl <= 0) {
         this.projectiles.splice(i, 1);
+        pr.onLost?.();
         continue;
       }
       const dir = this.homingDir.subVectors(target, pr.pos);
@@ -2713,7 +2786,92 @@ export class Vfx {
       const uz = dir.z / dist;
       dir.multiplyScalar(step / dist);
       pr.pos.add(dir);
-      if (pr.lightning) {
+      if (pr.orb) {
+        // The Magma Burst head: the boulder mesh rides this position
+        // (ability_vfx/magma_boulders.ts), so the particles are only its molten
+        // halo, a hot heart, and the odd glob flung off, all growing with the
+        // rock (a pebble at the hand, a boulder at arrival). Two-frame lives,
+        // so the head never strings out into a trail. (glowCore is ring-shaped
+        // and read as a hollow ring here: the soft and flare cells instead.)
+        pr.startDist ??= dist;
+        const g = boulderScale(flightProgress(pr.startDist, dist));
+        this.spawn(
+          pr.pos.x,
+          pr.pos.y,
+          pr.pos.z,
+          0,
+          0,
+          0,
+          pr.trailColor,
+          2.6 * g,
+          0.035,
+          0,
+          SPR.glowSoft,
+        );
+        this.spawn(
+          pr.pos.x,
+          pr.pos.y,
+          pr.pos.z,
+          0,
+          0,
+          0,
+          pr.coreColor,
+          1.1 * g,
+          0.035,
+          0,
+          SPR.flash,
+        );
+        if (Math.random() < 0.25 + 0.35 * g) {
+          this.spawn(
+            pr.pos.x,
+            pr.pos.y,
+            pr.pos.z,
+            (Math.random() - 0.5) * 2,
+            Math.random() * 1.2,
+            (Math.random() - 0.5) * 2,
+            pr.trailColor,
+            0.25 * g + 0.1,
+            0.4,
+            6,
+            SPR.flame,
+          );
+        }
+      } else if (pr.lightning && pr.tip) {
+        // A rider draws the channel: the head is only a small hot tip with a
+        // violet corona and the odd spark flung off it.
+        // Lives about two frames, so the tip never strings out into a trail.
+        // A flare (a hot point in a soft halo), never glowCore: that sprite is
+        // ring-shaped and read as a hollow circle on the tip.
+        this.spawn(pr.pos.x, pr.pos.y, pr.pos.z, 0, 0, 0, pr.coreColor, 0.7, 0.035, 0, SPR.flash);
+        this.spawn(
+          pr.pos.x,
+          pr.pos.y,
+          pr.pos.z,
+          0,
+          0,
+          0,
+          pr.trailColor,
+          0.9,
+          0.035,
+          0,
+          SPR.glowSoft,
+        );
+        if (Math.random() < 0.45) {
+          this.spawn(
+            pr.pos.x,
+            pr.pos.y,
+            pr.pos.z,
+            (Math.random() - 0.5) * 3,
+            Math.random() * 1.5,
+            (Math.random() - 0.5) * 3,
+            pr.coreColor,
+            0.16,
+            0.22,
+            4,
+            SPR.sparkle,
+          );
+        }
+      } else if (pr.lightning) {
         // The flying head is a short jagged electric streak trailing back along
         // the travel direction: a few segments, each kicked perpendicular for the
         // zig-zag, so it reads as a lightning bolt shape rather than a round comet.

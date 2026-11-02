@@ -14,6 +14,7 @@ import {
 } from '../ability_vfx_core';
 import type { AbilityAudioKind, AbilityAudioOpts } from '../audio_sink';
 import { CAST_VFX_ENGINE, type CastVfxSpawnGate } from '../cast_vfx_family';
+import type { TrackedLightHost } from '../light_pulses';
 import { tanHalfVerticalFov } from '../vfx_screen_bounds_core';
 import type { WarriorFuryStateAura, WarriorFuryStateKind } from '../warrior_fury_state_core';
 import type { WarriorPowerAnchor } from '../warrior_power_anchor';
@@ -31,6 +32,7 @@ import { FuryAudioQueue } from './fury_audio';
 import { abilityVfxTextures, OVERLAY_CELL } from './fx_textures';
 import { GroundAuras } from './ground_auras';
 import { HeldWarriorStorm } from './held_warrior_storm';
+import type { MagmaBurstPlan } from './magma_boulder_core';
 import { OverlaySprites } from './overlay_sprites';
 import { LightPillars } from './pillars';
 import type { BakedKind, FragmentKind } from './production_assets';
@@ -41,6 +43,7 @@ import {
   type RibbonAnchor,
 } from './ribbons';
 import { ShockRings } from './rings';
+import type { SeqSlot } from './sequencer';
 import { ArchetypeSequencer, type SeqPoint, type SequencerHost } from './sequencer';
 import { BuffShells } from './shells';
 import { SIGNATURE_CONTACT_TIME } from './signature_core';
@@ -56,6 +59,8 @@ import {
   type SpiritCompileGate,
 } from './spirits';
 import type { SteelSweepRange } from './steel_sweep';
+import { SteppedLeaderBolts } from './stepped_leader';
+import type { ArcBoltLeaderPlan } from './stepped_leader_core';
 import { WarriorAttention } from './warrior_attention';
 import { drawWarriorControlMark, evictDecorationForWarriorMark } from './warrior_control_marks';
 import { type WarriorFlashStyle, warriorFlashStyle } from './warrior_flash';
@@ -79,6 +84,18 @@ export type { DecalStyle } from './decals';
 // Particle bursts delegate to the pooled Vfx cloud through this seam (the
 // painter wires deps.vfx.burst in); kind picks the sprite family.
 export type ParticleBurstKind = 'sparks' | 'embers' | 'debris' | 'smoke' | 'blood';
+
+/** The Magma Burst boulder pool as the engine sees it: closures over a pool
+ * that lives outside (ability_vfx/magma_boulders.ts). */
+export interface MagmaBoulderPort {
+  spawn(sourceId: number, targetId: number, head: THREE.Vector3, plan: MagmaBurstPlan): number;
+  impact(handle: number, at: THREE.Vector3): void;
+  lost(handle: number): void;
+  advance(dt: number, reducedMotion: boolean): void;
+  clear(): void;
+  dispose(): void;
+  count(): number;
+}
 export type ParticleBurst = (
   x: number,
   y: number,
@@ -478,6 +495,19 @@ export class AbilityVfxFx implements SequencerHost {
   private guardDt = 0;
   private guardFacing = (id: number) => this.facingAt(id) ?? null;
   private rings: ShockRings;
+  // The Arc Bolt stepped leader (stepped_leader.ts): draws through the ribbon
+  // pool's held pass and moves one tracked pulse-pool light.
+  private leaders: SteppedLeaderBolts;
+  // The Magma Burst boulder pool (magma_boulders.ts). Its rocks are scene
+  // meshes owned OUTSIDE this engine (renderer_ability_presentation.ts builds
+  // the pool), so it reaches here as closures only, never as a field holding
+  // the pool; plus the archetype sequence each boulder fires at arrival,
+  // keyed by the boulder's handle.
+  private boulders: MagmaBoulderPort | null = null;
+  // Each entry keeps the identity the slot was started with: a held slot can be
+  // stolen by a later cast (the pool reuses the oldest), and a stale entry must
+  // never land or cancel someone else's sequence.
+  private boulderSeq = new Map<number, { slot: SeqSlot; caster: number; ability: string }>();
   private decals: GroundDecals;
   private overlay: OverlaySprites;
   private pillars: LightPillars;
@@ -703,6 +733,28 @@ export class AbilityVfxFx implements SequencerHost {
     this.baked = new BakedImpactLayers(scene, textureReady);
     this.fragments = new SolidImpactFragments(scene);
     this.rings = new ShockRings(scene, tex, groundY);
+    this.leaders = new SteppedLeaderBolts({
+      strip: (points, count, width, color, light, taper) =>
+        this.ribbons.appendStrip(points, count, width, color, light, taper),
+      crack: (fx, fy, fz, tx, ty, tz, colorHex, life, width, jagScale, delay) =>
+        this.ribbons.spawnBoltPoints(
+          fx,
+          fy,
+          fz,
+          tx,
+          ty,
+          tz,
+          colorHex,
+          life,
+          width,
+          jagScale,
+          delay,
+        ),
+      anchor,
+      hand: (id, out) => this.handSample?.(id, 0, out) ?? false,
+      ring: (x, y, z, radius, colorHex) =>
+        this.rings.spawn(x, y, z, radius, 0.45, colorHex, 1.2 * this.intensity(), true),
+    });
     this.decals = new GroundDecals(scene, tex, groundY);
     this.overlay = new OverlaySprites(scene, tex);
     this.pillars = new LightPillars(scene);
@@ -1773,6 +1825,94 @@ export class AbilityVfxFx implements SequencerHost {
       fractured,
     );
   }
+  // ---- Arc Bolt stepped leader (stepped_leader.ts) -------------------------
+  /** The moving-light seam (the renderer's pulse pool); null = no light. */
+  setTrackedLightHost(host: TrackedLightHost | null): void {
+    this.leaders.setLightHost(host);
+  }
+  /** Start a leader riding a projectile's live head; returns its handle. */
+  steppedLeader(
+    sourceId: number,
+    targetId: number,
+    head: THREE.Vector3,
+    plan: ArcBoltLeaderPlan,
+  ): number {
+    if (this.disposed) return -1;
+    return this.leaders.spawn(sourceId, targetId, head, plan);
+  }
+  /** The whole leader at once, then the stroke (the Arc Overload echo). */
+  steppedLeaderStrike(sourceId: number, targetId: number, plan: ArcBoltLeaderPlan): boolean {
+    if (this.disposed) return false;
+    return this.leaders.strike(sourceId, targetId, plan);
+  }
+  steppedLeaderImpact(handle: number, at: THREE.Vector3): void {
+    this.leaders.impact(handle, at);
+  }
+  steppedLeaderLost(handle: number): void {
+    this.leaders.lost(handle);
+  }
+  /** Live stepped leaders (probe/test readout). */
+  steppedLeaderCount(): number {
+    return this.leaders.activeCount();
+  }
+  private drawLeaders = (): void => {
+    this.leaders.draw();
+  };
+
+  // ---- Magma Burst cracking boulder (magma_boulders.ts) ----------------------
+  /** Wire the boulder pool (closures only; see the field). */
+  setMagmaBoulderPort(port: MagmaBoulderPort | null): void {
+    this.boulders = port;
+  }
+  /**
+   * Start a boulder riding a projectile's live head, plus the ability's
+   * archetype sequence held for travel (release flash and windup now, the
+   * impact stack at arrival). Returns the boulder's handle, or -1 with no pool.
+   */
+  magmaBoulder(
+    abilityId: string,
+    spec: AbilityVfxFullSpec | undefined,
+    sourceId: number,
+    targetId: number,
+    head: THREE.Vector3,
+    plan: MagmaBurstPlan,
+    colorHex: number,
+    tier: number,
+  ): number {
+    if (this.disposed || !this.boulders) return -1;
+    const handle = this.boulders.spawn(sourceId, targetId, head, plan);
+    if (handle < 0) return -1;
+    const seq = spec
+      ? this.sequencer.start(this, abilityId, spec, sourceId, targetId, colorHex, tier, true)
+      : null;
+    if (seq) this.boulderSeq.set(handle, { slot: seq, caster: sourceId, ability: abilityId });
+    return handle;
+  }
+  // A held slot can be stolen by a later cast (the pool reuses the oldest), so
+  // a stale entry must never land or cancel someone else's sequence.
+  private takeBoulderSeq(handle: number): SeqSlot | null {
+    const held = this.boulderSeq.get(handle);
+    if (!held) return null;
+    this.boulderSeq.delete(handle);
+    const { slot } = held;
+    return slot.active && slot.casterId === held.caster && slot.abilityId === held.ability
+      ? slot
+      : null;
+  }
+  magmaBoulderImpact(handle: number, at: THREE.Vector3): void {
+    this.boulders?.impact(handle, at);
+    const seq = this.takeBoulderSeq(handle);
+    if (seq) this.sequencer.triggerImpact(this, seq, at.x, at.y, at.z);
+  }
+  magmaBoulderLost(handle: number): void {
+    this.boulders?.lost(handle);
+    const seq = this.takeBoulderSeq(handle);
+    if (seq) this.sequencer.cancel(seq);
+  }
+  /** Live boulders (probe/test readout). */
+  magmaBoulderCount(): number {
+    return this.boulders?.count() ?? 0;
+  }
   setWorldLightDelegate(
     callback:
       | ((
@@ -2477,7 +2617,15 @@ export class AbilityVfxFx implements SequencerHost {
     this.furyAudio.update(this, dt);
     // Pack after the sequence emits this frame's contacts, so the visible
     // wound and native weapon contact share one frame. Advance each pool once.
-    this.ribbons.update(dt, camPosScratch, reducedMotion, undefined, this.drawPriorityStorms);
+    this.leaders.advance(dt, reducedMotion);
+    this.boulders?.advance(dt, reducedMotion);
+    this.ribbons.update(
+      dt,
+      camPosScratch,
+      reducedMotion,
+      this.drawLeaders,
+      this.drawPriorityStorms,
+    );
     this.furyStates.draw(
       this.frame,
       dt,
@@ -2546,6 +2694,9 @@ export class AbilityVfxFx implements SequencerHost {
     this.warriorStorms.clear();
     this.furyAudio.clear();
     this.contactBursts.clear();
+    this.leaders.clear();
+    this.boulders?.clear();
+    this.boulderSeq.clear();
     this.ribbons.clear();
     this.baked.clear();
     this.fragments.clear();
@@ -2586,6 +2737,8 @@ export class AbilityVfxFx implements SequencerHost {
       }
     };
     release(() => this.clear());
+    release(() => this.leaders.setLightHost(null));
+    release(() => this.boulders?.dispose());
     this.worldLightCb = null;
     release(() => this.ribbons.dispose());
     release(() => this.baked.dispose());

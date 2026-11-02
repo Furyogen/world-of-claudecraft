@@ -61,6 +61,47 @@ layers behind the `index.ts` barrel:
   of the entry. Anything new added to `prewarmSpawn` that a live frame would
   SEE must not be added here.
 
+Arc Bolt (the Shaman's `lightning_bolt`, and its Arc Overload echo) is a bespoke
+read beside the gallery anatomy: `arc_bolt.ts` routes both of its spellfx cues
+onto a stepped lightning leader (`stepped_leader.ts`, pure path and envelope math
+in the registered `stepped_leader_core.ts`) that RIDES the pooled `../vfx.ts`
+lightning projectile (`lightningProjectile` returns the live head and takes
+`tip`/`onImpact`/`onLost`) and stages its return stroke at ARRIVAL, never on the
+compressed 0.15 s instant clock. It owns no material: it draws through the ribbon
+pool's held pass (`appendStrip`), reached through closures so the cast-gate
+attribution walk credits the mesh to `ribbons` alone. Its light is ONE slot
+borrowed from the pulse pool (`../light_pulses.ts` `TrackedLightHost`), never a
+new light; a tracked slot never steals, and an ordinary pulse may take it back on
+the one-light tier. Other `'lightning'` cues (the nature trinket procs) keep the
+old look. Pinned by `tests/stepped_leader.test.ts` and
+`tests/stepped_leader_core.test.ts`.
+
+Magma Burst (the Shaman's `lava_burst`) follows the same rider shape:
+`magma_burst.ts` routes its heavyBolt cue onto a molten-orb projectile head
+(`../vfx.ts` `moltenOrbProjectile`, drawn as a halo that grows with the rock)
+ridden by a cracking volcanic boulder (`magma_boulders.ts`, the pool; the rock
+itself is `../magma_boulder_visual.ts`; pure growth, crack, light, plate-split
+and plan math in the registered `magma_boulder_core.ts`). One flight progress
+drives the rock swelling from a pebble to a boulder, its crust plates drifting
+apart so the glowing cracks over the molten core open and widen, the drips, and
+the light growing with it; at arrival it shatters (debris and embers) and a
+ring of fire burns on the pool's own clock (never the shared delayed-burst
+pool: its slots are few and its delays cap at 0.2 s), and the light is the same
+`TrackedLightHost` slot, lit like the world's lava (the core's `LAVA_*` figures
+are the Drakelands lava pools' own colour, level and reach, pinned against
+`../ember_features.ts`); when an ordinary pulse takes that slot (the cast flash
+on the one-light tier) the pool claims one back as soon as one is free, never by
+stealing. Unlike the ribbon riders the rock is real scene meshes:
+three visuals built once, hidden, on the two shared materials the boot manifest
+stages (`ABILITY_MATERIAL_SOURCES`, `magma-boulder`), and the pool lives OUTSIDE
+`AbilityVfxFx`, reached through `MagmaBoulderPort` closures so the cast-gate
+attribution walk never credits its meshes to an engine field. Unlike Arc Bolt it
+keeps the archetype sequencer: its class-owned spec (`../shaman_vfx_specs.ts`,
+registered) supplies the `orb` windup and an impact stack the boulder starts
+with `awaitTravel` and fires at ARRIVAL (`AbilityVfxFx.magmaBoulder` /
+`magmaBoulderImpact`). Pinned by `tests/magma_boulders.test.ts` and
+`tests/magma_boulder_core.test.ts`.
+
 `spirits.ts` (`SpiritApparitions`) discipline: do NOT imitate the naive gallery
 code it ports. One cached PUPPET per creature GLB, whose meshes all share ONE
 additive ghost material, so a spawn only attaches the cached puppet to a pooled
