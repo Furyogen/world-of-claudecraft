@@ -9,6 +9,7 @@ import { groundTelegraphWireJson } from '../server/ground_telegraph_wire';
 import { decodeSporeBursts } from '../src/net/ground_telegraph_wire';
 import { MOONTIDE_STAGES, VERDANCE_STAGES } from '../src/sim/combat/druid_engines';
 import {
+  GROVEHEART_BOON_COOLDOWN_CUT,
   GROVEHEART_BOON_ICD,
   MOONGROVE_BOON_ICD,
   NATURES_BOON_ID,
@@ -323,8 +324,8 @@ describe("Spore Burst: Nature's Boon", () => {
     expect(me.procState?.icds.dru_grove_natures_boon).toBe(GROVEHEART_BOON_ICD);
   });
 
-  it('Groveheart: a proc ends the Spore Burst cooldown so the window is spendable', () => {
-    const { sim, pid, me } = druid('restoration');
+  it('Groveheart: a proc takes 15 sec off the Spore Burst cooldown', () => {
+    const { sim, me } = druid('restoration');
     const ctx = rawCtx(sim);
     me.cooldowns.set('spore_burst', 25);
     const hot = { id: 'rejuvenation', kind: 'hot', sourceId: me.id } as Aura;
@@ -336,18 +337,29 @@ describe("Spore Burst: Nature's Boon", () => {
       ticks++;
     }
     expect(armedFor(me)).toEqual(['spore_burst']);
+    expect(me.cooldowns.get('spore_burst')).toBe(25 - GROVEHEART_BOON_COOLDOWN_CUT);
+    // Inside the internal cooldown a tick neither rolls nor cuts again.
+    expect(countDraws(sim, () => naturesBoonOnHotTick(ctx, me, hot))).toBe(0);
+    expect(me.cooldowns.get('spore_burst')).toBe(25 - GROVEHEART_BOON_COOLDOWN_CUT);
+  });
+
+  it('Groveheart: a proc with less than 15 sec left ends the cooldown, and the window pays', () => {
+    const { sim, pid, me } = druid('restoration');
+    const ctx = rawCtx(sim);
+    me.cooldowns.set('spore_burst', 9);
+    const hot = { id: 'rejuvenation', kind: 'hot', sourceId: me.id } as Aura;
+    let ticks = 0;
+    while (armedFor(me).length === 0 && ticks < 500) {
+      naturesBoonOnHotTick(ctx, me, hot);
+      ticks++;
+    }
     expect(me.cooldowns.has('spore_burst')).toBe(false);
-    // The armed window then pays for an immediate cast, which re-arms the
-    // full cooldown and spends the window.
     const mana = me.resource;
     me.gcdRemaining = 0;
     sim.castAbility('spore_burst', pid, AIM);
     expect(me.resource).toBe(mana);
     expect(me.cooldowns.get('spore_burst')).toBeCloseTo(30, 5);
     expect(armedFor(me)).toEqual([]);
-    // Inside the internal cooldown a tick neither rolls nor resets.
-    expect(countDraws(sim, () => naturesBoonOnHotTick(ctx, me, hot))).toBe(0);
-    expect(me.cooldowns.get('spore_burst')).toBeCloseTo(30, 5);
   });
 
   it('Moongrove: a proc leaves the Spore Burst cooldown running', () => {

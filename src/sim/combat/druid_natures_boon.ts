@@ -26,8 +26,11 @@
 //
 //   Moongrove   every completed Wildbolt or Skyfall cast.
 //   Groveheart  every tick of a heal-over-time effect the druid owns. A
-//               Groveheart proc also ends Spore Burst's cooldown, so the
-//               armed window is always spendable the moment it lands.
+//               Groveheart proc also takes 15 sec off Spore Burst's
+//               cooldown, so the armed window is spendable sooner. A full
+//               reset was tried first and roughly doubled Groveheart healing
+//               in a 10-seed Monte Carlo; the cut keeps the window useful
+//               without making every proc an extra burst.
 //
 // Each spec's window names only its own spells, so a Moongrove proc never
 // pays for a Wildfang heal and the reverse.
@@ -63,8 +66,10 @@ export const GROVEHEART_BOON_TICK_CHANCE = 0.1;
 export const GROVEHEART_BOON_ICD = 10;
 /** procState.icds key for the Groveheart internal cooldown. */
 export const GROVEHEART_BOON_ICD_KEY = 'dru_grove_natures_boon';
-/** The cooldown a Groveheart proc ends: Spore Burst, the spell it pays for. */
-const GROVEHEART_BOON_RESETS = 'spore_burst';
+/** The cooldown a Groveheart proc shortens: Spore Burst, the spell it pays for. */
+const GROVEHEART_BOON_SHORTENS = 'spore_burst';
+/** Seconds a Groveheart proc takes off Spore Burst's remaining cooldown. */
+export const GROVEHEART_BOON_COOLDOWN_CUT = 15;
 /** Moongrove: per completed Wildbolt or Skyfall cast. */
 export const MOONGROVE_BOON_CAST_CHANCE = 0.1;
 /** Moongrove: no second proc for this long after one lands. */
@@ -250,8 +255,8 @@ export function naturesBoonOnCast(ctx: SimContext, player: Entity, abilityId: st
  *  druid's own HoT tick rolls the Groveheart chance when the internal cooldown
  *  is clear; the gate and the cooldown check both pass BEFORE the roll, so no
  *  other player's stream moves and a druid inside the cooldown draws nothing.
- *  A proc ends Spore Burst's cooldown too (draws nothing), so the free, 25%
- *  stronger mushroom the window promises can always be cast. */
+ *  A proc also takes GROVEHEART_BOON_COOLDOWN_CUT off Spore Burst's remaining
+ *  cooldown (draws nothing), ending it outright when less than that is left. */
 export function naturesBoonOnHotTick(ctx: SimContext, source: Entity | null, aura: Aura): void {
   if (!source || source.dead || aura.kind !== 'hot' || aura.sourceId !== source.id) return;
   if (!isDruidOfSpec(ctx, source, 'restoration')) return;
@@ -263,5 +268,8 @@ export function naturesBoonOnHotTick(ctx: SimContext, source: Entity | null, aur
     GROVEHEART_BOON_TICK_CHANCE,
     GROVEHEART_BOON_ABILITIES,
   );
-  if (procced) source.cooldowns.delete(GROVEHEART_BOON_RESETS);
+  if (!procced) return;
+  const left = source.cooldowns.get(GROVEHEART_BOON_SHORTENS) ?? 0;
+  if (left <= GROVEHEART_BOON_COOLDOWN_CUT) source.cooldowns.delete(GROVEHEART_BOON_SHORTENS);
+  else source.cooldowns.set(GROVEHEART_BOON_SHORTENS, left - GROVEHEART_BOON_COOLDOWN_CUT);
 }
