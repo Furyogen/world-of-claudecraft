@@ -6,8 +6,8 @@ import { type InPlaceClipSpec, inPlaceTranslation } from './root_motion_core';
  * track loses its baked forward travel (root_motion_core.ts) so the sim alone
  * moves the body. Runs once per visual key from prepareVisual, on CLONES, so
  * the cached gltf clips any other key resolves stay as authored. A clip or
- * bone the asset lacks is skipped: the manifest test pins that every listed
- * name resolves for the shipped asset.
+ * bone the asset lacks is skipped, so tests/in_place_clips.test.ts pins that
+ * every listed name resolves for the shipped asset.
  */
 export function prepareInPlaceClips(
   clips: Map<string, THREE.AnimationClip>,
