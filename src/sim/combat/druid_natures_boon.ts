@@ -21,16 +21,16 @@
 //          standing in. That is the whole point of the passive.
 //
 // The two caster specs arm their own window for Spore Burst (an instant,
-// free, 25% stronger mushroom), each behind a 10 sec internal cooldown with
-// a 10% roll:
+// free mushroom), each behind an internal cooldown with a 10% roll:
 //
-//   Moongrove   every completed Wildbolt or Skyfall cast.
-//   Groveheart  every tick of a heal-over-time effect the druid owns. A
-//               Groveheart proc also takes 15 sec off Spore Burst's
-//               cooldown, so the armed window is spendable sooner. A full
-//               reset was tried first and roughly doubled Groveheart healing
-//               in a 10-seed Monte Carlo; the cut keeps the window useful
-//               without making every proc an extra burst.
+//   Moongrove   every completed Wildbolt or Skyfall cast, 10 sec cooldown;
+//               the window is 25% stronger.
+//   Groveheart  every tick of a heal-over-time effect the druid owns, 20 sec
+//               cooldown. The proc takes 15 sec off Spore Burst's cooldown and
+//               the window is free but NOT stronger. Tuned by a 10-seed Monte
+//               Carlo (5 healed allies, no overheal): a full reset with the 25%
+//               roughly doubled Groveheart healing; the cut, the plain-strength
+//               window and the 20 sec cooldown together leave it about 20%.
 //
 // Each spec's window names only its own spells, so a Moongrove proc never
 // pays for a Wildfang heal and the reverse.
@@ -62,8 +62,9 @@ export const NATURES_BOON_NAME = "Nature's Boon";
 export const NATURES_BOON_CHANCE = 1 / 15;
 /** Groveheart: per tick of an owned heal-over-time effect. */
 export const GROVEHEART_BOON_TICK_CHANCE = 0.1;
-/** Groveheart: no second proc for this long after one lands. */
-export const GROVEHEART_BOON_ICD = 10;
+/** Groveheart: no second proc for this long after one lands (Moongrove's is
+ *  10; see the header for why Groveheart's is longer). */
+export const GROVEHEART_BOON_ICD = 20;
 /** procState.icds key for the Groveheart internal cooldown. */
 export const GROVEHEART_BOON_ICD_KEY = 'dru_grove_natures_boon';
 /** The cooldown a Groveheart proc shortens: Spore Burst, the spell it pays for. */

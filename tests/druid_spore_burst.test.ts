@@ -313,7 +313,7 @@ describe("Spore Burst: Nature's Boon", () => {
     expect(countDraws(sim, () => naturesBoonOnCast(ctx, me, 'wrath'))).toBe(0);
   });
 
-  it('Groveheart: an owned HoT tick rolls it behind a 10 sec cooldown', () => {
+  it('Groveheart: an owned HoT tick rolls it behind a 20 sec cooldown', () => {
     const { sim, me } = druid('restoration');
     const ctx = rawCtx(sim);
     const hot = { id: 'rejuvenation', kind: 'hot', sourceId: me.id } as Aura;
@@ -324,6 +324,7 @@ describe("Spore Burst: Nature's Boon", () => {
     }
     expect(armedFor(me)).toEqual(['spore_burst']);
     expect(me.procState?.icds.dru_grove_natures_boon).toBe(GROVEHEART_BOON_ICD);
+    expect(GROVEHEART_BOON_ICD).toBe(20);
   });
 
   it('Groveheart: a proc takes 15 sec off the Spore Burst cooldown', () => {
