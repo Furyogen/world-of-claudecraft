@@ -35,7 +35,7 @@ export const OLD_BLOOD_STAGES = 3;
 export const VERDANCE_STAGES = 5;
 const ENGINE_BACKING_DURATION = 3600;
 
-export const HIGHMOON_TITHE_PCT = 0.15;
+export const HIGHMOON_TITHE_PCT = 0.1;
 export const WILD_APEX_MULT = 1.25;
 export const QUICKENING_ENERGY = 5;
 export const QUICKENING_RAGE = 3;
@@ -363,6 +363,13 @@ export function druidEngineOnCast(
   if (abilityId === LUNGE_ID) startLunge(ctx, player, target);
 
   const spec = specOf(ctx, player);
+  // Highmoon Tithe also pays on Overbloom, the Groveheart payoff (the
+  // Fleetmend button at 5 Verdance), so the row 14 refund has a Groveheart
+  // use beside Moongrove's Moonsurge and Sunwake. refundMana pays only while
+  // mana is the live bar.
+  if (abilityId === 'overbloom' && selectedRow(ctx, player, DRUID_TALENT_IDS.highmoonTithe)) {
+    refundMana(player, HIGHMOON_TITHE_PCT);
+  }
   // Spore Burst (combat/druid_spore_burst.ts) is a payoff when the bank is
   // full: the cast arm already took the 25%, and here the whole bank is
   // spent, in any form, exactly as Overbloom or Moonsurge spend it.

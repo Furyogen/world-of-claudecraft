@@ -1960,10 +1960,11 @@ export const DRUID_CHOICE_ROWS: ClassChoiceRows = {
         {
           id: 'dru_r14_moonfury',
           name: 'Highmoon Tithe',
-          description: 'Moonsurge and Sunwake each also restore 15% of your maximum mana.',
+          description:
+            'Moonsurge, Sunwake, and Overbloom each also restore 10% of your maximum mana.',
           icon: 'moonseed',
           effect: {
-            intrinsic: { mechanic: 'druid_highmoon_tithe', metrics: { pct: 0.15 } },
+            intrinsic: { mechanic: 'druid_highmoon_tithe', metrics: { pct: 0.1 } },
           },
         },
         {
