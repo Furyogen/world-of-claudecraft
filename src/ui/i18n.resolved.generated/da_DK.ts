@@ -4102,7 +4102,7 @@ export const da_DK: EnTranslations = {
       "formTravel": "Fleet-form: bevægelseshastighed øget med {pct}%",
       "formFireball": "Ember Form: bevægelseshastighed øget med {pct}%; angreb og trolddomme er deaktiverede",
       "formMoonkin": "Månekinform: besværgelsesskade øget med {pct}% og rustning øget med {armorPct}%",
-      "formSporemender": "Sporemender Form: healing done increased by {pct}%, armor increased by {armorPct}%, and movement speed reduced by {slowPct}%",
+      "formSporemender": "Sporemender Form: healing done increased by {pct}%, armor increased by {armorPct}%, and movement speed reduced by {slowPct}% while on foot",
       "formShadow": "Skyggeform: Skyggeskade øget med {pct}%",
       "resourceCount": "{value} af {max}",
       "formLich": "Soul Lance rammer også op til {targets} nærliggende fjender for {pct}% skade",
@@ -14299,7 +14299,7 @@ export const da_DK: EnTranslations = {
       },
       "sporemender_form": {
         "name": "Sporemender Form",
-        "description": "Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 40%, but reducing your movement speed by 20% while on foot. All of your caster-form spells stay usable, and you can shift in and out while mounted. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart signature)"
+        "description": "Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 40%, but reducing your movement speed by 20% while on foot. All of your caster-form spells stay usable, and you can shift in and out while mounted. Lasts until you shift out. Shifting into any form while on foot grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart signature)"
       },
       "spore_burst": {
         "name": "Spore Burst",
@@ -14312,7 +14312,7 @@ export const da_DK: EnTranslations = {
         "description": "Your spells can arm Nature's Boon for 10 sec: the spell it names becomes free, 25% stronger, and castable in any form. A fresh proc refreshes the duration.",
         "specNote_feral": "Each landed melee auto-attack has a 1 in 15 chance to arm it for Sporemending, or for Oakhide while in Bruin Form.",
         "specNote_balance": "Each Wildbolt or Skyfall you cast has a 10% chance to arm it for Spore Burst, at most once every 10 sec.",
-        "specNote_restoration": "Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and reset its cooldown, at most once every 10 sec."
+        "specNote_restoration": "Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and reset the Spore Burst cooldown, at most once every 10 sec."
       },
       "overbloom": {
         "name": "Overblomstring",

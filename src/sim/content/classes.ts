@@ -7985,7 +7985,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_sporemender', value: 0, duration: 3600 }],
     description:
-      'Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 40%, but reducing your movement speed by 20% while on foot. All of your caster-form spells stay usable, and you can shift in and out while mounted. Lasts until you shift out. Shifting into any form grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart signature)',
+      'Shapeshift into a Sporemender, increasing your healing done by 20% and your armor by 40%, but reducing your movement speed by 20% while on foot. All of your caster-form spells stay usable, and you can shift in and out while mounted. Lasts until you shift out. Shifting into any form while on foot grants Loping Stride, a short burst of movement speed. Cast again to return to caster form. (Groveheart signature)',
   },
   spore_burst: {
     id: 'spore_burst',
@@ -8041,7 +8041,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       balance:
         'Each Wildbolt or Skyfall you cast has a 10% chance to arm it for Spore Burst, at most once every 10 sec.',
       restoration:
-        'Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and reset its cooldown, at most once every 10 sec.',
+        'Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and reset the Spore Burst cooldown, at most once every 10 sec.',
     },
   },
   feral_charge: {
