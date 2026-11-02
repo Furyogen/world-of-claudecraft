@@ -41,6 +41,7 @@ import {
 } from './held_item_grips';
 import { heldWeaponSize } from './held_item_size_core';
 import { pruneHeldPropIdles, registerHeldPropIdle } from './held_prop_idle';
+import { prepareInPlaceClips } from './in_place_clips';
 import { composedLookReady } from './look_pieces';
 import { buildMakeupDecal } from './makeup';
 import {
@@ -3110,6 +3111,7 @@ export function prepareVisual(key: string): PreparedVisual {
     clips.set(PALADIN_BASTION_SWEEP_CLIP, createPaladinBastionSweepClip(sweepBase));
   }
 
+  prepareInPlaceClips(clips, def.inPlaceClips, gltf.scene);
   applyClipTrackDrops(clips, def.clipTrackDrops);
   applyClipPositionDrops(clips, def.clipPositionDrops);
   // These prepared gestures use KayKit axes and cannot bind to the WOC rig.

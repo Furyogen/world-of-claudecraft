@@ -211,6 +211,7 @@ import type { EyeGlowSpec } from './eye_glow_core';
 import type { MeshToggleDef } from './gesture_mesh_toggles';
 import type { GlowPulseSet } from './glow_pulse_core';
 import { NPC_PROP_SET_IDS, type NpcLook, type NpcPropSet, npcLookFor } from './npc_looks';
+import type { InPlaceClipSpec } from './root_motion_core';
 import { SANCTUM_BOSS_LOOKS, SANCTUM_BOSS_MOB_KEYS } from './sanctum_boss_looks';
 import { SANCTUM_MOB_KEYS, sanctumCreatureLooks } from './sanctum_creature_looks';
 import type { SeatClipSet } from './seat_clips';
@@ -633,6 +634,11 @@ export interface VisualDef {
    *  what binds, making the reference look like a dead knob past that point. */
   walkTimeScaleMax?: number;
   runTimeScaleMax?: number;
+  /** Strip baked forward travel off a root bone's position track in these
+   *  clips at load (characters/in_place_clips.ts), for a rig authored with
+   *  root motion: the sim moves the body, so travel left in the clip makes it
+   *  surge ahead of its pivot and snap back every loop. */
+  inPlaceClips?: InPlaceClipSpec;
   /** Wind the outgoing gait's cadence down across a crossfade instead of
    *  letting it hold its last speed while it dissolves. Opt-in per rig: it
    *  changes how every stop and gait change reads, so rigs adopt it one at a
@@ -3298,6 +3304,21 @@ export const VISUALS: Record<string, VisualDef> = {
     authoredAtlas: true,
     attackTimeScale: 6,
     deathTimeScale: 3,
+    // Tripo baked the travel into Walk and Run (the Hip slides forward across
+    // each cycle and snaps back at the loop), so both play in place and the
+    // sim alone moves the body. The refs are MEASURED off that baked travel
+    // (root_motion_core.ts cycleTravel, scaled from the ~1.0 unit source to
+    // the 2.6 yd height): Run covers 1.85 yd/s at 1x, Walk 0.51 yd/s. The
+    // cadence then tracks the real ground speed, so the form's 80% pace
+    // (SPOREMENDER_MOVE_SPEED_MULT) plays the cycle at 80% of a full-speed
+    // run instead of outrunning the body. The authored gait is slow for the
+    // pace it carries, so the ceilings sit high enough to keep feet matched
+    // through a Loping Stride burst.
+    inPlaceClips: { bone: 'Hip', clips: ['Walk', 'Run'] },
+    walkRef: 0.51,
+    runRef: 1.85,
+    walkTimeScaleMax: 5,
+    runTimeScaleMax: 5,
     clips: {
       idle: 'Idle',
       walk: 'Walk',

@@ -1228,6 +1228,7 @@ const RENDER_PURE_CORES = [
   'src/render/gloam_field_core.ts',
   'src/render/gloam_pool_core.ts',
   'src/render/gloam_smoke_core.ts',
+  'src/render/characters/root_motion_core.ts',
   'src/render/entry_detail_horizon_core.ts',
   'src/render/gather_batch_reach_core.ts',
   'src/render/zone_feature_cells_core.ts',
