@@ -323,6 +323,46 @@ describe("Spore Burst: Nature's Boon", () => {
     expect(me.procState?.icds.dru_grove_natures_boon).toBe(GROVEHEART_BOON_ICD);
   });
 
+  it('Groveheart: a proc ends the Spore Burst cooldown so the window is spendable', () => {
+    const { sim, pid, me } = druid('restoration');
+    const ctx = rawCtx(sim);
+    me.cooldowns.set('spore_burst', 25);
+    const hot = { id: 'rejuvenation', kind: 'hot', sourceId: me.id } as Aura;
+    let ticks = 0;
+    while (armedFor(me).length === 0 && ticks < 500) {
+      // A miss leaves the cooldown untouched.
+      expect(me.cooldowns.get('spore_burst')).toBe(25);
+      naturesBoonOnHotTick(ctx, me, hot);
+      ticks++;
+    }
+    expect(armedFor(me)).toEqual(['spore_burst']);
+    expect(me.cooldowns.has('spore_burst')).toBe(false);
+    // The armed window then pays for an immediate cast, which re-arms the
+    // full cooldown and spends the window.
+    const mana = me.resource;
+    me.gcdRemaining = 0;
+    sim.castAbility('spore_burst', pid, AIM);
+    expect(me.resource).toBe(mana);
+    expect(me.cooldowns.get('spore_burst')).toBeCloseTo(30, 5);
+    expect(armedFor(me)).toEqual([]);
+    // Inside the internal cooldown a tick neither rolls nor resets.
+    expect(countDraws(sim, () => naturesBoonOnHotTick(ctx, me, hot))).toBe(0);
+    expect(me.cooldowns.get('spore_burst')).toBeCloseTo(30, 5);
+  });
+
+  it('Moongrove: a proc leaves the Spore Burst cooldown running', () => {
+    const { sim, me } = druid('balance');
+    const ctx = rawCtx(sim);
+    me.cooldowns.set('spore_burst', 25);
+    let casts = 0;
+    while (armedFor(me).length === 0 && casts < 500) {
+      naturesBoonOnCast(ctx, me, 'wrath');
+      casts++;
+    }
+    expect(armedFor(me)).toEqual(['spore_burst']);
+    expect(me.cooldowns.get('spore_burst')).toBe(25);
+  });
+
   it('neither hook draws for a Wildfang druid', () => {
     const { sim, me } = druid('feral');
     const ctx = rawCtx(sim);

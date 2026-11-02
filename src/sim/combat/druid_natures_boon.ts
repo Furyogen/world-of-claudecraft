@@ -25,7 +25,9 @@
 // a 10% roll:
 //
 //   Moongrove   every completed Wildbolt or Skyfall cast.
-//   Groveheart  every tick of a heal-over-time effect the druid owns.
+//   Groveheart  every tick of a heal-over-time effect the druid owns. A
+//               Groveheart proc also ends Spore Burst's cooldown, so the
+//               armed window is always spendable the moment it lands.
 //
 // Each spec's window names only its own spells, so a Moongrove proc never
 // pays for a Wildfang heal and the reverse.
@@ -61,6 +63,8 @@ export const GROVEHEART_BOON_TICK_CHANCE = 0.1;
 export const GROVEHEART_BOON_ICD = 10;
 /** procState.icds key for the Groveheart internal cooldown. */
 export const GROVEHEART_BOON_ICD_KEY = 'dru_grove_natures_boon';
+/** The cooldown a Groveheart proc ends: Spore Burst, the spell it pays for. */
+const GROVEHEART_BOON_RESETS = 'spore_burst';
 /** Moongrove: per completed Wildbolt or Skyfall cast. */
 export const MOONGROVE_BOON_CAST_CHANCE = 0.1;
 /** Moongrove: no second proc for this long after one lands. */
@@ -217,12 +221,13 @@ function rollCasterBoon(
   icd: number,
   chance: number,
   abilities: readonly string[],
-): void {
-  if (player.procState?.icds[icdKey] !== undefined) return;
-  if (!ctx.rng.chance(chance)) return;
+): boolean {
+  if (player.procState?.icds[icdKey] !== undefined) return false;
+  if (!ctx.rng.chance(chance)) return false;
   if (!player.procState) player.procState = { counters: {}, icds: {} };
   player.procState.icds[icdKey] = icd;
   armNaturesBoon(ctx, player, abilities);
+  return true;
 }
 
 /** The completed-cast hook (combat/talent_procs.ts onCastCompleted). A
@@ -244,11 +249,13 @@ export function naturesBoonOnCast(ctx: SimContext, player: Entity, abilityId: st
 /** The heal-over-time tick hook (combat/auras.ts). A committed restoration
  *  druid's own HoT tick rolls the Groveheart chance when the internal cooldown
  *  is clear; the gate and the cooldown check both pass BEFORE the roll, so no
- *  other player's stream moves and a druid inside the cooldown draws nothing. */
+ *  other player's stream moves and a druid inside the cooldown draws nothing.
+ *  A proc ends Spore Burst's cooldown too (draws nothing), so the free, 25%
+ *  stronger mushroom the window promises can always be cast. */
 export function naturesBoonOnHotTick(ctx: SimContext, source: Entity | null, aura: Aura): void {
   if (!source || source.dead || aura.kind !== 'hot' || aura.sourceId !== source.id) return;
   if (!isDruidOfSpec(ctx, source, 'restoration')) return;
-  rollCasterBoon(
+  const procced = rollCasterBoon(
     ctx,
     source,
     GROVEHEART_BOON_ICD_KEY,
@@ -256,4 +263,5 @@ export function naturesBoonOnHotTick(ctx: SimContext, source: Entity | null, aur
     GROVEHEART_BOON_TICK_CHANCE,
     GROVEHEART_BOON_ABILITIES,
   );
+  if (procced) source.cooldowns.delete(GROVEHEART_BOON_RESETS);
 }
