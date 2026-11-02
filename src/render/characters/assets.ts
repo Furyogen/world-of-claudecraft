@@ -38,6 +38,7 @@ import {
   KAYKIT_SHIELD_GRIPS,
 } from './held_item_grips';
 import { pruneHeldPropIdles, registerHeldPropIdle } from './held_prop_idle';
+import { prepareInPlaceClips } from './in_place_clips';
 import { composedLookReady } from './look_pieces';
 import { buildMakeupDecal } from './makeup';
 import {
@@ -2477,6 +2478,7 @@ export function prepareVisual(key: string): PreparedVisual {
     clips.set(PALADIN_BASTION_SWEEP_CLIP, createPaladinBastionSweepClip(sweepBase));
   }
 
+  prepareInPlaceClips(clips, def.inPlaceClips, gltf.scene);
   prepareWarriorAbilityClips(key, clips, def.clips.attackByAbility);
   prepareWarriorActionFallbacks(key, clips, gltf.scene);
   // Pose a throwaway clone mid-idle, measure it, and bake the static mesh. No
