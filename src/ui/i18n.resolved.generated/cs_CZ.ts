@@ -14312,7 +14312,7 @@ export const cs_CZ: EnTranslations = {
         "description": "Your spells can arm Nature's Boon for 10 sec: the spell it names becomes free, 25% stronger, and castable in any form. A fresh proc refreshes the duration.",
         "specNote_feral": "Each landed melee auto-attack has a 1 in 15 chance to arm it for Sporemending, or for Oakhide while in Bruin Form.",
         "specNote_balance": "Each Wildbolt or Skyfall you cast has a 10% chance to arm it for Spore Burst, at most once every 10 sec.",
-        "specNote_restoration": "Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and take 15 sec off the Spore Burst cooldown, at most once every 10 sec."
+        "specNote_restoration": "Each tick of your heal-over-time effects has a 10% chance to arm it for Spore Burst and take 15 sec off the Spore Burst cooldown, at most once every 10 sec. This Spore Burst is free but not stronger."
       },
       "overbloom": {
         "name": "Překvět",

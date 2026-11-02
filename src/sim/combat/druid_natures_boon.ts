@@ -80,6 +80,11 @@ export const MOONGROVE_BOON_ICD_KEY = 'dru_moon_natures_boon';
 const MOONGROVE_BOON_TRIGGER_IDS: ReadonlySet<string> = new Set(['wrath', 'starfire']);
 /** An armed window also makes its spell 25% stronger. */
 export const NATURES_BOON_POWER = 1.25;
+/** Groveheart's window carries no bonus: the free Spore Burst lands at its
+ *  ordinary strength. Its 15 sec cooldown cut already turns most procs into an
+ *  extra burst, and with the 25% on top a 10-seed Monte Carlo had Groveheart
+ *  healing about 50% higher. */
+export const GROVEHEART_BOON_POWER = 1;
 /** How long the armed window lasts, in seconds. */
 export const NATURES_BOON_DURATION = 10;
 
@@ -120,6 +125,9 @@ interface BoonAura {
   id?: string;
   kind: string;
   empowerAbilities?: readonly string[];
+  /** The window's power multiplier (armNaturesBoon); 0 on a window armed
+   *  before the field existed, which reads as NATURES_BOON_POWER. */
+  value?: number;
 }
 
 /** Does the druid's current form allow the window to pay for this ability?
@@ -143,7 +151,12 @@ export function naturesBoonFormAllows(
  *  shape in combat/casting_lifecycle.ts). 1 when no window covers this cast, so
  *  an ordinary Sporemending or Oakhide is untouched. */
 export function naturesBoonPowerFor(auras: readonly BoonAura[], abilityId: string): number {
-  return naturesBoonArmedFor(auras, abilityId) ? NATURES_BOON_POWER : 1;
+  if (!naturesBoonArmedFor(auras, abilityId)) return 1;
+  const window = auras.find(
+    (aura) => aura.id === NATURES_BOON_ID && aura.kind === 'next_cast_free',
+  );
+  const power = window?.value ?? 0;
+  return power > 0 ? power : NATURES_BOON_POWER;
 }
 
 /** Is a Nature's Boon window armed for this exact ability right now? The one
@@ -177,7 +190,12 @@ function isDruidOfSpec(ctx: SimContext, player: Entity, spec: string): boolean {
  *  the 10 sec rather than stacking). Both arms emit the proc flash: a refresh
  *  is a proc the player can see and act on (a fresh 10 sec), so a silent one
  *  would read as the window quietly outliving its timer. */
-function armNaturesBoon(ctx: SimContext, player: Entity, abilities: readonly string[]): void {
+function armNaturesBoon(
+  ctx: SimContext,
+  player: Entity,
+  abilities: readonly string[],
+  power = NATURES_BOON_POWER,
+): void {
   const existing = player.auras.find(
     (aura) => aura.id === NATURES_BOON_ID && aura.sourceId === player.id,
   );
@@ -186,6 +204,7 @@ function armNaturesBoon(ctx: SimContext, player: Entity, abilities: readonly str
     existing.remaining = NATURES_BOON_DURATION;
     existing.duration = NATURES_BOON_DURATION;
     existing.empowerAbilities = [...abilities];
+    existing.value = power;
   } else {
     ctx.applyAura(player, {
       id: NATURES_BOON_ID,
@@ -193,7 +212,8 @@ function armNaturesBoon(ctx: SimContext, player: Entity, abilities: readonly str
       kind: 'next_cast_free',
       remaining: NATURES_BOON_DURATION,
       duration: NATURES_BOON_DURATION,
-      value: 0,
+      // The window's power multiplier (naturesBoonPowerFor).
+      value: power,
       sourceId: player.id,
       school: 'nature',
       empowerAbilities: [...abilities],
@@ -226,12 +246,13 @@ function rollCasterBoon(
   icd: number,
   chance: number,
   abilities: readonly string[],
+  power = NATURES_BOON_POWER,
 ): boolean {
   if (player.procState?.icds[icdKey] !== undefined) return false;
   if (!ctx.rng.chance(chance)) return false;
   if (!player.procState) player.procState = { counters: {}, icds: {} };
   player.procState.icds[icdKey] = icd;
-  armNaturesBoon(ctx, player, abilities);
+  armNaturesBoon(ctx, player, abilities, power);
   return true;
 }
 
@@ -267,6 +288,7 @@ export function naturesBoonOnHotTick(ctx: SimContext, source: Entity | null, aur
     GROVEHEART_BOON_ICD,
     GROVEHEART_BOON_TICK_CHANCE,
     GROVEHEART_BOON_ABILITIES,
+    GROVEHEART_BOON_POWER,
   );
   if (!procced) return;
   const left = source.cooldowns.get(GROVEHEART_BOON_SHORTENS) ?? 0;

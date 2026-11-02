@@ -11,12 +11,14 @@ import { MOONTIDE_STAGES, VERDANCE_STAGES } from '../src/sim/combat/druid_engine
 import {
   GROVEHEART_BOON_COOLDOWN_CUT,
   GROVEHEART_BOON_ICD,
+  GROVEHEART_BOON_POWER,
   MOONGROVE_BOON_ICD,
   NATURES_BOON_ID,
   NATURES_BOON_POWER,
   naturesBoonArmedFor,
   naturesBoonOnCast,
   naturesBoonOnHotTick,
+  naturesBoonPowerFor,
 } from '../src/sim/combat/druid_natures_boon';
 import {
   SPORE_BURST_FULL_BANK_POWER,
@@ -373,6 +375,54 @@ describe("Spore Burst: Nature's Boon", () => {
     }
     expect(armedFor(me)).toEqual(['spore_burst']);
     expect(me.cooldowns.get('spore_burst')).toBe(25);
+  });
+
+  it('arms the Moongrove window 25% stronger and the Groveheart window at plain strength', () => {
+    const moon = druid('balance');
+    let casts = 0;
+    while (armedFor(moon.me).length === 0 && casts < 500) {
+      naturesBoonOnCast(rawCtx(moon.sim), moon.me, 'wrath');
+      casts++;
+    }
+    expect(naturesBoonPowerFor(moon.me.auras, SPORE_BURST_ID)).toBe(NATURES_BOON_POWER);
+
+    const grove = druid('restoration');
+    const hot = { id: 'rejuvenation', kind: 'hot', sourceId: grove.me.id } as Aura;
+    let ticks = 0;
+    while (armedFor(grove.me).length === 0 && ticks < 500) {
+      naturesBoonOnHotTick(rawCtx(grove.sim), grove.me, hot);
+      ticks++;
+    }
+    expect(naturesBoonPowerFor(grove.me.auras, SPORE_BURST_ID)).toBe(GROVEHEART_BOON_POWER);
+    expect(GROVEHEART_BOON_POWER).toBe(1);
+  });
+
+  it('a Groveheart free Spore Burst hits exactly as hard as a paid one', () => {
+    const burst = (armed: boolean) => {
+      const { sim, pid, me } = druid('restoration');
+      const target = wolf(sim, AIM.x, AIM.z);
+      if (armed) {
+        const hot = { id: 'rejuvenation', kind: 'hot', sourceId: me.id } as Aura;
+        let ticks = 0;
+        while (armedFor(me).length === 0 && ticks < 500) {
+          naturesBoonOnHotTick(rawCtx(sim), me, hot);
+          ticks++;
+        }
+        expect(armedFor(me)).toEqual(['spore_burst']);
+        me.cooldowns.delete('spore_burst');
+      }
+      const mana = me.resource;
+      me.gcdRemaining = 0;
+      sim.castAbility('spore_burst', pid, AIM);
+      const spent = mana - me.resource;
+      tickN(sim, FUSE_TICKS);
+      return { damage: 5000 - target.hp, spent };
+    };
+    const paid = burst(false);
+    const free = burst(true);
+    expect(free.spent).toBe(0);
+    expect(paid.spent).toBeGreaterThan(0);
+    expect(free.damage).toBe(paid.damage);
   });
 
   it('neither hook draws for a Wildfang druid', () => {
